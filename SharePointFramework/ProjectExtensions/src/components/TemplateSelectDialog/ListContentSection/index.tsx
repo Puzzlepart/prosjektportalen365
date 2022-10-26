@@ -1,5 +1,6 @@
 import {
   DetailsList,
+  Icon,
   ScrollablePane,
   SearchBox,
   SelectionMode,
@@ -41,9 +42,7 @@ export const ListContentSection: TemplateSelectDialogSectionComponent = (props) 
           )}
           onRenderDetailsFooter={() => (
             <Sticky stickyPosition={StickyPositionType.Footer}>
-              {context.state.selectedTemplate?.listExtensionIds && (
-                <TemplateListContentConfigMessage />
-              )}
+              {context.state.selectedTemplate?.extensionIds && <TemplateListContentConfigMessage />}
             </Sticky>
           )}
           items={items}
@@ -53,7 +52,18 @@ export const ListContentSection: TemplateSelectDialogSectionComponent = (props) 
               fieldName: 'text',
               name: strings.TitleLabel,
               minWidth: 150,
-              maxWidth: 150
+              maxWidth: 150,
+              onRender: (item) => {
+                const isLocked =
+                  context.state.selectedTemplate?.isDefaultListContentLocked &&
+                  context.state.selectedTemplate?.listContentConfigIds.includes(item.id)
+                return (
+                  <div className={styles.titleColumn}>
+                    {isLocked && <Icon iconName='Lock' className={styles.lockIcon} />}
+                    <span>{item.text}</span>
+                  </div>
+                )
+              }
             },
             {
               key: 'subText',

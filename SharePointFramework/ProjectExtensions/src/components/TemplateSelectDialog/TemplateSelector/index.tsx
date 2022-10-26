@@ -22,7 +22,7 @@ export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
     context.setState({
       selectedTemplate: template,
       selectedExtensions: context.props.data.extensions.filter(
-        (ext) => ext.isDefault || template?.listExtensionIds?.some((id) => id === ext.id)
+        (ext) => ext.isDefault || template?.extensionIds?.some((id) => id === ext.id)
       ),
       selectedListContentConfig: context.props.data.listContentConfig.filter(
         (lcc) => lcc.isDefault || template?.listContentConfigIds?.some((id) => id === lcc.id)
@@ -71,7 +71,7 @@ export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
           selectOnBlur={true}
         />
         {(context.state.selectedTemplate?.listContentConfigIds ||
-          context.state.selectedTemplate?.listExtensionIds) && <TemplateListContentConfigMessage />}
+          context.state.selectedTemplate?.extensionIds) && <TemplateListContentConfigMessage />}
       </div>
     </div>
   )

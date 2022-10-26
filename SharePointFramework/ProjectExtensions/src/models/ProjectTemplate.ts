@@ -33,10 +33,10 @@ export class ProjectTemplate {
   public isDefault: boolean
   public isDefaultExtensionsLocked: boolean
   public isDefaultListContentLocked: boolean
+  public extensionIds: number[]
   public listContentConfigIds: number[]
   public projectTemplateId: number
   public projectTemplateUrl: string
-  public listExtensionIds: number[]
   public projectContentType: string
   public projectStatusContentType: string
   public projectColumns: string
@@ -64,7 +64,7 @@ export class ProjectTemplate {
     this.isHidden = spItem.IsHiddenTemplate
     spItem.ListContentConfigLookupId?.length > 0 ? spItem.ListContentConfigLookupId : null
     this.projectTemplateId = spItem.GtProjectTemplateId
-    this.listExtensionIds =
+    this.extensionIds =
       spItem.GtProjectExtensionsId?.length > 0 ? spItem.GtProjectExtensionsId : null
     this.projectContentType = spItem.GtProjectContentType
     this.projectStatusContentType = spItem.GtProjectStatusContentType

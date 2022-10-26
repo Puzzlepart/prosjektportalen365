@@ -13,7 +13,7 @@ export function useTemplateSelectDialog(props: ITemplateSelectDialogProps) {
   const [state, $setState] = useState<ITemplateSelectDialogState>({
     selectedTemplate: getDefaultTemplate(),
     selectedExtensions: props.data.extensions.filter(
-      (ext) => ext.isDefault || getDefaultTemplate().listExtensionIds?.some((id) => id === ext.id)
+      (ext) => ext.isDefault || getDefaultTemplate().extensionIds?.some((id) => id === ext.id)
     ),
     selectedListContentConfig: props.data.listContentConfig.filter(
       (lcc) =>
@@ -35,11 +35,7 @@ export function useTemplateSelectDialog(props: ITemplateSelectDialogProps) {
    * On submit the selected user configuration
    */
   const onSubmit = () => {
-    const data = { ...state }
-    data.selectedTemplate.listContentConfigIds = state.selectedListContentConfig.map(
-      (lcc) => lcc.id
-    )
-    props.onSubmit(data)
+    props.onSubmit(state)
   }
 
   return { state, setState, onSubmit } as const
