@@ -1,7 +1,7 @@
-import { DetailsList, SearchBox, SelectionMode } from '@fluentui/react'
+import { DetailsList, ScrollablePane, SearchBox, SelectionMode, Sticky, StickyPositionType } from '@fluentui/react'
 import React, { FunctionComponent } from 'react'
-import styles from './SearchableList.module.scss'
 import { ISearchableListProps } from './types'
+import styles from './SearchableList.module.scss'
 import { useSearchableList } from './useSearchableList'
 
 export const SearchableList: FunctionComponent<ISearchableListProps> = (props) => {
@@ -9,28 +9,30 @@ export const SearchableList: FunctionComponent<ISearchableListProps> = (props) =
 
   return (
     <div className={styles.root}>
-      <DetailsList
-        styles={{ root: { height: 450 } }}
-        setKey='set'
-        selection={selection}
-        selectionMode={SelectionMode.multiple}
-        selectionPreservedOnEmptyClick={true}
-        onRenderRow={onRenderRow}
-        onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
-          <div>
-            <div style={{ marginTop: 10 }}>
-              <SearchBox
-                {...props.searchBox}
-                onChange={(_, newValue) => onSearch(newValue)}
-                onSearch={(newValue) => onSearch(newValue)}
-              />
-            </div>
-            {defaultRender(detailsHeaderProps)}
-          </div>
-        )}
-        items={props.items}
-        columns={props.columns}
-      />
+      <div style={{ height: 450 }}>
+        <ScrollablePane>
+          <DetailsList
+            setKey='set'
+            selection={selection}
+            selectionMode={SelectionMode.multiple}
+            selectionPreservedOnEmptyClick={true}
+            onRenderRow={onRenderRow}
+            onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
+              <Sticky stickyPosition={StickyPositionType.Header} >
+                <SearchBox
+                  {...props.searchBox}
+                  className={styles.searchBox}
+                  onChange={(_, newValue) => onSearch(newValue)}
+                  onSearch={(newValue) => onSearch(newValue)}
+                />
+                {defaultRender(detailsHeaderProps)}
+              </Sticky>
+            )}
+            items={props.items}
+            columns={props.columns}
+          />
+        </ScrollablePane>
+      </div>
     </div>
   )
 }

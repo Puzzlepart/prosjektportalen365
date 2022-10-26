@@ -1,4 +1,4 @@
-import { DetailsList, ScrollablePane, SearchBox, SelectionMode } from '@fluentui/react'
+import { DetailsList, ScrollablePane, SearchBox, SelectionMode, Sticky, StickyPositionType } from '@fluentui/react'
 import strings from 'ProjectExtensionsStrings'
 import React, { FunctionComponent } from 'react'
 import styles from './ListContentSection.module.scss'
@@ -9,11 +9,6 @@ export const ListContentSection: FunctionComponent = () => {
 
   return (
     <div className={styles.root}>
-      <SearchBox
-        placeholder={strings.ListContentSectionSearchPlaceholder}
-        onChange={(_, newValue) => onSearch(newValue)}
-        onSearch={(newValue) => onSearch(newValue)}
-      />
       <div style={{ height: 300 }}>
         <ScrollablePane>
           <DetailsList
@@ -22,6 +17,17 @@ export const ListContentSection: FunctionComponent = () => {
             selectionMode={SelectionMode.multiple}
             selectionPreservedOnEmptyClick={true}
             onRenderRow={onRenderRow}
+            onRenderDetailsHeader={(props_, defaultRender) => (
+              <Sticky stickyPosition={StickyPositionType.Header} >
+                <SearchBox
+                  className={styles.searchBox}
+                  placeholder={strings.ListContentSectionSearchPlaceholder}
+                  onChange={(_, newValue) => onSearch(newValue)}
+                  onSearch={(newValue) => onSearch(newValue)}
+                />
+                {defaultRender(props_)}
+              </Sticky>
+            )}
             items={items}
             columns={[
               {

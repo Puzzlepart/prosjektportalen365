@@ -27,7 +27,7 @@ export const TemplateSelectDialog: FunctionComponent<ITemplateSelectDialogProps>
         modalProps={{ containerClassName: styles.root, isBlocking: true, isDarkOverlay: true }}
         onDismiss={props.onDismiss}
         containerClassName={styles.root}>
-        <Pivot style={{ minHeight: 600 }}>
+        <Pivot style={{ minHeight: 500 }}>
           <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
             <TemplateSelector />
             {(state.selectedTemplate?.listContentConfigIds ||
