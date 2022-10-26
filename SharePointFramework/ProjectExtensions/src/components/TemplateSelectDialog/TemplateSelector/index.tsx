@@ -7,7 +7,7 @@ import { TemplateSelectorItem } from './TemplateSelectorItem'
 import { ITemplateSelectorProps } from './types'
 
 export const TemplateSelector: FunctionComponent<ITemplateSelectorProps> = (props) => {
-  const [value, setValue] = useState(props.selectedTemplate?.text)
+  const [searchValue, setSearchValue] = useState(props.selectedTemplate?.text)
   return (
     <div className={styles.root}>
       <div className={styles.container}>
@@ -15,8 +15,8 @@ export const TemplateSelector: FunctionComponent<ITemplateSelectorProps> = (prop
           getItemValue={(template: ProjectTemplate) => template.text}
           items={props.templates}
           shouldItemRender={(template: ProjectTemplate) =>
-            value === props.selectedTemplate.text ||
-            template.text.toLowerCase().indexOf(value.toLowerCase()) > -1
+            searchValue === props.selectedTemplate.text ||
+            template.text.toLowerCase().indexOf(searchValue.toLowerCase()) > -1
           }
           renderItem={(template: ProjectTemplate, isHighlighted) => (
             <div key={template.id}>
@@ -30,14 +30,14 @@ export const TemplateSelector: FunctionComponent<ITemplateSelectorProps> = (prop
               onClear={(event) => {
                 event.stopPropagation()
                 event.preventDefault()
-                setValue('')
+                setSearchValue('')
               }}
             />
           )}
-          value={value}
-          onChange={(_, value_) => setValue(value_)}
+          value={searchValue}
+          onChange={(_, value) => setSearchValue(value)}
           onSelect={(_, template: ProjectTemplate) => {
-            setValue(template.text)
+            setSearchValue(template.text)
             props.onChange(template)
           }}
           selectOnBlur={true}
