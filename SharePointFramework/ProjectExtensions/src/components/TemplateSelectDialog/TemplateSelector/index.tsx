@@ -27,10 +27,8 @@ export const TemplateSelector: FunctionComponent<ITemplateSelectorProps> = (prop
             <SearchBox
               {...(inputProps as ISearchBoxProps)}
               onClear={(event) => {
-                // eslint-disable-next-line no-console
-                console.log(event.stopPropagation)
-                // eslint-disable-next-line no-console
-                console.log(event.preventDefault)
+                event.stopPropagation()
+                event.preventDefault()
                 setValue('')
               }}
             />

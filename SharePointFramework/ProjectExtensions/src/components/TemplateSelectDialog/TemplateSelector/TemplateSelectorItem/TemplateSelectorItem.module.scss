@@ -8,6 +8,11 @@
 
   &.isHighlighted {
     background-color: $ms-color-themeSecondary;
+    color: $ms-color-white;
+
+    .subText {
+      color: $ms-color-white;
+    }
   }
 
   .icon {
