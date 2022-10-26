@@ -15,7 +15,7 @@ export const TemplateSelector: FunctionComponent<ITemplateSelectorProps> = (prop
           getItemValue={(template: ProjectTemplate) => template.text}
           items={props.templates}
           shouldItemRender={(template: ProjectTemplate) =>
-            searchValue === props.selectedTemplate.text ||
+            searchValue === props.selectedTemplate?.text ||
             template.text.toLowerCase().indexOf(searchValue.toLowerCase()) > -1
           }
           renderItem={(template: ProjectTemplate, isHighlighted) => (
@@ -27,10 +27,12 @@ export const TemplateSelector: FunctionComponent<ITemplateSelectorProps> = (prop
           renderInput={(inputProps) => (
             <SearchBox
               {...(inputProps as ISearchBoxProps)}
+              iconProps={props.selectedTemplate?.iconProps}
               onClear={(event) => {
                 event.stopPropagation()
                 event.preventDefault()
                 setSearchValue('')
+                props.onChange(null)
               }}
             />
           )}

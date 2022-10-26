@@ -10,7 +10,7 @@ export const TemplateSelectorItem: FunctionComponent<ITemplateSelectorItemProps>
   return (
     <div className={[styles.root, isHighlighted && styles.isHighlighted].filter(Boolean).join(' ')}>
       <div className={styles.icon}>
-        <Icon iconName={template.iconName} />
+        <Icon {...template.iconProps} />
       </div>
       <div className={styles.body}>
         <div className={styles.text}>{template.text}</div>

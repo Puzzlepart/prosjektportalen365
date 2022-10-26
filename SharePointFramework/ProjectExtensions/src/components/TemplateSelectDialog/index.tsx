@@ -1,14 +1,8 @@
-/* eslint-disable no-console */
-import {
-  DefaultButton,
-  DialogFooter, Pivot,
-  PivotItem,
-  PrimaryButton
-} from '@fluentui/react'
+import { DefaultButton, DialogFooter, Pivot, PivotItem, PrimaryButton } from '@fluentui/react'
 import { ProjectTemplate } from 'models'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { Component, ReactElement } from 'react'
-import { isEmpty } from 'underscore'
+import { first, isEmpty } from 'underscore'
 import { ProjectSetupSettings } from '../../projectSetup/ProjectSetupSettings'
 import { BaseDialog } from '../@BaseDialog'
 import { ExtensionsSection } from './ExtensionsSection'
@@ -41,53 +35,51 @@ export class TemplateSelectDialog extends Component<
   }
 
   public render(): ReactElement<ITemplateSelectDialogProps> {
-    const { version, onDismiss, data } = this.props
-    const { selectedTemplate, selectedListContentConfig, selectedExtensions } = this.state
-
     return (
       <BaseDialog
-        version={version}
+        version={this.props.version}
         dialogContentProps={{
           title: strings.TemplateSelectDialogTitle,
           subText: strings.TemplateSelectDialogInfoText,
           className: styles.content
         }}
         modalProps={{ containerClassName: styles.root, isBlocking: true, isDarkOverlay: true }}
-        onDismiss={onDismiss}
+        onDismiss={this.props.onDismiss}
         containerClassName={styles.root}>
         <Pivot style={{ minHeight: 350, height: this.state.flexibleHeight }}>
           <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
             <TemplateSelector
-              templates={data.templates.filter((t) => !t.isHidden)}
-              selectedTemplate={selectedTemplate}
+              templates={this.props.data.templates.filter((t) => !t.isHidden)}
+              selectedTemplate={this.state.selectedTemplate}
               onChange={this._onTemplateChange.bind(this)}
             />
-            {(selectedTemplate.listContentConfigIds || selectedTemplate.listExtensionIds) && (
-              <TemplateListContentConfigMessage selectedTemplate={selectedTemplate} />
+            {(this.state.selectedTemplate?.listContentConfigIds ||
+              this.state.selectedTemplate?.listExtensionIds) && (
+              <TemplateListContentConfigMessage selectedTemplate={this.state.selectedTemplate} />
             )}
           </PivotItem>
-          {!isEmpty(data.extensions) && (
+          {!isEmpty(this.props.data.extensions) && (
             <PivotItem headerText={strings.ExtensionsTitle} itemIcon='ArrangeBringForward'>
-              {selectedTemplate.listExtensionIds && (
-                <TemplateListContentConfigMessage selectedTemplate={selectedTemplate} />
+              {this.state.selectedTemplate?.listExtensionIds && (
+                <TemplateListContentConfigMessage selectedTemplate={this.state.selectedTemplate} />
               )}
               <ExtensionsSection
-                extensions={data.extensions}
-                selectedExtensions={selectedExtensions}
-                lockDefault={selectedTemplate.isDefaultExtensionsLocked}
+                extensions={this.props.data.extensions}
+                selectedExtensions={this.state.selectedExtensions}
+                lockDefault={this.state.selectedTemplate?.isDefaultExtensionsLocked}
                 onChange={(s) => this.setState({ selectedExtensions: s })}
               />
             </PivotItem>
           )}
-          {!isEmpty(data.listContentConfig) && (
+          {!isEmpty(this.props.data.listContentConfig) && (
             <PivotItem headerText={strings.ListContentTitle} itemIcon='ViewList'>
-              {selectedTemplate.listContentConfigIds && (
-                <TemplateListContentConfigMessage selectedTemplate={selectedTemplate} />
+              {this.state.selectedTemplate?.listContentConfigIds && (
+                <TemplateListContentConfigMessage selectedTemplate={this.state.selectedTemplate} />
               )}
               <ListContentSection
-                listContentConfig={data.listContentConfig}
-                selectedListContentConfig={selectedListContentConfig}
-                lockDefault={selectedTemplate.isDefaultListContentLocked}
+                listContentConfig={this.props.data.listContentConfig}
+                selectedListContentConfig={this.state.selectedListContentConfig}
+                lockDefault={this.state.selectedTemplate?.isDefaultListContentLocked}
                 onChange={(s) => this.setState({ selectedListContentConfig: s })}
               />
             </PivotItem>
@@ -95,6 +87,7 @@ export class TemplateSelectDialog extends Component<
         </Pivot>
         <DialogFooter>
           <PrimaryButton
+            disabled={!this.state.selectedTemplate}
             text={strings.TemplateSelectDialogSubmitButtonText}
             onClick={this._onSubmit.bind(this)}
           />
@@ -110,13 +103,15 @@ export class TemplateSelectDialog extends Component<
    * @param template - Project template
    */
   private _onTemplateChange(template: ProjectTemplate): void {
+    // eslint-disable-next-line no-console
+    console.log({ _onTemplateChange: template })
     this.setState({
       selectedTemplate: template,
       selectedExtensions: this.props.data.extensions.filter(
-        (ext) => ext.isDefault || template.listExtensionIds?.some((id) => id === ext.id)
+        (ext) => ext.isDefault || template?.listExtensionIds?.some((id) => id === ext.id)
       ),
       selectedListContentConfig: this.props.data.listContentConfig.filter(
-        (lcc) => lcc.isDefault || template.listContentConfigIds?.some((id) => id === lcc.id)
+        (lcc) => lcc.isDefault || template?.listContentConfigIds?.some((id) => id === lcc.id)
       )
     })
   }
@@ -128,7 +123,7 @@ export class TemplateSelectDialog extends Component<
    */
   private _getDefaultTemplate(): ProjectTemplate {
     let [defaultTemplate] = this.props.data.templates.filter((tmpl) => tmpl.isDefault)
-    if (!defaultTemplate) defaultTemplate = this.props.data.templates[0]
+    if (!defaultTemplate) defaultTemplate = first(this.props.data.templates)
     return defaultTemplate
   }
 
