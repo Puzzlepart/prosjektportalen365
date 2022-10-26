@@ -1705,6 +1705,12 @@
   <data name="SiteFields_GtExtensionDefault_DisplayName" xml:space="preserve">
     <value>Standard</value>
   </data>
+  <data name="SiteFields_GtExtensionHidden_Description" xml:space="preserve">
+    <value>Om elementet skjules, kan det ikke velges av brukerne i dialogen for oppsett av nytt prosjektområde.</value>
+  </data>
+  <data name="SiteFields_GtExtensionHidden_DisplayName" xml:space="preserve">
+    <value>Skjult</value>
+  </data>
   <data name="SiteFields_GtSPGroupName_DisplayName" xml:space="preserve">
     <value>SharePoint gruppenavn</value>
   </data>
