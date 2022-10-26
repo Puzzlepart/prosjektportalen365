@@ -15,6 +15,7 @@ export const TemplateSelector: FunctionComponent<ITemplateSelectorProps> = (prop
           getItemValue={(template: ProjectTemplate) => template.text}
           items={props.templates}
           shouldItemRender={(template: ProjectTemplate) =>
+            value === props.selectedTemplate.text ||
             template.text.toLowerCase().indexOf(value.toLowerCase()) > -1
           }
           renderItem={(template: ProjectTemplate, isHighlighted) => (
@@ -35,7 +36,10 @@ export const TemplateSelector: FunctionComponent<ITemplateSelectorProps> = (prop
           )}
           value={value}
           onChange={(_, value_) => setValue(value_)}
-          onSelect={(_, template) => props.onChange(template)}
+          onSelect={(_, template: ProjectTemplate) => {
+            setValue(template.text)
+            props.onChange(template)
+          }}
           selectOnBlur={true}
         />
       </div>
