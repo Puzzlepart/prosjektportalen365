@@ -4,7 +4,7 @@ import { LogLevel } from '@pnp/logging'
 import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
 import assign from 'object-assign'
-import React from 'react'
+import React, { ComponentClass, FC } from 'react'
 import * as ReactDom from 'react-dom'
 import HubSiteService, { IHubSite } from 'sp-hubsite-service'
 import { SPDataAdapter } from '../../data'
@@ -20,10 +20,7 @@ export abstract class BaseProgramWebPart<
 
   public abstract render(): void
 
-  public renderComponent<T = any>(
-    component: React.ComponentClass<T> | React.FC<T>,
-    props?: T
-  ): void {
+  public renderComponent<T = any>(component: ComponentClass<T> | FC<T>, props?: T): void {
     const combinedProps = assign(this.properties, props, {
       pageContext: this.context.pageContext,
       dataAdapter: this.dataAdapter,
