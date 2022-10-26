@@ -1,12 +1,12 @@
 import { Spinner, ICommandBarItemProps, CommandBar } from '@fluentui/react'
 import { isEmpty } from '@microsoft/sp-lodash-subset'
 import * as strings from 'ProgramWebPartsStrings'
-import React, { FunctionComponent, useContext } from 'react'
+import React, { FC, useContext } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import { removeChildProjects } from '../data'
 import { CHILD_PROJECTS_REMOVED, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
 
-export const Commands: FunctionComponent = () => {
+export const Commands: FC = () => {
   const context = useContext(ProgramAdministrationContext)
   const getLoadingBar = () => {
     const commandBarButtonAs = () => (

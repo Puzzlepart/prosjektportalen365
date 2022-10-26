@@ -3,7 +3,7 @@ import * as React from 'react'
 import styles from './FilterItem.module.scss'
 import { IFilterItemProps } from './types'
 
-export const FilterItem: React.FunctionComponent<IFilterItemProps> = (props) => {
+export const FilterItem: React.FC<IFilterItemProps> = (props) => {
   return (
     <li>
       <div className={styles.root}>

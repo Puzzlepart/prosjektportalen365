@@ -2,12 +2,12 @@ import { DialogFooter, PrimaryButton, DefaultButton } from '@fluentui/react'
 import { ProjectPhasesContext } from 'components/ProjectPhases/context'
 import { DISMISS_CHANGE_PHASE_DIALOG } from 'components/ProjectPhases/reducer'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FunctionComponent, useContext } from 'react'
+import React, { FC, useContext } from 'react'
 import { ChangePhaseDialogContext } from '../context'
 import { SET_VIEW } from '../reducer'
 import { View } from '../Views'
 
-export const Footer: FunctionComponent = () => {
+export const Footer: FC = () => {
   const context = useContext(ProjectPhasesContext)
   const { state, dispatch } = useContext(ChangePhaseDialogContext)
   const actions = []

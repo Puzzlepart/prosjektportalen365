@@ -1,6 +1,6 @@
 import { DefaultButton, DialogFooter, Pivot, PivotItem, PrimaryButton } from '@fluentui/react'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { isEmpty } from 'underscore'
 import { BaseDialog } from '../@BaseDialog'
 import { TemplateSelectDialogContext } from './context'
@@ -12,7 +12,7 @@ import { TemplateSelector } from './TemplateSelector'
 import { ITemplateSelectDialogProps } from './types'
 import { useTemplateSelectDialog } from './useTemplateSelectDialog'
 
-export const TemplateSelectDialog: FunctionComponent<ITemplateSelectDialogProps> = (props) => {
+export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
   const { state, setState, onSubmit } = useTemplateSelectDialog(props)
 
   return (

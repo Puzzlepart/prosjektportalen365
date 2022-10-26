@@ -1,11 +1,11 @@
 import { Modal, Pivot, PivotItem, ActionButton } from '@fluentui/react'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import styles from './HelpContentModal.module.scss'
 import { IHelpContentModalProps } from './types'
 
-export const HelpContentModal: FunctionComponent<IHelpContentModalProps> = (props) => {
+export const HelpContentModal: FC<IHelpContentModalProps> = (props) => {
   return (
     <Modal
       isOpen={props.isOpen}

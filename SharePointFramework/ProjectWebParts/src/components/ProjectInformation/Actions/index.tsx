@@ -1,11 +1,11 @@
 import { ActionButton, DefaultButton, IButtonProps } from '@fluentui/react/lib/Button'
-import React, { FunctionComponent, useContext } from 'react'
+import React, { FC, useContext } from 'react'
 import { isEmpty } from 'underscore'
 import { ProjectInformationContext } from '../context'
 import styles from './Actions.module.scss'
 import { useActions } from './useActions'
 
-export const Actions: FunctionComponent = () => {
+export const Actions: FC = () => {
   const context = useContext(ProjectInformationContext)
   const actions = useActions()
   if (isEmpty(actions)) return null

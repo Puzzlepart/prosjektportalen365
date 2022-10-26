@@ -10,7 +10,7 @@ import * as strings from 'PortfolioWebPartsStrings'
 import styles from './Timeline.module.scss'
 import './Timeline.overrides.css'
 import moment from 'moment'
-import React, { FunctionComponent, useState } from 'react'
+import React, { FC, useState } from 'react'
 import { format, MessageBar } from '@fluentui/react'
 import { Commands } from '../Commands'
 import { DetailsCallout } from '../DetailsCallout'
@@ -32,7 +32,7 @@ export interface ITimelineProps {
 /**
  * @component Timeline
  */
-export const Timeline: FunctionComponent<ITimelineProps> = (props) => {
+export const Timeline: FC<ITimelineProps> = (props) => {
   const [showDetails, setShowDetails] = useState<{
     item: ITimelineItem
     element: HTMLElement

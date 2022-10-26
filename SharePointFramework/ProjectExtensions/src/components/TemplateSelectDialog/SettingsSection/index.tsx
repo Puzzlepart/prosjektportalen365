@@ -1,11 +1,11 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { getId } from '@uifabric/utilities'
 import { Toggle } from '@fluentui/react/lib/Toggle'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import styles from './SettingsSection.module.scss'
 import { ISettingsSectionProps } from './types'
 
-export const SettingsSection: FunctionComponent<ISettingsSectionProps> = (props) => {
+export const SettingsSection: FC<ISettingsSectionProps> = (props) => {
   function onChange(event: React.MouseEvent<HTMLElement, MouseEvent>, checked?: boolean) {
     props.onChange((event.currentTarget as HTMLElement).id, checked)
   }

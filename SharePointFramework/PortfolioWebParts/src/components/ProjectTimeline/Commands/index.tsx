@@ -5,7 +5,7 @@ import {
   CommandBar
 } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import React, { FunctionComponent, useState } from 'react'
+import React, { FC, useState } from 'react'
 
 export interface ICommandsProps {
   /**
@@ -25,7 +25,7 @@ export interface ICommandsProps {
   isGroupByEnabled?: boolean
 }
 
-export const Commands: FunctionComponent<ICommandsProps> = (props) => {
+export const Commands: FC<ICommandsProps> = (props) => {
   const [selectedGroup, setSelectedGroup] = useState<string>(strings.ProjectLabel)
 
   const cmd: ICommandBarProps = {

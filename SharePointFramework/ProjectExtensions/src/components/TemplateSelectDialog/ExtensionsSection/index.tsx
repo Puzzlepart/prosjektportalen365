@@ -1,11 +1,11 @@
 import { Icon, Toggle } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import React, { FunctionComponent, useContext } from 'react'
+import React, { FC, useContext } from 'react'
 import { ProjectExtension } from '../../../models'
 import { TemplateSelectDialogContext } from '../context'
 import styles from './ExtensionsSection.module.scss'
 
-export const ExtensionsSection: FunctionComponent = () => {
+export const ExtensionsSection: FC = () => {
   const context = useContext(TemplateSelectDialogContext)
 
   /**

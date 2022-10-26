@@ -1,11 +1,11 @@
 import { format, MessageBar } from '@fluentui/react'
 import strings from 'ProjectExtensionsStrings'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import ReactMarkdown from 'react-markdown'
 import styles from './TemplateListContentConfigMessage.module.scss'
 import { ITemplateListContentConfigMessageProps } from './types'
 
-export const TemplateListContentConfigMessage: FunctionComponent<ITemplateListContentConfigMessageProps> = ({
+export const TemplateListContentConfigMessage: FC<ITemplateListContentConfigMessageProps> = ({
   selectedTemplate
 }) => {
   return (

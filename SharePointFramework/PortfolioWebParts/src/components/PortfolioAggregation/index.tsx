@@ -6,7 +6,7 @@ import {
 } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { FilterPanel } from '../FilterPanel'
 import { ColumnContextMenu } from './ColumnContextMenu'
 import { addColumn, ColumnFormPanel } from './ColumnFormPanel'
@@ -20,7 +20,7 @@ import { ShowHideColumnPanel } from './ShowHideColumnPanel'
 import { IPortfolioAggregationProps } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
 
-export const PortfolioAggregation: FunctionComponent<IPortfolioAggregationProps> = (props) => {
+export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
   const { state, dispatch, items, layerHostId, ctxValue } = usePortfolioAggregation(props)
 
   if (state.error) {

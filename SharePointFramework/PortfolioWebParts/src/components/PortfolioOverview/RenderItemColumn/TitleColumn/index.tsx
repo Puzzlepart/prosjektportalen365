@@ -2,10 +2,10 @@ import { TooltipHost, Icon, Link } from '@fluentui/react'
 import { Web } from '@pnp/sp'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { ITitleColumnProps } from './types'
 
-export const TitleColumn: FunctionComponent<ITitleColumnProps> = ({ item, props }) => {
+export const TitleColumn: FC<ITitleColumnProps> = ({ item, props }) => {
   let content = (
     <span>
       <span>{item.Title}</span>

@@ -1,12 +1,12 @@
 import { ISearchBoxProps, SearchBox } from '@fluentui/react'
 import { ProjectTemplate } from 'models'
-import React, { FunctionComponent, useContext, useState } from 'react'
+import React, { FC, useContext, useState } from 'react'
 import Autocomplete from 'react-autocomplete'
 import { TemplateSelectDialogContext } from '../context'
 import styles from './TemplateSelector.module.scss'
 import { TemplateSelectorItem } from './TemplateSelectorItem'
 
-export const TemplateSelector: FunctionComponent = () => {
+export const TemplateSelector: FC = () => {
   const context = useContext(TemplateSelectDialogContext)
   const [searchValue, setSearchValue] = useState(context.state.selectedTemplate?.text)
 

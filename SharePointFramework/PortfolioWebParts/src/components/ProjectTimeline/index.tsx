@@ -1,5 +1,5 @@
 import * as strings from 'PortfolioWebPartsStrings'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { Timeline } from './Timeline'
 import styles from './ProjectTimeline.module.scss'
 import { IProjectTimelineProps } from './types'
@@ -9,7 +9,7 @@ import { useProjectTimeline } from './useProjectTimeline'
 import { ProjectTimelineContext } from './context'
 import { Spinner, format, MessageBarType } from '@fluentui/react'
 
-export const ProjectTimeline: FunctionComponent<IProjectTimelineProps> = (props) => {
+export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
   const { state, setState, onFilterChange, onGroupChange } = useProjectTimeline(props)
   return (
     <ProjectTimelineContext.Provider

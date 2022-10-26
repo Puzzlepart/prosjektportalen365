@@ -1,9 +1,9 @@
 import { Icon } from '@fluentui/react'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { ITemplateSelectorItemProps } from './types'
 import styles from './TemplateSelectorItem.module.scss'
 
-export const TemplateSelectorItem: FunctionComponent<ITemplateSelectorItemProps> = ({
+export const TemplateSelectorItem: FC<ITemplateSelectorItemProps> = ({
   template,
   isHighlighted
 }) => {

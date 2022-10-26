@@ -21,7 +21,7 @@ export abstract class BaseProgramWebPart<
   public abstract render(): void
 
   public renderComponent<T = any>(
-    component: React.ComponentClass<T> | React.FunctionComponent<T>,
+    component: React.ComponentClass<T> | React.FC<T>,
     props?: T
   ): void {
     const combinedProps = assign(this.properties, props, {

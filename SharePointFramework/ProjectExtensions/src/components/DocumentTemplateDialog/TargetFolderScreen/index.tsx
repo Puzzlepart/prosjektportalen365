@@ -12,7 +12,7 @@ import { InfoMessage } from 'components/InfoMessage'
 import { SPDataAdapter } from 'data'
 import { SPFolder } from 'models'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { FunctionComponent, useContext, useEffect, useState } from 'react'
+import React, { FC, useContext, useEffect, useState } from 'react'
 import { TemplateSelectorContext } from 'templateSelector/context'
 import { isEmpty } from 'underscore'
 import { DocumentTemplateDialogScreen } from '..'
@@ -22,7 +22,7 @@ import { SET_SCREEN, SET_TARGET } from '../reducer'
 import columns from './columns'
 import styles from './TargetFolderScreen.module.scss'
 
-export const TargetFolderScreen: FunctionComponent = () => {
+export const TargetFolderScreen: FC = () => {
   const { state, dispatch } = useContext(DocumentTemplateDialogContext)
   const context = useContext(TemplateSelectorContext)
   const [root, setRoot] = useState(context.currentLibrary)

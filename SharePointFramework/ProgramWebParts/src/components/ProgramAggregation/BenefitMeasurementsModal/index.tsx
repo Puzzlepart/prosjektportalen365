@@ -1,12 +1,12 @@
 import { IColumn, Modal, DetailsList, SelectionMode } from '@fluentui/react'
 import { get, isEmpty } from '@microsoft/sp-lodash-subset'
 import strings from 'ProgramWebPartsStrings'
-import React, { FunctionComponent, useState } from 'react'
+import React, { FC, useState } from 'react'
 import styles from './BenefitMeasurementsModal.module.scss'
 import { columns } from './columns'
 import { IItemModalProps } from './types'
 
-export const BenefitMeasurementsModal: FunctionComponent<IItemModalProps> = (props) => {
+export const BenefitMeasurementsModal: FC<IItemModalProps> = (props) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const onRenderItemColumn = (item: any, index: number, column: IColumn) => {
