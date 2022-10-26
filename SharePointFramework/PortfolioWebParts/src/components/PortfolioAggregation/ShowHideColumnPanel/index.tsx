@@ -1,4 +1,4 @@
-import { Panel, PrimaryButton, DefaultButton, Checkbox } from '@fluentui/react'
+import { Checkbox, DefaultButton, Panel, PrimaryButton } from '@fluentui/react'
 import { IFilterItemProps } from 'components/FilterPanel/FilterItem/types'
 import _ from 'lodash'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -85,7 +85,7 @@ export const ShowHideColumnPanel: FC = () => {
   )
 }
 
-export const CheckBox: React.FC<IFilterItemProps> = (props) => {
+export const CheckBox: FC<IFilterItemProps> = (props) => {
   return (
     <>
       <Checkbox
