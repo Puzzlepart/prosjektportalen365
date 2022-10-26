@@ -24,7 +24,7 @@ export class PortfolioOverviewCommands extends Component<
           isOpen={this.state.showFilterPanel}
           layerHostId={this.props.layerHostId}
           headerText={strings.FiltersString}
-          onDismissed={() => this.setState({ showFilterPanel: false })}
+          onDismiss={() => this.setState({ showFilterPanel: false })}
           isLightDismiss={true}
           filters={this._filters}
           onFilterChange={this.props.events.onFilterChange}
