@@ -32,8 +32,8 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
             <TemplateSelector />
             {(state.selectedTemplate?.listContentConfigIds ||
               state.selectedTemplate?.listExtensionIds) && (
-                <TemplateListContentConfigMessage selectedTemplate={state.selectedTemplate} />
-              )}
+              <TemplateListContentConfigMessage selectedTemplate={state.selectedTemplate} />
+            )}
           </PivotItem>
           {!isEmpty(props.data.extensions) && (
             <PivotItem headerText={strings.ExtensionsTitle} itemIcon='ArrangeBringForward'>

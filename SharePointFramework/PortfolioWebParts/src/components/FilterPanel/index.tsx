@@ -20,4 +20,3 @@ export const FilterPanel: FC<IFilterPanelProps> = (props) => {
 export * from './Filter/types'
 export * from './FilterItem/types'
 export * from './types'
-

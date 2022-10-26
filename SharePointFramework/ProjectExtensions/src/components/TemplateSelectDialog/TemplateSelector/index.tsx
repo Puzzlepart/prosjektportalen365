@@ -11,10 +11,10 @@ export const TemplateSelector: FC = () => {
   const [searchValue, setSearchValue] = useState(context.state.selectedTemplate?.text)
 
   /**
- * Sets the selected template to the state, and updates the pre-defined selected extensions
- *
- * @param template - Project template
- */
+   * Sets the selected template to the state, and updates the pre-defined selected extensions
+   *
+   * @param template - Project template
+   */
   const onTemplateChange = (template: ProjectTemplate): void => {
     context.setState({
       selectedTemplate: template,

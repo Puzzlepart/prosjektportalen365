@@ -38,11 +38,13 @@ export const ListContentSection: FC = () => {
               <Toggle
                 label={lcc.text}
                 defaultChecked={selectedKeys.indexOf(lcc.key) !== -1}
-                disabled={context.state.selectedTemplate?.isDefaultListContentLocked && lcc.isDefault}
+                disabled={
+                  context.state.selectedTemplate?.isDefaultListContentLocked && lcc.isDefault
+                }
                 inlineLabel={true}
                 onChanged={(checked) => onChanged(lcc, checked)}
               />
-              {(context.state.selectedTemplate?.isDefaultListContentLocked && lcc.isDefault) && (
+              {context.state.selectedTemplate?.isDefaultListContentLocked && lcc.isDefault && (
                 <Icon iconName={'Lock'} className={styles.icon} />
               )}
             </div>

@@ -3,9 +3,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { ProjectInformation } from '../ProjectInformation'
 import { IProjectInformationPanelProps } from './types'
 
-export const ProjectInformationPanel: FC<IProjectInformationPanelProps> = (
-  props
-) => {
+export const ProjectInformationPanel: FC<IProjectInformationPanelProps> = (props) => {
   const [showPanel, setShowPanel] = useState(!props.hidden)
 
   useEffect(() => {
