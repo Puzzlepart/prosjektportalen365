@@ -26,20 +26,32 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
         modalProps={{ containerClassName: styles.root, isBlocking: true, isDarkOverlay: true }}
         onDismiss={props.onDismiss}
         containerClassName={styles.root}>
-        <Pivot style={{ minHeight: 400 }}>
+        <Pivot style={{ minHeight: 450 }}>
           <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
             <TemplateSelector />
           </PivotItem>
-          {!isEmpty(props.data.extensions) && (
-            <PivotItem headerText={strings.ExtensionsTitle} itemIcon='ArrangeBringForward'>
-              <ExtensionsSection style={{ height: 400 }} />
-            </PivotItem>
-          )}
-          {!isEmpty(props.data.listContentConfig) && (
-            <PivotItem headerText={strings.ListContentTitle} itemIcon='ViewList'>
-              <ListContentSection style={{ height: 400 }} />
-            </PivotItem>
-          )}
+          <PivotItem
+            headerText={strings.ExtensionsSectionHeaderText}
+            itemIcon='ArrangeBringForward'
+            headerButtonProps={
+              isEmpty(props.data.extensions) && {
+                disabled: true,
+                style: { opacity: 0.3, cursor: 'default' }
+              }
+            }>
+            <ExtensionsSection style={{ height: 400 }} />
+          </PivotItem>
+          <PivotItem
+            headerText={strings.ListContentSectionHeaderText}
+            itemIcon='ViewList'
+            headerButtonProps={
+              isEmpty(props.data.listContentConfig) && {
+                disabled: true,
+                style: { opacity: 0.3, cursor: 'default' }
+              }
+            }>
+            <ListContentSection style={{ height: 400 }} />
+          </PivotItem>
         </Pivot>
         <DialogFooter>
           <PrimaryButton

@@ -2,8 +2,6 @@ import {
   DetailsList,
   IDetailsRowProps,
   ScrollablePane,
-  SearchBox,
-  SelectAllVisibility,
   SelectionMode,
   Sticky,
   StickyPositionType
@@ -13,6 +11,7 @@ import strings from 'ProjectExtensionsStrings'
 import React, { useContext } from 'react'
 import { CheckLocked } from '../CheckLocked'
 import { TemplateSelectDialogContext } from '../context'
+import { ListHeaderSearch } from '../ListHeaderSearch'
 import { TemplateListContentConfigMessage } from '../TemplateListContentConfigMessage'
 import { TemplateSelectDialogSectionComponent } from '../types'
 import { useSelectionList } from '../useSelectionList'
@@ -57,19 +56,15 @@ export const ListContentSection: TemplateSelectDialogSectionComponent = (props) 
             return defaultRender(detailsRowProps)
           }}
           onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
-            <Sticky stickyPosition={StickyPositionType.Header}>
-              <div className={styles.searchBox} hidden={items.length < 5}>
-                <SearchBox
-                  placeholder={strings.ExtensionsSectionSearchPlaceholder}
-                  onChange={(_, newValue) => onSearch(newValue)}
-                  onSearch={(newValue) => onSearch(newValue)}
-                />
-              </div>
-              {defaultRender({
-                ...detailsHeaderProps,
-                selectAllVisibility: SelectAllVisibility.hidden
-              })}
-            </Sticky>
+            <ListHeaderSearch
+              detailsHeaderProps={detailsHeaderProps}
+              defaultRender={defaultRender}
+              search={{
+                placeholder: strings.ListContentSectionSearchPlaceholder,
+                onSearch,
+                hidden: items.length < 5
+              }}
+            />
           )}
           onRenderDetailsFooter={() => (
             <Sticky stickyPosition={StickyPositionType.Footer}>
