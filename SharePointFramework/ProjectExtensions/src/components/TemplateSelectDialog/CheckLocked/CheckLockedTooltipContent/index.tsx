@@ -9,7 +9,7 @@ export const CheckLockedTooltipContent: FC<ICheckLockedTooltipContent> = (props)
   return (
     <div className={styles.root}>
       <div className={styles.icon}>
-        <Icon  {...props.iconProps} />
+        <Icon {...props.iconProps} />
       </div>
       <div>{props.text}</div>
     </div>

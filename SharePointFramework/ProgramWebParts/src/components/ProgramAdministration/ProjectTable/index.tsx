@@ -1,70 +1,15 @@
-import { SelectionMode, Checkbox, SearchBox } from '@fluentui/react'
-import { uniqBy } from '@microsoft/sp-lodash-subset'
+import { Checkbox, SearchBox } from '@fluentui/react'
 import strings from 'ProgramWebPartsStrings'
-import React, { FormEvent, FC, useContext, useEffect, useMemo, useState, ChangeEvent } from 'react'
+import React, { FormEvent, FC, useContext, useMemo } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import styles from './ProjectTable.module.scss'
 import { IListField, IProjectTableProps } from './types'
+import { useProjectTable } from './useProjectTable'
 
 export const ProjectTable: FC<IProjectTableProps> = (props) => {
   const context = useContext(ProgramAdministrationContext)
-  const [items, setItems] = useState<any[]>([])
-  const [selection, setSelection] = useState<any[]>([])
-
-  useEffect(() => setItems(props.items), [props.items])
-  useEffect(() => props.onSelectionChanged(selection), [selection])
-
-  const handleItemClicked = (item: any, selecting: boolean) => {
-    if (props.selectionMode === SelectionMode.none) return
-    let newSelection: any[] = null
-    if (selecting) {
-      switch (props.selectionMode) {
-        case SelectionMode.single: {
-          newSelection = [item]
-          break
-        }
-        case SelectionMode.multiple: {
-          newSelection = [...selection, item]
-          break
-        }
-      }
-    } else {
-      newSelection = [...selection.filter((selectedItem: any): boolean => selectedItem !== item)]
-    }
-    if (newSelection) {
-      setSelection(newSelection)
-    }
-  }
-
-  const handleHeaderCheckboxClicked = (selecting: boolean) => {
-    if (props.selectionMode === SelectionMode.none) return
-    let newSelection: any[] = null
-    if (selecting) {
-      switch (props.selectionMode) {
-        case SelectionMode.multiple: {
-          newSelection = [...props.items]
-          break
-        }
-      }
-    } else {
-      newSelection = []
-    }
-    if (newSelection) {
-      setSelection(newSelection)
-    }
-  }
-
-  const handleFilterChanged = (_: ChangeEvent<HTMLInputElement>, filter: string) => {
-    const filtered: any[] = props.items.filter((item: any): boolean =>
-      props.fields
-        .map((field: IListField): string => field.fieldName)
-        .some(
-          (key: string): boolean =>
-            key in item && (item[key] + '').toLowerCase().indexOf(filter) >= 0
-        )
-    )
-    setItems(uniqBy([...(selection ?? []), ...filtered], (item) => item.SiteId))
-  }
+  const { items, handleItemClicked, handleHeaderCheckboxClicked, handleFilterChanged, selection } =
+    useProjectTable(props)
 
   const renderCheckbox = (checked: boolean, onChange: (checked: boolean) => void) => (
     <Checkbox
