@@ -10,9 +10,7 @@
   "main": "lib/index.js",
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
-    "serve:nobrowser": "gulp serve-deprecated --nobrowser --locale=nb-no",
-    "serve": "gulp serve-deprecated --locale=nb-no",
-    "preserve": "node ../.tasks/createServeConfig.js",
+    "serve": "node ../.tasks/createServeConfig.js &&  && gulp serve-deprecated --locale=nb-no --nobrowser",
     "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
     "package:debug": "gulp clean && gulp default && gulp package-solution",
     "build": "tsc --build",
@@ -60,6 +58,6 @@
     "gulp": "4.0.2",
     "prettier": "2.7.1",
     "typescript": "4.5.5",
-    "webpack": "4.46.0"
+    "webpack": "5.74.0"
   }
 }

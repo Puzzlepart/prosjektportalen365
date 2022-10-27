@@ -1,0 +1,3 @@
+<Field Description="{resource:SiteFields_GtExtensionHidden_Description}" DisplayName="{resource:SiteFields_GtExtensionHidden_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{6ba9eb00-1971-4e9d-953d-2367fa017cda}" Name="GtExtensionHidden" StaticName="GtExtensionHidden" Type="Boolean">
+    <Default>0</Default>
+</Field>

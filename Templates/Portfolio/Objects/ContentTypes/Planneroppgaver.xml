@@ -9,5 +9,6 @@
         <pnp:FieldRef ID="525a7269-b880-4266-8482-fe7a1bfaac3e" Name="GtLccFields" Hidden="true" UpdateChildren="true" />
         <pnp:FieldRef ID="19c0c03c-678a-4c2a-ab9b-cb9ffd903012" Name="GtLccDefault" UpdateChildren="true" />
         <pnp:FieldRef ID="f536ad85-248c-49b9-b6c7-0665943a2061" Name="GtLccHidden" UpdateChildren="true" />
+        <pnp:FieldRef ID="f7a0e768-d12f-449d-8d46-8bd9a2ffc45b" Name="GtLccLocked" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

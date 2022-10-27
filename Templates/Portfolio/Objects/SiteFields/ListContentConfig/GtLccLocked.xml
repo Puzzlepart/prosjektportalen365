@@ -1,0 +1,3 @@
+﻿<Field Description="{resource:SiteFields_GtLccLocked_Description}" DisplayName="{resource:SiteFields_GtLccLocked_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{f7a0e768-d12f-449d-8d46-8bd9a2ffc45b}" Name="GtLccLocked" StaticName="GtLccLocked" Type="Boolean">
+    <Default>0</Default>
+</Field>

@@ -9,8 +9,7 @@
   "license": "MIT",
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
-    "serve": "gulp serve-deprecated --locale=nb-no --nobrowser",
-    "preserve": "node ../.tasks/createServeConfig.js",
+    "serve": "node ../.tasks/createServeConfig.js && gulp serve-deprecated --locale=nb-no --nobrowser",
     "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
     "package:debug": "gulp clean && gulp default && gulp package-solution",
     "build": "tsc --build",
@@ -80,6 +79,6 @@
     "livereload": "0.9.1",
     "prettier": "2.1.1",
     "typescript": "4.5.5",
-    "webpack": "^4.44.2"
+    "webpack": "5.74.0"
   }
 }

@@ -1,31 +1,50 @@
-import { Web } from '@pnp/sp'
-import { IDropdownOption } from '@fluentui/react/lib/Dropdown'
+import { getId, IObjectWithKey } from '@fluentui/react'
 import { TypedHash } from '@pnp/common'
+import { Web } from '@pnp/sp'
 import { Schema } from 'sp-js-provisioning'
+import { ProjectTemplate } from './ProjectTemplate'
 
-export interface IProjectExtension {
+export interface IProjectExtensionSPItem {
   Id: number
   FieldValuesAsText?: TypedHash<string>
   key: string
   GtExtensionDefault?: boolean
+  GtExtensionHidden?: boolean
+  GtExtensionLocked?: boolean
   File?: { UniqueId: string; Name: string; Title: string; ServerRelativeUrl: string }
 }
 
-export class ProjectExtension implements Omit<IDropdownOption, 'id'> {
+export class ProjectExtension implements IObjectWithKey {
   public id: number
   public key: string
   public text: string
   public isDefault: boolean
+  public hidden: boolean
   public subText: string
   public serverRelativeUrl: string
+  private _isLocked: boolean
 
-  constructor(spItem: IProjectExtension, public web: Web) {
-    this.key = `projecttemplate_${spItem.Id}`
+  constructor(spItem: IProjectExtensionSPItem, public web: Web) {
+    this.key = getId(`projecttemplate_${spItem.Id}`)
     this.text = spItem.File.Title
     this.isDefault = spItem.GtExtensionDefault
+    this.hidden = spItem.GtExtensionHidden
+    this._isLocked = spItem.GtExtensionLocked
     this.subText = spItem.FieldValuesAsText.GtDescription
     this.serverRelativeUrl = spItem.File.ServerRelativeUrl
     this.id = spItem.Id
+  }
+
+  /**
+   * Checks if the project extension is locked for the specified template
+   *
+   * @param template Project template
+   */
+  public isLocked(template: ProjectTemplate): boolean {
+    return (
+      this._isLocked ||
+      (template?.isDefaultExtensionsLocked && template?.extensionIds.includes(this.id))
+    )
   }
 
   public async getSchema(): Promise<Schema> {

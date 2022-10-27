@@ -6,7 +6,6 @@ import { BaseDialog } from '../@BaseDialog'
 import { TemplateSelectDialogContext } from './context'
 import { ExtensionsSection } from './ExtensionsSection'
 import { ListContentSection } from './ListContentSection'
-import { TemplateListContentConfigMessage } from './TemplateListContentConfigMessage'
 import styles from './TemplateSelectDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
 import { ITemplateSelectDialogProps } from './types'
@@ -27,30 +26,32 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
         modalProps={{ containerClassName: styles.root, isBlocking: true, isDarkOverlay: true }}
         onDismiss={props.onDismiss}
         containerClassName={styles.root}>
-        <Pivot style={{ minHeight: 350, height: state.flexibleHeight }}>
+        <Pivot style={{ minHeight: 450 }}>
           <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
             <TemplateSelector />
-            {(state.selectedTemplate?.listContentConfigIds ||
-              state.selectedTemplate?.listExtensionIds) && (
-              <TemplateListContentConfigMessage selectedTemplate={state.selectedTemplate} />
-            )}
           </PivotItem>
-          {!isEmpty(props.data.extensions) && (
-            <PivotItem headerText={strings.ExtensionsTitle} itemIcon='ArrangeBringForward'>
-              {state.selectedTemplate?.listExtensionIds && (
-                <TemplateListContentConfigMessage selectedTemplate={state.selectedTemplate} />
-              )}
-              <ExtensionsSection />
-            </PivotItem>
-          )}
-          {!isEmpty(props.data.listContentConfig) && (
-            <PivotItem headerText={strings.ListContentTitle} itemIcon='ViewList'>
-              {state.selectedTemplate?.listContentConfigIds && (
-                <TemplateListContentConfigMessage selectedTemplate={state.selectedTemplate} />
-              )}
-              <ListContentSection />
-            </PivotItem>
-          )}
+          <PivotItem
+            headerText={strings.ExtensionsSectionHeaderText}
+            itemIcon='ArrangeBringForward'
+            headerButtonProps={
+              isEmpty(props.data.extensions) && {
+                disabled: true,
+                style: { opacity: 0.3, cursor: 'default' }
+              }
+            }>
+            <ExtensionsSection style={{ height: 400 }} />
+          </PivotItem>
+          <PivotItem
+            headerText={strings.ListContentSectionHeaderText}
+            itemIcon='ViewList'
+            headerButtonProps={
+              isEmpty(props.data.listContentConfig) && {
+                disabled: true,
+                style: { opacity: 0.3, cursor: 'default' }
+              }
+            }>
+            <ListContentSection style={{ height: 400 }} />
+          </PivotItem>
         </Pivot>
         <DialogFooter>
           <PrimaryButton

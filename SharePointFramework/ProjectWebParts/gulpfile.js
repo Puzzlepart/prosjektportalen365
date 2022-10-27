@@ -21,7 +21,7 @@ gulp.task('setHiddenToolbox', (done) => {
             let manifest = require(files[i])
             if (['RiskMatrixWebPart'].indexOf(manifest.alias) !== -1) {
                 log(`[${colors.cyan('setHiddenToolbox')}] Skipping ${colors.cyan('hiddenFromToolbox')} for ${colors.cyan(manifest.alias)}...`)
-            } else if (manifest.hiddenFromToolbox != !!argv.ship) {
+            } else if (manifest.hiddenFromToolbox !== !!argv.ship) {
                 log(`[${colors.cyan('setHiddenToolbox')}] Setting ${colors.cyan('hiddenFromToolbox')} to ${colors.cyan(!!argv.ship)} for ${colors.cyan(manifest.alias)}...`)
                 manifest.hiddenFromToolbox = !!argv.ship
                 fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { /* handle error */ })

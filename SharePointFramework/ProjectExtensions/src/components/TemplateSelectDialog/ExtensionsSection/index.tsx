@@ -1,52 +1,80 @@
-import { Icon, Toggle } from '@fluentui/react'
-import { stringIsNullOrEmpty } from '@pnp/common'
-import React, { FC, useContext } from 'react'
-import { ProjectExtension } from '../../../models'
+import {
+  DetailsList,
+  IDetailsRowProps,
+  ScrollablePane,
+  SelectionMode,
+  Sticky,
+  StickyPositionType
+} from '@fluentui/react'
+import { ProjectExtension } from 'models'
+import strings from 'ProjectExtensionsStrings'
+import React, { useContext } from 'react'
+import { CheckLocked } from '../CheckLocked'
 import { TemplateSelectDialogContext } from '../context'
+import { ListHeaderSearch } from '../ListHeaderSearch'
+import { TemplateListContentConfigMessage } from '../TemplateListContentConfigMessage'
+import { TemplateSelectDialogSectionComponent } from '../types'
+import { useSelectionList } from '../useSelectionList'
 import styles from './ExtensionsSection.module.scss'
+import { useColumns } from './useColumns'
 
-export const ExtensionsSection: FC = () => {
+export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) => {
   const context = useContext(TemplateSelectDialogContext)
-
-  /**
-   * On item toggle
-   *
-   * @param extension Extension
-   * @param checked Checked
-   */
-  function onChange(extension: ProjectExtension, checked: boolean): void {
-    let selectedExtensions = []
-    if (checked) selectedExtensions = [extension, ...context.state.selectedExtensions]
-    else
-      selectedExtensions = context.state.selectedExtensions.filter(
-        (ext) => extension.text !== ext.text
-      )
-    context.setState({ selectedExtensions })
-  }
-
-  const selectedKeys = context.state.selectedExtensions.map((ext) => ext.key)
+  const selectedKeys = context.state.selectedExtensions.map((lc) => lc.key)
+  const { selection, onSearch, searchTerm } = useSelectionList(
+    selectedKeys,
+    (selectedExtensions) => {
+      context.setState({ selectedExtensions })
+    }
+  )
+  const items = context.props.data.extensions.filter((ext) => !ext.hidden)
+  const columns = useColumns()
 
   return (
-    <div className={styles.root}>
-      {context.props.data.extensions.map((ext) => (
-        <div key={ext.key} className={styles.item}>
-          <div className={styles.toggle}>
-            <Toggle
-              label={ext.text}
-              defaultChecked={selectedKeys.indexOf(ext.key) !== -1}
-              disabled={context.state.selectedTemplate?.isDefaultExtensionsLocked && ext.isDefault}
-              inlineLabel={true}
-              onChange={(_event, checked) => onChange(ext, checked)}
+    <div className={styles.root} style={props.style}>
+      <ScrollablePane>
+        <DetailsList
+          setKey='set'
+          selection={selection}
+          selectionMode={SelectionMode.multiple}
+          selectionPreservedOnEmptyClick={true}
+          onRenderRow={(
+            detailsRowProps: IDetailsRowProps,
+            defaultRender: (props?: IDetailsRowProps) => JSX.Element
+          ) => {
+            const ext = detailsRowProps.item as ProjectExtension
+            detailsRowProps.disabled = ext.isLocked(context.state.selectedTemplate)
+            if (detailsRowProps.disabled)
+              detailsRowProps.onRenderCheck = (props) => (
+                <CheckLocked {...props} tooltip={{ text: strings.ExtensionLockedTooltipText }} />
+              )
+            if (
+              ext.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1 &&
+              !selectedKeys.includes(ext.key)
+            )
+              return null
+            return defaultRender(detailsRowProps)
+          }}
+          onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
+            <ListHeaderSearch
+              detailsHeaderProps={detailsHeaderProps}
+              defaultRender={defaultRender}
+              search={{
+                placeholder: strings.ExtensionsSectionSearchPlaceholder,
+                onSearch,
+                hidden: items.length < 5
+              }}
             />
-            {context.state.selectedTemplate?.isDefaultExtensionsLocked && ext.isDefault && (
-              <Icon iconName='Lock' className={styles.icon} />
-            )}
-          </div>
-          <div className={styles.subText} hidden={stringIsNullOrEmpty(ext.subText)}>
-            <span>{ext.subText}</span>
-          </div>
-        </div>
-      ))}
+          )}
+          onRenderDetailsFooter={() => (
+            <Sticky stickyPosition={StickyPositionType.Footer}>
+              {context.state.selectedTemplate?.extensionIds && <TemplateListContentConfigMessage />}
+            </Sticky>
+          )}
+          items={items}
+          columns={columns}
+        />
+      </ScrollablePane>
     </div>
   )
 }

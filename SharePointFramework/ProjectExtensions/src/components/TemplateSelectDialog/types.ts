@@ -2,6 +2,12 @@ import { ProjectSetupSettings } from 'projectSetup/ProjectSetupSettings'
 import { IProjectSetupData } from 'projectSetup/types'
 import { ListContentConfig, ProjectExtension, ProjectTemplate } from 'models'
 import { IBaseDialogProps } from '../@BaseDialog/types'
+import React from 'react'
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface ITemplateSelectDialogSectionProps extends React.HTMLProps<HTMLDivElement> {}
+
+export type TemplateSelectDialogSectionComponent = React.FC<ITemplateSelectDialogSectionProps>
 
 export interface ITemplateSelectDialogProps extends IBaseDialogProps {
   /**
@@ -27,7 +33,7 @@ export interface ITemplateSelectDialogState {
   selectedExtensions?: ProjectExtension[]
 
   /**
-   * Currently selected list content config
+   * Currently selected list content configuration
    */
   selectedListContentConfig?: ListContentConfig[]
 
@@ -35,9 +41,4 @@ export interface ITemplateSelectDialogState {
    * Settings
    */
   settings?: ProjectSetupSettings
-
-  /**
-   * Height for the Dialog Pivot needs to be fixed
-   */
-  flexibleHeight?: number
 }

@@ -1,12 +1,15 @@
 import { ISearchBoxProps, SearchBox } from '@fluentui/react'
 import { ProjectTemplate } from 'models'
-import React, { FC, useContext, useState } from 'react'
+import strings from 'ProjectExtensionsStrings'
+import React, { useContext, useState } from 'react'
 import Autocomplete from 'react-autocomplete'
 import { TemplateSelectDialogContext } from '../context'
+import { TemplateListContentConfigMessage } from '../TemplateListContentConfigMessage'
+import { TemplateSelectDialogSectionComponent } from '../types'
 import styles from './TemplateSelector.module.scss'
 import { TemplateSelectorItem } from './TemplateSelectorItem'
 
-export const TemplateSelector: FC = () => {
+export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
   const context = useContext(TemplateSelectDialogContext)
   const [searchValue, setSearchValue] = useState(context.state.selectedTemplate?.text)
 
@@ -19,7 +22,7 @@ export const TemplateSelector: FC = () => {
     context.setState({
       selectedTemplate: template,
       selectedExtensions: context.props.data.extensions.filter(
-        (ext) => ext.isDefault || template?.listExtensionIds?.some((id) => id === ext.id)
+        (ext) => ext.isDefault || template?.extensionIds?.some((id) => id === ext.id)
       ),
       selectedListContentConfig: context.props.data.listContentConfig.filter(
         (lcc) => lcc.isDefault || template?.listContentConfigIds?.some((id) => id === lcc.id)
@@ -42,11 +45,15 @@ export const TemplateSelector: FC = () => {
               <TemplateSelectorItem template={template} isHighlighted={isHighlighted} />
             </div>
           )}
-          inputProps={{ className: styles.searchBox }}
+          inputProps={{
+            className: styles.searchBox,
+            placeholder: strings.TemplateSelectorSearchPlaceholder
+          }}
           renderInput={(inputProps) => (
             <SearchBox
               {...(inputProps as ISearchBoxProps)}
               iconProps={context.state.selectedTemplate?.iconProps}
+              clearButtonProps={{ title: strings.TemplateSelectorSearchClearText }}
               onClear={(event) => {
                 event.stopPropagation()
                 event.preventDefault()
@@ -63,6 +70,8 @@ export const TemplateSelector: FC = () => {
           }}
           selectOnBlur={true}
         />
+        {(context.state.selectedTemplate?.listContentConfigIds ||
+          context.state.selectedTemplate?.extensionIds) && <TemplateListContentConfigMessage />}
       </div>
     </div>
   )

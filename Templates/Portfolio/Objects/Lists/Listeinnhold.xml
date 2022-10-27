@@ -20,6 +20,57 @@
                 <FieldRef Name="GtLccFields" />
                 <FieldRef Name="GtLccHidden" />
                 <FieldRef Name="GtLccDefault" />
+                <FieldRef Name="GtLccLocked" />
+                <FieldRef Name="Modified" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">30</RowLimit>
+            <JSLink>clienttemplates.js</JSLink>
+        </View>
+        <View Type="HTML" DisplayName="{resource:ContentTypes_ListContent_Name}" Url="{site}/{resource:Lists_ListContent_Url}ListContent.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+            <Query>
+                <Where>
+                    <Eq>
+                        <FieldRef Name="ContentType" />
+                        <Value Type="Computed">{resource:ContentTypes_ListContent_Name}</Value>
+                    </Eq>
+                </Where>
+                <OrderBy>
+                    <FieldRef Name="Title" />
+                </OrderBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="Title" />
+                <FieldRef Name="GtDescription" />
+                <FieldRef Name="GtLccSourceList" />
+                <FieldRef Name="GtLccDestinationList" />
+                <FieldRef Name="GtLccFields" />
+                <FieldRef Name="GtLccHidden" />
+                <FieldRef Name="GtLccDefault" />
+                <FieldRef Name="GtLccLocked" />
+                <FieldRef Name="Modified" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">30</RowLimit>
+            <JSLink>clienttemplates.js</JSLink>
+        </View>
+        <View Type="HTML" DisplayName="{resource:ContentTypes_PlannerTasks_Name}" Url="{site}/{resource:Lists_ListContent_Url}/PlannerTasks.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+            <Query>
+                <Where>
+                    <Eq>
+                        <FieldRef Name="ContentType" />
+                        <Value Type="Computed">{resource:ContentTypes_PlannerTasks_Name}</Value>
+                    </Eq>
+                </Where>
+                <OrderBy>
+                    <FieldRef Name="Title" />
+                </OrderBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="Title" />
+                <FieldRef Name="GtDescription" />
+                <FieldRef Name="GtLccSourceList" />
+                <FieldRef Name="GtLccHidden" />
+                <FieldRef Name="GtLccDefault" />
+                <FieldRef Name="GtLccLocked" />
                 <FieldRef Name="Modified" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
@@ -41,7 +92,7 @@
             <pnp:DataValue FieldName="Title">Planneroppgaver</pnp:DataValue>
             <pnp:DataValue FieldName="GtDescription">Standard prosjektoppgaver for å understøtte Prosjektveiviserens metodikk</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccSourceList">Planneroppgaver</pnp:DataValue>
-            <pnp:DataValue FieldName="GtLccFields">N/A</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccFields">-</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
         </pnp:DataRow>

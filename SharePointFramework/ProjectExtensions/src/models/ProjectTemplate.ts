@@ -1,4 +1,4 @@
-import { IIconProps } from '@fluentui/react'
+import { getId, IIconProps } from '@fluentui/react'
 import { TypedHash } from '@pnp/common'
 import { Web } from '@pnp/sp'
 import { Schema } from 'sp-js-provisioning'
@@ -33,10 +33,10 @@ export class ProjectTemplate {
   public isDefault: boolean
   public isDefaultExtensionsLocked: boolean
   public isDefaultListContentLocked: boolean
+  public extensionIds: number[]
   public listContentConfigIds: number[]
   public projectTemplateId: number
   public projectTemplateUrl: string
-  public listExtensionIds: number[]
   public projectContentType: string
   public projectStatusContentType: string
   public projectColumns: string
@@ -48,7 +48,7 @@ export class ProjectTemplate {
 
   constructor(spItem: IProjectTemplateSPItem, public web: Web) {
     this.id = spItem.Id
-    this.key = `Template${this.id}`
+    this.key = getId(`projecttemplate_${this.id}`)
     this.text = spItem.FieldValuesAsText.Title
     this.subText = spItem.FieldValuesAsText.GtDescription
     this.isDefault = spItem?.IsDefaultTemplate
@@ -64,7 +64,7 @@ export class ProjectTemplate {
     this.isHidden = spItem.IsHiddenTemplate
     spItem.ListContentConfigLookupId?.length > 0 ? spItem.ListContentConfigLookupId : null
     this.projectTemplateId = spItem.GtProjectTemplateId
-    this.listExtensionIds =
+    this.extensionIds =
       spItem.GtProjectExtensionsId?.length > 0 ? spItem.GtProjectExtensionsId : null
     this.projectContentType = spItem.GtProjectContentType
     this.projectStatusContentType = spItem.GtProjectStatusContentType

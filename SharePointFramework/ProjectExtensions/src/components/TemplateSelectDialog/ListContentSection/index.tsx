@@ -1,58 +1,80 @@
-import { Icon, Toggle } from '@fluentui/react'
-import { stringIsNullOrEmpty } from '@pnp/common'
-import React, { FC, useContext } from 'react'
-import { ListContentConfig } from '../../../models'
+import {
+  DetailsList,
+  IDetailsRowProps,
+  ScrollablePane,
+  SelectionMode,
+  Sticky,
+  StickyPositionType
+} from '@fluentui/react'
+import { ListContentConfig } from 'models'
+import strings from 'ProjectExtensionsStrings'
+import React, { useContext } from 'react'
+import { CheckLocked } from '../CheckLocked'
 import { TemplateSelectDialogContext } from '../context'
+import { ListHeaderSearch } from '../ListHeaderSearch'
+import { TemplateListContentConfigMessage } from '../TemplateListContentConfigMessage'
+import { TemplateSelectDialogSectionComponent } from '../types'
+import { useSelectionList } from '../useSelectionList'
 import styles from './ListContentSection.module.scss'
+import { useColumns } from './useColumns'
 
-export const ListContentSection: FC = () => {
+export const ListContentSection: TemplateSelectDialogSectionComponent = (props) => {
   const context = useContext(TemplateSelectDialogContext)
-
-  /**
-   * On item toggle
-   *
-   * @param listContentConfig List content config
-   * @param checked Checked
-   */
-  function onChanged(listContentConfig: ListContentConfig, checked: boolean): void {
-    let selectedListContentConfig = []
-    if (checked) {
-      selectedListContentConfig = [listContentConfig, ...context.state.selectedListContentConfig]
-    } else {
-      selectedListContentConfig = context.state.selectedListContentConfig.filter(
-        (lcc) => listContentConfig.text !== lcc.text
-      )
-    }
-    context.setState({ selectedListContentConfig })
-  }
-
   const selectedKeys = context.state.selectedListContentConfig.map((lc) => lc.key)
+  const { selection, onSearch, searchTerm } = useSelectionList(
+    selectedKeys,
+    (selectedListContentConfig) => {
+      context.setState({ selectedListContentConfig })
+    }
+  )
+  const items = context.props.data.listContentConfig.filter((lcc) => !lcc.hidden)
+  const columns = useColumns()
 
   return (
-    <div className={styles.root}>
-      {context.props.data.listContentConfig
-        .filter((lcc) => !lcc.hidden)
-        .map((lcc) => (
-          <div key={lcc.key} className={styles.item}>
-            <div className={styles.toggle}>
-              <Toggle
-                label={lcc.text}
-                defaultChecked={selectedKeys.indexOf(lcc.key) !== -1}
-                disabled={
-                  context.state.selectedTemplate?.isDefaultListContentLocked && lcc.isDefault
-                }
-                inlineLabel={true}
-                onChanged={(checked) => onChanged(lcc, checked)}
-              />
-              {context.state.selectedTemplate?.isDefaultListContentLocked && lcc.isDefault && (
-                <Icon iconName={'Lock'} className={styles.icon} />
-              )}
-            </div>
-            <div className={styles.subText} hidden={stringIsNullOrEmpty(lcc.subText)}>
-              <span>{lcc.subText}</span>
-            </div>
-          </div>
-        ))}
+    <div className={styles.root} style={props.style}>
+      <ScrollablePane>
+        <DetailsList
+          setKey='set'
+          selection={selection}
+          selectionMode={SelectionMode.multiple}
+          selectionPreservedOnEmptyClick={true}
+          onRenderRow={(
+            detailsRowProps: IDetailsRowProps,
+            defaultRender: (props?: IDetailsRowProps) => JSX.Element
+          ) => {
+            const lcc = detailsRowProps.item as ListContentConfig
+            detailsRowProps.disabled = lcc.isLocked(context.state.selectedTemplate)
+            if (detailsRowProps.disabled)
+              detailsRowProps.onRenderCheck = (props) => (
+                <CheckLocked {...props} tooltip={{ text: strings.ListContentLockedTooltipText }} />
+              )
+            if (
+              lcc.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1 &&
+              !selectedKeys.includes(lcc.key)
+            )
+              return null
+            return defaultRender(detailsRowProps)
+          }}
+          onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
+            <ListHeaderSearch
+              detailsHeaderProps={detailsHeaderProps}
+              defaultRender={defaultRender}
+              search={{
+                placeholder: strings.ListContentSectionSearchPlaceholder,
+                onSearch,
+                hidden: items.length < 5
+              }}
+            />
+          )}
+          onRenderDetailsFooter={() => (
+            <Sticky stickyPosition={StickyPositionType.Footer}>
+              {context.state.selectedTemplate?.extensionIds && <TemplateListContentConfigMessage />}
+            </Sticky>
+          )}
+          items={items}
+          columns={columns}
+        />
+      </ScrollablePane>
     </div>
   )
 }

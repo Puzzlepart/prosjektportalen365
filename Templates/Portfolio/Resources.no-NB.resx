@@ -757,6 +757,12 @@
   <data name="SiteFields_GtLccDestinationLibrary_DisplayName" xml:space="preserve">
     <value>Biblioteksurl (mål)</value>
   </data>
+  <data name="SiteFields_GtLccLocked_Description" xml:space="preserve">
+    <value>Lås elementet. Bruk sammen med "Velges som standard" for å sette elementet som obligatorisk.</value>
+  </data>
+  <data name="SiteFields_GtLccLocked_DisplayName" xml:space="preserve">
+    <value>Låst</value>
+  </data>
   <data name="SiteFields_GtShowFieldProjectStatus_DisplayName" xml:space="preserve">
     <value>Vis på prosjektstatus-siden</value>
   </data>
@@ -1704,6 +1710,18 @@
   </data>
   <data name="SiteFields_GtExtensionDefault_DisplayName" xml:space="preserve">
     <value>Standard</value>
+  </data>
+  <data name="SiteFields_GtExtensionHidden_Description" xml:space="preserve">
+    <value>Om elementet skjules, kan det ikke velges av brukerne i dialogen for oppsett av nytt prosjektområde.</value>
+  </data>
+  <data name="SiteFields_GtExtensionHidden_DisplayName" xml:space="preserve">
+    <value>Skjult</value>
+  </data>
+  <data name="SiteFields_GtExtensionLocked_Description" xml:space="preserve">
+    <value>Lås elementet. Bruk sammen med 'Velges som standard' for å sette elementet som obligatorisk.</value>
+  </data>
+  <data name="SiteFields_GtExtensionLocked_DisplayName" xml:space="preserve">
+    <value>Låst</value>
   </data>
   <data name="SiteFields_GtSPGroupName_DisplayName" xml:space="preserve">
     <value>SharePoint gruppenavn</value>

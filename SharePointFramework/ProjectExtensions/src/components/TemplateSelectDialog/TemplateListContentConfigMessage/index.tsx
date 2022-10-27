@@ -1,18 +1,17 @@
 import { format, MessageBar } from '@fluentui/react'
 import strings from 'ProjectExtensionsStrings'
-import React, { FC } from 'react'
+import React, { FC, useContext } from 'react'
 import ReactMarkdown from 'react-markdown'
+import { TemplateSelectDialogContext } from '../context'
 import styles from './TemplateListContentConfigMessage.module.scss'
-import { ITemplateListContentConfigMessageProps } from './types'
 
-export const TemplateListContentConfigMessage: FC<ITemplateListContentConfigMessageProps> = ({
-  selectedTemplate
-}) => {
+export const TemplateListContentConfigMessage: FC = () => {
+  const context = useContext(TemplateSelectDialogContext)
   return (
     <div className={styles.root}>
       <MessageBar>
         <ReactMarkdown>
-          {format(strings.TemplateListContentConfigText, selectedTemplate?.text)}
+          {format(strings.TemplateListContentConfigText, context.state.selectedTemplate?.text)}
         </ReactMarkdown>
       </MessageBar>
     </div>
