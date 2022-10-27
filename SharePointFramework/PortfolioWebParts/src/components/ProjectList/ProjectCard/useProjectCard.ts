@@ -17,7 +17,7 @@ export function useProjectCard(props: IProjectCardProps) {
     className: styles.root,
     style: {}
   }
-  if (!props.project.userIsMember) {
+  if (props.project.userIsMember === false) {
     documentCardProps.onClickHref = '#'
     documentCardProps.title = strings.NoAccessMessage
     documentCardProps.style = { opacity: '20%', cursor: 'default' }
