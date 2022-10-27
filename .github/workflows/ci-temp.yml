@@ -45,7 +45,7 @@ jobs:
   upgrade:
     needs: build_release_package
     name: Upgrade
-    runs-on: windows-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/download-artifact@v3
         with:
