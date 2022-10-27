@@ -8,7 +8,7 @@ import { IProjectCardProps } from './types'
  * @param props Props
  */
 export function useProjectCard(props: IProjectCardProps) {
-  const [isImageLoaded, setIsImageLoaded] = useState(false)
+  const [isImageLoaded, setIsImageLoaded] = useState(!props.project.logo)
   let title = ''
   let href = props.project.url
   let style: CSSProperties = {}
@@ -17,5 +17,5 @@ export function useProjectCard(props: IProjectCardProps) {
     title = strings.NoAccessMessage
     style = { opacity: '20%', cursor: 'default' }
   }
-  return { shimmer: props.shimmer || !isImageLoaded, setIsImageLoaded, title, href, style }
+  return { shimmer: (props.shimmer || !isImageLoaded), setIsImageLoaded, title, href, style }
 }
