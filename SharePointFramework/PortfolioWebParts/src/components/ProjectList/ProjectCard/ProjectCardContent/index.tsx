@@ -1,7 +1,7 @@
 import { IPersonaSharedProps, Persona, PersonaSize } from '@fluentui/react/lib/Persona'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC } from 'react'
-import styles from '../ProjectCard.module.scss'
+import styles from './ProjectCardContent.module.scss'
 import { IProjectCardProps } from '../types'
 
 /**
@@ -30,7 +30,7 @@ export const ProjectCardContent: FC<IProjectCardProps> = ({
     secondaryText: strings.ProjectManager
   }
   return (
-    <div>
+    <div className={styles.root}>
       <div className={styles.phase}>{project.phase || strings.NotSet}</div>
       <div className={styles.personaContainer} hidden={!showProjectOwner}>
         <Persona {...ownerPersonaProps} />
