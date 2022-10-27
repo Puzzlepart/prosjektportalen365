@@ -1718,7 +1718,7 @@
     <value>Skjult</value>
   </data>
   <data name="SiteFields_GtExtensionLocked_Description" xml:space="preserve">
-    <value>Lås elementet. Bruk sammen med "Velges som standard" for å sette elementet som obligatorisk.</value>
+    <value>Lås elementet. Bruk sammen med 'Velges som standard' for å sette elementet som obligatorisk.</value>
   </data>
   <data name="SiteFields_GtExtensionLocked_DisplayName" xml:space="preserve">
     <value>Låst</value>
