@@ -1,4 +1,6 @@
 declare interface IProjectExtensionsStrings {
+  ExtensionLockedTooltipText: string
+  ListContentLockedTooltipText: string
   TemplateSelectorSearchClearText: string
   TemplateSelectorSearchPlaceholder: string
   ExtensionsSectionSearchPlaceholder: string

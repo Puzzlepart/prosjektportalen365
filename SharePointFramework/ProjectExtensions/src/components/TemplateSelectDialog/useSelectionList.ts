@@ -1,18 +1,20 @@
 import { Selection } from '@fluentui/react'
 import { ListContentConfig } from 'models'
-import { useContext, useEffect, useState } from 'react'
-import { TemplateSelectDialogContext } from './context'
+import { useEffect, useState } from 'react'
 
 /**
  * Component logic hook for selection list
  *
  * @param selectedKeys Selected keys
+ * @param onSelectionChanged On selection changed
  */
-export function useSelectionList(selectedKeys: string[]) {
-  const context = useContext(TemplateSelectDialogContext)
-  const __selection = new Selection<ListContentConfig>({
+export function useSelectionList(
+  selectedKeys: string[],
+  onSelectionChanged: (items: any[]) => void
+) {
+  const __selection = new Selection<any>({
     onSelectionChanged: () => {
-      context.setState({ selectedListContentConfig: [...selection.getSelection()] })
+      onSelectionChanged(selection.getSelection())
     }
   })
   const [selection, setSelection] = useState<Selection<ListContentConfig>>(__selection)

@@ -1,6 +1,8 @@
 define([], function () {
     return {
-        TemplateSelectorSearchClearText:'Nullstill valg av prosjektmal',
+        ExtensionLockedTooltipText: 'Prosjekttilegget er låst og kan ikke velges bort.',
+        ListContentLockedTooltipText: 'Standardinnhold-elementet er låst og kan ikke velges bort.',
+        TemplateSelectorSearchClearText: 'Nullstill valg av prosjektmal',
         TemplateSelectorSearchPlaceholder: 'Søk i prosjektmaler...',
         ExtensionsSectionSearchPlaceholder: 'Søk i prosjekttillegg...',
         ListContentSectionSearchPlaceholder: 'Søk i standardinnhold...',

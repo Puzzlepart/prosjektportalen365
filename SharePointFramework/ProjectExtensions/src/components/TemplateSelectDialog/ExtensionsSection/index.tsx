@@ -22,7 +22,12 @@ import { useColumns } from './useColumns'
 export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) => {
   const context = useContext(TemplateSelectDialogContext)
   const selectedKeys = context.state.selectedExtensions.map((lc) => lc.key)
-  const { selection, onSearch, searchTerm } = useSelectionList(selectedKeys)
+  const { selection, onSearch, searchTerm } = useSelectionList(
+    selectedKeys,
+    (selectedExtensions) => {
+      context.setState({ selectedExtensions })
+    }
+  )
   const items = context.props.data.extensions.filter((ext) => !ext.hidden)
   const columns = useColumns()
 
@@ -41,7 +46,9 @@ export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) =
             const ext = detailsRowProps.item as ProjectExtension
             detailsRowProps.disabled = ext.isLocked(context.state.selectedTemplate)
             if (detailsRowProps.disabled)
-              detailsRowProps.onRenderCheck = (props) => <CheckLocked {...props} />
+              detailsRowProps.onRenderCheck = (props) => (
+                <CheckLocked {...props} tooltipText={strings.ExtensionLockedTooltipText} />
+              )
             if (
               ext.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1 &&
               !selectedKeys.includes(ext.key)
