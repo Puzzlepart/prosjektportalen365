@@ -1,15 +1,12 @@
 import {
   DetailsList,
-  IDetailsRowProps,
   ScrollablePane,
   SelectionMode,
   Sticky,
   StickyPositionType
 } from '@fluentui/react'
-import { ProjectExtension } from 'models'
 import strings from 'ProjectExtensionsStrings'
 import React, { useContext } from 'react'
-import { CheckLocked } from '../CheckLocked'
 import { TemplateSelectDialogContext } from '../context'
 import { ListHeaderSearch } from '../ListHeaderSearch'
 import { TemplateListContentConfigMessage } from '../TemplateListContentConfigMessage'
@@ -19,7 +16,7 @@ import { useExtensionsSection } from './useExtensionsSection'
 
 export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) => {
   const context = useContext(TemplateSelectDialogContext)
-  const { selection, selectedKeys, items, columns, onSearch, searchTerm } = useExtensionsSection()
+  const { selection, items, columns, onSearch, onRenderRow } = useExtensionsSection()
 
   return (
     <div className={styles.root} style={props.style}>
@@ -29,33 +26,7 @@ export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) =
           selection={selection}
           selectionMode={SelectionMode.multiple}
           selectionPreservedOnEmptyClick={true}
-          onRenderRow={(
-            detailsRowProps: IDetailsRowProps,
-            defaultRender: (props?: IDetailsRowProps) => JSX.Element
-          ) => {
-            const ext = detailsRowProps.item as ProjectExtension
-            const isLocked = ext.isLocked(context.state.selectedTemplate)
-            detailsRowProps.disabled = isLocked
-            if (isLocked) {
-              detailsRowProps.onRenderCheck = (props) => (
-                <CheckLocked {...props} tooltip={{ text: strings.ExtensionLockedTooltipText }} />
-              )
-              if (ext.isDefault) {
-                detailsRowProps.styles = {
-                  root: { background: 'rgb(237, 235, 233)', color: 'rgb(50, 49, 48)' }
-                }
-              }
-            }
-            if (
-              ext.text.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
-              selectedKeys.includes(ext.key) ||
-              (isLocked && ext.isDefault)
-            ) {
-              return defaultRender(detailsRowProps)
-            } else {
-              return null
-            }
-          }}
+          onRenderRow={onRenderRow}
           onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
             <ListHeaderSearch
               detailsHeaderProps={detailsHeaderProps}
