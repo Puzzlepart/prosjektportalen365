@@ -13,6 +13,7 @@ export const useProjectList = (props: IProjectListProps) => {
     showAsTiles: props.showAsTiles,
     selectedView: 'my_projects',
     projects: Array.apply(null, Array(24)).map(() => 0),
+    isUserInPortfolioManagerGroup: false,
     sort: { fieldName: props.sortBy, isSortedDescending: true }
   })
 

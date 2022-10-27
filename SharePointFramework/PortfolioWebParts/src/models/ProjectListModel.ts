@@ -1,4 +1,4 @@
-import { IPersonaSharedProps } from '@fluentui/react/lib/Persona'
+import { IPersonaSharedProps } from '@fluentui/react'
 
 export class ProjectListModel {
   public siteId?: string

@@ -24,7 +24,7 @@ export interface IProjectListProps extends IBaseComponentProps {
   showViewSelector?: boolean
 
   /**
-   * Show as tiles (shown as list if false)
+   * Show as tiles (shown as list if false). Perhaps this could be changed to some kind of enumeration instead?
    */
   showAsTiles?: boolean
 

@@ -40,14 +40,13 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
    */
   function renderProjects(projects: ProjectListModel[]) {
     if (state.loading) {
-      return projects.map((_, idx) => <ProjectCard key={idx} shimmer={true} />)
+      return projects.map((_, idx) => <ProjectCard key={idx} isDataLoaded={false} />)
     }
     if (state.showAsTiles) {
       return projects.map((project, idx) => (
         <ProjectCard
           key={idx}
           project={project}
-          shouldTruncateTitle={true}
           showProjectLogo={props.showProjectLogo}
           showProjectOwner={props.showProjectOwner}
           showProjectManager={props.showProjectManager}
@@ -102,34 +101,56 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   return (
     <div className={styles.root}>
       <div className={styles.container}>
-        {state.isUserInPortfolioManagerGroup && (
-          <div className={styles.projectDisplaySelect}>
-            <Pivot
-              onLinkClick={({ props }) => setState({ selectedView: props.itemKey })}
-              selectedKey={state.selectedView}>
-              <PivotItem
-                headerText={strings.MyProjectsLabel}
-                itemKey='my_projects'
-                itemIcon='FabricUserFolder'
-              />
-              <PivotItem
-                headerText={strings.AllProjectsLabel}
-                itemKey='all_projects'
-                itemIcon='AllApps'
-              />
-              <PivotItem
-                headerText={strings.ParentProjectLabel}
-                itemKey='parent_projects'
-                itemIcon='ProductVariant'
-              />
-              <PivotItem
-                headerText={strings.ProgramLabel}
-                itemKey='program'
-                itemIcon='ProductList'
-              />
-            </Pivot>
-          </div>
-        )}
+        <div className={styles.projectDisplaySelect}>
+          <Pivot
+            onLinkClick={({ props }) => setState({ selectedView: props.itemKey })}
+            selectedKey={state.selectedView}>
+            <PivotItem
+              headerText={strings.MyProjectsLabel}
+              itemKey='my_projects'
+              itemIcon='FabricUserFolder'
+              headerButtonProps={
+                !state.isUserInPortfolioManagerGroup && {
+                  disabled: true,
+                  style: { opacity: 0.3, cursor: 'default' }
+                }
+              }
+            />
+            <PivotItem
+              headerText={strings.AllProjectsLabel}
+              itemKey='all_projects'
+              itemIcon='AllApps'
+              headerButtonProps={
+                !state.isUserInPortfolioManagerGroup && {
+                  disabled: true,
+                  style: { opacity: 0.3, cursor: 'default' }
+                }
+              }
+            />
+            <PivotItem
+              headerText={strings.ParentProjectLabel}
+              itemKey='parent_projects'
+              itemIcon='ProductVariant'
+              headerButtonProps={
+                !state.isUserInPortfolioManagerGroup && {
+                  disabled: true,
+                  style: { opacity: 0.3, cursor: 'default' }
+                }
+              }
+            />
+            <PivotItem
+              headerText={strings.ProgramLabel}
+              itemKey='program'
+              itemIcon='ProductList'
+              headerButtonProps={
+                !state.isUserInPortfolioManagerGroup && {
+                  disabled: true,
+                  style: { opacity: 0.3, cursor: 'default' }
+                }
+              }
+            />
+          </Pivot>
+        </div>
         <div className={styles.searchBox} hidden={!props.showSearchBox}>
           <SearchBox
             disabled={state.loading || isEmpty(state.projects)}

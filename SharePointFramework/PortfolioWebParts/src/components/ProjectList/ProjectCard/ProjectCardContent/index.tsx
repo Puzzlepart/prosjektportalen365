@@ -1,42 +1,44 @@
 import { IPersonaSharedProps, Persona, PersonaSize } from '@fluentui/react/lib/Persona'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC } from 'react'
-import styles from './ProjectCardContent.module.scss'
 import { IProjectCardProps } from '../types'
+import styles from './ProjectCardContent.module.scss'
 
-/**
- * Project Card Content
- *
- * @param props Props
- */
-export const ProjectCardContent: FC<IProjectCardProps> = ({
-  project,
-  showProjectOwner,
-  showProjectManager
-}) => {
+function useProjectCardContent(props: IProjectCardProps) {
   const defaultPersonaProps: IPersonaSharedProps = {
     text: strings.NotSet,
     size: PersonaSize.size40,
     imageShouldFadeIn: true
   }
-  const ownerPersonaProps = {
+  const ownerPersonaProps: IPersonaSharedProps = {
     ...defaultPersonaProps,
-    ...project.owner,
+    ...props.project.owner,
     secondaryText: strings.ProjectOwner
   }
-  const managerPersonaProps = {
+  const managerPersonaProps: IPersonaSharedProps = {
     ...defaultPersonaProps,
-    ...project.manager,
+    ...props.project.manager,
     secondaryText: strings.ProjectManager
   }
+  let phase = props.project.phase ?? strings.NotSet
+  if (!props.isDataLoaded) {
+    phase = ['Konsept', 'Planlegge', 'Gjennomføre', 'Avslutte', 'Realisere'][
+      Math.floor(Math.random() * 5)
+    ]
+  }
+  return { phase, owner: ownerPersonaProps, manager: managerPersonaProps } as const
+}
+
+export const ProjectCardContent: FC<IProjectCardProps> = (props) => {
+  const { phase, owner, manager } = useProjectCardContent(props)
   return (
     <div className={styles.root}>
-      <div className={styles.phase}>{project.phase || strings.NotSet}</div>
-      <div className={styles.personaContainer} hidden={!showProjectOwner}>
-        <Persona {...ownerPersonaProps} />
+      <div className={styles.phase}>{phase}</div>
+      <div className={styles.personaContainer} hidden={!props.showProjectOwner}>
+        <Persona {...owner} />
       </div>
-      <div className={styles.personaContainer} hidden={!showProjectManager}>
-        <Persona {...managerPersonaProps} />
+      <div className={styles.personaContainer} hidden={!props.showProjectManager}>
+        <Persona {...manager} />
       </div>
     </div>
   )

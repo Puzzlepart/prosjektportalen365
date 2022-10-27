@@ -17,5 +17,5 @@ export function useProjectCard(props: IProjectCardProps) {
     title = strings.NoAccessMessage
     style = { opacity: '20%', cursor: 'default' }
   }
-  return { shimmer: props.shimmer || !isImageLoaded, setIsImageLoaded, title, href, style }
+  return { isDataLoaded: props.isDataLoaded && isImageLoaded, setIsImageLoaded, title, href, style }
 }
