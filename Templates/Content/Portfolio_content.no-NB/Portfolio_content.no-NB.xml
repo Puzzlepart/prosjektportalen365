@@ -41,6 +41,7 @@
                         <pnp:Property Key="GtExtensionDefault" Value="0" />
                         <pnp:Property Key="GtExtensionHidden" Value="1" />
                         <pnp:Property Key="GtExtensionLocked" Value="0" />
+                        
                     </pnp:Properties>
                 </pnp:File>
                 <pnp:File Src="Malbibliotek/Gevinstrealiseringsplan.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
