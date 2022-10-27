@@ -24,14 +24,11 @@ export function useRowRenderer({ selectedKeys, searchTerm }) {
         }
       }
     }
-    if (
+    const shouldRenderRow =
       ext.text.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
       selectedKeys.includes(ext.key) ||
       (isLocked && ext.isDefault)
-    ) {
-      return defaultRender(detailsRowProps)
-    } else {
-      return null
-    }
+    if (shouldRenderRow) return defaultRender(detailsRowProps)
+    else return null
   }
 }

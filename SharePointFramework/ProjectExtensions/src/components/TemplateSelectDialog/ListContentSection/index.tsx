@@ -1,5 +1,6 @@
 import {
-  DetailsList, ScrollablePane,
+  DetailsList,
+  ScrollablePane,
   SelectionMode,
   Sticky,
   StickyPositionType
