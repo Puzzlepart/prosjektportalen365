@@ -69,3 +69,4 @@ jobs:
       - name: Install
         run: release/Install.ps1 -Url "${{ env.SP_URL }}_${{ needs.build_release_package.outputs.sha_short }}" -Title "Prosjektportalen 365 ${{ needs.build_release_package.outputs.sha_short }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
         shell: powershell
+        
