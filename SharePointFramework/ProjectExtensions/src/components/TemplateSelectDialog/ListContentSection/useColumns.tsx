@@ -16,7 +16,7 @@ export function useColumns(): IColumn[] {
       fieldName: 'text',
       name: strings.TitleLabel,
       minWidth: 150,
-      maxWidth: 150,
+      maxWidth: 180,
       onRender: (lcc: ListContentConfig) => {
         const isLocked = lcc.isLocked(context.state.selectedTemplate)
         return (

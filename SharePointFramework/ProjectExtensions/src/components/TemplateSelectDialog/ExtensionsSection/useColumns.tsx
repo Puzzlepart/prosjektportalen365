@@ -16,7 +16,7 @@ export function useColumns(): IColumn[] {
       fieldName: 'text',
       name: strings.TitleLabel,
       minWidth: 150,
-      maxWidth: 150,
+      maxWidth: 180,
       onRender: (ext: ProjectExtension) => {
         const isLocked = ext.isLocked(context.state.selectedTemplate)
         return (

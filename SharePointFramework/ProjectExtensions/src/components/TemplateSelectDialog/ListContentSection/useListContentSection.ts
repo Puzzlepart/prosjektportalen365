@@ -32,7 +32,11 @@ export function useListContentSection() {
     defaultRender: (props?: IDetailsRowProps) => JSX.Element
   ) {
     const lcc = detailsRowProps.item as ListContentConfig
-    if (lcc.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1) return null
+    if (
+      lcc.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1 &&
+      !selectedKeys.includes(lcc.key)
+    )
+      return null
     return defaultRender({
       ...detailsRowProps,
       disabled: lcc.isLocked(context.state.selectedTemplate)

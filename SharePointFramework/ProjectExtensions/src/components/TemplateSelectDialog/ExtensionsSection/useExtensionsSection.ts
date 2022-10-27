@@ -32,7 +32,11 @@ export function useExtensionsSection() {
     defaultRender: (props?: IDetailsRowProps) => JSX.Element
   ) {
     const ext = detailsRowProps.item as ProjectExtension
-    if (ext.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1) return null
+    if (
+      ext.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1 &&
+      !selectedKeys.includes(ext.key)
+    )
+      return null
     return defaultRender({
       ...detailsRowProps,
       disabled: ext.isLocked(context.state.selectedTemplate)
