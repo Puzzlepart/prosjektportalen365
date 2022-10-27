@@ -34,8 +34,9 @@ export const ListContentSection: TemplateSelectDialogSectionComponent = (props) 
             defaultRender: (props?: IDetailsRowProps) => JSX.Element
           ) => {
             const lcc = detailsRowProps.item as ListContentConfig
-            detailsRowProps.disabled = lcc.isLocked(context.state.selectedTemplate)
-            if (detailsRowProps.disabled) {
+            const isLocked = lcc.isLocked(context.state.selectedTemplate)
+            detailsRowProps.disabled = isLocked
+            if (isLocked) {
               detailsRowProps.onRenderCheck = (props) => (
                 <CheckLocked {...props} tooltip={{ text: strings.ListContentLockedTooltipText }} />
               )
@@ -46,11 +47,14 @@ export const ListContentSection: TemplateSelectDialogSectionComponent = (props) 
               }
             }
             if (
-              lcc.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1 &&
-              !selectedKeys.includes(lcc.key)
-            )
+              lcc.text.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
+              selectedKeys.includes(lcc.key) ||
+              (isLocked && lcc.isDefault)
+            ) {
+              return defaultRender(detailsRowProps)
+            } else {
               return null
-            return defaultRender(detailsRowProps)
+            }
           }}
           onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
             <ListHeaderSearch
