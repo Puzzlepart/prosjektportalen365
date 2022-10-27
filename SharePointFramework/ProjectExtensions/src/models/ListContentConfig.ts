@@ -14,6 +14,7 @@ export interface IListContentConfigSPItem {
   GtLccDefault: boolean
   GtLccSourceList: string
   GtLccHidden: boolean
+  GtLccLocked: boolean
 }
 
 export enum ListContentConfigType {
@@ -31,6 +32,7 @@ export class ListContentConfig implements IObjectWithKey {
   public subText: string
   public isDefault: boolean
   public hidden: boolean
+  private _isLocked: boolean
   public sourceListProps: IListProperties = {}
   public destListProps: IListProperties = {}
   private _sourceList: string
@@ -43,17 +45,18 @@ export class ListContentConfig implements IObjectWithKey {
     this.subText = _spItem.GtDescription
     this.isDefault = _spItem.GtLccDefault
     this.hidden = _spItem.GtLccHidden
+    this._isLocked = _spItem.GtLccLocked ?? true
     this._sourceList = _spItem.GtLccSourceList
     this._destinationList = _spItem.GtLccDestinationList
   }
 
   /**
-   * Checks if the list content config is locked
+   * Checks if the list content config is locked for the specified template
    *
    * @param template Project template
    */
   public isLocked(template: ProjectTemplate): boolean {
-    return template?.isDefaultListContentLocked && template?.listContentConfigIds.includes(this.id)
+    return this._isLocked || (template?.isDefaultListContentLocked && template?.listContentConfigIds.includes(this.id))
   }
 
   public get type(): ListContentConfigType {
