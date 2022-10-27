@@ -154,19 +154,19 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         )}
         <div className={styles.projects}>{renderProjects(projects)}</div>
       </div>
-        <ProjectInformationPanel
-          key={state.showProjectInfo?.siteId}
-          title={state.showProjectInfo?.title}
-          siteId={state.showProjectInfo?.siteId}
-          webUrl={state.showProjectInfo?.url}
-          hubSite={{
-            web: new Web(props.pageContext.site.absoluteUrl),
-            url: props.pageContext.site.absoluteUrl
-          }}
-          page='Portfolio'
-          hidden={!state.showProjectInfo}
-          hideAllActions={true}
-        />
+      <ProjectInformationPanel
+        key={state.showProjectInfo?.siteId}
+        title={state.showProjectInfo?.title}
+        siteId={state.showProjectInfo?.siteId}
+        webUrl={state.showProjectInfo?.url}
+        hubSite={{
+          web: new Web(props.pageContext.site.absoluteUrl),
+          url: props.pageContext.site.absoluteUrl
+        }}
+        page='Portfolio'
+        hidden={!state.showProjectInfo}
+        hideAllActions={true}
+      />
     </div>
   )
 }

@@ -4,7 +4,7 @@ import { IProjectCardProps } from './types'
 
 /**
  * Component logic hook for `ProjectCard`
- * 
+ *
  * @param props Props
  */
 export function useProjectCard(props: IProjectCardProps) {
@@ -17,5 +17,5 @@ export function useProjectCard(props: IProjectCardProps) {
     title = strings.NoAccessMessage
     style = { opacity: '20%', cursor: 'default' }
   }
-  return { shimmer: (props.shimmer || !isImageLoaded), setIsImageLoaded, title, href, style }
+  return { shimmer: props.shimmer || !isImageLoaded, setIsImageLoaded, title, href, style }
 }

@@ -133,7 +133,7 @@ export const useProjectList = (props: IProjectListProps) => {
       setState({
         ...state,
         projects,
-        loading: true,
+        loading: false,
         isUserInPortfolioManagerGroup
       })
     })
