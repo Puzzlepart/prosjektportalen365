@@ -3,6 +3,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
+
+## 1.7.3 - TBA
+
+### Added
+
+- Enabling autocomplete search for template in project setup dialog #837
+
 ## 1.7.2 - 26.10.2022
 
 ### Added
