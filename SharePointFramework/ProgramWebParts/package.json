@@ -90,7 +90,7 @@
     "pp365-projectwebparts": "1.7.2-850.1",
     "prettier": "2.3.2",
     "typescript": "4.5.5",
-    "webpack": "^4.44.2",
+    "webpack": "5.74.0",
     "yargs": "14.2.0"
   }
 }
