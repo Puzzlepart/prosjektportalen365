@@ -5,11 +5,11 @@ import styles from './CheckLockedTooltipContent.module.scss'
 import { Icon } from '@fluentui/react'
 
 export const CheckLockedTooltipContent: FC<ICheckLockedTooltipContent> = (props) => {
-  if (stringIsNullOrEmpty(props.tooltipText)) return null
+  if (stringIsNullOrEmpty(props.text)) return null
   return (
     <div className={styles.root}>
       <Icon className={styles.icon} {...props.iconProps} />
-      <span>{props.tooltipText}</span>
+      <span>{props.text}</span>
     </div>
   )
 }

@@ -47,7 +47,7 @@ export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) =
             detailsRowProps.disabled = ext.isLocked(context.state.selectedTemplate)
             if (detailsRowProps.disabled)
               detailsRowProps.onRenderCheck = (props) => (
-                <CheckLocked {...props} tooltipText={strings.ExtensionLockedTooltipText} />
+                <CheckLocked {...props} tooltip={{ text: strings.ExtensionLockedTooltipText }} />
               )
             if (
               ext.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1 &&

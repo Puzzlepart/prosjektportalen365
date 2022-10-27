@@ -56,7 +56,10 @@ export class ListContentConfig implements IObjectWithKey {
    * @param template Project template
    */
   public isLocked(template: ProjectTemplate): boolean {
-    return this._isLocked || (template?.isDefaultListContentLocked && template?.listContentConfigIds.includes(this.id))
+    return (
+      this._isLocked ||
+      (template?.isDefaultListContentLocked && template?.listContentConfigIds.includes(this.id))
+    )
   }
 
   public get type(): ListContentConfigType {

@@ -5,7 +5,7 @@ import { ICheckLockedProps } from './types'
 
 export const CheckLocked: FC<ICheckLockedProps> = (props) => {
   return (
-    <TooltipHost content={<CheckLockedTooltipContent {...props} />}>
+    <TooltipHost content={<CheckLockedTooltipContent {...props.tooltip} />}>
       <div id={props.id} className={props.className} style={props.style}>
         <Icon {...props.iconProps} />
       </div>

@@ -47,7 +47,7 @@ export const ListContentSection: TemplateSelectDialogSectionComponent = (props) 
             detailsRowProps.disabled = lcc.isLocked(context.state.selectedTemplate)
             if (detailsRowProps.disabled)
               detailsRowProps.onRenderCheck = (props) => (
-                <CheckLocked {...props} tooltipText={strings.ListContentLockedTooltipText} />
+                <CheckLocked {...props} tooltip={{ text: strings.ListContentLockedTooltipText }} />
               )
             if (
               lcc.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1 &&

@@ -4,7 +4,7 @@ export interface ICheckLockedTooltipContent {
   /**
    * Text to be shown in the `TooltipHost`
    */
-  tooltipText?: string
+  text?: string
 
   /**
    * Props for the Lock icon (`iconName` defaults to **Lock**)

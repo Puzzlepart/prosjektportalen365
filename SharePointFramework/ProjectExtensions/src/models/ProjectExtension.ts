@@ -41,7 +41,10 @@ export class ProjectExtension implements IObjectWithKey {
    * @param template Project template
    */
   public isLocked(template: ProjectTemplate): boolean {
-    return this._isLocked || (template?.isDefaultExtensionsLocked && template?.extensionIds.includes(this.id))
+    return (
+      this._isLocked ||
+      (template?.isDefaultExtensionsLocked && template?.extensionIds.includes(this.id))
+    )
   }
 
   public async getSchema(): Promise<Schema> {
