@@ -1,5 +1,6 @@
 import {
   DetailsList,
+  IDetailsRowProps,
   ScrollablePane,
   SearchBox,
   SelectAllVisibility,
@@ -7,17 +8,23 @@ import {
   Sticky,
   StickyPositionType
 } from '@fluentui/react'
+import { ListContentConfig } from 'models'
 import strings from 'ProjectExtensionsStrings'
 import React, { useContext } from 'react'
 import { TemplateSelectDialogContext } from '../context'
 import { TemplateListContentConfigMessage } from '../TemplateListContentConfigMessage'
 import { TemplateSelectDialogSectionComponent } from '../types'
+import { useSelectionList } from '../useSelectionList'
 import styles from './ListContentSection.module.scss'
-import { useListContentSection } from './useListContentSection'
+import { onRenderCheckLocked } from './onRenderCheckLocked'
+import { useColumns } from './useColumns'
 
 export const ListContentSection: TemplateSelectDialogSectionComponent = (props) => {
   const context = useContext(TemplateSelectDialogContext)
-  const { selection, items, columns, onSearch, onRenderRow } = useListContentSection()
+  const selectedKeys = context.state.selectedListContentConfig.map((lc) => lc.key)
+  const { selection, onSearch, searchTerm } = useSelectionList(selectedKeys)
+  const items = context.props.data.listContentConfig.filter((lcc) => !lcc.hidden)
+  const columns = useColumns()
 
   return (
     <div className={styles.root} style={props.style}>
@@ -27,7 +34,20 @@ export const ListContentSection: TemplateSelectDialogSectionComponent = (props) 
           selection={selection}
           selectionMode={SelectionMode.multiple}
           selectionPreservedOnEmptyClick={true}
-          onRenderRow={onRenderRow}
+          onRenderRow={(
+            detailsRowProps: IDetailsRowProps,
+            defaultRender: (props?: IDetailsRowProps) => JSX.Element
+          ) => {
+            const lcc = detailsRowProps.item as ListContentConfig
+            detailsRowProps.disabled = lcc.isLocked(context.state.selectedTemplate)
+            if (detailsRowProps.disabled) detailsRowProps.onRenderCheck = onRenderCheckLocked
+            if (
+              lcc.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1 &&
+              !selectedKeys.includes(lcc.key)
+            )
+              return null
+            return defaultRender(detailsRowProps)
+          }}
           onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
             <Sticky stickyPosition={StickyPositionType.Header}>
               <div className={styles.searchBox} hidden={items.length < 5}>
