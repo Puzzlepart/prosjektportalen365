@@ -11,12 +11,12 @@ import {
 import { ProjectExtension } from 'models'
 import strings from 'ProjectExtensionsStrings'
 import React, { useContext } from 'react'
+import { CheckLocked } from '../CheckLocked'
 import { TemplateSelectDialogContext } from '../context'
 import { TemplateListContentConfigMessage } from '../TemplateListContentConfigMessage'
 import { TemplateSelectDialogSectionComponent } from '../types'
 import { useSelectionList } from '../useSelectionList'
 import styles from './ExtensionsSection.module.scss'
-import { onRenderCheckLocked } from './onRenderCheckLocked'
 import { useColumns } from './useColumns'
 
 export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) => {
@@ -40,7 +40,8 @@ export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) =
           ) => {
             const ext = detailsRowProps.item as ProjectExtension
             detailsRowProps.disabled = ext.isLocked(context.state.selectedTemplate)
-            if (detailsRowProps.disabled) detailsRowProps.onRenderCheck = onRenderCheckLocked
+            if (detailsRowProps.disabled)
+              detailsRowProps.onRenderCheck = (props) => <CheckLocked {...props} />
             if (
               ext.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1 &&
               !selectedKeys.includes(ext.key)

@@ -11,12 +11,12 @@ import {
 import { ListContentConfig } from 'models'
 import strings from 'ProjectExtensionsStrings'
 import React, { useContext } from 'react'
+import { CheckLocked } from '../CheckLocked'
 import { TemplateSelectDialogContext } from '../context'
 import { TemplateListContentConfigMessage } from '../TemplateListContentConfigMessage'
 import { TemplateSelectDialogSectionComponent } from '../types'
 import { useSelectionList } from '../useSelectionList'
 import styles from './ListContentSection.module.scss'
-import { onRenderCheckLocked } from './onRenderCheckLocked'
 import { useColumns } from './useColumns'
 
 export const ListContentSection: TemplateSelectDialogSectionComponent = (props) => {
@@ -40,7 +40,8 @@ export const ListContentSection: TemplateSelectDialogSectionComponent = (props) 
           ) => {
             const lcc = detailsRowProps.item as ListContentConfig
             detailsRowProps.disabled = lcc.isLocked(context.state.selectedTemplate)
-            if (detailsRowProps.disabled) detailsRowProps.onRenderCheck = onRenderCheckLocked
+            if (detailsRowProps.disabled)
+              detailsRowProps.onRenderCheck = (props) => <CheckLocked {...props} />
             if (
               lcc.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1 &&
               !selectedKeys.includes(lcc.key)
