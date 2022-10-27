@@ -16,7 +16,7 @@ export interface IProjectExtensionSPItem {
 
 export class ProjectExtension implements IObjectWithKey {
   public id: number
-  public key: string
+  public key: number
   public text: string
   public isDefault: boolean
   public hidden: boolean
@@ -26,7 +26,7 @@ export class ProjectExtension implements IObjectWithKey {
 
   constructor(spItem: IProjectExtensionSPItem, public web: Web) {
     this.id = spItem.Id
-    this.key = this.id.toString()
+    this.key = this.id
     this.text = spItem.File.Title
     this.isDefault = spItem.GtExtensionDefault
     this._isLocked = spItem.GtExtensionLocked

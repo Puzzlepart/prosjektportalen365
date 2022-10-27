@@ -14,21 +14,12 @@ import { TemplateSelectDialogContext } from '../context'
 import { ListHeaderSearch } from '../ListHeaderSearch'
 import { TemplateListContentConfigMessage } from '../TemplateListContentConfigMessage'
 import { TemplateSelectDialogSectionComponent } from '../types'
-import { useSelectionList } from '../useSelectionList'
 import styles from './ListContentSection.module.scss'
-import { useColumns } from './useColumns'
+import { useListContentSection } from './useListContentSection'
 
 export const ListContentSection: TemplateSelectDialogSectionComponent = (props) => {
   const context = useContext(TemplateSelectDialogContext)
-  const selectedKeys = context.state.selectedListContentConfig.map((lc) => lc.key)
-  const { selection, onSearch, searchTerm } = useSelectionList(
-    selectedKeys,
-    (selectedListContentConfig) => {
-      context.setState({ selectedListContentConfig })
-    }
-  )
-  const items = context.props.data.listContentConfig.filter((lcc) => !lcc.hidden)
-  const columns = useColumns()
+  const { selection, selectedKeys, items, columns, onSearch, searchTerm } = useListContentSection()
 
   return (
     <div className={styles.root} style={props.style}>

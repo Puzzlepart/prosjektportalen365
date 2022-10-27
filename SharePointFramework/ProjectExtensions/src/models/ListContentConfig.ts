@@ -27,7 +27,7 @@ export enum ListContentConfigType {
  */
 export class ListContentConfig implements IObjectWithKey {
   public id: number
-  public key: string
+  public key: number
   public text: string
   public subText: string
   public isDefault: boolean
@@ -40,7 +40,7 @@ export class ListContentConfig implements IObjectWithKey {
 
   constructor(private _spItem: IListContentConfigSPItem, public web: Web) {
     this.id = _spItem.Id
-    this.key = this.id.toString()
+    this.key = this.id
     this.text = _spItem.Title
     this.subText = _spItem.GtDescription
     this.isDefault = _spItem.GtLccDefault
