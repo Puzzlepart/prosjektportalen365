@@ -1,5 +1,7 @@
+import { IDocumentCardProps } from '@fluentui/react'
+import styles from './ProjectCard.module.scss'
 import * as strings from 'PortfolioWebPartsStrings'
-import { CSSProperties, useState } from 'react'
+import { useState } from 'react'
 import { IProjectCardProps } from './types'
 
 /**
@@ -9,13 +11,16 @@ import { IProjectCardProps } from './types'
  */
 export function useProjectCard(props: IProjectCardProps) {
   const [isImageLoaded, setIsImageLoaded] = useState(!props.project.logo)
-  let title = ''
-  let href = props.project.url
-  let style: CSSProperties = {}
-  if (!props.project.userIsMember) {
-    href = '#'
-    title = strings.NoAccessMessage
-    style = { opacity: '20%', cursor: 'default' }
+  const documentCardProps: IDocumentCardProps = {
+    title: '',
+    onClickHref: props.project.url,
+    className: styles.root,
+    style: {}
   }
-  return { isDataLoaded: props.isDataLoaded && isImageLoaded, setIsImageLoaded, title, href, style }
+  if (!props.project.userIsMember) {
+    documentCardProps.onClickHref = '#'
+    documentCardProps.title = strings.NoAccessMessage
+    documentCardProps.style = { opacity: '20%', cursor: 'default' }
+  }
+  return { isDataLoaded: props.isDataLoaded && isImageLoaded, setIsImageLoaded, documentCardProps } as const
 }

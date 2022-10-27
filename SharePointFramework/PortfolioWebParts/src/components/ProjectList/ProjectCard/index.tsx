@@ -15,7 +15,7 @@ import { IProjectCardProps } from './types'
 import { useProjectCard } from './useProjectCard'
 
 export const ProjectCard: FC<IProjectCardProps> = (props) => {
-  const { isDataLoaded, setIsImageLoaded, title, href, style } = useProjectCard(props)
+  const { isDataLoaded, setIsImageLoaded, documentCardProps } = useProjectCard(props)
   return (
     <Shimmer
       className={styles.root}
@@ -29,8 +29,8 @@ export const ProjectCard: FC<IProjectCardProps> = (props) => {
           </div>
         </div>
       }>
-      <DocumentCard className={styles.root} title={title} onClickHref={href} style={style}>
-        <Link href={href} target='_blank'>
+      <DocumentCard {...documentCardProps}>
+        <Link href={documentCardProps.onClickHref} target='_blank'>
           <ProjectCardHeader {...props} onImageLoad={() => setIsImageLoaded(true)} />
         </Link>
         <ProjectCardContent {...props} />
