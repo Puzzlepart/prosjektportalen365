@@ -63,7 +63,7 @@ export const ProjectTable: FC<IProjectTableProps> = (props) => {
             key in item && (item[key] + '').toLowerCase().indexOf(filter) >= 0
         )
     )
-    setItems(uniqBy([ ...selection ?? [], ...filtered ], item => item.SiteId))
+    setItems(uniqBy([...(selection ?? []), ...filtered], (item) => item.SiteId))
   }
 
   const renderCheckbox = (checked: boolean, onChange: (checked: boolean) => void) => (
@@ -116,23 +116,21 @@ export const ProjectTable: FC<IProjectTableProps> = (props) => {
         }}>
         {renderCheckbox(checked, (newChecked: boolean) => handleItemClicked(item, newChecked))}
       </li>,
-      ...props.fields.map(
-        (field: IListField, index: number) => (
-          <li
-            key={field.key}
-            className={styles.column}
-            onClick={(event) => {
-              event.preventDefault()
-              handleItemClicked(item, !checked)
-            }}>
-            {field.onRender ? (
-              field.onRender(item, index, field)
-            ) : (
-              <div>{item[field.fieldName] + ''}</div>
-            )}
-          </li>
-        )
-      )
+      ...props.fields.map((field: IListField, index: number) => (
+        <li
+          key={field.key}
+          className={styles.column}
+          onClick={(event) => {
+            event.preventDefault()
+            handleItemClicked(item, !checked)
+          }}>
+          {field.onRender ? (
+            field.onRender(item, index, field)
+          ) : (
+            <div>{item[field.fieldName] + ''}</div>
+          )}
+        </li>
+      ))
     ]
   }
 
