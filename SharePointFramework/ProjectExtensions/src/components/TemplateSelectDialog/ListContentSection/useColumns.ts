@@ -4,7 +4,7 @@ import strings from 'ProjectExtensionsStrings'
 /**
  * Columns hook for `ListContentSection`
  */
-export function useColumns(): IColumn[] {
+export function useColumns() {
   return [
     {
       key: 'text',
@@ -17,7 +17,8 @@ export function useColumns(): IColumn[] {
       key: 'subText',
       fieldName: 'subText',
       name: strings.DescriptionLabel,
-      minWidth: 250
+      minWidth: 250,
+      isMultiline: true
     }
-  ]
+  ] as IColumn[]
 }
