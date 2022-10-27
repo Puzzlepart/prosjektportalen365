@@ -34,6 +34,13 @@
                         <pnp:Property Key="IsDefaultTemplate" Value="0" />
                     </pnp:Properties>
                 </pnp:File>
+                <pnp:File Src="ProjectExtensions/Fasesider.txt" Folder="Prosjekttillegg" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Fasesider" />
+                        <pnp:Property Key="GtDescription" Value="Egne sider for de ulike standardfasene i Prosjektportalen. Dette tillegget inneholde sider for Konsept, Planlegge, Gjennomføre, Avslutte og Realisere." />
+                        <pnp:Property Key="GtExtensionDefault" Value="0" />
+                    </pnp:Properties>
+                </pnp:File>
                 <pnp:File Src="Malbibliotek/Gevinstrealiseringsplan.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Gevinstrealiseringsplan" />
