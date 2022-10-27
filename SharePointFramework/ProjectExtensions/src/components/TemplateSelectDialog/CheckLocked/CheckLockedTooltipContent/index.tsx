@@ -8,8 +8,10 @@ export const CheckLockedTooltipContent: FC<ICheckLockedTooltipContent> = (props)
   if (stringIsNullOrEmpty(props.text)) return null
   return (
     <div className={styles.root}>
-      <Icon className={styles.icon} {...props.iconProps} />
-      <span>{props.text}</span>
+      <div className={styles.icon}>
+        <Icon  {...props.iconProps} />
+      </div>
+      <div>{props.text}</div>
     </div>
   )
 }

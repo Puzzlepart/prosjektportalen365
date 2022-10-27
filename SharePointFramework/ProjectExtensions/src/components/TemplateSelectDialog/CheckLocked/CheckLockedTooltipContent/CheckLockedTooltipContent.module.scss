@@ -1,8 +1,17 @@
 .root {
+  width: 220px;
   padding: 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
 
   .icon {
+    font-size: 16px;
+    padding: 4px 0 0 0;
+    margin: 0 6px 0 0;
+  }
+
+  .text {
     font-size: 12px;
-    margin-right: 6px;
   }
 }
