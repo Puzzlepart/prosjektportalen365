@@ -16,7 +16,7 @@ env:
 jobs:
   build_release_package:
     name: Build release package
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
@@ -45,7 +45,7 @@ jobs:
   upgrade:
     needs: build_release_package
     name: Upgrade
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v3
         with:
@@ -59,7 +59,7 @@ jobs:
   install:
     needs: [build_release_package, upgrade]
     name: Install
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v3
         with:
@@ -69,4 +69,3 @@ jobs:
       - name: Install
         run: release/Install.ps1 -Url "${{ env.SP_URL }}_${{ needs.build_release_package.outputs.sha_short }}" -Title "Prosjektportalen 365 ${{ needs.build_release_package.outputs.sha_short }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
         shell: powershell
-        
