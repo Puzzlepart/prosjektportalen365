@@ -1,15 +1,13 @@
 import {
-  ShimmeredDetailsList,
-  SelectionMode,
   IColumn,
   MessageBar,
   MessageBarType,
   Pivot,
   PivotItem,
   SearchBox,
-  Toggle,
-  Spinner,
-  SpinnerSize
+  SelectionMode,
+  ShimmeredDetailsList,
+  Toggle
 } from '@fluentui/react'
 import { Web } from '@pnp/sp'
 import { ProjectListModel } from 'models'
@@ -41,6 +39,9 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
    * @param projects - Projects
    */
   function renderProjects(projects: ProjectListModel[]) {
+    if (state.loading) {
+      return projects.map((_, idx) => <ProjectCard key={idx} shimmer={true} />)
+    }
     if (state.showAsTiles) {
       return projects.map((project, idx) => (
         <ProjectCard
@@ -146,34 +147,25 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             onChanged={(showAsTiles) => setState({ showAsTiles })}
           />
         </div>
-        {state.loading && (
-          <div className={styles.spinner}>
-            <Spinner size={SpinnerSize.large} label={strings.ProjectListLoadingText} />
-          </div>
-        )}
         {!state.loading && isEmpty(projects) && (
           <div className={styles.emptyMessage}>
             <MessageBar>{strings.ProjectListEmptyText}</MessageBar>
           </div>
         )}
-        {!isEmpty(projects) && (
-          <>
-            <ProjectInformationPanel
-              key={state.showProjectInfo?.siteId}
-              title={state.showProjectInfo?.title}
-              siteId={state.showProjectInfo?.siteId}
-              webUrl={state.showProjectInfo?.url}
-              hubSite={{
-                web: new Web(props.pageContext.site.absoluteUrl),
-                url: props.pageContext.site.absoluteUrl
-              }}
-              page='Portfolio'
-              hidden={!state.showProjectInfo}
-              hideAllActions={true}
-            />
-            <div className={styles.projects}>{renderProjects(projects)}</div>
-          </>
-        )}
+        <ProjectInformationPanel
+          key={state.showProjectInfo?.siteId}
+          title={state.showProjectInfo?.title}
+          siteId={state.showProjectInfo?.siteId}
+          webUrl={state.showProjectInfo?.url}
+          hubSite={{
+            web: new Web(props.pageContext.site.absoluteUrl),
+            url: props.pageContext.site.absoluteUrl
+          }}
+          page='Portfolio'
+          hidden={!state.showProjectInfo}
+          hideAllActions={true}
+        />
+        <div className={styles.projects}>{renderProjects(projects)}</div>
       </div>
     </div>
   )

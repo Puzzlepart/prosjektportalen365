@@ -3,14 +3,14 @@ import { ProjectListModel } from 'models'
 
 export interface IProjectCardProps {
   /**
-   * Project
+   * Project model
    */
-  project: ProjectListModel
+  project?: ProjectListModel
 
   /**
    * Should the title be truncated
    */
-  shouldTruncateTitle: boolean
+  shouldTruncateTitle?: boolean
 
   /**
    * Show Project Logo
@@ -28,7 +28,12 @@ export interface IProjectCardProps {
   showProjectManager?: boolean
 
   /**
-   * Actions
+   * Actions to display in the footer of the card
    */
-  actions: IButtonProps[]
+  actions?: IButtonProps[]
+
+  /**
+   * Render a shimmered card (if data is loading)
+   */
+  shimmer?: boolean
 }

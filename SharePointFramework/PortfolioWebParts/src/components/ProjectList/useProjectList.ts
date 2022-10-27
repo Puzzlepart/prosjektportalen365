@@ -11,7 +11,8 @@ export const useProjectList = (props: IProjectListProps) => {
     searchTerm: '',
     showAsTiles: props.showAsTiles,
     selectedView: 'my_projects',
-    projects: [],
+    // eslint-disable-next-line prefer-spread
+    projects: Array.apply(null, Array(24)).map(() => 0),
     sort: { fieldName: props.sortBy, isSortedDescending: true }
   })
 
@@ -127,7 +128,10 @@ export const useProjectList = (props: IProjectListProps) => {
   useEffect(() => {
     Promise.all([
       props.dataAdapter.fetchEnrichedProjects(),
-      props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
+      props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName),
+      (() => {
+        window.setTimeout(Promise.resolve, 5000)
+      })()
     ]).then(([projects, isUserInPortfolioManagerGroup]) => {
       setState({
         ...state,
