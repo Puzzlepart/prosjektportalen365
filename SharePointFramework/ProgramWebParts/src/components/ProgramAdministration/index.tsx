@@ -35,7 +35,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
 
   return (
     <ProgramAdministrationContext.Provider value={{ props, state, dispatch }}>
-      {state.userHasManagePermission && <Commands />}
+      <Commands />
       <div className={styles.root}>
         <div className={styles.header}>
           <div className={styles.title}>{props.title}</div>

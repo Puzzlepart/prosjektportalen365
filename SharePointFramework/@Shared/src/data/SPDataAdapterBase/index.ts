@@ -98,7 +98,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
       async () => {
         const userPermissions = []
         const rolesToCheck = properties.GtProjectAdminRoles
-        if (!rolesToCheck) {
+        if (!isArray(rolesToCheck)) {
           if (pageContext.legacyPageContext.isSiteAdmin === true) return true
           else return false
         }
