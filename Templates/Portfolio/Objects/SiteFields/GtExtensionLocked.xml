@@ -1,0 +1,3 @@
+<Field Description="{resource:SiteFields_GtExtensionLocked_Description}" DisplayName="{resource:SiteFields_GtExtensionLocked_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{065b9b97-ad41-4bec-8df1-63ccfe7da071}" Name="GtExtensionLocked" StaticName="GtExtensionLocked" Type="Boolean">
+    <Default>0</Default>
+</Field>

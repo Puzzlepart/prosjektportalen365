@@ -10,6 +10,7 @@ export interface IProjectExtension {
   key: string
   GtExtensionDefault?: boolean
   GtExtensionHidden?: boolean
+  GtExtensionLocked?: boolean
   File?: { UniqueId: string; Name: string; Title: string; ServerRelativeUrl: string }
 }
 
@@ -19,6 +20,7 @@ export class ProjectExtension implements IObjectWithKey {
   public text: string
   public isDefault: boolean
   public hidden: boolean
+  private _isLocked: boolean
   public subText: string
   public serverRelativeUrl: string
 
@@ -27,18 +29,19 @@ export class ProjectExtension implements IObjectWithKey {
     this.text = spItem.File.Title
     this.isDefault = spItem.GtExtensionDefault
     this.hidden = spItem.GtExtensionHidden
+    this._isLocked = spItem.GtExtensionLocked ?? true
     this.subText = spItem.FieldValuesAsText.GtDescription
     this.serverRelativeUrl = spItem.File.ServerRelativeUrl
     this.id = spItem.Id
   }
 
   /**
-   * Checks if the project extension is locked
+   * Checks if the project extension is locked for the specified template
    *
    * @param template Project template
    */
   public isLocked(template: ProjectTemplate): boolean {
-    return template?.isDefaultExtensionsLocked && template?.extensionIds.includes(this.id)
+    return this._isLocked || (template?.isDefaultExtensionsLocked && template?.extensionIds.includes(this.id))
   }
 
   public async getSchema(): Promise<Schema> {

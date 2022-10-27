@@ -1711,6 +1711,12 @@
   <data name="SiteFields_GtExtensionHidden_DisplayName" xml:space="preserve">
     <value>Skjult</value>
   </data>
+  <data name="SiteFields_GtExtensionLocked_Description" xml:space="preserve">
+    <value>Lås elementet. Bruk sammen med "Velges som standard" for å sette elementet som obligatorisk.</value>
+  </data>
+  <data name="SiteFields_GtExtensionLocked_DisplayName" xml:space="preserve">
+    <value>Låst</value>
+  </data>
   <data name="SiteFields_GtSPGroupName_DisplayName" xml:space="preserve">
     <value>SharePoint gruppenavn</value>
   </data>
