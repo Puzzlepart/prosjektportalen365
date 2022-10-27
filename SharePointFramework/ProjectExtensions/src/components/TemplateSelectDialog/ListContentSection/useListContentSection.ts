@@ -2,7 +2,9 @@ import { IDetailsRowProps, Selection } from '@fluentui/react'
 import { ListContentConfig } from 'models'
 import { useContext, useEffect, useState } from 'react'
 import { TemplateSelectDialogContext } from '../context'
+import { onRenderCheckLocked } from './onRenderCheckLocked'
 import { useColumns } from './useColumns'
+
 
 /**
  * Component logic hook for `ListContentSection`
@@ -32,15 +34,14 @@ export function useListContentSection() {
     defaultRender: (props?: IDetailsRowProps) => JSX.Element
   ) {
     const lcc = detailsRowProps.item as ListContentConfig
+    detailsRowProps.disabled = lcc.isLocked(context.state.selectedTemplate)
+    if (detailsRowProps.disabled) detailsRowProps.onRenderCheck = onRenderCheckLocked
     if (
       lcc.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1 &&
       !selectedKeys.includes(lcc.key)
     )
       return null
-    return defaultRender({
-      ...detailsRowProps,
-      disabled: lcc.isLocked(context.state.selectedTemplate)
-    })
+    return defaultRender(detailsRowProps)
   }
 
   const columns = useColumns()

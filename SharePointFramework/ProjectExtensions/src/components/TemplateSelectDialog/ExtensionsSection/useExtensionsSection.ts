@@ -2,6 +2,7 @@ import { IDetailsRowProps, Selection } from '@fluentui/react'
 import { ProjectExtension } from 'models'
 import { useContext, useEffect, useState } from 'react'
 import { TemplateSelectDialogContext } from '../context'
+import { onRenderCheckLocked } from './onRenderCheckLocked'
 import { useColumns } from './useColumns'
 
 /**
@@ -32,15 +33,14 @@ export function useExtensionsSection() {
     defaultRender: (props?: IDetailsRowProps) => JSX.Element
   ) {
     const ext = detailsRowProps.item as ProjectExtension
+    detailsRowProps.disabled = ext.isLocked(context.state.selectedTemplate)
+    if (detailsRowProps.disabled) detailsRowProps.onRenderCheck = onRenderCheckLocked
     if (
       ext.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1 &&
       !selectedKeys.includes(ext.key)
     )
       return null
-    return defaultRender({
-      ...detailsRowProps,
-      disabled: ext.isLocked(context.state.selectedTemplate)
-    })
+    return defaultRender(detailsRowProps)
   }
 
   const columns = useColumns()
