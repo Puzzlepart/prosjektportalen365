@@ -1,25 +1,19 @@
 <pnp:ListInstance Title="{resource:Lists_TemplateOptions_Title}" Url="{resource:Lists_TemplateOptions_Url}" Description="" DocumentTemplate="" TemplateType="100" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" EnableFolderCreation="false" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage=""
   xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
   <pnp:Views>
-    <View Name="{895C5324-0C85-46D5-B425-A6CD69AD143D}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Maloppsett/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+    <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_TemplateOptions_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
       <Query />
       <ViewFields>
+        <FieldRef Name="IsDefaultTemplate" />
         <FieldRef Name="LinkTitle" />
         <FieldRef Name="GtDescription" />
         <FieldRef Name="IconName" />
         <FieldRef Name="GtProjectTemplate" />
-        <FieldRef Name="IsHiddenTemplate" />
         <FieldRef Name="GtProjectExtensions" />
-        <FieldRef Name="ListContentConfigLookup" />
-        <FieldRef Name="GtProjectPhaseTermId" />
-        <FieldRef Name="GtProjectContentType" />
-        <FieldRef Name="GtProjectStatusContentType" />
-        <FieldRef Name="GtProjectColumns" />
-        <FieldRef Name="GtIsProgram" />
-        <FieldRef Name="GtProjectCustomColumns" />
-        <FieldRef Name="IsDefaultTemplate" />
         <FieldRef Name="IsDefaultExtensionsLocked" />
+        <FieldRef Name="ListContentConfigLookup" />
         <FieldRef Name="IsDefaultListContentLocked" />
+        <FieldRef Name="IsHiddenTemplate" />
       </ViewFields>
       <RowLimit Paged="TRUE">30</RowLimit>
       <JSLink>clienttemplates.js</JSLink>
@@ -30,9 +24,9 @@
     <Field Type="Text" DisplayName="Ikon" MaxLength="255" ID="{d953c1a3-9f7a-4cc3-8147-b6ce924a7901}" SourceID="{{listid:Maloppsett}}" StaticName="IconName" Name="IconName">
       <Default>Page</Default>
     </Field>
-    <Field Type="Lookup" DisplayName="Mal" Required="TRUE" EnforceUniqueValues="FALSE" List="{listid:Prosjektmaler}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{8e762956-13a9-4cbd-965b-bbfed0d0d7a0}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectTemplate" Name="GtProjectTemplate" Group="" Version="1" />
-    <Field Type="LookupMulti" DisplayName="Utvidelser" EnforceUniqueValues="FALSE" List="{listid:Prosjekttillegg}" ShowField="Title" Mult="TRUE" Sortable="FALSE" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{5627c98b-c725-44d0-9415-3125b8f61302}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectExtensions" Name="GtProjectExtensions" />
-    <Field Type="LookupMulti" DisplayName="Listeinnhold" EnforceUniqueValues="FALSE" List="{listid:Listeinnhold}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{a5554044-ab27-43b8-b11e-0fbfd641790c}" SourceID="{{listid:Maloppsett}}" StaticName="ListContentConfigLookup" Name="ListContentConfigLookup" Group="" Mult="TRUE" Sortable="FALSE" Version="1" />
+    <Field Type="Lookup" DisplayName="Mal" Required="TRUE" List="{listid:Prosjektmaler}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{8e762956-13a9-4cbd-965b-bbfed0d0d7a0}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectTemplate" Name="GtProjectTemplate" />
+    <Field Type="LookupMulti" DisplayName="Utvidelser" List="{listid:Prosjekttillegg}" ShowField="Title" Mult="TRUE" Sortable="FALSE" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{5627c98b-c725-44d0-9415-3125b8f61302}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectExtensions" Name="GtProjectExtensions" />
+    <Field Type="LookupMulti" DisplayName="Listeinnhold" List="{listid:Listeinnhold}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{a5554044-ab27-43b8-b11e-0fbfd641790c}" SourceID="{{listid:Maloppsett}}" StaticName="ListContentConfigLookup" Name="ListContentConfigLookup" Mult="TRUE" Sortable="FALSE" />
     <Field Type="Text" DisplayName="Prosjektfase Termsett ID" MaxLength="255" ID="{6287b5c6-85da-420d-815b-47de8122ec14}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectPhaseTermId" Name="GtProjectPhaseTermId">
       <Default>abcfc9d9-a263-4abb-8234-be973c46258a</Default>
     </Field>
