@@ -40,7 +40,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
    */
   function renderProjects(projects: ProjectListModel[]) {
     if (state.loading) {
-      return projects.map((_, idx) => <ProjectCard key={idx} shimmer={true} />)
+      return projects.map((_, idx) => <ProjectCard key={idx} />)
     }
     if (state.showAsTiles) {
       return projects.map((project, idx) => (
@@ -152,6 +152,8 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             <MessageBar>{strings.ProjectListEmptyText}</MessageBar>
           </div>
         )}
+        <div className={styles.projects}>{renderProjects(projects)}</div>
+      </div>
         <ProjectInformationPanel
           key={state.showProjectInfo?.siteId}
           title={state.showProjectInfo?.title}
@@ -165,8 +167,6 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
           hidden={!state.showProjectInfo}
           hideAllActions={true}
         />
-        <div className={styles.projects}>{renderProjects(projects)}</div>
-      </div>
     </div>
   )
 }

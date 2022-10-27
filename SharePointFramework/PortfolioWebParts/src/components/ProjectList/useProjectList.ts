@@ -133,13 +133,13 @@ export const useProjectList = (props: IProjectListProps) => {
       setState({
         ...state,
         projects,
-        loading: false,
+        loading: true,
         isUserInPortfolioManagerGroup
       })
     })
   }, [])
 
-  const projects = filterProjets(state.projects)
+  const projects = state.loading ? state.projects : filterProjets(state.projects)
 
   return {
     state,

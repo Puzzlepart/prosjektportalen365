@@ -20,3 +20,8 @@ export const ProjectCard: FC<IProjectCardProps> = (props) => {
     </DocumentCard>
   )
 }
+
+ProjectCard.defaultProps = {
+  project: {},
+  shimmer: true
+}
