@@ -71,13 +71,7 @@
                 <Name>TermSetId</Name>
                 <Value p4:type="q2:string" 
                     xmlns:p4="http://www.w3.org/2001/XMLSchema-instance" 
-                    xmlns:q2="http://www.w3.org/2001/XMLSchema">{3930cddb-fa4d-496f-b314-03ecabb91de1}</Value>
-            </Property>
-            <Property>
-                <Name>TextField</Name>
-                <Value p4:type="q6:string" 
-                    xmlns:p4="http://www.w3.org/2001/XMLSchema-instance" 
-                    xmlns:q6="http://www.w3.org/2001/XMLSchema">{a91d1d0d-d704-4ad2-a7b9-924cc33988d2}</Value>
+                    xmlns:q2="http://www.w3.org/2001/XMLSchema">{abdc8d0f-cf79-4d49-82e2-d94d9122ad65}</Value>
             </Property>
             <Property>
                 <Name>UserCreated</Name>
