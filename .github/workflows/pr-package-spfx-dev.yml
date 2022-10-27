@@ -5,6 +5,8 @@ on:
     branches:
       - main
       - dev
+    paths:
+      - "SharePointFramework/**"
 jobs:
   build_shared:
     name: Build @Shared
