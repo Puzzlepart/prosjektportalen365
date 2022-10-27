@@ -595,10 +595,10 @@
   <data name="SiteFields_GtProjectTypeText_DisplayName" xml:space="preserve">
     <value>Prosjekttype (tekst)</value>
   </data>
-  <data name="SiteFields_GtUNSustainableDevelopmentGoals_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtUNSustDevGoals_DisplayName" xml:space="preserve">
     <value>FNs bærekraftsmål</value>
   </data>
-  <data name="SiteFields_GtUNSustainableDevelopmentGoalsText_DisplayName" xml:space="preserve">
+  <data name="SiteFields_GtUNSustDevGoalsText_DisplayName" xml:space="preserve">
     <value>FNs bærekraftsmål (tekst)</value>
   </data>
   <data name="SiteFields_GtProjectNumber_DisplayName" xml:space="preserve">
@@ -1426,7 +1426,7 @@
   <data name="SiteFields_GtProjectType_Description" xml:space="preserve">
     <value>Hva slags type prosjekt er dette?</value>
   </data>
-  <data name="SiteFields_GtUNSustainableDevelopmentGoals_Description" xml:space="preserve">
+  <data name="SiteFields_GtUNSustDevGoals_Description" xml:space="preserve">
     <value>FNs bærekraftsmål er verdens felles arbeidsplan for å utrydde fattigdom, bekjempe ulikhet og stoppe klimaendringene innen 2030.</value>
   </data>
   <data name="SiteFields_GtProjectNumber_Description" xml:space="preserve">

@@ -473,8 +473,8 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">330</pnp:DataValue>
             <pnp:DataValue FieldName="Title">FNs bærekraftsmål</pnp:DataValue>
-            <pnp:DataValue FieldName="GtInternalName">GtUNSustainableDevelopmentGoals</pnp:DataValue>
-            <pnp:DataValue FieldName="GtManagedProperty">GtUNSustainableDevelopmentGoalsTextOWSTEXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtUNSustDevGoals</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtUNSustDevGoalsTextOWSTEXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>

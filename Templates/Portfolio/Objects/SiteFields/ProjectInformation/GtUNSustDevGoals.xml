@@ -1,4 +1,4 @@
-﻿<Field Description="{resource:SiteFields_GtUNSustainableDevelopmentGoals_Description}" DisplayName="{resource:SiteFields_GtUNSustainableDevelopmentGoals_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{293886a7-dc00-47c4-be98-438a34af8d8a}" List="{{listid:TaxonomyHiddenList}}" Mult="TRUE" Name="GtUNSustainableDevelopmentGoals" ShowField="Term1044" SourceID="{{siteid}}" StaticName="GtUNSustainableDevelopmentGoals" Type="TaxonomyFieldTypeMulti" WebId="{siteid}">
+﻿<Field Description="{resource:SiteFields_GtUNSustDevGoals_Description}" DisplayName="{resource:SiteFields_GtUNSustDevGoals_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{293886a7-dc00-47c4-be98-438a34af8d8a}" List="{{listid:TaxonomyHiddenList}}" Mult="TRUE" Name="GtUNSustDevGoals" ShowField="Term1044" SourceID="{{siteid}}" StaticName="GtUNSustDevGoals" Type="TaxonomyFieldTypeMulti" WebId="{siteid}">
     <Customization>
         <ArrayOfProperty>
             <Property>
