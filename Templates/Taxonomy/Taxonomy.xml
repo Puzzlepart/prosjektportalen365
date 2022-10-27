@@ -211,25 +211,16 @@
                                     <pnp:Labels>
                                         <pnp:Label Language="1033" Value="1. Utrydde fattigdom" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
-                                    <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="Description" Value="Bærekraftsmål 1 har som mål å utrydde ekstrem fattigdom og halvere andelen mennesker som lever i relativ fattigdom. Koronapandemien har ført til at andelen fattige i verden har økt for første gang siden 1998. Flere har blitt fattigere, og i Norge har også flere fått dårligere råd. Men andelen mennesker som lever i ekstrem fattigdom er mindre i dag enn den var i 1990. Å utrydde fattigdom er viktig for å nå alle FNs 17 bærekraftsmål. For å redusere fattigdommen trenger vi en mer rettferdig fordeling av ressursene våre, og bærekraftig økonomisk vekst." />
-                                    </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="2. Utrydde sult" ID="076fd5e4-41e4-469b-b0a5-47685141c121" SourceTermId="076fd5e4-41e4-469b-b0a5-47685141c121">
                                     <pnp:Labels>
                                         <pnp:Label Language="1033" Value="2. Utrydde sult" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
-                                    <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="URL" Value="https://www.fn.no/om-fn/fns-baerekraftsmaal/utrydde-sult" />
-                                    </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="3. God helse og livskvalitet" ID="4702f85b-9771-4f9d-86ea-f2266caa85ff" SourceTermId="4702f85b-9771-4f9d-86ea-f2266caa85ff">
                                     <pnp:Labels>
                                         <pnp:Label Language="1033" Value="3. God helse og livskvalitet" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
-                                    <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="URL" Value="https://www.fn.no/om-fn/fns-baerekraftsmaal/god-helse-og-livskvalitet" />
-                                    </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="4. God utdanning" ID="2d26b638-cfbc-4e1b-81e7-f3bdce5cd250" SourceTermId="2d26b638-cfbc-4e1b-81e7-f3bdce5cd250">
                                     <pnp:Labels>
