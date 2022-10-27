@@ -6,6 +6,7 @@ import styles from './ProjectTable.module.scss'
 import { IListField, IProjectTableProps } from './types'
 import { useProjectTable } from './useProjectTable'
 
+
 export const ProjectTable: FC<IProjectTableProps> = (props) => {
   const context = useContext(ProgramAdministrationContext)
   const { items, handleItemClicked, handleHeaderCheckboxClicked, handleFilterChanged, selection } =
