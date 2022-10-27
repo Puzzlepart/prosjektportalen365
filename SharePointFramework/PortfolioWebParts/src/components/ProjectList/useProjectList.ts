@@ -10,7 +10,7 @@ export const useProjectList = (props: IProjectListProps) => {
   const [state, $setState] = useState<IProjectListState>({
     loading: true,
     searchTerm: '',
-    showAsTiles: props.showAsTiles,
+    renderAs: 'tiles',
     selectedView: 'my_projects',
     projects: Array.apply(null, Array(24)).map(() => 0),
     isUserInPortfolioManagerGroup: false,

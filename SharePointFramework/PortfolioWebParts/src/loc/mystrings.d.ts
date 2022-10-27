@@ -139,9 +139,9 @@ declare interface IPortfolioWebPartsStrings {
   SearchBoxPlaceholderText: string
   SearchBoxPlaceholderTextLabel: string
   ShowAllMeasurementsLinkText: string
-  ShowAsListText: string
+  RenderAsListText: string
   ShowAsTilesLabel: string
-  ShowAsTilesText: string
+  RenderAsTilesText: string
   ShowCommandBarLabel: string
   ShowExcelExportButtonLabel: string
   ShowFiltersLabel: string

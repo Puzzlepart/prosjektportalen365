@@ -42,35 +42,38 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     if (state.loading) {
       return projects.map((_, idx) => <ProjectCard key={idx} isDataLoaded={false} />)
     }
-    if (state.showAsTiles) {
-      return projects.map((project, idx) => (
-        <ProjectCard
-          key={idx}
-          project={project}
-          showProjectLogo={props.showProjectLogo}
-          showProjectOwner={props.showProjectOwner}
-          showProjectManager={props.showProjectManager}
-          actions={getCardActions(project)}
-        />
-      ))
-    } else {
-      const columns = props.columns.map((col) => {
-        col.isSorted = col.key === state.sort?.fieldName
-        if (col.isSorted) {
-          col.isSortedDescending = state.sort?.isSortedDescending
-        }
-        return col
-      })
-      return (
-        <ShimmeredDetailsList
-          enableShimmer={state.loading}
-          items={projects}
-          columns={columns}
-          onRenderItemColumn={onRenderItemColumn}
-          onColumnHeaderClick={onListSort}
-          selectionMode={SelectionMode.none}
-        />
-      )
+    switch (state.renderAs) {
+      case 'tiles': {
+        return projects.map((project, idx) => (
+          <ProjectCard
+            key={idx}
+            project={project}
+            showProjectLogo={props.showProjectLogo}
+            showProjectOwner={props.showProjectOwner}
+            showProjectManager={props.showProjectManager}
+            actions={getCardActions(project)}
+          />
+        ))
+      }
+      case 'list': {
+        const columns = props.columns.map((col) => {
+          col.isSorted = col.key === state.sort?.fieldName
+          if (col.isSorted) {
+            col.isSortedDescending = state.sort?.isSortedDescending
+          }
+          return col
+        })
+        return (
+          <ShimmeredDetailsList
+            enableShimmer={state.loading}
+            items={projects}
+            columns={columns}
+            onRenderItemColumn={onRenderItemColumn}
+            onColumnHeaderClick={onListSort}
+            selectionMode={SelectionMode.none}
+          />
+        )
+      }
     }
   }
 
@@ -158,14 +161,14 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             onChanged={onSearch}
           />
         </div>
-        <div className={styles.viewToggle} hidden={!props.showViewSelector}>
+        <div className={styles.renderAsToggle} hidden={!props.showViewSelector}>
           <Toggle
-            offText={strings.ShowAsListText}
-            onText={strings.ShowAsTilesText}
-            defaultChecked={state.showAsTiles}
+            offText={strings.RenderAsListText}
+            onText={strings.RenderAsTilesText}
+            defaultChecked={state.renderAs === 'tiles'}
             disabled={state.loading || isEmpty(state.projects)}
             inlineLabel={true}
-            onChanged={(showAsTiles) => setState({ showAsTiles })}
+            onChanged={(checked) => setState({ renderAs: checked ? 'tiles' : 'list' })}
           />
         </div>
         {!state.loading && isEmpty(projects) && (
