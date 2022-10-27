@@ -1,4 +1,4 @@
-import { Link, Shimmer, ShimmerElementsGroup, ShimmerElementType } from '@fluentui/react'
+import { Link } from '@fluentui/react'
 import { DocumentCard } from '@fluentui/react/lib/DocumentCard'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC } from 'react'
@@ -6,29 +6,11 @@ import styles from './ProjectCard.module.scss'
 import { ProjectCardContent } from './ProjectCardContent'
 import { ProjectCardFooter } from './ProjectCardFooter'
 import { ProjectCardHeader } from './ProjectCardHeader'
+import { ShimmeredCard } from './ShimmeredCard'
 import { IProjectCardProps } from './types'
 
 export const ProjectCard: FC<IProjectCardProps> = (props) => {
-  if (props.shimmer) {
-    return (
-      <Shimmer
-        className={styles.root}
-        isDataLoaded={false}
-        customElementsGroup={
-          <div>
-            <div className={styles.shimmerGroup}>
-              <ShimmerElementsGroup
-                shimmerElements={[{ type: ShimmerElementType.line, width: '100%', height: 100 }]}
-              />
-              <ShimmerElementsGroup
-                shimmerElements={[{ type: ShimmerElementType.gap, width: '100%', height: 30 }]}
-              />
-            </div>
-          </div>
-        }
-      />
-    )
-  }
+  if (props.shimmer) return <ShimmeredCard height={300} />
   return (
     <DocumentCard
       className={styles.root}

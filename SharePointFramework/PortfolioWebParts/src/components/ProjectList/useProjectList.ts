@@ -128,15 +128,12 @@ export const useProjectList = (props: IProjectListProps) => {
   useEffect(() => {
     Promise.all([
       props.dataAdapter.fetchEnrichedProjects(),
-      props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName),
-      (() => {
-        window.setTimeout(Promise.resolve, 5000)
-      })()
+      props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
     ]).then(([projects, isUserInPortfolioManagerGroup]) => {
       setState({
         ...state,
         projects,
-        loading: false,
+        loading: true,
         isUserInPortfolioManagerGroup
       })
     })
