@@ -2,6 +2,11 @@ import * as strings from 'PortfolioWebPartsStrings'
 import { CSSProperties, useState } from 'react'
 import { IProjectCardProps } from './types'
 
+/**
+ * Component logic hook for `ProjectCard`
+ * 
+ * @param props Props
+ */
 export function useProjectCard(props: IProjectCardProps) {
   const [isImageLoaded, setIsImageLoaded] = useState(false)
   let title = ''
