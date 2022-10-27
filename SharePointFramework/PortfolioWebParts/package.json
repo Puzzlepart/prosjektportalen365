@@ -1,6 +1,6 @@
 {
   "name": "pp365-portfoliowebparts",
-  "version": "1.7.2-1",
+  "version": "1.7.2-850.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -13,12 +13,11 @@
     "preserve": "node ../.tasks/createServeConfig.js",
     "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
     "package:debug": "gulp clean && gulp default && gulp package-solution",
-    "build": "tsc --build",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
     "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
-    "publish:temp": "npm install && npm run build && npm publish --tag temp"
+    "publish:temp": "npm install && npm run package && npm publish --tag temp"
   },
   "dependencies": {
     "@fluentui/react": "8.98.1",
