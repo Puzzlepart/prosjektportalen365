@@ -1,25 +1,49 @@
-import { Link } from '@fluentui/react'
-import { DocumentCard } from '@fluentui/react/lib/DocumentCard'
-import * as strings from 'PortfolioWebPartsStrings'
+import {
+  DocumentCard,
+  DocumentCardActions,
+  Link,
+  Shimmer,
+  ShimmerElementsGroup,
+  ShimmerElementType
+} from '@fluentui/react'
+import { ProjectListModel } from 'models'
 import React, { FC } from 'react'
 import styles from './ProjectCard.module.scss'
 import { ProjectCardContent } from './ProjectCardContent'
-import { ProjectCardFooter } from './ProjectCardFooter'
 import { ProjectCardHeader } from './ProjectCardHeader'
 import { IProjectCardProps } from './types'
+import { useProjectCard } from './useProjectCard'
 
 export const ProjectCard: FC<IProjectCardProps> = (props) => {
+  const { isDataLoaded, setIsImageLoaded, documentCardProps } = useProjectCard(props)
   return (
-    <DocumentCard
-      title={!props.project.userIsMember ? strings.NoAccessMessage : ''}
-      className={styles.projectCard}
-      onClickHref={props.project.userIsMember ? props.project.url : '#'}
-      style={!props.project.userIsMember ? { opacity: '20%', cursor: 'default' } : {}}>
-      <Link href={props.project.userIsMember ? props.project.url : '#'} target='_blank'>
-        <ProjectCardHeader {...props} />
-      </Link>
-      <ProjectCardContent {...props} />
-      <ProjectCardFooter {...props} />
-    </DocumentCard>
+    <Shimmer
+      className={styles.root}
+      isDataLoaded={isDataLoaded}
+      customElementsGroup={
+        <div>
+          <div className={styles.shimmerGroup}>
+            <ShimmerElementsGroup
+              shimmerElements={[{ type: ShimmerElementType.line, width: '100%', height: 440 }]}
+            />
+          </div>
+        </div>
+      }>
+      <DocumentCard {...documentCardProps}>
+        <Link href={documentCardProps.onClickHref} target='_blank'>
+          <ProjectCardHeader {...props} onImageLoad={() => setIsImageLoaded(true)} />
+        </Link>
+        <ProjectCardContent {...props} />
+        <DocumentCardActions actions={props.actions} />
+      </DocumentCard>
+    </Shimmer>
   )
+}
+
+ProjectCard.defaultProps = {
+  project: new ProjectListModel(undefined, {}),
+  isDataLoaded: true,
+  showProjectOwner: true,
+  showProjectManager: true,
+  shouldTruncateTitle: true
 }

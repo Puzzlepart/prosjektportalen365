@@ -1,34 +1,26 @@
 import { IButtonProps } from '@fluentui/react/lib/Button'
 import { ProjectListModel } from 'models'
+import { IProjectListProps } from '../types'
 
-export interface IProjectCardProps {
+export interface IProjectCardProps
+  extends Pick<IProjectListProps, 'showProjectLogo' | 'showProjectOwner' | 'showProjectManager'> {
   /**
-   * Project
+   * Project model
    */
-  project: ProjectListModel
+  project?: ProjectListModel
 
   /**
    * Should the title be truncated
    */
-  shouldTruncateTitle: boolean
+  shouldTruncateTitle?: boolean
 
   /**
-   * Show Project Logo
+   * Actions to display in the footer of the card
    */
-  showProjectLogo?: boolean
+  actions?: IButtonProps[]
 
   /**
-   * Show Project Owner
+   * Controls when the shimmer is swapped with actual data through an animated transition
    */
-  showProjectOwner?: boolean
-
-  /**
-   * Show Project Manager
-   */
-  showProjectManager?: boolean
-
-  /**
-   * Actions
-   */
-  actions: IButtonProps[]
+  isDataLoaded?: boolean
 }

@@ -1,3 +1,4 @@
+/* eslint-disable prefer-spread */
 import { ProjectListModel } from 'models'
 import { IButtonProps, IColumn } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
@@ -9,9 +10,10 @@ export const useProjectList = (props: IProjectListProps) => {
   const [state, $setState] = useState<IProjectListState>({
     loading: true,
     searchTerm: '',
-    showAsTiles: props.showAsTiles,
+    renderAs: 'tiles',
     selectedView: 'my_projects',
-    projects: [],
+    projects: Array.apply(null, Array(24)).map(() => 0),
+    isUserInPortfolioManagerGroup: false,
     sort: { fieldName: props.sortBy, isSortedDescending: true }
   })
 
@@ -66,7 +68,7 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   /**
-   * Filter projects
+   * Filter projects based on `selectedView` and `searchTerm`
    *
    * @param projects - Projects
    */
@@ -138,7 +140,7 @@ export const useProjectList = (props: IProjectListProps) => {
     })
   }, [])
 
-  const projects = filterProjets(state.projects)
+  const projects = state.loading ? state.projects : filterProjets(state.projects)
 
   return {
     state,

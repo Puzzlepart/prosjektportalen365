@@ -33,9 +33,6 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                 }),
                 PropertyPaneToggle('showViewSelector', {
                   label: strings.ShowViewSelectorLabel
-                }),
-                PropertyPaneToggle('showAsTiles', {
-                  label: strings.ShowAsTilesLabel
                 })
               ]
             },

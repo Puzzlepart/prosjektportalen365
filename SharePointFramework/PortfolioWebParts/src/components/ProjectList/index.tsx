@@ -1,15 +1,13 @@
 import {
-  ShimmeredDetailsList,
-  SelectionMode,
   IColumn,
   MessageBar,
   MessageBarType,
   Pivot,
   PivotItem,
   SearchBox,
-  Toggle,
-  Spinner,
-  SpinnerSize
+  SelectionMode,
+  ShimmeredDetailsList,
+  Toggle
 } from '@fluentui/react'
 import { Web } from '@pnp/sp'
 import { ProjectListModel } from 'models'
@@ -41,36 +39,41 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
    * @param projects - Projects
    */
   function renderProjects(projects: ProjectListModel[]) {
-    if (state.showAsTiles) {
-      return projects.map((project, idx) => (
-        <ProjectCard
-          key={idx}
-          project={project}
-          shouldTruncateTitle={true}
-          showProjectLogo={props.showProjectLogo}
-          showProjectOwner={props.showProjectOwner}
-          showProjectManager={props.showProjectManager}
-          actions={getCardActions(project)}
-        />
-      ))
-    } else {
-      const columns = props.columns.map((col) => {
-        col.isSorted = col.key === state.sort?.fieldName
-        if (col.isSorted) {
-          col.isSortedDescending = state.sort?.isSortedDescending
-        }
-        return col
-      })
-      return (
-        <ShimmeredDetailsList
-          enableShimmer={state.loading}
-          items={projects}
-          columns={columns}
-          onRenderItemColumn={onRenderItemColumn}
-          onColumnHeaderClick={onListSort}
-          selectionMode={SelectionMode.none}
-        />
-      )
+    if (state.loading) {
+      return projects.map((_, idx) => <ProjectCard key={idx} isDataLoaded={false} />)
+    }
+    switch (state.renderAs) {
+      case 'tiles': {
+        return projects.map((project, idx) => (
+          <ProjectCard
+            key={idx}
+            project={project}
+            showProjectLogo={props.showProjectLogo}
+            showProjectOwner={props.showProjectOwner}
+            showProjectManager={props.showProjectManager}
+            actions={getCardActions(project)}
+          />
+        ))
+      }
+      case 'list': {
+        const columns = props.columns.map((col) => {
+          col.isSorted = col.key === state.sort?.fieldName
+          if (col.isSorted) {
+            col.isSortedDescending = state.sort?.isSortedDescending
+          }
+          return col
+        })
+        return (
+          <ShimmeredDetailsList
+            enableShimmer={state.loading}
+            items={projects}
+            columns={columns}
+            onRenderItemColumn={onRenderItemColumn}
+            onColumnHeaderClick={onListSort}
+            selectionMode={SelectionMode.none}
+          />
+        )
+      }
     }
   }
 
@@ -101,34 +104,56 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   return (
     <div className={styles.root}>
       <div className={styles.container}>
-        {state.isUserInPortfolioManagerGroup && (
-          <div className={styles.projectDisplaySelect}>
-            <Pivot
-              onLinkClick={({ props }) => setState({ selectedView: props.itemKey })}
-              selectedKey={state.selectedView}>
-              <PivotItem
-                headerText={strings.MyProjectsLabel}
-                itemKey='my_projects'
-                itemIcon='FabricUserFolder'
-              />
-              <PivotItem
-                headerText={strings.AllProjectsLabel}
-                itemKey='all_projects'
-                itemIcon='AllApps'
-              />
-              <PivotItem
-                headerText={strings.ParentProjectLabel}
-                itemKey='parent_projects'
-                itemIcon='ProductVariant'
-              />
-              <PivotItem
-                headerText={strings.ProgramLabel}
-                itemKey='program'
-                itemIcon='ProductList'
-              />
-            </Pivot>
-          </div>
-        )}
+        <div className={styles.projectDisplaySelect}>
+          <Pivot
+            onLinkClick={({ props }) => setState({ selectedView: props.itemKey })}
+            selectedKey={state.selectedView}>
+            <PivotItem
+              headerText={strings.MyProjectsLabel}
+              itemKey='my_projects'
+              itemIcon='FabricUserFolder'
+              headerButtonProps={
+                !state.isUserInPortfolioManagerGroup && {
+                  disabled: true,
+                  style: { opacity: 0.3, cursor: 'default' }
+                }
+              }
+            />
+            <PivotItem
+              headerText={strings.AllProjectsLabel}
+              itemKey='all_projects'
+              itemIcon='AllApps'
+              headerButtonProps={
+                !state.isUserInPortfolioManagerGroup && {
+                  disabled: true,
+                  style: { opacity: 0.3, cursor: 'default' }
+                }
+              }
+            />
+            <PivotItem
+              headerText={strings.ParentProjectLabel}
+              itemKey='parent_projects'
+              itemIcon='ProductVariant'
+              headerButtonProps={
+                !state.isUserInPortfolioManagerGroup && {
+                  disabled: true,
+                  style: { opacity: 0.3, cursor: 'default' }
+                }
+              }
+            />
+            <PivotItem
+              headerText={strings.ProgramLabel}
+              itemKey='program'
+              itemIcon='ProductList'
+              headerButtonProps={
+                !state.isUserInPortfolioManagerGroup && {
+                  disabled: true,
+                  style: { opacity: 0.3, cursor: 'default' }
+                }
+              }
+            />
+          </Pivot>
+        </div>
         <div className={styles.searchBox} hidden={!props.showSearchBox}>
           <SearchBox
             disabled={state.loading || isEmpty(state.projects)}
@@ -136,45 +161,36 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             onChanged={onSearch}
           />
         </div>
-        <div className={styles.viewToggle} hidden={!props.showViewSelector}>
+        <div className={styles.renderAsToggle} hidden={!props.showViewSelector}>
           <Toggle
-            offText={strings.ShowAsListText}
-            onText={strings.ShowAsTilesText}
-            defaultChecked={state.showAsTiles}
+            offText={strings.RenderAsListText}
+            onText={strings.RenderAsTilesText}
+            defaultChecked={state.renderAs === 'tiles'}
             disabled={state.loading || isEmpty(state.projects)}
             inlineLabel={true}
-            onChanged={(showAsTiles) => setState({ showAsTiles })}
+            onChanged={(checked) => setState({ renderAs: checked ? 'tiles' : 'list' })}
           />
         </div>
-        {state.loading && (
-          <div className={styles.spinner}>
-            <Spinner size={SpinnerSize.large} label={strings.ProjectListLoadingText} />
-          </div>
-        )}
         {!state.loading && isEmpty(projects) && (
           <div className={styles.emptyMessage}>
             <MessageBar>{strings.ProjectListEmptyText}</MessageBar>
           </div>
         )}
-        {!isEmpty(projects) && (
-          <>
-            <ProjectInformationPanel
-              key={state.showProjectInfo?.siteId}
-              title={state.showProjectInfo?.title}
-              siteId={state.showProjectInfo?.siteId}
-              webUrl={state.showProjectInfo?.url}
-              hubSite={{
-                web: new Web(props.pageContext.site.absoluteUrl),
-                url: props.pageContext.site.absoluteUrl
-              }}
-              page='Portfolio'
-              hidden={!state.showProjectInfo}
-              hideAllActions={true}
-            />
-            <div className={styles.projects}>{renderProjects(projects)}</div>
-          </>
-        )}
+        <div className={styles.projects}>{renderProjects(projects)}</div>
       </div>
+      <ProjectInformationPanel
+        key={state.showProjectInfo?.siteId}
+        title={state.showProjectInfo?.title}
+        siteId={state.showProjectInfo?.siteId}
+        webUrl={state.showProjectInfo?.url}
+        hubSite={{
+          web: new Web(props.pageContext.site.absoluteUrl),
+          url: props.pageContext.site.absoluteUrl
+        }}
+        page='Portfolio'
+        hidden={!state.showProjectInfo}
+        hideAllActions={true}
+      />
     </div>
   )
 }
