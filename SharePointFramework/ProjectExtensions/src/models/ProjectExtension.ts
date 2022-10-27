@@ -1,4 +1,4 @@
-import { getId, IObjectWithKey } from '@fluentui/react'
+import { IObjectWithKey } from '@fluentui/react'
 import { TypedHash } from '@pnp/common'
 import { Web } from '@pnp/sp'
 import { Schema } from 'sp-js-provisioning'
@@ -25,14 +25,14 @@ export class ProjectExtension implements IObjectWithKey {
   private _isLocked: boolean
 
   constructor(spItem: IProjectExtensionSPItem, public web: Web) {
-    this.key = getId(`projecttemplate_${spItem.Id}`)
+    this.id = spItem.Id
+    this.key = this.id.toString()
     this.text = spItem.File.Title
     this.isDefault = spItem.GtExtensionDefault
     this.hidden = spItem.GtExtensionHidden
     this._isLocked = spItem.GtExtensionLocked
     this.subText = spItem.FieldValuesAsText.GtDescription
     this.serverRelativeUrl = spItem.File.ServerRelativeUrl
-    this.id = spItem.Id
   }
 
   /**

@@ -1,4 +1,4 @@
-import { getId, IObjectWithKey } from '@fluentui/react'
+import { IObjectWithKey } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { List, sp, Web } from '@pnp/sp'
 import { IListProperties } from './IListProperties'
@@ -40,7 +40,7 @@ export class ListContentConfig implements IObjectWithKey {
 
   constructor(private _spItem: IListContentConfigSPItem, public web: Web) {
     this.id = _spItem.Id
-    this.key = getId(`listcontentconfig_${this.id}`)
+    this.key = this.id.toString()
     this.text = _spItem.Title
     this.subText = _spItem.GtDescription
     this.isDefault = _spItem.GtLccDefault
