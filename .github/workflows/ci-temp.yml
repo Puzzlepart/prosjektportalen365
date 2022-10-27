@@ -8,7 +8,6 @@ on:
       - "Install/**"
       - "Templates/**"
       - package.json
-      - .github/workflows/ci-temp.yml
 
 env:
   SP_URL: "https://puzzlepart.sharepoint.com/sites/pp365_9511058"
@@ -21,10 +20,6 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
-
-      - name: Set sha_short
-        id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
       - name: Setup Node.js 16.18.0
         uses: actions/setup-node@v3
@@ -39,8 +34,6 @@ jobs:
         with:
           name: release-package
           path: release
-    outputs:
-      sha_short: ${{ steps.vars.outputs.sha_short }}
 
   upgrade:
     needs: build_release_package
