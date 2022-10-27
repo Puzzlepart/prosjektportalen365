@@ -301,7 +301,7 @@ if (-not $SkipAppPackages.IsPresent) {
         exit 0 
     }
     Try {
-        StartAction("[INFO] Installing SharePoint Framework app packages to $TenantAppCatalogUrl")
+        StartAction("Installing SharePoint Framework app packages to $TenantAppCatalogUrl")
         foreach ($AppPkg in (Get-ChildItem "$PSScriptRoot\Apps" -ErrorAction SilentlyContinue)) {
             Add-PnPApp -Path $AppPkg.FullName -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop >$null 2>&1
         }
