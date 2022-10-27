@@ -1,7 +1,7 @@
 import { Link } from '@fluentui/react'
 import { DocumentCard } from '@fluentui/react/lib/DocumentCard'
 import * as strings from 'PortfolioWebPartsStrings'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import styles from './ProjectCard.module.scss'
 import { ProjectCardContent } from './ProjectCardContent'
 import { ProjectCardFooter } from './ProjectCardFooter'
@@ -10,7 +10,8 @@ import { ShimmeredCard } from './ShimmeredCard'
 import { IProjectCardProps } from './types'
 
 export const ProjectCard: FC<IProjectCardProps> = (props) => {
-  if (props.shimmer) return <ShimmeredCard height={300} />
+  const [isImageLoaded, setIsImageLoaded] = useState(false)
+  if (props.shimmer && !isImageLoaded) return <ShimmeredCard height={300} />
   return (
     <DocumentCard
       className={styles.root}
@@ -18,7 +19,7 @@ export const ProjectCard: FC<IProjectCardProps> = (props) => {
       onClickHref={props.project.userIsMember ? props.project.url : '#'}
       style={!props.project.userIsMember ? { opacity: '20%', cursor: 'default' } : {}}>
       <Link href={props.project.userIsMember ? props.project.url : '#'} target='_blank'>
-        <ProjectCardHeader {...props} />
+        <ProjectCardHeader {...props} onImageLoad={() =>  setIsImageLoaded(true)} />
       </Link>
       <ProjectCardContent {...props} />
       <ProjectCardFooter {...props} />
