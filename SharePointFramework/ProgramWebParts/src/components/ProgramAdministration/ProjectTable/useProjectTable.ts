@@ -5,7 +5,7 @@ import { IListField, IProjectTableProps } from './types'
 
 /**
  * Component logic hook for `ProjectTable`
- * 
+ *
  * @param props Props
  */
 export function useProjectTable(props: IProjectTableProps) {

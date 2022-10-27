@@ -26,7 +26,7 @@ export const ProjectTable: FC<IProjectTableProps> = (props) => {
     />
   )
 
-  const headers = useMemo<JSX.Element[]>(() => {
+  const renderHeaders = useMemo<JSX.Element[]>(() => {
     const checked: boolean =
       props.items && props.items.every((item): boolean => selection.indexOf(item) >= 0)
     return [
@@ -90,7 +90,7 @@ export const ProjectTable: FC<IProjectTableProps> = (props) => {
           }}>
           {props.fields ? (
             <>
-              {headers}
+              {renderHeaders}
               {items ? items.map(renderListRow) : <div />}
             </>
           ) : (
