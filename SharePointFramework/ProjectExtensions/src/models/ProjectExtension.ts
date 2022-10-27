@@ -29,8 +29,8 @@ export class ProjectExtension implements IObjectWithKey {
     this.key = this.id.toString()
     this.text = spItem.File.Title
     this.isDefault = spItem.GtExtensionDefault
-    this.hidden = spItem.GtExtensionHidden
     this._isLocked = spItem.GtExtensionLocked
+    this.hidden = this._isLocked && !this.isDefault ? true : spItem.GtExtensionHidden
     this.subText = spItem.FieldValuesAsText.GtDescription
     this.serverRelativeUrl = spItem.File.ServerRelativeUrl
   }

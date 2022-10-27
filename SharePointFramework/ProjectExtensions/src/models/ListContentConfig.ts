@@ -44,8 +44,8 @@ export class ListContentConfig implements IObjectWithKey {
     this.text = _spItem.Title
     this.subText = _spItem.GtDescription
     this.isDefault = _spItem.GtLccDefault
-    this.hidden = _spItem.GtLccHidden
     this._isLocked = _spItem.GtLccLocked
+    this.hidden = this._isLocked && !this.isDefault ? true : _spItem.GtLccHidden
     this._sourceList = _spItem.GtLccSourceList
     this._destinationList = _spItem.GtLccDestinationList
   }

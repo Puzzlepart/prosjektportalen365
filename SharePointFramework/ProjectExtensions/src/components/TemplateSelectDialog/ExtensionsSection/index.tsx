@@ -44,10 +44,16 @@ export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) =
           ) => {
             const ext = detailsRowProps.item as ProjectExtension
             detailsRowProps.disabled = ext.isLocked(context.state.selectedTemplate)
-            if (detailsRowProps.disabled)
+            if (detailsRowProps.disabled) {
               detailsRowProps.onRenderCheck = (props) => (
                 <CheckLocked {...props} tooltip={{ text: strings.ExtensionLockedTooltipText }} />
               )
+              if (ext.isDefault) {
+                detailsRowProps.styles = {
+                  root: { background: 'rgb(237, 235, 233)', color: 'rgb(50, 49, 48)' }
+                }
+              }
+            }
             if (
               ext.text.toLowerCase().indexOf(searchTerm.toLowerCase()) === -1 &&
               !selectedKeys.includes(ext.key)
