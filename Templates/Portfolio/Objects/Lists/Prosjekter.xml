@@ -6,43 +6,21 @@
     </pnp:ContentTypeBindings>
     <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_Projects_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+            <Query>
+                <OrderBy>
+                    <FieldRef Name="ID" />
+                </OrderBy>
+                <Where>
+                    <Eq>
+                        <FieldRef Name="ID" />
+                        <Value Type="Counter">0</Value>
+                    </Eq>
+                </Where>
+            </Query>
             <ViewFields>
                 <FieldRef Name="ID" />
-                <FieldRef Name="Title" />
-                <FieldRef Name="GtProjectFinanceName" />
-                <FieldRef Name="GtProjectNumber" />
-                <FieldRef Name="GtArchiveReference" />
-                <FieldRef Name="GtProjectServiceArea" />
-                <FieldRef Name="GtProjectType" />
-                <FieldRef Name="GtUNSustainableDevelopmentGoals" />
-                <FieldRef Name="GtProjectPhase" />
-                <FieldRef Name="GtProjectManager" />
-                <FieldRef Name="GtProjectOwner" />
-                <FieldRef Name="GtProjectSupport" />
-                <FieldRef Name="GtGainsResponsible" />
-                <FieldRef Name="GtStartDate" />
-                <FieldRef Name="GtEndDate" />
-                <FieldRef Name="GtProjectGoals" />
-                <FieldRef Name="GtBudgetTotal" />
-                <FieldRef Name="GtCostsTotal" />
-                <FieldRef Name="GtProjectForecast" />
-                <FieldRef Name="GtBudgetLastReportDate" />
-                <FieldRef Name="GtGroupId" />
-                <FieldRef Name="GtSiteId" />
-                <FieldRef Name="GtSiteUrl" />
-                <FieldRef Name="GtLastSyncTime" />
-                <FieldRef Name="GtProjectLifecycleStatus" />
-                <FieldRef Name="GtProjectPhaseText" />
-                <FieldRef Name="GtProjectServiceAreaText" />
-                <FieldRef Name="GtProjectTypeText" />
-                <FieldRef Name="GtUNSustainableDevelopmentGoalsText" />
-                <FieldRef Name="GtProjectTemplate" />
-                <FieldRef Name="GtParentProjects" />
-                <FieldRef Name="GtChildProjects" />
-                <FieldRef Name="GtIsParentProject" />
-                <FieldRef Name="GtIsProgram" />
             </ViewFields>
-            <RowLimit Paged="TRUE">200</RowLimit>
+            <RowLimit Paged="TRUE">30</RowLimit>
             <Aggregations Value="Off" />
             <JSLink>clienttemplates.js</JSLink>
         </View>
