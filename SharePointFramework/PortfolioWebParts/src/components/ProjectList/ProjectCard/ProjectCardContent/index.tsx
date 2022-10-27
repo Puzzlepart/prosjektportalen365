@@ -1,8 +1,8 @@
 import { IPersonaSharedProps, Persona, PersonaSize } from '@fluentui/react/lib/Persona'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC } from 'react'
-import styles from './ProjectCard.module.scss'
-import { IProjectCardProps } from './types'
+import styles from '../ProjectCard.module.scss'
+import { IProjectCardProps } from '../types'
 
 /**
  * Project Card Content
