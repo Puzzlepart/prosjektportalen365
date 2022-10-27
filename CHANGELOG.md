@@ -10,6 +10,9 @@ Every change is marked with issue ID.
 
 - Enabling autocomplete search for template in project setup dialog #837
 
+### Fixed
+- Persist selection when doing a search in Program Admin #849
+
 ## 1.7.2 - 26.10.2022
 
 ### Added
