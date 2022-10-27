@@ -14,6 +14,7 @@
                 <FieldRef Name="GtArchiveReference" />
                 <FieldRef Name="GtProjectServiceArea" />
                 <FieldRef Name="GtProjectType" />
+                <FieldRef Name="GtUNSustainableDevelopmentGoals" />
                 <FieldRef Name="GtProjectPhase" />
                 <FieldRef Name="GtProjectManager" />
                 <FieldRef Name="GtProjectOwner" />
@@ -34,6 +35,7 @@
                 <FieldRef Name="GtProjectPhaseText" />
                 <FieldRef Name="GtProjectServiceAreaText" />
                 <FieldRef Name="GtProjectTypeText" />
+                <FieldRef Name="GtUNSustainableDevelopmentGoalsText" />
                 <FieldRef Name="GtProjectTemplate" />
                 <FieldRef Name="GtParentProjects" />
                 <FieldRef Name="GtChildProjects" />
