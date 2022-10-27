@@ -205,6 +205,60 @@
                                 </pnp:Term>
                             </pnp:Terms>
                         </pnp:TermSet>
+                        <pnp:TermSet Name="FNs bærekraftsmål" ID="99af1a25-88c1-4781-a05c-8446928d3fdd" Description=" ">
+                            <pnp:Terms>
+                                <pnp:Term Name="Administrasjon og IKT" ID="b81d2835-beae-41ae-a810-89cf1bea480f" SourceTermId="b81d2835-beae-41ae-a810-89cf1bea480f">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Administration and ICT" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Arbeid og næringsliv" ID="27805ae3-5749-44d9-94a7-146eedb06cfb" SourceTermId="27805ae3-5749-44d9-94a7-146eedb06cfb">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Work and business" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Helse og velferd" ID="88058353-ac05-4652-a4fc-690b649ab03a" SourceTermId="88058353-ac05-4652-a4fc-690b649ab03a">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Healthcare" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Kultur, idrett og fritid" ID="8b3870f8-59a2-4cef-a281-19228b286bbf" SourceTermId="8b3870f8-59a2-4cef-a281-19228b286bbf">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Culture, sports and leisure" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Natur og miljø" ID="e302dff1-4fb3-4d86-894a-f3bd769f4764" SourceTermId="e302dff1-4fb3-4d86-894a-f3bd769f4764">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Nature and environment" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Plan, bygg og geodata" ID="ab3dd407-a44b-4783-aa45-481fb9f564ba" SourceTermId="ab3dd407-a44b-4783-aa45-481fb9f564ba">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Plan, build and geodata" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Skatt og avgift" ID="40191080-4a2a-4b8f-9c76-c31be95ae5d4" SourceTermId="40191080-4a2a-4b8f-9c76-c31be95ae5d4">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Taxes and fees" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Skole og oppvekst" ID="46475d37-c854-439e-b04b-2433f2dc2566" SourceTermId="46475d37-c854-439e-b04b-2433f2dc2566">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Education" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Trafikk og samferdsel" ID="6479faf1-3141-46ef-94d6-fc65e8f51448" SourceTermId="6479faf1-3141-46ef-94d6-fc65e8f51448">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Transportation" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                                <pnp:Term Name="Vann og avløp" ID="8d1082d0-a44d-452d-baef-212b938c5102" SourceTermId="8d1082d0-a44d-452d-baef-212b938c5102">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Water and drain" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                </pnp:Term>
+                            </pnp:Terms>
+                        </pnp:TermSet>
                         <pnp:TermSet Name="Rolle" ID="54da9f47-c64e-4a26-80f3-4d3c3fa1b7b2" Description=" ">
                             <pnp:Terms>
                                 <pnp:Term Name="Prosjekteier" ID="aa39c7e0-33f1-40cf-8afd-ea5cc6881c03" SourceTermId="aa39c7e0-33f1-40cf-8afd-ea5cc6881c03">
