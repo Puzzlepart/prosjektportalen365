@@ -9,9 +9,8 @@
   "license": "MIT",
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
-    "serve": "gulp serve-deprecated --locale=nb-no --nobrowser",
-    "preserve": "node ../.tasks/createServeConfig.js && gulp setHiddenToolbox",
-    "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
+    "serve": "node ../.tasks/createServeConfig.js && gulp setHiddenToolbox && gulp serve-deprecated --locale=nb-no --nobrowser",
+    "package": "gulp clean --ship && gulp setHiddenToolbox --ship && gulp default --ship && gulp package-solution --ship",
     "package:debug": "gulp clean && gulp default && gulp package-solution",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color",
