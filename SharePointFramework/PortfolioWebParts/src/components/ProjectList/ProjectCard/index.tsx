@@ -23,5 +23,5 @@ export const ProjectCard: FC<IProjectCardProps> = (props) => {
 
 ProjectCard.defaultProps = {
   project: {},
-  shimmer: true
+  shimmer: false
 }

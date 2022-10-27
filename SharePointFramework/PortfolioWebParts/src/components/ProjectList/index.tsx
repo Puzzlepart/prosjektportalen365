@@ -40,7 +40,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
    */
   function renderProjects(projects: ProjectListModel[]) {
     if (state.loading) {
-      return projects.map((_, idx) => <ProjectCard key={idx} />)
+      return projects.map((_, idx) => <ProjectCard key={idx} shimmer={true} />)
     }
     if (state.showAsTiles) {
       return projects.map((project, idx) => (
