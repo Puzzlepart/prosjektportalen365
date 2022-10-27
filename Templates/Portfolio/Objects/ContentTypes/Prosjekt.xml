@@ -7,6 +7,7 @@
         <pnp:FieldRef ID="a59fe220-36c3-464a-8cfc-40d6d04debd2" Name="GtArchiveReference" UpdateChildren="true" />
         <pnp:FieldRef ID="3275d73a-fd4d-48ba-bcc1-31526460d57b" Name="GtProjectServiceArea" UpdateChildren="true" />
         <pnp:FieldRef ID="ddb69044-7d2c-4865-86ec-b71413780409" Name="GtProjectType" UpdateChildren="true" />
+        <pnp:FieldRef ID="293886a7-dc00-47c4-be98-438a34af8d8a" Name="GtUNSustDevGoals" UpdateChildren="true" />
         <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" UpdateChildren="true" />
         <pnp:FieldRef ID="d46bed8f-0fb6-4684-8221-632fdb12598f" Name="GtProjectManager" UpdateChildren="true" />
         <pnp:FieldRef ID="3121ac55-d68e-4fcb-8fc8-3d8ed8a601b2" Name="GtProjectOwner" UpdateChildren="true" />
@@ -27,6 +28,7 @@
         <pnp:FieldRef ID="1b9a1571-b300-4cc0-bd32-9311f72e1998" Name="GtProjectPhaseText" UpdateChildren="true" />
         <pnp:FieldRef ID="1b87b4e7-b9ed-4a31-96cc-abfaca61eea4" Name="GtProjectServiceAreaText" UpdateChildren="true" />
         <pnp:FieldRef ID="7212b9e5-52fc-46cb-8b5e-9bf787dd115f" Name="GtProjectTypeText" UpdateChildren="true" />
+        <pnp:FieldRef ID="fc103496-b2eb-4236-9902-ac47c2550c61" Name="GtUNSustDevGoalsText" UpdateChildren="true" />
         <pnp:FieldRef ID="664ddf9a-a415-4b0b-a34f-0653547f03f0" Name="GtProjectAdminRoles" UpdateChildren="true" />
         <pnp:FieldRef ID="4cc4a931-3861-45ad-85de-6db88afe9fa0" Name="GtProjectTemplate" UpdateChildren="true" />
         <pnp:FieldRef ID="98e55335-a95a-4755-83a3-6f8b64af2420" Name="GtParentProjects" UpdateChildren="true" />
