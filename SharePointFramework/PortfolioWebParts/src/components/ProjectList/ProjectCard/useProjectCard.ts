@@ -22,5 +22,9 @@ export function useProjectCard(props: IProjectCardProps) {
     documentCardProps.title = strings.NoAccessMessage
     documentCardProps.style = { opacity: '20%', cursor: 'default' }
   }
-  return { isDataLoaded: props.isDataLoaded && isImageLoaded, setIsImageLoaded, documentCardProps } as const
+  return {
+    isDataLoaded: props.isDataLoaded && isImageLoaded,
+    setIsImageLoaded,
+    documentCardProps
+  } as const
 }
