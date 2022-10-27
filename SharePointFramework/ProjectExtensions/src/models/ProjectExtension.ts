@@ -4,7 +4,7 @@ import { Web } from '@pnp/sp'
 import { Schema } from 'sp-js-provisioning'
 import { ProjectTemplate } from './ProjectTemplate'
 
-export interface IProjectExtension {
+export interface IProjectExtensionSPItem {
   Id: number
   FieldValuesAsText?: TypedHash<string>
   key: string
@@ -20,16 +20,16 @@ export class ProjectExtension implements IObjectWithKey {
   public text: string
   public isDefault: boolean
   public hidden: boolean
-  private _isLocked: boolean
   public subText: string
   public serverRelativeUrl: string
+  private _isLocked: boolean
 
-  constructor(spItem: IProjectExtension, public web: Web) {
+  constructor(spItem: IProjectExtensionSPItem, public web: Web) {
     this.key = getId(`projecttemplate_${spItem.Id}`)
     this.text = spItem.File.Title
     this.isDefault = spItem.GtExtensionDefault
     this.hidden = spItem.GtExtensionHidden
-    this._isLocked = spItem.GtExtensionLocked ?? true
+    this._isLocked = spItem.GtExtensionLocked
     this.subText = spItem.FieldValuesAsText.GtDescription
     this.serverRelativeUrl = spItem.File.ServerRelativeUrl
     this.id = spItem.Id

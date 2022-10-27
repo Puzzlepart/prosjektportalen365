@@ -32,9 +32,9 @@ export class ListContentConfig implements IObjectWithKey {
   public subText: string
   public isDefault: boolean
   public hidden: boolean
-  private _isLocked: boolean
   public sourceListProps: IListProperties = {}
   public destListProps: IListProperties = {}
+  private _isLocked: boolean
   private _sourceList: string
   private _destinationList: string
 
@@ -45,7 +45,7 @@ export class ListContentConfig implements IObjectWithKey {
     this.subText = _spItem.GtDescription
     this.isDefault = _spItem.GtLccDefault
     this.hidden = _spItem.GtLccHidden
-    this._isLocked = _spItem.GtLccLocked ?? true
+    this._isLocked = _spItem.GtLccLocked
     this._sourceList = _spItem.GtLccSourceList
     this._destinationList = _spItem.GtLccDestinationList
   }
