@@ -1,6 +1,7 @@
 {
   "name": "pp365-portfoliowebparts",
   "version": "1.7.2-850.1",
+  
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
