@@ -30,7 +30,7 @@ export const Commands: FC = () => {
       iconProps: { iconName: 'Add' },
       buttonStyles: { root: { border: 'none' } },
       onClick: () => context.dispatch(TOGGLE_ADD_PROJECT_DIALOG()),
-      disabled: !context.props.context.pageContext.legacyPageContext.isSiteAdmin
+      disabled: !context.state.userHasManagePermission
     },
     {
       key: 'ProgramRemoveChilds',
@@ -38,8 +38,7 @@ export const Commands: FC = () => {
       iconProps: { iconName: 'Delete' },
       buttonStyles: { root: { border: 'none' } },
       disabled:
-        isEmpty(context.state.selectedProjectsToDelete) ||
-        !context.props.context.pageContext.legacyPageContext.isSiteAdmin,
+        isEmpty(context.state.selectedProjectsToDelete) || !context.state.userHasManagePermission,
       onClick: () => {
         removeChildProjects(context.props.dataAdapter, context.state.selectedProjectsToDelete).then(
           (childProjects) => {

@@ -1,6 +1,7 @@
 import { SelectionMode, Checkbox, SearchBox } from '@fluentui/react'
+import { uniqBy } from '@microsoft/sp-lodash-subset'
 import strings from 'ProgramWebPartsStrings'
-import React, { FormEvent, FC, useContext, useEffect, useMemo, useState } from 'react'
+import React, { FormEvent, FC, useContext, useEffect, useMemo, useState, ChangeEvent } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import styles from './ProjectTable.module.scss'
 import { IListField, IProjectTableProps } from './types'
@@ -53,7 +54,7 @@ export const ProjectTable: FC<IProjectTableProps> = (props) => {
     }
   }
 
-  const handleFilterChanged = (_: React.ChangeEvent<HTMLInputElement>, filter: string) => {
+  const handleFilterChanged = (_: ChangeEvent<HTMLInputElement>, filter: string) => {
     const filtered: any[] = props.items.filter((item: any): boolean =>
       props.fields
         .map((field: IListField): string => field.fieldName)
@@ -62,29 +63,27 @@ export const ProjectTable: FC<IProjectTableProps> = (props) => {
             key in item && (item[key] + '').toLowerCase().indexOf(filter) >= 0
         )
     )
-    setItems(filtered)
+    setItems(uniqBy([...(selection ?? []), ...filtered], (item) => item.SiteId))
   }
 
-  const renderCheckbox = (checked: boolean, onChange: (checked: boolean) => void): JSX.Element => {
-    return (
-      <Checkbox
-        checked={checked}
-        disabled={!context.state.userHasManagePermission}
-        styles={{
-          root: { top: '50%', transform: 'translateY(-50%)' },
-          checkbox: { borderRadius: '16px' }
-        }}
-        onChange={(ev: FormEvent, newChecked: boolean) => {
-          onChange(newChecked)
-          ev.stopPropagation()
-        }}
-      />
-    )
-  }
+  const renderCheckbox = (checked: boolean, onChange: (checked: boolean) => void) => (
+    <Checkbox
+      checked={checked}
+      disabled={!context.state.userHasManagePermission}
+      styles={{
+        root: { top: '50%', transform: 'translateY(-50%)' },
+        checkbox: { borderRadius: '16px' }
+      }}
+      onChange={(ev: FormEvent, newChecked: boolean) => {
+        onChange(newChecked)
+        ev.stopPropagation()
+      }}
+    />
+  )
 
-  const headers: JSX.Element[] = useMemo((): JSX.Element[] => {
+  const headers = useMemo<JSX.Element[]>(() => {
     const checked: boolean =
-      props.items && props.items.every((item: any): boolean => selection.indexOf(item) >= 0)
+      props.items && props.items.every((item): boolean => selection.indexOf(item) >= 0)
     return [
       <li
         key='checkbox'
@@ -117,23 +116,21 @@ export const ProjectTable: FC<IProjectTableProps> = (props) => {
         }}>
         {renderCheckbox(checked, (newChecked: boolean) => handleItemClicked(item, newChecked))}
       </li>,
-      ...props.fields.map(
-        (field: IListField, index: number): JSX.Element => (
-          <li
-            key={field.key}
-            className={styles.column}
-            onClick={(event) => {
-              event.preventDefault()
-              handleItemClicked(item, !checked)
-            }}>
-            {field.onRender ? (
-              field.onRender(item, index, field)
-            ) : (
-              <div>{item[field.fieldName] + ''}</div>
-            )}
-          </li>
-        )
-      )
+      ...props.fields.map((field: IListField, index: number) => (
+        <li
+          key={field.key}
+          className={styles.column}
+          onClick={(event) => {
+            event.preventDefault()
+            handleItemClicked(item, !checked)
+          }}>
+          {field.onRender ? (
+            field.onRender(item, index, field)
+          ) : (
+            <div>{item[field.fieldName] + ''}</div>
+          )}
+        </li>
+      ))
     ]
   }
 
