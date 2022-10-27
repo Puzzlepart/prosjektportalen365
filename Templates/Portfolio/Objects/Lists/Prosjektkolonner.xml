@@ -478,7 +478,7 @@
             <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
-            <pnp:DataValue FieldName="GtShowFieldFrontpage">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldPortfolio">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
