@@ -1,10 +1,10 @@
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { ICommandsProps } from './types'
 import styles from './PortfolioInsightsCommandBar.module.scss'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ICommandBarItemProps, ContextualMenuItemType, CommandBar } from '@fluentui/react'
 
-export const Commands: FunctionComponent<ICommandsProps> = (props) => {
+export const Commands: FC<ICommandsProps> = (props) => {
   const items: ICommandBarItemProps[] = [
     {
       key: 'NEW_ITEM',

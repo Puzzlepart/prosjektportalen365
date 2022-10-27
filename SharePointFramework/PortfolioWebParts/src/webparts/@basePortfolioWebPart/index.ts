@@ -1,13 +1,13 @@
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
 import { IBaseComponentProps } from 'components/types'
-import { DataAdapter } from '../../data'
 import assign from 'object-assign'
-import React from 'react'
+import React, { FC } from 'react'
 import * as ReactDom from 'react-dom'
+import { DataAdapter } from '../../data'
 
 export abstract class BasePortfolioWebPart<
   T extends IBaseComponentProps
@@ -23,10 +23,7 @@ export abstract class BasePortfolioWebPart<
    * @param component Component
    * @param props Props
    */
-  public renderComponent<T = any>(
-    component: React.ComponentClass<T> | React.FunctionComponent<T>,
-    props?: T
-  ): void {
+  public renderComponent<T = any>(component: React.ComponentClass<T> | FC<T>, props?: T): void {
     const combinedProps = assign({ title: this._pageTitle }, this.properties, props, {
       pageContext: this.context.pageContext,
       dataAdapter: this.dataAdapter,

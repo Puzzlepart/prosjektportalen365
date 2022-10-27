@@ -1,9 +1,9 @@
 import { DocumentCardTitle } from '@fluentui/react/lib/DocumentCard'
-import React, { FunctionComponent, useState } from 'react'
+import React, { FC, useState } from 'react'
 import styles from './ProjectCard.module.scss'
 import { IProjectCardProps } from './types'
 
-export const ProjectCardHeader: FunctionComponent<IProjectCardProps> = ({
+export const ProjectCardHeader: FC<IProjectCardProps> = ({
   project,
   showProjectLogo,
   shouldTruncateTitle

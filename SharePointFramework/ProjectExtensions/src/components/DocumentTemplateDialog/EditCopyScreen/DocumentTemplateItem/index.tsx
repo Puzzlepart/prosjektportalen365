@@ -3,11 +3,11 @@ import { getId } from '@uifabric/utilities'
 import { DocumentTemplateDialogContext } from 'components/DocumentTemplateDialog/context'
 import { SPDataAdapter } from 'data'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { FormEvent, FunctionComponent, useContext, useEffect, useState } from 'react'
+import React, { FormEvent, FC, useContext, useEffect, useState } from 'react'
 import styles from './DocumentTemplateItem.module.scss'
 import { IDocumentTemplateItemProps } from './types'
 
-export const DocumentTemplateItem: FunctionComponent<IDocumentTemplateItemProps> = (props) => {
+export const DocumentTemplateItem: FC<IDocumentTemplateItemProps> = (props) => {
   const { state } = useContext(DocumentTemplateDialogContext)
   const nameId = getId('name')
   const titleId = getId('title')

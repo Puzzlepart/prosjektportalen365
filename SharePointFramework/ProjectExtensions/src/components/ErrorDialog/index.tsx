@@ -1,5 +1,5 @@
 import * as strings from 'ProjectExtensionsStrings'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { BaseDialog } from '../@BaseDialog'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
@@ -13,7 +13,7 @@ import {
   DialogFooter
 } from '@fluentui/react'
 
-export const ErrorDialog: FunctionComponent<IErrorDialogProps> = ({
+export const ErrorDialog: FC<IErrorDialogProps> = ({
   error,
   version,
   messageType = MessageBarType.error,

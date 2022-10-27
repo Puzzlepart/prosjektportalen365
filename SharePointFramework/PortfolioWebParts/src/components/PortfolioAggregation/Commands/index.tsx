@@ -7,12 +7,12 @@ import {
 import * as strings from 'PortfolioWebPartsStrings'
 import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
 import { redirect } from 'pp365-shared/lib/util'
-import React, { FunctionComponent, useContext } from 'react'
+import React, { FC, useContext } from 'react'
 import { isEmpty } from 'underscore'
 import { PortfolioAggregationContext } from '../context'
 import { SET_DATA_SOURCE, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL } from '../reducer'
 
-export const Commands: FunctionComponent = () => {
+export const Commands: FC = () => {
   const { props, state, dispatch } = useContext(PortfolioAggregationContext)
 
   const cmd: ICommandBarProps = {

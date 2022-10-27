@@ -1,18 +1,11 @@
 import { SelectionMode, Checkbox, SearchBox } from '@fluentui/react'
 import strings from 'ProgramWebPartsStrings'
-import React, {
-  FormEvent,
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useMemo,
-  useState
-} from 'react'
+import React, { FormEvent, FC, useContext, useEffect, useMemo, useState } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import styles from './ProjectTable.module.scss'
 import { IListField, IProjectTableProps } from './types'
 
-export const ProjectTable: FunctionComponent<IProjectTableProps> = (props) => {
+export const ProjectTable: FC<IProjectTableProps> = (props) => {
   const context = useContext(ProgramAdministrationContext)
   const [items, setItems] = useState<any[]>([])
   const [selection, setSelection] = useState<any[]>([])

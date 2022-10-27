@@ -5,7 +5,7 @@ import {
   DetailsListLayoutMode
 } from '@fluentui/react'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { ColumnContextMenu } from './ColumnContextMenu'
 import { Commands } from './Commands'
 import { ProgramAggregationContext } from './context'
@@ -16,7 +16,7 @@ import SearchBox from './SearchBox'
 import { IProgramAggregationProps } from './types'
 import { useProgramAggregation } from './useProgramAggregation'
 
-export const ProgramAggregation: FunctionComponent<IProgramAggregationProps> = (props) => {
+export const ProgramAggregation: FC<IProgramAggregationProps> = (props) => {
   const { state, dispatch, items, ctxValue } = useProgramAggregation(props)
 
   if (state.error) {

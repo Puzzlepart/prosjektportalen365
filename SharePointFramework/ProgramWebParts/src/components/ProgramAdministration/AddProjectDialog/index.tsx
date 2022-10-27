@@ -8,7 +8,7 @@ import {
   DefaultButton
 } from '@fluentui/react'
 import * as strings from 'ProgramWebPartsStrings'
-import React, { FunctionComponent, useContext } from 'react'
+import React, { FC, useContext } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import { addChildProject } from '../data'
 import { fields } from '../index'
@@ -18,7 +18,7 @@ import { CHILD_PROJECTS_ADDED, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
 import { shimmeredColumns } from '../types'
 import { useAddProjectDialog } from './useAddProjectDialog'
 
-export const AddProjectDialog: FunctionComponent = () => {
+export const AddProjectDialog: FC = () => {
   const context = useContext(ProgramAdministrationContext)
   const { selectedProjects, availableProjects } = useAddProjectDialog()
 

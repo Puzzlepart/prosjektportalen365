@@ -1,10 +1,10 @@
 import { CommandBar, ICommandBarProps } from '@fluentui/react/lib/CommandBar'
 import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
 import strings from 'ProgramWebPartsStrings'
-import React, { FunctionComponent, useContext } from 'react'
+import React, { FC, useContext } from 'react'
 import { ProgramAggregationContext } from '../context'
 
-export const Commands: FunctionComponent = () => {
+export const Commands: FC = () => {
   const context = useContext(ProgramAggregationContext)
 
   const cmd: ICommandBarProps = {

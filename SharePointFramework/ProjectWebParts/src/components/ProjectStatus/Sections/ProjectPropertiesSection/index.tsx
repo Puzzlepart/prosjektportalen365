@@ -1,14 +1,12 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection'
 import styles from './ProjectPropertiesSection.module.scss'
 import { StatusSectionField } from './StatusSectionField'
 import { IProjectPropertiesSectionProps } from './types'
 
-export const ProjectPropertiesSection: FunctionComponent<IProjectPropertiesSectionProps> = (
-  props
-) => {
+export const ProjectPropertiesSection: FC<IProjectPropertiesSectionProps> = (props) => {
   /**
    * Render fields specified in model.viewFields
    */

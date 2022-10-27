@@ -1,4 +1,4 @@
-import { IDropdownOption } from '@fluentui/react'
+import { IIconProps } from '@fluentui/react'
 import { TypedHash } from '@pnp/common'
 import { Web } from '@pnp/sp'
 import { Schema } from 'sp-js-provisioning'
@@ -24,12 +24,12 @@ export interface IProjectTemplateSPItem {
   GtProjectPhaseTermId: string
 }
 
-export class ProjectTemplate implements IDropdownOption {
+export class ProjectTemplate {
   public id: any
   public key: string
   public text: string
   public subText: string
-  public iconName: string
+  public iconProps: IIconProps
   public isDefault: boolean
   public isDefaultExtensionsLocked: boolean
   public isDefaultListContentLocked: boolean
@@ -54,7 +54,7 @@ export class ProjectTemplate implements IDropdownOption {
     this.isDefault = spItem?.IsDefaultTemplate
     this.isDefaultExtensionsLocked = spItem?.IsDefaultExtensionsLocked
     this.isDefaultListContentLocked = spItem?.IsDefaultListContentLocked
-    this.iconName = spItem.IconName
+    this.iconProps = { iconName: spItem.IconName }
     this.listContentConfigIds =
       spItem.ListContentConfigLookupId && spItem.ListContentConfigLookupId.length > 0
         ? spItem.ListContentConfigLookupId

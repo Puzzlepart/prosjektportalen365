@@ -1,6 +1,6 @@
 import { Toggle } from '@fluentui/react/lib/Toggle'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { RiskElementModel } from '../'
 import { IMatrixCell, MatrixCell, MatrixCellType, MatrixHeaderCell } from '../MatrixCell'
 import { RiskElement } from '../RiskElement'
@@ -8,7 +8,7 @@ import RISK_MATRIX_CELLS from '../RiskMatrixCells'
 import styles from './MatrixRow.module.scss'
 import { IMatrixRowProps } from './types'
 
-export const MatrixRow: FunctionComponent<IMatrixRowProps> = ({ children }: IMatrixRowProps) => {
+export const MatrixRow: FC<IMatrixRowProps> = ({ children }: IMatrixRowProps) => {
   return <tr className={styles.matrixRow}>{children}</tr>
 }
 

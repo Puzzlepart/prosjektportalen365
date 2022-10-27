@@ -9,8 +9,8 @@
   "license": "MIT",
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
-    "serve": "gulp serve-deprecated --locale=nb-no",
-    "serve:nobrowser": "gulp serve-deprecated --nobrowser --locale=nb-no",
+    "serve": "gulp serve-deprecated --locale=nb-no --nobrowser",
+    "preserve": "node ../.tasks/createServeConfig.js",
     "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
     "package:debug": "gulp clean && gulp default && gulp package-solution",
     "build": "tsc --build",
@@ -18,8 +18,7 @@
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
     "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
-    "publish:temp": "npm install && npm run build && npm publish --tag temp",
-    "preserve": "node ../.tasks/createServeConfig.js"
+    "publish:temp": "npm install && npm run build && npm publish --tag temp"
   },
   "dependencies": {
     "@fluentui/react": "8.98.1",
@@ -41,6 +40,7 @@
     "msgraph-helper": "0.8.3",
     "pp365-shared": "1.7.2",
     "react": "16.13.1",
+    "react-autocomplete": "1.8.1",
     "react-dom": "16.13.1",
     "react-markdown": "^8.0.3",
     "rehype-raw": "^6.1.1",
@@ -59,6 +59,7 @@
     "@microsoft/sp-build-web": "1.15.2",
     "@rushstack/eslint-config": "2.5.1",
     "@types/react": "16.9.51",
+    "@types/react-autocomplete": "^1.8.6",
     "@types/react-dom": "16.9.8",
     "@types/sharepoint": "2016.1.7",
     "@types/underscore": "1.9.2",

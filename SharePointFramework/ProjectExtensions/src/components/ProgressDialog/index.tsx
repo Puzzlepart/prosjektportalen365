@@ -1,11 +1,11 @@
 import { Icon, ProgressIndicator } from '@fluentui/react'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { BaseDialog } from '../@BaseDialog/index'
 import styles from './ProgressDialog.module.scss'
 import { IProgressDialogProps } from './types'
 
-export const ProgressDialog: FunctionComponent<IProgressDialogProps> = (props) => {
+export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
   return (
     <BaseDialog
       version={props.version}

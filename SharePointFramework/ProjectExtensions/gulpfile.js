@@ -15,7 +15,6 @@ build.configureWebpack.mergeConfig({
         let { paths, outDir } = JSON.parse(JSON.stringify(tsConfig.compilerOptions).replace(/\/\*"/gm, '"'))
         webpack.resolve.alias = Object.keys(paths).reduce((alias, key) => {
             let _path = path.join(__dirname, outDir, paths[key][0])
-            log(`[${colors.cyan('configure-webpack')}] Added alias ${colors.cyan(key)} pointing to ${colors.cyan(_path)}...`)
             return { ...alias, [key]: _path }
         }, webpack.resolve.alias)
         webpack.externals = Object.assign(webpack.externals || {}, { 'XLSX': 'XLSX' })

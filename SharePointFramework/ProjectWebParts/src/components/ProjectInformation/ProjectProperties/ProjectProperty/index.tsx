@@ -2,11 +2,11 @@ import { DisplayMode } from '@microsoft/sp-core-library'
 import { Persona, PersonaSize } from '@fluentui/react'
 import { Toggle } from '@fluentui/react/lib/Toggle'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import styles from './ProjectProperty.module.scss'
 import { IProjectPropertyProps } from './types'
 
-export const ProjectProperty: FunctionComponent<IProjectPropertyProps> = ({
+export const ProjectProperty: FC<IProjectPropertyProps> = ({
   model,
   style,
   displayMode = DisplayMode.Read,

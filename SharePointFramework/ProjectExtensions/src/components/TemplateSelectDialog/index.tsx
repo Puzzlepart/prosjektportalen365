@@ -1,159 +1,68 @@
-/* eslint-disable no-console */
-import {
-  DefaultButton,
-  DialogFooter,
-  MessageBar,
-  MessageBarType,
-  Pivot,
-  PivotItem,
-  PrimaryButton
-} from '@fluentui/react'
-import { ProjectTemplate } from 'models'
+import { DefaultButton, DialogFooter, Pivot, PivotItem, PrimaryButton } from '@fluentui/react'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { Component, ReactElement } from 'react'
+import React, { FC } from 'react'
 import { isEmpty } from 'underscore'
-import { ProjectSetupSettings } from '../../projectSetup/ProjectSetupSettings'
 import { BaseDialog } from '../@BaseDialog'
+import { TemplateSelectDialogContext } from './context'
 import { ExtensionsSection } from './ExtensionsSection'
 import { ListContentSection } from './ListContentSection'
+import { TemplateListContentConfigMessage } from './TemplateListContentConfigMessage'
 import styles from './TemplateSelectDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
-import { ITemplateSelectDialogProps, ITemplateSelectDialogState } from './types'
+import { ITemplateSelectDialogProps } from './types'
+import { useTemplateSelectDialog } from './useTemplateSelectDialog'
 
-export class TemplateSelectDialog extends Component<
-  ITemplateSelectDialogProps,
-  ITemplateSelectDialogState
-> {
-  constructor(props: ITemplateSelectDialogProps) {
-    super(props)
-    this.state = {
-      flexibleHeight: (props.data.templates.filter((t) => !t.isHidden).length / 4) * 150,
-      selectedTemplate: this._getDefaultTemplate(),
-      selectedExtensions: props.data.extensions.filter(
-        (ext) =>
-          ext.isDefault || this._getDefaultTemplate().listExtensionIds?.some((id) => id === ext.id)
-      ),
-      selectedListContentConfig: props.data.listContentConfig.filter(
-        (lcc) =>
-          lcc.isDefault ||
-          this._getDefaultTemplate().listContentConfigIds?.some((id) => id === lcc.id)
-      ),
-      settings: new ProjectSetupSettings().useDefault()
-    }
-  }
+export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
+  const { state, setState, onSubmit } = useTemplateSelectDialog(props)
 
-  public render(): ReactElement<ITemplateSelectDialogProps> {
-    const { version, onDismiss, data } = this.props
-    const { selectedTemplate, selectedListContentConfig, selectedExtensions } = this.state
-
-    return (
+  return (
+    <TemplateSelectDialogContext.Provider value={{ props, state, setState }}>
       <BaseDialog
-        version={version}
+        version={props.version}
         dialogContentProps={{
           title: strings.TemplateSelectDialogTitle,
           subText: strings.TemplateSelectDialogInfoText,
           className: styles.content
         }}
         modalProps={{ containerClassName: styles.root, isBlocking: true, isDarkOverlay: true }}
-        onDismiss={onDismiss}
+        onDismiss={props.onDismiss}
         containerClassName={styles.root}>
-        <Pivot style={{ minHeight: 350, height: this.state.flexibleHeight }}>
+        <Pivot style={{ minHeight: 350, height: state.flexibleHeight }}>
           <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
-            <TemplateSelector
-              templates={data.templates.filter((t) => !t.isHidden)}
-              selectedTemplate={selectedTemplate}
-              onChange={this._onTemplateChange.bind(this)}
-            />
-            {(selectedTemplate.listContentConfigIds || selectedTemplate.listExtensionIds) && (
-              <MessageBar messageBarType={MessageBarType.info}>
-                {strings.TemplateListContentConfigText}
-              </MessageBar>
+            <TemplateSelector />
+            {(state.selectedTemplate?.listContentConfigIds ||
+              state.selectedTemplate?.listExtensionIds) && (
+              <TemplateListContentConfigMessage selectedTemplate={state.selectedTemplate} />
             )}
           </PivotItem>
-          {!isEmpty(data.extensions) && (
+          {!isEmpty(props.data.extensions) && (
             <PivotItem headerText={strings.ExtensionsTitle} itemIcon='ArrangeBringForward'>
-              {selectedTemplate.listExtensionIds && (
-                <div style={{ marginTop: 20 }}>
-                  <MessageBar messageBarType={MessageBarType.info}>
-                    {strings.TemplateListContentConfigText}
-                  </MessageBar>
-                </div>
+              {state.selectedTemplate?.listExtensionIds && (
+                <TemplateListContentConfigMessage selectedTemplate={state.selectedTemplate} />
               )}
-              <ExtensionsSection
-                extensions={data.extensions}
-                selectedExtensions={selectedExtensions}
-                lockDefault={selectedTemplate.isDefaultExtensionsLocked}
-                onChange={(s) => this.setState({ selectedExtensions: s })}
-              />
+              <ExtensionsSection />
             </PivotItem>
           )}
-          {!isEmpty(data.listContentConfig) && (
+          {!isEmpty(props.data.listContentConfig) && (
             <PivotItem headerText={strings.ListContentTitle} itemIcon='ViewList'>
-              {selectedTemplate.listContentConfigIds && (
-                <div style={{ marginTop: 20 }}>
-                  <MessageBar messageBarType={MessageBarType.info}>
-                    {strings.TemplateListContentConfigText}
-                  </MessageBar>
-                </div>
+              {state.selectedTemplate?.listContentConfigIds && (
+                <TemplateListContentConfigMessage selectedTemplate={state.selectedTemplate} />
               )}
-              <ListContentSection
-                listContentConfig={data.listContentConfig}
-                selectedListContentConfig={selectedListContentConfig}
-                lockDefault={selectedTemplate.isDefaultListContentLocked}
-                onChange={(s) => this.setState({ selectedListContentConfig: s })}
-              />
+              <ListContentSection />
             </PivotItem>
           )}
         </Pivot>
         <DialogFooter>
           <PrimaryButton
+            disabled={!state.selectedTemplate}
             text={strings.TemplateSelectDialogSubmitButtonText}
-            onClick={this._onSubmit.bind(this)}
+            onClick={onSubmit}
           />
-          <DefaultButton text={strings.CloseModalText} onClick={this.props.onDismiss} />
+          <DefaultButton text={strings.CloseModalText} onClick={props.onDismiss} />
         </DialogFooter>
       </BaseDialog>
-    )
-  }
-
-  /**
-   * Sets the selected template to the state, and updates the pre-defined selected extensions
-   *
-   * @param template - Project template
-   */
-  private _onTemplateChange(template: ProjectTemplate): void {
-    this.setState({
-      selectedTemplate: template,
-      selectedExtensions: this.props.data.extensions.filter(
-        (ext) => ext.isDefault || template.listExtensionIds?.some((id) => id === ext.id)
-      ),
-      selectedListContentConfig: this.props.data.listContentConfig.filter(
-        (lcc) => lcc.isDefault || template.listContentConfigIds?.some((id) => id === lcc.id)
-      )
-    })
-  }
-
-  /**
-   * Get default template.
-   *
-   * The first template that is set to default or the first template retrieved
-   */
-  private _getDefaultTemplate(): ProjectTemplate {
-    let [defaultTemplate] = this.props.data.templates.filter((tmpl) => tmpl.isDefault)
-    if (!defaultTemplate) defaultTemplate = this.props.data.templates[0]
-    return defaultTemplate
-  }
-
-  /**
-   * On submit the selected user configuration
-   */
-  private _onSubmit() {
-    const data = { ...this.state }
-    data.selectedTemplate.listContentConfigIds = this.state.selectedListContentConfig.map(
-      (lcc) => lcc.id
-    )
-    this.props.onSubmit(data)
-  }
+    </TemplateSelectDialogContext.Provider>
+  )
 }
 
 export * from './types'

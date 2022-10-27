@@ -1,6 +1,6 @@
 import { IPersonaSharedProps, Persona, PersonaSize } from '@fluentui/react/lib/Persona'
 import * as strings from 'PortfolioWebPartsStrings'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import styles from './ProjectCard.module.scss'
 import { IProjectCardProps } from './types'
 
@@ -9,7 +9,7 @@ import { IProjectCardProps } from './types'
  *
  * @param props Props
  */
-export const ProjectCardContent: FunctionComponent<IProjectCardProps> = ({
+export const ProjectCardContent: FC<IProjectCardProps> = ({
   project,
   showProjectOwner,
   showProjectManager

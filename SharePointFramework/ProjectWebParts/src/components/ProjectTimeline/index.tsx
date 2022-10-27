@@ -2,7 +2,7 @@ import { format, MessageBarType, Spinner } from '@fluentui/react'
 import { Timeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/Timeline'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { ProjectTimelineContext } from './context'
 import styles from './ProjectTimeline.module.scss'
 import { TimelineList } from './TimelineList'
@@ -13,7 +13,7 @@ import { useProjectTimeline } from './useProjectTimeline'
  * @component ProjectTimeline (Project webpart)
  * @extends Component
  */
-export const ProjectTimeline: FunctionComponent<IProjectTimelineProps> = (props) => {
+export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
   const { state, setState, onFilterChange, onGroupChange } = useProjectTimeline(props)
 
   return (

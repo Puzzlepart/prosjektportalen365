@@ -1,11 +1,11 @@
-import React, { FunctionComponent, useEffect } from 'react'
+import React, { FC, useEffect } from 'react'
 import { IRiskMatrixProps } from './types'
 import { MatrixRows } from './MatrixRow'
 import styles from './RiskMatrix.module.scss'
 import { sp } from '@pnp/sp/'
 import HubSiteService from 'sp-hubsite-service'
 
-export const RiskMatrix: FunctionComponent<IRiskMatrixProps> = ({
+export const RiskMatrix: FC<IRiskMatrixProps> = ({
   items = [],
   width = 400,
   height = 300,

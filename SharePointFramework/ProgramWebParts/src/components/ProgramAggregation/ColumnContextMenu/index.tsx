@@ -5,11 +5,11 @@ import {
   ContextualMenu
 } from '@fluentui/react'
 import strings from 'ProgramWebPartsStrings'
-import React, { FunctionComponent, useContext } from 'react'
+import React, { FC, useContext } from 'react'
 import { ProgramAggregationContext } from '../context'
 import { COLUMN_HEADER_CONTEXT_MENU, SET_GROUP_BY, SET_SORT } from '../reducer'
 
-export const ColumnContextMenu: FunctionComponent = () => {
+export const ColumnContextMenu: FC = () => {
   const context = useContext(ProgramAggregationContext)
   if (!context.state.columnContextMenu) return null
   const { column, target } = context.state.columnContextMenu
