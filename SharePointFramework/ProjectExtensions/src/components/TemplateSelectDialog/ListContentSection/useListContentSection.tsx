@@ -10,11 +10,11 @@ import { useRowRenderer } from './useRowRenderer'
  */
 export function useListContentSection() {
   const context = useContext(TemplateSelectDialogContext)
-  const selectedKeys = context.state.selectedListContentConfig.map((lc) => lc.key)
+  const selectedKeys = context.state.selectedContentConfig.map((lc) => lc.key)
   const { selection, onSearch, searchTerm } = useSelectionList(selectedKeys, (selection) => {
     context.dispatch(ON_LIST_CONTENT_CONFIG_CHANGED(selection))
   })
-  const items = context.props.data.listContentConfig.filter((lcc) => !lcc.hidden)
+  const items = context.props.data.contentConfig.filter((lcc) => !lcc.hidden)
   const columns = useColumns()
   const onRenderRow = useRowRenderer({ selectedKeys, searchTerm })
   return { selection, items, columns, onSearch, onRenderRow } as const

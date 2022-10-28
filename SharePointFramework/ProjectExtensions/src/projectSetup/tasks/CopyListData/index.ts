@@ -88,7 +88,8 @@ export class CopyListData extends BaseTask {
             break
           case ContentConfigType.List:
             {
-              if (contentConfig.sourceListProps.BaseTemplate === 101) await this._processFiles(contentConfig)
+              if (contentConfig.sourceListProps.BaseTemplate === 101)
+                await this._processFiles(contentConfig)
               else await this._processListItems(contentConfig)
             }
             break
@@ -106,10 +107,7 @@ export class CopyListData extends BaseTask {
    * @param config List content config
    * @param fields Fields
    */
-  private async _getSourceItems<T = any>(
-    config: ContentConfig,
-    fields?: string[]
-  ): Promise<T[]> {
+  private async _getSourceItems<T = any>(config: ContentConfig, fields?: string[]): Promise<T[]> {
     try {
       return await config.sourceList.items
         .select(...(fields || config.fields), 'TaxCatchAll/ID', 'TaxCatchAll/Term')

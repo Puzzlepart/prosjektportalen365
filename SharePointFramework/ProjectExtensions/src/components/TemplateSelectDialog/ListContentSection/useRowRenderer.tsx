@@ -1,5 +1,5 @@
 import { IDetailsRowProps } from '@fluentui/react'
-import { ListContentConfig } from 'models'
+import { ContentConfig } from 'models'
 import strings from 'ProjectExtensionsStrings'
 import React, { useContext } from 'react'
 import { CheckLocked } from '../CheckLocked'
@@ -15,7 +15,7 @@ export function useRowRenderer({ selectedKeys, searchTerm }) {
     detailsRowProps: IDetailsRowProps,
     defaultRender: (props?: IDetailsRowProps) => JSX.Element
   ) => {
-    const lcc = detailsRowProps.item as ListContentConfig
+    const lcc = detailsRowProps.item as ContentConfig
     const isMandatory = lcc.isMandatory(context.state.selectedTemplate)
     detailsRowProps.disabled = isMandatory
     if (isMandatory) {

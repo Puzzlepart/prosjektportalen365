@@ -45,7 +45,7 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
             headerText={strings.ListContentSectionHeaderText}
             itemIcon='ViewList'
             headerButtonProps={
-              isEmpty(props.data.listContentConfig) && {
+              isEmpty(props.data.contentConfig) && {
                 disabled: true,
                 style: { opacity: 0.3, cursor: 'default' }
               }

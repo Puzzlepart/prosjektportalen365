@@ -7,13 +7,13 @@ import { ITemplateConfigMessageProps } from './types'
 
 /**
  * Component logic hook for `TemplateConfigMessage`
- * 
+ *
  * @returns `hidden` and `text`
  */
 export function useTemplateConfigMessage({ section }: ITemplateConfigMessageProps) {
   const context = useContext(TemplateSelectDialogContext)
   const templateHasExtensions = !isEmpty(context.state.selectedTemplate?.extensionIds)
-  const templateHasContentConfig = !isEmpty(context.state.selectedTemplate?.listContentConfigIds)
+  const templateHasContentConfig = !isEmpty(context.state.selectedTemplate?.contentConfigIds)
   const hidden = !(
     (section === 'ExtensionsSection' && templateHasExtensions) ||
     (section === 'ListContentSection' && templateHasContentConfig) ||

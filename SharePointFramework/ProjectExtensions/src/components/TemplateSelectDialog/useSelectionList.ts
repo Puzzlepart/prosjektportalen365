@@ -1,5 +1,5 @@
 import { Selection } from '@fluentui/react'
-import { ListContentConfig } from 'models'
+import { ContentConfig } from 'models'
 import { useEffect, useState } from 'react'
 
 /**
@@ -17,7 +17,7 @@ export function useSelectionList(
       onSelectionChanged(selection.getSelection())
     }
   })
-  const [selection, setSelection] = useState<Selection<ListContentConfig>>(__selection)
+  const [selection, setSelection] = useState<Selection<ContentConfig>>(__selection)
   const [searchTerm, setSearchTerm] = useState<string>('')
 
   useEffect(() => {

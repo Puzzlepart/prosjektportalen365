@@ -75,19 +75,18 @@ export class ProjectTemplate extends UserSelectableObject {
 
   /**
    * Get content configurations for the template
-   * 
+   *
    * @param contentConfig Available content configurations
    */
   public getContentConfig(contentConfig: ContentConfig[]) {
     return contentConfig.filter(
-      (lcc) =>
-        lcc.isDefault(this) || this.contentConfigIds.some((id) => id === lcc.id)
+      (lcc) => lcc.isDefault(this) || this.contentConfigIds.some((id) => id === lcc.id)
     )
   }
 
   /**
    * Get extensions for the template
-   * 
+   *
    * @param extensions Available extensions
    */
   public getExtensions(extensions: ProjectExtension[]) {

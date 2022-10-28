@@ -22,12 +22,7 @@ import {
   ProgressDialog,
   TemplateSelectDialog
 } from '../components'
-import {
-  ContentConfig,
-  ProjectExtension,
-  ProjectTemplate,
-  ProjectTemplateFile
-} from '../models'
+import { ContentConfig, ProjectExtension, ProjectTemplate, ProjectTemplateFile } from '../models'
 import { deleteCustomizer } from './deleteCustomizer'
 import { ProjectSetupError } from './ProjectSetupError'
 import { ProjectSetupSettings } from './ProjectSetupSettings'
@@ -397,9 +392,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             )
           : Promise.resolve([]),
         this.properties.contentConfigList
-          ? this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, [
-              'File'
-            ])
+          ? this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File'])
           : Promise.resolve([]),
         this._portal.getItems(
           strings.Lists_ProjectTemplateFiles_Title,
