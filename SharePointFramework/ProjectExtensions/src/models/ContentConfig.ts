@@ -1,10 +1,9 @@
-import { getId, IObjectWithKey } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { List, sp, Web } from '@pnp/sp'
 import { IListProperties } from './IListProperties'
-import { ProjectTemplate } from './ProjectTemplate'
+import { UserSelectableObject } from './UserSelectableObject'
 
-export interface IListContentConfigSPItem {
+export interface IContentConfigSPItem {
   ContentTypeId: string
   Id: number
   Title: string
@@ -17,55 +16,37 @@ export interface IListContentConfigSPItem {
   GtLccLocked: boolean
 }
 
-export enum ListContentConfigType {
+export enum ContentConfigType {
   List,
   Planner
 }
 
 /**
- * @model ListContentConfig
+ * @model ContentConfig
  */
-export class ListContentConfig implements IObjectWithKey {
-  public id: number
-  public key: string
-  public text: string
-  public subText: string
-  public isDefault: boolean
-  public hidden: boolean
+export class ContentConfig extends UserSelectableObject {
   public sourceListProps: IListProperties = {}
   public destListProps: IListProperties = {}
-  private _isLocked: boolean
   private _sourceList: string
   private _destinationList: string
 
-  constructor(private _spItem: IListContentConfigSPItem, public web: Web) {
-    this.id = _spItem.Id
-    this.key = getId(`listcontentconfig_${this.id}`)
-    this.text = _spItem.Title
-    this.subText = _spItem.GtDescription
-    this.isDefault = _spItem.GtLccDefault
-    this.hidden = _spItem.GtLccHidden
-    this._isLocked = _spItem.GtLccLocked
+  constructor(private _spItem: IContentConfigSPItem, public web: Web) {
+    super(
+      _spItem.Id,
+      _spItem.Title,
+      _spItem.GtDescription,
+      _spItem.GtLccDefault,
+      _spItem.GtLccLocked,
+      _spItem.GtLccHidden
+    )
     this._sourceList = _spItem.GtLccSourceList
     this._destinationList = _spItem.GtLccDestinationList
   }
 
-  /**
-   * Checks if the list content config is locked for the specified template
-   *
-   * @param template Project template
-   */
-  public isLocked(template: ProjectTemplate): boolean {
-    return (
-      this._isLocked ||
-      (template?.isDefaultListContentLocked && template?.listContentConfigIds.includes(this.id))
-    )
-  }
-
-  public get type(): ListContentConfigType {
+  public get type(): ContentConfigType {
     if (this._spItem.ContentTypeId.indexOf('0x0100B8B4EE61A547B247B49CFC21B67D5B7D01') !== -1)
-      return ListContentConfigType.Planner
-    return ListContentConfigType.List
+      return ContentConfigType.Planner
+    return ContentConfigType.List
   }
   public get fields() {
     return !stringIsNullOrEmpty(this._spItem.GtLccFields) ? this._spItem.GtLccFields.split(',') : []
@@ -84,7 +65,7 @@ export class ListContentConfig implements IObjectWithKey {
       .select('Title', 'ListItemEntityTypeFullName', 'ItemCount', 'BaseTemplate')
       .expand('RootFolder')
       .get<IListProperties>()
-    if (this.type === ListContentConfigType.List) {
+    if (this.type === ContentConfigType.List) {
       this.destListProps = await this.destList
         .select('Title', 'ListItemEntityTypeFullName', 'ItemCount', 'BaseTemplate')
         .expand('RootFolder')

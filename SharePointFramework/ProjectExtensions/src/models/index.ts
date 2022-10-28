@@ -1,6 +1,6 @@
 export * from './ProjectTemplate'
 export * from './ProjectExtension'
-export * from './ListContentConfig'
+export * from './ContentConfig'
 export * from './TemplateItem'
 export * from './IListProperties'
 export * from './IPlannerTaskSPItem'

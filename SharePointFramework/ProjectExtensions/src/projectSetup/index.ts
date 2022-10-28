@@ -22,12 +22,7 @@ import {
   ProgressDialog,
   TemplateSelectDialog
 } from '../components'
-import {
-  ListContentConfig,
-  ProjectExtension,
-  ProjectTemplate,
-  ProjectTemplateFile
-} from '../models'
+import { ContentConfig, ProjectExtension, ProjectTemplate, ProjectTemplateFile } from '../models'
 import { deleteCustomizer } from './deleteCustomizer'
 import { ProjectSetupError } from './ProjectSetupError'
 import { ProjectSetupSettings } from './ProjectSetupSettings'
@@ -209,7 +204,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     return {
       selectedTemplate,
       selectedExtensions: [],
-      selectedListContentConfig: [],
+      selectedContentConfig: [],
       settings: new ProjectSetupSettings().useDefault()
     }
   }
@@ -358,25 +353,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         level: LogLevel.Info
       })
       await MSGraphHelper.Init(this.context.msGraphClientFactory)
-      Logger.log({
-        message: '(ProjectSetup) [_fetchData]: Retrieving hub site url',
-        data: {},
-        level: LogLevel.Info
-      })
       const data: IProjectSetupData = {}
       data.hub = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
       this._portal = new PortalDataService().configure({ urlOrWeb: data.hub.web })
-      Logger.log({
-        message: '(ProjectSetup) [_fetchData]: Retrieved hub site url',
-        data: { hubUrl: data.hub.url },
-        level: LogLevel.Info
-      })
-      Logger.log({
-        message: '(ProjectSetup) [_fetchData]: Retrieving templates, extensions and content config',
-        data: {},
-        level: LogLevel.Info
-      })
-      const [_templates, extensions, listContentConfig, templateFiles] = await Promise.all([
+      const [_templates, extensions, contentConfig, templateFiles] = await Promise.all([
         this._portal.getItems(
           this.properties.templatesLibrary,
           ProjectTemplate,
@@ -397,9 +377,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             )
           : Promise.resolve([]),
         this.properties.contentConfigList
-          ? this._portal.getItems(this.properties.contentConfigList, ListContentConfig, {}, [
-              'File'
-            ])
+          ? this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File'])
           : Promise.resolve([]),
         this._portal.getItems(
           strings.Lists_ProjectTemplateFiles_Title,
@@ -415,19 +393,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         tmpl.projectTemplateUrl = tmplFile?.serverRelativeUrl
         return tmpl
       })
-      Logger.log({
-        message: '(ProjectSetup) [_fetchData]: Retrieved templates, extensions and content config',
-        data: {
-          templates: templates.length,
-          extensions: extensions.length,
-          listContentConfig: listContentConfig.length
-        },
-        level: LogLevel.Info
-      })
       return {
         ...data,
         extensions,
-        listContentConfig,
+        contentConfig,
         templates
       }
     } catch (error) {

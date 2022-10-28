@@ -3,6 +3,11 @@ import React, { FC } from 'react'
 import styles from './ListHeaderSearch.module.scss'
 import { IListHeaderSearchProps } from './types'
 
+/**
+ * List header for `<DetailsList />` with a optional `<SearchBox />`
+ * 
+ * @param props Props
+ */
 export const ListHeaderSearch: FC<IListHeaderSearchProps> = (props) => {
   return (
     <Sticky stickyPosition={StickyPositionType.Header}>

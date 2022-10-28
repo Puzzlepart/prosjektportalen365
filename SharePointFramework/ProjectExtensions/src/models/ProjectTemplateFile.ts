@@ -1,5 +1,8 @@
 import { IProjectTemplateSPItem } from 'models'
 
+/**
+ * @model ProjectTemplateFile
+ */
 export class ProjectTemplateFile {
   public id: number
   public serverRelativeUrl: string

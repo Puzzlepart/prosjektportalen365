@@ -1,6 +1,6 @@
 import { ProjectSetupSettings } from 'projectSetup/ProjectSetupSettings'
 import { IProjectSetupData } from 'projectSetup/types'
-import { ListContentConfig, ProjectExtension, ProjectTemplate } from 'models'
+import { ContentConfig, ProjectExtension, ProjectTemplate } from 'models'
 import { IBaseDialogProps } from '../@BaseDialog/types'
 import React from 'react'
 
@@ -33,9 +33,9 @@ export interface ITemplateSelectDialogState {
   selectedExtensions?: ProjectExtension[]
 
   /**
-   * Currently selected list content configuration
+   * Currently selected content configuration
    */
-  selectedListContentConfig?: ListContentConfig[]
+  selectedContentConfig?: ContentConfig[]
 
   /**
    * Settings

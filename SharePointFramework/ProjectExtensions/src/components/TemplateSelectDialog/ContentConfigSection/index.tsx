@@ -10,16 +10,16 @@ import React from 'react'
 import { ListHeaderSearch } from '../ListHeaderSearch'
 import { TemplateConfigMessage } from '../TemplateConfigMessage'
 import { TemplateSelectDialogSectionComponent } from '../types'
-import styles from './ExtensionsSection.module.scss'
-import { useExtensionsSection } from './useExtensionsSection'
+import styles from './ContentConfigSection.module.scss'
+import { useContentConfigSection } from './useContentConfigSection'
 
 /**
- * Section for selection of project extensions.
+ * Section for selection of content configurations.
  * 
  * @param props Props
  */
-export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) => {
-  const { selection, items, columns, onSearch, onRenderRow } = useExtensionsSection()
+export const ContentConfigSection: TemplateSelectDialogSectionComponent = (props) => {
+  const { selection, items, columns, onSearch, onRenderRow } = useContentConfigSection()
 
   return (
     <div className={styles.root} style={props.style}>
@@ -35,7 +35,7 @@ export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) =
               detailsHeaderProps={detailsHeaderProps}
               defaultRender={defaultRender}
               search={{
-                placeholder: strings.ExtensionsSectionSearchPlaceholder,
+                placeholder: strings.ContentConfigSectionSearchPlaceholder,
                 onSearch,
                 hidden: items.length < 5
               }}
@@ -43,7 +43,7 @@ export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) =
           )}
           onRenderDetailsFooter={() => (
             <Sticky stickyPosition={StickyPositionType.Footer}>
-              <TemplateConfigMessage section='ExtensionsSection' />
+              <TemplateConfigMessage section='ContentConfigSection' />
             </Sticky>
           )}
           items={items}

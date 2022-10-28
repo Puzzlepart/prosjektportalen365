@@ -4,7 +4,8 @@ import strings from 'ProjectExtensionsStrings'
 import React, { useContext, useState } from 'react'
 import Autocomplete from 'react-autocomplete'
 import { TemplateSelectDialogContext } from '../context'
-import { TemplateListContentConfigMessage } from '../TemplateListContentConfigMessage'
+import { ON_TEMPLATE_CHANGED } from '../reducer'
+import { TemplateConfigMessage } from '../TemplateConfigMessage'
 import { TemplateSelectDialogSectionComponent } from '../types'
 import styles from './TemplateSelector.module.scss'
 import { TemplateSelectorItem } from './TemplateSelectorItem'
@@ -13,29 +14,12 @@ export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
   const context = useContext(TemplateSelectDialogContext)
   const [searchValue, setSearchValue] = useState(context.state.selectedTemplate?.text)
 
-  /**
-   * Sets the selected template to the state, and updates the pre-defined selected extensions
-   *
-   * @param template - Project template
-   */
-  const onTemplateChange = (template: ProjectTemplate): void => {
-    context.setState({
-      selectedTemplate: template,
-      selectedExtensions: context.props.data.extensions.filter(
-        (ext) => ext.isDefault || template?.extensionIds?.some((id) => id === ext.id)
-      ),
-      selectedListContentConfig: context.props.data.listContentConfig.filter(
-        (lcc) => lcc.isDefault || template?.listContentConfigIds?.some((id) => id === lcc.id)
-      )
-    })
-  }
-
   return (
     <div className={styles.root}>
       <div className={styles.container}>
         <Autocomplete
           getItemValue={(template: ProjectTemplate) => template.text}
-          items={context.props.data.templates.filter((t) => !t.isHidden)}
+          items={context.props.data.templates.filter((t) => !t.hidden)}
           shouldItemRender={(template: ProjectTemplate) =>
             searchValue === context.state.selectedTemplate?.text ||
             template.text.toLowerCase().indexOf(searchValue.toLowerCase()) > -1
@@ -58,7 +42,7 @@ export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
                 event.stopPropagation()
                 event.preventDefault()
                 setSearchValue('')
-                onTemplateChange(null)
+                context.dispatch(ON_TEMPLATE_CHANGED(null))
               }}
             />
           )}
@@ -66,12 +50,11 @@ export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
           onChange={(_, value) => setSearchValue(value)}
           onSelect={(_, template: ProjectTemplate) => {
             setSearchValue(template.text)
-            onTemplateChange(template)
+            context.dispatch(ON_TEMPLATE_CHANGED(template))
           }}
           selectOnBlur={true}
         />
-        {(context.state.selectedTemplate?.listContentConfigIds ||
-          context.state.selectedTemplate?.extensionIds) && <TemplateListContentConfigMessage />}
+        <TemplateConfigMessage section='TemplateSelector' />
       </div>
     </div>
   )

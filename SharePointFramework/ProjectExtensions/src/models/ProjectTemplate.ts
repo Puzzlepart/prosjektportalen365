@@ -1,7 +1,11 @@
-import { getId, IIconProps } from '@fluentui/react'
+import { IIconProps } from '@fluentui/react'
 import { TypedHash } from '@pnp/common'
 import { Web } from '@pnp/sp'
 import { Schema } from 'sp-js-provisioning'
+import { isArray } from 'underscore'
+import { ContentConfig } from './ContentConfig'
+import { ProjectExtension } from './ProjectExtension'
+import { UserSelectableObject } from './UserSelectableObject'
 
 export interface IProjectTemplateSPItem {
   Id?: number
@@ -24,71 +28,87 @@ export interface IProjectTemplateSPItem {
   GtProjectPhaseTermId: string
 }
 
-export class ProjectTemplate {
-  public id: any
-  public key: string
-  public text: string
-  public subText: string
-  public iconProps: IIconProps
-  public isDefault: boolean
-  public isDefaultExtensionsLocked: boolean
-  public isDefaultListContentLocked: boolean
-  public extensionIds: number[]
-  public listContentConfigIds: number[]
-  public projectTemplateId: number
+/**
+ * @model ProjectTemplate
+ */
+export class ProjectTemplate extends UserSelectableObject {
+  public iconProps: Pick<IIconProps, 'iconName' | 'styles'>
+  public projectTemplateId: number = -1
   public projectTemplateUrl: string
-  public projectContentType: string
-  public projectStatusContentType: string
-  public projectColumns: string
-  public projectCustomColumns: string
-  public projectPhaseTermId: string
+  public contentConfigIds: number[] = []
+  public isDefaultContentConfigLocked: boolean
+  public extensionIds: number[] = []
+  public isDefaultExtensionsLocked: boolean
   public isProgram: boolean
   public isParentProject: boolean
-  public isHidden: boolean
+  private _projectContentType: string
+  private _projectStatusContentType: string
+  private _projectColumns: string
+  private _projectCustomColumns: string
+  private _projectPhaseTermId: string
 
   constructor(spItem: IProjectTemplateSPItem, public web: Web) {
-    this.id = spItem.Id
-    this.key = getId(`projecttemplate_${this.id}`)
-    this.text = spItem.FieldValuesAsText.Title
-    this.subText = spItem.FieldValuesAsText.GtDescription
-    this.isDefault = spItem?.IsDefaultTemplate
-    this.isDefaultExtensionsLocked = spItem?.IsDefaultExtensionsLocked
-    this.isDefaultListContentLocked = spItem?.IsDefaultListContentLocked
+    super(
+      spItem.Id,
+      spItem.FieldValuesAsText.Title,
+      spItem.FieldValuesAsText.GtDescription,
+      spItem.IsDefaultTemplate,
+      false,
+      spItem.IsHiddenTemplate
+    )
     this.iconProps = { iconName: spItem.IconName }
-    this.listContentConfigIds =
-      spItem.ListContentConfigLookupId && spItem.ListContentConfigLookupId.length > 0
-        ? spItem.ListContentConfigLookupId
-        : null
+    this.isDefaultExtensionsLocked = spItem?.IsDefaultExtensionsLocked
+    this.isDefaultContentConfigLocked = spItem?.IsDefaultListContentLocked
+    this.projectTemplateId = spItem.GtProjectTemplateId
+    this.contentConfigIds = isArray(spItem.ListContentConfigLookupId)
+      ? spItem.ListContentConfigLookupId
+      : []
+    this.extensionIds = isArray(spItem.GtProjectExtensionsId) ? spItem.GtProjectExtensionsId : []
     this.isProgram = spItem.GtIsProgram
     this.isParentProject = spItem.GtIsParentProject
-    this.isHidden = spItem.IsHiddenTemplate
-    spItem.ListContentConfigLookupId?.length > 0 ? spItem.ListContentConfigLookupId : null
-    this.projectTemplateId = spItem.GtProjectTemplateId
-    this.extensionIds =
-      spItem.GtProjectExtensionsId?.length > 0 ? spItem.GtProjectExtensionsId : null
-    this.projectContentType = spItem.GtProjectContentType
-    this.projectStatusContentType = spItem.GtProjectStatusContentType
-    this.projectColumns = spItem.GtProjectColumns
-    this.projectCustomColumns = spItem.GtProjectCustomColumns
-    this.projectPhaseTermId = spItem.GtProjectPhaseTermId
+    this._projectContentType = spItem.GtProjectContentType
+    this._projectStatusContentType = spItem.GtProjectStatusContentType
+    this._projectColumns = spItem.GtProjectColumns
+    this._projectCustomColumns = spItem.GtProjectCustomColumns
+    this._projectPhaseTermId = spItem.GtProjectPhaseTermId
+  }
+
+  /**
+   * Get content configurations for the template
+   *
+   * @param contentConfig Available content configurations
+   */
+  public getContentConfig(contentConfig: ContentConfig[]) {
+    return contentConfig.filter(
+      (lcc) => lcc.isDefault(this) || this.contentConfigIds.some((id) => id === lcc.id)
+    )
+  }
+
+  /**
+   * Get extensions for the template
+   *
+   * @param extensions Available extensions
+   */
+  public getExtensions(extensions: ProjectExtension[]) {
+    return extensions.filter(
+      (ext) => ext.isDefault(this) || this.extensionIds.some((id) => id === ext.id)
+    )
   }
 
   public async getSchema(): Promise<Schema> {
     const schema = await this.web.getFileByServerRelativeUrl(this.projectTemplateUrl).getJSON()
     schema.Parameters = schema.Parameters || {}
     schema.Parameters.ProjectContentTypeId =
-      this?.projectContentType ?? schema.Parameters.ProjectContentTypeId
+      this._projectContentType ?? schema.Parameters.ProjectContentTypeId
     schema.Parameters.ProjectStatusContentTypeId =
-      this?.projectStatusContentType ?? schema.Parameters.ProjectStatusContentTypeId
+      this._projectStatusContentType ?? schema.Parameters.ProjectStatusContentTypeId
     schema.Parameters.ProvisionSiteFields =
-      this?.projectColumns ?? schema.Parameters.ProvisionSiteFields
+      this._projectColumns ?? schema.Parameters.ProvisionSiteFields
     schema.Parameters.CustomSiteFields =
-      this?.projectCustomColumns ?? schema.Parameters.CustomSiteFields
-    if (!schema.Parameters.TermSetIds) {
-      schema.Parameters.TermSetIds = {}
-    }
+      this._projectCustomColumns ?? schema.Parameters.CustomSiteFields
+    schema.Parameters.TermSetIds = schema.Parameters.TermSetIds ?? {}
     schema.Parameters.TermSetIds.GtProjectPhase =
-      this?.projectPhaseTermId ?? schema.Parameters.TermSetIds.GtProjectPhase
+      this._projectPhaseTermId ?? schema.Parameters.TermSetIds.GtProjectPhase
     return schema
   }
 }
