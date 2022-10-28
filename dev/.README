@@ -156,7 +156,7 @@ The pnp templates should be found in the release folder.
 
 We have set up continuous integration using GitHub actions.
 
-![CI - Build and install (dev)](https://github.com/Puzzlepart/prosjektportalen365/workflows/CI%20-%20Build%20and%20install%20(dev)/badge.svg?branch=dev)
+[![CI (dev)](https://github.com/Puzzlepart/prosjektportalen365/actions/workflows/ci-dev.yml/badge.svg?branch=dev)](https://github.com/Puzzlepart/prosjektportalen365/actions/workflows/ci-dev.yml)
 
 Keywords can be used in the commit message to avoid the CI running some of the jobs.
 
