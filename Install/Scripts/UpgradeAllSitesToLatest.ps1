@@ -10,6 +10,12 @@ $global:__PnPConnection = $null
 $ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
 . $ScriptDir/PP365Functions.ps1
 
+
+if (-not ([string]::IsNullOrEmpty($CI))) {
+    Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
+    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
+}
+
 function Connect-SharePoint {
     Param(
         [Parameter(Mandatory = $true)]
@@ -17,7 +23,7 @@ function Connect-SharePoint {
     )
 
     Try {
-        if (-not [string]::IsNullOrEmpty($CI)) {
+        if (-not ([string]::IsNullOrEmpty($CI))) {
             $DecodedCred = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($CI))).Split("|")
             $Password = ConvertTo-SecureString -String $DecodedCred[1] -AsPlainText -Force
             $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $DecodedCred[0], $Password
@@ -35,11 +41,6 @@ function Connect-SharePoint {
         Write-Host "[INFO] Failed to connect to [$Url]: $($_.Exception.Message)"
         throw $_.Exception.Message
     }
-}
-
-if (-not [string]::IsNullOrEmpty($CI)) {
-    Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
-    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
 }
 
 function EnsureProjectTimelinePage() {
@@ -208,7 +209,7 @@ if ([string]::IsNullOrEmpty($CI)) {
     while ("y", "n" -notcontains $YesOrNo)
 }
 
-if ($YesOrNo -eq "y" -or (-not [string]::IsNullOrEmpty($CI))) {
+if ($YesOrNo -eq "y" -or (-not ([string]::IsNullOrEmpty($CI)))) {
     $ProjectsInHub | ForEach-Object {
         Write-Host "`tRemoving access to $_"
         Connect-SharePoint -Url $_
