@@ -2,7 +2,7 @@ import { useEffect, useReducer, useRef } from 'react'
 import { changePhase } from './changePhase'
 import { fetchData } from './fetchData'
 import reducer, {
-  initState,
+  initialState,
   INIT_CHANGE_PHASE,
   INIT_DATA, SET_PHASE
 } from './reducer'
@@ -12,8 +12,8 @@ import { IProjectPhasesProps } from './types'
  * Component logic hook for `ProjectPhases`
  */
 export function useProjectPhases(props: IProjectPhasesProps) {
-  const root = useRef(null)
-  const [state, dispatch] = useReducer(reducer, initState())
+  const rootRef = useRef(null)
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   useEffect(() => {
     fetchData(props).then((data) => dispatch(INIT_DATA({ data })))
@@ -48,5 +48,5 @@ export function useProjectPhases(props: IProjectPhasesProps) {
     }
   }
 
-  return { root, state, dispatch, onChangePhase } as const
+  return {  rootRef, state, dispatch, onChangePhase } as const
 }

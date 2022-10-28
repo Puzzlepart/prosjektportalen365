@@ -15,7 +15,7 @@ import { IProjectPhasesProps } from './types'
 import { useProjectPhases } from './useProjectPhases'
 
 export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
-  const { root, state, dispatch, onChangePhase } = useProjectPhases(props)
+  const { rootRef, state, dispatch, onChangePhase } = useProjectPhases(props)
 
   if (state.hidden) return null
 
@@ -30,12 +30,12 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
   }
 
   return (
-    <div className={styles.root} ref={root}>
+    <div className={styles.root} ref={rootRef}>
       <div className={styles.container}>
         <ProjectPhasesContext.Provider value={{ props, state, dispatch, onChangePhase }}>
           <Shimmer
             isDataLoaded={!state.loading}
-            shimmerElements={getShimmerElements(root.current?.clientWidth)}>
+            shimmerElements={getShimmerElements(rootRef.current?.clientWidth)}>
             <ul className={styles.phaseList}>
               {state.data.phases
                 .filter((p) => p.isVisible)
