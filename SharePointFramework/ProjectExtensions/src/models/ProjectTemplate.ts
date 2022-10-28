@@ -35,9 +35,9 @@ export class ProjectTemplate extends UserSelectableObject {
   public iconProps: Pick<IIconProps, 'iconName' | 'styles'>
   public projectTemplateId: number = -1
   public projectTemplateUrl: string
-  public contentConfigIds: number[] = []
+  public contentConfig: number[] = []
   public isDefaultContentConfigLocked: boolean
-  public extensionIds: number[] = []
+  public extensions: number[] = []
   public isDefaultExtensionsLocked: boolean
   public isProgram: boolean
   public isParentProject: boolean
@@ -60,10 +60,10 @@ export class ProjectTemplate extends UserSelectableObject {
     this.isDefaultExtensionsLocked = spItem?.IsDefaultExtensionsLocked
     this.isDefaultContentConfigLocked = spItem?.IsDefaultListContentLocked
     this.projectTemplateId = spItem.GtProjectTemplateId
-    this.contentConfigIds = isArray(spItem.ListContentConfigLookupId)
+    this.contentConfig = isArray(spItem.ListContentConfigLookupId)
       ? spItem.ListContentConfigLookupId
       : []
-    this.extensionIds = isArray(spItem.GtProjectExtensionsId) ? spItem.GtProjectExtensionsId : []
+    this.extensions = isArray(spItem.GtProjectExtensionsId) ? spItem.GtProjectExtensionsId : []
     this.isProgram = spItem.GtIsProgram
     this.isParentProject = spItem.GtIsParentProject
     this._projectContentType = spItem.GtProjectContentType
@@ -80,7 +80,7 @@ export class ProjectTemplate extends UserSelectableObject {
    */
   public getContentConfig(contentConfig: ContentConfig[]) {
     return contentConfig.filter(
-      (lcc) => lcc.isDefault(this) || this.contentConfigIds.some((id) => id === lcc.id)
+      (lcc) => lcc.isDefaultForTemplate(this) || this.contentConfig.some((id) => id === lcc.id)
     )
   }
 
@@ -91,7 +91,7 @@ export class ProjectTemplate extends UserSelectableObject {
    */
   public getExtensions(extensions: ProjectExtension[]) {
     return extensions.filter(
-      (ext) => ext.isDefault(this) || this.extensionIds.some((id) => id === ext.id)
+      (ext) => ext.isDefaultForTemplate(this) || this.extensions.some((id) => id === ext.id)
     )
   }
 

@@ -14,7 +14,7 @@ export function useContentConfigSection() {
   const { selection, onSearch, searchTerm } = useSelectionList(selectedKeys, (selection) => {
     context.dispatch(ON_LIST_CONTENT_CONFIG_CHANGED(selection))
   })
-  const items = context.props.data.contentConfig.filter((lcc) => !lcc.hidden)
+  const items = context.props.data.contentConfig.filter((contentConfig) => !contentConfig.hidden)
   const columns = useColumns()
   const onRenderRow = useRowRenderer({ selectedKeys, searchTerm })
   return { selection, items, columns, onSearch, onRenderRow } as const
