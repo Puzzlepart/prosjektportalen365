@@ -5,7 +5,7 @@
   "scripts": {
     "sync-version": "node ./.tasks/automatic-versioning.js",
     "generate-readme": "npx @appnest/readme generate && npx @appnest/readme generate --config dev/blueprint.json",
-    "postversion": "npm run generate-readme"
+    "postversion": "npm run generate-readme && npm run sync-version"
   },
   "repository": {
     "type": "git",

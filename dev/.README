@@ -127,6 +127,8 @@ The SharePoint Framework solutions are published to `npm` independently.
 - [ProjectWebParts](https://www.npmjs.com/package/pp365-projectwebparts)
 - [ProjectExtensions](https://www.npmjs.com/package/pp365-projectextensions)
 - [PortfolioWebParts](https://www.npmjs.com/package/pp365-portfoliowebparts)
+- [ProgramWebParts](https://www.npmjs.com/package/pp365-programwebparts)
+- [PortfolioExtensions](https://www.npmjs.com/package/pp365-portfolioextensions)
 
 ## Building a new release
 
@@ -140,9 +142,9 @@ Run the PowerShell script `Build-Release.ps1` located in the `Install` directory
 
 The installation package should be found in the release folder.
 
-## Building only pnp templates
+## Building only PnP templates
 
-To only build pnp templates make sure your on the `main` branch and in sync with **origin**.
+To only build PnP templates make sure your on the `main` branch and in sync with **origin**.
 
 Run the PowerShell script `Build-Release.ps1` located in the `Install` directory:
 
@@ -150,7 +152,7 @@ Run the PowerShell script `Build-Release.ps1` located in the `Install` directory
 ./Install/Build-Release.ps1 -SkipBuildSharePointFramework
 ```
 
-The pnp templates should be found in the release folder.
+The PnP templates should be found in the release folder.
 
 ## Continuous integration
 
@@ -184,17 +186,20 @@ For creating a new release, we have two options: Minor and patch. New minor vers
 
 Increasing the version number is done by npm scripts. This is done on the dev-branch when the functionality currently in dev is deemed ready for release.
 
+
+### Patch-release
 ```powershell
-# patch-release
 npm version patch
 git push --tags
+```
 
-# minor-release
+### Minor-release
+```powershell
 npm version minor
 git push --tags
 ```
 
-Then create a Pull Request to merge dev into main. The output from GitHub Actions will include a release package that can be shared as a release on GitHub. No manual build required.
+Then create a Pull Request to merge `dev` into `main`. The output from GitHub Actions will include a release package that can be shared as a release on GitHub. No manual build required.
 
 ## Versioning
 

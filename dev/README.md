@@ -16,25 +16,25 @@
 
 ## ➤ Table of Contents
 
-	* [➤ Site Design / Site Scripts](#-site-design--site-scripts)
-	* [➤ JS Provisioning Template](#-js-provisioning-template)
-	* [➤ Templates](#-templates)
-		* [JSON provisioning template](#json-provisioning-template)
-			* [Building JSON templates](#building-json-templates)
-		* [PnP templates](#pnp-templates)
-			* [Portfolio](#portfolio)
-			* [Content templates](#content-templates)
-	* [➤ NPM](#-npm)
-	* [➤ Building a new release](#-building-a-new-release)
-	* [➤ Building only pnp templates](#-building-only-pnp-templates)
-	* [➤ Continuous integration](#-continuous-integration)
-		* [Build and install (dev)](#build-and-install-dev)
-		* [Build release (main)](#build-release-main)
-	* [➤ Creating a new release](#-creating-a-new-release)
-* [➤ patch-release](#-patch-release)
-* [➤ minor-release](#-minor-release)
-	* [➤ Versioning](#-versioning)
-	* [➤ README generation](#-readme-generation)
+* [➤ Site Design / Site Scripts](#-site-design--site-scripts)
+* [➤ JS Provisioning Template](#-js-provisioning-template)
+* [➤ Templates](#-templates)
+	* [JSON provisioning template](#json-provisioning-template)
+		* [Building JSON templates](#building-json-templates)
+	* [PnP templates](#pnp-templates)
+		* [Portfolio](#portfolio)
+		* [Content templates](#content-templates)
+* [➤ NPM](#-npm)
+* [➤ Building a new release](#-building-a-new-release)
+* [➤ Building only PnP templates](#-building-only-pnp-templates)
+* [➤ Continuous integration](#-continuous-integration)
+	* [Build and install (dev)](#build-and-install-dev)
+	* [Build release (main)](#build-release-main)
+* [➤ Creating a new release](#-creating-a-new-release)
+	* [Patch-release](#patch-release)
+	* [Minor-release](#minor-release)
+* [➤ Versioning](#-versioning)
+* [➤ README generation](#-readme-generation)
 </details>
 
 
@@ -170,6 +170,8 @@ The SharePoint Framework solutions are published to `npm` independently.
 - [ProjectWebParts](https://www.npmjs.com/package/pp365-projectwebparts)
 - [ProjectExtensions](https://www.npmjs.com/package/pp365-projectextensions)
 - [PortfolioWebParts](https://www.npmjs.com/package/pp365-portfoliowebparts)
+- [ProgramWebParts](https://www.npmjs.com/package/pp365-programwebparts)
+- [PortfolioExtensions](https://www.npmjs.com/package/pp365-portfolioextensions)
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#building-a-new-release)
@@ -189,9 +191,9 @@ The installation package should be found in the release folder.
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#building-only-pnp-templates)
 
-## ➤ Building only pnp templates
+## ➤ Building only PnP templates
 
-To only build pnp templates make sure your on the `main` branch and in sync with **origin**.
+To only build PnP templates make sure your on the `main` branch and in sync with **origin**.
 
 Run the PowerShell script `Build-Release.ps1` located in the `Install` directory:
 
@@ -199,7 +201,7 @@ Run the PowerShell script `Build-Release.ps1` located in the `Install` directory
 ./Install/Build-Release.ps1 -SkipBuildSharePointFramework
 ```
 
-The pnp templates should be found in the release folder.
+The PnP templates should be found in the release folder.
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#continuous-integration)
@@ -239,23 +241,20 @@ For creating a new release, we have two options: Minor and patch. New minor vers
 
 Increasing the version number is done by npm scripts. This is done on the dev-branch when the functionality currently in dev is deemed ready for release.
 
+
+### Patch-release
 ```powershell
-
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#patch-release)
-
-# ➤ patch-release
 npm version patch
 git push --tags
+```
 
-
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#minor-release)
-
-# ➤ minor-release
+### Minor-release
+```powershell
 npm version minor
 git push --tags
 ```
 
-Then create a Pull Request to merge dev into main. The output from GitHub Actions will include a release package that can be shared as a release on GitHub. No manual build required.
+Then create a Pull Request to merge `dev` into `main`. The output from GitHub Actions will include a release package that can be shared as a release on GitHub. No manual build required.
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#versioning)
