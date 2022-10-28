@@ -5,13 +5,15 @@ Param(
     [string]$CI
 )
 
+$CI_MODE = (-not ([string]::IsNullOrEmpty($CI)))
+
 $global:__PnPConnection = $null
 
 $ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
 . $ScriptDir/PP365Functions.ps1
 
 
-if (-not ([string]::IsNullOrEmpty($CI))) {
+if ($CI_MODE) {
     Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
     Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
 }
@@ -23,7 +25,7 @@ function Connect-SharePoint {
     )
 
     Try {
-        if (-not ([string]::IsNullOrEmpty($CI))) {
+        if ($CI_MODE) {
             $DecodedCred = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($CI))).Split("|")
             $Password = ConvertTo-SecureString -String $DecodedCred[1] -AsPlainText -Force
             $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $DecodedCred[0], $Password
@@ -179,7 +181,7 @@ $ProjectsInHub = Get-PP365HubSiteChild -Identity (Get-PnPHubSite -Identity $Url)
 Write-Host "The following sites were found to be part of the Project Portal hub:"
 $ProjectsInHub | ForEach-Object { Write-Host "`t$_" }
 
-if ([string]::IsNullOrEmpty($CI)) {
+if (-not $CI_MODE) {
     Write-Host "We can grant $UserName admin access to existing projects. This will ensure that all project will be upgraded. If you select no, the script will only upgrade the sites you are already an owner of."
     do {
         $YesOrNo = Read-Host "Do you want to grant $UserName access to all sites in the hub (listed above)? (y/n)"
@@ -187,7 +189,7 @@ if ([string]::IsNullOrEmpty($CI)) {
     while ("y", "n" -notcontains $YesOrNo)
 }
 
-if ($YesOrNo -eq "y" -or (-not [string]::IsNullOrEmpty($CI))) {
+if ($YesOrNo -eq "y" -or $CI_MODE) {
     $ProjectsInHub | ForEach-Object {
         Write-Host "`tGranting access to $_"
         Set-PnPTenantSite -Url $_ -Owners $UserName
@@ -201,7 +203,7 @@ $ProjectsInHub | ForEach-Object {
     Write-Host "`t`tDone processing $_" -ForegroundColor Green
 }
 
-if ([string]::IsNullOrEmpty($CI)) {
+if (-not $CI_MODE) {
     Write-Host "We can remove $UserName's admin access from existing projects."
     do {
         $YesOrNo = Read-Host "Do you want to remove $UserName's admin access from all sites in the hub? (y/n)"
@@ -209,7 +211,7 @@ if ([string]::IsNullOrEmpty($CI)) {
     while ("y", "n" -notcontains $YesOrNo)
 }
 
-if ($YesOrNo -eq "y" -or (-not ([string]::IsNullOrEmpty($CI)))) {
+if ($YesOrNo -eq "y" -or $CI_MODE) {
     $ProjectsInHub | ForEach-Object {
         Write-Host "`tRemoving access to $_"
         Connect-SharePoint -Url $_
@@ -219,4 +221,4 @@ if ($YesOrNo -eq "y" -or (-not ([string]::IsNullOrEmpty($CI)))) {
 
 
 Stop-Transcript
-$global:PnPConnection = $null
+$global:__PnPConnection = $null
