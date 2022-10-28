@@ -154,25 +154,29 @@ The pnp templates should be found in the release folder.
 
 ## Continuous integration
 
+We have set up continuous integration using GitHub actions.
+
 ![CI - Build and install (dev)](https://github.com/Puzzlepart/prosjektportalen365/workflows/CI%20-%20Build%20and%20install%20(dev)/badge.svg?branch=dev)
 
-We have set up continuous using GitHub actions.
+Keywords can be used in the commit message to avoid the CI running some of the jobs.
+
+- `[skip-build-release]` to avoid the _Build release package_ job starting. This will result in no jobs starting as the _Upgrade_ and _Install_ jobs are dependent on the job _Build release package_
+- `[skip-upgrade]` to avoid the _Uprade_ job starting. This will also skip the _Install_ job as it's dependent on _Upgrade_
+- `[skip-install]` to avoid the _Install_ job starting. 
 
 ### Build and install (dev)
 
-[ci-build-install-dev](../.github/workflows/ci-dev.yml) builds a new release on _push_ to **dev**.
+[ci-dev](../.github/workflows/ci-dev.yml) builds a new release on _push_ to **dev**.
 
 It runs [Build-Release.ps1](../Install/Build-Release.ps1) with `-CI` param, then runs [Install.ps1](../Install/Install.ps1) (also with `-CI` param, this time with a encoded string consisting of the username and password, stored in a GitHub secret). The URL to install to is stored in the GitHub secret `CI_DEV_TARGET_URL`.
 
-With the current approach, with no cache, a full run takes about 30 minutes.
+With the current approach, with no cache (as it runs `npm ci`), a full run takes about 25-35 minutes.
 
 ![image-20201121133532960](assets/image-20201121133532960.png)
 
 ### Build release (main)
 
-[build-release](../.github/workflows/build-release.yml) builds a new release package on _tag_ to **main**, then drafts a new GitHub release with the installation package.
-
-![image-20210303133423458](assets/image-20210303133423458.png)
+[build-release](../.github/workflows/build-release.yml) builds a new release package on **push** to **main**.
 
 ## Creating a new release
 
@@ -202,7 +206,7 @@ This `automatic-versioning.js` task can also be run as a **npm script** outside 
 npm run sync-version
 ```
 
-After the `sync-version` script has been run, it is important to publish the SharePointFramework packages (@Shared, PortfolioWebParts, etc...) to npmjs.
+After the `sync-version` script has been run, it is important to publish the SharePointFramework packages (@Shared, PortfolioWebParts, etc...) to npm.
 
 This is done for each package by running the following script:
 
