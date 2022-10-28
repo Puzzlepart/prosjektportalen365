@@ -1,6 +1,7 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { List, sp, Web } from '@pnp/sp'
 import { IListProperties } from './IListProperties'
+import { ProjectTemplate } from './ProjectTemplate'
 import { UserSelectableObject } from './UserSelectableObject'
 
 export interface IContentConfigSPItem {
@@ -41,6 +42,30 @@ export class ContentConfig extends UserSelectableObject {
     )
     this._sourceList = _spItem.GtLccSourceList
     this._destinationList = _spItem.GtLccDestinationList
+  }
+
+  /**
+   * Checks if the content config is mandatory for the specified template. It's either
+   * locked and default on the content configuration element itself, or it's connected to the
+   * template and `isDefaultContentConfigLocked` is set to true.
+   *
+   * @param template Project template
+   */
+  public isMandatoryForTemplate(template: ProjectTemplate): boolean {
+    return (
+      (this.isLocked && this.isDefault) ||
+      (template?.isDefaultContentConfigLocked && template?.contentConfig.includes(this.id))
+    )
+  }
+
+  /**
+   * Checks if the content config is default for the specified template. It's either
+   * default on the content configuration element itself, or it's connected to the template.
+   *
+   * @param template Project template
+   */
+  public isDefaultForTemplate(template?: ProjectTemplate): boolean {
+    return this.isDefault || template?.contentConfig.includes(this.id)
   }
 
   public get type(): ContentConfigType {

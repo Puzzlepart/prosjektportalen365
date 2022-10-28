@@ -15,8 +15,10 @@ export function useRowRenderer({ selectedKeys, searchTerm }) {
     detailsRowProps: IDetailsRowProps,
     defaultRender: (props?: IDetailsRowProps) => JSX.Element
   ) => {
-    const lcc = detailsRowProps.item as ContentConfig
-    const isMandatory = lcc.isMandatory(context.state.selectedTemplate)
+    const contentConfig = detailsRowProps.item as ContentConfig
+    const isMandatory = contentConfig.isMandatoryForTemplate(context.state.selectedTemplate)
+    // eslint-disable-next-line no-console
+    console.log(contentConfig, isMandatory)
     detailsRowProps.disabled = isMandatory
     if (isMandatory) {
       detailsRowProps.onRenderCheck = (props) => (
@@ -27,8 +29,8 @@ export function useRowRenderer({ selectedKeys, searchTerm }) {
       }
     }
     const shouldRenderRow =
-      lcc.text.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
-      selectedKeys.includes(lcc.key)
+      contentConfig.text.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
+      selectedKeys.includes(contentConfig.key)
     return shouldRenderRow ? defaultRender(detailsRowProps) : null
   }
 }
