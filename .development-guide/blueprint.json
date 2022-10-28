@@ -1,8 +1,8 @@
 {
   "package": "package.json",
-  "blueprint": "dev/.README",
-  "input": "dev/.README",
-  "output": "dev/README.md",
+  "blueprint": ".development-guide/.README",
+  "input": ".development-guide/.README",
+  "output": ".development-guide/README.md",
   "text": "Development guide",
   "logo": {
     "src": "../assets/PP365 Piktogram Flat DIGITAL.png",

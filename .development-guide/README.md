@@ -1,4 +1,4 @@
-<!-- ⚠️ This README has been generated from the file(s) "dev/.README" ⚠️--><p align="center">
+<!-- ⚠️ This README has been generated from the file(s) ".development-guide/.README" ⚠️--><p align="center">
   <img src="../assets/PP365 Piktogram Flat DIGITAL.png" alt="Logo" width="119" height="119" />
 </p> <p align="center">
   <b>Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.</b></br>
@@ -214,7 +214,7 @@ We have set up continuous integration using GitHub actions.
 
 Keywords can be used in the commit message to avoid the CI running some of the jobs.
 
-- `[skip-build-release]` to avoid the _Build release package_ job starting. This will result in no jobs starting as the _Upgrade_ and _Install_ jobs are dependent on the job _Build release package_
+- `[skip-ci]` to avoid the _Build release package_ job starting. This will result in no jobs starting as the _Upgrade_ and _Install_ jobs are dependent on the job _Build release package_
 - `[skip-upgrade]` to avoid the _Uprade_ job starting. This will also skip the _Install_ job as it's dependent on _Upgrade_
 - `[skip-install]` to avoid the _Install_ job starting. 
 
