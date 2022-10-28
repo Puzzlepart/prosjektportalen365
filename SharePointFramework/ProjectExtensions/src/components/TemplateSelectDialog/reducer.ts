@@ -12,26 +12,27 @@ export const ON_LIST_CONTENT_CONFIG_CHANGED = createAction<ListContentConfig[]>(
 export const ON_EXTENSIONS_CHANGED = createAction<ProjectExtension[]>('ON_EXTENTIONS_CHANGED')
 export const ON_TEMPLATE_CHANGED = createAction<ProjectTemplate>('ON_TEMPLATE_CHANGED')
 
-export const initState = (): ITemplateSelectDialogState => ({
+export const initialState: ITemplateSelectDialogState = {
   selectedTemplate: null,
   selectedListContentConfig: [],
   selectedExtensions: [],
   settings: new ProjectSetupSettings().useDefault()
-})
+}
 
 export default (data: IProjectSetupData) =>
-  createReducer(initState(), {
+  createReducer(initialState, {
     [INIT.type]: (state: ITemplateSelectDialogState) => {
-      let [selectedTemplate] = data.templates.filter((tmpl) => tmpl.isDefault)
-      if (!selectedTemplate) selectedTemplate = first(data.templates)
-      state.selectedTemplate = selectedTemplate
+      let [template] = data.templates.filter((t) => t.isDefault())
+      if (!template) template = first(data.templates)
+      state.selectedTemplate = template
       state.selectedListContentConfig = data.listContentConfig.filter(
-        (lcc) => lcc.isDefault || selectedTemplate.listContentConfigIds?.some((id) => id === lcc.id)
+        (lcc) => lcc.isDefault(template) || template.listContentConfigIds.some((id) => id === lcc.id)
       )
       state.selectedExtensions = data.extensions.filter(
-        (ext) => ext.isDefault || selectedTemplate.extensionIds?.some((id) => id === ext.id)
+        (ext) => ext.isDefault(template)|| template.extensionIds.some((id) => id === ext.id)
       )
     },
+
     [ON_LIST_CONTENT_CONFIG_CHANGED.type]: (
       state: ITemplateSelectDialogState,
       { payload }: ReturnType<typeof ON_LIST_CONTENT_CONFIG_CHANGED>
@@ -44,6 +45,7 @@ export default (data: IProjectSetupData) =>
         (lcc) => lcc.id
       )
     },
+
     [ON_EXTENSIONS_CHANGED.type]: (
       state: ITemplateSelectDialogState,
       { payload }: ReturnType<typeof ON_EXTENSIONS_CHANGED>
@@ -53,16 +55,17 @@ export default (data: IProjectSetupData) =>
       )
       state.selectedExtensions = uniq([...mandatoryExtensions, ...payload], (lcc) => lcc.id)
     },
+
     [ON_TEMPLATE_CHANGED.type]: (
       state: ITemplateSelectDialogState,
       { payload: template }: ReturnType<typeof ON_TEMPLATE_CHANGED>
     ) => {
       state.selectedTemplate = template
       state.selectedListContentConfig = data.listContentConfig.filter(
-        (lcc) => lcc.isDefault || template?.listContentConfigIds?.some((id) => id === lcc.id)
+        (lcc) => lcc.isDefault(template) || template?.listContentConfigIds.some((id) => id === lcc.id)
       )
       state.selectedExtensions = data.extensions.filter(
-        (ext) => ext.isDefault || template?.extensionIds?.some((id) => id === ext.id)
+        (ext) => ext.isDefault(template) || template?.extensionIds.some((id) => id === ext.id)
       )
     }
   })

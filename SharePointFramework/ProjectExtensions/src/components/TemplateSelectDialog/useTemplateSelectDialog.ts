@@ -1,9 +1,9 @@
 import { useEffect, useReducer } from 'react'
-import createReducer, { INIT, initState } from './reducer'
+import createReducer, { INIT, initialState } from './reducer'
 import { ITemplateSelectDialogProps } from './types'
 
 export function useTemplateSelectDialog(props: ITemplateSelectDialogProps) {
-  const [state, dispatch] = useReducer(createReducer(props.data), initState())
+  const [state, dispatch] = useReducer(createReducer(props.data), initialState)
 
   useEffect(() => {
     dispatch(INIT())

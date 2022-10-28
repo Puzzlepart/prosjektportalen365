@@ -8,12 +8,12 @@ export class UserSelectableObject implements IObjectWithKey {
     public id: number,
     public text: string,
     public subText: string,
-    public isDefault: boolean,
+    private _isDefault: boolean,
     public isLocked: boolean,
     public hidden: boolean
   ) {
     this.key = this.id
-    this.hidden = this.isLocked && !this.isDefault ? true : this.hidden
+    this.hidden = this.isLocked && !this._isDefault ? true : this.hidden
   }
 
   /**
@@ -23,8 +23,20 @@ export class UserSelectableObject implements IObjectWithKey {
    */
   public isMandatory(template: ProjectTemplate): boolean {
     return (
-      (this.isLocked && this.isDefault) ||
+      (this.isLocked && this._isDefault) ||
       (template?.isDefaultExtensionsLocked && template?.extensionIds.includes(this.id))
+    )
+  }
+
+  /**
+   * Checks if the user selectable object is default for the specified template
+   *
+   * @param template Project template
+   */
+  public isDefault(template?: ProjectTemplate): boolean {
+    return (
+      this._isDefault ||
+      template?.extensionIds.includes(this.id)
     )
   }
 }
