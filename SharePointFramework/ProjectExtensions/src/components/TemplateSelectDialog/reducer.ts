@@ -26,10 +26,11 @@ export default (data: IProjectSetupData) =>
       if (!template) template = first(data.templates)
       state.selectedTemplate = template
       state.selectedListContentConfig = data.listContentConfig.filter(
-        (lcc) => lcc.isDefault(template) || template.listContentConfigIds.some((id) => id === lcc.id)
+        (lcc) =>
+          lcc.isDefault(template) || template.listContentConfigIds.some((id) => id === lcc.id)
       )
       state.selectedExtensions = data.extensions.filter(
-        (ext) => ext.isDefault(template)|| template.extensionIds.some((id) => id === ext.id)
+        (ext) => ext.isDefault(template) || template.extensionIds.some((id) => id === ext.id)
       )
     },
 
@@ -62,7 +63,8 @@ export default (data: IProjectSetupData) =>
     ) => {
       state.selectedTemplate = template
       state.selectedListContentConfig = data.listContentConfig.filter(
-        (lcc) => lcc.isDefault(template) || template?.listContentConfigIds.some((id) => id === lcc.id)
+        (lcc) =>
+          lcc.isDefault(template) || template?.listContentConfigIds.some((id) => id === lcc.id)
       )
       state.selectedExtensions = data.extensions.filter(
         (ext) => ext.isDefault(template) || template?.extensionIds.some((id) => id === ext.id)

@@ -34,9 +34,6 @@ export class UserSelectableObject implements IObjectWithKey {
    * @param template Project template
    */
   public isDefault(template?: ProjectTemplate): boolean {
-    return (
-      this._isDefault ||
-      template?.extensionIds.includes(this.id)
-    )
+    return this._isDefault || template?.extensionIds.includes(this.id)
   }
 }

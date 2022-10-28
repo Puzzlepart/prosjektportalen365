@@ -55,10 +55,10 @@ export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
           }}
           selectOnBlur={true}
         />
-        {!isEmpty(
-          context.state.selectedTemplate?.listContentConfigIds ||
-            !isEmpty(context.state.selectedTemplate?.extensionIds)
-        ) && <TemplateListContentConfigMessage />}
+        {(!isEmpty(context.state.selectedTemplate?.listContentConfigIds) ||
+          !isEmpty(context.state.selectedTemplate?.extensionIds)) && (
+          <TemplateListContentConfigMessage />
+        )}
       </div>
     </div>
   )
