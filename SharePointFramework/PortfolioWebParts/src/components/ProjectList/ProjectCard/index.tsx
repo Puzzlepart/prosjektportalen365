@@ -43,7 +43,7 @@ export const ProjectCard: FC<IProjectCardProps> = (props) => {
 ProjectCard.defaultProps = {
   project: new ProjectListModel(undefined, {}),
   isDataLoaded: true,
-  showProjectOwner: true,
-  showProjectManager: true,
+  showProjectOwner: false,
+  showProjectManager: false,
   shouldTruncateTitle: true
 }

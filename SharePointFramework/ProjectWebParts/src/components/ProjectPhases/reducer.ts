@@ -12,7 +12,7 @@ export const DISMISS_CHANGE_PHASE_DIALOG = createAction('DISMISS_CHANGE_PHASE_DI
 export const INIT_CHANGE_PHASE = createAction('INIT_CHANGE_PHASE')
 export const SET_PHASE = createAction<{ phase: ProjectPhaseModel }>('SET_PHASE')
 
-export const initialState: IProjectPhasesState ={
+export const initialState: IProjectPhasesState = {
   loading: true,
   data: {
     phases: []

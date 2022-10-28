@@ -7,9 +7,7 @@ import { ProjectPhasesContext } from './context'
 import { ProjectPhase } from './ProjectPhase'
 import { ProjectPhaseCallout } from './ProjectPhase/ProjectPhaseCallout'
 import styles from './ProjectPhases.module.scss'
-import {
-  HIDE_MESSAGE,
-  OPEN_CALLOUT} from './reducer'
+import { HIDE_MESSAGE, OPEN_CALLOUT } from './reducer'
 import { getShimmerElements } from './shimmer'
 import { IProjectPhasesProps } from './types'
 import { useProjectPhases } from './useProjectPhases'
