@@ -15,7 +15,7 @@ import { useExtensionsSection } from './useExtensionsSection'
 
 /**
  * Section for selection of project extensions.
- * 
+ *
  * @param props Props
  */
 export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) => {

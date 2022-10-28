@@ -6,7 +6,7 @@ import { IMandatoryCheckProps } from './types'
 /**
  * Component that renders a Lock icon instead of a checkbox for items
  * in a list that should be mandatory.
- * 
+ *
  * @param props Props
  */
 export const MandatoryCheck: FC<IMandatoryCheckProps> = (props) => {

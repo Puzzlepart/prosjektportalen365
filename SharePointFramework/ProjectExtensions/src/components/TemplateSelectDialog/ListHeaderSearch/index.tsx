@@ -5,7 +5,7 @@ import { IListHeaderSearchProps } from './types'
 
 /**
  * List header for `<DetailsList />` with a optional `<SearchBox />`
- * 
+ *
  * @param props Props
  */
 export const ListHeaderSearch: FC<IListHeaderSearchProps> = (props) => {

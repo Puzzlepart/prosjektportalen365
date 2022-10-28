@@ -34,7 +34,7 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
             headerText={strings.ExtensionsSectionHeaderText}
             itemIcon='ArrangeBringForward'
             headerButtonProps={
-              isEmpty(props.data.extensions) && {
+              (isEmpty(props.data.extensions) || !state.selectedTemplate) && {
                 disabled: true,
                 style: { opacity: 0.3, cursor: 'default' }
               }
@@ -45,7 +45,7 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
             headerText={strings.ContentConfigSectionHeaderText}
             itemIcon='ViewList'
             headerButtonProps={
-              isEmpty(props.data.contentConfig) && {
+              (isEmpty(props.data.contentConfig) || !state.selectedTemplate) && {
                 disabled: true,
                 style: { opacity: 0.3, cursor: 'default' }
               }

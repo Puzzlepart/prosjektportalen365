@@ -19,6 +19,9 @@ export const initialState: ITemplateSelectDialogState = {
   settings: new ProjectSetupSettings().useDefault()
 }
 
+/**
+ * Create reducer for `TemplateSelectDialog`
+ */
 export default (data: IProjectSetupData) =>
   createReducer(initialState, {
     [INIT.type]: (state: ITemplateSelectDialogState) => {
@@ -54,7 +57,7 @@ export default (data: IProjectSetupData) =>
       { payload: template }: ReturnType<typeof ON_TEMPLATE_CHANGED>
     ) => {
       state.selectedTemplate = template
-      state.selectedContentConfig = template.getContentConfig(data.contentConfig)
-      state.selectedExtensions = template.getExtensions(data.extensions)
+      state.selectedContentConfig = template?.getContentConfig(data.contentConfig) || []
+      state.selectedExtensions = template?.getExtensions(data.extensions) || []
     }
   })
