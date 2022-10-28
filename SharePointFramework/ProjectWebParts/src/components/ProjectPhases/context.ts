@@ -1,11 +1,11 @@
 import { AnyAction } from '@reduxjs/toolkit'
-import { createContext } from 'react'
+import { createContext, Dispatch } from 'react'
 import { IProjectPhasesProps, IProjectPhasesState } from './types'
 
 export interface IProjectPhasesContext<
   S = IProjectPhasesState,
   P = IProjectPhasesProps,
-  D = React.Dispatch<AnyAction>
+  D = Dispatch<AnyAction>
 > {
   state: S
   props: P

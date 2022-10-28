@@ -20,13 +20,11 @@ function useProjectCardContent(props: IProjectCardProps) {
     ...props.project.manager,
     secondaryText: strings.ProjectManager
   }
-  let phase = props.project.phase ?? strings.NotSet
-  if (!props.isDataLoaded) {
-    phase = ['Konsept', 'Planlegge', 'Gjennomføre', 'Avslutte', 'Realisere'][
-      Math.floor(Math.random() * 5)
-    ]
-  }
-  return { phase, owner: ownerPersonaProps, manager: managerPersonaProps } as const
+  return {
+    phase: props.project.phase,
+    owner: ownerPersonaProps,
+    manager: managerPersonaProps
+  } as const
 }
 
 export const ProjectCardContent: FC<IProjectCardProps> = (props) => {
