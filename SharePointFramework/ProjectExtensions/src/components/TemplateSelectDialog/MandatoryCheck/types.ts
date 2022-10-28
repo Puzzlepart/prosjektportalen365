@@ -1,7 +1,7 @@
 import { IDetailsRowCheckProps, IIconProps } from '@fluentui/react'
-import { ICheckLockedTooltipContent } from './CheckLockedTooltipContent/types'
+import { IMandatoryCheckTooltipProps } from './MandatoryCheckTooltip/types'
 
-export interface ICheckLockedProps extends IDetailsRowCheckProps {
+export interface IMandatoryCheckProps extends IDetailsRowCheckProps {
   /**
    * Props for the Lock icon (`iconName` defaults to **Lock**)
    */
@@ -10,5 +10,5 @@ export interface ICheckLockedProps extends IDetailsRowCheckProps {
   /**
    * Tooltip props
    */
-  tooltip?: ICheckLockedTooltipContent
+  tooltip?: IMandatoryCheckTooltipProps
 }

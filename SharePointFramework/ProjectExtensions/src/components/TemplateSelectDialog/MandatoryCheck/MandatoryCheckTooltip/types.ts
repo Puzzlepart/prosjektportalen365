@@ -1,6 +1,6 @@
 import { IIconProps } from '@fluentui/react'
 
-export interface ICheckLockedTooltipContent {
+export interface IMandatoryCheckTooltipProps {
   /**
    * Text to be shown in the `TooltipHost`
    */

@@ -36,10 +36,7 @@ export default (data: IProjectSetupData) =>
       const mandatoryContentConfig = data.contentConfig.filter((lcc) =>
         lcc.isMandatory(state.selectedTemplate)
       )
-      state.selectedContentConfig = uniq(
-        [...mandatoryContentConfig, ...payload],
-        (lcc) => lcc.id
-      )
+      state.selectedContentConfig = uniq([...mandatoryContentConfig, ...payload], (lcc) => lcc.id)
     },
 
     [ON_EXTENSIONS_CHANGED.type]: (

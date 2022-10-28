@@ -2,7 +2,7 @@ import { IDetailsRowProps } from '@fluentui/react'
 import { ProjectExtension } from 'models'
 import strings from 'ProjectExtensionsStrings'
 import React, { useContext } from 'react'
-import { CheckLocked } from '../CheckLocked'
+import { MandatoryCheck } from '../MandatoryCheck'
 import { TemplateSelectDialogContext } from '../context'
 
 /**
@@ -20,7 +20,7 @@ export function useRowRenderer({ selectedKeys, searchTerm }) {
     detailsRowProps.disabled = isMandatory
     if (isMandatory) {
       detailsRowProps.onRenderCheck = (props) => (
-        <CheckLocked {...props} tooltip={{ text: strings.ExtensionLockedTooltipText }} />
+        <MandatoryCheck {...props} tooltip={{ text: strings.ExtensionLockedTooltipText }} />
       )
       detailsRowProps.styles = {
         root: { background: 'rgb(237, 235, 233)', color: 'rgb(50, 49, 48)' }
