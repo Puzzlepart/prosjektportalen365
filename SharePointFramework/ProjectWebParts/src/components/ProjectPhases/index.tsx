@@ -1,32 +1,21 @@
 import { MessageBarType, Shimmer } from '@fluentui/react'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FC, useEffect, useReducer, useRef } from 'react'
-import { changePhase } from './changePhase'
+import React, { FC } from 'react'
 import { ChangePhaseDialog } from './ChangePhaseDialog'
 import { ProjectPhasesContext } from './context'
-import { fetchData } from './fetchData'
 import { ProjectPhase } from './ProjectPhase'
 import { ProjectPhaseCallout } from './ProjectPhase/ProjectPhaseCallout'
 import styles from './ProjectPhases.module.scss'
-import reducer, {
+import {
   HIDE_MESSAGE,
-  initState,
-  INIT_CHANGE_PHASE,
-  INIT_DATA,
-  OPEN_CALLOUT,
-  SET_PHASE
-} from './reducer'
+  OPEN_CALLOUT} from './reducer'
 import { getShimmerElements } from './shimmer'
 import { IProjectPhasesProps } from './types'
+import { useProjectPhases } from './useProjectPhases'
 
 export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
-  const root = useRef(null)
-  const [state, dispatch] = useReducer(reducer, initState())
-
-  useEffect(() => {
-    fetchData(props).then((data) => dispatch(INIT_DATA({ data })))
-  }, [])
+  const { root, state, dispatch, onChangePhase } = useProjectPhases(props)
 
   if (state.hidden) return null
 
@@ -38,38 +27,6 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
         text={strings.WebPartNoAccessMessage}
       />
     )
-  }
-
-  /**
-   * On change phase
-   */
-  const onChangePhase = async () => {
-    dispatch(INIT_CHANGE_PHASE())
-    await changePhase(
-      state.confirmPhase,
-      state.data.phaseTextField,
-      props,
-      state.data.phaseSitePages
-    )
-    dispatch(SET_PHASE({ phase: state.confirmPhase }))
-    if (
-      props.syncPropertiesAfterPhaseChange === undefined ||
-      props.syncPropertiesAfterPhaseChange
-    ) {
-      const currentUrlIsPageRelative =
-        document.location.pathname.indexOf(state.data.welcomePage) > -1
-      const welcomepage = !currentUrlIsPageRelative
-        ? `${document.location.pathname}/${state.data.welcomePage}`
-        : document.location.pathname
-      setTimeout(() => {
-        window.location.assign(
-          `${document.location.protocol}//${document.location.hostname}${welcomepage}#syncproperties=1`
-        )
-        if (currentUrlIsPageRelative) {
-          window.location.reload()
-        }
-      }, 1000)
-    }
   }
 
   return (
