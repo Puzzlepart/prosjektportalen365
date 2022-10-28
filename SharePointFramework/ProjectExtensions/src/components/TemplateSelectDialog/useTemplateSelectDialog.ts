@@ -1,7 +1,7 @@
 import { ProjectTemplate } from 'models'
 import { ProjectSetupSettings } from 'projectSetup/ProjectSetupSettings'
 import { useState } from 'react'
-import { first } from 'underscore'
+import { first, uniq } from 'underscore'
 import { ITemplateSelectDialogProps, ITemplateSelectDialogState } from './types'
 
 export function useTemplateSelectDialog(props: ITemplateSelectDialogProps) {
@@ -32,10 +32,27 @@ export function useTemplateSelectDialog(props: ITemplateSelectDialogProps) {
   }
 
   /**
-   * On submit the selected user configuration
+   * On submit the selected user configuration. Due to the nature of the `DetailsList` 
+   * selection we need to ensure the mandatory list content config and extensions are included. 
    */
   const onSubmit = () => {
-    props.onSubmit(state)
+    const mandatorylistContentConfig = props.data.listContentConfig.filter((lcc) =>
+      lcc.isMandatory(state.selectedTemplate)
+    )
+    const mandatoryExtensions = props.data.extensions.filter((ext) =>
+      ext.isMandatory(state.selectedTemplate)
+    )
+    props.onSubmit({
+      ...state,
+      selectedListContentConfig: uniq(
+        [...mandatorylistContentConfig, ...state.selectedListContentConfig],
+        (lcc) => lcc.id
+      ),
+      selectedExtensions: uniq(
+        [...mandatoryExtensions, ...state.selectedExtensions],
+        (ext) => ext.id
+      )
+    })
   }
 
   return { state, setState, onSubmit } as const

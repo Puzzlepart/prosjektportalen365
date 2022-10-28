@@ -4,6 +4,9 @@ import { useSelectionList } from '../useSelectionList'
 import { useRowRenderer } from './useRowRenderer'
 import { useColumns } from './useColumns'
 
+/**
+ * Component logic hook for `ExtensionsSection`
+ */
 export function useExtensionsSection() {
   const context = useContext(TemplateSelectDialogContext)
   const selectedKeys = context.state.selectedExtensions.map((lc) => lc.key)

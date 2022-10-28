@@ -1,50 +1,31 @@
-import { IObjectWithKey } from '@fluentui/react'
+/* eslint-disable max-classes-per-file */
 import { TypedHash } from '@pnp/common'
 import { Web } from '@pnp/sp'
 import { Schema } from 'sp-js-provisioning'
-import { ProjectTemplate } from './ProjectTemplate'
+import { UserSelectableObject } from './UserSelectableObject'
 
 export interface IProjectExtensionSPItem {
   Id: number
   FieldValuesAsText?: TypedHash<string>
-  key: string
   GtExtensionDefault?: boolean
   GtExtensionHidden?: boolean
   GtExtensionLocked?: boolean
   File?: { UniqueId: string; Name: string; Title: string; ServerRelativeUrl: string }
 }
 
-export class ProjectExtension implements IObjectWithKey {
-  public id: number
-  public key: number
-  public text: string
-  public isDefault: boolean
-  public hidden: boolean
-  public subText: string
+export class ProjectExtension extends UserSelectableObject {
   public serverRelativeUrl: string
-  private _isLocked: boolean
 
   constructor(spItem: IProjectExtensionSPItem, public web: Web) {
-    this.id = spItem.Id
-    this.key = this.id
-    this.text = spItem.File.Title
-    this.isDefault = spItem.GtExtensionDefault
-    this._isLocked = spItem.GtExtensionLocked
-    this.hidden = this._isLocked && !this.isDefault ? true : spItem.GtExtensionHidden
-    this.subText = spItem.FieldValuesAsText.GtDescription
-    this.serverRelativeUrl = spItem.File.ServerRelativeUrl
-  }
-
-  /**
-   * Checks if the project extension is locked for the specified template
-   *
-   * @param template Project template
-   */
-  public isLocked(template: ProjectTemplate): boolean {
-    return (
-      this._isLocked ||
-      (template?.isDefaultExtensionsLocked && template?.extensionIds.includes(this.id))
+    super(
+      spItem.Id,
+      spItem.File.Title,
+      spItem.FieldValuesAsText.GtDescription,
+      spItem.GtExtensionDefault,
+      spItem.GtExtensionLocked,
+      spItem.GtExtensionHidden
     )
+    this.serverRelativeUrl = spItem.File.ServerRelativeUrl
   }
 
   public async getSchema(): Promise<Schema> {

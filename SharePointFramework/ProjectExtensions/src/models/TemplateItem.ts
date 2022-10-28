@@ -22,6 +22,9 @@ export interface ITemplateSPItem {
   FieldValuesAsText?: TypedHash<string>
 }
 
+/**
+ * @model TemplateItem
+ */
 export class TemplateItem {
   /**
    * Item id

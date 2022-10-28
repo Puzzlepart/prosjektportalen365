@@ -5,6 +5,10 @@ import React, { useContext } from 'react'
 import { CheckLocked } from '../CheckLocked'
 import { TemplateSelectDialogContext } from '../context'
 
+/**
+ * Row renderer hook for `ExtensionsSection`. Returns an instance of
+ * `onRenderRow`.
+ */
 export function useRowRenderer({ selectedKeys, searchTerm }) {
   const context = useContext(TemplateSelectDialogContext)
   return (
@@ -12,22 +16,20 @@ export function useRowRenderer({ selectedKeys, searchTerm }) {
     defaultRender: (props?: IDetailsRowProps) => JSX.Element
   ) => {
     const ext = detailsRowProps.item as ProjectExtension
-    const isLocked = ext.isLocked(context.state.selectedTemplate)
-    detailsRowProps.disabled = isLocked
-    if (isLocked) {
+    const isMandatory = ext.isMandatory(context.state.selectedTemplate)
+    detailsRowProps.disabled = isMandatory
+    if (isMandatory) {
       detailsRowProps.onRenderCheck = (props) => (
         <CheckLocked {...props} tooltip={{ text: strings.ExtensionLockedTooltipText }} />
       )
-      if (ext.isDefault) {
-        detailsRowProps.styles = {
-          root: { background: 'rgb(237, 235, 233)', color: 'rgb(50, 49, 48)' }
-        }
+      detailsRowProps.styles = {
+        root: { background: 'rgb(237, 235, 233)', color: 'rgb(50, 49, 48)' }
       }
     }
     const shouldRenderRow =
       ext.text.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
       selectedKeys.includes(ext.key) ||
-      (isLocked && ext.isDefault)
+      isMandatory
     if (shouldRenderRow) return defaultRender(detailsRowProps)
     else return null
   }

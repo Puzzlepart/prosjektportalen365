@@ -24,6 +24,9 @@ export interface IProjectTemplateSPItem {
   GtProjectPhaseTermId: string
 }
 
+/**
+ * @model ProjectTemplate
+ */
 export class ProjectTemplate {
   public id: any
   public key: string

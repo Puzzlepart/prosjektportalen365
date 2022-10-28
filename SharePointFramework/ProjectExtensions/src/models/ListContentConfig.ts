@@ -1,8 +1,7 @@
-import { IObjectWithKey } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { List, sp, Web } from '@pnp/sp'
 import { IListProperties } from './IListProperties'
-import { ProjectTemplate } from './ProjectTemplate'
+import { UserSelectableObject } from './UserSelectableObject'
 
 export interface IListContentConfigSPItem {
   ContentTypeId: string
@@ -25,41 +24,23 @@ export enum ListContentConfigType {
 /**
  * @model ListContentConfig
  */
-export class ListContentConfig implements IObjectWithKey {
-  public id: number
-  public key: number
-  public text: string
-  public subText: string
-  public isDefault: boolean
-  public hidden: boolean
+export class ListContentConfig extends UserSelectableObject {
   public sourceListProps: IListProperties = {}
   public destListProps: IListProperties = {}
-  private _isLocked: boolean
   private _sourceList: string
   private _destinationList: string
 
   constructor(private _spItem: IListContentConfigSPItem, public web: Web) {
-    this.id = _spItem.Id
-    this.key = this.id
-    this.text = _spItem.Title
-    this.subText = _spItem.GtDescription
-    this.isDefault = _spItem.GtLccDefault
-    this._isLocked = _spItem.GtLccLocked
-    this.hidden = this._isLocked && !this.isDefault ? true : _spItem.GtLccHidden
+    super(
+      _spItem.Id,
+      _spItem.Title,
+      _spItem.GtDescription,
+      _spItem.GtLccDefault,
+      _spItem.GtLccLocked,
+      _spItem.GtLccHidden
+    )
     this._sourceList = _spItem.GtLccSourceList
     this._destinationList = _spItem.GtLccDestinationList
-  }
-
-  /**
-   * Checks if the list content config is locked for the specified template
-   *
-   * @param template Project template
-   */
-  public isLocked(template: ProjectTemplate): boolean {
-    return (
-      this._isLocked ||
-      (template?.isDefaultListContentLocked && template?.listContentConfigIds.includes(this.id))
-    )
   }
 
   public get type(): ListContentConfigType {

@@ -5,6 +5,10 @@ import React, { useContext } from 'react'
 import { CheckLocked } from '../CheckLocked'
 import { TemplateSelectDialogContext } from '../context'
 
+/**
+ * Row renderer hook for `ListContentSection`. Returns an instance of
+ * `onRenderRow`.
+ */
 export function useRowRenderer({ selectedKeys, searchTerm }) {
   const context = useContext(TemplateSelectDialogContext)
   return (
@@ -12,22 +16,20 @@ export function useRowRenderer({ selectedKeys, searchTerm }) {
     defaultRender: (props?: IDetailsRowProps) => JSX.Element
   ) => {
     const lcc = detailsRowProps.item as ListContentConfig
-    const isLocked = lcc.isLocked(context.state.selectedTemplate)
-    detailsRowProps.disabled = isLocked
-    if (isLocked) {
+    const isMandatory = lcc.isMandatory(context.state.selectedTemplate)
+    detailsRowProps.disabled = isMandatory
+    if (isMandatory) {
       detailsRowProps.onRenderCheck = (props) => (
         <CheckLocked {...props} tooltip={{ text: strings.ListContentLockedTooltipText }} />
       )
-      if (lcc.isDefault) {
-        detailsRowProps.styles = {
-          root: { background: 'rgb(237, 235, 233)', color: 'rgb(50, 49, 48)' }
-        }
+      detailsRowProps.styles = {
+        root: { background: 'rgb(237, 235, 233)', color: 'rgb(50, 49, 48)' }
       }
     }
     const shouldRenderRow =
       lcc.text.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
       selectedKeys.includes(lcc.key) ||
-      (isLocked && lcc.isDefault)
+      isMandatory
     if (shouldRenderRow) return defaultRender(detailsRowProps)
     else return null
   }

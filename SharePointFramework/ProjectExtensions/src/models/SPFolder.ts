@@ -9,6 +9,9 @@ interface ISPFolderData {
   BaseTemplate?: number
 }
 
+/**
+ * @model SPFolder
+ */
 export class SPFolder {
   public id: string
   public name: string

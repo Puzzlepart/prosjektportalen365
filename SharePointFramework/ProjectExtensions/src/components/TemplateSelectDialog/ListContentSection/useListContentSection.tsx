@@ -4,6 +4,9 @@ import { useSelectionList } from '../useSelectionList'
 import { useColumns } from './useColumns'
 import { useRowRenderer } from './useRowRenderer'
 
+/**
+ * Component logic hook for `ListContentSection`
+ */
 export function useListContentSection() {
   const context = useContext(TemplateSelectDialogContext)
   const selectedKeys = context.state.selectedListContentConfig.map((lc) => lc.key)

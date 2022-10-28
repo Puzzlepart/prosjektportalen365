@@ -32,7 +32,9 @@ export const ListContentSection: TemplateSelectDialogSectionComponent = (props) 
               detailsHeaderProps={detailsHeaderProps}
               defaultRender={defaultRender}
               search={{
-                placeholder: strings.ListContentSectionSearchPlaceholder,
+                placeholder: `${
+                  strings.ListContentSectionSearchPlaceholder
+                } ${selection.getSelectedCount()}`,
                 onSearch,
                 hidden: items.length < 5
               }}
