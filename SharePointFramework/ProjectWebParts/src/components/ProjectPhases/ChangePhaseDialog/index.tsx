@@ -1,15 +1,14 @@
-import { Dialog, format, DialogType, MessageBarType } from '@fluentui/react'
+import { Dialog, DialogType, format } from '@fluentui/react'
 import SPDataAdapter from 'data'
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext, useEffect, useReducer } from 'react'
-import _ from 'underscore'
 import { ProjectPhasesContext } from '../context'
 import { DISMISS_CHANGE_PHASE_DIALOG } from '../reducer'
 import { Body } from './Body'
 import styles from './ChangePhaseDialog.module.scss'
 import { ChangePhaseDialogContext } from './context'
+import { DynamicHomepageContent } from './DynamicHomepageContent'
 import { Footer } from './Footer'
 import reducer, { CHECKLIST_ITEM_UPDATED, INIT } from './reducer'
 import { View } from './Views'
@@ -18,10 +17,6 @@ export const ChangePhaseDialog: FC = () => {
   const context = useContext(ProjectPhasesContext)
   if (!context.state.confirmPhase) return null
   const [state, dispatch] = useReducer(reducer, {})
-  const phaseSitePages = context.state.data.phaseSitePages
-  const confirmPhaseName = context.state.confirmPhase.name
-  const phaseSitePage =
-    phaseSitePages && _.find(phaseSitePages, (p) => p.title === confirmPhaseName)
 
   useEffect(() => dispatch(INIT({ context })), [])
 
@@ -50,25 +45,14 @@ export const ChangePhaseDialog: FC = () => {
         containerClassName={styles.root}
         title={strings.ChangePhaseText}
         subText={
-          state.view === View.Confirm && format(strings.ConfirmChangePhase, confirmPhaseName)
+          state.view === View.Confirm &&
+          format(strings.ConfirmChangePhase, context.state.confirmPhase.name)
         }
         dialogContentProps={{ type: DialogType.largeHeader }}
         modalProps={{ isDarkOverlay: true, isBlocking: false }}
         onDismiss={() => context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())}>
         {state.view === View.Confirm && context.props.useDynamicHomepage && (
-          <div className={styles.dynamicHomepageContent}>
-            <UserMessage
-              text={
-                phaseSitePage
-                  ? format(
-                      strings.PhaseSitePageFoundDescription,
-                      phaseSitePage && phaseSitePage.fileLeafRef
-                    )
-                  : format(strings.PhaseSitePageNotFoundDescription, confirmPhaseName)
-              }
-              type={phaseSitePage ? MessageBarType.info : MessageBarType.warning}
-            />
-          </div>
+          <DynamicHomepageContent />
         )}
         <Body />
         <Footer />
