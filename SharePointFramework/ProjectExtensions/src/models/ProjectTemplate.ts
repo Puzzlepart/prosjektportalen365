@@ -3,6 +3,8 @@ import { TypedHash } from '@pnp/common'
 import { Web } from '@pnp/sp'
 import { Schema } from 'sp-js-provisioning'
 import { isArray } from 'underscore'
+import { ContentConfig } from './ContentConfig'
+import { ProjectExtension } from './ProjectExtension'
 import { UserSelectableObject } from './UserSelectableObject'
 
 export interface IProjectTemplateSPItem {
@@ -33,8 +35,8 @@ export class ProjectTemplate extends UserSelectableObject {
   public iconProps: Pick<IIconProps, 'iconName' | 'styles'>
   public projectTemplateId: number = -1
   public projectTemplateUrl: string
-  public listContentConfigIds: number[] = []
-  public isDefaultListContentLocked: boolean
+  public contentConfigIds: number[] = []
+  public isDefaultContentConfigLocked: boolean
   public extensionIds: number[] = []
   public isDefaultExtensionsLocked: boolean
   public isProgram: boolean
@@ -56,9 +58,9 @@ export class ProjectTemplate extends UserSelectableObject {
     )
     this.iconProps = { iconName: spItem.IconName }
     this.isDefaultExtensionsLocked = spItem?.IsDefaultExtensionsLocked
-    this.isDefaultListContentLocked = spItem?.IsDefaultListContentLocked
+    this.isDefaultContentConfigLocked = spItem?.IsDefaultListContentLocked
     this.projectTemplateId = spItem.GtProjectTemplateId
-    this.listContentConfigIds = isArray(spItem.ListContentConfigLookupId)
+    this.contentConfigIds = isArray(spItem.ListContentConfigLookupId)
       ? spItem.ListContentConfigLookupId
       : []
     this.extensionIds = isArray(spItem.GtProjectExtensionsId) ? spItem.GtProjectExtensionsId : []
@@ -69,6 +71,29 @@ export class ProjectTemplate extends UserSelectableObject {
     this._projectColumns = spItem.GtProjectColumns
     this._projectCustomColumns = spItem.GtProjectCustomColumns
     this._projectPhaseTermId = spItem.GtProjectPhaseTermId
+  }
+
+  /**
+   * Get content configurations for the template
+   * 
+   * @param contentConfig Available content configurations
+   */
+  public getContentConfig(contentConfig: ContentConfig[]) {
+    return contentConfig.filter(
+      (lcc) =>
+        lcc.isDefault(this) || this.contentConfigIds.some((id) => id === lcc.id)
+    )
+  }
+
+  /**
+   * Get extensions for the template
+   * 
+   * @param extensions Available extensions
+   */
+  public getExtensions(extensions: ProjectExtension[]) {
+    return extensions.filter(
+      (ext) => ext.isDefault(this) || this.extensionIds.some((id) => id === ext.id)
+    )
   }
 
   public async getSchema(): Promise<Schema> {
