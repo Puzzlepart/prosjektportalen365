@@ -3,10 +3,9 @@ import { ProjectTemplate } from 'models'
 import strings from 'ProjectExtensionsStrings'
 import React, { useContext, useState } from 'react'
 import Autocomplete from 'react-autocomplete'
-import { isEmpty } from 'underscore'
 import { TemplateSelectDialogContext } from '../context'
 import { ON_TEMPLATE_CHANGED } from '../reducer'
-import { TemplateListContentConfigMessage } from '../TemplateListContentConfigMessage'
+import { TemplateConfigMessage } from '../TemplateConfigMessage'
 import { TemplateSelectDialogSectionComponent } from '../types'
 import styles from './TemplateSelector.module.scss'
 import { TemplateSelectorItem } from './TemplateSelectorItem'
@@ -55,10 +54,7 @@ export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
           }}
           selectOnBlur={true}
         />
-        {(!isEmpty(context.state.selectedTemplate?.listContentConfigIds) ||
-          !isEmpty(context.state.selectedTemplate?.extensionIds)) && (
-          <TemplateListContentConfigMessage />
-        )}
+        <TemplateConfigMessage section='TemplateSelector' />
       </div>
     </div>
   )

@@ -91,7 +91,7 @@ declare interface IProjectExtensionsStrings {
   PhaseLabel: string
   SetupAbortedText: string
   UnknownErrorText: string
-  TemplateListContentConfigText: string
+  TemplateConfigText: string
   ProjectAlreadySetupMessage: string
   ProjectAlreadySetupStack: string
   ProjectProvisioningSuccessLogText: string

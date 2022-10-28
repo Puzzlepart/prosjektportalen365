@@ -86,7 +86,7 @@ define([], function () {
         PhaseLabel: 'Fase',
         SetupAbortedText: 'Installasjon avbrutt av bruker',
         UnknownErrorText: 'Ukjent feil',
-        TemplateListContentConfigText: 'Den valgte prosjektmalen **{0}** inneholder konfigurasjon for standardinnhold og/eller prosjekttillegg. Disse er valgt som standard.',
+        TemplateConfigText: 'Den valgte prosjektmalen **{0}** inneholder konfigurasjon for {1}. Disse er valgt som standard.',
         DescriptionLabel: 'Beskrivelse',
         FolderDropdownLabel: 'Velg mappe',
         DocumentLibraryDropdownLabel: 'Velg dokumentbibliotek',
