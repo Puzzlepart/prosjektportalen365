@@ -1,6 +1,8 @@
 Param(
     [Parameter(Mandatory = $true)]
-    [string]$Url
+    [string]$Url,
+    [Parameter(Mandatory = $false, HelpMessage = "Used by Continuous Integration")]
+    [string]$CI
 )
 
 $global:__PnPConnection = $null
@@ -15,16 +17,29 @@ function Connect-SharePoint {
     )
 
     Try {
-        if ($null -ne $global:__PnPConnection.ClientId) {
-            Connect-PnPOnline -Url $Url -Interactive -ClientId $global:__PnPConnection.ClientId -ErrorAction Stop -WarningAction Ignore
+        if (-not [string]::IsNullOrEmpty($CI)) {
+            $DecodedCred = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($CI))).Split("|")
+            $Password = ConvertTo-SecureString -String $DecodedCred[1] -AsPlainText -Force
+            $Credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $DecodedCred[0], $Password
+            Connect-PnPOnline -Url $Url -Credentials $Credentials -ErrorAction Stop  -WarningAction Ignore
         }
-        Connect-PnPOnline -Url $Url -Interactive -ErrorAction Stop -WarningAction Ignore
-        $global:__PnPConnection = Get-PnPConnection
+        else {
+            if ($null -ne $global:__PnPConnection.ClientId) {
+                Connect-PnPOnline -Url $Url -Interactive -ClientId $global:__PnPConnection.ClientId -ErrorAction Stop -WarningAction Ignore
+            }
+            Connect-PnPOnline -Url $Url -Interactive -ErrorAction Stop -WarningAction Ignore
+            $global:__PnPConnection = Get-PnPConnection
+        }
     }
     Catch {
         Write-Host "[INFO] Failed to connect to [$Url]: $($_.Exception.Message)"
         throw $_.Exception.Message
     }
+}
+
+if (-not [string]::IsNullOrEmpty($CI)) {
+    Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
+    Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
 }
 
 function EnsureProjectTimelinePage() {
@@ -128,7 +143,8 @@ function EnsureHelpContentExtension() {
     if ($null -eq (Get-PnPCustomAction | Where-Object { $_.ClientSideComponentId -eq $ClientSideComponentId })) {
         Write-Host "`t`tAdding help content extension to site"
         Add-PnPCustomAction -Title "Hjelpeinnhold" -Name "Hjelpeinnhold" -Location "ClientSideExtension.ApplicationCustomizer" -ClientSideComponentId $ClientSideComponentId -ClientSideComponentProperties "{`"listName`":`"Hjelpeinnhold`",`"linkText`":`"Hjelp tilgjengelig`"}"  >$null 2>&1
-    } else {
+    }
+    else {
         Write-Host "`t`tThe site already has the help content extension" -ForegroundColor Green
     }
 }
@@ -162,13 +178,15 @@ $ProjectsInHub = Get-PP365HubSiteChild -Identity (Get-PnPHubSite -Identity $Url)
 Write-Host "The following sites were found to be part of the Project Portal hub:"
 $ProjectsInHub | ForEach-Object { Write-Host "`t$_" }
 
-Write-Host "We can grant $UserName admin access to existing projects. This will ensure that all project will be upgraded. If you select no, the script will only upgrade the sites you are already an owner of."
-do {
-    $YesOrNo = Read-Host "Do you want to grant $UserName access to all sites in the hub (listed above)? (y/n)"
-} 
-while ("y", "n" -notcontains $YesOrNo)
+if ([string]::IsNullOrEmpty($CI)) {
+    Write-Host "We can grant $UserName admin access to existing projects. This will ensure that all project will be upgraded. If you select no, the script will only upgrade the sites you are already an owner of."
+    do {
+        $YesOrNo = Read-Host "Do you want to grant $UserName access to all sites in the hub (listed above)? (y/n)"
+    } 
+    while ("y", "n" -notcontains $YesOrNo)
+}
 
-if ($YesOrNo -eq "y") {
+if ($YesOrNo -eq "y" -or (-not [string]::IsNullOrEmpty($CI))) {
     $ProjectsInHub | ForEach-Object {
         Write-Host "`tGranting access to $_"
         Set-PnPTenantSite -Url $_ -Owners $UserName
@@ -182,13 +200,15 @@ $ProjectsInHub | ForEach-Object {
     Write-Host "`t`tDone processing $_" -ForegroundColor Green
 }
 
-Write-Host "We can remove $UserName's admin access from existing projects."
-do {
-    $YesOrNo = Read-Host "Do you want to remove $UserName's admin access from all sites in the hub? (y/n)"
-} 
-while ("y", "n" -notcontains $YesOrNo)
+if ([string]::IsNullOrEmpty($CI)) {
+    Write-Host "We can remove $UserName's admin access from existing projects."
+    do {
+        $YesOrNo = Read-Host "Do you want to remove $UserName's admin access from all sites in the hub? (y/n)"
+    } 
+    while ("y", "n" -notcontains $YesOrNo)
+}
 
-if ($YesOrNo -eq "y") {
+if ($YesOrNo -eq "y" -or (-not [string]::IsNullOrEmpty($CI))) {
     $ProjectsInHub | ForEach-Object {
         Write-Host "`tRemoving access to $_"
         Connect-SharePoint -Url $_
