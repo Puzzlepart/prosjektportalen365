@@ -13,6 +13,11 @@ import { TemplateSelectDialogSectionComponent } from '../types'
 import styles from './ExtensionsSection.module.scss'
 import { useExtensionsSection } from './useExtensionsSection'
 
+/**
+ * Section for selection of project extensions.
+ * 
+ * @param props Props
+ */
 export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) => {
   const { selection, items, columns, onSearch, onRenderRow } = useExtensionsSection()
 
