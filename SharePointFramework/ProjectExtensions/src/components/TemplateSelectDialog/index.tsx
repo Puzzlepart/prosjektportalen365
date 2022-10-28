@@ -12,10 +12,10 @@ import { ITemplateSelectDialogProps } from './types'
 import { useTemplateSelectDialog } from './useTemplateSelectDialog'
 
 export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
-  const { state, setState, onSubmit } = useTemplateSelectDialog(props)
+  const { state, dispatch, onSubmit } = useTemplateSelectDialog(props)
 
   return (
-    <TemplateSelectDialogContext.Provider value={{ props, state, setState }}>
+    <TemplateSelectDialogContext.Provider value={{ props, state, dispatch }}>
       <BaseDialog
         version={props.version}
         dialogContentProps={{

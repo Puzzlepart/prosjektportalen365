@@ -28,8 +28,7 @@ export function useRowRenderer({ selectedKeys, searchTerm }) {
     }
     const shouldRenderRow =
       ext.text.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
-      selectedKeys.includes(ext.key) ||
-      isMandatory
+      selectedKeys.includes(ext.key)
     if (shouldRenderRow) return defaultRender(detailsRowProps)
     else return null
   }

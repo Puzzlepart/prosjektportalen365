@@ -4,6 +4,7 @@ import strings from 'ProjectExtensionsStrings'
 import React, { useContext, useState } from 'react'
 import Autocomplete from 'react-autocomplete'
 import { TemplateSelectDialogContext } from '../context'
+import { ON_TEMPLATE_CHANGED } from '../reducer'
 import { TemplateListContentConfigMessage } from '../TemplateListContentConfigMessage'
 import { TemplateSelectDialogSectionComponent } from '../types'
 import styles from './TemplateSelector.module.scss'
@@ -19,15 +20,7 @@ export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
    * @param template - Project template
    */
   const onTemplateChange = (template: ProjectTemplate): void => {
-    context.setState({
-      selectedTemplate: template,
-      selectedExtensions: context.props.data.extensions.filter(
-        (ext) => ext.isDefault || template?.extensionIds?.some((id) => id === ext.id)
-      ),
-      selectedListContentConfig: context.props.data.listContentConfig.filter(
-        (lcc) => lcc.isDefault || template?.listContentConfigIds?.some((id) => id === lcc.id)
-      )
-    })
+    context.dispatch(ON_TEMPLATE_CHANGED(template))
   }
 
   return (
@@ -35,7 +28,7 @@ export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
       <div className={styles.container}>
         <Autocomplete
           getItemValue={(template: ProjectTemplate) => template.text}
-          items={context.props.data.templates.filter((t) => !t.isHidden)}
+          items={context.props.data.templates.filter((t) => !t.hidden)}
           shouldItemRender={(template: ProjectTemplate) =>
             searchValue === context.state.selectedTemplate?.text ||
             template.text.toLowerCase().indexOf(searchValue.toLowerCase()) > -1

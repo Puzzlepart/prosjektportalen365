@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 import { TemplateSelectDialogContext } from '../context'
+import { ON_LIST_CONTENT_CONFIG_CHANGED } from '../reducer'
 import { useSelectionList } from '../useSelectionList'
 import { useColumns } from './useColumns'
 import { useRowRenderer } from './useRowRenderer'
@@ -10,12 +11,9 @@ import { useRowRenderer } from './useRowRenderer'
 export function useListContentSection() {
   const context = useContext(TemplateSelectDialogContext)
   const selectedKeys = context.state.selectedListContentConfig.map((lc) => lc.key)
-  const { selection, onSearch, searchTerm } = useSelectionList(
-    selectedKeys,
-    (selectedListContentConfig) => {
-      context.setState({ selectedListContentConfig })
-    }
-  )
+  const { selection, onSearch, searchTerm } = useSelectionList(selectedKeys, (selection) => {
+    context.dispatch(ON_LIST_CONTENT_CONFIG_CHANGED(selection))
+  })
   const items = context.props.data.listContentConfig.filter((lcc) => !lcc.hidden)
   const columns = useColumns()
   const onRenderRow = useRowRenderer({ selectedKeys, searchTerm })

@@ -28,8 +28,7 @@ export function useRowRenderer({ selectedKeys, searchTerm }) {
     }
     const shouldRenderRow =
       lcc.text.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
-      selectedKeys.includes(lcc.key) ||
-      isMandatory
+      selectedKeys.includes(lcc.key)
     if (shouldRenderRow) return defaultRender(detailsRowProps)
     else return null
   }
