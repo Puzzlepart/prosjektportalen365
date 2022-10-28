@@ -125,9 +125,11 @@ function EnsureProgramAggregrationWebPart() {
 
 function EnsureHelpContentExtension() {
     $ClientSideComponentId = "28987406-2a67-48a8-9297-fd2833bf0a09"
-    if($null -eq (Get-PnPCustomAction | Where-Object { $_.ClientSideComponentId -eq $ClientSideComponentId })) {
-        Write-Host "`t`tAdding help content extension"
-        #Add-PnPCustomAction -Title "Hjelpeinnhold" -Name "Hjelpeinnhold" -Location "ClientSideExtension.ApplicationCustomizer" -ClientSideComponentId $ClientSideComponentId -ClientSideComponentProperties "{`"listName`":`"Hjelpeinnhold`",`"linkText`":`"Hjelp tilgjengelig`"}"
+    if ($null -eq (Get-PnPCustomAction | Where-Object { $_.ClientSideComponentId -eq $ClientSideComponentId })) {
+        Write-Host "`t`tAdding help content extension to site"
+        Add-PnPCustomAction -Title "Hjelpeinnhold" -Name "Hjelpeinnhold" -Location "ClientSideExtension.ApplicationCustomizer" -ClientSideComponentId $ClientSideComponentId -ClientSideComponentProperties "{`"listName`":`"Hjelpeinnhold`",`"linkText`":`"Hjelp tilgjengelig`"}"  >$null 2>&1
+    } else {
+        Write-Host "`t`tThe site already has the help content extension" -ForegroundColor Green
     }
 }
 
@@ -155,8 +157,7 @@ $Context.Load($Context.Web.CurrentUser)
 $Context.ExecuteQuery()
 $UserName = $Context.Web.CurrentUser.LoginName
 
-$PPHubSite = Get-PnPHubSite -Identity $Url
-$ProjectsInHub = Get-PP365HubSiteChild -Identity $PPHubSite
+$ProjectsInHub = Get-PP365HubSiteChild -Identity (Get-PnPHubSite -Identity $Url)
 
 Write-Host "The following sites were found to be part of the Project Portal hub:"
 $ProjectsInHub | ForEach-Object { Write-Host "`t$_" }
