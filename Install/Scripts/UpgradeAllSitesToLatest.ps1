@@ -130,14 +130,15 @@ function EnsureResourceLoadIsSiteColumn() {
 }
 
 function EnsureProgramAggregrationWebPart() {
-    $Pages = Get-Content "./EnsureProgramAggregrationWebPart/$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+    $BaseDir = "$ScriptDir/EnsureProgramAggregrationWebPart"
+    $Pages = Get-Content "$BaseDir/$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
     foreach ($Page in $Pages.PSObject.Properties.GetEnumerator()) {
         $DeprecatedComponent = Get-PnPPageComponent -Page "$($Page.Name).aspx" -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $Page.Value } | Select-Object -First 1
         if ($null -ne $DeprecatedComponent) {
             Write-Host "`t`tReplacing deprecated component $($Page.Value) for $($Page.Name).aspx"
-            $JsonControlData = Get-Content "./EnsureProgramAggregrationWebPart/JsonControlData_$($Page.Name).json" -Raw -Encoding UTF8
+            $JsonControlData = Get-Content "$BaseDir/JsonControlData_$($Page.Name).json" -Raw -Encoding UTF8
             $Title = $JsonControlData | ConvertFrom-Json | Select-Object -ExpandProperty title
-            Invoke-PnPSiteTemplate -Path ./EnsureProgramAggregrationWebPart/Template_ProgramAggregationWebPart.xml -Parameters @{"JsonControlData" = $JsonControlData; "PageName" = "$($Page.Name).aspx"; "Title" = $Title }
+            Invoke-PnPSiteTemplate -Path "$BaseDir/Template_ProgramAggregationWebPart.xml" -Parameters @{"JsonControlData" = $JsonControlData; "PageName" = "$($Page.Name).aspx"; "Title" = $Title }
         }
     }
 }
