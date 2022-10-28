@@ -7,6 +7,7 @@ import {
 } from '@fluentui/react'
 import strings from 'ProjectExtensionsStrings'
 import React, { useContext } from 'react'
+import { isEmpty } from 'underscore'
 import { TemplateSelectDialogContext } from '../context'
 import { ListHeaderSearch } from '../ListHeaderSearch'
 import { TemplateListContentConfigMessage } from '../TemplateListContentConfigMessage'
@@ -40,7 +41,9 @@ export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) =
           )}
           onRenderDetailsFooter={() => (
             <Sticky stickyPosition={StickyPositionType.Footer}>
-              {context.state.selectedTemplate?.extensionIds && <TemplateListContentConfigMessage />}
+              {!isEmpty(context.state.selectedTemplate?.extensionIds) && (
+                <TemplateListContentConfigMessage />
+              )}
             </Sticky>
           )}
           items={items}
