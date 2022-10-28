@@ -37,7 +37,7 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Language")]
     [ValidateSet('Norwegian')]
     [string]$Language = "Norwegian",
-    [Parameter(Mandatory = $false, HelpMessage = "CI")]
+    [Parameter(Mandatory = $false, HelpMessage = "Used by Continuous Integration")]
     [string]$CI
 )
 
