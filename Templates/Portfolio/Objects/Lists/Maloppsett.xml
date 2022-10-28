@@ -26,7 +26,13 @@
     </Field>
     <Field Type="Lookup" DisplayName="Mal" Required="TRUE" List="{listid:Prosjektmaler}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{8e762956-13a9-4cbd-965b-bbfed0d0d7a0}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectTemplate" Name="GtProjectTemplate" />
     <Field Type="LookupMulti" DisplayName="Utvidelser" List="{listid:Prosjekttillegg}" ShowField="Title" Mult="TRUE" Sortable="FALSE" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{5627c98b-c725-44d0-9415-3125b8f61302}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectExtensions" Name="GtProjectExtensions" />
+    <Field Type="Boolean" DisplayName="Lås valgte utvidelser?" Description="Dette gjør at valgte utvidelser for denne malen blir satt som obligatorisk." ID="{c5091d4a-9b05-4cd4-96e7-9076d4d66379}" SourceID="{{listid:Maloppsett}}" StaticName="IsDefaultExtensionsLocked" Name="IsDefaultExtensionsLocked">
+      <Default>0</Default>
+    </Field>
     <Field Type="LookupMulti" DisplayName="Listeinnhold" List="{listid:Listeinnhold}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{a5554044-ab27-43b8-b11e-0fbfd641790c}" SourceID="{{listid:Maloppsett}}" StaticName="ListContentConfigLookup" Name="ListContentConfigLookup" Mult="TRUE" Sortable="FALSE" />
+    <Field Type="Boolean" DisplayName="Lås valgte listeinnhold?" Description="Dette gjør at valgt listeinnhold for denne malen blir satt som obligatorisk." ID="{6e551826-2069-4ac9-a199-01f573fbccff}" SourceID="{{listid:Maloppsett}}" StaticName="IsDefaultListContentLocked" Name="IsDefaultListContentLocked">
+      <Default>0</Default>
+    </Field>
     <Field Type="Text" DisplayName="Prosjektfase Termsett ID" MaxLength="255" ID="{6287b5c6-85da-420d-815b-47de8122ec14}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectPhaseTermId" Name="GtProjectPhaseTermId">
       <Default>abcfc9d9-a263-4abb-8234-be973c46258a</Default>
     </Field>
@@ -46,12 +52,6 @@
       <Default>Egendefinerte kolonner for Prosjektportalen</Default>
     </Field>
     <Field Type="Boolean" DisplayName="Standard mal?" ID="{80a9dc17-834e-4c30-af28-87f3ef1900df}" SourceID="{{listid:Maloppsett}}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate">
-      <Default>0</Default>
-    </Field>
-    <Field Type="Boolean" DisplayName="Lås valgte utvidelser?" Description="Dette gjør at valgte tillegg for denne malen blir satt som obligatorisk." ID="{c5091d4a-9b05-4cd4-96e7-9076d4d66379}" SourceID="{{listid:Maloppsett}}" StaticName="IsDefaultExtensionsLocked" Name="IsDefaultExtensionsLocked">
-      <Default>0</Default>
-    </Field>
-    <Field Type="Boolean" DisplayName="Lås valgte listeinnhold?" Description="Dette gjør at valgt listeinnhold for denne malen blir satt som obligatorisk." ID="{6e551826-2069-4ac9-a199-01f573fbccff}" SourceID="{{listid:Maloppsett}}" StaticName="IsDefaultListContentLocked" Name="IsDefaultListContentLocked">
       <Default>0</Default>
     </Field>
   </pnp:Fields>

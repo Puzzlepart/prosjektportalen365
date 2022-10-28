@@ -764,7 +764,7 @@
     <value>Biblioteksurl (mål)</value>
   </data>
   <data name="SiteFields_GtLccLocked_Description" xml:space="preserve">
-    <value>Lås elementet. Bruk sammen med "Velges som standard" for å sette elementet som obligatorisk.</value>
+    <value>Lås elementet. Bruk sammen med 'Velges som standard' for å sette elementet som obligatorisk. Om elementet er satt som låst, men ikke satt som 'Velges som standard' vil ikke elementet vises i dialogen for oppsett av nytt prosjektområde.</value>
   </data>
   <data name="SiteFields_GtLccLocked_DisplayName" xml:space="preserve">
     <value>Låst</value>
@@ -1727,7 +1727,7 @@
     <value>Skjult</value>
   </data>
   <data name="SiteFields_GtExtensionLocked_Description" xml:space="preserve">
-    <value>Lås elementet. Bruk sammen med 'Velges som standard' for å sette elementet som obligatorisk.</value>
+    <value>Lås elementet. Bruk sammen med 'Velges som standard' for å sette elementet som obligatorisk. Om elementet er satt som låst, men ikke satt som 'Velges som standard' vil ikke elementet vises i dialogen for oppsett av nytt prosjektområde.</value>
   </data>
   <data name="SiteFields_GtExtensionLocked_DisplayName" xml:space="preserve">
     <value>Låst</value>
