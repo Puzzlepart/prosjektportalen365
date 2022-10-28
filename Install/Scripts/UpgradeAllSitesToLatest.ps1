@@ -27,7 +27,7 @@ function Connect-SharePoint {
     }
 }
 
-function EnsureProjectTimelinePage($Url) {
+function EnsureProjectTimelinePage() {
     $ExistingNodes = Get-PnPNavigationNode -Location QuickLaunch -ErrorAction SilentlyContinue
     if ($null -eq $ExistingNodes) {
         Write-Host "`t`tCannot connect to site. Do you have access?" -ForegroundColor Red
@@ -51,7 +51,7 @@ function EnsureProjectTimelinePage($Url) {
     }
 }
 
-function EnsureResourceLoadIsSiteColumn($Url) {
+function EnsureResourceLoadIsSiteColumn() {
     $ResourceAllocation = Get-PnPList -Identity "Ressursallokering" -ErrorAction SilentlyContinue
     if ($null -ne $ResourceAllocation) {
         $ResourceLoadSiteColumn = Get-PnPField -Identity "GtResourceLoad"
@@ -110,7 +110,7 @@ function EnsureResourceLoadIsSiteColumn($Url) {
     }
 }
 
-function EnsureProgramAggregrationWebPart($Url) {
+function EnsureProgramAggregrationWebPart() {
     $Pages = Get-Content "./EnsureProgramAggregrationWebPart/$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
     foreach ($Page in $Pages.PSObject.Properties.GetEnumerator()) {
         $DeprecatedComponent = Get-PnPPageComponent -Page "$($Page.Name).aspx" -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $Page.Value } | Select-Object -First 1
@@ -123,11 +123,20 @@ function EnsureProgramAggregrationWebPart($Url) {
     }
 }
 
+function EnsureHelpContentExtension() {
+    $ClientSideComponentId = "28987406-2a67-48a8-9297-fd2833bf0a09"
+    if($null -eq (Get-PnPCustomAction | Where-Object { $_.ClientSideComponentId -eq $ClientSideComponentId })) {
+        Write-Host "`t`tAdding help content extension"
+        #Add-PnPCustomAction -Title "Hjelpeinnhold" -Name "Hjelpeinnhold" -Location "ClientSideExtension.ApplicationCustomizer" -ClientSideComponentId $ClientSideComponentId -ClientSideComponentProperties "{`"listName`":`"Hjelpeinnhold`",`"linkText`":`"Hjelp tilgjengelig`"}"
+    }
+}
+
 function UpgradeSite($Url) {
     Connect-SharePoint -Url $Url
-    EnsureProjectTimelinePage -Url $Url
-    EnsureResourceLoadIsSiteColumn -Url $Url
-    EnsureProgramAggregrationWebPart -Url $Url
+    EnsureProjectTimelinePage
+    EnsureResourceLoadIsSiteColumn
+    EnsureProgramAggregrationWebPart
+    EnsureHelpContentExtension
 }
 
 Write-Host "This script will update all existing sites in a Prosjektportalen installation. This requires you to have the SharePoint admin role"
