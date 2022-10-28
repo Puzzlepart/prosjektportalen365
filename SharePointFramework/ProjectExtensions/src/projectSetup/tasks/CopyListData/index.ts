@@ -4,7 +4,7 @@ import { IProjectSetupData } from 'projectSetup'
 import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { SPField } from 'pp365-shared/lib/models/SPField'
-import { IPlannerTaskSPItem, ListContentConfig, ListContentConfigType } from '../../../models'
+import { IPlannerTaskSPItem, ContentConfig, ContentConfigType } from '../../../models'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 import {
@@ -39,14 +39,14 @@ export class CopyListData extends BaseTask {
         params.context.pageContext.legacyPageContext.groupId,
         false
       )
-      for (let i = 0; i < this.data.selectedListContentConfig.length; i++) {
-        const config = this.data.selectedListContentConfig[i]
-        await config.load()
+      for (let i = 0; i < this.data.selectedContentConfig.length; i++) {
+        const contentConfig = this.data.selectedContentConfig[i]
+        await contentConfig.load()
         // eslint-disable-next-line default-case
-        switch (config.type) {
-          case ListContentConfigType.Planner:
+        switch (contentConfig.type) {
+          case ContentConfigType.Planner:
             {
-              const items = await this._getSourceItems<IPlannerTaskSPItem>(config, [
+              const items = await this._getSourceItems<IPlannerTaskSPItem>(contentConfig, [
                 'Title',
                 'GtDescription',
                 'GtCategory',
@@ -86,10 +86,10 @@ export class CopyListData extends BaseTask {
               )
             }
             break
-          case ListContentConfigType.List:
+          case ContentConfigType.List:
             {
-              if (config.sourceListProps.BaseTemplate === 101) await this._processFiles(config)
-              else await this._processListItems(config)
+              if (contentConfig.sourceListProps.BaseTemplate === 101) await this._processFiles(contentConfig)
+              else await this._processListItems(contentConfig)
             }
             break
         }
@@ -107,7 +107,7 @@ export class CopyListData extends BaseTask {
    * @param fields Fields
    */
   private async _getSourceItems<T = any>(
-    config: ListContentConfig,
+    config: ContentConfig,
     fields?: string[]
   ): Promise<T[]> {
     try {
@@ -127,9 +127,9 @@ export class CopyListData extends BaseTask {
   /**
    * Get source fields
    *
-   * @param config List config
+   * @param config Content config
    */
-  private async _getSourceFields(config: ListContentConfig): Promise<SPField[]> {
+  private async _getSourceFields(config: ContentConfig): Promise<SPField[]> {
     try {
       return await config.sourceList.fields.select(...Object.keys(new SPField())).get<SPField[]>()
     } catch (error) {
@@ -140,10 +140,10 @@ export class CopyListData extends BaseTask {
   /**
    * Process list items
    *
-   * @param config List config
+   * @param config Content config
    * @param batchChunkSize Batch chunk size (defaults to 25)
    */
-  private async _processListItems(config: ListContentConfig, batchChunkSize = 25) {
+  private async _processListItems(config: ContentConfig, batchChunkSize = 25) {
     try {
       this.logInformation('Processing list items', { listConfig: config })
       const progressText = format(
@@ -211,12 +211,12 @@ export class CopyListData extends BaseTask {
   /**
    * Create folder hierarchy
    *
-   * @param config List config
+   * @param config Content config
    * @param folders An array of folders to provision
    * @param progressText Progress text
    */
   private async _provisionFolderHierarchy(
-    config: ListContentConfig,
+    config: ContentConfig,
     folders: string[],
     progressText: string
   ): Promise<void> {
@@ -245,9 +245,9 @@ export class CopyListData extends BaseTask {
   /**
    * Process files
    *
-   * @param config List config
+   * @param config Content config
    */
-  private async _processFiles(config: ListContentConfig) {
+  private async _processFiles(config: ContentConfig) {
     try {
       this.logInformation('Processing files', { listConfig: config })
       const progressText = format(

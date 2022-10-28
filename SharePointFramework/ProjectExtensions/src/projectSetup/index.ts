@@ -23,7 +23,7 @@ import {
   TemplateSelectDialog
 } from '../components'
 import {
-  ListContentConfig,
+  ContentConfig,
   ProjectExtension,
   ProjectTemplate,
   ProjectTemplateFile
@@ -209,7 +209,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     return {
       selectedTemplate,
       selectedExtensions: [],
-      selectedListContentConfig: [],
+      selectedContentConfig: [],
       settings: new ProjectSetupSettings().useDefault()
     }
   }
@@ -397,7 +397,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             )
           : Promise.resolve([]),
         this.properties.contentConfigList
-          ? this._portal.getItems(this.properties.contentConfigList, ListContentConfig, {}, [
+          ? this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, [
               'File'
             ])
           : Promise.resolve([]),
@@ -427,7 +427,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       return {
         ...data,
         extensions,
-        listContentConfig,
+        contentConfig: listContentConfig,
         templates
       }
     } catch (error) {
