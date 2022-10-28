@@ -5,6 +5,7 @@ Param(
     [string]$CI
 )
 
+
 $CI_MODE = (-not ([string]::IsNullOrEmpty($CI)))
 
 $global:__PnPConnection = $null
