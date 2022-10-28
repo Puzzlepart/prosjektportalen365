@@ -33,11 +33,11 @@ export default (data: IProjectSetupData) =>
       state: ITemplateSelectDialogState,
       { payload }: ReturnType<typeof ON_LIST_CONTENT_CONFIG_CHANGED>
     ) => {
-      const mandatorylistContentConfig = data.contentConfig.filter((lcc) =>
+      const mandatoryContentConfig = data.contentConfig.filter((lcc) =>
         lcc.isMandatory(state.selectedTemplate)
       )
       state.selectedContentConfig = uniq(
-        [...mandatorylistContentConfig, ...payload],
+        [...mandatoryContentConfig, ...payload],
         (lcc) => lcc.id
       )
     },

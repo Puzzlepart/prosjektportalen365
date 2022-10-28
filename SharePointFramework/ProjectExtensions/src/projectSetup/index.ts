@@ -353,25 +353,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         level: LogLevel.Info
       })
       await MSGraphHelper.Init(this.context.msGraphClientFactory)
-      Logger.log({
-        message: '(ProjectSetup) [_fetchData]: Retrieving hub site url',
-        data: {},
-        level: LogLevel.Info
-      })
       const data: IProjectSetupData = {}
       data.hub = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
       this._portal = new PortalDataService().configure({ urlOrWeb: data.hub.web })
-      Logger.log({
-        message: '(ProjectSetup) [_fetchData]: Retrieved hub site url',
-        data: { hubUrl: data.hub.url },
-        level: LogLevel.Info
-      })
-      Logger.log({
-        message: '(ProjectSetup) [_fetchData]: Retrieving templates, extensions and content config',
-        data: {},
-        level: LogLevel.Info
-      })
-      const [_templates, extensions, listContentConfig, templateFiles] = await Promise.all([
+      const [_templates, extensions, contentConfig, templateFiles] = await Promise.all([
         this._portal.getItems(
           this.properties.templatesLibrary,
           ProjectTemplate,
@@ -382,14 +367,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         ),
         this.properties.extensionsLibrary
           ? this._portal.getItems(
-              this.properties.extensionsLibrary,
-              ProjectExtension,
-              {
-                ViewXml:
-                  '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-              },
-              ['File', 'FieldValuesAsText']
-            )
+            this.properties.extensionsLibrary,
+            ProjectExtension,
+            {
+              ViewXml:
+                '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+            },
+            ['File', 'FieldValuesAsText']
+          )
           : Promise.resolve([]),
         this.properties.contentConfigList
           ? this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File'])
@@ -408,19 +393,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         tmpl.projectTemplateUrl = tmplFile?.serverRelativeUrl
         return tmpl
       })
-      Logger.log({
-        message: '(ProjectSetup) [_fetchData]: Retrieved templates, extensions and content config',
-        data: {
-          templates: templates.length,
-          extensions: extensions.length,
-          listContentConfig: listContentConfig.length
-        },
-        level: LogLevel.Info
-      })
       return {
         ...data,
         extensions,
-        contentConfig: listContentConfig,
+        contentConfig,
         templates
       }
     } catch (error) {

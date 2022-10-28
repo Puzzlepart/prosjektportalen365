@@ -2,7 +2,7 @@ import { IColumn } from '@fluentui/react'
 import strings from 'ProjectExtensionsStrings'
 
 /**
- * Columns hook for `ListContentSection`
+ * Columns hook for `ContentConfigSection`
  */
 export function useColumns() {
   return [

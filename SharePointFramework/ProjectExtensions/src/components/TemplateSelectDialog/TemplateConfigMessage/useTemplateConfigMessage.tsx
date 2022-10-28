@@ -16,7 +16,7 @@ export function useTemplateConfigMessage({ section }: ITemplateConfigMessageProp
   const templateHasContentConfig = !isEmpty(context.state.selectedTemplate?.contentConfigIds)
   const hidden = !(
     (section === 'ExtensionsSection' && templateHasExtensions) ||
-    (section === 'ListContentSection' && templateHasContentConfig) ||
+    (section === 'ContentConfigSection' && templateHasContentConfig) ||
     (section === 'TemplateSelector' && (templateHasExtensions || templateHasContentConfig))
   )
   const text = format(
@@ -24,7 +24,7 @@ export function useTemplateConfigMessage({ section }: ITemplateConfigMessageProp
     context.state.selectedTemplate?.text,
     [
       templateHasExtensions && strings.ExtensionsSectionHeaderText,
-      templateHasContentConfig && strings.ListContentSectionHeaderText
+      templateHasContentConfig && strings.ContentConfigSectionHeaderText
     ]
       .filter(Boolean)
       .join(' og ')

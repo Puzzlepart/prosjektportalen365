@@ -5,7 +5,7 @@ import { isEmpty } from 'underscore'
 import { BaseDialog } from '../@BaseDialog'
 import { TemplateSelectDialogContext } from './context'
 import { ExtensionsSection } from './ExtensionsSection'
-import { ListContentSection } from './ListContentSection'
+import { ContentConfigSection } from './ContentConfigSection'
 import styles from './TemplateSelectDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
 import { ITemplateSelectDialogProps } from './types'
@@ -42,7 +42,7 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
             <ExtensionsSection style={{ height: 400 }} />
           </PivotItem>
           <PivotItem
-            headerText={strings.ListContentSectionHeaderText}
+            headerText={strings.ContentConfigSectionHeaderText}
             itemIcon='ViewList'
             headerButtonProps={
               isEmpty(props.data.contentConfig) && {
@@ -50,7 +50,7 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
                 style: { opacity: 0.3, cursor: 'default' }
               }
             }>
-            <ListContentSection style={{ height: 400 }} />
+            <ContentConfigSection style={{ height: 400 }} />
           </PivotItem>
         </Pivot>
         <DialogFooter>

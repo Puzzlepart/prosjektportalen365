@@ -1,3 +1,3 @@
 export interface ITemplateConfigMessageProps {
-  section: 'ExtensionsSection' | 'ListContentSection' | 'TemplateSelector'
+  section: 'ExtensionsSection' | 'ContentConfigSection' | 'TemplateSelector'
 }

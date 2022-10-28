@@ -6,7 +6,7 @@ import { CheckLocked } from '../CheckLocked'
 import { TemplateSelectDialogContext } from '../context'
 
 /**
- * Row renderer hook for `ListContentSection`. Returns an instance of
+ * Row renderer hook for `ContentConfigSection`. Returns an instance of
  * `onRenderRow`.
  */
 export function useRowRenderer({ selectedKeys, searchTerm }) {
@@ -20,7 +20,7 @@ export function useRowRenderer({ selectedKeys, searchTerm }) {
     detailsRowProps.disabled = isMandatory
     if (isMandatory) {
       detailsRowProps.onRenderCheck = (props) => (
-        <CheckLocked {...props} tooltip={{ text: strings.ListContentLockedTooltipText }} />
+        <CheckLocked {...props} tooltip={{ text: strings.ContentConfigLockedTooltipText }} />
       )
       detailsRowProps.styles = {
         root: { background: 'rgb(237, 235, 233)', color: 'rgb(50, 49, 48)' }

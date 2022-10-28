@@ -6,9 +6,9 @@ import { useColumns } from './useColumns'
 import { useRowRenderer } from './useRowRenderer'
 
 /**
- * Component logic hook for `ListContentSection`
+ * Component logic hook for `ContentConfigSection`
  */
-export function useListContentSection() {
+export function useContentConfigSection() {
   const context = useContext(TemplateSelectDialogContext)
   const selectedKeys = context.state.selectedContentConfig.map((lc) => lc.key)
   const { selection, onSearch, searchTerm } = useSelectionList(selectedKeys, (selection) => {

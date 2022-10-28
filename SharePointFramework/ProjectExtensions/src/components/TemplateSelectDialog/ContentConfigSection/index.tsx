@@ -10,11 +10,11 @@ import React from 'react'
 import { ListHeaderSearch } from '../ListHeaderSearch'
 import { TemplateConfigMessage } from '../TemplateConfigMessage'
 import { TemplateSelectDialogSectionComponent } from '../types'
-import styles from './ListContentSection.module.scss'
-import { useListContentSection } from './useListContentSection'
+import styles from './ContentConfigSection.module.scss'
+import { useContentConfigSection } from './useContentConfigSection'
 
-export const ListContentSection: TemplateSelectDialogSectionComponent = (props) => {
-  const { selection, items, columns, onSearch, onRenderRow } = useListContentSection()
+export const ContentConfigSection: TemplateSelectDialogSectionComponent = (props) => {
+  const { selection, items, columns, onSearch, onRenderRow } = useContentConfigSection()
 
   return (
     <div className={styles.root} style={props.style}>
@@ -30,7 +30,7 @@ export const ListContentSection: TemplateSelectDialogSectionComponent = (props) 
               detailsHeaderProps={detailsHeaderProps}
               defaultRender={defaultRender}
               search={{
-                placeholder: strings.ListContentSectionSearchPlaceholder,
+                placeholder: strings.ContentConfigSectionSearchPlaceholder,
                 onSearch,
                 hidden: items.length < 5
               }}
@@ -38,7 +38,7 @@ export const ListContentSection: TemplateSelectDialogSectionComponent = (props) 
           )}
           onRenderDetailsFooter={() => (
             <Sticky stickyPosition={StickyPositionType.Footer}>
-              <TemplateConfigMessage section='ListContentSection' />
+              <TemplateConfigMessage section='ContentConfigSection' />
             </Sticky>
           )}
           items={items}
