@@ -7,7 +7,7 @@ import { IProjectStatusData, IProjectStatusProps } from './types'
 
 /**
  * Fetch data
- * 
+ *
  * @param props Props
  */
 export const fetchData = async (props: IProjectStatusProps): Promise<IProjectStatusData> => {
