@@ -17,11 +17,6 @@ export interface IProjectListView extends IPivotItemProps {
 
 export interface IProjectListProps extends IBaseComponentProps {
   /**
-   * Loading text
-   */
-  loadingText: string
-
-  /**
    * Sort by property
    */
   sortBy?: string
