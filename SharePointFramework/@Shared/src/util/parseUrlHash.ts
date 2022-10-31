@@ -1,7 +1,7 @@
 /**
  * Parse url hash
  *
- * @param {string} lowerCase Lower case hash
+ * @param lowerCase Lower case hash
  */
 export function parseUrlHash<T>(lowerCase: boolean = false): T {
   let hash = document.location.hash.substring(1)

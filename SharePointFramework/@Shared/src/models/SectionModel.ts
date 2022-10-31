@@ -30,7 +30,7 @@ export class SectionModel {
   /**
    * Constructor
    *
-   * @param {any} _item Section item
+   * @param _item Section item
    */
   constructor(private _item: any) {
     this.name = _item.Title

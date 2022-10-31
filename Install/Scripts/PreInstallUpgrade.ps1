@@ -3,9 +3,7 @@ $LastInstall = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><O
 if ($null -ne $LastInstall) {
     $PreviousVersion = $LastInstall.FieldValues["InstallVersion"]
 
-    if ($PreviousVersion -lt "1.4.0") {        
-        Write-Host "[INFO] Removing deprecated pages"
-        
+    if ($PreviousVersion -lt "1.4.0") {
         $DeprecatedIds = @(
             "d8558017-1e3b-4d13-82fa-2520e845297b", 
             "3ec6bcaf-28bc-4f2e-9e90-77e8cebf0b5f", 
@@ -22,13 +20,7 @@ if ($null -ne $LastInstall) {
         }
     }
 
-    if ($PreviousVersion -lt "1.6.0") {
-        Get-PnPProvisioningTemplate -Out "$BasePath\Navigation.xml" -Handlers Navigation -Force -Erroraction SilentlyContinue
-        ((Get-Content -path "$BasePath\Navigation.xml" -Raw) -replace 'false', 'true') | Set-Content -Path "$BasePath\Navigation.xml" -Force -ErrorAction SilentlyContinue
-
-        Write-Host "[INFO] Removing deprecated pages"
-        Write-Host "[INFO] In version v1.6.0 we reworked the aggregated webparts and removed the benefits webpart as this is now handled in the aggregated webpart. Removing pages so that we overwrite the old pages correctly"
-        
+    if ($PreviousVersion -lt "1.7.0") {
         $PnPClientSidePages = @(
             "Gevinstoversikt.aspx", 
             "Erfaringslogg.aspx", 

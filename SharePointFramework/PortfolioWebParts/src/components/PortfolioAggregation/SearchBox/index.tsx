@@ -1,6 +1,5 @@
+import { format, SearchBox } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
 import strings from 'PortfolioWebPartsStrings'
 import React, { useContext } from 'react'
 import { PortfolioAggregationContext } from '../context'
@@ -27,7 +26,7 @@ export default () => {
     <div className={styles.root} hidden={!props.showSearchBox}>
       <SearchBox
         placeholder={getPlaceholderText()}
-        onChange={(searchTerm) => dispatch(SEARCH({ searchTerm }))}
+        onChange={(_event, searchTerm) => dispatch(SEARCH({ searchTerm }))}
       />
     </div>
   )

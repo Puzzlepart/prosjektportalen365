@@ -1,5 +1,5 @@
 <pnp:ListInstance Title="{resource:Lists_ResourceAllocation_Title}" TemplateType="100" Url="{resource:Lists_ResourceAllocation_Url}" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000"
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x010029F45E75BA9CE340A83EFFB2927E11F4" Default="true" />
     </pnp:ContentTypeBindings>
@@ -26,7 +26,7 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="false" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="Beskrivelse" Required="false" />
     </pnp:FieldRefs>
     <pnp:Fields>
         <Field ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Type="Text" Name="Title" StaticName="Title" DisplayName="Beskrivelse" Description="Beskriv kort hensikten med allokeringen" />

@@ -1,10 +1,10 @@
-import { Modal } from 'office-ui-fabric-react/lib/Modal'
-import React, { FunctionComponent } from 'react'
+import { Modal } from '@fluentui/react/lib/Modal'
+import React, { FC } from 'react'
 import { ProjectInformation } from '../ProjectInformation'
 import styles from './ProjectInformationModal.module.scss'
 import { IProjectInformationModalProps } from './types'
 
-export const ProjectInformationModal: FunctionComponent<IProjectInformationModalProps> = (
+export const ProjectInformationModal: FC<IProjectInformationModalProps> = (
   props: IProjectInformationModalProps
 ) => {
   return (

@@ -1,11 +1,4 @@
 import { Web } from '@pnp/sp'
-import {
-  DetailsList,
-  DetailsListLayoutMode,
-  IColumn,
-  SelectionMode
-} from 'office-ui-fabric-react/lib/DetailsList'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import * as strings from 'ProjectWebPartsStrings'
 import React from 'react'
 import { RiskMatrix } from '../../../RiskMatrix'
@@ -14,6 +7,14 @@ import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection'
 import { IRiskSectionProps, IRiskSectionState, IRiskSectionData } from './types'
 import styles from './RiskSection.module.scss'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
+import {
+  MessageBarType,
+  DetailsList,
+  SelectionMode,
+  DetailsListLayoutMode,
+  IColumn
+} from '@fluentui/react'
 
 export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionState> {
   constructor(props: IRiskSectionProps) {
@@ -52,11 +53,7 @@ export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionStat
   private _renderContent() {
     if (this.state.loading || !this.state.data) return null
     if (this.state.error)
-      return (
-        <MessageBar messageBarType={MessageBarType.error}>
-          {strings.ListSectionDataErrorMessage}
-        </MessageBar>
-      )
+      return <UserMessage text={strings.ListSectionDataErrorMessage} type={MessageBarType.error} />
     return (
       <>
         <div className='ms-Grid-col ms-sm12'>

@@ -3,8 +3,8 @@ import { sp } from '@pnp/sp'
 /**
  * Run hook when changing phase
  *
- * @param {string} hookUrl Hook url
- * @param {string} hookAuth Hook auth
+ * @param hookUrl Hook url
+ * @param hookAuth Hook auth
  */
 export const runPhaseHook = async (hookUrl: string, hookAuth: string) => {
   try {

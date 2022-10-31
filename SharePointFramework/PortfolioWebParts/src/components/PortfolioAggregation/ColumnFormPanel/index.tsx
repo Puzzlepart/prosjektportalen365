@@ -1,9 +1,5 @@
+import { Panel, TextField, Toggle, Dropdown, PrimaryButton, DefaultButton } from '@fluentui/react'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
-import { Dropdown } from 'office-ui-fabric-react'
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
-import { Panel } from 'office-ui-fabric-react/lib/Panel'
-import { TextField } from 'office-ui-fabric-react/lib/TextField'
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { useContext, useEffect, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
@@ -17,7 +13,7 @@ export const addColumn = () => ({
   name: strings.AddColumnText,
   iconName: 'CalculatorAddition',
   iconClassName: styles.addColumnIcon,
-  minWidth: 175,
+  minWidth: 175
 })
 
 const initialColumn = {
@@ -55,18 +51,19 @@ export const ColumnFormPanel = () => {
   const onSave = async () => {
     setColumn(initialColumn)
     if (state.editColumn)
-      await Promise.resolve(props.dataAdapter.configure().then((adapter) => {
-        adapter
-          .updateProjectContentColumn(column)
-          .then(() => {
-            dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
-          })
-          .catch((error) => (state.error = error))
-      }))
+      await Promise.resolve(
+        props.dataAdapter.configure().then((adapter) => {
+          adapter
+            .updateProjectContentColumn(column)
+            .then(() => {
+              dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
+            })
+            .catch((error) => (state.error = error))
+        })
+      )
     else {
       const renderAs =
-        column.data?.renderAs.charAt(0).toUpperCase() +
-        column.data?.renderAs.slice(1)
+        column.data?.renderAs.charAt(0).toUpperCase() + column.data?.renderAs.slice(1)
 
       const newItem = {
         GtSortOrder: column.sortOrder || 100,
@@ -78,21 +75,25 @@ export const ColumnFormPanel = () => {
         GtColMinWidth: column.minWidth
       }
 
-      await Promise.resolve(props.dataAdapter.configure().then((adapter) => {
-        adapter.addItemToList(strings.ProjectContentColumnsListName, newItem)
-          .then((result) => {
-            const updateItem = {
-              GtProjectContentColumnsId: result['Id']
-            }
+      await Promise.resolve(
+        props.dataAdapter.configure().then((adapter) => {
+          adapter
+            .addItemToList(strings.ProjectContentColumnsListName, newItem)
+            .then((result) => {
+              const updateItem = {
+                GtProjectContentColumnsId: result['Id']
+              }
 
-            adapter.updateDataSourceItem(updateItem, state.dataSource)
-              .then(() => {
-                dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
-              })
-              .catch((error) => (state.error = error))
-          })
-          .catch((error) => (state.error = error))
-      }))
+              adapter
+                .updateDataSourceItem(updateItem, state.dataSource)
+                .then(() => {
+                  dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
+                })
+                .catch((error) => (state.error = error))
+            })
+            .catch((error) => (state.error = error))
+        })
+      )
     }
   }
 
@@ -271,14 +272,16 @@ export const ColumnFormPanel = () => {
             text={strings.DeleteButtonLabel}
             style={{ marginLeft: 4 }}
             onClick={async () => {
-              await Promise.resolve(props.dataAdapter.configure().then((adapter) => {
-                adapter
-                  .deleteProjectContentColumn(state.editColumn)
-                  .then(() => {
-                    dispatch(DELETE_COLUMN())
-                  })
-                  .catch((error) => (state.error = error))
-              }))
+              await Promise.resolve(
+                props.dataAdapter.configure().then((adapter) => {
+                  adapter
+                    .deleteProjectContentColumn(state.editColumn)
+                    .then(() => {
+                      dispatch(DELETE_COLUMN())
+                    })
+                    .catch((error) => (state.error = error))
+                })
+              )
             }}
           />
         )}

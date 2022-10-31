@@ -1,47 +1,14 @@
 import { FileAddResult } from '@pnp/sp'
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import { TemplateItem } from 'models'
-import { Selection } from 'office-ui-fabric-react/lib/DetailsList'
+import { Selection } from '@fluentui/react/lib/DetailsList'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogState } from './types'
 
-/**
- * When selection is changed, the non-folder items is set in the state.
- */
 export const SELECTION_CHANGED = createAction<{ selection: Selection }>('SELECTION_CHANGED')
-
-/**
- * Start copying of items
- */
 export const START_COPY = createAction('START_COPY')
-
-/**
- * Updat copy progress
- */
 export const COPY_PROGRESS = createAction<any>('COPY_PROGRESS')
-
-/**
- * When copying is done
- */
 export const COPY_DONE = createAction<{ files: FileAddResult[] }>('COPY_DONE')
-
-/**
- * Set screen
- *
- * One of the following
- *
- * * Select
- * * TargetFolder
- * * EditCopy
- * * CopyProgress
- * * Summary
- *
- * When changing to Select screen, the selected state is reset.
- */
 export const SET_SCREEN = createAction<{ screen: DocumentTemplateDialogScreen }>('SET_SCREEN')
-
-/**
- * Set target folder
- */
 export const SET_TARGET = createAction<{ folder: string }>('SET_TARGET')
 
 export const initState = (): IDocumentTemplateDialogState => ({

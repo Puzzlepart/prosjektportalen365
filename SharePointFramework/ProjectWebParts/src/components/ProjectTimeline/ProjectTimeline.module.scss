@@ -4,9 +4,7 @@
   margin: 15px 0 50px 0;
   .container {
     margin: 0px auto;
-    .commandBar {
-      margin: 0px auto;
-    }
+
     .header {
       padding: 23px 32px 20px 32px;
 
@@ -21,15 +19,6 @@
     }
     .infoText {
       padding: 23px 32px 23px 32px;
-    }
-    .timelineList {
-      margin: 25px;
-
-      .stickyHeader {
-      .headerColumns {
-        position: inherit;
-      }
-    }
     }
   }
 }

@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  ProjectListLoadingText: string
   EditColumnHeaderText: string
   PortfolioAggregationNotConfiguredMessage: string
   DataSourceCategoryDescription: string
@@ -38,6 +39,7 @@ declare interface IPortfolioWebPartsStrings {
   IsResizableLabel: string
   SaveButtonLabel: string
   CloseButtonLabel: string
+  GroupByLabel: string
   GroupByColumnLabel: string
   FilterBy: string
   DataSourceCategoryLabel: string
@@ -77,6 +79,8 @@ declare interface IPortfolioWebPartsStrings {
   DeliveryStatusCommentLabel: string
   DeliveryStatusLabel: string
   DescriptionFieldLabel: string
+  TagFieldLabel: string
+  CategoryFieldLabel: string
   DesiredValueLabel: string
   EditViewText: string
   ErrorText: string
@@ -105,7 +109,7 @@ declare interface IPortfolioWebPartsStrings {
   NoGroupingText: string
   NoProjectData: string
   NoProperties: string
-  NoSearchResults: string
+  ProjectListEmptyText: string
   NotSet: string
   PhaseLabel: string
   ProbabilityLabel: string
@@ -119,7 +123,9 @@ declare interface IPortfolioWebPartsStrings {
   PropertyPaneDescription: string
   RecommendationLabel: string
   ProjectTimelineInfoText: string
+  ProjectTimelineErrorTransformItemText: string
   ResourceAllocationInfoText: string
+  ResourceAllocationErrorTransformGroupText: string
   ResourceLabel: string
   ResponsibleLabel: string
   RoleLabel: string
@@ -134,9 +140,9 @@ declare interface IPortfolioWebPartsStrings {
   SearchBoxPlaceholderText: string
   SearchBoxPlaceholderTextLabel: string
   ShowAllMeasurementsLinkText: string
-  ShowAsListText: string
+  RenderAsListText: string
   ShowAsTilesLabel: string
-  ShowAsTilesText: string
+  RenderAsTilesText: string
   ShowCommandBarLabel: string
   ShowExcelExportButtonLabel: string
   ShowFiltersLabel: string
@@ -173,6 +179,7 @@ declare interface IPortfolioWebPartsStrings {
   MilestoneLabel: string
   ProjectLabel: string
   SubPhaseLabel: string
+  ProjectDeliveryLabel: string
   CurrentPhaseLabel: string
   MilestoneDateLabel: string
   NameLabel: string

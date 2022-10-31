@@ -1,0 +1,15 @@
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+
+.commandBar {
+  margin: 0px auto;
+}
+
+.timelineList {
+  margin: 25px;
+
+  .stickyHeader {
+    .headerColumns {
+      position: inherit;
+    }
+  }
+}

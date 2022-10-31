@@ -1,0 +1,29 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "37c7e990-483d-4f70-b9b9-def1790817e7",
+  "alias": "ProgramAggregationWebPart",
+  "componentType": "WebPart",
+  "version": "1.7.2",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "hiddenFromToolbox": false,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Aggregeringswebdel for Program"
+      },
+      "description": {
+        "default": " "
+      },
+      "officeFabricIconFontName": "SearchAndApps",
+      "properties": {}
+    }
+  ]
+}

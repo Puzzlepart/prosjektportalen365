@@ -1,7 +1,6 @@
+import { Callout, ActionButton } from '@fluentui/react'
 import { ProjectPhasesContext } from 'components/ProjectPhases/context'
 import { CHANGE_PHASE, DISMISS_CALLOUT } from 'components/ProjectPhases/reducer'
-import { ActionButton } from 'office-ui-fabric-react/lib/Button'
-import { Callout } from 'office-ui-fabric-react/lib/Callout'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { useContext } from 'react'
 import { isEmpty } from 'underscore'
@@ -49,14 +48,14 @@ export const ProjectPhaseCallout = ({ phase, target }: IProjectPhaseCalloutProps
                   iconProps={{ iconName: 'CheckList' }}
                 />
               )}
-              <ActionButton
-                onClick={() => context.dispatch(CHANGE_PHASE())}
-                text={strings.ChangePhaseText}
-                iconProps={{ iconName: 'TransitionPop' }}
-                disabled={
-                  phase.id === context.state.data?.currentPhase?.id || !context.props.isSiteAdmin
-                }
-              />
+              {context.state.data.userHasChangePhasePermission && (
+                <ActionButton
+                  onClick={() => context.dispatch(CHANGE_PHASE())}
+                  text={strings.ChangePhaseText}
+                  iconProps={{ iconName: 'TransitionPop' }}
+                  disabled={phase.id === context.state.data?.currentPhase?.id}
+                />
+              )}
             </div>
           </div>
         </div>

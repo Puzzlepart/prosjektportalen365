@@ -1,4 +1,11 @@
 declare interface IProjectWebPartsStrings {
+  RedoText: string
+  CreateParentModalSubText: string
+  CreateParentModalTitle: string
+  UseFramelessButtonsLabel: string
+  HideParentProjectsLabel: string
+  HideAllActionsLabel: string
+  HideActionsLabel: string
   ShowSubTextFieldLabel: string
   SyncPropertiesAfterPhaseChangeFieldLabel: string
   SubTextTruncateLengthFieldLabel: string
@@ -25,8 +32,8 @@ declare interface IProjectWebPartsStrings {
   ConfirmPhaseDialogTitle: string
   CurrentPhaseViewNameFieldLabel: string
   DocumentsListName: string
-  EditPropertiesText: string
-  ViewAllPropertiesLabel: string
+  EditProjectInformationText: string
+  ShowAllProjectInformationText: string
   EditReportButtonText: string
   PublishReportButtonText: string
   PublishedStatusReport: string
@@ -115,9 +122,13 @@ declare interface IProjectWebPartsStrings {
   PhaseLabel: string
   SiteTitleLabel: string
   TypeLabel: string
+  TagFieldLabel: string
+  CategoryFieldLabel: string
   DeleteItemLabel: string
   ProjecttimelineGroupName: string
   ProjectTimelineInfoText: string
+  ProjectTimelineErrorTransformItemText: string
+  ProjectTimelineErrorFetchText: string
   ProjectTimelineListInfoText: string
   TimelineContentListName: string
   TimelineConfigurationListName: strin
@@ -162,6 +173,17 @@ declare interface IProjectWebPartsStrings {
   ConfigItemTitleFieldLabel: string
   ShowProjectDeliveriesLabel: string
   ProjectDeliveriesGroupName: string
+  UseIdeaProcessingFieldLabel: string
+  UseIdeaProcessingCalloutText: string
+  IdeaProjectDataTitle: string
+  CancelText: string
+  SyncProjectModalTitle: string
+  SyncProjectModalSubText: string
+  IdeaProcessingTitle: string
+  IdeaProcessingUrlTitle: string
+  GroupLevelProject: string
+  GroupLevelPortfolio: string
+  ParentProjectsHeaderText: string
 }
 
 declare module 'ProjectWebPartsStrings' {

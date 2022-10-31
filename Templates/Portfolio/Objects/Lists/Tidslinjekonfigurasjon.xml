@@ -1,5 +1,5 @@
 <pnp:ListInstance Title="{resource:Lists_Timeline_Configuration_Title}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Timeline_Configuration_Url}" Hidden="false" RemoveExistingContentTypes="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false"
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100DAFD9901A59F445EB29B2CE3D663A87D" Default="true" />
     </pnp:ContentTypeBindings>
@@ -14,6 +14,7 @@
                 <FieldRef Name="GtSortOrder" Width="200" />
                 <FieldRef Name="Title" />
                 <FieldRef Name="GtHexColor" />
+                <FieldRef Name="GtTimelineCategory" />
                 <FieldRef Name="GtElementType" />
                 <FieldRef Name="GtShowElementPortfolio" />
                 <FieldRef Name="GtShowElementProgram" />
@@ -25,7 +26,8 @@
         </View>
     </pnp:Views>
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="Tittel" />
+        <pnp:FieldRef ID="aff55aa3-49a2-46ef-af10-9ae8031ab1b4" Name="GtTimelineCategory" DisplayName="{resource:Lists_GtTimelineCategory_DisplayName}" />
     </pnp:FieldRefs>
     <pnp:Fields>
         <Field Type="Text" DisplayName="{resource:SiteFields_GtHexColor_DisplayName}" Description="{resource:SiteFields_GtHexColor_Description}" ID="{aaf7828e-a937-4c7e-834b-406cf1166d77}" StaticName="GtHexColor" Name="GtHexColor" CustomFormatter="{&quot;$schema&quot;:&quot;https://developer.microsoft.com/json-schemas/sp/v2/column-formatting.schema.json&quot;,&quot;elmType&quot;:&quot;div&quot;,&quot;style&quot;:{&quot;box-sizing&quot;:&quot;border-box&quot;,&quot;padding&quot;:&quot;02px&quot;,&quot;overflow&quot;:&quot;hidden&quot;,&quot;text-overflow&quot;:&quot;ellipsis&quot;,&quot;background-color&quot;:&quot;[$GtHexColor]&quot;,&quot;color&quot;:&quot;white&quot;,&quot;border-style&quot;:&quot;solid&quot;,&quot;border-color&quot;:&quot;[$GtHexColor]&quot;},&quot;txtContent&quot;:&quot;[$GtHexColor]&quot;}" />
@@ -36,6 +38,7 @@
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prosjekt</pnp:DataValue>
             <pnp:DataValue FieldName="GtHexColor">#f35d69</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTimelineCategory">Styring</pnp:DataValue>
             <pnp:DataValue FieldName="GtElementType">Bar</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowElementPortfolio">1</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowElementProgram">1</pnp:DataValue>
@@ -43,17 +46,19 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Fase</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHexColor">#2589d6</pnp:DataValue>
-            <pnp:DataValue FieldName="GtElementType">Bar</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Beslutningspunkt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHexColor">#6495ED</pnp:DataValue>
+            <pnp:DataValue FieldName="GtElementType">Diamant</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTimelineCategory">Styring</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowElementPortfolio">1</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowElementProgram">1</pnp:DataValue>
             <pnp:DataValue FieldName="GtTimelineFilter">1</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Delfase</pnp:DataValue>
-            <pnp:DataValue FieldName="GtHexColor">#249ea0</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Fase</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHexColor">#2589d6</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTimelineCategory">Styring</pnp:DataValue>
             <pnp:DataValue FieldName="GtElementType">Bar</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowElementPortfolio">1</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowElementProgram">1</pnp:DataValue>
@@ -61,9 +66,20 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Delfase</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHexColor">#249ea0</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTimelineCategory">Styring</pnp:DataValue>
+            <pnp:DataValue FieldName="GtElementType">Bar</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowElementPortfolio">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowElementProgram">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTimelineFilter">1</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Milepæl</pnp:DataValue>
             <pnp:DataValue FieldName="GtHexColor">#ffc800</pnp:DataValue>
             <pnp:DataValue FieldName="GtElementType">Diamant</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTimelineCategory">Leveranse</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowElementPortfolio">1</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowElementProgram">1</pnp:DataValue>
             <pnp:DataValue FieldName="GtTimelineFilter">1</pnp:DataValue>

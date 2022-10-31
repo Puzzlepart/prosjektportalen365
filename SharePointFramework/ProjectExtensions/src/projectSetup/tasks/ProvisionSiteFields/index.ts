@@ -1,5 +1,5 @@
 import { IProjectSetupData } from 'projectSetup'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { transformFieldXml } from 'pp365-shared/lib/helpers'
 import { SPField } from 'pp365-shared/lib/models'

@@ -1,7 +1,7 @@
 import { TypedHash } from '@pnp/common'
 import { ItemUpdateResult, QueryPropertyValueType, SearchQuery, SortDirection } from '@pnp/sp'
 import { IPortfolioConfiguration, IAggregatedListConfiguration } from 'interfaces'
-import { ProjectListModel, TimelineContentListModel } from 'models'
+import { ProjectListModel, TimelineConfigurationListModel, TimelineContentListModel } from 'models'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services'
 
@@ -73,13 +73,14 @@ export interface IDataAdapter {
     hubSiteId: any
   ): Promise<any>
   isUserInGroup?(PortfolioManagerGroupName: string): Promise<boolean>
-  fetchDataForTimelineProject?(siteId: any): Promise<any>
-  fetchTimelineContentItems?(): Promise<TimelineContentListModel[]>
+  fetchTimelineProjectData?(timelineConfig: any[]): Promise<{ reports: any[]; configElement: any }>
+  fetchTimelineContentItems?(timelineConfig: any[]): Promise<TimelineContentListModel[]>
   fetchTimelineAggregatedContent?(
     configItemTitle: string,
-    dataSourceName: string
+    dataSourceName: string,
+    timelineConfig: any[]
   ): Promise<TimelineContentListModel[]>
-  fetchTimelineConfiguration?(): Promise<any>
+  fetchTimelineConfiguration?(): Promise<TimelineConfigurationListModel[]>
   fetchEnrichedProjects?(): Promise<ProjectListModel[]>
   fetchProjects?(configuration?: IAggregatedListConfiguration, dataSource?: string): Promise<any[]>
   fetchProjectSites(
@@ -90,7 +91,7 @@ export interface IDataAdapter {
   fetchItemsWithSource?(
     dataSourceName: string,
     selectProperties: string[],
-    dataSourceCategory?: string
+    includeSelf?: boolean
   ): Promise<any[]>
   fetchBenefitItemsWithSource?(
     dataSource: DataSource,
@@ -101,5 +102,9 @@ export interface IDataAdapter {
   updateProjectContentColumn?(properties: TypedHash<any>): Promise<any>
   deleteProjectContentColumn?(property: TypedHash<any>): Promise<any>
   addItemToList?(listName: string, properties: TypedHash<any>): Promise<any[]>
-  updateDataSourceItem?(properties: TypedHash<any>, dataSourceTitle: string, shouldReplace?: boolean): Promise<ItemUpdateResult>
+  updateDataSourceItem?(
+    properties: TypedHash<any>,
+    dataSourceTitle: string,
+    shouldReplace?: boolean
+  ): Promise<ItemUpdateResult>
 }

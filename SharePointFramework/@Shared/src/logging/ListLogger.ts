@@ -1,25 +1,20 @@
 /* eslint-disable max-classes-per-file */
 import { ItemAddResult, List } from '@pnp/sp'
+import { IListLoggerEntry } from './IListLoggerEntry'
+import { IListLoggerMemberMap } from './IListLoggerMemberMap'
+import { ListLoggerEntryLevel } from './ListLoggerEntryLevel'
 
-export type ListLoggerEntryLevel = 'Info' | 'Warning' | 'Error'
-
-export class IListLoggerEntry {
-  webUrl?: string
-  scope?: string
-  functionName?: string
-  message: string
-  level: ListLoggerEntryLevel
+export const defaultListLoggerMemberMap: Record<string, string> = {
+  webUrl: 'GtLogWebUrl',
+  scope: 'GtLogScope',
+  functionName: 'GtLogFunctionName',
+  message: 'GtLogMessage',
+  level: 'GtLogLevel',
+  component: 'GtLogComponentName',
+  context: 'GtLogContext'
 }
 
-export class IListLoggerMemberMap {
-  webUrl?: string
-  scope?: string
-  functionName?: string
-  message?: string
-  level?: string
-}
-
-export default new (class ListLogger {
+class ListLogger {
   public list: any
   public memberMap: IListLoggerMemberMap
   public webUrl: string = ''
@@ -28,12 +23,17 @@ export default new (class ListLogger {
   /**
    * Initialize ListLogger
    *
-   * @param {any} list List
-   * @param {IListLoggerMemberMap} memberMap Member map
-   * @param {string} webUrl Web URL
-   * @param {string} scope scope
+   * @param list List
+   * @param webUrl Web URL
+   * @param scope scope
+   * @param memberMap Member map
    */
-  public init(list: any, memberMap: IListLoggerMemberMap, webUrl?: string, scope?: string) {
+  public init(
+    list: any,
+    webUrl?: string,
+    scope?: string,
+    memberMap: IListLoggerMemberMap = defaultListLoggerMemberMap
+  ) {
     this.list = list
     this.memberMap = memberMap
     this.webUrl = webUrl
@@ -41,33 +41,49 @@ export default new (class ListLogger {
   }
 
   /**
-   * Log entry
+   * Log entry to SharePoint list
    *
-   * @param {IListLoggerEntry} entry Entry
+   * Will fail silently.
+   *
+   * @param entry Entry
    */
   public log(entry: IListLoggerEntry): Promise<ItemAddResult> {
-    const spItem = this.getSpItem(entry)
-    return (this.list as List).items.add(spItem)
+    try {
+      const spItem = this._getSpItem({ ...this._getEntryDefaults(), ...entry })
+      return (this.list as List).items.add(spItem)
+    } catch (error) {}
   }
 
   /**
-   * Write message
+   * Write message to SharePoint list
    *
-   * @param {string} message Message
-   * @param {ListLoggerEntryLevel} level Level
-   * @param {string} functionName Function name
+   * Will fail silently.
+   *
+   * @param message Message
+   * @param functionName Function name
+   * @param level Level (defaults to Info)
    */
-  public write(message: string, level: ListLoggerEntryLevel = 'Info', functionName?: string) {
-    return this.log({ message, level, functionName, webUrl: this.webUrl, scope: this.scope })
+  public write(
+    message: string,
+    functionName?: string,
+    level: ListLoggerEntryLevel = 'Info'
+  ): Promise<ItemAddResult> {
+    return this.log({
+      message,
+      level,
+      functionName,
+      webUrl: this.webUrl ?? this._getEntryDefaults().webUrl,
+      scope: this.scope
+    })
   }
 
   /**
    * Get sp item for entry
    *
-   * @param {IListLoggerEntry} entry Entry
+   * @param entry Entry
    */
-  public getSpItem(entry: IListLoggerEntry) {
-    let item: { [key: string]: string } = {}
+  private _getSpItem(entry: IListLoggerEntry) {
+    let item: Record<string, any> = {}
 
     if (this.webUrl && this.memberMap.webUrl) {
       item[this.memberMap.webUrl] = this.webUrl
@@ -82,4 +98,13 @@ export default new (class ListLogger {
     }, item)
     return item
   }
-})()
+
+  private _getEntryDefaults(): Partial<IListLoggerEntry> {
+    return {
+      level: 'Info',
+      webUrl: document.location.href.split('/').slice(0, 5).join('/')
+    } as Partial<IListLoggerEntry>
+  }
+}
+
+export default new ListLogger()

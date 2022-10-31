@@ -1,11 +1,12 @@
-import { Web } from '@pnp/sp'
 import {
+  MessageBarType,
   DetailsList,
-  DetailsListLayoutMode,
   IColumn,
-  SelectionMode
-} from 'office-ui-fabric-react/lib/DetailsList'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+  SelectionMode,
+  DetailsListLayoutMode
+} from '@fluentui/react'
+import { Web } from '@pnp/sp'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { getObjectValue } from 'pp365-shared/lib/helpers'
 import * as strings from 'ProjectWebPartsStrings'
 import React from 'react'
@@ -56,11 +57,7 @@ export class ListSection extends BaseSection<
       return null
     }
     if (this.state.error) {
-      return (
-        <MessageBar messageBarType={MessageBarType.error}>
-          {strings.ListSectionDataErrorMessage}
-        </MessageBar>
-      )
+      return <UserMessage text={strings.ListSectionDataErrorMessage} type={MessageBarType.error} />
     }
     return (
       <div className={`${styles.list} ms-Grid-col ms-sm12`}>

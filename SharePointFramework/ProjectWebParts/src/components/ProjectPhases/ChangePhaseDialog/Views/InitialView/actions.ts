@@ -1,12 +1,12 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { IButtonProps } from 'office-ui-fabric-react/lib/Button'
+import { IButtonProps } from '@fluentui/react/lib/Button'
 import * as strings from 'ProjectWebPartsStrings'
 
 /**
  * Get actions
  *
- * @param {string} commtent Comment value
- * @param {void} onNextChecklistItem On next checklist item callback
+ * @param comment Comment value
+ * @param onNextChecklistItem On next checklist item callback
  */
 export default (comment: string, onNextChecklistItem: (statusValue: string) => void) => {
   const isCommentValid = !stringIsNullOrEmpty(comment) && comment.length >= 4

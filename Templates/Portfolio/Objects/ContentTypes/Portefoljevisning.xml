@@ -1,14 +1,14 @@
 <pnp:ContentType ID="0x01001BE34662FF90874E9FEB29B37B6BB18C" Name="{resource:ContentTypes_PortfolioView_Name}" Description="{resource:ContentTypes_PortfolioView_Description}" Group="{resource:ContentTypes_Group}" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
-        <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" Required="true" />
-        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
-        <pnp:FieldRef ID="31e405e0-2890-439d-9c9f-42354154feda" Name="GtSearchQuery" Required="true" />
-        <pnp:FieldRef ID="3ccd363c-36ba-49aa-bf1e-52a2eb27a876" Name="GtPortfolioIsDefaultView" />
-        <pnp:FieldRef ID="b5fc712a-9908-4ba1-a8ac-7e51eca7a251" Name="GtPortfolioFabricIcon" Required="true" />
-        <pnp:FieldRef ID="43c79736-a2b6-452c-9995-6b72bba0ec16" Name="GtPortfolioColumns" Required="true" />
-        <pnp:FieldRef ID="503e35fd-ccee-4d66-af88-e016eab2f80b" Name="GtPortfolioRefiners" />
-        <pnp:FieldRef ID="0d7a146d-b41e-4357-82c3-76fb49eac011" Name="GtPortfolioGroupBy" />
-        <pnp:FieldRef ID="9f4ee969-ea00-4cc1-a466-a05c7db4156d" Name="GtPortfolioIsPersonalView" />
+        <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="31e405e0-2890-439d-9c9f-42354154feda" Name="GtSearchQuery" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="3ccd363c-36ba-49aa-bf1e-52a2eb27a876" Name="GtPortfolioIsDefaultView" UpdateChildren="true" />
+        <pnp:FieldRef ID="b5fc712a-9908-4ba1-a8ac-7e51eca7a251" Name="GtPortfolioFabricIcon" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="43c79736-a2b6-452c-9995-6b72bba0ec16" Name="GtPortfolioColumns" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="503e35fd-ccee-4d66-af88-e016eab2f80b" Name="GtPortfolioRefiners" UpdateChildren="true" />
+        <pnp:FieldRef ID="0d7a146d-b41e-4357-82c3-76fb49eac011" Name="GtPortfolioGroupBy" UpdateChildren="true" />
+        <pnp:FieldRef ID="9f4ee969-ea00-4cc1-a466-a05c7db4156d" Name="GtPortfolioIsPersonalView" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

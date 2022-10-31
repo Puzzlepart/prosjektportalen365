@@ -1,5 +1,6 @@
-<pnp:CustomActions xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+<pnp:CustomActions xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:WebCustomActions>
         <pnp:CustomAction Group="Customization" Location="Microsoft.SharePoint.SiteSettings" Name="Konfigurasjon av Prosjektportalen" Title="Konfigurasjon av Prosjektportalen" Url="SitePages/Konfigurasjon.aspx" Rights="ManageWeb" Sequence="2001" />
+        <pnp:CustomAction Name="{537d3f41-eb97-4c5c-a5e7-a24e3ba25da8}" Location="ClientSideExtension.ApplicationCustomizer" Title="Hjelpeinnhold" Sequence="0" Rights="" RegistrationType="None" ClientSideComponentId="28987406-2a67-48a8-9297-fd2833bf0a09" ClientSideComponentProperties="{&quot;listName&quot;:&quot;Hjelpeinnhold&quot;,&quot;linkText&quot;:&quot;Hjelp tilgjengelig&quot;}" />
     </pnp:WebCustomActions>
 </pnp:CustomActions>

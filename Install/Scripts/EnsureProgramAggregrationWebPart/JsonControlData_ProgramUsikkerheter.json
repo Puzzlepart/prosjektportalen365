@@ -1,0 +1,61 @@
+{
+    "title": "Usikkerheter for underområder",
+    "searchBoxPlaceholderText": "Søk i usikkerheter for underområder...",
+    "dataSource": "Programrisiko",
+    "columns": [
+        {
+            "key": "Title",
+            "fieldName": "Title",
+            "name": "Tittel",
+            "minWidth": 150,
+            "maxWidth": 300
+        },
+        {
+            "key": "GtRiskProbabilityOWSNMBR",
+            "fieldName": "GtRiskProbabilityOWSNMBR",
+            "name": "Sannsynlighet (S)",
+            "minWidth": 100,
+            "maxWidth": 125,
+            "data": {
+                "renderAs": "int"
+            }
+        },
+        {
+            "key": "GtRiskConsequenceOWSNMBR",
+            "fieldName": "GtRiskConsequenceOWSNMBR",
+            "name": "Konsekvens (K)",
+            "minWidth": 100,
+            "maxWidth": 125,
+            "data": {
+                "renderAs": "int"
+            }
+        },
+        {
+            "key": "GtRiskProbabilityPostActionOWSNMBR",
+            "fieldName": "GtRiskProbabilityPostActionOWSNMBR",
+            "name": "S etter tiltak",
+            "minWidth": 100,
+            "maxWidth": 125,
+            "data": {
+                "renderAs": "int"
+            }
+        },
+        {
+            "key": "GtRiskConsequencePostActionOWSNMBR",
+            "fieldName": "GtRiskConsequencePostActionOWSNMBR",
+            "name": "K etter tiltak",
+            "minWidth": 100,
+            "maxWidth": 125,
+            "data": {
+                "renderAs": "int"
+            }
+        },
+        {
+            "key": "GtRiskActionOWSMTXT",
+            "fieldName": "GtRiskActionOWSMTXT",
+            "name": "Tiltak",
+            "minWidth": 300,
+            "isMultiline": true
+        }
+    ]
+}

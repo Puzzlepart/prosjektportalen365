@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-var-requires */
 'use strict'
 const fs = require('fs')
@@ -6,25 +7,13 @@ const find = require('find')
 const gulp = require('gulp')
 const build = require('@microsoft/sp-build-web')
 const tsConfig = require('./tsconfig.json')
-const WebpackBar = require('webpackbar')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const os = require('os')
 const argv = require('yargs').argv
 const log = require('@microsoft/gulp-core-build').log
 const colors = require('colors')
-let buildConfig = {
-    parallel: os.cpus().length - 1,
-    bundleAnalyzerEnabled: false
-}
 
 build.addSuppression('Warning - [sass] The local CSS class \'ms-Grid\' is not camelCase and will not be type-safe.')
 build.addSuppression('Warning - [sass] The local CSS class \'-webkit-filter\' is not camelCase and will not be type-safe.')
 
-try {
-    buildConfig = require('./build.config.json')
-} catch (error) {
-    log(`Missing '${colors.cyan('./build.config.json')}'. Using defaults...`)
-}
 
 gulp.task('setHiddenToolbox', (done) => {
     find.file(/\manifest.json$/, path.join(__dirname, 'src'), (files) => {
@@ -32,7 +21,7 @@ gulp.task('setHiddenToolbox', (done) => {
             let manifest = require(files[i])
             if (['RiskMatrixWebPart'].indexOf(manifest.alias) !== -1) {
                 log(`[${colors.cyan('setHiddenToolbox')}] Skipping ${colors.cyan('hiddenFromToolbox')} for ${colors.cyan(manifest.alias)}...`)
-            } else if (manifest.hiddenFromToolbox != !!argv.ship) {
+            } else if (manifest.hiddenFromToolbox !== !!argv.ship) {
                 log(`[${colors.cyan('setHiddenToolbox')}] Setting ${colors.cyan('hiddenFromToolbox')} to ${colors.cyan(!!argv.ship)} for ${colors.cyan(manifest.alias)}...`)
                 manifest.hiddenFromToolbox = !!argv.ship
                 fs.writeFile(files[i], JSON.stringify(manifest, null, 4), (_error) => { /* handle error */ })
@@ -47,26 +36,14 @@ build.configureWebpack.mergeConfig({
         let { paths, outDir } = JSON.parse(JSON.stringify(tsConfig.compilerOptions).replace(/\/\*"/gm, '"'))
         webpack.resolve.alias = Object.keys(paths).reduce((alias, key) => {
             let _path = path.join(__dirname, outDir, paths[key][0])
-            log(`[${colors.cyan('configure-webpack')}] Added alias ${colors.cyan(key)} pointing to ${colors.cyan(_path)}...`)
             return { ...alias, [key]: _path }
         }, webpack.resolve.alias)
         webpack.externals = Object.assign(webpack.externals || {}, { 'XLSX': 'XLSX' })
-        webpack.plugins = webpack.plugins || []
-        log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('WebpackBar')}...`)
-        webpack.plugins.push(new WebpackBar())
-        if (buildConfig.bundleAnalyzerEnabled) {
-            log(`[${colors.cyan('configure-webpack')}] Adding plugin ${colors.cyan('BundleAnalyzerPlugin')}...`)
-            webpack.plugins.push(new BundleAnalyzerPlugin())
-        }
-        if (webpack.optimization && webpack.optimization.minimizer) {
-            log(`[${colors.cyan('configure-webpack')}] Setting ${colors.cyan('minimizer')} to run ${colors.cyan(buildConfig.parallel)} processes in parallel and enabling cache...`)
-            webpack.optimization.minimizer[0].options.parallel = buildConfig.parallel
-            webpack.optimization.minimizer[0].options.cache = true
-        }
         return webpack
     }
 })
 
 build.tslintCmd.enabled = false
+build.lintCmd.enabled = false
 
 build.initialize(gulp)

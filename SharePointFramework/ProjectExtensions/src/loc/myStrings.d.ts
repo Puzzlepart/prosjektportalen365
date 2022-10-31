@@ -1,4 +1,10 @@
 declare interface IProjectExtensionsStrings {
+  ExtensionLockedTooltipText: string
+  ContentConfigLockedTooltipText: string
+  TemplateSelectorSearchClearText: string
+  TemplateSelectorSearchPlaceholder: string
+  ExtensionsSectionSearchPlaceholder: string
+  ContentConfigSectionSearchPlaceholder: string
   PermissionConfigurationList: string
   SitePermissionsText: string
   SitePermissionsSubText: string
@@ -32,7 +38,7 @@ declare interface IProjectExtensionsStrings {
   DescriptionLabel: string
   EditPropertiesLinkText: string
   ErrorDialogTitle: string
-  ExtensionsTitle: string
+  ExtensionsSectionHeaderText: string
   GetMoreText: string
   GetSetupDataErrorMessage: string
   GetSetupDataErrorStack: string
@@ -42,7 +48,7 @@ declare interface IProjectExtensionsStrings {
   IsHubSiteErrorStack: string
   DocumentLibraryDropdownLabel: string
   FolderDropdownLabel: string
-  ListContentTitle: string
+  ContentConfigSectionHeaderText: string
   ModifiedLabel: string
   NameLabel: string
   FileNameLabel: string
@@ -85,7 +91,7 @@ declare interface IProjectExtensionsStrings {
   PhaseLabel: string
   SetupAbortedText: string
   UnknownErrorText: string
-  TemplateListContentConfigText: string
+  TemplateConfigText: string
   ProjectAlreadySetupMessage: string
   ProjectAlreadySetupStack: string
   ProjectProvisioningSuccessLogText: string

@@ -11,14 +11,15 @@ import {
   DataField,
   ProjectListModel,
   TimelineContentListModel,
+  TimelineConfigurationListModel,
   SPChartConfigurationItem,
   SPContentType,
   Benefit,
   BenefitMeasurement,
   BenefitMeasurementIndicator
-} from 'models'
+} from '../models'
 import MSGraph from 'msgraph-helper'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'PortfolioWebPartsStrings'
 import { isNull } from 'pp365-shared/lib/helpers'
 import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
@@ -49,7 +50,7 @@ export class DataAdapter implements IDataAdapter {
 
   /**
    * Configuring the DataAdapter enabling use
-   * of the DataSourceService.
+   * of the `DataSourceService`.
    */
   public async configure(): Promise<DataAdapter> {
     if (this.dataSourceService) return this
@@ -59,7 +60,7 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch chart data (used by [PortfolioInsights])
+   * Fetch chart data
    *
    * @param view View configuration
    * @param configuration PortfolioOverviewConfiguration
@@ -127,6 +128,11 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
+  /**
+   * Get aggregated list config
+   *
+   * @param category Category
+   */
   public async getAggregatedListConfig(category: string): Promise<IAggregatedListConfiguration> {
     let portal = this._portalDataService
 
@@ -161,7 +167,6 @@ export class DataAdapter implements IDataAdapter {
    * @param configuration
    * @param siteId
    * @returns {Promise<IFetchDataForViewItemResult[]>}
-   * @memberof DataAdapter
    */
   public async fetchDataForView(
     view: PortfolioOverviewView,
@@ -226,7 +231,6 @@ export class DataAdapter implements IDataAdapter {
    * @param siteId
    * @param [siteIdProperty='GtSiteIdOWSTEXT']
    * @returns {Promise<IFetchDataForViewItemResult[]>}
-   * @memberof DataAdapter
    */
   public async fetchDataForManagerView(
     view: PortfolioOverviewView,
@@ -317,33 +321,48 @@ export class DataAdapter implements IDataAdapter {
   /**
    * Fetches data for the Projecttimeline project
    *
-   * @param siteId
+   * @param timelineConfig
    */
-  public async fetchDataForTimelineProject(siteId: string) {
-    const siteIdProperty: string = 'GtSiteIdOWSTEXT'
+  public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationListModel[]) {
+    try {
+      const [{ PrimarySearchResults: statusReports }] = await Promise.all([
+        sp.search({
+          ...DEFAULT_SEARCH_SETTINGS,
+          QueryTemplate: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5 GtModerationStatusOWSCHCS:Publisert`,
+          SelectProperties: [
+            'Title',
+            'GtSiteIdOWSTEXT',
+            'GtCostsTotalOWSCURR',
+            'GtBudgetTotalOWSCURR'
+          ]
+        })
+      ])
 
-    const [timelineConfig, { PrimarySearchResults: statusReports }] = await Promise.all([
-      this.fetchTimelineConfiguration(),
-      sp.search({
-        ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} ${siteIdProperty}:{${siteId}}
-        ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
-        SelectProperties: [siteIdProperty, 'GtCostsTotalOWSCURR', 'GtBudgetTotalOWSCURR']
-      })
-    ])
-    const [data] = statusReports.map((item) => cleanDeep({ ...item }))
-    const config = _.find(timelineConfig, (col) => col.Title === strings.ProjectLabel)
-    return {
-      type: strings.ProjectLabel,
-      costsTotal: data && data['GtCostsTotalOWSCURR'],
-      budgetTotal: data && data['GtBudgetTotalOWSCURR'],
-      sortOrder: config && config.GtSortOrder,
-      hexColor: config && config.GtHexColor,
-      elementType: config && config.GtElementType,
-      showElementPortfolio: config && config.GtShowElementPortfolio,
-      showElementProgram: config && config.GtShowElementProgram,
-      timelineFilter: config && config.GtTimelineFilter
-    }
+      const config = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
+
+      const configElement = {
+        type: strings.ProjectLabel,
+        sortOrder: config && config.sortOrder,
+        hexColor: config && config.hexColor,
+        timelineCategory: config && config.timelineCategory,
+        elementType: config && config.elementType,
+        showElementPortfolio: config && config.showElementPortfolio,
+        showElementProgram: config && config.showElementProgram,
+        timelineFilter: config && config.timelineFilter
+      }
+
+      const reports = statusReports
+        .map((report) => {
+          return {
+            siteId: report && report['GtSiteIdOWSTEXT'],
+            costsTotal: report && report['GtCostsTotalOWSCURR'],
+            budgetTotal: report && report['GtBudgetTotalOWSCURR']
+          }
+        })
+        .filter((p) => p)
+
+      return { reports, configElement }
+    } catch (error) {}
   }
 
   /**
@@ -351,10 +370,11 @@ export class DataAdapter implements IDataAdapter {
    *
    * * Fetching list items
    * * Maps the items to TimelineContentListModel
+   *
+   * @param timelineConfig
    */
-  public async fetchTimelineContentItems() {
-    const [timelineConfig, timelineItems] = await Promise.all([
-      this.fetchTimelineConfiguration(),
+  public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationListModel[]) {
+    const [timelineItems] = await Promise.all([
       sp.web.lists
         .getByTitle(strings.TimelineContentListName)
         .items.select(
@@ -364,33 +384,37 @@ export class DataAdapter implements IDataAdapter {
           'GtEndDate',
           'GtBudgetTotal',
           'GtCostsTotal',
+          'GtDescription',
+          'GtTag',
           'GtSiteIdLookup/Title',
           'GtSiteIdLookup/GtSiteId'
         )
-        .top(500)
         .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .get()
+        .getAll()
     ])
 
     return timelineItems
       .map((item) => {
         const type = item.GtTimelineTypeLookup && item.GtTimelineTypeLookup.Title
-        const config = _.find(timelineConfig, (col) => col.Title === type)
+        const config = _.find(timelineConfig, (col) => col.title === type)
 
-        if (item.GtSiteIdLookup?.Title && config && config.GtShowElementPortfolio) {
+        if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
           const model = new TimelineContentListModel(
             item.GtSiteIdLookup?.GtSiteId,
             item.GtSiteIdLookup?.Title,
             item.Title,
-            config && config.Title,
-            config && config.GtSortOrder,
-            config && config.GtHexColor,
-            config && config.GtElementType,
-            config && config.GtShowElementPortfolio,
-            config && config.GtShowElementProgram,
-            config && config.GtTimelineFilter,
+            config && config.title,
+            config && config.sortOrder,
+            config && config.hexColor,
+            config && config.timelineCategory,
+            config && config.elementType,
+            config && config.showElementPortfolio,
+            config && config.showElementProgram,
+            config && config.timelineFilter,
             item.GtStartDate,
             item.GtEndDate,
+            item.GtDescription,
+            item.GtTag,
             item.GtBudgetTotal,
             item.GtCostsTotal
           )
@@ -405,30 +429,54 @@ export class DataAdapter implements IDataAdapter {
    *
    */
   public async fetchTimelineConfiguration() {
-    return await sp.web.lists
+    const timelineConfig = await sp.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
       .items.select(
-        'Title',
         'GtSortOrder',
+        'Title',
         'GtHexColor',
+        'GtTimelineCategory',
         'GtElementType',
         'GtShowElementPortfolio',
         'GtShowElementProgram',
         'GtTimelineFilter'
       )
-      .top(500)
-      .get()
+      .getAll()
+
+    return timelineConfig
+      .map((item) => {
+        const model = new TimelineConfigurationListModel(
+          item.GtSortOrder,
+          item.Title,
+          item.GtHexColor,
+          item.GtTimelineCategory,
+          item.GtElementType,
+          item.GtShowElementPortfolio,
+          item.GtShowElementProgram,
+          item.GtTimelineFilter
+        )
+        return model
+      })
+      .filter((p) => p)
   }
 
   /**
    * Fetches configuration data for the Projecttimeline
    *
+   * @param configItemTitle
+   * @param dataSourceName
+   * @param timelineConfig
    */
-  public async fetchTimelineAggregatedContent(configItemTitle: string, dataSourceName: string) {
-    const [timelineConfig] = await Promise.all([this.fetchTimelineConfiguration()])
-
-    const config: any = _.find(timelineConfig, (col) => col.Title === (configItemTitle || 'Prosjektleveranse'))
-    if (config && config.GtShowElementPortfolio) {
+  public async fetchTimelineAggregatedContent(
+    configItemTitle: string,
+    dataSourceName: string,
+    timelineConfig: TimelineConfigurationListModel[]
+  ) {
+    const config = _.find(
+      timelineConfig,
+      (col) => col.title === (configItemTitle || 'Prosjektleveranse')
+    )
+    if (config && config.showElementPortfolio) {
       const [projectDeliveries] = await Promise.all([
         this.configure().then((adapter) => {
           return adapter
@@ -439,7 +487,10 @@ export class DataAdapter implements IDataAdapter {
               'GtDeliveryEndTimeOWSDATE'
             ])
             .then((deliveries) => {
-              return deliveries
+              return deliveries.filter(
+                (delivery) =>
+                  delivery.GtDeliveryStartTimeOWSDATE && delivery.GtDeliveryEndTimeOWSDATE
+              )
             })
             .catch((error) => {
               throw error
@@ -453,19 +504,16 @@ export class DataAdapter implements IDataAdapter {
             item.SiteId,
             item.SiteTitle,
             item.Title,
-            (config && config.Title) || configItemTitle,
-            (config && config.GtSortOrder) || 90,
-            (config && config.GtHexColor) || '#384f61',
-            (config && config.GtElementType) || strings.BarLabel,
-            (config && config.GtShowElementPortfolio) || false,
-            (config && config.GtShowElementProgram) || false,
-            (config && config.GtTimelineFilter) || true,
+            (config && config.title) || configItemTitle,
+            (config && config.sortOrder) || 90,
+            (config && config.hexColor) || '#384f61',
+            (config && config.timelineCategory) || 'Styring',
+            (config && config.elementType) || strings.BarLabel,
+            (config && config.showElementPortfolio) || false,
+            (config && config.showElementProgram) || false,
+            (config && config.timelineFilter) || true,
             item.GtDeliveryStartTimeOWSDATE,
             item.GtDeliveryEndTimeOWSDATE,
-            null,
-            null,
-            null,
-            null,
             item.GtDeliveryDescriptionOWSMTXT
           )
           return model
@@ -603,16 +651,16 @@ export class DataAdapter implements IDataAdapter {
     configuration?: IAggregatedListConfiguration,
     dataSource?: string
   ): Promise<any[]> {
-    const odata = configuration && configuration.views.find((v) => v.title === dataSource)?.odataQuery
-    let projects
+    const odata =
+      configuration && configuration.views.find((v) => v.title === dataSource)?.odataQuery
+    let projects: any[]
 
     if (odata && !dataSource.includes('(Prosjektnivå)')) {
-      [projects] = await Promise.all([
-        await sp.web.lists
-          .getByTitle(strings.ProjectsListName)
-          .items.filter(`${odata}`)
-          .get<any[]>()
-      ])
+      // eslint-disable-next-line @typescript-eslint/no-extra-semi
+      projects = await sp.web.lists
+        .getByTitle(strings.ProjectsListName)
+        .items.filter(`${odata}`)
+        .get<any[]>()
     }
     return projects
   }
@@ -625,8 +673,6 @@ export class DataAdapter implements IDataAdapter {
    * @param groupName
    *
    * @returns {Promise<boolean>}
-   *
-   * @memberof DataAdapter
    */
   public async isUserInGroup(groupName: string): Promise<boolean> {
     try {
@@ -658,9 +704,9 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch items with data source name
+   * Fetch items with data source
    *
-   * @param dataSourceName Data source name
+   * @param dataSource Data source
    * @param selectProperties Select properties
    */
   public async fetchBenefitItemsWithSource(
@@ -738,25 +784,20 @@ export class DataAdapter implements IDataAdapter {
    *
    * @param dataSourceName Data source name
    * @param selectProperties Select properties
-   * @param dataSourceCategory Data source category
-   *
    */
   public async fetchItemsWithSource(
     dataSourceName: string,
-    selectProperties: string[],
-    dataSourceCategory?: string
-  ): Promise<any> {
-    let items
+    selectProperties: string[]
+  ): Promise<any[]> {
+    let items: any[]
 
     try {
       const dataSrc = await this.dataSourceService.getByName(dataSourceName)
       if (!dataSrc) {
         throw new Error(format(strings.DataSourceNotFound, dataSourceName))
       }
-
       const dataSrcProperties = dataSrc.projectColumns.map((col) => col.fieldName) || []
-
-      if (dataSourceCategory === 'Gevinstoversikt') {
+      if (dataSrc.category === 'Gevinstoversikt') {
         items = await this.fetchBenefitItemsWithSource(dataSrc, [
           ...selectProperties,
           ...dataSrcProperties
@@ -794,7 +835,12 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchProjectContentColumns(dataSourceCategory: string): Promise<any> {
     try {
-      if (isNull(dataSourceCategory) || !dataSourceCategory || dataSourceCategory.includes('(Prosjektnivå)')) {
+      if (
+        isNull(dataSourceCategory) ||
+        !dataSourceCategory ||
+        dataSourceCategory === '' ||
+        dataSourceCategory.includes('(Prosjektnivå)')
+      ) {
         return []
       } else {
         const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
@@ -812,9 +858,8 @@ export class DataAdapter implements IDataAdapter {
           })
         return filteredItems
       }
-
     } catch (error) {
-      throw new Error(format(strings.DataSourceError, dataSourceCategory))
+      throw new Error(format(strings.DataSourceCategoryError, dataSourceCategory))
     }
   }
 
@@ -834,8 +879,7 @@ export class DataAdapter implements IDataAdapter {
       }
 
       const renderAs =
-        properties.data.renderAs.charAt(0).toUpperCase() +
-        properties.data.renderAs.slice(1)
+        properties.data.renderAs.charAt(0).toUpperCase() + properties.data.renderAs.slice(1)
 
       const itemUpdateResult = await list.items.getById(item.Id).update({
         GtFieldDataType: renderAs,
@@ -850,16 +894,16 @@ export class DataAdapter implements IDataAdapter {
   /**
    * Delete project content column
    *
-   * @param property Property
+   * @param column Column to delete
    */
-  public async deleteProjectContentColumn(property: TypedHash<any>): Promise<any> {
+  public async deleteProjectContentColumn(column: TypedHash<any>): Promise<any> {
     try {
       const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
       const items = await list.items.get()
-      const item = items.find((i) => i.GtManagedProperty === property.fieldName)
+      const item = items.find((i) => i.GtManagedProperty === column.fieldName)
 
       if (!item) {
-        throw new Error(format(strings.ProjectContentColumnItemNotFound, property.fieldName))
+        throw new Error(format(strings.ProjectContentColumnItemNotFound, column.fieldName))
       }
 
       const itemDeleteResult = list.items.getById(item.Id).delete()
@@ -891,7 +935,11 @@ export class DataAdapter implements IDataAdapter {
    * @param properties Properties
    * @param dataSourceTitle Data source title
    */
-  public async updateDataSourceItem(properties: TypedHash<any>, dataSourceTitle: string, shouldReplace: boolean = false): Promise<ItemUpdateResult> {
+  public async updateDataSourceItem(
+    properties: TypedHash<any>,
+    dataSourceTitle: string,
+    shouldReplace: boolean = false
+  ): Promise<ItemUpdateResult> {
     try {
       const list = sp.web.lists.getByTitle(strings.DataSourceListName)
       const items = await list.items.get()

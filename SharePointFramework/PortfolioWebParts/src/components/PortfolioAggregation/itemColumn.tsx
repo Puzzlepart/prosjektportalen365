@@ -1,15 +1,16 @@
+import { IColumn, Icon, Link } from '@fluentui/react/lib'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { IColumn, Link, Icon } from 'office-ui-fabric-react/lib'
-import { formatDate, tryParseCurrency, tryParsePercentage } from 'pp365-shared/lib/helpers'
+import { Web } from '@pnp/sp'
 import strings from 'PortfolioWebPartsStrings'
+import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
+import { formatDate, tryParseCurrency, tryParsePercentage } from 'pp365-shared/lib/helpers'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import React from 'react'
 import { isEmpty } from 'underscore'
-import { ProjectInformationTooltip } from 'pp365-projectwebparts/lib/components/ProjectInformationTooltip'
-import { IPortfolioAggregationContext } from './context'
-import { Web } from '@pnp/sp'
 import { TagsColumn } from '../PortfolioOverview/RenderItemColumn/TagsColumn'
+import { UserColumn } from '../PortfolioOverview/RenderItemColumn/UserColumn'
 import ItemModal from './ItemModal'
+import { IPortfolioAggregationProps } from './types'
 
 /**
  * Render item column
@@ -26,7 +27,7 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
   }
   const columnValue = get(item, column.fieldName, null)
 
-  const type = column?.data ? column?.data?.renderAs : column['dataType']
+  const type = column?.data?.renderAs ?? column['dataType']
 
   switch (type) {
     case 'number':
@@ -42,7 +43,7 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
     case 'datetime':
       return formatDate(columnValue, true)
     case 'user':
-      return columnValue // TODO: Implement user rendering correctly at some point
+      return columnValue && <UserColumn column={column} columnValue={columnValue} />
     case 'list': {
       const values: string[] = columnValue ? columnValue.split(';#') : []
       if (isEmpty(values)) return null
@@ -83,45 +84,53 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
 /**
  * Get default columns
  *
- * @param context Context
+ * @param props Props
  */
-export const getDefaultColumns = (context: IPortfolioAggregationContext, isParent?: boolean) => [
-  {
-    key: 'SiteTitle',
-    idx: 0,
-    fieldName: 'SiteTitle',
-    name: strings.SiteTitleLabel,
-    minWidth: 150,
-    maxWidth: 225,
-    isResizable: true,
-    onRender: (item: any) => {
-      if (!isParent) {
+export const getDefaultColumns = (props: IPortfolioAggregationProps) => {
+  if (props.lockedColumns) return []
+  return [
+    {
+      key: 'SiteTitle',
+      idx: 0,
+      fieldName: 'SiteTitle',
+      name: strings.SiteTitleLabel,
+      minWidth: 150,
+      maxWidth: 225,
+      isResizable: true,
+      onRender: (item: any) => {
         return (
-          <ProjectInformationTooltip
+          <ProjectInformationPanel
             key={item.SiteId}
-            title={item.SiteTitle}
+            title={item.Title}
             siteId={item.SiteId}
-            webUrl={item.SPWebURL}
+            webUrl={item.Path}
             hubSite={{
-              web: new Web(context.props.pageContext.site.absoluteUrl),
-              url: context.props.pageContext.site.absoluteUrl
+              web: new Web(props.pageContext.site.absoluteUrl),
+              url: props.pageContext.site.absoluteUrl
             }}
-            page='Portfolio'>
+            page='Portfolio'
+            hideAllActions={true}
+            onRenderToggleElement={(onToggle) => (
+              <Icon
+                iconName='Info'
+                style={{
+                  color: '666666',
+                  marginLeft: 4,
+                  position: 'relative',
+                  top: '2px',
+                  fontSize: '1.1em',
+                  cursor: 'pointer'
+                }}
+                onClick={onToggle}
+              />
+            )}>
             <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
               {item.SiteTitle}
             </Link>
-          </ProjectInformationTooltip>
+          </ProjectInformationPanel>
         )
-      } else {
-        return item.SPWebURL ? (
-          <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
-            {item.SiteTitle}
-          </Link>
-        ) : (
-          <span>{item.SiteTitle}</span>
-        )
-      }
-    },
-    data: { isGroupable: true }
-  }
-]
+      },
+      data: { isGroupable: true }
+    }
+  ]
+}

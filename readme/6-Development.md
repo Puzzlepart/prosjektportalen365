@@ -1,3 +1,3 @@
 ## Development
 
-Please read the [Development guide](./dev/README.md).
+Please read the [Development guide](./.development-guide/README.md).

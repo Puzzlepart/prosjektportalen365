@@ -1,0 +1,19 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/command-set-extension-manifest.schema.json",
+  "id": "b13831c6-c4f8-4bbc-9da3-bd5f960f7e2b",
+  "alias": "IdeaProjectDataCommand",
+  "componentType": "Extension",
+  "extensionType": "ListViewCommandSet",
+  "version": "1.7.2",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "items": {
+    "OPEN_IDEA_PROJECTDATA_DIALOG": {
+      "title": {
+        "default": "Opprett prosjektdata"
+      },
+      "iconImageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAARZJREFUWEdjZEACltOnGzL+YzyHLEZt9n+m/0bHMzPPw8xlHLQOQHcpJSGBHLJEh8CoA0AhwMTGduf/j18RoOBn5GBbAaJhfGKjBKTv369fKrDETVIUgC2G5gqQRmQ+sQ5A10eaA/4w/WFk+n8J7PN/jHpgB0D5RDsApI/lHwtZIYCcX4m1EJu60VxAdgiM5gKG0VyAVG2OzGw4mguolguQ6hBQnXI8N/0ywSYZNRsk+BIwzjYhNR1gPXcuL3K74mhy8me6hgDZdcHIro4ZGRh6/jP8v0VqCYit7cjIwKj2n4GhBNyiQjOX6h0TUtuOqA6YPFOX1DYfegiR2nZEcQCpwU2seqJzAbEGkqpu1AGWSGkLvS4AAGkB7scMjpmzAAAAAElFTkSuQmCC",
+      "type": "command"
+    }
+  }
+}

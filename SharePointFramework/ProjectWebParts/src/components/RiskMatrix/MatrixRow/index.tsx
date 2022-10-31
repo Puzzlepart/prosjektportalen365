@@ -1,6 +1,6 @@
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
+import { Toggle } from '@fluentui/react/lib/Toggle'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FunctionComponent } from 'react'
+import React, { FC } from 'react'
 import { RiskElementModel } from '../'
 import { IMatrixCell, MatrixCell, MatrixCellType, MatrixHeaderCell } from '../MatrixCell'
 import { RiskElement } from '../RiskElement'
@@ -8,7 +8,7 @@ import RISK_MATRIX_CELLS from '../RiskMatrixCells'
 import styles from './MatrixRow.module.scss'
 import { IMatrixRowProps } from './types'
 
-export const MatrixRow: FunctionComponent<IMatrixRowProps> = ({ children }: IMatrixRowProps) => {
+export const MatrixRow: FC<IMatrixRowProps> = ({ children }: IMatrixRowProps) => {
   return <tr className={styles.matrixRow}>{children}</tr>
 }
 
@@ -53,12 +53,14 @@ const getRiskElementsPostActionForCell = (
   return riskElements
 }
 
-export const MatrixRows = ({ items, calloutTemplate }) => {
+export const MatrixRows = ({ items, calloutTemplate, customCells }) => {
   const [showPostAction, setShowPostAction] = React.useState(false)
 
-  const children = RISK_MATRIX_CELLS.map((rows, i) => {
+  const selectedCells = customCells ?? RISK_MATRIX_CELLS
+
+  const children = selectedCells.map((rows, i) => {
     const cells = rows.map((c, j) => {
-      const cell = RISK_MATRIX_CELLS[i][j]
+      const cell = selectedCells[i][j]
       const riskElements = getRiskElementsForCell(items, cell, calloutTemplate)
       const riskElementsPostAction = getRiskElementsPostActionForCell(items, cell, calloutTemplate)
       switch (cell.cellType) {

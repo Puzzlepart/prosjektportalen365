@@ -1,25 +1,22 @@
-import { Customizer } from '@uifabric/utilities'
-import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel'
-import React from 'react'
+import { Panel, PanelType } from '@fluentui/react'
+import React, { FC } from 'react'
 import { Filter } from './Filter'
 import { IFilterPanelProps } from './types'
 
-export const FilterPanel: React.FunctionComponent<IFilterPanelProps> = (props) => {
+export const FilterPanel: FC<IFilterPanelProps> = (props) => {
   return (
-    <Customizer scopedSettings={{ Layer: { hostId: props.layerHostId } }}>
-      <Panel {...props} type={PanelType.smallFixedFar}>
-        <div>
-          {props.filters
-            .filter((f) => f.items.length > 1)
-            .map((f, idx) => (
-              <Filter {...f} key={idx} onFilterChange={props.onFilterChange} />
-            ))}
-        </div>
-      </Panel>
-    </Customizer>
+    <Panel {...props} type={PanelType.smallFixedFar}>
+      <div>
+        {props.filters
+          .filter((f) => f.items.length > 1)
+          .map((f, idx) => (
+            <Filter {...f} key={idx} onFilterChange={props.onFilterChange} />
+          ))}
+      </div>
+    </Panel>
   )
 }
 
-export * from './FilterItem/types'
 export * from './Filter/types'
+export * from './FilterItem/types'
 export * from './types'

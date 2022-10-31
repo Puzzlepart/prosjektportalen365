@@ -1,18 +1,18 @@
-import { IPersonaSharedProps } from 'office-ui-fabric-react/lib/Persona'
+import { IPersonaSharedProps } from '@fluentui/react'
 
 export class ProjectListModel {
-  public siteId: string
-  public groupId: string
-  public url: string
-  public lifecycleStatus: string
+  public siteId?: string
+  public groupId?: string
+  public url?: string
+  public lifecycleStatus?: string
   public type?: string[]
-  public serviceArea: string[]
+  public serviceArea?: string[]
   public phase?: string
   public startDate?: string
   public endDate?: string
-  public manager: IPersonaSharedProps
-  public owner: IPersonaSharedProps
-  public logo: string
+  public manager?: IPersonaSharedProps
+  public owner?: IPersonaSharedProps
+  public logo?: string
   public userIsMember?: boolean
   public data?: any[]
   public isParent?: boolean
@@ -24,7 +24,7 @@ export class ProjectListModel {
    * @param title - Title
    * @param item - Item
    */
-  constructor(public title: string, item: any) {
+  constructor(public title?: string, item?: any) {
     this.siteId = item.GtSiteId
     this.groupId = item.GtGroupId
     this.url = item.GtSiteUrl

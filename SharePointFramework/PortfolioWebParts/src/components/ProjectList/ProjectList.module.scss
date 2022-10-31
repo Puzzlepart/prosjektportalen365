@@ -1,4 +1,4 @@
-@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 .root {
     @include ms-Grid;
     .container {
@@ -9,28 +9,19 @@
             @include ms-font-m;
             margin-top: 8px;
         }
-        .viewToggle {
-            @include ms-Grid-col;
-            @include ms-sm4;
-            @include ms-font-m;
-            margin-top: 8px;
-        }
         .projectDisplaySelect {
             @include ms-Grid-col;
             @include ms-sm12;
             @include ms-font-m;
             margin-top: -7px;
         }
+
         .emptyMessage {
             @include ms-Grid-col;
             @include ms-sm12;
             margin: 15px 0 0 0;
         }
-        .loadingIndicator {
-            @include ms-Grid-col;
-            @include ms-sm12;
-            margin: 15px 0 0 0;
-        }
+
         .projects {
             @include ms-Grid-col;
             @include ms-sm12;

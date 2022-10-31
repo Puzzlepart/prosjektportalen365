@@ -1,4 +1,4 @@
-<pnp:Security xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+<pnp:Security xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:SiteGroups>
         <pnp:SiteGroup
             Title="Porteføljeinnsyn"
@@ -10,6 +10,13 @@
         <pnp:SiteGroup
             Title="Porteføljeadministratorer"
             Description="Porteføljeadministratorer har som standard full kontroll på alle prosjektområder gjennom listen &lt;a href=&quot;{site}/Lists/Tillatelseskonfigurasjon&quot;&gt;Tillatelseskonfigurasjon&lt;/a&gt;."
+            Owner="{associatedownergroupid}"
+            AllowMembersEditMembership="false"
+            OnlyAllowMembersViewMembership="true">
+        </pnp:SiteGroup>
+        <pnp:SiteGroup
+            Title="Idebehandlere"
+            Description="Idebehandlere er personer som kan kan godkjenne og behandle idéer: &lt;a href=&quot;{site}/Lists/Idebehandling&quot;&gt;Idebehandling&lt;/a&gt;."
             Owner="{associatedownergroupid}"
             AllowMembersEditMembership="false"
             OnlyAllowMembersViewMembership="true">

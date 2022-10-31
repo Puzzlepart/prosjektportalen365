@@ -1,5 +1,5 @@
 import { ITimelineItem } from 'interfaces/ITimelineItem'
-import { Callout } from 'office-ui-fabric-react/lib/Callout'
+import { Callout } from '@fluentui/react/lib/Callout'
 import * as strings from 'PortfolioWebPartsStrings'
 import { formatDate } from 'pp365-shared/lib/helpers/formatDate'
 import React from 'react'

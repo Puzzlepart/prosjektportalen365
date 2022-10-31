@@ -7,274 +7,400 @@
         "ProjectStatusContentTypeId": "0x010022252E35737A413FB56A1BA53862F6D5"
     },
     "Navigation": {
-        "QuickLaunch": [{
-            "Url": "#",
-            "Title": "Underordnet innhold",
-            "Children": [{
-                    "Url": "SitePages/Admin.aspx",
-                    "Title": "Administrasjon"
-                },
-                {
-                    "Url": "SitePages/OverordnetOversikt.aspx",
-                    "Title": "Oversikt"
-                },
-                {
-                    "Url": "SitePages/OverordnetGevinster.aspx",
-                    "Title": "Gevinster"
-                },
-                {
-                    "Url": "SitePages/OverordnetTidslinje.aspx",
-                    "Title": "Tidslinje"
-                },
-                {
-                    "Url": "SitePages/OverordnetLeveranser.aspx",
-                    "Title": "Leveranser"
-                },
-                {
-                    "Url": "SitePages/OverordnetUsikkerheter.aspx",
-                    "Title": "Usikkerheter"
-                }
-            ]
-        }]
+        "QuickLaunch": [
+            {
+                "Url": "#",
+                "Title": "Underordnet innhold",
+                "Children": [
+                    {
+                        "Url": "SitePages/Admin.aspx",
+                        "Title": "Administrasjon"
+                    },
+                    {
+                        "Url": "SitePages/OverordnetOversikt.aspx",
+                        "Title": "Oversikt"
+                    },
+                    {
+                        "Url": "SitePages/OverordnetGevinster.aspx",
+                        "Title": "Gevinster"
+                    },
+                    {
+                        "Url": "SitePages/OverordnetTidslinje.aspx",
+                        "Title": "Tidslinje"
+                    },
+                    {
+                        "Url": "SitePages/OverordnetLeveranser.aspx",
+                        "Title": "Leveranser"
+                    },
+                    {
+                        "Url": "SitePages/OverordnetUsikkerheter.aspx",
+                        "Title": "Usikkerheter"
+                    }
+                ]
+            }
+        ]
     },
-    "ClientSidePages": [{
+    "ClientSidePages": [
+        {
             "Name": "Admin.aspx",
             "Title": "Administrasjon",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
-            "Sections": [{
-                "Columns": [{
-                    "Factor": 12,
-                    "Controls": [{
-                        "Id": "9570e369-21a6-4bf5-8198-13506499de52",
-                        "Properties": {
-                            "webPartTitle": "Administrasjon av underområder"
+            "Sections": [
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
+                                {
+                                    "Id": "9570e369-21a6-4bf5-8198-13506499de52",
+                                    "Properties": {
+                                        "title": "Administrasjon av underområder"
+                                    }
+                                }
+                            ]
                         }
-                    }]
-                }]
-            }]
+                    ]
+                }
+            ]
         },
         {
             "Name": "OverordnetOversikt.aspx",
             "Title": "Oversikt",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
-            "Sections": [{
-                "Columns": [{
-                    "Factor": 12,
-                    "Controls": [{
-                        "Id": "01417142-67c8-498b-a6da-6e78003023dd",
-                        "Properties": {
-                            "webPartTitle": "Underområder - oversikt",
-                            "showCommandBar": true,
-                            "showFilters": true,
-                            "showGroupBy": true,
-                            "showSearchBox": true,
-                            "showViewSelector": true,
-                            "showExcelExportButton": true
+            "Sections": [
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
+                                {
+                                    "Id": "01417142-67c8-498b-a6da-6e78003023dd",
+                                    "Properties": {
+                                        "title": "Underområder",
+                                        "showCommandBar": true,
+                                        "showFilters": true,
+                                        "showGroupBy": true,
+                                        "showSearchBox": true,
+                                        "showViewSelector": true,
+                                        "showExcelExportButton": true
+                                    }
+                                }
+                            ]
                         }
-                    }]
-                }]
-            }]
+                    ]
+                }
+            ]
         },
         {
             "Name": "OverordnetGevinster.aspx",
             "Title": "Gevinster",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
-            "Sections": [{
-                "Columns": [{
-                    "Factor": 12,
-                    "Controls": [{
-                        "Id": "1ca1e22e-2a44-490f-9e1b-759f986df0d8",
-                        "Properties": {
-                            "webPartTitle": "Underområder - gevinster",
-                            "dataSource": "Alle Gevinstelementer",
-                            "searchBoxPlaceholderText": "Søk i gevinster...",
-                            "showCommandBar": true,
-                            "showSearchBox": true,
-                            "showExcelExportButton": true,
-                            "hiddenColumns": [
-                                "siteTitle"
+            "Sections": [
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
+                                {
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
+                                    "Properties": {
+                                        "title": "Gevinster for underområder",
+                                        "searchBoxPlaceholderText": "Søk i gevinster for underområder...",
+                                        "dataSource": "Alle gevinstelementer",
+                                        "columns": [
+                                            {
+                                                "key": "Benefit.Title",
+                                                "fieldName": "Benefit.Title",
+                                                "name": "Gevinst",
+                                                "minWidth": 100,
+                                                "maxWidth": 180,
+                                                "isMultiline": true,
+                                                "isResizable": true
+                                            },
+                                            {
+                                                "key": "Benefit.Responsible",
+                                                "fieldName": "Benefit.Responsible",
+                                                "name": "Gevinstansvarlig",
+                                                "minWidth": 50,
+                                                "maxWidth": 150,
+                                                "isResizable": true,
+                                                "isGroupable": true
+                                            },
+                                            {
+                                                "key": "Benefit.Owner",
+                                                "fieldName": "Benefit.Owner",
+                                                "name": "Gevinsteier",
+                                                "minWidth": 50,
+                                                "maxWidth": 180,
+                                                "isResizable": true,
+                                                "isGroupable": true
+                                            },
+                                            {
+                                                "key": "Title",
+                                                "fieldName": "Title",
+                                                "name": "Måleindikator",
+                                                "minWidth": 50,
+                                                "maxWidth": 180,
+                                                "isMultiline": true,
+                                                "isResizable": true
+                                            },
+                                            {
+                                                "key": "Unit",
+                                                "fieldName": "Unit",
+                                                "name": "Måleenhet",
+                                                "minWidth": 50,
+                                                "maxWidth": 80,
+                                                "isResizable": true
+                                            },
+                                            {
+                                                "key": "StartValue",
+                                                "fieldName": "StartValue",
+                                                "fieldNameDisplay": "StartValueDisplay",
+                                                "name": "Startverdi",
+                                                "minWidth": 50,
+                                                "maxWidth": 80,
+                                                "isResizable": true
+                                            },
+                                            {
+                                                "key": "DesiredValue",
+                                                "fieldName": "DesiredValue",
+                                                "fieldNameDisplay": "DesiredValueDisplay",
+                                                "name": "Ønsket verdi",
+                                                "minWidth": 50,
+                                                "maxWidth": 80,
+                                                "isResizable": true
+                                            },
+                                            {
+                                                "key": "Measurements[0].Value",
+                                                "fieldName": "Measurements[0].Value",
+                                                "fieldNameDisplay": "Measurements[0].ValueDisplay",
+                                                "name": "Siste måling",
+                                                "minWidth": 50,
+                                                "maxWidth": 80,
+                                                "isResizable": true
+                                            },
+                                            {
+                                                "key": "Measurements[0].Achievement",
+                                                "fieldName": "Measurements[0].Achievement",
+                                                "name": "Måloppnåelse",
+                                                "minWidth": 50,
+                                                "maxWidth": 80,
+                                                "isResizable": true,
+                                                "data": {
+                                                    "renderAs": "BenefitMeasurementTrend"
+                                                }
+                                            },
+                                            {
+                                                "fieldName": "BenefitMeasurementsModal",
+                                                "key": "BenefitMeasurementsModal",
+                                                "name": "Vis alle målinger",
+                                                "minWidth": 80,
+                                                "maxWidth": 150,
+                                                "data": {
+                                                    "renderAs": "BenefitMeasurementsModal"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
                             ]
                         }
-                    }]
-                }]
-            }]
+                    ]
+                }
+            ]
         },
         {
             "Name": "OverordnetTidslinje.aspx",
             "Title": "Tidslinje",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
-            "Sections": [{
-                "Columns": [{
-                    "Factor": 12,
-                    "Controls": [{
-                        "Id": "f97a38ab-78c2-400e-899f-b0d4cda76166",
-                        "Properties": {
-                            "webPartTitle": "Underområder - tidslinje",
-                            "infoText": "Her listes alle prosjektene med start- og sluttdato i prosjektet. Prosjekttidslinjen støtter også faser, delfaser og milepæler. Tidslinjeelementer til dette prosjektet opprettes i den<A HREF=\"../sitePages/Prosjekttidslinje.aspx\">lokale tidslinjeinnhold listen</A>. Prosjekter vises med rød farge, faser i blått, delfaser blågrønt, og milepæler i gult. For å zoome inn/ut i tidslinje: ALT+Musehjul",
-                            "dataSource": "Prosjekttidslinje"
+            "Sections": [
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
+                                {
+                                    "Id": "f97a38ab-78c2-400e-899f-b0d4cda76166",
+                                    "Properties": {
+                                        "title": "Tidslinje for underområder",
+                                        "infoText": "Her listes alle prosjektene med start- og sluttdato i prosjektet. Prosjekttidslinjen støtter også faser, delfaser og milepæler. Tidslinjeelementer til dette prosjektet opprettes i den<A HREF=\"../sitePages/Prosjekttidslinje.aspx\">lokale tidslinjeinnhold listen</A>. Prosjekter vises med rød farge, faser i blått, delfaser blågrønt, og milepæler i gult. For å zoome inn/ut i tidslinje: ALT+Musehjul",
+                                        "dataSource": "Prosjekttidslinje"
+                                    }
+                                }
+                            ]
                         }
-                    }]
-                }]
-            }]
+                    ]
+                }
+            ]
         },
         {
             "Name": "OverordnetLeveranser.aspx",
             "Title": "Leveranser",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
-            "Sections": [{
-                "Columns": [{
-                    "Factor": 12,
-                    "Controls": [{
-                        "Id": "7ff12e9d-1565-4694-b1de-948d1b174487",
-                        "Properties": {
-                            "webPartTitle": "Underområder - leveranser",
-                            "dataSource": "Alle prosjektleveranser",
-                            "showCommandBar": true,
-                            "showSearchBox": true,
-                            "showExcelExportButton": true,
-                            "columns": [{
-                                    "key": "Title",
-                                    "fieldName": "Title",
-                                    "name": "Tittel",
-                                    "minWidth": 220,
-                                    "maxWidth": 250,
-                                    "isMultiline": true,
-                                    "isResizable": true
-                                },
+            "Sections": [
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
                                 {
-                                    "key": "GtDeliveryDescriptionOWSMTXT",
-                                    "fieldName": "GtDeliveryDescriptionOWSMTXT",
-                                    "name": "Leveransebeskrivelse",
-                                    "minWidth": 220,
-                                    "maxWidth": 220,
-                                    "isMultiline": true,
-                                    "isResizable": true
-                                },
-                                {
-                                    "key": "GtDeliveryStartTimeOWSDATE",
-                                    "fieldName": "GtDeliveryStartTimeOWSDATE",
-                                    "name": "Starttidspunkt",
-                                    "minWidth": 100,
-                                    "maxWidth": 150,
-                                    "isResizable": true,
-                                    "data": {
-                                        "renderAs": "date"
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
+                                    "Properties": {
+                                        "title": "Leveranser for underområder",
+                                        "searchBoxPlaceholderText": "Søk i leveranser for underområder...",
+                                        "dataSource": "Alle prosjektleveranser",
+                                        "columns": [
+                                            {
+                                                "key": "Title",
+                                                "fieldName": "Title",
+                                                "name": "Tittel",
+                                                "minWidth": 220,
+                                                "maxWidth": 250,
+                                                "isMultiline": true,
+                                                "isResizable": true
+                                            },
+                                            {
+                                                "key": "GtDeliveryDescriptionOWSMTXT",
+                                                "fieldName": "GtDeliveryDescriptionOWSMTXT",
+                                                "name": "Leveransebeskrivelse",
+                                                "minWidth": 220,
+                                                "maxWidth": 220,
+                                                "isMultiline": true,
+                                                "isResizable": true
+                                            },
+                                            {
+                                                "key": "GtDeliveryStartTimeOWSDATE",
+                                                "fieldName": "GtDeliveryStartTimeOWSDATE",
+                                                "name": "Starttidspunkt",
+                                                "minWidth": 100,
+                                                "maxWidth": 150,
+                                                "isResizable": true,
+                                                "data": {
+                                                    "renderAs": "date"
+                                                }
+                                            },
+                                            {
+                                                "key": "GtDeliveryEndTimeOWSDATE",
+                                                "fieldName": "GtDeliveryEndTimeOWSDATE",
+                                                "name": "Sluttidspunkt",
+                                                "minWidth": 100,
+                                                "maxWidth": 150,
+                                                "isResizable": true,
+                                                "data": {
+                                                    "renderAs": "date"
+                                                }
+                                            },
+                                            {
+                                                "key": "GtDeliveryStatusOWSCHCS",
+                                                "fieldName": "GtDeliveryStatusOWSCHCS",
+                                                "name": "Leveransestatus",
+                                                "minWidth": 100,
+                                                "maxWidth": 150,
+                                                "isResizable": true
+                                            },
+                                            {
+                                                "key": "GtDeliveryStatusCommentOWSMTXT",
+                                                "fieldName": "GtDeliveryStatusCommentOWSMTXT",
+                                                "name": "Kommentar, leveransestatus",
+                                                "minWidth": 220,
+                                                "maxWidth": 220,
+                                                "isMultiline": true,
+                                                "isResizable": true
+                                            }
+                                        ]
                                     }
-                                },
-                                {
-                                    "key": "GtDeliveryEndTimeOWSDATE",
-                                    "fieldName": "GtDeliveryEndTimeOWSDATE",
-                                    "name": "Sluttidspunkt",
-                                    "minWidth": 100,
-                                    "maxWidth": 150,
-                                    "isResizable": true,
-                                    "data": {
-                                        "renderAs": "date"
-                                    }
-                                },
-                                {
-                                    "key": "GtDeliveryStatusOWSCHCS",
-                                    "fieldName": "GtDeliveryStatusOWSCHCS",
-                                    "name": "Leveransestatus",
-                                    "minWidth": 100,
-                                    "maxWidth": 150,
-                                    "isResizable": true
-                                },
-                                {
-                                    "key": "GtDeliveryStatusCommentOWSMTXT",
-                                    "fieldName": "GtDeliveryStatusCommentOWSMTXT",
-                                    "name": "Kommentar, leveransestatus",
-                                    "minWidth": 220,
-                                    "maxWidth": 220,
-                                    "isMultiline": true,
-                                    "isResizable": true
                                 }
                             ]
                         }
-                    }]
-                }]
-            }]
+                    ]
+                }
+            ]
         },
         {
             "Name": "OverordnetUsikkerheter.aspx",
             "Title": "Usikkerheter",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
-            "Sections": [{
-                "Columns": [{
-                    "Factor": 12,
-                    "Controls": [{
-                        "Id": "3e189ba9-e1c2-4143-9598-820512e48c47",
-                        "Properties": {
-                            "webPartTitle": "Underområder - usikkerhet",
-                            "dataSource": "Programrisiko",
-                            "showCommandBar": true,
-                            "showSearchBox": true,
-                            "showExcelExportButton": true,
-                            "columns": [{
-                                    "key": "Title",
-                                    "fieldName": "Title",
-                                    "name": "Tittel",
-                                    "minWidth": 150,
-                                    "maxWidth": 300
-                                },
+            "Sections": [
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
                                 {
-                                    "key": "GtRiskProbabilityOWSNMBR",
-                                    "fieldName": "GtRiskProbabilityOWSNMBR",
-                                    "name": "Sannsynlighet (S)",
-                                    "minWidth": 100,
-                                    "maxWidth": 125,
-                                    "data": {
-                                        "renderAs": "int"
+                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
+                                    "Properties": {
+                                        "title": "Usikkerheter for underområder",
+                                        "searchBoxPlaceholderText": "Søk i usikkerheter for underområder...",
+                                        "dataSource": "Programrisiko",
+                                        "columns": [
+                                            {
+                                                "key": "Title",
+                                                "fieldName": "Title",
+                                                "name": "Tittel",
+                                                "minWidth": 150,
+                                                "maxWidth": 300
+                                            },
+                                            {
+                                                "key": "GtRiskProbabilityOWSNMBR",
+                                                "fieldName": "GtRiskProbabilityOWSNMBR",
+                                                "name": "Sannsynlighet (S)",
+                                                "minWidth": 100,
+                                                "maxWidth": 125,
+                                                "data": {
+                                                    "renderAs": "int"
+                                                }
+                                            },
+                                            {
+                                                "key": "GtRiskConsequenceOWSNMBR",
+                                                "fieldName": "GtRiskConsequenceOWSNMBR",
+                                                "name": "Konsekvens (K)",
+                                                "minWidth": 100,
+                                                "maxWidth": 125,
+                                                "data": {
+                                                    "renderAs": "int"
+                                                }
+                                            },
+                                            {
+                                                "key": "GtRiskProbabilityPostActionOWSNMBR",
+                                                "fieldName": "GtRiskProbabilityPostActionOWSNMBR",
+                                                "name": "S etter tiltak",
+                                                "minWidth": 100,
+                                                "maxWidth": 125,
+                                                "data": {
+                                                    "renderAs": "int"
+                                                }
+                                            },
+                                            {
+                                                "key": "GtRiskConsequencePostActionOWSNMBR",
+                                                "fieldName": "GtRiskConsequencePostActionOWSNMBR",
+                                                "name": "K etter tiltak",
+                                                "minWidth": 100,
+                                                "maxWidth": 125,
+                                                "data": {
+                                                    "renderAs": "int"
+                                                }
+                                            },
+                                            {
+                                                "key": "GtRiskActionOWSMTXT",
+                                                "fieldName": "GtRiskActionOWSMTXT",
+                                                "name": "Tiltak",
+                                                "minWidth": 300,
+                                                "isMultiline": true
+                                            }
+                                        ]
                                     }
-                                },
-                                {
-                                    "key": "GtRiskConsequenceOWSNMBR",
-                                    "fieldName": "GtRiskConsequenceOWSNMBR",
-                                    "name": "Konsekvens (K)",
-                                    "minWidth": 100,
-                                    "maxWidth": 125,
-                                    "data": {
-                                        "renderAs": "int"
-                                    }
-                                },
-                                {
-                                    "key": "GtRiskProbabilityPostActionOWSNMBR",
-                                    "fieldName": "GtRiskProbabilityPostActionOWSNMBR",
-                                    "name": "S etter tiltak",
-                                    "minWidth": 100,
-                                    "maxWidth": 125,
-                                    "data": {
-                                        "renderAs": "int"
-                                    }
-                                },
-                                {
-                                    "key": "GtRiskConsequencePostActionOWSNMBR",
-                                    "fieldName": "GtRiskConsequencePostActionOWSNMBR",
-                                    "name": "K etter tiltak",
-                                    "minWidth": 100,
-                                    "maxWidth": 125,
-                                    "data": {
-                                        "renderAs": "int"
-                                    }
-                                },
-                                {
-                                    "key": "GtRiskActionOWSMTXT",
-                                    "fieldName": "GtRiskActionOWSMTXT",
-                                    "name": "Tiltak",
-                                    "minWidth": 300,
-                                    "isMultiline": true
                                 }
                             ]
                         }
-                    }]
-                }]
-            }]
+                    ]
+                }
+            ]
         }
     ]
 }

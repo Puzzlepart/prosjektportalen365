@@ -1,51 +1,40 @@
 import {
-  DefaultButton,
   Dialog,
+  DialogType,
+  ShimmeredDetailsList,
+  SelectionMode,
   DialogFooter,
   PrimaryButton,
-  DialogType,
-  SelectionMode,
-  ShimmeredDetailsList
-} from 'office-ui-fabric-react'
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react'
-import { IAddProjectProps } from './types'
-import { ProjectTable } from '../ProjectTable'
-import { fields } from '../index'
-import { useStore } from '../store'
-import { addChildProject, fetchAvailableProjects } from '../helpers'
-import { shimmeredColumns } from '../types'
-import styles from '../programAdministration.module.scss'
+  DefaultButton
+} from '@fluentui/react'
 import * as strings from 'ProgramWebPartsStrings'
+import React, { FC, useContext } from 'react'
+import { ProgramAdministrationContext } from '../context'
+import { addChildProject } from '../data'
+import { fields } from '../index'
+import styles from '../ProgramAdministration.module.scss'
+import { ProjectTable } from '../ProjectTable'
+import { CHILD_PROJECTS_ADDED, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
+import { shimmeredColumns } from '../types'
+import { useAddProjectDialog } from './useAddProjectDialog'
 
-export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp, context }) => {
-  const projects = useStore((state) => state.availableProjects)
-  const setAvailableProjects = useStore((state) => state.setAvailableProjects)
-  const setChildProjects = useStore((state) => state.setChildProjects)
-  const childProjects = useStore((state) => state.childProjects)
-  const toggleProjectDialog = useStore((state) => state.toggleProjectDialog)
-  const [isLoading, setIsLoading] = useState(false)
-  const selectedItem = useRef([])
-
-  useEffect(() => {
-    const fetch = async () => {
-      const data = await fetchAvailableProjects(sp, context)
-      setAvailableProjects(data)
-      setIsLoading(false)
-    }
-    setIsLoading(true)
-    fetch()
-  }, [])
+export const AddProjectDialog: FC = () => {
+  const context = useContext(ProgramAdministrationContext)
+  const { selectedProjects, availableProjects } = useAddProjectDialog()
 
   return (
     <>
       <Dialog
         hidden={false}
-        onDismiss={() => toggleProjectDialog()}
-        minWidth='50em'
+        onDismiss={() => context.dispatch(TOGGLE_ADD_PROJECT_DIALOG())}
+        minWidth='60em'
         maxWidth='1000px'
-        dialogContentProps={dialogContentProps}>
+        dialogContentProps={{
+          type: DialogType.largeHeader,
+          title: strings.ProgramAddChildsButtonText
+        }}>
         <div className={styles.dialogContent}>
-          {isLoading ? (
+          {context.state.loading.AddProjectDialog ? (
             <ShimmeredDetailsList
               items={[]}
               shimmerLines={15}
@@ -54,31 +43,29 @@ export const AddProjectDialog: FunctionComponent<IAddProjectProps> = ({ sp, cont
             />
           ) : (
             <ProjectTable
-              fields={fields}
-              projects={projects}
-              width='50em'
-              onSelect={(item) => (selectedItem.current = item)}
+              fields={fields(false)}
+              items={availableProjects}
               selectionMode={SelectionMode.multiple}
+              onSelectionChanged={(items) => {
+                selectedProjects.current = items
+              }}
             />
           )}
         </div>
         <DialogFooter>
           <PrimaryButton
             text={strings.Add}
-            onClick={() => {
-              addChildProject(sp, selectedItem.current)
-              setChildProjects([...childProjects, ...selectedItem.current])
-              toggleProjectDialog()
+            onClick={async () => {
+              await addChildProject(context.props.dataAdapter, selectedProjects.current)
+              context.dispatch(CHILD_PROJECTS_ADDED({ childProjects: selectedProjects.current }))
             }}
           />
-          <DefaultButton text={strings.Cancel} onClick={() => toggleProjectDialog()} />
+          <DefaultButton
+            text={strings.Cancel}
+            onClick={() => context.dispatch(TOGGLE_ADD_PROJECT_DIALOG())}
+          />
         </DialogFooter>
       </Dialog>
     </>
   )
-}
-
-const dialogContentProps = {
-  type: DialogType.largeHeader,
-  title: strings.ProgramAddProject
 }

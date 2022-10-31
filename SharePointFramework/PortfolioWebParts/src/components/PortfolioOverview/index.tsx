@@ -1,29 +1,31 @@
-import { UrlQueryParameterCollection } from '@microsoft/sp-core-library'
-import { stringIsNullOrEmpty } from '@pnp/common'
-import { getId } from '@uifabric/utilities'
-import sortArray from 'array-sort'
-import * as uniq from 'array-unique'
 import {
-  ContextualMenu,
-  ContextualMenuItemType,
-  IContextualMenuProps
-} from 'office-ui-fabric-react/lib/ContextualMenu'
-import {
+  Selection,
+  getId,
+  MessageBar,
+  ScrollablePane,
+  ScrollbarVisibility,
+  MarqueeSelection,
+  ShimmeredDetailsList,
   ConstrainMode,
   DetailsListLayoutMode,
+  SelectionMode,
+  LayerHost,
+  ContextualMenu,
+  format,
   IDetailsHeaderProps,
+  IRenderFunction,
+  Sticky,
+  StickyPositionType,
+  SearchBox,
+  ContextualMenuItemType,
+  IContextualMenuProps,
   IGroup,
-  Selection,
-  SelectionMode
-} from 'office-ui-fabric-react/lib/DetailsList'
-import { LayerHost } from 'office-ui-fabric-react/lib/Layer'
-import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane'
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox'
-import { ShimmeredDetailsList } from 'office-ui-fabric-react/lib/ShimmeredDetailsList'
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky'
-import { format, IRenderFunction } from 'office-ui-fabric-react/lib/Utilities'
+  MessageBarType
+} from '@fluentui/react'
+import { UrlQueryParameterCollection } from '@microsoft/sp-core-library'
+import { stringIsNullOrEmpty } from '@pnp/common'
+import sortArray from 'array-sort'
+import * as uniq from 'array-unique'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
@@ -79,7 +81,7 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
     }
   }
 
-  public componentWillUpdate(
+  public UNSAFE_componentWillUpdate(
     _nextProps: IPortfolioOverviewProps,
     { currentView, groupBy }: IPortfolioOverviewState
   ) {
@@ -159,10 +161,15 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
   /**
    * On search
    *
+   * @param _event Event
    * @param searchTerm Search term
    * @param delay Delay in ms
    */
-  private _onSearch(searchTerm: string, delay: number = 500) {
+  private _onSearch(
+    _event: React.ChangeEvent<HTMLInputElement>,
+    searchTerm: string,
+    delay: number = 600
+  ) {
     clearTimeout(this._onSearchDelay)
     this._onSearchDelay = setTimeout(() => {
       this.setState({ searchTerm: searchTerm.toLowerCase() })

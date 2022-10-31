@@ -1,104 +1,49 @@
-import moment from 'moment'
-import { Icon, IPersonaSharedProps, Persona, PersonaSize } from 'office-ui-fabric-react'
-import { DocumentCardActions, DocumentCardTitle } from 'office-ui-fabric-react/lib/DocumentCard'
-import strings from 'PortfolioWebPartsStrings'
-import React, { FunctionComponent } from 'react'
-import { placeholderImage } from '../types'
+import {
+  DocumentCard,
+  DocumentCardActions,
+  Link,
+  Shimmer,
+  ShimmerElementsGroup,
+  ShimmerElementType
+} from '@fluentui/react'
+import { ProjectListModel } from 'models'
+import React, { FC } from 'react'
 import styles from './ProjectCard.module.scss'
-import { ProjectLifecycleStatus } from './ProjectLifecycleStatus'
-import { ProjectServiceArea } from './ProjectServiceArea'
-import { ProjectType } from './ProjectType'
+import { ProjectCardContent } from './ProjectCardContent'
+import { ProjectCardHeader } from './ProjectCardHeader'
 import { IProjectCardProps } from './types'
+import { useProjectCard } from './useProjectCard'
 
-export const ProjectCard: FunctionComponent<IProjectCardProps> = ({
-  project,
-  actions,
-  showProjectOwner,
-  showProjectManager,
-  showLifeCycleStatus,
-  showServiceArea,
-  showType,
-  phaseLevel
-}) => {
-  const ownerPersona: IPersonaSharedProps = {
-    title: project.owner
-      ? `${project.owner.text} | ${strings.ProjectOwner}`
-      : 'Prosjekteier ikke satt',
-    imageUrl: project.owner ? project.owner.imageUrl : null
-  }
-  const managerPersona: IPersonaSharedProps = {
-    title: project.manager
-      ? `${project.manager.text} | ${strings.ProjectManager}`
-      : 'Prosjektleder ikke satt',
-    imageUrl: project.manager ? project.manager.imageUrl : null
-  }
-
-  const _setPhaseColor = (phaseLevel) => {
-    switch (phaseLevel) {
-      case 'Portfolio':
-        return '#0072c6'
-      case 'Project':
-        return '#339933'
-      default:
-        return '#808080'
-    }
-  }
+export const ProjectCard: FC<IProjectCardProps> = (props) => {
+  const { isDataLoaded, setIsImageLoaded, documentCardProps } = useProjectCard(props)
   return (
-    <a href={project.userIsMember ? project.url : null} style={{ textDecoration: 'none' }}>
-      <div
-        className={styles.root}
-        style={!project.userIsMember ? { opacity: '50%', cursor: 'default' } : {}}>
-        <div className={styles.logo}>
-          <img src={project.logo ?? placeholderImage} />
-        </div>
-        <div
-          title={project.phase}
-          style={{ backgroundColor: _setPhaseColor(phaseLevel), opacity: 0.9, color: 'white' }}
-          className={styles.phaseLabel}>
-          <span className={styles.phaseLabelTitle}>
-            {project.phase ? project.phase : strings.NotSet}
-          </span>
-        </div>
-        <DocumentCardTitle className={styles.title} title={project.title} shouldTruncate={true} />
-        <hr />
+    <Shimmer
+      className={styles.root}
+      isDataLoaded={isDataLoaded}
+      customElementsGroup={
         <div>
-          <div className={styles.labels}>
-            <ProjectLifecycleStatus
-              hidden={!showLifeCycleStatus}
-              lifecycleStatus={project.lifecycleStatus}
+          <div className={styles.shimmerGroup}>
+            <ShimmerElementsGroup
+              shimmerElements={[{ type: ShimmerElementType.line, width: '100%', height: 440 }]}
             />
-            <ProjectServiceArea hidden={!showServiceArea} serviceArea={project.serviceArea} />
-            <ProjectType hidden={!showType} type={project.type} />
-          </div>
-          <div className={styles.content}>
-            <div title={strings.EndDateLabel} className={styles.endDate}>
-              <Icon
-                className={styles.endDateIcon}
-                iconName='Calendar'
-                style={
-                  project.endDate && moment(project.endDate).isBefore()
-                    ? { color: '#FF6666' }
-                    : { color: 'black' }
-                }
-              />
-              <span className={styles.endDateText}>
-                {project.endDate ? moment(project.endDate).format('DD.MM.YYYY') : strings.NotSet}
-              </span>
-            </div>
           </div>
         </div>
-        <div className={styles.footer}>
-          <div className={styles.persona}>
-            {showProjectOwner && project.owner && (
-              <Persona {...ownerPersona} size={PersonaSize.size40} hidePersonaDetails />
-            )}
-            {showProjectManager && project.manager && (
-              <Persona {...managerPersona} size={PersonaSize.size40} hidePersonaDetails />
-            )}
-          </div>
-          <DocumentCardActions actions={actions} />
-        </div>
-      </div>
-    </a>
+      }>
+      <DocumentCard {...documentCardProps}>
+        <Link href={documentCardProps.onClickHref} target='_blank'>
+          <ProjectCardHeader {...props} onImageLoad={() => setIsImageLoaded(true)} />
+        </Link>
+        <ProjectCardContent {...props} />
+        <DocumentCardActions actions={props.actions} />
+      </DocumentCard>
+    </Shimmer>
   )
+}
+
+ProjectCard.defaultProps = {
+  project: new ProjectListModel(undefined, {}),
+  isDataLoaded: true,
+  showProjectOwner: false,
+  showProjectManager: false,
+  shouldTruncateTitle: true
 }

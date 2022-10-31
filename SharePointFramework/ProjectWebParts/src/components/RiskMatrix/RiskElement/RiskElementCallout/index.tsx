@@ -1,9 +1,9 @@
-import { Callout } from 'office-ui-fabric-react/lib/Callout'
-import React, { FunctionComponent } from 'react'
+import { Callout } from '@fluentui/react/lib/Callout'
+import React, { FC } from 'react'
 import { replaceTokens } from 'pp365-shared/lib/util/replaceTokens'
 import { IRiskElementCalloutProps } from './types'
 
-export const RiskElementCallout: FunctionComponent<IRiskElementCalloutProps> = ({
+export const RiskElementCallout: FC<IRiskElementCalloutProps> = ({
   risk,
   calloutTemplate,
   target,

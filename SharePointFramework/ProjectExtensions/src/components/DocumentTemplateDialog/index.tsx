@@ -1,9 +1,13 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import {
+  DefaultButton,
+  DialogFooter,
+  format,
+  MessageBarType,
+  PrimaryButton,
+  Selection
+} from '@fluentui/react'
 import { FileAddResult } from '@pnp/sp'
-import { ActionButton } from 'office-ui-fabric-react/lib/Button'
-import { Selection } from 'office-ui-fabric-react/lib/DetailsList'
-import { MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { useReducer } from 'react'
 import { isEmpty } from 'underscore'
@@ -36,7 +40,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   /**
    * On copy documents to the selected target URL
    *
-   * @param {TemplateItem[]} templates Templates
+   * @param templates Templates
    */
   async function onStartCopy(templates: TemplateItem[]): Promise<void> {
     dispatch(START_COPY())
@@ -97,9 +101,8 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
       {
         [DocumentTemplateDialogScreen.Select]: (
           <>
-            <ActionButton
+            <PrimaryButton
               text={strings.OnSubmitSelectionText}
-              iconProps={{ iconName: 'CheckMark' }}
               onClick={() =>
                 dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.TargetFolder }))
               }
@@ -109,16 +112,11 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
         ),
         [DocumentTemplateDialogScreen.Summary]: (
           <>
-            <ActionButton
+            <PrimaryButton
               text={strings.GetMoreText}
-              iconProps={{ iconName: 'CirclePlus' }}
               onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))}
             />
-            <ActionButton
-              text={strings.CloseModalText}
-              iconProps={{ iconName: 'ClosePane' }}
-              onClick={onClose}
-            />
+            <DefaultButton text={strings.CloseModalText} onClick={onClose} />
           </>
         )
       }[state.screen] || null
@@ -133,10 +131,10 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
           isBlocking: state.locked,
           isDarkOverlay: state.locked
         }}
-        onRenderFooter={onRenderFooter}
         onDismiss={onClose}
         containerClassName={styles.root}>
         <div className={styles.container}>{onRenderContent()}</div>
+        <DialogFooter>{onRenderFooter()}</DialogFooter>
       </BaseDialog>
     </DocumentTemplateDialogContext.Provider>
   )

@@ -1,19 +1,25 @@
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
 import * as strings from 'ProjectExtensionsStrings'
-import * as React from 'react'
+import React, { FC } from 'react'
 import { BaseDialog } from '../@BaseDialog'
-import ReactMarkdown from 'react-markdown/with-html'
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
 import styles from './ErrorDialog.module.scss'
 import { IErrorDialogProps } from './types'
+import {
+  MessageBarType,
+  DefaultButton,
+  PrimaryButton,
+  MessageBar,
+  DialogFooter
+} from '@fluentui/react'
 
-export const ErrorDialog = ({
+export const ErrorDialog: FC<IErrorDialogProps> = ({
   error,
   version,
   messageType = MessageBarType.error,
   onDismiss,
   onSetupClick
-}: IErrorDialogProps) => {
+}) => {
   const onRenderFooter = () => {
     if (error.name === 'AlreadySetup') {
       return (
@@ -23,26 +29,23 @@ export const ErrorDialog = ({
         </>
       )
     }
-    return (
-      <>
-        <PrimaryButton text={strings.CloseModalText} onClick={onDismiss} />
-      </>
-    )
+    return <PrimaryButton text={strings.CloseModalText} onClick={onDismiss} />
   }
 
   return (
     <BaseDialog
       version={version}
       dialogContentProps={{ title: error.message }}
-      modalProps={{ isBlocking: false, isDarkOverlay: true }}
-      onRenderFooter={onRenderFooter}
-      onDismiss={onDismiss}
-      containerClassName={styles.errorDialog}>
+      modalProps={{ containerClassName: styles.root, isBlocking: false, isDarkOverlay: true }}
+      onDismiss={onDismiss}>
       <div style={{ marginTop: 15 }}>
         <MessageBar messageBarType={messageType} className={styles.errorMessage}>
-          <ReactMarkdown escapeHtml={false} linkTarget='_blank' source={error.stack} />
+          <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]}>
+            {error.stack}
+          </ReactMarkdown>
         </MessageBar>
       </div>
+      <DialogFooter>{onRenderFooter()}</DialogFooter>
     </BaseDialog>
   )
 }

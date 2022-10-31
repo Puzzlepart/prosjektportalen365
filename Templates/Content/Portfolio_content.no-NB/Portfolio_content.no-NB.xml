@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
-<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema https://raw.githubusercontent.com/OfficeDev/PnP-Provisioning-Schema/master/OfficeDevPnP.ProvisioningSchema/ProvisioningSchema-2019-03.xsd">
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:Preferences></pnp:Preferences>
     <pnp:Templates ID="CONTAINER-TEMPLATE-PP-PORTFOLIO-CONTENT-NO-NB">
         <pnp:ProvisioningTemplate ID="TEMPLATE-PP-PORTFOLIO-NO-NB" Scope="RootSite">
             <pnp:Files>
-                <pnp:File Src="ProjectTemplates\Standardmal.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
+                <pnp:File Src="ProjectTemplates/Standardmal.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Standardmal" />
                         <pnp:Property Key="GtDescription" Value="Dette er standardmalen for prosjekt som følger med Prosjektportalen 365. Blir overskrevet ved en oppgradering." />
@@ -15,7 +14,7 @@
                         <pnp:Property Key="GtIsParentProject" Value="0" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="ProjectTemplates\Overordnet.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
+                <pnp:File Src="ProjectTemplates/Overordnet.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Overordnet" />
                         <pnp:Property Key="GtDescription" Value="Dette er standardmalen for overordnet prosjekt som følger med Prosjektportalen 365. Blir overskrevet ved en oppgradering." />
@@ -25,7 +24,7 @@
                         <pnp:Property Key="IsDefaultTemplate" Value="0" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="ProjectTemplates\Programmal.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
+                <pnp:File Src="ProjectTemplates/Programmal.txt" Folder="Prosjektmaler" Level="Published" Overwrite="true">
                     <pnp:Properties>
                         <pnp:Property Key="Title" Value="Programmal" />
                         <pnp:Property Key="GtDescription" Value="Dette er standardmalen for program som følger med Prosjektportalen 365. Blir overskrevet ved en oppgradering." />
@@ -35,7 +34,50 @@
                         <pnp:Property Key="IsDefaultTemplate" Value="0" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:Directory Src="Malbibliotek" Folder="Malbibliotek" Overwrite="false" Recursive="false" IncludedExtensions="*.doc,*.docx,*.xls,*.xlsx,*.ppt,*.pptx" />
+                <pnp:File Src="ProjectExtensions/Fasesider.txt" Folder="Prosjekttillegg" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Fasesider" />
+                        <pnp:Property Key="GtDescription" Value="Egne sider for de ulike standardfasene i Prosjektportalen til bruk sammen med dynamisk forside-funksjonaliteten. Dette tillegget inneholder sider for Konsept, Planlegge, Gjennomføre, Avslutte og Realisere." />
+                        <pnp:Property Key="GtExtensionDefault" Value="0" />
+                        <pnp:Property Key="GtExtensionHidden" Value="1" />
+                        <pnp:Property Key="GtExtensionLocked" Value="0" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Gevinstrealiseringsplan.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Gevinstrealiseringsplan" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Gevinstverktøy.xlsx" Folder="Malbibliotek" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Gevinstverktøy" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Mandat for konseptfasen.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Mandat for konseptfasen" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Prosjektbegrunnelse.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Prosjektbegrunnelse" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Prosjektforslag.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Prosjektforslag" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Sluttrapport.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Sluttrapport" />
+                    </pnp:Properties>
+                </pnp:File>
+                <pnp:File Src="Malbibliotek/Styringsdokument.docx" Folder="Malbibliotek" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Styringsdokument" />
+                    </pnp:Properties>
+                </pnp:File>
             </pnp:Files>
             <pnp:Lists>
                 <pnp:ListInstance Title="Fasesjekkliste" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Fasesjekkliste" EnableVersioning="true" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false">

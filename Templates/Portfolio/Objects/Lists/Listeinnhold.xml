@@ -1,5 +1,5 @@
 <pnp:ListInstance Title="{resource:Lists_ListContent_Title}" Description="" DocumentTemplate="" Hidden="true" TemplateType="100" Url="{resource:Lists_ListContent_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false" ContentTypesEnabled="true" RemoveExistingContentTypes="true" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100B8B4EE61A547B247B49CFC21B67D5B7D" Default="true" />
         <pnp:ContentTypeBinding ContentTypeID="0x0100B8B4EE61A547B247B49CFC21B67D5B7D01" />
@@ -20,6 +20,57 @@
                 <FieldRef Name="GtLccFields" />
                 <FieldRef Name="GtLccHidden" />
                 <FieldRef Name="GtLccDefault" />
+                <FieldRef Name="GtLccLocked" />
+                <FieldRef Name="Modified" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">30</RowLimit>
+            <JSLink>clienttemplates.js</JSLink>
+        </View>
+        <View Type="HTML" DisplayName="{resource:ContentTypes_ListContent_Name}" Url="{site}/{resource:Lists_ListContent_Url}ListContent.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+            <Query>
+                <Where>
+                    <Eq>
+                        <FieldRef Name="ContentType" />
+                        <Value Type="Computed">{resource:ContentTypes_ListContent_Name}</Value>
+                    </Eq>
+                </Where>
+                <OrderBy>
+                    <FieldRef Name="Title" />
+                </OrderBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="Title" />
+                <FieldRef Name="GtDescription" />
+                <FieldRef Name="GtLccSourceList" />
+                <FieldRef Name="GtLccDestinationList" />
+                <FieldRef Name="GtLccFields" />
+                <FieldRef Name="GtLccHidden" />
+                <FieldRef Name="GtLccDefault" />
+                <FieldRef Name="GtLccLocked" />
+                <FieldRef Name="Modified" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">30</RowLimit>
+            <JSLink>clienttemplates.js</JSLink>
+        </View>
+        <View Type="HTML" DisplayName="{resource:ContentTypes_PlannerTasks_Name}" Url="{site}/{resource:Lists_ListContent_Url}/PlannerTasks.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+            <Query>
+                <Where>
+                    <Eq>
+                        <FieldRef Name="ContentType" />
+                        <Value Type="Computed">{resource:ContentTypes_PlannerTasks_Name}</Value>
+                    </Eq>
+                </Where>
+                <OrderBy>
+                    <FieldRef Name="Title" />
+                </OrderBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="Title" />
+                <FieldRef Name="GtDescription" />
+                <FieldRef Name="GtLccSourceList" />
+                <FieldRef Name="GtLccHidden" />
+                <FieldRef Name="GtLccDefault" />
+                <FieldRef Name="GtLccLocked" />
                 <FieldRef Name="Modified" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
@@ -41,7 +92,7 @@
             <pnp:DataValue FieldName="Title">Planneroppgaver</pnp:DataValue>
             <pnp:DataValue FieldName="GtDescription">Standard prosjektoppgaver for å understøtte Prosjektveiviserens metodikk</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccSourceList">Planneroppgaver</pnp:DataValue>
-            <pnp:DataValue FieldName="GtLccFields">N/A</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccFields">-</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
         </pnp:DataRow>

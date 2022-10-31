@@ -1,49 +1,26 @@
-import { IButtonProps } from 'office-ui-fabric-react/lib/Button'
+import { IButtonProps } from '@fluentui/react/lib/Button'
 import { ProjectListModel } from 'models'
+import { IProjectListProps } from '../types'
 
-export interface IProjectCardProps {
+export interface IProjectCardProps
+  extends Pick<IProjectListProps, 'showProjectLogo' | 'showProjectOwner' | 'showProjectManager'> {
   /**
-   * Project
+   * Project model
    */
-  project: ProjectListModel
+  project?: ProjectListModel
 
   /**
-   * Show Project Logo
+   * Should the title be truncated
    */
-  showProjectLogo?: boolean
+  shouldTruncateTitle?: boolean
 
   /**
-   * Show Project Owner
-   */
-  showProjectOwner?: boolean
-
-  /**
-   * Show Project Manager
-   */
-  showProjectManager?: boolean
-
-  /**
-   * Show Life Cycle Status
-   */
-  showLifeCycleStatus?: boolean
-
-  /**
-   * Show Service Area
-   */
-  showServiceArea?: boolean
-
-  /**
-   * Show Type
-   */
-  showType?: boolean
-
-  /**
-   * Actions
+   * Actions to display in the footer of the card
    */
   actions?: IButtonProps[]
 
   /**
-   * Phase Level (Portfolio, Project)
+   * Controls when the shimmer is swapped with actual data through an animated transition
    */
-  phaseLevel?: string
+  isDataLoaded?: boolean
 }

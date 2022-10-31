@@ -1,13 +1,18 @@
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { sp, Web } from '@pnp/sp'
 import { IProjectSetupData } from 'projectSetup'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { SPField } from 'pp365-shared/lib/models/SPField'
-import { IPlannerTaskSPItem, ListContentConfig, ListContentConfigType } from '../../../models'
+import { IPlannerTaskSPItem, ContentConfig, ContentConfigType } from '../../../models'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
-import { ITaskDetails, PlannerConfiguration, TaskAttachment } from '../PlannerConfiguration'
+import {
+  ITaskDetails,
+  PlannerConfiguration,
+  TaskAttachment,
+  TaskPreviewType
+} from '../PlannerConfiguration'
 
 export class CopyListData extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -34,22 +39,28 @@ export class CopyListData extends BaseTask {
         params.context.pageContext.legacyPageContext.groupId,
         false
       )
-      for (let i = 0; i < this.data.selectedListContentConfig.length; i++) {
-        const config = this.data.selectedListContentConfig[i]
-        await config.load()
+      for (let i = 0; i < this.data.selectedContentConfig.length; i++) {
+        const contentConfig = this.data.selectedContentConfig[i]
+        await contentConfig.load()
         // eslint-disable-next-line default-case
-        switch (config.type) {
-          case ListContentConfigType.Planner:
+        switch (contentConfig.type) {
+          case ContentConfigType.Planner:
             {
-              const items = await this._getSourceItems<IPlannerTaskSPItem>(config, [
+              const items = await this._getSourceItems<IPlannerTaskSPItem>(contentConfig, [
                 'Title',
+                'GtDescription',
                 'GtCategory',
                 'GtChecklist',
-                'GtAttachments'
+                'GtAttachments',
+                'GtPlannerPreviewType'
               ])
               const configuration = items.reduce((obj, item) => {
                 obj[item.GtCategory] = obj[item.GtCategory] || {}
                 const taskDetails: ITaskDetails = {}
+                taskDetails.previewType = 'automatic'
+                if (!stringIsNullOrEmpty(item.GtDescription)) {
+                  taskDetails.description = item.GtDescription
+                }
                 if (!stringIsNullOrEmpty(item.GtChecklist)) {
                   taskDetails.checklist = item.GtChecklist.split(';')
                 }
@@ -60,6 +71,12 @@ export class CopyListData extends BaseTask {
                       .filter((attachment) => !stringIsNullOrEmpty(attachment.url))
                   } catch (error) {}
                 }
+                if (!stringIsNullOrEmpty(item.GtPlannerPreviewType)) {
+                  let m: RegExpExecArray
+                  if ((m = /\(([^)]+)\)/.exec(item.GtPlannerPreviewType)) !== null) {
+                    taskDetails.previewType = (m[1] ?? 'automatic') as TaskPreviewType
+                  }
+                }
                 obj[item.GtCategory][item.Title] = taskDetails
                 return obj
               }, {})
@@ -69,10 +86,11 @@ export class CopyListData extends BaseTask {
               )
             }
             break
-          case ListContentConfigType.List:
+          case ContentConfigType.List:
             {
-              if (config.sourceListProps.BaseTemplate === 101) await this._processFiles(config)
-              else await this._processListItems(config)
+              if (contentConfig.sourceListProps.BaseTemplate === 101)
+                await this._processFiles(contentConfig)
+              else await this._processListItems(contentConfig)
             }
             break
         }
@@ -86,25 +104,18 @@ export class CopyListData extends BaseTask {
   /**
    * Get source items
    *
-   * @param listContentConfig List config
-   * @param {string[]} fields Fields
+   * @param config List content config
+   * @param fields Fields
    */
-  private async _getSourceItems<T = any>(
-    config: ListContentConfig,
-    fields?: string[]
-  ): Promise<T[]> {
+  private async _getSourceItems<T = any>(config: ContentConfig, fields?: string[]): Promise<T[]> {
     try {
       return await config.sourceList.items
         .select(...(fields || config.fields), 'TaxCatchAll/ID', 'TaxCatchAll/Term')
         .expand('TaxCatchAll')
-        .top(500)
-        .get()
+        .getAll()
     } catch (error) {
       try {
-        return await config.sourceList.items
-          .select(...(fields || config.fields))
-          .top(500)
-          .get()
+        return await config.sourceList.items.select(...(fields || config.fields)).getAll()
       } catch (error) {
         return []
       }
@@ -114,9 +125,9 @@ export class CopyListData extends BaseTask {
   /**
    * Get source fields
    *
-   * @param config List config
+   * @param config Content config
    */
-  private async _getSourceFields(config: ListContentConfig): Promise<SPField[]> {
+  private async _getSourceFields(config: ContentConfig): Promise<SPField[]> {
     try {
       return await config.sourceList.fields.select(...Object.keys(new SPField())).get<SPField[]>()
     } catch (error) {
@@ -127,10 +138,10 @@ export class CopyListData extends BaseTask {
   /**
    * Process list items
    *
-   * @param config List config
+   * @param config Content config
    * @param batchChunkSize Batch chunk size (defaults to 25)
    */
-  private async _processListItems(config: ListContentConfig, batchChunkSize = 25) {
+  private async _processListItems(config: ContentConfig, batchChunkSize = 25) {
     try {
       this.logInformation('Processing list items', { listConfig: config })
       const progressText = format(
@@ -175,7 +186,7 @@ export class CopyListData extends BaseTask {
    * Get file contents
    *
    * @param web Web
-   * @param {IFile[]} files Files to get content for
+   * @param files Files to get content for
    */
   private async _getFileContents(web: Web, files: any[]): Promise<any[]> {
     try {
@@ -198,12 +209,12 @@ export class CopyListData extends BaseTask {
   /**
    * Create folder hierarchy
    *
-   * @param config List config
-   * @param {string[]} folders An array of folders to provision
+   * @param config Content config
+   * @param folders An array of folders to provision
    * @param progressText Progress text
    */
   private async _provisionFolderHierarchy(
-    config: ListContentConfig,
+    config: ContentConfig,
     folders: string[],
     progressText: string
   ): Promise<void> {
@@ -232,9 +243,9 @@ export class CopyListData extends BaseTask {
   /**
    * Process files
    *
-   * @param config List config
+   * @param config Content config
    */
-  private async _processFiles(config: ListContentConfig) {
+  private async _processFiles(config: ContentConfig) {
     try {
       this.logInformation('Processing files', { listConfig: config })
       const progressText = format(
@@ -248,8 +259,7 @@ export class CopyListData extends BaseTask {
       const spItems = await config.sourceList.items
         .expand('Folder')
         .select('Title', 'LinkFilename', 'FileRef', 'FileDirRef', 'Folder/ServerRelativeUrl')
-        .top(500)
-        .get()
+        .getAll()
 
       const folders: string[] = []
       const files: any[] = []
@@ -292,9 +302,9 @@ export class CopyListData extends BaseTask {
   /**
    * Get item properties
    *
-   * @param {string[]} fields Fields
+   * @param fields Fields
    * @param sourceItem Source item
-   * @param {any[]} sourceFields Source fields
+   * @param sourceFields Source fields
    */
   private _getProperties(fields: string[], sourceItem: TypedHash<any>, sourceFields: SPField[]) {
     return fields.reduce((obj: TypedHash<any>, fieldName: string) => {

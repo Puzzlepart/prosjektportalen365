@@ -1,9 +1,9 @@
-import { IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb'
+import { IBreadcrumbItem } from '@fluentui/react/lib/Breadcrumb'
 import { IFolderNavigationProps } from './types'
 /**
  * Create breadcrum items
  *
- * @param {Partial<IFolderNavigationProps>} props Folder navigation props
+ * @param props Folder navigation props
  */
 export const createItems = ({
   currentFolder,

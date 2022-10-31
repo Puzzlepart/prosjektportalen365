@@ -1,9 +1,9 @@
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox'
-import React from 'react'
+import { Checkbox } from '@fluentui/react/lib/Checkbox'
+import React, { FC } from 'react'
 import styles from './FilterItem.module.scss'
 import { IFilterItemProps } from './types'
 
-export const FilterItem: React.FunctionComponent<IFilterItemProps> = (props) => {
+export const FilterItem: FC<IFilterItemProps> = (props) => {
   return (
     <li>
       <div className={styles.root}>

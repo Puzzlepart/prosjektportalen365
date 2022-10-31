@@ -104,7 +104,12 @@ export interface IProjectPhasesData {
   /**
    * Welcome page of web
    */
-  welcomepage?: string
+  welcomePage?: string
+
+  /**
+   * Current user has change phase permission (75a08ae0-d69a-41b2-adf4-ae233c6bff9f)
+   */
+  userHasChangePhasePermission?: boolean
 }
 
 export interface IPhaseSitePageModel {

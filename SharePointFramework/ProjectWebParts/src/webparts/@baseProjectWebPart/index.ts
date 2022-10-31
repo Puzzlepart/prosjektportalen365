@@ -18,10 +18,9 @@ export abstract class BaseProjectWebPart<
   /**
    * Render component
    *
-   * @param {any} component Component
-   * @param {P} props Props
+   * @param component Component
+   * @param props Props
    */
-
   public renderComponent<P>(component: any, props?: Partial<P>): void {
     const combinedProps: T = {
       ...this.properties,

@@ -7,84 +7,82 @@ on:
       - "SharePointFramework/**"
       - "Install/**"
       - "Templates/**"
-      - package.json
 
 env:
   SP_URL: "https://puzzlepart.sharepoint.com/sites/pp365"
-  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+  CI_CREDENTIALS: ${{ secrets.CI_DEV_CREDENTIALS }}
 
 jobs:
-  build-release:
-    runs-on: windows-latest
-
+  build_release_package:
+    name: Build release package
+    runs-on: macos-latest
+    if: "!contains(github.event.head_commit.message, '[skip-ci]')"
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js 12.19.0
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
         with:
-          node-version: 12.19.0
+          ref: ${{ github.head_ref }}
+
+      - name: Set sha_short
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - name: Setup Node.js 16.18.0
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.18.0
 
       - name: Run Install/Build-Release.ps1 in CI mode
-        run: Install/Build-Release.ps1 -CI
-        shell: powershell
+        run: Install/Build-Release.ps1 -CI -SkipBundle
+        shell: pwsh
 
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v3
+        with:
+          name: release-package
+          path: release
+    outputs:
+      sha_short: ${{ steps.vars.outputs.sha_short }}
+
+  upgrade:
+    needs: build_release_package
+    name: Upgrade
+    runs-on: macos-latest
+    if: "!contains(github.event.head_commit.message, '[skip-upgrade]')"
+    steps:
+      - uses: actions/download-artifact@v3
         with:
           name: release-package
           path: release
 
-  upgrade:
-    needs: build-release
-    runs-on: windows-latest
-    steps:
-      - uses: actions/download-artifact@v1
-        with:
-          name: release-package
-
       - name: Upgrade
-        run: release-package/Install.ps1 -Url ${{ env.SP_URL }} -Upgrade -CI ${{ secrets.CI_DEV_CREDENTIALS }}
+        run: release/Install.ps1 -Url ${{ env.SP_URL }} -Upgrade -CI ${{ env.CI_CREDENTIALS }}
         shell: powershell
-
-      - name: Slack notify
-        uses: 8398a7/action-slack@v3
-        with:
-          status: custom
-          fields: workflow,job,commit,repo,ref,author,took
-          custom_payload: |
-            {
-              username: 'action-slack',
-              icon_emoji: ':octocat:',
-              attachments: [{
-                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `${process.env.AS_WORKFLOW}\n${process.env.AS_JOB} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO}@${process.env.AS_REF} by ${process.env.AS_AUTHOR} succeeded in ${process.env.AS_TOOK}. ${{ env.SP_URL }} have been upgraded with the latest goodies from the dev branch.`,
-              }]
-            }
 
   install:
-    needs: [build-release, upgrade]
-    runs-on: windows-latest
+    needs: [build_release_package, upgrade]
+    name: Install
+    runs-on: macos-latest
+    if: "!contains(github.event.head_commit.message, '[skip-install]')"
     steps:
-      - uses: actions/download-artifact@v1
+      - uses: actions/download-artifact@v3
         with:
           name: release-package
+          path: release
 
       - name: Install
-        run: release-package/Install.ps1 -Url "${{ env.SP_URL }}_${{ github.run_id }}" -Title "Prosjektportalen 365 ${{ github.run_id }}" -CI ${{ secrets.CI_DEV_CREDENTIALS }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
+        run: release/Install.ps1 -Url "${{ env.SP_URL }}_${{ needs.build_release_package.outputs.sha_short }}" -Title "Prosjektportalen 365 ${{ needs.build_release_package.outputs.sha_short }}" -CI ${{ env.CI_CREDENTIALS }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
         shell: powershell
 
-      - name: Slack notify
-        uses: 8398a7/action-slack@v3
+  upgrade_all_sites_to_latest:
+    needs: [build_release_package, upgrade]
+    name: Upgrade all sites to latest
+    runs-on: macos-latest
+    if: "contains(github.event.head_commit.message, '[upgrade-all-sites-to-latest]')"
+    steps:
+      - uses: actions/download-artifact@v3
         with:
-          status: custom
-          fields: workflow,job,commit,repo,ref,author,took
-          custom_payload: |
-            {
-              username: 'action-slack',
-              icon_emoji: ':octocat:',
-              attachments: [{
-                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `${process.env.AS_WORKFLOW}\n${process.env.AS_JOB} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO}@${process.env.AS_REF} by ${process.env.AS_AUTHOR} succeeded in ${process.env.AS_TOOK}. A fresh install of Prosjektportalen 365 is ready at ${{ env.SP_URL }}_${{ github.run_id }}.`,
-              }]
-            }
+          name: release-package
+          path: release
+
+      - name: Run script UpgradeAllSitesToLatest.ps1 in CI mode
+        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ env.SP_URL }} -CI ${{ env.CI_CREDENTIALS }}
+        shell: powershell

@@ -1,5 +1,4 @@
-import { IIconProps } from 'office-ui-fabric-react/lib/Icon'
-import { IProgressIndicatorProps } from 'office-ui-fabric-react/lib/ProgressIndicator'
+import { IProgressIndicatorProps, IIconProps } from '@fluentui/react'
 
 export interface ICopyProgressScreenProps extends IProgressIndicatorProps {
   iconProps: IIconProps

@@ -8,13 +8,13 @@ import * as strings from 'ProjectExtensionsStrings'
 import * as validFilename from 'valid-filename'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
 
-export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
+class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
 
   /**
    * Configure the SP data adapter
    *
-   * @param {ApplicationCustomizerContext | ListViewCommandSetContext} spfxContext Context
+   * @param spfxContext Context
    * @param settings Settings
    */
   public configure(
@@ -100,4 +100,6 @@ export default new (class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapter
       .get()
     return libraries.map((lib) => new SPFolder(lib))
   }
-})()
+}
+
+export default new SPDataAdapter()

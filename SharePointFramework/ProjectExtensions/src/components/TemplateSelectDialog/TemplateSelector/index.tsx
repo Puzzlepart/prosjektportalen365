@@ -1,49 +1,60 @@
-import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown'
-import { Icon } from 'office-ui-fabric-react/lib/Icon'
-import * as React from 'react'
-import { ProjectTemplate } from '../../../models'
-import { ITemplateSelectorProps } from './types'
+import { ISearchBoxProps, SearchBox } from '@fluentui/react'
+import { ProjectTemplate } from 'models'
+import strings from 'ProjectExtensionsStrings'
+import React, { useContext, useState } from 'react'
+import Autocomplete from 'react-autocomplete'
+import { TemplateSelectDialogContext } from '../context'
+import { ON_TEMPLATE_CHANGED } from '../reducer'
+import { TemplateConfigMessage } from '../TemplateConfigMessage'
+import { TemplateSelectDialogSectionComponent } from '../types'
 import styles from './TemplateSelector.module.scss'
+import { TemplateSelectorItem } from './TemplateSelectorItem'
 
-export const TemplateSelector: React.FunctionComponent<ITemplateSelectorProps> = (props) => {
-  /**
-   * On template selected
-   *
-   * @param {ProjectTemplate} opt Option
-   */
-  const onTemplateSelected = (opt: ProjectTemplate): void => {
-    props.onChange(opt)
-  }
-
-  /**
-   * On render option
-   *
-   * @param opt Option
-   */
-  const onRenderOption = (option: ProjectTemplate): JSX.Element => {
-    return (
-      <div className={styles.dropdownOption}>
-        <div className={styles.icon}>
-          <Icon iconName={option.iconName} />
-        </div>
-        <div className={styles.body}>
-          <div className={styles.text}>{option.text}</div>
-          <div className={styles.subText}>{option.subText}</div>
-        </div>
-      </div>
-    )
-  }
+export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
+  const context = useContext(TemplateSelectDialogContext)
+  const [searchValue, setSearchValue] = useState(context.state.selectedTemplate?.text)
 
   return (
-    <div className={styles.templateSelector}>
-      <div className={styles.dropdown}>
-        <Dropdown
-          disabled={props.templates?.length <= 1}
-          defaultSelectedKey={props.selectedTemplate.key}
-          onChanged={onTemplateSelected}
-          options={props.templates}
-          onRenderOption={onRenderOption}
+    <div className={styles.root}>
+      <div className={styles.container}>
+        <Autocomplete
+          getItemValue={(template: ProjectTemplate) => template.text}
+          items={context.props.data.templates.filter((t) => !t.hidden)}
+          shouldItemRender={(template: ProjectTemplate) =>
+            searchValue === context.state.selectedTemplate?.text ||
+            template.text.toLowerCase().indexOf(searchValue.toLowerCase()) > -1
+          }
+          renderItem={(template: ProjectTemplate, isHighlighted) => (
+            <div key={template.id}>
+              <TemplateSelectorItem template={template} isHighlighted={isHighlighted} />
+            </div>
+          )}
+          inputProps={{
+            className: styles.searchBox,
+            placeholder: strings.TemplateSelectorSearchPlaceholder
+          }}
+          renderInput={(inputProps) => (
+            <SearchBox
+              {...(inputProps as ISearchBoxProps)}
+              iconProps={context.state.selectedTemplate?.iconProps}
+              clearButtonProps={{ title: strings.TemplateSelectorSearchClearText }}
+              onClear={(event) => {
+                event.stopPropagation()
+                event.preventDefault()
+                setSearchValue('')
+                context.dispatch(ON_TEMPLATE_CHANGED(null))
+              }}
+            />
+          )}
+          value={searchValue}
+          onChange={(_, value) => setSearchValue(value)}
+          onSelect={(_, template: ProjectTemplate) => {
+            setSearchValue(template.text)
+            context.dispatch(ON_TEMPLATE_CHANGED(template))
+          }}
+          selectOnBlur={true}
         />
+        <TemplateConfigMessage section='TemplateSelector' />
       </div>
     </div>
   )

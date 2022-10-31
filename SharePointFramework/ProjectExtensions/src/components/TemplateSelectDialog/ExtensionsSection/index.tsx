@@ -1,50 +1,54 @@
-import { stringIsNullOrEmpty } from '@pnp/common'
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle'
-import { Icon } from 'office-ui-fabric-react/lib/Icon'
-import * as React from 'react'
-import { ProjectExtension } from '../../../models'
+import {
+  DetailsList,
+  ScrollablePane,
+  SelectionMode,
+  Sticky,
+  StickyPositionType
+} from '@fluentui/react'
+import strings from 'ProjectExtensionsStrings'
+import React from 'react'
+import { ListHeaderSearch } from '../ListHeaderSearch'
+import { TemplateConfigMessage } from '../TemplateConfigMessage'
+import { TemplateSelectDialogSectionComponent } from '../types'
 import styles from './ExtensionsSection.module.scss'
-import { IExtensionsSectionProps } from './types'
-import { ScrollablePane } from 'office-ui-fabric-react'
+import { useExtensionsSection } from './useExtensionsSection'
 
-export const ExtensionsSection: React.FunctionComponent<IExtensionsSectionProps> = (props) => {
-  /**
-   * On item toggle
-   *
-   * @param extension Extension
-   * @param checked Checked
-   */
-  const onChange = (extension: ProjectExtension, checked: boolean): void => {
-    let selectedExtensions = []
-    if (checked) selectedExtensions = [extension, ...props.selectedExtensions]
-    else selectedExtensions = props.selectedExtensions.filter((ext) => extension.text !== ext.text)
-    props.onChange(selectedExtensions)
-  }
-
-  const selectedKeys = props.selectedExtensions.map((ext) => ext.key)
+/**
+ * Section for selection of project extensions.
+ *
+ * @param props Props
+ */
+export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) => {
+  const { selection, items, columns, onSearch, onRenderRow } = useExtensionsSection()
 
   return (
-    <div className={styles.extensionsSection}>
-      <ScrollablePane className={styles.container}>
-        {props.extensions.map((ext) => (
-          <div key={ext.key} className={styles.item}>
-            <div className={styles.toggle}>
-              <Toggle
-                label={ext.text}
-                defaultChecked={selectedKeys.indexOf(ext.key) !== -1}
-                disabled={props.lockDefault && ext.isDefault}
-                inlineLabel={true}
-                onChange={(_event, checked) => onChange(ext, checked)}
-              />
-              {props.lockDefault && ext.isDefault && (
-                <Icon iconName={'Lock'} className={styles.icon} />
-              )}
-            </div>
-            <div className={styles.subText} hidden={stringIsNullOrEmpty(ext.subText)}>
-              <span>{ext.subText}</span>
-            </div>
-          </div>
-        ))}
+    <div className={styles.root} style={props.style}>
+      <ScrollablePane>
+        <DetailsList
+          setKey='set'
+          selection={selection}
+          selectionMode={SelectionMode.multiple}
+          selectionPreservedOnEmptyClick={true}
+          onRenderRow={onRenderRow}
+          onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
+            <ListHeaderSearch
+              detailsHeaderProps={detailsHeaderProps}
+              defaultRender={defaultRender}
+              search={{
+                placeholder: strings.ExtensionsSectionSearchPlaceholder,
+                onSearch,
+                hidden: items.length < 5
+              }}
+            />
+          )}
+          onRenderDetailsFooter={() => (
+            <Sticky stickyPosition={StickyPositionType.Footer}>
+              <TemplateConfigMessage section='ExtensionsSection' />
+            </Sticky>
+          )}
+          items={items}
+          columns={columns}
+        />
       </ScrollablePane>
     </div>
   )

@@ -1,5 +1,5 @@
 import { ChartData, ChartDataItem } from 'models'
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar'
+import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar'
 import { PortfolioOverviewView } from 'pp365-shared/lib/models'
 import React, { Component } from 'react'
 import Chart from './Chart'

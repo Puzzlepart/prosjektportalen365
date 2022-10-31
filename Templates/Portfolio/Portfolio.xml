@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema https://raw.githubusercontent.com/OfficeDev/PnP-Provisioning-Schema/master/OfficeDevPnP.ProvisioningSchema/ProvisioningSchema-2019-03.xsd">
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:Preferences></pnp:Preferences>
     <pnp:Localizations>
         <pnp:Localization LCID="1044" Name="Norwegian" ResourceFile="Resources.no-NB.resx" />
@@ -15,7 +14,6 @@
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/RegionalSettings.xml" />
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Navigation.xml" />
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SupportedUILanguages.xml" />
-            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Files.xml" />
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/@.xml" />
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/CustomActions.xml" />
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/WebSettings.xml" />

@@ -1,4 +1,4 @@
-import { dateAdd, PnPClientStorage, PnPClientStore, TypedHash } from '@pnp/common'
+import { dateAdd, PnPClientStorage, PnPClientStore } from '@pnp/common'
 import { ConsoleListener, Logger } from '@pnp/logging'
 import { SPConfiguration, Web } from '@pnp/sp'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
@@ -16,11 +16,11 @@ import { IPropertyItemContext } from './IPropertyItemContext'
 
 export class ProjectDataService {
   private _storage: PnPClientStore
-  private _storageKeys: TypedHash<string> = {
+  private _storageKeys: Record<string, string> = {
     _getPropertyItemContext: '{0}_propertyitemcontext',
     getPhases: '{0}_projectphases_terms'
   }
-  private _web: Web
+  public web: Web
 
   /**
    * Creates a new instance of ProjectDataService
@@ -37,7 +37,7 @@ export class ProjectDataService {
       Logger.subscribe(new ConsoleListener())
       Logger.activeLogLevel = _params.logLevel
     }
-    this._web = new Web(this._params.webUrl)
+    this.web = new Web(this._params.webUrl)
   }
 
   /**
@@ -55,28 +55,28 @@ export class ProjectDataService {
   /**
    * Get storage key for function
    *
-   * @param {string} func Function name
+   * @param func Function name
    */
-  private _getStorageKey(func: string) {
+  public getStorageKey(func: string) {
     return this._storageKeys[func]
   }
 
   /**
    * Get property item context from site
    *
-   * @param {Date} expire Date of expire for cache
+   * @param expire Date of expire for cache
    */
   private async _getPropertyItemContext(
     expire: Date = dateAdd(new Date(), 'minute', 15)
   ): Promise<IPropertyItemContext> {
     const context: Partial<IPropertyItemContext> = await this._storage.getOrPut(
-      this._getStorageKey('_getPropertyItemContext'),
+      this.getStorageKey('_getPropertyItemContext'),
       async () => {
         try {
           Logger.write(
             `(ProjectDataService) (_getPropertyItemContext) Checking if list ${this._params.propertiesListName} exists in web.`
           )
-          const [list] = await this._web.lists
+          const [list] = await this.web.lists
             .filter(`Title eq '${this._params.propertiesListName}'`)
             .select('Id', 'DefaultEditFormUrl')
             .usingCaching()
@@ -90,7 +90,7 @@ export class ProjectDataService {
           Logger.write(
             `(ProjectDataService) (_getPropertyItemContext) Checking if there's a entry in list ${this._params.propertiesListName}.`
           )
-          const [item] = await this._web.lists
+          const [item] = await this.web.lists
             .getById(list.Id)
             .items.select('Id')
             .top(1)
@@ -118,15 +118,15 @@ export class ProjectDataService {
     )
     return {
       ...context,
-      list: this._web.lists.getById(context.listId),
-      item: this._web.lists.getById(context.listId).items.getById(context.itemId)
+      list: this.web.lists.getById(context.listId),
+      item: this.web.lists.getById(context.listId).items.getById(context.itemId)
     }
   }
 
   /**
    * Get property item from site
    *
-   * @param {string} urlSource Url source
+   * @param urlSource Url source
    */
   private async _getPropertyItem(
     urlSource: string = document.location.href
@@ -151,13 +151,19 @@ export class ProjectDataService {
           .filter("substringof('Gt', InternalName)")
           .usingCaching()
           .get(),
-          this._web.rootFolder.select('welcomepage').get()
+        this.web.rootFolder.select('welcomepage').get()
       ])
 
-      urlSource = !urlSource.includes(welcomepage.WelcomePage) ? urlSource.replace('#syncproperties=1', `/${welcomepage.WelcomePage}#syncproperties=1`).replace('//SitePages', '/SitePages') : urlSource
-      
+      urlSource = !urlSource.includes(welcomepage.WelcomePage)
+        ? urlSource
+            .replace('#syncproperties=1', `/${welcomepage.WelcomePage}#syncproperties=1`)
+            .replace('//SitePages', '/SitePages')
+        : urlSource
+
       const editFormUrl = makeUrlAbsolute(
-        `${propertyItemContext.defaultEditFormUrl}?ID=${propertyItemContext.itemId}&Source=${encodeURIComponent(urlSource)}`
+        `${propertyItemContext.defaultEditFormUrl}?ID=${
+          propertyItemContext.itemId
+        }&Source=${encodeURIComponent(urlSource)}`
       )
       const versionHistoryUrl = `${this._params.webUrl}/_layouts/15/versions.aspx?list=${propertyItemContext.listId}&ID=${propertyItemContext.itemId}`
       return {
@@ -177,11 +183,13 @@ export class ProjectDataService {
    * Get properties data
    */
   public async getPropertiesData(): Promise<IGetPropertiesData> {
-    const propertyItem = await this._getPropertyItem(`${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`)
+    const propertyItem = await this._getPropertyItem(
+      `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
+    )
 
     if (propertyItem) {
       const templateParameters = tryParseJson(propertyItem.fieldValuesText.TemplateParameters, {})
-      Logger.write('(ProjectDataService) (getPropertiesData) Local property item found.') 
+      Logger.write('(ProjectDataService) (getPropertiesData) Local property item found.')
       return {
         ...propertyItem,
         propertiesListId: propertyItem.propertiesListId,
@@ -208,10 +216,10 @@ export class ProjectDataService {
   /**
    * Get last updated time in seconds since now
    *
-   * @param {IGetPropertiesData} data Data
+   * @param data Data
    */
   public async getPropertiesLastUpdated(data: IGetPropertiesData): Promise<number> {
-    const { Modified } = await this._web.lists
+    const { Modified } = await this.web.lists
       .getById(data.propertiesListId)
       .items.getById(data.fieldValues.Id)
       .select('Modified')
@@ -222,8 +230,8 @@ export class ProjectDataService {
   /**
    * Update phase
    *
-   * @param {Phase} phase Phase
-   * @param {string} phaseTextField Phase text field
+   * @param phase Phase
+   * @param phaseTextField Phase text field
    */
   public async updatePhase(phase: ProjectPhaseModel, phaseTextField: string): Promise<void> {
     const properties = { [phaseTextField]: phase.toString() }
@@ -242,8 +250,8 @@ export class ProjectDataService {
   /**
    * Get phases
    *
-   * @param {string} termSetId Get phases
-   * @param {ChecklistData} checklistData Checklist data
+   * @param termSetId Get phases
+   * @param checklistData Checklist data
    */
   public async getPhases(
     termSetId: string,
@@ -274,7 +282,7 @@ export class ProjectDataService {
   /**
    * Get current phase
    *
-   * @param {string} phaseField Phase field
+   * @param phaseField Phase field
    */
   public async getCurrentPhaseName(phaseField: string): Promise<string> {
     try {
@@ -288,13 +296,13 @@ export class ProjectDataService {
   /**
    * Get checklist data
    *
-   * @param {string} listName List name
+   * @param listName List name
    */
   public async getChecklistData(
     listName: string
   ): Promise<{ [termGuid: string]: ProjectPhaseChecklistData }> {
     try {
-      const items = await this._web.lists
+      const items = await this.web.lists
         .getByTitle(listName)
         .items.select('ID', 'Title', 'GtComment', 'GtChecklistStatus', 'GtProjectPhase')
         .get<IProjectPhaseChecklistItem[]>()
@@ -319,12 +327,12 @@ export class ProjectDataService {
   /**
    * Update checklist item
    *
-   * @param {string} listName List name
-   * @param {number} id Id
-   * @param {TypedHash} properties Properties
+   * @param listName List name
+   * @param id Id
+   * @param properties Properties
    */
-  public async updateChecklistItem(listName: string, id: number, properties: TypedHash<any>) {
-    return await this._web.lists.getByTitle(listName).items.getById(id).update(properties)
+  public async updateChecklistItem(listName: string, id: number, properties: Record<string, any>) {
+    return await this.web.lists.getByTitle(listName).items.getById(id).update(properties)
   }
 
   /**
@@ -332,7 +340,7 @@ export class ProjectDataService {
    */
   public clearCache(): void {
     Object.keys(this._storageKeys).forEach((name) => {
-      const key = this._getStorageKey(name)
+      const key = this.getStorageKey(name)
       Logger.write(`(ProjectDataService) Clearing key ${key} from sessionStorage.`)
       sessionStorage.removeItem(key)
     })

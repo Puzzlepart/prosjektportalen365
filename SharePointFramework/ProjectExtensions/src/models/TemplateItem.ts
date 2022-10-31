@@ -1,7 +1,7 @@
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { FileAddResult, Folder, Web } from '@pnp/sp'
 import { FileIconType, getFileTypeIconProps, IFileTypeIconOptions } from '@uifabric/file-type-icons'
-import { IIconProps } from 'office-ui-fabric-react/lib/Icon'
+import { IIconProps } from '@fluentui/react/lib/Icon'
 import { formatDate } from 'pp365-shared/lib/helpers'
 
 export interface ITemplateSPItem {
@@ -22,6 +22,9 @@ export interface ITemplateSPItem {
   FieldValuesAsText?: TypedHash<string>
 }
 
+/**
+ * @model TemplateItem
+ */
 export class TemplateItem {
   /**
    * Item id
@@ -97,13 +100,9 @@ export class TemplateItem {
     try {
       const content = await this.web.getFileByServerRelativeUrl(this.serverRelativeUrl).getBlob()
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      const fileAddResult = await folder.files.addChunked(
-        this.newName,
-        content,
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        () => {},
-        shouldOverwrite
-      )
+      const fileAddResult = await folder.files.addUsingPath(this.newName, content, {
+        Overwrite: shouldOverwrite
+      })
       await (await fileAddResult.file.getItem()).update({ Title: this.newTitle })
       return fileAddResult
     } catch (error) {

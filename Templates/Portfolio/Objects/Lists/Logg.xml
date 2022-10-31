@@ -1,26 +1,114 @@
 <pnp:ListInstance Title="{resource:Lists_Log_Title}" TemplateType="100" Url="{resource:Lists_Log_Url}" Hidden="true" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" 
-    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/05/ProvisioningSchema">
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100A39D24CC7FD645868192E61A2376EBFD" Default="true" />
     </pnp:ContentTypeBindings>
-    <pnp:Views>
+    <pnp:Views RemoveExistingViews="true">
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_Log_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <Query>
                 <OrderBy>
-                    <FieldRef Name="Modified" Ascending="FALSE" />
+                    <FieldRef Name="Created" Ascending="FALSE" />
                 </OrderBy>
             </Query>
             <ViewFields>
+                <FieldRef Name="GtLogLevel" />
                 <FieldRef Name="GtLogWebUrl" />
+                <FieldRef Name="GtLogMessage" />
                 <FieldRef Name="GtLogScope" />
                 <FieldRef Name="GtLogFunctionName" />
-                <FieldRef Name="GtLogMessage" />
-                <FieldRef Name="GtLogLevel" />
-                <FieldRef Name="Modified" />
+                <FieldRef Name="GtLogComponentName" />
+                <FieldRef Name="Created" />
+                <FieldRef Name="Author" />
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
             <Aggregations Value="Off" />
             <JSLink>clienttemplates.js</JSLink>
+        </View>
+        <View Type="HTML" DisplayName="Grouped by Log Level" Url="{site}/{resource:Lists_Log_Url}/GroupByLogLevel.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+          <Query>
+            <OrderBy>
+              <FieldRef Name="Created" Ascending="FALSE" />
+            </OrderBy>
+            <GroupBy>
+              <FieldRef Name="GtLogLevel" Ascending="TRUE" />
+            </GroupBy>
+          </Query>
+          <ViewFields>
+            <FieldRef Name="GtLogWebUrl" />
+            <FieldRef Name="GtLogMessage" />
+            <FieldRef Name="GtLogScope" />
+            <FieldRef Name="GtLogFunctionName" />
+            <FieldRef Name="GtLogComponentName" />
+            <FieldRef Name="GtLogMessage" />
+            <FieldRef Name="Created" />
+            <FieldRef Name="Author" />
+          </ViewFields>
+          <RowLimit Paged="TRUE">100</RowLimit>
+          <JSLink>clienttemplates.js</JSLink>
+        </View>
+        <View Type="HTML" DisplayName="Grouped by Scope" Url="{site}/{resource:Lists_Log_Url}/GroupByScope.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+          <Query>
+            <OrderBy>
+              <FieldRef Name="Created" Ascending="FALSE" />
+            </OrderBy>
+            <GroupBy>
+              <FieldRef Name="GtLogScope" Ascending="TRUE" />
+            </GroupBy>
+          </Query>
+          <ViewFields>
+            <FieldRef Name="GtLogLevel" />
+            <FieldRef Name="GtLogWebUrl" />
+            <FieldRef Name="GtLogMessage" />
+            <FieldRef Name="GtLogFunctionName" />
+            <FieldRef Name="GtLogComponentName" />
+            <FieldRef Name="GtLogMessage" />
+            <FieldRef Name="Created" />
+            <FieldRef Name="Author" />
+          </ViewFields>
+          <RowLimit Paged="TRUE">100</RowLimit>
+          <JSLink>clienttemplates.js</JSLink>
+        </View>
+        <View Type="HTML" DisplayName="Grouped by Function Name" Url="{site}/{resource:Lists_Log_Url}/GroupByFunction.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+          <Query>
+            <OrderBy>
+              <FieldRef Name="Created" Ascending="FALSE" />
+            </OrderBy>
+            <GroupBy>
+              <FieldRef Name="GtLogFunctionName" Ascending="TRUE" />
+            </GroupBy>
+          </Query>
+          <ViewFields>
+            <FieldRef Name="GtLogWebUrl" />
+            <FieldRef Name="GtLogMessage" />
+            <FieldRef Name="GtLogScope" />
+            <FieldRef Name="GtLogComponentName" />
+            <FieldRef Name="GtLogMessage" />
+            <FieldRef Name="Created" />
+            <FieldRef Name="Author" />
+          </ViewFields>
+          <RowLimit Paged="TRUE">100</RowLimit>
+          <JSLink>clienttemplates.js</JSLink>
+        </View>
+        <View Type="HTML" DisplayName="Grouped by Component Name" Url="{site}/{resource:Lists_Log_Url}/GroupByComponent.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+          <Query>
+            <OrderBy>
+              <FieldRef Name="Created" Ascending="FALSE" />
+            </OrderBy>
+            <GroupBy>
+              <FieldRef Name="GtLogComponentName" Ascending="TRUE" />
+            </GroupBy>
+          </Query>
+          <ViewFields>
+            <FieldRef Name="GtLogWebUrl" />
+            <FieldRef Name="GtLogMessage" />
+            <FieldRef Name="GtLogScope" />
+            <FieldRef Name="GtLogFunctionName" />
+            <FieldRef Name="GtLogMessage" />
+            <FieldRef Name="Created" />
+            <FieldRef Name="Author" />
+          </ViewFields>
+          <RowLimit Paged="TRUE">100</RowLimit>
+          <JSLink>clienttemplates.js</JSLink>
         </View>
     </pnp:Views>
 </pnp:ListInstance>

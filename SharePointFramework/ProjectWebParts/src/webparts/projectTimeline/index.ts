@@ -5,7 +5,7 @@ import {
 } from '@microsoft/sp-property-pane'
 import '@pnp/polyfill-ie11'
 import { IProjectTimelineProps, ProjectTimeline } from 'components/ProjectTimeline'
-import 'office-ui-fabric-react/dist/css/fabric.min.css'
+import '@fluentui/react/dist/css/fabric.min.css'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 
 import * as strings from 'ProjectWebPartsStrings'
@@ -31,16 +31,8 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                   label: strings.ListNameFieldLabel,
                   value: 'Tidslinjeinnhold'
                 }),
-                PropertyPaneToggle('showFilterButton', {
-                  label: strings.ShowFilterButtonLabel,
-                  checked: true
-                }),
                 PropertyPaneToggle('showTimeline', {
                   label: strings.ShowTimelineLabel,
-                  checked: true
-                }),
-                PropertyPaneToggle('showInfoMessage', {
-                  label: strings.ShowInfoMessageLabel,
                   checked: true
                 }),
                 PropertyPaneToggle('showCmdTimelineList', {
@@ -67,7 +59,7 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                 PropertyPaneTextField('configItemTitle', {
                   label: strings.ConfigItemTitleFieldLabel,
                   value: 'Prosjektleveranse'
-                }),
+                })
               ]
             }
           ]

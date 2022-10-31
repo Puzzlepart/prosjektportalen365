@@ -1,92 +1,77 @@
-import { IViewField, SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
-import { ShimmeredDetailsList } from 'office-ui-fabric-react'
-import { UserMessage } from 'pp365-projectwebparts/lib/components/UserMessage'
+import { SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
+import { Link, MessageBar, ShimmeredDetailsList } from '@fluentui/react'
 import * as strings from 'ProgramWebPartsStrings'
-import React, { FunctionComponent, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import { AddProjectDialog } from './AddProjectDialog'
 import { Commands } from './Commands'
-import styles from './programAdministration.module.scss'
+import { ProgramAdministrationContext } from './context'
+import styles from './ProgramAdministration.module.scss'
 import { ProjectTable } from './ProjectTable'
-import { useStore } from './store'
-import { IProgramAdministrationItem, IProgramAdministrationProps, shimmeredColumns } from './types'
+import { IListField } from './ProjectTable/types'
+import { SET_SELECTED_TO_DELETE } from './reducer'
+import { IProgramAdministrationProps, shimmeredColumns } from './types'
+import { useProgramAdministration } from './useProgramAdministration'
+import { isEmpty } from '@microsoft/sp-lodash-subset'
 
-export const ProgramAdministration: FunctionComponent<IProgramAdministrationProps> = ({
-  sp,
-  webPartTitle,
-  dataAdapter,
-  context
-}) => {
-  const displayProjectDialog = useStore((state) => state.displayProjectDialog)
-  const childProjects = useStore((state) => state.childProjects)
-  const setSelected = useStore((state) => state.setSelectedToDelete)
-  const fetchChildProjects = useStore((state) => state.fetchChildProjects)
-  const error = useStore((state) => state.error)
-  const [isLoading, setIsLoading] = useState(false)
+export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) => {
+  const { state, dispatch } = useProgramAdministration(props)
 
-  useEffect(() => {
-    const fetch = async () => {
-      await fetchChildProjects(sp, dataAdapter)
-      setIsLoading(false)
-    }
-    setIsLoading(true)
-    fetch()
-  }, [])
-
-  if (error) {
+  if (state.error) {
     return (
       <>
         <div className={styles.root}>
           <h2>{strings.ProgramAdministrationHeader}</h2>
-          <UserMessage messageBarType={error.messageBarType} text={error.text} />
+          <MessageBar messageBarType={state.error.messageBarType}>{state.error.text}</MessageBar>
         </div>
       </>
     )
   }
 
-  if (isLoading) {
+  if (state.loading.root) {
     return (
       <ShimmeredDetailsList items={[]} shimmerLines={15} columns={shimmeredColumns} enableShimmer />
     )
   }
 
   return (
-    <>
-      <Commands _sp={sp} isSiteAdmin={context.pageContext.legacyPageContext.isSiteAdmin} />
+    <ProgramAdministrationContext.Provider value={{ props, state, dispatch }}>
+      <Commands />
       <div className={styles.root}>
         <div className={styles.header}>
-          <div className={styles.title}>{webPartTitle}</div>
+          <div className={styles.title}>{props.title}</div>
         </div>
         <div>
-          {childProjects.length > 0 ? (
+          {!isEmpty(state.childProjects) ? (
             <ProjectTable
-              fields={fields}
-              projects={childProjects}
-              onSelect={(selectedItem: any) => setSelected(selectedItem)}
-              selectionMode={SelectionMode.multiple}
+              fields={fields(true)}
+              items={state.childProjects}
+              selectionMode={
+                state.userHasManagePermission ? SelectionMode.multiple : SelectionMode.none
+              }
+              onSelectionChanged={(selected) => dispatch(SET_SELECTED_TO_DELETE({ selected }))}
             />
           ) : (
-            <UserMessage text={strings.ProgramAdministration_EmptyMessage} />
+            <MessageBar>{strings.ProgramAdministration_EmptyMessage}</MessageBar>
           )}
         </div>
-        {displayProjectDialog && <AddProjectDialog sp={sp} context={context} />}
+        {state.displayAddProjectDialog && <AddProjectDialog />}
       </div>
-    </>
+    </ProgramAdministrationContext.Provider>
   )
 }
 
-export const fields: IViewField[] = [
+export const fields = (renderAsLink: boolean): IListField[] => [
   {
-    name: 'Title',
-    displayName: 'Tittel',
-    isResizable: true,
-    render: (item: IProgramAdministrationItem) => {
-      return (
-        <a href={item.SPWebURL} target='_blank' data-interception='off' rel='noreferrer'>
+    key: 'Title',
+    text: 'Tittel',
+    fieldName: 'Title',
+    onRender: (item) =>
+      renderAsLink ? (
+        <Link href={item.SPWebURL} target='_blank' rel='noreferrer'>
           {item.Title}
-        </a>
+        </Link>
+      ) : (
+        item.Title
       )
-    },
-    sorting: true,
-    maxWidth: 250
   }
 ]

@@ -3,17 +3,62 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
-## 1.6.2 - TBA
+
+## 1.7.3 - TBA
+
+### Added
+
+- Enabling autocomplete search for template in project setup dialog #837
+- Enabling search for extensions and list content configurations #839
+- Added FNs bærekraftsmål to project properties #454
+
+### Fixed
+
+- Persist selection when doing a search in Program Admin #849
+
+## 1.7.2 - 26.10.2022
 
 ### Added
 
 - Added support to run hooks when changing phases #747
   - Example: Trigger API's, Flows, Logic Apps, Azure Functions, etc...
-- Addeded check if projecttemplate is attempted to be applied to portfolio level #748
+- Added check if projecttemplate is attempted to be applied to portfolio level #748
+- Added better error handling for ProjectTimelines (Portfolio and project level) #755
+- Custom Risk matrix cells (colors, headers, text, etc...) #624
+- Script to fix planner issues, see 'Ensure-PlannerPlans' script #752
+- Added 'Description' and 'Tag' as two new default fields to ProjectTimelineContent list #764
+- Added better error handling for Resource allocation #776
+- Added support for description/notes on planner tasks #704
+- Added support for preview type on planner tasks #718
+- Fix for problems where aggregated webpart pages didn't work properly #754
+  - Top navigation bar elements ('Erfaringslogg', 'Gevinst-', 'Risiko-' and 'Leveranseoversikt') needs to be checked and fixed manually after upgrade to 1.7.2 ⚠️
+- Integrated IdeaProcessing (from prosjektportalen365-addons) directly in Prosjektportalen365 with improvements and new additions #777
+  - This also adds sync functionality to synchronize ProjectData to newly created projects based off of ideas
+  - Remove old IdeaProcessing webparts if you have used idea processing prior to 1.7.2 ⚠️
+- Displaying parent projects in Project Information webpart #760
+- Added ability to hide certain parts of the Project Information webpart #670
+- Added inline help content function to sitepages and lists #788
+- Added pre populated elements to help content list #799
+- Added ability to group ProjectTimeline by projects, category and type (Project level) #766
+  - Users can now also filter by category, found in the filter panel
 
 ### Changed
 
+- Installation now uses the new PnP.PowerShell module #417
+  - Use -Interactive instead of -UseWebLogin when upgrading/installing ⚠️
 - Changed phase callout from hover to clickable #734
+- Information messages now uses a newer and stable version to render HTML #762
+- Reduced amount of calls when loading ProjectTimeline, this improves the speed by alot! #743
+- Filterpanel for Timeline: Project is now collapsed by default in the panel #776
+- Restructured configuration page using 3 columns #712
+- Multi taxonomy terms (ex: 'Tjenesteområde') are now shown as labels instead of just text #827
+
+### Fixed
+
+- Fixed slow loading of project logos #648
+- Fixed a bug where default column values were wiped when importing documents through TemplateSelector dialog #761
+- Fixed a bug where users could't see the callout dialog for ProjectTimeline at the bottom of the page #771
+- Fixed a bug with ProgramAdministration where ProjectTable did not keep selected items while searching #759
 
 ## 1.6.1 - 01.07.2022
 

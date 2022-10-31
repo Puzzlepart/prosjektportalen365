@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
 
 .root {
@@ -133,5 +134,18 @@
       justify-content: space-between;
       width: 90px;
     }
+=======
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+
+.root {
+  object-fit: cover;
+  margin: 5px 10px 5px 0;
+  padding: 0;
+  width: 240px;
+  box-sizing: border-box;
+
+  .shimmerGroup > div {
+    display: block;
+>>>>>>> dev
   }
 }
