@@ -13,7 +13,7 @@ export const INIT_CHANGE_PHASE = createAction('INIT_CHANGE_PHASE')
 export const SET_PHASE = createAction<{ phase: ProjectPhaseModel }>('SET_PHASE')
 
 export const initialState: IProjectPhasesState = {
-  loading: true,
+  isDataLoaded: false,
   data: {
     phases: []
   }
@@ -23,7 +23,7 @@ export default createReducer(initialState, {
   [INIT_DATA.type]: (state, { payload }: ReturnType<typeof INIT_DATA>) => {
     state.data = payload.data
     state.phase = payload.data.currentPhase
-    state.loading = false
+    state.isDataLoaded = true
   },
 
   [HIDE_MESSAGE.type]: (state) => {

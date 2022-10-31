@@ -1,26 +1,18 @@
-import React from 'react'
-import { IStatusSectionProps, IStatusSectionState } from './types'
-import { BaseSection } from '../BaseSection'
+import React, { FC, useContext } from 'react'
 import { StatusElement } from '../../StatusElement'
+import { BaseSection } from '../BaseSection'
+import { SectionContext } from '../context'
 
-export class StatusSection extends BaseSection<IStatusSectionProps, IStatusSectionState> {
-  constructor(props: IStatusSectionProps) {
-    super(props)
-    this.state = {}
-  }
-
-  /**
-   * Renders the <StatusSection /> component
-   */
-  public render(): React.ReactElement<IStatusSectionProps> {
-    return (
-      <BaseSection {...this.props}>
-        <div className='ms-Grid-row'>
-          <div className='ms-Grid-col ms-sm12'>
-            <StatusElement {...this.props.headerProps} />
-          </div>
+export const StatusSection: FC = () => {
+  const { headerProps } = useContext(SectionContext)
+  if (!headerProps.value) return null
+  return (
+    <BaseSection>
+      <div className='ms-Grid-row'>
+        <div className='ms-Grid-col ms-sm12'>
+          <StatusElement />
         </div>
-      </BaseSection>
-    )
-  }
+      </div>
+    </BaseSection>
+  )
 }

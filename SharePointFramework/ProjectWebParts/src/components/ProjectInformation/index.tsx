@@ -28,7 +28,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
               {props.title}
             </span>
           </div>
-          {state.loading ? (
+          {!state.isDataLoaded ? (
             <>
               <Shimmer width='65%' className={styles.shimmer} />
               <Shimmer width='65%' className={styles.shimmer} />

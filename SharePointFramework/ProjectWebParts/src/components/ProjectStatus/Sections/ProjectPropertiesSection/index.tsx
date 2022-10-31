@@ -1,28 +1,32 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
-import React, { FC } from 'react'
+import { ProjectStatusContext } from 'components/ProjectStatus/context'
+import React, { FC, useContext } from 'react'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection'
+import { SectionContext } from '../context'
 import styles from './ProjectPropertiesSection.module.scss'
 import { StatusSectionField } from './StatusSectionField'
-import { IProjectPropertiesSectionProps } from './types'
+import { useProjectPropertiesSection } from './useProjectPropertiesSection'
 
-export const ProjectPropertiesSection: FC<IProjectPropertiesSectionProps> = (props) => {
+export const ProjectPropertiesSection: FC = () => {
+  const context = useContext(ProjectStatusContext)
+  const { section } = useContext(SectionContext)
+  const { fieldValues, fields } = useProjectPropertiesSection()
+
   /**
    * Render fields specified in model.viewFields
    */
   function renderFields() {
-    if (props.model.viewFields) {
-      return props.model.viewFields.map((fieldName) => {
-        const [fld] = props.fields.filter(
-          (f) => [f.InternalName, f.Title].indexOf(fieldName) !== -1
-        )
-        if (fld && !stringIsNullOrEmpty(props.fieldValues[fieldName])) {
+    if (section.viewFields) {
+      return section.viewFields.map((fieldName) => {
+        const [fld] = fields.filter((f) => [f.InternalName, f.Title].indexOf(fieldName) !== -1)
+        if (fld && !stringIsNullOrEmpty(fieldValues[fieldName])) {
           return (
             <StatusSectionField
               key={fieldName}
               label={fld.Title}
-              value={props.fieldValues[fieldName]}
-              width={props.fieldWidth}
+              value={fieldValues[fieldName]}
+              width={context.props.fieldWidth}
             />
           )
         }
@@ -33,12 +37,12 @@ export const ProjectPropertiesSection: FC<IProjectPropertiesSectionProps> = (pro
   }
 
   return (
-    <BaseSection {...props}>
-      <div className='ms-Grid-row'>
-        <div className='ms-Grid-col ms-sm12'>
-          <StatusElement {...props.headerProps} />
+    <BaseSection>
+      <div className={styles.root}>
+        <div className={styles.container}>
+          <StatusElement />
         </div>
-        <div className={`${styles.fields} ms-Grid-col ms-sm12`}>{renderFields()}</div>
+        <div className={styles.fields}>{renderFields()}</div>
       </div>
     </BaseSection>
   )

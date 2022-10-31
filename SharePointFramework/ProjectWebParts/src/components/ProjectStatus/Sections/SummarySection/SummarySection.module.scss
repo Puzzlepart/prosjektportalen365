@@ -1,12 +1,14 @@
 @import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
-.projectInformation {
-  @include ms-Grid-col;
-  @include ms-sm12;
-  @include ms-xl6;
-}
-.sections {
-  @include ms-Grid-col;
-  @include ms-sm12;
-  @include ms-xl6;
+.root {
+  .projectInformation {
+    @include ms-Grid-col;
+    @include ms-sm12;
+    @include ms-xl6;
+  }
+  .sections {
+    @include ms-Grid-col;
+    @include ms-sm12;
+    @include ms-xl6;
+  }
 }

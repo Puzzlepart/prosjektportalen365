@@ -1,15 +1,4 @@
-export type StatusElementColumnWidth =
-  | 'column1'
-  | 'column2'
-  | 'column3'
-  | 'column4'
-  | 'column6'
-  | 'column8'
-  | 'column10'
-  | 'column11'
-  | 'column12'
-
-export interface IStatusElementProps {
+export interface IStatusElement {
   label: string
   value: string
   comment?: string
@@ -17,6 +6,4 @@ export interface IStatusElementProps {
   height?: string | number
   iconSize?: number
   iconColor?: string
-  iconColumnWidth?: StatusElementColumnWidth
-  bodyColumnWidth?: StatusElementColumnWidth
 }
