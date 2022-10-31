@@ -7,41 +7,5 @@
   .container {
     padding: 10px 32px;
     @include ms-Grid-row;
-    .header {
-      padding: 15px 0 25px 0 !important;
-      .title {
-        font-size: 28px;
-        font-weight: 100;
-        margin: 0;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
-    }
-    .actions {
-      > button,
-      > a {
-        margin: 0 8px 0 0;
-      }
-    }
-    .sections {
-      padding: 0 32px 20px 32px;
-    }
-    .column12 {
-      @include ms-Grid-col;
-      @include ms-sm12;
-    }
-    .column8 {
-      @include ms-Grid-col;
-      @include ms-sm8;
-    }
-    .column6 {
-      @include ms-Grid-col;
-      @include ms-sm6;
-    }
-    .column4 {
-      @include ms-Grid-col;
-      @include ms-sm4;
-    }
   }
 }
