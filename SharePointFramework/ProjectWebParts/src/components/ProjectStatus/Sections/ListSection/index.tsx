@@ -6,31 +6,14 @@ import {
   SelectionMode,
   Shimmer
 } from '@fluentui/react'
-import { ProjectStatusContext } from 'components/ProjectStatus/context'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FC, useContext, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection/index'
 import styles from './ListSection.module.scss'
-import { IListSectionData, IListSectionState } from './types'
-import { useFetchListData } from './useFetchListData'
-
-function useListSection() {
-  const context = useContext(ProjectStatusContext)
-  const [state, setState] = useState<IListSectionState<IListSectionData>>({ isDataLoaded: false })
-  const fetchListData = useFetchListData()
-  const showLists = context.state.data.reports
-    ? context.state.selectedReport.id === context.state.mostRecentReportId
-    : true
-
-  useEffect(() => {
-    fetchListData().then((data) => setState({ data, isDataLoaded: true }))
-  }, [])
-
-  return { state, showLists } as const
-}
+import { useListSection } from './useListSection'
 
 export const ListSection: FC = () => {
   const { state, showLists } = useListSection()
