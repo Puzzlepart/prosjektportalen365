@@ -6,8 +6,7 @@ import {
   PivotItem,
   SearchBox,
   SelectionMode,
-  ShimmeredDetailsList,
-  Toggle
+  ShimmeredDetailsList
 } from '@fluentui/react'
 import { Web } from '@pnp/sp'
 import { ProjectListModel } from 'models'
@@ -19,7 +18,8 @@ import { find, isEmpty } from 'underscore'
 import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
-import { IProjectListProps } from './types'
+import { RenderModeDropdown } from './RenderModeDropdown'
+import { IProjectListProps, ProjectListRenderMode } from './types'
 import { useProjectList } from './useProjectList'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
@@ -129,16 +129,10 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             onChange={onSearch}
           />
         </div>
-        <div className={styles.renderAsToggle} hidden={!props.showViewSelector}>
-          <Toggle
-            offText={strings.RenderAsListText}
-            onText={strings.RenderAsTilesText}
-            defaultChecked={state.renderAs === 'tiles'}
-            disabled={state.loading || isEmpty(state.projects)}
-            inlineLabel={true}
-            onChanged={(checked) => setState({ renderAs: checked ? 'tiles' : 'list' })}
-          />
-        </div>
+        <RenderModeDropdown
+          hidden={!props.showViewSelector}
+          onChange={(_event, option) => setState({ renderAs: option.key as ProjectListRenderMode })}
+        />
         {!state.loading && isEmpty(projects) && (
           <div className={styles.emptyMessage}>
             <MessageBar>{strings.ProjectListEmptyText}</MessageBar>

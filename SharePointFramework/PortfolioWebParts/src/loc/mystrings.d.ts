@@ -143,7 +143,6 @@ declare interface IPortfolioWebPartsStrings {
   SearchBoxPlaceholderTextLabel: string
   ShowAllMeasurementsLinkText: string
   RenderAsListText: string
-  ShowAsTilesLabel: string
   RenderAsTilesText: string
   ShowCommandBarLabel: string
   ShowExcelExportButtonLabel: string

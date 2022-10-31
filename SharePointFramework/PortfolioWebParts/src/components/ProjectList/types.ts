@@ -15,6 +15,8 @@ export interface IProjectListView extends IPivotItemProps {
       }
 }
 
+export type ProjectListRenderMode = 'tiles' | 'list'
+
 export interface IProjectListProps extends IBaseComponentProps {
   /**
    * Sort by property
@@ -91,8 +93,7 @@ export interface IProjectListState {
   /**
    * How the projects should be rendered. `tiles` or `list`
    */
-  renderAs?: 'tiles' | 'list'
-
+  renderAs?: ProjectListRenderMode
   /**
    * Current selected view
    */
