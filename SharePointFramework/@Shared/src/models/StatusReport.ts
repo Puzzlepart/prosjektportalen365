@@ -97,7 +97,7 @@ export class StatusReport {
    * Moderation status
    */
   public get moderationStatus(): string {
-    return this._item.FieldValuesAsText.GtModerationStatus
+    return this._item.FieldValuesAsText?.GtModerationStatus
   }
 
   /**
