@@ -1,4 +1,7 @@
 declare interface IPortfolioWebPartsStrings {
+  HideViewsLabel: string
+  ProjectsAccessSearchBoxPlaceholderText: string
+  ProjectsAccessHeaderText: string
   ProjectListLoadingText: string
   EditColumnHeaderText: string
   PortfolioAggregationNotConfiguredMessage: string
@@ -140,7 +143,6 @@ declare interface IPortfolioWebPartsStrings {
   SearchBoxPlaceholderTextLabel: string
   ShowAllMeasurementsLinkText: string
   RenderAsListText: string
-  ShowAsTilesLabel: string
   RenderAsTilesText: string
   ShowCommandBarLabel: string
   ShowExcelExportButtonLabel: string
@@ -186,10 +188,10 @@ declare interface IPortfolioWebPartsStrings {
   NewLabel: string
   ReadOnlyGroupName: string
   DisplayAllProjects: string
-  MyProjectsLabel: string
-  AllProjectsLabel: string
-  ProgramLabel: string
-  ParentProjectLabel: string
+  MyProjectsHeaderText: string
+  AllProjectsHeaderText: string
+  ProgramProjectsHeaderText: string
+  ParentProjectsHeaderText: string
   NoAccessMessage: string
   BooleanYes: string
   BooleanNo: string

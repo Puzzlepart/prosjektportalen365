@@ -6,8 +6,7 @@ import {
   PivotItem,
   SearchBox,
   SelectionMode,
-  ShimmeredDetailsList,
-  Toggle
+  ShimmeredDetailsList
 } from '@fluentui/react'
 import { Web } from '@pnp/sp'
 import { ProjectListModel } from 'models'
@@ -15,10 +14,11 @@ import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import { getObjectValue } from 'pp365-shared/lib/helpers'
 import React, { FC } from 'react'
-import { isEmpty } from 'underscore'
+import { find, isEmpty } from 'underscore'
 import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
+import { RenderModeDropdown } from './RenderModeDropdown'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
 
@@ -27,16 +27,17 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     state,
     setState,
     projects,
+    views,
     getCardActions,
-    getSearchBoxPlaceholder,
     onListSort,
-    onSearch
+    onSearch,
+    searchBoxPlaceholder
   } = useProjectList(props)
 
   /**
    * Render projects
    *
-   * @param projects - Projects
+   * @param projects - Projects to render
    */
   function renderProjects(projects: ProjectListModel[]) {
     if (state.loading) {
@@ -87,7 +88,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   function onRenderItemColumn(project: ProjectListModel, _index: number, column: IColumn) {
     const colValue = getObjectValue(project, column.fieldName, null)
     if (column.fieldName === 'title') {
-      if (project.userIsMember) return <a href={project.url}>{colValue}</a>
+      if (project.isUserMember) return <a href={project.url}>{colValue}</a>
       return <>{colValue}</>
     }
     return colValue
@@ -106,71 +107,32 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
       <div className={styles.container}>
         <div className={styles.projectDisplaySelect}>
           <Pivot
-            onLinkClick={({ props }) => setState({ selectedView: props.itemKey })}
-            selectedKey={state.selectedView}>
-            <PivotItem
-              headerText={strings.MyProjectsLabel}
-              itemKey='my_projects'
-              itemIcon='FabricUserFolder'
-              headerButtonProps={
-                !state.isUserInPortfolioManagerGroup && {
-                  disabled: true,
-                  style: { opacity: 0.3, cursor: 'default' }
-                }
-              }
-            />
-            <PivotItem
-              headerText={strings.AllProjectsLabel}
-              itemKey='all_projects'
-              itemIcon='AllApps'
-              headerButtonProps={
-                !state.isUserInPortfolioManagerGroup && {
-                  disabled: true,
-                  style: { opacity: 0.3, cursor: 'default' }
-                }
-              }
-            />
-            <PivotItem
-              headerText={strings.ParentProjectLabel}
-              itemKey='parent_projects'
-              itemIcon='ProductVariant'
-              headerButtonProps={
-                !state.isUserInPortfolioManagerGroup && {
-                  disabled: true,
-                  style: { opacity: 0.3, cursor: 'default' }
-                }
-              }
-            />
-            <PivotItem
-              headerText={strings.ProgramLabel}
-              itemKey='program'
-              itemIcon='ProductList'
-              headerButtonProps={
-                !state.isUserInPortfolioManagerGroup && {
-                  disabled: true,
-                  style: { opacity: 0.3, cursor: 'default' }
-                }
-              }
-            />
+            onLinkClick={({ props }) =>
+              setState({ selectedView: find(views, (v) => v.itemKey === props.itemKey) })
+            }
+            selectedKey={state.selectedView.itemKey}>
+            {views.map((view) => (
+              <PivotItem
+                key={view.itemKey}
+                itemKey={view.itemKey}
+                headerText={view.headerText}
+                itemIcon={view.itemIcon}
+                headerButtonProps={view.getHeaderButtonProps && view.getHeaderButtonProps(state)}
+              />
+            ))}
           </Pivot>
         </div>
         <div className={styles.searchBox} hidden={!props.showSearchBox}>
           <SearchBox
             disabled={state.loading || isEmpty(state.projects)}
-            placeholder={getSearchBoxPlaceholder()}
-            onChanged={onSearch}
+            placeholder={searchBoxPlaceholder}
+            onChange={onSearch}
           />
         </div>
-        <div className={styles.renderAsToggle} hidden={!props.showViewSelector}>
-          <Toggle
-            offText={strings.RenderAsListText}
-            onText={strings.RenderAsTilesText}
-            defaultChecked={state.renderAs === 'tiles'}
-            disabled={state.loading || isEmpty(state.projects)}
-            inlineLabel={true}
-            onChanged={(checked) => setState({ renderAs: checked ? 'tiles' : 'list' })}
-          />
-        </div>
+        <RenderModeDropdown
+          hidden={!props.showViewSelector}
+          onChange={(renderAs) => setState({ renderAs })}
+        />
         {!state.loading && isEmpty(projects) && (
           <div className={styles.emptyMessage}>
             <MessageBar>{strings.ProjectListEmptyText}</MessageBar>

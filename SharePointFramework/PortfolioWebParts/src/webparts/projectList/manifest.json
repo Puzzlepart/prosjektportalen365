@@ -27,7 +27,9 @@
         "sortBy": "Title",
         "renderAs": "tiles",
         "showProjectOwner": true,
-        "showProjectManager": true
+        "showProjectManager": true,
+        "defaultView": "my_projects",
+        "hideViews": ["projects_access"]
       }
     }
   ]

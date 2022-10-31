@@ -1,17 +1,26 @@
 /* eslint-disable prefer-spread */
+import { format, IButtonProps, IColumn } from '@fluentui/react'
 import { ProjectListModel } from 'models'
-import { IButtonProps, IColumn } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { sortAlphabetically } from 'pp365-shared/lib/helpers'
 import { useEffect, useState } from 'react'
+import { any, find, first } from 'underscore'
+import { ProjectListViews } from './ProjectListViews'
 import { IProjectListProps, IProjectListState } from './types'
 
+/**
+ * Component logic hook for `ProjectList`.
+ *
+ * @param props Props
+ */
 export const useProjectList = (props: IProjectListProps) => {
   const [state, $setState] = useState<IProjectListState>({
     loading: true,
     searchTerm: '',
     renderAs: 'tiles',
-    selectedView: 'my_projects',
+    selectedView:
+      find(ProjectListViews, (view) => view.itemKey === props.defaultView) ??
+      first(ProjectListViews),
     projects: Array.apply(null, Array(24)).map(() => 0),
     isUserInPortfolioManagerGroup: false,
     sort: { fieldName: props.sortBy, isSortedDescending: true }
@@ -60,9 +69,7 @@ export const useProjectList = (props: IProjectListProps) => {
     event.stopPropagation()
     switch (event.currentTarget.id) {
       case 'ON_SELECT_PROJECT':
-        {
-          setState({ showProjectInfo: project })
-        }
+        setState({ showProjectInfo: project })
         break
     }
   }
@@ -74,23 +81,17 @@ export const useProjectList = (props: IProjectListProps) => {
    */
   function filterProjets(projects: ProjectListModel[]) {
     return projects
-      .filter((project) => {
-        if (state.selectedView === 'my_projects') return project.userIsMember
-        if (state.selectedView === 'parent_projects') return project.isParent
-        if (state.selectedView === 'program') return project.isProgram
-        return true
-      })
-      .filter((p) => {
-        const matches = Object.keys(p).filter((key) => {
-          const value = p[key]
+      .filter((project) => state.selectedView.filter(project))
+      .filter((project) =>
+        any(Object.keys(project), (key) => {
+          const value = project[key]
           return (
             value &&
             typeof value === 'string' &&
             value.toLowerCase().indexOf(state.searchTerm) !== -1
           )
-        }).length
-        return matches > 0
-      })
+        })
+      )
       .sort((a, b) =>
         sortAlphabetically<ProjectListModel>(
           a,
@@ -102,28 +103,13 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   /**
-   * On search
+   * On search callback
    *
+   * @param _event - React change event
    * @param searchTerm - Search term
    */
-  function onSearch(searchTerm: string) {
+  function onSearch(_event: React.ChangeEvent<HTMLInputElement>, searchTerm: string) {
     setState({ searchTerm: searchTerm.toLowerCase() })
-  }
-
-  /**
-   * Get searchbox placeholder text based on `state.selectedView`
-   */
-  function getSearchBoxPlaceholder() {
-    switch (state.selectedView) {
-      case 'my_projects':
-        return strings.MyProjectsSearchBoxPlaceholderText
-      case 'all_projects':
-        return strings.AllProjectsSearchBoxPlaceholderText
-      case 'parent_projects':
-        return strings.ParentProjectsSearchBoxPlaceholderText
-      case 'program':
-        return strings.ProgramSearchBoxPlaceholderText
-    }
   }
 
   useEffect(() => {
@@ -141,13 +127,15 @@ export const useProjectList = (props: IProjectListProps) => {
   }, [])
 
   const projects = state.loading ? state.projects : filterProjets(state.projects)
+  const views = ProjectListViews.filter((view) => !props.hideViews.includes(view.itemKey))
 
   return {
     state,
     setState,
     projects,
+    views,
     getCardActions,
-    getSearchBoxPlaceholder,
+    searchBoxPlaceholder: format(state.selectedView.searchBoxPlaceholder, projects.length),
     onListSort,
     onSearch
   } as const

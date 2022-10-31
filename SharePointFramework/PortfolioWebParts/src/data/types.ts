@@ -81,7 +81,7 @@ export interface IDataAdapter {
     timelineConfig: any[]
   ): Promise<TimelineContentListModel[]>
   fetchTimelineConfiguration?(): Promise<TimelineConfigurationListModel[]>
-  fetchEnrichedProjects?(): Promise<ProjectListModel[]>
+  fetchEnrichedProjects?(filter?: string): Promise<ProjectListModel[]>
   fetchProjects?(configuration?: IAggregatedListConfiguration, dataSource?: string): Promise<any[]>
   fetchProjectSites(
     rowLimit: number,

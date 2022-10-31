@@ -11,6 +11,7 @@ Every change is marked with issue ID.
 - Enabling autocomplete search for template in project setup dialog #837
 - Enabling search for extensions and list content configurations #839
 - Added FNs bærekraftsmål to project properties #454
+- Option for showing all projects you have access to on the front page #724
 
 ### Fixed
 
