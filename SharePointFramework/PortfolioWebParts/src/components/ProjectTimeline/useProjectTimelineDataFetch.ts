@@ -146,24 +146,22 @@ const transformItems = (
  * Fetch data for ProjectTimeline
  *
  * @param props Component properties for `ProjectTimeline`
+ *
  * @returns `ProjectTimeline` state
  */
 const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProjectTimelineState>> => {
   try {
-    const data = props.dataAdapter
-
-    const timelineConfiguration = await data.fetchTimelineConfiguration()
-
+    const timelineConfiguration = await props.dataAdapter.fetchTimelineConfiguration()
     const [
       projects,
       projectData,
       timelineContentItems,
       timelineAggregatedContent = []
     ] = await Promise.all([
-      data.fetchEnrichedProjects(),
-      data.fetchTimelineProjectData(timelineConfiguration),
-      data.fetchTimelineContentItems(timelineConfiguration),
-      data.fetchTimelineAggregatedContent(
+      props.dataAdapter.fetchEnrichedProjects(),
+      props.dataAdapter.fetchTimelineProjectData(timelineConfiguration),
+      props.dataAdapter.fetchTimelineContentItems(timelineConfiguration),
+      props.dataAdapter.fetchTimelineAggregatedContent(
         props.configItemTitle,
         props.dataSourceName,
         timelineConfiguration
@@ -182,7 +180,7 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
       }
     )
 
-    let timelineItems: TimelineContentListModel[] = filteredProjects.map((project) => {
+    let timelineItems = filteredProjects.map<TimelineContentListModel>((project) => {
       const config = projectData.configElement
       const statusReport = projectData?.reports?.find((statusReport) => {
         return statusReport.siteId === project.siteId

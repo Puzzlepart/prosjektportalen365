@@ -1,5 +1,5 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { dateAdd, TypedHash } from '@pnp/common'
+import { dateAdd, PnPClientStorage, TypedHash } from '@pnp/common'
 import { ItemUpdateResult, QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
@@ -224,13 +224,10 @@ export class DataAdapter implements IDataAdapter {
   /**
    * Fetch data for manager view
    *
-   * @description Used by PortfolioOverview and PortfolioInsights
-   *
-   * @param view
-   * @param configuration
-   * @param siteId
-   * @param [siteIdProperty='GtSiteIdOWSTEXT']
-   * @returns {Promise<IFetchDataForViewItemResult[]>}
+   * @param view View
+   * @param configuration Configuration
+   * @param siteId Site ID
+   * @param siteIdProperty Site ID property (defaults to **GtSiteIdOWSTEXT**)
    */
   public async fetchDataForManagerView(
     view: PortfolioOverviewView,
@@ -266,11 +263,13 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   *  Fetches data for portfolio views
-   * @param view
-   * @param configuration
-   * @param siteId
-   * @param [siteIdProperty='GtSiteIdOWSTEXT']
+   * Fetches data for portfolio views
+   *
+   * @param view View
+   * @param configuration Configuration
+   * @param siteId Site ID
+   * @param siteIdProperty Site ID property (defaults to **GtSiteIdOWSTEXT**)
+   * @param queryArray Query array
    */
   private async _fetchDataForView(
     view: PortfolioOverviewView,
@@ -321,7 +320,7 @@ export class DataAdapter implements IDataAdapter {
   /**
    * Fetches data for the Projecttimeline project
    *
-   * @param timelineConfig
+   * @param timelineConfig Timeline configuration
    */
   public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationListModel[]) {
     try {
@@ -369,9 +368,9 @@ export class DataAdapter implements IDataAdapter {
    *  Fetches items from timelinecontent list
    *
    * * Fetching list items
-   * * Maps the items to TimelineContentListModel
+   * * Maps the items to `TimelineContentListModel`
    *
-   * @param timelineConfig
+   * @param timelineConfig Timeline configuration
    */
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationListModel[]) {
     const [timelineItems] = await Promise.all([
@@ -425,8 +424,7 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetches configuration data for the Projecttimeline
-   *
+   * Fetches configuration data for the Project Timeline
    */
   public async fetchTimelineConfiguration() {
     const timelineConfig = await sp.web.lists
@@ -463,9 +461,9 @@ export class DataAdapter implements IDataAdapter {
   /**
    * Fetches configuration data for the Projecttimeline
    *
-   * @param configItemTitle
-   * @param dataSourceName
-   * @param timelineConfig
+   * @param configItemTitle Configuration item title
+   * @param dataSourceName Data source name
+   * @param timelineConfig Timeline configuration
    */
   public async fetchTimelineAggregatedContent(
     configItemTitle: string,
@@ -561,22 +559,28 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Map projects
-   * @param items Items
-   * @param groups Groups
-   * @param users Users
+   * Mapping projects combing `items`, `groups` and `users`.
+   *
+   * @param items Items from projects list
+   * @param groups Groups from Microsoft Graph API
+   * @param sites Sites search results
+   * @param users Site users
    */
   private _mapProjects(
     items: ISPProjectItem[],
     groups: IGraphGroup[],
+    sites: SearchResult[],
     users: ISPUser[]
   ): ProjectListModel[] {
     const projects = items
       .map((item) => {
         const [group] = groups.filter((grp) => grp.id === item.GtGroupId)
+        const [site] = sites.filter((site) => site['SiteId'] === item.GtSiteId)
         const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
         const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
         const model = new ProjectListModel(group?.displayName ?? item.Title, item)
+        // eslint-disable-next-line no-console
+        console.log(site)
         model.userIsMember = !!group
         if (manager) model.manager = { text: manager.Title, imageUrl: getUserPhoto(manager.Email) }
         if (owner) model.owner = { text: owner.Title, imageUrl: getUserPhoto(owner.Email) }
@@ -587,52 +591,58 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch enriched projects
-   * * Fetching project list items
-   * * Graph groups
-   * * Site users
-   * * Combines the data
+   * Fetching enriched projects by combining list items from projects list,
+   * Graph Groups and site users.
+   *
+   * @param filter Filter for project items
    */
-  public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
+  public async fetchEnrichedProjects(
+    // eslint-disable-next-line quotes
+    filter = "GtProjectLifecycleStatus ne 'Avsluttet'"
+  ): Promise<ProjectListModel[]> {
     await MSGraph.Init(this.context.msGraphClientFactory)
-    const [items, groups, users] = await Promise.all([
-      sp.web.lists
-        .getByTitle(strings.ProjectsListName)
-        .items.select(
-          'GtGroupId',
-          'GtSiteId',
-          'GtSiteUrl',
-          'GtProjectOwnerId',
-          'GtProjectManagerId',
-          'GtProjectPhaseText',
-          'GtStartDate',
-          'GtEndDate',
-          'Title',
-          'GtIsParentProject',
-          'GtIsProgram'
-        )
-        // eslint-disable-next-line quotes
-        .filter("GtProjectLifecycleStatus ne 'Avsluttet'")
-        .orderBy('Title')
-        .top(500)
-        .usingCaching()
-        .get<ISPProjectItem[]>(),
-      MSGraph.Get<IGraphGroup[]>(
-        '/me/memberOf/$/microsoft.graph.group',
-        ['id', 'displayName'],
-        // eslint-disable-next-line quotes
-        "groupTypes/any(a:a%20eq%20'unified')"
-      ),
-      sp.web.siteUsers
-        .select('Id', 'Title', 'Email')
-        .usingCaching({
-          key: 'fetchenrichedprojects_siteusers',
-          storeName: 'session',
-          expiration: dateAdd(new Date(), 'minute', 15)
-        })
-        .get<ISPUser[]>()
-    ])
-    const projects = this._mapProjects(items, groups, users)
+    const [items, groups, users, sites] = await new PnPClientStorage().session.getOrPut(
+      'pp366_fetchenrichedprojects',
+      async () => {
+        return await Promise.all([
+          sp.web.lists
+            .getByTitle(strings.ProjectsListName)
+            .items.select(
+              'GtGroupId',
+              'GtSiteId',
+              'GtSiteUrl',
+              'GtProjectOwnerId',
+              'GtProjectManagerId',
+              'GtProjectPhaseText',
+              'GtStartDate',
+              'GtEndDate',
+              'Title',
+              'GtIsParentProject',
+              'GtIsProgram'
+            )
+            .filter(filter)
+            .orderBy('Title')
+            .top(500)
+            .usingCaching()
+            .get<ISPProjectItem[]>(),
+          MSGraph.Get<IGraphGroup[]>(
+            '/me/memberOf/$/microsoft.graph.group',
+            ['id', 'displayName'],
+            // eslint-disable-next-line quotes
+            "groupTypes/any(a:a%20eq%20'unified')"
+          ),
+          sp.web.siteUsers.select('Id', 'Title', 'Email').get<ISPUser[]>(),
+          this._fetchItems(
+            'DepartmentId:{35c98c45-29a1-480a-900d-1eb2f91ca56d} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*',
+            ['Title', 'SiteId']
+          )
+        ])
+      },
+      dateAdd(new Date(), 'minute', 30)
+    )
+    // eslint-disable-next-line no-console
+    console.log(sites)
+    const projects = this._mapProjects(items, groups, sites, users)
     return projects
   }
 
@@ -646,15 +656,12 @@ export class DataAdapter implements IDataAdapter {
     configuration?: IAggregatedListConfiguration,
     dataSource?: string
   ): Promise<any[]> {
-    const odata =
-      configuration && configuration.views.find((v) => v.title === dataSource)?.odataQuery
+    const { odataQuery } = (configuration?.views || []).find((v) => v.title === dataSource)
     let projects: any[]
-
-    if (odata && !dataSource.includes('(Prosjektnivå)')) {
-      // eslint-disable-next-line @typescript-eslint/no-extra-semi
+    if (odataQuery && !dataSource.includes('(Prosjektnivå)')) {
       projects = await sp.web.lists
         .getByTitle(strings.ProjectsListName)
-        .items.filter(`${odata}`)
+        .items.filter(`${odataQuery}`)
         .get<any[]>()
     }
     return projects
@@ -663,11 +670,7 @@ export class DataAdapter implements IDataAdapter {
   /**
    * Checks if the current is in the specified group
    *
-   * @public
-   *
-   * @param groupName
-   *
-   * @returns {Promise<boolean>}
+   * @param groupName Group name
    */
   public async isUserInGroup(groupName: string): Promise<boolean> {
     try {
@@ -682,7 +685,7 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch items
+   * Fetch items with `sp.search` using the specified `queryTemplate` and `selectProperties`.
    *
    * @param queryTemplate Query template
    * @param selectProperties Select properties
