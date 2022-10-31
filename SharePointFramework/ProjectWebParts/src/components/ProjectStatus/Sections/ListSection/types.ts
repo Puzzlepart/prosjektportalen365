@@ -2,9 +2,9 @@ import { IColumn } from '@fluentui/react/lib/DetailsList'
 
 export interface IListSectionState<T> {
   /**
-   * Whether the component is loading
+   * The component has loaded the neccessary data
    */
-  loading?: boolean
+   isDataLoaded?: boolean
 
   /**
    * Data

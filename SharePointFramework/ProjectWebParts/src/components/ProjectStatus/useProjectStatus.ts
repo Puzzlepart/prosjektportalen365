@@ -1,3 +1,5 @@
+/* eslint-disable prefer-spread */
+import { SectionModel, StatusReport } from 'pp365-shared/lib/models'
 import { getUrlParam, parseUrlHash } from 'pp365-shared/lib/util'
 import { useEffect, useState } from 'react'
 import { find, first } from 'underscore'
@@ -6,8 +8,9 @@ import { IProjectStatusHashState, IProjectStatusProps, IProjectStatusState } fro
 
 export function useProjectStatus(props: IProjectStatusProps) {
   const [state, $setState] = useState<IProjectStatusState>({
-    loading: true,
-    data: { reports: [], sections: [] }
+    isDataLoaded: false,
+    selectedReport: new StatusReport({}),
+    data: { reports: [], sections:  Array.apply(null, Array(6)).map(() => new SectionModel({})), }
   })
 
   const setState = (newState: Partial<IProjectStatusState>) => {
@@ -37,8 +40,8 @@ export function useProjectStatus(props: IProjectStatusProps) {
         data,
         selectedReport,
         sourceUrl: decodeURIComponent(sourceUrlParam || ''),
-        loading: false,
-        newestReportId,
+        isDataLoaded: false,
+        mostRecentReportId: newestReportId,
         userHasAdminPermission: data.userHasAdminPermission
       })
     })

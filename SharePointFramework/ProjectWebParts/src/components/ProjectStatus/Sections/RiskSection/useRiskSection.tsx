@@ -5,14 +5,14 @@ import { IRiskSectionState } from './types'
 
 export function useRiskSection() {
   const context = useContext(ProjectStatusContext)
-  const [state, setState] = useState<IRiskSectionState>({ loading: true })
+  const [state, setState] = useState<IRiskSectionState>({ isDataLoaded: false })
   const fetchListData = useFetchListData()
   const showLists = context.state.data.reports
-    ? context.state.selectedReport.id === context.state.newestReportId
+    ? context.state.selectedReport.id === context.state.mostRecentReportId
     : true
 
   useEffect(() => {
-    fetchListData().then((data) => setState({ data, loading: false }))
+    fetchListData().then((data) => setState({ data, isDataLoaded: false }))
   }, [])
 
   return { state, showLists } as const

@@ -25,11 +25,11 @@ export function useDeleteReport() {
       context.setState({
         selectedReport,
         sourceUrl: decodeURIComponent(sourceUrlParam || ''),
-        loading: false,
-        newestReportId
+        isDataLoaded: false,
+        mostRecentReportId: newestReportId
       })
     } catch (error) {
-      context.setState({ error, loading: false })
+      context.setState({ error, isDataLoaded: true })
     }
   }
 }

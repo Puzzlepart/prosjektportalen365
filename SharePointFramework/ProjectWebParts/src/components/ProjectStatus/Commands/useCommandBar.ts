@@ -56,7 +56,7 @@ export function useCommands() {
   const farItems: IContextualMenuItem[] = []
   if (context.state.sourceUrl) {
     farItems.push({
-      key: 'NAVIGATE_TO_SOURC_EURL',
+      key: 'NAVIGATE_TO_SOURCE_URL',
       name: strings.NavigateToSourceUrlText,
       iconProps: { iconName: 'NavigateBack' },
       href: context.state.sourceUrl

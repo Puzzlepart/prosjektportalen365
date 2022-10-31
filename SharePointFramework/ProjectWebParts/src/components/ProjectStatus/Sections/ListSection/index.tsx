@@ -18,14 +18,14 @@ import { useFetchListData } from './useFetchListData'
 
 function useListSection() {
   const context = useContext(ProjectStatusContext)
-  const [state, setState] = useState<IListSectionState<IListSectionData>>({ loading: true })
+  const [state, setState] = useState<IListSectionState<IListSectionData>>({ isDataLoaded: false })
   const fetchListData = useFetchListData()
   const showLists = context.state.data.reports
-    ? context.state.selectedReport.id === context.state.newestReportId
+    ? context.state.selectedReport.id === context.state.mostRecentReportId
     : true
 
   useEffect(() => {
-    fetchListData().then((data) => setState({ data, loading: false }))
+    fetchListData().then((data) => setState({ data, isDataLoaded: false }))
   }, [])
 
   return { state, showLists } as const
@@ -38,7 +38,7 @@ export const ListSection: FC = () => {
    * Render list
    */
   function renderList() {
-    if (state.loading || !state.data) return null
+    if (!state.isDataLoaded || !state.data) return null
     if (state.error)
       return <UserMessage text={strings.ListSectionDataErrorMessage} type={MessageBarType.error} />
     return (

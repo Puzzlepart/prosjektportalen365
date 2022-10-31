@@ -17,7 +17,7 @@ export const RiskSection: FC = () => {
    * Render content
    */
   function renderContent() {
-    if (state.loading || !state.data) return null
+    if (!state.isDataLoaded || !state.data) return null
     if (state.error)
       return <UserMessage text={strings.ListSectionDataErrorMessage} type={MessageBarType.error} />
     return (

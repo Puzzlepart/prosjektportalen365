@@ -35,8 +35,7 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   /**
    * ID of the most recent report
    */
-
-  newestReportId?: number
+  mostRecentReportId?: number
 
   /**
    * Current user has admin permissions
