@@ -12,7 +12,9 @@ export function useDeleteReport() {
       siteId: context.props.siteId
     })
     await portalDataService.deleteStatusReport(context.state.selectedReport.id)
-    const reports = context.state.data.reports.filter(r => r.id !== context.state.selectedReport.id)
+    const reports = context.state.data.reports.filter(
+      (r) => r.id !== context.state.selectedReport.id
+    )
     try {
       const [selectedReport] = context.state.data.reports
       const sourceUrlParam = getUrlParam('Source')

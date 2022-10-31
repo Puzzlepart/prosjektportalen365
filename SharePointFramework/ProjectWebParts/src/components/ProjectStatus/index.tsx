@@ -5,6 +5,7 @@ import { Header } from './Header'
 import styles from './ProjectStatus.module.scss'
 import { Sections } from './Sections'
 import { IProjectStatusProps } from './types'
+import { UnpublishedStatusReportInfo } from './UnpublishedStatusReportInfo'
 import { useProjectStatus } from './useProjectStatus'
 
 export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
@@ -14,6 +15,7 @@ export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
       <div className={styles.root}>
         <Commands />
         <div className={styles.container}>
+          <UnpublishedStatusReportInfo />
           <Header />
           <Sections />
         </div>
