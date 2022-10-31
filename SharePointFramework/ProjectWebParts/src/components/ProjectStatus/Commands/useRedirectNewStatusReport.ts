@@ -9,7 +9,7 @@ import { useEditFormUrl } from './useEditFormUrl'
 
 /**
  * Hook for redirecting to a new status report.
- * 
+ *
  * @returns A function callback
  */
 export function useRedirectNewStatusReport() {

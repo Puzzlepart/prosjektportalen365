@@ -6,7 +6,7 @@ import { ProjectStatusContext } from '../context'
 
 /**
  * Hook for deletion of report.
- * 
+ *
  * @returns A function callback
  */
 export function useDeleteReport() {
@@ -16,7 +16,7 @@ export function useDeleteReport() {
       urlOrWeb: context.props.hubSite.web,
       siteId: context.props.siteId
     })
-     await portalDataService.deleteStatusReport(context.state.selectedReport.id)
+    await portalDataService.deleteStatusReport(context.state.selectedReport.id)
     const reports = context.state.data.reports.filter(
       (r) => r.id !== context.state.selectedReport.id
     )

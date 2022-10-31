@@ -126,12 +126,13 @@ export class PortalDataService {
   /**
    * Update status report, and add snapshot as attachment.
    *
-   * @param id Id
+   * @param report Status report
    * @param properties Properties
    * @param attachment Attachment
+   * @param publishedString String value for published state
    */
   public async updateStatusReport(
-    id: number,
+    report: StatusReport,
     properties: Record<string, string>,
     attachment?: AttachmentFileInfo,
     publishedString?: string
@@ -139,12 +140,12 @@ export class PortalDataService {
     const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
     if (attachment) {
       try {
-        await list.items.getById(id).attachmentFiles.addMultiple([attachment])
+        await list.items.getById(report.id).attachmentFiles.addMultiple([attachment])
       } catch (error) {}
     }
     try {
-      const itemUpdateResult = await list.items.getById(id).update(properties)
-      return new StatusReport(itemUpdateResult.data, publishedString)
+      await list.items.getById(report.id).update(properties)
+      return new StatusReport({ ...report.item, ...properties }, publishedString)
     } catch (error) {
       throw error
     }

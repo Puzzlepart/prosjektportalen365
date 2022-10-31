@@ -8,7 +8,7 @@ import { useCaptureReport } from './useCaptureReport'
 
 /**
  * Hook for publishing of reports.
- * 
+ *
  * @returns A function callback
  */
 export function usePublishReport() {
@@ -26,20 +26,21 @@ export function usePublishReport() {
           GtModerationStatus: strings.GtModerationStatus_Choice_Published,
           GtLastReportDate: moment().format('YYYY-MM-DD HH:mm')
         }
-       const updatedReport = await portalDataService.updateStatusReport(
-          context.state.selectedReport.id,
+        const updatedReport = await portalDataService.updateStatusReport(
+          context.state.selectedReport,
           properties,
           attachment,
           strings.GtModerationStatus_Choice_Published
         )
-        const reports = context.state.data.reports.map(r => {
+        const reports = context.state.data.reports.map((r) => {
           return updatedReport.id === r.id ? updatedReport : r
         })
         context.setState({
           data: {
             ...context.state.data,
             reports
-          }
+          },
+          selectedReport: updatedReport
         })
       } catch (error) {}
     }

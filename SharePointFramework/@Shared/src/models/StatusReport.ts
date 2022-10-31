@@ -15,14 +15,14 @@ export class StatusReport {
   /**
    * Creates a new instance of StatusReport
    *
-   * @param _item - SP item
+   * @param item - SP item
    * @param _publishedString Published string
    */
-  constructor(private _item: Record<string, any>, private _publishedString?: string) {
-    this.id = _item.Id
-    this.created = new Date(_item.Created)
-    this.modified = new Date(_item.Modified)
-    this.publishedDate = _item.GtLastReportDate ? new Date(_item.GtLastReportDate) : null
+  constructor(public item: Record<string, any>, private _publishedString?: string) {
+    this.id = item.Id
+    this.created = new Date(item.Created)
+    this.modified = new Date(item.Modified)
+    this.publishedDate = item.GtLastReportDate ? new Date(item.GtLastReportDate) : null
   }
 
   /**
@@ -40,10 +40,10 @@ export class StatusReport {
    * Get status values from item
    */
   public get statusValues(): Record<string, string> {
-    return Object.keys(this._item)
+    return Object.keys(this.item)
       .filter((fieldName) => fieldName.indexOf('Status') !== -1 && fieldName.indexOf('Gt') === 0)
       .reduce((obj, fieldName) => {
-        obj[fieldName] = this._item[fieldName]
+        obj[fieldName] = this.item[fieldName]
         return obj
       }, {})
   }
@@ -53,9 +53,9 @@ export class StatusReport {
    */
   public get budgetNumbers(): Record<string, number> {
     return {
-      GtBudgetTotal: this._item.GtBudgetTotal || 0,
-      GtCostsTotal: this._item.GtCostsTotal || 0,
-      GtProjectForecast: this._item.GtProjectForecast || 0
+      GtBudgetTotal: this.item.GtBudgetTotal || 0,
+      GtCostsTotal: this.item.GtCostsTotal || 0,
+      GtProjectForecast: this.item.GtProjectForecast || 0
     }
   }
 
@@ -63,14 +63,14 @@ export class StatusReport {
    * Field values
    */
   public get values(): Record<string, any> {
-    return this._item
+    return this.item
   }
 
   /**
    * Attachments
    */
   public get attachments(): StatusReportAttachment[] {
-    return this._item.AttachmentFiles || []
+    return this.item.AttachmentFiles || []
   }
 
   /**
@@ -84,14 +84,14 @@ export class StatusReport {
    * Field values
    */
   public get fieldValues(): Record<string, string> {
-    return this._item.FieldValuesAsText || this._item
+    return this.item.FieldValuesAsText || this.item
   }
 
   /**
    * Moderation status
    */
   public get moderationStatus(): string {
-    return this._item.FieldValuesAsText?.GtModerationStatus
+    return this.item.GtModerationStatus
   }
 
   /**
@@ -107,6 +107,6 @@ export class StatusReport {
    * @param fieldName - Field name
    */
   public getStatusValue(fieldName: string): { value: string; comment: string } {
-    return { value: this._item[fieldName], comment: this._item[`${fieldName}Comment`] }
+    return { value: this.item[fieldName], comment: this.item[`${fieldName}Comment`] }
   }
 }
