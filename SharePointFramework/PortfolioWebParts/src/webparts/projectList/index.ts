@@ -21,7 +21,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    const viewOptions = ProjectListViews.map<IPropertyPaneDropdownOption>(view => ({
+    const viewOptions = ProjectListViews.map<IPropertyPaneDropdownOption>((view) => ({
       key: view.itemKey,
       text: view.headerText
     }))
@@ -49,7 +49,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                 PropertyFieldMultiSelect('hideViews', {
                   key: 'hideViews',
                   label: strings.HideViewsLabel,
-                  options:viewOptions,
+                  options: viewOptions,
                   selectedKeys: this.properties.hideViews ?? []
                 })
               ]

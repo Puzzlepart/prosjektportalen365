@@ -4,7 +4,7 @@ import { ProjectListModel } from 'models'
 import strings from 'PortfolioWebPartsStrings'
 import { sortAlphabetically } from 'pp365-shared/lib/helpers'
 import { useEffect, useState } from 'react'
-import { find, first } from 'underscore'
+import { any, find, first } from 'underscore'
 import { ProjectListViews } from './ProjectListViews'
 import { IProjectListProps, IProjectListState } from './types'
 
@@ -18,7 +18,9 @@ export const useProjectList = (props: IProjectListProps) => {
     loading: true,
     searchTerm: '',
     renderAs: 'tiles',
-    selectedView: find(ProjectListViews, view => view.itemKey === props.defaultView) ?? first(ProjectListViews),
+    selectedView:
+      find(ProjectListViews, (view) => view.itemKey === props.defaultView) ??
+      first(ProjectListViews),
     projects: Array.apply(null, Array(24)).map(() => 0),
     isUserInPortfolioManagerGroup: false,
     sort: { fieldName: props.sortBy, isSortedDescending: true }
@@ -80,17 +82,16 @@ export const useProjectList = (props: IProjectListProps) => {
   function filterProjets(projects: ProjectListModel[]) {
     return projects
       .filter((project) => state.selectedView.filter(project))
-      .filter((p) => {
-        const matches = Object.keys(p).filter((key) => {
-          const value = p[key]
+      .filter((project) =>
+        any(Object.keys(project), (key) => {
+          const value = project[key]
           return (
             value &&
             typeof value === 'string' &&
             value.toLowerCase().indexOf(state.searchTerm) !== -1
           )
-        }).length
-        return matches > 0
-      })
+        })
+      )
       .sort((a, b) =>
         sortAlphabetically<ProjectListModel>(
           a,
@@ -126,7 +127,7 @@ export const useProjectList = (props: IProjectListProps) => {
   }, [])
 
   const projects = state.loading ? state.projects : filterProjets(state.projects)
-  const views = ProjectListViews.filter(view => !props.hideViews.includes(view.itemKey))
+  const views = ProjectListViews.filter((view) => !props.hideViews.includes(view.itemKey))
 
   return {
     state,
