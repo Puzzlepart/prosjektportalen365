@@ -1,6 +1,13 @@
+import { IPivotItemProps } from '@fluentui/react'
 import { IColumn } from '@fluentui/react/lib/DetailsList'
-import { IBaseComponentProps } from '../types'
 import { ProjectListModel } from 'models'
+import { IBaseComponentProps } from '../types'
+
+export interface IProjectListView extends IPivotItemProps {
+  searchBoxPlaceholder?: string
+  filter?: (project?: ProjectListModel) => boolean
+}
+
 
 export interface IProjectListProps extends IBaseComponentProps {
   /**
@@ -78,7 +85,7 @@ export interface IProjectListState {
   /**
    * Current selected view
    */
-  selectedView?: string
+  selectedView?: IProjectListView
 
   /**
    * Is the current user in the PortfolioManagerGroup?

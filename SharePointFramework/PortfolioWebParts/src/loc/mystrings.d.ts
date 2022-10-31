@@ -186,10 +186,10 @@ declare interface IPortfolioWebPartsStrings {
   NewLabel: string
   ReadOnlyGroupName: string
   DisplayAllProjects: string
-  MyProjectsLabel: string
-  AllProjectsLabel: string
-  ProgramLabel: string
-  ParentProjectLabel: string
+  MyProjectsHeaderText: string
+  AllProjectsHeaderText: string
+  ProgramProjectsHeaderText: string
+  ParentProjectsHeaderText: string
   NoAccessMessage: string
   BooleanYes: string
   BooleanNo: string

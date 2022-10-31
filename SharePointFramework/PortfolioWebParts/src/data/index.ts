@@ -17,16 +17,25 @@ import _, { any, find, first } from 'underscore'
 import {
   Benefit,
   BenefitMeasurement,
-  BenefitMeasurementIndicator, ChartConfiguration,
+  BenefitMeasurementIndicator,
+  ChartConfiguration,
   ChartData,
   ChartDataItem,
   DataField,
-  ProjectListModel, SPChartConfigurationItem,
-  SPContentType, TimelineConfigurationListModel, TimelineContentListModel
+  ProjectListModel,
+  SPChartConfigurationItem,
+  SPContentType,
+  TimelineConfigurationListModel,
+  TimelineContentListModel
 } from '../models'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import {
-  CONTENT_TYPE_ID_BENEFITS, CONTENT_TYPE_ID_INDICATORS, CONTENT_TYPE_ID_MEASUREMENTS, DEFAULT_GAINS_PROPERTIES, DEFAULT_SEARCH_SETTINGS, IDataAdapter
+  CONTENT_TYPE_ID_BENEFITS,
+  CONTENT_TYPE_ID_INDICATORS,
+  CONTENT_TYPE_ID_MEASUREMENTS,
+  DEFAULT_GAINS_PROPERTIES,
+  DEFAULT_SEARCH_SETTINGS,
+  IDataAdapter
 } from './types'
 
 export class DataAdapter implements IDataAdapter {
@@ -287,8 +296,9 @@ export class DataAdapter implements IDataAdapter {
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${queryArray ?? ''
-          } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `${
+          queryArray ?? ''
+        } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })
@@ -351,7 +361,7 @@ export class DataAdapter implements IDataAdapter {
         .filter((p) => p)
 
       return { reports, configElement }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**

@@ -15,10 +15,11 @@ import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import { getObjectValue } from 'pp365-shared/lib/helpers'
 import React, { FC } from 'react'
-import { isEmpty } from 'underscore'
+import { find, isEmpty } from 'underscore'
 import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
+import { ProjectListViews } from './ProjectListViews'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
 
@@ -106,52 +107,24 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
       <div className={styles.container}>
         <div className={styles.projectDisplaySelect}>
           <Pivot
-            onLinkClick={({ props }) => setState({ selectedView: props.itemKey })}
-            selectedKey={state.selectedView}>
-            <PivotItem
-              headerText={strings.MyProjectsLabel}
-              itemKey='my_projects'
-              itemIcon='FabricUserFolder'
-              headerButtonProps={
-                !state.isUserInPortfolioManagerGroup && {
-                  disabled: true,
-                  style: { opacity: 0.3, cursor: 'default' }
+            onLinkClick={({ props }) =>
+              setState({ selectedView: find(ProjectListViews, (v) => v.itemKey === props.itemKey) })
+            }
+            selectedKey={state.selectedView.itemKey}>
+            {ProjectListViews.map((props) => (
+              <PivotItem
+                key={props.itemKey}
+                itemKey={props.itemKey}
+                headerText={props.headerText}
+                itemIcon={props.itemIcon}
+                headerButtonProps={
+                  !state.isUserInPortfolioManagerGroup && {
+                    disabled: true,
+                    style: { opacity: 0.3, cursor: 'default' }
+                  }
                 }
-              }
-            />
-            <PivotItem
-              headerText={strings.AllProjectsLabel}
-              itemKey='all_projects'
-              itemIcon='AllApps'
-              headerButtonProps={
-                !state.isUserInPortfolioManagerGroup && {
-                  disabled: true,
-                  style: { opacity: 0.3, cursor: 'default' }
-                }
-              }
-            />
-            <PivotItem
-              headerText={strings.ParentProjectLabel}
-              itemKey='parent_projects'
-              itemIcon='ProductVariant'
-              headerButtonProps={
-                !state.isUserInPortfolioManagerGroup && {
-                  disabled: true,
-                  style: { opacity: 0.3, cursor: 'default' }
-                }
-              }
-            />
-            <PivotItem
-              headerText={strings.ProgramLabel}
-              itemKey='program'
-              itemIcon='ProductList'
-              headerButtonProps={
-                !state.isUserInPortfolioManagerGroup && {
-                  disabled: true,
-                  style: { opacity: 0.3, cursor: 'default' }
-                }
-              }
-            />
+              />
+            ))}
           </Pivot>
         </div>
         <div className={styles.searchBox} hidden={!props.showSearchBox}>

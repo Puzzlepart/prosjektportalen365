@@ -1,17 +1,24 @@
 /* eslint-disable prefer-spread */
+import { format, IButtonProps, IColumn } from '@fluentui/react'
 import { ProjectListModel } from 'models'
-import { IButtonProps, IColumn } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { sortAlphabetically } from 'pp365-shared/lib/helpers'
 import { useEffect, useState } from 'react'
+import { first } from 'underscore'
+import { ProjectListViews } from './ProjectListViews'
 import { IProjectListProps, IProjectListState } from './types'
 
+/**
+ * Component logic hook for `ProjectList`.
+ *
+ * @param props Props
+ */
 export const useProjectList = (props: IProjectListProps) => {
   const [state, $setState] = useState<IProjectListState>({
     loading: true,
     searchTerm: '',
     renderAs: 'tiles',
-    selectedView: 'my_projects',
+    selectedView: first(ProjectListViews),
     projects: Array.apply(null, Array(24)).map(() => 0),
     isUserInPortfolioManagerGroup: false,
     sort: { fieldName: props.sortBy, isSortedDescending: true }
@@ -74,12 +81,7 @@ export const useProjectList = (props: IProjectListProps) => {
    */
   function filterProjets(projects: ProjectListModel[]) {
     return projects
-      .filter((project) => {
-        if (state.selectedView === 'my_projects') return project.userIsMember
-        if (state.selectedView === 'parent_projects') return project.isParent
-        if (state.selectedView === 'program') return project.isProgram
-        return true
-      })
+      .filter((project) => state.selectedView.filter(project))
       .filter((p) => {
         const matches = Object.keys(p).filter((key) => {
           const value = p[key]
@@ -114,16 +116,7 @@ export const useProjectList = (props: IProjectListProps) => {
    * Get searchbox placeholder text based on `state.selectedView`
    */
   function getSearchBoxPlaceholder() {
-    switch (state.selectedView) {
-      case 'my_projects':
-        return strings.MyProjectsSearchBoxPlaceholderText
-      case 'all_projects':
-        return strings.AllProjectsSearchBoxPlaceholderText
-      case 'parent_projects':
-        return strings.ParentProjectsSearchBoxPlaceholderText
-      case 'program':
-        return strings.ProgramSearchBoxPlaceholderText
-    }
+    return format(state.selectedView.searchBoxPlaceholder, state.projects.length)
   }
 
   useEffect(() => {
