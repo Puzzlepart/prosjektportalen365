@@ -1,41 +1,19 @@
-import { IPersonaSharedProps, Persona, PersonaSize } from '@fluentui/react/lib/Persona'
-import * as strings from 'PortfolioWebPartsStrings'
-import React, { FC } from 'react'
-import { IProjectCardProps } from '../types'
+import { Persona } from '@fluentui/react/lib/Persona'
+import React, { FC, useContext } from 'react'
+import { ProjectCardContext } from '../context'
 import styles from './ProjectCardContent.module.scss'
+import { useProjectCardContent } from './useProjectCardContent'
 
-function useProjectCardContent(props: IProjectCardProps) {
-  const defaultPersonaProps: IPersonaSharedProps = {
-    text: strings.NotSet,
-    size: PersonaSize.size40,
-    imageShouldFadeIn: true
-  }
-  const ownerPersonaProps: IPersonaSharedProps = {
-    ...defaultPersonaProps,
-    ...props.project.owner,
-    secondaryText: strings.ProjectOwner
-  }
-  const managerPersonaProps: IPersonaSharedProps = {
-    ...defaultPersonaProps,
-    ...props.project.manager,
-    secondaryText: strings.ProjectManager
-  }
-  return {
-    phase: props.project.phase,
-    owner: ownerPersonaProps,
-    manager: managerPersonaProps
-  } as const
-}
-
-export const ProjectCardContent: FC<IProjectCardProps> = (props) => {
-  const { phase, owner, manager } = useProjectCardContent(props)
+export const ProjectCardContent: FC = () => {
+  const context = useContext(ProjectCardContext)
+  const { phase, owner, manager } = useProjectCardContent()
   return (
     <div className={styles.root}>
       <div className={styles.phase}>{phase}</div>
-      <div className={styles.personaContainer} hidden={!props.showProjectOwner}>
+      <div className={styles.personaContainer} hidden={!context.showProjectOwner}>
         <Persona {...owner} />
       </div>
-      <div className={styles.personaContainer} hidden={!props.showProjectManager}>
+      <div className={styles.personaContainer} hidden={!context.showProjectManager}>
         <Persona {...manager} />
       </div>
     </div>

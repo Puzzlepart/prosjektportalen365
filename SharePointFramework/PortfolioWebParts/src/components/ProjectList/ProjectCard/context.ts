@@ -1,8 +1,9 @@
 import { IButtonProps } from '@fluentui/react/lib/Button'
 import { ProjectListModel } from 'models'
+import { createContext } from 'react'
 import { IProjectListProps } from '../types'
 
-export interface IProjectCardProps
+export interface IProjectCardContext
   extends Pick<IProjectListProps, 'showProjectLogo' | 'showProjectOwner' | 'showProjectManager'> {
   /**
    * Project model
@@ -24,3 +25,5 @@ export interface IProjectCardProps
    */
   isDataLoaded?: boolean
 }
+
+export const ProjectCardContext = createContext<IProjectCardContext>(null)

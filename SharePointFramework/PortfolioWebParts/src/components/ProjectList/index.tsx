@@ -16,6 +16,7 @@ import { getObjectValue } from 'pp365-shared/lib/helpers'
 import React, { FC } from 'react'
 import { find, isEmpty } from 'underscore'
 import { ProjectCard } from './ProjectCard'
+import { ProjectCardContext } from './ProjectCard/context'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
 import { RenderModeDropdown } from './RenderModeDropdown'
@@ -40,20 +41,17 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
    * @param projects - Projects to render
    */
   function renderProjects(projects: ProjectListModel[]) {
-    if (state.loading) {
-      return projects.map((_, idx) => <ProjectCard key={idx} isDataLoaded={false} />)
-    }
     switch (state.renderAs) {
       case 'tiles': {
         return projects.map((project, idx) => (
-          <ProjectCard
-            key={idx}
-            project={project}
-            showProjectLogo={props.showProjectLogo}
-            showProjectOwner={props.showProjectOwner}
-            showProjectManager={props.showProjectManager}
-            actions={getCardActions(project)}
-          />
+          <ProjectCardContext.Provider key={idx} value={{
+            ...props,
+            project,
+            actions: getCardActions(project),
+            isDataLoaded: !state.loading
+          }}>
+            <ProjectCard />
+          </ProjectCardContext.Provider>
         ))
       }
       case 'list': {

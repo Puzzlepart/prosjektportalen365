@@ -6,16 +6,16 @@ import {
   ShimmerElementsGroup,
   ShimmerElementType
 } from '@fluentui/react'
-import { ProjectListModel } from 'models'
-import React, { FC } from 'react'
+import React, { FC, useContext } from 'react'
+import { ProjectCardContext } from './context'
 import styles from './ProjectCard.module.scss'
 import { ProjectCardContent } from './ProjectCardContent'
 import { ProjectCardHeader } from './ProjectCardHeader'
-import { IProjectCardProps } from './types'
 import { useProjectCard } from './useProjectCard'
 
-export const ProjectCard: FC<IProjectCardProps> = (props) => {
-  const { isDataLoaded, setIsImageLoaded, documentCardProps } = useProjectCard(props)
+export const ProjectCard: FC = () => {
+  const context = useContext(ProjectCardContext)
+  const { isDataLoaded, setIsImageLoaded, documentCardProps } = useProjectCard()
   return (
     <Shimmer
       className={styles.root}
@@ -31,19 +31,11 @@ export const ProjectCard: FC<IProjectCardProps> = (props) => {
       }>
       <DocumentCard {...documentCardProps}>
         <Link href={documentCardProps.onClickHref} target='_blank'>
-          <ProjectCardHeader {...props} onImageLoad={() => setIsImageLoaded(true)} />
+          <ProjectCardHeader onImageLoad={() => setIsImageLoaded(true)} />
         </Link>
-        <ProjectCardContent {...props} />
-        <DocumentCardActions actions={props.actions} />
+        <ProjectCardContent />
+        <DocumentCardActions actions={context.actions} />
       </DocumentCard>
     </Shimmer>
   )
-}
-
-ProjectCard.defaultProps = {
-  project: new ProjectListModel(undefined, {}),
-  isDataLoaded: true,
-  showProjectOwner: false,
-  showProjectManager: false,
-  shouldTruncateTitle: true
 }
