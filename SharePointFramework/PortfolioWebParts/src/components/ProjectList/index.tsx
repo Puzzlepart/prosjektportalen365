@@ -19,7 +19,7 @@ import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
 import { RenderModeDropdown } from './RenderModeDropdown'
-import { IProjectListProps, ProjectListRenderMode } from './types'
+import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
@@ -131,7 +131,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         </div>
         <RenderModeDropdown
           hidden={!props.showViewSelector}
-          onChange={(_event, option) => setState({ renderAs: option.key as ProjectListRenderMode })}
+          onChange={(renderAs) => setState({ renderAs })}
         />
         {!state.loading && isEmpty(projects) && (
           <div className={styles.emptyMessage}>

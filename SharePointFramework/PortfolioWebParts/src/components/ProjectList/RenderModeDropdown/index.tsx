@@ -1,36 +1,30 @@
-import { Dropdown, Icon, IDropdownOption, IDropdownProps, IIconProps } from '@fluentui/react'
+import { Dropdown, Icon, IRenderFunction } from '@fluentui/react'
 import React, { FC, useEffect, useState } from 'react'
+import { ProjectListRenderMode } from '../types'
 import styles from './RenderModeDropdown.module.scss'
-import { LIST_OPTION, TILE_OPTION } from './types'
+import {
+  IRenderModeDropdownProps,
+  LIST_OPTION,
+  RenderModeDropdownOption,
+  TILE_OPTION
+} from './types'
 
-export const RenderModeDropdown: FC<Omit<IDropdownProps, 'options'>> = (props) => {
-  const [selectedOption, setSelectedOption] = useState<IDropdownOption<IIconProps>>(TILE_OPTION)
+export const RenderModeDropdown: FC<IRenderModeDropdownProps> = (props) => {
+  const [selectedOption, setSelectedOption] = useState<RenderModeDropdownOption>(TILE_OPTION)
 
-  useEffect(() => {
-    props.onChange(null, selectedOption)
-  }, [selectedOption])
+  useEffect(() => props.onChange(selectedOption.key as ProjectListRenderMode), [selectedOption])
 
-  const onRenderOption = (option: IDropdownOption<IIconProps>): JSX.Element => {
+  const onRenderOption: IRenderFunction<RenderModeDropdownOption> = (option) => {
     return (
       <div>
-        {option.data?.iconName && (
-          <Icon style={{ marginRight: 8 }} iconName={option.data.iconName} />
-        )}
+        {option.data?.iconProps && <Icon style={{ marginRight: 8 }} {...option.data.iconProps} />}
         <span>{option.text}</span>
       </div>
     )
   }
 
-  const onRenderTitle = (): JSX.Element => {
-    return (
-      <div>
-        {selectedOption.data?.iconName && (
-          <Icon style={{ marginRight: 8 }} iconName={selectedOption.data.iconName} />
-        )}
-        <span>{selectedOption.text}</span>
-      </div>
-    )
-  }
+  const onRenderTitle: IRenderFunction<RenderModeDropdownOption[]> = () =>
+    onRenderOption(selectedOption)
 
   return (
     <div className={styles.root} hidden={props.hidden}>
