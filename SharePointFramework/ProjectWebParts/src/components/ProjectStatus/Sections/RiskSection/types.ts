@@ -1,9 +1,5 @@
-import { IListSectionProps, IListSectionState, IListSectionData } from '../ListSection'
-import { IRiskMatrixProps, RiskElementModel } from 'components/RiskMatrix'
-
-export interface IRiskSectionProps extends IListSectionProps {
-  riskMatrix?: IRiskMatrixProps
-}
+import { RiskElementModel } from 'components/RiskMatrix'
+import { IListSectionData, IListSectionState } from '../ListSection'
 
 export type IRiskSectionState = IListSectionState<IRiskSectionData>
 

@@ -9,7 +9,7 @@ export type StatusElementColumnWidth =
   | 'column11'
   | 'column12'
 
-export interface IStatusElementProps {
+export interface IStatusElement {
   label: string
   value: string
   comment?: string

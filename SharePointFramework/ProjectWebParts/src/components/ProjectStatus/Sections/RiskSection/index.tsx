@@ -7,10 +7,9 @@ import { RiskMatrix } from '../../../RiskMatrix'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection'
 import styles from './RiskSection.module.scss'
-import { IRiskSectionProps } from './types'
 import { useRiskSection } from './useRiskSection'
 
-export const RiskSection: FC<IRiskSectionProps> = () => {
+export const RiskSection: FC = () => {
   const context = useContext(ProjectStatusContext)
   const { state, showLists } = useRiskSection()
 

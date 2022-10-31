@@ -1,9 +1,6 @@
 import { IColumn } from '@fluentui/react/lib/DetailsList'
-import { IBaseSectionProps, IBaseSectionState } from '../BaseSection'
 
-export type IListSectionProps = IBaseSectionProps
-
-export interface IListSectionState<T> extends IBaseSectionState {
+export interface IListSectionState<T> {
   /**
    * Whether the component is loading
    */

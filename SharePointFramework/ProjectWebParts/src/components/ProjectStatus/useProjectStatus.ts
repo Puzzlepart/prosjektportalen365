@@ -5,7 +5,10 @@ import { fetchData } from './fetchData'
 import { IProjectStatusHashState, IProjectStatusProps, IProjectStatusState } from './types'
 
 export function useProjectStatus(props: IProjectStatusProps) {
-  const [state, $setState] = useState<IProjectStatusState>({ loading: true, data: { reports: [] } })
+  const [state, $setState] = useState<IProjectStatusState>({
+    loading: true,
+    data: { reports: [], sections: [] }
+  })
 
   const setState = (newState: Partial<IProjectStatusState>) => {
     $setState((_state) => ({ ..._state, ...newState }))
