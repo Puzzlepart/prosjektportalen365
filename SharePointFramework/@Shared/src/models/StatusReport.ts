@@ -1,4 +1,3 @@
-import { TypedHash } from '@pnp/common'
 import { isEmpty } from 'underscore'
 
 export type StatusReportAttachment = {
@@ -19,16 +18,11 @@ export class StatusReport {
    * @param _item - SP item
    * @param _publishedString Published string
    */
-  constructor(private _item: TypedHash<any>, private _publishedString?: string) {
+  constructor(private _item: Record<string, any>, private _publishedString?: string) {
     this.id = _item.Id
     this.created = new Date(_item.Created)
     this.modified = new Date(_item.Modified)
     this.publishedDate = _item.GtLastReportDate ? new Date(_item.GtLastReportDate) : null
-  }
-
-  public setDefaultEditFormUrl(defaultEditFormUrl: string) {
-    this.defaultEditFormUrl = defaultEditFormUrl
-    return this
   }
 
   /**
@@ -45,7 +39,7 @@ export class StatusReport {
   /**
    * Get status values from item
    */
-  public get statusValues(): TypedHash<string> {
+  public get statusValues(): Record<string, string> {
     return Object.keys(this._item)
       .filter((fieldName) => fieldName.indexOf('Status') !== -1 && fieldName.indexOf('Gt') === 0)
       .reduce((obj, fieldName) => {
@@ -57,7 +51,7 @@ export class StatusReport {
   /**
    * Budget numbers
    */
-  public get budgetNumbers(): TypedHash<number> {
+  public get budgetNumbers(): Record<string, number> {
     return {
       GtBudgetTotal: this._item.GtBudgetTotal || 0,
       GtCostsTotal: this._item.GtCostsTotal || 0,
@@ -68,7 +62,7 @@ export class StatusReport {
   /**
    * Field values
    */
-  public get values(): TypedHash<string | number | boolean> {
+  public get values(): Record<string, any> {
     return this._item
   }
 
@@ -89,7 +83,7 @@ export class StatusReport {
   /**
    * Field values
    */
-  public get fieldValues(): TypedHash<string> {
+  public get fieldValues(): Record<string, string> {
     return this._item.FieldValuesAsText || this._item
   }
 
@@ -114,19 +108,5 @@ export class StatusReport {
    */
   public getStatusValue(fieldName: string): { value: string; comment: string } {
     return { value: this._item[fieldName], comment: this._item[`${fieldName}Comment`] }
-  }
-
-  /**
-   * Edit form URL with added Source parameter
-   */
-  public get editFormUrl() {
-    return [
-      `${window.location.protocol}//${window.location.hostname}`,
-      this.defaultEditFormUrl,
-      '?ID=',
-      this.id,
-      '&Source=',
-      encodeURIComponent(`${window.location.origin}${window.location.pathname}`)
-    ].join('')
   }
 }

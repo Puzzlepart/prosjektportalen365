@@ -4,6 +4,11 @@ import { useContext } from 'react'
 import { first } from 'underscore'
 import { ProjectStatusContext } from '../context'
 
+/**
+ * Hook for deletion of report.
+ * 
+ * @returns A function callback
+ */
 export function useDeleteReport() {
   const context = useContext(ProjectStatusContext)
   return async () => {
@@ -11,15 +16,14 @@ export function useDeleteReport() {
       urlOrWeb: context.props.hubSite.web,
       siteId: context.props.siteId
     })
-    await portalDataService.deleteStatusReport(context.state.selectedReport.id)
+     await portalDataService.deleteStatusReport(context.state.selectedReport.id)
     const reports = context.state.data.reports.filter(
       (r) => r.id !== context.state.selectedReport.id
     )
     try {
-      const [selectedReport] = context.state.data.reports
+      const selectedReport = first(reports)
       const sourceUrlParam = getUrlParam('Source')
-      const newestReportId = first(context.state.data.reports)?.id ?? 0
-
+      const mostRecentReportId = selectedReport?.id ?? 0
       context.setState({
         data: {
           ...context.state.data,
@@ -27,8 +31,7 @@ export function useDeleteReport() {
         },
         selectedReport,
         sourceUrl: decodeURIComponent(sourceUrlParam || ''),
-        isDataLoaded: false,
-        mostRecentReportId: newestReportId
+        mostRecentReportId
       })
     } catch (error) {
       context.setState({ error, isDataLoaded: true })

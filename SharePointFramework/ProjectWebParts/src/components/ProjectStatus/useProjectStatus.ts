@@ -6,11 +6,18 @@ import { find, first } from 'underscore'
 import { fetchData } from './fetchData'
 import { IProjectStatusHashState, IProjectStatusProps, IProjectStatusState } from './types'
 
+/**
+ * Component logic hook for `ProjectStatus`
+ */
 export function useProjectStatus(props: IProjectStatusProps) {
   const [state, $setState] = useState<IProjectStatusState>({
     isDataLoaded: false,
     selectedReport: new StatusReport({}),
-    data: { reports: [], sections: Array.apply(null, Array(6)).map(() => new SectionModel({})) }
+    data: {
+      reports: [],
+      sections: Array.apply(null, Array(6)).map(() => new SectionModel({ ContentTypeId: '' })),
+      columnConfig: []
+    }
   })
 
   const setState = (newState: Partial<IProjectStatusState>) => {

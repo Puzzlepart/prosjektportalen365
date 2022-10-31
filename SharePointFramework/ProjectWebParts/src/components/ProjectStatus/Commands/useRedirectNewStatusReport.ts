@@ -5,9 +5,16 @@ import { PortalDataService } from 'pp365-shared/lib/services'
 import strings from 'ProjectWebPartsStrings'
 import { useContext } from 'react'
 import { ProjectStatusContext } from '../context'
+import { useEditFormUrl } from './useEditFormUrl'
 
+/**
+ * Hook for redirecting to a new status report.
+ * 
+ * @returns A function callback
+ */
 export function useRedirectNewStatusReport() {
   const context = useContext(ProjectStatusContext)
+  const getEditFormUrl = useEditFormUrl()
   return async () => {
     const portalDataService = new PortalDataService().configure({
       urlOrWeb: context.props.hubSite.web,
@@ -32,12 +39,11 @@ export function useRedirectNewStatusReport() {
       data: { fieldValues: properties },
       level: LogLevel.Info
     })
-    const { editFormUrl } = await portalDataService.addStatusReport(
+    const report = await portalDataService.addStatusReport(
       properties,
-      context.state.data.properties.templateParameters?.ProjectStatusContentTypeId,
-      context.state.data.reportEditFormUrl
+      context.state.data.properties.templateParameters?.ProjectStatusContentTypeId
     )
     document.location.hash = ''
-    document.location.href = editFormUrl
+    document.location.href = getEditFormUrl(report)
   }
 }

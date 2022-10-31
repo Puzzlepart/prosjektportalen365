@@ -1,7 +1,7 @@
 import { CommandBar, Shimmer } from '@fluentui/react'
 import React, { FC, useContext } from 'react'
 import { ProjectStatusContext } from '../context'
-import { useCommands } from './useCommandBar'
+import { useCommands } from './useCommands'
 
 export const Commands: FC = () => {
   const context = useContext(ProjectStatusContext)

@@ -49,9 +49,7 @@ export const fetchData = async (props: IProjectStatusProps): Promise<IProjectSta
       ProjectAdminPermission.ProjectStatusAdmin,
       properties.fieldValues
     )
-    const sortedReports = reports
-      .map((item) => item.setDefaultEditFormUrl(reportList.DefaultEditFormUrl))
-      .sort((a, b) => b.created.getTime() - a.created.getTime())
+    const sortedReports = reports.sort((a, b) => b.created.getTime() - a.created.getTime())
     const sortedSections = sections.sort((a, b) => (a.sortOrder < b.sortOrder ? -1 : 1))
     return {
       properties,

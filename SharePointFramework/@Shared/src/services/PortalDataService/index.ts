@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { find } from '@microsoft/sp-lodash-subset'
-import { dateAdd, stringIsNullOrEmpty, TypedHash } from '@pnp/common'
+import { dateAdd, stringIsNullOrEmpty } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
 import { AttachmentFileInfo, CamlQuery, ListEnsureResult, Web } from '@pnp/sp'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
@@ -9,16 +9,16 @@ import { transformFieldXml } from '../../helpers/transformFieldXml'
 import { ISPContentType } from '../../interfaces'
 import {
   PortfolioOverviewView,
+  ProjectAdminRole,
   ProjectColumn,
   ProjectColumnConfig,
   SectionModel,
   SPField,
   SPPortfolioOverviewViewItem,
+  SPProjectAdminRoleItem,
   SPProjectColumnConfigItem,
   SPProjectColumnItem,
-  StatusReport,
-  ProjectAdminRole,
-  SPProjectAdminRoleItem
+  StatusReport
 } from '../../models'
 import {
   IPortalDataServiceConfiguration,
@@ -71,18 +71,18 @@ export class PortalDataService {
         constructor,
         {
           ViewXml: `<View>
-                      <Query>
-                          <OrderBy>
-                              <FieldRef Name="ID" />
-                          </OrderBy>
-                          <Where>
-                              <Contains>
-                                  <FieldRef Name="GtChildProjects" />
-                                  <Value Type="Note">${webUrl}</Value>
-                              </Contains>
-                          </Where>
-                      </Query>
-                  </View>`
+  <Query>
+    <OrderBy>
+      <FieldRef Name="ID" />
+    </OrderBy>
+    <Where>
+      <Contains>
+        <FieldRef Name="GtChildProjects" />
+        <Value Type="Note">${webUrl}</Value>
+      </Contains>
+    </Where>
+  </Query>
+</View>`
         },
         []
       )
@@ -124,7 +124,7 @@ export class PortalDataService {
   }
 
   /**
-   * Update status report, and add snapshot as attachment
+   * Update status report, and add snapshot as attachment.
    *
    * @param id Id
    * @param properties Properties
@@ -132,27 +132,20 @@ export class PortalDataService {
    */
   public async updateStatusReport(
     id: number,
-    properties: TypedHash<string>,
-    attachment?: AttachmentFileInfo
-  ): Promise<void> {
+    properties: Record<string, string>,
+    attachment?: AttachmentFileInfo,
+    publishedString?: string
+  ): Promise<StatusReport> {
     const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
     if (attachment) {
       try {
         await list.items.getById(id).attachmentFiles.addMultiple([attachment])
-      } catch (error) {
-        Logger.log({
-          message: `(updateStatusReport): Unable to attach PNG snapshot: ${error.message}`,
-          level: LogLevel.Info
-        })
-      }
+      } catch (error) {}
     }
     try {
-      await list.items.getById(id).update(properties)
+      const itemUpdateResult = await list.items.getById(id).update(properties)
+      return new StatusReport(itemUpdateResult.data, publishedString)
     } catch (error) {
-      Logger.log({
-        message: `(updateStatusReport): Unable to update status report: ${error.message}`,
-        level: LogLevel.Info
-      })
       throw error
     }
   }
@@ -230,7 +223,7 @@ export class PortalDataService {
     url: string,
     listName: string,
     contentTypeId: string,
-    properties?: TypedHash<string>
+    properties?: Record<string, string>
   ): Promise<ListEnsureResult> {
     const targetWeb = new Web(url)
     const { jsomContext } = await initJsom(url, { loadTaxonomy: true })
@@ -394,13 +387,11 @@ export class PortalDataService {
    * Add status report
    *
    * @param properties Properties
-   * @param contentTypeId Content type id
-   * @param defaultEditFormUrl Default edit form URL
+   * @param contentTypeId Content type ID
    */
   public async addStatusReport(
-    properties: TypedHash<string | number | boolean>,
-    contentTypeId: string,
-    defaultEditFormUrl: string
+    properties: Record<string, any>,
+    contentTypeId: string
   ): Promise<StatusReport> {
     const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
     if (contentTypeId) {
@@ -409,7 +400,7 @@ export class PortalDataService {
       if (ct) properties.ContentTypeId = ct.StringId
     }
     const itemAddResult = await list.items.add(properties)
-    return new StatusReport(itemAddResult.data).setDefaultEditFormUrl(defaultEditFormUrl)
+    return new StatusReport(itemAddResult.data)
   }
 
   /**
