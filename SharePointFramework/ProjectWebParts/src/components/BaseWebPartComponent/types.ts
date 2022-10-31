@@ -47,11 +47,6 @@ export interface IBaseWebPartComponentProps extends React.DOMAttributes<HTMLDivE
 
 export interface IBaseWebPartComponentState<T> extends Pick<IShimmerProps, 'isDataLoaded'> {
   /**
-   * The component is loading
-   */
-  loading?: boolean
-
-  /**
    * Data
    */
   data?: T

@@ -22,7 +22,7 @@ import strings from 'ProjectWebPartsStrings'
  */
 export const useProjectTimeline = (props: IProjectTimelineProps) => {
   const [state, $setState] = useState<IProjectTimelineState>({
-    loading: true,
+    isDataLoaded: false,
     activeFilters: {},
     refetch: new Date().getTime()
   })
@@ -164,11 +164,11 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
   }
 
   useProjectTimelineDataFetch(props, state.refetch, (data) => {
-    if (data.error) setState({ error: data.error, loading: false })
+    if (data.error) setState({ error: data.error, isDataLoaded: true })
     else {
       const filters = getFilters(data.timelineConfiguration, data.data)
       const filteredData = getFilteredData(data.data)
-      setState({ ...data, filteredData, filters, loading: false })
+      setState({ ...data, filteredData, filters, isDataLoaded: true })
     }
   })
 

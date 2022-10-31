@@ -16,10 +16,11 @@ import { useProjectInformationDataFetch } from './useProjectInformationDataFetch
  * Component logic hook for `ProjectInformation`
  *
  * @param props Props
+ * 
  * @returns `state`, `setState`, `getCustomActions`, `onSyncProperties`
  */
 export const useProjectInformation = (props: IProjectInformationProps) => {
-  const [state, $setState] = useState<IProjectInformationState>({ loading: true })
+  const [state, $setState] = useState<IProjectInformationState>({ isDataLoaded: false })
 
   const setState = (newState: Partial<IProjectInformationState>) => {
     $setState((_state) => ({ ..._state, ...newState }))
@@ -105,7 +106,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     }
   }
 
-  useProjectInformationDataFetch(props, (data) => setState({ ...data, loading: false }))
+  useProjectInformationDataFetch(props, (data) => setState({ ...data, isDataLoaded: true }))
 
   useEffect(() => {
     if (state?.data?.fieldValues) {

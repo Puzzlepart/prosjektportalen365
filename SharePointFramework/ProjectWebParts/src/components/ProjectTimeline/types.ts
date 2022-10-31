@@ -23,11 +23,6 @@ export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
 
 export interface IProjectTimelineState extends IBaseWebPartComponentState<any> {
   /**
-   * Whether the component is loading
-   */
-  loading: boolean
-
-  /**
    * Groups
    */
   groups?: ITimelineGroups

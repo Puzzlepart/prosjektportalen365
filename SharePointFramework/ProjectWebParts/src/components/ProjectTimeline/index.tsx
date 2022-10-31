@@ -20,7 +20,7 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
     <ProjectTimelineContext.Provider value={{ props, state, setState, onGroupChange }}>
       <div className={styles.root}>
         <div className={styles.container}>
-          {state.loading ? (
+          {!state.isDataLoaded ? (
             <div className={styles.root}>
               <div className={styles.container}>
                 <Spinner label={format(strings.LoadingText, props.title)} />
