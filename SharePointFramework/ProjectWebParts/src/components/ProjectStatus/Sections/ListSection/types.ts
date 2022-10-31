@@ -7,7 +7,7 @@ export interface IListSectionState<T> extends IBaseSectionState {
   /**
    * Whether the component is loading
    */
-  loading: boolean
+  loading?: boolean
 
   /**
    * Data
