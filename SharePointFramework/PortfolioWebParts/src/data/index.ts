@@ -1,25 +1,11 @@
+import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, PnPClientStorage, TypedHash } from '@pnp/common'
 import { ItemUpdateResult, QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
 import { IAggregatedListConfiguration } from 'interfaces/IAggregatedListConfiguration'
-import {
-  ChartConfiguration,
-  ChartData,
-  ChartDataItem,
-  DataField,
-  ProjectListModel,
-  TimelineContentListModel,
-  TimelineConfigurationListModel,
-  SPChartConfigurationItem,
-  SPContentType,
-  Benefit,
-  BenefitMeasurement,
-  BenefitMeasurementIndicator
-} from '../models'
-import MSGraph from 'msgraph-helper'
-import { format } from '@fluentui/react/lib/Utilities'
+import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
 import { isNull } from 'pp365-shared/lib/helpers'
 import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
@@ -27,15 +13,20 @@ import { DataSource, PortfolioOverviewView, ProjectColumn } from 'pp365-shared/l
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
 import HubSiteService from 'sp-hubsite-service'
-import _, { first } from 'underscore'
+import _, { any, find, first } from 'underscore'
+import {
+  Benefit,
+  BenefitMeasurement,
+  BenefitMeasurementIndicator, ChartConfiguration,
+  ChartData,
+  ChartDataItem,
+  DataField,
+  ProjectListModel, SPChartConfigurationItem,
+  SPContentType, TimelineConfigurationListModel, TimelineContentListModel
+} from '../models'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import {
-  DEFAULT_SEARCH_SETTINGS,
-  CONTENT_TYPE_ID_BENEFITS,
-  CONTENT_TYPE_ID_MEASUREMENTS,
-  CONTENT_TYPE_ID_INDICATORS,
-  IDataAdapter,
-  DEFAULT_GAINS_PROPERTIES
+  CONTENT_TYPE_ID_BENEFITS, CONTENT_TYPE_ID_INDICATORS, CONTENT_TYPE_ID_MEASUREMENTS, DEFAULT_GAINS_PROPERTIES, DEFAULT_SEARCH_SETTINGS, IDataAdapter
 } from './types'
 
 export class DataAdapter implements IDataAdapter {
@@ -296,9 +287,8 @@ export class DataAdapter implements IDataAdapter {
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${
-          queryArray ?? ''
-        } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `${queryArray ?? ''
+          } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })
@@ -361,7 +351,7 @@ export class DataAdapter implements IDataAdapter {
         .filter((p) => p)
 
       return { reports, configElement }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -559,7 +549,7 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Mapping projects combing `items`, `groups` and `users`.
+   * Mapping projects combing `items`, `groups`, `sites` and `users`.
    *
    * @param items Items from projects list
    * @param groups Groups from Microsoft Graph API
@@ -574,14 +564,12 @@ export class DataAdapter implements IDataAdapter {
   ): ProjectListModel[] {
     const projects = items
       .map((item) => {
-        const [group] = groups.filter((grp) => grp.id === item.GtGroupId)
-        const [site] = sites.filter((site) => site['SiteId'] === item.GtSiteId)
         const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
         const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
+        const group = find(groups, (grp) => grp.id === item.GtGroupId)
         const model = new ProjectListModel(group?.displayName ?? item.Title, item)
-        // eslint-disable-next-line no-console
-        console.log(site)
         model.userIsMember = !!group
+        model.userHasAccess = any(sites, (site) => site['SiteId'] === item.GtSiteId)
         if (manager) model.manager = { text: manager.Title, imageUrl: getUserPhoto(manager.Email) }
         if (owner) model.owner = { text: owner.Title, imageUrl: getUserPhoto(owner.Email) }
         return model
@@ -592,17 +580,21 @@ export class DataAdapter implements IDataAdapter {
 
   /**
    * Fetching enriched projects by combining list items from projects list,
-   * Graph Groups and site users.
+   * Graph Groups and site users. The result are cached in `localStorage`
+   * by the key `pp365_fetchenrichedprojects` for 30 minutes.
    *
    * @param filter Filter for project items
+   * @param storageKey Storage key for `PnPClientStore`
    */
   public async fetchEnrichedProjects(
     // eslint-disable-next-line quotes
-    filter = "GtProjectLifecycleStatus ne 'Avsluttet'"
+    filter = "GtProjectLifecycleStatus ne 'Avsluttet'",
+    storageKey = 'pp365_fetchenrichedprojects'
   ): Promise<ProjectListModel[]> {
-    await MSGraph.Init(this.context.msGraphClientFactory)
-    const [items, groups, users, sites] = await new PnPClientStorage().session.getOrPut(
-      'pp366_fetchenrichedprojects',
+    await msGraph.Init(this.context.msGraphClientFactory)
+    const sessionStore = new PnPClientStorage().local
+    const [items, groups, users, sites] = await sessionStore.getOrPut(
+      storageKey,
       async () => {
         return await Promise.all([
           sp.web.lists
@@ -625,7 +617,7 @@ export class DataAdapter implements IDataAdapter {
             .top(500)
             .usingCaching()
             .get<ISPProjectItem[]>(),
-          MSGraph.Get<IGraphGroup[]>(
+          msGraph.Get<IGraphGroup[]>(
             '/me/memberOf/$/microsoft.graph.group',
             ['id', 'displayName'],
             // eslint-disable-next-line quotes
@@ -633,15 +625,13 @@ export class DataAdapter implements IDataAdapter {
           ),
           sp.web.siteUsers.select('Id', 'Title', 'Email').get<ISPUser[]>(),
           this._fetchItems(
-            'DepartmentId:{35c98c45-29a1-480a-900d-1eb2f91ca56d} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*',
+            `DepartmentId:${this.context.pageContext.site.id.toString()} contentclass:STS_Site`,
             ['Title', 'SiteId']
           )
         ])
       },
       dateAdd(new Date(), 'minute', 30)
     )
-    // eslint-disable-next-line no-console
-    console.log(sites)
     const projects = this._mapProjects(items, groups, sites, users)
     return projects
   }

@@ -13,9 +13,28 @@ export class ProjectListModel {
   public manager?: IPersonaSharedProps
   public owner?: IPersonaSharedProps
   public logo?: string
+
+  /**
+   * User is a full member of the group, with access to all 
+   * group resources like Planner, Teams etc.
+   */
   public userIsMember?: boolean
+
+  /**
+   * User has access to the group site, but not neccessarily 
+   * to all group resources like Planner, Teams etc.
+   */
+  public userHasAccess?: boolean
   public data?: any[]
+
+  /**
+   * The project is a parent project.
+   */
   public isParent?: boolean
+
+  /**
+   * The project is a program project.
+   */
   public isProgram?: boolean
 
   /**
