@@ -1,16 +1,16 @@
 import { Icon } from '@fluentui/react/lib/Icon'
-import React from 'react'
+import React, { FC } from 'react'
 import { IStatusElementProps } from './types'
 import styles from './StatusElement.module.scss'
 
-export const StatusElement = ({
+export const StatusElement: FC<IStatusElementProps> = ({
   iconName,
   label,
   value,
   comment,
   iconSize = 30,
   iconColor
-}: IStatusElementProps) => {
+}) => {
   return (
     <div className={styles.root}>
       <div className={styles.container}>

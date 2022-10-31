@@ -1,14 +1,18 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { IStatusSectionFieldProps } from './types'
 import styles from './StatusSectionField.module.scss'
 
-export const StatusSectionField = ({ label, value, width }: IStatusSectionFieldProps) => {
+export const StatusSectionField: FC<IStatusSectionFieldProps> = (props) => {
   return (
-    <div className={styles.statusSectionField} style={{ width: width || 250 }}>
-      <div className={styles.statusSectionFieldInner}>
-        <div className={styles.statusSectionFieldLabel}>{label}</div>
-        <div className={styles.statusSectionFieldValue}>{value}</div>
+    <div className={styles.root} style={{ width: props.width || 250 }}>
+      <div className={styles.container}>
+        <div className={styles.fieldLabel}>{props.label}</div>
+        <div className={styles.fieldValue}>{props.value}</div>
       </div>
     </div>
   )
+}
+
+StatusSectionField.defaultProps = {
+  width: 250
 }
