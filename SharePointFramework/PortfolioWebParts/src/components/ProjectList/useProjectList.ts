@@ -67,9 +67,7 @@ export const useProjectList = (props: IProjectListProps) => {
     event.stopPropagation()
     switch (event.currentTarget.id) {
       case 'ON_SELECT_PROJECT':
-        {
-          setState({ showProjectInfo: project })
-        }
+        setState({ showProjectInfo: project })
         break
     }
   }

@@ -24,7 +24,12 @@ export const ProjectListViews: IProjectListView[] = [
     headerText: strings.AllProjectsHeaderText,
     itemIcon: 'AllApps',
     searchBoxPlaceholder: strings.AllProjectsSearchBoxPlaceholderText,
-    filter: () => true
+    filter: () => true,
+    getHeaderButtonProps: (state) =>
+      !state.isUserInPortfolioManagerGroup && {
+        disabled: true,
+        style: { opacity: 0.3, cursor: 'default' }
+      }
   },
   {
     itemKey: 'parent_projects',

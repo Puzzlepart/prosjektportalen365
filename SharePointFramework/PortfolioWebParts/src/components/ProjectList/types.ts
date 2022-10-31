@@ -1,4 +1,4 @@
-import { IPivotItemProps } from '@fluentui/react'
+import { IButtonProps, IPivotItemProps } from '@fluentui/react'
 import { IColumn } from '@fluentui/react/lib/DetailsList'
 import { ProjectListModel } from 'models'
 import { IBaseComponentProps } from '../types'
@@ -6,6 +6,13 @@ import { IBaseComponentProps } from '../types'
 export interface IProjectListView extends IPivotItemProps {
   searchBoxPlaceholder?: string
   filter?: (project?: ProjectListModel) => boolean
+  getHeaderButtonProps?: (
+    state: IProjectListState
+  ) =>
+    | IButtonProps
+    | {
+        [key: string]: string | number | boolean
+      }
 }
 
 export interface IProjectListProps extends IBaseComponentProps {

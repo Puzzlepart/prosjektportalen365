@@ -111,18 +111,13 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
               setState({ selectedView: find(ProjectListViews, (v) => v.itemKey === props.itemKey) })
             }
             selectedKey={state.selectedView.itemKey}>
-            {ProjectListViews.map((props) => (
+            {ProjectListViews.map((view) => (
               <PivotItem
-                key={props.itemKey}
-                itemKey={props.itemKey}
-                headerText={props.headerText}
-                itemIcon={props.itemIcon}
-                headerButtonProps={
-                  !state.isUserInPortfolioManagerGroup && {
-                    disabled: true,
-                    style: { opacity: 0.3, cursor: 'default' }
-                  }
-                }
+                key={view.itemKey}
+                itemKey={view.itemKey}
+                headerText={view.headerText}
+                itemIcon={view.itemIcon}
+                headerButtonProps={view.getHeaderButtonProps && view.getHeaderButtonProps(state)}
               />
             ))}
           </Pivot>
