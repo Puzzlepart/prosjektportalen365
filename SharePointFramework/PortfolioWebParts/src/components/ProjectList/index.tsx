@@ -126,7 +126,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
           <SearchBox
             disabled={state.loading || isEmpty(state.projects)}
             placeholder={searchBoxPlaceholder}
-            onChanged={onSearch}
+            onChange={onSearch}
           />
         </div>
         <div className={styles.renderAsToggle} hidden={!props.showViewSelector}>

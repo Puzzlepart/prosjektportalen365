@@ -102,11 +102,12 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   /**
-   * On search
+   * On search callback
    *
+   * @param _event - React change event
    * @param searchTerm - Search term
    */
-  function onSearch(searchTerm: string) {
+  function onSearch(_event: React.ChangeEvent<HTMLInputElement>, searchTerm: string) {
     setState({ searchTerm: searchTerm.toLowerCase() })
   }
 
