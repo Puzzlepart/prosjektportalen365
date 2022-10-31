@@ -110,13 +110,6 @@ export const useProjectList = (props: IProjectListProps) => {
     setState({ searchTerm: searchTerm.toLowerCase() })
   }
 
-  /**
-   * Get searchbox placeholder text based on `state.selectedView`
-   */
-  function getSearchBoxPlaceholder() {
-    return format(state.selectedView.searchBoxPlaceholder, state.projects.length)
-  }
-
   useEffect(() => {
     Promise.all([
       props.dataAdapter.fetchEnrichedProjects(),
@@ -138,7 +131,7 @@ export const useProjectList = (props: IProjectListProps) => {
     setState,
     projects,
     getCardActions,
-    getSearchBoxPlaceholder,
+    searchBoxPlaceholder:  format(state.selectedView.searchBoxPlaceholder, state.projects.length),
     onListSort,
     onSearch
   } as const

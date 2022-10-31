@@ -29,15 +29,15 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     setState,
     projects,
     getCardActions,
-    getSearchBoxPlaceholder,
     onListSort,
-    onSearch
+    onSearch,
+    searchBoxPlaceholder
   } = useProjectList(props)
 
   /**
    * Render projects
    *
-   * @param projects - Projects
+   * @param projects - Projects to render
    */
   function renderProjects(projects: ProjectListModel[]) {
     if (state.loading) {
@@ -108,12 +108,12 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         <div className={styles.projectDisplaySelect}>
           <Pivot
             onLinkClick={({ props }) =>
-              setState({ selectedView: find(ProjectListViews, (v) => v.itemKey === props.itemKey) })
+              setState({ selectedView: find(ProjectListViews, (v) => v.key === props.itemKey) })
             }
-            selectedKey={state.selectedView.itemKey}>
+            selectedKey={state.selectedView.key}>
             {ProjectListViews.map((view) => (
               <PivotItem
-                key={view.itemKey}
+                key={view.key}
                 itemKey={view.itemKey}
                 headerText={view.headerText}
                 itemIcon={view.itemIcon}
@@ -125,7 +125,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         <div className={styles.searchBox} hidden={!props.showSearchBox}>
           <SearchBox
             disabled={state.loading || isEmpty(state.projects)}
-            placeholder={getSearchBoxPlaceholder()}
+            placeholder={searchBoxPlaceholder}
             onChanged={onSearch}
           />
         </div>
