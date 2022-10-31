@@ -6,11 +6,18 @@ import { IProjectListView } from './types'
  */
 export const ProjectListViews: IProjectListView[] = [
   {
+    itemKey: 'projects_access',
+    headerText: strings.ProjectsAccessHeaderText,
+    itemIcon: 'ViewList',
+    searchBoxPlaceholder: strings.ProjectsAccessSearchBoxPlaceholderText,
+    filter: (project) => project.hasUserAccess
+  },
+  {
     itemKey: 'my_projects',
     headerText: strings.MyProjectsHeaderText,
     itemIcon: 'FabricUserFolder',
     searchBoxPlaceholder: strings.MyProjectsSearchBoxPlaceholderText,
-    filter: (project) => project.userIsMember
+    filter: (project) => project.isUserMember
   },
   {
     itemKey: 'all_projects',

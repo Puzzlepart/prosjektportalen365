@@ -8,7 +8,6 @@ export interface IProjectListView extends IPivotItemProps {
   filter?: (project?: ProjectListModel) => boolean
 }
 
-
 export interface IProjectListProps extends IBaseComponentProps {
   /**
    * Loading text

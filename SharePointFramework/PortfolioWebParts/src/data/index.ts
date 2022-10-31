@@ -578,8 +578,8 @@ export class DataAdapter implements IDataAdapter {
         const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
         const group = find(groups, (grp) => grp.id === item.GtGroupId)
         const model = new ProjectListModel(group?.displayName ?? item.Title, item)
-        model.userIsMember = !!group
-        model.userHasAccess = any(sites, (site) => site['SiteId'] === item.GtSiteId)
+        model.isUserMember = !!group
+        model.hasUserAccess = any(sites, (site) => site['SiteId'] === item.GtSiteId)
         if (manager) model.manager = { text: manager.Title, imageUrl: getUserPhoto(manager.Email) }
         if (owner) model.owner = { text: owner.Title, imageUrl: getUserPhoto(owner.Email) }
         return model

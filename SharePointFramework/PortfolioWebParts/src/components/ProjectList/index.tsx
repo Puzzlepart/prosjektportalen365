@@ -88,7 +88,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   function onRenderItemColumn(project: ProjectListModel, _index: number, column: IColumn) {
     const colValue = getObjectValue(project, column.fieldName, null)
     if (column.fieldName === 'title') {
-      if (project.userIsMember) return <a href={project.url}>{colValue}</a>
+      if (project.isUserMember) return <a href={project.url}>{colValue}</a>
       return <>{colValue}</>
     }
     return colValue

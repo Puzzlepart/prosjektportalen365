@@ -1,4 +1,6 @@
 declare interface IPortfolioWebPartsStrings {
+  ProjectsAccessSearchBoxPlaceholderText: string
+  ProjectsAccessHeaderText: string
   ProjectListLoadingText: string
   EditColumnHeaderText: string
   PortfolioAggregationNotConfiguredMessage: string
