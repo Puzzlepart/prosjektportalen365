@@ -29,9 +29,8 @@ export const RenderModeDropdown: FC<IRenderModeDropdownProps> = (props) => {
   return (
     <div className={styles.root} hidden={props.hidden}>
       <Dropdown
-        label={null}
         options={[TILE_OPTION, LIST_OPTION]}
-        defaultSelectedKey={TILE_OPTION.key}
+        selectedKey={selectedOption.key}
         onRenderTitle={onRenderTitle}
         onRenderOption={onRenderOption}
         onChange={(_event, option) => setSelectedOption(option)}
