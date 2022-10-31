@@ -19,7 +19,6 @@ import { find, isEmpty } from 'underscore'
 import { ProjectCard } from './ProjectCard'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
-import { ProjectListViews } from './ProjectListViews'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
 
@@ -28,6 +27,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     state,
     setState,
     projects,
+    views,
     getCardActions,
     onListSort,
     onSearch,
@@ -108,12 +108,12 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         <div className={styles.projectDisplaySelect}>
           <Pivot
             onLinkClick={({ props }) =>
-              setState({ selectedView: find(ProjectListViews, (v) => v.key === props.itemKey) })
+              setState({ selectedView: find(views, (v) => v.itemKey === props.itemKey) })
             }
-            selectedKey={state.selectedView.key}>
-            {ProjectListViews.map((view) => (
+            selectedKey={state.selectedView.itemKey}>
+            {views.map((view) => (
               <PivotItem
-                key={view.key}
+                key={view.itemKey}
                 itemKey={view.itemKey}
                 headerText={view.headerText}
                 itemIcon={view.itemIcon}

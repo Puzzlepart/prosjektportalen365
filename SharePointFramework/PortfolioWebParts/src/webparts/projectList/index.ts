@@ -1,9 +1,13 @@
 import {
   IPropertyPaneConfiguration,
+  IPropertyPaneDropdownOption,
+  PropertyPaneDropdown,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
+import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls'
 import { IProjectListProps, ProjectList } from 'components/ProjectList'
+import { ProjectListViews } from 'components/ProjectList/ProjectListViews'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
@@ -17,6 +21,10 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    const viewOptions = ProjectListViews.map<IPropertyPaneDropdownOption>(view => ({
+      key: view.itemKey,
+      text: view.headerText
+    }))
     return {
       pages: [
         {
@@ -33,6 +41,16 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                 }),
                 PropertyPaneToggle('showViewSelector', {
                   label: strings.ShowViewSelectorLabel
+                }),
+                PropertyPaneDropdown('defaultView', {
+                  label: strings.DefaultViewLabel,
+                  options: viewOptions
+                }),
+                PropertyFieldMultiSelect('hideViews', {
+                  key: 'hideViews',
+                  label: strings.HideViewsLabel,
+                  options:viewOptions,
+                  selectedKeys: this.properties.hideViews ?? []
                 })
               ]
             },

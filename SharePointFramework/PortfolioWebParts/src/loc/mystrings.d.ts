@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  HideViewsLabel: string
   ProjectsAccessSearchBoxPlaceholderText: string
   ProjectsAccessHeaderText: string
   ProjectListLoadingText: string

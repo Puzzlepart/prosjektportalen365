@@ -4,7 +4,7 @@ import { ProjectListModel } from 'models'
 import strings from 'PortfolioWebPartsStrings'
 import { sortAlphabetically } from 'pp365-shared/lib/helpers'
 import { useEffect, useState } from 'react'
-import { first } from 'underscore'
+import { find, first } from 'underscore'
 import { ProjectListViews } from './ProjectListViews'
 import { IProjectListProps, IProjectListState } from './types'
 
@@ -18,7 +18,7 @@ export const useProjectList = (props: IProjectListProps) => {
     loading: true,
     searchTerm: '',
     renderAs: 'tiles',
-    selectedView: first(ProjectListViews),
+    selectedView: find(ProjectListViews, view => view.itemKey === props.defaultView) ?? first(ProjectListViews),
     projects: Array.apply(null, Array(24)).map(() => 0),
     isUserInPortfolioManagerGroup: false,
     sort: { fieldName: props.sortBy, isSortedDescending: true }
@@ -125,13 +125,15 @@ export const useProjectList = (props: IProjectListProps) => {
   }, [])
 
   const projects = state.loading ? state.projects : filterProjets(state.projects)
+  const views = ProjectListViews.filter(view => !props.hideViews.includes(view.itemKey))
 
   return {
     state,
     setState,
     projects,
+    views,
     getCardActions,
-    searchBoxPlaceholder:  format(state.selectedView.searchBoxPlaceholder, state.projects.length),
+    searchBoxPlaceholder: format(state.selectedView.searchBoxPlaceholder, state.projects.length),
     onListSort,
     onSearch
   } as const

@@ -11,8 +11,8 @@ export interface IProjectListView extends IPivotItemProps {
   ) =>
     | IButtonProps
     | {
-        [key: string]: string | number | boolean
-      }
+      [key: string]: string | number | boolean
+    }
 }
 
 export interface IProjectListProps extends IBaseComponentProps {
@@ -55,6 +55,16 @@ export interface IProjectListProps extends IBaseComponentProps {
    * Columns
    */
   columns?: IColumn[]
+
+  /**
+   * Default view
+   */
+  defaultView?: string
+
+  /**
+   * Hide views
+   */
+  hideViews?: string[]
 }
 
 export interface IProjectListState {
