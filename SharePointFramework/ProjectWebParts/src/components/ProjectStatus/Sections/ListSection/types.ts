@@ -18,6 +18,6 @@ export interface IListSectionState<T> {
 }
 
 export interface IListSectionData {
-  columns: IColumn[]
-  items: any[]
+  columns?: IColumn[]
+  items?: any[]
 }
