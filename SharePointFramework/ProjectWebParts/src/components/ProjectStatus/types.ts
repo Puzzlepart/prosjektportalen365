@@ -2,6 +2,7 @@ import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseW
 import { ProjectColumnConfig, SectionModel, SPField, StatusReport } from 'pp365-shared/lib/models'
 import { IGetPropertiesData } from 'pp365-shared/lib/services'
 import { PageContext } from '@microsoft/sp-page-context'
+
 export interface IProjectStatusProps extends IBaseWebPartComponentProps {
   riskMatrixCalloutTemplate: string
   riskMatrixWidth?: number | string
@@ -29,7 +30,7 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   /**
    * Is the report being published?
    */
-  isPublishing: boolean
+  isPublishing?: boolean
 
   /**
    * ID of the most recent report
