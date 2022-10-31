@@ -1,14 +1,22 @@
 @import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
-.fields {
-  margin-top: 25px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  -ms-flex-pack: distribute;
-  justify-content: flex-start;
-  align-content: flex-start;
-  align-items: flex-start;
+.root {
+  @include ms-Grid;
+  .container {
+    @include ms-Grid-row;
+    .fields {
+      @include ms-Grid-col;
+      @include ms-sm12;
+      margin-top: 25px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      -ms-flex-pack: distribute;
+      justify-content: flex-start;
+      align-content: flex-start;
+      align-items: flex-start;
+    }
+  }
 }
