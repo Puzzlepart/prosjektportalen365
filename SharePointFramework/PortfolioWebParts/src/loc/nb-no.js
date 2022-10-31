@@ -132,7 +132,7 @@ define([], function () {
     SaveViewAsText: 'Lagre visning som',
     ProjectsAccessSearchBoxPlaceholderText:'Søk i {0} prosjekter du har tilgang til...',
     MyProjectsSearchBoxPlaceholderText: 'Søk i {0} prosjekter du er medlem av...',
-    AllProjectsSearchBoxPlaceholderText: 'Søk i {0} alle prosjekter...',
+    AllProjectsSearchBoxPlaceholderText: 'Søk i alle {0} prosjekter...',
     ParentProjectsSearchBoxPlaceholderText: 'Søk i {0} overordnede prosjekter...',
     ProgramSearchBoxPlaceholderText: 'Søk i {0} program...',
     SearchBoxPlaceholderText: 'Søk i {0}...',

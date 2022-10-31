@@ -134,7 +134,7 @@ export const useProjectList = (props: IProjectListProps) => {
     projects,
     views,
     getCardActions,
-    searchBoxPlaceholder: format(state.selectedView.searchBoxPlaceholder, state.projects.length),
+    searchBoxPlaceholder: format(state.selectedView.searchBoxPlaceholder, projects.length),
     onListSort,
     onSearch
   } as const
