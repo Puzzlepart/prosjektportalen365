@@ -1,6 +1,6 @@
 @import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
-.projectStatus {
+.root {
   @include ms-Grid;
   padding: 0;
   margin: 0;
