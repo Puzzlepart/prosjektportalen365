@@ -3,10 +3,10 @@ import { useContext } from 'react'
 import { ProjectStatusContext } from '../context'
 import { ISectionContext } from './context'
 
-export function useCreateContextValue() {
+export function useCreateContextValue({ iconSize = 30 }) {
   const context = useContext(ProjectStatusContext)
   return (section: SectionModel) => {
-    const { value, comment } = context.state.selectedReport?.getStatusValue(section.fieldName)
+    const { value, comment } = context.state.selectedReport?.getStatusValue(section.fieldName) ?? {}
     const [columnConfig] = context.state.data.columnConfig.filter(
       (c) => c.columnFieldName === section.fieldName && c.value === value
     )
@@ -16,8 +16,8 @@ export function useCreateContextValue() {
         value,
         comment,
         iconName: section.iconName,
-        iconSize: 50,
-        iconColor: columnConfig ? columnConfig.color : '#444'
+        iconSize,
+        iconColor: columnConfig?.color ?? '#444'
       },
       section
     } as ISectionContext

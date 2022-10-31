@@ -2,21 +2,21 @@
 
 .root {
   @include ms-Grid;
+  padding: 0;
+  margin: 0;
   .container {
     @include ms-Grid-row;
-    .fields {
-      @include ms-Grid-col;
-      @include ms-sm12;
-      margin-top: 25px;
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-      -ms-flex-pack: distribute;
-      justify-content: flex-start;
-      align-content: flex-start;
-      align-items: flex-start;
-    }
+  }
+  .fields {
+    margin: 25px 0 0 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-pack: distribute;
+    justify-content: flex-start;
+    align-content: flex-start;
+    align-items: flex-start;
   }
 }

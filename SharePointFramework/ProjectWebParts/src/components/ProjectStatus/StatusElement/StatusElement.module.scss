@@ -3,28 +3,32 @@
 .root {
   @include ms-Grid;
   margin: 20px 0 0 0;
+  
   .container {
     @include ms-Grid-row;
 
-    .statusIcon {
+    .icon {
       @include ms-Grid-col;
       @include ms-sm12;      
       @include ms-md2;
     }
-    .statusContent {
+    .content {
       @include ms-Grid-col;
       @include ms-sm12;
       @include ms-md10;
-      .statusElementLabel {
+
+      .label {
         font-size: 16px;
         font-weight: 400;
       }
-      .statusElementValue {
+
+      .value {
         font-size: 18px;
         font-weight: 600;
         margin-bottom: 5px;
       }
-      .statusElementComment {
+
+      .comment {
         font-size: 12px;
       }
     }

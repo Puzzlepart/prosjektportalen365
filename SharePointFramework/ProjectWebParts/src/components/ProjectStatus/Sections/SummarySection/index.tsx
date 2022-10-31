@@ -10,7 +10,7 @@ import styles from './SummarySection.module.scss'
 
 export const SummarySection: FC = () => {
   const context = useContext(ProjectStatusContext)
-  const createContextValue = useCreateContextValue()
+  const createContextValue = useCreateContextValue({})
 
   /**
    * Render sections
@@ -32,21 +32,23 @@ export const SummarySection: FC = () => {
 
   return (
     <BaseSection>
-      <div className={styles.projectInformation}>
-        <ProjectInformation
-          hubSite={{
-            web: new Web(context.props.hubSite.url),
-            url: context.props.hubSite.url
-          }}
-          siteId={context.props.siteId}
-          webUrl={context.props.webUrl}
-          page='ProjectStatus'
-          hideAllActions={true}
-        />
-      </div>
-      <div className={styles.sections}>
-        <div className='ms-Grid' dir='ltr'>
-          <div className='ms-Grid-row'>{renderSections()}</div>
+      <div className={styles.root}>
+        <div className={styles.projectInformation}>
+          <ProjectInformation
+            hubSite={{
+              web: new Web(context.props.hubSite.url),
+              url: context.props.hubSite.url
+            }}
+            siteId={context.props.siteId}
+            webUrl={context.props.webUrl}
+            page='ProjectStatus'
+            hideAllActions={true}
+          />
+        </div>
+        <div className={styles.sections}>
+          <div className='ms-Grid' dir='ltr'>
+            <div className='ms-Grid-row'>{renderSections()}</div>
+          </div>
         </div>
       </div>
     </BaseSection>
