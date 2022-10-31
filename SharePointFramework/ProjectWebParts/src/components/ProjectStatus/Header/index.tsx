@@ -13,8 +13,8 @@ export const Header: FC = () => {
           {context.props.title}{' '}
           {context.state.selectedReport
             ? moment(
-              context.state.selectedReport.publishedDate ?? context.state.selectedReport.created
-            ).format('DD.MM.yyyy')
+                context.state.selectedReport.publishedDate ?? context.state.selectedReport.created
+              ).format('DD.MM.yyyy')
             : null}{' '}
         </div>
       </div>

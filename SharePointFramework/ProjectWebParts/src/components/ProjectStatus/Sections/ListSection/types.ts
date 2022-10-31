@@ -4,7 +4,7 @@ export interface IListSectionState<T> {
   /**
    * The component has loaded the neccessary data
    */
-   isDataLoaded?: boolean
+  isDataLoaded?: boolean
 
   /**
    * Data

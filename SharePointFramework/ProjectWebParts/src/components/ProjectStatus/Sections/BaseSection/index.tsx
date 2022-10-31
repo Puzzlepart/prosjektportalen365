@@ -8,9 +8,7 @@ export const BaseSection: FC<HTMLProps<HTMLDivElement>> = ({ children }) => {
   return (
     <div className={styles.root}>
       <div className={styles.container}>
-        <Shimmer isDataLoaded={context.state.isDataLoaded}>
-          {children}
-        </Shimmer>
+        <Shimmer isDataLoaded={context.state.isDataLoaded}>{children}</Shimmer>
       </div>
     </div>
   )

@@ -1,3 +1,4 @@
+import { IShimmerProps } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { IHubSite } from 'sp-hubsite-service'
@@ -44,16 +45,11 @@ export interface IBaseWebPartComponentProps extends React.DOMAttributes<HTMLDivE
   webPartContext?: WebPartContext
 }
 
-export interface IBaseWebPartComponentState<T> {
+export interface IBaseWebPartComponentState<T> extends Pick<IShimmerProps, 'isDataLoaded'> {
   /**
    * The component is loading
    */
   loading?: boolean
-
-  /**
-   * The component has loaded the neccessary data
-   */
-  isDataLoaded?: boolean
 
   /**
    * Data

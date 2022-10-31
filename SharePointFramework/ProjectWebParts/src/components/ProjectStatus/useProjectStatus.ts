@@ -10,7 +10,7 @@ export function useProjectStatus(props: IProjectStatusProps) {
   const [state, $setState] = useState<IProjectStatusState>({
     isDataLoaded: false,
     selectedReport: new StatusReport({}),
-    data: { reports: [], sections:  Array.apply(null, Array(6)).map(() => new SectionModel({})), }
+    data: { reports: [], sections: Array.apply(null, Array(6)).map(() => new SectionModel({})) }
   })
 
   const setState = (newState: Partial<IProjectStatusState>) => {
@@ -40,7 +40,7 @@ export function useProjectStatus(props: IProjectStatusProps) {
         data,
         selectedReport,
         sourceUrl: decodeURIComponent(sourceUrlParam || ''),
-        isDataLoaded: false,
+        isDataLoaded: true,
         mostRecentReportId: newestReportId,
         userHasAdminPermission: data.userHasAdminPermission
       })

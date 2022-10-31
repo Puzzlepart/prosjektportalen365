@@ -12,7 +12,7 @@ export function useRiskSection() {
     : true
 
   useEffect(() => {
-    fetchListData().then((data) => setState({ data, isDataLoaded: false }))
+    fetchListData().then((data) => setState({ data, isDataLoaded: true }))
   }, [])
 
   return { state, showLists } as const

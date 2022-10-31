@@ -3,7 +3,8 @@ import {
   DetailsListLayoutMode,
   IColumn,
   MessageBarType,
-  SelectionMode
+  SelectionMode,
+  Shimmer
 } from '@fluentui/react'
 import { ProjectStatusContext } from 'components/ProjectStatus/context'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
@@ -25,7 +26,7 @@ function useListSection() {
     : true
 
   useEffect(() => {
-    fetchListData().then((data) => setState({ data, isDataLoaded: false }))
+    fetchListData().then((data) => setState({ data, isDataLoaded: true }))
   }, [])
 
   return { state, showLists } as const
@@ -38,18 +39,19 @@ export const ListSection: FC = () => {
    * Render list
    */
   function renderList() {
-    if (!state.isDataLoaded || !state.data) return null
     if (state.error)
       return <UserMessage text={strings.ListSectionDataErrorMessage} type={MessageBarType.error} />
     return (
-      <div className={`${styles.list} ms-Grid-col ms-sm12`}>
-        <DetailsList
-          columns={get<IColumn[]>(state, 'data.columns', [])}
-          items={get<any[]>(state, 'data.items', [])}
-          selectionMode={SelectionMode.none}
-          layoutMode={DetailsListLayoutMode.justified}
-        />
-      </div>
+      <Shimmer isDataLoaded={state.isDataLoaded}>
+        <div className={`${styles.list} ms-Grid-col ms-sm12`}>
+          <DetailsList
+            columns={get<IColumn[]>(state, 'data.columns', [])}
+            items={get<any[]>(state, 'data.items', [])}
+            selectionMode={SelectionMode.none}
+            layoutMode={DetailsListLayoutMode.justified}
+          />
+        </div>
+      </Shimmer>
     )
   }
 
