@@ -1,6 +1,6 @@
 import { ProjectStatusContext } from 'components/ProjectStatus/context'
 import { useContext, useEffect, useState } from 'react'
-import { useFetchListData } from './fetchListData'
+import { useFetchListData } from './useFetchListData'
 import { IRiskSectionState } from './types'
 
 export function useRiskSection() {
