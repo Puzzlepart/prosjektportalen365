@@ -1,11 +1,16 @@
-import { Dropdown, Icon, IDropdownOption, IDropdownProps } from '@fluentui/react'
-import strings from 'PortfolioWebPartsStrings'
-import React, { FC } from 'react'
-import { first } from 'underscore'
+import { Dropdown, Icon, IDropdownOption, IDropdownProps, IIconProps } from '@fluentui/react'
+import React, { FC, useEffect, useState } from 'react'
 import styles from './RenderModeDropdown.module.scss'
+import { LIST_OPTION, TILE_OPTION } from './types'
 
 export const RenderModeDropdown: FC<Omit<IDropdownProps, 'options'>> = (props) => {
-  const onRenderOption = (option: IDropdownOption): JSX.Element => {
+  const [selectedOption, setSelectedOption] = useState<IDropdownOption<IIconProps>>(TILE_OPTION)
+
+  useEffect(() => {
+    props.onChange(null, selectedOption)
+  }, [selectedOption])
+
+  const onRenderOption = (option: IDropdownOption<IIconProps>): JSX.Element => {
     return (
       <div>
         {option.data?.iconName && (
@@ -16,15 +21,13 @@ export const RenderModeDropdown: FC<Omit<IDropdownProps, 'options'>> = (props) =
     )
   }
 
-  const onRenderTitle = (options: IDropdownOption[]): JSX.Element => {
-    const option = first(options)
-
+  const onRenderTitle = (): JSX.Element => {
     return (
       <div>
-        {option.data?.iconName && (
-          <Icon style={{ marginRight: 8 }} iconName={option.data.iconName} />
+        {selectedOption.data?.iconName && (
+          <Icon style={{ marginRight: 8 }} iconName={selectedOption.data.iconName} />
         )}
-        <span>{option.text}</span>
+        <span>{selectedOption.text}</span>
       </div>
     )
   }
@@ -33,22 +36,11 @@ export const RenderModeDropdown: FC<Omit<IDropdownProps, 'options'>> = (props) =
     <div className={styles.root} hidden={props.hidden}>
       <Dropdown
         label={null}
-        options={[
-          {
-            key: 'tiles',
-            text: strings.RenderAsTilesText,
-            data: { iconName: 'Tiles' }
-          },
-          {
-            key: 'list',
-            text: strings.RenderAsListText,
-            data: { iconName: 'PageList' }
-          }
-        ]}
-        defaultSelectedKey='tiles'
+        options={[TILE_OPTION, LIST_OPTION]}
+        defaultSelectedKey={TILE_OPTION.key}
         onRenderTitle={onRenderTitle}
         onRenderOption={onRenderOption}
-        onChange={props.onChange}
+        onChange={(_event, option) => setSelectedOption(option)}
       />
     </div>
   )
