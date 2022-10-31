@@ -2,7 +2,7 @@ import { IListSectionProps, IListSectionState, IListSectionData } from '../ListS
 import { IRiskMatrixProps, RiskElementModel } from 'components/RiskMatrix'
 
 export interface IRiskSectionProps extends IListSectionProps {
-  riskMatrix: IRiskMatrixProps
+  riskMatrix?: IRiskMatrixProps
 }
 
 export type IRiskSectionState = IListSectionState<IRiskSectionData>
