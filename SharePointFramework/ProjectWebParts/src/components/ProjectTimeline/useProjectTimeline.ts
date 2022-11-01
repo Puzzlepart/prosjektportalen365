@@ -126,34 +126,28 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
         case strings.CategoryFieldLabel:
           {
             selectedGroup = state.groups.categoryGroups
-            updatedItems = state.data.items.map((item) => {
-              return {
-                ...item,
-                group: selectedGroup.find((g) => g.title === item.data.category).id
-              }
-            })
+            updatedItems = state.data.items.map((item) => ({
+              ...item,
+              group: selectedGroup.find((g) => g.title === item.data.category).id
+            }))
           }
           break
         case strings.TypeLabel:
           {
             selectedGroup = state.groups.typeGroups
-            updatedItems = state.data.items.map((item) => {
-              return {
-                ...item,
-                group: selectedGroup.find((g) => g.title === item.data.type).id
-              }
-            })
+            updatedItems = state.data.items.map((item) => ({
+              ...item,
+              group: selectedGroup.find((g) => g.title === item.data.type).id
+            }))
           }
           break
         default:
           {
             selectedGroup = state.groups.projectGroups
-            updatedItems = state.data.items.map((item) => {
-              return {
-                ...item,
-                group: selectedGroup.find((g) => g.title === item.project).id
-              }
-            })
+            updatedItems = state.data.items.map((item) => ({
+              ...item,
+              group: selectedGroup.find((g) => g.title === item.project).id
+            }))
           }
           break
       }
