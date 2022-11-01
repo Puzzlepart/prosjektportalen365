@@ -14,7 +14,7 @@ export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   showFilterButton?: boolean
   showTimeline?: boolean
   showTimelineList?: boolean
-  showCmdTimelineList?: boolean
+  showTimelineListCommands?: boolean
   infoText?: string
   showProjectDeliveries?: boolean
   projectDeliveriesListName?: string

@@ -15,7 +15,7 @@ export const TimelineList: FC = () => {
   return (
     <>
       <div className={styles.timelineList}>
-        {context.props.showCmdTimelineList && (
+        {context.props.showTimelineListCommands && (
           <div className={styles.commandBar}>
             <CommandBar {...getCommandBarProps()} />
           </div>

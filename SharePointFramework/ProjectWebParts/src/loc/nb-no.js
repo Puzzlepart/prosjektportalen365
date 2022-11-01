@@ -157,7 +157,7 @@ define([], function () {
     ShowFilterButtonLabel: 'Vis filterknapp',
     ShowTimelineLabel: 'Vis tidslinje',
     ShowInfoMessageLabel: 'Vis infomelding',
-    ShowCmdTimelineListLabel: 'Vis kommandolinje for liste',
+    ShowTimelineListCommandsLabel: 'Vis kommandolinje for liste',
     ShowTimelineListLabel: 'Vis liste',
     AdvancedGroupName: 'Avansert',
     UseDynamicHomepageFieldLabel: 'Bruk dynamisk hjemmeside',

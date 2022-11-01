@@ -157,7 +157,7 @@ declare interface IProjectWebPartsStrings {
   ShowFilterButtonLabel: string
   ShowTimelineLabel: string
   ShowInfoMessageLabel: string
-  ShowCmdTimelineListLabel: string
+  ShowTimelineListCommandsLabel: string
   ShowTimelineListLabel: string
   AdvancedGroupName: string
   UseDynamicHomepageFieldLabel: string
