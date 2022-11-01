@@ -6,7 +6,7 @@ import styles from './ProjectStatus.module.scss'
 import { Sections } from './Sections'
 import { IProjectStatusProps } from './types'
 import { UnpublishedStatusReportInfo } from './UnpublishedStatusReportInfo'
-import {  useProjectStatusContext } from './useProjectStatusContext'
+import { useProjectStatusContext } from './useProjectStatusContext'
 
 export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
   const ctxValue = useProjectStatusContext(props)

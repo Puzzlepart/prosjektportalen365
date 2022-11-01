@@ -1,5 +1,9 @@
 define([], function () {
   return {
+    DefaultVisibleStartLabel: 'Standard starttdato',
+    DefaultVisibleStartValue: '{0} måneder tilbake i tid',
+    DefaultVisibleEndLabel: 'Standard sluttdato',
+    DefaultVisibleEndValue: '{0} måneder frem i tid',
     CreateParentModalTitle: 'Overordnet område',
     CreateParentModalSubText: 'Ønsker du å gjøre om området til et overordnet område? Denne handlingen er ikke reversibel.',
     UseFramelessButtonsLabel: 'Rammeløse knapper',

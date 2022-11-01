@@ -37,4 +37,5 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
   )
 }
 
+export * from './Timeline'
 export * from './types'

@@ -13,12 +13,13 @@ import { IColumn } from '@fluentui/react/lib/DetailsList'
 import { TimelineConfigurationListModel } from 'pp365-portfoliowebparts/lib/models'
 import { IFilterItemProps, IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
 import strings from 'ProjectWebPartsStrings'
+import { TimelineTimeframe } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline'
 
 /**
  * Component logic hook for `ProjectTimeline`
  *
  * @param props Props
- * 
+ *
  * @returns `state`, `setState`, `onFilterChange`
  */
 export const useProjectTimeline = (props: IProjectTimelineProps) => {
@@ -57,10 +58,10 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
 
   /**
    * Get filters
-   * 
+   *
    * @param config Timeline configuration
    * @param data Timeline data
-   * 
+   *
    * @returns `filters` for `FilterPanel`
    */
   const getFilters = (
@@ -175,10 +176,18 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     }
   })
 
+  const [sAmount, sDuration] = props.defaultVisibleStart.split(',')
+  const [eAmount, eDuration] = props.defaultVisibleEnd.split(',')
+  const defaultTimeframe: TimelineTimeframe = [
+    [parseInt(sAmount), sDuration as moment.unitOfTime.DurationConstructor],
+    [parseInt(eAmount), eDuration as moment.unitOfTime.DurationConstructor]
+  ]
+
   return {
     state,
     setState,
     onFilterChange,
-    onGroupByChange
+    onGroupByChange,
+    defaultTimeframe
   } as const
 }

@@ -19,7 +19,7 @@ import {
  * Creating groups based on projects title, categories and types.
  *
  * @param projects Projects
- * 
+ *
  * @returns Timeline groups
  */
 const createTimelineGroups = (
@@ -36,9 +36,9 @@ const createTimelineGroups = (
     }
   )
 
-  const categoryGroups = _.uniq(
-    timelineConfiguration.map((item) => item.GtTimelineCategory)
-  ).map<ITimelineGroup>((category, id) => {
+  const categoryGroups = _.uniq(timelineConfiguration.map((item) => item.GtTimelineCategory)).map<
+    ITimelineGroup
+  >((category, id) => {
     return {
       id,
       title: category,
@@ -68,10 +68,13 @@ const createTimelineGroups = (
  *
  * @param timelineItems Timeline items
  * @param timelineGroups Timeline groups
- * 
+ *
  * @returns Timeline items
  */
-const transformItems = (timelineItems: TimelineContentListModel[], timelineGroups: ITimelineGroup[]): ITimelineItem[] => {
+const transformItems = (
+  timelineItems: TimelineContentListModel[],
+  timelineGroups: ITimelineGroup[]
+): ITimelineItem[] => {
   let _project: any
   let _siteId: any
   let _itemTitle: any
@@ -325,7 +328,7 @@ const fetchProjectData = async (props: IProjectTimelineProps): Promise<any> => {
     return {
       id: first(projectData).Id,
       startDate: first(projectData)?.GtStartDate,
-      endDate:  first(projectData)?.GtEndDate,
+      endDate: first(projectData)?.GtEndDate,
       type: strings.ProjectLabel,
       sortOrder: config && config.GtSortOrder,
       hexColor: config && config.GtHexColor,

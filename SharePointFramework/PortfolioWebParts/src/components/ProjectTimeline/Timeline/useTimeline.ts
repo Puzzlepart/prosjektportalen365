@@ -25,8 +25,8 @@ export function useTimeline(props: ITimelineProps) {
     setShowDetails({ element: event.currentTarget, item })
   }
 
-  const defaultTimeStart = moment().add(...props.defaultVisibleTime[0])
-  const defaultTimeEnd = moment().add(...props.defaultVisibleTime[1])
+  const defaultTimeStart = moment().add(...props.defaultTimeframe[0])
+  const defaultTimeEnd = moment().add(...props.defaultTimeframe[1])
   const sidebarWidth =
     first(props.groups)?.type === TimelineGroupType.Project && props.isGroupByEnabled
       ? 0

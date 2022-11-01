@@ -88,9 +88,11 @@ export const Timeline: FC<ITimelineProps> = (props) => {
 }
 
 Timeline.defaultProps = {
-  defaultVisibleTime: [
+  defaultTimeframe: [
     [-1, 'months'],
     [1, 'years']
   ],
   infoText: strings.ProjectTimelineInfoText
 }
+
+export *  from './types'

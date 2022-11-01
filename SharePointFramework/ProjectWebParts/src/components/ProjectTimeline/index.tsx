@@ -1,5 +1,5 @@
 import { format, MessageBarType, Spinner } from '@fluentui/react'
-import { Timeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline/Timeline'
+import { Timeline } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
@@ -10,7 +10,9 @@ import { IProjectTimelineProps } from './types'
 import { useProjectTimeline } from './useProjectTimeline'
 
 export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
-  const { state, setState, onFilterChange, onGroupByChange } = useProjectTimeline(props)
+  const { state, setState, onFilterChange, onGroupByChange, defaultTimeframe } = useProjectTimeline(
+    props
+  )
 
   return (
     <ProjectTimelineContext.Provider value={{ props, state, setState }}>
@@ -30,7 +32,7 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
                 <Timeline
                   title={props.title}
                   infoText={strings.ProjectTimelineListInfoText}
-                  defaultVisibleTime={[[-2, 'months'], [2, 'months']]}
+                  defaultTimeframe={defaultTimeframe}
                   groups={state.filteredData.groups}
                   items={state.filteredData.items}
                   filters={state.filters}

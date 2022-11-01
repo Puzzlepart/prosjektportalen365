@@ -1,5 +1,6 @@
 import {
   IPropertyPaneConfiguration,
+  PropertyPaneDropdown,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
@@ -9,6 +10,7 @@ import '@fluentui/react/dist/css/fabric.min.css'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 
 import * as strings from 'ProjectWebPartsStrings'
+import { format } from '@fluentui/react'
 
 export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectTimelineProps> {
   public async onInit() {
@@ -20,6 +22,8 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    // eslint-disable-next-line no-console
+    console.log(this.properties)
     return {
       pages: [
         {
@@ -35,6 +39,36 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                   label: strings.ShowTimelineLabel,
                   checked: true
                 }),
+                this.properties.showTimeline &&
+                  PropertyPaneDropdown('defaultVisibleStart', {
+                    label: strings.DefaultVisibleStartLabel,
+                    options: [
+                      [2, 'months'],
+                      [4, 'months'],
+                      [6, 'months'],
+                      [8, 'months'],
+                      [10, 'months'],
+                      [12, 'months']
+                    ].map((val) => ({
+                      key: val.toString(),
+                      text: format(strings.DefaultVisibleStartValue, val[0])
+                    }))
+                  }),
+                this.properties.showTimeline &&
+                  PropertyPaneDropdown('defaultVisibleEnd', {
+                    label: strings.DefaultVisibleEndLabel,
+                    options: [
+                      [2, 'months'],
+                      [4, 'months'],
+                      [6, 'months'],
+                      [8, 'months'],
+                      [10, 'months'],
+                      [12, 'months']
+                    ].map((val) => ({
+                      key: val.toString(),
+                      text: format(strings.DefaultVisibleEndValue, val[0])
+                    }))
+                  }),
                 PropertyPaneToggle('showCmdTimelineList', {
                   label: strings.ShowCmdTimelineListLabel,
                   checked: true
@@ -43,7 +77,7 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                   label: strings.ShowTimelineListLabel,
                   checked: true
                 })
-              ]
+              ].filter(Boolean)
             },
             {
               groupName: strings.ProjectDeliveriesGroupName,

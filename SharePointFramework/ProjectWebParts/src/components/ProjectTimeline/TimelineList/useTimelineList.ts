@@ -3,11 +3,7 @@ import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { get } from '@microsoft/sp-lodash-subset'
 import moment from 'moment'
 import { tryParseCurrency } from 'pp365-shared/lib/helpers'
-import {
-  getId,
-  IColumn,
-  ICommandBarProps, Selection
-} from '@fluentui/react'
+import { getId, IColumn, ICommandBarProps, Selection } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import { Logger, LogLevel } from '@pnp/logging'
 import { ProjectTimelineContext } from '../context'
@@ -30,10 +26,8 @@ export function useTimelineList() {
    * @param column Column
    */
   const onRenderItemColumn = (item: any, index: number, column: IColumn) => {
-    if (!column.fieldName)
-      return null
-    if (column.onRender)
-      return column.onRender(item, index, column)
+    if (!column.fieldName) return null
+    if (column.onRender) return column.onRender(item, index, column)
     if (!stringIsNullOrEmpty(column['fieldNameDisplay'])) {
       return get(item, column['fieldNameDisplay'], null)
     }

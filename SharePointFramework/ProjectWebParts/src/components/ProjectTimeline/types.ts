@@ -19,6 +19,8 @@ export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   showProjectDeliveries?: boolean
   projectDeliveriesListName?: string
   configItemTitle?: string
+  defaultVisibleStart?: string
+  defaultVisibleEnd?: string
 }
 
 export interface IProjectTimelineState extends IBaseWebPartComponentState<ITimelineData> {

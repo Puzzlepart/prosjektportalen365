@@ -1,4 +1,8 @@
 declare interface IProjectWebPartsStrings {
+  DefaultVisibleStartValue: string
+  DefaultVisibleEndValue: string
+  DefaultVisibleStartLabel: string
+  DefaultVisibleEndLabel: string
   RedoText: string
   CreateParentModalSubText: string
   CreateParentModalTitle: string

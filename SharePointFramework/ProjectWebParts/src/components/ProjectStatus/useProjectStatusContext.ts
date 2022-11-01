@@ -55,5 +55,5 @@ export function useProjectStatusContext(props: IProjectStatusProps) {
     })
   }, [])
 
-  return {props, state, setState } as IProjectStatusContext
+  return { props, state, setState } as IProjectStatusContext
 }
