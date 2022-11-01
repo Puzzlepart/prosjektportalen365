@@ -325,12 +325,6 @@
   <data name="ContentTypes_ListSection_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_TimelineSection_Name" xml:space="preserve">
-    <value>Tidslinjeseksjon</value>
-  </data>
-  <data name="ContentTypes_TimelineSection_Description" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="ContentTypes_LogElement_Name" xml:space="preserve">
     <value>Loggelement</value>
   </data>

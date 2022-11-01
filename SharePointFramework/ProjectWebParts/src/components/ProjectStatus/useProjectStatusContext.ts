@@ -3,13 +3,14 @@ import { SectionModel, StatusReport } from 'pp365-shared/lib/models'
 import { getUrlParam, parseUrlHash } from 'pp365-shared/lib/util'
 import { useEffect, useState } from 'react'
 import { find, first } from 'underscore'
+import { IProjectStatusContext } from './context'
 import { fetchData } from './fetchData'
 import { IProjectStatusHashState, IProjectStatusProps, IProjectStatusState } from './types'
 
 /**
- * Component logic hook for `ProjectStatus`
+ * Hook for `ProjectStatusContext`
  */
-export function useProjectStatus(props: IProjectStatusProps) {
+export function useProjectStatusContext(props: IProjectStatusProps) {
   const [state, $setState] = useState<IProjectStatusState>({
     isDataLoaded: false,
     selectedReport: new StatusReport({}),
@@ -54,5 +55,5 @@ export function useProjectStatus(props: IProjectStatusProps) {
     })
   }, [])
 
-  return { state, setState } as const
+  return {props, state, setState } as IProjectStatusContext
 }

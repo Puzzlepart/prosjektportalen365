@@ -3,8 +3,7 @@ export enum SectionType {
   StatusSection,
   RiskSection,
   ProjectPropertiesSection,
-  ListSection,
-  TimelineSection
+  ListSection
 }
 
 export class SectionModel {
@@ -64,9 +63,6 @@ export class SectionModel {
     }
     if (this._item.ContentTypeId.indexOf('0x01004CEFE616A94A3A48A27D9DEBDF5EC82805') !== -1) {
       return SectionType.ListSection
-    }
-    if (this._item.ContentTypeId.indexOf('0x01004CEFE616A94A3A48A27D9DEBDF5EC82806') !== -1) {
-      return SectionType.TimelineSection
     }
   }
 }

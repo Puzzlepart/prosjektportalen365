@@ -3,6 +3,11 @@ import { useContext } from 'react'
 import { ProjectStatusContext } from '../context'
 import { ISectionContext } from './context'
 
+/**
+ * Hook for creating context value for `SectionContext`.
+ * 
+ * @returns A callback function
+ */
 export function useCreateContextValue({ iconSize = 30 }) {
   const context = useContext(ProjectStatusContext)
   return (section: SectionModel) => {

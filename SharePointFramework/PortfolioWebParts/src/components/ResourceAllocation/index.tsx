@@ -282,7 +282,7 @@ export class ResourceAllocation extends Component<
    *
    * @param searchResults Search results
    *
-   * @returns {ITimelineGroup[]} Timeline groups
+   * @returns Timeline groups
    */
   private _transformGroups(searchResults: IAllocationSearchResult[]): ITimelineGroup[] {
     const groupNames: string[] = searchResults
@@ -314,7 +314,7 @@ export class ResourceAllocation extends Component<
    * @param searchResults Search results
    * @param groups Groups
    *
-   * @returns {ITimelineItem[]} Timeline items
+   * @returns Timeline items
    */
   private _transformItems(
     searchResults: IAllocationSearchResult[],
@@ -361,7 +361,7 @@ export class ResourceAllocation extends Component<
   /**
    * Fetch data
    *
-   * @returns {ITimelineData} Timeline data
+   * @returns Timeline data
    */
   private async _fetchData(): Promise<ITimelineData> {
     const dataSource = await new DataSourceService(sp.web).getByName(this.props.dataSource)
