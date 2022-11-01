@@ -1,4 +1,5 @@
 declare interface IProjectWebPartsStrings {
+  DefaultGroupByLabel: string
   DefaultTimeframeStartValue: string
   DefaultTimeframeEndValue: string
   DefaultTimeframeStartLabel: string

@@ -19,41 +19,23 @@ export function useCommands(props: ICommandsProps) {
       buttonStyles: { root: { border: 'none' } },
       itemType: ContextualMenuItemType.Header,
       subMenuProps: {
-        items: [
-          {
-            key: strings.ProjectLabel,
-            name: strings.ProjectLabel,
-            iconProps: { iconName: 'List' },
-            canCheck: true,
-            checked: selectedGroupBy === strings.ProjectLabel,
-            onClick: () => {
-              setSelectedGroupBy(strings.ProjectLabel)
-              props.onGroupByChange(strings.ProjectLabel)
-            }
-          },
-          {
-            key: strings.CategoryFieldLabel,
-            name: strings.CategoryFieldLabel,
-            iconProps: { iconName: 'AlignLeft' },
-            canCheck: true,
-            checked: selectedGroupBy === strings.CategoryFieldLabel,
-            onClick: () => {
-              setSelectedGroupBy(strings.CategoryFieldLabel)
-              props.onGroupByChange(strings.CategoryFieldLabel)
-            }
-          },
-          {
-            key: strings.TypeLabel,
-            name: strings.TypeLabel,
-            iconProps: { iconName: 'AlignLeft' },
-            canCheck: true,
-            checked: selectedGroupBy === strings.TypeLabel,
-            onClick: () => {
-              setSelectedGroupBy(strings.TypeLabel)
-              props.onGroupByChange(strings.TypeLabel)
-            }
-          }
-        ]
+        items:
+          [
+            [strings.ProjectLabel, 'List'],
+            [strings.CategoryFieldLabel, 'AlignLeft'],
+            [strings.TypeLabel, 'AlignLeft']
+          ].map(([groupBy, iconName]) => (
+            {
+              key: groupBy,
+              name: groupBy,
+              iconProps: { iconName },
+              canCheck: true,
+              checked: selectedGroupBy === groupBy,
+              onClick: () => {
+                setSelectedGroupBy(groupBy)
+                props.onGroupByChange(groupBy)
+              }
+            }))
       }
     } as IContextualMenuItem)
 

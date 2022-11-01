@@ -19,6 +19,7 @@ import {
  * Creating groups based on projects title, categories and types.
  *
  * @param projects Projects
+ * @param timelineConfiguration Timeline configuration
  *
  * @returns Timeline groups
  */
@@ -68,12 +69,14 @@ const createTimelineGroups = (
  *
  * @param timelineItems Timeline items
  * @param timelineGroups Timeline groups
+ * @param defaultGroupBy Default group by
  *
  * @returns Timeline items
  */
 const transformItems = (
   timelineItems: TimelineContentListModel[],
-  timelineGroups: ITimelineGroup[]
+  timelineGroups: ITimelineGroup[],
+  defaultGroupBy: string
 ): ITimelineItem[] => {
   let _project: any
   let _siteId: any
@@ -95,9 +98,31 @@ const transformItems = (
           item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69'
       }
       const type = item.type || strings.PhaseLabel
+      const category = item.timelineCategory ?? 'Styring'
+      const project = item.title
+      let group = 0
+
+      switch (defaultGroupBy) {
+        case strings.CategoryFieldLabel:
+          {
+            group = timelineGroups.find((g) => g.title === category).id
+          }
+          break
+        case strings.TypeLabel:
+          {
+            group = timelineGroups.find((g) => g.title === type).id
+          }
+          break
+        default:
+          {
+            group = timelineGroups.find((g) => g.title === project).id
+          }
+          break
+      }
+
       return {
         id,
-        group: timelineGroups.find((g) => g.title === type).id,
+        group,
         title:
           item.type === strings.ProjectLabel
             ? format(strings.ProjectTimelineItemInfo, item.title)
@@ -108,7 +133,7 @@ const transformItems = (
             : moment(new Date(item.startDate)),
         end_time: moment(new Date(item.endDate)),
         itemProps: { style },
-        project: item.title,
+        project,
         projectUrl: item.url,
         data: {
           phase: item.phase,
@@ -118,7 +143,7 @@ const transformItems = (
           costsTotal: item.costsTotal,
           sortOrder: item.sortOrder || 99,
           hexColor: item.hexColor,
-          category: item.timelineCategory ?? 'Styring',
+          category,
           elementType: item.elementType || strings.BarLabel,
           filter: item.timelineFilter,
           tag: item.tag
@@ -141,10 +166,11 @@ const transformItems = (
 
 /**
  * Get timeline items and columns
+ *
+ * @param props Component properties for `ProjectTimeline`
  */
 const getTimelineData = async (props: IProjectTimelineProps) => {
   let projectDeliveries = []
-
   try {
     const timelineConfig = await props.hubSite.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
@@ -299,6 +325,8 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
 
 /**
  * Fetch project data
+ *
+ * @param props Component properties for `ProjectTimeline`
  */
 const fetchProjectData = async (props: IProjectTimelineProps): Promise<any> => {
   try {
@@ -346,9 +374,33 @@ const fetchProjectData = async (props: IProjectTimelineProps): Promise<any> => {
 }
 
 /**
+ * Get selected groups based on `defaultGroupBy`
+ *
+ * @param groups Timeline groups
+ * @param defaultGroupBy Default groups
+ */
+const getSelectedGroups = (groups: ITimelineGroups, defaultGroupBy: string) => {
+  switch (defaultGroupBy) {
+    case strings.CategoryFieldLabel:
+      {
+        return groups.categoryGroups
+      }
+    case strings.TypeLabel:
+      {
+        return groups.typeGroups
+      }
+    default:
+      {
+        return groups.projectGroups
+      }
+  }
+}
+
+/**
  * Fetch data for ProjectTimeline
  *
  * @param props Component properties for `ProjectTimeline`
+ * 
  * @returns `ProjectTimeline` state
  */
 const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProjectTimelineState>> => {
@@ -370,12 +422,13 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
     ] = await getTimelineData(props)
     const timelineItems = [...timelineContentItems, ...[project]]
     const groups = createTimelineGroups([project], timelineConfiguration)
-    const items = transformItems(timelineItems, groups.typeGroups)
+    const selectedGroups = getSelectedGroups(groups, props.defaultGroupBy)
+    const items = transformItems(timelineItems, selectedGroups, props.defaultGroupBy)
 
     return {
       data: {
         items,
-        groups: groups.typeGroups,
+        groups: selectedGroups,
         timelineListItems,
         timelineColumns
       },

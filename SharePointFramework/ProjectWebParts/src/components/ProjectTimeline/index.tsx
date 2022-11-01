@@ -38,7 +38,7 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
                   filters={state.filters}
                   onFilterChange={onFilterChange}
                   onGroupByChange={onGroupByChange}
-                  defaultGroupBy={strings.TypeLabel}
+                  defaultGroupBy={props.defaultGroupBy}
                   isGroupByEnabled
                 />
               )}
@@ -53,7 +53,8 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
 
 ProjectTimeline.defaultProps = {
   defaultTimeframeStart: '-4,months',
-  defaultTimeframeEnd: '4,months'
+  defaultTimeframeEnd: '4,months',
+  defaultGroupBy: strings.TypeLabel
 }
 
 export * from './types'
