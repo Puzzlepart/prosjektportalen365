@@ -370,7 +370,7 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
     return {
       data: {
         items,
-        groups: groups.projectGroups,
+        groups: groups.typeGroups,
         timelineListItems,
         timelineColumns
       },

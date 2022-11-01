@@ -112,16 +112,16 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
   }
 
   /**
-   * On group change
+   * On group by change
    *
-   * @param group Group by
+   * @param groupBy Group by
    */
-  const onGroupChange = (group: string) => {
+  const onGroupByChange = (groupBy: string) => {
     let selectedGroup: ITimelineGroup[] = []
     let updatedItems: ITimelineItem[] = []
 
     if (state?.data?.items) {
-      switch (group) {
+      switch (groupBy) {
         case strings.CategoryFieldLabel:
           {
             selectedGroup = state.groups.categoryGroups
@@ -179,6 +179,6 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     state,
     setState,
     onFilterChange,
-    onGroupChange
+    onGroupByChange
   } as const
 }

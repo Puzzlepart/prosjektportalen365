@@ -10,7 +10,7 @@ import { IProjectTimelineProps } from './types'
 import { useProjectTimeline } from './useProjectTimeline'
 
 export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
-  const { state, setState, onFilterChange,onGroupChange } = useProjectTimeline(props)
+  const { state, setState, onFilterChange, onGroupByChange } = useProjectTimeline(props)
 
   return (
     <ProjectTimelineContext.Provider value={{ props, state, setState }}>
@@ -28,16 +28,16 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
             <div>
               {props.showTimeline && (
                 <Timeline
-                  defaultTimeStart={[-2, 'months']}
-                  defaultTimeEnd={[2, 'months']}
+                  title={props.title}
+                  infoText={strings.ProjectTimelineListInfoText}
+                  defaultVisibleTime={[[-2, 'months'], [2, 'months']]}
                   groups={state.filteredData.groups}
                   items={state.filteredData.items}
                   filters={state.filters}
                   onFilterChange={onFilterChange}
-                  onGroupChange={onGroupChange}
+                  onGroupByChange={onGroupByChange}
+                  defaultGroupBy={strings.TypeLabel}
                   isGroupByEnabled
-                  infoText={strings.ProjectTimelineListInfoText}
-                  title={props.title}
                 />
               )}
               {props.showTimelineList && <TimelineList />}

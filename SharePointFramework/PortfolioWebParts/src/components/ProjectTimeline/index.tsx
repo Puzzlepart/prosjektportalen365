@@ -9,7 +9,7 @@ import { IProjectTimelineProps } from './types'
 import { useProjectTimeline } from './useProjectTimeline'
 
 export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
-  const { state, onFilterChange, onGroupChange } = useProjectTimeline(props)
+  const { state, onFilterChange, onGroupByChange } = useProjectTimeline(props)
   return (
     <div className={styles.root}>
       <div className={styles.container}>
@@ -30,7 +30,7 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
               infoText={strings.ProjectTimelineInfoText}
               filters={state.filters}
               onFilterChange={onFilterChange}
-              onGroupChange={onGroupChange}
+              onGroupByChange={onGroupByChange}
               title={props.title}
             />
           </>

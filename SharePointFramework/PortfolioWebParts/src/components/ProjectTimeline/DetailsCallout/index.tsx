@@ -2,10 +2,10 @@ import { Callout } from '@fluentui/react/lib/Callout'
 import * as strings from 'PortfolioWebPartsStrings'
 import { formatDate, tryParseCurrency } from 'pp365-shared/lib/helpers'
 import styles from './DetailsCallout.module.scss'
-import React from 'react'
+import React, { FC } from 'react'
 import { IDetailsCalloutProps } from './types'
 
-export const DetailsCallout = ({ timelineItem, onDismiss }: IDetailsCalloutProps) => {
+export const DetailsCallout: FC<IDetailsCalloutProps> = ({ timelineItem, onDismiss }) => {
   const item = timelineItem.item.data
 
   const _calloutContent = (): JSX.Element => {

@@ -21,7 +21,7 @@ export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   configItemTitle?: string
 }
 
-export interface IProjectTimelineState extends IBaseWebPartComponentState<any> {
+export interface IProjectTimelineState extends IBaseWebPartComponentState<ITimelineData> {
   /**
    * Groups
    */

@@ -34,8 +34,9 @@ export const Timeline: FC<ITimelineProps> = (props) => {
         <div>
           <Commands
             setShowFilterPanel={setShowFilterPanel}
-            onGroupChange={props.onGroupChange.bind(this)}
+            onGroupByChange={props.onGroupByChange}
             isGroupByEnabled={props.isGroupByEnabled}
+            defaultGroupBy={props.defaultGroupBy}
           />
         </div>
       </div>

@@ -6,12 +6,18 @@ export interface ICommandsProps {
 
   /**
    * On Group change
-   * @param group Group
+   * 
+   * @param groupBy Group by
    */
-  onGroupChange: (group: string) => void
+   onGroupByChange: (groupBy: string) => void
 
   /**
    * Is group by enabled
    */
   isGroupByEnabled?: boolean
+
+  /**
+   * Default group by
+   */
+   defaultGroupBy?: string
 }

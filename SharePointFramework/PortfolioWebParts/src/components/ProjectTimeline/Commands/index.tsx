@@ -9,7 +9,7 @@ import React, { FC, useState } from 'react'
 import { ICommandsProps } from './types'
 
 export const Commands: FC<ICommandsProps> = (props) => {
-  const [selectedGroup, setSelectedGroup] = useState<string>(strings.ProjectLabel)
+  const [selectedGroupBy, setSelectedGroupBy] = useState<string>(props.defaultGroupBy)
 
   const cmd: ICommandBarProps = {
     items: [],
@@ -30,10 +30,10 @@ export const Commands: FC<ICommandsProps> = (props) => {
             name: strings.ProjectLabel,
             iconProps: { iconName: 'List' },
             canCheck: true,
-            checked: selectedGroup === strings.ProjectLabel,
+            checked: selectedGroupBy === strings.ProjectLabel,
             onClick: () => {
-              setSelectedGroup(strings.ProjectLabel)
-              props.onGroupChange(strings.ProjectLabel)
+              setSelectedGroupBy(strings.ProjectLabel)
+              props.onGroupByChange(strings.ProjectLabel)
             }
           },
           {
@@ -41,10 +41,10 @@ export const Commands: FC<ICommandsProps> = (props) => {
             name: strings.CategoryFieldLabel,
             iconProps: { iconName: 'AlignLeft' },
             canCheck: true,
-            checked: selectedGroup === strings.CategoryFieldLabel,
+            checked: selectedGroupBy === strings.CategoryFieldLabel,
             onClick: () => {
-              setSelectedGroup(strings.CategoryFieldLabel)
-              props.onGroupChange(strings.CategoryFieldLabel)
+              setSelectedGroupBy(strings.CategoryFieldLabel)
+              props.onGroupByChange(strings.CategoryFieldLabel)
             }
           },
           {
@@ -52,10 +52,10 @@ export const Commands: FC<ICommandsProps> = (props) => {
             name: strings.TypeLabel,
             iconProps: { iconName: 'AlignLeft' },
             canCheck: true,
-            checked: selectedGroup === strings.TypeLabel,
+            checked: selectedGroupBy === strings.TypeLabel,
             onClick: () => {
-              setSelectedGroup(strings.TypeLabel)
-              props.onGroupChange(strings.TypeLabel)
+              setSelectedGroupBy(strings.TypeLabel)
+              props.onGroupByChange(strings.TypeLabel)
             }
           }
         ]
@@ -81,4 +81,8 @@ export const Commands: FC<ICommandsProps> = (props) => {
       <CommandBar {...cmd} />
     </div>
   )
+}
+
+Commands.defaultProps = {
+  defaultGroupBy: strings.ProjectLabel
 }
