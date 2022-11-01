@@ -62,8 +62,10 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
 
   /**
    * Get filters
+   * 
    * @param config Timeline configuration
    * @param data Timeline data
+   * 
    * @returns `filters` for `FilterPanel`
    */
   const getFilters = (

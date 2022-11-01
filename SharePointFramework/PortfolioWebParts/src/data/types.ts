@@ -73,7 +73,7 @@ export interface IDataAdapter {
     hubSiteId: any
   ): Promise<any>
   isUserInGroup?(PortfolioManagerGroupName: string): Promise<boolean>
-  fetchTimelineProjectData?(timelineConfig: any[]): Promise<{ reports: any[]; configElement: any }>
+  fetchTimelineProjectData?(timelineConfig: any[]): Promise<{ reports: any[]; configElement: TimelineConfigurationListModel }>
   fetchTimelineContentItems?(timelineConfig: any[]): Promise<TimelineContentListModel[]>
   fetchTimelineAggregatedContent?(
     configItemTitle: string,

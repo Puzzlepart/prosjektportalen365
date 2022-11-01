@@ -3,7 +3,7 @@ import sortArray from 'array-sort'
 import _ from 'lodash'
 import moment from 'moment'
 import strings from 'PortfolioWebPartsStrings'
-import { useEffect } from 'react'
+import { CSSProperties, useEffect } from 'react'
 import { ITimelineGroup, ITimelineItem, TimelineGroupType } from '../../interfaces'
 import { ProjectListModel, TimelineContentListModel } from '../../models'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
@@ -49,7 +49,7 @@ const transformItems = (
 ): ITimelineItem[] => {
   let _item: TimelineContentListModel, _siteId: string
   try {
-    const items: ITimelineItem[] = timelineItems.map((item, id) => {
+    const items = timelineItems.map<ITimelineItem>((item, id) => {
       _item = item
 
       const group = _.find(groups, (grp) => item.siteId.indexOf(grp.siteId) !== -1)
@@ -57,15 +57,32 @@ const transformItems = (
 
       if (group === null) return
 
-      const style: React.CSSProperties = {
+      const style: CSSProperties = {
         color: 'white',
         border: 'none',
         cursor: 'auto',
         outline: 'none',
         background:
-          item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69',
+          item.getConfig('elementType') !== strings.BarLabel
+            ? 'transparent'
+            : item.getConfig('hexColor', '#f35d69'),
         backgroundColor:
-          item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69'
+          item.getConfig('elementType') !== strings.BarLabel
+            ? 'transparent'
+            : item.getConfig('hexColor', '#f35d69')
+      }
+      const data: any = {
+        phase: item.phase,
+        description: item.description,
+        type: item.type,
+        budgetTotal: item.budgetTotal,
+        costsTotal: item.costsTotal,
+        sortOrder: item.getConfig('sortOrder'),
+        hexColor: item.getConfig('hexColor'),
+        category: item.getConfig('timelineCategory'),
+        elementType: item.getConfig('elementType'),
+        filter: item.getConfig('timelineFilter'),
+        tag: item.tag
       }
       return {
         id,
@@ -75,26 +92,14 @@ const transformItems = (
             ? format(strings.ProjectTimelineItemInfo, item.title)
             : item.itemTitle,
         start_time:
-          item.elementType !== strings.BarLabel
+          item.getConfig('elementType') !== strings.BarLabel
             ? moment(new Date(item.endDate))
             : moment(new Date(item.startDate)),
         end_time: moment(new Date(item.endDate)),
         itemProps: { style },
         project: item.title,
         projectUrl: item.url,
-        data: {
-          phase: item.phase,
-          description: item.description,
-          type: item.type,
-          budgetTotal: item.budgetTotal,
-          costsTotal: item.costsTotal,
-          sortOrder: item.sortOrder,
-          hexColor: item.hexColor,
-          category: item.timelineCategory,
-          elementType: item.elementType,
-          filter: item.timelineFilter,
-          tag: item.tag
-        }
+        data
       } as ITimelineItem
     })
 
@@ -143,11 +148,9 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
     })
 
     const filteredTimelineItems = [...timelineContentItems, ...timelineAggregatedContent].filter(
-      (item) => {
-        return filteredProjects.some((project) => {
-          return project.title.indexOf(item.title) !== -1
-        })
-      }
+      (item) => filteredProjects.some((project) => {
+        return project.title.indexOf(item.title) !== -1
+      })
     )
 
     let timelineItems = filteredProjects.map<TimelineContentListModel>((project) => {
@@ -155,11 +158,20 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
       const statusReport = projectData?.reports?.find((statusReport) => {
         return statusReport.siteId === project.siteId
       })
-      return {
-        ...project,
-        ...config,
-        ...statusReport
-      }
+      return new TimelineContentListModel(
+        project.siteId,
+        project.title,
+        project.title,
+        strings.ProjectLabel,
+        project.startDate,
+        project.endDate,
+        '',
+        '',
+        statusReport?.budgetTotal,
+        statusReport?.costsTotal,
+        project.url,
+        project.phase
+      ).setConfig(config)
     })
 
     timelineItems = [...timelineItems, ...filteredTimelineItems]

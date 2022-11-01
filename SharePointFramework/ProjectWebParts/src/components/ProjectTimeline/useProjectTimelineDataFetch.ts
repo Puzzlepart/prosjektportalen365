@@ -2,7 +2,7 @@ import { format } from '@fluentui/react'
 import { sp } from '@pnp/sp'
 import _ from 'lodash'
 import moment from 'moment'
-import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
+import { TimelineConfigurationListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { CSSProperties, useEffect } from 'react'
 import { first } from 'underscore'
@@ -18,24 +18,20 @@ import {
 /**
  * Creating groups based on projects title, categories and types.
  *
- * @param projects Projects
+ * @param project Project
  * @param timelineConfiguration Timeline configuration
  *
  * @returns Timeline groups
  */
 const createTimelineGroups = (
-  projects: ProjectListModel[],
+  project: TimelineContentListModel,
   timelineConfiguration: any[]
 ): ITimelineGroups => {
-  const projectGroups = _.uniq(projects.map((project) => project.title)).map<ITimelineGroup>(
-    (title, id) => {
-      return {
-        id,
-        title,
-        type: TimelineGroupType.Project
-      }
-    }
-  )
+  const projectGroups = [{
+    id: 0,
+    title: project.title,
+    type: TimelineGroupType.Project
+  }]
 
   const categoryGroups = _.uniq(timelineConfiguration.map((item) => item.GtTimelineCategory)).map<
     ITimelineGroup
@@ -93,12 +89,12 @@ const transformItems = (
         cursor: 'auto',
         outline: 'none',
         background:
-          item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69',
+          item.getConfig('elementType') !== strings.BarLabel ? 'transparent' : item.getConfig('hexColor', '#f35d69'),
         backgroundColor:
-          item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69'
+          item.getConfig('elementType') !== strings.BarLabel ? 'transparent' : item.getConfig('hexColor', '#f35d69')
       }
       const type = item.type || strings.PhaseLabel
-      const category = item.timelineCategory ?? 'Styring'
+      const category = item.getConfig('elementType', 'Styring')
       const project = item.title
       let group = 0
 
@@ -119,7 +115,19 @@ const transformItems = (
           }
           break
       }
-
+      const data: any = {
+        phase: item.phase,
+        description: item.description || '',
+        type,
+        budgetTotal: item.budgetTotal,
+        costsTotal: item.costsTotal,
+        sortOrder: item.getConfig('sortOrder', '99'),
+        hexColor: item.getConfig('hexColor'),
+        category,
+        elementType: item.getConfig('elementType', strings.BarLabel),
+        filter: item.getConfig('timelineFilter'),
+        tag: item.tag
+      }
       return {
         id,
         group,
@@ -128,26 +136,14 @@ const transformItems = (
             ? format(strings.ProjectTimelineItemInfo, item.title)
             : item.itemTitle,
         start_time:
-          item.elementType !== strings.BarLabel
+          item.getConfig('elementType') !== strings.BarLabel
             ? moment(new Date(item.endDate))
             : moment(new Date(item.startDate)),
         end_time: moment(new Date(item.endDate)),
         itemProps: { style },
         project,
         projectUrl: item.url,
-        data: {
-          phase: item.phase,
-          description: item.description || '',
-          type,
-          budgetTotal: item.budgetTotal,
-          costsTotal: item.costsTotal,
-          sortOrder: item.sortOrder || 99,
-          hexColor: item.hexColor,
-          category,
-          elementType: item.elementType || strings.BarLabel,
-          filter: item.timelineFilter,
-          tag: item.tag
-        }
+        data
       } as ITimelineItem
     })
 
@@ -164,6 +160,36 @@ const transformItems = (
   }
 }
 
+
+const fetchTimelineConfiguration = async (props: IProjectTimelineProps) => {
+  return (await props.hubSite.web.lists
+    .getByTitle(strings.TimelineConfigurationListName)
+    .items.select(
+      'Title',
+      'GtSortOrder',
+      'GtHexColor',
+      'GtTimelineCategory',
+      'GtElementType',
+      'GtShowElementPortfolio',
+      'GtShowElementProgram',
+      'GtTimelineFilter'
+    )
+    .getAll()).map((item) => {
+      const model = new TimelineConfigurationListModel(
+        item.GtSortOrder,
+        item.Title,
+        item.GtHexColor,
+        item.GtTimelineCategory,
+        item.GtElementType,
+        item.GtShowElementPortfolio,
+        item.GtShowElementProgram,
+        item.GtTimelineFilter
+      )
+      return model
+    })
+    .filter((p) => p)
+}
+
 /**
  * Get timeline items and columns
  *
@@ -172,19 +198,7 @@ const transformItems = (
 const getTimelineData = async (props: IProjectTimelineProps) => {
   let projectDeliveries = []
   try {
-    const timelineConfig = await props.hubSite.web.lists
-      .getByTitle(strings.TimelineConfigurationListName)
-      .items.select(
-        'Title',
-        'GtSortOrder',
-        'GtHexColor',
-        'GtTimelineCategory',
-        'GtElementType',
-        'GtShowElementPortfolio',
-        'GtShowElementProgram',
-        'GtTimelineFilter'
-      )
-      .getAll()
+    const timelineConfig = await fetchTimelineConfiguration(props)
 
     if (props.showProjectDeliveries) {
       // eslint-disable-next-line @typescript-eslint/no-extra-semi
@@ -197,25 +211,24 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
         .map((item) => {
           const config = _.find(
             timelineConfig,
-            (col) => col.Title === (props.configItemTitle || 'Prosjektleveranse')
+            (col) => col.title === (props.configItemTitle || 'Prosjektleveranse')
           )
-          const model = new TimelineContentListModel(
+          return new TimelineContentListModel(
             props.siteId,
             props.webTitle,
             item.Title,
-            config?.Title ?? props.configItemTitle,
-            config?.GtSortOrder ?? 90,
-            config?.GtHexColor ?? '#384f61',
-            config?.GtTimelineCategory ?? 'Styring',
-            config?.GtElementType ?? strings.BarLabel,
-            config?.GtShowElementPortfolio ?? false,
-            config?.GtShowElementProgram ?? false,
-            config?.GtTimelineFilter ?? true,
+            config?.title ?? props.configItemTitle,
             item.GtDeliveryStartTime,
             item.GtDeliveryEndTime,
             item.GtDeliveryDescription
-          )
-          return model
+          ).setConfig({
+            sortOrder: 90,
+            hexColor: '#384f61',
+            timelineCategory: 'Styring',
+            elementType: strings.BarLabel,
+            timelineFilter: true,
+            ...config
+          })
         })
         .filter((t) => t)
     }
@@ -290,28 +303,19 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
       .filter((item) => item.GtSiteIdLookup.Title === props.webTitle)
       .map((item) => {
         const type = item.GtTimelineTypeLookup && item.GtTimelineTypeLookup.Title
-        const config = _.find(timelineConfig, (col) => col.Title === type)
-
-        const model = new TimelineContentListModel(
+        const config = _.find(timelineConfig, (col) => col.title === type)
+        return new TimelineContentListModel(
           item.GtSiteIdLookup?.GtSiteId,
           item.GtSiteIdLookup?.Title,
           item.Title,
-          config?.Title,
-          config?.GtSortOrder,
-          config?.GtHexColor,
-          config?.GtTimelineCategory,
-          config?.GtElementType,
-          config?.GtShowElementPortfolio,
-          config?.GtShowElementProgram,
-          config?.GtTimelineFilter,
+          config?.title,
           item.GtStartDate,
           item.GtEndDate,
           item.GtDescription,
           item.GtTag,
           item.GtBudgetTotal,
           item.GtCostsTotal
-        )
-        return model
+        ).setConfig(config)
       })
       .filter((t) => t)
 
@@ -328,7 +332,7 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
  *
  * @param props Component properties for `ProjectTimeline`
  */
-const fetchProjectData = async (props: IProjectTimelineProps): Promise<any> => {
+const fetchProjectData = async (props: IProjectTimelineProps): Promise<TimelineContentListModel> => {
   try {
     const [projectData, timelineConfig] = await Promise.all([
       props.hubSite.web.lists
@@ -336,36 +340,18 @@ const fetchProjectData = async (props: IProjectTimelineProps): Promise<any> => {
         .items.select('Id', 'GtStartDate', 'GtEndDate')
         .filter(`GtSiteId eq '${props.siteId}'`)
         .getAll(),
-      props.hubSite.web.lists
-        .getByTitle(strings.TimelineConfigurationListName)
-        .items.select(
-          'Title',
-          'GtSortOrder',
-          'GtHexColor',
-          'GtTimelineCategory',
-          'GtElementType',
-          'GtShowElementPortfolio',
-          'GtShowElementProgram',
-          'GtTimelineFilter'
-        )
-        .top(500)
-        .get()
+      fetchTimelineConfiguration(props)
     ])
 
-    const config = _.find(timelineConfig, (col) => col.Title === strings.ProjectLabel)
-    return {
-      id: first(projectData).Id,
-      startDate: first(projectData)?.GtStartDate,
-      endDate: first(projectData)?.GtEndDate,
-      type: strings.ProjectLabel,
-      sortOrder: config && config.GtSortOrder,
-      hexColor: config && config.GtHexColor,
-      timelineCategory: config && config.GtTimelineCategory,
-      elementType: config && config.GtElementType,
-      showElementPortfolio: config && config.GtShowElementPortfolio,
-      showElementProgram: config && config.GtShowElementProgram,
-      timelineFilter: config && config.GtTimelineFilter
-    }
+    const config = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
+    return new TimelineContentListModel(
+      props.siteId,
+      props.webTitle,
+      props.webTitle,
+      strings.ProjectLabel,
+      first(projectData)?.GtStartDate,
+      first(projectData)?.GtEndDate
+    ).setConfig(config)
   } catch (error) {
     throw new Error(
       format(strings.ProjectTimelineErrorFetchText, props.siteId, props.webTitle, error)
@@ -402,14 +388,7 @@ const getSelectedGroups = (groups: ITimelineGroups, defaultGroupBy: string) => {
  */
 const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProjectTimelineState>> => {
   try {
-    const projectData = await fetchProjectData(props)
-    const project = {
-      siteId: props.siteId,
-      groupId: props.siteId,
-      title: props.webTitle,
-      url: props.webUrl,
-      ...projectData
-    }
+    const project = await fetchProjectData(props)
 
     const [
       timelineContentItems,
@@ -418,7 +397,7 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
       timelineConfiguration
     ] = await getTimelineData(props)
     const timelineItems = [...timelineContentItems, ...[project]]
-    const groups = createTimelineGroups([project], timelineConfiguration)
+    const groups = createTimelineGroups(project, timelineConfiguration)
     const selectedGroups = getSelectedGroups(groups, props.defaultGroupBy)
     const items = transformItems(timelineItems, selectedGroups, props.defaultGroupBy)
 

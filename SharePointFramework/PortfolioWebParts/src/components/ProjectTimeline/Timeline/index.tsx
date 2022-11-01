@@ -1,4 +1,5 @@
 import { format, MessageBar } from '@fluentui/react'
+import { ITimelineItem } from 'interfaces/ITimelineItem'
 import moment from 'moment'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC } from 'react'
@@ -56,7 +57,7 @@ export const Timeline: FC<ITimelineProps> = (props) => {
         </div>
       )}
       <div className={styles.timeline}>
-        <ReactTimeline<any>
+        <ReactTimeline<ITimelineItem>
           defaultTimeStart={defaultTimeStart}
           defaultTimeEnd={defaultTimeEnd}
           groups={props.groups}
@@ -76,7 +77,7 @@ export const Timeline: FC<ITimelineProps> = (props) => {
         isOpen={showFilterPanel}
         headerText={strings.FilterText}
         filters={props.filters}
-        onFilterChange={props.onFilterChange.bind(this)}
+        onFilterChange={props.onFilterChange}
         isLightDismiss
         onDismiss={() => setShowFilterPanel(false)}
       />

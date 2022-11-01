@@ -19,23 +19,21 @@ export function useCommands(props: ICommandsProps) {
       buttonStyles: { root: { border: 'none' } },
       itemType: ContextualMenuItemType.Header,
       subMenuProps: {
-        items:
-          [
-            [strings.ProjectLabel, 'List'],
-            [strings.CategoryFieldLabel, 'AlignLeft'],
-            [strings.TypeLabel, 'AlignLeft']
-          ].map(([groupBy, iconName]) => (
-            {
-              key: groupBy,
-              name: groupBy,
-              iconProps: { iconName },
-              canCheck: true,
-              checked: selectedGroupBy === groupBy,
-              onClick: () => {
-                setSelectedGroupBy(groupBy)
-                props.onGroupByChange(groupBy)
-              }
-            }))
+        items: [
+          [strings.ProjectLabel, 'List'],
+          [strings.CategoryFieldLabel, 'AlignLeft'],
+          [strings.TypeLabel, 'AlignLeft']
+        ].map(([groupBy, iconName]) => ({
+          key: groupBy,
+          name: groupBy,
+          iconProps: { iconName },
+          canCheck: true,
+          checked: selectedGroupBy === groupBy,
+          onClick: () => {
+            setSelectedGroupBy(groupBy)
+            props.onGroupByChange(groupBy)
+          }
+        }))
       }
     } as IContextualMenuItem)
 
