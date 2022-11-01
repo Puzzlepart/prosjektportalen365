@@ -24,14 +24,12 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
         ) : (
           <>
             <Timeline
-              defaultVisibleTime={[[-1, 'months'],[1, 'years']]}
+              title={props.title}
               groups={state.filteredData.groups}
               items={state.filteredData.items}
-              infoText={strings.ProjectTimelineInfoText}
               filters={state.filters}
               onFilterChange={onFilterChange}
               onGroupByChange={onGroupByChange}
-              title={props.title}
             />
           </>
         )}

@@ -68,8 +68,8 @@ export const Timeline: FC<ITimelineProps> = (props) => {
             props.groups[0].type === TimelineGroupType.Project && props.isGroupByEnabled
               ? 0
               : props.isGroupByEnabled
-              ? 120
-              : 300
+                ? 120
+                : 300
           }
           itemRenderer={itemRenderer}
           groupRenderer={groupRenderer}>
@@ -91,4 +91,9 @@ export const Timeline: FC<ITimelineProps> = (props) => {
       )}
     </>
   )
+}
+
+Timeline.defaultProps = {
+  defaultVisibleTime: [[-1, 'months'], [1, 'years']],
+  infoText: strings.ProjectTimelineInfoText
 }

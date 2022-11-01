@@ -5,7 +5,7 @@ import { IFilterItemProps, IFilterProps } from '../../FilterPanel'
 import { ICommandsProps } from '../Commands/types'
 
 export interface ITimelineProps extends Pick<ICommandsProps, 'onGroupByChange' | 'isGroupByEnabled' | 'defaultGroupBy'> {
-  defaultVisibleTime: [[number, moment.unitOfTime.DurationConstructor], [number, moment.unitOfTime.DurationConstructor]]
+  defaultVisibleTime?: [[number, moment.unitOfTime.DurationConstructor], [number, moment.unitOfTime.DurationConstructor]]
   groups: ITimelineGroup[]
   items: ITimelineItem[]
   filters: IFilterProps[]

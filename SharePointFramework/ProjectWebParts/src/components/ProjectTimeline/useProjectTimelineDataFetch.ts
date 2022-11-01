@@ -4,7 +4,7 @@ import _ from 'lodash'
 import moment from 'moment'
 import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
 import strings from 'ProjectWebPartsStrings'
-import { useEffect } from 'react'
+import { CSSProperties, useEffect } from 'react'
 import { first } from 'underscore'
 import {
   IProjectTimelineProps,
@@ -16,7 +16,7 @@ import {
 } from './types'
 
 /**
- * Creating groups based on projects title
+ * Creating groups based on projects title, categories and types.
  *
  * @param projects Projects
  * 
@@ -67,10 +67,11 @@ const transformGroups = (
  * Transform items for timeline
  *
  * @param timelineItems Timeline items
+ * @param timelineGroups Timeline groups
  * 
  * @returns Timeline items
  */
-const transformItems = (timelineItems: TimelineContentListModel[]): ITimelineItem[] => {
+const transformItems = (timelineItems: TimelineContentListModel[], timelineGroups: ITimelineGroup[]): ITimelineItem[] => {
   let _project: any
   let _siteId: any
   let _itemTitle: any
@@ -80,7 +81,7 @@ const transformItems = (timelineItems: TimelineContentListModel[]): ITimelineIte
       _itemTitle = item.itemTitle
       _siteId = item.siteId || 'N/A'
 
-      const style: React.CSSProperties = {
+      const style: CSSProperties = {
         color: 'white',
         border: 'none',
         cursor: 'auto',
@@ -90,9 +91,10 @@ const transformItems = (timelineItems: TimelineContentListModel[]): ITimelineIte
         backgroundColor:
           item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69'
       }
+      const category = item.timelineCategory ?? 'Styring'
       return {
         id,
-        group: 0,
+        group: timelineGroups.find((g) => g.title === category).id,
         title:
           item.type === strings.ProjectLabel
             ? format(strings.ProjectTimelineItemInfo, item.title)
@@ -113,7 +115,7 @@ const transformItems = (timelineItems: TimelineContentListModel[]): ITimelineIte
           costsTotal: item.costsTotal,
           sortOrder: item.sortOrder || 99,
           hexColor: item.hexColor,
-          category: item.timelineCategory || 'Styring',
+          category: category,
           elementType: item.elementType || strings.BarLabel,
           filter: item.timelineFilter,
           tag: item.tag
@@ -365,7 +367,7 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
     ] = await getTimelineData(props)
     const timelineItems = [...timelineContentItems, ...[project]]
     const groups = transformGroups([project], timelineConfiguration)
-    const items = transformItems(timelineItems)
+    const items = transformItems(timelineItems, groups.typeGroups)
 
     return {
       data: {
