@@ -51,4 +51,9 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
   )
 }
 
+ProjectTimeline.defaultProps = {
+  defaultTimeframeStart: '-4,months',
+  defaultTimeframeEnd: '4,months'
+}
+
 export * from './types'

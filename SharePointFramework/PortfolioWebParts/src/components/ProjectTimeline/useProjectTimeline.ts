@@ -120,12 +120,12 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     }
   }
 
-  useProjectTimelineDataFetch(props, (_) => {
-    if (_.error) setState({ error: _.error, isDataLoaded: true })
+  useProjectTimelineDataFetch(props, ($) => {
+    if ($.error) setState({ error: $.error, isDataLoaded: true })
     else {
-      const filters = getFilters(_.timelineConfiguration, _.data)
-      const filteredData = getFilteredData(_.data)
-      setState({ ..._, filteredData, filters, isDataLoaded: true })
+      const filters = getFilters($.timelineConfiguration, $.data)
+      const filteredData = getFilteredData($.data)
+      setState({ ...$, filteredData, filters, isDataLoaded: true })
     }
   })
 

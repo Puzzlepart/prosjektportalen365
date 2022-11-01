@@ -40,8 +40,8 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                   checked: true
                 }),
                 this.properties.showTimeline &&
-                  PropertyPaneDropdown('defaultVisibleStart', {
-                    label: strings.DefaultVisibleStartLabel,
+                  PropertyPaneDropdown('defaultTimeframeStart', {
+                    label: strings.DefaultTimeframeStartLabel,
                     options: [
                       [2, 'months'],
                       [4, 'months'],
@@ -51,12 +51,12 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                       [12, 'months']
                     ].map((val) => ({
                       key: val.toString(),
-                      text: format(strings.DefaultVisibleStartValue, val[0])
+                      text: format(strings.DefaultTimeframeStartValue, val[0])
                     }))
                   }),
                 this.properties.showTimeline &&
-                  PropertyPaneDropdown('defaultVisibleEnd', {
-                    label: strings.DefaultVisibleEndLabel,
+                  PropertyPaneDropdown('defaultTimeframeEnd', {
+                    label: strings.DefaultTimeframeEndLabel,
                     options: [
                       [2, 'months'],
                       [4, 'months'],
@@ -66,7 +66,7 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                       [12, 'months']
                     ].map((val) => ({
                       key: val.toString(),
-                      text: format(strings.DefaultVisibleEndValue, val[0])
+                      text: format(strings.DefaultTimeframeEndValue, val[0])
                     }))
                   }),
                 PropertyPaneToggle('showCmdTimelineList', {

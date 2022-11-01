@@ -167,19 +167,19 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     })
   }
 
-  useProjectTimelineDataFetch(props, state.refetch, (data) => {
-    if (data.error) setState({ error: data.error, isDataLoaded: true })
+  useProjectTimelineDataFetch(props, state.refetch, ($) => {
+    if ($.error) setState({ error: $.error, isDataLoaded: true })
     else {
-      const filters = getFilters(data.timelineConfiguration, data.data)
-      const filteredData = getFilteredData(data.data)
-      setState({ ...data, filteredData, filters, isDataLoaded: true })
+      const filters = getFilters($.timelineConfiguration, $.data)
+      const filteredData = getFilteredData($.data)
+      setState({ ...$, filteredData, filters, isDataLoaded: true })
     }
   })
 
-  const [sAmount, sDuration] = props.defaultVisibleStart.split(',')
-  const [eAmount, eDuration] = props.defaultVisibleEnd.split(',')
+  const [sAmount, sDuration] = props.defaultTimeframeStart.split(',')
+  const [eAmount, eDuration] = props.defaultTimeframeEnd.split(',')
   const defaultTimeframe: TimelineTimeframe = [
-    [parseInt(sAmount), sDuration as moment.unitOfTime.DurationConstructor],
+    [-parseInt(sAmount), sDuration as moment.unitOfTime.DurationConstructor],
     [parseInt(eAmount), eDuration as moment.unitOfTime.DurationConstructor]
   ]
 
