@@ -1,20 +1,27 @@
-import { Persona } from '@fluentui/react/lib/Persona'
+import moment from 'moment'
+import { Icon } from 'office-ui-fabric-react'
+import strings from 'PortfolioWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { ProjectCardContext } from '../context'
 import styles from './ProjectCardContent.module.scss'
-import { useProjectCardContent } from './useProjectCardContent'
 
 export const ProjectCardContent: FC = () => {
   const context = useContext(ProjectCardContext)
-  const { phase, owner, manager } = useProjectCardContent()
   return (
     <div className={styles.root}>
-      <div className={styles.phase}>{phase}</div>
-      <div className={styles.personaContainer} hidden={!context.showProjectOwner}>
-        <Persona {...owner} />
-      </div>
-      <div className={styles.personaContainer} hidden={!context.showProjectManager}>
-        <Persona {...manager} />
+      <div title={strings.EndDateLabel} className={styles.endDate}>
+        <Icon
+          className={styles.endDateIcon}
+          iconName='Calendar'
+          style={
+            context.project.endDate && moment(context.project.endDate).isBefore()
+              ? { color: '#FF6666' }
+              : { color: 'black' }
+          }
+        />
+        <span className={styles.endDateText}>
+          {context.project.endDate ? moment(context.project.endDate).format('DD.MM.YYYY') : strings.NotSet}
+        </span>
       </div>
     </div>
   )
