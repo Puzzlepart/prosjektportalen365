@@ -1,4 +1,3 @@
-import { TypedHash } from '@pnp/common'
 import { isEmpty } from 'underscore'
 
 export type StatusReportAttachment = {
@@ -16,19 +15,14 @@ export class StatusReport {
   /**
    * Creates a new instance of StatusReport
    *
-   * @param _item - SP item
+   * @param item - SP item
    * @param _publishedString Published string
    */
-  constructor(private _item: TypedHash<any>, private _publishedString?: string) {
-    this.id = _item.Id
-    this.created = new Date(_item.Created)
-    this.modified = new Date(_item.Modified)
-    this.publishedDate = _item.GtLastReportDate ? new Date(_item.GtLastReportDate) : null
-  }
-
-  public setDefaultEditFormUrl(defaultEditFormUrl: string) {
-    this.defaultEditFormUrl = defaultEditFormUrl
-    return this
+  constructor(public item: Record<string, any>, private _publishedString?: string) {
+    this.id = item.Id
+    this.created = new Date(item.Created)
+    this.modified = new Date(item.Modified)
+    this.publishedDate = item.GtLastReportDate ? new Date(item.GtLastReportDate) : null
   }
 
   /**
@@ -45,11 +39,11 @@ export class StatusReport {
   /**
    * Get status values from item
    */
-  public get statusValues(): TypedHash<string> {
-    return Object.keys(this._item)
+  public get statusValues(): Record<string, string> {
+    return Object.keys(this.item)
       .filter((fieldName) => fieldName.indexOf('Status') !== -1 && fieldName.indexOf('Gt') === 0)
       .reduce((obj, fieldName) => {
-        obj[fieldName] = this._item[fieldName]
+        obj[fieldName] = this.item[fieldName]
         return obj
       }, {})
   }
@@ -57,26 +51,26 @@ export class StatusReport {
   /**
    * Budget numbers
    */
-  public get budgetNumbers(): TypedHash<number> {
+  public get budgetNumbers(): Record<string, number> {
     return {
-      GtBudgetTotal: this._item.GtBudgetTotal || 0,
-      GtCostsTotal: this._item.GtCostsTotal || 0,
-      GtProjectForecast: this._item.GtProjectForecast || 0
+      GtBudgetTotal: this.item.GtBudgetTotal || 0,
+      GtCostsTotal: this.item.GtCostsTotal || 0,
+      GtProjectForecast: this.item.GtProjectForecast || 0
     }
   }
 
   /**
    * Field values
    */
-  public get values(): TypedHash<string | number | boolean> {
-    return this._item
+  public get values(): Record<string, any> {
+    return this.item
   }
 
   /**
    * Attachments
    */
   public get attachments(): StatusReportAttachment[] {
-    return this._item.AttachmentFiles || []
+    return this.item.AttachmentFiles || []
   }
 
   /**
@@ -89,15 +83,15 @@ export class StatusReport {
   /**
    * Field values
    */
-  public get fieldValues(): TypedHash<string> {
-    return this._item.FieldValuesAsText || this._item
+  public get fieldValues(): Record<string, string> {
+    return this.item.FieldValuesAsText || this.item
   }
 
   /**
    * Moderation status
    */
   public get moderationStatus(): string {
-    return this._item.FieldValuesAsText.GtModerationStatus
+    return this.item.GtModerationStatus
   }
 
   /**
@@ -113,20 +107,6 @@ export class StatusReport {
    * @param fieldName - Field name
    */
   public getStatusValue(fieldName: string): { value: string; comment: string } {
-    return { value: this._item[fieldName], comment: this._item[`${fieldName}Comment`] }
-  }
-
-  /**
-   * Edit form URL with added Source parameter
-   */
-  public get editFormUrl() {
-    return [
-      `${window.location.protocol}//${window.location.hostname}`,
-      this.defaultEditFormUrl,
-      '?ID=',
-      this.id,
-      '&Source=',
-      encodeURIComponent(`${window.location.origin}${window.location.pathname}`)
-    ].join('')
+    return { value: this.item[fieldName], comment: this.item[`${fieldName}Comment`] }
   }
 }

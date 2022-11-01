@@ -4,10 +4,10 @@ import {
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane'
 import '@pnp/polyfill-ie11'
-import { IProjectStatusProps, ProjectStatus } from 'components/ProjectStatus'
 import '@fluentui/react/dist/css/fabric.min.css'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 import * as strings from 'ProjectWebPartsStrings'
+import { ProjectStatus, IProjectStatusProps } from 'components/ProjectStatus'
 
 export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectStatusProps> {
   public async onInit() {

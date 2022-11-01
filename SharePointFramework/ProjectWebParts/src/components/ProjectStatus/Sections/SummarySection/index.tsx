@@ -1,73 +1,56 @@
 import { Web } from '@pnp/sp'
 import { ProjectInformation } from 'components/ProjectInformation'
-import React from 'react'
+import { ProjectStatusContext } from 'components/ProjectStatus/context'
+import React, { FC, useContext } from 'react'
 import { StatusElement } from '../../StatusElement'
-import { IStatusElementProps } from '../../StatusElement/types'
 import { BaseSection } from '../BaseSection'
+import { SectionContext } from '../context'
+import { useCreateContextValue } from '../useCreateContextValue'
 import styles from './SummarySection.module.scss'
-import { ISummarySectionProps, ISummarySectionState } from './types'
 
-export class SummarySection extends BaseSection<ISummarySectionProps, ISummarySectionState> {
-  constructor(props: ISummarySectionProps) {
-    super(props)
-  }
+export const SummarySection: FC = () => {
+  const context = useContext(ProjectStatusContext)
+  const createContextValue = useCreateContextValue({})
 
   /**
-   * Renders the <SummarySection /> component
+   * Render sections
    */
-  public render(): React.ReactElement<ISummarySectionProps> {
-    return (
-      <BaseSection {...this.props}>
+  function renderSections() {
+    return context.state.data.sections.map((sec, idx) => {
+      const ctxValue = createContextValue(sec)
+      if (ctxValue.headerProps.value || sec.fieldName === 'GtOverallStatus') {
+        return (
+          <SectionContext.Provider key={idx} value={ctxValue}>
+            <div key={idx} className='ms-Grid-col ms-sm6'>
+              <StatusElement />
+            </div>
+          </SectionContext.Provider>
+        )
+      }
+    })
+  }
+
+  return (
+    <BaseSection>
+      <div className={styles.root}>
         <div className={styles.projectInformation}>
           <ProjectInformation
             hubSite={{
-              web: new Web(this.props.hubSiteUrl),
-              url: this.props.hubSiteUrl
+              web: new Web(context.props.hubSite.url),
+              url: context.props.hubSite.url
             }}
-            siteId={this.props.siteId}
-            webUrl={this.props.webUrl}
+            siteId={context.props.siteId}
+            webUrl={context.props.webUrl}
             page='ProjectStatus'
             hideAllActions={true}
           />
         </div>
         <div className={styles.sections}>
           <div className='ms-Grid' dir='ltr'>
-            <div className='ms-Grid-row'>{this._renderSections()}</div>
+            <div className='ms-Grid-row'>{renderSections()}</div>
           </div>
         </div>
-      </BaseSection>
-    )
-  }
-
-  /**
-   * Render sections
-   */
-  private _renderSections() {
-    const { report, sections } = this.props
-    return sections.map((sec, idx) => {
-      const { value, comment } = report.getStatusValue(sec.fieldName)
-      const [columnConfig] = this.props.columnConfig.filter(
-        (c) => c.columnFieldName === sec.fieldName && c.value === value
-      )
-      const props: IStatusElementProps = {
-        label: sec.name,
-        value,
-        comment,
-        iconName: sec.iconName,
-        iconColor: columnConfig ? columnConfig.color : '#444',
-        height: 150
-      }
-      if (sec.fieldName === 'GtOverallStatus') {
-        props.comment = props.value
-        props.value = ''
-      }
-      if (props.value || sec.fieldName === 'GtOverallStatus') {
-        return (
-          <div key={idx} className='ms-Grid-col ms-sm6'>
-            <StatusElement {...props} />
-          </div>
-        )
-      }
-    })
-  }
+      </div>
+    </BaseSection>
+  )
 }

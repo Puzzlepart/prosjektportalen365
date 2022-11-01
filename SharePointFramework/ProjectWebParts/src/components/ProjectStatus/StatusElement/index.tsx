@@ -1,29 +1,27 @@
 import { Icon } from '@fluentui/react/lib/Icon'
-import React from 'react'
-import { IStatusElementProps } from './types'
+import React, { FC, useContext } from 'react'
+import { SectionContext } from '../Sections/context'
 import styles from './StatusElement.module.scss'
 
-export const StatusElement = ({
-  iconName,
-  label,
-  value,
-  comment,
-  iconSize = 30,
-  iconColor
-}: IStatusElementProps) => {
+export const StatusElement: FC = () => {
+  const { headerProps } = useContext(SectionContext)
   return (
     <div className={styles.root}>
       <div className={styles.container}>
-        <div className={styles.statusIcon} style={{ fontSize: iconSize, color: iconColor }}>
-          <Icon iconName={iconName} />
+        <div
+          className={styles.icon}
+          style={{ fontSize: headerProps.iconSize, color: headerProps.iconColor }}>
+          <Icon iconName={headerProps.iconName} />
         </div>
-        <div className={styles.statusContent}>
-          <div className={styles.statusElementLabel}>{label}</div>
-          <div className={styles.statusElementValue}>{value}</div>
-          {comment && (
+        <div className={styles.content}>
+          <div className={styles.label}>{headerProps.label}</div>
+          <div className={styles.value}>{headerProps.value}</div>
+          {headerProps.comment && (
             <div
-              className={styles.statusElementComment}
-              dangerouslySetInnerHTML={{ __html: comment.replace(/\n/g, '<br />') }}></div>
+              className={styles.comment}
+              dangerouslySetInnerHTML={{
+                __html: headerProps.comment.replace(/\n/g, '<br />')
+              }}></div>
           )}
         </div>
       </div>

@@ -44,12 +44,14 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     switch (state.renderAs) {
       case 'tiles': {
         return projects.map((project, idx) => (
-          <ProjectCardContext.Provider key={idx} value={{
-            ...props,
-            project,
-            actions: getCardActions(project),
-            isDataLoaded: !state.loading
-          }}>
+          <ProjectCardContext.Provider
+            key={idx}
+            value={{
+              ...props,
+              project,
+              actions: getCardActions(project),
+              isDataLoaded: !state.loading
+            }}>
             <ProjectCard />
           </ProjectCardContext.Provider>
         ))

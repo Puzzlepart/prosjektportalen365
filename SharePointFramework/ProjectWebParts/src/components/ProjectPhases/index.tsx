@@ -32,7 +32,7 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
       <div className={styles.container}>
         <ProjectPhasesContext.Provider value={{ props, state, dispatch, onChangePhase }}>
           <Shimmer
-            isDataLoaded={!state.loading}
+            isDataLoaded={state.isDataLoaded}
             shimmerElements={getShimmerElements(rootRef.current?.clientWidth)}>
             <ul className={styles.phaseList}>
               {state.data.phases

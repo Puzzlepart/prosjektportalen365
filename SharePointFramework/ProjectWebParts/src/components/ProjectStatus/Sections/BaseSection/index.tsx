@@ -1,18 +1,15 @@
-import React from 'react'
+import { Shimmer } from '@fluentui/react'
+import { ProjectStatusContext } from 'components/ProjectStatus/context'
+import React, { FC, HTMLProps, useContext } from 'react'
 import styles from './BaseSection.module.scss'
-import { IBaseSectionProps, IBaseSectionState } from './types'
 
-export class BaseSection<
-  T1 extends IBaseSectionProps,
-  T2 extends IBaseSectionState
-> extends React.Component<T1, T2> {
-  public render(): React.ReactElement<T1> {
-    return (
-      <div className={styles.statusSection}>
-        <div className={styles.container}>{this.props.children}</div>
+export const BaseSection: FC<HTMLProps<HTMLDivElement>> = ({ children }) => {
+  const context = useContext(ProjectStatusContext)
+  return (
+    <div className={styles.root}>
+      <div className={styles.container}>
+        <Shimmer isDataLoaded={context.state.isDataLoaded}>{children}</Shimmer>
       </div>
-    )
-  }
+    </div>
+  )
 }
-
-export * from './types'

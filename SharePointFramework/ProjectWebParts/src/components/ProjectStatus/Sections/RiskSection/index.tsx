@@ -1,110 +1,63 @@
-import { Web } from '@pnp/sp'
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  IColumn,
+  MessageBarType,
+  SelectionMode,
+  Shimmer
+} from '@fluentui/react'
+import { ProjectStatusContext } from 'components/ProjectStatus/context'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
-import React from 'react'
-import { RiskMatrix } from '../../../RiskMatrix'
-import { RiskElementModel } from '../../../RiskMatrix'
+import React, { FC, useContext } from 'react'
+import { RiskElementModel, RiskMatrix } from '../../../RiskMatrix'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection'
-import { IRiskSectionProps, IRiskSectionState, IRiskSectionData } from './types'
 import styles from './RiskSection.module.scss'
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
-import {
-  MessageBarType,
-  DetailsList,
-  SelectionMode,
-  DetailsListLayoutMode,
-  IColumn
-} from '@fluentui/react'
+import { useRiskSection } from './useRiskSection'
+import { getObjectValue as get } from 'pp365-shared/lib/helpers'
 
-export class RiskSection extends BaseSection<IRiskSectionProps, IRiskSectionState> {
-  constructor(props: IRiskSectionProps) {
-    super(props)
-    this.state = { loading: true }
-  }
-
-  public async componentDidMount() {
-    try {
-      const data = await this._fetchListData()
-      this.setState({ data, loading: false })
-    } catch (error) {
-      this.setState({ error, loading: false })
-    }
-  }
-
-  /**
-   * Renders the <RiskSection /> component
-   */
-  public render(): React.ReactElement<IRiskSectionProps> {
-    return (
-      <BaseSection {...this.props}>
-        <div className='ms-Grid-row'>
-          <div className='ms-Grid-col ms-sm12'>
-            <StatusElement {...this.props.headerProps} />
-          </div>
-          {this.props.showLists && this._renderContent()}
-        </div>
-      </BaseSection>
-    )
-  }
+export const RiskSection: FC = () => {
+  const context = useContext(ProjectStatusContext)
+  const { state, showLists } = useRiskSection()
 
   /**
    * Render content
    */
-  private _renderContent() {
-    if (this.state.loading || !this.state.data) return null
-    if (this.state.error)
+  function renderContent() {
+    if (state.error)
       return <UserMessage text={strings.ListSectionDataErrorMessage} type={MessageBarType.error} />
     return (
-      <>
+      <Shimmer isDataLoaded={state.isDataLoaded}>
         <div className='ms-Grid-col ms-sm12'>
-          <RiskMatrix {...this.props.riskMatrix} items={this.state.data.riskElements} />
+          <RiskMatrix
+            width={context.props.riskMatrixWidth}
+            height={context.props.riskMatrixHeight}
+            calloutTemplate={context.props.riskMatrixCalloutTemplate}
+            pageContext={context.props.pageContext}
+            items={get<RiskElementModel[]>(state, 'data.riskElements', [])}
+          />
         </div>
         <div className={`${styles.list} ms-Grid-col ms-sm12`}>
           <DetailsList
-            columns={this.state.data.columns}
-            items={this.state.data.items}
+            columns={get<IColumn[]>(state, 'data.columns', [])}
+            items={get<any[]>(state, 'data.items', [])}
             selectionMode={SelectionMode.none}
             layoutMode={DetailsListLayoutMode.justified}
           />
         </div>
-      </>
+      </Shimmer>
     )
   }
 
-  /**
-   * Fetch data
-   */
-  private async _fetchListData(): Promise<IRiskSectionData> {
-    const { listTitle, viewQuery, viewFields, rowLimit } = this.props.model
-    const list = new Web(this.props.webUrl).lists.getByTitle(listTitle)
-    const viewXml = `<View><Query>${viewQuery}</Query><RowLimit>${rowLimit}</RowLimit></View>`
-    try {
-      const [items, fields] = await Promise.all([
-        list.getItemsByCAMLQuery({ ViewXml: viewXml }, 'FieldValuesAsText') as Promise<any[]>,
-        list.fields
-          .select('Title', 'InternalName', 'TypeAsString')
-          .get<{ Title: string; InternalName: string; TypeAsString: string }[]>()
-      ])
-      if (items.length === 0) return null
-      const itemValues = items.map((i) => i.FieldValuesAsText)
-      const riskElements = itemValues.map((i) => new RiskElementModel(i))
-      const columns: IColumn[] = viewFields
-        .filter((vf) => fields.filter((fld) => fld.InternalName === vf).length === 1)
-        .map((vf) => {
-          const [field] = fields.filter((fld) => fld.InternalName === vf)
-          return {
-            key: field.InternalName,
-            fieldName: field.InternalName,
-            name: field.Title,
-            minWidth: 100,
-            maxWidth: { Text: 250, Note: 250, Choice: 150, Number: 100 }[field.TypeAsString] || 150,
-            isResizable: true,
-            isMultiline: true
-          } as IColumn
-        })
-      return { items: itemValues, columns, riskElements }
-    } catch (error) {
-      throw error
-    }
-  }
+  return (
+    <BaseSection>
+      <div className='ms-Grid-row'>
+        <div className='ms-Grid-col ms-sm12'>
+          <StatusElement />
+        </div>
+        {showLists && renderContent()}
+      </div>
+    </BaseSection>
+  )
 }
