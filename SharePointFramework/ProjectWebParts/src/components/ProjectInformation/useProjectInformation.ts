@@ -16,7 +16,7 @@ import { useProjectInformationDataFetch } from './useProjectInformationDataFetch
  * Component logic hook for `ProjectInformation`
  *
  * @param props Props
- * 
+ *
  * @returns `state`, `setState`, `getCustomActions`, `onSyncProperties`
  */
 export const useProjectInformation = (props: IProjectInformationProps) => {

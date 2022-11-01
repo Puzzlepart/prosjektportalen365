@@ -1,21 +1,13 @@
-import {
-  DocumentCard,
-  DocumentCardActions,
-  Link,
-  Shimmer,
-  ShimmerElementsGroup,
-  ShimmerElementType
-} from '@fluentui/react'
-import React, { FC, useContext } from 'react'
-import { ProjectCardContext } from './context'
+import { Shimmer, ShimmerElementsGroup, ShimmerElementType } from '@fluentui/react'
+import React, { FC } from 'react'
 import styles from './ProjectCard.module.scss'
 import { ProjectCardContent } from './ProjectCardContent'
+import { ProjectCardFooter } from './ProjectCardFooter'
 import { ProjectCardHeader } from './ProjectCardHeader'
 import { useProjectCard } from './useProjectCard'
 
 export const ProjectCard: FC = () => {
-  const context = useContext(ProjectCardContext)
-  const { isDataLoaded, setIsImageLoaded, documentCardProps } = useProjectCard()
+  const { isDataLoaded, setIsImageLoaded } = useProjectCard()
   return (
     <Shimmer
       className={styles.root}
@@ -29,13 +21,11 @@ export const ProjectCard: FC = () => {
           </div>
         </div>
       }>
-      <DocumentCard {...documentCardProps}>
-        <Link href={documentCardProps.onClickHref} target='_blank'>
-          <ProjectCardHeader onImageLoad={() => setIsImageLoaded(true)} />
-        </Link>
+      <div className={styles.root}>
+        <ProjectCardHeader onImageLoad={() => setIsImageLoaded(true)} />
         <ProjectCardContent />
-        <DocumentCardActions actions={context.actions} />
-      </DocumentCard>
+        <ProjectCardFooter />
+      </div>
     </Shimmer>
   )
 }

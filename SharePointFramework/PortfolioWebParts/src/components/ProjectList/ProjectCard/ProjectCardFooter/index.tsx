@@ -10,12 +10,8 @@ export const ProjectCardFooter: FC = () => {
   return (
     <div className={styles.root}>
       <div className={styles.persona}>
-        {(context.showProjectOwner && owner) && (
-          <Persona {...owner} />
-        )}
-        {(context.showProjectManager && manager) && (
-          <Persona {...manager} />
-        )}
+        {context.showProjectOwner && owner && <Persona {...owner} />}
+        {context.showProjectManager && manager && <Persona {...manager} />}
       </div>
       <DocumentCardActions actions={context.actions} />
     </div>

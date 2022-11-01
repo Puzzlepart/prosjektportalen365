@@ -20,7 +20,9 @@ export const ProjectCardContent: FC = () => {
           }
         />
         <span className={styles.endDateText}>
-          {context.project.endDate ? moment(context.project.endDate).format('DD.MM.YYYY') : strings.NotSet}
+          {context.project.endDate
+            ? moment(context.project.endDate).format('DD.MM.YYYY')
+            : strings.NotSet}
         </span>
       </div>
     </div>

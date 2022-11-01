@@ -14,16 +14,20 @@ export function useProjectCardFooter() {
     imageShouldFadeIn: true,
     hidePersonaDetails: true
   }
-  const ownerPersonaProps = context.project.owner && {
-    ...defaultPersonaProps,
-    ...context.project.owner,
-    secondaryText: strings.ProjectOwner
-  } as IPersonaSharedProps
-  const managerPersonaProps = context.project.manager && {
-    ...defaultPersonaProps,
-    ...context.project.manager,
-    secondaryText: strings.ProjectManager
-  } as IPersonaSharedProps
+  const ownerPersonaProps =
+    context.project.owner &&
+    ({
+      ...defaultPersonaProps,
+      ...context.project.owner,
+      secondaryText: strings.ProjectOwner
+    } as IPersonaSharedProps)
+  const managerPersonaProps =
+    context.project.manager &&
+    ({
+      ...defaultPersonaProps,
+      ...context.project.manager,
+      secondaryText: strings.ProjectManager
+    } as IPersonaSharedProps)
   return {
     owner: ownerPersonaProps,
     manager: managerPersonaProps
