@@ -1,23 +1,27 @@
+import { IColumn } from '@fluentui/react/lib/DetailsList'
+import { get } from '@microsoft/sp-lodash-subset'
+import sortArray from 'array-sort'
+import { IFilterProps } from 'components/FilterPanel/Filter/types'
+import { IFilterItemProps } from 'components/FilterPanel/FilterItem/types'
+import strings from 'PortfolioWebPartsStrings'
 import { useState } from 'react'
+import { ITimelineData } from '../../interfaces'
+import { TimelineConfigurationListModel } from '../../models'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
 import { useProjectTimelineDataFetch } from './useProjectTimelineDataFetch'
-import { ITimelineData, ITimelineGroup, ITimelineItem } from '../../interfaces'
-import sortArray from 'array-sort'
-import { get } from '@microsoft/sp-lodash-subset'
-import { IFilterProps } from 'components/FilterPanel/Filter/types'
-import strings from 'PortfolioWebPartsStrings'
-import { IColumn } from '@fluentui/react/lib/DetailsList'
-import { IFilterItemProps } from 'components/FilterPanel/FilterItem/types'
-import { TimelineConfigurationListModel } from '../../models'
 
 /**
  * Component logic hook for `ProjectTimeline`
  *
  * @param props Props
+ *
  * @returns `state`, `setState`, `onFilterChange`
  */
 export const useProjectTimeline = (props: IProjectTimelineProps) => {
-  const [state, $setState] = useState<IProjectTimelineState>({ loading: true, activeFilters: {} })
+  const [state, $setState] = useState<IProjectTimelineState>({
+    isDataLoaded: false,
+    activeFilters: {}
+  })
 
   const setState = (newState: Partial<IProjectTimelineState>) => {
     $setState((_state) => ({ ..._state, ...newState }))
@@ -25,7 +29,9 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
 
   /**
    * Get filtered data
+   *
    * @param data Timeline data
+   *
    * @returns `data` filtered by `state.activeFilters`
    */
   const getFilteredData = (data: ITimelineData): ITimelineData => {
@@ -114,74 +120,18 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     }
   }
 
-  /**
-   * On group by change
-   *
-   * @param groupBy Group by
-   */
-  const onGroupByChange = (groupBy: string) => {
-    let selectedGroup: ITimelineGroup[] = []
-    let updatedItems: ITimelineItem[] = []
-
-    if (state?.data?.items) {
-      switch (groupBy) {
-        case strings.CategoryFieldLabel:
-          {
-            selectedGroup = state.groups.categoryGroup
-            updatedItems = state.data.items.map((item) => {
-              return {
-                ...item,
-                group: selectedGroup.find((g) => g.title === item.data.category).id
-              }
-            })
-          }
-          break
-        case strings.TypeLabel:
-          {
-            selectedGroup = state.groups.typeGroup
-            updatedItems = state.data.items.map((item) => {
-              return {
-                ...item,
-                group: selectedGroup.find((g) => g.title === item.data.type).id
-              }
-            })
-          }
-          break
-        default:
-          {
-            selectedGroup = state.groups.projectGroup
-            updatedItems = state.data.items.map((item) => {
-              return {
-                ...item,
-                group: selectedGroup.find((g) => g.title === item.project).id
-              }
-            })
-          }
-          break
-      }
-    }
-
-    const filteredData = getFilteredData({ items: updatedItems, groups: selectedGroup })
-
-    setState({
-      data: { items: updatedItems, groups: selectedGroup },
-      filteredData
-    })
-  }
-
-  useProjectTimelineDataFetch(props, (data) => {
-    if (data.error) setState({ error: data.error, loading: false })
+  useProjectTimelineDataFetch(props, (_) => {
+    if (_.error) setState({ error: _.error, isDataLoaded: true })
     else {
-      const filters = getFilters(data.timelineConfiguration, data.data)
-      const filteredData = getFilteredData(data.data)
-      setState({ ...data, filteredData, filters, loading: false })
+      const filters = getFilters(_.timelineConfiguration, _.data)
+      const filteredData = getFilteredData(_.data)
+      setState({ ..._, filteredData, filters, isDataLoaded: true })
     }
   })
 
   return {
     state,
     setState,
-    onFilterChange,
-    onGroupByChange
-  }
+    onFilterChange
+  } as const
 }

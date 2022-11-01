@@ -1,7 +1,8 @@
-import { ITimelineItem } from '../../../interfaces'
+import { ITimelineItem, TimelineGroupType } from '../../../interfaces'
 import React, { useState } from 'react'
 import { ITimelineProps } from './types'
 import moment from 'moment'
+import { first } from 'underscore'
 
 export function useTimeline(props: ITimelineProps) {
   const [showDetails, setShowDetails] = useState<{
@@ -26,6 +27,21 @@ export function useTimeline(props: ITimelineProps) {
 
   const defaultTimeStart = moment().add(...props.defaultVisibleTime[0])
   const defaultTimeEnd = moment().add(...props.defaultVisibleTime[1])
+  const sidebarWidth =
+    first(props.groups)?.type === TimelineGroupType.Project && props.isGroupByEnabled
+      ? 0
+      : props.isGroupByEnabled
+      ? 120
+      : 300
 
-  return { defaultTimeStart, defaultTimeEnd, showFilterPanel, setShowFilterPanel, showDetails, setShowDetails, onItemClick } as const
+  return {
+    defaultTimeStart,
+    defaultTimeEnd,
+    sidebarWidth,
+    showFilterPanel,
+    setShowFilterPanel,
+    showDetails,
+    setShowDetails,
+    onItemClick
+  } as const
 }

@@ -22,7 +22,7 @@ import {
  * 
  * @returns Timeline groups
  */
-const transformGroups = (
+const createTimelineGroups = (
   projects: ProjectListModel[],
   timelineConfiguration: any[]
 ): ITimelineGroups => {
@@ -91,10 +91,10 @@ const transformItems = (timelineItems: TimelineContentListModel[], timelineGroup
         backgroundColor:
           item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69'
       }
-      const category = item.timelineCategory ?? 'Styring'
+      const type = item.type || strings.PhaseLabel
       return {
         id,
-        group: timelineGroups.find((g) => g.title === category).id,
+        group: timelineGroups.find((g) => g.title === type).id,
         title:
           item.type === strings.ProjectLabel
             ? format(strings.ProjectTimelineItemInfo, item.title)
@@ -110,12 +110,12 @@ const transformItems = (timelineItems: TimelineContentListModel[], timelineGroup
         data: {
           phase: item.phase,
           description: item.description || '',
-          type: item.type || strings.PhaseLabel,
+          type,
           budgetTotal: item.budgetTotal,
           costsTotal: item.costsTotal,
           sortOrder: item.sortOrder || 99,
           hexColor: item.hexColor,
-          category: category,
+          category: item.timelineCategory ?? 'Styring',
           elementType: item.elementType || strings.BarLabel,
           filter: item.timelineFilter,
           tag: item.tag
@@ -366,7 +366,7 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
       timelineConfiguration
     ] = await getTimelineData(props)
     const timelineItems = [...timelineContentItems, ...[project]]
-    const groups = transformGroups([project], timelineConfiguration)
+    const groups = createTimelineGroups([project], timelineConfiguration)
     const items = transformItems(timelineItems, groups.typeGroups)
 
     return {
