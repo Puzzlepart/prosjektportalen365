@@ -10,13 +10,13 @@ export const ProjectCard: FC = () => {
   const { isDataLoaded, setIsImageLoaded } = useProjectCard()
   return (
     <Shimmer
-      className={styles.root}
+      className={styles.shimmer}
       isDataLoaded={isDataLoaded}
       customElementsGroup={
         <div>
           <div className={styles.shimmerGroup}>
             <ShimmerElementsGroup
-              shimmerElements={[{ type: ShimmerElementType.line, width: '100%', height: 440 }]}
+              shimmerElements={[{ type: ShimmerElementType.line, width: '100%', height: 300 }]}
             />
           </div>
         </div>
