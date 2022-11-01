@@ -1,18 +1,17 @@
-
 export interface ICommandsProps {
   /**
    * Set Show Filter Panel
    */
-  setShowFilterPanel: (showFilterPanel: boolean) => void;
+  setShowFilterPanel: (showFilterPanel: boolean) => void
 
   /**
    * On Group change
    * @param group Group
    */
-  onGroupChange: (group: string) => void;
+  onGroupChange: (group: string) => void
 
   /**
    * Is group by enabled
    */
-  isGroupByEnabled?: boolean;
+  isGroupByEnabled?: boolean
 }

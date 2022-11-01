@@ -10,10 +10,10 @@ import { IProjectTimelineProps } from './types'
 import { useProjectTimeline } from './useProjectTimeline'
 
 export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
-  const { state, setState, onFilterChange, onGroupChange } = useProjectTimeline(props)
+  const { state, setState, onFilterChange,onGroupChange } = useProjectTimeline(props)
 
   return (
-    <ProjectTimelineContext.Provider value={{ props, state, setState, onGroupChange }}>
+    <ProjectTimelineContext.Provider value={{ props, state, setState }}>
       <div className={styles.root}>
         <div className={styles.container}>
           {!state.isDataLoaded ? (
@@ -25,23 +25,23 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
           ) : state.error ? (
             <UserMessage type={MessageBarType.severeWarning} text={state.error.message} />
           ) : (
-            <>
+            <div>
               {props.showTimeline && (
                 <Timeline
-                  defaultTimeStart={[-1, 'years']}
-                  defaultTimeEnd={[1, 'years']}
+                  defaultTimeStart={[-2, 'months']}
+                  defaultTimeEnd={[2, 'months']}
                   groups={state.filteredData.groups}
                   items={state.filteredData.items}
                   filters={state.filters}
-                  onFilterChange={onFilterChange.bind(this)}
-                  onGroupChange={onGroupChange.bind(this)}
+                  onFilterChange={onFilterChange}
+                  onGroupChange={onGroupChange}
                   isGroupByEnabled
                   infoText={strings.ProjectTimelineListInfoText}
                   title={props.title}
                 />
               )}
               {props.showTimelineList && <TimelineList />}
-            </>
+            </div>
           )}
         </div>
       </div>

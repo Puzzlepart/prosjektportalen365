@@ -18,6 +18,7 @@ import strings from 'ProjectWebPartsStrings'
  * Component logic hook for `ProjectTimeline`
  *
  * @param props Props
+ * 
  * @returns `state`, `setState`, `onFilterChange`
  */
 export const useProjectTimeline = (props: IProjectTimelineProps) => {
@@ -56,8 +57,10 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
 
   /**
    * Get filters
+   * 
    * @param config Timeline configuration
    * @param data Timeline data
+   * 
    * @returns `filters` for `FilterPanel`
    */
   const getFilters = (
@@ -111,9 +114,9 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
   /**
    * On group change
    *
-   * @param group any
+   * @param group Group by
    */
-  const onGroupChange = (group) => {
+  const onGroupChange = (group: string) => {
     let selectedGroup: ITimelineGroup[] = []
     let updatedItems: ITimelineItem[] = []
 
@@ -121,7 +124,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
       switch (group) {
         case strings.CategoryFieldLabel:
           {
-            selectedGroup = state.groups.categoryGroup
+            selectedGroup = state.groups.categoryGroups
             updatedItems = state.data.items.map((item) => {
               return {
                 ...item,
@@ -132,7 +135,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
           break
         case strings.TypeLabel:
           {
-            selectedGroup = state.groups.typeGroup
+            selectedGroup = state.groups.typeGroups
             updatedItems = state.data.items.map((item) => {
               return {
                 ...item,
@@ -143,7 +146,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
           break
         default:
           {
-            selectedGroup = state.groups.projectGroup
+            selectedGroup = state.groups.projectGroups
             updatedItems = state.data.items.map((item) => {
               return {
                 ...item,

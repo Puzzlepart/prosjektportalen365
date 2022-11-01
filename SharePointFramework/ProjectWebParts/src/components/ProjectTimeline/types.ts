@@ -94,9 +94,9 @@ export interface ITimelineGroup {
 }
 
 export interface ITimelineGroups {
-  projectGroup: ITimelineGroup[]
-  categoryGroup: ITimelineGroup[]
-  typeGroup: ITimelineGroup[]
+  projectGroups: ITimelineGroup[]
+  categoryGroups: ITimelineGroup[]
+  typeGroups: ITimelineGroup[]
 }
 
 export interface IItemData {

@@ -5,6 +5,7 @@ import moment from 'moment'
 import { ProjectListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { useEffect } from 'react'
+import { first } from 'underscore'
 import {
   IProjectTimelineProps,
   IProjectTimelineState,
@@ -18,13 +19,14 @@ import {
  * Creating groups based on projects title
  *
  * @param projects Projects
+ * 
  * @returns Timeline groups
  */
 const transformGroups = (
   projects: ProjectListModel[],
   timelineConfiguration: any[]
 ): ITimelineGroups => {
-  const projectGroup: ITimelineGroup[] = _.uniq(projects.map((project) => project.title)).map(
+  const projectGroups = _.uniq(projects.map((project) => project.title)).map<ITimelineGroup>(
     (title, id) => {
       return {
         id,
@@ -34,9 +36,9 @@ const transformGroups = (
     }
   )
 
-  const categoryGroup: ITimelineGroup[] = _.uniq(
+  const categoryGroups = _.uniq(
     timelineConfiguration.map((item) => item.GtTimelineCategory)
-  ).map((category, id) => {
+  ).map<ITimelineGroup>((category, id) => {
     return {
       id,
       title: category,
@@ -44,7 +46,7 @@ const transformGroups = (
     }
   })
 
-  const typeGroup: ITimelineGroup[] = _.uniq(timelineConfiguration.map((item) => item.Title)).map(
+  const typeGroups = _.uniq(timelineConfiguration.map((item) => item.Title)).map<ITimelineGroup>(
     (type, id) => {
       return {
         id,
@@ -55,9 +57,9 @@ const transformGroups = (
   )
 
   return {
-    projectGroup,
-    categoryGroup,
-    typeGroup
+    projectGroups,
+    categoryGroups,
+    typeGroups
   }
 }
 
@@ -65,7 +67,7 @@ const transformGroups = (
  * Transform items for timeline
  *
  * @param timelineItems Timeline items
- * @param groups Groups
+ * 
  * @returns Timeline items
  */
 const transformItems = (timelineItems: TimelineContentListModel[]): ITimelineItem[] => {
@@ -170,14 +172,14 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
             props.siteId,
             props.webTitle,
             item.Title,
-            (config && config.Title) || props.configItemTitle,
-            (config && config.GtSortOrder) || 90,
-            (config && config.GtHexColor) || '#384f61',
-            (config && config.GtTimelineCategory) || 'Styring',
-            (config && config.GtElementType) || strings.BarLabel,
-            (config && config.GtShowElementPortfolio) || false,
-            (config && config.GtShowElementProgram) || false,
-            (config && config.GtTimelineFilter) || true,
+            config?.Title ?? props.configItemTitle,
+            config?.GtSortOrder ?? 90,
+            config?.GtHexColor ?? '#384f61',
+            config?.GtTimelineCategory ?? 'Styring',
+            config?.GtElementType ?? strings.BarLabel,
+            config?.GtShowElementPortfolio ?? false,
+            config?.GtShowElementProgram ?? false,
+            config?.GtTimelineFilter ?? true,
             item.GtDeliveryStartTime,
             item.GtDeliveryEndTime,
             item.GtDeliveryDescription
@@ -187,7 +189,7 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
         .filter((t) => t)
     }
 
-    const allColumns = (
+    const defaultViewColumns = (
       await props.hubSite.web.lists
         .getByTitle(strings.TimelineContentListName)
         .defaultView.fields.select('Items')
@@ -195,11 +197,11 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
         .get()
     )['Items']
 
-    const filterstring: string = allColumns
+    const filterString: string = defaultViewColumns
       .map((col: string) => `(InternalName eq '${col}')`)
       .join(' or ')
 
-    const internalNames: string = await allColumns.map((col: string) => `${col}`).join(',')
+    const internalNames: string = await defaultViewColumns.map((col: string) => `${col}`).join(',')
 
     let timelineContentItems = await props.hubSite.web.lists
       .getByTitle(strings.TimelineContentListName)
@@ -220,7 +222,7 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
 
     const timelineColumns = await props.hubSite.web.lists
       .getByTitle(strings.TimelineContentListName)
-      .fields.filter(filterstring)
+      .fields.filter(filterString)
       .select('InternalName', 'Title', 'TypeAsString')
       .top(500)
       .get()
@@ -263,14 +265,14 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
           item.GtSiteIdLookup?.GtSiteId,
           item.GtSiteIdLookup?.Title,
           item.Title,
-          config && config.Title,
-          config && config.GtSortOrder,
-          config && config.GtHexColor,
-          config && config.GtTimelineCategory,
-          config && config.GtElementType,
-          config && config.GtShowElementPortfolio,
-          config && config.GtShowElementProgram,
-          config && config.GtTimelineFilter,
+          config?.Title,
+          config?.GtSortOrder,
+          config?.GtHexColor,
+          config?.GtTimelineCategory,
+          config?.GtElementType,
+          config?.GtShowElementPortfolio,
+          config?.GtShowElementProgram,
+          config?.GtTimelineFilter,
           item.GtStartDate,
           item.GtEndDate,
           item.GtDescription,
@@ -319,9 +321,9 @@ const fetchProjectData = async (props: IProjectTimelineProps): Promise<any> => {
 
     const config = _.find(timelineConfig, (col) => col.Title === strings.ProjectLabel)
     return {
-      id: projectData && projectData[0].Id,
-      startDate: projectData && projectData[0].GtStartDate,
-      endDate: projectData && projectData[0].GtEndDate,
+      id: first(projectData).Id,
+      startDate: first(projectData)?.GtStartDate,
+      endDate:  first(projectData)?.GtEndDate,
       type: strings.ProjectLabel,
       sortOrder: config && config.GtSortOrder,
       hexColor: config && config.GtHexColor,
@@ -368,7 +370,7 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
     return {
       data: {
         items,
-        groups: groups.projectGroup,
+        groups: groups.projectGroups,
         timelineListItems,
         timelineColumns
       },
