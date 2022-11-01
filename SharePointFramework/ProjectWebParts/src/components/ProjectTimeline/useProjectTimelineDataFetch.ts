@@ -381,18 +381,15 @@ const fetchProjectData = async (props: IProjectTimelineProps): Promise<any> => {
  */
 const getSelectedGroups = (groups: ITimelineGroups, defaultGroupBy: string) => {
   switch (defaultGroupBy) {
-    case strings.CategoryFieldLabel:
-      {
-        return groups.categoryGroups
-      }
-    case strings.TypeLabel:
-      {
-        return groups.typeGroups
-      }
-    default:
-      {
-        return groups.projectGroups
-      }
+    case strings.CategoryFieldLabel: {
+      return groups.categoryGroups
+    }
+    case strings.TypeLabel: {
+      return groups.typeGroups
+    }
+    default: {
+      return groups.projectGroups
+    }
   }
 }
 
@@ -400,7 +397,7 @@ const getSelectedGroups = (groups: ITimelineGroups, defaultGroupBy: string) => {
  * Fetch data for ProjectTimeline
  *
  * @param props Component properties for `ProjectTimeline`
- * 
+ *
  * @returns `ProjectTimeline` state
  */
 const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProjectTimelineState>> => {
