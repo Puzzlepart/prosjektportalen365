@@ -1,0 +1,15 @@
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+
+.root {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 10px;
+  width: 90%;
+
+  .persona {
+    display: flex;
+    justify-content: space-between;
+    width: 90px;
+  }
+}
