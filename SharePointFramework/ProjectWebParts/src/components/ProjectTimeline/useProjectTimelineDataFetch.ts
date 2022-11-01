@@ -25,7 +25,7 @@ import {
  */
 const createTimelineGroups = (
   project: TimelineContentListModel,
-  timelineConfiguration: any[]
+  timelineConfiguration: TimelineConfigurationListModel[]
 ): ITimelineGroups => {
   const projectGroups = [{
     id: 0,
@@ -33,7 +33,7 @@ const createTimelineGroups = (
     type: TimelineGroupType.Project
   }]
 
-  const categoryGroups = _.uniq(timelineConfiguration.map((item) => item.GtTimelineCategory)).map<
+  const categoryGroups = _.uniq(timelineConfiguration.map((config) => config.timelineCategory)).map<
     ITimelineGroup
   >((category, id) => {
     return {
@@ -43,7 +43,7 @@ const createTimelineGroups = (
     }
   })
 
-  const typeGroups = _.uniq(timelineConfiguration.map((item) => item.Title)).map<ITimelineGroup>(
+  const typeGroups = _.uniq(timelineConfiguration.map((config) => config.title)).map<ITimelineGroup>(
     (type, id) => {
       return {
         id,
