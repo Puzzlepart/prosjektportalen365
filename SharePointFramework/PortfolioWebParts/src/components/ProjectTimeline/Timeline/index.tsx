@@ -1,24 +1,24 @@
-import { TimelineGroupType } from '../../../interfaces'
+import { format, MessageBar } from '@fluentui/react'
+import moment from 'moment'
+import * as strings from 'PortfolioWebPartsStrings'
+import React, { FC } from 'react'
 import ReactTimeline, { TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
-import * as strings from 'PortfolioWebPartsStrings'
-import styles from './Timeline.module.scss'
-import './Timeline.overrides.css'
-import moment from 'moment'
-import React, { FC } from 'react'
-import { format, MessageBar } from '@fluentui/react'
+import { FilterPanel } from '../../FilterPanel'
 import { Commands } from '../Commands'
 import { DetailsCallout } from '../DetailsCallout'
-import { FilterPanel } from '../../FilterPanel'
+import styles from './Timeline.module.scss'
+import './Timeline.overrides.css'
 import { ITimelineProps } from './types'
-import { useTimeline } from './useTimeline'
-import { useItemRenderer } from './useItemRenderer'
 import { useGroupRenderer } from './useGroupRenderer'
+import { useItemRenderer } from './useItemRenderer'
+import { useTimeline } from './useTimeline'
 
 export const Timeline: FC<ITimelineProps> = (props) => {
   const {
     defaultTimeStart,
     defaultTimeEnd,
+    sidebarWidth,
     showFilterPanel,
     setShowFilterPanel,
     showDetails,
@@ -29,7 +29,7 @@ export const Timeline: FC<ITimelineProps> = (props) => {
   const groupRenderer = useGroupRenderer()
 
   return (
-    <>
+    <div className={styles.root}>
       <div className={styles.commandBar}>
         <div>
           <Commands
@@ -64,13 +64,7 @@ export const Timeline: FC<ITimelineProps> = (props) => {
           stackItems={true}
           canMove={false}
           canChangeGroup={false}
-          sidebarWidth={
-            props.groups[0].type === TimelineGroupType.Project && props.isGroupByEnabled
-              ? 0
-              : props.isGroupByEnabled
-                ? 120
-                : 300
-          }
+          sidebarWidth={sidebarWidth}
           itemRenderer={itemRenderer}
           groupRenderer={groupRenderer}>
           <TimelineMarkers>
@@ -89,11 +83,14 @@ export const Timeline: FC<ITimelineProps> = (props) => {
       {showDetails && (
         <DetailsCallout timelineItem={showDetails} onDismiss={() => setShowDetails(null)} />
       )}
-    </>
+    </div>
   )
 }
 
 Timeline.defaultProps = {
-  defaultVisibleTime: [[-1, 'months'], [1, 'years']],
+  defaultVisibleTime: [
+    [-1, 'months'],
+    [1, 'years']
+  ],
   infoText: strings.ProjectTimelineInfoText
 }

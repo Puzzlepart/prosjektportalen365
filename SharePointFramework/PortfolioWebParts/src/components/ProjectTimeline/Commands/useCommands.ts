@@ -12,7 +12,7 @@ export function useCommands(props: ICommandsProps) {
   }
 
   if (props.isGroupByEnabled)
-    commandBarProps.farItems.push({
+    commandBarProps.items.push({
       key: 'GroupBy',
       name: `${strings.GroupByLabel} ${selectedGroupBy}`,
       iconProps: { iconName: 'GroupedList' },

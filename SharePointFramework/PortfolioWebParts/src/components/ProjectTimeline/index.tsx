@@ -9,11 +9,11 @@ import { IProjectTimelineProps } from './types'
 import { useProjectTimeline } from './useProjectTimeline'
 
 export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
-  const { state, onFilterChange, onGroupByChange } = useProjectTimeline(props)
+  const { state, onFilterChange } = useProjectTimeline(props)
   return (
     <div className={styles.root}>
       <div className={styles.container}>
-        {state.loading ? (
+        {!state.isDataLoaded ? (
           <div className={styles.root}>
             <div className={styles.container}>
               <Spinner label={format(strings.LoadingText, props.title)} />
@@ -29,7 +29,6 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
               items={state.filteredData.items}
               filters={state.filters}
               onFilterChange={onFilterChange}
-              onGroupByChange={onGroupByChange}
             />
           </>
         )}
