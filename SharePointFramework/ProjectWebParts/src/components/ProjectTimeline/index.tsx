@@ -9,10 +9,6 @@ import { TimelineList } from './TimelineList'
 import { IProjectTimelineProps } from './types'
 import { useProjectTimeline } from './useProjectTimeline'
 
-/**
- * @component ProjectTimeline (Project webpart)
- * @extends Component
- */
 export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
   const { state, setState, onFilterChange, onGroupChange } = useProjectTimeline(props)
 

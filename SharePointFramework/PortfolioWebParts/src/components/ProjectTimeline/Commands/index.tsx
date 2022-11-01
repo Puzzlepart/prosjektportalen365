@@ -6,24 +6,7 @@ import {
 } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC, useState } from 'react'
-
-export interface ICommandsProps {
-  /**
-   * Set Show Filter Panel
-   */
-  setShowFilterPanel: (showFilterPanel: boolean) => void
-
-  /**
-   * On Group change
-   * @param group Group
-   */
-  onGroupChange: (group: string) => void
-
-  /**
-   * Is group by enabled
-   */
-  isGroupByEnabled?: boolean
-}
+import { ICommandsProps } from './types'
 
 export const Commands: FC<ICommandsProps> = (props) => {
   const [selectedGroup, setSelectedGroup] = useState<string>(strings.ProjectLabel)

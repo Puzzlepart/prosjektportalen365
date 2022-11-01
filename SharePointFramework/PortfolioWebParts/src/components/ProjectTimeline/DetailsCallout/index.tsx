@@ -1,14 +1,9 @@
-import { ITimelineItem } from 'interfaces/ITimelineItem'
 import { Callout } from '@fluentui/react/lib/Callout'
 import * as strings from 'PortfolioWebPartsStrings'
 import { formatDate, tryParseCurrency } from 'pp365-shared/lib/helpers'
 import styles from './DetailsCallout.module.scss'
 import React from 'react'
-
-export interface IDetailsCalloutProps {
-  timelineItem: { item: ITimelineItem; element: HTMLElement }
-  onDismiss: () => void
-}
+import { IDetailsCalloutProps } from './types'
 
 export const DetailsCallout = ({ timelineItem, onDismiss }: IDetailsCalloutProps) => {
   const item = timelineItem.item.data

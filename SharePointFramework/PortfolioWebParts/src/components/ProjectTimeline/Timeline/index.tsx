@@ -14,24 +14,9 @@ import React, { FC, useState } from 'react'
 import { format, MessageBar } from '@fluentui/react'
 import { Commands } from '../Commands'
 import { DetailsCallout } from '../DetailsCallout'
-import { FilterPanel, IFilterProps } from '../../FilterPanel'
+import { FilterPanel } from '../../FilterPanel'
+import { ITimelineProps } from './types'
 
-export interface ITimelineProps {
-  defaultTimeStart?: [number, moment.unitOfTime.DurationConstructor]
-  defaultTimeEnd?: [number, moment.unitOfTime.DurationConstructor]
-  groups: ITimelineGroup[]
-  items: ITimelineItem[]
-  filters: IFilterProps[]
-  onFilterChange: (filter: string) => void
-  onGroupChange: (group: string) => void
-  isGroupByEnabled?: boolean
-  infoText?: string
-  title?: string
-}
-
-/**
- * @component Timeline
- */
 export const Timeline: FC<ITimelineProps> = (props) => {
   const [showDetails, setShowDetails] = useState<{
     item: ITimelineItem
