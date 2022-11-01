@@ -116,7 +116,7 @@ function StartAction($Action) {
 
 function EndAction() {
     $global:sw_action.Stop()
-    $ElapsedSeconds = [math]::Round(($global:sw_action.ElapsedMilliseconds)/1000, 2)
+    $ElapsedSeconds = [math]::Round(($global:sw_action.ElapsedMilliseconds) / 1000, 2)
     Write-Host "Completed in $($ElapsedSeconds)s" -ForegroundColor Green
 }
 
@@ -174,17 +174,30 @@ if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
             New-PnPSite -Type TeamSite -Title $Title -Alias $Alias -IsPublic:$true -ErrorAction Stop -Lcid $LanguageId >$null 2>&1
             EndAction
         }
-        StartAction("Promoting $Url to hubsite")
-        Register-PnPHubSite -Site $Url -ErrorAction SilentlyContinue >$null 2>&1
         Disconnect-PnPOnline
-        EndAction
     }
     Catch {
-        Write-Host "[ERROR] Failed to create site and promote to hub site: $($_.Exception.Message)" -ForegroundColor Red
+        Write-Host "[ERROR] Failed to create site: $($_.Exception.Message)" -ForegroundColor Red
         exit 0
     }
 }
 #endregion
+
+#region Promoting site to hubsite
+if (-not $Upgrade.IsPresent) {
+    Try {
+        Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
+        StartAction("Promoting $Url to hubsite")
+        Register-PnPHubSite -Site $Url -ErrorAction SilentlyContinue >$null 2>&1
+        EndAction
+        Disconnect-PnPOnline
+    }
+    Catch {
+        Write-Host "[ERROR] Failed to promote site to hub site: $($_.Exception.Message)" -ForegroundColor Red
+        exit 0
+    }
+}
+#endregiojn
 
 #region Setting permissons
 if (-not $Upgrade.IsPresent) {
