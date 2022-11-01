@@ -95,4 +95,4 @@ Timeline.defaultProps = {
   infoText: strings.ProjectTimelineInfoText
 }
 
-export *  from './types'
+export * from './types'
