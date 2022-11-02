@@ -56,6 +56,6 @@ ProjectInformation.defaultProps = {
   hideParentProjects: true
 }
 
-export { ProjectInformationModal } from '../ProjectInformationModal'
+export * from '../ProjectInformationPanel'
 export * from './types'
 
