@@ -113,6 +113,10 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<
                   min: 25,
                   max: 150,
                   step: 5,
+                }),
+                this.properties.hideStatusReport === false &&
+                PropertyPaneToggle('statusReportShowOnlyIcons', {
+                  label: strings.StatusReportTruncateCommentsLabel
                 })
               ].filter(Boolean)
             },
