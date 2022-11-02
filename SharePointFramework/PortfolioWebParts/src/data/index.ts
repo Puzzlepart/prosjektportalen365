@@ -421,21 +421,8 @@ export class DataAdapter implements IDataAdapter {
       .getAll()
 
     return timelineConfig
-      .map((item) => {
-        const model = new TimelineConfigurationModel(
-          item.GtSortOrder,
-          item.Title,
-          item.GtHexColor,
-          item.GtHexColorText,
-          item.GtTimelineCategory,
-          item.GtElementType,
-          item.GtShowElementPortfolio,
-          item.GtShowElementProgram,
-          item.GtTimelineFilter
-        )
-        return model
-      })
-      .filter((p) => p)
+      .map((item) => new TimelineConfigurationModel(item))
+      .filter(Boolean)
   }
 
   /**

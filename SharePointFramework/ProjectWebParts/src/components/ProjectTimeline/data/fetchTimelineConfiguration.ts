@@ -11,17 +11,8 @@ export async function fetchTimelineConfiguration(props: IProjectTimelineProps) {
   return (
     await props.hubSite.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
-      .items.select(
-        'Title',
-        'GtSortOrder',
-        'GtHexColor',
-        'GtHexColorText',
-        'GtTimelineCategory',
-        'GtElementType',
-        'GtShowElementPortfolio',
-        'GtShowElementProgram',
-        'GtTimelineFilter'
-      )
+      .items
+      .select(...Object.keys(new SPTimelineConfigurationItem()))
       .orderBy('GtSortOrder')
       .getAll()
   )

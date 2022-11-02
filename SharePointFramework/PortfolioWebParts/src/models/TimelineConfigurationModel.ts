@@ -1,29 +1,46 @@
+/* eslint-disable max-classes-per-file */
 
+export class SPTimelineConfigurationItem {
+  public Title: string = ''
+  public GtSortOrder: number = 99
+  public GtHexColor: string = null
+  public GtHexColorText: string = null
+  public GtTimelineCategory: string = null
+  public GtElementType: string = null
+  public GtShowElementPortfolio: boolean = false
+  public GtShowElementProgram: boolean = false
+  public GtTimelineFilter: boolean = false
+
+  public fields(): string[] {
+    return Object.keys(this)
+  }
+}
 
 export class TimelineConfigurationModel {
+  public sortOrder: number
+  public title: string
+  public bgColorHex: string
+  public textColorHex: string
+  public timelineCategory: string
+  public elementType: any
+  public showElementPortfolio: any
+  public showElementProgram: any
+  public timelineFilter: any
+
   /**
    * Creates a new instance of TimelineConfigurationModel
    *
-   * @param sortOrder Sort order
-   * @param title Title
-   * @param bgColorHex Background hexadecimal color
-   * @param textColorHex Text hexadecimal color
-   * @param timelineCategory Timeline category
-   * @param elementType Element type
-   * @param showElementPortfolio Show element on portfolio timeline
-   * @param showElementProgram Show element on program timeline
-   * @param timelineFilter Timeline filterable
+   * @param item SP item
    */
-
-  constructor(
-    public sortOrder: number,
-    public title: string,
-    public bgColorHex: string,
-    public textColorHex: string,
-    public timelineCategory: string,
-    public elementType: any,
-    public showElementPortfolio: any,
-    public showElementProgram: any,
-    public timelineFilter: any
-  ) {}
+  constructor(item: SPTimelineConfigurationItem) {
+    this.sortOrder = item.GtSortOrder
+    this.title = item.Title
+    this.bgColorHex = item.GtHexColor
+    this.textColorHex = item.GtHexColorText
+    this.timelineCategory = item.GtTimelineCategory
+    this.elementType = item.GtElementType
+    this.showElementPortfolio = item.GtShowElementPortfolio
+    this.showElementProgram = item.GtShowElementProgram
+    this.timelineFilter = item.GtTimelineFilter
+   }
 }

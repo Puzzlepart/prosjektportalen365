@@ -1,9 +1,35 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable default-case */
 import assign from 'object-assign'
-import { ChartData, DataField, SPChartConfigurationItem } from './'
+import { ChartData, DataField } from './'
 
 export const CHARTCONFIGBASE_CONTENTTYPEID = '0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D'
 export const CHART_TYPES = ['bar', 'column', 'pie']
+
+export class SPChartConfigurationItem {
+  public ContentTypeId = ''
+
+  public Title = ''
+
+  public GtPiSubTitle = ''
+
+  public GtPiFieldsId: number[] = []
+
+  public GtPiCategoryFieldId = 0
+
+  public GtPiWidthSm = 0
+
+  public GtPiWidthMd = 0
+
+  public GtPiWidthLg = 0
+
+  public GtPiWidthXl = 0
+
+  public GtPiWidthXxl = 0
+
+  public GtPiWidthXxxl = 0
+}
+
 
 export class ChartConfiguration {
   constructor(public item: SPChartConfigurationItem, public fields: DataField[]) {
