@@ -25,8 +25,9 @@ import {
   ProjectListModel,
   SPChartConfigurationItem,
   SPContentType,
-  TimelineConfigurationListModel,
-  TimelineContentListModel
+  SPTimelineConfigurationItem,
+  TimelineConfigurationModel,
+  TimelineContentModel
 } from '../models'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import {
@@ -322,7 +323,7 @@ export class DataAdapter implements IDataAdapter {
    *
    * @param timelineConfig Timeline configuration
    */
-  public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationListModel[]) {
+  public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationModel[]) {
     try {
       const [{ PrimarySearchResults: statusReports }] = await Promise.all([
         sp.search({
@@ -361,7 +362,7 @@ export class DataAdapter implements IDataAdapter {
    *
    * @param timelineConfig Timeline configuration
    */
-  public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationListModel[]) {
+  public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
     const timelineItems = await sp.web.lists
       .getByTitle(strings.TimelineContentListName)
       .items.select(
@@ -384,7 +385,7 @@ export class DataAdapter implements IDataAdapter {
         const type = item.GtTimelineTypeLookup?.Title
         const config = _.find(timelineConfig, (col) => col.title === type)
         if (item.GtSiteIdLookup?.Title && config?.showElementPortfolio) {
-          return new TimelineContentListModel(
+          return new TimelineContentModel(
             item.GtSiteIdLookup?.GtSiteId,
             item.GtSiteIdLookup?.Title,
             item.Title,
@@ -395,7 +396,7 @@ export class DataAdapter implements IDataAdapter {
             item.GtTag,
             item.GtBudgetTotal,
             item.GtCostsTotal
-          ).setConfig(config)
+          ).usingConfig(config)
         }
       })
       .filter(Boolean)
@@ -407,35 +408,10 @@ export class DataAdapter implements IDataAdapter {
   public async fetchTimelineConfiguration() {
     const timelineConfig = await sp.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
-      .items.select(
-        'GtSortOrder',
-        'Title',
-        'GtHexColor',
-        'GtHexColorText',
-        'GtTimelineCategory',
-        'GtElementType',
-        'GtShowElementPortfolio',
-        'GtShowElementProgram',
-        'GtTimelineFilter'
-      )
+      .items.select(...new SPTimelineConfigurationItem().fields)
       .getAll()
 
-    return timelineConfig
-      .map((item) => {
-        const model = new TimelineConfigurationListModel(
-          item.GtSortOrder,
-          item.Title,
-          item.GtHexColor,
-          item.GtHexColorText,
-          item.GtTimelineCategory,
-          item.GtElementType,
-          item.GtShowElementPortfolio,
-          item.GtShowElementProgram,
-          item.GtTimelineFilter
-        )
-        return model
-      })
-      .filter((p) => p)
+    return timelineConfig.map((item) => new TimelineConfigurationModel(item)).filter(Boolean)
   }
 
   /**
@@ -448,7 +424,7 @@ export class DataAdapter implements IDataAdapter {
   public async fetchTimelineAggregatedContent(
     configItemTitle: string,
     dataSourceName: string,
-    timelineConfig: TimelineConfigurationListModel[]
+    timelineConfig: TimelineConfigurationModel[]
   ) {
     const config = _.find(
       timelineConfig,
@@ -478,7 +454,7 @@ export class DataAdapter implements IDataAdapter {
 
       return projectDeliveries
         .map((item) =>
-          new TimelineContentListModel(
+          new TimelineContentModel(
             item.SiteId,
             item.SiteTitle,
             item.Title,
@@ -486,7 +462,7 @@ export class DataAdapter implements IDataAdapter {
             item.GtDeliveryStartTimeOWSDATE,
             item.GtDeliveryEndTimeOWSDATE,
             item.GtDeliveryDescriptionOWSMTXT
-          ).setConfig(config)
+          ).usingConfig(config)
         )
         .filter((t) => t)
     } else return []

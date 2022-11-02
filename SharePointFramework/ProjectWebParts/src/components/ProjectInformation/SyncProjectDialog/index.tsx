@@ -16,7 +16,7 @@ import React, { FC, useContext, useEffect, useState } from 'react'
 import SPDataAdapter from '../../../data'
 import { ProjectInformationContext } from '../context'
 
-export const SyncProjectModal: FC = () => {
+export const SyncProjectDialog: FC = () => {
   const context = useContext(ProjectInformationContext)
   const [isLoading, setLoading] = useState(true)
   const [isSyncing, setSyncing] = useState(false)
@@ -29,55 +29,53 @@ export const SyncProjectModal: FC = () => {
   }, [])
 
   return (
-    <>
-      <Dialog
-        hidden={false}
-        minWidth={400}
-        onDismiss={() => context.setState({ displaySyncProjectModal: false })}
-        dialogContentProps={{
-          type: DialogType.largeHeader,
-          title: strings.SyncProjectModalTitle,
-          subText: strings.SyncProjectModalSubText
-        }}>
-        {isLoading && (
-          <Spinner
-            label={format(strings.LoadingText, strings.IdeaProjectDataTitle)}
-            size={SpinnerSize.medium}
+    <Dialog
+      hidden={!context.state.displaySyncProjectDialog}
+      minWidth={400}
+      onDismiss={() => context.setState({ displaySyncProjectDialog: false })}
+      dialogContentProps={{
+        type: DialogType.largeHeader,
+        title: strings.SyncProjectModalTitle,
+        subText: strings.SyncProjectModalSubText
+      }}>
+      {isLoading && (
+        <Spinner
+          label={format(strings.LoadingText, strings.IdeaProjectDataTitle)}
+          size={SpinnerSize.medium}
+        />
+      )}
+      {isSyncing && (
+        <Spinner
+          label={strings.SyncProjectPropertiesValuesProgressLabel}
+          size={SpinnerSize.medium}
+        />
+      )}
+      {!isLoading && !hasSynced && (
+        <DialogFooter>
+          <DefaultButton
+            text={strings.CancelText}
+            onClick={() => context.setState({ displaySyncProjectDialog: false })}
+            disabled={isSyncing}
           />
-        )}
-        {isSyncing && (
-          <Spinner
-            label={strings.SyncProjectPropertiesValuesProgressLabel}
-            size={SpinnerSize.medium}
+          <PrimaryButton
+            text='Synkroniser'
+            onClick={() => {
+              syncProperties(projectData, projectDataId)
+            }}
+            disabled={isSyncing}
           />
-        )}
-        {!isLoading && !hasSynced && (
-          <DialogFooter>
-            <DefaultButton
-              text={strings.CancelText}
-              onClick={() => context.setState({ displaySyncProjectModal: false })}
-              disabled={isSyncing}
-            />
-            <PrimaryButton
-              text='Synkroniser'
-              onClick={() => {
-                syncProperties(projectData, projectDataId)
-              }}
-              disabled={isSyncing}
-            />
-          </DialogFooter>
-        )}
-        {hasSynced && (
-          <DialogFooter>
-            <PrimaryButton
-              text={strings.CloseText}
-              onClick={() => context.setState({ displaySyncProjectModal: false })}
-              disabled={isSyncing}
-            />
-          </DialogFooter>
-        )}
-      </Dialog>
-    </>
+        </DialogFooter>
+      )}
+      {hasSynced && (
+        <DialogFooter>
+          <PrimaryButton
+            text={strings.CloseText}
+            onClick={() => context.setState({ displaySyncProjectDialog: false })}
+            disabled={isSyncing}
+          />
+        </DialogFooter>
+      )}
+    </Dialog>
   )
 
   async function updateIdeaProcessingItem(projectDataItemId: number) {
@@ -157,7 +155,7 @@ export const SyncProjectModal: FC = () => {
       await updateIdeaProcessingItem(projectDataId).then(() => {
         setSyncing(false)
         setHasSynced(true)
-        context.setState({ displaySyncProjectModal: false })
+        context.setState({ displaySyncProjectDialog: false })
         context.onSyncProperties(true)
       })
     } catch (error) {

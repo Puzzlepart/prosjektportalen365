@@ -6,7 +6,7 @@ import { IFilterItemProps } from 'components/FilterPanel/FilterItem/types'
 import strings from 'PortfolioWebPartsStrings'
 import { useState } from 'react'
 import { ITimelineData } from '../../interfaces'
-import { TimelineConfigurationListModel } from '../../models'
+import { TimelineConfigurationModel } from '../../models'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
 import { useProjectTimelineDataFetch } from './useProjectTimelineDataFetch'
 
@@ -70,7 +70,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
    * @returns `filters` for `FilterPanel`
    */
   const getFilters = (
-    config: TimelineConfigurationListModel[],
+    config: TimelineConfigurationModel[],
     data: ITimelineData
   ): IFilterProps[] => {
     const columns = [

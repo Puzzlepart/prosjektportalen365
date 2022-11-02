@@ -1,7 +1,7 @@
 import { format } from '@fluentui/react'
 import moment from 'moment'
 import { ITimelineItem } from 'pp365-portfoliowebparts/lib/interfaces/ITimelineItem'
-import { TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
+import { TimelineContentModel } from 'pp365-portfoliowebparts/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { CSSProperties } from 'react'
 import { IProjectTimelineProps, ITimelineGroup } from '../types'
@@ -16,7 +16,7 @@ import { IProjectTimelineProps, ITimelineGroup } from '../types'
  * @returns Timeline items
  */
 export function transformItems(
-  timelineItems: TimelineContentListModel[],
+  timelineItems: TimelineContentModel[],
   timelineGroups: ITimelineGroup[],
   props: IProjectTimelineProps
 ): ITimelineItem[] {

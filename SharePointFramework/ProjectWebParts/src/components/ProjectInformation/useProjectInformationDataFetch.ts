@@ -48,7 +48,7 @@ const transformProperties = (
  *
  * @param props Component properties for `ProjectInformation`
  */
-const projectDataSynced = async (props: IProjectInformationProps) => {
+const checkProjectDataSynced = async (props: IProjectInformationProps) => {
   try {
     let isSynced = false
     const projectDataList = props.hubSite.web.lists.getByTitle(strings.IdeaProjectDataTitle)
@@ -79,7 +79,14 @@ const fetchData = async (
   props: IProjectInformationProps
 ): Promise<Partial<IProjectInformationState>> => {
   try {
-    const [columns, propertiesData, parentProjects] = await Promise.all([
+    const [
+      columns,
+      propertiesData,
+      parentProjects,
+      reports,
+      sections,
+      columnConfig
+    ] = await Promise.all([
       SPDataAdapter.portal.getProjectColumns(),
       SPDataAdapter.project.getPropertiesData(),
       props.page === 'Frontpage'
@@ -87,11 +94,24 @@ const fetchData = async (
             props.webPartContext?.pageContext?.web?.absoluteUrl,
             ProjectInformationParentProject
           )
-        : Promise.resolve([])
+        : Promise.resolve([]),
+      !props.hideStatusReport
+        ? SPDataAdapter.portal.getStatusReports({
+            filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
+            publishedString: strings.GtModerationStatus_Choice_Published
+          })
+        : Promise.resolve([]),
+      !props.hideStatusReport
+        ? SPDataAdapter.portal.getProjectStatusSections()
+        : Promise.resolve([]),
+      !props.hideStatusReport ? SPDataAdapter.portal.getProjectColumnConfig() : Promise.resolve([])
     ])
     const data: IProjectInformationData = {
       columns,
       parentProjects,
+      reports,
+      sections,
+      columnConfig,
       ...propertiesData
     }
     const properties = transformProperties(data, props)
@@ -103,11 +123,12 @@ const fetchData = async (
         ProjectAdminPermission.EditProjectProperties,
         data.fieldValues
       )
-      isProjectDataSynced = props.useIdeaProcessing && (await projectDataSynced(props))
+      isProjectDataSynced = props.useIdeaProcessing && (await checkProjectDataSynced(props))
     }
+    const isParentProject = data.fieldValues?.GtIsParentProject || data.fieldValues?.GtIsProgram
     return {
       data,
-      isParentProject: data.fieldValues?.GtIsParentProject || data.fieldValues?.GtIsProgram,
+      isParentProject,
       properties,
       allProperties,
       userHasEditPermission,

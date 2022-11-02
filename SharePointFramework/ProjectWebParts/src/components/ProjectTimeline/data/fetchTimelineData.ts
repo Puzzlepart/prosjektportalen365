@@ -2,8 +2,8 @@ import { IColumn } from '@fluentui/react'
 import { sp } from '@pnp/sp'
 import _ from 'lodash'
 import {
-  TimelineConfigurationListModel,
-  TimelineContentListModel
+  TimelineConfigurationModel,
+  TimelineContentModel
 } from 'pp365-portfoliowebparts/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { IProjectTimelineProps } from '../types'
@@ -16,37 +16,39 @@ import { IProjectTimelineProps } from '../types'
  */
 export async function fetchTimelineData(
   props: IProjectTimelineProps,
-  timelineConfig: TimelineConfigurationListModel[]
+  timelineConfig: TimelineConfigurationModel[]
 ) {
   try {
     const timelineContentList = props.hubSite.web.lists.getByTitle(strings.TimelineContentListName)
-    let projectDeliveries = []
-    if (props.showProjectDeliveries) {
-      // eslint-disable-next-line @typescript-eslint/no-extra-semi
-      projectDeliveries = await sp.web.lists
-        .getByTitle(props.projectDeliveriesListName)
-        .items.select('Title', 'GtDeliveryDescription', 'GtDeliveryStartTime', 'GtDeliveryEndTime')
-        .getAll()
-
-      projectDeliveries = projectDeliveries
-        .map((item) => {
-          const config = _.find(timelineConfig, (col) => col.title === props.configItemTitle)
-          return new TimelineContentListModel(
-            props.siteId,
-            props.webTitle,
-            item.Title,
-            config?.title ?? props.configItemTitle,
-            item.GtDeliveryStartTime,
-            item.GtDeliveryEndTime,
-            item.GtDeliveryDescription
-          ).setConfig({
-            elementType: strings.BarLabel,
-            timelineFilter: true,
-            ...config
-          })
+    const projectDeliveries = (props.showProjectDeliveries
+      ? await sp.web.lists
+          .getByTitle(props.projectDeliveriesListName)
+          .items.select(
+            'Title',
+            'GtDeliveryDescription',
+            'GtDeliveryStartTime',
+            'GtDeliveryEndTime'
+          )
+          .getAll()
+      : []
+    )
+      .map((item) => {
+        const config = _.find(timelineConfig, (col) => col.title === props.configItemTitle)
+        return new TimelineContentModel(
+          props.siteId,
+          props.webTitle,
+          item.Title,
+          config?.title ?? props.configItemTitle,
+          item.GtDeliveryStartTime,
+          item.GtDeliveryEndTime,
+          item.GtDeliveryDescription
+        ).usingConfig({
+          elementType: strings.BarLabel,
+          timelineFilter: true,
+          ...config
         })
-        .filter((t) => t)
-    }
+      })
+      .filter(Boolean)
 
     const defaultViewColumns = (
       await timelineContentList.defaultView.fields.select('Items').top(500).get()
@@ -107,7 +109,7 @@ export async function fetchTimelineData(
       .map((item) => {
         const type = item.GtTimelineTypeLookup?.Title
         const config = _.find(timelineConfig, (col) => col.title === type)
-        return new TimelineContentListModel(
+        return new TimelineContentModel(
           item.GtSiteIdLookup?.GtSiteId,
           item.GtSiteIdLookup?.Title,
           item.Title,
@@ -118,7 +120,7 @@ export async function fetchTimelineData(
           item.GtTag,
           item.GtBudgetTotal,
           item.GtCostsTotal
-        ).setConfig(config)
+        ).usingConfig(config)
       })
       .filter((t) => t)
 

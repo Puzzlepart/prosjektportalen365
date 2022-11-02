@@ -1,7 +1,7 @@
 import { TypedHash } from '@pnp/common'
 import { ItemUpdateResult, QueryPropertyValueType, SearchQuery, SortDirection } from '@pnp/sp'
 import { IPortfolioConfiguration, IAggregatedListConfiguration } from 'interfaces'
-import { ProjectListModel, TimelineConfigurationListModel, TimelineContentListModel } from 'models'
+import { ProjectListModel, TimelineConfigurationModel, TimelineContentModel } from 'models'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services'
 
@@ -75,14 +75,14 @@ export interface IDataAdapter {
   isUserInGroup?(PortfolioManagerGroupName: string): Promise<boolean>
   fetchTimelineProjectData?(
     timelineConfig: any[]
-  ): Promise<{ reports: any[]; configElement: TimelineConfigurationListModel }>
-  fetchTimelineContentItems?(timelineConfig: any[]): Promise<TimelineContentListModel[]>
+  ): Promise<{ reports: any[]; configElement: TimelineConfigurationModel }>
+  fetchTimelineContentItems?(timelineConfig: any[]): Promise<TimelineContentModel[]>
   fetchTimelineAggregatedContent?(
     configItemTitle: string,
     dataSourceName: string,
     timelineConfig: any[]
-  ): Promise<TimelineContentListModel[]>
-  fetchTimelineConfiguration?(): Promise<TimelineConfigurationListModel[]>
+  ): Promise<TimelineContentModel[]>
+  fetchTimelineConfiguration?(): Promise<TimelineConfigurationModel[]>
   fetchEnrichedProjects?(filter?: string): Promise<ProjectListModel[]>
   fetchProjects?(configuration?: IAggregatedListConfiguration, dataSource?: string): Promise<any[]>
   fetchProjectSites(

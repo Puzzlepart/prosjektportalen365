@@ -2,7 +2,7 @@ import { IShimmerProps } from '@fluentui/react'
 import * as moment from 'moment'
 import { IFilterProps } from '../../components/FilterPanel/Filter/types'
 import { ITimelineData, ITimelineItem } from '../../interfaces'
-import { ProjectListModel, TimelineConfigurationListModel } from '../../models'
+import { ProjectListModel, TimelineConfigurationModel } from '../../models'
 import { IBaseComponentProps } from '../types'
 
 export interface IProjectTimelineProps extends IBaseComponentProps {
@@ -66,7 +66,7 @@ export interface IProjectTimelineState extends Pick<IShimmerProps, 'isDataLoaded
   /**
    * Timeline configuration
    */
-  timelineConfig?: TimelineConfigurationListModel[]
+  timelineConfig?: TimelineConfigurationModel[]
 
   /**
    * Error

@@ -11,4 +11,11 @@
     @include ms-sm12;
     @include ms-xl6;
   }
+
+  .fullWidth {
+    @include ms-sm12;
+    @include ms-xl12;
+    padding: 0; 
+    margin: 0;
+  }
 }

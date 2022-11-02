@@ -9,7 +9,7 @@ import { useProjectTimelineDataFetch } from './data/useProjectTimelineDataFetch'
 import sortArray from 'array-sort'
 import { get } from '@microsoft/sp-lodash-subset'
 import { IColumn } from '@fluentui/react/lib/DetailsList'
-import { TimelineConfigurationListModel } from 'pp365-portfoliowebparts/lib/models'
+import { TimelineConfigurationModel } from 'pp365-portfoliowebparts/lib/models'
 import { IFilterItemProps, IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
 import strings from 'ProjectWebPartsStrings'
 import { TimelineTimeframe } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline'
@@ -65,7 +65,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
    * @returns `filters` for `FilterPanel`
    */
   const getFilters = (
-    config: TimelineConfigurationListModel[],
+    config: TimelineConfigurationModel[],
     data: ITimelineData
   ): IFilterProps[] => {
     const columns = [

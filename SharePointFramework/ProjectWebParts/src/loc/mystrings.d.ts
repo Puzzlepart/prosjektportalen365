@@ -1,4 +1,7 @@
 declare interface IProjectWebPartsStrings {
+  StatusReportTruncateCommentsLabel: string
+  ProjectInformationStatusReportHeaderText: string
+  HideStatusReportLabel: string
   DefaultGroupByLabel: string
   DefaultTimeframeStartValue: string
   DefaultTimeframeEndValue: string

@@ -10,7 +10,7 @@ import {
   ITimelineItemData,
   TimelineGroupType
 } from '../../interfaces'
-import { ProjectListModel, TimelineContentListModel } from '../../models'
+import { ProjectListModel, TimelineContentModel } from '../../models'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
 
 /**
@@ -49,10 +49,10 @@ const createProjectGroups = (projects: ProjectListModel[]): ITimelineGroup[] => 
  * @returns Timeline items
  */
 const transformItems = (
-  timelineItems: TimelineContentListModel[],
+  timelineItems: TimelineContentModel[],
   groups: ITimelineGroup[]
 ): ITimelineItem[] => {
-  let _item: TimelineContentListModel, _siteId: string
+  let _item: TimelineContentModel, _siteId: string
   try {
     const items = timelineItems.map<ITimelineItem>((item, id) => {
       _item = item
@@ -159,12 +159,12 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
         })
     )
 
-    let timelineItems = filteredProjects.map<TimelineContentListModel>((project) => {
+    let timelineItems = filteredProjects.map<TimelineContentModel>((project) => {
       const config = projectData.configElement
       const statusReport = projectData?.reports?.find((statusReport) => {
         return statusReport.siteId === project.siteId
       })
-      return new TimelineContentListModel(
+      return new TimelineContentModel(
         project.siteId,
         project.title,
         project.title,
@@ -177,7 +177,7 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
         statusReport?.costsTotal,
         project.url,
         project.phase
-      ).setConfig(config)
+      ).usingConfig(config)
     })
 
     timelineItems = [...timelineItems, ...filteredTimelineItems]
