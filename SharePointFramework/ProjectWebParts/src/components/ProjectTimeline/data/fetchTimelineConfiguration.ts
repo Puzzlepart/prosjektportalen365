@@ -3,7 +3,7 @@ import strings from 'ProjectWebPartsStrings'
 import { IProjectTimelineProps } from '../types'
 
 /**
- * Get timeline configuration
+ * Fetch timeline configuration
  *
  * @param props Component properties for `ProjectTimeline`
  */
@@ -39,5 +39,5 @@ export async function fetchTimelineConfiguration(props: IProjectTimelineProps) {
       )
       return model
     })
-    .filter((p) => p)
+    .filter(Boolean)
 }
