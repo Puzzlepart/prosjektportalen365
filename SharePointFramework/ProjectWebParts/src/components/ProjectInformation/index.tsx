@@ -7,6 +7,7 @@ import { Actions } from './Actions'
 import { AllPropertiesPanel } from './AllPropertiesPanel'
 import { ProjectInformationContext } from './context'
 import { CreateParentModal } from './CreateParentModal'
+import { CustomShimmerElementsGroup } from './CustomShimmerElementsGroup'
 import { ParentProjectsList } from './ParentProjectsList'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
@@ -28,7 +29,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
               {props.title}
             </span>
           </div>
-          <Shimmer isDataLoaded={state.isDataLoaded}>
+          <Shimmer isDataLoaded={state.isDataLoaded} customElementsGroup={<CustomShimmerElementsGroup />}>
             <ProjectProperties properties={state.properties} />
             {!props.hideAllActions && state.message && <UserMessage {...state.message} />}
             <ParentProjectsList />

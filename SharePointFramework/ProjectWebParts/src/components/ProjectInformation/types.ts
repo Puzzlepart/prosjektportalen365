@@ -8,6 +8,7 @@ import * as ProjectDataService from 'pp365-shared/lib/services/ProjectDataServic
 import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 import { ActionType } from './Actions/types'
 import { Web } from '@pnp/sp'
+import { IProjectStatusData } from '../ProjectStatus'
 
 export class ProjectInformationParentProject {
   public title: string
@@ -150,7 +151,7 @@ export interface IProjectInformationUrlHash {
   force: string
 }
 
-export interface IProjectInformationData extends ProjectDataService.IGetPropertiesData {
+export interface IProjectInformationData extends ProjectDataService.IGetPropertiesData, Pick<IProjectStatusData, 'reports'|'sections'|'columnConfig'> {
   /**
    * Column configuration
    */

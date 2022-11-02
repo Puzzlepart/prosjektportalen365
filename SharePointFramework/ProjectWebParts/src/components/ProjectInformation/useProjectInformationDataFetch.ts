@@ -79,19 +79,29 @@ const fetchData = async (
   props: IProjectInformationProps
 ): Promise<Partial<IProjectInformationState>> => {
   try {
-    const [columns, propertiesData, parentProjects] = await Promise.all([
-      SPDataAdapter.portal.getProjectColumns(),
-      SPDataAdapter.project.getPropertiesData(),
-      props.page === 'Frontpage'
-        ? SPDataAdapter.portal.getParentProjects(
+    const [columns, propertiesData, parentProjects, reports,
+      sections,
+      columnConfig,] = await Promise.all([
+        SPDataAdapter.portal.getProjectColumns(),
+        SPDataAdapter.project.getPropertiesData(),
+        props.page === 'Frontpage'
+          ? SPDataAdapter.portal.getParentProjects(
             props.webPartContext?.pageContext?.web?.absoluteUrl,
             ProjectInformationParentProject
           )
-        : Promise.resolve([])
-    ])
+          : Promise.resolve([]),
+        SPDataAdapter.portal.getStatusReports({
+          publishedString: strings.GtModerationStatus_Choice_Published
+        }),
+        SPDataAdapter.portal.getProjectStatusSections(),
+        SPDataAdapter.portal.getProjectColumnConfig(),
+      ])
     const data: IProjectInformationData = {
       columns,
       parentProjects,
+      reports,
+      sections,
+      columnConfig,
       ...propertiesData
     }
     const properties = transformProperties(data, props)
@@ -105,9 +115,10 @@ const fetchData = async (
       )
       isProjectDataSynced = props.useIdeaProcessing && (await projectDataSynced(props))
     }
+    const isParentProject = data.fieldValues?.GtIsParentProject || data.fieldValues?.GtIsProgram
     return {
       data,
-      isParentProject: data.fieldValues?.GtIsParentProject || data.fieldValues?.GtIsProgram,
+      isParentProject,
       properties,
       allProperties,
       userHasEditPermission,
