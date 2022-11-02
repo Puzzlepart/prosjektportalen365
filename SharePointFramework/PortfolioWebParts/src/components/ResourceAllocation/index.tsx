@@ -353,7 +353,7 @@ export class ResourceAllocation extends Component<
         props: res,
         data: {
           project: res.SiteTitle,
-          projectUrl: res.SiteName,
+          projectUrl: res.SiteName
         }
       } as ITimelineItem
     })

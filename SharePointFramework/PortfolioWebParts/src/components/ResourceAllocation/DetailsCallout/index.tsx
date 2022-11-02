@@ -6,7 +6,7 @@ import styles from './DetailsCallout.module.scss'
 import { IDetailsCalloutProps } from './types'
 
 export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
-  const {item} = props.viewItem
+  const { item } = props.viewItem
   return (
     <Callout
       className={styles.detailsCallout}
@@ -30,15 +30,13 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
         <b>{strings.AllocationPercetageLabel}:</b> <span>{item.data.allocation}%</span>
       </p>
       <p>
-        <b>{strings.StartDateLabel}:</b>{' '}
-        <span>{formatDate(item.props.GtStartDateOWSDATE)}</span>
+        <b>{strings.StartDateLabel}:</b> <span>{formatDate(item.props.GtStartDateOWSDATE)}</span>
       </p>
       <p>
         <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.props.GtEndDateOWSDATE)}</span>
       </p>
       <p hidden={!item.props.GtAllocationStatusOWSCHCS}>
-        <b>{strings.AllocationStatusLabel}:</b>{' '}
-        <span>{item.props.GtAllocationStatusOWSCHCS}</span>
+        <b>{strings.AllocationStatusLabel}:</b> <span>{item.props.GtAllocationStatusOWSCHCS}</span>
       </p>
       <p hidden={!item.props.GtAllocationCommentOWSMTXT}>
         <b>{strings.CommentLabel}:</b> <span>{item.props.GtAllocationCommentOWSMTXT}</span>

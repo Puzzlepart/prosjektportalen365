@@ -4,7 +4,12 @@ import _ from 'lodash'
 import moment from 'moment'
 import strings from 'PortfolioWebPartsStrings'
 import { CSSProperties, useEffect } from 'react'
-import { ITimelineGroup, ITimelineItem, TimelineGroupType } from '../../interfaces'
+import {
+  ITimelineGroup,
+  ITimelineItem,
+  ITimelineItemData,
+  TimelineGroupType
+} from '../../interfaces'
 import { ProjectListModel, TimelineContentListModel } from '../../models'
 import { IProjectTimelineProps, IProjectTimelineState } from './types'
 
@@ -70,14 +75,17 @@ const transformItems = (
         background: background,
         backgroundColor: background
       }
-      const data: any = {
+      const data: ITimelineItemData = {
+        project: item.title,
+        projectUrl: item.url,
         phase: item.phase,
         description: item.description,
         type: item.type,
         budgetTotal: item.budgetTotal,
         costsTotal: item.costsTotal,
         sortOrder: item.getConfig('sortOrder'),
-        hexColor: item.getConfig('bgColorHex'),
+        bgColorHex: item.getConfig('bgColorHex'),
+        textColorHex: item.getConfig('textColorHex'),
         category: item.getConfig('timelineCategory'),
         elementType: item.getConfig('elementType'),
         filter: item.getConfig('timelineFilter'),
@@ -96,8 +104,6 @@ const transformItems = (
             : moment(new Date(item.startDate)),
         end_time: moment(new Date(item.endDate)),
         itemProps: { style },
-        project: item.title,
-        projectUrl: item.url,
         data
       } as ITimelineItem
     })
@@ -147,9 +153,10 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
     })
 
     const filteredTimelineItems = [...timelineContentItems, ...timelineAggregatedContent].filter(
-      (item) => filteredProjects.some((project) => {
-        return project.title.indexOf(item.title) !== -1
-      })
+      (item) =>
+        filteredProjects.some((project) => {
+          return project.title.indexOf(item.title) !== -1
+        })
     )
 
     let timelineItems = filteredProjects.map<TimelineContentListModel>((project) => {

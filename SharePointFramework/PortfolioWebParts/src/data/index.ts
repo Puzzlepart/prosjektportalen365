@@ -296,8 +296,9 @@ export class DataAdapter implements IDataAdapter {
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${queryArray ?? ''
-          } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `${
+          queryArray ?? ''
+        } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })
@@ -349,7 +350,7 @@ export class DataAdapter implements IDataAdapter {
         .filter((p) => p)
 
       return { reports, configElement }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
@@ -457,13 +458,15 @@ export class DataAdapter implements IDataAdapter {
       const [projectDeliveries] = await Promise.all([
         this.configure().then(async (adapter) => {
           try {
-            const deliveries = await adapter
-              .fetchItemsWithSource(dataSourceName || 'Alle prosjektleveranser', [
+            const deliveries = await adapter.fetchItemsWithSource(
+              dataSourceName || 'Alle prosjektleveranser',
+              [
                 'Title',
                 'GtDeliveryDescriptionOWSMTXT',
                 'GtDeliveryStartTimeOWSDATE',
                 'GtDeliveryEndTimeOWSDATE'
-              ])
+              ]
+            )
             return deliveries.filter(
               (delivery) => delivery.GtDeliveryStartTimeOWSDATE && delivery.GtDeliveryEndTimeOWSDATE
             )
@@ -486,7 +489,7 @@ export class DataAdapter implements IDataAdapter {
           ).setConfig(config)
         )
         .filter((t) => t)
-    } else return [ ]
+    } else return []
   }
 
   /**

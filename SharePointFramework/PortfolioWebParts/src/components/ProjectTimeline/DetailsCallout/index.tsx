@@ -5,20 +5,20 @@ import styles from './DetailsCallout.module.scss'
 import React, { FC } from 'react'
 import { IDetailsCalloutProps } from './types'
 
-export const DetailsCallout: FC<IDetailsCalloutProps> = ({ timelineItem, onDismiss }) => {
-  const item = timelineItem.item.data
+export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
+  const { data } = props.timelineItem.item
 
-  const _calloutContent = (): JSX.Element => {
-    switch (item.type) {
+  const calloutContent = (): JSX.Element => {
+    switch (data.type) {
       case strings.MilestoneLabel: {
         return (
           <>
-            <p hidden={!item.type}>
-              <b>{item.type}:</b> <span>{timelineItem.item.title}</span>
+            <p hidden={!data.type}>
+              <b>{data.type}:</b> <span>{props.timelineItem.item.title}</span>
             </p>
             <p>
               <b>{strings.MilestoneDateLabel}:</b>{' '}
-              <span>{formatDate(timelineItem.item.end_time.toString())}</span>
+              <span>{formatDate(props.timelineItem.item.end_time.toString())}</span>
             </p>
           </>
         )
@@ -27,16 +27,16 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = ({ timelineItem, onDismi
       case strings.SubPhaseLabel: {
         return (
           <>
-            <p hidden={!item.type}>
-              <b>{item.type}:</b> <span>{timelineItem.item.title}</span>
+            <p hidden={!data.type}>
+              <b>{data.type}:</b> <span>{props.timelineItem.item.title}</span>
             </p>
             <p>
               <b>{strings.StartDateLabel}:</b>{' '}
-              <span>{formatDate(timelineItem.item.start_time.toString())}</span>
+              <span>{formatDate(props.timelineItem.item.start_time.toString())}</span>
             </p>
             <p>
               <b>{strings.EndDateLabel}:</b>{' '}
-              <span>{formatDate(timelineItem.item.end_time.toString())}</span>
+              <span>{formatDate(props.timelineItem.item.end_time.toString())}</span>
             </p>
           </>
         )
@@ -44,30 +44,30 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = ({ timelineItem, onDismi
       case strings.ProjectLabel: {
         return (
           <>
-            <p hidden={!timelineItem.item.data.projectUrl}>
+            <p hidden={!props.timelineItem.item.data.projectUrl}>
               <b>{strings.ProjectLabel}:</b>{' '}
-              <a href={timelineItem.item.data.projectUrl}>
-                <span>{timelineItem.item.data.project}</span>
+              <a href={props.timelineItem.item.data.projectUrl}>
+                <span>{props.timelineItem.item.data.project}</span>
               </a>
             </p>
-            <p hidden={!item.budgetTotal || !item.costsTotal}>
+            <p hidden={!data.budgetTotal || !data.costsTotal}>
               <a
                 target='_blank'
                 rel='noreferrer'
-                href={`${timelineItem.item.data.projectUrl}/SitePages/Prosjektstatus.aspx`}>
+                href={`${props.timelineItem.item.data.projectUrl}/SitePages/Prosjektstatus.aspx`}>
                 <span>{strings.LastPublishedStatusreport}</span>
               </a>
             </p>
-            <p hidden={!item.phase}>
-              <b>{strings.CurrentPhaseLabel}:</b> <span>{item.phase}</span>
+            <p hidden={!data.phase}>
+              <b>{strings.CurrentPhaseLabel}:</b> <span>{data.phase}</span>
             </p>
             <p>
               <b>{strings.StartDateLabel}:</b>{' '}
-              <span>{formatDate(timelineItem.item.start_time.toString())}</span>
+              <span>{formatDate(props.timelineItem.item.start_time.toString())}</span>
             </p>
             <p>
               <b>{strings.EndDateLabel}:</b>{' '}
-              <span>{formatDate(timelineItem.item.end_time.toString())}</span>
+              <span>{formatDate(props.timelineItem.item.end_time.toString())}</span>
             </p>
           </>
         )
@@ -76,19 +76,19 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = ({ timelineItem, onDismi
         return (
           <>
             <p>
-              <b>{strings.NameLabel}:</b> <span>{timelineItem.item.title}</span>
+              <b>{strings.NameLabel}:</b> <span>{props.timelineItem.item.title}</span>
             </p>
-            <p hidden={item.elementType !== strings.TriangleLabel}>
+            <p hidden={data.elementType !== strings.TriangleLabel}>
               <b>{strings.ColumnRenderOptionDate}:</b>{' '}
-              <span>{formatDate(timelineItem.item.end_time.toString())}</span>
+              <span>{formatDate(props.timelineItem.item.end_time.toString())}</span>
             </p>
-            <p hidden={item.elementType === strings.TriangleLabel}>
+            <p hidden={data.elementType === strings.TriangleLabel}>
               <b>{strings.StartDateLabel}:</b>{' '}
-              <span>{formatDate(timelineItem.item.start_time.toString())}</span>
+              <span>{formatDate(props.timelineItem.item.start_time.toString())}</span>
             </p>
-            <p hidden={item.elementType === strings.TriangleLabel}>
+            <p hidden={data.elementType === strings.TriangleLabel}>
               <b>{strings.EndDateLabel}:</b>{' '}
-              <span>{formatDate(timelineItem.item.end_time.toString())}</span>
+              <span>{formatDate(props.timelineItem.item.end_time.toString())}</span>
             </p>
           </>
         )
@@ -110,39 +110,39 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = ({ timelineItem, onDismi
     <Callout
       className={styles.detailsCallout}
       styles={{
-        beak: { backgroundColor: item.hexColor },
+        beak: { backgroundColor: data.bgColorHex },
         beakCurtain: {
-          borderTop: `8px solid ${item.hexColor}`,
+          borderTop: `8px solid ${data.bgColorHex}`,
           borderRadius: '4px'
         }
       }}
-      target={timelineItem.element}
+      target={props.timelineItem.element}
       bounds={bounds}
-      onDismiss={onDismiss}
+      onDismiss={props.onDismiss}
       setInitialFocus={true}>
       <div className={styles.calloutHeader}>
         <div
-          hidden={!item.tag}
+          hidden={!data.tag}
           title={strings.TagFieldLabel}
           className={styles.tag}
           style={{
-            backgroundColor: item.hexColor
+            backgroundColor: data.bgColorHex
           }}>
-          {item.tag}
+          {data.tag}
         </div>
       </div>
-      {_calloutContent()}
-      <p hidden={!item.budgetTotal}>
-        <b>{strings.BudgetTotalLabel}:</b> <span>{tryParseCurrency(item.budgetTotal)}</span>
+      {calloutContent()}
+      <p hidden={!data.budgetTotal}>
+        <b>{strings.BudgetTotalLabel}:</b> <span>{tryParseCurrency(data.budgetTotal)}</span>
       </p>
-      <p hidden={!item.costsTotal}>
-        <b>{strings.CostsTotalLabel}:</b> <span>{tryParseCurrency(item.costsTotal)}</span>
+      <p hidden={!data.costsTotal}>
+        <b>{strings.CostsTotalLabel}:</b> <span>{tryParseCurrency(data.costsTotal)}</span>
       </p>
-      <p hidden={!item.description}>
-        <b>{strings.DescriptionFieldLabel}:</b> <span>{item.description}</span>
+      <p hidden={!data.description}>
+        <b>{strings.DescriptionFieldLabel}:</b> <span>{data.description}</span>
       </p>
-      <p hidden={!item.type}>
-        <b>{strings.TypeLabel}:</b> <span>{item.type}</span>
+      <p hidden={!data.type}>
+        <b>{strings.TypeLabel}:</b> <span>{data.type}</span>
       </p>
     </Callout>
   )
