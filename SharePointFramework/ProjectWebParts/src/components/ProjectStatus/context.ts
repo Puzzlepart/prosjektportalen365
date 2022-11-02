@@ -9,5 +9,3 @@ export interface IProjectStatusContext {
 }
 
 export const ProjectStatusContext = createContext<IProjectStatusContext>(null)
-
-
