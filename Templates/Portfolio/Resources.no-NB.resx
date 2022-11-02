@@ -1769,10 +1769,16 @@
     <value>Hva slags element type/form skal denne ha?</value>
   </data>
   <data name="SiteFields_GtHexColor_DisplayName" xml:space="preserve">
-    <value>Farge (hexadesimal verdi)</value>
+    <value>Bakgrunnsfarge (heksadesimal-verdi)</value>
   </data>
   <data name="SiteFields_GtHexColor_Description" xml:space="preserve">
-    <value>Hva er fargen for elementet (hexadesimal verdi)?</value>
+    <value>Hva er bakrunnsfargen for elementet?</value>
+  </data>
+  <data name="SiteFields_GtHexColorText_DisplayName" xml:space="preserve">
+    <value>Tekstfarge (heksadesimal-verdi)</value>
+  </data>
+  <data name="SiteFields_GtHexColorText_Description" xml:space="preserve">
+    <value>Hva er tesktfargen for elementet?</value>
   </data>
   <data name="SiteFields_GtShowElementPortfolio_DisplayName" xml:space="preserve">
     <value>Vis på portefølje</value>
