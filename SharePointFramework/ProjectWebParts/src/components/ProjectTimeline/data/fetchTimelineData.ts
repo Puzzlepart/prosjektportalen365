@@ -42,7 +42,7 @@ export async function fetchTimelineData(
           item.GtDeliveryStartTime,
           item.GtDeliveryEndTime,
           item.GtDeliveryDescription
-        ).setConfig({
+        ).usingConfig({
           elementType: strings.BarLabel,
           timelineFilter: true,
           ...config
@@ -120,7 +120,7 @@ export async function fetchTimelineData(
           item.GtTag,
           item.GtBudgetTotal,
           item.GtCostsTotal
-        ).setConfig(config)
+        ).usingConfig(config)
       })
       .filter((t) => t)
 

@@ -33,7 +33,7 @@ export async function fetchProjectData(
       strings.ProjectLabel,
       first(projectData)?.GtStartDate,
       first(projectData)?.GtEndDate
-    ).setConfig(config)
+    ).usingConfig(config)
   } catch (error) {
     throw new Error(
       format(strings.ProjectTimelineErrorFetchText, props.siteId, props.webTitle, error)
