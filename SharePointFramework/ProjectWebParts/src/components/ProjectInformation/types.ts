@@ -98,17 +98,6 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   statusReportShowOnlyIcons?: boolean
 }
 
-export const ProjectInformationDefaultProps: IProjectInformationProps = {
-  page: 'Frontpage',
-  customActions: [],
-  hideActions: [],
-  hideAllActions: false,
-  useFramelessButtons: false,
-  hideStatusReport: true,
-  hideParentProjects: true,
-  statusReportShowOnlyIcons: true
-}
-
 export interface IProjectInformationState
   extends IBaseWebPartComponentState<IProjectInformationData> {
   /**
