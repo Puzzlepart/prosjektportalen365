@@ -1,4 +1,5 @@
 declare interface IProjectWebPartsStrings {
+  HideStatusReportLabel: string | ReactElement<any, string | JSXElementConstructor<any>>
   DefaultGroupByLabel: string
   DefaultTimeframeStartValue: string
   DefaultTimeframeEndValue: string

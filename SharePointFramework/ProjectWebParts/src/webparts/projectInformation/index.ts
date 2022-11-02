@@ -87,6 +87,9 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<
                 PropertyPaneToggle('hideParentProjects', {
                   label: strings.HideParentProjectsLabel
                 }),
+                PropertyPaneToggle('hideStatusReport', {
+                  label: strings.HideStatusReportLabel
+                }),
                 PropertyPaneToggle('useFramelessButtons', {
                   label: strings.UseFramelessButtonsLabel
                 })
