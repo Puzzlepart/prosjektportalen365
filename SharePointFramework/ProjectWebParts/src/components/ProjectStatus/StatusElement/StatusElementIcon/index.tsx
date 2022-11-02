@@ -1,8 +1,8 @@
 import { Icon } from '@fluentui/react/lib/Icon'
-import { SectionContext } from 'components/ProjectStatus/Sections/context'
 import React, { FC, useContext } from 'react'
-import { IStatusElementIconProps } from './types'
+import { SectionContext } from '../../../ProjectStatus/Sections/context'
 import styles from './StatusElementIcon.module.scss'
+import { IStatusElementIconProps } from './types'
 
 export const StatusElementIcon: FC<IStatusElementIconProps> = (props) => {
   const { headerProps } = useContext(SectionContext)

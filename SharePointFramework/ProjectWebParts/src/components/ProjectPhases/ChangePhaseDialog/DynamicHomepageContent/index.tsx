@@ -1,5 +1,5 @@
 import { format, MessageBarType } from '@fluentui/react'
-import { ProjectPhasesContext } from 'components/ProjectPhases/context'
+import { ProjectPhasesContext } from '../../../ProjectPhases/context'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'

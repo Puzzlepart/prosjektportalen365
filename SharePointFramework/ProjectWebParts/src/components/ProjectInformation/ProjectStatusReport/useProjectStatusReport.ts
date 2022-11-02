@@ -1,4 +1,4 @@
-import { IProjectStatusContext } from 'components/ProjectStatus/context'
+import { IProjectStatusContext } from '../../ProjectStatus/context'
 import strings from 'ProjectWebPartsStrings'
 import { useContext } from 'react'
 import _ from 'underscore'
