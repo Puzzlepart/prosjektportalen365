@@ -10,7 +10,7 @@ try {
             fs.copyFile(configTempSrc, configSrc, () => {
                 fs.rm(configTempSrc, () => { })
             })
-        }, 2000)
+        }, 10000)
     } else {
         if (!process.env.SERVE_BUNDLE) return
         fs.copyFile(configSrc, configTempSrc, (err) => {
