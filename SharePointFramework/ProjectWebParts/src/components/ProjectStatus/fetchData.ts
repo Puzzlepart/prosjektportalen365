@@ -1,7 +1,6 @@
 import { LogLevel } from '@pnp/logging'
-import SPDataAdapter from 'data'
+import SPDataAdapter from '../../data'
 import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
-import { PortalDataService } from 'pp365-shared/lib/services'
 import strings from 'ProjectWebPartsStrings'
 import { IProjectStatusData, IProjectStatusProps } from './types'
 
@@ -20,10 +19,6 @@ export const fetchData = async (props: IProjectStatusProps): Promise<IProjectSta
         logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }
-    const portalDataService = new PortalDataService().configure({
-      urlOrWeb: props.hubSite.web,
-      siteId: props.siteId
-    })
     const [
       properties,
       reportList,
@@ -33,13 +28,14 @@ export const fetchData = async (props: IProjectStatusProps): Promise<IProjectSta
       reportFields
     ] = await Promise.all([
       SPDataAdapter.project.getPropertiesData(),
-      portalDataService.getStatusReportListProps(),
-      portalDataService.getStatusReports({
+      SPDataAdapter.portal.getStatusReportListProps(),
+      SPDataAdapter.portal.getStatusReports({
+        useCaching: false,
         publishedString: strings.GtModerationStatus_Choice_Published
       }),
-      portalDataService.getProjectStatusSections(),
-      portalDataService.getProjectColumnConfig(),
-      portalDataService.getListFields(
+      SPDataAdapter.portal.getProjectStatusSections(),
+      SPDataAdapter.portal.getProjectColumnConfig(),
+      SPDataAdapter.portal.getListFields(
         'PROJECT_STATUS',
         // eslint-disable-next-line quotes
         "Hidden eq false and Group ne 'Hidden'"

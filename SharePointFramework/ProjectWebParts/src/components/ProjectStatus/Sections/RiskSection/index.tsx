@@ -6,7 +6,7 @@ import {
   SelectionMode,
   Shimmer
 } from '@fluentui/react'
-import { ProjectStatusContext } from 'components/ProjectStatus/context'
+import { ProjectStatusContext } from '../../../ProjectStatus/context'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'

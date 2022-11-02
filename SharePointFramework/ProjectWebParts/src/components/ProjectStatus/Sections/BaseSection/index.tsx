@@ -1,5 +1,5 @@
 import { Shimmer } from '@fluentui/react'
-import { ProjectStatusContext } from 'components/ProjectStatus/context'
+import { ProjectStatusContext } from '../../../ProjectStatus/context'
 import { conditionalClassName } from 'pp365-shared/lib/util'
 import React, { FC, useContext } from 'react'
 import styles from './BaseSection.module.scss'

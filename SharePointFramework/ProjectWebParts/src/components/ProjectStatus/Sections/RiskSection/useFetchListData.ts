@@ -1,7 +1,7 @@
 import { IColumn } from '@fluentui/react'
 import { Web } from '@pnp/sp'
-import { ProjectStatusContext } from 'components/ProjectStatus/context'
-import { RiskElementModel } from 'components/RiskMatrix'
+import { ProjectStatusContext } from '../../../ProjectStatus/context'
+import { RiskElementModel } from '../../../RiskMatrix'
 import { useContext } from 'react'
 import { SectionContext } from '../context'
 

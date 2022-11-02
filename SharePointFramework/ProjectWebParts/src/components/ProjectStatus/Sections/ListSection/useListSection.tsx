@@ -1,4 +1,4 @@
-import { ProjectStatusContext } from 'components/ProjectStatus/context'
+import { ProjectStatusContext } from '../../../ProjectStatus/context'
 import { useContext, useEffect, useState } from 'react'
 import { isEmpty } from 'underscore'
 import { IListSectionData, IListSectionState } from './types'

@@ -1,5 +1,5 @@
 import { Dialog, DialogType, format } from '@fluentui/react'
-import SPDataAdapter from 'data'
+import SPDataAdapter from '../../../data'
 import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext, useEffect, useReducer } from 'react'

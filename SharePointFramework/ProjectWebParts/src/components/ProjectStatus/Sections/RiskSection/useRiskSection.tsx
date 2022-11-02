@@ -1,4 +1,4 @@
-import { ProjectStatusContext } from 'components/ProjectStatus/context'
+import { ProjectStatusContext } from '../../../ProjectStatus/context'
 import { useContext, useEffect, useState } from 'react'
 import { useFetchListData } from './useFetchListData'
 import { IRiskSectionState } from './types'

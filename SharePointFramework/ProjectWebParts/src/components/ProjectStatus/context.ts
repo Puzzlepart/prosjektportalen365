@@ -1,3 +1,4 @@
+/* eslint-disable prefer-spread */
 import { createContext } from 'react'
 import { IProjectStatusProps, IProjectStatusState } from './types'
 
