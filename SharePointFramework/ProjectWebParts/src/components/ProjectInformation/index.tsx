@@ -29,7 +29,9 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
               {props.title}
             </span>
           </div>
-          <Shimmer isDataLoaded={state.isDataLoaded} customElementsGroup={<CustomShimmerElementsGroup />}>
+          <Shimmer
+            isDataLoaded={state.isDataLoaded}
+            customElementsGroup={<CustomShimmerElementsGroup />}>
             <ProjectProperties properties={state.properties} />
             {!props.hideAllActions && state.message && <UserMessage {...state.message} />}
             <ParentProjectsList />
@@ -59,4 +61,3 @@ ProjectInformation.defaultProps = {
 
 export * from '../ProjectInformationPanel'
 export * from './types'
-

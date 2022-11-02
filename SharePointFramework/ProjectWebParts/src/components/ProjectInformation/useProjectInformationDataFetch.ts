@@ -79,23 +79,28 @@ const fetchData = async (
   props: IProjectInformationProps
 ): Promise<Partial<IProjectInformationState>> => {
   try {
-    const [columns, propertiesData, parentProjects, reports,
+    const [
+      columns,
+      propertiesData,
+      parentProjects,
+      reports,
       sections,
-      columnConfig,] = await Promise.all([
-        SPDataAdapter.portal.getProjectColumns(),
-        SPDataAdapter.project.getPropertiesData(),
-        props.page === 'Frontpage'
-          ? SPDataAdapter.portal.getParentProjects(
+      columnConfig
+    ] = await Promise.all([
+      SPDataAdapter.portal.getProjectColumns(),
+      SPDataAdapter.project.getPropertiesData(),
+      props.page === 'Frontpage'
+        ? SPDataAdapter.portal.getParentProjects(
             props.webPartContext?.pageContext?.web?.absoluteUrl,
             ProjectInformationParentProject
           )
-          : Promise.resolve([]),
-        SPDataAdapter.portal.getStatusReports({
-          publishedString: strings.GtModerationStatus_Choice_Published
-        }),
-        SPDataAdapter.portal.getProjectStatusSections(),
-        SPDataAdapter.portal.getProjectColumnConfig(),
-      ])
+        : Promise.resolve([]),
+      SPDataAdapter.portal.getStatusReports({
+        publishedString: strings.GtModerationStatus_Choice_Published
+      }),
+      SPDataAdapter.portal.getProjectStatusSections(),
+      SPDataAdapter.portal.getProjectColumnConfig()
+    ])
     const data: IProjectInformationData = {
       columns,
       parentProjects,

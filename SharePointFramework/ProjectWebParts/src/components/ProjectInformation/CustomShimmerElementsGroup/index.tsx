@@ -23,6 +23,5 @@ export const CustomShimmerElementsGroup: FC = () => {
         />
       </div>
     </div>
-
   )
 }

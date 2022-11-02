@@ -151,7 +151,9 @@ export interface IProjectInformationUrlHash {
   force: string
 }
 
-export interface IProjectInformationData extends ProjectDataService.IGetPropertiesData, Pick<IProjectStatusData, 'reports'|'sections'|'columnConfig'> {
+export interface IProjectInformationData
+  extends ProjectDataService.IGetPropertiesData,
+    Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {
   /**
    * Column configuration
    */
