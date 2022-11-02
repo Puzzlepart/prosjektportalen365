@@ -3,6 +3,9 @@ import { SectionContext } from '../Sections/context'
 import styles from './StatusElement.module.scss'
 import { IStatusElementProps } from './types'
 
+/**
+ * Component logic hook for `StatusElement`
+ */
 export function useStatusElement(props: IStatusElementProps) {
   const { headerProps } = useContext(SectionContext)
   let comment = headerProps.comment?.replace(/\n/g, '<br />')
@@ -18,5 +21,5 @@ export function useStatusElement(props: IStatusElementProps) {
       __html: comment
     }
   }
-  return { commentProps } as const
+  return { commentProps, iconSize: props.iconSize ?? headerProps.iconSize } as const
 }

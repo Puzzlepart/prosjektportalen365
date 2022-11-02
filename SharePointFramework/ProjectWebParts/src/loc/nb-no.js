@@ -1,6 +1,7 @@
 define([], function () {
   return {
-    DefaultGroupByLabel:'Standard gruppering',
+    StatusReportTruncateCommentsLabel: 'Avkort kommentarer',
+    DefaultGroupByLabel: 'Standard gruppering',
     DefaultTimeframeStartLabel: 'Standard starttdato',
     DefaultTimeframeStartValue: '{0} måneder tilbake i tid',
     DefaultTimeframeEndLabel: 'Standard sluttdato',
@@ -183,7 +184,7 @@ define([], function () {
     UseIdeaProcessingCalloutText: 'Dersom idébehandlingsfunksjonalitet brukes for synkronisering av prosjektegenskaper, må dette feltet være aktivert for å kunne synkronisere prosjektegenskaper fra \'Prosjektdata\' listen ned til prosjektet. Dersom det ligger et element i \'Prosjektdata\' listen med samme \'Områdeadresse\', vil det dukke opp en knapp for å sykronisere prosjektegenskaper. Dersom dette ikke er tilfellet, vil det ikke dukke opp noen knapp for å synkronisere prosjektegenskaper.',
     IdeaProjectDataTitle: 'Prosjektdata',
     CancelText: 'Avbryt',
-    RedoText:'Gjør om',
+    RedoText: 'Gjør om',
     SyncProjectModalTitle: 'Hent prosjektdata fra idé',
     SyncProjectModalSubText: 'Dersom du synkroniserer prosjektdata, vil alle prosjektegenskaper bli erstattet med prosjektegenskaper fra prosjektdata listen. Dette vil også synkroniseres til hubområdet. Dersom du vil fortsette, trykk \'Synkroniser\'.',
     IdeaProcessingTitle: 'Idébehandling',

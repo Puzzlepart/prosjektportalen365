@@ -1,5 +1,6 @@
 import {
   IPropertyPaneConfiguration,
+  PropertyPaneSlider,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
@@ -91,6 +92,14 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<
                       ? true
                       : this.properties.hideParentProjects
                 }),
+                PropertyPaneToggle('useFramelessButtons', {
+                  label: strings.UseFramelessButtonsLabel
+                })
+              ].filter(Boolean)
+            },
+            {
+              groupName: strings.ProjectStatusGroupName,
+              groupFields: [
                 PropertyPaneToggle('hideStatusReport', {
                   label: strings.HideStatusReportLabel,
                   checked:
@@ -98,10 +107,14 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<
                       ? true
                       : this.properties.hideStatusReport
                 }),
-                PropertyPaneToggle('useFramelessButtons', {
-                  label: strings.UseFramelessButtonsLabel
+                this.properties.hideStatusReport === false &&
+                PropertyPaneSlider('statusReportTruncateComments', {
+                  label: strings.StatusReportTruncateCommentsLabel,
+                  min: 25,
+                  max: 150,
+                  step: 5,
                 })
-              ]
+              ].filter(Boolean)
             },
             {
               groupName: strings.AdvancedGroupName,

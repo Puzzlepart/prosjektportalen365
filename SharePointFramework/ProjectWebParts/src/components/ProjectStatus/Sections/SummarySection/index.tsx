@@ -9,21 +9,24 @@ import { useCreateContextValue } from '../useCreateContextValue'
 import { ISummarySectionProps } from './types'
 import styles from './SummarySection.module.scss'
 import { conditionalClassName } from 'pp365-shared/lib/util'
+import { pick } from 'underscore'
 
 export const SummarySection: FC<ISummarySectionProps> = (props) => {
   const context = useContext(ProjectStatusContext)
   const createContextValue = useCreateContextValue({})
 
   /**
-   * Render sections
+   * Render sections where `ctxValue.headerProps.value` is set, or the `fieldName` is
+   * **GtOverallStatus**.
    */
   function renderSections() {
     return context.state.data.sections.map((sec, idx) => {
       const ctxValue = createContextValue(sec)
-      return ctxValue.headerProps.value || sec.fieldName === 'GtOverallStatus' ? (
+      const shouldRender = ctxValue.headerProps.value || sec.fieldName === 'GtOverallStatus'
+      return shouldRender ? (
         <SectionContext.Provider key={idx} value={ctxValue}>
           <div key={idx} className='ms-Grid-col ms-sm6'>
-            <StatusElement iconSize={props.iconSize} />
+            <StatusElement {...pick(props, 'iconSize', 'truncateComment')} />
           </div>
         </SectionContext.Provider>
       ) : null

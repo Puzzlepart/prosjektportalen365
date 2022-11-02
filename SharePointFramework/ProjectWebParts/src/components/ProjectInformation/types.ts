@@ -86,6 +86,11 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    * Hide latest status report
    */
   hideStatusReport?: boolean
+
+  /**
+   * Truncate status report comments to the specified length and add ellipsis (...)
+   */
+  statusReportTruncateComments?: number
 }
 
 export interface IProjectInformationState
