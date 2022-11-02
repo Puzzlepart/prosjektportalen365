@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Commands } from './Commands'
 import { ProjectStatusContext } from './context'
-import { useProjectStatus } from "./useProjectStatus"
+import { useProjectStatus } from './useProjectStatus'
 import { Header } from './Header'
 import styles from './ProjectStatus.module.scss'
 import { Sections } from './Sections'

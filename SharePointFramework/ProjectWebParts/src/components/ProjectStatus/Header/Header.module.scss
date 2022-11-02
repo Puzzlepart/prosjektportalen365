@@ -3,7 +3,7 @@
 .root {
   @include ms-Grid-col;
   @include ms-sm12;
-  padding: 15px 0 25px 0 !important;
+  padding: 15px 0 25px 0;
   
   .title {
     font-size: 28px;
