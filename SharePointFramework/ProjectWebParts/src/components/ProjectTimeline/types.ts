@@ -1,6 +1,8 @@
+import { IColumn } from '@fluentui/react'
 import { TypedHash } from '@pnp/common'
 import * as moment from 'moment'
 import { IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
+import { TimelineConfigurationListModel } from 'pp365-portfoliowebparts/lib/models'
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import * as ProjectDataService from 'pp365-shared/lib/services/ProjectDataService'
 import { IEntityField } from 'sp-entityportal-service'
@@ -43,7 +45,7 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<ITimel
   /**
    * Active filters
    */
-  activeFilters: { [key: string]: string[] }
+  activeFilters: Record<string, string[]>
 
   /**
    * Filtered data
@@ -53,7 +55,7 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<ITimel
   /**
    * Timeline Configuration
    */
-  timelineConfiguration?: any
+  timelineConfig?: TimelineConfigurationListModel[]
 
   /**
    * Error
@@ -75,8 +77,8 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<ITimel
 export interface ITimelineData {
   items: ITimelineItem[]
   groups: ITimelineGroup[]
-  timelineListItems?: any[]
-  timelineColumns?: any[]
+  listItems?: Record<string, any>[]
+  listColumns?: IColumn[]
 }
 
 export enum TimelineGroupType {

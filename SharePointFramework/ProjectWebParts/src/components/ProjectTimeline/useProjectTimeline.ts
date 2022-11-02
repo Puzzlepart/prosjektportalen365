@@ -107,7 +107,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     setState({ activeFilters })
     if (state?.data?.items) {
       const filteredData = getFilteredData(state?.data)
-      const filters = getFilters(state?.timelineConfiguration, state?.data)
+      const filters = getFilters(state?.timelineConfig, state?.data)
       setState({ filteredData, filters })
     }
   }
@@ -164,7 +164,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
   useProjectTimelineDataFetch(props, state.refetch, ($) => {
     if ($.error) setState({ error: $.error, isDataLoaded: true })
     else {
-      const filters = getFilters($.timelineConfiguration, $.data)
+      const filters = getFilters($.timelineConfig, $.data)
       const filteredData = getFilteredData($.data)
       setState({ ...$, filteredData, filters, isDataLoaded: true })
     }

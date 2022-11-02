@@ -1,8 +1,11 @@
-import { format } from '@fluentui/react'
+import { format, IColumn } from '@fluentui/react'
 import { sp } from '@pnp/sp'
 import _ from 'lodash'
 import moment from 'moment'
-import { TimelineConfigurationListModel, TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
+import {
+  TimelineConfigurationListModel,
+  TimelineContentListModel
+} from 'pp365-portfoliowebparts/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { CSSProperties, useEffect } from 'react'
 import { first } from 'underscore'
@@ -27,11 +30,13 @@ const createTimelineGroups = (
   project: TimelineContentListModel,
   timelineConfiguration: TimelineConfigurationListModel[]
 ): ITimelineGroups => {
-  const projectGroups = [{
-    id: 0,
-    title: project.title,
-    type: TimelineGroupType.Project
-  }]
+  const projectGroups = [
+    {
+      id: 0,
+      title: project.title,
+      type: TimelineGroupType.Project
+    }
+  ]
 
   const categoryGroups = _.uniq(timelineConfiguration.map((config) => config.timelineCategory)).map<
     ITimelineGroup
@@ -43,15 +48,15 @@ const createTimelineGroups = (
     }
   })
 
-  const typeGroups = _.uniq(timelineConfiguration.map((config) => config.title)).map<ITimelineGroup>(
-    (type, id) => {
-      return {
-        id,
-        title: type,
-        type: TimelineGroupType.Type
-      }
+  const typeGroups = _.uniq(timelineConfiguration.map((config) => config.title)).map<
+    ITimelineGroup
+  >((type, id) => {
+    return {
+      id,
+      title: type,
+      type: TimelineGroupType.Type
     }
-  )
+  })
 
   return {
     projectGroups,
@@ -89,12 +94,16 @@ const transformItems = (
         cursor: 'auto',
         outline: 'none',
         background:
-          item.getConfig('elementType') !== strings.BarLabel ? 'transparent' : item.getConfig('hexColor', '#f35d69'),
+          item.getConfig('elementType') !== strings.BarLabel
+            ? 'transparent'
+            : item.getConfig('hexColor', '#f35d69'),
         backgroundColor:
-          item.getConfig('elementType') !== strings.BarLabel ? 'transparent' : item.getConfig('hexColor', '#f35d69')
+          item.getConfig('elementType') !== strings.BarLabel
+            ? 'transparent'
+            : item.getConfig('hexColor', '#f35d69')
       }
       const type = item.type || strings.PhaseLabel
-      const category = item.getConfig('elementType', 'Styring')
+      const category = item.getConfig('timelineCategory', 'Styring')
       const project = item.title
       let group = 0
 
@@ -121,12 +130,12 @@ const transformItems = (
         type,
         budgetTotal: item.budgetTotal,
         costsTotal: item.costsTotal,
+        category,
+        tag: item.tag,
         sortOrder: item.getConfig('sortOrder', '99'),
         hexColor: item.getConfig('hexColor'),
-        category,
         elementType: item.getConfig('elementType', strings.BarLabel),
-        filter: item.getConfig('timelineFilter'),
-        tag: item.tag
+        filter: item.getConfig('timelineFilter')
       }
       return {
         id,
@@ -160,21 +169,28 @@ const transformItems = (
   }
 }
 
-
+/**
+ * Get timeline configuration
+ *
+ * @param props Component properties for `ProjectTimeline`
+ */
 const fetchTimelineConfiguration = async (props: IProjectTimelineProps) => {
-  return (await props.hubSite.web.lists
-    .getByTitle(strings.TimelineConfigurationListName)
-    .items.select(
-      'Title',
-      'GtSortOrder',
-      'GtHexColor',
-      'GtTimelineCategory',
-      'GtElementType',
-      'GtShowElementPortfolio',
-      'GtShowElementProgram',
-      'GtTimelineFilter'
-    )
-    .getAll()).map((item) => {
+  return (
+    await props.hubSite.web.lists
+      .getByTitle(strings.TimelineConfigurationListName)
+      .items.select(
+        'Title',
+        'GtSortOrder',
+        'GtHexColor',
+        'GtTimelineCategory',
+        'GtElementType',
+        'GtShowElementPortfolio',
+        'GtShowElementProgram',
+        'GtTimelineFilter'
+      )
+      .getAll()
+  )
+    .map((item) => {
       const model = new TimelineConfigurationListModel(
         item.GtSortOrder,
         item.Title,
@@ -191,28 +207,27 @@ const fetchTimelineConfiguration = async (props: IProjectTimelineProps) => {
 }
 
 /**
- * Get timeline items and columns
+ * Fetch timeline items and columns
  *
  * @param props Component properties for `ProjectTimeline`
+ * @param timelineConfig Timeline configuration
  */
-const getTimelineData = async (props: IProjectTimelineProps) => {
+const fetchTimelineData = async (
+  props: IProjectTimelineProps,
+  timelineConfig: TimelineConfigurationListModel[]
+) => {
   let projectDeliveries = []
   try {
-    const timelineConfig = await fetchTimelineConfiguration(props)
-
     if (props.showProjectDeliveries) {
       // eslint-disable-next-line @typescript-eslint/no-extra-semi
       projectDeliveries = await sp.web.lists
-        .getByTitle(props.projectDeliveriesListName || 'Prosjektleveranser')
+        .getByTitle(props.projectDeliveriesListName)
         .items.select('Title', 'GtDeliveryDescription', 'GtDeliveryStartTime', 'GtDeliveryEndTime')
         .getAll()
 
       projectDeliveries = projectDeliveries
         .map((item) => {
-          const config = _.find(
-            timelineConfig,
-            (col) => col.title === (props.configItemTitle || 'Prosjektleveranse')
-          )
+          const config = _.find(timelineConfig, (col) => col.title === props.configItemTitle)
           return new TimelineContentListModel(
             props.siteId,
             props.webTitle,
@@ -247,62 +262,60 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
 
     const internalNames: string = await defaultViewColumns.map((col: string) => `${col}`).join(',')
 
-    let timelineContentItems = await props.hubSite.web.lists
-      .getByTitle(strings.TimelineContentListName)
-      .items.select(
-        internalNames,
-        'Id',
-        'GtTimelineTypeLookup/Title',
-        'GtSiteIdLookupId',
-        'GtSiteIdLookup/Title',
-        'GtSiteIdLookup/GtSiteId'
-      )
-      .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-      .getAll()
+    // eslint-disable-next-line prefer-const
+    let [timelineContentItems, timelineColumns] = await Promise.all([
+      props.hubSite.web.lists
+        .getByTitle(strings.TimelineContentListName)
+        .items.select(
+          internalNames,
+          'Id',
+          'GtTimelineTypeLookup/Title',
+          'GtSiteIdLookupId',
+          'GtSiteIdLookup/Title',
+          'GtSiteIdLookup/GtSiteId'
+        )
+        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+        .getAll(),
+      props.hubSite.web.lists
+        .getByTitle(strings.TimelineContentListName)
+        .fields.filter(filterString)
+        .select('InternalName', 'Title', 'TypeAsString')
+        .top(500)
+        .get()
+    ])
 
     let timelineListItems = timelineContentItems.filter(
       (item) => item.GtSiteIdLookup.Title === props.webTitle
     )
 
-    const timelineColumns = await props.hubSite.web.lists
-      .getByTitle(strings.TimelineContentListName)
-      .fields.filter(filterString)
-      .select('InternalName', 'Title', 'TypeAsString')
-      .top(500)
-      .get()
-
-    const columns: any[] = timelineColumns
+    const columns = timelineColumns
       .filter((column) => column.InternalName !== 'GtSiteIdLookup')
-      .map((column) => {
-        return {
-          key: column.InternalName,
-          name: column.Title,
-          fieldName: column.InternalName,
-          data: { type: column.TypeAsString },
-          minWidth: 150,
-          maxWidth: 200,
-          isResizable: true
-        }
-      })
+      .map<IColumn>((column) => ({
+        key: column.InternalName,
+        name: column.Title,
+        fieldName: column.InternalName,
+        data: { type: column.TypeAsString },
+        minWidth: 150,
+        maxWidth: 200,
+        isResizable: true
+      }))
 
-    timelineListItems = timelineListItems.map((item) => {
-      return {
-        ...item,
-        EditFormUrl: [
-          `${props.hubSite.url}`,
-          `/Lists/${strings.TimelineContentListName}/EditForm.aspx`,
-          '?ID=',
-          item.Id,
-          '&Source=',
-          encodeURIComponent(window.location.href)
-        ].join('')
-      }
-    })
+    timelineListItems = timelineListItems.map((item) => ({
+      ...item,
+      EditFormUrl: [
+        `${props.hubSite.url}`,
+        `/Lists/${strings.TimelineContentListName}/EditForm.aspx`,
+        '?ID=',
+        item.Id,
+        '&Source=',
+        encodeURIComponent(window.location.href)
+      ].join('')
+    }))
 
     timelineContentItems = timelineContentItems
       .filter((item) => item.GtSiteIdLookup.Title === props.webTitle)
       .map((item) => {
-        const type = item.GtTimelineTypeLookup && item.GtTimelineTypeLookup.Title
+        const type = item.GtTimelineTypeLookup?.Title
         const config = _.find(timelineConfig, (col) => col.title === type)
         return new TimelineContentListModel(
           item.GtSiteIdLookup?.GtSiteId,
@@ -321,9 +334,9 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
 
     timelineContentItems = [...timelineContentItems, ...projectDeliveries]
 
-    return [timelineContentItems, timelineListItems, columns, timelineConfig]
+    return { timelineContentItems, timelineListItems, columns, timelineConfig } as const
   } catch (error) {
-    return []
+    return null
   }
 }
 
@@ -331,17 +344,18 @@ const getTimelineData = async (props: IProjectTimelineProps) => {
  * Fetch project data
  *
  * @param props Component properties for `ProjectTimeline`
+ * @param timelineConfig Timeline configuration
  */
-const fetchProjectData = async (props: IProjectTimelineProps): Promise<TimelineContentListModel> => {
+const fetchProjectData = async (
+  props: IProjectTimelineProps,
+  timelineConfig: TimelineConfigurationListModel[]
+): Promise<TimelineContentListModel> => {
   try {
-    const [projectData, timelineConfig] = await Promise.all([
-      props.hubSite.web.lists
-        .getByTitle(strings.ProjectsListName)
-        .items.select('Id', 'GtStartDate', 'GtEndDate')
-        .filter(`GtSiteId eq '${props.siteId}'`)
-        .getAll(),
-      fetchTimelineConfiguration(props)
-    ])
+    const projectData = await props.hubSite.web.lists
+      .getByTitle(strings.ProjectsListName)
+      .items.select('Id', 'GtStartDate', 'GtEndDate')
+      .filter(`GtSiteId eq '${props.siteId}'`)
+      .getAll()
 
     const config = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
     return new TimelineContentListModel(
@@ -363,19 +377,16 @@ const fetchProjectData = async (props: IProjectTimelineProps): Promise<TimelineC
  * Get selected groups based on `defaultGroupBy`
  *
  * @param groups Timeline groups
- * @param defaultGroupBy Default groups
+ * @param defaultGroupBy Default group by
  */
 const getSelectedGroups = (groups: ITimelineGroups, defaultGroupBy: string) => {
   switch (defaultGroupBy) {
-    case strings.CategoryFieldLabel: {
+    case strings.CategoryFieldLabel:
       return groups.categoryGroups
-    }
-    case strings.TypeLabel: {
+    case strings.TypeLabel:
       return groups.typeGroups
-    }
-    default: {
+    default:
       return groups.projectGroups
-    }
   }
 }
 
@@ -388,29 +399,29 @@ const getSelectedGroups = (groups: ITimelineGroups, defaultGroupBy: string) => {
  */
 const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProjectTimelineState>> => {
   try {
-    const project = await fetchProjectData(props)
-
-    const [
-      timelineContentItems,
-      timelineListItems,
-      timelineColumns,
-      timelineConfiguration
-    ] = await getTimelineData(props)
-    const timelineItems = [...timelineContentItems, ...[project]]
-    const groups = createTimelineGroups(project, timelineConfiguration)
+    const timelineConfig = await fetchTimelineConfiguration(props)
+    const [timelineData, project] = await Promise.all([
+      fetchTimelineData(props, timelineConfig),
+      fetchProjectData(props, timelineConfig)
+    ])
+    const groups = createTimelineGroups(project, timelineConfig)
     const selectedGroups = getSelectedGroups(groups, props.defaultGroupBy)
-    const items = transformItems(timelineItems, selectedGroups, props.defaultGroupBy)
+    const items = transformItems(
+      [...timelineData.timelineContentItems, project],
+      selectedGroups,
+      props.defaultGroupBy
+    )
 
     return {
       data: {
         items,
         groups: selectedGroups,
-        timelineListItems,
-        timelineColumns
+        listItems: timelineData.timelineListItems,
+        listColumns: timelineData.columns
       },
-      timelineConfiguration,
+      timelineConfig,
       groups
-    }
+    } as const
   } catch (error) {
     return { error }
   }

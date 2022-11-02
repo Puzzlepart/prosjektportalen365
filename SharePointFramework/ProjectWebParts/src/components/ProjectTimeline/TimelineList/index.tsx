@@ -21,8 +21,8 @@ export const TimelineList: FC = () => {
           </div>
         )}
         <DetailsList
-          columns={context.state.data.timelineColumns}
-          items={context.state.data.timelineListItems}
+          columns={context.state.data.listColumns}
+          items={context.state.data.listItems}
           onRenderItemColumn={onRenderItemColumn}
           selection={selection}
           selectionMode={SelectionMode.single}

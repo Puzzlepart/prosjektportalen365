@@ -173,7 +173,7 @@ export function useTimelineList() {
    * @param column Column
    */
   const onColumnHeaderClick = (_event: React.MouseEvent<HTMLElement>, column: IColumn): void => {
-    const newColumns = context.state.data.timelineColumns.map((col: IColumn) => {
+    const newColumns = context.state.data.listColumns.map((col: IColumn) => {
       if (col.key === column.key) {
         col.isSortedDescending = !col.isSortedDescending
         col.isSorted = true
@@ -184,12 +184,12 @@ export function useTimelineList() {
       return col
     })
     const newItems = copyAndSort(
-      context.state.data.timelineListItems,
+      context.state.data.listItems,
       column.fieldName,
       column.isSortedDescending
     )
     context.setState({
-      data: { ...context.state.data, timelineColumns: newColumns, timelineListItems: newItems }
+      data: { ...context.state.data, listColumns: newColumns, listItems: newItems }
     })
   }
 
