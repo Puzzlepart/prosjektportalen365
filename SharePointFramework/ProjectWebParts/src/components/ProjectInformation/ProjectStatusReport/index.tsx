@@ -16,6 +16,7 @@ export const ProjectStatusReport: FC = () => {
           transparent
           noPadding
           noMargin
+          iconsOnly={context.props.statusReportShowOnlyIcons}
           iconSize={18}
           truncateComment={context.props.statusReportTruncateComments}
         />

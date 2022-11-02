@@ -7,7 +7,11 @@ import {
 import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
 import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect'
 import { PropertyFieldToggleWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldToggleWithCallout'
-import { IProjectInformationProps, ProjectInformation } from 'components/ProjectInformation'
+import {
+  IProjectInformationProps,
+  ProjectInformation,
+  ProjectInformationDefaultProps
+} from 'components/ProjectInformation'
 import * as strings from 'ProjectWebPartsStrings'
 import React from 'react'
 import { BaseProjectWebPart } from '../@baseProjectWebPart'
@@ -33,6 +37,7 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    const propertiesWithDefaults = { ...ProjectInformationDefaultProps, ...this.properties }
     return {
       pages: [
         {
@@ -82,42 +87,44 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<
                   ],
                   selectedKeys: this.properties.hideActions ?? []
                 }),
+                !this.properties.hideAllActions &&
+                  PropertyPaneToggle('useFramelessButtons', {
+                    label: strings.UseFramelessButtonsLabel
+                  }),
                 PropertyPaneTextField('adminPageLink', {
                   label: strings.AdminPageLinkLabel
-                }),
-                PropertyPaneToggle('hideParentProjects', {
-                  label: strings.HideParentProjectsLabel,
-                  checked:
-                    this.properties.hideParentProjects === undefined
-                      ? true
-                      : this.properties.hideParentProjects
-                }),
-                PropertyPaneToggle('useFramelessButtons', {
-                  label: strings.UseFramelessButtonsLabel
                 })
               ].filter(Boolean)
+            },
+            {
+              groupName: strings.ParentProjectsGroupName,
+              groupFields: [
+                PropertyPaneToggle('hideParentProjects', {
+                  label: strings.HideParentProjectsLabel,
+                  checked: propertiesWithDefaults.hideParentProjects
+                })
+              ]
             },
             {
               groupName: strings.ProjectStatusGroupName,
               groupFields: [
                 PropertyPaneToggle('hideStatusReport', {
                   label: strings.HideStatusReportLabel,
-                  checked:
-                    this.properties.hideStatusReport === undefined
-                      ? true
-                      : this.properties.hideStatusReport
+                  checked: propertiesWithDefaults.hideStatusReport
                 }),
-                this.properties.hideStatusReport === false &&
-                PropertyPaneSlider('statusReportTruncateComments', {
-                  label: strings.StatusReportTruncateCommentsLabel,
-                  min: 25,
-                  max: 150,
-                  step: 5,
-                }),
-                this.properties.hideStatusReport === false &&
-                PropertyPaneToggle('statusReportShowOnlyIcons', {
-                  label: strings.StatusReportTruncateCommentsLabel
-                })
+                !propertiesWithDefaults.hideStatusReport &&
+                  PropertyPaneToggle('statusReportShowOnlyIcons', {
+                    label: strings.StatusReportShowOnlyIconsLabel,
+                    checked: propertiesWithDefaults.statusReportShowOnlyIcons
+                  }),
+                !propertiesWithDefaults.hideStatusReport &&
+                  !propertiesWithDefaults.statusReportShowOnlyIcons &&
+                  PropertyPaneSlider('statusReportTruncateComments', {
+                    label: strings.StatusReportTruncateCommentsLabel,
+                    min: 25,
+                    max: 150,
+                    step: 5
+                  })
               ].filter(Boolean)
             },
             {

@@ -13,7 +13,7 @@ import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
 import { ProjectStatusReport } from './ProjectStatusReport'
 import { SyncProjectDialog } from './SyncProjectDialog'
-import { IProjectInformationProps } from './types'
+import { IProjectInformationProps, ProjectInformationDefaultProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
 
 export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
@@ -49,15 +49,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
   )
 }
 
-ProjectInformation.defaultProps = {
-  page: 'Frontpage',
-  customActions: [],
-  hideActions: [],
-  hideAllActions: false,
-  useFramelessButtons: false,
-  hideStatusReport: true,
-  hideParentProjects: true
-}
+ProjectInformation.defaultProps = ProjectInformationDefaultProps
 
 export * from '../ProjectInformationPanel'
 export * from './types'

@@ -8,7 +8,7 @@ import { SectionContext } from '../context'
 import { useCreateContextValue } from '../useCreateContextValue'
 import { ISummarySectionProps } from './types'
 import styles from './SummarySection.module.scss'
-import { conditionalClassName } from 'pp365-shared/lib/util'
+import { conditionalClassName as className } from 'pp365-shared/lib/util'
 import { pick } from 'underscore'
 
 export const SummarySection: FC<ISummarySectionProps> = (props) => {
@@ -16,17 +16,22 @@ export const SummarySection: FC<ISummarySectionProps> = (props) => {
   const createContextValue = useCreateContextValue({})
 
   /**
-   * Render sections where `ctxValue.headerProps.value` is set, or the `fieldName` is
-   * **GtOverallStatus**.
+   * Render status elements where `ctxValue.headerProps.value` is set,
+   * or the `fieldName` is **GtOverallStatus**.
    */
-  function renderSections() {
+  function renderStatusElements() {
     return context.state.data.sections.map((sec, idx) => {
       const ctxValue = createContextValue(sec)
       const shouldRender = ctxValue.headerProps.value || sec.fieldName === 'GtOverallStatus'
       return shouldRender ? (
         <SectionContext.Provider key={idx} value={ctxValue}>
-          <div key={idx} className='ms-Grid-col ms-sm6'>
-            <StatusElement {...pick(props, 'iconSize', 'truncateComment')} />
+          <div
+            key={idx}
+            className={className([
+              styles.statusElement,
+              props.iconsOnly ? styles.iconsOnly : styles.halfWidth
+            ])}>
+            <StatusElement {...pick(props, 'iconSize', 'truncateComment', 'iconsOnly')} />
           </div>
         </SectionContext.Provider>
       ) : null
@@ -51,12 +56,12 @@ export const SummarySection: FC<ISummarySectionProps> = (props) => {
           </div>
         )}
         <div
-          className={conditionalClassName([
-            styles.sections,
+          className={className([
+            styles.statusElements,
             !props.showProjectInformation && styles.fullWidth
           ])}>
-          <div className='ms-Grid' dir='ltr'>
-            <div className='ms-Grid-row'>{renderSections()}</div>
+          <div className={styles.container} dir='ltr'>
+            <div className={styles.row}>{renderStatusElements()}</div>
           </div>
         </div>
       </div>
