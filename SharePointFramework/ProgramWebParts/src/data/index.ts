@@ -15,8 +15,8 @@ import {
   BenefitMeasurement,
   BenefitMeasurementIndicator,
   ProjectListModel,
-  TimelineConfigurationListModel,
-  TimelineContentListModel
+  TimelineConfigurationModel,
+  TimelineContentModel
 } from 'pp365-portfoliowebparts/lib/models'
 import { ISPDataAdapterBaseConfiguration, SPDataAdapterBase } from 'pp365-shared/lib/data'
 import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
@@ -330,7 +330,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    * @param _timelineConfig Timeline config (not in use)
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async fetchTimelineProjectData(_timelineConfig: TimelineConfigurationListModel[]) {
+  public async fetchTimelineProjectData(_timelineConfig: TimelineConfigurationModel[]) {
     return await Promise.resolve({})
   }
 
@@ -369,14 +369,14 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   }
 
   /**
-   *  Fetches items from timelinecontent list
+   *  Fetches items from timeline content list
    *
    * * Fetching list items
-   * * Maps the items to TimelineContentListModel
+   * * Maps the items to `TimelineContentModel`
    *
    * @description Used in `ProjectTimeline`
    */
-  public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationListModel[]) {
+  public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
     const [timelineItems] = await Promise.all([
       this.portal.web.lists
         .getByTitle(strings.TimelineContentListName)
@@ -411,26 +411,18 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
           )
         ) {
           if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
-            const model = new TimelineContentListModel(
+           return new TimelineContentModel(
               item.GtSiteIdLookup?.GtSiteId,
               item.GtSiteIdLookup?.Title,
               item.Title,
-              config && config.title,
-              config && config.sortOrder,
-              config && config.hexColor,
-              config && config.timelineCategory,
-              config && config.elementType,
-              config && config.showElementPortfolio,
-              config && config.showElementProgram,
-              config && config.timelineFilter,
+               config?.title,
               item.GtStartDate,
               item.GtEndDate,
               item.GtDescription,
               item.GtTag,
               item.GtBudgetTotal,
               item.GtCostsTotal
-            )
-            return model
+            ).usingConfig(config)
           }
         }
       })
@@ -459,7 +451,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
 
     return timelineConfig
       .map((item) => {
-        const model = new TimelineConfigurationListModel(
+        const model = new TimelineConfigurationModel(
           item.GtSortOrder,
           item.Title,
           item.GtHexColor,
@@ -482,7 +474,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   public async fetchTimelineAggregatedContent(
     configItemTitle: string,
     dataSourceName: string,
-    timelineConfig: TimelineConfigurationListModel[]
+    timelineConfig: TimelineConfigurationModel[]
   ) {
     const config = timelineConfig.find(
       (col) => col.title === (configItemTitle || 'Prosjektleveranse')
@@ -510,7 +502,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
 
       return projectDeliveries
         .map((item) => {
-          const model = new TimelineContentListModel(
+          const model = new TimelineContentModel(
             item.SiteId,
             item.SiteTitle,
             item.Title,
