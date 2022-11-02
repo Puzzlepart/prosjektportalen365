@@ -28,15 +28,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
               {props.title}
             </span>
           </div>
-          {!state.isDataLoaded ? (
-            <>
-              <Shimmer width='65%' className={styles.shimmer} />
-              <Shimmer width='65%' className={styles.shimmer} />
-              <Shimmer width='50%' className={styles.shimmer} />
-              <Shimmer width='45%' className={styles.shimmer} />
-            </>
-          ) : (
-            <div>
+            <Shimmer isDataLoaded={state.isDataLoaded}>
               <ProjectProperties properties={state.properties} />
               {!props.hideAllActions && state.message && <UserMessage {...state.message} />}
               <ParentProjectsList />
@@ -54,8 +46,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
               {state.confirmActionProps && <ConfirmDialog {...state.confirmActionProps} />}
               {state.displayCreateParentModal && <CreateParentModal />}
               {state.displaySyncProjectModal && <SyncProjectModal />}
-            </div>
-          )}
+            </Shimmer>
         </div>
       </div>
     </ProjectInformationContext.Provider>
@@ -67,7 +58,9 @@ ProjectInformation.defaultProps = {
   customActions: [],
   hideActions: [],
   hideAllActions: false,
-  useFramelessButtons: false
+  useFramelessButtons: false,
+  hideStatusReport: true,
+  hideParentProjects: true
 }
 
 export { ProjectInformationModal } from '../ProjectInformationModal'

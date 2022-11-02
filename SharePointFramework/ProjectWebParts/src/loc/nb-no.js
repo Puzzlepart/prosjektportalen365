@@ -9,6 +9,7 @@ define([], function () {
     CreateParentModalSubText: 'Ønsker du å gjøre om området til et overordnet område? Denne handlingen er ikke reversibel.',
     UseFramelessButtonsLabel: 'Rammeløse knapper',
     HideParentProjectsLabel: 'Skjul overordnede prosjekter',
+    HideStatusReportLabel: 'Skjul siste statusrapport',
     HideActionsLabel: 'Skjul knapper',
     HideAllActionsLabel: 'Skjul alle knapper',
     ShowSubTextFieldLabel: 'Vis fasetekst',
