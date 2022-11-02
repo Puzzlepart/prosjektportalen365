@@ -4,11 +4,11 @@ import { IGetPropertiesData } from 'pp365-shared/lib/services'
 import { PageContext } from '@microsoft/sp-page-context'
 
 export interface IProjectStatusProps extends IBaseWebPartComponentProps {
-  riskMatrixCalloutTemplate: string
+  riskMatrixCalloutTemplate?: string
   riskMatrixWidth?: number | string
   riskMatrixHeight?: number | string
   fieldWidth?: number
-  pageContext: PageContext
+  pageContext?: PageContext
 }
 
 export interface IProjectStatusState extends IBaseWebPartComponentState<IProjectStatusData> {

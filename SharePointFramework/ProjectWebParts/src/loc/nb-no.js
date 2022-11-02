@@ -1,6 +1,5 @@
 define([], function () {
   return {
-    ProjectStatusReportHeaderText:'Siste publiserte statusrapport',
     DefaultGroupByLabel:'Standard gruppering',
     DefaultTimeframeStartLabel: 'Standard starttdato',
     DefaultTimeframeStartValue: '{0} måneder tilbake i tid',
@@ -34,6 +33,7 @@ define([], function () {
     DocumentsListName: 'Dokumenter',
     EditProjectInformationText: 'Rediger prosjektinformasjon',
     ShowAllProjectInformationText: 'Vis all prosjektinformasjon',
+    ProjectInformationStatusReportHeaderText: 'Statusrapport publisert',
     EditReportButtonText: 'Rediger status',
     PublishReportButtonText: 'Publiser',
     GetSnapshotButtonText: 'Åpne som øyeblikksbilde',

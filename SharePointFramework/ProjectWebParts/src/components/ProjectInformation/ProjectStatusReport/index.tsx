@@ -1,25 +1,16 @@
 import { ProjectStatusContext } from 'components/ProjectStatus/context'
-import { SummarySection } from 'components/ProjectStatus/Sections/SummarySection'
-import strings from 'ProjectWebPartsStrings'
-import React, { FC, useContext } from 'react'
-import _ from 'underscore'
-import { ProjectInformationContext } from '../context'
+import React, { FC } from 'react'
+import { Header } from '../../ProjectStatus/Header'
+import { SummarySection } from '../../ProjectStatus/Sections/SummarySection'
 import styles from './ProjectStatusReport.module.scss'
+import { useProjectStatusReport } from './useProjectStatusReport'
 
 export const ProjectStatusReport: FC = () => {
-  const context = useContext(ProjectInformationContext)
+  const { projectStatusContext } = useProjectStatusReport()
   return (
     <div className={styles.root}>
-      <div className={styles.header}>
-        <span role='heading' aria-level={3}>
-          {strings.ProjectStatusReportHeaderText}
-        </span>
-      </div>
-      <ProjectStatusContext.Provider
-        value={{
-          props: null,
-          state: { ...context.state, selectedReport: _.first(context.state.data.reports) }
-        }}>
+      <ProjectStatusContext.Provider value={projectStatusContext}>
+        <Header className={styles.header} />
         <SummarySection transparent noPadding noMargin iconSize={18} />
       </ProjectStatusContext.Provider>
     </div>
