@@ -1,8 +1,9 @@
-import { IBaseComponentProps } from '../types'
+import { IShimmerProps } from '@fluentui/react'
 import * as moment from 'moment'
-import { ITimelineData, ITimelineGroups, ITimelineItem } from '../../interfaces'
-import { ProjectListModel } from '../../models'
 import { IFilterProps } from '../../components/FilterPanel/Filter/types'
+import { ITimelineData, ITimelineItem } from '../../interfaces'
+import { ProjectListModel, TimelineConfigurationModel } from '../../models'
+import { IBaseComponentProps } from '../types'
 
 export interface IProjectTimelineProps extends IBaseComponentProps {
   /**
@@ -36,22 +37,7 @@ export interface IProjectTimelineProps extends IBaseComponentProps {
   configItemTitle?: string
 }
 
-export interface IProjectTimelineState {
-  /**
-   * Whether the component is loading
-   */
-  loading: boolean
-
-  /**
-   * Groups
-   */
-  groups?: ITimelineGroups
-
-  /**
-   * Show filter panel
-   */
-  showFilterPanel?: boolean
-
+export interface IProjectTimelineState extends Pick<IShimmerProps, 'isDataLoaded'> {
   /**
    * Filters
    */
@@ -78,9 +64,9 @@ export interface IProjectTimelineState {
   filteredData?: ITimelineData
 
   /**
-   * Timeline Configuration
+   * Timeline configuration
    */
-  timelineConfiguration?: any
+  timelineConfig?: TimelineConfigurationModel[]
 
   /**
    * Error

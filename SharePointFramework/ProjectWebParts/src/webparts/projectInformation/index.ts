@@ -1,5 +1,6 @@
 import {
   IPropertyPaneConfiguration,
+  PropertyPaneSlider,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
@@ -32,6 +33,7 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    const propertiesWithDefaults = { ...ProjectInformation.defaultProps, ...this.properties }
     return {
       pages: [
         {
@@ -81,16 +83,45 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<
                   ],
                   selectedKeys: this.properties.hideActions ?? []
                 }),
+                !this.properties.hideAllActions &&
+                  PropertyPaneToggle('useFramelessButtons', {
+                    label: strings.UseFramelessButtonsLabel
+                  }),
                 PropertyPaneTextField('adminPageLink', {
                   label: strings.AdminPageLinkLabel
-                }),
+                })
+              ].filter(Boolean)
+            },
+            {
+              groupName: strings.ParentProjectsGroupName,
+              groupFields: [
                 PropertyPaneToggle('hideParentProjects', {
-                  label: strings.HideParentProjectsLabel
-                }),
-                PropertyPaneToggle('useFramelessButtons', {
-                  label: strings.UseFramelessButtonsLabel
+                  label: strings.HideParentProjectsLabel,
+                  checked: propertiesWithDefaults.hideParentProjects
                 })
               ]
+            },
+            {
+              groupName: strings.ProjectStatusGroupName,
+              groupFields: [
+                PropertyPaneToggle('hideStatusReport', {
+                  label: strings.HideStatusReportLabel,
+                  checked: propertiesWithDefaults.hideStatusReport
+                }),
+                !propertiesWithDefaults.hideStatusReport &&
+                  PropertyPaneToggle('statusReportShowOnlyIcons', {
+                    label: strings.StatusReportShowOnlyIconsLabel,
+                    checked: propertiesWithDefaults.statusReportShowOnlyIcons
+                  }),
+                !propertiesWithDefaults.hideStatusReport &&
+                  !propertiesWithDefaults.statusReportShowOnlyIcons &&
+                  PropertyPaneSlider('statusReportTruncateComments', {
+                    label: strings.StatusReportTruncateCommentsLabel,
+                    min: 25,
+                    max: 150,
+                    step: 5
+                  })
+              ].filter(Boolean)
             },
             {
               groupName: strings.AdvancedGroupName,

@@ -1,17 +1,18 @@
-import { Panel, PanelType } from '@fluentui/react/lib/Panel'
 import { Shimmer } from '@fluentui/react/lib/Shimmer'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
-import * as strings from 'ProjectWebPartsStrings'
 import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
 import React, { FC } from 'react'
 import { ProgressDialog } from '../ProgressDialog'
 import { Actions } from './Actions'
+import { AllPropertiesPanel } from './AllPropertiesPanel'
 import { ProjectInformationContext } from './context'
-import { CreateParentModal } from './CreateParentModal'
+import { CreateParentDialog } from './CreateParentDialog'
+import { CustomShimmerElementsGroup } from './CustomShimmerElementsGroup'
 import { ParentProjectsList } from './ParentProjectsList'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
-import { SyncProjectModal } from './SyncProjectModal'
+import { ProjectStatusReport } from './ProjectStatusReport'
+import { SyncProjectDialog } from './SyncProjectDialog'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
 
@@ -28,36 +29,22 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
               {props.title}
             </span>
           </div>
-          {!state.isDataLoaded ? (
-            <>
-              <Shimmer width='65%' className={styles.shimmer} />
-              <Shimmer width='65%' className={styles.shimmer} />
-              <Shimmer width='50%' className={styles.shimmer} />
-              <Shimmer width='45%' className={styles.shimmer} />
-            </>
-          ) : (
-            <div>
-              <ProjectProperties properties={state.properties} />
-              {!props.hideAllActions && state.message && <UserMessage {...state.message} />}
-              <ParentProjectsList />
-              <Actions />
-              <ProgressDialog {...state.progress} />
-              <Panel
-                type={PanelType.medium}
-                headerText={strings.ProjectPropertiesListName}
-                isOpen={state.showAllPropertiesPanel}
-                onDismiss={() => setState({ showAllPropertiesPanel: false })}
-                isLightDismiss
-                closeButtonAriaLabel={strings.CloseText}>
-                <ProjectProperties properties={state.allProperties} />
-              </Panel>
-              {state.confirmActionProps && <ConfirmDialog {...state.confirmActionProps} />}
-              {state.displayCreateParentModal && <CreateParentModal />}
-              {state.displaySyncProjectModal && <SyncProjectModal />}
-            </div>
-          )}
+          <Shimmer
+            isDataLoaded={state.isDataLoaded}
+            customElementsGroup={<CustomShimmerElementsGroup />}>
+            <ProjectProperties properties={state.properties} />
+            {!props.hideAllActions && state.message && <UserMessage {...state.message} />}
+            <Actions />
+            <ParentProjectsList />
+            <ProjectStatusReport />
+            <ProgressDialog {...state.progress} />
+            <AllPropertiesPanel />
+            <CreateParentDialog />
+            <SyncProjectDialog />
+          </Shimmer>
         </div>
       </div>
+      {state.confirmActionProps && <ConfirmDialog {...state.confirmActionProps} />}
     </ProjectInformationContext.Provider>
   )
 }
@@ -67,8 +54,11 @@ ProjectInformation.defaultProps = {
   customActions: [],
   hideActions: [],
   hideAllActions: false,
-  useFramelessButtons: false
+  useFramelessButtons: false,
+  hideStatusReport: true,
+  hideParentProjects: true,
+  statusReportShowOnlyIcons: true
 }
 
-export { ProjectInformationModal } from '../ProjectInformationModal'
+export * from '../ProjectInformationPanel'
 export * from './types'

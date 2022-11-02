@@ -20,14 +20,14 @@ export const useActions = () => {
   ]
   const viewVersionHistoryAction: ActionType = [
     strings.ViewVersionHistoryText,
-    context.state.data.versionHistoryUrl,
+    context.state.data?.versionHistoryUrl,
     'History',
     false,
     !context.state.userHasEditPermission
   ]
   const editProjectInformationAction: ActionType = [
     strings.EditProjectInformationText,
-    context.state.data.editFormUrl,
+    context.state.data?.editFormUrl,
     'Edit',
     false,
     !context.state.userHasEditPermission
@@ -51,7 +51,7 @@ export const useActions = () => {
   const transformToParentProject: ActionType = [
     strings.CreateParentProjectLabel,
     () => {
-      context.setState({ displayCreateParentModal: true })
+      context.setState({ displayCreateParentDialog: true })
     },
     'Org',
     false,
@@ -60,7 +60,7 @@ export const useActions = () => {
   const syncProjectPropertiesAction: ActionType = [
     strings.SyncProjectPropertiesText,
     () => {
-      context.setState({ displaySyncProjectModal: true })
+      context.setState({ displaySyncProjectDialog: true })
     },
     'Sync',
     false,

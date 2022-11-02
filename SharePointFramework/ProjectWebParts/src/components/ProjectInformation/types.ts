@@ -1,13 +1,14 @@
 import { TypedHash } from '@pnp/common'
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
 import { ProjectColumn } from 'pp365-shared/lib/models'
-import { IProgressDialogProps } from 'components/ProgressDialog/types'
+import { IProgressDialogProps } from '../ProgressDialog/types'
 import { IUserMessageProps } from 'pp365-shared/lib/components/UserMessage'
 import { IEntityField } from 'sp-entityportal-service'
 import * as ProjectDataService from 'pp365-shared/lib/services/ProjectDataService'
 import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 import { ActionType } from './Actions/types'
 import { Web } from '@pnp/sp'
+import { IProjectStatusData } from '../ProjectStatus'
 
 export class ProjectInformationParentProject {
   public title: string
@@ -80,6 +81,21 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    * Hide parent projects section
    */
   hideParentProjects?: boolean
+
+  /**
+   * Hide latest status report
+   */
+  hideStatusReport?: boolean
+
+  /**
+   * Truncate status report comments to the specified length and add ellipsis (...)
+   */
+  statusReportTruncateComments?: number
+
+  /**
+   * Show only icons for latest status report
+   */
+  statusReportShowOnlyIcons?: boolean
 }
 
 export interface IProjectInformationState
@@ -110,19 +126,19 @@ export interface IProjectInformationState
   confirmActionProps?: any
 
   /**
-   * Display CreateParentModal
-   */
-  displayCreateParentModal?: boolean
-
-  /**
    * Is the project a parent project
    */
   isParentProject?: boolean
 
   /**
-   * Display SyncProjectModal
+   *  Display `<CreateParentDialog />`
    */
-  displaySyncProjectModal?: boolean
+  displayCreateParentDialog?: boolean
+
+  /**
+   * Display `<SyncProjectDialog />`
+   */
+  displaySyncProjectDialog?: boolean
 
   /**
    * Show project properties panel
@@ -145,7 +161,9 @@ export interface IProjectInformationUrlHash {
   force: string
 }
 
-export interface IProjectInformationData extends ProjectDataService.IGetPropertiesData {
+export interface IProjectInformationData
+  extends ProjectDataService.IGetPropertiesData,
+    Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {
   /**
    * Column configuration
    */

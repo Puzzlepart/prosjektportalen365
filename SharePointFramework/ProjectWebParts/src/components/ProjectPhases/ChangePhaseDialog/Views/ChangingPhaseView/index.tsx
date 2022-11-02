@@ -1,5 +1,5 @@
 import { format, ProgressIndicator } from '@fluentui/react'
-import { ProjectPhasesContext } from 'components/ProjectPhases/context'
+import { ProjectPhasesContext } from '../../../../ProjectPhases/context'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
 

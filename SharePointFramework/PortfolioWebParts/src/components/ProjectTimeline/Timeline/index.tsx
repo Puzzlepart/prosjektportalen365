@@ -1,148 +1,43 @@
-import { ITimelineItem, ITimelineGroup, TimelineGroupType } from '../../../interfaces'
-import ReactTimeline, {
-  ReactCalendarGroupRendererProps,
-  ReactCalendarItemRendererProps,
-  TimelineMarkers,
-  TodayMarker
-} from 'react-calendar-timeline'
-import 'react-calendar-timeline/lib/Timeline.css'
-import * as strings from 'PortfolioWebPartsStrings'
-import styles from './Timeline.module.scss'
-import './Timeline.overrides.css'
-import moment from 'moment'
-import React, { FC, useState } from 'react'
 import { format, MessageBar } from '@fluentui/react'
+import { ITimelineItem } from 'interfaces/ITimelineItem'
+import moment from 'moment'
+import * as strings from 'PortfolioWebPartsStrings'
+import React, { FC } from 'react'
+import ReactTimeline, { TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
+import 'react-calendar-timeline/lib/Timeline.css'
+import { FilterPanel } from '../../FilterPanel'
 import { Commands } from '../Commands'
 import { DetailsCallout } from '../DetailsCallout'
-import { FilterPanel, IFilterProps } from '../../FilterPanel'
+import styles from './Timeline.module.scss'
+import './Timeline.overrides.css'
+import { ITimelineProps } from './types'
+import { useGroupRenderer } from './useGroupRenderer'
+import { useItemRenderer } from './useItemRenderer'
+import { useTimeline } from './useTimeline'
 
-export interface ITimelineProps {
-  defaultTimeStart?: [number, moment.unitOfTime.DurationConstructor]
-  defaultTimeEnd?: [number, moment.unitOfTime.DurationConstructor]
-  groups: ITimelineGroup[]
-  items: ITimelineItem[]
-  filters: IFilterProps[]
-  onFilterChange: (filter: string) => void
-  onGroupChange: (group: string) => void
-  isGroupByEnabled?: boolean
-  infoText?: string
-  title?: string
-}
-
-/**
- * @component Timeline
- */
 export const Timeline: FC<ITimelineProps> = (props) => {
-  const [showDetails, setShowDetails] = useState<{
-    item: ITimelineItem
-    element: HTMLElement
-  }>(null)
-
-  const [showFilterPanel, setShowFilterPanel] = useState(false)
-
-  /**
-   * On item click
-   *
-   * @param event Event
-   * @param item Item
-   */
-  const onItemClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    item: ITimelineItem
-  ) => {
-    setShowDetails({ element: event.currentTarget, item })
-  }
-
-  /**
-   * Timeline item renderer
-   */
-  const itemRenderer = (calProps: ReactCalendarItemRendererProps<any>) => {
-    const htmlProps = calProps.getItemProps(calProps.item.itemProps)
-
-    switch (calProps.item.data.elementType) {
-      case strings.DiamondLabel: {
-        return (
-          <div
-            {...htmlProps}
-            className={`${styles.timelineItem} rc-item`}
-            onClick={(event) => onItemClick(event, calProps.item)}>
-            <div
-              className={`${styles.itemContent} rc-milestoneitem-content`}
-              style={{
-                maxHeight: `${calProps.itemContext.dimensions.height}`,
-                clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
-                width: '22px',
-                height: '24px',
-                backgroundColor: calProps.item.data.hexColor || '#ffc800',
-                marginTop: '-2px'
-              }}
-            />
-          </div>
-        )
-      }
-      case strings.TriangleLabel: {
-        return (
-          <div
-            {...htmlProps}
-            className={`${styles.timelineItem} rc-item`}
-            onClick={(event) => onItemClick(event, calProps.item)}>
-            <div
-              className={`${styles.itemContent} rc-milestoneitem-content`}
-              style={{
-                maxHeight: `${calProps.itemContext.dimensions.height}`,
-                width: '0',
-                height: '0',
-                borderLeft: '11px solid transparent',
-                borderRight: '11px solid transparent',
-                borderBottom: `22px solid ${calProps.item.data.hexColor || 'lightblue'}`,
-                marginTop: '-3px'
-              }}
-            />
-          </div>
-        )
-      }
-      default: {
-        return (
-          <div
-            {...htmlProps}
-            className={`${styles.timelineItem} rc-item`}
-            onClick={(event) => onItemClick(event, calProps.item)}>
-            <div
-              className={`${styles.itemContent} rc-item-content`}
-              style={{
-                maxHeight: `${calProps.itemContext.dimensions.height}`,
-                paddingLeft: '8px'
-              }}>
-              {calProps.item.title}
-            </div>
-          </div>
-        )
-      }
-    }
-  }
-
-  /**
-   * Timeline group renderer
-   */
-  const groupRenderer = ({ group }: ReactCalendarGroupRendererProps<ITimelineGroup>) => {
-    const style: React.CSSProperties = { display: 'block', width: '100%' }
-    return (
-      <div>
-        <span title={group.title} style={style}>
-          {group.title}
-        </span>
-      </div>
-    )
-  }
+  const {
+    defaultTimeStart,
+    defaultTimeEnd,
+    sidebarWidth,
+    showFilterPanel,
+    setShowFilterPanel,
+    showDetails,
+    setShowDetails,
+    onItemClick
+  } = useTimeline(props)
+  const itemRenderer = useItemRenderer(onItemClick)
+  const groupRenderer = useGroupRenderer()
 
   return (
-    <>
+    <div className={styles.root}>
       <div className={styles.commandBar}>
         <div>
           <Commands
             setShowFilterPanel={setShowFilterPanel}
-            onGroupChange={props.onGroupChange.bind(this)}
+            onGroupByChange={props.onGroupByChange}
             isGroupByEnabled={props.isGroupByEnabled}
+            defaultGroupBy={props.defaultGroupBy}
           />
         </div>
       </div>
@@ -162,23 +57,17 @@ export const Timeline: FC<ITimelineProps> = (props) => {
         </div>
       )}
       <div className={styles.timeline}>
-        <ReactTimeline<any>
+        <ReactTimeline<ITimelineItem>
+          defaultTimeStart={defaultTimeStart}
+          defaultTimeEnd={defaultTimeEnd}
           groups={props.groups}
           items={props.items}
           stackItems={true}
           canMove={false}
           canChangeGroup={false}
-          sidebarWidth={
-            props.groups[0].type === TimelineGroupType.Project && props.isGroupByEnabled
-              ? 0
-              : props.isGroupByEnabled
-              ? 120
-              : 300
-          }
-          itemRenderer={itemRenderer.bind(this)}
-          groupRenderer={groupRenderer.bind(this)}
-          defaultTimeStart={moment().add(...props.defaultTimeStart)}
-          defaultTimeEnd={moment().add(...props.defaultTimeEnd)}>
+          sidebarWidth={sidebarWidth}
+          itemRenderer={itemRenderer}
+          groupRenderer={groupRenderer}>
           <TimelineMarkers>
             <TodayMarker date={moment().toDate()} />
           </TimelineMarkers>
@@ -188,13 +77,23 @@ export const Timeline: FC<ITimelineProps> = (props) => {
         isOpen={showFilterPanel}
         headerText={strings.FilterText}
         filters={props.filters}
-        onFilterChange={props.onFilterChange.bind(this)}
+        onFilterChange={props.onFilterChange}
         isLightDismiss
         onDismiss={() => setShowFilterPanel(false)}
       />
       {showDetails && (
         <DetailsCallout timelineItem={showDetails} onDismiss={() => setShowDetails(null)} />
       )}
-    </>
+    </div>
   )
 }
+
+Timeline.defaultProps = {
+  defaultTimeframe: [
+    [-1, 'months'],
+    [1, 'years']
+  ],
+  infoText: strings.ProjectTimelineInfoText
+}
+
+export * from './types'

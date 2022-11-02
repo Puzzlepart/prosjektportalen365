@@ -1,6 +1,6 @@
 import { DialogFooter, PrimaryButton, DefaultButton } from '@fluentui/react'
-import { ProjectPhasesContext } from 'components/ProjectPhases/context'
-import { DISMISS_CHANGE_PHASE_DIALOG } from 'components/ProjectPhases/reducer'
+import { ProjectPhasesContext } from '../../../ProjectPhases/context'
+import { DISMISS_CHANGE_PHASE_DIALOG } from '../../..//ProjectPhases/reducer'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { ChangePhaseDialogContext } from '../context'

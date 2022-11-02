@@ -1,4 +1,14 @@
 declare interface IProjectWebPartsStrings {
+  ParentProjectsGroupName: string
+  StatusReportShowOnlyIconsLabel: string | ReactElement<any, string | JSXElementConstructor<any>>
+  StatusReportTruncateCommentsLabel: string
+  ProjectInformationStatusReportHeaderText: string
+  HideStatusReportLabel: string
+  DefaultGroupByLabel: string
+  DefaultTimeframeStartValue: string
+  DefaultTimeframeEndValue: string
+  DefaultTimeframeStartLabel: string
+  DefaultTimeframeEndLabel: string
   RedoText: string
   CreateParentModalSubText: string
   CreateParentModalTitle: string
@@ -15,7 +25,6 @@ declare interface IProjectWebPartsStrings {
   NavigateToSourceUrlText: string
   ProjectStatusGroupName: string
   StatusReportsHeaderLabel: string
-  StatusReportsCountLabel: string
   ChangePhaseText: string
   ChangingPhaseDescription: string
   PleaseWaitText: string
@@ -131,15 +140,15 @@ declare interface IProjectWebPartsStrings {
   ProjectTimelineErrorFetchText: string
   ProjectTimelineListInfoText: string
   TimelineContentListName: string
-  TimelineConfigurationListName: strin
+  TimelineConfigurationListName: string
   NewItemLabel: string
   EditItemLabel: string
   PortfolioManagerGroupName: string
   ProjectTimelineItemInfo: string
   LastPublishedStatusreport: string
-  DiamondLabel: strin
-  BarLabel: strin
-  TriangleLabel: strin
+  DiamondLabel: string
+  BarLabel: string
+  TriangleLabel: string
   MilestoneLabel: string
   ProjectLabel: string
   SubPhaseLabel: string
@@ -152,7 +161,7 @@ declare interface IProjectWebPartsStrings {
   ShowFilterButtonLabel: string
   ShowTimelineLabel: string
   ShowInfoMessageLabel: string
-  ShowCmdTimelineListLabel: string
+  ShowTimelineListCommandsLabel: string
   ShowTimelineListLabel: string
   AdvancedGroupName: string
   UseDynamicHomepageFieldLabel: string

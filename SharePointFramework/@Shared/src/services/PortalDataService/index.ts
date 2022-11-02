@@ -20,18 +20,12 @@ import {
   SPProjectColumnItem,
   StatusReport
 } from '../../models'
+import { GetStatusReportsOptions } from './GetStatusReportsOptions'
 import {
   IPortalDataServiceConfiguration,
   PortalDataServiceDefaultConfiguration,
   PortalDataServiceList
 } from './IPortalDataServiceConfiguration'
-
-export type GetStatusReportsOptions = {
-  filter?: string
-  top?: number
-  select?: string[]
-  publishedString?: string
-}
 
 export class PortalDataService {
   private _configuration: IPortalDataServiceConfiguration
@@ -110,13 +104,14 @@ export class PortalDataService {
   }
 
   /**
-   * Get project status sections
+   * Get project status sections using caching.
    */
   public async getProjectStatusSections(): Promise<SectionModel[]> {
     try {
       const items = await this.web.lists
         .getByTitle(this._configuration.listNames.STATUS_SECTIONS)
-        .items.get()
+        .items.usingCaching()
+        .get()
       return items.map((item) => new SectionModel(item))
     } catch (error) {
       return []
@@ -164,7 +159,7 @@ export class PortalDataService {
   }
 
   /**
-   * Get project column configuration
+   * Get project column configuration using caching.
    */
   public async getProjectColumnConfig(): Promise<ProjectColumnConfig[]> {
     const spItems = await this.web.lists
@@ -176,6 +171,7 @@ export class PortalDataService {
         'GtPortfolioColumn/Title',
         'GtPortfolioColumn/GtInternalName'
       )
+      .usingCaching()
       .get<SPProjectColumnConfigItem[]>()
     return spItems.map((item) => new ProjectColumnConfig(item))
   }
@@ -405,7 +401,8 @@ export class PortalDataService {
   }
 
   /**
-   * Get status reports
+   * Get status reports using caching by default. Can be turned off by setting
+   * `useCaching` to `false`.
    *
    * @param options Options
    */
@@ -413,7 +410,8 @@ export class PortalDataService {
     filter = '',
     top,
     select,
-    publishedString
+    publishedString,
+    useCaching = true
   }: GetStatusReportsOptions): Promise<StatusReport[]> {
     if (!this._configuration.siteId) throw 'Property {siteId} missing in configuration'
     if (stringIsNullOrEmpty(filter)) filter = `GtSiteId eq '${this._configuration.siteId}'`
@@ -425,6 +423,7 @@ export class PortalDataService {
         .orderBy('Id', false)
       if (top) items = items.top(top)
       if (select) items = items.select(...select)
+      if (useCaching) items = items.usingCaching()
       return (await items.get()).map((i) => new StatusReport(i, publishedString))
     } catch (error) {
       throw error
@@ -440,11 +439,7 @@ export class PortalDataService {
         .getByTitle(this._configuration.listNames.PROJECT_STATUS)
         .select('DefaultEditFormUrl')
         .expand('DefaultEditFormUrl')
-        .usingCaching({
-          key: 'projectstatus_defaulteditformurl',
-          storeName: 'session',
-          expiration: dateAdd(new Date(), 'day', 1)
-        })
+        .usingCaching()
         .get<{ DefaultEditFormUrl: string }>()
     } catch (error) {
       throw error

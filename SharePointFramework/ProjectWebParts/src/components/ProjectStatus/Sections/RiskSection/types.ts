@@ -1,4 +1,4 @@
-import { RiskElementModel } from 'components/RiskMatrix'
+import { RiskElementModel } from '../../../RiskMatrix'
 import { IListSectionData, IListSectionState } from '../ListSection'
 
 export type IRiskSectionState = IListSectionState<IRiskSectionData>

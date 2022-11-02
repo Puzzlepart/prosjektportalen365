@@ -1,10 +1,11 @@
 /* eslint-disable prefer-spread */
 import { SectionModel, StatusReport } from 'pp365-shared/lib/models'
 import { getUrlParam, parseUrlHash } from 'pp365-shared/lib/util'
-import { useEffect, useState } from 'react'
+import { ProviderProps, useEffect, useState } from 'react'
 import { find, first } from 'underscore'
 import { fetchData } from './fetchData'
 import { IProjectStatusHashState, IProjectStatusProps, IProjectStatusState } from './types'
+import { IProjectStatusContext } from './context'
 
 /**
  * Component logic hook for `ProjectStatus`
@@ -54,5 +55,5 @@ export function useProjectStatus(props: IProjectStatusProps) {
     })
   }, [])
 
-  return { state, setState } as const
+  return { value: { props, state, setState } } as ProviderProps<IProjectStatusContext>
 }

@@ -1,27 +1,26 @@
-import { ITimelineGroup, ITimelineGroups, ITimelineItem, TimelineGroupType } from '../../interfaces'
-import _ from 'lodash'
-import sortArray from 'array-sort'
-import {
-  ProjectListModel,
-  TimelineConfigurationListModel,
-  TimelineContentListModel
-} from '../../models'
-import { useEffect } from 'react'
-import { IProjectTimelineProps, IProjectTimelineState } from './types'
 import { format } from '@fluentui/react/lib/Utilities'
-import strings from 'PortfolioWebPartsStrings'
+import sortArray from 'array-sort'
+import _ from 'lodash'
 import moment from 'moment'
+import strings from 'PortfolioWebPartsStrings'
+import { CSSProperties, useEffect } from 'react'
+import {
+  ITimelineGroup,
+  ITimelineItem,
+  ITimelineItemData,
+  TimelineGroupType
+} from '../../interfaces'
+import { ProjectListModel, TimelineContentModel } from '../../models'
+import { IProjectTimelineProps, IProjectTimelineState } from './types'
 
 /**
  * Creating groups based on projects title
  *
  * @param projects Projects
+ *
  * @returns Timeline groups
  */
-const transformGroups = (
-  projects: ProjectListModel[],
-  timelineConfiguration: TimelineConfigurationListModel[]
-): ITimelineGroups => {
+const createProjectGroups = (projects: ProjectListModel[]): ITimelineGroup[] => {
   const mappedProjects = _.uniq(projects.map((project) => project.title)).map((title) => {
     const project = projects.find((project) => project.title === title)
     return {
@@ -30,7 +29,7 @@ const transformGroups = (
     }
   })
 
-  const projectGroup: ITimelineGroup[] = mappedProjects.map((project, id) => {
+  const projectGroups = mappedProjects.map<ITimelineGroup>((project, id) => {
     return {
       id,
       title: project.title,
@@ -39,31 +38,7 @@ const transformGroups = (
     }
   })
 
-  const categoryGroup: ITimelineGroup[] = _.uniq(
-    timelineConfiguration.map((item) => item.timelineCategory)
-  ).map((category, id) => {
-    return {
-      id,
-      title: category,
-      type: TimelineGroupType.Category
-    }
-  })
-
-  const typeGroup: ITimelineGroup[] = _.uniq(timelineConfiguration.map((item) => item.title)).map(
-    (type, id) => {
-      return {
-        id,
-        title: type,
-        type: TimelineGroupType.Type
-      }
-    }
-  )
-
-  return {
-    projectGroup: sortArray(projectGroup, ['type', 'title']),
-    categoryGroup,
-    typeGroup
-  }
+  return sortArray(projectGroups, ['type', 'title'])
 }
 
 /**
@@ -74,12 +49,12 @@ const transformGroups = (
  * @returns Timeline items
  */
 const transformItems = (
-  timelineItems: TimelineContentListModel[],
+  timelineItems: TimelineContentModel[],
   groups: ITimelineGroup[]
 ): ITimelineItem[] => {
-  let _item: TimelineContentListModel, _siteId: string
+  let _item: TimelineContentModel, _siteId: string
   try {
-    const items: ITimelineItem[] = timelineItems.map((item, id) => {
+    const items = timelineItems.map<ITimelineItem>((item, id) => {
       _item = item
 
       const group = _.find(groups, (grp) => item.siteId.indexOf(grp.siteId) !== -1)
@@ -87,15 +62,34 @@ const transformItems = (
 
       if (group === null) return
 
-      const style: React.CSSProperties = {
-        color: 'white',
+      const background =
+        item.getConfig('elementType') !== strings.BarLabel
+          ? 'transparent'
+          : item.getConfig('bgColorHex', '#f35d69')
+
+      const style: CSSProperties = {
         border: 'none',
         cursor: 'auto',
         outline: 'none',
-        background:
-          item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69',
-        backgroundColor:
-          item.elementType !== strings.BarLabel ? 'transparent' : item.hexColor || '#f35d69'
+        color: item.getConfig('textColorHex', '#ffffff'),
+        background: background,
+        backgroundColor: background
+      }
+      const data: ITimelineItemData = {
+        project: item.title,
+        projectUrl: item.url,
+        phase: item.phase,
+        description: item.description,
+        type: item.type,
+        budgetTotal: item.budgetTotal,
+        costsTotal: item.costsTotal,
+        sortOrder: item.getConfig('sortOrder'),
+        bgColorHex: item.getConfig('bgColorHex'),
+        textColorHex: item.getConfig('textColorHex'),
+        category: item.getConfig('timelineCategory'),
+        elementType: item.getConfig('elementType'),
+        filter: item.getConfig('timelineFilter'),
+        tag: item.tag
       }
       return {
         id,
@@ -105,26 +99,12 @@ const transformItems = (
             ? format(strings.ProjectTimelineItemInfo, item.title)
             : item.itemTitle,
         start_time:
-          item.elementType !== strings.BarLabel
+          item.getConfig('elementType') !== strings.BarLabel
             ? moment(new Date(item.endDate))
             : moment(new Date(item.startDate)),
         end_time: moment(new Date(item.endDate)),
         itemProps: { style },
-        project: item.title,
-        projectUrl: item.url,
-        data: {
-          phase: item.phase,
-          description: item.description,
-          type: item.type,
-          budgetTotal: item.budgetTotal,
-          costsTotal: item.costsTotal,
-          sortOrder: item.sortOrder,
-          hexColor: item.hexColor,
-          category: item.timelineCategory,
-          elementType: item.elementType,
-          filter: item.timelineFilter,
-          tag: item.tag
-        }
+        data
       } as ITimelineItem
     })
 
@@ -151,7 +131,7 @@ const transformItems = (
  */
 const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProjectTimelineState>> => {
   try {
-    const timelineConfiguration = await props.dataAdapter.fetchTimelineConfiguration()
+    const timelineConfig = await props.dataAdapter.fetchTimelineConfiguration()
     const [
       projects,
       projectData,
@@ -159,12 +139,12 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
       timelineAggregatedContent = []
     ] = await Promise.all([
       props.dataAdapter.fetchEnrichedProjects(),
-      props.dataAdapter.fetchTimelineProjectData(timelineConfiguration),
-      props.dataAdapter.fetchTimelineContentItems(timelineConfiguration),
+      props.dataAdapter.fetchTimelineProjectData(timelineConfig),
+      props.dataAdapter.fetchTimelineContentItems(timelineConfig),
       props.dataAdapter.fetchTimelineAggregatedContent(
         props.configItemTitle,
         props.dataSourceName,
-        timelineConfiguration
+        timelineConfig
       )
     ])
 
@@ -173,39 +153,44 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
     })
 
     const filteredTimelineItems = [...timelineContentItems, ...timelineAggregatedContent].filter(
-      (item) => {
-        return filteredProjects.some((project) => {
+      (item) =>
+        filteredProjects.some((project) => {
           return project.title.indexOf(item.title) !== -1
         })
-      }
     )
 
-    let timelineItems = filteredProjects.map<TimelineContentListModel>((project) => {
+    let timelineItems = filteredProjects.map<TimelineContentModel>((project) => {
       const config = projectData.configElement
       const statusReport = projectData?.reports?.find((statusReport) => {
         return statusReport.siteId === project.siteId
       })
-      return {
-        ...project,
-        ...config,
-        ...statusReport
-      }
+      return new TimelineContentModel(
+        project.siteId,
+        project.title,
+        project.title,
+        strings.ProjectLabel,
+        project.startDate,
+        project.endDate,
+        '',
+        '',
+        statusReport?.budgetTotal,
+        statusReport?.costsTotal,
+        project.url,
+        project.phase
+      ).usingConfig(config)
     })
 
     timelineItems = [...timelineItems, ...filteredTimelineItems]
-
-    const groups = transformGroups(filteredProjects, timelineConfiguration)
-
-    const items = transformItems(timelineItems, groups.projectGroup)
+    const groups = createProjectGroups(filteredProjects)
+    const items = transformItems(timelineItems, groups)
 
     return {
       data: {
         items,
-        groups: groups.projectGroup
+        groups
       },
-      timelineConfiguration,
-      groups
-    }
+      timelineConfig
+    } as Partial<IProjectTimelineState>
   } catch (error) {
     return { error }
   }

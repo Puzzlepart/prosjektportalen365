@@ -1,22 +1,14 @@
 import { Shimmer } from '@fluentui/react'
-import moment from 'moment'
-import React, { FC, useContext } from 'react'
-import { ProjectStatusContext } from '../context'
+import React, { FC, HTMLProps } from 'react'
 import styles from './Header.module.scss'
+import { useHeader } from './useHeader'
 
-export const Header: FC = () => {
-  const context = useContext(ProjectStatusContext)
+export const Header: FC<HTMLProps<HTMLDivElement>> = (props) => {
+  const { isDataLoaded, title } = useHeader()
   return (
-    <Shimmer isDataLoaded={context.state.isDataLoaded}>
-      <div className={styles.root}>
-        <div className={styles.title}>
-          {context.props.title}{' '}
-          {context.state.selectedReport
-            ? moment(
-                context.state.selectedReport.publishedDate ?? context.state.selectedReport.created
-              ).format('DD.MM.yyyy')
-            : null}{' '}
-        </div>
+    <Shimmer isDataLoaded={isDataLoaded}>
+      <div className={props.className ?? styles.root}>
+        <div className={styles.title}>{title}</div>
       </div>
     </Shimmer>
   )

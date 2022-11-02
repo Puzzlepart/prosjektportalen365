@@ -1,4 +1,4 @@
-import { ProjectStatusContext } from 'components/ProjectStatus/context'
+import { ProjectStatusContext } from '../../../ProjectStatus/context'
 import { useContext } from 'react'
 
 export function useProjectPropertiesSection() {

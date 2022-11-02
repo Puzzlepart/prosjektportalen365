@@ -10,9 +10,9 @@ import styles from './ProjectProperties.module.scss'
 import { ProjectProperty } from './ProjectProperty'
 import { IProjectPropertiesProps } from './types'
 
-export const ProjectProperties: FC<IProjectPropertiesProps> = ({ properties }) => {
+export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
   const context = useContext(ProjectInformationContext)
-  const nonEmptyProperties = properties.filter(({ empty }) => !empty)
+  const nonEmptyProperties = props.properties?.filter(({ empty }) => !empty) ?? []
 
   if (context.props.displayMode !== DisplayMode.Edit) {
     if (isEmpty(nonEmptyProperties)) {
@@ -50,7 +50,7 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = ({ properties }) =
                   type={MessageBarType.warning}
                 />
                 <div hidden={stringIsNullOrEmpty(context.state.data.propertiesListId)}>
-                  {properties.map((model, idx) => (
+                  {props.properties.map((model, idx) => (
                     <ProjectProperty
                       key={idx}
                       model={model}
@@ -67,4 +67,8 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = ({ properties }) =
       </div>
     )
   }
+}
+
+ProjectProperties.defaultProps = {
+  properties: []
 }

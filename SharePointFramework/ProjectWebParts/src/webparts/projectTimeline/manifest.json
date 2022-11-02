@@ -26,7 +26,7 @@
             "properties": {
                 "listName": "Tidslinjeinnhold",
                 "showTimeline": true,
-                "showCmdTimelineList": true,
+                "showTimelineListCommands": true,
                 "showTimelineList": true,
                 "showProjectDeliveries": false,
                 "projectDeliveriesListName": "Prosjektleveranser",

@@ -6,6 +6,19 @@
   background-color: #eff6fa;
   border-top: 5px solid #035484;
 
+  &.transparent {
+    background-color: transparent !important;
+    border-color: transparent;
+  }
+
+  &.noPadding .container {
+    padding: 0 !important;
+  }
+
+  &.noMargin, &.noMargin .container {
+    margin: 0 !important;
+  }
+
   .container {
     @include ms-Grid-row;
     padding: 15px 30px 30px 30px;
