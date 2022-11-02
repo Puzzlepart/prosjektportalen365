@@ -2,15 +2,19 @@ import { Icon } from '@fluentui/react/lib/Icon'
 import React, { FC, useContext } from 'react'
 import { SectionContext } from '../Sections/context'
 import styles from './StatusElement.module.scss'
+import { IStatusElementProps } from './types'
 
-export const StatusElement: FC = () => {
+export const StatusElement: FC<IStatusElementProps> = (props) => {
   const { headerProps } = useContext(SectionContext)
   return (
     <div className={styles.root}>
       <div className={styles.container}>
         <div
           className={styles.icon}
-          style={{ fontSize: headerProps.iconSize, color: headerProps.iconColor }}>
+          style={{
+            fontSize: props.iconSize ?? headerProps.iconSize,
+            color: headerProps.iconColor
+          }}>
           <Icon iconName={headerProps.iconName} />
         </div>
         <div className={styles.content}>

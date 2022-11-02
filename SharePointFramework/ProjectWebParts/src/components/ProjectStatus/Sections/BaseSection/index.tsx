@@ -8,7 +8,13 @@ import { IBaseSectionProps } from './types'
 export const BaseSection: FC<IBaseSectionProps> = (props) => {
   const context = useContext(ProjectStatusContext)
   return (
-    <div className={conditionalClassName([styles.root, props.translate && styles.transparent])}>
+    <div
+      className={conditionalClassName([
+        styles.root,
+        props.transparent && styles.transparent,
+        props.noPadding && styles.noPadding,
+        props.noMargin && styles.noMargin
+      ])}>
       <div className={styles.container}>
         <Shimmer isDataLoaded={context.state.isDataLoaded}>{props.children}</Shimmer>
       </div>

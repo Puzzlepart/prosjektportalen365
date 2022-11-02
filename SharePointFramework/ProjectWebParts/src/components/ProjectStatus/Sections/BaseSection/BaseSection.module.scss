@@ -11,6 +11,14 @@
     border-color: transparent;
   }
 
+  &.noPadding .container {
+    padding: 0 !important;
+  }
+
+  &.noMargin {
+    margin: 0 !important;
+  }
+
   .container {
     @include ms-Grid-row;
     padding: 15px 30px 30px 30px;

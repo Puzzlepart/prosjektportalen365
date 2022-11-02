@@ -23,7 +23,7 @@ export const SummarySection: FC<ISummarySectionProps> = (props) => {
       return ctxValue.headerProps.value || sec.fieldName === 'GtOverallStatus' ? (
         <SectionContext.Provider key={idx} value={ctxValue}>
           <div key={idx} className='ms-Grid-col ms-sm6'>
-            <StatusElement />
+            <StatusElement iconSize={props.iconSize} />
           </div>
         </SectionContext.Provider>
       ) : null
@@ -31,7 +31,7 @@ export const SummarySection: FC<ISummarySectionProps> = (props) => {
   }
 
   return (
-    <BaseSection transparent={props.transparent}>
+    <BaseSection {...props}>
       <div className={styles.root}>
         {props.showProjectInformation && (
           <div className={styles.projectInformation}>

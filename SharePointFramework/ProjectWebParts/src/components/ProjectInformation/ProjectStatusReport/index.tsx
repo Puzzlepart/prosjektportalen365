@@ -20,7 +20,7 @@ export const ProjectStatusReport: FC = () => {
           props: null,
           state: { ...context.state, selectedReport: _.first(context.state.data.reports) }
         }}>
-        <SummarySection transparent />
+        <SummarySection transparent noPadding noMargin iconSize={18} />
       </ProjectStatusContext.Provider>
     </div>
   )
