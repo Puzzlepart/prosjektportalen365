@@ -56,7 +56,8 @@ ProjectTimeline.defaultProps = {
   defaultTimeframeEnd: '4,months',
   defaultGroupBy: strings.TypeLabel,
   projectDeliveriesListName: 'Prosjektleveranser',
-  configItemTitle: 'Prosjektleveranse'
+  configItemTitle: 'Prosjektleveranse',
+  defaultCategory: 'Styring'
 }
 
 export * from './types'

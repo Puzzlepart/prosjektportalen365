@@ -296,8 +296,9 @@ export class DataAdapter implements IDataAdapter {
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${queryArray ?? ''
-          } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `${
+          queryArray ?? ''
+        } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })
@@ -336,18 +337,7 @@ export class DataAdapter implements IDataAdapter {
         })
       ])
 
-      const config = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
-
-      const configElement: TimelineConfigurationListModel = {
-        title: '',
-        sortOrder: config?.sortOrder,
-        hexColor: config?.hexColor,
-        timelineCategory: config?.timelineCategory,
-        elementType: config?.elementType,
-        showElementPortfolio: config?.showElementPortfolio,
-        showElementProgram: config?.showElementProgram,
-        timelineFilter: config?.timelineFilter
-      }
+      const configElement = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
 
       const reports = statusReports
         .map((report) => {
@@ -360,7 +350,7 @@ export class DataAdapter implements IDataAdapter {
         .filter((p) => p)
 
       return { reports, configElement }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
@@ -421,6 +411,7 @@ export class DataAdapter implements IDataAdapter {
         'GtSortOrder',
         'Title',
         'GtHexColor',
+        'GtHexColorText',
         'GtTimelineCategory',
         'GtElementType',
         'GtShowElementPortfolio',
@@ -435,6 +426,7 @@ export class DataAdapter implements IDataAdapter {
           item.GtSortOrder,
           item.Title,
           item.GtHexColor,
+          item.GtHexColorText,
           item.GtTimelineCategory,
           item.GtElementType,
           item.GtShowElementPortfolio,
@@ -466,13 +458,15 @@ export class DataAdapter implements IDataAdapter {
       const [projectDeliveries] = await Promise.all([
         this.configure().then(async (adapter) => {
           try {
-            const deliveries = await adapter
-              .fetchItemsWithSource(dataSourceName || 'Alle prosjektleveranser', [
+            const deliveries = await adapter.fetchItemsWithSource(
+              dataSourceName || 'Alle prosjektleveranser',
+              [
                 'Title',
                 'GtDeliveryDescriptionOWSMTXT',
                 'GtDeliveryStartTimeOWSDATE',
                 'GtDeliveryEndTimeOWSDATE'
-              ])
+              ]
+            )
             return deliveries.filter(
               (delivery) => delivery.GtDeliveryStartTimeOWSDATE && delivery.GtDeliveryEndTimeOWSDATE
             )
@@ -495,7 +489,7 @@ export class DataAdapter implements IDataAdapter {
           ).setConfig(config)
         )
         .filter((t) => t)
-    } else return [ ]
+    } else return []
   }
 
   /**

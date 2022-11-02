@@ -10,7 +10,8 @@ export interface ITimelineItemData {
   budgetTotal?: string
   costsTotal?: string
   sortOrder?: number
-  hexColor?: string
+  bgColorHex?: string
+  textColorHex?: string
   category?: string
   elementType?: string
   filter?: boolean

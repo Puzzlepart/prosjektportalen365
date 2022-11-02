@@ -40,8 +40,9 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     const activeFiltersKeys = Object.keys(activeFilters)
     data.items = sortArray(data.items, 'data.sortOrder')
 
-    const projectId = data.items.find((i) => i.data?.projectUrl === props.pageContext.site.absoluteUrl)
-      ?.id
+    const projectId = data.items.find(
+      (i) => i.data?.projectUrl === props.pageContext.site.absoluteUrl
+    )?.id
     const topGroup = data.groups.find((i) => i.id === projectId)
     projectId &&
       (data.groups = [topGroup, ...data.groups.filter((grp) => grp?.id !== projectId)].filter(
@@ -62,10 +63,10 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
 
   /**
    * Get filters
-   * 
+   *
    * @param config Timeline configuration
    * @param data Timeline data
-   * 
+   *
    * @returns `filters` for `FilterPanel`
    */
   const getFilters = (

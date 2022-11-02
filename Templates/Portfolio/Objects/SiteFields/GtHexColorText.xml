@@ -1,0 +1,3 @@
+<Field Type="Text" DisplayName="{resource:SiteFields_GtHexColorText_DisplayName}" Description="{resource:SiteFields_GtHexColorText_Description}" MaxLength="7" Group="Egendefinerte kolonner" ID="{e7c9cd18-9913-4d4a-9990-64630be48d1a}" StaticName="GtHexColorText" Name="GtHexColorText">
+    <Default>#ffffff</Default>
+</Field>

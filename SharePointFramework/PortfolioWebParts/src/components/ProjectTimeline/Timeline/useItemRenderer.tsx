@@ -12,7 +12,7 @@ import React from 'react'
 export function useItemRenderer(
   onItemClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) => void
 ) {
-  return (calProps: ReactCalendarItemRendererProps<any>) => {
+  return (calProps: ReactCalendarItemRendererProps<ITimelineItem>) => {
     const htmlProps = calProps.getItemProps(calProps.item.itemProps)
 
     switch (calProps.item.data.elementType) {
@@ -29,7 +29,7 @@ export function useItemRenderer(
                 clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
                 width: '22px',
                 height: '24px',
-                backgroundColor: calProps.item.data.hexColor || '#ffc800',
+                backgroundColor: calProps.item.data.bgColorHex || '#ffc800',
                 marginTop: '-2px'
               }}
             />
@@ -50,7 +50,7 @@ export function useItemRenderer(
                 height: '0',
                 borderLeft: '11px solid transparent',
                 borderRight: '11px solid transparent',
-                borderBottom: `22px solid ${calProps.item.data.hexColor || 'lightblue'}`,
+                borderBottom: `22px solid ${calProps.item.data.bgColorHex || 'lightblue'}`,
                 marginTop: '-3px'
               }}
             />
