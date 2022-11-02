@@ -3,8 +3,7 @@ import {
   IProjectTimelineProps,
   IProjectTimelineState,
   ITimelineData,
-  ITimelineGroup,
-  ITimelineItem
+  ITimelineGroup
 } from './types'
 import { useProjectTimelineDataFetch } from './useProjectTimelineDataFetch'
 import sortArray from 'array-sort'
@@ -14,6 +13,7 @@ import { TimelineConfigurationListModel } from 'pp365-portfoliowebparts/lib/mode
 import { IFilterItemProps, IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
 import strings from 'ProjectWebPartsStrings'
 import { TimelineTimeframe } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline'
+import { ITimelineItem } from 'pp365-portfoliowebparts/lib/interfaces/ITimelineItem'
 
 /**
  * Component logic hook for `ProjectTimeline`
@@ -128,7 +128,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
             selectedGroup = state.groups.categoryGroups
             updatedItems = state.data.items.map((item) => ({
               ...item,
-              group: selectedGroup.find((g) => g.title === item.data.category).id
+              group: selectedGroup.find((g) => g.title === item.data.category)?.id
             }))
           }
           break
@@ -137,7 +137,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
             selectedGroup = state.groups.typeGroups
             updatedItems = state.data.items.map((item) => ({
               ...item,
-              group: selectedGroup.find((g) => g.title === item.data.type).id
+              group: selectedGroup.find((g) => g.title === item.data.type)?.id
             }))
           }
           break
@@ -146,7 +146,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
             selectedGroup = state.groups.projectGroups
             updatedItems = state.data.items.map((item) => ({
               ...item,
-              group: selectedGroup.find((g) => g.title === item.project).id
+              group: selectedGroup.find((g) => g.title === item.data?.project)?.id
             }))
           }
           break

@@ -44,17 +44,17 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = ({ timelineItem, onDismi
       case strings.ProjectLabel: {
         return (
           <>
-            <p hidden={!timelineItem.item.projectUrl}>
+            <p hidden={!timelineItem.item.data.projectUrl}>
               <b>{strings.ProjectLabel}:</b>{' '}
-              <a href={timelineItem.item.projectUrl}>
-                <span>{timelineItem.item.project}</span>
+              <a href={timelineItem.item.data.projectUrl}>
+                <span>{timelineItem.item.data.project}</span>
               </a>
             </p>
             <p hidden={!item.budgetTotal || !item.costsTotal}>
               <a
                 target='_blank'
                 rel='noreferrer'
-                href={`${timelineItem.item.projectUrl}/SitePages/Prosjektstatus.aspx`}>
+                href={`${timelineItem.item.data.projectUrl}/SitePages/Prosjektstatus.aspx`}>
                 <span>{strings.LastPublishedStatusreport}</span>
               </a>
             </p>

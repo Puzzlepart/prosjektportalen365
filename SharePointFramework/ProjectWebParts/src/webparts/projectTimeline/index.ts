@@ -22,8 +22,6 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    // eslint-disable-next-line no-console
-    console.log(this.properties)
     return {
       pages: [
         {

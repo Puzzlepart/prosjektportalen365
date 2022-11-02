@@ -32,13 +32,24 @@ export class TimelineContentListModel {
     public costsTotal?: string,
     public url?: string,
     public phase?: string
-  ) {}
+  ) { }
 
+  /**
+   * Set configuration
+   * 
+   * @param config Timeline configuration
+   */
   public setConfig(config: TimelineConfigurationListModel) {
     this._config = config
     return this
   }
 
+  /**
+   * Get configuration entry by key
+   * 
+   * @param key Configuration key
+   * @param fallbackValue Fallback value
+   */
   public getConfig<T = string>(key: keyof TimelineConfigurationListModel, fallbackValue: T = null) {
     return (this._config[key] ?? fallbackValue) as T
   }

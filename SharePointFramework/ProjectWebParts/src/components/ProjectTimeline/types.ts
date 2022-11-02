@@ -1,7 +1,6 @@
 import { IColumn } from '@fluentui/react'
-import { TypedHash } from '@pnp/common'
-import * as moment from 'moment'
 import { IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
+import { ITimelineItem } from 'pp365-portfoliowebparts/lib/interfaces/ITimelineItem'
 import { TimelineConfigurationListModel } from 'pp365-portfoliowebparts/lib/models'
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import * as ProjectDataService from 'pp365-shared/lib/services/ProjectDataService'
@@ -53,7 +52,7 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<ITimel
   filteredData?: ITimelineData
 
   /**
-   * Timeline Configuration
+   * Timeline configuration
    */
   timelineConfig?: TimelineConfigurationListModel[]
 
@@ -97,37 +96,6 @@ export interface ITimelineGroups {
   projectGroups: ITimelineGroup[]
   categoryGroups: ITimelineGroup[]
   typeGroups: ITimelineGroup[]
-}
-
-export interface ITimelineItemData {
-  phase?: string
-  description?: string
-  milestoneDate?: moment.Moment
-  type?: string
-  budgetTotal?: string
-  costsTotal?: string
-  sortOrder?: number
-  hexColor?: string
-  category?: string
-  elementType?: string
-  filter?: boolean
-  tag?: string
-}
-
-export interface ITimelineItem {
-  id: number
-  title: string
-  group: number
-  start_time: moment.Moment
-  end_time: moment.Moment
-  allocation?: number
-  itemProps: React.HTMLProps<HTMLDivElement>
-  project: string
-  projectUrl?: string
-  data?: ITimelineItemData
-  role?: string
-  resource?: string
-  props: TypedHash<any>
 }
 
 export interface IProjectTimelineData extends ProjectDataService.IGetPropertiesData {

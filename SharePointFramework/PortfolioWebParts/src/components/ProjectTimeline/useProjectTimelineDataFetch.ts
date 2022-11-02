@@ -183,7 +183,7 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
         items,
         groups
       },
-      timelineConfiguration
+      timelineConfig: timelineConfiguration
     } as Partial<IProjectTimelineState>
   } catch (error) {
     return { error }

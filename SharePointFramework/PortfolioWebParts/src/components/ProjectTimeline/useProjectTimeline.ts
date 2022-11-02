@@ -40,9 +40,9 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     const activeFiltersKeys = Object.keys(activeFilters)
     data.items = sortArray(data.items, 'data.sortOrder')
 
-    const projectId = data.items.find((i) => i?.projectUrl === props.pageContext.site.absoluteUrl)
+    const projectId = data.items.find((i) => i.data?.projectUrl === props.pageContext.site.absoluteUrl)
       ?.id
-    const topGroup = data.groups.find((i) => i?.id === projectId)
+    const topGroup = data.groups.find((i) => i.id === projectId)
     projectId &&
       (data.groups = [topGroup, ...data.groups.filter((grp) => grp?.id !== projectId)].filter(
         (grp) => grp
@@ -117,7 +117,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     setState({ activeFilters })
     if (state?.data?.items) {
       const filteredData = getFilteredData(state?.data)
-      const filters = getFilters(state?.timelineConfiguration, state?.data)
+      const filters = getFilters(state?.timelineConfig, state?.data)
       setState({ filteredData, filters })
     }
   }
@@ -125,7 +125,7 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
   useProjectTimelineDataFetch(props, ($) => {
     if ($.error) setState({ error: $.error, isDataLoaded: true })
     else {
-      const filters = getFilters($.timelineConfiguration, $.data)
+      const filters = getFilters($.timelineConfig, $.data)
       const filteredData = getFilteredData($.data)
       setState({ ...$, filteredData, filters, isDataLoaded: true })
     }

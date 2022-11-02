@@ -3,6 +3,10 @@ import { sp } from '@pnp/sp'
 import _ from 'lodash'
 import moment from 'moment'
 import {
+  ITimelineItem,
+  ITimelineItemData
+} from 'pp365-portfoliowebparts/lib/interfaces/ITimelineItem'
+import {
   TimelineConfigurationListModel,
   TimelineContentListModel
 } from 'pp365-portfoliowebparts/lib/models'
@@ -14,7 +18,6 @@ import {
   IProjectTimelineState,
   ITimelineGroup,
   ITimelineGroups,
-  ITimelineItem,
   TimelineGroupType
 } from './types'
 
@@ -124,15 +127,17 @@ const transformItems = (
           }
           break
       }
-      const data: any = {
-        phase: item.phase,
-        description: item.description || '',
+      const data: ITimelineItemData = {
+        project,
+        projectUrl: item.url,
         type,
+        category,
+        phase: item.phase,
+        description: item.description ?? '',
         budgetTotal: item.budgetTotal,
         costsTotal: item.costsTotal,
-        category,
         tag: item.tag,
-        sortOrder: item.getConfig('sortOrder', '99'),
+        sortOrder: item.getConfig<number>('sortOrder', 99),
         hexColor: item.getConfig('hexColor'),
         elementType: item.getConfig('elementType', strings.BarLabel),
         filter: item.getConfig('timelineFilter')
@@ -150,8 +155,6 @@ const transformItems = (
             : moment(new Date(item.startDate)),
         end_time: moment(new Date(item.endDate)),
         itemProps: { style },
-        project,
-        projectUrl: item.url,
         data
       } as ITimelineItem
     })
@@ -216,8 +219,9 @@ const fetchTimelineData = async (
   props: IProjectTimelineProps,
   timelineConfig: TimelineConfigurationListModel[]
 ) => {
-  let projectDeliveries = []
   try {
+    const timelineContentList = props.hubSite.web.lists.getByTitle(strings.TimelineContentListName)
+    let projectDeliveries = []
     if (props.showProjectDeliveries) {
       // eslint-disable-next-line @typescript-eslint/no-extra-semi
       projectDeliveries = await sp.web.lists
@@ -249,25 +253,16 @@ const fetchTimelineData = async (
     }
 
     const defaultViewColumns = (
-      await props.hubSite.web.lists
-        .getByTitle(strings.TimelineContentListName)
-        .defaultView.fields.select('Items')
-        .top(500)
-        .get()
-    )['Items']
+      await timelineContentList.defaultView.fields.select('Items').top(500).get()
+    )['Items'] as string[]
 
-    const filterString: string = defaultViewColumns
-      .map((col: string) => `(InternalName eq '${col}')`)
-      .join(' or ')
-
-    const internalNames: string = await defaultViewColumns.map((col: string) => `${col}`).join(',')
+    const filterString = defaultViewColumns.map((col) => `(InternalName eq '${col}')`).join(' or ')
 
     // eslint-disable-next-line prefer-const
     let [timelineContentItems, timelineColumns] = await Promise.all([
-      props.hubSite.web.lists
-        .getByTitle(strings.TimelineContentListName)
-        .items.select(
-          internalNames,
+      timelineContentList.items
+        .select(
+          ...defaultViewColumns,
           'Id',
           'GtTimelineTypeLookup/Title',
           'GtSiteIdLookupId',
@@ -276,9 +271,8 @@ const fetchTimelineData = async (
         )
         .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
         .getAll(),
-      props.hubSite.web.lists
-        .getByTitle(strings.TimelineContentListName)
-        .fields.filter(filterString)
+      timelineContentList.fields
+        .filter(filterString)
         .select('InternalName', 'Title', 'TypeAsString')
         .top(500)
         .get()
