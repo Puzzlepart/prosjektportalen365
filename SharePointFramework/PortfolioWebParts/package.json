@@ -9,7 +9,8 @@
   "license": "MIT",
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
-    "serve": "node ../.tasks/createServeConfig.js && gulp serve-deprecated --locale=nb-no --nobrowser",
+    "preserve": "node ../.tasks/createServeConfig.js && gulp setHiddenToolbox && node ../.tasks/setBundleConfig.js",
+    "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\" \"node ../.tasks/setBundleConfig.js --revert\"",
     "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
     "package:debug": "gulp clean && gulp default && gulp package-solution",
     "postversion": "tsc && npm publish",
@@ -70,6 +71,7 @@
     "@typescript-eslint/parser": "5.40.0",
     "ajv": "6.12.5",
     "concurrently": "5.2.0",
+    "dotenv": "16.0.3",
     "eslint": "8.25.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.2.1",
