@@ -1,15 +1,15 @@
 import { Web } from '@pnp/sp'
-import { ProjectInformation } from 'components/ProjectInformation'
-import { ProjectStatusContext } from 'components/ProjectStatus/context'
+import { conditionalClassName as className } from 'pp365-shared/lib/util'
 import React, { FC, useContext } from 'react'
+import { pick } from 'underscore'
+import { ProjectInformation } from '../../../ProjectInformation'
+import { ProjectStatusContext } from '../../../ProjectStatus/context'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection'
 import { SectionContext } from '../context'
 import { useCreateContextValue } from '../useCreateContextValue'
-import { ISummarySectionProps } from './types'
 import styles from './SummarySection.module.scss'
-import { conditionalClassName as className } from 'pp365-shared/lib/util'
-import { pick } from 'underscore'
+import { ISummarySectionProps } from './types'
 
 export const SummarySection: FC<ISummarySectionProps> = (props) => {
   const context = useContext(ProjectStatusContext)

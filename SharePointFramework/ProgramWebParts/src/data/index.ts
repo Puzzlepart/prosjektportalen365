@@ -335,40 +335,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   }
 
   /**
-   * Fetches project timeline data
-   *
-   * @description Used in `ProjectTimeline`
-   *
-   * @param siteId - Site ID
-   */
-  public async fetchDataForTimelineProject(siteId: string) {
-    const siteIdProperty: string = 'GtSiteIdOWSTEXT'
-
-    const [timelineConfig, { PrimarySearchResults: statusReports }] = await Promise.all([
-      this.fetchTimelineConfiguration(),
-      sp.search({
-        ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `DepartmentId:{${this.spfxContext.pageContext.legacyPageContext.hubSiteId}} ${siteIdProperty}:{${siteId}}
-        ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
-        SelectProperties: [siteIdProperty, 'GtCostsTotalOWSCURR', 'GtBudgetTotalOWSCURR']
-      })
-    ])
-    const [data] = statusReports.map((item) => cleanDeep({ ...item }))
-    const config = timelineConfig.find((col) => col.title === strings.ProjectLabel)
-    return {
-      type: strings.ProjectLabel,
-      costsTotal: data && data['GtCostsTotalOWSCURR'],
-      budgetTotal: data && data['GtBudgetTotalOWSCURR'],
-      sortOrder: config && config.sortOrder,
-      hexColor: config && config.hexColor,
-      elementType: config && config.elementType,
-      showElementPortfolio: config && config.showElementPortfolio,
-      showElementProgram: config && config.showElementProgram,
-      timelineFilter: config && config.timelineFilter
-    }
-  }
-
-  /**
    *  Fetches items from timeline content list
    *
    * * Fetching list items
@@ -411,11 +377,11 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
           )
         ) {
           if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
-           return new TimelineContentModel(
+            return new TimelineContentModel(
               item.GtSiteIdLookup?.GtSiteId,
               item.GtSiteIdLookup?.Title,
               item.Title,
-               config?.title,
+              config?.title,
               item.GtStartDate,
               item.GtEndDate,
               item.GtDescription,
@@ -449,21 +415,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       )
       .getAll()
 
-    return timelineConfig
-      .map((item) => {
-        const model = new TimelineConfigurationModel(
-          item.GtSortOrder,
-          item.Title,
-          item.GtHexColor,
-          item.GtTimelineCategory,
-          item.GtElementType,
-          item.GtShowElementPortfolio,
-          item.GtShowElementProgram,
-          item.GtTimelineFilter
-        )
-        return model
-      })
-      .filter((p) => p)
+    return timelineConfig.map((item) => new TimelineConfigurationModel(item)).filter((p) => p)
   }
 
   /**
@@ -501,25 +453,24 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
         })
 
       return projectDeliveries
-        .map((item) => {
-          const model = new TimelineContentModel(
+        .map((item) =>
+          new TimelineContentModel(
             item.SiteId,
             item.SiteTitle,
             item.Title,
-            (config && config.title) || configItemTitle,
-            (config && config.sortOrder) || 90,
-            (config && config.hexColor) || '#384f61',
-            (config && config.timelineCategory) || 'Styring',
-            (config && config.elementType) || strings.BarLabel,
-            (config && config.showElementPortfolio) || false,
-            (config && config.showElementProgram) || false,
-            (config && config.timelineFilter) || true,
+            config.title ?? configItemTitle,
             item.GtDeliveryStartTimeOWSDATE,
             item.GtDeliveryEndTimeOWSDATE,
             item.GtDeliveryDescriptionOWSMTXT
-          )
-          return model
-        })
+          ).usingConfig({
+            sortOrder: 90,
+            bgColorHex: '#384f61',
+            timelineCategory: 'Styring',
+            elementType: strings.BarLabel,
+            timelineFilter: true,
+            ...config
+          })
+        )
         .filter(Boolean)
     }
   }
@@ -580,7 +531,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
         const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
         const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
         const model = new ProjectListModel(group?.displayName ?? item.Title, item)
-        model.userIsMember = !!group
+        model.isUserMember = !!group
         if (manager) model.manager = { text: manager.Title, imageUrl: getUserPhoto(manager.Email) }
         if (owner) model.owner = { text: owner.Title, imageUrl: getUserPhoto(owner.Email) }
         return model
