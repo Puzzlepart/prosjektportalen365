@@ -159,7 +159,7 @@ export class PortalDataService {
   }
 
   /**
-   * Get project column configuration
+   * Get project column configuration using caching.
    */
   public async getProjectColumnConfig(): Promise<ProjectColumnConfig[]> {
     const spItems = await this.web.lists
@@ -171,6 +171,7 @@ export class PortalDataService {
         'GtPortfolioColumn/Title',
         'GtPortfolioColumn/GtInternalName'
       )
+      .usingCaching()
       .get<SPProjectColumnConfigItem[]>()
     return spItems.map((item) => new ProjectColumnConfig(item))
   }
@@ -438,11 +439,7 @@ export class PortalDataService {
         .getByTitle(this._configuration.listNames.PROJECT_STATUS)
         .select('DefaultEditFormUrl')
         .expand('DefaultEditFormUrl')
-        .usingCaching({
-          key: 'projectstatus_defaulteditformurl',
-          storeName: 'session',
-          expiration: dateAdd(new Date(), 'day', 1)
-        })
+        .usingCaching()
         .get<{ DefaultEditFormUrl: string }>()
     } catch (error) {
       throw error

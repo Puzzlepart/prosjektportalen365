@@ -1,3 +1,4 @@
+/* eslint-disable prefer-spread */
 import { createContext } from 'react'
 import { IProjectStatusProps, IProjectStatusState } from './types'
 
@@ -8,3 +9,5 @@ export interface IProjectStatusContext {
 }
 
 export const ProjectStatusContext = createContext<IProjectStatusContext>(null)
+
+
