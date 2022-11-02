@@ -6,9 +6,10 @@ import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection'
 import { SectionContext } from '../context'
 import { useCreateContextValue } from '../useCreateContextValue'
+import { ISummarySectionProps } from './types'
 import styles from './SummarySection.module.scss'
 
-export const SummarySection: FC = () => {
+export const SummarySection: FC<ISummarySectionProps> = (props) => {
   const context = useContext(ProjectStatusContext)
   const createContextValue = useCreateContextValue({})
 
@@ -18,33 +19,33 @@ export const SummarySection: FC = () => {
   function renderSections() {
     return context.state.data.sections.map((sec, idx) => {
       const ctxValue = createContextValue(sec)
-      if (ctxValue.headerProps.value || sec.fieldName === 'GtOverallStatus') {
-        return (
-          <SectionContext.Provider key={idx} value={ctxValue}>
-            <div key={idx} className='ms-Grid-col ms-sm6'>
-              <StatusElement />
-            </div>
-          </SectionContext.Provider>
-        )
-      }
+      return ctxValue.headerProps.value || sec.fieldName === 'GtOverallStatus' ? (
+        <SectionContext.Provider key={idx} value={ctxValue}>
+          <div key={idx} className='ms-Grid-col ms-sm6'>
+            <StatusElement />
+          </div>
+        </SectionContext.Provider>
+      ) : null
     })
   }
 
   return (
     <BaseSection>
       <div className={styles.root}>
-        <div className={styles.projectInformation}>
-          <ProjectInformation
-            hubSite={{
-              web: new Web(context.props.hubSite.url),
-              url: context.props.hubSite.url
-            }}
-            siteId={context.props.siteId}
-            webUrl={context.props.webUrl}
-            page='ProjectStatus'
-            hideAllActions={true}
-          />
-        </div>
+        {props.showProjectInformation && (
+          <div className={styles.projectInformation}>
+            <ProjectInformation
+              hubSite={{
+                web: new Web(context.props.hubSite.url),
+                url: context.props.hubSite.url
+              }}
+              siteId={context.props.siteId}
+              webUrl={context.props.webUrl}
+              page='ProjectStatus'
+              hideAllActions={true}
+            />
+          </div>
+        )}
         <div className={styles.sections}>
           <div className='ms-Grid' dir='ltr'>
             <div className='ms-Grid-row'>{renderSections()}</div>
@@ -53,4 +54,8 @@ export const SummarySection: FC = () => {
       </div>
     </BaseSection>
   )
+}
+
+SummarySection.defaultProps = {
+  showProjectInformation: false
 }

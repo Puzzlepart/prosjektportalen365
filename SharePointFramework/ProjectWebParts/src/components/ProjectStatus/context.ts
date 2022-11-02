@@ -4,7 +4,7 @@ import { IProjectStatusProps, IProjectStatusState } from './types'
 export interface IProjectStatusContext {
   props: IProjectStatusProps
   state: IProjectStatusState
-  setState: (newState: Partial<IProjectStatusState>) => void
+  setState?: (newState: Partial<IProjectStatusState>) => void
 }
 
 export const ProjectStatusContext = createContext<IProjectStatusContext>(null)

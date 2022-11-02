@@ -3,14 +3,11 @@ import { LogLevel } from '@pnp/logging'
 import { format, IProgressIndicatorProps, MessageBarType } from '@fluentui/react'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import strings from 'ProjectWebPartsStrings'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
-import {
-  IProjectInformationProps,
-  IProjectInformationState,
-  IProjectInformationUrlHash
-} from './types'
+import { IProjectInformationProps, IProjectInformationUrlHash } from './types'
 import { useProjectInformationDataFetch } from './useProjectInformationDataFetch'
+import { useProjectInformationState } from './useProjectInformationState'
 
 /**
  * Component logic hook for `ProjectInformation`
@@ -20,11 +17,7 @@ import { useProjectInformationDataFetch } from './useProjectInformationDataFetch
  * @returns `state`, `setState`, `getCustomActions`, `onSyncProperties`
  */
 export const useProjectInformation = (props: IProjectInformationProps) => {
-  const [state, $setState] = useState<IProjectInformationState>({ isDataLoaded: false })
-
-  const setState = (newState: Partial<IProjectInformationState>) => {
-    $setState((_state) => ({ ..._state, ...newState }))
-  }
+  const { state, setState } = useProjectInformationState()
 
   SPDataAdapter.configure(props.webPartContext, {
     siteId: props.siteId,
