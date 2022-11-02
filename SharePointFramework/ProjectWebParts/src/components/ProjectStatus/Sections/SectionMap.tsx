@@ -13,3 +13,5 @@ export const SectionMap = {
   [SectionType.RiskSection]: <RiskSection />,
   [SectionType.ListSection]: <ListSection />
 }
+
+export { SummarySection, StatusSection, ProjectPropertiesSection, RiskSection, ListSection }

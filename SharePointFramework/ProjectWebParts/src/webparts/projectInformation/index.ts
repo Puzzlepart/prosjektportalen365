@@ -85,10 +85,18 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<
                   label: strings.AdminPageLinkLabel
                 }),
                 PropertyPaneToggle('hideParentProjects', {
-                  label: strings.HideParentProjectsLabel
+                  label: strings.HideParentProjectsLabel,
+                  checked:
+                    this.properties.hideParentProjects === undefined
+                      ? true
+                      : this.properties.hideParentProjects
                 }),
                 PropertyPaneToggle('hideStatusReport', {
-                  label: strings.HideStatusReportLabel
+                  label: strings.HideStatusReportLabel,
+                  checked:
+                    this.properties.hideStatusReport === undefined
+                      ? true
+                      : this.properties.hideStatusReport
                 }),
                 PropertyPaneToggle('useFramelessButtons', {
                   label: strings.UseFramelessButtonsLabel

@@ -13,7 +13,7 @@ import React, { FC, useContext, useState } from 'react'
 import { ProjectInformationContext } from '../context'
 import { ProjectSetupCustomAction } from './ProjectSetupCustomAction'
 
-export const CreateParentModal: FC = () => {
+export const CreateParentDialog: FC = () => {
   const context = useContext(ProjectInformationContext)
   const [isLoading, setLoading] = useState(false)
 
@@ -24,33 +24,31 @@ export const CreateParentModal: FC = () => {
   }
 
   return (
-    <>
-      <Dialog
-        hidden={false}
-        onDismiss={() => context.setState({ displayCreateParentModal: false })}
-        dialogContentProps={{
-          type: DialogType.largeHeader,
-          title: strings.CreateParentModalTitle,
-          subText: strings.CreateParentModalSubText
-        }}>
-        {!isLoading && (
-          <DialogFooter>
-            <DefaultButton
-              text={strings.CancelText}
-              onClick={() => context.setState({ displayCreateParentModal: false })}
-            />
-            <PrimaryButton
-              text={strings.RedoText}
-              onClick={() => {
-                saveNavigationNodes()
-                applyCustomAction()
-              }}
-            />
-          </DialogFooter>
-        )}
-        {isLoading && <Spinner size={SpinnerSize.medium} />}
-      </Dialog>
-    </>
+    <Dialog
+      hidden={!context.state.displayCreateParentDialog}
+      onDismiss={() => context.setState({ displayCreateParentDialog: false })}
+      dialogContentProps={{
+        type: DialogType.largeHeader,
+        title: strings.CreateParentModalTitle,
+        subText: strings.CreateParentModalSubText
+      }}>
+      {!isLoading && (
+        <DialogFooter>
+          <DefaultButton
+            text={strings.CancelText}
+            onClick={() => context.setState({ displayCreateParentDialog: false })}
+          />
+          <PrimaryButton
+            text={strings.RedoText}
+            onClick={() => {
+              saveNavigationNodes()
+              applyCustomAction()
+            }}
+          />
+        </DialogFooter>
+      )}
+      {isLoading && <Spinner size={SpinnerSize.medium} />}
+    </Dialog>
   )
 }
 

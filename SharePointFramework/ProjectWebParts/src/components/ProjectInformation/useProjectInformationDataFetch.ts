@@ -95,12 +95,16 @@ const fetchData = async (
             ProjectInformationParentProject
           )
         : Promise.resolve([]),
-      SPDataAdapter.portal.getStatusReports({
-        filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
-        publishedString: strings.GtModerationStatus_Choice_Published
-      }),
-      SPDataAdapter.portal.getProjectStatusSections(),
-      SPDataAdapter.portal.getProjectColumnConfig()
+      !props.hideStatusReport
+        ? SPDataAdapter.portal.getStatusReports({
+            filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
+            publishedString: strings.GtModerationStatus_Choice_Published
+          })
+        : Promise.resolve([]),
+      !props.hideStatusReport
+        ? SPDataAdapter.portal.getProjectStatusSections()
+        : Promise.resolve([]),
+      !props.hideStatusReport ? SPDataAdapter.portal.getProjectColumnConfig() : Promise.resolve([])
     ])
     const data: IProjectInformationData = {
       columns,

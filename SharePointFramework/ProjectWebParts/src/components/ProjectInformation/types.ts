@@ -116,19 +116,19 @@ export interface IProjectInformationState
   confirmActionProps?: any
 
   /**
-   * Display CreateParentModal
-   */
-  displayCreateParentModal?: boolean
-
-  /**
    * Is the project a parent project
    */
   isParentProject?: boolean
 
   /**
-   * Display SyncProjectModal
+   *  Display `<CreateParentDialog />`
    */
-  displaySyncProjectModal?: boolean
+  displayCreateParentDialog?: boolean
+
+  /**
+   * Display `<SyncProjectDialog />`
+   */
+  displaySyncProjectDialog?: boolean
 
   /**
    * Show project properties panel

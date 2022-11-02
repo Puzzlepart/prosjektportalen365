@@ -51,7 +51,7 @@ export const useActions = () => {
   const transformToParentProject: ActionType = [
     strings.CreateParentProjectLabel,
     () => {
-      context.setState({ displayCreateParentModal: true })
+      context.setState({ displayCreateParentDialog: true })
     },
     'Org',
     false,
@@ -60,7 +60,7 @@ export const useActions = () => {
   const syncProjectPropertiesAction: ActionType = [
     strings.SyncProjectPropertiesText,
     () => {
-      context.setState({ displaySyncProjectModal: true })
+      context.setState({ displaySyncProjectDialog: true })
     },
     'Sync',
     false,

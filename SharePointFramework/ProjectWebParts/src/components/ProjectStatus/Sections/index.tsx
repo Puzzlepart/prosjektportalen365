@@ -26,3 +26,5 @@ export const Sections: FC = () => {
     </div>
   )
 }
+
+export * from './SectionMap'

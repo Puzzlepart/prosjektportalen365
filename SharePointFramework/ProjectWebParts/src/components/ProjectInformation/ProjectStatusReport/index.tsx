@@ -1,7 +1,6 @@
-import { ProjectStatusContext } from 'components/ProjectStatus/context'
 import React, { FC } from 'react'
 import { Header } from '../../ProjectStatus/Header'
-import { SummarySection } from '../../ProjectStatus/Sections/SummarySection'
+import { SummarySection, ProjectStatusContext } from '../../ProjectStatus'
 import styles from './ProjectStatusReport.module.scss'
 import { useProjectStatusReport } from './useProjectStatusReport'
 

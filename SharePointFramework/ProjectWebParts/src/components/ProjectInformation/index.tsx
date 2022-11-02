@@ -6,13 +6,13 @@ import { ProgressDialog } from '../ProgressDialog'
 import { Actions } from './Actions'
 import { AllPropertiesPanel } from './AllPropertiesPanel'
 import { ProjectInformationContext } from './context'
-import { CreateParentModal } from './CreateParentModal'
+import { CreateParentDialog } from './CreateParentDialog'
 import { CustomShimmerElementsGroup } from './CustomShimmerElementsGroup'
 import { ParentProjectsList } from './ParentProjectsList'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
 import { ProjectStatusReport } from './ProjectStatusReport'
-import { SyncProjectModal } from './SyncProjectModal'
+import { SyncProjectDialog } from './SyncProjectDialog'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
 
@@ -34,17 +34,17 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
             customElementsGroup={<CustomShimmerElementsGroup />}>
             <ProjectProperties properties={state.properties} />
             {!props.hideAllActions && state.message && <UserMessage {...state.message} />}
+            <Actions />
             <ParentProjectsList />
             <ProjectStatusReport />
-            <Actions />
             <ProgressDialog {...state.progress} />
             <AllPropertiesPanel />
-            {state.confirmActionProps && <ConfirmDialog {...state.confirmActionProps} />}
-            {state.displayCreateParentModal && <CreateParentModal />}
-            {state.displaySyncProjectModal && <SyncProjectModal />}
+            <CreateParentDialog />
+            <SyncProjectDialog />
           </Shimmer>
         </div>
       </div>
+      {state.confirmActionProps && <ConfirmDialog {...state.confirmActionProps} />}
     </ProjectInformationContext.Provider>
   )
 }
