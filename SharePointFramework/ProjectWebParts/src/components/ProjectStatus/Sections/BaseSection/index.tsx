@@ -1,15 +1,19 @@
 import { Shimmer } from '@fluentui/react'
 import { ProjectStatusContext } from 'components/ProjectStatus/context'
-import React, { FC, HTMLProps, useContext } from 'react'
+import { conditionalClassName } from 'pp365-shared/lib/util'
+import React, { FC, useContext } from 'react'
 import styles from './BaseSection.module.scss'
+import { IBaseSectionProps } from './types'
 
-export const BaseSection: FC<HTMLProps<HTMLDivElement>> = ({ children }) => {
+export const BaseSection: FC<IBaseSectionProps> = (props) => {
   const context = useContext(ProjectStatusContext)
   return (
-    <div className={styles.root}>
+    <div className={conditionalClassName([styles.root, props.translate && styles.transparent])}>
       <div className={styles.container}>
-        <Shimmer isDataLoaded={context.state.isDataLoaded}>{children}</Shimmer>
+        <Shimmer isDataLoaded={context.state.isDataLoaded}>{props.children}</Shimmer>
       </div>
     </div>
   )
 }
+
+export * from './types'

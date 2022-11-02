@@ -48,7 +48,7 @@ const transformProperties = (
  *
  * @param props Component properties for `ProjectInformation`
  */
-const projectDataSynced = async (props: IProjectInformationProps) => {
+const checkProjectDataSynced = async (props: IProjectInformationProps) => {
   try {
     let isSynced = false
     const projectDataList = props.hubSite.web.lists.getByTitle(strings.IdeaProjectDataTitle)
@@ -118,7 +118,7 @@ const fetchData = async (
         ProjectAdminPermission.EditProjectProperties,
         data.fieldValues
       )
-      isProjectDataSynced = props.useIdeaProcessing && (await projectDataSynced(props))
+      isProjectDataSynced = props.useIdeaProcessing && (await checkProjectDataSynced(props))
     }
     const isParentProject = data.fieldValues?.GtIsParentProject || data.fieldValues?.GtIsProgram
     return {

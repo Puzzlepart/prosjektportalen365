@@ -2,17 +2,9 @@ import { ProjectStatusContext } from 'components/ProjectStatus/context'
 import { SummarySection } from 'components/ProjectStatus/Sections/SummarySection'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
+import _ from 'underscore'
 import { ProjectInformationContext } from '../context'
 import styles from './ProjectStatusReport.module.scss'
-
-// function useProjectStatusReport() {
-//   const context = useContext(ProjectInformationContext)
-//   const ctxValue: IProjectStatusContext = {
-//     props: null,
-//     state: context.state
-//   }
-//   return { ctxValue } as const
-// }
 
 export const ProjectStatusReport: FC = () => {
   const context = useContext(ProjectInformationContext)
@@ -23,8 +15,12 @@ export const ProjectStatusReport: FC = () => {
           {strings.ProjectStatusReportHeaderText}
         </span>
       </div>
-      <ProjectStatusContext.Provider value={{ props: null, state: context.state }}>
-        <SummarySection />
+      <ProjectStatusContext.Provider
+        value={{
+          props: null,
+          state: { ...context.state, selectedReport: _.first(context.state.data.reports) }
+        }}>
+        <SummarySection transparent />
       </ProjectStatusContext.Provider>
     </div>
   )

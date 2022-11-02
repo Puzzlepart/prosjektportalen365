@@ -8,6 +8,7 @@ import { SectionContext } from '../context'
 import { useCreateContextValue } from '../useCreateContextValue'
 import { ISummarySectionProps } from './types'
 import styles from './SummarySection.module.scss'
+import { conditionalClassName } from 'pp365-shared/lib/util'
 
 export const SummarySection: FC<ISummarySectionProps> = (props) => {
   const context = useContext(ProjectStatusContext)
@@ -30,7 +31,7 @@ export const SummarySection: FC<ISummarySectionProps> = (props) => {
   }
 
   return (
-    <BaseSection>
+    <BaseSection transparent={props.transparent}>
       <div className={styles.root}>
         {props.showProjectInformation && (
           <div className={styles.projectInformation}>
@@ -46,7 +47,11 @@ export const SummarySection: FC<ISummarySectionProps> = (props) => {
             />
           </div>
         )}
-        <div className={styles.sections}>
+        <div
+          className={conditionalClassName([
+            styles.sections,
+            !props.showProjectInformation && styles.fullWidth
+          ])}>
           <div className='ms-Grid' dir='ltr'>
             <div className='ms-Grid-row'>{renderSections()}</div>
           </div>
@@ -54,8 +59,4 @@ export const SummarySection: FC<ISummarySectionProps> = (props) => {
       </div>
     </BaseSection>
   )
-}
-
-SummarySection.defaultProps = {
-  showProjectInformation: false
 }
