@@ -1,5 +1,5 @@
 import { LogLevel } from '@pnp/logging'
-import SPDataAdapter from 'data'
+import SPDataAdapter from '../../data'
 import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import strings from 'ProjectWebPartsStrings'
 import { IProjectStatusData, IProjectStatusProps } from './types'
