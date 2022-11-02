@@ -91,6 +91,22 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    * Truncate status report comments to the specified length and add ellipsis (...)
    */
   statusReportTruncateComments?: number
+
+  /**
+   * Show only icons for latest status report
+   */
+  statusReportShowOnlyIcons?: boolean
+}
+
+export const ProjectInformationDefaultProps: IProjectInformationProps = {
+  page: 'Frontpage',
+  customActions: [],
+  hideActions: [],
+  hideAllActions: false,
+  useFramelessButtons: false,
+  hideStatusReport: true,
+  hideParentProjects: true,
+  statusReportShowOnlyIcons: true
 }
 
 export interface IProjectInformationState

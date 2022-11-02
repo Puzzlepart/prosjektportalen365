@@ -6,12 +6,7 @@
   
   .container {
     @include ms-Grid-row;
-
-    .icon {
-      @include ms-Grid-col;
-      @include ms-sm12;      
-      @include ms-md2;
-    }
+    
     .content {
       @include ms-Grid-col;
       @include ms-sm12;

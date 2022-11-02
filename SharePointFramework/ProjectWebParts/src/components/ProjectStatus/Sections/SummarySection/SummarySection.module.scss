@@ -6,16 +6,35 @@
     @include ms-sm12;
     @include ms-xl6;
   }
-  .sections {
+
+  .statusElements {
     @include ms-Grid-col;
     @include ms-sm12;
     @include ms-xl6;
+
+    .container {
+      @include ms-Grid;
+      .row {
+        @include ms-Grid-row;
+        .statusElement {
+          @include ms-Grid-col;
+
+          &.halfWidth {
+            @include ms-sm6;
+          }
+
+          &.iconsOnly {
+            margin: 10px 0 0 0;
+          }
+        }
+      }
+    }
   }
 
   .fullWidth {
     @include ms-sm12;
     @include ms-xl12;
-    padding: 0; 
+    padding: 0;
     margin: 0;
   }
 }

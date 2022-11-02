@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    ParentProjectsGroupName:'Overordnede prosjekter',
+    StatusReportShowOnlyIconsLabel: 'Vis kun ikoner',
     StatusReportTruncateCommentsLabel: 'Avkort kommentarer',
     DefaultGroupByLabel: 'Standard gruppering',
     DefaultTimeframeStartLabel: 'Standard starttdato',
@@ -76,7 +78,6 @@ define([], function () {
     WebPartNotConfiguredMessage: 'Webdelen er ikke konfigurert riktig. Du må angi webpartegenskaper riktig.',
     Yes: 'Ja',
     StatusReportsHeaderLabel: 'Overskrift',
-    StatusReportsCountLabel: 'Antal rapporter å vise',
     ProjectStatusGroupName: 'Prosjektstatus',
     NavigateToSourceUrlText: 'Gå tilbake',
     SyncProjectPropertiesText: 'Hent prosjektdata',

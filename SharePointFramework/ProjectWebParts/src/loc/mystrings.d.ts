@@ -1,4 +1,6 @@
 declare interface IProjectWebPartsStrings {
+  ParentProjectsGroupName: string
+  StatusReportShowOnlyIconsLabel: string | ReactElement<any, string | JSXElementConstructor<any>>
   StatusReportTruncateCommentsLabel: string
   ProjectInformationStatusReportHeaderText: string
   HideStatusReportLabel: string
@@ -23,7 +25,6 @@ declare interface IProjectWebPartsStrings {
   NavigateToSourceUrlText: string
   ProjectStatusGroupName: string
   StatusReportsHeaderLabel: string
-  StatusReportsCountLabel: string
   ChangePhaseText: string
   ChangingPhaseDescription: string
   PleaseWaitText: string

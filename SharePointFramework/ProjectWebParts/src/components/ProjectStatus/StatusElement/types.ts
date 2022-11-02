@@ -9,5 +9,13 @@ export interface IStatusElement {
 }
 
 export interface IStatusElementProps extends Pick<IStatusElement, 'iconSize'> {
+  /**
+   * Truncate comment to the specified length and add ellipsis (...)
+   */
   truncateComment?: number
+
+  /**
+   * Show only icons
+   */
+  iconsOnly?: boolean
 }
