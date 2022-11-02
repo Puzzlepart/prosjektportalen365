@@ -27,7 +27,7 @@ export async function fetchData(
     const items = transformItems(
       [...timelineData.timelineContentItems, project],
       selectedGroups,
-      props.defaultGroupBy
+      props
     )
 
     return {

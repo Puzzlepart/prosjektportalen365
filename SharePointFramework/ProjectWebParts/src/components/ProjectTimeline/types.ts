@@ -23,6 +23,7 @@ export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   defaultTimeframeStart?: string
   defaultTimeframeEnd?: string
   defaultGroupBy?: string
+  defaultCategory?: string
 }
 
 export interface IProjectTimelineState extends IBaseWebPartComponentState<ITimelineData> {

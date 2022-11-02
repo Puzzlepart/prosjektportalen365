@@ -4,21 +4,21 @@ import { ITimelineItem } from 'pp365-portfoliowebparts/lib/interfaces/ITimelineI
 import { TimelineContentListModel } from 'pp365-portfoliowebparts/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { CSSProperties } from 'react'
-import { ITimelineGroup } from '../types'
+import { IProjectTimelineProps, ITimelineGroup } from '../types'
 
 /**
  * Transform items for timeline
  *
  * @param timelineItems Timeline items
  * @param timelineGroups Timeline groups
- * @param defaultGroupBy Default group by
+ * @param props Component properties for `ProjectTimeline`
  *
  * @returns Timeline items
  */
 export function transformItems(
   timelineItems: TimelineContentListModel[],
   timelineGroups: ITimelineGroup[],
-  defaultGroupBy: string
+  props: IProjectTimelineProps
 ): ITimelineItem[] {
   let _project: any
   let _siteId: any
@@ -61,7 +61,7 @@ export function transformItems(
         project: item.title,
         projectUrl: item.url,
         type: item.type || strings.PhaseLabel,
-        category: item.getConfig('timelineCategory', 'Styring'),
+        category: item.getConfig('timelineCategory', props.defaultCategory),
         phase: item.phase,
         description: item.description ?? '',
         budgetTotal: item.budgetTotal,
@@ -73,7 +73,7 @@ export function transformItems(
         elementType: item.getConfig('elementType', strings.BarLabel),
         filter: item.getConfig('timelineFilter')
       }
-      switch (defaultGroupBy) {
+      switch (props.defaultGroupBy) {
         case strings.CategoryFieldLabel:
           timelineItem.group = timelineGroups.find((g) => g.title === timelineItem.data.category).id
           break
