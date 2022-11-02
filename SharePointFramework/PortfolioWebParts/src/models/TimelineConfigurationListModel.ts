@@ -4,7 +4,8 @@ export class TimelineConfigurationListModel {
    *
    * @param sortOrder Sort order
    * @param title Title
-   * @param hexColor Hexadecimal color
+   * @param bgColorHex Background hexadecimal color
+   * @param textColorHex Text hexadecimal color
    * @param timelineCategory Timeline category
    * @param elementType Element type
    * @param showElementPortfolio Show element on portfolio timeline
@@ -15,7 +16,8 @@ export class TimelineConfigurationListModel {
   constructor(
     public sortOrder: number,
     public title: string,
-    public hexColor: string,
+    public bgColorHex: string,
+    public textColorHex: string,
     public timelineCategory: string,
     public elementType: any,
     public showElementPortfolio: any,

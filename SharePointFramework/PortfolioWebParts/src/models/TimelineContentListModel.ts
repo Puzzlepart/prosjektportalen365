@@ -32,11 +32,11 @@ export class TimelineContentListModel {
     public costsTotal?: string,
     public url?: string,
     public phase?: string
-  ) { }
+  ) {}
 
   /**
    * Set configuration
-   * 
+   *
    * @param config Timeline configuration
    */
   public setConfig(config: TimelineConfigurationListModel) {
@@ -46,7 +46,7 @@ export class TimelineContentListModel {
 
   /**
    * Get configuration entry by key
-   * 
+   *
    * @param key Configuration key
    * @param fallbackValue Fallback value
    */

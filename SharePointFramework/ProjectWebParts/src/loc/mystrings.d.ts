@@ -137,15 +137,15 @@ declare interface IProjectWebPartsStrings {
   ProjectTimelineErrorFetchText: string
   ProjectTimelineListInfoText: string
   TimelineContentListName: string
-  TimelineConfigurationListName: strin
+  TimelineConfigurationListName: string
   NewItemLabel: string
   EditItemLabel: string
   PortfolioManagerGroupName: string
   ProjectTimelineItemInfo: string
   LastPublishedStatusreport: string
-  DiamondLabel: strin
-  BarLabel: strin
-  TriangleLabel: strin
+  DiamondLabel: string
+  BarLabel: string
+  TriangleLabel: string
   MilestoneLabel: string
   ProjectLabel: string
   SubPhaseLabel: string

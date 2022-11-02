@@ -40,9 +40,6 @@ export async function fetchTimelineData(
             item.GtDeliveryEndTime,
             item.GtDeliveryDescription
           ).setConfig({
-            sortOrder: 90,
-            hexColor: '#384f61',
-            timelineCategory: 'Styring',
             elementType: strings.BarLabel,
             timelineFilter: true,
             ...config
