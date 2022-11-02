@@ -12,6 +12,7 @@ Every change is marked with issue ID.
 - Enabling search for extensions and list content configurations #839
 - Added FNs bærekraftsmål to project properties #454
 - Option for showing all projects you have access to on the front page #724
+- Customizable text color in project timeline webpart #767
 
 ### Fixed
 
