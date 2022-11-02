@@ -396,7 +396,7 @@ export class DataAdapter implements IDataAdapter {
             item.GtTag,
             item.GtBudgetTotal,
             item.GtCostsTotal
-          ).setConfig(config)
+          ).usingConfig(config)
         }
       })
       .filter(Boolean)
@@ -462,7 +462,7 @@ export class DataAdapter implements IDataAdapter {
             item.GtDeliveryStartTimeOWSDATE,
             item.GtDeliveryEndTimeOWSDATE,
             item.GtDeliveryDescriptionOWSMTXT
-          ).setConfig(config)
+          ).usingConfig(config)
         )
         .filter((t) => t)
     } else return []

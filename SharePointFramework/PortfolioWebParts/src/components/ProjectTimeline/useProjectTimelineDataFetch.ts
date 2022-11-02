@@ -177,7 +177,7 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
         statusReport?.costsTotal,
         project.url,
         project.phase
-      ).setConfig(config)
+      ).usingConfig(config)
     })
 
     timelineItems = [...timelineItems, ...filteredTimelineItems]

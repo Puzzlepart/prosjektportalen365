@@ -35,11 +35,11 @@ export class TimelineContentModel {
   ) {}
 
   /**
-   * Set configuration
+   * Returns the `TimelineContentModel` using the specified `config`.
    *
    * @param config Timeline configuration
    */
-  public setConfig(config: TimelineConfigurationModel) {
+  public usingConfig(config: TimelineConfigurationModel) {
     this._config = config
     return this
   }
