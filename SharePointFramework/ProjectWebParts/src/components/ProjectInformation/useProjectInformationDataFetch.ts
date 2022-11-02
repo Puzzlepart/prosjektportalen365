@@ -96,6 +96,7 @@ const fetchData = async (
           )
         : Promise.resolve([]),
       SPDataAdapter.portal.getStatusReports({
+        filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
         publishedString: strings.GtModerationStatus_Choice_Published
       }),
       SPDataAdapter.portal.getProjectStatusSections(),
