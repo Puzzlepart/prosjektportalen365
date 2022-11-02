@@ -1,7 +1,7 @@
-import { TimelineConfigurationListModel } from './TimelineConfigurationListModel'
+import { TimelineConfigurationModel } from './TimelineConfigurationModel'
 
 export class TimelineContentListModel {
-  private _config: TimelineConfigurationListModel
+  private _config: TimelineConfigurationModel
 
   /**
    * Creates a new instance of TimelineContentListModel
@@ -39,7 +39,7 @@ export class TimelineContentListModel {
    *
    * @param config Timeline configuration
    */
-  public setConfig(config: TimelineConfigurationListModel) {
+  public setConfig(config: TimelineConfigurationModel) {
     this._config = config
     return this
   }
@@ -50,7 +50,7 @@ export class TimelineContentListModel {
    * @param key Configuration key
    * @param fallbackValue Fallback value
    */
-  public getConfig<T = string>(key: keyof TimelineConfigurationListModel, fallbackValue: T = null) {
+  public getConfig<T = string>(key: keyof TimelineConfigurationModel, fallbackValue: T = null) {
     return (this._config[key] ?? fallbackValue) as T
   }
 }

@@ -25,7 +25,7 @@ import {
   ProjectListModel,
   SPChartConfigurationItem,
   SPContentType,
-  TimelineConfigurationListModel,
+  TimelineConfigurationModel,
   TimelineContentListModel
 } from '../models'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
@@ -322,7 +322,7 @@ export class DataAdapter implements IDataAdapter {
    *
    * @param timelineConfig Timeline configuration
    */
-  public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationListModel[]) {
+  public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationModel[]) {
     try {
       const [{ PrimarySearchResults: statusReports }] = await Promise.all([
         sp.search({
@@ -361,7 +361,7 @@ export class DataAdapter implements IDataAdapter {
    *
    * @param timelineConfig Timeline configuration
    */
-  public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationListModel[]) {
+  public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
     const timelineItems = await sp.web.lists
       .getByTitle(strings.TimelineContentListName)
       .items.select(
@@ -422,7 +422,7 @@ export class DataAdapter implements IDataAdapter {
 
     return timelineConfig
       .map((item) => {
-        const model = new TimelineConfigurationListModel(
+        const model = new TimelineConfigurationModel(
           item.GtSortOrder,
           item.Title,
           item.GtHexColor,
@@ -448,7 +448,7 @@ export class DataAdapter implements IDataAdapter {
   public async fetchTimelineAggregatedContent(
     configItemTitle: string,
     dataSourceName: string,
-    timelineConfig: TimelineConfigurationListModel[]
+    timelineConfig: TimelineConfigurationModel[]
   ) {
     const config = _.find(
       timelineConfig,

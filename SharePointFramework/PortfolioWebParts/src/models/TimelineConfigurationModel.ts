@@ -1,6 +1,8 @@
-export class TimelineConfigurationListModel {
+
+
+export class TimelineConfigurationModel {
   /**
-   * Creates a new instance of ProjectListModel
+   * Creates a new instance of TimelineConfigurationModel
    *
    * @param sortOrder Sort order
    * @param title Title
