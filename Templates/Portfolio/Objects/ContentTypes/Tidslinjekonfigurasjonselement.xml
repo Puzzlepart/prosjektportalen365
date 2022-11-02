@@ -4,6 +4,7 @@
         <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
         <pnp:FieldRef ID="aaf7828e-a937-4c7e-834b-406cf1166d77" Name="GtHexColor" UpdateChildren="true" />
+        <pnp:FieldRef ID="e7c9cd18-9913-4d4a-9990-64630be48d1a" Name="GtHexColorText" UpdateChildren="true" />
         <pnp:FieldRef ID="aff55aa3-49a2-46ef-af10-9ae8031ab1b4" Name="GtTimelineCategory" UpdateChildren="true" />
         <pnp:FieldRef ID="21d70251-03ef-47e6-bd7f-0f01bd15d500" Name="GtElementType" Required="true" UpdateChildren="true" />
         <pnp:FieldRef ID="6ef97f12-3ac3-4ebc-8975-d658eea33571" Name="GtShowElementPortfolio" UpdateChildren="true" />
