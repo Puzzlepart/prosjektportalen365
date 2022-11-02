@@ -1,4 +1,5 @@
 declare interface IProjectWebPartsStrings {
+  ProjectStatusReportHeaderText: string
   HideStatusReportLabel: string
   DefaultGroupByLabel: string
   DefaultTimeframeStartValue: string

@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    ProjectStatusReportHeaderText:'Siste publiserte statusrapport',
     DefaultGroupByLabel:'Standard gruppering',
     DefaultTimeframeStartLabel: 'Standard starttdato',
     DefaultTimeframeStartValue: '{0} måneder tilbake i tid',
