@@ -32,19 +32,17 @@ export function transformItems(
       _itemTitle = item.itemTitle
       _siteId = item.siteId || 'N/A'
 
+      const background = item.getConfig('elementType') !== strings.BarLabel
+        ? 'transparent'
+        : item.getConfig('hexColor', '#f35d69')
+
       const style: CSSProperties = {
-        color: 'white',
         border: 'none',
         cursor: 'auto',
         outline: 'none',
-        background:
-          item.getConfig('elementType') !== strings.BarLabel
-            ? 'transparent'
-            : item.getConfig('hexColor', '#f35d69'),
-        backgroundColor:
-          item.getConfig('elementType') !== strings.BarLabel
-            ? 'transparent'
-            : item.getConfig('hexColor', '#f35d69')
+        color: item.getConfig('textColorHex', '#ffffff'),
+        background,
+        backgroundColor: background
       }
       const type = item.type || strings.PhaseLabel
       const category = item.getConfig('timelineCategory', 'Styring')
@@ -52,20 +50,11 @@ export function transformItems(
       let group = 0
 
       switch (defaultGroupBy) {
-        case strings.CategoryFieldLabel:
-          {
-            group = timelineGroups.find((g) => g.title === category).id
-          }
+        case strings.CategoryFieldLabel: group = timelineGroups.find((g) => g.title === category).id
           break
-        case strings.TypeLabel:
-          {
-            group = timelineGroups.find((g) => g.title === type).id
-          }
+        case strings.TypeLabel: group = timelineGroups.find((g) => g.title === type).id
           break
-        default:
-          {
-            group = timelineGroups.find((g) => g.title === project).id
-          }
+        default: group = timelineGroups.find((g) => g.title === project).id
           break
       }
       const data: ITimelineItemData = {

@@ -57,19 +57,18 @@ const transformItems = (
 
       if (group === null) return
 
+      const background =
+        item.getConfig('elementType') !== strings.BarLabel
+          ? 'transparent'
+          : item.getConfig('bgColorHex', '#f35d69')
+
       const style: CSSProperties = {
-        color: 'white',
         border: 'none',
         cursor: 'auto',
         outline: 'none',
-        background:
-          item.getConfig('elementType') !== strings.BarLabel
-            ? 'transparent'
-            : item.getConfig('hexColor', '#f35d69'),
-        backgroundColor:
-          item.getConfig('elementType') !== strings.BarLabel
-            ? 'transparent'
-            : item.getConfig('hexColor', '#f35d69')
+        color: item.getConfig('textColorHex', '#ffffff'),
+        background: background,
+        backgroundColor: background
       }
       const data: any = {
         phase: item.phase,
@@ -78,7 +77,7 @@ const transformItems = (
         budgetTotal: item.budgetTotal,
         costsTotal: item.costsTotal,
         sortOrder: item.getConfig('sortOrder'),
-        hexColor: item.getConfig('hexColor'),
+        hexColor: item.getConfig('bgColorHex'),
         category: item.getConfig('timelineCategory'),
         elementType: item.getConfig('elementType'),
         filter: item.getConfig('timelineFilter'),
@@ -126,7 +125,7 @@ const transformItems = (
  */
 const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProjectTimelineState>> => {
   try {
-    const timelineConfiguration = await props.dataAdapter.fetchTimelineConfiguration()
+    const timelineConfig = await props.dataAdapter.fetchTimelineConfiguration()
     const [
       projects,
       projectData,
@@ -134,12 +133,12 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
       timelineAggregatedContent = []
     ] = await Promise.all([
       props.dataAdapter.fetchEnrichedProjects(),
-      props.dataAdapter.fetchTimelineProjectData(timelineConfiguration),
-      props.dataAdapter.fetchTimelineContentItems(timelineConfiguration),
+      props.dataAdapter.fetchTimelineProjectData(timelineConfig),
+      props.dataAdapter.fetchTimelineContentItems(timelineConfig),
       props.dataAdapter.fetchTimelineAggregatedContent(
         props.configItemTitle,
         props.dataSourceName,
-        timelineConfiguration
+        timelineConfig
       )
     ])
 
@@ -183,7 +182,7 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
         items,
         groups
       },
-      timelineConfig: timelineConfiguration
+      timelineConfig
     } as Partial<IProjectTimelineState>
   } catch (error) {
     return { error }

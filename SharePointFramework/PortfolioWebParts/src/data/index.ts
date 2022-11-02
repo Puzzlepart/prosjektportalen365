@@ -336,18 +336,7 @@ export class DataAdapter implements IDataAdapter {
         })
       ])
 
-      const config = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
-
-      const configElement: TimelineConfigurationListModel = {
-        title: '',
-        sortOrder: config?.sortOrder,
-        hexColor: config?.hexColor,
-        timelineCategory: config?.timelineCategory,
-        elementType: config?.elementType,
-        showElementPortfolio: config?.showElementPortfolio,
-        showElementProgram: config?.showElementProgram,
-        timelineFilter: config?.timelineFilter
-      }
+      const configElement = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
 
       const reports = statusReports
         .map((report) => {
@@ -421,6 +410,7 @@ export class DataAdapter implements IDataAdapter {
         'GtSortOrder',
         'Title',
         'GtHexColor',
+        'GtHexColorText',
         'GtTimelineCategory',
         'GtElementType',
         'GtShowElementPortfolio',
@@ -435,6 +425,7 @@ export class DataAdapter implements IDataAdapter {
           item.GtSortOrder,
           item.Title,
           item.GtHexColor,
+          item.GtHexColorText,
           item.GtTimelineCategory,
           item.GtElementType,
           item.GtShowElementPortfolio,
