@@ -4,6 +4,7 @@ import {
 } from 'pp365-portfoliowebparts/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { IProjectTimelineProps } from '../types'
+
 /**
  * Fetch timeline configuration
  *
