@@ -5,7 +5,10 @@ import { TimelineConfigurationModel } from 'pp365-portfoliowebparts/lib/models'
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import * as ProjectDataService from 'pp365-shared/lib/services/ProjectDataService'
 import { IEntityField } from 'sp-entityportal-service'
-import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent/types'
+import {
+  IBaseWebPartComponentProps,
+  IBaseWebPartComponentState
+} from '../BaseWebPartComponent/types'
 
 export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   listName?: string

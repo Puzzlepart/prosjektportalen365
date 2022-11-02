@@ -3,9 +3,11 @@ import React, { FC, useContext } from 'react'
 import { SectionContext } from '../Sections/context'
 import styles from './StatusElement.module.scss'
 import { IStatusElementProps } from './types'
+import { useStatusElement } from './useStatusElement'
 
 export const StatusElement: FC<IStatusElementProps> = (props) => {
   const { headerProps } = useContext(SectionContext)
+  const { commentProps } = useStatusElement(props)
   return (
     <div className={styles.root}>
       <div className={styles.container}>
@@ -20,13 +22,7 @@ export const StatusElement: FC<IStatusElementProps> = (props) => {
         <div className={styles.content}>
           <div className={styles.label}>{headerProps.label}</div>
           <div className={styles.value}>{headerProps.value}</div>
-          {headerProps.comment && (
-            <div
-              className={styles.comment}
-              dangerouslySetInnerHTML={{
-                __html: headerProps.comment.replace(/\n/g, '<br />')
-              }}></div>
-          )}
+          <div {...commentProps}></div>
         </div>
       </div>
     </div>

@@ -9,4 +9,6 @@ export interface IStatusElement {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IStatusElementProps extends Pick<IStatusElement, 'iconSize'> {}
+export interface IStatusElementProps extends Pick<IStatusElement, 'iconSize'> {
+  truncateComment?: number
+}
