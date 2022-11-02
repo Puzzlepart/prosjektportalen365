@@ -5,7 +5,7 @@ import {
   ITimelineData,
   ITimelineGroup
 } from './types'
-import { useProjectTimelineDataFetch } from './useProjectTimelineDataFetch'
+import { useProjectTimelineDataFetch } from './data/useProjectTimelineDataFetch'
 import sortArray from 'array-sort'
 import { get } from '@microsoft/sp-lodash-subset'
 import { IColumn } from '@fluentui/react/lib/DetailsList'
