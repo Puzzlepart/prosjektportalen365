@@ -1,16 +1,11 @@
-import { ITimelineItem } from 'interfaces/ITimelineItem'
 import { Callout } from '@fluentui/react/lib/Callout'
 import * as strings from 'PortfolioWebPartsStrings'
 import { formatDate, tryParseCurrency } from 'pp365-shared/lib/helpers'
 import styles from './DetailsCallout.module.scss'
-import React from 'react'
+import React, { FC } from 'react'
+import { IDetailsCalloutProps } from './types'
 
-export interface IDetailsCalloutProps {
-  timelineItem: { item: ITimelineItem; element: HTMLElement }
-  onDismiss: () => void
-}
-
-export const DetailsCallout = ({ timelineItem, onDismiss }: IDetailsCalloutProps) => {
+export const DetailsCallout: FC<IDetailsCalloutProps> = ({ timelineItem, onDismiss }) => {
   const item = timelineItem.item.data
 
   const _calloutContent = (): JSX.Element => {
@@ -49,17 +44,17 @@ export const DetailsCallout = ({ timelineItem, onDismiss }: IDetailsCalloutProps
       case strings.ProjectLabel: {
         return (
           <>
-            <p hidden={!timelineItem.item.projectUrl}>
+            <p hidden={!timelineItem.item.data.projectUrl}>
               <b>{strings.ProjectLabel}:</b>{' '}
-              <a href={timelineItem.item.projectUrl}>
-                <span>{timelineItem.item.project}</span>
+              <a href={timelineItem.item.data.projectUrl}>
+                <span>{timelineItem.item.data.project}</span>
               </a>
             </p>
             <p hidden={!item.budgetTotal || !item.costsTotal}>
               <a
                 target='_blank'
                 rel='noreferrer'
-                href={`${timelineItem.item.projectUrl}/SitePages/Prosjektstatus.aspx`}>
+                href={`${timelineItem.item.data.projectUrl}/SitePages/Prosjektstatus.aspx`}>
                 <span>{strings.LastPublishedStatusreport}</span>
               </a>
             </p>

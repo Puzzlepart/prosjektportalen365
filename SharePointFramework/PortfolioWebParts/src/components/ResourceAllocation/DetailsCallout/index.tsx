@@ -1,22 +1,18 @@
-import { ITimelineItem } from 'interfaces/ITimelineItem'
 import { Callout } from '@fluentui/react/lib/Callout'
 import * as strings from 'PortfolioWebPartsStrings'
 import { formatDate } from 'pp365-shared/lib/helpers/formatDate'
-import React from 'react'
+import React, { FC } from 'react'
 import styles from './DetailsCallout.module.scss'
+import { IDetailsCalloutProps } from './types'
 
-export interface IDetailsCalloutProps {
-  item: { data: ITimelineItem; element: HTMLElement }
-  onDismiss: () => void
-}
-
-export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
+export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
+  const {item} = props.viewItem
   return (
     <Callout
       className={styles.detailsCallout}
       gapSpace={10}
-      target={item.element}
-      onDismiss={onDismiss}
+      target={props.viewItem.element}
+      onDismiss={props.onDismiss}
       setInitialFocus={true}>
       <p>
         <b>{strings.ProjectLabel}:</b>{' '}
@@ -35,17 +31,17 @@ export const DetailsCallout = ({ item, onDismiss }: IDetailsCalloutProps) => {
       </p>
       <p>
         <b>{strings.StartDateLabel}:</b>{' '}
-        <span>{formatDate(item.data.props.GtStartDateOWSDATE)}</span>
+        <span>{formatDate(item.props.GtStartDateOWSDATE)}</span>
       </p>
       <p>
-        <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.data.props.GtEndDateOWSDATE)}</span>
+        <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.props.GtEndDateOWSDATE)}</span>
       </p>
-      <p hidden={!item.data.props.GtAllocationStatusOWSCHCS}>
+      <p hidden={!item.props.GtAllocationStatusOWSCHCS}>
         <b>{strings.AllocationStatusLabel}:</b>{' '}
-        <span>{item.data.props.GtAllocationStatusOWSCHCS}</span>
+        <span>{item.props.GtAllocationStatusOWSCHCS}</span>
       </p>
-      <p hidden={!item.data.props.GtAllocationCommentOWSMTXT}>
-        <b>{strings.CommentLabel}:</b> <span>{item.data.props.GtAllocationCommentOWSMTXT}</span>
+      <p hidden={!item.props.GtAllocationCommentOWSMTXT}>
+        <b>{strings.CommentLabel}:</b> <span>{item.props.GtAllocationCommentOWSMTXT}</span>
       </p>
     </Callout>
   )

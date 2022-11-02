@@ -1,5 +1,10 @@
 define([], function () {
   return {
+    DefaultGroupByLabel:'Standard gruppering',
+    DefaultTimeframeStartLabel: 'Standard starttdato',
+    DefaultTimeframeStartValue: '{0} måneder tilbake i tid',
+    DefaultTimeframeEndLabel: 'Standard sluttdato',
+    DefaultTimeframeEndValue: '{0} måneder frem i tid',
     CreateParentModalTitle: 'Overordnet område',
     CreateParentModalSubText: 'Ønsker du å gjøre om området til et overordnet område? Denne handlingen er ikke reversibel.',
     UseFramelessButtonsLabel: 'Rammeløse knapper',
@@ -152,7 +157,7 @@ define([], function () {
     ShowFilterButtonLabel: 'Vis filterknapp',
     ShowTimelineLabel: 'Vis tidslinje',
     ShowInfoMessageLabel: 'Vis infomelding',
-    ShowCmdTimelineListLabel: 'Vis kommandolinje for liste',
+    ShowTimelineListCommandsLabel: 'Vis kommandolinje for liste',
     ShowTimelineListLabel: 'Vis liste',
     AdvancedGroupName: 'Avansert',
     UseDynamicHomepageFieldLabel: 'Bruk dynamisk hjemmeside',

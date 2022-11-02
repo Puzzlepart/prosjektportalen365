@@ -150,7 +150,7 @@ export class ResourceAllocation extends Component<
         />
         {this.state.showDetails && (
           <DetailsCallout
-            item={this.state.showDetails}
+            viewItem={this.state.showDetails}
             onDismiss={() => this.setState({ showDetails: null })}
           />
         )}
@@ -274,7 +274,7 @@ export class ResourceAllocation extends Component<
    * @param item Item
    */
   private _onItemClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) {
-    this.setState({ showDetails: { element: event.currentTarget, data: item } })
+    this.setState({ showDetails: { element: event.currentTarget, item: item } })
   }
 
   /**
@@ -348,11 +348,13 @@ export class ResourceAllocation extends Component<
         end_time: moment(new Date(res.GtEndDateOWSDATE)),
         allocation,
         itemProps: { style },
-        project: res.SiteTitle,
-        projectUrl: res.SiteName,
         role: res.RefinableString72,
         resource: res.RefinableString71,
-        props: res
+        props: res,
+        data: {
+          project: res.SiteTitle,
+          projectUrl: res.SiteName,
+        }
       } as ITimelineItem
     })
     return items

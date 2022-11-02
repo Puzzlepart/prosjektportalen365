@@ -6,7 +6,7 @@
     "version": "1.7.2",
     "manifestVersion": 2,
     "requiresCustomScript": false,
-    "hiddenFromToolbox": true,
+    "hiddenFromToolbox": false,
     "supportedHosts": [
         "SharePointWebPart"
     ],
@@ -26,7 +26,7 @@
             "properties": {
                 "listName": "Tidslinjeinnhold",
                 "showTimeline": true,
-                "showCmdTimelineList": true,
+                "showTimelineListCommands": true,
                 "showTimelineList": true,
                 "showProjectDeliveries": false,
                 "projectDeliveriesListName": "Prosjektleveranser",

@@ -1,18 +1,15 @@
+import { TimelineConfigurationListModel } from './TimelineConfigurationListModel'
+
 export class TimelineContentListModel {
+  private _config: TimelineConfigurationListModel
+
   /**
    * Creates a new instance of TimelineContentListModel
    *
    * @param siteId Site id
    * @param title Title
    * @param itemTitle Item title
-   * @param type Type
-   * @param sortOrder Sort order
-   * @param hexColor Hexadecimal color
-   * @param timelineCategory Category
-   * @param elementType Element type
-   * @param showElementPortfolio Show element on portfolio timeline
-   * @param showElementProgram Show element on program timeline
-   * @param timelineFilter Timeline filterable
+   * @param type Item type
    * @param startDate Start Date
    * @param endDate End Date
    * @param description Description
@@ -27,13 +24,6 @@ export class TimelineContentListModel {
     public title: string,
     public itemTitle: string,
     public type: string,
-    public sortOrder: number,
-    public hexColor: string,
-    public timelineCategory: string,
-    public elementType: any,
-    public showElementPortfolio: any,
-    public showElementProgram: any,
-    public timelineFilter: any,
     public startDate?: string,
     public endDate?: string,
     public description?: string,
@@ -42,5 +32,25 @@ export class TimelineContentListModel {
     public costsTotal?: string,
     public url?: string,
     public phase?: string
-  ) {}
+  ) { }
+
+  /**
+   * Set configuration
+   * 
+   * @param config Timeline configuration
+   */
+  public setConfig(config: TimelineConfigurationListModel) {
+    this._config = config
+    return this
+  }
+
+  /**
+   * Get configuration entry by key
+   * 
+   * @param key Configuration key
+   * @param fallbackValue Fallback value
+   */
+  public getConfig<T = string>(key: keyof TimelineConfigurationListModel, fallbackValue: T = null) {
+    return (this._config[key] ?? fallbackValue) as T
+  }
 }

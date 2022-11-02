@@ -3,21 +3,23 @@ import {
   IProjectTimelineProps,
   IProjectTimelineState,
   ITimelineData,
-  ITimelineGroup,
-  ITimelineItem
+  ITimelineGroup
 } from './types'
-import { useProjectTimelineDataFetch } from './useProjectTimelineDataFetch'
+import { useProjectTimelineDataFetch } from './data/useProjectTimelineDataFetch'
 import sortArray from 'array-sort'
 import { get } from '@microsoft/sp-lodash-subset'
 import { IColumn } from '@fluentui/react/lib/DetailsList'
 import { TimelineConfigurationListModel } from 'pp365-portfoliowebparts/lib/models'
 import { IFilterItemProps, IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
 import strings from 'ProjectWebPartsStrings'
+import { TimelineTimeframe } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline'
+import { ITimelineItem } from 'pp365-portfoliowebparts/lib/interfaces/ITimelineItem'
 
 /**
  * Component logic hook for `ProjectTimeline`
  *
  * @param props Props
+ *
  * @returns `state`, `setState`, `onFilterChange`
  */
 export const useProjectTimeline = (props: IProjectTimelineProps) => {
@@ -56,8 +58,10 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
 
   /**
    * Get filters
+   *
    * @param config Timeline configuration
    * @param data Timeline data
+   *
    * @returns `filters` for `FilterPanel`
    */
   const getFilters = (
@@ -103,53 +107,47 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     setState({ activeFilters })
     if (state?.data?.items) {
       const filteredData = getFilteredData(state?.data)
-      const filters = getFilters(state?.timelineConfiguration, state?.data)
+      const filters = getFilters(state?.timelineConfig, state?.data)
       setState({ filteredData, filters })
     }
   }
 
   /**
-   * On group change
+   * On group by change
    *
-   * @param group any
+   * @param groupBy Group by
    */
-  const onGroupChange = (group) => {
+  const onGroupByChange = (groupBy: string) => {
     let selectedGroup: ITimelineGroup[] = []
     let updatedItems: ITimelineItem[] = []
 
     if (state?.data?.items) {
-      switch (group) {
+      switch (groupBy) {
         case strings.CategoryFieldLabel:
           {
-            selectedGroup = state.groups.categoryGroup
-            updatedItems = state.data.items.map((item) => {
-              return {
-                ...item,
-                group: selectedGroup.find((g) => g.title === item.data.category).id
-              }
-            })
+            selectedGroup = state.groups.categoryGroups
+            updatedItems = state.data.items.map((item) => ({
+              ...item,
+              group: selectedGroup.find((g) => g.title === item.data.category)?.id
+            }))
           }
           break
         case strings.TypeLabel:
           {
-            selectedGroup = state.groups.typeGroup
-            updatedItems = state.data.items.map((item) => {
-              return {
-                ...item,
-                group: selectedGroup.find((g) => g.title === item.data.type).id
-              }
-            })
+            selectedGroup = state.groups.typeGroups
+            updatedItems = state.data.items.map((item) => ({
+              ...item,
+              group: selectedGroup.find((g) => g.title === item.data.type)?.id
+            }))
           }
           break
         default:
           {
-            selectedGroup = state.groups.projectGroup
-            updatedItems = state.data.items.map((item) => {
-              return {
-                ...item,
-                group: selectedGroup.find((g) => g.title === item.project).id
-              }
-            })
+            selectedGroup = state.groups.projectGroups
+            updatedItems = state.data.items.map((item) => ({
+              ...item,
+              group: selectedGroup.find((g) => g.title === item.data?.project)?.id
+            }))
           }
           break
       }
@@ -163,19 +161,27 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     })
   }
 
-  useProjectTimelineDataFetch(props, state.refetch, (data) => {
-    if (data.error) setState({ error: data.error, isDataLoaded: true })
+  useProjectTimelineDataFetch(props, state.refetch, ($) => {
+    if ($.error) setState({ error: $.error, isDataLoaded: true })
     else {
-      const filters = getFilters(data.timelineConfiguration, data.data)
-      const filteredData = getFilteredData(data.data)
-      setState({ ...data, filteredData, filters, isDataLoaded: true })
+      const filters = getFilters($.timelineConfig, $.data)
+      const filteredData = getFilteredData($.data)
+      setState({ ...$, filteredData, filters, isDataLoaded: true })
     }
   })
+
+  const [sAmount, sDuration] = props.defaultTimeframeStart.split(',')
+  const [eAmount, eDuration] = props.defaultTimeframeEnd.split(',')
+  const defaultTimeframe: TimelineTimeframe = [
+    [-parseInt(sAmount), sDuration as moment.unitOfTime.DurationConstructor],
+    [parseInt(eAmount), eDuration as moment.unitOfTime.DurationConstructor]
+  ]
 
   return {
     state,
     setState,
     onFilterChange,
-    onGroupChange
+    onGroupByChange,
+    defaultTimeframe
   } as const
 }

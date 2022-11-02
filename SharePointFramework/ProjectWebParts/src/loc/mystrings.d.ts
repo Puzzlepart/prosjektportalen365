@@ -1,4 +1,9 @@
 declare interface IProjectWebPartsStrings {
+  DefaultGroupByLabel: string
+  DefaultTimeframeStartValue: string
+  DefaultTimeframeEndValue: string
+  DefaultTimeframeStartLabel: string
+  DefaultTimeframeEndLabel: string
   RedoText: string
   CreateParentModalSubText: string
   CreateParentModalTitle: string
@@ -152,7 +157,7 @@ declare interface IProjectWebPartsStrings {
   ShowFilterButtonLabel: string
   ShowTimelineLabel: string
   ShowInfoMessageLabel: string
-  ShowCmdTimelineListLabel: string
+  ShowTimelineListCommandsLabel: string
   ShowTimelineListLabel: string
   AdvancedGroupName: string
   UseDynamicHomepageFieldLabel: string

@@ -5,7 +5,7 @@ import { ISectionContext } from './context'
 
 /**
  * Hook for creating context value for `SectionContext`.
- * 
+ *
  * @returns A callback function
  */
 export function useCreateContextValue({ iconSize = 30 }) {
