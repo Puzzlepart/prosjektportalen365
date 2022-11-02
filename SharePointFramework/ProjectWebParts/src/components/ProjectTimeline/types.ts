@@ -1,7 +1,7 @@
 import { IColumn } from '@fluentui/react'
 import { IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
 import { ITimelineItem } from 'pp365-portfoliowebparts/lib/interfaces/ITimelineItem'
-import { TimelineConfigurationListModel } from 'pp365-portfoliowebparts/lib/models'
+import { TimelineConfigurationModel } from 'pp365-portfoliowebparts/lib/models'
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import * as ProjectDataService from 'pp365-shared/lib/services/ProjectDataService'
 import { IEntityField } from 'sp-entityportal-service'
@@ -55,7 +55,7 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<ITimel
   /**
    * Timeline configuration
    */
-  timelineConfig?: TimelineConfigurationListModel[]
+  timelineConfig?: TimelineConfigurationModel[]
 
   /**
    * Error

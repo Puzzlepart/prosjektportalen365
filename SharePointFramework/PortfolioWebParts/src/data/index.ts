@@ -25,8 +25,9 @@ import {
   ProjectListModel,
   SPChartConfigurationItem,
   SPContentType,
+  SPTimelineConfigurationItem,
   TimelineConfigurationModel,
-  TimelineContentListModel
+  TimelineContentModel
 } from '../models'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import {
@@ -384,7 +385,7 @@ export class DataAdapter implements IDataAdapter {
         const type = item.GtTimelineTypeLookup?.Title
         const config = _.find(timelineConfig, (col) => col.title === type)
         if (item.GtSiteIdLookup?.Title && config?.showElementPortfolio) {
-          return new TimelineContentListModel(
+          return new TimelineContentModel(
             item.GtSiteIdLookup?.GtSiteId,
             item.GtSiteIdLookup?.Title,
             item.Title,
@@ -407,22 +408,10 @@ export class DataAdapter implements IDataAdapter {
   public async fetchTimelineConfiguration() {
     const timelineConfig = await sp.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
-      .items.select(
-        'GtSortOrder',
-        'Title',
-        'GtHexColor',
-        'GtHexColorText',
-        'GtTimelineCategory',
-        'GtElementType',
-        'GtShowElementPortfolio',
-        'GtShowElementProgram',
-        'GtTimelineFilter'
-      )
+      .items.select(...new SPTimelineConfigurationItem().fields)
       .getAll()
 
-    return timelineConfig
-      .map((item) => new TimelineConfigurationModel(item))
-      .filter(Boolean)
+    return timelineConfig.map((item) => new TimelineConfigurationModel(item)).filter(Boolean)
   }
 
   /**
@@ -465,7 +454,7 @@ export class DataAdapter implements IDataAdapter {
 
       return projectDeliveries
         .map((item) =>
-          new TimelineContentListModel(
+          new TimelineContentModel(
             item.SiteId,
             item.SiteTitle,
             item.Title,

@@ -1,8 +1,8 @@
 import { format } from '@fluentui/react'
 import _ from 'lodash'
 import {
-  TimelineConfigurationListModel,
-  TimelineContentListModel
+  TimelineConfigurationModel,
+  TimelineContentModel
 } from 'pp365-portfoliowebparts/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { first } from 'underscore'
@@ -16,8 +16,8 @@ import { IProjectTimelineProps } from '../types'
  */
 export async function fetchProjectData(
   props: IProjectTimelineProps,
-  timelineConfig: TimelineConfigurationListModel[]
-): Promise<TimelineContentListModel> {
+  timelineConfig: TimelineConfigurationModel[]
+): Promise<TimelineContentModel> {
   try {
     const projectData = await props.hubSite.web.lists
       .getByTitle(strings.ProjectsListName)
@@ -26,7 +26,7 @@ export async function fetchProjectData(
       .getAll()
 
     const config = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
-    return new TimelineContentListModel(
+    return new TimelineContentModel(
       props.siteId,
       props.webTitle,
       props.webTitle,

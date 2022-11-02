@@ -30,7 +30,6 @@ export class SPChartConfigurationItem {
   public GtPiWidthXxxl = 0
 }
 
-
 export class ChartConfiguration {
   constructor(public item: SPChartConfigurationItem, public fields: DataField[]) {
     this.item = item

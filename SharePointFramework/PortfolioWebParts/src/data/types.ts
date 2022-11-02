@@ -1,7 +1,7 @@
 import { TypedHash } from '@pnp/common'
 import { ItemUpdateResult, QueryPropertyValueType, SearchQuery, SortDirection } from '@pnp/sp'
 import { IPortfolioConfiguration, IAggregatedListConfiguration } from 'interfaces'
-import { ProjectListModel, TimelineConfigurationModel, TimelineContentListModel } from 'models'
+import { ProjectListModel, TimelineConfigurationModel, TimelineContentModel } from 'models'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services'
 
@@ -76,12 +76,12 @@ export interface IDataAdapter {
   fetchTimelineProjectData?(
     timelineConfig: any[]
   ): Promise<{ reports: any[]; configElement: TimelineConfigurationModel }>
-  fetchTimelineContentItems?(timelineConfig: any[]): Promise<TimelineContentListModel[]>
+  fetchTimelineContentItems?(timelineConfig: any[]): Promise<TimelineContentModel[]>
   fetchTimelineAggregatedContent?(
     configItemTitle: string,
     dataSourceName: string,
     timelineConfig: any[]
-  ): Promise<TimelineContentListModel[]>
+  ): Promise<TimelineContentModel[]>
   fetchTimelineConfiguration?(): Promise<TimelineConfigurationModel[]>
   fetchEnrichedProjects?(filter?: string): Promise<ProjectListModel[]>
   fetchProjects?(configuration?: IAggregatedListConfiguration, dataSource?: string): Promise<any[]>

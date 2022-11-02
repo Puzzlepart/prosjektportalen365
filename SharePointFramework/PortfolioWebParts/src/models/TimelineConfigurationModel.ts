@@ -11,7 +11,7 @@ export class SPTimelineConfigurationItem {
   public GtShowElementProgram: boolean = false
   public GtTimelineFilter: boolean = false
 
-  public fields(): string[] {
+  public get fields(): string[] {
     return Object.keys(this)
   }
 }
@@ -42,5 +42,5 @@ export class TimelineConfigurationModel {
     this.showElementPortfolio = item.GtShowElementPortfolio
     this.showElementProgram = item.GtShowElementProgram
     this.timelineFilter = item.GtTimelineFilter
-   }
+  }
 }

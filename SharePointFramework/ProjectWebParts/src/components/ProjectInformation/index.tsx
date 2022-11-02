@@ -28,25 +28,25 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
               {props.title}
             </span>
           </div>
-            <Shimmer isDataLoaded={state.isDataLoaded}>
-              <ProjectProperties properties={state.properties} />
-              {!props.hideAllActions && state.message && <UserMessage {...state.message} />}
-              <ParentProjectsList />
-              <Actions />
-              <ProgressDialog {...state.progress} />
-              <Panel
-                type={PanelType.medium}
-                headerText={strings.ProjectPropertiesListName}
-                isOpen={state.showAllPropertiesPanel}
-                onDismiss={() => setState({ showAllPropertiesPanel: false })}
-                isLightDismiss
-                closeButtonAriaLabel={strings.CloseText}>
-                <ProjectProperties properties={state.allProperties} />
-              </Panel>
-              {state.confirmActionProps && <ConfirmDialog {...state.confirmActionProps} />}
-              {state.displayCreateParentModal && <CreateParentModal />}
-              {state.displaySyncProjectModal && <SyncProjectModal />}
-            </Shimmer>
+          <Shimmer isDataLoaded={state.isDataLoaded}>
+            <ProjectProperties properties={state.properties} />
+            {!props.hideAllActions && state.message && <UserMessage {...state.message} />}
+            <ParentProjectsList />
+            <Actions />
+            <ProgressDialog {...state.progress} />
+            <Panel
+              type={PanelType.medium}
+              headerText={strings.ProjectPropertiesListName}
+              isOpen={state.showAllPropertiesPanel}
+              onDismiss={() => setState({ showAllPropertiesPanel: false })}
+              isLightDismiss
+              closeButtonAriaLabel={strings.CloseText}>
+              <ProjectProperties properties={state.allProperties} />
+            </Panel>
+            {state.confirmActionProps && <ConfirmDialog {...state.confirmActionProps} />}
+            {state.displayCreateParentModal && <CreateParentModal />}
+            {state.displaySyncProjectModal && <SyncProjectModal />}
+          </Shimmer>
         </div>
       </div>
     </ProjectInformationContext.Provider>

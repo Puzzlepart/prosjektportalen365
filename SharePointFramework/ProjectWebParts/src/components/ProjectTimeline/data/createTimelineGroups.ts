@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import {
-  TimelineConfigurationListModel,
-  TimelineContentListModel
+  TimelineConfigurationModel,
+  TimelineContentModel
 } from 'pp365-portfoliowebparts/lib/models'
 import { ITimelineGroup, ITimelineGroups, TimelineGroupType } from '../types'
 
@@ -14,8 +14,8 @@ import { ITimelineGroup, ITimelineGroups, TimelineGroupType } from '../types'
  * @returns Timeline groups
  */
 export function createTimelineGroups(
-  project: TimelineContentListModel,
-  timelineConfiguration: TimelineConfigurationListModel[]
+  project: TimelineContentModel,
+  timelineConfiguration: TimelineConfigurationModel[]
 ): ITimelineGroups {
   const projectGroups = [
     {

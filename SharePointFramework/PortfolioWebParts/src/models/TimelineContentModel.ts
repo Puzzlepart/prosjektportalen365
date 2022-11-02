@@ -1,10 +1,10 @@
 import { TimelineConfigurationModel } from './TimelineConfigurationModel'
 
-export class TimelineContentListModel {
+export class TimelineContentModel {
   private _config: TimelineConfigurationModel
 
   /**
-   * Creates a new instance of TimelineContentListModel
+   * Creates a new instance of TimelineContentModel
    *
    * @param siteId Site id
    * @param title Title

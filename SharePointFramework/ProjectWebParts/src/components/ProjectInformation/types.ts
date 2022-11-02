@@ -84,7 +84,7 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   /**
    * Hide latest status report
    */
-   hideStatusReport?: boolean
+  hideStatusReport?: boolean
 }
 
 export interface IProjectInformationState
