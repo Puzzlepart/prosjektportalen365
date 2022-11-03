@@ -24,7 +24,10 @@ class PropertyFieldColorConfigurationBuilder
     changeCallback?: (targetProperty?: string, newValue?: any) => void
   ): void {
     render(
-      <PropertyFieldColorConfiguration {...this.properties} onChange={(_, newValue) => changeCallback(this.targetProperty, newValue)} />,
+      <PropertyFieldColorConfiguration
+        {...this.properties}
+        onChange={(_, newValue) => changeCallback(this.targetProperty, newValue)}
+      />,
       element
     )
   }

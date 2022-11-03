@@ -28,7 +28,7 @@ export function useRiskMatrix(props: IRiskMatrixProps) {
         .getFileByServerRelativeUrl(`/${ServerRelativeUrl}/${props.customConfigUrl}`)
         .getJSON()
       setConfiguration(jsonConfig_)
-    } catch { }
+    } catch {}
   }
 
   useEffect(() => {

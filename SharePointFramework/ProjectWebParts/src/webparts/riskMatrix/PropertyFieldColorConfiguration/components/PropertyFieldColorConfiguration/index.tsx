@@ -28,7 +28,11 @@ export const PropertyFieldColorConfiguration: FC<IPropertyFieldColorConfiguratio
         ))}
       </div>
       <div className={styles.saveBtn}>
-        <DefaultButton text={strings.SaveColorConfigurationText} onClick={onSave && onSave} disabled={!onSave} />
+        <DefaultButton
+          text={strings.SaveColorConfigurationText}
+          onClick={onSave && onSave}
+          disabled={!onSave}
+        />
       </div>
     </div>
   )

@@ -7,9 +7,7 @@ import { MatrixColorScaleConfig } from '../types'
  *
  * @param percentage Percentage value (0 - 1.0)
  */
-export function useColorForPercentage(
-  percentage: number
-) {
+export function useColorForPercentage(percentage: number) {
   const context = useContext(RiskMatrixContext)
   let lower: MatrixColorScaleConfig, upper: MatrixColorScaleConfig
   for (let i = 1; i < context.colorScaleConfig.length - 1; i++) {

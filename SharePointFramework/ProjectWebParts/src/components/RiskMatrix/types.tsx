@@ -18,6 +18,7 @@ export interface IRiskMatrixProps extends Omit<HTMLProps<HTMLDivElement>, 'size'
   customConfigUrl?: string
   size?: RiskMatrixSize
   items?: RiskElementModel[]
+  fullWidth?: boolean
   width?: number | string
   height?: number | string
   calloutTemplate: string

@@ -21,6 +21,7 @@ RiskMatrix.defaultProps = {
   items: [],
   width: 400,
   height: 300,
+  fullWidth: false,
   customConfigUrl: 'SiteAssets/custom-cells.txt',
   size: '5',
   colorScaleConfig: MATRIX_DEFAULT_COLOR_SCALE_CONFIG
