@@ -1,4 +1,4 @@
-import { DefaultButton, Label, Slider } from '@fluentui/react'
+import { DefaultButton, Label, PrimaryButton, Slider } from '@fluentui/react'
 import { MATRIX_DEFAULT_COLOR_SCALE_CONFIG } from 'components/RiskMatrix/types'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
@@ -10,9 +10,14 @@ import { usePropertyFieldColorConfiguration } from './usePropertyFieldColorConfi
 export const PropertyFieldColorConfiguration: FC<IPropertyFieldColorConfigurationProps> = (
   props
 ) => {
-  const { count, setCount, config, onColorChange, onSave } = usePropertyFieldColorConfiguration(
-    props
-  )
+  const {
+    count,
+    setCount,
+    config,
+    onColorChange,
+    onSave,
+    onRevertDefault
+  } = usePropertyFieldColorConfiguration(props)
   return (
     <div className={styles.root}>
       <Label>{props.label}</Label>
@@ -27,11 +32,16 @@ export const PropertyFieldColorConfiguration: FC<IPropertyFieldColorConfiguratio
           />
         ))}
       </div>
-      <div className={styles.saveBtn}>
-        <DefaultButton
+      <div className={styles.actions}>
+        <PrimaryButton
           text={strings.SaveColorConfigurationText}
           onClick={onSave && onSave}
           disabled={!onSave}
+        />
+        <DefaultButton
+          text={strings.RevertDefaultColorConfigurationText}
+          onClick={onRevertDefault && onRevertDefault}
+          disabled={!onRevertDefault}
         />
       </div>
     </div>

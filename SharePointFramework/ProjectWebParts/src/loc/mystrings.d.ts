@@ -1,4 +1,5 @@
 declare interface IProjectWebPartsStrings {
+  RevertDefaultColorConfigurationText: string
   RiskMatrix_Header_ExtremelyLow: string
   RiskMatrix_Header_VeryCritical: string
   RiskMatrixColorScaleConfigLabel: string
