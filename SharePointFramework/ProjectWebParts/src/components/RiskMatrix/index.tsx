@@ -6,10 +6,10 @@ import { MATRIX_DEFAULT_COLOR_SCALE_CONFIG, IRiskMatrixProps } from './types'
 import { useRiskMatrix } from './useRiskMatrix'
 
 export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
-  const { configuration, size, style } = useRiskMatrix(props)
+  const { ctxValue, style } = useRiskMatrix(props)
 
   return (
-    <RiskMatrixContext.Provider value={{ ...props, configuration, size }}>
+    <RiskMatrixContext.Provider value={ctxValue}>
       <div className={styles.root} style={style}>
         <MatrixRows />
       </div>

@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    RiskMatrixColorScaleConfigLabel:'Fargekonfigurasjon',
     RiskMatrixSizeLabel: 'Størrelse',
     RiskMatrixFullWidthLabel: 'Bruk full bredde',
     ParentProjectsGroupName: 'Overordnede prosjekter',

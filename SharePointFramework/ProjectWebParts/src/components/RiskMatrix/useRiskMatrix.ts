@@ -28,7 +28,7 @@ export function useRiskMatrix(props: IRiskMatrixProps) {
         .getFileByServerRelativeUrl(`/${ServerRelativeUrl}/${props.customConfigUrl}`)
         .getJSON()
       setConfiguration(jsonConfig_)
-    } catch {}
+    } catch { }
   }
 
   useEffect(() => {
@@ -39,5 +39,5 @@ export function useRiskMatrix(props: IRiskMatrixProps) {
 
   const style: CSSProperties = pick(props, 'width', 'height')
 
-  return { configuration, size, style } as const
+  return { ctxValue: { ...props, configuration, size }, style } as const
 }

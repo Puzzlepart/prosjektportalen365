@@ -15,35 +15,29 @@ export function usePropertyFieldColorConfiguration(props: IPropertyFieldColorCon
     $setCount(count_)
     const inc = count_ - config.length
     const lastColor = last(config)?.color
-    setConfig((config_) => {
+    setConfig(($config) => {
       if (inc > 0) {
         for (let i = 0; i < inc; i++) {
-          config_.push({
-            color: props.value[config_.length + i]?.color ?? lastColor
+          $config.push({
+            color: props.value[$config.length + i]?.color ?? lastColor
           })
         }
-      } else config_ = config_.splice(0, count_)
-      return config_.map((c,idx) => ({
+      } else $config = $config.splice(0, count_)
+      return $config.map((c, idx) => ({
         ...c,
-        percentage: Math.floor(10 + ((90/ config_.length) * idx))
+        percentage: Math.floor(10 + ((90 / $config.length) * idx))
       }))
     })
   }
 
   function onColorChange(idx: number, color: any) {
-    setConfig((config_) => {
-      config_[idx].color = color
-      return config_
-    })
+    setConfig(($config) => $config.map((c, i) => idx === i ? { ...c, color } : c))
   }
 
   let onSave: () => void = null
 
   if (!_.isEqual(props.value, config)) {
-    onSave = () => {
-      // eslint-disable-next-line no-console
-      console.log(config)
-    }
+    onSave = () => props.onChange(null, config)
   }
 
   return { config, count, setCount, onColorChange, onSave } as const

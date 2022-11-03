@@ -6,7 +6,6 @@ import { MatrixColorScaleConfig } from '../types'
  * Get color for percentage value based on `colorConfig`.
  *
  * @param percentage Percentage value (0 - 1.0)
- * @param colorConfig Color scale configuration
  */
 export function useColorForPercentage(
   percentage: number

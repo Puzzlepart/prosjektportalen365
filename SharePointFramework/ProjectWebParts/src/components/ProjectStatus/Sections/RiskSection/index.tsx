@@ -35,6 +35,7 @@ export const RiskSection: FC = () => {
             height={context.props.riskMatrixHeight}
             calloutTemplate={context.props.riskMatrixCalloutTemplate}
             size={context.props.riskMatrixSize}
+            colorScaleConfig={context.props.riskMatrixColorScaleConfig}
             pageContext={context.props.pageContext}
             items={get<RiskElementModel[]>(state, 'data.riskElements', [])}
           />

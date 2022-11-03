@@ -22,6 +22,8 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    // eslint-disable-next-line no-console
+    console.log(this.properties.riskMatrixColorScaleConfig)
     return {
       pages: [
         {
@@ -70,9 +72,9 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                     }
                   ]
                 }),
-                PropertyFieldColorConfiguration('riskMatrixColorConfig', {
-                  key: 'riskMatrixColorConfig',
-                  label: 'Fargekonfigurasjon',
+                PropertyFieldColorConfiguration('riskMatrixColorScaleConfig', {
+                  key: 'riskMatrixColorScaleConfig',
+                  label: strings.RiskMatrixColorScaleConfigLabel,
                   value: this.properties.riskMatrixColorScaleConfig
                 })
               ]
