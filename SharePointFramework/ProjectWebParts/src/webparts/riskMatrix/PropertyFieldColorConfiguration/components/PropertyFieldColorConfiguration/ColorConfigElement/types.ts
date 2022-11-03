@@ -1,5 +1,8 @@
-export interface IColorConfigElementProps {
+import { ICalloutProps, IColorPickerProps } from '@fluentui/react'
+
+export interface IColorConfigElementProps
+  extends Pick<IColorPickerProps, 'onChange'>,
+    Omit<ICalloutProps, 'onChange' | 'color'> {
   percentage: number
-  color: string
-  onChange: (color: any) => void
+  color: [number, number, number]
 }
