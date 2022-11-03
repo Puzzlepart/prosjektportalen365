@@ -7,7 +7,7 @@ import { IRiskMatrixProps, RiskMatrixConfiguration } from './types'
 
 /**
  * Component logic hook for `RiskMatrix`
- * 
+ *
  * @param props Props
  */
 export function useRiskMatrix(props: IRiskMatrixProps) {
@@ -28,7 +28,7 @@ export function useRiskMatrix(props: IRiskMatrixProps) {
         .getFileByServerRelativeUrl(`/${ServerRelativeUrl}/${props.customConfigUrl}`)
         .getJSON()
       setConfiguration(jsonConfig_)
-    } catch { }
+    } catch {}
   }
 
   useEffect(() => {

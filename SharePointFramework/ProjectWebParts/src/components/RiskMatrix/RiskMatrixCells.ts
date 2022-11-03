@@ -58,12 +58,12 @@ const RiskMatrixHeaders: Record<number, string[][]> = {
 
 /**
  * Generate default risk matrix configuration
- * 
+ *
  * @param size Matrix size
  */
 export const generateRiskMatrixConfiguration = (size: number): RiskMatrixConfiguration => {
   const [topHeaders, leftHeaders] = RiskMatrixHeaders[size]
-  const firstRow = topHeaders.map<IMatrixCell>(cellValue => ({
+  const firstRow = topHeaders.map<IMatrixCell>((cellValue) => ({
     cellValue,
     cellType: MatrixCellType.Header,
     className: 'risk-header'
@@ -83,7 +83,7 @@ export const generateRiskMatrixConfiguration = (size: number): RiskMatrixConfigu
         className: 'risk-matrix-cell',
         consequence,
         probability: size - i
-      },)
+      })
     }
     configuration.push(row)
   }

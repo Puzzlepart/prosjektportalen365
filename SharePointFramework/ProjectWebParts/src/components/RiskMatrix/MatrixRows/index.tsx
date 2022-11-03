@@ -45,7 +45,7 @@ export const MatrixRows: FC = () => {
       switch (cell.cellType) {
         case MatrixCellType.Cell: {
           return (
-            <MatrixCell key={j} className={cell.className} cell={cell} >
+            <MatrixCell key={j} className={cell.className} cell={cell}>
               <span hidden={showPostAction}>{riskElements}</span>
               <span hidden={!showPostAction}>{riskElementsPostAction}</span>
             </MatrixCell>

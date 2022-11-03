@@ -1,14 +1,26 @@
-import { ColorPicker, TooltipHost } from '@fluentui/react'
+import { Callout, ColorPicker } from '@fluentui/react'
 import React, { FC } from 'react'
-import styles from './PropertyFieldColorConfiguration.module.scss'
+import styles from './ColorConfigElement.module.scss'
+import { IColorConfigElementProps } from './types'
+import { useColorConfigElement } from './useColorConfigElement'
 
-export const ColorConfigElement: FC<{ color: string }> = (props) => {
-    return (
-        <TooltipHost
-            content={<ColorPicker color={props.color} showPreview={true} />}>
-            <div className={styles.root} style={{ backgroundColor: props.color }}>
-
-            </div>
-        </TooltipHost>
-    )
+export const ColorConfigElement: FC<IColorConfigElementProps> = (props) => {
+  const { ref, isEditing, setIsEditing } = useColorConfigElement()
+  return (
+    <div
+      ref={ref}
+      className={styles.root}
+      style={{ backgroundColor: props.color }}
+      onClick={() => setIsEditing(true)}>
+      {isEditing && (
+        <Callout target={ref.current} gapSpace={10} onDismiss={() => setIsEditing(false)}>
+          <ColorPicker
+            color={props.color}
+            showPreview={true}
+            onChange={(_ev, color) => props.onChange([color.r, color.g, color.b])}
+          />
+        </Callout>
+      )}
+    </div>
+  )
 }

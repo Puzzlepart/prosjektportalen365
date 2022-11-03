@@ -10,6 +10,7 @@ import '@fluentui/react/dist/css/fabric.min.css'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 import * as strings from 'ProjectWebPartsStrings'
 import { ProjectStatus, IProjectStatusProps } from 'components/ProjectStatus'
+import PropertyFieldColorConfiguration from '../riskMatrix/PropertyFieldColorConfiguration'
 
 export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectStatusProps> {
   public async onInit() {
@@ -50,24 +51,29 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,
                   resizable: true,
-                  rows: 30,
+                  rows: 12
                 }),
                 PropertyPaneDropdown('riskMatrixSize', {
                   label: strings.RiskMatrixSizeLabel,
-                  options:[
+                  options: [
                     {
-                      key:'4',
+                      key: '4',
                       text: '4x4'
                     },
                     {
-                      key:'5',
+                      key: '5',
                       text: '5x5'
                     },
                     {
-                      key:'6',
+                      key: '6',
                       text: '6x6'
                     }
                   ]
+                }),
+                PropertyFieldColorConfiguration('riskMatrixColorConfig', {
+                  key: 'riskMatrixColorConfig',
+                  label: 'Fargekonfigurasjon',
+                  value: this.properties.riskMatrixColorConfig
                 })
               ]
             },
