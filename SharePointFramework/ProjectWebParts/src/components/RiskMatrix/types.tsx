@@ -2,6 +2,7 @@ import { PageContext } from '@microsoft/sp-page-context'
 import { HTMLProps } from 'react'
 
 export interface IRiskMatrixProps extends HTMLProps<HTMLDivElement> {
+  customCellsUrl?: string
   items?: RiskElementModel[]
   width?: number | string
   height?: number | string

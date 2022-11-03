@@ -8,7 +8,7 @@ import { IRiskMatrixProps, RiskMatrix, RiskElementModel } from 'components/RiskM
 import * as getValue from 'get-value'
 import ReactDom from 'react-dom'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
-import { IRiskMatrixWebPartProps } from './IRiskMatrixWebPartProps'
+import { IRiskMatrixWebPartProps } from './types'
 import * as strings from 'ProjectWebPartsStrings'
 
 export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWebPartProps> {

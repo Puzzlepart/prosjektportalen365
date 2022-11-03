@@ -29,7 +29,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                 PropertyPaneSlider('riskMatrixWidth', {
                   label: strings.WidthFieldLabel,
                   min: 400,
-                  max: 1000,
+                  max: 1300,
                   value: 400,
                   showValue: true
                 }),

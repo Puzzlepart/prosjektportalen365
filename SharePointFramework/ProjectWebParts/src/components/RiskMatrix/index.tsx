@@ -1,48 +1,28 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import { IRiskMatrixProps } from './types'
 import { MatrixRows } from './MatrixRows'
 import styles from './RiskMatrix.module.scss'
-import { sp } from '@pnp/sp/'
-import HubSiteService from 'sp-hubsite-service'
 import { pick } from 'underscore'
+import { useRiskMatrix } from './useRiskMatrix'
+import { RiskMatrixContext } from './context'
 
 export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
-  const [jsonConfig, setJsonConfig] = useState<undefined | []>()
-
-  useEffect(() => {
-    if (props.pageContext) {
-      fetchJsonConfiguration()
-    }
-  }, [])
-
-  async function fetchJsonConfiguration() {
-    const { web } = await HubSiteService.GetHubSite(sp, props.pageContext as any)
-    const { ServerRelativeUrl } = await web.get()
-    const jsonConfig_ = await web
-      .getFileByServerRelativeUrl(`/${ServerRelativeUrl}/SiteAssets/custom-cells.txt`)
-      .getJSON()
-    setJsonConfig(jsonConfig_)
-  }
+  const { cells } = useRiskMatrix(props)
 
   return (
-    <div className={styles.riskMatrix} style={pick(props, 'width', 'height')}>
-      <table className={styles.table}>
-        <tbody>
-          <MatrixRows
-            items={props.items}
-            calloutTemplate={props.calloutTemplate}
-            cells={jsonConfig}
-          />
-        </tbody>
-      </table>
-    </div>
+    <RiskMatrixContext.Provider value={{ ...props, cells }}>
+      <div className={styles.root} style={pick(props, 'width', 'height')}>
+        <MatrixRows />
+      </div>
+    </RiskMatrixContext.Provider>
   )
 }
 
 RiskMatrix.defaultProps = {
   items: [],
   width: 400,
-  height: 300
+  height: 300,
+  customCellsUrl: 'SiteAssets/custom-cells.txt'
 }
 
 export * from './types'
