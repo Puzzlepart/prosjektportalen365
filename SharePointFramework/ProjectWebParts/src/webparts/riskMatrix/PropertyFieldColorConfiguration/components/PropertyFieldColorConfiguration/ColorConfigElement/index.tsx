@@ -18,7 +18,7 @@ export const ColorConfigElement: FC<IColorConfigElementProps> = (props) => {
           <ColorPicker
             color={props.color}
             showPreview={true}
-            onChange={(_ev, color) => props.onChange([color.r, color.g, color.b])}
+            onChange={props.onChange}
           />
         </Callout>
       )}

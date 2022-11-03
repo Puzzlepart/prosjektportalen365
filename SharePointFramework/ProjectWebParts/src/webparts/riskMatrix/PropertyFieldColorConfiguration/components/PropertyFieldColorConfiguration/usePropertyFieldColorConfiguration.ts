@@ -1,3 +1,4 @@
+import { IColor } from '@fluentui/react'
 import { MATRIX_DEFAULT_COLOR_SCALE_CONFIG } from 'components/RiskMatrix'
 import { useState } from 'react'
 import _, { last } from 'underscore'
@@ -29,8 +30,8 @@ export function usePropertyFieldColorConfiguration(props: IPropertyFieldColorCon
     })
   }
 
-  function onColorChange(idx: number, color: any) {
-    $setConfig(($config) => $config.map((c, i) => (idx === i ? { ...c, color } : c)))
+  function onColorChange(idx: number, color: IColor) {
+    $setConfig(($config) => $config.map((c, i) => (idx === i ? { ...c, color: [color.r, color.g, color.b] } : c)))
   }
 
   let onSave: () => void = null

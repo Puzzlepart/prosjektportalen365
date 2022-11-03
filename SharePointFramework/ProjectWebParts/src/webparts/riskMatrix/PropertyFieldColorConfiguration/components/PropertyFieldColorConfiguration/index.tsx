@@ -32,7 +32,7 @@ export const PropertyFieldColorConfiguration: FC<IPropertyFieldColorConfiguratio
             key={idx}
             percentage={percentage}
             color={`rgb(${color.join(',')})`}
-            onChange={(color) => onColorChange(idx, color)}
+            onChange={(_, color) => onColorChange(idx, color)}
           />
         ))}
       </div>
