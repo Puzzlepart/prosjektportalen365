@@ -1,66 +1,55 @@
 import { getId } from '@fluentui/react'
 import { Toggle } from '@fluentui/react/lib/Toggle'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FC, useState } from 'react'
+import React, { FC, useContext, useState } from 'react'
+import { RiskMatrixContext } from '../context'
 import { IMatrixCell, MatrixCell, MatrixCellType, MatrixHeaderCell } from '../MatrixCell'
 import { RiskElement } from '../RiskElement'
-import RISK_MATRIX_CELLS from '../RiskMatrixCells'
 import { MatrixRow } from './MatrixRow'
-import { IMatrixRowsProps } from './types'
 
-/**
+export const MatrixRows: FC = () => {
+  const context = useContext(RiskMatrixContext)
+  const [showPostAction, setShowPostAction] = useState(false)
+
+  /**
  * Get risk elements for cell
  * 
  * @param cell Cell
- * @param props Props for MatrixRows
  */
-const getRiskElementsForCell = (
-  cell: IMatrixCell,
-  props: IMatrixRowsProps
-) => {
-  const itemsForCell = props.items.filter(
-    ({ probability, consequence }) => cell.probability === probability && cell.consequence === consequence
-  )
-  return itemsForCell.map((risk, idx) => (
-    <RiskElement key={getId(idx.toString())} model={risk} calloutTemplate={props.calloutTemplate} />
-  ))
-}
+  const getRiskElementsForCell = ( cell: IMatrixCell ) => {
+    const itemsForCell = context.items.filter(
+      ({ probability, consequence }) => cell.probability === probability && cell.consequence === consequence
+    )
+    return itemsForCell.map((risk, idx) => (
+      <RiskElement key={getId(idx.toString())} model={risk} />
+    ))
+  }
 
-/**
- * Get risk elements post action for cell
- * 
- * @param cell Cell
- * @param props Props for MatrixRows
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getRiskElementsPostActionForCell = (
-  cell: IMatrixCell,
-  props: IMatrixRowsProps
-) => {
-  const itemsForCell = props.items.filter(
-    (risk) =>
-      cell.probability === risk.probabilityPostAction &&
-      cell.consequence === risk.consequencePostAction
-  )
-  return itemsForCell.map((risk, idx) => (
-    <RiskElement
-      key={getId(idx.toString())}
-      model={risk}
-      calloutTemplate={props.calloutTemplate}
-    />
-  ))
-}
+  /**
+   * Get risk elements post action for cell
+   * 
+   * @param cell Cell
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const getRiskElementsPostActionForCell = (cell: IMatrixCell ) => {
+    const itemsForCell = context.items.filter(
+      ({ probabilityPostAction, consequencePostAction }) =>
+        cell.probability === probabilityPostAction &&
+        cell.consequence === consequencePostAction
+    )
+    return itemsForCell.map((risk, idx) => (
+      <RiskElement
+        key={getId(idx.toString())}
+        model={risk}  />
+    ))
+  }
 
-export const MatrixRows: FC<IMatrixRowsProps> = (props) => {
-  const [showPostAction, setShowPostAction] = useState(false)
-
-  const children = props.cells.map((rows, i) => {
+  const children = context.cells.map((rows, i) => {
     const cells = rows.map((c, j) => {
-      const cell = props.cells[i][j]
-      const riskElements = getRiskElementsForCell(cell, props)
+      const cell = context.cells[i][j]
+      const riskElements = getRiskElementsForCell(cell)
       const riskElementsPostAction = getRiskElementsPostActionForCell(
-        cell,
-        props
+        cell
       )
       switch (cell.cellType) {
         case MatrixCellType.Cell: {
@@ -91,8 +80,4 @@ export const MatrixRows: FC<IMatrixRowsProps> = (props) => {
       />
     </>
   )
-}
-
-MatrixRows.defaultProps = {
-  cells: RISK_MATRIX_CELLS
 }
