@@ -1,5 +1,7 @@
 import { PageContext } from '@microsoft/sp-page-context'
-export interface IRiskMatrixProps {
+import { HTMLProps } from 'react'
+
+export interface IRiskMatrixProps extends HTMLProps<HTMLDivElement> {
   items?: RiskElementModel[]
   width?: number | string
   height?: number | string

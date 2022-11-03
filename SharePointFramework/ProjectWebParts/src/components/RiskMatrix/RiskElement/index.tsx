@@ -1,41 +1,30 @@
+import { TooltipHost } from '@fluentui/react'
+import { replaceTokens } from 'pp365-shared/lib/util'
 import React, { FC } from 'react'
-import { IRiskElementProps } from './types'
 import styles from './RiskElement.module.scss'
-import { RiskElementCallout } from './RiskElementCallout'
+import { IRiskElementProps } from './types'
 
-export const RiskElement: FC<IRiskElementProps> = ({
-  style,
-  model,
-  calloutTemplate
-}: IRiskElementProps) => {
-  const [callout, setCallout] = React.useState(null)
-
+export const RiskElement: FC<IRiskElementProps> = (props) => {
   const getTooltip = () => {
     let tooltip = ''
-    if (model.siteTitle) {
-      tooltip += `${model.siteTitle}: `
+    if (props.model.siteTitle) {
+      tooltip += `${props.model.siteTitle}: `
     }
-    tooltip += model.title
+    tooltip += props.model.title
     return tooltip
   }
 
   return (
-    <>
-      <div
-        onClick={(event) => setCallout(event.currentTarget)}
-        className={styles.riskElement}
-        title={getTooltip()}
-        style={style}>
-        {model.id}
+    <TooltipHost
+      content={
+        <span
+          dangerouslySetInnerHTML={{
+            __html: replaceTokens(props.calloutTemplate, props.model.item)
+          }}></span>
+      }>
+      <div className={styles.root} title={getTooltip()} style={props.style}>
+        {props.model.id}
       </div>
-      {callout && (
-        <RiskElementCallout
-          risk={model}
-          calloutTemplate={calloutTemplate}
-          target={callout}
-          onDismiss={() => setCallout(null)}
-        />
-      )}
-    </>
+    </TooltipHost>
   )
 }

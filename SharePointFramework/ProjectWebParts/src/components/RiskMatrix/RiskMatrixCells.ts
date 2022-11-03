@@ -1,7 +1,7 @@
 import { IMatrixCell, MatrixCellType } from './MatrixCell'
 import * as strings from 'ProjectWebPartsStrings'
 
-const RISK_MATRIX_CELLS: Array<IMatrixCell[]> = [
+const RISK_MATRIX_CELLS: IMatrixCell[][] = [
   [
     {
       cellType: MatrixCellType.Header,

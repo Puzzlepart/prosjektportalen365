@@ -13,3 +13,7 @@ export interface IMatrixCell {
 }
 
 export type IMatrixCellProps = React.HTMLProps<HTMLElement>
+
+export interface IMatrixHeaderCellProps extends React.HTMLProps<HTMLElement> {
+  label: string
+}

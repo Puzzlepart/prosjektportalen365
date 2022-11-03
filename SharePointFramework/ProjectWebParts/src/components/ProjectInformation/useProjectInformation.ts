@@ -33,7 +33,11 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
    * @param type Message bar type
    * @param duration Duration in seconds
    */
-  const addMessage = (text: string, type: MessageBarType, duration: number = 5): Promise<void> => {
+  const addMessage = (
+    text: string,
+    type: MessageBarType,
+    duration: number = 5
+  ): Promise<void> => {
     return new Promise((resolve) => {
       setState({
         message: {
@@ -88,7 +92,10 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
       document.location.href =
         sessionStorage.DEBUG || DEBUG ? document.location.href.split('#')[0] : props.webUrl
     } catch (error) {
-      addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning)
+      addMessage(
+        strings.SyncProjectPropertiesErrorText,
+        MessageBarType.severeWarning
+      )
     } finally {
       setState({ progress: null })
     }
