@@ -18,4 +18,5 @@ export interface ITimelineProps
   onFilterChange: (column: IColumn, selectedItems: IFilterItemProps[]) => void
   infoText?: string
   title?: string
+  hideSidebar?: boolean
 }
