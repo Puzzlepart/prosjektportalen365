@@ -1,8 +1,9 @@
 import { sp } from '@pnp/sp/'
 import { useEffect, useState } from 'react'
 import HubSiteService from 'sp-hubsite-service'
+import { DynamicMatrixConfiguration } from '../DynamicMatrix'
 import { generateRiskMatrixConfiguration } from './generateRiskMatrixConfiguration'
-import { IRiskMatrixProps, RiskMatrixConfiguration } from './types'
+import { IRiskMatrixProps } from './types'
 
 /**
  * Configuration hook for `RiskMatrix`
@@ -10,7 +11,7 @@ import { IRiskMatrixProps, RiskMatrixConfiguration } from './types'
  * @param props Props
  */
 export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
-  const [configuration, setConfiguration] = useState<RiskMatrixConfiguration>([])
+  const [configuration, setConfiguration] = useState<DynamicMatrixConfiguration>([])
 
   useEffect(() => {
     if (props.pageContext) {

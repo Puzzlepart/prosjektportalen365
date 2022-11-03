@@ -10,8 +10,8 @@ export interface IMatrixCell {
   cellType: MatrixCellType
   className: string
   style?: CSSProperties
-  consequence?: number
-  probability?: number
+  x?: number
+  y?: number
 }
 
 export interface IMatrixCellProps extends HTMLProps<HTMLDivElement> {

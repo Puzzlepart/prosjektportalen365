@@ -15,4 +15,5 @@ export const MatrixCell: FC<IMatrixCellProps> = (props) => {
 }
 
 export * from './MatrixHeaderCell'
+export * from './MatrixElement'
 export * from './types'

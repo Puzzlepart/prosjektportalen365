@@ -1,6 +1,5 @@
 import * as strings from 'ProjectWebPartsStrings'
-import { IMatrixCell, MatrixCellType } from './MatrixCell'
-import { RiskMatrixConfiguration } from './types'
+import { DynamicMatrixConfiguration, IMatrixCell, MatrixCellType } from '../DynamicMatrix'
 
 const RiskMatrixHeaders: Record<number, string[][]> = {
   4: [
@@ -61,7 +60,7 @@ const RiskMatrixHeaders: Record<number, string[][]> = {
  *
  * @param size Matrix size
  */
-export const generateRiskMatrixConfiguration = (size: number): RiskMatrixConfiguration => {
+export const generateRiskMatrixConfiguration = (size: number): DynamicMatrixConfiguration => {
   const [topHeaders, leftHeaders] = RiskMatrixHeaders[size]
   const firstRow = topHeaders.map<IMatrixCell>((cellValue) => ({
     cellValue,
@@ -81,8 +80,8 @@ export const generateRiskMatrixConfiguration = (size: number): RiskMatrixConfigu
       row.push({
         cellType: MatrixCellType.Cell,
         className: 'risk-matrix-cell',
-        consequence,
-        probability: size - i
+        x: consequence,
+        y: size - i
       })
     }
     configuration.push(row)

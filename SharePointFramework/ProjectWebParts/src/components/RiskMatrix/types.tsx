@@ -1,12 +1,9 @@
 import { PageContext } from '@microsoft/sp-page-context'
+import { IMatrixElementModel } from '../DynamicMatrix/MatrixCell/MatrixElement/types'
 import { HTMLProps } from 'react'
-import { IMatrixCell } from './MatrixCell/types'
+import { IDynamicMatrixContext, DynamicMatrixColorScaleConfig } from '../DynamicMatrix'
 
-type RGB = [number, number, number]
-
-export type MatrixColorScaleConfig = { percentage?: number; color: RGB }
-
-export const MATRIX_DEFAULT_COLOR_SCALE_CONFIG: MatrixColorScaleConfig[] = [
+export const MATRIX_DEFAULT_COLOR_SCALE_CONFIG: DynamicMatrixColorScaleConfig[] = [
   { percentage: 10, color: [44, 186, 0] },
   { percentage: 30, color: [163, 255, 0] },
   { percentage: 50, color: [255, 244, 0] },
@@ -14,19 +11,14 @@ export const MATRIX_DEFAULT_COLOR_SCALE_CONFIG: MatrixColorScaleConfig[] = [
   { percentage: 90, color: [255, 0, 0] }
 ]
 
-export interface IRiskMatrixProps extends Omit<HTMLProps<HTMLDivElement>, 'size'> {
+export interface IRiskMatrixProps
+  extends Omit<HTMLProps<HTMLDivElement>, 'size'>,
+    Pick<IDynamicMatrixContext, 'size' | 'colorScaleConfig' | 'calloutTemplate'> {
   customConfigUrl?: string
-  size?: RiskMatrixSize
   items?: RiskElementModel[]
   fullWidth?: boolean
-  calloutTemplate: string
   pageContext?: PageContext
-  colorScaleConfig?: MatrixColorScaleConfig[]
 }
-
-export type RiskMatrixSize = '4' | '5' | '6'
-
-export type RiskMatrixConfiguration = IMatrixCell[][]
 
 export interface IRiskElementItem {
   Id: number
@@ -34,7 +26,7 @@ export interface IRiskElementItem {
   [key: string]: any
 }
 
-export class RiskElementModel {
+export class RiskElementModel implements IMatrixElementModel {
   public id: number
   public title: string
   public probability: number
@@ -66,5 +58,12 @@ export class RiskElementModel {
       consequencePostAction || item.GtRiskConsequencePostAction,
       10
     )
+  }
+
+  public get tooltip() {
+    let tooltip = ''
+    if (this.siteTitle) tooltip += `${this.siteTitle}: `
+    tooltip += this.title
+    return tooltip
   }
 }

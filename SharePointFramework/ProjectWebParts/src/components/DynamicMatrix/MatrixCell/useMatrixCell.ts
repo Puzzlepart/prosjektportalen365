@@ -1,7 +1,7 @@
+import { DynamicMatrixContext } from '../context'
 import { useContext } from 'react'
-import { RiskMatrixContext } from '../context'
-import { MatrixColorScaleConfig } from '../types'
 import { IMatrixCell } from './types'
+import { DynamicMatrixColorScaleConfig } from '..'
 
 /**
  * Component logic hook for `MatrixCell`
@@ -9,11 +9,12 @@ import { IMatrixCell } from './types'
  * @param cell Matrix cell
  */
 export function useMatrixCell(cell: IMatrixCell) {
-  const context = useContext(RiskMatrixContext)
-  const riskFactor = cell.consequence * cell.probability
-  const numberOfCells = context.size * context.size
+  const context = useContext(DynamicMatrixContext)
+  const size = parseInt(context.size, 10)
+  const riskFactor = cell.x * cell.y
+  const numberOfCells = size * size
   const percentage = Math.floor((riskFactor / numberOfCells) * 100)
-  let lower: MatrixColorScaleConfig, upper: MatrixColorScaleConfig
+  let lower: DynamicMatrixColorScaleConfig, upper: DynamicMatrixColorScaleConfig
   for (let i = 1; i < context.colorScaleConfig.length - 1; i++) {
     lower = context.colorScaleConfig[i - 1]
     upper = context.colorScaleConfig[i]

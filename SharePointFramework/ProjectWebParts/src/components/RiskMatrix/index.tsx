@@ -1,19 +1,23 @@
 import React, { FC } from 'react'
-import { RiskMatrixContext } from './context'
-import { MatrixRows } from './MatrixRows'
-import styles from './RiskMatrix.module.scss'
+import { DynamicMatrixContext } from '../DynamicMatrix/context'
+import { DynamicMatrix } from '../DynamicMatrix'
 import { MATRIX_DEFAULT_COLOR_SCALE_CONFIG, IRiskMatrixProps } from './types'
 import { useRiskMatrix } from './useRiskMatrix'
+import { Toggle } from '@fluentui/react'
+import strings from 'ProjectWebPartsStrings'
 
 export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
-  const { ctxValue } = useRiskMatrix(props)
-
+  const { ctxValue, setShowPostAction } = useRiskMatrix(props)
   return (
-    <RiskMatrixContext.Provider value={ctxValue}>
-      <div className={styles.root} style={{ width: props.width, minHeight: 300 }}>
-        <MatrixRows />
-      </div>
-    </RiskMatrixContext.Provider>
+    <DynamicMatrixContext.Provider value={ctxValue}>
+      <DynamicMatrix />
+      <Toggle
+        label={strings.RiskMatrix_ToggleElements}
+        onText={strings.Yes}
+        offText={strings.No}
+        onChange={(_event, checked) => setShowPostAction(checked)}
+      />
+    </DynamicMatrixContext.Provider>
   )
 }
 

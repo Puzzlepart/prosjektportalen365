@@ -1,3 +1,6 @@
+import { IMatrixElementProps } from 'components/DynamicMatrix/MatrixCell/MatrixElement/types'
+import { useState } from 'react'
+import { IDynamicMatrixContext, IMatrixCell } from '../DynamicMatrix'
 import { IRiskMatrixProps } from './types'
 import { useRiskMatrixConfiguration } from './useRiskMatrixConfiguration'
 
@@ -7,7 +10,36 @@ import { useRiskMatrixConfiguration } from './useRiskMatrixConfiguration'
  * @param props Props
  */
 export function useRiskMatrix(props: IRiskMatrixProps) {
+  const [showPostAction, setShowPostAction] = useState(false)
   const { configuration } = useRiskMatrixConfiguration(props)
-  const size = parseInt(props.size, 10)
-  return { ctxValue: { ...props, configuration, size } } as const
+
+  function getElementsForCell(cell: IMatrixCell) {
+    const elements = props.items
+      .filter((ele) => cell.y === ele.probability && cell.x === ele.consequence)
+      .map(
+        (i) =>
+          ({
+            model: i,
+            style: { opacity: showPostAction ? 0 : 1 }
+          } as IMatrixElementProps)
+      )
+    const postActionElements = props.items
+      .filter((ele) => cell.y === ele.probabilityPostAction && cell.x === ele.consequencePostAction)
+      .map(
+        (i) =>
+          ({
+            model: i,
+            style: { opacity: showPostAction ? 1 : 0 }
+          } as IMatrixElementProps)
+      )
+    return [...elements, ...postActionElements]
+  }
+
+  const ctxValue: IDynamicMatrixContext = {
+    ...props,
+    configuration,
+    getElementsForCell
+  }
+
+  return { ctxValue, setShowPostAction } as const
 }
