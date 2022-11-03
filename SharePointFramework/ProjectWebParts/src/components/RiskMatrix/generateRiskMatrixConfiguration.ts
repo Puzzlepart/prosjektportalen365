@@ -57,7 +57,7 @@ const RiskMatrixHeaders: Record<number, string[][]> = {
 }
 
 /**
- * Generate default risk matrix configuration
+ * Generate risk matrix configuration
  *
  * @param size Matrix size
  */
