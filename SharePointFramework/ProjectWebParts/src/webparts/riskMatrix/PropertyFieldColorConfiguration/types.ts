@@ -1,8 +1,8 @@
 import { IPropertyPaneCustomFieldProps } from '@microsoft/sp-property-pane'
-import { ColorScaleConfig } from 'components/RiskMatrix'
+import { MatrixColorScaleConfig } from 'components/RiskMatrix'
 
 export interface IPropertyFieldColorConfigurationProps extends IPropertyPaneCustomFieldProps {
   label?: string
-  value?: ColorScaleConfig[]
+  value?: MatrixColorScaleConfig[]
   onChange?: (targetProperty?: string, newValue?: any) => void
 }

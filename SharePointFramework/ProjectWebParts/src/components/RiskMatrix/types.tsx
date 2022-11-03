@@ -4,9 +4,9 @@ import { IMatrixCell } from './MatrixCell/types'
 
 type RGB = [number, number, number]
 
-export type ColorScaleConfig = { percentage: number; color: RGB }
+export type MatrixColorScaleConfig = { percentage?: number; color: RGB }
 
-export const DEFAULT_COLOR_SCALE_CONFIG: ColorScaleConfig[] = [
+export const MATRIX_DEFAULT_COLOR_SCALE_CONFIG: MatrixColorScaleConfig[] = [
   { percentage: 10, color: [44, 186, 0] },
   { percentage: 30, color: [163, 255, 0] },
   { percentage: 50, color: [255, 244, 0] },
@@ -22,7 +22,7 @@ export interface IRiskMatrixProps extends Omit<HTMLProps<HTMLDivElement>, 'size'
   height?: number | string
   calloutTemplate: string
   pageContext?: PageContext
-  colorConfig?: ColorScaleConfig[]
+  colorScaleConfig?: MatrixColorScaleConfig[]
 }
 
 export type RiskMatrixSize = '4' | '5' | '6'

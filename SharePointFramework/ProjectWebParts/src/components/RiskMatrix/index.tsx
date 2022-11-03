@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { RiskMatrixContext } from './context'
 import { MatrixRows } from './MatrixRows'
 import styles from './RiskMatrix.module.scss'
-import { DEFAULT_COLOR_SCALE_CONFIG, IRiskMatrixProps } from './types'
+import { MATRIX_DEFAULT_COLOR_SCALE_CONFIG, IRiskMatrixProps } from './types'
 import { useRiskMatrix } from './useRiskMatrix'
 
 export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
@@ -23,7 +23,7 @@ RiskMatrix.defaultProps = {
   height: 300,
   customConfigUrl: 'SiteAssets/custom-cells.txt',
   size: '5',
-  colorConfig: DEFAULT_COLOR_SCALE_CONFIG
+  colorScaleConfig: MATRIX_DEFAULT_COLOR_SCALE_CONFIG
 }
 
 export * from './types'

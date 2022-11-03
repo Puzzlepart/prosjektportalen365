@@ -1,4 +1,6 @@
-import { ColorScaleConfig, DEFAULT_COLOR_SCALE_CONFIG } from '../types'
+import { useContext } from 'react'
+import { RiskMatrixContext } from '../context'
+import { MatrixColorScaleConfig } from '../types'
 
 /**
  * Get color for percentage value based on `colorConfig`.
@@ -7,14 +9,14 @@ import { ColorScaleConfig, DEFAULT_COLOR_SCALE_CONFIG } from '../types'
  * @param colorConfig Color scale configuration
  */
 export function useColorForPercentage(
-  percentage: number,
-  colorConfig = DEFAULT_COLOR_SCALE_CONFIG
+  percentage: number
 ) {
-  let lower: ColorScaleConfig, upper: ColorScaleConfig
-  for (let i = 1; i < colorConfig.length - 1; i++) {
-    lower = colorConfig[i - 1]
-    upper = colorConfig[i]
-    if (percentage < colorConfig[i].percentage) {
+  const context = useContext(RiskMatrixContext)
+  let lower: MatrixColorScaleConfig, upper: MatrixColorScaleConfig
+  for (let i = 1; i < context.colorScaleConfig.length - 1; i++) {
+    lower = context.colorScaleConfig[i - 1]
+    upper = context.colorScaleConfig[i]
+    if (percentage < context.colorScaleConfig[i].percentage) {
       break
     }
   }

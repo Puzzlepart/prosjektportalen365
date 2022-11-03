@@ -14,26 +14,17 @@ class PropertyFieldColorConfigurationBuilder
     this.targetProperty = _targetProperty
     this.properties = {
       ..._properties,
-      value: [
-        { percentage: 10, color: [44, 186, 0] },
-        { percentage: 30, color: [163, 255, 0] },
-        { percentage: 50, color: [255, 244, 0] },
-        { percentage: 70, color: [255, 167, 0] },
-        { percentage: 90, color: [255, 0, 0] }
-      ],
       onRender: this.onRender.bind(this)
     }
   }
 
   public onRender(
     element: HTMLElement,
-    context?: any,
+    _context?: any,
     changeCallback?: (targetProperty?: string, newValue?: any) => void
   ): void {
-    // eslint-disable-next-line no-console
-    console.log(context, changeCallback)
     render(
-      <PropertyFieldColorConfiguration {...this.properties} onChange={changeCallback} />,
+      <PropertyFieldColorConfiguration {...this.properties} onChange={(_, newValue) => changeCallback(this.targetProperty, newValue)} />,
       element
     )
   }

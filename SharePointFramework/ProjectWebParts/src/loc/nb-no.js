@@ -61,6 +61,7 @@ define([], function () {
     PhaseChecklistViewUrl: 'Lists/Fasesjekkliste/AllItems.aspx',
     PickReportText: 'Velg rapport',
     SaveText: 'Lagre',
+    SaveColorConfigurationText:'Lagre fargekonfigurasjon',
     RiskMatrixGroupName: 'Risikomatrise',
     ProjectStatusProjectPropertiesGroupName: 'Prosjektegenskaper (Statusseksjoner)',
     SettingsGroupName: 'Innstillinger',

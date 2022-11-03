@@ -73,7 +73,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                 PropertyFieldColorConfiguration('riskMatrixColorConfig', {
                   key: 'riskMatrixColorConfig',
                   label: 'Fargekonfigurasjon',
-                  value: this.properties.riskMatrixColorConfig
+                  value: this.properties.riskMatrixColorScaleConfig
                 })
               ]
             },

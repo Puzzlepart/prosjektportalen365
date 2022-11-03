@@ -1,4 +1,5 @@
 declare interface IProjectWebPartsStrings {
+  SaveColorConfigurationText: string
   RiskMatrixSizeLabel: string
   RiskMatrixFullWidthLabel: string 
   ParentProjectsGroupName: string
