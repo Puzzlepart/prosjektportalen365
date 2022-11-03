@@ -1,3 +1,4 @@
+import { MATRIX_DEFAULT_COLOR_SCALE_CONFIG } from 'components/RiskMatrix'
 import { useState } from 'react'
 import _, { last } from 'underscore'
 import { IPropertyFieldColorConfigurationProps } from '../../types'
@@ -35,10 +36,14 @@ export function usePropertyFieldColorConfiguration(props: IPropertyFieldColorCon
   }
 
   let onSave: () => void = null
+  let onRevertDefault: () => void = null
 
   if (!_.isEqual(props.value, config)) {
     onSave = () => props.onChange(null, config)
   }
+  if (!_.isEqual(MATRIX_DEFAULT_COLOR_SCALE_CONFIG, config)) {
+    onRevertDefault = () => props.onChange(null, undefined)
+  }
 
-  return { config, count, setCount, onColorChange, onSave } as const
+  return { config, count, setCount, onColorChange, onSave, onRevertDefault } as const
 }

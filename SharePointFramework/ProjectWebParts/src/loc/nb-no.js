@@ -1,6 +1,7 @@
 define([], function () {
   return {
-    RiskMatrixColorScaleConfigLabel:'Fargekonfigurasjon',
+    RevertDefaultColorConfigurationText: 'Bruk standard',
+    RiskMatrixColorScaleConfigLabel: 'Fargekonfigurasjon',
     RiskMatrixSizeLabel: 'Størrelse',
     RiskMatrixFullWidthLabel: 'Bruk full bredde',
     ParentProjectsGroupName: 'Overordnede prosjekter',
@@ -62,7 +63,7 @@ define([], function () {
     PhaseChecklistViewUrl: 'Lists/Fasesjekkliste/AllItems.aspx',
     PickReportText: 'Velg rapport',
     SaveText: 'Lagre',
-    SaveColorConfigurationText:'Lagre fargekonfigurasjon',
+    SaveColorConfigurationText: 'Lagre',
     RiskMatrixGroupName: 'Risikomatrise',
     ProjectStatusProjectPropertiesGroupName: 'Prosjektegenskaper (Statusseksjoner)',
     SettingsGroupName: 'Innstillinger',
