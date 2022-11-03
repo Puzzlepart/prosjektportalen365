@@ -43,7 +43,7 @@ const RiskMatrixHeaders: Record<number, string[][]> = {
       strings.RiskMatrix_Header_Moderate,
       strings.RiskMatrix_Header_Serious,
       strings.RiskMatrix_Header_Critical,
-      strings.RiskMatrix_Header_Critical
+      strings.RiskMatrix_Header_VeryCritical
     ],
     [
       strings.RiskMatrix_Header_VeryHigh,
@@ -51,7 +51,7 @@ const RiskMatrixHeaders: Record<number, string[][]> = {
       strings.RiskMatrix_Header_Medium,
       strings.RiskMatrix_Header_Low,
       strings.RiskMatrix_Header_VeryLow,
-      strings.RiskMatrix_Header_VeryLow
+      strings.RiskMatrix_Header_ExtremelyLow
     ]
   ]
 }
