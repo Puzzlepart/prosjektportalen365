@@ -14,10 +14,19 @@ export const ColorConfigElement: FC<IColorConfigElementProps> = (props) => {
       onClick={() => setIsEditing(true)}>
       <div className={styles.container}>{props.percentage}%</div>
       {isEditing && (
-        <Callout target={ref.current} gapSpace={10} onDismiss={() => setIsEditing(false)}>
+        <Callout
+          target={ref.current}
+          gapSpace={props.gapSpace}
+          preventDismissOnScroll={props.preventDismissOnScroll}
+          onDismiss={() => setIsEditing(false)}>
           <ColorPicker color={colorString} showPreview={true} onChange={props.onChange} />
         </Callout>
       )}
     </div>
   )
+}
+
+ColorConfigElement.defaultProps = {
+  gapSpace: 10,
+  preventDismissOnScroll: true
 }
