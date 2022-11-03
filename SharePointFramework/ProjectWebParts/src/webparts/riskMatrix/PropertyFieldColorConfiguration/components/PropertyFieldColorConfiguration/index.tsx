@@ -11,9 +11,8 @@ export const PropertyFieldColorConfiguration: FC<IPropertyFieldColorConfiguratio
   props
 ) => {
   const {
-    count,
-    setCount,
     config,
+    setConfig,
     onColorChange,
     onSave,
     onRevertDefault
@@ -21,7 +20,12 @@ export const PropertyFieldColorConfiguration: FC<IPropertyFieldColorConfiguratio
   return (
     <div className={styles.root}>
       <Label>{props.label}</Label>
-      <Slider min={3} max={8} defaultValue={count} onChange={setCount} />
+      <Slider
+        min={props.minColors}
+        max={props.maxColors}
+        value={config.length}
+        onChange={setConfig}
+      />
       <div className={styles.container}>
         {config.map(({ percentage, color }, idx) => (
           <ColorConfigElement
@@ -49,5 +53,7 @@ export const PropertyFieldColorConfiguration: FC<IPropertyFieldColorConfiguratio
 }
 
 PropertyFieldColorConfiguration.defaultProps = {
-  value: MATRIX_DEFAULT_COLOR_SCALE_CONFIG
+  value: MATRIX_DEFAULT_COLOR_SCALE_CONFIG,
+  minColors: 3,
+  maxColors: 8
 }

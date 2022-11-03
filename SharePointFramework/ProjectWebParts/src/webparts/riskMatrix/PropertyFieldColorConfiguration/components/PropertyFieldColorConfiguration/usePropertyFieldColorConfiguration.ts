@@ -4,35 +4,33 @@ import _, { last } from 'underscore'
 import { IPropertyFieldColorConfigurationProps } from '../../types'
 
 export function usePropertyFieldColorConfiguration(props: IPropertyFieldColorConfigurationProps) {
-  const [config, setConfig] = useState(props.value)
-  const [count, $setCount] = useState(config.length)
+  const [config, $setConfig] = useState(props.value)
 
   /**
-   * Set the count to a new value. Also updates the configuration.
+   * Set configuration
    *
-   * @param count_ New count
+   * @param count New count
    */
-  function setCount(count_: number) {
-    $setCount(count_)
-    const inc = count_ - config.length
+  function setConfig(count: number) {
+    const inc = count - config.length
     const lastColor = last(config)?.color
-    setConfig(($config) => {
+    $setConfig(($config) => {
       if (inc > 0) {
         for (let i = 0; i < inc; i++) {
           $config.push({
             color: props.value[$config.length + i]?.color ?? lastColor
           })
         }
-      } else $config = $config.splice(0, count_)
+      } else $config = $config.splice(0, count)
       return $config.map((c, idx) => ({
-        ...c,
-        percentage: Math.floor(10 + (90 / $config.length) * idx)
+        percentage: Math.floor(Math.round((10 + (90 / $config.length) * idx) / 10) * 10),
+        color: c.color
       }))
     })
   }
 
   function onColorChange(idx: number, color: any) {
-    setConfig(($config) => $config.map((c, i) => (idx === i ? { ...c, color } : c)))
+    $setConfig(($config) => $config.map((c, i) => (idx === i ? { ...c, color } : c)))
   }
 
   let onSave: () => void = null
@@ -42,8 +40,11 @@ export function usePropertyFieldColorConfiguration(props: IPropertyFieldColorCon
     onSave = () => props.onChange(null, config)
   }
   if (!_.isEqual(MATRIX_DEFAULT_COLOR_SCALE_CONFIG, config)) {
-    onRevertDefault = () => props.onChange(null, undefined)
+    onRevertDefault = () => {
+      $setConfig(MATRIX_DEFAULT_COLOR_SCALE_CONFIG)
+      props.onChange(null, MATRIX_DEFAULT_COLOR_SCALE_CONFIG)
+    }
   }
 
-  return { config, count, setCount, onColorChange, onSave, onRevertDefault } as const
+  return { config, setConfig, onColorChange, onSave, onRevertDefault } as const
 }

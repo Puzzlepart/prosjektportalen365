@@ -5,4 +5,6 @@ export interface IPropertyFieldColorConfigurationProps extends IPropertyPaneCust
   label?: string
   value?: MatrixColorScaleConfig[]
   onChange?: (targetProperty?: string, newValue?: any) => void
+  minColors?: number
+  maxColors?: number
 }

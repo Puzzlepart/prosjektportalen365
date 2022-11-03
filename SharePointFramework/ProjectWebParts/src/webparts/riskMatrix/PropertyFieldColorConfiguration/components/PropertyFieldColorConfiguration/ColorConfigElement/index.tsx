@@ -12,7 +12,7 @@ export const ColorConfigElement: FC<IColorConfigElementProps> = (props) => {
       className={styles.root}
       style={{ backgroundColor: props.color }}
       onClick={() => setIsEditing(true)}>
-      <div className={styles.container}>{props.percentage}</div>
+      <div className={styles.container}>{props.percentage}%</div>
       {isEditing && (
         <Callout target={ref.current} gapSpace={10} onDismiss={() => setIsEditing(false)}>
           <ColorPicker

@@ -1,17 +1,17 @@
-import '@pnp/polyfill-ie11'
-import { sp, SPConfiguration, SPRest, Web } from '@pnp/sp'
-import { SpEntityPortalService } from 'sp-entityportal-service'
-import { PortalDataService } from '../../services/PortalDataService'
-import { ISPDataAdapterBaseConfiguration } from './ISPDataAdapterBaseConfiguration'
-import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
 import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
-import { ProjectAdminRoleType } from '../../models'
-import { ProjectAdminPermission } from './ProjectAdminPermission'
-import { dateAdd, PnPClientStorage, PnPClientStore } from '@pnp/common'
-import { isArray, unique, contains } from 'underscore'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { SPUser } from '@microsoft/sp-page-context'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { dateAdd, PnPClientStorage, PnPClientStore } from '@pnp/common'
+import '@pnp/polyfill-ie11'
+import { sp, SPConfiguration, SPRest, Web } from '@pnp/sp'
+import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { SpEntityPortalService } from 'sp-entityportal-service'
+import _ from 'underscore'
+import { ProjectAdminRoleType } from '../../models'
+import { PortalDataService } from '../../services/PortalDataService'
+import { ISPDataAdapterBaseConfiguration } from './ISPDataAdapterBaseConfiguration'
+import { ProjectAdminPermission } from './ProjectAdminPermission'
 
 export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   public spConfiguration: SPConfiguration = {
@@ -115,7 +115,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
       async () => {
         const userPermissions = []
         const rolesToCheck = properties.GtProjectAdminRoles
-        if (!isArray(rolesToCheck)) {
+        if (!_.isArray(rolesToCheck) || _.isEmpty(rolesToCheck)) {
           if (pageContext.legacyPageContext.isSiteAdmin === true) return true
           else return false
         }
@@ -135,7 +135,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
             case ProjectAdminRoleType.ProjectProperty:
               {
                 const projectFieldValue = properties[role.projectFieldName]
-                if (isArray(projectFieldValue) && projectFieldValue.indexOf(currentUser.Id) !== -1)
+                if (_.isArray(projectFieldValue) && projectFieldValue.indexOf(currentUser.Id) !== -1)
                   userPermissions.push(...role.permissions)
                 if (projectFieldValue === currentUser?.Id) userPermissions.push(...role.permissions)
               }
@@ -166,12 +166,12 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
               break
           }
         }
-        return unique(userPermissions, (p) => p)
+        return _.unique(userPermissions, (p) => p)
       },
       storageExpire
     )
     if (typeof permissions === 'boolean') return permissions
-    else return contains(permissions, permission.toString())
+    else return _.contains(permissions, permission.toString())
   }
 }
 

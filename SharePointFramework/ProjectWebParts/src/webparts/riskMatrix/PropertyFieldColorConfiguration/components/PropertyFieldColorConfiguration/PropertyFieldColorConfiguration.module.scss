@@ -13,7 +13,7 @@
     flex-wrap: nowrap;
     margin: 15px 0 0 0;
 
-    > div, > button {
+    > button:first-child {
       flex: 1;
       margin: 0 8px 0 0;
     }
