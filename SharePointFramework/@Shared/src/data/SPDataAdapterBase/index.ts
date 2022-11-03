@@ -95,11 +95,11 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
 
   /**
    * Check project admin permissions. The result is stored in `sessionStorage`
-   * for `expireMinutes` minutes to avoid too many requests.
+   * for `expireMinutes` _(default 10)_ minutes to avoid too many requests.
    *
    * @param permission Permission to check
    * @param properties Project properties
-   * @param expireMinutes Expiry in minutes
+   * @param expireMinutes Expiry in minutes (default 10)
    */
   public async checkProjectAdminPermissions(
     permission: ProjectAdminPermission,
