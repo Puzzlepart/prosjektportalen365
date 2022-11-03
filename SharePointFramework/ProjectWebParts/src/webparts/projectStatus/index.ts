@@ -1,5 +1,6 @@
 import {
   IPropertyPaneConfiguration,
+  PropertyPaneDropdown,
   PropertyPaneSlider,
   PropertyPaneTextField,
   PropertyPaneToggle
@@ -48,7 +49,25 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                 PropertyPaneTextField('riskMatrixCalloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,
-                  resizable: true
+                  resizable: true,
+                  rows: 30,
+                }),
+                PropertyPaneDropdown('riskMatrixSize', {
+                  label: strings.RiskMatrixSizeLabel,
+                  options:[
+                    {
+                      key:'4',
+                      text: '4x4'
+                    },
+                    {
+                      key:'5',
+                      text: '5x5'
+                    },
+                    {
+                      key:'6',
+                      text: '6x6'
+                    }
+                  ]
                 })
               ]
             },

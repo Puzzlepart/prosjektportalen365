@@ -45,14 +45,14 @@ export const MatrixRows: FC = () => {
       switch (cell.cellType) {
         case MatrixCellType.Cell: {
           return (
-            <MatrixCell key={j} style={cell.style} className={cell.className}>
+            <MatrixCell key={j} className={cell.className} cell={cell} >
               <span hidden={showPostAction}>{riskElements}</span>
               <span hidden={!showPostAction}>{riskElementsPostAction}</span>
             </MatrixCell>
           )
         }
         case MatrixCellType.Header: {
-          return <MatrixHeaderCell key={j} label={c.cellValue} className={cell.className} />
+          return <MatrixHeaderCell key={j} text={c.cellValue} className={cell.className} />
         }
         default:
           return null

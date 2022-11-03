@@ -6,10 +6,10 @@ import { IRiskMatrixProps } from './types'
 import { useRiskMatrix } from './useRiskMatrix'
 
 export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
-  const { configuration, style } = useRiskMatrix(props)
+  const { configuration,size, style } = useRiskMatrix(props)
 
   return (
-    <RiskMatrixContext.Provider value={{ ...props, configuration }}>
+    <RiskMatrixContext.Provider value={{ ...props, configuration, size }}>
       <div className={styles.root} style={style}>
         <MatrixRows />
       </div>
@@ -21,7 +21,8 @@ RiskMatrix.defaultProps = {
   items: [],
   width: 400,
   height: 300,
-  customConfigUrl: 'SiteAssets/custom-cells.txt'
+  customConfigUrl: 'SiteAssets/custom-cells.txt',
+  size: '5'
 }
 
 export * from './types'

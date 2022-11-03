@@ -1,10 +1,9 @@
 import { createContext } from 'react'
-import { RiskElementModel, RiskMatrixConfiguration } from './types'
+import { IRiskMatrixProps, RiskMatrixConfiguration } from './types'
 
-export interface IRiskMatrixContext {
-  items?: RiskElementModel[]
-  calloutTemplate: string
+export interface IRiskMatrixContext extends Pick<IRiskMatrixProps, 'items' | 'calloutTemplate'> {
   configuration: RiskMatrixConfiguration
+  size: number
 }
 
 export const RiskMatrixContext = createContext<IRiskMatrixContext>(null)

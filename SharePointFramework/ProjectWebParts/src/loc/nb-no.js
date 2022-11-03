@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    RiskMatrixSizeLabel: 'Størrelse',
     RiskMatrixFullWidthLabel: 'Bruk full bredde',
     ParentProjectsGroupName: 'Overordnede prosjekter',
     StatusReportShowOnlyIconsLabel: 'Vis kun ikoner',

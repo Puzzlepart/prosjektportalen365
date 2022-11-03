@@ -1,4 +1,5 @@
 declare interface IProjectWebPartsStrings {
+  RiskMatrixSizeLabel: string
   RiskMatrixFullWidthLabel: string 
   ParentProjectsGroupName: string
   StatusReportShowOnlyIconsLabel: string

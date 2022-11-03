@@ -2,14 +2,17 @@ import { PageContext } from '@microsoft/sp-page-context'
 import { HTMLProps } from 'react'
 import { IMatrixCell } from './MatrixCell/types'
 
-export interface IRiskMatrixProps extends HTMLProps<HTMLDivElement> {
+export interface IRiskMatrixProps extends Omit<HTMLProps<HTMLDivElement>, 'size'> {
   customConfigUrl?: string
+  size?: RiskMatrixSize
   items?: RiskElementModel[]
   width?: number | string
   height?: number | string
   calloutTemplate: string
   pageContext?: PageContext
 }
+
+export type RiskMatrixSize = '4' | '5' | '6'
 
 export type RiskMatrixConfiguration = IMatrixCell[][]
 

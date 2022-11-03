@@ -2,12 +2,14 @@ import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseW
 import { ProjectColumnConfig, SectionModel, SPField, StatusReport } from 'pp365-shared/lib/models'
 import { IGetPropertiesData } from 'pp365-shared/lib/services'
 import { PageContext } from '@microsoft/sp-page-context'
+import { RiskMatrixSize } from 'components/RiskMatrix'
 
 export interface IProjectStatusProps extends IBaseWebPartComponentProps {
   riskMatrixCalloutTemplate?: string
   riskMatrixFullWidth?: boolean
   riskMatrixWidth?: number | string
   riskMatrixHeight?: number | string
+  riskMatrixSize?: RiskMatrixSize
   fieldWidth?: number
   pageContext?: PageContext
 }

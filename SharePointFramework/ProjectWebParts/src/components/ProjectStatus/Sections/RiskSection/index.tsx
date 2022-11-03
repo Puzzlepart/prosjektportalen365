@@ -29,16 +29,17 @@ export const RiskSection: FC = () => {
       return <UserMessage text={strings.ListSectionDataErrorMessage} type={MessageBarType.error} />
     return (
       <Shimmer isDataLoaded={state.isDataLoaded}>
-        <div className='ms-Grid-col ms-sm12'>
+        <div className={styles.riskMatrix}>
           <RiskMatrix
             width={context.props.riskMatrixFullWidth ? '100%' : context.props.riskMatrixWidth}
             height={context.props.riskMatrixHeight}
             calloutTemplate={context.props.riskMatrixCalloutTemplate}
+            size={context.props.riskMatrixSize}
             pageContext={context.props.pageContext}
             items={get<RiskElementModel[]>(state, 'data.riskElements', [])}
           />
         </div>
-        <div className={`${styles.list} ms-Grid-col ms-sm12`}>
+        <div className={styles.list}>
           <DetailsList
             columns={get<IColumn[]>(state, 'data.columns', [])}
             items={get<any[]>(state, 'data.items', [])}

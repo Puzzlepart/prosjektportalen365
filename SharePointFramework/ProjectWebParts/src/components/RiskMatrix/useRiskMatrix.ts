@@ -2,11 +2,17 @@ import { sp } from '@pnp/sp/'
 import { CSSProperties, useEffect, useState } from 'react'
 import HubSiteService from 'sp-hubsite-service'
 import { pick } from 'underscore'
-import RISK_MATRIX_CELLS from './RiskMatrixCells'
+import { generateRiskMatrixConfiguration } from './RiskMatrixCells'
 import { IRiskMatrixProps, RiskMatrixConfiguration } from './types'
 
+/**
+ * Component logic hook for `RiskMatrix`
+ * 
+ * @param props Props
+ */
 export function useRiskMatrix(props: IRiskMatrixProps) {
-  const [configuration, setConfiguration] = useState<RiskMatrixConfiguration>(RISK_MATRIX_CELLS)
+  const [configuration, setConfiguration] = useState<RiskMatrixConfiguration>([])
+  const size = parseInt(props.size, 10)
 
   useEffect(() => {
     if (props.pageContext) {
@@ -22,10 +28,16 @@ export function useRiskMatrix(props: IRiskMatrixProps) {
         .getFileByServerRelativeUrl(`/${ServerRelativeUrl}/${props.customConfigUrl}`)
         .getJSON()
       setConfiguration(jsonConfig_)
-    } catch {}
+    } catch { }
   }
+
+  useEffect(() => {
+    if (props.size) {
+      setConfiguration(generateRiskMatrixConfiguration(size))
+    }
+  }, [props.size])
 
   const style: CSSProperties = pick(props, 'width', 'height')
 
-  return { configuration, style } as const
+  return { configuration, size, style } as const
 }

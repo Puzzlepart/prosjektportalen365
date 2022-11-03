@@ -1,5 +1,12 @@
 @import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
+.riskMatrix {
+  @include ms-Grid-col;
+  @include ms-sm12;
+}
+
 .list {
+  @include ms-Grid-col;
+  @include ms-sm12;
   margin-top: 25px;
 }
