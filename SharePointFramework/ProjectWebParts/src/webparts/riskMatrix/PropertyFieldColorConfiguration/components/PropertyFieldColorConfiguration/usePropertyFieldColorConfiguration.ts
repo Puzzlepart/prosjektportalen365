@@ -31,7 +31,9 @@ export function usePropertyFieldColorConfiguration(props: IPropertyFieldColorCon
   }
 
   function onColorChange(idx: number, color: IColor) {
-    $setConfig(($config) => $config.map((c, i) => (idx === i ? { ...c, color: [color.r, color.g, color.b] } : c)))
+    $setConfig(($config) =>
+      $config.map((c, i) => (idx === i ? { ...c, color: [color.r, color.g, color.b] } : c))
+    )
   }
 
   let onSave: () => void = null

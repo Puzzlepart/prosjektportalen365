@@ -5,21 +5,17 @@ import { IColorConfigElementProps } from './types'
 import { useColorConfigElement } from './useColorConfigElement'
 
 export const ColorConfigElement: FC<IColorConfigElementProps> = (props) => {
-  const { ref, isEditing, setIsEditing } = useColorConfigElement()
+  const { ref, isEditing, setIsEditing, colorString } = useColorConfigElement(props)
   return (
     <div
       ref={ref}
       className={styles.root}
-      style={{ backgroundColor: props.color }}
+      style={{ backgroundColor: colorString }}
       onClick={() => setIsEditing(true)}>
       <div className={styles.container}>{props.percentage}%</div>
       {isEditing && (
         <Callout target={ref.current} gapSpace={10} onDismiss={() => setIsEditing(false)}>
-          <ColorPicker
-            color={props.color}
-            showPreview={true}
-            onChange={props.onChange}
-          />
+          <ColorPicker color={colorString} showPreview={true} onChange={props.onChange} />
         </Callout>
       )}
     </div>
