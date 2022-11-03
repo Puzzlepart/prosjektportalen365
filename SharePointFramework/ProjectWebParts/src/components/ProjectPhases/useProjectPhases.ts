@@ -27,22 +27,17 @@ export function useProjectPhases(props: IProjectPhasesProps) {
       state.data.phaseSitePages
     )
     dispatch(SET_PHASE({ phase: state.confirmPhase }))
-    if (
-      props.syncPropertiesAfterPhaseChange === undefined ||
-      props.syncPropertiesAfterPhaseChange
-    ) {
+    if (props.syncPropertiesAfterPhaseChange) {
       const currentUrlIsPageRelative =
         document.location.pathname.indexOf(state.data.welcomePage) > -1
-      const welcomepage = !currentUrlIsPageRelative
+      const welcomePage = !currentUrlIsPageRelative
         ? `${document.location.pathname}/${state.data.welcomePage}`
         : document.location.pathname
       setTimeout(() => {
         window.location.assign(
-          `${document.location.protocol}//${document.location.hostname}${welcomepage}#syncproperties=1`
+          `${document.location.protocol}//${document.location.hostname}${welcomePage}#syncproperties=1`
         )
-        if (currentUrlIsPageRelative) {
-          window.location.reload()
-        }
+        if (currentUrlIsPageRelative) window.location.reload()
       }, 1000)
     }
   }

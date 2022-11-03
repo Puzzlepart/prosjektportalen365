@@ -55,4 +55,8 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
   )
 }
 
+ProjectPhases.defaultProps = {
+  syncPropertiesAfterPhaseChange: true
+}
+
 export * from './types'

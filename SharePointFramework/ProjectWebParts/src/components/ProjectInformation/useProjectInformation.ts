@@ -30,25 +30,20 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
    * Add message
    *
    * @param text Message text
-   * @param messageBarType Message type
+   * @param type Message bar type
    * @param duration Duration in seconds
    */
-  const addMessage = (
-    text: string,
-    messageBarType: MessageBarType,
-    duration: number = 5
-  ): Promise<void> => {
+  const addMessage = (text: string, type: MessageBarType, duration: number = 5): Promise<void> => {
     return new Promise((resolve) => {
       setState({
-        ...state,
         message: {
           text: format(text, duration.toString()),
-          messageBarType,
-          onDismiss: () => setState({ ...state, message: null })
+          type,
+          onDismiss: () => setState({ message: null })
         }
       })
       window.setTimeout(() => {
-        setState({ ...state, message: null })
+        setState({ message: null })
         resolve()
       }, duration * 1000)
     })
@@ -76,7 +71,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
       const { created } = await SPDataAdapter.portal.syncList(
         props.webUrl,
         strings.ProjectPropertiesListName,
-        state.data.templateParameters.ProjectContentTypeId ||
+        state.data.templateParameters.ProjectContentTypeId ??
           '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: props.webTitle }
       )

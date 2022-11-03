@@ -70,7 +70,7 @@ define([], function () {
     ProjectPropertiesListName: 'Project Properties',
     SyncProjectPropertiesProgressLabel: 'Synchronizes project properties to the portfolio area',
     SyncProjectPropertiesSuccessText: 'Project properties were synchronized to the portfolio area. The page will reload in {0} seconds. ',
-    SyncProjectPropertiesErrorText: 'An error occurred while syncing project properties to the portfolio site. For example, it could be an invalid field.',
+    SyncProjectPropertiesErrorText: 'An error occurred while syncing project properties to the portfolio site. For example, it could for instance be an invalid field.',
     SyncProjectPropertiesListProgressDescription: 'Updating Project Properties List',
     SyncProjectPropertiesValuesProgressLabel: 'Syncing properties',
     SyncProjectPropertiesValuesProgressDescription: 'Please wait...',

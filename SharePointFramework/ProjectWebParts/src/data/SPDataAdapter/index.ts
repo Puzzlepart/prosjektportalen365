@@ -81,7 +81,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   ): Promise<void> {
     try {
       progressFunc({
-        label: strings.SyncProjectPropertiesValuesProgressDescription,
+        label: strings.SyncProjectPropertiesValuesProgressLabel,
         description: strings.SyncProjectPropertiesValuesProgressDescription
       })
       const properties = await this.getMappedProjectProperties(
