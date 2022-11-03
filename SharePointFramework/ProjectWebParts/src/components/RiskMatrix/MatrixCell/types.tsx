@@ -14,8 +14,6 @@ export interface IMatrixCell {
   probability?: number
 }
 
-export type IMatrixCellProps = HTMLProps<HTMLElement>
-
-export interface IMatrixHeaderCellProps extends IMatrixCellProps {
-  label: string
+export interface IMatrixCellProps extends HTMLProps<HTMLDivElement> {
+  cell?: IMatrixCell
 }

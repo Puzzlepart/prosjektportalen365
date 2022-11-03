@@ -1,249 +1,91 @@
 import * as strings from 'ProjectWebPartsStrings'
-import { MatrixCellType } from './MatrixCell'
+import { IMatrixCell, MatrixCellType } from './MatrixCell'
 import { RiskMatrixConfiguration } from './types'
 
-const RISK_MATRIX_CELLS: RiskMatrixConfiguration = [
-  [
-    {
-      cellType: MatrixCellType.Header,
-      className: 'risk-header'
-    },
-    {
-      cellValue: strings.RiskMatrix_Header_Insignificant,
-      cellType: MatrixCellType.Header,
-      className: 'risk-header'
-    },
-    {
-      cellValue: strings.RiskMatrix_Header_Small,
-      cellType: MatrixCellType.Header,
-      className: 'risk-header'
-    },
-    {
-      cellValue: strings.RiskMatrix_Header_Moderate,
-      cellType: MatrixCellType.Header,
-      className: 'risk-header'
-    },
-    {
-      cellValue: strings.RiskMatrix_Header_Serious,
-      cellType: MatrixCellType.Header,
-      className: 'risk-header'
-    },
-    {
-      cellValue: strings.RiskMatrix_Header_Critical,
-      cellType: MatrixCellType.Header,
-      className: 'risk-header'
-    }
+const RiskMatrixHeaders: Record<number, string[][]> = {
+  4: [
+    [
+      undefined,
+      strings.RiskMatrix_Header_Insignificant,
+      strings.RiskMatrix_Header_Small,
+      strings.RiskMatrix_Header_Moderate,
+      strings.RiskMatrix_Header_Serious
+    ],
+    [
+      strings.RiskMatrix_Header_VeryHigh,
+      strings.RiskMatrix_Header_High,
+      strings.RiskMatrix_Header_Medium,
+      strings.RiskMatrix_Header_Low
+    ]
   ],
-  [
-    {
-      cellValue: strings.RiskMatrix_Header_VeryHigh,
-      cellType: MatrixCellType.Header,
-      className: 'risk-header'
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#2da748' },
-      consequence: 1,
-      probability: 5
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#e9b359' },
-      consequence: 2,
-      probability: 5
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#ea5c73' },
-      consequence: 3,
-      probability: 5
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#ea5c73' },
-      consequence: 4,
-      probability: 5
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#ea5c73' },
-      consequence: 5,
-      probability: 5
-    }
+  5: [
+    [
+      undefined,
+      strings.RiskMatrix_Header_Insignificant,
+      strings.RiskMatrix_Header_Small,
+      strings.RiskMatrix_Header_Moderate,
+      strings.RiskMatrix_Header_Serious,
+      strings.RiskMatrix_Header_Critical
+    ],
+    [
+      strings.RiskMatrix_Header_VeryHigh,
+      strings.RiskMatrix_Header_High,
+      strings.RiskMatrix_Header_Medium,
+      strings.RiskMatrix_Header_Low,
+      strings.RiskMatrix_Header_VeryLow
+    ]
   ],
-  [
-    {
-      cellValue: strings.RiskMatrix_Header_High,
-      cellType: MatrixCellType.Header,
-      className: 'risk-header'
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#2da748' },
-      consequence: 1,
-      probability: 4
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#e9b359' },
-      consequence: 2,
-      probability: 4
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#e9b359' },
-      consequence: 3,
-      probability: 4
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#ea5c73' },
-      consequence: 4,
-      probability: 4
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#ea5c73' },
-      consequence: 5,
-      probability: 4
-    }
-  ],
-  [
-    {
-      cellValue: strings.RiskMatrix_Header_Medium,
-      cellType: MatrixCellType.Header,
-      className: 'risk-header'
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#2da748' },
-      consequence: 1,
-      probability: 3
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#2da748' },
-      consequence: 2,
-      probability: 3
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#e9b359' },
-      consequence: 3,
-      probability: 3
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#e9b359' },
-      consequence: 4,
-      probability: 3
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#ea5c73' },
-      consequence: 5,
-      probability: 3
-    }
-  ],
-  [
-    {
-      cellValue: strings.RiskMatrix_Header_Low,
-      cellType: MatrixCellType.Header,
-      className: 'risk-header'
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#2da748' },
-      consequence: 1,
-      probability: 2
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#2da748' },
-      consequence: 2,
-      probability: 2
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#2da748' },
-      consequence: 3,
-      probability: 2
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#e9b359' },
-      consequence: 4,
-      probability: 2
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#e9b359' },
-      consequence: 5,
-      probability: 2
-    }
-  ],
-  [
-    {
-      cellValue: strings.RiskMatrix_Header_VeryLow,
-      cellType: MatrixCellType.Header,
-      className: 'risk-header'
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#2da748' },
-      consequence: 1,
-      probability: 1
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#2da748' },
-      consequence: 2,
-      probability: 1
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#2da748' },
-      consequence: 3,
-      probability: 1
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#2da748' },
-      consequence: 4,
-      probability: 1
-    },
-    {
-      cellType: MatrixCellType.Cell,
-      className: 'risk-matrix-cell',
-      style: { backgroundColor: '#e9b359' },
-      consequence: 5,
-      probability: 1
-    }
+  6: [
+    [
+      undefined,
+      strings.RiskMatrix_Header_Insignificant,
+      strings.RiskMatrix_Header_Small,
+      strings.RiskMatrix_Header_Moderate,
+      strings.RiskMatrix_Header_Serious,
+      strings.RiskMatrix_Header_Critical,
+      strings.RiskMatrix_Header_Critical
+    ],
+    [
+      strings.RiskMatrix_Header_VeryHigh,
+      strings.RiskMatrix_Header_High,
+      strings.RiskMatrix_Header_Medium,
+      strings.RiskMatrix_Header_Low,
+      strings.RiskMatrix_Header_VeryLow,
+      strings.RiskMatrix_Header_VeryLow
+    ]
   ]
-]
+}
 
-export default RISK_MATRIX_CELLS
+/**
+ * Generate default risk matrix configuration
+ * 
+ * @param size Matrix size
+ */
+export const generateRiskMatrixConfiguration = (size: number): RiskMatrixConfiguration => {
+  const [topHeaders, leftHeaders] = RiskMatrixHeaders[size]
+  const firstRow = topHeaders.map<IMatrixCell>(cellValue => ({
+    cellValue,
+    cellType: MatrixCellType.Header,
+    className: 'risk-header'
+  }))
+  const configuration = [firstRow]
+  for (let i = 0; i < size; i++) {
+    const row: IMatrixCell[] = [
+      {
+        cellValue: leftHeaders[i],
+        cellType: MatrixCellType.Header,
+        className: 'risk-header'
+      }
+    ]
+    for (let consequence = 1; consequence <= size; consequence++) {
+      row.push({
+        cellType: MatrixCellType.Cell,
+        className: 'risk-matrix-cell',
+        consequence,
+        probability: size - i
+      },)
+    }
+    configuration.push(row)
+  }
+  return configuration
+}
