@@ -111,7 +111,6 @@ define([], function () {
     ProbabilityPostActionFieldNameFieldLabel: 'Field name - Probability (post action)',
     ConsequencePostActionFieldNameFieldLabel: 'Field name - Consequence (post action)',
     WidthFieldLabel: 'Width (pixels)',
-    HeightFieldLabel: 'Height (pixels)',
     CalloutTemplateFieldLabel: 'Callout template',
     FilterText: 'Filtrer',
     PhaseLabel: 'Fase',

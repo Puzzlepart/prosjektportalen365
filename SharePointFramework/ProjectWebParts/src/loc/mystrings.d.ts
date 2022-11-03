@@ -132,7 +132,6 @@ declare interface IProjectWebPartsStrings {
   ProbabilityPostActionFieldNameFieldLabel: string
   ConsequencePostActionFieldNameFieldLabel: string
   WidthFieldLabel: string
-  HeightFieldLabel: string
   CalloutTemplateFieldLabel: string
   FilterText: string
   PhaseLabel: string

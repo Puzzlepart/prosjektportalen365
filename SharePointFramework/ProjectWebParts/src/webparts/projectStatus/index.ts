@@ -42,18 +42,11 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   showValue: true,
                   disabled: this.properties.riskMatrixFullWidth
                 }),
-                PropertyPaneSlider('riskMatrixHeight', {
-                  label: strings.HeightFieldLabel,
-                  min: 400,
-                  max: 1000,
-                  value: 400,
-                  showValue: true
-                }),
                 PropertyPaneTextField('riskMatrixCalloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,
                   resizable: true,
-                  rows: 12
+                  rows: 8
                 }),
                 PropertyPaneDropdown('riskMatrixSize', {
                   label: strings.RiskMatrixSizeLabel,

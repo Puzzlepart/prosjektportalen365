@@ -8,7 +8,6 @@ export interface IProjectStatusProps extends IBaseWebPartComponentProps {
   riskMatrixCalloutTemplate?: string
   riskMatrixFullWidth?: boolean
   riskMatrixWidth?: number | string
-  riskMatrixHeight?: number | string
   riskMatrixSize?: RiskMatrixSize
   riskMatrixColorScaleConfig?: MatrixColorScaleConfig[]
   fieldWidth?: number

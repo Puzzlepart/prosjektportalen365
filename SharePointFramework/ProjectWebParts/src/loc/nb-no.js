@@ -132,7 +132,6 @@ define([], function () {
     ProbabilityPostActionFieldNameFieldLabel: 'Feltnavn - Sannsynlighet (etter tiltak)',
     ConsequencePostActionFieldNameFieldLabel: 'Feltnavn - Konsekvens (etter tiltak)',
     WidthFieldLabel: 'Bredde (piksler)',
-    HeightFieldLabel: 'Høyde (piksler)',
     CalloutTemplateFieldLabel: 'Mal for callout',
     FilterText: 'Filtrer',
     PhaseLabel: 'Fase',

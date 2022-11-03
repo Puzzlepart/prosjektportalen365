@@ -1,7 +1,7 @@
 import { TooltipHost } from '@fluentui/react'
 import { replaceTokens } from 'pp365-shared/lib/util'
 import React, { FC, useContext } from 'react'
-import { RiskMatrixContext } from '../context'
+import { RiskMatrixContext } from '../../context'
 import styles from './RiskElement.module.scss'
 import { IRiskElementProps } from './types'
 

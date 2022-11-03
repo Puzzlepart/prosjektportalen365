@@ -4,7 +4,7 @@ import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext, useState } from 'react'
 import { RiskMatrixContext } from '../context'
 import { IMatrixCell, MatrixCell, MatrixCellType, MatrixHeaderCell } from '../MatrixCell'
-import { RiskElement } from '../RiskElement'
+import { RiskElement } from '../MatrixCell/RiskElement'
 import { MatrixRow } from './MatrixRow'
 
 export const MatrixRows: FC = () => {

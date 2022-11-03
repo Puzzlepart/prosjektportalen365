@@ -108,17 +108,11 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                   showValue: true,
                   disabled: this.properties.fullWidth
                 }),
-                PropertyPaneSlider('height', {
-                  label: strings.HeightFieldLabel,
-                  min: 400,
-                  max: 1000,
-                  value: 400,
-                  showValue: true
-                }),
                 PropertyPaneTextField('calloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,
-                  resizable: true
+                  resizable: true,
+                  rows: 8
                 }),
                 PropertyPaneDropdown('size', {
                   label: strings.RiskMatrixSizeLabel,

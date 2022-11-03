@@ -32,7 +32,6 @@ export const RiskSection: FC = () => {
         <div className={styles.riskMatrix}>
           <RiskMatrix
             width={context.props.riskMatrixFullWidth ? '100%' : context.props.riskMatrixWidth}
-            height={context.props.riskMatrixHeight}
             calloutTemplate={context.props.riskMatrixCalloutTemplate}
             size={context.props.riskMatrixSize}
             colorScaleConfig={context.props.riskMatrixColorScaleConfig}
