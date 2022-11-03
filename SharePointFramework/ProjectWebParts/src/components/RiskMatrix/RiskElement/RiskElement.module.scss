@@ -1,4 +1,4 @@
-.riskElement {
+.root {
   border-radius: 50%;
   padding: 1px;
   margin: 2px;
@@ -9,4 +9,11 @@
   cursor: pointer;
   background-color: #fff;
   color: #666;
+  font-size: 11px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  line-height: 18px;
+}
+
+.tooltip {
+  padding: 0 20px;
 }

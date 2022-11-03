@@ -1,3 +1,5 @@
+import { CSSProperties, HTMLProps } from 'react'
+
 export enum MatrixCellType {
   Header,
   Cell
@@ -7,9 +9,11 @@ export interface IMatrixCell {
   cellValue?: string
   cellType: MatrixCellType
   className: string
-  style?: React.CSSProperties
+  style?: CSSProperties
   consequence?: number
   probability?: number
 }
 
-export type IMatrixCellProps = React.HTMLProps<HTMLElement>
+export interface IMatrixCellProps extends HTMLProps<HTMLDivElement> {
+  cell?: IMatrixCell
+}

@@ -4,7 +4,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 Every change is marked with issue ID.
 
 
-## 1.7.3 - TBA
+## 1.7.4 - TBA
 
 ### Added
 

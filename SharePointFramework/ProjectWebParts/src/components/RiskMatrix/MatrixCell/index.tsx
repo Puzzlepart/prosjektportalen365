@@ -1,25 +1,18 @@
 import React, { FC } from 'react'
-import { IMatrixCellProps } from './types'
 import styles from './MatrixCell.module.scss'
+import { IMatrixCellProps } from './types'
+import { useMatrixCell } from './useMatrixCell'
 
-export const MatrixCell: FC<IMatrixCellProps> = ({ style, children }: IMatrixCellProps) => {
+export const MatrixCell: FC<IMatrixCellProps> = (props) => {
+  const { backgroundColor } = useMatrixCell(props.cell)
   return (
-    <td className={styles.matrixCell} style={style}>
-      <div className={styles.container}>{children}</div>
-    </td>
+    <div className={styles.root} style={{ backgroundColor, ...props.style }}>
+      <div className={styles.container}>
+        <span>{props.children}</span>
+      </div>
+    </div>
   )
 }
 
-export interface IMatrixHeaderCellProps extends React.HTMLProps<HTMLElement> {
-  label: string
-}
-
-export const MatrixHeaderCell: FC<IMatrixHeaderCellProps> = (props: IMatrixHeaderCellProps) => {
-  return (
-    <td className={`${styles.matrixCell} ${styles.headerCell}`}>
-      <span>{props.label}</span>
-    </td>
-  )
-}
-
+export * from './MatrixHeaderCell'
 export * from './types'
