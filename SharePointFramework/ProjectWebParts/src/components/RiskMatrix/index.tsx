@@ -1,17 +1,16 @@
 import React, { FC } from 'react'
-import { IRiskMatrixProps } from './types'
+import { RiskMatrixContext } from './context'
 import { MatrixRows } from './MatrixRows'
 import styles from './RiskMatrix.module.scss'
-import { pick } from 'underscore'
+import { IRiskMatrixProps } from './types'
 import { useRiskMatrix } from './useRiskMatrix'
-import { RiskMatrixContext } from './context'
 
 export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
-  const { cells } = useRiskMatrix(props)
+  const { configuration, style } = useRiskMatrix(props)
 
   return (
-    <RiskMatrixContext.Provider value={{ ...props, cells }}>
-      <div className={styles.root} style={pick(props, 'width', 'height')}>
+    <RiskMatrixContext.Provider value={{ ...props, configuration }}>
+      <div className={styles.root} style={style}>
         <MatrixRows />
       </div>
     </RiskMatrixContext.Provider>
@@ -22,7 +21,7 @@ RiskMatrix.defaultProps = {
   items: [],
   width: 400,
   height: 300,
-  customCellsUrl: 'SiteAssets/custom-cells.txt'
+  customConfigUrl: 'SiteAssets/custom-cells.txt'
 }
 
 export * from './types'

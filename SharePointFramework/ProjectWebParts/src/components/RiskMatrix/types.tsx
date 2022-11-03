@@ -1,14 +1,17 @@
 import { PageContext } from '@microsoft/sp-page-context'
 import { HTMLProps } from 'react'
+import { IMatrixCell } from './MatrixCell/types'
 
 export interface IRiskMatrixProps extends HTMLProps<HTMLDivElement> {
-  customCellsUrl?: string
+  customConfigUrl?: string
   items?: RiskElementModel[]
   width?: number | string
   height?: number | string
   calloutTemplate: string
   pageContext?: PageContext
 }
+
+export type RiskMatrixConfiguration = IMatrixCell[][]
 
 export interface IRiskElementItem {
   Id: number

@@ -12,45 +12,36 @@ export const MatrixRows: FC = () => {
   const [showPostAction, setShowPostAction] = useState(false)
 
   /**
- * Get risk elements for cell
- * 
- * @param cell Cell
- */
-  const getRiskElementsForCell = ( cell: IMatrixCell ) => {
+   * Get risk elements for cell
+   *
+   * @param cell Cell
+   */
+  const getRiskElementsForCell = (cell: IMatrixCell) => {
     const itemsForCell = context.items.filter(
-      ({ probability, consequence }) => cell.probability === probability && cell.consequence === consequence
+      ({ probability, consequence }) =>
+        cell.probability === probability && cell.consequence === consequence
     )
-    return itemsForCell.map((risk, idx) => (
-      <RiskElement key={getId(idx.toString())} model={risk} />
-    ))
+    return itemsForCell.map((risk, idx) => <RiskElement key={getId(idx.toString())} model={risk} />)
   }
 
   /**
    * Get risk elements post action for cell
-   * 
+   *
    * @param cell Cell
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const getRiskElementsPostActionForCell = (cell: IMatrixCell ) => {
+  const getRiskElementsPostActionForCell = (cell: IMatrixCell) => {
     const itemsForCell = context.items.filter(
       ({ probabilityPostAction, consequencePostAction }) =>
-        cell.probability === probabilityPostAction &&
-        cell.consequence === consequencePostAction
+        cell.probability === probabilityPostAction && cell.consequence === consequencePostAction
     )
-    return itemsForCell.map((risk, idx) => (
-      <RiskElement
-        key={getId(idx.toString())}
-        model={risk}  />
-    ))
+    return itemsForCell.map((risk, idx) => <RiskElement key={getId(idx.toString())} model={risk} />)
   }
 
-  const children = context.cells.map((rows, i) => {
+  const children = context.configuration.map((rows, i) => {
     const cells = rows.map((c, j) => {
-      const cell = context.cells[i][j]
+      const cell = context.configuration[i][j]
       const riskElements = getRiskElementsForCell(cell)
-      const riskElementsPostAction = getRiskElementsPostActionForCell(
-        cell
-      )
+      const riskElementsPostAction = getRiskElementsPostActionForCell(cell)
       switch (cell.cellType) {
         case MatrixCellType.Cell: {
           return (

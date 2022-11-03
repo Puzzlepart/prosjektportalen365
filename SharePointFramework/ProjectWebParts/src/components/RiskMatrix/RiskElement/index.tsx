@@ -7,7 +7,7 @@ import { IRiskElementProps } from './types'
 
 export const RiskElement: FC<IRiskElementProps> = (props) => {
   const context = useContext(RiskMatrixContext)
-  
+
   const getTooltip = () => {
     let tooltip = ''
     if (props.model.siteTitle) {

@@ -1,6 +1,7 @@
 declare interface IProjectWebPartsStrings {
+  RiskMatrixFullWidthLabel: string 
   ParentProjectsGroupName: string
-  StatusReportShowOnlyIconsLabel: string | ReactElement<any, string | JSXElementConstructor<any>>
+  StatusReportShowOnlyIconsLabel: string
   StatusReportTruncateCommentsLabel: string
   ProjectInformationStatusReportHeaderText: string
   HideStatusReportLabel: string

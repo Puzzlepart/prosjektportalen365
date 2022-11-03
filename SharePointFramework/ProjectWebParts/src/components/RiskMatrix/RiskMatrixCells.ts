@@ -1,7 +1,8 @@
-import { IMatrixCell, MatrixCellType } from './MatrixCell'
 import * as strings from 'ProjectWebPartsStrings'
+import { MatrixCellType } from './MatrixCell'
+import { RiskMatrixConfiguration } from './types'
 
-const RISK_MATRIX_CELLS: IMatrixCell[][] = [
+const RISK_MATRIX_CELLS: RiskMatrixConfiguration = [
   [
     {
       cellType: MatrixCellType.Header,

@@ -1,6 +1,7 @@
 define([], function () {
   return {
-    ParentProjectsGroupName:'Overordnede prosjekter',
+    RiskMatrixFullWidthLabel: 'Bruk full bredde',
+    ParentProjectsGroupName: 'Overordnede prosjekter',
     StatusReportShowOnlyIconsLabel: 'Vis kun ikoner',
     StatusReportTruncateCommentsLabel: 'Avkort kommentarer',
     DefaultGroupByLabel: 'Standard gruppering',

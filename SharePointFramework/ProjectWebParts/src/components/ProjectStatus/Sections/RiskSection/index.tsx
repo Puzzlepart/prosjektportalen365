@@ -31,7 +31,7 @@ export const RiskSection: FC = () => {
       <Shimmer isDataLoaded={state.isDataLoaded}>
         <div className='ms-Grid-col ms-sm12'>
           <RiskMatrix
-            width={context.props.riskMatrixWidth}
+            width={context.props.riskMatrixFullWidth ? '100%' : context.props.riskMatrixWidth}
             height={context.props.riskMatrixHeight}
             calloutTemplate={context.props.riskMatrixCalloutTemplate}
             pageContext={context.props.pageContext}

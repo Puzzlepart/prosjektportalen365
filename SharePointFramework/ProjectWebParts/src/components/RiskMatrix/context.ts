@@ -1,11 +1,10 @@
 import { createContext } from 'react'
-import { IMatrixCell } from './MatrixCell/types'
-import { RiskElementModel } from './types'
+import { RiskElementModel, RiskMatrixConfiguration } from './types'
 
 export interface IRiskMatrixContext {
-    items?: RiskElementModel[]
-    calloutTemplate: string
-    cells: IMatrixCell[][]
+  items?: RiskElementModel[]
+  calloutTemplate: string
+  configuration: RiskMatrixConfiguration
 }
 
 export const RiskMatrixContext = createContext<IRiskMatrixContext>(null)

@@ -1,7 +1,8 @@
 import {
   IPropertyPaneConfiguration,
   PropertyPaneSlider,
-  PropertyPaneTextField
+  PropertyPaneTextField,
+  PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import '@pnp/polyfill-ie11'
 import '@fluentui/react/dist/css/fabric.min.css'
@@ -26,12 +27,16 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
             {
               groupName: strings.RiskMatrixGroupName,
               groupFields: [
+                PropertyPaneToggle('riskMatrixFullWidth', {
+                  label: strings.RiskMatrixFullWidthLabel
+                }),
                 PropertyPaneSlider('riskMatrixWidth', {
                   label: strings.WidthFieldLabel,
                   min: 400,
                   max: 1300,
                   value: 400,
-                  showValue: true
+                  showValue: true,
+                  disabled: this.properties.riskMatrixFullWidth
                 }),
                 PropertyPaneSlider('riskMatrixHeight', {
                   label: strings.HeightFieldLabel,
