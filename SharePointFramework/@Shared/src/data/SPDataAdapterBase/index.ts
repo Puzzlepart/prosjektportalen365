@@ -11,6 +11,7 @@ import { ProjectAdminPermission } from './ProjectAdminPermission'
 import { dateAdd, PnPClientStorage, PnPClientStore } from '@pnp/common'
 import { isArray, unique, contains } from 'underscore'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { SPUser } from '@microsoft/sp-page-context'
 
 export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   public spConfiguration: SPConfiguration = {
@@ -79,20 +80,36 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   }
 
   /**
+   * Ensure current user and return it.
+   *
+   * @param user User
+   */
+  private async getCurrentUser(user: SPUser) {
+    try {
+      const { data: currentUser } = await sp.web.ensureUser(user.loginName ?? user.email)
+      return currentUser
+    } catch {
+      return null
+    }
+  }
+
+  /**
    * Check project admin permissions. The result is stored in `sessionStorage`
-   * for 30 minutes to avoid too many requests.
+   * for `expireMinutes` minutes to avoid too many requests.
    *
    * @param permission Permission to check
    * @param properties Project properties
+   * @param expireMinutes Expiry in minutes
    */
   public async checkProjectAdminPermissions(
     permission: ProjectAdminPermission,
-    properties: Record<string, any>
+    properties: Record<string, any>,
+    expireMinutes = 10
   ) {
     const { pageContext } = this.spfxContext
     if (!pageContext) return false
     const storageKey = this.getStorageKey('getProjectAdminPermissions')
-    const storageExpire = dateAdd(new Date(), 'minute', 30)
+    const storageExpire = dateAdd(new Date(), 'minute', expireMinutes)
     const permissions = await new PnPClientStorage().session.getOrPut(
       storageKey,
       async () => {
@@ -102,7 +119,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
           if (pageContext.legacyPageContext.isSiteAdmin === true) return true
           else return false
         }
-        const { data: currentUser } = await sp.web.ensureUser(pageContext.user.email)
+        const currentUser = await this.getCurrentUser(pageContext.user)
         const projectAdminRoles = (await this.portal.getProjectAdminRoles()).filter(
           (role) => rolesToCheck.indexOf(role.title) !== -1
         )
