@@ -1,0 +1,13 @@
+.root {
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+
+  .container {
+    box-sizing: border-box;
+    font-size: 12px;
+    line-height: 32px;
+    text-align: center;
+    width: 100%;
+  }
+}

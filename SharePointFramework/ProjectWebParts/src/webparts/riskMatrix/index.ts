@@ -1,15 +1,18 @@
 import {
   IPropertyPaneConfiguration,
+  PropertyPaneDropdown,
   PropertyPaneSlider,
-  PropertyPaneTextField
+  PropertyPaneTextField,
+  PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { sp } from '@pnp/sp'
 import { IRiskMatrixProps, RiskMatrix, RiskElementModel } from 'components/RiskMatrix'
 import * as getValue from 'get-value'
 import ReactDom from 'react-dom'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
-import { IRiskMatrixWebPartProps } from './IRiskMatrixWebPartProps'
+import { IRiskMatrixWebPartProps } from './types'
 import * as strings from 'ProjectWebPartsStrings'
+import PropertyFieldColorConfiguration from './PropertyFieldColorConfiguration'
 
 export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWebPartProps> {
   private _items: RiskElementModel[] = []
@@ -29,29 +32,33 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
       this.renderError(this._error)
     } else {
       this.renderComponent<IRiskMatrixProps>(RiskMatrix, {
-        width: this.properties.width,
-        height: this.properties.height,
-        calloutTemplate: this.properties.calloutTemplate,
+        ...this.properties,
+        width: this.properties.fullWidth ? '100%' : this.properties.width,
         items: this._items
       })
     }
   }
 
   protected async _getItems(): Promise<RiskElementModel[]> {
-    let items: any[] = await sp.web.lists
+    const {
+      probabilityFieldName,
+      consequenceFieldName,
+      probabilityPostActionFieldName,
+      consequencePostActionFieldName
+    } = this.properties
+    const items: any[] = await sp.web.lists
       .getByTitle(this.properties.listName)
       .getItemsByCAMLQuery({ ViewXml: this.properties.viewXml })
-    items = items.map(
+    return items.map(
       (i) =>
         new RiskElementModel(
           i,
-          getValue(i, this.properties.probabilityFieldName, { default: '' }),
-          getValue(i, this.properties.consequenceFieldName, { default: '' }),
-          getValue(i, this.properties.probabilityPostActionFieldName, { default: '' }),
-          getValue(i, this.properties.consequencePostActionFieldName, { default: '' })
+          getValue(i, probabilityFieldName, { default: '' }),
+          getValue(i, consequenceFieldName, { default: '' }),
+          getValue(i, probabilityPostActionFieldName, { default: '' }),
+          getValue(i, consequencePostActionFieldName, { default: '' })
         )
     )
-    return items
   }
 
   protected onDispose(): void {
@@ -90,12 +97,16 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
             {
               groupName: strings.LookAndFeelGroupName,
               groupFields: [
+                PropertyPaneToggle('fullWidth', {
+                  label: strings.RiskMatrixFullWidthLabel
+                }),
                 PropertyPaneSlider('width', {
                   label: strings.WidthFieldLabel,
                   min: 400,
                   max: 1000,
                   value: 400,
-                  showValue: true
+                  showValue: true,
+                  disabled: this.properties.fullWidth
                 }),
                 PropertyPaneSlider('height', {
                   label: strings.HeightFieldLabel,
@@ -108,6 +119,28 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,
                   resizable: true
+                }),
+                PropertyPaneDropdown('size', {
+                  label: strings.RiskMatrixSizeLabel,
+                  options: [
+                    {
+                      key: '4',
+                      text: '4x4'
+                    },
+                    {
+                      key: '5',
+                      text: '5x5'
+                    },
+                    {
+                      key: '6',
+                      text: '6x6'
+                    }
+                  ]
+                }),
+                PropertyFieldColorConfiguration('colorScaleConfig', {
+                  key: 'riskMatrixColorScaleConfig',
+                  label: strings.RiskMatrixColorScaleConfigLabel,
+                  value: this.properties.colorScaleConfig
                 })
               ]
             }

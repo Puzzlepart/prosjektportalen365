@@ -1,7 +1,7 @@
 import { IBaseWebPartComponentProps } from 'components/BaseWebPartComponent/types'
-import { IRiskElementProps } from 'components/RiskMatrix/RiskElement/types'
+import { IRiskMatrixProps } from 'components/RiskMatrix'
 
-export interface IRiskMatrixWebPartProps extends IBaseWebPartComponentProps, IRiskElementProps {
+export interface IRiskMatrixWebPartProps extends IBaseWebPartComponentProps, IRiskMatrixProps {
   listName?: string
   viewXml?: string
   probabilityFieldName?: string

@@ -1,11 +1,34 @@
 import { PageContext } from '@microsoft/sp-page-context'
-export interface IRiskMatrixProps {
+import { HTMLProps } from 'react'
+import { IMatrixCell } from './MatrixCell/types'
+
+type RGB = [number, number, number]
+
+export type MatrixColorScaleConfig = { percentage?: number; color: RGB }
+
+export const MATRIX_DEFAULT_COLOR_SCALE_CONFIG: MatrixColorScaleConfig[] = [
+  { percentage: 10, color: [44, 186, 0] },
+  { percentage: 30, color: [163, 255, 0] },
+  { percentage: 50, color: [255, 244, 0] },
+  { percentage: 70, color: [255, 167, 0] },
+  { percentage: 90, color: [255, 0, 0] }
+]
+
+export interface IRiskMatrixProps extends Omit<HTMLProps<HTMLDivElement>, 'size'> {
+  customConfigUrl?: string
+  size?: RiskMatrixSize
   items?: RiskElementModel[]
+  fullWidth?: boolean
   width?: number | string
   height?: number | string
   calloutTemplate: string
   pageContext?: PageContext
+  colorScaleConfig?: MatrixColorScaleConfig[]
 }
+
+export type RiskMatrixSize = '4' | '5' | '6'
+
+export type RiskMatrixConfiguration = IMatrixCell[][]
 
 export interface IRiskElementItem {
   Id: number

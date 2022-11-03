@@ -1,0 +1,12 @@
+.root {
+  .container {
+    display: flex;
+    flex-direction: rowx;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 20px 0 0 0;
+  }
+  .saveBtn {
+    margin: 15px 0 0 0;
+  }
+}

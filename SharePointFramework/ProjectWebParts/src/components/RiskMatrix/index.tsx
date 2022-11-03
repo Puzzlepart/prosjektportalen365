@@ -1,44 +1,30 @@
-import React, { FC, useEffect } from 'react'
-import { IRiskMatrixProps } from './types'
-import { MatrixRows } from './MatrixRow'
+import React, { FC } from 'react'
+import { RiskMatrixContext } from './context'
+import { MatrixRows } from './MatrixRows'
 import styles from './RiskMatrix.module.scss'
-import { sp } from '@pnp/sp/'
-import HubSiteService from 'sp-hubsite-service'
+import { MATRIX_DEFAULT_COLOR_SCALE_CONFIG, IRiskMatrixProps } from './types'
+import { useRiskMatrix } from './useRiskMatrix'
 
-export const RiskMatrix: FC<IRiskMatrixProps> = ({
-  items = [],
-  width = 400,
-  height = 300,
-  calloutTemplate,
-  pageContext
-}: IRiskMatrixProps) => {
-  const [jsonConfig, setJsonConfig] = React.useState<undefined | []>()
-
-  useEffect(() => {
-    async function fetchJson() {
-      await fetchJsonConfiguration()
-    }
-    pageContext && fetchJson()
-  }, [])
-
-  async function fetchJsonConfiguration() {
-    const hubSite = await HubSiteService.GetHubSite(sp, pageContext as any)
-    const { ServerRelativeUrl } = await hubSite.web.get()
-    const json = await hubSite.web
-      .getFileByServerRelativeUrl(`/${ServerRelativeUrl}/SiteAssets/custom-cells.txt`)
-      .getJSON()
-    setJsonConfig(json)
-  }
+export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
+  const { ctxValue, style } = useRiskMatrix(props)
 
   return (
-    <div className={styles.riskMatrix} style={{ width, height }}>
-      <table className={styles.table}>
-        <tbody>
-          <MatrixRows items={items} calloutTemplate={calloutTemplate} customCells={jsonConfig} />
-        </tbody>
-      </table>
-    </div>
+    <RiskMatrixContext.Provider value={ctxValue}>
+      <div className={styles.root} style={style}>
+        <MatrixRows />
+      </div>
+    </RiskMatrixContext.Provider>
   )
+}
+
+RiskMatrix.defaultProps = {
+  items: [],
+  width: 400,
+  height: 300,
+  fullWidth: false,
+  customConfigUrl: 'SiteAssets/custom-cells.txt',
+  size: '5',
+  colorScaleConfig: MATRIX_DEFAULT_COLOR_SCALE_CONFIG
 }
 
 export * from './types'
