@@ -1,6 +1,6 @@
 import { IPropertyPaneField, PropertyPaneFieldType } from '@microsoft/sp-property-pane'
 import React from 'react'
-import { render } from 'react-dom'
+import { render, unmountComponentAtNode } from 'react-dom'
 import { ColorConfigurator } from './ColorConfigurator'
 import { IPropertyFieldColorConfigurationProps } from './types'
 
@@ -14,7 +14,8 @@ class PropertyFieldColorConfigurationBuilder
     this.targetProperty = _targetProperty
     this.properties = {
       ..._properties,
-      onRender: this.onRender.bind(this)
+      onRender: this.onRender.bind(this),
+      onDispose: this.onRender.bind(this)
     }
     this._onChange = this._onChange.bind(this)
   }
@@ -39,6 +40,10 @@ class PropertyFieldColorConfigurationBuilder
       element
     )
   }
+
+  public onDispose(element: HTMLElement, _context?: any): void {
+    unmountComponentAtNode(element)
+  }
 }
 
 export default function (
@@ -47,6 +52,7 @@ export default function (
 ): IPropertyPaneField<IPropertyFieldColorConfigurationProps> {
   return new PropertyFieldColorConfigurationBuilder(targetProperty, {
     ...properties,
-    onRender: null
+    onRender: null,
+    onDispose: null
   })
 }
