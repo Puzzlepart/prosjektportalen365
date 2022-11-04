@@ -2452,4 +2452,19 @@
   <data name="ProjectAdminPermissions_ChildProjectsAdmin" xml:space="preserve">
     <value>Administrering av underområder</value>
   </data>
+  <data name="SiteFields_InstallStartTime_DisplayName" xml:space="preserve">
+    <value>Starttid</value>
+  </data>
+  <data name="SiteFields_InstallEndTime_DisplayName" xml:space="preserve">
+    <value>Slutttid</value>
+  </data>
+  <data name="SiteFields_InstallVersion_DisplayName" xml:space="preserve">
+    <value>Versjon</value>
+  </data>
+  <data name="SiteFields_InstallCommand_DisplayName" xml:space="preserve">
+    <value>Kommando</value>
+  </data>
+  <data name="SiteFields_InstallUser_DisplayName" xml:space="preserve">
+    <value>Installasjonsbruker</value>
+  </data>
 </root>
