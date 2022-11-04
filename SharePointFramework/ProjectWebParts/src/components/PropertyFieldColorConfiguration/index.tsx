@@ -23,7 +23,7 @@ class PropertyFieldColorConfigurationBuilder
     changeCallback: (targetProperty?: string, newValue?: any) => void,
     newValue: any
   ) {
-    changeCallback(this.targetProperty, JSON.stringify(newValue))
+    changeCallback(this.targetProperty, newValue)
   }
 
   public onRender(
