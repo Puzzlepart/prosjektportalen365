@@ -1,34 +1,17 @@
 import { PageContext } from '@microsoft/sp-page-context'
+import strings from 'ProjectWebPartsStrings'
 import { HTMLProps } from 'react'
-import { IMatrixCell } from './MatrixCell/types'
+import { IDynamicMatrixProps } from '../DynamicMatrix'
+import { IMatrixElementModel } from '../DynamicMatrix/MatrixCell/MatrixElement/types'
 
-type RGB = [number, number, number]
-
-export type MatrixColorScaleConfig = { percentage?: number; color: RGB }
-
-export const MATRIX_DEFAULT_COLOR_SCALE_CONFIG: MatrixColorScaleConfig[] = [
-  { percentage: 10, color: [44, 186, 0] },
-  { percentage: 30, color: [163, 255, 0] },
-  { percentage: 50, color: [255, 244, 0] },
-  { percentage: 70, color: [255, 167, 0] },
-  { percentage: 90, color: [255, 0, 0] }
-]
-
-export interface IRiskMatrixProps extends Omit<HTMLProps<HTMLDivElement>, 'size'> {
+export interface IRiskMatrixProps
+  extends Omit<HTMLProps<HTMLDivElement>, 'size'>,
+    Pick<IDynamicMatrixProps, 'size' | 'colorScaleConfig' | 'calloutTemplate'> {
   customConfigUrl?: string
-  size?: RiskMatrixSize
   items?: RiskElementModel[]
   fullWidth?: boolean
-  width?: number | string
-  height?: number | string
-  calloutTemplate: string
   pageContext?: PageContext
-  colorScaleConfig?: MatrixColorScaleConfig[]
 }
-
-export type RiskMatrixSize = '4' | '5' | '6'
-
-export type RiskMatrixConfiguration = IMatrixCell[][]
 
 export interface IRiskElementItem {
   Id: number
@@ -36,7 +19,7 @@ export interface IRiskElementItem {
   [key: string]: any
 }
 
-export class RiskElementModel {
+export class RiskElementModel implements IMatrixElementModel {
   public id: number
   public title: string
   public probability: number
@@ -69,4 +52,65 @@ export class RiskElementModel {
       10
     )
   }
+
+  public get tooltip() {
+    let tooltip = ''
+    if (this.siteTitle) tooltip += `${this.siteTitle}: `
+    tooltip += this.title
+    return tooltip
+  }
+}
+
+export const RiskMatrixHeaders: Record<number, string[][]> = {
+  4: [
+    [
+      undefined,
+      strings.RiskMatrix_Header_Insignificant,
+      strings.RiskMatrix_Header_Small,
+      strings.RiskMatrix_Header_Moderate,
+      strings.RiskMatrix_Header_Serious
+    ],
+    [
+      strings.RiskMatrix_Header_VeryHigh,
+      strings.RiskMatrix_Header_High,
+      strings.RiskMatrix_Header_Medium,
+      strings.RiskMatrix_Header_Low
+    ]
+  ],
+  5: [
+    [
+      undefined,
+      strings.RiskMatrix_Header_Insignificant,
+      strings.RiskMatrix_Header_Small,
+      strings.RiskMatrix_Header_Moderate,
+      strings.RiskMatrix_Header_Serious,
+      strings.RiskMatrix_Header_Critical
+    ],
+    [
+      strings.RiskMatrix_Header_VeryHigh,
+      strings.RiskMatrix_Header_High,
+      strings.RiskMatrix_Header_Medium,
+      strings.RiskMatrix_Header_Low,
+      strings.RiskMatrix_Header_VeryLow
+    ]
+  ],
+  6: [
+    [
+      undefined,
+      strings.RiskMatrix_Header_Insignificant,
+      strings.RiskMatrix_Header_Small,
+      strings.RiskMatrix_Header_Moderate,
+      strings.RiskMatrix_Header_Serious,
+      strings.RiskMatrix_Header_Critical,
+      strings.RiskMatrix_Header_VeryCritical
+    ],
+    [
+      strings.RiskMatrix_Header_VeryHigh,
+      strings.RiskMatrix_Header_High,
+      strings.RiskMatrix_Header_Medium,
+      strings.RiskMatrix_Header_Low,
+      strings.RiskMatrix_Header_VeryLow,
+      strings.RiskMatrix_Header_ExtremelyLow
+    ]
+  ]
 }

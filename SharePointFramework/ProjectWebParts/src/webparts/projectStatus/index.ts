@@ -1,3 +1,4 @@
+import '@fluentui/react/dist/css/fabric.min.css'
 import {
   IPropertyPaneConfiguration,
   PropertyPaneDropdown,
@@ -6,11 +7,10 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import '@pnp/polyfill-ie11'
-import '@fluentui/react/dist/css/fabric.min.css'
-import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
+import { IProjectStatusProps, ProjectStatus } from 'components/ProjectStatus'
 import * as strings from 'ProjectWebPartsStrings'
-import { ProjectStatus, IProjectStatusProps } from 'components/ProjectStatus'
-import PropertyFieldColorConfiguration from '../riskMatrix/PropertyFieldColorConfiguration'
+import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
+import PropertyFieldColorConfiguration from '../../components/PropertyFieldColorConfiguration'
 
 export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectStatusProps> {
   public async onInit() {
@@ -22,8 +22,6 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    // eslint-disable-next-line no-console
-    console.log(this.properties.riskMatrixColorScaleConfig)
     return {
       pages: [
         {
@@ -31,31 +29,24 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
             {
               groupName: strings.RiskMatrixGroupName,
               groupFields: [
-                PropertyPaneToggle('riskMatrixFullWidth', {
+                PropertyPaneToggle('riskMatrix.fullWidth', {
                   label: strings.RiskMatrixFullWidthLabel
                 }),
-                PropertyPaneSlider('riskMatrixWidth', {
+                PropertyPaneSlider('riskMatrix.width', {
                   label: strings.WidthFieldLabel,
                   min: 400,
                   max: 1300,
                   value: 400,
                   showValue: true,
-                  disabled: this.properties.riskMatrixFullWidth
+                  disabled: this.properties.riskMatrix?.fullWidth
                 }),
-                PropertyPaneSlider('riskMatrixHeight', {
-                  label: strings.HeightFieldLabel,
-                  min: 400,
-                  max: 1000,
-                  value: 400,
-                  showValue: true
-                }),
-                PropertyPaneTextField('riskMatrixCalloutTemplate', {
+                PropertyPaneTextField('riskMatrix.calloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,
                   resizable: true,
-                  rows: 12
+                  rows: 8
                 }),
-                PropertyPaneDropdown('riskMatrixSize', {
+                PropertyPaneDropdown('riskMatrix.size', {
                   label: strings.RiskMatrixSizeLabel,
                   options: [
                     {
@@ -70,12 +61,20 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                       key: '6',
                       text: '6x6'
                     }
-                  ]
+                  ],
+                  selectedKey: this.properties.riskMatrix?.size ?? '5'
                 }),
-                PropertyFieldColorConfiguration('riskMatrixColorScaleConfig', {
+                PropertyFieldColorConfiguration('riskMatrix.colorScaleConfig', {
                   key: 'riskMatrixColorScaleConfig',
                   label: strings.RiskMatrixColorScaleConfigLabel,
-                  value: this.properties.riskMatrixColorScaleConfig
+                  defaultValue: [
+                    { p: 10, r: 44, g: 186, b: 0 },
+                    { p: 30, r: 163, g: 255, b: 0 },
+                    { p: 50, r: 255, g: 244, b: 0 },
+                    { p: 70, r: 255, g: 167, b: 0 },
+                    { p: 90, r: 255, g: 0, b: 0 }
+                  ],
+                  value: this.properties.riskMatrix?.colorScaleConfig
                 })
               ]
             },

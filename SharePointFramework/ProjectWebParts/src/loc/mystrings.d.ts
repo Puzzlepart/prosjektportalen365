@@ -1,4 +1,7 @@
 declare interface IProjectWebPartsStrings {
+  ColorPickerStrings: IColorPickerStrings
+  RiskMatrixToggleElementsOnText: string
+  RiskMatrixToggleElementsOffText: string
   RevertDefaultColorConfigurationText: string
   RiskMatrix_Header_ExtremelyLow: string
   RiskMatrix_Header_VeryCritical: string
@@ -119,10 +122,7 @@ declare interface IProjectWebPartsStrings {
   RiskMatrix_Header_Small: string
   RiskMatrix_Header_VeryHigh: string
   RiskMatrix_Header_VeryLow: string
-  RiskMatrix_ViewSelectorLabel: string
-  RiskMatrix_EmptyMessage: string
-  RiskMatrix_LoadingText: string
-  RiskMatrix_ToggleElements: string
+  RiskMatrixToggleElementsLabel: string
   GtModerationStatus_Choice_Published: string
   GtModerationStatus_Choice_Draft: string
   ListNameFieldLabel: string
@@ -132,7 +132,6 @@ declare interface IProjectWebPartsStrings {
   ProbabilityPostActionFieldNameFieldLabel: string
   ConsequencePostActionFieldNameFieldLabel: string
   WidthFieldLabel: string
-  HeightFieldLabel: string
   CalloutTemplateFieldLabel: string
   FilterText: string
   PhaseLabel: string

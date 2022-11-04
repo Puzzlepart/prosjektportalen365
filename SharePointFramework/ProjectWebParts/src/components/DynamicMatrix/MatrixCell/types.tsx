@@ -6,12 +6,12 @@ export enum MatrixCellType {
 }
 
 export interface IMatrixCell {
-  cellValue?: string
   cellType: MatrixCellType
-  className: string
+  cellValue?: string
+  className?: string
   style?: CSSProperties
-  consequence?: number
-  probability?: number
+  x?: number
+  y?: number
 }
 
 export interface IMatrixCellProps extends HTMLProps<HTMLDivElement> {

@@ -1,5 +1,5 @@
-import { IBaseWebPartComponentProps } from 'components/BaseWebPartComponent/types'
-import { IRiskMatrixProps } from 'components/RiskMatrix'
+import { IBaseWebPartComponentProps } from '../../components/BaseWebPartComponent/types'
+import { IRiskMatrixProps } from '../../components/RiskMatrix'
 
 export interface IRiskMatrixWebPartProps extends IBaseWebPartComponentProps, IRiskMatrixProps {
   listName?: string

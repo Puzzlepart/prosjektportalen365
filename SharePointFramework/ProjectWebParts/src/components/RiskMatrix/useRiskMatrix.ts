@@ -1,5 +1,6 @@
-import { CSSProperties } from 'react'
-import { pick } from 'underscore'
+import { IMatrixElementProps } from 'components/DynamicMatrix/MatrixCell/MatrixElement/types'
+import { useState } from 'react'
+import { IMatrixCell } from '../DynamicMatrix'
 import { IRiskMatrixProps } from './types'
 import { useRiskMatrixConfiguration } from './useRiskMatrixConfiguration'
 
@@ -9,8 +10,34 @@ import { useRiskMatrixConfiguration } from './useRiskMatrixConfiguration'
  * @param props Props
  */
 export function useRiskMatrix(props: IRiskMatrixProps) {
-  const { configuration } = useRiskMatrixConfiguration(props)
-  const size = parseInt(props.size, 10)
-  const style: CSSProperties = pick(props, 'width', 'height')
-  return { ctxValue: { ...props, configuration, size }, style } as const
+  const [showPostAction, setShowPostAction] = useState(false)
+  const configuration = useRiskMatrixConfiguration(props)
+
+  function getElementsForCell(cell: IMatrixCell) {
+    const elements = props.items
+      .filter((item) => cell.y === item.probability && cell.x === item.consequence)
+      .map(
+        (item) =>
+          ({
+            model: item,
+            style: { opacity: showPostAction ? 0 : 1 },
+            title: item.tooltip
+          } as IMatrixElementProps)
+      )
+    const postActionElements = props.items
+      .filter(
+        (item) => cell.y === item.probabilityPostAction && cell.x === item.consequencePostAction
+      )
+      .map(
+        (item) =>
+          ({
+            model: item,
+            style: { opacity: showPostAction ? 1 : 0 },
+            title: item.tooltip
+          } as IMatrixElementProps)
+      )
+    return [...elements, ...postActionElements]
+  }
+
+  return { configuration, getElementsForCell, setShowPostAction } as const
 }

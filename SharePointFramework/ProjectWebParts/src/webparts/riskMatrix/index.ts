@@ -6,13 +6,13 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { sp } from '@pnp/sp'
-import { IRiskMatrixProps, RiskMatrix, RiskElementModel } from 'components/RiskMatrix'
+import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
+import { IRiskMatrixProps, RiskElementModel, RiskMatrix } from 'components/RiskMatrix'
 import * as getValue from 'get-value'
+import * as strings from 'ProjectWebPartsStrings'
 import ReactDom from 'react-dom'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 import { IRiskMatrixWebPartProps } from './types'
-import * as strings from 'ProjectWebPartsStrings'
-import PropertyFieldColorConfiguration from './PropertyFieldColorConfiguration'
 
 export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWebPartProps> {
   private _items: RiskElementModel[] = []
@@ -108,17 +108,11 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                   showValue: true,
                   disabled: this.properties.fullWidth
                 }),
-                PropertyPaneSlider('height', {
-                  label: strings.HeightFieldLabel,
-                  min: 400,
-                  max: 1000,
-                  value: 400,
-                  showValue: true
-                }),
                 PropertyPaneTextField('calloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,
-                  resizable: true
+                  resizable: true,
+                  rows: 8
                 }),
                 PropertyPaneDropdown('size', {
                   label: strings.RiskMatrixSizeLabel,
@@ -135,11 +129,19 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                       key: '6',
                       text: '6x6'
                     }
-                  ]
+                  ],
+                  selectedKey: this.properties.size ?? '5'
                 }),
                 PropertyFieldColorConfiguration('colorScaleConfig', {
-                  key: 'riskMatrixColorScaleConfig',
+                  key: 'colorScaleConfig',
                   label: strings.RiskMatrixColorScaleConfigLabel,
+                  defaultValue: [
+                    { p: 10, r: 44, g: 186, b: 0 },
+                    { p: 30, r: 163, g: 255, b: 0 },
+                    { p: 50, r: 255, g: 244, b: 0 },
+                    { p: 70, r: 255, g: 167, b: 0 },
+                    { p: 90, r: 255, g: 0, b: 0 }
+                  ],
                   value: this.properties.colorScaleConfig
                 })
               ]
@@ -150,3 +152,5 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
     }
   }
 }
+
+export * from './types'

@@ -1,30 +1,47 @@
+import { Toggle } from '@fluentui/react'
+import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
-import { RiskMatrixContext } from './context'
-import { MatrixRows } from './MatrixRows'
-import styles from './RiskMatrix.module.scss'
-import { MATRIX_DEFAULT_COLOR_SCALE_CONFIG, IRiskMatrixProps } from './types'
+import { DynamicMatrix } from '../DynamicMatrix'
+import { IRiskMatrixProps } from './types'
 import { useRiskMatrix } from './useRiskMatrix'
 
 export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
-  const { ctxValue, style } = useRiskMatrix(props)
-
+  const { configuration, getElementsForCell, setShowPostAction } = useRiskMatrix(props)
   return (
-    <RiskMatrixContext.Provider value={ctxValue}>
-      <div className={styles.root} style={style}>
-        <MatrixRows />
-      </div>
-    </RiskMatrixContext.Provider>
+    <>
+      <DynamicMatrix
+        {...props}
+        width={props.fullWidth ? '100%' : props.width}
+        configuration={configuration}
+        getElementsForCell={getElementsForCell}
+      />
+      <Toggle
+        label={strings.RiskMatrixToggleElementsLabel}
+        onText={strings.RiskMatrixToggleElementsOnText}
+        offText={strings.RiskMatrixToggleElementsOffText}
+        onChange={(_event, checked) => setShowPostAction(checked)}
+      />
+    </>
   )
 }
 
 RiskMatrix.defaultProps = {
   items: [],
   width: 400,
-  height: 300,
-  fullWidth: false,
+  calloutTemplate: `
+  <h3>{Title}</h3>\n
+  <p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n
+  <p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n
+  <p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>`,
   customConfigUrl: 'SiteAssets/custom-cells.txt',
   size: '5',
-  colorScaleConfig: MATRIX_DEFAULT_COLOR_SCALE_CONFIG
+  colorScaleConfig: [
+    { p: 10, r: 44, g: 186, b: 0 },
+    { p: 30, r: 163, g: 255, b: 0 },
+    { p: 50, r: 255, g: 244, b: 0 },
+    { p: 70, r: 255, g: 167, b: 0 },
+    { p: 90, r: 255, g: 0, b: 0 }
+  ]
 }
 
 export * from './types'

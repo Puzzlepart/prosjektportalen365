@@ -1,38 +1,33 @@
 import { DefaultButton, Label, PrimaryButton, Slider } from '@fluentui/react'
-import { MATRIX_DEFAULT_COLOR_SCALE_CONFIG } from 'components/RiskMatrix/types'
+import { get } from '@microsoft/sp-lodash-subset'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
-import { IPropertyFieldColorConfigurationProps } from '../../types'
 import { ColorConfigElement } from './ColorConfigElement'
 import styles from './PropertyFieldColorConfiguration.module.scss'
+import { CHANGE_CONFIG, SET_CONFIG } from './reducer'
+import { IColorConfiguratorProps } from './types'
 import { usePropertyFieldColorConfiguration } from './usePropertyFieldColorConfiguration'
 
-export const PropertyFieldColorConfiguration: FC<IPropertyFieldColorConfigurationProps> = (
-  props
-) => {
-  const {
-    config,
-    setConfig,
-    onColorChange,
-    onSave,
-    onRevertDefault
-  } = usePropertyFieldColorConfiguration(props)
+export const ColorConfigurator: FC<IColorConfiguratorProps> = (props) => {
+  const { state, dispatch, onSave, onRevertDefault } = usePropertyFieldColorConfiguration(props)
   return (
     <div className={styles.root}>
       <Label>{props.label}</Label>
       <Slider
         min={props.minColors}
         max={props.maxColors}
-        value={config.length}
-        onChange={setConfig}
+        value={state.config.length}
+        onChange={(count) => dispatch(SET_CONFIG({ count }))}
       />
       <div className={styles.container}>
-        {config.map(({ percentage, color }, idx) => (
+        {state.config.map((config, index) => (
           <ColorConfigElement
-            key={idx}
-            percentage={percentage}
-            color={color}
-            onChange={(_, color) => onColorChange(idx, color)}
+            key={index}
+            config={config}
+            onChangeColor={(_, color) => dispatch(CHANGE_CONFIG({ index, color }))}
+            onChangePercentage={(percentage) => dispatch(CHANGE_CONFIG({ index, percentage }))}
+            min={get(state, `config[${index - 1}][0]`, 0) + 2}
+            max={get(state, `config[${index + 1}][0]`, 100) - 2}
           />
         ))}
       </div>
@@ -52,8 +47,7 @@ export const PropertyFieldColorConfiguration: FC<IPropertyFieldColorConfiguratio
   )
 }
 
-PropertyFieldColorConfiguration.defaultProps = {
-  value: MATRIX_DEFAULT_COLOR_SCALE_CONFIG,
+ColorConfigurator.defaultProps = {
   minColors: 3,
   maxColors: 8
 }

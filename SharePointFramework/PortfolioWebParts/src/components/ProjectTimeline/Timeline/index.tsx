@@ -11,8 +11,6 @@ import { DetailsCallout } from '../DetailsCallout'
 import styles from './Timeline.module.scss'
 import './Timeline.overrides.css'
 import { ITimelineProps } from './types'
-import { useGroupRenderer } from './useGroupRenderer'
-import { useItemRenderer } from './useItemRenderer'
 import { useTimeline } from './useTimeline'
 
 export const Timeline: FC<ITimelineProps> = (props) => {
@@ -24,10 +22,9 @@ export const Timeline: FC<ITimelineProps> = (props) => {
     setShowFilterPanel,
     showDetails,
     setShowDetails,
-    onItemClick
+    itemRenderer,
+    groupRenderer
   } = useTimeline(props)
-  const itemRenderer = useItemRenderer(onItemClick)
-  const groupRenderer = useGroupRenderer()
 
   return (
     <div className={styles.root}>
