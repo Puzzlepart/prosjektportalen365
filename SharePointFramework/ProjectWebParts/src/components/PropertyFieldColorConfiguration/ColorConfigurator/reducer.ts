@@ -25,12 +25,10 @@ export default (props: IColorConfiguratorProps) =>
       if (inc > 0) {
         for (let i = 0; i < inc; i++) {
           const newConfig = props.defaultValue[state.config.length + i] ?? lastConfig
+          // eslint-disable-next-line no-console
+          console.table(newConfig)
           state.config.push(newConfig)
         }
-        state.config = state.config.map(([, r, g, b], idx) => {
-          const pct = Math.floor(Math.round((10 + (90 / state.config.length) * idx) / 10) * 10)
-          return [pct, r, g, b]
-        })
       } else state.config = state.config.splice(0, payload.count)
     },
     [CHANGE_CONFIG.type]: (

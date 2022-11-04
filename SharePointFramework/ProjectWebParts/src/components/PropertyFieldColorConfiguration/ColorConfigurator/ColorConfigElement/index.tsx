@@ -30,7 +30,6 @@ export const ColorConfigElement: FC<IColorConfigElementProps> = (props) => {
             />
             <Slider
               value={percentage}
-              step={1}
               min={props.min}
               max={props.max}
               onChange={props.onChangePercentage}
