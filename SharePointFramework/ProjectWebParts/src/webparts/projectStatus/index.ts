@@ -22,6 +22,8 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    // eslint-disable-next-line no-console
+    console.log(this.properties)
     return {
       pages: [
         {
