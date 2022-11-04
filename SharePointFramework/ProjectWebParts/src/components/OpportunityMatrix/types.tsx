@@ -1,7 +1,7 @@
 import { PageContext } from '@microsoft/sp-page-context'
 import strings from 'ProjectWebPartsStrings'
 import { HTMLProps } from 'react'
-import { IDynamicMatrixProps } from '../DynamicMatrix'
+import { DynamicMatrixColorScaleConfig, IDynamicMatrixProps } from '../DynamicMatrix'
 import { IMatrixElementModel } from '../DynamicMatrix/MatrixCell/MatrixElement/types'
 
 export interface IOpportunityMatrixProps
@@ -114,3 +114,11 @@ export const OpportunityMatrixHeaders: Record<number, string[][]> = {
     ]
   ]
 }
+
+export const OPPORTUNITY_MATRIX_DEFAULT_COLOR_SCALE_CONFIG: DynamicMatrixColorScaleConfig[] = [
+  { percentage: 10, color: [255, 0, 0] },
+  { percentage: 30, color: [255, 167, 0] },
+  { percentage: 50, color: [255, 244, 0] },
+  { percentage: 70, color: [163, 255, 0] },
+  { percentage: 90, color: [44, 186, 0] }
+]

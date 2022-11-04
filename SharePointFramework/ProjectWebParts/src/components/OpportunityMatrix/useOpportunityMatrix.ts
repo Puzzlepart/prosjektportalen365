@@ -10,7 +10,7 @@ import { useOpportunityMatrixConfiguration } from './useOpportunityMatrixConfigu
  * @param props Props
  */
 export function useOpportunityMatrix(props: IOpportunityMatrixProps) {
-  const [showPostAction, setShowPostAction] = useState(false)
+  const [showPostAction] = useState(false)
   const configuration = useOpportunityMatrixConfiguration(props)
 
   function getElementsForCell(cell: IMatrixCell) {
@@ -35,5 +35,5 @@ export function useOpportunityMatrix(props: IOpportunityMatrixProps) {
     return [...elements, ...postActionElements]
   }
 
-  return { configuration, getElementsForCell, setShowPostAction } as const
+  return { configuration, getElementsForCell } as const
 }
