@@ -2,7 +2,7 @@ import { IPropertyPaneField, PropertyPaneFieldType } from '@microsoft/sp-propert
 import React from 'react'
 import { render } from 'react-dom'
 import { IPropertyFieldColorConfigurationProps } from './types'
-import { PropertyFieldColorConfiguration } from './components/PropertyFieldColorConfiguration'
+import { ColorConfigurator } from './ColorConfigurator'
 
 class PropertyFieldColorConfigurationBuilder
   implements IPropertyPaneField<IPropertyFieldColorConfigurationProps> {
@@ -24,7 +24,7 @@ class PropertyFieldColorConfigurationBuilder
     changeCallback?: (targetProperty?: string, newValue?: any) => void
   ): void {
     render(
-      <PropertyFieldColorConfiguration
+      <ColorConfigurator
         {...this.properties}
         onChange={(_, newValue) => changeCallback(this.targetProperty, newValue)}
       />,

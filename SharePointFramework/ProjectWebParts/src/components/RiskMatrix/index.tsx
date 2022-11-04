@@ -1,10 +1,11 @@
 import React, { FC } from 'react'
 import { DynamicMatrixContext } from '../DynamicMatrix/context'
 import { DynamicMatrix } from '../DynamicMatrix'
-import { MATRIX_DEFAULT_COLOR_SCALE_CONFIG, IRiskMatrixProps } from './types'
+import { IRiskMatrixProps } from './types'
 import { useRiskMatrix } from './useRiskMatrix'
 import { Toggle } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
+import { MATRIX_DEFAULT_COLOR_SCALE_CONFIG } from '../../webparts/riskMatrix'
 
 export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
   const { ctxValue, setShowPostAction } = useRiskMatrix(props)

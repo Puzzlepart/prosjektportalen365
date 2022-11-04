@@ -1,3 +1,4 @@
+import '@fluentui/react/dist/css/fabric.min.css'
 import {
   IPropertyPaneConfiguration,
   PropertyPaneDropdown,
@@ -6,11 +7,11 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import '@pnp/polyfill-ie11'
-import '@fluentui/react/dist/css/fabric.min.css'
-import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
+import { IProjectStatusProps, ProjectStatus } from 'components/ProjectStatus'
 import * as strings from 'ProjectWebPartsStrings'
-import { ProjectStatus, IProjectStatusProps } from 'components/ProjectStatus'
-import PropertyFieldColorConfiguration from '../riskMatrix/PropertyFieldColorConfiguration'
+import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
+import { MATRIX_DEFAULT_COLOR_SCALE_CONFIG } from '../riskMatrix'
+import PropertyFieldColorConfiguration from '../../components/PropertyFieldColorConfiguration'
 
 export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectStatusProps> {
   public async onInit() {
@@ -22,8 +23,6 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    // eslint-disable-next-line no-console
-    console.log(this.properties.riskMatrixColorScaleConfig)
     return {
       pages: [
         {
@@ -63,11 +62,13 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                       key: '6',
                       text: '6x6'
                     }
-                  ]
+                  ],
+                  selectedKey: this.properties.riskMatrixSize ?? '5'
                 }),
                 PropertyFieldColorConfiguration('riskMatrixColorScaleConfig', {
                   key: 'riskMatrixColorScaleConfig',
                   label: strings.RiskMatrixColorScaleConfigLabel,
+                  defaultValue: MATRIX_DEFAULT_COLOR_SCALE_CONFIG,
                   value: this.properties.riskMatrixColorScaleConfig
                 })
               ]

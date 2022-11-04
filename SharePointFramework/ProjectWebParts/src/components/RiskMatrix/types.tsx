@@ -1,15 +1,7 @@
 import { PageContext } from '@microsoft/sp-page-context'
-import { IMatrixElementModel } from '../DynamicMatrix/MatrixCell/MatrixElement/types'
 import { HTMLProps } from 'react'
-import { IDynamicMatrixContext, DynamicMatrixColorScaleConfig } from '../DynamicMatrix'
-
-export const MATRIX_DEFAULT_COLOR_SCALE_CONFIG: DynamicMatrixColorScaleConfig[] = [
-  { percentage: 10, color: [44, 186, 0] },
-  { percentage: 30, color: [163, 255, 0] },
-  { percentage: 50, color: [255, 244, 0] },
-  { percentage: 70, color: [255, 167, 0] },
-  { percentage: 90, color: [255, 0, 0] }
-]
+import { IDynamicMatrixContext } from '../DynamicMatrix'
+import { IMatrixElementModel } from '../DynamicMatrix/MatrixCell/MatrixElement/types'
 
 export interface IRiskMatrixProps
   extends Omit<HTMLProps<HTMLDivElement>, 'size'>,

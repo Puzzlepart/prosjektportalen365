@@ -6,13 +6,13 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { sp } from '@pnp/sp'
-import { IRiskMatrixProps, RiskMatrix, RiskElementModel } from 'components/RiskMatrix'
 import * as getValue from 'get-value'
 import ReactDom from 'react-dom'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
-import { IRiskMatrixWebPartProps } from './types'
+import { IRiskMatrixWebPartProps, MATRIX_DEFAULT_COLOR_SCALE_CONFIG } from './types'
 import * as strings from 'ProjectWebPartsStrings'
-import PropertyFieldColorConfiguration from './PropertyFieldColorConfiguration'
+import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
+import { RiskElementModel, IRiskMatrixProps, RiskMatrix } from 'components/RiskMatrix'
 
 export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWebPartProps> {
   private _items: RiskElementModel[] = []
@@ -129,11 +129,13 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                       key: '6',
                       text: '6x6'
                     }
-                  ]
+                  ],
+                  selectedKey: this.properties.size ?? '5'
                 }),
                 PropertyFieldColorConfiguration('colorScaleConfig', {
                   key: 'riskMatrixColorScaleConfig',
                   label: strings.RiskMatrixColorScaleConfigLabel,
+                  defaultValue: MATRIX_DEFAULT_COLOR_SCALE_CONFIG,
                   value: this.properties.colorScaleConfig
                 })
               ]
@@ -144,3 +146,5 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
     }
   }
 }
+
+export * from './types'

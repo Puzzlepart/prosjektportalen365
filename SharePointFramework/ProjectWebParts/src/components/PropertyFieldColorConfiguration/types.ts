@@ -1,8 +1,9 @@
 import { IPropertyPaneCustomFieldProps } from '@microsoft/sp-property-pane'
-import { DynamicMatrixColorScaleConfig } from '../../../components/DynamicMatrix'
+import { DynamicMatrixColorScaleConfig } from '../DynamicMatrix'
 
 export interface IPropertyFieldColorConfigurationProps extends IPropertyPaneCustomFieldProps {
   label?: string
+  defaultValue?: DynamicMatrixColorScaleConfig[]
   value?: DynamicMatrixColorScaleConfig[]
   onChange?: (targetProperty?: string, newValue?: any) => void
   minColors?: number
