@@ -1,4 +1,5 @@
 import { PageContext } from '@microsoft/sp-page-context'
+import strings from 'ProjectWebPartsStrings'
 import { HTMLProps } from 'react'
 import { IDynamicMatrixContext } from '../DynamicMatrix'
 import { IMatrixElementModel } from '../DynamicMatrix/MatrixCell/MatrixElement/types'
@@ -58,4 +59,58 @@ export class RiskElementModel implements IMatrixElementModel {
     tooltip += this.title
     return tooltip
   }
+}
+
+export const RiskMatrixHeaders: Record<number, string[][]> = {
+  4: [
+    [
+      undefined,
+      strings.RiskMatrix_Header_Insignificant,
+      strings.RiskMatrix_Header_Small,
+      strings.RiskMatrix_Header_Moderate,
+      strings.RiskMatrix_Header_Serious
+    ],
+    [
+      strings.RiskMatrix_Header_VeryHigh,
+      strings.RiskMatrix_Header_High,
+      strings.RiskMatrix_Header_Medium,
+      strings.RiskMatrix_Header_Low
+    ]
+  ],
+  5: [
+    [
+      undefined,
+      strings.RiskMatrix_Header_Insignificant,
+      strings.RiskMatrix_Header_Small,
+      strings.RiskMatrix_Header_Moderate,
+      strings.RiskMatrix_Header_Serious,
+      strings.RiskMatrix_Header_Critical
+    ],
+    [
+      strings.RiskMatrix_Header_VeryHigh,
+      strings.RiskMatrix_Header_High,
+      strings.RiskMatrix_Header_Medium,
+      strings.RiskMatrix_Header_Low,
+      strings.RiskMatrix_Header_VeryLow
+    ]
+  ],
+  6: [
+    [
+      undefined,
+      strings.RiskMatrix_Header_Insignificant,
+      strings.RiskMatrix_Header_Small,
+      strings.RiskMatrix_Header_Moderate,
+      strings.RiskMatrix_Header_Serious,
+      strings.RiskMatrix_Header_Critical,
+      strings.RiskMatrix_Header_VeryCritical
+    ],
+    [
+      strings.RiskMatrix_Header_VeryHigh,
+      strings.RiskMatrix_Header_High,
+      strings.RiskMatrix_Header_Medium,
+      strings.RiskMatrix_Header_Low,
+      strings.RiskMatrix_Header_VeryLow,
+      strings.RiskMatrix_Header_ExtremelyLow
+    ]
+  ]
 }

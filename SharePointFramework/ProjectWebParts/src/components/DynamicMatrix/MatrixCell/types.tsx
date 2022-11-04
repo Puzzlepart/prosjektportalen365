@@ -6,9 +6,9 @@ export enum MatrixCellType {
 }
 
 export interface IMatrixCell {
-  cellValue?: string
   cellType: MatrixCellType
-  className: string
+  cellValue?: string
+  className?: string
   style?: CSSProperties
   x?: number
   y?: number

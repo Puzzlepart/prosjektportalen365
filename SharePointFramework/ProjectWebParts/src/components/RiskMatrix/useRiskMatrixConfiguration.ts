@@ -1,9 +1,9 @@
 import { sp } from '@pnp/sp/'
+import { generateMatrixConfiguration } from '../DynamicMatrix/generateMatrixConfiguration'
 import { useEffect, useState } from 'react'
 import HubSiteService from 'sp-hubsite-service'
 import { DynamicMatrixConfiguration } from '../DynamicMatrix'
-import { generateRiskMatrixConfiguration } from './generateRiskMatrixConfiguration'
-import { IRiskMatrixProps } from './types'
+import { IRiskMatrixProps, RiskMatrixHeaders } from './types'
 
 /**
  * Configuration hook for `RiskMatrix`
@@ -25,6 +25,7 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
       const { ServerRelativeUrl } = await web.get()
       const jsonConfig_ = await web
         .getFileByServerRelativeUrl(`/${ServerRelativeUrl}/${props.customConfigUrl}`)
+        .usingCaching()
         .getJSON()
       setConfiguration(jsonConfig_)
     } catch {}
@@ -32,7 +33,7 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
 
   useEffect(() => {
     if (props.size) {
-      setConfiguration(generateRiskMatrixConfiguration(parseInt(props.size, 10)))
+      setConfiguration(generateMatrixConfiguration(parseInt(props.size, 10), RiskMatrixHeaders))
     }
   }, [props.size])
 
