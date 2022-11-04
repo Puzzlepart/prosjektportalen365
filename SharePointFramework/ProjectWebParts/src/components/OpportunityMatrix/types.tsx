@@ -4,22 +4,22 @@ import { HTMLProps } from 'react'
 import { IDynamicMatrixProps } from '../DynamicMatrix'
 import { IMatrixElementModel } from '../DynamicMatrix/MatrixCell/MatrixElement/types'
 
-export interface IRiskMatrixProps
+export interface IOpportunityMatrixProps
   extends Omit<HTMLProps<HTMLDivElement>, 'size'>,
     Pick<IDynamicMatrixProps, 'size' | 'colorScaleConfig' | 'calloutTemplate'> {
   customConfigUrl?: string
-  items?: RiskElementModel[]
+  items?: OpportunityElementModel[]
   fullWidth?: boolean
   pageContext?: PageContext
 }
 
-export interface IRiskElementItem {
+export interface IOpportunityElementItem {
   Id: number
   Title: string
   [key: string]: any
 }
 
-export class RiskElementModel implements IMatrixElementModel {
+export class OpportunityElementModel implements IMatrixElementModel {
   public id: number
   public title: string
   public probability: number
@@ -33,7 +33,7 @@ export class RiskElementModel implements IMatrixElementModel {
   public siteTitle: string
 
   constructor(
-    public item: IRiskElementItem,
+    public item: IOpportunityElementItem,
     probability?: string,
     consequence?: string,
     probabilityPostAction?: string,
@@ -61,7 +61,7 @@ export class RiskElementModel implements IMatrixElementModel {
   }
 }
 
-export const RiskMatrixHeaders: Record<number, string[][]> = {
+export const OpportunityMatrixHeaders: Record<number, string[][]> = {
   4: [
     [
       undefined,

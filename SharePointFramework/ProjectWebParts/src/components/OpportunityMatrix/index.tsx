@@ -3,11 +3,11 @@ import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import { MATRIX_DEFAULT_COLOR_SCALE_CONFIG } from '../../webparts/riskMatrix'
 import { DynamicMatrix } from '../DynamicMatrix'
-import { IRiskMatrixProps } from './types'
-import { useRiskMatrix } from './useRiskMatrix'
+import { IOpportunityMatrixProps } from './types'
+import { useOpportunityMatrix } from './useOpportunityMatrix'
 
-export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
-  const { configuration, getElementsForCell, setShowPostAction } = useRiskMatrix(props)
+export const OpportunityMatrix: FC<IOpportunityMatrixProps> = (props) => {
+  const { configuration, getElementsForCell, setShowPostAction } = useOpportunityMatrix(props)
   return (
     <>
       <DynamicMatrix
@@ -26,15 +26,9 @@ export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
   )
 }
 
-RiskMatrix.defaultProps = {
+OpportunityMatrix.defaultProps = {
   items: [],
   width: 400,
-  calloutTemplate: `
-  <h3>{Title}</h3>\n
-  <p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n
-  <p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n
-  <p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>`,
-  customConfigUrl: 'SiteAssets/custom-cells.txt',
   size: '5',
   colorScaleConfig: MATRIX_DEFAULT_COLOR_SCALE_CONFIG
 }

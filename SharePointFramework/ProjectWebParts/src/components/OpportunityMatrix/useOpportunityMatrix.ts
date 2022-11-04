@@ -1,17 +1,17 @@
 import { IMatrixElementProps } from 'components/DynamicMatrix/MatrixCell/MatrixElement/types'
 import { useState } from 'react'
 import { IMatrixCell } from '../DynamicMatrix'
-import { IRiskMatrixProps } from './types'
-import { useRiskMatrixConfiguration } from './useRiskMatrixConfiguration'
+import { IOpportunityMatrixProps } from './types'
+import { useOpportunityMatrixConfiguration } from './useOpportunityMatrixConfiguration'
 
 /**
- * Component logic hook for `RiskMatrix`
+ * Component logic hook for `OpportunityMatrix`
  *
  * @param props Props
  */
-export function useRiskMatrix(props: IRiskMatrixProps) {
+export function useOpportunityMatrix(props: IOpportunityMatrixProps) {
   const [showPostAction, setShowPostAction] = useState(false)
-  const configuration = useRiskMatrixConfiguration(props)
+  const configuration = useOpportunityMatrixConfiguration(props)
 
   function getElementsForCell(cell: IMatrixCell) {
     const elements = props.items
