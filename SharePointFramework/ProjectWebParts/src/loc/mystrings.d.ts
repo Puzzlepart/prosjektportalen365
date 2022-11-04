@@ -1,5 +1,4 @@
 declare interface IProjectWebPartsStrings {
-  ColorConfigElementPercentageLabel: string
   ColorPickerStrings: IColorPickerStrings
   RiskMatrixToggleElementsOnText: string
   RiskMatrixToggleElementsOffText: string

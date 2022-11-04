@@ -1,8 +1,7 @@
 define([], function () {
   return {
-    ColorConfigElementPercentageLabel:'Velg en prosentverdi mellom {0} og {1}',
     ColorPickerStrings: {
-      hex: 'Heksadesimal',
+      hex: '',
       red: 'Rød',
       green: 'Grønn',
       blue: 'Blå'

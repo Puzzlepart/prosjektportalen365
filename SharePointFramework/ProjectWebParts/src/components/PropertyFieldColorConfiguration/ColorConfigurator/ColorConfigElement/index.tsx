@@ -1,4 +1,4 @@
-import { Callout, ColorPicker, format, Slider } from '@fluentui/react'
+import { Callout, ColorPicker, Slider } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import styles from './ColorConfigElement.module.scss'
@@ -29,7 +29,6 @@ export const ColorConfigElement: FC<IColorConfigElementProps> = (props) => {
               onChange={props.onChangeColor}
             />
             <Slider
-              label={format(strings.ColorConfigElementPercentageLabel, props.min, props.max)}
               value={percentage}
               step={1}
               min={props.min}
