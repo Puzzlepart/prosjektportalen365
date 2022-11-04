@@ -10,9 +10,7 @@ import { useMatrixCellColor } from './useMatrixCellColor'
  */
 export function useMatrixCell(cell: IMatrixCell) {
   const { props } = useContext(DynamicMatrixContext)
-  const size = parseInt(props.size, 10)
-  const riskFactor = cell.x * cell.y
-  const numberOfCells = size * size
-  const backgroundColor = useMatrixCellColor(riskFactor, numberOfCells)
+  const cellValue = cell.x * cell.y
+  const backgroundColor = useMatrixCellColor(cellValue, parseInt(props.size, 10))
   return { backgroundColor } as const
 }

@@ -21,11 +21,7 @@ export const MatrixElement: FC<IMatrixElementProps> = (props) => {
           </div>
         )
       }>
-      <div
-        className={styles.root}
-        title={props.title}
-        style={props.style}
-        hidden={props.hidden}>
+      <div className={styles.root} title={props.title} style={props.style} hidden={props.hidden}>
         {props.model.id}
       </div>
     </TooltipHost>

@@ -68,11 +68,11 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   key: 'riskMatrixColorScaleConfig',
                   label: strings.RiskMatrixColorScaleConfigLabel,
                   defaultValue: [
-                    { percentage: 10, color: [44, 186, 0] },
-                    { percentage: 30, color: [163, 255, 0] },
-                    { percentage: 50, color: [255, 244, 0] },
-                    { percentage: 70, color: [255, 167, 0] },
-                    { percentage: 90, color: [255, 0, 0] }
+                    [10, 44, 186, 0],
+                    [30, 163, 255, 0],
+                    [50, 255, 244, 0],
+                    [70, 255, 167, 0],
+                    [90, 255, 0, 0]
                   ],
                   value: this.properties.riskMatrix?.colorScaleConfig
                 })

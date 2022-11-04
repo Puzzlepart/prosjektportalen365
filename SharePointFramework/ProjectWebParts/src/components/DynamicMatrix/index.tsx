@@ -23,7 +23,13 @@ export const DynamicMatrix: FC<IDynamicMatrixProps> = (props) => {
                 )
               }
               case MatrixCellType.Header: {
-                return <MatrixHeaderCell key={cellIndex} text={cell.cellValue} className={cell.className} />
+                return (
+                  <MatrixHeaderCell
+                    key={cellIndex}
+                    text={cell.cellValue}
+                    className={cell.className}
+                  />
+                )
               }
             }
           })

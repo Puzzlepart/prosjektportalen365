@@ -1,25 +1,33 @@
-import { Callout, ColorPicker } from '@fluentui/react'
+import { Callout, ColorPicker, Slider } from '@fluentui/react'
 import React, { FC } from 'react'
 import styles from './ColorConfigElement.module.scss'
 import { IColorConfigElementProps } from './types'
 import { useColorConfigElement } from './useColorConfigElement'
 
 export const ColorConfigElement: FC<IColorConfigElementProps> = (props) => {
-  const { ref, isEditing, setIsEditing, rgbColorString } = useColorConfigElement(props)
+  const { ref, isEditing, setIsEditing, rgbColorString, percentage } = useColorConfigElement(props)
   return (
     <div
       ref={ref}
       className={styles.root}
       style={{ backgroundColor: rgbColorString }}
       onClick={() => setIsEditing(true)}>
-      <div className={styles.container}>{props.config.percentage}%</div>
+      <div className={styles.container}>{percentage}%</div>
       {isEditing && (
         <Callout
           target={ref.current}
           gapSpace={props.gapSpace}
-          preventDismissOnScroll={props.preventDismissOnScroll}
+          preventDismissOnScroll={true}
           onDismiss={() => setIsEditing(false)}>
-          <ColorPicker color={rgbColorString} showPreview={true} onChange={props.onChange} />
+          <ColorPicker color={rgbColorString}  alphaType='none' showPreview={true} onChange={props.onChangeColor} />
+          <Slider
+            value={percentage}
+            step={1}
+            min={props.min}
+            max={props.max}
+            onChange={props.onChangePercentage}
+            valueFormat={(value) => `${value}%`}
+          />
         </Callout>
       )}
     </div>
@@ -28,5 +36,6 @@ export const ColorConfigElement: FC<IColorConfigElementProps> = (props) => {
 
 ColorConfigElement.defaultProps = {
   gapSpace: 10,
-  preventDismissOnScroll: true
+  min: 0,
+  max: 100
 }

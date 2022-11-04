@@ -2,24 +2,32 @@ import { DynamicMatrixContext } from '../context'
 import { useContext } from 'react'
 import { DynamicMatrixColorScaleConfig } from '..'
 
-export function useMatrixCellColor(riskFactor: number, numberOfCells: number) {
+/**
+ * Hook for getting color for cell based on color scale specified in
+ * `context.props.colorScaleConfig`.
+ *
+ * @param cellValue Cell value
+ * @param size Matrix size
+ */
+export function useMatrixCellColor(cellValue: number, size: number) {
   const { props } = useContext(DynamicMatrixContext)
-  const percentage = Math.floor((riskFactor / numberOfCells) * 100)
-  let lower: DynamicMatrixColorScaleConfig, upper: DynamicMatrixColorScaleConfig
+  const percentage = Math.floor((cellValue / (size * size)) * 100)
+  let lowerCfg: DynamicMatrixColorScaleConfig, upperCfg: DynamicMatrixColorScaleConfig
   for (let i = 1; i < props.colorScaleConfig.length - 1; i++) {
-    lower = props.colorScaleConfig[i - 1]
-    upper = props.colorScaleConfig[i]
-    if (percentage < props.colorScaleConfig[i].percentage) {
+    lowerCfg = props.colorScaleConfig[i - 1]
+    upperCfg = props.colorScaleConfig[i]
+    if (percentage < props.colorScaleConfig[i][0]) {
       break
     }
   }
-  const range = upper.percentage - lower.percentage
-  const rangePct = (percentage - lower.percentage) / range
+  const [uPct, uR, uG, uB] = upperCfg
+  const [lPct, lR, lG, lB] = lowerCfg
+  const range = uPct - lPct
+  const rangePct = (percentage - lPct) / range
   const pctLower = 1 - rangePct
   const pctUpper = rangePct
-  const r = Math.floor(lower.color[0] * pctLower + upper.color[0] * pctUpper)
-  const g = Math.floor(lower.color[1] * pctLower + upper.color[1] * pctUpper)
-  const b = Math.floor(lower.color[2] * pctLower + upper.color[2] * pctUpper)
-  const color = [r, g, b]
-  return 'rgb(' + color.join(',') + ')'
+  const r = Math.floor(lR * pctLower + uR * pctUpper)
+  const g = Math.floor(lG * pctLower + uG * pctUpper)
+  const b = Math.floor(lB * pctLower + uB * pctUpper)
+  return 'rgb(' + [r, g, b].join(',') + ')'
 }
