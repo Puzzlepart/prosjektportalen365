@@ -6,14 +6,14 @@ import { IColorConfigElementProps } from './types'
 import { useColorConfigElement } from './useColorConfigElement'
 
 export const ColorConfigElement: FC<IColorConfigElementProps> = (props) => {
-  const { ref, isEditing, setIsEditing, rgbColorString, percentage } = useColorConfigElement(props)
+  const { ref, isEditing, setIsEditing, rgbColorString } = useColorConfigElement(props)
   return (
     <div
       ref={ref}
       className={styles.root}
       style={{ backgroundColor: rgbColorString }}
       onClick={() => setIsEditing(true)}>
-      <div className={styles.container}>{percentage}%</div>
+      <div className={styles.container}>{props.config.p}%</div>
       {isEditing && (
         <Callout
           target={ref.current}
@@ -29,7 +29,7 @@ export const ColorConfigElement: FC<IColorConfigElementProps> = (props) => {
               onChange={props.onChangeColor}
             />
             <Slider
-              value={percentage}
+              value={props.config.p}
               min={props.min}
               max={props.max}
               onChange={props.onChangePercentage}

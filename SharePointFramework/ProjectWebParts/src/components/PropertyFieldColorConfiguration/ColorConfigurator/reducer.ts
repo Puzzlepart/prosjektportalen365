@@ -1,6 +1,6 @@
 import { IColor } from '@fluentui/react'
 import { createAction, createReducer } from '@reduxjs/toolkit'
-import _ from 'underscore'
+import _, { pick } from 'underscore'
 import { DynamicMatrixColorScaleConfig } from '../../DynamicMatrix'
 import { IColorConfiguratorProps, IColorConfiguratorState } from './types'
 
@@ -25,8 +25,6 @@ export default (props: IColorConfiguratorProps) =>
       if (inc > 0) {
         for (let i = 0; i < inc; i++) {
           const newConfig = props.defaultValue[state.config.length + i] ?? lastConfig
-          // eslint-disable-next-line no-console
-          console.table(newConfig)
           state.config.push(newConfig)
         }
       } else state.config = state.config.splice(0, payload.count)
@@ -38,8 +36,8 @@ export default (props: IColorConfiguratorProps) =>
       state.config = state.config.map((c, i) =>
         payload.index === i
           ? payload.color
-            ? [c[0], payload.color.r, payload.color.g, payload.color.b]
-            : [payload.percentage, c[1], c[2], c[3]]
+            ? { p: c[0], ...pick(payload.color, 'r', 'g', 'b') }
+            : { p: payload.percentage, r: c.r, g: c.g, b: c.b }
           : c
       )
     },

@@ -19,8 +19,11 @@ class PropertyFieldColorConfigurationBuilder
     this._onChange = this._onChange.bind(this)
   }
 
-  protected _onChange(changeCallback: (targetProperty?: string, newValue?: any) => void, newValue: any) {
-    changeCallback(this.targetProperty, {})
+  protected _onChange(
+    changeCallback: (targetProperty?: string, newValue?: any) => void,
+    newValue: any
+  ) {
+    changeCallback(this.targetProperty, JSON.stringify(newValue))
   }
 
   public onRender(

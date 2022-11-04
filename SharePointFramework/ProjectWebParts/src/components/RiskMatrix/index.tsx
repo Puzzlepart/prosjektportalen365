@@ -36,11 +36,11 @@ RiskMatrix.defaultProps = {
   customConfigUrl: 'SiteAssets/custom-cells.txt',
   size: '5',
   colorScaleConfig: [
-    [10, 44, 186, 0],
-    [30, 163, 255, 0],
-    [50, 255, 244, 0],
-    [70, 255, 167, 0],
-    [90, 255, 0, 0]
+    { p: 10, r: 44, g: 186, b: 0 },
+    { p: 30, r: 163, g: 255, b: 0 },
+    { p: 50, r: 255, g: 244, b: 0 },
+    { p: 70, r: 255, g: 167, b: 0 },
+    { p: 90, r: 255, g: 0, b: 0 }
   ]
 }
 
