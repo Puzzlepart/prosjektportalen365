@@ -1,4 +1,5 @@
-import { Callout, ColorPicker, Slider } from '@fluentui/react'
+import { Callout, ColorPicker, format, Slider } from '@fluentui/react'
+import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import styles from './ColorConfigElement.module.scss'
 import { IColorConfigElementProps } from './types'
@@ -19,15 +20,24 @@ export const ColorConfigElement: FC<IColorConfigElementProps> = (props) => {
           gapSpace={props.gapSpace}
           preventDismissOnScroll={true}
           onDismiss={() => setIsEditing(false)}>
-          <ColorPicker color={rgbColorString}  alphaType='none' showPreview={true} onChange={props.onChangeColor} />
-          <Slider
-            value={percentage}
-            step={1}
-            min={props.min}
-            max={props.max}
-            onChange={props.onChangePercentage}
-            valueFormat={(value) => `${value}%`}
-          />
+          <div className={styles.calloutContent}>
+            <ColorPicker
+              color={rgbColorString}
+              strings={strings.ColorPickerStrings}
+              alphaType='none'
+              showPreview={true}
+              onChange={props.onChangeColor}
+            />
+            <Slider
+              label={format(strings.ColorConfigElementPercentageLabel, props.min, props.max)}
+              value={percentage}
+              step={1}
+              min={props.min}
+              max={props.max}
+              onChange={props.onChangePercentage}
+              valueFormat={(value) => `${value}%`}
+            />
+          </div>
         </Callout>
       )}
     </div>

@@ -1,5 +1,12 @@
 define([], function () {
   return {
+    ColorConfigElementPercentageLabel:'Velg en prosentverdi mellom {0} og {1}',
+    ColorPickerStrings: {
+      hex: 'Heksadesimal',
+      red: 'Rød',
+      green: 'Grønn',
+      blue: 'Blå'
+    },
     RiskMatrixToggleElementsOnText: 'Etter tiltak',
     RiskMatrixToggleElementsOffText: 'Før tiltak',
     RevertDefaultColorConfigurationText: 'Bruk standard',
