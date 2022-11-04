@@ -15,21 +15,25 @@ export function useRiskMatrix(props: IRiskMatrixProps) {
 
   function getElementsForCell(cell: IMatrixCell) {
     const elements = props.items
-      .filter((ele) => cell.y === ele.probability && cell.x === ele.consequence)
+      .filter((item) => cell.y === item.probability && cell.x === item.consequence)
       .map(
-        (i) =>
+        (item) =>
           ({
-            model: i,
-            style: { opacity: showPostAction ? 0 : 1 }
+            model: item,
+            style: { opacity: showPostAction ? 0 : 1 },
+            title: item.tooltip
           } as IMatrixElementProps)
       )
     const postActionElements = props.items
-      .filter((ele) => cell.y === ele.probabilityPostAction && cell.x === ele.consequencePostAction)
+      .filter(
+        (item) => cell.y === item.probabilityPostAction && cell.x === item.consequencePostAction
+      )
       .map(
-        (i) =>
+        (item) =>
           ({
-            model: i,
-            style: { opacity: showPostAction ? 1 : 0 }
+            model: item,
+            style: { opacity: showPostAction ? 1 : 0 },
+            title: item.tooltip
           } as IMatrixElementProps)
       )
     return [...elements, ...postActionElements]

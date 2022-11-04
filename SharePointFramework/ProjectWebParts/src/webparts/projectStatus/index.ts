@@ -10,7 +10,6 @@ import '@pnp/polyfill-ie11'
 import { IProjectStatusProps, ProjectStatus } from 'components/ProjectStatus'
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
-import { MATRIX_DEFAULT_COLOR_SCALE_CONFIG } from '../riskMatrix'
 import PropertyFieldColorConfiguration from '../../components/PropertyFieldColorConfiguration'
 
 export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectStatusProps> {
@@ -68,7 +67,13 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                 PropertyFieldColorConfiguration('riskMatrix.colorScaleConfig', {
                   key: 'riskMatrixColorScaleConfig',
                   label: strings.RiskMatrixColorScaleConfigLabel,
-                  defaultValue: MATRIX_DEFAULT_COLOR_SCALE_CONFIG,
+                  defaultValue: [
+                    { p: 10, r: 44, g: 186, b: 0 },
+                    { p: 30, r: 163, g: 255, b: 0 },
+                    { p: 50, r: 255, g: 244, b: 0 },
+                    { p: 70, r: 255, g: 167, b: 0 },
+                    { p: 90, r: 255, g: 0, b: 0 }
+                  ],
                   value: this.properties.riskMatrix?.colorScaleConfig
                 })
               ]

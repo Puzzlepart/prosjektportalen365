@@ -1,8 +1,10 @@
-import { ICalloutProps, IColorPickerProps } from '@fluentui/react'
+import { ICalloutProps, IColor, ISliderProps } from '@fluentui/react'
+import { DynamicMatrixColorScaleConfig } from 'components/DynamicMatrix'
 
 export interface IColorConfigElementProps
-  extends Pick<IColorPickerProps, 'onChange'>,
+  extends Pick<ISliderProps, 'min' | 'max'>,
     Omit<ICalloutProps, 'onChange' | 'color'> {
-  percentage: number
-  color: [number, number, number]
+  onChangeColor?: (ev: React.SyntheticEvent<HTMLElement, Event>, color: IColor) => void
+  onChangePercentage?: (value: number, range?: [number, number], event?: MouseEvent) => void
+  config: DynamicMatrixColorScaleConfig
 }

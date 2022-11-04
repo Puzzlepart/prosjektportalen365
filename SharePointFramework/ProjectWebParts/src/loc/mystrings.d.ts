@@ -1,4 +1,5 @@
 declare interface IProjectWebPartsStrings {
+  ColorPickerStrings: IColorPickerStrings
   RiskMatrixToggleElementsOnText: string
   RiskMatrixToggleElementsOffText: string
   RevertDefaultColorConfigurationText: string

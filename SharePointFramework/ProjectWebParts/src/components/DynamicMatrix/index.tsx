@@ -9,14 +9,13 @@ export const DynamicMatrix: FC<IDynamicMatrixProps> = (props) => {
   return (
     <DynamicMatrixContext.Provider value={{ props }}>
       <div className={styles.root} style={{ width: props.width, minHeight: 300 }}>
-        {props.configuration.map((rows, i) => {
-          const cells = rows.map((c, j) => {
-            const cell = props.configuration[i][j]
+        {props.configuration.map((row, rowIdx) => {
+          const cells = row.map((cell, cellIndex) => {
             const elements = props.getElementsForCell(cell)
             switch (cell.cellType) {
               case MatrixCellType.Cell: {
                 return (
-                  <MatrixCell key={j} className={cell.className} cell={cell}>
+                  <MatrixCell key={cellIndex} className={cell.className} cell={cell}>
                     {elements.map((props, idx) => (
                       <MatrixElement key={idx} {...props} />
                     ))}
@@ -24,13 +23,17 @@ export const DynamicMatrix: FC<IDynamicMatrixProps> = (props) => {
                 )
               }
               case MatrixCellType.Header: {
-                return <MatrixHeaderCell key={j} text={c.cellValue} className={cell.className} />
+                return (
+                  <MatrixHeaderCell
+                    key={cellIndex}
+                    text={cell.cellValue}
+                    className={cell.className}
+                  />
+                )
               }
-              default:
-                return null
             }
           })
-          return <MatrixRow key={i}>{cells}</MatrixRow>
+          return <MatrixRow key={rowIdx}>{cells}</MatrixRow>
         })}
       </div>
     </DynamicMatrixContext.Provider>

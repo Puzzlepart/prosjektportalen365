@@ -1,5 +1,11 @@
 define([], function () {
   return {
+    ColorPickerStrings: {
+      hex: '',
+      red: 'Rød',
+      green: 'Grønn',
+      blue: 'Blå'
+    },
     RiskMatrixToggleElementsOnText: 'Etter tiltak',
     RiskMatrixToggleElementsOffText: 'Før tiltak',
     RevertDefaultColorConfigurationText: 'Bruk standard',

@@ -1,9 +1,10 @@
 import { DefaultButton, Label, PrimaryButton, Slider } from '@fluentui/react'
+import { get } from '@microsoft/sp-lodash-subset'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import { ColorConfigElement } from './ColorConfigElement'
 import styles from './PropertyFieldColorConfiguration.module.scss'
-import { CHANGE_CONFIG_COLOR, SET_CONFIG } from './reducer'
+import { CHANGE_CONFIG, SET_CONFIG } from './reducer'
 import { IColorConfiguratorProps } from './types'
 import { usePropertyFieldColorConfiguration } from './usePropertyFieldColorConfiguration'
 
@@ -19,12 +20,14 @@ export const ColorConfigurator: FC<IColorConfiguratorProps> = (props) => {
         onChange={(count) => dispatch(SET_CONFIG({ count }))}
       />
       <div className={styles.container}>
-        {state.config.map(({ percentage, color }, index) => (
+        {state.config.map((config, index) => (
           <ColorConfigElement
             key={index}
-            percentage={percentage}
-            color={color}
-            onChange={(_, color) => dispatch(CHANGE_CONFIG_COLOR({ index, color }))}
+            config={config}
+            onChangeColor={(_, color) => dispatch(CHANGE_CONFIG({ index, color }))}
+            onChangePercentage={(percentage) => dispatch(CHANGE_CONFIG({ index, percentage }))}
+            min={get(state, `config[${index - 1}][0]`, 0) + 2}
+            max={get(state, `config[${index + 1}][0]`, 100) - 2}
           />
         ))}
       </div>
