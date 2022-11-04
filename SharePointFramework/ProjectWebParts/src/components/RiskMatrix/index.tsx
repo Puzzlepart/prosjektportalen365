@@ -1,7 +1,7 @@
 import { Toggle } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
-import { MATRIX_DEFAULT_COLOR_SCALE_CONFIG } from '../../webparts/riskMatrix'
+import { RISK_MATRIX_DEFAULT_COLOR_SCALE_CONFIG } from '../../webparts/riskMatrix'
 import { DynamicMatrix } from '../DynamicMatrix'
 import { IRiskMatrixProps } from './types'
 import { useRiskMatrix } from './useRiskMatrix'
@@ -36,7 +36,7 @@ RiskMatrix.defaultProps = {
   <p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>`,
   customConfigUrl: 'SiteAssets/custom-cells.txt',
   size: '5',
-  colorScaleConfig: MATRIX_DEFAULT_COLOR_SCALE_CONFIG
+  colorScaleConfig: RISK_MATRIX_DEFAULT_COLOR_SCALE_CONFIG
 }
 
 export * from './types'

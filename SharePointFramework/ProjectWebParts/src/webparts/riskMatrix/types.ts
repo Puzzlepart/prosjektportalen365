@@ -11,7 +11,7 @@ export interface IRiskMatrixWebPartProps extends IBaseWebPartComponentProps, IRi
   consequencePostActionFieldName?: string
 }
 
-export const MATRIX_DEFAULT_COLOR_SCALE_CONFIG: DynamicMatrixColorScaleConfig[] = [
+export const RISK_MATRIX_DEFAULT_COLOR_SCALE_CONFIG: DynamicMatrixColorScaleConfig[] = [
   { percentage: 10, color: [44, 186, 0] },
   { percentage: 30, color: [163, 255, 0] },
   { percentage: 50, color: [255, 244, 0] },

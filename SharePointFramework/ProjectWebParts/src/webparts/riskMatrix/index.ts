@@ -9,7 +9,7 @@ import { sp } from '@pnp/sp'
 import * as getValue from 'get-value'
 import ReactDom from 'react-dom'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
-import { IRiskMatrixWebPartProps, MATRIX_DEFAULT_COLOR_SCALE_CONFIG } from './types'
+import { IRiskMatrixWebPartProps, RISK_MATRIX_DEFAULT_COLOR_SCALE_CONFIG } from './types'
 import * as strings from 'ProjectWebPartsStrings'
 import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
 import { RiskElementModel, IRiskMatrixProps, RiskMatrix } from 'components/RiskMatrix'
@@ -135,7 +135,7 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                 PropertyFieldColorConfiguration('colorScaleConfig', {
                   key: 'riskMatrixColorScaleConfig',
                   label: strings.RiskMatrixColorScaleConfigLabel,
-                  defaultValue: MATRIX_DEFAULT_COLOR_SCALE_CONFIG,
+                  defaultValue: RISK_MATRIX_DEFAULT_COLOR_SCALE_CONFIG,
                   value: this.properties.colorScaleConfig
                 })
               ]
