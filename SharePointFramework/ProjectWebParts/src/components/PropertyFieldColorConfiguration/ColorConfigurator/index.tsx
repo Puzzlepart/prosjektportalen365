@@ -19,11 +19,10 @@ export const ColorConfigurator: FC<IColorConfiguratorProps> = (props) => {
         onChange={(count) => dispatch(SET_CONFIG({ count }))}
       />
       <div className={styles.container}>
-        {state.config.map(({ percentage, color }, index) => (
+        {state.config.map((config, index) => (
           <ColorConfigElement
             key={index}
-            percentage={percentage}
-            color={color}
+            config={config}
             onChange={(_, color) => dispatch(CHANGE_CONFIG_COLOR({ index, color }))}
           />
         ))}

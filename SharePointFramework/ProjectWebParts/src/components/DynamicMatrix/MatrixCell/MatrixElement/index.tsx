@@ -10,6 +10,7 @@ export const MatrixElement: FC<IMatrixElementProps> = (props) => {
 
   return (
     <TooltipHost
+      calloutProps={{ gapSpace: 10 }}
       content={
         context.props?.calloutTemplate && (
           <div className={styles.tooltip}>
@@ -22,7 +23,7 @@ export const MatrixElement: FC<IMatrixElementProps> = (props) => {
       }>
       <div
         className={styles.root}
-        title={props.model.tooltip}
+        title={props.title}
         style={props.style}
         hidden={props.hidden}>
         {props.model.id}

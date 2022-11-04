@@ -8,6 +8,6 @@ export function useColorConfigElement(props: IColorConfigElementProps) {
     ref,
     isEditing,
     setIsEditing,
-    colorString: `rgb(${props.color.join(',')})` as string
+    rgbColorString: `rgb(${props.config.color.join(',')})` as string
   } as const
 }

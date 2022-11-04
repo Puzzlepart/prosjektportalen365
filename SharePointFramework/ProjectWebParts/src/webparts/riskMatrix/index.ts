@@ -6,13 +6,13 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { sp } from '@pnp/sp'
+import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
+import { IRiskMatrixProps, RiskElementModel, RiskMatrix } from 'components/RiskMatrix'
 import * as getValue from 'get-value'
+import * as strings from 'ProjectWebPartsStrings'
 import ReactDom from 'react-dom'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
-import { IRiskMatrixWebPartProps, MATRIX_DEFAULT_COLOR_SCALE_CONFIG } from './types'
-import * as strings from 'ProjectWebPartsStrings'
-import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
-import { RiskElementModel, IRiskMatrixProps, RiskMatrix } from 'components/RiskMatrix'
+import { IRiskMatrixWebPartProps } from './types'
 
 export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWebPartProps> {
   private _items: RiskElementModel[] = []
@@ -133,9 +133,15 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                   selectedKey: this.properties.size ?? '5'
                 }),
                 PropertyFieldColorConfiguration('colorScaleConfig', {
-                  key: 'riskMatrixColorScaleConfig',
+                  key: 'colorScaleConfig',
                   label: strings.RiskMatrixColorScaleConfigLabel,
-                  defaultValue: MATRIX_DEFAULT_COLOR_SCALE_CONFIG,
+                  defaultValue: [
+                    { percentage: 10, color: [44, 186, 0] },
+                    { percentage: 30, color: [163, 255, 0] },
+                    { percentage: 50, color: [255, 244, 0] },
+                    { percentage: 70, color: [255, 167, 0] },
+                    { percentage: 90, color: [255, 0, 0] }
+                  ],
                   value: this.properties.colorScaleConfig
                 })
               ]
