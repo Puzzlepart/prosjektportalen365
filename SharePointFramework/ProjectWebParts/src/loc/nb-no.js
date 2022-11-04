@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    RiskMatrixToggleElementsOnText: 'Etter tiltak',
+    RiskMatrixToggleElementsOffText: 'Før tiltak',
     RevertDefaultColorConfigurationText: 'Bruk standard',
     RiskMatrixColorScaleConfigLabel: 'Fargekonfigurasjon',
     RiskMatrixSizeLabel: 'Størrelse',
@@ -119,10 +121,7 @@ define([], function () {
     RiskMatrix_Header_VeryHigh: 'Svært høy',
     RiskMatrix_Header_VeryLow: 'Svært lav',
     RiskMatrix_Header_ExtremelyLow: 'Ekstremt lav',
-    RiskMatrix_ViewSelectorLabel: 'Velg en visning',
-    RiskMatrix_EmptyMessage: 'Det finnes ingen Risiko-elementer i den angitte visningen.',
-    RiskMatrix_LoadingText: 'Laster risikomatrise...',
-    RiskMatrix_ToggleElements: 'Vis før/etter tiltak',
+    RiskMatrixToggleElementsLabel: 'Vis før/etter tiltak',
     GtModerationStatus_Choice_Published: 'Publisert',
     GtModerationStatus_Choice_Draft: 'Kladd',
     ListNameFieldLabel: 'Listenavn',

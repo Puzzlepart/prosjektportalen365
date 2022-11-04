@@ -31,10 +31,7 @@ export const RiskSection: FC = () => {
       <Shimmer isDataLoaded={state.isDataLoaded}>
         <div className={styles.riskMatrix}>
           <RiskMatrix
-            width={context.props.riskMatrixFullWidth ? '100%' : context.props.riskMatrixWidth}
-            calloutTemplate={context.props.riskMatrixCalloutTemplate}
-            size={context.props.riskMatrixSize}
-            colorScaleConfig={context.props.riskMatrixColorScaleConfig}
+            {...context.props.riskMatrix}
             pageContext={context.props.pageContext}
             items={get<RiskElementModel[]>(state, 'data.riskElements', [])}
           />

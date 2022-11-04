@@ -1,12 +1,12 @@
 import { PageContext } from '@microsoft/sp-page-context'
 import strings from 'ProjectWebPartsStrings'
 import { HTMLProps } from 'react'
-import { IDynamicMatrixContext } from '../DynamicMatrix'
+import { IDynamicMatrixProps } from '../DynamicMatrix'
 import { IMatrixElementModel } from '../DynamicMatrix/MatrixCell/MatrixElement/types'
 
 export interface IRiskMatrixProps
   extends Omit<HTMLProps<HTMLDivElement>, 'size'>,
-    Pick<IDynamicMatrixContext, 'size' | 'colorScaleConfig' | 'calloutTemplate'> {
+    Pick<IDynamicMatrixProps, 'size' | 'colorScaleConfig' | 'calloutTemplate'> {
   customConfigUrl?: string
   items?: RiskElementModel[]
   fullWidth?: boolean

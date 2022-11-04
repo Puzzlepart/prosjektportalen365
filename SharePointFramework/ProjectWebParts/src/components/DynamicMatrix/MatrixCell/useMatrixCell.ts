@@ -9,16 +9,16 @@ import { DynamicMatrixColorScaleConfig } from '..'
  * @param cell Matrix cell
  */
 export function useMatrixCell(cell: IMatrixCell) {
-  const context = useContext(DynamicMatrixContext)
-  const size = parseInt(context.size, 10)
+  const { props } = useContext(DynamicMatrixContext)
+  const size = parseInt(props.size, 10)
   const riskFactor = cell.x * cell.y
   const numberOfCells = size * size
   const percentage = Math.floor((riskFactor / numberOfCells) * 100)
   let lower: DynamicMatrixColorScaleConfig, upper: DynamicMatrixColorScaleConfig
-  for (let i = 1; i < context.colorScaleConfig.length - 1; i++) {
-    lower = context.colorScaleConfig[i - 1]
-    upper = context.colorScaleConfig[i]
-    if (percentage < context.colorScaleConfig[i].percentage) {
+  for (let i = 1; i < props.colorScaleConfig.length - 1; i++) {
+    lower = props.colorScaleConfig[i - 1]
+    upper = props.colorScaleConfig[i]
+    if (percentage < props.colorScaleConfig[i].percentage) {
       break
     }
   }

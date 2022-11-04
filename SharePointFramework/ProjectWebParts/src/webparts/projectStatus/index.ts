@@ -30,24 +30,24 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
             {
               groupName: strings.RiskMatrixGroupName,
               groupFields: [
-                PropertyPaneToggle('riskMatrixFullWidth', {
+                PropertyPaneToggle('riskMatrix.fullWidth', {
                   label: strings.RiskMatrixFullWidthLabel
                 }),
-                PropertyPaneSlider('riskMatrixWidth', {
+                PropertyPaneSlider('riskMatrix.width', {
                   label: strings.WidthFieldLabel,
                   min: 400,
                   max: 1300,
                   value: 400,
                   showValue: true,
-                  disabled: this.properties.riskMatrixFullWidth
+                  disabled: this.properties.riskMatrix?.fullWidth
                 }),
-                PropertyPaneTextField('riskMatrixCalloutTemplate', {
+                PropertyPaneTextField('riskMatrix.calloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,
                   resizable: true,
                   rows: 8
                 }),
-                PropertyPaneDropdown('riskMatrixSize', {
+                PropertyPaneDropdown('riskMatrix.size', {
                   label: strings.RiskMatrixSizeLabel,
                   options: [
                     {
@@ -63,13 +63,13 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                       text: '6x6'
                     }
                   ],
-                  selectedKey: this.properties.riskMatrixSize ?? '5'
+                  selectedKey: this.properties.riskMatrix?.size ?? '5'
                 }),
-                PropertyFieldColorConfiguration('riskMatrixColorScaleConfig', {
+                PropertyFieldColorConfiguration('riskMatrix.colorScaleConfig', {
                   key: 'riskMatrixColorScaleConfig',
                   label: strings.RiskMatrixColorScaleConfigLabel,
                   defaultValue: MATRIX_DEFAULT_COLOR_SCALE_CONFIG,
-                  value: this.properties.riskMatrixColorScaleConfig
+                  value: this.properties.riskMatrix?.colorScaleConfig
                 })
               ]
             },

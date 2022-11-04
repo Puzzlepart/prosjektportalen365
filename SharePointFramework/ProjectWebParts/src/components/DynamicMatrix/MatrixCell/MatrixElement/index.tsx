@@ -11,12 +11,14 @@ export const MatrixElement: FC<IMatrixElementProps> = (props) => {
   return (
     <TooltipHost
       content={
-        <div className={styles.tooltip}>
-          <span
-            dangerouslySetInnerHTML={{
-              __html: replaceTokens(context.calloutTemplate, props.model.item)
-            }}></span>
-        </div>
+        context.props?.calloutTemplate && (
+          <div className={styles.tooltip}>
+            <span
+              dangerouslySetInnerHTML={{
+                __html: replaceTokens(context.props?.calloutTemplate, props.model.item)
+              }}></span>
+          </div>
+        )
       }>
       <div
         className={styles.root}

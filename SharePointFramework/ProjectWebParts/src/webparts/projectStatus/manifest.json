@@ -6,7 +6,7 @@
     "version": "1.7.3",
     "manifestVersion": 2,
     "requiresCustomScript": false,
-    "hiddenFromToolbox": false,
+    "hiddenFromToolbox": true,
     "supportedHosts": [
         "SharePointWebPart"
     ],
@@ -25,9 +25,11 @@
             "officeFabricIconFontName": "AwayStatus",
             "properties": {
                 "title": "Prosjektstatus",
-                "riskMatrixCalloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>",
-                "riskMatrixWidth": 800,
-                "fieldWidth": 250
+                "fieldWidth": 250,
+                "riskMatrix": {
+                    "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>",
+                    "width": 800
+                }
             }
         }
     ]

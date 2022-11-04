@@ -37,5 +37,5 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
     }
   }, [props.size])
 
-  return { configuration, setConfiguration } as const
+  return configuration
 }

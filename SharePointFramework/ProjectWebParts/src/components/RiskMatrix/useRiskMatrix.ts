@@ -1,6 +1,6 @@
 import { IMatrixElementProps } from 'components/DynamicMatrix/MatrixCell/MatrixElement/types'
 import { useState } from 'react'
-import { IDynamicMatrixContext, IMatrixCell } from '../DynamicMatrix'
+import { IMatrixCell } from '../DynamicMatrix'
 import { IRiskMatrixProps } from './types'
 import { useRiskMatrixConfiguration } from './useRiskMatrixConfiguration'
 
@@ -11,7 +11,7 @@ import { useRiskMatrixConfiguration } from './useRiskMatrixConfiguration'
  */
 export function useRiskMatrix(props: IRiskMatrixProps) {
   const [showPostAction, setShowPostAction] = useState(false)
-  const { configuration } = useRiskMatrixConfiguration(props)
+  const configuration = useRiskMatrixConfiguration(props)
 
   function getElementsForCell(cell: IMatrixCell) {
     const elements = props.items
@@ -35,11 +35,5 @@ export function useRiskMatrix(props: IRiskMatrixProps) {
     return [...elements, ...postActionElements]
   }
 
-  const ctxValue: IDynamicMatrixContext = {
-    ...props,
-    configuration,
-    getElementsForCell
-  }
-
-  return { ctxValue, setShowPostAction } as const
+  return { configuration, getElementsForCell, setShowPostAction } as const
 }

@@ -1,15 +1,8 @@
 import { createContext } from 'react'
-import { IMatrixCell, DynamicMatrixColorScaleConfig, DynamicMatrixConfiguration } from '.'
-import { IMatrixElementProps } from './MatrixCell/MatrixElement/types'
+import { IDynamicMatrixProps } from '.'
 
 export interface IDynamicMatrixContext {
-  items?: any[]
-  configuration: DynamicMatrixConfiguration
-  size?: string
-  width?: string | number
-  calloutTemplate: string
-  getElementsForCell: (cell: IMatrixCell) => IMatrixElementProps[]
-  colorScaleConfig?: DynamicMatrixColorScaleConfig[]
+  props: IDynamicMatrixProps
 }
 
 export const DynamicMatrixContext = createContext<IDynamicMatrixContext>(null)

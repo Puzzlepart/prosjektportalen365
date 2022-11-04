@@ -1,15 +1,11 @@
 import { PageContext } from '@microsoft/sp-page-context'
+import { IRiskMatrixProps } from 'components/RiskMatrix'
 import { ProjectColumnConfig, SectionModel, SPField, StatusReport } from 'pp365-shared/lib/models'
 import { IGetPropertiesData } from 'pp365-shared/lib/services'
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
-import { DynamicMatrixColorScaleConfig, DynamicMatrixSize } from '../DynamicMatrix'
 
 export interface IProjectStatusProps extends IBaseWebPartComponentProps {
-  riskMatrixCalloutTemplate?: string
-  riskMatrixFullWidth?: boolean
-  riskMatrixWidth?: number | string
-  riskMatrixSize?: DynamicMatrixSize
-  riskMatrixColorScaleConfig?: DynamicMatrixColorScaleConfig[]
+  riskMatrix?: IRiskMatrixProps
   fieldWidth?: number
   pageContext?: PageContext
 }
