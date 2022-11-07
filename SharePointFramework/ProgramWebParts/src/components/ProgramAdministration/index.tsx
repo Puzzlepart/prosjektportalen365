@@ -9,7 +9,7 @@ import styles from './ProgramAdministration.module.scss'
 import { ProjectTable } from './ProjectTable'
 import { IListField } from './ProjectTable/types'
 import { SET_SELECTED_TO_DELETE } from './reducer'
-import { IProgramAdministrationProps, shimmeredColumns } from './types'
+import { IProgramAdministrationProps } from './types'
 import { useProgramAdministration } from './useProgramAdministration'
 import { isEmpty } from '@microsoft/sp-lodash-subset'
 
@@ -29,7 +29,20 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
 
   if (state.loading.root) {
     return (
-      <ShimmeredDetailsList items={[]} shimmerLines={15} columns={shimmeredColumns} enableShimmer />
+      <ShimmeredDetailsList
+        items={[]}
+        shimmerLines={15}
+        columns={[
+          {
+            key: 'Title',
+            name: 'Tittel',
+            isResizable: true,
+            maxWidth: 250,
+            minWidth: 100
+          }
+        ]}
+        enableShimmer
+      />
     )
   }
 

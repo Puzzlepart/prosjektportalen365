@@ -1,0 +1,11 @@
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+
+.root {
+  max-height: 600px;
+  overflow: hidden;
+}
+
+.dialogContent {
+  margin-top: 20px;
+  overflow: hidden;
+}
