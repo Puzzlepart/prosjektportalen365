@@ -3,6 +3,8 @@ import { useContext, useEffect, useState } from 'react'
 import { isEmpty } from 'underscore'
 import { IListSectionData, IListSectionState } from './types'
 import { useFetchListData } from './useFetchListData'
+import { getObjectValue as get } from 'pp365-shared/lib/helpers'
+import { IColumn } from '@fluentui/react'
 
 export function useListSection() {
   const context = useContext(ProjectStatusContext)
@@ -11,7 +13,7 @@ export function useListSection() {
     data: {}
   })
   const fetchListData = useFetchListData()
-  const showLists =
+  const shouldRenderList =
     (context.state.data.reports
       ? context.state.selectedReport.id === context.state.mostRecentReportId
       : true) && !isEmpty(state.data?.items)
@@ -20,5 +22,10 @@ export function useListSection() {
     fetchListData().then((data) => setState({ data, isDataLoaded: true }))
   }, [])
 
-  return { state, showLists } as const
+  return {
+    state,
+    items: get<any[]>(state, 'data.items', []),
+    columns: get<IColumn[]>(state, 'data.columns', []),
+    shouldRenderList
+  } as const
 }

@@ -1,25 +1,23 @@
 import {
-  DetailsList,
   DetailsListLayoutMode,
-  IColumn,
   MessageBarType,
   SelectionMode,
-  Shimmer
+  Shimmer,
+  ShimmeredDetailsList
 } from '@fluentui/react'
-import { ProjectStatusContext } from '../../../ProjectStatus/context'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
-import { RiskElementModel, RiskMatrix } from '../../../RiskMatrix'
+import { ProjectStatusContext } from '../../../ProjectStatus/context'
+import { RiskMatrix } from '../../../RiskMatrix'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection'
 import styles from './RiskSection.module.scss'
 import { useRiskSection } from './useRiskSection'
-import { getObjectValue as get } from 'pp365-shared/lib/helpers'
 
 export const RiskSection: FC = () => {
   const context = useContext(ProjectStatusContext)
-  const { state, showLists } = useRiskSection()
+  const { state, riskElements, items, columns, shouldRenderContent } = useRiskSection()
 
   /**
    * Render content
@@ -33,13 +31,15 @@ export const RiskSection: FC = () => {
           <RiskMatrix
             {...context.props.riskMatrix}
             pageContext={context.props.pageContext}
-            items={get<RiskElementModel[]>(state, 'data.riskElements', [])}
+            items={riskElements}
           />
         </div>
         <div className={styles.list}>
-          <DetailsList
-            columns={get<IColumn[]>(state, 'data.columns', [])}
-            items={get<any[]>(state, 'data.items', [])}
+          <ShimmeredDetailsList
+            styles={{ root: { borderRadius: 10 } }}
+            enableShimmer={!state.isDataLoaded}
+            items={items}
+            columns={columns}
             selectionMode={SelectionMode.none}
             layoutMode={DetailsListLayoutMode.justified}
           />
@@ -54,7 +54,7 @@ export const RiskSection: FC = () => {
         <div className='ms-Grid-col ms-sm12'>
           <StatusElement />
         </div>
-        {showLists && renderContent()}
+        {shouldRenderContent && renderContent()}
       </div>
     </BaseSection>
   )
