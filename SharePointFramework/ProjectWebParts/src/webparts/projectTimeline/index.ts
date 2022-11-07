@@ -22,6 +22,7 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    const propertesWithDefaults = { ...ProjectTimeline.defaultProps, ...this.properties }
     return {
       pages: [
         {
@@ -39,6 +40,7 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                 this.properties.showTimeline &&
                   PropertyPaneDropdown('defaultTimeframeStart', {
                     label: strings.DefaultTimeframeStartLabel,
+                    selectedKey: propertesWithDefaults.defaultTimeframeStart,
                     options: [
                       [2, 'months'],
                       [4, 'months'],
@@ -54,6 +56,7 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                 this.properties.showTimeline &&
                   PropertyPaneDropdown('defaultTimeframeEnd', {
                     label: strings.DefaultTimeframeEndLabel,
+                    selectedKey: propertesWithDefaults.defaultTimeframeEnd,
                     options: [
                       [2, 'months'],
                       [4, 'months'],
@@ -69,6 +72,7 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                 this.properties.showTimeline &&
                   PropertyPaneDropdown('defaultGroupBy', {
                     label: strings.DefaultGroupByLabel,
+                    selectedKey: propertesWithDefaults.defaultGroupBy,
                     options: [
                       {
                         key: strings.ProjectLabel,
@@ -87,7 +91,7 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                 PropertyPaneToggle('showTimelineList', {
                   label: strings.ShowTimelineListLabel
                 }),
-                this.properties.showTimelineList &&
+                propertesWithDefaults.showTimelineList &&
                   PropertyPaneToggle('showTimelineListCommands', {
                     label: strings.ShowTimelineListCommandsLabel
                   })
