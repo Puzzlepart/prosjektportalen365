@@ -26,16 +26,18 @@ export const AddProjectDialog: FC = () => {
     <>
       <Dialog
         hidden={false}
-        modalProps={{ containerClassName: styles.root }}
+        modalProps={{
+          containerClassName: styles.root,
+          scrollableContentClassName: styles.scrollableContent
+        }}
         onDismiss={() => context.dispatch(TOGGLE_ADD_PROJECT_DIALOG())}
         minWidth='60em'
         maxWidth='1000px'
         dialogContentProps={{
           type: DialogType.largeHeader,
-          title: strings.ProgramAddChildsButtonText,
-          className: styles.dialogContent
+          title: strings.ProgramAddChildsButtonText
         }}>
-        <div>
+        <div className={styles.dialogContent}>
           {context.state.loading.AddProjectDialog ? (
             <ShimmeredDetailsList
               items={[]}
@@ -52,7 +54,8 @@ export const AddProjectDialog: FC = () => {
             />
           ) : (
             <ProjectTable
-              fields={fields(false)}
+              height={550}
+              fields={fields({ renderAsLink: false })}
               items={availableProjects}
               selectionMode={SelectionMode.multiple}
               onSelectionChanged={(selected) => {

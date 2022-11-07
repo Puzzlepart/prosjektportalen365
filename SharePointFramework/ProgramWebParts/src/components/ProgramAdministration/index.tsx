@@ -55,7 +55,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
         <div>
           {!isEmpty(state.childProjects) ? (
             <ProjectTable
-              fields={fields(true)}
+              fields={fields({ renderAsLink: true })}
               items={state.childProjects}
               selectionMode={
                 state.userHasManagePermission ? SelectionMode.multiple : SelectionMode.none
@@ -72,7 +72,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
   )
 }
 
-export const fields = (renderAsLink: boolean): IListField[] => [
+export const fields = ({ renderAsLink = false }): IListField[] => [
   {
     key: 'Title',
     text: 'Tittel',
