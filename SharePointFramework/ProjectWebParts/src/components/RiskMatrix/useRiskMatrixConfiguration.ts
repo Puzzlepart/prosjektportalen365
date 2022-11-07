@@ -33,9 +33,11 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
 
   useEffect(() => {
     if (props.size) {
-      setConfiguration(generateMatrixConfiguration(parseInt(props.size, 10), RiskMatrixHeaders))
+      setConfiguration(
+        generateMatrixConfiguration(parseInt(props.size, 10), RiskMatrixHeaders(props))
+      )
     }
-  }, [props.size])
+  }, [props])
 
   return configuration
 }

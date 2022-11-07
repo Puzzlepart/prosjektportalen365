@@ -41,7 +41,7 @@ class PropertyFieldColorConfigurationBuilder
     )
   }
 
-  public onDispose(element: HTMLElement, _context?: any): void {
+  public onDispose(element: HTMLElement): void {
     unmountComponentAtNode(element)
   }
 }
