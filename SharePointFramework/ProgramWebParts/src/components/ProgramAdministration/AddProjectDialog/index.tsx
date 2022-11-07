@@ -44,7 +44,6 @@ export const AddProjectDialog: FC = () => {
                 {
                   key: 'Title',
                   name: 'Tittel',
-                  isResizable: true,
                   maxWidth: 250,
                   minWidth: 100
                 }

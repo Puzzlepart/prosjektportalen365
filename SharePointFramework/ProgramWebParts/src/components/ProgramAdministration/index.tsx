@@ -36,7 +36,6 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
           {
             key: 'Title',
             name: 'Tittel',
-            isResizable: true,
             maxWidth: 250,
             minWidth: 100
           }
