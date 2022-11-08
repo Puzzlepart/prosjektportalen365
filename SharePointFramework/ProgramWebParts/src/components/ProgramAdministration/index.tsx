@@ -1,5 +1,6 @@
+import { Link, MessageBar, ShimmeredDetailsList } from '@fluentui/react'
+import { isEmpty } from '@microsoft/sp-lodash-subset'
 import { SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
-import { Icon, Link, MessageBar, ShimmeredDetailsList, TooltipHost } from '@fluentui/react'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FC } from 'react'
 import { AddProjectDialog } from './AddProjectDialog'
@@ -9,9 +10,9 @@ import styles from './ProgramAdministration.module.scss'
 import { ProjectTable } from './ProjectTable'
 import { IListField } from './ProjectTable/types'
 import { SET_SELECTED_TO_DELETE } from './reducer'
+import { TooltipHeader } from './TooltipHeader'
 import { IProgramAdministrationProps } from './types'
 import { useProgramAdministration } from './useProgramAdministration'
-import { isEmpty } from '@microsoft/sp-lodash-subset'
 
 export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) => {
   const { state, dispatch } = useProgramAdministration(props)
@@ -49,14 +50,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
     <ProgramAdministrationContext.Provider value={{ props, state, dispatch }}>
       <Commands />
       <div className={styles.root}>
-        <div className={styles.header}>
-          <div className={styles.title}>
-            <TooltipHost content={<div><p>{strings.ProgramAdministrationInfoMessage}</p></div>}>
-              <span>{props.title}</span>
-              <Icon iconName='Info' className={styles.icon} />
-            </TooltipHost>
-          </div>
-        </div>
+        <TooltipHeader />
         <div>
           {!isEmpty(state.childProjects) ? (
             <ProjectTable
