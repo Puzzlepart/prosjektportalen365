@@ -1,0 +1,1 @@
+<Field Description="{resource:SiteFields_GtSectionDataJson_Description}" DisplayName="{resource:SiteFields_GtSectionDataJson_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{8ccb7ac0-5cc7-48c5-9e80-d1b5bd09f724}" Name="GtSectionDataJson" StaticName="GtSectionDataJson" Type="Note" ShowInNewForm="FALSE" ShowInEditForm="FALSE" ShowInDisplayForm="FALSE" />
