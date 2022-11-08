@@ -35,7 +35,7 @@ export const AddProjectDialog: FC = () => {
         maxWidth='1000px'
         dialogContentProps={{
           type: DialogType.largeHeader,
-          title: strings.ProgramAddChildsButtonText
+          title: strings.ProgramAdministrationAddChildsButtonText
         }}>
         <div className={styles.dialogContent}>
           {context.state.loading.AddProjectDialog ? (

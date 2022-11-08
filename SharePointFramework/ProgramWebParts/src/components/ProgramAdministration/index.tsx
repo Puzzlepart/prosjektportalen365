@@ -1,5 +1,5 @@
 import { SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
-import { Link, MessageBar, ShimmeredDetailsList } from '@fluentui/react'
+import { Icon, Link, MessageBar, ShimmeredDetailsList, TooltipHost } from '@fluentui/react'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FC } from 'react'
 import { AddProjectDialog } from './AddProjectDialog'
@@ -50,7 +50,12 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
       <Commands />
       <div className={styles.root}>
         <div className={styles.header}>
-          <div className={styles.title}>{props.title}</div>
+          <div className={styles.title}>
+            <TooltipHost content={<div><p>{strings.ProgramAdministrationInfoMessage}</p></div>}>
+              <span>{props.title}</span>
+              <Icon iconName='Info' className={styles.icon} />
+            </TooltipHost>
+          </div>
         </div>
         <div>
           {!isEmpty(state.childProjects) ? (
@@ -63,7 +68,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
               onSelectionChanged={(selected) => dispatch(SET_SELECTED_TO_DELETE({ selected }))}
             />
           ) : (
-            <MessageBar>{strings.ProgramAdministration_EmptyMessage}</MessageBar>
+            <MessageBar>{strings.ProgramAdministrationEmptyMessage}</MessageBar>
           )}
         </div>
         {state.displayAddProjectDialog && <AddProjectDialog />}
