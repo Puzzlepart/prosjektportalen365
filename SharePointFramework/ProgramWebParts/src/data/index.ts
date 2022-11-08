@@ -649,7 +649,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
           Querytext: '*',
           RowLimit: 500,
           TrimDuplicates: false,
-          SelectProperties: [...selectProperties, 'Path', 'SiteTitle']
+          SelectProperties: [...selectProperties, 'Path', 'Title', 'SiteTitle', 'SPWebURL']
         })
       )
     })
