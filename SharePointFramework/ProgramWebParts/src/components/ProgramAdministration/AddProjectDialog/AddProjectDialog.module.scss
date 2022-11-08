@@ -1,0 +1,13 @@
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+
+.root {
+  .scrollableContent {
+    height: 750px;
+    overflow: hidden;
+  }
+}
+
+.dialogContent {
+  margin-top: 20px;
+  box-sizing: border-box;
+}

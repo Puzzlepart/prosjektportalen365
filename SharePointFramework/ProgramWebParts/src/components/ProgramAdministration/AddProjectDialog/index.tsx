@@ -1,53 +1,65 @@
 import {
+  DefaultButton,
   Dialog,
-  DialogType,
-  ShimmeredDetailsList,
-  SelectionMode,
   DialogFooter,
+  DialogType,
   PrimaryButton,
-  DefaultButton
+  SelectionMode,
+  ShimmeredDetailsList
 } from '@fluentui/react'
+import _ from 'lodash'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import { addChildProject } from '../data'
 import { fields } from '../index'
-import styles from '../ProgramAdministration.module.scss'
+import styles from './AddProjectDialog.module.scss'
 import { ProjectTable } from '../ProjectTable'
 import { CHILD_PROJECTS_ADDED, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
-import { shimmeredColumns } from '../types'
 import { useAddProjectDialog } from './useAddProjectDialog'
 
 export const AddProjectDialog: FC = () => {
   const context = useContext(ProgramAdministrationContext)
-  const { selectedProjects, availableProjects } = useAddProjectDialog()
+  const { selectedProjects, setSelectedProjects, availableProjects } = useAddProjectDialog()
 
   return (
     <>
       <Dialog
         hidden={false}
+        modalProps={{
+          containerClassName: styles.root,
+          scrollableContentClassName: styles.scrollableContent
+        }}
         onDismiss={() => context.dispatch(TOGGLE_ADD_PROJECT_DIALOG())}
         minWidth='60em'
         maxWidth='1000px'
         dialogContentProps={{
           type: DialogType.largeHeader,
-          title: strings.ProgramAddChildsButtonText
+          title: strings.ProgramAdministrationAddChildsButtonText
         }}>
         <div className={styles.dialogContent}>
           {context.state.loading.AddProjectDialog ? (
             <ShimmeredDetailsList
               items={[]}
               shimmerLines={15}
-              columns={shimmeredColumns}
+              columns={[
+                {
+                  key: 'Title',
+                  name: 'Tittel',
+                  maxWidth: 250,
+                  minWidth: 100
+                }
+              ]}
               enableShimmer
             />
           ) : (
             <ProjectTable
-              fields={fields(false)}
+              height={550}
+              fields={fields({ renderAsLink: false })}
               items={availableProjects}
               selectionMode={SelectionMode.multiple}
-              onSelectionChanged={(items) => {
-                selectedProjects.current = items
+              onSelectionChanged={(selected) => {
+                setSelectedProjects(selected)
               }}
             />
           )}
@@ -55,9 +67,10 @@ export const AddProjectDialog: FC = () => {
         <DialogFooter>
           <PrimaryButton
             text={strings.Add}
+            disabled={_.isEmpty(selectedProjects)}
             onClick={async () => {
-              await addChildProject(context.props.dataAdapter, selectedProjects.current)
-              context.dispatch(CHILD_PROJECTS_ADDED({ childProjects: selectedProjects.current }))
+              await addChildProject(context.props.dataAdapter, selectedProjects)
+              context.dispatch(CHILD_PROJECTS_ADDED({ childProjects: selectedProjects }))
             }}
           />
           <DefaultButton

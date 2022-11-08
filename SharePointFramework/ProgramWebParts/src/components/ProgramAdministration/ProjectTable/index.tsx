@@ -82,7 +82,7 @@ export const ProjectTable: FC<IProjectTableProps> = (props) => {
   return (
     <div className={styles.root}>
       <SearchBox placeholder={strings.ProgramSearchProjectsText} onChange={handleFilterChanged} />
-      <div className={styles.scroll}>
+      <div className={styles.scroll} style={{ height: props.height }}>
         <ol
           className={styles.list}
           style={{
