@@ -2,7 +2,9 @@ name: CI (dev)
 
 on:
   push:
-    branches: [dev]
+    branches: 
+      - dev
+      - issues/499
     paths:
       - "SharePointFramework/**"
       - "Install/**"
