@@ -1,11 +1,11 @@
-import { useContext, useEffect, useRef } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import { getHubSiteProjects } from '../data'
 import { DATA_LOADED } from '../reducer'
 
 export const useAddProjectDialog = () => {
   const context = useContext(ProgramAdministrationContext)
-  const selectedProjects = useRef<Array<Record<string, string>>>([])
+  const [selectedProjects, setSelectedProjects] = useState<any[]>([])
 
   useEffect(() => {
     getHubSiteProjects()
@@ -27,5 +27,5 @@ export const useAddProjectDialog = () => {
     )
     .filter((project) => project['SPWebURL'])
 
-  return { selectedProjects, availableProjects } as const
+  return { selectedProjects, setSelectedProjects, availableProjects } as const
 }

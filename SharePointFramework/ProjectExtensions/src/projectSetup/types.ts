@@ -1,3 +1,4 @@
+import { IDialogContentProps } from '@fluentui/react'
 import { ITemplateSelectDialogState } from 'components/TemplateSelectDialog'
 import { IHubSite } from 'sp-hubsite-service'
 import { ContentConfig, ProjectExtension, ProjectTemplate } from '../models/index'
@@ -43,6 +44,12 @@ export interface IProjectSetupProperties {
    * auto-run the provisioning.
    */
   forceTemplate?: string
+
+  /**
+   * Progress dialog content props. Override properties like
+   * `title` and `subText`.
+   */
+  progressDialogContentProps?: IDialogContentProps
 }
 
 export interface IProjectSetupData extends ITemplateSelectDialogState {

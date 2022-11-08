@@ -8,5 +8,9 @@
 .list {
   @include ms-Grid-col;
   @include ms-sm12;
-  margin-top: 25px;
+  margin: 15px 0 0 0;
+
+  div[class*="ms-DetailsHeader"] {
+    padding: 0;
+  }
 }

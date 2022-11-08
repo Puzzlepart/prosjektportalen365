@@ -13,7 +13,8 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
       dialogContentProps={{
         title: strings.ProgressDialogTitle,
         subText: strings.ProgressDialogSubText,
-        className: styles.content
+        className: styles.content,
+        ...props.dialogContentProps
       }}
       onDismiss={props.onDismiss}>
       <div className={styles.icon}>
@@ -23,7 +24,7 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
         />
       </div>
       <div className={styles.indicator}>
-        <ProgressIndicator label={props.text} description={props.subText} />
+        <ProgressIndicator {...props.progressIndicator} />
       </div>
     </BaseDialog>
   )

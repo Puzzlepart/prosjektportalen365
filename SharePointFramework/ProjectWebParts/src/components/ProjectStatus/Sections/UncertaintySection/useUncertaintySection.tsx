@@ -1,19 +1,17 @@
-import { ProjectStatusContext } from '../../../ProjectStatus/context'
+import { IColumn } from '@fluentui/react'
+import { RiskElementModel } from 'components/RiskMatrix'
+import { getObjectValue as get } from 'pp365-shared/lib/helpers'
 import { useContext, useEffect, useState } from 'react'
 import { isEmpty } from 'underscore'
-import { IListSectionData, IListSectionState } from './types'
+import { ProjectStatusContext } from '../../context'
+import { IUncertaintySectionState } from './types'
 import { useFetchListData } from './useFetchListData'
-import { getObjectValue as get } from 'pp365-shared/lib/helpers'
-import { IColumn } from '@fluentui/react'
 
-export function useListSection() {
+export function useUncertaintySection() {
   const context = useContext(ProjectStatusContext)
-  const [state, setState] = useState<IListSectionState<IListSectionData>>({
-    isDataLoaded: false,
-    data: {}
-  })
+  const [state, setState] = useState<IUncertaintySectionState>({ isDataLoaded: false, data: {} })
   const fetchListData = useFetchListData()
-  const shouldRenderList =
+  const shouldRenderContent =
     (context.state.data.reports
       ? context.state.selectedReport.id === context.state.mostRecentReportId
       : true) && !isEmpty(state.data?.items)
@@ -24,8 +22,9 @@ export function useListSection() {
 
   return {
     state,
+    riskElements: get<RiskElementModel[]>(state, 'data.riskElements', []),
     items: get<any[]>(state, 'data.items', []),
     columns: get<IColumn[]>(state, 'data.columns', []),
-    shouldRenderList
+    shouldRenderContent
   } as const
 }

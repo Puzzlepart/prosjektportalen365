@@ -1,5 +1,14 @@
 define([], function () {
   return {
+    OverrideHeadersLabel: 'Overstyr overskrifter for {0}x{0}',
+    ProbabilityHeaderFieldLabel: 'Sannsynlighet {0}',
+    ConsequenceHeaderFieldLabel: 'Konsekvens {0}',
+    ColorPickerStrings: {
+      hex: '',
+      red: 'Rød',
+      green: 'Grønn',
+      blue: 'Blå'
+    },
     RiskMatrixToggleElementsOnText: 'Etter tiltak',
     RiskMatrixToggleElementsOffText: 'Før tiltak',
     RevertDefaultColorConfigurationText: 'Bruk standard',

@@ -1,4 +1,4 @@
-<pnp:ContentType ID="0x010029F45E75BA9CE340A83EFFB2927E11F4" Name="{resource:ContentTypes_ResourceAllocation_Name}" Description="{resource:ContentTypes_ResourceAllocation_Description}" Group="{resource:ContentTypes_Group}" 
+<pnp:ContentType ID="0x010029F45E75BA9CE340A83EFFB2927E11F4" Name="{resource:ContentTypes_ResourceAllocation_Name}" Description="{resource:ContentTypes_ResourceAllocation_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="88d9b92c-efed-45d0-a586-86d9196b77d0" Name="GtResourceUser" Required="true" UpdateChildren="true" />

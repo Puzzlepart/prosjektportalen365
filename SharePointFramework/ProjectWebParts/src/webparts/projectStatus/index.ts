@@ -1,6 +1,9 @@
+import { format } from '@fluentui/react'
 import '@fluentui/react/dist/css/fabric.min.css'
+import { get } from '@microsoft/sp-lodash-subset'
 import {
   IPropertyPaneConfiguration,
+  IPropertyPaneField,
   PropertyPaneDropdown,
   PropertyPaneSlider,
   PropertyPaneTextField,
@@ -10,7 +13,6 @@ import '@pnp/polyfill-ie11'
 import { IProjectStatusProps, ProjectStatus } from 'components/ProjectStatus'
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
-import { RISK_MATRIX_DEFAULT_COLOR_SCALE_CONFIG } from '../riskMatrix'
 import PropertyFieldColorConfiguration from '../../components/PropertyFieldColorConfiguration'
 
 export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectStatusProps> {
@@ -20,6 +22,52 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
 
   public render(): void {
     this.renderComponent<IProjectStatusProps>(ProjectStatus)
+  }
+
+  protected get headerLabelFields(): IPropertyPaneField<any>[] {
+    const size = parseInt(this.properties?.riskMatrix?.size ?? '5', 10)
+    const overrideHeaderLabels = PropertyPaneToggle(`riskMatrix.overrideHeaderLabels.${size}`, {
+      label: format(strings.OverrideHeadersLabel, size)
+    })
+    if (!get(this.properties, `riskMatrix.overrideHeaderLabels.${size}`, false)) {
+      return [overrideHeaderLabels]
+    }
+    const headerLabelFields: IPropertyPaneField<any>[] = []
+    const probabilityHeaders: string[] = [
+      strings.RiskMatrix_Header_VeryHigh,
+      strings.RiskMatrix_Header_High,
+      strings.RiskMatrix_Header_Medium,
+      strings.RiskMatrix_Header_Low,
+      strings.RiskMatrix_Header_VeryLow,
+      strings.RiskMatrix_Header_ExtremelyLow
+    ]
+    const consequenceHeaders: string[] = [
+      strings.RiskMatrix_Header_Insignificant,
+      strings.RiskMatrix_Header_Small,
+      strings.RiskMatrix_Header_Moderate,
+      strings.RiskMatrix_Header_Serious,
+      strings.RiskMatrix_Header_Critical,
+      strings.RiskMatrix_Header_VeryCritical
+    ]
+    for (let i = 0; i < size; i++) {
+      const probabilityHeaderFieldName = `riskMatrix.headerLabels.${size}.p${i}`
+      headerLabelFields.push(
+        PropertyPaneTextField(probabilityHeaderFieldName, {
+          label: format(strings.ProbabilityHeaderFieldLabel, i + 1),
+          placeholder: probabilityHeaders[i]
+        })
+      )
+    }
+    for (let i = 0; i < size; i++) {
+      const consequenceHeaderFieldName = `riskMatrix.headerLabels.${size}.c${i}`
+      headerLabelFields.push(
+        PropertyPaneTextField(consequenceHeaderFieldName, {
+          label: format(strings.ConsequenceHeaderFieldLabel, i + 1),
+          placeholder: consequenceHeaders[i]
+        })
+      )
+    }
+    return [overrideHeaderLabels, ...headerLabelFields]
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -68,9 +116,16 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                 PropertyFieldColorConfiguration('riskMatrix.colorScaleConfig', {
                   key: 'riskMatrixColorScaleConfig',
                   label: strings.RiskMatrixColorScaleConfigLabel,
-                  defaultValue: RISK_MATRIX_DEFAULT_COLOR_SCALE_CONFIG,
+                  defaultValue: [
+                    { p: 10, r: 44, g: 186, b: 0 },
+                    { p: 30, r: 163, g: 255, b: 0 },
+                    { p: 50, r: 255, g: 244, b: 0 },
+                    { p: 70, r: 255, g: 167, b: 0 },
+                    { p: 90, r: 255, g: 0, b: 0 }
+                  ],
                   value: this.properties.riskMatrix?.colorScaleConfig
-                })
+                }),
+                ...this.headerLabelFields
               ]
             },
             {

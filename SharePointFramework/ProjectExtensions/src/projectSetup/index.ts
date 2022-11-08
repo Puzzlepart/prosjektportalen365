@@ -140,9 +140,12 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       })
       data = { ...data, ...provisioningInfo }
       this._renderProgressDialog({
-        text: strings.ProgressDialogLabel,
-        subText: strings.ProgressDialogDescription,
-        iconName: 'Page'
+        progressIndicator: {
+          label: strings.ProgressDialogLabel,
+          description: strings.ProgressDialogDescription
+        },
+        iconName: data.selectedTemplate?.iconProps?.iconName ?? 'Page',
+        dialogContentProps: this.properties.progressDialogContentProps
       })
       await this._startProvision(taskParams, data)
 
@@ -295,21 +298,16 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Start provision
    *
-   * Get tasks using Tasks.getTasks and runs through them in sequence
+   * Get tasks using `Tasks.getTasks` and runs through them in sequence
    *
-   * @param taskParams - Task params
-   * @param data - Data
+   * @param taskParams Task params
+   * @param data Data
    */
   private async _startProvision(
     taskParams: Tasks.IBaseTaskParams,
     data: IProjectSetupData
   ): Promise<void> {
     const tasks = Tasks.getTasks(data)
-    Logger.log({
-      message: '(ProjectSetup) [_startProvision]',
-      data: { properties: this.properties, tasks: tasks.map((t) => t.taskName) },
-      level: LogLevel.Info
-    })
     try {
       await ListLogger.write(strings.ProjectProvisioningStartLogText)
       for (let i = 0; i < tasks.length; i++) {
@@ -334,12 +332,16 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * On task status updated
    *
-   * @param text - Text
-   * @param subText - Sub text
+   * @param label - Progress label
+   * @param description - Progress description
    * @param iconName - Icon name
    */
-  private _onTaskStatusUpdated(text: string, subText: string, iconName: string) {
-    this._renderProgressDialog({ text, subText, iconName })
+  private _onTaskStatusUpdated(label: string, description: string, iconName: string) {
+    this._renderProgressDialog({
+      progressIndicator: { label, description },
+      iconName,
+      dialogContentProps: this.properties.progressDialogContentProps
+    })
   }
 
   /**

@@ -1,4 +1,4 @@
-<pnp:ContentType ID="0x0100AAE66CFF1A3F488D843FF7CF96E41DD9" Name="{resource:ContentTypes_ProjectIdea_Name}" Description="{resource:ContentTypes_ProjectIdea_Description}" Group="{resource:ContentTypes_Group}"
+<pnp:ContentType ID="0x0100AAE66CFF1A3F488D843FF7CF96E41DD9" Name="{resource:ContentTypes_ProjectIdea_Name}" Description="{resource:ContentTypes_ProjectIdea_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true"
   xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
   <pnp:FieldRefs>
     <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
