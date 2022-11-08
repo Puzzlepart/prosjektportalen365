@@ -8,16 +8,16 @@ import {
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
-import { ProjectStatusContext } from '../../../ProjectStatus/context'
+import { ProjectStatusContext } from '../../context'
 import { RiskMatrix } from '../../../RiskMatrix'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection'
-import styles from './RiskSection.module.scss'
-import { useRiskSection } from './useRiskSection'
+import styles from './UncertaintySection.module.scss'
+import { useUncertaintySection } from './useUncertaintySection'
 
-export const RiskSection: FC = () => {
+export const UncertaintySection: FC = () => {
   const context = useContext(ProjectStatusContext)
-  const { state, riskElements, items, columns, shouldRenderContent } = useRiskSection()
+  const { state, riskElements, items, columns, shouldRenderContent } = useUncertaintySection()
 
   /**
    * Render content

@@ -3,13 +3,13 @@ import { RiskElementModel } from 'components/RiskMatrix'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers'
 import { useContext, useEffect, useState } from 'react'
 import { isEmpty } from 'underscore'
-import { ProjectStatusContext } from '../../../ProjectStatus/context'
-import { IRiskSectionState } from './types'
+import { ProjectStatusContext } from '../../context'
+import { IUncertaintySectionState } from './types'
 import { useFetchListData } from './useFetchListData'
 
-export function useRiskSection() {
+export function useUncertaintySection() {
   const context = useContext(ProjectStatusContext)
-  const [state, setState] = useState<IRiskSectionState>({ isDataLoaded: false, data: {} })
+  const [state, setState] = useState<IUncertaintySectionState>({ isDataLoaded: false, data: {} })
   const fetchListData = useFetchListData()
   const shouldRenderContent =
     (context.state.data.reports
