@@ -436,10 +436,10 @@
   <data name="ContentTypes_ResourceAllocation_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_RiskSection_Name" xml:space="preserve">
-    <value>Risikoseksjon</value>
+  <data name="ContentTypes_UncertaintySection_Name" xml:space="preserve">
+    <value>Usikkerhetseksjon</value>
   </data>
-  <data name="ContentTypes_RiskSection_Description" xml:space="preserve">
+  <data name="ContentTypes_UncertaintySection_Description" xml:space="preserve">
     <value></value>
   </data>
   <data name="ContentTypes_ProjectPropertiesSection_Name" xml:space="preserve">

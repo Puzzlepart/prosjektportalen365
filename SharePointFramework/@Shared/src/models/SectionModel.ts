@@ -1,7 +1,7 @@
 export enum SectionType {
   SummarySection,
   StatusSection,
-  RiskSection,
+  UncertaintySection,
   ProjectPropertiesSection,
   ListSection
 }
@@ -59,7 +59,7 @@ export class SectionModel {
       return SectionType.ProjectPropertiesSection
     }
     if (this._item.ContentTypeId.indexOf('0x01004CEFE616A94A3A48A27D9DEBDF5EC82804') !== -1) {
-      return SectionType.RiskSection
+      return SectionType.UncertaintySection
     }
     if (this._item.ContentTypeId.indexOf('0x01004CEFE616A94A3A48A27D9DEBDF5EC82805') !== -1) {
       return SectionType.ListSection
