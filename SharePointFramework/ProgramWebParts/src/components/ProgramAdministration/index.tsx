@@ -1,5 +1,6 @@
-import { SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
 import { Link, MessageBar, ShimmeredDetailsList } from '@fluentui/react'
+import { isEmpty } from '@microsoft/sp-lodash-subset'
+import { SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FC } from 'react'
 import { AddProjectDialog } from './AddProjectDialog'
@@ -9,9 +10,9 @@ import styles from './ProgramAdministration.module.scss'
 import { ProjectTable } from './ProjectTable'
 import { IListField } from './ProjectTable/types'
 import { SET_SELECTED_TO_DELETE } from './reducer'
-import { IProgramAdministrationProps, shimmeredColumns } from './types'
+import { TooltipHeader } from './TooltipHeader'
+import { IProgramAdministrationProps } from './types'
 import { useProgramAdministration } from './useProgramAdministration'
-import { isEmpty } from '@microsoft/sp-lodash-subset'
 
 export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) => {
   const { state, dispatch } = useProgramAdministration(props)
@@ -29,7 +30,19 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
 
   if (state.loading.root) {
     return (
-      <ShimmeredDetailsList items={[]} shimmerLines={15} columns={shimmeredColumns} enableShimmer />
+      <ShimmeredDetailsList
+        items={[]}
+        shimmerLines={15}
+        columns={[
+          {
+            key: 'Title',
+            name: 'Tittel',
+            maxWidth: 250,
+            minWidth: 100
+          }
+        ]}
+        enableShimmer
+      />
     )
   }
 
@@ -37,13 +50,11 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
     <ProgramAdministrationContext.Provider value={{ props, state, dispatch }}>
       <Commands />
       <div className={styles.root}>
-        <div className={styles.header}>
-          <div className={styles.title}>{props.title}</div>
-        </div>
+        <TooltipHeader />
         <div>
           {!isEmpty(state.childProjects) ? (
             <ProjectTable
-              fields={fields(true)}
+              fields={fields({ renderAsLink: true })}
               items={state.childProjects}
               selectionMode={
                 state.userHasManagePermission ? SelectionMode.multiple : SelectionMode.none
@@ -51,7 +62,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
               onSelectionChanged={(selected) => dispatch(SET_SELECTED_TO_DELETE({ selected }))}
             />
           ) : (
-            <MessageBar>{strings.ProgramAdministration_EmptyMessage}</MessageBar>
+            <MessageBar>{strings.ProgramAdministrationEmptyMessage}</MessageBar>
           )}
         </div>
         {state.displayAddProjectDialog && <AddProjectDialog />}
@@ -60,7 +71,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
   )
 }
 
-export const fields = (renderAsLink: boolean): IListField[] => [
+export const fields = ({ renderAsLink = false }): IListField[] => [
   {
     key: 'Title',
     text: 'Tittel',

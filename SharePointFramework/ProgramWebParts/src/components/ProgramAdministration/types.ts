@@ -1,7 +1,7 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { SearchResult } from '@pnp/sp'
 import { SPDataAdapter } from 'data'
-import { IColumn, MessageBarType } from '@fluentui/react'
+import { MessageBarType } from '@fluentui/react'
 
 export interface IProgramAdministrationProps {
   title: string
@@ -52,13 +52,3 @@ export interface IProgramAdministrationState {
     messageBarType: MessageBarType
   }
 }
-
-export const shimmeredColumns: IColumn[] = [
-  {
-    key: 'Title',
-    name: 'Tittel',
-    isResizable: true,
-    maxWidth: 250,
-    minWidth: 100
-  }
-]

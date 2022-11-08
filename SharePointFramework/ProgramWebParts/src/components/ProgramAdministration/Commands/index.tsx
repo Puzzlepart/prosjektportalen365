@@ -26,7 +26,7 @@ export const Commands: FC = () => {
   const _items: ICommandBarItemProps[] = [
     {
       key: 'ProgramAddChilds',
-      text: strings.ProgramAddChildsButtonText,
+      text: strings.ProgramAdministrationAddChildsButtonText,
       iconProps: { iconName: 'Add' },
       buttonStyles: { root: { border: 'none' } },
       onClick: () => context.dispatch(TOGGLE_ADD_PROJECT_DIALOG()),
