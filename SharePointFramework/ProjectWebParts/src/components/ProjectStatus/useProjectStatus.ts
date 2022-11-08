@@ -18,7 +18,8 @@ export function useProjectStatus(props: IProjectStatusProps) {
       reports: [],
       sections: Array.apply(null, Array(6)).map(() => new SectionModel({ ContentTypeId: '' })),
       columnConfig: []
-    }
+    },
+    persistListData:{}
   })
 
   const setState = (newState: Partial<IProjectStatusState>) => {

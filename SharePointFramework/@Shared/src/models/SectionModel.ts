@@ -7,6 +7,7 @@ export enum SectionType {
 }
 
 export class SectionModel {
+  public id: number
   public name: string
   public iconName: string
   public source: string
@@ -32,6 +33,7 @@ export class SectionModel {
    * @param _item Section item
    */
   constructor(private _item: any) {
+    this.id = _item.Id
     this.name = _item.Title
     this.iconName = _item.GtSecIcon
     this.source = _item.GtSecSource

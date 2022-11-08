@@ -1,10 +1,10 @@
-import { ProjectStatusContext } from '../../../ProjectStatus/context'
+import { IColumn } from '@fluentui/react'
+import { getObjectValue as get } from 'pp365-shared/lib/helpers'
 import { useContext, useEffect, useState } from 'react'
 import { isEmpty } from 'underscore'
+import { ProjectStatusContext } from '../../../ProjectStatus/context'
 import { IListSectionData, IListSectionState } from './types'
 import { useFetchListData } from './useFetchListData'
-import { getObjectValue as get } from 'pp365-shared/lib/helpers'
-import { IColumn } from '@fluentui/react'
 
 export function useListSection() {
   const context = useContext(ProjectStatusContext)
@@ -19,7 +19,10 @@ export function useListSection() {
       : true) && !isEmpty(state.data?.items)
 
   useEffect(() => {
-    fetchListData().then((data) => setState({ data, isDataLoaded: true }))
+    fetchListData().then((data) => {
+      context.setState({ persistListData: { ...context.state.persistListData, 4: data.items } })
+      setState({ data, isDataLoaded: true })
+    })
   }, [])
 
   return {
