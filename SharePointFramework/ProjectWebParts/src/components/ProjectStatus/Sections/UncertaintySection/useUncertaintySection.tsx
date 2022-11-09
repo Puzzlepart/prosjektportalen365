@@ -4,11 +4,13 @@ import { getObjectValue as get } from 'pp365-shared/lib/helpers'
 import { useContext, useEffect, useState } from 'react'
 import { isEmpty } from 'underscore'
 import { ProjectStatusContext } from '../../context'
+import { SectionContext } from '../context'
 import { IUncertaintySectionState } from './types'
 import { useFetchListData } from './useFetchListData'
 
 export function useUncertaintySection() {
   const context = useContext(ProjectStatusContext)
+  const { section } = useContext(SectionContext)
   const [state, setState] = useState<IUncertaintySectionState>({ isDataLoaded: false, data: {} })
   const fetchListData = useFetchListData()
   const shouldRenderContent =
@@ -17,7 +19,10 @@ export function useUncertaintySection() {
       : true) && !isEmpty(state.data?.items)
 
   useEffect(() => {
-    fetchListData().then((data) => setState({ data, isDataLoaded: true }))
+    fetchListData().then((data) => {
+      context.setState({ persistListData: { ...context.state.persistListData, [section.id]: { items: data.items, riskElements: data.riskElements } } })
+      setState({ data, isDataLoaded: true })
+    })
   }, [])
 
   return {

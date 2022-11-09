@@ -24,7 +24,8 @@ export function usePublishReport() {
         const attachment = await captureReport(context.state.selectedReport.values.Title)
         const properties: TypedHash<string> = {
           GtModerationStatus: strings.GtModerationStatus_Choice_Published,
-          GtLastReportDate: moment().format('YYYY-MM-DD HH:mm')
+          GtLastReportDate: moment().format('YYYY-MM-DD HH:mm'),
+          GtSectionDataJson: JSON.stringify(context.state.persistListData)
         }
         const updatedReport = await portalDataService.updateStatusReport(
           context.state.selectedReport,
