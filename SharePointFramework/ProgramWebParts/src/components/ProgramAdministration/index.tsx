@@ -34,7 +34,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
         <div>
           {!isEmpty(state.childProjects) || state.loading.root ? (
             <ShimmeredDetailsList
-              setKey='selection'
+              setKey='ProgramAdministration'
               enableShimmer={state.loading.root}
               items={state.childProjects}
               columns={columns({ renderAsLink: true })}

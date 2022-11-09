@@ -39,7 +39,7 @@ export const AddProjectDialog: FC = () => {
       <div className={styles.dialogContent}>
         <ScrollablePane>
           <ShimmeredDetailsList
-            setKey='selection'
+            setKey='AddProjectDialog'
             items={availableProjects}
             columns={columns({ renderAsLink: false })}
             selectionMode={SelectionMode.multiple}
