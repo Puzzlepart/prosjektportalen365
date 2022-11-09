@@ -2,8 +2,7 @@ import {
   DefaultButton,
   Dialog,
   DialogFooter,
-  DialogType,
-  PrimaryButton,
+  DialogType, PrimaryButton,
   SelectionMode,
   ShimmeredDetailsList
 } from '@fluentui/react'
@@ -26,12 +25,8 @@ export const AddProjectDialog: FC = () => {
   return (
     <Dialog
       hidden={false}
-      modalProps={{
-        containerClassName: styles.root
-      }}
+      modalProps={{ containerClassName: styles.root }}
       onDismiss={() => context.dispatch(TOGGLE_ADD_PROJECT_DIALOG())}
-      minWidth='60em'
-      maxWidth='1000px'
       dialogContentProps={{
         type: DialogType.largeHeader,
         title: strings.ProgramAdministrationAddChildsButtonText
