@@ -1,10 +1,19 @@
-import { CommandBar, SearchBox, SelectAllVisibility, Sticky, StickyPositionType } from '@fluentui/react'
+import {
+  CommandBar,
+  SearchBox,
+  SelectAllVisibility,
+  Sticky,
+  StickyPositionType
+} from '@fluentui/react'
+import { format } from '@uifabric/utilities'
+import strings from 'ProjectExtensionsStrings'
 import React, { FC } from 'react'
 import styles from './ListHeaderSearch.module.scss'
 import { IListHeaderSearchProps } from './types'
 
 /**
- * List header for `<DetailsList />` with a optional `<SearchBox />`
+ * List header for `<DetailsList />` with a optional `<CommandBar />` with a
+ * `<SearchBox />`.
  *
  * @param props Props
  */
@@ -14,7 +23,7 @@ export const ListHeaderSearch: FC<IListHeaderSearchProps> = (props) => {
       <CommandBar
         items={[
           {
-            key: 'searchBox',
+            key: 'cmdSearchBox',
             onRender: () => (
               <div className={styles.searchBox} hidden={props.search?.hidden}>
                 <SearchBox
@@ -24,6 +33,12 @@ export const ListHeaderSearch: FC<IListHeaderSearchProps> = (props) => {
                 />
               </div>
             )
+          }
+        ]}
+        farItems={[
+          {
+            key: 'cmdSelectionCount',
+            text: format(strings.CmdSelectionCountText, props.selectedCount)
           }
         ]}
       />
@@ -40,7 +55,7 @@ ListHeaderSearch.defaultProps = {
     hidden: true,
     placeholder: '',
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    onSearch: () => { }
+    onSearch: () => {}
   },
   selectAllVisibility: SelectAllVisibility.hidden
 }
