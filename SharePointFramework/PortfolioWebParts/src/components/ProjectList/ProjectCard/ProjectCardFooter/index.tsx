@@ -1,4 +1,4 @@
-import { DocumentCardActions, Persona } from '@fluentui/react'
+import { DocumentCardActions, Persona, TooltipHost } from '@fluentui/react'
 import React, { FC, useContext } from 'react'
 import { ProjectCardContext } from '../context'
 import styles from './ProjectCardFooter.module.scss'
@@ -10,8 +10,16 @@ export const ProjectCardFooter: FC = () => {
   return (
     <div className={styles.root}>
       <div className={styles.persona}>
-        {context.showProjectOwner && owner && <Persona {...owner} />}
-        {context.showProjectManager && manager && <Persona {...manager} />}
+        {context.showProjectOwner && owner && (
+          <TooltipHost content={<Persona {...owner} hidePersonaDetails={false} />}>
+            <Persona {...owner} />
+          </TooltipHost>
+        )}
+        {context.showProjectManager && manager && (
+          <TooltipHost content={<Persona {...manager} hidePersonaDetails={false} />}>
+            <Persona {...manager} />
+          </TooltipHost>
+        )}
       </div>
       <DocumentCardActions actions={context.actions} />
     </div>

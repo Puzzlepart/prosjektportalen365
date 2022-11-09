@@ -1,8 +1,5 @@
-import { IDocumentCardProps } from '@fluentui/react'
-import * as strings from 'PortfolioWebPartsStrings'
 import { useContext, useState } from 'react'
 import { ProjectCardContext } from './context'
-import styles from './ProjectCard.module.scss'
 
 /**
  * Component logic hook for `ProjectCard`
@@ -10,20 +7,16 @@ import styles from './ProjectCard.module.scss'
 export function useProjectCard() {
   const context = useContext(ProjectCardContext)
   const [isImageLoaded, setIsImageLoaded] = useState(!context.project.logo)
-  const documentCardProps: IDocumentCardProps = {
-    title: '',
-    onClickHref: context.project.url,
-    className: styles.root,
-    style: {}
+  let onClick = () => {
+    window.open(context.project.url, '_blank')
   }
   if (context.project.isUserMember === false) {
-    documentCardProps.onClickHref = '#'
-    documentCardProps.title = strings.NoAccessMessage
-    documentCardProps.style = { opacity: '20%', cursor: 'default' }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    onClick = () => {}
   }
   return {
     isDataLoaded: context.isDataLoaded && isImageLoaded,
     setIsImageLoaded,
-    documentCardProps
+    onClick
   } as const
 }

@@ -18,7 +18,7 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
         />
       </div>
       <div title={context.project.phase} style={getPhaseStyle()} className={styles.phase}>
-        <span className={styles.title}>{context.project?.phase ?? strings.NotSet}</span>
+        <span>{context.project?.phase ?? strings.NotSet}</span>
       </div>
       <DocumentCardTitle
         className={styles.title}

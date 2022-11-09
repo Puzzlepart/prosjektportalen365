@@ -7,7 +7,7 @@ import { ProjectCardHeader } from './ProjectCardHeader'
 import { useProjectCard } from './useProjectCard'
 
 export const ProjectCard: FC = () => {
-  const { isDataLoaded, setIsImageLoaded } = useProjectCard()
+  const { isDataLoaded, setIsImageLoaded, onClick } = useProjectCard()
   return (
     <Shimmer
       className={styles.shimmer}
@@ -21,7 +21,7 @@ export const ProjectCard: FC = () => {
           </div>
         </div>
       }>
-      <div className={styles.root}>
+      <div className={styles.root} onClick={onClick}>
         <ProjectCardHeader onImageLoad={() => setIsImageLoaded(true)} />
         <ProjectCardContent />
         <ProjectCardFooter />

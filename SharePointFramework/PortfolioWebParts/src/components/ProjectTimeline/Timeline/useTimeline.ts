@@ -35,7 +35,7 @@ export function useTimeline(props: ITimelineProps) {
     sidebarWidth = 120
     if (_.first(props.groups)?.type === TimelineGroupType.Project) sidebarWidth = 0
   }
-  if(props.hideSidebar) {
+  if (props.hideSidebar) {
     sidebarWidth = 0
   }
 
