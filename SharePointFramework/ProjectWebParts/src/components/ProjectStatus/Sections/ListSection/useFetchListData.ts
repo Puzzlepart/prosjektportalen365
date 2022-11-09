@@ -1,7 +1,7 @@
 import { IColumn } from '@fluentui/react'
 import { Web } from '@pnp/sp'
-import { ProjectStatusContext } from '../../../ProjectStatus/context'
 import { useContext } from 'react'
+import { ProjectStatusContext } from '../../../ProjectStatus/context'
 import { SectionContext } from '../context'
 
 /**

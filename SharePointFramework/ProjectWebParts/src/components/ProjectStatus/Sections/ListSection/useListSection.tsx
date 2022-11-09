@@ -1,5 +1,4 @@
 import { IColumn } from '@fluentui/react'
-import _ from 'lodash'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers'
 import { useContext, useEffect, useState } from 'react'
 import { isEmpty } from 'underscore'
@@ -23,10 +22,15 @@ export function useListSection() {
       : true) && !isEmpty(state.data?.items)
 
   useEffect(() => {
-    fetchListData().then((data) => {
-      context.dispatch(PERSIST_SECTION_DATA({ section, data: _.pick(data, 'items') }))
-      setState({ data, isDataLoaded: true })
-    })
+    const persistedData = context.state.selectedReport.persistedSectionData[section.id]
+    if (persistedData) {
+      setState({ data: persistedData, isDataLoaded: true })
+    } else {
+      fetchListData().then((data) => {
+        context.dispatch(PERSIST_SECTION_DATA({ section, data }))
+        setState({ data, isDataLoaded: true })
+      })
+    }
   }, [])
 
   return {
