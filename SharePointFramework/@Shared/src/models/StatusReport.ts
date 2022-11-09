@@ -11,6 +11,7 @@ export class StatusReport {
   public defaultEditFormUrl: string
   public modified: Date
   public publishedDate: Date
+  public persistedSectionData: Record<string, any>
 
   /**
    * Creates a new instance of StatusReport
@@ -23,6 +24,7 @@ export class StatusReport {
     this.created = new Date(item.Created)
     this.modified = new Date(item.Modified)
     this.publishedDate = item.GtLastReportDate ? new Date(item.GtLastReportDate) : null
+    this.persistedSectionData = JSON.parse(item.GtSectionDataJson ?? '{}')
   }
 
   /**

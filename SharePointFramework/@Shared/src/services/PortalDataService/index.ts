@@ -381,7 +381,7 @@ export class PortalDataService {
   }
 
   /**
-   * Add status report
+   * Add status report with the specified `properties` and `contentTypeId`
    *
    * @param properties Properties
    * @param contentTypeId Content type ID

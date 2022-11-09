@@ -1,13 +1,16 @@
-import { ProjectStatusContext } from '../../../ProjectStatus/context'
+import { IColumn } from '@fluentui/react'
+import { getObjectValue as get } from 'pp365-shared/lib/helpers'
 import { useContext, useEffect, useState } from 'react'
 import { isEmpty } from 'underscore'
+import { ProjectStatusContext } from '../../../ProjectStatus/context'
+import { PERSIST_SECTION_DATA } from '../../reducer'
+import { SectionContext } from '../context'
 import { IListSectionData, IListSectionState } from './types'
 import { useFetchListData } from './useFetchListData'
-import { getObjectValue as get } from 'pp365-shared/lib/helpers'
-import { IColumn } from '@fluentui/react'
 
 export function useListSection() {
   const context = useContext(ProjectStatusContext)
+  const { section } = useContext(SectionContext)
   const [state, setState] = useState<IListSectionState<IListSectionData>>({
     isDataLoaded: false,
     data: {}
@@ -19,7 +22,15 @@ export function useListSection() {
       : true) && !isEmpty(state.data?.items)
 
   useEffect(() => {
-    fetchListData().then((data) => setState({ data, isDataLoaded: true }))
+    const persistedData = context.state.selectedReport.persistedSectionData[section.id]
+    if (persistedData) {
+      setState({ data: persistedData, isDataLoaded: true })
+    } else {
+      fetchListData().then((data) => {
+        context.dispatch(PERSIST_SECTION_DATA({ section, data }))
+        setState({ data, isDataLoaded: true })
+      })
+    }
   }, [])
 
   return {
