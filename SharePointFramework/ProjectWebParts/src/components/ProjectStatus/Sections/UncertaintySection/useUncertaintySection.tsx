@@ -7,6 +7,8 @@ import { ProjectStatusContext } from '../../context'
 import { SectionContext } from '../context'
 import { IUncertaintySectionState } from './types'
 import { useFetchListData } from './useFetchListData'
+import { PERSIST_SECTION_DATA } from '../../reducer'
+import _ from 'lodash'
 
 export function useUncertaintySection() {
   const context = useContext(ProjectStatusContext)
@@ -20,7 +22,12 @@ export function useUncertaintySection() {
 
   useEffect(() => {
     fetchListData().then((data) => {
-      context.setState({ persistListData: { ...context.state.persistListData, [section.id]: { items: data.items, riskElements: data.riskElements } } })
+      context.dispatch(
+        PERSIST_SECTION_DATA({
+          section,
+          data: _.pick(data, 'items', 'riskElements')
+        })
+      )
       setState({ data, isDataLoaded: true })
     })
   }, [])

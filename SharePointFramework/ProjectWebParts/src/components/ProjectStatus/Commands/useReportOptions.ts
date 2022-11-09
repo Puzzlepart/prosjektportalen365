@@ -2,6 +2,7 @@ import { IContextualMenuItem } from '@fluentui/react'
 import { formatDate } from 'pp365-shared/lib/helpers'
 import { useContext } from 'react'
 import { ProjectStatusContext } from '../context'
+import { SELECT_REPORT } from '../reducer'
 
 export function useReportOptions() {
   const context = useContext(ProjectStatusContext)
@@ -13,7 +14,7 @@ export function useReportOptions() {
       key: `${report.id}`,
       name: formatDate(report.created, true),
       onClick: () => {
-        context.setState({ selectedReport: report })
+        context.dispatch(SELECT_REPORT({ report }))
       },
       canCheck: true,
       iconProps: {

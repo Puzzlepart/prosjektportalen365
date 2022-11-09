@@ -4,6 +4,7 @@ import { PortalDataService } from 'pp365-shared/lib/services'
 import strings from 'ProjectWebPartsStrings'
 import { useContext } from 'react'
 import { ProjectStatusContext } from '../context'
+import { REPORT_PUBLISHED } from '../reducer'
 import { useCaptureReport } from './useCaptureReport'
 
 /**
@@ -33,16 +34,7 @@ export function usePublishReport() {
           attachment,
           strings.GtModerationStatus_Choice_Published
         )
-        const reports = context.state.data.reports.map((r) => {
-          return updatedReport.id === r.id ? updatedReport : r
-        })
-        context.setState({
-          data: {
-            ...context.state.data,
-            reports
-          },
-          selectedReport: updatedReport
-        })
+        context.dispatch(REPORT_PUBLISHED({ updatedReport }))
       } catch (error) {}
     }
   }

@@ -1,8 +1,7 @@
 import { PortalDataService } from 'pp365-shared/lib/services'
-import { getUrlParam } from 'pp365-shared/lib/util/getUrlParam'
 import { useContext } from 'react'
-import { first } from 'underscore'
 import { ProjectStatusContext } from '../context'
+import { REPORT_DELETED, REPORT_DELETE_ERROR } from '../reducer'
 
 /**
  * Hook for deletion of report.
@@ -16,25 +15,11 @@ export function useDeleteReport() {
       urlOrWeb: context.props.hubSite.web,
       siteId: context.props.siteId
     })
-    await portalDataService.deleteStatusReport(context.state.selectedReport.id)
-    const reports = context.state.data.reports.filter(
-      (r) => r.id !== context.state.selectedReport.id
-    )
     try {
-      const selectedReport = first(reports)
-      const sourceUrlParam = getUrlParam('Source')
-      const mostRecentReportId = selectedReport?.id ?? 0
-      context.setState({
-        data: {
-          ...context.state.data,
-          reports
-        },
-        selectedReport,
-        sourceUrl: decodeURIComponent(sourceUrlParam || ''),
-        mostRecentReportId
-      })
+      await portalDataService.deleteStatusReport(context.state.selectedReport.id)
+      context.dispatch(REPORT_DELETED())
     } catch (error) {
-      context.setState({ error, isDataLoaded: true })
+      context.dispatch(REPORT_DELETE_ERROR())
     }
   }
 }

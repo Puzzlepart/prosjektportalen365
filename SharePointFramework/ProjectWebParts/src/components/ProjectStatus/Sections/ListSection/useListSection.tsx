@@ -1,11 +1,13 @@
-import { ProjectStatusContext } from '../../../ProjectStatus/context'
+import { IColumn } from '@fluentui/react'
+import _ from 'lodash'
+import { getObjectValue as get } from 'pp365-shared/lib/helpers'
 import { useContext, useEffect, useState } from 'react'
 import { isEmpty } from 'underscore'
+import { ProjectStatusContext } from '../../../ProjectStatus/context'
+import { PERSIST_SECTION_DATA } from '../../reducer'
+import { SectionContext } from '../context'
 import { IListSectionData, IListSectionState } from './types'
 import { useFetchListData } from './useFetchListData'
-import { getObjectValue as get } from 'pp365-shared/lib/helpers'
-import { IColumn } from '@fluentui/react'
-import { SectionContext } from '../context'
 
 export function useListSection() {
   const context = useContext(ProjectStatusContext)
@@ -22,7 +24,7 @@ export function useListSection() {
 
   useEffect(() => {
     fetchListData().then((data) => {
-      context.setState({ persistListData: { ...context.state.persistListData, [section.id]: { items: data.items } } })
+      context.dispatch(PERSIST_SECTION_DATA({ section, data: _.pick(data, 'items') }))
       setState({ data, isDataLoaded: true })
     })
   }, [])
