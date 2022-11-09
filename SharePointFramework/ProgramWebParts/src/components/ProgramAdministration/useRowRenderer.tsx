@@ -9,8 +9,6 @@ export function useRowRenderer({ selectedKeys, searchTerm }) {
     detailsRowProps: IDetailsRowProps,
     defaultRender: (props?: IDetailsRowProps) => JSX.Element
   ) => {
-    // eslint-disable-next-line no-console
-    console.log(detailsRowProps.item)
     const shouldRenderRow =
       detailsRowProps.item.Title.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
       selectedKeys.includes(detailsRowProps.item.key)

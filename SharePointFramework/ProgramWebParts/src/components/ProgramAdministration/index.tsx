@@ -34,6 +34,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
         <div>
           {!isEmpty(state.childProjects) || state.loading.root ? (
             <ShimmeredDetailsList
+              setKey='selection'
               enableShimmer={state.loading.root}
               items={state.childProjects}
               columns={columns({ renderAsLink: true })}
@@ -49,7 +50,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
                   defaultRender={defaultRender}
                   selectedCount={state.selectedProjectsToDelete?.length ?? 0}
                   search={{
-                    placeholder: 'Søk i koblede prosjekter...',
+                    placeholder: strings.ProgramAdministrationSearchBoxPlaceholder,
                     onSearch
                   }}
                   noPadding

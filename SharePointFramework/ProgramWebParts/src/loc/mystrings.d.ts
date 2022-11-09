@@ -176,16 +176,11 @@ declare interface IProgramWebPartsStrings {
   ProgramAdministrationAddChildsButtonText: string
   RiskWebPartTitle: string
   RiskDataSource: string
-  Lists_StoredProjects_MaxLimitError: string
-  Lists_StoredProjects_DoesNotExist: string
-  Lists_ProjectsTimeline_DoesNotExist: string
-  ProgramPortfolio_LoadingText: string
-  ProgramPortfolio_SearchBoxLabelText: string
-  ProgramPortfolio_ShowCountText: string
+  ProgramAdministrationSearchBoxPlaceholder: string
   ProgramTimelineHeader: string
   ProgramAdministrationHeader: string
   ProgramRemoveChildsButtonText: string
-  ProgramSearchProjectsText: string
+  AddProjectDialogSearchBoxPlaceholder: string
   Add: string
   Cancel: string
   Yes: string

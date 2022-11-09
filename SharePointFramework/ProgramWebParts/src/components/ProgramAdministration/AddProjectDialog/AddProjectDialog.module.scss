@@ -5,12 +5,15 @@
     height: 650px;
     margin: 20px 0 0 0;
     box-sizing: border-box;
-    position: relative;
 
     .searchBox {
       width: 625px;
       margin: 10px 0 0 0;
       box-sizing: border-box;
     }
+  }
+
+  div[class*="ms-List-cell"] {
+    min-height: 0px;
   }
 }

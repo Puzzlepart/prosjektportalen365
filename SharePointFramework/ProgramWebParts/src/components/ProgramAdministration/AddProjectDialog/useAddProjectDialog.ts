@@ -1,15 +1,16 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import { getHubSiteProjects } from '../data'
-import { DATA_LOADED } from '../reducer'
+import { DATA_LOADED, SET_SELECTED_TO_ADD } from '../reducer'
+import { useRowRenderer } from '../useRowRenderer'
 import { useSelectionList } from '../useSelectionList'
 
 export const useAddProjectDialog = () => {
   const context = useContext(ProgramAdministrationContext)
-  const [selectedProjects, setSelectedProjects] = useState<any[]>([])
+  const selectedKeys = context.state.selectedProjectsToAdd.map((p) => p.key)
 
-  const { selection, onSearch, searchTerm } = useSelectionList([], (selected) => {
-    setSelectedProjects(selected)
+  const selectionList = useSelectionList(selectedKeys, (selected) => {
+    context.dispatch(SET_SELECTED_TO_ADD({ selected }))
   })
 
   useEffect(() => {
@@ -24,20 +25,21 @@ export const useAddProjectDialog = () => {
       )
   }, [])
 
-  const availableProjects = context.state.availableProjects
-    .filter(
-      (project) =>
-        !context.state.childProjects.some((el) => el.SiteId === project['SiteId']) &&
-        project['SiteId'] !== context.props.context.pageContext.site.id.toString()
-    )
-    .filter((project) => project['SPWebURL'])
+  const availableProjects = context.state.availableProjects.filter(
+    (project) =>
+      !context.state.childProjects.some((el) => el.SiteId === project.SiteId) &&
+      project.SiteId !== context.props.context.pageContext.site.id.toString() &&
+      project.SPWebURL
+  )
+
+  const onRenderRow = useRowRenderer({
+    selectedKeys,
+    searchTerm: selectionList.searchTerm
+  })
 
   return {
-    selectedProjects,
-    setSelectedProjects,
+    ...selectionList,
     availableProjects,
-    selection,
-    onSearch,
-    searchTerm
+    onRenderRow
   } as const
 }

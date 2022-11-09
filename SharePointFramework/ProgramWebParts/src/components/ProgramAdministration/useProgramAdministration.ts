@@ -9,12 +9,13 @@ import { useSelectionList } from './useSelectionList'
 
 export const useProgramAdministration = (props: IProgramAdministrationProps) => {
   const [state, dispatch] = useReducer(reducer, initialState)
+  const selectedKeys = state.selectedProjectsToDelete.map((p) => p.key)
 
   sp.setup({
     sp: { baseUrl: props.context.pageContext.web.absoluteUrl }
   })
 
-  const { selection, onSearch, searchTerm } = useSelectionList([], (selected) => {
+  const { selection, onSearch, searchTerm } = useSelectionList(selectedKeys, (selected) => {
     dispatch(SET_SELECTED_TO_DELETE({ selected }))
   })
 
@@ -33,7 +34,7 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
   }, [])
 
   const onRenderRow = useRowRenderer({
-    selectedKeys: state.selectedProjectsToDelete.map((lc) => lc.key),
+    selectedKeys,
     searchTerm
   })
 

@@ -24,14 +24,19 @@ export interface IProgramAdministrationState {
   childProjects: Record<string, any>[]
 
   /**
-   * True if `AddProjectDialog` should be displayed to the user
+   * True if `<AddProjectDialog />` should be displayed to the user
    */
-  displayAddProjectDialog: boolean
+  displayAddProjectDialog?: boolean
 
   /**
    * Projects available to add to parent project
    */
   availableProjects: Record<string, any>[]
+
+  /**
+   * Projects selected by user to add
+   */
+  selectedProjectsToAdd: Record<string, any>[]
 
   /**
    * Projects selected by user for deletion
