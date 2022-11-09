@@ -1,4 +1,4 @@
-import { Selection } from '@fluentui/react'
+import { IObjectWithKey, Selection } from '@fluentui/react'
 import { useEffect, useState } from 'react'
 
 /**
@@ -11,12 +11,12 @@ export function useSelectionList(
   selectedKeys: (string | number)[],
   onSelectionChanged: (items: any[]) => void
 ) {
-  const __selection = new Selection<any>({
+  const __selection = new Selection<IObjectWithKey>({
     onSelectionChanged: () => {
       onSelectionChanged(selection.getSelection())
     }
   })
-  const [selection, setSelection] = useState<Selection<any>>(__selection)
+  const [selection, setSelection] = useState<Selection<IObjectWithKey>>(__selection)
   const [searchTerm, setSearchTerm] = useState<string>('')
 
   useEffect(() => {

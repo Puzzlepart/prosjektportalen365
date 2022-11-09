@@ -9,7 +9,12 @@ export const TooltipHeader: FC = () => {
   return (
     <div className={styles.root}>
       <div className={styles.title}>
-        <TooltipHost content={<div><p>{strings.ProgramAdministrationInfoMessage}</p></div>}>
+        <TooltipHost
+          content={
+            <div>
+              <p>{strings.ProgramAdministrationInfoMessage}</p>
+            </div>
+          }>
           <span>{context.props.title}</span>
           <Icon iconName='Info' className={styles.icon} />
         </TooltipHost>

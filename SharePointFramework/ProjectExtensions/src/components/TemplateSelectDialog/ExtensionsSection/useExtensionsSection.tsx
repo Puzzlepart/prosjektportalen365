@@ -17,5 +17,12 @@ export function useExtensionsSection() {
   const items = context.props.data.extensions.filter((ext) => !ext.hidden)
   const columns = useColumns()
   const onRenderRow = useRowRenderer({ selectedKeys, searchTerm })
-  return { selection, items, columns, onSearch, onRenderRow } as const
+  return {
+    selection,
+    selectedCount: selectedKeys.length,
+    items,
+    columns,
+    onSearch,
+    onRenderRow
+  } as const
 }

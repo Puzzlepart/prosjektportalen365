@@ -6,7 +6,7 @@ import { SPDataAdapter } from 'data'
 /**
  * Fetches all projects associated with the current hubsite context
  */
-export async function getHubSiteProjects() {
+export async function getHubSiteProjects(): Promise<any[]> {
   const data = await sp.site.select('HubSiteId').get()
   const { PrimarySearchResults } = await sp.search({
     Querytext: `DepartmentId:{${data.HubSiteId}} contentclass:STS_Site`,
