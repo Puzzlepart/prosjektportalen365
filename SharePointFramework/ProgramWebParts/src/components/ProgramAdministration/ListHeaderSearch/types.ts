@@ -6,4 +6,5 @@ export interface IListHeaderSearchProps {
   detailsHeaderProps: IDetailsHeaderProps
   defaultRender: (props?: IDetailsHeaderProps) => JSX.Element
   selectAllVisibility?: SelectAllVisibility
+  noPadding?: boolean
 }

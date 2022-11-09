@@ -37,7 +37,6 @@ export const AddProjectDialog: FC = () => {
         title: strings.ProgramAdministrationAddChildsButtonText
       }}>
       <div className={styles.dialogContent}>
-        <div className={styles.list}>
           <ScrollablePane styles={{ root: { maxHeigth: '100%' } }}>
             <ShimmeredDetailsList
               items={availableProjects}
@@ -57,7 +56,6 @@ export const AddProjectDialog: FC = () => {
               )}
             />
           </ScrollablePane>
-        </div>
       </div>
       <DialogFooter>
         <PrimaryButton

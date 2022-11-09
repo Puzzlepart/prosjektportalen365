@@ -49,9 +49,10 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
                   defaultRender={defaultRender}
                   selectedCount={state.selectedProjectsToDelete?.length ?? 0}
                   search={{
-                    placeholder: 'Søk i prosjekter...',
+                    placeholder: 'Søk i koblede prosjekter...',
                     onSearch
                   }}
+                  noPadding
                 />
               )}
             />

@@ -2,13 +2,10 @@
 
 .root {
   .dialogContent {
+    height: 650px;
     margin: 20px 0 0 0;
     box-sizing: border-box;
-
-    .list {
-      height: 650px;
-      box-sizing: border-box;
-    }
+    position: relative;
 
     .searchBox {
       width: 625px;
