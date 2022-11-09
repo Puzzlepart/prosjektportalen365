@@ -1,7 +1,6 @@
-import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { SearchResult } from '@pnp/sp'
-import { SPDataAdapter } from 'data'
 import { MessageBarType } from '@fluentui/react'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { SPDataAdapter } from 'data'
 
 export interface IProgramAdministrationProps {
   title: string
@@ -22,7 +21,7 @@ export interface IProgramAdministrationState {
   /**
    * Child projects
    */
-  childProjects: Array<Record<string, string>>
+  childProjects: Record<string, any>[]
 
   /**
    * True if `AddProjectDialog` should be displayed to the user
@@ -32,12 +31,12 @@ export interface IProgramAdministrationState {
   /**
    * Projects available to add to parent project
    */
-  availableProjects: SearchResult[]
+  availableProjects: Record<string, any>[]
 
   /**
    * Projects selected by user for deletion
    */
-  selectedProjectsToDelete: Array<Record<string, string>>
+  selectedProjectsToDelete: Record<string, any>[]
 
   /**
    * User has manage permission, meaning `ChildProjectsAdmin`

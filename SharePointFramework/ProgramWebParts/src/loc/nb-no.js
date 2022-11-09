@@ -1,5 +1,6 @@
 define([], function () {
     return {
+        CmdSelectionCountText: '{0} er merket',
         DataSourceCategoryDescription: 'Angi en datakildekategori for å kunne velge mellom flere datakilder i webdelen.',
         DataSourceDescription: 'Navnet på datakilden du vil bruke. Datakildene finner du i listen Datakilder på Portføljeområdet.',
         SearchPropertyDescription: 'Navnet på den forvaltede egenskapen for denne kolonnen.',

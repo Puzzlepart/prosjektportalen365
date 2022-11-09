@@ -12,15 +12,14 @@ import * as strings from 'ProgramWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import { addChildProject } from '../data'
-import { fields } from '../index'
-import styles from './AddProjectDialog.module.scss'
-import { ProjectTable } from '../ProjectTable'
+import { columns } from '../index'
 import { CHILD_PROJECTS_ADDED, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
+import styles from './AddProjectDialog.module.scss'
 import { useAddProjectDialog } from './useAddProjectDialog'
 
 export const AddProjectDialog: FC = () => {
   const context = useContext(ProgramAdministrationContext)
-  const { selectedProjects, setSelectedProjects, availableProjects } = useAddProjectDialog()
+  const { selectedProjects, availableProjects } = useAddProjectDialog()
 
   return (
     <>
@@ -38,31 +37,13 @@ export const AddProjectDialog: FC = () => {
           title: strings.ProgramAdministrationAddChildsButtonText
         }}>
         <div className={styles.dialogContent}>
-          {context.state.loading.AddProjectDialog ? (
-            <ShimmeredDetailsList
-              items={[]}
-              shimmerLines={15}
-              columns={[
-                {
-                  key: 'Title',
-                  name: 'Tittel',
-                  maxWidth: 250,
-                  minWidth: 100
-                }
-              ]}
-              enableShimmer
-            />
-          ) : (
-            <ProjectTable
-              height={550}
-              fields={fields({ renderAsLink: false })}
-              items={availableProjects}
-              selectionMode={SelectionMode.multiple}
-              onSelectionChanged={(selected) => {
-                setSelectedProjects(selected)
-              }}
-            />
-          )}
+          <ShimmeredDetailsList
+            items={availableProjects}
+            shimmerLines={15}
+            columns={columns({ renderAsLink: false })}
+            selectionMode={SelectionMode.multiple}
+            enableShimmer={context.state.loading.AddProjectDialog}
+          />
         </div>
         <DialogFooter>
           <PrimaryButton

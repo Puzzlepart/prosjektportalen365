@@ -1,4 +1,5 @@
 declare interface IProgramWebPartsStrings {
+  CmdSelectionCountText: string
   ProgramAdministrationInfoMessage: ReactNode
   EditColumnHeaderText: string
   DataSourceCategoryDescription: string
