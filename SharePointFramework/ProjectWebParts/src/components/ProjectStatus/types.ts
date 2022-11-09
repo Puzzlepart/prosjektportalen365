@@ -44,7 +44,7 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   /**
    * Persist list data
    */
-  persistListData?: Record<string, any>
+  persistedSectionData?: Record<string, any>
 }
 
 export interface IProjectStatusHashState {

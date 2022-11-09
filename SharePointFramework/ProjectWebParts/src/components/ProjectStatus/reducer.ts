@@ -23,11 +23,11 @@ export const initialState: IProjectStatusState = {
     sections: Array.apply(null, Array(6)).map(() => new SectionModel({ ContentTypeId: '' })),
     columnConfig: []
   },
-  persistListData: {}
+  persistedSectionData: {}
 }
 
 export default createReducer(initialState, {
-  [INIT_DATA.type]: (state, { payload }: ReturnType<typeof INIT_DATA>) => {
+  [INIT_DATA.type]: (state: IProjectStatusState, { payload }: ReturnType<typeof INIT_DATA>) => {
     let [selectedReport] = payload.data.reports
     const hashState = parseUrlHash<IProjectStatusHashState>()
     const selectedReportUrlParam = getUrlParam('selectedReport')
@@ -49,32 +49,44 @@ export default createReducer(initialState, {
     state.userHasAdminPermission = payload.data.userHasAdminPermission
     state.isDataLoaded = true
   },
-  [REPORT_PUBLISHING.type]: (state) => {
+  [REPORT_PUBLISHING.type]: (state: IProjectStatusState) => {
     state.isPublishing = true
   },
-  [REPORT_PUBLISHED.type]: (state, { payload }: ReturnType<typeof REPORT_PUBLISHED>) => {
+  [REPORT_PUBLISHED.type]: (
+    state: IProjectStatusState,
+    { payload }: ReturnType<typeof REPORT_PUBLISHED>
+  ) => {
     const reports = state.data.reports.map((r) => {
       return payload.updatedReport.id === r.id ? payload.updatedReport : r
     })
     state.data = { ...state.data, reports }
     state.selectedReport = payload.updatedReport
   },
-  [REPORT_DELETED.type]: (state) => {
+  [REPORT_DELETED.type]: (state: IProjectStatusState) => {
     const reports = state.data.reports.filter((r) => r.id !== state.selectedReport.id)
     state.data = { ...state.data, reports }
     state.selectedReport = _.first(reports)
     state.sourceUrl = decodeURIComponent(getUrlParam('Source') ?? '')
     state.mostRecentReportId = state.selectedReport?.id ?? 0
   },
-  [REPORT_DELETE_ERROR.type]: (state, { payload }: ReturnType<typeof REPORT_DELETE_ERROR>) => {
+  [REPORT_DELETE_ERROR.type]: (
+    state: IProjectStatusState,
+    { payload }: ReturnType<typeof REPORT_DELETE_ERROR>
+  ) => {
     state.error = payload.error
   },
-  [SELECT_REPORT.type]: (state, { payload }: ReturnType<typeof SELECT_REPORT>) => {
+  [SELECT_REPORT.type]: (
+    state: IProjectStatusState,
+    { payload }: ReturnType<typeof SELECT_REPORT>
+  ) => {
     state.selectedReport = payload.report
   },
-  [PERSIST_SECTION_DATA.type]: (state, { payload }: ReturnType<typeof PERSIST_SECTION_DATA>) => {
-    state.persistListData = {
-      ...state.persistListData,
+  [PERSIST_SECTION_DATA.type]: (
+    state: IProjectStatusState,
+    { payload }: ReturnType<typeof PERSIST_SECTION_DATA>
+  ) => {
+    state.persistedSectionData = {
+      ...state.persistedSectionData,
       [payload.section.id]: payload.data
     }
   }
