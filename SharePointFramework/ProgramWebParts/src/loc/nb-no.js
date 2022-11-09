@@ -1,5 +1,6 @@
 define([], function () {
     return {
+        CmdSelectionCountText: '{0} er merket',
         DataSourceCategoryDescription: 'Angi en datakildekategori for å kunne velge mellom flere datakilder i webdelen.',
         DataSourceDescription: 'Navnet på datakilden du vil bruke. Datakildene finner du i listen Datakilder på Portføljeområdet.',
         SearchPropertyDescription: 'Navnet på den forvaltede egenskapen for denne kolonnen.',
@@ -179,13 +180,8 @@ define([], function () {
         RiskDataSource: "Programrisiko",
         Add: "Legg til",
         Cancel: "Avbryt",
-        ProgramSearchProjectsText: "Søk i prosjekter",
-        Lists_StoredProjects_MaxLimitError: "Du har {0} områder i programmet. Det er satt en grense på {1}.",
-        Lists_StoredProjects_DoesNotExist: "Listen 'Programmets prosjekter' finnes ikke på området",
-        Lists_ProjectsTimeline_DoesNotExist: "Listen 'Prosjekttidslinje' finnes ikke på området",
-        ProgramPortfolio_LoadingText: "Laster programportefølje...",
-        ProgramPortfolio_SearchBoxLabelText: "Søk i programmets områder...",
-        ProgramPortfolio_ShowCountText: "Viser {0} av totalt {1} områder i programmet.",
+        AddProjectDialogSearchBoxPlaceholder: "Søk i prosjekter...",
+        ProgramAdministrationSearchBoxPlaceholder: "Søk i programmets områder...",
         Yes: "Ja",
         No: "Nei",
         PreviousPage: "Forrige side",

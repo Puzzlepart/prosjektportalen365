@@ -17,8 +17,6 @@ export function useRowRenderer({ selectedKeys, searchTerm }) {
   ) => {
     const contentConfig = detailsRowProps.item as ContentConfig
     const isMandatory = contentConfig.isMandatoryForTemplate(context.state.selectedTemplate)
-    // eslint-disable-next-line no-console
-    console.log(contentConfig, isMandatory)
     detailsRowProps.disabled = isMandatory
     if (isMandatory) {
       detailsRowProps.onRenderCheck = (props) => (

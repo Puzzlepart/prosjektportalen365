@@ -19,7 +19,14 @@ import { useContentConfigSection } from './useContentConfigSection'
  * @param props Props
  */
 export const ContentConfigSection: TemplateSelectDialogSectionComponent = (props) => {
-  const { selection, items, columns, onSearch, onRenderRow } = useContentConfigSection()
+  const {
+    selection,
+    selectedCount,
+    items,
+    columns,
+    onSearch,
+    onRenderRow
+  } = useContentConfigSection()
 
   return (
     <div className={styles.root} style={props.style}>
@@ -34,6 +41,7 @@ export const ContentConfigSection: TemplateSelectDialogSectionComponent = (props
             <ListHeaderSearch
               detailsHeaderProps={detailsHeaderProps}
               defaultRender={defaultRender}
+              selectedCount={selectedCount}
               search={{
                 placeholder: strings.ContentConfigSectionSearchPlaceholder,
                 onSearch,

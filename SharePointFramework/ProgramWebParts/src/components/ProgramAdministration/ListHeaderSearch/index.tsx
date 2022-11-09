@@ -6,7 +6,7 @@ import {
   StickyPositionType
 } from '@fluentui/react'
 import { format } from '@uifabric/utilities'
-import strings from 'ProjectExtensionsStrings'
+import strings from 'ProgramWebPartsStrings'
 import React, { FC } from 'react'
 import styles from './ListHeaderSearch.module.scss'
 import { IListHeaderSearchProps } from './types'
@@ -21,6 +21,7 @@ export const ListHeaderSearch: FC<IListHeaderSearchProps> = (props) => {
   return (
     <Sticky stickyPosition={StickyPositionType.Header}>
       <CommandBar
+        styles={{ root: { padding: 0 } }}
         items={[
           {
             key: 'cmdSearchBox',
