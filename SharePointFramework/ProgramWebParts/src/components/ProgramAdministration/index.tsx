@@ -1,20 +1,19 @@
-import { SelectionMode } from '@pnp/spfx-controls-react/lib/ListView'
-import { Link, MessageBar, ShimmeredDetailsList } from '@fluentui/react'
+import { MessageBar, SelectionMode, ShimmeredDetailsList } from '@fluentui/react'
+import { isEmpty } from '@microsoft/sp-lodash-subset'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FC } from 'react'
 import { AddProjectDialog } from './AddProjectDialog'
+import { columns } from './columns'
 import { Commands } from './Commands'
 import { ProgramAdministrationContext } from './context'
+import { ListHeaderSearch } from './ListHeaderSearch'
 import styles from './ProgramAdministration.module.scss'
-import { ProjectTable } from './ProjectTable'
-import { IListField } from './ProjectTable/types'
-import { SET_SELECTED_TO_DELETE } from './reducer'
-import { IProgramAdministrationProps, shimmeredColumns } from './types'
+import { TooltipHeader } from './TooltipHeader'
+import { IProgramAdministrationProps } from './types'
 import { useProgramAdministration } from './useProgramAdministration'
-import { isEmpty } from '@microsoft/sp-lodash-subset'
 
 export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) => {
-  const { state, dispatch } = useProgramAdministration(props)
+  const { state, dispatch, selection, onSearch, onRenderRow } = useProgramAdministration(props)
 
   if (state.error) {
     return (
@@ -27,31 +26,38 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
     )
   }
 
-  if (state.loading.root) {
-    return (
-      <ShimmeredDetailsList items={[]} shimmerLines={15} columns={shimmeredColumns} enableShimmer />
-    )
-  }
-
   return (
     <ProgramAdministrationContext.Provider value={{ props, state, dispatch }}>
       <Commands />
       <div className={styles.root}>
-        <div className={styles.header}>
-          <div className={styles.title}>{props.title}</div>
-        </div>
+        <TooltipHeader />
         <div>
-          {!isEmpty(state.childProjects) ? (
-            <ProjectTable
-              fields={fields(true)}
+          {!isEmpty(state.childProjects) || state.loading.root ? (
+            <ShimmeredDetailsList
+              setKey='ProgramAdministration'
+              enableShimmer={state.loading.root}
               items={state.childProjects}
+              columns={columns({ renderAsLink: true })}
+              selection={selection}
               selectionMode={
                 state.userHasManagePermission ? SelectionMode.multiple : SelectionMode.none
               }
-              onSelectionChanged={(selected) => dispatch(SET_SELECTED_TO_DELETE({ selected }))}
+              selectionPreservedOnEmptyClick={true}
+              onRenderRow={onRenderRow}
+              onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
+                <ListHeaderSearch
+                  detailsHeaderProps={detailsHeaderProps}
+                  defaultRender={defaultRender}
+                  selectedCount={state.selectedProjectsToDelete?.length ?? 0}
+                  search={{
+                    placeholder: strings.ProgramAdministrationSearchBoxPlaceholder,
+                    onSearch
+                  }}
+                />
+              )}
             />
           ) : (
-            <MessageBar>{strings.ProgramAdministration_EmptyMessage}</MessageBar>
+            <MessageBar>{strings.ProgramAdministrationEmptyMessage}</MessageBar>
           )}
         </div>
         {state.displayAddProjectDialog && <AddProjectDialog />}
@@ -59,19 +65,3 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
     </ProgramAdministrationContext.Provider>
   )
 }
-
-export const fields = (renderAsLink: boolean): IListField[] => [
-  {
-    key: 'Title',
-    text: 'Tittel',
-    fieldName: 'Title',
-    onRender: (item) =>
-      renderAsLink ? (
-        <Link href={item.SPWebURL} target='_blank' rel='noreferrer'>
-          {item.Title}
-        </Link>
-      ) : (
-        item.Title
-      )
-  }
-]

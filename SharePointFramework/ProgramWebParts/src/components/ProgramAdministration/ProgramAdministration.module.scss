@@ -1,23 +1,16 @@
-@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
 .root {
   height: 100vh;
   margin: 20px;
 
-  .header {
-    padding-bottom: 20px;
-
-    .title {
-      font-size: 28px;
-      font-weight: 100;
-      margin: 0;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
+  .searchBox {
+    width: 625px;
+    margin: 10px 0 0 0;
+    box-sizing: border-box;
   }
 
-  .dialogContent {
-    margin-top: 20px;
+  div[class*="ms-List-cell"] {
+    min-height: 0px;
   }
 }

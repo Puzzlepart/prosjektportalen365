@@ -1,7 +1,6 @@
+import { MessageBarType } from '@fluentui/react'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { SearchResult } from '@pnp/sp'
 import { SPDataAdapter } from 'data'
-import { IColumn, MessageBarType } from '@fluentui/react'
 
 export interface IProgramAdministrationProps {
   title: string
@@ -12,7 +11,7 @@ export interface IProgramAdministrationProps {
 
 export interface IProgramAdministrationState {
   /**
-   * Loading state
+   * Loading state for scopes `root` and `AddProjectDialog`
    */
   loading: {
     root: boolean
@@ -22,22 +21,27 @@ export interface IProgramAdministrationState {
   /**
    * Child projects
    */
-  childProjects: Array<Record<string, string>>
+  childProjects: Record<string, any>[]
 
   /**
-   * True if `AddProjectDialog` should be displayed to the user
+   * True if `<AddProjectDialog />` should be displayed to the user
    */
-  displayAddProjectDialog: boolean
+  displayAddProjectDialog?: boolean
 
   /**
    * Projects available to add to parent project
    */
-  availableProjects: SearchResult[]
+  availableProjects: Record<string, any>[]
+
+  /**
+   * Projects selected by user to add
+   */
+  selectedProjectsToAdd: Record<string, any>[]
 
   /**
    * Projects selected by user for deletion
    */
-  selectedProjectsToDelete: Array<Record<string, string>>
+  selectedProjectsToDelete: Record<string, any>[]
 
   /**
    * User has manage permission, meaning `ChildProjectsAdmin`
@@ -52,13 +56,3 @@ export interface IProgramAdministrationState {
     messageBarType: MessageBarType
   }
 }
-
-export const shimmeredColumns: IColumn[] = [
-  {
-    key: 'Title',
-    name: 'Tittel',
-    isResizable: true,
-    maxWidth: 250,
-    minWidth: 100
-  }
-]

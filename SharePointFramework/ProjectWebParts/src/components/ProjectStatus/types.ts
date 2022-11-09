@@ -40,6 +40,11 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
    * Current user has admin permissions
    */
   userHasAdminPermission?: boolean
+
+  /**
+   * Persist list data
+   */
+  persistedSectionData?: Record<string, any>
 }
 
 export interface IProjectStatusHashState {

@@ -16,14 +16,14 @@
         "default": "Other"
       },
       "title": {
-        "default": "Underområder - oversikt"
+        "default": "Oversikt over underområder"
       },
       "description": {
         "default": "Gir en listevisning av underprosjekter"
       },
       "officeFabricIconFontName": "Page",
       "properties": {
-        "title": "Underområder",
+        "title": "Oversikt over underområder",
         "showCommandBar": true,
         "showFilters": true,
         "showGroupBy": true,

@@ -1,4 +1,4 @@
-import { Spinner, ICommandBarItemProps, CommandBar } from '@fluentui/react'
+import { CommandBar, ICommandBarItemProps } from '@fluentui/react'
 import { isEmpty } from '@microsoft/sp-lodash-subset'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FC, useContext } from 'react'
@@ -8,25 +8,10 @@ import { CHILD_PROJECTS_REMOVED, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
 
 export const Commands: FC = () => {
   const context = useContext(ProgramAdministrationContext)
-  const getLoadingBar = () => {
-    const commandBarButtonAs = () => (
-      <div
-        style={{
-          width: '120px',
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-around'
-        }}>
-        <Spinner />
-      </div>
-    )
-    return context.state.loading.root ? commandBarButtonAs : null
-  }
-
-  const _items: ICommandBarItemProps[] = [
+  const items: ICommandBarItemProps[] = [
     {
       key: 'ProgramAddChilds',
-      text: strings.ProgramAddChildsButtonText,
+      text: strings.ProgramAdministrationAddChildsButtonText,
       iconProps: { iconName: 'Add' },
       buttonStyles: { root: { border: 'none' } },
       onClick: () => context.dispatch(TOGGLE_ADD_PROJECT_DIALOG()),
@@ -45,10 +30,9 @@ export const Commands: FC = () => {
             context.dispatch(CHILD_PROJECTS_REMOVED({ childProjects }))
           }
         )
-      },
-      commandBarButtonAs: getLoadingBar()
+      }
     }
   ]
 
-  return <CommandBar items={_items} style={{ backgroundColor: 'white', marginBottom: '5px' }} />
+  return <CommandBar items={items} style={{ backgroundColor: 'white', marginBottom: '5px' }} />
 }

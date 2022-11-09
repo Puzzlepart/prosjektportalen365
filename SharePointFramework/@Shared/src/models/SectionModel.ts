@@ -1,12 +1,13 @@
 export enum SectionType {
   SummarySection,
   StatusSection,
-  RiskSection,
+  UncertaintySection,
   ProjectPropertiesSection,
   ListSection
 }
 
 export class SectionModel {
+  public id: number
   public name: string
   public iconName: string
   public source: string
@@ -32,6 +33,7 @@ export class SectionModel {
    * @param _item Section item
    */
   constructor(private _item: any) {
+    this.id = _item.Id
     this.name = _item.Title
     this.iconName = _item.GtSecIcon
     this.source = _item.GtSecSource
@@ -59,7 +61,7 @@ export class SectionModel {
       return SectionType.ProjectPropertiesSection
     }
     if (this._item.ContentTypeId.indexOf('0x01004CEFE616A94A3A48A27D9DEBDF5EC82804') !== -1) {
-      return SectionType.RiskSection
+      return SectionType.UncertaintySection
     }
     if (this._item.ContentTypeId.indexOf('0x01004CEFE616A94A3A48A27D9DEBDF5EC82805') !== -1) {
       return SectionType.ListSection

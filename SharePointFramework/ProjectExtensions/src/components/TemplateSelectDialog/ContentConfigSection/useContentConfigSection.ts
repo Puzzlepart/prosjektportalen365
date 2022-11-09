@@ -17,5 +17,12 @@ export function useContentConfigSection() {
   const items = context.props.data.contentConfig.filter((contentConfig) => !contentConfig.hidden)
   const columns = useColumns()
   const onRenderRow = useRowRenderer({ selectedKeys, searchTerm })
-  return { selection, items, columns, onSearch, onRenderRow } as const
+  return {
+    selection,
+    selectedCount: selectedKeys.length,
+    items,
+    columns,
+    onSearch,
+    onRenderRow
+  } as const
 }

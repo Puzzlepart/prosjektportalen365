@@ -1,4 +1,5 @@
 declare interface IProjectExtensionsStrings {
+  CmdSelectionCountText: string
   ExtensionLockedTooltipText: string
   ContentConfigLockedTooltipText: string
   TemplateSelectorSearchClearText: string

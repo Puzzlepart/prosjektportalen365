@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    OverrideHeadersLabel: 'Overstyr overskrifter for {0}x{0}',
+    ProbabilityHeaderFieldLabel: 'Sannsynlighet {0}',
+    ConsequenceHeaderFieldLabel: 'Konsekvens {0}',
     ColorPickerStrings: {
       hex: '',
       red: 'Rød',

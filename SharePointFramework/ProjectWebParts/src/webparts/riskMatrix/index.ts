@@ -1,5 +1,8 @@
+import { format } from '@fluentui/react'
+import { get } from '@microsoft/sp-lodash-subset'
 import {
   IPropertyPaneConfiguration,
+  IPropertyPaneField,
   PropertyPaneDropdown,
   PropertyPaneSlider,
   PropertyPaneTextField,
@@ -63,6 +66,52 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
 
   protected onDispose(): void {
     ReactDom.unmountComponentAtNode(this.domElement)
+  }
+
+  protected get headerLabelFields(): IPropertyPaneField<any>[] {
+    const size = parseInt(this.properties.size ?? '5', 10)
+    const overrideHeaderLabels = PropertyPaneToggle(`overrideHeaderLabels.${size}`, {
+      label: format(strings.OverrideHeadersLabel, size)
+    })
+    if (!get(this.properties, `overrideHeaderLabels.${size}`, false)) {
+      return [overrideHeaderLabels]
+    }
+    const headerLabelFields: IPropertyPaneField<any>[] = []
+    const probabilityHeaders: string[] = [
+      strings.RiskMatrix_Header_VeryHigh,
+      strings.RiskMatrix_Header_High,
+      strings.RiskMatrix_Header_Medium,
+      strings.RiskMatrix_Header_Low,
+      strings.RiskMatrix_Header_VeryLow,
+      strings.RiskMatrix_Header_ExtremelyLow
+    ]
+    const consequenceHeaders: string[] = [
+      strings.RiskMatrix_Header_Insignificant,
+      strings.RiskMatrix_Header_Small,
+      strings.RiskMatrix_Header_Moderate,
+      strings.RiskMatrix_Header_Serious,
+      strings.RiskMatrix_Header_Critical,
+      strings.RiskMatrix_Header_VeryCritical
+    ]
+    for (let i = 0; i < size; i++) {
+      const probabilityHeaderFieldName = `headerLabels.${size}.p${i}`
+      headerLabelFields.push(
+        PropertyPaneTextField(probabilityHeaderFieldName, {
+          label: format(strings.ProbabilityHeaderFieldLabel, i + 1),
+          placeholder: probabilityHeaders[i]
+        })
+      )
+    }
+    for (let i = 0; i < size; i++) {
+      const consequenceHeaderFieldName = `headerLabels.${size}.c${i}`
+      headerLabelFields.push(
+        PropertyPaneTextField(consequenceHeaderFieldName, {
+          label: format(strings.ConsequenceHeaderFieldLabel, i + 1),
+          placeholder: consequenceHeaders[i]
+        })
+      )
+    }
+    return [overrideHeaderLabels, ...headerLabelFields]
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -143,7 +192,8 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                     { p: 90, r: 255, g: 0, b: 0 }
                   ],
                   value: this.properties.colorScaleConfig
-                })
+                }),
+                ...this.headerLabelFields
               ]
             }
           ]

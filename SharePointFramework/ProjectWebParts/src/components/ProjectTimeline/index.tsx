@@ -52,7 +52,7 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
 }
 
 ProjectTimeline.defaultProps = {
-  defaultTimeframeStart: '-4,months',
+  defaultTimeframeStart: '4,months',
   defaultTimeframeEnd: '4,months',
   defaultGroupBy: strings.TypeLabel,
   projectDeliveriesListName: 'Prosjektleveranser',

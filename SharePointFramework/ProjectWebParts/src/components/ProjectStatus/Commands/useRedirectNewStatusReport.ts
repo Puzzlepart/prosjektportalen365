@@ -1,6 +1,5 @@
 import { format } from '@fluentui/react'
 import { TypedHash } from '@pnp/common'
-import { Logger, LogLevel } from '@pnp/logging'
 import { PortalDataService } from 'pp365-shared/lib/services'
 import strings from 'ProjectWebPartsStrings'
 import { useContext } from 'react'
@@ -24,7 +23,11 @@ export function useRedirectNewStatusReport() {
     let properties: TypedHash<string | number | boolean> = {}
     if (lastReport) {
       properties = context.state.data.reportFields
-        .filter((field) => field.SchemaXml.indexOf('ReadOnly="TRUE"') === -1)
+        .filter(
+          (field) =>
+            field.SchemaXml.indexOf('ReadOnly="TRUE"') === -1 &&
+            !['GtSectionDataJson'].includes(field.InternalName)
+        )
         .reduce((obj, field) => {
           const fieldValue = lastReport.values[field.InternalName]
           if (fieldValue) obj[field.InternalName] = fieldValue
@@ -34,11 +37,6 @@ export function useRedirectNewStatusReport() {
     properties.Title = format(strings.NewStatusReportTitle, context.props.webTitle)
     properties.GtSiteId = context.props.siteId
     properties.GtModerationStatus = strings.GtModerationStatus_Choice_Draft
-    Logger.log({
-      message: '(ProjectStatus) _redirectNewStatusReport: Created new status report',
-      data: { fieldValues: properties },
-      level: LogLevel.Info
-    })
     const report = await portalDataService.addStatusReport(
       properties,
       context.state.data.properties.templateParameters?.ProjectStatusContentTypeId

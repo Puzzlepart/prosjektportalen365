@@ -1,4 +1,4 @@
-<pnp:ContentType ID="0x010022252E35737A413FB56A1BA53862F6D5" Name="{resource:ContentTypes_ProjectStatus_Name}" Description="{resource:ContentTypes_ProjectStatus_Description}" Group="{resource:ContentTypes_Group}" 
+<pnp:ContentType ID="0x010022252E35737A413FB56A1BA53862F6D5" Name="{resource:ContentTypes_ProjectStatus_Name}" Description="{resource:ContentTypes_ProjectStatus_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" UpdateChildren="true" />
@@ -15,10 +15,13 @@
         <pnp:FieldRef ID="733a47e1-4465-41c0-89e3-037f9a65c403" Name="GtStatusQualityComment" UpdateChildren="true" />
         <pnp:FieldRef ID="fc8a879d-83bc-4670-b1f6-c9817e333614" Name="GtStatusRisk" Required="true" UpdateChildren="true" />
         <pnp:FieldRef ID="b5932b1d-bee4-410c-aac2-54a7cd9d5381" Name="GtStatusRiskComment" UpdateChildren="true" />
+        <pnp:FieldRef ID="09e5a74f-7ec9-467e-9474-f6870c933143" Name="GtStatusOpportunities" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="ce6c7ed6-39cf-46a1-b238-a1ad51ad8aca" Name="GtStatusOpportunitiesComment" UpdateChildren="true" />
         <pnp:FieldRef ID="b1958607-cd56-4ecb-9ad7-65fb7d3c22c7" Name="GtStatusGainAchievement" Required="true" UpdateChildren="true" />
         <pnp:FieldRef ID="cb41572a-78c6-4e33-8505-b97bfd8fd162" Name="GtStatusGainAchievementComment" UpdateChildren="true" />
         <pnp:FieldRef ID="9a81b4e1-64ea-40c2-9be1-946f20e78999" Name="GtModerationStatus" UpdateChildren="true" />
         <pnp:FieldRef ID="fba7ced6-9970-4b14-ab9c-7c809310d86d" Name="GtSiteId" UpdateChildren="true" />
-        <pnp:FieldRef ID="B3004225-79DE-42CC-A4B7-80968A9AFC58" Name="GtLastReportDate"/>
+        <pnp:FieldRef ID="B3004225-79DE-42CC-A4B7-80968A9AFC58" Name="GtLastReportDate" UpdateChildren="true" />
+        <pnp:FieldRef ID="8ccb7ac0-5cc7-48c5-9e80-d1b5bd09f724" Name="GtSectionDataJson" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

@@ -1,5 +1,6 @@
 define([], function () {
     return {
+        CmdSelectionCountText: '{0} er merket',
         ExtensionLockedTooltipText: 'Prosjekttilegget er låst og kan ikke velges bort.',
         ContentConfigLockedTooltipText: 'Standardinnhold-elementet er låst og kan ikke velges bort.',
         TemplateSelectorSearchClearText: 'Nullstill valg av prosjektmal',

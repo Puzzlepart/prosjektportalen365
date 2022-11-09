@@ -436,10 +436,10 @@
   <data name="ContentTypes_ResourceAllocation_Description" xml:space="preserve">
     <value></value>
   </data>
-  <data name="ContentTypes_RiskSection_Name" xml:space="preserve">
-    <value>Risikoseksjon</value>
+  <data name="ContentTypes_UncertaintySection_Name" xml:space="preserve">
+    <value>Usikkerhetseksjon</value>
   </data>
-  <data name="ContentTypes_RiskSection_Description" xml:space="preserve">
+  <data name="ContentTypes_UncertaintySection_Description" xml:space="preserve">
     <value></value>
   </data>
   <data name="ContentTypes_ProjectPropertiesSection_Name" xml:space="preserve">
@@ -568,6 +568,9 @@
   <data name="SiteFields_GtStatusRiskComment_DisplayName" xml:space="preserve">
     <value>Kommentar, risiko</value>
   </data>
+  <data name="SiteFields_GtStatusOpportunitiesComment_DisplayName" xml:space="preserve">
+    <value>Kommentar, muligheter</value>
+  </data>
   <data name="SiteFields_GtArchiveReference_DisplayName" xml:space="preserve">
     <value>Sak-/arkivreferanse</value>
   </data>
@@ -615,6 +618,9 @@
   </data>
   <data name="SiteFields_GtStatusRisk_DisplayName" xml:space="preserve">
     <value>Status risiko</value>
+  </data>
+  <data name="SiteFields_GtStatusOpportunities_DisplayName" xml:space="preserve">
+    <value>Status muligheter</value>
   </data>
   <data name="SiteFields_GtStatusGainAchievement_DisplayName" xml:space="preserve">
     <value>Status gevinstoppnåelse</value>
@@ -1403,7 +1409,10 @@
     <value>Oppsummert kort hva som er oppnådd i prosjektet i siste periode, hva som er planlagt for neste periode og aktuelle utfordringer</value>
   </data>
   <data name="SiteFields_GtStatusRiskComment_Description" xml:space="preserve">
-    <value>Oppsummer kort det totale risikobildet for prosjektet og hvilke tiltak prosjektet planlegger for neste periode. </value>
+    <value>Oppsummer kort det totale risikobildet for prosjektet og hvilke tiltak prosjektet planlegger for neste periode.</value>
+  </data>
+  <data name="SiteFields_GtStatusOpportunitiesComment_Description" xml:space="preserve">
+    <value></value>
   </data>
   <data name="SiteFields_GtArchiveReference_Description" xml:space="preserve">
     <value>Hvis relevant, legg inn tilhørende sak- og arkivreferanse</value>
@@ -1443,6 +1452,9 @@
   </data>
   <data name="SiteFields_GtStatusRisk_Description" xml:space="preserve">
     <value>Hva er status på prosjektets risikobilde?</value>
+  </data>
+  <data name="SiteFields_GtStatusOpportunities_Description" xml:space="preserve">
+    <value>Hva er status på prosjektets muligheter?</value>
   </data>
   <data name="SiteFields_GtStatusGainAchievement_Description" xml:space="preserve">
     <value>Hva er status på prosjektets gevinstoppnåelse?</value>
@@ -2203,6 +2215,15 @@
   <data name="Choice_GtStatusRisk_High" xml:space="preserve">
     <value>Høy</value>
   </data>
+  <data name="Choice_GtStatusOpportunities_Low" xml:space="preserve">
+    <value>Lav</value>
+  </data>
+  <data name="Choice_GtStatusOpportunities_Medium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="Choice_GtStatusOpportunities_High" xml:space="preserve">
+    <value>Høy</value>
+  </data>
   <data name="Choice_GtStatusGainAchievement_NotStarted" xml:space="preserve">
     <value>Ikke påbegynt</value>
   </data>
@@ -2451,5 +2472,26 @@
   </data>
   <data name="ProjectAdminPermissions_ChildProjectsAdmin" xml:space="preserve">
     <value>Administrering av underområder</value>
+  </data>
+  <data name="SiteFields_InstallStartTime_DisplayName" xml:space="preserve">
+    <value>Starttid</value>
+  </data>
+  <data name="SiteFields_InstallEndTime_DisplayName" xml:space="preserve">
+    <value>Slutttid</value>
+  </data>
+  <data name="SiteFields_InstallVersion_DisplayName" xml:space="preserve">
+    <value>Versjon</value>
+  </data>
+  <data name="SiteFields_InstallCommand_DisplayName" xml:space="preserve">
+    <value>Kommando</value>
+  </data>
+  <data name="SiteFields_InstallUser_DisplayName" xml:space="preserve">
+    <value>Installasjonsbruker</value>
+  </data>
+  <data name="SiteFields_GtSectionDataJson_DisplayName" xml:space="preserve">
+    <value>Seksjonsdata</value>
+  </data>
+  <data name="SiteFields_GtSectionDataJson_Description" xml:space="preserve">
+    <value></value>
   </data>
 </root>

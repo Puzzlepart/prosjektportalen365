@@ -1,4 +1,4 @@
-<pnp:ContentType ID="0x0100618197F7C782A0459EB2FA5EBF1BDDF203" Name="{resource:ContentTypes_ProjectAdminRoleSiteAdmin_Name}" Description="{resource:ContentTypes_ProjectAdminRoleSiteAdmin_Description}" Group="{resource:ContentTypes_Group}" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+<pnp:ContentType ID="0x0100618197F7C782A0459EB2FA5EBF1BDDF203" Name="{resource:ContentTypes_ProjectAdminRoleSiteAdmin_Name}" Description="{resource:ContentTypes_ProjectAdminRoleSiteAdmin_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
         <pnp:FieldRef ID="90469fa1-c494-418d-8436-1de37b787644" Name="GtProjectAdminPermissions" Required="true" UpdateChildren="true" />
