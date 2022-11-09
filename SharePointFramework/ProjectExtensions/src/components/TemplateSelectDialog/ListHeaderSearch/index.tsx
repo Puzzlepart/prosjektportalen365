@@ -1,4 +1,4 @@
-import { SearchBox, SelectAllVisibility, Sticky, StickyPositionType } from '@fluentui/react'
+import { CommandBar, SearchBox, SelectAllVisibility, Sticky, StickyPositionType } from '@fluentui/react'
 import React, { FC } from 'react'
 import styles from './ListHeaderSearch.module.scss'
 import { IListHeaderSearchProps } from './types'
@@ -11,13 +11,22 @@ import { IListHeaderSearchProps } from './types'
 export const ListHeaderSearch: FC<IListHeaderSearchProps> = (props) => {
   return (
     <Sticky stickyPosition={StickyPositionType.Header}>
-      <div className={styles.searchBox} hidden={props.search?.hidden}>
-        <SearchBox
-          placeholder={props.search?.placeholder}
-          onChange={(_, newValue) => props.search?.onSearch(newValue)}
-          onSearch={(newValue) => props.search?.onSearch(newValue)}
-        />
-      </div>
+      <CommandBar
+        items={[
+          {
+            key: 'searchBox',
+            onRender: () => (
+              <div className={styles.searchBox} hidden={props.search?.hidden}>
+                <SearchBox
+                  placeholder={props.search?.placeholder}
+                  onChange={(_, newValue) => props.search?.onSearch(newValue)}
+                  onSearch={(newValue) => props.search?.onSearch(newValue)}
+                />
+              </div>
+            )
+          }
+        ]}
+      />
       {props.defaultRender({
         ...props.detailsHeaderProps,
         selectAllVisibility: props.selectAllVisibility
@@ -31,7 +40,7 @@ ListHeaderSearch.defaultProps = {
     hidden: true,
     placeholder: '',
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    onSearch: () => {}
+    onSearch: () => { }
   },
   selectAllVisibility: SelectAllVisibility.hidden
 }
