@@ -21,7 +21,7 @@ export const ListHeaderSearch: FC<IListHeaderSearchProps> = (props) => {
   return (
     <Sticky stickyPosition={StickyPositionType.Header}>
       <CommandBar
-        styles={props.noPadding && { root: { padding: 0 } }}
+        styles={{ root: { padding: 0 } }}
         items={[
           {
             key: 'cmdSearchBox',

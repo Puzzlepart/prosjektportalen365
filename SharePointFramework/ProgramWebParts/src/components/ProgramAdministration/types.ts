@@ -11,7 +11,7 @@ export interface IProgramAdministrationProps {
 
 export interface IProgramAdministrationState {
   /**
-   * Loading state
+   * Loading state for scopes `root` and `AddProjectDialog`
    */
   loading: {
     root: boolean

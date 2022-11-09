@@ -53,7 +53,6 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
                     placeholder: strings.ProgramAdministrationSearchBoxPlaceholder,
                     onSearch
                   }}
-                  noPadding
                 />
               )}
             />

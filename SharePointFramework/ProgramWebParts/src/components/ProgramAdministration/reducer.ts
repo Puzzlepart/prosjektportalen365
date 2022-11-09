@@ -43,10 +43,10 @@ export default createReducer(initialState, {
     { payload }: ReturnType<typeof DATA_LOADED>
   ) => {
     state.childProjects = payload.data.childProjects
-      ? appendKey(payload.data.childProjects, 'SiteId').sort((a, b) => a.Title - b.Title)
+      ? appendKey(payload.data.childProjects, 'SiteId')
       : state.childProjects
     state.availableProjects = payload.data.availableProjects
-      ? appendKey(payload.data.availableProjects, 'SiteId').sort((a, b) => a.Title - b.Title)
+      ? appendKey(payload.data.availableProjects, 'SiteId')
       : state.availableProjects
     state.userHasManagePermission =
       payload.data.userHasManagePermission ?? state.userHasManagePermission
