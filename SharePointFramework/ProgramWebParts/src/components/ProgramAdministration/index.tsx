@@ -1,19 +1,12 @@
-import {
-  CommandBar,
-  format,
-  IColumn,
-  Link,
-  MessageBar,
-  SearchBox,
-  SelectionMode,
-  ShimmeredDetailsList
-} from '@fluentui/react'
+import { MessageBar, SelectionMode, ShimmeredDetailsList } from '@fluentui/react'
 import { isEmpty } from '@microsoft/sp-lodash-subset'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FC } from 'react'
 import { AddProjectDialog } from './AddProjectDialog'
+import { columns } from './columns'
 import { Commands } from './Commands'
 import { ProgramAdministrationContext } from './context'
+import { ListHeaderSearch } from './ListHeaderSearch'
 import styles from './ProgramAdministration.module.scss'
 import { TooltipHeader } from './TooltipHeader'
 import { IProgramAdministrationProps } from './types'
@@ -39,31 +32,6 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
       <div className={styles.root}>
         <TooltipHeader />
         <div>
-          <CommandBar
-            items={[
-              {
-                key: 'cmdSearchBox',
-                onRender: () => (
-                  <div className={styles.searchBox}>
-                    <SearchBox
-                      placeholder={'Søk i underområder...'}
-                      onSearch={onSearch}
-                      onChange={(_, newValue) => onSearch(newValue)}
-                    />
-                  </div>
-                )
-              }
-            ]}
-            farItems={[
-              {
-                key: 'cmdSelectionCount',
-                text: format(
-                  strings.CmdSelectionCountText,
-                  state.selectedProjectsToDelete?.length ?? 0
-                )
-              }
-            ]}
-          />
           {!isEmpty(state.childProjects) || state.loading.root ? (
             <ShimmeredDetailsList
               enableShimmer={state.loading.root}
@@ -73,7 +41,19 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
               selectionMode={
                 state.userHasManagePermission ? SelectionMode.multiple : SelectionMode.none
               }
+              selectionPreservedOnEmptyClick={true}
               onRenderRow={onRenderRow}
+              onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
+                <ListHeaderSearch
+                  detailsHeaderProps={detailsHeaderProps}
+                  defaultRender={defaultRender}
+                  selectedCount={state.selectedProjectsToDelete?.length ?? 0}
+                  search={{
+                    placeholder: 'Søk i prosjekter...',
+                    onSearch
+                  }}
+                />
+              )}
             />
           ) : (
             <MessageBar>{strings.ProgramAdministrationEmptyMessage}</MessageBar>
@@ -84,20 +64,3 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
     </ProgramAdministrationContext.Provider>
   )
 }
-
-export const columns = ({ renderAsLink = false }): IColumn[] => [
-  {
-    key: 'Title',
-    fieldName: 'Title',
-    name: 'Tittel',
-    onRender: (item) =>
-      renderAsLink ? (
-        <Link href={item.SPWebURL} target='_blank' rel='noreferrer'>
-          {item.Title}
-        </Link>
-      ) : (
-        item.Title
-      ),
-    minWidth: 100
-  }
-]

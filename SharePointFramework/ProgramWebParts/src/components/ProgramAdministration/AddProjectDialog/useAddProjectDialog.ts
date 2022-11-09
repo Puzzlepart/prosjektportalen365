@@ -2,10 +2,15 @@ import { useContext, useEffect, useState } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import { getHubSiteProjects } from '../data'
 import { DATA_LOADED } from '../reducer'
+import { useSelectionList } from '../useSelectionList'
 
 export const useAddProjectDialog = () => {
   const context = useContext(ProgramAdministrationContext)
   const [selectedProjects, setSelectedProjects] = useState<any[]>([])
+
+  const { selection, onSearch, searchTerm } = useSelectionList([], (selected) => {
+    setSelectedProjects(selected)
+  })
 
   useEffect(() => {
     getHubSiteProjects()
@@ -27,5 +32,12 @@ export const useAddProjectDialog = () => {
     )
     .filter((project) => project['SPWebURL'])
 
-  return { selectedProjects, setSelectedProjects, availableProjects } as const
+  return {
+    selectedProjects,
+    setSelectedProjects,
+    availableProjects,
+    selection,
+    onSearch,
+    searchTerm
+  } as const
 }

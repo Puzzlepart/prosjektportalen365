@@ -1,3 +1,4 @@
+import { IObjectWithKey } from '@fluentui/react'
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import { IProgramAdministrationState } from './types'
 
@@ -18,7 +19,7 @@ export const initialState: IProgramAdministrationState = {
   },
   childProjects: [],
   availableProjects: [],
-  displayAddProjectDialog: false,
+  displayAddProjectDialog: true,
   selectedProjectsToDelete: [],
   error: null
 }
@@ -29,7 +30,7 @@ export const initialState: IProgramAdministrationState = {
  * @param items Items
  * @param keyProperty Key property
  */
-function appendKey(items: any[], keyProperty: string) {
+function appendKey(items: any[], keyProperty: string): IObjectWithKey[] {
   return items.map((i) => ({
     key: i[keyProperty],
     ...i
