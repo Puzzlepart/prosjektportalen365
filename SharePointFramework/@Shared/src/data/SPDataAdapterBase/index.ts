@@ -136,9 +136,13 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
               case ProjectAdminRoleType.ProjectProperty:
                 {
                   const projectFieldValue = properties[role.projectFieldName]
-                  if (_.isArray(projectFieldValue) && projectFieldValue.indexOf(currentUser.Id) !== -1)
+                  if (
+                    _.isArray(projectFieldValue) &&
+                    projectFieldValue.indexOf(currentUser.Id) !== -1
+                  )
                     userPermissions.push(...role.permissions)
-                  if (projectFieldValue === currentUser?.Id) userPermissions.push(...role.permissions)
+                  if (projectFieldValue === currentUser?.Id)
+                    userPermissions.push(...role.permissions)
                 }
                 break
               case ProjectAdminRoleType.SharePointGroup:
@@ -162,7 +166,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                       ).length > 0
                     )
                       userPermissions.push(...role.permissions)
-                  } catch { }
+                  } catch {}
                 }
                 break
             }
