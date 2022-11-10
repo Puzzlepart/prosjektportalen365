@@ -1,8 +1,8 @@
-name: CI (dev)
+name: CI (issues/756)
 
 on:
   push:
-    branches: [dev]
+    branches: [issues/756]
     paths:
       - "SharePointFramework/**"
       - "Install/**"
@@ -55,34 +55,4 @@ jobs:
 
       - name: Upgrade
         run: release/Install.ps1 -Url ${{ env.SP_URL }} -Upgrade -CI ${{ env.CI_CREDENTIALS }}
-        shell: powershell
-
-  install:
-    needs: [build_release_package, upgrade]
-    name: Install
-    runs-on: macos-latest
-    if: "!contains(github.event.head_commit.message, '[skip-install]')"
-    steps:
-      - uses: actions/download-artifact@v3
-        with:
-          name: release-package
-          path: release
-
-      - name: Install
-        run: release/Install.ps1 -Url "${{ env.SP_URL }}_${{ needs.build_release_package.outputs.sha_short }}" -Title "Prosjektportalen 365 ${{ needs.build_release_package.outputs.sha_short }}" -CI ${{ env.CI_CREDENTIALS }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
-        shell: powershell
-
-  upgrade_all_sites_to_latest:
-    needs: [build_release_package, upgrade]
-    name: Upgrade all sites to latest
-    runs-on: macos-latest
-    if: "contains(github.event.head_commit.message, '[upgrade-all-sites-to-latest]')"
-    steps:
-      - uses: actions/download-artifact@v3
-        with:
-          name: release-package
-          path: release
-
-      - name: Run script UpgradeAllSitesToLatest.ps1 in CI mode
-        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ env.SP_URL }} -CI ${{ env.CI_CREDENTIALS }}
         shell: powershell
