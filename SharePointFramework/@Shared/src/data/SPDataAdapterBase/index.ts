@@ -106,72 +106,76 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
     properties: Record<string, any>,
     expireMinutes = 10
   ) {
-    const { pageContext } = this.spfxContext
-    if (!pageContext) return false
-    const storageKey = this.getStorageKey('getProjectAdminPermissions')
-    const storageExpire = dateAdd(new Date(), 'minute', expireMinutes)
-    const permissions = await new PnPClientStorage().session.getOrPut(
-      storageKey,
-      async () => {
-        const userPermissions = []
-        const rolesToCheck = properties.GtProjectAdminRoles
-        if (!_.isArray(rolesToCheck) || _.isEmpty(rolesToCheck)) {
-          if (pageContext.legacyPageContext.isSiteAdmin === true) return true
-          else return false
-        }
-        const currentUser = await this.getCurrentUser(pageContext.user)
-        const projectAdminRoles = (await this.portal.getProjectAdminRoles()).filter(
-          (role) => rolesToCheck.indexOf(role.title) !== -1
-        )
-        for (let i = 0; i < projectAdminRoles.length; i++) {
-          const role = projectAdminRoles[i]
-          switch (role.type) {
-            case ProjectAdminRoleType.SiteAdmin:
-              {
-                if (pageContext.legacyPageContext.isSiteAdmin === true)
-                  userPermissions.push(...role.permissions)
-              }
-              break
-            case ProjectAdminRoleType.ProjectProperty:
-              {
-                const projectFieldValue = properties[role.projectFieldName]
-                if (_.isArray(projectFieldValue) && projectFieldValue.indexOf(currentUser.Id) !== -1)
-                  userPermissions.push(...role.permissions)
-                if (projectFieldValue === currentUser?.Id) userPermissions.push(...role.permissions)
-              }
-              break
-            case ProjectAdminRoleType.SharePointGroup:
-              {
-                let web: Web = null
-                switch (role.groupLevel) {
-                  case 'Prosjekt':
-                    web = sp.web
-                    break
-                  case 'Portefølje':
-                    web = this.portal.web
-                    break
-                }
-                try {
-                  if (
-                    (
-                      await web.siteGroups
-                        .getByName(role.groupName)
-                        .users.filter(`Email eq '${currentUser.Email}'`)
-                        .get()
-                    ).length > 0
-                  )
-                    userPermissions.push(...role.permissions)
-                } catch {}
-              }
-              break
+    try {
+      const { pageContext } = this.spfxContext
+      if (!pageContext) return false
+      const storageKey = this.getStorageKey('getProjectAdminPermissions')
+      const storageExpire = dateAdd(new Date(), 'minute', expireMinutes)
+      const permissions = await new PnPClientStorage().session.getOrPut(
+        storageKey,
+        async () => {
+          const userPermissions = []
+          const rolesToCheck = properties.GtProjectAdminRoles
+          if (!_.isArray(rolesToCheck) || _.isEmpty(rolesToCheck)) {
+            if (pageContext.legacyPageContext.isSiteAdmin === true) return true
+            else return false
           }
-        }
-        return _.unique(userPermissions, (p) => p)
-      },
-      storageExpire
-    )
-    if (typeof permissions === 'boolean') return permissions
-    else return _.contains(permissions, permission.toString())
+          const currentUser = await this.getCurrentUser(pageContext.user)
+          const projectAdminRoles = (await this.portal.getProjectAdminRoles()).filter(
+            (role) => rolesToCheck.indexOf(role.title) !== -1
+          )
+          for (let i = 0; i < projectAdminRoles.length; i++) {
+            const role = projectAdminRoles[i]
+            switch (role.type) {
+              case ProjectAdminRoleType.SiteAdmin:
+                {
+                  if (pageContext.legacyPageContext.isSiteAdmin === true)
+                    userPermissions.push(...role.permissions)
+                }
+                break
+              case ProjectAdminRoleType.ProjectProperty:
+                {
+                  const projectFieldValue = properties[role.projectFieldName]
+                  if (_.isArray(projectFieldValue) && projectFieldValue.indexOf(currentUser.Id) !== -1)
+                    userPermissions.push(...role.permissions)
+                  if (projectFieldValue === currentUser?.Id) userPermissions.push(...role.permissions)
+                }
+                break
+              case ProjectAdminRoleType.SharePointGroup:
+                {
+                  let web: Web = null
+                  switch (role.groupLevel) {
+                    case 'Prosjekt':
+                      web = sp.web
+                      break
+                    case 'Portefølje':
+                      web = this.portal.web
+                      break
+                  }
+                  try {
+                    if (
+                      (
+                        await web.siteGroups
+                          .getByName(role.groupName)
+                          .users.filter(`Email eq '${currentUser.Email}'`)
+                          .get()
+                      ).length > 0
+                    )
+                      userPermissions.push(...role.permissions)
+                  } catch { }
+                }
+                break
+            }
+          }
+          return _.unique(userPermissions, (p) => p)
+        },
+        storageExpire
+      )
+      if (typeof permissions === 'boolean') return permissions
+      else return _.contains(permissions, permission.toString())
+    } catch {
+      return false
+    }
   }
 }
 
