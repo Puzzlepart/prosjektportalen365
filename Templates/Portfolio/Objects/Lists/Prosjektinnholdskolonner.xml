@@ -21,7 +21,6 @@
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
             <Aggregations Value="Off" />
-            <JSLink>hierarchytaskslist.js</JSLink>
         </View>
     </pnp:Views>
     <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Overwrite">
