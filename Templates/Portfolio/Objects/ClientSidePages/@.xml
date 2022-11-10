@@ -6,7 +6,7 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Portefoljeinnsikt.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Portefoljeoversikt.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Ressursallokering.xml" />
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Risikooversikt.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Usikkerhetsoversikt.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Konfigurasjon.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/Prosjekttidslinje.xml" />
 </pnp:ClientSidePages>
