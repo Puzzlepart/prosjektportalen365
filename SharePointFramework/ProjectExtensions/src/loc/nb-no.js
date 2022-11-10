@@ -74,7 +74,7 @@ define([], function () {
         TitleLabel: 'Tittel',
         ProgressDialogSubText: 'Vennligst vent. Ikke lukk nettleservinduet - da vil ikke prosjektområdet bli riktig satt opp.',
         DocumentTemplateDialogScreenSelectInfoText: 'Velg dokumentmalene du vil kopiere til prosjektområdet.<br /><br />Malene hentes fra <a href="{0}" target="_blank">{1}</a> og det hentes **siste versjon** av malene.<br /><br />Når du trykker **Velg** sendes du videre til et skjermbilde hvor du velger destinasjonen du ønsker å kopiere til.',
-        DocumentTemplateDialogScreenEditCopyInfoText: 'Her kan du sette **Filnavn** og **Tittel** for dokumentene som kopieres over.<br /><br />Når du er ferdig, trykk **Start kopering** for å starte kopieringen.',
+        DocumentTemplateDialogScreenEditCopyInfoText: 'Her kan du sette **Filnavn** og **Tittel** for dokumentene som kopieres over.<br /><br />Når du er ferdig, trykk **Start kopiering** for å starte kopieringen.',
         FilenameAlreadyInUseErrorText: 'Filnavnet er allerede i bruk.',
         FilenameInValidErrorText: 'Filnavnet er ugyldig.',
         SyncLocalProjectPropertiesListText: 'Synkroniserer liste for prosjektegenskaper',
