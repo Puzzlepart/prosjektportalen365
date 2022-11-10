@@ -2,11 +2,13 @@ name: CI (dev)
 
 on:
   push:
-    branches: [dev]
+    branches: 
+      - issues/756
     paths:
       - "SharePointFramework/**"
       - "Install/**"
       - "Templates/**"
+      - .github/workflows/ci-dev.yml
 
 env:
   SP_URL: "https://puzzlepart.sharepoint.com/sites/pp365"
