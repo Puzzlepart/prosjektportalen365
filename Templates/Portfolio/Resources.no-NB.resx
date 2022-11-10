@@ -2449,11 +2449,11 @@
   <data name="ClientSidePages_ResourceAllocation_Title" xml:space="preserve">
     <value>Ressursallokering</value>
   </data>
-  <data name="ClientSidePages_RiskOverview_PageName" xml:space="preserve">
-    <value>Risikooversikt.aspx</value>
+  <data name="ClientSidePages_UncertaintyOverview_PageName" xml:space="preserve">
+    <value>Usikkerhetsoversikt.aspx</value>
   </data>
-  <data name="ClientSidePages_RiskOverview_Title" xml:space="preserve">
-    <value>Risikooversikt</value>
+  <data name="ClientSidePages_UncertaintyOverview_Title" xml:space="preserve">
+    <value>Usikkerhetsoversikt</value>
   </data>
   <data name="ClientSidePages_ProjectTimeline_PageName" xml:space="preserve">
     <value>Prosjekttidslinje.aspx</value>
