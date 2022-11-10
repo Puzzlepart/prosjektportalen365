@@ -1205,7 +1205,7 @@
     <value>Vis i portefølje</value>
   </data>
   <data name="SiteFields_GtShowInPortfolio_Description" xml:space="preserve">
-    <value>Velg 'Ja' dersom usikkerheten skal synliggjøes i den sentrale risikooversikten på porteføljenivå (gjør risikoen synlig for alle med tilgang til prosjektporalen og prosjektet)</value>
+    <value>Velg 'Ja' dersom usikkerheten skal synliggjøes i den sentrale usikkerhetsoversikten på porteføljenivå (gjør risikoen synlig for alle med tilgang til prosjektporalen og prosjektet)</value>
   </data>
   <data name="SiteFields_GtStakeholderActions_DisplayName" xml:space="preserve">
     <value>Tiltak</value>
