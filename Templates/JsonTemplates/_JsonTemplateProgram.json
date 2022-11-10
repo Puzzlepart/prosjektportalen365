@@ -64,6 +64,10 @@
                 {
                     "ID": "6c2da0dc-77b1-4152-b751-97adf436faa0",
                     "Name": "GtRiskStatus"
+                },
+                {
+                    "ID": "6bd17911-c48a-4900-be61-54ae26207d78",
+                    "Name": "GtShowInPortfolio"
                 }
             ]
         },
@@ -71,25 +75,13 @@
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89701",
             "Name": "{{ContentTypes_Risk_Name}}",
             "Description": "",
-            "Group": "{{ContentTypes_Group}}",
-            "FieldRefs": [
-                {
-                    "ID": "6bd17911-c48a-4900-be61-54ae26207d78",
-                    "Name": "GtShowInPortfolio"
-                }
-            ]
+            "Group": "{{ContentTypes_Group}}"
         },
         {
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89702",
             "Name": "{{ContentTypes_Possibility_Name}}",
             "Description": "",
-            "Group": "{{ContentTypes_Group}}",
-            "FieldRefs": [
-                {
-                    "ID": "6bd17911-c48a-4900-be61-54ae26207d78",
-                    "Name": "GtShowInPortfolio"
-                }
-            ]
+            "Group": "{{ContentTypes_Group}}"
         },
         {
             "ID": "0x010072C95831F8434782AB2FF6BE3E596F46",
