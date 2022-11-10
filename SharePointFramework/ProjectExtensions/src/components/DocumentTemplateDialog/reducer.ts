@@ -11,14 +11,14 @@ export const COPY_DONE = createAction<{ files: FileAddResult[] }>('COPY_DONE')
 export const SET_SCREEN = createAction<{ screen: DocumentTemplateDialogScreen }>('SET_SCREEN')
 export const SET_TARGET = createAction<{ folder: string }>('SET_TARGET')
 
-export const initState = (): IDocumentTemplateDialogState => ({
+export const initialState: IDocumentTemplateDialogState = {
   targetFolder: '',
   screen: DocumentTemplateDialogScreen.Select,
   selected: [],
   uploaded: []
-})
+}
 
-export default createReducer(initState(), {
+export default createReducer(initialState, {
   [SELECTION_CHANGED.type]: (state, { payload }: ReturnType<typeof SELECTION_CHANGED>) => {
     state.selected = (payload.selection.getSelection() as TemplateItem[]).filter(
       (item) => !item.isFolder

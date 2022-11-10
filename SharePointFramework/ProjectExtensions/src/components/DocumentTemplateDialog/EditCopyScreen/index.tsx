@@ -10,7 +10,7 @@ import { DocumentTemplateItem } from './DocumentTemplateItem'
 import styles from './EditCopyScreen.module.scss'
 import { IEditCopyScreenProps } from './types'
 
-export const EditCopyScreen: FC<IEditCopyScreenProps> = ({ onStartCopy }) => {
+export const EditCopyScreen: FC<IEditCopyScreenProps> = (props) => {
   const { state, dispatch } = useContext(DocumentTemplateDialogContext)
   const [templates, setTemplates] = useState([...state.selected])
 
@@ -50,7 +50,7 @@ export const EditCopyScreen: FC<IEditCopyScreenProps> = ({ onStartCopy }) => {
         <PrimaryButton
           text={strings.OnStartCopyText}
           disabled={!isFileNamesValid()}
-          onClick={() => onStartCopy(templates)}
+          onClick={() => props.onStartCopy(templates)}
         />
         <DefaultButton
           text={strings.OnGoBackText}

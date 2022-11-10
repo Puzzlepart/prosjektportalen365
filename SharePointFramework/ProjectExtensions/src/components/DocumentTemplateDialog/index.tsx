@@ -9,7 +9,7 @@ import {
 } from '@fluentui/react'
 import { FileAddResult } from '@pnp/sp'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { useReducer } from 'react'
+import React, { FC, useReducer } from 'react'
 import { isEmpty } from 'underscore'
 import { SPDataAdapter } from '../../data'
 import { TemplateItem } from '../../models/index'
@@ -22,7 +22,7 @@ import { EditCopyScreen } from './EditCopyScreen'
 import reducer, {
   COPY_DONE,
   COPY_PROGRESS,
-  initState,
+  initialState,
   SELECTION_CHANGED,
   SET_SCREEN,
   START_COPY
@@ -31,8 +31,8 @@ import { SelectScreen } from './SelectScreen'
 import { TargetFolderScreen } from './TargetFolderScreen'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogProps } from './types'
 
-export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
-  const [state, dispatch] = useReducer(reducer, initState())
+export const DocumentTemplateDialog: FC<IDocumentTemplateDialogProps> = (props) => {
+  const [state, dispatch] = useReducer(reducer, initialState)
   const selection = new Selection({
     onSelectionChanged: () => dispatch(SELECTION_CHANGED({ selection }))
   })

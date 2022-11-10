@@ -9,7 +9,7 @@ import {
 } from '@fluentui/react'
 import { TemplateItem } from 'models'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { useContext, useMemo, useState } from 'react'
+import React, { FC, useContext, useMemo, useState } from 'react'
 import { TemplateSelectorContext } from 'templateSelector/context'
 import { isEmpty } from 'underscore'
 import { InfoMessage } from '../../InfoMessage'
@@ -17,7 +17,7 @@ import { FolderNavigation } from '../FolderNavigation'
 import columns from './columns'
 import { ISelectScreenProps } from './types'
 
-export const SelectScreen = (props: ISelectScreenProps) => {
+export const SelectScreen: FC<ISelectScreenProps> = (props) => {
   const context = useContext(TemplateSelectorContext)
   const [folder, setFolder] = useState<string>('')
   const templates = useMemo(

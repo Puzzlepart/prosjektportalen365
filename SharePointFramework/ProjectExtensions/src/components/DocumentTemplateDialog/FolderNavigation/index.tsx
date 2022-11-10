@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Breadcrumb, IBreadcrumbItem } from '@fluentui/react/lib/Breadcrumb'
-import React, { useMemo } from 'react'
+import React, { FC, useMemo } from 'react'
 import { isEmpty } from 'underscore'
 import { createItems } from './createItems'
 import styles from './FolderNavigation.module.scss'
 import { IFolderNavigationProps } from './types'
 
-export const FolderNavigation = (props: IFolderNavigationProps) => {
+export const FolderNavigation: FC<IFolderNavigationProps> = (props) => {
   const items = useMemo(() => createItems(props), [props.currentFolder])
   const breadcrumb: IBreadcrumbItem[] = [
     ...(props.items || []),
