@@ -1,5 +1,5 @@
 import { dateAdd, PnPClientStorage, PnPClientStore } from '@pnp/common'
-import { Logger, LogLevel, PnPLogging } from '@pnp/logging'
+import { LogLevel, PnPLogging } from '@pnp/logging'
 import { spfi, SPFI, SPFx } from '@pnp/sp'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
@@ -66,36 +66,17 @@ export class ProjectDataService {
       this.getStorageKey('_getPropertyItemContext'),
       async () => {
         try {
-          Logger.write(
-            `(ProjectDataService) (_getPropertyItemContext) Checking if list ${this.configuration.propertiesListName} exists in web.`
-          )
           const [list] = await this.sp.web.lists
             .filter(`Title eq '${this.configuration.propertiesListName}'`)
             .select('Id', 'DefaultEditFormUrl')
             <ISPList[]>()
-          if (!list) {
-            Logger.write(
-              `(ProjectDataService) List ${this.configuration.propertiesListName} does not exist in web.`
-            )
-            return null
-          }
-          Logger.write(
-            `(ProjectDataService) (_getPropertyItemContext) Checking if there's a entry in list ${this.configuration.propertiesListName}.`
-          )
+          if (!list)      return null
           const [item] = await this.sp.web.lists
             .getById(list.Id)
             .items.select('Id')
             .top(1)
             <{ Id: number }[]>()
-          if (!item) {
-            Logger.write(
-              `(ProjectDataService) (_getPropertyItemContext) No entry found in list ${this.configuration.propertiesListName}.`
-            )
-            return null
-          }
-          Logger.write(
-            `(ProjectDataService) (_getPropertyItemContext) Entry with ID ${item.Id} found in list ${this.configuration.propertiesListName}.`
-          )
+          if (!item)    return null
           return {
             itemId: item.Id,
             listId: list.Id,
@@ -171,19 +152,14 @@ export class ProjectDataService {
   public async getPropertiesData(): Promise<IGetPropertiesData> {
     const propertyItem = await this._getPropertyItem( `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
     )
-
     if (propertyItem) {
       const templateParameters = tryParseJson(propertyItem.fieldValuesText.TemplateParameters, {})
-      Logger.write('(ProjectDataService) (getPropertiesData) Local property item found.')
       return {
         ...propertyItem,
         propertiesListId: propertyItem.propertiesListId,
         templateParameters
       }
     } else {
-      Logger.write(
-        '(ProjectDataService) (getPropertiesData) Local property item not found. Retrieving data from portal site.'
-      )
       const entity = await this.configuration.entityService.fetchEntity(this.configuration.siteId, this.configuration.webUrl)
       return {
         fieldValues: entity.fieldValues,
@@ -238,6 +214,7 @@ export class ProjectDataService {
    */
   public async getPhases(
     termSetId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     checklistData: { [termGuid: string]: ProjectPhaseChecklistData } = {}
   ): Promise<ProjectPhaseModel[]> {
     return await Promise.all([])
@@ -325,7 +302,6 @@ export class ProjectDataService {
   public clearCache(): void {
     Object.keys(this._storageKeys).forEach((name) => {
       const key = this.getStorageKey(name)
-      Logger.write(`(ProjectDataService) Clearing key ${key} from sessionStorage.`)
       sessionStorage.removeItem(key)
     })
   }
