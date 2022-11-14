@@ -1,8 +1,10 @@
-import { List, Item } from '@pnp/sp'
+import { IItem } from '@pnp/sp/items'
+import { IList } from '@pnp/sp/lists'
+
 export interface IPropertyItemContext {
   itemId?: number
   listId?: string
   defaultEditFormUrl?: string
-  list?: List
-  item?: Item
+  list?: IList
+  item?: IItem
 }

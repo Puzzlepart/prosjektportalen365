@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
-import { ItemAddResult, List } from '@pnp/sp'
+import { IItemAddResult } from '@pnp/sp/items'
+import { IList } from '@pnp/sp/lists'
 import { IListLoggerEntry } from './IListLoggerEntry'
 import { IListLoggerMemberMap } from './IListLoggerMemberMap'
 import { ListLoggerEntryLevel } from './ListLoggerEntryLevel'
@@ -47,10 +48,10 @@ class ListLogger {
    *
    * @param entry Entry
    */
-  public log(entry: IListLoggerEntry): Promise<ItemAddResult> {
+  public log(entry: IListLoggerEntry): Promise<IItemAddResult> {
     try {
       const spItem = this._getSpItem({ ...this._getEntryDefaults(), ...entry })
-      return (this.list as List).items.add(spItem)
+      return (this.list as IList).items.add(spItem)
     } catch (error) {}
   }
 
@@ -67,7 +68,7 @@ class ListLogger {
     message: string,
     functionName?: string,
     level: ListLoggerEntryLevel = 'Info'
-  ): Promise<ItemAddResult> {
+  ): Promise<IItemAddResult> {
     return this.log({
       message,
       level,
