@@ -3,8 +3,12 @@ import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
 import { SPUser } from '@microsoft/sp-page-context'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, PnPClientStorage, PnPClientStore } from '@pnp/common'
+import { LogLevel, PnPLogging } from '@pnp/logging'
 import '@pnp/polyfill-ie11'
-import { sp, SPConfiguration, SPRest, Web } from '@pnp/sp'
+import { spfi, SPFI, SPFx } from '@pnp/sp'
+import '@pnp/sp/site-groups'
+import '@pnp/sp/site-users'
+import '@pnp/sp/webs'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import _ from 'underscore'
@@ -14,17 +18,10 @@ import { ISPDataAdapterBaseConfiguration } from './ISPDataAdapterBaseConfigurati
 import { ProjectAdminPermission } from './ProjectAdminPermission'
 
 export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
-  public spConfiguration: SPConfiguration = {
-    defaultCachingStore: 'session',
-    defaultCachingTimeoutSeconds: 90,
-    enableCacheExpiration: true,
-    cacheExpirationIntervalMilliseconds: 2500,
-    globalCacheDisable: false
-  }
   public settings: T
   public portal: PortalDataService
   public entityService: SpEntityPortalService
-  public sp: SPRest
+  public sp: SPFI
   public isConfigured: boolean = false
   public spfxContext: ApplicationCustomizerContext | ListViewCommandSetContext | WebPartContext
   private _storage: PnPClientStore
@@ -62,10 +59,10 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   public configure(spfxContext: any, settings: T) {
     this.spfxContext = spfxContext
     this.settings = settings
-    sp.setup({ spfxContext, ...this.spConfiguration })
-    this.sp = sp
+    this.sp = spfi().using(SPFx(spfxContext)).using(PnPLogging(LogLevel.Warning))
     this.portal = new PortalDataService().configure({
-      urlOrWeb: new Web(this.settings.hubSiteUrl),
+      spfxContext,
+      url: this.settings.hubSiteUrl,
       siteId: this.settings.siteId
     })
     this.entityService = new SpEntityPortalService({
@@ -86,7 +83,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
    */
   private async getCurrentUser(user: SPUser) {
     try {
-      const { data: currentUser } = await sp.web.ensureUser(user.loginName ?? user.email)
+      const { data: currentUser } = await this.sp.web.ensureUser(user.loginName ?? user.email)
       return currentUser
     } catch {
       return null
@@ -147,22 +144,21 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                 break
               case ProjectAdminRoleType.SharePointGroup:
                 {
-                  let web: Web = null
+                  let sp: SPFI = null
                   switch (role.groupLevel) {
                     case 'Prosjekt':
-                      web = sp.web
+                      sp = this.sp
                       break
                     case 'Portefølje':
-                      web = this.portal.web
+                      sp = this.portal.sp
                       break
                   }
                   try {
                     if (
                       (
-                        await web.siteGroups
+                        await sp.web.siteGroups
                           .getByName(role.groupName)
-                          .users.filter(`Email eq '${currentUser.Email}'`)
-                          .get()
+                          .users.filter(`Email eq '${currentUser.Email}'`)()
                       ).length > 0
                     )
                       userPermissions.push(...role.permissions)

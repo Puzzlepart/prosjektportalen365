@@ -1,8 +1,6 @@
 /* eslint-disable no-console */
 import { find } from '@microsoft/sp-lodash-subset'
 import { dateAdd, stringIsNullOrEmpty } from '@pnp/common'
-import { Logger, LogLevel } from '@pnp/logging'
-import { AttachmentFileInfo, CamlQuery, ListEnsureResult, Web } from '@pnp/sp'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { transformFieldXml } from '../../helpers/transformFieldXml'
@@ -26,10 +24,16 @@ import {
   PortalDataServiceDefaultConfiguration,
   PortalDataServiceList
 } from './IPortalDataServiceConfiguration'
+import { spfi, SPFI, SPFx } from '@pnp/sp'
+import { Logger, LogLevel, PnPLogging } from '@pnp/logging'
+import { IWeb } from '@pnp/sp/webs'
+import '@pnp/sp/lists'
+import '@pnp/sp/items'
+import '@pnp/sp/folders'
 
 export class PortalDataService {
   private _configuration: IPortalDataServiceConfiguration
-  public web: Web
+  public sp: SPFI
 
   /**
    * Configure PortalDataService
@@ -38,11 +42,7 @@ export class PortalDataService {
    */
   public configure(configuration: IPortalDataServiceConfiguration): PortalDataService {
     this._configuration = { ...PortalDataServiceDefaultConfiguration, ...configuration }
-    if (typeof this._configuration.urlOrWeb === 'string') {
-      this.web = new Web(this._configuration.urlOrWeb)
-    } else {
-      this.web = this._configuration.urlOrWeb
-    }
+    this.sp = spfi().using(SPFx(this._configuration.spfxContext)).using(PnPLogging(LogLevel.Warning))
     return this
   }
 
@@ -57,7 +57,7 @@ export class PortalDataService {
    */
   public async getParentProjects<T>(
     webUrl: string,
-    constructor: new (item: any, web: Web) => T
+    constructor: new (item: any, web: IWeb) => T
   ): Promise<T[]> {
     try {
       const projectItems = await this.getItems(
@@ -93,10 +93,9 @@ export class PortalDataService {
    */
   public async getProjectColumns(): Promise<ProjectColumn[]> {
     try {
-      const spItems = await this.web.lists
+      const spItems = await this.sp.web.lists
         .getByTitle(this._configuration.listNames.PROJECT_COLUMNS)
-        .items.select(...Object.keys(new SPProjectColumnItem()))
-        .get<SPProjectColumnItem[]>()
+        .items.select(...Object.keys(new SPProjectColumnItem()))()
       return spItems.map((item) => new ProjectColumn(item))
     } catch (error) {
       return []
@@ -129,10 +128,10 @@ export class PortalDataService {
   public async updateStatusReport(
     report: StatusReport,
     properties: Record<string, string>,
-    attachment?: AttachmentFileInfo,
+    attachment?: IAttachmentFileInfo,
     publishedString?: string
   ): Promise<StatusReport> {
-    const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
+    const list = this.sp.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
     if (attachment) {
       try {
         await list.items.getById(report.id).attachmentFiles.addMultiple([attachment])
@@ -221,7 +220,7 @@ export class PortalDataService {
     listName: string,
     contentTypeId: string,
     properties?: Record<string, string>
-  ): Promise<ListEnsureResult> {
+  ): Promise<IListEnsureResult> {
     const targetWeb = new Web(url)
     const { jsomContext } = await initJsom(url, { loadTaxonomy: true })
     const [hubContentType, targetSiteFields, ensureList] = await Promise.all([
@@ -346,10 +345,10 @@ export class PortalDataService {
    */
   public async getFiles<T>(
     listName: string,
-    constructor: new (file: any, web: Web) => T
+    constructor: new (file: any, web: IWeb) => T
   ): Promise<T[]> {
-    const files = await this.web.lists.getByTitle(listName).rootFolder.files.usingCaching().get()
-    return files.map((file) => new constructor(file, this.web))
+    const files = await this.sp.web.lists.getByTitle(listName).rootFolder.files.usingCaching().get()
+    return files.map((file) => new constructor(file, this.sp.web))
   }
 
   /**

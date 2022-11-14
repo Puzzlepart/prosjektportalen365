@@ -1,5 +1,3 @@
-import { Web } from '@pnp/sp'
-
 export type PortalDataServiceList =
   | 'STATUS_SECTIONS'
   | 'PROJECT_COLUMNS'
@@ -10,7 +8,8 @@ export type PortalDataServiceList =
   | 'DATA_SOURCES'
 
 export interface IPortalDataServiceConfiguration extends Object {
-  urlOrWeb: string | Web
+  url: string
+  spfxContext: any
   siteId?: string
   webUrl?: string
   listNames?: {
