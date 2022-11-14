@@ -9,7 +9,7 @@ import {
   ProjectPhaseModel
 } from '../../models'
 import { tryParseJson } from '../../util/tryParseJson'
-import { IGetPropertiesData } from './IGetPropertiesData'
+import { IGetPropertiesData } from './types'
 import { IProjectDataServiceConfiguration } from './IProjectDataServiceConfiguration'
 import { IPropertyItemContext } from './IPropertyItemContext'
 
