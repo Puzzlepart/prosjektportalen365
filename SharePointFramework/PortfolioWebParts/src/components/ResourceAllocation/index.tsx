@@ -366,7 +366,7 @@ export class ResourceAllocation extends Component<
    * @returns Timeline data
    */
   private async _fetchData(): Promise<ITimelineData> {
-    const dataSource = await new DataSourceService(sp.web).getByName(this.props.dataSource)
+    const dataSource = await new DataSourceService().getByName(this.props.dataSource)
     if (!dataSource) throw format(strings.DataSourceNotFound, this.props.dataSource)
     try {
       const results = (

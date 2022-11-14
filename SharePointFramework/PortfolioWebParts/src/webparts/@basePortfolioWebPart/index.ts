@@ -1,8 +1,7 @@
 import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
-import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
-import '@pnp/polyfill-ie11'
-import { sp } from '@pnp/sp'
+import { Logger, LogLevel } from '@pnp/logging'
+import { spfi, SPFI, SPFx } from '@pnp/sp'
 import { IBaseComponentProps } from 'components/types'
 import assign from 'object-assign'
 import React, { FC } from 'react'
@@ -13,6 +12,7 @@ export abstract class BasePortfolioWebPart<
   T extends IBaseComponentProps
 > extends BaseClientSideWebPart<T> {
   public dataAdapter: DataAdapter
+  public sp: SPFI
   private _pageTitle: string
 
   public abstract render(): void
@@ -24,10 +24,12 @@ export abstract class BasePortfolioWebPart<
    * @param props Props
    */
   public renderComponent<T = any>(component: React.ComponentClass<T> | FC<T>, props?: T): void {
-    const combinedProps = assign({ title: this._pageTitle }, this.properties, props, {
+    this.sp = spfi().using(SPFx(this.context))
+    const combinedProps: T = assign({ title: this._pageTitle }, this.properties, props, {
       pageContext: this.context.pageContext,
       dataAdapter: this.dataAdapter,
-      displayMode: this.displayMode
+      displayMode: this.displayMode,
+      sp: this.sp
     })
     const element: React.ReactElement<T> = React.createElement(component, combinedProps)
     ReactDom.render(element, this.domElement)
@@ -37,16 +39,13 @@ export abstract class BasePortfolioWebPart<
    * Setup
    */
   private async _setup() {
-    sp.setup({ spfxContext: this.context })
-    Logger.subscribe(new ConsoleListener())
     Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     try {
       this._pageTitle = (
-        await sp.web.lists
+        await this.sp.web.lists
           .getById(this.context.pageContext.list.id.toString())
           .items.getById(this.context.pageContext.listItem.id)
-          .select('Title')
-          .get<{ Title: string }>()
+          .select('Title')<{ Title: string }>()
       ).Title
     } catch (error) {}
   }

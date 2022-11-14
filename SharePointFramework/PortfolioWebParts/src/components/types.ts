@@ -1,5 +1,6 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { PageContext } from '@microsoft/sp-page-context'
+import { SPFI } from '@pnp/sp'
 import { IDataAdapter } from 'data/types'
 
 export interface IBaseComponentProps {
@@ -23,4 +24,9 @@ export interface IBaseComponentProps {
    * Display mode of the component.
    */
   displayMode?: DisplayMode
+
+  /**
+   * SP instance
+   */
+   sp: SPFI
 }

@@ -66,6 +66,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
       siteId: this.settings.siteId
     })
     this.entityService = new SpEntityPortalService({
+      spfxContext,
       portalUrl: this.settings.hubSiteUrl,
       listName: 'Prosjekter',
       contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',

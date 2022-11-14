@@ -1,6 +1,6 @@
 {
   "name": "pp365-shared",
-  "version": "1.7.3-887.1",
+  "version": "1.7.3-891.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -39,7 +39,6 @@
     "rehype-raw": "^6.1.1",
     "scriptjs": "^2.5.9",
     "sp-entityportal-service": "2.1.0",
-    "sp-hubsite-service": "0.7.1",
     "spfx-jsom": "0.6.6",
     "underscore": "^1.9.1",
     "xlsx": "^0.16.9",

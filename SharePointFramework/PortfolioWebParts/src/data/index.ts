@@ -1,7 +1,8 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, PnPClientStorage, TypedHash } from '@pnp/common'
-import { ItemUpdateResult, QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
+import { IItemUpdateResult } from '@pnp/sp/items'
+import {  QueryPropertyValueType, ISearchResult, SortDirection } from '@pnp/sp/search'
 import * as cleanDeep from 'clean-deep'
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
 import { IAggregatedListConfiguration } from 'interfaces/IAggregatedListConfiguration'
@@ -40,12 +41,13 @@ import {
 } from './types'
 
 export class DataAdapter implements IDataAdapter {
-  private _portalDataService: PortalDataService
   public dataSourceService: DataSourceService
+  private _portalDataService: PortalDataService
 
-  constructor(public context: WebPartContext, private siteIds?: string[]) {
+  constructor(public context: WebPartContext) {
     this._portalDataService = new PortalDataService().configure({
-      urlOrWeb: context.pageContext.web.absoluteUrl
+      spfxContext: context,
+      url: context.pageContext.web.absoluteUrl
     })
   }
 
@@ -55,7 +57,7 @@ export class DataAdapter implements IDataAdapter {
    */
   public async configure(): Promise<DataAdapter> {
     if (this.dataSourceService) return this
-    const { web } = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
+    const { web } = await HubSiteService.GetHubSite(this.context)
     this.dataSourceService = new DataSourceService(web)
     return this
   }
@@ -139,8 +141,8 @@ export class DataAdapter implements IDataAdapter {
 
     try {
       if (category.includes('(Prosjektnivå)') || !category) {
-        const { web } = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
-        portal = new PortalDataService().configure({ urlOrWeb: web })
+        const { url } = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
+        portal = new PortalDataService().configure({ spfxContext: this.context, url })
       }
       const [views, viewsUrls, columnUrls] = await Promise.all([
         await this.configure().then((adapter) => {
@@ -479,7 +481,7 @@ export class DataAdapter implements IDataAdapter {
     rowLimit: number,
     sortProperty: string,
     sortDirection: SortDirection
-  ): Promise<SearchResult[]> {
+  ): Promise<ISearchResult[]> {
     const response = await sp.search({
       Querytext: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} contentclass:STS_Site`,
       TrimDuplicates: false,
@@ -884,7 +886,7 @@ export class DataAdapter implements IDataAdapter {
     properties: TypedHash<any>,
     dataSourceTitle: string,
     shouldReplace: boolean = false
-  ): Promise<ItemUpdateResult> {
+  ): Promise<IItemUpdateResult> {
     try {
       const list = sp.web.lists.getByTitle(strings.DataSourceListName)
       const items = await list.items.get()

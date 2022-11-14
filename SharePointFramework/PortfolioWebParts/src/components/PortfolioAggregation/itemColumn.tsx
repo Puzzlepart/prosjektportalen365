@@ -1,6 +1,5 @@
 import { IColumn, Icon, Link } from '@fluentui/react/lib'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { Web } from '@pnp/sp'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import { formatDate, tryParseCurrency, tryParsePercentage } from 'pp365-shared/lib/helpers'

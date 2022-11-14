@@ -1,11 +1,12 @@
 import { TypedHash } from '@pnp/common'
-import { ItemUpdateResult, QueryPropertyValueType, SearchQuery, SortDirection } from '@pnp/sp'
+import { IItemUpdateResult } from '@pnp/sp/items'
+import { ISearchQuery, QueryPropertyValueType, SortDirection } from '@pnp/sp/search'
 import { IPortfolioConfiguration, IAggregatedListConfiguration } from 'interfaces'
 import { ProjectListModel, TimelineConfigurationModel, TimelineContentModel } from 'models'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services'
 
-export const DEFAULT_SEARCH_SETTINGS: SearchQuery = {
+export const DEFAULT_SEARCH_SETTINGS: ISearchQuery = {
   Querytext: '*',
   RowLimit: 500,
   TrimDuplicates: false,
@@ -108,5 +109,5 @@ export interface IDataAdapter {
     properties: TypedHash<any>,
     dataSourceTitle: string,
     shouldReplace?: boolean
-  ): Promise<ItemUpdateResult>
+  ): Promise<IItemUpdateResult>
 }

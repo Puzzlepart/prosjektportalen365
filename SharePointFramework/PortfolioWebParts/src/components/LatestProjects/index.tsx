@@ -1,6 +1,6 @@
 import { Spinner, SpinnerType, MessageBar } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
-import { SortDirection } from '@pnp/sp'
+import { SortDirection } from '@pnp/sp/search'
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle'
 import * as PortfolioWebPartsStrings from 'PortfolioWebPartsStrings'
 import { formatDate } from 'pp365-shared/lib/helpers'

@@ -8,7 +8,6 @@ import {
   SelectionMode,
   ShimmeredDetailsList
 } from '@fluentui/react'
-import { Web } from '@pnp/sp'
 import { ProjectListModel } from 'models'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
