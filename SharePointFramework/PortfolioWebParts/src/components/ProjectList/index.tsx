@@ -145,7 +145,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         siteId={state.showProjectInfo?.siteId}
         webUrl={state.showProjectInfo?.url}
         hubSite={{
-          web: new Web(props.pageContext.site.absoluteUrl),
+          web: null,
           url: props.pageContext.site.absoluteUrl
         }}
         page='Portfolio'

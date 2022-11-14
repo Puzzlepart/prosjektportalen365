@@ -9,7 +9,6 @@ import {
   ContextualMenuItemType
 } from '@fluentui/react'
 import { get } from '@microsoft/sp-lodash-subset'
-import { sp } from '@pnp/sp'
 import sortArray from 'array-sort'
 import {
   IAllocationSearchResult,
@@ -366,11 +365,11 @@ export class ResourceAllocation extends Component<
    * @returns Timeline data
    */
   private async _fetchData(): Promise<ITimelineData> {
-    const dataSource = await new DataSourceService().getByName(this.props.dataSource)
+    const dataSource = await new DataSourceService(this.props.sp.web).getByName(this.props.dataSource)
     if (!dataSource) throw format(strings.DataSourceNotFound, this.props.dataSource)
     try {
       const results = (
-        await sp.search({
+        await this.props.sp.search({
           QueryTemplate: dataSource.searchQuery,
           Querytext: '*',
           RowLimit: 500,

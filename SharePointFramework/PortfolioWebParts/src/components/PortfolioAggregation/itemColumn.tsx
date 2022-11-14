@@ -104,7 +104,7 @@ export const getDefaultColumns = (props: IPortfolioAggregationProps) => {
             siteId={item.SiteId}
             webUrl={item.Path}
             hubSite={{
-              web: new Web(props.pageContext.site.absoluteUrl),
+              web: null,
               url: props.pageContext.site.absoluteUrl
             }}
             page='Portfolio'

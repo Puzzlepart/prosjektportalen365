@@ -1,6 +1,8 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, PnPClientStorage, TypedHash } from '@pnp/common'
+import { spfi, SPFI, SPFx } from '@pnp/sp'
+import '@pnp/sp/site-groups'
 import { IItemUpdateResult } from '@pnp/sp/items'
 import {  QueryPropertyValueType, ISearchResult, SortDirection } from '@pnp/sp/search'
 import * as cleanDeep from 'clean-deep'
@@ -14,7 +16,7 @@ import { DataSource, PortfolioOverviewView, ProjectColumn } from 'pp365-shared/l
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
 import HubSiteService from 'sp-hubsite-service'
-import _, { any, find, first } from 'underscore'
+import _ from 'underscore'
 import {
   Benefit,
   BenefitMeasurement,
@@ -42,12 +44,14 @@ import {
 
 export class DataAdapter implements IDataAdapter {
   public dataSourceService: DataSourceService
+  public sp: SPFI
   private _portalDataService: PortalDataService
 
-  constructor(public context: WebPartContext) {
+  constructor(public spfxContext: WebPartContext) {
+    this.sp = spfi().using(SPFx(spfxContext))
     this._portalDataService = new PortalDataService().configure({
-      spfxContext: context,
-      url: context.pageContext.web.absoluteUrl
+      spfxContext,
+      url: spfxContext.pageContext.web.absoluteUrl
     })
   }
 
@@ -57,8 +61,8 @@ export class DataAdapter implements IDataAdapter {
    */
   public async configure(): Promise<DataAdapter> {
     if (this.dataSourceService) return this
-    const { web } = await HubSiteService.GetHubSite(this.context)
-    this.dataSourceService = new DataSourceService(web)
+    const { sp } = await HubSiteService.GetHubSite(this.spfxContext)
+    this.dataSourceService = new DataSourceService(sp.web)
     return this
   }
 
@@ -78,14 +82,14 @@ export class DataAdapter implements IDataAdapter {
   ) {
     try {
       const [chartItems, contentTypes] = await Promise.all([
-        sp.web.lists
+        this.sp.web.lists
           .getByTitle(chartConfigurationListName)
           .items.select(...Object.keys(new SPChartConfigurationItem()))
-          .get<SPChartConfigurationItem[]>(),
-        sp.web.lists
+          <SPChartConfigurationItem[]>(),
+        this.sp.web.lists
           .getByTitle(chartConfigurationListName)
           .contentTypes.select(...Object.keys(new SPContentType()))
-          .get<SPContentType[]>()
+          <SPContentType[]>()
       ])
       const charts: ChartConfiguration[] = chartItems.map((item) => {
         const fields = item.GtPiFieldsId.map((id) => {
@@ -141,8 +145,8 @@ export class DataAdapter implements IDataAdapter {
 
     try {
       if (category.includes('(Prosjektnivå)') || !category) {
-        const { url } = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
-        portal = new PortalDataService().configure({ spfxContext: this.context, url })
+        const { url } = await HubSiteService.GetHubSite(this.sp, this.spfxContext.pageContext as any)
+        portal = new PortalDataService().configure({ spfxContext: this.spfxContext, url })
       }
       const [views, viewsUrls, columnUrls] = await Promise.all([
         await this.configure().then((adapter) => {
@@ -287,17 +291,17 @@ export class DataAdapter implements IDataAdapter {
       { PrimarySearchResults: sites },
       { PrimarySearchResults: statusReports }
     ] = await Promise.all([
-      sp.search({
+      this.sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: `${queryArray ?? ''} ${view.searchQuery} `,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
       }),
-      sp.search({
+      this.sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: `${queryArray ?? ''} DepartmentId:{${siteId}} contentclass:STS_Site`,
         SelectProperties: ['Path', 'Title', 'SiteId']
       }),
-      sp.search({
+      this.sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: `${
           queryArray ?? ''
@@ -328,9 +332,9 @@ export class DataAdapter implements IDataAdapter {
   public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationModel[]) {
     try {
       const [{ PrimarySearchResults: statusReports }] = await Promise.all([
-        sp.search({
+        this.sp.search({
           ...DEFAULT_SEARCH_SETTINGS,
-          QueryTemplate: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+          QueryTemplate: `DepartmentId:{${this.spfxContext.pageContext.legacyPageContext.hubSiteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
           SelectProperties: [
             'Title',
             'GtSiteIdOWSTEXT',
@@ -365,7 +369,7 @@ export class DataAdapter implements IDataAdapter {
    * @param timelineConfig Timeline configuration
    */
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
-    const timelineItems = await sp.web.lists
+    const timelineItems = await this.sp.web.lists
       .getByTitle(strings.TimelineContentListName)
       .items.select(
         'Title',
@@ -379,8 +383,7 @@ export class DataAdapter implements IDataAdapter {
         'GtSiteIdLookup/Title',
         'GtSiteIdLookup/GtSiteId'
       )
-      .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-      .getAll()
+      .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')()
 
     return timelineItems
       .map((item) => {
@@ -408,11 +411,9 @@ export class DataAdapter implements IDataAdapter {
    * Fetches configuration data for the Project Timeline
    */
   public async fetchTimelineConfiguration() {
-    const timelineConfig = await sp.web.lists
+    const timelineConfig = await this.sp.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
-      .items.select(...new SPTimelineConfigurationItem().fields)
-      .getAll()
-
+      .items.select(...new SPTimelineConfigurationItem().fields)()
     return timelineConfig.map((item) => new TimelineConfigurationModel(item)).filter(Boolean)
   }
 
@@ -482,8 +483,8 @@ export class DataAdapter implements IDataAdapter {
     sortProperty: string,
     sortDirection: SortDirection
   ): Promise<ISearchResult[]> {
-    const response = await sp.search({
-      Querytext: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} contentclass:STS_Site`,
+    const response = await this.sp.search({
+      Querytext: `DepartmentId:{${this.spfxContext.pageContext.legacyPageContext.hubSiteId}} contentclass:STS_Site`,
       TrimDuplicates: false,
       RowLimit: rowLimit,
       SelectProperties: ['Title', 'Path', 'SiteId', 'Created'],
@@ -504,7 +505,7 @@ export class DataAdapter implements IDataAdapter {
       ]
     })
     return response.PrimarySearchResults.filter(
-      (site) => this.context.pageContext.legacyPageContext.hubSiteId !== site['SiteId']
+      (site) => this.spfxContext.pageContext.legacyPageContext.hubSiteId !== site['SiteId']
     )
   }
 
@@ -519,17 +520,17 @@ export class DataAdapter implements IDataAdapter {
   private _mapProjects(
     items: ISPProjectItem[],
     groups: IGraphGroup[],
-    sites: SearchResult[],
+    sites: ISearchResult[],
     users: ISPUser[]
   ): ProjectListModel[] {
     const projects = items
       .map((item) => {
         const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
         const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
-        const group = find(groups, (grp) => grp.id === item.GtGroupId)
+        const group = _.find(groups, (grp) => grp.id === item.GtGroupId)
         const model = new ProjectListModel(group?.displayName ?? item.Title, item)
         model.isUserMember = !!group
-        model.hasUserAccess = any(sites, (site) => site['SiteId'] === item.GtSiteId)
+        model.hasUserAccess = _.any(sites, (site) => site['SiteId'] === item.GtSiteId)
         if (manager) model.manager = { text: manager.Title, imageUrl: getUserPhoto(manager.Email) }
         if (owner) model.owner = { text: owner.Title, imageUrl: getUserPhoto(owner.Email) }
         return model
@@ -549,14 +550,14 @@ export class DataAdapter implements IDataAdapter {
     // eslint-disable-next-line quotes
     filter = "GtProjectLifecycleStatus ne 'Avsluttet'"
   ): Promise<ProjectListModel[]> {
-    await msGraph.Init(this.context.msGraphClientFactory)
+    await msGraph.Init(this.spfxContext.msGraphClientFactory)
     const localStore = new PnPClientStorage().local
-    const siteId = this.context.pageContext.site.id.toString()
+    const siteId = this.spfxContext.pageContext.site.id.toString()
     const [items, groups, users, sites] = await localStore.getOrPut(
       `pp365_fetchenrichedprojects_${siteId}`,
       async () => {
         return await Promise.all([
-          sp.web.lists
+          this.sp.web.lists
             .getByTitle(strings.ProjectsListName)
             .items.select(
               'GtGroupId',
@@ -573,16 +574,14 @@ export class DataAdapter implements IDataAdapter {
             )
             .filter(filter)
             .orderBy('Title')
-            .top(500)
-            .usingCaching()
-            .get<ISPProjectItem[]>(),
+            .top(500)<ISPProjectItem[]>(),
           msGraph.Get<IGraphGroup[]>(
             '/me/memberOf/$/microsoft.graph.group',
             ['id', 'displayName'],
             // eslint-disable-next-line quotes
             "groupTypes/any(a:a%20eq%20'unified')"
           ),
-          sp.web.siteUsers.select('Id', 'Title', 'Email').get<ISPUser[]>(),
+          this.sp.web.siteUsers.select('Id', 'Title', 'Email')<ISPUser[]>(),
           this._fetchItems(
             `DepartmentId:${siteId} contentclass:STS_Site`,
             ['Title', 'SiteId']
@@ -608,10 +607,10 @@ export class DataAdapter implements IDataAdapter {
     const { odataQuery } = (configuration?.views || []).find((v) => v.title === dataSource)
     let projects: any[]
     if (odataQuery && !dataSource.includes('(Prosjektnivå)')) {
-      projects = await sp.web.lists
+      projects = await this.sp.web.lists
         .getByTitle(strings.ProjectsListName)
         .items.filter(`${odataQuery}`)
-        .get<any[]>()
+        <any[]>()
     }
     return projects
   }
@@ -623,11 +622,10 @@ export class DataAdapter implements IDataAdapter {
    */
   public async isUserInGroup(groupName: string): Promise<boolean> {
     try {
-      const [siteGroup] = await sp.web.siteGroups
+      const [siteGroup] = await this.sp.web.siteGroups
         .select('CanCurrentUserViewMembership', 'Title')
-        .filter(`Title eq '${groupName}'`)
-        .get()
-      return siteGroup && siteGroup.CanCurrentUserViewMembership
+        .filter(`Title eq '${groupName}'`)()
+      return siteGroup && siteGroup['CanCurrentUserViewMembership']
     } catch (error) {
       return false
     }
@@ -640,7 +638,7 @@ export class DataAdapter implements IDataAdapter {
    * @param selectProperties Select properties
    */
   private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
-    const response = await sp.search({
+    const response = await this.sp.search({
       QueryTemplate: `${queryTemplate}`,
       Querytext: '*',
       RowLimit: 500,
@@ -687,7 +685,7 @@ export class DataAdapter implements IDataAdapter {
     const items = indicactors.map((i) => {
       const benefit = i.Benefit
       const measurements = i.Measurements
-      const firstMeasurement = first(i.Measurements)
+      const firstMeasurement = _.first(i.Measurements)
 
       const item = {
         ..._.pick(firstMeasurement?.Properties, _.identity),
@@ -790,8 +788,8 @@ export class DataAdapter implements IDataAdapter {
       ) {
         return []
       } else {
-        const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
-        const items = await list.items.get()
+        const list = this.sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
+        const items = await list.items()
         const filteredItems = items
           .filter(
             (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
@@ -817,8 +815,8 @@ export class DataAdapter implements IDataAdapter {
    */
   public async updateProjectContentColumn(properties: TypedHash<any>): Promise<any> {
     try {
-      const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
-      const items = await list.items.get()
+      const list = this.sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
+      const items = await list.items()
       const item = items.find((i) => i.GtManagedProperty === properties.fieldName)
 
       if (!item) {
@@ -845,8 +843,8 @@ export class DataAdapter implements IDataAdapter {
    */
   public async deleteProjectContentColumn(column: TypedHash<any>): Promise<any> {
     try {
-      const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
-      const items = await list.items.get()
+      const list = this.sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
+      const items = await list.items()
       const item = items.find((i) => i.GtManagedProperty === column.fieldName)
 
       if (!item) {
@@ -868,7 +866,7 @@ export class DataAdapter implements IDataAdapter {
    */
   public async addItemToList(listName: string, properties: TypedHash<any>): Promise<any> {
     try {
-      const list = sp.web.lists.getByTitle(listName)
+      const list = this.sp.web.lists.getByTitle(listName)
       const itemAddResult = await list.items.add(properties)
       return itemAddResult.data
     } catch (error) {
@@ -888,8 +886,8 @@ export class DataAdapter implements IDataAdapter {
     shouldReplace: boolean = false
   ): Promise<IItemUpdateResult> {
     try {
-      const list = sp.web.lists.getByTitle(strings.DataSourceListName)
-      const items = await list.items.get()
+      const list = this.sp.web.lists.getByTitle(strings.DataSourceListName)
+      const items = await list.items()
       const item = items.find((i) => i.Title === dataSourceTitle)
 
       if (!item) {

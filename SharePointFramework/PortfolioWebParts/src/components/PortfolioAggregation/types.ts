@@ -1,5 +1,5 @@
 import { MessageBarType, IGroup, IColumn, IPanelProps, Target } from '@fluentui/react'
-import { SearchResult } from '@pnp/sp'
+import { ISearchResult } from '@pnp/sp/search'
 import { IFilterProps } from 'components/FilterPanel'
 import { IDataAdapter } from 'data/types'
 import { IAggregatedListConfiguration } from 'interfaces'
@@ -92,7 +92,7 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   /**
    * Transforms the data after it's fetched
    */
-  postTransform?: (results: SearchResult[]) => T[]
+  postTransform?: (results: ISearchResult[]) => T[]
 }
 
 export interface IPortfolioAggregationState {
