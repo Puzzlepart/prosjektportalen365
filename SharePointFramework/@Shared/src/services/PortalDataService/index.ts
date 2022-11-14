@@ -30,12 +30,12 @@ import {
   SPProjectColumnItem,
   StatusReport
 } from '../../models'
-import { GetStatusReportsOptions } from './types'
 import {
   IPortalDataServiceConfiguration,
   PortalDataServiceDefaultConfiguration,
   PortalDataServiceList
 } from './IPortalDataServiceConfiguration'
+import { GetStatusReportsOptions } from './types'
 
 export class PortalDataService {
   private _configuration: IPortalDataServiceConfiguration
