@@ -8,6 +8,9 @@ import { SectionContext } from '../context'
 import { IListSectionData, IListSectionState } from './types'
 import { useFetchListData } from './useFetchListData'
 
+/**
+ * Component logic hook for `ListSection`
+ */
 export function useListSection() {
   const context = useContext(ProjectStatusContext)
   const { section } = useContext(SectionContext)

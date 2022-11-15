@@ -9,6 +9,9 @@ import { SectionContext } from '../context'
 import { useFetchListData } from '../ListSection/useFetchListData'
 import { IUncertaintySectionData, IUncertaintySectionState } from './types'
 
+/**
+ * Component logic hook for `UncertaintySection`
+ */
 export function useUncertaintySection() {
   const context = useContext(ProjectStatusContext)
   const { section } = useContext(SectionContext)
@@ -27,7 +30,7 @@ export function useUncertaintySection() {
       fetchListData().then((_data) => {
         const data: IUncertaintySectionData = {
           ..._data,
-          matrixElements: _data.items.map((i) => new UncertaintyElementModel(i))
+          matrixElements: _data.items.map((i) => new UncertaintyElementModel(i)),
         }
         context.dispatch(
           PERSIST_SECTION_DATA({

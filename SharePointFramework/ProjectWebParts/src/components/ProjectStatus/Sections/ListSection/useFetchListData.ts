@@ -36,7 +36,7 @@ export function useFetchListData(): () => Promise<IListSectionData> {
         } catch { }
       }
       const [items, fields] = await Promise.all([
-        list.getItemsByCAMLQuery({ ViewXml: view.ListViewXml }, 'FieldValuesAsText') as Promise<
+        list.getItemsByCAMLQuery({ ViewXml: view.ListViewXml }, 'FieldValuesAsText', 'ContentType') as Promise<
           any[]
         >,
         list.fields.select('Title', 'InternalName', 'TypeAsString').get<SPField[]>()
