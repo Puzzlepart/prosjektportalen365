@@ -1,4 +1,5 @@
 import { PageContext } from '@microsoft/sp-page-context'
+import { IOpportunityMatrixProps } from 'components/OpportunityMatrix'
 import { IRiskMatrixProps } from 'components/RiskMatrix'
 import { ProjectColumnConfig, SectionModel, SPField, StatusReport } from 'pp365-shared/lib/models'
 import { IGetPropertiesData } from 'pp365-shared/lib/services'
@@ -6,6 +7,7 @@ import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseW
 
 export interface IProjectStatusProps extends IBaseWebPartComponentProps {
   riskMatrix?: IRiskMatrixProps
+  opportunityMatrix?: IOpportunityMatrixProps
   fieldWidth?: number
   pageContext?: PageContext
 }

@@ -5,11 +5,12 @@ import {
   Shimmer,
   ShimmeredDetailsList
 } from '@fluentui/react'
+import { OpportunityMatrix } from 'components/OpportunityMatrix'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
-import { ProjectStatusContext } from '../../context'
 import { RiskMatrix } from '../../../RiskMatrix'
+import { ProjectStatusContext } from '../../context'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection'
 import styles from './UncertaintySection.module.scss'
@@ -25,16 +26,35 @@ export const UncertaintySection: FC = () => {
   function renderContent() {
     if (state.error)
       return <UserMessage text={strings.ListSectionDataErrorMessage} type={MessageBarType.error} />
-    return (
-      <Shimmer isDataLoaded={state.isDataLoaded}>
-        <div className={styles.riskMatrix}>
+
+    let matrix = null
+    switch (state.data.contentTypeIndex) {
+      case 1: {
+        matrix = (
           <RiskMatrix
             {...context.props.riskMatrix}
             pageContext={context.props.pageContext}
             items={matrixElements}
           />
+        )
+      }
+        break
+      case 2: {
+        matrix = (
+          <OpportunityMatrix
+            {...context.props.opportunityMatrix}
+            items={matrixElements}
+          />
+        )
+      }
+        break
+    }
+    return (
+      <Shimmer isDataLoaded={state.isDataLoaded}>
+        <div className={styles.matrixContainer}>
+          {matrix}
         </div>
-        <div className={styles.list}>
+        <div className={styles.listContainer}>
           <ShimmeredDetailsList
             styles={{ root: { borderRadius: 10 } }}
             enableShimmer={!state.isDataLoaded}

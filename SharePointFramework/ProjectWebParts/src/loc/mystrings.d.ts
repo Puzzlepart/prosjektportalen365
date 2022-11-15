@@ -96,6 +96,7 @@ declare interface IProjectWebPartsStrings {
   WebPartNotConfiguredMessage: string
   Yes: string
   RiskMatrixGroupName: string
+  OpportunityMatrixGroupName: string
   ProjectStatusProjectPropertiesGroupName: string
   GeneralGroupName: string
   SyncProjectPropertiesText: string

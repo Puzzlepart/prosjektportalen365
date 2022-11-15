@@ -967,7 +967,7 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<GroupBy Collapse=\"TRUE\" GroupLimit=\"30\"><FieldRef Name=\"GtRiskStatus\" Ascending=\"FALSE\" /></GroupBy><OrderBy><FieldRef Name=\"GtRiskFactor\" Ascending=\"FALSE\" /></OrderBy><Where><Neq>  <FieldRef Name=\"GtRiskStatus\" />  <Value Type=\"Text\">Ikke lenger aktuell</Value></Neq></Where>"
+                        "ViewQuery": "<GroupBy Collapse=\"TRUE\" GroupLimit=\"30\"><FieldRef Name=\"GtRiskStatus\" Ascending=\"FALSE\" /></GroupBy><OrderBy><FieldRef Name=\"GtRiskFactor\" Ascending=\"FALSE\" /></OrderBy><Where><Neq> <FieldRef Name=\"GtRiskStatus\" /> <Value Type=\"Text\">Ikke lenger aktuell</Value></Neq></Where>"
                     }
                 },
                 {

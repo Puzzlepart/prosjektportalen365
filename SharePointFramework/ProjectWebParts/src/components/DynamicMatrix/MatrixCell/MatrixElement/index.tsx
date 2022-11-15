@@ -7,7 +7,8 @@ import { IMatrixElementProps } from './types'
 
 export const MatrixElement: FC<IMatrixElementProps> = (props) => {
   const context = useContext(DynamicMatrixContext)
-
+// eslint-disable-next-line no-console
+console.log(context.props?.calloutTemplate, props.model.item)
   return (
     <TooltipHost
       calloutProps={{ gapSpace: 10 }}

@@ -76,6 +76,7 @@ define([], function () {
     SaveText: 'Lagre',
     SaveColorConfigurationText: 'Lagre',
     RiskMatrixGroupName: 'Risikomatrise',
+    OpportunityMatrixGroupName:'Mulighetsmatrise',
     ProjectStatusProjectPropertiesGroupName: 'Prosjektegenskaper (Statusseksjoner)',
     SettingsGroupName: 'Innstillinger',
     DataGroupName: 'Data',

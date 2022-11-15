@@ -1,4 +1,5 @@
 import { IColumn } from '@fluentui/react'
+import _ from 'lodash'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers'
 import { useContext, useEffect, useState } from 'react'
 import { UncertaintyElementModel } from 'types'
@@ -28,9 +29,13 @@ export function useUncertaintySection() {
       setState({ data: persistedData, isDataLoaded: true })
     } else {
       fetchListData().then((_data) => {
+        const contentTypeIndex = parseInt(
+          _.first(_data.items)?.ContentType?.Id?.StringValue?.substring(38, 40) ?? '-1'
+        )
         const data: IUncertaintySectionData = {
           ..._data,
           matrixElements: _data.items.map((i) => new UncertaintyElementModel(i)),
+          contentTypeIndex
         }
         context.dispatch(
           PERSIST_SECTION_DATA({

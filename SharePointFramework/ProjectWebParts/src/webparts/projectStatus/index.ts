@@ -24,7 +24,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
     this.renderComponent<IProjectStatusProps>(ProjectStatus)
   }
 
-  protected get headerLabelFields(): IPropertyPaneField<any>[] {
+  protected get riskMatrixHeaderLabelFields(): IPropertyPaneField<any>[] {
     const size = parseInt(this.properties?.riskMatrix?.size ?? '5', 10)
     const overrideHeaderLabels = PropertyPaneToggle(`riskMatrix.overrideHeaderLabels.${size}`, {
       label: format(strings.OverrideHeadersLabel, size)
@@ -60,6 +60,52 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
     }
     for (let i = 0; i < size; i++) {
       const consequenceHeaderFieldName = `riskMatrix.headerLabels.${size}.c${i}`
+      headerLabelFields.push(
+        PropertyPaneTextField(consequenceHeaderFieldName, {
+          label: format(strings.ConsequenceHeaderFieldLabel, i + 1),
+          placeholder: consequenceHeaders[i]
+        })
+      )
+    }
+    return [overrideHeaderLabels, ...headerLabelFields]
+  }
+
+  protected get opportunityMatrixHeaderLabelFields(): IPropertyPaneField<any>[] {
+    const size = parseInt(this.properties?.opportunityMatrix?.size ?? '5', 10)
+    const overrideHeaderLabels = PropertyPaneToggle(`opportunityMatrix.overrideHeaderLabels.${size}`, {
+      label: format(strings.OverrideHeadersLabel, size)
+    })
+    if (!get(this.properties, `opportunityMatrix.overrideHeaderLabels.${size}`, false)) {
+      return [overrideHeaderLabels]
+    }
+    const headerLabelFields: IPropertyPaneField<any>[] = []
+    const probabilityHeaders: string[] = [
+      '',
+      '',
+      '',
+      '',
+      '',
+      ''
+    ]
+    const consequenceHeaders: string[] = [
+      '',
+      '',
+      '',
+      '',
+      '',
+      ''
+    ]
+    for (let i = 0; i < size; i++) {
+      const probabilityHeaderFieldName = `opportunityMatrix.headerLabels.${size}.p${i}`
+      headerLabelFields.push(
+        PropertyPaneTextField(probabilityHeaderFieldName, {
+          label: format(strings.ProbabilityHeaderFieldLabel, i + 1),
+          placeholder: probabilityHeaders[i]
+        })
+      )
+    }
+    for (let i = 0; i < size; i++) {
+      const consequenceHeaderFieldName = `opportunityMatrix.headerLabels.${size}.c${i}`
       headerLabelFields.push(
         PropertyPaneTextField(consequenceHeaderFieldName, {
           label: format(strings.ConsequenceHeaderFieldLabel, i + 1),
@@ -125,7 +171,60 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   ],
                   value: this.properties.riskMatrix?.colorScaleConfig
                 }),
-                ...this.headerLabelFields
+                ...this.riskMatrixHeaderLabelFields
+              ]
+            },
+            {
+              groupName: strings.OpportunityMatrixGroupName,
+              groupFields: [
+                PropertyPaneToggle('opportunityMatrix.fullWidth', {
+                  label: strings.MatrixFullWidthLabel
+                }),
+                PropertyPaneSlider('opportunityMatrix.width', {
+                  label: strings.WidthFieldLabel,
+                  min: 400,
+                  max: 1300,
+                  value: 400,
+                  showValue: true,
+                  disabled: this.properties.riskMatrix?.fullWidth
+                }),
+                PropertyPaneTextField('opportunityMatrix.calloutTemplate', {
+                  label: strings.CalloutTemplateFieldLabel,
+                  multiline: true,
+                  resizable: true,
+                  rows: 8
+                }),
+                PropertyPaneDropdown('opportunityMatrix.size', {
+                  label: strings.MatrixSizeLabel,
+                  options: [
+                    {
+                      key: '4',
+                      text: '4x4'
+                    },
+                    {
+                      key: '5',
+                      text: '5x5'
+                    },
+                    {
+                      key: '6',
+                      text: '6x6'
+                    }
+                  ],
+                  selectedKey: this.properties.opportunityMatrix?.size ?? '5'
+                }),
+                PropertyFieldColorConfiguration('opportunityMatrix.colorScaleConfig', {
+                  key: 'opportunityMatrixColorScaleConfig',
+                  label: strings.MatrixColorScaleConfigLabel,
+                  defaultValue: [
+                    { p: 10, r: 255, g: 0, b: 0 },
+                    { p: 30, r: 255, g: 167, b: 0 },
+                    { p: 50, r: 255, g: 244, b: 0 },
+                    { p: 70, r: 163, g: 255, b: 0 },
+                    { p: 90, r: 44, g: 186, b: 0 }
+                  ],
+                  value: this.properties.opportunityMatrix?.colorScaleConfig
+                }),
+                ...this.opportunityMatrixHeaderLabelFields
               ]
             },
             {
