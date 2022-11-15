@@ -13,4 +13,3 @@ export interface IRiskMatrixProps
   overrideHeaderLabels?: Record<string, boolean>
   headerLabels?: Record<string, string[]>
 }
-

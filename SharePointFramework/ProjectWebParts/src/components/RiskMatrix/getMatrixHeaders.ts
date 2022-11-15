@@ -2,7 +2,7 @@ import { get } from '@microsoft/sp-lodash-subset'
 import strings from 'ProjectWebPartsStrings'
 import { IRiskMatrixProps } from './types'
 
- function getHeaderLabel(
+function getHeaderLabel(
   props: IRiskMatrixProps,
   size: string,
   headerName: string,

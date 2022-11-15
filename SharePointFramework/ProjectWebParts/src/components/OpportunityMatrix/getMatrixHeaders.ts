@@ -2,7 +2,7 @@ import { get } from '@microsoft/sp-lodash-subset'
 import strings from 'ProjectWebPartsStrings'
 import { IOpportunityMatrixProps } from './types'
 
- function getHeaderLabel(
+function getHeaderLabel(
   props: IOpportunityMatrixProps,
   size: string,
   headerName: string,
@@ -20,9 +20,7 @@ import { IOpportunityMatrixProps } from './types'
  * @param props Component props
  */
 
-export function getMatrixHeaders(
-  props: IOpportunityMatrixProps
-) {
+export function getMatrixHeaders(props: IOpportunityMatrixProps) {
   const headers: Record<number, string[][]> = {}
   headers[4] = [
     [
@@ -30,13 +28,13 @@ export function getMatrixHeaders(
       getHeaderLabel(props, '4', 'c0', strings.MatrixHeader_VerySmall),
       getHeaderLabel(props, '4', 'c1', strings.MatrixHeader_Small),
       getHeaderLabel(props, '4', 'c2', strings.MatrixHeader_Medium),
-      getHeaderLabel(props, '4', 'c3', strings.MatrixHeader_Large),
+      getHeaderLabel(props, '4', 'c3', strings.MatrixHeader_Large)
     ],
     [
       getHeaderLabel(props, '4', 'p1', strings.MatrixHeader_High),
       getHeaderLabel(props, '4', 'p2', strings.MatrixHeader_Medium),
       getHeaderLabel(props, '4', 'p3', strings.MatrixHeader_Low),
-      getHeaderLabel(props, '4', 'p4', strings.MatrixHeader_VeryLow),
+      getHeaderLabel(props, '4', 'p4', strings.MatrixHeader_VeryLow)
     ]
   ]
   headers[5] = [
@@ -53,7 +51,7 @@ export function getMatrixHeaders(
       getHeaderLabel(props, '5', 'p1', strings.MatrixHeader_High),
       getHeaderLabel(props, '5', 'p2', strings.MatrixHeader_Medium),
       getHeaderLabel(props, '5', 'p3', strings.MatrixHeader_Low),
-      getHeaderLabel(props, '5', 'p4', strings.MatrixHeader_VeryLow),
+      getHeaderLabel(props, '5', 'p4', strings.MatrixHeader_VeryLow)
     ]
   ]
   headers[6] = [
@@ -66,7 +64,8 @@ export function getMatrixHeaders(
       getHeaderLabel(props, '6', 'c4', strings.MatrixHeader_VeryLarge),
       getHeaderLabel(props, '6', 'c5', strings.MatrixHeader_ExtremelyLarge)
     ],
-    [,
+    [
+      ,
       getHeaderLabel(props, '6', 'p0', strings.MatrixHeader_ExtremelyHigh),
       getHeaderLabel(props, '6', 'p1', strings.MatrixHeader_VeryHigh),
       getHeaderLabel(props, '6', 'p2', strings.MatrixHeader_High),

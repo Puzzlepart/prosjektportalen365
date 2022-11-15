@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import HubSiteService from 'sp-hubsite-service'
 import { DynamicMatrixConfiguration } from '../DynamicMatrix'
 import { IRiskMatrixProps } from './types'
-import { getMatrixHeaders } from "./getMatrixHeaders"
+import { getMatrixHeaders } from './getMatrixHeaders'
 
 /**
  * Configuration hook for `RiskMatrix`

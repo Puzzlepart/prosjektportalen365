@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { DynamicMatrixConfiguration } from '../DynamicMatrix'
 import { generateMatrixConfiguration } from '../DynamicMatrix/generateMatrixConfiguration'
 import { IOpportunityMatrixProps } from './types'
-import { getMatrixHeaders } from "./getMatrixHeaders"
+import { getMatrixHeaders } from './getMatrixHeaders'
 
 /**
  * Configuration hook for `OpportunityMatrix`
