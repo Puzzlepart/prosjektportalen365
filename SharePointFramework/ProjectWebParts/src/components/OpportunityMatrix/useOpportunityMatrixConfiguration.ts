@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { DynamicMatrixConfiguration } from '../DynamicMatrix'
 import { generateMatrixConfiguration } from '../DynamicMatrix/generateMatrixConfiguration'
-import { IOpportunityMatrixProps, RiskMatrixHeaders } from './types'
+import { IOpportunityMatrixProps, OpportunityMatrixHeaders } from './types'
 
 /**
  * Configuration hook for `OpportunityMatrix`
@@ -14,7 +14,7 @@ export function useOpportunityMatrixConfiguration(props: IOpportunityMatrixProps
   useEffect(() => {
     if (props.size) {
       setConfiguration(
-        generateMatrixConfiguration(parseInt(props.size, 10), RiskMatrixHeaders(props))
+        generateMatrixConfiguration(parseInt(props.size, 10), OpportunityMatrixHeaders(props))
       )
     }
   }, [props])

@@ -1,5 +1,5 @@
 declare interface IProjectWebPartsStrings {
-  OverrideHeadersLabel: string | ReactElement<any, string | JSXElementConstructor<any>>
+  OverrideHeadersLabel: string
   ProbabilityHeaderFieldLabel: string
   ConsequenceHeaderFieldLabel: string
   ColorPickerStrings: IColorPickerStrings
