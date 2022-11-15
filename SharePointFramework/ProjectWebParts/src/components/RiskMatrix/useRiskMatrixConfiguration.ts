@@ -3,7 +3,8 @@ import { generateMatrixConfiguration } from '../DynamicMatrix/generateMatrixConf
 import { useEffect, useState } from 'react'
 import HubSiteService from 'sp-hubsite-service'
 import { DynamicMatrixConfiguration } from '../DynamicMatrix'
-import { IRiskMatrixProps, RiskMatrixHeaders } from './types'
+import { IRiskMatrixProps } from './types'
+import { getMatrixHeaders } from "./getMatrixHeaders"
 
 /**
  * Configuration hook for `RiskMatrix`
@@ -34,7 +35,7 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
   useEffect(() => {
     if (props.size) {
       setConfiguration(
-        generateMatrixConfiguration(parseInt(props.size, 10), RiskMatrixHeaders(props))
+        generateMatrixConfiguration(parseInt(props.size, 10), getMatrixHeaders(props))
       )
     }
   }, [props])

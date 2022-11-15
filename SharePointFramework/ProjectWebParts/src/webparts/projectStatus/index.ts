@@ -34,20 +34,20 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
     }
     const headerLabelFields: IPropertyPaneField<any>[] = []
     const probabilityHeaders: string[] = [
-      strings.RiskMatrix_Header_VeryHigh,
-      strings.RiskMatrix_Header_High,
-      strings.RiskMatrix_Header_Medium,
-      strings.RiskMatrix_Header_Low,
-      strings.RiskMatrix_Header_VeryLow,
-      strings.RiskMatrix_Header_ExtremelyLow
+      strings.MatrixHeader_VeryHigh,
+      strings.MatrixHeader_High,
+      strings.MatrixHeader_Medium,
+      strings.MatrixHeader_Low,
+      strings.MatrixHeader_VeryLow,
+      strings.MatrixHeader_ExtremelyLow
     ]
     const consequenceHeaders: string[] = [
-      strings.RiskMatrix_Header_Insignificant,
-      strings.RiskMatrix_Header_Small,
-      strings.RiskMatrix_Header_Moderate,
-      strings.RiskMatrix_Header_Serious,
-      strings.RiskMatrix_Header_Critical,
-      strings.RiskMatrix_Header_VeryCritical
+      strings.MatrixHeader_Insignificant,
+      strings.MatrixHeader_Small,
+      strings.MatrixHeader_Moderate,
+      strings.MatrixHeader_Serious,
+      strings.MatrixHeader_Critical,
+      strings.MatrixHeader_VeryCritical
     ]
     for (let i = 0; i < size; i++) {
       const probabilityHeaderFieldName = `riskMatrix.headerLabels.${size}.p${i}`
