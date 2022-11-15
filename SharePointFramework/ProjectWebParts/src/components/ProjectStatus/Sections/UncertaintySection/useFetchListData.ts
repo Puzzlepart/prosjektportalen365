@@ -1,9 +1,9 @@
 import { IColumn } from '@fluentui/react'
 import { Web } from '@pnp/sp'
 import { ProjectStatusContext } from '../../context'
-import { RiskElementModel } from '../../../RiskMatrix'
 import { useContext } from 'react'
 import { SectionContext } from '../context'
+import { UncertaintyElementModel } from 'types'
 
 /**
  * Fetch list data
@@ -23,10 +23,10 @@ export function useFetchListData() {
       ])
       if (items.length === 0) return null
       const itemValues = items.map((i) => i.FieldValuesAsText)
-      const riskElements = itemValues.map((i) => new RiskElementModel(i))
-      const columns: IColumn[] = section.viewFields
+      const matrixElements = itemValues.map((i) => new UncertaintyElementModel(i))
+      const columns = section.viewFields
         .filter((vf) => fields.filter((fld) => fld.InternalName === vf).length === 1)
-        .map((vf) => {
+        .map<IColumn>((vf) => {
           const [field] = fields.filter((fld) => fld.InternalName === vf)
           return {
             key: field.InternalName,
@@ -36,9 +36,9 @@ export function useFetchListData() {
             maxWidth: { Text: 250, Note: 250, Choice: 150, Number: 100 }[field.TypeAsString] || 150,
             isResizable: true,
             isMultiline: true
-          } as IColumn
+          } 
         })
-      return { items: itemValues, columns, riskElements }
+      return { items: itemValues, columns, matrixElements }
     } catch (error) {
       throw error
     }

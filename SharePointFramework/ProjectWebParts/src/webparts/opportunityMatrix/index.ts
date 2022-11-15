@@ -9,16 +9,17 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { sp } from '@pnp/sp'
-import { IOpportunityMatrixProps, OpportunityElementModel, OpportunityMatrix } from 'components/OpportunityMatrix'
+import { IOpportunityMatrixProps, OpportunityMatrix } from 'components/OpportunityMatrix'
 import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
 import * as getValue from 'get-value'
 import * as strings from 'ProjectWebPartsStrings'
 import ReactDom from 'react-dom'
+import { UncertaintyElementModel } from 'types'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 import { IOpportunityMatrixWebPartProps } from './types'
 
 export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpportunityMatrixWebPartProps> {
-  private _items: OpportunityElementModel[] = []
+  private _items: UncertaintyElementModel[] = []
   private _error: Error
 
   public async onInit() {
@@ -42,7 +43,7 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
     }
   }
 
-  protected async _getItems(): Promise<OpportunityElementModel[]> {
+  protected async _getItems(): Promise<UncertaintyElementModel[]> {
     const {
       probabilityFieldName,
       consequenceFieldName,
@@ -54,7 +55,7 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
       .getItemsByCAMLQuery({ ViewXml: this.properties.viewXml })
     return items.map(
       (i) =>
-        new OpportunityElementModel(
+        new UncertaintyElementModel(
           i,
           getValue(i, probabilityFieldName, { default: '' }),
           getValue(i, consequenceFieldName, { default: '' }),

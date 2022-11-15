@@ -17,7 +17,7 @@ import { useUncertaintySection } from './useUncertaintySection'
 
 export const UncertaintySection: FC = () => {
   const context = useContext(ProjectStatusContext)
-  const { state, riskElements, items, columns, shouldRenderContent } = useUncertaintySection()
+  const { state, matrixElements, items, columns, shouldRenderContent } = useUncertaintySection()
 
   /**
    * Render content
@@ -31,7 +31,7 @@ export const UncertaintySection: FC = () => {
           <RiskMatrix
             {...context.props.riskMatrix}
             pageContext={context.props.pageContext}
-            items={riskElements}
+            items={matrixElements}
           />
         </div>
         <div className={styles.list}>

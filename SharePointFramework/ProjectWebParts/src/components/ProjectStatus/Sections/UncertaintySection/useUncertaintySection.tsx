@@ -1,5 +1,4 @@
 import { IColumn } from '@fluentui/react'
-import { RiskElementModel } from 'components/RiskMatrix'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers'
 import { useContext, useEffect, useState } from 'react'
 import { isEmpty } from 'underscore'
@@ -38,7 +37,7 @@ export function useUncertaintySection() {
 
   return {
     state,
-    riskElements: get<RiskElementModel[]>(state, 'data.riskElements', []),
+    matrixElements: get<any[]>(state, 'data.matrixElements', []),
     items: get<any[]>(state, 'data.items', []),
     columns: get<IColumn[]>(state, 'data.columns', []),
     shouldRenderContent

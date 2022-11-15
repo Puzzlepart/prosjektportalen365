@@ -1,8 +1,8 @@
-import { RiskElementModel } from '../../../RiskMatrix'
+import { UncertaintyElementModel } from 'types'
 import { IListSectionData, IListSectionState } from '../ListSection'
 
 export type IUncertaintySectionState = IListSectionState<IUncertaintySectionData>
 
 export interface IUncertaintySectionData extends IListSectionData {
-  riskElements?: RiskElementModel[]
+  matrixElements?: UncertaintyElementModel[]
 }

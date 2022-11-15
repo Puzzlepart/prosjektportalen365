@@ -10,15 +10,16 @@ import {
 } from '@microsoft/sp-property-pane'
 import { sp } from '@pnp/sp'
 import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
-import { IRiskMatrixProps, RiskElementModel, RiskMatrix } from 'components/RiskMatrix'
+import { IRiskMatrixProps, RiskMatrix } from 'components/RiskMatrix'
 import * as getValue from 'get-value'
 import * as strings from 'ProjectWebPartsStrings'
 import ReactDom from 'react-dom'
+import { UncertaintyElementModel } from 'types'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 import { IRiskMatrixWebPartProps } from './types'
 
 export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWebPartProps> {
-  private _items: RiskElementModel[] = []
+  private _items: UncertaintyElementModel[] = []
   private _error: Error
 
   public async onInit() {
@@ -42,7 +43,7 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
     }
   }
 
-  protected async _getItems(): Promise<RiskElementModel[]> {
+  protected async _getItems(): Promise<UncertaintyElementModel[]> {
     const {
       probabilityFieldName,
       consequenceFieldName,
@@ -54,7 +55,7 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
       .getItemsByCAMLQuery({ ViewXml: this.properties.viewXml })
     return items.map(
       (i) =>
-        new RiskElementModel(
+        new UncertaintyElementModel(
           i,
           getValue(i, probabilityFieldName, { default: '' }),
           getValue(i, consequenceFieldName, { default: '' }),

@@ -1,65 +1,17 @@
 import { get } from '@microsoft/sp-lodash-subset'
 import { PageContext } from '@microsoft/sp-page-context'
 import { HTMLProps } from 'react'
+import { UncertaintyElementModel } from 'types'
 import { IDynamicMatrixProps } from '../DynamicMatrix'
-import { IMatrixElementModel } from '../DynamicMatrix/MatrixCell/MatrixElement/types'
 
 export interface IOpportunityMatrixProps
   extends Omit<HTMLProps<HTMLDivElement>, 'size'>,
   Pick<IDynamicMatrixProps, 'size' | 'colorScaleConfig' | 'calloutTemplate'> {
-  items?: OpportunityElementModel[]
+  items?: UncertaintyElementModel[]
   fullWidth?: boolean
   pageContext?: PageContext
   overrideHeaderLabels?: Record<string, boolean>
   headerLabels?: Record<string, string[]>
-}
-
-export interface IOpportunityElementItem {
-  Id: number
-  Title: string
-  [key: string]: any
-}
-
-export class OpportunityElementModel implements IMatrixElementModel {
-  public id: number
-  public title: string
-  public probability: number
-  public consequence: number
-  public probabilityPostAction: number
-  public consequencePostAction: number
-  public action: string
-  public url: string
-  public webId: string
-  public webUrl: string
-  public siteTitle: string
-
-  constructor(
-    public item: IOpportunityElementItem,
-    probability?: string,
-    consequence?: string,
-    probabilityPostAction?: string,
-    consequencePostAction?: string
-  ) {
-    this.id = item.Id || item.ID
-    this.title = item.Title
-    this.probability = parseInt(probability || item.GtRiskProbability, 10)
-    this.consequence = parseInt(consequence || item.GtRiskConsequence, 10)
-    this.probabilityPostAction = parseInt(
-      probabilityPostAction || item.GtRiskProbabilityPostAction,
-      10
-    )
-    this.consequencePostAction = parseInt(
-      consequencePostAction || item.GtRiskConsequencePostAction,
-      10
-    )
-  }
-
-  public get tooltip() {
-    let tooltip = ''
-    if (this.siteTitle) tooltip += `${this.siteTitle}: `
-    tooltip += this.title
-    return tooltip
-  }
 }
 
 function getHeaderLabel(
