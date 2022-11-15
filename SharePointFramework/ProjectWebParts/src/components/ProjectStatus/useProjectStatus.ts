@@ -17,5 +17,7 @@ export function useProjectStatus(props: IProjectStatusProps) {
     })
   }, [])
 
-  return { value: { props, state, dispatch } } as ProviderProps<IProjectStatusContext>
+  const value = { props, state, dispatch }
+
+  return { value } as ProviderProps<IProjectStatusContext>
 }

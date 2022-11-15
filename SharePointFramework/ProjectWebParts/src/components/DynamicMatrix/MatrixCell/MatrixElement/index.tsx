@@ -7,7 +7,6 @@ import { IMatrixElementProps } from './types'
 
 export const MatrixElement: FC<IMatrixElementProps> = (props) => {
   const context = useContext(DynamicMatrixContext)
-
   return (
     <TooltipHost
       calloutProps={{ gapSpace: 10 }}
