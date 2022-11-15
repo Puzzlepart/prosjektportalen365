@@ -16,9 +16,9 @@ export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
         getElementsForCell={getElementsForCell}
       />
       <Toggle
-        label={strings.RiskMatrixToggleElementsLabel}
-        onText={strings.RiskMatrixToggleElementsOnText}
-        offText={strings.RiskMatrixToggleElementsOffText}
+        label={strings.ToggleUncertaintyPostActionLabel}
+        onText={strings.ToggleUncertaintyPostActionOnText}
+        offText={strings.ToggleUncertaintyPostActionOffText}
         onChange={(_event, checked) => setShowPostAction(checked)}
       />
     </>

@@ -16,9 +16,9 @@ export const OpportunityMatrix: FC<IOpportunityMatrixProps> = (props) => {
         getElementsForCell={getElementsForCell}
       />
       <Toggle
-        label={strings.RiskMatrixToggleElementsLabel}
-        onText={strings.RiskMatrixToggleElementsOnText}
-        offText={strings.RiskMatrixToggleElementsOffText}
+        label={strings.ToggleUncertaintyPostActionLabel}
+        onText={strings.ToggleUncertaintyPostActionOnText}
+        offText={strings.ToggleUncertaintyPostActionOffText}
         onChange={(_event, checked) => setShowPostAction(checked)}
       />
     </>
@@ -35,11 +35,11 @@ OpportunityMatrix.defaultProps = {
   <p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>`,
   size: '5',
   colorScaleConfig: [
-    { p: 90, r: 44, g: 186, b: 0 },
-    { p: 70, r: 163, g: 255, b: 0 },
-    { p: 50, r: 255, g: 244, b: 0 },
+    { p: 10, r: 255, g: 0, b: 0 },
     { p: 30, r: 255, g: 167, b: 0 },
-    { p: 10, r: 255, g: 0, b: 0 }
+    { p: 50, r: 255, g: 244, b: 0 },
+    { p: 70, r: 163, g: 255, b: 0 },
+    { p: 90, r: 44, g: 186, b: 0 }
   ]
 }
 

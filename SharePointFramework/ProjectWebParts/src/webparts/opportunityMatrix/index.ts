@@ -78,20 +78,20 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
     }
     const headerLabelFields: IPropertyPaneField<any>[] = []
     const probabilityHeaders: string[] = [
-      strings.RiskMatrix_Header_VeryHigh,
-      strings.RiskMatrix_Header_High,
-      strings.RiskMatrix_Header_Medium,
-      strings.RiskMatrix_Header_Low,
-      strings.RiskMatrix_Header_VeryLow,
-      strings.RiskMatrix_Header_ExtremelyLow
+      '',
+      '',
+      '',
+      '',
+      '',
+      ''
     ]
     const consequenceHeaders: string[] = [
-      strings.RiskMatrix_Header_Insignificant,
-      strings.RiskMatrix_Header_Small,
-      strings.RiskMatrix_Header_Moderate,
-      strings.RiskMatrix_Header_Serious,
-      strings.RiskMatrix_Header_Critical,
-      strings.RiskMatrix_Header_VeryCritical
+      '',
+      '',
+      '',
+      '',
+      '',
+      ''
     ]
     for (let i = 0; i < size; i++) {
       const probabilityHeaderFieldName = `headerLabels.${size}.p${i}`
@@ -185,11 +185,11 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
                   key: 'colorScaleConfig',
                   label: strings.MatrixColorScaleConfigLabel,
                   defaultValue: [
-                    { p: 10, r: 44, g: 186, b: 0 },
-                    { p: 30, r: 163, g: 255, b: 0 },
+                    { p: 10, r: 255, g: 0, b: 0 },
+                    { p: 30, r: 255, g: 167, b: 0 },
                     { p: 50, r: 255, g: 244, b: 0 },
-                    { p: 70, r: 255, g: 167, b: 0 },
-                    { p: 90, r: 255, g: 0, b: 0 }
+                    { p: 70, r: 163, g: 255, b: 0 },
+                    { p: 90, r: 44, g: 186, b: 0 }
                   ],
                   value: this.properties.colorScaleConfig
                 }),

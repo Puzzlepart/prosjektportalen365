@@ -3,8 +3,8 @@ declare interface IProjectWebPartsStrings {
   ProbabilityHeaderFieldLabel: string
   ConsequenceHeaderFieldLabel: string
   ColorPickerStrings: IColorPickerStrings
-  RiskMatrixToggleElementsOnText: string
-  RiskMatrixToggleElementsOffText: string
+  ToggleUncertaintyPostActionOnText: string
+  ToggleUncertaintyPostActionOffText: string
   RevertDefaultColorConfigurationText: string
   RiskMatrix_Header_ExtremelyLow: string
   RiskMatrix_Header_VeryCritical: string
@@ -125,7 +125,7 @@ declare interface IProjectWebPartsStrings {
   RiskMatrix_Header_Small: string
   RiskMatrix_Header_VeryHigh: string
   RiskMatrix_Header_VeryLow: string
-  RiskMatrixToggleElementsLabel: string
+  ToggleUncertaintyPostActionLabel: string
   GtModerationStatus_Choice_Published: string
   GtModerationStatus_Choice_Draft: string
   ListNameFieldLabel: string

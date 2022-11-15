@@ -5,7 +5,7 @@ import { IOpportunityMatrixProps } from './types'
 import { useOpportunityMatrixConfiguration } from './useOpportunityMatrixConfiguration'
 
 /**
- * Component logic hook for `RiskMatrix`
+ * Component logic hook for `OpportunityMatrix`
  *
  * @param props Props
  */
