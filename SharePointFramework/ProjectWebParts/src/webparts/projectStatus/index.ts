@@ -72,29 +72,18 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
 
   protected get opportunityMatrixHeaderLabelFields(): IPropertyPaneField<any>[] {
     const size = parseInt(this.properties?.opportunityMatrix?.size ?? '5', 10)
-    const overrideHeaderLabels = PropertyPaneToggle(`opportunityMatrix.overrideHeaderLabels.${size}`, {
-      label: format(strings.OverrideHeadersLabel, size)
-    })
+    const overrideHeaderLabels = PropertyPaneToggle(
+      `opportunityMatrix.overrideHeaderLabels.${size}`,
+      {
+        label: format(strings.OverrideHeadersLabel, size)
+      }
+    )
     if (!get(this.properties, `opportunityMatrix.overrideHeaderLabels.${size}`, false)) {
       return [overrideHeaderLabels]
     }
     const headerLabelFields: IPropertyPaneField<any>[] = []
-    const probabilityHeaders: string[] = [
-      '',
-      '',
-      '',
-      '',
-      '',
-      ''
-    ]
-    const consequenceHeaders: string[] = [
-      '',
-      '',
-      '',
-      '',
-      '',
-      ''
-    ]
+    const probabilityHeaders: string[] = ['', '', '', '', '', '']
+    const consequenceHeaders: string[] = ['', '', '', '', '', '']
     for (let i = 0; i < size; i++) {
       const probabilityHeaderFieldName = `opportunityMatrix.headerLabels.${size}.p${i}`
       headerLabelFields.push(

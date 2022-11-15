@@ -1,4 +1,4 @@
-import { UncertaintyElementModel } from 'types'
+import { UncertaintyElementModel } from '../../../../types'
 import { IListSectionData, IListSectionState } from '../ListSection'
 
 export type IUncertaintySectionState = IListSectionState<IUncertaintySectionData>

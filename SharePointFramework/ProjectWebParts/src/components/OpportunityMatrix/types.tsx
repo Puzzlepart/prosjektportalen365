@@ -1,7 +1,7 @@
 import { get } from '@microsoft/sp-lodash-subset'
 import { PageContext } from '@microsoft/sp-page-context'
 import { HTMLProps } from 'react'
-import { UncertaintyElementModel } from 'types'
+import { UncertaintyElementModel } from '../../types'
 import { IDynamicMatrixProps } from '../DynamicMatrix'
 
 export interface IOpportunityMatrixProps

@@ -3,7 +3,7 @@ import { PageContext } from '@microsoft/sp-page-context'
 import strings from 'ProjectWebPartsStrings'
 import { HTMLProps } from 'react'
 import { IDynamicMatrixProps } from '../DynamicMatrix'
-import { UncertaintyElementModel } from 'types/UncertaintyElementModel'
+import { UncertaintyElementModel } from '../../types'
 
 export interface IRiskMatrixProps
   extends Omit<HTMLProps<HTMLDivElement>, 'size'>,

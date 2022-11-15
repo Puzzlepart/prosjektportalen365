@@ -29,31 +29,26 @@ export const UncertaintySection: FC = () => {
 
     let matrix = null
     switch (state.data.contentTypeIndex) {
-      case 1: {
-        matrix = (
-          <RiskMatrix
-            {...context.props.riskMatrix}
-            pageContext={context.props.pageContext}
-            items={matrixElements}
-          />
-        )
-      }
+      case 1:
+        {
+          matrix = (
+            <RiskMatrix
+              {...context.props.riskMatrix}
+              pageContext={context.props.pageContext}
+              items={matrixElements}
+            />
+          )
+        }
         break
-      case 2: {
-        matrix = (
-          <OpportunityMatrix
-            {...context.props.opportunityMatrix}
-            items={matrixElements}
-          />
-        )
-      }
+      case 2:
+        {
+          matrix = <OpportunityMatrix {...context.props.opportunityMatrix} items={matrixElements} />
+        }
         break
     }
     return (
       <Shimmer isDataLoaded={state.isDataLoaded}>
-        <div className={styles.matrixContainer}>
-          {matrix}
-        </div>
+        <div className={styles.matrixContainer}>{matrix}</div>
         <div className={styles.listContainer}>
           <ShimmeredDetailsList
             styles={{ root: { borderRadius: 10 } }}
