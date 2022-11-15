@@ -147,7 +147,7 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
               groupName: strings.LookAndFeelGroupName,
               groupFields: [
                 PropertyPaneToggle('fullWidth', {
-                  label: strings.RiskMatrixFullWidthLabel
+                  label: strings.MatrixFullWidthLabel
                 }),
                 PropertyPaneSlider('width', {
                   label: strings.WidthFieldLabel,
@@ -164,7 +164,7 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                   rows: 8
                 }),
                 PropertyPaneDropdown('size', {
-                  label: strings.RiskMatrixSizeLabel,
+                  label: strings.MatrixSizeLabel,
                   options: [
                     {
                       key: '4',
@@ -183,7 +183,7 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                 }),
                 PropertyFieldColorConfiguration('colorScaleConfig', {
                   key: 'colorScaleConfig',
-                  label: strings.RiskMatrixColorScaleConfigLabel,
+                  label: strings.MatrixColorScaleConfigLabel,
                   defaultValue: [
                     { p: 10, r: 44, g: 186, b: 0 },
                     { p: 30, r: 163, g: 255, b: 0 },

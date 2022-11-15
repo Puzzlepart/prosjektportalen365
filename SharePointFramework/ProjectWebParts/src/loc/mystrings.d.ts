@@ -8,10 +8,10 @@ declare interface IProjectWebPartsStrings {
   RevertDefaultColorConfigurationText: string
   RiskMatrix_Header_ExtremelyLow: string
   RiskMatrix_Header_VeryCritical: string
-  RiskMatrixColorScaleConfigLabel: string
+  MatrixColorScaleConfigLabel: string
   SaveColorConfigurationText: string
-  RiskMatrixSizeLabel: string
-  RiskMatrixFullWidthLabel: string 
+  MatrixSizeLabel: string
+  MatrixFullWidthLabel: string 
   ParentProjectsGroupName: string
   StatusReportShowOnlyIconsLabel: string
   StatusReportTruncateCommentsLabel: string

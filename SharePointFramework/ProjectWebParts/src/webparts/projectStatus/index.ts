@@ -79,7 +79,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
               groupName: strings.RiskMatrixGroupName,
               groupFields: [
                 PropertyPaneToggle('riskMatrix.fullWidth', {
-                  label: strings.RiskMatrixFullWidthLabel
+                  label: strings.MatrixFullWidthLabel
                 }),
                 PropertyPaneSlider('riskMatrix.width', {
                   label: strings.WidthFieldLabel,
@@ -96,7 +96,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   rows: 8
                 }),
                 PropertyPaneDropdown('riskMatrix.size', {
-                  label: strings.RiskMatrixSizeLabel,
+                  label: strings.MatrixSizeLabel,
                   options: [
                     {
                       key: '4',
@@ -115,7 +115,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                 }),
                 PropertyFieldColorConfiguration('riskMatrix.colorScaleConfig', {
                   key: 'riskMatrixColorScaleConfig',
-                  label: strings.RiskMatrixColorScaleConfigLabel,
+                  label: strings.MatrixColorScaleConfigLabel,
                   defaultValue: [
                     { p: 10, r: 44, g: 186, b: 0 },
                     { p: 30, r: 163, g: 255, b: 0 },
