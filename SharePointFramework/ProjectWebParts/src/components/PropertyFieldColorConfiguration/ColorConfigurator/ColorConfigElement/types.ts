@@ -1,5 +1,5 @@
 import { ICalloutProps, IColor, ISliderProps } from '@fluentui/react'
-import { DynamicMatrixColorScaleConfig } from 'components/DynamicMatrix'
+import { DynamicMatrixColorScaleConfig } from '../../../DynamicMatrix'
 
 export interface IColorConfigElementProps
   extends Pick<ISliderProps, 'min' | 'max'>,

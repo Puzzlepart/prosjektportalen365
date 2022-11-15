@@ -5,7 +5,7 @@ import {
   Shimmer,
   ShimmeredDetailsList
 } from '@fluentui/react'
-import { OpportunityMatrix } from 'components/OpportunityMatrix'
+import { OpportunityMatrix } from '../../../OpportunityMatrix'
 import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'

@@ -1,4 +1,4 @@
-import { IMatrixElementProps } from 'components/DynamicMatrix/MatrixCell/MatrixElement/types'
+import { IMatrixElementProps } from '../DynamicMatrix/MatrixCell/MatrixElement/types'
 import { useState } from 'react'
 import { IMatrixCell } from '../DynamicMatrix'
 import { IOpportunityMatrixProps } from './types'
