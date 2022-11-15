@@ -36,8 +36,7 @@ export class UncertaintyElementModel implements IMatrixElementModel<Record<strin
 
   public get tooltip() {
     let tooltip = ''
-    if (this.siteTitle)
-      tooltip += `${this.siteTitle}: `
+    if (this.siteTitle) tooltip += `${this.siteTitle}: `
     tooltip += this.title
     return tooltip
   }

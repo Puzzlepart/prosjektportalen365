@@ -6,7 +6,7 @@ import { IDynamicMatrixProps } from '../DynamicMatrix'
 
 export interface IOpportunityMatrixProps
   extends Omit<HTMLProps<HTMLDivElement>, 'size'>,
-  Pick<IDynamicMatrixProps, 'size' | 'colorScaleConfig' | 'calloutTemplate'> {
+    Pick<IDynamicMatrixProps, 'size' | 'colorScaleConfig' | 'calloutTemplate'> {
   items?: UncertaintyElementModel[]
   fullWidth?: boolean
   pageContext?: PageContext
@@ -26,7 +26,9 @@ function getHeaderLabel(
     : fallbackHeaderLabel
 }
 
-export function OpportunityMatrixHeaders(props: IOpportunityMatrixProps): Record<number, string[][]> {
+export function OpportunityMatrixHeaders(
+  props: IOpportunityMatrixProps
+): Record<number, string[][]> {
   const fourByFour = [
     [
       undefined,

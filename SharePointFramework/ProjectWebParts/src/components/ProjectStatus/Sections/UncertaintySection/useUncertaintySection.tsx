@@ -1,12 +1,13 @@
 import { IColumn } from '@fluentui/react'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers'
 import { useContext, useEffect, useState } from 'react'
+import { UncertaintyElementModel } from 'types'
 import { isEmpty } from 'underscore'
 import { ProjectStatusContext } from '../../context'
 import { PERSIST_SECTION_DATA } from '../../reducer'
 import { SectionContext } from '../context'
-import { IUncertaintySectionState } from './types'
-import { useFetchListData } from './useFetchListData'
+import { useFetchListData } from '../ListSection/useFetchListData'
+import { IUncertaintySectionData, IUncertaintySectionState } from './types'
 
 export function useUncertaintySection() {
   const context = useContext(ProjectStatusContext)
@@ -23,7 +24,11 @@ export function useUncertaintySection() {
     if (persistedData) {
       setState({ data: persistedData, isDataLoaded: true })
     } else {
-      fetchListData().then((data) => {
+      fetchListData().then((_data) => {
+        const data: IUncertaintySectionData = {
+          ..._data,
+          matrixElements: _data.items.map((i) => new UncertaintyElementModel(i))
+        }
         context.dispatch(
           PERSIST_SECTION_DATA({
             section,

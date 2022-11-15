@@ -18,7 +18,9 @@ import { UncertaintyElementModel } from 'types'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 import { IOpportunityMatrixWebPartProps } from './types'
 
-export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpportunityMatrixWebPartProps> {
+export default class OpportunityMatrixWebPart extends BaseProjectWebPart<
+  IOpportunityMatrixWebPartProps
+> {
   private _items: UncertaintyElementModel[] = []
   private _error: Error
 
@@ -78,22 +80,8 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
       return [overrideHeaderLabels]
     }
     const headerLabelFields: IPropertyPaneField<any>[] = []
-    const probabilityHeaders: string[] = [
-      '',
-      '',
-      '',
-      '',
-      '',
-      ''
-    ]
-    const consequenceHeaders: string[] = [
-      '',
-      '',
-      '',
-      '',
-      '',
-      ''
-    ]
+    const probabilityHeaders: string[] = ['', '', '', '', '', '']
+    const consequenceHeaders: string[] = ['', '', '', '', '', '']
     for (let i = 0; i < size; i++) {
       const probabilityHeaderFieldName = `headerLabels.${size}.p${i}`
       headerLabelFields.push(
