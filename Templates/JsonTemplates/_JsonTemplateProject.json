@@ -959,14 +959,11 @@
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
-                        "GtRiskDescription",
-                        "GtRiskProbability",
-                        "GtRiskConsequence",
-                        "GtRiskFactor",
-                        "GtRiskStatus",
-                        "GtRiskStrategy",
+                        "GtRiskProximity",
                         "GtRiskAction",
-                        "Modified"
+                        "GtRiskStrategy",
+                        "GtRiskFactor",
+                        "GtRiskFactorPostAction"
                     ],
                     "AdditionalSettings": {
                         "RowLimit": 100,
@@ -979,14 +976,11 @@
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
-                        "GtRiskDescription",
-                        "GtRiskProbability",
-                        "GtRiskConsequence",
-                        "GtRiskFactor",
-                        "GtRiskStatus",
-                        "GtRiskStrategy",
+                        "GtRiskProximity",
                         "GtRiskAction",
-                        "Modified"
+                        "GtRiskStrategy",
+                        "GtRiskFactor",
+                        "GtRiskFactorPostAction"
                     ],
                     "AdditionalSettings": {
                         "RowLimit": 100,
