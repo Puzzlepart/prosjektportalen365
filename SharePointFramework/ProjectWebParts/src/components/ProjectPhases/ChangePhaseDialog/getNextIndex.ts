@@ -1,18 +1,20 @@
-import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
+import _ from 'lodash'
+import { ChecklistItemModel } from 'pp365-shared/lib/models'
 import * as strings from 'ProjectWebPartsStrings'
 
 /**
- * Get next index
+ * Get next checklist item index.
  *
  * @param checklistItems Checklist items
  * @param startIndex Start index
  */
 export const getNextIndex = (
-  checklistItems: IProjectPhaseChecklistItem[],
+  checklistItems: ChecklistItemModel[],
   startIndex: number = 0
 ): number => {
-  const [nextOpen] = [...checklistItems]
-    .splice(startIndex)
-    .filter((item) => item.GtChecklistStatus === strings.StatusOpen)
+  const nextOpen = _.find(
+    [...checklistItems].splice(startIndex),
+    (item) => item.status === strings.StatusOpen
+  )
   return checklistItems.indexOf(nextOpen)
 }

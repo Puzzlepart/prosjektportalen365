@@ -1,3 +1,4 @@
+export * from './ChecklistItemModel'
 export * from './DataSource'
 export * from './ProjectPropertyModel'
 export * from './ProjectColumnConfig'

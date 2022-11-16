@@ -1,4 +1,8 @@
 declare interface IProjectWebPartsStrings {
+  ChecklistCommentDescription: string
+  ChecklistCommentPlaceholder: string
+  ProjectPhasesChangePhaseError: string
+  ProjectPhasesFetchDataError: string
   OverrideHeadersLabel: string
   ProbabilityHeaderFieldLabel: string
   ConsequenceHeaderFieldLabel: string
@@ -42,7 +46,7 @@ declare interface IProjectWebPartsStrings {
   CheckpointDoneTooltip: string
   CheckpointNotRelevantTooltip: string
   CheckpointNotRelevantTooltipCommentEmpty: string
-  CheckPointsMarkedAsText: string
+  CheckPointsStatus: string
   CheckpointStillOpenTooltip: string
   CheckpointStillOpenTooltipCommentEmpty: string
   CloseText: string

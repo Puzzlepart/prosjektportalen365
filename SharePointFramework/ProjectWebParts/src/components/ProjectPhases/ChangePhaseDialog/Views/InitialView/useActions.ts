@@ -1,15 +1,20 @@
-import { stringIsNullOrEmpty } from '@pnp/common'
 import { IButtonProps } from '@fluentui/react/lib/Button'
+import { ProjectPhasesContext } from 'components/ProjectPhases/context'
 import * as strings from 'ProjectWebPartsStrings'
+import { useContext } from 'react'
 
 /**
- * Get actions
+ * Use actions hook
  *
  * @param comment Comment value
  * @param onNextChecklistItem On next checklist item callback
  */
-export default (comment: string, onNextChecklistItem: (statusValue: string) => void) => {
-  const isCommentValid = !stringIsNullOrEmpty(comment) && comment.length >= 4
+export function useActions(
+  comment: string,
+  onNextChecklistItem: (statusValue: string) => void
+) {
+  const context = useContext(ProjectPhasesContext)
+  const isCommentValid = comment?.length >= context.props.commentMinLength
   const actions: IButtonProps[] = [
     {
       text: strings.StatusNotRelevant,

@@ -1,5 +1,9 @@
 define([], function () {
   return {
+    ChecklistCommentPlaceholder: 'Skriv inn en kommentar...',
+    ChecklistCommentDescription: 'Kommentar er obligatorisk om sjekkpunktet skal markeres som "Ikke relevant" eller "Fortsatt åpen".',
+    ProjectPhasesChangePhaseError: 'Det skjedde en feil under endring av fase. Vennligst prøv igjen, eller kontakt en administrator.',
+    ProjectPhasesFetchDataError: 'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.',
     OverrideHeadersLabel: 'Overstyr overskrifter for {0}x{0}',
     ProbabilityHeaderFieldLabel: 'Sannsynlighet {0}',
     ConsequenceHeaderFieldLabel: 'Konsekvens {0}',
@@ -39,7 +43,7 @@ define([], function () {
     CheckpointDoneTooltip: 'Sjekkpunktet er utført',
     CheckpointNotRelevantTooltip: 'Sjekkpunktet er ikke relevant',
     CheckpointNotRelevantTooltipCommentEmpty: 'Du kan ikke sette sjekkpunktet som \'Ikke relevant\' uten å legge inn enn kommentar.',
-    CheckPointsMarkedAsText: 'sjekkpunkter markert som',
+    CheckPointsStatus: '{0} sjekkpunkter markert som **{1}**',
     CheckpointStillOpenTooltip: 'Sjekkpunktet er forsatt åpent',
     CheckpointStillOpenTooltipCommentEmpty: 'Du kan ikke sette sjekkpunktet som \'Fortsatt åpen\' uten å legge inn enn kommentar.',
     CloseText: 'Lukk',
@@ -76,7 +80,7 @@ define([], function () {
     SaveText: 'Lagre',
     SaveColorConfigurationText: 'Lagre',
     RiskMatrixGroupName: 'Risikomatrise',
-    OpportunityMatrixGroupName:'Mulighetsmatrise',
+    OpportunityMatrixGroupName: 'Mulighetsmatrise',
     ProjectStatusProjectPropertiesGroupName: 'Prosjektegenskaper (Statusseksjoner)',
     SettingsGroupName: 'Innstillinger',
     DataGroupName: 'Data',
