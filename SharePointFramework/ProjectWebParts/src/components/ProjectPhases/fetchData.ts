@@ -6,13 +6,12 @@ import { IProjectPhasesData, IProjectPhasesProps } from '.'
 import { getPhaseSitePages } from './getPhaseSitePages'
 import { getWelcomePage } from './getWelcomePage'
 
-/***
- * Fetch phase terms
+/**
+ * Fetch data for `ProjectPhases`.
  *
  * @param props ProjectPhases props
  */
 export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPhasesData> {
-  const { phaseField } = props
   let phaseSitePages = []
 
   try {
@@ -23,7 +22,7 @@ export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPha
       logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     })
     const [phaseFieldCtx, checklistData, welcomePage, properties] = await Promise.all([
-      SPDataAdapter.getTermFieldContext(phaseField),
+      SPDataAdapter.getTermFieldContext(props.phaseField),
       SPDataAdapter.project.getChecklistData(strings.PhaseChecklistName),
       getWelcomePage(),
       SPDataAdapter.project.getPropertiesData()
