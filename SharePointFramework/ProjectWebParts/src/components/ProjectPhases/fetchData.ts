@@ -1,10 +1,22 @@
 import { LogLevel } from '@pnp/logging'
-import SPDataAdapter from '../../data'
+import { sp } from '@pnp/sp'
 import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import * as strings from 'ProjectWebPartsStrings'
 import { IProjectPhasesData, IProjectPhasesProps } from '.'
+import SPDataAdapter from '../../data'
 import { getPhaseSitePages } from './getPhaseSitePages'
-import { getWelcomePage } from './getWelcomePage'
+
+/**
+ * Get welcome page of the web
+ */
+async function getWelcomePage() {
+  try {
+    const { WelcomePage } = await sp.web.rootFolder.select('welcomepage').get()
+    return WelcomePage
+  } catch (error) {
+    throw error
+  }
+}
 
 /**
  * Fetch data for `ProjectPhases`.

@@ -1,11 +1,11 @@
-import { ProjectPhaseModel } from 'pp365-shared/lib/models'
 import { sp } from '@pnp/sp'
+import { ProjectPhaseModel } from 'pp365-shared/lib/models'
 import { IPhaseSitePageModel } from './types'
 
 /**
- * Change phase
+ * Get phase site pages.
  *
- * @param phases
+ * @param phases Phases
  */
 export const getPhaseSitePages = async (phases: ProjectPhaseModel[]) => {
   try {
@@ -18,14 +18,11 @@ export const getPhaseSitePages = async (phases: ProjectPhaseModel[]) => {
       return phases.some((phase) => phase.name === p.Title)
     })
 
-    const phaseSitePages = sitePages.map(
-      (p) =>
-        ({
-          id: p.Id,
-          title: p.Title,
-          fileLeafRef: p.FileLeafRef
-        } as IPhaseSitePageModel)
-    )
+    const phaseSitePages = sitePages.map<IPhaseSitePageModel>((p) => ({
+      id: p.Id,
+      title: p.Title,
+      fileLeafRef: p.FileLeafRef
+    }))
 
     return phaseSitePages
   } catch (error) {

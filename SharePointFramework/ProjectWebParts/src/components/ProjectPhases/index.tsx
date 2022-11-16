@@ -6,7 +6,7 @@ import { ProjectPhasesContext } from './context'
 import { ProjectPhase } from './ProjectPhase'
 import { ProjectPhaseCallout } from './ProjectPhase/ProjectPhaseCallout'
 import styles from './ProjectPhases.module.scss'
-import { DISMISS_ERROR_MESSAGE, OPEN_CALLOUT } from './reducer'
+import { DISMISS_ERROR_MESSAGE } from './reducer'
 import { getShimmerElements } from './shimmer'
 import { IProjectPhasesProps } from './types'
 import { useProjectPhases } from './useProjectPhases'
@@ -25,12 +25,7 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
               {state.data.phases
                 .filter((p) => p.isVisible)
                 .map((phase, idx) => (
-                  <ProjectPhase
-                    key={idx}
-                    phase={phase}
-                    isCurrentPhase={phase.id === state.phase?.id}
-                    onOpenCallout={(target) => dispatch(OPEN_CALLOUT({ phase, target }))}
-                  />
+                  <ProjectPhase key={idx} phase={phase} />
                 ))}
             </ul>
             <ProjectPhaseCallout {...(state.callout || {})} />

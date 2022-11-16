@@ -7,11 +7,6 @@ export interface IProjectPhaseProps {
   phase: ProjectPhaseModel
 
   /**
-   * Is current phase
-   */
-  isCurrentPhase?: boolean
-
-  /**
    * Change phase enabled
    */
   changePhaseEnabled?: boolean
@@ -22,12 +17,4 @@ export interface IProjectPhaseProps {
    * @param target Target
    */
   onChangePhaseHandler?: (target: HTMLSpanElement) => void
-
-  /**
-   * On open callout
-   *
-   * @param target Target
-   * @param phase Phase
-   */
-  onOpenCallout: (target: HTMLSpanElement, phase: ProjectPhaseModel) => void
 }

@@ -6,7 +6,7 @@ import { IPhaseSitePageModel } from './types'
  * Change welcome page.
  *
  * @param phaseName Phase page name
- * @param absoluteUrl Absolute URL;
+ * @param absoluteUrl Absolute URL
  * @param phaseSitePages Phase site pages
  */
 export const changeWelcomePage = async (

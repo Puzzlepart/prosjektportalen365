@@ -1,16 +1,17 @@
 import { TextField } from '@fluentui/react/lib/TextField'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { useContext, useState } from 'react'
+import React, { FC, useContext, useState } from 'react'
 import { ChangePhaseDialogContext } from '../../context'
 import getActions from './actions'
 import styles from './InitialView.module.scss'
 import { StatusOptions } from './StatusOptions'
-import { IInitialViewProps } from './types'
 
-export const InitialView = (props: IInitialViewProps) => {
-  if (!props.checklistItem) return null
+export const InitialView:FC = () => {
+  const { state } = useContext(ChangePhaseDialogContext)
+  const checklistItem = state.checklistItems[state.currentIdx]
+  if (!checklistItem) return null
   const { nextChecklistItem } = useContext(ChangePhaseDialogContext)
-  const [comment, setComment] = useState(props.checklistItem.GtComment || '')
+  const [comment, setComment] = useState(checklistItem.GtComment || '')
 
   /**
    * On next check list item
@@ -30,7 +31,7 @@ export const InitialView = (props: IInitialViewProps) => {
   return (
     <div className={styles.root}>
       <div className={styles.header}>
-        {props.checklistItem.ID}. {props.checklistItem.Title}
+        {checklistItem.ID}. {checklistItem.Title}
       </div>
       <TextField
         className={styles.commentField}
