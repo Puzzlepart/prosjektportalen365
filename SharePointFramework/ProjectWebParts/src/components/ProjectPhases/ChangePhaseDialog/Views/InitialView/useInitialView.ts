@@ -1,13 +1,11 @@
-import { ProjectPhasesContext } from '../../../context'
 import { useContext, useState } from 'react'
 import { ChangePhaseDialogContext } from '../../context'
-import { getActions } from './actions'
+import { useActions } from './useActions'
 
 /**
  * Component logic hook for `InitialView`
  */
 export function useInitialView() {
-  const context = useContext(ProjectPhasesContext)
   const { state } = useContext(ChangePhaseDialogContext)
   const checklistItem = state.checklistItems[state.currentIdx]
   const { nextChecklistItem } = useContext(ChangePhaseDialogContext)
@@ -26,7 +24,7 @@ export function useInitialView() {
     setComment('')
   }
 
-  const actions = getActions(comment, onNextChecklistItem, context.props.commentMinLength)
+  const actions = useActions(comment, onNextChecklistItem)
 
   return { checklistItem, setComment, comment, actions } as const
 }
