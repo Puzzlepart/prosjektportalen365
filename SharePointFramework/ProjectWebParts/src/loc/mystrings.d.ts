@@ -1,4 +1,6 @@
 declare interface IProjectWebPartsStrings {
+  ChecklistCommentDescription: string
+  ChecklistCommentPlaceholder: string
   ProjectPhasesChangePhaseError: string
   ProjectPhasesFetchDataError: string
   OverrideHeadersLabel: string

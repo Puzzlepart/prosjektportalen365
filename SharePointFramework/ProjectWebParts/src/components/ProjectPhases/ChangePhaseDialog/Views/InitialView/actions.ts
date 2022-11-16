@@ -5,10 +5,15 @@ import * as strings from 'ProjectWebPartsStrings'
  * Get actions
  *
  * @param comment Comment value
- * @param onNextChecklistItem On next checklist item callback
+ * @param onNextChecklistItem On next checklist item callbac
+ * @param commentMinLength Comment min length
  */
-export default (comment: string, onNextChecklistItem: (statusValue: string) => void) => {
-  const isCommentValid = comment?.length >= 4
+export function getActions(
+  comment: string,
+  onNextChecklistItem: (statusValue: string) => void,
+  commentMinLength: number
+) {
+  const isCommentValid = comment?.length >= commentMinLength
   const actions: IButtonProps[] = [
     {
       text: strings.StatusNotRelevant,

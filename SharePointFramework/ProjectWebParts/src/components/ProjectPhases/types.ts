@@ -47,6 +47,13 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
    * Hook auth - for authing hooks when switching phases
    */
   hookAuth: string
+
+  /**
+   * Comment min. length
+   *
+   * @default 4
+   */
+  commentMinLength?: number
 }
 
 export interface IProjectPhasesState extends IBaseWebPartComponentState<IProjectPhasesData> {

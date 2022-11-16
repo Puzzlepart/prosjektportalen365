@@ -18,13 +18,11 @@ export const getPhaseSitePages = async (phases: ProjectPhaseModel[]) => {
       return phases.some((phase) => phase.name === p.Title)
     })
 
-    const phaseSitePages = sitePages.map<IPhaseSitePageModel>((p) => ({
+    return sitePages.map<IPhaseSitePageModel>((p) => ({
       id: p.Id,
       title: p.Title,
       fileLeafRef: p.FileLeafRef
     }))
-
-    return phaseSitePages
   } catch (error) {
     throw error
   }

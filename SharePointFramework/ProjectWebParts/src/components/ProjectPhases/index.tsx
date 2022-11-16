@@ -46,7 +46,8 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
 }
 ProjectPhases.displayName = 'Project Phases'
 ProjectPhases.defaultProps = {
-  syncPropertiesAfterPhaseChange: true
+  syncPropertiesAfterPhaseChange: true,
+  commentMinLength: 4
 }
 
 export * from './types'

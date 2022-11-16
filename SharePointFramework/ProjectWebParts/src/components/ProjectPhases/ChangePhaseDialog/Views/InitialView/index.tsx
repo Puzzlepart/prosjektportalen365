@@ -17,7 +17,8 @@ export const InitialView: FC = () => {
       <TextField
         className={styles.commentField}
         onChange={(_, newValue: string) => setComment(newValue)}
-        placeholder={strings.CommentLabel}
+        placeholder={strings.ChecklistCommentPlaceholder}
+        description={strings.ChecklistCommentDescription}
         multiline
         value={comment}
         resizable={false}

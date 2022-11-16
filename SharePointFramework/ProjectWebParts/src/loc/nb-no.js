@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    ChecklistCommentPlaceholder: 'Skriv inn en kommentar...',
+    ChecklistCommentDescription: 'Kommentar er obligatorisk om sjekkpunktet skal markeres som "Ikke relevant" eller "Fortsatt åpen".',
     ProjectPhasesChangePhaseError: 'Det skjedde en feil under endring av fase. Vennligst prøv igjen, eller kontakt en administrator.',
     ProjectPhasesFetchDataError: 'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.',
     OverrideHeadersLabel: 'Overstyr overskrifter for {0}x{0}',
