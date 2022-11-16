@@ -1,24 +1,26 @@
-import { Callout, ActionButton } from '@fluentui/react'
+import { ActionButton, Callout, format } from '@fluentui/react'
+import * as strings from 'ProjectWebPartsStrings'
+import React, { FC, useContext } from 'react'
+import ReactMarkdown from 'react-markdown'
+import { isEmpty } from 'underscore'
 import { ProjectPhasesContext } from '../../../ProjectPhases/context'
 import { CHANGE_PHASE, DISMISS_CALLOUT } from '../../../ProjectPhases/reducer'
-import * as strings from 'ProjectWebPartsStrings'
-import React, { useContext } from 'react'
-import { isEmpty } from 'underscore'
 import styles from './ProjectPhaseCallout.module.scss'
 import { IProjectPhaseCalloutProps } from './types'
 
-export const ProjectPhaseCallout = ({ phase, target }: IProjectPhaseCalloutProps) => {
-  if (!target) return null
+export const ProjectPhaseCallout: FC<IProjectPhaseCalloutProps> = (props) => {
   const context = useContext(ProjectPhasesContext)
+  if (!props.target) return null
+  const { phase } = props
   const stats = Object.keys(phase.checklistData.stats)
-  const items = Object.keys(phase.checklistData.items)
   return (
     <Callout
       gapSpace={5}
-      target={target}
+      target={props.target}
       onDismiss={() => context.dispatch(DISMISS_CALLOUT())}
-      setInitialFocus={true}>
-      <div className={styles.projectPhaseCallout}>
+      setInitialFocus={true}
+      className={styles.root}>
+      <div className={styles.container}>
         <div className={styles.header}>
           <span className={styles.title}>{phase.name}</span>
         </div>
@@ -26,20 +28,20 @@ export const ProjectPhaseCallout = ({ phase, target }: IProjectPhaseCalloutProps
           <p className={styles.subText}>{phase.subText}</p>
           <div>
             <div className={styles.stats} hidden={isEmpty(stats)}>
-              {stats.map((status, idx) => {
-                return (
-                  <div key={idx}>
-                    <span>
-                      <span className={styles.count}>{phase.checklistData.stats[status]}</span>
-                      <span className={styles.markedAs}>{strings.CheckPointsMarkedAsText}</span>
-                      <span className={styles.statusValue}>{status}</span>
-                    </span>
-                  </div>
-                )
-              })}
+              {stats.map((status, idx) => (
+                <div key={idx}>
+                  <ReactMarkdown>
+                    {format(
+                      strings.CheckPointsStatus,
+                      phase.checklistData.stats[status],
+                      status.toLowerCase()
+                    )}
+                  </ReactMarkdown>
+                </div>
+              ))}
             </div>
             <div className={styles.actions}>
-              {!isEmpty(items) && (
+              {!isEmpty(phase.checklistData.items) && (
                 <ActionButton
                   href={phase.getFilteredPhaseChecklistViewUrl(
                     `${context.props.webUrl}/${strings.PhaseChecklistViewUrl}`

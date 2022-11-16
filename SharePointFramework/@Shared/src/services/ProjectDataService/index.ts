@@ -224,7 +224,7 @@ export class ProjectDataService {
   }
 
   /**
-   * Update phase
+   * Update phase to the specified `phase` for the project.
    *
    * @param phase Phase
    * @param phaseTextField Phase text field
@@ -263,7 +263,6 @@ export class ProjectDataService {
         expiration: dateAdd(new Date(), 'day', 1)
       })
       .get()
-    Logger.write(`(ProjectDataService) Retrieved ${terms.length} phases from ${termSetId}.`)
     return terms.map(
       (term) =>
         new ProjectPhaseModel(
@@ -290,9 +289,12 @@ export class ProjectDataService {
   }
 
   /**
-   * Get checklist data from the specified list.
+   * Get checklist data from the specified list as an object.
    *
    * @param listName List name
+   * 
+   * @returns An object with term GUID as the key, and the items for the term GUID
+   * as the value.
    */
   public async getChecklistData(
     listName: string
@@ -310,10 +312,8 @@ export class ProjectDataService {
           obj[item.termGuid].stats = obj[item.termGuid].stats || {}
           obj[item.termGuid].items = obj[item.termGuid].items || []
           obj[item.termGuid].items.push(item)
-          obj[item.termGuid].stats[item.status.toLowerCase()] = obj[item.termGuid].stats[
-            item.status.toLowerCase()
-          ]
-            ? obj[item.termGuid].stats[item.status.toLowerCase()] + 1
+          obj[item.termGuid].stats[item.status] = obj[item.termGuid].stats[item.status]
+            ? obj[item.termGuid].stats[item.status] + 1
             : 1
           return obj
         }, {})
