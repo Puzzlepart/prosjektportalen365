@@ -1,4 +1,6 @@
 declare interface IProjectWebPartsStrings {
+  ProjectPhasesChangePhaseError: string
+  ProjectPhasesFetchDataError: string
   OverrideHeadersLabel: string
   ProbabilityHeaderFieldLabel: string
   ConsequenceHeaderFieldLabel: string
