@@ -1,6 +1,4 @@
-import {
-  MessageBar
-} from 'office-ui-fabric-react/lib/MessageBar'
+import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar'
 import * as React from 'react'
 import { FC } from 'react'
 import ReactMarkdown from 'react-markdown'

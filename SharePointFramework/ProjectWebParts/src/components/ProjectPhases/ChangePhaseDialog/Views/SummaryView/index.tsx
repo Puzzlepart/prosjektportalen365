@@ -9,7 +9,7 @@ export const SummaryView: FC = () => {
     <div className={styles.root}>
       <ul className={styles.list}>
         {state.checklistItems.map((item) => (
-          <CheckListItem key={item.ID} item={item} />
+          <CheckListItem key={item.id} item={item} />
         ))}
       </ul>
     </div>

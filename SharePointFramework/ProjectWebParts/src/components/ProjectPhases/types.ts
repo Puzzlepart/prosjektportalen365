@@ -1,4 +1,4 @@
-import { IProjectPhaseChecklistItem, ProjectPhaseModel } from 'pp365-shared/lib/models'
+import { ProjectPhaseChecklistData, ProjectPhaseModel } from 'pp365-shared/lib/models'
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
 import { IProjectPhaseCalloutProps } from './ProjectPhase/ProjectPhaseCallout'
 
@@ -71,9 +71,7 @@ export interface IProjectPhasesState extends IBaseWebPartComponentState<IProject
   callout?: IProjectPhaseCalloutProps
 }
 
-export type ChecklistData = {
-  [termGuid: string]: { stats: { [status: string]: number }; items: IProjectPhaseChecklistItem[] }
-}
+export type ChecklistData = Record<string, ProjectPhaseChecklistData>
 
 export interface IProjectPhasesData {
   /**

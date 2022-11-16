@@ -4,11 +4,7 @@ import { SPConfiguration, Web } from '@pnp/sp'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { ISPList } from '../../interfaces/ISPList'
-import {
-  IProjectPhaseChecklistItem,
-  ProjectPhaseChecklistData,
-  ProjectPhaseModel
-} from '../../models'
+import { ChecklistItemModel, ProjectPhaseChecklistData, ProjectPhaseModel } from '../../models'
 import { tryParseJson } from '../../util/tryParseJson'
 import { IGetPropertiesData } from './IGetPropertiesData'
 import { IProjectDataServiceParams } from './IProjectDataServiceParams'
@@ -248,9 +244,9 @@ export class ProjectDataService {
   }
 
   /**
-   * Get phases
+   * Get phases for the project.
    *
-   * @param termSetId Get phases
+   * @param termSetId Term set ID
    * @param checklistData Checklist data
    */
   public async getPhases(
@@ -280,9 +276,9 @@ export class ProjectDataService {
   }
 
   /**
-   * Get current phase
+   * Get current phase name for the project.
    *
-   * @param phaseField Phase field
+   * @param phaseField Phase field name
    */
   public async getCurrentPhaseName(phaseField: string): Promise<string> {
     try {
@@ -294,28 +290,31 @@ export class ProjectDataService {
   }
 
   /**
-   * Get checklist data
+   * Get checklist data from the specified list.
    *
    * @param listName List name
    */
   public async getChecklistData(
     listName: string
-  ): Promise<{ [termGuid: string]: ProjectPhaseChecklistData }> {
+  ): Promise<Record<string, ProjectPhaseChecklistData>> {
     try {
       const items = await this.web.lists
         .getByTitle(listName)
         .items.select('ID', 'Title', 'GtComment', 'GtChecklistStatus', 'GtProjectPhase')
-        .get<IProjectPhaseChecklistItem[]>()
-      const checklistData = items
-        .filter((item) => item.GtProjectPhase)
+        .get<Record<string, any>[]>()
+      const checklistItems = items.map((item) => new ChecklistItemModel(item))
+      const checklistData = checklistItems
+        .filter((item) => item.termGuid)
         .reduce((obj, item) => {
-          const status = item.GtChecklistStatus.toLowerCase()
-          const termId = `/Guid(${item.GtProjectPhase.TermGuid})/`
-          obj[termId] = obj[termId] ? obj[termId] : {}
-          obj[termId].stats = obj[termId].stats || {}
-          obj[termId].items = obj[termId].items || []
-          obj[termId].items.push(item)
-          obj[termId].stats[status] = obj[termId].stats[status] ? obj[termId].stats[status] + 1 : 1
+          obj[item.termGuid] = obj[item.termGuid] ? obj[item.termGuid] : {}
+          obj[item.termGuid].stats = obj[item.termGuid].stats || {}
+          obj[item.termGuid].items = obj[item.termGuid].items || []
+          obj[item.termGuid].items.push(item)
+          obj[item.termGuid].stats[item.status.toLowerCase()] = obj[item.termGuid].stats[
+            item.status.toLowerCase()
+          ]
+            ? obj[item.termGuid].stats[item.status.toLowerCase()] + 1
+            : 1
           return obj
         }, {})
       return checklistData

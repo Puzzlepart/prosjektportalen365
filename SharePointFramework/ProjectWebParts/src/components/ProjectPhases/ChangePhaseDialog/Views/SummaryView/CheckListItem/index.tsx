@@ -1,35 +1,18 @@
-import { stringIsNullOrEmpty } from '@pnp/common'
 import { Icon } from '@fluentui/react/lib/Icon'
+import { stringIsNullOrEmpty } from '@pnp/common'
 import * as strings from 'ProjectWebPartsStrings'
-import React from 'react'
-import { useState } from 'react'
+import React, { FC, useState } from 'react'
 import styles from './CheckListItem.module.scss'
-import IChecklistItemProps from './types'
+import IChecklistItemProps, { STATUS_COLORS, STATUS_ICONS } from './types'
 
-const STATUS_COLORS = {
-  [strings.StatusOpen]: 'inherit',
-  [strings.StatusClosed]: '#107c10',
-  [strings.StatusNotRelevant]: '#e81123'
-}
-
-const STATUS_ICONS = {
-  [strings.StatusOpen]: 'CircleRing',
-  [strings.StatusClosed]: 'Completed',
-  [strings.StatusNotRelevant]: 'Blocked'
-}
-
-export const CheckListItem = ({ item }: IChecklistItemProps) => {
+export const CheckListItem: FC<IChecklistItemProps> = ({ item }) => {
   const [commentHidden, setCommentHidden] = useState(true)
-
-  const hasComment = !stringIsNullOrEmpty(item.GtComment)
+  const hasComment = !stringIsNullOrEmpty(item.comment)
 
   return (
     <li className={styles.checkListItem}>
       <div className={styles.iconContainer}>
-        <Icon
-          iconName={STATUS_ICONS[item.GtChecklistStatus]}
-          style={{ color: STATUS_COLORS[item.GtChecklistStatus] }}
-        />
+        <Icon iconName={STATUS_ICONS[item.status]} style={{ color: STATUS_COLORS[item.status] }} />
       </div>
       <div className={styles.container}>
         <div
@@ -38,7 +21,7 @@ export const CheckListItem = ({ item }: IChecklistItemProps) => {
           onClick={() => hasComment && setCommentHidden(!commentHidden)}>
           <div className={styles.title}>
             <span>
-              {item.ID}. {item.Title}
+              {item.id}. {item.title}
             </span>
           </div>
           <div className={styles.toggle} hidden={!hasComment}>
@@ -47,8 +30,7 @@ export const CheckListItem = ({ item }: IChecklistItemProps) => {
         </div>
         <div className={styles.content} hidden={commentHidden}>
           <div className={styles.comment}>
-            <span className={styles.label}>{strings.CommentLabel}</span>{' '}
-            <span>{item.GtComment}</span>
+            <span className={styles.label}>{strings.CommentLabel}</span> <span>{item.comment}</span>
           </div>
         </div>
       </div>
