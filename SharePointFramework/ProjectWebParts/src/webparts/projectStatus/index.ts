@@ -175,7 +175,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   max: 1300,
                   value: 400,
                   showValue: true,
-                  disabled: this.properties.riskMatrix?.fullWidth
+                  disabled: this.properties.opportunityMatrix?.fullWidth
                 }),
                 PropertyPaneTextField('opportunityMatrix.calloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
@@ -205,11 +205,36 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   key: 'opportunityMatrixColorScaleConfig',
                   label: strings.MatrixColorScaleConfigLabel,
                   defaultValue: [
-                    { p: 10, r: 255, g: 0, b: 0 },
-                    { p: 30, r: 255, g: 167, b: 0 },
-                    { p: 50, r: 255, g: 244, b: 0 },
-                    { p: 70, r: 163, g: 255, b: 0 },
-                    { p: 90, r: 44, g: 186, b: 0 }
+                    {
+                      p: 10,
+                      r: 255,
+                      g: 167,
+                      b: 0
+                    },
+                    {
+                      p: 30,
+                      r: 255,
+                      g: 214,
+                      b: 10
+                    },
+                    {
+                      p: 50,
+                      r: 255,
+                      g: 244,
+                      b: 0
+                    },
+                    {
+                      p: 70,
+                      r: 163,
+                      g: 255,
+                      b: 0
+                    },
+                    {
+                      p: 90,
+                      r: 44,
+                      g: 186,
+                      b: 0
+                    }
                   ],
                   value: this.properties.opportunityMatrix?.colorScaleConfig
                 }),

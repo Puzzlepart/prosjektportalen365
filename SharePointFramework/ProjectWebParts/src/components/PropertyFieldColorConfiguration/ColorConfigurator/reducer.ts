@@ -4,7 +4,7 @@ import _, { pick } from 'underscore'
 import { DynamicMatrixColorScaleConfig } from '../../DynamicMatrix'
 import { IColorConfiguratorProps, IColorConfiguratorState } from './types'
 
-export const INIT = createAction<{ config: DynamicMatrixColorScaleConfig[] }>('INIT')
+export const INIT = createAction<{ config: DynamicMatrixColorScaleConfig }>('INIT')
 export const SET_CONFIG = createAction<{ count: number }>('SET_CONFIG')
 export const CHANGE_CONFIG = createAction<{ index: number; color?: IColor; percentage?: number }>(
   'CHANGE_CONFIG'
