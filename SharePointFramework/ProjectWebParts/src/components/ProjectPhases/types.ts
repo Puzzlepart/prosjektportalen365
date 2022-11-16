@@ -66,7 +66,7 @@ export interface IProjectPhasesState extends IBaseWebPartComponentState<IProject
   isChangingPhase?: boolean
 
   /**
-   * Callout
+   * Callout props
    */
   callout?: IProjectPhaseCalloutProps
 }

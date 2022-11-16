@@ -12,8 +12,6 @@ import { getWelcomePage } from './getWelcomePage'
  * @param props ProjectPhases props
  */
 export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPhasesData> {
-  let phaseSitePages = []
-
   try {
     SPDataAdapter.configure(props.webPartContext, {
       siteId: props.siteId,
@@ -36,10 +34,7 @@ export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPha
       )
     ])
 
-    if (props.useDynamicHomepage) {
-      phaseSitePages = await getPhaseSitePages(phases)
-    }
-
+    const phaseSitePages = props.useDynamicHomepage ? await getPhaseSitePages(phases) : []
     const [currentPhase] = phases.filter((p) => p.name === currentPhaseName)
 
     return {
@@ -50,7 +45,7 @@ export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPha
       welcomePage,
       userHasChangePhasePermission
     } as IProjectPhasesData
-  } catch (error) {
-    throw new Error()
+  } catch {
+    throw new Error(strings.ProjectPhasesFetchDataError)
   }
 }

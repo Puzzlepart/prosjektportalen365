@@ -6,6 +6,7 @@ import { modifyCurrentPhaseView } from './modifyCurrentPhaseView'
 import { IPhaseSitePageModel, IProjectPhasesProps } from './types'
 import { ListLogger } from 'pp365-shared/lib/logging'
 import { ProjectPhases } from '.'
+import strings from 'ProjectWebPartsStrings'
 
 /**
  * Change phase for the current project. Runs `SPDataAdapter.project.updatePhase`, runs phase
@@ -41,6 +42,6 @@ export const changePhase = async (
       functionName: 'changePhase',
       component: ProjectPhases.displayName
     })
-    throw error
+    throw new Error(strings.ProjectPhasesChangePhaseError)
   }
 }
