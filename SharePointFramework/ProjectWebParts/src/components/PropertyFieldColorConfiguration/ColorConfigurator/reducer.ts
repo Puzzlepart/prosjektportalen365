@@ -37,7 +37,7 @@ export default (props: IColorConfiguratorProps) =>
         payload.index === i
           ? payload.color
             ? { p: c.p, ...pick(payload.color, 'r', 'g', 'b') }
-            : { p: payload.percentage, r: c.r, g: c.g, b: c.b }
+            : { p: payload.percentage, ...pick(c, 'r', 'g', 'b') }
           : c
       )
     },
