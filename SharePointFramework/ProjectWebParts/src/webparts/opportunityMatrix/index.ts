@@ -14,7 +14,7 @@ import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfig
 import * as getValue from 'get-value'
 import * as strings from 'ProjectWebPartsStrings'
 import ReactDom from 'react-dom'
-import { UncertaintyElementModel } from 'types'
+import { UncertaintyElementModel } from '../../models'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 import { IOpportunityMatrixWebPartProps } from './types'
 

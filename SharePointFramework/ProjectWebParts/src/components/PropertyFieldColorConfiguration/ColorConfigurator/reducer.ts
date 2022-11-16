@@ -36,7 +36,7 @@ export default (props: IColorConfiguratorProps) =>
       state.config = state.config.map((c, i) =>
         payload.index === i
           ? payload.color
-            ? { p: c[0], ...pick(payload.color, 'r', 'g', 'b') }
+            ? { p: c.p, ...pick(payload.color, 'r', 'g', 'b') }
             : { p: payload.percentage, r: c.r, g: c.g, b: c.b }
           : c
       )

@@ -1,6 +1,6 @@
 import { PageContext } from '@microsoft/sp-page-context'
 import { HTMLProps } from 'react'
-import { UncertaintyElementModel } from '../../types'
+import { UncertaintyElementModel } from '../../models'
 import { IDynamicMatrixProps } from '../DynamicMatrix'
 
 export interface IOpportunityMatrixProps
