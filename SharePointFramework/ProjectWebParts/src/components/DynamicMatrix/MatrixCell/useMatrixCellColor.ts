@@ -1,6 +1,6 @@
 import { DynamicMatrixContext } from '../context'
 import { useContext } from 'react'
-import { DynamicMatrixColorScaleConfig } from '..'
+import { DynamicMatrixColorScaleConfigItem } from '..'
 
 /**
  * Hook for getting color for cell based on color scale specified in
@@ -12,7 +12,7 @@ import { DynamicMatrixColorScaleConfig } from '..'
 export function useMatrixCellColor(cellValue: number, size: number) {
   const { props } = useContext(DynamicMatrixContext)
   const percentage = Math.floor((cellValue / (size * size)) * 100)
-  let lowerCfg: DynamicMatrixColorScaleConfig, upperCfg: DynamicMatrixColorScaleConfig
+  let lowerCfg: DynamicMatrixColorScaleConfigItem, upperCfg: DynamicMatrixColorScaleConfigItem
   for (let i = 1; i < props.colorScaleConfig.length - 1; i++) {
     lowerCfg = props.colorScaleConfig[i - 1]
     upperCfg = props.colorScaleConfig[i]

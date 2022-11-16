@@ -9,16 +9,18 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { sp } from '@pnp/sp'
+import { IOpportunityMatrixProps, OpportunityMatrix } from 'components/OpportunityMatrix'
 import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
-import { IRiskMatrixProps, RiskMatrix } from 'components/RiskMatrix'
 import * as getValue from 'get-value'
 import * as strings from 'ProjectWebPartsStrings'
 import ReactDom from 'react-dom'
 import { UncertaintyElementModel } from '../../models'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
-import { IRiskMatrixWebPartProps } from './types'
+import { IOpportunityMatrixWebPartProps } from './types'
 
-export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWebPartProps> {
+export default class OpportunityMatrixWebPart extends BaseProjectWebPart<
+  IOpportunityMatrixWebPartProps
+> {
   private _items: UncertaintyElementModel[] = []
   private _error: Error
 
@@ -35,7 +37,7 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
     if (this._error) {
       this.renderError(this._error)
     } else {
-      this.renderComponent<IRiskMatrixProps>(RiskMatrix, {
+      this.renderComponent<IOpportunityMatrixProps>(OpportunityMatrix, {
         ...this.properties,
         width: this.properties.fullWidth ? '100%' : this.properties.width,
         items: this._items
@@ -78,22 +80,8 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
       return [overrideHeaderLabels]
     }
     const headerLabelFields: IPropertyPaneField<any>[] = []
-    const probabilityHeaders: string[] = [
-      strings.MatrixHeader_VeryHigh,
-      strings.MatrixHeader_High,
-      strings.MatrixHeader_Medium,
-      strings.MatrixHeader_Low,
-      strings.MatrixHeader_VeryLow,
-      strings.MatrixHeader_ExtremelyLow
-    ]
-    const consequenceHeaders: string[] = [
-      strings.MatrixHeader_Insignificant,
-      strings.MatrixHeader_Small,
-      strings.MatrixHeader_Moderate,
-      strings.MatrixHeader_Serious,
-      strings.MatrixHeader_Critical,
-      strings.MatrixHeader_VeryCritical
-    ]
+    const probabilityHeaders: string[] = ['', '', '', '', '', '']
+    const consequenceHeaders: string[] = ['', '', '', '', '', '']
     for (let i = 0; i < size; i++) {
       const probabilityHeaderFieldName = `headerLabels.${size}.p${i}`
       headerLabelFields.push(
@@ -186,11 +174,36 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                   key: 'colorScaleConfig',
                   label: strings.MatrixColorScaleConfigLabel,
                   defaultValue: [
-                    { p: 10, r: 44, g: 186, b: 0 },
-                    { p: 30, r: 163, g: 255, b: 0 },
-                    { p: 50, r: 255, g: 244, b: 0 },
-                    { p: 70, r: 255, g: 167, b: 0 },
-                    { p: 90, r: 255, g: 0, b: 0 }
+                    {
+                      p: 10,
+                      r: 255,
+                      g: 167,
+                      b: 0
+                    },
+                    {
+                      p: 30,
+                      r: 255,
+                      g: 214,
+                      b: 10
+                    },
+                    {
+                      p: 50,
+                      r: 255,
+                      g: 244,
+                      b: 0
+                    },
+                    {
+                      p: 70,
+                      r: 163,
+                      g: 255,
+                      b: 0
+                    },
+                    {
+                      p: 90,
+                      r: 44,
+                      g: 186,
+                      b: 0
+                    }
                   ],
                   value: this.properties.colorScaleConfig
                 }),

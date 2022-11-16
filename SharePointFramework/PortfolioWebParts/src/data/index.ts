@@ -539,20 +539,19 @@ export class DataAdapter implements IDataAdapter {
   /**
    * Fetching enriched projects by combining list items from projects list,
    * Graph Groups and site users. The result are cached in `localStorage`
-   * by the key `pp365_fetchenrichedprojects` for 30 minutes.
+   * for 30 minutes.
    *
    * @param filter Filter for project items
-   * @param storageKey Storage key for `PnPClientStore`
    */
   public async fetchEnrichedProjects(
     // eslint-disable-next-line quotes
-    filter = "GtProjectLifecycleStatus ne 'Avsluttet'",
-    storageKey = 'pp365_fetchenrichedprojects'
+    filter = "GtProjectLifecycleStatus ne 'Avsluttet'"
   ): Promise<ProjectListModel[]> {
     await msGraph.Init(this.context.msGraphClientFactory)
-    const sessionStore = new PnPClientStorage().local
-    const [items, groups, users, sites] = await sessionStore.getOrPut(
-      storageKey,
+    const localStore = new PnPClientStorage().local
+    const siteId = this.context.pageContext.site.id.toString()
+    const [items, groups, users, sites] = await localStore.getOrPut(
+      `pp365_fetchenrichedprojects_${siteId}`,
       async () => {
         return await Promise.all([
           sp.web.lists
@@ -582,10 +581,7 @@ export class DataAdapter implements IDataAdapter {
             "groupTypes/any(a:a%20eq%20'unified')"
           ),
           sp.web.siteUsers.select('Id', 'Title', 'Email').get<ISPUser[]>(),
-          this._fetchItems(
-            `DepartmentId:${this.context.pageContext.site.id.toString()} contentclass:STS_Site`,
-            ['Title', 'SiteId']
-          )
+          this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId'])
         ])
       },
       dateAdd(new Date(), 'minute', 30)

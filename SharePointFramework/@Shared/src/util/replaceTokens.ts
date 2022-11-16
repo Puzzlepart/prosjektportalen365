@@ -10,8 +10,12 @@ export function replaceTokens(
   obj: Record<string, any>,
   regex: RegExp = /\{[A-Za-z]*\}/gm
 ): string {
-  return str.match(regex).reduce((s, value) => {
-    const field = value.substring(1, value.length - 1)
-    return s.replace(value, obj[field] || '')
-  }, str)
+  try {
+    return str.match(regex).reduce((s, value) => {
+      const field = value.substring(1, value.length - 1)
+      return s.replace(value, obj[field] || '')
+    }, str)
+  } catch {
+    return str
+  }
 }

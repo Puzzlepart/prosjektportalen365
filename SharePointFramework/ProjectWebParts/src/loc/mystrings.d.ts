@@ -1,17 +1,15 @@
 declare interface IProjectWebPartsStrings {
-  OverrideHeadersLabel: string | ReactElement<any, string | JSXElementConstructor<any>>
+  OverrideHeadersLabel: string
   ProbabilityHeaderFieldLabel: string
   ConsequenceHeaderFieldLabel: string
   ColorPickerStrings: IColorPickerStrings
-  RiskMatrixToggleElementsOnText: string
-  RiskMatrixToggleElementsOffText: string
+  ToggleUncertaintyPostActionOnText: string
+  ToggleUncertaintyPostActionOffText: string
   RevertDefaultColorConfigurationText: string
-  RiskMatrix_Header_ExtremelyLow: string
-  RiskMatrix_Header_VeryCritical: string
-  RiskMatrixColorScaleConfigLabel: string
+  MatrixColorScaleConfigLabel: string
   SaveColorConfigurationText: string
-  RiskMatrixSizeLabel: string
-  RiskMatrixFullWidthLabel: string 
+  MatrixSizeLabel: string
+  MatrixFullWidthLabel: string 
   ParentProjectsGroupName: string
   StatusReportShowOnlyIconsLabel: string
   StatusReportTruncateCommentsLabel: string
@@ -96,6 +94,7 @@ declare interface IProjectWebPartsStrings {
   WebPartNotConfiguredMessage: string
   Yes: string
   RiskMatrixGroupName: string
+  OpportunityMatrixGroupName: string
   ProjectStatusProjectPropertiesGroupName: string
   GeneralGroupName: string
   SyncProjectPropertiesText: string
@@ -115,17 +114,25 @@ declare interface IProjectWebPartsStrings {
   ProjectsListName: string
   NoStatusReportsMessage: string
   SyncNowText: string
-  RiskMatrix_Header_Critical: string
-  RiskMatrix_Header_High: string
-  RiskMatrix_Header_Insignificant: string
-  RiskMatrix_Header_Low: string
-  RiskMatrix_Header_Medium: string
-  RiskMatrix_Header_Moderate: string
-  RiskMatrix_Header_Serious: string
-  RiskMatrix_Header_Small: string
-  RiskMatrix_Header_VeryHigh: string
-  RiskMatrix_Header_VeryLow: string
-  RiskMatrixToggleElementsLabel: string
+  MatrixHeader_Critical: string
+  MatrixHeader_High: string
+  MatrixHeader_Insignificant: string
+  MatrixHeader_Low: string
+  MatrixHeader_Medium: string
+  MatrixHeader_Moderate: string
+  MatrixHeader_Serious: string
+  MatrixHeader_Small: string
+  MatrixHeader_VerySmall: string
+  MatrixHeader_VeryHigh: string
+  MatrixHeader_VeryHigh: string
+  MatrixHeader_ExtremelyHigh: string
+  MatrixHeader_VeryLow: string
+  MatrixHeader_ExtremelyLow: string
+  MatrixHeader_Large: string
+  MatrixHeader_VeryLarge: string
+  MatrixHeader_ExtremelyLarge: string
+  MatrixHeader_VeryCritical: string
+  ToggleUncertaintyPostActionLabel: string
   GtModerationStatus_Choice_Published: string
   GtModerationStatus_Choice_Draft: string
   ListNameFieldLabel: string

@@ -64,6 +64,10 @@
                 {
                     "ID": "6c2da0dc-77b1-4152-b751-97adf436faa0",
                     "Name": "GtRiskStatus"
+                },
+                {
+                    "ID": "6bd17911-c48a-4900-be61-54ae26207d78",
+                    "Name": "GtShowInPortfolio"
                 }
             ]
         },
@@ -71,13 +75,7 @@
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89701",
             "Name": "{{ContentTypes_Risk_Name}}",
             "Description": "",
-            "Group": "{{ContentTypes_Group}}",
-            "FieldRefs": [
-                {
-                    "ID": "6bd17911-c48a-4900-be61-54ae26207d78",
-                    "Name": "GtShowInPortfolio"
-                }
-            ]
+            "Group": "{{ContentTypes_Group}}"
         },
         {
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89702",
@@ -1267,19 +1265,33 @@
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
-                        "GtRiskDescription",
-                        "GtRiskProbability",
-                        "GtRiskConsequence",
-                        "GtRiskFactor",
-                        "GtRiskStatus",
-                        "GtRiskStrategy",
+                        "GtRiskProximity",
                         "GtRiskAction",
-                        "Modified"
+                        "GtRiskStrategy",
+                        "GtRiskFactor",
+                        "GtRiskFactorPostAction"
                     ],
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<GroupBy Collapse=\"TRUE\" GroupLimit=\"30\"><FieldRef Name=\"GtRiskStatus\" Ascending=\"FALSE\" /></GroupBy><OrderBy><FieldRef Name=\"GtRiskFactor\" Ascending=\"FALSE\" /></OrderBy><Where><Neq>  <FieldRef Name=\"GtRiskStatus\" />  <Value Type=\"Text\">Ikke lenger aktuell</Value></Neq></Where>"
+                        "ViewQuery": "<GroupBy Collapse= \"TRUE\" GroupLimit= \"30\"><FieldRef Name= \"GtRiskStatus\" Ascending= \"FALSE\" /></GroupBy><OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">Ikke lenger aktuell</Value></Neq><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">Risiko</Value></Eq></And></Where>"
+                    }
+                },
+                {
+                    "Title": "Aktuelle muligheter",
+                    "ViewFields": [
+                        "ID",
+                        "LinkTitle",
+                        "GtRiskProximity",
+                        "GtRiskAction",
+                        "GtRiskStrategy",
+                        "GtRiskFactor",
+                        "GtRiskFactorPostAction"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 100,
+                        "Paged": true,
+                        "ViewQuery": "<GroupBy Collapse= \"TRUE\" GroupLimit= \"30\"><FieldRef Name= \"GtRiskStatus\" Ascending= \"FALSE\" /></GroupBy><OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">Ikke lenger aktuell</Value></Neq><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">Mulighet</Value></Eq></And></Where>"
                     }
                 },
                 {
@@ -1299,7 +1311,7 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<GroupBy Collapse=\"TRUE\" GroupLimit=\"30\"><FieldRef Name=\"GtRiskStatus\" Ascending=\"FALSE\" /></GroupBy><OrderBy><FieldRef Name=\"GtRiskFactor\" Ascending=\"FALSE\" /></OrderBy><Where><And>  <Neq>    <FieldRef Name=\"GtRiskStatus\" />    <Value Type=\"Text\">Ikke lenger aktuell</Value>  </Neq>  <Gt>    <FieldRef Name=\"GtRiskFactor\" />    <Value Type=\"Number\">10</Value>  </Gt></And></Where>"
+                        "ViewQuery": "<GroupBy Collapse= \"TRUE\" GroupLimit= \"30\"><FieldRef Name= \"GtRiskStatus\" Ascending= \"FALSE\" /></GroupBy><OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">Ikke lenger aktuell</Value></Neq><Gt><FieldRef Name= \"GtRiskFactor\" /><Value Type= \"Number\">10</Value></Gt></And><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">Risiko</Value></Eq></And></Where>"
                     }
                 },
                 {
@@ -1322,7 +1334,7 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtRiskFactor\" Ascending=\"FALSE\" /></OrderBy><Where><Eq>  <FieldRef Name=\"GtRiskStatus\" />  <Value Type=\"Text\">Ikke lenger aktuell</Value></Eq></Where>"
+                        "ViewQuery": "<OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">Ikke lenger aktuell</Value></Neq><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">Risiko</Value></Eq></And></Where>"
                     }
                 },
                 {
@@ -1340,7 +1352,7 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": " <OrderBy><FieldRef Name=\"GtRiskFactor\" Ascending=\"FALSE\" /></OrderBy><Where><IsNull>  <FieldRef Name=\"GtActionResponsible\" /></IsNull></Where>"
+                        "ViewQuery": " <OrderBy><FieldRef Name=\"GtRiskFactor\" Ascending=\"FALSE\" /></OrderBy><Where><IsNull><FieldRef Name=\"GtActionResponsible\" /></IsNull></Where>"
                     }
                 },
                 {
@@ -1364,6 +1376,29 @@
                         "RowLimit": 100,
                         "Paged": true,
                         "ViewQuery": "<Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">Risiko</Value></Eq></Where>"
+                    }
+                },
+                {
+                    "Title": "Mulighet",
+                    "ViewFields": [
+                        "ID",
+                        "LinkTitle",
+                        "GtRiskDescription",
+                        "GtRiskProbability",
+                        "GtRiskConsequence",
+                        "GtRiskFactor",
+                        "GtRiskStatus",
+                        "GtRiskStrategy",
+                        "GtRiskAction",
+                        "GtRiskProbabilityPostAction",
+                        "GtRiskConsequencePostAction",
+                        "GtRiskFactorPostAction",
+                        "Modified"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 100,
+                        "Paged": true,
+                        "ViewQuery": "<Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">Mulighet</Value></Eq></Where>"
                     }
                 },
                 {

@@ -706,6 +706,9 @@
   <data name="SiteFields_GtSecList_DisplayName" xml:space="preserve">
     <value>Listenavn</value>
   </data>
+  <data name="SiteFields_GtSecView_DisplayName" xml:space="preserve">
+    <value>Visningsnavn</value>
+  </data>
   <data name="SiteFields_GtPortfolioFabricIcon_DisplayName" xml:space="preserve">
     <value>Ikon</value>
   </data>
@@ -1515,6 +1518,9 @@
   </data>
   <data name="SiteFields_GtSecList_Description" xml:space="preserve">
     <value></value>
+  </data>
+  <data name="SiteFields_GtSecView_Description" xml:space="preserve">
+    <value>Velg en visning for listen. Spørring, felter og elementgrense fra listevisningen blir gjeldende.</value>
   </data>
   <data name="SiteFields_GtPortfolioFabricIcon_Description" xml:space="preserve">
     <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
@@ -2449,11 +2455,11 @@
   <data name="ClientSidePages_ResourceAllocation_Title" xml:space="preserve">
     <value>Ressursallokering</value>
   </data>
-  <data name="ClientSidePages_RiskOverview_PageName" xml:space="preserve">
-    <value>Risikooversikt.aspx</value>
+  <data name="ClientSidePages_UncertaintyOverview_PageName" xml:space="preserve">
+    <value>Usikkerhetsoversikt.aspx</value>
   </data>
-  <data name="ClientSidePages_RiskOverview_Title" xml:space="preserve">
-    <value>Risikooversikt</value>
+  <data name="ClientSidePages_UncertaintyOverview_Title" xml:space="preserve">
+    <value>Usikkerhetsoversikt</value>
   </data>
   <data name="ClientSidePages_ProjectTimeline_PageName" xml:space="preserve">
     <value>Prosjekttidslinje.aspx</value>

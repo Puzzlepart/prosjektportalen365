@@ -1,14 +1,18 @@
 import { IColumn } from '@fluentui/react'
-import { RiskElementModel } from 'components/RiskMatrix'
+import _ from 'lodash'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers'
 import { useContext, useEffect, useState } from 'react'
+import { UncertaintyElementModel } from '../../../../models'
 import { isEmpty } from 'underscore'
 import { ProjectStatusContext } from '../../context'
 import { PERSIST_SECTION_DATA } from '../../reducer'
 import { SectionContext } from '../context'
-import { IUncertaintySectionState } from './types'
-import { useFetchListData } from './useFetchListData'
+import { useFetchListData } from '../ListSection/useFetchListData'
+import { IUncertaintySectionData, IUncertaintySectionState } from './types'
 
+/**
+ * Component logic hook for `UncertaintySection`
+ */
 export function useUncertaintySection() {
   const context = useContext(ProjectStatusContext)
   const { section } = useContext(SectionContext)
@@ -24,7 +28,15 @@ export function useUncertaintySection() {
     if (persistedData) {
       setState({ data: persistedData, isDataLoaded: true })
     } else {
-      fetchListData().then((data) => {
+      fetchListData().then((_data) => {
+        const contentTypeIndex = parseInt(
+          _.first(_data.items)?.ContentType?.Id?.StringValue?.substring(38, 40) ?? '-1'
+        )
+        const data: IUncertaintySectionData = {
+          ..._data,
+          matrixElements: _data.items.map((i) => new UncertaintyElementModel(i)),
+          contentTypeIndex
+        }
         context.dispatch(
           PERSIST_SECTION_DATA({
             section,
@@ -38,7 +50,7 @@ export function useUncertaintySection() {
 
   return {
     state,
-    riskElements: get<RiskElementModel[]>(state, 'data.riskElements', []),
+    matrixElements: get<any[]>(state, 'data.matrixElements', []),
     items: get<any[]>(state, 'data.items', []),
     columns: get<IColumn[]>(state, 'data.columns', []),
     shouldRenderContent

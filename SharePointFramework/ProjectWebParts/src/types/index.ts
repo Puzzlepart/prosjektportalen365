@@ -1,1 +1,1 @@
-export { PhaseChecklistData } from './PhaseChecklistData'
+export * from './PhaseChecklistData'
