@@ -54,7 +54,7 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
     </div>
   )
 }
-
+ProjectPhases.displayName = 'Project Phases'
 ProjectPhases.defaultProps = {
   syncPropertiesAfterPhaseChange: true
 }
