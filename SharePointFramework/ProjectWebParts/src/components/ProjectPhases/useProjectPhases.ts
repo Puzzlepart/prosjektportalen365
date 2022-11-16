@@ -1,4 +1,6 @@
+import { ListLogger } from 'pp365-shared/lib/logging'
 import { useEffect, useReducer, useRef } from 'react'
+import { ProjectPhases } from '.'
 import { changePhase } from './changePhase'
 import { fetchData } from './fetchData'
 import reducer, { initialState, INIT_CHANGE_PHASE, INIT_DATA, SET_PHASE } from './reducer'
@@ -10,6 +12,12 @@ import { IProjectPhasesProps } from './types'
 export function useProjectPhases(props: IProjectPhasesProps) {
   const rootRef = useRef(null)
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  ListLogger.init(
+    props.hubSite.web.lists.getByTitle('Logg'),
+    props.webPartContext.pageContext.web.absoluteUrl,
+    ProjectPhases.displayName
+  )
 
   useEffect(() => {
     fetchData(props).then((data) => dispatch(INIT_DATA({ data })))
