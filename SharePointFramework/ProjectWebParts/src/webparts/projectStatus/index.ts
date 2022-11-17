@@ -10,10 +10,18 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import '@pnp/polyfill-ie11'
-import { IProjectStatusProps, ProjectStatus } from 'components/ProjectStatus'
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
+import {
+  OPPORTUNITY_MATRIX_CONSEQUENCE_HEADERS,
+  OPPORTUNITY_MATRIX_PROBABILITY_HEADERS
+} from '../../components/OpportunityMatrix/types'
+import { IProjectStatusProps, ProjectStatus } from '../../components/ProjectStatus'
 import PropertyFieldColorConfiguration from '../../components/PropertyFieldColorConfiguration'
+import {
+  RISK_MATRIX_CONSEQUENCE_HEADERS,
+  RISK_MATRIX_PROBABILITY_HEADERS
+} from '../../components/RiskMatrix'
 
 export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectStatusProps> {
   public async onInit() {
@@ -24,33 +32,21 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
     this.renderComponent<IProjectStatusProps>(ProjectStatus)
   }
 
-  protected get riskMatrixHeaderLabelFields(): IPropertyPaneField<any>[] {
-    const size = parseInt(this.properties?.riskMatrix?.size ?? '5', 10)
-    const overrideHeaderLabels = PropertyPaneToggle(`riskMatrix.overrideHeaderLabels.${size}`, {
+  protected getMatrixHeaderLabelPropertyFields(
+    matrixKey: string,
+    probabilityHeaders: string[],
+    consequenceHeaders: string[]
+  ): IPropertyPaneField<any>[] {
+    const size = parseInt(get(this.properties, `${matrixKey}.size`, '5'))
+    const overrideHeaderLabels = PropertyPaneToggle(`${matrixKey}.overrideHeaderLabels.${size}`, {
       label: format(strings.OverrideHeadersLabel, size)
     })
-    if (!get(this.properties, `riskMatrix.overrideHeaderLabels.${size}`, false)) {
+    if (!get(this.properties, `${matrixKey}.overrideHeaderLabels.${size}`, false)) {
       return [overrideHeaderLabels]
     }
     const headerLabelFields: IPropertyPaneField<any>[] = []
-    const probabilityHeaders: string[] = [
-      strings.MatrixHeader_VeryHigh,
-      strings.MatrixHeader_High,
-      strings.MatrixHeader_Medium,
-      strings.MatrixHeader_Low,
-      strings.MatrixHeader_VeryLow,
-      strings.MatrixHeader_ExtremelyLow
-    ]
-    const consequenceHeaders: string[] = [
-      strings.MatrixHeader_Insignificant,
-      strings.MatrixHeader_Small,
-      strings.MatrixHeader_Moderate,
-      strings.MatrixHeader_Serious,
-      strings.MatrixHeader_Critical,
-      strings.MatrixHeader_VeryCritical
-    ]
     for (let i = 0; i < size; i++) {
-      const probabilityHeaderFieldName = `riskMatrix.headerLabels.${size}.p${i}`
+      const probabilityHeaderFieldName = `${matrixKey}.headerLabels.${size}.p${i}`
       headerLabelFields.push(
         PropertyPaneTextField(probabilityHeaderFieldName, {
           label: format(strings.ProbabilityHeaderFieldLabel, i + 1),
@@ -59,42 +55,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
       )
     }
     for (let i = 0; i < size; i++) {
-      const consequenceHeaderFieldName = `riskMatrix.headerLabels.${size}.c${i}`
-      headerLabelFields.push(
-        PropertyPaneTextField(consequenceHeaderFieldName, {
-          label: format(strings.ConsequenceHeaderFieldLabel, i + 1),
-          placeholder: consequenceHeaders[i]
-        })
-      )
-    }
-    return [overrideHeaderLabels, ...headerLabelFields]
-  }
-
-  protected get opportunityMatrixHeaderLabelFields(): IPropertyPaneField<any>[] {
-    const size = parseInt(this.properties?.opportunityMatrix?.size ?? '5', 10)
-    const overrideHeaderLabels = PropertyPaneToggle(
-      `opportunityMatrix.overrideHeaderLabels.${size}`,
-      {
-        label: format(strings.OverrideHeadersLabel, size)
-      }
-    )
-    if (!get(this.properties, `opportunityMatrix.overrideHeaderLabels.${size}`, false)) {
-      return [overrideHeaderLabels]
-    }
-    const headerLabelFields: IPropertyPaneField<any>[] = []
-    const probabilityHeaders: string[] = ['', '', '', '', '', '']
-    const consequenceHeaders: string[] = ['', '', '', '', '', '']
-    for (let i = 0; i < size; i++) {
-      const probabilityHeaderFieldName = `opportunityMatrix.headerLabels.${size}.p${i}`
-      headerLabelFields.push(
-        PropertyPaneTextField(probabilityHeaderFieldName, {
-          label: format(strings.ProbabilityHeaderFieldLabel, i + 1),
-          placeholder: probabilityHeaders[i]
-        })
-      )
-    }
-    for (let i = 0; i < size; i++) {
-      const consequenceHeaderFieldName = `opportunityMatrix.headerLabels.${size}.c${i}`
+      const consequenceHeaderFieldName = `${matrixKey}.headerLabels.${size}.c${i}`
       headerLabelFields.push(
         PropertyPaneTextField(consequenceHeaderFieldName, {
           label: format(strings.ConsequenceHeaderFieldLabel, i + 1),
@@ -160,7 +121,11 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   ],
                   value: this.properties.riskMatrix?.colorScaleConfig
                 }),
-                ...this.riskMatrixHeaderLabelFields
+                ...this.getMatrixHeaderLabelPropertyFields(
+                  'riskMatrix',
+                  RISK_MATRIX_PROBABILITY_HEADERS,
+                  RISK_MATRIX_CONSEQUENCE_HEADERS
+                )
               ]
             },
             {
@@ -238,7 +203,11 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   ],
                   value: this.properties.opportunityMatrix?.colorScaleConfig
                 }),
-                ...this.opportunityMatrixHeaderLabelFields
+                ...this.getMatrixHeaderLabelPropertyFields(
+                  'opportunityMatrix',
+                  OPPORTUNITY_MATRIX_PROBABILITY_HEADERS,
+                  OPPORTUNITY_MATRIX_CONSEQUENCE_HEADERS
+                )
               ]
             },
             {
