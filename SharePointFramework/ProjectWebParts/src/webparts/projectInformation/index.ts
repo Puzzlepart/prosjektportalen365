@@ -23,7 +23,7 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<
     this.renderComponent<IProjectInformationProps>(ProjectInformation, {
       onFieldExternalChanged: this._onFieldExternalChanged.bind(this),
       adminPageLink: this.properties.adminPageLink ?? strings.DefaultAdminPageLink,
-      webPartContext: this.context
+      spfxContext: this.context
     })
   }
 

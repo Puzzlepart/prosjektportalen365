@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
-import { ItemAddResult, List } from '@pnp/sp'
+import { IItemAddResult } from '@pnp/sp/items/types'
+import { IList } from '@pnp/sp/lists/types'
 import {
   defaultListLoggerMemberMap,
   IListLoggerEntry,
@@ -8,7 +9,7 @@ import {
 } from './types'
 
 class ListLogger {
-  public list: any
+  public list: IList
   public memberMap: IListLoggerMemberMap
   public webUrl: string = ''
   public scope: string = ''
@@ -43,7 +44,7 @@ class ListLogger {
   public log(entry: IListLoggerEntry): Promise<IItemAddResult> {
     try {
       const spItem = this._getSpItem({ ...this._getEntryDefaults(), ...entry })
-      return (this.list as List).items.add(spItem)
+      return this.list.items.add(spItem)
     } catch (error) { }
   }
 

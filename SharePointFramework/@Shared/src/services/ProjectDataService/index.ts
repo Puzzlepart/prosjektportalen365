@@ -67,13 +67,13 @@ export class ProjectDataService {
             .filter(`Title eq '${this.configuration.propertiesListName}'`)
             .select('Id', 'DefaultEditFormUrl')
             <ISPList[]>()
-          if (!list)      return null
+          if (!list) return null
           const [item] = await this.sp.web.lists
             .getById(list.Id)
             .items.select('Id')
             .top(1)
             <{ Id: number }[]>()
-          if (!item)    return null
+          if (!item) return null
           return {
             itemId: item.Id,
             listId: list.Id,
@@ -122,12 +122,11 @@ export class ProjectDataService {
       ])
 
       urlSource = !urlSource.includes(welcomepage.WelcomePage)
-        ? urlSource .replace('#syncproperties=1', `/${welcomepage.WelcomePage}#syncproperties=1`)
-            .replace('//SitePages', '/SitePages')
+        ? urlSource.replace('#syncproperties=1', `/${welcomepage.WelcomePage}#syncproperties=1`)
+          .replace('//SitePages', '/SitePages')
         : urlSource
 
-      const editFormUrl = makeUrlAbsolute( `${propertyItemContext.defaultEditFormUrl}?ID=${
-          propertyItemContext.itemId }&Source=${encodeURIComponent(urlSource)}`
+      const editFormUrl = makeUrlAbsolute(`${propertyItemContext.defaultEditFormUrl}?ID=${propertyItemContext.itemId}&Source=${encodeURIComponent(urlSource)}`
       )
       const versionHistoryUrl = `${this.configuration.webUrl}/_layouts/15/versions.aspx?list=${propertyItemContext.listId}&ID=${propertyItemContext.itemId}`
       return {
@@ -147,7 +146,7 @@ export class ProjectDataService {
    * Get properties data
    */
   public async getPropertiesData(): Promise<IGetPropertiesData> {
-    const propertyItem = await this._getPropertyItem( `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
+    const propertyItem = await this._getPropertyItem(`${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
     )
     if (propertyItem) {
       const templateParameters = tryParseJson(propertyItem.fieldValuesText.TemplateParameters, {})
@@ -214,25 +213,7 @@ export class ProjectDataService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     checklistData: { [termGuid: string]: ProjectPhaseChecklistData } = {}
   ): Promise<ProjectPhaseModel[]> {
-    const terms = await this._params.taxonomy
-      .getDefaultSiteCollectionTermStore()
-      .getTermSetById(termSetId)
-      .terms.select('Id', 'Name', 'LocalCustomProperties')
-      .usingCaching({
-        key: this._storageKeys.getPhases,
-        storeName: 'session',
-        expiration: dateAdd(new Date(), 'day', 1)
-      })
-      .get()
-    return terms.map(
-      (term) =>
-        new ProjectPhaseModel(
-          term.Name,
-          term.Id,
-          checklistData[term.Id],
-          term.LocalCustomProperties
-        )
-    )
+    return await Promise.resolve([])
   }
 
   /**
@@ -263,8 +244,7 @@ export class ProjectDataService {
     try {
       const items = await this.sp.web.lists
         .getByTitle(listName)
-        .items.select('ID', 'Title', 'GtComment', 'GtChecklistStatus', 'GtProjectPhase')
-        .get<Record<string, any>[]>()
+        .items.select('ID', 'Title', 'GtComment', 'GtChecklistStatus', 'GtProjectPhase')<Record<string, any>[]>()
       const checklistItems = items.map((item) => new ChecklistItemModel(item))
       const checklistData = checklistItems
         .filter((item) => item.termGuid)

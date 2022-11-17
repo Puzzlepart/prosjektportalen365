@@ -28,7 +28,7 @@ async function getWelcomePage() {
  */
 const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = async (props) => {
   try {
-    SPDataAdapter.configure(props.webPartContext, {
+    SPDataAdapter.configure(props.spfxContext, {
       siteId: props.siteId,
       webUrl: props.webUrl,
       hubSiteUrl: props.hubSite.url,

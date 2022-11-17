@@ -20,7 +20,7 @@ export function useProjectPhases(props: IProjectPhasesProps) {
 
   ListLogger.init(
     props.hubSite.web.lists.getByTitle(strings.LogListName),
-    props.webPartContext.pageContext.web.absoluteUrl,
+    props.spfxContext.pageContext.web.absoluteUrl,
     ProjectPhases.displayName
   )
 

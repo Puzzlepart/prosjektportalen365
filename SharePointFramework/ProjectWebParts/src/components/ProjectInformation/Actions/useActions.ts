@@ -42,7 +42,7 @@ export const useActions = () => {
   const administerChildrenAction: ActionType = [
     strings.ChildProjectAdminLabel,
     () => {
-      window.location.href = `${context.props.webPartContext.pageContext.web.serverRelativeUrl}/SitePages/${context.props.adminPageLink}`
+      window.location.href = `${context.props.spfxContext.pageContext.web.serverRelativeUrl}/SitePages/${context.props.adminPageLink}`
     },
     'Org',
     false,

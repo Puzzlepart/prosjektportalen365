@@ -23,11 +23,11 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
 
   ListLogger.init(
     props.hubSite.web.lists.getByTitle(strings.LogListName),
-    props.webPartContext.pageContext.web.absoluteUrl,
+    props.spfxContext.pageContext.web.absoluteUrl,
     ProjectInformation.displayName
   )
 
-  SPDataAdapter.configure(props.webPartContext, {
+  SPDataAdapter.configure(props.spfxContext, {
     siteId: props.siteId,
     webUrl: props.webUrl,
     hubSiteUrl: props.hubSite.url,

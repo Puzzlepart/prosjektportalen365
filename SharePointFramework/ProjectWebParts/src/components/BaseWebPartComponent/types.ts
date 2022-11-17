@@ -1,9 +1,10 @@
 import { IShimmerProps } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { HTMLProps } from 'react'
 import { IHubSite } from 'sp-hubsite-service'
 
-export interface IBaseWebPartComponentProps extends React.DOMAttributes<HTMLDivElement> {
+export interface IBaseWebPartComponentProps extends Omit<HTMLProps<HTMLDivElement>, 'size'> {
   /**
    * Title of the web part
    */
@@ -42,7 +43,7 @@ export interface IBaseWebPartComponentProps extends React.DOMAttributes<HTMLDivE
   /**
    * Web part context
    */
-  webPartContext?: WebPartContext
+  spfxContext?: WebPartContext
 }
 
 export interface IBaseWebPartComponentState<T> extends Pick<IShimmerProps, 'isDataLoaded'> {

@@ -30,7 +30,7 @@ export const changePhase = async (
     if (props.useDynamicHomepage)
       await changeWelcomePage(
         phase.name,
-        props.webPartContext.pageContext.web.absoluteUrl,
+        props.spfxContext.pageContext.web.absoluteUrl,
         phaseSitePages
       )
     await modifyCurrentPhaseView(phase.name, props.currentPhaseViewName)

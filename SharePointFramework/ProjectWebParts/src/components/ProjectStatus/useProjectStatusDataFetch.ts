@@ -14,7 +14,7 @@ import { IProjectStatusData, IProjectStatusProps } from './types'
 const fetchData: DataFetchFunction<IProjectStatusProps, IProjectStatusData> = async (props) => {
   try {
     if (!SPDataAdapter.isConfigured) {
-      SPDataAdapter.configure(props.webPartContext, {
+      SPDataAdapter.configure(props.spfxContext, {
         siteId: props.siteId,
         webUrl: props.webUrl,
         hubSiteUrl: props.hubSite.url,

@@ -56,7 +56,7 @@ const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolea
     let isSynced = false
     const projectDataList = props.hubSite.web.lists.getByTitle(strings.IdeaProjectDataTitle)
     const [projectDataItem] = await projectDataList.items
-      .filter(`GtSiteUrl eq '${props.webPartContext.pageContext.web.absoluteUrl}'`)
+      .filter(`GtSiteUrl eq '${props.spfxContext.pageContext.web.absoluteUrl}'`)
       .select('Id')
       .get()
     const ideaProcessingList = props.hubSite.web.lists.getByTitle(strings.IdeaProcessingTitle)
@@ -92,7 +92,7 @@ const fetchData: DataFetchFunction<IProjectInformationProps, Partial<IProjectInf
       SPDataAdapter.project.getPropertiesData(),
       props.page === 'Frontpage'
         ? SPDataAdapter.portal.getParentProjects(
-          props.webPartContext?.pageContext?.web?.absoluteUrl,
+          props.spfxContext?.pageContext?.web?.absoluteUrl,
           ProjectInformationParentProject
         )
         : Promise.resolve([]),

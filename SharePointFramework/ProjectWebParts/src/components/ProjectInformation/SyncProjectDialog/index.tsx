@@ -104,7 +104,7 @@ export const SyncProjectDialog: FC = () => {
       )
 
       const [projectDataItem] = await projectDataList.items
-        .filter(`GtSiteUrl eq '${context.props.webPartContext.pageContext.web.absoluteUrl}'`)
+        .filter(`GtSiteUrl eq '${context.props.spfxContext.pageContext.web.absoluteUrl}'`)
         .select('Id')
         .get()
 
