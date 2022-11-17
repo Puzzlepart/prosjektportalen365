@@ -1,12 +1,13 @@
-import { LogLevel } from '@pnp/logging'
 import { format } from '@fluentui/react/lib/Utilities'
+import { LogLevel } from '@pnp/logging'
 import * as strings from 'ProjectExtensionsStrings'
 import { Web, WebProvisioner } from 'sp-js-provisioning'
 import _ from 'underscore'
 import { IProjectSetupData } from '../../types'
-import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
+import { BaseTask, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 import { APPLY_TEMPLATE_STATUS_MAP } from './ApplyTemplateStatusMap'
+import { ApplyTemplateTaskError } from './ApplyTemplateTaskError'
 
 export class ApplyTemplate extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -63,11 +64,7 @@ export class ApplyTemplate extends BaseTask {
       }
       return params
     } catch (error) {
-      throw new BaseTaskError(
-        this.taskName,
-        `${strings.ApplyTemplateErrorMessage}: ${error.message}`,
-        error
-      )
+      throw new ApplyTemplateTaskError(error)
     }
   }
 }

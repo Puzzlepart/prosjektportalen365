@@ -19,7 +19,7 @@ define([], function () {
         ApplyTemplateClientSidePages: 'Legger inn filer og webdeler',
         ApplyTemplateComposedLook: 'Legger på farge og fonter',
         ApplyTemplateContentTypes: 'Legger inn innholdstyper',
-        ApplyTemplateErrorMessage: 'Det skjedde en feil under konfigurering av området',
+        ApplyTemplateErrorMessage: 'Det skjedde en feil i steg {0} under konfigurering av området',
         ApplyTemplateFiles: 'Legger inn filer og webdeler',
         ApplyTemplateLists: 'Legger inn lister med felter, innholdstyper og visninger',
         ApplyTemplateNavigation: 'Legger inn navigasjon',
