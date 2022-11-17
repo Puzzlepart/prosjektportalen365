@@ -2,7 +2,7 @@ import { LogLevel } from '@pnp/logging'
 import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { Web, WebProvisioner } from 'sp-js-provisioning'
-import * as _ from 'underscore'
+import _ from 'underscore'
 import { IProjectSetupData } from '../../types'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
@@ -63,8 +63,7 @@ export class ApplyTemplate extends BaseTask {
       }
       return params
     } catch (error) {
-      this.logError('Failed to apply template to site')
-      throw new BaseTaskError(this.taskName, strings.ApplyTemplateErrorMessage, error)
+      throw new BaseTaskError(this.taskName,`${strings.ApplyTemplateErrorMessage}: ${error.message}`, error)
     }
   }
 }

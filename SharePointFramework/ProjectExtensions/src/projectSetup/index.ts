@@ -4,13 +4,13 @@ import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-applic
 import { isArray, stringIsNullOrEmpty } from '@pnp/common'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { MenuNode, sp, Web } from '@pnp/sp'
-import { getId } from '@uifabric/utilities'
+import { format, getId } from '@uifabric/utilities'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import { ListLogger } from 'pp365-shared/lib/logging'
 import { PortalDataService } from 'pp365-shared/lib/services'
 import * as strings from 'ProjectExtensionsStrings'
 import { createElement } from 'react'
-import * as ReactDOM from 'react-dom'
+import { render, unmountComponentAtNode } from 'react-dom'
 import { default as HubSiteService } from 'sp-hubsite-service'
 import { find, uniq } from 'underscore'
 import {
@@ -31,7 +31,7 @@ import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } fr
 
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
   private _portal: PortalDataService
-  private isSetup = true
+  private _isSetup = true
   private _placeholderIds = {
     ErrorDialog: getId('errordialog'),
     ProgressDialog: getId('progressdialog'),
@@ -49,12 +49,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     )
       return
     try {
-      Logger.log({
-        message: '(ProjectSetup) onInit: Initializing pre-conditionals before initializing setup',
-        data: { version: this.context.manifest.version, validation: this._validation },
-        level: LogLevel.Info
-      })
-      this.isSetup = await this._isProjectSetup()
+      this._isSetup = await this._isProjectSetup()
 
       // eslint-disable-next-line default-case
       switch (this._validation) {
@@ -92,11 +87,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         properties: this.properties
       })
     } catch (error) {
-      Logger.log({
-        message: '(ProjectSetup) [onInit]: Failed initializing pre-conditionals',
-        data: error,
-        level: LogLevel.Error
-      })
       this._renderErrorDialog({ error })
     }
   }
@@ -121,11 +111,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    */
   private async _initializeSetup(taskParams: Tasks.IBaseTaskParams) {
     try {
-      Logger.log({
-        message: '(ProjectSetup) [_initializeSetup]: Initializing setup',
-        data: { version: this.context.manifest.version, placeholderIds: this._placeholderIds },
-        level: LogLevel.Info
-      })
       let data = await this._fetchData()
       ListLogger.init(
         data.hub.web.lists.getByTitle('Logg'),
@@ -133,11 +118,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         'ProjectSetup'
       )
       const provisioningInfo = await this._getProvisioningInfo(data)
-      Logger.log({
-        message: '(ProjectSetup) [_initializeSetup]: Template selected by user',
-        data: {},
-        level: LogLevel.Info
-      })
       data = { ...data, ...provisioningInfo }
       this._renderProgressDialog({
         progressIndicator: {
@@ -150,7 +130,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       await this._startProvision(taskParams, data)
 
       if (!stringIsNullOrEmpty(this.properties.forceTemplate)) {
-        await this.reacreateNavMenu()
+        await this.recreateNavMenu()
         await sp.web.lists
           .getByTitle(strings.ProjectPropertiesListName)
           .items.getById(1)
@@ -164,11 +144,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         !this.properties.skipReload
       )
     } catch (error) {
-      Logger.log({
-        message: '(ProjectSetup) [_initializeSetup]: Failed initializing setup',
-        data: error,
-        level: LogLevel.Error
-      })
       this._renderErrorDialog({ error })
     }
   }
@@ -176,7 +151,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   /**
    * Adds the old custom navigation nodes to the quick launch menu
    */
-  private async reacreateNavMenu() {
+  private async recreateNavMenu() {
     const oldNodes: MenuNode[] = await JSON.parse(localStorage.getItem('pp_navigationNodes'))
     const navigationNodes = uniq([...oldNodes])
     for await (const node of navigationNodes) {
@@ -227,7 +202,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       } else {
         const element = createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
           data,
-          version: this.manifest.version,
+          version: this.version,
           onSubmit: (state: ITemplateSelectDialogState) => {
             this._unmount(placeholder)
             resolve(state)
@@ -243,7 +218,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             )
           }
         })
-        ReactDOM.render(element, placeholder)
+        render(element, placeholder)
       }
     })
   }
@@ -257,9 +232,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     const placeholder = this._getPlaceholder('ProgressDialog')
     const element = createElement<IProgressDialogProps>(ProgressDialog, {
       ...props,
-      version: this.manifest.version
+      version: this.version
     })
-    ReactDOM.render(element, placeholder)
+    render(element, placeholder)
   }
 
   /**
@@ -273,9 +248,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     const placeholder = this._getPlaceholder('ErrorDialog')
     const element = createElement<IErrorDialogProps>(ErrorDialog, {
       ...props,
-      version: this.manifest.version,
+      version: this.version,
       onDismiss: async () => {
-        if (this.isSetup) {
+        if (this._isSetup) {
           await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
         }
         this._unmount(placeholder)
@@ -292,7 +267,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         this._unmount(placeholder)
       }
     })
-    ReactDOM.render(element, placeholder)
+    render(element, placeholder)
   }
 
   /**
@@ -309,7 +284,11 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   ): Promise<void> {
     const tasks = Tasks.getTasks(data)
     try {
-      await ListLogger.write(strings.ProjectProvisioningStartLogText)
+      await ListLogger.log({
+        message: format(strings.ProjectProvisioningStartLogText, this.context.pageContext.web.title),
+        functionName: '_startProvision',
+        component: 'ProjectSetup'
+      })
       for (let i = 0; i < tasks.length; i++) {
         const task = tasks[i]
         if (
@@ -317,14 +296,21 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           ['PreTask', ...this.properties.tasks].indexOf(task.taskName) === -1
         )
           continue
-        Logger.log({
-          message: `(ProjectSetup) [_startProvision]: Executing task ${task.taskName}`,
-          level: LogLevel.Info
-        })
         taskParams = await task.execute(taskParams, this._onTaskStatusUpdated.bind(this))
       }
-      await ListLogger.write(strings.ProjectProvisioningSuccessLogText)
+      await ListLogger.log({
+        message: format(strings.ProjectProvisioningSuccessLogText, this.context.pageContext.web.title),
+        functionName: '_startProvision',
+        component: 'ProjectSetup'
+      })
     } catch (error) {
+      await ListLogger.log({
+        message: error.message,
+        functionName: '_startProvision',
+        component: 'ProjectSetup',
+        scope: error.name,
+        level: 'Error'
+      })
       throw error
     }
   }
@@ -349,11 +335,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    */
   private async _fetchData(): Promise<IProjectSetupData> {
     try {
-      Logger.log({
-        message: '(ProjectSetup) [_fetchData]: Retrieving required data for setup',
-        data: { version: this.context.manifest.version },
-        level: LogLevel.Info
-      })
       await MSGraphHelper.Init(this.context.msGraphClientFactory)
       const data: IProjectSetupData = {}
       data.hub = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
@@ -369,14 +350,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         ),
         this.properties.extensionsLibrary
           ? this._portal.getItems(
-              this.properties.extensionsLibrary,
-              ProjectExtension,
-              {
-                ViewXml:
-                  '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-              },
-              ['File', 'FieldValuesAsText']
-            )
+            this.properties.extensionsLibrary,
+            ProjectExtension,
+            {
+              ViewXml:
+                '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+            },
+            ['File', 'FieldValuesAsText']
+          )
           : Promise.resolve([]),
         this.properties.contentConfigList
           ? this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File'])
@@ -424,7 +405,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       )
     )
       return ProjectSetupValidation.IsHubSite
-    if (this.isSetup) return ProjectSetupValidation.AlreadySetup
+    if (this._isSetup) return ProjectSetupValidation.AlreadySetup
     return ProjectSetupValidation.Ready
   }
 
@@ -434,7 +415,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    * @param container - HTML container elememnt
    */
   private _unmount(container: HTMLElement): boolean {
-    return ReactDOM.unmountComponentAtNode(container)
+    return unmountComponentAtNode(container)
   }
 
   /**
@@ -469,6 +450,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     const { WelcomePage } = await sp.web.rootFolder.select('WelcomePage').get()
     if (WelcomePage === 'SitePages/Home.aspx') return false
     return true
+  }
+
+  private get version() {
+    return DEBUG ? 'Serving on localhost' : `v${this.manifest.version}`
   }
 }
 
