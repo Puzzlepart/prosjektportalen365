@@ -3,9 +3,13 @@ import { sp } from '@pnp/sp'
 import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import { ListLogger } from 'pp365-shared/lib/logging'
 import * as strings from 'ProjectWebPartsStrings'
+import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { IProjectPhasesData, IProjectPhasesProps, ProjectPhases } from '.'
 import SPDataAdapter from '../../data'
 import { getPhaseSitePages } from './getPhaseSitePages'
+import { useEffect } from 'react'
+import { AnyAction } from '@reduxjs/toolkit'
+import { INIT_DATA } from './reducer'
 
 /**
  * Get welcome page of the web
@@ -21,10 +25,8 @@ async function getWelcomePage() {
 
 /**
  * Fetch data for `ProjectPhases`.
- *
- * @param props ProjectPhases props
  */
-export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPhasesData> {
+const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = async (props) => {
   try {
     SPDataAdapter.configure(props.webPartContext, {
       siteId: props.siteId,
@@ -56,7 +58,7 @@ export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPha
       phaseSitePages,
       welcomePage,
       userHasChangePhasePermission
-    } as IProjectPhasesData
+    }
   } catch (error) {
     ListLogger.log({
       message: error.message,
@@ -66,4 +68,21 @@ export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPha
     })
     throw new Error(strings.ProjectPhasesFetchDataError)
   }
+}
+
+/**
+ * Fetch hook for `ProjectPhases`
+ *
+ * @param props Component properties for `ProjectPhases`
+ * @param dispatch Dispatcer
+ */
+export const useProjectPhasesDataFetch = (
+  props: IProjectPhasesProps,
+  dispatch: React.Dispatch<AnyAction>
+) => {
+  useEffect(() => {
+    fetchData(props)
+      .then((data) => dispatch(INIT_DATA({ data })))
+      .catch((error) => dispatch(INIT_DATA({ data: null, error })))
+  }, [])
 }
