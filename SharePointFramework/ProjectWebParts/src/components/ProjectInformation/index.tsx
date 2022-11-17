@@ -29,19 +29,29 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
               {props.title}
             </span>
           </div>
-          <Shimmer
-            isDataLoaded={state.isDataLoaded}
-            customElementsGroup={<CustomShimmerElementsGroup />}>
-            <ProjectProperties properties={state.properties} />
-            {!props.hideAllActions && state.message && <UserMessage {...state.message} />}
-            <Actions />
-            <ParentProjectsList />
-            <ProjectStatusReport />
-            <ProgressDialog {...state.progress} />
-            <AllPropertiesPanel />
-            <CreateParentDialog />
-            <SyncProjectDialog />
-          </Shimmer>
+          {state.error ? (
+            <UserMessage
+              className={styles.userMessage}
+              type={state.error.type}
+              text={state.error.message}
+            />
+          ) : (
+            <Shimmer
+              isDataLoaded={state.isDataLoaded}
+              customElementsGroup={<CustomShimmerElementsGroup />}>
+              <ProjectProperties properties={state.properties} />
+              {!props.hideAllActions && state.message && (
+                <UserMessage className={styles.userMessage} {...state.message} />
+              )}
+              <Actions />
+              <ParentProjectsList />
+              <ProjectStatusReport />
+              <ProgressDialog {...state.progress} />
+              <AllPropertiesPanel />
+              <CreateParentDialog />
+              <SyncProjectDialog />
+            </Shimmer>
+          )}
         </div>
       </div>
       {state.confirmActionProps && <ConfirmDialog {...state.confirmActionProps} />}
@@ -49,6 +59,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
   )
 }
 
+ProjectInformation.displayName = 'Project Information'
 ProjectInformation.defaultProps = {
   page: 'Frontpage',
   customActions: [],

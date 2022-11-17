@@ -1,9 +1,9 @@
 /* eslint-disable prefer-spread */
-import { ProviderProps, useEffect, useReducer } from 'react'
+import { ProviderProps, useReducer } from 'react'
 import { IProjectStatusContext } from './context'
-import { fetchData } from './fetchData'
-import reducer, { initialState, INIT_DATA } from './reducer'
+import reducer, { initialState } from './reducer'
 import { IProjectStatusProps } from './types'
+import { useProjectStatusDataFetch } from './useProjectStatusDataFetch'
 
 /**
  * Component logic hook for `ProjectStatus`
@@ -11,11 +11,7 @@ import { IProjectStatusProps } from './types'
 export function useProjectStatus(props: IProjectStatusProps) {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  useEffect(() => {
-    fetchData(props).then((data) => {
-      dispatch(INIT_DATA({ data }))
-    })
-  }, [])
+  useProjectStatusDataFetch(props, dispatch)
 
   const value = { props, state, dispatch }
 

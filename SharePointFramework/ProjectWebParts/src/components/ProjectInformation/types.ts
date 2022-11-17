@@ -27,7 +27,7 @@ export class ProjectInformationParentProject {
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   /**
-   * Page property is used to determnine which properties to display
+   * Page property is used to determine which properties to display
    */
   page: 'Frontpage' | 'ProjectStatus' | 'Portfolio'
 

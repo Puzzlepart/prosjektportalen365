@@ -1,16 +1,15 @@
 import { ListLogger } from 'pp365-shared/lib/logging'
-import { useEffect, useReducer, useRef } from 'react'
+import strings from 'ProjectWebPartsStrings'
+import { useReducer, useRef } from 'react'
 import { ProjectPhases } from '.'
 import { changePhase } from './changePhase'
-import { fetchData } from './fetchData'
 import reducer, {
   CHANGE_PHASE_ERROR,
   initialState,
-  INIT_CHANGE_PHASE,
-  INIT_DATA,
-  SET_PHASE
+  INIT_CHANGE_PHASE, SET_PHASE
 } from './reducer'
 import { IProjectPhasesProps } from './types'
+import { useProjectPhasesDataFetch } from './useProjectPhasesDataFetch'
 
 /**
  * Component logic hook for `ProjectPhases`
@@ -20,16 +19,10 @@ export function useProjectPhases(props: IProjectPhasesProps) {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   ListLogger.init(
-    props.hubSite.web.lists.getByTitle('Logg'),
+    props.hubSite.web.lists.getByTitle(strings.LogListName),
     props.webPartContext.pageContext.web.absoluteUrl,
     ProjectPhases.displayName
   )
-
-  useEffect(() => {
-    fetchData(props)
-      .then((data) => dispatch(INIT_DATA({ data })))
-      .catch((error) => dispatch(INIT_DATA({ data: null, error })))
-  }, [])
 
   /**
    * On change phase
@@ -61,6 +54,8 @@ export function useProjectPhases(props: IProjectPhasesProps) {
       dispatch(CHANGE_PHASE_ERROR({ error }))
     }
   }
+
+  useProjectPhasesDataFetch(props, dispatch)
 
   return { rootRef, state, dispatch, onChangePhase } as const
 }
