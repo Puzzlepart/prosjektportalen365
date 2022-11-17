@@ -217,6 +217,7 @@ define([], function () {
     IdeaProcessingUrlTitle: 'Idebehandling',
     GroupLevelProject: 'Prosjekt',
     GroupLevelPortfolio: 'Portefølje',
-    ParentProjectsHeaderText: 'Overordnede prosjekter'
+    ParentProjectsHeaderText: 'Overordnede prosjekter',
+    LogListName: 'Logg'
   }
 })

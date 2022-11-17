@@ -56,7 +56,6 @@ declare interface IProjectWebPartsStrings {
   ConfirmPhaseDialogSubText: string
   ConfirmPhaseDialogTitle: string
   CurrentPhaseViewNameFieldLabel: string
-  DocumentsListName: string
   EditProjectInformationText: string
   ShowAllProjectInformationText: string
   EditReportButtonText: string
@@ -214,6 +213,8 @@ declare interface IProjectWebPartsStrings {
   GroupLevelProject: string
   GroupLevelPortfolio: string
   ParentProjectsHeaderText: string
+  DocumentsListName: string
+  LogListName: string
 }
 
 declare module 'ProjectWebPartsStrings' {
