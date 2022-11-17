@@ -1,6 +1,6 @@
 import * as strings from 'ProjectExtensionsStrings'
 
-export const APPLY_TEMPLATE_STATUS_MAP: { [key: string]: { text: string; iconName: string } } = {
+export const APPLY_TEMPLATE_STATUS_MAP: Record<string, { text: string; iconName: string }> = {
   Files: { text: strings.ApplyTemplateFiles, iconName: 'OpenFile' },
   Lists: { text: strings.ApplyTemplateLists, iconName: 'PageListSolid' },
   Navigation: { text: strings.ApplyTemplateNavigation, iconName: 'MiniLink' },

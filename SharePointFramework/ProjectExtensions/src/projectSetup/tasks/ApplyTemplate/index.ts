@@ -26,13 +26,14 @@ export class ApplyTemplate extends BaseTask {
   ): Promise<IBaseTaskParams> {
     try {
       const web = new Web(params.context.pageContext.web.absoluteUrl)
+      const activeLogLevel =  (sessionStorage.DEBUG === '1' || DEBUG
+      ? LogLevel.Info
+      : LogLevel.Error) as any
       const provisioner = new WebProvisioner(web).setup({
         spfxContext: params.context,
         logging: {
           prefix: '(ProjectSetup) (ApplyTemplate)',
-          activeLogLevel: (sessionStorage.DEBUG === '1' || DEBUG
-            ? LogLevel.Info
-            : LogLevel.Error) as any
+          activeLogLevel
         },
         spConfiguration: {
           cacheExpirationIntervalMilliseconds: 5000,
@@ -43,12 +44,12 @@ export class ApplyTemplate extends BaseTask {
       })
       this.logInformation('Applying template to site', { parameters: params.templateParameters })
       const templateSchema = _.omit(params.templateSchema, params.templateExcludeHandlers)
-      await provisioner.applyTemplate(templateSchema, null, (status) => {
-        if (APPLY_TEMPLATE_STATUS_MAP[status]) {
+      await provisioner.applyTemplate(templateSchema, null, (handler) => {
+        if (APPLY_TEMPLATE_STATUS_MAP[handler]) {
           onProgress(
             format(strings.ApplyTemplateText, this.data.selectedTemplate.text),
-            APPLY_TEMPLATE_STATUS_MAP[status].text,
-            APPLY_TEMPLATE_STATUS_MAP[status].iconName
+            APPLY_TEMPLATE_STATUS_MAP[handler].text,
+            APPLY_TEMPLATE_STATUS_MAP[handler].iconName
           )
         }
       })
