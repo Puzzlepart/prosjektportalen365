@@ -93,13 +93,13 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
   private async _ensureParentProjectPatch(data: IProjectSetupData): Promise<void> {
     const [singleItem] = await data.hub.web.lists
-      .getByTitle('Prosjekter')
+      .getByTitle(this.properties.projectsList)
       .items.filter(
         `GtSiteId eq '${this.context.pageContext.legacyPageContext.siteId.replace(/([{}])/g, '')}'`
       )
       .get()
     await data.hub.web.lists
-      .getByTitle('Prosjekter')
+      .getByTitle(this.properties.projectsList)
       .items.getById(singleItem.Id)
       .update({ GtIsParentProject: true })
   }
@@ -285,7 +285,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     const tasks = Tasks.getTasks(data)
     try {
       await ListLogger.log({
-        message: format(strings.ProjectProvisioningStartLogText, this.context.pageContext.web.title),
+        message: format(
+          strings.ProjectProvisioningStartLogText,
+          this.context.pageContext.web.title
+        ),
         functionName: '_startProvision',
         component: 'ProjectSetup'
       })
@@ -299,7 +302,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         taskParams = await task.execute(taskParams, this._onTaskStatusUpdated.bind(this))
       }
       await ListLogger.log({
-        message: format(strings.ProjectProvisioningSuccessLogText, this.context.pageContext.web.title),
+        message: format(
+          strings.ProjectProvisioningSuccessLogText,
+          this.context.pageContext.web.title
+        ),
         functionName: '_startProvision',
         component: 'ProjectSetup'
       })
@@ -350,14 +356,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         ),
         this.properties.extensionsLibrary
           ? this._portal.getItems(
-            this.properties.extensionsLibrary,
-            ProjectExtension,
-            {
-              ViewXml:
-                '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-            },
-            ['File', 'FieldValuesAsText']
-          )
+              this.properties.extensionsLibrary,
+              ProjectExtension,
+              {
+                ViewXml:
+                  '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+              },
+              ['File', 'FieldValuesAsText']
+            )
           : Promise.resolve([]),
         this.properties.contentConfigList
           ? this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File'])

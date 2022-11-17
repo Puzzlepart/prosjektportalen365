@@ -44,7 +44,7 @@ class ListLogger {
     try {
       const spItem = this._getSpItem({ ...this._getEntryDefaults(), ...entry })
       return (this.list as List).items.add(spItem)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -65,7 +65,6 @@ class ListLogger {
       message,
       level,
       functionName,
-      webUrl: this.webUrl ?? this._getEntryDefaults().webUrl,
       scope: this.scope
     })
   }
@@ -77,24 +76,26 @@ class ListLogger {
    */
   private _getSpItem(entry: IListLoggerEntry): Record<string, any> {
     let item: Record<string, any> = {}
-    item = Object.keys(this.memberMap).reduce((_item, key) => {
-      const fieldName = this.memberMap[key]
-      _item[fieldName] = entry[key]
-      return _item
-    }, item)
     if (this.webUrl && this.memberMap.webUrl) {
       item[this.memberMap.webUrl] = this.webUrl
     }
     if (this.scope && this.memberMap.scope) {
       item[this.memberMap.scope] = this.scope
     }
+    item = Object.keys(this.memberMap).reduce((_item, key) => {
+      const fieldName = this.memberMap[key]
+      if (entry[key]) {
+        _item[fieldName] = entry[key]
+      }
+      return _item
+    }, item)
     return item
   }
 
   private _getEntryDefaults(): Partial<IListLoggerEntry> {
     return {
       level: 'Info',
-      webUrl: document.location.href.split('/').slice(0, 5).join('/')
+      webUrl: this.webUrl ?? document.location.href.split('/').slice(0, 5).join('/')
     } as Partial<IListLoggerEntry>
   }
 }

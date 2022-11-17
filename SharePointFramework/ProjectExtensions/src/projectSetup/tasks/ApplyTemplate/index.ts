@@ -63,7 +63,11 @@ export class ApplyTemplate extends BaseTask {
       }
       return params
     } catch (error) {
-      throw new BaseTaskError(this.taskName,`${strings.ApplyTemplateErrorMessage}: ${error.message}`, error)
+      throw new BaseTaskError(
+        this.taskName,
+        `${strings.ApplyTemplateErrorMessage}: ${error.message}`,
+        error
+      )
     }
   }
 }
