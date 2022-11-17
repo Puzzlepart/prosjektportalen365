@@ -10,13 +10,14 @@ import { useProjectInformationDataFetch } from './useProjectInformationDataFetch
 import { useProjectInformationState } from './useProjectInformationState'
 import { ListLogger } from 'pp365-shared/lib/logging'
 import { ProjectInformation } from '.'
+import { pick } from 'underscore'
 
 /**
  * Component logic hook for `ProjectInformation`
  *
  * @param props Props
  *
- * @returns `state`, `setState`, `getCustomActions`, `onSyncProperties`
+ * @returns `state`, `setState`, `onSyncProperties`
  */
 export const useProjectInformation = (props: IProjectInformationProps) => {
   const { state, setState } = useProjectInformationState()
@@ -39,13 +40,17 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
    *
    * @param text Message text
    * @param type Message bar type
-   * @param duration Duration in seconds
+   * @param durationSec Duration in seconds
    */
-  const addMessage = (text: string, type: MessageBarType, duration: number = 5): Promise<void> => {
+  const addMessage = (
+    text: string,
+    type: MessageBarType,
+    durationSec: number = 5
+  ): Promise<void> => {
     return new Promise((resolve) => {
       setState({
         message: {
-          text: format(text, duration.toString()),
+          text: format(text, durationSec.toString()),
           type,
           onDismiss: () => setState({ message: null })
         }
@@ -53,7 +58,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
       window.setTimeout(() => {
         setState({ message: null })
         resolve()
-      }, duration * 1000)
+      }, durationSec * 1000)
     })
   }
 
@@ -96,13 +101,28 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
       document.location.href =
         sessionStorage.DEBUG || DEBUG ? document.location.href.split('#')[0] : props.webUrl
     } catch (error) {
+      ListLogger.log({
+        message: error.message,
+        level: 'Error',
+        functionName: 'onSyncProperties',
+        component: ProjectInformation.displayName
+      })
       addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning)
     } finally {
       setState({ progress: null })
     }
   }
 
-  useProjectInformationDataFetch(props, (data) => setState({ ...data, isDataLoaded: true }))
+  useProjectInformationDataFetch(
+    props,
+    (data) => setState({ ...data, isDataLoaded: true }),
+    (error) => {
+      setState({
+        isDataLoaded: true,
+        error: { ...pick(error, 'name', 'stack'), type: MessageBarType.severeWarning }
+      })
+    }
+  )
 
   useEffect(() => {
     if (state?.data?.fieldValues) {

@@ -1,8 +1,9 @@
 import { LogLevel } from '@pnp/logging'
 import { sp } from '@pnp/sp'
 import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
+import { ListLogger } from 'pp365-shared/lib/logging'
 import * as strings from 'ProjectWebPartsStrings'
-import { IProjectPhasesData, IProjectPhasesProps } from '.'
+import { IProjectPhasesData, IProjectPhasesProps, ProjectPhases } from '.'
 import SPDataAdapter from '../../data'
 import { getPhaseSitePages } from './getPhaseSitePages'
 
@@ -48,7 +49,6 @@ export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPha
 
     const phaseSitePages = props.useDynamicHomepage ? await getPhaseSitePages(phases) : []
     const [currentPhase] = phases.filter((p) => p.name === currentPhaseName)
-
     return {
       currentPhase,
       phases,
@@ -57,7 +57,13 @@ export async function fetchData(props: IProjectPhasesProps): Promise<IProjectPha
       welcomePage,
       userHasChangePhasePermission
     } as IProjectPhasesData
-  } catch {
+  } catch (error) {
+    ListLogger.log({
+      message: error.message,
+      level: 'Error',
+      functionName: 'fetchData',
+      component: ProjectPhases.displayName
+    })
     throw new Error(strings.ProjectPhasesFetchDataError)
   }
 }

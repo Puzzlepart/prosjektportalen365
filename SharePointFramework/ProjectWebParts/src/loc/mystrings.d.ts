@@ -1,4 +1,5 @@
 declare interface IProjectWebPartsStrings {
+  ProjectInformationDataFetchErrorText: string
   ChecklistCommentDescription: string
   ChecklistCommentPlaceholder: string
   ProjectPhasesChangePhaseError: string

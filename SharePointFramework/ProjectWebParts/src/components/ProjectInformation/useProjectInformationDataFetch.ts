@@ -1,7 +1,9 @@
 import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
+import { ListLogger } from 'pp365-shared/lib/logging'
 import strings from 'ProjectWebPartsStrings'
 import { useEffect } from 'react'
 import { isEmpty } from 'underscore'
+import { ProjectInformation } from '.'
 import SPDataAdapter from '../../data'
 import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 import {
@@ -135,7 +137,13 @@ const fetchData = async (
       isProjectDataSynced
     }
   } catch (error) {
-    throw error
+    ListLogger.log({
+      message: error.message,
+      level: 'Error',
+      functionName: 'fetchData',
+      component: ProjectInformation.displayName
+    })
+    throw new Error(strings.ProjectInformationDataFetchErrorText)
   }
 }
 
@@ -143,13 +151,15 @@ const fetchData = async (
  * Fetch hook for ProjectInformation
  *
  * @param props Component properties for `ProjectInformation`
- * @param fetchCallback Fetch callback
+ * @param successCb Success function callback
+ * @param errorCb Error function callback
  */
 export const useProjectInformationDataFetch = (
   props: IProjectInformationProps,
-  fetchCallback: (data: Partial<IProjectInformationState>) => void
+  successCb: (data: Partial<IProjectInformationState>) => void,
+  errorCb: (error: any) => void
 ) => {
   useEffect(() => {
-    fetchData(props).then(fetchCallback)
+    fetchData(props).then(successCb).catch(errorCb)
   }, [])
 }

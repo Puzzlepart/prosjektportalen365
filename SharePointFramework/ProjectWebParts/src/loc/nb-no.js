@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    ProjectInformationDataFetchErrorText: 'Det skjedde en feil under uthenting av prosjektinformasjon.',
     ChecklistCommentPlaceholder: 'Skriv inn en kommentar...',
     ChecklistCommentDescription: 'Kommentar er obligatorisk om sjekkpunktet skal markeres som "Ikke relevant" eller "Fortsatt åpen".',
     ProjectPhasesChangePhaseError: 'Det skjedde en feil under endring av fase. Vennligst prøv igjen, eller kontakt en administrator.',
