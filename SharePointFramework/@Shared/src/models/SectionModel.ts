@@ -15,6 +15,7 @@ export class SectionModel {
   public viewQuery: string
   public viewFields: string[]
   public rowLimit: number
+  public viewName: string
   public fieldName: string
   public commentFieldName: string
   public statusClassName: string
@@ -30,9 +31,9 @@ export class SectionModel {
   /**
    * Constructor
    *
-   * @param _item Section item
+   * @param _item Section SP item
    */
-  constructor(private _item: any) {
+  constructor(private _item: Record<string, any>) {
     this.id = _item.Id
     this.name = _item.Title
     this.iconName = _item.GtSecIcon
@@ -41,6 +42,7 @@ export class SectionModel {
     this.viewQuery = _item.GtSecViewQuery
     this.viewFields = _item.GtSecViewFields ? _item.GtSecViewFields.split(',') : []
     this.rowLimit = _item.GtSecRowLimit
+    this.viewName = _item.GtSecView
     this.fieldName = _item.GtSecFieldName
     this.showRiskMatrix = _item.GtSecShowRiskMatrix
     this.showInStatusSection = _item.GtSecShowInStatusSection

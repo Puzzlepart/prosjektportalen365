@@ -5,5 +5,5 @@ import { IPropertyFieldColorConfigurationProps } from '../types'
 export interface IColorConfiguratorProps extends IPropertyFieldColorConfigurationProps {}
 
 export interface IColorConfiguratorState {
-  config: DynamicMatrixColorScaleConfig[]
+  config: DynamicMatrixColorScaleConfig
 }

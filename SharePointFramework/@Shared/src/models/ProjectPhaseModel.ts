@@ -1,20 +1,9 @@
 import { TypedHash } from '@pnp/common'
+import { ChecklistItemModel } from './ChecklistItemModel'
 
 export type ProjectPhaseChecklistData = {
-  stats?: {
-    [status: string]: number
-  }
-  items?: IProjectPhaseChecklistItem[]
-}
-
-export interface IProjectPhaseChecklistItem {
-  ID: number
-  Title: string
-  GtComment: string
-  GtChecklistStatus: string
-  GtProjectPhase: {
-    TermGuid: string
-  }
+  stats?: Record<string, number>
+  items?: ChecklistItemModel[]
 }
 
 /**

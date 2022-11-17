@@ -32,6 +32,7 @@ export const ColorConfigElement: FC<IColorConfigElementProps> = (props) => {
               value={props.config.p}
               min={props.min}
               max={props.max}
+              step={2}
               onChange={props.onChangePercentage}
               valueFormat={(value) => `${value}%`}
             />

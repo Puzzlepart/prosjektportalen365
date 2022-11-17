@@ -1,9 +1,11 @@
+import { format, IProgressIndicatorProps, MessageBarType } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { LogLevel } from '@pnp/logging'
-import { format, IProgressIndicatorProps, MessageBarType } from '@fluentui/react'
+import { ListLogger } from 'pp365-shared/lib/logging'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import strings from 'ProjectWebPartsStrings'
 import { useEffect } from 'react'
+import { ProjectInformation } from '.'
 import SPDataAdapter from '../../data'
 import { IProjectInformationProps, IProjectInformationUrlHash } from './types'
 import { useProjectInformationDataFetch } from './useProjectInformationDataFetch'
@@ -14,10 +16,16 @@ import { useProjectInformationState } from './useProjectInformationState'
  *
  * @param props Props
  *
- * @returns `state`, `setState`, `getCustomActions`, `onSyncProperties`
+ * @returns `state`, `setState`, `onSyncProperties`
  */
 export const useProjectInformation = (props: IProjectInformationProps) => {
   const { state, setState } = useProjectInformationState()
+
+  ListLogger.init(
+    props.hubSite.web.lists.getByTitle(strings.LogListName),
+    props.webPartContext.pageContext.web.absoluteUrl,
+    ProjectInformation.displayName
+  )
 
   SPDataAdapter.configure(props.webPartContext, {
     siteId: props.siteId,
@@ -31,13 +39,17 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
    *
    * @param text Message text
    * @param type Message bar type
-   * @param duration Duration in seconds
+   * @param durationSec Duration in seconds
    */
-  const addMessage = (text: string, type: MessageBarType, duration: number = 5): Promise<void> => {
+  const addMessage = (
+    text: string,
+    type: MessageBarType,
+    durationSec: number = 5
+  ): Promise<void> => {
     return new Promise((resolve) => {
       setState({
         message: {
-          text: format(text, duration.toString()),
+          text: format(text, durationSec.toString()),
           type,
           onDismiss: () => setState({ message: null })
         }
@@ -45,7 +57,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
       window.setTimeout(() => {
         setState({ message: null })
         resolve()
-      }, duration * 1000)
+      }, durationSec * 1000)
     })
   }
 
@@ -72,7 +84,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
         props.webUrl,
         strings.ProjectPropertiesListName,
         state.data.templateParameters.ProjectContentTypeId ??
-          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: props.webTitle }
       )
       if (!created) {
@@ -88,13 +100,19 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
       document.location.href =
         sessionStorage.DEBUG || DEBUG ? document.location.href.split('#')[0] : props.webUrl
     } catch (error) {
+      ListLogger.log({
+        message: error.message,
+        level: 'Error',
+        functionName: 'onSyncProperties',
+        component: ProjectInformation.displayName
+      })
       addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning)
     } finally {
       setState({ progress: null })
     }
   }
 
-  useProjectInformationDataFetch(props, (data) => setState({ ...data, isDataLoaded: true }))
+  useProjectInformationDataFetch(props, setState)
 
   useEffect(() => {
     if (state?.data?.fieldValues) {

@@ -10,15 +10,16 @@ import {
 } from '@microsoft/sp-property-pane'
 import { sp } from '@pnp/sp'
 import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
-import { IRiskMatrixProps, RiskElementModel, RiskMatrix } from 'components/RiskMatrix'
+import { IRiskMatrixProps, RiskMatrix } from 'components/RiskMatrix'
 import * as getValue from 'get-value'
 import * as strings from 'ProjectWebPartsStrings'
 import ReactDom from 'react-dom'
+import { UncertaintyElementModel } from '../../models'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 import { IRiskMatrixWebPartProps } from './types'
 
 export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWebPartProps> {
-  private _items: RiskElementModel[] = []
+  private _items: UncertaintyElementModel[] = []
   private _error: Error
 
   public async onInit() {
@@ -42,7 +43,7 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
     }
   }
 
-  protected async _getItems(): Promise<RiskElementModel[]> {
+  protected async _getItems(): Promise<UncertaintyElementModel[]> {
     const {
       probabilityFieldName,
       consequenceFieldName,
@@ -54,7 +55,7 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
       .getItemsByCAMLQuery({ ViewXml: this.properties.viewXml })
     return items.map(
       (i) =>
-        new RiskElementModel(
+        new UncertaintyElementModel(
           i,
           getValue(i, probabilityFieldName, { default: '' }),
           getValue(i, consequenceFieldName, { default: '' }),
@@ -78,20 +79,20 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
     }
     const headerLabelFields: IPropertyPaneField<any>[] = []
     const probabilityHeaders: string[] = [
-      strings.RiskMatrix_Header_VeryHigh,
-      strings.RiskMatrix_Header_High,
-      strings.RiskMatrix_Header_Medium,
-      strings.RiskMatrix_Header_Low,
-      strings.RiskMatrix_Header_VeryLow,
-      strings.RiskMatrix_Header_ExtremelyLow
+      strings.MatrixHeader_VeryHigh,
+      strings.MatrixHeader_High,
+      strings.MatrixHeader_Medium,
+      strings.MatrixHeader_Low,
+      strings.MatrixHeader_VeryLow,
+      strings.MatrixHeader_ExtremelyLow
     ]
     const consequenceHeaders: string[] = [
-      strings.RiskMatrix_Header_Insignificant,
-      strings.RiskMatrix_Header_Small,
-      strings.RiskMatrix_Header_Moderate,
-      strings.RiskMatrix_Header_Serious,
-      strings.RiskMatrix_Header_Critical,
-      strings.RiskMatrix_Header_VeryCritical
+      strings.MatrixHeader_Insignificant,
+      strings.MatrixHeader_Small,
+      strings.MatrixHeader_Moderate,
+      strings.MatrixHeader_Serious,
+      strings.MatrixHeader_Critical,
+      strings.MatrixHeader_VeryCritical
     ]
     for (let i = 0; i < size; i++) {
       const probabilityHeaderFieldName = `headerLabels.${size}.p${i}`
@@ -147,7 +148,7 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
               groupName: strings.LookAndFeelGroupName,
               groupFields: [
                 PropertyPaneToggle('fullWidth', {
-                  label: strings.RiskMatrixFullWidthLabel
+                  label: strings.MatrixFullWidthLabel
                 }),
                 PropertyPaneSlider('width', {
                   label: strings.WidthFieldLabel,
@@ -164,7 +165,7 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                   rows: 8
                 }),
                 PropertyPaneDropdown('size', {
-                  label: strings.RiskMatrixSizeLabel,
+                  label: strings.MatrixSizeLabel,
                   options: [
                     {
                       key: '4',
@@ -183,7 +184,7 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                 }),
                 PropertyFieldColorConfiguration('colorScaleConfig', {
                   key: 'colorScaleConfig',
-                  label: strings.RiskMatrixColorScaleConfigLabel,
+                  label: strings.MatrixColorScaleConfigLabel,
                   defaultValue: [
                     { p: 10, r: 44, g: 186, b: 0 },
                     { p: 30, r: 163, g: 255, b: 0 },

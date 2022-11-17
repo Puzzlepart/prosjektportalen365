@@ -4,10 +4,7 @@ import { spfi, SPFI, SPFx } from '@pnp/sp'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { ISPList } from '../../interfaces/ISPList'
-import {
-  ProjectPhaseChecklistData,
-  ProjectPhaseModel
-} from '../../models'
+import { ChecklistItemModel, ProjectPhaseChecklistData, ProjectPhaseModel } from '../../models'
 import { tryParseJson } from '../../util/tryParseJson'
 import { IGetPropertiesData } from './types'
 import { IProjectDataServiceConfiguration } from './IProjectDataServiceConfiguration'
@@ -187,7 +184,7 @@ export class ProjectDataService {
   }
 
   /**
-   * Update phase
+   * Update phase to the specified `phase` for the project.
    *
    * @param phase Phase
    * @param phaseTextField Phase text field
@@ -207,9 +204,9 @@ export class ProjectDataService {
   }
 
   /**
-   * Get phases
+   * Get phases for the project.
    *
-   * @param termSetId Get phases
+   * @param termSetId Term set ID
    * @param checklistData Checklist data
    */
   public async getPhases(
@@ -217,33 +214,31 @@ export class ProjectDataService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     checklistData: { [termGuid: string]: ProjectPhaseChecklistData } = {}
   ): Promise<ProjectPhaseModel[]> {
-    return await Promise.all([])
-    // const terms = await this._params.taxonomy
-    //   .getDefaultSiteCollectionTermStore()
-    //   .getTermSetById(termSetId)
-    //   .terms.select('Id', 'Name', 'LocalCustomProperties')
-    //   .usingCaching({
-    //     key: this._storageKeys.getPhases,
-    //     storeName: 'session',
-    //     expiration: dateAdd(new Date(), 'day', 1)
-    //   })
-    //   .get()
-    // Logger.write(`(ProjectDataService) Retrieved ${terms.length} phases from ${termSetId}.`)
-    // return terms.map(
-    //   (term) =>
-    //     new ProjectPhaseModel(
-    //       term.Name,
-    //       term.Id,
-    //       checklistData[term.Id],
-    //       term.LocalCustomProperties
-    //     )
-    // )
+    const terms = await this._params.taxonomy
+      .getDefaultSiteCollectionTermStore()
+      .getTermSetById(termSetId)
+      .terms.select('Id', 'Name', 'LocalCustomProperties')
+      .usingCaching({
+        key: this._storageKeys.getPhases,
+        storeName: 'session',
+        expiration: dateAdd(new Date(), 'day', 1)
+      })
+      .get()
+    return terms.map(
+      (term) =>
+        new ProjectPhaseModel(
+          term.Name,
+          term.Id,
+          checklistData[term.Id],
+          term.LocalCustomProperties
+        )
+    )
   }
 
   /**
-   * Get current phase
+   * Get current phase name for the project.
    *
-   * @param phaseField Phase field
+   * @param phaseField Phase field name
    */
   public async getCurrentPhaseName(phaseField: string): Promise<string> {
     try {
@@ -255,28 +250,32 @@ export class ProjectDataService {
   }
 
   /**
-   * Get checklist data
+   * Get checklist data from the specified list as an object.
    *
    * @param listName List name
+   * 
+   * @returns An object with term GUID as the key, and the items for the term GUID
+   * as the value.
    */
   public async getChecklistData(
     listName: string
-  ): Promise<{ [termGuid: string]: ProjectPhaseChecklistData }> {
+  ): Promise<Record<string, ProjectPhaseChecklistData>> {
     try {
       const items = await this.sp.web.lists
         .getByTitle(listName)
         .items.select('ID', 'Title', 'GtComment', 'GtChecklistStatus', 'GtProjectPhase')
-       ()
-      const checklistData = items
-        .filter((item) => item.GtProjectPhase)
+        .get<Record<string, any>[]>()
+      const checklistItems = items.map((item) => new ChecklistItemModel(item))
+      const checklistData = checklistItems
+        .filter((item) => item.termGuid)
         .reduce((obj, item) => {
-          const status = item.GtChecklistStatus.toLowerCase()
-          const termId = `/Guid(${item.GtProjectPhase.TermGuid})/`
-          obj[termId] = obj[termId] ? obj[termId] : {}
-          obj[termId].stats = obj[termId].stats || {}
-          obj[termId].items = obj[termId].items || []
-          obj[termId].items.push(item)
-          obj[termId].stats[status] = obj[termId].stats[status] ? obj[termId].stats[status] + 1 : 1
+          obj[item.termGuid] = obj[item.termGuid] ? obj[item.termGuid] : {}
+          obj[item.termGuid].stats = obj[item.termGuid].stats || {}
+          obj[item.termGuid].items = obj[item.termGuid].items || []
+          obj[item.termGuid].items.push(item)
+          obj[item.termGuid].stats[item.status] = obj[item.termGuid].stats[item.status]
+            ? obj[item.termGuid].stats[item.status] + 1
+            : 1
           return obj
         }, {})
       return checklistData

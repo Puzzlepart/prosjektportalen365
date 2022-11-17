@@ -26,8 +26,8 @@ export const ColorConfigurator: FC<IColorConfiguratorProps> = (props) => {
             config={config}
             onChangeColor={(_, color) => dispatch(CHANGE_CONFIG({ index, color }))}
             onChangePercentage={(percentage) => dispatch(CHANGE_CONFIG({ index, percentage }))}
-            min={get(state, `config[${index - 1}][0]`, 0) + 2}
-            max={get(state, `config[${index + 1}][0]`, 100) - 2}
+            min={get(state, `config[${index - 1}].p`, 0) + 2}
+            max={get(state, `config[${index + 1}].p`, 100) - 2}
           />
         ))}
       </div>

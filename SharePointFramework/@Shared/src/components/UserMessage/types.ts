@@ -3,7 +3,7 @@ import { IMessageBarProps, MessageBarType } from 'office-ui-fabric-react'
 /**
  * @category UserMessage
  */
-export interface IUserMessageProps extends IMessageBarProps {
+export interface IUserMessageProps extends Omit<IMessageBarProps, 'messageBarType'> {
   /**
    * Text to show in the message
    *

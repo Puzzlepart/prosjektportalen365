@@ -1,11 +1,11 @@
-import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
+import { ChecklistItemModel } from 'pp365-shared/lib/models'
 import { View } from './Views'
 
 export interface IChangePhaseDialogState {
   /**
    * Check list items
    */
-  checklistItems?: IProjectPhaseChecklistItem[]
+  checklistItems?: ChecklistItemModel[]
 
   /**
    * Currently selected index

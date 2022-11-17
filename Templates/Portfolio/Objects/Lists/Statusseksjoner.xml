@@ -139,6 +139,7 @@
     &lt;/And&gt;
 &lt;/Where&gt;</pnp:DataValue>
             <pnp:DataValue FieldName="GtSecRowLimit">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSecView">Aktuelle muligheter</pnp:DataValue>
             <pnp:DataValue FieldName="ContentTypeId">0x01004CEFE616A94A3A48A27D9DEBDF5EC82804</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>

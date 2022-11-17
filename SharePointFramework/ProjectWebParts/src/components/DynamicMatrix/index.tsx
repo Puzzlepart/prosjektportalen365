@@ -5,40 +5,38 @@ import { MatrixCell, MatrixCellType, MatrixElement, MatrixHeaderCell } from './M
 import { MatrixRow } from './MatrixRow'
 import { IDynamicMatrixProps } from './types'
 
-export const DynamicMatrix: FC<IDynamicMatrixProps> = (props) => {
-  return (
-    <DynamicMatrixContext.Provider value={{ props }}>
-      <div className={styles.root} style={{ width: props.width, minHeight: 300 }}>
-        {props.configuration.map((row, rowIdx) => {
-          const cells = row.map((cell, cellIndex) => {
-            const elements = props.getElementsForCell(cell)
-            switch (cell.cellType) {
-              case MatrixCellType.Cell: {
-                return (
-                  <MatrixCell key={cellIndex} className={cell.className} cell={cell}>
-                    {elements.map((props, idx) => (
-                      <MatrixElement key={idx} {...props} />
-                    ))}
-                  </MatrixCell>
-                )
-              }
-              case MatrixCellType.Header: {
-                return (
-                  <MatrixHeaderCell
-                    key={cellIndex}
-                    text={cell.cellValue}
-                    className={cell.className}
-                  />
-                )
-              }
+export const DynamicMatrix: FC<IDynamicMatrixProps> = (props) => (
+  <DynamicMatrixContext.Provider value={{ props }}>
+    <div className={styles.root} style={{ width: props.width, minHeight: 300 }}>
+      {props.configuration.map((row, rowIndex) => {
+        const cells = row.map((cell, cellIndex) => {
+          const elements = props.getElementsForCell(cell)
+          switch (cell.cellType) {
+            case MatrixCellType.Cell: {
+              return (
+                <MatrixCell key={cellIndex} className={cell.className} cell={cell}>
+                  {elements.map((props, idx) => (
+                    <MatrixElement key={idx} {...props} />
+                  ))}
+                </MatrixCell>
+              )
             }
-          })
-          return <MatrixRow key={rowIdx}>{cells}</MatrixRow>
-        })}
-      </div>
-    </DynamicMatrixContext.Provider>
-  )
-}
+            case MatrixCellType.Header: {
+              return (
+                <MatrixHeaderCell
+                  key={cellIndex}
+                  text={cell.cellValue}
+                  className={cell.className}
+                />
+              )
+            }
+          }
+        })
+        return <MatrixRow key={rowIndex}>{cells}</MatrixRow>
+      })}
+    </div>
+  </DynamicMatrixContext.Provider>
+)
 
 export * from './context'
 export * from './MatrixCell'

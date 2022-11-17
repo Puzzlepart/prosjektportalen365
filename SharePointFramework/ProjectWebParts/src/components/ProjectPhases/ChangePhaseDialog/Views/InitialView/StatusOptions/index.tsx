@@ -1,13 +1,14 @@
 import { ActionButton } from '@fluentui/react/lib/Button'
-import React from 'react'
+import React, { FC } from 'react'
 import { IStatusOptionsProps } from './types'
+import styles from './StatusOptions.module.scss'
 
-export const StatusOptions = ({ actions }: IStatusOptionsProps) => {
+export const StatusOptions: FC<IStatusOptionsProps> = ({ actions }) => {
   return (
-    <div style={{ marginTop: 20, marginBottom: 25 }}>
+    <div className={styles.root}>
       {actions.map((opt, key) => (
         <span key={key}>
-          <ActionButton style={{ marginRight: 5 }} {...opt} />
+          <ActionButton className={styles.action} {...opt} />
         </span>
       ))}
     </div>

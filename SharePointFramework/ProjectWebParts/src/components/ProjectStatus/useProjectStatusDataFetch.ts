@@ -1,15 +1,17 @@
 import { LogLevel } from '@pnp/logging'
-import SPDataAdapter from '../../data'
+import { AnyAction } from '@reduxjs/toolkit'
 import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import strings from 'ProjectWebPartsStrings'
+import { useEffect } from 'react'
+import SPDataAdapter from '../../data'
+import { DataFetchFunction } from '../../types/DataFetchFunction'
+import { INIT_DATA } from './reducer'
 import { IProjectStatusData, IProjectStatusProps } from './types'
 
 /**
- * Fetch data
- *
- * @param props Props
+ * Fetch data for `ProjectStatus`
  */
-export const fetchData = async (props: IProjectStatusProps): Promise<IProjectStatusData> => {
+const fetchData: DataFetchFunction<IProjectStatusProps, IProjectStatusData> = async (props) => {
   try {
     if (!SPDataAdapter.isConfigured) {
       SPDataAdapter.configure(props.webPartContext, {
@@ -59,4 +61,20 @@ export const fetchData = async (props: IProjectStatusProps): Promise<IProjectSta
   } catch (error) {
     throw strings.ProjectStatusDataErrorText
   }
+}
+
+/**
+ * Fetch hook for `ProjectStatus`
+ *
+ * @param props Component properties for `ProjectStatus`
+ * @param dispatch Dispatcer
+ */
+ export const useProjectStatusDataFetch = (
+  props: IProjectStatusProps,
+  dispatch: React.Dispatch<AnyAction>
+) => {
+  useEffect(() => {
+    fetchData(props)
+      .then((data) => dispatch(INIT_DATA({ data })))
+  }, [])
 }
