@@ -8,6 +8,8 @@ import SPDataAdapter from '../../data'
 import { IProjectInformationProps, IProjectInformationUrlHash } from './types'
 import { useProjectInformationDataFetch } from './useProjectInformationDataFetch'
 import { useProjectInformationState } from './useProjectInformationState'
+import { ListLogger } from 'pp365-shared/lib/logging'
+import { ProjectInformation } from '.'
 
 /**
  * Component logic hook for `ProjectInformation`
@@ -18,6 +20,12 @@ import { useProjectInformationState } from './useProjectInformationState'
  */
 export const useProjectInformation = (props: IProjectInformationProps) => {
   const { state, setState } = useProjectInformationState()
+
+  ListLogger.init(
+    props.hubSite.web.lists.getByTitle('Logg'),
+    props.webPartContext.pageContext.web.absoluteUrl,
+    ProjectInformation.displayName
+  )
 
   SPDataAdapter.configure(props.webPartContext, {
     siteId: props.siteId,

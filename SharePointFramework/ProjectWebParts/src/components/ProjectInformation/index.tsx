@@ -49,6 +49,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
   )
 }
 
+ProjectInformation.displayName = 'Project Information'
 ProjectInformation.defaultProps = {
   page: 'Frontpage',
   customActions: [],
