@@ -23,11 +23,11 @@ export class ProjectDataService {
    *
    * @param configuration Configuration for ProjectDataService
    */
-  constructor(
-    public configuration: IProjectDataServiceConfiguration
-  ) {
+  constructor(public configuration: IProjectDataServiceConfiguration) {
     this._initStorage()
-    this.sp = spfi(this.configuration.webUrl).using(SPFx(this.configuration.spfxContext)).using(PnPLogging(LogLevel.Warning))
+    this.sp = spfi(this.configuration.webUrl)
+      .using(SPFx(this.configuration.spfxContext))
+      .using(PnPLogging(LogLevel.Warning))
   }
 
   /**
@@ -65,14 +65,11 @@ export class ProjectDataService {
         try {
           const [list] = await this.sp.web.lists
             .filter(`Title eq '${this.configuration.propertiesListName}'`)
-            .select('Id', 'DefaultEditFormUrl')
-            <ISPList[]>()
+            .select('Id', 'DefaultEditFormUrl')<ISPList[]>()
           if (!list) return null
-          const [item] = await this.sp.web.lists
-            .getById(list.Id)
-            .items.select('Id')
-            .top(1)
-            <{ Id: number }[]>()
+          const [item] = await this.sp.web.lists.getById(list.Id).items.select('Id').top(1)<
+            { Id: number }[]
+          >()
           if (!item) return null
           return {
             itemId: item.Id,
@@ -122,11 +119,15 @@ export class ProjectDataService {
       ])
 
       urlSource = !urlSource.includes(welcomepage.WelcomePage)
-        ? urlSource.replace('#syncproperties=1', `/${welcomepage.WelcomePage}#syncproperties=1`)
-          .replace('//SitePages', '/SitePages')
+        ? urlSource
+            .replace('#syncproperties=1', `/${welcomepage.WelcomePage}#syncproperties=1`)
+            .replace('//SitePages', '/SitePages')
         : urlSource
 
-      const editFormUrl = makeUrlAbsolute(`${propertyItemContext.defaultEditFormUrl}?ID=${propertyItemContext.itemId}&Source=${encodeURIComponent(urlSource)}`
+      const editFormUrl = makeUrlAbsolute(
+        `${propertyItemContext.defaultEditFormUrl}?ID=${
+          propertyItemContext.itemId
+        }&Source=${encodeURIComponent(urlSource)}`
       )
       const versionHistoryUrl = `${this.configuration.webUrl}/_layouts/15/versions.aspx?list=${propertyItemContext.listId}&ID=${propertyItemContext.itemId}`
       return {
@@ -146,7 +147,8 @@ export class ProjectDataService {
    * Get properties data
    */
   public async getPropertiesData(): Promise<IGetPropertiesData> {
-    const propertyItem = await this._getPropertyItem(`${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
+    const propertyItem = await this._getPropertyItem(
+      `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
     )
     if (propertyItem) {
       const templateParameters = tryParseJson(propertyItem.fieldValuesText.TemplateParameters, {})
@@ -156,7 +158,10 @@ export class ProjectDataService {
         templateParameters
       }
     } else {
-      const entity = await this.configuration.entityService.fetchEntity(this.configuration.siteId, this.configuration.webUrl)
+      const entity = await this.configuration.entityService.fetchEntity(
+        this.configuration.siteId,
+        this.configuration.webUrl
+      )
       return {
         fieldValues: entity.fieldValues,
         fieldValuesText: entity.fieldValues,
@@ -177,8 +182,7 @@ export class ProjectDataService {
     const { Modified } = await this.sp.web.lists
       .getById(data.propertiesListId)
       .items.getById(data.fieldValues.Id)
-      .select('Modified')
-      <{ Modified: string }>()
+      .select('Modified')<{ Modified: string }>()
     return (new Date().getTime() - new Date(Modified).getTime()) / 1000
   }
 
@@ -195,7 +199,10 @@ export class ProjectDataService {
       if (propertyItemContext) {
         await propertyItemContext.item.update(properties)
       } else {
-        await this.configuration.entityService.updateEntityItem(this.configuration.siteId, properties)
+        await this.configuration.entityService.updateEntityItem(
+          this.configuration.siteId,
+          properties
+        )
       }
     } catch (error) {
       throw error
@@ -234,7 +241,7 @@ export class ProjectDataService {
    * Get checklist data from the specified list as an object.
    *
    * @param listName List name
-   * 
+   *
    * @returns An object with term GUID as the key, and the items for the term GUID
    * as the value.
    */
@@ -244,7 +251,9 @@ export class ProjectDataService {
     try {
       const items = await this.sp.web.lists
         .getByTitle(listName)
-        .items.select('ID', 'Title', 'GtComment', 'GtChecklistStatus', 'GtProjectPhase')<Record<string, any>[]>()
+        .items.select('ID', 'Title', 'GtComment', 'GtChecklistStatus', 'GtProjectPhase')<
+        Record<string, any>[]
+      >()
       const checklistItems = items.map((item) => new ChecklistItemModel(item))
       const checklistData = checklistItems
         .filter((item) => item.termGuid)

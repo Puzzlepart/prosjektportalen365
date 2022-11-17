@@ -5,7 +5,6 @@ import {
   TimelineContentModel
 } from 'pp365-portfoliowebparts/lib/models'
 import strings from 'ProjectWebPartsStrings'
-import { first } from 'underscore'
 import { IProjectTimelineProps } from '../types'
 
 /**
@@ -19,11 +18,12 @@ export async function fetchProjectData(
   timelineConfig: TimelineConfigurationModel[]
 ): Promise<TimelineContentModel> {
   try {
-    const projectData = await props.hubSite.web.lists
+    const [projectData] = await props.hubSite.sp.web.lists
       .getByTitle(strings.ProjectsListName)
-      .items.select('Id', 'GtStartDate', 'GtEndDate')
-      .filter(`GtSiteId eq '${props.siteId}'`)
-      .getAll()
+      .items
+      .select('Id', 'GtStartDate', 'GtEndDate')
+      .top(1)
+      .filter(`GtSiteId eq '${props.siteId}'`)()
 
     const config = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
     return new TimelineContentModel(
@@ -31,8 +31,8 @@ export async function fetchProjectData(
       props.webTitle,
       props.webTitle,
       strings.ProjectLabel,
-      first(projectData)?.GtStartDate,
-      first(projectData)?.GtEndDate
+      projectData?.GtStartDate,
+      projectData?.GtEndDate
     ).usingConfig(config)
   } catch (error) {
     throw new Error(

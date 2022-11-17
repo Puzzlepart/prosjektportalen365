@@ -1,8 +1,6 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
-import { sp } from '@pnp/sp'
-import { taxonomy } from '@pnp/sp-taxonomy'
 import { IProgressIndicatorProps } from '@fluentui/react/lib/ProgressIndicator'
 import { SPDataAdapterBase } from 'pp365-shared/lib/data'
 import { ProjectDataService } from 'pp365-shared/lib/services'
@@ -23,15 +21,13 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    */
   public configure(spfxContext: WebPartContext, configuration: ISPDataAdapterConfiguration) {
     super.configure(spfxContext, configuration)
-    taxonomy.setup({ spfxContext })
     this.project = new ProjectDataService(
       {
         ...this.settings,
+        spfxContext: spfxContext,
         entityService: this.entityService,
-        propertiesListName: strings.ProjectPropertiesListName,
-        taxonomy
-      },
-      this.spConfiguration
+        propertiesListName: strings.ProjectPropertiesListName
+      }
     )
   }
 
@@ -121,10 +117,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       const [fields, siteUsers] = await Promise.all([
         templateParameters.ProjectContentTypeId
           ? this.entityService
-              .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
-              .getEntityFields()
+            .usingParams({ spfxContext: this.spfxContext, contentTypeId: templateParameters.ProjectContentTypeId })
+            .getEntityFields()
           : this.entityService.getEntityFields(),
-        this.sp.web.siteUsers.select('Id', 'Email', 'LoginName', 'Title').get<
+        this.sp.web.siteUsers.select('Id', 'Email', 'LoginName', 'Title')<
           {
             Id: number
             Email: string
@@ -179,13 +175,13 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
                 const [_user] = siteUsers.filter(
                   (u) => u.Title === fieldValuesText[fld.InternalName]
                 )
-                const user = _user ? await sp.web.ensureUser(_user.LoginName) : null
+                const user = _user ? await this.sp.web.ensureUser(_user.LoginName) : null
                 properties[`${fld.InternalName}Id`] = user ? user.data.Id : null
               } else {
                 const [_user] = siteUsers.filter(
                   (u) => u.Id === fieldValues[`${fld.InternalName}Id`]
                 )
-                const user = _user ? await this.entityService.web.ensureUser(_user.LoginName) : null
+                const user = _user ? await this.entityService.sp.web.ensureUser(_user.LoginName) : null
                 properties[`${fld.InternalName}Id`] = user ? user.data.Id : null
               }
             }
@@ -196,7 +192,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
                 const userIds = fieldValuesText[fld.InternalName] || []
                 const users = siteUsers.filter((u) => userIds.indexOf(u.Title) !== -1)
                 const ensured = await Promise.all(
-                  users.map(({ LoginName }) => sp.web.ensureUser(LoginName))
+                  users.map(({ LoginName }) => this.sp.web.ensureUser(LoginName))
                 )
                 properties[`${fld.InternalName}Id`] = {
                   results: ensured.map(({ data }) => data.Id)
@@ -205,7 +201,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
                 const userIds = fieldValues[`${fld.InternalName}Id`] || []
                 const users = siteUsers.filter((u) => userIds.indexOf(u.Id) !== -1)
                 const ensured = await Promise.all(
-                  users.map(({ LoginName }) => this.entityService.web.ensureUser(LoginName))
+                  users.map(({ LoginName }) => this.entityService.sp.web.ensureUser(LoginName))
                 )
                 properties[`${fld.InternalName}Id`] = {
                   results: ensured.map(({ data }) => data.Id)
@@ -261,14 +257,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public async getTermFieldContext(fieldName: string) {
     const phaseField = await this.sp.web.fields
       .getByInternalNameOrTitle(fieldName)
-      .select('InternalName', 'TermSetId', 'TextField')
-      .usingCaching()
-      .get<{ InternalName: string; TermSetId: string; TextField: string }>()
+      .select('InternalName', 'TermSetId', 'TextField')<{ InternalName: string; TermSetId: string; TextField: string }>()
     const phaseTextField = await this.sp.web.fields
       .getById(phaseField.TextField)
-      .select('InternalName')
-      .usingCaching()
-      .get<{ InternalName: string }>()
+      .select('InternalName')<{ InternalName: string }>()
     return {
       fieldName: phaseField.InternalName,
       termSetId: phaseField.TermSetId,

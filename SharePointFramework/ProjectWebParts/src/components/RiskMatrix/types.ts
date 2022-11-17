@@ -1,11 +1,11 @@
 import { PageContext } from '@microsoft/sp-page-context'
 import strings from 'ProjectWebPartsStrings'
-import { HTMLProps } from 'react'
+import { IBaseWebPartComponentProps } from '../../components/BaseWebPartComponent/types'
 import { UncertaintyElementModel } from '../../models'
 import { IDynamicMatrixProps } from '../DynamicMatrix'
 
 export interface IRiskMatrixProps
-  extends Omit<HTMLProps<HTMLDivElement>, 'size'>,
+  extends IBaseWebPartComponentProps,
     Pick<IDynamicMatrixProps, 'size' | 'colorScaleConfig' | 'calloutTemplate'> {
   customConfigUrl?: string
   items?: UncertaintyElementModel[]

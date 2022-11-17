@@ -1,6 +1,5 @@
 import { format, IProgressIndicatorProps, MessageBarType } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { LogLevel } from '@pnp/logging'
 import { ListLogger } from 'pp365-shared/lib/logging'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import strings from 'ProjectWebPartsStrings'
@@ -22,7 +21,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
   const { state, setState } = useProjectInformationState()
 
   ListLogger.init(
-    props.hubSite.web.lists.getByTitle(strings.LogListName),
+    props.hubSite.sp.web.lists.getByTitle(strings.LogListName),
     props.spfxContext.pageContext.web.absoluteUrl,
     ProjectInformation.displayName
   )
@@ -30,8 +29,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
   SPDataAdapter.configure(props.spfxContext, {
     siteId: props.siteId,
     webUrl: props.webUrl,
-    hubSiteUrl: props.hubSite.url,
-    logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+    hubSiteUrl: props.hubSite.url
   })
 
   /**

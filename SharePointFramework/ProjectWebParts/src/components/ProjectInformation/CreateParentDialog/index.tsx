@@ -1,4 +1,3 @@
-import { MenuNode, sp } from '@pnp/sp'
 import {
   DefaultButton,
   Dialog,

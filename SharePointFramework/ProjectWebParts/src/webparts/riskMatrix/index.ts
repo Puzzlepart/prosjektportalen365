@@ -8,10 +8,8 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { sp } from '@pnp/sp'
 import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
 import { IRiskMatrixProps, RiskMatrix } from 'components/RiskMatrix'
-import * as getValue from 'get-value'
 import * as strings from 'ProjectWebPartsStrings'
 import ReactDom from 'react-dom'
 import { UncertaintyElementModel } from '../../models'
@@ -50,17 +48,17 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
       probabilityPostActionFieldName,
       consequencePostActionFieldName
     } = this.properties
-    const items: any[] = await sp.web.lists
+    const items: any[] = await this.sp.web.lists
       .getByTitle(this.properties.listName)
       .getItemsByCAMLQuery({ ViewXml: this.properties.viewXml })
     return items.map(
       (i) =>
         new UncertaintyElementModel(
           i,
-          getValue(i, probabilityFieldName, { default: '' }),
-          getValue(i, consequenceFieldName, { default: '' }),
-          getValue(i, probabilityPostActionFieldName, { default: '' }),
-          getValue(i, consequencePostActionFieldName, { default: '' })
+          get(i, probabilityFieldName, ''),
+          get(i, consequenceFieldName, ''),
+          get(i, probabilityPostActionFieldName, ''),
+          get(i, consequencePostActionFieldName, '')
         )
     )
   }

@@ -30,10 +30,9 @@ export class DataSourceService {
    */
   public async getByName(name: string): Promise<DataSource> {
     const [[item], _columns] = await Promise.all([
-      this.list.items
-        .select(...Object.keys(new SPDataSourceItem()))
-        .filter(`Title eq '${name}'`)
-        <SPDataSourceItem[]>(),
+      this.list.items.select(...Object.keys(new SPDataSourceItem())).filter(`Title eq '${name}'`)<
+        SPDataSourceItem[]
+      >(),
       this.columnsList.items()
     ])
     if (item) {
@@ -52,8 +51,7 @@ export class DataSourceService {
   public async getByCategory(category: string): Promise<DataSource[]> {
     const items = await this.list.items
       .select(...Object.keys(new SPDataSourceItem()))
-      .filter(`GtDataSourceCategory eq '${category}'`)
-      <SPDataSourceItem[]>()
+      .filter(`GtDataSourceCategory eq '${category}'`)<SPDataSourceItem[]>()
     return items.map((item) => new DataSource(item))
   }
 }

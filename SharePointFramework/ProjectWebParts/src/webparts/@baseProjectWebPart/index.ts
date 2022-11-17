@@ -1,9 +1,8 @@
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
-import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
-import '@pnp/polyfill-ie11'
-import { sp } from '@pnp/sp'
+import { LogLevel, PnPLogging } from '@pnp/logging'
+import { spfi, SPFI, SPFx } from '@pnp/sp'
 import React from 'react'
-import ReactDom from 'react-dom'
+import { render } from 'react-dom'
 import HubSiteService, { IHubSite } from 'sp-hubsite-service'
 import { IBaseWebPartComponentProps } from '../../components/BaseWebPartComponent'
 import SPDataAdapter from '../../data'
@@ -11,6 +10,7 @@ import SPDataAdapter from '../../data'
 export abstract class BaseProjectWebPart<
   T extends IBaseWebPartComponentProps
 > extends BaseClientSideWebPart<T> {
+  public sp: SPFI
   private _hubSite: IHubSite
 
   public abstract render(): void
@@ -35,23 +35,21 @@ export abstract class BaseProjectWebPart<
       pageContext: this.context.pageContext
     }
     const element = React.createElement(component, combinedProps)
-    ReactDom.render(element, this.domElement)
+    render(element, this.domElement)
   }
 
   /**
    * Setup sp, data adapter, logging etc
    */
   private async _setup() {
-    sp.setup({ spfxContext: this.context })
-    this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
+    this.sp = spfi(this.context.pageContext.web.absoluteUrl).using(SPFx(this.context)).using(PnPLogging(LogLevel.Warning))
+    this._hubSite = await HubSiteService.GetHubSite(this.context)
     SPDataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
       hubSiteUrl: this._hubSite.url,
       logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     })
-    Logger.subscribe(new ConsoleListener())
-    Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
   }
 
   public async onInit(): Promise<void> {

@@ -48,7 +48,9 @@ export class PortalDataService {
    */
   public configure(configuration: IPortalDataServiceConfiguration): PortalDataService {
     this._configuration = { ...PortalDataServiceDefaultConfiguration, ...configuration }
-    this.sp = spfi(this._configuration.url).using(SPFx(this._configuration.spfxContext)).using(PnPLogging(LogLevel.Warning))
+    this.sp = spfi(this._configuration.url)
+      .using(SPFx(this._configuration.spfxContext))
+      .using(PnPLogging(LogLevel.Warning))
     return this
   }
 
@@ -184,8 +186,7 @@ export class PortalDataService {
   public async getPortfolioOverviewViews(): Promise<PortfolioOverviewView[]> {
     const spItems = await this.sp.web.lists
       .getByTitle(this._configuration.listNames.PORTFOLIO_VIEWS)
-      .items.orderBy('GtSortOrder', true)
-      <SPPortfolioOverviewViewItem[]>()
+      .items.orderBy('GtSortOrder', true)<SPPortfolioOverviewViewItem[]>()
     return spItems.map((item) => new PortfolioOverviewView(item))
   }
 
@@ -200,7 +201,10 @@ export class PortalDataService {
     const urls = await this.sp.web.lists
       .getByTitle(this._configuration.listNames[list])
       .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
-      .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')<{ DefaultNewFormUrl: string; DefaultEditFormUrl: string }>()
+      .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')<{
+      DefaultNewFormUrl: string
+      DefaultEditFormUrl: string
+    }>()
     return {
       defaultNewFormUrl: makeUrlAbsolute(urls.DefaultNewFormUrl),
       defaultEditFormUrl: makeUrlAbsolute(urls.DefaultEditFormUrl)
@@ -223,7 +227,9 @@ export class PortalDataService {
     contentTypeId: string,
     properties?: Record<string, string>
   ): Promise<IListEnsureResult> {
-    const targetWeb = spfi(url).using(SPFx(this._configuration.spfxContext)).using(PnPLogging(LogLevel.Warning)).web
+    const targetWeb = spfi(url)
+      .using(SPFx(this._configuration.spfxContext))
+      .using(PnPLogging(LogLevel.Warning)).web
     const { jsomContext } = await initJsom(url, { loadTaxonomy: true })
     const [hubContentType, targetSiteFields, ensureList] = await Promise.all([
       this._getHubContentType(contentTypeId),
@@ -324,8 +330,7 @@ export class PortalDataService {
         'FieldLinks/Name',
         'FieldLinks/Required'
       )
-      .expand('Fields', 'FieldLinks')
-      <ISPContentType>()
+      .expand('Fields', 'FieldLinks')<ISPContentType>()
     return contentType
   }
 
@@ -437,8 +442,7 @@ export class PortalDataService {
       return this.sp.web.lists
         .getByTitle(this._configuration.listNames.PROJECT_STATUS)
         .select('DefaultEditFormUrl')
-        .expand('DefaultEditFormUrl')
-        <{ DefaultEditFormUrl: string }>()
+        .expand('DefaultEditFormUrl')<{ DefaultEditFormUrl: string }>()
     } catch (error) {
       throw error
     }
@@ -480,8 +484,7 @@ export class PortalDataService {
         'GtProjectFieldName',
         'GtProjectAdminPermissions/GtProjectAdminPermissionId'
       )
-      .expand('GtProjectAdminPermissions')
-      <SPProjectAdminRoleItem[]>()
+      .expand('GtProjectAdminPermissions')<SPProjectAdminRoleItem[]>()
     return spItems.map((item) => new ProjectAdminRole(item))
   }
 }

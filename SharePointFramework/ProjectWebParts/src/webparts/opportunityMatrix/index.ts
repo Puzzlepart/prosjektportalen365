@@ -8,14 +8,12 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { sp } from '@pnp/sp'
 import { IOpportunityMatrixProps, OpportunityMatrix } from 'components/OpportunityMatrix'
 import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
-import * as getValue from 'get-value'
 import * as strings from 'ProjectWebPartsStrings'
-import ReactDom from 'react-dom'
-import { UncertaintyElementModel } from '../../models'
+import { unmountComponentAtNode } from 'react-dom'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
+import { UncertaintyElementModel } from '../../models'
 import { IOpportunityMatrixWebPartProps } from './types'
 
 export default class OpportunityMatrixWebPart extends BaseProjectWebPart<
@@ -34,9 +32,8 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<
   }
 
   public render(): void {
-    if (this._error) {
-      this.renderError(this._error)
-    } else {
+    if (this._error) this.renderError(this._error)
+    else {
       this.renderComponent<IOpportunityMatrixProps>(OpportunityMatrix, {
         ...this.properties,
         width: this.properties.fullWidth ? '100%' : this.properties.width,
@@ -46,29 +43,23 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<
   }
 
   protected async _getItems(): Promise<UncertaintyElementModel[]> {
-    const {
-      probabilityFieldName,
-      consequenceFieldName,
-      probabilityPostActionFieldName,
-      consequencePostActionFieldName
-    } = this.properties
-    const items: any[] = await sp.web.lists
+    const items: any[] = await this.sp.web.lists
       .getByTitle(this.properties.listName)
       .getItemsByCAMLQuery({ ViewXml: this.properties.viewXml })
     return items.map(
       (i) =>
         new UncertaintyElementModel(
           i,
-          getValue(i, probabilityFieldName, { default: '' }),
-          getValue(i, consequenceFieldName, { default: '' }),
-          getValue(i, probabilityPostActionFieldName, { default: '' }),
-          getValue(i, consequencePostActionFieldName, { default: '' })
+          get(i, this.properties.probabilityFieldName, ''),
+          get(i, this.properties.consequenceFieldName, ''),
+          get(i, this.properties.probabilityPostActionFieldName, ''),
+          get(i, this.properties.consequencePostActionFieldName, '')
         )
     )
   }
 
   protected onDispose(): void {
-    ReactDom.unmountComponentAtNode(this.domElement)
+    unmountComponentAtNode(this.domElement)
   }
 
   protected get headerLabelFields(): IPropertyPaneField<any>[] {

@@ -1,4 +1,3 @@
-import { LogLevel } from '@pnp/logging'
 import { AnyAction } from '@reduxjs/toolkit'
 import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import strings from 'ProjectWebPartsStrings'
@@ -17,8 +16,7 @@ const fetchData: DataFetchFunction<IProjectStatusProps, IProjectStatusData> = as
       SPDataAdapter.configure(props.spfxContext, {
         siteId: props.siteId,
         webUrl: props.webUrl,
-        hubSiteUrl: props.hubSite.url,
-        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+        hubSiteUrl: props.hubSite.url
       })
     }
     const [

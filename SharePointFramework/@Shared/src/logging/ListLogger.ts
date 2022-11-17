@@ -45,7 +45,7 @@ class ListLogger {
     try {
       const spItem = this._getSpItem({ ...this._getEntryDefaults(), ...entry })
       return this.list.items.add(spItem)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**

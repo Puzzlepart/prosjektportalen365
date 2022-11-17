@@ -117,7 +117,7 @@ export function useTimelineList() {
    * @param properties Properties
    */
   const addTimelineItem = async (properties: TypedHash<any>): Promise<any> => {
-    const list = context.props.hubSite.web.lists.getByTitle(strings.TimelineContentListName)
+    const list = context.props.hubSite.sp.web.lists.getByTitle(strings.TimelineContentListName)
     const itemAddResult = await list.items.add(properties)
     return itemAddResult.data
   }
@@ -128,7 +128,7 @@ export function useTimelineList() {
    * @param item Item
    */
   const deleteTimelineItem = async (item: any) => {
-    const list = context.props.hubSite.web.lists.getByTitle(strings.TimelineContentListName)
+    const list = context.props.hubSite.sp.web.lists.getByTitle(strings.TimelineContentListName)
     await list.items.getById(item.Id).delete()
     context.setState({
       refetch: new Date().getTime()
