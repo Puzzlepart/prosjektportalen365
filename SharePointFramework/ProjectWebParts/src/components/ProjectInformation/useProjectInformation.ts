@@ -1,16 +1,15 @@
+import { format, IProgressIndicatorProps, MessageBarType } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { LogLevel } from '@pnp/logging'
-import { format, IProgressIndicatorProps, MessageBarType } from '@fluentui/react'
+import { ListLogger } from 'pp365-shared/lib/logging'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import strings from 'ProjectWebPartsStrings'
 import { useEffect } from 'react'
+import { ProjectInformation } from '.'
 import SPDataAdapter from '../../data'
 import { IProjectInformationProps, IProjectInformationUrlHash } from './types'
 import { useProjectInformationDataFetch } from './useProjectInformationDataFetch'
 import { useProjectInformationState } from './useProjectInformationState'
-import { ListLogger } from 'pp365-shared/lib/logging'
-import { ProjectInformation } from '.'
-import { pick } from 'underscore'
 
 /**
  * Component logic hook for `ProjectInformation`
@@ -23,7 +22,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
   const { state, setState } = useProjectInformationState()
 
   ListLogger.init(
-    props.hubSite.web.lists.getByTitle('Logg'),
+    props.hubSite.web.lists.getByTitle(strings.LogListName),
     props.webPartContext.pageContext.web.absoluteUrl,
     ProjectInformation.displayName
   )
@@ -85,7 +84,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
         props.webUrl,
         strings.ProjectPropertiesListName,
         state.data.templateParameters.ProjectContentTypeId ??
-          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: props.webTitle }
       )
       if (!created) {
@@ -113,16 +112,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     }
   }
 
-  useProjectInformationDataFetch(
-    props,
-    (data) => setState({ ...data, isDataLoaded: true }),
-    (error) => {
-      setState({
-        isDataLoaded: true,
-        error: { ...pick(error, 'name', 'stack'), type: MessageBarType.severeWarning }
-      })
-    }
-  )
+  useProjectInformationDataFetch(props, setState)
 
   useEffect(() => {
     if (state?.data?.fieldValues) {

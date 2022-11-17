@@ -1,3 +1,5 @@
+import { MessageBarType } from '@fluentui/react'
+import _ from 'lodash'
 import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import { ListLogger } from 'pp365-shared/lib/logging'
 import strings from 'ProjectWebPartsStrings'
@@ -5,6 +7,7 @@ import { useEffect } from 'react'
 import { isEmpty } from 'underscore'
 import { ProjectInformation } from '.'
 import SPDataAdapter from '../../data'
+import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 import {
   IProjectInformationData,
@@ -47,10 +50,8 @@ const transformProperties = (
 
 /**
  * Checks if project data is synced
- *
- * @param props Component properties for `ProjectInformation`
  */
-const checkProjectDataSynced = async (props: IProjectInformationProps) => {
+const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolean> = async (props) => {
   try {
     let isSynced = false
     const projectDataList = props.hubSite.web.lists.getByTitle(strings.IdeaProjectDataTitle)
@@ -73,13 +74,11 @@ const checkProjectDataSynced = async (props: IProjectInformationProps) => {
 }
 
 /**
- * Fetch data for ProjectInformation
- *
- * @param props Component properties for `ProjectInformation`
+ * Fetch data for `ProjectInformation`
  */
-const fetchData = async (
-  props: IProjectInformationProps
-): Promise<Partial<IProjectInformationState>> => {
+const fetchData: DataFetchFunction<IProjectInformationProps, Partial<IProjectInformationState>> = async (
+  props
+) => {
   try {
     const [
       columns,
@@ -93,20 +92,20 @@ const fetchData = async (
       SPDataAdapter.project.getPropertiesData(),
       props.page === 'Frontpage'
         ? SPDataAdapter.portal.getParentProjects(
-            props.webPartContext?.pageContext?.web?.absoluteUrl,
-            ProjectInformationParentProject
-          )
+          props.webPartContext?.pageContext?.web?.absoluteUrl,
+          ProjectInformationParentProject
+        )
         : Promise.resolve([]),
-      !props.hideStatusReport
-        ? SPDataAdapter.portal.getStatusReports({
-            filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
-            publishedString: strings.GtModerationStatus_Choice_Published
-          })
-        : Promise.resolve([]),
-      !props.hideStatusReport
-        ? SPDataAdapter.portal.getProjectStatusSections()
-        : Promise.resolve([]),
-      !props.hideStatusReport ? SPDataAdapter.portal.getProjectColumnConfig() : Promise.resolve([])
+      props.hideStatusReport
+        ? Promise.resolve([])
+        : SPDataAdapter.portal.getStatusReports({
+          filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
+          publishedString: strings.GtModerationStatus_Choice_Published
+        }),
+      props.hideStatusReport
+        ? Promise.resolve([])
+        : SPDataAdapter.portal.getProjectStatusSections(),
+      props.hideStatusReport ? Promise.resolve([]) : SPDataAdapter.portal.getProjectColumnConfig()
     ])
     const data: IProjectInformationData = {
       columns,
@@ -151,15 +150,18 @@ const fetchData = async (
  * Fetch hook for ProjectInformation
  *
  * @param props Component properties for `ProjectInformation`
- * @param successCb Success function callback
- * @param errorCb Error function callback
+ * @param setState Set state function for `ProjectInformation`
  */
 export const useProjectInformationDataFetch = (
   props: IProjectInformationProps,
-  successCb: (data: Partial<IProjectInformationState>) => void,
-  errorCb: (error: any) => void
+  setState: (newState: Partial<IProjectInformationState>) => void
 ) => {
   useEffect(() => {
-    fetchData(props).then(successCb).catch(errorCb)
+    fetchData(props)
+    .then((data) => setState({ ...data, isDataLoaded: true }))
+    .catch((error) =>  setState({
+      isDataLoaded: true,
+      error: { ..._.pick(error, 'message', 'stack'), type: MessageBarType.severeWarning }
+    }))
   }, [])
 }
