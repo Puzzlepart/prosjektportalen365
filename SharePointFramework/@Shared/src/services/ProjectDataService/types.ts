@@ -1,14 +1,12 @@
-import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
-import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
-import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { IItem } from '@pnp/sp/items'
 import { IList } from '@pnp/sp/lists'
 import { IEntityField, SpEntityPortalService } from 'sp-entityportal-service'
+import { SPFxContext } from '../../types'
 
 export interface IProjectDataServiceConfiguration {
   projectWebUrl: string
   projectSiteId: string
-  spfxContext: WebPartContext | ListViewCommandSetContext | ApplicationCustomizerContext
+  spfxContext: SPFxContext
   entityService: SpEntityPortalService
   propertiesListName: string
 }

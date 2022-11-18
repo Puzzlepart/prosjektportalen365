@@ -1,8 +1,5 @@
-import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
-import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
 import { SPUser } from '@microsoft/sp-page-context'
-import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { dateAdd, PnPClientStorage, IPnPClientStore } from '@pnp/core'
+import { dateAdd, IPnPClientStore, PnPClientStorage } from '@pnp/core'
 import { LogLevel, PnPLogging } from '@pnp/logging'
 import '@pnp/polyfill-ie11'
 import { spfi, SPFI, SPFx } from '@pnp/sp'
@@ -14,16 +11,17 @@ import { SpEntityPortalService } from 'sp-entityportal-service'
 import _ from 'underscore'
 import { ProjectAdminRoleType } from '../../models'
 import { PortalDataService } from '../../services/PortalDataService'
+import { SPFxContext } from '../../types'
 import { ISPDataAdapterBaseConfiguration } from './ISPDataAdapterBaseConfiguration'
 import { ProjectAdminPermission } from './ProjectAdminPermission'
 
 export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
-  public settings: T
-  public portal: PortalDataService
+  public portalService: PortalDataService
   public entityService: SpEntityPortalService
   public sp: SPFI
   public isConfigured: boolean = false
-  public spfxContext: ApplicationCustomizerContext | ListViewCommandSetContext | WebPartContext
+  public spfxContext: SPFxContext
+  private _configuration: T
   private _storage: IPnPClientStore
   private _storageKeys: Record<string, string> = {
     getProjectAdminPermissions: '{0}_project_admin_permissions'
@@ -54,19 +52,19 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
    * Configure the SP data adapter
    *
    * @param spfxContext Context
-   * @param settings Settings
+   * @param configuration Configuration
    */
-  public configure(spfxContext: any, settings: T) {
+  public configure(spfxContext: any, configuration: T) {
     this.spfxContext = spfxContext
-    this.settings = settings
+    this._configuration = configuration
     this.sp = spfi().using(SPFx(spfxContext)).using(PnPLogging(LogLevel.Warning))
-    this.portal = new PortalDataService().configure({
+    this.portalService = new PortalDataService().configure({
       spfxContext,
-      url: this.settings.hubSiteContext.url
+      url: this._configuration.hubSiteContext.url
     })
     this.entityService = new SpEntityPortalService({
       spfxContext,
-      portalUrl: this.settings.hubSiteContext.url,
+      portalUrl: this._configuration.hubSiteContext.url,
       listName: 'Prosjekter',
       contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
       identityFieldName: 'GtSiteId',
@@ -118,7 +116,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
             else return false
           }
           const currentUser = await this.getCurrentUser(pageContext.user)
-          const projectAdminRoles = (await this.portal.getProjectAdminRoles()).filter(
+          const projectAdminRoles = (await this.portalService.getProjectAdminRoles()).filter(
             (role) => rolesToCheck.indexOf(role.title) !== -1
           )
           for (let i = 0; i < projectAdminRoles.length; i++) {
@@ -150,7 +148,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                       sp = this.sp
                       break
                     case 'Portefølje':
-                      sp = this.portal.sp
+                      sp = this.portalService.sp
                       break
                   }
                   try {

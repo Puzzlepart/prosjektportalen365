@@ -1,2 +1,3 @@
-export { DataFieldType } from './DataFieldType'
-export { SearchValueType } from './SearchValueType'
+export * from './DataFieldType'
+export * from './SearchValueType'
+export * from './SPFxContext'
