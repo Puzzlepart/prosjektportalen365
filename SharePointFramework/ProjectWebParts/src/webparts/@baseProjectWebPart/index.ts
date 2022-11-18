@@ -3,7 +3,7 @@ import { LogLevel, PnPLogging } from '@pnp/logging'
 import { spfi, SPFI, SPFx } from '@pnp/sp'
 import React from 'react'
 import { render } from 'react-dom'
-import HubSiteService, { IHubSite } from 'sp-hubsite-service'
+import HubSiteService, { IHubSiteContext } from 'sp-hubsite-service'
 import { IBaseWebPartComponentProps } from '../../components/BaseWebPartComponent'
 import SPDataAdapter from '../../data'
 
@@ -11,7 +11,7 @@ export abstract class BaseProjectWebPart<
   T extends IBaseWebPartComponentProps
 > extends BaseClientSideWebPart<T> {
   public sp: SPFI
-  private _hubSite: IHubSite
+  private _hubSiteCtx: IHubSiteContext
 
   public abstract render(): void
 
@@ -26,7 +26,7 @@ export abstract class BaseProjectWebPart<
       ...this.properties,
       ...props,
       title: this.properties.title || this.title,
-      hubSite: this._hubSite,
+      hubSite: this._hubSiteCtx,
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
       webTitle: this.context.pageContext.web.title,
@@ -43,11 +43,11 @@ export abstract class BaseProjectWebPart<
    */
   private async _setup() {
     this.sp = spfi(this.context.pageContext.web.absoluteUrl).using(SPFx(this.context)).using(PnPLogging(LogLevel.Warning))
-    this._hubSite = await HubSiteService.GetHubSite(this.context)
+    this._hubSiteCtx = await HubSiteService.GetHubSite(this.context)
     SPDataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
-      hubSiteUrl: this._hubSite.url,
+      hubSiteUrl: this._hubSiteCtx.url,
       logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     })
   }

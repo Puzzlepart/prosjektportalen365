@@ -6,9 +6,7 @@ import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { ISPList } from '../../interfaces/ISPList'
 import { ChecklistItemModel, ProjectPhaseChecklistData, ProjectPhaseModel } from '../../models'
 import { tryParseJson } from '../../util/tryParseJson'
-import { IGetPropertiesData } from './types'
-import { IProjectDataServiceConfiguration } from './IProjectDataServiceConfiguration'
-import { IPropertyItemContext } from './IPropertyItemContext'
+import { IGetPropertiesData, IProjectDataServiceConfiguration, IPropertyItemContext } from './types'
 
 export class ProjectDataService {
   private _storage: PnPClientStore
@@ -25,7 +23,7 @@ export class ProjectDataService {
    */
   constructor(public configuration: IProjectDataServiceConfiguration) {
     this._initStorage()
-    this.sp = spfi(this.configuration.webUrl)
+    this.sp = spfi(this.configuration.projectWebUrl)
       .using(SPFx(this.configuration.spfxContext))
       .using(PnPLogging(LogLevel.Warning))
   }
@@ -36,7 +34,7 @@ export class ProjectDataService {
   private _initStorage() {
     this._storage = new PnPClientStorage().session
     this._storageKeys = Object.keys(this._storageKeys).reduce((obj, key) => {
-      obj[key] = format(this._storageKeys[key], this.configuration.siteId.replace(/-/g, ''))
+      obj[key] = format(this._storageKeys[key], this.configuration.projectSiteId.replace(/-/g, ''))
       return obj
     }, {})
     this._storage.deleteExpired()
@@ -129,7 +127,7 @@ export class ProjectDataService {
           propertyItemContext.itemId
         }&Source=${encodeURIComponent(urlSource)}`
       )
-      const versionHistoryUrl = `${this.configuration.webUrl}/_layouts/15/versions.aspx?list=${propertyItemContext.listId}&ID=${propertyItemContext.itemId}`
+      const versionHistoryUrl = `${this.configuration.projectWebUrl}/_layouts/15/versions.aspx?list=${propertyItemContext.listId}&ID=${propertyItemContext.itemId}`
       return {
         fieldValuesText,
         fieldValues,
@@ -159,8 +157,8 @@ export class ProjectDataService {
       }
     } else {
       const entity = await this.configuration.entityService.fetchEntity(
-        this.configuration.siteId,
-        this.configuration.webUrl
+        this.configuration.projectSiteId,
+        this.configuration.projectWebUrl
       )
       return {
         fieldValues: entity.fieldValues,
@@ -200,7 +198,7 @@ export class ProjectDataService {
         await propertyItemContext.item.update(properties)
       } else {
         await this.configuration.entityService.updateEntityItem(
-          this.configuration.siteId,
+          this.configuration.projectSiteId,
           properties
         )
       }

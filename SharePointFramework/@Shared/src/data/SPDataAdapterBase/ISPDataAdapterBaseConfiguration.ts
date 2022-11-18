@@ -1,4 +1,5 @@
 import { LogLevel } from '@pnp/logging'
+import { IHubSiteContext } from 'sp-hubsite-service'
 
 export interface ISPDataAdapterBaseConfiguration {
   /**
@@ -12,9 +13,9 @@ export interface ISPDataAdapterBaseConfiguration {
   siteId: string
 
   /**
-   * Hub site URL
+   * Hub site context
    */
-  hubSiteUrl: string
+  hubSiteContext: IHubSiteContext
 
   /**
    * Log level

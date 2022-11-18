@@ -24,7 +24,7 @@ export class DataSourceService {
   }
 
   /**
-   * Get by name
+   * Get data source by name
    *
    * @param name Name
    */

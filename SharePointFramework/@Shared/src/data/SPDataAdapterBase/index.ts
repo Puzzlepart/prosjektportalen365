@@ -62,12 +62,12 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
     this.sp = spfi().using(SPFx(spfxContext)).using(PnPLogging(LogLevel.Warning))
     this.portal = new PortalDataService().configure({
       spfxContext,
-      url: this.settings.hubSiteUrl,
+      url: this.settings.hubSiteContext.url,
       siteId: this.settings.siteId
     })
     this.entityService = new SpEntityPortalService({
       spfxContext,
-      portalUrl: this.settings.hubSiteUrl,
+      portalUrl: this.settings.hubSiteContext.url,
       listName: 'Prosjekter',
       contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
       identityFieldName: 'GtSiteId',

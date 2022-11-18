@@ -1,5 +1,22 @@
-import { TypedHash } from '@pnp/common'
-import { IEntityField } from 'sp-entityportal-service'
+import { IItem } from '@pnp/sp/items'
+import { IList } from '@pnp/sp/lists'
+import { IEntityField, SpEntityPortalService } from 'sp-entityportal-service'
+
+export interface IProjectDataServiceConfiguration<C = any> {
+  projectWebUrl: string
+  projectSiteId: string
+  spfxContext: C
+  entityService: SpEntityPortalService
+  propertiesListName: string
+}
+
+export interface IPropertyItemContext {
+  itemId?: number
+  listId?: string
+  defaultEditFormUrl?: string
+  list?: IList
+  item?: IItem
+}
 
 export interface IGetPropertiesData {
   /**
@@ -15,12 +32,12 @@ export interface IGetPropertiesData {
   /**
    * Field values
    */
-  fieldValues?: TypedHash<any>
+  fieldValues?: Record<string, any>
 
   /**
    * Field values as text
    */
-  fieldValuesText?: TypedHash<string>
+  fieldValuesText?: Record<string, string>
 
   /**
    * Entity fields
@@ -35,5 +52,5 @@ export interface IGetPropertiesData {
   /**
    *
    */
-  templateParameters?: TypedHash<any>
+  templateParameters?: Record<string, any>
 }
