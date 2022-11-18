@@ -1,7 +1,6 @@
 import { SPUser } from '@microsoft/sp-page-context'
 import { dateAdd, IPnPClientStore, PnPClientStorage } from '@pnp/core'
 import { LogLevel, PnPLogging } from '@pnp/logging'
-import '@pnp/polyfill-ie11'
 import { spfi, SPFI, SPFx } from '@pnp/sp'
 import '@pnp/sp/site-groups'
 import '@pnp/sp/site-users'
