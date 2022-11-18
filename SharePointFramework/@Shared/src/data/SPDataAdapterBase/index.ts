@@ -2,7 +2,7 @@ import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
 import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
 import { SPUser } from '@microsoft/sp-page-context'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { dateAdd, PnPClientStorage, PnPClientStore } from '@pnp/common'
+import { dateAdd, PnPClientStorage, IPnPClientStore } from '@pnp/core'
 import { LogLevel, PnPLogging } from '@pnp/logging'
 import '@pnp/polyfill-ie11'
 import { spfi, SPFI, SPFx } from '@pnp/sp'
@@ -24,7 +24,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   public sp: SPFI
   public isConfigured: boolean = false
   public spfxContext: ApplicationCustomizerContext | ListViewCommandSetContext | WebPartContext
-  private _storage: PnPClientStore
+  private _storage: IPnPClientStore
   private _storageKeys: Record<string, string> = {
     getProjectAdminPermissions: '{0}_project_admin_permissions'
   }
@@ -35,7 +35,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   private _initStorage() {
     this._storage = new PnPClientStorage().session
     this._storageKeys = Object.keys(this._storageKeys).reduce((obj, key) => {
-      obj[key] = format(this._storageKeys[key], this.settings.siteId.replace(/-/g, ''))
+      obj[key] = format(this._storageKeys[key], this.spfxContext.pageContext.site.id.toString().replace(/-/g, ''))
       return obj
     }, {})
     this._storage.deleteExpired()
@@ -62,8 +62,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
     this.sp = spfi().using(SPFx(spfxContext)).using(PnPLogging(LogLevel.Warning))
     this.portal = new PortalDataService().configure({
       spfxContext,
-      url: this.settings.hubSiteContext.url,
-      siteId: this.settings.siteId
+      url: this.settings.hubSiteContext.url
     })
     this.entityService = new SpEntityPortalService({
       spfxContext,

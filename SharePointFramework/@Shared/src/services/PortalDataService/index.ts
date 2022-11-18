@@ -418,8 +418,7 @@ export class PortalDataService {
     select,
     publishedString
   }: GetStatusReportsOptions): Promise<StatusReport[]> {
-    if (!this._configuration.siteId) throw 'Property {siteId} missing in configuration'
-    if (stringIsNullOrEmpty(filter)) filter = `GtSiteId eq '${this._configuration.siteId}'`
+    if (stringIsNullOrEmpty(filter)) filter = `GtSiteId eq '${this._configuration.spfxContext.pageContext.site.id.toString()}'`
     try {
       let items = this.sp.web.lists
         .getByTitle(this._configuration.listNames.PROJECT_STATUS)

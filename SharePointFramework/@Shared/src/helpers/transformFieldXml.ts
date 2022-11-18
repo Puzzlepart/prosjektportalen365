@@ -1,5 +1,4 @@
 import { DOMParser } from 'xmldom'
-import { TypedHash } from '@pnp/common'
 
 /**
  * Transform field XML, adding and removing the specified attributes
@@ -10,7 +9,7 @@ import { TypedHash } from '@pnp/common'
  */
 export function transformFieldXml(
   schemaXml: string,
-  attributes: TypedHash<string> = {},
+  attributes: Record<string, string> = {},
   removeAttributes: string[] = ['Version', 'SourceID', 'Required', 'WebId', 'List']
 ): string {
   const { documentElement } = new DOMParser().parseFromString(schemaXml)

@@ -1,4 +1,4 @@
-import { dateAdd, PnPClientStorage, PnPClientStore } from '@pnp/common'
+import { dateAdd, PnPClientStorage, IPnPClientStore } from '@pnp/core'
 import { LogLevel, PnPLogging } from '@pnp/logging'
 import { spfi, SPFI, SPFx } from '@pnp/sp'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
@@ -9,7 +9,7 @@ import { tryParseJson } from '../../util/tryParseJson'
 import { IGetPropertiesData, IProjectDataServiceConfiguration, IPropertyItemContext } from './types'
 
 export class ProjectDataService {
-  private _storage: PnPClientStore
+  private _storage: IPnPClientStore
   private _storageKeys: Record<string, string> = {
     _getPropertyItemContext: '{0}_propertyitemcontext',
     getPhases: '{0}_projectphases_terms'
