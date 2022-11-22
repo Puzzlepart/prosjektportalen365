@@ -10,7 +10,7 @@ import { find } from 'underscore'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
-  public project: ProjectDataService
+  public projectService: ProjectDataService
   private _name = 'SPDataAdapter'
 
   /**
@@ -21,10 +21,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    */
   public configure(spfxContext: WebPartContext, configuration: ISPDataAdapterConfiguration) {
     super.configure(spfxContext, configuration)
-    this.project = new ProjectDataService(
+    this.projectService = new ProjectDataService(
       {
-        ...this.settings,
-        spfxContext: spfxContext,
+        spfxContext,
+        projectWebUrl: spfxContext.pageContext.web.absoluteUrl,
+        projectSiteId: spfxContext.pageContext.site.id.toString(),
         entityService: this.entityService,
         propertiesListName: strings.ProjectPropertiesListName
       }
@@ -85,7 +86,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         fieldValuesText,
         templateParameters
       )
-      await this.entityService.updateEntityItem(this.settings.siteId, properties)
+      await this.entityService.updateEntityItem(this.spfxContext.pageContext.site.id.toString(), properties)
       Logger.log({
         message: `(${this._name}) (syncPropertyItemToHub) Successfully synced item to hub entity.`,
         data: { properties },
@@ -272,7 +273,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * Clear cache for the project.
    */
   public clearCache() {
-    this.project.clearCache()
+    this.projectService.clearCache()
   }
 }
 

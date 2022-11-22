@@ -9,7 +9,11 @@ export function useProjectStatusReport() {
   const selectedReport = _.first(context.state.data.reports)
   if (!selectedReport || context.props.hideStatusReport) return null
   const projectStatusContext: IProjectStatusContext = {
-    props: { title: strings.ProjectInformationStatusReportHeaderText },
+    props: {
+      title: strings.ProjectInformationStatusReportHeaderText,
+      sp: null,
+      spfxContext: null
+    },
     state: { ...context.state, selectedReport }
   }
   return projectStatusContext

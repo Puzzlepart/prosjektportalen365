@@ -29,7 +29,7 @@ export const ChangePhaseDialog: FC = () => {
    */
   const nextChecklistItem = async (properties: Partial<Record<string, any>>) => {
     const currentItem = [...state.checklistItems][state.currentIdx]
-    await SPDataAdapter.project.updateChecklistItem(
+    await SPDataAdapter.projectService.updateChecklistItem(
       strings.PhaseChecklistName,
       currentItem.id,
       properties

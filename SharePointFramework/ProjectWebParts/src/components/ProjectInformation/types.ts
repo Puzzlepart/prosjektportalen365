@@ -1,14 +1,13 @@
-import { TypedHash } from '@pnp/common'
-import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
-import { ProjectColumn } from 'pp365-shared/lib/models'
-import { IProgressDialogProps } from './ProgressDialog/types'
+import { IWeb } from '@pnp/sp/webs'
 import { IUserMessageProps } from 'pp365-shared/lib/components/UserMessage'
-import { IEntityField } from 'sp-entityportal-service'
+import { ProjectColumn } from 'pp365-shared/lib/models'
 import * as ProjectDataService from 'pp365-shared/lib/services/ProjectDataService'
-import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
-import { ActionType } from './Actions/types'
-import { Web } from '@pnp/sp'
+import { IEntityField } from 'sp-entityportal-service'
+import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
 import { IProjectStatusData } from '../ProjectStatus'
+import { ActionType } from './Actions/types'
+import { IProgressDialogProps } from './ProgressDialog/types'
+import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 
 export class ProjectInformationParentProject {
   public title: string
@@ -16,7 +15,7 @@ export class ProjectInformationParentProject {
   public childProjects: any[]
   public iconName: 'ProductVariant' | 'ProductList'
 
-  constructor(spItem: TypedHash<any>, public web: Web) {
+  constructor(spItem: Record<string, any>, public web: IWeb) {
     this.title = spItem.Title
     this.url = spItem.GtSiteUrl
     this.childProjects = (JSON.parse(spItem.GtChildProjects ?? []) as any[]).map((i) => i.SPWebURL)
@@ -54,7 +53,7 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   /**
    * A hash object of fields to show for external users
    */
-  showFieldExternal?: TypedHash<boolean>
+  showFieldExternal?: Record<string, boolean>
 
   /**
    * Link to the admin page
@@ -96,6 +95,11 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    * Show only icons for latest status report
    */
   statusReportShowOnlyIcons?: boolean
+
+  /**
+   * Specify project context if the project differs from the provided `spfxContext´
+   */
+  projectContext?: { title: string, url: string, siteId: string }
 }
 
 export interface IProjectInformationState
@@ -163,7 +167,7 @@ export interface IProjectInformationUrlHash {
 
 export interface IProjectInformationData
   extends ProjectDataService.IGetPropertiesData,
-    Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {
+  Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {
   /**
    * Column configuration
    */

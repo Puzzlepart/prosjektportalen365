@@ -1,17 +1,16 @@
-import { sp } from '@pnp/sp'
+import { IProjectPhasesProps } from './types'
 
 /**
  * Run hook when changing phase
- *
- * @param hookUrl Hook url
- * @param hookAuth Hook auth
+ * 
+ * @param props Component props for `ProjectPhases`
  */
-export const runPhaseHook = async (hookUrl: string, hookAuth: string) => {
+export const runPhaseHook = async (props: IProjectPhasesProps) => {
   try {
-    const web = await sp.web.get()
+    const web = await props.sp.web()
 
     const body = {
-      apiKey: hookAuth,
+      apiKey: props.hookAuth,
       webUrl: web.Url
     }
 
@@ -24,6 +23,6 @@ export const runPhaseHook = async (hookUrl: string, hookAuth: string) => {
       }
     }
 
-    fetch(hookUrl, postRequest)
+    fetch(props.hookUrl, postRequest)
   } catch (error) {}
 }

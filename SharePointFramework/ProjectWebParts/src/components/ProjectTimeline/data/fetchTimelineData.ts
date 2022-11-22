@@ -1,5 +1,4 @@
 import { IColumn } from '@fluentui/react'
-import { sp } from '@pnp/sp'
 import _ from 'lodash'
 import {
   TimelineConfigurationModel,
@@ -7,6 +6,7 @@ import {
 } from 'pp365-portfoliowebparts/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { IProjectTimelineProps } from '../types'
+import '@pnp/sp/views'
 
 /**
  * Fetch timeline items and columns
@@ -19,24 +19,23 @@ export async function fetchTimelineData(
   timelineConfig: TimelineConfigurationModel[]
 ) {
   try {
-    const timelineContentList = props.hubSite.web.lists.getByTitle(strings.TimelineContentListName)
+    const timelineContentList = props.hubSiteContext.web.lists.getByTitle(strings.TimelineContentListName)
     const projectDeliveries = (props.showProjectDeliveries
-      ? await sp.web.lists
+      ? await props.sp.web.lists
           .getByTitle(props.projectDeliveriesListName)
           .items.select(
             'Title',
             'GtDeliveryDescription',
             'GtDeliveryStartTime',
             'GtDeliveryEndTime'
-          )
-          .getAll()
+          )()
       : []
     )
       .map((item) => {
         const config = _.find(timelineConfig, (col) => col.title === props.configItemTitle)
         return new TimelineContentModel(
-          props.siteId,
-          props.webTitle,
+          props.spfxContext.pageContext.site.id.toString(),
+          props.spfxContext.pageContext.web.title,
           item.Title,
           config?.title ?? props.configItemTitle,
           item.GtDeliveryStartTime,
@@ -51,7 +50,7 @@ export async function fetchTimelineData(
       .filter(Boolean)
 
     const defaultViewColumns = (
-      await timelineContentList.defaultView.fields.select('Items').top(500).get()
+      await timelineContentList.defaultView.fields.select('Items').top(500)()
     )['Items'] as string[]
 
     const filterString = defaultViewColumns.map((col) => `(InternalName eq '${col}')`).join(' or ')
@@ -67,17 +66,15 @@ export async function fetchTimelineData(
           'GtSiteIdLookup/Title',
           'GtSiteIdLookup/GtSiteId'
         )
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .getAll(),
+        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')(),
       timelineContentList.fields
         .filter(filterString)
         .select('InternalName', 'Title', 'TypeAsString')
-        .top(500)
-        .get()
+        .top(500)()
     ])
 
     let timelineListItems = timelineContentItems.filter(
-      (item) => item.GtSiteIdLookup.Title === props.webTitle
+      (item) => item.GtSiteIdLookup.Title === props.spfxContext.pageContext.web.title
     )
 
     const columns = timelineColumns
@@ -95,7 +92,7 @@ export async function fetchTimelineData(
     timelineListItems = timelineListItems.map((item) => ({
       ...item,
       EditFormUrl: [
-        `${props.hubSite.url}`,
+        `${props.hubSiteContext.url}`,
         `/Lists/${strings.TimelineContentListName}/EditForm.aspx`,
         '?ID=',
         item.Id,
@@ -105,7 +102,7 @@ export async function fetchTimelineData(
     }))
 
     timelineContentItems = timelineContentItems
-      .filter((item) => item.GtSiteIdLookup.Title === props.webTitle)
+      .filter((item) => item.GtSiteIdLookup.Title === props.spfxContext.pageContext.web.title)
       .map((item) => {
         const type = item.GtTimelineTypeLookup?.Title
         const config = _.find(timelineConfig, (col) => col.title === type)

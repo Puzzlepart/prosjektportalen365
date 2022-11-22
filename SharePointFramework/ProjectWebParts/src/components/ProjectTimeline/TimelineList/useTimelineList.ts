@@ -89,11 +89,10 @@ export function useTimelineList() {
    */
   const redirectNewTimelineItem = async () => {
     const [project] = (
-      await context.props.hubSite.web.lists
+      await context.props.hubSiteContext.web.lists
         .getByTitle(strings.ProjectsListName)
-        .items.select('Id', 'GtSiteId')
-        .getAll()
-    ).filter(({ GtSiteId }) => GtSiteId === context.props.siteId)
+        .items.select('Id', 'GtSiteId')()
+    ).filter(({ GtSiteId }) => GtSiteId === context.props.spfxContext.pageContext.site.id.toString())
 
     const properties: TypedHash<any> = {
       Title: 'Nytt element på tidslinjen',
@@ -117,7 +116,7 @@ export function useTimelineList() {
    * @param properties Properties
    */
   const addTimelineItem = async (properties: TypedHash<any>): Promise<any> => {
-    const list = context.props.hubSite.sp.web.lists.getByTitle(strings.TimelineContentListName)
+    const list = context.props.hubSiteContext.sp.web.lists.getByTitle(strings.TimelineContentListName)
     const itemAddResult = await list.items.add(properties)
     return itemAddResult.data
   }
@@ -128,7 +127,7 @@ export function useTimelineList() {
    * @param item Item
    */
   const deleteTimelineItem = async (item: any) => {
-    const list = context.props.hubSite.sp.web.lists.getByTitle(strings.TimelineContentListName)
+    const list = context.props.hubSiteContext.sp.web.lists.getByTitle(strings.TimelineContentListName)
     await list.items.getById(item.Id).delete()
     context.setState({
       refetch: new Date().getTime()
@@ -142,7 +141,7 @@ export function useTimelineList() {
    */
   const editFormUrl = (item: any) => {
     return [
-      `${context.props.hubSite.url}`,
+      `${context.props.hubSiteContext.url}`,
       `/Lists/${strings.TimelineContentListName}/EditForm.aspx`,
       '?ID=',
       item.Id,

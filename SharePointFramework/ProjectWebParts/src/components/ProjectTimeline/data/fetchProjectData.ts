@@ -18,25 +18,25 @@ export async function fetchProjectData(
   timelineConfig: TimelineConfigurationModel[]
 ): Promise<TimelineContentModel> {
   try {
-    const [projectData] = await props.hubSite.sp.web.lists
+    const [projectData] = await props.hubSiteContext.sp.web.lists
       .getByTitle(strings.ProjectsListName)
       .items
       .select('Id', 'GtStartDate', 'GtEndDate')
       .top(1)
-      .filter(`GtSiteId eq '${props.siteId}'`)()
+      .filter(`GtSiteId eq '${props.spfxContext.pageContext.site.id.toString()}'`)()
 
     const config = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
     return new TimelineContentModel(
-      props.siteId,
-      props.webTitle,
-      props.webTitle,
+      props.spfxContext.pageContext.site.id.toString(),
+      props.spfxContext.pageContext.web.title,
+      props.spfxContext.pageContext.web.title,
       strings.ProjectLabel,
       projectData?.GtStartDate,
       projectData?.GtEndDate
     ).usingConfig(config)
   } catch (error) {
     throw new Error(
-      format(strings.ProjectTimelineErrorFetchText, props.siteId, props.webTitle, error)
+      format(strings.ProjectTimelineErrorFetchText, props.spfxContext.pageContext.site.id.toString(), props.spfxContext.pageContext.web.title, error)
     )
   }
 }

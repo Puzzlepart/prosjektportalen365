@@ -1,5 +1,5 @@
 import { IColumn } from '@fluentui/react'
-import { CamlQuery, Web } from '@pnp/sp'
+import { ICamlQuery } from '@pnp/sp/lists'
 import _ from 'lodash'
 import { SPField } from 'pp365-shared/lib/models'
 import { useContext } from 'react'
@@ -20,7 +20,7 @@ export function useFetchListData() {
   const context = useContext(ProjectStatusContext)
   const { section } = useContext(SectionContext)
   return async (): Promise<IListSectionData> => {
-    const list = new Web(context.props.webUrl).lists.getByTitle(section.listTitle)
+    const list = context.props.sp.web.lists.getByTitle(section.listTitle)
     try {
       let view: UseFetchListDataView = {
         ListViewXml: `<View><Query>${section.viewQuery}</Query><RowLimit>${section.rowLimit}</RowLimit></View>`,
@@ -31,16 +31,15 @@ export function useFetchListData() {
           view = await list.views
             .getByTitle(section.viewName)
             .select('ListViewXml', 'ViewFields')
-            .expand('ViewFields')
-            .get<UseFetchListDataView>()
-        } catch {}
+            .expand('ViewFields')()
+        } catch { }
       }
-      const camlQuery: CamlQuery = {
+      const camlQuery: ICamlQuery = {
         ViewXml: view.ListViewXml.replace(/<ViewFields>[\w\W]*<\/ViewFields>/gm, '')
       }
       const [items, fields] = await Promise.all([
         list.getItemsByCAMLQuery(camlQuery, 'FieldValuesAsText', 'ContentType') as Promise<any[]>,
-        list.fields.select('Title', 'InternalName', 'TypeAsString').get<SPField[]>()
+        list.fields.select('Title', 'InternalName', 'TypeAsString')<SPField[]>()
       ])
       if (_.isEmpty(items)) return null
       const itemValues = items.map((i) => ({ ...i.FieldValuesAsText, ContentType: i?.ContentType }))

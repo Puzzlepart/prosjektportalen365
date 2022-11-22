@@ -1,8 +1,9 @@
 import { IShimmerProps } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { SPFI } from '@pnp/sp'
 import { HTMLProps } from 'react'
-import { IHubSite } from 'sp-hubsite-service'
+import { IHubSiteContext } from 'sp-hubsite-service'
 
 export interface IBaseWebPartComponentProps extends Omit<HTMLProps<HTMLDivElement>, 'size'> {
   /**
@@ -11,24 +12,9 @@ export interface IBaseWebPartComponentProps extends Omit<HTMLProps<HTMLDivElemen
   title?: string
 
   /**
-   * Hub site
+   * Hub site context
    */
-  hubSite?: IHubSite
-
-  /**
-   * ID of the site
-   */
-  siteId?: string
-
-  /**
-   * URL for the web
-   */
-  webUrl?: string
-
-  /**
-   * Title for the web
-   */
-  webTitle?: string
+  hubSiteContext?: IHubSiteContext
 
   /**
    * Is the current user site admin
@@ -43,7 +29,12 @@ export interface IBaseWebPartComponentProps extends Omit<HTMLProps<HTMLDivElemen
   /**
    * Web part context
    */
-  spfxContext?: WebPartContext
+  spfxContext: WebPartContext
+
+  /**
+   * SPFI instance
+   */
+  sp: SPFI
 }
 
 export interface IBaseWebPartComponentState<T> extends Pick<IShimmerProps, 'isDataLoaded'> {

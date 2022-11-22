@@ -21,15 +21,13 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
   const { state, setState } = useProjectInformationState()
 
   ListLogger.init(
-    props.hubSite.sp.web.lists.getByTitle(strings.LogListName),
+    props.hubSiteContext.sp.web.lists.getByTitle(strings.LogListName),
     props.spfxContext.pageContext.web.absoluteUrl,
     ProjectInformation.displayName
   )
 
   SPDataAdapter.configure(props.spfxContext, {
-    siteId: props.siteId,
-    webUrl: props.webUrl,
-    hubSiteUrl: props.hubSite.url
+    hubSiteContext: props.hubSiteContext
   })
 
   /**
@@ -66,7 +64,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
    */
   const onSyncProperties = async (force: boolean = false): Promise<void> => {
     if (!stringIsNullOrEmpty(state.data.propertiesListId)) {
-      const lastUpdated = await SPDataAdapter.project.getPropertiesLastUpdated(state.data)
+      const lastUpdated = await SPDataAdapter.projectService.getPropertiesLastUpdated(state.data)
       if (lastUpdated > 60 && !force) return
     }
     if (props.skipSyncToHub) return
@@ -78,17 +76,17 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
         label: strings.SyncProjectPropertiesListProgressDescription,
         description: `${strings.PleaseWaitText}...`
       })
-      const { created } = await SPDataAdapter.portal.syncList(
-        props.webUrl,
+      const { created } = await SPDataAdapter.portalService.syncList(
+        props.spfxContext.pageContext.web.absoluteUrl,
         strings.ProjectPropertiesListName,
         state.data.templateParameters.ProjectContentTypeId ??
         '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
-        { Title: props.webTitle }
+        { Title: props.spfxContext.pageContext.web.title }
       )
       if (!created) {
         await SPDataAdapter.syncPropertyItemToHub(
           state.data.fieldValues,
-          { ...state.data.fieldValuesText, Title: props.webTitle },
+          { ...state.data.fieldValuesText, Title: props.spfxContext.pageContext.web.title },
           state.data.templateParameters,
           progressFunc
         )
@@ -96,7 +94,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
       SPDataAdapter.clearCache()
       await sleep(5)
       document.location.href =
-        sessionStorage.DEBUG || DEBUG ? document.location.href.split('#')[0] : props.webUrl
+        sessionStorage.DEBUG || DEBUG ? document.location.href.split('#')[0] : props.spfxContext.pageContext.web.absoluteUrl
     } catch (error) {
       ListLogger.log({
         message: error.message,

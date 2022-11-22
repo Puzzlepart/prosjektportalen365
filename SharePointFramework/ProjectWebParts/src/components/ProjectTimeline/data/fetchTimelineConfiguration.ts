@@ -12,11 +12,10 @@ import { IProjectTimelineProps } from '../types'
  */
 export async function fetchTimelineConfiguration(props: IProjectTimelineProps) {
   return (
-    await props.hubSite.web.lists
+    await props.hubSiteContext.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
       .items.select(...new SPTimelineConfigurationItem().fields)
-      .orderBy('GtSortOrder')
-      .getAll()
+      .orderBy('GtSortOrder')()
   )
     .map((item) => new TimelineConfigurationModel(item))
     .filter(Boolean)

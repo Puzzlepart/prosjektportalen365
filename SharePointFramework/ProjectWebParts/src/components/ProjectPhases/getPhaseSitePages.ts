@@ -1,4 +1,4 @@
-import { sp } from '@pnp/sp'
+import { SPFI } from '@pnp/sp'
 import { ProjectPhaseModel } from 'pp365-shared/lib/models'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { IPhaseSitePageModel } from './types'
@@ -8,12 +8,11 @@ import { IPhaseSitePageModel } from './types'
  *
  * @param phases Phases
  */
-export const getPhaseSitePages: DataFetchFunction<ProjectPhaseModel[], IPhaseSitePageModel[]> = async (phases) => {
+export const getPhaseSitePages: DataFetchFunction<{sp: SPFI, phases: ProjectPhaseModel[]}, IPhaseSitePageModel[]> = async ({sp, phases}) => {
   try {
     let sitePages = await sp.web.lists
       .getByTitle('Områdesider')
-      .items.select('Id, Title, FileRef, EncodedAbsUrl, FileLeafRef')
-      .get()
+      .items.select('Id, Title, FileRef, EncodedAbsUrl, FileLeafRef')()
 
     sitePages = sitePages.filter((p) => {
       return phases.some((phase) => phase.name === p.Title)

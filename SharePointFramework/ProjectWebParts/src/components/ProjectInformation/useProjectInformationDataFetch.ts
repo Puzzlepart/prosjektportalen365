@@ -54,16 +54,14 @@ const transformProperties = (
 const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolean> = async (props) => {
   try {
     let isSynced = false
-    const projectDataList = props.hubSite.web.lists.getByTitle(strings.IdeaProjectDataTitle)
+    const projectDataList = props.hubSiteContext.web.lists.getByTitle(strings.IdeaProjectDataTitle)
     const [projectDataItem] = await projectDataList.items
       .filter(`GtSiteUrl eq '${props.spfxContext.pageContext.web.absoluteUrl}'`)
-      .select('Id')
-      .get()
-    const ideaProcessingList = props.hubSite.web.lists.getByTitle(strings.IdeaProcessingTitle)
+      .select('Id')()
+    const ideaProcessingList = props.hubSiteContext.web.lists.getByTitle(strings.IdeaProcessingTitle)
     const [ideaProcessingItem] = await ideaProcessingList.items
       .filter(`GtIdeaProjectDataId eq '${projectDataItem.Id}'`)
-      .select('Id, GtIdeaDecision')
-      .get()
+      .select('Id, GtIdeaDecision')()
     if (ideaProcessingItem.GtIdeaDecision === 'Godkjent og synkronisert') {
       isSynced = true
     }
@@ -88,24 +86,24 @@ const fetchData: DataFetchFunction<IProjectInformationProps, Partial<IProjectInf
       sections,
       columnConfig
     ] = await Promise.all([
-      SPDataAdapter.portal.getProjectColumns(),
-      SPDataAdapter.project.getPropertiesData(),
+      SPDataAdapter.portalService.getProjectColumns(),
+      SPDataAdapter.projectService.getPropertiesData(),
       props.page === 'Frontpage'
-        ? SPDataAdapter.portal.getParentProjects(
+        ? SPDataAdapter.portalService.getParentProjects(
           props.spfxContext?.pageContext?.web?.absoluteUrl,
           ProjectInformationParentProject
         )
         : Promise.resolve([]),
       props.hideStatusReport
         ? Promise.resolve([])
-        : SPDataAdapter.portal.getStatusReports({
-          filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
+        : SPDataAdapter.portalService.getStatusReports({
+          filter: `(GtSiteId eq '${props.spfxContext.pageContext.site.id.toString()}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
           publishedString: strings.GtModerationStatus_Choice_Published
         }),
       props.hideStatusReport
         ? Promise.resolve([])
-        : SPDataAdapter.portal.getProjectStatusSections(),
-      props.hideStatusReport ? Promise.resolve([]) : SPDataAdapter.portal.getProjectColumnConfig()
+        : SPDataAdapter.portalService.getProjectStatusSections(),
+      props.hideStatusReport ? Promise.resolve([]) : SPDataAdapter.portalService.getProjectColumnConfig()
     ])
     const data: IProjectInformationData = {
       columns,

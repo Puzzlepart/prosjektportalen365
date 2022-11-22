@@ -11,7 +11,7 @@ export abstract class BaseProjectWebPart<
   T extends IBaseWebPartComponentProps
 > extends BaseClientSideWebPart<T> {
   public sp: SPFI
-  private _hubSiteCtx: IHubSiteContext
+  private _hubSiteContext: IHubSiteContext
 
   public abstract render(): void
 
@@ -26,13 +26,10 @@ export abstract class BaseProjectWebPart<
       ...this.properties,
       ...props,
       title: this.properties.title || this.title,
-      hubSite: this._hubSiteCtx,
-      siteId: this.context.pageContext.site.id.toString(),
-      webUrl: this.context.pageContext.web.absoluteUrl,
-      webTitle: this.context.pageContext.web.title,
-      isSiteAdmin: this.context.pageContext.legacyPageContext.isSiteAdmin,
+      hubSiteContext: this._hubSiteContext,
       displayMode: this.displayMode,
-      pageContext: this.context.pageContext
+      spfxContext: this.context,
+      sp: this.sp
     }
     const element = React.createElement(component, combinedProps)
     render(element, this.domElement)
@@ -43,13 +40,8 @@ export abstract class BaseProjectWebPart<
    */
   private async _setup() {
     this.sp = spfi(this.context.pageContext.web.absoluteUrl).using(SPFx(this.context)).using(PnPLogging(LogLevel.Warning))
-    this._hubSiteCtx = await HubSiteService.GetHubSite(this.context)
-    SPDataAdapter.configure(this.context, {
-      siteId: this.context.pageContext.site.id.toString(),
-      webUrl: this.context.pageContext.web.absoluteUrl,
-      hubSiteUrl: this._hubSiteCtx.url,
-      logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-    })
+    this._hubSiteContext = await HubSiteService.GetHubSite(this.context)
+    SPDataAdapter.configure(this.context, { hubSiteContext: this._hubSiteContext })
   }
 
   public async onInit(): Promise<void> {

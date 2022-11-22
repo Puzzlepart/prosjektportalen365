@@ -19,7 +19,7 @@ export function useProjectPhases(props: IProjectPhasesProps) {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   ListLogger.init(
-    props.hubSite.web.lists.getByTitle(strings.LogListName),
+    props.hubSiteContext.web.lists.getByTitle(strings.LogListName),
     props.spfxContext.pageContext.web.absoluteUrl,
     ProjectPhases.displayName
   )

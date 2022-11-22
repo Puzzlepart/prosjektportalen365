@@ -1,6 +1,5 @@
 import { TypedHash } from '@pnp/common'
 import moment from 'moment'
-import { PortalDataService } from 'pp365-shared/lib/services'
 import strings from 'ProjectWebPartsStrings'
 import { useContext } from 'react'
 import { ProjectStatusContext } from '../context'
@@ -16,10 +15,6 @@ export function usePublishReport() {
   const context = useContext(ProjectStatusContext)
   const captureReport = useCaptureReport()
   return async () => {
-    const portalDataService = new PortalDataService().configure({
-      urlOrWeb: context.props.hubSite.web,
-      siteId: context.props.siteId
-    })
     if (!context.state.isPublishing) {
       try {
         const attachment = await captureReport(context.state.selectedReport.values.Title)
@@ -28,7 +23,7 @@ export function usePublishReport() {
           GtLastReportDate: moment().format('YYYY-MM-DD HH:mm'),
           GtSectionDataJson: JSON.stringify(context.state.persistedSectionData)
         }
-        const updatedReport = await portalDataService.updateStatusReport(
+        const updatedReport = await context.portalDataService.updateStatusReport(
           context.state.selectedReport,
           properties,
           attachment,

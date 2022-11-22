@@ -1,6 +1,5 @@
 import { format } from '@fluentui/react'
 import { TypedHash } from '@pnp/common'
-import { PortalDataService } from 'pp365-shared/lib/services'
 import strings from 'ProjectWebPartsStrings'
 import { useContext } from 'react'
 import { ProjectStatusContext } from '../context'
@@ -15,10 +14,6 @@ export function useRedirectNewStatusReport() {
   const context = useContext(ProjectStatusContext)
   const getEditFormUrl = useEditFormUrl()
   return async () => {
-    const portalDataService = new PortalDataService().configure({
-      urlOrWeb: context.props.hubSite.web,
-      siteId: context.props.siteId
-    })
     const [lastReport] = context.state.data.reports
     let properties: TypedHash<string | number | boolean> = {}
     if (lastReport) {
@@ -34,10 +29,10 @@ export function useRedirectNewStatusReport() {
           return obj
         }, {})
     }
-    properties.Title = format(strings.NewStatusReportTitle, context.props.webTitle)
-    properties.GtSiteId = context.props.siteId
+    properties.Title = format(strings.NewStatusReportTitle, context.props.spfxContext.pageContext.web.title)
+    properties.GtSiteId = context.props.spfxContext.pageContext.site.id.toString()
     properties.GtModerationStatus = strings.GtModerationStatus_Choice_Draft
-    const report = await portalDataService.addStatusReport(
+    const report = await context.portalDataService.addStatusReport(
       properties,
       context.state.data.properties.templateParameters?.ProjectStatusContentTypeId
     )

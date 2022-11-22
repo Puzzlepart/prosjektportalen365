@@ -581,7 +581,7 @@ export class DataAdapter implements IDataAdapter {
             // eslint-disable-next-line quotes
             "groupTypes/any(a:a%20eq%20'unified')"
           ),
-          sp.web.siteUsers.select('Id', 'Title', 'Email').get<ISPUser[]>(),
+          this.sp.web.siteUsers.select('Id', 'Title', 'Email')<ISPUser[]>(),
           this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId'])
         ])
       },

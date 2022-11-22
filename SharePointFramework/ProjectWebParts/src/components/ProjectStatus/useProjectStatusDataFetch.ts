@@ -13,11 +13,7 @@ import { IProjectStatusData, IProjectStatusProps } from './types'
 const fetchData: DataFetchFunction<IProjectStatusProps, IProjectStatusData> = async (props) => {
   try {
     if (!SPDataAdapter.isConfigured) {
-      SPDataAdapter.configure(props.spfxContext, {
-        siteId: props.siteId,
-        webUrl: props.webUrl,
-        hubSiteUrl: props.hubSite.url
-      })
+      SPDataAdapter.configure(props.spfxContext, { hubSiteContext: props.hubSiteContext })
     }
     const [
       properties,
@@ -27,15 +23,15 @@ const fetchData: DataFetchFunction<IProjectStatusProps, IProjectStatusData> = as
       columnConfig,
       reportFields
     ] = await Promise.all([
-      SPDataAdapter.project.getPropertiesData(),
-      SPDataAdapter.portal.getStatusReportListProps(),
-      SPDataAdapter.portal.getStatusReports({
+      SPDataAdapter.projectService.getPropertiesData(),
+      SPDataAdapter.portalService.getStatusReportListProps(),
+      SPDataAdapter.portalService.getStatusReports({
         useCaching: false,
         publishedString: strings.GtModerationStatus_Choice_Published
       }),
-      SPDataAdapter.portal.getProjectStatusSections(),
-      SPDataAdapter.portal.getProjectColumnConfig(),
-      SPDataAdapter.portal.getListFields(
+      SPDataAdapter.portalService.getProjectStatusSections(),
+      SPDataAdapter.portalService.getProjectColumnConfig(),
+      SPDataAdapter.portalService.getListFields(
         'PROJECT_STATUS',
         // eslint-disable-next-line quotes
         "Hidden eq false and Group ne 'Hidden'"
@@ -67,7 +63,7 @@ const fetchData: DataFetchFunction<IProjectStatusProps, IProjectStatusData> = as
  * @param props Component properties for `ProjectStatus`
  * @param dispatch Dispatcer
  */
- export const useProjectStatusDataFetch = (
+export const useProjectStatusDataFetch = (
   props: IProjectStatusProps,
   dispatch: React.Dispatch<AnyAction>
 ) => {

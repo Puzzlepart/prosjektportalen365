@@ -141,11 +141,9 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
       </div>
       <ProjectInformationPanel
         key={state.showProjectInfo?.siteId}
-        title={state.showProjectInfo?.title}
-        siteId={state.showProjectInfo?.siteId}
-        webUrl={state.showProjectInfo?.url}
-        hubSite={{
-          web: null,
+        hubSiteContext={{
+          sp: props.sp,
+          web: props.sp.web,
           url: props.pageContext.site.absoluteUrl
         }}
         page='Portfolio'

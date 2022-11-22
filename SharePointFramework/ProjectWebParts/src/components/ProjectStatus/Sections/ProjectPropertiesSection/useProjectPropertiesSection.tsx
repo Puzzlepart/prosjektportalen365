@@ -1,7 +1,7 @@
 import { ProjectStatusContext } from '../../../ProjectStatus/context'
 import { useContext } from 'react'
 
-export function useProjectPropertiesSection() {
+export function useProjectPropertiesSection(): { fieldValues: Record<string, any>, fields: readonly any[] } {
   const context = useContext(ProjectStatusContext)
   return {
     fieldValues: {

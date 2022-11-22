@@ -27,11 +27,9 @@ export const TitleColumn: FC<ITitleColumnProps> = ({ item, props }) => {
       <div>
         <ProjectInformationPanel
           key={item.SiteId}
-          title={item.Title}
-          siteId={item.SiteId}
-          webUrl={item.Path}
-          hubSite={{
-            web: null,
+          hubSiteContext={{
+            sp: props.sp,
+            web: props.sp.web,
             url: props.pageContext.site.absoluteUrl
           }}
           page='Portfolio'
