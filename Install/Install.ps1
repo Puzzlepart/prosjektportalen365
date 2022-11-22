@@ -391,7 +391,7 @@ if (-not $SkipTemplate.IsPresent) {
         Disconnect-PnPOnline
     }
     Catch {
-        Write-Host "[ERROR] Failed to apply PnP templates to $(Url): $($_.Exception.Message)" -ForegroundColor Red
+        Write-Host ("[ERROR] Failed to apply PnP templates to ${0}: ${1}" -f $Url,$_.Exception.Message) -ForegroundColor Red
         exit 0
     }
 }
