@@ -1,9 +1,8 @@
-import { Logger, LogLevel } from '@pnp/logging'
 import { sp } from '@pnp/sp'
 import * as strings from 'ProjectWebPartsStrings'
 
 /**
- * Modify frontpage current phase view
+ * Modify frontpage current phase view.
  *
  * @param phaseTermName Phase term name
  * @param currentPhaseViewName Current phase view name
@@ -30,14 +29,5 @@ export const modifyCurrentPhaseView = async (
   ].join('')
   try {
     await documentsViews.getById(documentsFrontpageView.Id).update({ ViewQuery: newViewQuery })
-    Logger.write(
-      `(ProjectPhases) modifyDocumentViews: Successfully updated ViewQuery for view '${currentPhaseViewName}' for list '${strings.DocumentsListName}'`,
-      LogLevel.Info
-    )
-  } catch (err) {
-    Logger.write(
-      `(ProjectPhases) modifyDocumentViews: Failed to update ViewQuery for view '${currentPhaseViewName}' for list '${strings.DocumentsListName}'`,
-      LogLevel.Error
-    )
-  }
+  } catch (err) {}
 }

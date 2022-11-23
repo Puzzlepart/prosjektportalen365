@@ -1,14 +1,10 @@
-import {
-  IMessageBarStyleProps,
-  IMessageBarStyles,
-  MessageBar
-} from 'office-ui-fabric-react/lib/MessageBar'
-import { IStyleFunctionOrObject } from 'office-ui-fabric-react'
+import { MessageBar } from 'office-ui-fabric-react/lib/MessageBar'
 import * as React from 'react'
 import { FC } from 'react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import { IUserMessageProps } from './types'
+import { useUserMessage } from './useUserMessage'
 
 /**
  * A component that supports a MessageBar with markdown using react-markdown
@@ -16,24 +12,7 @@ import { IUserMessageProps } from './types'
  * @category UserMessage
  */
 export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => {
-  const _styles: IStyleFunctionOrObject<IMessageBarStyleProps, IMessageBarStyles> = {}
-
-  if (props.fixedCenter) {
-    _styles.root = {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      minHeight: props.fixedCenter
-    }
-  }
-
-  if (props.isCompact) {
-    _styles.text = {
-      marginTop: '3px',
-      marginBottom: '0px'
-    }
-  }
-
+  const { styles } = useUserMessage(props)
   return (
     <div
       id={props.id}
@@ -43,7 +22,7 @@ export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => 
       onClick={props.onClick}
     >
       <MessageBar
-        styles={_styles}
+        styles={styles}
         isMultiline={props.isMultiline}
         messageBarType={props.type}
         onDismiss={props.onDismiss}

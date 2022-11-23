@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { FC, useContext } from 'react'
+import { ChangePhaseDialogContext } from '../../context'
 import { CheckListItem } from './CheckListItem'
-import { ISummaryViewProps } from './types'
 import styles from './SummaryView.module.scss'
 
-export const SummaryView = (props: ISummaryViewProps) => {
+export const SummaryView: FC = () => {
+  const { state } = useContext(ChangePhaseDialogContext)
   return (
-    <div className={styles.summaryView}>
-      <ul className={styles.checklist}>
-        {props.checklistItems.map((item) => (
-          <CheckListItem key={item.ID} item={item} />
+    <div className={styles.root}>
+      <ul className={styles.list}>
+        {state.checklistItems.map((item) => (
+          <CheckListItem key={item.id} item={item} />
         ))}
       </ul>
     </div>

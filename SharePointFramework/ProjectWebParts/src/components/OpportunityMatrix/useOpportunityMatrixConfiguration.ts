@@ -14,9 +14,8 @@ export function useOpportunityMatrixConfiguration(props: IOpportunityMatrixProps
 
   useEffect(() => {
     if (props.size) {
-      setConfiguration(
-        generateMatrixConfiguration(parseInt(props.size, 10), getMatrixHeaders(props))
-      )
+      const matrixHeaders = getMatrixHeaders(props)
+      setConfiguration(generateMatrixConfiguration(parseInt(props.size, 10), matrixHeaders))
     }
   }, [props])
 
