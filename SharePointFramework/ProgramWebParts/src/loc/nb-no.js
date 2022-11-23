@@ -176,7 +176,6 @@ define([], function () {
         ProgramAdministrationHeader: 'Administrasjon av underordnede områder',
         ProgramAdministrationInfoMessage: 'Velg en eller flere prosjekter du ønsker å knytte til området. Området vil dukke opp som forelder, for prosjektene som er valgt, under Prosjektinformasjon.',
         ProgramRemoveChildsButtonText: 'Fjern underordnede områder',
-        RiskWebPartTitle: 'Risikooversikt',
         RiskDataSource: 'Programrisiko',
         Add: 'Legg til',
         Cancel: 'Avbryt',

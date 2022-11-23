@@ -49,7 +49,7 @@ if ($null -ne $LastInstall) {
         Add-PnPNavigationNode -Location TopNavigationBar -Title "Gevinstoversikt" -Url "$($Uri.LocalPath)/SitePages/Gevinstoversikt.aspx"
         Add-PnPNavigationNode -Location TopNavigationBar -Title "Erfaringslogg" -Url "$($Uri.LocalPath)/SitePages/Erfaringslogg.aspx"
         Add-PnPNavigationNode -Location TopNavigationBar -Title "Leveranseoversikt" -Url "$($Uri.LocalPath)/SitePages/Leveranseoversikt.aspx"
-        Add-PnPNavigationNode -Location TopNavigationBar -Title "Risikooversikt" -Url "$($Uri.LocalPath)/SitePages/Risikooversikt.aspx"
+        Add-PnPNavigationNode -Location TopNavigationBar -Title "Usikkerhetsoversikt" -Url "$($Uri.LocalPath)/SitePages/Usikkerhetsoversikt.aspx"
         Write-Host "[SUCCESS] Please adjust navigation order manually"
     }
 }
