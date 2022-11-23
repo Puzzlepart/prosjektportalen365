@@ -174,7 +174,6 @@ declare interface IProgramWebPartsStrings {
   NoAccessMessage: string
   ProgramAdministrationEmptyMessage: string
   ProgramAdministrationAddChildsButtonText: string
-  RiskWebPartTitle: string
   RiskDataSource: string
   ProgramAdministrationSearchBoxPlaceholder: string
   ProgramTimelineHeader: string
