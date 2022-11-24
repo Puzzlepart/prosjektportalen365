@@ -2,10 +2,6 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/spfx-serve.schema.json",
   "port": 4321,
   "https": true,
-  "api": {
-    "port": 5432,
-    "entryPath": "node_modules/@microsoft/sp-webpart-workbench/lib/api/"
-  },
   "serveConfigurations": {
     "default": {
       "pageUrl": "https://puzzlepart.sharepoint.com/sites/pp365/Lists/Idebehandling/AllItems.aspx",
