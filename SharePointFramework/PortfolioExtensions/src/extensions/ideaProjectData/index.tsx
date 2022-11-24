@@ -5,7 +5,6 @@ import {
   IListViewCommandSetExecuteEventParameters,
   RowAccessor
 } from '@microsoft/sp-listview-extensibility'
-import { TypedHash } from '@pnp/common'
 import { SPFI, spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/webs'
 import '@pnp/sp/items'
@@ -99,7 +98,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
    * @param rowTitle: Title of the selected row
    */
   private async _redirectNewItem(rowId: number, rowTitle: string) {
-    const properties: TypedHash<any> = {
+    const properties: Record<string, any> = {
       Title: rowTitle,
       GtProjectFinanceName: rowTitle
     }
@@ -135,7 +134,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
    *
    * @param properties Properties
    */
-  public async _addItem(properties: TypedHash<any>): Promise<any> {
+  public async _addItem(properties: Record<string, any>): Promise<any> {
     const list = this._sp.web.lists.getByTitle(strings.IdeaProjectDataTitle)
     const itemAddResult = await list.items.add(properties)
     return itemAddResult.data
