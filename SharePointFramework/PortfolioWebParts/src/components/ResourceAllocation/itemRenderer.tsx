@@ -1,11 +1,12 @@
 import React from 'react'
 import { ReactCalendarItemRendererProps } from 'react-calendar-timeline'
+import { IDetailsCalloutItem } from './DetailsCallout/types'
 import styles from './ResourceAllocation.module.scss'
 
 /**
  * Timeline item renderer
  */
-export function itemRenderer(props: ReactCalendarItemRendererProps<any>, onItemClick: any) {
+export function itemRenderer(props: ReactCalendarItemRendererProps<any>, onItemClick: (details: IDetailsCalloutItem) => void) {
   const htmlProps = props.getItemProps(props.item.itemProps)
   return (
     <div
