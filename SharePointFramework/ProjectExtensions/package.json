@@ -10,7 +10,7 @@
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
     "preserve": "node ../.tasks/createServeConfig.js && node ../.tasks/setBundleConfig.js",
-    "serve": "concurrently \"gulp serve-deprecated --locale=nb-no\" \"node ../.tasks/setBundleConfig.js --revert\"",
+    "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\" \"node ../.tasks/setBundleConfig.js --revert\"",
     "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
     "package:debug": "gulp clean && gulp default && gulp package-solution",
     "build": "tsc --build",
