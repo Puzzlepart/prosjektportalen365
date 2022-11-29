@@ -7,7 +7,6 @@ import {
 } from '@microsoft/sp-property-pane'
 import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
 import { PropertyFieldToggleWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldToggleWithCallout'
-import '@pnp/polyfill-ie11'
 import React from 'react'
 import { IProjectPhasesProps, ProjectPhases } from 'components/ProjectPhases'
 import '@fluentui/react/dist/css/fabric.min.css'

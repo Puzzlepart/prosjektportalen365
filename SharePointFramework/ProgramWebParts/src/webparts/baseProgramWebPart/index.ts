@@ -1,7 +1,6 @@
 import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { LogLevel } from '@pnp/logging'
-import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
 import assign from 'object-assign'
 import React, { ComponentClass, FC } from 'react'
