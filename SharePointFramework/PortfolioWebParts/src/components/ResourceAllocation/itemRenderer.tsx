@@ -6,7 +6,10 @@ import styles from './ResourceAllocation.module.scss'
 /**
  * Timeline item renderer
  */
-export function itemRenderer(props: ReactCalendarItemRendererProps<any>, onItemClick: (details: IDetailsCalloutItem) => void) {
+export function itemRenderer(
+  props: ReactCalendarItemRendererProps<any>,
+  onItemClick: (details: IDetailsCalloutItem) => void
+) {
   const htmlProps = props.getItemProps(props.item.itemProps)
   return (
     <div

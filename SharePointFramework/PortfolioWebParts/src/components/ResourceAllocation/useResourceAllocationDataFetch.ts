@@ -58,9 +58,8 @@ function transformItems(
         groups,
         (grp) => [res.RefinableString71, res.RefinableString72].indexOf(grp.title) !== -1
       )
-      if (!group) return null
       const isAbsence = res.ContentTypeId.indexOf('0x010029F45E75BA9CE340A83EFFB2927E11F4') !== -1
-      if(isAbsence && !res.GtResourceAbsenceOWSCHCS) return null
+      if (!group || (isAbsence && !res.GtResourceAbsenceOWSCHCS)) return null
       const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number
       const itemOpacity = allocation < 30 ? 0.3 : allocation / 100
       const itemColor = allocation < 40 ? '#000' : '#fff'
@@ -79,8 +78,8 @@ function transformItems(
       const start_time = moment(new Date(res.GtStartDateOWSDATE))
       const end_time = moment(new Date(res.GtEndDateOWSDATE))
       return {
-        id,
         group: group.id,
+        id,
         title,
         start_time,
         end_time: end_time,
@@ -101,7 +100,7 @@ function transformItems(
 
 /**
  * Fetch data
- * 
+ *
  * @param props Component properties for `ResourceAllocation`
  *
  * @returns Timeline data
