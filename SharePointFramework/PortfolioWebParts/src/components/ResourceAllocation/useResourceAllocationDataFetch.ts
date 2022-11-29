@@ -43,6 +43,7 @@ function transformGroups(searchResults: IAllocationSearchResult[]): ITimelineGro
  *
  * @param searchResults Search results
  * @param groups Groups
+ * @param props Component properties for `ResourceAllocation`
  *
  * @returns Timeline items
  */
@@ -58,8 +59,9 @@ function transformItems(
         (grp) => [res.RefinableString71, res.RefinableString72].indexOf(grp.title) !== -1
       )
       if (!group) return null
-      const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number
       const isAbsence = res.ContentTypeId.indexOf('0x010029F45E75BA9CE340A83EFFB2927E11F4') !== -1
+      if(isAbsence && !res.GtResourceAbsenceOWSCHCS) return null
+      const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number
       const itemOpacity = allocation < 30 ? 0.3 : allocation / 100
       const itemColor = allocation < 40 ? '#000' : '#fff'
       const backgroundColor = isAbsence ? props.itemAbsenceBgColor : props.itemBgColor
@@ -71,14 +73,17 @@ function transformItems(
         background: `rgb(${backgroundColor})`,
         backgroundColor: `rgba(${backgroundColor}, ${itemOpacity})`
       }
+      const title = isAbsence
+        ? `${res.GtResourceAbsenceOWSCHCS} (${allocation}%)`
+        : `${res.RefinableString72} - ${res.SiteTitle} (${allocation}%)`
+      const start_time = moment(new Date(res.GtStartDateOWSDATE))
+      const end_time = moment(new Date(res.GtEndDateOWSDATE))
       return {
         id,
         group: group.id,
-        title: isAbsence
-          ? `${res.GtResourceAbsenceOWSCHCS} (${allocation}%)`
-          : `${res.RefinableString72} - ${res.SiteTitle} (${allocation}%)`,
-        start_time: moment(new Date(res.GtStartDateOWSDATE)),
-        end_time: moment(new Date(res.GtEndDateOWSDATE)),
+        title,
+        start_time,
+        end_time: end_time,
         allocation,
         itemProps: { style },
         role: res.RefinableString72,
@@ -96,10 +101,12 @@ function transformItems(
 
 /**
  * Fetch data
+ * 
+ * @param props Component properties for `ResourceAllocation`
  *
  * @returns Timeline data
  */
-export async function fetchData(props: IResourceAllocationProps): Promise<ITimelineData> {
+async function fetchData(props: IResourceAllocationProps): Promise<ITimelineData> {
   const dataSource = await new DataSourceService(sp.web).getByName(props.dataSource)
   if (!dataSource) throw format(strings.DataSourceNotFound, props.dataSource)
   try {
