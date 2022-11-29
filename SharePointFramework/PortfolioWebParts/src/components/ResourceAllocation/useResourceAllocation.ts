@@ -11,8 +11,6 @@ import { useResourceAllocationDataFetch } from './useResourceAllocationDataFetch
 export function useResourceAllocation(props: IResourceAllocationProps) {
   moment.locale('nb')
   const [state, setState] = useState<IResourceAllocationState>({
-    loading: true,
-    showFilterPanel: false,
     activeFilters: {},
     data: { items: [], groups: [] }
   })
@@ -64,7 +62,7 @@ export function useResourceAllocation(props: IResourceAllocationProps) {
   const { items, groups } = useFilteredData(state)
 
   useResourceAllocationDataFetch(props, (data) => {
-    setState({ ...state, data })
+    setState({ ...state, data, isDataLoaded: true })
   })
 
   return { state, setState, commandBar, filters, onFilterChange, items, groups } as const

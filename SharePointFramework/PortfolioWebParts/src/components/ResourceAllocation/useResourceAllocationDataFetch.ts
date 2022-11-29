@@ -1,44 +1,41 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { sp } from '@pnp/sp'
 import sortArray from 'array-sort'
-import {
-  IAllocationSearchResult, ITimelineData, TimelineResourceType
-} from 'interfaces'
+import { IAllocationSearchResult, ITimelineData, TimelineResourceType } from 'interfaces'
 import _ from 'lodash'
 import moment from 'moment'
 import strings from 'PortfolioWebPartsStrings'
 import { tryParsePercentage } from 'pp365-shared/lib/helpers'
 import { DataSourceService } from 'pp365-shared/lib/services'
 import { useEffect } from 'react'
-import {
-  ITimelineGroup,
-  ITimelineItem
-} from '../../interfaces'
+import { ITimelineGroup, ITimelineItem } from '../../interfaces'
 import { IResourceAllocationProps } from './types'
 
 /**
- * Creating groups based on user property (RefinableString71) on the search result, with fallback to role (RefinableString72)
+ * Creating groups based on user property (`RefinableString71`) on the search result,
+ * with fallback to role (`RefinableString72`)
  *
  * @param searchResults Search results
  *
  * @returns Timeline groups
  */
 function transformGroups(searchResults: IAllocationSearchResult[]): ITimelineGroup[] {
-  const groupNames = _.uniq(searchResults
-    .map((res) => res.RefinableString71 ?? (res.RefinableString72 && `${res.RefinableString72}|R`))
-    .filter(Boolean))
-  // eslint-disable-next-line no-console
-  console.log(groupNames)
-  let groups: ITimelineGroup[] = groupNames.map((name, id) => {
+  const groupNames = _.uniq(
+    searchResults
+      .map(
+        (res) => res.RefinableString71 ?? (res.RefinableString72 && `${res.RefinableString72}|R`)
+      )
+      .filter(Boolean)
+  )
+  const groups = groupNames.map<ITimelineGroup>((name, index) => {
     const [title, type] = name.split('|')
     return {
-      id,
+      id: index,
       title,
       resourceType: type === 'R' ? TimelineResourceType.Role : TimelineResourceType.User
     }
   })
-  groups = sortArray(groups, ['type', 'title'])
-  return groups
+  return sortArray(groups, ['type', 'title'])
 }
 
 /**
@@ -54,43 +51,46 @@ function transformItems(
   groups: ITimelineGroup[],
   props: IResourceAllocationProps
 ): ITimelineItem[] {
-  const items: ITimelineItem[] = searchResults.map((res, id) => {
-    const group = _.find(
-      groups,
-      (grp) => [res.RefinableString71, res.RefinableString72].indexOf(grp.title) !== -1
-    )
-    const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number
-    const isAbsence = res.ContentTypeId.indexOf('0x010029F45E75BA9CE340A83EFFB2927E11F4') !== -1
-    const itemOpacity = allocation < 30 ? 0.3 : allocation / 100
-    const itemColor = allocation < 40 ? '#000' : '#fff'
-    const backgroundColor = isAbsence ? props.itemAbsenceBgColor : props.itemBgColor
-    const style: React.CSSProperties = {
-      color: itemColor,
-      border: 'none',
-      cursor: 'auto',
-      outline: 'none',
-      background: `rgb(${backgroundColor})`,
-      backgroundColor: `rgba(${backgroundColor}, ${itemOpacity})`
-    }
-    return {
-      id,
-      group: group.id,
-      title: isAbsence
-        ? `${res.GtResourceAbsenceOWSCHCS} (${allocation}%)`
-        : `${res.RefinableString72} - ${res.SiteTitle} (${allocation}%)`,
-      start_time: moment(new Date(res.GtStartDateOWSDATE)),
-      end_time: moment(new Date(res.GtEndDateOWSDATE)),
-      allocation,
-      itemProps: { style },
-      role: res.RefinableString72,
-      resource: res.RefinableString71,
-      props: res,
-      data: {
-        project: res.SiteTitle,
-        projectUrl: res.SiteName
+  const items = searchResults
+    .map<ITimelineItem>((res, id) => {
+      const group = _.find(
+        groups,
+        (grp) => [res.RefinableString71, res.RefinableString72].indexOf(grp.title) !== -1
+      )
+      if (!group) return null
+      const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number
+      const isAbsence = res.ContentTypeId.indexOf('0x010029F45E75BA9CE340A83EFFB2927E11F4') !== -1
+      const itemOpacity = allocation < 30 ? 0.3 : allocation / 100
+      const itemColor = allocation < 40 ? '#000' : '#fff'
+      const backgroundColor = isAbsence ? props.itemAbsenceBgColor : props.itemBgColor
+      const style: React.CSSProperties = {
+        color: itemColor,
+        border: 'none',
+        cursor: 'auto',
+        outline: 'none',
+        background: `rgb(${backgroundColor})`,
+        backgroundColor: `rgba(${backgroundColor}, ${itemOpacity})`
       }
-    } as ITimelineItem
-  })
+      return {
+        id,
+        group: group.id,
+        title: isAbsence
+          ? `${res.GtResourceAbsenceOWSCHCS} (${allocation}%)`
+          : `${res.RefinableString72} - ${res.SiteTitle} (${allocation}%)`,
+        start_time: moment(new Date(res.GtStartDateOWSDATE)),
+        end_time: moment(new Date(res.GtEndDateOWSDATE)),
+        allocation,
+        itemProps: { style },
+        role: res.RefinableString72,
+        resource: res.RefinableString71,
+        props: res,
+        data: {
+          project: res.SiteTitle,
+          projectUrl: res.SiteName
+        }
+      } as ITimelineItem
+    })
+    .filter(Boolean)
   return items
 }
 
@@ -119,7 +119,6 @@ export async function fetchData(props: IResourceAllocationProps): Promise<ITimel
     throw error
   }
 }
-
 
 /**
  * Fetch hook for `<ResourceAllocation />`

@@ -15,9 +15,17 @@ import { IResourceAllocationProps } from './types'
 import { useResourceAllocation } from './useResourceAllocation'
 
 export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
-  const { state, setState, commandBar, filters, onFilterChange, items, groups } = useResourceAllocation(props)
+  const {
+    state,
+    setState,
+    commandBar,
+    filters,
+    onFilterChange,
+    items,
+    groups
+  } = useResourceAllocation(props)
 
-  if (state.loading) return null
+  if (!state.isDataLoaded) return null
 
   if (state.error) {
     return (

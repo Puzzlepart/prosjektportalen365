@@ -1,6 +1,7 @@
-import { IBaseComponentProps } from '../types'
-import * as moment from 'moment'
+import { IShimmerProps } from '@fluentui/react'
 import { ITimelineData, ITimelineItem } from 'interfaces'
+import * as moment from 'moment'
+import { IBaseComponentProps } from '../types'
 
 export interface IResourceAllocationProps extends IBaseComponentProps {
   /**
@@ -34,21 +35,16 @@ export interface IResourceAllocationProps extends IBaseComponentProps {
   selectProperties?: string[]
 }
 
-export interface IResourceAllocationState {
-  /**
-   * Whether the component is loading
-   */
-  loading: boolean
-
-  /**
-   * Show filter panel
-   */
-  showFilterPanel: boolean
-
+export interface IResourceAllocationState extends Pick<IShimmerProps, 'isDataLoaded'> {
   /**
    * Active filters
    */
   activeFilters: { [key: string]: string[] }
+
+  /**
+   * Show filter panel
+   */
+  showFilterPanel?: boolean
 
   /**
    * Data
