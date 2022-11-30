@@ -3,10 +3,11 @@ import { format, IButtonProps, IColumn } from '@fluentui/react'
 import { ProjectListModel } from 'models'
 import strings from 'PortfolioWebPartsStrings'
 import { sortAlphabetically } from 'pp365-shared/lib/helpers'
-import { useEffect, useState } from 'react'
-import { any, find, first } from 'underscore'
+import { useEffect } from 'react'
+import _ from 'underscore'
 import { ProjectListViews } from './ProjectListViews'
-import { IProjectListProps, IProjectListState } from './types'
+import { IProjectListProps } from './types'
+import { useProjectListState } from './useProjectListState'
 
 /**
  * Component logic hook for `ProjectList`.
@@ -14,20 +15,7 @@ import { IProjectListProps, IProjectListState } from './types'
  * @param props Props
  */
 export const useProjectList = (props: IProjectListProps) => {
-  const [state, $setState] = useState<IProjectListState>({
-    loading: true,
-    searchTerm: '',
-    renderAs: 'tiles',
-    selectedView:
-      find(ProjectListViews, (view) => view.itemKey === props.defaultView) ??
-      first(ProjectListViews),
-    projects: Array.apply(null, Array(24)).map(() => 0),
-    isUserInPortfolioManagerGroup: false,
-    sort: { fieldName: props.sortBy, isSortedDescending: true }
-  })
-
-  const setState = (newState: Partial<IProjectListState>) =>
-    $setState((state_) => ({ ...state_, ...newState }))
+  const { state, setState } = useProjectListState(props)
 
   /**
    * Sorting on column header click
@@ -83,7 +71,7 @@ export const useProjectList = (props: IProjectListProps) => {
     return projects
       .filter((project) => state.selectedView.filter(project))
       .filter((project) =>
-        any(Object.keys(project), (key) => {
+        _.any(Object.keys(project), (key) => {
           const value = project[key]
           return (
             value &&
@@ -112,22 +100,27 @@ export const useProjectList = (props: IProjectListProps) => {
     setState({ searchTerm: searchTerm.toLowerCase() })
   }
 
+  const projects = state.isDataLoaded ?  filterProjets(state.projects) : state.projects 
+  const views = ProjectListViews.filter((view) => {
+    return !props.hideViews.includes(view.itemKey) && _.any(state.projects, (project) => view.filter(project))
+  })
+
   useEffect(() => {
     Promise.all([
       props.dataAdapter.fetchEnrichedProjects(),
       props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
     ]).then(([projects, isUserInPortfolioManagerGroup]) => {
+      const selectedView = _.find(views, (view) => view.itemKey === props.defaultView) ??
+      _.first(ProjectListViews)
       setState({
         ...state,
         projects,
-        loading: false,
-        isUserInPortfolioManagerGroup
+        isDataLoaded: true,
+        isUserInPortfolioManagerGroup,
+        selectedView
       })
     })
   }, [])
-
-  const projects = state.loading ? state.projects : filterProjets(state.projects)
-  const views = ProjectListViews.filter((view) => !props.hideViews.includes(view.itemKey))
 
   return {
     state,

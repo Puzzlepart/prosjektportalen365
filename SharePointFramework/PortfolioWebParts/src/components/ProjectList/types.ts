@@ -1,4 +1,4 @@
-import { IButtonProps, IPivotItemProps } from '@fluentui/react'
+import { IButtonProps, IPivotItemProps, IShimmerProps } from '@fluentui/react'
 import { IColumn } from '@fluentui/react/lib/DetailsList'
 import { ProjectListModel } from 'models'
 import { IBaseComponentProps } from '../types'
@@ -64,12 +64,7 @@ export interface IProjectListProps extends IBaseComponentProps {
   hideViews?: string[]
 }
 
-export interface IProjectListState {
-  /**
-   * Whether the component is loading
-   */
-  loading: boolean
-
+export interface IProjectListState  extends Pick<IShimmerProps, 'isDataLoaded'> {
   /**
    * Search term
    */
