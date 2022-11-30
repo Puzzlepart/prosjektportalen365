@@ -1,11 +1,10 @@
 /* eslint-disable prefer-spread */
 import { format, IButtonProps, IColumn } from '@fluentui/react'
 import { ProjectListModel } from 'models'
-import strings from 'PortfolioWebPartsStrings'
 import { sortAlphabetically } from 'pp365-shared/lib/helpers'
-import { useEffect } from 'react'
 import _ from 'underscore'
 import { IProjectListProps } from './types'
+import { useProjectListDataFetch } from './useProjectListDataFetch'
 import { useProjectListState } from './useProjectListState'
 
 /**
@@ -101,29 +100,9 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   const projects = state.isDataLoaded ? filterProjets(state.projects) : state.projects
-  const views = props.views.filter((view) => {
-    return (
-      !props.hideViews.includes(view.itemKey) &&
-      _.any(state.projects, (project) => view.filter(project))
-    )
-  })
+  const views = props.views.filter((view) => !props.hideViews.includes(view.itemKey))
 
-  useEffect(() => {
-    Promise.all([
-      props.dataAdapter.fetchEnrichedProjects(),
-      props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
-    ]).then(([projects, isUserInPortfolioManagerGroup]) => {
-      const selectedView =
-        _.find(views, (view) => view.itemKey === props.defaultView) ?? _.first(views)
-      setState({
-        ...state,
-        projects,
-        isDataLoaded: true,
-        isUserInPortfolioManagerGroup,
-        selectedView
-      })
-    })
-  }, [])
+  useProjectListDataFetch(props, views, setState)
 
   return {
     state,
