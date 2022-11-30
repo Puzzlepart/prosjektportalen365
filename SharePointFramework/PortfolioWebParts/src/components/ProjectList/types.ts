@@ -64,7 +64,7 @@ export interface IProjectListProps extends IBaseComponentProps {
   hideViews?: string[]
 }
 
-export interface IProjectListState  extends Pick<IShimmerProps, 'isDataLoaded'> {
+export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
   /**
    * Search term
    */

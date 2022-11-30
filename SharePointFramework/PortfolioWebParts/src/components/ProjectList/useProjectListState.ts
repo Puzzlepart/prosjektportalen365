@@ -10,8 +10,8 @@ import { IProjectListProps, IProjectListState } from './types'
  * @param props Props
  */
 export function useProjectListState(props: IProjectListProps) {
-  const defaultSelectedView = find(ProjectListViews, (view) => view.itemKey === props.defaultView) ??
-    first(ProjectListViews)
+  const defaultSelectedView =
+    find(ProjectListViews, (view) => view.itemKey === props.defaultView) ?? first(ProjectListViews)
   const mockProjects = Array.apply(null, Array(Math.floor(Math.random() * 31) + 50)).map(() => 0)
   const defaultSort = { fieldName: props.sortBy, isSortedDescending: true }
   const [state, $setState] = useState<IProjectListState>({
@@ -23,7 +23,8 @@ export function useProjectListState(props: IProjectListProps) {
     sort: defaultSort
   })
 
-  const setState = (newState: Partial<IProjectListState>) => $setState((state_) => ({ ...state_, ...newState }))
+  const setState = (newState: Partial<IProjectListState>) =>
+    $setState((state_) => ({ ...state_, ...newState }))
 
   return { state, setState } as const
 }

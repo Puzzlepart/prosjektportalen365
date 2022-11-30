@@ -100,9 +100,12 @@ export const useProjectList = (props: IProjectListProps) => {
     setState({ searchTerm: searchTerm.toLowerCase() })
   }
 
-  const projects = state.isDataLoaded ?  filterProjets(state.projects) : state.projects 
+  const projects = state.isDataLoaded ? filterProjets(state.projects) : state.projects
   const views = ProjectListViews.filter((view) => {
-    return !props.hideViews.includes(view.itemKey) && _.any(state.projects, (project) => view.filter(project))
+    return (
+      !props.hideViews.includes(view.itemKey) &&
+      _.any(state.projects, (project) => view.filter(project))
+    )
   })
 
   useEffect(() => {
@@ -110,8 +113,8 @@ export const useProjectList = (props: IProjectListProps) => {
       props.dataAdapter.fetchEnrichedProjects(),
       props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
     ]).then(([projects, isUserInPortfolioManagerGroup]) => {
-      const selectedView = _.find(views, (view) => view.itemKey === props.defaultView) ??
-      _.first(ProjectListViews)
+      const selectedView =
+        _.find(views, (view) => view.itemKey === props.defaultView) ?? _.first(ProjectListViews)
       setState({
         ...state,
         projects,

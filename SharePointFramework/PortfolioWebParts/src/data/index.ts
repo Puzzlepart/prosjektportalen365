@@ -297,8 +297,9 @@ export class DataAdapter implements IDataAdapter {
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${queryArray ?? ''
-          } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `${
+          queryArray ?? ''
+        } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })
@@ -350,7 +351,7 @@ export class DataAdapter implements IDataAdapter {
         .filter((p) => p)
 
       return { reports, configElement }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
@@ -591,13 +592,14 @@ export class DataAdapter implements IDataAdapter {
    */
   private fetchMemberGroups() {
     return new Promise<IGraphGroup[]>((resolve) => {
-      msGraph.Get<IGraphGroup[]>(
-        '/me/memberOf/$/microsoft.graph.group',
-        ['id', 'displayName'],
-        // eslint-disable-next-line quotes
-        "groupTypes/any(a:a%20eq%20'unified')"
-      )
-        .then(value => resolve(value))
+      msGraph
+        .Get<IGraphGroup[]>(
+          '/me/memberOf/$/microsoft.graph.group',
+          ['id', 'displayName'],
+          // eslint-disable-next-line quotes
+          "groupTypes/any(a:a%20eq%20'unified')"
+        )
+        .then((value) => resolve(value))
         .catch(() => resolve([]))
     })
   }
