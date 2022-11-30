@@ -5,7 +5,6 @@ import strings from 'PortfolioWebPartsStrings'
 import { sortAlphabetically } from 'pp365-shared/lib/helpers'
 import { useEffect } from 'react'
 import _ from 'underscore'
-import { ProjectListViews } from './ProjectListViews'
 import { IProjectListProps } from './types'
 import { useProjectListState } from './useProjectListState'
 
@@ -28,7 +27,8 @@ export const useProjectList = (props: IProjectListProps) => {
     if (column.isSorted) {
       isSortedDescending = !isSortedDescending
     }
-    setState({ sort: { fieldName: column.fieldName, isSortedDescending } })
+    const newSort = { fieldName: column.fieldName, isSortedDescending }
+    setState({ sort: newSort })
   }
 
   /**
@@ -101,7 +101,7 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   const projects = state.isDataLoaded ? filterProjets(state.projects) : state.projects
-  const views = ProjectListViews.filter((view) => {
+  const views = props.views.filter((view) => {
     return (
       !props.hideViews.includes(view.itemKey) &&
       _.any(state.projects, (project) => view.filter(project))
@@ -114,7 +114,7 @@ export const useProjectList = (props: IProjectListProps) => {
       props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
     ]).then(([projects, isUserInPortfolioManagerGroup]) => {
       const selectedView =
-        _.find(views, (view) => view.itemKey === props.defaultView) ?? _.first(ProjectListViews)
+        _.find(views, (view) => view.itemKey === props.defaultView) ?? _.first(views)
       setState({
         ...state,
         projects,

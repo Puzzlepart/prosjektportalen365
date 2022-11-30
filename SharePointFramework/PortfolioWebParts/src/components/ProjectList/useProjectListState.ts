@@ -1,6 +1,6 @@
 /* eslint-disable prefer-spread */
 import { useState } from 'react'
-import { find, first } from 'underscore'
+import _ from 'underscore'
 import { ProjectListViews } from './ProjectListViews'
 import { IProjectListProps, IProjectListState } from './types'
 
@@ -11,7 +11,7 @@ import { IProjectListProps, IProjectListState } from './types'
  */
 export function useProjectListState(props: IProjectListProps) {
   const defaultSelectedView =
-    find(ProjectListViews, (view) => view.itemKey === props.defaultView) ?? first(ProjectListViews)
+    _.find(props.views, (view) => view.itemKey === props.defaultView) ?? _.first(ProjectListViews)
   const mockProjects = Array.apply(null, Array(Math.floor(Math.random() * 31) + 50)).map(() => 0)
   const defaultSort = { fieldName: props.sortBy, isSortedDescending: true }
   const [state, $setState] = useState<IProjectListState>({

@@ -62,6 +62,11 @@ export interface IProjectListProps extends IBaseComponentProps {
    * Hide views
    */
   hideViews?: string[]
+
+  /**
+   * Views
+   */
+  views?: IProjectListView[]
 }
 
 export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {

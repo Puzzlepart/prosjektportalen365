@@ -19,6 +19,7 @@ import { ProjectCard } from './ProjectCard'
 import { ProjectCardContext } from './ProjectCard/context'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
+import { ProjectListViews } from './ProjectListViews'
 import { RenderModeDropdown } from './RenderModeDropdown'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
@@ -159,7 +160,8 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
 
 ProjectList.defaultProps = {
   columns: PROJECTLIST_COLUMNS,
-  sortBy: 'Title'
+  sortBy: 'Title',
+  views: ProjectListViews
 }
 
 export * from './types'
