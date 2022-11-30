@@ -1,6 +1,11 @@
 import { ITimelineItem } from 'interfaces/ITimelineItem'
 
+export interface IDetailsCalloutItem {
+  item: ITimelineItem
+  element: HTMLElement
+}
+
 export interface IDetailsCalloutProps {
-  viewItem: { item: ITimelineItem; element: HTMLElement }
+  viewItem: IDetailsCalloutItem
   onDismiss: () => void
 }
