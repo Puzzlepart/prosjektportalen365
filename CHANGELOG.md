@@ -18,6 +18,7 @@ Every change is marked with issue ID.
 ### Fixed
 
 - Persist selection when doing a search in Program Admin #849
+- Bugfix for ResourceAllocation where web part is not loaded due to elements not having User or Role assigned #904
 
 ## 1.7.2 - 26.10.2022
 
