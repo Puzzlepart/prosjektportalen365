@@ -1,5 +1,4 @@
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
-import { TypedHash } from '@pnp/common'
 import { PortalDataService } from 'pp365-shared/lib/services'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import { Schema, Web } from 'sp-js-provisioning'
@@ -30,7 +29,7 @@ export interface IBaseTaskParams {
   /**
    * Context for the Application Customizer
    */
-  context: ApplicationCustomizerContext
+  spfxContext: ApplicationCustomizerContext
 
   /**
    * Properties
@@ -60,5 +59,5 @@ export interface IBaseTaskParams {
   /**
    * Miscellaneous data
    */
-  data?: TypedHash<any>
+  data?: Record<string, any>
 }

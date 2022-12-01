@@ -1,4 +1,3 @@
-import { TypedHash } from '@pnp/common'
 import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
@@ -52,7 +51,7 @@ export class SetupProjectInformation extends BaseTask {
         'AlignCenter'
       )
       this.logInformation(
-        `Synchronizing list '${strings.ProjectPropertiesListName}' based on content type from ${this.data.hub.url} `,
+        `Synchronizing list '${strings.ProjectPropertiesListName}' based on content type from ${this.data.hubSiteContext.url} `,
         {}
       )
       const { list } = await params.portal.syncList(
@@ -66,32 +65,32 @@ export class SetupProjectInformation extends BaseTask {
         'AlignCenter'
       )
 
-      if ((await list.items.getAll())?.length >= 1) {
+      if ((await list.items())?.length >= 1) {
         await list.items.getById(1).update({
-          Title: params.context.pageContext.web.title,
+          Title: params.spfxContext.pageContext.web.title,
           TemplateParameters: JSON.stringify(params.templateSchema.Parameters),
           GtIsProgram: isProgram,
           GtIsParentProject: isParent
         })
       } else {
         await list.items.add({
-          Title: params.context.pageContext.web.title,
+          Title: params.spfxContext.pageContext.web.title,
           TemplateParameters: JSON.stringify(params.templateSchema.Parameters),
           GtIsProgram: isProgram,
           GtIsParentProject: isParent
         })
       }
 
-      const items = await list.items.getAll()
+      const items = await list.items()
       if (items.length >= 1) {
-        if (!(await list.items.getById(1).select('TemplateParameters').get()).TemplateParameters) {
+        if (!(await list.items.getById(1).select('TemplateParameters')()).TemplateParameters) {
           await list.items.getById(1).update({
             TemplateParameters: JSON.stringify(params.templateSchema.Parameters)
           })
         }
       } else {
         await list.items.add({
-          Title: params.context.pageContext.web.title,
+          Title: params.spfxContext.pageContext.web.title,
           TemplateParameters: JSON.stringify(params.templateSchema.Parameters)
         })
       }
@@ -114,15 +113,15 @@ export class SetupProjectInformation extends BaseTask {
   private async _addEntryToHub(params: IBaseTaskParams) {
     try {
       this.logInformation(
-        `Attempting to retrieve project item from list '${params.properties.projectsList}' at ${this.data.hub.url}`
+        `Attempting to retrieve project item from list '${params.properties.projectsList}' at ${this.data.hubSiteContext.url}`
       )
       const entity = await params.entityService.getEntityItem(
-        params.context.pageContext.legacyPageContext.groupId
+        params.spfxContext.pageContext.legacyPageContext.groupId
       )
       if (entity) return
-      const properties: TypedHash<any> = {
-        Title: params.context.pageContext.web.title,
-        GtSiteId: params.context.pageContext.site.id.toString(),
+      const properties: Record<string, any> = {
+        Title: params.spfxContext.pageContext.web.title,
+        GtSiteId: params.spfxContext.pageContext.site.id.toString(),
         GtProjectTemplate: this.data.selectedTemplate.text,
         GtIsProgram: this.data.selectedTemplate.isProgram,
         GtIsParentProject: this.data.selectedTemplate.isParentProject
@@ -131,16 +130,16 @@ export class SetupProjectInformation extends BaseTask {
         properties.ContentTypeId = params.templateSchema.Parameters.ProjectContentTypeId
       }
       this.logInformation(
-        `Adding project entity to list '${params.properties.projectsList}' at ${this.data.hub.url}`,
+        `Adding project entity to list '${params.properties.projectsList}' at ${this.data.hubSiteContext.url}`,
         { properties }
       )
       await params.entityService.createNewEntity(
-        params.context.pageContext.legacyPageContext.groupId,
-        params.context.pageContext.web.absoluteUrl,
+        params.spfxContext.pageContext.legacyPageContext.groupId,
+        params.spfxContext.pageContext.web.absoluteUrl,
         properties
       )
       this.logInformation(
-        `Project entity added to list '${params.properties.projectsList}' at ${this.data.hub.url}`
+        `Project entity added to list '${params.properties.projectsList}' at ${this.data.hubSiteContext.url}`
       )
     } catch (error) {
       throw error

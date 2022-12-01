@@ -1,4 +1,5 @@
-import { CamlQuery, SiteUserProps } from '@pnp/sp'
+import { ICamlQuery } from '@pnp/sp/lists'
+import { ISiteUserProps } from '@pnp/sp/site-users/types'
 import strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { isEmpty } from 'underscore'
@@ -32,7 +33,7 @@ export class SitePermissions extends BaseTask {
       const [permConfig, roleDefinitions, groups] = await Promise.all([
         this._getPermissionConfiguration(),
         this._getRoleDefinitions(params.web),
-        this._getSiteGroups(this.data.hub.web)
+        this._getSiteGroups(this.data.hubSiteContext.web)
       ])
       for (let i = 0; i < permConfig.length; i++) {
         const { groupName, permissionLevel } = permConfig[i]
@@ -62,8 +63,8 @@ export class SitePermissions extends BaseTask {
    * Get configurations for the selected template from list
    */
   private async _getPermissionConfiguration(): Promise<IPermissionConfiguration[]> {
-    const list = this.data.hub.web.lists.getByTitle(strings.PermissionConfigurationList)
-    const query: CamlQuery = {
+    const list = this.data.hubSiteContext.web.lists.getByTitle(strings.PermissionConfigurationList)
+    const query: ICamlQuery = {
       ViewXml: `<View>
     <Query>
       <Where>
@@ -98,7 +99,7 @@ export class SitePermissions extends BaseTask {
     return (await web.siteGroups.select('Title', 'Users').expand('Users').get()).reduce(
       (grps, { Title, Users }) => ({
         ...grps,
-        [Title]: Users.map((u: SiteUserProps) => u.LoginName)
+        [Title]: Users.map((u: ISiteUserProps) => u.LoginName)
       }),
       {}
     )

@@ -1,5 +1,4 @@
-import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
-import { sp, Web } from '@pnp/sp'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import { IProjectSetupData } from 'projectSetup'
 import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
@@ -13,6 +12,7 @@ import {
   TaskAttachment,
   TaskPreviewType
 } from '../PlannerConfiguration'
+import { IWeb } from '@pnp/sp/webs'
 
 export class CopyListData extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -35,8 +35,8 @@ export class CopyListData extends BaseTask {
     this.onProgress = onProgress
     try {
       await new PlannerConfiguration(this.data, {}).ensurePlan(
-        params.context.pageContext.web.title,
-        params.context.pageContext.legacyPageContext.groupId,
+        params.spfxContext.pageContext.web.title,
+        params.spfxContext.pageContext.legacyPageContext.groupId,
         false
       )
       for (let i = 0; i < this.data.selectedContentConfig.length; i++) {
@@ -188,7 +188,7 @@ export class CopyListData extends BaseTask {
    * @param web Web
    * @param files Files to get content for
    */
-  private async _getFileContents(web: Web, files: any[]): Promise<any[]> {
+  private async _getFileContents(web: IWeb, files: any[]): Promise<any[]> {
     try {
       const fileContents = await Promise.all(
         files.map(

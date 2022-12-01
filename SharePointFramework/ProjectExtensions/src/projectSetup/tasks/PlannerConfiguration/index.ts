@@ -297,7 +297,7 @@ export class PlannerConfiguration extends BaseTask {
   ): Promise<IBaseTaskParams> {
     this.logInformation('Setting up Plans, Buckets and Task')
     try {
-      const groupPlan = await this._createPlan(params.context.pageContext, onProgress)
+      const groupPlan = await this._createPlan(params.spfxContext.pageContext, onProgress)
       params.templateParameters = { defaultPlanId: groupPlan.id }
     } catch (error) {
       this.logWarning('Failed to set up Plans, Buckets and Tasks', error)

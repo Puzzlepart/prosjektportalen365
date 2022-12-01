@@ -1,9 +1,7 @@
 import { MessageBarType } from '@fluentui/react'
 import { override } from '@microsoft/decorators'
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base'
-import { isArray, stringIsNullOrEmpty } from '@pnp/common'
-import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
-import { MenuNode, sp, Web } from '@pnp/sp'
+import { isArray, stringIsNullOrEmpty } from '@pnp/core'
 import { format, getId } from '@uifabric/utilities'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import { ListLogger } from 'pp365-shared/lib/logging'
@@ -40,9 +38,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
   @override
   public async onInit(): Promise<void> {
-    sp.setup({ spfxContext: this.context })
-    Logger.subscribe(new ConsoleListener())
-    Logger.activeLogLevel = sessionStorage.DEBUG === '1' || DEBUG ? LogLevel.Info : LogLevel.Warning
     if (
       !this.context.pageContext.legacyPageContext.isSiteAdmin ||
       !this.context.pageContext.legacyPageContext.groupId
@@ -83,7 +78,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         web: new Web(this.context.pageContext.web.absoluteUrl) as any,
         webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
         templateExcludeHandlers: [],
-        context: this.context,
+        spfxContext: this.context,
         properties: this.properties
       })
     } catch (error) {
@@ -92,13 +87,12 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   private async _ensureParentProjectPatch(data: IProjectSetupData): Promise<void> {
-    const [singleItem] = await data.hub.web.lists
+    const [singleItem] = await data.hubSiteContext.web.lists
       .getByTitle(this.properties.projectsList)
       .items.filter(
         `GtSiteId eq '${this.context.pageContext.legacyPageContext.siteId.replace(/([{}])/g, '')}'`
-      )
-      .get()
-    await data.hub.web.lists
+      )()
+    await data.hubSiteContext.web.lists
       .getByTitle(this.properties.projectsList)
       .items.getById(singleItem.Id)
       .update({ GtIsParentProject: true })
@@ -113,7 +107,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     try {
       let data = await this._fetchData()
       ListLogger.init(
-        data.hub.web.lists.getByTitle('Logg'),
+        data.hubSiteContext.web.lists.getByTitle('Logg'),
         this.context.pageContext.web.absoluteUrl,
         'ProjectSetup'
       )
@@ -261,7 +255,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           web: new Web(this.context.pageContext.web.absoluteUrl) as any,
           webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
           templateExcludeHandlers: [],
-          context: this.context,
+          spfxContext: this.context,
           properties: this.properties
         })
         this._unmount(placeholder)
@@ -343,8 +337,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     try {
       await MSGraphHelper.Init(this.context.msGraphClientFactory)
       const data: IProjectSetupData = {}
-      data.hub = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
-      this._portal = new PortalDataService().configure({ urlOrWeb: data.hub.web })
+      data.hubSiteContext = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
+      this._portal = new PortalDataService().configure({ urlOrWeb: data.hubSiteContext.web })
       const [_templates, extensions, contentConfig, templateFiles] = await Promise.all([
         this._portal.getItems(
           this.properties.templatesLibrary,

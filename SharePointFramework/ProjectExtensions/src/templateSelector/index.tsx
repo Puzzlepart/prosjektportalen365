@@ -4,21 +4,17 @@ import {
   Command,
   IListViewCommandSetExecuteEventParameters
 } from '@microsoft/sp-listview-extensibility'
-import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
-import { sp } from '@pnp/sp'
+import { Logger, LogLevel } from '@pnp/logging'
 import { getId } from '@uifabric/utilities'
+import { DocumentTemplateDialog } from 'components'
+import { SPDataAdapter } from 'data'
 import * as strings from 'ProjectExtensionsStrings'
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import HubSiteService from 'sp-hubsite-service'
 import { find, first } from 'underscore'
-import { DocumentTemplateDialog } from 'components'
-import { SPDataAdapter } from 'data'
 import { ITemplateSelectorContext, TemplateSelectorContext } from './context'
 import { ITemplateSelectorCommandProperties } from './types'
-
-Logger.subscribe(new ConsoleListener())
-Logger.activeLogLevel = LogLevel.Info
 
 export default class TemplateSelectorCommand extends BaseListViewCommandSet<
   ITemplateSelectorCommandProperties
@@ -29,26 +25,15 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<
 
   @override
   public async onInit() {
-    Logger.log({
-      message: '(TemplateSelectorCommand) onInit: Initializing',
-      data: { version: this.context.manifest.version, placeholderIds: this._placeholderIds },
-      level: LogLevel.Info
-    })
-    Logger.subscribe(new ConsoleListener())
-    Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-    const hub = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
-    SPDataAdapter.configure(this.context, {
-      siteId: this.context.pageContext.site.id.toString(),
-      webUrl: this.context.pageContext.web.absoluteUrl,
-      hubSiteUrl: hub.url
-    })
+    const hubSiteContext = await HubSiteService.GetHubSite(this.context)
+    SPDataAdapter.configure(this.context, {hubSiteContext })
     this._openCmd = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR')
     if (!this._openCmd) return
     try {
       const templateLib = 'Malbibliotek'
       this._ctxValue.templateLibrary = {
         title: templateLib,
-        url: `${hub.url}/${templateLib}`
+        url: `${hubSiteContext.url}/${templateLib}`
       }
       this._ctxValue.templates = await SPDataAdapter.getDocumentTemplates(
         templateLib,

@@ -5,7 +5,6 @@ import { SpEntityPortalService } from 'sp-entityportal-service'
 import initSpfxJsom, { ExecuteJsomQuery } from 'spfx-jsom'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import _ from 'underscore'
-import { ITaxonomySession, Session } from '@pnp/sp-taxonomy'
 
 export class PreTask extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -24,16 +23,17 @@ export class PreTask extends BaseTask {
     }
 
     try {
-      params.spfxJsomContext = await initSpfxJsom(params.context.pageContext.site.absoluteUrl, {
+      params.spfxJsomContext = await initSpfxJsom(params.spfxContext.pageContext.site.absoluteUrl, {
         loadTaxonomy: true
       })
       params.entityService = new SpEntityPortalService({
-        portalUrl: this.data.hub.url,
+        spfxContext: params.spfxContext,
+        portalUrl: this.data.hubSiteContext.url,
         listName: params.properties.projectsList,
         identityFieldName: 'GtGroupId',
         urlFieldName: 'GtSiteUrl'
       })
-      params.portal = new PortalDataService().configure({ urlOrWeb: this.data.hub.web })
+      params.portal = new PortalDataService().configure({ url: this.data.hubSiteContext.url, spfxContext: params.spfxContext })
       params.spfxJsomContext.jsomContext.web['set_isMultilingual'](false)
       params.spfxJsomContext.jsomContext.web.update()
       await ExecuteJsomQuery(params.spfxJsomContext.jsomContext)
@@ -63,20 +63,22 @@ export class PreTask extends BaseTask {
    *
    * @param termSetIds - Term set IDs
    */
-  private async validateTermSetIds(termSetIds: any) {
-    const taxonomySession: ITaxonomySession = new Session()
-    const termSet = await taxonomySession
-      .getDefaultSiteCollectionTermStore()
-      .getTermSetById(termSetIds.GtProjectPhase)
-      .get()
-    if (!termSet.Name) {
-      this.logError(`Failed to validate term set ${termSetIds.GtProjectPhase}`)
-      throw new BaseTaskError(
-        this.taskName,
-        strings.PreTaskTermSetIdValidationErrorMessage,
-        strings.TermSetDoesNotExistError
-      )
-    }
+  private validateTermSetIds(termSetIds: any) {
+    // eslint-disable-next-line no-console
+    console.log(termSetIds)
+    // const taxonomySession: ITaxonomySession = new Session()
+    // const termSet = await taxonomySession
+    //   .getDefaultSiteCollectionTermStore()
+    //   .getTermSetById(termSetIds.GtProjectPhase)
+    //   .get()
+    // if (!termSet.Name) {
+    //   this.logError(`Failed to validate term set ${termSetIds.GtProjectPhase}`)
+    //   throw new BaseTaskError(
+    //     this.taskName,
+    //     strings.PreTaskTermSetIdValidationErrorMessage,
+    //     strings.TermSetDoesNotExistError
+    //   )
+    // }
   }
 
   /**
@@ -88,7 +90,7 @@ export class PreTask extends BaseTask {
     await Promise.all(
       contentTypes.map(async (ct) => {
         try {
-          await this.data.hub.web.contentTypes.getById(ct).get()
+          await this.data.hubSiteContext.web.contentTypes.getById(ct)()
         } catch (error) {
           this.logError(`Failed to validate content type ${ct}`)
           throw new BaseTaskError(
