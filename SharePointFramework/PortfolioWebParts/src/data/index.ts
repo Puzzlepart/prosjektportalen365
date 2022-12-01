@@ -535,7 +535,7 @@ export class DataAdapter implements IDataAdapter {
         if (owner) model.owner = { text: owner.Title, imageUrl: getUserPhoto(owner.Email) }
         return model
       })
-      .filter((p) => p)
+      .filter(Boolean)
     return projects
   }
 
@@ -574,14 +574,11 @@ export class DataAdapter implements IDataAdapter {
             )
             .filter(filter)
             .orderBy('Title')
-            .top(500)<ISPProjectItem[]>(),
-          msGraph.Get<IGraphGroup[]>(
-            '/me/memberOf/$/microsoft.graph.group',
-            ['id', 'displayName'],
-            // eslint-disable-next-line quotes
-            "groupTypes/any(a:a%20eq%20'unified')"
-          ),
-          this.sp.web.siteUsers.select('Id', 'Title', 'Email')<ISPUser[]>(),
+            .top(500)
+            .usingCaching()
+            .get<ISPProjectItem[]>(),
+          this.fetchMemberGroups(),
+          sp.web.siteUsers.select('Id', 'Title', 'Email').get<ISPUser[]>(),
           this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId'])
         ])
       },
@@ -589,6 +586,25 @@ export class DataAdapter implements IDataAdapter {
     )
     const projects = this._mapProjects(items, groups, sites, users)
     return projects
+  }
+
+  /**
+   * Fetches groups where the user is a member from the Graph
+   * using `msgraph-helper`. Resolves an empty array if the
+   * request fails (see https://github.com/Puzzlepart/prosjektportalen365/issues/908).
+   */
+  private fetchMemberGroups() {
+    return new Promise<IGraphGroup[]>((resolve) => {
+      msGraph
+        .Get<IGraphGroup[]>(
+          '/me/memberOf/$/microsoft.graph.group',
+          ['id', 'displayName'],
+          // eslint-disable-next-line quotes
+          "groupTypes/any(a:a%20eq%20'unified')"
+        )
+        .then((value) => resolve(value))
+        .catch(() => resolve([]))
+    })
   }
 
   /**

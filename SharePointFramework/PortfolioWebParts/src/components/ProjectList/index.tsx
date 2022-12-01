@@ -18,6 +18,7 @@ import { ProjectCard } from './ProjectCard'
 import { ProjectCardContext } from './ProjectCard/context'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
+import { ProjectListViews } from './ProjectListViews'
 import { RenderModeDropdown } from './RenderModeDropdown'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
@@ -49,7 +50,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
               ...props,
               project,
               actions: getCardActions(project),
-              isDataLoaded: !state.loading
+              isDataLoaded: state.isDataLoaded
             }}>
             <ProjectCard />
           </ProjectCardContext.Provider>
@@ -65,7 +66,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         })
         return (
           <ShimmeredDetailsList
-            enableShimmer={state.loading}
+            enableShimmer={!state.isDataLoaded}
             items={projects}
             columns={columns}
             onRenderItemColumn={onRenderItemColumn}
@@ -116,28 +117,28 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
                 itemKey={view.itemKey}
                 headerText={view.headerText}
                 itemIcon={view.itemIcon}
-                headerButtonProps={view.getHeaderButtonProps && view.getHeaderButtonProps(state)}
-              />
+                headerButtonProps={view.getHeaderButtonProps && view.getHeaderButtonProps(state)}>
+                <div className={styles.searchBox} hidden={!props.showSearchBox}>
+                  <SearchBox
+                    disabled={!state.isDataLoaded || isEmpty(state.projects)}
+                    placeholder={searchBoxPlaceholder}
+                    onChange={onSearch}
+                  />
+                </div>
+                <RenderModeDropdown
+                  hidden={!props.showViewSelector}
+                  onChange={(renderAs) => setState({ renderAs })}
+                />
+                {state.isDataLoaded && isEmpty(projects) && (
+                  <div className={styles.emptyMessage}>
+                    <MessageBar>{strings.ProjectListEmptyText}</MessageBar>
+                  </div>
+                )}
+                <div className={styles.projects}>{renderProjects(projects)}</div>
+              </PivotItem>
             ))}
           </Pivot>
         </div>
-        <div className={styles.searchBox} hidden={!props.showSearchBox}>
-          <SearchBox
-            disabled={state.loading || isEmpty(state.projects)}
-            placeholder={searchBoxPlaceholder}
-            onChange={onSearch}
-          />
-        </div>
-        <RenderModeDropdown
-          hidden={!props.showViewSelector}
-          onChange={(renderAs) => setState({ renderAs })}
-        />
-        {!state.loading && isEmpty(projects) && (
-          <div className={styles.emptyMessage}>
-            <MessageBar>{strings.ProjectListEmptyText}</MessageBar>
-          </div>
-        )}
-        <div className={styles.projects}>{renderProjects(projects)}</div>
       </div>
       <ProjectInformationPanel
         key={state.showProjectInfo?.siteId}
@@ -156,7 +157,8 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
 
 ProjectList.defaultProps = {
   columns: PROJECTLIST_COLUMNS,
-  sortBy: 'Title'
+  sortBy: 'Title',
+  views: ProjectListViews
 }
 
 export * from './types'
