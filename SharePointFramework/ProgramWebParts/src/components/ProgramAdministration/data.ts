@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { flatten } from '@microsoft/sp-lodash-subset'
-import { sp } from '@pnp/sp'
-import { SPDataAdapter } from 'data'
+import { SPFI } from '@pnp/sp'
+import '@pnp/sp/sites'
+import { IProgramAdministrationContext } from './context'
 
 /**
  * Fetches all projects associated with the current hubsite context
+ * 
+ * @param sp SPFI
  */
-export async function getHubSiteProjects(): Promise<any[]> {
-  const data = await sp.site.select('HubSiteId').get()
+export async function getHubSiteProjects(sp: SPFI): Promise<any[]> {
+  const data = await sp.site.select('HubSiteId')()
   const { PrimarySearchResults } = await sp.search({
     Querytext: `DepartmentId:{${data.HubSiteId}} contentclass:STS_Site`,
     RowLimit: 500,
@@ -19,9 +22,16 @@ export async function getHubSiteProjects(): Promise<any[]> {
   return PrimarySearchResults
 }
 
-async function searchHubSite(hubId: string, query: string) {
+/**
+ * Search hub site
+ *
+ * @param sp SPFI
+ * @param hubSiteId Hub site ID
+ * @param queryText Query text
+ */
+async function searchHubSite(sp: SPFI, hubSiteId: string, queryText: string) {
   const searchData = await sp.search({
-    Querytext: `${query} DepartmentId:{${hubId}} contentclass:STS_Site`,
+    Querytext: `${queryText} DepartmentId:{${hubSiteId}} contentclass:STS_Site`,
     RowLimit: 500,
     StartRow: 0,
     ClientType: 'ContentSearchRegular',
@@ -34,16 +44,14 @@ async function searchHubSite(hubId: string, query: string) {
 /**
  * Fetches current child projects using default caching
  *
- * @param dataAdapter Data adapter
+ * @param context Context object
  */
-export async function fetchChildProjects(
-  dataAdapter: SPDataAdapter
-): Promise<Array<Record<string, string>>> {
-  const queryArray = dataAdapter.aggregatedQueryBuilder('SiteId')
-  const hubData = await sp.site.select('HubSiteId').get()
+export async function fetchChildProjects(context: IProgramAdministrationContext): Promise<Array<Record<string, string>>> {
+  const queryArray = context.props.dataAdapter.aggregatedQueryBuilder('SiteId')
+  const hubData = await context.props.sp.site.select('HubSiteId')()
   const searchPromises = []
   for (const query of queryArray) {
-    searchPromises.push(searchHubSite(hubData.HubSiteId, query))
+    searchPromises.push(searchHubSite(context.props.sp, hubData.HubSiteId, query))
   }
   const responses: any[] = await Promise.all(searchPromises)
   const searchResults = []
@@ -56,44 +64,34 @@ export async function fetchChildProjects(
 /**
  * Add child projects
  *
- * @param dataAdapter Data adapter
- * @param newProjects New projects to add
+ * @param context Context object
  */
-export async function addChildProject(
-  dataAdapter: SPDataAdapter,
-  newProjects: Array<Record<string, string>>
-) {
-  const [{ GtChildProjects }] = await sp.web.lists
+export async function addChildProject(context: IProgramAdministrationContext) {
+  const [{ GtChildProjects }] = await context.props.sp.web.lists
     .getByTitle('Prosjektegenskaper')
-    .items.select('GtChildProjects')
-    .get()
+    .items.select('GtChildProjects')()
   const projects = JSON.parse(GtChildProjects)
-  const updatedProjects = [...projects, ...newProjects]
+  const updatedProjects = [...projects, ...context.state.selectedProjectsToAdd]
   const updateProperties = { GtChildProjects: JSON.stringify(updatedProjects) }
-  await sp.web.lists.getByTitle('Prosjektegenskaper').items.getById(1).update(updateProperties)
-  await dataAdapter.updateProjectInHub(updateProperties)
+  await context.props.sp.web.lists.getByTitle('Prosjektegenskaper').items.getById(1).update(updateProperties)
+  await context.props.dataAdapter.updateProjectInHub(updateProperties)
 }
 
 /**
  * Remove child projects
  *
- * @param dataAdapter Data adapter
- * @param projectToRemove Projects to delete
+ * @param context Context object
  */
-export async function removeChildProjects(
-  dataAdapter: SPDataAdapter,
-  projectToRemove: Array<Record<string, string>>
-): Promise<Array<Record<string, string>>> {
-  const [currentData] = await sp.web.lists
+export async function removeChildProjects(context: IProgramAdministrationContext): Promise<Array<Record<string, string>>> {
+  const [currentData] = await context.props.sp.web.lists
     .getByTitle('Prosjektegenskaper')
-    .items.select('GtChildProjects')
-    .get()
+    .items.select('GtChildProjects')()
   const projects: Array<Record<string, string>> = JSON.parse(currentData.GtChildProjects)
   const updatedProjects = projects.filter(
-    (p) => !projectToRemove.some((el) => el.SiteId === p.SiteId)
+    (p) => !context.state.selectedProjectsToDelete.some((el) => el.SiteId === p.SiteId)
   )
   const updateProperties = { GtChildProjects: JSON.stringify(updatedProjects) }
-  await sp.web.lists.getByTitle('Prosjektegenskaper').items.getById(1).update(updateProperties)
-  await dataAdapter.updateProjectInHub(updateProperties)
+  await context.props.sp.web.lists.getByTitle('Prosjektegenskaper').items.getById(1).update(updateProperties)
+  await context.props.dataAdapter.updateProjectInHub(updateProperties)
   return updatedProjects
 }

@@ -1,13 +1,8 @@
 import { MessageBarType } from '@fluentui/react'
-import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { SPDataAdapter } from 'data'
+import { IBaseProgramWebPartProps } from '../../webparts/baseProgramWebPart/types'
 
-export interface IProgramAdministrationProps {
-  title: string
-  description: string
-  context: WebPartContext
-  dataAdapter: SPDataAdapter
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface IProgramAdministrationProps extends IBaseProgramWebPartProps {}
 
 export interface IProgramAdministrationState {
   /**

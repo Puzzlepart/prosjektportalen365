@@ -25,7 +25,7 @@ export const Commands: FC = () => {
       disabled:
         isEmpty(context.state.selectedProjectsToDelete) || !context.state.userHasManagePermission,
       onClick: () => {
-        removeChildProjects(context.props.dataAdapter, context.state.selectedProjectsToDelete).then(
+        removeChildProjects(context).then(
           (childProjects) => {
             context.dispatch(CHILD_PROJECTS_REMOVED({ childProjects }))
           }

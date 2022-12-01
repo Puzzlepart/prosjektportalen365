@@ -1,9 +1,9 @@
+import { format } from '@fluentui/react/lib/Utilities'
+import { flatten } from '@microsoft/sp-lodash-subset'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { dateAdd } from '@pnp/common'
-import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
+import { ISearchResult, QueryPropertyValueType, SortDirection } from '@pnp/sp/search/types'
 import * as cleanDeep from 'clean-deep'
 import MSGraph from 'msgraph-helper'
-import { format } from '@fluentui/react/lib/Utilities'
 import {
   IGraphGroup,
   IPortfolioConfiguration,
@@ -27,7 +27,6 @@ import HubSiteService from 'sp-hubsite-service'
 import { GAINS_DEFAULT_SELECT_PROPERTIES } from './config'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
-import { flatten } from '@microsoft/sp-lodash-subset'
 
 /**
  * SPDataAdapter for `ProgramWebParts`.
@@ -50,15 +49,16 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     configuration: ISPDataAdapterBaseConfiguration
   ) {
     super.configure(spfxContext, configuration)
-    const { web } = await HubSiteService.GetHubSite(sp, spfxContext.pageContext as any)
+    const { web } = await HubSiteService.GetHubSite(spfxContext)
     this.dataSourceService = new DataSourceService(web)
     this.project = new ProjectDataService(
       {
-        ...this.settings,
+        projectSiteId: spfxContext.pageContext.site.id.toString(),
+        projectWebUrl: spfxContext.pageContext.site.absoluteUrl,
+        spfxContext,
         entityService: this.entityService,
         propertiesListName: strings.ProjectPropertiesListName
-      },
-      this.spConfiguration
+      }
     )
   }
 
@@ -70,11 +70,11 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
     // eslint-disable-next-line prefer-const
     let [columnConfig, columns, views, viewsUrls, columnUrls] = await Promise.all([
-      this.portal.getProjectColumnConfig(),
-      this.portal.getProjectColumns(),
-      this.portal.getPortfolioOverviewViews(),
-      this.portal.getListFormUrls('PORTFOLIO_VIEWS'),
-      this.portal.getListFormUrls('PROJECT_COLUMNS')
+      this.portalService.getProjectColumnConfig(),
+      this.portalService.getProjectColumns(),
+      this.portalService.getPortfolioOverviewViews(),
+      this.portalService.getListFormUrls('PORTFOLIO_VIEWS'),
+      this.portalService.getListFormUrls('PROJECT_COLUMNS')
     ])
     columns = columns.map((col) => col.configure(columnConfig))
     const refiners = columns.filter((col) => col.isRefinable)
@@ -293,17 +293,17 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       { PrimarySearchResults: sites },
       { PrimarySearchResults: statusReports }
     ] = await Promise.all([
-      sp.search({
+      this.sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: searchQuery,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
       }),
-      sp.search({
+      this.sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
         SelectProperties: ['Path', 'Title', 'SiteId']
       }),
-      sp.search({
+      this.sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: `${queryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
@@ -344,7 +344,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    */
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
     const [timelineItems] = await Promise.all([
-      this.portal.web.lists
+      this.portalService.sp.web.lists
         .getByTitle(strings.TimelineContentListName)
         .items.select(
           'Title',
@@ -358,8 +358,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
           'GtSiteIdLookup/Title',
           'GtSiteIdLookup/GtSiteId'
         )
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .getAll()
+        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')()
     ])
 
     return timelineItems
@@ -401,7 +400,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    * @description Used in `ProjectTimeline`
    */
   public async fetchTimelineConfiguration() {
-    const timelineConfig = await this.portal.web.lists
+    const timelineConfig = await this.portalService.sp.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
       .items.select(
         'GtSortOrder',
@@ -412,10 +411,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
         'GtShowElementPortfolio',
         'GtShowElementProgram',
         'GtTimelineFilter'
-      )
-      .getAll()
-
-    return timelineConfig.map((item) => new TimelineConfigurationModel(item)).filter((p) => p)
+    )()
+    return timelineConfig.map((item) => new TimelineConfigurationModel(item)).filter(Boolean)
   }
 
   /**
@@ -486,8 +483,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     rowLimit: number,
     sortProperty: string,
     sortDirection: SortDirection
-  ): Promise<SearchResult[]> {
-    const response = await sp.search({
+  ): Promise<ISearchResult[]> {
+    const response = await this.sp.search({
       Querytext: `DepartmentId:{${this.spfxContext.pageContext.legacyPageContext.hubSiteId}} contentclass:STS_Site`,
       TrimDuplicates: false,
       RowLimit: rowLimit,
@@ -566,7 +563,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
     await MSGraph.Init(this.spfxContext.msGraphClientFactory)
     const [items, groups, users] = await Promise.all([
-      this.portal.web.lists
+      this.portalService.sp.web.lists
         .getByTitle(strings.ProjectsListName)
         .items.select(
           'GtGroupId',
@@ -583,22 +580,16 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
         .filter("GtProjectLifecycleStatus ne 'Avsluttet'")
         .orderBy('Title')
         .top(500)
-        .usingCaching()
-        .get<ISPProjectItem[]>(),
+        <ISPProjectItem[]>(),
       MSGraph.Get<IGraphGroup[]>(
         '/me/memberOf/$/microsoft.graph.group',
         ['id', 'displayName'],
         // eslint-disable-next-line quotes
         "groupTypes/any(a:a%20eq%20'unified')"
       ),
-      sp.web.siteUsers
+      this.sp.web.siteUsers
         .select('Id', 'Title', 'Email')
-        .usingCaching({
-          key: 'fetchenrichedprojects_siteusers',
-          storeName: 'session',
-          expiration: dateAdd(new Date(), 'minute', 15)
-        })
-        .get<ISPUser[]>()
+        <ISPUser[]>()
     ])
 
     const projects = this._mapProjects(items, groups, users)
@@ -614,11 +605,10 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    */
   public async isUserInGroup(groupName: string): Promise<boolean> {
     try {
-      const [siteGroup] = await sp.web.siteGroups
+      const [siteGroup] = await this.sp.web.siteGroups
         .select('CanCurrentUserViewMembership', 'Title')
-        .filter(`Title eq '${groupName}'`)
-        .get()
-      return siteGroup && siteGroup.CanCurrentUserViewMembership
+        .filter(`Title eq '${groupName}'`)()
+      return siteGroup && siteGroup['CanCurrentUserViewMembership']
     } catch (error) {
       return false
     }
@@ -635,16 +625,13 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     selectProperties: string[],
     includeSelf: boolean = false
   ) {
-    sp.setup({
-      spfxContext: this.spfxContext
-    })
     const siteId = this.spfxContext.pageContext.site.id.toString()
     const programFilter = this.childProjects && this.aggregatedQueryBuilder('SiteId')
     if (includeSelf) programFilter.unshift(`SiteId:${siteId}`)
     const promises = []
     programFilter.forEach((element) => {
       promises.push(
-        sp.search({
+        this.sp.search({
           QueryTemplate: `${element} ${queryTemplate}`,
           Querytext: '*',
           RowLimit: 500,
@@ -737,10 +724,9 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    */
   public async updateProjectInHub(properties: Record<string, any>): Promise<void> {
     try {
-      const list = this.portal.web.lists.getByTitle(strings.ProjectsListName)
+      const list = this.portalService.sp.web.lists.getByTitle(strings.ProjectsListName)
       const [item] = await list.items
-        .filter(`GtSiteId eq '${this.spfxContext.pageContext.site.id.toString()}'`)
-        .get()
+        .filter(`GtSiteId eq '${this.spfxContext.pageContext.site.id.toString()}'`)()
       await list.items.getById(item.ID).update(properties)
     } catch (error) {}
   }

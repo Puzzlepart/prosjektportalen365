@@ -16,6 +16,8 @@ export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProgramT
       <>
         <ProjectTimeline
           title={this.properties.title}
+          spfxContext={this.context}
+          sp={this.sp}
           dataAdapter={this.dataAdapter}
           pageContext={this.context.pageContext as any}
           infoText={this.properties.infoText}

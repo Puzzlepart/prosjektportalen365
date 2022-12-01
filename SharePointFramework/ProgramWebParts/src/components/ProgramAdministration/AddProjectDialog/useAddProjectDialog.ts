@@ -14,7 +14,7 @@ export const useAddProjectDialog = () => {
   })
 
   useEffect(() => {
-    getHubSiteProjects()
+    getHubSiteProjects(context.props.sp)
       .then((availableProjects) =>
         context.dispatch(DATA_LOADED({ data: { availableProjects }, scope: 'AddProjectDialog' }))
       )
@@ -28,7 +28,7 @@ export const useAddProjectDialog = () => {
   const availableProjects = context.state.availableProjects.filter(
     (project) =>
       !context.state.childProjects.some((el) => el.SiteId === project.SiteId) &&
-      project.SiteId !== context.props.context.pageContext.site.id.toString() &&
+      project.SiteId !== context.props.spfxContext.pageContext.site.id.toString() &&
       project.SPWebURL
   )
 

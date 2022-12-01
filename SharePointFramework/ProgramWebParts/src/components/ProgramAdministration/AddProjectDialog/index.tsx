@@ -61,7 +61,7 @@ export const AddProjectDialog: FC = () => {
           text={strings.Add}
           disabled={_.isEmpty(context.state.selectedProjectsToAdd)}
           onClick={async () => {
-            await addChildProject(context.props.dataAdapter, context.state.selectedProjectsToAdd)
+            await addChildProject(context)
             context.dispatch(ADD_CHILD_PROJECTS())
           }}
         />
