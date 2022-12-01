@@ -292,9 +292,6 @@
   <data name="ContentTypes_Possibility_Name" xml:space="preserve">
     <value>Mulighet</value>
   </data>
-  <data name="ContentTypes_Stakeholder_Name" xml:space="preserve">
-    <value>Interessent</value>
-  </data>
   <data name="ContentTypes_CommunicationElement_Name" xml:space="preserve">
     <value>Kommunikasjonselement</value>
   </data>
@@ -429,6 +426,18 @@
   </data>
   <data name="ContentTypes_ProjectStatus_Description" xml:space="preserve">
     <value></value>
+  </data>
+  <data name="ContentTypes_ProjectBA_Name" xml:space="preserve">
+    <value>Prosjekt (Bygg og anlegg)</value>
+  </data>
+  <data name="ContentTypes_ProjectBA_Description" xml:space="preserve">
+    <value>Prosjekt innholdstype for bygg- og anleggsprosjekter</value>
+  </data>
+  <data name="ContentTypes_ProjectStatusBA_Name" xml:space="preserve">
+    <value>Prosjektstatus (Bygg og anlegg)</value>
+  </data>
+  <data name="ContentTypes_ProjectStatusBA_Description" xml:space="preserve">
+    <value>Prosjektstatus innholdstype for bygg- og anleggsprosjekter</value>
   </data>
   <data name="ContentTypes_ResourceAllocation_Name" xml:space="preserve">
     <value>Ressursallokering</value>
