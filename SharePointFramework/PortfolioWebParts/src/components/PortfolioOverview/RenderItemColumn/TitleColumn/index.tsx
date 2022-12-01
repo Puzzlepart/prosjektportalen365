@@ -27,6 +27,8 @@ export const TitleColumn: FC<ITitleColumnProps> = ({ item, props }) => {
       <div>
         <ProjectInformationPanel
           key={item.SiteId}
+          sp={props.sp}
+          spfxContext={props.spfxContext}
           hubSiteContext={{
             sp: props.sp,
             web: props.sp.web,

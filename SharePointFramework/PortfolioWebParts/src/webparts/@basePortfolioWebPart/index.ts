@@ -26,6 +26,7 @@ export abstract class BasePortfolioWebPart<
   public renderComponent<T = any>(component: React.ComponentClass<T> | FC<T>, props?: T): void {
     this.sp = spfi().using(SPFx(this.context))
     const combinedProps: T = assign({ title: this._pageTitle }, this.properties, props, {
+      spfxContext: this.context,
       pageContext: this.context.pageContext,
       dataAdapter: this.dataAdapter,
       displayMode: this.displayMode,

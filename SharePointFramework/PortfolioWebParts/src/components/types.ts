@@ -1,5 +1,6 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { PageContext } from '@microsoft/sp-page-context'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { SPFI } from '@pnp/sp'
 import { IDataAdapter } from 'data/types'
 
@@ -8,6 +9,11 @@ export interface IBaseComponentProps {
    * Component title.
    */
   title?: string
+
+  /**
+   * Web part context
+   */
+  spfxContext: WebPartContext
 
   /**
    * Page context. It might be neccessary to pass `this.context.pageContext as any` due to

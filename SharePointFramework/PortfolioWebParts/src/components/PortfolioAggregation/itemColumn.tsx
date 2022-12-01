@@ -100,6 +100,8 @@ export const getDefaultColumns = (props: IPortfolioAggregationProps) => {
         return (
           <ProjectInformationPanel
             key={item.SiteId}
+            sp={props.sp}
+            spfxContext={props.spfxContext}
             hubSiteContext={{
               sp: props.sp,
               web: props.sp.web,

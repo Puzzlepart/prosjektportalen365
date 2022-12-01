@@ -142,6 +142,8 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
       </div>
       <ProjectInformationPanel
         key={state.showProjectInfo?.siteId}
+        sp={props.sp}
+        spfxContext={props.spfxContext}
         hubSiteContext={{
           sp: props.sp,
           web: props.sp.web,
