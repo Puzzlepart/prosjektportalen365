@@ -575,10 +575,9 @@ export class DataAdapter implements IDataAdapter {
             .filter(filter)
             .orderBy('Title')
             .top(500)
-            .usingCaching()
-            .get<ISPProjectItem[]>(),
+            <ISPProjectItem[]>(),
           this.fetchMemberGroups(),
-          sp.web.siteUsers.select('Id', 'Title', 'Email').get<ISPUser[]>(),
+          this.sp.web.siteUsers.select('Id', 'Title', 'Email')<ISPUser[]>(),
           this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId'])
         ])
       },
