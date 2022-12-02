@@ -274,6 +274,42 @@
   <data name="Lists_IdeaRegistration_Url" xml:space="preserve">
     <value>Lists/Ideregistrering</value>
   </data>
+  <data name="Lists_PhaseChecklistA_Title" xml:space="preserve">
+    <value>Fasesjekkliste Anlegg</value>
+  </data>
+  <data name="Lists_PhaseChecklistA_Url" xml:space="preserve">
+    <value>Lists/Fasesjekkliste_Anlegg</value>
+  </data>
+  <data name="Lists_PhaseChecklistB_Title" xml:space="preserve">
+    <value>Fasesjekkliste Bygg</value>
+  </data>
+  <data name="Lists_PhaseChecklistB_Url" xml:space="preserve">
+    <value>Lists/Fasesjekkliste_Bygg</value>
+  </data>
+  <data name="Lists_PlannerTasksA_Title" xml:space="preserve">
+    <value>Planneroppgaver Anlegg</value>
+  </data>
+  <data name="Lists_PlannerTasksA_Url" xml:space="preserve">
+    <value>Lists/Planneroppgaver_Anlegg</value>
+  </data>
+  <data name="Lists_PlannerTasksB_Title" xml:space="preserve">
+    <value>Planneroppgaver Bygg</value>
+  </data>
+  <data name="Lists_PlannerTasksB_Url" xml:space="preserve">
+    <value>Lists/Planneroppgaver_Bygg</value>
+  </data>
+  <data name="Lists_DocumentsA_Title" xml:space="preserve">
+    <value>Standarddokumenter Anlegg</value>
+  </data>
+  <data name="Lists_DocumentsA_Url" xml:space="preserve">
+    <value>Standarddokumenter_Anlegg</value>
+  </data>
+  <data name="Lists_DocumentsB_Title" xml:space="preserve">
+    <value>Standarddokumenter Bygg</value>
+  </data>
+  <data name="Lists_DocumentsB_Url" xml:space="preserve">
+    <value>Standarddokumenter_Bygg</value>
+  </data>
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>Alle elementer</value>
   </data>
