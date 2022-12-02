@@ -520,6 +520,9 @@
   <data name="SiteFields_Idea_Group" xml:space="preserve">
     <value>Kolonner for Prosjektportalen (Prosjektideer)</value>
   </data>
+  <data name="SiteFields_BA_Group" xml:space="preserve">
+    <value>Kolonner for Prosjektportalen (Bygg og anlegg)</value>
+  </data>
   <data name="SiteFields_GtRiskDescription_DisplayName" xml:space="preserve">
     <value>Beskrivelse av usikkerhet</value>
   </data>
@@ -1866,6 +1869,96 @@
   </data>
   <data name="SiteFields_GtRegistratedIdea_Description" xml:space="preserve">
     <value>Registrert idé tilknytning</value>
+  </data>
+  <data name="SiteFields_GtBAEndDateOriginal_DisplayName" xml:space="preserve">
+    <value>Opprinnelig overtakelsesdato</value>
+  </data>
+  <data name="SiteFields_GtBAEndDateOriginal_Description" xml:space="preserve">
+    <value>Hva er (planlagt) overtakelsesdato hvor bestiller overtar prosjektleveransene</value>
+  </data>
+  <data name="SiteFields_GtBAProjectEnv_DisplayName" xml:space="preserve">
+    <value>Status miljø</value>
+  </data>
+  <data name="SiteFields_GtBAProjectEnv_Description" xml:space="preserve">
+    <value>Har det vært hendelser knyttet til miljø i siste periode?</value>
+  </data>
+  <data name="SiteFields_GtBAProjectEnvComment_DisplayName" xml:space="preserve">
+    <value>Kommentar, miljø</value>
+  </data>
+  <data name="SiteFields_GtBAProjectEnvComment_Description" xml:space="preserve">
+    <value>Oppsummer kort det totale miljø-bildet for prosjektet og hvilke tiltak det planlegges for i neste periode</value>
+  </data>
+  <data name="SiteFields_GtBAProjectInvestementPhase_DisplayName" xml:space="preserve">
+    <value>HP-fase</value>
+  </data>
+  <data name="SiteFields_GtBAProjectInvestementPhase_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtBAProjectPolitical_DisplayName" xml:space="preserve">
+    <value>Siste politiske vedtak</value>
+  </data>
+  <data name="SiteFields_GtBAProjectPolitical_Description" xml:space="preserve">
+    <value>Når ble siste politiske vedtak som påvirker prosjektet fattet?</value>
+  </data>
+  <data name="SiteFields_GtBAProjectPoliticalComment_DisplayName" xml:space="preserve">
+    <value>Kommentar, siste politiske vedtak</value>
+  </data>
+  <data name="SiteFields_GtBAProjectPoliticalComment_Description" xml:space="preserve">
+    <value>Kommentar til hvordan siste politiske vedtak påvirker prosjektet</value>
+  </data>
+  <data name="SiteFields_GtBAProjectPoliticalLink_DisplayName" xml:space="preserve">
+    <value>Lenke til siste politiske vedtak</value>
+  </data>
+  <data name="SiteFields_GtBAProjectPoliticalLink_Description" xml:space="preserve">
+    <value>Lenke til f. eks dokument/artikkel om siste politiske vedtak</value>
+  </data>
+  <data name="SiteFields_GtBAProjectPrognosisThisYear_DisplayName" xml:space="preserve">
+    <value>Prognose i år</value>
+  </data>
+  <data name="SiteFields_GtBAProjectPrognosisThisYear_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtBAProjectSHA_DisplayName" xml:space="preserve">
+    <value>Status SHA</value>
+  </data>
+  <data name="SiteFields_GtBAProjectSHA_Description" xml:space="preserve">
+    <value>Har det vært hendelser knyttet til SHA (Sikkerhet, helse, arbeidsmiljø) i siste periode?</value>
+  </data>
+  <data name="SiteFields_GtBAProjectSHAComment_DisplayName" xml:space="preserve">
+    <value>Kommentar, SHA</value>
+  </data>
+  <data name="SiteFields_GtBAProjectSHAComment_Description" xml:space="preserve">
+    <value>Oppsummer kort det totale SHA-bildet for prosjektet og hvilke tiltak det planlegges for i neste periode</value>
+  </data>
+  <data name="SiteFields_GtBAProjectStatusCase_DisplayName" xml:space="preserve">
+    <value>Status plan- og byggesak</value>
+  </data>
+  <data name="SiteFields_GtBAProjectStatusCase_Description" xml:space="preserve">
+    <value>Hva er status på plan- og byggsak for prosjektet?</value>
+  </data>
+  <data name="SiteFields_GtBAProjectStatusCaseComment_DisplayName" xml:space="preserve">
+    <value>Kommentar, plan- og byggesak</value>
+  </data>
+  <data name="SiteFields_GtBAProjectStatusCaseComment_Description" xml:space="preserve">
+    <value>Beskriv eventuelle utfordringer knyttet til plan- og byggesak, samt planlagte tiltak for neste periode</value>
+  </data>
+  <data name="SiteFields_GtBAProjectSupport_DisplayName" xml:space="preserve">
+    <value>Status tilskudd</value>
+  </data>
+  <data name="SiteFields_GtBAProjectSupport_Description" xml:space="preserve">
+    <value>Hva er status på eventuelle tilskuddsmuligehter for prosjektet?</value>
+  </data>
+  <data name="SiteFields_GtBAProjectSupportComment_DisplayName" xml:space="preserve">
+    <value>Kommentar, tilskudd</value>
+  </data>
+  <data name="SiteFields_GtBAProjectSupportComment_Description" xml:space="preserve">
+    <value>Hvis relevant, beskriv hvor i søknadsprosessen prosjektet er og hva som er planlagt for neste periode</value>
+  </data>
+  <data name="SiteFields_GtBAStakeholderGroup_DisplayName" xml:space="preserve">
+    <value>Interessentgruppe</value>
+  </data>
+  <data name="SiteFields_GtBAStakeholderGroup_Description" xml:space="preserve">
+    <value>Hvilken interessentgruppe tilhører interessenten?</value>
   </data>
    <data name="SiteFields_GtResourceLink_DisplayName" xml:space="preserve">
     <value>Link til ressurs</value>
