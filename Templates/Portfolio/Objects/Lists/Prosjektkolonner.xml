@@ -29,7 +29,6 @@
         </View>
     </pnp:Views>
     <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Skip">
-
         <pnp:DataRow>            <!-- ID: 1 -->
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Tittel</pnp:DataValue>
