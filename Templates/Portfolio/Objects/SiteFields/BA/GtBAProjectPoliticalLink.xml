@@ -1,0 +1,1 @@
+<Field ID="{c3ef03c1-b6b8-4b9f-a0e5-3e119d23522f}" Name="GtBAProjectPoliticalLink" DisplayName="{resource:SiteFields_GtBAProjectPoliticalLink_DisplayName}" Type="URL" Group="{resource:SiteFields_BA_Group}" Description="{resource:SiteFields_GtBAProjectPoliticalLink_Description}" Format="Hyperlink" StaticName="GtBAProjectPoliticalLink" />

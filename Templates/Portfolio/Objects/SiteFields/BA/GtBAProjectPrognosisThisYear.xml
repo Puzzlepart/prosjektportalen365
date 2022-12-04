@@ -1,0 +1,1 @@
+<Field ID="{165b92ca-3224-4a86-a749-3b06d315947f}" Name="GtBAProjectPrognosisThisYear" DisplayName="{resource:SiteFields_GtBAProjectPrognosisThisYear_DisplayName}" Type="Number" Group="{resource:SiteFields_BA_Group}" Description="{resource:SiteFields_GtBAProjectPrognosisThisYear_Description}" StaticName="GtBAProjectPrognosisThisYear" />
