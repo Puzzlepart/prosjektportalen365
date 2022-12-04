@@ -3,8 +3,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Every change is marked with issue ID.
 
-
-## 1.7.4 - TBA
+## 1.8.0 - 14.12.2022
 
 ### Added
 
@@ -14,6 +13,7 @@ Every change is marked with issue ID.
 - Option for showing all projects you have access to on the front page #724
 - Customizable text color in project timeline webpart #767
 - Showing status report summary on the front page #368
+- Integrated 'Bygg & anlegg' addon (prosjektportalen365-bygganlegg) directly in Prosjektportalen 365 #910
 
 ### Fixed
 
@@ -36,7 +36,7 @@ Every change is marked with issue ID.
 - Added support for preview type on planner tasks #718
 - Fix for problems where aggregated webpart pages didn't work properly #754
   - Top navigation bar elements ('Erfaringslogg', 'Gevinst-', 'Risiko-' and 'Leveranseoversikt') needs to be checked and fixed manually after upgrade to 1.7.2 ⚠️
-- Integrated IdeaProcessing (from prosjektportalen365-addons) directly in Prosjektportalen365 with improvements and new additions #777
+- Integrated IdeaProcessing (from prosjektportalen365-addons) directly in Prosjektportalen 365 with improvements and new additions #777
   - This also adds sync functionality to synchronize ProjectData to newly created projects based off of ideas
   - Remove old IdeaProcessing webparts if you have used idea processing prior to 1.7.2 ⚠️
 - Displaying parent projects in Project Information webpart #760
