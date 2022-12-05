@@ -14,6 +14,7 @@ Every change is marked with issue ID.
 - Customizable text color in project timeline webpart #767
 - Showing status report summary on the front page #368
 - Integrated 'Bygg & anlegg' addon (prosjektportalen365-bygganlegg) directly in Prosjektportalen 365 #910
+  - When upgrading, if you want the standard 'Bygg & anlegg' content, make sure to add parameter: `-IncludeBAContent` when upgrading ⚠️
 
 ### Fixed
 
