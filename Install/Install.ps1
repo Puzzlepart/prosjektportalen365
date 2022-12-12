@@ -487,9 +487,6 @@ $InstallEntry = @{
     InstallCommand   = $MyInvocation.Line.Substring(2);
 }
 
-if($null -ne $CurrentUser.Email) {
-    $InstallEntry.InstallUser = $CurrentUser.Email
-}
 if (-not [string]::IsNullOrEmpty($CI)) {
     $InstallEntry.InstallCommand = "GitHub CI";
 }
