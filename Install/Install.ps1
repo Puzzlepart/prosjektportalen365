@@ -199,7 +199,7 @@ if (-not $Upgrade.IsPresent) {
         exit 0
     }
 }
-#endregiojn
+#endregion
 
 #region Setting permissons
 if (-not $Upgrade.IsPresent) {

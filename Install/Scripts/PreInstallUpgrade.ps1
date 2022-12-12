@@ -24,7 +24,8 @@ if ($null -ne $LastInstall) {
         $PnPClientSidePages = @(
             "Gevinstoversikt.aspx", 
             "Erfaringslogg.aspx", 
-            "Leveranseoversikt.aspx"
+            "Leveranseoversikt.aspx", 
+            "Risikooversikt.aspx"
         )
 
         $Pages = Get-PnPFolder -Url SitePages -Includes Files | Select-Object -ExpandProperty Files

@@ -9,7 +9,7 @@ if ($null -ne $LastInstall) {
     }
     if ($PreviousVersion -lt "1.5.0") {
         Write-Host "[INFO] Applying PnP upgrade template [1.5.0] to [$Url]"
-        Apply-PnPProvisioningTemplate "$BasePath\1.5.0.pnp" -ErrorAction Stop
+        Invoke-PnPSiteTemplate -Path "$BasePath\1.5.0.pnp" -ErrorAction Stop
         Write-Host "[SUCCESS] Successfully applied PnP template [1.5.0] to [$Url]" -ForegroundColor Green
     }
     if ($PreviousVersion -lt "1.6.0") {
