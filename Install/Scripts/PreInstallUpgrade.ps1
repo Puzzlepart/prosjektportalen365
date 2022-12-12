@@ -13,7 +13,7 @@ if ($null -ne $LastInstall) {
         $Pages = Get-PnPFolder -Url SitePages -Includes Files | Select-Object -ExpandProperty Files
 
         $Pages | ForEach-Object {
-            $DeprecatedComponents = Get-PnPClientSideComponent -Page $_.Name | Where-Object { $DeprecatedIds.Contains($_.WebPartId) }
+            $DeprecatedComponents = Get-PnPPageComponent -Page $_.Name | Where-Object { $DeprecatedIds.Contains($_.WebPartId) }
             if ($DeprecatedComponents.Count -gt 0) {
                 Remove-PnPClientSidePage $_.Name -Force -ErrorAction SilentlyContinue
             }
