@@ -196,6 +196,34 @@
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status SHA (Ingen)</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumn">43</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnValue">Ingen hendelser siste måned</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status SHA (Hendelse)</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumn">43</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnValue">Hendelse registrert siste måned</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnColor">#e9b359</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status miljø (Ingen)</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumn">45</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnValue">Ingen hendelser siste måned</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status miljø (Hendelse)</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumn">45</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnValue">Hendelse registrert siste måned</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnColor">#e9b359</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
+        </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>
