@@ -17,6 +17,10 @@ Every change is marked with issue ID.
   - When upgrading, if you want the standard 'Bygg & anlegg' content, make sure to add parameter: `-IncludeBAContent` when upgrading ⚠️
 - Support for creating more than 1 plan per project [#906](https://github.com/Puzzlepart/prosjektportalen365/issues/906)
 
+### Changed
+
+- Excluding private/shared channel sites when searching for sites (Program administration) [#915](https://github.com/Puzzlepart/prosjektportalen365/issues/915)
+
 ### Fixed
 
 - Persist selection when doing a search in Program Admin [#849](https://github.com/Puzzlepart/prosjektportalen365/issues/849)
