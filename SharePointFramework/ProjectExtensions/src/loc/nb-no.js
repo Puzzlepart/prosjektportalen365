@@ -1,5 +1,6 @@
 define([], function () {
     return {
+        ConfiguredSpecifiedTaskMessage: 'Configured to run only the specified tasks: {0}',
         CmdSelectionCountText: '{0} er merket',
         ExtensionLockedTooltipText: 'Prosjekttilegget er låst og kan ikke velges bort.',
         ContentConfigLockedTooltipText: 'Standardinnhold-elementet er låst og kan ikke velges bort.',

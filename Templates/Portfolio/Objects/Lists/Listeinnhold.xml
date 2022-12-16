@@ -71,6 +71,7 @@
                 <FieldRef Name="GtLccHidden" />
                 <FieldRef Name="GtLccDefault" />
                 <FieldRef Name="GtLccLocked" />
+                <FieldRef Name="GtPlannerName" />
                 <FieldRef Name="Modified" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
