@@ -495,7 +495,7 @@ export class PortalDataService {
 
   /**
      * Get hub site
-     * 
+     *
      * @param {SPRest} sp Sp
      * @param {PageContext} pageContext Page context
      * @param {Date} expire Expire
@@ -512,9 +512,9 @@ export class PortalDataService {
           credentials: 'include',
         })).json()
         return ({ url: SiteUrl, web: new Web(SiteUrl) })
-      } catch (error) {    
+      } catch (error) {
         const SiteUrl = await new PnPClientStorage().local.getOrPut(`hubsite_${hubSiteId.replace(/-/g, '')}_url`, async () => {
-          let { PrimarySearchResults } = await sp.search({
+          const { PrimarySearchResults } = await sp.search({
             Querytext: `SiteId:${hubSiteId} contentclass:STS_Site`,
             SelectProperties: ['Path'],
           })
