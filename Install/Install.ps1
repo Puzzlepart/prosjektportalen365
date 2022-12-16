@@ -38,7 +38,9 @@ Param(
     [ValidateSet('Norwegian')]
     [string]$Language = "Norwegian",
     [Parameter(Mandatory = $false, HelpMessage = "Used by Continuous Integration")]
-    [string]$CI
+    [string]$CI,
+    [Parameter(Mandatory = $false, HelpMessage = "Do you want to include B&A content (only when upgrading)")]
+    [switch]$IncludeBAContent
 )
 
 $global:__InteractiveCachedAccessTokens = @{}
@@ -197,7 +199,7 @@ if (-not $Upgrade.IsPresent) {
         exit 0
     }
 }
-#endregiojn
+#endregion
 
 #region Setting permissons
 if (-not $Upgrade.IsPresent) {
@@ -370,6 +372,12 @@ if (-not $SkipTemplate.IsPresent) {
             StartAction("Applying PnP content template to $Url")
             Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -Handlers Files -ErrorAction Stop -WarningAction SilentlyContinue
             EndAction
+
+            if ($IncludeBAContent.IsPresent) {
+                StartAction("Applying PnP B&A content template to $Url")
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
+                EndAction
+            }
         }
         else {
             StartAction("Applying PnP template Portfolio to $Url")
@@ -381,6 +389,10 @@ if (-not $SkipTemplate.IsPresent) {
 
             StartAction("Applying PnP content template to $Url")
             Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
+            EndAction
+
+            StartAction("Applying PnP B&A content template to $Url")
+            Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio_content_BA.$LanguageCode.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
             EndAction
         }
         

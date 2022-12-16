@@ -1,0 +1,1 @@
+<Field Type="Note" DisplayName="{resource:SiteFields_GtBAProjectStatusCaseComment_DisplayName}" Description="{resource:SiteFields_GtBAProjectStatusCaseComment_Description}" RichText="FALSE" ID="{3a998841-f6a1-4445-ab71-94f650287f9c}" StaticName="GtBAProjectStatusCaseComment" Name="GtBAProjectStatusCaseComment" Group="{resource:SiteFields_BA_Group}" />

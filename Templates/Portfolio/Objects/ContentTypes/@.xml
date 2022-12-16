@@ -35,4 +35,6 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Prosjektadministrasjonsrolle - Områdeadministrator.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Prosjektadministrasjonstilgang.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/Hjelpeinnhold.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/BA/Prosjekt (Bygg og anlegg).xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes/BA/Prosjektstatus (Bygg og anlegg).xml" />
 </pnp:ContentTypes> 
