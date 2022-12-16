@@ -203,6 +203,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         const element = createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
           data,
           version: this.version,
+          tasks: this.properties.tasks,
           onSubmit: (state: ITemplateSelectDialogState) => {
             this._unmount(placeholder)
             resolve(state)

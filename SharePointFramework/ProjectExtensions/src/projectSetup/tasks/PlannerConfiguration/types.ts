@@ -1,8 +1,9 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 
 export interface IPlannerPlan {
-  id: string
   title: string
+  id?: string
+  owner?: string
 }
 
 export class TaskAttachment {
