@@ -1,12 +1,13 @@
 /* eslint-disable no-console */
 import { find } from '@microsoft/sp-lodash-subset'
-import { dateAdd, stringIsNullOrEmpty } from '@pnp/common'
+import { dateAdd, stringIsNullOrEmpty, PnPClientStorage } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
-import { AttachmentFileInfo, CamlQuery, ListEnsureResult, Web } from '@pnp/sp'
+import { AttachmentFileInfo, CamlQuery, ListEnsureResult, Web, SPRest } from '@pnp/sp'
+import { PageContext } from '@microsoft/sp-page-context'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { transformFieldXml } from '../../helpers/transformFieldXml'
-import { ISPContentType } from '../../interfaces'
+import { ISPContentType, IHubSite } from '../../interfaces'
 import {
   PortfolioOverviewView,
   ProjectAdminRole,
@@ -136,7 +137,7 @@ export class PortalDataService {
     if (attachment) {
       try {
         await list.items.getById(report.id).attachmentFiles.addMultiple([attachment])
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       await list.items.getById(report.id).update(properties)
@@ -282,7 +283,7 @@ export class PortalDataService {
           fieldToCreate.updateAndPushChanges(true)
         }
         await executeQuery(jsomContext)
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       Logger.log({
@@ -298,7 +299,7 @@ export class PortalDataService {
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch {}
+    } catch { }
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }
@@ -490,5 +491,39 @@ export class PortalDataService {
       })
       .get<SPProjectAdminRoleItem[]>()
     return spItems.map((item) => new ProjectAdminRole(item))
+  }
+
+  /**
+     * Get hub site
+     * 
+     * @param {SPRest} sp Sp
+     * @param {PageContext} pageContext Page context
+     * @param {Date} expire Expire
+     */
+  public async GetHubSite(sp: SPRest, pageContext: PageContext, expire: Date = dateAdd(new Date(), 'year', 1)): Promise<IHubSite> {
+    try {
+      const hubSiteId = pageContext.legacyPageContext.hubSiteId || ''
+      try {
+        const { SiteUrl } = await (await fetch(`${pageContext.web.absoluteUrl}/_api/HubSites/GetById('${hubSiteId}')`, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json;odata=nometadata'
+          },
+          credentials: 'include',
+        })).json()
+        return ({ url: SiteUrl, web: new Web(SiteUrl) })
+      } catch (error) {    
+        const SiteUrl = await new PnPClientStorage().local.getOrPut(`hubsite_${hubSiteId.replace(/-/g, '')}_url`, async () => {
+          let { PrimarySearchResults } = await sp.search({
+            Querytext: `SiteId:${hubSiteId} contentclass:STS_Site`,
+            SelectProperties: ['Path'],
+          })
+          return PrimarySearchResults[0] ? PrimarySearchResults[0].Path : ''
+        }, expire)
+        return ({ url: SiteUrl, web: new Web(SiteUrl) })
+       }
+    } catch (err) {
+      throw err
+    }
   }
 }
