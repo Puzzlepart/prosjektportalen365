@@ -1,6 +1,6 @@
 import { IDialogContentProps } from '@fluentui/react'
 import { ITemplateSelectDialogState } from 'components/TemplateSelectDialog'
-import { IHubSite } from 'sp-hubsite-service'
+import { IHubSite } from 'pp365-shared/lib/interfaces'
 import { ContentConfig, ProjectExtension, ProjectTemplate } from '../models/index'
 
 export interface IProjectSetupProperties {

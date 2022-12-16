@@ -4,7 +4,8 @@ import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
 import React from 'react'
 import ReactDom from 'react-dom'
-import HubSiteService, { IHubSite } from 'sp-hubsite-service'
+import { PortalDataService } from 'pp365-shared/lib/services'
+import { IHubSite } from 'pp365-shared/lib/interfaces'
 import { IBaseWebPartComponentProps } from '../../components/BaseWebPartComponent'
 import SPDataAdapter from '../../data'
 
@@ -34,6 +35,7 @@ export abstract class BaseProjectWebPart<
       displayMode: this.displayMode,
       pageContext: this.context.pageContext
     }
+    
     const element = React.createElement(component, combinedProps)
     ReactDom.render(element, this.domElement)
   }
@@ -43,7 +45,7 @@ export abstract class BaseProjectWebPart<
    */
   private async _setup() {
     sp.setup({ spfxContext: this.context })
-    this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
+    this._hubSite = await new PortalDataService().GetHubSite(sp, this.context.pageContext as any)
     SPDataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,

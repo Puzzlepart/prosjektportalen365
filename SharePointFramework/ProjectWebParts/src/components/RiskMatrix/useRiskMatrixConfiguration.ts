@@ -1,10 +1,10 @@
 import { sp } from '@pnp/sp/'
 import { generateMatrixConfiguration } from '../DynamicMatrix/generateMatrixConfiguration'
 import { useEffect, useState } from 'react'
-import HubSiteService from 'sp-hubsite-service'
 import { DynamicMatrixConfiguration } from '../DynamicMatrix'
 import { IRiskMatrixProps } from './types'
 import { getMatrixHeaders } from './getMatrixHeaders'
+import { PortalDataService } from 'pp365-shared/lib/services'
 
 /**
  * Configuration hook for `RiskMatrix`
@@ -22,7 +22,7 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
 
   async function fetchJsonConfiguration() {
     try {
-      const { web } = await HubSiteService.GetHubSite(sp, props.pageContext as any)
+      const { web } = await new PortalDataService().GetHubSite(sp, props.pageContext as any)
       const { ServerRelativeUrl } = await web.get()
       const jsonConfig_ = await web
         .getFileByServerRelativeUrl(`/${ServerRelativeUrl}/${props.customConfigUrl}`)

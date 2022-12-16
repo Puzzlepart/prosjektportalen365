@@ -11,7 +11,6 @@ import { PortalDataService } from 'pp365-shared/lib/services'
 import * as strings from 'ProjectExtensionsStrings'
 import { createElement } from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
-import { default as HubSiteService } from 'sp-hubsite-service'
 import { find, uniq } from 'underscore'
 import {
   ErrorDialog,
@@ -344,7 +343,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     try {
       await MSGraphHelper.Init(this.context.msGraphClientFactory)
       const data: IProjectSetupData = {}
-      data.hub = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
+      data.hub = await new PortalDataService().GetHubSite(sp, this.context.pageContext as any)
       this._portal = new PortalDataService().configure({ urlOrWeb: data.hub.web })
       const [_templates, extensions, contentConfig, templateFiles] = await Promise.all([
         this._portal.getItems(

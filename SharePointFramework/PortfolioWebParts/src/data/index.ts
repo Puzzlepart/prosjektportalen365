@@ -12,7 +12,6 @@ import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
 import { DataSource, PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
-import HubSiteService from 'sp-hubsite-service'
 import _, { any, find, first } from 'underscore'
 import {
   Benefit,
@@ -55,7 +54,7 @@ export class DataAdapter implements IDataAdapter {
    */
   public async configure(): Promise<DataAdapter> {
     if (this.dataSourceService) return this
-    const { web } = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
+    const { web } = await this._portalDataService.GetHubSite(sp, this.context.pageContext as any)
     this.dataSourceService = new DataSourceService(web)
     return this
   }
@@ -139,7 +138,7 @@ export class DataAdapter implements IDataAdapter {
 
     try {
       if (category.includes('(Prosjektnivå)') || !category) {
-        const { web } = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
+        const { web } = await this._portalDataService.GetHubSite(sp, this.context.pageContext as any)
         portal = new PortalDataService().configure({ urlOrWeb: web })
       }
       const [views, viewsUrls, columnUrls] = await Promise.all([

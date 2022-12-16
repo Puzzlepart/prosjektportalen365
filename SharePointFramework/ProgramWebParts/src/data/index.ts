@@ -21,9 +21,8 @@ import {
 import { ISPDataAdapterBaseConfiguration, SPDataAdapterBase } from 'pp365-shared/lib/data'
 import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
-import { DataSourceService, ProjectDataService } from 'pp365-shared/lib/services'
+import { DataSourceService, PortalDataService, ProjectDataService } from 'pp365-shared/lib/services'
 import * as strings from 'ProgramWebPartsStrings'
-import HubSiteService from 'sp-hubsite-service'
 import { GAINS_DEFAULT_SELECT_PROPERTIES } from './config'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
@@ -50,7 +49,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     configuration: ISPDataAdapterBaseConfiguration
   ) {
     super.configure(spfxContext, configuration)
-    const { web } = await HubSiteService.GetHubSite(sp, spfxContext.pageContext as any)
+    const { web } = await new PortalDataService().GetHubSite(sp, spfxContext.pageContext as any)
     this.dataSourceService = new DataSourceService(web)
     this.project = new ProjectDataService(
       {

@@ -94,7 +94,7 @@ export const SyncProjectDialog: FC = () => {
       })
 
       return updatedResult
-    } catch (error) {}
+    } catch (error) { }
   }
 
   async function getProjectData() {
@@ -108,21 +108,25 @@ export const SyncProjectDialog: FC = () => {
         .select('Id')
         .get()
 
-      const item = projectDataList.items.getById(projectDataItem.Id)
+      if (projectDataItem) {
 
-      const [fieldValuesText, fieldValues] = await Promise.all([
-        item.fieldValuesAsText.get(),
-        item.get()
-      ])
+        const item = projectDataList.items.getById(projectDataItem.Id)
 
-      const itemProperties = await SPDataAdapter.getMappedProjectProperties(
-        fieldValues,
-        { ...fieldValuesText, Title: context.props.webTitle },
-        context.state.data.templateParameters,
-        true
-      )
-      setProjectData(itemProperties)
-      setProjectDataId(projectDataItem.Id)
+        const [fieldValuesText, fieldValues] = await Promise.all([
+          item.fieldValuesAsText.get(),
+          item.get()
+        ])
+
+        const itemProperties = await SPDataAdapter.getMappedProjectProperties(
+          fieldValues,
+          { ...fieldValuesText, Title: context.props.webTitle },
+          context.state.data.templateParameters,
+          true
+        )
+        setProjectData(itemProperties)
+        setProjectDataId(projectDataItem.Id)
+      }
+      
       setLoading(false)
     } catch (error) {
       throw error

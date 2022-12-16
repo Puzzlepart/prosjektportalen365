@@ -10,12 +10,12 @@ import { getId } from '@uifabric/utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
-import HubSiteService from 'sp-hubsite-service'
 import { find, first } from 'underscore'
 import { DocumentTemplateDialog } from 'components'
 import { SPDataAdapter } from 'data'
 import { ITemplateSelectorContext, TemplateSelectorContext } from './context'
 import { ITemplateSelectorCommandProperties } from './types'
+import { PortalDataService } from 'pp365-shared/lib/services'
 
 Logger.subscribe(new ConsoleListener())
 Logger.activeLogLevel = LogLevel.Info
@@ -36,7 +36,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<
     })
     Logger.subscribe(new ConsoleListener())
     Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-    const hub = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
+    const hub = await new PortalDataService().GetHubSite(sp, this.context.pageContext as any)
     SPDataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
