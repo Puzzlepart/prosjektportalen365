@@ -9,7 +9,7 @@ import { SPDataAdapter } from 'data'
 export async function getHubSiteProjects(): Promise<any[]> {
   const data = await sp.site.select('HubSiteId').get()
   const { PrimarySearchResults } = await sp.search({
-    Querytext: `DepartmentId:{${data.HubSiteId}} contentclass:STS_Site`,
+    Querytext: `DepartmentId:{${data.HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
     RowLimit: 500,
     StartRow: 0,
     ClientType: 'ContentSearchRegular',
@@ -21,7 +21,7 @@ export async function getHubSiteProjects(): Promise<any[]> {
 
 async function searchHubSite(hubId: string, query: string) {
   const searchData = await sp.search({
-    Querytext: `${query} DepartmentId:{${hubId}} contentclass:STS_Site`,
+    Querytext: `${query} DepartmentId:{${hubId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
     RowLimit: 500,
     StartRow: 0,
     ClientType: 'ContentSearchRegular',
