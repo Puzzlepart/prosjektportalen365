@@ -4,14 +4,11 @@ import {
   TimelineConfigurationModel
 } from 'pp365-portfoliowebparts/lib/models'
 import strings from 'ProjectWebPartsStrings'
-import { IProjectTimelineProps } from '../types'
 
 /**
  * Fetch timeline configuration
- *
- * @param props Component properties for `ProjectTimeline`
  */
-export async function fetchTimelineConfiguration(props: IProjectTimelineProps) {
+export async function fetchTimelineConfiguration() {
   return (
     await SPDataAdapter.portal.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
