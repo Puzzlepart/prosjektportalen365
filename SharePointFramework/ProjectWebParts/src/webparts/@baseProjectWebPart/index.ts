@@ -10,7 +10,6 @@ import SPDataAdapter from '../../data'
 export abstract class BaseProjectWebPart<
   T extends IBaseWebPartComponentProps
 > extends BaseClientSideWebPart<T> {
-
   public abstract render(): void
 
   /**

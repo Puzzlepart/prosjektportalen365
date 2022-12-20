@@ -17,11 +17,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param spfxContext Context
    * @param settings Settings
    */
-  public configure(
+  public async configure(
     spfxContext: ApplicationCustomizerContext | ListViewCommandSetContext,
     settings: ISPDataAdapterConfiguration
   ) {
-    super.configure(spfxContext, settings)
+    await super.configure(spfxContext, settings)
     this.project = new ProjectDataService(
       {
         ...this.settings,

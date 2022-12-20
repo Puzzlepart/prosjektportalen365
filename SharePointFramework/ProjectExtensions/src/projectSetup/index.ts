@@ -5,6 +5,7 @@ import { isArray, stringIsNullOrEmpty } from '@pnp/common'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { MenuNode, sp, Web } from '@pnp/sp'
 import { format, getId } from '@uifabric/utilities'
+import { SPDataAdapter } from 'data'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import { ListLogger } from 'pp365-shared/lib/logging'
 import { PortalDataService } from 'pp365-shared/lib/services'
@@ -90,14 +91,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     }
   }
 
-  private async _ensureParentProjectPatch(data: IProjectSetupData): Promise<void> {
-    const [singleItem] = await data.hub.web.lists
+  private async _ensureParentProjectPatch(): Promise<void> {
+    const [singleItem] = await SPDataAdapter.portal.web.lists
       .getByTitle(this.properties.projectsList)
       .items.filter(
         `GtSiteId eq '${this.context.pageContext.legacyPageContext.siteId.replace(/([{}])/g, '')}'`
       )
       .get()
-    await data.hub.web.lists
+    await SPDataAdapter.portal.web.lists
       .getByTitle(this.properties.projectsList)
       .items.getById(singleItem.Id)
       .update({ GtIsParentProject: true })
@@ -112,7 +113,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     try {
       let data = await this._fetchData()
       ListLogger.init(
-        data.hub.web.lists.getByTitle('Logg'),
+        SPDataAdapter.portal.web.lists.getByTitle('Logg'),
         this.context.pageContext.web.absoluteUrl,
         'ProjectSetup'
       )
@@ -134,7 +135,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           .getByTitle(strings.ProjectPropertiesListName)
           .items.getById(1)
           .update({ GtIsParentProject: true, GtChildProjects: JSON.stringify([]) })
-        await this._ensureParentProjectPatch(data)
+        await this._ensureParentProjectPatch()
       }
 
       await deleteCustomizer(
@@ -343,8 +344,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     try {
       await MSGraphHelper.Init(this.context.msGraphClientFactory)
       const data: IProjectSetupData = {}
-      data.hub = await new PortalDataService().GetHubSite(sp, this.context.pageContext as any)
-      this._portal = new PortalDataService().configure({ urlOrWeb: data.hub.web })
+      this._portal = await new PortalDataService().configure({
+        pageContext: this.context.pageContext as any
+      })
       const [_templates, extensions, contentConfig, templateFiles] = await Promise.all([
         this._portal.getItems(
           this.properties.templatesLibrary,

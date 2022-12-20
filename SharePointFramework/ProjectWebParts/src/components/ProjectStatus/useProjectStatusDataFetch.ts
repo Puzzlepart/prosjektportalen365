@@ -68,12 +68,11 @@ const fetchData: DataFetchFunction<IProjectStatusProps, IProjectStatusData> = as
  * @param props Component properties for `ProjectStatus`
  * @param dispatch Dispatcer
  */
- export const useProjectStatusDataFetch = (
+export const useProjectStatusDataFetch = (
   props: IProjectStatusProps,
   dispatch: React.Dispatch<AnyAction>
 ) => {
   useEffect(() => {
-    fetchData(props)
-      .then((data) => dispatch(INIT_DATA({ data })))
+    fetchData(props).then((data) => dispatch(INIT_DATA({ data })))
   }, [])
 }

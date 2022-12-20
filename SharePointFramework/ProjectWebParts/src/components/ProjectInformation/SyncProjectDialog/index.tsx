@@ -94,7 +94,7 @@ export const SyncProjectDialog: FC = () => {
       })
 
       return updatedResult
-    } catch (error) { }
+    } catch (error) {}
   }
 
   async function getProjectData() {
@@ -109,7 +109,6 @@ export const SyncProjectDialog: FC = () => {
         .get()
 
       if (projectDataItem) {
-
         const item = projectDataList.items.getById(projectDataItem.Id)
 
         const [fieldValuesText, fieldValues] = await Promise.all([

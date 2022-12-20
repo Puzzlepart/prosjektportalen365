@@ -20,7 +20,9 @@ export async function fetchTimelineData(
   timelineConfig: TimelineConfigurationModel[]
 ) {
   try {
-    const timelineContentList =  SPDataAdapter.portal.web.lists.getByTitle(strings.TimelineContentListName)
+    const timelineContentList = SPDataAdapter.portal.web.lists.getByTitle(
+      strings.TimelineContentListName
+    )
     const projectDeliveries = (props.showProjectDeliveries
       ? await sp.web.lists
           .getByTitle(props.projectDeliveriesListName)
@@ -96,7 +98,7 @@ export async function fetchTimelineData(
     timelineListItems = timelineListItems.map((item) => ({
       ...item,
       EditFormUrl: [
-        `${ SPDataAdapter.portal.url}`,
+        `${SPDataAdapter.portal.url}`,
         `/Lists/${strings.TimelineContentListName}/EditForm.aspx`,
         '?ID=',
         item.Id,

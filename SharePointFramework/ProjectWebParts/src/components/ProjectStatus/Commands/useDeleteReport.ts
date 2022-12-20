@@ -11,7 +11,9 @@ import { REPORT_DELETED, REPORT_DELETE_ERROR } from '../reducer'
 export function useDeleteReport() {
   const context = useContext(ProjectStatusContext)
   return async () => {
-    const portalDataService = await new PortalDataService().configure({ pageContext: context.props.pageContext })
+    const portalDataService = await new PortalDataService().configure({
+      pageContext: context.props.pageContext
+    })
     try {
       await portalDataService.deleteStatusReport(context.state.selectedReport.id)
       context.dispatch(REPORT_DELETED())

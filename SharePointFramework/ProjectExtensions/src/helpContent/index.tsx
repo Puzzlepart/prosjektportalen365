@@ -63,8 +63,9 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
       return await new PnPClientStorage().session.getOrPut(
         `pp365_help_content_${window.location.pathname}`,
         async () => {
-          const hub = await new PortalDataService().GetHubSite(sp, this.context.pageContext as any)
-          const portal = new PortalDataService().configure({ urlOrWeb: hub.web })
+          const portal = await new PortalDataService().configure({
+            pageContext: this.context.pageContext
+          })
           let items = await portal.getItems(listName, HelpContentModel, {
             ViewXml:
               '<View><Query><OrderBy><FieldRef Name="GtSortOrder" /></OrderBy></Query></View>'

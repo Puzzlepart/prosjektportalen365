@@ -21,7 +21,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param spfxContext Context
    * @param configuration Configuration
    */
-  public async configure(spfxContext: WebPartContext, configuration: ISPDataAdapterConfiguration): Promise<void> {
+  public async configure(
+    spfxContext: WebPartContext,
+    configuration: ISPDataAdapterConfiguration
+  ): Promise<void> {
     super.configure(spfxContext, configuration)
     taxonomy.setup({ spfxContext })
     this.project = new ProjectDataService(

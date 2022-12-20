@@ -1,8 +1,8 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, PnPClientStorage, TypedHash } from '@pnp/common'
-  import { ItemUpdateResult, QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
-  import * as cleanDeep from 'clean-deep'
+import { ItemUpdateResult, QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
+import * as cleanDeep from 'clean-deep'
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
 import { IAggregatedListConfiguration } from 'interfaces/IAggregatedListConfiguration'
 import msGraph from 'msgraph-helper'
@@ -136,14 +136,16 @@ export class DataAdapter implements IDataAdapter {
   public async getAggregatedListConfig(category: string): Promise<IAggregatedListConfiguration> {
     try {
       if (category.includes('(Prosjektnivå)') || !category) {
-        this._portalDataService = await this._portalDataService.configure({ pageContext: this.context.pageContext })
+        this._portalDataService = await this._portalDataService.configure({
+          pageContext: this.context.pageContext
+        })
       }
       const [views, viewsUrls, columnUrls] = await Promise.all([
         await this.configure().then((adapter) => {
           return adapter.fetchDataSources(category)
         }),
-        this._portalDataService .getListFormUrls('DATA_SOURCES'),
-        this._portalDataService .getListFormUrls('PROJECT_CONTENT_COLUMNS')
+        this._portalDataService.getListFormUrls('DATA_SOURCES'),
+        this._portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS')
       ])
       return {
         views,

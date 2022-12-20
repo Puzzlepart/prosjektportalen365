@@ -27,7 +27,7 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
         .usingCaching()
         .getJSON()
       setConfiguration(jsonConfig_)
-    } catch { }
+    } catch {}
   }
 
   useEffect(() => {

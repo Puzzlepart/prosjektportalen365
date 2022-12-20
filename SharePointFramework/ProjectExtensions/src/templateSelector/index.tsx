@@ -5,17 +5,15 @@ import {
   IListViewCommandSetExecuteEventParameters
 } from '@microsoft/sp-listview-extensibility'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
-import { sp } from '@pnp/sp'
 import { getId } from '@uifabric/utilities'
+import { DocumentTemplateDialog } from 'components'
+import { SPDataAdapter } from 'data'
 import * as strings from 'ProjectExtensionsStrings'
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import { find, first } from 'underscore'
-import { DocumentTemplateDialog } from 'components'
-import { SPDataAdapter } from 'data'
 import { ITemplateSelectorContext, TemplateSelectorContext } from './context'
 import { ITemplateSelectorCommandProperties } from './types'
-import { PortalDataService } from 'pp365-shared/lib/services'
 
 Logger.subscribe(new ConsoleListener())
 Logger.activeLogLevel = LogLevel.Info
@@ -36,11 +34,9 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<
     })
     Logger.subscribe(new ConsoleListener())
     Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-    const hub = await new PortalDataService().GetHubSite(sp, this.context.pageContext as any)
-    SPDataAdapter.configure(this.context, {
+    await SPDataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
-      webUrl: this.context.pageContext.web.absoluteUrl,
-      hubSiteUrl: hub.url
+      webUrl: this.context.pageContext.web.absoluteUrl
     })
     this._openCmd = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR')
     if (!this._openCmd) return
@@ -48,7 +44,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<
       const templateLib = 'Malbibliotek'
       this._ctxValue.templateLibrary = {
         title: templateLib,
-        url: `${hub.url}/${templateLib}`
+        url: `${SPDataAdapter.portal.url}/${templateLib}`
       }
       this._ctxValue.templates = await SPDataAdapter.getDocumentTemplates(
         templateLib,
