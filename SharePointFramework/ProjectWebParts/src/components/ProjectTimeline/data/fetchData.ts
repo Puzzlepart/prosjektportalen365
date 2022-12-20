@@ -17,7 +17,7 @@ export async function fetchData(
   props: IProjectTimelineProps
 ): Promise<Partial<IProjectTimelineState>> {
   try {
-    const timelineConfig = await fetchTimelineConfiguration(props)
+    const timelineConfig = await fetchTimelineConfiguration()
     const [timelineData, project] = await Promise.all([
       fetchTimelineData(props, timelineConfig),
       fetchProjectData(props, timelineConfig)
