@@ -1,6 +1,6 @@
 {
   "name": "pp365-shared",
-  "version": "1.7.3-640.1",
+  "version": "1.7.3-923.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -36,7 +36,6 @@
     "gulp": "^4.0.2",
     "object-get": "^2.1.0",
     "office-ui-fabric-react": "6.214.0",
-    "pp365-shared": "1.6.7",
     "react": "16.8.5",
     "react-dom": "16.8.5",
     "react-markdown": "^8.0.3",
