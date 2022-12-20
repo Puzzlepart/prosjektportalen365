@@ -25,7 +25,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     spfxContext: WebPartContext,
     configuration: ISPDataAdapterConfiguration
   ): Promise<void> {
-    super.configure(spfxContext, configuration)
+    await super.configure(spfxContext, configuration)
     taxonomy.setup({ spfxContext })
     this.project = new ProjectDataService(
       {
@@ -39,7 +39,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Get fields to sync
+   * Filters a list of fields to include only those with the 'Gt' prefix or those in a custom group.
    *
    * @param fields Fields
    * @param customGroupName Custom group name

@@ -44,8 +44,8 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     text: string,
     type: MessageBarType,
     durationSec: number = 5
-  ): Promise<void> => {
-    return new Promise((resolve) => {
+  ) => {
+    return new Promise<void>((resolve) => {
       setState({
         message: {
           text: format(text, durationSec.toString()),
@@ -83,7 +83,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
         props.webUrl,
         strings.ProjectPropertiesListName,
         state.data.templateParameters.ProjectContentTypeId ??
-          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: props.webTitle }
       )
       if (!created) {
