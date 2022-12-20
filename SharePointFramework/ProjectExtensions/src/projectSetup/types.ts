@@ -1,6 +1,5 @@
 import { IDialogContentProps } from '@fluentui/react'
 import { ITemplateSelectDialogState } from 'components/TemplateSelectDialog'
-import { IHubSite } from 'sp-hubsite-service'
 import { ContentConfig, ProjectExtension, ProjectTemplate } from '../models/index'
 
 export interface IProjectSetupProperties {
@@ -67,11 +66,6 @@ export interface IProjectSetupData extends ITemplateSelectDialogState {
    * Content config
    */
   contentConfig?: ContentConfig[]
-
-  /**
-   * Hub site
-   */
-  hub?: IHubSite
 }
 
 export enum ProjectSetupValidation {

@@ -17,7 +17,6 @@ const fetchData: DataFetchFunction<IProjectStatusProps, IProjectStatusData> = as
       SPDataAdapter.configure(props.webPartContext, {
         siteId: props.siteId,
         webUrl: props.webUrl,
-        hubSiteUrl: props.hubSite.url,
         logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }
@@ -69,12 +68,11 @@ const fetchData: DataFetchFunction<IProjectStatusProps, IProjectStatusData> = as
  * @param props Component properties for `ProjectStatus`
  * @param dispatch Dispatcer
  */
- export const useProjectStatusDataFetch = (
+export const useProjectStatusDataFetch = (
   props: IProjectStatusProps,
   dispatch: React.Dispatch<AnyAction>
 ) => {
   useEffect(() => {
-    fetchData(props)
-      .then((data) => dispatch(INIT_DATA({ data })))
+    fetchData(props).then((data) => dispatch(INIT_DATA({ data })))
   }, [])
 }

@@ -2,7 +2,8 @@ import {
   DefaultButton,
   Dialog,
   DialogFooter,
-  DialogType, PrimaryButton,
+  DialogType,
+  PrimaryButton,
   SelectionMode,
   ShimmeredDetailsList
 } from '@fluentui/react'

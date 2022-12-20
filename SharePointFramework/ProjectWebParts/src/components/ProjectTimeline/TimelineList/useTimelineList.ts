@@ -1,11 +1,12 @@
-import { useContext, useState } from 'react'
-import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
+import { getId, IColumn, ICommandBarProps, Selection } from '@fluentui/react'
 import { get } from '@microsoft/sp-lodash-subset'
+import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
+import { Logger, LogLevel } from '@pnp/logging'
+import SPDataAdapter from 'data/SPDataAdapter'
 import moment from 'moment'
 import { tryParseCurrency } from 'pp365-shared/lib/helpers'
-import { getId, IColumn, ICommandBarProps, Selection } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
-import { Logger, LogLevel } from '@pnp/logging'
+import { useContext, useState } from 'react'
 import { ProjectTimelineContext } from '../context'
 
 export function useTimelineList() {
@@ -89,7 +90,7 @@ export function useTimelineList() {
    */
   const redirectNewTimelineItem = async () => {
     const [project] = (
-      await context.props.hubSite.web.lists
+      await SPDataAdapter.portal.web.lists
         .getByTitle(strings.ProjectsListName)
         .items.select('Id', 'GtSiteId')
         .getAll()
@@ -117,7 +118,7 @@ export function useTimelineList() {
    * @param properties Properties
    */
   const addTimelineItem = async (properties: TypedHash<any>): Promise<any> => {
-    const list = context.props.hubSite.web.lists.getByTitle(strings.TimelineContentListName)
+    const list = SPDataAdapter.portal.web.lists.getByTitle(strings.TimelineContentListName)
     const itemAddResult = await list.items.add(properties)
     return itemAddResult.data
   }
@@ -128,7 +129,7 @@ export function useTimelineList() {
    * @param item Item
    */
   const deleteTimelineItem = async (item: any) => {
-    const list = context.props.hubSite.web.lists.getByTitle(strings.TimelineContentListName)
+    const list = SPDataAdapter.portal.web.lists.getByTitle(strings.TimelineContentListName)
     await list.items.getById(item.Id).delete()
     context.setState({
       refetch: new Date().getTime()
@@ -142,7 +143,7 @@ export function useTimelineList() {
    */
   const editFormUrl = (item: any) => {
     return [
-      `${context.props.hubSite.url}`,
+      `${SPDataAdapter.portal.url}`,
       `/Lists/${strings.TimelineContentListName}/EditForm.aspx`,
       '?ID=',
       item.Id,

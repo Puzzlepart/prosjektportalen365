@@ -227,25 +227,25 @@ export class PlannerConfiguration extends BaseTask {
       description: taskDetails.description ?? '',
       checklist: taskDetails.checklist
         ? taskDetails.checklist.reduce(
-          (obj, title) => ({
-            ...obj,
-            [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
-          }),
-          {}
-        )
+            (obj, title) => ({
+              ...obj,
+              [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
+            }),
+            {}
+          )
         : {},
       references: taskDetails.attachments
         ? taskDetails.attachments.reduce(
-          (obj, attachment) => ({
-            ...obj,
-            [this.replaceUrlTokens(attachment.url, pageContext)]: {
-              '@odata.type': 'microsoft.graph.plannerExternalReference',
-              alias: attachment.alias,
-              type: attachment.type
-            }
-          }),
-          {}
-        )
+            (obj, attachment) => ({
+              ...obj,
+              [this.replaceUrlTokens(attachment.url, pageContext)]: {
+                '@odata.type': 'microsoft.graph.plannerExternalReference',
+                alias: attachment.alias,
+                type: attachment.type
+              }
+            }),
+            {}
+          )
         : {},
       previewType: taskDetails.previewType
     }

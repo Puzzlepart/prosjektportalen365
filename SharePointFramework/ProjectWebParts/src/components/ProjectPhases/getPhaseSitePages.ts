@@ -8,7 +8,10 @@ import { IPhaseSitePageModel } from './types'
  *
  * @param phases Phases
  */
-export const getPhaseSitePages: DataFetchFunction<ProjectPhaseModel[], IPhaseSitePageModel[]> = async (phases) => {
+export const getPhaseSitePages: DataFetchFunction<
+  ProjectPhaseModel[],
+  IPhaseSitePageModel[]
+> = async (phases) => {
   try {
     let sitePages = await sp.web.lists
       .getByTitle('Områdesider')

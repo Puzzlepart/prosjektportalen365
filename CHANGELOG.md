@@ -25,6 +25,7 @@ Every change is marked with issue ID.
 
 - Persist selection when doing a search in Program Admin [#849](https://github.com/Puzzlepart/prosjektportalen365/issues/849)
 - Bugfix for ResourceAllocation where web part is not loaded due to elements not having User or Role assigned [#904](https://github.com/Puzzlepart/prosjektportalen365/issues/904)
+- Fixed an issue where hubsite was not resolved, leading to inconsistensies and errors [#640](https://github.com/Puzzlepart/prosjektportalen365/issues/849)
 
 ## 1.7.2 - 26.10.2022
 

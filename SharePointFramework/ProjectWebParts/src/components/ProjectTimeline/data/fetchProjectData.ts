@@ -1,4 +1,5 @@
 import { format } from '@fluentui/react'
+import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
 import {
   TimelineConfigurationModel,
@@ -19,7 +20,7 @@ export async function fetchProjectData(
   timelineConfig: TimelineConfigurationModel[]
 ): Promise<TimelineContentModel> {
   try {
-    const projectData = await props.hubSite.web.lists
+    const projectData = await SPDataAdapter.portal.web.lists
       .getByTitle(strings.ProjectsListName)
       .items.select('Id', 'GtStartDate', 'GtEndDate')
       .filter(`GtSiteId eq '${props.siteId}'`)

@@ -6,6 +6,7 @@ import initSpfxJsom, { ExecuteJsomQuery } from 'spfx-jsom'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import _ from 'underscore'
 import { ITaxonomySession, Session } from '@pnp/sp-taxonomy'
+import SPDataAdapter from 'data/SPDataAdapter'
 
 export class PreTask extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -28,12 +29,14 @@ export class PreTask extends BaseTask {
         loadTaxonomy: true
       })
       params.entityService = new SpEntityPortalService({
-        portalUrl: this.data.hub.url,
+        portalUrl: SPDataAdapter.portal.url,
         listName: params.properties.projectsList,
         identityFieldName: 'GtGroupId',
         urlFieldName: 'GtSiteUrl'
       })
-      params.portal = new PortalDataService().configure({ urlOrWeb: this.data.hub.web })
+      params.portal = await new PortalDataService().configure({
+        pageContext: params.context.pageContext
+      })
       params.spfxJsomContext.jsomContext.web['set_isMultilingual'](false)
       params.spfxJsomContext.jsomContext.web.update()
       await ExecuteJsomQuery(params.spfxJsomContext.jsomContext)
@@ -88,7 +91,7 @@ export class PreTask extends BaseTask {
     await Promise.all(
       contentTypes.map(async (ct) => {
         try {
-          await this.data.hub.web.contentTypes.getById(ct).get()
+          await SPDataAdapter.portal.web.contentTypes.getById(ct).get()
         } catch (error) {
           this.logError(`Failed to validate content type ${ct}`)
           throw new BaseTaskError(

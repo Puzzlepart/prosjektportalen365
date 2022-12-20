@@ -1,4 +1,4 @@
-import { Web } from '@pnp/sp'
+import { PageContext } from '@microsoft/sp-page-context'
 
 export type PortalDataServiceList =
   | 'STATUS_SECTIONS'
@@ -10,9 +10,7 @@ export type PortalDataServiceList =
   | 'DATA_SOURCES'
 
 export interface IPortalDataServiceConfiguration extends Object {
-  urlOrWeb: string | Web
-  siteId?: string
-  webUrl?: string
+  pageContext?: PageContext
   listNames?: {
     STATUS_SECTIONS: string
     PROJECT_COLUMNS: string

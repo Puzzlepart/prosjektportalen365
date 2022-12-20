@@ -1,10 +1,9 @@
-import { sp } from '@pnp/sp/'
-import { generateMatrixConfiguration } from '../DynamicMatrix/generateMatrixConfiguration'
+import SPDataAdapter from '../../data'
 import { useEffect, useState } from 'react'
-import HubSiteService from 'sp-hubsite-service'
 import { DynamicMatrixConfiguration } from '../DynamicMatrix'
-import { IRiskMatrixProps } from './types'
+import { generateMatrixConfiguration } from '../DynamicMatrix/generateMatrixConfiguration'
 import { getMatrixHeaders } from './getMatrixHeaders'
+import { IRiskMatrixProps } from './types'
 
 /**
  * Configuration hook for `RiskMatrix`
@@ -22,9 +21,8 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
 
   async function fetchJsonConfiguration() {
     try {
-      const { web } = await HubSiteService.GetHubSite(sp, props.pageContext as any)
-      const { ServerRelativeUrl } = await web.get()
-      const jsonConfig_ = await web
+      const { ServerRelativeUrl } = await SPDataAdapter.portal.web.get()
+      const jsonConfig_ = await SPDataAdapter.portal.web
         .getFileByServerRelativeUrl(`/${ServerRelativeUrl}/${props.customConfigUrl}`)
         .usingCaching()
         .getJSON()

@@ -71,7 +71,7 @@ export class CopyListData extends BaseTask {
                     taskDetails.attachments = item.GtAttachments.split('|')
                       .map((str) => new TaskAttachment(str))
                       .filter((attachment) => !stringIsNullOrEmpty(attachment.url))
-                  } catch (error) { }
+                  } catch (error) {}
                 }
                 if (!stringIsNullOrEmpty(item.GtPlannerPreviewType)) {
                   let m: RegExpExecArray
@@ -82,10 +82,9 @@ export class CopyListData extends BaseTask {
                 obj[item.GtCategory][item.Title] = taskDetails
                 return obj
               }, {})
-              await new PlannerConfiguration(contentConfig.plannerTitle, this.data, configuration, ['Metodikk']).execute(
-                params,
-                onProgress
-              )
+              await new PlannerConfiguration(contentConfig.plannerTitle, this.data, configuration, [
+                'Metodikk'
+              ]).execute(params, onProgress)
             }
             break
           case ContentConfigType.List:
@@ -222,8 +221,9 @@ export class CopyListData extends BaseTask {
   ): Promise<void> {
     try {
       await folders.sort().reduce((chain: Promise<any>, folder, index: number) => {
-        const folderServerRelUrl = `${config.destListProps.RootFolder.ServerRelativeUrl
-          }/${folder.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
+        const folderServerRelUrl = `${
+          config.destListProps.RootFolder.ServerRelativeUrl
+        }/${folder.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
         this.onProgress(
           progressText,
           format(strings.ProcessFolderText, index + 1, folders.length),
@@ -276,8 +276,9 @@ export class CopyListData extends BaseTask {
       const filesCopied = []
       for (let i = 0; i < filesWithContents.length; i++) {
         const file = filesWithContents[i]
-        const destFolderUrl = `${config.destListProps.RootFolder.ServerRelativeUrl
-          }${file.FileDirRef.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
+        const destFolderUrl = `${
+          config.destListProps.RootFolder.ServerRelativeUrl
+        }${file.FileDirRef.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
         try {
           this.logInformation(`Copying file ${file.LinkFilename}`)
           this.onProgress(
@@ -291,7 +292,7 @@ export class CopyListData extends BaseTask {
             .files.add(filename, file.Blob, true)
           filesCopied.push(fileAddResult)
           this.logInformation(`Successfully copied file ${file.LinkFilename}`)
-        } catch (err) { }
+        } catch (err) {}
       }
       return filesCopied
     } catch (error) {
