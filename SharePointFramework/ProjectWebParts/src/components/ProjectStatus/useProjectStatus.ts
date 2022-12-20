@@ -13,7 +13,7 @@ export function useProjectStatus(props: IProjectStatusProps) {
 
   useProjectStatusDataFetch(props, dispatch)
 
-  const value = { props, state, dispatch }
+  const value: IProjectStatusContext = { props, state, dispatch }
 
   return { value } as ProviderProps<IProjectStatusContext>
 }

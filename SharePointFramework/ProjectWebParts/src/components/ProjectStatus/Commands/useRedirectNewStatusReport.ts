@@ -15,9 +15,8 @@ export function useRedirectNewStatusReport() {
   const context = useContext(ProjectStatusContext)
   const getEditFormUrl = useEditFormUrl()
   return async () => {
-    const portalDataService = new PortalDataService().configure({
-      urlOrWeb: context.props.hubSite.web,
-      siteId: context.props.siteId
+    const portalDataService = await new PortalDataService().configure({
+      pageContext: context.props.pageContext
     })
     const [lastReport] = context.state.data.reports
     let properties: TypedHash<string | number | boolean> = {}

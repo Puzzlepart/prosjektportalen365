@@ -1,13 +1,10 @@
+import SPDataAdapter from 'data/SPDataAdapter'
 import { ListLogger } from 'pp365-shared/lib/logging'
 import strings from 'ProjectWebPartsStrings'
 import { useReducer, useRef } from 'react'
 import { ProjectPhases } from '.'
 import { changePhase } from './changePhase'
-import reducer, {
-  CHANGE_PHASE_ERROR,
-  initialState,
-  INIT_CHANGE_PHASE, SET_PHASE
-} from './reducer'
+import reducer, { CHANGE_PHASE_ERROR, initialState, INIT_CHANGE_PHASE, SET_PHASE } from './reducer'
 import { IProjectPhasesProps } from './types'
 import { useProjectPhasesDataFetch } from './useProjectPhasesDataFetch'
 
@@ -19,7 +16,7 @@ export function useProjectPhases(props: IProjectPhasesProps) {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   ListLogger.init(
-    props.hubSite.web.lists.getByTitle(strings.LogListName),
+    SPDataAdapter.portal.web.lists.getByTitle(strings.LogListName),
     props.webPartContext.pageContext.web.absoluteUrl,
     ProjectPhases.displayName
   )

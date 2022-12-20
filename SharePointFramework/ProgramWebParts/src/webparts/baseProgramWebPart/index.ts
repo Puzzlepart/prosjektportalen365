@@ -4,9 +4,9 @@ import { LogLevel } from '@pnp/logging'
 import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
 import assign from 'object-assign'
+import { IHubSite } from 'pp365-shared/lib/interfaces'
 import React, { ComponentClass, FC } from 'react'
 import * as ReactDom from 'react-dom'
-import HubSiteService, { IHubSite } from 'sp-hubsite-service'
 import { SPDataAdapter } from '../../data'
 import { IBaseProgramWebPartProps } from './types'
 
@@ -50,14 +50,12 @@ export abstract class BaseProgramWebPart<
     await this.dataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
-      hubSiteUrl: this.hubSite.url,
       logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     })
   }
 
   public async onInit(): Promise<void> {
     sp.setup({ spfxContext: this.context })
-    this.hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext)
     this.dataAdapter = new SPDataAdapter()
     this.dataAdapter.childProjects = await this.getChildProjects()
     this.context.statusRenderer.clearLoadingIndicator(this.domElement)

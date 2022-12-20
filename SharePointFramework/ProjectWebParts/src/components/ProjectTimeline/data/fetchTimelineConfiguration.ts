@@ -1,3 +1,4 @@
+import SPDataAdapter from 'data/SPDataAdapter'
 import {
   SPTimelineConfigurationItem,
   TimelineConfigurationModel
@@ -12,7 +13,7 @@ import { IProjectTimelineProps } from '../types'
  */
 export async function fetchTimelineConfiguration(props: IProjectTimelineProps) {
   return (
-    await props.hubSite.web.lists
+    await SPDataAdapter.portal.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
       .items.select(...new SPTimelineConfigurationItem().fields)
       .orderBy('GtSortOrder')

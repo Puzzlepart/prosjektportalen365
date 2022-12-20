@@ -51,15 +51,19 @@ const transformProperties = (
 /**
  * Checks if project data is synced
  */
-const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolean> = async (props) => {
+const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolean> = async (
+  props
+) => {
   try {
     let isSynced = false
-    const projectDataList = props.hubSite.web.lists.getByTitle(strings.IdeaProjectDataTitle)
+    const projectDataList = SPDataAdapter.portal.web.lists.getByTitle(strings.IdeaProjectDataTitle)
     const [projectDataItem] = await projectDataList.items
       .filter(`GtSiteUrl eq '${props.webPartContext.pageContext.web.absoluteUrl}'`)
       .select('Id')
       .get()
-    const ideaProcessingList = props.hubSite.web.lists.getByTitle(strings.IdeaProcessingTitle)
+    const ideaProcessingList = SPDataAdapter.portal.web.lists.getByTitle(
+      strings.IdeaProcessingTitle
+    )
     const [ideaProcessingItem] = await ideaProcessingList.items
       .filter(`GtIdeaProjectDataId eq '${projectDataItem.Id}'`)
       .select('Id, GtIdeaDecision')
@@ -76,9 +80,10 @@ const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolea
 /**
  * Fetch data for `ProjectInformation`
  */
-const fetchData: DataFetchFunction<IProjectInformationProps, Partial<IProjectInformationState>> = async (
-  props
-) => {
+const fetchData: DataFetchFunction<
+  IProjectInformationProps,
+  Partial<IProjectInformationState>
+> = async (props) => {
   try {
     const [
       columns,
@@ -92,16 +97,16 @@ const fetchData: DataFetchFunction<IProjectInformationProps, Partial<IProjectInf
       SPDataAdapter.project.getPropertiesData(),
       props.page === 'Frontpage'
         ? SPDataAdapter.portal.getParentProjects(
-          props.webPartContext?.pageContext?.web?.absoluteUrl,
-          ProjectInformationParentProject
-        )
+            props.webPartContext?.pageContext?.web?.absoluteUrl,
+            ProjectInformationParentProject
+          )
         : Promise.resolve([]),
       props.hideStatusReport
         ? Promise.resolve([])
         : SPDataAdapter.portal.getStatusReports({
-          filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
-          publishedString: strings.GtModerationStatus_Choice_Published
-        }),
+            filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
+            publishedString: strings.GtModerationStatus_Choice_Published
+          }),
       props.hideStatusReport
         ? Promise.resolve([])
         : SPDataAdapter.portal.getProjectStatusSections(),
@@ -158,10 +163,12 @@ export const useProjectInformationDataFetch = (
 ) => {
   useEffect(() => {
     fetchData(props)
-    .then((data) => setState({ ...data, isDataLoaded: true }))
-    .catch((error) =>  setState({
-      isDataLoaded: true,
-      error: { ..._.pick(error, 'message', 'stack'), type: MessageBarType.severeWarning }
-    }))
+      .then((data) => setState({ ...data, isDataLoaded: true }))
+      .catch((error) =>
+        setState({
+          isDataLoaded: true,
+          error: { ..._.pick(error, 'message', 'stack'), type: MessageBarType.severeWarning }
+        })
+      )
   }, [])
 }
