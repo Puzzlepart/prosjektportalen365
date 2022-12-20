@@ -22,7 +22,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
   const { state, setState } = useProjectInformationState()
 
   ListLogger.init(
-    props.hubSite.web.lists.getByTitle(strings.LogListName),
+    SPDataAdapter.portal.web.lists.getByTitle(strings.LogListName),
     props.webPartContext.pageContext.web.absoluteUrl,
     ProjectInformation.displayName
   )
@@ -30,7 +30,6 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
   SPDataAdapter.configure(props.webPartContext, {
     siteId: props.siteId,
     webUrl: props.webUrl,
-    hubSiteUrl: props.hubSite.url,
     logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
   })
 

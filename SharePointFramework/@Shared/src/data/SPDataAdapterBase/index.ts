@@ -59,17 +59,16 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
    * @param spfxContext Context
    * @param settings Settings
    */
-  public configure(spfxContext: any, settings: T) {
+  public async configure(spfxContext: any, settings: T) {
     this.spfxContext = spfxContext
     this.settings = settings
     sp.setup({ spfxContext, ...this.spConfiguration })
     this.sp = sp
-    this.portal = new PortalDataService().configure({
-      urlOrWeb: new Web(this.settings.hubSiteUrl),
-      siteId: this.settings.siteId
+    this.portal = await new PortalDataService().configure({
+      pageContext: spfxContext.pageContext,
     })
     this.entityService = new SpEntityPortalService({
-      portalUrl: this.settings.hubSiteUrl,
+      portalUrl: this.portal.url,
       listName: 'Prosjekter',
       contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
       identityFieldName: 'GtSiteId',
@@ -166,7 +165,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                       ).length > 0
                     )
                       userPermissions.push(...role.permissions)
-                  } catch {}
+                  } catch { }
                 }
                 break
             }

@@ -12,11 +12,6 @@ export interface ISPDataAdapterBaseConfiguration {
   siteId: string
 
   /**
-   * Hub site URL
-   */
-  hubSiteUrl: string
-
-  /**
    * Log level
    */
   logLevel?: LogLevel

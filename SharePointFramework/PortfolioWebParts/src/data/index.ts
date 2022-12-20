@@ -1,8 +1,8 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, PnPClientStorage, TypedHash } from '@pnp/common'
-import { ItemUpdateResult, QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
-import * as cleanDeep from 'clean-deep'
+  import { ItemUpdateResult, QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
+  import * as cleanDeep from 'clean-deep'
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
 import { IAggregatedListConfiguration } from 'interfaces/IAggregatedListConfiguration'
 import msGraph from 'msgraph-helper'
@@ -43,9 +43,7 @@ export class DataAdapter implements IDataAdapter {
   public dataSourceService: DataSourceService
 
   constructor(public context: WebPartContext, private siteIds?: string[]) {
-    this._portalDataService = new PortalDataService().configure({
-      urlOrWeb: context.pageContext.web.absoluteUrl
-    })
+    this._portalDataService = new PortalDataService()
   }
 
   /**
@@ -54,8 +52,10 @@ export class DataAdapter implements IDataAdapter {
    */
   public async configure(): Promise<DataAdapter> {
     if (this.dataSourceService) return this
-    const { web } = await this._portalDataService.GetHubSite(sp, this.context.pageContext as any)
-    this.dataSourceService = new DataSourceService(web)
+    this._portalDataService = await this._portalDataService.configure({
+      pageContext: this.context.pageContext
+    })
+    this.dataSourceService = new DataSourceService(this._portalDataService.web)
     return this
   }
 
@@ -134,19 +134,16 @@ export class DataAdapter implements IDataAdapter {
    * @param category Category
    */
   public async getAggregatedListConfig(category: string): Promise<IAggregatedListConfiguration> {
-    let portal = this._portalDataService
-
     try {
       if (category.includes('(Prosjektnivå)') || !category) {
-        const { web } = await this._portalDataService.GetHubSite(sp, this.context.pageContext as any)
-        portal = new PortalDataService().configure({ urlOrWeb: web })
+        this._portalDataService = await this._portalDataService.configure({ pageContext: this.context.pageContext })
       }
       const [views, viewsUrls, columnUrls] = await Promise.all([
         await this.configure().then((adapter) => {
           return adapter.fetchDataSources(category)
         }),
-        portal.getListFormUrls('DATA_SOURCES'),
-        portal.getListFormUrls('PROJECT_CONTENT_COLUMNS')
+        this._portalDataService .getListFormUrls('DATA_SOURCES'),
+        this._portalDataService .getListFormUrls('PROJECT_CONTENT_COLUMNS')
       ])
       return {
         views,

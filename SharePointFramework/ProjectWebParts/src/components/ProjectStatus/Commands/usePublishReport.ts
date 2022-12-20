@@ -16,10 +16,7 @@ export function usePublishReport() {
   const context = useContext(ProjectStatusContext)
   const captureReport = useCaptureReport()
   return async () => {
-    const portalDataService = new PortalDataService().configure({
-      urlOrWeb: context.props.hubSite.web,
-      siteId: context.props.siteId
-    })
+    const portalDataService = await new PortalDataService().configure({ pageContext: context.props.pageContext })
     if (!context.state.isPublishing) {
       try {
         const attachment = await captureReport(context.state.selectedReport.values.Title)

@@ -1,9 +1,10 @@
+import { format } from '@fluentui/react/lib/Utilities'
+import { flatten } from '@microsoft/sp-lodash-subset'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd } from '@pnp/common'
 import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import MSGraph from 'msgraph-helper'
-import { format } from '@fluentui/react/lib/Utilities'
 import {
   IGraphGroup,
   IPortfolioConfiguration,
@@ -21,12 +22,11 @@ import {
 import { ISPDataAdapterBaseConfiguration, SPDataAdapterBase } from 'pp365-shared/lib/data'
 import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
-import { DataSourceService, PortalDataService, ProjectDataService } from 'pp365-shared/lib/services'
+import { DataSourceService, ProjectDataService } from 'pp365-shared/lib/services'
 import * as strings from 'ProgramWebPartsStrings'
 import { GAINS_DEFAULT_SELECT_PROPERTIES } from './config'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
-import { flatten } from '@microsoft/sp-lodash-subset'
 
 /**
  * SPDataAdapter for `ProgramWebParts`.
@@ -48,9 +48,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     spfxContext: WebPartContext,
     configuration: ISPDataAdapterBaseConfiguration
   ) {
-    super.configure(spfxContext, configuration)
-    const { web } = await new PortalDataService().GetHubSite(sp, spfxContext.pageContext as any)
-    this.dataSourceService = new DataSourceService(web)
+    await super.configure(spfxContext, configuration)
+    this.dataSourceService = new DataSourceService(this.portal.web)
     this.project = new ProjectDataService(
       {
         ...this.settings,

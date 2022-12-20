@@ -1,3 +1,4 @@
+import SPDataAdapter from 'data/SPDataAdapter'
 import { ListLogger } from 'pp365-shared/lib/logging'
 import strings from 'ProjectWebPartsStrings'
 import { useReducer, useRef } from 'react'
@@ -19,7 +20,7 @@ export function useProjectPhases(props: IProjectPhasesProps) {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   ListLogger.init(
-    props.hubSite.web.lists.getByTitle(strings.LogListName),
+    SPDataAdapter.portal.web.lists.getByTitle(strings.LogListName),
     props.webPartContext.pageContext.web.absoluteUrl,
     ProjectPhases.displayName
   )

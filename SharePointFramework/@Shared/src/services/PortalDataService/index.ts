@@ -1,13 +1,12 @@
 /* eslint-disable no-console */
 import { find } from '@microsoft/sp-lodash-subset'
-import { dateAdd, stringIsNullOrEmpty, PnPClientStorage } from '@pnp/common'
+import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
-import { AttachmentFileInfo, CamlQuery, ListEnsureResult, Web, SPRest } from '@pnp/sp'
-import { PageContext } from '@microsoft/sp-page-context'
+import { AttachmentFileInfo, CamlQuery, ListEnsureResult, sp, Web } from '@pnp/sp'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { transformFieldXml } from '../../helpers/transformFieldXml'
-import { ISPContentType, IHubSite } from '../../interfaces'
+import { IHubSite, ISPContentType } from '../../interfaces'
 import {
   PortfolioOverviewView,
   ProjectAdminRole,
@@ -31,20 +30,51 @@ import {
 export class PortalDataService {
   private _configuration: IPortalDataServiceConfiguration
   public web: Web
+  public url: string
 
   /**
    * Configure PortalDataService
    *
    * @param configuration Configuration for PortalDataService
    */
-  public configure(configuration: IPortalDataServiceConfiguration): PortalDataService {
+  public async configure(configuration: IPortalDataServiceConfiguration): Promise<PortalDataService> {
     this._configuration = { ...PortalDataServiceDefaultConfiguration, ...configuration }
-    if (typeof this._configuration.urlOrWeb === 'string') {
-      this.web = new Web(this._configuration.urlOrWeb)
-    } else {
-      this.web = this._configuration.urlOrWeb
-    }
+    const hubSite = await this.getHubSite()
+    this.web = hubSite.web
+    this.url = hubSite.url
     return this
+  }
+
+  /**
+   * Get hub site
+   *
+   * @param expire Expire
+   */
+  private async getHubSite(expire: Date = dateAdd(new Date(), 'year', 1)): Promise<IHubSite> {
+    try {
+      const hubSiteId = this._configuration.pageContext.legacyPageContext.hubSiteId || ''
+      try {
+        const { SiteUrl } = await (await fetch(`${this._configuration.pageContext.web.absoluteUrl}/_api/HubSites/GetById('${hubSiteId}')`, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json;odata=nometadata'
+          },
+          credentials: 'include',
+        })).json()
+        return ({ url: SiteUrl, web: new Web(SiteUrl) })
+      } catch (error) {
+        const SiteUrl = await new PnPClientStorage().local.getOrPut(`hubsite_${hubSiteId.replace(/-/g, '')}_url`, async () => {
+          const { PrimarySearchResults } = await sp.search({
+            Querytext: `SiteId:${hubSiteId} contentclass:STS_Site`,
+            SelectProperties: ['Path'],
+          })
+          return PrimarySearchResults[0] ? PrimarySearchResults[0].Path : ''
+        }, expire)
+        return ({ url: SiteUrl, web: new Web(SiteUrl) })
+      }
+    } catch (err) {
+      throw err
+    }
   }
 
   /**
@@ -414,8 +444,8 @@ export class PortalDataService {
     publishedString,
     useCaching = true
   }: GetStatusReportsOptions): Promise<StatusReport[]> {
-    if (!this._configuration.siteId) throw 'Property {siteId} missing in configuration'
-    if (stringIsNullOrEmpty(filter)) filter = `GtSiteId eq '${this._configuration.siteId}'`
+    if (!this._configuration.pageContext) throw 'Property pageContext missing in configuration'
+    if (stringIsNullOrEmpty(filter)) filter = `GtSiteId eq '${this._configuration.pageContext.site.id.toString()}'`
     try {
       let items = this.web.lists
         .getByTitle(this._configuration.listNames.PROJECT_STATUS)
@@ -491,39 +521,5 @@ export class PortalDataService {
       })
       .get<SPProjectAdminRoleItem[]>()
     return spItems.map((item) => new ProjectAdminRole(item))
-  }
-
-  /**
-     * Get hub site
-     *
-     * @param {SPRest} sp Sp
-     * @param {PageContext} pageContext Page context
-     * @param {Date} expire Expire
-     */
-  public async GetHubSite(sp: SPRest, pageContext: PageContext, expire: Date = dateAdd(new Date(), 'year', 1)): Promise<IHubSite> {
-    try {
-      const hubSiteId = pageContext.legacyPageContext.hubSiteId || ''
-      try {
-        const { SiteUrl } = await (await fetch(`${pageContext.web.absoluteUrl}/_api/HubSites/GetById('${hubSiteId}')`, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json;odata=nometadata'
-          },
-          credentials: 'include',
-        })).json()
-        return ({ url: SiteUrl, web: new Web(SiteUrl) })
-      } catch (error) {
-        const SiteUrl = await new PnPClientStorage().local.getOrPut(`hubsite_${hubSiteId.replace(/-/g, '')}_url`, async () => {
-          const { PrimarySearchResults } = await sp.search({
-            Querytext: `SiteId:${hubSiteId} contentclass:STS_Site`,
-            SelectProperties: ['Path'],
-          })
-          return PrimarySearchResults[0] ? PrimarySearchResults[0].Path : ''
-        }, expire)
-        return ({ url: SiteUrl, web: new Web(SiteUrl) })
-       }
-    } catch (err) {
-      throw err
-    }
   }
 }

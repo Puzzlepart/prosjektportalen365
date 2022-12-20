@@ -31,7 +31,6 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
     SPDataAdapter.configure(props.webPartContext, {
       siteId: props.siteId,
       webUrl: props.webUrl,
-      hubSiteUrl: props.hubSite.url,
       logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     })
     const [phaseFieldCtx, checklistData, welcomePage, properties] = await Promise.all([
