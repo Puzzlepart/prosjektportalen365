@@ -43,9 +43,10 @@ Param(
     [switch]$IncludeBAContent
 )
 
+## Storing access tokens for interactive logins
 $global:__InteractiveCachedAccessTokens = @{}
 
-#region Handling installation language
+#region Handling installation language and culture
 $LanguageIds = @{
     "Norwegian"    = 1044;
     "English (US)" = 1033;
@@ -64,6 +65,8 @@ $ErrorActionPreference = "Stop"
 $sw = [Diagnostics.Stopwatch]::StartNew()
 $global:sw_action = $null
 $InstallStartTime = (Get-Date -Format o)
+
+## Check if -Upgrade switch is present
 if ($Upgrade.IsPresent) {
     Write-Host "########################################################" -ForegroundColor Cyan
     Write-Host "### Upgrading Prosjektportalen 365 v{VERSION_PLACEHOLDER} #####" -ForegroundColor Cyan
@@ -75,6 +78,19 @@ else {
     Write-Host "########################################################" -ForegroundColor Cyan
 }
 
+<#
+.SYNOPSIS
+Connect to SharePoint Online
+
+.DESCRIPTION
+Connect to SharePoint Online with the specified URL using PnP PowerShell
+
+.PARAMETER Url
+The URL to the SharePoint site
+
+.EXAMPLE
+Connect-SharePoint -Url https://contoso.sharepoint.com/sites/pp365
+#>
 function Connect-SharePoint {
     Param(
         [Parameter(Mandatory = $true)]
@@ -111,17 +127,41 @@ function Connect-SharePoint {
     }
 }
 
+<#
+.SYNOPSIS
+Start action
+
+.DESCRIPTION
+Start action, write action name and start stopwatch
+
+.PARAMETER Action
+Action name to start
+#>
 function StartAction($Action) {
     $global:sw_action = [Diagnostics.Stopwatch]::StartNew()
     Write-Host "[INFO] $Action...  " -NoNewline
 }
 
+<#
+.SYNOPSIS
+End action
+
+.DESCRIPTION
+End action, stop stopwatch and write elapsed time
+#>
 function EndAction() {
     $global:sw_action.Stop()
     $ElapsedSeconds = [math]::Round(($global:sw_action.ElapsedMilliseconds) / 1000, 2)
     Write-Host "Completed in $($ElapsedSeconds)s" -ForegroundColor Green
 }
 
+<#
+.SYNOPSIS
+Load PnP.PowerShell from bundle
+
+.DESCRIPTION
+Loaa PnP.PowerShell from bundle and return version.
+#>
 function LoadBundle() {
     Import-Module "$PSScriptRoot\PnP.PowerShell\PnP.PowerShell.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
     return (Get-Command Connect-PnPOnline).Version
@@ -142,7 +182,7 @@ else {
 }
 
 
-#region Setting variables
+#region Setting variables based on input from user
 [System.Uri]$Uri = $Url.TrimEnd('/')
 $ManagedPath = $Uri.Segments[1]
 $Alias = $Uri.Segments[2]
@@ -185,7 +225,7 @@ if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
 }
 #endregion
 
-#region Promoting site to hubsite
+#region Promote site to hub site
 if (-not $Upgrade.IsPresent) {
     Try {
         Connect-SharePoint -Url $AdminSiteUrl -ErrorAction Stop
@@ -201,7 +241,7 @@ if (-not $Upgrade.IsPresent) {
 }
 #endregion
 
-#region Setting permissons
+#region Setting permissions
 if (-not $Upgrade.IsPresent) {
     Try {
         StartAction("Setting permissions for associated member group")
@@ -222,7 +262,7 @@ if (-not $Upgrade.IsPresent) {
 #endregion
 
 
-#region Install site design
+#region Creating/updating site design
 $SiteDesignName = [Uri]::UnescapeDataString($SiteDesignName)
 $SiteDesignDesc = [Uri]::UnescapeDataString("Samarbeid i et prosjektomr%C3%A5de fra Prosjektportalen")
 
@@ -288,7 +328,7 @@ if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
 }
 #endregion
 
-#region Pre install
+#region Running pre-install upgrade steps
 if ($Upgrade.IsPresent) {
     StartAction("Running pre-install upgrade steps")
     try {
@@ -494,7 +534,9 @@ if (-not [string]::IsNullOrEmpty($CI)) {
     $InstallEntry.InstallCommand = "GitHub CI";
 }
 
+## Logging installation to SharePoint list
 Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -ErrorAction SilentlyContinue >$null 2>&1
+
 Disconnect-PnPOnline
 
 $InstallEntry.InstallUrl = $Uri.AbsoluteUri
@@ -505,5 +547,8 @@ try {
 catch {}
 #endregion
 
+## Turning off PnP trace logging
 Set-PnPTraceLog -Off
+
+## Clearing cached access tokens
 $global:__InteractiveCachedAccessTokens = $null
