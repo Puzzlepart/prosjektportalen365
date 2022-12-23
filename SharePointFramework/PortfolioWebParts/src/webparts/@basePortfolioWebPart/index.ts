@@ -52,7 +52,7 @@ export abstract class BasePortfolioWebPart<
   }
 
   public async onInit(): Promise<void> {
-    this.dataAdapter = new DataAdapter(this.context)
+    this.dataAdapter = await new DataAdapter(this.context).configure()
     this.context.statusRenderer.clearLoadingIndicator(this.domElement)
     await this._setup()
   }

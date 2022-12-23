@@ -12,7 +12,7 @@ import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
 import { DataSource, PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
-import _, { any, find, first } from 'underscore'
+import _ from 'underscore'
 import {
   Benefit,
   BenefitMeasurement,
@@ -47,8 +47,8 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Configuring the DataAdapter enabling use
-   * of the `DataSourceService`.
+   * Configuring the `DataAdapter` enabling use
+   * of the `DataSourceService` and `PortalDataService`
    */
   public async configure(): Promise<DataAdapter> {
     if (this.dataSourceService) return this
@@ -141,9 +141,7 @@ export class DataAdapter implements IDataAdapter {
         })
       }
       const [views, viewsUrls, columnUrls] = await Promise.all([
-        await this.configure().then((adapter) => {
-          return adapter.fetchDataSources(category)
-        }),
+        this.fetchDataSources(category),
         this._portalDataService.getListFormUrls('DATA_SOURCES'),
         this._portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS')
       ])
@@ -295,9 +293,8 @@ export class DataAdapter implements IDataAdapter {
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${
-          queryArray ?? ''
-        } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `${queryArray ?? ''
+          } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })
@@ -349,7 +346,7 @@ export class DataAdapter implements IDataAdapter {
         .filter((p) => p)
 
       return { reports, configElement }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -429,26 +426,24 @@ export class DataAdapter implements IDataAdapter {
       (col) => col.title === (configItemTitle || 'Prosjektleveranse')
     )
     if (config?.showElementPortfolio) {
-      const [projectDeliveries] = await Promise.all([
-        this.configure().then(async (adapter) => {
-          try {
-            const deliveries = await adapter.fetchItemsWithSource(
-              dataSourceName || 'Alle prosjektleveranser',
-              [
-                'Title',
-                'GtDeliveryDescriptionOWSMTXT',
-                'GtDeliveryStartTimeOWSDATE',
-                'GtDeliveryEndTimeOWSDATE'
-              ]
-            )
-            return deliveries.filter(
-              (delivery) => delivery.GtDeliveryStartTimeOWSDATE && delivery.GtDeliveryEndTimeOWSDATE
-            )
-          } catch (error) {
-            throw error
-          }
-        })
-      ])
+      const [projectDeliveries] = await (async () => {
+        try {
+          const deliveries = await this.fetchItemsWithSource(
+            dataSourceName || 'Alle prosjektleveranser',
+            [
+              'Title',
+              'GtDeliveryDescriptionOWSMTXT',
+              'GtDeliveryStartTimeOWSDATE',
+              'GtDeliveryEndTimeOWSDATE'
+            ]
+          )
+          return deliveries.filter(
+            (delivery) => delivery.GtDeliveryStartTimeOWSDATE && delivery.GtDeliveryEndTimeOWSDATE
+          )
+        } catch (error) {
+          throw error
+        }
+      })()
 
       return projectDeliveries
         .map((item) =>
@@ -522,10 +517,10 @@ export class DataAdapter implements IDataAdapter {
       .map((item) => {
         const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
         const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
-        const group = find(groups, (grp) => grp.id === item.GtGroupId)
+        const group = _.find(groups, (grp) => grp.id === item.GtGroupId)
         const model = new ProjectListModel(group?.displayName ?? item.Title, item)
         model.isUserMember = !!group
-        model.hasUserAccess = any(sites, (site) => site['SiteId'] === item.GtSiteId)
+        model.hasUserAccess = _.any(sites, (site) => site['SiteId'] === item.GtSiteId)
         if (manager) model.manager = { text: manager.Title, imageUrl: getUserPhoto(manager.Email) }
         if (owner) model.owner = { text: owner.Title, imageUrl: getUserPhoto(owner.Email) }
         return model
@@ -694,7 +689,7 @@ export class DataAdapter implements IDataAdapter {
     const items = indicactors.map((i) => {
       const benefit = i.Benefit
       const measurements = i.Measurements
-      const firstMeasurement = first(i.Measurements)
+      const firstMeasurement = _.first(i.Measurements)
 
       const item = {
         ..._.pick(firstMeasurement?.Properties, _.identity),

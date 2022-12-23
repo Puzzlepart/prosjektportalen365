@@ -52,14 +52,12 @@ export const ColumnFormPanel = () => {
     setColumn(initialColumn)
     if (state.editColumn)
       await Promise.resolve(
-        props.dataAdapter.configure().then((adapter) => {
-          adapter
-            .updateProjectContentColumn(column)
-            .then(() => {
-              dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
-            })
-            .catch((error) => (state.error = error))
-        })
+        props.dataAdapter
+          .updateProjectContentColumn(column)
+          .then(() => {
+            dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
+          })
+          .catch((error) => (state.error = error))
       )
     else {
       const renderAs =
@@ -76,23 +74,21 @@ export const ColumnFormPanel = () => {
       }
 
       await Promise.resolve(
-        props.dataAdapter.configure().then((adapter) => {
-          adapter
-            .addItemToList(strings.ProjectContentColumnsListName, newItem)
-            .then((result) => {
-              const updateItem = {
-                GtProjectContentColumnsId: result['Id']
-              }
+        props.dataAdapter
+          .addItemToList(strings.ProjectContentColumnsListName, newItem)
+          .then((result) => {
+            const updateItem = {
+              GtProjectContentColumnsId: result['Id']
+            }
 
-              adapter
-                .updateDataSourceItem(updateItem, state.dataSource)
-                .then(() => {
-                  dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
-                })
-                .catch((error) => (state.error = error))
-            })
-            .catch((error) => (state.error = error))
-        })
+            props.dataAdapter
+              .updateDataSourceItem(updateItem, state.dataSource)
+              .then(() => {
+                dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
+              })
+              .catch((error) => (state.error = error))
+          })
+          .catch((error) => (state.error = error))
       )
     }
   }
@@ -273,14 +269,12 @@ export const ColumnFormPanel = () => {
             style={{ marginLeft: 4 }}
             onClick={async () => {
               await Promise.resolve(
-                props.dataAdapter.configure().then((adapter) => {
-                  adapter
-                    .deleteProjectContentColumn(state.editColumn)
-                    .then(() => {
-                      dispatch(DELETE_COLUMN())
-                    })
-                    .catch((error) => (state.error = error))
-                })
+                props.dataAdapter
+                  .deleteProjectContentColumn(state.editColumn)
+                  .then(() => {
+                    dispatch(DELETE_COLUMN())
+                  })
+                  .catch((error) => (state.error = error))
               )
             }}
           />

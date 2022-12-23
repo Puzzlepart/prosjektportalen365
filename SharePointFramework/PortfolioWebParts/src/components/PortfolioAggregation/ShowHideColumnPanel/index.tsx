@@ -32,14 +32,12 @@ export const ShowHideColumnPanel: FC = () => {
     }
 
     await Promise.resolve(
-      props.dataAdapter.configure().then((adapter) => {
-        adapter
-          .updateDataSourceItem(updateItems, state.dataSource, true)
-          .then(() => {
-            dispatch(SHOW_HIDE_COLUMNS({ columns: selectedColumns }))
-          })
-          .catch((error) => (state.error = error))
-      })
+      props.dataAdapter
+        .updateDataSourceItem(updateItems, state.dataSource, true)
+        .then(() => {
+          dispatch(SHOW_HIDE_COLUMNS({ columns: selectedColumns }))
+        })
+        .catch((error) => (state.error = error))
     )
   }
 
