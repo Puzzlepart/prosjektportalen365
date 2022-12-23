@@ -24,53 +24,49 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
 
   useEffect(() => {
     if (props.dataSourceCategory) {
-      props.dataAdapter.configure().then((adapter) => {
-        adapter
-          .fetchDataSources(props.dataSourceCategory)
-          .then((dataSources) =>
-            dispatch(
-              DATA_FETCHED({
-                items: null,
-                dataSources
-              })
-            )
+      props.dataAdapter
+        .fetchDataSources(props.dataSourceCategory)
+        .then((dataSources) =>
+          dispatch(
+            DATA_FETCHED({
+              items: null,
+              dataSources
+            })
           )
-          .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
-      })
+        )
+        .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
     }
   }, [props.dataSourceCategory, props.defaultViewId])
 
   useEffect(() => {
     dispatch(START_FETCH())
     if (!state.currentView && props.dataSourceCategory) return
-    props.dataAdapter.configure().then((adapter) => {
-      Promise.all([
-        adapter.dataSourceService.getByName(state.dataSource),
-        adapter.fetchItemsWithSource(
-          state.dataSource,
-          props.selectProperties || state.columns.map((col) => col.fieldName)
-        ),
-        adapter.fetchProjectContentColumns
-          ? adapter.fetchProjectContentColumns(props.dataSourceCategory)
-          : Promise.resolve(undefined),
-        adapter.fetchProjects
-          ? adapter.fetchProjects(props.configuration, state.dataSource)
-          : Promise.resolve(undefined)
-      ])
-        .then(([dataSrc, items, projectColumns, projects]) => {
-          dispatch(
-            DATA_FETCHED({
-              items,
-              columns: projectColumns,
-              fltColumns: dataSrc.projectColumns,
-              projects
-            })
-          )
-          dispatch(GET_FILTERS({ filters: dataSrc.projectRefiners }))
-          dispatch(SET_GROUP_BY({ column: dataSrc.projectGroupBy }))
-        })
-        .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
-    })
+    Promise.all([
+      props.dataAdapter.dataSourceService.getByName(state.dataSource),
+      props.dataAdapter.fetchItemsWithSource(
+        state.dataSource,
+        props.selectProperties || state.columns.map((col) => col.fieldName)
+      ),
+      props.dataAdapter.fetchProjectContentColumns
+        ? props.dataAdapter.fetchProjectContentColumns(props.dataSourceCategory)
+        : Promise.resolve(undefined),
+      props.dataAdapter.fetchProjects
+        ? props.dataAdapter.fetchProjects(props.configuration, state.dataSource)
+        : Promise.resolve(undefined)
+    ])
+      .then(([dataSrc, items, projectColumns, projects]) => {
+        dispatch(
+          DATA_FETCHED({
+            items,
+            columns: projectColumns,
+            fltColumns: dataSrc.projectColumns,
+            projects
+          })
+        )
+        dispatch(GET_FILTERS({ filters: dataSrc.projectRefiners }))
+        dispatch(SET_GROUP_BY({ column: dataSrc.projectGroupBy }))
+      })
+      .catch((error) => dispatch(DATA_FETCH_ERROR({ error })))
   }, [state.columnAdded, state.columnDeleted, state.columnShowHide, state.currentView])
 
   const items = useMemo(() => {

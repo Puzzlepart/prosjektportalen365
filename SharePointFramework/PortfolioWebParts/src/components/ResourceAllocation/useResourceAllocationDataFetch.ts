@@ -54,13 +54,15 @@ function transformItems(
 ): ITimelineItem[] {
   const items = searchResults
     .map<ITimelineItem>((res, id) => {
-      const group = _.find(
-        groups,
-        (grp) => res.RefinableString71 && res.RefinableString71.indexOf(grp.title) !== -1
-      ) ?? _.find(
-        groups,
-        (grp) => res.RefinableString72 && res.RefinableString72.indexOf(grp.title) !== -1
-      )
+      const group =
+        _.find(
+          groups,
+          (grp) => res.RefinableString71 && res.RefinableString71.indexOf(grp.title) !== -1
+        ) ??
+        _.find(
+          groups,
+          (grp) => res.RefinableString72 && res.RefinableString72.indexOf(grp.title) !== -1
+        )
 
       const isAbsence = res.ContentTypeId.indexOf('0x010029F45E75BA9CE340A83EFFB2927E11F4') !== -1
       if (!group || (isAbsence && !res.GtResourceAbsenceOWSCHCS)) return null
