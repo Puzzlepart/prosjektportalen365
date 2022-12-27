@@ -16,6 +16,7 @@ Every change is marked with issue ID.
 - Integrated 'Bygg & anlegg' addon (prosjektportalen365-bygganlegg) directly in Prosjektportalen 365 [#910](https://github.com/Puzzlepart/prosjektportalen365/issues/910)
   - When upgrading, if you want the standard 'Bygg & anlegg' content, make sure to add parameter: `-IncludeBAContent` when upgrading ⚠️
 - Support for creating more than 1 plan per project [#906](https://github.com/Puzzlepart/prosjektportalen365/issues/906)
+- Support to show tags on timeline for deliveries (if added to list) [#917](https://github.com/Puzzlepart/prosjektportalen365/issues/917)
 
 ### Changed
 
