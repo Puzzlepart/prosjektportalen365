@@ -22,6 +22,7 @@ export async function fetchData(
       fetchTimelineData(props, timelineConfig),
       fetchProjectData(props, timelineConfig)
     ])
+
     const groups = createTimelineGroups(project, timelineConfig)
     const selectedGroups = getSelectedGroups(groups, props.defaultGroupBy)
     const items = transformItems(

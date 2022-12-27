@@ -24,48 +24,29 @@ export async function fetchTimelineData(
       strings.TimelineContentListName
     )
 
-    let projectDeliveries;
-
-    try {
-      projectDeliveries = await sp.web.lists
+    const projectDeliveries = (props.showProjectDeliveries
+      ? await sp.web.lists
         .getByTitle(props.projectDeliveriesListName)
-        .items.select(
-          'Title',
-          'GtDeliveryDescription',
-          'GtDeliveryStartTime',
-          'GtDeliveryEndTime',
-          'GtTag'
-        )
-        .getAll();
-    } catch (error) {
-      projectDeliveries = await sp.web.lists
-        .getByTitle(props.projectDeliveriesListName)
-        .items.select(
-          'Title',
-          'GtDeliveryDescription',
-          'GtDeliveryStartTime',
-          'GtDeliveryEndTime',
-        )
-        .getAll();
-    }
-
-    projectDeliveries.map((item) => {
-      const config = _.find(timelineConfig, (col) => col.title === props.configItemTitle)
-      return new TimelineContentModel(
-        props.siteId,
-        props.webTitle,
-        item.Title,
-        config?.title ?? props.configItemTitle,
-        item.GtDeliveryStartTime,
-        item.GtDeliveryEndTime,
-        item.GtDeliveryDescription,
-        item.GtTag || ''
-      ).usingConfig({
-        elementType: strings.BarLabel,
-        timelineFilter: true,
-        ...config
+        .items
+        .getAll()
+      : [])
+      .map((item) => {
+        const config = _.find(timelineConfig, (col) => col.title === props.configItemTitle)
+        return new TimelineContentModel(
+          props.siteId,
+          props.webTitle,
+          item.Title,
+          config?.title ?? props.configItemTitle,
+          item.GtDeliveryStartTime,
+          item.GtDeliveryEndTime,
+          item.GtDeliveryDescription,
+          item.GtTag || ''
+        ).usingConfig({
+          elementType: strings.BarLabel,
+          timelineFilter: true,
+          ...config
+        })
       })
-    })
       .filter(Boolean)
 
     const defaultViewColumns = (
