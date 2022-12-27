@@ -440,7 +440,7 @@ export class DataAdapter implements IDataAdapter {
       (col) => col.title === (configItemTitle || 'Prosjektleveranse')
     )
     if (config?.showElementPortfolio) {
-      const [projectDeliveries] = await (async () => {
+      const projectDeliveries = await (async () => {
         try {
           const deliveries = await this.fetchItemsWithSource(
             dataSourceName || 'Alle prosjektleveranser',
