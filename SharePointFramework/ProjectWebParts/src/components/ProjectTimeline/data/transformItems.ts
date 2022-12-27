@@ -25,6 +25,7 @@ export function transformItems(
   let _itemTitle: any
   try {
     const items: ITimelineItem[] = timelineItems.map((item, id) => {
+    const items: ITimelineItem[] = timelineItems.filter((item) => item.type).map((item, id) => {
       _project = item.title
       _itemTitle = item.itemTitle
       _siteId = item.siteId ?? 'N/A'

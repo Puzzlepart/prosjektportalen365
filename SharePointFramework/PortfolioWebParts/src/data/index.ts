@@ -47,7 +47,7 @@ export class DataAdapter implements IDataAdapter {
 
   /**
    * Constructs the `DataAdapter` class
-   * 
+   *
    * @param context Web part context
    * @param siteIds Site IDs
    */
@@ -410,7 +410,7 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetches configuration data for the Project Timeline and 
+   * Fetches configuration data for the Project Timeline and
    * maps them to `TimelineConfigurationModel`.
    */
   public async fetchTimelineConfiguration() {
@@ -448,7 +448,8 @@ export class DataAdapter implements IDataAdapter {
               'Title',
               'GtDeliveryDescriptionOWSMTXT',
               'GtDeliveryStartTimeOWSDATE',
-              'GtDeliveryEndTimeOWSDATE'
+              'GtDeliveryEndTimeOWSDATE',
+              'GtTagOWSCHCS'
             ]
           )
           return deliveries.filter(
@@ -468,7 +469,8 @@ export class DataAdapter implements IDataAdapter {
             config?.title ?? configItemTitle,
             item.GtDeliveryStartTimeOWSDATE,
             item.GtDeliveryEndTimeOWSDATE,
-            item.GtDeliveryDescriptionOWSMTXT
+            item.GtDeliveryDescriptionOWSMTXT,
+            item.GtTagOWSCHCS
           ).usingConfig(config)
         )
         .filter(Boolean)

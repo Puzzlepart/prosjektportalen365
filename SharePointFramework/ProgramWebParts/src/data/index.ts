@@ -437,7 +437,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
           'Title',
           'GtDeliveryDescriptionOWSMTXT',
           'GtDeliveryStartTimeOWSDATE',
-          'GtDeliveryEndTimeOWSDATE'
+          'GtDeliveryEndTimeOWSDATE',
+          'GtTagOWSCHCS'
         ],
         true
       )
@@ -459,7 +460,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
             config.title ?? configItemTitle,
             item.GtDeliveryStartTimeOWSDATE,
             item.GtDeliveryEndTimeOWSDATE,
-            item.GtDeliveryDescriptionOWSMTXT
+            item.GtDeliveryDescriptionOWSMTXT,
+            item.GtTagOWSCHCS
           ).usingConfig({
             sortOrder: 90,
             bgColorHex: '#384f61',
