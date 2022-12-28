@@ -23,18 +23,13 @@ export async function fetchTimelineData(
     const timelineContentList = SPDataAdapter.portal.web.lists.getByTitle(
       strings.TimelineContentListName
     )
+
     const projectDeliveries = (props.showProjectDeliveries
       ? await sp.web.lists
-          .getByTitle(props.projectDeliveriesListName)
-          .items.select(
-            'Title',
-            'GtDeliveryDescription',
-            'GtDeliveryStartTime',
-            'GtDeliveryEndTime'
-          )
-          .getAll()
-      : []
-    )
+        .getByTitle(props.projectDeliveriesListName)
+        .items
+        .getAll()
+      : [])
       .map((item) => {
         const config = _.find(timelineConfig, (col) => col.title === props.configItemTitle)
         return new TimelineContentModel(
@@ -44,7 +39,8 @@ export async function fetchTimelineData(
           config?.title ?? props.configItemTitle,
           item.GtDeliveryStartTime,
           item.GtDeliveryEndTime,
-          item.GtDeliveryDescription
+          item.GtDeliveryDescription,
+          item.GtTag || ''
         ).usingConfig({
           elementType: strings.BarLabel,
           timelineFilter: true,
