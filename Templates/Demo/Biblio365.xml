@@ -1,0 +1,1907 @@
+<?xml version="1.0"?>
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
+  <pnp:Preferences Generator="PnP.Framework, Version=1.11.2.0, Culture=neutral, PublicKeyToken=0d501f89f11b748c" />
+  <pnp:Templates ID="CONTAINER-TEMPLATE-49A22075DBD64868915A381C2281146C">
+    <pnp:ProvisioningTemplate ID="TEMPLATE-49A22075DBD64868915A381C2281146C" Version="1" BaseSiteTemplate="GROUP#0" Scope="RootSite">
+      <pnp:WebSettings RequestAccessEmail="" NoCrawl="false" WelcomePage="SitePages/ProjectHome.aspx" AlternateCSS="" MasterPageUrl="{masterpagecatalog}/seattle.master" CustomMasterPageUrl="{masterpagecatalog}/seattle.master" HubSiteUrl="{hosturl}/sites/pp365" CommentsOnSitePagesDisabled="false" QuickLaunchEnabled="true" MembersCanShare="true" SearchScope="DefaultScope" SearchBoxInNavBar="Inherit" />
+      <pnp:SiteSettings AllowDesigner="true" AllowCreateDeclarativeWorkflow="true" AllowSaveDeclarativeWorkflowAsTemplate="true" AllowSavePublishDeclarativeWorkflow="true" SearchBoxInNavBar="Inherit" SearchCenterUrl="" />
+      <pnp:RegionalSettings AdjustHijriDays="0" AlternateCalendarType="None" CalendarType="Gregorian" Collation="9" FirstDayOfWeek="Monday" FirstWeekOfYear="0" LocaleId="1044" ShowWeeks="false" Time24="true" TimeZone="4" WorkDayEndHour="5:00PM" WorkDays="62" WorkDayStartHour="8:00AM" />
+      <pnp:SupportedUILanguages>
+        <pnp:SupportedUILanguage LCID="1044" />
+      </pnp:SupportedUILanguages>
+      <pnp:Security AssociatedOwnerGroup="{groupsitetitle}-eiere" AssociatedMemberGroup="{groupsitetitle}-medlemmer" AssociatedVisitorGroup="{groupsitetitle}-besøkende">
+        <pnp:SiteGroups>
+          <pnp:SiteGroup Title="{groupsitename}-besøkende" Description="Bruk denne gruppen til å gi personer lesetillatelser for SharePoint-området&amp;#58; &lt;a href=&quot;/sites/Biblio365&quot;&gt;Biblio 365&lt;/a&gt;" Owner="{associatedownergroupid}" AllowMembersEditMembership="false" AllowRequestToJoinLeave="false" AutoAcceptRequestToJoinLeave="false" OnlyAllowMembersViewMembership="false" RequestToJoinLeaveEmailSetting="" />
+          <pnp:SiteGroup Title="{groupsitename}-eiere" Description="Bruk denne gruppen til å gi personer tillatelser med full kontroll for SharePoint-området&amp;#58; &lt;a href=&quot;/sites/Biblio365&quot;&gt;Biblio 365&lt;/a&gt;" Owner="{associatedownergroupid}" AllowMembersEditMembership="false" AllowRequestToJoinLeave="false" AutoAcceptRequestToJoinLeave="false" OnlyAllowMembersViewMembership="false" RequestToJoinLeaveEmailSetting="" />
+          <pnp:SiteGroup Title="{groupsitename}-medlemmer" Description="Bruk denne gruppen til å gi personer bidragstillatelser for SharePoint-området&amp;#58; &lt;a href=&quot;/sites/Biblio365&quot;&gt;Biblio 365&lt;/a&gt;" Owner="{associatedownergroupid}" AllowMembersEditMembership="true" AllowRequestToJoinLeave="false" AutoAcceptRequestToJoinLeave="false" OnlyAllowMembersViewMembership="false" RequestToJoinLeaveEmailSetting="" />
+        </pnp:SiteGroups>
+        <pnp:Permissions>
+          <pnp:RoleAssignments>
+            <pnp:RoleAssignment Principal="{associatedownergroupid}" RoleDefinition="{roledefinition:Administrator}" />
+            <pnp:RoleAssignment Principal="{associatedvisitorgroupid}" RoleDefinition="{roledefinition:Reader}" />
+            <pnp:RoleAssignment Principal="{associatedmembergroupid}" RoleDefinition="{roledefinition:Editor}" />
+            <pnp:RoleAssignment Principal="Hub-besøkende" RoleDefinition="{roledefinition:Reader}" />
+            <pnp:RoleAssignment Principal="Porteføljeadministratorer" RoleDefinition="{roledefinition:Administrator}" />
+            <pnp:RoleAssignment Principal="Hub-besøkende1" RoleDefinition="{roledefinition:Reader}" />
+          </pnp:RoleAssignments>
+        </pnp:Permissions>
+      </pnp:Security>
+      <pnp:Navigation AddNewPagesToNavigation="true" CreateFriendlyUrlsForNewPages="true">
+        <pnp:CurrentNavigation NavigationType="StructuralLocal">
+          <pnp:StructuralNavigation RemoveExistingNodes="true">
+            <pnp:NavigationNode Title="Hjem" Url="{site}" />
+            <pnp:NavigationNode Title="Prosjektstatus" Url="{site}/SitePages/Prosjektstatus.aspx" />
+            <pnp:NavigationNode Title="Prosjektlogg" Url="{site}/Lists/Prosjektlogg/AllItems.aspx" />
+            <pnp:NavigationNode Title="Interessentregister" Url="{site}/Lists/Interessentregister/AllItems.aspx" />
+            <pnp:NavigationNode Title="Kommunikasjonsplan" Url="{site}/Lists/Kommunikasjonsplan/AllItems.aspx" />
+            <pnp:NavigationNode Title="Usikkerhet" Url="{site}/Lists/Usikkerhet/AllItems.aspx" />
+            <pnp:NavigationNode Title="Dokumenter" Url="{site}/Delte dokumenter/Forms/AllItems.aspx" />
+            <pnp:NavigationNode Title="Oppgaver" Url="{site}/SitePages/Oppgaver.aspx" />
+            <pnp:NavigationNode Title="Fasesjekkliste" Url="{site}/Lists/Fasesjekkliste/AllItems.aspx" />
+            <pnp:NavigationNode Title="Notatblokk" Url="{site}/_layouts/15/groupstatus.aspx?Target=NOTEBOOK" IsExternal="true" />
+            <pnp:NavigationNode Title="Gevinstarbeid" Url="{site}#">
+              <pnp:NavigationNode Title="Endringsanalyse" Url="{site}/Lists/Endringsanalyse/AllItems.aspx" />
+              <pnp:NavigationNode Title="Gevinstanalyse og gevinstrealiseringsplan" Url="{site}/Lists/Gevinstanalyse og gevinstrealiseringsplan/AllItems.aspx" />
+              <pnp:NavigationNode Title="Måleindikatorer" Url="{site}/Lists/Mleindikatorer/AllItems.aspx" />
+              <pnp:NavigationNode Title="Gevinstoppfølging" Url="{site}/Lists/Gevinstoppflging/AllItems.aspx" />
+              <pnp:NavigationNode Title="Gevinstoversikt" Url="{site}/SitePages/Gevinstoversikt.aspx" />
+            </pnp:NavigationNode>
+            <pnp:NavigationNode Title="Prosjektleveranser" Url="{site}/Lists/Prosjektleveranser/AllItems.aspx" />
+            <pnp:NavigationNode Title="Ressursallokering" Url="{site}/Lists/Ressursallokering/AllItems.aspx" />
+            <pnp:NavigationNode Title="Prosjekttidslinje" Url="{site}/SitePages/Prosjekttidslinje.aspx" />
+            <pnp:NavigationNode Title="Områdeinnhold" Url="{site}/_layouts/15/viewlsts.aspx" IsExternal="true" />
+          </pnp:StructuralNavigation>
+        </pnp:CurrentNavigation>
+      </pnp:Navigation>
+      <pnp:SiteFields>
+        <Field Type="Note" DisplayName="Fase_0" StaticName="j25543a5815d485da9a5e0773ad762e9" Name="j25543a5815d485da9a5e0773ad762e9" ID="{f9375230-87f9-4707-8855-ced4e932d93f}" ShowInViewForms="FALSE" Required="FALSE" Hidden="TRUE" CanToggleHidden="TRUE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="Note" DisplayName="Rolle_0" StaticName="ja0ae560bd5545d4907f5119bf0a83bb" Name="ja0ae560bd5545d4907f5119bf0a83bb" ID="{d0bc560f-4bf3-4152-8825-dc80f34835d8}" ShowInViewForms="FALSE" Required="FALSE" Hidden="TRUE" CanToggleHidden="TRUE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field DisplayName="Beskrivelse av usikkerhet" Description="" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{e930090a-480e-414a-bd4a-0ef5bca31443}" Name="GtRiskDescription" StaticName="GtRiskDescription" Type="Note" UnlimitedLengthInDocumentLibrary="TRUE" NumLines="3" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{9889a80f-c9ec-41d8-a359-ac5fb5c4cfa2}" Name="_SPCallToAction" StaticName="_SPCallToAction" DisplayName="Handlingsoppfordring" Type="Note" SourceID="http://schemas.microsoft.com/sharepoint/v3" Group="_Hidden" Description="" AllowDeletion="FALSE" ShowInNewForm="FALSE" ShowInEditForm="FALSE" ShowInDisplayForm="FALSE" ShowInViewForms="FALSE" ShowInListSettings="FALSE" />
+        <Field ID="{6bd17911-c48a-4900-be61-54ae26207d78}" Name="GtShowInPortfolio" DisplayName="Vis i portefølje" Type="Boolean" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Velg 'Ja' dersom elementet skal synliggjøres i den sentrale oversikten på porteføljenivå (gjør elementet synlig for alle med tilgang til prosjektportalen og prosjektet)" StaticName="GtShowInPortfolio" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{dc856c1d-0b98-4d38-9918-d7068f74bd8b}" Name="GtDeliveryAcceptanceResponsible" DisplayName="Godkjenningsansvar" Type="User" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvem har ansvaret for å godkjenne leveransen?" StaticName="GtDeliveryAcceptanceResponsible" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="Note" DisplayName="Kommentar til måling" Description="Legg inn eventuelle tilleggs-/utfyllende kommentarer til siste utførte måling" NumLines="3" RichText="FALSE" ID="{0b78e51d-84d9-4885-9e79-2fe382a2ceb9}" StaticName="GtMeasurementComment" Name="GtMeasurementComment" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{cbf2ae22-2c77-4ad0-a639-07fddfb5cd81}" Name="GtMilestoneActualDate" StaticName="GtMilestoneActualDate" DisplayName="Faktisk dato" Type="DateTime" Format="DateOnly" FriendlyDisplayFormat="Disabled" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="Note" DisplayName="Beskrivelse av utfordring" Description="Beskriv utfordringen med prosessen slik den er i dag" NumLines="3" RichText="FALSE" RichTextMode="Compatible" IsolateStyles="FALSE" ID="{1fb52a28-81c4-405f-8da6-883c29b6b856}" StaticName="GtChallengeDescription" Name="GtChallengeDescription" RestrictedMode="TRUE" AppendOnly="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{7838332a-cf7f-47d5-924f-8c6d134935ea}" Name="GtProjectLogResponsible" DisplayName="Ansvarlig" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvem er ansvarlig for oppfølging av det innmeldte loggelementet?" FillInChoice="TRUE" StaticName="GtProjectLogResponsible" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <CHOICES>
+            <CHOICE>Prosjekteier</CHOICE>
+            <CHOICE>Linjeorganisasjon</CHOICE>
+            <CHOICE>Prosjektleder</CHOICE>
+            <CHOICE>Prosjektgruppe</CHOICE>
+            <CHOICE>Leverandør</CHOICE>
+            <CHOICE>Referansegrupper</CHOICE>
+            <CHOICE>Andre</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Description="Hva er (planlagt/forventet) sluttdato" DisplayName="Sluttdato" Format="DateOnly" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{16623c2a-3fd1-41c2-87e7-958583dd88da}" Name="GtEndDate" StaticName="GtEndDate" Type="DateTime" AllowDeletion="TRUE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{3bcfaa2c-e9bd-4a22-bf65-af4d68c308e7}" Name="GtDeliveryAcceptanceMethod" DisplayName="Godkjenningsmetode" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvordan blir godkjenningen av leveransen bekreftet? Eksempelvis ved testing, brukerundersøkelse, demonstrasjon, muntlig eller skriftlig avtale/overlering." AppendOnly="FALSE" StaticName="GtDeliveryAcceptanceMethod" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{88d9b92c-efed-45d0-a586-86d9196b77d0}" Type="User" Name="GtResourceUser" StaticName="GtResourceUser" DisplayName="Navn" Description="Oppgi navnet på personen som allokeres/tildeles arbeid i prosjektet" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="Text" DisplayName="Prosjektmal" Description="" MaxLength="255" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{4cc4a931-3861-45ad-85de-6db88afe9fa0}" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtProjectTemplate" Name="GtProjectTemplate" AllowDeletion="TRUE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{00f17233-d4c0-49d0-aebd-5004552abb17}" Name="GtRiskConsequencePostAction" DisplayName="K etter tiltak" Type="Number" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Oppgi konsekvensen (0-5) av usikkerheten dersom den skulle inntreffe etter at tiltakk er iverksatt" Min="0" Max="5" StaticName="GtRiskConsequencePostAction" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{6219fd33-2f3c-42f5-9790-174143bfb99c}" Name="GtRiskAction" DisplayName="Tiltak" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Oppgi aktuelle tiltak for å håndtere usikkerheten" AppendOnly="FALSE" StaticName="GtRiskAction" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="DateTime" DisplayName="Realiseringstidspunkt" Description="Forventet tidspunkt for realisering av gevinsten" Format="DateOnly" FriendlyDisplayFormat="Disabled" ID="{b0d03734-a5b1-4e85-a752-45b2da8df7dd}" StaticName="GtRealizationTime" Name="GtRealizationTime" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{4393ed3c-1599-4ab3-8444-444ab35754bb}" DisplayName="Kommentar, leveransestatus" Name="GtDeliveryStatusComment" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Legg inn eventuelle tilleggs-/utfyllende kommentarer til prosjektleveransens status" NumLines="3" UnlimitedLengthInDocumentLibrary="TRUE" StaticName="GtDeliveryStatusComment" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="Text" DisplayName="SharePoint gruppenavn" Description="" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{d307d83e-7cce-4076-b74e-4a725407fbea}" StaticName="GtSPGroupName" Name="GtSPGroupName" AllowDeletion="TRUE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{a3462545-ac76-4681-96b4-f883fea4b2ba}" Name="GtProjectLogDescription" DisplayName="Loggbeskrivelse" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Gi en utfyllende beskrivelse av loggelementet" AppendOnly="FALSE" StaticName="GtProjectLogDescription" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{cb19284a-cde7-4570-a980-1dab8bd74470}" Name="_ExtendedDescription" SourceID="http://schemas.microsoft.com/sharepoint/v3" StaticName="_ExtendedDescription" DisplayName="Beskrivelse" Group="Utvidede kolonner" RichText="TRUE" ShowInEditForm="FALSE" RichTextMode="Compatible" CanToggleHidden="TRUE" Type="Note" />
+        <Field Type="Number" DisplayName="Målt verdi" Description="Oppgi verdien for siste utførte måling" ID="{70dc7c4a-54ec-4674-b238-2b2a889e1b49}" StaticName="GtMeasurementValue" Name="GtMeasurementValue" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Description="Hvem er gevinstansvarlig for prosjektet?" DisplayName="Gevinstansvarlig" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{fcf9c850-8267-4452-8366-74b7a76da177}" Name="GtGainsResponsible" ShowField="ImnName" StaticName="GtGainsResponsible" Type="User" UserSelectionMode="PeopleOnly" UserSelectionScope="0" AllowDeletion="TRUE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="Choice" DisplayName="Måleenhet" Description="Oppgi målenhet for måleindikatoren" Format="Dropdown" ID="{0d38db52-2040-44c1-823e-7642f76519ee}" StaticName="GtMeasurementUnit" Name="GtMeasurementUnit" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <Default>Antall</Default>
+          <CHOICES>
+            <CHOICE>Antall</CHOICE>
+            <CHOICE>Kroner</CHOICE>
+            <CHOICE>Prosent</CHOICE>
+            <CHOICE>Timer</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Type="Choice" DisplayName="Siste beslutningspunktstatus" Format="RadioButtons" FillInChoice="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{13aa2254-728b-48bd-8d09-5aa5e20933e1}" StaticName="GtLastGateStatus" Name="GtLastGateStatus" ShowInNewForm="FALSE" ShowInEditForm="FALSE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <CHOICES>
+            <CHOICE>Godkjent</CHOICE>
+            <CHOICE>Foreløpig godkjent</CHOICE>
+            <CHOICE>Avvist</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field ID="{2bb7e155-3af4-4353-a460-8da404c4e748}" Name="GtStakeholderInfluencePossibilty" DisplayName="Mulighet til påvirkning" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="I hvilken grad har interessentgruppen mulighet til å påvirke prosjektet?" StaticName="GtStakeholderInfluencePossibilty" AllowDeletion="TRUE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <CHOICES>
+            <CHOICE>Stor</CHOICE>
+            <CHOICE>Middels</CHOICE>
+            <CHOICE>Liten</CHOICE>
+            <CHOICE>Ingen</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field ID="{08ac9d56-f8eb-4a2c-868f-d39fc012fcd6}" Type="Number" Name="GtResourceLoad" StaticName="GtResourceLoad" DisplayName="Belastning" Description="Hva er ressursens forventede arbeidsbelastning, oppgis i tall som indikerer prosent" Percentage="TRUE" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="Note" DisplayName="Gevinstomsetting" Description="Hvordan skal gevinsten realiseres?" NumLines="3" RichText="FALSE" ID="{d79d8a58-1079-4a3a-9f27-02de9a3eace1}" StaticName="GtGainsTurnover" Name="GtGainsTurnover" RestrictedMode="TRUE" RichTextMode="Compatible" IsolateStyles="FALSE" AppendOnly="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{17a4b359-5819-4e7c-9894-a154320a661d}" Name="GtMilestoneStatus" StaticName="GtMilestoneStatus" DisplayName="Status milepæl" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" FillInChoice="FALSE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <CHOICES>
+            <CHOICE>Ikke i rute</CHOICE>
+            <CHOICE>I rute</CHOICE>
+            <CHOICE>Oppnådd</CHOICE>
+            <CHOICE>Ikke oppnådd</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field ID="{c755525b-3716-4ee8-a4f4-f9684808c009}" Name="GtRiskProximity" DisplayName="Nærhet" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Når kan denne usikkerheten inntreffe?" StaticName="GtRiskProximity" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <CHOICES>
+            <CHOICE>Umiddelbart</CHOICE>
+            <CHOICE>I denne fasen</CHOICE>
+            <CHOICE>Innenfor prosjektet</CHOICE>
+            <CHOICE>Utenfor prosjektet</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field ID="{AC9CE95B-F081-4B8A-BB19-2F4427D44674}" Name="_ExpirationDate" SourceID="http://schemas.microsoft.com/sharepoint/v3" StaticName="_ExpirationDate" Hidden="TRUE" Group="_Hidden" ReadOnly="TRUE" Type="Lookup" List="Docs" ShowField="ExpirationDate" DisplayName="Utløpsdato" FromBaseType="TRUE" DisplaceOnUpgrade="TRUE" FieldRef="ID" JoinColName="DoclibRowId" JoinRowOrdinal="0" JoinType="INNER" />
+        <Field ID="{0e1b295d-2bfb-4ef6-ae92-e72068e56111}" Name="GtRiskProbability" DisplayName="Sannsynlighet (S)" Type="Number" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Oppgi sannsynligheten (0-5) for at usikkerheten inntreffer" Min="0" Max="5" StaticName="GtRiskProbability" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Description="Dersom gevinstene skal realiseres i ulike deler av organisasjonen (eller i flere virksomheter) anbefales det å oppnevne en gevinsteier i de ulike delene av linjeorganisasjonen (eller virksomhetene) som eier ulike deler av de planlagte gevinstene. Gevinsteiere har da et distribuert ansvar for sin del av gevinstene, og har en viktig rolle som den gevinstansvarliges forlengede arm og lokale støttespiller." DisplayName="Gevinsteier" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{158b2f60-8068-447f-83e7-cabdb5bf4cf4}" Name="GtGainsOwner" ShowField="ImnName" StaticName="GtGainsOwner" Type="User" UserSelectionMode="PeopleOnly" UserSelectionScope="0" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field DisplayName="Rolle" Description="Velg den rollen personen skal ha i prosjektet" ID="{3a0ae560-bd55-45d4-907f-5119bf0a83bb}" Type="TaxonomyFieldType" Group="Kolonner for Prosjektportalen (Prosjekt)" StaticName="GtResourceRole" Name="GtResourceRole" ShowField="Term1044" SourceID="{{siteid}}" List="{{listid:TaxonomyHiddenList}}" WebId="{siteid}">
+          <Customization>
+            <ArrayOfProperty>
+              <Property>
+                <Name>SspId</Name>
+                <Value xmlns:q1="http://www.w3.org/2001/XMLSchema" p4:type="q1:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{sitecollectiontermstoreid}</Value>
+              </Property>
+              <Property>
+                <Name>GroupId</Name>
+              </Property>
+              <Property>
+                <Name>TermSetId</Name>
+                <Value xmlns:q2="http://www.w3.org/2001/XMLSchema" p4:type="q2:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{termsetid:Prosjektportalen:Rolle}</Value>
+              </Property>
+              <Property>
+                <Name>AnchorId</Name>
+                <Value xmlns:q3="http://www.w3.org/2001/XMLSchema" p4:type="q3:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">00000000-0000-0000-0000-000000000000</Value>
+              </Property>
+              <Property>
+                <Name>UserCreated</Name>
+                <Value xmlns:q4="http://www.w3.org/2001/XMLSchema" p4:type="q4:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>Open</Name>
+                <Value xmlns:q5="http://www.w3.org/2001/XMLSchema" p4:type="q5:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>TextField</Name>
+                <Value xmlns:q6="http://www.w3.org/2001/XMLSchema" p4:type="q6:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{d0bc560f-4bf3-4152-8825-dc80f34835d8}</Value>
+              </Property>
+              <Property>
+                <Name>IsPathRendered</Name>
+                <Value xmlns:q7="http://www.w3.org/2001/XMLSchema" p4:type="q7:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>IsKeyword</Name>
+                <Value xmlns:q8="http://www.w3.org/2001/XMLSchema" p4:type="q8:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>TargetTemplate</Name>
+              </Property>
+              <Property>
+                <Name>CreateValuesInEditForm</Name>
+                <Value xmlns:q9="http://www.w3.org/2001/XMLSchema" p4:type="q9:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>IsDocTagsEnabled</Name>
+              </Property>
+              <Property>
+                <Name>FilterAssemblyStrongName</Name>
+                <Value xmlns:q10="http://www.w3.org/2001/XMLSchema" p4:type="q10:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">Microsoft.SharePoint.Taxonomy, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c</Value>
+              </Property>
+              <Property>
+                <Name>FilterClassName</Name>
+                <Value xmlns:q11="http://www.w3.org/2001/XMLSchema" p4:type="q11:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">Microsoft.SharePoint.Taxonomy.TaxonomyField</Value>
+              </Property>
+              <Property>
+                <Name>FilterMethodName</Name>
+                <Value xmlns:q12="http://www.w3.org/2001/XMLSchema" p4:type="q12:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">GetFilteringHtml</Value>
+              </Property>
+              <Property>
+                <Name>FilterJavascriptProperty</Name>
+                <Value xmlns:q13="http://www.w3.org/2001/XMLSchema" p4:type="q13:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">FilteringJavascript</Value>
+              </Property>
+            </ArrayOfProperty>
+          </Customization>
+        </Field>
+        <Field ID="{2391d165-5d13-46b7-87d2-e32040293210}" Name="GtProjectLogType" DisplayName="Loggelement" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hva slags type loggelement er dette?" StaticName="GtProjectLogType" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <Default>Kommentar/Bekymring/Hendelse</Default>
+          <CHOICES>
+            <CHOICE>Kommentar/Bekymring/Hendelse</CHOICE>
+            <CHOICE>Endringsforespørsel</CHOICE>
+            <CHOICE>Avvik fra spesifikasjon</CHOICE>
+            <CHOICE>Beslutning</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field ID="{08D89A66-4634-42B8-9D5A-0C27395A48B3}" Name="TriggerFlowInfo" SourceID="http://schemas.microsoft.com/sharepoint/v3" Required="FALSE" ShowInFileDlg="FALSE" Hidden="TRUE" ShowInNewForm="FALSE" ShowInEditForm="FALSE" ReadOnlyEnforced="FALSE" ReadOnly="TRUE" DisplaceOnUpgrade="TRUE" StaticName="TriggerFlowInfo" Type="Text" DisplayName="Informasjon om utløserflyt" Sortable="FALSE" />
+        <Field ID="{49b0ba6b-d1ec-4644-91b7-691a33524c90}" Name="GtProjectLogReporter" DisplayName="Meldt av" Type="User" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Du kan melde på vegne av andre eller på vegne av deg selv. Oppgi hvem loggelementet er meldt av" StaticName="GtProjectLogReporter" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{45d5b378-67ce-4f21-b622-fe54b27c83a6}" Name="GtStakeholderActions" DisplayName="Tiltak" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Beskriv tiltak for å oppnå støtte hos interessenten eller redusere motstand/ hindringer" AppendOnly="FALSE" StaticName="GtStakeholderActions" AllowDeletion="TRUE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="Number" DisplayName="Startverdi" Description="Oppgi resultatet fra den første målingen (nullpunktsmålingen)" ID="{c5fc8781-7fbd-43a2-a215-c8c959bbab69}" StaticName="GtStartValue" Name="GtStartValue" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{77450582-a061-4416-af17-6dfb99fa9036}" Name="GtActionDate" DisplayName="Tiltaksdato" Type="DateTime" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Når skal kommunikasjonsaktiviteten gjennomføres?" Format="DateOnly" StaticName="GtActionDate" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="Choice" DisplayName="Rettighetsnivå" Description="Definerer rettighetsnivå på SharePoint-området til prosjektet." Format="Dropdown" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{80cdca83-d0da-4f8f-abcd-5695763556e9}" StaticName="GtPermissionLevel" Name="GtPermissionLevel" AllowDeletion="TRUE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <Default>Lese</Default>
+          <CHOICES>
+            <CHOICE>Lese</CHOICE>
+            <CHOICE>Bidra</CHOICE>
+            <CHOICE>Rediger</CHOICE>
+            <CHOICE>Full kontroll</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field ID="{6539658a-b186-402c-b224-9fb41cb48596}" Name="GtProjectLogActors" DisplayName="Aktører" Type="MultiChoice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Velg aktuelle aktører knyttet til loggelementet" FillInChoice="TRUE" StaticName="GtProjectLogActors" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <CHOICES>
+            <CHOICE>Leverandører</CHOICE>
+            <CHOICE>Prosjektstyre</CHOICE>
+            <CHOICE>Prosjektgruppe</CHOICE>
+            <CHOICE>Referansegruppe</CHOICE>
+            <CHOICE>Andre interessenter</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field ID="{3dd7058b-0ba1-46e5-b40a-4f2f542638ea}" Name="GtDeliveryQualityTolerance" DisplayName="Kvalitetstoleranse" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvilke toleranser (slingringsmonn) gjelder for akseptansekriteriene?" AppendOnly="FALSE" StaticName="GtDeliveryQualityTolerance" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{ff41708b-e251-4237-a060-bea44657e8dc}" Name="_SPAssetFolderId" StaticName="_SPAssetFolderId" DisplayName="ID for objektmappe" Type="Number" SourceID="http://schemas.microsoft.com/sharepoint/v3" Group="_Hidden" Description="" ReadOnly="TRUE" AllowDeletion="FALSE" Hidden="TRUE" />
+        <Field ID="{c845028e-3395-49d4-86fe-6d94992c38c2}" Name="GtDeliveryQualityResponsible" DisplayName="Kvalitetsansvar" Type="User" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvem er ansvarlig for å godkjenne kvaliteten på leveransen?" StaticName="GtDeliveryQualityResponsible" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Description="Hvor i listen ønsker du at elementet skal ligge, benytt f. eks 41 dersom du vil at elementet skal ligge mellom element 40 og 50." DisplayName="Sorteringsrekkefølge" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{0e82c395-9ed9-43f9-871a-208215b18558}" Name="GtSortOrder" StaticName="GtSortOrder" Type="Number" AllowDeletion="TRUE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <Default>100</Default>
+        </Field>
+        <Field ID="{6aad1f97-ba6f-4865-b325-9deea7bd0564}" Name="GtProjectLogRecommendation" DisplayName="Anbefaling" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Beskriv prosjektets anbefaling for videre håndtering av loggelementet" UnlimitedLengthInDocumentLibrary="TRUE" AppendOnly="FALSE" StaticName="GtProjectLogRecommendation" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="Choice" DisplayName="Status" Description="Oppgi status for allokeringen (oppdateres ved behov/endring)" Format="Dropdown" FillInChoice="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{6ec4d897-ee44-42b2-80c0-3714021f6ac6}" StaticName="GtAllocationStatus" Name="GtAllocationStatus" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <Default>Forespurt</Default>
+          <CHOICES>
+            <CHOICE>Forespurt</CHOICE>
+            <CHOICE>Tildelt</CHOICE>
+            <CHOICE>Avvist</CHOICE>
+            <CHOICE>Annet (beskriv i kommentar</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Type="Note" DisplayName="Leveransebeskrivelse" Description="Gi en utfyllende beskrivelse for prosjektleveransen" UnlimitedLengthInDocumentLibrary="TRUE" NumLines="6" RichText="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{99430a99-1354-418f-921f-7ddfdb6c0d7f}" StaticName="GtDeliveryDescription" Name="GtDeliveryDescription" RichTextMode="Compatible" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="Note" DisplayName="Beskrivelse" UnlimitedLengthInDocumentLibrary="TRUE" NumLines="6" RichText="TRUE" RichTextMode="FullHtml" IsolateStyles="TRUE" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{27d85299-57fd-4c76-a752-edafe1ca944e}" StaticName="GtActionDescription" Name="GtActionDescription" Description="" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="DateTime" DisplayName="Sluttidspunkt" Description="Oppgi (forventet) sluttidspunkt for denne prosjektleveransen" Format="DateOnly" FriendlyDisplayFormat="Disabled" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{eb78509b-4109-474e-aca8-90d024a960de}" StaticName="GtDeliveryEndTime" Name="GtDeliveryEndTime" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{554d32a0-0148-4b3c-bfc4-f101232ee501}" Name="GtRiskConsequence" DisplayName="Konsekvens (K)" Type="Number" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Oppgi konsekvensen (0-5) av usikkerheten dersom den skulle inntreffe" Min="0" Max="5" StaticName="GtRiskConsequence" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{475d2ca1-5b8e-4479-96ae-81c0a89354f3}" Name="GtStakeholderInfluence" DisplayName="Påvirkes i hvilken grad" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="I hvilken grad påvirkes interessentgruppen av prosjektet?" StaticName="GtStakeholderInfluence" AllowDeletion="TRUE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <CHOICES>
+            <CHOICE>Stor</CHOICE>
+            <CHOICE>Middels</CHOICE>
+            <CHOICE>Liten</CHOICE>
+            <CHOICE>Ingen</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Type="Text" DisplayName="Kommunikasjonskanal" MaxLength="255" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{4d5e69a2-2eb5-422c-af04-70b67697cd23}" StaticName="GtActionChannel" Name="GtActionChannel" Description="Hvilken kanal benyttes til denne kommunikasjonsaktiviteten?" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{249527a3-c7f9-4ea5-9c33-f942c06c9215}" Name="GtChecklistStatus" DisplayName="Status" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hva er statusen for sjekkpunktet? (Anbefalt status = 'Åpen'. Dette påvirker om man blir etterspurt sjekkpunktet ifm faseendring)" StaticName="GtChecklistStatus" CustomFormatter="{&#xA;&quot;$schema&quot;: &quot;https://developer.microsoft.com/json-schemas/sp/v2/column-formatting.schema.json&quot;,&#xA;&quot;elmType&quot;:&quot;div&quot;,&#xA;&quot;attributes&quot;:{&#xA;&quot;class&quot;: &quot;=if(@currentField == 'Åpen', 'sp-field-severity--low', if(@currentField == 'Utført', 'sp-field-severity--good', if(@currentField == 'Arkivert', 'sp-field-severity--warning', 'sp-field-severity--blocked'))) + ' ms-fontColor-neutralSecondary'&quot;&#xA;    },&#xA;    &quot;children&quot;: [&#xA;        {&#xA;            &quot;elmType&quot;: &quot;span&quot;,&#xA;            &quot;style&quot;: {&#xA;                &quot;display&quot;: &quot;inline-block&quot;,&#xA;                &quot;padding&quot;: &quot;0 4px&quot;&#xA;            },&#xA;            &quot;attributes&quot;: {&#xA;                &quot;iconName&quot;: &quot;=if(@currentField == 'Åpen', 'CircleRing', if(@currentField == 'Utført', 'Completed', if(@currentField == 'Arkivert', 'Archive', 'Blocked')))&quot;&#xA;}&#xA;},&#xA;{&#xA;&quot;elmType&quot;: &quot;span&quot;,&#xA;&quot;txtContent&quot;: &quot;@currentField&quot;&#xA;}&#xA;]&#xA;}" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <Default>Åpen</Default>
+          <CHOICES>
+            <CHOICE>Åpen</CHOICE>
+            <CHOICE>Utført</CHOICE>
+            <CHOICE>Ikke relevant</CHOICE>
+            <CHOICE>Arkivert</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field ID="{2ae541a5-5ecc-481d-afb6-c03a6f1e71b4}" Type="User" Name="GtActionResponsible" StaticName="GtActionResponsible" DisplayName="Tiltaksansvarlig" Description="Hvem er ansvarlig for å følge opp usikkerheten?" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Description="" DisplayName="Fase" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{325543a5-815d-485d-a9a5-e0773ad762e9}" Name="GtProjectPhase" ShowField="Term1044" StaticName="GtProjectPhase" Type="TaxonomyFieldType" AllowDeletion="TRUE" SourceID="{{siteid}}" List="{{listid:TaxonomyHiddenList}}" WebId="{siteid}">
+          <Customization>
+            <ArrayOfProperty>
+              <Property>
+                <Name>SspId</Name>
+                <Value xmlns:q1="http://www.w3.org/2001/XMLSchema" p4:type="q1:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{sitecollectiontermstoreid}</Value>
+              </Property>
+              <Property>
+                <Name>GroupId</Name>
+              </Property>
+              <Property>
+                <Name>TermSetId</Name>
+                <Value xmlns:q2="http://www.w3.org/2001/XMLSchema" p4:type="q2:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{termsetid:Prosjektportalen:Fase}</Value>
+              </Property>
+              <Property>
+                <Name>AnchorId</Name>
+                <Value xmlns:q3="http://www.w3.org/2001/XMLSchema" p4:type="q3:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">00000000-0000-0000-0000-000000000000</Value>
+              </Property>
+              <Property>
+                <Name>UserCreated</Name>
+                <Value xmlns:q4="http://www.w3.org/2001/XMLSchema" p4:type="q4:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>Open</Name>
+                <Value xmlns:q5="http://www.w3.org/2001/XMLSchema" p4:type="q5:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>TextField</Name>
+                <Value xmlns:q6="http://www.w3.org/2001/XMLSchema" p4:type="q6:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{f9375230-87f9-4707-8855-ced4e932d93f}</Value>
+              </Property>
+              <Property>
+                <Name>IsPathRendered</Name>
+                <Value xmlns:q7="http://www.w3.org/2001/XMLSchema" p4:type="q7:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>IsKeyword</Name>
+                <Value xmlns:q8="http://www.w3.org/2001/XMLSchema" p4:type="q8:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>TargetTemplate</Name>
+              </Property>
+              <Property>
+                <Name>CreateValuesInEditForm</Name>
+                <Value xmlns:q9="http://www.w3.org/2001/XMLSchema" p4:type="q9:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+              </Property>
+              <Property>
+                <Name>IsDocTagsEnabled</Name>
+              </Property>
+              <Property>
+                <Name>FilterAssemblyStrongName</Name>
+                <Value xmlns:q10="http://www.w3.org/2001/XMLSchema" p4:type="q10:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">Microsoft.SharePoint.Taxonomy, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c</Value>
+              </Property>
+              <Property>
+                <Name>FilterClassName</Name>
+                <Value xmlns:q11="http://www.w3.org/2001/XMLSchema" p4:type="q11:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">Microsoft.SharePoint.Taxonomy.TaxonomyField</Value>
+              </Property>
+              <Property>
+                <Name>FilterMethodName</Name>
+                <Value xmlns:q12="http://www.w3.org/2001/XMLSchema" p4:type="q12:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">GetFilteringHtml</Value>
+              </Property>
+              <Property>
+                <Name>FilterJavascriptProperty</Name>
+                <Value xmlns:q13="http://www.w3.org/2001/XMLSchema" p4:type="q13:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">FilteringJavascript</Value>
+              </Property>
+            </ArrayOfProperty>
+          </Customization>
+        </Field>
+        <Field Description="" DisplayName="Sist synkronisert" Format="DateOnly" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{5e2506aa-1fe1-4be6-8b45-2e94eb9afdd0}" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" Name="GtLastSyncTime" StaticName="GtLastSyncTime" Type="DateTime" AllowDeletion="TRUE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{dabdcbab-7bab-4fb2-8d65-85bd03809a8d}" Name="GtMilestoneComment" StaticName="GtMilestoneComment" DisplayName="Kommentar milepæl" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" UnlimitedLengthInDocumentLibrary="TRUE" AppendOnly="FALSE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="Note" DisplayName="Kommentar" Description="Legg inn eventuelle tilleggs-/utfyllende kommentarer til ressursens allokering" UnlimitedLengthInDocumentLibrary="TRUE" NumLines="6" RichText="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{42b501ac-c235-4b2a-a95d-8d00aad11779}" StaticName="GtAllocationComment" Name="GtAllocationComment" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a}" Name="GtStakeholderGroup" DisplayName="Interessentgruppe" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvilken interessentgruppe tilhører interessenten?" StaticName="GtStakeholderGroup" AllowDeletion="TRUE" CustomFormatter="" EnforceUniqueValues="FALSE" Indexed="FALSE" FillInChoice="FALSE" Format="Dropdown" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <CHOICES>
+            <CHOICE>Medarbeidere</CHOICE>
+            <CHOICE>Ledelse</CHOICE>
+            <CHOICE>Innbyggere</CHOICE>
+            <CHOICE>Næringsliv</CHOICE>
+            <CHOICE>Frivillighet/Organisasjon</CHOICE>
+            <CHOICE>Fagforening</CHOICE>
+            <CHOICE>Andre offentlige aktører</CHOICE>
+            <CHOICE>Akademia</CHOICE>
+            <CHOICE>Virkemiddelapparat</CHOICE>
+            <CHOICE>Brukere</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field ID="{970ed1b2-9e71-45aa-8f8d-c391a15f067f}" Name="GtStakeholderContext" DisplayName="Arena/Møteplass/Nettverk" Type="Text" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvor treffer du denne interessentgruppen?" StaticName="GtStakeholderContext" AllowDeletion="TRUE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{748ae9b5-223d-4daa-b8f8-dc14284b59db}" Name="GtStakeholderInterest" DisplayName="Interesse" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvilken interesse har interessentgruppen ovenfor prosjektet?" AppendOnly="FALSE" StaticName="GtStakeholderInterest" AllowDeletion="TRUE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="Number" DisplayName="Ønsket verdi" Description="Oppgi verdien når gevinsten anses som realisert" ID="{8b399cb6-c53e-432c-8ffa-b48e2bfbbf71}" StaticName="GtDesiredValue" Name="GtDesiredValue" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{f81ebcb7-8791-44b0-9919-08ed5524b11d}" Name="GtRiskProbabilityPostAction" DisplayName="S etter tiltak" Type="Number" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Oppgi sannsynligheten (0-5) for at usikkerheten inntreffer etter at tiltak er iverksatt" Min="0" Max="5" StaticName="GtRiskProbabilityPostAction" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="Note" DisplayName="Forutsetninger for gevinstoppnåelse" Description="Hvilke forutsetninger må ligge til grunn for gevinstoppnåelse?" NumLines="3" RichText="FALSE" ID="{de5cf8b7-6823-4dac-b4a7-916c53bd3376}" StaticName="GtPrereqProfitAchievement" Name="GtPrereqProfitAchievement" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="Choice" DisplayName="Status" Format="Dropdown" FillInChoice="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{bf340fba-c512-4a07-a543-cdf2d10c578e}" StaticName="GtActionStatus" Name="GtActionStatus" Description="Hvilken status har kommunikasjonsaktiviteten?" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <Default>Ikke påbegynt</Default>
+          <CHOICES>
+            <CHOICE>Ikke påbegynt</CHOICE>
+            <CHOICE>Påbegynt</CHOICE>
+            <CHOICE>Fullført</CHOICE>
+            <CHOICE>Utsatt</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Type="DateTime" DisplayName="Dato for måling" Description="Oppgi dato for siste utførte måling" Format="DateOnly" FriendlyDisplayFormat="Disabled" ID="{5c6fafbb-aee4-4e46-b110-5c798916c2ca}" StaticName="GtMeasurementDate" Name="GtMeasurementDate" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <Default>[today]</Default>
+        </Field>
+        <Field Type="Choice" DisplayName="Gevinsttype" Format="RadioButtons" ID="{a1a56abd-5b3d-45d2-8617-32b2f8b195de}" StaticName="GtGainsType" Name="GtGainsType" Description="Direkte (økonomiske - NOK), Indirekte (frigjort tid - årsverk), Kvalitative (f.eks. omdømme)" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <Default>Direkte</Default>
+          <CHOICES>
+            <CHOICE>Direkte</CHOICE>
+            <CHOICE>Indirekte</CHOICE>
+            <CHOICE>Kvalitativ</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field ID="{1150d6bd-c9ba-4014-bd74-7d559110841d}" Name="GtStakeholderStrategy" DisplayName="Plan/strategi/prosjekt" Type="Text" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Kort beskrivelse av plan/strategi for denne interessenten" StaticName="GtStakeholderStrategy" AllowDeletion="TRUE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{04cfd3c0-5f18-4906-bdca-b5f84b693437}" Name="GtRiskStrategy" DisplayName="Usikkerhetstrategi" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvilken usikkerhetsstrategi er valgt for å håndtere usikkerheten" StaticName="GtRiskStrategy" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <Default>Redusere</Default>
+          <CHOICES>
+            <CHOICE>Redusere</CHOICE>
+            <CHOICE>Overvåke</CHOICE>
+            <CHOICE>Unngå</CHOICE>
+            <CHOICE>Overføre</CHOICE>
+            <CHOICE>Dele</CHOICE>
+            <CHOICE>Akseptere</CHOICE>
+            <CHOICE>Øke</CHOICE>
+            <CHOICE>Utnytte</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field ID="{149a30c2-056d-44f0-9cb5-29bfc632ca25}" Name="GtDeliveryAcceptanceCriteria" DisplayName="Akseptansekriterier" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Målbare definisjoner av kravene leveransen må møte før den kan aksepteres av bestiller" AppendOnly="FALSE" StaticName="GtDeliveryAcceptanceCriteria" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{c8e260c2-6887-4f9e-a713-7200246c3b1c}" Name="GtDeliveryQualityExpectations" DisplayName="Kvalitetsforventninger" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvilke forventninger er uttalt til kvaliteten på leveransen?" AppendOnly="FALSE" StaticName="GtDeliveryQualityExpectations" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{a3038ecc-69db-4179-b23b-5fdb0535b38c}" Name="GtProjectInfoDescription" DisplayName="Beskrivelse" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" UnlimitedLengthInDocumentLibrary="TRUE" AppendOnly="FALSE" StaticName="GtProjectInfoDescription" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{4322afd6-5f0f-4a22-819a-cb61668e6ede}" DisplayName="Leveransestatus" Name="GtDeliveryStatus" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Oppgi leveransens status (oppdateres etter behov og underveis i prosjektet)" Format="RadioButtons" FillInChoice="FALSE" StaticName="GtDeliveryStatus" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <Default>Ihht. plan</Default>
+          <CHOICES>
+            <CHOICE>Ihht. plan</CHOICE>
+            <CHOICE>Små avvik</CHOICE>
+            <CHOICE>Store avvik</CHOICE>
+            <CHOICE>Godkjent</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field Type="Text" DisplayName="Prosess" Description="Dersom endringen påvirker en prosess, oppgi denne her. Eks 'Onboarding'" ID="{68a5a2da-048c-4d2d-8ba4-5a8b32b60120}" StaticName="GtProcess" Name="GtProcess" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Description="Hva er (planlagt/forventet) startdato" DisplayName="Startdato" Format="DateOnly" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{e39c32db-a7da-4c93-9369-8aa5a7bde92d}" Name="GtStartDate" StaticName="GtStartDate" Type="DateTime" AllowDeletion="TRUE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="Choice" DisplayName="Status usikkerhet" Description="Oppgi statusen for usikkerheten" Format="RadioButtons" FillInChoice="FALSE" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{6c2da0dc-77b1-4152-b751-97adf436faa0}" StaticName="GtRiskStatus" Name="GtRiskStatus" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <Default>Identifisert</Default>
+          <CHOICES>
+            <CHOICE>Identifisert</CHOICE>
+            <CHOICE>Tiltak gjennomført</CHOICE>
+            <CHOICE>Ikke lenger aktuell</CHOICE>
+          </CHOICES>
+        </Field>
+        <Field ID="{ce9474dd-407b-4480-951a-5381857fad6a}" Name="GtDeliveryAcceptanceDate" DisplayName="Godkjent dato" Type="DateTime" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Oppgi dato for når leveransen er godkjent (gjøres under godkjenningen)" Format="DateOnly" StaticName="GtDeliveryAcceptanceDate" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field Type="DateTime" DisplayName="Starttidspunkt" Description="Oppgi (forventet) starttidspunkt for denne prosjektleveransen" Format="DateOnly" FriendlyDisplayFormat="Disabled" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{219a5cdf-799c-48ee-8869-ea39e4b9a6aa}" StaticName="GtDeliveryStartTime" Name="GtDeliveryStartTime" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{7b424ee7-bcc8-490a-8c4c-01637da03347}" Name="GtProjectLogConsequence" DisplayName="Konsekvens" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Gi en utfyllende beskrivelse av konsekvensen av loggelementet" UnlimitedLengthInDocumentLibrary="TRUE" AppendOnly="FALSE" StaticName="GtProjectLogConsequence" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{832a2eeb-5709-40b4-9f7c-04ae67ddd86b}" Name="GtProjectLogExperience" DisplayName="Til erfaringslogg" Type="Boolean" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Velg 'Ja' dersom loggelementet skal synliggjøes i erfaringsloggen på porteføljenivå (gjør loggelementet synlig for alle med tilgang til prosjektportalen og prosjektet)" StaticName="GtProjectLogExperience" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{1fa322ec-6b56-4ea9-a1fd-2623e34083e6}" Name="GtMilestonePlannedDate" StaticName="GtMilestonePlannedDate" DisplayName="Planlagt dato" Type="DateTime" Format="DateOnly" FriendlyDisplayFormat="Disabled" Group="Kolonner for Prosjektportalen (Prosjekt)" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field DisplayName="Kommentar" Description="Legg inn eventuelle tilleggs-/utfyllende kommentarer til personens fravær" Title="Kommentar" Type="Text" Group="Kolonner for Prosjektportalen (Prosjekt)" ID="{1dd2e8f2-bf4f-4a66-b0dc-ad992d10eb64}" StaticName="GtResourceAbsenceComment" Name="GtResourceAbsenceComment" AllowDeletion="TRUE" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{3A8EE3F8-166B-4394-B3E2-E98DCF86A847}" Name="A2ODMountCount" SourceID="http://schemas.microsoft.com/sharepoint/v3" StaticName="A2ODMountCount" Hidden="TRUE" Group="_Hidden" ReadOnly="TRUE" Type="Lookup" List="Docs" ShowField="A2ODMountCount" DisplayName="Antall A2OD-monteringer" FromBaseType="TRUE" DisplaceOnUpgrade="TRUE" FieldRef="ID" JoinColName="DoclibRowId" JoinRowOrdinal="0" JoinType="INNER" />
+        <Field ID="{509a6bfe-004e-41f9-bd73-9a0e02d5c4a7}" Name="GtComment" DisplayName="Kommentar" Type="Note" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Det anbefales at denne er blank under opprettelsen slik at man skrive inn kommentar ifm faseendring" UnlimitedLengthInDocumentLibrary="TRUE" AppendOnly="FALSE" StaticName="GtComment" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}" />
+        <Field ID="{8499bd48-4c5d-43ae-8e27-7968d49ca14f}" Name="GtRiskFactor" DisplayName="Risikofaktor" Type="Calculated" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" ResultType="Number" StaticName="GtRiskFactor" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <Formula>=[Sannsynlighet (S)]*[Konsekvens (K)]</Formula>
+        </Field>
+        <Field ID="{62f0454d-1150-4d55-86ef-075f786d6e5c}" Name="GtRiskFactorPostAction" DisplayName="Risikofaktor etter tiltak" Type="Calculated" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="" ResultType="Number" StaticName="GtRiskFactorPostAction" SourceID="{f7b8ed48-059b-431f-9c40-d6a7dcafef86}">
+          <Formula>=[S etter tiltak]*[K etter tiltak]</Formula>
+        </Field>
+      </pnp:SiteFields>
+      <pnp:ContentTypes>
+        <pnp:ContentType DisplayFormClientSideComponentId="" DisplayFormClientSideComponentProperties="" NewFormClientSideComponentProperties="" EditFormClientSideComponentId="" EditFormClientSideComponentProperties="" ID="0x010004EAFF7AFCC94C2680042E6881264120" Name="Ressursallokering" Description="Opprett et nytt listeelement." Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="" UpdateChildren="false">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="88d9b92c-efed-45d0-a586-86d9196b77d0" Name="GtResourceUser" UpdateChildren="true" />
+            <pnp:FieldRef ID="d0bc560f-4bf3-4152-8825-dc80f34835d8" Name="ja0ae560bd5545d4907f5119bf0a83bb" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="f3b0adf9-c1a2-4b02-920d-943fba4b3611" Name="TaxCatchAll" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="8f6b6dd8-9357-4019-8172-966fcd502ed2" Name="TaxCatchAllLabel" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="3a0ae560-bd55-45d4-907f-5119bf0a83bb" Name="GtResourceRole" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="e39c32db-a7da-4c93-9369-8aa5a7bde92d" Name="GtStartDate" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="16623c2a-3fd1-41c2-87e7-958583dd88da" Name="GtEndDate" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="08ac9d56-f8eb-4a2c-868f-d39fc012fcd6" Name="GtResourceLoad" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="6ec4d897-ee44-42b2-80c0-3714021f6ac6" Name="GtAllocationStatus" UpdateChildren="true" />
+            <pnp:FieldRef ID="42b501ac-c235-4b2a-a95d-8d00aad11779" Name="GtAllocationComment" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType DisplayFormClientSideComponentId="" DisplayFormClientSideComponentProperties="" NewFormClientSideComponentProperties="" EditFormClientSideComponentId="" EditFormClientSideComponentProperties="" ID="0x01001AF93A93F5534B5FBAF750572B11BB7F" Name="Endring" Description="Opprett et nytt listeelement." Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="" UpdateChildren="false">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="68a5a2da-048c-4d2d-8ba4-5a8b32b60120" Name="GtProcess" UpdateChildren="true" />
+            <pnp:FieldRef ID="1fb52a28-81c4-405f-8da6-883c29b6b856" Name="GtChallengeDescription" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType DisplayFormClientSideComponentId="" DisplayFormClientSideComponentProperties="" NewFormClientSideComponentProperties="" EditFormClientSideComponentId="" EditFormClientSideComponentProperties="" ID="0x010039EAFDC2A1624C1BA1A444FC8FE85DEC" Name="Gevinstoppfølging" Description="Opprett et nytt listeelement." Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="" UpdateChildren="false">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="5c6fafbb-aee4-4e46-b110-5c798916c2ca" Name="GtMeasurementDate" UpdateChildren="true" />
+            <pnp:FieldRef ID="70dc7c4a-54ec-4674-b238-2b2a889e1b49" Name="GtMeasurementValue" UpdateChildren="true" />
+            <pnp:FieldRef ID="0b78e51d-84d9-4885-9e79-2fe382a2ceb9" Name="GtMeasurementComment" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType DisplayFormClientSideComponentId="" DisplayFormClientSideComponentProperties="" NewFormClientSideComponentProperties="" EditFormClientSideComponentId="" EditFormClientSideComponentProperties="" ID="0x0100486B1F8AEA24486FBA1C1BA9146C360C" Name="Sjekkpunkt" Description="Opprett et nytt listeelement." Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="" UpdateChildren="false">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="f9375230-87f9-4707-8855-ced4e932d93f" Name="j25543a5815d485da9a5e0773ad762e9" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="f3b0adf9-c1a2-4b02-920d-943fba4b3611" Name="TaxCatchAll" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="8f6b6dd8-9357-4019-8172-966fcd502ed2" Name="TaxCatchAllLabel" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" UpdateChildren="true" />
+            <pnp:FieldRef ID="249527a3-c7f9-4ea5-9c33-f942c06c9215" Name="GtChecklistStatus" UpdateChildren="true" />
+            <pnp:FieldRef ID="509a6bfe-004e-41f9-bd73-9a0e02d5c4a7" Name="GtComment" UpdateChildren="true" />
+            <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType DisplayFormClientSideComponentId="" DisplayFormClientSideComponentProperties="" NewFormClientSideComponentProperties="" EditFormClientSideComponentId="" EditFormClientSideComponentProperties="" ID="0x01004EDD18CB92C14EBA97103D909C897810" Name="Prosjektloggelement" Description="Opprett et nytt listeelement." Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="" UpdateChildren="false">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="2391d165-5d13-46b7-87d2-e32040293210" Name="GtProjectLogType" UpdateChildren="true" />
+            <pnp:FieldRef ID="49b0ba6b-d1ec-4644-91b7-691a33524c90" Name="GtProjectLogReporter" UpdateChildren="true" />
+            <pnp:FieldRef ID="a3462545-ac76-4681-96b4-f883fea4b2ba" Name="GtProjectLogDescription" UpdateChildren="true" />
+            <pnp:FieldRef ID="7838332a-cf7f-47d5-924f-8c6d134935ea" Name="GtProjectLogResponsible" UpdateChildren="true" />
+            <pnp:FieldRef ID="7b424ee7-bcc8-490a-8c4c-01637da03347" Name="GtProjectLogConsequence" UpdateChildren="true" />
+            <pnp:FieldRef ID="6aad1f97-ba6f-4865-b325-9deea7bd0564" Name="GtProjectLogRecommendation" UpdateChildren="true" />
+            <pnp:FieldRef ID="832a2eeb-5709-40b4-9f7c-04ae67ddd86b" Name="GtProjectLogExperience" UpdateChildren="true" />
+            <pnp:FieldRef ID="6539658a-b186-402c-b224-9fb41cb48596" Name="GtProjectLogActors" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType DisplayFormClientSideComponentId="" DisplayFormClientSideComponentProperties="" NewFormClientSideComponentProperties="" EditFormClientSideComponentId="" EditFormClientSideComponentProperties="" ID="0x01004F466123309D46BAB9D5C6DE89A6CF67" Name="Gevinst" Description="Opprett et nytt listeelement." Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="" UpdateChildren="false">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="a1a56abd-5b3d-45d2-8617-32b2f8b195de" Name="GtGainsType" UpdateChildren="true" />
+            <pnp:FieldRef ID="de5cf8b7-6823-4dac-b4a7-916c53bd3376" Name="GtPrereqProfitAchievement" UpdateChildren="true" />
+            <pnp:FieldRef ID="d79d8a58-1079-4a3a-9f27-02de9a3eace1" Name="GtGainsTurnover" UpdateChildren="true" />
+            <pnp:FieldRef ID="fcf9c850-8267-4452-8366-74b7a76da177" Name="GtGainsResponsible" UpdateChildren="true" />
+            <pnp:FieldRef ID="158b2f60-8068-447f-83e7-cabdb5bf4cf4" Name="GtGainsOwner" UpdateChildren="true" />
+            <pnp:FieldRef ID="b0d03734-a5b1-4e85-a752-45b2da8df7dd" Name="GtRealizationTime" UpdateChildren="true" />
+            <pnp:FieldRef ID="6bd17911-c48a-4900-be61-54ae26207d78" Name="GtShowInPortfolio" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType DisplayFormClientSideComponentId="" DisplayFormClientSideComponentProperties="" NewFormClientSideComponentProperties="" EditFormClientSideComponentId="" EditFormClientSideComponentProperties="" ID="0x010065CE65D51354419EA794C6FACD4FA2EB" Name="Kommunikasjonselement" Description="Opprett et nytt listeelement." Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="" UpdateChildren="false">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="f9375230-87f9-4707-8855-ced4e932d93f" Name="j25543a5815d485da9a5e0773ad762e9" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="f3b0adf9-c1a2-4b02-920d-943fba4b3611" Name="TaxCatchAll" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="8f6b6dd8-9357-4019-8172-966fcd502ed2" Name="TaxCatchAllLabel" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" UpdateChildren="true" />
+            <pnp:FieldRef ID="bf340fba-c512-4a07-a543-cdf2d10c578e" Name="GtActionStatus" UpdateChildren="true" />
+            <pnp:FieldRef ID="4d5e69a2-2eb5-422c-af04-70b67697cd23" Name="GtActionChannel" UpdateChildren="true" />
+            <pnp:FieldRef ID="77450582-a061-4416-af17-6dfb99fa9036" Name="GtActionDate" UpdateChildren="true" />
+            <pnp:FieldRef ID="2ae541a5-5ecc-481d-afb6-c03a6f1e71b4" Name="GtActionResponsible" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType DisplayFormClientSideComponentId="" DisplayFormClientSideComponentProperties="" NewFormClientSideComponentProperties="" EditFormClientSideComponentId="" EditFormClientSideComponentProperties="" ID="0x010072C95831F8434782AB2FF6BE3E596F46" Name="Interessent" Description="Opprett et nytt listeelement." Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="" UpdateChildren="false">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a" Name="GtStakeholderGroup" UpdateChildren="true" />
+            <pnp:FieldRef ID="970ed1b2-9e71-45aa-8f8d-c391a15f067f" Name="GtStakeholderContext" UpdateChildren="true" />
+            <pnp:FieldRef ID="1150d6bd-c9ba-4014-bd74-7d559110841d" Name="GtStakeholderStrategy" UpdateChildren="true" />
+            <pnp:FieldRef ID="748ae9b5-223d-4daa-b8f8-dc14284b59db" Name="GtStakeholderInterest" UpdateChildren="true" />
+            <pnp:FieldRef ID="475d2ca1-5b8e-4479-96ae-81c0a89354f3" Name="GtStakeholderInfluence" UpdateChildren="true" />
+            <pnp:FieldRef ID="2bb7e155-3af4-4353-a460-8da404c4e748" Name="GtStakeholderInfluencePossibilty" UpdateChildren="true" />
+            <pnp:FieldRef ID="45d5b378-67ce-4f21-b622-fe54b27c83a6" Name="GtStakeholderActions" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType DisplayFormClientSideComponentId="" DisplayFormClientSideComponentProperties="" NewFormClientSideComponentProperties="" EditFormClientSideComponentId="" EditFormClientSideComponentProperties="" ID="0x010073043EFE3E814A2BBEF96B8457623F95" Name="Måleindikator" Description="Opprett et nytt listeelement." Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="" UpdateChildren="false">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="c5fc8781-7fbd-43a2-a215-c8c959bbab69" Name="GtStartValue" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="8b399cb6-c53e-432c-8ffa-b48e2bfbbf71" Name="GtDesiredValue" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="0d38db52-2040-44c1-823e-7642f76519ee" Name="GtMeasurementUnit" Required="true" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType DisplayFormClientSideComponentId="" DisplayFormClientSideComponentProperties="" NewFormClientSideComponentProperties="" EditFormClientSideComponentId="" EditFormClientSideComponentProperties="" ID="0x0100A87AE71CBF2643A6BC9D0948BD2EE897" Name="Usikkerhet" Description="Opprett et nytt listeelement." Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="" UpdateChildren="false">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="e930090a-480e-414a-bd4a-0ef5bca31443" Name="GtRiskDescription" UpdateChildren="true" />
+            <pnp:FieldRef ID="f9375230-87f9-4707-8855-ced4e932d93f" Name="j25543a5815d485da9a5e0773ad762e9" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="f3b0adf9-c1a2-4b02-920d-943fba4b3611" Name="TaxCatchAll" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="8f6b6dd8-9357-4019-8172-966fcd502ed2" Name="TaxCatchAllLabel" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" UpdateChildren="true" />
+            <pnp:FieldRef ID="c755525b-3716-4ee8-a4f4-f9684808c009" Name="GtRiskProximity" UpdateChildren="true" />
+            <pnp:FieldRef ID="6219fd33-2f3c-42f5-9790-174143bfb99c" Name="GtRiskAction" UpdateChildren="true" />
+            <pnp:FieldRef ID="04cfd3c0-5f18-4906-bdca-b5f84b693437" Name="GtRiskStrategy" UpdateChildren="true" />
+            <pnp:FieldRef ID="2ae541a5-5ecc-481d-afb6-c03a6f1e71b4" Name="GtActionResponsible" UpdateChildren="true" />
+            <pnp:FieldRef ID="0e1b295d-2bfb-4ef6-ae92-e72068e56111" Name="GtRiskProbability" UpdateChildren="true" />
+            <pnp:FieldRef ID="554d32a0-0148-4b3c-bfc4-f101232ee501" Name="GtRiskConsequence" UpdateChildren="true" />
+            <pnp:FieldRef ID="8499bd48-4c5d-43ae-8e27-7968d49ca14f" Name="GtRiskFactor" UpdateChildren="true" />
+            <pnp:FieldRef ID="f81ebcb7-8791-44b0-9919-08ed5524b11d" Name="GtRiskProbabilityPostAction" UpdateChildren="true" />
+            <pnp:FieldRef ID="00f17233-d4c0-49d0-aebd-5004552abb17" Name="GtRiskConsequencePostAction" UpdateChildren="true" />
+            <pnp:FieldRef ID="62f0454d-1150-4d55-86ef-075f786d6e5c" Name="GtRiskFactorPostAction" UpdateChildren="true" />
+            <pnp:FieldRef ID="6c2da0dc-77b1-4152-b751-97adf436faa0" Name="GtRiskStatus" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType DisplayFormClientSideComponentId="" DisplayFormClientSideComponentProperties="" NewFormClientSideComponentProperties="" EditFormClientSideComponentId="" EditFormClientSideComponentProperties="" ID="0x0100A87AE71CBF2643A6BC9D0948BD2EE89701" Name="Risiko" Description="Opprett et nytt listeelement." Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="" UpdateChildren="false">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="e930090a-480e-414a-bd4a-0ef5bca31443" Name="GtRiskDescription" UpdateChildren="true" />
+            <pnp:FieldRef ID="f9375230-87f9-4707-8855-ced4e932d93f" Name="j25543a5815d485da9a5e0773ad762e9" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="f3b0adf9-c1a2-4b02-920d-943fba4b3611" Name="TaxCatchAll" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="8f6b6dd8-9357-4019-8172-966fcd502ed2" Name="TaxCatchAllLabel" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" UpdateChildren="true" />
+            <pnp:FieldRef ID="c755525b-3716-4ee8-a4f4-f9684808c009" Name="GtRiskProximity" UpdateChildren="true" />
+            <pnp:FieldRef ID="6219fd33-2f3c-42f5-9790-174143bfb99c" Name="GtRiskAction" UpdateChildren="true" />
+            <pnp:FieldRef ID="04cfd3c0-5f18-4906-bdca-b5f84b693437" Name="GtRiskStrategy" UpdateChildren="true" />
+            <pnp:FieldRef ID="2ae541a5-5ecc-481d-afb6-c03a6f1e71b4" Name="GtActionResponsible" UpdateChildren="true" />
+            <pnp:FieldRef ID="0e1b295d-2bfb-4ef6-ae92-e72068e56111" Name="GtRiskProbability" UpdateChildren="true" />
+            <pnp:FieldRef ID="554d32a0-0148-4b3c-bfc4-f101232ee501" Name="GtRiskConsequence" UpdateChildren="true" />
+            <pnp:FieldRef ID="8499bd48-4c5d-43ae-8e27-7968d49ca14f" Name="GtRiskFactor" UpdateChildren="true" />
+            <pnp:FieldRef ID="f81ebcb7-8791-44b0-9919-08ed5524b11d" Name="GtRiskProbabilityPostAction" UpdateChildren="true" />
+            <pnp:FieldRef ID="00f17233-d4c0-49d0-aebd-5004552abb17" Name="GtRiskConsequencePostAction" UpdateChildren="true" />
+            <pnp:FieldRef ID="62f0454d-1150-4d55-86ef-075f786d6e5c" Name="GtRiskFactorPostAction" UpdateChildren="true" />
+            <pnp:FieldRef ID="6c2da0dc-77b1-4152-b751-97adf436faa0" Name="GtRiskStatus" UpdateChildren="true" />
+            <pnp:FieldRef ID="6bd17911-c48a-4900-be61-54ae26207d78" Name="GtShowInPortfolio" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType DisplayFormClientSideComponentId="" DisplayFormClientSideComponentProperties="" NewFormClientSideComponentProperties="" EditFormClientSideComponentId="" EditFormClientSideComponentProperties="" ID="0x0100A87AE71CBF2643A6BC9D0948BD2EE89702" Name="Mulighet" Description="Opprett et nytt listeelement." Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="" UpdateChildren="false">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="e930090a-480e-414a-bd4a-0ef5bca31443" Name="GtRiskDescription" UpdateChildren="true" />
+            <pnp:FieldRef ID="f9375230-87f9-4707-8855-ced4e932d93f" Name="j25543a5815d485da9a5e0773ad762e9" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="f3b0adf9-c1a2-4b02-920d-943fba4b3611" Name="TaxCatchAll" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="8f6b6dd8-9357-4019-8172-966fcd502ed2" Name="TaxCatchAllLabel" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" UpdateChildren="true" />
+            <pnp:FieldRef ID="c755525b-3716-4ee8-a4f4-f9684808c009" Name="GtRiskProximity" UpdateChildren="true" />
+            <pnp:FieldRef ID="6219fd33-2f3c-42f5-9790-174143bfb99c" Name="GtRiskAction" UpdateChildren="true" />
+            <pnp:FieldRef ID="04cfd3c0-5f18-4906-bdca-b5f84b693437" Name="GtRiskStrategy" UpdateChildren="true" />
+            <pnp:FieldRef ID="2ae541a5-5ecc-481d-afb6-c03a6f1e71b4" Name="GtActionResponsible" UpdateChildren="true" />
+            <pnp:FieldRef ID="0e1b295d-2bfb-4ef6-ae92-e72068e56111" Name="GtRiskProbability" UpdateChildren="true" />
+            <pnp:FieldRef ID="554d32a0-0148-4b3c-bfc4-f101232ee501" Name="GtRiskConsequence" UpdateChildren="true" />
+            <pnp:FieldRef ID="8499bd48-4c5d-43ae-8e27-7968d49ca14f" Name="GtRiskFactor" UpdateChildren="true" />
+            <pnp:FieldRef ID="f81ebcb7-8791-44b0-9919-08ed5524b11d" Name="GtRiskProbabilityPostAction" UpdateChildren="true" />
+            <pnp:FieldRef ID="00f17233-d4c0-49d0-aebd-5004552abb17" Name="GtRiskConsequencePostAction" UpdateChildren="true" />
+            <pnp:FieldRef ID="62f0454d-1150-4d55-86ef-075f786d6e5c" Name="GtRiskFactorPostAction" UpdateChildren="true" />
+            <pnp:FieldRef ID="6c2da0dc-77b1-4152-b751-97adf436faa0" Name="GtRiskStatus" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType DisplayFormClientSideComponentId="" DisplayFormClientSideComponentProperties="" NewFormClientSideComponentProperties="" EditFormClientSideComponentId="" EditFormClientSideComponentProperties="" ID="0x0100D7B74DE815F946D3B0F99D19F9B36B68" Name="Prosjektleveranse" Description="Opprett et nytt listeelement." Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="" UpdateChildren="false">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="99430a99-1354-418f-921f-7ddfdb6c0d7f" Name="GtDeliveryDescription" UpdateChildren="true" />
+            <pnp:FieldRef ID="219a5cdf-799c-48ee-8869-ea39e4b9a6aa" Name="GtDeliveryStartTime" UpdateChildren="true" />
+            <pnp:FieldRef ID="eb78509b-4109-474e-aca8-90d024a960de" Name="GtDeliveryEndTime" UpdateChildren="true" />
+            <pnp:FieldRef ID="c8e260c2-6887-4f9e-a713-7200246c3b1c" Name="GtDeliveryQualityExpectations" UpdateChildren="true" />
+            <pnp:FieldRef ID="149a30c2-056d-44f0-9cb5-29bfc632ca25" Name="GtDeliveryAcceptanceCriteria" UpdateChildren="true" />
+            <pnp:FieldRef ID="3dd7058b-0ba1-46e5-b40a-4f2f542638ea" Name="GtDeliveryQualityTolerance" UpdateChildren="true" />
+            <pnp:FieldRef ID="c845028e-3395-49d4-86fe-6d94992c38c2" Name="GtDeliveryQualityResponsible" UpdateChildren="true" />
+            <pnp:FieldRef ID="3bcfaa2c-e9bd-4a22-bf65-af4d68c308e7" Name="GtDeliveryAcceptanceMethod" UpdateChildren="true" />
+            <pnp:FieldRef ID="dc856c1d-0b98-4d38-9918-d7068f74bd8b" Name="GtDeliveryAcceptanceResponsible" UpdateChildren="true" />
+            <pnp:FieldRef ID="ce9474dd-407b-4480-951a-5381857fad6a" Name="GtDeliveryAcceptanceDate" UpdateChildren="true" />
+            <pnp:FieldRef ID="4322afd6-5f0f-4a22-819a-cb61668e6ede" Name="GtDeliveryStatus" UpdateChildren="true" />
+            <pnp:FieldRef ID="4393ed3c-1599-4ab3-8444-444ab35754bb" Name="GtDeliveryStatusComment" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType DisplayFormClientSideComponentId="" DisplayFormClientSideComponentProperties="" NewFormClientSideComponentProperties="" EditFormClientSideComponentId="" EditFormClientSideComponentProperties="" ID="0x010200C19C974828B24D469B69C22B2D1FFB63" Name="Prosjekthendelse" Description="Opprett et nytt møte, en ny tidsfrist eller en annen hendelse." Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="" UpdateChildren="false">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="288f5f32-8462-4175-8f09-dd7ba29359a9" Name="Location" UpdateChildren="true" />
+            <pnp:FieldRef ID="64cd368d-2f95-4bfc-a1f9-8d4324ecb007" Name="EventDate" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="2684f9f2-54be-429f-ba06-76754fc056bf" Name="EndDate" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="9da97a8a-1da5-4a77-98d3-4bc10456e700" Name="Description" UpdateChildren="true" />
+            <pnp:FieldRef ID="6df9bd52-550e-4a30-bc31-a4366832a87d" Name="Category" UpdateChildren="true" />
+            <pnp:FieldRef ID="7d95d1f4-f5fd-4a70-90cd-b35abc9b5bc8" Name="fAllDayEvent" UpdateChildren="true" />
+            <pnp:FieldRef ID="f2e63656-135e-4f1c-8fc2-ccbe74071901" Name="fRecurrence" UpdateChildren="true" />
+            <pnp:FieldRef ID="08fc65f9-48eb-4e99-bd61-5946c439e691" Name="WorkspaceLink" UpdateChildren="true" />
+            <pnp:FieldRef ID="5d1d4e76-091a-4e03-ae83-6a59847731c0" Name="EventType" UpdateChildren="true" />
+            <pnp:FieldRef ID="63055d04-01b5-48f3-9e1e-e564e7c6b23b" Name="UID" UpdateChildren="true" />
+            <pnp:FieldRef ID="dfcc8fff-7c4c-45d6-94ed-14ce0719efef" Name="RecurrenceID" UpdateChildren="true" />
+            <pnp:FieldRef ID="b8bbe503-bb22-4237-8d9e-0587756a2176" Name="EventCanceled" UpdateChildren="true" />
+            <pnp:FieldRef ID="4d54445d-1c84-4a6d-b8db-a51ded4e1acc" Name="Duration" UpdateChildren="true" />
+            <pnp:FieldRef ID="d12572d0-0a1e-4438-89b5-4d0430be7603" Name="RecurrenceData" UpdateChildren="true" />
+            <pnp:FieldRef ID="6cc1c612-748a-48d8-88f2-944f477f301b" Name="TimeZone" UpdateChildren="true" />
+            <pnp:FieldRef ID="c4b72ed6-45aa-4422-bff1-2b6750d30819" Name="XMLTZone" UpdateChildren="true" />
+            <pnp:FieldRef ID="9b2bed84-7769-40e3-9b1d-7954a4053834" Name="MasterSeriesItemID" UpdateChildren="true" />
+            <pnp:FieldRef ID="881eac4a-55a5-48b6-a28e-8329d7486120" Name="Workspace" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType DisplayFormClientSideComponentId="" DisplayFormClientSideComponentProperties="" NewFormClientSideComponentProperties="" EditFormClientSideComponentId="" EditFormClientSideComponentProperties="" ID="0x01080024FEF2F7FA284B7CB33E6635D636E380" Name="Prosjektoppgave" Description="Spor et arbeidselement som du eller gruppen må fullføre." Group="Prosjektportalen innholdstyper" NewFormUrl="" EditFormUrl="" DisplayFormUrl="" UpdateChildren="false">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" UpdateChildren="true" />
+            <pnp:FieldRef ID="64cd368d-2f95-4bfc-a1f9-8d4324ecb007" Name="StartDate" UpdateChildren="true" />
+            <pnp:FieldRef ID="cd21b4c2-6841-4f9e-a23a-738a65f99889" Name="DueDate" UpdateChildren="true" />
+            <pnp:FieldRef ID="53101f38-dd2e-458c-b245-0c236cc13d1a" Name="AssignedTo" UpdateChildren="true" />
+            <pnp:FieldRef ID="d2311440-1ed6-46ea-b46d-daa643dc3886" Name="PercentComplete" UpdateChildren="true" />
+            <pnp:FieldRef ID="7662cd2c-f069-4dba-9e35-082cf976e170" Name="Body" UpdateChildren="true" />
+            <pnp:FieldRef ID="c3a92d97-2b77-4a25-9698-3ab54874bc6f" Name="Predecessors" UpdateChildren="true" />
+            <pnp:FieldRef ID="a8eb573e-9e11-481a-a8c9-1104a54b2fbd" Name="Priority" UpdateChildren="true" />
+            <pnp:FieldRef ID="c15b34c3-ce7d-490a-b133-3f4de8801b76" Name="Status" UpdateChildren="true" />
+            <pnp:FieldRef ID="d2a04afc-9a05-48c8-a7fa-fa98f9496141" Name="RelatedItems" UpdateChildren="true" />
+            <pnp:FieldRef ID="f9375230-87f9-4707-8855-ced4e932d93f" Name="j25543a5815d485da9a5e0773ad762e9" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="f3b0adf9-c1a2-4b02-920d-943fba4b3611" Name="TaxCatchAll" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="8f6b6dd8-9357-4019-8172-966fcd502ed2" Name="TaxCatchAllLabel" Hidden="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" UpdateChildren="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+      </pnp:ContentTypes>
+      <pnp:Lists>
+      <pnp:ListInstance Title="Prosjektegenskaper" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Prosjektegenskaper" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" Hidden="true" EnableAttachments="false" EnableFolderCreation="false" DefaultDisplayFormUrl="{site}/Lists/Prosjektegenskaper/DispForm.aspx" DefaultEditFormUrl="{site}/Lists/Prosjektegenskaper/EditForm.aspx" DefaultNewFormUrl="{site}/Lists/Prosjektegenskaper/NewForm.aspx" ImageUrl="/_layouts/15/images/itgen.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x01" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0120" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views>
+            <View Name="{15635A96-FE69-4AC1-9C75-B6D1C025F7A7}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Prosjektegenskaper/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query>
+                <OrderBy>
+                  <FieldRef Name="ID" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="LinkTitle" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+          <pnp:Fields>
+            <Field Type="Note" DisplayName="GtProjectType_0" StaticName="ddb690447d2c486586ecb71413780409" Name="ddb690447d2c486586ecb71413780409" ID="{4f02bd7f-c4dd-4ad3-8fe6-61dc02d18bdb}" ShowInViewForms="FALSE" Required="FALSE" Hidden="TRUE" CanToggleHidden="TRUE" ColName="ntext3" RowOrdinal="0" />
+            <Field Type="Note" DisplayName="GtProjectServiceArea_0" StaticName="j275d73afd4d48babcc131526460d57b" Name="j275d73afd4d48babcc131526460d57b" ID="{87b00cac-b21b-403b-bd62-0b2d4e8c304e}" ShowInViewForms="FALSE" Required="FALSE" Hidden="TRUE" CanToggleHidden="TRUE" ColName="ntext2" RowOrdinal="0" />
+            <Field Description="Hvis relevant, legg inn tilhørende prosjektnavn fra økonomisystemet" DisplayName="Prosjektnavn i økonomisystemet" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{983d5ab3-0a6c-4f6a-a7b5-d34d52d73676}" Name="GtProjectFinanceName" StaticName="GtProjectFinanceName" Type="Text" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="nvarchar4" RowOrdinal="0" Version="1" />
+            <Field Description="Hvis relevant, legg inn tilhørende prosjektnummer" DisplayName="Prosjektnummer" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{64d45745-0dd0-4c21-979b-67fb13748bb1}" Name="GtProjectNumber" StaticName="GtProjectNumber" Type="Text" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="nvarchar5" RowOrdinal="0" Version="1" />
+            <Field Description="Hvis relevant, legg inn tilhørende sak- og arkivreferanse" DisplayName="Sak-/arkivreferanse" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{a59fe220-36c3-464a-8cfc-40d6d04debd2}" Name="GtArchiveReference" StaticName="GtArchiveReference" Type="Text" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="nvarchar6" RowOrdinal="0" Version="1" />
+            <Field Description="Hva slags tjenesteområde hører prosjektet til?" DisplayName="Tjenesteområde" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{3275d73a-fd4d-48ba-bcc1-31526460d57b}" Mult="TRUE" Name="GtProjectServiceArea" ShowField="Term1044" StaticName="GtProjectServiceArea" Type="TaxonomyFieldTypeMulti" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="int1" RowOrdinal="0" List="{listid:TaxonomyHiddenList}" WebId="{siteid}" Version="2">
+              <Customization>
+                <ArrayOfProperty>
+                  <Property>
+                    <Name>SspId</Name>
+                    <Value xmlns:q1="http://www.w3.org/2001/XMLSchema" p4:type="q1:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{sitecollectiontermstoreid}</Value>
+                  </Property>
+                  <Property>
+                    <Name>GroupId</Name>
+                  </Property>
+                  <Property>
+                    <Name>TermSetId</Name>
+                    <Value xmlns:q2="http://www.w3.org/2001/XMLSchema" p4:type="q2:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{termsetid:Prosjektportalen:Tjenesteområde}</Value>
+                  </Property>
+                  <Property>
+                    <Name>AnchorId</Name>
+                    <Value xmlns:q3="http://www.w3.org/2001/XMLSchema" p4:type="q3:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">00000000-0000-0000-0000-000000000000</Value>
+                  </Property>
+                  <Property>
+                    <Name>UserCreated</Name>
+                    <Value xmlns:q4="http://www.w3.org/2001/XMLSchema" p4:type="q4:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+                  </Property>
+                  <Property>
+                    <Name>Open</Name>
+                    <Value xmlns:q5="http://www.w3.org/2001/XMLSchema" p4:type="q5:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+                  </Property>
+                  <Property>
+                    <Name>TextField</Name>
+                    <Value xmlns:q6="http://www.w3.org/2001/XMLSchema" p4:type="q6:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{87b00cac-b21b-403b-bd62-0b2d4e8c304e}</Value>
+                  </Property>
+                  <Property>
+                    <Name>IsPathRendered</Name>
+                    <Value xmlns:q7="http://www.w3.org/2001/XMLSchema" p4:type="q7:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+                  </Property>
+                  <Property>
+                    <Name>IsKeyword</Name>
+                    <Value xmlns:q8="http://www.w3.org/2001/XMLSchema" p4:type="q8:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+                  </Property>
+                  <Property>
+                    <Name>TargetTemplate</Name>
+                  </Property>
+                  <Property>
+                    <Name>CreateValuesInEditForm</Name>
+                    <Value xmlns:q9="http://www.w3.org/2001/XMLSchema" p4:type="q9:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+                  </Property>
+                  <Property>
+                    <Name>IsDocTagsEnabled</Name>
+                  </Property>
+                  <Property>
+                    <Name>FilterAssemblyStrongName</Name>
+                    <Value xmlns:q10="http://www.w3.org/2001/XMLSchema" p4:type="q10:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">Microsoft.SharePoint.Taxonomy, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c</Value>
+                  </Property>
+                  <Property>
+                    <Name>FilterClassName</Name>
+                    <Value xmlns:q11="http://www.w3.org/2001/XMLSchema" p4:type="q11:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">Microsoft.SharePoint.Taxonomy.TaxonomyField</Value>
+                  </Property>
+                  <Property>
+                    <Name>FilterMethodName</Name>
+                    <Value xmlns:q12="http://www.w3.org/2001/XMLSchema" p4:type="q12:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">GetFilteringHtml</Value>
+                  </Property>
+                  <Property>
+                    <Name>FilterJavascriptProperty</Name>
+                    <Value xmlns:q13="http://www.w3.org/2001/XMLSchema" p4:type="q13:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">FilteringJavascript</Value>
+                  </Property>
+                </ArrayOfProperty>
+              </Customization>
+            </Field>
+            <Field Description="Hva slags type prosjekt er dette?" DisplayName="Prosjekttype" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{ddb69044-7d2c-4865-86ec-b71413780409}" Mult="TRUE" Name="GtProjectType" ShowField="Term1044" StaticName="GtProjectType" Type="TaxonomyFieldTypeMulti" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="int3" RowOrdinal="0" List="{listid:TaxonomyHiddenList}" WebId="{siteid}" Version="2">
+              <Customization>
+                <ArrayOfProperty>
+                  <Property>
+                    <Name>SspId</Name>
+                    <Value xmlns:q1="http://www.w3.org/2001/XMLSchema" p4:type="q1:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{sitecollectiontermstoreid}</Value>
+                  </Property>
+                  <Property>
+                    <Name>GroupId</Name>
+                  </Property>
+                  <Property>
+                    <Name>TermSetId</Name>
+                    <Value xmlns:q2="http://www.w3.org/2001/XMLSchema" p4:type="q2:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{termsetid:Prosjektportalen:Prosjekttype}</Value>
+                  </Property>
+                  <Property>
+                    <Name>AnchorId</Name>
+                    <Value xmlns:q3="http://www.w3.org/2001/XMLSchema" p4:type="q3:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">00000000-0000-0000-0000-000000000000</Value>
+                  </Property>
+                  <Property>
+                    <Name>UserCreated</Name>
+                    <Value xmlns:q4="http://www.w3.org/2001/XMLSchema" p4:type="q4:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+                  </Property>
+                  <Property>
+                    <Name>Open</Name>
+                    <Value xmlns:q5="http://www.w3.org/2001/XMLSchema" p4:type="q5:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+                  </Property>
+                  <Property>
+                    <Name>TextField</Name>
+                    <Value xmlns:q6="http://www.w3.org/2001/XMLSchema" p4:type="q6:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">{4f02bd7f-c4dd-4ad3-8fe6-61dc02d18bdb}</Value>
+                  </Property>
+                  <Property>
+                    <Name>IsPathRendered</Name>
+                    <Value xmlns:q7="http://www.w3.org/2001/XMLSchema" p4:type="q7:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+                  </Property>
+                  <Property>
+                    <Name>IsKeyword</Name>
+                    <Value xmlns:q8="http://www.w3.org/2001/XMLSchema" p4:type="q8:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+                  </Property>
+                  <Property>
+                    <Name>TargetTemplate</Name>
+                  </Property>
+                  <Property>
+                    <Name>CreateValuesInEditForm</Name>
+                    <Value xmlns:q9="http://www.w3.org/2001/XMLSchema" p4:type="q9:boolean" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">false</Value>
+                  </Property>
+                  <Property>
+                    <Name>IsDocTagsEnabled</Name>
+                  </Property>
+                  <Property>
+                    <Name>FilterAssemblyStrongName</Name>
+                    <Value xmlns:q10="http://www.w3.org/2001/XMLSchema" p4:type="q10:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">Microsoft.SharePoint.Taxonomy, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c</Value>
+                  </Property>
+                  <Property>
+                    <Name>FilterClassName</Name>
+                    <Value xmlns:q11="http://www.w3.org/2001/XMLSchema" p4:type="q11:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">Microsoft.SharePoint.Taxonomy.TaxonomyField</Value>
+                  </Property>
+                  <Property>
+                    <Name>FilterMethodName</Name>
+                    <Value xmlns:q12="http://www.w3.org/2001/XMLSchema" p4:type="q12:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">GetFilteringHtml</Value>
+                  </Property>
+                  <Property>
+                    <Name>FilterJavascriptProperty</Name>
+                    <Value xmlns:q13="http://www.w3.org/2001/XMLSchema" p4:type="q13:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance">FilteringJavascript</Value>
+                  </Property>
+                </ArrayOfProperty>
+              </Customization>
+            </Field>
+            <Field Description="Hvem er prosjektleder for prosjektet?" DisplayName="Prosjektleder" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{d46bed8f-0fb6-4684-8221-632fdb12598f}" Name="GtProjectManager" StaticName="GtProjectManager" Type="User" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="int5" RowOrdinal="0" Version="1" />
+            <Field Description="Hvem er prosjekteier for prosjektet?" DisplayName="Prosjekteier" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{3121ac55-d68e-4fcb-8fc8-3d8ed8a601b2}" Name="GtProjectOwner" StaticName="GtProjectOwner" Type="User" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="int6" RowOrdinal="0" Version="1" />
+            <Field Description="Hvem er prosjektstøtte for prosjektet? Dette kan være assisterende prosjektledere eller andre involverte." DisplayName="Prosjektstøtte" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{610cfd27-9943-4749-818e-b1d652d70482}" Name="GtProjectSupport" StaticName="GtProjectSupport" Type="UserMulti" Mult="TRUE" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="int7" RowOrdinal="0" Version="1" />
+            <Field AppendOnly="FALSE" Description="Hva er prosjektets målsetting?" DisplayName="Målsetting" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{018f09b8-4954-41bb-a8f6-fa531b90b79f}" Name="GtProjectGoals" StaticName="GtProjectGoals" Type="Note" UnlimitedLengthInDocumentLibrary="TRUE" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="ntext5" RowOrdinal="0" Version="1" />
+            <Field Description="" DisplayName="Gruppe-ID" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{167aef39-147b-40e1-befa-c1982af39d71}" Name="GtGroupId" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtGroupId" Type="Text" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="nvarchar7" RowOrdinal="0" Version="1" />
+            <Field Description="" DisplayName="Område-ID" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{fba7ced6-9970-4b14-ab9c-7c809310d86d}" Name="GtSiteId" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtSiteId" Type="Text" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="nvarchar8" RowOrdinal="0" Version="1">
+              <Default>00000000-0000-0000-0000-000000000000</Default>
+            </Field>
+            <Field Description="" DisplayName="Områdeadresse" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{871c1234-9ac5-4841-8b56-50839c34a7a1}" Name="GtSiteUrl" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtSiteUrl" Type="Text" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="nvarchar9" RowOrdinal="0" Version="1" />
+            <Field ID="{18d92e18-10b6-42ea-815d-b12d7827564e}" Name="GtProjectLifecycleStatus" DisplayName="Prosjektstatus" Type="Choice" Format="Dropdown" Group="Kolonner for Prosjektportalen (Portefølje)" Description="Hvilken status har prosjektet ditt?" StaticName="GtProjectLifecycleStatus" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="nvarchar10" RowOrdinal="0" Version="1">
+              <Default>Aktivt</Default>
+              <CHOICES>
+                <CHOICE>Aktivt</CHOICE>
+                <CHOICE>Avventer</CHOICE>
+                <CHOICE>Avsluttet</CHOICE>
+              </CHOICES>
+            </Field>
+            <Field Description="" DisplayName="Fase (text)" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{1b9a1571-b300-4cc0-bd32-9311f72e1998}" Name="GtProjectPhaseText" StaticName="GtProjectPhaseText" Type="Text" ShowInEditForm="FALSE" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="nvarchar11" RowOrdinal="0" Version="1" />
+            <Field Description="Hva slags tjenesteområde hører prosjektet til?" DisplayName="Tjenesteområde (tekst)" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{1b87b4e7-b9ed-4a31-96cc-abfaca61eea4}" Name="GtProjectServiceAreaText" StaticName="GtProjectServiceAreaText" Type="Text" ShowInEditForm="FALSE" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="nvarchar12" RowOrdinal="0" Version="1" />
+            <Field Description="Hva slags type prosjekt er dette?" DisplayName="Prosjekttype (tekst)" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{7212b9e5-52fc-46cb-8b5e-9bf787dd115f}" Name="GtProjectTypeText" StaticName="GtProjectTypeText" Type="Text" ShowInEditForm="FALSE" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="nvarchar13" RowOrdinal="0" Version="1" />
+            <Field Type="MultiChoice" DisplayName="Prosjektadministrasjonsroller" Description="Velg hvilke roller som skal kunne administrere prosjektet. Dette inkluderer handlinger som å redigere prosjektegenskaper og fase." Format="Dropdown" CustomFormatter="{&quot;elmType&quot;:&quot;div&quot;,&quot;style&quot;:{&quot;flex-wrap&quot;:&quot;wrap&quot;,&quot;display&quot;:&quot;flex&quot;},&quot;children&quot;:[{&quot;forEach&quot;:&quot;__INTERNAL__ in @currentField&quot;,&quot;elmType&quot;:&quot;div&quot;,&quot;style&quot;:{&quot;box-sizing&quot;:&quot;border-box&quot;,&quot;padding&quot;:&quot;4px 8px 5px 8px&quot;,&quot;overflow&quot;:&quot;hidden&quot;,&quot;text-overflow&quot;:&quot;ellipsis&quot;,&quot;display&quot;:&quot;flex&quot;,&quot;border-radius&quot;:&quot;16px&quot;,&quot;height&quot;:&quot;24px&quot;,&quot;align-items&quot;:&quot;center&quot;,&quot;white-space&quot;:&quot;nowrap&quot;,&quot;margin&quot;:&quot;4px 4px 4px 4px&quot;},&quot;attributes&quot;:{&quot;class&quot;:{&quot;operator&quot;:&quot;:&quot;,&quot;operands&quot;:[{&quot;operator&quot;:&quot;==&quot;,&quot;operands&quot;:[&quot;[$__INTERNAL__]&quot;,&quot;Prosjekteier&quot;]},&quot;sp-css-backgroundColor-BgCornflowerBlue sp-field-fontSizeSmall sp-css-color-CornflowerBlueFont&quot;,{&quot;operator&quot;:&quot;:&quot;,&quot;operands&quot;:[{&quot;operator&quot;:&quot;==&quot;,&quot;operands&quot;:[&quot;[$__INTERNAL__]&quot;,&quot;Prosjektleder&quot;]},&quot;sp-css-backgroundColor-BgMintGreen sp-field-fontSizeSmall sp-css-color-MintGreenFont&quot;,{&quot;operator&quot;:&quot;:&quot;,&quot;operands&quot;:[{&quot;operator&quot;:&quot;==&quot;,&quot;operands&quot;:[&quot;[$__INTERNAL__]&quot;,&quot;Prosjektstøtte&quot;]},&quot;sp-css-backgroundColor-BgGold sp-field-fontSizeSmall sp-css-color-GoldFont&quot;,{&quot;operator&quot;:&quot;:&quot;,&quot;operands&quot;:[{&quot;operator&quot;:&quot;==&quot;,&quot;operands&quot;:[&quot;[$__INTERNAL__]&quot;,&quot;Prosjektkontor&quot;]},&quot;sp-css-backgroundColor-BgDarkBlue sp-css-borderColor-WhiteFont sp-field-fontSizeSmall sp-css-color-WhiteFont&quot;,{&quot;operator&quot;:&quot;:&quot;,&quot;operands&quot;:[{&quot;operator&quot;:&quot;==&quot;,&quot;operands&quot;:[&quot;[$__INTERNAL__]&quot;,&quot;SP områdeadministrator&quot;]},&quot;sp-css-backgroundColor-BgViolet sp-css-borderColor-VioletFont sp-field-fontSizeSmall sp-css-color-VioletFont&quot;,&quot;sp-field-borderAllRegular sp-field-borderAllSolid sp-css-borderColor-neutralSecondary&quot;]}]}]}]}]}},&quot;txtContent&quot;:&quot;[$__INTERNAL__]&quot;}],&quot;templateId&quot;:&quot;BgColorChoicePill&quot;}" FillInChoice="FALSE" Group="Kolonner for Prosjektportalen (Portefølje)" ID="{664ddf9a-a415-4b0b-a34f-0653547f03f0}" StaticName="GtProjectAdminRoles" Name="GtProjectAdminRoles" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="ntext6" RowOrdinal="0" Version="1">
+              <Default>SP områdeadministrator</Default>
+              <CHOICES>
+                <CHOICE>Prosjekteier</CHOICE>
+                <CHOICE>Prosjektleder</CHOICE>
+                <CHOICE>Prosjektstøtte</CHOICE>
+                <CHOICE>Prosjektkontor</CHOICE>
+                <CHOICE>SP områdeadministrator</CHOICE>
+              </CHOICES>
+            </Field>
+            <Field Name="GtParentProjects" ID="{98e55335-a95a-4755-83a3-6f8b64af2420}" DisplayName="Overordnede prosjekter" Type="Note" Group="Kolonner for Prosjektportalen (Portefølje)" AppendOnly="FALSE" UnlimitedLengthInDocumentLibrary="TRUE" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtParentProjects" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="ntext7" RowOrdinal="0" Version="1">
+              <Default>[]</Default>
+            </Field>
+            <Field Name="GtChildProjects" ID="{e007ef7e-9c47-4bc2-8171-5c32688f3e0c}" DisplayName="Underområder" Type="Note" Group="Kolonner for Prosjektportalen (Portefølje)" AppendOnly="FALSE" UnlimitedLengthInDocumentLibrary="TRUE" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtChildProjects" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="ntext8" RowOrdinal="0" Version="1">
+              <Default>[]</Default>
+            </Field>
+            <Field Name="GtIsParentProject" ID="{8f1f38cb-7eb2-4122-a866-4c9e99b2ebed}" DisplayName="Overordnet" Type="Boolean" Group="Kolonner for Prosjektportalen (Portefølje)" AppendOnly="FALSE" UnlimitedLengthInDocumentLibrary="TRUE" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtIsParentProject" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="bit1" RowOrdinal="0" Version="1">
+              <Default>0</Default>
+            </Field>
+            <Field Name="GtIsProgram" ID="{77baede1-38df-454c-a53a-dd7904ba0046}" DisplayName="Program" Type="Boolean" Group="Kolonner for Prosjektportalen (Portefølje)" AppendOnly="FALSE" UnlimitedLengthInDocumentLibrary="TRUE" ShowInDisplayForm="FALSE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtIsProgram" AllowDeletion="TRUE" Customization="" SourceID="{{listid:Prosjektegenskaper}}" ColName="bit2" RowOrdinal="0" Version="1">
+              <Default>0</Default>
+            </Field>
+          </pnp:Fields>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="f9375230-87f9-4707-8855-ced4e932d93f" Name="j25543a5815d485da9a5e0773ad762e9" Hidden="true" DisplayName="GtProjectPhase_0" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" DisplayName="Tittel" />
+            <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" DisplayName="Fase" />
+            <pnp:FieldRef ID="fcf9c850-8267-4452-8366-74b7a76da177" Name="GtGainsResponsible" DisplayName="Gevinstansvarlig" />
+            <pnp:FieldRef ID="e39c32db-a7da-4c93-9369-8aa5a7bde92d" Name="GtStartDate" DisplayName="Startdato" />
+            <pnp:FieldRef ID="16623c2a-3fd1-41c2-87e7-958583dd88da" Name="GtEndDate" DisplayName="Sluttdato" />
+            <pnp:FieldRef ID="5e2506aa-1fe1-4be6-8b45-2e94eb9afdd0" Name="GtLastSyncTime" DisplayName="Sist synkronisert" />
+            <pnp:FieldRef ID="4cc4a931-3861-45ad-85de-6db88afe9fa0" Name="GtProjectTemplate" DisplayName="Prosjektmal" />
+          </pnp:FieldRefs>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="Dokumenter" Description="" DocumentTemplate="{site}/Delte dokumenter/Forms/template.dotx" OnQuickLaunch="true" TemplateType="101" Url="Delte dokumenter" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="500" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-e717-4e80-aa17-d0c71b360101" EnableAttachments="false" ListExperience="NewExperience" DefaultDisplayFormUrl="{site}/Delte dokumenter/Forms/DispForm.aspx" DefaultEditFormUrl="{site}/Delte dokumenter/Forms/EditForm.aspx" DefaultNewFormUrl="{site}/Delte dokumenter/Forms/Upload.aspx" ImageUrl="/_layouts/15/images/itdl.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x0101" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0120" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views>
+            <View Name="{3BEA65E1-8F96-4E10-9C11-EBAB5D461DCC}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle dokumenter" Url="{site}/Delte dokumenter/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/dlicon.png?rev=47">
+              <Query />
+              <ViewFields>
+                <FieldRef Name="DocIcon" />
+                <FieldRef Name="LinkFilename" />
+                <FieldRef Name="GtProjectPhase" />
+                <FieldRef Name="Modified" />
+                <FieldRef Name="Editor" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+            <View Name="{4D37EDF1-1FD1-4CAE-8F6E-622178E424B8}" Type="HTML" Scope="Recursive" DisplayName="Gjeldende fase" Url="{site}/Delte dokumenter/Forms/Gjeldende fase.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/dlicon.png?rev=47">
+              <Query>
+                <Where>
+                  <Eq>
+                    <FieldRef Name="GtProjectPhase" />
+                    <Value Type="Text">Planlegge</Value>
+                  </Eq>
+                </Where>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="DocIcon" />
+                <FieldRef Name="LinkFilename" />
+                <FieldRef Name="Modified" />
+                <FieldRef Name="Editor" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="f9375230-87f9-4707-8855-ced4e932d93f" Name="j25543a5815d485da9a5e0773ad762e9" Hidden="true" DisplayName="Fase_0" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="Tittel" />
+            <pnp:FieldRef ID="cb19284a-cde7-4570-a980-1dab8bd74470" Name="_ExtendedDescription" DisplayName="Beskrivelse" />
+            <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" DisplayName="Fase" />
+            <pnp:FieldRef ID="d307dff3-340f-44a2-9f4b-fbfe1ba07459" Name="_CommentCount" DisplayName="Antall kommentarer" />
+            <pnp:FieldRef ID="db8d9d6d-dc9a-4fbd-85f3-4a753bfdc58c" Name="_LikeCount" DisplayName="Antall likerklikk" />
+          </pnp:FieldRefs>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="Endringsanalyse" Description="" DocumentTemplate="" OnQuickLaunch="true" TemplateType="100" Url="Lists/Endringsanalyse" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" ContentTypesEnabled="true" EnableFolderCreation="false" DefaultDisplayFormUrl="{site}/Lists/Endringsanalyse/DispForm.aspx" DefaultEditFormUrl="{site}/Lists/Endringsanalyse/EditForm.aspx" DefaultNewFormUrl="{site}/Lists/Endringsanalyse/NewForm.aspx" ImageUrl="/_layouts/15/images/itgen.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x01001AF93A93F5534B5FBAF750572B11BB7F" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0120" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views>
+            <View Name="{B22CE0D0-196C-45FC-8D25-D3A7CD596776}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Endringsanalyse/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query>
+                <OrderBy>
+                  <FieldRef Name="ID" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtProcess" />
+                <FieldRef Name="GtChallengeDescription" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+            <View Name="{6F767CDD-B6EF-4FDE-85EA-D80BAB4D16EA}" Type="HTML" DisplayName="Pr prosess" Url="{site}/Lists/Endringsanalyse/Pr prosess.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query>
+                <GroupBy Collapse="TRUE" GroupLimit="30">
+                  <FieldRef Name="GtProcess" Ascending="FALSE" />
+                </GroupBy>
+                <OrderBy>
+                  <FieldRef Name="ID" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="GtChallengeDescription" />
+                <FieldRef Name="LinkTitle" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" DisplayName="Endring" />
+            <pnp:FieldRef ID="68a5a2da-048c-4d2d-8ba4-5a8b32b60120" Name="GtProcess" DisplayName="Prosess" />
+            <pnp:FieldRef ID="1fb52a28-81c4-405f-8da6-883c29b6b856" Name="GtChallengeDescription" DisplayName="Beskrivelse av utfordring" />
+          </pnp:FieldRefs>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="Fasesjekkliste" Description="" DocumentTemplate="" OnQuickLaunch="true" TemplateType="100" Url="Lists/Fasesjekkliste" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" ContentTypesEnabled="true" EnableFolderCreation="false" DefaultDisplayFormUrl="{site}/Lists/Fasesjekkliste/DispForm.aspx" DefaultEditFormUrl="{site}/Lists/Fasesjekkliste/EditForm.aspx" DefaultNewFormUrl="{site}/Lists/Fasesjekkliste/NewForm.aspx" ImageUrl="/_layouts/15/images/itgen.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x0100486B1F8AEA24486FBA1C1BA9146C360C" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0120" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views>
+            <View Name="{E896B7D7-8231-48FF-B8F2-2968BC2F3800}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Fasesjekkliste/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query>
+                <OrderBy>
+                  <FieldRef Name="GtSortOrder" />
+                  <FieldRef Name="ID" />
+                </OrderBy>
+                <Where>
+                  <Neq>
+                    <FieldRef Name="GtChecklistStatus" />
+                    <Value Type="Text">Arkivert</Value>
+                  </Neq>
+                </Where>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="GtSortOrder" />
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtProjectPhase" />
+                <FieldRef Name="GtChecklistStatus" />
+                <FieldRef Name="GtComment" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">50</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+            <View Name="{42972FA9-78F9-4D8D-80FB-B83867C144AD}" Type="HTML" DisplayName="Arkivert" Url="{site}/Lists/Fasesjekkliste/Arkivert.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query>
+                <OrderBy>
+                  <FieldRef Name="GtSortOrder" />
+                  <FieldRef Name="ID" />
+                </OrderBy>
+                <Where>
+                  <Eq>
+                    <FieldRef Name="GtChecklistStatus" />
+                    <Value Type="Text">Arkivert</Value>
+                  </Eq>
+                </Where>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="GtSortOrder" />
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtProjectPhase" />
+                <FieldRef Name="GtComment" />
+              </ViewFields>
+              <RowLimit Paged="FALSE">50</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+            <View Name="{D6B8CF29-1E16-4BA0-B2A9-8CC229BC3C8B}" Type="HTML" DisplayName="Per status" Url="{site}/Lists/Fasesjekkliste/Per status.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query>
+                <GroupBy Collapse="TRUE" GroupLimit="30">
+                  <FieldRef Name="GtChecklistStatus" Ascending="FALSE" />
+                </GroupBy>
+                <OrderBy>
+                  <FieldRef Name="GtSortOrder" />
+                  <FieldRef Name="ID" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="GtSortOrder" />
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtProjectPhase" />
+                <FieldRef Name="GtComment" />
+              </ViewFields>
+              <RowLimit Paged="FALSE">50</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="f9375230-87f9-4707-8855-ced4e932d93f" Name="j25543a5815d485da9a5e0773ad762e9" Hidden="true" DisplayName="Fase_0" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" DisplayName="Tittel" />
+            <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" DisplayName="Fase" />
+            <pnp:FieldRef ID="249527a3-c7f9-4ea5-9c33-f942c06c9215" Name="GtChecklistStatus" DisplayName="Status" />
+            <pnp:FieldRef ID="509a6bfe-004e-41f9-bd73-9a0e02d5c4a7" Name="GtComment" DisplayName="Kommentar" />
+            <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" DisplayName="Sorteringsrekkefølge" />
+          </pnp:FieldRefs>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="Gevinstanalyse og gevinstrealiseringsplan" Description="" DocumentTemplate="" OnQuickLaunch="true" TemplateType="100" Url="Lists/Gevinstanalyse og gevinstrealiseringsplan" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" ContentTypesEnabled="true" EnableFolderCreation="false" DefaultDisplayFormUrl="{site}/Lists/Gevinstanalyse og gevinstrealiseringsplan/DispForm.aspx" DefaultEditFormUrl="{site}/Lists/Gevinstanalyse og gevinstrealiseringsplan/EditForm.aspx" DefaultNewFormUrl="{site}/Lists/Gevinstanalyse og gevinstrealiseringsplan/NewForm.aspx" ImageUrl="/_layouts/15/images/itgen.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x01004F466123309D46BAB9D5C6DE89A6CF67" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0120" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views>
+            <View Name="{C47E78D8-5A82-4A84-807B-782086A4049A}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Gevinstanalyse og gevinstrealiseringsplan/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query />
+              <ViewFields>
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtChangeLookup" />
+                <FieldRef Name="GtGainsType" />
+                <FieldRef Name="GtGainsTurnover" />
+                <FieldRef Name="GtGainsResponsible" />
+                <FieldRef Name="GtGainsOwner" />
+                <FieldRef Name="GtRealizationTime" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+            <View Name="{7448651E-210F-4D4F-844D-90F5E636C45E}" Type="HTML" DisplayName="Pr gevinsttype" Url="{site}/Lists/Gevinstanalyse og gevinstrealiseringsplan/Pr gevinsttype.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query>
+                <GroupBy Collapse="TRUE" GroupLimit="30">
+                  <FieldRef Name="GtGainsType" Ascending="FALSE" />
+                </GroupBy>
+                <OrderBy>
+                  <FieldRef Name="ID" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="GtChangeLookup" />
+                <FieldRef Name="Title" />
+                <FieldRef Name="GtGainsTurnover" />
+                <FieldRef Name="GtGainsResponsible" />
+                <FieldRef Name="GtGainsOwner" />
+                <FieldRef Name="GtRealizationTime" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+          <pnp:Fields>
+            <Field Type="LookupMulti" DisplayName="Endring" List="{listid:Endringsanalyse}" ShowField="LinkTitleNoMenu" UnlimitedLengthInDocumentLibrary="FALSE" RelationshipDeleteBehavior="None" ID="{1d5752af-4d26-4aed-b20a-6229ac14ed5d}" StaticName="GtChangeLookup" Name="GtChangeLookup" Group="" Description="Hvilken endring fra endringsanalysen skal gevinsten knyttes mot?" Mult="TRUE" SourceID="{{listid:Gevinstanalyse og gevinstrealiseringsplan}}" ColName="int3" RowOrdinal="0" Version="1" />
+          </pnp:Fields>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" DisplayName="Gevinst" />
+            <pnp:FieldRef ID="a1a56abd-5b3d-45d2-8617-32b2f8b195de" Name="GtGainsType" DisplayName="Gevinsttype" />
+            <pnp:FieldRef ID="de5cf8b7-6823-4dac-b4a7-916c53bd3376" Name="GtPrereqProfitAchievement" DisplayName="Forutsetninger for gevinstoppnåelse" />
+            <pnp:FieldRef ID="d79d8a58-1079-4a3a-9f27-02de9a3eace1" Name="GtGainsTurnover" DisplayName="Gevinstomsetting" />
+            <pnp:FieldRef ID="fcf9c850-8267-4452-8366-74b7a76da177" Name="GtGainsResponsible" DisplayName="Gevinstansvarlig" />
+            <pnp:FieldRef ID="158b2f60-8068-447f-83e7-cabdb5bf4cf4" Name="GtGainsOwner" DisplayName="Gevinsteier" />
+            <pnp:FieldRef ID="b0d03734-a5b1-4e85-a752-45b2da8df7dd" Name="GtRealizationTime" DisplayName="Realiseringstidspunkt" />
+            <pnp:FieldRef ID="6bd17911-c48a-4900-be61-54ae26207d78" Name="GtShowInPortfolio" DisplayName="Vis i portefølje" />
+          </pnp:FieldRefs>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="Gevinstoppfølging" Description="" DocumentTemplate="" OnQuickLaunch="true" TemplateType="100" Url="Lists/Gevinstoppflging" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" EnableFolderCreation="false" DefaultDisplayFormUrl="{site}/Lists/Gevinstoppflging/DispForm.aspx" DefaultEditFormUrl="{site}/Lists/Gevinstoppflging/EditForm.aspx" DefaultNewFormUrl="{site}/Lists/Gevinstoppflging/NewForm.aspx" ImageUrl="/_layouts/15/images/itgen.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x010039EAFDC2A1624C1BA1A444FC8FE85DEC" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0120" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views>
+            <View Name="{A39D5136-2228-4CCE-A334-99DC75544B0D}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Gevinstoppflging/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query>
+                <GroupBy Collapse="TRUE" GroupLimit="30">
+                  <FieldRef Name="GtMeasureIndicatorLookup" />
+                </GroupBy>
+                <OrderBy>
+                  <FieldRef Name="GtMeasurementDate" Ascending="FALSE" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="GtMeasureIndicatorLookup" />
+                <FieldRef Name="GtMeasureIndicatorLookup_GtDesir" />
+                <FieldRef Name="GtMeasurementDate" />
+                <FieldRef Name="GtMeasurementValue" />
+                <FieldRef Name="GtMeasurementComment" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+            <View Name="{91494E2D-023A-4C91-BF63-E97EEE1C0EC2}" Type="HTML" DisplayName="Flat visning" Url="{site}/Lists/Gevinstoppflging/Flat visning.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query>
+                <OrderBy>
+                  <FieldRef Name="GtMeasureIndicatorLookup" />
+                  <FieldRef Name="GtMeasurementDate" Ascending="FALSE" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="GtMeasureIndicatorLookup" />
+                <FieldRef Name="GtMeasureIndicatorLookup_GtDesir" />
+                <FieldRef Name="GtMeasurementDate" />
+                <FieldRef Name="GtMeasurementValue" />
+                <FieldRef Name="GtMeasurementComment" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+          <pnp:Fields>
+            <Field Type="Lookup" DisplayName="Måleindikator" List="{listid:Måleindikatorer}" ShowField="Title" ID="{92ae8541-f35e-4c05-8518-b9abce2d0860}" Description="Knytt målingen opp mot riktig måleindikator" StaticName="GtMeasureIndicatorLookup" Name="GtMeasureIndicatorLookup" SourceID="{{listid:Gevinstoppfølging}}" ColName="int1" RowOrdinal="0" Version="1" />
+            <Field Type="Lookup" DisplayName="Måleindikator:ID" List="{listid:Måleindikatorer}" ShowField="ID" FieldRef="92ae8541-f35e-4c05-8518-b9abce2d0860" ReadOnly="TRUE" ID="{571f95d9-4c0b-4b4d-8a0b-9a1771811f07}" ShowInDisplayForm="FALSE" StaticName="GtMeasureIndicatorLookup_ID" Name="GtMeasureIndicatorLookup_ID" SourceID="{{listid:Gevinstoppfølging}}" Version="1" />
+            <Field Type="Lookup" DisplayName="Måleindikator:Ønsket verdi" List="{listid:Måleindikatorer}" ShowField="GtDesiredValue" FieldRef="92ae8541-f35e-4c05-8518-b9abce2d0860" ReadOnly="TRUE" ID="{8fe2e615-999b-48dc-8889-151ed84a757a}" ShowInDisplayForm="FALSE" StaticName="GtMeasureIndicatorLookup_GtDesiredValue" Name="GtMeasureIndicatorLookup_GtDesir" SourceID="{{listid:Gevinstoppfølging}}" Version="1" />
+          </pnp:Fields>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="Tittel" />
+            <pnp:FieldRef ID="5c6fafbb-aee4-4e46-b110-5c798916c2ca" Name="GtMeasurementDate" DisplayName="Dato for måling" />
+            <pnp:FieldRef ID="70dc7c4a-54ec-4674-b238-2b2a889e1b49" Name="GtMeasurementValue" DisplayName="Målt verdi" />
+            <pnp:FieldRef ID="0b78e51d-84d9-4885-9e79-2fe382a2ceb9" Name="GtMeasurementComment" DisplayName="Kommentar til måling" />
+          </pnp:FieldRefs>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="Interessentregister" Description="" DocumentTemplate="" OnQuickLaunch="true" TemplateType="100" Url="Lists/Interessentregister" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" ContentTypesEnabled="true" EnableFolderCreation="false" DefaultDisplayFormUrl="{site}/Lists/Interessentregister/DispForm.aspx" DefaultEditFormUrl="{site}/Lists/Interessentregister/EditForm.aspx" DefaultNewFormUrl="{site}/Lists/Interessentregister/NewForm.aspx" ImageUrl="/_layouts/15/images/itgen.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x010072C95831F8434782AB2FF6BE3E596F46" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0120" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views>
+            <View Name="{219C31FD-329F-4C26-9A12-66E486E98BF2}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Interessentregister/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query />
+              <ViewFields>
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtStakeholderGroup" />
+                <FieldRef Name="GtStakeholderContext" />
+                <FieldRef Name="GtStakeholderStrategy" />
+                <FieldRef Name="GtStakeholderInterest" />
+                <FieldRef Name="GtStakeholderInfluence" />
+                <FieldRef Name="GtStakeholderInfluencePossibilty" />
+                <FieldRef Name="GtStakeholderActions" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" DisplayName="Tittel" />
+            <pnp:FieldRef ID="2847b3b0-ed22-4c47-b7c0-3ebfc83dae4a" Name="GtStakeholderGroup" DisplayName="Interessentgruppe" />
+            <pnp:FieldRef ID="970ed1b2-9e71-45aa-8f8d-c391a15f067f" Name="GtStakeholderContext" DisplayName="Arena/Møteplass/Nettverk" />
+            <pnp:FieldRef ID="1150d6bd-c9ba-4014-bd74-7d559110841d" Name="GtStakeholderStrategy" DisplayName="Plan/strategi/prosjekt" />
+            <pnp:FieldRef ID="748ae9b5-223d-4daa-b8f8-dc14284b59db" Name="GtStakeholderInterest" DisplayName="Interesse" />
+            <pnp:FieldRef ID="475d2ca1-5b8e-4479-96ae-81c0a89354f3" Name="GtStakeholderInfluence" DisplayName="Påvirkes i hvilken grad" />
+            <pnp:FieldRef ID="2bb7e155-3af4-4353-a460-8da404c4e748" Name="GtStakeholderInfluencePossibilty" DisplayName="Mulighet til påvirkning" />
+            <pnp:FieldRef ID="45d5b378-67ce-4f21-b622-fe54b27c83a6" Name="GtStakeholderActions" DisplayName="Tiltak" />
+          </pnp:FieldRefs>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="Kommunikasjonsplan" Description="" DocumentTemplate="" OnQuickLaunch="true" TemplateType="100" Url="Lists/Kommunikasjonsplan" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" ContentTypesEnabled="true" EnableFolderCreation="false" DefaultDisplayFormUrl="{site}/Lists/Kommunikasjonsplan/DispForm.aspx" DefaultEditFormUrl="{site}/Lists/Kommunikasjonsplan/EditForm.aspx" DefaultNewFormUrl="{site}/Lists/Kommunikasjonsplan/NewForm.aspx" ImageUrl="/_layouts/15/images/itgen.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x010065CE65D51354419EA794C6FACD4FA2EB" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0120" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views>
+            <View Name="{3D3136BC-D9D4-4B64-87AB-A03D4BE6C4E6}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Kommunikasjonsplan/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query />
+              <ViewFields>
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtProjectPhase" />
+                <FieldRef Name="GtActionDate" />
+                <FieldRef Name="GtActionResponsible" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">10</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+          <pnp:Fields>
+            <Field Type="LookupMulti" DisplayName="Målgruppe" List="{listid:Interessentregister}" ShowField="Title" ID="{d685f33f-51b5-4e9f-a314-4b3d9467a7e4}" Description="Hvem er målgruppen (interessent) for kommunikasjonsaktiviteten?" StaticName="GtCommunicationTarget" Name="GtCommunicationTarget" Mult="TRUE" SourceID="{{listid:Kommunikasjonsplan}}" ColName="int4" RowOrdinal="0" Version="1" />
+          </pnp:Fields>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="f9375230-87f9-4707-8855-ced4e932d93f" Name="j25543a5815d485da9a5e0773ad762e9" Hidden="true" DisplayName="Fase_0" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" DisplayName="Tittel" />
+            <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" DisplayName="Fase" />
+            <pnp:FieldRef ID="bf340fba-c512-4a07-a543-cdf2d10c578e" Name="GtActionStatus" DisplayName="Status" />
+            <pnp:FieldRef ID="4d5e69a2-2eb5-422c-af04-70b67697cd23" Name="GtActionChannel" DisplayName="Kommunikasjonskanal" />
+            <pnp:FieldRef ID="77450582-a061-4416-af17-6dfb99fa9036" Name="GtActionDate" DisplayName="Tiltaksdato" />
+            <pnp:FieldRef ID="2ae541a5-5ecc-481d-afb6-c03a6f1e71b4" Name="GtActionResponsible" DisplayName="Tiltaksansvarlig" />
+          </pnp:FieldRefs>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="Måleindikatorer" Description="" DocumentTemplate="" OnQuickLaunch="true" TemplateType="100" Url="Lists/Mleindikatorer" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" ContentTypesEnabled="true" EnableFolderCreation="false" DefaultDisplayFormUrl="{site}/Lists/Mleindikatorer/DispForm.aspx" DefaultEditFormUrl="{site}/Lists/Mleindikatorer/EditForm.aspx" DefaultNewFormUrl="{site}/Lists/Mleindikatorer/NewForm.aspx" ImageUrl="/_layouts/15/images/itgen.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x010073043EFE3E814A2BBEF96B8457623F95" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0120" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views>
+            <View Name="{11FAB2E3-B457-470D-9779-5C3FC6531F8A}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Mleindikatorer/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query>
+                <OrderBy>
+                  <FieldRef Name="ID" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtGainLookup" />
+                <FieldRef Name="GtStartValue" />
+                <FieldRef Name="GtDesiredValue" />
+                <FieldRef Name="GtMeasurementUnit" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+          <pnp:Fields>
+            <Field Type="Lookup" DisplayName="Gevinst" List="{listid:Gevinstanalyse og gevinstrealiseringsplan}" ShowField="Title" ID="{8d70fa93-b547-46f1-84e7-4982f8c9c675}" StaticName="GtGainLookup" Name="GtGainLookup" SourceID="{{listid:Måleindikatorer}}" ColName="int1" RowOrdinal="0" Version="1" />
+            <Field Type="Lookup" DisplayName="Gevinst:ID" List="{listid:Gevinstanalyse og gevinstrealiseringsplan}" ShowField="ID" FieldRef="8d70fa93-b547-46f1-84e7-4982f8c9c675" ReadOnly="TRUE" UnlimitedLengthInDocumentLibrary="FALSE" ID="{c239539c-8672-46cc-be77-fb53322f71ae}" ShowInDisplayForm="FALSE" StaticName="GtGainLookup_ID" Name="GtGainLookup_ID" SourceID="{{listid:Måleindikatorer}}" Version="1" />
+          </pnp:Fields>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" DisplayName="Tittel" />
+            <pnp:FieldRef ID="c5fc8781-7fbd-43a2-a215-c8c959bbab69" Name="GtStartValue" DisplayName="Startverdi" />
+            <pnp:FieldRef ID="8b399cb6-c53e-432c-8ffa-b48e2bfbbf71" Name="GtDesiredValue" DisplayName="Ønsket verdi" />
+            <pnp:FieldRef ID="0d38db52-2040-44c1-823e-7642f76519ee" Name="GtMeasurementUnit" DisplayName="Måleenhet" />
+          </pnp:FieldRefs>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="Nettstedsobjekter" Description="Bruk dette biblioteket til å lagre filer som er inkludert på sider i dette området, for eksempel bilder på wiki-sider." DocumentTemplate="{site}/SiteAssets/Forms/template.doc" TemplateType="101" Url="SiteAssets" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="500" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-e717-4e80-aa17-d0c71b360101" EnableAttachments="false" DefaultDisplayFormUrl="{site}/SiteAssets/Forms/DispForm.aspx" DefaultEditFormUrl="{site}/SiteAssets/Forms/EditForm.aspx" DefaultNewFormUrl="{site}/SiteAssets/Forms/Upload.aspx" ImageUrl="/_layouts/15/images/itdl.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="true" ValidationFormula="" ValidationMessage="">
+          <pnp:PropertyBagEntries>
+            <pnp:PropertyBagEntry Key="IsAttachmentLibrary" Value="1" Overwrite="false" />
+          </pnp:PropertyBagEntries>
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x0101" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0120" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views>
+            <View Name="{7818212A-FCF2-4C4E-AE54-8C1EBAACF13C}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle dokumenter" Url="{site}/SiteAssets/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/dlicon.png?rev=47">
+              <Query>
+                <OrderBy>
+                  <FieldRef Name="FileLeafRef" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="DocIcon" />
+                <FieldRef Name="LinkFilename" />
+                <FieldRef Name="Modified" />
+                <FieldRef Name="Editor" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="d307dff3-340f-44a2-9f4b-fbfe1ba07459" Name="_CommentCount" DisplayName="Antall kommentarer" />
+            <pnp:FieldRef ID="db8d9d6d-dc9a-4fbd-85f3-4a753bfdc58c" Name="_LikeCount" DisplayName="Antall likerklikk" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="Tittel" />
+            <pnp:FieldRef ID="cb19284a-cde7-4570-a980-1dab8bd74470" Name="_ExtendedDescription" DisplayName="Beskrivelse" />
+          </pnp:FieldRefs>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="Områdesider" Description="" DocumentTemplate="" TemplateType="119" Url="SitePages" EnableVersioning="true" EnableMinorVersions="true" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="1" TemplateFeatureID="00bfea71-c796-4402-9f2f-0eb9a6e71b18" ContentTypesEnabled="true" EnableAttachments="false" EnableFolderCreation="false" DefaultDisplayFormUrl="{site}/SitePages/Forms/DispForm.aspx" DefaultEditFormUrl="{site}/SitePages/Forms/EditForm.aspx" DefaultNewFormUrl="{site}/SitePages/Forms/Upload.aspx" ImageUrl="/_layouts/15/images/itdl.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="true" ValidationFormula="" ValidationMessage="">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x010108" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0120" />
+            <pnp:ContentTypeBinding ContentTypeID="0x01010901" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0101009D1CB255DA76424F860D91F20E6C4118" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0101009D1CB255DA76424F860D91F20E6C4118002A50BFCFB7614729B56886FADA02339B" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views>
+            <View Name="{D786B416-F46F-4044-93FF-BD3A3F7F0F37}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Etter forfatter" Url="{site}/SitePages/Forms/ByAuthor.aspx" Level="1" BaseViewID="4" ContentTypeID="0x" ToolbarTemplate="WikiLibraryViewToolBar" ImageUrl="/_layouts/15/images/dlicon.png?rev=47">
+              <Query>
+                <GroupBy Collapse="FALSE">
+                  <FieldRef Name="Author" />
+                </GroupBy>
+                <OrderBy>
+                  <FieldRef Name="Modified" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="DocIcon" />
+                <FieldRef Name="LinkFilename" />
+                <FieldRef Name="Editor" />
+                <FieldRef Name="Modified" />
+                <FieldRef Name="Created" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+            <View Name="{51256896-D7EC-4710-9437-F07A016E70F8}" Type="HTML" DisplayName="Alle sider" Url="{site}/SitePages/Forms/AllPages.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ToolbarTemplate="WikiLibraryViewToolBar" ImageUrl="/_layouts/15/images/dlicon.png?rev=47">
+              <Query>
+                <OrderBy>
+                  <FieldRef Name="Modified" Ascending="FALSE" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="DocIcon" />
+                <FieldRef Name="LinkFilename" />
+                <FieldRef Name="Editor" />
+                <FieldRef Name="Modified" />
+                <FieldRef Name="Author" />
+                <FieldRef Name="Created" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+            <View Name="{954B91FC-E413-4662-BC26-79D7B9C82325}" Type="HTML" DisplayName="Etter redigeringsprogram" Url="{site}/SitePages/Forms/ByEditor.aspx" Level="1" BaseViewID="5" ContentTypeID="0x" ToolbarTemplate="WikiLibraryViewToolBar" ImageUrl="/_layouts/15/images/dlicon.png?rev=47">
+              <Query>
+                <GroupBy Collapse="FALSE">
+                  <FieldRef Name="Editor" />
+                </GroupBy>
+                <OrderBy>
+                  <FieldRef Name="FileLeafRef" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="DocIcon" />
+                <FieldRef Name="LinkFilename" />
+                <FieldRef Name="Editor" />
+                <FieldRef Name="Modified" />
+                <FieldRef Name="Author" />
+                <FieldRef Name="Created" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+            <View Name="{512F11CB-010F-4C41-8BEB-D30A9ABA549E}" Type="HTML" DisplayName="Nylige endringer" Url="{site}/SitePages/Forms/RecentChanges.aspx" Level="1" BaseViewID="2" ContentTypeID="0x" ToolbarTemplate="WikiLibraryViewToolBar" ImageUrl="/_layouts/15/images/dlicon.png?rev=47">
+              <Query>
+                <OrderBy>
+                  <FieldRef Name="Modified" Ascending="FALSE" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="DocIcon" />
+                <FieldRef Name="LinkFilename" />
+                <FieldRef Name="Editor" />
+                <FieldRef Name="Modified" />
+                <FieldRef Name="Author" />
+                <FieldRef Name="Created" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+            <View Name="{DF5FA164-ED37-4456-9238-5756D3044E4F}" Type="HTML" DisplayName="Opprettet av meg" Url="{site}/SitePages/Forms/CreatedByMe.aspx" Level="1" BaseViewID="3" ContentTypeID="0x" ToolbarTemplate="WikiLibraryViewToolBar" ImageUrl="/_layouts/15/images/dlicon.png?rev=47">
+              <Query>
+                <Where>
+                  <Eq>
+                    <FieldRef Name="Author" />
+                    <Value Type="Integer">
+                      <UserID />
+                    </Value>
+                  </Eq>
+                </Where>
+                <OrderBy>
+                  <FieldRef Name="FileLeafRef" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="DocIcon" />
+                <FieldRef Name="LinkFilename" />
+                <FieldRef Name="Editor" />
+                <FieldRef Name="Modified" />
+                <FieldRef Name="Author" />
+                <FieldRef Name="Created" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="c33527b4-d920-4587-b791-45024d00068a" Name="WikiField" DisplayName="Wiki-innhold" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="Tittel" />
+            <pnp:FieldRef ID="4966388e-6e12-4bc6-8990-5b5b66153eae" Name="CanvasContent1" DisplayName="Innhold på redigeringslerret" />
+            <pnp:FieldRef ID="5baf6db5-9d25-4738-b15e-db5789298e82" Name="BannerImageUrl" DisplayName="Nettadresse for bannerbilde" />
+            <pnp:FieldRef ID="3f155110-a6a2-4d70-926c-94648101f0e8" Name="Description" DisplayName="Beskrivelse" />
+            <pnp:FieldRef ID="f5ad16a2-85be-46b2-b5f0-2bb8b4a5074a" Name="PromotedState" DisplayName="Forfremmet tilstand" />
+            <pnp:FieldRef ID="c84f8697-331e-457d-884a-c4fb8f30ea74" Name="FirstPublishedDate" DisplayName="Dato for første publisering" />
+            <pnp:FieldRef ID="261075db-0525-4fb8-a6ea-772014186599" Name="LayoutWebpartsContent" DisplayName="Innhold for sideoppsett" />
+            <pnp:FieldRef ID="1a7348e7-1bb7-4a47-9790-088e7cb20b58" Name="_AuthorByline" DisplayName="Linje for forfatternavn" />
+            <pnp:FieldRef ID="d60d65ff-ff42-4044-a684-ac3f7a5e598c" Name="_TopicHeader" DisplayName="Emneoverskrift" />
+            <pnp:FieldRef ID="9de685c5-fdf5-4319-b987-3edf55efb36f" Name="_SPSitePageFlags" DisplayName="Flagg for nettstedsider" />
+            <pnp:FieldRef ID="9889a80f-c9ec-41d8-a359-ac5fb5c4cfa2" Name="_SPCallToAction" DisplayName="Handlingsoppfordring" />
+            <pnp:FieldRef ID="0e7b982f-698a-4d0c-aacb-f16906f66d30" Name="_OriginalSourceUrl" DisplayName="Opprinnelig kildenettadresse" />
+            <pnp:FieldRef ID="36193413-dd5c-4096-8c1e-1b40098b9ba3" Name="_OriginalSourceSiteId" DisplayName="ID for opprinnelig kildeområde" />
+            <pnp:FieldRef ID="3477a5bc-c605-4b2e-a7c1-8db8f13c017e" Name="_OriginalSourceWebId" DisplayName="ID for opprinnelig kildenett" />
+            <pnp:FieldRef ID="139da674-dbf6-439f-98e0-4eb05fa9a669" Name="_OriginalSourceListId" DisplayName="ID for opprinnelig kildeliste" />
+            <pnp:FieldRef ID="91e86a43-75f2-426f-80da-35edfb47d55d" Name="_OriginalSourceItemId" DisplayName="ID for opprinnelig kildeelement" />
+          </pnp:FieldRefs>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="Prosjektleveranser" Description="" DocumentTemplate="" OnQuickLaunch="true" TemplateType="100" Url="Lists/Prosjektleveranser" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" ContentTypesEnabled="true" EnableFolderCreation="false" DefaultDisplayFormUrl="{site}/Lists/Prosjektleveranser/DispForm.aspx" DefaultEditFormUrl="{site}/Lists/Prosjektleveranser/EditForm.aspx" DefaultNewFormUrl="{site}/Lists/Prosjektleveranser/NewForm.aspx" ImageUrl="/_layouts/15/images/itgen.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x0100D7B74DE815F946D3B0F99D19F9B36B68" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0120" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views>
+            <View Name="{D9281C43-F260-4CCB-A932-DBC2CD9E1930}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Prosjektleveranser/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query />
+              <ViewFields>
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtDeliveryDescription" />
+                <FieldRef Name="GtDeliveryStartTime" />
+                <FieldRef Name="GtDeliveryEndTime" />
+                <FieldRef Name="GtDeliveryStatus" />
+                <FieldRef Name="GtDeliveryStatusComment" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+          <pnp:Fields>
+            <Field Type="LookupMulti" DisplayName="Interessent(er)" List="{listid:Interessentregister}" ShowField="Title" ID="{6d90e0b6-73e6-48fb-aa1e-b897b214f934}" Description="Oppgi hvilken interessent(er) leveransen påvirker" Name="GtDeliveryStakeholders" StaticName="GtDeliveryStakeholders" Mult="TRUE" SourceID="{{listid:Prosjektleveranser}}" ColName="int3" RowOrdinal="0" Version="1" />
+          </pnp:Fields>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" DisplayName="Tittel" />
+            <pnp:FieldRef ID="99430a99-1354-418f-921f-7ddfdb6c0d7f" Name="GtDeliveryDescription" DisplayName="Leveransebeskrivelse" />
+            <pnp:FieldRef ID="219a5cdf-799c-48ee-8869-ea39e4b9a6aa" Name="GtDeliveryStartTime" DisplayName="Starttidspunkt" />
+            <pnp:FieldRef ID="eb78509b-4109-474e-aca8-90d024a960de" Name="GtDeliveryEndTime" DisplayName="Sluttidspunkt" />
+            <pnp:FieldRef ID="c8e260c2-6887-4f9e-a713-7200246c3b1c" Name="GtDeliveryQualityExpectations" DisplayName="Kvalitetsforventninger" />
+            <pnp:FieldRef ID="149a30c2-056d-44f0-9cb5-29bfc632ca25" Name="GtDeliveryAcceptanceCriteria" DisplayName="Akseptansekriterier" />
+            <pnp:FieldRef ID="3dd7058b-0ba1-46e5-b40a-4f2f542638ea" Name="GtDeliveryQualityTolerance" DisplayName="Kvalitetstoleranse" />
+            <pnp:FieldRef ID="c845028e-3395-49d4-86fe-6d94992c38c2" Name="GtDeliveryQualityResponsible" DisplayName="Kvalitetsansvar" />
+            <pnp:FieldRef ID="3bcfaa2c-e9bd-4a22-bf65-af4d68c308e7" Name="GtDeliveryAcceptanceMethod" DisplayName="Godkjenningsmetode" />
+            <pnp:FieldRef ID="dc856c1d-0b98-4d38-9918-d7068f74bd8b" Name="GtDeliveryAcceptanceResponsible" DisplayName="Godkjenningsansvar" />
+            <pnp:FieldRef ID="ce9474dd-407b-4480-951a-5381857fad6a" Name="GtDeliveryAcceptanceDate" DisplayName="Godkjent dato" />
+            <pnp:FieldRef ID="4322afd6-5f0f-4a22-819a-cb61668e6ede" Name="GtDeliveryStatus" DisplayName="Leveransestatus" />
+            <pnp:FieldRef ID="4393ed3c-1599-4ab3-8444-444ab35754bb" Name="GtDeliveryStatusComment" DisplayName="Kommentar, leveransestatus" />
+          </pnp:FieldRefs>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="Prosjektlogg" Description="" DocumentTemplate="" OnQuickLaunch="true" TemplateType="100" Url="Lists/Prosjektlogg" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" EnableFolderCreation="false" DefaultDisplayFormUrl="{site}/Lists/Prosjektlogg/DispForm.aspx" DefaultEditFormUrl="{site}/Lists/Prosjektlogg/EditForm.aspx" DefaultNewFormUrl="{site}/Lists/Prosjektlogg/NewForm.aspx" ImageUrl="/_layouts/15/images/itgen.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x01004EDD18CB92C14EBA97103D909C897810" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0120" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views>
+            <View Name="{0C4F4F28-AF25-4A1D-905E-0B05E8947C82}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Prosjektlogg/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query />
+              <ViewFields>
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtProjectLogType" />
+                <FieldRef Name="GtProjectLogReporter" />
+                <FieldRef Name="GtProjectLogResponsible" />
+                <FieldRef Name="GtProjectLogConsequence" />
+                <FieldRef Name="GtProjectLogRecommendation" />
+                <FieldRef Name="GtProjectLogExperience" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+          <pnp:Fields>
+            <Field Type="Lookup" DisplayName="Påvirker leveranse" List="{listid:Prosjektleveranser}" ShowField="Title" ID="{022cc93f-13df-4420-bd47-55e4fdae5d18}" Description="Hvis relevant, oppgi hvilken leveranse loggelementet påvirker" StaticName="GtProjectLogProductLookup" Name="GtProjectLogProductLookup" SourceID="{{listid:Prosjektlogg}}" ColName="int2" RowOrdinal="0" Version="1" />
+          </pnp:Fields>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" DisplayName="Tittel" />
+            <pnp:FieldRef ID="2391d165-5d13-46b7-87d2-e32040293210" Name="GtProjectLogType" DisplayName="Loggelement" />
+            <pnp:FieldRef ID="49b0ba6b-d1ec-4644-91b7-691a33524c90" Name="GtProjectLogReporter" DisplayName="Meldt av" />
+            <pnp:FieldRef ID="a3462545-ac76-4681-96b4-f883fea4b2ba" Name="GtProjectLogDescription" DisplayName="Loggbeskrivelse" />
+            <pnp:FieldRef ID="7838332a-cf7f-47d5-924f-8c6d134935ea" Name="GtProjectLogResponsible" DisplayName="Ansvarlig" />
+            <pnp:FieldRef ID="7b424ee7-bcc8-490a-8c4c-01637da03347" Name="GtProjectLogConsequence" DisplayName="Konsekvens" />
+            <pnp:FieldRef ID="6aad1f97-ba6f-4865-b325-9deea7bd0564" Name="GtProjectLogRecommendation" DisplayName="Anbefaling" />
+            <pnp:FieldRef ID="832a2eeb-5709-40b4-9f7c-04ae67ddd86b" Name="GtProjectLogExperience" DisplayName="Til erfaringslogg" />
+            <pnp:FieldRef ID="6539658a-b186-402c-b224-9fb41cb48596" Name="GtProjectLogActors" DisplayName="Aktører" />
+          </pnp:FieldRefs>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="Ressursallokering" Description="" DocumentTemplate="" OnQuickLaunch="true" TemplateType="100" Url="Lists/Ressursallokering" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" EnableFolderCreation="false" DefaultDisplayFormUrl="{site}/Lists/Ressursallokering/DispForm.aspx" DefaultEditFormUrl="{site}/Lists/Ressursallokering/EditForm.aspx" DefaultNewFormUrl="{site}/Lists/Ressursallokering/NewForm.aspx" ImageUrl="/_layouts/15/images/itgen.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x010004EAFF7AFCC94C2680042E6881264120" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0120" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views>
+            <View Name="{00BC662A-5D8E-449E-BE2B-70B25477A9F4}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Ressursallokering/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query />
+              <ViewFields>
+                <FieldRef Name="ID" />
+                <FieldRef Name="GtResourceUser" />
+                <FieldRef Name="GtResourceRole" />
+                <FieldRef Name="GtStartDate" />
+                <FieldRef Name="GtEndDate" />
+                <FieldRef Name="GtResourceLoad" />
+                <FieldRef Name="GtAllocationStatus" />
+                <FieldRef Name="GtAllocationComment" />
+                <FieldRef Name="Modified" />
+                <FieldRef Name="Editor" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">100</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="d0bc560f-4bf3-4152-8825-dc80f34835d8" Name="ja0ae560bd5545d4907f5119bf0a83bb" Hidden="true" DisplayName="Rolle_0" />
+            <pnp:FieldRef ID="88d9b92c-efed-45d0-a586-86d9196b77d0" Name="GtResourceUser" DisplayName="Navn" />
+            <pnp:FieldRef ID="3a0ae560-bd55-45d4-907f-5119bf0a83bb" Name="GtResourceRole" DisplayName="Rolle" />
+            <pnp:FieldRef ID="e39c32db-a7da-4c93-9369-8aa5a7bde92d" Name="GtStartDate" DisplayName="Startdato" />
+            <pnp:FieldRef ID="16623c2a-3fd1-41c2-87e7-958583dd88da" Name="GtEndDate" DisplayName="Sluttdato" />
+            <pnp:FieldRef ID="08ac9d56-f8eb-4a2c-868f-d39fc012fcd6" Name="GtResourceLoad" DisplayName="Belastning" />
+            <pnp:FieldRef ID="6ec4d897-ee44-42b2-80c0-3714021f6ac6" Name="GtAllocationStatus" DisplayName="Status" />
+            <pnp:FieldRef ID="42b501ac-c235-4b2a-a95d-8d00aad11779" Name="GtAllocationComment" DisplayName="Kommentar" />
+          </pnp:FieldRefs>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="Skjemamaler" Description="Dette biblioteket inneholder administratorgodkjente skjemamaler som er aktivert for denne områdesamlingen." DocumentTemplate="" TemplateType="101" Url="FormServerTemplates" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-e717-4e80-aa17-d0c71b360101" EnableAttachments="false" EnableFolderCreation="false" DefaultDisplayFormUrl="{site}/FormServerTemplates/Forms/DispForm.aspx" DefaultEditFormUrl="{site}/FormServerTemplates/Forms/EditForm.aspx" DefaultNewFormUrl="{site}/FormServerTemplates/Forms/Upload.aspx" ImageUrl="/_layouts/15/images/itdl.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x010100F8EF98760CBA4A94994F13BA881038FA" Default="true" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views>
+            <View Name="{5F86F9F7-2FE1-4D9A-98E6-27242F38E83A}" MobileView="TRUE" Type="HTML" DisplayName="Alle dokumenter" Url="{site}/FormServerTemplates/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/dlicon.png?rev=47">
+              <Query>
+                <OrderBy>
+                  <FieldRef Name="FileLeafRef" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="DocIcon" />
+                <FieldRef Name="LinkFilename" />
+                <FieldRef Name="Modified" />
+                <FieldRef Name="Editor" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+            <View Name="{2535E917-71DF-493B-AD8C-210429A8549A}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle skjemaer" Url="{site}/FormServerTemplates/Forms/All Forms.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/dlicon.png?rev=47">
+              <Query>
+                <GroupBy Collapse="FALSE">
+                  <FieldRef Name="FormCategory" />
+                </GroupBy>
+                <OrderBy>
+                  <FieldRef Name="FormName" />
+                </OrderBy>
+                <Where>
+                  <Neq>
+                    <FieldRef Name="ShowInCatalog" />
+                    <Value Type="Boolean">0</Value>
+                  </Neq>
+                </Where>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="DocIcon" />
+                <FieldRef Name="LinkFilename" />
+                <FieldRef Name="FormName" />
+                <FieldRef Name="FormDescription" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="Tittel" />
+            <pnp:FieldRef ID="cb19284a-cde7-4570-a980-1dab8bd74470" Name="_ExtendedDescription" DisplayName="Beskrivelse" />
+            <pnp:FieldRef ID="66b691cf-07a3-4ca6-ac6d-27fa969c8569" Name="FormName" DisplayName="Skjemanavn" />
+            <pnp:FieldRef ID="65572d4d-445a-43f1-9c77-3358222a2c93" Name="FormCategory" DisplayName="Skjemakategori" />
+            <pnp:FieldRef ID="94ad6f7c-09a1-42ca-974f-d24e080160c2" Name="FormVersion" DisplayName="Skjemaversjon" />
+            <pnp:FieldRef ID="1a03fa74-8c63-40cc-bd06-73b580bd8744" Name="FormId" DisplayName="Skjema-ID" />
+            <pnp:FieldRef ID="96c27c9d-33f5-4f8e-893e-684014bc7090" Name="FormLocale" DisplayName="Nasjonal skjemainnstilling" />
+            <pnp:FieldRef ID="1fff255c-6c88-4a76-957b-ae24bf07b78c" Name="FormDescription" DisplayName="Skjemabeskrivelse" />
+            <pnp:FieldRef ID="4ef69ca4-4179-4d27-9e6c-f9544d45dfdc" Name="ShowInCatalog" DisplayName="Vis i katalog" />
+            <pnp:FieldRef ID="1a03fa74-8c63-40cc-bd06-73b580bd8743" Name="LinkTemplateName" DisplayName="Skjemanavn" />
+            <pnp:FieldRef ID="d307dff3-340f-44a2-9f4b-fbfe1ba07459" Name="_CommentCount" DisplayName="Antall kommentarer" />
+            <pnp:FieldRef ID="db8d9d6d-dc9a-4fbd-85f3-4a753bfdc58c" Name="_LikeCount" DisplayName="Antall likerklikk" />
+          </pnp:FieldRefs>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="Stilbibliotek" Description="Bruk stilbiblioteket til å lagre stilark, for eksempel CSS- eller XSL-filer. Stilarkene i galleriet kan brukes av dette området eller noen av de sekundære områdene." DocumentTemplate="" TemplateType="101" Url="Style Library" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="500" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-e717-4e80-aa17-d0c71b360101" EnableAttachments="false" DefaultDisplayFormUrl="{site}/Style Library/Forms/DispForm.aspx" DefaultEditFormUrl="{site}/Style Library/Forms/EditForm.aspx" DefaultNewFormUrl="{site}/Style Library/Forms/Upload.aspx" ImageUrl="/_layouts/15/images/itdl.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x0101" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0120" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views>
+            <View Name="{29BF0171-F830-4050-A00B-1AC634FD3E79}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle dokumenter" Url="{site}/Style Library/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/dlicon.png?rev=47">
+              <Query>
+                <OrderBy>
+                  <FieldRef Name="FileLeafRef" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="DocIcon" />
+                <FieldRef Name="LinkFilename" />
+                <FieldRef Name="Modified" />
+                <FieldRef Name="Editor" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="d307dff3-340f-44a2-9f4b-fbfe1ba07459" Name="_CommentCount" DisplayName="Antall kommentarer" />
+            <pnp:FieldRef ID="db8d9d6d-dc9a-4fbd-85f3-4a753bfdc58c" Name="_LikeCount" DisplayName="Antall likerklikk" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="Tittel" />
+            <pnp:FieldRef ID="cb19284a-cde7-4570-a980-1dab8bd74470" Name="_ExtendedDescription" DisplayName="Beskrivelse" />
+          </pnp:FieldRefs>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="Usikkerhet" Description="" DocumentTemplate="" OnQuickLaunch="true" TemplateType="100" Url="Lists/Usikkerhet" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" ContentTypesEnabled="true" EnableFolderCreation="false" DefaultDisplayFormUrl="{site}/Lists/Usikkerhet/DispForm.aspx" DefaultEditFormUrl="{site}/Lists/Usikkerhet/EditForm.aspx" DefaultNewFormUrl="{site}/Lists/Usikkerhet/NewForm.aspx" ImageUrl="/_layouts/15/images/itgen.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x0100A87AE71CBF2643A6BC9D0948BD2EE89701" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0120" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0100A87AE71CBF2643A6BC9D0948BD2EE89702" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views>
+            <View Name="{EBB7AD20-1354-4F19-96E6-C75CF8A228E8}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Usikkerhet/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query>
+                <FieldRef Name="GtRiskFactor" Ascending="FALSE" />
+              </Query>
+              <ViewFields>
+                <FieldRef Name="ID" />
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtRiskDescription" />
+                <FieldRef Name="GtRiskProbability" />
+                <FieldRef Name="GtRiskConsequence" />
+                <FieldRef Name="GtRiskFactor" />
+                <FieldRef Name="GtRiskStatus" />
+                <FieldRef Name="GtRiskStrategy" />
+                <FieldRef Name="GtRiskAction" />
+                <FieldRef Name="GtRiskProbabilityPostAction" />
+                <FieldRef Name="GtRiskConsequencePostAction" />
+                <FieldRef Name="GtRiskFactorPostAction" />
+                <FieldRef Name="Modified" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">100</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+            <View Name="{762501C2-4738-4E32-BF30-384E98115F17}" Type="HTML" DisplayName="Aktuell risiko" Url="{site}/Lists/Usikkerhet/Aktuell risiko.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query>
+                <GroupBy Collapse="TRUE" GroupLimit="30">
+                  <FieldRef Name="GtRiskStatus" Ascending="FALSE" />
+                </GroupBy>
+                <OrderBy>
+                  <FieldRef Name="GtRiskFactor" Ascending="FALSE" />
+                </OrderBy>
+                <Where>
+                  <Neq>
+                    <FieldRef Name="GtRiskStatus" />
+                    <Value Type="Text">Ikke lenger aktuell</Value>
+                  </Neq>
+                </Where>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="ID" />
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtRiskDescription" />
+                <FieldRef Name="GtRiskProbability" />
+                <FieldRef Name="GtRiskConsequence" />
+                <FieldRef Name="GtRiskFactor" />
+                <FieldRef Name="GtRiskStatus" />
+                <FieldRef Name="GtRiskStrategy" />
+                <FieldRef Name="GtRiskAction" />
+                <FieldRef Name="Modified" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">100</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+            <View Name="{ACE46B5D-8CC6-4FA3-B082-C224EDCB890A}" Type="HTML" DisplayName="Uakseptabel risiko" Url="{site}/Lists/Usikkerhet/Uakseptabel risiko.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query>
+                <GroupBy Collapse="TRUE" GroupLimit="30">
+                  <FieldRef Name="GtRiskStatus" Ascending="FALSE" />
+                </GroupBy>
+                <OrderBy>
+                  <FieldRef Name="GtRiskFactor" Ascending="FALSE" />
+                </OrderBy>
+                <Where>
+                  <And>
+                    <Neq>
+                      <FieldRef Name="GtRiskStatus" />
+                      <Value Type="Text">Ikke lenger aktuell</Value>
+                    </Neq>
+                    <Gt>
+                      <FieldRef Name="GtRiskFactor" />
+                      <Value Type="Number">10</Value>
+                    </Gt>
+                  </And>
+                </Where>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="ID" />
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtRiskDescription" />
+                <FieldRef Name="GtRiskProbability" />
+                <FieldRef Name="GtRiskConsequence" />
+                <FieldRef Name="GtRiskFactor" />
+                <FieldRef Name="GtRiskStatus" />
+                <FieldRef Name="GtRiskStrategy" />
+                <FieldRef Name="GtRiskAction" />
+                <FieldRef Name="Modified" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">100</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+            <View Name="{602D5108-2E03-44AB-B9B6-42C5C0BF26BD}" Type="HTML" DisplayName="Avklart risiko" Url="{site}/Lists/Usikkerhet/Avklart risiko.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query>
+                <OrderBy>
+                  <FieldRef Name="GtRiskFactor" Ascending="FALSE" />
+                </OrderBy>
+                <Where>
+                  <Eq>
+                    <FieldRef Name="GtRiskStatus" />
+                    <Value Type="Text">Ikke lenger aktuell</Value>
+                  </Eq>
+                </Where>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="ID" />
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtRiskDescription" />
+                <FieldRef Name="GtRiskProbability" />
+                <FieldRef Name="GtRiskConsequence" />
+                <FieldRef Name="GtRiskFactor" />
+                <FieldRef Name="GtRiskStatus" />
+                <FieldRef Name="GtRiskStrategy" />
+                <FieldRef Name="GtRiskAction" />
+                <FieldRef Name="GtRiskProbabilityPostAction" />
+                <FieldRef Name="GtRiskConsequencePostAction" />
+                <FieldRef Name="GtRiskFactorPostAction" />
+                <FieldRef Name="Modified" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">100</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+            <View Name="{7D14D091-57C5-4D7E-BE65-C248B41871AC}" Type="HTML" DisplayName="Uten ansvarlig" Url="{site}/Lists/Usikkerhet/Uten ansvarlig.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query>
+                <OrderBy>
+                  <FieldRef Name="GtRiskFactor" Ascending="FALSE" />
+                </OrderBy>
+                <Where>
+                  <IsNull>
+                    <FieldRef Name="GtActionResponsible" />
+                  </IsNull>
+                </Where>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="ID" />
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtRiskDescription" />
+                <FieldRef Name="GtRiskFactor" />
+                <FieldRef Name="GtRiskStatus" />
+                <FieldRef Name="GtRiskAction" />
+                <FieldRef Name="GtActionResponsible" />
+                <FieldRef Name="Modified" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">100</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+            <View Name="{B350107B-7AF5-4544-87DB-98810F16B7A6}" Type="HTML" DisplayName="Risiko" Url="{site}/Lists/Usikkerhet/Risiko.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query>
+                <Where>
+                  <Eq>
+                    <FieldRef Name="ContentType" />
+                    <Value Type="Computed">Risiko</Value>
+                  </Eq>
+                </Where>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="ID" />
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtRiskDescription" />
+                <FieldRef Name="GtRiskProbability" />
+                <FieldRef Name="GtRiskConsequence" />
+                <FieldRef Name="GtRiskFactor" />
+                <FieldRef Name="GtRiskStatus" />
+                <FieldRef Name="GtRiskStrategy" />
+                <FieldRef Name="GtRiskAction" />
+                <FieldRef Name="GtRiskProbabilityPostAction" />
+                <FieldRef Name="GtRiskConsequencePostAction" />
+                <FieldRef Name="GtRiskFactorPostAction" />
+                <FieldRef Name="Modified" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">100</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+            <View Name="{A1592AA4-F91A-4DFB-AAB4-8E43A313207B}" Type="HTML" DisplayName="Gjeldende fase" Url="{site}/Lists/Usikkerhet/Gjeldende fase.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query />
+              <ViewFields>
+                <FieldRef Name="ID" />
+                <FieldRef Name="LinkTitle" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">100</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="f9375230-87f9-4707-8855-ced4e932d93f" Name="j25543a5815d485da9a5e0773ad762e9" Hidden="true" DisplayName="Fase_0" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" DisplayName="Tittel" />
+            <pnp:FieldRef ID="e930090a-480e-414a-bd4a-0ef5bca31443" Name="GtRiskDescription" DisplayName="Beskrivelse av usikkerhet" />
+            <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" DisplayName="Fase" />
+            <pnp:FieldRef ID="c755525b-3716-4ee8-a4f4-f9684808c009" Name="GtRiskProximity" DisplayName="Nærhet" />
+            <pnp:FieldRef ID="6219fd33-2f3c-42f5-9790-174143bfb99c" Name="GtRiskAction" DisplayName="Tiltak" />
+            <pnp:FieldRef ID="04cfd3c0-5f18-4906-bdca-b5f84b693437" Name="GtRiskStrategy" DisplayName="Usikkerhetstrategi" />
+            <pnp:FieldRef ID="2ae541a5-5ecc-481d-afb6-c03a6f1e71b4" Name="GtActionResponsible" DisplayName="Tiltaksansvarlig" />
+            <pnp:FieldRef ID="0e1b295d-2bfb-4ef6-ae92-e72068e56111" Name="GtRiskProbability" DisplayName="Sannsynlighet (S)" />
+            <pnp:FieldRef ID="554d32a0-0148-4b3c-bfc4-f101232ee501" Name="GtRiskConsequence" DisplayName="Konsekvens (K)" />
+            <pnp:FieldRef ID="f81ebcb7-8791-44b0-9919-08ed5524b11d" Name="GtRiskProbabilityPostAction" DisplayName="S etter tiltak" />
+            <pnp:FieldRef ID="00f17233-d4c0-49d0-aebd-5004552abb17" Name="GtRiskConsequencePostAction" DisplayName="K etter tiltak" />
+            <pnp:FieldRef ID="6c2da0dc-77b1-4152-b751-97adf436faa0" Name="GtRiskStatus" DisplayName="Status usikkerhet" />
+            <pnp:FieldRef ID="6bd17911-c48a-4900-be61-54ae26207d78" Name="GtShowInPortfolio" DisplayName="Vis i portefølje" />
+            <pnp:FieldRef ID="8499bd48-4c5d-43ae-8e27-7968d49ca14f" Name="GtRiskFactor" DisplayName="Risikofaktor" />
+            <pnp:FieldRef ID="62f0454d-1150-4d55-86ef-075f786d6e5c" Name="GtRiskFactorPostAction" DisplayName="Risikofaktor etter tiltak" />
+          </pnp:FieldRefs>
+        </pnp:ListInstance>
+      </pnp:Lists>
+      <pnp:Features>
+        <pnp:WebFeatures>
+          <pnp:Feature ID="780ac353-eaf8-4ac2-8c47-536d93c03fd6" />
+        </pnp:WebFeatures>
+      </pnp:Features>
+      <pnp:CustomActions>
+        <pnp:WebCustomActions>
+          <pnp:CustomAction Name="{a09a4a3e-7472-4b69-ae87-01607b550cac}" Location="ClientSideExtension.ApplicationCustomizer" Title="Oppgradering av prosjekter" Sequence="0" Rights="" RegistrationType="None" ClientSideComponentId="453a6c1e-e1d0-4b12-a3fc-690a36da1f0c" ClientSideComponentProperties="{}" />
+          <pnp:CustomAction Name="{59db7c3f-5289-4863-8ba7-6b7ccbda3444}" Location="ClientSideExtension.ApplicationCustomizer" Title="Hjelpeinnhold" Sequence="0" Rights="" RegistrationType="None" ClientSideComponentId="28987406-2a67-48a8-9297-fd2833bf0a09" ClientSideComponentProperties="{&quot;listName&quot;:&quot;Hjelpeinnhold&quot;,&quot;linkText&quot;:&quot;Hjelp tilgjengelig&quot;}" />
+          <pnp:CustomAction Name="{32d574a2-a9aa-4df2-b1ed-77c687fa769d}" Location="ClientSideExtension.ListViewCommandSet.CommandBar" Title="Malvelger" Sequence="0" Rights="" RegistrationId="101" RegistrationType="List" ClientSideComponentId="c9080212-e63e-47cc-8278-00ad38c3f5a5" ClientSideComponentProperties="{&quot;templateLibrary&quot;: &quot;Malbibliotek&quot;}" />
+        </pnp:WebCustomActions>
+      </pnp:CustomActions>
+      <pnp:ClientSidePages>
+        <pnp:ClientSidePage PromoteAsNewsArticle="false" PromoteAsTemplate="false" Overwrite="true" Layout="Home" EnableComments="false" Title="Hjemmeside" ThumbnailUrl="" PageName="Home.aspx">
+          <pnp:Header Type="Default" LayoutType="FullWidthImage" ShowTopicHeader="false" ShowPublishDate="false" ShowBackgroundGradient="false" TopicHeader="" AlternativeText="" Authors="" AuthorByLineId="-1" />
+        </pnp:ClientSidePage>
+        <pnp:ClientSidePage PromoteAsNewsArticle="false" PromoteAsTemplate="false" Overwrite="true" Layout="Home" EnableComments="false" Title="Hjem" ThumbnailUrl="" PageName="ProjectHome.aspx">
+          <pnp:Header Type="Default" LayoutType="FullWidthImage" ShowTopicHeader="false" ShowPublishDate="false" ShowBackgroundGradient="false" TopicHeader="" AlternativeText="" Authors="[]" AuthorByLineId="-1" />
+          <pnp:Sections>
+            <pnp:Section Order="1" Type="TwoColumnLeft">
+              <pnp:Controls>
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;id&quot;: &quot;4449d3dc-fa58-4982-b87c-5a893114e7b7&quot;, &quot;instanceId&quot;: &quot;968574da-5704-4eec-9695-eb1dbb784092&quot;, &quot;title&quot;: &quot;Fasevelger&quot;, &quot;description&quot;: &quot; &quot;, &quot;dataVersion&quot;: &quot;1.0&quot;, &quot;properties&quot;: {&quot;phaseField&quot;:&quot;Fase&quot;,&quot;syncPropertiesAfterPhaseChange&quot;:true,&quot;showSubText&quot;:true,&quot;subTextTruncateLength&quot;:50,&quot;currentPhaseViewName&quot;:&quot;Gjeldende fase&quot;,&quot;useDynamicHomepage&quot;:false,&quot;usePhaseHooks&quot;:false}, &quot;serverProcessedContent&quot;: {}, &quot;dynamicDataPaths&quot;: {}, &quot;dynamicDataValues&quot;: {}}" ControlId="4449d3dc-fa58-4982-b87c-5a893114e7b7" Order="1" Column="1" />
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;id&quot;: &quot;39c4c1c2-63fa-41be-8cc2-f6c0b49b253d&quot;, &quot;instanceId&quot;: &quot;6649d442-fcdd-423f-8d67-303dec2f856e&quot;, &quot;title&quot;: &quot;Planner&quot;, &quot;description&quot;: &quot;Vis og arbeid med et Planner-kort eller-diagrammer.&quot;, &quot;dataVersion&quot;: &quot;1.0&quot;, &quot;properties&quot;: {&quot;planId&quot;:&quot;&quot;,&quot;plannerViewMode &quot;:&quot;config&quot;,&quot;groupPlans&quot;:[],&quot;isFullScreen&quot;:false,&quot;title&quot;:&quot;Oppgaver&quot;,&quot;plannerViewMode&quot;:&quot;bucketchart&quot;}, &quot;serverProcessedContent&quot;: {}, &quot;dynamicDataPaths&quot;: {}, &quot;dynamicDataValues&quot;: {}}" ControlId="39c4c1c2-63fa-41be-8cc2-f6c0b49b253d" Order="2" Column="1" />
+                <pnp:CanvasControl WebPartType="GroupCalendar" JsonControlData="{&quot;id&quot;: &quot;6676088b-e28e-4a90-b9cb-d0d0303cd2eb&quot;, &quot;instanceId&quot;: &quot;30c47d1f-cdbf-447b-b158-84e3fed04ab5&quot;, &quot;title&quot;: &quot;Gruppekalender&quot;, &quot;description&quot;: &quot;Vis en kalender fra en av Office 365-gruppene dine.&quot;, &quot;dataVersion&quot;: &quot;1.0&quot;, &quot;properties&quot;: {&quot;selectedGroupId&quot;:&quot;&quot;,&quot;selectedGroupName&quot;:&quot;&quot;,&quot;selectedGroupEmail&quot;:&quot;&quot;,&quot;accessType&quot;:&quot;&quot;,&quot;showPerPage&quot;:5,&quot;title&quot;:&quot;Møter og hendelser&quot;,&quot;timeSpanLimitInMonth&quot;:6,&quot;useContextualGroup&quot;:false}, &quot;serverProcessedContent&quot;: {}, &quot;dynamicDataPaths&quot;: {}, &quot;dynamicDataValues&quot;: {}}" ControlId="6676088b-e28e-4a90-b9cb-d0d0303cd2eb" Order="3" Column="1" />
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;id&quot;: &quot;b8bec0be-2354-443d-a3ca-24b36e8ea7dc&quot;, &quot;instanceId&quot;: &quot;9c3e0bee-4e86-47d6-8bfa-e17ccd90a835&quot;, &quot;title&quot;: &quot;Prosjektinformasjon&quot;, &quot;description&quot;: &quot; &quot;, &quot;dataVersion&quot;: &quot;1.0&quot;, &quot;properties&quot;: {&quot;title&quot;:&quot;Prosjektinformasjon&quot;,&quot;useIdeaProcessing&quot;:false,&quot;hideAllActions&quot;:false,&quot;useFramelessButtons&quot;:false,&quot;hideActions&quot;:[],&quot;statusReportsCount&quot;:0,&quot;statusReportsHeader&quot;:&quot;Prosjektstatus&quot;,&quot;filterField&quot;:&quot;GtShowFieldFrontpage&quot;,&quot;adminPageLink&quot;:&quot;Admin.aspx&quot;}, &quot;serverProcessedContent&quot;: {}, &quot;dynamicDataPaths&quot;: {}, &quot;dynamicDataValues&quot;: {}}" ControlId="b8bec0be-2354-443d-a3ca-24b36e8ea7dc" Order="1" Column="2" />
+                <pnp:CanvasControl WebPartType="NewsReel" JsonControlData="{&quot;id&quot;: &quot;a5df8fdf-b508-4b66-98a6-d83bc2597f63&quot;, &quot;instanceId&quot;: &quot;92ccd933-1061-4492-bb68-a05f8bb97b13&quot;, &quot;title&quot;: &quot;Nyheter&quot;, &quot;description&quot;: &quot;Vis nyhets inn Legg fra ett eller flere områder i en rekke oppsett. Du kan filtrere nyheter og mål nyheter til viktige mål grupper.&quot;, &quot;dataVersion&quot;: &quot;1.0&quot;, &quot;properties&quot;: {&quot;title&quot;:&quot;Prosjektnyheter&quot;,&quot;showChrome&quot;:true,&quot;compactMode&quot;:true}, &quot;serverProcessedContent&quot;: {}, &quot;dynamicDataPaths&quot;: {}, &quot;dynamicDataValues&quot;: {}}" ControlId="a5df8fdf-b508-4b66-98a6-d83bc2597f63" Order="2" Column="2" />
+              </pnp:Controls>
+            </pnp:Section>
+            <pnp:Section Order="2" Type="OneColumn">
+              <pnp:Controls>
+                <pnp:CanvasControl WebPartType="List" JsonControlData="{&quot;id&quot;: &quot;f92bf067-bc19-489e-a556-7fe95f508720&quot;, &quot;instanceId&quot;: &quot;e09dfbf4-bb6d-42da-8b96-4975817d33f7&quot;, &quot;title&quot;: &quot;Liste&quot;, &quot;description&quot;: &quot;Vis en liste fra dette nettstedet.&quot;, &quot;dataVersion&quot;: &quot;1.0&quot;, &quot;properties&quot;: {&quot;isDocumentLibrary&quot;:true,&quot;filterBy&quot;:{},&quot;selectedListId&quot;:&quot;{listid:Dokumenter}&quot;,&quot;webpartHeightKey&quot;:4}, &quot;serverProcessedContent&quot;: {}, &quot;dynamicDataPaths&quot;: {}, &quot;dynamicDataValues&quot;: {}}" ControlId="f92bf067-bc19-489e-a556-7fe95f508720" Order="1" Column="1" />
+              </pnp:Controls>
+            </pnp:Section>
+          </pnp:Sections>
+        </pnp:ClientSidePage>
+        <pnp:ClientSidePage PromoteAsNewsArticle="false" PromoteAsTemplate="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Oppgaver" ThumbnailUrl="" PageName="Oppgaver.aspx">
+          <pnp:Header Type="Default" LayoutType="FullWidthImage" ShowTopicHeader="false" ShowPublishDate="false" ShowBackgroundGradient="false" TopicHeader="" AlternativeText="" Authors="[]" AuthorByLineId="-1" />
+          <pnp:Sections>
+            <pnp:Section Order="1" Type="OneColumn">
+              <pnp:Controls>
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;id&quot;: &quot;39c4c1c2-63fa-41be-8cc2-f6c0b49b253d&quot;, &quot;instanceId&quot;: &quot;899a585a-c9e9-475b-ba69-3c62d5ef1f07&quot;, &quot;title&quot;: &quot;Planner&quot;, &quot;description&quot;: &quot;Vis og arbeid med et Planner-kort eller-diagrammer.&quot;, &quot;dataVersion&quot;: &quot;1.0&quot;, &quot;properties&quot;: {&quot;planId&quot;:&quot;&quot;,&quot;plannerViewMode &quot;:&quot;config&quot;,&quot;groupPlans&quot;:[],&quot;isFullScreen&quot;:false,&quot;plannerViewMode&quot;:&quot;board&quot;}, &quot;serverProcessedContent&quot;: {}, &quot;dynamicDataPaths&quot;: {}, &quot;dynamicDataValues&quot;: {}}" ControlId="39c4c1c2-63fa-41be-8cc2-f6c0b49b253d" Order="1" Column="1" />
+              </pnp:Controls>
+            </pnp:Section>
+          </pnp:Sections>
+        </pnp:ClientSidePage>
+        <pnp:ClientSidePage PromoteAsNewsArticle="false" PromoteAsTemplate="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Gevinstoversikt" ThumbnailUrl="" PageName="Gevinstoversikt.aspx">
+          <pnp:Header Type="Default" LayoutType="FullWidthImage" ShowTopicHeader="false" ShowPublishDate="false" ShowBackgroundGradient="false" TopicHeader="" AlternativeText="" Authors="[]" AuthorByLineId="-1" />
+          <pnp:Sections>
+            <pnp:Section Order="1" Type="OneColumn">
+              <pnp:Controls>
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;id&quot;: &quot;5f925484-cfb4-42ce-9f90-79a874bb8a68&quot;, &quot;instanceId&quot;: &quot;0ec7e4f7-c1bc-4d99-91ea-7846f3356c55&quot;, &quot;title&quot;: &quot;Gevinstoversikt&quot;, &quot;description&quot;: &quot; &quot;, &quot;dataVersion&quot;: &quot;1.0&quot;, &quot;properties&quot;: {&quot;title&quot;:&quot;Gevinstoversikt&quot;,&quot;dataSource&quot;:&quot;Gevinstoversikt (Prosjektnivå)&quot;,&quot;searchBoxPlaceholderText&quot;:&quot;Søk i gevinster...&quot;,&quot;hiddenColumns&quot;:[&quot;siteTitle&quot;]}, &quot;serverProcessedContent&quot;: {}, &quot;dynamicDataPaths&quot;: {}, &quot;dynamicDataValues&quot;: {}}" ControlId="5f925484-cfb4-42ce-9f90-79a874bb8a68" Order="1" Column="1" />
+              </pnp:Controls>
+            </pnp:Section>
+          </pnp:Sections>
+        </pnp:ClientSidePage>
+        <pnp:ClientSidePage PromoteAsNewsArticle="false" PromoteAsTemplate="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Prosjektstatus" ThumbnailUrl="" PageName="Prosjektstatus.aspx">
+          <pnp:Header Type="Default" LayoutType="FullWidthImage" ShowTopicHeader="false" ShowPublishDate="false" ShowBackgroundGradient="false" TopicHeader="" AlternativeText="" Authors="[]" AuthorByLineId="-1" />
+          <pnp:Sections>
+            <pnp:Section Order="1" Type="OneColumn">
+              <pnp:Controls>
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;id&quot;: &quot;681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6&quot;, &quot;instanceId&quot;: &quot;e7180287-7505-4c9c-b836-e29f9fec229c&quot;, &quot;title&quot;: &quot;Prosjektstatus&quot;, &quot;description&quot;: &quot; &quot;, &quot;dataVersion&quot;: &quot;1.0&quot;, &quot;properties&quot;: {&quot;title&quot;:&quot;Prosjektstatus&quot;,&quot;riskMatrixCalloutTemplate&quot;:&quot;&lt;h3&gt;{Title}&lt;/h3&gt;\n&lt;p&gt;&lt;strong&gt;Usikkerhetstrategi: &lt;/strong&gt;{GtRiskStrategy}&lt;/p&gt;\n&lt;p&gt;&lt;strong&gt;Nærhet: &lt;/strong&gt;{GtRiskProximity}&lt;/p&gt;\n&lt;p&gt;&lt;strong&gt;Status usikkerhet: &lt;/strong&gt;{GtRiskStatus}&lt;/p&gt;&quot;,&quot;riskMatrixWidth&quot;:800,&quot;riskMatrixHeight&quot;:400,&quot;fieldWidth&quot;:250}, &quot;serverProcessedContent&quot;: {}, &quot;dynamicDataPaths&quot;: {}, &quot;dynamicDataValues&quot;: {}}" ControlId="681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6" Order="1" Column="1" />
+              </pnp:Controls>
+            </pnp:Section>
+          </pnp:Sections>
+        </pnp:ClientSidePage>
+        <pnp:ClientSidePage PromoteAsNewsArticle="false" PromoteAsTemplate="false" Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="Prosjekttidslinje" ThumbnailUrl="" PageName="Prosjekttidslinje.aspx">
+          <pnp:Header Type="Default" LayoutType="FullWidthImage" ShowTopicHeader="false" ShowPublishDate="false" ShowBackgroundGradient="false" TopicHeader="" AlternativeText="" Authors="[]" AuthorByLineId="-1" />
+          <pnp:Sections>
+            <pnp:Section Order="1" Type="OneColumn">
+              <pnp:Controls>
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{&quot;id&quot;: &quot;d156652b-9121-47af-89ae-1fe8427c53da&quot;, &quot;instanceId&quot;: &quot;b96b622b-3640-45e2-8253-f31621e0f812&quot;, &quot;title&quot;: &quot;Prosjekttidslinje&quot;, &quot;description&quot;: &quot; &quot;, &quot;dataVersion&quot;: &quot;1.0&quot;, &quot;properties&quot;: {&quot;listName&quot;:&quot;Tidslinjeinnhold&quot;,&quot;showTimeline&quot;:true,&quot;showCmdTimelineList&quot;:true,&quot;showTimelineList&quot;:true,&quot;showProjectDeliveries&quot;:false,&quot;projectDeliveriesListName&quot;:&quot;Prosjektleveranser&quot;,&quot;configItemTitle&quot;:&quot;Prosjektleveranse&quot;,&quot;title&quot;:&quot;Prosjekttidslinje&quot;,&quot;showFilterButton&quot;:true,&quot;showInfoMessage&quot;:true}, &quot;serverProcessedContent&quot;: {}, &quot;dynamicDataPaths&quot;: {}, &quot;dynamicDataValues&quot;: {}}" ControlId="d156652b-9121-47af-89ae-1fe8427c53da" Order="1" Column="1" />
+              </pnp:Controls>
+            </pnp:Section>
+          </pnp:Sections>
+        </pnp:ClientSidePage>
+      </pnp:ClientSidePages>
+      <pnp:Header Layout="Compact" />
+    </pnp:ProvisioningTemplate>
+  </pnp:Templates>
+</pnp:Provisioning>
