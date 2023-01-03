@@ -168,6 +168,7 @@ EndAction
 
 
 if (-not $CI.IsPresent) {
+    rimraf "$($RELEASE_PATH).zip"l
     Add-Type -Assembly "System.IO.Compression.FileSystem"
     [IO.Compression.ZipFile]::CreateFromDirectory($RELEASE_PATH, "$($RELEASE_PATH).zip")  
     $sw.Stop()
