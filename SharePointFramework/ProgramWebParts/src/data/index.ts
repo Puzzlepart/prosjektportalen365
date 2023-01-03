@@ -329,32 +329,28 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    * @param timelineConfig Timeline configuration
    */
   public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationModel[]) {
-      const [{ PrimarySearchResults: statusReports }] = await Promise.all([
-        sp.search({
-          ...DEFAULT_SEARCH_SETTINGS,
-          QueryTemplate: `DepartmentId:{${this.spfxContext.pageContext.legacyPageContext.hubSiteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
-          SelectProperties: [
-            'Title',
-            'GtSiteIdOWSTEXT',
-            'GtCostsTotalOWSCURR',
-            'GtBudgetTotalOWSCURR'
-          ]
-        })
-      ])
 
-      const configElement = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
+    const searchQuery = `ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`
+    const selectProperties = [
+      'GtSiteIdOWSTEXT',
+      'GtCostsTotalOWSCURR',
+      'GtBudgetTotalOWSCURR'
+    ]
+    const statusReports = await this._fetchItems(searchQuery, selectProperties, false, 'GtSiteIdOWSTEXT')
 
-      const reports = statusReports
-        .map((report) => {
-          return {
-            siteId: report && report['GtSiteIdOWSTEXT'],
-            costsTotal: report && report['GtCostsTotalOWSCURR'],
-            budgetTotal: report && report['GtBudgetTotalOWSCURR']
-          }
-        })
-        .filter((p) => p)
+    const configElement = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
 
-      return { reports, configElement }
+    const reports = statusReports
+      .map((report) => {
+        return {
+          siteId: report && report['GtSiteIdOWSTEXT'],
+          costsTotal: report && report['GtCostsTotalOWSCURR'],
+          budgetTotal: report && report['GtBudgetTotalOWSCURR']
+        }
+      })
+      .filter((p) => p)
+
+    return { reports, configElement }
   }
 
   /**
@@ -658,14 +654,15 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   private async _fetchItems(
     queryTemplate: string,
     selectProperties: string[],
-    includeSelf: boolean = false
+    includeSelf: boolean = false,
+    siteIdManagedProperty: string = 'SiteId'
   ) {
     sp.setup({
       spfxContext: this.spfxContext
     })
     const siteId = this.spfxContext.pageContext.site.id.toString()
-    const programFilter = this.childProjects && this.aggregatedQueryBuilder('SiteId')
-    if (includeSelf) programFilter.unshift(`SiteId:${siteId}`)
+    const programFilter = this.childProjects && this.aggregatedQueryBuilder(siteIdManagedProperty)
+    if (includeSelf) programFilter.unshift(`${siteIdManagedProperty}:${siteId}`)
     const promises = []
     programFilter.forEach((element) => {
       promises.push(
