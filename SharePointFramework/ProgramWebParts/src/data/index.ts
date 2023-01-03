@@ -27,6 +27,7 @@ import * as strings from 'ProgramWebPartsStrings'
 import { GAINS_DEFAULT_SELECT_PROPERTIES } from './config'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
+import _ from 'underscore'
 
 /**
  * SPDataAdapter for `ProgramWebParts`.
@@ -323,13 +324,32 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   }
 
   /**
-   * Currently not in use, but it's here to avoid `ProjectTimeline` failing.
+   * Fetches data for the Projecttimeline project.
    *
-   * @param _timelineConfig Timeline config (not in use)
+   * @param timelineConfig Timeline configuration
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async fetchTimelineProjectData(_timelineConfig: TimelineConfigurationModel[]) {
-    return await Promise.resolve({})
+  public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationModel[]) {
+    const searchQuery = 'ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert'
+    const selectProperties = [
+      'GtSiteIdOWSTEXT',
+      'GtCostsTotalOWSCURR',
+      'GtBudgetTotalOWSCURR'
+    ]
+
+    const statusReports = await this._fetchItems(searchQuery, selectProperties, false, 'GtSiteIdOWSTEXT')
+    const reports = statusReports
+      .map((report) => {
+        return {
+          siteId: report && report['GtSiteIdOWSTEXT'],
+          costsTotal: report && report['GtCostsTotalOWSCURR'],
+          budgetTotal: report && report['GtBudgetTotalOWSCURR']
+        }
+      })
+      .filter((p) => p)
+
+    const configElement = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
+
+    return { reports, configElement }
   }
 
   /**
@@ -371,7 +391,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
             (child) =>
               child?.SiteId === item?.GtSiteIdLookup?.GtSiteId ||
               item?.GtSiteIdLookup?.GtSiteId ===
-                this?.spfxContext?.pageContext?.site?.id?.toString()
+              this?.spfxContext?.pageContext?.site?.id?.toString()
           )
         ) {
           if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
@@ -633,14 +653,15 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   private async _fetchItems(
     queryTemplate: string,
     selectProperties: string[],
-    includeSelf: boolean = false
+    includeSelf: boolean = false,
+    siteIdManagedProperty: string = 'SiteId'
   ) {
     sp.setup({
       spfxContext: this.spfxContext
     })
     const siteId = this.spfxContext.pageContext.site.id.toString()
-    const programFilter = this.childProjects && this.aggregatedQueryBuilder('SiteId')
-    if (includeSelf) programFilter.unshift(`SiteId:${siteId}`)
+    const programFilter = this.childProjects && this.aggregatedQueryBuilder(siteIdManagedProperty)
+    if (includeSelf) programFilter.unshift(`${siteIdManagedProperty}:${siteId}`)
     const promises = []
     programFilter.forEach((element) => {
       promises.push(
@@ -742,6 +763,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
         .filter(`GtSiteId eq '${this.spfxContext.pageContext.site.id.toString()}'`)
         .get()
       await list.items.getById(item.ID).update(properties)
-    } catch (error) {}
+    } catch (error) { }
   }
 }
