@@ -329,17 +329,14 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    * @param timelineConfig Timeline configuration
    */
   public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationModel[]) {
-
-    const searchQuery = `ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`
+    const searchQuery = 'ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert'
     const selectProperties = [
       'GtSiteIdOWSTEXT',
       'GtCostsTotalOWSCURR',
       'GtBudgetTotalOWSCURR'
     ]
+
     const statusReports = await this._fetchItems(searchQuery, selectProperties, false, 'GtSiteIdOWSTEXT')
-
-    const configElement = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
-
     const reports = statusReports
       .map((report) => {
         return {
@@ -349,6 +346,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
         }
       })
       .filter((p) => p)
+
+    const configElement = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
 
     return { reports, configElement }
   }
