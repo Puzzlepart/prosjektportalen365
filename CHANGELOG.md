@@ -28,6 +28,7 @@ Every change is marked with issue ID.
 - Bugfix for ResourceAllocation where web part is not loaded due to elements not having User or Role assigned [#904](https://github.com/Puzzlepart/prosjektportalen365/issues/904)
 - Fixed an issue where hubsite was not resolved, leading to inconsistensies and errors [#640](https://github.com/Puzzlepart/prosjektportalen365/issues/849)
 - Fixed an issue where sometimes the role was shown as the owner of a resource allocation entry [#916](https://github.com/Puzzlepart/prosjektportalen365/issues/916)
+- Fixed an issue where '? Hjelp tilgjengelig' button didn't render propertly [#902](https://github.com/Puzzlepart/prosjektportalen365/issues/902)
 
 ## 1.7.2 - 26.10.2022
 
