@@ -42,6 +42,7 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
     if (helpContentPlaceholder === null) {
       helpContentPlaceholder = document.createElement('DIV')
       helpContentPlaceholder.id = helpContentId
+      helpContentPlaceholder.style.height = '30px'
       this._topPlaceholder.domElement.appendChild(helpContentPlaceholder)
     }
     if (helpContent.length === 0) ReactDOM.render(null, helpContentPlaceholder)

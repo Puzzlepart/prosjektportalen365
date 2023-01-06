@@ -1,15 +1,22 @@
 ### Your checklist for this pull request
 
-- [ ] Make sure you are requesting to **pull a topic/feature/bugfix branch** (right side). Don't request your main!
+- [ ] Make sure you are requesting to pull your branch (right side).
 - [ ] Make sure you are making a pull request against the **dev** branch (left side). Also you should start *your branch* off *dev*.
-- [ ] Check the commit's or even all commits' message 
+- [ ] Check the commit's or even all commits' message
 - [ ] Check if your code additions will fail linting checks
 - [ ] Remember: Add issue description to [CHANGELOG](https://github.com/Puzzlepart/prosjektportalen365/blob/dev/CHANGELOG.md) with the **ID of the issue** associated with this PR
-- [ ] Documentation: Have a look at the [PP365 User manual](https://puzzlepart.github.io/prosjektportalen-manual/) and consider the need for updates to be made. Updates can be done directly into the 'Kladd' branch or by providing information to test team for implementation.
+- [ ] Tag PR and issue with correct Milestone
+- [ ] Assign the PR to yourself and add labels
 
 ### Description
 
 Please describe your pull request in detail.
+
+If you have made any visual changes, please add before/after screenshots if possible. At least a screenshot of the visual change.
+
+| Before        | After        |
+| ------------- | ------------ |
+| Before change | After change |
 
 ### How to test
 
@@ -22,7 +29,10 @@ Example:
 3. Then that
 
 ### Update of documentation
-- [ ] Update user manual if needed
+
+Update user manual if needed
+
+- Documentation: Have a look at the [PP365 User manual](https://puzzlepart.github.io/prosjektportalen-manual/) and consider the need for updates to be made. Updates can be done directly into the 'Kladd' branch or by providing information to test team for implementation.
 
 ### Relevant issues (if applicable)
 

@@ -1192,29 +1192,12 @@
                         "GtDeliveryStartTime",
                         "GtDeliveryEndTime",
                         "GtDeliveryStatus",
-                        "GtDeliveryStatusComment",
-                        "GtDeliveryPhase"
-                    ],
-                    "AdditionalSettings": {
-                        "RowLimit": 30,
-                        "Paged": true,
-                        "ViewQuery": ""
-                    }
-                },
-                {
-                    "Title": "Leveransefase",
-                    "ViewFields": [
-                        "LinkTitle",
-                        "GtDeliveryDescription",
-                        "GtDeliveryStartTime",
-                        "GtDeliveryEndTime",
-                        "GtDeliveryStatus",
                         "GtDeliveryStatusComment"
                     ],
                     "AdditionalSettings": {
                         "RowLimit": 30,
                         "Paged": true,
-                        "ViewQuery": "<GroupBy Collapse=\"FALSE\" GroupLimit=\"30\"><FieldRef Name=\"GtDeliveryPhase\" /></GroupBy>"
+                        "ViewQuery": ""
                     }
                 }
             ]
