@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+  <pnp:Preferences Generator="OfficeDevPnP.Core, Version=3.20.2004.0, Culture=neutral, PublicKeyToken=5e633289e95c321a" />
+  <pnp:Templates ID="CONTAINER-TEMPLATE-SINGLEWEBPARTAPPPAGE">
+    <pnp:ProvisioningTemplate ID="TEMPLATE-SINGLEWEBPARTAPPPAGE" Version="1" BaseSiteTemplate="GROUP#0" Scope="RootSite">
+      <pnp:ClientSidePages>
+        <pnp:ClientSidePage Overwrite="true" Layout="SingleWebPartAppPage" EnableComments="false" Title="{parameter:Title}" PageName="{parameter:PageName}">
+          <pnp:Sections>
+            <pnp:Section Order="1" Type="OneColumn">
+              <pnp:Controls>
+                <pnp:CanvasControl WebPartType="Custom" JsonControlData="{parameter:JsonControlData}" ControlId="6c0e484d-f6da-40d4-81fc-ec1389ef29a8" Order="1" Column="1" />
+              </pnp:Controls>
+            </pnp:Section>
+          </pnp:Sections>
+        </pnp:ClientSidePage>
+      </pnp:ClientSidePages>
+    </pnp:ProvisioningTemplate>
+  </pnp:Templates>
+</pnp:Provisioning>
