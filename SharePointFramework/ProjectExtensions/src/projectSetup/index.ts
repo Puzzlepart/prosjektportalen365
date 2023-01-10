@@ -77,6 +77,15 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             MessageBarType.warning
           )
         }
+        case ProjectSetupValidation.AlreadySetup: {
+          if (stringIsNullOrEmpty(this.properties.forceTemplate)) {
+            throw new ProjectSetupError(
+              'AlreadySetup',
+              strings.ProjectAlreadySetupMessage,
+              strings.ProjectAlreadySetupStack
+            )
+          }
+        }
       }
 
       this._initializeSetup({
