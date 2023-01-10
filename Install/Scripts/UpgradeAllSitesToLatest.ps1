@@ -146,6 +146,20 @@ function EnsureProgramAggregrationWebPart() {
     }
 }
 
+function EnsureProjectAggregrationWebPart() {
+    $BaseDir = "$ScriptDir/EnsureProjectAggregrationWebPart"
+    $Pages = Get-Content "$BaseDir/$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+    foreach ($Page in $Pages.PSObject.Properties.GetEnumerator()) {
+        $DeprecatedComponent = Get-PnPPageComponent -Page "$($Page.Name).aspx" -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $Page.Value } | Select-Object -First 1
+        if ($null -ne $DeprecatedComponent) {
+            Write-Host "`t`tReplacing deprecated component $($Page.Value) for $($Page.Name).aspx"
+            $JsonControlData = Get-Content "$BaseDir/JsonControlData_$($Page.Name).json" -Raw -Encoding UTF8
+            $Title = $JsonControlData | ConvertFrom-Json | Select-Object -ExpandProperty title
+            Invoke-PnPSiteTemplate -Path "$BaseDir/Template_ProjectAggregationWebPart.xml" -Parameters @{"JsonControlData" = $JsonControlData; "PageName" = "$($Page.Name).aspx"; "Title" = $Title }
+        }
+    }
+}
+
 function EnsureHelpContentExtension() {
     $ClientSideComponentId = "28987406-2a67-48a8-9297-fd2833bf0a09"
     if ($null -eq (Get-PnPCustomAction | Where-Object { $_.ClientSideComponentId -eq $ClientSideComponentId })) {
@@ -162,6 +176,7 @@ function UpgradeSite($Url) {
     EnsureProjectTimelinePage
     EnsureResourceLoadIsSiteColumn
     EnsureProgramAggregrationWebPart
+    EnsureProjectAggregrationWebPart
     EnsureHelpContentExtension
 }
 
