@@ -8,6 +8,7 @@
                 </OrderBy>
             </Query>
             <ViewFields>
+                <FieldRef Name="LinkTitle" />
                 <FieldRef Name="InstallStartTime" />
                 <FieldRef Name="InstallEndTime" />
                 <FieldRef Name="InstallVersion" />
