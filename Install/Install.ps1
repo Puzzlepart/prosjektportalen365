@@ -521,7 +521,7 @@ Write-Host "[INFO] Logged installation entry"
 $InstallEndTime = (Get-Date -Format o)
 
 $InstallEntry = @{
-    Title            = "PP365 Upgrade to {VERSION_PLACEHOLDER}"
+    Title            = "PP365 {VERSION_PLACEHOLDER}"
     InstallStartTime = $InstallStartTime; 
     InstallEndTime   = $InstallEndTime; 
     InstallVersion   = "{VERSION_PLACEHOLDER}";
