@@ -353,7 +353,7 @@ export class ProjectDataService {
       const { WelcomePage } = await this.web.rootFolder.select('welcomepage').get()
       return WelcomePage
     } catch (error) {
-      return "SitePages/ProjectHome.aspx" //Visitors doesn't have access to rootFolder
+      return 'SitePages/ProjectHome.aspx' //Visitors doesn't have access to rootFolder
     }
   }
 }
