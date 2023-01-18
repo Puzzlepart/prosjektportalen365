@@ -443,7 +443,7 @@ if (-not $SkipTemplate.IsPresent) {
         Disconnect-PnPOnline
     }
     Catch {
-        Write-Host ("[ERROR] Failed to apply PnP templates to ${0}: ${1}" -f $Uri.AbsoluteUri,$_.Exception.Message) -ForegroundColor Red
+        Write-Host ("[ERROR] Failed to apply PnP templates to ${0}: ${1}" -f $Uri.AbsoluteUri, $_.Exception.Message) -ForegroundColor Red
         exit 0
     }
 }
@@ -521,13 +521,14 @@ Write-Host "[INFO] Logged installation entry"
 $InstallEndTime = (Get-Date -Format o)
 
 $InstallEntry = @{
+    Title            = "PP365 {VERSION_PLACEHOLDER}"
     InstallStartTime = $InstallStartTime; 
     InstallEndTime   = $InstallEndTime; 
     InstallVersion   = "{VERSION_PLACEHOLDER}";
     InstallCommand   = $MyInvocation.Line.Substring(2);
 }
 
-if($null -ne $CurrentUser.Email) {
+if ($null -ne $CurrentUser.Email) {
     $InstallEntry.InstallUser = $CurrentUser.Email
 }
 if (-not [string]::IsNullOrEmpty($CI)) {
