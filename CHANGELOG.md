@@ -29,6 +29,7 @@ Every change is marked with issue ID.
 - Fixed an issue where hubsite was not resolved, leading to inconsistensies and errors [#640](https://github.com/Puzzlepart/prosjektportalen365/issues/849)
 - Fixed an issue where sometimes the role was shown as the owner of a resource allocation entry [#916](https://github.com/Puzzlepart/prosjektportalen365/issues/916)
 - Fixed an issue where '? Hjelp tilgjengelig' button didn't render propertly [#902](https://github.com/Puzzlepart/prosjektportalen365/issues/902)
+- Fixed an issue where visitors to a project didn't see the phase web part [#948](https://github.com/Puzzlepart/prosjektportalen365/issues/948)
 
 ## 1.7.2 - 26.10.2022
 
