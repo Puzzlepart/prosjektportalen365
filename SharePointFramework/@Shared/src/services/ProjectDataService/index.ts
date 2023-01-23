@@ -147,7 +147,7 @@ export class ProjectDataService {
           .filter("substringof('Gt', InternalName)")
           .usingCaching()
           .get(),
-        this.web.rootFolder.select('welcomepage').get()
+          this.getWelcomePage()
       ])
 
       urlSource = !urlSource.includes(welcomepage.WelcomePage)
@@ -343,6 +343,18 @@ export class ProjectDataService {
       Logger.write(`(ProjectDataService) Clearing key ${key} from sessionStorage.`)
       sessionStorage.removeItem(key)
     })
+  }
+
+    /**
+   * Get welcome page of the web
+   */
+  public async getWelcomePage() {
+    try {
+      const { WelcomePage } = await this.web.rootFolder.select('welcomepage').get()
+      return WelcomePage
+    } catch (error) {
+      return 'SitePages/ProjectHome.aspx' //Visitors doesn't have access to rootFolder
+    }
   }
 }
 
