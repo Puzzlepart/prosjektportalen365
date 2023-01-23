@@ -55,7 +55,11 @@ export class ProjectPhaseModel {
    * Uses local custom property ShowOnFrontpage
    */
   public get isVisible() {
-    return this.properties.ShowOnFrontpage !== 'false'
+    try {
+      return Boolean.parse(this.properties.ShowOnFrontpage)
+    } catch {
+      return true
+    }
   }
 
   /**
