@@ -41,6 +41,7 @@
     "@pnp/spfx-property-controls": "2.2.0",
     "@reduxjs/toolkit": "1.5.0",
     "@types/array-sort": "1.0.0",
+    "@uifabric/utilities": "6.45.1",
     "array-sort": "1.0.0",
     "clean-deep": "3.0.2",
     "interactjs": "1.6.2",

@@ -5,10 +5,10 @@ import {
   DialogType,
   PrimaryButton,
   SelectionMode,
-  ShimmeredDetailsList
+  ShimmeredDetailsList,
+  ScrollablePane
 } from '@fluentui/react'
 import _ from 'lodash'
-import { ScrollablePane } from 'office-ui-fabric-react'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { columns } from '../columns'
