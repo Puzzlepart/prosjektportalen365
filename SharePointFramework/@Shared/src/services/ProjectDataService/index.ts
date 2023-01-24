@@ -150,9 +150,9 @@ export class ProjectDataService {
           this.getWelcomePage()
       ])
 
-      urlSource = !urlSource.includes(welcomepage.WelcomePage)
+      urlSource = !urlSource.includes(welcomepage)
         ? urlSource
-            .replace('#syncproperties=1', `/${welcomepage.WelcomePage}#syncproperties=1`)
+            .replace('#syncproperties=1', `/${welcomepage}#syncproperties=1`)
             .replace('//SitePages', '/SitePages')
         : urlSource
 
