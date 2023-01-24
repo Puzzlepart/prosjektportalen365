@@ -63,7 +63,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         TypeAsString: 'Note'
       },
       ...fields.filter(({ SchemaXml, InternalName, Group }) => {
-        const hideFromEditForm = SchemaXml.indexOf('ShowInEditForm=\'FALSE\'') !== -1
+        const hideFromEditForm = SchemaXml.indexOf('ShowInEditForm=\"FALSE\"') !== -1
         const gtPrefix = InternalName.indexOf('Gt') === 0
         const inCustomGroup = Group === customGroupName
         // Include fields with Gt prefix or in custom group, or those in the forcedFields array
