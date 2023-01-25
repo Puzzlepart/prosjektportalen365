@@ -52,6 +52,8 @@ export const COLUMN_HEADER_CONTEXT_MENU = createAction<{
   target: Target
 }>('COLUMN_HEADER_CONTEXT_MENU')
 export const SET_GROUP_BY = createAction<{ column: IProjectContentColumn }>('SET_GROUP_BY')
+export const SET_COLLAPSED = createAction<{ group: IGroup }>('SET_COLLAPSED')
+export const SET_ALL_COLLAPSED = createAction<{ isAllCollapsed: boolean }>('SET_ALL_COLLAPSED')
 export const SET_SORT = createAction<{ column: IProjectContentColumn; sortDesencing: boolean }>(
   'SET_SORT'
 )
@@ -213,10 +215,23 @@ export default (props: IPortfolioAggregationProps) =>
           }
         : null
     },
+    [SET_ALL_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_ALL_COLLAPSED>) => {
+      state.groups = state.groups.map((g) => {
+        return { ...g, isCollapsed: payload.isAllCollapsed }
+      })
+    },
+    [SET_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_COLLAPSED>) => {
+      const { key, isCollapsed } = payload.group
+      state.groups = state.groups.map((g) => {
+        if (g.key === key) return { ...g, isCollapsed: !isCollapsed }
+        return g
+      })
+    },
     [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {
-      if (payload.column) {
-        state.items = sortArray([...state.items], [payload.column.fieldName])
-        state.groupBy = payload.column
+      const { column } = payload
+      if (column) {
+        state.items = sortArray([...state.items], [column.fieldName])
+        state.groupBy = column
         const groupNames: string[] = state.items.map((g) =>
           get<string>(g, state.groupBy.fieldName, strings.NotSet)
         )
@@ -225,14 +240,14 @@ export default (props: IPortfolioAggregationProps) =>
           .sort((a, b) => (a > b ? 1 : -1))
           .map((name, idx) => {
             const count = groupNames.filter((n) => n === name).length
-            const group: IGroup = {
+            const group ={
               key: `Group_${idx}`,
               name: `${state.groupBy.name}: ${name}`,
               startIndex: groupNames.indexOf(name, 0),
               count,
               isShowingAll: count === state.items.length,
               isDropEnabled: false,
-              isCollapsed: false
+              isCollapsed: false,
             }
             return group
           })
@@ -283,7 +298,7 @@ export default (props: IPortfolioAggregationProps) =>
       }
       if (!currentView && configuration.views.length > 0) {
         currentView = first(configuration.views)
-      } 
+      }
       if (!currentView) {
         throw new PortfolioAggregationErrorMessage(
           strings.ViewNotFoundMessage,
