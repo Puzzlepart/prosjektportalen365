@@ -274,33 +274,21 @@ export default (props: IPortfolioAggregationProps) =>
 
       if (viewIdUrlParam) {
         currentView = _.find(views, (v) => v.id.toString() === viewIdUrlParam)
-        if (!currentView) {
-          throw new PortfolioAggregationErrorMessage(
-            strings.ViewNotFoundMessage,
-            MessageBarType.error
-          )
-        }
       } else if (hashState.viewId) {
         currentView = _.find(views, (v) => v.id.toString() === hashState.viewId)
-        if (!currentView) {
-          throw new PortfolioAggregationErrorMessage(
-            strings.ViewNotFoundMessage,
-            MessageBarType.error
-          )
-        }
       } else if (defaultViewId) {
         currentView = _.find(views, (v) => v.id.toString() === defaultViewId.toString())
-        if (!currentView) {
-          throw new PortfolioAggregationErrorMessage(
-            strings.ViewNotFoundMessage,
-            MessageBarType.error
-          )
-        }
       } else {
         currentView = _.find(views, (v) => v.isDefault)
-        if (!currentView) {
-          currentView = first(configuration.views)
-        }
+      }
+      if (!currentView && configuration.views.length > 0) {
+        currentView = first(configuration.views)
+      } 
+      if (!currentView) {
+        throw new PortfolioAggregationErrorMessage(
+          strings.ViewNotFoundMessage,
+          MessageBarType.error
+        )
       }
       const obj: IPortfolioAggregationHashState = {}
       if (currentView) obj.viewId = currentView.id.toString()
