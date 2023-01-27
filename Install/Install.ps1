@@ -401,6 +401,16 @@ if (-not $SkipTemplate.IsPresent) {
         if (-not $SkipTaxonomy.IsPresent -and -not $Upgrade.IsPresent) {
             StartAction("Applying PnP template Taxonomy to $($Uri.AbsoluteUri)")
             Invoke-PnPSiteTemplate "$TemplatesBasePath/Taxonomy.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
+            Invoke-PnPSiteTemplate "$TemplatesBasePath/TaxonomyBA.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
+            EndAction
+        }
+        elseif (-not $SkipTaxonomy.IsPresent -and $Upgrade.IsPresent) {
+            StartAction("Applying PnP template Taxonomy (B&A) to $($Uri.AbsoluteUri)")
+            $TermSetA = Get-PnPTermSet -Identity "cc6cdd18-c7d5-42e1-8d19-a336dd78f3f2" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
+            $TermSetB = Get-PnPTermSet -Identity "ec5ceb95-7259-4282-811f-7c57304be71e" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
+            if (-not $TermSetA -or -not $TermSetB) {
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/TaxonomyBA.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
+            }
             EndAction
         }
 
