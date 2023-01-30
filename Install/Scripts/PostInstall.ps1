@@ -2,7 +2,7 @@ Write-Host "[INFO] Post-install action: Disabling content types for lists"
 Set-PnPList -Identity Prosjektkolonnekonfigurasjon -EnableContentTypes:$false >$null 2>&1  
 Set-PnPList -Identity Fasesjekkliste -EnableContentTypes:$false >$null 2>&1  
 Set-PnPList -Identity Konfigurasjon -EnableContentTypes:$false >$null 2>&1  
-Set-PnPList -Identity Porteføljevisninger -EnableContentTypes:$false >$null 2>&1  
+Set-PnPList -Identity ([System.Uri]::UnescapeDataString('Portef%C3%B8ljevisninger')) -EnableContentTypes:$false >$null 2>&1  
 Set-PnPList -Identity Prosjektkolonner -EnableContentTypes:$false >$null 2>&1  
 Set-PnPList -Identity Ressursallokering -EnableContentTypes:$false >$null 2>&1  
 Set-PnPList -Identity Planneroppgaver -EnableContentTypes:$false >$null 2>&1  
