@@ -164,6 +164,10 @@ StartAction("Building Taxonomy PnP template")
 Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Taxonomy.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Taxonomy" -Force
 EndAction
 
+StartAction("Building Taxonomy BA PnP template")
+Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/TaxonomyBA.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/TaxonomyBA" -Force
+EndAction
+
 #endregion
 
 
