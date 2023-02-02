@@ -1,11 +1,11 @@
-## Added
+## Ny funksjonalitet
 
 -
 
-## Improvements
+## Forbedringer
 
 -
 
-## Fixed
+## Rettelser
 
 -

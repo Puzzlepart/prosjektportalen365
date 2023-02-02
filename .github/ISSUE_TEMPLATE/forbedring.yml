@@ -1,0 +1,29 @@
+name: Forbedringsforslag
+description: Forslag til forbedring av Prosjektportalen 365
+labels: enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Takk for at du tar deg tid til å fylle ut skjemaet og foreslå forbedringer.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Er forespørselen din relatert til et problem? Vennligst beskriv.
+      description: En klar og kortfattet beskrivelse av hva problemet er. (Eks. Jeg blir alltid frustrert når...)
+    validations:
+      required: false
+  - type: textarea
+    id: forslag
+    attributes:
+      label: Beskriv løsningen du ønsker
+      description: En klar og kortfattet beskrivelse av hva du ønsker skal skje.
+    validations:
+      required: true
+  - type: textarea
+    id: annet
+    attributes:
+      label: Ytterligere kontekst
+      description: Legg til annen kontekst om feilen her.
+    validations:
+      required: false
