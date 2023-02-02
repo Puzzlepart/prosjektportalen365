@@ -52,4 +52,10 @@ if ($null -ne $LastInstall) {
         Add-PnPNavigationNode -Location TopNavigationBar -Title "Usikkerhetsoversikt" -Url "$($Uri.LocalPath)/SitePages/Usikkerhetsoversikt.aspx"
         Write-Host "[SUCCESS] Please adjust navigation order manually"
     }
+
+    if ($PreviousVersion -lt "1.8.0" -or $PreviousVersion -like "*BA*") {
+        Write-Host "[INFO] In version v1.8.0 we have integrated the 'Bygg & Anlegg' addon with standard installation. Checking to see if addon has been previously installed..." 
+
+        # Set correct listeinnhold to B&A maloppsett
+    }
 }
