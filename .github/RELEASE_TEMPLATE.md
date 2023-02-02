@@ -6,6 +6,6 @@
 
 -
 
-### Feilrettelser
+### Feilrettinger
 
 -

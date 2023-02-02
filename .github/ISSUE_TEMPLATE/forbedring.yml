@@ -23,7 +23,7 @@ body:
   - type: textarea
     id: annet
     attributes:
-      label: Ytterligere kontekst
-      description: Legg til annen kontekst om feilen her.
+      label: Ytterligere informasjon
+      description: Legg til annen informasjon om forslaget her.
     validations:
       required: false

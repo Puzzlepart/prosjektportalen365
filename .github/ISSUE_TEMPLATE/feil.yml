@@ -43,8 +43,8 @@ body:
   - type: textarea
     id: annet
     attributes:
-      label: Ytterligere kontekst
-      description: Legg til annen kontekst om feilen her.
+      label: Ytterligere informasjon
+      description: Legg til annen relevant informasjon om feilen her.
     validations:
       required: false
   - type: dropdown
@@ -74,5 +74,5 @@ body:
     id: logg
     attributes:
       label: Relevant logg
-      description: Vennligst kopier og lim inn alle relevante loggutdata. Dette feltet blir automatisk formatert til kode, så det er ikke nødvendig med backticks.
+      description: Vennligst kopier og lim inn alle relevante loggdata. Dette feltet blir automatisk formatert til kode, så det er ikke nødvendig med backticks.
       render: shell
