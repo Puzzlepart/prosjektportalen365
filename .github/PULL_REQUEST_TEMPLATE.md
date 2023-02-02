@@ -1,29 +1,42 @@
-### Your checklist for this pull request
+# Pull request (PR)
 
-- [ ] Make sure you are requesting to **pull a topic/feature/bugfix branch** (right side). Don't request your main!
-- [ ] Make sure you are making a pull request against the **dev** branch (left side). Also you should start *your branch* off *dev*.
-- [ ] Check the commit's or even all commits' message 
-- [ ] Check if your code additions will fail linting checks
-- [ ] Remember: Add issue description to [CHANGELOG](https://github.com/Puzzlepart/prosjektportalen365/blob/dev/CHANGELOG.md) with the **ID of the issue** associated with this PR
-- [ ] Documentation: Have a look at the [PP365 User manual](https://puzzlepart.github.io/prosjektportalen-manual/) and consider the need for updates to be made. Updates can be done directly into the 'Kladd' branch or by providing information to test team for implementation.
+Sørg for at du ber om PR for din branch (høyre side). Sørg for at du gjør en PR mot dev-branchen (venstre side). Sjekk commits og alle commit-meldingene.
 
-### Description
+## Sjekklisten din
 
-Please describe your pull request in detail.
+Alle sjekkpunktene under må være sjekket av og godkjent for at vi skal kunne merge branchen din mot dev.
 
-### How to test
+- [ ] Sjekk at din branch ikke feiler på `linting`.
+- [ ] Legg ved beskrivelse i [CHANGELOG](https://github.com/Puzzlepart/prosjektportalen365/blob/dev/CHANGELOG.md), markert med **ID av issue** knyttet til PR-en
+- [ ] Anig korrekt `Milestone` på PR-en og issuet
+- [ ] Tilegn deg selv PR-en og legg til `labels`
 
-Please describe how someone else (a regular user without coding skills) can test this PR. In the form of a numbered list and checkboxes for Jan when the testing period occurs.
+### Beskrivelse
 
-Example:
+Vennligst beskriv PR-en din i detalj.
 
-1. Do this
-2. Then this
-3. Then that
+Hvis du har gjort noen visuelle endringer, vennligst legg til før/etter skjermbilder dersom mulig. I hvert fall et skjermbilde av den visuelle endringen.
 
-### Update of documentation
-- [ ] Update user manual if needed
+| Før      | Etter      |
+| -------- | ---------- |
+| Førbilde | Etterbilde |
 
-### Relevant issues (if applicable)
+### Hvordan teste
 
-💔Thank you!
+Vennligst beskriv hvordan noen andre (en vanlig bruker uten kodeferdigheter) kan teste denne PR-en. Følg eksempelet under, punktene du legger ved vil bli brukt når vi tester neste versjon av Prosjektportalen
+
+| #   | Handling          | Forventet resultat     |
+| --- | ----------------- | ---------------------- |
+| 1   | Gjør følgende...  | Følgende er forventet  |
+| 2   | Deretter dette... | Her forventes dette... |
+| 3   | Deretter utfør... | Her skal...            |
+
+### Relevante issues (hvis aktuelt)
+
+-
+
+### Oppdatering av dokumentasjon
+
+Oppdater brukerhåndboken om nødvendig
+
+Dokumentasjon: Ta en titt på [PP365 User manual](https://puzzlepart.github.io/prosjektportalen-manual/) og vurder behovet for oppdateringer.

@@ -1,0 +1,78 @@
+name: Feil/problem/mangel i løsningen
+description: Logg en feil som du ønsker at vi skal undersøke
+labels: bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Takk for at du tar deg tid til å fylle ut skjemaet og rapportere feilen.
+  - type: textarea
+    id: beskrivelse
+    attributes:
+      label: Beskriv feilen
+      description: En klar og kortfattet beskrivelse av hva feilen er.
+      value: "En feil har oppstått..."
+    validations:
+      required: true
+  - type: textarea
+    id: gjennskapelse
+    attributes:
+      label: Hvordan reprodusere feilen
+      description: Legg ved trinnvist hvordan vi kan reprodusere feilen du opplever
+      value: "Trinn for å gjenskape:\n\n
+1. Gå til ...\n
+2. Klikk på ...\n
+3. Scroll ned til ...\n
+4. Se feil"
+    validations:
+      required: false
+  - type: textarea
+    id: forventelse
+    attributes:
+      label: Forventet oppførsel
+      description: En klar og kortfattet beskrivelse av hva du forventet skulle skje.
+    validations:
+      required: false
+  - type: textarea
+    id: skjermbilder
+    attributes:
+      label: Skjermbilder
+      description: Hvis aktuelt, legg til skjermbilder for å forklare feilen du opplever.
+    validations:
+      required: false
+  - type: textarea
+    id: annet
+    attributes:
+      label: Ytterligere informasjon
+      description: Legg til annen relevant informasjon om feilen her.
+    validations:
+      required: false
+  - type: dropdown
+    id: nettlesere
+    attributes:
+      label: Hvilke nettleser(e) oppleves feilen på?
+      multiple: true
+      options:
+        - Chrome
+        - Firefox
+        - Microsoft Edge
+        - Safari
+        - Annet (spesifiser over)
+  - type: dropdown
+    id: versjon
+    attributes:
+      label: Versjon
+      description: Hvilken versjon av Prosjektportalen 365 oppsto feilen på?
+      options:
+        - 1.8.0
+        - 1.7.2
+        - 1.6.1
+        - Annet (spesifiser over)
+    validations:
+      required: true
+  - type: textarea
+    id: logg
+    attributes:
+      label: Relevant logg
+      description: Vennligst kopier og lim inn alle relevante loggdata. Dette feltet blir automatisk formatert til kode, så det er ikke nødvendig med backticks.
+      render: shell
