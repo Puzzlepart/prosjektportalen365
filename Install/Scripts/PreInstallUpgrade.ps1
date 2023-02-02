@@ -44,7 +44,7 @@ if ($null -ne $LastInstall) {
         if ($TermSetA -or $TermSetB) {
             Write-Host "[INFO] 'Bygg & Anlegg' addon detected. Renaming old contenttypes to avoid conflicts..." 
             $ProjectStatusBACT = Get-PnPContentType -Identity "Prosjektstatus (Bygg og anlegg)" -ErrorAction SilentlyContinue
-            $ProjectBACT = Get-PnPContentType -Identity "Prosjektstatus (Bygg og anlegg)" -ErrorAction SilentlyContinue
+            $ProjectBACT = Get-PnPContentType -Identity "Prosjekt (Bygg og anlegg)" -ErrorAction SilentlyContinue
 
             if ($ProjectStatusBACT) {
                 $ProjectStatusBACT.Name = "Prosjektstatus (Bygg og anlegg) - UTDATERT"
