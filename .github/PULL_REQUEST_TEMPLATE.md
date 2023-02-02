@@ -2,7 +2,7 @@
 
 Sørg for at du ber om PR for din branch (høyre side). Sørg for at du gjør en PR mot dev-branchen (venstre side). Sjekk commits eller til og med alle commits meldingene.
 
-## Sjekklisten din for denne pull requesten (PR)
+## Sjekklisten din
 
 Alle sjekkpunktene under må være sjekket av og godkjent for at vi skal kunne merge branchen din mot dev.
 
