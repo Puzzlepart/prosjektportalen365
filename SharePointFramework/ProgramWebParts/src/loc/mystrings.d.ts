@@ -167,7 +167,6 @@ declare interface IProgramWebPartsStrings {
   CostsTotalLabel: string
   NoProjectsFound: string
   NewLabel: string
-  ReadOnlyGroupName: string
   DisplayAllProjects: string
   MyProjectsLabel: string
   AllProjectsLabel: string
