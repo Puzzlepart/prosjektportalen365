@@ -747,7 +747,10 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch items with data source name.
+   * Fetch items with data source name. If the data source is a benefit overview,
+   * the items are fetched using `fetchBenefitItemsWithSource`.
+   * 
+   * The property 'FileExtension' is always added to the select properties.
    *
    * @param dataSourceName Data source name
    * @param selectProperties Select properties
@@ -772,7 +775,8 @@ export class DataAdapter implements IDataAdapter {
       } else {
         items = await this._fetchItems(dataSrc.searchQuery, [
           ...selectProperties,
-          ...dataSrcProperties
+          ...dataSrcProperties,
+          'FileExtension'
         ])
       }
 
@@ -845,11 +849,7 @@ export class DataAdapter implements IDataAdapter {
         throw new Error(format(strings.ProjectContentColumnItemNotFound, properties.fieldName))
       }
 
-      const renderAs =
-        properties.data.renderAs.charAt(0).toUpperCase() + properties.data.renderAs.slice(1)
-
       const itemUpdateResult = await list.items.getById(item.Id).update({
-        GtFieldDataType: renderAs,
         GtColMinWidth: properties.minWidth
       })
       return itemUpdateResult
