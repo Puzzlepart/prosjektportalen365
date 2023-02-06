@@ -21,7 +21,7 @@ define([], function () {
     ColumnRenderOptionTrend: 'Trend',
     ColumnRenderOptionTaxonomy: 'Taksonomi',
     ColumnRenderOptionModal: 'Modal',
-    ColumnRenderOptionFileNameIcon: 'Filnavn med ikon',
+    ColumnRenderOptionFilenameWithIcon: 'Filnavn med ikon',
     ColumnRenderPersistGloballyLabel: 'Oppdater globalt',
     ColumnRenderLabel: 'Vis som',
     EditColumnLabel: 'Rediger',

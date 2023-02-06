@@ -1,6 +1,4 @@
 declare interface IPortfolioWebPartsStrings {
-  ColumnRenderPersistGloballyLabel: string
-  ColumnRenderOptionFileNameIcon: string
   HideViewsLabel: string
   ProjectsAccessSearchBoxPlaceholderText: string
   ProjectsAccessHeaderText: string
@@ -21,6 +19,8 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionTrend: string
   ColumnRenderOptionTaxonomy: string
   ColumnRenderOptionModal: string
+  ColumnRenderOptionFilenameWithIcon: string
+  ColumnRenderPersistGloballyLabel: string
   DataSourceGroupName: string
   CommandBarGroupName: string
   SearchBoxGroupName: string
