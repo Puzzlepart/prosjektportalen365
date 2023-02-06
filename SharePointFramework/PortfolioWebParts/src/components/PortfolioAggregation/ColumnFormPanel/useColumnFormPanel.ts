@@ -26,6 +26,9 @@ const initialColumn = {
   }
 }
 
+/**
+ * Component logic hook for ColumnFormPanel. Handles state and dispatches actions to the reducer.
+ */
 export function useColumnFormPanel() {
   const { state, props, dispatch } = useContext(PortfolioAggregationContext)
   const [column, setColumn] = useState<IProjectContentColumn>({
@@ -39,7 +42,7 @@ export function useColumnFormPanel() {
         minWidth: 100,
         maxWidth: 150,
         data: {
-          renderAs: 'text'
+          renderAs: state.editColumn.dataType ?? 'text'
         },
         ...state.editColumn
       })
