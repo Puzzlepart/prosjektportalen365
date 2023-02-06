@@ -78,7 +78,7 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
     }
     case 'modal':
       return <ItemModal title={item.MeasurementIndicator} value={JSON.parse(columnValue)} />
-    case 'filename_icon':
+    case 'filenamewithicon':
       return (
         <span>
           <Icon

@@ -13,5 +13,6 @@
         <CHOICE>List</CHOICE>
         <CHOICE>Trend</CHOICE>
         <CHOICE>Modal</CHOICE>
+        <CHOICE>FilenameWithIcon</CHOICE>
     </CHOICES>
 </Field>
