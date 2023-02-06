@@ -78,8 +78,6 @@ export const DATA_FETCH_ERROR = createAction<{ error: Error }>('DATA_FETCH_ERROR
  * @param columns - State
  */
 const persistColumns = (props: IPortfolioAggregationProps, columns: IProjectContentColumn[]) => {
-  // eslint-disable-next-line no-console
-  console.log(columns.map((col) => omit(col, 'calculatedWidth', 'currentWidth')))
   props.onUpdateProperty(
     'columns',
     columns.map((col) => omit(col, 'calculatedWidth', 'currentWidth'))
@@ -134,8 +132,7 @@ export default (props: IPortfolioAggregationProps) =>
           const mergedColumns = state.columns.map((col) => {
             const payCol = payload.columns.find((c) => c.key === col.key)
             if (payCol) {
-              const renderAs =
-                col.data.renderAs ?? (payCol.dataType ? payCol.dataType.toLowerCase() : 'text')
+              const renderAs = (col.data.renderAs ?? payCol.dataType ?? 'text').toLowerCase()
               return {
                 ...col,
                 id: payCol.id,

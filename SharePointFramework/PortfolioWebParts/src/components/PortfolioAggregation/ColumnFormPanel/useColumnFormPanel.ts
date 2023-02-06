@@ -1,4 +1,5 @@
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
+import { capitalize } from 'lodash'
 import * as strings from 'PortfolioWebPartsStrings'
 import { useContext, useEffect, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
@@ -35,7 +36,7 @@ export function useColumnFormPanel() {
     ...initialColumn,
     ...(state.editColumn || {})
   })
-
+  const [persistRenderAs, setPersistRenderAs] = useState(false)
   useEffect(() => {
     if (state.editColumn) {
       setColumn({
@@ -54,22 +55,19 @@ export function useColumnFormPanel() {
     if (state.editColumn)
       await Promise.resolve(
         props.dataAdapter
-          .updateProjectContentColumn(column)
+          .updateProjectContentColumn(column, persistRenderAs)
           .then(() => {
             dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
           })
           .catch((error) => (state.error = error))
       )
     else {
-      const renderAs =
-        column.data?.renderAs.charAt(0).toUpperCase() + column.data?.renderAs.slice(1)
-
-      const newItem = {
+      const newItem: Record<string, any> = {
         GtSortOrder: column.sortOrder || 100,
         Title: column.name,
         GtInternalName: column.internalName,
         GtManagedProperty: column.fieldName,
-        GtFieldDataType: renderAs,
+        GtFieldDataType: capitalize(column.data?.renderAs).split('_').join(' '),
         GtDataSourceCategory: props.title,
         GtColMinWidth: column.minWidth
       }
@@ -99,5 +97,15 @@ export function useColumnFormPanel() {
     dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
   }
 
-  return { state, props, dispatch, onSave, onDismiss, column, setColumn } as const
+  return {
+    state,
+    props,
+    dispatch,
+    onSave,
+    onDismiss,
+    column,
+    setColumn,
+    persistRenderAs,
+    setPersistRenderAs
+  } as const
 }

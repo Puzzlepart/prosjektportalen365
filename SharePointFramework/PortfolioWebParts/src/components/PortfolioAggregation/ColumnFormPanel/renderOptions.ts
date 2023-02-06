@@ -47,7 +47,7 @@ export const renderOptions: IDropdownOption[] = [
     text: strings.ColumnRenderOptionModal
   },
   {
-    key: 'filenamewithicon',
+    key: 'filename_with_icon',
     text: strings.ColumnRenderOptionFilenameWithIcon
   }
 ]

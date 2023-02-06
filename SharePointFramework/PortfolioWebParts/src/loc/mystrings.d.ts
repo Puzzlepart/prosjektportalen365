@@ -1,4 +1,6 @@
 declare interface IPortfolioWebPartsStrings {
+  ColumnRenderDescription: ReactNode
+  DisplayNameDescription: string
   HideViewsLabel: string
   ProjectsAccessSearchBoxPlaceholderText: string
   ProjectsAccessHeaderText: string

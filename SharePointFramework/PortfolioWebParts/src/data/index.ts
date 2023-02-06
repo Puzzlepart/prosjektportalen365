@@ -5,6 +5,7 @@ import { ItemUpdateResult, QueryPropertyValueType, SearchResult, SortDirection, 
 import * as cleanDeep from 'clean-deep'
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
 import { IAggregatedListConfiguration } from 'interfaces/IAggregatedListConfiguration'
+import { capitalize } from 'lodash'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
 import { isNull } from 'pp365-shared/lib/helpers'
@@ -749,7 +750,7 @@ export class DataAdapter implements IDataAdapter {
   /**
    * Fetch items with data source name. If the data source is a benefit overview,
    * the items are fetched using `fetchBenefitItemsWithSource`.
-   * 
+   *
    * The property 'FileExtension' is always added to the select properties.
    *
    * @param dataSourceName Data source name
@@ -823,7 +824,9 @@ export class DataAdapter implements IDataAdapter {
           .map((item) => {
             const projectColumn = new ProjectColumn(item)
             projectColumn['data'] = {
-              renderAs: projectColumn.dataType ? projectColumn.dataType.toLowerCase() : 'text'
+              renderAs: (projectColumn.dataType ? projectColumn.dataType.toLowerCase() : 'text')
+                .split(' ')
+                .join('_')
             }
             return projectColumn
           })
@@ -835,23 +838,31 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Update project content column.
+   * Update project content column. The column is identified by the field name.
    *
-   * @param properties Properties
+   * @param column Column properties
+   * @param persistRenderAs Persist render as property
    */
-  public async updateProjectContentColumn(properties: Record<string, any>): Promise<any> {
+  public async updateProjectContentColumn(
+    column: Record<string, any>,
+    persistRenderAs = false
+  ): Promise<any> {
     try {
       const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
       const items = await list.items.get()
-      const item = items.find((i) => i.GtManagedProperty === properties.fieldName)
+      const item = items.find((i) => i.GtManagedProperty === column.fieldName)
 
       if (!item) {
-        throw new Error(format(strings.ProjectContentColumnItemNotFound, properties.fieldName))
+        throw new Error(format(strings.ProjectContentColumnItemNotFound, column.fieldName))
       }
 
-      const itemUpdateResult = await list.items.getById(item.Id).update({
-        GtColMinWidth: properties.minWidth
-      })
+      const properties: Record<string, any> = {
+        GtColMinWidth: column.minWidth
+      }
+      if (persistRenderAs) {
+        properties.GtFieldDataType = capitalize(column.data.renderAs).split('_').join(' ')
+      }
+      const itemUpdateResult = await list.items.getById(item.Id).update(properties)
       return itemUpdateResult
     } catch (error) {
       throw new Error(error)

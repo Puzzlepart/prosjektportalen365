@@ -15,7 +15,17 @@ import { renderOptions } from './renderOptions'
 import { useColumnFormPanel } from './useColumnFormPanel'
 
 export const ColumnFormPanel: FC = () => {
-  const { state, props, dispatch, onSave, onDismiss, column, setColumn } = useColumnFormPanel()
+  const {
+    state,
+    props,
+    dispatch,
+    onSave,
+    onDismiss,
+    column,
+    setColumn,
+    persistRenderAs,
+    setPersistRenderAs
+  } = useColumnFormPanel()
 
   return (
     <Panel
@@ -72,6 +82,7 @@ export const ColumnFormPanel: FC = () => {
       <div className={styles.field}>
         <TextField
           label={strings.DisplayNameLabel}
+          description={strings.DisplayNameDescription}
           required={true}
           value={column.name}
           onChange={(_, value) =>
@@ -163,10 +174,17 @@ export const ColumnFormPanel: FC = () => {
             })
           }
         />
-        <Checkbox
-          label={strings.ColumnRenderPersistGloballyLabel}
-          styles={{ root: { margin: '10px 0 15px 0' } }}
-        />
+        <div className={styles.fieldDescription}>
+          {strings.ColumnRenderDescription}
+        </div>
+        {state.editColumn && (
+          <Checkbox
+            label={strings.ColumnRenderPersistGloballyLabel}
+            defaultChecked={persistRenderAs}
+            onChange={(_, checked) => setPersistRenderAs(checked)}
+            styles={{ root: { margin: '10px 0 15px 0' } }}
+          />
+        )}
       </div>
       <div className={styles.footer}>
         <PrimaryButton
