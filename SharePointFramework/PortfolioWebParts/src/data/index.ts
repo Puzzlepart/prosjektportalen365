@@ -751,7 +751,7 @@ export class DataAdapter implements IDataAdapter {
    * Fetch items with data source name. If the data source is a benefit overview,
    * the items are fetched using `fetchBenefitItemsWithSource`.
    *
-   * The property 'FileExtension' is always added to the select properties.
+   * The properties 'FileExtension' and 'ServerRedirectedURL' is always added to the select properties.
    *
    * @param dataSourceName Data source name
    * @param selectProperties Select properties
@@ -777,7 +777,8 @@ export class DataAdapter implements IDataAdapter {
         items = await this._fetchItems(dataSrc.searchQuery, [
           ...selectProperties,
           ...dataSrcProperties,
-          'FileExtension'
+          'FileExtension',
+          'ServerRedirectedURL'
         ])
       }
 

@@ -89,7 +89,9 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
             })}
             styles={{ root: { verticalAlign: 'bottom' } }}
           />
-          <span style={{ marginLeft: 8 }}>{columnValue}</span>
+          <Link href={item.ServerRedirectedURL} rel='noopener noreferrer' target='_blank' style={{ marginLeft: 8 }}>
+            {columnValue}
+          </Link>
         </span>
       )
     default:
