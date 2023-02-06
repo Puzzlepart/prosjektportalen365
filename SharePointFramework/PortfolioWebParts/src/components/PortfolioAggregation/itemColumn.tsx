@@ -1,3 +1,4 @@
+import { getFileTypeIconProps, initializeFileTypeIcons } from '@fluentui/react-file-type-icons'
 import { IColumn, Icon, Link } from '@fluentui/react/lib'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { Web } from '@pnp/sp'
@@ -11,6 +12,7 @@ import { TagsColumn } from '../PortfolioOverview/RenderItemColumn/TagsColumn'
 import { UserColumn } from '../PortfolioOverview/RenderItemColumn/UserColumn'
 import ItemModal from './ItemModal'
 import { IPortfolioAggregationProps } from './types'
+initializeFileTypeIcons()
 
 /**
  * Render item column
@@ -76,6 +78,20 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
     }
     case 'modal':
       return <ItemModal title={item.MeasurementIndicator} value={JSON.parse(columnValue)} />
+    case 'filename_icon':
+      return (
+        <span>
+          <Icon
+            {...getFileTypeIconProps({
+              extension: item.FileExtension,
+              size: 16,
+              imageFileType: 'png'
+            })}
+            styles={{ root: { verticalAlign: 'bottom' } }}
+          />
+          <span style={{ marginLeft: 8 }}>{columnValue}</span>
+        </span>
+      )
     default:
       return columnValue
   }

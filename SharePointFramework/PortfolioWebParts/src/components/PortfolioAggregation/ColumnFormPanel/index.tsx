@@ -1,11 +1,18 @@
-import { DefaultButton, Dropdown, Panel, PrimaryButton, TextField, Toggle } from '@fluentui/react'
+import {
+  Checkbox,
+  DefaultButton,
+  Dropdown,
+  Panel,
+  PrimaryButton,
+  TextField,
+  Toggle
+} from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC } from 'react'
 import { DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import styles from './ColumnFormPanel.module.scss'
 import { renderOptions } from './renderOptions'
 import { useColumnFormPanel } from './useColumnFormPanel'
-
 
 export const ColumnFormPanel: FC = () => {
   const { state, props, dispatch, onSave, onDismiss, column, setColumn } = useColumnFormPanel()
@@ -155,6 +162,10 @@ export const ColumnFormPanel: FC = () => {
               }
             })
           }
+        />
+        <Checkbox
+          label={strings.ColumnRenderPersistGloballyLabel}
+          styles={{ root: { margin: '10px 0 15px 0' } }}
         />
       </div>
       <div className={styles.footer}>

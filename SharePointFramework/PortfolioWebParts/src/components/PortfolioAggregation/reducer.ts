@@ -78,6 +78,8 @@ export const DATA_FETCH_ERROR = createAction<{ error: Error }>('DATA_FETCH_ERROR
  * @param columns - State
  */
 const persistColumns = (props: IPortfolioAggregationProps, columns: IProjectContentColumn[]) => {
+  // eslint-disable-next-line no-console
+  console.log(columns.map((col) => omit(col, 'calculatedWidth', 'currentWidth')))
   props.onUpdateProperty(
     'columns',
     columns.map((col) => omit(col, 'calculatedWidth', 'currentWidth'))
@@ -131,18 +133,18 @@ export default (props: IPortfolioAggregationProps) =>
         if (!isEmpty(payload.columns)) {
           const mergedColumns = state.columns.map((col) => {
             const payCol = payload.columns.find((c) => c.key === col.key)
-            if (payCol)
+            if (payCol) {
+              const renderAs =
+                col.data.renderAs ?? (payCol.dataType ? payCol.dataType.toLowerCase() : 'text')
               return {
                 ...col,
                 id: payCol.id,
                 internalName: payCol.internalName,
                 minWidth: payCol.minWidth,
                 dataType: payCol.dataType,
-                data: {
-                  renderAs: payCol.dataType ? payCol.dataType.toLowerCase() : 'text'
-                }
+                data: { renderAs }
               }
-            else return col
+            } else return col
           })
 
           const newColumns = payload.columns.filter((col) => {
@@ -240,14 +242,14 @@ export default (props: IPortfolioAggregationProps) =>
           .sort((a, b) => (a > b ? 1 : -1))
           .map((name, idx) => {
             const count = groupNames.filter((n) => n === name).length
-            const group ={
+            const group = {
               key: `Group_${idx}`,
               name: `${state.groupBy.name}: ${name}`,
               startIndex: groupNames.indexOf(name, 0),
               count,
               isShowingAll: count === state.items.length,
               isDropEnabled: false,
-              isCollapsed: false,
+              isCollapsed: false
             }
             return group
           })
