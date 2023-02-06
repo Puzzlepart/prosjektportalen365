@@ -1,4 +1,6 @@
 declare interface IPortfolioWebPartsStrings {
+  ColumnRenderPersistGloballyLabel: string
+  ColumnRenderOptionFileNameIcon: string
   HideViewsLabel: string
   ProjectsAccessSearchBoxPlaceholderText: string
   ProjectsAccessHeaderText: string
