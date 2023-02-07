@@ -21,13 +21,12 @@ if ($null -ne $LastInstall) {
             $OldSiteId = $Item.FieldValues["SiteIdLookup"].LookupId
             $OldType = $Item.FieldValues["TimelineType"]
 
-            if($null -ne $OldSiteId) {
+            if ($null -ne $OldSiteId) {
                 $Item["GtSiteIdLookup"] = $OldSiteId
             }
             
-            if($null -ne $OldType) {
-                Switch ($OldType)
-                {
+            if ($null -ne $OldType) {
+                Switch ($OldType) {
                     "Prosjekt" { $Item["GtTimelineTypeLookup"] = 1 }
                     "Fase" { $Item["GtTimelineTypeLookup"] = 2 }
                     "Delfase" { $Item["GtTimelineTypeLookup"] = 3 }
@@ -54,32 +53,27 @@ if ($null -ne $LastInstall) {
     }
 
     if ($PreviousVersion -lt "1.8.0" -or $PreviousVersion -like "*BA*") {
-
         Write-Host "[INFO] In version v1.8.0 we have integrated the 'Bygg & Anlegg' addon with standard installation. Checking to see if addon has been previously installed..." 
-
-
         #If Either Bygg or Anlegg changes title in the list, rename these.
         $TemplateMap = @{
-            "Bygg"="Byggprosjekt";
-            "Anlegg"="Anleggsprosjekt"
+            "Bygg"   = "Byggprosjekt";
+            "Anlegg" = "Anleggsprosjekt"
         }
-
         #If any of the titles are changed, change here.
         $ListContentMap = @{
-            "FasesjekkBygg" = "Fasesjekkliste Bygg";
-            "PlannerBygg" = "Planneroppgaver Bygg";
-            "DokumentBygg" = "Standarddokumenter Bygg";
+            "FasesjekkBygg"   = "Fasesjekkliste Bygg";
+            "PlannerBygg"     = "Planneroppgaver Bygg";
+            "DokumentBygg"    = "Standarddokumenter Bygg";
             "FasesjekkAnlegg" = "Fasesjekkliste Anlegg";
-            "PlannerAnlegg" = "Planneroppgaver Anlegg";
-            "DokumentAnlegg" = "Standarddokumenter Anlegg";
+            "PlannerAnlegg"   = "Planneroppgaver Anlegg";
+            "DokumentAnlegg"  = "Standarddokumenter Anlegg";
         }
 
         $ListContent = Get-PnPListItem -List Listeinnhold
         $MalOppsett = Get-PnPListItem -List Maloppsett
-
+        
         $Bygg = $MalOppsett | Where-Object { $_["Title"] -eq $TemplateMap["Bygg"] }
         $Anlegg = $MalOppsett | Where-Object { $_["Title"] -eq $TemplateMap["Anlegg"] }
-
         $ByggPlanner = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["PlannerBygg"] }
         $ByggFasesjekk = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["FasesjekkBygg"] }
         $ByggDokument = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["DokumentBygg"] }
@@ -89,22 +83,18 @@ if ($null -ne $LastInstall) {
 
         #Adds Standard List Content to B&A template setup
         $ByggItems = @()
-        $ByggItems+=[Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId"=$ByggPlanner.Id}
-        $ByggItems+=[Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId"=$ByggFasesjekk.Id}
-        $ByggItems+=[Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId"=$ByggDokument.Id}
+        $ByggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $ByggPlanner.Id }
+        $ByggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $ByggFasesjekk.Id }
+        $ByggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $ByggDokument.Id }
         $Bygg["ListContentConfigLookup"] = $ByggItems
         $Bygg.SystemUpdate()
         $Bygg.Context.ExecuteQuery()
         $AnleggItems = @()
-        $AnleggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId"=$AnleggPlanner.Id}
-        $AnleggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId"=$AnleggFasesjekk.Id}
-        $AnleggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId"=$AnleggDokument.Id}
+        $AnleggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $AnleggPlanner.Id }
+        $AnleggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $AnleggFasesjekk.Id }
+        $AnleggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $AnleggDokument.Id }
         $Anlegg["ListContentConfigLookup"] = $AnleggItems
         $Anlegg.SystemUpdate()
         $Anlegg.Context.ExecuteQuery()
-
-
-
-
     }
 }
