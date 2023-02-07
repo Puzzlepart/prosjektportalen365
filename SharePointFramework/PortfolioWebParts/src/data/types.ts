@@ -4,6 +4,12 @@ import { IPortfolioConfiguration, IAggregatedListConfiguration } from 'interface
 import { ProjectListModel, TimelineConfigurationModel, TimelineContentModel } from 'models'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services'
+import { SearchResult } from '@pnp/sp'
+
+export interface IFetchDataForViewItemResult extends SearchResult {
+  SiteId: string
+  [key: string]: any
+}
 
 export const DEFAULT_SEARCH_SETTINGS: SearchQuery = {
   Querytext: '*',

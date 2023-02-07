@@ -29,14 +29,14 @@ import {
   TimelineConfigurationModel,
   TimelineContentModel
 } from '../models'
-import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import {
   CONTENT_TYPE_ID_BENEFITS,
   CONTENT_TYPE_ID_INDICATORS,
   CONTENT_TYPE_ID_MEASUREMENTS,
   DEFAULT_GAINS_PROPERTIES,
   DEFAULT_SEARCH_SETTINGS,
-  IDataAdapter
+  IDataAdapter,
+  IFetchDataForViewItemResult
 } from './types'
 
 /**

@@ -174,9 +174,7 @@ export const ColumnFormPanel: FC = () => {
             })
           }
         />
-        <div className={styles.fieldDescription}>
-          {strings.ColumnRenderDescription}
-        </div>
+        <div className={styles.fieldDescription}>{strings.ColumnRenderDescription}</div>
         {state.editColumn && (
           <Checkbox
             label={strings.ColumnRenderPersistGloballyLabel}
