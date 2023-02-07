@@ -25,11 +25,9 @@ export async function fetchTimelineData(
     )
 
     const projectDeliveries = (props.showProjectDeliveries
-      ? await sp.web.lists
-        .getByTitle(props.projectDeliveriesListName)
-        .items
-        .getAll()
-      : [])
+      ? await sp.web.lists.getByTitle(props.projectDeliveriesListName).items.getAll()
+      : []
+    )
       .map((item) => {
         const config = _.find(timelineConfig, (col) => col.title === props.configItemTitle)
         return new TimelineContentModel(
