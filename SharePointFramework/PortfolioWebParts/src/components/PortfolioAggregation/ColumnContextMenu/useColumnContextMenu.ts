@@ -20,7 +20,7 @@ import {
 **/
 export function useColumnContextMenu() {
     const { props, state, dispatch } = useContext(PortfolioAggregationContext)
-    if (!state.columnContextMenu) return null
+    if (!state.columnContextMenu) return {}
     const { column, target } = state.columnContextMenu
     const columnIndex = indexOf(
         state.columns.map((c) => c.fieldName),
