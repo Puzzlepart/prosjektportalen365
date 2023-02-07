@@ -29,6 +29,7 @@ const initialColumn = {
 
 /**
  * Component logic hook for ColumnFormPanel. Handles state and dispatches actions to the reducer.
+ * Also provides methods for saving and deleting columns.
  */
 export function useColumnFormPanel() {
   const { state, props, dispatch } = useContext(PortfolioAggregationContext)
