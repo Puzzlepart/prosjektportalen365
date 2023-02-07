@@ -4,6 +4,12 @@ import { IPortfolioConfiguration, IAggregatedListConfiguration } from 'interface
 import { ProjectListModel, TimelineConfigurationModel, TimelineContentModel } from 'models'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services'
+import { SearchResult } from '@pnp/sp'
+
+export interface IFetchDataForViewItemResult extends SearchResult {
+  SiteId: string
+  [key: string]: any
+}
 
 export const DEFAULT_SEARCH_SETTINGS: SearchQuery = {
   Querytext: '*',
@@ -101,7 +107,7 @@ export interface IDataAdapter {
     dataSourceCategory?: string
   ): Promise<any[]>
   fetchProjectContentColumns?(dataSourceCategory: string): Promise<any[]>
-  updateProjectContentColumn?(properties: TypedHash<any>): Promise<any>
+  updateProjectContentColumn?(column: Record<string, any>, persistRenderAs?: boolean): Promise<any>
   deleteProjectContentColumn?(property: TypedHash<any>): Promise<any>
   addItemToList?(listName: string, properties: TypedHash<any>): Promise<any[]>
   updateDataSourceItem?(
