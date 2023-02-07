@@ -1,19 +1,10 @@
-import { IModalProps, IColumn, Modal, DetailsList, SelectionMode } from '@fluentui/react'
+import { IColumn, Modal, DetailsList, SelectionMode } from '@fluentui/react'
 import { get, isEmpty } from '@microsoft/sp-lodash-subset'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { PureComponent } from 'react'
 import { columns } from './columns'
+import { IItemModalProps, IItemModalState } from './types'
 import styles from './ItemModal.module.scss'
-
-export interface IItemModalProps extends IModalProps {
-  title: string
-  value: any
-  columns?: IColumn[]
-}
-
-export interface IItemModalState {
-  isOpen?: boolean
-}
 
 export default class ItemModal extends PureComponent<IItemModalProps, IItemModalState> {
   public static defaultProps: Partial<IItemModalProps> = {

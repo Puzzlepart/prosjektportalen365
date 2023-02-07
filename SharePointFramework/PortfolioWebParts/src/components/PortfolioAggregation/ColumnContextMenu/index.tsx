@@ -1,6 +1,4 @@
-import {
-  ContextualMenu
-} from '@fluentui/react'
+import { ContextualMenu } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { PortfolioAggregationContext } from '../context'
