@@ -1,3 +1,3 @@
-## Templates
+## Maler
 
-See **3. Templates** in [Development guide](../Dev/Home).
+Se **3. Maler** i [Utviklingsguiden](./.development-guide/README.md).
