@@ -625,7 +625,7 @@ export class DataAdapter implements IDataAdapter {
     configuration?: IAggregatedListConfiguration,
     dataSource?: string
   ): Promise<any[]> {
-    const { odataQuery } = (configuration?.views || []).find((v) => v.title === dataSource)
+    const odataQuery = configuration && configuration.views.find((v) => v.title === dataSource)?.odataQuery
     let projects: any[]
     if (odataQuery && !dataSource.includes('(Prosjektnivå)')) {
       projects = await sp.web.lists
