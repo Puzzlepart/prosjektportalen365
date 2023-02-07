@@ -54,9 +54,7 @@ if ($null -ne $LastInstall) {
     }
 
     if ($PreviousVersion -lt "1.8.0" -or $PreviousVersion -like "*BA*") {
-
         Write-Host "[INFO] In version v1.8.0 we have integrated the 'Bygg & Anlegg' addon with standard installation. Checking to see if addon has been previously installed..." 
-
 
         #If Either Bygg or Anlegg changes title in the list, rename these.
         $TemplateMap = @{
@@ -79,7 +77,6 @@ if ($null -ne $LastInstall) {
 
         $Bygg = $MalOppsett | Where-Object { $_["Title"] -eq $TemplateMap["Bygg"] }
         $Anlegg = $MalOppsett | Where-Object { $_["Title"] -eq $TemplateMap["Anlegg"] }
-
         $ByggPlanner = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["PlannerBygg"] }
         $ByggFasesjekk = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["FasesjekkBygg"] }
         $ByggDokument = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["DokumentBygg"] }
@@ -102,9 +99,5 @@ if ($null -ne $LastInstall) {
         $Anlegg["ListContentConfigLookup"] = $AnleggItems
         $Anlegg.SystemUpdate()
         $Anlegg.Context.ExecuteQuery()
-
-
-
-
     }
 }
