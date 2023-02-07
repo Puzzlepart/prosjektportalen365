@@ -1,4 +1,3 @@
-import { IFetchDataForViewItemResult } from 'data/IFetchDataForViewItemResult'
 import { Icon } from '@fluentui/react/lib/Icon'
 import { formatDate, tryParseCurrency } from 'pp365-shared/lib/helpers'
 import { ProjectColumn } from 'pp365-shared/lib/models'
@@ -9,6 +8,7 @@ import { IRenderItemColumnProps } from './IRenderItemColumnProps'
 import { TagsColumn } from './TagsColumn'
 import { UserColumn } from './UserColumn'
 import * as strings from 'PortfolioWebPartsStrings'
+import { IFetchDataForViewItemResult } from 'data/types'
 
 /**
  * Mapping for rendering of the different data types
