@@ -329,14 +329,16 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    * @param timelineConfig Timeline configuration
    */
   public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationModel[]) {
-    const searchQuery = 'ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert'
-    const selectProperties = [
-      'GtSiteIdOWSTEXT',
-      'GtCostsTotalOWSCURR',
-      'GtBudgetTotalOWSCURR'
-    ]
+    const searchQuery =
+      'ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert'
+    const selectProperties = ['GtSiteIdOWSTEXT', 'GtCostsTotalOWSCURR', 'GtBudgetTotalOWSCURR']
 
-    const statusReports = await this._fetchItems(searchQuery, selectProperties, false, 'GtSiteIdOWSTEXT')
+    const statusReports = await this._fetchItems(
+      searchQuery,
+      selectProperties,
+      false,
+      'GtSiteIdOWSTEXT'
+    )
     const reports = statusReports
       .map((report) => {
         return {
@@ -391,7 +393,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
             (child) =>
               child?.SiteId === item?.GtSiteIdLookup?.GtSiteId ||
               item?.GtSiteIdLookup?.GtSiteId ===
-              this?.spfxContext?.pageContext?.site?.id?.toString()
+                this?.spfxContext?.pageContext?.site?.id?.toString()
           )
         ) {
           if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
@@ -763,6 +765,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
         .filter(`GtSiteId eq '${this.spfxContext.pageContext.site.id.toString()}'`)
         .get()
       await list.items.getById(item.ID).update(properties)
-    } catch (error) { }
+    } catch (error) {}
   }
 }

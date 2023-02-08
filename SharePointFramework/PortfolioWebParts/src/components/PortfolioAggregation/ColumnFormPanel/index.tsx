@@ -1,102 +1,31 @@
-import { Panel, TextField, Toggle, Dropdown, PrimaryButton, DefaultButton } from '@fluentui/react'
-import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
+import {
+  Checkbox,
+  DefaultButton,
+  Dropdown,
+  Panel,
+  PrimaryButton,
+  TextField,
+  Toggle
+} from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import React, { useContext, useEffect, useState } from 'react'
-import { PortfolioAggregationContext } from '../context'
-import { ADD_COLUMN, DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
+import React, { FC } from 'react'
+import { DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import styles from './ColumnFormPanel.module.scss'
 import { renderOptions } from './renderOptions'
+import { useColumnFormPanel } from './useColumnFormPanel'
 
-export const addColumn = () => ({
-  key: '',
-  fieldName: '',
-  name: strings.AddColumnText,
-  iconName: 'CalculatorAddition',
-  iconClassName: styles.addColumnIcon,
-  minWidth: 175
-})
-
-const initialColumn = {
-  key: null,
-  fieldName: '',
-  internalname: '',
-  name: '',
-  minWidth: 100,
-  maxWidth: 150,
-  data: {
-    renderAs: 'text'
-  }
-}
-
-export const ColumnFormPanel = () => {
-  const { state, props, dispatch } = useContext(PortfolioAggregationContext)
-  const [column, setColumn] = useState<IProjectContentColumn>({
-    ...initialColumn,
-    ...(state.editColumn || {})
-  })
-
-  useEffect(() => {
-    if (state.editColumn) {
-      setColumn({
-        minWidth: 100,
-        maxWidth: 150,
-        data: {
-          renderAs: 'text'
-        },
-        ...state.editColumn
-      })
-    }
-  }, [state.editColumn])
-
-  const onSave = async () => {
-    setColumn(initialColumn)
-    if (state.editColumn)
-      await Promise.resolve(
-        props.dataAdapter
-          .updateProjectContentColumn(column)
-          .then(() => {
-            dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
-          })
-          .catch((error) => (state.error = error))
-      )
-    else {
-      const renderAs =
-        column.data?.renderAs.charAt(0).toUpperCase() + column.data?.renderAs.slice(1)
-
-      const newItem = {
-        GtSortOrder: column.sortOrder || 100,
-        Title: column.name,
-        GtInternalName: column.internalName,
-        GtManagedProperty: column.fieldName,
-        GtFieldDataType: renderAs,
-        GtDataSourceCategory: props.title,
-        GtColMinWidth: column.minWidth
-      }
-
-      await Promise.resolve(
-        props.dataAdapter
-          .addItemToList(strings.ProjectContentColumnsListName, newItem)
-          .then((result) => {
-            const updateItem = {
-              GtProjectContentColumnsId: result['Id']
-            }
-
-            props.dataAdapter
-              .updateDataSourceItem(updateItem, state.dataSource)
-              .then(() => {
-                dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
-              })
-              .catch((error) => (state.error = error))
-          })
-          .catch((error) => (state.error = error))
-      )
-    }
-  }
-
-  const onDismiss = () => {
-    setColumn(initialColumn)
-    dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
-  }
+export const ColumnFormPanel: FC = () => {
+  const {
+    state,
+    props,
+    dispatch,
+    onSave,
+    onDismiss,
+    column,
+    setColumn,
+    persistRenderAs,
+    setPersistRenderAs
+  } = useColumnFormPanel()
 
   return (
     <Panel
@@ -153,6 +82,7 @@ export const ColumnFormPanel = () => {
       <div className={styles.field}>
         <TextField
           label={strings.DisplayNameLabel}
+          description={strings.DisplayNameDescription}
           required={true}
           value={column.name}
           onChange={(_, value) =>
@@ -244,6 +174,15 @@ export const ColumnFormPanel = () => {
             })
           }
         />
+        <div className={styles.fieldDescription}>{strings.ColumnRenderDescription}</div>
+        {state.editColumn && (
+          <Checkbox
+            label={strings.ColumnRenderPersistGloballyLabel}
+            defaultChecked={persistRenderAs}
+            onChange={(_, checked) => setPersistRenderAs(checked)}
+            styles={{ root: { margin: '10px 0 15px 0' } }}
+          />
+        )}
       </div>
       <div className={styles.footer}>
         <PrimaryButton
@@ -283,3 +222,5 @@ export const ColumnFormPanel = () => {
     </Panel>
   )
 }
+
+export * from './useColumnFormPanel'

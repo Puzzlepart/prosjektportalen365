@@ -39,4 +39,4 @@ Vennligst beskriv hvordan noen andre (en vanlig bruker uten kodeferdigheter) kan
 
 Oppdater brukerhåndboken om nødvendig
 
-Dokumentasjon: Ta en titt på [PP365 User manual](https://puzzlepart.github.io/prosjektportalen-manual/) og vurder behovet for oppdateringer.
+- Dokumentasjon: Ta en titt på [Brukermanual for Prosjektportalen 365](https://puzzlepart.github.io/prosjektportalen-manual/) og vurder behovet for oppdateringer.
