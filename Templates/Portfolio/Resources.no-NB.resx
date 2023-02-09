@@ -464,13 +464,13 @@
     <value></value>
   </data>
   <data name="ContentTypes_ProjectBA_Name" xml:space="preserve">
-    <value>Prosjekt (Bygg og anlegg)</value>
+    <value>Prosjekt (BA)</value>
   </data>
   <data name="ContentTypes_ProjectBA_Description" xml:space="preserve">
     <value>Prosjekt innholdstype for bygg- og anleggsprosjekter</value>
   </data>
   <data name="ContentTypes_ProjectStatusBA_Name" xml:space="preserve">
-    <value>Prosjektstatus (Bygg og anlegg)</value>
+    <value>Prosjektstatus (BA)</value>
   </data>
   <data name="ContentTypes_ProjectStatusBA_Description" xml:space="preserve">
     <value>Prosjektstatus innholdstype for bygg- og anleggsprosjekter</value>

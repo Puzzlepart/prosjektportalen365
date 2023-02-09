@@ -72,7 +72,7 @@ function EnsureProjectTimelinePage() {
 }
 
 function EnsureResourceLoadIsSiteColumn() {
-    if($global:__InstalledVersion -lt "1.7.2") {
+    if ($global:__InstalledVersion -lt "1.7.2") {
         $ResourceAllocation = Get-PnPList -Identity "Ressursallokering" -ErrorAction SilentlyContinue
         if ($null -ne $ResourceAllocation) {
             $ResourceLoadSiteColumn = Get-PnPField -Identity "GtResourceLoad"
