@@ -57,8 +57,7 @@ if ($null -ne $LastInstall) {
                 $ProjectBACT.SystemUpdate()
                 $ProjectBACT.Context.ExecuteQuery()
             }
-            Write-Host "[SUCCESS] 'Bygg & Anlegg' contenttypes renamed" 
-
+            Write-Host "[SUCCESS] 'Bygg & Anlegg' contenttypes re-named" 
         }
     }
 }
