@@ -24,7 +24,7 @@ function StartAction($Action) {
 
 function EndAction() {
     $global:sw_action.Stop()
-    $ElapsedSeconds = [math]::Round(($global:sw_action.ElapsedMilliseconds)/1000, 2)
+    $ElapsedSeconds = [math]::Round(($global:sw_action.ElapsedMilliseconds) / 1000, 2)
     Write-Host "Completed in $($ElapsedSeconds)s" -ForegroundColor Green
 }
 

@@ -13,8 +13,8 @@ $TemplateSetups = Get-PnPListItem -List "Maloppsett"
 $TemplateFiles = Get-PnPListItem -List "Prosjektmaler"
 
 $TemplatesMap = @{
-    "Standardmal" = "Standardmal.txt";
-    "Programmal" = "Programmal.txt";
+    "Standardmal"    = "Standardmal.txt";
+    "Programmal"     = "Programmal.txt";
     "Overordnet mal" = "Overordnet.txt";
 }
 
