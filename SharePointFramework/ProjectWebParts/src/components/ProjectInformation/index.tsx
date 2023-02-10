@@ -49,7 +49,9 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
               <ProgressDialog {...state.progress} />
               <AllPropertiesPanel />
               <CreateParentDialog />
-              <SyncProjectDialog />
+              {props.page === 'Frontpage' && props.useIdeaProcessing && (
+                <SyncProjectDialog />
+              )}
             </Shimmer>
           )}
         </div>
@@ -66,8 +68,8 @@ ProjectInformation.defaultProps = {
   hideActions: [],
   hideAllActions: false,
   useFramelessButtons: false,
-  hideStatusReport: true,
-  hideParentProjects: true,
+  hideStatusReport: false,
+  hideParentProjects: false,
   statusReportShowOnlyIcons: true
 }
 

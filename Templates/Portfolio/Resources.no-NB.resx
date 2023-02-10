@@ -2183,10 +2183,10 @@
     <value>Velg hvilke tilganger denne rollen skal ha.</value>
   </data>
   <data name="SiteFields_GtPlannerName_DisplayName" xml:space="preserve">
-    <value>Plan-navn</value>
+    <value>Plannavn</value>
   </data>
   <data name="SiteFields_GtPlannerName_Description" xml:space="preserve">
-    <value>Velg et eget navn for planen. Brukes om du vil opprette flere planer for samme prosjekt. Det fullstendige plan-navnet vil også inneholde navnet på området/prosjektet.</value>
+    <value>Velg et eget navn for planen. Brukes om du vil opprette flere planer for samme prosjekt. Det fullstendige plannavnet vil også inneholde navnet på området/prosjektet.</value>
   </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>

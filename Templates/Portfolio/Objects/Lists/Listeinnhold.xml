@@ -96,6 +96,7 @@
             <pnp:DataValue FieldName="GtLccFields">-</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPlannerName">Standardplan</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="ContentTypeId">0x0100B8B4EE61A547B247B49CFC21B67D5B7D01</pnp:DataValue>
@@ -105,6 +106,7 @@
             <pnp:DataValue FieldName="GtLccFields">-</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPlannerName">Byggplan</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="ContentTypeId">0x0100B8B4EE61A547B247B49CFC21B67D5B7D01</pnp:DataValue>
@@ -114,6 +116,7 @@
             <pnp:DataValue FieldName="GtLccFields">-</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPlannerName">Anleggsplan</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Standarddokumenter Bygg</pnp:DataValue>
