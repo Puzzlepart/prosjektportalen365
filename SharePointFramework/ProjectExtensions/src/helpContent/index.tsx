@@ -37,6 +37,7 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
    */
   private async _render(): Promise<void> {
     const helpContent = await this._getHelpContent(this.properties.listName)
+    if (helpContent.length === 0) return
     const helpContentId = 'pp-help-content'
     let helpContentPlaceholder = document.getElementById(helpContentId)
     if (helpContentPlaceholder === null) {
