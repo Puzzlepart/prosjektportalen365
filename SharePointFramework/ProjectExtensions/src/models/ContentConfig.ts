@@ -44,7 +44,7 @@ export class ContentConfig extends UserSelectableObject {
     )
     this._sourceList = _spItem.GtLccSourceList
     this._destinationList = _spItem.GtLccDestinationList
-    this.plannerTitle = _spItem.GtPlannerName
+    this.plannerTitle = _spItem.GtPlannerName || _spItem.Title
   }
 
   /**
