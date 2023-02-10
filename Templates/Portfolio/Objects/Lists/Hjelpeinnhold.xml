@@ -82,9 +82,9 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Risikooversikt Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Usikkerhetsoversikt Brukermanual</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
-            <pnp:DataValue FieldName="GtURL">SitePages/Risikooversikt.aspx</pnp:DataValue>
+            <pnp:DataValue FieldName="GtURL">SitePages/Usikkerhetsoversikt.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
             <pnp:DataValue FieldName="GtExternalURL">https://github.com/Puzzlepart/prosjektportalen-manual/blob/master/Brukermanual/3%20Portefolje/3.7%20Risikooversikt.md</pnp:DataValue>
