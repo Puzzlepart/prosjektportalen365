@@ -45,6 +45,7 @@ og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed an issue where webparts didn't load properly because user didn't have an e-mail account [#844](https://github.com/Puzzlepart/prosjektportalen365/issues/844)
 - Fixed bugs where users could not upgrade from pre 1.5.4 versions [#901](https://github.com/Puzzlepart/prosjektportalen365/issues/901)
 - Fixed a bug where parts of 'Fasevelger' webpart didn't show properly [#920](https://github.com/Puzzlepart/prosjektportalen365/issues/920)
+- Fixed a bug where planner plans without 'Plannername' in 'ListContent' failed under ProjectSetup [#976](https://github.com/Puzzlepart/prosjektportalen365/issues/976)
 
 ---
 
