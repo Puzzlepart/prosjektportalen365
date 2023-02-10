@@ -66,8 +66,8 @@ ProjectInformation.defaultProps = {
   hideActions: [],
   hideAllActions: false,
   useFramelessButtons: false,
-  hideStatusReport: true,
-  hideParentProjects: true,
+  hideStatusReport: false,
+  hideParentProjects: false,
   statusReportShowOnlyIcons: true
 }
 
