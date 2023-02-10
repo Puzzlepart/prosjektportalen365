@@ -1,6 +1,7 @@
 name: Package SharePoint Framework
 on:
   pull_request:
+  merge_group:
     types: [assigned, opened, synchronize, reopened]
     branches:
       - main
