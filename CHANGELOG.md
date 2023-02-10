@@ -30,6 +30,7 @@ og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Reworked search experience throughout Prosjektportalen [#884](https://github.com/Puzzlepart/prosjektportalen365/issues/884)
 - Excluding private/shared channel sites when searching for sites (Program administration) [#915](https://github.com/Puzzlepart/prosjektportalen365/issues/915)
 - Aggregated Content: Support for document name column with file type icon [#962](https://github.com/Puzzlepart/prosjektportalen365/issues/962)
+- 'Oversikt' program webpart will show all projects similar to 'Porteføljeoversikt', an `eye` icon will appear for projects the user does not have access to. [#961](https://github.com/Puzzlepart/prosjektportalen365/issues/961)
 
 ### Feilrettinger
 

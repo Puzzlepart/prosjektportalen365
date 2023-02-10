@@ -239,29 +239,30 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   public async fetchDataForViewBatch(
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
-    siteId: string[]
+    siteId: string[],
+    siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
-    const queryArray = this.aggregatedQueryBuilder('GtSiteIdOWSTEXT')
+    const queryArray = this.aggregatedQueryBuilder(siteIdProperty)
     const items = []
     for (let i = 0; i < queryArray.length; i++) {
       const { projects, sites, statusReports } = await this._fetchDataForView(
         view,
         configuration,
         siteId,
-        'GtSiteIdOWSTEXT',
+        siteIdProperty,
         queryArray[i]
       )
-      const item = sites.map((site) => {
-        const [project] = projects.filter((res) => res['GtSiteIdOWSTEXT'] === site['SiteId'])
+      const item = projects.map((project) => {
         const [statusReport] = statusReports.filter(
-          (res) => res['GtSiteIdOWSTEXT'] === site['SiteId']
+          (res) => res[siteIdProperty] === project[siteIdProperty]
         )
+        const [site] = sites.filter((res) => res['SiteId'] === project[siteIdProperty])
+
         return {
           ...statusReport,
           ...project,
-          Title: site.Title,
-          Path: site.Path,
-          SiteId: site['SiteId']
+          Path: site && site.Path,
+          SiteId: project[siteIdProperty]
         }
       })
       items.push(...item)
