@@ -190,7 +190,6 @@ declare interface IPortfolioWebPartsStrings {
   CostsTotalLabel: string
   NoProjectsFound: string
   NewLabel: string
-  ReadOnlyGroupName: string
   DisplayAllProjects: string
   MyProjectsHeaderText: string
   AllProjectsHeaderText: string
