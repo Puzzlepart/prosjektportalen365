@@ -11,36 +11,45 @@ import { dateAdd, PnPClientStorage } from '@pnp/common'
  */
 export async function getHubSiteProjects() {
   const { HubSiteId } = await sp.site.select('HubSiteId').usingCaching().get()
-  return new PnPClientStorage().local.getOrPut(`HubSiteProjects_${HubSiteId}`, async () => {
-    const [{ PrimarySearchResults: sts_sites }, { PrimarySearchResults: items }] = await Promise.all([
-      sp.search({
-        Querytext: `DepartmentId:{${HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
-        RowLimit: 500,
-        StartRow: 0,
-        ClientType: 'ContentSearchRegular',
-        SelectProperties: ['SPWebURL', 'Title', 'SiteId'],
-        TrimDuplicates: false
-      }),
-      sp.search({
-        Querytext: `DepartmentId:{${HubSiteId}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
-        RowLimit: 500,
-        StartRow: 0,
-        ClientType: 'ContentSearchRegular',
-        SelectProperties: ['GtSiteIdOWSTEXT', 'Title'],
-        TrimDuplicates: false
-      })
-    ])
-    return items
-      .filter((item) => item['GtSiteIdOWSTEXT'] && item['GtSiteIdOWSTEXT'] !== '00000000-0000-0000-0000-000000000000')
-      .map<IProgramAdministrationProject>((item) => {
-        const site = sts_sites.find((site) => site['SiteId'] === item['GtSiteIdOWSTEXT'])
-        return {
-          SiteId: item['GtSiteIdOWSTEXT'],
-          Title: site?.Title ?? item['Title'],
-          SPWebURL: site && site['SPWebURL'],
-        }
-      })
-  }, dateAdd(new Date(), 'minute', 5))
+  return new PnPClientStorage().local.getOrPut(
+    `HubSiteProjects_${HubSiteId}`,
+    async () => {
+      const [{ PrimarySearchResults: sts_sites }, { PrimarySearchResults: items }] =
+        await Promise.all([
+          sp.search({
+            Querytext: `DepartmentId:{${HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
+            RowLimit: 500,
+            StartRow: 0,
+            ClientType: 'ContentSearchRegular',
+            SelectProperties: ['SPWebURL', 'Title', 'SiteId'],
+            TrimDuplicates: false
+          }),
+          sp.search({
+            Querytext: `DepartmentId:{${HubSiteId}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
+            RowLimit: 500,
+            StartRow: 0,
+            ClientType: 'ContentSearchRegular',
+            SelectProperties: ['GtSiteIdOWSTEXT', 'Title'],
+            TrimDuplicates: false
+          })
+        ])
+      return items
+        .filter(
+          (item) =>
+            item['GtSiteIdOWSTEXT'] &&
+            item['GtSiteIdOWSTEXT'] !== '00000000-0000-0000-0000-000000000000'
+        )
+        .map<IProgramAdministrationProject>((item) => {
+          const site = sts_sites.find((site) => site['SiteId'] === item['GtSiteIdOWSTEXT'])
+          return {
+            SiteId: item['GtSiteIdOWSTEXT'],
+            Title: site?.Title ?? item['Title'],
+            SPWebURL: site && site['SPWebURL']
+          }
+        })
+    },
+    dateAdd(new Date(), 'minute', 5)
+  )
 }
 
 /**
@@ -49,9 +58,7 @@ export async function getHubSiteProjects() {
  *
  * @param dataAdapter Data adapter
  */
-export async function fetchChildProjects(
-  dataAdapter: SPDataAdapter
-): Promise<any[]> {
+export async function fetchChildProjects(dataAdapter: SPDataAdapter): Promise<any[]> {
   const availableProjects = await getHubSiteProjects()
   const childProjectsSiteIds = dataAdapter.childProjects.map((p) => p.SiteId)
   return availableProjects.filter((p) => childProjectsSiteIds.indexOf(p.SiteId) !== -1)

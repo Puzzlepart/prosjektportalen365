@@ -3,7 +3,7 @@ import { Icon } from 'office-ui-fabric-react'
 import React from 'react'
 
 /**
- * Returns an array of columns for the ShimmeredDetailsList. If SPPWebURL is not set, the project 
+ * Returns an array of columns for the ShimmeredDetailsList. If SPPWebURL is not set, the project
  * is not accessible by the user, but the user can still add it to the program. If renderAsLink is
  * set to true, the project title will be rendered as a link to the project.
  */
@@ -28,8 +28,7 @@ export function columns({ renderAsLink = false }) {
               {item.Title}
             </Link>
           )
-        }
-        else return item.Title
+        } else return item.Title
       },
       minWidth: 100
     }
