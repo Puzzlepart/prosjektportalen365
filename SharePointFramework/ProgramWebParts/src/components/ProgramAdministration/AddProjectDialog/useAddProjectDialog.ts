@@ -28,8 +28,7 @@ export const useAddProjectDialog = () => {
   const availableProjects = context.state.availableProjects.filter(
     (project) =>
       !context.state.childProjects.some((el) => el.SiteId === project.SiteId) &&
-      project.SiteId !== context.props.context.pageContext.site.id.toString() &&
-      project.SPWebURL
+      project.SiteId !== context.props.context.pageContext.site.id.toString()
   )
 
   const onRenderRow = useRowRenderer({

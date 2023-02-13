@@ -2,21 +2,39 @@
 import { flatten } from '@microsoft/sp-lodash-subset'
 import { sp } from '@pnp/sp'
 import { SPDataAdapter } from 'data'
+import { IProgramAdministrationProject } from './types'
 
 /**
  * Fetches all projects associated with the current hubsite context
  */
-export async function getHubSiteProjects(): Promise<any[]> {
+export async function getHubSiteProjects() {
   const data = await sp.site.select('HubSiteId').get()
-  const { PrimarySearchResults } = await sp.search({
-    Querytext: `DepartmentId:{${data.HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
-    RowLimit: 500,
-    StartRow: 0,
-    ClientType: 'ContentSearchRegular',
-    SelectProperties: ['SPWebURL', 'Title'],
-    TrimDuplicates: false
+  const [{ PrimarySearchResults: sts_sites }, { PrimarySearchResults: items }] = await Promise.all([
+    sp.search({
+      Querytext: `DepartmentId:{${data.HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
+      RowLimit: 500,
+      StartRow: 0,
+      ClientType: 'ContentSearchRegular',
+      SelectProperties: ['SPWebURL', 'Title', 'SiteId'],
+      TrimDuplicates: false
+    }),
+    sp.search({
+      Querytext: `DepartmentId:{${data.HubSiteId}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
+      RowLimit: 500,
+      StartRow: 0,
+      ClientType: 'ContentSearchRegular',
+      SelectProperties: ['GtSiteIdOWSTEXT', 'Title'],
+      TrimDuplicates: false
+    })
+  ])
+  return items.map<IProgramAdministrationProject>((item) => {
+    const site = sts_sites.find((site) => site['SiteId'] === item['GtSiteIdOWSTEXT'])
+    return {
+      SiteId: item['GtSiteIdOWSTEXT'],
+      Title: site?.Title ?? item['Title'],
+      SPWebURL: site && site['SPWebURL'],
+    }
   })
-  return PrimarySearchResults
 }
 
 async function searchHubSite(hubId: string, query: string) {
