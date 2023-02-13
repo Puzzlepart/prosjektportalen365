@@ -16,7 +16,7 @@ export function columns({ renderAsLink = false }) {
       onRender: (item) => {
         if (!item.SPWebURL) {
           return (
-            <div style={{ opacity: 0.3 }} title='Du har ikke tilgang til dette prosjektet, men du kan alikevel legge det til i programmet.'>
+            <div style={{ opacity: 0.3 }}>
               <span>{item.Title}</span>
               <Icon style={{ marginLeft: 6 }} iconName='Hide' />
             </div>
