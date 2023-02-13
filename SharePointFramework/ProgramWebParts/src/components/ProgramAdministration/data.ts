@@ -5,13 +5,16 @@ import { SPDataAdapter } from 'data'
 import { IProgramAdministrationProject } from './types'
 
 /**
- * Fetches all projects associated with the current hubsite context
+ * Fetches all projects associated with the current hubsite context. This is done by querying the
+ * search index for all sites with the same DepartmentId as the current hubsite and all project items with
+ * the same DepartmentId as the current hubsite. The sites are then matched with the items to
+ * retrieve the SiteId and SPWebURL.
  */
 export async function getHubSiteProjects() {
-  const data = await sp.site.select('HubSiteId').get()
+  const { HubSiteId } = await sp.site.select('HubSiteId').get()
   const [{ PrimarySearchResults: sts_sites }, { PrimarySearchResults: items }] = await Promise.all([
     sp.search({
-      Querytext: `DepartmentId:{${data.HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
+      Querytext: `DepartmentId:{${HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
       RowLimit: 500,
       StartRow: 0,
       ClientType: 'ContentSearchRegular',
@@ -19,7 +22,7 @@ export async function getHubSiteProjects() {
       TrimDuplicates: false
     }),
     sp.search({
-      Querytext: `DepartmentId:{${data.HubSiteId}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
+      Querytext: `DepartmentId:{${HubSiteId}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
       RowLimit: 500,
       StartRow: 0,
       ClientType: 'ContentSearchRegular',
@@ -37,9 +40,16 @@ export async function getHubSiteProjects() {
   })
 }
 
-async function searchHubSite(hubId: string, query: string) {
+/**
+ * Searches the search index for items with the same DepartmentId as the current hubsite using
+ * the specified query text.
+ * 
+ * @param hubSiteId Hub site id
+ * @param queryText Query text
+ */
+async function searchHubSite(hubSiteId: string, queryText: string) {
   const searchData = await sp.search({
-    Querytext: `${query} DepartmentId:{${hubId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
+    Querytext: `${queryText} DepartmentId:{${hubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
     RowLimit: 500,
     StartRow: 0,
     ClientType: 'ContentSearchRegular',
@@ -50,7 +60,7 @@ async function searchHubSite(hubId: string, query: string) {
 }
 
 /**
- * Fetches current child projects using default caching
+ * Fetches current child projects using default caching.
  *
  * @param dataAdapter Data adapter
  */
@@ -72,12 +82,12 @@ export async function fetchChildProjects(
 }
 
 /**
- * Add child projects
+ * Add child projects.
  *
  * @param dataAdapter Data adapter
  * @param newProjects New projects to add
  */
-export async function addChildProject(
+export async function addChildProjects(
   dataAdapter: SPDataAdapter,
   newProjects: Array<Record<string, string>>
 ) {
@@ -93,7 +103,7 @@ export async function addChildProject(
 }
 
 /**
- * Remove child projects
+ * Remove child projects.
  *
  * @param dataAdapter Data adapter
  * @param projectToRemove Projects to delete
