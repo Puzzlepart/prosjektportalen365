@@ -95,6 +95,14 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     return colValue
   }
 
+  if (state.projects.length === 0) {
+    return (
+      <div className={styles.root}>
+        <MessageBar messageBarType={MessageBarType.info}>{strings.NoProjectsFound}</MessageBar>
+      </div>
+    )
+  }
+
   if (state.error) {
     return (
       <div className={styles.root}>
