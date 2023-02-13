@@ -30,14 +30,16 @@ export async function getHubSiteProjects() {
       TrimDuplicates: false
     })
   ])
-  return items.map<IProgramAdministrationProject>((item) => {
-    const site = sts_sites.find((site) => site['SiteId'] === item['GtSiteIdOWSTEXT'])
-    return {
-      SiteId: item['GtSiteIdOWSTEXT'],
-      Title: site?.Title ?? item['Title'],
-      SPWebURL: site && site['SPWebURL'],
-    }
-  })
+  return items
+    .filter((item) => item['GtSiteIdOWSTEXT'] && item['GtSiteIdOWSTEXT'] !== '00000000-0000-0000-0000-000000000000')
+    .map<IProgramAdministrationProject>((item) => {
+      const site = sts_sites.find((site) => site['SiteId'] === item['GtSiteIdOWSTEXT'])
+      return {
+        SiteId: item['GtSiteIdOWSTEXT'],
+        Title: site?.Title ?? item['Title'],
+        SPWebURL: site && site['SPWebURL'],
+      }
+    })
 }
 
 /**
