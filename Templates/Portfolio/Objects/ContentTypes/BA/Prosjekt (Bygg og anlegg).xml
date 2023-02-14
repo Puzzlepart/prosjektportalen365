@@ -1,4 +1,4 @@
-﻿<pnp:ContentType ID="0x0100C4784EA80C45433792E60E1DD000C5B7" Name="{resource:ContentTypes_ProjectBA_Name}" Description="{resource:ContentTypes_ProjectBA_Description}" Group="{resource:ContentTypes_Group}" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+﻿<pnp:ContentType ID="0x0100805E9E4FEAAB4F0EABAB2600D30DB70C00BA" Name="{resource:ContentTypes_ProjectBA_Name}" Description="{resource:ContentTypes_ProjectBA_Description}" Group="{resource:ContentTypes_Group}" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" UpdateChildren="true" />
         <pnp:FieldRef ID="983d5ab3-0a6c-4f6a-a7b5-d34d52d73676" Name="GtProjectFinanceName" UpdateChildren="true" />

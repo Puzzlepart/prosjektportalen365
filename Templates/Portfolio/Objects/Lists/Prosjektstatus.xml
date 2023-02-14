@@ -2,7 +2,7 @@
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x010022252E35737A413FB56A1BA53862F6D5" Default="true" />
-        <pnp:ContentTypeBinding ContentTypeID="0x0100676A5FAB1C974B6A9276279850EA2806" />
+        <pnp:ContentTypeBinding ContentTypeID="0x010022252E35737A413FB56A1BA53862F6D500BA" />
     </pnp:ContentTypeBindings>
     <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_ProjectStatus_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
