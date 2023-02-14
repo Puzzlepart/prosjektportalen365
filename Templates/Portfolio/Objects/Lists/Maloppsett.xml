@@ -105,8 +105,8 @@
       <pnp:DataValue FieldName="Title">Byggprosjekt</pnp:DataValue>
       <pnp:DataValue FieldName="Order">150</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectTemplate">1</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectContentType">0x0100C4784EA80C45433792E60E1DD000C5B7</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectStatusContentType">0x0100676A5FAB1C974B6A9276279850EA2806</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectContentType">0x0100805E9E4FEAAB4F0EABAB2600D30DB70C00BA</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectStatusContentType">0x010022252E35737A413FB56A1BA53862F6D500BA</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectPhaseTermId">ec5ceb95-7259-4282-811f-7c57304be71e</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectColumns">Kolonner for Prosjektportalen (Prosjekt)</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectCustomColumns">Egendefinerte kolonner for Prosjektportalen</pnp:DataValue>
@@ -118,8 +118,8 @@
       <pnp:DataValue FieldName="Title">Anleggsprosjekt</pnp:DataValue>
       <pnp:DataValue FieldName="Order">200</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectTemplate">1</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectContentType">0x0100C4784EA80C45433792E60E1DD000C5B7</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectStatusContentType">0x0100676A5FAB1C974B6A9276279850EA2806</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectContentType">0x0100805E9E4FEAAB4F0EABAB2600D30DB70C00BA</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectStatusContentType">0x010022252E35737A413FB56A1BA53862F6D500BA</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectPhaseTermId">cc6cdd18-c7d5-42e1-8d19-a336dd78f3f2</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectColumns">Kolonner for Prosjektportalen (Prosjekt)</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectCustomColumns">Egendefinerte kolonner for Prosjektportalen</pnp:DataValue>
