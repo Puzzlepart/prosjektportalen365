@@ -32,3 +32,62 @@ foreach ($tmpl in $TemplatesMap.GetEnumerator()) {
 }
 
 Write-Host "[SUCCESS] Post-install action: Ensured default project templates" -ForegroundColor Green
+Write-Host "[INFO] Post-install action: Adding list content to template setup"
+
+$TemplateSetupMap = @{
+    "Bygg"   = "Byggprosjekt";
+    "Anlegg" = "Anleggsprosjekt";
+    "Standard" = "Standardmal"
+}
+
+$ListContentMap = @{
+    "FasesjekkStandard" = "Fasesjekkpunkter";
+    "PlannerStandard"   = "Planneroppgaver";
+    "FasesjekkBygg"     = "Fasesjekkliste Bygg";
+    "PlannerBygg"       = "Planneroppgaver Bygg";
+    "DokumentBygg"      = "Standarddokumenter Bygg";
+    "FasesjekkAnlegg"   = "Fasesjekkliste Anlegg";
+    "PlannerAnlegg"     = "Planneroppgaver Anlegg";
+    "DokumentAnlegg"    = "Standarddokumenter Anlegg";
+}
+
+$ListContent = Get-PnPListItem -List Listeinnhold
+$TemplateOptions = Get-PnPListItem -List Maloppsett
+
+$Standard = $TemplateOptions | Where-Object { $_["Title"] -eq $TemplateSetupMap["Standard"] }
+$StandardPlanner = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["PlannerStandard"] }
+$StandardPhaseChecklist = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["FasesjekkStandard"] }
+
+$StandardItems = @()
+$StandardItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $StandardPlanner.Id }
+$StandardItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $StandardPhaseChecklist.Id }
+
+$Standard["ListContentConfigLookup"] = $StandardItems
+$Standard.SystemUpdate()
+$Standard.Context.ExecuteQuery()
+
+$Bygg = $TemplateOptions | Where-Object { $_["Title"] -eq $TemplateSetupMap["Bygg"] }
+$ByggPlanner = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["PlannerBygg"] }
+$ByggPhaseChecklist = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["FasesjekkBygg"] }
+$ByggDocuments = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["DokumentBygg"] }
+
+$Anlegg = $TemplateOptions | Where-Object { $_["Title"] -eq $TemplateSetupMap["Anlegg"] }
+$AnleggPlanner = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["PlannerAnlegg"] }
+$AnleggPhaseChecklist = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["FasesjekkAnlegg"] }
+$AnleggDocuments = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["DokumentAnlegg"] }     
+
+$ByggItems = @()
+$ByggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $ByggPlanner.Id }
+$ByggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $ByggPhaseChecklist.Id }
+$ByggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $ByggDocuments.Id }
+$Bygg["ListContentConfigLookup"] = $ByggItems
+$Bygg.SystemUpdate()
+$Bygg.Context.ExecuteQuery()
+
+$AnleggItems = @()
+$AnleggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $AnleggPlanner.Id }
+$AnleggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $AnleggPhaseChecklist.Id }
+$AnleggItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $AnleggDocuments.Id }
+$Anlegg["ListContentConfigLookup"] = $AnleggItems
+$Anlegg.SystemUpdate()
+$Anlegg.Context.ExecuteQuery()
