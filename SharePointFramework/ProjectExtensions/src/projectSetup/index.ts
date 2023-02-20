@@ -362,15 +362,20 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         pageContext: this.context.pageContext as any
       })
 
-      const templateFileName = (
+      const propertyBagRegex = /^pp_.*_template$/
+      const templateProperties = (
         await sp.web.select('Title', 'AllProperties').expand('AllProperties').get()
-      )['AllProperties']['pp_template']
-      let templateViewXml = `<View></View>`
-      if (templateFileName) {
+      )['AllProperties']
+
+      const templateProperty = Object.keys(templateProperties).find(key => propertyBagRegex.test(key))
+      const templateName = templateProperties[templateProperty]
+
+      let templateViewXml = '<View></View>'
+      if (templateName) {
         templateViewXml = `<View Scope="RecursiveAll">
           <Query><Where><And>
             <Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq>
-            <Eq><FieldRef Name="FileLeafRef" /><Value Type="Text">${templateFileName}</Value></Eq>
+            <Eq><FieldRef Name="Title" /><Value Type="Text">${templateName}</Value></Eq>
           </And></Where></Query>
         </View>`
       }
@@ -407,6 +412,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           ['File']
         )
       ])
+
       const templates = _templates.map((tmpl) => {
         const [tmplFile] = templateFiles.filter((file) => file.id === tmpl.projectTemplateId)
         tmpl.projectTemplateUrl = tmplFile?.serverRelativeUrl
