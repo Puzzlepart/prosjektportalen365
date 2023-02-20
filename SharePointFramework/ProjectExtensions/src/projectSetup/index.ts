@@ -361,25 +361,39 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       this._portal = await new PortalDataService().configure({
         pageContext: this.context.pageContext as any
       })
+
+      const templateFileName = (
+        await sp.web.select('Title', 'AllProperties').expand('AllProperties').get()
+      )['AllProperties']['pp_template']
+      let templateViewXml = `<View></View>`
+      if (templateFileName) {
+        templateViewXml = `<View Scope="RecursiveAll">
+          <Query><Where><And>
+            <Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq>
+            <Eq><FieldRef Name="FileLeafRef" /><Value Type="Text">${templateFileName}</Value></Eq>
+          </And></Where></Query>
+        </View>`
+      }
+
       const [_templates, extensions, contentConfig, templateFiles] = await Promise.all([
         this._portal.getItems(
           this.properties.templatesLibrary,
           ProjectTemplate,
           {
-            ViewXml: '<View></View>'
+            ViewXml: templateViewXml
           },
           ['FieldValuesAsText']
         ),
         this.properties.extensionsLibrary
           ? this._portal.getItems(
-              this.properties.extensionsLibrary,
-              ProjectExtension,
-              {
-                ViewXml:
-                  '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-              },
-              ['File', 'FieldValuesAsText']
-            )
+            this.properties.extensionsLibrary,
+            ProjectExtension,
+            {
+              ViewXml:
+                '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+            },
+            ['File', 'FieldValuesAsText']
+          )
           : Promise.resolve([]),
         this.properties.contentConfigList
           ? this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File'])
