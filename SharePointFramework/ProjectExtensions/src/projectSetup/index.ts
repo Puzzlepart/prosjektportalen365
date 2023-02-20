@@ -360,7 +360,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     const webAllProperties = (
       await sp.web.select('Title', 'AllProperties').expand('AllProperties').get()
     )['AllProperties']
-    const templateProperty = Object.keys(webAllProperties).find(key => propertyBagRegex.test(key))
+    const templateProperty = Object.keys(webAllProperties).find((key) => propertyBagRegex.test(key))
     const templateName = webAllProperties[templateProperty]
 
     let templateViewXml = '<View></View>'
@@ -397,14 +397,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         this._getTemplates(),
         this.properties.extensionsLibrary
           ? this._portal.getItems(
-            this.properties.extensionsLibrary,
-            ProjectExtension,
-            {
-              ViewXml:
-                '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-            },
-            ['File', 'FieldValuesAsText']
-          )
+              this.properties.extensionsLibrary,
+              ProjectExtension,
+              {
+                ViewXml:
+                  '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+              },
+              ['File', 'FieldValuesAsText']
+            )
           : Promise.resolve([]),
         this.properties.contentConfigList
           ? this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File'])
