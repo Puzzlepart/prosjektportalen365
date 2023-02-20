@@ -224,6 +224,10 @@
                 {
                     "ID": "4393ed3c-1599-4ab3-8444-444ab35754bb",
                     "Name": "GtDeliveryStatusComment"
+                },
+                {
+                    "ID": "4d342fb6-a0e0-4064-b794-c1d36c922997",
+                    "Name": "GtTag"
                 }
             ]
         },
