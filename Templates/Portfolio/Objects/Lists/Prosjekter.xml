@@ -2,7 +2,7 @@
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100805E9E4FEAAB4F0EABAB2600D30DB70C" Default="true" />
-        <pnp:ContentTypeBinding ContentTypeID="0x0100805E9E4FEAAB4F0EABAB2600D30DB70C00BA" />
+        <pnp:ContentTypeBinding ContentTypeID="0x0100805E9E4FEAAB4F0EABAB2600D30DB70CBA" />
         <pnp:ContentTypeBinding ContentTypeID="0x01" Remove="true" />
     </pnp:ContentTypeBindings>
     <pnp:Views>
