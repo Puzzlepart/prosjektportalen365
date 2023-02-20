@@ -352,7 +352,38 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Fetch data
+   * Get templates from portal site. Checks for locked template in property bag,
+   * and if found, returns only that template. Otherwise, returns all templates.
+   */
+  private async _getTemplates() {
+    const propertyBagRegex = /^pp_.*_template$/
+    const webAllProperties = (
+      await sp.web.select('Title', 'AllProperties').expand('AllProperties').get()
+    )['AllProperties']
+    const templateProperty = Object.keys(webAllProperties).find(key => propertyBagRegex.test(key))
+    const templateName = webAllProperties[templateProperty]
+
+    let templateViewXml = '<View></View>'
+    if (templateName) {
+      templateViewXml = `<View Scope="RecursiveAll">
+        <Query><Where><And>
+          <Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq>
+          <Eq><FieldRef Name="Title" /><Value Type="Text">${templateName}</Value></Eq>
+        </And></Where></Query>
+      </View>`
+    }
+    return this._portal.getItems(
+      this.properties.templatesLibrary,
+      ProjectTemplate,
+      {
+        ViewXml: templateViewXml
+      },
+      ['FieldValuesAsText']
+    )
+  }
+
+  /**
+   * Fetch data from SharePoint and initializes the MSGraphHelper.
    */
   private async _fetchData(): Promise<IProjectSetupData> {
     try {
@@ -362,33 +393,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         pageContext: this.context.pageContext as any
       })
 
-      const propertyBagRegex = /^pp_.*_template$/
-      const templateProperties = (
-        await sp.web.select('Title', 'AllProperties').expand('AllProperties').get()
-      )['AllProperties']
-
-      const templateProperty = Object.keys(templateProperties).find(key => propertyBagRegex.test(key))
-      const templateName = templateProperties[templateProperty]
-
-      let templateViewXml = '<View></View>'
-      if (templateName) {
-        templateViewXml = `<View Scope="RecursiveAll">
-          <Query><Where><And>
-            <Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq>
-            <Eq><FieldRef Name="Title" /><Value Type="Text">${templateName}</Value></Eq>
-          </And></Where></Query>
-        </View>`
-      }
-
       const [_templates, extensions, contentConfig, templateFiles] = await Promise.all([
-        this._portal.getItems(
-          this.properties.templatesLibrary,
-          ProjectTemplate,
-          {
-            ViewXml: templateViewXml
-          },
-          ['FieldValuesAsText']
-        ),
+        this._getTemplates(),
         this.properties.extensionsLibrary
           ? this._portal.getItems(
             this.properties.extensionsLibrary,
