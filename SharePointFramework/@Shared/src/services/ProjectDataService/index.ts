@@ -150,9 +150,6 @@ export class ProjectDataService {
         this.getWelcomePage()
       ])
 
-      // eslint-disable-next-line no-console
-      console.log('_getPropertyItem', welcomepage)
-
       const modifiedSourceUrl = !sourceUrl.includes(welcomepage)
         ? sourceUrl
             .replace('#syncproperties=1', `/${welcomepage}#syncproperties=1`)
@@ -165,8 +162,6 @@ export class ProjectDataService {
         }&Source=${encodeURIComponent(modifiedSourceUrl)}`
       )
 
-      // eslint-disable-next-line no-console
-      console.log('_getPropertyItem', editFormUrl)
       const versionHistoryUrl = `${this._params.webUrl}/_layouts/15/versions.aspx?list=${propertyItemContext.listId}&ID=${propertyItemContext.itemId}`
       return {
         fieldValuesText,
