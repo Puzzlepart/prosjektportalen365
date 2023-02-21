@@ -49,9 +49,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
               <ProgressDialog {...state.progress} />
               <AllPropertiesPanel />
               <CreateParentDialog />
-              {props.page === 'Frontpage' && props.useIdeaProcessing && (
-                <SyncProjectDialog />
-              )}
+              {props.page === 'Frontpage' && props.useIdeaProcessing && <SyncProjectDialog />}
             </Shimmer>
           )}
         </div>
