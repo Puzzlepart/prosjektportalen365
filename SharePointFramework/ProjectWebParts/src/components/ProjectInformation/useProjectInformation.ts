@@ -27,11 +27,13 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     ProjectInformation.displayName
   )
 
-  SPDataAdapter.configure(props.webPartContext, {
-    siteId: props.siteId,
-    webUrl: props.webUrl,
-    logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-  })
+  if (!SPDataAdapter.isConfigured) {
+    SPDataAdapter.configure(props.webPartContext, {
+      siteId: props.siteId,
+      webUrl: props.webUrl,
+      logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+    })
+  }
 
   /**
    * Add message
@@ -79,7 +81,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
         props.webUrl,
         strings.ProjectPropertiesListName,
         state.data.templateParameters.ProjectContentTypeId ??
-          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: props.webTitle }
       )
       if (!created) {

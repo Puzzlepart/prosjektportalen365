@@ -28,7 +28,8 @@ export abstract class BaseProjectWebPart<
       webTitle: this.context.pageContext.web.title,
       isSiteAdmin: this.context.pageContext.legacyPageContext.isSiteAdmin,
       displayMode: this.displayMode,
-      pageContext: this.context.pageContext
+      pageContext: this.context.pageContext,
+      webPartContext: this.context
     }
 
     const element = React.createElement(component, combinedProps)

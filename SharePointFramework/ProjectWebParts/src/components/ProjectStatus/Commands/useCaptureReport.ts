@@ -2,9 +2,9 @@ import moment from 'moment'
 import domToImage from 'dom-to-image'
 
 /**
- * Hook for capturing a report.
+ * Hook for capturing a report using dom-to-image.
  *
- * @returns A function callback
+ * @returns A function callback taking the report title as a parameter
  */
 export function useCaptureReport() {
   return async (title: string | number | boolean) => {
