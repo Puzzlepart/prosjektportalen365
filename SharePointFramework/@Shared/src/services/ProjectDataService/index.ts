@@ -155,12 +155,13 @@ export class ProjectDataService {
 
       const modifiedSourceUrl = !sourceUrl.includes(welcomepage)
         ? sourceUrl
-          .replace('#syncproperties=1', `/${welcomepage}#syncproperties=1`)
-          .replace('//SitePages', '/SitePages')
+            .replace('#syncproperties=1', `/${welcomepage}#syncproperties=1`)
+            .replace('//SitePages', '/SitePages')
         : sourceUrl
 
       const editFormUrl = makeUrlAbsolute(
-        `${propertyItemContext.defaultEditFormUrl}?ID=${propertyItemContext.itemId
+        `${propertyItemContext.defaultEditFormUrl}?ID=${
+          propertyItemContext.itemId
         }&Source=${encodeURIComponent(modifiedSourceUrl)}`
       )
 
@@ -297,7 +298,7 @@ export class ProjectDataService {
    * Get checklist data from the specified list as an object.
    *
    * @param listName List name
-   * 
+   *
    * @returns An object with term GUID as the key, and the items for the term GUID
    * as the value.
    */

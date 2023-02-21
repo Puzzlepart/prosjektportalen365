@@ -37,7 +37,9 @@ export class PortalDataService {
    *
    * @param configuration Configuration for PortalDataService
    */
-  public async configure(configuration: IPortalDataServiceConfiguration): Promise<PortalDataService> {
+  public async configure(
+    configuration: IPortalDataServiceConfiguration
+  ): Promise<PortalDataService> {
     this._configuration = { ...PortalDataServiceDefaultConfiguration, ...configuration }
     const hubSite = await this.getHubSite()
     this.web = hubSite.web
@@ -54,23 +56,32 @@ export class PortalDataService {
     try {
       const hubSiteId = this._configuration.pageContext.legacyPageContext.hubSiteId || ''
       try {
-        const { SiteUrl } = await (await fetch(`${this._configuration.pageContext.web.absoluteUrl}/_api/HubSites/GetById('${hubSiteId}')`, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json;odata=nometadata'
-          },
-          credentials: 'include',
-        })).json()
-        return ({ url: SiteUrl, web: new Web(SiteUrl) })
+        const { SiteUrl } = await (
+          await fetch(
+            `${this._configuration.pageContext.web.absoluteUrl}/_api/HubSites/GetById('${hubSiteId}')`,
+            {
+              method: 'GET',
+              headers: {
+                Accept: 'application/json;odata=nometadata'
+              },
+              credentials: 'include'
+            }
+          )
+        ).json()
+        return { url: SiteUrl, web: new Web(SiteUrl) }
       } catch (error) {
-        const SiteUrl = await new PnPClientStorage().local.getOrPut(`hubsite_${hubSiteId.replace(/-/g, '')}_url`, async () => {
-          const { PrimarySearchResults } = await sp.search({
-            Querytext: `SiteId:${hubSiteId} contentclass:STS_Site`,
-            SelectProperties: ['Path'],
-          })
-          return PrimarySearchResults[0] ? PrimarySearchResults[0].Path : ''
-        }, expire)
-        return ({ url: SiteUrl, web: new Web(SiteUrl) })
+        const SiteUrl = await new PnPClientStorage().local.getOrPut(
+          `hubsite_${hubSiteId.replace(/-/g, '')}_url`,
+          async () => {
+            const { PrimarySearchResults } = await sp.search({
+              Querytext: `SiteId:${hubSiteId} contentclass:STS_Site`,
+              SelectProperties: ['Path']
+            })
+            return PrimarySearchResults[0] ? PrimarySearchResults[0].Path : ''
+          },
+          expire
+        )
+        return { url: SiteUrl, web: new Web(SiteUrl) }
       }
     } catch (err) {
       throw err
@@ -167,7 +178,7 @@ export class PortalDataService {
     if (attachment) {
       try {
         await list.items.getById(report.id).attachmentFiles.addMultiple([attachment])
-      } catch (error) { }
+      } catch (error) {}
     }
     try {
       await list.items.getById(report.id).update(properties)
@@ -313,7 +324,7 @@ export class PortalDataService {
           fieldToCreate.updateAndPushChanges(true)
         }
         await executeQuery(jsomContext)
-      } catch (error) { }
+      } catch (error) {}
     }
     try {
       Logger.log({
@@ -329,7 +340,7 @@ export class PortalDataService {
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch { }
+    } catch {}
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }
@@ -445,7 +456,8 @@ export class PortalDataService {
     useCaching = true
   }: GetStatusReportsOptions): Promise<StatusReport[]> {
     if (!this._configuration.pageContext) throw 'Property pageContext missing in configuration'
-    if (stringIsNullOrEmpty(filter)) filter = `GtSiteId eq '${this._configuration.pageContext.site.id.toString()}'`
+    if (stringIsNullOrEmpty(filter))
+      filter = `GtSiteId eq '${this._configuration.pageContext.site.id.toString()}'`
     try {
       let items = this.web.lists
         .getByTitle(this._configuration.listNames.PROJECT_STATUS)
