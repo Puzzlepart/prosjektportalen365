@@ -13,6 +13,7 @@ import {
   TaskAttachment,
   TaskPreviewType
 } from '../PlannerConfiguration'
+import _ from 'underscore'
 
 export class CopyListData extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -23,7 +24,12 @@ export class CopyListData extends BaseTask {
    * Execute CopyListData.
    *
    * Creates a Planner plan for the Microsoft 365 group, then loops
-   * through all list data configurations.
+   * through all list data configurations. For each configuration,
+   * it will either create a Planner plan or copy list items based
+   * on the configuration type.
+   * 
+   * If there's no Planner configuration, it will create a default 
+   * one.
    *
    * @param params Task parameters
    * @param onProgress On progress function
@@ -34,13 +40,7 @@ export class CopyListData extends BaseTask {
   ): Promise<IBaseTaskParams> {
     this.onProgress = onProgress
     try {
-      await new PlannerConfiguration(null, this.data, {}).ensurePlan(
-        {
-          title: params.context.pageContext.web.title,
-          owner: params.context.pageContext.legacyPageContext.groupId
-        },
-        false
-      )
+      await this.createDefaultPlannerPlan(params)
       for (let i = 0; i < this.data.selectedContentConfig.length; i++) {
         const contentConfig = this.data.selectedContentConfig[i]
         await contentConfig.load()
@@ -56,32 +56,7 @@ export class CopyListData extends BaseTask {
                 'GtAttachments',
                 'GtPlannerPreviewType'
               ])
-              const configuration = items.reduce((obj, item) => {
-                obj[item.GtCategory] = obj[item.GtCategory] || {}
-                const taskDetails: ITaskDetails = {}
-                taskDetails.previewType = 'automatic'
-                if (!stringIsNullOrEmpty(item.GtDescription)) {
-                  taskDetails.description = item.GtDescription
-                }
-                if (!stringIsNullOrEmpty(item.GtChecklist)) {
-                  taskDetails.checklist = item.GtChecklist.split(';')
-                }
-                if (!stringIsNullOrEmpty(item.GtAttachments)) {
-                  try {
-                    taskDetails.attachments = item.GtAttachments.split('|')
-                      .map((str) => new TaskAttachment(str))
-                      .filter((attachment) => !stringIsNullOrEmpty(attachment.url))
-                  } catch (error) {}
-                }
-                if (!stringIsNullOrEmpty(item.GtPlannerPreviewType)) {
-                  let m: RegExpExecArray
-                  if ((m = /\(([^)]+)\)/.exec(item.GtPlannerPreviewType)) !== null) {
-                    taskDetails.previewType = (m[1] ?? 'automatic') as TaskPreviewType
-                  }
-                }
-                obj[item.GtCategory][item.Title] = taskDetails
-                return obj
-              }, {})
+              const configuration = this.parsePlannerConfiguration(items)
               await new PlannerConfiguration(contentConfig.plannerTitle, this.data, configuration, [
                 'Metodikk'
               ]).execute(params, onProgress)
@@ -99,6 +74,57 @@ export class CopyListData extends BaseTask {
       return params
     } catch (error) {
       throw new BaseTaskError(this.taskName, strings.CopyListDataErrorMessage, error)
+    }
+  }
+
+  /**
+   * Parses Planner configuration from Planner task items.
+   * 
+   * @param items Planner task items
+   */
+  private parsePlannerConfiguration(items: IPlannerTaskSPItem[]) {
+    return items.reduce((obj, item) => {
+      obj[item.GtCategory] = obj[item.GtCategory] || {}
+      const taskDetails: ITaskDetails = {}
+      taskDetails.previewType = 'automatic'
+      if (!stringIsNullOrEmpty(item.GtDescription)) {
+        taskDetails.description = item.GtDescription
+      }
+      if (!stringIsNullOrEmpty(item.GtChecklist)) {
+        taskDetails.checklist = item.GtChecklist.split(';')
+      }
+      if (!stringIsNullOrEmpty(item.GtAttachments)) {
+        try {
+          taskDetails.attachments = item.GtAttachments.split('|')
+            .map((str) => new TaskAttachment(str))
+            .filter((attachment) => !stringIsNullOrEmpty(attachment.url))
+        } catch (error) { }
+      }
+      if (!stringIsNullOrEmpty(item.GtPlannerPreviewType)) {
+        let m: RegExpExecArray
+        if ((m = /\(([^)]+)\)/.exec(item.GtPlannerPreviewType)) !== null) {
+          taskDetails.previewType = (m[1] ?? 'automatic') as TaskPreviewType
+        }
+      }
+      obj[item.GtCategory][item.Title] = taskDetails
+      return obj
+    }, {})
+  }
+
+  /**
+   * Creates a default Planner plan if there's no Planner configuration.
+   * 
+   * @param params Task parameters
+   */
+  private async createDefaultPlannerPlan(params: IBaseTaskParams) {
+    if (!_.any(this.data.selectedContentConfig, (c) => c.type === ContentConfigType.Planner)) {
+      await new PlannerConfiguration(null, this.data, {}).ensurePlan(
+        {
+          title: params.context.pageContext.web.title,
+          owner: params.context.pageContext.legacyPageContext.groupId
+        },
+        false
+      )
     }
   }
 
@@ -221,9 +247,8 @@ export class CopyListData extends BaseTask {
   ): Promise<void> {
     try {
       await folders.sort().reduce((chain: Promise<any>, folder, index: number) => {
-        const folderServerRelUrl = `${
-          config.destListProps.RootFolder.ServerRelativeUrl
-        }/${folder.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
+        const folderServerRelUrl = `${config.destListProps.RootFolder.ServerRelativeUrl
+          }/${folder.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
         this.onProgress(
           progressText,
           format(strings.ProcessFolderText, index + 1, folders.length),
@@ -276,9 +301,8 @@ export class CopyListData extends BaseTask {
       const filesCopied = []
       for (let i = 0; i < filesWithContents.length; i++) {
         const file = filesWithContents[i]
-        const destFolderUrl = `${
-          config.destListProps.RootFolder.ServerRelativeUrl
-        }${file.FileDirRef.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
+        const destFolderUrl = `${config.destListProps.RootFolder.ServerRelativeUrl
+          }${file.FileDirRef.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
         try {
           this.logInformation(`Copying file ${file.LinkFilename}`)
           this.onProgress(
@@ -292,7 +316,7 @@ export class CopyListData extends BaseTask {
             .files.add(filename, file.Blob, true)
           filesCopied.push(fileAddResult)
           this.logInformation(`Successfully copied file ${file.LinkFilename}`)
-        } catch (err) {}
+        } catch (err) { }
       }
       return filesCopied
     } catch (error) {
@@ -339,3 +363,4 @@ export class CopyListData extends BaseTask {
     }, {})
   }
 }
+
