@@ -35,8 +35,8 @@ Write-Host "[SUCCESS] Post-install action: Ensured default project templates" -F
 Write-Host "[INFO] Post-install action: Adding list content to template setup"
 
 $TemplateSetupMap = @{
-    "Bygg"   = "Byggprosjekt";
-    "Anlegg" = "Anleggsprosjekt";
+    "Bygg"     = "Byggprosjekt";
+    "Anlegg"   = "Anleggsprosjekt";
     "Standard" = "Standardmal"
 }
 
@@ -56,17 +56,18 @@ $TemplateOptions = Get-PnPListItem -List Maloppsett
 
 $Standard = $TemplateOptions | Where-Object { $_["Title"] -eq $TemplateSetupMap["Standard"] }
 if ($Standard) {
-$StandardPlanner = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["PlannerStandard"] }
-$StandardPhaseChecklist = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["FasesjekkStandard"] }
+    $StandardPlanner = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["PlannerStandard"] }
+    $StandardPhaseChecklist = $ListContent | Where-Object { $_["Title"] -eq $ListContentMap["FasesjekkStandard"] }
 
-$StandardItems = @()
-$StandardItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $StandardPlanner.Id }
-$StandardItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $StandardPhaseChecklist.Id }
+    $StandardItems = @()
+    $StandardItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $StandardPlanner.Id }
+    $StandardItems += [Microsoft.SharePoint.Client.FieldLookupValue]@{"LookupId" = $StandardPhaseChecklist.Id }
 
-$Standard["ListContentConfigLookup"] = $StandardItems
-$Standard.SystemUpdate()
-$Standard.Context.ExecuteQuery()
-} else {
+    $Standard["ListContentConfigLookup"] = $StandardItems
+    $Standard.SystemUpdate()
+    $Standard.Context.ExecuteQuery()
+}
+else {
     Write-Host "[WARNING] Failed to find Standardmal template. Please check the Maloppsett list." -ForegroundColor Yellow
 }
 $Bygg = $TemplateOptions | Where-Object { $_["Title"] -eq $TemplateSetupMap["Bygg"] }
@@ -81,7 +82,8 @@ if ($Bygg) {
     $Bygg["ListContentConfigLookup"] = $ByggItems
     $Bygg.SystemUpdate()
     $Bygg.Context.ExecuteQuery()
-} else {
+}
+else {
     Write-Host "[WARNING] Failed to find Byggprosjekt template. Please check the Maloppsett list." -ForegroundColor Yellow
 }
 $Anlegg = $TemplateOptions | Where-Object { $_["Title"] -eq $TemplateSetupMap["Anlegg"] }
@@ -96,6 +98,7 @@ if ($Anlegg) {
     $Anlegg["ListContentConfigLookup"] = $AnleggItems
     $Anlegg.SystemUpdate()
     $Anlegg.Context.ExecuteQuery()
-} else {
+}
+else {
     Write-Host "[WARNING] Failed to find Anleggsprosjekt template. Please check the Maloppsett list." -ForegroundColor Yellow
 }
