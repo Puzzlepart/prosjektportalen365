@@ -352,7 +352,38 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Fetch data
+   * Get templates from portal site. Checks for locked template in property bag,
+   * and if found, returns only that template. Otherwise, returns all templates.
+   */
+  private async _getTemplates() {
+    const propertyBagRegex = /^pp_.*_template$/
+    const webAllProperties = (
+      await sp.web.select('Title', 'AllProperties').expand('AllProperties').get()
+    )['AllProperties']
+    const templateProperty = Object.keys(webAllProperties).find((key) => propertyBagRegex.test(key))
+    const templateName = webAllProperties[templateProperty]
+
+    let templateViewXml = '<View></View>'
+    if (templateName) {
+      templateViewXml = `<View Scope="RecursiveAll">
+        <Query><Where><And>
+          <Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq>
+          <Eq><FieldRef Name="Title" /><Value Type="Text">${templateName}</Value></Eq>
+        </And></Where></Query>
+      </View>`
+    }
+    return this._portal.getItems(
+      this.properties.templatesLibrary,
+      ProjectTemplate,
+      {
+        ViewXml: templateViewXml
+      },
+      ['FieldValuesAsText']
+    )
+  }
+
+  /**
+   * Fetch data from SharePoint and initializes the MSGraphHelper.
    */
   private async _fetchData(): Promise<IProjectSetupData> {
     try {
@@ -361,15 +392,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       this._portal = await new PortalDataService().configure({
         pageContext: this.context.pageContext as any
       })
+
       const [_templates, extensions, contentConfig, templateFiles] = await Promise.all([
-        this._portal.getItems(
-          this.properties.templatesLibrary,
-          ProjectTemplate,
-          {
-            ViewXml: '<View></View>'
-          },
-          ['FieldValuesAsText']
-        ),
+        this._getTemplates(),
         this.properties.extensionsLibrary
           ? this._portal.getItems(
               this.properties.extensionsLibrary,
@@ -393,6 +418,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           ['File']
         )
       ])
+
       const templates = _templates.map((tmpl) => {
         const [tmplFile] = templateFiles.filter((file) => file.id === tmpl.projectTemplateId)
         tmpl.projectTemplateUrl = tmplFile?.serverRelativeUrl

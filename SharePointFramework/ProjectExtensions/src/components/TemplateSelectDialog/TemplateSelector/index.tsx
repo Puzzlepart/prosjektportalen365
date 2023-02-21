@@ -38,6 +38,7 @@ export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
               {...(inputProps as ISearchBoxProps)}
               iconProps={context.state.selectedTemplate?.iconProps}
               clearButtonProps={{ title: strings.TemplateSelectorSearchClearText }}
+              disabled={context.props.data.templates.length === 1}
               onClear={(event) => {
                 event.stopPropagation()
                 event.preventDefault()

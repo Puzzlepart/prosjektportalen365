@@ -8,7 +8,7 @@ Alle sjekkpunktene under må være sjekket av og godkjent for at vi skal kunne m
 
 - [ ] Sjekk at din branch ikke feiler på `linting`.
 - [ ] Legg ved beskrivelse i [CHANGELOG](https://github.com/Puzzlepart/prosjektportalen365/blob/dev/CHANGELOG.md), markert med **ID av issue** knyttet til PR-en
-- [ ] Anig korrekt `Milestone` på PR-en og issuet
+- [ ] Angi korrekt `Milestone` på PR-en og issuet
 - [ ] Tilegn deg selv PR-en og legg til `labels`
 
 ### Beskrivelse
