@@ -15,11 +15,13 @@ import { INIT_DATA } from './reducer'
  */
 const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = async (props) => {
   try {
-    SPDataAdapter.configure(props.webPartContext, {
-      siteId: props.siteId,
-      webUrl: props.webUrl,
-      logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-    })
+    if (!SPDataAdapter.isConfigured) {
+      SPDataAdapter.configure(props.webPartContext, {
+        siteId: props.siteId,
+        webUrl: props.webUrl,
+        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+      })
+    }
     const [phaseFieldCtx, checklistData, welcomePage, properties] = await Promise.all([
       SPDataAdapter.getTermFieldContext(props.phaseField),
       SPDataAdapter.project.getChecklistData(strings.PhaseChecklistName),

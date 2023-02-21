@@ -48,6 +48,7 @@ og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed a bug where parts of 'Fasevelger' webpart didn't show properly [#920](https://github.com/Puzzlepart/prosjektportalen365/issues/920)
 - Fixed a bug where '? Hjelp tilgjengelig' div rendered as empty line if a page didn't have help content [#974](https://github.com/Puzzlepart/prosjektportalen365/issues/974)
 - Fixed a bug where planner plans without 'Plannername' in 'ListContent' failed under ProjectSetup [#976](https://github.com/Puzzlepart/prosjektportalen365/issues/976)
+- Fixed a bug where save snapshot didn't work in Project Status [#955](https://github.com/Puzzlepart/prosjektportalen365/issues/955)
 
 ---
 
