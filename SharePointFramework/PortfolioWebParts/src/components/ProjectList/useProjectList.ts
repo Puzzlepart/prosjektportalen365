@@ -101,7 +101,9 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   const projects = state.isDataLoaded ? filterProjets(state.projects) : state.projects
-  const views = props.views.filter((view) => !props.hideViews.includes(view.itemKey) && (!view.isHidden || !view?.isHidden(state)))
+  const views = props.views.filter(
+    (view) => !props.hideViews.includes(view.itemKey) && (!view.isHidden || !view?.isHidden(state))
+  )
 
   useProjectListDataFetch(props, views, setState)
 
@@ -111,9 +113,10 @@ export const useProjectList = (props: IProjectListProps) => {
     projects,
     views,
     getCardActions,
-    searchBoxPlaceholder: (!state.isDataLoaded || state.projects.length === 0)
-      ? ''
-      : format(state.selectedView.searchBoxPlaceholder, projects.length),
+    searchBoxPlaceholder:
+      !state.isDataLoaded || state.projects.length === 0
+        ? ''
+        : format(state.selectedView.searchBoxPlaceholder, projects.length),
     onListSort,
     onSearch
   } as const
