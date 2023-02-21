@@ -122,10 +122,10 @@ export class ProjectDataService {
   /**
    * Get property item from site
    *
-   * @param urlSource Url source
+   * @param sourceUrl Source url to append to edit form url
    */
   private async _getPropertyItem(
-    urlSource: string = document.location.href
+    sourceUrl: string = document.location.href
   ): Promise<IGetPropertiesData> {
     try {
       const propertyItemContext = await this._getPropertyItemContext()
@@ -147,20 +147,25 @@ export class ProjectDataService {
           .filter("substringof('Gt', InternalName)")
           .usingCaching()
           .get(),
-          this.getWelcomePage()
+        this.getWelcomePage()
       ])
 
-      urlSource = !urlSource.includes(welcomepage)
-        ? urlSource
-            .replace('#syncproperties=1', `/${welcomepage}#syncproperties=1`)
-            .replace('//SitePages', '/SitePages')
-        : urlSource
+      // eslint-disable-next-line no-console
+      console.log('_getPropertyItem', welcomepage)
+
+      const modifiedSourceUrl = !sourceUrl.includes(welcomepage)
+        ? sourceUrl
+          .replace('#syncproperties=1', `/${welcomepage}#syncproperties=1`)
+          .replace('//SitePages', '/SitePages')
+        : sourceUrl
 
       const editFormUrl = makeUrlAbsolute(
-        `${propertyItemContext.defaultEditFormUrl}?ID=${
-          propertyItemContext.itemId
-        }&Source=${encodeURIComponent(urlSource)}`
+        `${propertyItemContext.defaultEditFormUrl}?ID=${propertyItemContext.itemId
+        }&Source=${encodeURIComponent(modifiedSourceUrl)}`
       )
+
+      // eslint-disable-next-line no-console
+      console.log('_getPropertyItem', editFormUrl)
       const versionHistoryUrl = `${this._params.webUrl}/_layouts/15/versions.aspx?list=${propertyItemContext.listId}&ID=${propertyItemContext.itemId}`
       return {
         fieldValuesText,
@@ -345,15 +350,16 @@ export class ProjectDataService {
     })
   }
 
-    /**
-   * Get welcome page of the web
+  /**
+   * Get welcome page for the project web. If the user doesn't have access to the root folder,
+   * the default page will be returned.
    */
   public async getWelcomePage() {
     try {
-      const { WelcomePage } = await this.web.rootFolder.select('welcomepage').get()
+      const { WelcomePage } = await this.web.rootFolder.select('WelcomePage').get()
       return WelcomePage
     } catch (error) {
-      return 'SitePages/ProjectHome.aspx' //Visitors doesn't have access to rootFolder
+      return 'SitePages/ProjectHome.aspx'
     }
   }
 }
