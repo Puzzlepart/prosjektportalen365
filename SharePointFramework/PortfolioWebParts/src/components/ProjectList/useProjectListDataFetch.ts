@@ -4,7 +4,8 @@ import _ from 'underscore'
 import { IProjectListProps, IProjectListState, IProjectListView } from './types'
 
 /**
- * Component data fetch hook for `ProjectList`.
+ * Component data fetch hook for `ProjectList`. This hook is responsible for
+ * fetching data and setting state.
  *
  * @param props Props
  * @param views Views
