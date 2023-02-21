@@ -8,7 +8,8 @@ import { useProjectListDataFetch } from './useProjectListDataFetch'
 import { useProjectListState } from './useProjectListState'
 
 /**
- * Component logic hook for `ProjectList`.
+ * Component logic hook for `ProjectList`. This hook is responsible for
+ * fetching data, sorting, filtering and other logic.
  *
  * @param props Props
  */
@@ -100,7 +101,7 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   const projects = state.isDataLoaded ? filterProjets(state.projects) : state.projects
-  const views = props.views.filter((view) => !props.hideViews.includes(view.itemKey))
+  const views = props.views.filter((view) => !props.hideViews.includes(view.itemKey) && (!view.isHidden || !view?.isHidden(state)))
 
   useProjectListDataFetch(props, views, setState)
 

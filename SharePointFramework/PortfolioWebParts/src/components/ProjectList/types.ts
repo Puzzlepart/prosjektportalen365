@@ -4,15 +4,39 @@ import { ProjectListModel } from 'models'
 import { IBaseComponentProps } from '../types'
 
 export interface IProjectListView extends IPivotItemProps {
+  /**
+   * Placeholder text for search box.
+   */
   searchBoxPlaceholder?: string
+
+  /**
+   * Filter function for projects. If not provided, all projects are shown.
+   * 
+   * @param project Project list model
+   */
   filter?: (project?: ProjectListModel) => boolean
+
+  /**
+   * Function to get header button props. If not provided, the default button props are used.
+   * 
+   * @param state State of the component
+   */
   getHeaderButtonProps?: (
     state: IProjectListState
   ) =>
     | IButtonProps
     | {
-        [key: string]: string | number | boolean
-      }
+      [key: string]: string | number | boolean
+    }
+
+  /**
+   * Function to determine if the view should be hidden. If not provided, the view is not hidden.
+   * 
+   * @param state State of the component
+   */
+  isHidden?: (
+    state: IProjectListState
+  ) => boolean
 }
 
 export type ProjectListRenderMode = 'tiles' | 'list'
@@ -34,17 +58,17 @@ export interface IProjectListProps extends IBaseComponentProps {
   showViewSelector?: boolean
 
   /**
-   * Show Project Logo
+   * Show Project Logo on the project card
    */
   showProjectLogo?: boolean
 
   /**
-   * Show Project Owner
+   * Show Project Owner on the project card 
    */
   showProjectOwner?: boolean
 
   /**
-   * Show Project Manager
+   * Show Project Manager on the project card
    */
   showProjectManager?: boolean
 
@@ -59,12 +83,12 @@ export interface IProjectListProps extends IBaseComponentProps {
   defaultView?: string
 
   /**
-   * Hide views
+   * Array of views to hide
    */
   hideViews?: string[]
 
   /**
-   * Views
+   * Views to show using Pivot component
    */
   views?: IProjectListView[]
 }
