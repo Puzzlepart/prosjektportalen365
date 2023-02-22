@@ -42,7 +42,17 @@ Det er nå mulig å knytte nye prosjekter opp mot `FNs bærekraftsmål`. Dette g
 
 ## 'Tilgang til'-vertikal på forsiden
 
+Tidligere var det kun mulig å se prosjekter på portalforsiden der du som bruker var lagt inn i Microsoft 365-gruppen for prosjektet. Med `Tilgang til` ser du også alle prosjekter du har blitt tildelt tilgang til via SharePoint-grupper.
+
+![image](./assets/tilgang-til-vertikal.png)
+
+Visningen kan skjules som en global innstilling.
+
+![image](./assets/tilgang-til-visning.png)
+
 ## Statusrapport i prosjektinformasjon
+
+Kjente ikoner fra statusrapport vises nå på prosjektforsiden
 
 ## Etiketter på prosjektleveranser
 
