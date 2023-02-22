@@ -8,19 +8,31 @@
 
 Velkommen til versjon 1.8.0 av Prosjektportalen 365. Det er flere grunnleggende endringer i løsningen som gjør det verdt å oppgardere til siste versjon. Her er noen av høydepunktene:
 
-- **[Bygg- og anleggsmodulen](#bygg--og-anleggsmodulen)** - Modulen er nå en del av standardpakken
+- **[Rettighetsstyring av komponenter](#rettighetsstyring-av-komponenter)** - Styre hvilke roller som har tilgang til hva
+- **[Søkeboks i prosjektoppsett dialog](#søkeboks-i-prosjektoppsett-dialog)** - Det er nå støtte for søk i prosjektoppsett dialog
+- **[Overordnede prosjekter i prosjektinformasjon](#overordnede-prosjekter-i-prosjektinformasjon)** - Visning av overordnede prosjekter som prosjektet er tilknyttet til
+- **[Statusrapport i prosjektinformasjon](#statusrapport-i-prosjektinformasjon)** - Kjente ikoner fra statusrapport vises nå på prosjektforsiden
 - **[Flere planner planer](#flere-planner-planer)** - Opprett prosjekter med flere planner planer per prosjekt
 - **['Tilgang til'-vertikal på forsiden](#tilgang-til-vertikal-på-forsiden)** - Mulighet for å se alle prosjekter du har tilgang til
-- **[Statusrapport i prosjektinformasjon](#statusrapport-i-prosjektinformasjon)** - Kjente ikoner fra statusrapport vises nå på prosjektforsiden
-- **[Søkeboks i prosjektoppsett dialog](#søkeboks-i-prosjektoppsett-dialog)** - Det er nå støtte for søk i prosjektoppsett dialog
-
-## Bygg- og anleggsmodulen
-
-Bygg- og anleggsmodulen er nå tatt inn som en integrert del av Prosjektportalen 365. Det innebærer at denne blir automatisk installert når Prosjektportalen 365 installeres.
-
-For kunder som skal oppgradere fra tidligere versjon, må følgende parameter legges til for å få med standardinnholdet i Bygg- og anleggsmodulen. `-IncludeBAContent`
+- **[Bygg- og anleggsmodulen](#bygg--og-anleggsmodulen)** - Modulen er nå en del av standardpakken
 
 ![image](./assets/ba-mal.png)
+
+## Rettighetsstyring av komponenter
+
+Lorem ipsum dolor sit amet.
+
+## Søkeboks i Prosjektoppsett dialog
+
+Lorem ipsum dolor sit amet.
+
+## Overordnede prosjekter i prosjektinformasjon
+
+Lorem ipsum dolor sit amet.
+
+## Statusrapport i prosjektinformasjon
+
+Kjente ikoner fra statusrapport vises nå på prosjektforsiden
 
 ## Flere planner planer
 
@@ -50,16 +62,16 @@ Visningen kan skjules som en global innstilling.
 
 ![image](./assets/tilgang-til-visning.png)
 
-## Statusrapport i prosjektinformasjon
-
-Kjente ikoner fra statusrapport vises nå på prosjektforsiden
-
 ## Etiketter på prosjektleveranser
 
 Det er mulig å vise etiketter for Prosjektleveranser på prosjektets tidslinje
 
-## Søkeboks i Prosjektoppsett dialog
-
 ## Konfigurasjon av tekstfarge på prosjekttidslinje
 
 Støtte for selvvalgte tekstfarger i prosjekttidslinje
+
+## Bygg- og anleggsmodulen
+
+Bygg- og anleggsmodulen er nå tatt inn som en integrert del av Prosjektportalen 365. Det innebærer at denne blir automatisk installert når Prosjektportalen 365 installeres.
+
+For kunder som skal oppgradere fra tidligere versjon, må følgende parameter legges til for å få med standardinnholdet i Bygg- og anleggsmodulen. `-IncludeBAContent`
