@@ -32,7 +32,7 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   /**
-   * Get card ations
+   * Get card ations. For now only `ON_SELECT_PROJECT` is handled.
    *
    * @param project - Project
    */
@@ -47,7 +47,7 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   /**
-   * On execute card action
+   * On execute card action. For now only `ON_SELECT_PROJECT` is handled.
    *
    * @param event - Event
    * @param project - Project
@@ -63,7 +63,7 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   /**
-   * Filter projects based on `selectedView` and `searchTerm`
+   * Filter projects based on `selectedView` and `searchTerm`.
    *
    * @param projects - Projects
    */
@@ -76,7 +76,7 @@ export const useProjectList = (props: IProjectListProps) => {
           return (
             value &&
             typeof value === 'string' &&
-            value.toLowerCase().indexOf(state.searchTerm) !== -1
+            value.toLowerCase().indexOf(state.searchTerm.toLowerCase()) !== -1
           )
         })
       )
@@ -91,13 +91,13 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   /**
-   * On search callback
+   * On search callback handler
    *
    * @param _event - React change event
    * @param searchTerm - Search term
    */
   function onSearch(_event: React.ChangeEvent<HTMLInputElement>, searchTerm: string) {
-    setState({ searchTerm: searchTerm.toLowerCase() })
+    setState({ searchTerm })
   }
 
   const projects = state.isDataLoaded ? filterProjets(state.projects) : state.projects

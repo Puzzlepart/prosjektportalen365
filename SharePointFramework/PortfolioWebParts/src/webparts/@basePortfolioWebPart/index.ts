@@ -18,7 +18,12 @@ export abstract class BasePortfolioWebPart<
   public abstract render(): void
 
   /**
-   * Render component
+   * Render component specified in `component` parameter, with the props 
+   * specified in `props` parameter. The props will be merged with the
+   * web part properties and the following props:
+   * - `pageContext`
+   * - `dataAdapter`
+   * - `displayMode`
    *
    * @param component Component
    * @param props Props

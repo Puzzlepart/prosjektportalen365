@@ -130,6 +130,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
                 <div className={styles.searchBox} hidden={!props.showSearchBox}>
                   <SearchBox
                     disabled={!state.isDataLoaded || isEmpty(state.projects)}
+                    value={state.searchTerm}
                     placeholder={searchBoxPlaceholder}
                     onChange={onSearch}
                   />
