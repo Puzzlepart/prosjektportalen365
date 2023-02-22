@@ -99,7 +99,14 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
         </span>
       )
     default:
-      return columnValue
+      switch (column.fieldName) {
+        case 'Title': {
+          return <Link href={item.Path} rel='noopener noreferrer' target='_blank'>{columnValue}</Link>
+        }
+        default: {
+          return columnValue
+        }
+      }
   }
 }
 
