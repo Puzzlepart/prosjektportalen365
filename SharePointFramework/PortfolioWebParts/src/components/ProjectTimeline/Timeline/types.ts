@@ -11,12 +11,51 @@ export type TimelineTimeframe = [
 
 export interface ITimelineProps
   extends Pick<ICommandsProps, 'onGroupByChange' | 'isGroupByEnabled' | 'defaultGroupBy'> {
+  /**
+   * Timeline default timeframe
+   */
   defaultTimeframe?: TimelineTimeframe
+
+  /**
+   * Timeline groups. Array of interface `ITimelineGroup`
+   */
   groups: ITimelineGroup[]
+
+  /**
+   * Timeline items. Array of interface `ITimelineItem`
+   */
   items: ITimelineItem[]
+
+  /**
+   * Timeline filters. Array of interface `IFilterProps`
+   */
   filters: IFilterProps[]
+
+  /**
+   * Callback function for when the filter changes.
+   *
+   * @param column Column
+   * @param selectedItems Selected items
+   */
   onFilterChange: (column: IColumn, selectedItems: IFilterItemProps[]) => void
+
+  /**
+   * Information text
+   */
   infoText?: string
+
+  /**
+   * Title of the timeline
+   */
   title?: string
+
+  /**
+   * Hide sidebar (defaults to `false`)
+   */
   hideSidebar?: boolean
+
+  /**
+   * Show information text above the timeline (defaults to `true`)
+   */
+  showInfoText?: boolean
 }
