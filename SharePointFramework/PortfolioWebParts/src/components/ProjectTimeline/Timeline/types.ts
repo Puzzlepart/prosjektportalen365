@@ -11,7 +11,6 @@ export type TimelineTimeframe = [
 
 export interface ITimelineProps
   extends Pick<ICommandsProps, 'onGroupByChange' | 'isGroupByEnabled' | 'defaultGroupBy'> {
-
   /**
    * Timeline default timeframe
    */
@@ -34,9 +33,9 @@ export interface ITimelineProps
 
   /**
    * Callback function for when the filter changes.
-   * 
+   *
    * @param column Column
-   * @param selectedItems Selected items 
+   * @param selectedItems Selected items
    */
   onFilterChange: (column: IColumn, selectedItems: IFilterItemProps[]) => void
 

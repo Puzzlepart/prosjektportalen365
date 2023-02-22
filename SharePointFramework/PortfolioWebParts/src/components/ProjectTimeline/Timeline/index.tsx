@@ -43,7 +43,7 @@ export const Timeline: FC<ITimelineProps> = (props) => {
           <div className={styles.title}>{props.title}</div>
         </div>
       )}
-      {(props.showInfoText && props.infoText) && (
+      {props.showInfoText && props.infoText && (
         <div className={styles.infoText}>
           <MessageBar>
             <div
