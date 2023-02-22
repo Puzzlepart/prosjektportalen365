@@ -1,7 +1,9 @@
 Formatet er basert på [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## 1.8.0 - TBA
+Sjekk ut [release notes](./releasenotes/LATEST.md) for mer detaljert 'changelog' av siste versjon.
+
+## 1.8.0 - 28.02.2023
 
 ### Ny funksjonalitet
 
