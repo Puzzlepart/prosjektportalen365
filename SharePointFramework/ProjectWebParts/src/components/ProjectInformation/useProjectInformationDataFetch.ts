@@ -78,7 +78,9 @@ const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolea
 }
 
 /**
- * Fetch data for `ProjectInformation`
+ * Fetch data for `ProjectInformation` component.
+ *
+ * @remarks This function is used in `useProjectInformationDataFetch` hook.
  */
 const fetchData: DataFetchFunction<
   IProjectInformationProps,

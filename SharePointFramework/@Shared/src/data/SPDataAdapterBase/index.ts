@@ -65,7 +65,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
     sp.setup({ spfxContext, ...this.spConfiguration })
     this.sp = sp
     this.portal = await new PortalDataService().configure({
-      pageContext: spfxContext.pageContext,
+      pageContext: spfxContext.pageContext
     })
     this.entityService = new SpEntityPortalService({
       portalUrl: this.portal.url,
@@ -165,7 +165,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                       ).length > 0
                     )
                       userPermissions.push(...role.permissions)
-                  } catch { }
+                  } catch {}
                 }
                 break
             }
