@@ -51,6 +51,7 @@ og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed a bug where save snapshot didn't work in Project Status [#955](https://github.com/Puzzlepart/prosjektportalen365/issues/955)
 - Fixed bug with the Project List web part where guests could see the "All Projects" tab [#996](https://github.com/Puzzlepart/prosjektportalen365/issues/996)
 - Persist search box state when switching tabs in the Project List web part [#989](https://github.com/Puzzlepart/prosjektportalen365/issues/989)
+- Timeline for a program's projects no longer displays information message - the link was not working [#995](https://github.com/Puzzlepart/prosjektportalen365/issues/995)
 
 ---
 
