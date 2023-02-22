@@ -228,7 +228,7 @@ export default (props: IPortfolioAggregationProps) =>
     },
     [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {
       const { column } = payload
-      if (column) {
+      if (column && column.fieldName !== state.groupBy?.fieldName) {
         state.items = sortArray([...state.items], [column.fieldName])
         state.groupBy = column
         const groupNames: string[] = state.items.map((g) =>
@@ -252,6 +252,14 @@ export default (props: IPortfolioAggregationProps) =>
           })
       } else {
         state.groups = null
+        state.groupBy = null
+        state.items = state.items = sortArray(
+          [...state.items],
+          [state.sortBy?.fieldName ? state.sortBy.fieldName : 'SiteTitle'],
+          {
+            reverse: state.sortBy?.isSortedDescending ? state.sortBy.isSortedDescending : false
+          }
+        )
       }
     },
     [SET_SORT.type]: (state, { payload }: ReturnType<typeof SET_SORT>) => {
