@@ -15,6 +15,7 @@ Velkommen til versjon 1.8.0 av Prosjektportalen 365. Det er flere grunnleggende 
 - **[Flere planner planer](#flere-planner-planer)** - Opprett prosjekter med flere planner planer per prosjekt
 - **['Tilgang til'-vertikal på forsiden](#tilgang-til-vertikal-på-forsiden)** - Mulighet for å se alle prosjekter du har tilgang til
 - **[Bygg- og anleggsmodulen](#bygg--og-anleggsmodulen)** - Modulen er nå en del av standardpakken
+- **[Logging av hendelser](#bygg--og-anleggsmodulen)** - Ny liste for logging av hendelser og feil
 
 ![image](./assets/ba-mal.png)
 
@@ -75,3 +76,13 @@ Støtte for selvvalgte tekstfarger i prosjekttidslinje
 Bygg- og anleggsmodulen er nå tatt inn som en integrert del av Prosjektportalen 365. Det innebærer at denne blir automatisk installert når Prosjektportalen 365 installeres.
 
 For kunder som skal oppgradere fra tidligere versjon, må følgende parameter legges til for å få med standardinnholdet i Bygg- og anleggsmodulen. `-IncludeBAContent`
+
+## Unike fasesider (Prosjekttillegg)
+
+Unike sider for hver fase som valgbart prosjekttillegg. Det er nå mulig å velge at hver fase skal ha sin egen side. Disse sidene er i utgangspunktet like som prosjektets hjemmeside, men kan da tilpasses av kunden slik at hver fase blir unik.
+
+## Logging av hendelser
+
+Ny liste for logging av hendelser. Det er opprettet en ny liste hvor systemet lagrer hendelser som oppstår under oppsett og endringer i administrasjon av prosjekter. I praksis logges nå feil under prosjektopprettelse samt faseendringer.
+
+Listen er tilgjengelig i konfigurasjonssiden for Prosjektportalen.
