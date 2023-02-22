@@ -43,7 +43,7 @@ export const Timeline: FC<ITimelineProps> = (props) => {
           <div className={styles.title}>{props.title}</div>
         </div>
       )}
-      {props.infoText && (
+      {(props.showInfoText && props.infoText) && (
         <div className={styles.infoText}>
           <MessageBar>
             <div
@@ -90,7 +90,8 @@ Timeline.defaultProps = {
     [-1, 'months'],
     [1, 'years']
   ],
-  infoText: strings.ProjectTimelineInfoText
+  infoText: strings.ProjectTimelineInfoText,
+  showInfoText: true
 }
 
 export * from './types'
