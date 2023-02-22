@@ -32,6 +32,7 @@ og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Aggregated Content: Support for document name column with file type icon [#962](https://github.com/Puzzlepart/prosjektportalen365/issues/962)
 - 'Oversikt' program webpart will show all projects similar to 'Porteføljeoversikt', an `eye` icon will appear for projects the user does not have access to. [#961](https://github.com/Puzzlepart/prosjektportalen365/issues/961)
 - Show all projects in the Administration web part for program regardless of access, an `eye` icon will appear for projects the user does not have access to. [#972](https://github.com/Puzzlepart/prosjektportalen365/issues/972)
+- The title column for aggregation web part are now rendered as a clickable link to the list item [#947](https://github.com/Puzzlepart/prosjektportalen365/issues/947)
 
 ### Feilrettinger
 
