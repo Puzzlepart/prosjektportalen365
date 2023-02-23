@@ -6,8 +6,7 @@ import { IDynamicMatrixProps } from '../DynamicMatrix'
 
 export interface IRiskMatrixProps
   extends Omit<HTMLProps<HTMLDivElement>, 'size'>,
-  Pick<IDynamicMatrixProps, 'size' | 'colorScaleConfig' | 'calloutTemplate'> {
-
+    Pick<IDynamicMatrixProps, 'size' | 'colorScaleConfig' | 'calloutTemplate'> {
   /**
    * Custom configuration URL. File must be a JSON file stored in SharePoint.
    */
