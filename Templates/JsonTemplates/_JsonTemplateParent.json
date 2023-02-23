@@ -9,7 +9,7 @@
     "Navigation": {
         "QuickLaunch": [
             {
-                "Url": "#",
+                "Url": "SitePages/OverordnetOversikt.aspx",
                 "Title": "Underordnet innhold",
                 "Children": [
                     {
