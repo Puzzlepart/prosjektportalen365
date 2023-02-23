@@ -13,14 +13,14 @@ import '@pnp/polyfill-ie11'
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 import {
-  OPPORTUNITY_MATRIX_CONSEQUENCE_HEADERS,
-  OPPORTUNITY_MATRIX_PROBABILITY_HEADERS
+  OPPORTUNITY_DEFAULT_MATRIX_CONSEQUENCE_HEADERS,
+  OPPORTUNITY_DEFAULT_MATRIX_PROBABILITY_HEADERS
 } from '../../components/OpportunityMatrix/types'
 import { IProjectStatusProps, ProjectStatus } from '../../components/ProjectStatus'
 import PropertyFieldColorConfiguration from '../../components/PropertyFieldColorConfiguration'
 import {
-  RISK_MATRIX_CONSEQUENCE_HEADERS,
-  RISK_MATRIX_PROBABILITY_HEADERS
+  RISK_MATRIX_DEFAULT_CONSEQUENCE_HEADERS,
+  RISK_MATRIX_DEFAULT_PROBABILITY_HEADERS
 } from '../../components/RiskMatrix'
 
 export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectStatusProps> {
@@ -130,8 +130,8 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                 }),
                 ...this.getMatrixHeaderLabelPropertyFields(
                   'riskMatrix',
-                  RISK_MATRIX_PROBABILITY_HEADERS,
-                  RISK_MATRIX_CONSEQUENCE_HEADERS
+                  RISK_MATRIX_DEFAULT_PROBABILITY_HEADERS,
+                  RISK_MATRIX_DEFAULT_CONSEQUENCE_HEADERS
                 )
               ]
             },
@@ -212,8 +212,8 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                 }),
                 ...this.getMatrixHeaderLabelPropertyFields(
                   'opportunityMatrix',
-                  OPPORTUNITY_MATRIX_PROBABILITY_HEADERS,
-                  OPPORTUNITY_MATRIX_CONSEQUENCE_HEADERS
+                  OPPORTUNITY_DEFAULT_MATRIX_PROBABILITY_HEADERS,
+                  OPPORTUNITY_DEFAULT_MATRIX_CONSEQUENCE_HEADERS
                 )
               ]
             },

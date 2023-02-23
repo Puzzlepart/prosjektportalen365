@@ -1,8 +1,8 @@
 import { get } from '@microsoft/sp-lodash-subset'
 import {
-  OPPORTUNITY_MATRIX_CONSEQUENCE_HEADERS,
+  OPPORTUNITY_DEFAULT_MATRIX_CONSEQUENCE_HEADERS,
   IOpportunityMatrixProps,
-  OPPORTUNITY_MATRIX_PROBABILITY_HEADERS
+  OPPORTUNITY_DEFAULT_MATRIX_PROBABILITY_HEADERS
 } from './types'
 
 /**
@@ -38,13 +38,14 @@ export function getMatrixHeaders(props: IOpportunityMatrixProps) {
     headers[size] = [
       [
         undefined,
-        ...[...OPPORTUNITY_MATRIX_CONSEQUENCE_HEADERS]
+        ...[...OPPORTUNITY_DEFAULT_MATRIX_CONSEQUENCE_HEADERS]
           .splice(0, size)
-          .map((header, index) => getHeaderLabel(props, size.toString(), `c${index}`, header))
+          .map((defaultHeader, index) => getHeaderLabel(props, size.toString(), `c${index}`, defaultHeader))
       ],
-      [...OPPORTUNITY_MATRIX_PROBABILITY_HEADERS]
+      [...OPPORTUNITY_DEFAULT_MATRIX_PROBABILITY_HEADERS]
         .splice(0, size)
-        .map((header, index) => getHeaderLabel(props, size.toString(), `p${index}`, header)).reverse()
+        .map((defaultHeader, index) => getHeaderLabel(props, size.toString(), `p${index}`, defaultHeader))
+        .reverse()
     ]
     return headers
   }, {})
