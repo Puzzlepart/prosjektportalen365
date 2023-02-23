@@ -16,7 +16,7 @@ export function useOpportunityMatrix(props: IOpportunityMatrixProps) {
 
   /**
    * Get the matrix elements for a given cell.
-   * 
+   *
    * @param cell Matrix cell
    */
   function getElementsForCell(cell: IMatrixCell) {

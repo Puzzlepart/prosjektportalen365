@@ -7,11 +7,35 @@ import { IDynamicMatrixProps } from '../DynamicMatrix'
 export interface IRiskMatrixProps
   extends Omit<HTMLProps<HTMLDivElement>, 'size'>,
   Pick<IDynamicMatrixProps, 'size' | 'colorScaleConfig' | 'calloutTemplate'> {
+
+  /**
+   * Custom configuration URL. File must be a JSON file stored in SharePoint.
+   */
   customConfigUrl?: string
+
+  /**
+   * The items to render in the matrix
+   */
   items?: UncertaintyElementModel[]
+
+  /**
+   * Whether the matrix should be full width
+   */
   fullWidth?: boolean
+
+  /**
+   * SPFx page context
+   */
   pageContext?: PageContext
+
+  /**
+   * Overridden header labels for probability and consequence
+   */
   overrideHeaderLabels?: Record<string, boolean>
+
+  /**
+   * Header labels for probability and consequence
+   */
   headerLabels?: Record<string, string[]>
 }
 

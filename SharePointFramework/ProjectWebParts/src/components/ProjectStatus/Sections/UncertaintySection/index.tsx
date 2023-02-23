@@ -21,7 +21,7 @@ export const UncertaintySection: FC = () => {
   const { state, matrixElements, items, columns, shouldRenderContent } = useUncertaintySection()
 
   /**
-   * Render content for the Uncertainty section. Handles potential errors and renders OpportunityMatrix 
+   * Render content for the Uncertainty section. Handles potential errors and renders OpportunityMatrix
    * or RiskMatrix based on the content type of the first item in the list.
    */
   function renderContent() {

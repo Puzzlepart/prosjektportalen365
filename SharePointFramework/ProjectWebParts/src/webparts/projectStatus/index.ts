@@ -34,7 +34,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
 
   /**
    * Get matrix header label property fields.
-   * 
+   *
    * @param matrixKey Matrix key
    * @param defaultProbabilityHeaders Default header labels for probability
    * @param defaultConsequenceHeaders Default header labels for consequence
