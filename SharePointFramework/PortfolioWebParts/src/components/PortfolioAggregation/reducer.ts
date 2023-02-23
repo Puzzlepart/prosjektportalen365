@@ -209,9 +209,9 @@ export default (props: IPortfolioAggregationProps) =>
     ) => {
       state.columnContextMenu = payload
         ? {
-            column: payload.column,
-            target: payload.target as any
-          }
+          column: payload.column,
+          target: payload.target as any
+        }
         : null
     },
     [SET_ALL_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_ALL_COLLAPSED>) => {
@@ -228,7 +228,7 @@ export default (props: IPortfolioAggregationProps) =>
     },
     [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {
       const { column } = payload
-      if (column && column.fieldName !== state.groupBy?.fieldName) {
+      if (column && (column.fieldName !== state.groupBy?.fieldName)) {
         state.items = sortArray([...state.items], [column.fieldName])
         state.groupBy = column
         const groupNames: string[] = state.items.map((g) =>
