@@ -15,7 +15,7 @@ Velkommen til versjon 1.8.0 av Prosjektportalen 365. I denne versjonen er det fl
 - **[Flere planner planer](#flere-planner-planer)** - Opprett prosjekter med flere planner planer per prosjekt
 - **['Tilgang til'-vertikal på forsiden](#tilgang-til-vertikal-på-forsiden)** - Mulighet for å se alle prosjekter du har tilgang til
 - **[Bygg- og anleggsmodulen](#bygg--og-anleggsmodulen)** - Modulen er nå en del av standardpakken
-- **[Logging av hendelser](#bygg--og-anleggsmodulen)** - Ny liste for logging av hendelser og feil
+- **[Logging av hendelser](#logging-av-hendelser)** - Ny liste for logging av hendelser og feil
 
 ---
 
