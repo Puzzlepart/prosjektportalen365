@@ -1,13 +1,13 @@
 # Prosjektportalen 365 - 1.8.0 (Februar 2023)
 
 **Versjon 1.8.0** adresserer følgende [issues](https://github.com/Puzzlepart/prosjektportalen365/issues?q=is%3Aissue+is%3Aclosed+milestone%3A1.8).
-
-**Nedlasting**: [v1.8.0](https://github.com/Puzzlepart/prosjektportalen365/releases)
+> **Nedlasting**: [v1.8.0](https://github.com/Puzzlepart/prosjektportalen365/releases)
 
 ---
 
-Velkommen til versjon 1.8.0 av Prosjektportalen 365. Det er flere grunnleggende endringer i løsningen som gjør det verdt å oppgardere til siste versjon. Her er noen av høydepunktene:
+Velkommen til versjon 1.8.0 av Prosjektportalen 365. I denne versjonen er det flere grunnleggende endringer som gjør det verdt å oppgardere til. Her er noen av høydepunktene:
 
+- **[Dynamiske matriser i prosjektstatus](#dynamiske-matriser)** - Risiko- og mulighetsmatrisene er blitt mer fleksible
 - **[Rettighetsstyring av komponenter](#rettighetsstyring-av-komponenter)** - Styre hvilke roller som har tilgang til hva
 - **[Søkeboks i prosjektoppsett dialog](#søkeboks-i-prosjektoppsett-dialog)** - Det er nå støtte for søk i prosjektoppsett dialog
 - **[Overordnede prosjekter i prosjektinformasjon](#overordnede-prosjekter-i-prosjektinformasjon)** - Visning av overordnede prosjekter som prosjektet er tilknyttet til
@@ -17,11 +17,42 @@ Velkommen til versjon 1.8.0 av Prosjektportalen 365. Det er flere grunnleggende 
 - **[Bygg- og anleggsmodulen](#bygg--og-anleggsmodulen)** - Modulen er nå en del av standardpakken
 - **[Logging av hendelser](#bygg--og-anleggsmodulen)** - Ny liste for logging av hendelser og feil
 
-![image](./assets/ba-mal.png)
+---
+
+## Dynamiske matriser
+
+Risiko- og mulighetsmatrisene er blitt mer fleksible. Det er nå mulig å justere størrelse og farger. Matrisene kan også settes til å bruke hele kolonnebredden i statusrapportene eller selvvalgt bredde. Det er også mulig å overstyre overskriftene til sannsynlighet og konsekvens aksene.
+
+![image](./assets/usikkerhetsmatrise-3.png)
+
+Endringene gjøres ved å klikke på "Rediger" på Prosjektstatus siden.
+
+![image](./assets/usikkerhetsmatrise-1.png) ![image](./assets/usikkerhetsmatrise-2.png)
+
+## Mulighetsmatrise
+
+Skrive noe om denne?
+
+![image](./assets/mulighetsmatrise.png)
 
 ## Rettighetsstyring av komponenter
 
-Lorem ipsum dolor sit amet.
+Vi har lagt til mulighet til å styre hvilke roller som skal ha tilgang til å redigere webdeler og komponenter i webdelene. Listen, `Prosjektadministrasjonroller`, er tilgjengelig i konfigurasjonssiden for Prosjektportalen under 'Avansert'.
+
+![image](./assets/prosjektadministrasjonsroller.png)
+
+Funksjoner som kan delegeres er:
+
+- redigere prosjektinformasjon
+- endre fase
+- administrere prosjektstatus
+- administrering av underområder
+
+Roller som kommer med ut av boksen som kan tildeles rettigheter er:
+
+![image](./assets/prosjektadministrasjonsroller-liste.png)
+
+Det er også mulig å legge til flere roller med, eksempel: 'Gevinstansvarlig' eller grupper som er definert på porteføljenivå under 'Tillatelseskonfigurasjon' i Prosjektportalens administrasjonsområde
 
 ## Søkeboks i Prosjektoppsett dialog
 
@@ -29,29 +60,32 @@ Lorem ipsum dolor sit amet.
 
 ## Overordnede prosjekter i prosjektinformasjon
 
-Lorem ipsum dolor sit amet.
+Det er nå mulig å vise prosjekter som er overordnet eller underordnet et prosjekt i Prosjektinformasjon. Dette slås på ved å redigere egenskapene til webelen for Prosjektinformasjon.
+
+![image](./assets/overordnet.png)
 
 ## Statusrapport i prosjektinformasjon
 
-Kjente ikoner fra statusrapport vises nå på prosjektforsiden
+Det er lagt inn visning av statusrapporten på prosjektets forside. Som standard vises disse som ikoner (med statusfarge). Forhåndsvisning av tittel og kommentar får du ved å holde musepekeren over ikonet.
+
+![image](./assets/statusrapport-prosjektinfo-1.png)
+
+Ved å redigere webdelen er det mulig å skjule statusrapport. Det er også mulig å vise statusene med kommentarer dersom 'Vis kun ikoner' er avslått. Derifra kan du velge 'Avkort kommentarer' - da vil tekstfeltene vises med mindre eller mer tekst. Forhåndsvisning ved å holde musepekeren over vil fortsatt vise hele teksten.
+
+![image](./assets/statusrapport-prosjektinfo-2.png)
+
+![image](./assets/statusrapport-prosjektinfo-3.png)
 
 ## Flere planner planer
 
-Man kan nå ha mer enn 1 Planner for hvert prosjekt. Dette kan gjøres på to måter: 
+Man kan nå ha mer enn 1 Planner for hvert prosjekt. Dette kan gjøres på to måter:
 
 1. Opprette 2 ulike mallister som danner utgangspunkt for 2 plannere dersom man ønsker de opprettet med standard innhold.  
+   - Viktig å huske på å legge til flere sider også
 
-   - Viktig å huske på å legge til flere sider også 
+2. Opprette manuelt i etterkant av at prosjektet er opprettet
 
-2. Opprette manuelt i etterkant av at prosjektet er opprettet 
-
-   - I de tilfeller hvor man for eksempel vil skille standard prosjektoppgaver som kommer fra Prosjektveiviseren fra "løse/ frie" oppgaver som tilhører prosjektet 
-
-## FNs bærekraftsmål
-
-Det er nå mulig å knytte nye prosjekter opp mot `FNs bærekraftsmål`. Dette gjøres ved å redigere prosjektinformasjonen.
-
-![image](./assets/fns-baerekraftsmal.png)
+   - I de tilfeller hvor man for eksempel vil skille standard prosjektoppgaver som kommer fra Prosjektveiviseren fra "løse/ frie" oppgaver som tilhører prosjektet
 
 ## 'Tilgang til'-vertikal på forsiden
 
@@ -63,26 +97,36 @@ Visningen kan skjules som en global innstilling.
 
 ![image](./assets/tilgang-til-visning.png)
 
-## Etiketter på prosjektleveranser
+## FNs bærekraftsmål
 
-Det er mulig å vise etiketter for Prosjektleveranser på prosjektets tidslinje
+Det er nå mulig å knytte nye prosjekter opp mot `FNs bærekraftsmål`. Dette gjøres ved å redigere prosjektinformasjonen.
+
+![image](./assets/fns-baerekraftsmal.png)
 
 ## Konfigurasjon av tekstfarge på prosjekttidslinje
 
-Støtte for selvvalgte tekstfarger i prosjekttidslinje
+Noen ganger opplevde brukere at tidslinjen ble farget slik at teksten ble uleselig. Vi har derfor gjort det mulig å velge egne farger for tidslinjen.
+
+Dette er tilgjengelig i konfigurasjonen for tidslinjen som finnes i de generelle konfigurasjonsinnstillingene for Prosjektportalen 365 under "Innstillinger for nettsted > Utseende og funksjonalitet / Konfigurasjon av Prosjektportalen".
 
 ## Bygg- og anleggsmodulen
 
 Bygg- og anleggsmodulen er nå tatt inn som en integrert del av Prosjektportalen 365. Det innebærer at denne blir automatisk installert når Prosjektportalen 365 installeres.
 
+![image](./assets/ba-mal.png)
+
 For kunder som skal oppgradere fra tidligere versjon, må følgende parameter legges til for å få med standardinnholdet i Bygg- og anleggsmodulen. `-IncludeBAContent`
 
 ## Unike fasesider (Prosjekttillegg)
 
-Unike sider for hver fase som valgbart prosjekttillegg. Det er nå mulig å velge at hver fase skal ha sin egen side. Disse sidene er i utgangspunktet like som prosjektets hjemmeside, men kan da tilpasses av kunden slik at hver fase blir unik.
+Unike sider for hver fase som valgbart prosjekttillegg. Det er nå mulig å velge at hver fase skal ha sin egen side. Disse sidene er i utgangspunktet like som prosjektets hjemmeside, men kan da tilpasses av kunden slik at hver fase blir unik. Prosjekttillegget er skjult som standard og må slåes på dersom det skal dukke opp i 'Oppsett av prosjektområde dialog.
+
+![image](./assets/fasesider.png)
 
 ## Logging av hendelser
 
-Ny liste for logging av hendelser. Det er opprettet en ny liste hvor systemet lagrer hendelser som oppstår under oppsett og endringer i administrasjon av prosjekter. I praksis logges nå feil under prosjektopprettelse samt faseendringer.
+Det er opprettet en ny liste hvor systemet lagrer hendelser som oppstår under oppsett og endringer i administrasjon av prosjekter. I praksis logges nå feil under prosjektopprettelse samt faseendringer og synkronisering av prosjektinformasjon.
 
-Listen er tilgjengelig i konfigurasjonssiden for Prosjektportalen.
+Listen, `Logg`, er tilgjengelig i konfigurasjonssiden for Prosjektportalen under 'Avansert'.
+
+![image](./assets/logg.png)
