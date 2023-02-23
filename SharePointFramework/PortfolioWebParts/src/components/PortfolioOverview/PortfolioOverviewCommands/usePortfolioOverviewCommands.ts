@@ -10,11 +10,11 @@ import { IPortfolioOverviewCommandsProps, IPortfolioOverviewCommandsState } from
 /**
  * Component logic hook for the PortfolioOverviewCommands component. Handles the logic for
  * the command bar and the filter panel.
- * 
+ *
  * @param props Props for the PortfolioOverviewCommands component
  */
 export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsProps) {
-const [state, setState] = useState<IPortfolioOverviewCommandsState>({showFilterPanel: false})
+  const [state, setState] = useState<IPortfolioOverviewCommandsState>({ showFilterPanel: false })
 
   const items: IContextualMenuItem[] = [
     {
@@ -40,8 +40,7 @@ const [state, setState] = useState<IPortfolioOverviewCommandsState>({showFilterP
       iconProps: { iconName: 'CirclePlus' },
       buttonStyles: { root: { border: 'none' } },
       data: {
-        isVisible:
-          props.pageContext.legacyPageContext.isSiteAdmin && props.showViewSelector
+        isVisible: props.configuration.userCanAddViews && props.showViewSelector
       },
       onClick: () => redirect(props.configuration.viewsUrls.defaultNewFormUrl)
     } as IContextualMenuItem,
@@ -76,14 +75,14 @@ const [state, setState] = useState<IPortfolioOverviewCommandsState>({showFilterP
           },
           ...props.configuration.views.map(
             (view) =>
-            ({
-              key: view.id.toString(),
-              name: view.title,
-              iconProps: { iconName: view.iconName },
-              canCheck: true,
-              checked: view.id === props.currentView?.id,
-              onClick: () => props.events.onChangeView(view)
-            } as IContextualMenuItem)
+              ({
+                key: view.id.toString(),
+                name: view.title,
+                iconProps: { iconName: view.iconName },
+                canCheck: true,
+                checked: view.id === props.currentView?.id,
+                onClick: () => props.events.onChangeView(view)
+              } as IContextualMenuItem)
           ),
           {
             key: 'DIVIDER_02',
@@ -98,7 +97,8 @@ const [state, setState] = useState<IPortfolioOverviewCommandsState>({showFilterP
             key: 'EDIT_VIEW',
             name: strings.EditViewText,
             onClick: () =>
-              redirect( `${props.configuration.viewsUrls.defaultEditFormUrl}?ID=${props.currentView?.id}`
+              redirect(
+                `${props.configuration.viewsUrls.defaultEditFormUrl}?ID=${props.currentView?.id}`
               )
           }
         ]
@@ -144,7 +144,7 @@ const [state, setState] = useState<IPortfolioOverviewCommandsState>({showFilterP
    * error handling.
    */
   async function exportToExcel(): Promise<void> {
-    setState({...state, isExporting: true })
+    setState({ ...state, isExporting: true })
     try {
       const { fltItems, fltColumns, selectedItems } = props
 
@@ -159,9 +159,9 @@ const [state, setState] = useState<IPortfolioOverviewCommandsState>({showFilterP
       })
 
       await ExcelExportService.export(items, fltColumns)
-      setState({...state,  isExporting: false })
+      setState({ ...state, isExporting: false })
     } catch (error) {
-      setState({...state,  isExporting: false })
+      setState({ ...state, isExporting: false })
     }
   }
 
