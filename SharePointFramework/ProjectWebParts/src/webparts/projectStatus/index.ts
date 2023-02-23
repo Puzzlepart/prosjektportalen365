@@ -13,14 +13,14 @@ import '@pnp/polyfill-ie11'
 import * as strings from 'ProjectWebPartsStrings'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 import {
-  OPPORTUNITY_MATRIX_CONSEQUENCE_HEADERS,
-  OPPORTUNITY_MATRIX_PROBABILITY_HEADERS
+  OPPORTUNITY_DEFAULT_MATRIX_CONSEQUENCE_HEADERS,
+  OPPORTUNITY_DEFAULT_MATRIX_PROBABILITY_HEADERS
 } from '../../components/OpportunityMatrix/types'
 import { IProjectStatusProps, ProjectStatus } from '../../components/ProjectStatus'
 import PropertyFieldColorConfiguration from '../../components/PropertyFieldColorConfiguration'
 import {
-  RISK_MATRIX_CONSEQUENCE_HEADERS,
-  RISK_MATRIX_PROBABILITY_HEADERS
+  RISK_MATRIX_DEFAULT_CONSEQUENCE_HEADERS,
+  RISK_MATRIX_DEFAULT_PROBABILITY_HEADERS
 } from '../../components/RiskMatrix'
 
 export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectStatusProps> {
@@ -32,10 +32,17 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
     this.renderComponent<IProjectStatusProps>(ProjectStatus)
   }
 
+  /**
+   * Get matrix header label property fields.
+   *
+   * @param matrixKey Matrix key
+   * @param defaultProbabilityHeaders Default header labels for probability
+   * @param defaultConsequenceHeaders Default header labels for consequence
+   */
   protected getMatrixHeaderLabelPropertyFields(
     matrixKey: string,
-    probabilityHeaders: string[],
-    consequenceHeaders: string[]
+    defaultProbabilityHeaders: string[],
+    defaultConsequenceHeaders: string[]
   ): IPropertyPaneField<any>[] {
     const size = parseInt(get(this.properties, `${matrixKey}.size`, '5'))
     const overrideHeaderLabels = PropertyPaneToggle(`${matrixKey}.overrideHeaderLabels.${size}`, {
@@ -50,7 +57,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
       headerLabelFields.push(
         PropertyPaneTextField(probabilityHeaderFieldName, {
           label: format(strings.ProbabilityHeaderFieldLabel, i + 1),
-          placeholder: probabilityHeaders[i]
+          placeholder: defaultProbabilityHeaders[i]
         })
       )
     }
@@ -59,7 +66,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
       headerLabelFields.push(
         PropertyPaneTextField(consequenceHeaderFieldName, {
           label: format(strings.ConsequenceHeaderFieldLabel, i + 1),
-          placeholder: consequenceHeaders[i]
+          placeholder: defaultConsequenceHeaders[i]
         })
       )
     }
@@ -123,8 +130,8 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                 }),
                 ...this.getMatrixHeaderLabelPropertyFields(
                   'riskMatrix',
-                  RISK_MATRIX_PROBABILITY_HEADERS,
-                  RISK_MATRIX_CONSEQUENCE_HEADERS
+                  RISK_MATRIX_DEFAULT_PROBABILITY_HEADERS,
+                  RISK_MATRIX_DEFAULT_CONSEQUENCE_HEADERS
                 )
               ]
             },
@@ -205,8 +212,8 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                 }),
                 ...this.getMatrixHeaderLabelPropertyFields(
                   'opportunityMatrix',
-                  OPPORTUNITY_MATRIX_PROBABILITY_HEADERS,
-                  OPPORTUNITY_MATRIX_CONSEQUENCE_HEADERS
+                  OPPORTUNITY_DEFAULT_MATRIX_PROBABILITY_HEADERS,
+                  OPPORTUNITY_DEFAULT_MATRIX_CONSEQUENCE_HEADERS
                 )
               ]
             },
