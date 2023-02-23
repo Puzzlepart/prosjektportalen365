@@ -40,11 +40,6 @@ export interface ITimelineProps
   onFilterChange: (column: IColumn, selectedItems: IFilterItemProps[]) => void
 
   /**
-   * Information text
-   */
-  infoText?: string
-
-  /**
    * Title of the timeline
    */
   title?: string
@@ -53,6 +48,11 @@ export interface ITimelineProps
    * Hide sidebar (defaults to `false`)
    */
   hideSidebar?: boolean
+
+  /**
+   * Information text
+   */
+  infoText?: string
 
   /**
    * Show information text above the timeline (defaults to `true`)

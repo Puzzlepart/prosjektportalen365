@@ -1,5 +1,6 @@
 define([], function () {
     return {
+        ProgramTimelineInfoText: "Her listes alle prosjektene med start- og sluttdato som er tilknyttet området. For å zoome inn/ut i tidslinje: ALT+Musehjul",
         CmdSelectionCountText: '{0} er merket',
         DataSourceCategoryDescription: 'Angi en datakildekategori for å kunne velge mellom flere datakilder i webdelen.',
         DataSourceDescription: 'Navnet på datakilden du vil bruke. Datakildene finner du i listen Datakilder på Portføljeområdet.',
