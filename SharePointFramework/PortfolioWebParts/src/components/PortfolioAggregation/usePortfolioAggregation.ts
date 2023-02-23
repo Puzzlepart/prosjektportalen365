@@ -13,6 +13,12 @@ import createReducer, {
 import { searchItem } from './search'
 import { IPortfolioAggregationProps } from './types'
 
+/**
+ * Component logic hook for the Portfolio Aggregation component. This
+ * hook is responsible for fetching data, managing state and dispatching.
+ *
+ * @param props Props for the Portfolio Aggregation component
+ */
 export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
   const reducer = useMemo(() => createReducer(props), [])
   const [state, dispatch] = useReducer(reducer, initState(props))
