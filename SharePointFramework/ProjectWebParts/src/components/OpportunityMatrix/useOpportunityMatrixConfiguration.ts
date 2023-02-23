@@ -5,7 +5,8 @@ import { IOpportunityMatrixProps } from './types'
 import { getMatrixHeaders } from './getMatrixHeaders'
 
 /**
- * Configuration hook for `OpportunityMatrix`
+ * Configuration hook for `OpportunityMatrix`. Generates the matrix configuration based on the
+ * specified matrix size.
  *
  * @param props Props
  */
