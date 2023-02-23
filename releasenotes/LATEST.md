@@ -132,3 +132,16 @@ Det er opprettet en ny liste hvor systemet lagrer hendelser som oppstår under o
 Listen, `Logg`, er tilgjengelig i konfigurasjonssiden for Prosjektportalen under 'Avansert'.
 
 ![image](./assets/logg.png)
+
+---
+## Endringslogg
+
+> For fullstendig endringslogg av alt som er med i denne utvigelsen, så kan du [trykke her for å lese mer](../CHANGELOG.md#180---28022023).
+
+## Takk til dere
+
+Sist men ikke minst sier vi takk til alle som har bidratt til å melde inn bugs og feil, gi oss verdifulle tilbakemeldinger og foreslå endringer.
+
+Uten deres engasjement ville vi ikke vært i stand til å utvikle Prosjektportalen til det verktøyet det er i dag.
+
+-Prosjektportalen-teamet
