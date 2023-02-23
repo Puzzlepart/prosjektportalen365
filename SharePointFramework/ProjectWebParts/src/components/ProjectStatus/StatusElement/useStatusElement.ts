@@ -4,12 +4,13 @@ import styles from './StatusElement.module.scss'
 import { IStatusElementProps } from './types'
 
 /**
- * Component logic hook for `StatusElement`
+ * Component logic hook for `StatusElement`. Handles truncating of the comment
+ * and the icon size.
  */
 export function useStatusElement(props: IStatusElementProps) {
   const { headerProps } = useContext(SectionContext)
   let comment = headerProps.comment?.replace(/\n/g, '<br />')
-  if (props.truncateComment) {
+  if (comment && props.truncateComment) {
     comment =
       comment.length > props.truncateComment
         ? comment.slice(0, props.truncateComment) + '...'
