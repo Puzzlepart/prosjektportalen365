@@ -18,10 +18,9 @@ export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProgramT
           title={this.properties.title}
           dataAdapter={this.dataAdapter}
           pageContext={this.context.pageContext as any}
-          infoText={this.properties.infoText}
           dataSourceName={this.properties.dataSourceName}
           configItemTitle={this.properties.configItemTitle}
-          showInfoText={false}
+          infoText={strings.ProgramTimelineInfoText}
         />
       </>,
       this.domElement

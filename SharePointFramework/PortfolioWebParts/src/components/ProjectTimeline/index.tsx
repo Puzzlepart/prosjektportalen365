@@ -29,6 +29,7 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
               items={state.filteredData.items}
               filters={state.filters}
               onFilterChange={onFilterChange}
+              infoText={props.infoText}
               showInfoText={props.showInfoText}
             />
           </>
