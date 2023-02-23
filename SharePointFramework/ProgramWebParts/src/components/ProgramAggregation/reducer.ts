@@ -35,7 +35,7 @@ export const initState = (props: IProgramAggregationProps): IProgramAggregationS
 })
 
 /**
- * Create reducer for Projects
+ * Create reducer for ProgramAggregation component
  */
 export default (props: IProgramAggregationProps) =>
   createReducer(initState(props), {
@@ -98,7 +98,7 @@ export default (props: IProgramAggregationProps) =>
         : null
     },
     [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {
-      if (payload.column && payload.column.key !== state.groupBy?.key) {
+      if (payload.column && payload.column.fieldName !== state.groupBy?.fieldName) {
         state.items = sortArray([...state.items], [payload.column.fieldName])
         state.groupBy = payload.column
         const groupNames: string[] = state.items.map((g) =>
@@ -122,6 +122,14 @@ export default (props: IProgramAggregationProps) =>
           })
       } else {
         state.groups = null
+        state.groupBy = null
+        state.items = state.items = sortArray(
+          [...state.items],
+          [state.sortBy?.fieldName ? state.sortBy.fieldName : 'SiteTitle'],
+          {
+            reverse: state.sortBy?.isSortedDescending ? state.sortBy.isSortedDescending : false
+          }
+        )
       }
     },
     [SET_SORT.type]: (state, { payload }: ReturnType<typeof SET_SORT>) => {
