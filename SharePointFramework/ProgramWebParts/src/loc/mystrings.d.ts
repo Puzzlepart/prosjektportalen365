@@ -1,4 +1,5 @@
 declare interface IProgramWebPartsStrings {
+  ProgramTimelineInfoText: string
   CmdSelectionCountText: string
   ProgramAdministrationInfoMessage: string
   EditColumnHeaderText: string

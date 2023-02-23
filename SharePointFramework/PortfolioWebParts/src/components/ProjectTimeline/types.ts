@@ -4,8 +4,11 @@ import { IFilterProps } from '../../components/FilterPanel/Filter/types'
 import { ITimelineData, ITimelineItem } from '../../interfaces'
 import { ProjectListModel, TimelineConfigurationModel } from '../../models'
 import { IBaseComponentProps } from '../types'
+import { ITimelineProps } from './Timeline'
 
-export interface IProjectTimelineProps extends IBaseComponentProps {
+export interface IProjectTimelineProps
+  extends IBaseComponentProps,
+    Pick<ITimelineProps, 'infoText' | 'showInfoText'> {
   /**
    * Timeline default start time
    */
@@ -35,11 +38,6 @@ export interface IProjectTimelineProps extends IBaseComponentProps {
    * Timeline configuration item title
    */
   configItemTitle?: string
-
-  /**
-   * Show information text above the timeline (defaults to `true`)
-   */
-  showInfoText?: boolean
 }
 
 export interface IProjectTimelineState extends Pick<IShimmerProps, 'isDataLoaded'> {
