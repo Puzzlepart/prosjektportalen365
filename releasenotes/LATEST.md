@@ -123,6 +123,8 @@ Unike sider for hver fase som valgbart prosjekttillegg. Det er nå mulig å velg
 
 ![image](./assets/fasesider.png)
 
+For å ta i bruk dynamisk endring av fasesider må dette spesifiseres i prosjektmalen på fasevelger webdelen.
+
 ## Logging av hendelser
 
 Det er opprettet en ny liste hvor systemet lagrer hendelser som oppstår under oppsett og endringer i administrasjon av prosjekter. I praksis logges nå feil under prosjektopprettelse samt faseendringer og synkronisering av prosjektinformasjon.
