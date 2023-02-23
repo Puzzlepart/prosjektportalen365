@@ -35,6 +35,11 @@ export interface IProjectTimelineProps extends IBaseComponentProps {
    * Timeline configuration item title
    */
   configItemTitle?: string
+
+  /**
+   * Show information text above the timeline (defaults to `true`)
+   */
+  showInfoText?: boolean
 }
 
 export interface IProjectTimelineState extends Pick<IShimmerProps, 'isDataLoaded'> {

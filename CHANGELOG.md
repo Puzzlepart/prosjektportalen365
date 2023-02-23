@@ -32,6 +32,7 @@ og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Aggregated Content: Support for document name column with file type icon [#962](https://github.com/Puzzlepart/prosjektportalen365/issues/962)
 - 'Oversikt' program webpart will show all projects similar to 'Porteføljeoversikt', an `eye` icon will appear for projects the user does not have access to. [#961](https://github.com/Puzzlepart/prosjektportalen365/issues/961)
 - Show all projects in the Administration web part for program regardless of access, an `eye` icon will appear for projects the user does not have access to. [#972](https://github.com/Puzzlepart/prosjektportalen365/issues/972)
+- The title column for aggregation web part are now rendered as a clickable link to the list item [#947](https://github.com/Puzzlepart/prosjektportalen365/issues/947)
 
 ### Feilrettinger
 
@@ -50,6 +51,8 @@ og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed a bug where planner plans without 'Plannername' in 'ListContent' failed under ProjectSetup [#976](https://github.com/Puzzlepart/prosjektportalen365/issues/976)
 - Fixed a bug where save snapshot didn't work in Project Status [#955](https://github.com/Puzzlepart/prosjektportalen365/issues/955)
 - Fixed bug with the Project List web part where guests could see the "All Projects" tab [#996](https://github.com/Puzzlepart/prosjektportalen365/issues/996)
+- Persist search box state when switching tabs in the Project List web part [#989](https://github.com/Puzzlepart/prosjektportalen365/issues/989)
+- Timeline for a program's projects no longer displays information message - the link was not working [#995](https://github.com/Puzzlepart/prosjektportalen365/issues/995)
 
 ---
 
