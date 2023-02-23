@@ -444,7 +444,7 @@
                 "Title": "Programstatus"
             },
             {
-                "Url": "#",
+                "Url": "SitePages/ProgramOversikt.aspx",
                 "Title": "Programinnhold",
                 "Children": [
                     {
