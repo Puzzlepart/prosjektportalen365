@@ -56,7 +56,7 @@ Det er også mulig å legge til flere roller med, eksempel: 'Gevinstansvarlig' e
 
 ## Søkeboks i Prosjektoppsett dialog
 
-Lorem ipsum dolor sit amet.
+Skrive noe om denne?
 
 ## Overordnede prosjekter i prosjektinformasjon
 
