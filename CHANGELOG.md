@@ -53,6 +53,7 @@ og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed bug with the Project List web part where guests could see the "All Projects" tab [#996](https://github.com/Puzzlepart/prosjektportalen365/issues/996)
 - Persist search box state when switching tabs in the Project List web part [#989](https://github.com/Puzzlepart/prosjektportalen365/issues/989)
 - Timeline for a program's projects displays a diffferent information message - the link was not working [#995](https://github.com/Puzzlepart/prosjektportalen365/issues/995)
+- Fixed the standard header labels for the Uncertainty Matrices [#999](https://github.com/Puzzlepart/prosjektportalen365/issues/999)
 
 ---
 
