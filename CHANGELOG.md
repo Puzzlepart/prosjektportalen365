@@ -7,7 +7,7 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 
 ### Ny funksjonalitet
 
-- 'Auto-complete' søk for mal i prosjektoppsett dialog [#837](https://github.com/Puzzlepart/prosjektportalen365/issues/837)
+- 'Auto-complete' søk for maler i prosjektoppsett dialog [#837](https://github.com/Puzzlepart/prosjektportalen365/issues/837)
 - Sok etter prosjekttillegg og standardinnhold i prosjektoppsett dialog [#839](https://github.com/Puzzlepart/prosjektportalen365/issues/839)
 - Nytt felt: `FNs bærekraftsmål`, i prosjektinformasjon [#454](https://github.com/Puzzlepart/prosjektportalen365/issues/454)
 - Mulighet for å se alle prosjekter man har tilgang til på forsiden [#724](https://github.com/Puzzlepart/prosjektportalen365/issues/724)
