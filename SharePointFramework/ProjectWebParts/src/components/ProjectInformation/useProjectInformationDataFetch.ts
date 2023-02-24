@@ -161,8 +161,6 @@ const fetchData: DataFetchFunction<
       functionName: 'fetchData',
       component: ProjectInformation.displayName
     })
-    // eslint-disable-next-line no-console
-    console.log(error)
     throw new Error(strings.ProjectInformationDataFetchErrorText)
   }
 }
