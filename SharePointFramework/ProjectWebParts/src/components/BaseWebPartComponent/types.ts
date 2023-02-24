@@ -34,7 +34,7 @@ export interface IBaseWebPartComponentProps extends React.DOMAttributes<HTMLDivE
   displayMode?: DisplayMode
 
   /**
-   * Web part context
+   * SPFx web part context
    */
   webPartContext?: WebPartContext
 }

@@ -15,7 +15,8 @@ import { IPortfolioAggregationProps } from './types'
 
 /**
  * Component logic hook for the Portfolio Aggregation component. This
- * hook is responsible for fetching data, managing state and dispatching.
+ * hook is responsible for fetching data, managing state and dispatching
+ * actions to the reducer.
  *
  * @param props Props for the Portfolio Aggregation component
  */

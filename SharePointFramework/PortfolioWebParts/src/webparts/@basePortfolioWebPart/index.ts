@@ -21,6 +21,7 @@ export abstract class BasePortfolioWebPart<
    * Render component specified in `component` parameter, with the props
    * specified in `props` parameter. The props will be merged with the
    * web part properties and the following props:
+   * - `webPartContext`
    * - `pageContext`
    * - `dataAdapter`
    * - `displayMode`
@@ -30,6 +31,7 @@ export abstract class BasePortfolioWebPart<
    */
   public renderComponent<T = any>(component: React.ComponentClass<T> | FC<T>, props?: T): void {
     const combinedProps = assign({ title: this._pageTitle }, this.properties, props, {
+      webPartContext: this.context,
       pageContext: this.context.pageContext,
       dataAdapter: this.dataAdapter,
       displayMode: this.displayMode

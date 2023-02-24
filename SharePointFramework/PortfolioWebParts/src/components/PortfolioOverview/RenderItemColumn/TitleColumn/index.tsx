@@ -1,5 +1,4 @@
-import { TooltipHost, Icon, Link } from '@fluentui/react'
-import { Web } from '@pnp/sp'
+import { Icon, Link, TooltipHost } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import React, { FC } from 'react'
@@ -31,12 +30,9 @@ export const TitleColumn: FC<ITitleColumnProps> = ({ item, props }) => {
           title={item.Title}
           siteId={item.SiteId}
           webUrl={item.Path}
-          hubSite={{
-            web: new Web(props.pageContext.site.absoluteUrl),
-            url: props.pageContext.site.absoluteUrl
-          }}
           page='Portfolio'
           hideAllActions={true}
+          webPartContext={props.webPartContext}
           onRenderToggleElement={(onToggle) => (
             <Icon
               iconName='Info'

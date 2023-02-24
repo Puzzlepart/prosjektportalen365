@@ -46,7 +46,7 @@
     "moment": "2.24.0",
     "msgraph-helper": "0.7.3",
     "object-assign": "4.1.1",
-    "pp365-shared": "1.7.3-1028.1",
+    "pp365-shared": "1.7.3-1032.2",
     "react": "16.13.1",
     "react-calendar-timeline": "0.27.0",
     "react-dom": "16.13.1",
@@ -80,7 +80,7 @@
     "find": "0.3.0",
     "gulp": "4.0.2",
     "livereload": "0.9.1",
-    "pp365-projectwebparts": "1.7.3-1028.1",
+    "pp365-projectwebparts": "1.7.3-1032.18",
     "prettier": "2.1.1",
     "typescript": "4.5.5",
     "webpack": "5.74.0"
