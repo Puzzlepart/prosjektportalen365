@@ -1,4 +1,5 @@
 import { MessageBarType } from '@fluentui/react'
+import { LogLevel } from '@pnp/logging'
 import _ from 'lodash'
 import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import { ListLogger } from 'pp365-shared/lib/logging'
@@ -99,16 +100,16 @@ const fetchData: DataFetchFunction<
       SPDataAdapter.project.getPropertiesData(),
       props.page === 'Frontpage'
         ? SPDataAdapter.portal.getParentProjects(
-            props.webPartContext?.pageContext?.web?.absoluteUrl,
-            ProjectInformationParentProject
-          )
+          props.webPartContext?.pageContext?.web?.absoluteUrl,
+          ProjectInformationParentProject
+        )
         : Promise.resolve([]),
       props.hideStatusReport
         ? Promise.resolve([])
         : SPDataAdapter.portal.getStatusReports({
-            filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
-            publishedString: strings.GtModerationStatus_Choice_Published
-          }),
+          filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
+          publishedString: strings.GtModerationStatus_Choice_Published
+        }),
       props.hideStatusReport
         ? Promise.resolve([])
         : SPDataAdapter.portal.getProjectStatusSections(),
@@ -166,13 +167,19 @@ export const useProjectInformationDataFetch = (
   setState: (newState: Partial<IProjectInformationState>) => void
 ) => {
   useEffect(() => {
-    fetchData(props)
-      .then((data) => setState({ ...data, isDataLoaded: true }))
-      .catch((error) =>
-        setState({
-          isDataLoaded: true,
-          error: { ..._.pick(error, 'message', 'stack'), type: MessageBarType.severeWarning }
-        })
-      )
+    SPDataAdapter.configure(props.webPartContext, {
+      siteId: props.siteId,
+      webUrl: props.webUrl,
+      logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+    }).then(() => {
+      fetchData(props)
+        .then((data) => setState({ ...data, isDataLoaded: true }))
+        .catch((error) =>
+          setState({
+            isDataLoaded: true,
+            error: { ..._.pick(error, 'message', 'stack'), type: MessageBarType.severeWarning }
+          })
+        )
+    })
   }, [])
 }

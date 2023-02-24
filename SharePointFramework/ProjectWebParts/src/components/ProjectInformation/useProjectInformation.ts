@@ -1,6 +1,5 @@
 import { format, IProgressIndicatorProps, MessageBarType } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { LogLevel } from '@pnp/logging'
 import { ListLogger } from 'pp365-shared/lib/logging'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import strings from 'ProjectWebPartsStrings'
@@ -26,12 +25,6 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
   //   props.webUrl,
   //   ProjectInformation.displayName
   // )
-
-  SPDataAdapter.configure(props.webPartContext, {
-    siteId: props.siteId,
-    webUrl: props.webUrl,
-    logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-  })
 
   /**
    * Add message
