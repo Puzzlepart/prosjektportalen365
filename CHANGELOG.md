@@ -1,60 +1,61 @@
 Formatet er basert på [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## 1.8.0 - TBA
+Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detaljert 'endringslogg' for siste versjon.
+
+## 1.8.0 - 28.02.2023
 
 ### Ny funksjonalitet
 
-- Enabling autocomplete search for template in project setup dialog [#837](https://github.com/Puzzlepart/prosjektportalen365/issues/837)
-- Enabling search for extensions and list content configurations [#839](https://github.com/Puzzlepart/prosjektportalen365/issues/839)
-- Added new field: `FNs bærekraftsmål`, to project properties [#454](https://github.com/Puzzlepart/prosjektportalen365/issues/454)
-- Option for showing all projects you have access to on the front page [#724](https://github.com/Puzzlepart/prosjektportalen365/issues/724)
-- Customizable text color in project timeline webpart [#767](https://github.com/Puzzlepart/prosjektportalen365/issues/767)
-- Added status report summary on the front page (ProjectInformation) [#368](https://github.com/Puzzlepart/prosjektportalen365/issues/368)
-- Integrated 'Bygg & anlegg' addon (prosjektportalen365-bygganlegg) directly in Prosjektportalen 365 [#910](https://github.com/Puzzlepart/prosjektportalen365/issues/910)
-  - When upgrading, if you want the standard 'Bygg & anlegg' content, make sure to add parameter: `-IncludeBAContent` when upgrading ⚠️
-- Support for creating multiple planner plans per project [#906](https://github.com/Puzzlepart/prosjektportalen365/issues/906)
-- Support to show tags on timeline for deliveries (if added to list) [#917](https://github.com/Puzzlepart/prosjektportalen365/issues/917)
-- Dynamic risk matrix: You can now configure the size, range of colors, etc... of the matrix. [#433](https://github.com/Puzzlepart/prosjektportalen365/issues/433)
-- Added new fields for opportunity (status and comment), to projectstatus list and a new statusreport section: 'Muligheter'. [#499](https://github.com/Puzzlepart/prosjektportalen365/issues/#499)
-- Added possibility to make certain project template configurations mandatory [#839](https://github.com/Puzzlepart/prosjektportalen365/issues/839)
-- Added a standard project extension for multiple pages based on project phase [#784](https://github.com/Puzzlepart/prosjektportalen365/issues/784)
-- Added a new list `Lists/Logg` [#842](https://github.com/Puzzlepart/prosjektportalen365/issues/842)
-  - Entries for certain events and errors are now logged to the list (ex: Changing phase, creating projects...)
+- 'Auto-complete' søk for maler i prosjektoppsett dialog [#837](https://github.com/Puzzlepart/prosjektportalen365/issues/837)
+- Sok etter prosjekttillegg og standardinnhold i prosjektoppsett dialog [#839](https://github.com/Puzzlepart/prosjektportalen365/issues/839)
+- Nytt felt: `FNs bærekraftsmål`, i prosjektinformasjon [#454](https://github.com/Puzzlepart/prosjektportalen365/issues/454)
+- Mulighet for å se alle prosjekter man har tilgang til på forsiden [#724](https://github.com/Puzzlepart/prosjektportalen365/issues/724)
+- Konfigurasjon av tekstfarge på prosjekttidslinje [#767](https://github.com/Puzzlepart/prosjektportalen365/issues/767)
+- Statusrapport sammendrag i prosjektinformasjon [#368](https://github.com/Puzzlepart/prosjektportalen365/issues/368)
+- Integrasjon av bygg- og anleggsmodulen (prosjektportalen365-bygganlegg) i Prosjektportalen 365 [#910](https://github.com/Puzzlepart/prosjektportalen365/issues/910)
+  - For brukere som har skal oppgradere og ønsker bygg- og anllegsinnhold, må følgende parameter legges til: `-IncludeBAContent`. ⚠️
+- Støtte for flere Planner planer per prosjekt [#906](https://github.com/Puzzlepart/prosjektportalen365/issues/906)
+- Støtte for etikett på prosjektleveranser - tidslinje [#917](https://github.com/Puzzlepart/prosjektportalen365/issues/917)
+- Dynamisk risiko- og mulighetsmatrise: Konfigurasjon av størrelse, farger osv... [#433](https://github.com/Puzzlepart/prosjektportalen365/issues/433)
+- Lagt til nye felter for muligheter (status og kommentar), til prosjektstatus listen med tilhørende statusrapport seksjon 'Muligheter' . [#499](https://github.com/Puzzlepart/prosjektportalen365/issues/#499)
+- Søtte for å gjøre spesifikke maloppsett obligatoriske [#839](https://github.com/Puzzlepart/prosjektportalen365/issues/839)
+- Nytt standard prosjekttillegg for fasesider [#784](https://github.com/Puzzlepart/prosjektportalen365/issues/784)
+- Ny liste `Lists/Logg` [#842](https://github.com/Puzzlepart/prosjektportalen365/issues/842)
+  - Det er opprettet en ny liste hvor systemet lagrer hendelser eller feil som oppstår (eksempel: ved prosjektopprettelse, endring av faser, osv...)
 
 ### Forbedringer
 
-- Default grouping for timeline has been set to Type [#768](https://github.com/Puzzlepart/prosjektportalen365/issues/768)
-- Various UI/UX improvements for program components [#693](https://github.com/Puzzlepart/prosjektportalen365/issues/693)
-- Renamed 'Risikooversikt' to 'Usikkerhetsoversikt', this includes statusreport sections. [#499](https://github.com/Puzzlepart/prosjektportalen365/issues/#499)
-- Reworked search experience throughout Prosjektportalen [#884](https://github.com/Puzzlepart/prosjektportalen365/issues/884)
-- Excluding private/shared channel sites when searching for sites (Program administration) [#915](https://github.com/Puzzlepart/prosjektportalen365/issues/915)
-- Aggregated Content: Support for document name column with file type icon [#962](https://github.com/Puzzlepart/prosjektportalen365/issues/962)
-- 'Oversikt' program webpart will show all projects similar to 'Porteføljeoversikt', an `eye` icon will appear for projects the user does not have access to. [#961](https://github.com/Puzzlepart/prosjektportalen365/issues/961)
-- Show all projects in the Administration web part for program regardless of access, an `eye` icon will appear for projects the user does not have access to. [#972](https://github.com/Puzzlepart/prosjektportalen365/issues/972)
-- The title column for aggregation web part are now rendered as a clickable link to the list item [#947](https://github.com/Puzzlepart/prosjektportalen365/issues/947)
+- Standard gruppering av tidslinje er satt til 'Type' [#768](https://github.com/Puzzlepart/prosjektportalen365/issues/768)
+- Diverse UI/UX forbedringer for program komponentene [#693](https://github.com/Puzzlepart/prosjektportalen365/issues/693)
+- Omdøpt 'Risikooversikt' til 'Usikkerhetsoversikt', dette inkluderer også statusrapport seksjonene. [#499](https://github.com/Puzzlepart/prosjektportalen365/issues/#499)
+- Omarbeidet søkeopplevelse i hele Prosjektportalen [#884](https://github.com/Puzzlepart/prosjektportalen365/issues/884)
+- Ekskludering av private/delte kanal områder når man søker etter områder (Program administrasjon) [#915](https://github.com/Puzzlepart/prosjektportalen365/issues/915)
+- Aggregert innhold: Støtte for dokumentnavnkolonne med filtypeikon [#962](https://github.com/Puzzlepart/prosjektportalen365/issues/962)
+- 'Oversikt' program webdel vil nå vise alle prosjekter, i samme stil som 'Porteføljeoversikt', med `øye` ikon som vises ved prosjekter brukeren ikke har tilgang til. [#961](https://github.com/Puzzlepart/prosjektportalen365/issues/961)
+- Vis alle prosjekter i 'Administrasjon webdel' for program ruavhengig av tilganger, et `øye` ikon vises ved prosjekter brukeren ikke har tilgang til. [#972](https://github.com/Puzzlepart/prosjektportalen365/issues/972)
+- Tittelkolonnen for aggregerte webdeler er nå gjengitt som en klikkbar lenke til listeelementet [#947](https://github.com/Puzzlepart/prosjektportalen365/issues/947)
+- Vedvarende valg ved søk i Program Admin [#849](https://github.com/Puzzlepart/prosjektportalen365/issues/849)
+- Persister søkeboksinnhold når du bytter fane i prosjektutlistingswebdelen [#989](https://github.com/Puzzlepart/prosjektportalen365/issues/989)
+- Tidslinjen for et programs prosjekter viser nå en annen informasjonsmelding [#995](https://github.com/Puzzlepart/prosjektportalen365/issues/995)
 
 ### Feilrettinger
 
-- Persist selection when doing a search in Program Admin [#849](https://github.com/Puzzlepart/prosjektportalen365/issues/849)
-- Bugfix for ResourceAllocation where web part is not loaded due to elements not having User or Role assigned [#904](https://github.com/Puzzlepart/prosjektportalen365/issues/904)
-- Fixed an issue where hubsite was not resolved, leading to inconsistensies and errors [#640](https://github.com/Puzzlepart/prosjektportalen365/issues/849)
-- Fixed an issue where sometimes the role was shown as the owner of a resource allocation entry [#916](https://github.com/Puzzlepart/prosjektportalen365/issues/916)
-- Fixed an issue where '? Hjelp tilgjengelig' button didn't render propertly [#902](https://github.com/Puzzlepart/prosjektportalen365/issues/902)
-- Fixed an issue where visitors to a project didn't see the phase web part [#948](https://github.com/Puzzlepart/prosjektportalen365/issues/948)
-- Fixed an issue where it was not possible to collapse groups in aggregated webparts [#945](https://github.com/Puzzlepart/prosjektportalen365/issues/945)
-- Fixed an issue where '? Hjelp tilgjengelig' button didn't show on existing projects [#844](https://github.com/Puzzlepart/prosjektportalen365/issues/844)
-- Fixed an issue where webparts didn't load properly because user didn't have an e-mail account [#844](https://github.com/Puzzlepart/prosjektportalen365/issues/844)
-- Fixed bugs where users could not upgrade from pre 1.5.4 versions [#901](https://github.com/Puzzlepart/prosjektportalen365/issues/901)
-- Fixed a bug where parts of 'Fasevelger' webpart didn't show properly [#920](https://github.com/Puzzlepart/prosjektportalen365/issues/920)
-- Fixed a bug where '? Hjelp tilgjengelig' div rendered as empty line if a page didn't have help content [#974](https://github.com/Puzzlepart/prosjektportalen365/issues/974)
-- Fixed a bug where planner plans without 'Plannername' in 'ListContent' failed under ProjectSetup [#976](https://github.com/Puzzlepart/prosjektportalen365/issues/976)
-- Fixed a bug where save snapshot didn't work in Project Status [#955](https://github.com/Puzzlepart/prosjektportalen365/issues/955)
-- Fixed bug with the Project List web part where guests could see the "All Projects" tab [#996](https://github.com/Puzzlepart/prosjektportalen365/issues/996)
-- Persist search box state when switching tabs in the Project List web part [#989](https://github.com/Puzzlepart/prosjektportalen365/issues/989)
-- Timeline for a program's projects displays a diffferent information message - the link was not working [#995](https://github.com/Puzzlepart/prosjektportalen365/issues/995)
-- Fixed the standard header labels for the Uncertainty Matrices [#999](https://github.com/Puzzlepart/prosjektportalen365/issues/999)
-- Handles removal of invalid special characters when generating project status snapshot [#1033](https://github.com/Puzzlepart/prosjektportalen365/issues/1033)
+- Rettet et feil hvor ressursallokeringswebdelen ikke lastet på grunn av elementer som ikke var tildelt bruker eller rolle [#904](https://github.com/Puzzlepart/prosjektportalen365/issues/904)
+- Rettet et problem hvor hubsite ikke ble funnet, noe som førte til inkonsekvenser og feil [#640](https://github.com/Puzzlepart/prosjektportalen365/issues/849)
+- Rettet et feil hvor noen ganger rollen ble vist som eier av en ressursallokeringsoppføring [#916](https://github.com/Puzzlepart/prosjektportalen365/issues/916)
+- Rettet et feil hvor '? Hjelp tilgjengelig'-knappen ikke ble vist ordentlig [#902](https://github.com/Puzzlepart/prosjektportalen365/issues/902), [#974](https://github.com/Puzzlepart/prosjektportalen365/issues/974)
+- Rettet et feil hvor besøkende til et prosjekt ikke så fasevelger-webdelen [#948](https://github.com/Puzzlepart/prosjektportalen365/issues/948)
+- Rettet et feil hvor det ikke var mulig å kollapse grupper i aggregerte webdeler [#945](https://github.com/Puzzlepart/prosjektportalen365/issues/945)
+- Rettet et feil hvor '? Hjelp tilgjengelig'-knappen ikke kom med på eksisterende prosjekter [#844](https://github.com/Puzzlepart/prosjektportalen365/issues/844)
+- Rettet et feil hvor webdeler ikke ble lastet ordentlig fordi brukeren ikke hadde en e-postkonto [#844](https://github.com/Puzzlepart/prosjektportalen365/issues/844)
+- Rettet feil hvor brukere ikke kunne oppgradere fra 1.5.4-versjoner eller tidligere [#901](https://github.com/Puzzlepart/prosjektportalen365/issues/901)
+- Rettet en feil hvor deler av 'Fasevelger' webdelen ikke ble vist ordentlig [#920](https://github.com/Puzzlepart/prosjektportalen365/issues/920)
+- Rettet en feil hvor planneroppgaver uten 'plannavn' i 'Listeinnhold' mislyktes under prosjektoppsett [#976](https://github.com/Puzzlepart/prosjektportalen365/issues/976)
+- Rettet en feil hvor lagring av øyeblikksbilde ikke fungerte i prosjektstatus [#955](https://github.com/Puzzlepart/prosjektportalen365/issues/955)
+- Rettet feil med prosjektutlistingswebdelen, hvor gjester kunne se fanen "Alle prosjekter". [#996](https://github.com/Puzzlepart/prosjektportalen365/issues/996)
+- Rettet standard overskriftsetiketter for usikkerhetsmatrisene [#999](https://github.com/Puzzlepart/prosjektportalen365/issues/999)
+- Håndtering av ugyldige spesialtegn ved generering av et øyeblikksbilde for prosjektstatus [#1033](https://github.com/Puzzlepart/prosjektportalen365/issues/1033)
 
 ---
 
