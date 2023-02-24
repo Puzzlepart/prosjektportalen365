@@ -55,7 +55,7 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Rettet en feil hvor lagring av øyeblikksbilde ikke fungerte i prosjektstatus [#955](https://github.com/Puzzlepart/prosjektportalen365/issues/955)
 - Rettet feil med prosjektutlistingswebdelen, hvor gjester kunne se fanen "Alle prosjekter". [#996](https://github.com/Puzzlepart/prosjektportalen365/issues/996)
 - Rettet standard overskriftsetiketter for usikkerhetsmatrisene [#999](https://github.com/Puzzlepart/prosjektportalen365/issues/999)
-- Handles removal of invalid special characters when generating project status snapshot [#1033](https://github.com/Puzzlepart/prosjektportalen365/issues/1033)
+- Håndtering av ugyldige spesialtegn ved generering av et øyeblikksbilde for prosjektstatus [#1033](https://github.com/Puzzlepart/prosjektportalen365/issues/1033)
 
 ---
 
