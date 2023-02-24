@@ -11,7 +11,10 @@ import { useFetchListData } from '../ListSection/useFetchListData'
 import { IUncertaintySectionData, IUncertaintySectionState } from './types'
 
 /**
- * Component logic hook for `UncertaintySection`
+ * Component logic hook for `UncertaintySection`. Fetches list data
+ * from SharePoint, handles state and dispatches actions to the reducer,
+ * aswell as handling the logic for rendering the section content using
+ * the `shouldRenderContent` flag.
  */
 export function useUncertaintySection() {
   const context = useContext(ProjectStatusContext)
@@ -30,11 +33,11 @@ export function useUncertaintySection() {
     } else {
       fetchListData().then((_data) => {
         const contentTypeIndex = parseInt(
-          _.first(_data.items)?.ContentType?.Id?.StringValue?.substring(38, 40) ?? '-1'
+          _.first(_data?.items)?.ContentType?.Id?.StringValue?.substring(38, 40) ?? '-1'
         )
         const data: IUncertaintySectionData = {
           ..._data,
-          matrixElements: _data.items.map((i) => new UncertaintyElementModel(i)),
+          matrixElements: _data?.items?.map((i) => new UncertaintyElementModel(i)),
           contentTypeIndex
         }
         context.dispatch(
