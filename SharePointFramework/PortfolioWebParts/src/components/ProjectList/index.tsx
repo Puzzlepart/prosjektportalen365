@@ -8,7 +8,6 @@ import {
   SelectionMode,
   ShimmeredDetailsList
 } from '@fluentui/react'
-import { Web } from '@pnp/sp'
 import { ProjectListModel } from 'models'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
@@ -155,10 +154,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         title={state.showProjectInfo?.title}
         siteId={state.showProjectInfo?.siteId}
         webUrl={state.showProjectInfo?.url}
-        hubSite={{
-          web: new Web(props.pageContext.site.absoluteUrl),
-          url: props.pageContext.site.absoluteUrl
-        }}
+        webPartContext={props.webPartContext}
         page='Portfolio'
         hidden={!state.showProjectInfo}
         hideAllActions={true}

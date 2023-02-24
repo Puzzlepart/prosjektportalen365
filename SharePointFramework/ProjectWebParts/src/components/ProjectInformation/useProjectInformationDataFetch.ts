@@ -1,4 +1,5 @@
 import { MessageBarType } from '@fluentui/react'
+import { LogLevel } from '@pnp/logging'
 import _ from 'lodash'
 import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import { ListLogger } from 'pp365-shared/lib/logging'
@@ -78,15 +79,26 @@ const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolea
 }
 
 /**
- * Fetch data for `ProjectInformation` component.
+ * Fetch data for `ProjectInformation` component. This function is used in
+ * `useProjectInformationDataFetch` hook.
  *
- * @remarks This function is used in `useProjectInformationDataFetch` hook.
+ * @remarks Ensures that `SPDataAdapter` is configured
+ * before fetching data. Normally the `SPDataAdapter` is not configured
+ * if the component is used in a web part in a different SharePoint Framework solution
+ * like `PortfolioWebParts`.
  */
 const fetchData: DataFetchFunction<
   IProjectInformationProps,
   Partial<IProjectInformationState>
 > = async (props) => {
   try {
+    if (!SPDataAdapter.isConfigured) {
+      await SPDataAdapter.configure(props.webPartContext, {
+        siteId: props.siteId,
+        webUrl: props.webUrl,
+        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+      })
+    }
     const [
       columns,
       propertiesData,
@@ -154,7 +166,8 @@ const fetchData: DataFetchFunction<
 }
 
 /**
- * Fetch hook for ProjectInformation
+ * Fetch hook for ProjectInformation. Fetches data for `ProjectInformation` component
+ * using `fetchData` function together with React `useEffect` hook.
  *
  * @param props Component properties for `ProjectInformation`
  * @param setState Set state function for `ProjectInformation`

@@ -1,6 +1,5 @@
 import { format, IProgressIndicatorProps, MessageBarType } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { LogLevel } from '@pnp/logging'
 import { ListLogger } from 'pp365-shared/lib/logging'
 import { parseUrlHash, sleep } from 'pp365-shared/lib/util'
 import strings from 'ProjectWebPartsStrings'
@@ -12,7 +11,10 @@ import { useProjectInformationDataFetch } from './useProjectInformationDataFetch
 import { useProjectInformationState } from './useProjectInformationState'
 
 /**
- * Component logic hook for `ProjectInformation`
+ * Component logic hook for `ProjectInformation`. If the SPDataAdapter is configured, it will
+ * initialize the `ListLogger` with the `LogListName` from the `strings` resource file. It handles
+ * fetching the project data and setting the state. It also provides callback functions `addMessage`
+ * and `onSyncProperties`, aswell as handling hash changes.
  *
  * @param props Props
  *
@@ -21,18 +23,12 @@ import { useProjectInformationState } from './useProjectInformationState'
 export const useProjectInformation = (props: IProjectInformationProps) => {
   const { state, setState } = useProjectInformationState()
 
-  ListLogger.init(
-    SPDataAdapter.portal.web.lists.getByTitle(strings.LogListName),
-    props.webUrl,
-    ProjectInformation.displayName
-  )
-
-  if (!SPDataAdapter.isConfigured) {
-    SPDataAdapter.configure(props.webPartContext, {
-      siteId: props.siteId,
-      webUrl: props.webUrl,
-      logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-    })
+  if (SPDataAdapter.isConfigured) {
+    ListLogger.init(
+      SPDataAdapter.portal.web.lists.getByTitle(strings.LogListName),
+      props.webUrl,
+      ProjectInformation.displayName
+    )
   }
 
   /**
@@ -121,6 +117,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
   return {
     state,
     setState,
+    addMessage,
     onSyncProperties
-  }
+  } as const
 }
