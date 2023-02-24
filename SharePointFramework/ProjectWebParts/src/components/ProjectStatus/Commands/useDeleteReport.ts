@@ -4,7 +4,8 @@ import { ProjectStatusContext } from '../context'
 import { REPORT_DELETED, REPORT_DELETE_ERROR } from '../reducer'
 
 /**
- * Hook for deletion of report.
+ * Hook for deletion of report. Returns a callback function
+ * for deleting the selected report.
  *
  * @returns A function callback
  */
