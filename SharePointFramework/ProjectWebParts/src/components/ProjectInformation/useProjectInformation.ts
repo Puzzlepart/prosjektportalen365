@@ -21,19 +21,17 @@ import { useProjectInformationState } from './useProjectInformationState'
 export const useProjectInformation = (props: IProjectInformationProps) => {
   const { state, setState } = useProjectInformationState()
 
-  ListLogger.init(
-    SPDataAdapter.portal.web.lists.getByTitle(strings.LogListName),
-    props.webUrl,
-    ProjectInformation.displayName
-  )
+  // ListLogger.init(
+  //   SPDataAdapter.portal.web.lists.getByTitle(strings.LogListName),
+  //   props.webUrl,
+  //   ProjectInformation.displayName
+  // )
 
-  if (!SPDataAdapter.isConfigured) {
-    SPDataAdapter.configure(props.webPartContext, {
-      siteId: props.siteId,
-      webUrl: props.webUrl,
-      logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-    })
-  }
+  SPDataAdapter.configure(props.webPartContext, {
+    siteId: props.siteId,
+    webUrl: props.webUrl,
+    logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+  })
 
   /**
    * Add message
@@ -81,7 +79,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
         props.webUrl,
         strings.ProjectPropertiesListName,
         state.data.templateParameters.ProjectContentTypeId ??
-          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: props.webTitle }
       )
       if (!created) {

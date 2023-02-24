@@ -1,7 +1,6 @@
 import { getFileTypeIconProps, initializeFileTypeIcons } from '@fluentui/react-file-type-icons'
 import { IColumn, Icon, Link } from '@fluentui/react/lib'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { Web } from '@pnp/sp'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import { formatDate, tryParseCurrency, tryParsePercentage } from 'pp365-shared/lib/helpers'
@@ -31,6 +30,7 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
 
   const type = column?.data?.renderAs ?? column['dataType']
 
+  
   switch (type) {
     case 'number':
       return columnValue ? parseInt(columnValue) : null
@@ -137,12 +137,9 @@ export const getDefaultColumns = (props: IPortfolioAggregationProps) => {
             title={item.Title}
             siteId={item.SiteId}
             webUrl={item.Path}
-            hubSite={{
-              web: new Web(props.pageContext.site.absoluteUrl),
-              url: props.pageContext.site.absoluteUrl
-            }}
             page='Portfolio'
             hideAllActions={true}
+            webPartContext={props.webPartContext}
             onRenderToggleElement={(onToggle) => (
               <Icon
                 iconName='Info'
