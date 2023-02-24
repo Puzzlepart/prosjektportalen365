@@ -30,7 +30,6 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
 
   const type = column?.data?.renderAs ?? column['dataType']
 
-  
   switch (type) {
     case 'number':
       return columnValue ? parseInt(columnValue) : null

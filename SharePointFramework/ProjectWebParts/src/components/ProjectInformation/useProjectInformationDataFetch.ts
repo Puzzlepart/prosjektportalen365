@@ -79,11 +79,11 @@ const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolea
 }
 
 /**
- * Fetch data for `ProjectInformation` component. This function is used in 
+ * Fetch data for `ProjectInformation` component. This function is used in
  * `useProjectInformationDataFetch` hook.
- * 
+ *
  * @remarks Ensures that `SPDataAdapter` is configured
- * before fetching data. Normally the `SPDataAdapter` is not configured 
+ * before fetching data. Normally the `SPDataAdapter` is not configured
  * if the component is used in a web part in a different SharePoint Framework solution
  * like `PortfolioWebParts`.
  */
