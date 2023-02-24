@@ -20,10 +20,26 @@ export function useCaptureReport() {
       statusReportHtml.appendChild(dateStamp)
       statusReportHtml.style.backgroundColor = '#FFFFFF'
       const content = await domToImage.toBlob(statusReportHtml)
-      const name = `${(title + '_' + date).toString().replace(/\/|\\| |\:/g, '-')}.png`
+      const name = createValidAttachmentName(title, date)
       return { name, content } as AttachmentFileInfo
     } catch (error) {
       return null
     }
   }
+}
+
+/**
+ * Creates a valid file name for the attachment file. The file name is
+ * created by concatenating the title and date and replacing all
+ * `/`, `\`, ` `, `:` with `-`, aswell as removing any invalid
+ * characters (`~#%&*{}:<>?\/|"`).
+ *
+ * @param title The title of the project
+ * @param date The current date in format `YYYY-MM-DD HH:mm`
+ */
+function createValidAttachmentName(title: string | number | boolean, date: string) {
+  return `${(title + '_' + date)
+    .toString()
+    .replace(/\/|\\| |\:/g, '-')
+    .replace(/[~#%&*{}:<>?\/|"]/gm, '')}.png`
 }
