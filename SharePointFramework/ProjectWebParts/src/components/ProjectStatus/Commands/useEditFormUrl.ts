@@ -4,7 +4,7 @@ import { ProjectStatusContext } from '../context'
 
 /**
  * Returns a function that returns the edit form URL for a report.
- * 
+ *
  * @returns A function callback
  */
 export function useEditFormUrl() {

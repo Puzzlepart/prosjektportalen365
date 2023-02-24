@@ -8,7 +8,7 @@ import { useEditFormUrl } from './useEditFormUrl'
 /**
  * Hook for redirecting to a new status report. Uses `useEditFormUrl` hook
  * to get the edit form URL for the new report. Redirect the user to the
- * edit form URL for the new report, and sets initial values for the report 
+ * edit form URL for the new report, and sets initial values for the report
  * based on the web title and the last report (if it exists).
  *
  * @returns A function callback

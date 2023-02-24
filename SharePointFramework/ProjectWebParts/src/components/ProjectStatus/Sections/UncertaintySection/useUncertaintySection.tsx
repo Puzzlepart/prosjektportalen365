@@ -11,8 +11,8 @@ import { useFetchListData } from '../ListSection/useFetchListData'
 import { IUncertaintySectionData, IUncertaintySectionState } from './types'
 
 /**
- * Component logic hook for `UncertaintySection`. Fetches list data 
- * from SharePoint, handles state and dispatches actions to the reducer, 
+ * Component logic hook for `UncertaintySection`. Fetches list data
+ * from SharePoint, handles state and dispatches actions to the reducer,
  * aswell as handling the logic for rendering the section content using
  * the `shouldRenderContent` flag.
  */
