@@ -11,7 +11,10 @@ import { useProjectInformationDataFetch } from './useProjectInformationDataFetch
 import { useProjectInformationState } from './useProjectInformationState'
 
 /**
- * Component logic hook for `ProjectInformation`
+ * Component logic hook for `ProjectInformation`. If the SPDataAdapter is configured, it will
+ * initialize the `ListLogger` with the `LogListName` from the `strings` resource file. It handles
+ * fetching the project data and setting the state. It also provides callback functions `addMessage`
+ * and `onSyncProperties`, aswell as handling hash changes.
  *
  * @param props Props
  *
@@ -20,11 +23,13 @@ import { useProjectInformationState } from './useProjectInformationState'
 export const useProjectInformation = (props: IProjectInformationProps) => {
   const { state, setState } = useProjectInformationState()
 
-  // ListLogger.init(
-  //   SPDataAdapter.portal.web.lists.getByTitle(strings.LogListName),
-  //   props.webUrl,
-  //   ProjectInformation.displayName
-  // )
+  if (SPDataAdapter.isConfigured) {
+    ListLogger.init(
+      SPDataAdapter.portal.web.lists.getByTitle(strings.LogListName),
+      props.webUrl,
+      ProjectInformation.displayName
+    )
+  }
 
   /**
    * Add message
@@ -72,7 +77,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
         props.webUrl,
         strings.ProjectPropertiesListName,
         state.data.templateParameters.ProjectContentTypeId ??
-        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
         { Title: props.webTitle }
       )
       if (!created) {
@@ -112,6 +117,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
   return {
     state,
     setState,
+    addMessage,
     onSyncProperties
-  }
+  } as const
 }

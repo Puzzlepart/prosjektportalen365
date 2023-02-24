@@ -79,15 +79,26 @@ const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolea
 }
 
 /**
- * Fetch data for `ProjectInformation` component.
- *
- * @remarks This function is used in `useProjectInformationDataFetch` hook.
+ * Fetch data for `ProjectInformation` component. This function is used in 
+ * `useProjectInformationDataFetch` hook.
+ * 
+ * @remarks Ensures that `SPDataAdapter` is configured
+ * before fetching data. Normally the `SPDataAdapter` is not configured 
+ * if the component is used in a web part in a different SharePoint Framework solution
+ * like `PortfolioWebParts`.
  */
 const fetchData: DataFetchFunction<
   IProjectInformationProps,
   Partial<IProjectInformationState>
 > = async (props) => {
   try {
+    if (!SPDataAdapter.isConfigured) {
+      await SPDataAdapter.configure(props.webPartContext, {
+        siteId: props.siteId,
+        webUrl: props.webUrl,
+        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+      })
+    }
     const [
       columns,
       propertiesData,
@@ -100,16 +111,16 @@ const fetchData: DataFetchFunction<
       SPDataAdapter.project.getPropertiesData(),
       props.page === 'Frontpage'
         ? SPDataAdapter.portal.getParentProjects(
-          props.webPartContext?.pageContext?.web?.absoluteUrl,
-          ProjectInformationParentProject
-        )
+            props.webPartContext?.pageContext?.web?.absoluteUrl,
+            ProjectInformationParentProject
+          )
         : Promise.resolve([]),
       props.hideStatusReport
         ? Promise.resolve([])
         : SPDataAdapter.portal.getStatusReports({
-          filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
-          publishedString: strings.GtModerationStatus_Choice_Published
-        }),
+            filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
+            publishedString: strings.GtModerationStatus_Choice_Published
+          }),
       props.hideStatusReport
         ? Promise.resolve([])
         : SPDataAdapter.portal.getProjectStatusSections(),
@@ -157,7 +168,8 @@ const fetchData: DataFetchFunction<
 }
 
 /**
- * Fetch hook for ProjectInformation
+ * Fetch hook for ProjectInformation. Fetches data for `ProjectInformation` component
+ * using `fetchData` function together with React `useEffect` hook.
  *
  * @param props Component properties for `ProjectInformation`
  * @param setState Set state function for `ProjectInformation`
@@ -167,21 +179,13 @@ export const useProjectInformationDataFetch = (
   setState: (newState: Partial<IProjectInformationState>) => void
 ) => {
   useEffect(() => {
-    SPDataAdapter.configure(props.webPartContext, {
-      siteId: props.siteId,
-      webUrl: props.webUrl,
-      logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-    }).then(() => {
-      // eslint-disable-next-line no-console
-      console.group(SPDataAdapter)
-      fetchData(props)
-        .then((data) => setState({ ...data, isDataLoaded: true }))
-        .catch((error) =>
-          setState({
-            isDataLoaded: true,
-            error: { ..._.pick(error, 'message', 'stack'), type: MessageBarType.severeWarning }
-          })
-        )
-    })
+    fetchData(props)
+      .then((data) => setState({ ...data, isDataLoaded: true }))
+      .catch((error) =>
+        setState({
+          isDataLoaded: true,
+          error: { ..._.pick(error, 'message', 'stack'), type: MessageBarType.severeWarning }
+        })
+      )
   }, [])
 }
