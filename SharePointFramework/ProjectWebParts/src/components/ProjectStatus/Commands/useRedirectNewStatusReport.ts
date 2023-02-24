@@ -1,5 +1,4 @@
 import { format } from '@fluentui/react'
-import { TypedHash } from '@pnp/common'
 import { PortalDataService } from 'pp365-shared/lib/services'
 import strings from 'ProjectWebPartsStrings'
 import { useContext } from 'react'
@@ -7,7 +6,10 @@ import { ProjectStatusContext } from '../context'
 import { useEditFormUrl } from './useEditFormUrl'
 
 /**
- * Hook for redirecting to a new status report.
+ * Hook for redirecting to a new status report. Uses `useEditFormUrl` hook
+ * to get the edit form URL for the new report. Redirect the user to the
+ * edit form URL for the new report, and sets initial values for the report 
+ * based on the web title and the last report (if it exists).
  *
  * @returns A function callback
  */
@@ -19,7 +21,7 @@ export function useRedirectNewStatusReport() {
       pageContext: context.props.pageContext
     })
     const [lastReport] = context.state.data.reports
-    let properties: TypedHash<string | number | boolean> = {}
+    let properties: Record<string, string | number | boolean> = {}
     if (lastReport) {
       properties = context.state.data.reportFields
         .filter(

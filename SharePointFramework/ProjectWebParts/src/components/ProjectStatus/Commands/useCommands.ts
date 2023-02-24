@@ -52,7 +52,6 @@ export function useCommands() {
         key: 'PUBLISH_REPORT',
         name: strings.PublishReportButtonText,
         iconProps: { iconName: 'PublishContent' },
-        disabled: context.state.selectedReport?.published,
         onClick: () => {
           context.dispatch(REPORT_PUBLISHING())
           publishReport()
