@@ -1,37 +1,37 @@
 {
-    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-    "id": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
-    "alias": "ProjectPhasesWebPart",
-    "componentType": "WebPart",
-    "version": "1.7.3",
-    "manifestVersion": 2,
-    "requiresCustomScript": false,
-    "hiddenFromToolbox": true,
-    "supportedHosts": [
-        "SharePointWebPart"
-    ],
-    "preconfiguredEntries": [
-        {
-            "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
-            "group": {
-                "default": "Other"
-            },
-            "title": {
-                "default": "Fasevelger"
-            },
-            "description": {
-                "default": " "
-            },
-            "officeFabricIconFontName": "GitGraph",
-            "properties": {
-                "phaseField": "Fase",
-                "syncPropertiesAfterPhaseChange": true,
-                "showSubText": true,
-                "subTextTruncateLength": 50,
-                "currentPhaseViewName": "Gjeldende fase",
-                "useDynamicHomepage": false,
-                "usePhaseHooks": false
-            }
-        }
-    ]
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
+  "alias": "ProjectPhasesWebPart",
+  "componentType": "WebPart",
+  "version": "1.8.0",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "hiddenFromToolbox": true,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Fasevelger"
+      },
+      "description": {
+        "default": " "
+      },
+      "officeFabricIconFontName": "GitGraph",
+      "properties": {
+        "phaseField": "Fase",
+        "syncPropertiesAfterPhaseChange": true,
+        "showSubText": true,
+        "subTextTruncateLength": 50,
+        "currentPhaseViewName": "Gjeldende fase",
+        "useDynamicHomepage": false,
+        "usePhaseHooks": false
+      }
+    }
+  ]
 }

@@ -3,7 +3,7 @@
   "id": "f97a38ab-78c2-400e-899f-b0d4cda76166",
   "alias": "ProgramTimelineWebPart",
   "componentType": "WebPart",
-  "version": "1.7.3",
+  "version": "1.8.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "supportedHosts": [
