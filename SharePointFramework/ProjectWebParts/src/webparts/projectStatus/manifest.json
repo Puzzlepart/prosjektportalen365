@@ -1,36 +1,36 @@
 {
-    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-    "id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
-    "alias": "ProjectStatusWebPart",
-    "componentType": "WebPart",
-    "version": "1.7.3",
-    "manifestVersion": 2,
-    "requiresCustomScript": false,
-    "hiddenFromToolbox": true,
-    "supportedHosts": [
-        "SharePointWebPart"
-    ],
-    "preconfiguredEntries": [
-        {
-            "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
-            "group": {
-                "default": "Other"
-            },
-            "title": {
-                "default": "Prosjektstatus"
-            },
-            "description": {
-                "default": " "
-            },
-            "officeFabricIconFontName": "AwayStatus",
-            "properties": {
-                "title": "Prosjektstatus",
-                "fieldWidth": 250,
-                "riskMatrix": {
-                    "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>",
-                    "width": 800
-                }
-            }
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
+  "alias": "ProjectStatusWebPart",
+  "componentType": "WebPart",
+  "version": "1.8.0",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "hiddenFromToolbox": true,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Prosjektstatus"
+      },
+      "description": {
+        "default": " "
+      },
+      "officeFabricIconFontName": "AwayStatus",
+      "properties": {
+        "title": "Prosjektstatus",
+        "fieldWidth": 250,
+        "riskMatrix": {
+          "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>",
+          "width": 800
         }
-    ]
+      }
+    }
+  ]
 }
