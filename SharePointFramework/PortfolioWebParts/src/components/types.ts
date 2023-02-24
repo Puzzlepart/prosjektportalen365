@@ -10,7 +10,7 @@ export interface IBaseComponentProps {
   title?: string
 
   /**
-   * Web part context
+   * SPFx web part context
    */
   webPartContext?: WebPartContext
 

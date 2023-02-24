@@ -172,6 +172,8 @@ export const useProjectInformationDataFetch = (
       webUrl: props.webUrl,
       logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     }).then(() => {
+      // eslint-disable-next-line no-console
+      console.group(SPDataAdapter)
       fetchData(props)
         .then((data) => setState({ ...data, isDataLoaded: true }))
         .catch((error) =>
