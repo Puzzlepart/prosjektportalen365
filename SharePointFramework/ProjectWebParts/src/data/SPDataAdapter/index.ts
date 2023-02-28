@@ -21,8 +21,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param spfxContext Context
    * @param configuration Configuration
    */
-  public configure(spfxContext: WebPartContext, configuration: ISPDataAdapterConfiguration) {
-    super.configure(spfxContext, configuration)
+  public async configure(
+    spfxContext: WebPartContext,
+    configuration: ISPDataAdapterConfiguration
+  ): Promise<void> {
+    await super.configure(spfxContext, configuration)
     taxonomy.setup({ spfxContext })
     this.project = new ProjectDataService(
       {
@@ -36,15 +39,21 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Get fields to sync
+   * Filters a list of fields to include only those with the `Gt` prefix,
+   * those in a custom group, or those specified in the forcedFields array.
    *
    * @param fields Fields
    * @param customGroupName Custom group name
+   * @param forcedFields Array of field names to include regardless of the `ShowInEditForm` attribute value
    *
    * @returns Fields to sync
    */
-  private _getFieldsToSync(fields: IEntityField[], customGroupName: string): any[] {
-    const fieldToSync = [
+  private _getFieldsToSync(
+    fields: IEntityField[],
+    customGroupName: string,
+    forcedFields: string[]
+  ): any[] {
+    const fieldsToSync = [
       {
         InternalName: 'Title',
         TypeAsString: 'Text'
@@ -57,12 +66,16 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         const hideFromEditForm = SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1
         const gtPrefix = InternalName.indexOf('Gt') === 0
         const inCustomGroup = Group === customGroupName
-        if (hideFromEditForm) return false
-        if (!gtPrefix && !inCustomGroup) return false
+        // Include fields with Gt prefix or in custom group, or those in the forcedFields array
+        if (
+          (!gtPrefix && !inCustomGroup && !forcedFields.includes(InternalName)) ||
+          hideFromEditForm
+        )
+          return false
         return true
       })
     ]
-    return fieldToSync
+    return fieldsToSync
   }
 
   /**
@@ -81,7 +94,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   ): Promise<void> {
     try {
       progressFunc({
-        label: strings.SyncProjectPropertiesValuesProgressDescription,
+        label: strings.SyncProjectPropertiesValuesProgressLabel,
         description: strings.SyncProjectPropertiesValuesProgressDescription
       })
       const properties = await this.getMappedProjectProperties(
@@ -133,7 +146,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
           }[]
         >()
       ])
-      const fieldsToSync = this._getFieldsToSync(fields, templateParameters.CustomSiteFields)
+      const fieldsToSync = this._getFieldsToSync(fields, templateParameters.CustomSiteFields, [
+        'GtIsParentProject',
+        'GtIsProgram'
+      ])
       const properties: TypedHash<any> = {}
       for (let i = 0; i < fieldsToSync.length; i++) {
         const fld = fieldsToSync[i]

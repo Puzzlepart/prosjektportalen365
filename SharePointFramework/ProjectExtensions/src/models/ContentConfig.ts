@@ -15,6 +15,7 @@ export interface IContentConfigSPItem {
   GtLccSourceList: string
   GtLccHidden: boolean
   GtLccLocked: boolean
+  GtPlannerName: string
 }
 
 export enum ContentConfigType {
@@ -26,6 +27,7 @@ export enum ContentConfigType {
  * @model ContentConfig
  */
 export class ContentConfig extends UserSelectableObject {
+  public plannerTitle: string
   public sourceListProps: IListProperties = {}
   public destListProps: IListProperties = {}
   private _sourceList: string
@@ -42,6 +44,7 @@ export class ContentConfig extends UserSelectableObject {
     )
     this._sourceList = _spItem.GtLccSourceList
     this._destinationList = _spItem.GtLccDestinationList
+    this.plannerTitle = _spItem.GtPlannerName || _spItem.Title
   }
 
   /**

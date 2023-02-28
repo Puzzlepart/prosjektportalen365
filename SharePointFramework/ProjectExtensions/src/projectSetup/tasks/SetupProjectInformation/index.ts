@@ -51,10 +51,6 @@ export class SetupProjectInformation extends BaseTask {
         strings.SyncLocalProjectPropertiesListText,
         'AlignCenter'
       )
-      this.logInformation(
-        `Synchronizing list '${strings.ProjectPropertiesListName}' based on content type from ${this.data.hub.url} `,
-        {}
-      )
       const { list } = await params.portal.syncList(
         params.webAbsoluteUrl,
         strings.ProjectPropertiesListName,
@@ -113,9 +109,6 @@ export class SetupProjectInformation extends BaseTask {
    */
   private async _addEntryToHub(params: IBaseTaskParams) {
     try {
-      this.logInformation(
-        `Attempting to retrieve project item from list '${params.properties.projectsList}' at ${this.data.hub.url}`
-      )
       const entity = await params.entityService.getEntityItem(
         params.context.pageContext.legacyPageContext.groupId
       )
@@ -130,17 +123,10 @@ export class SetupProjectInformation extends BaseTask {
       if (params.templateSchema.Parameters.ProjectContentTypeId) {
         properties.ContentTypeId = params.templateSchema.Parameters.ProjectContentTypeId
       }
-      this.logInformation(
-        `Adding project entity to list '${params.properties.projectsList}' at ${this.data.hub.url}`,
-        { properties }
-      )
       await params.entityService.createNewEntity(
         params.context.pageContext.legacyPageContext.groupId,
         params.context.pageContext.web.absoluteUrl,
         properties
-      )
-      this.logInformation(
-        `Project entity added to list '${params.properties.projectsList}' at ${this.data.hub.url}`
       )
     } catch (error) {
       throw error

@@ -1,5 +1,4 @@
 import { AnyAction } from '@reduxjs/toolkit'
-import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 import { createContext } from 'react'
 import { IChangePhaseDialogState } from './types'
 
@@ -17,12 +16,12 @@ export interface IChangePhaseDialogContext {
   /**
    * Next checklist item
    *
-   * Updates the current checklist item, and dispatches CHECKLIST_ITEM_UPDATED
-   * with the properties
+   * Updates the current checklist item, and dispatches `CHECKLIST_ITEM_UPDATED`
+   * with the properties.
    *
    * @param properties Properties
    */
-  nextChecklistItem: (properties: Partial<IProjectPhaseChecklistItem>) => void
+  nextChecklistItem: (properties: Record<string, any>) => void
 }
 
 export const ChangePhaseDialogContext = createContext<IChangePhaseDialogContext>(null)

@@ -1,0 +1,1 @@
+﻿<Field Type="Text" DisplayName="{resource:SiteFields_GtSecView_DisplayName}" Description="{resource:SiteFields_GtSecView_Description}" Group="{resource:SiteFields_Portfolio_Group}" ID="{0c5167bb-1c77-49ce-8985-e012e33398c8}" StaticName="GtSecView" Name="GtSecView" />

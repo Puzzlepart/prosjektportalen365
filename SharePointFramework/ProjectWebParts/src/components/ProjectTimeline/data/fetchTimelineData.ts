@@ -1,5 +1,6 @@
 import { IColumn } from '@fluentui/react'
 import { sp } from '@pnp/sp'
+import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
 import {
   TimelineConfigurationModel,
@@ -19,17 +20,12 @@ export async function fetchTimelineData(
   timelineConfig: TimelineConfigurationModel[]
 ) {
   try {
-    const timelineContentList = props.hubSite.web.lists.getByTitle(strings.TimelineContentListName)
+    const timelineContentList = SPDataAdapter.portal.web.lists.getByTitle(
+      strings.TimelineContentListName
+    )
+
     const projectDeliveries = (props.showProjectDeliveries
-      ? await sp.web.lists
-          .getByTitle(props.projectDeliveriesListName)
-          .items.select(
-            'Title',
-            'GtDeliveryDescription',
-            'GtDeliveryStartTime',
-            'GtDeliveryEndTime'
-          )
-          .getAll()
+      ? await sp.web.lists.getByTitle(props.projectDeliveriesListName).items.getAll()
       : []
     )
       .map((item) => {
@@ -41,7 +37,8 @@ export async function fetchTimelineData(
           config?.title ?? props.configItemTitle,
           item.GtDeliveryStartTime,
           item.GtDeliveryEndTime,
-          item.GtDeliveryDescription
+          item.GtDeliveryDescription,
+          item.GtTag || ''
         ).usingConfig({
           elementType: strings.BarLabel,
           timelineFilter: true,
@@ -95,7 +92,7 @@ export async function fetchTimelineData(
     timelineListItems = timelineListItems.map((item) => ({
       ...item,
       EditFormUrl: [
-        `${props.hubSite.url}`,
+        `${SPDataAdapter.portal.url}`,
         `/Lists/${strings.TimelineContentListName}/EditForm.aspx`,
         '?ID=',
         item.Id,

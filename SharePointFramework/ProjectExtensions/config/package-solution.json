@@ -3,7 +3,7 @@
   "solution": {
     "name": "Prosjektportalen 365 - Project Extensions",
     "id": "fe723971-d5c2-4698-91e3-c16e2f72fb5b",
-    "version": "1.7.3.0",
+    "version": "1.8.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "webApiPermissionRequests": [

@@ -8,6 +8,7 @@ import { IProjectSetupData } from 'projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 import { IPlannerBucket, IPlannerConfiguration, IPlannerPlan, ITaskDetails } from './types'
+import _ from 'underscore'
 /**
  * @class PlannerConfiguration
  */
@@ -15,11 +16,13 @@ export class PlannerConfiguration extends BaseTask {
   /**
    * Constructor
    *
+   * @param planTitle Plan title
    * @param data Project setup data
    * @param _configuration Planner configuration object
    * @param _labels Planner labels
    */
   constructor(
+    public planTitle: string,
     data: IProjectSetupData,
     private _configuration: IPlannerConfiguration,
     private _labels: string[] = []
@@ -58,14 +61,16 @@ export class PlannerConfiguration extends BaseTask {
     onProgress: OnProgressCallbackFunction
   ): Promise<IPlannerPlan> {
     try {
-      const planTitle = pageContext.web.title
-      const owner = pageContext.legacyPageContext.groupId
-      this.logInformation(`Creating plan ${planTitle}`)
-      const plan = await this.ensurePlan(planTitle, owner)
+      let plan: IPlannerPlan = {
+        title: [pageContext.web.title, this.planTitle].filter(Boolean).join(' - '),
+        owner: pageContext.legacyPageContext.groupId
+      }
+      this.logInformation(`Creating plan ${plan.title}`)
+      plan = await this.ensurePlan(plan)
       const existingBuckets = await this._fetchBuckets(plan.id)
       for (let i = 0; i < Object.keys(this._configuration).length; i++) {
         const bucketName = Object.keys(this._configuration)[i]
-        this.logInformation(`Ensuring bucket ${bucketName} for plan ${planTitle}`)
+        this.logInformation(`Ensuring bucket ${bucketName} for plan ${plan.title}`)
         const bucket = await this._ensureBucket(bucketName, existingBuckets, plan.id)
         onProgress(
           strings.PlannerConfigurationText,
@@ -83,16 +88,15 @@ export class PlannerConfiguration extends BaseTask {
   /**
    * Ensure plan
    *
-   * @param title Plan title
-   * @param owner Owner (group id)
+   * @param plan Plan object
    * @param setupLabels Setup labels for the plan
    */
-  public async ensurePlan(title: string, owner: string, setupLabels = true): Promise<IPlannerPlan> {
+  public async ensurePlan(plan: IPlannerPlan, setupLabels = true): Promise<IPlannerPlan> {
     try {
-      const existingGroupPlans = await this._fetchPlans(owner)
-      let [plan] = existingGroupPlans.filter((p) => p.title === title)
-      if (!plan) {
-        plan = await MSGraphHelper.Post('planner/plans', JSON.stringify({ title, owner }))
+      const existingGroupPlans = await this._fetchPlans(plan.owner)
+      const existingPlan = _.find(existingGroupPlans, (p) => p.title === plan.title)
+      if (!existingPlan) {
+        plan = await MSGraphHelper.Post('planner/plans', JSON.stringify(plan))
       }
       if (setupLabels) await this._setupLabels(plan)
       return plan

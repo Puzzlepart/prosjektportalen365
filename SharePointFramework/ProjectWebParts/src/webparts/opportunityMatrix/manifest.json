@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "aff0baa2-9ab4-4c13-a062-d5fa5028121c",
+  "alias": "OpportunityMatrixWebPart",
+  "componentType": "WebPart",
+  "version": "1.8.0",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "hiddenFromToolbox": true,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Mulighetsmatrise"
+      },
+      "description": {
+        "default": " "
+      },
+      "officeFabricIconFontName": "BranchCommit",
+      "properties": {
+        "listName": "Usikkerhet",
+        "viewXml": "<View><Query><Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">Mulighet</Value></Eq></Where></Query></View>",
+        "probabilityFieldName": "GtRiskProbability",
+        "consequenceFieldName": "GtRiskConsequence",
+        "probabilityPostActionFieldName": "GtRiskProbabilityPostAction",
+        "consequencePostActionFieldName": "GtRiskConsequencePostAction",
+        "width": 800,
+        "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>"
+      }
+    }
+  ]
+}

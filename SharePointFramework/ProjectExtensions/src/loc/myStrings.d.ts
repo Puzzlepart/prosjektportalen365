@@ -1,4 +1,6 @@
 declare interface IProjectExtensionsStrings {
+  ConfiguredSpecifiedTaskMessage: string
+  CmdSelectionCountText: string
   ExtensionLockedTooltipText: string
   ContentConfigLockedTooltipText: string
   TemplateSelectorSearchClearText: string

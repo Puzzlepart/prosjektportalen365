@@ -1,10 +1,11 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { dateAdd, PnPClientStorage, TypedHash } from '@pnp/common'
+import { dateAdd, PnPClientStorage } from '@pnp/common'
 import { ItemUpdateResult, QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
 import { IAggregatedListConfiguration } from 'interfaces/IAggregatedListConfiguration'
+import { capitalize } from 'lodash'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
 import { isNull } from 'pp365-shared/lib/helpers'
@@ -12,8 +13,7 @@ import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
 import { DataSource, PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
-import HubSiteService from 'sp-hubsite-service'
-import _, { any, find, first } from 'underscore'
+import _ from 'underscore'
 import {
   Benefit,
   BenefitMeasurement,
@@ -29,39 +29,48 @@ import {
   TimelineConfigurationModel,
   TimelineContentModel
 } from '../models'
-import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import {
   CONTENT_TYPE_ID_BENEFITS,
   CONTENT_TYPE_ID_INDICATORS,
   CONTENT_TYPE_ID_MEASUREMENTS,
   DEFAULT_GAINS_PROPERTIES,
   DEFAULT_SEARCH_SETTINGS,
-  IDataAdapter
+  IDataAdapter,
+  IFetchDataForViewItemResult
 } from './types'
 
+/**
+ * Data adapter for Portfolio Web Parts.
+ */
 export class DataAdapter implements IDataAdapter {
   private _portalDataService: PortalDataService
   public dataSourceService: DataSourceService
 
+  /**
+   * Constructs the `DataAdapter` class
+   *
+   * @param context Web part context
+   * @param siteIds Site IDs
+   */
   constructor(public context: WebPartContext, private siteIds?: string[]) {
-    this._portalDataService = new PortalDataService().configure({
-      urlOrWeb: context.pageContext.web.absoluteUrl
-    })
+    this._portalDataService = new PortalDataService()
   }
 
   /**
-   * Configuring the DataAdapter enabling use
-   * of the `DataSourceService`.
+   * Configuring the `DataAdapter` enabling use
+   * of the `DataSourceService` and `PortalDataService`
    */
   public async configure(): Promise<DataAdapter> {
     if (this.dataSourceService) return this
-    const { web } = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
-    this.dataSourceService = new DataSourceService(web)
+    this._portalDataService = await this._portalDataService.configure({
+      pageContext: this.context.pageContext
+    })
+    this.dataSourceService = new DataSourceService(this._portalDataService.web)
     return this
   }
 
   /**
-   * Fetch chart data
+   * Fetch chart data for a view
    *
    * @param view View configuration
    * @param configuration PortfolioOverviewConfiguration
@@ -108,6 +117,9 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
+  /**
+   * Get portfolio configuration from SharePoint lists.
+   */
   public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
     // eslint-disable-next-line prefer-const
     let [columnConfig, columns, views, viewsUrls, columnUrls] = await Promise.all([
@@ -130,24 +142,21 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Get aggregated list config
+   * Get aggregated list config for the given category.
    *
    * @param category Category
    */
   public async getAggregatedListConfig(category: string): Promise<IAggregatedListConfiguration> {
-    let portal = this._portalDataService
-
     try {
       if (category.includes('(Prosjektnivå)') || !category) {
-        const { web } = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
-        portal = new PortalDataService().configure({ urlOrWeb: web })
+        this._portalDataService = await this._portalDataService.configure({
+          pageContext: this.context.pageContext
+        })
       }
       const [views, viewsUrls, columnUrls] = await Promise.all([
-        await this.configure().then((adapter) => {
-          return adapter.fetchDataSources(category)
-        }),
-        portal.getListFormUrls('DATA_SOURCES'),
-        portal.getListFormUrls('PROJECT_CONTENT_COLUMNS')
+        this.fetchDataSources(category),
+        this._portalDataService.getListFormUrls('DATA_SOURCES'),
+        this._portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS')
       ])
       return {
         views,
@@ -160,9 +169,9 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch data for view
+   * Fetch data for view.
    *
-   * @description Used by PortfolioOverview and PortfolioInsights
+   * @description Used by `PortfolioOverview` and `PortfolioInsights`
    *
    * @param view
    * @param configuration
@@ -184,7 +193,6 @@ export class DataAdapter implements IDataAdapter {
 
   /**
    * Fetch data for regular view
-   *
    *
    * @param view View configuration
    * @param configuration PortfolioOverviewConfiguration
@@ -223,7 +231,7 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch data for manager view
+   * Fetch data for manager view.
    *
    * @param view View
    * @param configuration Configuration
@@ -319,7 +327,7 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetches data for the Projecttimeline project
+   * Fetches data for the Projecttimeline project.
    *
    * @param timelineConfig Timeline configuration
    */
@@ -355,7 +363,7 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   *  Fetches items from timelinecontent list
+   *  Fetches items from timeline content list and maps them to `TimelineContentListModel`.
    *
    * * Fetching list items
    * * Maps the items to `TimelineContentListModel`
@@ -403,7 +411,8 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetches configuration data for the Project Timeline
+   * Fetches configuration data for the Project Timeline and
+   * maps them to `TimelineConfigurationModel`.
    */
   public async fetchTimelineConfiguration() {
     const timelineConfig = await sp.web.lists
@@ -415,7 +424,8 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetches configuration data for the Projecttimeline
+   * Fetches configuration data for the Project Timeline and
+   * maps them to `TimelineContentModel`.
    *
    * @param configItemTitle Configuration item title
    * @param dataSourceName Data source name
@@ -431,29 +441,28 @@ export class DataAdapter implements IDataAdapter {
       (col) => col.title === (configItemTitle || 'Prosjektleveranse')
     )
     if (config?.showElementPortfolio) {
-      const [projectDeliveries] = await Promise.all([
-        this.configure().then(async (adapter) => {
-          try {
-            const deliveries = await adapter.fetchItemsWithSource(
-              dataSourceName || 'Alle prosjektleveranser',
-              [
-                'Title',
-                'GtDeliveryDescriptionOWSMTXT',
-                'GtDeliveryStartTimeOWSDATE',
-                'GtDeliveryEndTimeOWSDATE'
-              ]
-            )
-            return deliveries.filter(
-              (delivery) => delivery.GtDeliveryStartTimeOWSDATE && delivery.GtDeliveryEndTimeOWSDATE
-            )
-          } catch (error) {
-            throw error
-          }
-        })
-      ])
+      const projectDeliveries = await (async () => {
+        try {
+          const deliveries = await this.fetchItemsWithSource(
+            dataSourceName || 'Alle prosjektleveranser',
+            [
+              'Title',
+              'GtDeliveryDescriptionOWSMTXT',
+              'GtDeliveryStartTimeOWSDATE',
+              'GtDeliveryEndTimeOWSDATE',
+              'GtTagOWSCHCS'
+            ]
+          )
+          return deliveries.filter(
+            (delivery) => delivery.GtDeliveryStartTimeOWSDATE && delivery.GtDeliveryEndTimeOWSDATE
+          ) as any[]
+        } catch (error) {
+          throw error
+        }
+      })()
 
-      return projectDeliveries
-        .map((item) =>
+      return (projectDeliveries as any[])
+        .map<TimelineContentModel>((item: any) =>
           new TimelineContentModel(
             item.SiteId,
             item.SiteTitle,
@@ -461,15 +470,16 @@ export class DataAdapter implements IDataAdapter {
             config?.title ?? configItemTitle,
             item.GtDeliveryStartTimeOWSDATE,
             item.GtDeliveryEndTimeOWSDATE,
-            item.GtDeliveryDescriptionOWSMTXT
+            item.GtDeliveryDescriptionOWSMTXT,
+            item.GtTagOWSCHCS
           ).usingConfig(config)
         )
-        .filter((t) => t)
+        .filter(Boolean)
     } else return []
   }
 
   /**
-   * Fetch project sites
+   * Fetch project sites using search.
    *
    * @param rowLimit Row limit
    * @param sortProperty Sort property
@@ -524,35 +534,34 @@ export class DataAdapter implements IDataAdapter {
       .map((item) => {
         const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
         const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
-        const group = find(groups, (grp) => grp.id === item.GtGroupId)
+        const group = _.find(groups, (grp) => grp.id === item.GtGroupId)
         const model = new ProjectListModel(group?.displayName ?? item.Title, item)
         model.isUserMember = !!group
-        model.hasUserAccess = any(sites, (site) => site['SiteId'] === item.GtSiteId)
+        model.hasUserAccess = _.any(sites, (site) => site['SiteId'] === item.GtSiteId)
         if (manager) model.manager = { text: manager.Title, imageUrl: getUserPhoto(manager.Email) }
         if (owner) model.owner = { text: owner.Title, imageUrl: getUserPhoto(owner.Email) }
         return model
       })
-      .filter((p) => p)
+      .filter(Boolean)
     return projects
   }
 
   /**
    * Fetching enriched projects by combining list items from projects list,
    * Graph Groups and site users. The result are cached in `localStorage`
-   * by the key `pp365_fetchenrichedprojects` for 30 minutes.
+   * for 30 minutes.
    *
    * @param filter Filter for project items
-   * @param storageKey Storage key for `PnPClientStore`
    */
   public async fetchEnrichedProjects(
     // eslint-disable-next-line quotes
-    filter = "GtProjectLifecycleStatus ne 'Avsluttet'",
-    storageKey = 'pp365_fetchenrichedprojects'
+    filter = "GtProjectLifecycleStatus ne 'Avsluttet'"
   ): Promise<ProjectListModel[]> {
     await msGraph.Init(this.context.msGraphClientFactory)
-    const sessionStore = new PnPClientStorage().local
-    const [items, groups, users, sites] = await sessionStore.getOrPut(
-      storageKey,
+    const localStore = new PnPClientStorage().local
+    const siteId = this.context.pageContext.site.id.toString()
+    const [items, groups, users, sites] = await localStore.getOrPut(
+      `pp365_fetchenrichedprojects_${siteId}`,
       async () => {
         return await Promise.all([
           sp.web.lists
@@ -575,17 +584,9 @@ export class DataAdapter implements IDataAdapter {
             .top(500)
             .usingCaching()
             .get<ISPProjectItem[]>(),
-          msGraph.Get<IGraphGroup[]>(
-            '/me/memberOf/$/microsoft.graph.group',
-            ['id', 'displayName'],
-            // eslint-disable-next-line quotes
-            "groupTypes/any(a:a%20eq%20'unified')"
-          ),
+          this.fetchMemberGroups(),
           sp.web.siteUsers.select('Id', 'Title', 'Email').get<ISPUser[]>(),
-          this._fetchItems(
-            `DepartmentId:${this.context.pageContext.site.id.toString()} contentclass:STS_Site`,
-            ['Title', 'SiteId']
-          )
+          this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId'])
         ])
       },
       dateAdd(new Date(), 'minute', 30)
@@ -595,7 +596,28 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch projects
+   * Fetches groups where the user is a member from the Graph
+   * using `msgraph-helper`. Resolves an empty array if the
+   * request fails (see https://github.com/Puzzlepart/prosjektportalen365/issues/908).
+   */
+  private fetchMemberGroups() {
+    return new Promise<IGraphGroup[]>((resolve) => {
+      msGraph
+        .Get<IGraphGroup[]>(
+          '/me/memberOf/$/microsoft.graph.group',
+          ['id', 'displayName'],
+          // eslint-disable-next-line quotes
+          "groupTypes/any(a:a%20eq%20'unified')"
+        )
+        .then((value) => resolve(value))
+        .catch(() => resolve([]))
+    })
+  }
+
+  /**
+   * Fetch projects from the projects list. If a data source is specified,
+   * the projects are filtered using the `odataQuery` property from the
+   * specified view.
    *
    * @param configuration Configuration
    * @param dataSource Data source
@@ -604,7 +626,7 @@ export class DataAdapter implements IDataAdapter {
     configuration?: IAggregatedListConfiguration,
     dataSource?: string
   ): Promise<any[]> {
-    const { odataQuery } = (configuration?.views || []).find((v) => v.title === dataSource)
+    const odataQuery = (configuration?.views || []).find((v) => v.title === dataSource)?.odataQuery
     let projects: any[]
     if (odataQuery && !dataSource.includes('(Prosjektnivå)')) {
       projects = await sp.web.lists
@@ -616,7 +638,7 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Checks if the current is in the specified group
+   * Checks if the current is in the specified SharePoint group.
    *
    * @param groupName Group name
    */
@@ -650,7 +672,7 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch items with data source
+   * Fetch items with the specified `dataSource` and `selectProperties`.
    *
    * @param dataSource Data source
    * @param selectProperties Select properties
@@ -686,7 +708,7 @@ export class DataAdapter implements IDataAdapter {
     const items = indicactors.map((i) => {
       const benefit = i.Benefit
       const measurements = i.Measurements
-      const firstMeasurement = first(i.Measurements)
+      const firstMeasurement = _.first(i.Measurements)
 
       const item = {
         ..._.pick(firstMeasurement?.Properties, _.identity),
@@ -726,7 +748,10 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch items with data source name
+   * Fetch items with data source name. If the data source is a benefit overview,
+   * the items are fetched using `fetchBenefitItemsWithSource`.
+   *
+   * The properties 'FileExtension' and 'ServerRedirectedURL' is always added to the select properties.
    *
    * @param dataSourceName Data source name
    * @param selectProperties Select properties
@@ -751,7 +776,9 @@ export class DataAdapter implements IDataAdapter {
       } else {
         items = await this._fetchItems(dataSrc.searchQuery, [
           ...selectProperties,
-          ...dataSrcProperties
+          ...dataSrcProperties,
+          'FileExtension',
+          'ServerRedirectedURL'
         ])
       }
 
@@ -762,7 +789,7 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch data sources by category
+   * Fetch data sources by category.
    *
    * @param category Data source category
    */
@@ -775,7 +802,7 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch items from the ContentColumns
+   * Fetch items from the project content columns SharePoint list.
    *
    * @param dataSourceCategory Data source category
    */
@@ -798,7 +825,9 @@ export class DataAdapter implements IDataAdapter {
           .map((item) => {
             const projectColumn = new ProjectColumn(item)
             projectColumn['data'] = {
-              renderAs: projectColumn.dataType ? projectColumn.dataType.toLowerCase() : 'text'
+              renderAs: (projectColumn.dataType ? projectColumn.dataType.toLowerCase() : 'text')
+                .split(' ')
+                .join('_')
             }
             return projectColumn
           })
@@ -810,27 +839,31 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Update project content column
+   * Update project content column. The column is identified by the field name.
    *
-   * @param properties Properties
+   * @param column Column properties
+   * @param persistRenderAs Persist render as property
    */
-  public async updateProjectContentColumn(properties: TypedHash<any>): Promise<any> {
+  public async updateProjectContentColumn(
+    column: Record<string, any>,
+    persistRenderAs = false
+  ): Promise<any> {
     try {
       const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
       const items = await list.items.get()
-      const item = items.find((i) => i.GtManagedProperty === properties.fieldName)
+      const item = items.find((i) => i.GtManagedProperty === column.fieldName)
 
       if (!item) {
-        throw new Error(format(strings.ProjectContentColumnItemNotFound, properties.fieldName))
+        throw new Error(format(strings.ProjectContentColumnItemNotFound, column.fieldName))
       }
 
-      const renderAs =
-        properties.data.renderAs.charAt(0).toUpperCase() + properties.data.renderAs.slice(1)
-
-      const itemUpdateResult = await list.items.getById(item.Id).update({
-        GtFieldDataType: renderAs,
-        GtColMinWidth: properties.minWidth
-      })
+      const properties: Record<string, any> = {
+        GtColMinWidth: column.minWidth
+      }
+      if (persistRenderAs) {
+        properties.GtFieldDataType = capitalize(column.data.renderAs).split('_').join(' ')
+      }
+      const itemUpdateResult = await list.items.getById(item.Id).update(properties)
       return itemUpdateResult
     } catch (error) {
       throw new Error(error)
@@ -842,7 +875,7 @@ export class DataAdapter implements IDataAdapter {
    *
    * @param column Column to delete
    */
-  public async deleteProjectContentColumn(column: TypedHash<any>): Promise<any> {
+  public async deleteProjectContentColumn(column: Record<string, any>): Promise<any> {
     try {
       const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
       const items = await list.items.get()
@@ -865,7 +898,7 @@ export class DataAdapter implements IDataAdapter {
    * @param listName List name
    * @param properties Properties
    */
-  public async addItemToList(listName: string, properties: TypedHash<any>): Promise<any> {
+  public async addItemToList(listName: string, properties: Record<string, any>): Promise<any> {
     try {
       const list = sp.web.lists.getByTitle(listName)
       const itemAddResult = await list.items.add(properties)
@@ -882,7 +915,7 @@ export class DataAdapter implements IDataAdapter {
    * @param dataSourceTitle Data source title
    */
   public async updateDataSourceItem(
-    properties: TypedHash<any>,
+    properties: Record<string, any>,
     dataSourceTitle: string,
     shouldReplace: boolean = false
   ): Promise<ItemUpdateResult> {

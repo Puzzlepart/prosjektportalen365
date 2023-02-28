@@ -1,33 +1,20 @@
 /* eslint-disable prefer-spread */
 import { format, IButtonProps, IColumn } from '@fluentui/react'
 import { ProjectListModel } from 'models'
-import strings from 'PortfolioWebPartsStrings'
 import { sortAlphabetically } from 'pp365-shared/lib/helpers'
-import { useEffect, useState } from 'react'
-import { any, find, first } from 'underscore'
-import { ProjectListViews } from './ProjectListViews'
-import { IProjectListProps, IProjectListState } from './types'
+import _ from 'underscore'
+import { IProjectListProps } from './types'
+import { useProjectListDataFetch } from './useProjectListDataFetch'
+import { useProjectListState } from './useProjectListState'
 
 /**
- * Component logic hook for `ProjectList`.
+ * Component logic hook for `ProjectList`. This hook is responsible for
+ * fetching data, sorting, filtering and other logic.
  *
  * @param props Props
  */
 export const useProjectList = (props: IProjectListProps) => {
-  const [state, $setState] = useState<IProjectListState>({
-    loading: true,
-    searchTerm: '',
-    renderAs: 'tiles',
-    selectedView:
-      find(ProjectListViews, (view) => view.itemKey === props.defaultView) ??
-      first(ProjectListViews),
-    projects: Array.apply(null, Array(24)).map(() => 0),
-    isUserInPortfolioManagerGroup: false,
-    sort: { fieldName: props.sortBy, isSortedDescending: true }
-  })
-
-  const setState = (newState: Partial<IProjectListState>) =>
-    $setState((state_) => ({ ...state_, ...newState }))
+  const { state, setState } = useProjectListState(props)
 
   /**
    * Sorting on column header click
@@ -40,11 +27,12 @@ export const useProjectList = (props: IProjectListProps) => {
     if (column.isSorted) {
       isSortedDescending = !isSortedDescending
     }
-    setState({ sort: { fieldName: column.fieldName, isSortedDescending } })
+    const newSort = { fieldName: column.fieldName, isSortedDescending }
+    setState({ sort: newSort })
   }
 
   /**
-   * Get card ations
+   * Get card ations. For now only `ON_SELECT_PROJECT` is handled.
    *
    * @param project - Project
    */
@@ -59,7 +47,7 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   /**
-   * On execute card action
+   * On execute card action. For now only `ON_SELECT_PROJECT` is handled.
    *
    * @param event - Event
    * @param project - Project
@@ -75,7 +63,7 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   /**
-   * Filter projects based on `selectedView` and `searchTerm`
+   * Filter projects based on `selectedView` and `searchTerm`.
    *
    * @param projects - Projects
    */
@@ -83,12 +71,12 @@ export const useProjectList = (props: IProjectListProps) => {
     return projects
       .filter((project) => state.selectedView.filter(project))
       .filter((project) =>
-        any(Object.keys(project), (key) => {
+        _.any(Object.keys(project), (key) => {
           const value = project[key]
           return (
             value &&
             typeof value === 'string' &&
-            value.toLowerCase().indexOf(state.searchTerm) !== -1
+            value.toLowerCase().indexOf(state.searchTerm.toLowerCase()) !== -1
           )
         })
       )
@@ -103,31 +91,21 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   /**
-   * On search callback
+   * On search callback handler
    *
    * @param _event - React change event
    * @param searchTerm - Search term
    */
   function onSearch(_event: React.ChangeEvent<HTMLInputElement>, searchTerm: string) {
-    setState({ searchTerm: searchTerm.toLowerCase() })
+    setState({ searchTerm })
   }
 
-  useEffect(() => {
-    Promise.all([
-      props.dataAdapter.fetchEnrichedProjects(),
-      props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
-    ]).then(([projects, isUserInPortfolioManagerGroup]) => {
-      setState({
-        ...state,
-        projects,
-        loading: false,
-        isUserInPortfolioManagerGroup
-      })
-    })
-  }, [])
+  const projects = state.isDataLoaded ? filterProjets(state.projects) : state.projects
+  const views = props.views.filter(
+    (view) => !props.hideViews.includes(view.itemKey) && (!view.isHidden || !view?.isHidden(state))
+  )
 
-  const projects = state.loading ? state.projects : filterProjets(state.projects)
-  const views = ProjectListViews.filter((view) => !props.hideViews.includes(view.itemKey))
+  useProjectListDataFetch(props, views, setState)
 
   return {
     state,
@@ -135,7 +113,10 @@ export const useProjectList = (props: IProjectListProps) => {
     projects,
     views,
     getCardActions,
-    searchBoxPlaceholder: format(state.selectedView.searchBoxPlaceholder, projects.length),
+    searchBoxPlaceholder:
+      !state.isDataLoaded || state.projects.length === 0
+        ? ''
+        : format(state.selectedView.searchBoxPlaceholder, projects.length),
     onListSort,
     onSearch
   } as const

@@ -2,6 +2,14 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
   "version": "2.0",
   "bundles": {
+    "opportunity-matrix-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/opportunityMatrix/index.js",
+          "manifest": "./src/webparts/opportunityMatrix/manifest.json"
+        }
+      ]
+    },
     "project-status-web-part": {
       "components": [
         {

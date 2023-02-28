@@ -9,7 +9,6 @@ import { sp } from '@pnp/sp'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { default as HubSiteService } from 'sp-hubsite-service'
 import { HelpContent } from '../components'
 import { HelpContentModel } from '../models/HelpContentModel'
 import { IHelpContentApplicationCustomizerProperties } from './types'
@@ -38,11 +37,13 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
    */
   private async _render(): Promise<void> {
     const helpContent = await this._getHelpContent(this.properties.listName)
+    if (helpContent.length === 0) return
     const helpContentId = 'pp-help-content'
     let helpContentPlaceholder = document.getElementById(helpContentId)
     if (helpContentPlaceholder === null) {
       helpContentPlaceholder = document.createElement('DIV')
       helpContentPlaceholder.id = helpContentId
+      helpContentPlaceholder.style.height = '30px'
       this._topPlaceholder.domElement.appendChild(helpContentPlaceholder)
     }
     if (helpContent.length === 0) ReactDOM.render(null, helpContentPlaceholder)
@@ -64,8 +65,9 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
       return await new PnPClientStorage().session.getOrPut(
         `pp365_help_content_${window.location.pathname}`,
         async () => {
-          const hub = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
-          const portal = new PortalDataService().configure({ urlOrWeb: hub.web })
+          const portal = await new PortalDataService().configure({
+            pageContext: this.context.pageContext
+          })
           let items = await portal.getItems(listName, HelpContentModel, {
             ViewXml:
               '<View><Query><OrderBy><FieldRef Name="GtSortOrder" /></OrderBy></Query></View>'

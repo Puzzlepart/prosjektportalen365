@@ -1,198 +1,220 @@
 declare interface IProjectWebPartsStrings {
-  ParentProjectsGroupName: string
-  StatusReportShowOnlyIconsLabel: string | ReactElement<any, string | JSXElementConstructor<any>>
-  StatusReportTruncateCommentsLabel: string
-  ProjectInformationStatusReportHeaderText: string
-  HideStatusReportLabel: string
-  DefaultGroupByLabel: string
-  DefaultTimeframeStartValue: string
-  DefaultTimeframeEndValue: string
-  DefaultTimeframeStartLabel: string
-  DefaultTimeframeEndLabel: string
-  RedoText: string
-  CreateParentModalSubText: string
-  CreateParentModalTitle: string
-  UseFramelessButtonsLabel: string
-  HideParentProjectsLabel: string
-  HideAllActionsLabel: string
-  HideActionsLabel: string
-  ShowSubTextFieldLabel: string
-  SyncPropertiesAfterPhaseChangeFieldLabel: string
-  SubTextTruncateLengthFieldLabel: string
-  SkipSyncToHubLabel: string
-  PhaseFieldFieldLabel: string
-  NoLocalPropertiesListWarningText: string
-  NavigateToSourceUrlText: string
-  ProjectStatusGroupName: string
-  StatusReportsHeaderLabel: string
+  AdminPageLinkLabel: string
+  AdvancedGroupName: string
+  BarLabel: string
+  BudgetTotalLabel: string
+  CalloutTemplateFieldLabel: string
+  CancelText: string
+  CategoryFieldLabel: string
   ChangePhaseText: string
   ChangingPhaseDescription: string
-  PleaseWaitText: string
+  ChecklistCommentDescription: string
+  ChecklistCommentPlaceholder: string
   CheckpointDoneTooltip: string
   CheckpointNotRelevantTooltip: string
   CheckpointNotRelevantTooltipCommentEmpty: string
-  CheckPointsMarkedAsText: string
+  CheckPointsStatus: string
   CheckpointStillOpenTooltip: string
   CheckpointStillOpenTooltipCommentEmpty: string
+  ChildProjectAdminLabel: string
   CloseText: string
+  ColorPickerStrings: IColorPickerStrings
   CommentLabel: string
+  ConfigItemTitleFieldLabel: string
   ConfirmChangePhase: string
   ConfirmPhaseDialogSubText: string
   ConfirmPhaseDialogTitle: string
+  ConsequenceFieldNameFieldLabel: string
+  ConsequenceHeaderFieldLabel: string
+  ConsequencePostActionFieldNameFieldLabel: string
+  CostsTotalLabel: string
+  CreateParentModalSubText: string
+  CreateParentModalTitle: string
+  CreateParentProjectLabel: string
+  CurrentPhaseLabel: string
   CurrentPhaseViewNameFieldLabel: string
-  DocumentsListName: string
-  EditProjectInformationText: string
-  ShowAllProjectInformationText: string
-  EditReportButtonText: string
-  PublishReportButtonText: string
-  PublishedStatusReport: string
-  NotPublishedStatusReport: string
+  DataGroupName: string
+  DefaultAdminPageLink: string
+  DefaultGroupByLabel: string
+  DefaultTimeframeEndLabel: string
+  DefaultTimeframeEndValue: string
+  DefaultTimeframeStartLabel: string
+  DefaultTimeframeStartValue: string
+  DeleteItemLabel: string
   DeleteReportButtonText: string
+  DiamondLabel: string
+  DocumentsListName: string
+  EditItemLabel: string
+  EditProjectInformationText: string
+  EditReportButtonText: string
   EditSiteInformationText: string
+  EndDateLabel: string
   ErrorText: string
+  ExternalUsersConfigInfoText: string
+  ExternalUsersConfigText: string
+  FilterText: string
+  GeneralGroupName: string
+  GetSnapshotButtonText: string
+  GroupLevelPortfolio: string
+  GroupLevelProject: string
+  GtModerationStatus_Choice_Draft: string
+  GtModerationStatus_Choice_Published: string
+  HideActionsLabel: string
+  HideAllActionsLabel: string
+  HideParentProjectsLabel: string
+  HideStatusReportLabel: string
+  HookAuthFieldDescription: string
+  HookAuthFieldLabel: string
+  HookUrlFieldDescription: string
+  HookUrlFieldLabel: string
+  IdeaProcessingTitle: string
+  IdeaProcessingUrlTitle: string
+  IdeaProjectDataTitle: string
+  LastPublishedStatusreport: string
+  ListNameFieldLabel: string
   ListSectionDataErrorMessage: string
   LoadingText: string
+  LogListName: string
+  LookAndFeelGroupName: string
+  MatrixColorScaleConfigLabel: string
+  MatrixFullWidthLabel: string 
+  MatrixHeader_Critical: string
+  MatrixHeader_ExtremelyHigh: string
+  MatrixHeader_ExtremelyLarge: string
+  MatrixHeader_ExtremelyLow: string
+  MatrixHeader_High: string
+  MatrixHeader_Insignificant: string
+  MatrixHeader_Large: string
+  MatrixHeader_Low: string
+  MatrixHeader_Medium: string
+  MatrixHeader_Moderate: string
+  MatrixHeader_Serious: string
+  MatrixHeader_Small: string
+  MatrixHeader_VeryCritical: string
+  MatrixHeader_VeryHigh: string
+  MatrixHeader_VeryHigh: string
+  MatrixHeader_VeryLarge: string
+  MatrixHeader_VeryLow: string
+  MatrixHeader_VerySmall: string
+  MatrixSizeLabel: string
+  MilestoneDateLabel: string
+  MilestoneLabel: string
   MissingPropertiesMessage: string
   MoveOn: string
+  NavigateToSourceUrlText: string
+  NewItemLabel: string
   NewStatusReportModalHeaderText: string
   NewStatusReportTitle: string
-  UnpublishedStatusReportInfo: string
   No: string
+  NoLocalPropertiesListWarningText: string
   NoPropertiesMessage: string
+  NoStatusReportsMessage: string
+  NotPublishedStatusReport: string
+  OpportunityMatrixGroupName: string
+  OverrideHeadersLabel: string
   PageReloadMessage: string
+  ParentProjectsGroupName: string
+  ParentProjectsHeaderText: string
   PersistedPhasePropertyBagKey: string
   PhaseChecklistLinkText: string
   PhaseChecklistName: string
   PhaseChecklistViewUrl: string
+  PhaseFieldFieldLabel: string
+  PhaseLabel: string
+  PhaseSitePageFoundDescription: string
+  PhaseSitePageNotFoundDescription: string
   PickReportText: string
+  PleaseWaitText: string
+  PortfolioManagerGroupName: string
+  ProbabilityFieldNameFieldLabel: string
+  ProbabilityHeaderFieldLabel: string
+  ProbabilityPostActionFieldNameFieldLabel: string
+  ProjectDeliveriesGroupName: string
+  ProjectInformationDataFetchErrorText: string
+  ProjectInformationStatusReportHeaderText: string
+  ProjectLabel: string
+  ProjectPhasesChangePhaseError: string
+  ProjectPhasesFetchDataError: string
+  ProjectPropertiesListName: string
+  ProjectsListName: string
+  ProjectStatusDataErrorText: string
+  ProjectStatusGroupName: string
+  ProjectStatusProjectPropertiesGroupName: string
+  ProjectTimelineErrorFetchText: string
+  ProjectTimelineErrorTransformItemText: string
+  ProjecttimelineGroupName: string
+  ProjectTimelineInfoText: string
+  ProjectTimelineItemInfo: string
+  ProjectTimelineListInfoText: string
+  PublishedStatusReport: string
+  PublishReportButtonText: string
+  RedoText: string
+  RevertDefaultColorConfigurationText: string
+  RiskMatrixGroupName: string
+  SaveColorConfigurationText: string
   SaveText: string
   SettingsGroupName: string
-  DataGroupName: string
-  LookAndFeelGroupName: string
+  ShowAllProjectInformationText: string
+  ShowFieldExternalUsers: string
+  ShowFilterButtonLabel: string
+  ShowInfoMessageLabel: string
+  ShowProjectDeliveriesLabel: string
+  ShowSubTextFieldLabel: string
+  ShowTimelineLabel: string
+  ShowTimelineListCommandsLabel: string
+  ShowTimelineListLabel: string
+  SiteTitleLabel: string
   Skip: string
+  SkipSyncToHubLabel: string
+  StartDateLabel: string
   StatusClosed: string
   StatusNotRelevant: string
   StatusOpen: string
-  GetSnapshotButtonText: string
+  StatusReportsHeaderLabel: string
+  StatusReportShowOnlyIconsLabel: string
+  StatusReportTruncateCommentsLabel: string
   StatusStillOpen: string
-  TasksLinkText: string
-  UpdateViewsDocumentsFieldLabel: string
-  UpdateViewsRisksFieldLabel: string
-  ViewsGroupName: string
-  ViewVersionHistoryText: string
-  WebPartNotConfiguredMessage: string
-  Yes: string
-  RiskMatrixGroupName: string
-  ProjectStatusProjectPropertiesGroupName: string
-  GeneralGroupName: string
-  SyncProjectPropertiesText: string
+  SubPhaseLabel: string
+  SubTextTruncateLengthFieldLabel: string
+  SyncNowText: string
+  SyncProjectModalSubText: string
+  SyncProjectModalTitle: string
   SyncProjectPropertiesDescription: string
-  ProjectPropertiesListName: string
-  SyncProjectPropertiesProgressLabel: string
-  SyncProjectPropertiesSuccessText: string
   SyncProjectPropertiesErrorText: string
   SyncProjectPropertiesListProgressDescription: string
-  SyncProjectPropertiesValuesProgressLabel: string
+  SyncProjectPropertiesProgressLabel: string
+  SyncProjectPropertiesSuccessText: string
+  SyncProjectPropertiesText: string
   SyncProjectPropertiesValuesProgressDescription: string
-  ProjectStatusDataErrorText: string
-  ShowFieldExternalUsers: string
-  ExternalUsersConfigText: string
-  ExternalUsersConfigInfoText: string
-  WebPartNoAccessMessage: string
-  ProjectsListName: string
-  NoStatusReportsMessage: string
-  SyncNowText: string
-  RiskMatrix_Header_Critical: string
-  RiskMatrix_Header_High: string
-  RiskMatrix_Header_Insignificant: string
-  RiskMatrix_Header_Low: string
-  RiskMatrix_Header_Medium: string
-  RiskMatrix_Header_Moderate: string
-  RiskMatrix_Header_Serious: string
-  RiskMatrix_Header_Small: string
-  RiskMatrix_Header_VeryHigh: string
-  RiskMatrix_Header_VeryLow: string
-  RiskMatrix_ViewSelectorLabel: string
-  RiskMatrix_EmptyMessage: string
-  RiskMatrix_LoadingText: string
-  RiskMatrix_ToggleElements: string
-  GtModerationStatus_Choice_Published: string
-  GtModerationStatus_Choice_Draft: string
-  ListNameFieldLabel: string
-  ViewXmlFieldLabel: string
-  ProbabilityFieldNameFieldLabel: string
-  ConsequenceFieldNameFieldLabel: string
-  ProbabilityPostActionFieldNameFieldLabel: string
-  ConsequencePostActionFieldNameFieldLabel: string
-  WidthFieldLabel: string
-  HeightFieldLabel: string
-  CalloutTemplateFieldLabel: string
-  FilterText: string
-  PhaseLabel: string
-  SiteTitleLabel: string
-  TypeLabel: string
+  SyncProjectPropertiesValuesProgressLabel: string
+  SyncPropertiesAfterPhaseChangeFieldLabel: string
   TagFieldLabel: string
-  CategoryFieldLabel: string
-  DeleteItemLabel: string
-  ProjecttimelineGroupName: string
-  ProjectTimelineInfoText: string
-  ProjectTimelineErrorTransformItemText: string
-  ProjectTimelineErrorFetchText: string
-  ProjectTimelineListInfoText: string
-  TimelineContentListName: string
+  TasksLinkText: string
   TimelineConfigurationListName: string
-  NewItemLabel: string
-  EditItemLabel: string
-  PortfolioManagerGroupName: string
-  ProjectTimelineItemInfo: string
-  LastPublishedStatusreport: string
-  DiamondLabel: string
-  BarLabel: string
+  TimelineContentListName: string
+  ToggleUncertaintyPostActionLabel: string
+  ToggleUncertaintyPostActionOffText: string
+  ToggleUncertaintyPostActionOnText: string
   TriangleLabel: string
-  MilestoneLabel: string
-  ProjectLabel: string
-  SubPhaseLabel: string
-  CurrentPhaseLabel: string
-  MilestoneDateLabel: string
-  StartDateLabel: string
-  EndDateLabel: string
-  BudgetTotalLabel: string
-  CostsTotalLabel: string
-  ShowFilterButtonLabel: string
-  ShowTimelineLabel: string
-  ShowInfoMessageLabel: string
-  ShowTimelineListCommandsLabel: string
-  ShowTimelineListLabel: string
-  AdvancedGroupName: string
-  UseDynamicHomepageFieldLabel: string
+  TypeLabel: string
+  UnpublishedStatusReportInfo: string
+  UpdateViewsDocumentsFieldLabel: string
+  UpdateViewsRisksFieldLabel: string
   UseDynamicHomepageCalloutText: string
-  UsePhaseHooksFieldLabel: string
-  UsePhaseHooksCalloutText: string
-  HookUrlFieldLabel: string
-  HookUrlFieldDescription: string
-  HookAuthFieldLabel: string
-  HookAuthFieldDescription: string
-  PhaseSitePageFoundDescription: string
-  PhaseSitePageNotFoundDescription: string
   UseDynamicHomepageChangePhaseDescription: string
-  CreateParentProjectLabel: string
-  ChildProjectAdminLabel: string
-  AdminPageLinkLabel: string
-  DefaultAdminPageLink: string
-  ConfigItemTitleFieldLabel: string
-  ShowProjectDeliveriesLabel: string
-  ProjectDeliveriesGroupName: string
-  UseIdeaProcessingFieldLabel: string
+  UseDynamicHomepageFieldLabel: string
+  UseFramelessButtonsLabel: string
   UseIdeaProcessingCalloutText: string
-  IdeaProjectDataTitle: string
-  CancelText: string
-  SyncProjectModalTitle: string
-  SyncProjectModalSubText: string
-  IdeaProcessingTitle: string
-  IdeaProcessingUrlTitle: string
-  GroupLevelProject: string
-  GroupLevelPortfolio: string
-  ParentProjectsHeaderText: string
+  UseIdeaProcessingFieldLabel: string
+  UsePhaseHooksCalloutText: string
+  UsePhaseHooksFieldLabel: string
+  ViewsGroupName: string
+  ViewVersionHistoryText: string
+  ViewXmlFieldLabel: string
+  WebPartNoAccessMessage: string
+  WebPartNotConfiguredMessage: string
+  WidthFieldLabel: string
+  Yes: string
 }
 
 declare module 'ProjectWebPartsStrings' {

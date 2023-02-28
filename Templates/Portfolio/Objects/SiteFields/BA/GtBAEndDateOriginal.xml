@@ -1,0 +1,1 @@
+<Field ID="{b02982d3-9e9f-4172-a576-34bcbe3b8332}" Name="GtBAEndDateOriginal" DisplayName="Opprinnelig overtakelsesdato" Type="DateTime" Format="DateOnly" Group="{resource:SiteFields_BA_Group}" Description="Hva er (planlagt) overtakelsesdato hvor bestiller overtar prosjektleveransene" StaticName="GtBAEndDateOriginal" />

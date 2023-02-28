@@ -1,0 +1,16 @@
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+
+.matrixContainer {
+  @include ms-Grid-col;
+  @include ms-sm12;
+}
+
+.listContainer {
+  @include ms-Grid-col;
+  @include ms-sm12;
+  margin: 15px 0 0 0;
+
+  div[class*="ms-DetailsHeader"] {
+    padding: 0;
+  }
+}

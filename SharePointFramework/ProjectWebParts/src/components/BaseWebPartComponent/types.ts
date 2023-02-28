@@ -1,18 +1,12 @@
 import { IShimmerProps } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { IHubSite } from 'sp-hubsite-service'
 
 export interface IBaseWebPartComponentProps extends React.DOMAttributes<HTMLDivElement> {
   /**
    * Title of the web part
    */
   title?: string
-
-  /**
-   * Hub site
-   */
-  hubSite?: IHubSite
 
   /**
    * ID of the site
@@ -40,7 +34,7 @@ export interface IBaseWebPartComponentProps extends React.DOMAttributes<HTMLDivE
   displayMode?: DisplayMode
 
   /**
-   * Web part context
+   * SPFx web part context
    */
   webPartContext?: WebPartContext
 }

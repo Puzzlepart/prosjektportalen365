@@ -1,18 +1,11 @@
 /* eslint-disable max-classes-per-file */
 import { ItemAddResult, List } from '@pnp/sp'
-import { IListLoggerEntry } from './IListLoggerEntry'
-import { IListLoggerMemberMap } from './IListLoggerMemberMap'
-import { ListLoggerEntryLevel } from './ListLoggerEntryLevel'
-
-export const defaultListLoggerMemberMap: Record<string, string> = {
-  webUrl: 'GtLogWebUrl',
-  scope: 'GtLogScope',
-  functionName: 'GtLogFunctionName',
-  message: 'GtLogMessage',
-  level: 'GtLogLevel',
-  component: 'GtLogComponentName',
-  context: 'GtLogContext'
-}
+import {
+  defaultListLoggerMemberMap,
+  IListLoggerEntry,
+  IListLoggerMemberMap,
+  ListLoggerEntryLevel
+} from './types'
 
 class ListLogger {
   public list: any
@@ -21,7 +14,7 @@ class ListLogger {
   public scope: string = ''
 
   /**
-   * Initialize ListLogger
+   * Initialize `ListLogger`
    *
    * @param list List
    * @param webUrl Web URL
@@ -41,7 +34,7 @@ class ListLogger {
   }
 
   /**
-   * Log entry to SharePoint list
+   * Log entry to SharePoint list specified when running `init()`.
    *
    * Will fail silently.
    *
@@ -55,7 +48,7 @@ class ListLogger {
   }
 
   /**
-   * Write message to SharePoint list
+   * Write message to SharePoint list specified when running `init()`.
    *
    * Will fail silently.
    *
@@ -72,19 +65,17 @@ class ListLogger {
       message,
       level,
       functionName,
-      webUrl: this.webUrl ?? this._getEntryDefaults().webUrl,
       scope: this.scope
     })
   }
 
   /**
-   * Get sp item for entry
+   * Get SP item properties for entry
    *
    * @param entry Entry
    */
-  private _getSpItem(entry: IListLoggerEntry) {
+  private _getSpItem(entry: IListLoggerEntry): Record<string, any> {
     let item: Record<string, any> = {}
-
     if (this.webUrl && this.memberMap.webUrl) {
       item[this.memberMap.webUrl] = this.webUrl
     }
@@ -93,7 +84,9 @@ class ListLogger {
     }
     item = Object.keys(this.memberMap).reduce((_item, key) => {
       const fieldName = this.memberMap[key]
-      _item[fieldName] = entry[key]
+      if (entry[key]) {
+        _item[fieldName] = entry[key]
+      }
       return _item
     }, item)
     return item
@@ -102,7 +95,7 @@ class ListLogger {
   private _getEntryDefaults(): Partial<IListLoggerEntry> {
     return {
       level: 'Info',
-      webUrl: document.location.href.split('/').slice(0, 5).join('/')
+      webUrl: this.webUrl ?? document.location.href.split('/').slice(0, 5).join('/')
     } as Partial<IListLoggerEntry>
   }
 }

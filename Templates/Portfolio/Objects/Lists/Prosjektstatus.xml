@@ -2,7 +2,7 @@
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x010022252E35737A413FB56A1BA53862F6D5" Default="true" />
-        <pnp:ContentTypeBinding ContentTypeID="0x01" Remove="true" />
+        <pnp:ContentTypeBinding ContentTypeID="0x010022252E35737A413FB56A1BA53862F6D5BA" />
     </pnp:ContentTypeBindings>
     <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_ProjectStatus_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
@@ -22,6 +22,8 @@
                 <FieldRef Name="GtStatusQualityComment" />
                 <FieldRef Name="GtStatusRisk" />
                 <FieldRef Name="GtStatusRiskComment" />
+                <FieldRef Name="GtStatusOpportunities" />
+                <FieldRef Name="GtStatusOpportunitiesComment" />
                 <FieldRef Name="GtStatusGainAchievement" />
                 <FieldRef Name="GtStatusGainAchievementComment" />
                 <FieldRef Name="GtModerationStatus" />
@@ -39,5 +41,6 @@
         <pnp:FieldRef ID="0bbe6a84-67e6-4a9c-b26b-a5973dacd473" Name="GtStatusQuality" DisplayName="{resource:SiteFields_GtStatusQuality_DisplayName}" Required="true" />
         <pnp:FieldRef ID="fc8a879d-83bc-4670-b1f6-c9817e333614" Name="GtStatusRisk" DisplayName="{resource:SiteFields_GtStatusRisk_DisplayName}" Required="true" />
         <pnp:FieldRef ID="b1958607-cd56-4ecb-9ad7-65fb7d3c22c7" Name="GtStatusGainAchievement" DisplayName="{resource:SiteFields_GtStatusGainAchievement_DisplayName}" Required="true" />
+        <pnp:FieldRef ID="09e5a74f-7ec9-467e-9474-f6870c933143" Name="GtStatusOpportunities" DisplayName="{resource:SiteFields_GtStatusOpportunities_DisplayName}" Required="true" />
     </pnp:FieldRefs>
 </pnp:ListInstance>

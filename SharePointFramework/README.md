@@ -87,7 +87,6 @@ _Published to **npm** as `pp365-projectwebparts`_
 | IdeaProcessingCommand         | 5af28222-4bf8-419c-9533-5a31967b9f20 | PortfolioExtensions |
 | IdeaProjectDataCommand        | b13831c6-c4f8-4bbc-9da3-bd5f960f7e2b | PortfolioExtensions |
 | IdeaRegistrationCommand       | c93a4a2a-f5f0-41ee-9ab6-04ad85004d20 | PortfolioExtensions |
-| BenefitsOverviewWebPart       | 5f925484-cfb4-42ce-9f90-79a874bb8a68 | PortfolioWebParts   |
 | LatestProjectsWebPart         | 941fd73c-b957-41c3-8d4f-082268407f10 | PortfolioWebParts   |
 | PortfolioAggregationWebPart   | 6c0e484d-f6da-40d4-81fc-ec1389ef29a8 | PortfolioWebParts   |
 | PortfolioInsightsWebPart      | 875ca87a-e331-4ffb-bc69-0272fdf80e41 | PortfolioWebParts   |

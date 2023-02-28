@@ -1,0 +1,18 @@
+<Field ID="{dfbde199-879c-4de9-aac4-6a3f0dbb22c3}" Name="GtBAStakeholderGroup" DisplayName="{resource:SiteFields_GtBAStakeholderGroup_DisplayName}" Type="Choice" Group="{resource:SiteFields_BA_Group}" Description="{resource:SiteFields_GtBAStakeholderGroup_Description}" StaticName="GtBAStakeholderGroup">
+  <CHOICES>
+    <CHOICE>Politisk</CHOICE>
+    <CHOICE>Kommuneadministrasjon</CHOICE>
+    <CHOICE>Virksomheter</CHOICE>
+    <CHOICE>Samarbeidspartnere</CHOICE>
+    <CHOICE>Råd og utvalg</CHOICE>
+    <CHOICE>Tillitsvalgte</CHOICE>
+    <CHOICE>Foreninger (eksterne)</CHOICE>
+    <CHOICE>Offentlige myndigheter</CHOICE>
+    <CHOICE>Tilsyn og vesener</CHOICE>
+    <CHOICE>Nettleverandører</CHOICE>
+    <CHOICE>Transport</CHOICE>
+    <CHOICE>Naboer</CHOICE>
+    <CHOICE>Brukere</CHOICE>
+    <CHOICE>Andre aktører</CHOICE>
+  </CHOICES>
+</Field>

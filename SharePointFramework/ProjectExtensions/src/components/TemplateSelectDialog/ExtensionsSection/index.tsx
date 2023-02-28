@@ -19,7 +19,7 @@ import { useExtensionsSection } from './useExtensionsSection'
  * @param props Props
  */
 export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) => {
-  const { selection, items, columns, onSearch, onRenderRow } = useExtensionsSection()
+  const { selection, selectedCount, items, columns, onSearch, onRenderRow } = useExtensionsSection()
 
   return (
     <div className={styles.root} style={props.style}>
@@ -34,6 +34,7 @@ export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) =
             <ListHeaderSearch
               detailsHeaderProps={detailsHeaderProps}
               defaultRender={defaultRender}
+              selectedCount={selectedCount}
               search={{
                 placeholder: strings.ExtensionsSectionSearchPlaceholder,
                 onSearch,

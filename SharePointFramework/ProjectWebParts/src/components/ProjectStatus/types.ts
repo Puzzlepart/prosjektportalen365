@@ -1,12 +1,13 @@
-import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
+import { PageContext } from '@microsoft/sp-page-context'
+import { IOpportunityMatrixProps } from '../OpportunityMatrix'
+import { IRiskMatrixProps } from '../RiskMatrix'
 import { ProjectColumnConfig, SectionModel, SPField, StatusReport } from 'pp365-shared/lib/models'
 import { IGetPropertiesData } from 'pp365-shared/lib/services'
-import { PageContext } from '@microsoft/sp-page-context'
+import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
 
 export interface IProjectStatusProps extends IBaseWebPartComponentProps {
-  riskMatrixCalloutTemplate?: string
-  riskMatrixWidth?: number | string
-  riskMatrixHeight?: number | string
+  riskMatrix?: IRiskMatrixProps
+  opportunityMatrix?: IOpportunityMatrixProps
   fieldWidth?: number
   pageContext?: PageContext
 }
@@ -41,6 +42,11 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
    * Current user has admin permissions
    */
   userHasAdminPermission?: boolean
+
+  /**
+   * Persist list data
+   */
+  persistedSectionData?: Record<string, any>
 }
 
 export interface IProjectStatusHashState {

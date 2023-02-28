@@ -4,15 +4,12 @@ import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
 import React from 'react'
 import ReactDom from 'react-dom'
-import HubSiteService, { IHubSite } from 'sp-hubsite-service'
 import { IBaseWebPartComponentProps } from '../../components/BaseWebPartComponent'
 import SPDataAdapter from '../../data'
 
 export abstract class BaseProjectWebPart<
   T extends IBaseWebPartComponentProps
 > extends BaseClientSideWebPart<T> {
-  private _hubSite: IHubSite
-
   public abstract render(): void
 
   /**
@@ -26,14 +23,15 @@ export abstract class BaseProjectWebPart<
       ...this.properties,
       ...props,
       title: this.properties.title || this.title,
-      hubSite: this._hubSite,
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
       webTitle: this.context.pageContext.web.title,
       isSiteAdmin: this.context.pageContext.legacyPageContext.isSiteAdmin,
       displayMode: this.displayMode,
-      pageContext: this.context.pageContext
+      pageContext: this.context.pageContext,
+      webPartContext: this.context
     }
+
     const element = React.createElement(component, combinedProps)
     ReactDom.render(element, this.domElement)
   }
@@ -43,11 +41,9 @@ export abstract class BaseProjectWebPart<
    */
   private async _setup() {
     sp.setup({ spfxContext: this.context })
-    this._hubSite = await HubSiteService.GetHubSite(sp, this.context.pageContext as any)
-    SPDataAdapter.configure(this.context, {
+    await SPDataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
-      hubSiteUrl: this._hubSite.url,
       logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     })
     Logger.subscribe(new ConsoleListener())

@@ -1,65 +1,76 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { flatten } from '@microsoft/sp-lodash-subset'
 import { sp } from '@pnp/sp'
 import { SPDataAdapter } from 'data'
+import { IProgramAdministrationProject } from './types'
+import { dateAdd, PnPClientStorage } from '@pnp/common'
 
 /**
- * Fetches all projects associated with the current hubsite context
+ * Fetches all projects associated with the current hubsite context. This is done by querying the
+ * search index for all sites with the same DepartmentId as the current hubsite and all project items with
+ * the same DepartmentId as the current hubsite. The sites are then matched with the items to
+ * retrieve the SiteId and SPWebURL. The result are cached for 5 minutes.
  */
 export async function getHubSiteProjects() {
-  const data = await sp.site.select('HubSiteId').get()
-  const { PrimarySearchResults } = await sp.search({
-    Querytext: `DepartmentId:{${data.HubSiteId}} contentclass:STS_Site`,
-    RowLimit: 500,
-    StartRow: 0,
-    ClientType: 'ContentSearchRegular',
-    SelectProperties: ['SPWebURL', 'Title'],
-    TrimDuplicates: false
-  })
-  return PrimarySearchResults
-}
-
-async function searchHubSite(hubId: string, query: string) {
-  const searchData = await sp.search({
-    Querytext: `${query} DepartmentId:{${hubId}} contentclass:STS_Site`,
-    RowLimit: 500,
-    StartRow: 0,
-    ClientType: 'ContentSearchRegular',
-    SelectProperties: ['GtSiteIdOWSTEXT', 'SPWebURL', 'Title'],
-    TrimDuplicates: false
-  })
-  return searchData
+  const { HubSiteId } = await sp.site.select('HubSiteId').usingCaching().get()
+  return new PnPClientStorage().local.getOrPut(
+    `HubSiteProjects_${HubSiteId}`,
+    async () => {
+      const [{ PrimarySearchResults: sts_sites }, { PrimarySearchResults: items }] =
+        await Promise.all([
+          sp.search({
+            Querytext: `DepartmentId:{${HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
+            RowLimit: 500,
+            StartRow: 0,
+            ClientType: 'ContentSearchRegular',
+            SelectProperties: ['SPWebURL', 'Title', 'SiteId'],
+            TrimDuplicates: false
+          }),
+          sp.search({
+            Querytext: `DepartmentId:{${HubSiteId}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
+            RowLimit: 500,
+            StartRow: 0,
+            ClientType: 'ContentSearchRegular',
+            SelectProperties: ['GtSiteIdOWSTEXT', 'Title'],
+            TrimDuplicates: false
+          })
+        ])
+      return items
+        .filter(
+          (item) =>
+            item['GtSiteIdOWSTEXT'] &&
+            item['GtSiteIdOWSTEXT'] !== '00000000-0000-0000-0000-000000000000'
+        )
+        .map<IProgramAdministrationProject>((item) => {
+          const site = sts_sites.find((site) => site['SiteId'] === item['GtSiteIdOWSTEXT'])
+          return {
+            SiteId: item['GtSiteIdOWSTEXT'],
+            Title: site?.Title ?? item['Title'],
+            SPWebURL: site && site['SPWebURL']
+          }
+        })
+    },
+    dateAdd(new Date(), 'minute', 5)
+  )
 }
 
 /**
- * Fetches current child projects using default caching
+ * Fetches current child projects. Fetches all available projects and filters out the ones that are not
+ * in the child projects project property `GtChildProjects`.
  *
  * @param dataAdapter Data adapter
  */
-export async function fetchChildProjects(
-  dataAdapter: SPDataAdapter
-): Promise<Array<Record<string, string>>> {
-  const queryArray = dataAdapter.aggregatedQueryBuilder('SiteId')
-  const hubData = await sp.site.select('HubSiteId').get()
-  const searchPromises = []
-  for (const query of queryArray) {
-    searchPromises.push(searchHubSite(hubData.HubSiteId, query))
-  }
-  const responses: any[] = await Promise.all(searchPromises)
-  const searchResults = []
-  responses.forEach((response) => {
-    searchResults.push(response.PrimarySearchResults)
-  })
-  return flatten(searchResults)
+export async function fetchChildProjects(dataAdapter: SPDataAdapter): Promise<any[]> {
+  const availableProjects = await getHubSiteProjects()
+  const childProjectsSiteIds = dataAdapter.childProjects.map((p) => p.SiteId)
+  return availableProjects.filter((p) => childProjectsSiteIds.indexOf(p.SiteId) !== -1)
 }
 
 /**
- * Add child projects
+ * Add child projects.
  *
  * @param dataAdapter Data adapter
  * @param newProjects New projects to add
  */
-export async function addChildProject(
+export async function addChildProjects(
   dataAdapter: SPDataAdapter,
   newProjects: Array<Record<string, string>>
 ) {
@@ -75,7 +86,7 @@ export async function addChildProject(
 }
 
 /**
- * Remove child projects
+ * Remove child projects.
  *
  * @param dataAdapter Data adapter
  * @param projectToRemove Projects to delete

@@ -1,6 +1,3 @@
-import { TypedHash } from '@pnp/common'
-import { Logger, LogLevel } from '@pnp/logging'
-import { sp } from '@pnp/sp'
 import {
   DefaultButton,
   Dialog,
@@ -11,6 +8,9 @@ import {
   Spinner,
   SpinnerSize
 } from '@fluentui/react'
+import { TypedHash } from '@pnp/common'
+import { Logger, LogLevel } from '@pnp/logging'
+import { sp } from '@pnp/sp'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext, useEffect, useState } from 'react'
 import SPDataAdapter from '../../../data'
@@ -80,7 +80,7 @@ export const SyncProjectDialog: FC = () => {
 
   async function updateIdeaProcessingItem(projectDataItemId: number) {
     try {
-      const ideaProcessingList = context.props.hubSite.web.lists.getByTitle(
+      const ideaProcessingList = SPDataAdapter.portal.web.lists.getByTitle(
         strings.IdeaProcessingTitle
       )
 
@@ -99,7 +99,7 @@ export const SyncProjectDialog: FC = () => {
 
   async function getProjectData() {
     try {
-      const projectDataList = context.props.hubSite.web.lists.getByTitle(
+      const projectDataList = SPDataAdapter.portal.web.lists.getByTitle(
         strings.IdeaProjectDataTitle
       )
 
@@ -108,21 +108,24 @@ export const SyncProjectDialog: FC = () => {
         .select('Id')
         .get()
 
-      const item = projectDataList.items.getById(projectDataItem.Id)
+      if (projectDataItem) {
+        const item = projectDataList.items.getById(projectDataItem.Id)
 
-      const [fieldValuesText, fieldValues] = await Promise.all([
-        item.fieldValuesAsText.get(),
-        item.get()
-      ])
+        const [fieldValuesText, fieldValues] = await Promise.all([
+          item.fieldValuesAsText.get(),
+          item.get()
+        ])
 
-      const itemProperties = await SPDataAdapter.getMappedProjectProperties(
-        fieldValues,
-        { ...fieldValuesText, Title: context.props.webTitle },
-        context.state.data.templateParameters,
-        true
-      )
-      setProjectData(itemProperties)
-      setProjectDataId(projectDataItem.Id)
+        const itemProperties = await SPDataAdapter.getMappedProjectProperties(
+          fieldValues,
+          { ...fieldValuesText, Title: context.props.webTitle },
+          context.state.data.templateParameters,
+          true
+        )
+        setProjectData(itemProperties)
+        setProjectDataId(projectDataItem.Id)
+      }
+
       setLoading(false)
     } catch (error) {
       throw error

@@ -5,6 +5,7 @@ import { transformFieldXml } from 'pp365-shared/lib/helpers'
 import { SPField } from 'pp365-shared/lib/models'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
+import SPDataAdapter from 'data/SPDataAdapter'
 
 export class ProvisionSiteFields extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -29,7 +30,7 @@ export class ProvisionSiteFields extends BaseTask {
         const existingSiteFields = await params.web.fields
           .select(...Object.keys(new SPField()))
           .get<SPField[]>()
-        const siteFields = await this.data.hub.web.fields
+        const siteFields = await SPDataAdapter.portal.web.fields
           .filter(
             `Group eq '${params.templateSchema.Parameters.ProvisionSiteFields}' and TypeAsString ne 'Calculated'`
           )

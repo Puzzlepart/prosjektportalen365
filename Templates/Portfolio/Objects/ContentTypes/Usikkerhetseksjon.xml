@@ -1,0 +1,20 @@
+<pnp:ContentType ID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82804" Name="{resource:ContentTypes_UncertaintySection_Name}" Description="{resource:ContentTypes_UncertaintySection_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true"
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+    <pnp:FieldRefs>
+        <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
+        <pnp:FieldRef ID="b2af224f-5e07-4f9f-9a3a-9f5345bb3153" Name="GtSecIcon" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="1c6ac96b-0f62-4396-8e87-d7db512d96b9" Name="GtSecShowInNavbar" Hidden="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="9985ae83-9e19-48dc-b33d-2fbf84f7202b" Name="GtSecShowInStatusSection" UpdateChildren="true" />
+        <pnp:FieldRef ID="3aad67a9-d8bb-41ce-9324-17a757e6b14b" Name="GtSecShowAsSection" UpdateChildren="true" />
+        <pnp:FieldRef ID="2d6790ad-9da9-408c-a87f-8d56d7b377f6" Name="GtSecSource" UpdateChildren="true" />
+        <pnp:FieldRef ID="4b5ca6f2-a470-4c11-a738-edd9d55fb096" Name="GtSecList" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="dd9a8b72-c646-4ec2-b834-614fa27fb79a" Name="GtSecViewQuery" UpdateChildren="true" />
+        <pnp:FieldRef ID="2d165a4d-a3e9-4756-acd2-abb537041fd4" Name="GtSecViewFields" UpdateChildren="true" />
+        <pnp:FieldRef ID="adf89685-f464-4ef5-8f7b-53b600aac14a" Name="GtSecRowLimit" UpdateChildren="true" />
+        <pnp:FieldRef ID="fe762779-f5d6-475d-ad1d-68e7d9ae0034" Name="GtSecFieldName" UpdateChildren="true" />
+        <pnp:FieldRef ID="0c5167bb-1c77-49ce-8985-e012e33398c8" Name="GtSecView" UpdateChildren="true" />
+        <pnp:FieldRef ID="f93b92b8-1a69-445f-b13f-0fc3ef924101" Name="GtSecShowRiskMatrix" Hidden="true" UpdateChildren="true" />
+    </pnp:FieldRefs>
+</pnp:ContentType>

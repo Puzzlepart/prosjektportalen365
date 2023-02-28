@@ -62,8 +62,20 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
     }
     case 'BenefitMeasurementsModal':
       return <BenefitMeasurementsModal title={item.Title} value={item.Measurements} />
-    default:
-      return columnValue
+    default: {
+      switch (column.fieldName) {
+        case 'Title': {
+          return (
+            <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
+              {columnValue}
+            </Link>
+          )
+        }
+        default: {
+          return columnValue
+        }
+      }
+    }
   }
 }
 

@@ -13,7 +13,7 @@ if ($null -ne $LastInstall) {
         $Pages = Get-PnPFolder -Url SitePages -Includes Files | Select-Object -ExpandProperty Files
 
         $Pages | ForEach-Object {
-            $DeprecatedComponents = Get-PnPClientSideComponent -Page $_.Name | Where-Object { $DeprecatedIds.Contains($_.WebPartId) }
+            $DeprecatedComponents = Get-PnPPageComponent -Page $_.Name | Where-Object { $DeprecatedIds.Contains($_.WebPartId) }
             if ($DeprecatedComponents.Count -gt 0) {
                 Remove-PnPClientSidePage $_.Name -Force -ErrorAction SilentlyContinue
             }
@@ -33,6 +33,31 @@ if ($null -ne $LastInstall) {
             if ($PnPClientSidePages.Contains($_.Name)) {
                 Remove-PnPClientSidePage -Identity $_.Name -Force -ErrorAction SilentlyContinue
             }
+        }
+    }
+
+    if ($PreviousVersion -lt "1.8.0" -or $PreviousVersion -like "*BA*") {
+        Write-Host "[INFO] In version v1.8.0 we have integrated the 'Bygg & Anlegg' addon with standard installation. Checking to see if addon has been previously installed..." 
+
+        $TermSetA = Get-PnPTermSet -Identity "cc6cdd18-c7d5-42e1-8d19-a336dd78f3f2" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
+        $TermSetB = Get-PnPTermSet -Identity "ec5ceb95-7259-4282-811f-7c57304be71e" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
+        if ($TermSetA -or $TermSetB) {
+            Write-Host "[INFO] 'Bygg & Anlegg' addon detected. Renaming old contenttypes to avoid conflicts..." 
+            $ProjectStatusBACT = Get-PnPContentType -Identity "Prosjektstatus (Bygg og anlegg)" -ErrorAction SilentlyContinue
+            $ProjectBACT = Get-PnPContentType -Identity "Prosjekt (Bygg og anlegg)" -ErrorAction SilentlyContinue
+
+            if ($ProjectStatusBACT) {
+                $ProjectStatusBACT.Name = "Prosjektstatus (Bygg og anlegg) - UTDATERT"
+                $ProjectStatusBACT.SystemUpdate()
+                $ProjectStatusBACT.Context.ExecuteQuery()
+            }
+
+            if ($ProjectBACT) {
+                $ProjectBACT.Name = "Prosjekt (Bygg og anlegg) - UTDATERT"
+                $ProjectBACT.SystemUpdate()
+                $ProjectBACT.Context.ExecuteQuery()
+            }
+            Write-Host "[SUCCESS] 'Bygg & Anlegg' contenttypes re-named" 
         }
     }
 }

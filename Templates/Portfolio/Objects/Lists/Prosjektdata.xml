@@ -7,6 +7,7 @@
     <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_ProjectData_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
             <ViewFields>
+                <FieldRef Name="ID" />
                 <FieldRef Name="Title" Hidden="true" />
                 <FieldRef Name="GtProjectFinanceName" />
                 <FieldRef Name="GtProjectNumber" />

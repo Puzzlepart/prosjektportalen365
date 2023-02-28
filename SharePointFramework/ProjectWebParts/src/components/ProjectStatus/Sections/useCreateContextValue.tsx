@@ -6,6 +6,9 @@ import { ISectionContext } from './context'
 /**
  * Hook for creating context value for `SectionContext`.
  *
+ * @remarks Field `GtOverallStatus` is a special case, where
+ * the value is stored in the comment field.
+ *
  * @returns A callback function
  */
 export function useCreateContextValue({ iconSize = 30 }) {

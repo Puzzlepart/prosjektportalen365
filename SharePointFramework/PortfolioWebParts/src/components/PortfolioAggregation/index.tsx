@@ -14,7 +14,13 @@ import { Commands } from './Commands'
 import { PortfolioAggregationContext } from './context'
 import { getDefaultColumns, renderItemColumn } from './itemColumn'
 import styles from './PortfolioAggregation.module.scss'
-import { COLUMN_HEADER_CONTEXT_MENU, ON_FILTER_CHANGE, TOGGLE_FILTER_PANEL } from './reducer'
+import {
+  COLUMN_HEADER_CONTEXT_MENU,
+  ON_FILTER_CHANGE,
+  SET_ALL_COLLAPSED,
+  SET_COLLAPSED,
+  TOGGLE_FILTER_PANEL
+} from './reducer'
 import SearchBox from './SearchBox'
 import { ShowHideColumnPanel } from './ShowHideColumnPanel'
 import { IPortfolioAggregationProps } from './types'
@@ -57,6 +63,14 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             ].filter((c) => c)}
             groups={state.groups}
             compact={state.isCompact}
+            groupProps={{
+              // TODO: Temporary fix for collapsing groups, the new state handling throws errors
+              onToggleCollapseAll: (isAllCollapsed) =>
+                dispatch(SET_ALL_COLLAPSED({ isAllCollapsed })),
+              headerProps: {
+                onToggleCollapse: (group) => dispatch(SET_COLLAPSED({ group }))
+              }
+            }}
           />
         </div>
         <ColumnContextMenu />

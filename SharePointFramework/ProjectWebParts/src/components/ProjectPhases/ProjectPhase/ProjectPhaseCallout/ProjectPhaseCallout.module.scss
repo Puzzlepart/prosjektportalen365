@@ -1,50 +1,38 @@
 @import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
 
-.projectPhaseCallout {
-  padding: 20px;
+.root {
+  .container {
+    padding: 20px;
 
-  .header {
-    margin: 0 0 5px 0;
-    .title {
-      font-size: 18px;
-    }
-  }
-
-  .body {
-    .subText {
-      max-width: 250px;
-      font-size: 14px;
-    }
-    .stats {
-      margin: 0 0 15px 0;
-      font-size: 12px;
-
-      > div {
-        margin: 4px 0 0 0;
-      }
-
-      .count {
-        font-weight: 600;
-        margin: 0 2px 0 0;
-      }
-
-      .markedAs {
-        font-weight: normal;
-      }
-
-      .statusValue {
-        font-weight: 600;
-        margin: 0 0 0 2px;
+    .header {
+      margin: 0 0 5px 0;
+      .title {
+        font-size: 18px;
       }
     }
-    .actions {
-      button,
-      a {
-        display: block;
-        height: 20px;
-        margin: 6px 0 0 0;
-        padding: 0;
+
+    .body {
+      .subText {
+        max-width: 250px;
+        font-size: 14px;
+      }
+      .stats {
+        margin: 0 0 15px 0;
         font-size: 12px;
+
+        > div {
+          margin: 4px 0 0 0;
+        }
+      }
+      .actions {
+        button,
+        a {
+          display: block;
+          height: 20px;
+          margin: 6px 0 0 0;
+          padding: 0;
+          font-size: 12px;
+        }
       }
     }
   }

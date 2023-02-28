@@ -1,4 +1,4 @@
-import { createAction, createReducer, current } from '@reduxjs/toolkit'
+import { createAction, createReducer } from '@reduxjs/toolkit'
 import { ContentConfig, ProjectExtension, ProjectTemplate } from 'models'
 import { ProjectSetupSettings } from 'projectSetup/ProjectSetupSettings'
 import { first, uniq } from 'underscore'
@@ -30,8 +30,6 @@ export default (data: IProjectSetupData) =>
       state.selectedTemplate = template
       state.selectedContentConfig = template.getContentConfig(data.contentConfig)
       state.selectedExtensions = template.getExtensions(data.extensions)
-      // eslint-disable-next-line no-console
-      console.log(current(state))
     },
 
     [ON_LIST_CONTENT_CONFIG_CHANGED.type]: (

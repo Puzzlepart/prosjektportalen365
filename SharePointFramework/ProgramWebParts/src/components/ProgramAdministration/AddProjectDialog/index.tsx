@@ -1,71 +1,76 @@
 import {
+  DefaultButton,
   Dialog,
-  DialogType,
-  ShimmeredDetailsList,
-  SelectionMode,
   DialogFooter,
+  DialogType,
   PrimaryButton,
-  DefaultButton
+  SelectionMode,
+  ShimmeredDetailsList,
+  ScrollablePane
 } from '@fluentui/react'
+import _ from 'lodash'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FC, useContext } from 'react'
+import { columns } from '../columns'
 import { ProgramAdministrationContext } from '../context'
-import { addChildProject } from '../data'
-import { fields } from '../index'
-import styles from '../ProgramAdministration.module.scss'
-import { ProjectTable } from '../ProjectTable'
-import { CHILD_PROJECTS_ADDED, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
-import { shimmeredColumns } from '../types'
+import { addChildProjects } from '../data'
+import { ListHeaderSearch } from '../ListHeaderSearch'
+import { ADD_CHILD_PROJECTS, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
+import styles from './AddProjectDialog.module.scss'
 import { useAddProjectDialog } from './useAddProjectDialog'
 
 export const AddProjectDialog: FC = () => {
   const context = useContext(ProgramAdministrationContext)
-  const { selectedProjects, availableProjects } = useAddProjectDialog()
+  const { selection, availableProjects, onSearch, onRenderRow } = useAddProjectDialog()
 
   return (
-    <>
-      <Dialog
-        hidden={false}
-        onDismiss={() => context.dispatch(TOGGLE_ADD_PROJECT_DIALOG())}
-        minWidth='60em'
-        maxWidth='1000px'
-        dialogContentProps={{
-          type: DialogType.largeHeader,
-          title: strings.ProgramAddChildsButtonText
-        }}>
-        <div className={styles.dialogContent}>
-          {context.state.loading.AddProjectDialog ? (
-            <ShimmeredDetailsList
-              items={[]}
-              shimmerLines={15}
-              columns={shimmeredColumns}
-              enableShimmer
-            />
-          ) : (
-            <ProjectTable
-              fields={fields(false)}
-              items={availableProjects}
-              selectionMode={SelectionMode.multiple}
-              onSelectionChanged={(items) => {
-                selectedProjects.current = items
-              }}
-            />
-          )}
-        </div>
-        <DialogFooter>
-          <PrimaryButton
-            text={strings.Add}
-            onClick={async () => {
-              await addChildProject(context.props.dataAdapter, selectedProjects.current)
-              context.dispatch(CHILD_PROJECTS_ADDED({ childProjects: selectedProjects.current }))
-            }}
+    <Dialog
+      hidden={false}
+      modalProps={{ containerClassName: styles.root }}
+      onDismiss={() => context.dispatch(TOGGLE_ADD_PROJECT_DIALOG())}
+      dialogContentProps={{
+        type: DialogType.largeHeader,
+        title: strings.ProgramAdministrationAddChildsButtonText
+      }}>
+      <div className={styles.dialogContent}>
+        <ScrollablePane>
+          <ShimmeredDetailsList
+            setKey='AddProjectDialog'
+            items={availableProjects}
+            columns={columns({ renderAsLink: false })}
+            selectionMode={SelectionMode.multiple}
+            selection={selection}
+            enableShimmer={context.state.loading.AddProjectDialog}
+            selectionPreservedOnEmptyClick={true}
+            onRenderRow={onRenderRow}
+            onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
+              <ListHeaderSearch
+                detailsHeaderProps={detailsHeaderProps}
+                defaultRender={defaultRender}
+                selectedCount={context.state.selectedProjectsToAdd?.length ?? 0}
+                search={{
+                  placeholder: strings.AddProjectDialogSearchBoxPlaceholder,
+                  onSearch
+                }}
+              />
+            )}
           />
-          <DefaultButton
-            text={strings.Cancel}
-            onClick={() => context.dispatch(TOGGLE_ADD_PROJECT_DIALOG())}
-          />
-        </DialogFooter>
-      </Dialog>
-    </>
+        </ScrollablePane>
+      </div>
+      <DialogFooter>
+        <PrimaryButton
+          text={strings.Add}
+          disabled={_.isEmpty(context.state.selectedProjectsToAdd)}
+          onClick={async () => {
+            await addChildProjects(context.props.dataAdapter, context.state.selectedProjectsToAdd)
+            context.dispatch(ADD_CHILD_PROJECTS())
+          }}
+        />
+        <DefaultButton
+          text={strings.Cancel}
+          onClick={() => context.dispatch(TOGGLE_ADD_PROJECT_DIALOG())}
+        />
+      </DialogFooter>
+    </Dialog>
   )
 }

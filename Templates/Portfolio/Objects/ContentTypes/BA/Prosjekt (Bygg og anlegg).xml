@@ -1,0 +1,42 @@
+﻿<pnp:ContentType ID="0x0100805E9E4FEAAB4F0EABAB2600D30DB70CBA" Name="{resource:ContentTypes_ProjectBA_Name}" Description="{resource:ContentTypes_ProjectBA_Description}" Group="{resource:ContentTypes_Group}" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+    <pnp:FieldRefs>
+        <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="983d5ab3-0a6c-4f6a-a7b5-d34d52d73676" Name="GtProjectFinanceName" UpdateChildren="true" />
+        <pnp:FieldRef ID="64d45745-0dd0-4c21-979b-67fb13748bb1" Name="GtProjectNumber" UpdateChildren="true" />
+        <pnp:FieldRef ID="a59fe220-36c3-464a-8cfc-40d6d04debd2" Name="GtArchiveReference" UpdateChildren="true" />
+        <pnp:FieldRef ID="3275d73a-fd4d-48ba-bcc1-31526460d57b" Name="GtProjectServiceArea" UpdateChildren="true" />
+        <pnp:FieldRef ID="ddb69044-7d2c-4865-86ec-b71413780409" Name="GtProjectType" UpdateChildren="true" />
+        <pnp:FieldRef ID="293886a7-dc00-47c4-be98-438a34af8d8a" Name="GtUNSustDevGoals" UpdateChildren="true" />
+        <pnp:FieldRef ID="325543a5-815d-485d-a9a5-e0773ad762e9" Name="GtProjectPhase" UpdateChildren="true" />
+        <pnp:FieldRef ID="d46bed8f-0fb6-4684-8221-632fdb12598f" Name="GtProjectManager" UpdateChildren="true" />
+        <pnp:FieldRef ID="3121ac55-d68e-4fcb-8fc8-3d8ed8a601b2" Name="GtProjectOwner" UpdateChildren="true" />
+        <pnp:FieldRef ID="610cfd27-9943-4749-818e-b1d652d70482" Name="GtProjectSupport" UpdateChildren="true" />
+        <pnp:FieldRef ID="fcf9c850-8267-4452-8366-74b7a76da177" Name="GtGainsResponsible" UpdateChildren="true" />
+        <pnp:FieldRef ID="e39c32db-a7da-4c93-9369-8aa5a7bde92d" Name="GtStartDate" UpdateChildren="true" />
+        <pnp:FieldRef ID="b02982d3-9e9f-4172-a576-34bcbe3b8332" Name="GtBAEndDateOriginal" UpdateChildren="true" />
+        <pnp:FieldRef ID="16623c2a-3fd1-41c2-87e7-958583dd88da" Name="GtEndDate" UpdateChildren="true" />
+        <pnp:FieldRef ID="018f09b8-4954-41bb-a8f6-fa531b90b79f" Name="GtProjectGoals" UpdateChildren="true" />
+        <pnp:FieldRef ID="3060379a-34d5-4bfb-a97d-f6efa834ff69" Name="GtBAProjectInvestementPhase" Hidden="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="f2a206c4-3b95-426b-9d46-dc9f283ed453" Name="GtBAProjectPolitical" UpdateChildren="true" />
+        <pnp:FieldRef ID="884d1db9-b8a5-4949-b74d-57d1ae0a2cf9" Name="GtBAProjectPoliticalComment" UpdateChildren="true" />
+        <pnp:FieldRef ID="c3ef03c1-b6b8-4b9f-a0e5-3e119d23522f" Name="GtBAProjectPoliticalLink" UpdateChildren="true" />
+        <pnp:FieldRef ID="28be4cc9-bc5e-4a55-a557-f652b564ca75" Name="GtBudgetTotal" Hidden="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="5af54348-bc38-4a18-a11f-0f84a96da4ea" Name="GtCostsTotal" Hidden="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="9076c206-ca80-4e17-b6f4-6fa3b90c421a" Name="GtProjectForecast" Hidden="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="f4623214-ab74-4160-82a7-37d46901bc1b" Name="GtBudgetLastReportDate" Hidden="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="167aef39-147b-40e1-befa-c1982af39d71" Name="GtGroupId" UpdateChildren="true" />
+        <pnp:FieldRef ID="fba7ced6-9970-4b14-ab9c-7c809310d86d" Name="GtSiteId" UpdateChildren="true" />
+        <pnp:FieldRef ID="871c1234-9ac5-4841-8b56-50839c34a7a1" Name="GtSiteUrl" UpdateChildren="true" />
+        <pnp:FieldRef ID="5e2506aa-1fe1-4be6-8b45-2e94eb9afdd0" Name="GtLastSyncTime" UpdateChildren="true" />
+        <pnp:FieldRef ID="18d92e18-10b6-42ea-815d-b12d7827564e" Name="GtProjectLifecycleStatus" UpdateChildren="true" />
+        <pnp:FieldRef ID="1b9a1571-b300-4cc0-bd32-9311f72e1998" Name="GtProjectPhaseText" UpdateChildren="true" />
+        <pnp:FieldRef ID="7212b9e5-52fc-46cb-8b5e-9bf787dd115f" Name="GtProjectTypeText" UpdateChildren="true" />
+        <pnp:FieldRef ID="fc103496-b2eb-4236-9902-ac47c2550c61" Name="GtUNSustDevGoalsText" UpdateChildren="true" />
+        <pnp:FieldRef ID="664ddf9a-a415-4b0b-a34f-0653547f03f0" Name="GtProjectAdminRoles" UpdateChildren="true" />
+        <pnp:FieldRef ID="4cc4a931-3861-45ad-85de-6db88afe9fa0" Name="GtProjectTemplate" UpdateChildren="true" />
+        <pnp:FieldRef ID="98e55335-a95a-4755-83a3-6f8b64af2420" Name="GtParentProjects" UpdateChildren="true" />
+        <pnp:FieldRef ID="e007ef7e-9c47-4bc2-8171-5c32688f3e0c" Name="GtChildProjects" UpdateChildren="true" />
+        <pnp:FieldRef ID="8f1f38cb-7eb2-4122-a866-4c9e99b2ebed" Name="GtIsParentProject" UpdateChildren="true" />
+        <pnp:FieldRef ID="77baede1-38df-454c-a53a-dd7904ba0046" Name="GtIsProgram" UpdateChildren="true" />
+    </pnp:FieldRefs>
+</pnp:ContentType>

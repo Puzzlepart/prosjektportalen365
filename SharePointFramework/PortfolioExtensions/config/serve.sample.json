@@ -1,0 +1,34 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/spfx-serve.schema.json",
+  "port": 4321,
+  "https": true,
+  "serveConfigurations": {
+    "default": {
+      "pageUrl": "https://puzzlepart.sharepoint.com/sites/pp365/Lists/Idebehandling/AllItems.aspx",
+      "customActions": {
+        "b13831c6-c4f8-4bbc-9da3-bd5f960f7e2b": {
+          "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+          "properties": {}
+        }
+      }
+    },
+    "ideaProcessing": {
+      "pageUrl": "https://puzzlepart.sharepoint.com/sites/pp365/Lists/Idebehandling/AllItems.aspx",
+      "customActions": {
+        "5af28222-4bf8-419c-9533-5a31967b9f20": {
+          "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+          "properties": {}
+        }
+      }
+    },
+    "ideaRegistration": {
+      "pageUrl": "https://puzzlepart.sharepoint.com/sites/pp365/Lists/Ideregistrering/AllItems.aspx",
+      "customActions": {
+        "c93a4a2a-f5f0-41ee-9ab6-04ad85004d20": {
+          "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+          "properties": {}
+        }
+      }
+    }
+  }
+}

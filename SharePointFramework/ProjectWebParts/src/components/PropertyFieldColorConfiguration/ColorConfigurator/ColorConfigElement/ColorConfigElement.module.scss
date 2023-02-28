@@ -1,0 +1,18 @@
+.root {
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+  .container {
+    box-sizing: border-box;
+    font-size: 11px;
+    line-height: 32px;
+    text-align: center;
+    width: 100%;
+  }
+}
+
+.calloutContent {
+  padding: 10px;
+}

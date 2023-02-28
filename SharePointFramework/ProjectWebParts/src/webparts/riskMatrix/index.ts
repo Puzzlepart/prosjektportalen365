@@ -1,18 +1,25 @@
+import { format } from '@fluentui/react'
+import { get } from '@microsoft/sp-lodash-subset'
 import {
   IPropertyPaneConfiguration,
+  IPropertyPaneField,
+  PropertyPaneDropdown,
   PropertyPaneSlider,
-  PropertyPaneTextField
+  PropertyPaneTextField,
+  PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { sp } from '@pnp/sp'
-import { IRiskMatrixProps, RiskMatrix, RiskElementModel } from 'components/RiskMatrix'
+import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
+import { IRiskMatrixProps, RiskMatrix } from 'components/RiskMatrix'
 import * as getValue from 'get-value'
-import ReactDom from 'react-dom'
-import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
-import { IRiskMatrixWebPartProps } from './IRiskMatrixWebPartProps'
 import * as strings from 'ProjectWebPartsStrings'
+import ReactDom from 'react-dom'
+import { UncertaintyElementModel } from '../../models'
+import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
+import { IRiskMatrixWebPartProps } from './types'
 
 export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWebPartProps> {
-  private _items: RiskElementModel[] = []
+  private _items: UncertaintyElementModel[] = []
   private _error: Error
 
   public async onInit() {
@@ -29,33 +36,83 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
       this.renderError(this._error)
     } else {
       this.renderComponent<IRiskMatrixProps>(RiskMatrix, {
-        width: this.properties.width,
-        height: this.properties.height,
-        calloutTemplate: this.properties.calloutTemplate,
+        ...this.properties,
+        width: this.properties.fullWidth ? '100%' : this.properties.width,
         items: this._items
       })
     }
   }
 
-  protected async _getItems(): Promise<RiskElementModel[]> {
-    let items: any[] = await sp.web.lists
+  protected async _getItems(): Promise<UncertaintyElementModel[]> {
+    const {
+      probabilityFieldName,
+      consequenceFieldName,
+      probabilityPostActionFieldName,
+      consequencePostActionFieldName
+    } = this.properties
+    const items: any[] = await sp.web.lists
       .getByTitle(this.properties.listName)
       .getItemsByCAMLQuery({ ViewXml: this.properties.viewXml })
-    items = items.map(
+    return items.map(
       (i) =>
-        new RiskElementModel(
+        new UncertaintyElementModel(
           i,
-          getValue(i, this.properties.probabilityFieldName, { default: '' }),
-          getValue(i, this.properties.consequenceFieldName, { default: '' }),
-          getValue(i, this.properties.probabilityPostActionFieldName, { default: '' }),
-          getValue(i, this.properties.consequencePostActionFieldName, { default: '' })
+          getValue(i, probabilityFieldName, { default: '' }),
+          getValue(i, consequenceFieldName, { default: '' }),
+          getValue(i, probabilityPostActionFieldName, { default: '' }),
+          getValue(i, consequencePostActionFieldName, { default: '' })
         )
     )
-    return items
   }
 
   protected onDispose(): void {
     ReactDom.unmountComponentAtNode(this.domElement)
+  }
+
+  protected get headerLabelFields(): IPropertyPaneField<any>[] {
+    const size = parseInt(this.properties.size ?? '5', 10)
+    const overrideHeaderLabels = PropertyPaneToggle(`overrideHeaderLabels.${size}`, {
+      label: format(strings.OverrideHeadersLabel, size)
+    })
+    if (!get(this.properties, `overrideHeaderLabels.${size}`, false)) {
+      return [overrideHeaderLabels]
+    }
+    const headerLabelFields: IPropertyPaneField<any>[] = []
+    const probabilityHeaders: string[] = [
+      strings.MatrixHeader_VeryHigh,
+      strings.MatrixHeader_High,
+      strings.MatrixHeader_Medium,
+      strings.MatrixHeader_Low,
+      strings.MatrixHeader_VeryLow,
+      strings.MatrixHeader_ExtremelyLow
+    ]
+    const consequenceHeaders: string[] = [
+      strings.MatrixHeader_Insignificant,
+      strings.MatrixHeader_Small,
+      strings.MatrixHeader_Moderate,
+      strings.MatrixHeader_Serious,
+      strings.MatrixHeader_Critical,
+      strings.MatrixHeader_VeryCritical
+    ]
+    for (let i = 0; i < size; i++) {
+      const probabilityHeaderFieldName = `headerLabels.${size}.p${i}`
+      headerLabelFields.push(
+        PropertyPaneTextField(probabilityHeaderFieldName, {
+          label: format(strings.ProbabilityHeaderFieldLabel, i + 1),
+          placeholder: probabilityHeaders[i]
+        })
+      )
+    }
+    for (let i = 0; i < size; i++) {
+      const consequenceHeaderFieldName = `headerLabels.${size}.c${i}`
+      headerLabelFields.push(
+        PropertyPaneTextField(consequenceHeaderFieldName, {
+          label: format(strings.ConsequenceHeaderFieldLabel, i + 1),
+          placeholder: consequenceHeaders[i]
+        })
+      )
+    }
+    return [overrideHeaderLabels, ...headerLabelFields]
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -90,25 +147,54 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
             {
               groupName: strings.LookAndFeelGroupName,
               groupFields: [
+                PropertyPaneToggle('fullWidth', {
+                  label: strings.MatrixFullWidthLabel
+                }),
                 PropertyPaneSlider('width', {
                   label: strings.WidthFieldLabel,
                   min: 400,
                   max: 1000,
                   value: 400,
-                  showValue: true
-                }),
-                PropertyPaneSlider('height', {
-                  label: strings.HeightFieldLabel,
-                  min: 400,
-                  max: 1000,
-                  value: 400,
-                  showValue: true
+                  showValue: true,
+                  disabled: this.properties.fullWidth
                 }),
                 PropertyPaneTextField('calloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,
-                  resizable: true
-                })
+                  resizable: true,
+                  rows: 8
+                }),
+                PropertyPaneDropdown('size', {
+                  label: strings.MatrixSizeLabel,
+                  options: [
+                    {
+                      key: '4',
+                      text: '4x4'
+                    },
+                    {
+                      key: '5',
+                      text: '5x5'
+                    },
+                    {
+                      key: '6',
+                      text: '6x6'
+                    }
+                  ],
+                  selectedKey: this.properties.size ?? '5'
+                }),
+                PropertyFieldColorConfiguration('colorScaleConfig', {
+                  key: 'colorScaleConfig',
+                  label: strings.MatrixColorScaleConfigLabel,
+                  defaultValue: [
+                    { p: 10, r: 44, g: 186, b: 0 },
+                    { p: 30, r: 163, g: 255, b: 0 },
+                    { p: 50, r: 255, g: 244, b: 0 },
+                    { p: 70, r: 255, g: 167, b: 0 },
+                    { p: 90, r: 255, g: 0, b: 0 }
+                  ],
+                  value: this.properties.colorScaleConfig
+                }),
+                ...this.headerLabelFields
               ]
             }
           ]
@@ -117,3 +203,5 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
     }
   }
 }
+
+export * from './types'

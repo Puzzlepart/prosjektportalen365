@@ -1,44 +1,47 @@
-import React, { FC, useEffect } from 'react'
+import { Toggle } from '@fluentui/react'
+import strings from 'ProjectWebPartsStrings'
+import React, { FC } from 'react'
+import { DynamicMatrix } from '../DynamicMatrix'
 import { IRiskMatrixProps } from './types'
-import { MatrixRows } from './MatrixRow'
-import styles from './RiskMatrix.module.scss'
-import { sp } from '@pnp/sp/'
-import HubSiteService from 'sp-hubsite-service'
+import { useRiskMatrix } from './useRiskMatrix'
 
-export const RiskMatrix: FC<IRiskMatrixProps> = ({
-  items = [],
-  width = 400,
-  height = 300,
-  calloutTemplate,
-  pageContext
-}: IRiskMatrixProps) => {
-  const [jsonConfig, setJsonConfig] = React.useState<undefined | []>()
-
-  useEffect(() => {
-    async function fetchJson() {
-      await fetchJsonConfiguration()
-    }
-    pageContext && fetchJson()
-  }, [])
-
-  async function fetchJsonConfiguration() {
-    const hubSite = await HubSiteService.GetHubSite(sp, pageContext as any)
-    const { ServerRelativeUrl } = await hubSite.web.get()
-    const json = await hubSite.web
-      .getFileByServerRelativeUrl(`/${ServerRelativeUrl}/SiteAssets/custom-cells.txt`)
-      .getJSON()
-    setJsonConfig(json)
-  }
-
+export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
+  const { configuration, getElementsForCell, setShowPostAction } = useRiskMatrix(props)
   return (
-    <div className={styles.riskMatrix} style={{ width, height }}>
-      <table className={styles.table}>
-        <tbody>
-          <MatrixRows items={items} calloutTemplate={calloutTemplate} customCells={jsonConfig} />
-        </tbody>
-      </table>
-    </div>
+    <>
+      <DynamicMatrix
+        {...props}
+        width={props.fullWidth ? '100%' : props.width}
+        configuration={configuration}
+        getElementsForCell={getElementsForCell}
+      />
+      <Toggle
+        label={strings.ToggleUncertaintyPostActionLabel}
+        onText={strings.ToggleUncertaintyPostActionOnText}
+        offText={strings.ToggleUncertaintyPostActionOffText}
+        onChange={(_event, checked) => setShowPostAction(checked)}
+      />
+    </>
   )
+}
+
+RiskMatrix.defaultProps = {
+  items: [],
+  width: 400,
+  calloutTemplate: `
+  <h3>{Title}</h3>\n
+  <p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n
+  <p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n
+  <p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>`,
+  customConfigUrl: 'SiteAssets/custom-cells.txt',
+  size: '5',
+  colorScaleConfig: [
+    { p: 10, r: 44, g: 186, b: 0 },
+    { p: 30, r: 163, g: 255, b: 0 },
+    { p: 50, r: 255, g: 244, b: 0 },
+    { p: 70, r: 255, g: 167, b: 0 },
+    { p: 90, r: 255, g: 0, b: 0 }
+  ]
 }
 
 export * from './types'

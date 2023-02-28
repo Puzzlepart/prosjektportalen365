@@ -1,4 +1,4 @@
-<pnp:ContentType ID="0x0100B8B4EE61A547B247B49CFC21B67D5B7D01" Name="{resource:ContentTypes_PlannerTasks_Name}" Description="{resource:ContentTypes_PlannerTasks_Description}" Group="{resource:ContentTypes_Group}" 
+<pnp:ContentType ID="0x0100B8B4EE61A547B247B49CFC21B67D5B7D01" Name="{resource:ContentTypes_PlannerTasks_Name}" Description="{resource:ContentTypes_PlannerTasks_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
@@ -10,5 +10,6 @@
         <pnp:FieldRef ID="19c0c03c-678a-4c2a-ab9b-cb9ffd903012" Name="GtLccDefault" UpdateChildren="true" />
         <pnp:FieldRef ID="f536ad85-248c-49b9-b6c7-0665943a2061" Name="GtLccHidden" UpdateChildren="true" />
         <pnp:FieldRef ID="f7a0e768-d12f-449d-8d46-8bd9a2ffc45b" Name="GtLccLocked" UpdateChildren="true" />
+        <pnp:FieldRef ID="82d30e82-e045-43fe-9246-13e87569f4bd" Name="GtPlannerName" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

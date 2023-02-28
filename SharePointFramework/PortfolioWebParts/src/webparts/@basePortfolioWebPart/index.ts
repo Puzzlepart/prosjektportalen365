@@ -18,13 +18,20 @@ export abstract class BasePortfolioWebPart<
   public abstract render(): void
 
   /**
-   * Render component
+   * Render component specified in `component` parameter, with the props
+   * specified in `props` parameter. The props will be merged with the
+   * web part properties and the following props:
+   * - `webPartContext`
+   * - `pageContext`
+   * - `dataAdapter`
+   * - `displayMode`
    *
    * @param component Component
    * @param props Props
    */
   public renderComponent<T = any>(component: React.ComponentClass<T> | FC<T>, props?: T): void {
     const combinedProps = assign({ title: this._pageTitle }, this.properties, props, {
+      webPartContext: this.context,
       pageContext: this.context.pageContext,
       dataAdapter: this.dataAdapter,
       displayMode: this.displayMode
@@ -52,7 +59,7 @@ export abstract class BasePortfolioWebPart<
   }
 
   public async onInit(): Promise<void> {
-    this.dataAdapter = new DataAdapter(this.context)
+    this.dataAdapter = await new DataAdapter(this.context).configure()
     this.context.statusRenderer.clearLoadingIndicator(this.domElement)
     await this._setup()
   }

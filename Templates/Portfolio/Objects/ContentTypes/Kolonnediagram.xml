@@ -1,4 +1,4 @@
-<pnp:ContentType ID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D02" Name="{resource:ContentTypes_ColumnChart_Name}" Description="{resource:ContentTypes_ColumnChart_Description}" Group="{resource:ContentTypes_Group}" 
+<pnp:ContentType ID="0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D02" Name="{resource:ContentTypes_ColumnChart_Name}" Description="{resource:ContentTypes_ColumnChart_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />

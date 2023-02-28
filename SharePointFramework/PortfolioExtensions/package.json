@@ -1,6 +1,6 @@
 {
   "name": "pp365-portfolioextensions",
-  "version": "1.7.3",
+  "version": "1.8.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -10,8 +10,7 @@
   "main": "lib/index.js",
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
-    "preserve": "node ../.tasks/createServeConfig.js && node ../.tasks/setBundleConfig.js",
-    "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\" \"node ../.tasks/setBundleConfig.js --revert\"",
+    "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\"",
     "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
     "package:debug": "gulp clean && gulp default && gulp package-solution",
     "build": "tsc --build",
@@ -30,7 +29,7 @@
     "@pnp/core": "^3.7.0",
     "@pnp/logging": "3.7.0",
     "@pnp/sp": "3.7.0",
-    "pp365-shared": "1.7.3",
+    "pp365-shared": "1.8.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "tslib": "2.3.1"

@@ -1,19 +1,15 @@
-import React, { useContext } from 'react'
+import React, { FC, useContext } from 'react'
 import { ChangePhaseDialogContext } from '../context'
 import { ChangingPhaseView, InitialView, SummaryView, View } from '../Views'
 
-export const Body = () => {
+const VIEW_MAP: Record<View, JSX.Element> = {
+  [View.Initial]: <InitialView />,
+  [View.Summary]: <SummaryView />,
+  [View.ChangingPhase]: <ChangingPhaseView />,
+  [View.Confirm]: null
+}
+
+export const Body: FC = () => {
   const { state } = useContext(ChangePhaseDialogContext)
-  switch (state.view) {
-    case View.Initial: {
-      const checklistItem = state.checklistItems[state.currentIdx]
-      return <InitialView checklistItem={checklistItem} />
-    }
-    case View.Summary:
-      return <SummaryView checklistItems={state.checklistItems} />
-    case View.ChangingPhase:
-      return <ChangingPhaseView />
-    default:
-      return null
-  }
+  return VIEW_MAP[state.view] ?? null
 }

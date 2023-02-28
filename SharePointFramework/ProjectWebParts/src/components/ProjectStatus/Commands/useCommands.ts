@@ -4,6 +4,7 @@ import strings from 'ProjectWebPartsStrings'
 import { useContext } from 'react'
 import { first } from 'underscore'
 import { ProjectStatusContext } from '../context'
+import { REPORT_PUBLISHING } from '../reducer'
 import { useDeleteReport } from './useDeleteReport'
 import { useEditFormUrl } from './useEditFormUrl'
 import { usePublishReport } from './usePublishReport'
@@ -53,8 +54,8 @@ export function useCommands() {
         iconProps: { iconName: 'PublishContent' },
         disabled: context.state.selectedReport?.published,
         onClick: () => {
+          context.dispatch(REPORT_PUBLISHING())
           publishReport()
-          context.setState({ isPublishing: true })
         }
       }
   ].filter(Boolean)

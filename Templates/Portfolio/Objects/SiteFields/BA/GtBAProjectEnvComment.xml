@@ -1,0 +1,1 @@
+<Field Type="Note" DisplayName="{resource:SiteFields_GtBAProjectEnvComment_DisplayName}" Description="{resource:SiteFields_GtBAProjectEnvComment_Description}" RichText="FALSE" ID="{cf7714a7-bec5-4c94-aa8a-e624148972a2}" StaticName="GtBAProjectEnvComment" UnlimitedLengthInDocumentLibrary="TRUE" Name="GtBAProjectEnvComment" Group="{resource:SiteFields_BA_Group}" />

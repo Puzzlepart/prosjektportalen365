@@ -3,7 +3,7 @@
   "id": "9570e369-21a6-4bf5-8198-13506499de52",
   "alias": "ProgramAdministrationWebpart",
   "componentType": "WebPart",
-  "version": "1.7.3",
+  "version": "1.8.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "supportedHosts": [

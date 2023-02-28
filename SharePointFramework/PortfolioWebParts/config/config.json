@@ -2,14 +2,6 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
   "version": "2.0",
   "bundles": {
-    "benefits-overview-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/benefitsOverview/index.js",
-          "manifest": "./src/webparts/benefitsOverview/manifest.json"
-        }
-      ]
-    },
     "latest-projects-web-part": {
       "components": [
         {

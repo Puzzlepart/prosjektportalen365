@@ -52,15 +52,14 @@ const transformItems = (
   timelineItems: TimelineContentModel[],
   groups: ITimelineGroup[]
 ): ITimelineItem[] => {
-  let _item: TimelineContentModel, _siteId: string
+  let _ctxItem: TimelineContentModel
   try {
     const items = timelineItems.map<ITimelineItem>((item, id) => {
-      _item = item
+      _ctxItem = item
 
       const group = _.find(groups, (grp) => item.siteId.indexOf(grp.siteId) !== -1)
-      _siteId = group.siteId || 'N/A'
 
-      if (group === null) return
+      if (!group) return null
 
       const background =
         item.getConfig('elementType') !== strings.BarLabel
@@ -113,9 +112,9 @@ const transformItems = (
     throw new Error(
       format(
         strings.ProjectTimelineErrorTransformItemText,
-        _siteId,
-        _item.itemTitle ? `${_item.itemTitle} (${_item.title})` : _item.title,
-        _item.type,
+        _ctxItem?.siteId ?? 'N/A',
+        _ctxItem.itemTitle ? `${_ctxItem.itemTitle} (${_ctxItem.title})` : _ctxItem.title,
+        _ctxItem.type,
         error
       )
     )

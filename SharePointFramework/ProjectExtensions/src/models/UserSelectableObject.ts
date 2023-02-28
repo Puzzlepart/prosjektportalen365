@@ -2,14 +2,14 @@ import { IObjectWithKey } from '@fluentui/react'
 
 export class UserSelectableObject implements IObjectWithKey {
   /**
-   * The `key` is the same as the `id` and corresponds to the item ID 
+   * The `key` is the same as the `id` and corresponds to the item ID
    * in the SharePoint list
    */
   public key: number
 
   constructor(
     /**
-     * The ID of the element corresponds to the item ID 
+     * The ID of the element corresponds to the item ID
      * in the SharePoint list
      */
     public id: number,

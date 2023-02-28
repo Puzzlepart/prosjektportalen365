@@ -1,20 +1,9 @@
 import { TypedHash } from '@pnp/common'
+import { ChecklistItemModel } from './ChecklistItemModel'
 
 export type ProjectPhaseChecklistData = {
-  stats?: {
-    [status: string]: number
-  }
-  items?: IProjectPhaseChecklistItem[]
-}
-
-export interface IProjectPhaseChecklistItem {
-  ID: number
-  Title: string
-  GtComment: string
-  GtChecklistStatus: string
-  GtProjectPhase: {
-    TermGuid: string
-  }
+  stats?: Record<string, number>
+  items?: ChecklistItemModel[]
 }
 
 /**
@@ -65,8 +54,12 @@ export class ProjectPhaseModel {
    *
    * Uses local custom property ShowOnFrontpage
    */
-  public get isVisible() {
-    return this.properties.ShowOnFrontpage !== 'false'
+  public get isVisible(): boolean {
+    try {
+      return JSON.parse(this.properties.ShowOnFrontpage)
+    } catch {
+      return true
+    }
   }
 
   /**

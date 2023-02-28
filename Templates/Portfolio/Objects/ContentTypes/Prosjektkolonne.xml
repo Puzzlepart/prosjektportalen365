@@ -1,4 +1,4 @@
-<pnp:ContentType ID="0x0100248005C277FADD45B7266F9151442472" Name="{resource:ContentTypes_ProjectColumn_Name}" Description="{resource:ContentTypes_ProjectColumn_Description}" Group="{resource:ContentTypes_Group}" 
+<pnp:ContentType ID="0x0100248005C277FADD45B7266F9151442472" Name="{resource:ContentTypes_ProjectColumn_Name}" Description="{resource:ContentTypes_ProjectColumn_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />

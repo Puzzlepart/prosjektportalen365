@@ -1,4 +1,3 @@
-import { Web } from '@pnp/sp'
 import { conditionalClassName as className } from 'pp365-shared/lib/util'
 import React, { FC, useContext } from 'react'
 import { pick } from 'underscore'
@@ -44,14 +43,11 @@ export const SummarySection: FC<ISummarySectionProps> = (props) => {
         {props.showProjectInformation && (
           <div className={styles.projectInformation}>
             <ProjectInformation
-              hubSite={{
-                web: new Web(context.props.hubSite.url),
-                url: context.props.hubSite.url
-              }}
               siteId={context.props.siteId}
               webUrl={context.props.webUrl}
               page='ProjectStatus'
               hideAllActions={true}
+              hideStatusReport={true}
             />
           </div>
         )}

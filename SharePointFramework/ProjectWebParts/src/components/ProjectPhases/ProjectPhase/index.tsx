@@ -1,42 +1,22 @@
-import { truncateString } from 'pp365-shared/lib/helpers/truncateString'
-import React, { useContext, useRef } from 'react'
-import { ProjectPhasesContext } from '../context'
+import React, { FC } from 'react'
 import styles from './ProjectPhase.module.scss'
 import { IProjectPhaseProps } from './types'
+import { useProjectPhase } from './useProjectPhase'
 
-export const ProjectPhase = ({ phase, isCurrentPhase, onOpenCallout }: IProjectPhaseProps) => {
-  const context = useContext(ProjectPhasesContext)
-  const targetRef = useRef()
-  const classNames = [styles.projectPhase]
-
-  if (isCurrentPhase) classNames.push(styles.isCurrentPhase)
-  if (phase.properties.PhaseLevel) {
-    const className = phase.properties.PhaseLevel.toLowerCase()
-    classNames.push(styles[className])
-  }
+export const ProjectPhase: FC<IProjectPhaseProps> = (props) => {
+  const { targetRef, onClick, className, subTextProps } = useProjectPhase(props)
 
   return (
-    <li className={classNames.join(' ')}>
+    <li className={className}>
       <a href='#' className={styles.container}>
         <div className={styles.phaseIcon}>
-          <span
-            className={styles.phaseLetter}
-            ref={targetRef}
-            onClick={() => onOpenCallout(targetRef.current, phase)}>
-            {phase.letter}
+          <span className={styles.phaseLetter} ref={targetRef} onClick={onClick}>
+            {props.phase.letter}
           </span>
-          <span
-            className={styles.phaseText}
-            onClick={() => onOpenCallout(targetRef.current, phase)}>
-            {phase.name}
+          <span className={styles.phaseText} onClick={onClick}>
+            {props.phase.name}
           </span>
-          <div
-            hidden={!context.props.showSubText}
-            className={styles.phaseSubText}
-            title={phase.subText}
-            dangerouslySetInnerHTML={{
-              __html: truncateString(phase.subText || '', context.props.subTextTruncateLength || 50)
-            }}></div>
+          <div {...subTextProps}></div>
         </div>
       </a>
     </li>

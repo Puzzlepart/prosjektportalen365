@@ -1,4 +1,5 @@
 import { CamlQuery, SiteUserProps } from '@pnp/sp'
+import SPDataAdapter from 'data/SPDataAdapter'
 import strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { isEmpty } from 'underscore'
@@ -32,7 +33,7 @@ export class SitePermissions extends BaseTask {
       const [permConfig, roleDefinitions, groups] = await Promise.all([
         this._getPermissionConfiguration(),
         this._getRoleDefinitions(params.web),
-        this._getSiteGroups(this.data.hub.web)
+        this._getSiteGroups()
       ])
       for (let i = 0; i < permConfig.length; i++) {
         const { groupName, permissionLevel } = permConfig[i]
@@ -62,7 +63,7 @@ export class SitePermissions extends BaseTask {
    * Get configurations for the selected template from list
    */
   private async _getPermissionConfiguration(): Promise<IPermissionConfiguration[]> {
-    const list = this.data.hub.web.lists.getByTitle(strings.PermissionConfigurationList)
+    const list = SPDataAdapter.portal.web.lists.getByTitle(strings.PermissionConfigurationList)
     const query: CamlQuery = {
       ViewXml: `<View>
     <Query>
@@ -90,12 +91,12 @@ export class SitePermissions extends BaseTask {
   }
 
   /**
-   * Get site groups with users from specified web
-   *
-   * @param web - Web
+   * Get site groups with users from the portal web
    */
-  private async _getSiteGroups(web: any) {
-    return (await web.siteGroups.select('Title', 'Users').expand('Users').get()).reduce(
+  private async _getSiteGroups() {
+    return (
+      await SPDataAdapter.portal.web.siteGroups.select('Title', 'Users').expand('Users').get()
+    ).reduce(
       (grps, { Title, Users }) => ({
         ...grps,
         [Title]: Users.map((u: SiteUserProps) => u.LoginName)

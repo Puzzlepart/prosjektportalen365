@@ -1,0 +1,6 @@
+<Field ID="{58947845-13c8-4cb4-892c-90ea727e22a4}" Name="GtBAProjectSHA" DisplayName="{resource:SiteFields_GtBAProjectSHA_DisplayName}" Type="Choice" Format="RadioButtons" Group="{resource:SiteFields_BA_Group}" Description="{resource:SiteFields_GtBAProjectSHA_Description}" StaticName="GtBAProjectSHA">
+  <CHOICES>
+    <CHOICE>Ingen hendelser siste måned</CHOICE>
+    <CHOICE>Hendelse registrert siste måned</CHOICE>
+  </CHOICES>
+</Field>

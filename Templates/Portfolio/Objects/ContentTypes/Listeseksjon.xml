@@ -1,4 +1,4 @@
-<pnp:ContentType ID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82805" Name="{resource:ContentTypes_ListSection_Name}" Description="{resource:ContentTypes_ListSection_Description}" Group="{resource:ContentTypes_Group}" 
+<pnp:ContentType ID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82805" Name="{resource:ContentTypes_ListSection_Name}" Description="{resource:ContentTypes_ListSection_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />
@@ -11,7 +11,8 @@
         <pnp:FieldRef ID="2d6790ad-9da9-408c-a87f-8d56d7b377f6" Name="GtSecSource" UpdateChildren="true" />
         <pnp:FieldRef ID="4b5ca6f2-a470-4c11-a738-edd9d55fb096" Name="GtSecList" Required="true" UpdateChildren="true" />
         <pnp:FieldRef ID="dd9a8b72-c646-4ec2-b834-614fa27fb79a" Name="GtSecViewQuery" UpdateChildren="true" />
-        <pnp:FieldRef ID="2d165a4d-a3e9-4756-acd2-abb537041fd4" Name="GtSecViewFields" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="2d165a4d-a3e9-4756-acd2-abb537041fd4" Name="GtSecViewFields" UpdateChildren="true" />
         <pnp:FieldRef ID="adf89685-f464-4ef5-8f7b-53b600aac14a" Name="GtSecRowLimit" UpdateChildren="true" />
+        <pnp:FieldRef ID="0c5167bb-1c77-49ce-8985-e012e33398c8" Name="GtSecView" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

@@ -64,6 +64,10 @@
                 {
                     "ID": "6c2da0dc-77b1-4152-b751-97adf436faa0",
                     "Name": "GtRiskStatus"
+                },
+                {
+                    "ID": "6bd17911-c48a-4900-be61-54ae26207d78",
+                    "Name": "GtShowInPortfolio"
                 }
             ]
         },
@@ -71,13 +75,7 @@
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89701",
             "Name": "{{ContentTypes_Risk_Name}}",
             "Description": "",
-            "Group": "{{ContentTypes_Group}}",
-            "FieldRefs": [
-                {
-                    "ID": "6bd17911-c48a-4900-be61-54ae26207d78",
-                    "Name": "GtShowInPortfolio"
-                }
-            ]
+            "Group": "{{ContentTypes_Group}}"
         },
         {
             "ID": "0x0100A87AE71CBF2643A6BC9D0948BD2EE89702",
@@ -226,6 +224,10 @@
                 {
                     "ID": "4393ed3c-1599-4ab3-8444-444ab35754bb",
                     "Name": "GtDeliveryStatusComment"
+                },
+                {
+                    "ID": "4d342fb6-a0e0-4064-b794-c1d36c922997",
+                    "Name": "GtTag"
                 }
             ]
         },
@@ -442,7 +444,7 @@
                 "Title": "Programstatus"
             },
             {
-                "Url": "#",
+                "Url": "SitePages/ProgramOversikt.aspx",
                 "Title": "Programinnhold",
                 "Children": [
                     {
@@ -624,7 +626,7 @@
                                 {
                                     "Id": "01417142-67c8-498b-a6da-6e78003023dd",
                                     "Properties": {
-                                        "title": "Underområder",
+                                        "title": "Oversikt over underområder",
                                         "showCommandBar": true,
                                         "showFilters": true,
                                         "showGroupBy": true,
@@ -798,9 +800,10 @@
                                     "Id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
                                     "Properties": {
                                         "title": "Programstatus",
-                                        "riskMatrixCalloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>",
-                                        "riskMatrixWidth": 800,
-                                        "riskMatrixHeight": 400
+                                        "riskMatrix": {
+                                            "calloutTemplate": "<h3>{Title}</h3>\n<p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n<p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n<p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>",
+                                            "width": 800
+                                        }
                                     }
                                 }
                             ]
@@ -1193,29 +1196,12 @@
                         "GtDeliveryStartTime",
                         "GtDeliveryEndTime",
                         "GtDeliveryStatus",
-                        "GtDeliveryStatusComment",
-                        "GtDeliveryPhase"
-                    ],
-                    "AdditionalSettings": {
-                        "RowLimit": 30,
-                        "Paged": true,
-                        "ViewQuery": ""
-                    }
-                },
-                {
-                    "Title": "Leveransefase",
-                    "ViewFields": [
-                        "LinkTitle",
-                        "GtDeliveryDescription",
-                        "GtDeliveryStartTime",
-                        "GtDeliveryEndTime",
-                        "GtDeliveryStatus",
                         "GtDeliveryStatusComment"
                     ],
                     "AdditionalSettings": {
                         "RowLimit": 30,
                         "Paged": true,
-                        "ViewQuery": "<GroupBy Collapse=\"FALSE\" GroupLimit=\"30\"><FieldRef Name=\"GtDeliveryPhase\" /></GroupBy>"
+                        "ViewQuery": ""
                     }
                 }
             ]
@@ -1266,19 +1252,33 @@
                     "ViewFields": [
                         "ID",
                         "LinkTitle",
-                        "GtRiskDescription",
-                        "GtRiskProbability",
-                        "GtRiskConsequence",
-                        "GtRiskFactor",
-                        "GtRiskStatus",
-                        "GtRiskStrategy",
+                        "GtRiskProximity",
                         "GtRiskAction",
-                        "Modified"
+                        "GtRiskStrategy",
+                        "GtRiskFactor",
+                        "GtRiskFactorPostAction"
                     ],
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<GroupBy Collapse=\"TRUE\" GroupLimit=\"30\"><FieldRef Name=\"GtRiskStatus\" Ascending=\"FALSE\" /></GroupBy><OrderBy><FieldRef Name=\"GtRiskFactor\" Ascending=\"FALSE\" /></OrderBy><Where><Neq>  <FieldRef Name=\"GtRiskStatus\" />  <Value Type=\"Text\">Ikke lenger aktuell</Value></Neq></Where>"
+                        "ViewQuery": "<GroupBy Collapse= \"TRUE\" GroupLimit= \"30\"><FieldRef Name= \"GtRiskStatus\" Ascending= \"FALSE\" /></GroupBy><OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">Ikke lenger aktuell</Value></Neq><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">Risiko</Value></Eq></And></Where>"
+                    }
+                },
+                {
+                    "Title": "Aktuelle muligheter",
+                    "ViewFields": [
+                        "ID",
+                        "LinkTitle",
+                        "GtRiskProximity",
+                        "GtRiskAction",
+                        "GtRiskStrategy",
+                        "GtRiskFactor",
+                        "GtRiskFactorPostAction"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 100,
+                        "Paged": true,
+                        "ViewQuery": "<GroupBy Collapse= \"TRUE\" GroupLimit= \"30\"><FieldRef Name= \"GtRiskStatus\" Ascending= \"FALSE\" /></GroupBy><OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">Ikke lenger aktuell</Value></Neq><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">Mulighet</Value></Eq></And></Where>"
                     }
                 },
                 {
@@ -1298,7 +1298,7 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<GroupBy Collapse=\"TRUE\" GroupLimit=\"30\"><FieldRef Name=\"GtRiskStatus\" Ascending=\"FALSE\" /></GroupBy><OrderBy><FieldRef Name=\"GtRiskFactor\" Ascending=\"FALSE\" /></OrderBy><Where><And>  <Neq>    <FieldRef Name=\"GtRiskStatus\" />    <Value Type=\"Text\">Ikke lenger aktuell</Value>  </Neq>  <Gt>    <FieldRef Name=\"GtRiskFactor\" />    <Value Type=\"Number\">10</Value>  </Gt></And></Where>"
+                        "ViewQuery": "<GroupBy Collapse= \"TRUE\" GroupLimit= \"30\"><FieldRef Name= \"GtRiskStatus\" Ascending= \"FALSE\" /></GroupBy><OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">Ikke lenger aktuell</Value></Neq><Gt><FieldRef Name= \"GtRiskFactor\" /><Value Type= \"Number\">10</Value></Gt></And><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">Risiko</Value></Eq></And></Where>"
                     }
                 },
                 {
@@ -1321,7 +1321,7 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": "<OrderBy><FieldRef Name=\"GtRiskFactor\" Ascending=\"FALSE\" /></OrderBy><Where><Eq>  <FieldRef Name=\"GtRiskStatus\" />  <Value Type=\"Text\">Ikke lenger aktuell</Value></Eq></Where>"
+                        "ViewQuery": "<OrderBy><FieldRef Name= \"GtRiskFactor\" Ascending= \"FALSE\" /></OrderBy><Where><And><Neq><FieldRef Name= \"GtRiskStatus\" /><Value Type= \"Text\">Ikke lenger aktuell</Value></Neq><Eq><FieldRef Name= \"ContentType\" /><Value Type= \"Computed\">Risiko</Value></Eq></And></Where>"
                     }
                 },
                 {
@@ -1339,7 +1339,7 @@
                     "AdditionalSettings": {
                         "RowLimit": 100,
                         "Paged": true,
-                        "ViewQuery": " <OrderBy><FieldRef Name=\"GtRiskFactor\" Ascending=\"FALSE\" /></OrderBy><Where><IsNull>  <FieldRef Name=\"GtActionResponsible\" /></IsNull></Where>"
+                        "ViewQuery": " <OrderBy><FieldRef Name=\"GtRiskFactor\" Ascending=\"FALSE\" /></OrderBy><Where><IsNull><FieldRef Name=\"GtActionResponsible\" /></IsNull></Where>"
                     }
                 },
                 {
@@ -1363,6 +1363,29 @@
                         "RowLimit": 100,
                         "Paged": true,
                         "ViewQuery": "<Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">Risiko</Value></Eq></Where>"
+                    }
+                },
+                {
+                    "Title": "Mulighet",
+                    "ViewFields": [
+                        "ID",
+                        "LinkTitle",
+                        "GtRiskDescription",
+                        "GtRiskProbability",
+                        "GtRiskConsequence",
+                        "GtRiskFactor",
+                        "GtRiskStatus",
+                        "GtRiskStrategy",
+                        "GtRiskAction",
+                        "GtRiskProbabilityPostAction",
+                        "GtRiskConsequencePostAction",
+                        "GtRiskFactorPostAction",
+                        "Modified"
+                    ],
+                    "AdditionalSettings": {
+                        "RowLimit": 100,
+                        "Paged": true,
+                        "ViewQuery": "<Where><Eq><FieldRef Name=\"ContentType\" /><Value Type=\"Computed\">Mulighet</Value></Eq></Where>"
                     }
                 },
                 {

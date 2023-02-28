@@ -11,8 +11,6 @@ import { DetailsCallout } from '../DetailsCallout'
 import styles from './Timeline.module.scss'
 import './Timeline.overrides.css'
 import { ITimelineProps } from './types'
-import { useGroupRenderer } from './useGroupRenderer'
-import { useItemRenderer } from './useItemRenderer'
 import { useTimeline } from './useTimeline'
 
 export const Timeline: FC<ITimelineProps> = (props) => {
@@ -24,10 +22,9 @@ export const Timeline: FC<ITimelineProps> = (props) => {
     setShowFilterPanel,
     showDetails,
     setShowDetails,
-    onItemClick
+    itemRenderer,
+    groupRenderer
   } = useTimeline(props)
-  const itemRenderer = useItemRenderer(onItemClick)
-  const groupRenderer = useGroupRenderer()
 
   return (
     <div className={styles.root}>
@@ -46,7 +43,7 @@ export const Timeline: FC<ITimelineProps> = (props) => {
           <div className={styles.title}>{props.title}</div>
         </div>
       )}
-      {props.infoText && (
+      {props.showInfoText && props.infoText && (
         <div className={styles.infoText}>
           <MessageBar>
             <div
@@ -93,7 +90,8 @@ Timeline.defaultProps = {
     [-1, 'months'],
     [1, 'years']
   ],
-  infoText: strings.ProjectTimelineInfoText
+  infoText: strings.ProjectTimelineInfoText,
+  showInfoText: true
 }
 
 export * from './types'

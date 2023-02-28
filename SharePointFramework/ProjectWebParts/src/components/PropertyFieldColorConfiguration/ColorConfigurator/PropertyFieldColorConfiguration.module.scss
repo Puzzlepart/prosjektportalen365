@@ -1,0 +1,21 @@
+.root {
+  .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 20px 0 0 0;
+  }
+  .actions {
+    display: flex;
+    flex-direction: row;
+    justify-content:  flex-start;
+    flex-wrap: nowrap;
+    margin: 15px 0 0 0;
+
+    > button:first-child {
+      flex: 1;
+      margin: 0 8px 0 0;
+    }
+  }
+}

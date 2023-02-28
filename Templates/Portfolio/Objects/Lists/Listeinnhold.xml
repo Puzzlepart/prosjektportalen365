@@ -71,6 +71,7 @@
                 <FieldRef Name="GtLccHidden" />
                 <FieldRef Name="GtLccDefault" />
                 <FieldRef Name="GtLccLocked" />
+                <FieldRef Name="GtPlannerName" />
                 <FieldRef Name="Modified" />
             </ViewFields>
             <RowLimit Paged="TRUE">30</RowLimit>
@@ -93,6 +94,63 @@
             <pnp:DataValue FieldName="GtDescription">Standard prosjektoppgaver for å understøtte Prosjektveiviserens metodikk</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccSourceList">Planneroppgaver</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccFields">-</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPlannerName">Standardplan</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100B8B4EE61A547B247B49CFC21B67D5B7D01</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Planneroppgaver Bygg</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDescription">Oppgaver for byggeprosjekter.</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccSourceList">Planneroppgaver Bygg</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccFields">-</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPlannerName">Byggplan</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="ContentTypeId">0x0100B8B4EE61A547B247B49CFC21B67D5B7D01</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Planneroppgaver Anlegg</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDescription">Oppgaver for anleggsprosjekter.</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccSourceList">Planneroppgaver Anlegg</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccFields">-</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPlannerName">Anleggsplan</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Standarddokumenter Bygg</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDescription">Standarddokumenter for byggeprosjekter.</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccSourceList">Standarddokumenter Bygg</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccDestinationList">Dokumenter</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccFields">Title</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Standarddokumenter Anlegg</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDescription">Standarddokumenter for anleggsprosjekter.</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccSourceList">Standarddokumenter Anlegg</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccDestinationList">Dokumenter</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccFields">Title</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Fasesjekkliste Bygg</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDescription">Fasesjekkpunkter for byggeprosjekter.</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccSourceList">Fasesjekkliste Bygg</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccDestinationList">Fasesjekkliste</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccFields">GtSortOrder,Title,GtProjectPhase</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Fasesjekkliste Anlegg</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDescription">Fasesjekkpunkter for anleggsprosjekter.</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccSourceList">Fasesjekkliste Anlegg</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccDestinationList">Fasesjekkliste</pnp:DataValue>
+            <pnp:DataValue FieldName="GtLccFields">GtSortOrder,Title,GtProjectPhase</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccDefault">0</pnp:DataValue>
             <pnp:DataValue FieldName="GtLccHidden">0</pnp:DataValue>
         </pnp:DataRow>

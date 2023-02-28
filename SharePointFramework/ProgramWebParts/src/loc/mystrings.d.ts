@@ -1,4 +1,7 @@
 declare interface IProgramWebPartsStrings {
+  ProgramTimelineInfoText: string
+  CmdSelectionCountText: string
+  ProgramAdministrationInfoMessage: string
   EditColumnHeaderText: string
   DataSourceCategoryDescription: string
   DataSourceDescription: string
@@ -165,86 +168,24 @@ declare interface IProgramWebPartsStrings {
   CostsTotalLabel: string
   NoProjectsFound: string
   NewLabel: string
-  ReadOnlyGroupName: string
   DisplayAllProjects: string
   MyProjectsLabel: string
   AllProjectsLabel: string
   NoAccessMessage: string
-  ProgramProjectsTimelineSync_LogListHeader: string
-  ProgramProjectsTimelineSync_DeleteLog: string
-  ProgramProjectsTimelineSync_EmptyLog: string
-  ProgramProjectsTimelineSync_RemoveFromProgram: string
-  ProgramProjectsTimelineSync_SyncToTimeline: string
-  ProgramProjectsTimelineSync_SyncingToTimeline: string
-  ProgramProjectsTimelineSync_SyncAllToTimeline: string
-  ProgramProjectsTimelineSync_SyncingAllToTimeline: string
-  ProgramProjectsTimelineSync_AddToTimelineAutomatically: string
-  ProgramProjectsTimelineSync_IncludeExpiredProjects: string
-  ProgramProjectsTimelineSync_StoredProjectsListHeader: string
-  ProgramProjectsTimelineSync_LoadingText: string
-  ProgramProjectsTimelineSync_ProjectRemoved: string
-  ProgramProjectsTimelineSync_ProjectDoesNotExist: string
-  ProgramProjectsTimelineSync_TimelineItemUpdated: string
-  ProgramProjectsTimelineSync_TimelineItemUpdateError: string
-  ProgramProjectsTimelineSync_TimelineItemAdded: string
-  ProgramProjectsTimelineSync_TimelineItemAddedToTimeline: string
-  ProgramProjectsTimelineSync_TimelineItemExpired: string
-  ProgramProjectsTimelineSync_TimelineItemNoDates: string
-  ProgramProjectsTimelineSync_PagingStatusText: string
-  ProgramProjectsTimelineSync_CountText: string
-  ProgramProjectStatus_LoadingText: string
-  ProgramProjectStatus_LoadingTextDescription: string
-  ProgramProjectStatus_LoadingFailedMessage: string
-  ProgramAddProject_AddingProjectToProgram: string
-  ProgramAddProject_AddingProjectToProgramDescription: string
-  ProgramAddProject_ProjectWasAddedToProgram: string
-  ProgramAddProject_ProjectsWasAddedToProgram: string
-  ProgramAddProject_AddProjectToProgram: string
-  ProgramAddChildsButtonText: string
-  ProgramAddProject_ProjectAlreadyInProgram: string
-  ProgramAddProject_ProjectsAlreadyInProgram: string
-  ProgramAddProject_AddAllProjectsToProgram: string
-  ProgramAddProject_EmptyMessage: string
-  ProgramAddProject_SearchBoxLabelText: string
-  ProgramAdministration_EmptyMessage: string
-  RiskWebPartTitle: string
+  ProgramAdministrationEmptyMessage: string
+  ProgramAdministrationAddChildsButtonText: string
   RiskDataSource: string
-  Lists_StoredProjects_MaxLimitError: string
-  Lists_StoredProjects_DoesNotExist: string
-  Lists_ProjectsTimeline_DoesNotExist: string
-  ProgramPortfolio_LoadingText: string
-  ProgramPortfolio_SearchBoxLabelText: string
-  ProgramPortfolio_ShowCountText: string
+  ProgramAdministrationSearchBoxPlaceholder: string
   ProgramTimelineHeader: string
   ProgramAdministrationHeader: string
   ProgramRemoveChildsButtonText: string
-  ProgramSearchProjectsText: string
+  AddProjectDialogSearchBoxPlaceholder: string
   Add: string
   Cancel: string
   Yes: string
   No: string
   PreviousPage: string
   NextPage: string
-  ProjectTimelineSync_RemoveFromProject: string
-  ProjectsTimelineSync_StoredProjectsListHeader: string
-  ProjectsTimelineSync_LoadingText: string
-  ProjectsTimelineSync_ProjectRemoved: string
-  ProjectsTimelineSync_CountText: string
-  ProjectStatus_LoadingText: string
-  ProjectAddProject_AddingProjectToProject: string
-  ProjectAddProject_AddingProjectToProjectDescription: string
-  ProjectAddProject_ProjectWasAddedToProject: string
-  ProjectAddProject_ProjectsWasAddedToProject: string
-  ProjectAddProject_AddProjectToProject: string
-  ProjectAddProject_ProjectAlreadyExist: string
-  ProjectAddProject_ProjectsAlreadyExist: string
-  ProjectAddProject_AddAllProjects: string
-  ProjectLists_StoredProjects_MaxLimitError: string
-  ProjectLists_StoredProjects_DoesNotExist: string
-  ProjectPortfolio_LoadingText: string
-  ProjectPortfolio_SearchBoxLabelText: string
-  ProjectPortfolio_ShowCountText: string
-  ProgramStatus_ViewIdLabel: string
   ProjectDeliveriesGroupName: string
   ShowProjectDeliveriesLabel: string
   ConfigItemTitleFieldLabel: string

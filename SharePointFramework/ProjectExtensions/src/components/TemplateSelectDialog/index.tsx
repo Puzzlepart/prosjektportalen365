@@ -1,11 +1,19 @@
-import { DefaultButton, DialogFooter, Pivot, PivotItem, PrimaryButton } from '@fluentui/react'
+import {
+  DefaultButton,
+  DialogFooter,
+  format,
+  MessageBar,
+  Pivot,
+  PivotItem,
+  PrimaryButton
+} from '@fluentui/react'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { FC } from 'react'
 import { isEmpty } from 'underscore'
 import { BaseDialog } from '../@BaseDialog'
+import { ContentConfigSection } from './ContentConfigSection'
 import { TemplateSelectDialogContext } from './context'
 import { ExtensionsSection } from './ExtensionsSection'
-import { ContentConfigSection } from './ContentConfigSection'
 import styles from './TemplateSelectDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
 import { ITemplateSelectDialogProps } from './types'
@@ -54,6 +62,11 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
           </PivotItem>
         </Pivot>
         <DialogFooter>
+          {props.tasks && (
+            <MessageBar>
+              {format(strings.ConfiguredSpecifiedTaskMessage, props.tasks.join(', '))}
+            </MessageBar>
+          )}
           <PrimaryButton
             disabled={!state.selectedTemplate}
             text={strings.TemplateSelectDialogSubmitButtonText}

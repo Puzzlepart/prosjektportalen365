@@ -4,11 +4,7 @@ import { SPConfiguration, Web } from '@pnp/sp'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { ISPList } from '../../interfaces/ISPList'
-import {
-  IProjectPhaseChecklistItem,
-  ProjectPhaseChecklistData,
-  ProjectPhaseModel
-} from '../../models'
+import { ChecklistItemModel, ProjectPhaseChecklistData, ProjectPhaseModel } from '../../models'
 import { tryParseJson } from '../../util/tryParseJson'
 import { IGetPropertiesData } from './IGetPropertiesData'
 import { IProjectDataServiceParams } from './IProjectDataServiceParams'
@@ -126,10 +122,10 @@ export class ProjectDataService {
   /**
    * Get property item from site
    *
-   * @param urlSource Url source
+   * @param sourceUrl Source url to append to edit form url
    */
   private async _getPropertyItem(
-    urlSource: string = document.location.href
+    sourceUrl: string = document.location.href
   ): Promise<IGetPropertiesData> {
     try {
       const propertyItemContext = await this._getPropertyItemContext()
@@ -151,20 +147,21 @@ export class ProjectDataService {
           .filter("substringof('Gt', InternalName)")
           .usingCaching()
           .get(),
-        this.web.rootFolder.select('welcomepage').get()
+        this.getWelcomePage()
       ])
 
-      urlSource = !urlSource.includes(welcomepage.WelcomePage)
-        ? urlSource
-            .replace('#syncproperties=1', `/${welcomepage.WelcomePage}#syncproperties=1`)
+      const modifiedSourceUrl = !sourceUrl.includes(welcomepage)
+        ? sourceUrl
+            .replace('#syncproperties=1', `/${welcomepage}#syncproperties=1`)
             .replace('//SitePages', '/SitePages')
-        : urlSource
+        : sourceUrl
 
       const editFormUrl = makeUrlAbsolute(
         `${propertyItemContext.defaultEditFormUrl}?ID=${
           propertyItemContext.itemId
-        }&Source=${encodeURIComponent(urlSource)}`
+        }&Source=${encodeURIComponent(modifiedSourceUrl)}`
       )
+
       const versionHistoryUrl = `${this._params.webUrl}/_layouts/15/versions.aspx?list=${propertyItemContext.listId}&ID=${propertyItemContext.itemId}`
       return {
         fieldValuesText,
@@ -228,7 +225,7 @@ export class ProjectDataService {
   }
 
   /**
-   * Update phase
+   * Update phase to the specified `phase` for the project.
    *
    * @param phase Phase
    * @param phaseTextField Phase text field
@@ -248,9 +245,9 @@ export class ProjectDataService {
   }
 
   /**
-   * Get phases
+   * Get phases for the project.
    *
-   * @param termSetId Get phases
+   * @param termSetId Term set ID
    * @param checklistData Checklist data
    */
   public async getPhases(
@@ -267,7 +264,6 @@ export class ProjectDataService {
         expiration: dateAdd(new Date(), 'day', 1)
       })
       .get()
-    Logger.write(`(ProjectDataService) Retrieved ${terms.length} phases from ${termSetId}.`)
     return terms.map(
       (term) =>
         new ProjectPhaseModel(
@@ -280,9 +276,9 @@ export class ProjectDataService {
   }
 
   /**
-   * Get current phase
+   * Get current phase name for the project.
    *
-   * @param phaseField Phase field
+   * @param phaseField Phase field name
    */
   public async getCurrentPhaseName(phaseField: string): Promise<string> {
     try {
@@ -294,28 +290,32 @@ export class ProjectDataService {
   }
 
   /**
-   * Get checklist data
+   * Get checklist data from the specified list as an object.
    *
    * @param listName List name
+   *
+   * @returns An object with term GUID as the key, and the items for the term GUID
+   * as the value.
    */
   public async getChecklistData(
     listName: string
-  ): Promise<{ [termGuid: string]: ProjectPhaseChecklistData }> {
+  ): Promise<Record<string, ProjectPhaseChecklistData>> {
     try {
       const items = await this.web.lists
         .getByTitle(listName)
         .items.select('ID', 'Title', 'GtComment', 'GtChecklistStatus', 'GtProjectPhase')
-        .get<IProjectPhaseChecklistItem[]>()
-      const checklistData = items
-        .filter((item) => item.GtProjectPhase)
+        .get<Record<string, any>[]>()
+      const checklistItems = items.map((item) => new ChecklistItemModel(item))
+      const checklistData = checklistItems
+        .filter((item) => item.termGuid)
         .reduce((obj, item) => {
-          const status = item.GtChecklistStatus.toLowerCase()
-          const termId = `/Guid(${item.GtProjectPhase.TermGuid})/`
-          obj[termId] = obj[termId] ? obj[termId] : {}
-          obj[termId].stats = obj[termId].stats || {}
-          obj[termId].items = obj[termId].items || []
-          obj[termId].items.push(item)
-          obj[termId].stats[status] = obj[termId].stats[status] ? obj[termId].stats[status] + 1 : 1
+          obj[item.termGuid] = obj[item.termGuid] ? obj[item.termGuid] : {}
+          obj[item.termGuid].stats = obj[item.termGuid].stats || {}
+          obj[item.termGuid].items = obj[item.termGuid].items || []
+          obj[item.termGuid].items.push(item)
+          obj[item.termGuid].stats[item.status] = obj[item.termGuid].stats[item.status]
+            ? obj[item.termGuid].stats[item.status] + 1
+            : 1
           return obj
         }, {})
       return checklistData
@@ -344,6 +344,19 @@ export class ProjectDataService {
       Logger.write(`(ProjectDataService) Clearing key ${key} from sessionStorage.`)
       sessionStorage.removeItem(key)
     })
+  }
+
+  /**
+   * Get welcome page for the project web. If the user doesn't have access to the root folder,
+   * the default page will be returned.
+   */
+  public async getWelcomePage() {
+    try {
+      const { WelcomePage } = await this.web.rootFolder.select('WelcomePage').get()
+      return WelcomePage
+    } catch (error) {
+      return 'SitePages/ProjectHome.aspx'
+    }
   }
 }
 

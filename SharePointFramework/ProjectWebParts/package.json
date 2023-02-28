@@ -1,6 +1,6 @@
 {
   "name": "pp365-projectwebparts",
-  "version": "1.7.3",
+  "version": "1.8.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -9,9 +9,9 @@
   "license": "MIT",
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
-    "preserve": "node ../.tasks/createServeConfig.js && gulp setHiddenToolbox && node ../.tasks/setBundleConfig.js",
-    "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\" \"node ../.tasks/setBundleConfig.js --revert\"",
-    "package": "gulp clean --ship && gulp setHiddenToolbox --ship && gulp default --ship && gulp package-solution --ship",
+    "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\"",
+    "prepackage": "gulp clean --ship && gulp setHiddenToolbox --ship",
+    "package": "gulp default --ship && gulp package-solution --ship",
     "package:debug": "gulp clean && gulp default && gulp package-solution",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color",
@@ -46,7 +46,7 @@
     "get-value": "3.0.1",
     "interactjs": "1.6.2",
     "msgraph-helper": "0.7.1",
-    "pp365-shared": "1.7.3",
+    "pp365-shared": "1.8.0",
     "pzl-spfx-components": "0.0.11",
     "react": "16.13.1",
     "react-calendar-timeline": "0.26.0",
@@ -56,7 +56,6 @@
     "react-scroll": "1.7.11",
     "rehype-raw": "^6.1.1",
     "sp-entityportal-service": "1.3.3",
-    "sp-hubsite-service": "0.5.1",
     "spfx-jsom": "^0.6.6",
     "tslib": "2.3.1",
     "underscore": "1.9.1"
@@ -88,7 +87,7 @@
     "find": "0.3.0",
     "gulp": "4.0.2",
     "livereload": "0.9.1",
-    "pp365-portfoliowebparts": "1.7.3",
+    "pp365-portfoliowebparts": "1.7.3-948.1",
     "prettier": "2.1.1",
     "typescript": "4.5.5",
     "webpack": "5.74.0"

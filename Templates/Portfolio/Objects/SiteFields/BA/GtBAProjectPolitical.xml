@@ -1,0 +1,1 @@
+<Field ID="{f2a206c4-3b95-426b-9d46-dc9f283ed453}" Name="GtBAProjectPolitical" DisplayName="{resource:SiteFields_GtBAProjectPolitical_DisplayName}" Type="DateTime" Format="DateOnly" Group="{resource:SiteFields_BA_Group}" Description="{resource:SiteFields_GtBAProjectPolitical_Description}" StaticName="GtBAProjectPolitical" />

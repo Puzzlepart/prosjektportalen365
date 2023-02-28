@@ -9,7 +9,7 @@
     "Navigation": {
         "QuickLaunch": [
             {
-                "Url": "#",
+                "Url": "SitePages/OverordnetOversikt.aspx",
                 "Title": "Underordnet innhold",
                 "Children": [
                     {
@@ -78,7 +78,7 @@
                                 {
                                     "Id": "01417142-67c8-498b-a6da-6e78003023dd",
                                     "Properties": {
-                                        "title": "Underområder",
+                                        "title": "Oversikt over underområder",
                                         "showCommandBar": true,
                                         "showFilters": true,
                                         "showGroupBy": true,

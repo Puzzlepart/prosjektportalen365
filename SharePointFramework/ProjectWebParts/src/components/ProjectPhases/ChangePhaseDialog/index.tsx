@@ -1,6 +1,5 @@
 import { Dialog, DialogType, format } from '@fluentui/react'
 import SPDataAdapter from '../../../data'
-import { IProjectPhaseChecklistItem } from 'pp365-shared/lib/models'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext, useEffect, useReducer } from 'react'
 import { ProjectPhasesContext } from '../context'
@@ -28,11 +27,11 @@ export const ChangePhaseDialog: FC = () => {
    *
    * @param properties Properties
    */
-  const nextChecklistItem = async (properties: Partial<IProjectPhaseChecklistItem>) => {
+  const nextChecklistItem = async (properties: Partial<Record<string, any>>) => {
     const currentItem = [...state.checklistItems][state.currentIdx]
     await SPDataAdapter.project.updateChecklistItem(
       strings.PhaseChecklistName,
-      currentItem.ID,
+      currentItem.id,
       properties
     )
     dispatch(CHECKLIST_ITEM_UPDATED({ properties }))

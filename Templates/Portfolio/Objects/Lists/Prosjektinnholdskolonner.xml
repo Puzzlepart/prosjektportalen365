@@ -21,10 +21,9 @@
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
             <Aggregations Value="Off" />
-            <JSLink>hierarchytaskslist.js</JSLink>
         </View>
     </pnp:Views>
-    <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Skip">
+    <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Overwrite">
         <pnp:DataRow>            <!-- ID: 1 -->
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Tittel</pnp:DataValue>
@@ -76,7 +75,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtRiskProbability</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtRiskProbabilityOWSNMBR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceCategory">Risikooversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 7 -->
@@ -85,7 +84,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtRiskConsequence</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtRiskConsequenceOWSNMBR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceCategory">Risikooversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 8 -->
@@ -94,7 +93,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtRiskProbabilityPostAction</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtRiskProbabilityPostActionOWSNMBR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceCategory">Risikooversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 9 -->
@@ -103,7 +102,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtRiskConsequencePostAction</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtRiskConsequencePostActionOWSNMBR</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Number</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceCategory">Risikooversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 10 -->
@@ -112,7 +111,7 @@
             <pnp:DataValue FieldName="GtInternalName">GtRiskActionOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtRiskActionOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceCategory">Risikooversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">300</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 11 -->

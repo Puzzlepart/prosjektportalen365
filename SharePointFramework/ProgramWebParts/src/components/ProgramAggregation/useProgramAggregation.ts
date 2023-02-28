@@ -3,6 +3,12 @@ import createReducer, { DATA_FETCHED, DATA_FETCH_ERROR, initState, START_FETCH }
 import { searchItem } from './search'
 import { IProgramAggregationProps } from './types'
 
+/**
+ * Component logic hook for ProgramAggregation component. This hook is responsible for fetching data and
+ * managing state of the component. Uses a React reducer to manage state and dispatch actions.
+ *
+ * @param props Props for ProgramAggregation component
+ */
 export const useProgramAggregation = (props: IProgramAggregationProps) => {
   const reducer = useMemo(() => createReducer(props), [])
   const [state, dispatch] = useReducer(reducer, initState(props))

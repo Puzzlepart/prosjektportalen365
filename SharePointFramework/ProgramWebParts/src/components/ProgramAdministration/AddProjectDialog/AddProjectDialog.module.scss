@@ -1,0 +1,24 @@
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+
+.root {
+  width: 950px;
+  max-width: 950px;
+  box-sizing: border-box;
+  position: relative;
+
+  .dialogContent {
+    height: 650px;
+    margin: 20px 0 0 0;
+    box-sizing: border-box;
+
+    .searchBox {
+      width: 625px;
+      margin: 10px 0 0 0;
+      box-sizing: border-box;
+    }
+  }
+
+  div[class*="ms-List-cell"] {
+    min-height: 0px;
+  }
+}

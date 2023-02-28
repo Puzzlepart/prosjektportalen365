@@ -1,8 +1,10 @@
-import { ITimelineItem, TimelineGroupType } from '../../../interfaces'
-import React, { useState } from 'react'
-import { ITimelineProps } from './types'
+import _ from 'underscore'
 import moment from 'moment'
-import { first } from 'underscore'
+import React, { useState } from 'react'
+import { ITimelineItem, TimelineGroupType } from '../../../interfaces'
+import { ITimelineProps } from './types'
+import { useGroupRenderer } from './useGroupRenderer'
+import { useItemRenderer } from './useItemRenderer'
 
 export function useTimeline(props: ITimelineProps) {
   const [showDetails, setShowDetails] = useState<{
@@ -27,12 +29,18 @@ export function useTimeline(props: ITimelineProps) {
 
   const defaultTimeStart = moment().add(...props.defaultTimeframe[0])
   const defaultTimeEnd = moment().add(...props.defaultTimeframe[1])
-  const sidebarWidth =
-    first(props.groups)?.type === TimelineGroupType.Project && props.isGroupByEnabled
-      ? 0
-      : props.isGroupByEnabled
-      ? 120
-      : 300
+  let sidebarWidth = 300
+
+  if (props.isGroupByEnabled) {
+    sidebarWidth = 120
+    if (_.first(props.groups)?.type === TimelineGroupType.Project) sidebarWidth = 0
+  }
+  if (props.hideSidebar) {
+    sidebarWidth = 0
+  }
+
+  const itemRenderer = useItemRenderer(onItemClick)
+  const groupRenderer = useGroupRenderer()
 
   return {
     defaultTimeStart,
@@ -42,6 +50,8 @@ export function useTimeline(props: ITimelineProps) {
     setShowFilterPanel,
     showDetails,
     setShowDetails,
-    onItemClick
+    onItemClick,
+    itemRenderer,
+    groupRenderer
   } as const
 }

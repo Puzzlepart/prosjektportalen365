@@ -1,6 +1,5 @@
-# Contributing
+# Bidrag
 
-When contributing to this repository, please first discuss the change you wish to make via issue,
-email, or any other method with the owners of this repository before making a change.
+Når du bidrar til dette repoet, vennligst diskuter endringer via issues, e-post eller en andre metoder med eierne av dette repoet før du gjør en endring.
 
-Please read the [Development guide](./.development-guide/README.md).
+Vennligst les [Utviklingsguiden](./.development-guide/README.md).

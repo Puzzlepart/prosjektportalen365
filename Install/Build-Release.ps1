@@ -24,7 +24,7 @@ function StartAction($Action) {
 
 function EndAction() {
     $global:sw_action.Stop()
-    $ElapsedSeconds = [math]::Round(($global:sw_action.ElapsedMilliseconds)/1000, 2)
+    $ElapsedSeconds = [math]::Round(($global:sw_action.ElapsedMilliseconds) / 1000, 2)
     Write-Host "Completed in $($ElapsedSeconds)s" -ForegroundColor Green
 }
 
@@ -104,9 +104,9 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
         npm ci --silent --no-audit --no-fund >$null 2>&1
     }
     else {
-        npm install --no-progress --silent --no-audit --no-fund >$null 2>&1
+        npm install --no-progress --silent --no-audit --no-fund
     }
-    npm run build >$null 2>&1
+    npm run build
     EndAction
 }
 
@@ -119,9 +119,9 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
             npm ci --silent --no-audit --no-fund >$null 2>&1
         }
         else {
-            npm install --no-progress --silent --no-audit --no-fund >$null 2>&1
+            npm install --no-progress --silent --no-audit --no-fund
         }
-        npm run package >$null 2>&1
+        npm run package
         Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
         EndAction
     }
@@ -141,9 +141,9 @@ if ($CI.IsPresent) {
     npm ci --silent --no-audit --no-fund >$null 2>&1
 }
 else {
-    npm install --no-progress --silent --no-audit --no-fund >$null 2>&1
+    npm install --no-progress --silent --no-audit --no-fund
 }
-npm run generateJsonTemplates >$null 2>&1
+npm run generateJsonTemplates
 
 Get-ChildItem "./Content" -Directory -Filter "*no-NB*" | ForEach-Object {
     Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
@@ -164,10 +164,15 @@ StartAction("Building Taxonomy PnP template")
 Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Taxonomy.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Taxonomy" -Force
 EndAction
 
+StartAction("Building Taxonomy BA PnP template")
+Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/TaxonomyBA.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/TaxonomyBA" -Force
+EndAction
+
 #endregion
 
 
 if (-not $CI.IsPresent) {
+    rimraf "$($RELEASE_PATH).zip"l
     Add-Type -Assembly "System.IO.Compression.FileSystem"
     [IO.Compression.ZipFile]::CreateFromDirectory($RELEASE_PATH, "$($RELEASE_PATH).zip")  
     $sw.Stop()

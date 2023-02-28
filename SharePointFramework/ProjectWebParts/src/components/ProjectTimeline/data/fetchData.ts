@@ -17,15 +17,16 @@ export async function fetchData(
   props: IProjectTimelineProps
 ): Promise<Partial<IProjectTimelineState>> {
   try {
-    const timelineConfig = await fetchTimelineConfiguration(props)
+    const timelineConfig = await fetchTimelineConfiguration()
     const [timelineData, project] = await Promise.all([
       fetchTimelineData(props, timelineConfig),
       fetchProjectData(props, timelineConfig)
     ])
+
     const groups = createTimelineGroups(project, timelineConfig)
     const selectedGroups = getSelectedGroups(groups, props.defaultGroupBy)
     const items = transformItems(
-      [...timelineData.timelineContentItems, project],
+      [...(timelineData?.timelineContentItems ?? []), project],
       selectedGroups,
       props
     )
@@ -34,8 +35,8 @@ export async function fetchData(
       data: {
         items,
         groups: selectedGroups,
-        listItems: timelineData.timelineListItems,
-        listColumns: timelineData.columns
+        listItems: timelineData?.timelineListItems ?? [],
+        listColumns: timelineData?.columns ?? []
       },
       timelineConfig,
       groups

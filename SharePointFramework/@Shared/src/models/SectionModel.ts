@@ -1,12 +1,13 @@
 export enum SectionType {
   SummarySection,
   StatusSection,
-  RiskSection,
+  UncertaintySection,
   ProjectPropertiesSection,
   ListSection
 }
 
 export class SectionModel {
+  public id: number
   public name: string
   public iconName: string
   public source: string
@@ -14,6 +15,7 @@ export class SectionModel {
   public viewQuery: string
   public viewFields: string[]
   public rowLimit: number
+  public viewName: string
   public fieldName: string
   public commentFieldName: string
   public statusClassName: string
@@ -29,9 +31,10 @@ export class SectionModel {
   /**
    * Constructor
    *
-   * @param _item Section item
+   * @param _item Section SP item
    */
-  constructor(private _item: any) {
+  constructor(private _item: Record<string, any>) {
+    this.id = _item.Id
     this.name = _item.Title
     this.iconName = _item.GtSecIcon
     this.source = _item.GtSecSource
@@ -39,6 +42,7 @@ export class SectionModel {
     this.viewQuery = _item.GtSecViewQuery
     this.viewFields = _item.GtSecViewFields ? _item.GtSecViewFields.split(',') : []
     this.rowLimit = _item.GtSecRowLimit
+    this.viewName = _item.GtSecView
     this.fieldName = _item.GtSecFieldName
     this.showRiskMatrix = _item.GtSecShowRiskMatrix
     this.showInStatusSection = _item.GtSecShowInStatusSection
@@ -59,7 +63,7 @@ export class SectionModel {
       return SectionType.ProjectPropertiesSection
     }
     if (this._item.ContentTypeId.indexOf('0x01004CEFE616A94A3A48A27D9DEBDF5EC82804') !== -1) {
-      return SectionType.RiskSection
+      return SectionType.UncertaintySection
     }
     if (this._item.ContentTypeId.indexOf('0x01004CEFE616A94A3A48A27D9DEBDF5EC82805') !== -1) {
       return SectionType.ListSection

@@ -1,12 +1,13 @@
-import { LogLevel } from '@pnp/logging'
 import { format } from '@fluentui/react/lib/Utilities'
+import { LogLevel } from '@pnp/logging'
 import * as strings from 'ProjectExtensionsStrings'
 import { Web, WebProvisioner } from 'sp-js-provisioning'
-import * as _ from 'underscore'
+import _ from 'underscore'
 import { IProjectSetupData } from '../../types'
-import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
+import { BaseTask, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 import { APPLY_TEMPLATE_STATUS_MAP } from './ApplyTemplateStatusMap'
+import { ApplyTemplateTaskError } from './ApplyTemplateTaskError'
 
 export class ApplyTemplate extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -25,13 +26,14 @@ export class ApplyTemplate extends BaseTask {
   ): Promise<IBaseTaskParams> {
     try {
       const web = new Web(params.context.pageContext.web.absoluteUrl)
+      const activeLogLevel = (sessionStorage.DEBUG === '1' || DEBUG
+        ? LogLevel.Info
+        : LogLevel.Error) as any
       const provisioner = new WebProvisioner(web).setup({
         spfxContext: params.context,
         logging: {
           prefix: '(ProjectSetup) (ApplyTemplate)',
-          activeLogLevel: (sessionStorage.DEBUG === '1' || DEBUG
-            ? LogLevel.Info
-            : LogLevel.Error) as any
+          activeLogLevel
         },
         spConfiguration: {
           cacheExpirationIntervalMilliseconds: 5000,
@@ -42,12 +44,12 @@ export class ApplyTemplate extends BaseTask {
       })
       this.logInformation('Applying template to site', { parameters: params.templateParameters })
       const templateSchema = _.omit(params.templateSchema, params.templateExcludeHandlers)
-      await provisioner.applyTemplate(templateSchema, null, (status) => {
-        if (APPLY_TEMPLATE_STATUS_MAP[status]) {
+      await provisioner.applyTemplate(templateSchema, null, (handler) => {
+        if (APPLY_TEMPLATE_STATUS_MAP[handler]) {
           onProgress(
             format(strings.ApplyTemplateText, this.data.selectedTemplate.text),
-            APPLY_TEMPLATE_STATUS_MAP[status].text,
-            APPLY_TEMPLATE_STATUS_MAP[status].iconName
+            APPLY_TEMPLATE_STATUS_MAP[handler].text,
+            APPLY_TEMPLATE_STATUS_MAP[handler].iconName
           )
         }
       })
@@ -63,8 +65,7 @@ export class ApplyTemplate extends BaseTask {
       }
       return params
     } catch (error) {
-      this.logError('Failed to apply template to site')
-      throw new BaseTaskError(this.taskName, strings.ApplyTemplateErrorMessage, error)
+      throw new ApplyTemplateTaskError(error)
     }
   }
 }

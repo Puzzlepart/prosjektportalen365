@@ -1,4 +1,4 @@
-<pnp:ContentType ID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82802" Name="{resource:ContentTypes_StatusFieldSection_Name}" Description="{resource:ContentTypes_StatusFieldSection_Description}" Group="{resource:ContentTypes_Group}" 
+<pnp:ContentType ID="0x01004CEFE616A94A3A48A27D9DEBDF5EC82802" Name="{resource:ContentTypes_StatusFieldSection_Name}" Description="{resource:ContentTypes_StatusFieldSection_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true" 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="c042a256-787d-4a6f-8a8a-cf6ab767f12d" Name="ContentType" UpdateChildren="true" />

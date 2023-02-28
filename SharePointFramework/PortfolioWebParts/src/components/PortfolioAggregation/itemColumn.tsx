@@ -1,6 +1,6 @@
+import { getFileTypeIconProps, initializeFileTypeIcons } from '@fluentui/react-file-type-icons'
 import { IColumn, Icon, Link } from '@fluentui/react/lib'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { Web } from '@pnp/sp'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import { formatDate, tryParseCurrency, tryParsePercentage } from 'pp365-shared/lib/helpers'
@@ -11,6 +11,7 @@ import { TagsColumn } from '../PortfolioOverview/RenderItemColumn/TagsColumn'
 import { UserColumn } from '../PortfolioOverview/RenderItemColumn/UserColumn'
 import ItemModal from './ItemModal'
 import { IPortfolioAggregationProps } from './types'
+initializeFileTypeIcons()
 
 /**
  * Render item column
@@ -76,8 +77,39 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
     }
     case 'modal':
       return <ItemModal title={item.MeasurementIndicator} value={JSON.parse(columnValue)} />
+    case 'filename_with_icon':
+      return (
+        <span>
+          <Icon
+            {...getFileTypeIconProps({
+              extension: item.FileExtension,
+              size: 16,
+              imageFileType: 'png'
+            })}
+            styles={{ root: { verticalAlign: 'bottom' } }}
+          />
+          <Link
+            href={item.ServerRedirectedURL}
+            rel='noopener noreferrer'
+            target='_blank'
+            style={{ marginLeft: 8 }}>
+            {columnValue}
+          </Link>
+        </span>
+      )
     default:
-      return columnValue
+      switch (column.fieldName) {
+        case 'Title': {
+          return (
+            <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
+              {columnValue}
+            </Link>
+          )
+        }
+        default: {
+          return columnValue
+        }
+      }
   }
 }
 
@@ -104,12 +136,9 @@ export const getDefaultColumns = (props: IPortfolioAggregationProps) => {
             title={item.Title}
             siteId={item.SiteId}
             webUrl={item.Path}
-            hubSite={{
-              web: new Web(props.pageContext.site.absoluteUrl),
-              url: props.pageContext.site.absoluteUrl
-            }}
             page='Portfolio'
             hideAllActions={true}
+            webPartContext={props.webPartContext}
             onRenderToggleElement={(onToggle) => (
               <Icon
                 iconName='Info'

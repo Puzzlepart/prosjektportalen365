@@ -3,20 +3,20 @@ import _ from 'underscore'
 import { IPhaseSitePageModel } from './types'
 
 /**
- * Change phase
+ * Change welcome page.
  *
- * @param phaseName
- * @param absoluteUrl absoluteurl
- * @param phaseSitePages Phase SitePages
+ * @param phaseName Phase page name
+ * @param absoluteUrl Absolute URL
+ * @param phaseSitePages Phase site pages
  */
 export const changeWelcomePage = async (
   phaseName: string,
   absoluteUrl: string,
-  phaseSitePages?: IPhaseSitePageModel[]
+  phaseSitePages: IPhaseSitePageModel[] = []
 ) => {
   try {
-    const phaseSitePage = phaseSitePages && _.find(phaseSitePages, (p) => p.title === phaseName)
-    if (phaseSitePage && phaseSitePage.fileLeafRef) {
+    const phaseSitePage = _.find(phaseSitePages, (p) => p.title === phaseName)
+    if (phaseSitePage?.fileLeafRef) {
       const spfxJsomContext = await initSpfxJsom(absoluteUrl)
       spfxJsomContext.jsomContext.web['get_rootFolder']()['set_welcomePage'](
         `SitePages/${phaseSitePage.fileLeafRef}`

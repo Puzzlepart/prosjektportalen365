@@ -1,4 +1,4 @@
-<pnp:ContentType ID="0x0100805E9E4FEAAB4F0EABAB2600D30DB70C" Name="{resource:ContentTypes_Project_Name}" Description="{resource:ContentTypes_Project_Description}" Group="{resource:ContentTypes_Group}"
+<pnp:ContentType ID="0x0100805E9E4FEAAB4F0EABAB2600D30DB70C" Name="{resource:ContentTypes_Project_Name}" Description="{resource:ContentTypes_Project_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" UpdateChildren="true" />
@@ -32,7 +32,7 @@
         <pnp:FieldRef ID="664ddf9a-a415-4b0b-a34f-0653547f03f0" Name="GtProjectAdminRoles" UpdateChildren="true" />
         <pnp:FieldRef ID="4cc4a931-3861-45ad-85de-6db88afe9fa0" Name="GtProjectTemplate" UpdateChildren="true" />
         <pnp:FieldRef ID="98e55335-a95a-4755-83a3-6f8b64af2420" Name="GtParentProjects" UpdateChildren="true" />
-        <pnp:FieldRef ID="e007ef7e-9c47-4bc2-8171-5c32688f3e0c" Name="GtChildProjects"  />
+        <pnp:FieldRef ID="e007ef7e-9c47-4bc2-8171-5c32688f3e0c" Name="GtChildProjects" UpdateChildren="true"  />
         <pnp:FieldRef ID="8f1f38cb-7eb2-4122-a866-4c9e99b2ebed" Name="GtIsParentProject" UpdateChildren="true" />
         <pnp:FieldRef ID="77baede1-38df-454c-a53a-dd7904ba0046" Name="GtIsProgram" UpdateChildren="true" />
     </pnp:FieldRefs>

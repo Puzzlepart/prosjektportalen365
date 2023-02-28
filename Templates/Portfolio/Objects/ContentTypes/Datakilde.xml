@@ -1,4 +1,4 @@
-<pnp:ContentType ID="0x0100A0AB42EFAB986D4A8E8038BC2391BEB2" Name="{resource:ContentTypes_DataSource_Name}" Description="{resource:ContentTypes_DataSource_Description}" Group="{resource:ContentTypes_Group}" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+<pnp:ContentType ID="0x0100A0AB42EFAB986D4A8E8038BC2391BEB2" Name="{resource:ContentTypes_DataSource_Name}" Description="{resource:ContentTypes_DataSource_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
         <pnp:FieldRef ID="31e405e0-2890-439d-9c9f-42354154feda" Name="GtSearchQuery" Required="true" UpdateChildren="true" />

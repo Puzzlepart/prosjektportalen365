@@ -1,9 +1,10 @@
+import { format } from '@fluentui/react/lib/Utilities'
+import { flatten } from '@microsoft/sp-lodash-subset'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd } from '@pnp/common'
 import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import MSGraph from 'msgraph-helper'
-import { format } from '@fluentui/react/lib/Utilities'
 import {
   IGraphGroup,
   IPortfolioConfiguration,
@@ -23,11 +24,10 @@ import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService, ProjectDataService } from 'pp365-shared/lib/services'
 import * as strings from 'ProgramWebPartsStrings'
-import HubSiteService from 'sp-hubsite-service'
 import { GAINS_DEFAULT_SELECT_PROPERTIES } from './config'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
-import { flatten } from '@microsoft/sp-lodash-subset'
+import _ from 'underscore'
 
 /**
  * SPDataAdapter for `ProgramWebParts`.
@@ -49,9 +49,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     spfxContext: WebPartContext,
     configuration: ISPDataAdapterBaseConfiguration
   ) {
-    super.configure(spfxContext, configuration)
-    const { web } = await HubSiteService.GetHubSite(sp, spfxContext.pageContext as any)
-    this.dataSourceService = new DataSourceService(web)
+    await super.configure(spfxContext, configuration)
+    this.dataSourceService = new DataSourceService(this.portal.web)
     this.project = new ProjectDataService(
       {
         ...this.settings,
@@ -240,29 +239,30 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   public async fetchDataForViewBatch(
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
-    siteId: string[]
+    siteId: string[],
+    siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
-    const queryArray = this.aggregatedQueryBuilder('GtSiteIdOWSTEXT')
+    const queryArray = this.aggregatedQueryBuilder(siteIdProperty)
     const items = []
     for (let i = 0; i < queryArray.length; i++) {
       const { projects, sites, statusReports } = await this._fetchDataForView(
         view,
         configuration,
         siteId,
-        'GtSiteIdOWSTEXT',
+        siteIdProperty,
         queryArray[i]
       )
-      const item = sites.map((site) => {
-        const [project] = projects.filter((res) => res['GtSiteIdOWSTEXT'] === site['SiteId'])
+      const item = projects.map((project) => {
         const [statusReport] = statusReports.filter(
-          (res) => res['GtSiteIdOWSTEXT'] === site['SiteId']
+          (res) => res[siteIdProperty] === project[siteIdProperty]
         )
+        const [site] = sites.filter((res) => res['SiteId'] === project[siteIdProperty])
+
         return {
           ...statusReport,
           ...project,
-          Title: site.Title,
-          Path: site.Path,
-          SiteId: site['SiteId']
+          Path: site && site.Path,
+          SiteId: project[siteIdProperty]
         }
       })
       items.push(...item)
@@ -325,13 +325,34 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   }
 
   /**
-   * Currently not in use, but it's here to avoid `ProjectTimeline` failing.
+   * Fetches data for the Projecttimeline project.
    *
-   * @param _timelineConfig Timeline config (not in use)
+   * @param timelineConfig Timeline configuration
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async fetchTimelineProjectData(_timelineConfig: TimelineConfigurationModel[]) {
-    return await Promise.resolve({})
+  public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationModel[]) {
+    const searchQuery =
+      'ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert'
+    const selectProperties = ['GtSiteIdOWSTEXT', 'GtCostsTotalOWSCURR', 'GtBudgetTotalOWSCURR']
+
+    const statusReports = await this._fetchItems(
+      searchQuery,
+      selectProperties,
+      false,
+      'GtSiteIdOWSTEXT'
+    )
+    const reports = statusReports
+      .map((report) => {
+        return {
+          siteId: report && report['GtSiteIdOWSTEXT'],
+          costsTotal: report && report['GtCostsTotalOWSCURR'],
+          budgetTotal: report && report['GtBudgetTotalOWSCURR']
+        }
+      })
+      .filter((p) => p)
+
+    const configElement = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
+
+    return { reports, configElement }
   }
 
   /**
@@ -439,7 +460,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
           'Title',
           'GtDeliveryDescriptionOWSMTXT',
           'GtDeliveryStartTimeOWSDATE',
-          'GtDeliveryEndTimeOWSDATE'
+          'GtDeliveryEndTimeOWSDATE',
+          'GtTagOWSCHCS'
         ],
         true
       )
@@ -461,7 +483,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
             config.title ?? configItemTitle,
             item.GtDeliveryStartTimeOWSDATE,
             item.GtDeliveryEndTimeOWSDATE,
-            item.GtDeliveryDescriptionOWSMTXT
+            item.GtDeliveryDescriptionOWSMTXT,
+            item.GtTagOWSCHCS
           ).usingConfig({
             sortOrder: 90,
             bgColorHex: '#384f61',
@@ -633,14 +656,15 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   private async _fetchItems(
     queryTemplate: string,
     selectProperties: string[],
-    includeSelf: boolean = false
+    includeSelf: boolean = false,
+    siteIdManagedProperty: string = 'SiteId'
   ) {
     sp.setup({
       spfxContext: this.spfxContext
     })
     const siteId = this.spfxContext.pageContext.site.id.toString()
-    const programFilter = this.childProjects && this.aggregatedQueryBuilder('SiteId')
-    if (includeSelf) programFilter.unshift(`SiteId:${siteId}`)
+    const programFilter = this.childProjects && this.aggregatedQueryBuilder(siteIdManagedProperty)
+    if (includeSelf) programFilter.unshift(`${siteIdManagedProperty}:${siteId}`)
     const promises = []
     programFilter.forEach((element) => {
       promises.push(
@@ -649,7 +673,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
           Querytext: '*',
           RowLimit: 500,
           TrimDuplicates: false,
-          SelectProperties: [...selectProperties, 'Path', 'SiteTitle']
+          SelectProperties: [...selectProperties, 'Path', 'Title', 'SiteTitle', 'SPWebURL']
         })
       )
     })
