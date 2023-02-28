@@ -5,7 +5,11 @@ import { IProjectListProps, IProjectListState, IProjectListView } from './types'
 
 /**
  * Component data fetch hook for `ProjectList`. This hook is responsible for
- * fetching data and setting state.
+ * fetching data and setting state. It feches enriched projects using 
+ * `dataAdapter.fetchEnrichedProjects()` and checks if the current user is in
+ * the `PortfolioManagerGroupName` group using `dataAdapter.isUserInGroup()`.
+ * The selected view is set to the `defaultView` prop or the first view in the
+ * `views` prop.
  *
  * @param props Props
  * @param views Views
@@ -21,7 +25,6 @@ export function useProjectListDataFetch(
       props.dataAdapter.fetchEnrichedProjects(),
       props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
     ]).then(([projects, isUserInPortfolioManagerGroup]) => {
-      views = views.filter((view) => _.any(projects, (project) => view.filter(project)))
       const selectedView =
         _.find(views, (view) => view.itemKey === props.defaultView) ?? _.first(views)
       setState({
