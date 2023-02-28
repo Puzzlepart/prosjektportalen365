@@ -166,7 +166,8 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
 ProjectList.defaultProps = {
   columns: PROJECTLIST_COLUMNS,
   sortBy: 'Title',
-  views: ProjectListViews
+  views: ProjectListViews,
+  hideViews: []
 }
 
 export * from './types'
