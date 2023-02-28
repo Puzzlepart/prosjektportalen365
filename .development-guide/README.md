@@ -154,6 +154,7 @@ In addition we have two PnP provisioning templates.
 Content templates are found in the **Content** folder. The name of the template follows the following pattern:
 
 `Portfolio_content.{language_code}.xml`
+`Portfolio_content_BA.{language_code}.xml`
 
 `language_code` can be for example **no-NB** or **en-US**.
 
