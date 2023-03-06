@@ -3,6 +3,15 @@ og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detaljert 'endringslogg' for siste versjon.
 
+=======
+## 1.9.0 - TBA
+
+### Ny funksjonalitet
+
+### Forbedringer
+
+### Feilrettinger
+
 ## 1.8.0 - 28.02.2023
 
 ### Ny funksjonalitet
