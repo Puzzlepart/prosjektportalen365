@@ -2,8 +2,7 @@ name: Build release (main)
 
 on:
   push:
-    branches:
-      - releases/*
+    branches: [main]
 
 jobs:
   build-release:
