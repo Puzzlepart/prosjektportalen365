@@ -12,6 +12,7 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 ### Feilrettinger
 
 - Fikset et problem i oppgraderingsskript der noen tenants ikke kunne hente alle hub children
+- Fikset et problem hvor kommandolinje ikke ble vist som standard [#1042](https://github.com/Puzzlepart/prosjektportalen365/issues/1042)
 
 ## 1.8.0 - 28.02.2023
 
