@@ -5,6 +5,10 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 
 ## 1.8.1 - TBA
 
+### Ny funksjonalitet
+
+### Forbedringer
+
 ### Feilrettinger
 
 - Fikset et problem i oppgraderingsskript der noen tenants ikke kunne hente alle hub children
