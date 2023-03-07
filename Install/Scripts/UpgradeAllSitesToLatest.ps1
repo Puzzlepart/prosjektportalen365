@@ -12,8 +12,6 @@ $global:__InstalledVersion = $null
 $global:__PnPConnection = $null
 
 $ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
-. $ScriptDir/PP365Functions.ps1
-
 
 if ($CI_MODE) {
     Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
@@ -224,7 +222,9 @@ $Context.Load($Context.Web.CurrentUser)
 $Context.ExecuteQuery()
 $UserName = $Context.Web.CurrentUser.LoginName
 
-$ProjectsInHub = Get-PP365HubSiteChild -Identity (Get-PnPHubSite -Identity $Url)
+Write-Host "Retrieving all sites of the Project Portal hub..."
+$ProjectsHub = Get-PnPTenantSite -Identity $Url
+$ProjectsInHub = Get-PnPTenantSite | Where-Object {$_.HubSiteId -eq $ProjectsHub.HubSiteId -and $_.Url -ne $ProjectsHub.Url } | ForEach-Object { return $_.Url }
 
 Write-Host "The following sites were found to be part of the Project Portal hub:"
 $ProjectsInHub | ForEach-Object { Write-Host "`t$_" }
