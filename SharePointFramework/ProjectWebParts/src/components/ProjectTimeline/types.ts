@@ -12,7 +12,6 @@ import {
 
 export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   listName?: string
-  showFilterButton?: boolean
   showTimeline?: boolean
   showTimelineList?: boolean
   showTimelineListCommands?: boolean

@@ -796,12 +796,13 @@
                                 {
                                     "Id": "d156652b-9121-47af-89ae-1fe8427c53da",
                                     "Properties": {
-                                        "title": "Prosjekttidslinje",
-                                        "showFilterButton": true,
+                                        "listName": "Tidslinjeinnhold",
                                         "showTimeline": true,
-                                        "showInfoMessage": true,
-                                        "showCmdTimelineList": true,
-                                        "showTimelineList": true
+                                        "showTimelineListCommands": true,
+                                        "showTimelineList": true,
+                                        "showProjectDeliveries": false,
+                                        "projectDeliveriesListName": "Prosjektleveranser",
+                                        "configItemTitle": "Prosjektleveranse"
                                     }
                                 }
                             ]
