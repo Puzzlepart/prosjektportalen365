@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "name": "d177708d-c0ea-4c20-a409-321f56f62014",
+    "spfx": {
+        "PortfolioWebParts": {
+            "solution": {
+                "id": "b6b1b1e0-5e5e-4b9c-9c1b-1b1e05e5e4b9"
+            },
+            "components": {
+                
+            }
+        }
+    }
+}

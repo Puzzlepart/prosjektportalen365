@@ -9,10 +9,19 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "CI mode. Installs PnP.PowerShell.")]
     [switch]$CI,
     [Parameter(Mandatory = $false)]
-    [switch]$SkipBundle
+    [switch]$SkipBundle,
+    [Parameter(Mandatory = $false)]
+    [string]$ChannelConfigPath
 )  
 
+if($ChannelConfigPath) {
+    $CHANNEL_CONFIG = Get-Content $ChannelConfigPath -Raw | ConvertFrom-Json
+}
 $PACKAGE_FILE = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
+
+$CHANNEL_CONFIG
+
+Wait-Debugger
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
 $global:sw_action = $null
