@@ -796,12 +796,13 @@
                                 {
                                     "Id": "{{ControlId_ProjectTimelineWebPart}}",
                                     "Properties": {
-                                        "title": "Prosjekttidslinje",
-                                        "showFilterButton": true,
+                                        "listName": "Tidslinjeinnhold",
                                         "showTimeline": true,
-                                        "showInfoMessage": true,
-                                        "showCmdTimelineList": true,
-                                        "showTimelineList": true
+                                        "showTimelineListCommands": true,
+                                        "showTimelineList": true,
+                                        "showProjectDeliveries": false,
+                                        "projectDeliveriesListName": "Prosjektleveranser",
+                                        "configItemTitle": "Prosjektleveranse"
                                     }
                                 }
                             ]
