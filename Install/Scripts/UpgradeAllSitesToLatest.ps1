@@ -57,7 +57,7 @@ function EnsureProjectTimelinePage() {
             Write-Host "`t`t`tAdding project timeline page"
             Add-PnPPage -Name "Prosjekttidslinje.aspx" -PromoteAs None -LayoutType SingleWebPartAppPage -CommentsEnabled:$false -Publish >$null 2>&1
             Write-Host "`t`t`tAdding project timeline app"
-            Add-PnPPageWebPart -Page "Prosjekttidslinje" -Component "Prosjekttidslinje" -WebPartProperties '{"listName":"Tidslinjeinnhold","showFilterButton":true,"showTimeline":true,"showInfoMessage":true,"showCmdTimelineList":true,"showTimelineList":true,"title":"Prosjekttidslinje"}' >$null 2>&1
+            Add-PnPPageWebPart -Page "Prosjekttidslinje" -Component "Prosjekttidslinje" -WebPartProperties '{"listName":"Tidslinjeinnhold","showTimeline":true,"showTimelineListCommands":true,"showTimelineList":true,"showProjectDeliveries":false,"projectDeliveriesListName":"Prosjektleveranser","configItemTitle":"Prosjektleveranse"}' >$null 2>&1
             Set-PnPClientSidePage -Identity "Prosjekttidslinje" -LayoutType SingleWebPartAppPage -HeaderType None -Publish >$null 2>&1
             Write-Host "`t`t`tAdding project timeline navigation item"
             Add-PnPNavigationNode -Location QuickLaunch -Title "Prosjekttidslinje" -Url "SitePages/Prosjekttidslinje.aspx" >$null 2>&1
@@ -224,7 +224,7 @@ $UserName = $Context.Web.CurrentUser.LoginName
 
 Write-Host "Retrieving all sites of the Project Portal hub..."
 $ProjectsHub = Get-PnPTenantSite -Identity $Url
-$ProjectsInHub = Get-PnPTenantSite | Where-Object {$_.HubSiteId -eq $ProjectsHub.HubSiteId -and $_.Url -ne $ProjectsHub.Url } | ForEach-Object { return $_.Url }
+$ProjectsInHub = Get-PnPTenantSite | Where-Object { $_.HubSiteId -eq $ProjectsHub.HubSiteId -and $_.Url -ne $ProjectsHub.Url } | ForEach-Object { return $_.Url }
 
 Write-Host "The following sites were found to be part of the Project Portal hub:"
 $ProjectsInHub | ForEach-Object { Write-Host "`t$_" }

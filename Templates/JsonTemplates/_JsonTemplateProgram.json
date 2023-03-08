@@ -826,13 +826,14 @@
                                 {
                                     "Id": "d156652b-9121-47af-89ae-1fe8427c53da",
                                     "Properties": {
-                                        "title": "Programtidslinje",
-                                        "showFilterButton": true,
+                                        "listName": "Tidslinjeinnhold",
                                         "showTimeline": true,
-                                        "showInfoMessage": true,
-                                        "showCmdTimelineList": true,
+                                        "showTimelineListCommands": true,
                                         "showTimelineList": true,
-                                        "infoText": "Her listes listeelementene for programmet. Her kan du redigere og legge til nye elementer. Dette vil synkroniseres til listen på hubområdet. For å zoome inn/ut i tidslinje: ALT+Musehjul"
+                                        "infoText": "Her listes listeelementene for programmet. Her kan du redigere og legge til nye elementer. Dette vil synkroniseres til listen på hubområdet. For å zoome inn/ut i tidslinje: ALT+Musehjul",
+                                        "showProjectDeliveries": false,
+                                        "projectDeliveriesListName": "Prosjektleveranser",
+                                        "configItemTitle": "Prosjektleveranse"
                                     }
                                 }
                             ]
