@@ -11,6 +11,16 @@ Sjekk ut [release notes](./release_notes/1.8.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
+## 1.8.1 - TBA
+
+### Ny funksjonalitet
+
+### Forbedringer
+
+### Feilrettinger
+
+- Fikset et problem i oppgraderingsskript der noen tenants ikke kunne hente alle hub children
+
 ## 1.8.0 - 28.02.2023
 
 ### Ny funksjonalitet
