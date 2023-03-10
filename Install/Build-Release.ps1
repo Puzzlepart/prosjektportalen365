@@ -19,10 +19,6 @@ if($ChannelConfigPath) {
 }
 $PACKAGE_FILE = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
 
-$CHANNEL_CONFIG
-
-Wait-Debugger
-
 $sw = [Diagnostics.Stopwatch]::StartNew()
 $global:sw_action = $null
 
@@ -50,7 +46,12 @@ $RELEASE_NAME = "$($PACKAGE_FILE.name)-$($PACKAGE_FILE.version).$($GIT_HASH)"
 $RELEASE_PATH = "$ROOT_PATH/release/$($RELEASE_NAME)"
 #endregion
 
-Write-Host "[Building release $RELEASE_NAME]" -ForegroundColor Cyan
+if($null -ne $CHANNEL_CONFIG) {
+    Write-Host "[Building release $RELEASE_NAME for channel $($CHANNEL_CONFIG.name)]" -ForegroundColor Yellow
+} else {
+    Write-Host "[Building release $RELEASE_NAME]" -ForegroundColor Yellow
+}
+
 
 if ($CI.IsPresent) {
     Write-Host "[Running in CI mode]" -ForegroundColor Yellow
@@ -130,12 +131,18 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
         else {
             npm install --no-progress --silent --no-audit --no-fund
         }
+        $SOLUTION_CONFIG = $CHANNEL_CONFIG.spfx.solutions.($_)
+        $SOLUTION_CONFIG_JSON = ($SOLUTION_CONFIG | ConvertTo-Json)
+        $SOLUTION_CONFIG_JSON | Out-File -FilePath "./config/generated-solution-config.json" -Encoding UTF8 -Force
+        node ./.tasks/generate-package-solution.js
         npm run package
+        node ./.tasks/generate-package-solution.js --revert
         Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
         EndAction
     }
 }
 #endregion
+
 
 #region Build PnP templates
 Set-Location $PSScriptRoot
