@@ -14,3 +14,6 @@ Templates/*.txt
 Templates/Resources.json
 .DS_Store
 node_modules
+SharePointFramework/**/src/**/manifest.json.bak
+SharePointFramework/**/config/package-solution.json.bak
+SharePointFramework/**/config/generated-solution-config.json
