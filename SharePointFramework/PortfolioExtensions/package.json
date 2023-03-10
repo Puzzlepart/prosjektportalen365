@@ -12,6 +12,7 @@
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
     "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\"",
     "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
+    "package-solution": "node ./.tasks/package-solution.js",
     "package:debug": "gulp clean && gulp default && gulp package-solution",
     "build": "tsc --build",
     "postversion": "tsc && npm publish",
@@ -59,6 +60,7 @@
     "gulp": "4.0.2",
     "prettier": "2.7.1",
     "typescript": "4.5.5",
-    "webpack": "5.74.0"
+    "webpack": "5.74.0",
+    "yargs": "17.7.1"
   }
 }
