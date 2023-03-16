@@ -57,6 +57,7 @@ $LanguageCodes = @{
     "English (US)" = 'en-US';
 }
 
+$Channel = "{CHANNEL_PLACEHOLDER}"
 $LanguageId = $LanguageIds[$Language]
 $LanguageCode = $LanguageCodes[$Language]
 #endregion
@@ -70,11 +71,17 @@ $InstallStartTime = (Get-Date -Format o)
 if ($Upgrade.IsPresent) {
     Write-Host "########################################################" -ForegroundColor Cyan
     Write-Host "### Upgrading Prosjektportalen 365 v{VERSION_PLACEHOLDER} #####" -ForegroundColor Cyan
+    if($Channel -ne "main") {
+        Write-Host "### Channel: $Channel ####" -ForegroundColor Cyan
+    }
     Write-Host "########################################################" -ForegroundColor Cyan
 }
 else {
     Write-Host "########################################################" -ForegroundColor Cyan
     Write-Host "### Installing Prosjektportalen 365 v{VERSION_PLACEHOLDER} ####" -ForegroundColor Cyan
+    if($Channel -ne "main") {
+        Write-Host "### Channel: $Channel ####" -ForegroundColor Cyan
+    }
     Write-Host "########################################################" -ForegroundColor Cyan
 }
 

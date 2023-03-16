@@ -21,8 +21,9 @@ Param(
     [string]$ChannelConfigPath
 )  
 
-$USE_CHANNEL_CONFIG = $ChannelConfigPath -ne $null
-$CHANNEL_CONFIG_NAME = $null
+$USE_CHANNEL_CONFIG = -not ([string]::IsNullOrEmpty($ChannelConfigPath))
+$USE_CHANNEL_CONFIG
+$CHANNEL_CONFIG_NAME = "main"
 
 <#
 Checks if parameter $ChannelConfigPath is set and if so, loads the channel config,
@@ -123,7 +124,7 @@ if (-not $SkipBundle.IsPresent) {
     EndAction
 }
 
-(Get-Content "$RELEASE_PATH/Install.ps1") -Replace '{VERSION_PLACEHOLDER}', "$($NPM_PACKAGE_FILE.version).$($GIT_HASH)" | Set-Content "$RELEASE_PATH/Install.ps1"
+(Get-Content "$RELEASE_PATH/Install.ps1") -Replace '{VERSION_PLACEHOLDER}', "$($NPM_PACKAGE_FILE.version).$($GIT_HASH)" -Replace "{CHANNEL_PLACEHOLDER}", $CHANNEL_CONFIG_NAME | Set-Content "$RELEASE_PATH/Install.ps1"
 #endregion
 
 #region Clean node_modules for all SharePoint Framework solutions
