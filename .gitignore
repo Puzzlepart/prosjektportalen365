@@ -19,3 +19,4 @@ SharePointFramework/**/config/package-solution.json.bak
 SharePointFramework/**/config/generated-solution-config.json
 .current-channel-config.json
 Templates/.replace-map.json
+.dist
