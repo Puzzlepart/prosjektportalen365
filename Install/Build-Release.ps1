@@ -35,22 +35,21 @@ if ($USE_CHANNEL_CONFIG) {
     $CHANNEL_CONFIG_JSON | Out-File -FilePath "$PSScriptRoot/../.current-channel-config.json" -Encoding UTF8 -Force
 }
 
-$PACKAGE_FILE = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
+$NPM_PACKAGE_FILE = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
 
-$sw = [Diagnostics.Stopwatch]::StartNew()
-$global:sw_action = $null
+$StopWatch = [Diagnostics.Stopwatch]::StartNew()
+$global:StopWatch_Action = $null
 
 function StartAction($Action) {
-    $global:sw_action = [Diagnostics.Stopwatch]::StartNew()
+    $global:StopWatch_Action = [Diagnostics.Stopwatch]::StartNew()
     Write-Host "[INFO] $Action...  " -NoNewline
 }
 
 function EndAction() {
-    $global:sw_action.Stop()
-    $ElapsedSeconds = [math]::Round(($global:sw_action.ElapsedMilliseconds) / 1000, 2)
+    $global:StopWatch_Action.Stop()
+    $ElapsedSeconds = [math]::Round(($global:StopWatch_Action.ElapsedMilliseconds) / 1000, 2)
     Write-Host "Completed in $($ElapsedSeconds)s" -ForegroundColor Green
 }
-
 
 #region Paths
 $START_PATH = Get-Location
@@ -60,7 +59,7 @@ $PNP_TEMPLATES_BASEPATH = "$ROOT_PATH/Templates"
 $SITE_SCRIPTS_BASEPATH = "$ROOT_PATH/SiteScripts/Src"
 $PNP_BUNDLE_PATH = "$PSScriptRoot/PnP.PowerShell"
 $GIT_HASH = git log --pretty=format:'%h' -n 1
-$RELEASE_NAME = "$($PACKAGE_FILE.name)-$($PACKAGE_FILE.version).$($GIT_HASH)"
+$RELEASE_NAME = "$($NPM_PACKAGE_FILE.name)-$($NPM_PACKAGE_FILE.version).$($GIT_HASH)"
 if ($USE_CHANNEL_CONFIG) {
     $RELEASE_NAME = "$($RELEASE_NAME)-$($CHANNEL_CONFIG_NAME)"
 }
@@ -68,10 +67,11 @@ $RELEASE_PATH = "$ROOT_PATH/release/$($RELEASE_NAME)"
 #endregion
 
 if ($null -ne $CHANNEL_CONFIG) {
-    Write-Host "[Building release $RELEASE_NAME for channel $($CHANNEL_CONFIG_NAME)]" -ForegroundColor Yellow
+    Write-Host "[Building release $RELEASE_NAME for channel $($CHANNEL_CONFIG_NAME)]" -ForegroundColor Cyan
+    Write-Host "## Make sure to delete the .current-channel-config.json file if you abort the build process ##" -ForegroundColor Yellow
 }
 else {
-    Write-Host "[Building release $RELEASE_NAME]" -ForegroundColor Yellow
+    Write-Host "[Building release $RELEASE_NAME]" -ForegroundColor Cyan
 }
 
 
@@ -123,7 +123,7 @@ if (-not $SkipBundle.IsPresent) {
     EndAction
 }
 
-(Get-Content "$RELEASE_PATH/Install.ps1") -Replace '{VERSION_PLACEHOLDER}', "$($PACKAGE_FILE.version).$($GIT_HASH)" | Set-Content "$RELEASE_PATH/Install.ps1"
+(Get-Content "$RELEASE_PATH/Install.ps1") -Replace '{VERSION_PLACEHOLDER}', "$($NPM_PACKAGE_FILE.version).$($GIT_HASH)" | Set-Content "$RELEASE_PATH/Install.ps1"
 #endregion
 
 #region Clean node_modules for all SharePoint Framework solutions
@@ -225,14 +225,18 @@ EndAction
 
 
 if (-not $CI.IsPresent) {
-    rimraf "$($RELEASE_PATH).zip"l
+    rimraf "$($RELEASE_PATH).zip"
     Add-Type -Assembly "System.IO.Compression.FileSystem"
     [IO.Compression.ZipFile]::CreateFromDirectory($RELEASE_PATH, "$($RELEASE_PATH).zip")  
-    $sw.Stop()
-    Write-Host "Done building release $RELEASE_NAME in $($sw.ElapsedMilliseconds/1000)s" -ForegroundColor Green
+    $StopWatch.Stop()
+    Write-Host "Done building release $RELEASE_NAME in $($StopWatch.ElapsedMilliseconds/1000)s" -ForegroundColor Green
     Set-Location $START_PATH
 }
 else {
-    $sw.Stop()
-    Write-Host "Done building release $RELEASE_NAME in $($sw.ElapsedMilliseconds/1000)s" -ForegroundColor Green
+    $StopWatch.Stop()
+    Write-Host "Done building release $RELEASE_NAME in $($StopWatch.ElapsedMilliseconds/1000)s" -ForegroundColor Green
+}
+
+if($USE_CHANNEL_CONFIG) {
+    Remove-Item -Path "$PSScriptRoot/../.current-channel-config.json" -Force
 }
