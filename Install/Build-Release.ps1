@@ -22,7 +22,6 @@ Param(
 )  
 
 $USE_CHANNEL_CONFIG = -not ([string]::IsNullOrEmpty($ChannelConfigPath))
-$USE_CHANNEL_CONFIG
 $CHANNEL_CONFIG_NAME = "main"
 
 <#
@@ -30,6 +29,10 @@ Checks if parameter $ChannelConfigPath is set and if so, loads the channel confi
 stores it as JSON in the root of the project and sets the $CHANNEL_CONFIG variable
 #>
 if ($USE_CHANNEL_CONFIG) {
+    if(-not (Test-Path $ChannelConfigPath)) {
+        Write-Host "Channel config file not found at $ChannelConfigPath. Aborting build of release." -ForegroundColor Red
+        exit 1
+    }
     $CHANNEL_CONFIG_JSON = Get-Content $ChannelConfigPath -Raw 
     $CHANNEL_CONFIG = $CHANNEL_CONFIG_JSON | ConvertFrom-Json
     $CHANNEL_CONFIG_NAME = $CHANNEL_CONFIG.name
@@ -69,7 +72,7 @@ $RELEASE_PATH = "$ROOT_PATH/release/$($RELEASE_NAME)"
 
 if ($null -ne $CHANNEL_CONFIG) {
     Write-Host "[Building release $RELEASE_NAME for channel $($CHANNEL_CONFIG_NAME)]" -ForegroundColor Cyan
-    Write-Host "## Make sure to delete the .current-channel-config.json file if you abort the build process ##" -ForegroundColor Yellow
+    Write-Host "[Make sure to delete the .current-channel-config.json file if you abort the build process]" -ForegroundColor Yellow
 }
 else {
     Write-Host "[Building release $RELEASE_NAME]" -ForegroundColor Cyan
