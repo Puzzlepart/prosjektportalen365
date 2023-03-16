@@ -78,6 +78,7 @@ else {
 
 if ($CI.IsPresent) {
     Write-Host "[Running in CI mode]" -ForegroundColor Yellow
+    npm ci 
 }
 
 if ($CI.IsPresent) {
@@ -147,7 +148,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
     else {
         npm install --no-progress --silent --no-audit --no-fund >$null 2>&1
     }
-    npm run build  >$null 2>&1
+    npm run build >$null 2>&1
     EndAction
 }
 
