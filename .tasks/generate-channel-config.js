@@ -73,7 +73,7 @@ async function addSpfxComponents() {
         let pkgSolutionContent = getFileContent(packageSolutionFiles[i])
         const [, solution] = packageSolutionFiles[i].split('/')
         const solution_id = isDefaultChannel ? pkgSolutionContent.solution.id : uuidv4()
-        const solution_name = isDefaultChannel ? pkgSolutionContent.solution.name : `${pkgSolutionContent.solution.name} (${channel_config.name})`
+        const solution_name = isDefaultChannel ? pkgSolutionContent.solution.name : `${pkgSolutionContent.solution.name} - ${channel_config.name}`
         const solution_zipped_package = isDefaultChannel ? pkgSolutionContent.paths.zippedPackage : `${pkgSolutionContent.paths.zippedPackage.replace('.sppkg', '')}-${channel_config.name}.sppkg`
         channel_config.spfx.solutions[solution] = channel_config.spfx.solutions[solution] || {}
         channel_config.spfx.solutions[solution].id = solution_id

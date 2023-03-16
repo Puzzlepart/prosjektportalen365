@@ -273,6 +273,12 @@ if (-not $Upgrade.IsPresent) {
 $SiteDesignName = [Uri]::UnescapeDataString($SiteDesignName)
 $SiteDesignDesc = [Uri]::UnescapeDataString("Samarbeid i et prosjektomr%C3%A5de fra Prosjektportalen")
 
+# Add channel to name and description for the site design if channel is specified and not main
+if($Channel -ne "main") {
+    $SiteDesignName += " ($Channel)"
+    $SiteDesignDesc += " ($Channel)"
+}
+
 if (-not $SkipSiteDesign.IsPresent) {
     $SiteScriptIds = @()
 

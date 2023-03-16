@@ -4,7 +4,7 @@
     "solutions": {
       "PortfolioExtensions": {
         "id": "b435060e-0748-4993-8b5d-ee83ef8a8ad7",
-        "name": "Prosjektportalen 365 - Portfolio Extensions (test)",
+        "name": "Prosjektportalen 365 - Portfolio Extensions - test",
         "zippedPackage": "solution/pp-portfolio-extensions-test.sppkg",
         "components": {
           "IdeaProcessingCommand": "a2a360d7-3748-4d0d-85d8-a03d659ba47d",
@@ -14,7 +14,7 @@
       },
       "PortfolioWebParts": {
         "id": "65422576-0c56-48e2-8a84-1a192685ceee",
-        "name": "Prosjektportalen 365 - Portfolio Web Parts (test)",
+        "name": "Prosjektportalen 365 - Portfolio Web Parts - test",
         "zippedPackage": "solution/pp-portfolio-web-parts-test.sppkg",
         "components": {
           "LatestProjectsWebPart": "3d374373-9fd8-4ba5-8a03-524651cac3e8",
@@ -28,7 +28,7 @@
       },
       "ProgramWebParts": {
         "id": "82fe1890-e114-4b9b-bd4d-c86012aa33e9",
-        "name": "Prosjektportalen 365 - Program Web Parts (test)",
+        "name": "Prosjektportalen 365 - Program Web Parts - test",
         "zippedPackage": "solution/pp-program-web-parts-test.sppkg",
         "components": {
           "ProgramAdministrationWebpart": "ca500bfe-49c7-4553-939a-b33254d77762",
@@ -39,7 +39,7 @@
       },
       "ProjectExtensions": {
         "id": "7883f20d-a353-4107-84aa-ec6ebc2e24fe",
-        "name": "Prosjektportalen 365 - Project Extensions (test)",
+        "name": "Prosjektportalen 365 - Project Extensions - test",
         "zippedPackage": "solution/pp-project-extensions-test.sppkg",
         "components": {
           "HelpContentApplicationCustomizer": "a5394e7a-e449-44bd-a700-cd5625331b89",
@@ -50,7 +50,7 @@
       },
       "ProjectWebParts": {
         "id": "99305c90-4fdb-4289-9379-2702957b3777",
-        "name": "Prosjektportalen 365 - Project Web Parts (test)",
+        "name": "Prosjektportalen 365 - Project Web Parts - test",
         "zippedPackage": "solution/pp-project-web-parts-test.sppkg",
         "components": {
           "OpportunityMatrixWebPart": "2301e02b-877c-427b-ace7-6ffb959b7326",
