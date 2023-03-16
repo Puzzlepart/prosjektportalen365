@@ -8,7 +8,6 @@ on:
       - "SharePointFramework/**"
       - "Install/**"
       - "Templates/**"
-      - .github/workflows/ci-releases.yml
 
 env:
   SP_URL: "https://puzzlepart.sharepoint.com/sites/pp365_channel_test"
@@ -16,7 +15,7 @@ env:
 
 jobs:
   build_release_package:
-    name: Build release package
+    name: Build release package for test channel
     runs-on: macos-latest
     if: "!contains(github.event.head_commit.message, '[skip-ci]')"
     steps:
@@ -46,7 +45,7 @@ jobs:
 
   install:
     needs: [build_release_package]
-    name: Install
+    name: Install (test)
     runs-on: macos-latest
     if: "!contains(github.event.head_commit.message, '[skip-install]')"
     steps:
