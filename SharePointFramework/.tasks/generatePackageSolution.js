@@ -11,8 +11,11 @@ const util = require('util')
 const glob = util.promisify(globMod)
 const revert = argv.revert;
 
-// Solution config file path
-const solutionConfigFile = path.join(process.cwd(), `../config/generated-solution-config.json`);
+// Config folder path
+const configFolder = path.join(process.cwd(), `config`);
+
+// Generated solution config file path
+const solutionConfigFile = path.join(configFolder, `generated-solution-config.json`);
 
 /**
  * Get file content for the given file path in JSON format
@@ -31,8 +34,8 @@ function getFileContent(file) {
  * the generated solution config file.
  */
 function revertPackageSolutionFile() {
-    const packageSolutionFile = path.join(process.cwd(), `../config/package-solution.json`);
-    const packageSolutionFileCopy = path.join(process.cwd(), `../config/package-solution.json.bak`);
+    const packageSolutionFile = path.join(configFolder, `package-solution.json`);
+    const packageSolutionFileCopy = path.join(configFolder, `package-solution.json.bak`);
     fs.copyFileSync(packageSolutionFileCopy, packageSolutionFile);
     fs.unlinkSync(packageSolutionFileCopy);
     fs.unlinkSync(solutionConfigFile)
@@ -56,8 +59,8 @@ function revertComponentManifestFiles(componentManifestFiles) {
  * Copy existing package solution file to a backup file
  */
 function copyExistingPackageSolutionFile() {
-    const packageSolutionFile = path.join(process.cwd(), `../config/package-solution.json`);
-    const packageSolutionFileCopy = path.join(process.cwd(), `../config/package-solution.json.bak`);
+    const packageSolutionFile = path.join(configFolder, `package-solution.json`);
+    const packageSolutionFileCopy = path.join(configFolder, `package-solution.json.bak`);
     fs.copyFileSync(packageSolutionFile, packageSolutionFileCopy);
 }
 
@@ -69,7 +72,7 @@ function copyExistingPackageSolutionFile() {
  * @param {*} zippedPackage Zipped package path
  */
 function generatePackageSolutionFile(id, name, zippedPackage) {
-    const packageSolutionFile = path.join(process.cwd(), `../config/package-solution.json`);
+    const packageSolutionFile = path.join(configFolder, `package-solution.json`);
     const packageSolution = getFileContent(packageSolutionFile);
     packageSolution.solution.id = id;
     packageSolution.solution.name = name;
@@ -108,7 +111,7 @@ function generateComponentManifestFiles(solutionConfig, componentManifestFiles) 
 
 
 (async () => {
-    const componentManifestFiles = await glob(path.join(process.cwd(), `../src/**/manifest.json`));
+    const componentManifestFiles = await glob(path.join(process.cwd(), `src/**/manifest.json`));
 
     if (revert) {
         revertPackageSolutionFile();

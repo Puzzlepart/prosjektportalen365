@@ -1,3 +1,10 @@
+<#
+.SYNOPSIS
+Builds a release package for Prosjektportalen 365
+
+.DESCRIPTION
+Builds a release package for Prosjektportalen 365. The release package contains all files needed to install Prosjektportalen 365 in a tenant.
+#>
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "")]
 Param(
     [Parameter(Mandatory = $false, HelpMessage = "Skip building of SharePoint Framework solutions")]
@@ -14,11 +21,13 @@ Param(
     [string]$ChannelConfigPath
 )  
 
+$USE_CHANNEL_CONFIG = $ChannelConfigPath -ne $null
+
 <#
 Checks if parameter $ChannelConfigPath is set and if so, loads the channel config,
 stores it as JSON in the root of the project and sets the $CHANNEL_CONFIG variable
 #>
-if ($ChannelConfigPath) {
+if ($USE_CHANNEL_CONFIG) {
     $CHANNEL_CONFIG_JSON = Get-Content $ChannelConfigPath -Raw 
     $CHANNEL_CONFIG = $CHANNEL_CONFIG_JSON | ConvertFrom-Json
     $CHANNEL_CONFIG_JSON | Out-File -FilePath "$PSScriptRoot/../.current-channel-config.json" -Encoding UTF8 -Force
@@ -82,6 +91,7 @@ $RELEASE_FOLDER = New-Item -Path "$RELEASE_PATH" -ItemType Directory -Force
 $RELEASE_PATH = $RELEASE_FOLDER.FullName
 StartAction("Creating release folder release/$($RELEASE_FOLDER.BaseName)")
 $RELEASE_PATH_TEMPLATES = (New-Item -Path "$RELEASE_PATH/Templates" -ItemType Directory -Force).FullName
+$PNP_TEMPLATES_DIST_BASEPATH = "$ROOT_PATH/.dist/Templates"
 $RELEASE_PATH_SITESCRIPTS = (New-Item -Path "$RELEASE_PATH/SiteScripts" -ItemType Directory -Force).FullName
 $RELEASE_PATH_SCRIPTS = (New-Item -Path "$RELEASE_PATH/Scripts" -ItemType Directory -Force).FullName
 $RELEASE_PATH_APPS = (New-Item -Path "$RELEASE_PATH/Apps" -ItemType Directory -Force).FullName
@@ -122,9 +132,9 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
         npm ci --silent --no-audit --no-fund >$null 2>&1
     }
     else {
-        npm install --no-progress --silent --no-audit --no-fund
+        npm install --no-progress --silent --no-audit --no-fund >$null 2>&1
     }
-    npm run build
+    npm run build  >$null 2>&1
     EndAction
 }
 
@@ -137,14 +147,14 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
             npm ci --silent --no-audit --no-fund >$null 2>&1
         }
         else {
-            npm install --no-progress --silent --no-audit --no-fund
+            npm install --no-progress --silent --no-audit --no-fund >$null 2>&1
         }
         $SOLUTION_CONFIG = $CHANNEL_CONFIG.spfx.solutions.($_)
         $SOLUTION_CONFIG_JSON = ($SOLUTION_CONFIG | ConvertTo-Json)
         $SOLUTION_CONFIG_JSON | Out-File -FilePath "./config/generated-solution-config.json" -Encoding UTF8 -Force
-        node ./.tasks/generate-package-solution.js
-        npm run package
-        node ./.tasks/generate-package-solution.js --revert
+        node ../.tasks/generatePackageSolution.js >$null 2>&1
+        npm run package >$null 2>&1
+        node ../.tasks/generatePackageSolution.js --revert >$null 2>&1 
         Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
         EndAction
     }
@@ -154,9 +164,14 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
 
 #region Build PnP templates
 Set-Location $PSScriptRoot
-node ./tasks/generate-pnp-templates.js
 StartAction("Building Portfolio PnP template")
-Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Portfolio" -Force
+if ($USE_CHANNEL_CONFIG) {
+    npm run generate-pnp-templates >$null 2>&1
+    Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_DIST_BASEPATH/Portfolio" -Force
+}
+else {
+    Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Portfolio" -Force
+}
 EndAction
 
 StartAction("Building PnP content templates")
