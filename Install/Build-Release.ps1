@@ -22,6 +22,7 @@ Param(
 )  
 
 $USE_CHANNEL_CONFIG = $ChannelConfigPath -ne $null
+$CHANNEL_CONFIG_NAME = $null
 
 <#
 Checks if parameter $ChannelConfigPath is set and if so, loads the channel config,
@@ -30,6 +31,7 @@ stores it as JSON in the root of the project and sets the $CHANNEL_CONFIG variab
 if ($USE_CHANNEL_CONFIG) {
     $CHANNEL_CONFIG_JSON = Get-Content $ChannelConfigPath -Raw 
     $CHANNEL_CONFIG = $CHANNEL_CONFIG_JSON | ConvertFrom-Json
+    $CHANNEL_CONFIG_NAME = $CHANNEL_CONFIG.name
     $CHANNEL_CONFIG_JSON | Out-File -FilePath "$PSScriptRoot/../.current-channel-config.json" -Encoding UTF8 -Force
 }
 
@@ -59,11 +61,14 @@ $SITE_SCRIPTS_BASEPATH = "$ROOT_PATH/SiteScripts/Src"
 $PNP_BUNDLE_PATH = "$PSScriptRoot/PnP.PowerShell"
 $GIT_HASH = git log --pretty=format:'%h' -n 1
 $RELEASE_NAME = "$($PACKAGE_FILE.name)-$($PACKAGE_FILE.version).$($GIT_HASH)"
+if ($USE_CHANNEL_CONFIG) {
+    $RELEASE_NAME = "$($RELEASE_NAME)-$($CHANNEL_CONFIG_NAME)"
+}
 $RELEASE_PATH = "$ROOT_PATH/release/$($RELEASE_NAME)"
 #endregion
 
 if ($null -ne $CHANNEL_CONFIG) {
-    Write-Host "[Building release $RELEASE_NAME for channel $($CHANNEL_CONFIG.name)]" -ForegroundColor Yellow
+    Write-Host "[Building release $RELEASE_NAME for channel $($CHANNEL_CONFIG_NAME)]" -ForegroundColor Yellow
 }
 else {
     Write-Host "[Building release $RELEASE_NAME]" -ForegroundColor Yellow
@@ -99,7 +104,14 @@ EndAction
 
 #region Copying source files
 StartAction("Copying Install.ps1, PostInstall.ps1 and site script source files")
-Copy-Item -Path "$SITE_SCRIPTS_BASEPATH/*.txt" -Filter *.txt -Destination $RELEASE_PATH_SITESCRIPTS -Force
+if ($USE_CHANNEL_CONFIG) {
+    npm run generate-site-scripts >$null 2>&1
+    $SITE_SCRIPTS_BASEPATH = "$ROOT_PATH/.dist/SiteScripts"
+    Copy-Item -Path "$SITE_SCRIPTS_BASEPATH/*.txt" -Filter *.txt -Destination $RELEASE_PATH_SITESCRIPTS -Force
+}
+else {
+    Copy-Item -Path "$SITE_SCRIPTS_BASEPATH/*.txt" -Filter *.txt -Destination $RELEASE_PATH_SITESCRIPTS -Force
+}
 Copy-Item -Path "$PSScriptRoot/Install.ps1" -Destination $RELEASE_PATH -Force
 Copy-Item -Path "$PSScriptRoot/Scripts/*" -Recurse -Destination $RELEASE_PATH_SCRIPTS -Force
 Copy-Item -Path "$PSScriptRoot/SearchConfiguration.xml" -Destination $RELEASE_PATH -Force
@@ -181,9 +193,10 @@ if ($CI.IsPresent) {
     npm ci --silent --no-audit --no-fund >$null 2>&1
 }
 else {
-    npm install --no-progress --silent --no-audit --no-fund
+    npm install --no-progress --silent --no-audit --no-fund  >$null 2>&1
 }
-npm run generateJsonTemplates
+
+npm run generateJsonTemplates  >$null 2>&1
 
 Get-ChildItem "./Content" -Directory -Filter "*no-NB*" | ForEach-Object {
     Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force

@@ -1,12 +1,11 @@
 /**
- * Automatically updates version for SPFx packages.
+ * @fileoverview Automatically updates version for SPFx packages.
  * 
  * Updates the following files:
  * * package.json
  * * package-solution.js
  * * manifest.json
  */
-
 if (process.env.npm_package_version === undefined) {
     throw 'Package version cannot be evaluated'
 }

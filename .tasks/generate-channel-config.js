@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Generates channel config for the current channel
+ */
 const globMod = require('glob')
 const util = require('util')
 const glob = util.promisify(globMod)
@@ -10,7 +13,7 @@ const argv = require('yargs').argv
 const default_channel_name = 'main'
 
 // Get the channel name from the command line
-const name = argv._[0]
+const name = argv._[0] ?? default_channel_name
 
 /**
  * Get file content for the given file path in JSON format
@@ -35,7 +38,7 @@ function saveToFile(channel_config, filePath) {
 }
 
 let channel_config = {
-    name: name ?? default_channel_name,
+    name,
     spfx: {
         solutions: {}
     }
@@ -45,22 +48,23 @@ let replace_map_config = {
 }
 
 /**
- * Main entry point for the task
+ * Main entry point for the task. If the --replaceMap flag is set, the task will only generate the replace map config file,
+ * and will not generate the channel config file. This is useful when you want to update the replace map config file only.
  */
 const _ = async () => {
     await addSpfxComponents()
-
-    saveToFile(channel_config, `./channels/${channel_config.name}.json`)
-    saveToFile(replace_map_config, 'Templates/.replace-map.json')
+    saveToFile(replace_map_config, '.channel-replace-map.json')
+    console.log('Replace map config file generated at .channel-replace-map.json')
+    if (!argv.replaceMap) {
+        saveToFile(channel_config, `./channels/${channel_config.name}.json`)
+        console.log(`Channel config file generated for channel '${channel_config.name}'`)
+    }
 }
 
 _()
 
 /**
  * Add SPFx components to the channel config object and replace map config object.
- * 
- * @returns Channel config object with SPFx components added and replace map config object
- * with the component ID to token name mapping.
  */
 async function addSpfxComponents() {
     const isDefaultChannel = channel_config.name === default_channel_name
@@ -91,5 +95,4 @@ async function addSpfxComponents() {
         channel_config.spfx.solutions[solution].components[manifestContent.alias] = component_id
         replace_map_config[component_id] = `ControlId_${manifestContent.alias}`
     }
-    return { channel_config, replace_map_config }
 }

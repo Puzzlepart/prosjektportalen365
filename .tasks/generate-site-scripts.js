@@ -1,11 +1,12 @@
 /**
- * @fileoverview Generate PnP template for Portfolio
+ * @fileoverview Generates Site Scripts for the current channel
  * @author Puzzlepart
  */
 const path = require('path')
 const fs = require('fs')
 const fse = require('fs-extra')
 const replace = require('replace')
+
 
 /**
  * Create the .dist folder if it does not exist
@@ -14,9 +15,11 @@ if (!fs.existsSync('.dist')){
     fs.mkdirSync('.dist');
 }
 
-var templatesPath = path.resolve(__dirname, '..', 'Templates')
-var portfolioTemplateFolder = `${templatesPath}/Portfolio`
-var channelPortfolioTemplateFolder = '.dist/Templates/Portfolio'
+// Site scripts source folder path
+var siteScriptsPath = path.resolve(__dirname, "..", "SiteScripts/src")
+
+// Destination folder for the site scripts
+var channelSiteScriptsFolder = '.dist/SiteScripts'
 
 /**
  * Get file content for the given file path in JSON format
@@ -25,7 +28,7 @@ var channelPortfolioTemplateFolder = '.dist/Templates/Portfolio'
  * @returns File contents as JSON
  */
 function getFileContent(file) {
-    const fileContent = fs.readFileSync(path.resolve(__dirname, '..', file), 'UTF-8')
+    const fileContent = fs.readFileSync(path.resolve(__dirname, "..", file), 'UTF-8')
     const fileContentJson = JSON.parse(fileContent)
     return fileContentJson
 }
@@ -40,27 +43,27 @@ var channelReplaceValue = Object.keys(currentChannelConfig.spfx.solutions).reduc
     }, acc)
 }, {})
 
-// Copy the portfolio template folder to a temporary folder Portfolio_<channel name>
-fse.copySync(portfolioTemplateFolder, channelPortfolioTemplateFolder)
+// Copy the site scripts to the .dist folder
+fse.copySync(siteScriptsPath, channelSiteScriptsFolder)
 
 /**
- * Replace tokens in the given template path. The tokens are defined in the `.channel-replace-map.json` file
+ * Replace tokens in the given site scripts path. The tokens are defined in the `.channel-replace-map.json` file
  * and the replacement values are generated from the current channel config file (`.current-channel-config.json`).
  * 
- * @param {*} templatePath Template path
+ * @param {*} siteScriptsPath Template path
  */
-function replaceTokensInTemplate(templatePath) {
+function replaceTokensInSiteScripts(siteScriptsPath) {
     for (var key in channelReplaceMap) {
         var token = channelReplaceMap[key]
         var replacement = channelReplaceValue[token]
         replace({
             regex: key,
             replacement,
-            paths: [templatePath],
+            paths: [siteScriptsPath],
             recursive: true,
             silent: true,
         });
     }
 }
 
-replaceTokensInTemplate(channelPortfolioTemplateFolder)
+replaceTokensInSiteScripts(channelSiteScriptsFolder)
