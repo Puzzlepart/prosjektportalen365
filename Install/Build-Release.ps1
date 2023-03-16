@@ -14,9 +14,16 @@ Param(
     [string]$ChannelConfigPath
 )  
 
-if($ChannelConfigPath) {
-    $CHANNEL_CONFIG = Get-Content $ChannelConfigPath -Raw | ConvertFrom-Json
+<#
+Checks if parameter $ChannelConfigPath is set and if so, loads the channel config,
+stores it as JSON in the root of the project and sets the $CHANNEL_CONFIG variable
+#>
+if ($ChannelConfigPath) {
+    $CHANNEL_CONFIG_JSON = Get-Content $ChannelConfigPath -Raw 
+    $CHANNEL_CONFIG = $CHANNEL_CONFIG_JSON | ConvertFrom-Json
+    $CHANNEL_CONFIG_JSON | Out-File -FilePath "$PSScriptRoot/../.current-channel-config.json" -Encoding UTF8 -Force
 }
+
 $PACKAGE_FILE = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
@@ -46,9 +53,10 @@ $RELEASE_NAME = "$($PACKAGE_FILE.name)-$($PACKAGE_FILE.version).$($GIT_HASH)"
 $RELEASE_PATH = "$ROOT_PATH/release/$($RELEASE_NAME)"
 #endregion
 
-if($null -ne $CHANNEL_CONFIG) {
+if ($null -ne $CHANNEL_CONFIG) {
     Write-Host "[Building release $RELEASE_NAME for channel $($CHANNEL_CONFIG.name)]" -ForegroundColor Yellow
-} else {
+}
+else {
     Write-Host "[Building release $RELEASE_NAME]" -ForegroundColor Yellow
 }
 
@@ -146,6 +154,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
 
 #region Build PnP templates
 Set-Location $PSScriptRoot
+node ./tasks/generate-pnp-templates.js
 StartAction("Building Portfolio PnP template")
 Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Portfolio" -Force
 EndAction

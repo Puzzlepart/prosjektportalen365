@@ -28,35 +28,41 @@ function getFileContent(file) {
  * Save the channel config to a file in the /channels folder
  * 
  * @param {*} channel_config Channel config object
+ * @param {*} filePath Path to the file to save the file to
  */
-function saveToFile(channel_config) {
-    fs.writeFileSync(path.resolve(__dirname, "..", `./channels/${channel_config.name}.json`), JSON.stringify(channel_config, null, 2), { encoding: 'utf8', overwrite: true })
+function saveToFile(channel_config, filePath) {
+    fs.writeFileSync(path.resolve(__dirname, "..", filePath), JSON.stringify(channel_config, null, 2), { encoding: 'utf8', overwrite: true })
+}
+
+let channel_config = {
+    name: name ?? default_channel_name,
+    spfx: {
+        solutions: {}
+    }
+}
+let replace_map_config = {
+
 }
 
 /**
  * Main entry point for the task
  */
 const _ = async () => {
-    let channel_config = {
-        name: name ?? default_channel_name,
-        spfx: {
-            solutions: {}
-        }
-    }
-    channel_config = await addSpfxComponents(channel_config)
+    await addSpfxComponents()
 
-    saveToFile(channel_config)
+    saveToFile(channel_config, `./channels/${channel_config.name}.json`)
+    saveToFile(replace_map_config, 'Templates/.replace-map.json')
 }
 
 _()
 
 /**
- * Add SPFx components to the channel config
+ * Add SPFx components to the channel config object and replace map config object.
  * 
- * @param {*} channel_config Channel config object
- * @returns Channel config object with SPFx components added
+ * @returns Channel config object with SPFx components added and replace map config object
+ * with the component ID to token name mapping.
  */
-async function addSpfxComponents(channel_config) {
+async function addSpfxComponents() {
     const isDefaultChannel = channel_config.name === default_channel_name
     let packageSolutionFiles = await glob('SharePointFramework/*/config/package-solution.json')
     for (let i = 0; i < packageSolutionFiles.length; i++) {
@@ -83,6 +89,7 @@ async function addSpfxComponents(channel_config) {
         // using the UUID v4 generator. This is to ensure that the component ID is the same for the default channel.
         const component_id = isDefaultChannel ? manifestContent.id : uuidv4()
         channel_config.spfx.solutions[solution].components[manifestContent.alias] = component_id
+        replace_map_config[component_id] = `ControlId_${manifestContent.alias}`
     }
-    return channel_config
+    return { channel_config, replace_map_config }
 }
