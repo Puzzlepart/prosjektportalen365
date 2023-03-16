@@ -1,26 +1,6 @@
 import {
-  Selection,
-  getId,
-  MessageBar,
-  ScrollablePane,
-  ScrollbarVisibility,
-  MarqueeSelection,
-  ShimmeredDetailsList,
-  ConstrainMode,
-  DetailsListLayoutMode,
-  SelectionMode,
-  LayerHost,
-  ContextualMenu,
-  format,
-  IDetailsHeaderProps,
-  IRenderFunction,
-  Sticky,
-  StickyPositionType,
-  SearchBox,
-  ContextualMenuItemType,
-  IContextualMenuProps,
-  IGroup,
-  MessageBarType
+  ContextualMenuItemType, format, getId, IContextualMenuProps, IDetailsHeaderProps, IGroup, IRenderFunction, MessageBarType, SearchBox, Selection, Sticky,
+  StickyPositionType
 } from '@fluentui/react'
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library'
 import { stringIsNullOrEmpty } from '@pnp/common'
@@ -35,8 +15,6 @@ import React, { Component } from 'react'
 import * as _ from 'underscore'
 import { IFilterItemProps, IFilterProps } from '../FilterPanel'
 import styles from './PortfolioOverview.module.scss'
-import { PortfolioOverviewCommands } from './PortfolioOverviewCommands'
-import { renderItemColumn } from './RenderItemColumn'
 import {
   IPortfolioOverviewHashStateState,
   IPortfolioOverviewProps,
@@ -92,63 +70,9 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
   }
 
   public render(): React.ReactElement<IPortfolioOverviewProps> {
-    if (this.state.error) {
-      return (
-        <div className={styles.root}>
-          <div className={styles.container}>
-            <MessageBar messageBarType={this.state.error.type}>
-              {this.state.error.message}
-            </MessageBar>
-          </div>
-        </div>
-      )
-    }
-
-    const { items, columns, groups } = this._getFilteredData()
-
     return (
-      <div className={styles.root}>
-        <PortfolioOverviewCommands
-          {...{ ...this.props, ...this.state }}
-          fltItems={items}
-          fltColumns={columns}
-          filters={this._getFilters()}
-          events={{
-            onSetCompact: (isCompact) => this.setState({ isCompact }),
-            onChangeView: this._onChangeView.bind(this),
-            onFilterChange: this._onFilterChange.bind(this)
-          }}
-          layerHostId={this._layerHostId}
-          hidden={!this.props.showCommandBar}
-        />
-        <div className={styles.container}>
-          <ScrollablePane
-            scrollbarVisibility={ScrollbarVisibility.auto}
-            styles={{ root: { top: 75 } }}>
-            <MarqueeSelection selection={this._selection} className={styles.listContainer}>
-              <ShimmeredDetailsList
-                enableShimmer={this.state.loading || !!this.state.isChangingView}
-                items={items}
-                constrainMode={ConstrainMode.unconstrained}
-                layoutMode={DetailsListLayoutMode.fixedColumns}
-                columns={columns}
-                groups={groups}
-                selectionMode={SelectionMode.multiple}
-                selection={this._selection}
-                setKey='multiple'
-                onRenderDetailsHeader={this._onRenderDetailsHeader.bind(this)}
-                onRenderItemColumn={(item, _index, column: ProjectColumn) =>
-                  renderItemColumn(item, column, this.props)
-                }
-                onColumnHeaderClick={this._onColumnHeaderClick.bind(this)}
-                onColumnHeaderContextMenu={this._onColumnHeaderContextMenu.bind(this)}
-                compact={this.state.isCompact}
-              />
-            </MarqueeSelection>
-            <LayerHost id={this._layerHostId} />
-          </ScrollablePane>
-        </div>
-        {this.state.columnContextMenu && <ContextualMenu {...this.state.columnContextMenu} />}
+      <div>
+        909d00a8-c563-4b52-a7a4-1fb5876f9058
       </div>
     )
   }
