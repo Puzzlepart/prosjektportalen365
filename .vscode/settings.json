@@ -7,8 +7,7 @@
         "**/dist": true,
         "**/temp": true,
         "README.md": true,
-        ".development-guide/README.md": true,
-        "**/package-lock.json": true
+        ".development-guide/README.md": true
     },
     "files.associations": {
         "*.txt": "json",

@@ -3,8 +3,6 @@ Install/InstallLog.txt
 Install/Scripts/UpgradeSites_Log*
 release/*
 SharePointFramework/**/.vscode/launch.json
-SharePointFramework/**/pnpm-lock.yaml
-SharePointFramework/**/shrinkwrap.yaml
 SharePointFramework/**/config/serve.json
 SharePointFramework/**/config/__config__temp.json
 SharePointFramework/**/.env
