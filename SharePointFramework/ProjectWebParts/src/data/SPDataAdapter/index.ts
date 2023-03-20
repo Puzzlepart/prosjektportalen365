@@ -132,7 +132,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         {}
       )
       const [fields, siteUsers] = await Promise.all([
-        templateParameters && templateParameters.ProjectContentTypeId
+        templateParameters?.ProjectContentTypeId
           ? this.entityService
               .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
               .getEntityFields()
@@ -146,7 +146,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
           }[]
         >()
       ])
-      const fieldsToSync = this._getFieldsToSync(fields, templateParameters && templateParameters.CustomSiteFields, [
+      const fieldsToSync = this._getFieldsToSync(fields, templateParameters?.CustomSiteFields, [
         'GtIsParentProject',
         'GtIsProgram'
       ])
