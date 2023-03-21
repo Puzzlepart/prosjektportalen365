@@ -55,5 +55,5 @@ jobs:
           path: release
 
       - name: Install
-        run: release/Install.ps1 -Url "${{ env.SP_URL }}" -Title "Prosjektportalen 365 (test)" -CI ${{ env.CI_CREDENTIALS }} -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
+        run: release/Install.ps1 -Url "${{ env.SP_URL }}" -Title "Prosjektportalen 365 (test)" -CI ${{ env.CI_CREDENTIALS }} -SkipTaxonomy -SkipSearchConfiguration
         shell: powershell
