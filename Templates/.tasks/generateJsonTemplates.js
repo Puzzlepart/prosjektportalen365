@@ -7,7 +7,10 @@ const path = require('path')
 const pkg = require('../../package.json')
 const JsonTokenReplace = require('@ptkdev/json-token-replace')
 const jsonTokenReplace = new JsonTokenReplace()
-const replace = require('replace')
+const argv = require('yargs').argv
+
+// Run replace in silent mode if the --silent flag is set
+const silent = argv.silent || false
 
 // Template names for the different languages
 const templateNames = {
@@ -54,8 +57,9 @@ jsonTemplates.forEach(templateFile => {
     }
 
     Object.keys(resourcesJson).forEach(key => {
+        const jsonTokens = { ...resourcesJson[key], ...channelReplaceValue }
         let content = jsonTokenReplace.replace(
-            resourcesJson[key],
+            jsonTokens,
             templateJson,
             '{{',
             '}}'
@@ -76,19 +80,3 @@ jsonTemplates.forEach(templateFile => {
             })
     })
 })
-
-// Loop through the channel replace map and replace the tokens in the project templates
-for (var key in channelReplaceMap) {
-    var token = channelReplaceMap[key]
-    var replacement = channelReplaceValue[token]
-    replace({
-        regex: key,
-        replacement,
-        paths: [
-            path.resolve(__dirname, '../Content/Portfolio_content.en-US/ProjectTemplates'),
-            path.resolve(__dirname, '../Content/Portfolio_content.no-NB/ProjectTemplates')
-        ],
-        recursive: true,
-        silent: true,
-    });
-}
