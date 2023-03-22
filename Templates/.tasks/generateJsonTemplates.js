@@ -49,8 +49,8 @@ jsonTemplates.forEach(templateFile => {
         'no-NB': path.resolve(__dirname, `../Content/Portfolio_content.no-NB/ProjectTemplates/${templateNames['nb-NO'][templateType]}.txt`)
     }
 
-    Object.keys(resourcesJson).forEach(key => {
-        const jsonTokens = { ...resourcesJson[key], ...channelReplaceValue }
+    Object.keys(resourcesJson).forEach(language => {
+        const jsonTokens = { ...resourcesJson[language], ...channelReplaceValue }
         let content = jsonTokenReplace.replace(
             jsonTokens,
             templateJson,
@@ -66,7 +66,7 @@ jsonTemplates.forEach(templateFile => {
         )
 
         fs.writeFile(
-            outputPaths[key],
+            outputPaths[language],
             JSON.stringify(content, null, 4),
             () => {
 
