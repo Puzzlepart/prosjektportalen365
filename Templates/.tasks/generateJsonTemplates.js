@@ -7,10 +7,6 @@ const path = require('path')
 const pkg = require('../../package.json')
 const JsonTokenReplace = require('@ptkdev/json-token-replace')
 const jsonTokenReplace = new JsonTokenReplace()
-const argv = require('yargs').argv
-
-// Run replace in silent mode if the --silent flag is set
-const silent = argv.silent || false
 
 // Template names for the different languages
 const templateNames = {
@@ -34,9 +30,6 @@ const jsonTemplates = fs.readdirSync(path.resolve(__dirname, '../JsonTemplates')
 
 // Get the current channel config
 const currentChannelConfig = require('../../.current-channel-config.json')
-
-// Get the channel replace map
-const channelReplaceMap = require('../../.channel-replace-map.json')
 
 // Generate the channel replace values
 const channelReplaceValue = Object.keys(currentChannelConfig.spfx.solutions).reduce((acc, key) => {
