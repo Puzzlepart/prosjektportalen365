@@ -33,7 +33,7 @@ jobs:
           node-version: 16.18.0
 
       - name: Run Install/Build-Release.ps1 in CI mode for channel test
-        run: Install/Build-Release.ps1 -CI -SkipBundle -ChannelConfigPath ./channels/test.json
+        run: Install/Build-Release.ps1 -CI -SkipBundle -Channel test
         shell: pwsh
 
       - uses: actions/upload-artifact@v3
