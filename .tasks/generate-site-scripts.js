@@ -6,10 +6,10 @@ const path = require('path')
 const fs = require('fs')
 const fse = require('fs-extra')
 const replace = require('replace')
-const args = require('yargs').argv
+const argv = require('yargs').argv
 
 // Run replace in silent mode if the --silent flag is set
-const silent = args.silent || false
+const silent = argv.silent || false
 
 /**
  * Create the .dist folder if it does not exist
