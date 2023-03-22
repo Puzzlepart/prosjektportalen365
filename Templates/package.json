@@ -3,9 +3,8 @@
   "main": "generateTemplate.js",
   "scripts": {
     "watch": "chokidar \"./_JsonTemplate.json\" -c \"npm run generateJsonTemplates\"",
-    "generateResxJson": "node ./.tasks/generateResxJson",
-    "generateJsonTemplates": "node ./.tasks/generateJsonTemplates",
-    "pregenerateJsonTemplates": "npm run generateResxJson"
+    "generate-resx-json": "node ./.tasks/generateResxJson",
+    "generate-json-templates": "npm run generate-resx-json && node ./.tasks/generateJsonTemplates"
   },
   "dependencies": {
     "@ptkdev/json-token-replace": "^1.2.2",
