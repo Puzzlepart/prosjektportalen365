@@ -503,7 +503,7 @@
                             "Factor": 8,
                             "Controls": [
                                 {
-                                    "Id": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
+                                    "Id": "{{ControlId_ProjectPhasesWebPart}}",
                                     "Properties": {
                                         "phaseField": "Fase",
                                         "syncPropertiesAfterPhaseChange": true,
@@ -526,7 +526,7 @@
                             "Factor": 4,
                             "Controls": [
                                 {
-                                    "Id": "b8bec0be-2354-443d-a3ca-24b36e8ea7dc",
+                                    "Id": "{{ControlId_ProjectInformationWebPart}}",
                                     "Properties": {
                                         "title": "Programinformasjon",
                                         "statusReportsCount": 0,
@@ -601,7 +601,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "9570e369-21a6-4bf5-8198-13506499de52",
+                                    "Id": "{{ControlId_ProgramAdministrationWebpart}}",
                                     "Properties": {
                                         "title": "Administrasjon av underområder"
                                     }
@@ -624,7 +624,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "01417142-67c8-498b-a6da-6e78003023dd",
+                                    "Id": "{{ControlId_ProgramProjectOverviewWebPart}}",
                                     "Properties": {
                                         "title": "Oversikt over underområder",
                                         "showCommandBar": true,
@@ -653,7 +653,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
+                                    "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
                                         "title": "Gevinster for underområder",
                                         "dataSource": "Alle gevinstelementer",
@@ -772,7 +772,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "f97a38ab-78c2-400e-899f-b0d4cda76166",
+                                    "Id": "{{ControlId_ProgramTimelineWebPart}}",
                                     "Properties": {
                                         "title": "Tidslinje for underområder",
                                         "infoText": "Her listes alle prosjektene med start- og sluttdato i programmet. Tidslinjen støtter også faser, delfaser og milepæler. Tidslinjeelementer til dette programmet opprettes i den<A HREF=\"../sitePages/Tidslinje.aspx\">lokale tidslinjeinnhold listen</A>. Prosjekter vises med rød farge, faser i blått, delfaser blågrønt, og milepæler i gult. For å zoome inn/ut i tidslinje: ALT+Musehjul",
@@ -797,7 +797,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
+                                    "Id": "{{ControlId_ProjectStatusWebPart}}",
                                     "Properties": {
                                         "title": "Programstatus",
                                         "riskMatrix": {
@@ -824,7 +824,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "d156652b-9121-47af-89ae-1fe8427c53da",
+                                    "Id": "{{ControlId_ProjectTimelineWebPart}}",
                                     "Properties": {
                                         "title": "Programtidslinje",
                                         "showFilterButton": true,
@@ -853,7 +853,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
+                                    "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
                                         "title": "Leveranser for underområder",
                                         "dataSource": "Alle prosjektleveranser",
@@ -936,7 +936,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "37c7e990-483d-4f70-b9b9-def1790817e7",
+                                    "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
                                         "title": "Usikkerheter for underområder",
                                         "searchBoxPlaceholderText": "Søk i usikkerheter for underområder...",
