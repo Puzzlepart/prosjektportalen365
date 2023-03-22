@@ -30,7 +30,7 @@ Checks if parameter $CHANNEL_CONFIG_PATH is set and if so, loads the channel con
 stores it as JSON in the root of the project and sets the $CHANNEL_CONFIG variable
 #>
 if ($USE_CHANNEL_CONFIG) {
-    if(-not (Test-Path $CHANNEL_CONFIG_PATH)) {
+    if (-not (Test-Path $CHANNEL_CONFIG_PATH)) {
         Write-Host "Channel config file not found at $CHANNEL_CONFIG_PATH. Aborting build of release." -ForegroundColor Red
         exit 1
     }
@@ -168,12 +168,17 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
         else {
             npm install --no-progress --silent --no-audit --no-fund >$null 2>&1
         }
-        $SOLUTION_CONFIG = $CHANNEL_CONFIG.spfx.solutions.($_)
-        $SOLUTION_CONFIG_JSON = ($SOLUTION_CONFIG | ConvertTo-Json)
-        $SOLUTION_CONFIG_JSON | Out-File -FilePath "./config/generated-solution-config.json" -Encoding UTF8 -Force
-        node ../.tasks/generatePackageSolution.js >$null 2>&1
-        npm run package >$null 2>&1
-        node ../.tasks/generatePackageSolution.js --revert >$null 2>&1 
+        if ($USE_CHANNEL_CONFIG) {
+            $SOLUTION_CONFIG = $CHANNEL_CONFIG.spfx.solutions.($_)
+            $SOLUTION_CONFIG_JSON = ($SOLUTION_CONFIG | ConvertTo-Json)
+            $SOLUTION_CONFIG_JSON | Out-File -FilePath "./config/generated-solution-config.json" -Encoding UTF8 -Force
+            node ../.tasks/generatePackageSolution.js >$null 2>&1
+            npm run package >$null 2>&1
+            node ../.tasks/generatePackageSolution.js --revert >$null 2>&1 
+        }
+        else {
+            npm run package >$null 2>&1
+        }
         Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
         EndAction
     }
@@ -203,7 +208,7 @@ else {
     npm install --no-progress --silent --no-audit --no-fund  >$null 2>&1
 }
 
-npm run generateJsonTemplates  >$null 2>&1
+npm run generate-json-templates >$null 2>&1
 
 Get-ChildItem "./Content" -Directory -Filter "*no-NB*" | ForEach-Object {
     Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
@@ -244,6 +249,6 @@ else {
     Write-Host "Done building release $RELEASE_NAME in $($StopWatch.ElapsedMilliseconds/1000)s" -ForegroundColor Green
 }
 
-if($USE_CHANNEL_CONFIG) {
+if ($USE_CHANNEL_CONFIG) {
     Remove-Item -Path "$PSScriptRoot/../.current-channel-config.json" -Force
 }
