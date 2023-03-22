@@ -18,22 +18,23 @@ Param(
     [Parameter(Mandatory = $false)]
     [switch]$SkipBundle,
     [Parameter(Mandatory = $false)]
-    [string]$ChannelConfigPath
+    [string]$Channel
 )  
 
-$USE_CHANNEL_CONFIG = -not ([string]::IsNullOrEmpty($ChannelConfigPath))
+$USE_CHANNEL_CONFIG = -not ([string]::IsNullOrEmpty($Channel))
+$CHANNEL_CONFIG_PATH = "$PSScriptRoot/../channels/$Channel.json"
 $CHANNEL_CONFIG_NAME = "main"
 
 <#
-Checks if parameter $ChannelConfigPath is set and if so, loads the channel config,
+Checks if parameter $CHANNEL_CONFIG_PATH is set and if so, loads the channel config,
 stores it as JSON in the root of the project and sets the $CHANNEL_CONFIG variable
 #>
 if ($USE_CHANNEL_CONFIG) {
-    if(-not (Test-Path $ChannelConfigPath)) {
-        Write-Host "Channel config file not found at $ChannelConfigPath. Aborting build of release." -ForegroundColor Red
+    if(-not (Test-Path $CHANNEL_CONFIG_PATH)) {
+        Write-Host "Channel config file not found at $CHANNEL_CONFIG_PATH. Aborting build of release." -ForegroundColor Red
         exit 1
     }
-    $CHANNEL_CONFIG_JSON = Get-Content $ChannelConfigPath -Raw 
+    $CHANNEL_CONFIG_JSON = Get-Content $CHANNEL_CONFIG_PATH -Raw 
     $CHANNEL_CONFIG = $CHANNEL_CONFIG_JSON | ConvertFrom-Json
     $CHANNEL_CONFIG_NAME = $CHANNEL_CONFIG.name
     $CHANNEL_CONFIG_JSON | Out-File -FilePath "$PSScriptRoot/../.current-channel-config.json" -Encoding UTF8 -Force

@@ -8,7 +8,7 @@
     "generate-channel-config": "node ./.tasks/generate-channel-config.js",
     "generate-channel-replace-map": "node ./.tasks/generate-channel-config.js --replace-map",
     "generate-pnp-templates": "node ./.tasks/generate-pnp-templates.js",
-    "generate-site-scripts": "node ./.tasks/generate-site-scripts.js",
+    "generate-site-scripts": "node ./.tasks/generate-site-scripts.js --silent",
     "postversion": "npm run generate-readme && npm run sync-version"
   },
   "repository": {

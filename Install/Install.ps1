@@ -288,6 +288,10 @@ if (-not $SkipSiteDesign.IsPresent) {
         $SiteScriptSrc = Get-ChildItem "$PSScriptRoot/SiteScripts/*.txt"
         foreach ($s in $SiteScriptSrc) {
             $Title = $s.BaseName.Substring(9)
+            # Add channel to name for the site script if channel is specified and not main
+            if($Channel -ne "main") {
+                $Title += " - $Channel"
+            }
             $Content = (Get-Content -Path $s.FullName -Raw | Out-String)
             $SiteScript = $SiteScripts | Where-Object { $_.Title -eq $Title }
             if ($null -ne $SiteScript) {
