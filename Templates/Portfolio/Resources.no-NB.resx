@@ -2638,6 +2638,9 @@
   <data name="SiteFields_InstallUser_DisplayName" xml:space="preserve">
     <value>Installasjonsbruker</value>
   </data>
+  <data name="SiteFields_InstallChannel_DisplayName" xml:space="preserve">
+    <value>Installasjonskanal</value>
+  </data>
   <data name="SiteFields_GtSectionDataJson_DisplayName" xml:space="preserve">
     <value>Seksjonsdata</value>
   </data>
