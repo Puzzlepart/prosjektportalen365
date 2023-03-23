@@ -9,6 +9,8 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 
 ### Forbedringer
 
+- Dersom bruker har "Full kontroll" tilgangsnivå på området får bruker fulle rettigheter på området [#1054](https://github.com/Puzzlepart/prosjektportalen365/issues/1054)
+
 ### Feilrettinger
 
 - Fikset et problem i oppgraderingsskript der noen tenants ikke kunne hente alle hub children
