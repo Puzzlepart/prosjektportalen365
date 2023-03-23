@@ -7,6 +7,7 @@
         "name": "Prosjektportalen 365 - Portfolio Extensions - test",
         "zippedPackage": "solution/pp-portfolio-extensions-test.sppkg",
         "components": {
+          "Footer": "65d27710-49a9-4492-a4ec-3ac4f1e798d2",
           "IdeaProcessingCommand": "a2a360d7-3748-4d0d-85d8-a03d659ba47d",
           "IdeaProjectDataCommand": "5e423d21-dfd0-4b7e-a7f6-86d208d96a4d",
           "IdeaRegistrationCommand": "b817d22f-fb61-4b28-ab3e-18a0c06416c1"
