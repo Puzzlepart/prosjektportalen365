@@ -36,7 +36,7 @@ export const InstallVersionTooltipContent: FC = () => {
           <b>{strings.InstallChannelLabel}</b>: {latestEntry.installChannel}
         </div>
       )}
-      <div className={styles.seeAllInstallationsLink} hidden>
+      <div className={styles.seeAllInstallationsLink}>
         <Link href={`${props.pageContext.web.absoluteUrl}/Lists/Installasjonslogg/AllItems.aspx`}>{strings.SeeAllInstallationsLinkText}</Link>
       </div>
     </div>
