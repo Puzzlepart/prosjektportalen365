@@ -15,16 +15,27 @@ const default_channel_name = 'main'
 // Get the channel name from the command line
 const name = argv._[0] ?? default_channel_name
 
+// Check if the update flag is set
+const update = argv._[1] === '/update' ?? false
+
+console.log(argv._)
+
 /**
  * Get file content for the given file path in JSON format
  * 
  * @param {*} file File path 
- * @returns File contents as JSON
+ * @param {*} fallback Fallback value to return if the file does not exis or the file content is not valid JSON (default: `{}`)
+ * 
+ * @returns File contents as JSON or the fallback value which defaults to an empty object
  */
-function getFileContent(file) {
-    const fileContent = fs.readFileSync(path.resolve(__dirname, "..", file), 'UTF-8')
-    const fileContentJson = JSON.parse(fileContent)
-    return fileContentJson
+function getFileContent(file, fallback = {}) {
+    try {
+        const fileContent = fs.readFileSync(path.resolve(__dirname, "..", file), 'UTF-8')
+        const fileContentJson = JSON.parse(fileContent)
+        return fileContentJson
+    } catch {
+        return fallback
+    }
 }
 
 /**
@@ -37,6 +48,7 @@ function saveToFile(channel_config, filePath) {
     fs.writeFileSync(path.resolve(__dirname, "..", filePath), JSON.stringify(channel_config, null, 2), { encoding: 'utf8', overwrite: true })
 }
 
+let current_channel_config = {}
 let channel_config = {
     name,
     spfx: {
@@ -52,6 +64,7 @@ let replace_map_config = {
  * and will not generate the channel config file. This is useful when you want to update the replace map config file only.
  */
 const _ = async () => {
+    if (update) current_channel_config = getFileContent(`./channels/${name}.json`)
     await addSpfxComponents()
     saveToFile(replace_map_config, '.channel-replace-map.json')
     console.log('Replace map config file generated at .channel-replace-map.json')
@@ -72,7 +85,8 @@ async function addSpfxComponents() {
     for (let i = 0; i < packageSolutionFiles.length; i++) {
         let pkgSolutionContent = getFileContent(packageSolutionFiles[i])
         const [, solution] = packageSolutionFiles[i].split('/')
-        const solution_id = isDefaultChannel ? pkgSolutionContent.solution.id : uuidv4()
+        const currentSolution = current_channel_config?.spfx?.solutions[solution]
+        const solution_id = isDefaultChannel ? pkgSolutionContent.solution.id : (currentSolution?.id ?? uuidv4())
         const solution_name = isDefaultChannel ? pkgSolutionContent.solution.name : `${pkgSolutionContent.solution.name} - ${channel_config.name}`
         const solution_zipped_package = isDefaultChannel ? pkgSolutionContent.paths.zippedPackage : `${pkgSolutionContent.paths.zippedPackage.replace('.sppkg', '')}-${channel_config.name}.sppkg`
         channel_config.spfx.solutions[solution] = channel_config.spfx.solutions[solution] || {}
@@ -89,9 +103,13 @@ async function addSpfxComponents() {
         // Get the solution name from the manifest file path
         const [, solution] = manifestFiles[i].split('/')
 
+        // Get the current component ID for the channel config if the update flag is set
+        const currentComponentId = current_channel_config?.spfx?.solutions[solution]?.components[manifestContent.alias]
+
         // If the channel is the default channel, use the component ID from the manifest, otherwise generate a new one
-        // using the UUID v4 generator. This is to ensure that the component ID is the same for the default channel.
-        const component_id = isDefaultChannel ? manifestContent.id : uuidv4()
+        // using the UUID v4 generator if the update flag is not set. This is to ensure that the component ID is the same
+        // for the default channel.
+        const component_id = isDefaultChannel ? manifestContent.id : (currentComponentId ?? uuidv4())
         channel_config.spfx.solutions[solution].components[manifestContent.alias] = component_id
         replace_map_config[component_id] = `ControlId_${manifestContent.alias}`
     }
