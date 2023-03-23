@@ -10,11 +10,12 @@ on:
       - "Templates/**"
 
 env:
-  SP_URL: "https://puzzlepart.sharepoint.com/sites/pp365_test"
+  SP_URL_TEST: "https://puzzlepart.sharepoint.com/sites/pp365_test"
+  SP_URL_STAGING: "https://puzzlepart.sharepoint.com/sites/pp365_staging"
   CI_CREDENTIALS: ${{ secrets.CI_DEV_CREDENTIALS }}
 
 jobs:
-  build_release_package:
+  build_release_package_test:
     name: Build release package for test channel
     runs-on: macos-latest
     if: "!contains(github.event.head_commit.message, '[skip-ci]')"
@@ -22,10 +23,6 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
-
-      - name: Set sha_short
-        id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
       - name: Setup Node.js 16.18.0
         uses: actions/setup-node@v3
@@ -38,22 +35,59 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: release-package
-          path: release
-    outputs:
-      sha_short: ${{ steps.vars.outputs.sha_short }}
+          name: release-package-test
+          path: release-test
 
-  install:
-    needs: [build_release_package]
+  install_test:
+    needs: [build_release_package_test]
     name: Install (test)
     runs-on: macos-latest
     if: "!contains(github.event.head_commit.message, '[skip-install]')"
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: release-package
-          path: release
+          name: release-package-test
+          path: release-test
 
       - name: Install
-        run: release/Install.ps1 -Url "${{ env.SP_URL }}" -Title "Prosjektportalen 365 (test)" -CI ${{ env.CI_CREDENTIALS }} -SkipTaxonomy -SkipSearchConfiguration
+        run: release/Install.ps1 -Url "${{ env.SP_URL_TEST }}" -Title "Prosjektportalen 365 (test)" -CI ${{ env.CI_CREDENTIALS }} -SkipTaxonomy -SkipSearchConfiguration
+        shell: powershell
+
+  build_release_package_staging:
+    needs: [build_release_package_test]
+    name: Build release package for staging channel
+    runs-on: macos-latest
+    if: "!contains(github.event.head_commit.message, '[skip-ci]')"
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js 16.18.0
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.18.0
+
+      - name: Run Install/Build-Release.ps1 in CI mode for channel staging
+        run: Install/Build-Release.ps1 -CI -SkipBundle -Channel staging
+        shell: pwsh
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: release-package-staging
+          path: release-staging
+
+  install_staging:
+    needs: [build_release_package_staging]
+    name: Install (staging)
+    runs-on: macos-latest
+    if: "!contains(github.event.head_commit.message, '[skip-install]')"
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: release-package-staging
+          path: release-staging
+
+      - name: Install
+        run: release/Install.ps1 -Url "${{ env.SP_URL_STAGING }}" -Title "Prosjektportalen 365 (staging)" -CI ${{ env.CI_CREDENTIALS }} -SkipTaxonomy -SkipSearchConfiguration
         shell: powershell

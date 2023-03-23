@@ -1,0 +1,67 @@
+{
+  "name": "staging",
+  "spfx": {
+    "solutions": {
+      "PortfolioExtensions": {
+        "id": "f69fdb81-3a4b-409d-92f6-ea3f85e6ee21",
+        "name": "Prosjektportalen 365 - Portfolio Extensions - staging",
+        "zippedPackage": "solution/pp-portfolio-extensions-staging.sppkg",
+        "components": {
+          "Footer": "08102ba2-5763-480b-b0fb-393ad1b980cd",
+          "IdeaProcessingCommand": "f5afd1ff-bcdf-4827-bddd-7057d9b878cd",
+          "IdeaProjectDataCommand": "72c20754-c930-42d9-b461-f4a99ceea59f",
+          "IdeaRegistrationCommand": "2cc09c1e-057f-41f0-ba6e-2e09d57722f8"
+        }
+      },
+      "PortfolioWebParts": {
+        "id": "742fe93a-66ad-444a-af54-239889510e89",
+        "name": "Prosjektportalen 365 - Portfolio Web Parts - staging",
+        "zippedPackage": "solution/pp-portfolio-web-parts-staging.sppkg",
+        "components": {
+          "LatestProjectsWebPart": "7fd2326a-d387-42e3-ac48-d89009098127",
+          "PortfolioAggregationWebPart": "d659b79b-9a40-49d3-bf65-402a50678201",
+          "PortfolioInsightsWebPart": "67c054a9-c572-4288-9925-fb0c04ced4ee",
+          "PortfolioOverviewWebPart": "df356034-195a-488d-8281-e3d09da2cded",
+          "ProjectListWebPart": "a51bf084-4b36-4382-8480-ec388e43c22d",
+          "ProjectTimelineWebPart": "39297bc8-b1f3-4c97-9756-47f81b73ba1a",
+          "ResourceAllocationWebPart": "1b69a90f-c83d-447a-9d0d-a281039c8721"
+        }
+      },
+      "ProgramWebParts": {
+        "id": "f8171833-b34b-4f06-8d41-17525cf7ad4a",
+        "name": "Prosjektportalen 365 - Program Web Parts - staging",
+        "zippedPackage": "solution/pp-program-web-parts-staging.sppkg",
+        "components": {
+          "ProgramAdministrationWebpart": "abc21db1-fcc9-4a26-8139-c5b6f12e94c2",
+          "ProgramAggregationWebPart": "e972dc09-a96c-404e-a06e-1ec032c1fd94",
+          "ProgramProjectOverviewWebPart": "e0e3d252-7983-41ef-ac47-c1be007c239b",
+          "ProgramTimelineWebPart": "87f5fd5d-a3b9-4169-a212-81c8a82f77e8"
+        }
+      },
+      "ProjectExtensions": {
+        "id": "48bdbfc2-b2bf-45aa-b59f-115d57add4e7",
+        "name": "Prosjektportalen 365 - Project Extensions - staging",
+        "zippedPackage": "solution/pp-project-extensions-staging.sppkg",
+        "components": {
+          "HelpContentApplicationCustomizer": "75845430-5b0d-42db-a990-d7db536d999d",
+          "ProjectSetup": "a6d92673-d1d5-44b6-bfcd-910acebb0066",
+          "ProjectUpgrade": "4ac47d21-f01e-415e-a25d-421081711c5c",
+          "TemplateSelectorCommand": "3cbbd947-6bf5-4851-adb5-8fec6eeaecb7"
+        }
+      },
+      "ProjectWebParts": {
+        "id": "6fbc4625-8d14-45e6-b948-401d4b8c60c5",
+        "name": "Prosjektportalen 365 - Project Web Parts - staging",
+        "zippedPackage": "solution/pp-project-web-parts-staging.sppkg",
+        "components": {
+          "OpportunityMatrixWebPart": "ecd1cdd4-c9c6-468a-b464-6da3dc5e09be",
+          "ProjectInformationWebPart": "aef6d957-cde6-4282-adbd-de8298729712",
+          "ProjectPhasesWebPart": "1654be24-de16-49b0-8ba9-fcefe38a3d25",
+          "ProjectStatusWebPart": "6e034e53-c6a3-4361-b11c-74a403ae9903",
+          "ProjectTimelineWebPart": "49ce34af-469d-4c63-a740-b0f313ff7e73",
+          "RiskMatrixWebPart": "5752e3eb-177a-4333-b25e-2824b43ca094"
+        }
+      }
+    }
+  }
+}
