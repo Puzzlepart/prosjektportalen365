@@ -1,3 +1,17 @@
 .root {
-    padding: 20px;
+    padding: 25px;
+
+    .content {
+        .left {
+            float: left;
+
+            .installVersion {
+                font-size: 12px;
+                color: #999;
+            }
+        }
+        .right {
+            float: right;
+        }
+    }
 }
