@@ -21,6 +21,7 @@ Param(
     [string]$Channel
 )  
 
+#region Variables and functions
 $USE_CHANNEL_CONFIG = -not ([string]::IsNullOrEmpty($Channel))
 $CHANNEL_CONFIG_PATH = "$PSScriptRoot/../channels/$Channel.json"
 $CHANNEL_CONFIG_NAME = "main"
@@ -55,6 +56,7 @@ function EndAction() {
     $ElapsedSeconds = [math]::Round(($global:StopWatch_Action.ElapsedMilliseconds) / 1000, 2)
     Write-Host "Completed in $($ElapsedSeconds)s" -ForegroundColor Green
 }
+#endregion
 
 #region Paths
 $START_PATH = Get-Location
@@ -71,6 +73,7 @@ if ($USE_CHANNEL_CONFIG) {
 $RELEASE_PATH = "$ROOT_PATH/release/$($RELEASE_NAME)"
 #endregion
 
+#region Pre-build
 if ($null -ne $CHANNEL_CONFIG) {
     Write-Host "[Building release $RELEASE_NAME for channel $($CHANNEL_CONFIG_NAME)]" -ForegroundColor Cyan
     Write-Host "[Make sure to delete the .current-channel-config.json file if you abort the build process]" -ForegroundColor Yellow
@@ -98,7 +101,9 @@ else {
 if ($CI.IsPresent) {
     $RELEASE_PATH = "$ROOT_PATH/release"
 }
+#endregion
 
+#region Creating release folder
 $RELEASE_FOLDER = New-Item -Path "$RELEASE_PATH" -ItemType Directory -Force
 $RELEASE_PATH = $RELEASE_FOLDER.FullName
 StartAction("Creating release folder release/$($RELEASE_FOLDER.BaseName)")
@@ -108,6 +113,7 @@ $RELEASE_PATH_SITESCRIPTS = (New-Item -Path "$RELEASE_PATH/SiteScripts" -ItemTyp
 $RELEASE_PATH_SCRIPTS = (New-Item -Path "$RELEASE_PATH/Scripts" -ItemType Directory -Force).FullName
 $RELEASE_PATH_APPS = (New-Item -Path "$RELEASE_PATH/Apps" -ItemType Directory -Force).FullName
 EndAction
+#endregion
 
 #region Copying source files
 StartAction("Copying Install.ps1, PostInstall.ps1 and site script source files")
@@ -185,7 +191,6 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
 }
 #endregion
 
-
 #region Build PnP templates
 Set-Location $PSScriptRoot
 StartAction("Building Portfolio PnP template")
@@ -235,7 +240,7 @@ EndAction
 
 #endregion
 
-
+#region Compressing release to a zip file
 if (-not $CI.IsPresent) {
     rimraf "$($RELEASE_PATH).zip"
     Add-Type -Assembly "System.IO.Compression.FileSystem"
@@ -252,3 +257,4 @@ else {
 if ($USE_CHANNEL_CONFIG) {
     Remove-Item -Path "$PSScriptRoot/../.current-channel-config.json" -Force
 }
+#endregion

@@ -1,4 +1,4 @@
-name: CI (channels)
+name: CI (test/staging)
 
 on:
   push:
