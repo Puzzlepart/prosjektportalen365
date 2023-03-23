@@ -62,6 +62,7 @@ export default class FooterApplicationCustomizer
     ReactDOM.render(React.createElement(Footer, footerProps), footerElement)
     this._bottomPlaceholder.domElement.append(footerElement)
   }
+  
   /**
    * Dispose the bottom placeholder when the footer is disposed.
    */

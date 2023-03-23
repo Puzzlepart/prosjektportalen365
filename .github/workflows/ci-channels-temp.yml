@@ -10,7 +10,7 @@ on:
       - "Templates/**"
 
 env:
-  SP_URL: "https://puzzlepart.sharepoint.com/sites/pp365_channel_test"
+  SP_URL: "https://puzzlepart.sharepoint.com/sites/pp365_test"
   CI_CREDENTIALS: ${{ secrets.CI_DEV_CREDENTIALS }}
 
 jobs:
