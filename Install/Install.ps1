@@ -560,6 +560,9 @@ if ($null -ne $CurrentUser.Email) {
 if (-not [string]::IsNullOrEmpty($CI)) {
     $InstallEntry.InstallCommand = "GitHub CI";
 }
+if($Channel -ne "main") {
+    $InstallEntry.InstallChannel = $Channel
+}
 
 ## Logging installation to SharePoint list
 Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -ErrorAction SilentlyContinue >$null 2>&1
