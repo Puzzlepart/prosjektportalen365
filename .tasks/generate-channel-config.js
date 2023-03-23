@@ -18,8 +18,6 @@ const name = argv._[0] ?? default_channel_name
 // Check if the update flag is set
 const update = argv._[1] === '/update' ?? false
 
-console.log(argv._)
-
 /**
  * Get file content for the given file path in JSON format
  * 
@@ -48,7 +46,10 @@ function saveToFile(channel_config, filePath) {
     fs.writeFileSync(path.resolve(__dirname, '..', filePath), JSON.stringify(channel_config, null, 2), { encoding: 'utf8', overwrite: true })
 }
 
+// Current channel config object
 let current_channel_config = {}
+
+// Channel config object
 let channel_config = {
     '$schema': './$schema.json',
     name,

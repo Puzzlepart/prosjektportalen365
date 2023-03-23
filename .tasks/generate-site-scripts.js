@@ -36,8 +36,13 @@ function getFileContent(file) {
     return fileContentJson
 }
 
+// Get the current channel config
 var currentChannelConfig = getFileContent('.current-channel-config.json')
+
+// Get the channel replace map
 var channelReplaceMap = getFileContent('.channel-replace-map.json')
+
+// Build the channel replace values
 var channelReplaceValue = Object.keys(currentChannelConfig.spfx.solutions).reduce((acc, key) => {
     const solution = currentChannelConfig.spfx.solutions[key]
     return Object.keys(solution.components).reduce((acc, componentKey) => {
