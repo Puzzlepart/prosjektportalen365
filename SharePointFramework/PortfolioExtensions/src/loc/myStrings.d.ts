@@ -27,6 +27,13 @@ declare interface IPortfolioExtensionsStrings {
   CloseLabel: string
   SubmitLabel: string
   CreateLabel: string
+  InstallStartTimeLabel: string
+  InstallEndTimeLabel: string
+  InstallVersionLabel: string
+  InstallCommandLabel: string
+  InstallChannelLabel: string
+  LastInstallHeaderText: string
+  SeeAllInstallationsLinkText: string
 }
 
 declare module 'PortfolioExtensionsStrings' {

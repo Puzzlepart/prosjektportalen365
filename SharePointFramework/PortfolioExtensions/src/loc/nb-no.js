@@ -27,6 +27,13 @@ define([], function () {
     CancelLabel: 'Avbryt',
     CloseLabel: 'Lukk',
     SubmitLabel: 'Send',
-    CreateLabel: 'Opprett'
+    CreateLabel: 'Opprett',
+    InstallStartTimeLabel: 'Starttidspunkt for installasjon',
+    InstallEndTimeLabel: 'Sluttidspunkt for installasjon',
+    InstallVersionLabel: 'Versjon',
+    InstallCommandLabel: 'Installasjonskommando',
+    InstallChannelLabel: 'Installasjonskanal',
+    LastInstallHeaderText: 'Siste installasjon',
+    SeeAllInstallationsLinkText: 'Se alle installasjoner',
   }
-});
+})
