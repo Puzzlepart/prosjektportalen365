@@ -10,7 +10,7 @@
   "main": "lib/index.js",
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
-    "serve": "concurrently \"gulp serve-deprecated --locale=nb-no\"",
+    "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\"",
     "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
     "package-solution": "node ./.tasks/package-solution.js",
     "package:debug": "gulp clean && gulp default && gulp package-solution",
@@ -22,7 +22,7 @@
     "publish:temp": "npm install && npm run build && npm publish --tag temp"
   },
   "dependencies": {
-    "@fluentui/react": "8.96.0",
+    "@fluentui/react": "8.98.1",
     "@microsoft/decorators": "1.15.2",
     "@microsoft/sp-core-library": "1.15.2",
     "@microsoft/sp-dialog": "1.15.2",
@@ -58,6 +58,7 @@
     "eslint-plugin-react": "7.31.10",
     "eslint-plugin-unused-imports": "2.0.0",
     "gulp": "4.0.2",
+    "livereload": "0.9.3",
     "prettier": "2.7.1",
     "typescript": "4.5.5",
     "webpack": "5.74.0",
