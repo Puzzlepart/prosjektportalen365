@@ -39,7 +39,7 @@ Param(
     [string]$Language = "Norwegian",
     [Parameter(Mandatory = $false, HelpMessage = "Used by Continuous Integration")]
     [string]$CI,
-    [Parameter(Mandatory = $false, HelpMessage = "Do you want to include B&A content (only when upgrading)")]
+    [Parameter(Mandatory = $false, HelpMessage = "Do you want to include Bygg & Anlegg content (only when upgrading)")]
     [switch]$IncludeBAContent
 )
 
