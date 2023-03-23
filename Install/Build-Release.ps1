@@ -82,7 +82,7 @@ $RELEASE_PATH = "$ROOT_PATH/release/$($RELEASE_NAME)"
 #region Pre-build
 if ($null -ne $CHANNEL_CONFIG) {
     Write-Host "[Building release $RELEASE_NAME for channel $($CHANNEL_CONFIG_NAME)]" -ForegroundColor Cyan
-    Write-Host "[Make sure to delete the .current-channel-config.json file if you abort the build process]" -ForegroundColor Yellow
+    Write-Host "IMPORTANT: Make sure to delete the .current-channel-config.json file if you abort the build process" -ForegroundColor Yellow
 }
 else {
     Write-Host "[Building release $RELEASE_NAME]" -ForegroundColor Cyan
@@ -119,7 +119,7 @@ $RELEASE_PATH_SITESCRIPTS = (New-Item -Path "$RELEASE_PATH/SiteScripts" -ItemTyp
 $RELEASE_PATH_SCRIPTS = (New-Item -Path "$RELEASE_PATH/Scripts" -ItemType Directory -Force).FullName
 $RELEASE_PATH_APPS = (New-Item -Path "$RELEASE_PATH/Apps" -ItemType Directory -Force).FullName
 EndAction
-#endregion
+#endregion  
 
 #region Copying source files
 StartAction("Copying Install.ps1, PostInstall.ps1 and site script source files")

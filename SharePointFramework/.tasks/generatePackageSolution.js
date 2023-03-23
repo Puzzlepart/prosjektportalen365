@@ -104,6 +104,18 @@ function generateComponentManifestFiles(solutionConfig, componentManifestFiles) 
         const componentManifestFile = componentManifestFiles[i];
         const componentManifest = getFileContent(componentManifestFile);
         componentManifest.id = solutionConfig.components[componentManifest.alias]
+        switch (componentManifest.componentType) {
+            /**
+             * For web parts, hide them from the toolbox by default. This is to avoid
+             * confusion with duplicate web parts in the toolbox when several channels
+             * are deployed to the same tenant.
+             */
+            case 'WebPart':
+                {
+                    componentManifest.hiddenFromToolbox = true
+                }
+                break;
+        }
         fs.writeFileSync(componentManifestFile, JSON.stringify(componentManifest, null, 2), { encoding: 'utf8', overwrite: true });
     }
 }
