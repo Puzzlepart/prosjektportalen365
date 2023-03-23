@@ -9,12 +9,13 @@ import { SPFI, spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/webs'
 import '@pnp/sp/items'
 import '@pnp/sp/lists'
+import strings from 'PortfolioExtensionsStrings'
 
 export default class FooterApplicationCustomizer
   extends BaseApplicationCustomizer<IFooterApplicationCustomizerProperties> {
   private _bottomPlaceholder: PlaceholderContent
   private _sp: SPFI
-  private _entries: IInstallationEntry[]
+  private _installEntries: IInstallationEntry[]
 
   public async onInit(): Promise<void> {
     await super.onInit()
@@ -24,8 +25,9 @@ export default class FooterApplicationCustomizer
   }
 
   private async _fetchInstallationLogs() {
-    const items = await this._sp.web.lists.getByTitle('Installasjonslogg').items.orderBy('InstallStartTime', false)()
-    this._entries = items.map(item => ({
+    const installationLogList =  this._sp.web.lists.getByTitle(strings.InstallationLogListName)
+    const installationLogItems = await installationLogList.items.orderBy('InstallStartTime', false)()
+    this._installEntries = installationLogItems.map(item => ({
       installCommand: item.InstallCommand,
       installStartTime: new Date(item.InstallStartTime),
       installEndTime: new Date(item.InstallEndTime),
@@ -49,7 +51,7 @@ export default class FooterApplicationCustomizer
           { onDispose: this._onDispose })
     }
     const footerElement: HTMLDivElement = document.createElement('div')
-    ReactDOM.render(React.createElement(Footer, { entries: this._entries }), footerElement)
+    ReactDOM.render(React.createElement(Footer, { installEntries: this._installEntries }), footerElement)
     this._bottomPlaceholder.domElement.append(footerElement)
   }
   /**

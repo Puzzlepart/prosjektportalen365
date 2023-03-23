@@ -34,6 +34,7 @@ declare interface IPortfolioExtensionsStrings {
   InstallChannelLabel: string
   LastInstallHeaderText: string
   SeeAllInstallationsLinkText: string
+  InstallationLogListName: string
 }
 
 declare module 'PortfolioExtensionsStrings' {

@@ -7,6 +7,6 @@ import { IFooterProps } from './types'
  * @param props Props for the `Footer` component
  */
 export function useFooter(props: IFooterProps) {
-    const latestEntry = props.entries[0]
+    const latestEntry = props.installEntries[0]
     return { latestEntry } as const
 }

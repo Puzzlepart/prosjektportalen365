@@ -35,5 +35,6 @@ define([], function () {
     InstallChannelLabel: 'Installasjonskanal',
     LastInstallHeaderText: 'Siste installasjon',
     SeeAllInstallationsLinkText: 'Se alle installasjoner',
+    InstallationLogListName: 'Installasjonslogg'
   }
 })
