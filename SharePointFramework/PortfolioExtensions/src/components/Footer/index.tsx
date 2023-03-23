@@ -24,3 +24,5 @@ export const Footer: FC<IFooterProps> = (props) => {
         </div>
     )
 }
+
+export * from './types'

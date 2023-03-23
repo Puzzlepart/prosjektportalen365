@@ -1,7 +1,7 @@
 import {
   BaseApplicationCustomizer, PlaceholderContent, PlaceholderName
 } from '@microsoft/sp-application-base'
-import { Footer } from 'components/Footer'
+import { Footer, IFooterProps } from 'components/Footer'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { IFooterApplicationCustomizerProperties, IInstallationEntry } from './types'
@@ -20,18 +20,21 @@ export default class FooterApplicationCustomizer
   public async onInit(): Promise<void> {
     await super.onInit()
     this._sp = spfi().using(SPFx(this.context))
-    await this._fetchInstallationLogs()
-    this._renderFooter(PlaceholderName.Bottom)
+    this._installEntries = await this._fetchInstallationLogs()
+    this._renderFooter(PlaceholderName.Bottom, { installEntries: this._installEntries })
   }
 
   /**
    * Fetch the installation logs from the `strings.InstallationLogListName` list. Converts
    * the item properties to match the `IInstallationEntry` interface.
+   * 
+   * @param orderBy Property to order by
+   * @param orderAscending Order ascending or descending
    */
-  private async _fetchInstallationLogs() {
-    const installationLogList =  this._sp.web.lists.getByTitle(strings.InstallationLogListName)
-    const installationLogItems = await installationLogList.items.orderBy('InstallStartTime', false)()
-    this._installEntries = installationLogItems.map(item => ({
+  private async _fetchInstallationLogs(orderBy = 'InstallStartTime', orderAscending = false) {
+    const installationLogList = this._sp.web.lists.getByTitle(strings.InstallationLogListName)
+    const installationLogItems = await installationLogList.items.orderBy(orderBy, orderAscending)()
+    return installationLogItems.map(item => ({
       installCommand: item.InstallCommand,
       installStartTime: new Date(item.InstallStartTime),
       installEndTime: new Date(item.InstallEndTime),
@@ -39,15 +42,16 @@ export default class FooterApplicationCustomizer
       installChannel: item.InstallChannel
     } as IInstallationEntry))
   }
- 
+
   /**
    * Render the footer in the specified placeholder. Creates a
    * placeholder if it doesn't exist and adds a new div element
    * to the placeholder where the footer will be rendered.
    * 
    * @param name Placeholder name
+   * @param footerProps Props for the `Footer` component
    */
-  private _renderFooter(name: PlaceholderName): void {
+  private _renderFooter(name: PlaceholderName, footerProps: IFooterProps): void {
     if (!this._bottomPlaceholder) {
       this._bottomPlaceholder =
         this.context.placeholderProvider.tryCreateContent(
@@ -55,7 +59,7 @@ export default class FooterApplicationCustomizer
           { onDispose: this._onDispose })
     }
     const footerElement: HTMLDivElement = document.createElement('div')
-    ReactDOM.render(React.createElement(Footer, { installEntries: this._installEntries }), footerElement)
+    ReactDOM.render(React.createElement(Footer, footerProps), footerElement)
     this._bottomPlaceholder.domElement.append(footerElement)
   }
   /**
