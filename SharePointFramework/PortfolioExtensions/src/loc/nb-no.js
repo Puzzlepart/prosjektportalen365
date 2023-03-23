@@ -36,6 +36,8 @@ define([], function () {
     LastInstallHeaderText: 'Siste installasjon',
     SeeAllInstallationsLinkText: 'Se alle installasjoner',
     InstallationLogListName: 'Installasjonslogg',
-    ConfigurationLinkText: 'Konfigurasjon av Prosjektportalen'
+    ConfigurationLinkText: 'Konfigurasjon av Prosjektportalen',
+    InstallDurationLabel: 'Installasjonsvarighet',
+    InstallDurationValueTemplate: '{0} minutter'
   }
 })

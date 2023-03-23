@@ -11,12 +11,12 @@ import { Footer, IFooterProps } from 'components/Footer'
 import strings from 'PortfolioExtensionsStrings'
 import { createElement } from 'react'
 import { render } from 'react-dom'
-import { IFooterApplicationCustomizerProperties, IInstallationEntry } from './types'
+import { IFooterApplicationCustomizerProperties, InstallationEntry } from './types'
 
 export default class FooterApplicationCustomizer extends BaseApplicationCustomizer<IFooterApplicationCustomizerProperties> {
   private _bottomPlaceholder: PlaceholderContent
   private _sp: SPFI
-  private _installEntries: IInstallationEntry[]
+  private _installEntries: InstallationEntry[]
 
   public async onInit(): Promise<void> {
     await super.onInit()
@@ -38,16 +38,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private async _fetchInstallationLogs(orderBy = 'InstallStartTime', orderAscending = false) {
     const installationLogList = this._sp.web.lists.getByTitle(strings.InstallationLogListName)
     const installationLogItems = await installationLogList.items.orderBy(orderBy, orderAscending)()
-    return installationLogItems.map(
-      (item) =>
-        ({
-          installCommand: item.InstallCommand,
-          installStartTime: new Date(item.InstallStartTime),
-          installEndTime: new Date(item.InstallEndTime),
-          installVersion: item.InstallVersion,
-          installChannel: item.InstallChannel
-        } as IInstallationEntry)
-    )
+    return installationLogItems.map((item) => new InstallationEntry(item))
   }
 
   /**

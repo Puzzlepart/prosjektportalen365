@@ -1,8 +1,8 @@
 import strings from 'PortfolioExtensionsStrings'
-import React, { FC,useContext } from 'react'
+import React, { FC, useContext } from 'react'
 import styles from './InstallVersionTooltipContent.module.scss'
-import { Link } from '@fluentui/react'
-import { FooterContext } from '../types'
+import { Link, format } from '@fluentui/react'
+import { FooterContext } from '../context'
 
 export const InstallVersionTooltipContent: FC = () => {
   const { latestEntry, props } = useContext(FooterContext)
@@ -26,6 +26,10 @@ export const InstallVersionTooltipContent: FC = () => {
         {latestEntry.installEndTime.toLocaleDateString('no', dateTimeFormatOptions)}
       </div>
       <div>
+        <b>{strings.InstallDurationLabel}</b>:{' '}
+        {format(strings.InstallDurationValueTemplate, latestEntry.installDuration)}
+      </div>
+      <div>
         <b>{strings.InstallVersionLabel}</b>: {latestEntry.installVersion}
       </div>
       <div>
@@ -37,7 +41,13 @@ export const InstallVersionTooltipContent: FC = () => {
         </div>
       )}
       <div className={styles.seeAllInstallationsLink}>
-        <Link href={`${props.pageContext.web.absoluteUrl}/Lists/Installasjonslogg/AllItems.aspx`}>{strings.SeeAllInstallationsLinkText}</Link>
+        <Link
+          href={`${props.pageContext.web.absoluteUrl}/Lists/Installasjonslogg/AllItems.aspx`}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          {strings.SeeAllInstallationsLinkText}
+        </Link>
       </div>
     </div>
   )
