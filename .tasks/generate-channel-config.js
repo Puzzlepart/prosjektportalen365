@@ -30,7 +30,7 @@ console.log(argv._)
  */
 function getFileContent(file, fallback = {}) {
     try {
-        const fileContent = fs.readFileSync(path.resolve(__dirname, "..", file), 'UTF-8')
+        const fileContent = fs.readFileSync(path.resolve(__dirname, '..', file), 'UTF-8')
         const fileContentJson = JSON.parse(fileContent)
         return fileContentJson
     } catch {
@@ -45,11 +45,12 @@ function getFileContent(file, fallback = {}) {
  * @param {*} filePath Path to the file to save the file to
  */
 function saveToFile(channel_config, filePath) {
-    fs.writeFileSync(path.resolve(__dirname, "..", filePath), JSON.stringify(channel_config, null, 2), { encoding: 'utf8', overwrite: true })
+    fs.writeFileSync(path.resolve(__dirname, '..', filePath), JSON.stringify(channel_config, null, 2), { encoding: 'utf8', overwrite: true })
 }
 
 let current_channel_config = {}
 let channel_config = {
+    '$schema': './$schema.json',
     name,
     spfx: {
         solutions: {}

@@ -1,4 +1,5 @@
 {
+  "$schema": "./$schema.json",
   "name": "staging",
   "spfx": {
     "solutions": {

@@ -19,7 +19,7 @@ if (!fs.existsSync('.dist')){
 }
 
 // Site scripts source folder path
-var siteScriptsPath = path.resolve(__dirname, "..", "SiteScripts/src")
+var siteScriptsPath = path.resolve(__dirname, '..', 'SiteScripts/src')
 
 // Destination folder for the site scripts
 var channelSiteScriptsFolder = '.dist/SiteScripts'
@@ -31,7 +31,7 @@ var channelSiteScriptsFolder = '.dist/SiteScripts'
  * @returns File contents as JSON
  */
 function getFileContent(file) {
-    const fileContent = fs.readFileSync(path.resolve(__dirname, "..", file), 'UTF-8')
+    const fileContent = fs.readFileSync(path.resolve(__dirname, '..', file), 'UTF-8')
     const fileContentJson = JSON.parse(fileContent)
     return fileContentJson
 }
