@@ -10,7 +10,7 @@
   "main": "lib/index.js",
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
-    "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\"",
+    "serve": "concurrently \"gulp serve-deprecated --locale=nb-no\"",
     "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
     "package-solution": "node ./.tasks/package-solution.js",
     "package:debug": "gulp clean && gulp default && gulp package-solution",
