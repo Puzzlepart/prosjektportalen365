@@ -6,7 +6,7 @@ import { IFooterProps } from './types'
 import { useFooter } from './useFooter'
 
 export const Footer: FC<IFooterProps> = (props) => {
-    const { latestEntry } = useFooter(props)
+    const { latestEntry,installedVersion } = useFooter(props)
     return (
         <div className={styles.root}>
             <div className={styles.content}>
@@ -16,7 +16,7 @@ export const Footer: FC<IFooterProps> = (props) => {
                         calloutProps={{ gapSpace: 0, calloutMaxWidth: 450 }}
                         hidden={false}
                         content={<InstallVersionTooltipContent latestEntry={latestEntry} />}>
-                        {latestEntry.installVersion}
+                        {installedVersion}
                     </TooltipHost>
                 </section>
                 <section className={styles.right}></section>

@@ -8,5 +8,9 @@ import { IFooterProps } from './types'
  */
 export function useFooter(props: IFooterProps) {
     const latestEntry = props.installEntries[0]
-    return { latestEntry } as const
+    let installedVersion = latestEntry.installVersion
+    if(latestEntry.installChannel) {
+        installedVersion += ` (${latestEntry.installChannel})`
+    }
+    return { latestEntry, installedVersion } as const
 }

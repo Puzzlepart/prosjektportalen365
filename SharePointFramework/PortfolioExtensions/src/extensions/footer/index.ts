@@ -24,6 +24,10 @@ export default class FooterApplicationCustomizer
     this._renderFooter(PlaceholderName.Bottom)
   }
 
+  /**
+   * Fetch the installation logs from the `strings.InstallationLogListName` list. Converts
+   * the item properties to match the `IInstallationEntry` interface.
+   */
   private async _fetchInstallationLogs() {
     const installationLogList =  this._sp.web.lists.getByTitle(strings.InstallationLogListName)
     const installationLogItems = await installationLogList.items.orderBy('InstallStartTime', false)()
