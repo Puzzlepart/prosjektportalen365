@@ -8,6 +8,7 @@ on:
       - "SharePointFramework/**"
       - "Install/**"
       - "Templates/**"
+      - .github/workflows/ci-channels-temp.yml
 
 env:
   SP_URL_TEST: "https://puzzlepart.sharepoint.com/sites/pp365_test"
@@ -36,7 +37,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: release-package-test
-          path: release-test
+          path: release
 
   install_test:
     needs: [build_release_package_test]
@@ -47,7 +48,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: release-package-test
-          path: release-test
+          path: release
 
       - name: Install
         run: release/Install.ps1 -Url "${{ env.SP_URL_TEST }}" -Title "Prosjektportalen 365 (test)" -CI ${{ env.CI_CREDENTIALS }} -SkipTaxonomy -SkipSearchConfiguration
@@ -75,7 +76,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: release-package-staging
-          path: release-staging
+          path: release
 
   install_staging:
     needs: [build_release_package_staging]
@@ -86,7 +87,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: release-package-staging
-          path: release-staging
+          path: release
 
       - name: Install
         run: release/Install.ps1 -Url "${{ env.SP_URL_STAGING }}" -Title "Prosjektportalen 365 (staging)" -CI ${{ env.CI_CREDENTIALS }} -SkipTaxonomy -SkipSearchConfiguration
