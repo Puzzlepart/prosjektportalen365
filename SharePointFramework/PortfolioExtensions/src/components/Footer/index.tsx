@@ -1,27 +1,38 @@
-import { TooltipHost } from '@fluentui/react'
+import { TooltipHost, Link } from '@fluentui/react'
+import strings from 'PortfolioExtensionsStrings'
 import React, { FC } from 'react'
 import styles from './Footer.module.scss'
 import { InstallVersionTooltipContent } from './InstallVersionTooltipContent'
-import { IFooterProps } from './types'
+import { FooterContext, IFooterProps } from './types'
 import { useFooter } from './useFooter'
 
 export const Footer: FC<IFooterProps> = (props) => {
-    const { latestEntry,installedVersion } = useFooter(props)
+    const { latestEntry, installedVersion } = useFooter(props)
     return (
-        <div className={styles.root}>
-            <div className={styles.content}>
-                <section className={styles.left}>
-                    <TooltipHost
-                        hostClassName={styles.installVersion}
-                        calloutProps={{ gapSpace: 0, calloutMaxWidth: 450 }}
-                        hidden={false}
-                        content={<InstallVersionTooltipContent latestEntry={latestEntry} />}>
-                        {installedVersion}
-                    </TooltipHost>
-                </section>
-                <section className={styles.right}></section>
+        <FooterContext.Provider value={{ latestEntry, props }}>
+            <div className={styles.root}>
+                <div className={styles.content}>
+                    <section className={styles.left}>
+                        <Link
+                            className={styles.configurationLink}
+                            href={`${props.pageContext.web.absoluteUrl}/SitePages/Konfigurasjon.aspx`}
+                        >
+                            {strings.ConfigurationLinkText}
+                        </Link>
+                    </section>
+                    <section className={styles.right}>
+                        <TooltipHost
+                            hostClassName={styles.installVersion}
+                            calloutProps={{ gapSpace: 0, calloutMaxWidth: 450 }}
+                            hidden={false}
+                            content={<InstallVersionTooltipContent />}
+                        >
+                            {installedVersion}
+                        </TooltipHost>
+                    </section>
+                </div>
             </div>
-        </div>
+        </FooterContext.Provider>
     )
 }
 

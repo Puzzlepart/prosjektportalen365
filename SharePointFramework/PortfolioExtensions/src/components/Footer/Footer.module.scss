@@ -5,13 +5,16 @@
         .left {
             float: left;
 
-            .installVersion {
+            .configurationLink {
                 font-size: 12px;
-                color: #999;
             }
         }
         .right {
             float: right;
+
+            .installVersion {
+                font-size: 12px;
+            }
         }
     }
 }

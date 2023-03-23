@@ -7,10 +7,10 @@ import { IFooterProps } from './types'
  * @param props Props for the `Footer` component
  */
 export function useFooter(props: IFooterProps) {
-    const latestEntry = props.installEntries[0]
-    let installedVersion = latestEntry.installVersion
-    if(latestEntry.installChannel) {
-        installedVersion += ` (${latestEntry.installChannel})`
-    }
-    return { latestEntry, installedVersion } as const
+  const latestEntry = props.installEntries[0]
+  let installedVersion = `v${latestEntry.installVersion}`
+  if (latestEntry.installChannel) {
+    installedVersion += ` (${latestEntry.installChannel})`
+  }
+  return { latestEntry, installedVersion } as const
 }

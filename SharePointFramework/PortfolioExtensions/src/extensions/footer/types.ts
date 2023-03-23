@@ -4,8 +4,7 @@
  * You can define an interface to describe it.
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IFooterApplicationCustomizerProperties {
-}
+export interface IFooterApplicationCustomizerProperties {}
 
 export interface IInstallationEntry {
   installCommand: string

@@ -35,6 +35,7 @@ declare interface IPortfolioExtensionsStrings {
   LastInstallHeaderText: string
   SeeAllInstallationsLinkText: string
   InstallationLogListName: string
+  ConfigurationLinkText: string
 }
 
 declare module 'PortfolioExtensionsStrings' {
