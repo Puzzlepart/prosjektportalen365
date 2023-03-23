@@ -2,5 +2,6 @@
     <pnp:WebCustomActions>
         <pnp:CustomAction Group="Customization" Location="Microsoft.SharePoint.SiteSettings" Name="Konfigurasjon av Prosjektportalen" Title="Konfigurasjon av Prosjektportalen" Url="SitePages/Konfigurasjon.aspx" Rights="ManageWeb" Sequence="2001" />
         <pnp:CustomAction Name="{537d3f41-eb97-4c5c-a5e7-a24e3ba25da8}" Location="ClientSideExtension.ApplicationCustomizer" Title="Hjelpeinnhold" Sequence="0" Rights="" RegistrationType="None" ClientSideComponentId="28987406-2a67-48a8-9297-fd2833bf0a09" ClientSideComponentProperties="{&quot;listName&quot;:&quot;Hjelpeinnhold&quot;,&quot;linkText&quot;:&quot;Hjelp tilgjengelig&quot;}" />
+        <pnp:CustomAction Name="{14a8f599-a359-4914-95c9-74476de792e5}" Location="ClientSideExtension.ApplicationCustomizer" Title="Footer" Sequence="0" Rights="" RegistrationType="None" ClientSideComponentId="84f27cec-ffde-4e00-a4cf-25c69f691054" ClientSideComponentProperties="{}" />
     </pnp:WebCustomActions>
 </pnp:CustomActions>
