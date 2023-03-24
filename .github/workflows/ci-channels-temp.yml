@@ -41,7 +41,8 @@ jobs:
           path: release
 
   install_test:
-    needs: [build_release_package_test]
+    needs: 
+      - build_release_package_test
     name: Install (test)
     runs-on: macos-latest
     if: "!contains(github.event.head_commit.message, '[skip-install]')"
@@ -56,7 +57,6 @@ jobs:
         shell: powershell
 
   build_release_package_staging:
-    needs: [build_release_package_test]
     name: Build release package for staging channel
     runs-on: macos-latest
     if: "!contains(github.event.head_commit.message, '[skip-ci]')"
@@ -80,7 +80,9 @@ jobs:
           path: release
 
   install_staging:
-    needs: [build_release_package_staging]
+    needs: 
+      - build_release_package_staging
+      - install_test
     name: Install (staging)
     runs-on: macos-latest
     if: "!contains(github.event.head_commit.message, '[skip-install]')"
@@ -95,7 +97,6 @@ jobs:
         shell: powershell
 
   build_release_package_prod:
-    needs: [install_staging]
     name: Build release package
     runs-on: macos-latest
     if: "!contains(github.event.head_commit.message, '[skip-ci]')"
@@ -119,7 +120,9 @@ jobs:
           path: release
 
   install_prod:
-    needs: [build_release_package_prod]
+    needs: 
+      - build_release_package_prod
+      - install_test
     name: Install (prod)
     runs-on: macos-latest
     if: "!contains(github.event.head_commit.message, '[skip-install]')"
