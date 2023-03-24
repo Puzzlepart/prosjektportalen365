@@ -23,7 +23,6 @@ Param(
 
 #region Variables and functions
 $USE_CHANNEL_CONFIG = -not ([string]::IsNullOrEmpty($Channel))
-$CHANNEL_CONFIG_PATH = "$PSScriptRoot/../channels/$Channel.json"
 $CHANNEL_CONFIG_NAME = "main"
 
 <#
@@ -31,6 +30,7 @@ Checks if parameter $CHANNEL_CONFIG_PATH is set and if so, loads the channel con
 stores it as JSON in the root of the project and sets the $CHANNEL_CONFIG variable
 #>
 if ($USE_CHANNEL_CONFIG) {
+    $CHANNEL_CONFIG_PATH = "$PSScriptRoot/../channels/$Channel.json"
     if (-not (Test-Path $CHANNEL_CONFIG_PATH)) {
         Write-Host "Channel config file not found at $CHANNEL_CONFIG_PATH. Aborting build of release." -ForegroundColor Red
         exit 1
@@ -91,8 +91,8 @@ else {
 
 if ($CI.IsPresent) {
     Write-Host "[Running in CI mode]" -ForegroundColor Yellow
-    npm ci >$null 2>&1
-    npm run generate-channel-replace-map >$null 2>&1
+    npm ci
+    npm run generate-channel-replace-map
 }
 
 if ($CI.IsPresent) {
@@ -124,7 +124,7 @@ EndAction
 #region Copying source files
 StartAction("Copying Install.ps1, PostInstall.ps1 and site script source files")
 if ($USE_CHANNEL_CONFIG) {
-    npm run generate-site-scripts >$null 2>&1
+    npm run generate-site-scripts
     $SITE_SCRIPTS_BASEPATH = "$ROOT_PATH/.dist/SiteScripts"
     Copy-Item -Path "$SITE_SCRIPTS_BASEPATH/*.txt" -Filter *.txt -Destination $RELEASE_PATH_SITESCRIPTS -Force
 }
@@ -160,12 +160,12 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
     StartAction("Building SharePointFramework\@Shared")
     Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH\@Shared"
     if ($CI.IsPresent) {  
-        npm ci --silent --no-audit --no-fund >$null 2>&1
+        npm ci --silent --no-audit --no-fund
     }
     else {
-        npm install --no-progress --silent --no-audit --no-fund >$null 2>&1
+        npm install --no-progress --silent --no-audit --no-fund
     }
-    npm run build >$null 2>&1
+    npm run build
     EndAction
 }
 
@@ -175,21 +175,21 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
         $Version = (Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json).solution.version
         StartAction("Packaging SPFx solution $_")
         if ($CI.IsPresent) {  
-            npm ci --silent --no-audit --no-fund >$null 2>&1
+            npm ci --silent --no-audit --no-fund
         }
         else {
-            npm install --no-progress --silent --no-audit --no-fund >$null 2>&1
+            npm install --no-progress --silent --no-audit --no-fund
         }
         if ($USE_CHANNEL_CONFIG) {
             $SOLUTION_CONFIG = $CHANNEL_CONFIG.spfx.solutions.($_)
             $SOLUTION_CONFIG_JSON = ($SOLUTION_CONFIG | ConvertTo-Json)
             $SOLUTION_CONFIG_JSON | Out-File -FilePath "./config/generated-solution-config.json" -Encoding UTF8 -Force
-            node ../.tasks/generatePackageSolution.js >$null 2>&1
-            npm run package >$null 2>&1
-            node ../.tasks/generatePackageSolution.js --revert >$null 2>&1 
+            node ../.tasks/generatePackageSolution.js
+            npm run package
+            node ../.tasks/generatePackageSolution.js --revert 
         }
         else {
-            npm run package >$null 2>&1
+            npm run package
         }
         Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
         EndAction
@@ -201,7 +201,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
 Set-Location $PSScriptRoot
 StartAction("Building Portfolio PnP template")
 if ($USE_CHANNEL_CONFIG) {
-    npm run generate-pnp-templates >$null 2>&1
+    npm run generate-pnp-templates
     Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_DIST_BASEPATH/Portfolio" -Force
 }
 else {
@@ -213,13 +213,13 @@ StartAction("Building PnP content templates")
 Set-Location $PNP_TEMPLATES_BASEPATH
 
 if ($CI.IsPresent) {  
-    npm ci --silent --no-audit --no-fund >$null 2>&1
+    npm ci --silent --no-audit --no-fund
 }
 else {
-    npm install --no-progress --silent --no-audit --no-fund  >$null 2>&1
+    npm install --no-progress --silent --no-audit --no-fund
 }
 
-npm run generate-json-templates >$null 2>&1
+npm run generate-json-templates
 
 Get-ChildItem "./Content" -Directory -Filter "*no-NB*" | ForEach-Object {
     Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force

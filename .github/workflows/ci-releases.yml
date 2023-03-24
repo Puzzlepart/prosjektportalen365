@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - releases/*
-      - feat/channel-support
     paths:
       - "SharePointFramework/**"
       - "Install/**"
@@ -12,7 +11,7 @@ on:
       - .github/workflows/ci-releases.yml
 
 env:
-  SP_URL: "https://puzzlepart.sharepoint.com/sites/pp365_temp"
+  SP_URL: "https://puzzlepart.sharepoint.com/sites/pp365"
   CI_CREDENTIALS: ${{ secrets.CI_DEV_CREDENTIALS }}
 
 jobs:
