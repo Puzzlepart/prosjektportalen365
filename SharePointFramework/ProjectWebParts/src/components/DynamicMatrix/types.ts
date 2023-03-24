@@ -35,7 +35,7 @@ export interface IDynamicMatrixProps {
   calloutTemplate: string
 
   /**
-   * Function that should return the elements for the specified `cell`.
+   * Function that should return the elements for the specified cell.
    */
   getElementsForCell: (cell: IMatrixCell) => IMatrixElementProps[]
 

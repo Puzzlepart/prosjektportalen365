@@ -1,7 +1,14 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, PnPClientStorage } from '@pnp/common'
-import { ItemUpdateResult, QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
+import {
+  ItemUpdateResult,
+  PermissionKind,
+  QueryPropertyValueType,
+  SearchResult,
+  SortDirection,
+  sp
+} from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
 import { IAggregatedListConfiguration } from 'interfaces/IAggregatedListConfiguration'
@@ -118,16 +125,26 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Get portfolio configuration from SharePoint lists.
+   * Get portfolio configuration from SharePoint lists. This includes:
+   * - `columns` - Project columns
+   * - `refiners` - Refinable columns
+   * - `views` - Portfolio overview views
+   * - `viewsUrls` - Portfolio views list form URLs
+   * - `columnUrls` - Project columns list form URLs
+   * - `userCanAddViews` - User can add portfolio views
    */
   public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
     // eslint-disable-next-line prefer-const
-    let [columnConfig, columns, views, viewsUrls, columnUrls] = await Promise.all([
+    let [columnConfig, columns, views, viewsUrls, columnUrls, userCanAddViews] = await Promise.all([
       this._portalDataService.getProjectColumnConfig(),
       this._portalDataService.getProjectColumns(),
       this._portalDataService.getPortfolioOverviewViews(),
       this._portalDataService.getListFormUrls('PORTFOLIO_VIEWS'),
-      this._portalDataService.getListFormUrls('PROJECT_COLUMNS')
+      this._portalDataService.getListFormUrls('PROJECT_COLUMNS'),
+      this._portalDataService.currentUserHasPermissionsToList(
+        'PORTFOLIO_VIEWS',
+        PermissionKind.AddListItems
+      )
     ])
     columns = columns.map((col) => col.configure(columnConfig))
     const refiners = columns.filter((col) => col.isRefinable)
@@ -137,8 +154,9 @@ export class DataAdapter implements IDataAdapter {
       refiners,
       views,
       viewsUrls,
-      columnUrls
-    }
+      columnUrls,
+      userCanAddViews
+    } as IPortfolioConfiguration
   }
 
   /**
@@ -169,13 +187,15 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch data for view.
+   * Fetch data for the specified view. Uses `this.fetchDataForManagerView` or `this.fetchDataForRegularView`
+   * depending on the user's group membership (needs to be member of `strings.PortfolioManagerGroupName`).
    *
    * @description Used by `PortfolioOverview` and `PortfolioInsights`
    *
    * @param view
    * @param configuration
    * @param siteId
+   *
    * @returns {Promise<IFetchDataForViewItemResult[]>}
    */
   public async fetchDataForView(
@@ -287,7 +307,6 @@ export class DataAdapter implements IDataAdapter {
     siteIdProperty: string = 'GtSiteIdOWSTEXT',
     queryArray?: string
   ) {
-    view
     let [
       { PrimarySearchResults: projects },
       { PrimarySearchResults: sites },
