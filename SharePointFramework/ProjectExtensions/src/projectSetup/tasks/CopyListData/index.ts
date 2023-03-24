@@ -112,7 +112,8 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Creates a default Planner plan if there's no Planner configuration.
+   * Creates a default Planner plan if there's no Planner configuration. This
+   * makes sure we have a Planner web part that doesn't throw errors.
    * 
    * @param params Task parameters
    */
@@ -210,7 +211,7 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Get file contents
+   * Get file contents for the specified files.
    *
    * @param web Web
    * @param files Files to get content for
@@ -267,7 +268,7 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Process files
+   * Process files.
    *
    * @param config Content config
    */
@@ -325,7 +326,11 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Get item properties
+   * Get item properties from the source items. This is used to create the destination items
+   * with the properties specified in the config list. For the taxonomy fields, the text field
+   * name for the term is also retrieved and added to the destination item. The term field is
+   * storing internal names longer than 32 characters, which is not allowed for field names so
+   * we need to substring the name to 32 characters.
    *
    * @param fields Fields
    * @param sourceItem Source item
@@ -346,8 +351,9 @@ export class CopyListData extends BaseTask {
                     (tax: any) => tax.ID === fieldValue.WssId
                   )
                   if (taxonomyFieldValue) {
+                    const textFieldName = textField.InternalName.substring(0, 32)
                     obj[
-                      textField.InternalName
+                      textFieldName
                     ] = `-1;#${taxonomyFieldValue.Term}|${fieldValue.TermGuid}`
                   }
                 }
