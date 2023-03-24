@@ -261,6 +261,6 @@ else {
 }
 
 if ($USE_CHANNEL_CONFIG) {
-    Remove-Item -Path "$PSScriptRoot/../.current-channel-config.json" -Force
+    Remove-Item -Path "$PSScriptRoot/../.current-channel-config.json" -Force -ErrorAction SilentlyContinue
 }
 #endregion
