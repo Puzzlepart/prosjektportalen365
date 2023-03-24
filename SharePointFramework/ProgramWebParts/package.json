@@ -49,7 +49,7 @@
     "moment": "^2.24.0",
     "msgraph-helper": "0.7.3",
     "object-assign": "4.1.1",
-    "pp365-shared": "^1.8.0-1045.3",
+    "pp365-shared": "1.8.0-1045.4",
     "pzl-react-reusable-components": "^0.0.14",
     "react": "16.13.1",
     "react-calendar-timeline": "0.27.0",

@@ -115,17 +115,9 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
         async () => {
           const userPermissions = []
           const rolesToCheck = properties.GtProjectAdminRoles
-          const hasFullControl = await sp.web.select('EffectiveBasePermissions').get()
-            .then(({ EffectiveBasePermissions }) => {
-              return sp.web.hasPermissions(EffectiveBasePermissions, PermissionKind.ManageWeb)
-            })
-
           if (!_.isArray(rolesToCheck) || _.isEmpty(rolesToCheck)) {
-            if (hasFullControl) return true
-            else return false
+            return await sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
           }
-          else if (hasFullControl) return true
-
           const currentUser = await this.getCurrentUser(pageContext.user)
           const projectAdminRoles = (await this.portal.getProjectAdminRoles()).filter(
             (role) => rolesToCheck.indexOf(role.title) !== -1
@@ -135,7 +127,8 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
             switch (role.type) {
               case ProjectAdminRoleType.SiteAdmin:
                 {
-                  if (pageContext.legacyPageContext.isSiteAdmin === true)
+                  const currentUserHasManageWebPermisson = await sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
+                  if (currentUserHasManageWebPermisson)
                     userPermissions.push(...role.permissions)
                 }
                 break
