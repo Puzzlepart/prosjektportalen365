@@ -4,7 +4,7 @@ import { SPUser } from '@microsoft/sp-page-context'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, PnPClientStorage, PnPClientStore } from '@pnp/common'
 import '@pnp/polyfill-ie11'
-import { sp, SPConfiguration, SPRest, Web } from '@pnp/sp'
+import { sp, SPConfiguration, SPRest, Web, PermissionKind } from '@pnp/sp'
 import { format } from 'office-ui-fabric-react/lib/Utilities'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import _ from 'underscore'
@@ -116,8 +116,8 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
           const userPermissions = []
           const rolesToCheck = properties.GtProjectAdminRoles
           if (!_.isArray(rolesToCheck) || _.isEmpty(rolesToCheck)) {
-            if (pageContext.legacyPageContext.isSiteAdmin === true) return true
-            else return false
+            const currentUserHasManageWebPermisson = await sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
+            if (currentUserHasManageWebPermisson) return true
           }
           const currentUser = await this.getCurrentUser(pageContext.user)
           const projectAdminRoles = (await this.portal.getProjectAdminRoles()).filter(
@@ -128,7 +128,8 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
             switch (role.type) {
               case ProjectAdminRoleType.SiteAdmin:
                 {
-                  if (pageContext.legacyPageContext.isSiteAdmin === true)
+                  const currentUserHasManageWebPermisson = await sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
+                  if (currentUserHasManageWebPermisson)
                     userPermissions.push(...role.permissions)
                 }
                 break
@@ -165,7 +166,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                       ).length > 0
                     )
                       userPermissions.push(...role.permissions)
-                  } catch {}
+                  } catch { }
                 }
                 break
             }
