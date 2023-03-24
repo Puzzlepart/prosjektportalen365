@@ -116,7 +116,8 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
           const userPermissions = []
           const rolesToCheck = properties.GtProjectAdminRoles
           if (!_.isArray(rolesToCheck) || _.isEmpty(rolesToCheck)) {
-            return await sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
+            const currentUserHasManageWebPermisson = await sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
+            if (currentUserHasManageWebPermisson) return true
           }
           const currentUser = await this.getCurrentUser(pageContext.user)
           const projectAdminRoles = (await this.portal.getProjectAdminRoles()).filter(
