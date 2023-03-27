@@ -503,11 +503,9 @@ if (-not $SkipSearchConfiguration.IsPresent) {
 }
 #endregion
 
-
-Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
-
 #region Post install - running post-install scripts and applying PnP templates
 Write-Host "[INFO] Running post-install steps" 
+Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
 try {
     ."$PSScriptRoot\Scripts\PostInstall.ps1"
     Write-Host "[SUCCESS] Successfully ran post-install steps" -ForegroundColor Green
