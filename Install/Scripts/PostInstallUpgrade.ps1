@@ -3,6 +3,11 @@ $LastInstall = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><O
 if ($null -ne $LastInstall) {
     $PreviousVersion = $LastInstall.FieldValues["InstallVersion"]
 
+    if ($PreviousVersion -lt "1.2.7") {
+        Write-Host "[INFO] In version v1.2.7 we added 'Prosjekttidslinje' to the top navigation. Adding this navigation item now as part of the upgrade" 
+        Add-PnPNavigationNode -Location TopNavigationBar -Title "Prosjekttidslinje" -Url "$($Uri.LocalPath)/SitePages/Prosjekttidslinje.aspx"
+    }
+    
     if ($PreviousVersion -lt "1.6.0") {
         Write-Host "[INFO] In version v1.6.0 we added Project timeline configuration and reworked the TimelineContent list. Merging data now as part of the upgrade"
 
