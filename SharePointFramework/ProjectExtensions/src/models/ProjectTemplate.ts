@@ -41,6 +41,7 @@ export class ProjectTemplate extends UserSelectableObject {
   public isDefaultExtensionsLocked: boolean
   public isProgram: boolean
   public isParentProject: boolean
+  public isForced: boolean = false
   private _projectContentType: string
   private _projectStatusContentType: string
   private _projectColumns: string

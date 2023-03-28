@@ -25,7 +25,11 @@ export const ErrorDialog: FC<IErrorDialogProps> = ({
       return (
         <>
           <DefaultButton onClick={onSetupClick} text={strings.ProvisionTemplateText} />
-          <PrimaryButton text={strings.ContinueToProjectText} onClick={onDismiss} />
+          <PrimaryButton
+            styles={{ root: { marginLeft: 6 } }}
+            text={strings.ContinueToProjectText}
+            onClick={onDismiss}
+          />
         </>
       )
     }
@@ -50,4 +54,4 @@ export const ErrorDialog: FC<IErrorDialogProps> = ({
   )
 }
 
-export { IErrorDialogProps }
+export * from './types'
