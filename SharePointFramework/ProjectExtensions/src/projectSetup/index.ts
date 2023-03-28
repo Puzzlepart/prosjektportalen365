@@ -353,37 +353,35 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
   /**
    * Get templates from portal site. Checks for locked template in property bag,
-   * and if found, returns only that template. Otherwise, returns all templates.
+   * and if found, returns only that template if it exists. Otherwise, returns all
+   * templates from the templates library.
+   * 
+   * @param propertyBagRegex - Regex to match property bag key for locked template
    */
-  private async _getTemplates() {
-    const propertyBagRegex = /^pp_.*_template$/
+  private async _getTemplates(propertyBagRegex = /^pp_.*_template$/) {
     const webAllProperties = (
       await sp.web.select('Title', 'AllProperties').expand('AllProperties').get()
     )['AllProperties']
-    const templateProperty = Object.keys(webAllProperties).find((key) => propertyBagRegex.test(key))
-    const templateName = webAllProperties[templateProperty]
-
-    let templateViewXml = '<View></View>'
-    if (templateName) {
-      templateViewXml = `<View Scope="RecursiveAll">
-        <Query><Where><And>
-          <Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq>
-          <Eq><FieldRef Name="Title" /><Value Type="Text">${templateName}</Value></Eq>
-        </And></Where></Query>
-      </View>`
-    }
-    return this._portal.getItems(
+    const lockedTemplateProperty = Object.keys(webAllProperties).find((key) => propertyBagRegex.test(key))
+    const lockedTemplateName = webAllProperties[lockedTemplateProperty]
+    const templates = await this._portal.getItems(
       this.properties.templatesLibrary,
       ProjectTemplate,
       {
-        ViewXml: templateViewXml
+        ViewXml: '<View></View>'
       },
       ['FieldValuesAsText']
     )
+    if (lockedTemplateName) {
+      const lockedTemplate = templates.find((t) => t.text === lockedTemplateName)
+      if (lockedTemplate) return [lockedTemplate]
+    }
+    return templates
   }
 
   /**
-   * Fetch data from SharePoint and initializes the MSGraphHelper.
+   * Fetch data from SharePoint and initializes the `MSGraphHelper`. This is
+   * called when the component is first loaded.
    */
   private async _fetchData(): Promise<IProjectSetupData> {
     try {
@@ -397,14 +395,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         this._getTemplates(),
         this.properties.extensionsLibrary
           ? this._portal.getItems(
-              this.properties.extensionsLibrary,
-              ProjectExtension,
-              {
-                ViewXml:
-                  '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-              },
-              ['File', 'FieldValuesAsText']
-            )
+            this.properties.extensionsLibrary,
+            ProjectExtension,
+            {
+              ViewXml:
+                '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+            },
+            ['File', 'FieldValuesAsText']
+          )
           : Promise.resolve([]),
         this.properties.contentConfigList
           ? this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File'])
