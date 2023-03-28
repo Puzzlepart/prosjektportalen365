@@ -10,6 +10,12 @@ import { IPortfolioOverviewCommandsProps, IPortfolioOverviewCommandsState } from
 /**
  * Component logic hook for the PortfolioOverviewCommands component. Handles the logic for
  * the command bar and the filter panel.
+ * 
+ * Renders the following context menu items for the command bar:
+ * - `EXCEL_EXPORT`: Excel export button
+ * - `NEW_VIEW`: New view button
+ * - `VIEW_OPTIONS`: View options button
+ * - `FILTERS`: Filters button
  *
  * @param props Props for the PortfolioOverviewCommands component
  */
@@ -73,7 +79,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
             key: 'DIVIDER_01',
             itemType: ContextualMenuItemType.Divider
           },
-          ...props.configuration.views.map(
+          ...props.configuration.views.filter(v => !v.isPersonal).map(
             (view) =>
               ({
                 key: view.id.toString(),
@@ -81,7 +87,23 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
                 iconProps: { iconName: view.iconName },
                 canCheck: true,
                 checked: view.id === props.currentView?.id,
-                onClick: () => props.events.onChangeView(view)
+                onClick: () => props.events.onChangeView(view),
+              } as IContextualMenuItem)
+          ),
+          {
+            key: 'HEADER_01',
+            itemType: ContextualMenuItemType.Header,
+            text: strings.PersonalViewsText
+          },
+          ...props.configuration.views.filter(v => v.isPersonal).map(
+            (view) =>
+              ({
+                key: view.id.toString(),
+                name: view.title,
+                iconProps: { iconName: view.iconName },
+                canCheck: true,
+                checked: view.id === props.currentView?.id,
+                onClick: () => props.events.onChangeView(view),
               } as IContextualMenuItem)
           ),
           {
