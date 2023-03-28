@@ -9,7 +9,6 @@ import {
 } from '@fluentui/react'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { FC } from 'react'
-import { isEmpty } from 'underscore'
 import { BaseDialog } from '../@BaseDialog'
 import { ContentConfigSection } from './ContentConfigSection'
 import { TemplateSelectDialogContext } from './context'
@@ -20,7 +19,7 @@ import { ITemplateSelectDialogProps } from './types'
 import { useTemplateSelectDialog } from './useTemplateSelectDialog'
 
 export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
-  const { state, dispatch, onSubmit } = useTemplateSelectDialog(props)
+  const { state, dispatch, onSubmit, isConfigDisabled } = useTemplateSelectDialog(props)
 
   return (
     <TemplateSelectDialogContext.Provider value={{ props, state, dispatch }}>
@@ -32,8 +31,7 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
           className: styles.content
         }}
         modalProps={{ containerClassName: styles.root, isBlocking: true, isDarkOverlay: true }}
-        onDismiss={props.onDismiss}
-        containerClassName={styles.root}>
+        onDismiss={props.onDismiss}>
         <Pivot style={{ minHeight: 450 }}>
           <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
             <TemplateSelector />
@@ -42,7 +40,7 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
             headerText={strings.ExtensionsSectionHeaderText}
             itemIcon='ArrangeBringForward'
             headerButtonProps={
-              (isEmpty(props.data.extensions) || !state.selectedTemplate) && {
+              isConfigDisabled('extensions') && {
                 disabled: true,
                 style: { opacity: 0.3, cursor: 'default' }
               }
@@ -53,7 +51,7 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
             headerText={strings.ContentConfigSectionHeaderText}
             itemIcon='ViewList'
             headerButtonProps={
-              (isEmpty(props.data.contentConfig) || !state.selectedTemplate) && {
+              isConfigDisabled('contentConfig') && {
                 disabled: true,
                 style: { opacity: 0.3, cursor: 'default' }
               }
