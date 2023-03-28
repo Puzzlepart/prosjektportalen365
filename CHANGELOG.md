@@ -19,6 +19,7 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Fikset et problem hvor kommandolinje ikke ble vist som standard [#1042](https://github.com/Puzzlepart/prosjektportalen365/issues/1042)
 - Fikset et problem som noen gang oppstod under kopering av fasesjekkliste-elementer med valgt fase [#1052](https://github.com/Puzzlepart/prosjektportalen365/issues/1052)
 - Fikset problem hvor det ikke var mulig å synkronisere data fra 'Prosjektdata' listen (Idebehandling)
+- Fikset manglende termset for FNs bærekraftsmål [#1058](https://github.com/Puzzlepart/prosjektportalen365/issues/1058)
 
 ## 1.8.0 - 28.02.2023
 
