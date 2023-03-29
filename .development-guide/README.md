@@ -154,6 +154,7 @@ In addition we have two PnP provisioning templates.
 Content templates are found in the **Content** folder. The name of the template follows the following pattern:
 
 `Portfolio_content.{language_code}.xml`
+`Portfolio_content_BA.{language_code}.xml`
 
 `language_code` can be for example **no-NB** or **en-US**.
 
@@ -221,7 +222,7 @@ Keywords can be used in the commit message to avoid (or force) the CI running so
 
 ### Build and install (dev)
 
-[ci-dev](../.github/workflows/ci-dev.yml) builds a new release on _push_ to **dev**.
+[ci-releases](../.github/workflows/ci-releases.yml) builds a new release on _push_ to **releases/***.
 
 It runs [Build-Release.ps1](../Install/Build-Release.ps1) with `-CI` param, then runs [Install.ps1](../Install/Install.ps1) (also with `-CI` param, this time with a encoded string consisting of the username and password, stored in a GitHub secret). The URL to install to is stored in the GitHub secret `CI_DEV_TARGET_URL`.
 
