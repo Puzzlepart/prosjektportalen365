@@ -3,7 +3,7 @@ name: CI (releases/*)
 on:
   push:
     branches:
-      - releases/*
+      - releases/1.8
     paths:
       - "SharePointFramework/**"
       - "Install/**"
