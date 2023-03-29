@@ -11,11 +11,17 @@ export const HelpContentModal: FC<IHelpContentModalProps> = (props) => {
       isOpen={props.isOpen}
       isBlocking={false}
       onDismiss={props.onDismiss}
-      containerClassName={styles.root}>
+      styles={{ root: { overflow: 'hidden' } }}
+      containerClassName={styles.root}
+      scrollableContentClassName={styles.scrollableContent}>
       <div className={styles.body}>
         <Pivot>
           {props.content.map((content, index) => (
-            <PivotItem key={index} headerText={content.title} itemIcon={content.iconName}>
+            <PivotItem
+              key={index}
+              headerText={content.title}
+              itemIcon={content.iconName}
+              style={{ overflow: 'auto', height: 'calc(100vh - 44px)' }}>
               <div className={styles.contentItem} title={content.title}>
                 <p dangerouslySetInnerHTML={{ __html: content.textContent }}></p>
                 {content.markdownContent && (
