@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  PersonalViewsText: string
   ColumnRenderDescription: ReactNode
   DisplayNameDescription: string
   HideViewsLabel: string
