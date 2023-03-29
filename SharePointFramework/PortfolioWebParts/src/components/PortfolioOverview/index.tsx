@@ -486,7 +486,8 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
   }
 
   /**
-   * Fetch initial data
+   * Fetches initial data. Uses `props.dataAdapter.fetchDataForView` or `props.dataAdapter.fetchDataForViewBatch` to
+   * fetch the items to be rendered depending on `props.isParentProject`.
    */
   private async _fetchInitialData(): Promise<Partial<IPortfolioOverviewState>> {
     try {
@@ -552,4 +553,4 @@ export class PortfolioOverview extends Component<IPortfolioOverviewProps, IPortf
   }
 }
 
-export { IPortfolioOverviewProps }
+export * from './types'

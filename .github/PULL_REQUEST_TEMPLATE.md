@@ -1,6 +1,6 @@
 # Pull request (PR)
 
-Sørg for at du ber om PR for din branch (høyre side). Sørg for at du gjør en PR mot dev-branchen (venstre side). Sjekk commits og alle commit-meldingene.
+Sørg for at du ber om PR for din branch (høyre side). Sørg for at du gjør en PR mot riktig release-branch (venstre side). Sjekk commits og alle commit-meldingene.
 
 ## Sjekklisten din
 

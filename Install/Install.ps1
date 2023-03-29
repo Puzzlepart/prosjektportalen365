@@ -330,14 +330,13 @@ if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
 
 #region Running pre-install upgrade steps
 if ($Upgrade.IsPresent) {
-    StartAction("Running pre-install upgrade steps")
+    Write-Host "[INFO] Running pre-install upgrade steps"
     try {
         Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
         ."$PSScriptRoot\Scripts\PreInstallUpgrade.ps1"
         Disconnect-PnPOnline
     }
     Catch {}
-    EndAction
 }
 #endregion
 
@@ -453,7 +452,7 @@ if (-not $SkipTemplate.IsPresent) {
         Disconnect-PnPOnline
     }
     Catch {
-        Write-Host ("[ERROR] Failed to apply PnP templates to ${0}: ${1}" -f $Uri.AbsoluteUri, $_.Exception.Message) -ForegroundColor Red
+        Write-Host "[ERROR] Failed to apply PnP templates to $($Uri.AbsoluteUri): $($_.Exception.Message)" -ForegroundColor Red
         exit 0
     }
 }

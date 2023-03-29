@@ -2,7 +2,7 @@
 import { find } from '@microsoft/sp-lodash-subset'
 import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
-import { AttachmentFileInfo, CamlQuery, ListEnsureResult, sp, Web } from '@pnp/sp'
+import { AttachmentFileInfo, CamlQuery, ListEnsureResult, PermissionKind, sp, Web } from '@pnp/sp'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { transformFieldXml } from '../../helpers/transformFieldXml'
@@ -246,6 +246,22 @@ export class PortalDataService {
       defaultNewFormUrl: makeUrlAbsolute(urls.DefaultNewFormUrl),
       defaultEditFormUrl: makeUrlAbsolute(urls.DefaultEditFormUrl)
     }
+  }
+
+  /**
+   * Checks if the current user has the specified permissions to the
+   * specified list.
+   *
+   * @param list List key
+   * @param permissionKind Permission kind to check
+   */
+  public async currentUserHasPermissionsToList(
+    list: PortalDataServiceList,
+    permissionKind: PermissionKind
+  ): Promise<boolean> {
+    return await this.web.lists
+      .getByTitle(this._configuration.listNames[list])
+      .currentUserHasPermissions(permissionKind)
   }
 
   /**

@@ -27,8 +27,8 @@ export class CopyListData extends BaseTask {
    * through all list data configurations. For each configuration,
    * it will either create a Planner plan or copy list items based
    * on the configuration type.
-   * 
-   * If there's no Planner configuration, it will create a default 
+   *
+   * If there's no Planner configuration, it will create a default
    * one.
    *
    * @param params Task parameters
@@ -79,7 +79,7 @@ export class CopyListData extends BaseTask {
 
   /**
    * Parses Planner configuration from Planner task items.
-   * 
+   *
    * @param items Planner task items
    */
   private parsePlannerConfiguration(items: IPlannerTaskSPItem[]) {
@@ -98,7 +98,7 @@ export class CopyListData extends BaseTask {
           taskDetails.attachments = item.GtAttachments.split('|')
             .map((str) => new TaskAttachment(str))
             .filter((attachment) => !stringIsNullOrEmpty(attachment.url))
-        } catch (error) { }
+        } catch (error) {}
       }
       if (!stringIsNullOrEmpty(item.GtPlannerPreviewType)) {
         let m: RegExpExecArray
@@ -112,8 +112,9 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Creates a default Planner plan if there's no Planner configuration.
-   * 
+   * Creates a default Planner plan if there's no Planner configuration. This
+   * makes sure we have a Planner web part that doesn't throw errors.
+   *
    * @param params Task parameters
    */
   private async createDefaultPlannerPlan(params: IBaseTaskParams) {
@@ -210,7 +211,7 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Get file contents
+   * Get file contents for the specified files.
    *
    * @param web Web
    * @param files Files to get content for
@@ -247,8 +248,9 @@ export class CopyListData extends BaseTask {
   ): Promise<void> {
     try {
       await folders.sort().reduce((chain: Promise<any>, folder, index: number) => {
-        const folderServerRelUrl = `${config.destListProps.RootFolder.ServerRelativeUrl
-          }/${folder.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
+        const folderServerRelUrl = `${
+          config.destListProps.RootFolder.ServerRelativeUrl
+        }/${folder.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
         this.onProgress(
           progressText,
           format(strings.ProcessFolderText, index + 1, folders.length),
@@ -267,7 +269,7 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Process files
+   * Process files.
    *
    * @param config Content config
    */
@@ -301,8 +303,9 @@ export class CopyListData extends BaseTask {
       const filesCopied = []
       for (let i = 0; i < filesWithContents.length; i++) {
         const file = filesWithContents[i]
-        const destFolderUrl = `${config.destListProps.RootFolder.ServerRelativeUrl
-          }${file.FileDirRef.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
+        const destFolderUrl = `${
+          config.destListProps.RootFolder.ServerRelativeUrl
+        }${file.FileDirRef.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
         try {
           this.logInformation(`Copying file ${file.LinkFilename}`)
           this.onProgress(
@@ -316,7 +319,7 @@ export class CopyListData extends BaseTask {
             .files.add(filename, file.Blob, true)
           filesCopied.push(fileAddResult)
           this.logInformation(`Successfully copied file ${file.LinkFilename}`)
-        } catch (err) { }
+        } catch (err) {}
       }
       return filesCopied
     } catch (error) {
@@ -325,7 +328,11 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Get item properties
+   * Get item properties from the source items. This is used to create the destination items
+   * with the properties specified in the config list. For the taxonomy fields, the text field
+   * name for the term is also retrieved and added to the destination item. The term field is
+   * storing internal names longer than 32 characters, which is not allowed for field names so
+   * we need to substring the name to 32 characters.
    *
    * @param fields Fields
    * @param sourceItem Source item
@@ -346,9 +353,8 @@ export class CopyListData extends BaseTask {
                     (tax: any) => tax.ID === fieldValue.WssId
                   )
                   if (taxonomyFieldValue) {
-                    obj[
-                      textField.InternalName
-                    ] = `-1;#${taxonomyFieldValue.Term}|${fieldValue.TermGuid}`
+                    const textFieldName = textField.InternalName.substring(0, 32)
+                    obj[textFieldName] = `-1;#${taxonomyFieldValue.Term}|${fieldValue.TermGuid}`
                   }
                 }
               }
@@ -363,4 +369,3 @@ export class CopyListData extends BaseTask {
     }, {})
   }
 }
-
