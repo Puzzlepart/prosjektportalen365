@@ -1,11 +1,33 @@
 import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
 import { isArray } from '@pnp/common'
+import _ from 'lodash'
 import * as strings from 'PortfolioWebPartsStrings'
+import { PortfolioOverviewView } from 'pp365-shared/lib/models/PortfolioOverviewView'
 import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
 import { redirect } from 'pp365-shared/lib/util'
 import { useState } from 'react'
 import { IFilterProps } from '../../FilterPanel'
 import { IPortfolioOverviewCommandsProps, IPortfolioOverviewCommandsState } from './types'
+
+/**
+ * Converts a collection of `PortfolioOverviewView` objects to 
+ * a collection of `IContextualMenuItem` objects.
+ * 
+ * @param props Props for the PortfolioOverviewCommands component
+ * @param filterFunc Optional filter function to filter the views
+ */
+function convertViewsToContextualMenuItems(props: IPortfolioOverviewCommandsProps, filterFunc: (view: PortfolioOverviewView) => boolean) {
+  return  props.configuration.views.filter(filterFunc).map(view => (
+    {
+      key: view.id.toString(),
+      name: view.title,
+      iconProps: { iconName: view.iconName },
+      canCheck: true,
+      checked: view.id === props.currentView?.id,
+      onClick: () => props.events.onChangeView(view),
+    } as IContextualMenuItem
+  ))
+}
 
 /**
  * Component logic hook for the PortfolioOverviewCommands component. Handles the logic for
@@ -21,6 +43,9 @@ import { IPortfolioOverviewCommandsProps, IPortfolioOverviewCommandsState } from
  */
 export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsProps) {
   const [state, setState] = useState<IPortfolioOverviewCommandsState>({ showFilterPanel: false })
+
+  const sharedViews = convertViewsToContextualMenuItems(props, (v) => !v.isPersonal)
+  const personalViews = convertViewsToContextualMenuItems(props, (v) => v.isPersonal)
 
   const items: IContextualMenuItem[] = [
     {
@@ -61,7 +86,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
         items: [
           {
             key: 'VIEW_LIST',
-            name: 'Liste',
+            name: strings.ListViewText,
             iconProps: { iconName: 'List' },
             canCheck: true,
             checked: !props.isCompact,
@@ -69,45 +94,25 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
           },
           {
             key: 'VIEW_COMPACT',
-            name: 'Kompakt liste',
+            name: strings.CompactViewText,
             iconProps: { iconName: 'AlignLeft' },
             canCheck: true,
             checked: props.isCompact,
             onClick: () => props.events.onSetCompact(true)
           },
           {
-            key: 'DIVIDER_01',
+            key: 'VIEWS_DIVIDER',
             itemType: ContextualMenuItemType.Divider
           },
-          ...props.configuration.views.filter(v => !v.isPersonal).map(
-            (view) =>
-              ({
-                key: view.id.toString(),
-                name: view.title,
-                iconProps: { iconName: view.iconName },
-                canCheck: true,
-                checked: view.id === props.currentView?.id,
-                onClick: () => props.events.onChangeView(view),
-              } as IContextualMenuItem)
-          ),
-          {
-            key: 'HEADER_01',
+          ...sharedViews,
+          !_.isEmpty(personalViews) && {
+            key: 'PERSONAL_VIEWS_HEADER',
             itemType: ContextualMenuItemType.Header,
-            text: strings.PersonalViewsText
+            text: strings.PersonalViewsHeaderText,
           },
-          ...props.configuration.views.filter(v => v.isPersonal).map(
-            (view) =>
-              ({
-                key: view.id.toString(),
-                name: view.title,
-                iconProps: { iconName: view.iconName },
-                canCheck: true,
-                checked: view.id === props.currentView?.id,
-                onClick: () => props.events.onChangeView(view),
-              } as IContextualMenuItem)
-          ),
+          ...personalViews,
           {
-            key: 'DIVIDER_02',
+            key: 'VIEW_ACTIONS_DIVIDER',
             itemType: ContextualMenuItemType.Divider
           },
           {
@@ -123,7 +128,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
                 `${props.configuration.viewsUrls.defaultEditFormUrl}?ID=${props.currentView?.id}`
               )
           }
-        ]
+        ].filter(Boolean)
       }
     } as IContextualMenuItem,
     {
