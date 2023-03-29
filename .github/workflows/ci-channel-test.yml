@@ -11,7 +11,7 @@ on:
       - .github/workflows/ci-channel-test.yml
 
 env:
-  SP_URL_TEST: "https://puzzlepart.sharepoint.com/sites/pp365_test"
+  SP_URL_TEST: "https://puzzlepart.sharepoint.com/sites/pp365_channels_test"
   CI_CREDENTIALS: ${{ secrets.CI_DEV_CREDENTIALS }}
 
 jobs:
