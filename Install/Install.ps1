@@ -330,14 +330,13 @@ if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
 
 #region Running pre-install upgrade steps
 if ($Upgrade.IsPresent) {
-    StartAction("Running pre-install upgrade steps")
+    Write-Host "[INFO] Running pre-install upgrade steps"
     try {
         Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
         ."$PSScriptRoot\Scripts\PreInstallUpgrade.ps1"
         Disconnect-PnPOnline
     }
     Catch {}
-    EndAction
 }
 #endregion
 
