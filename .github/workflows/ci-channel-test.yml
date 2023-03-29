@@ -8,7 +8,7 @@ on:
       - "SharePointFramework/**"
       - "Install/**"
       - "Templates/**"
-      - .github/workflows/ci-channels-temp.yml
+      - .github/workflows/ci-channel-test.yml
 
 env:
   SP_URL_TEST: "https://puzzlepart.sharepoint.com/sites/pp365_test"
