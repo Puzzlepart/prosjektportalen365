@@ -41,7 +41,6 @@ Sjekk ut [release notes](./release_notes/1.8.0.md) for høydepunkter og mer deta
 - Tilgang for å opprette porteføljeoversikt-visninger er nå basert på tilgang til listen [#932](https://github.com/Puzzlepart/prosjektportalen365/issues/932)
 - Alfabetisk sortering av filterverdier for Ressursallokering [#1059](https://github.com/Puzzlepart/prosjektportalen365/issues/1059)
 - Håndterer ugyldig låst mal (i property bag) i prosjektoppsettet [#1057](https://github.com/Puzzlepart/prosjektportalen365/issues/1057)
-- Porteføljeoversikt: vis personlige visninger som egen "seksjon" [#1045](https://github.com/Puzzlepart/prosjektportalen365/issues/1045)
 - Fiks for doble scrollbars på hjelpeinnhold-vindu [#997](https://github.com/Puzzlepart/prosjektportalen365/issues/997)
 
 ### Feilrettinger
@@ -50,6 +49,7 @@ Sjekk ut [release notes](./release_notes/1.8.0.md) for høydepunkter og mer deta
 - Fikset et problem hvor kommandolinje ikke ble vist som standard [#1042](https://github.com/Puzzlepart/prosjektportalen365/issues/1042)
 - Fikset et problem som noen gang oppstod under kopering av fasesjekkliste-elementer med valgt fase [#1052](https://github.com/Puzzlepart/prosjektportalen365/issues/1052)
 - Fikset problem hvor det ikke var mulig å synkronisere data fra 'Prosjektdata' listen (Idebehandling)
+- Fikset manglende termset for FNs bærekraftsmål [#1058](https://github.com/Puzzlepart/prosjektportalen365/issues/1058)
 
 ## 1.8.0 - 28.02.2023
 
