@@ -16,6 +16,15 @@
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#table-of-contents)
 
+## ➤ Table of Contents
+
+* [➤ Hva er Prosjektportalen for Microsoft 365?](#-hva-er-prosjektportalen-for-microsoft-365)
+* [➤ Installering og oppgradering](#-installering-og-oppgradering)
+* [➤ Kontakt](#-kontakt)
+* [➤ Nettleserstøtte](#-nettlesersttte)
+* [➤ Contributors](#-contributors)
+* [➤ Utvikling](#-utvikling)
+</details>
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#hva-er-prosjektportalen-for-microsoft-365)
@@ -82,3 +91,12 @@ Vi gjør vårt beste for å støtte alle nettlesere, men følger retningslinjer 
 | [tarjeieo@puzzlepart.com](mailto:tarjeieo@puzzlepart.com) | [olemp@puzzlepart.com](mailto:olemp@puzzlepart.com) | [remi.blom-ohlsen@puzzlepart.com](mailto:remi.blom-ohlsen@puzzlepart.com) |
 
 
+I tillegg flere fra teamet bak [prosjektportalen@puzzlepart.com](mailto:prosjektportalen@puzzlepart.com)
+
+
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#utvikling)
+
+## ➤ Utvikling
+
+Vennligst les [Utviklingsguiden](./.development-guide/README.md).

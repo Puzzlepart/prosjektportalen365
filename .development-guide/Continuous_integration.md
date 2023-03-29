@@ -2,7 +2,8 @@
 
 We have set up continuous integration using GitHub actions.
 
-[![CI (dev)](https://github.com/Puzzlepart/prosjektportalen365/actions/workflows/ci-dev.yml/badge.svg?branch=dev)](https://github.com/Puzzlepart/prosjektportalen365/actions/workflows/ci-dev.yml)
+### CI (releases/*)
+[![CI (releases)](https://github.com/Puzzlepart/prosjektportalen365/actions/workflows/ci-releases.yml/badge.svg?branch=releases/1.9)](https://github.com/Puzzlepart/prosjektportalen365/actions/workflows/ci-releases.yml)
 
 Keywords can be used in the commit message to avoid (or force) the CI running some of the jobs.
 
@@ -20,6 +21,11 @@ It runs [Build-Release.ps1](../Install/Build-Release.ps1) with `-CI` param, then
 With the current approach, with no cache (as it runs `npm ci`), a full run takes about 25-35 minutes.
 
 ![image-20201121133532960](assets/image-20201121133532960.png)
+
+### CI (channels/test)
+Keyword `[channels/test]` needs to be used in the commit message for this CI to run.
+
+It will build a package for channel [test](../channels/test.json) and deploy it to the URL specified in `SP_URL_TEST`.
 
 ### Build release (main)
 
