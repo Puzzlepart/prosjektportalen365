@@ -13,7 +13,6 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Tilgang for å opprette porteføljeoversikt-visninger er nå basert på tilgang til listen [#932](https://github.com/Puzzlepart/prosjektportalen365/issues/932)
 - Alfabetisk sortering av filterverdier for Ressursallokering [#1059](https://github.com/Puzzlepart/prosjektportalen365/issues/1059)
 - Håndterer ugyldig låst mal (i property bag) i prosjektoppsettet [#1057](https://github.com/Puzzlepart/prosjektportalen365/issues/1057)
-- Porteføljeoversikt: vis personlige visninger som egen "seksjon" [#1045](https://github.com/Puzzlepart/prosjektportalen365/issues/1045)
 - Fiks for doble scrollbars på hjelpeinnhold-vindu [#997](https://github.com/Puzzlepart/prosjektportalen365/issues/997)
 
 ### Feilrettinger
