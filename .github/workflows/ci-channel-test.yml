@@ -1,0 +1,53 @@
+name: CI (channels/test)
+
+on:
+  push:
+    branches:
+      - feat/channel-support
+    paths:
+      - "SharePointFramework/**"
+      - "Install/**"
+      - "Templates/**"
+      - .github/workflows/ci-channels-temp.yml
+
+env:
+  SP_URL_TEST: "https://puzzlepart.sharepoint.com/sites/pp365_test"
+  CI_CREDENTIALS: ${{ secrets.CI_DEV_CREDENTIALS }}
+
+jobs:
+  build_release_package_test:
+    name: Build release package for test channel
+    runs-on: macos-latest
+    if: "contains(github.event.head_commit.message, '[channels/test]')"
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js 16.18.0
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.18.0
+
+      - name: Run Install/Build-Release.ps1 in CI mode for channel test
+        run: Install/Build-Release.ps1 -CI -SkipBundle -Channel test
+        shell: pwsh
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: release-package-test
+          path: release
+
+  install_test:
+    needs: [build_release_package_test]
+    name: Install (test)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: release-package-test
+          path: release
+
+      - name: Install
+        run: release/Install.ps1 -Url "${{ env.SP_URL_TEST }}" -Title "Prosjektportalen 365 (test)" -CI ${{ env.CI_CREDENTIALS }} -SkipTaxonomy -SkipSearchConfiguration
+        shell: powershell
