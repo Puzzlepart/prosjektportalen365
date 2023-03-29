@@ -1,9 +1,11 @@
 Formatet er basert på [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-Sjekk ut [release notes](./release_notes/1.8.0.md) for høydepunkter og mer detaljert 'endringslogg' for siste versjon.
+Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detaljert 'endringslogg' for siste versjon.
 
-## 1.8.1 - TBA
+## 1.9.0 - TBA
+
+- Støtte for å installere til ulike kanaler for å støtte separate installasjoner i samme tenant [#1047](https://github.com/Puzzlepart/prosjektportalen365/issues/1047)
 
 ### Ny funksjonalitet
 
@@ -11,8 +13,25 @@ Sjekk ut [release notes](./release_notes/1.8.0.md) for høydepunkter og mer deta
 
 ### Feilrettinger
 
+## 1.8.1 - TBA
+
+### Ny funksjonalitet
+
+### Forbedringer
+
+- Dersom bruker har "Full kontroll" tilgangsnivå på området får bruker fulle rettigheter på området [#1054](https://github.com/Puzzlepart/prosjektportalen365/issues/1054)
+- Tilgang for å opprette porteføljeoversikt-visninger er nå basert på tilgang til listen [#932](https://github.com/Puzzlepart/prosjektportalen365/issues/932)
+- Alfabetisk sortering av filterverdier for Ressursallokering [#1059](https://github.com/Puzzlepart/prosjektportalen365/issues/1059)
+- Håndterer ugyldig låst mal (i property bag) i prosjektoppsettet [#1057](https://github.com/Puzzlepart/prosjektportalen365/issues/1057)
+- Fiks for doble scrollbars på hjelpeinnhold-vindu [#997](https://github.com/Puzzlepart/prosjektportalen365/issues/997)
+
+### Feilrettinger
+
 - Fikset et problem i oppgraderingsskript der noen tenants ikke kunne hente alle hub children
 - Fikset et problem hvor kommandolinje ikke ble vist som standard [#1042](https://github.com/Puzzlepart/prosjektportalen365/issues/1042)
+- Fikset et problem som noen gang oppstod under kopering av fasesjekkliste-elementer med valgt fase [#1052](https://github.com/Puzzlepart/prosjektportalen365/issues/1052)
+- Fikset problem hvor det ikke var mulig å synkronisere data fra 'Prosjektdata' listen (Idebehandling)
+- Fikset manglende termset for FNs bærekraftsmål [#1058](https://github.com/Puzzlepart/prosjektportalen365/issues/1058)
 
 ## 1.8.0 - 28.02.2023
 
