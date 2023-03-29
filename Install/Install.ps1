@@ -211,7 +211,8 @@ if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -o
 }
 #endregion
 
-Set-PnPTraceLog -On -Level Debug -LogFile "Install_Log_$([datetime]::Now.Ticks).txt"
+$LogFilePath = "$PSScriptRoot\Install_Log_$([datetime]::Now.Ticks).txt"
+Set-PnPTraceLog -On -Level Debug -LogFile $LogFilePath
 
 #region Create site
 if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
@@ -562,7 +563,12 @@ if($Channel -ne "main") {
 }
 
 ## Logging installation to SharePoint list
-Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -ErrorAction SilentlyContinue >$null 2>&1
+$InstallationEntry = Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -ErrorAction SilentlyContinue
+
+## Attempting to attach the log file to installation entry
+if ($null -ne $InstallationEntry) {
+    Add-PnPListItemAttachment -List "Installasjonslogg" -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction SilentlyContinue >$null 2>&1 
+}
 
 Disconnect-PnPOnline
 
