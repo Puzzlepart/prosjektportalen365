@@ -3,7 +3,7 @@ name: CI (channels/test)
 on:
   push:
     branches:
-      - feat/channel-support
+      - releases/1.9
     paths:
       - "SharePointFramework/**"
       - "Install/**"
