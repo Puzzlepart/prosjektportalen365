@@ -155,12 +155,12 @@ export interface IPortfolioOverviewState {
   sortBy?: ProjectColumn
 
   /**
-   * Is compact
+   * List should be rendered in compact mode
    */
   isCompact?: boolean
 
   /**
-   * Program context
+   * Program context used for web part context when used in a program project.
    */
   programContext?: WebPartContext
 
