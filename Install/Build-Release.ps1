@@ -18,6 +18,7 @@ Param(
     [Parameter(Mandatory = $false)]
     [switch]$SkipBundle,
     [Parameter(Mandatory = $false)]
+    [ValidateSet("test")]
     [string]$Channel
 )  
 
