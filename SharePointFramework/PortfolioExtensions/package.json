@@ -12,6 +12,7 @@
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
     "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\"",
     "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
+    "package-solution": "node ./.tasks/package-solution.js",
     "package:debug": "gulp clean && gulp default && gulp package-solution",
     "build": "tsc --build",
     "postversion": "tsc && npm publish",

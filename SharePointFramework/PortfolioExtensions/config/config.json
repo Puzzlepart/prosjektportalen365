@@ -25,6 +25,14 @@
           "manifest": "./src/extensions/ideaRegistration/manifest.json"
         }
       ]
+    },
+    "footer-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/footer/index.js",
+          "manifest": "./src/extensions/footer/manifest.json"
+        }
+      ]
     }
   },
   "externals": {},

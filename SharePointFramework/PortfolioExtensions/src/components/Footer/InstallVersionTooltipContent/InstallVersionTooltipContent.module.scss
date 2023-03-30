@@ -1,0 +1,12 @@
+.root {
+    padding: 10px;
+    width: 450px;
+    box-sizing: border-box;
+
+    .footer {
+        margin: 20px 0 0 0;
+        .seeAllInstallationsLink {
+            color: inherit;
+        }
+    }
+}

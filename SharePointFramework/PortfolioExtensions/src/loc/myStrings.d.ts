@@ -1,4 +1,10 @@
 declare interface IPortfolioExtensionsStrings {
+  LatestGitHubReleaseLinkTitle: string
+  LatestGitHubReleaseDownloadButtonText: string
+  LatestGitHubReleaseIsNewerText: any
+  LatestGitHubReleaseIsOlderText: any
+  LatestGitHubReleaseIsSameText: any
+  LatestGitHubReleaseLabel: string | number | boolean | {} | ReactElement<any, string | JSXElementConstructor<any>> | ReactNodeArray | ReactPortal
   SetRecommendationTitle: string
   SetRecommendationSubtitle: string
   IdeaProjectDataDialogTitle: string
@@ -27,6 +33,17 @@ declare interface IPortfolioExtensionsStrings {
   CloseLabel: string
   SubmitLabel: string
   CreateLabel: string
+  InstallStartTimeLabel: string
+  InstallEndTimeLabel: string
+  InstallVersionLabel: string
+  InstallCommandLabel: string
+  InstallChannelLabel: string
+  LastInstallHeaderText: string
+  SeeAllInstallationsLinkText: string
+  InstallationLogListName: string
+  ConfigurationLinkText: string
+  InstallDurationLabel: string
+  InstallDurationValueTemplate: string
 }
 
 declare module 'PortfolioExtensionsStrings' {
