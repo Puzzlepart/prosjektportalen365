@@ -5,7 +5,8 @@ on:
     branches:
       - releases/*
     paths:
-      - "SharePointFramework/**"
+      - SharePointFramework/**
+      - .github/workflows/pr-package-spfx-dev.yml
 jobs:
   build_shared:
     name: Build @Shared
