@@ -29,7 +29,7 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
           <Icon {...versionComparisonIconProps} />
         </span>
       </div>
-      <div hidden={latestGitHubVersion.lessThan(installedVersion)}>
+      <div hidden={!latestGitHubVersion.greaterThan(installedVersion)}>
         <ActionButton
           text={strings.LatestGitHubReleaseDownloadButtonText}
           iconProps={{ iconName: 'Download', styles: { root: { fontSize: 12 } } }}
