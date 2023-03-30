@@ -5,7 +5,8 @@ on:
     branches:
       - releases/*
     paths:
-      - "SharePointFramework/**"
+      - SharePointFramework/**
+      - .github/workflows/pr-package-spfx-dev.yml
 jobs:
   build_shared:
     name: Build @Shared
@@ -18,10 +19,9 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Setup Node.js 16.18.0
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 16.18.0
+          node-version: ${{ vars.NODE_VERSION }}
 
       - name: Install npm packages
         working-directory: ./SharePointFramework/@Shared
@@ -49,10 +49,9 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Setup Node.js 16.18.0
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 16.18.0
+          node-version: ${{ vars.NODE_VERSION }}
 
       - name: Install npm packages
         working-directory: ./SharePointFramework/PortfolioExtensions
@@ -80,10 +79,9 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Setup Node.js 16.18.0
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 16.18.0
+          node-version: ${{ vars.NODE_VERSION }}
 
       - name: Install npm packages
         working-directory: ./SharePointFramework/PortfolioWebParts
@@ -111,10 +109,9 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Setup Node.js 16.18.0
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 16.18.0
+          node-version: ${{ vars.NODE_VERSION }}
 
       - name: Install npm packages
         working-directory: ./SharePointFramework/ProgramWebParts
@@ -142,10 +139,9 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Setup Node.js 16.18.0
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 16.18.0
+          node-version: ${{ vars.NODE_VERSION }}
 
       - name: Install npm packages
         working-directory: ./SharePointFramework/ProjectExtensions
@@ -173,10 +169,9 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Setup Node.js 16.18.0
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 16.18.0
+          node-version: ${{ vars.NODE_VERSION }}
 
       - name: Install npm packages
         working-directory: ./SharePointFramework/ProjectWebParts
