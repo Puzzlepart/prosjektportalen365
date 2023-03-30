@@ -5,10 +5,10 @@ import { FooterContext } from '../../context'
 import { ILatestGitHubReleaseProps } from './types'
 
 /**
- * Component logic hook for the `LatestGitHubRelease` component. 
- * Returns the latest GitHub release, latest GitHub version, installed 
+ * Component logic hook for the `LatestGitHubRelease` component.
+ * Returns the latest GitHub release, latest GitHub version, installed
  * version and version comparison icon props.
- * 
+ *
  * @param props Props for the `LatestGitHubRelease` component
  */
 export function useLatestGitHubRelease(props: ILatestGitHubReleaseProps) {

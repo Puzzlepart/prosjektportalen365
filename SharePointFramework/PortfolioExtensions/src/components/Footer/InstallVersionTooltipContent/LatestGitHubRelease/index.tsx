@@ -17,7 +17,10 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
     <div className={styles.root}>
       <div>
         <span className={styles.label}>{strings.LatestGitHubReleaseLabel}</span>
-        <span className={styles.latestGitHubReleaseLink} title={strings.LatestGitHubReleaseLinkTitle}>
+        <span
+          className={styles.latestGitHubReleaseLink}
+          title={strings.LatestGitHubReleaseLinkTitle}
+        >
           <Link href={latestGitHubRelease.html_url} target='_blank' rel='noopener noreferrer'>
             {latestGitHubVersion.toString()}
           </Link>
