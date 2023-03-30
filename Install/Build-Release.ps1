@@ -185,9 +185,9 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
             $SOLUTION_CONFIG = $CHANNEL_CONFIG.spfx.solutions.($_)
             $SOLUTION_CONFIG_JSON = ($SOLUTION_CONFIG | ConvertTo-Json)
             $SOLUTION_CONFIG_JSON | Out-File -FilePath "./config/generated-solution-config.json" -Encoding UTF8 -Force
-            node ../.tasks/generatePackageSolution.js >$null 2>&1
+            node ../.tasks/modifySolutionFiles.js >$null 2>&1
             npm run package >$null 2>&1
-            node ../.tasks/generatePackageSolution.js --revert >$null 2>&1 
+            node ../.tasks/modifySolutionFiles.js --revert >$null 2>&1 
         }
         else {
             npm run package >$null 2>&1
