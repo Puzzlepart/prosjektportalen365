@@ -2,9 +2,9 @@
   "name": "prosjektportalen365-templates",
   "main": "generateTemplate.js",
   "scripts": {
-    "watch": "chokidar \"./_JsonTemplate.json\" -c \"npm run generateJsonTemplates\"",
+    "watch": "chokidar \"./_JsonTemplate.json\" -c \"npm run generate-project-templates\"",
     "generate-resx-json": "node ./.tasks/generateResxJson",
-    "generate-json-templates": "npm run generate-resx-json && node ./.tasks/generateJsonTemplates"
+    "generate-project-templates": "npm run generate-resx-json && node ./.tasks/generateProjectTemplates"
   },
   "dependencies": {
     "@ptkdev/json-token-replace": "^1.2.2",

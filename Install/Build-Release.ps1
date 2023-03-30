@@ -220,7 +220,7 @@ else {
     npm install --no-progress --silent --no-audit --no-fund  >$null 2>&1
 }
 
-npm run generate-json-templates >$null 2>&1
+npm run generate-project-templates >$null 2>&1
 
 Get-ChildItem "./Content" -Directory -Filter "*no-NB*" | ForEach-Object {
     Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force

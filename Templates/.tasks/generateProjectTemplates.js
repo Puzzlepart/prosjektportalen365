@@ -32,7 +32,7 @@ function getFileContent(file, fallbackValue = {}) {
 
 // Template names for the different languages
 const templateNames = {
-    'nb-NO': {
+    'no-NB': {
         'Project': 'Standardmal',
         'Program': 'Programmal',
         'Parent': 'Overordnet'
@@ -67,15 +67,16 @@ const channelReplaceValue = Object.keys(currentChannelConfig.spfx.solutions).red
 
 // For each JSON template, replace the tokens and write the output to the correct folder.
 jsonMasterTemplates.forEach(templateFile => {
-    const templateJson = getFileContent(`../JsonTemplates/${templateFile}`)
+    const templateJson = getFileContent(`JsonTemplates/${templateFile}`)
     const templateType = templateFile.substring('_JsonTemplate'.length).replace((/\.[^.]+/), '')
-    const outputPaths = {
-        'en-US': path.resolve(__dirname, `../Content/Portfolio_content.en-US/ProjectTemplates/${templateNames['en-US'][templateType]}.txt`),
-        'no-NB': path.resolve(__dirname, `../Content/Portfolio_content.no-NB/ProjectTemplates/${templateNames['nb-NO'][templateType]}.txt`)
-    }
+    const outputPaths = Object.keys(templateNames).reduce((acc, lng) => {
+        acc[lng] = path.resolve(__dirname, `../Content/Portfolio_content.${lng}/ProjectTemplates/${templateNames[lng][templateType]}.txt`)
+        return acc
+    }, {})
 
-    Object.keys(resourcesJson).forEach(language => {
-        const jsonTokens = { ...resourcesJson[language], ...channelReplaceValue }
+
+    Object.keys(resourcesJson).forEach(lng => {
+        const jsonTokens = { ...resourcesJson[lng], ...channelReplaceValue }
         let content = jsonTokenReplace.replace(
             jsonTokens,
             templateJson,
@@ -91,10 +92,9 @@ jsonMasterTemplates.forEach(templateFile => {
         )
 
         fs.writeFile(
-            outputPaths[language],
+            outputPaths[lng],
             JSON.stringify(content, null, 4),
             () => {
-
             })
     })
 })
