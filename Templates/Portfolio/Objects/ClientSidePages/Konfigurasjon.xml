@@ -509,6 +509,48 @@
                             },
                             &quot;altText&quot;: &quot;&quot;,
                             &quot;rawPreviewImageMinCanvasWidth&quot;: 32767
+                        },
+                        {
+                            &quot;sourceItem&quot;: {
+                                &quot;itemType&quot;: 4,
+                                &quot;fileExtension&quot;: &quot;&quot;,
+                                &quot;progId&quot;: &quot;&quot;
+                            },
+                            &quot;thumbnailType&quot;: 2,
+                            &quot;id&quot;: 6,
+                            &quot;fabricReactIcon&quot;: {
+                                &quot;iconName&quot;: &quot;projectcollection&quot;
+                            },
+                            &quot;altText&quot;: &quot;&quot;,
+                            &quot;rawPreviewImageMinCanvasWidth&quot;: 32767
+                        },
+                        {
+                            &quot;sourceItem&quot;: {
+                                &quot;itemType&quot;: 4,
+                                &quot;fileExtension&quot;: &quot;&quot;,
+                                &quot;progId&quot;: &quot;&quot;
+                            },
+                            &quot;thumbnailType&quot;: 2,
+                            &quot;id&quot;: 7,
+                            &quot;fabricReactIcon&quot;: {
+                                &quot;iconName&quot;: &quot;awaystatus&quot;
+                            },
+                            &quot;altText&quot;: &quot;&quot;,
+                            &quot;rawPreviewImageMinCanvasWidth&quot;: 32767
+                        },
+                        {
+                            &quot;sourceItem&quot;: {
+                                &quot;itemType&quot;: 4,
+                                &quot;fileExtension&quot;: &quot;&quot;,
+                                &quot;progId&quot;: &quot;&quot;
+                            },
+                            &quot;thumbnailType&quot;: 2,
+                            &quot;id&quot;: 8,
+                            &quot;fabricReactIcon&quot;: {
+                                &quot;iconName&quot;: &quot;timeline&quot;
+                            },
+                            &quot;altText&quot;: &quot;&quot;,
+                            &quot;rawPreviewImageMinCanvasWidth&quot;: 32767
                         }
                     ],
                     &quot;isMigrated&quot;: true,
@@ -546,11 +588,17 @@
                         &quot;items[2].description&quot;: &quot;Gi spesifikke brukere innsyn til alle prosjekter i porteføljen&quot;,
                         &quot;items[3].description&quot;: &quot;Konfigurasjon av roller som kan utføre administratorhandlinger i prosjektet&quot;,
                         &quot;items[4].description&quot;: &quot;Inneholder loggoppføringer fra de ulike komponentene i Prosjektportalen 365&quot;,
+                        &quot;items[5].description&quot;: &quot;Inneholder alle prosjektene i porteføljen, og egenskapene til disse.&quot;,
+                        &quot;items[6].description&quot;: &quot;Inneholder alle statusrapporter for alle prosjekter&quot;,
+                        &quot;items[7].description&quot;: &quot;Her kan du legge til innhold som skal vises på tidslinjen&quot;,
                         &quot;items[0].title&quot;: &quot;Installasjonslogg&quot;,
                         &quot;items[1].title&quot;: &quot;Konfigurasjonsfiler&quot;,
                         &quot;items[2].title&quot;: &quot;Porteføljeinnsyn&quot;,
                         &quot;items[3].title&quot;: &quot;Prosjektadministrasjonsroller&quot;,
-                        &quot;items[4].title&quot;: &quot;Logg&quot;
+                        &quot;items[4].title&quot;: &quot;Logg&quot;,
+                        &quot;items[5].title&quot;: &quot;Prosjekter&quot;,
+                        &quot;items[6].title&quot;: &quot;Prosjektstatus&quot;,
+                        &quot;items[7].title&quot;: &quot;Tidslinjeinnhold&quot;
                     },
                     &quot;imageSources&quot;: {},
                     &quot;links&quot;: {
@@ -559,7 +607,10 @@
                         &quot;items[1].sourceItem.url&quot;: &quot;{site}/Konfigurasjonsfiler&quot;,
                         &quot;items[2].sourceItem.url&quot;: &quot;{site}/_layouts/15/groups.aspx&quot;,
                         &quot;items[3].sourceItem.url&quot;: &quot;{site}/Lists/Prosjektadministrasjonsroller&quot;,
-                        &quot;items[4].sourceItem.url&quot;: &quot;{site}/Lists/Logg/AllItems.aspx&quot;
+                        &quot;items[4].sourceItem.url&quot;: &quot;{site}/Lists/Logg/AllItems.aspx&quot;,
+                        &quot;items[5].sourceItem.url&quot;: &quot;{site}/Lists/Prosjekter/AllItems.aspx&quot;,
+                        &quot;items[6].sourceItem.url&quot;: &quot;{site}/Lists/Prosjektstatus/AllItems.aspx&quot;,
+                        &quot;items[7].sourceItem.url&quot;: &quot;{site}/Lists/Tidslinjeinnhold/AllItems.aspx&quot;
                     },
                     &quot;componentDependencies&quot;: {
                         &quot;layoutComponentId&quot;: &quot;706e33c8-af37-4e7b-9d22-6e5694d92a6f&quot;
