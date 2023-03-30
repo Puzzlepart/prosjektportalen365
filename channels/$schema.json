@@ -1,0 +1,303 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "spfx": {
+            "type": "object",
+            "properties": {
+                "solutions": {
+                    "type": "object",
+                    "properties": {
+                        "PortfolioExtensions": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "zippedPackage": {
+                                    "type": "string",
+                                    "pattern": "solution\/pp-[A-Za-z-]*.sppkg"
+                                },
+                                "components": {
+                                    "type": "object",
+                                    "properties": {
+                                        "Footer": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "IdeaProcessingCommand": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "IdeaProjectDataCommand": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "IdeaRegistrationCommand": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        }
+                                    },
+                                    "required": [
+                                        "Footer",
+                                        "IdeaProcessingCommand",
+                                        "IdeaProjectDataCommand",
+                                        "IdeaRegistrationCommand"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "name",
+                                "zippedPackage",
+                                "components"
+                            ]
+                        },
+                        "PortfolioWebParts": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "zippedPackage": {
+                                    "type": "string",
+                                    "pattern": "solution\/pp-[A-Za-z-]*.sppkg"
+                                },
+                                "components": {
+                                    "type": "object",
+                                    "properties": {
+                                        "LatestProjectsWebPart": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "PortfolioAggregationWebPart": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "PortfolioInsightsWebPart": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "PortfolioOverviewWebPart": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "ProjectListWebPart": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "ProjectTimelineWebPart": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "ResourceAllocationWebPart": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        }
+                                    },
+                                    "required": [
+                                        "LatestProjectsWebPart",
+                                        "PortfolioAggregationWebPart",
+                                        "PortfolioInsightsWebPart",
+                                        "PortfolioOverviewWebPart",
+                                        "ProjectListWebPart",
+                                        "ProjectTimelineWebPart",
+                                        "ResourceAllocationWebPart"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "name",
+                                "zippedPackage",
+                                "components"
+                            ]
+                        },
+                        "ProgramWebParts": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "zippedPackage": {
+                                    "type": "string",
+                                    "pattern": "solution\/pp-[A-Za-z-]*.sppkg"
+                                },
+                                "components": {
+                                    "type": "object",
+                                    "properties": {
+                                        "ProgramAdministrationWebpart": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "ProgramAggregationWebPart": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "ProgramProjectOverviewWebPart": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "ProgramTimelineWebPart": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        }
+                                    },
+                                    "required": [
+                                        "ProgramAdministrationWebpart",
+                                        "ProgramAggregationWebPart",
+                                        "ProgramProjectOverviewWebPart",
+                                        "ProgramTimelineWebPart"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "name",
+                                "zippedPackage",
+                                "components"
+                            ]
+                        },
+                        "ProjectExtensions": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "zippedPackage": {
+                                    "type": "string",
+                                    "pattern": "solution\/pp-[A-Za-z-]*.sppkg"
+                                },
+                                "components": {
+                                    "type": "object",
+                                    "properties": {
+                                        "HelpContentApplicationCustomizer": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "ProjectSetup": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "ProjectUpgrade": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "TemplateSelectorCommand": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        }
+                                    },
+                                    "required": [
+                                        "HelpContentApplicationCustomizer",
+                                        "ProjectSetup",
+                                        "ProjectUpgrade",
+                                        "TemplateSelectorCommand"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "name",
+                                "zippedPackage",
+                                "components"
+                            ]
+                        },
+                        "ProjectWebParts": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "zippedPackage": {
+                                    "type": "string",
+                                    "pattern": "solution\/pp-[A-Za-z-]*.sppkg"
+                                },
+                                "components": {
+                                    "type": "object",
+                                    "properties": {
+                                        "OpportunityMatrixWebPart": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "ProjectInformationWebPart": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "ProjectPhasesWebPart": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "ProjectStatusWebPart": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "ProjectTimelineWebPart": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        },
+                                        "RiskMatrixWebPart": {
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                        }
+                                    },
+                                    "required": [
+                                        "OpportunityMatrixWebPart",
+                                        "ProjectInformationWebPart",
+                                        "ProjectPhasesWebPart",
+                                        "ProjectStatusWebPart",
+                                        "ProjectTimelineWebPart",
+                                        "RiskMatrixWebPart"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "name",
+                                "zippedPackage",
+                                "components"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "PortfolioExtensions",
+                        "PortfolioWebParts",
+                        "ProgramWebParts",
+                        "ProjectExtensions",
+                        "ProjectWebParts"
+                    ]
+                }
+            },
+            "required": [
+                "solutions"
+            ]
+        }
+    },
+    "required": [
+        "name",
+        "spfx"
+    ]
+}

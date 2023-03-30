@@ -100,4 +100,3 @@ I tillegg flere fra teamet bak [prosjektportalen@puzzlepart.com](mailto:prosjekt
 ## ➤ Utvikling
 
 Vennligst les [Utviklingsguiden](./.development-guide/README.md).
-

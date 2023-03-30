@@ -39,7 +39,7 @@ Param(
     [string]$Language = "Norwegian",
     [Parameter(Mandatory = $false, HelpMessage = "Used by Continuous Integration")]
     [string]$CI,
-    [Parameter(Mandatory = $false, HelpMessage = "Do you want to include B&A content (only when upgrading)")]
+    [Parameter(Mandatory = $false, HelpMessage = "Do you want to include Bygg & Anlegg content (only when upgrading)")]
     [switch]$IncludeBAContent
 )
 
@@ -57,6 +57,7 @@ $LanguageCodes = @{
     "English (US)" = 'en-US';
 }
 
+$Channel = "{CHANNEL_PLACEHOLDER}"
 $LanguageId = $LanguageIds[$Language]
 $LanguageCode = $LanguageCodes[$Language]
 #endregion
@@ -70,11 +71,17 @@ $InstallStartTime = (Get-Date -Format o)
 if ($Upgrade.IsPresent) {
     Write-Host "########################################################" -ForegroundColor Cyan
     Write-Host "### Upgrading Prosjektportalen 365 v{VERSION_PLACEHOLDER} #####" -ForegroundColor Cyan
+    if($Channel -ne "main") {
+        Write-Host "### Channel: $Channel ####" -ForegroundColor Cyan
+    }
     Write-Host "########################################################" -ForegroundColor Cyan
 }
 else {
     Write-Host "########################################################" -ForegroundColor Cyan
     Write-Host "### Installing Prosjektportalen 365 v{VERSION_PLACEHOLDER} ####" -ForegroundColor Cyan
+    if($Channel -ne "main") {
+        Write-Host "### Channel: $Channel ####" -ForegroundColor Cyan
+    }
     Write-Host "########################################################" -ForegroundColor Cyan
 }
 
@@ -204,7 +211,8 @@ if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -o
 }
 #endregion
 
-Set-PnPTraceLog -On -Level Debug -LogFile "Install_Log_$([datetime]::Now.Ticks).txt"
+$LogFilePath = "$PSScriptRoot\Install_Log_$([datetime]::Now.Ticks).txt"
+Set-PnPTraceLog -On -Level Debug -LogFile $LogFilePath
 
 #region Create site
 if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
@@ -266,6 +274,11 @@ if (-not $Upgrade.IsPresent) {
 $SiteDesignName = [Uri]::UnescapeDataString($SiteDesignName)
 $SiteDesignDesc = [Uri]::UnescapeDataString("Samarbeid i et prosjektomr%C3%A5de fra Prosjektportalen")
 
+# Add channel to name for the site design if channel is specified and not main
+if($Channel -ne "main") {
+    $SiteDesignName += " - $Channel"
+}
+
 if (-not $SkipSiteDesign.IsPresent) {
     $SiteScriptIds = @()
 
@@ -276,6 +289,10 @@ if (-not $SkipSiteDesign.IsPresent) {
         $SiteScriptSrc = Get-ChildItem "$PSScriptRoot/SiteScripts/*.txt"
         foreach ($s in $SiteScriptSrc) {
             $Title = $s.BaseName.Substring(9)
+            # Add channel to name for the site script if channel is specified and not main
+            if($Channel -ne "main") {
+                $Title += " - $Channel"
+            }
             $Content = (Get-Content -Path $s.FullName -Raw | Out-String)
             $SiteScript = $SiteScripts | Where-Object { $_.Title -eq $Title }
             if ($null -ne $SiteScript) {
@@ -486,11 +503,9 @@ if (-not $SkipSearchConfiguration.IsPresent) {
 }
 #endregion
 
-
-Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
-
 #region Post install - running post-install scripts and applying PnP templates
 Write-Host "[INFO] Running post-install steps" 
+Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
 try {
     ."$PSScriptRoot\Scripts\PostInstall.ps1"
     Write-Host "[SUCCESS] Successfully ran post-install steps" -ForegroundColor Green
@@ -543,9 +558,17 @@ if ($null -ne $CurrentUser.Email) {
 if (-not [string]::IsNullOrEmpty($CI)) {
     $InstallEntry.InstallCommand = "GitHub CI";
 }
+if($Channel -ne "main") {
+    $InstallEntry.InstallChannel = $Channel
+}
 
 ## Logging installation to SharePoint list
-Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -ErrorAction SilentlyContinue >$null 2>&1
+$InstallationEntry = Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -ErrorAction SilentlyContinue
+
+## Attempting to attach the log file to installation entry
+if ($null -ne $InstallationEntry) {
+    Add-PnPListItemAttachment -List "Installasjonslogg" -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction SilentlyContinue >$null 2>&1 
+}
 
 Disconnect-PnPOnline
 

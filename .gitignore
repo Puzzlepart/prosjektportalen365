@@ -3,8 +3,6 @@ Install/InstallLog.txt
 Install/Scripts/UpgradeSites_Log*
 release/*
 SharePointFramework/**/.vscode/launch.json
-SharePointFramework/**/pnpm-lock.yaml
-SharePointFramework/**/shrinkwrap.yaml
 SharePointFramework/**/config/serve.json
 SharePointFramework/**/config/__config__temp.json
 SharePointFramework/**/.env
@@ -14,3 +12,10 @@ Templates/*.txt
 Templates/Resources.json
 .DS_Store
 node_modules
+SharePointFramework/**/src/**/manifest.json.bak
+SharePointFramework/**/config/package-solution.json.bak
+SharePointFramework/**/config/.generated-solution-config.json
+.current-channel-config.json
+.channel-replace-map.json
+.dist
+Templates/*.ps1

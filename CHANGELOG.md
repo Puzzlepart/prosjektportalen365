@@ -3,6 +3,16 @@ og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detaljert 'endringslogg' for siste versjon.
 
+## 1.9.0 - TBA
+
+- Støtte for å installere til ulike kanaler for å støtte separate installasjoner i samme tenant [#1068](https://github.com/Puzzlepart/prosjektportalen365/issues/1068)
+
+### Ny funksjonalitet
+
+### Forbedringer
+
+### Feilrettinger
+
 ## 1.8.1 - TBA
 
 ### Ny funksjonalitet

@@ -28,12 +28,17 @@
 * [➤ Building a new release](#-building-a-new-release)
 * [➤ Building only PnP templates](#-building-only-pnp-templates)
 * [➤ Continuous integration](#-continuous-integration)
+	* [CI (releases/*)](#ci-releases)
 	* [Build and install (dev)](#build-and-install-dev)
+	* [CI (channels/test)](#ci-channelstest)
 	* [Build release (main)](#build-release-main)
 * [➤ Creating a new release](#-creating-a-new-release)
 	* [Patch-release](#patch-release)
 	* [Minor-release](#minor-release)
 * [➤ Versioning](#-versioning)
+* [➤ Installation channels](#-installation-channels)
+	* [Generating a new channel configuration](#generating-a-new-channel-configuration)
+	* [Building a new release for a channel](#building-a-new-release-for-a-channel)
 * [➤ README generation](#-readme-generation)
 </details>
 
@@ -93,6 +98,8 @@ Say you'd like to use the term set with ID **54da9f47-c64e-4a26-80f3-4d3c3fa1b7b
   }
 }
 ```
+
+
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#templates)
@@ -161,6 +168,7 @@ Content templates are found in the **Content** folder. The name of the template 
 The templates contains the JSON template(s), planner tasks and phase checklist items.
 
 
+
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#npm)
 
 ## ➤ NPM
@@ -173,6 +181,7 @@ The SharePoint Framework solutions are published to `npm` independently.
 - [PortfolioWebParts](https://www.npmjs.com/package/pp365-portfoliowebparts)
 - [ProgramWebParts](https://www.npmjs.com/package/pp365-programwebparts)
 - [PortfolioExtensions](https://www.npmjs.com/package/pp365-portfolioextensions)
+
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#building-a-new-release)
@@ -190,6 +199,7 @@ Run the PowerShell script `Build-Release.ps1` located in the `Install` directory
 The installation package should be found in the release folder.
 
 
+
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#building-only-pnp-templates)
 
 ## ➤ Building only PnP templates
@@ -205,13 +215,15 @@ Run the PowerShell script `Build-Release.ps1` located in the `Install` directory
 The PnP templates should be found in the release folder.
 
 
+
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#continuous-integration)
 
 ## ➤ Continuous integration
 
 We have set up continuous integration using GitHub actions.
 
-[![CI (dev)](https://github.com/Puzzlepart/prosjektportalen365/actions/workflows/ci-dev.yml/badge.svg?branch=dev)](https://github.com/Puzzlepart/prosjektportalen365/actions/workflows/ci-dev.yml)
+### CI (releases/*)
+[![CI (releases)](https://github.com/Puzzlepart/prosjektportalen365/actions/workflows/ci-releases.yml/badge.svg?branch=releases/1.9)](https://github.com/Puzzlepart/prosjektportalen365/actions/workflows/ci-releases.yml)
 
 Keywords can be used in the commit message to avoid (or force) the CI running some of the jobs.
 
@@ -230,9 +242,15 @@ With the current approach, with no cache (as it runs `npm ci`), a full run takes
 
 ![image-20201121133532960](assets/image-20201121133532960.png)
 
+### CI (channels/test)
+Keyword `[channels/test]` needs to be used in the commit message for this CI to run.
+
+It will build a package for channel [test](../channels/test.json) and deploy it to the URL specified in `SP_URL_TEST`.
+
 ### Build release (main)
 
 [build-release](../.github/workflows/build-release.yml) builds a new release package on **push** to **main**.
+
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#creating-a-new-release)
@@ -257,6 +275,7 @@ git push --tags
 ```
 
 Then create a Pull Request to merge `dev` into `main`. The output from GitHub Actions will include a release package that can be shared as a release on GitHub. No manual build required.
+
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#versioning)
@@ -286,6 +305,37 @@ npm install; npm run build; npm publish --tag temp;
 ```
 
 N.B.: To be able to publish you must sign in with an account that has access to the packages at [npmjs](https://www.npmjs.com)
+
+
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#installation-channels)
+
+## ➤ Installation channels
+
+To support installing several instances of _Prosjektportalen 365_ in a tenant, we support **installation channels**.
+
+### Generating a new channel configuration
+To generate a new channel configuration, use the `npm` script `generate-channel-config`.
+
+To generate a new channel configuration for `test`:
+
+```javascript
+npm run-script generate-channel-config test
+```
+
+To update an existing channel configuration, add the flag `/update`:
+
+```javascript
+npm run-script generate-channel-config test /update
+```
+
+### Building a new release for a channel
+To build a new release for a channel, add the `-Channel` flag when running the release-script.
+
+**Example (buiding for test channel):**
+```powershell
+Install/Build-Release.ps1 -Channel test
+```
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#readme-generation)

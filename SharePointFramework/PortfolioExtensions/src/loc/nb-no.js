@@ -29,4 +29,4 @@ define([], function () {
     SubmitLabel: 'Send',
     CreateLabel: 'Opprett'
   }
-});
+})

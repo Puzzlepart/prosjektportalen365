@@ -535,7 +535,7 @@
                             "Factor": 8,
                             "Controls": [
                                 {
-                                    "Id": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
+                                    "Id": "{{ControlId_ProjectPhasesWebPart}}",
                                     "Properties": {
                                         "phaseField": "Fase",
                                         "syncPropertiesAfterPhaseChange": true,
@@ -566,7 +566,7 @@
                             "Factor": 4,
                             "Controls": [
                                 {
-                                    "Id": "b8bec0be-2354-443d-a3ca-24b36e8ea7dc",
+                                    "Id": "{{ControlId_ProjectInformationWebPart}}",
                                     "Properties": {
                                         "title": "Prosjektinformasjon",
                                         "statusReportsCount": 0,
@@ -641,7 +641,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
+                                    "Id": "{{ControlId_PortfolioAggregationWebPart}}",
                                     "Properties": {
                                         "title": "Gevinstoversikt",
                                         "dataSource": "Gevinstoversikt (Prosjektnivå)",
@@ -763,7 +763,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
+                                    "Id": "{{ControlId_ProjectStatusWebPart}}",
                                     "Properties": {
                                         "title": "Prosjektstatus",
                                         "riskMatrix": {
@@ -794,7 +794,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "d156652b-9121-47af-89ae-1fe8427c53da",
+                                    "Id": "{{ControlId_ProjectTimelineWebPart}}",
                                     "Properties": {
                                         "listName": "Tidslinjeinnhold",
                                         "showTimeline": true,
