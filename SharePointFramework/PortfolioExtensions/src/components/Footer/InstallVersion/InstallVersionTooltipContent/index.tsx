@@ -1,7 +1,7 @@
 import { format, Link } from '@fluentui/react'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useContext } from 'react'
-import { FooterContext } from '../context'
+import { FooterContext } from '../../context'
 import styles from './InstallVersionTooltipContent.module.scss'
 import { LatestGitHubRelease } from './LatestGitHubRelease'
 

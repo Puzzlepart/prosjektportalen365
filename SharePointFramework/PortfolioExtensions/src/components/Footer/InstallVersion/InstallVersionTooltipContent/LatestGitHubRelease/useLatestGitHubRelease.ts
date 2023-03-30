@@ -1,7 +1,7 @@
 import { Version } from '@microsoft/sp-core-library'
 import strings from 'PortfolioExtensionsStrings'
 import { useContext } from 'react'
-import { FooterContext } from '../../context'
+import { FooterContext } from '../../../context'
 import { ILatestGitHubReleaseProps } from './types'
 
 /**
