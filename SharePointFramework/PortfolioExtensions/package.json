@@ -22,7 +22,7 @@
     "publish:temp": "npm install && npm run build && npm publish --tag temp"
   },
   "dependencies": {
-    "@fluentui/react": "8.98.1",
+    "@fluentui/react": "8.96.0",
     "@microsoft/decorators": "1.15.2",
     "@microsoft/sp-core-library": "1.15.2",
     "@microsoft/sp-dialog": "1.15.2",
@@ -61,7 +61,6 @@
     "livereload": "0.9.3",
     "prettier": "2.7.1",
     "typescript": "4.5.5",
-    "webpack": "5.74.0",
-    "yargs": "17.7.1"
+    "webpack": "5.74.0"
   }
 }
