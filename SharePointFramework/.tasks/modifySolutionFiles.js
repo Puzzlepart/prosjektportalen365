@@ -15,7 +15,7 @@ const revert = argv.revert;
 const configFolder = path.join(process.cwd(), `config`);
 
 // Generated solution config file path
-const solutionConfigFile = path.join(configFolder, `generated-solution-config.json`);
+const solutionConfigFile = path.join(configFolder, `.generated-solution-config.json`);
 
 /**
  * Get file content for the given file path in JSON format

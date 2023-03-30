@@ -14,7 +14,7 @@ Templates/Resources.json
 node_modules
 SharePointFramework/**/src/**/manifest.json.bak
 SharePointFramework/**/config/package-solution.json.bak
-SharePointFramework/**/config/generated-solution-config.json
+SharePointFramework/**/config/.generated-solution-config.json
 .current-channel-config.json
 .channel-replace-map.json
 .dist
