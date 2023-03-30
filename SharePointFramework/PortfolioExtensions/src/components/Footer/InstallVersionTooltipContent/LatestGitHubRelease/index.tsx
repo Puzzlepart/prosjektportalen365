@@ -1,6 +1,7 @@
 import { ActionButton, Icon, Link } from '@fluentui/react'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC } from 'react'
+import { ILatestGitHubReleaseProps } from './types'
 import styles from './LatestGitHubRelease.module.scss'
 import { useLatestGitHubRelease } from './useLatestGitHubRelease'
 
@@ -8,15 +9,15 @@ import { useLatestGitHubRelease } from './useLatestGitHubRelease'
  * Component for displaying the latest GitHub release and a
  * comparison between the latest GitHub release and the installed version.
  */
-export const LatestGitHubRelease: FC = () => {
+export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
   const { latestGitHubRelease, latestGitHubVersion, installedVersion, versionComparisonIconProps } =
-    useLatestGitHubRelease()
+    useLatestGitHubRelease(props)
 
   return (
     <div className={styles.root}>
       <div>
         <span className={styles.label}>{strings.LatestGitHubReleaseLabel}</span>
-        <span className={styles.latestGitHubReleaseLink}>
+        <span className={styles.latestGitHubReleaseLink} title={strings.LatestGitHubReleaseLinkTitle}>
           <Link href={latestGitHubRelease.html_url} target='_blank' rel='noopener noreferrer'>
             {latestGitHubVersion.toString()}
           </Link>
@@ -37,4 +38,13 @@ export const LatestGitHubRelease: FC = () => {
       </div>
     </div>
   )
+}
+
+LatestGitHubRelease.defaultProps = {
+  latestGitHubReleaseIsNewerIconName: 'ChevronUp',
+  latestGitHubReleaseIsNewerIconColor: 'green',
+  latestGitHubReleaseIsOlderIconName: 'ChevronDown',
+  latestGitHubReleaseIsOlderIconColor: 'red',
+  latestGitHubReleaseIsSameIconName: 'ChevronRight',
+  latestGitHubReleaseIsSameIconColor: 'black'
 }

@@ -2,12 +2,20 @@ import { Version } from '@microsoft/sp-core-library'
 import strings from 'PortfolioExtensionsStrings'
 import { useContext } from 'react'
 import { FooterContext } from '../../context'
+import { ILatestGitHubReleaseProps } from './types'
 
-export function useLatestGitHubRelease() {
-  const { props } = useContext(FooterContext)
-  const latestGitHubRelease = props.gitHubReleases[0]
+/**
+ * Component logic hook for the `LatestGitHubRelease` component. 
+ * Returns the latest GitHub release, latest GitHub version, installed 
+ * version and version comparison icon props.
+ * 
+ * @param props Props for the `LatestGitHubRelease` component
+ */
+export function useLatestGitHubRelease(props: ILatestGitHubReleaseProps) {
+  const context = useContext(FooterContext)
+  const latestGitHubRelease = context.props.gitHubReleases[0]
   const latestGitHubVersion = Version.parse(latestGitHubRelease.tag_name.substring(1))
-  const installedVersion = props.installEntries[0].installVersion
+  const installedVersion = context.props.installEntries[0].installVersion
 
   /**
    * Get icon props based on the comparison between the latest GitHub version and the installed version.
@@ -17,35 +25,36 @@ export function useLatestGitHubRelease() {
   const getVersionComparisonIconProps = () => {
     if (latestGitHubVersion.greaterThan(installedVersion)) {
       return {
-        iconName: 'ChevronUp',
+        iconName: props.latestGitHubReleaseIsNewerIconName,
         styles: {
           root: {
-            color: 'green'
+            color: props.latestGitHubReleaseIsNewerIconColor
           }
         },
         title: strings.LatestGitHubReleaseIsNewerText
       }
     } else if (latestGitHubVersion.lessThan(installedVersion)) {
       return {
-        iconName: 'ChevronDown',
+        iconName: props.latestGitHubReleaseIsOlderIconName,
         styles: {
           root: {
-            color: 'red'
+            color: props.latestGitHubReleaseIsOlderIconColor
           }
         },
         title: strings.LatestGitHubReleaseIsOlderText
       }
     }
     return {
-      iconName: 'CircleRing',
+      iconName: props.latestGitHubReleaseIsSameIconName,
       styles: {
         root: {
-          color: 'orange'
+          color: props.latestGitHubReleaseIsSameIconColor
         }
       },
       title: strings.LatestGitHubReleaseIsSameText
     }
   }
+
   return {
     latestGitHubRelease,
     latestGitHubVersion,

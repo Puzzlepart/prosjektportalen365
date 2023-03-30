@@ -43,6 +43,7 @@ define([], function () {
     LatestGitHubReleaseIsNewerText: 'En nyere versjon er tilgjengelig på GitHub',
     LatestGitHubReleaseIsOlderText: 'Versjonen som er installert er nyere enn den siste release fra GitHub',
     LatestGitHubReleaseIsSameText: 'Versjonen som er installert er den siste release fra GitHub',
-    LatestGitHubReleaseDownloadButtonText: 'Last ned siste release fra GitHub'
+    LatestGitHubReleaseDownloadButtonText: 'Last ned siste release fra GitHub',
+    LatestGitHubReleaseLinkTitle: 'Se siste release på GitHub'
   }
 })

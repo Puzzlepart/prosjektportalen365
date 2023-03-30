@@ -5,6 +5,10 @@ import { FooterContext } from '../context'
 import styles from './InstallVersionTooltipContent.module.scss'
 import { LatestGitHubRelease } from './LatestGitHubRelease'
 
+/**
+ * Component for displaying information about the latest installation
+ * of Prosjektportalen 365.
+ */
 export const InstallVersionTooltipContent: FC = () => {
   const { latestEntry, props } = useContext(FooterContext)
   const dateTimeFormatOptions: Intl.DateTimeFormatOptions = {

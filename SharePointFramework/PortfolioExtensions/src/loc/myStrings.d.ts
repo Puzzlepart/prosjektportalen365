@@ -1,4 +1,5 @@
 declare interface IPortfolioExtensionsStrings {
+  LatestGitHubReleaseLinkTitle: string
   LatestGitHubReleaseDownloadButtonText: string
   LatestGitHubReleaseIsNewerText: any
   LatestGitHubReleaseIsOlderText: any
