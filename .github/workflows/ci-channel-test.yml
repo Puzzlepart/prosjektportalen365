@@ -38,9 +38,9 @@ jobs:
           name: release-package-test
           path: release
 
-  install_test:
+  upgrade_channel_test:
     needs: [build_release_package_test]
-    name: Install (test)
+    name: Upgrade (test)
     runs-on: macos-latest
     steps:
       - uses: actions/download-artifact@v3
@@ -48,6 +48,6 @@ jobs:
           name: release-package-test
           path: release
 
-      - name: Install
-        run: release/Install.ps1 -Url "${{ env.SP_URL_TEST }}" -Title "Prosjektportalen 365 (test)" -CI ${{ env.CI_CREDENTIALS }} -SkipTaxonomy -SkipSearchConfiguration
+      - name: Upgrade
+        run: release/Install.ps1 -Url "${{ env.SP_URL_TEST }}" -Upgrade -CI ${{ env.CI_CREDENTIALS }}
         shell: powershell
