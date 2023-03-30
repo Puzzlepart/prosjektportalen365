@@ -8,9 +8,9 @@ import { IFooterProps } from './types'
 import { useFooter } from './useFooter'
 
 export const Footer: FC<IFooterProps> = (props) => {
-  const { latestEntry, installedVersion } = useFooter(props)
+  const footer = useFooter(props)
   return (
-    <FooterContext.Provider value={{ latestEntry, props }}>
+    <FooterContext.Provider value={{ ...footer, props }}>
       <div className={styles.root}>
         <div className={styles.content}>
           <section className={styles.left}>
@@ -28,7 +28,7 @@ export const Footer: FC<IFooterProps> = (props) => {
               hidden={false}
               content={<InstallVersionTooltipContent />}
             >
-              {installedVersion}
+              {footer.installedVersion}
             </TooltipHost>
           </section>
         </div>

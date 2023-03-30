@@ -11,19 +11,22 @@ import { Footer, IFooterProps } from 'components/Footer'
 import strings from 'PortfolioExtensionsStrings'
 import { createElement } from 'react'
 import { render } from 'react-dom'
-import { IFooterApplicationCustomizerProperties, InstallationEntry } from './types'
+import { IFooterApplicationCustomizerProperties, IGitHubRelease, InstallationEntry } from './types'
 
 export default class FooterApplicationCustomizer extends BaseApplicationCustomizer<IFooterApplicationCustomizerProperties> {
   private _bottomPlaceholder: PlaceholderContent
   private _sp: SPFI
   private _installEntries: InstallationEntry[]
+  private _gitHubReleases: IGitHubRelease[]
 
   public async onInit(): Promise<void> {
     await super.onInit()
     this._sp = spfi().using(SPFx(this.context))
     this._installEntries = await this._fetchInstallationLogs()
+    this._gitHubReleases = await this._fetchGitHubReleases()
     this._renderFooter(PlaceholderName.Bottom, {
       installEntries: this._installEntries,
+      gitHubReleases: this._gitHubReleases,
       pageContext: this.context.pageContext
     })
   }
@@ -39,6 +42,17 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     const installationLogList = this._sp.web.lists.getByTitle(strings.InstallationLogListName)
     const installationLogItems = await installationLogList.items.orderBy(orderBy, orderAscending)()
     return installationLogItems.map((item) => new InstallationEntry(item))
+  }
+
+  /**
+   * Fetch the latest GitHub releases from the `puzzlepart/prosjektportalen365` repository.
+   *
+   * @param repoName Repository name in the format `owner/repo`
+   */
+  private async _fetchGitHubReleases(repoName = 'puzzlepart/prosjektportalen365') {
+    const response = await fetch(`https://api.github.com/repos/${repoName}/releases`)
+    const releases = await response.json()
+    return releases
   }
 
   /**

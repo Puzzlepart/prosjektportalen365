@@ -1,8 +1,9 @@
+import { format, Link } from '@fluentui/react'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useContext } from 'react'
-import styles from './InstallVersionTooltipContent.module.scss'
-import { Link, format } from '@fluentui/react'
 import { FooterContext } from '../context'
+import styles from './InstallVersionTooltipContent.module.scss'
+import { LatestGitHubRelease } from './LatestGitHubRelease'
 
 export const InstallVersionTooltipContent: FC = () => {
   const { latestEntry, props } = useContext(FooterContext)
@@ -30,7 +31,7 @@ export const InstallVersionTooltipContent: FC = () => {
         {format(strings.InstallDurationValueTemplate, latestEntry.installDuration)}
       </div>
       <div>
-        <b>{strings.InstallVersionLabel}</b>: {latestEntry.installVersion}
+        <b>{strings.InstallVersionLabel}</b>: {latestEntry.fullInstallVersion}
       </div>
       <div>
         <b>{strings.InstallCommandLabel}</b>: {latestEntry.installCommand}
@@ -40,14 +41,17 @@ export const InstallVersionTooltipContent: FC = () => {
           <b>{strings.InstallChannelLabel}</b>: {latestEntry.installChannel}
         </div>
       )}
-      <div className={styles.seeAllInstallationsLink}>
-        <Link
-          href={`${props.pageContext.web.absoluteUrl}/Lists/Installasjonslogg/AllItems.aspx`}
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          {strings.SeeAllInstallationsLinkText}
-        </Link>
+      <div className={styles.footer}>
+        <div className={styles.seeAllInstallationsLink}>
+          <Link
+            href={`${props.pageContext.web.absoluteUrl}/Lists/Installasjonslogg/AllItems.aspx`}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            {strings.SeeAllInstallationsLinkText}
+          </Link>
+        </div>
+        <LatestGitHubRelease />
       </div>
     </div>
   )
