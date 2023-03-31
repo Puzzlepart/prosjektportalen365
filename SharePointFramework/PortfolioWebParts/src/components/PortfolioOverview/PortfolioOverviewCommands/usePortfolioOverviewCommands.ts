@@ -1,19 +1,17 @@
 import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
-import { isArray } from '@pnp/common'
 import * as strings from 'PortfolioWebPartsStrings'
-import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
 import { redirect } from 'pp365-shared/lib/util'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { IFilterProps } from '../../FilterPanel'
-import { IPortfolioOverviewCommandsProps, IPortfolioOverviewCommandsState } from './types'
+import { PortfolioOverviewContext } from '../context'
+import { IPortfolioOverviewCommandsState } from './types'
 
 /**
  * Component logic hook for the PortfolioOverviewCommands component. Handles the logic for
  * the command bar and the filter panel.
- *
- * @param props Props for the PortfolioOverviewCommands component
  */
-export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsProps) {
+export function usePortfolioOverviewCommands() {
+  const context = useContext(PortfolioOverviewContext)
   const [state, setState] = useState<IPortfolioOverviewCommandsState>({ showFilterPanel: false })
 
   const items: IContextualMenuItem[] = [
@@ -25,7 +23,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
         styles: { root: { color: 'green !important' } }
       },
       buttonStyles: { root: { border: 'none' } },
-      data: { isVisible: props.showExcelExportButton },
+      data: { isVisible: context.props.showExcelExportButton },
       disabled: state.isExporting,
       onClick: () => {
         exportToExcel()
@@ -40,17 +38,17 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       iconProps: { iconName: 'CirclePlus' },
       buttonStyles: { root: { border: 'none' } },
       data: {
-        isVisible: props.configuration.userCanAddViews && props.showViewSelector
+        isVisible: context.props.configuration.userCanAddViews && context.props.showViewSelector
       },
-      onClick: () => redirect(props.configuration.viewsUrls.defaultNewFormUrl)
+      onClick: () => redirect(context.props.configuration.viewsUrls.defaultNewFormUrl)
     } as IContextualMenuItem,
     {
       key: 'VIEW_OPTIONS',
-      name: props.currentView?.title,
+      name: context.state.currentView?.title,
       iconProps: { iconName: 'List' },
       buttonStyles: { root: { border: 'none' } },
       itemType: ContextualMenuItemType.Header,
-      data: { isVisible: props.showViewSelector },
+      data: { isVisible: context.props.showViewSelector },
       subMenuProps: {
         items: [
           {
@@ -58,30 +56,34 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
             name: 'Liste',
             iconProps: { iconName: 'List' },
             canCheck: true,
-            checked: !props.isCompact,
-            onClick: () => props.events.onSetCompact(false)
+            checked: !context.state.isCompact,
+            onClick: () => {
+              // TODO: handle `context.props.events.onSetCompact(false)`
+            }
           },
           {
             key: 'VIEW_COMPACT',
             name: 'Kompakt liste',
             iconProps: { iconName: 'AlignLeft' },
             canCheck: true,
-            checked: props.isCompact,
-            onClick: () => props.events.onSetCompact(true)
+            checked: context.state.isCompact,
+            onClick: () => {
+              // TODO: handle `context.props.events.onSetCompact(true)`
+            }
           },
           {
             key: 'DIVIDER_01',
             itemType: ContextualMenuItemType.Divider
           },
-          ...props.configuration.views.map(
+          ...context.props.configuration.views.map(
             (view) =>
               ({
                 key: view.id.toString(),
                 name: view.title,
                 iconProps: { iconName: view.iconName },
                 canCheck: true,
-                checked: view.id === props.currentView?.id,
-                onClick: () => props.events.onChangeView(view)
+                checked: view.id === context.state.currentView?.id,
+                // onClick: () => context.props.events.onChangeView(view)
               } as IContextualMenuItem)
           ),
           {
@@ -98,7 +100,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
             name: strings.EditViewText,
             onClick: () =>
               redirect(
-                `${props.configuration.viewsUrls.defaultEditFormUrl}?ID=${props.currentView?.id}`
+                `${context.props.configuration.viewsUrls.defaultEditFormUrl}?ID=${context.state.currentView?.id}`
               )
           }
         ]
@@ -112,7 +114,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       itemType: ContextualMenuItemType.Normal,
       canCheck: true,
       checked: state.showFilterPanel,
-      data: { isVisible: props.showFilters },
+      data: { isVisible: context.props.showFilters },
       onClick: (ev) => {
         ev.preventDefault()
         ev.stopPropagation()
@@ -129,14 +131,14 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
         name: strings.SelectedColumnsLabel,
         minWidth: 0
       },
-      items: props.configuration.columns.map((col) => ({
+      items: context.props.configuration.columns.map((col) => ({
         name: col.name,
         value: col.fieldName,
-        selected: props.fltColumns.indexOf(col) !== -1
+        // selected: context.props.fltColumns.indexOf(col) !== -1
       })),
       defaultCollapsed: true
     },
-    ...props.filters
+    // ...context.props.filters
   ]
 
   /**
@@ -144,25 +146,25 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
    * error handling.
    */
   async function exportToExcel(): Promise<void> {
-    setState({ ...state, isExporting: true })
-    try {
-      const { fltItems, fltColumns, selectedItems } = props
+    // setState({ ...state, isExporting: true })
+    // try {
+    //   const { fltItems, fltColumns, selectedItems } = props
 
-      const items = isArray(selectedItems) && selectedItems.length > 0 ? selectedItems : fltItems
+    //   const items = isArray(selectedItems) && selectedItems.length > 0 ? selectedItems : fltItems
 
-      fltColumns.forEach((col) => {
-        if (col.dataType === 'date') {
-          items.map((item) => {
-            item[col.fieldName] = new Date(item[col.fieldName])
-          })
-        }
-      })
+    //   fltColumns.forEach((col) => {
+    //     if (col.dataType === 'date') {
+    //       items.map((item) => {
+    //         item[col.fieldName] = new Date(item[col.fieldName])
+    //       })
+    //     }
+    //   })
 
-      await ExcelExportService.export(items, fltColumns)
-      setState({ ...state, isExporting: false })
-    } catch (error) {
-      setState({ ...state, isExporting: false })
-    }
+    //   await ExcelExportService.export(items, fltColumns)
+    //   setState({ ...state, isExporting: false })
+    // } catch (error) {
+    //   setState({ ...state, isExporting: false })
+    // }
   }
 
   return { items, farItems, filters, exportToExcel, state, setState } as const

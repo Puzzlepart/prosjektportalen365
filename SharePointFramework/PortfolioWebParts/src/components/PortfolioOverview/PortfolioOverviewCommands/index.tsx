@@ -1,23 +1,26 @@
 import { CommandBar } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import React from 'react'
+import React, { useContext } from 'react'
 import { FilterPanel } from '../../FilterPanel'
-import { IPortfolioOverviewCommandsProps } from './types'
+import { PortfolioOverviewContext } from '../context'
 import { usePortfolioOverviewCommands } from './usePortfolioOverviewCommands'
 
-export const PortfolioOverviewCommands: React.FC<IPortfolioOverviewCommandsProps> = (props) => {
-  const { items, farItems, filters, state, setState } = usePortfolioOverviewCommands(props)
+export const PortfolioOverviewCommands: React.FC = () => {
+  const { props, layerHostId } = useContext(PortfolioOverviewContext)
+  const { items, farItems, filters, state, setState } = usePortfolioOverviewCommands()
   return (
-    <div className={props.className} hidden={props.hidden}>
+    <div hidden={!props.showCommandBar}>
       <CommandBar items={items} farItems={farItems} />
       <FilterPanel
         isOpen={state.showFilterPanel}
-        layerHostId={props.layerHostId}
+        layerHostId={layerHostId}
         headerText={strings.FiltersString}
         onDismiss={() => setState({ showFilterPanel: false })}
         isLightDismiss={true}
         filters={filters}
-        onFilterChange={props.events.onFilterChange}
+        onFilterChange={() => {
+          // TODO: handle filter change
+        }}
       />
     </div>
   )
