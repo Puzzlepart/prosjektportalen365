@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { PortfolioOverviewContext } from './context'
 import styles from './PortfolioOverview.module.scss'
 import { PortfolioOverviewCommands } from './PortfolioOverviewCommands'
+import { EXECUTE_SEARCH } from './reducer'
 import { renderItemColumn } from './RenderItemColumn'
 import {
     IPortfolioOverviewProps
@@ -17,6 +18,7 @@ import { usePortfolioOverview } from './usePortfolioOverview'
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
     const {
         state,
+        dispatch,
         layerHostId,
         selection,
         onColumnHeaderClick,
@@ -65,7 +67,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
                                         </div>
                                         <div className={styles.searchBox} hidden={!props.showSearchBox}>
                                             <SearchBox
-                                                // onChange={this._onSearch.bind(this)}
+                                                onChange={(_e, newValue) => dispatch(EXECUTE_SEARCH(newValue))}
                                                 placeholder={''}
                                             />
                                         </div>
