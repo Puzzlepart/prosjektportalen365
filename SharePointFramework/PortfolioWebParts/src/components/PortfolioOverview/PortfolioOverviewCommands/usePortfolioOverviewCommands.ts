@@ -1,19 +1,22 @@
 import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
+import _ from 'lodash'
 import * as strings from 'PortfolioWebPartsStrings'
+import { ExcelExportService } from 'pp365-shared/lib/services'
 import { redirect } from 'pp365-shared/lib/util'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { IFilterProps } from '../../FilterPanel'
 import { PortfolioOverviewContext } from '../context'
-import { IPortfolioOverviewCommandsState } from './types'
+import { CHANGE_VIEW, EXCEL_EXPORT_ERROR, EXCEL_EXPORT_SUCCESS, START_EXCEL_EXPORT, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL } from '../reducer'
+import { IPortfolioOverviewCommandsProps } from './types'
 
 /**
  * Component logic hook for the PortfolioOverviewCommands component. Handles the logic for
  * the command bar and the filter panel.
+ * 
+ * @param props Props for the component `<PortfolioOverviewCommands />`
  */
-export function usePortfolioOverviewCommands() {
+export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsProps) {
   const context = useContext(PortfolioOverviewContext)
-  const [state, setState] = useState<IPortfolioOverviewCommandsState>({ showFilterPanel: false })
-
   const items: IContextualMenuItem[] = [
     {
       key: 'EXCEL_EXPORT',
@@ -24,7 +27,7 @@ export function usePortfolioOverviewCommands() {
       },
       buttonStyles: { root: { border: 'none' } },
       data: { isVisible: context.props.showExcelExportButton },
-      disabled: state.isExporting,
+      disabled: context.state.isExporting,
       onClick: () => {
         exportToExcel()
       }
@@ -58,7 +61,7 @@ export function usePortfolioOverviewCommands() {
             canCheck: true,
             checked: !context.state.isCompact,
             onClick: () => {
-              // TODO: handle `context.props.events.onSetCompact(false)`
+              context.dispatch(TOGGLE_COMPACT())
             }
           },
           {
@@ -68,7 +71,7 @@ export function usePortfolioOverviewCommands() {
             canCheck: true,
             checked: context.state.isCompact,
             onClick: () => {
-              // TODO: handle `context.props.events.onSetCompact(true)`
+              context.dispatch(TOGGLE_COMPACT())
             }
           },
           {
@@ -77,14 +80,14 @@ export function usePortfolioOverviewCommands() {
           },
           ...context.props.configuration.views.map(
             (view) =>
-              ({
-                key: view.id.toString(),
-                name: view.title,
-                iconProps: { iconName: view.iconName },
-                canCheck: true,
-                checked: view.id === context.state.currentView?.id,
-                // onClick: () => context.props.events.onChangeView(view)
-              } as IContextualMenuItem)
+            ({
+              key: view.id.toString(),
+              name: view.title,
+              iconProps: { iconName: view.iconName },
+              canCheck: true,
+              checked: view.id === context.state.currentView?.id,
+              onClick: () => context.dispatch(CHANGE_VIEW(view))
+            } as IContextualMenuItem)
           ),
           {
             key: 'DIVIDER_02',
@@ -113,12 +116,12 @@ export function usePortfolioOverviewCommands() {
       buttonStyles: { root: { border: 'none' } },
       itemType: ContextualMenuItemType.Normal,
       canCheck: true,
-      checked: state.showFilterPanel,
+      checked: context.state.showFilterPanel,
       data: { isVisible: context.props.showFilters },
       onClick: (ev) => {
         ev.preventDefault()
         ev.stopPropagation()
-        setState((prevState) => ({ showFilterPanel: !prevState.showFilterPanel }))
+        context.dispatch(TOGGLE_FILTER_PANEL())
       }
     } as IContextualMenuItem
   ].filter((i) => i.data.isVisible)
@@ -134,11 +137,11 @@ export function usePortfolioOverviewCommands() {
       items: context.props.configuration.columns.map((col) => ({
         name: col.name,
         value: col.fieldName,
-        // selected: context.props.fltColumns.indexOf(col) !== -1
+        selected: props.filteredData.columns.indexOf(col) !== -1
       })),
       defaultCollapsed: true
     },
-    // ...context.props.filters
+    ...context.state.filters
   ]
 
   /**
@@ -146,26 +149,28 @@ export function usePortfolioOverviewCommands() {
    * error handling.
    */
   async function exportToExcel(): Promise<void> {
-    // setState({ ...state, isExporting: true })
-    // try {
-    //   const { fltItems, fltColumns, selectedItems } = props
+    context.dispatch(START_EXCEL_EXPORT())
+    try {
+      // If no items are selected, export all items
+      const items = _.isArray(context.state.selectedItems) && context.state.selectedItems.length > 0 ? context.state.selectedItems : props.filteredData.items
 
-    //   const items = isArray(selectedItems) && selectedItems.length > 0 ? selectedItems : fltItems
+      // Convert date columns to Date objects
+      props.filteredData.columns.forEach((col) => {
+        if (col.dataType === 'date') {
+          items.map((item) => {
+            item[col.fieldName] = new Date(item[col.fieldName])
+          })
+        }
+      })
 
-    //   fltColumns.forEach((col) => {
-    //     if (col.dataType === 'date') {
-    //       items.map((item) => {
-    //         item[col.fieldName] = new Date(item[col.fieldName])
-    //       })
-    //     }
-    //   })
-
-    //   await ExcelExportService.export(items, fltColumns)
-    //   setState({ ...state, isExporting: false })
-    // } catch (error) {
-    //   setState({ ...state, isExporting: false })
-    // }
+      // Export to Excel using the `ExcelExportService` from `pp365-shared`
+      await ExcelExportService.export(items, props.filteredData.columns)
+      
+      context.dispatch(EXCEL_EXPORT_SUCCESS())
+    } catch (error) {
+      context.dispatch(EXCEL_EXPORT_ERROR(error))
+    }
   }
 
-  return { items, farItems, filters, exportToExcel, state, setState } as const
+  return { items, farItems, filters } as const
 }
