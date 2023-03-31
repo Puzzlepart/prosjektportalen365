@@ -1,23 +1,32 @@
 import { CommandBar } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import React from 'react'
-import { FilterPanel } from '../../FilterPanel'
+import { ProjectColumn } from 'pp365-shared/lib/models'
+import React, { useContext } from 'react'
+import { FilterPanel, IFilterItemProps } from '../../FilterPanel'
+import { PortfolioOverviewContext } from '../context'
+import { ON_FILTER_CHANGED, TOGGLE_FILTER_PANEL } from '../reducer'
 import { IPortfolioOverviewCommandsProps } from './types'
 import { usePortfolioOverviewCommands } from './usePortfolioOverviewCommands'
 
+/**
+ * Component for displaying the command bar and filter panel.
+ */
 export const PortfolioOverviewCommands: React.FC<IPortfolioOverviewCommandsProps> = (props) => {
-  const { items, farItems, filters, state, setState } = usePortfolioOverviewCommands(props)
+  const context = useContext(PortfolioOverviewContext)
+  const { items, farItems, filters } = usePortfolioOverviewCommands(props)
   return (
-    <div className={props.className} hidden={props.hidden}>
+    <div hidden={!context.props.showCommandBar}>
       <CommandBar items={items} farItems={farItems} />
       <FilterPanel
-        isOpen={state.showFilterPanel}
-        layerHostId={props.layerHostId}
+        isOpen={context.state.showFilterPanel}
+        layerHostId={context.layerHostId}
         headerText={strings.FiltersString}
-        onDismiss={() => setState({ showFilterPanel: false })}
+        onDismiss={() => context.dispatch(TOGGLE_FILTER_PANEL())}
         isLightDismiss={true}
         filters={filters}
-        onFilterChange={props.events.onFilterChange}
+        onFilterChange={(column: ProjectColumn, selectedItems: IFilterItemProps[]) => {
+          context.dispatch(ON_FILTER_CHANGED({ column, selectedItems }))
+        }}
       />
     </div>
   )

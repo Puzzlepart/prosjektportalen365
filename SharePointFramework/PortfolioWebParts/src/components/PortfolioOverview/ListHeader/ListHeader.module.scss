@@ -1,0 +1,23 @@
+.sticky {
+    margin: 0;
+}
+
+.root {
+    .header {
+        padding: 20px 0 20px 0;
+        .title {
+            font-size: 28px;
+            font-weight: 100;
+            margin: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    }
+    .searchBox {
+        position: inherit;
+    }
+    .headerColumns {
+        position: inherit;
+    }
+}

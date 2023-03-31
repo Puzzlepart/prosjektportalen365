@@ -13,22 +13,22 @@ export class PortfolioOverviewErrorMessage extends Error {
 
 export interface IPortfolioOverviewProps extends IBaseComponentProps {
   /**
-   * Configuration (columns and views etc)
+   * Configuration (columns and views etc).
    */
   configuration: IPortfolioConfiguration
 
   /**
-   * List name for column config
+   * SharePoint list name for the column configuration
    */
   columnConfigListName: string
 
   /**
-   * List name for columns
+   * SharePoint list name for the column configuration
    */
   columnsListName: string
 
   /**
-   * List name for views
+   * SharePoint list name for the views configuration
    */
   viewsListName: string
 
@@ -68,17 +68,14 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
   showViewSelector?: boolean
 
   /**
-   * Default view id
+   * Default view ID (the SharePoint item ID)
    */
   defaultViewId?: string
 
   /**
-   * Child project site ids
-   */
-  childSiteIds?: string[]
-
-  /**
-   * isParentProject
+   * Is parent project. Set to `true` if the web part is used in a parent project.
+   * This will fetch the child projects and show them in the list, instead of all
+   * projects in the current hub site.
    */
   isParentProject?: boolean
 }
@@ -105,7 +102,7 @@ export interface IPortfolioOverviewState {
   items?: any[]
 
   /**
-   * Selected items
+   * Selected items in the list
    */
   selectedItems?: any[]
 

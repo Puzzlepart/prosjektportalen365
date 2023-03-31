@@ -1,5 +1,7 @@
 declare interface IPortfolioWebPartsStrings {
-  ColumnRenderDescription: ReactNode
+  PortfolioOverviewDataFetchErrorView: string
+  PortfolioOverviewDataFetchError: string
+  ColumnRenderDescription: string
   DisplayNameDescription: string
   HideViewsLabel: string
   ProjectsAccessSearchBoxPlaceholderText: string
@@ -144,6 +146,7 @@ declare interface IPortfolioWebPartsStrings {
   ParentProjectsSearchBoxPlaceholderText: string
   ProgramSearchBoxPlaceholderText: string
   SearchBoxPlaceholderText: string
+  SearchBoxPlaceholderFallbackText: string
   SearchBoxPlaceholderTextLabel: string
   ShowAllMeasurementsLinkText: string
   RenderAsListText: string
