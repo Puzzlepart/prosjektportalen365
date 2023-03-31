@@ -40,8 +40,14 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
 
     return (
         <div className={styles.root}>
-            <PortfolioOverviewContext.Provider value={{ props, state, layerHostId }}>
-                <PortfolioOverviewCommands />
+            <PortfolioOverviewContext.Provider value={{ props, state,dispatch, layerHostId }}>
+                <PortfolioOverviewCommands
+                    filteredData={{
+                        items,
+                        columns,
+                        groups
+                    }}
+                />
                 <div className={styles.container}>
                     <ScrollablePane
                         scrollbarVisibility={ScrollbarVisibility.auto}
@@ -49,6 +55,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
                         <MarqueeSelection selection={selection} className={styles.listContainer}>
                             <ShimmeredDetailsList
                                 enableShimmer={state.loading || !!state.isChangingView}
+                                isPlaceholderData={state.loading || !!state.isChangingView}
                                 items={items}
                                 constrainMode={ConstrainMode.unconstrained}
                                 layoutMode={DetailsListLayoutMode.fixedColumns}

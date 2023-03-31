@@ -379,40 +379,7 @@
 //       } as IContextualMenuProps
 //     })
 //   }
-//   /**
-//    * Create groups
-//    *
-//    * @param items Items
-//    * @param columns Columns
-//    */
-//   private _createGroups(items: any[], columns: ProjectColumn[]) {
-//     const { groupBy, sortBy } = { ...this.state } as IPortfolioOverviewState
-//     if (!groupBy) return { items, columns, groups: null }
-//     const itemsSort = { props: [groupBy.fieldName], opts: { reverse: false } }
-//     if (sortBy) {
-//       itemsSort.props.push(sortBy.fieldName)
-//       itemsSort.opts.reverse = !sortBy.isSortedDescending
-//     }
-//     items = sortArray([...items], itemsSort.props, itemsSort.opts)
-//     const groupNames: string[] = items.map((g) => get<string>(g, groupBy.fieldName, strings.NotSet))
-//     const uniqueGroupNames: string[] = _.uniq(groupNames)
-//     const groups = uniqueGroupNames
-//       .sort((a, b) => (a > b ? 1 : -1))
-//       .map((name, idx) => {
-//         const count = groupNames.filter((n) => n === name).length
-//         const group: IGroup = {
-//           key: `Group_${idx}`,
-//           name: `${groupBy.name}: ${name}`,
-//           startIndex: groupNames.indexOf(name, 0),
-//           count,
-//           isShowingAll: count === items.length,
-//           isDropEnabled: false,
-//           isCollapsed: false
-//         }
-//         return group
-//       })
-//     return { items, columns, groups }
-//   }
+
 
 //   /**
 //    * Get filtered data
