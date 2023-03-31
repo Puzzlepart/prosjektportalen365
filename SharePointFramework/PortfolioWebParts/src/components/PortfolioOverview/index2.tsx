@@ -305,62 +305,7 @@
 //     column?: ProjectColumn,
 //     ev?: React.MouseEvent<HTMLElement, MouseEvent>
 //   ) {
-//     if (column.key === 'AddColumn') return
-//     this.setState({
-//       columnContextMenu: {
-//         target: ev.currentTarget,
-//         items: [
-//           {
-//             key: 'SORT_DESC',
-//             name: strings.SortDescLabel,
-//             canCheck: true,
-//             checked: column.isSorted && column.isSortedDescending,
-//             onClick: () => this._onColumnSort(column, true)
-//           },
-//           {
-//             key: 'SORT_ASC',
-//             name: strings.SortAscLabel,
-//             canCheck: true,
-//             checked: column.isSorted && !column.isSortedDescending,
-//             onClick: () => this._onColumnSort(column, false)
-//           },
-//           {
-//             key: 'DIVIDER_01',
-//             itemType: ContextualMenuItemType.Divider
-//           },
-//           {
-//             key: 'FILTER_BY',
-//             name: strings.FilterBy,
-//             canCheck: true,
-//             checked: false,
-//             disabled: true
-//           },
-//           {
-//             key: 'DIVIDER_02',
-//             itemType: ContextualMenuItemType.Divider
-//           },
-//           {
-//             key: 'GROUP_BY',
-//             name: format(strings.GroupByColumnLabel, column.name),
-//             canCheck: true,
-//             checked: get<string>(this.state, 'groupBy.fieldName', '') === column.fieldName,
-//             disabled: !column.isGroupable,
-//             onClick: () => this._onColumnGroupBy(column)
-//           },
-//           {
-//             key: 'DIVIDER_03',
-//             itemType: ContextualMenuItemType.Divider
-//           },
-//           {
-//             key: 'COLUMN_SETTINGS',
-//             name: strings.ColumSettingsLabel,
-//             onClick: () =>
-//               redirect(`${this.props.configuration.columnUrls.defaultEditFormUrl}?ID=${column.id}`),
-//             disabled: !this.props.pageContext.legacyPageContext.isSiteAdmin
-//           }
-//         ],
-//         onDismiss: () => this.setState({ columnContextMenu: null })
-//       } as IContextualMenuProps
+//   
 //     })
 //   }
 // }

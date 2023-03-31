@@ -3,6 +3,8 @@ import { IFilterItemProps } from 'components/FilterPanel'
 import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
 import _ from 'underscore'
+import { IContextualMenuProps } from '@fluentui/react'
+import sortArray from 'array-sort'
 
 interface IPortfolioOverviewReducerParams {
     props: IPortfolioOverviewProps
@@ -59,6 +61,21 @@ export const CHANGE_VIEW = createAction<PortfolioOverviewView>('CHANGE_VIEW')
 export const ON_FILTER_CHANGED = createAction<{ column: ProjectColumn, selectedItems: IFilterItemProps[] }>('ON_FILTER_CHANGED')
 
 /**
+ * `SET_COLUMN_CONTEXT_MENU`: Action dispatched when user opens the column context menu
+ */
+export const SET_COLUMN_CONTEXT_MENU = createAction<IContextualMenuProps>('SET_COLUMN_CONTEXT_MENU')
+
+/**
+ * `SET_GROUP_BY`: Action dispatched when user changes the group by column
+ */
+export const SET_GROUP_BY = createAction<ProjectColumn>('SET_GROUP_BY')
+
+/**
+ * `SET_SORT`: Action dispatched when user changes the sort column
+ */
+export const SET_SORT = createAction<{ column: ProjectColumn, isSortedDescending: boolean }>('SET_SORT')
+
+/**
  * Initialize state for `<PortfolioOverview />`
  * 
  * @param params Parameters for reducer initialization
@@ -88,6 +105,9 @@ export const initState = (params: IPortfolioOverviewReducerParams): IPortfolioOv
  * ´TOGGLE_COMPACT´: Action dispatched when user toggles compact mode for the list
  * ´CHANGE_VIEW´: Action dispatched when user changes the view
  * ´ON_FILTER_CHANGED´: Action dispatched when user changes a filter
+ * ´SET_COLUMN_CONTEXT_MENU´: Action dispatched when user opens the column context menu
+ * ´SET_GROUP_BY´: Action dispatched when user changes the group by column
+ * ´SET_SORT´: Action dispatched when user changes the sort column
  * 
  * @param params Parameters for reducer initialization
  */
@@ -124,11 +144,30 @@ export default (params: IPortfolioOverviewReducerParams) =>
         },
         [ON_FILTER_CHANGED.type]: (state, { payload }: ReturnType<typeof ON_FILTER_CHANGED>) => {
             const { column, selectedItems } = payload
-            if(_.isEmpty(selectedItems)) {
+            if (_.isEmpty(selectedItems)) {
                 delete state.activeFilters[column.fieldName]
             }
             else {
                 state.activeFilters[column.fieldName] = selectedItems.map((i) => i.value)
             }
+        },
+        [SET_COLUMN_CONTEXT_MENU.type]: (state, { payload }: ReturnType<typeof SET_COLUMN_CONTEXT_MENU>) => {
+            // Need to cast to any because of a bug in the typings
+            state.columnContextMenu = payload as any
+        },
+        [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {
+            state.groupBy = payload
+        },
+        [SET_SORT.type]: (state, { payload }: ReturnType<typeof SET_SORT>) => {
+            const itemsSorted = sortArray(state.items, [payload.column.fieldName], { reverse: !payload.isSortedDescending })
+            state.sortBy = payload.column
+            state.items = itemsSorted
+            state.columns = state.columns.map((col) => {
+                col.isSorted = col.key === payload.column.key
+                if (col.isSorted) {
+                    col.isSortedDescending = payload.isSortedDescending
+                }
+                return col
+            })
         }
     })

@@ -4,6 +4,8 @@ import createReducer, {
     initState
 } from './reducer'
 import { IPortfolioOverviewProps } from './types'
+import { useColumnHeaderClick } from './useColumnHeaderClick'
+import { useColumnHeaderContextMenu } from './useColumnHeaderContextMenu'
 import { useFetchInitialData } from './useFetchInitialData'
 import { usePersistedColumns } from './usePersistedColumns'
 
@@ -26,13 +28,9 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
         return []
     }
 
-    const onColumnHeaderClick = () => {
-        // TODO: Implement
-    }
+    const onColumnHeaderContextMenu = useColumnHeaderContextMenu()
 
-    const onColumnHeaderContextMenu = () => {
-        // TODO: Implement
-    }
+    const onColumnHeaderClick = useColumnHeaderClick(onColumnHeaderContextMenu)
 
     const onFilterChange = () => {
         // TODO: Implement
