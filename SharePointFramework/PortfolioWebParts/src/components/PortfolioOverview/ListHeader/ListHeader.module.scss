@@ -1,0 +1,21 @@
+.root {
+    .header {
+        padding-left: 32px;
+        padding-right: 32px;
+
+        .title {
+            font-size: 28px;
+            font-weight: 100;
+            margin: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    }
+    .searchBox {
+        display: none;
+    }
+    .headerColumns {
+        position: inherit;
+    }
+}

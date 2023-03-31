@@ -1,10 +1,10 @@
-import { ConstrainMode, ContextualMenu, DetailsListLayoutMode, IDetailsHeaderProps, IRenderFunction, LayerHost, MarqueeSelection, MessageBar, ScrollablePane, ScrollbarVisibility, SearchBox, SelectionMode, ShimmeredDetailsList, Sticky, StickyPositionType } from '@fluentui/react'
+import { ConstrainMode, ContextualMenu, DetailsListLayoutMode, IDetailsHeaderProps, IRenderFunction, LayerHost, MarqueeSelection, MessageBar, ScrollablePane, ScrollbarVisibility, SelectionMode, ShimmeredDetailsList } from '@fluentui/react'
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import React, { FC } from 'react'
 import { PortfolioOverviewContext } from './context'
+import { ListHeader } from './ListHeader'
 import styles from './PortfolioOverview.module.scss'
 import { PortfolioOverviewCommands } from './PortfolioOverviewCommands'
-import { EXECUTE_SEARCH } from './reducer'
 import { renderItemColumn } from './RenderItemColumn'
 import {
     IPortfolioOverviewProps
@@ -65,21 +65,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
                                 selection={selection}
                                 setKey='multiple'
                                 onRenderDetailsHeader={(headerProps: IDetailsHeaderProps, defaultRender?: IRenderFunction<IDetailsHeaderProps>) => (
-                                    <Sticky
-                                        stickyClassName={styles.stickyHeader}
-                                        stickyPosition={StickyPositionType.Header}
-                                        isScrollSynced={true}>
-                                        <div className={styles.header}>
-                                            <div className={styles.title}>{props.title}</div>
-                                        </div>
-                                        <div className={styles.searchBox} hidden={!props.showSearchBox}>
-                                            <SearchBox
-                                                onChange={(_e, newValue) => dispatch(EXECUTE_SEARCH(newValue))}
-                                                placeholder={''}
-                                            />
-                                        </div>
-                                        <div className={styles.headerColumns}>{defaultRender(headerProps)}</div>
-                                    </Sticky>
+                                    <ListHeader headerProps={headerProps} defaultRender={defaultRender} />
                                 )}
                                 onRenderItemColumn={(item, _index, column: ProjectColumn) =>
                                     renderItemColumn(item, column, props)
