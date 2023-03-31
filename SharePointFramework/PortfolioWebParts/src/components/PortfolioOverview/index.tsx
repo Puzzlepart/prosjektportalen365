@@ -6,12 +6,12 @@ import {
   IRenderFunction,
   LayerHost,
   MarqueeSelection,
-  MessageBar,
   ScrollablePane,
   ScrollbarVisibility,
   SelectionMode,
   ShimmeredDetailsList
 } from '@fluentui/react'
+import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import React, { FC } from 'react'
 import { PortfolioOverviewContext } from './context'
@@ -36,16 +36,6 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
   } = usePortfolioOverview(props)
   const { items, columns, groups } = useFilteredData(props, state)
 
-  if (state.error) {
-    return (
-      <div className={styles.root}>
-        <div className={styles.container}>
-          <MessageBar messageBarType={state.error.type}>{state.error.message}</MessageBar>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className={styles.root}>
       <PortfolioOverviewContext.Provider value={contextValue}>
@@ -57,35 +47,44 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
           }}
         />
         <div className={styles.container}>
-          <ScrollablePane
-            scrollbarVisibility={ScrollbarVisibility.auto}
-            styles={{ root: { top: 75 } }}>
-            <MarqueeSelection selection={selection} className={styles.listContainer}>
-              <ShimmeredDetailsList
-                enableShimmer={state.loading || !!state.isChangingView}
-                isPlaceholderData={state.loading || !!state.isChangingView}
-                items={items}
-                constrainMode={ConstrainMode.unconstrained}
-                layoutMode={DetailsListLayoutMode.fixedColumns}
-                columns={columns}
-                groups={groups}
-                selectionMode={SelectionMode.multiple}
-                selection={selection}
-                setKey='multiple'
-                onRenderDetailsHeader={(
-                  headerProps: IDetailsHeaderProps,
-                  defaultRender?: IRenderFunction<IDetailsHeaderProps>
-                ) => <ListHeader headerProps={headerProps} defaultRender={defaultRender} />}
-                onRenderItemColumn={(item, _index, column: ProjectColumn) =>
-                  renderItemColumn(item, column, props)
-                }
-                onColumnHeaderClick={onColumnHeaderClick}
-                onColumnHeaderContextMenu={onColumnHeaderContextMenu}
-                compact={state.isCompact}
-              />
-            </MarqueeSelection>
-            <LayerHost id={contextValue.layerHostId} />
-          </ScrollablePane>
+          {state.error ? (
+            <div className={styles.errorContainer}>
+              <ListHeader />
+              <div className={styles.error}>
+                <UserMessage text={state.error.message} type={state.error.type} />
+              </div>
+            </div>
+          ) : (
+            <ScrollablePane
+              scrollbarVisibility={ScrollbarVisibility.auto}
+              styles={{ root: { top: 75 } }}>
+              <MarqueeSelection selection={selection} className={styles.listContainer}>
+                <ShimmeredDetailsList
+                  enableShimmer={state.loading || !!state.isChangingView}
+                  isPlaceholderData={state.loading || !!state.isChangingView}
+                  items={items}
+                  constrainMode={ConstrainMode.unconstrained}
+                  layoutMode={DetailsListLayoutMode.fixedColumns}
+                  columns={columns}
+                  groups={groups}
+                  selectionMode={SelectionMode.multiple}
+                  selection={selection}
+                  setKey='multiple'
+                  onRenderDetailsHeader={(
+                    headerProps: IDetailsHeaderProps,
+                    defaultRender?: IRenderFunction<IDetailsHeaderProps>
+                  ) => <ListHeader headerProps={headerProps} defaultRender={defaultRender} />}
+                  onRenderItemColumn={(item, _index, column: ProjectColumn) =>
+                    renderItemColumn(item, column, props)
+                  }
+                  onColumnHeaderClick={onColumnHeaderClick}
+                  onColumnHeaderContextMenu={onColumnHeaderContextMenu}
+                  compact={state.isCompact}
+                />
+              </MarqueeSelection>
+              <LayerHost id={contextValue.layerHostId} />
+            </ScrollablePane>
+          )}
         </div>
         {state.columnContextMenu && <ContextualMenu {...state.columnContextMenu} />}
       </PortfolioOverviewContext.Provider>

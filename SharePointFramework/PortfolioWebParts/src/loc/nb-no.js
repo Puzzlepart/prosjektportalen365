@@ -140,6 +140,7 @@ define([], function () {
     ParentProjectsSearchBoxPlaceholderText: 'Søk i {0} overordnede prosjekter...',
     ProgramSearchBoxPlaceholderText: 'Søk i {0} program...',
     SearchBoxPlaceholderText: 'Søk i {0}...',
+    SearchBoxPlaceholderFallbackText: 'Søk...',
     SearchBoxPlaceholderTextLabel: 'Søkebokstekst',
     ShowAllMeasurementsLinkText: 'Vis alle målinger',
     RenderAsListText: 'Liste',
@@ -206,5 +207,7 @@ define([], function () {
     ProjectContentColumnItemNotFound: 'Prosjektinnholdskolonne ble ikke funnet',
     ShowHideColumnsLabel: 'Vis/skjul kolonner',
     ShowHideColumnsDescription: 'Velg kolonnene som skal vises for nåværende visning. Endringen vil oppdatere datakilden med kolonnene som velges.',
+    PortfolioOverviewDataFetchError: 'Det skjedde en feil under henting av data for porteføljeoversikten. Vennligst prøv igjen senere.\n \n \n **Detaljert feilmelding:** `{0}`',
+    PortfolioOverviewDataFetchErrorView: 'Det skjedde en feil under henting av data for porteføljeoversikten for visning "{0}". Vennligst prøv igjen senere, eller prøv en annen visning.\n \n \n **Detaljert feilmelding:** `{1}`',
   }
 })

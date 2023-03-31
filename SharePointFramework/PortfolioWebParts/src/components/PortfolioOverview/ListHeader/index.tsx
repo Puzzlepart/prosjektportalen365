@@ -15,12 +15,13 @@ export const ListHeader: FC<IListHeaderProps> = (props) => {
 
   /**
    * Get the placeholder text for the search box based on the
-   * current view.
+   * current view. If no view is selected, use a fallback text
+   * `strings.SearchBoxPlaceholderFallbackText`.
    *
    * @returns The placeholder text for the search box.
    */
   const getSearchBoxPlaceholderText = () => {
-    if (!context.state.currentView) return ''
+    if (!context.state.currentView) return strings.SearchBoxPlaceholderFallbackText
     return format(strings.SearchBoxPlaceholderText, context.state.currentView.title.toLowerCase())
   }
 
@@ -35,12 +36,14 @@ export const ListHeader: FC<IListHeaderProps> = (props) => {
         </div>
         <div className={styles.searchBox} hidden={!context.props.showSearchBox}>
           <SearchBox
-            disabled={context.state.loading}
+            disabled={context.state.loading || !!context.state.error}
             onChange={(_e, newValue) => context.dispatch(EXECUTE_SEARCH(newValue))}
             placeholder={getSearchBoxPlaceholderText()}
           />
         </div>
-        <div className={styles.headerColumns}>{props.defaultRender(props.headerProps)}</div>
+        {props.defaultRender && (
+          <div className={styles.headerColumns}>{props.defaultRender(props.headerProps)}</div>
+        )}
       </div>
     </Sticky>
   )

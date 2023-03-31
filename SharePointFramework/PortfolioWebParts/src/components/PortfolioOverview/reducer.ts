@@ -1,7 +1,14 @@
-import { IContextualMenuProps, IObjectWithKey, Selection } from '@fluentui/react'
+import {
+  format,
+  IContextualMenuProps,
+  IObjectWithKey,
+  MessageBarType,
+  Selection
+} from '@fluentui/react'
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import sortArray from 'array-sort'
 import { IFilterItemProps } from 'components/FilterPanel'
+import strings from 'PortfolioWebPartsStrings'
 import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import _ from 'underscore'
 import { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
@@ -24,6 +31,13 @@ export const DATA_FETCHED = createAction<{
   currentView: PortfolioOverviewView
   groupBy: ProjectColumn
 }>('DATA_FETCHED')
+
+/**
+ * `DATA_FETCH_ERROR`: Action dispatched when data fetch fails
+ */
+export const DATA_FETCH_ERROR = createAction<{ error: Error; view: PortfolioOverviewView }>(
+  'DATA_FETCH_ERROR'
+)
 
 /**
  * `EXECUTE_SEARCH`: Action dispatched when user executes a search
@@ -113,6 +127,7 @@ export const initState = (params: IPortfolioOverviewReducerParams): IPortfolioOv
  * Handles the following actions:
  * ´STARTING_DATA_FETCH´: Action dispatched when data fetch is started
  * ´DATA_FETCHED´: Action dispatched when data is fetched from SharePoint
+ * ´DATA_FETCH_ERROR´: Action dispatched when data fetch fails
  * ´EXECUTE_SEARCH´: Action dispatched when user executes a search
  * ´TOGGLE_FILTER_PANEL´: Action dispatched when user toggles the filter panel
  * ´START_EXCEL_EXPORT´: Action dispatched when user starts an Excel export
@@ -139,6 +154,22 @@ export default (params: IPortfolioOverviewReducerParams) =>
       state.columns = payload.currentView.columns
       state.groupBy = payload.groupBy
       state.loading = false
+      state.error = null
+    },
+    [DATA_FETCH_ERROR.type]: (state, { payload }: ReturnType<typeof DATA_FETCH_ERROR>) => {
+      state.loading = false
+      let message = format(strings.PortfolioOverviewDataFetchError, payload.error.message)
+      if (payload.view)
+        message = format(
+          strings.PortfolioOverviewDataFetchErrorView,
+          payload.view.title,
+          payload.error.message
+        )
+      state.error = {
+        name: payload.error?.name,
+        message,
+        type: MessageBarType.error
+      }
     },
     [EXECUTE_SEARCH.type]: (state, { payload }: ReturnType<typeof EXECUTE_SEARCH>) => {
       state.searchTerm = payload.toLowerCase()

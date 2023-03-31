@@ -10,9 +10,23 @@
     .searchBox {
       padding: 0 0 20px 0;
     }
+
     .statusBar {
       padding: 0 32px 0 32px;
     }
+
+    .errorContainer {
+      padding: 0 32px;
+
+      .error {
+        margin: 12px 0 0 0;
+
+        p {
+          margin: 0;
+        }
+      }
+    }
+    
     .listContainer {
       padding: 0 32px;
     }

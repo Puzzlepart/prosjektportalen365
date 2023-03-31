@@ -6,7 +6,7 @@ import { PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { parseUrlHash } from 'pp365-shared/lib/util/parseUrlHash'
 import { useEffect } from 'react'
 import { IPortfolioOverviewContext } from './context'
-import { DATA_FETCHED, STARTING_DATA_FETCH } from './reducer'
+import { DATA_FETCHED, DATA_FETCH_ERROR, STARTING_DATA_FETCH } from './reducer'
 import { IPortfolioOverviewHashStateState, PortfolioOverviewErrorMessage } from './types'
 import { usePersistedColumns } from './usePersistedColumns'
 
@@ -64,11 +64,12 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
   const [, set] = usePersistedColumns(context.props)
   useEffect(() => {
     const fetchInitialData = async () => {
+      let currentView = null
       try {
         context.dispatch(STARTING_DATA_FETCH())
         const { configuration, pageContext, isParentProject } = context.props
         const hashState = parseUrlHash<IPortfolioOverviewHashStateState>()
-        const currentView = getCurrentView(hashState, context)
+        currentView = getCurrentView(hashState, context)
         const items = isParentProject
           ? await context.props.dataAdapter.fetchDataForViewBatch(
               currentView,
@@ -93,7 +94,7 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
           })
         )
       } catch (error) {
-        throw error
+        context.dispatch(DATA_FETCH_ERROR({ error, view: currentView }))
       }
     }
 
