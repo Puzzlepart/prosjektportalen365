@@ -1,8 +1,10 @@
+.sticky {
+    margin: 0;
+}
+
 .root {
     .header {
-        padding-left: 32px;
-        padding-right: 32px;
-
+        padding: 20px 0 20px 0;
         .title {
             font-size: 28px;
             font-weight: 100;
@@ -13,7 +15,7 @@
         }
     }
     .searchBox {
-        display: none;
+        position: inherit;
     }
     .headerColumns {
         position: inherit;
