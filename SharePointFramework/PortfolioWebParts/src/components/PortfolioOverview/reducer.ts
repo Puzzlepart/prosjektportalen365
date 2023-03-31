@@ -1,20 +1,17 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
-import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
-import { DataSource } from 'pp365-shared/lib/models/DataSource'
+import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
 
 
 export const DATA_FETCHED = createAction<{
   items: any[]
-  dataSources?: DataSource[]
-  columns?: IProjectContentColumn[]
-  fltColumns?: IProjectContentColumn[]
-  projects?: any[]
+  currentView: PortfolioOverviewView,
+  groupBy: ProjectColumn
 }>('DATA_FETCHED')
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const initState = (_props: IPortfolioOverviewProps): IPortfolioOverviewState => ({
-  loading: false,
+  loading: true,
   isCompact: false,
   searchTerm: '',
   activeFilters: {},
@@ -31,8 +28,10 @@ export const initState = (_props: IPortfolioOverviewProps): IPortfolioOverviewSt
 export default (props: IPortfolioOverviewProps) =>
   createReducer(initState(props), {
     [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
-        // TODO
-        // eslint-disable-next-line no-console
-        console.log(payload, state)
+        state.items = payload.items
+        state.currentView = payload.currentView
+        state.columns = payload.currentView.columns
+        state.groupBy = payload.groupBy
+        state.loading = false
     }
   })
