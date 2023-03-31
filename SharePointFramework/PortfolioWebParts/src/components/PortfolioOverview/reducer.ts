@@ -125,25 +125,26 @@ export const initState = (params: IPortfolioOverviewReducerParams): IPortfolioOv
  * Create reducer for `<PortfolioOverview />`
  *
  * Handles the following actions:
- * ´STARTING_DATA_FETCH´: Action dispatched when data fetch is started
- * ´DATA_FETCHED´: Action dispatched when data is fetched from SharePoint
- * ´DATA_FETCH_ERROR´: Action dispatched when data fetch fails
- * ´EXECUTE_SEARCH´: Action dispatched when user executes a search
- * ´TOGGLE_FILTER_PANEL´: Action dispatched when user toggles the filter panel
- * ´START_EXCEL_EXPORT´: Action dispatched when user starts an Excel export
- * ´EXCEL_EXPORT_SUCCESS´: Action dispatched when Excel export is successful
- * ´EXCEL_EXPORT_ERROR´: Action dispatched when Excel export fails
- * ´TOGGLE_COMPACT´: Action dispatched when user toggles compact mode for the list
- * ´CHANGE_VIEW´: Action dispatched when user changes the view
- * ´ON_FILTER_CHANGED´: Action dispatched when user changes a filter
- * ´SET_COLUMN_CONTEXT_MENU´: Action dispatched when user opens the column context menu
- * ´SET_GROUP_BY´: Action dispatched when user changes the group by column
- * ´SET_SORT´: Action dispatched when user changes the sort column
- * ´SELECTION_CHANGED´: Action dispatched when user changes the selection in the list
+ *
+ * - `STARTING_DATA_FETCH`: Action dispatched when data fetch is started
+ * - `DATA_FETCHED`: Action dispatched when data is fetched from SharePoint
+ * - `DATA_FETCH_ERROR`: Action dispatched when data fetch fails
+ * - `EXECUTE_SEARCH`: Action dispatched when user executes a search
+ * - `TOGGLE_FILTER_PANEL`: Action dispatched when user toggles the filter panel
+ * - `START_EXCEL_EXPORT`: Action dispatched when user starts an Excel export
+ * - `EXCEL_EXPORT_SUCCESS`: Action dispatched when Excel export is successful
+ * - `EXCEL_EXPORT_ERROR`: Action dispatched when Excel export fails
+ * - `TOGGLE_COMPACT`: Action dispatched when user toggles compact mode for the list
+ * - `CHANGE_VIEW`: Action dispatched when user changes the view
+ * - `ON_FILTER_CHANGED`: Action dispatched when user changes a filter
+ * - `SET_COLUMN_CONTEXT_MENU`: Action dispatched when user opens the column context menu
+ * - `SET_GROUP_BY`: Action dispatched when user changes the group by column
+ * - `SET_SORT`: Action dispatched when user changes the sort column
+ * - `SELECTION_CHANGED`: Action dispatched when user changes the selection in the list
  *
  * @param params Parameters for reducer initialization
  */
-export default (params: IPortfolioOverviewReducerParams) =>
+const $createReducer = (params: IPortfolioOverviewReducerParams) =>
   createReducer(initState(params), {
     [STARTING_DATA_FETCH.type]: (state) => {
       state.loading = true
@@ -209,7 +210,7 @@ export default (params: IPortfolioOverviewReducerParams) =>
       state.columnContextMenu = payload as any
     },
     [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {
-      state.groupBy = payload
+      state.groupBy = payload.fieldName === state.groupBy.fieldName ? null : payload
     },
     [SET_SORT.type]: (state, { payload }: ReturnType<typeof SET_SORT>) => {
       const itemsSorted = sortArray(state.items, [payload.column.fieldName], {
@@ -229,3 +230,5 @@ export default (params: IPortfolioOverviewReducerParams) =>
       state.selectedItems = payload.getSelection()
     }
   })
+
+export default $createReducer
