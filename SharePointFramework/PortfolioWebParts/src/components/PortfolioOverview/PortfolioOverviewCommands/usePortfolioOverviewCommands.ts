@@ -4,7 +4,7 @@ import _ from 'lodash'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ExcelExportService } from 'pp365-shared/lib/services'
 import { redirect } from 'pp365-shared/lib/util'
-import { useContext } from 'react'
+import { useCallback, useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import {
   CHANGE_VIEW,
@@ -26,6 +26,42 @@ import { IPortfolioOverviewCommandsProps } from './types'
 export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsProps) {
   const context = useContext(PortfolioOverviewContext)
   const filters = usePortfolioOverviewFilters()
+
+  /**
+   * Callback function for Excel export. Handles the export to Excel with state updates and
+   * error handling.
+   */
+  const exportToExcel = useCallback(async () => {
+    // eslint-disable-next-line no-console
+    console.log('Dispatching START_EXCEL_EXPORT')
+    context.dispatch(START_EXCEL_EXPORT())
+    try {
+      // If no items are selected, export all items
+      const items =
+        _.isArray(context.state.selectedItems) && context.state.selectedItems.length > 0
+          ? context.state.selectedItems
+          : props.filteredData.items
+
+      // Convert date columns to Date objects
+      props.filteredData.columns.forEach((col) => {
+        if (col.dataType === 'date') {
+          items.map((item) => {
+            item[col.fieldName] = new Date(item[col.fieldName])
+          })
+        }
+      })
+
+      // Export to Excel using the `ExcelExportService` from `pp365-shared`
+      // eslint-disable-next-line no-console
+      console.log('Exporting to Excel with ExcelExportService', items, props.filteredData.columns)
+      await ExcelExportService.export(items, props.filteredData.columns)
+
+      context.dispatch(EXCEL_EXPORT_SUCCESS())
+    } catch (error) {
+      context.dispatch(EXCEL_EXPORT_ERROR(error))
+    }
+  }, [context.state])
+
   const items: IContextualMenuItem[] = [
     {
       key: 'EXCEL_EXPORT',
@@ -38,6 +74,8 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       data: { isVisible: context.props.showExcelExportButton },
       disabled: context.state.isExporting || context.state.loading,
       onClick: () => {
+        // eslint-disable-next-line no-console
+        console.log('exportToExcel')
         exportToExcel()
       }
     } as IContextualMenuItem
@@ -138,37 +176,6 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       }
     } as IContextualMenuItem
   ].filter((i) => i.data.isVisible)
-
-  /**
-   * Callback function for Excel export. Handles the export to Excel with state updates and
-   * error handling.
-   */
-  async function exportToExcel(): Promise<void> {
-    context.dispatch(START_EXCEL_EXPORT())
-    try {
-      // If no items are selected, export all items
-      const items =
-        _.isArray(context.state.selectedItems) && context.state.selectedItems.length > 0
-          ? context.state.selectedItems
-          : props.filteredData.items
-
-      // Convert date columns to Date objects
-      props.filteredData.columns.forEach((col) => {
-        if (col.dataType === 'date') {
-          items.map((item) => {
-            item[col.fieldName] = new Date(item[col.fieldName])
-          })
-        }
-      })
-
-      // Export to Excel using the `ExcelExportService` from `pp365-shared`
-      await ExcelExportService.export(items, props.filteredData.columns)
-
-      context.dispatch(EXCEL_EXPORT_SUCCESS())
-    } catch (error) {
-      context.dispatch(EXCEL_EXPORT_ERROR(error))
-    }
-  }
 
   return {
     items,

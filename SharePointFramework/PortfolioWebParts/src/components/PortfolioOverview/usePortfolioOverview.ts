@@ -1,4 +1,6 @@
-import { getId, Selection } from '@fluentui/react'
+import { Selection } from '@fluentui/react'
+import { useId } from '@fluentui/react-hooks'
+import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
 import { useMemo, useReducer } from 'react'
 import { IPortfolioOverviewContext } from './context'
 import createReducer, { initState, SELECTION_CHANGED } from './reducer'
@@ -14,36 +16,44 @@ import { usePersistedColumns } from './usePersistedColumns'
  * - Handles state using `useReducer` and our custom `reducer` function
  * - Handles selection changes using `Selection` from `@fluentui/react`
  * - Fetches initial data using `useFetchInitialData`
+ * - Configures the `ExcelExportService` from `pp365-shared`
+ * - Handles column header click using `useColumnHeaderClick`
+ * - Handles column header context menu using `useColumnHeaderContextMenu`
+ * - Handles column persistence using `usePersistedColumns`
  */
 export function usePortfolioOverview(props: IPortfolioOverviewProps) {
-    const { value: placeholderColumns } = usePersistedColumns(props)
-    const reducer = useMemo(() => createReducer({ props, placeholderColumns }), [])
-    const [state, dispatch] = useReducer(reducer, initState({ props, placeholderColumns }))
+  const [placeholderColumns] = usePersistedColumns(props)
+  const reducer = useMemo(() => createReducer({ props, placeholderColumns }), [])
+  const [state, dispatch] = useReducer(reducer, initState({ props, placeholderColumns }))
 
-    const contextValue: IPortfolioOverviewContext = {
-        props,
-        state,
-        dispatch,
-        layerHostId: getId('layerHost')
-    }
+  const layerHostId = useId('layerHost')
 
-    const onSelectionChanged = () => {
-        dispatch(SELECTION_CHANGED(selection))
-    }
+  const contextValue: IPortfolioOverviewContext = {
+    props,
+    state,
+    dispatch,
+    layerHostId
+  }
 
-    const selection = new Selection({ onSelectionChanged })
+  const onSelectionChanged = () => {
+    dispatch(SELECTION_CHANGED(selection))
+  }
 
-    const onColumnHeaderContextMenu = useColumnHeaderContextMenu()
+  const selection = new Selection({ onSelectionChanged })
 
-    const onColumnHeaderClick = useColumnHeaderClick(onColumnHeaderContextMenu)
+  const onColumnHeaderContextMenu = useColumnHeaderContextMenu()
 
-    useFetchData(contextValue)
+  const onColumnHeaderClick = useColumnHeaderClick(onColumnHeaderContextMenu)
 
-    return {
-        state,
-        contextValue,
-        selection,
-        onColumnHeaderClick,
-        onColumnHeaderContextMenu
-    } as const
+  useFetchData(contextValue)
+
+  ExcelExportService.configure({ name: props.title })
+
+  return {
+    state,
+    contextValue,
+    selection,
+    onColumnHeaderClick,
+    onColumnHeaderContextMenu
+  } as const
 }

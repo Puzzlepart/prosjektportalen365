@@ -16,7 +16,7 @@ export const ListHeader: FC<IListHeaderProps> = (props) => {
   /**
    * Get the placeholder text for the search box based on the
    * current view.
-   * 
+   *
    * @returns The placeholder text for the search box.
    */
   const getSearchBoxPlaceholderText = () => {

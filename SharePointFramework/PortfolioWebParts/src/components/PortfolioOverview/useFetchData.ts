@@ -59,7 +59,7 @@ function getCurrentView(
  * as it is not available yet using `useContext` in the hook.
  */
 export const useFetchData = (context: IPortfolioOverviewContext) => {
-  const { set } = usePersistedColumns(context.props)
+  const [, set] = usePersistedColumns(context.props)
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
