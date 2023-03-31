@@ -9,6 +9,18 @@ import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 
 /**
  * Hook for the column header context menu. Handles the logic for the context menu.
+ * 
+ * Creates a context menu for the column header and dispatches the `SET_COLUMN_CONTEXT_MENU` action.
+ * 
+ * The menu contains the following items:
+ * - `SORT_DESC`: Sorts the column in descending order
+ * - `SORT_ASC`: Sorts the column in ascending order
+ * - `DIVIDER_01`: Divider
+ * - `FILTER_BY`: Filter by column
+ * - `DIVIDER_02`: Divider
+ * - `GROUP_BY`: Group by column
+ * - `DIVIDER_03`: Divider
+ * - `COLUMN_SETTINGS`: Column settings
  */
 export function useColumnHeaderContextMenu() {
     const context = useContext(PortfolioOverviewContext)
