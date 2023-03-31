@@ -73,12 +73,9 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
   defaultViewId?: string
 
   /**
-   * Child project site IDs
-   */
-  childSiteIds?: string[]
-
-  /**
-   * Is parent project
+   * Is parent project. Set to `true` if the web part is used in a parent project.
+   * This will fetch the child projects and show them in the list, instead of all
+   * projects in the current hub site.
    */
   isParentProject?: boolean
 }
