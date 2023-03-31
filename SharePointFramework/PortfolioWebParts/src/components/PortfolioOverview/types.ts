@@ -13,7 +13,7 @@ export class PortfolioOverviewErrorMessage extends Error {
 
 export interface IPortfolioOverviewProps extends IBaseComponentProps {
   /**
-   * Configuration (columns and views etc)
+   * Configuration (columns and views etc).
    */
   configuration: IPortfolioConfiguration
 
@@ -73,12 +73,12 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
   defaultViewId?: string
 
   /**
-   * Child project site ids
+   * Child project site IDs
    */
   childSiteIds?: string[]
 
   /**
-   * isParentProject
+   * Is parent project
    */
   isParentProject?: boolean
 }

@@ -1,27 +1,28 @@
 import { MessageBarType } from '@fluentui/react'
 import { UrlQueryParameterCollection } from '@microsoft/sp-core-library'
-import { AnyAction } from '@reduxjs/toolkit'
 import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
 import { PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { parseUrlHash } from 'pp365-shared/lib/util/parseUrlHash'
 import { useEffect } from 'react'
-import { DATA_FETCHED } from './reducer'
-import { IPortfolioOverviewHashStateState, IPortfolioOverviewProps, PortfolioOverviewErrorMessage } from './types'
+import { IPortfolioOverviewContext } from './context'
+import { DATA_FETCHED, STARTING_DATA_FETCH } from './reducer'
+import { IPortfolioOverviewHashStateState, PortfolioOverviewErrorMessage } from './types'
 import { usePersistedColumns } from './usePersistedColumns'
 
 /**
- * Get current view from URL or hash state.
+ * Get current view from state - otherwise fallback to URL parameter or default view.
  *
  * @param hashState Hash state
- * @param props Component props for `PortfolioOverview`
+ * @param context `PortfolioOverview` context - needs to be passed as a prop to the function
+ * as it is not available yet using `useContext` in the function.
  */
-function getCurrentView(hashState: IPortfolioOverviewHashStateState, props: IPortfolioOverviewProps): PortfolioOverviewView {
+function getCurrentView(hashState: IPortfolioOverviewHashStateState, context: IPortfolioOverviewContext): PortfolioOverviewView {
+    if(context.state.currentView) return context.state.currentView
     const viewIdUrlParam = new UrlQueryParameterCollection(document.location.href).getValue(
         'viewId'
     )
-    const { configuration, defaultViewId } = props
-    const { views } = configuration
+    const views = context.props.configuration.views
     let currentView = null
 
     if (viewIdUrlParam) {
@@ -34,8 +35,8 @@ function getCurrentView(hashState: IPortfolioOverviewHashStateState, props: IPor
         if (!currentView) {
             throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
         }
-    } else if (defaultViewId) {
-        currentView = _.find(views, (v) => v.id.toString() === defaultViewId.toString())
+    } else if (context.props.defaultViewId) {
+        currentView = _.find(views, (v) => v.id.toString() === context.props.defaultViewId.toString())
         if (!currentView) {
             throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
         }
@@ -49,27 +50,29 @@ function getCurrentView(hashState: IPortfolioOverviewHashStateState, props: IPor
 }
 
 /**
- * Hook to fetch initial data for `PortfolioOverview`. The columns are persisted in local storage
- * using `set` from the hook `usePersistedColumns`.
+ * Hook to fetch data `PortfolioOverview`. The internal function `fetchInitialData` is called
+ * when the `context.state.currentView` changes. The data is then dispatched to the reducer.
+ * The columns are persisted in local storage using `set` from the hook `usePersistedColumns`.
  * 
- * @param props Props for `PortfolioOverview`
- * @param dispatch Dispatch function from `useReducer`
+ * @param context `PortfolioOverview` context - needs to be passed as a prop to the hook
+ * as it is not available yet using `useContext` in the hook.
  */
-export const useFetchInitialData = (props: IPortfolioOverviewProps, dispatch: React.Dispatch<AnyAction>) => {
-    const { set } = usePersistedColumns(props)
+export const useFetchData = (context: IPortfolioOverviewContext) => {
+    const { set } = usePersistedColumns(context.props)
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
-                const { configuration, pageContext, isParentProject } = props
+                context.dispatch(STARTING_DATA_FETCH())
+                const { configuration, pageContext, isParentProject } = context.props
                 const hashState = parseUrlHash<IPortfolioOverviewHashStateState>()
-                const currentView = getCurrentView(hashState, props)
+                const currentView = getCurrentView(hashState, context)
                 const items = isParentProject
-                    ? await props.dataAdapter.fetchDataForViewBatch(
+                    ? await context.props.dataAdapter.fetchDataForViewBatch(
                         currentView,
                         configuration,
                         pageContext.legacyPageContext.hubSiteId
                     )
-                    : await props.dataAdapter.fetchDataForView(
+                    : await context.props.dataAdapter.fetchDataForView(
                         currentView,
                         configuration,
                         pageContext.legacyPageContext.hubSiteId
@@ -79,7 +82,7 @@ export const useFetchInitialData = (props: IPortfolioOverviewProps, dispatch: Re
                     groupBy = _.find(configuration.columns, (fc) => fc.fieldName === hashState.groupBy)
                 }
                 set(currentView.columns)
-                dispatch(DATA_FETCHED({
+                context.dispatch(DATA_FETCHED({
                     items,
                     currentView,
                     groupBy
@@ -90,5 +93,5 @@ export const useFetchInitialData = (props: IPortfolioOverviewProps, dispatch: Re
         }
 
         fetchInitialData()
-    }, [])
+    }, [context.state.currentView])
 }

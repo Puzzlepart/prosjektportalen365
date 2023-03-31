@@ -12,6 +12,11 @@ interface IPortfolioOverviewReducerParams {
 }
 
 /**
+ * `STARTING_DATA_FETCH`: Action dispatched when data fetch is started
+ */
+export const STARTING_DATA_FETCH = createAction('STARTING_DATA_FETCH')
+
+/**
  * `DATA_FETCHED`: Action dispatched when data is fetched from SharePoint
  */
 export const DATA_FETCHED = createAction<{
@@ -96,6 +101,7 @@ export const initState = (params: IPortfolioOverviewReducerParams): IPortfolioOv
  * Create reducer for `<PortfolioOverview />`
  * 
  * Handles the following actions:
+ * ´STARTING_DATA_FETCH´: Action dispatched when data fetch is started
  * ´DATA_FETCHED´: Action dispatched when data is fetched from SharePoint
  * ´EXECUTE_SEARCH´: Action dispatched when user executes a search
  * ´TOGGLE_FILTER_PANEL´: Action dispatched when user toggles the filter panel
@@ -113,6 +119,9 @@ export const initState = (params: IPortfolioOverviewReducerParams): IPortfolioOv
  */
 export default (params: IPortfolioOverviewReducerParams) =>
     createReducer(initState(params), {
+        [STARTING_DATA_FETCH.type]: (state) => {
+            state.loading = true
+        },
         [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
             state.items = payload.items
             state.currentView = payload.currentView

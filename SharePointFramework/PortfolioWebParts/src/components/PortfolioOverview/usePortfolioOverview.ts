@@ -1,12 +1,13 @@
 import { getId, Selection } from '@fluentui/react'
 import { useMemo, useReducer } from 'react'
+import { IPortfolioOverviewContext } from './context'
 import createReducer, {
     initState
 } from './reducer'
 import { IPortfolioOverviewProps } from './types'
 import { useColumnHeaderClick } from './useColumnHeaderClick'
 import { useColumnHeaderContextMenu } from './useColumnHeaderContextMenu'
-import { useFetchInitialData } from './useFetchInitialData'
+import { useFetchData } from './useFetchData'
 import { usePersistedColumns } from './usePersistedColumns'
 
 /**
@@ -20,6 +21,8 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
     const { value: placeholderColumns } = usePersistedColumns(props)
     const reducer = useMemo(() => createReducer({ props, placeholderColumns }), [])
     const [state, dispatch] = useReducer(reducer, initState({ props, placeholderColumns }))
+
+    const contextValue: IPortfolioOverviewContext = { props, state,dispatch, layerHostId:getId('layerHost') }
 
     const selection = new Selection({})
 
@@ -36,16 +39,15 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
         // TODO: Implement
     }
 
-    useFetchInitialData(props, dispatch)
+    useFetchData(contextValue)
 
     return {
         state,
-        dispatch,
+        contextValue,
         selection,
         getFilters,
         onColumnHeaderClick,
         onColumnHeaderContextMenu,
         onFilterChange,
-        layerHostId: getId('layerHost'),
     } as const
 }

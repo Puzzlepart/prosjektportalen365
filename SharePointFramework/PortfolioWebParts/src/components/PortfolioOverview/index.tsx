@@ -18,8 +18,7 @@ import { usePortfolioOverview } from './usePortfolioOverview'
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
     const {
         state,
-        dispatch,
-        layerHostId,
+        contextValue,
         selection,
         onColumnHeaderClick,
         onColumnHeaderContextMenu,
@@ -40,7 +39,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
 
     return (
         <div className={styles.root}>
-            <PortfolioOverviewContext.Provider value={{ props, state,dispatch, layerHostId }}>
+            <PortfolioOverviewContext.Provider value={contextValue}>
                 <PortfolioOverviewCommands
                     filteredData={{
                         items,
@@ -75,7 +74,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
                                 compact={state.isCompact}
                             />
                         </MarqueeSelection>
-                        <LayerHost id={layerHostId} />
+                        <LayerHost id={contextValue.layerHostId} />
                     </ScrollablePane>
                 </div>
                 {state.columnContextMenu && <ContextualMenu {...state.columnContextMenu} />}
