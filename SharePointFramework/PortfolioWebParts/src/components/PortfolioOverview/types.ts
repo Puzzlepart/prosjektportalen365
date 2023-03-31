@@ -105,7 +105,7 @@ export interface IPortfolioOverviewState {
   items?: any[]
 
   /**
-   * Selected items
+   * Selected items in the list
    */
   selectedItems?: any[]
 
