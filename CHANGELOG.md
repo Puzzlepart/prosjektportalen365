@@ -5,7 +5,11 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 
 ## 1.8.2 - TBA
 
-### Ny funksjonalitet
+### Forbedringer
+
+- Porteføljeoversikt: vis personlige visninger som egen "seksjon" [#1045](https://github.com/Puzzlepart/prosjektportalen365/issues/1045)
+
+## 1.8.1 - 31.03.2023
 
 ### Forbedringer
 
