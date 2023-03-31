@@ -54,6 +54,8 @@ function getCurrentView(
  * Hook to fetch data `PortfolioOverview`. The internal function `fetchInitialData` is called
  * when the `context.state.currentView` changes. The data is then dispatched to the reducer.
  * The columns are persisted in local storage using `set` from the hook `usePersistedColumns`.
+ * This is done to use placeholders for the columns while the data is being fetched on the first
+ * render.
  *
  * @param context `PortfolioOverview` context needs to be passed as a prop to the hook
  * as it is not available yet using `useContext` in the hook.

@@ -13,19 +13,18 @@ import _ from 'underscore'
  * @param defaultValue Default value for columns if no persisted value is found
  * @param properties Properties to persist (default: `['fieldName', 'key', 'name', 'minWidth', 'sortOrder']`)
  *
- * @returns `[columns, set]` where `columns` is the persisted columns and `set` is a function
+ * @returns `[columns, set]` tuple where `columns` is the persisted columns and `set` is a function
  */
 export function usePersistedColumns(
   props: IPortfolioOverviewProps,
-  useViewId: boolean = true,
   defaultValue: ProjectColumn[] = [],
-  properties: any[] = ['fieldName', 'key', 'name', 'minWidth', 'sortOrder']
+  properties: any[] = ['fieldName', 'key', 'name', 'minWidth', 'sortOrder'],
+  localKeyPrefix = 'portfolio-overview-persisted-columns'
 ) {
   const localStore = new PnPClientStorage().local
-  let localKey = `portfolio-overview-persisted-columns-${props.pageContext.site.id
+  const localKey = `${localKeyPrefix}-${props.pageContext.site.id
     .toString()
     .replace(/-/g, '')}`
-  if (useViewId) localKey += `-${props.defaultViewId}`
 
   /**
    * Sets the columns to persist in `localStorage` using `PnPClientStorage`.
@@ -36,13 +35,14 @@ export function usePersistedColumns(
    */
   const set = (columns: ProjectColumn[]) => {
     try {
-      const valueToStore = columns.map((c) => _.pick(c, ...properties))
-      new PnPClientStorage().local.put(localKey, valueToStore, dateAdd(new Date(), 'day', 7))
-    } catch {}
+      const value = columns.map((c) => _.pick(c, ...properties))
+      localStore.put(localKey, value, dateAdd(new Date(), 'day', 7))
+    } catch { }
   }
 
   /**
-   * Gets the persisted columns from `localStorage` using `PnPClientStorage`.
+   * Gets the persisted columns from `localStorage` using `PnPClientStorage`,
+   * or the default value if no persisted value is found.
    *
    * @returns The persisted columns or the default value if no persisted value is found
    */
