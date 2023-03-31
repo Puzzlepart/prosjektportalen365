@@ -18,17 +18,17 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
   configuration: IPortfolioConfiguration
 
   /**
-   * List name for column config
+   * SharePoint list name for the column configuration
    */
   columnConfigListName: string
 
   /**
-   * List name for columns
+   * SharePoint list name for the column configuration
    */
   columnsListName: string
 
   /**
-   * List name for views
+   * SharePoint list name for the views configuration
    */
   viewsListName: string
 
@@ -68,7 +68,7 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
   showViewSelector?: boolean
 
   /**
-   * Default view id
+   * Default view ID (the SharePoint item ID)
    */
   defaultViewId?: string
 
