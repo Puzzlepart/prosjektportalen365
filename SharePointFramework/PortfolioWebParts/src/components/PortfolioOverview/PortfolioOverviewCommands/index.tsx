@@ -1,12 +1,16 @@
 import { CommandBar } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
+import { ProjectColumn } from 'pp365-shared/lib/models'
 import React, { useContext } from 'react'
-import { FilterPanel } from '../../FilterPanel'
+import { FilterPanel, IFilterItemProps } from '../../FilterPanel'
 import { PortfolioOverviewContext } from '../context'
-import { TOGGLE_FILTER_PANEL } from '../reducer'
+import { ON_FILTER_CHANGED, TOGGLE_FILTER_PANEL } from '../reducer'
 import { IPortfolioOverviewCommandsProps } from './types'
 import { usePortfolioOverviewCommands } from './usePortfolioOverviewCommands'
 
+/**
+ * Component for displaying the command bar and filter panel.
+ */
 export const PortfolioOverviewCommands: React.FC<IPortfolioOverviewCommandsProps> = (props) => {
   const context = useContext(PortfolioOverviewContext)
   const { items, farItems, filters } = usePortfolioOverviewCommands(props)
@@ -20,8 +24,8 @@ export const PortfolioOverviewCommands: React.FC<IPortfolioOverviewCommandsProps
         onDismiss={() => context.dispatch(TOGGLE_FILTER_PANEL())}
         isLightDismiss={true}
         filters={filters}
-        onFilterChange={() => {
-          // TODO: handle filter change
+        onFilterChange={(column: ProjectColumn, selectedItems: IFilterItemProps[]) => {
+          context.dispatch(ON_FILTER_CHANGED({ column, selectedItems }))
         }}
       />
     </div>

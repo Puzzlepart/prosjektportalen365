@@ -1,6 +1,8 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
+import { IFilterItemProps } from 'components/FilterPanel'
 import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
+import _ from 'underscore'
 
 interface IPortfolioOverviewReducerParams {
     props: IPortfolioOverviewProps
@@ -52,6 +54,11 @@ export const TOGGLE_COMPACT = createAction('TOGGLE_COMPACT')
 export const CHANGE_VIEW = createAction<PortfolioOverviewView>('CHANGE_VIEW')
 
 /**
+ * `ON_FILTER_CHANGED`: Action dispatched when user changes a filter
+ */
+export const ON_FILTER_CHANGED = createAction<{ column: ProjectColumn, selectedItems: IFilterItemProps[] }>('ON_FILTER_CHANGED')
+
+/**
  * Initialize state for `<PortfolioOverview />`
  * 
  * @param params Parameters for reducer initialization
@@ -80,6 +87,7 @@ export const initState = (params: IPortfolioOverviewReducerParams): IPortfolioOv
  * ´EXCEL_EXPORT_ERROR´: Action dispatched when Excel export fails
  * ´TOGGLE_COMPACT´: Action dispatched when user toggles compact mode for the list
  * ´CHANGE_VIEW´: Action dispatched when user changes the view
+ * ´ON_FILTER_CHANGED´: Action dispatched when user changes a filter
  * 
  * @param params Parameters for reducer initialization
  */
@@ -113,5 +121,14 @@ export default (params: IPortfolioOverviewReducerParams) =>
         [CHANGE_VIEW.type]: (state, { payload }: ReturnType<typeof CHANGE_VIEW>) => {
             state.currentView = payload
             state.columns = payload.columns
+        },
+        [ON_FILTER_CHANGED.type]: (state, { payload }: ReturnType<typeof ON_FILTER_CHANGED>) => {
+            const { column, selectedItems } = payload
+            if(_.isEmpty(selectedItems)) {
+                delete state.activeFilters[column.fieldName]
+            }
+            else {
+                state.activeFilters[column.fieldName] = selectedItems.map((i) => i.value)
+            }
         }
     })

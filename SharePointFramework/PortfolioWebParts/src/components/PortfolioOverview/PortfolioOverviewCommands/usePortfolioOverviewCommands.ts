@@ -1,12 +1,13 @@
 import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
+import { IFilterProps } from 'components/FilterPanel'
 import _ from 'lodash'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ExcelExportService } from 'pp365-shared/lib/services'
 import { redirect } from 'pp365-shared/lib/util'
 import { useContext } from 'react'
-import { IFilterProps } from '../../FilterPanel'
 import { PortfolioOverviewContext } from '../context'
 import { CHANGE_VIEW, EXCEL_EXPORT_ERROR, EXCEL_EXPORT_SUCCESS, START_EXCEL_EXPORT, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL } from '../reducer'
+import { usePortfolioOverviewFilters } from '../usePortfolioOverviewFilters'
 import { IPortfolioOverviewCommandsProps } from './types'
 
 /**
@@ -17,6 +18,7 @@ import { IPortfolioOverviewCommandsProps } from './types'
  */
 export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsProps) {
   const context = useContext(PortfolioOverviewContext)
+  const filters = usePortfolioOverviewFilters()
   const items: IContextualMenuItem[] = [
     {
       key: 'EXCEL_EXPORT',
@@ -126,23 +128,6 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
     } as IContextualMenuItem
   ].filter((i) => i.data.isVisible)
 
-  const filters: IFilterProps[] = [
-    {
-      column: {
-        key: 'SelectedColumns',
-        fieldName: 'SelectedColumns',
-        name: strings.SelectedColumnsLabel,
-        minWidth: 0
-      },
-      items: context.props.configuration.columns.map((col) => ({
-        name: col.name,
-        value: col.fieldName,
-        selected: props.filteredData.columns.indexOf(col) !== -1
-      })),
-      defaultCollapsed: true
-    },
-    ...context.state.filters
-  ]
 
   /**
    * Callback function for Excel export. Handles the export to Excel with state updates and
@@ -165,12 +150,32 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
 
       // Export to Excel using the `ExcelExportService` from `pp365-shared`
       await ExcelExportService.export(items, props.filteredData.columns)
-      
+
       context.dispatch(EXCEL_EXPORT_SUCCESS())
     } catch (error) {
       context.dispatch(EXCEL_EXPORT_ERROR(error))
     }
   }
 
-  return { items, farItems, filters } as const
+  return {
+    items,
+    farItems,
+    filters: [
+      {
+        column: {
+          key: 'SelectedColumns',
+          fieldName: 'SelectedColumns',
+          name: strings.SelectedColumnsLabel,
+          minWidth: 0
+        },
+        items: context.props.configuration.columns.map((col) => ({
+          name: col.name,
+          value: col.fieldName,
+          selected: props.filteredData.columns.indexOf(col) !== -1
+        })),
+        defaultCollapsed: true
+      },
+      ...filters
+    ] as IFilterProps[]
+  } as const
 }

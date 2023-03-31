@@ -8,6 +8,7 @@ import { parseUrlHash } from 'pp365-shared/lib/util/parseUrlHash'
 import { useEffect } from 'react'
 import { DATA_FETCHED } from './reducer'
 import { IPortfolioOverviewHashStateState, IPortfolioOverviewProps, PortfolioOverviewErrorMessage } from './types'
+import { usePersistedColumns } from './usePersistedColumns'
 
 /**
  * Get current view from URL or hash state.
@@ -48,12 +49,14 @@ function getCurrentView(hashState: IPortfolioOverviewHashStateState, props: IPor
 }
 
 /**
- * Hook to fetch initial data for `PortfolioOverview`
+ * Hook to fetch initial data for `PortfolioOverview`. The columns are persisted in local storage
+ * using `set` from the hook `usePersistedColumns`.
  * 
  * @param props Props for `PortfolioOverview`
  * @param dispatch Dispatch function from `useReducer`
  */
 export const useFetchInitialData = (props: IPortfolioOverviewProps, dispatch: React.Dispatch<AnyAction>) => {
+    const { set } = usePersistedColumns(props)
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
@@ -75,6 +78,7 @@ export const useFetchInitialData = (props: IPortfolioOverviewProps, dispatch: Re
                 if (hashState.groupBy && !groupBy) {
                     groupBy = _.find(configuration.columns, (fc) => fc.fieldName === hashState.groupBy)
                 }
+                set(currentView.columns)
                 dispatch(DATA_FETCHED({
                     items,
                     currentView,
