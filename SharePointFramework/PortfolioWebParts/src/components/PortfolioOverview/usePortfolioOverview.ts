@@ -41,7 +41,7 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
 
   const selection = new Selection({ onSelectionChanged })
 
-  const onColumnHeaderContextMenu = useColumnHeaderContextMenu()
+  const onColumnHeaderContextMenu = useColumnHeaderContextMenu(contextValue)
 
   const onColumnHeaderClick = useColumnHeaderClick(onColumnHeaderContextMenu)
 

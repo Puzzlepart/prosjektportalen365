@@ -32,8 +32,6 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
    * error handling.
    */
   const exportToExcel = useCallback(async () => {
-    // eslint-disable-next-line no-console
-    console.log('Dispatching START_EXCEL_EXPORT')
     context.dispatch(START_EXCEL_EXPORT())
     try {
       // If no items are selected, export all items
@@ -52,8 +50,6 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       })
 
       // Export to Excel using the `ExcelExportService` from `pp365-shared`
-      // eslint-disable-next-line no-console
-      console.log('Exporting to Excel with ExcelExportService', items, props.filteredData.columns)
       await ExcelExportService.export(items, props.filteredData.columns)
 
       context.dispatch(EXCEL_EXPORT_SUCCESS())
@@ -74,8 +70,6 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       data: { isVisible: context.props.showExcelExportButton },
       disabled: context.state.isExporting || context.state.loading,
       onClick: () => {
-        // eslint-disable-next-line no-console
-        console.log('exportToExcel')
         exportToExcel()
       }
     } as IContextualMenuItem

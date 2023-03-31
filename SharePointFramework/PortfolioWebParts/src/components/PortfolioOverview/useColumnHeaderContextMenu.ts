@@ -2,8 +2,7 @@ import { ContextualMenuItemType, format, IContextualMenuProps } from '@fluentui/
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import { redirect } from 'pp365-shared/lib/util/redirect'
-import { useContext } from 'react'
-import { PortfolioOverviewContext } from './context'
+import { IPortfolioOverviewContext } from './context'
 import { SET_COLUMN_CONTEXT_MENU, SET_GROUP_BY, SET_SORT } from './reducer'
 import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 
@@ -16,14 +15,14 @@ import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
  * - `SORT_DESC`: Sorts the column in descending order
  * - `SORT_ASC`: Sorts the column in ascending order
  * - `DIVIDER_01`: Divider
- * - `FILTER_BY`: Filter by column
- * - `DIVIDER_02`: Divider
  * - `GROUP_BY`: Group by column
  * - `DIVIDER_03`: Divider
  * - `COLUMN_SETTINGS`: Column settings
+ *
+ * @param context `PortfolioOverview` context needs to be passed as a prop to the hook
+ * as it is not available yet using `useContext` in the hook.
  */
-export function useColumnHeaderContextMenu() {
-  const context = useContext(PortfolioOverviewContext)
+export function useColumnHeaderContextMenu(context: IPortfolioOverviewContext) {
   const onColumnHeaderContextMenu = (
     column?: ProjectColumn,
     ev?: React.MouseEvent<HTMLElement, MouseEvent>
@@ -51,17 +50,6 @@ export function useColumnHeaderContextMenu() {
           itemType: ContextualMenuItemType.Divider
         },
         {
-          key: 'FILTER_BY',
-          name: strings.FilterBy,
-          canCheck: true,
-          checked: false,
-          disabled: true
-        },
-        {
-          key: 'DIVIDER_02',
-          itemType: ContextualMenuItemType.Divider
-        },
-        {
           key: 'GROUP_BY',
           name: format(strings.GroupByColumnLabel, column.name),
           canCheck: true,
@@ -70,7 +58,7 @@ export function useColumnHeaderContextMenu() {
           onClick: () => context.dispatch(SET_GROUP_BY(column))
         },
         {
-          key: 'DIVIDER_03',
+          key: 'DIVIDER_02',
           itemType: ContextualMenuItemType.Divider
         },
         {
