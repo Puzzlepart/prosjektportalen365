@@ -9,9 +9,9 @@ import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
 
 /**
  * Hook for the column header context menu. Handles the logic for the context menu.
- * 
+ *
  * Creates a context menu for the column header and dispatches the `SET_COLUMN_CONTEXT_MENU` action.
- * 
+ *
  * The menu contains the following items:
  * - `SORT_DESC`: Sorts the column in descending order
  * - `SORT_ASC`: Sorts the column in ascending order
@@ -23,64 +23,69 @@ import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
  * - `COLUMN_SETTINGS`: Column settings
  */
 export function useColumnHeaderContextMenu() {
-    const context = useContext(PortfolioOverviewContext)
-    const onColumnHeaderContextMenu = (column?: ProjectColumn, ev?: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        if (column.key === 'AddColumn') return
-        const columnContextMenu: IContextualMenuProps = {
-            target: ev.currentTarget,
-            items: [
-                {
-                    key: 'SORT_DESC',
-                    name: strings.SortDescLabel,
-                    canCheck: true,
-                    checked: column.isSorted && column.isSortedDescending,
-                    onClick: () => context.dispatch(SET_SORT({ column, isSortedDescending: true }))
-                },
-                {
-                    key: 'SORT_ASC',
-                    name: strings.SortAscLabel,
-                    canCheck: true,
-                    checked: column.isSorted && !column.isSortedDescending,
-                    onClick: () => context.dispatch(SET_SORT({ column, isSortedDescending: false }))
-                },
-                {
-                    key: 'DIVIDER_01',
-                    itemType: ContextualMenuItemType.Divider
-                },
-                {
-                    key: 'FILTER_BY',
-                    name: strings.FilterBy,
-                    canCheck: true,
-                    checked: false,
-                    disabled: true
-                },
-                {
-                    key: 'DIVIDER_02',
-                    itemType: ContextualMenuItemType.Divider
-                },
-                {
-                    key: 'GROUP_BY',
-                    name: format(strings.GroupByColumnLabel, column.name),
-                    canCheck: true,
-                    checked: get<string>(context.state, 'groupBy.fieldName', '') === column.fieldName,
-                    disabled: !column.isGroupable,
-                    onClick: () => context.dispatch(SET_GROUP_BY(column))
-                },
-                {
-                    key: 'DIVIDER_03',
-                    itemType: ContextualMenuItemType.Divider
-                },
-                {
-                    key: 'COLUMN_SETTINGS',
-                    name: strings.ColumSettingsLabel,
-                    onClick: () =>
-                        redirect(`${context.props.configuration.columnUrls.defaultEditFormUrl}?ID=${column.id}`),
-                    disabled: !context.props.pageContext.legacyPageContext.isSiteAdmin
-                }
-            ],
-            onDismiss: () => context.dispatch(SET_COLUMN_CONTEXT_MENU(null))
+  const context = useContext(PortfolioOverviewContext)
+  const onColumnHeaderContextMenu = (
+    column?: ProjectColumn,
+    ev?: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    if (column.key === 'AddColumn') return
+    const columnContextMenu: IContextualMenuProps = {
+      target: ev.currentTarget,
+      items: [
+        {
+          key: 'SORT_DESC',
+          name: strings.SortDescLabel,
+          canCheck: true,
+          checked: column.isSorted && column.isSortedDescending,
+          onClick: () => context.dispatch(SET_SORT({ column, isSortedDescending: true }))
+        },
+        {
+          key: 'SORT_ASC',
+          name: strings.SortAscLabel,
+          canCheck: true,
+          checked: column.isSorted && !column.isSortedDescending,
+          onClick: () => context.dispatch(SET_SORT({ column, isSortedDescending: false }))
+        },
+        {
+          key: 'DIVIDER_01',
+          itemType: ContextualMenuItemType.Divider
+        },
+        {
+          key: 'FILTER_BY',
+          name: strings.FilterBy,
+          canCheck: true,
+          checked: false,
+          disabled: true
+        },
+        {
+          key: 'DIVIDER_02',
+          itemType: ContextualMenuItemType.Divider
+        },
+        {
+          key: 'GROUP_BY',
+          name: format(strings.GroupByColumnLabel, column.name),
+          canCheck: true,
+          checked: get<string>(context.state, 'groupBy.fieldName', '') === column.fieldName,
+          disabled: !column.isGroupable,
+          onClick: () => context.dispatch(SET_GROUP_BY(column))
+        },
+        {
+          key: 'DIVIDER_03',
+          itemType: ContextualMenuItemType.Divider
+        },
+        {
+          key: 'COLUMN_SETTINGS',
+          name: strings.ColumSettingsLabel,
+          onClick: () =>
+            redirect(
+              `${context.props.configuration.columnUrls.defaultEditFormUrl}?ID=${column.id}`
+            ),
+          disabled: !context.props.pageContext.legacyPageContext.isSiteAdmin
         }
-        context.dispatch(SET_COLUMN_CONTEXT_MENU(columnContextMenu))
+      ],
+      onDismiss: () => context.dispatch(SET_COLUMN_CONTEXT_MENU(null))
     }
-    return onColumnHeaderContextMenu
+    context.dispatch(SET_COLUMN_CONTEXT_MENU(columnContextMenu))
+  }
+  return onColumnHeaderContextMenu
 }

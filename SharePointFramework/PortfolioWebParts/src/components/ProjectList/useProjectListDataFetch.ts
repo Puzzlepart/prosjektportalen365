@@ -5,7 +5,7 @@ import { IProjectListProps, IProjectListState, IProjectListView } from './types'
 
 /**
  * Component data fetch hook for `ProjectList`. This hook is responsible for
- * fetching data and setting state. It feches enriched projects using 
+ * fetching data and setting state. It feches enriched projects using
  * `dataAdapter.fetchEnrichedProjects()` and checks if the current user is in
  * the `PortfolioManagerGroupName` group using `dataAdapter.isUserInGroup()`.
  * The selected view is set to the `defaultView` prop or the first view in the

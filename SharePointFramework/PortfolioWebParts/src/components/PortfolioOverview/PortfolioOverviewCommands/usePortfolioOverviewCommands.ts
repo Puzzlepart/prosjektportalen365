@@ -6,14 +6,21 @@ import { ExcelExportService } from 'pp365-shared/lib/services'
 import { redirect } from 'pp365-shared/lib/util'
 import { useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
-import { CHANGE_VIEW, EXCEL_EXPORT_ERROR, EXCEL_EXPORT_SUCCESS, START_EXCEL_EXPORT, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL } from '../reducer'
+import {
+  CHANGE_VIEW,
+  EXCEL_EXPORT_ERROR,
+  EXCEL_EXPORT_SUCCESS,
+  START_EXCEL_EXPORT,
+  TOGGLE_COMPACT,
+  TOGGLE_FILTER_PANEL
+} from '../reducer'
 import { usePortfolioOverviewFilters } from '../usePortfolioOverviewFilters'
 import { IPortfolioOverviewCommandsProps } from './types'
 
 /**
  * Component logic hook for the PortfolioOverviewCommands component. Handles the logic for
  * the command bar and the filter panel.
- * 
+ *
  * @param props Props for the component `<PortfolioOverviewCommands />`
  */
 export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsProps) {
@@ -29,7 +36,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       },
       buttonStyles: { root: { border: 'none' } },
       data: { isVisible: context.props.showExcelExportButton },
-      disabled: context.state.isExporting,
+      disabled: context.state.isExporting || context.state.loading,
       onClick: () => {
         exportToExcel()
       }
@@ -45,6 +52,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       data: {
         isVisible: context.props.configuration.userCanAddViews && context.props.showViewSelector
       },
+      disabled: context.state.loading,
       onClick: () => redirect(context.props.configuration.viewsUrls.defaultNewFormUrl)
     } as IContextualMenuItem,
     {
@@ -54,6 +62,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       buttonStyles: { root: { border: 'none' } },
       itemType: ContextualMenuItemType.Header,
       data: { isVisible: context.props.showViewSelector },
+      disabled: context.state.loading,
       subMenuProps: {
         items: [
           {
@@ -82,14 +91,14 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
           },
           ...context.props.configuration.views.map(
             (view) =>
-            ({
-              key: view.id.toString(),
-              name: view.title,
-              iconProps: { iconName: view.iconName },
-              canCheck: true,
-              checked: view.id === context.state.currentView?.id,
-              onClick: () => context.dispatch(CHANGE_VIEW(view))
-            } as IContextualMenuItem)
+              ({
+                key: view.id.toString(),
+                name: view.title,
+                iconProps: { iconName: view.iconName },
+                canCheck: true,
+                checked: view.id === context.state.currentView?.id,
+                onClick: () => context.dispatch(CHANGE_VIEW(view))
+              } as IContextualMenuItem)
           ),
           {
             key: 'DIVIDER_02',
@@ -103,6 +112,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
           {
             key: 'EDIT_VIEW',
             name: strings.EditViewText,
+            disabled: context.state.loading,
             onClick: () =>
               redirect(
                 `${context.props.configuration.viewsUrls.defaultEditFormUrl}?ID=${context.state.currentView?.id}`
@@ -119,6 +129,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       itemType: ContextualMenuItemType.Normal,
       canCheck: true,
       checked: context.state.showFilterPanel,
+      disabled: context.state.loading,
       data: { isVisible: context.props.showFilters },
       onClick: (ev) => {
         ev.preventDefault()
@@ -128,7 +139,6 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
     } as IContextualMenuItem
   ].filter((i) => i.data.isVisible)
 
-
   /**
    * Callback function for Excel export. Handles the export to Excel with state updates and
    * error handling.
@@ -137,7 +147,10 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
     context.dispatch(START_EXCEL_EXPORT())
     try {
       // If no items are selected, export all items
-      const items = _.isArray(context.state.selectedItems) && context.state.selectedItems.length > 0 ? context.state.selectedItems : props.filteredData.items
+      const items =
+        _.isArray(context.state.selectedItems) && context.state.selectedItems.length > 0
+          ? context.state.selectedItems
+          : props.filteredData.items
 
       // Convert date columns to Date objects
       props.filteredData.columns.forEach((col) => {
