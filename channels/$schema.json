@@ -1,6 +1,16 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
+    "definitions": {
+        "guid": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "sppkg": {
+            "type": "string",
+            "pattern": "solution\\/pp-[A-Za-z-]*\\.sppkg"
+          }
+    },
     "properties": {
         "name": {
             "type": "string"
@@ -15,34 +25,28 @@
                             "type": "object",
                             "properties": {
                                 "id": {
-                                    "type": "string",
-                                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                    "$ref": "#/definitions/guid"
                                 },
                                 "name": {
                                     "type": "string"
                                 },
                                 "zippedPackage": {
-                                    "type": "string",
-                                    "pattern": "solution\/pp-[A-Za-z-]*.sppkg"
+                                    "$ref": "#/definitions/sppkg"
                                 },
                                 "components": {
                                     "type": "object",
                                     "properties": {
                                         "Footer": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "IdeaProcessingCommand": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "IdeaProjectDataCommand": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "IdeaRegistrationCommand": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         }
                                     },
                                     "required": [
@@ -64,46 +68,37 @@
                             "type": "object",
                             "properties": {
                                 "id": {
-                                    "type": "string",
-                                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                    "$ref": "#/definitions/guid"
                                 },
                                 "name": {
                                     "type": "string"
                                 },
                                 "zippedPackage": {
-                                    "type": "string",
-                                    "pattern": "solution\/pp-[A-Za-z-]*.sppkg"
+                                    "$ref": "#/definitions/sppkg"
                                 },
                                 "components": {
                                     "type": "object",
                                     "properties": {
                                         "LatestProjectsWebPart": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "PortfolioAggregationWebPart": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "PortfolioInsightsWebPart": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "PortfolioOverviewWebPart": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "ProjectListWebPart": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "ProjectTimelineWebPart": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "ResourceAllocationWebPart": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         }
                                     },
                                     "required": [
@@ -128,34 +123,28 @@
                             "type": "object",
                             "properties": {
                                 "id": {
-                                    "type": "string",
-                                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                    "$ref": "#/definitions/guid"
                                 },
                                 "name": {
                                     "type": "string"
                                 },
                                 "zippedPackage": {
-                                    "type": "string",
-                                    "pattern": "solution\/pp-[A-Za-z-]*.sppkg"
+                                    "$ref": "#/definitions/sppkg"
                                 },
                                 "components": {
                                     "type": "object",
                                     "properties": {
                                         "ProgramAdministrationWebpart": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "ProgramAggregationWebPart": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "ProgramProjectOverviewWebPart": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "ProgramTimelineWebPart": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         }
                                     },
                                     "required": [
@@ -177,34 +166,28 @@
                             "type": "object",
                             "properties": {
                                 "id": {
-                                    "type": "string",
-                                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                    "$ref": "#/definitions/guid"
                                 },
                                 "name": {
                                     "type": "string"
                                 },
                                 "zippedPackage": {
-                                    "type": "string",
-                                    "pattern": "solution\/pp-[A-Za-z-]*.sppkg"
+                                    "$ref": "#/definitions/sppkg"
                                 },
                                 "components": {
                                     "type": "object",
                                     "properties": {
                                         "HelpContentApplicationCustomizer": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "ProjectSetup": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "ProjectUpgrade": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "TemplateSelectorCommand": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         }
                                     },
                                     "required": [
@@ -226,42 +209,34 @@
                             "type": "object",
                             "properties": {
                                 "id": {
-                                    "type": "string",
-                                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                    "$ref": "#/definitions/guid"
                                 },
                                 "name": {
                                     "type": "string"
                                 },
                                 "zippedPackage": {
-                                    "type": "string",
-                                    "pattern": "solution\/pp-[A-Za-z-]*.sppkg"
+                                    "$ref": "#/definitions/sppkg"
                                 },
                                 "components": {
                                     "type": "object",
                                     "properties": {
                                         "OpportunityMatrixWebPart": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "ProjectInformationWebPart": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "ProjectPhasesWebPart": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "ProjectStatusWebPart": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "ProjectTimelineWebPart": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         },
                                         "RiskMatrixWebPart": {
-                                            "type": "string",
-                                            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                                            "$ref": "#/definitions/guid"
                                         }
                                     },
                                     "required": [
