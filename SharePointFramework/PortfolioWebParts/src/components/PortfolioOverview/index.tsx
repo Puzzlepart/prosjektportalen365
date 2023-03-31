@@ -1,4 +1,4 @@
-import { ConstrainMode, ContextualMenu, DetailsListLayoutMode, LayerHost, MarqueeSelection, MessageBar, ScrollablePane, ScrollbarVisibility, SelectionMode, ShimmeredDetailsList } from '@fluentui/react'
+import { ConstrainMode, ContextualMenu, DetailsListLayoutMode, IDetailsHeaderProps, IRenderFunction, LayerHost, MarqueeSelection, MessageBar, ScrollablePane, ScrollbarVisibility, SearchBox, SelectionMode, ShimmeredDetailsList, Sticky, StickyPositionType } from '@fluentui/react'
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import React, { FC } from 'react'
 import { PortfolioOverviewContext } from './context'
@@ -8,22 +8,21 @@ import { renderItemColumn } from './RenderItemColumn'
 import {
     IPortfolioOverviewProps
 } from './types'
+import { useFilteredData } from './useFilteredData'
 import { usePortfolioOverview } from './usePortfolioOverview'
 
+/**
+ * Component for displaying a portfolio overview - an overview of all projects in a portfolio.
+ */
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
     const {
         state,
-        setState,
         layerHostId,
         selection,
-        getFilteredData,
-        getFilters,
-        onRenderDetailsHeader,
         onColumnHeaderClick,
         onColumnHeaderContextMenu,
-        onChangeView,
-        onFilterChange
-    } = usePortfolioOverview()
+    } = usePortfolioOverview(props)
+    const { items, columns, groups } = useFilteredData(props, state)
 
     if (state.error) {
         return (
@@ -37,24 +36,10 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
         )
     }
 
-    const { items, columns, groups } = getFilteredData()
-
     return (
-        <PortfolioOverviewContext.Provider value={{ props, state, layerHostId }}>
-            <div className={styles.root}>
-                <PortfolioOverviewCommands
-                    // {...{ ...props, ...state }}
-                    // fltItems={items}
-                    // fltColumns={columns}
-                    // filters={getFilters()}
-                    // events={{
-                    //     onSetCompact: (isCompact) => setState({ isCompact }),
-                    //     onChangeView,
-                    //     onFilterChange
-                    // }}
-                    // layerHostId={layerHostId}
-                    // hidden={!props.showCommandBar}
-                />
+        <div className={styles.root}>
+            <PortfolioOverviewContext.Provider value={{ props, state, layerHostId }}>
+                <PortfolioOverviewCommands />
                 <div className={styles.container}>
                     <ScrollablePane
                         scrollbarVisibility={ScrollbarVisibility.auto}
@@ -70,7 +55,23 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
                                 selectionMode={SelectionMode.multiple}
                                 selection={selection}
                                 setKey='multiple'
-                                onRenderDetailsHeader={onRenderDetailsHeader}
+                                onRenderDetailsHeader={(headerProps: IDetailsHeaderProps, defaultRender?: IRenderFunction<IDetailsHeaderProps>) => (
+                                    <Sticky
+                                        stickyClassName={styles.stickyHeader}
+                                        stickyPosition={StickyPositionType.Header}
+                                        isScrollSynced={true}>
+                                        <div className={styles.header}>
+                                            <div className={styles.title}>{props.title}</div>
+                                        </div>
+                                        <div className={styles.searchBox} hidden={!props.showSearchBox}>
+                                            <SearchBox
+                                                // onChange={this._onSearch.bind(this)}
+                                                placeholder={''}
+                                            />
+                                        </div>
+                                        <div className={styles.headerColumns}>{defaultRender(headerProps)}</div>
+                                    </Sticky>
+                                )}
                                 onRenderItemColumn={(item, _index, column: ProjectColumn) =>
                                     renderItemColumn(item, column, props)
                                 }
@@ -83,8 +84,8 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
                     </ScrollablePane>
                 </div>
                 {state.columnContextMenu && <ContextualMenu {...state.columnContextMenu} />}
-            </div>
-        </PortfolioOverviewContext.Provider>
+            </PortfolioOverviewContext.Provider>
+        </div>
     )
 }
 
