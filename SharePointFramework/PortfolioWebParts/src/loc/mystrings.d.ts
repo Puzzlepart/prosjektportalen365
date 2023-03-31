@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  DefaultRenderModeLabel: string
   ColumnRenderDescription: ReactNode
   DisplayNameDescription: string
   HideViewsLabel: string
@@ -146,8 +147,8 @@ declare interface IPortfolioWebPartsStrings {
   SearchBoxPlaceholderText: string
   SearchBoxPlaceholderTextLabel: string
   ShowAllMeasurementsLinkText: string
-  RenderAsListText: string
-  RenderAsTilesText: string
+  RenderModeListText: string
+  RenderModeTilesText: string
   ShowCommandBarLabel: string
   ShowExcelExportButtonLabel: string
   ShowFiltersLabel: string

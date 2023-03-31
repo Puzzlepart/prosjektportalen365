@@ -142,8 +142,8 @@ define([], function () {
     SearchBoxPlaceholderText: 'Søk i {0}...',
     SearchBoxPlaceholderTextLabel: 'Søkebokstekst',
     ShowAllMeasurementsLinkText: 'Vis alle målinger',
-    RenderAsListText: 'Liste',
-    RenderAsTilesText: 'Fliser',
+    RenderModeListText: 'Liste',
+    RenderModeTilesText: 'Fliser',
     ShowCommandBarLabel: 'Vis kommandolinje',
     ShowExcelExportButtonLabel: 'Vis eksport til Excel-knapp',
     ShowFiltersLabel: 'Vis filtre',
@@ -206,5 +206,6 @@ define([], function () {
     ProjectContentColumnItemNotFound: 'Prosjektinnholdskolonne ble ikke funnet',
     ShowHideColumnsLabel: 'Vis/skjul kolonner',
     ShowHideColumnsDescription: 'Velg kolonnene som skal vises for nåværende visning. Endringen vil oppdatere datakilden med kolonnene som velges.',
+    DefaultRenderModeLabel: 'Standard visningsmodus'
   }
 })

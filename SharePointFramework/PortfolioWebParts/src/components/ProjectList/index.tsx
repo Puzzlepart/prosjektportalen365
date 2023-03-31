@@ -41,7 +41,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
    * @param projects - Projects to render
    */
   function renderProjects(projects: ProjectListModel[]) {
-    switch (state.renderAs) {
+    switch (state.renderMode) {
       case 'tiles': {
         return projects.map((project, idx) => (
           <ProjectCardContext.Provider
@@ -136,7 +136,8 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
                 </div>
                 <RenderModeDropdown
                   hidden={!props.showViewSelector}
-                  onChange={(renderAs) => setState({ renderAs })}
+                  renderAs={state.renderMode}
+                  onChange={(renderAs) => setState({ renderMode: renderAs })}
                 />
                 {state.isDataLoaded && isEmpty(projects) && (
                   <div className={styles.emptyMessage}>
