@@ -309,266 +309,332 @@
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Beslutte utredning av idéen og utforme et førsteutkast til prosjektmandat</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Definere en tydelig problemstilling som synliggjør behovet for nærmere utredning</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Gjøre det tydelig hvordan eller av hvem utredningen skal finansieres</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Vurdere om det er mest riktig å gjennomføre tiltaket som et prosjekt eller som en linjeoppgave</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Vurdere om tiltaket er i henhold til virksomhetsstrategien</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Vurdere om det finnes noen føringer (IT -politiske eller andre) som gjelder og må tas hensyn til i utredningen</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Vurdere om det er behov for mer informasjon før det kan fattes en beslutning</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Utforme endelig prosjektmandat og legge det fram til vedtak i Beslutningspunkt 1 (BP1)</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Gjennomføre BP1 (sjekkliste og evt. faseovergang) og vurdere om vi skal gå videre til konseptfasen og utrede ulike konsepter for et mulig prosjekt</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Hvis man i BP1 har vedtatt å gå videre til konseptfasen, utnevne en utredningsleder for konseptfasen</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Etablere prosjektforslagsdokumentet for videre arbeid (på basis av prosjektmandatet)</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Konsept</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">110</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Utnevne en prosjekteier</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Konsept</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Vurdere om det skal etableres et prosjektstyre</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Konsept</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Etablere rollebeskrivelse for prosjekteier</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Konsept</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">140</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Utpeke en prosjektleder</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Konsept</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">150</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Etablere rollebeskrivelse for prosjektleder</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Konsept</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">160</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Allokere nøkkelressurser for prosjektet og gjøre nødvendige avtaler for å sikre ressurstilgang, samt sette sammen en prosjektgruppe</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Konsept</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">170</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Gjennomføre nødvendige analyser (Samfunnsøkonomisk analyse, KS1, KS2 e.l.) </pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Konsept</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">180</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Etablere en grov prosjektbegrunnelse</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Konsept</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">190</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Samle inn erfaringer fra tidligere prosjekter og aktiviteter som er nyttige for dette prosjektet</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Konsept</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Etablere prosjektets egen erfaringslogg</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Konsept</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Vurdere om prosjektet er realistisk og gjennomførbart</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Konsept</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Vurdere om prosjektforslaget støtter opp under virksomhetens mål og strategier</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Konsept</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Vurdere om det er gjort en tilstrekkelig evaluering av ulike alternativer å sikre at prosjektforslaget gir et riktig valg å gå videre med. (Husk kvantitative og kvalitative gevinstanalyser og sammenligninger av kost/nytte for hvert alternativ)</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Konsept</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Utarbeide endelig prosjektforslag til vedtak i Beslutningspunkt 2 (BP2)</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Konsept</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">250</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Ferdigstille faseplan for Planleggingsfasen til vedtak i Beslutningspunkt 2 (BP2)</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Konsept</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">260</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Gjennomføre BP2 (sjekkliste og evt. faseovergang) og vurdere om man skal gå videre til planleggingsfasen og planlegge prosjektet i detalj</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Konsept</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">270</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Vurdere å etablere nødvendige strategier for gjennomføring av prosjektet (Dette vil variere mellom ulike prosjekttyper. Se eksempler under aktiviteter i Planleggingsfasen på Prosjektveiviseren.no)</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Planlegge</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">280</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Ferdigstille den detaljerte prosjektbegrunnelsen som i sum skal sikre at prosjektet fortsatt er ønskelig og i tråd med virksomhetens strategiske mål?</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Planlegge</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">290</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Gjennomføre en interessentanalyse</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Planlegge</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">300</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Opprette en kommunikasjonsplan</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Planlegge</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">310</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Etablere en endelig prosjektorganisasjon med roller og ansvar, og tilstrekkelige ressurser til å gjennomføre prosjektet</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Planlegge</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">320</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Gjennomføre usikkerhetsanalyse og vurdere om usikkerheten er akseptabel</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Planlegge</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">330</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Identifisere kritiske suksessfaktorer og leveranser i prosjektet</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Planlegge</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">340</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Utarbeide en gevinstrealiseringsplan som inkluderer en vurdering av linjeorganisasjonens kapasitet til å realisere gevinstene</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Planlegge</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">350</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Utarbeide en helhetlig og konsistent gjennomføringsplan som bryter prosjektet ned i håndterbare faser med milepæler</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Planlegge</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">360</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Utarbeide/samle nødvendig styringsdokumentasjon til vedtak i Beslutningspunkt 3 (BP3)</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Planlegge</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">370</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Ferdigstille faseplan for første gjennomføringsfase til vedtak i BP3</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Planlegge</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">380</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Gjennomføre BP3 (sjekkliste og evt. faseovergang) og vurdere om man skal gå videre til gjennomføringsfasen(e)</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Planlegge</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">390</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Følge opp at prosjektets leveranser er i overensstemmelse med definerte resultatmål for prosjektet</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Gjennomføre</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">400</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Sørge for at leveranser er skikkelig dokumentert og levert i henhold til plan</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Gjennomføre</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">410</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Når det nærmer seg avslutningsfasen, vurdere om det er noe utestående arbeid som prosjektet skal ha ansvar for å avslutte</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Gjennomføre</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">420</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Sørge for at nødvendig opplæring, brukerdokumentasjon, driftsrutiner osv er utarbeidet og gjennomført</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Gjennomføre</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">430</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Sørge for god dialog med linjeorganisasjonen underveis, slik at den er klar til å ta i bruk leveransene fra prosjektet</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Gjennomføre</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">440</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Forankre og tydeliggjøre hvem som skal følge opp og rapportere effekter (i henhold til gevinstrealiseringsplan), når dette skal rapporteres på etter prosjektslutt og til hvem</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Gjennomføre</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">450</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Avklare hvem som har ansvar for videre forvaltning og drift av prosjektresultatet, og inngå nødvendige avtaler</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Gjennomføre</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">460</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Levere ferdige prosjektleveranser til linjen</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Gjennomføre</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">470</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Oppdatere styringsdokumentasjon (prosjektbegrunnelse, erfaringslogg og gevinstrealiseringsplan) til vedtak i Beslutningspunkt 4 (BP4)</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Gjennomføre</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">480</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Ferdigstille faseplan for avslutningsfasen til vedtak i BP4</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Gjennomføre</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">490</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Gjennomføre BP4 (sjekkliste og evt. faseovergang) og vurdere om man skal gå videre til avslutningsfasen</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Gjennomføre</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">500</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Komplettere evt. restanseliste og overlevere endelig leveranse til linjeorganisasjonen</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Avslutte</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">510</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Levere evt. avtalt støtte til linjeorganisasjonen i innføringsfasen</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Avslutte</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">520</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Sørge for at alle relevante kontrakter og avtaler er formelt avsluttet</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Avslutte</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">530</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Oppdatere og avslutte prosjektregnskapet</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Avslutte</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">540</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Avslutte og arkivere prosjektetdokumentasjonen (produkt, kost, tid, kvalitet, ressursbruk)</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Avslutte</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">550</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Dokumentere positive og negative erfaringer for erfaringsoverføring til organisasjonens erfaringslogg</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Avslutte</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">560</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Oppdatere prosjektbegrunnelse og gevinstrealiseringsplan (husk at planlagte effektmålinger bør inngå som en del av virksomhetens ordinære styringsprosesser for å sikre måloppnåelse</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Avslutte</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">570</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Evaluere prosjektet og utarbeide sluttrapport</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Avslutte</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">580</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Informere alle relevante interessenter om avslutning av prosjektet?</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Avslutte</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">590</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Utarbeide/samle nødvendig styringsdokumentasjon (sluttrapport, oppdatert prosjektbegrunnelse og gevinstrealiseringplan med restrisiko) til vedtak i Beslutningspunkt 5 (BP5)</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Avslutte</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">600</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Gjennomføre BP5 (sjekkliste og evt. faseovergang) og vurdere om man skal avslutte prosjektet og gå til realiseringsfasen</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Avslutte</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">610</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Formelt oppløse prosjektorganisasjonen ('KickOut')</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Avslutte</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">620</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Sørge for at planlagte målinger og tiltak er gjennomført i henhold til gevinstrealiseringplanen</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Realisere</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">630</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Måle om forventede gevinster er oppnådd eller er om det behov for ytterligere tiltak. I så fall utarbeidet en tiltaksplan</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Realisere</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">640</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Gjennomføre avtalte effektmålinger for vedtak i Beslutningspunkt 6 (BP6)</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Realisere</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">650</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Gjennomføre BP6 (sjekkliste) og vurdere om man har oppnådd ønsket effekt, og evt. vurdere nye tiltak</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Realisere</pnp:DataValue>
+                            <pnp:DataValue FieldName="GtSortOrder">660</pnp:DataValue>
                         </pnp:DataRow>
                     </pnp:DataRows>
                 </pnp:ListInstance>
