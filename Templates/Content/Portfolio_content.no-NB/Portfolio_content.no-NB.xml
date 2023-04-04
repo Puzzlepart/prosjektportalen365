@@ -305,7 +305,7 @@
                     </pnp:DataRows>
                 </pnp:ListInstance>
                 <pnp:ListInstance Title="Planneroppgaver" TemplateType="100" Url="Lists/Planneroppgaver" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
-                    <pnp:DataRows UpdateBehavior="Skip" KeyColumn="Title">
+                    <pnp:DataRows UpdateBehavior="Overwrite" KeyColumn="Title">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Beslutte utredning av idéen og utforme et førsteutkast til prosjektmandat</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
