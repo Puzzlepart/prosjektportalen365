@@ -12,6 +12,8 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 
 ### Feilrettinger
 
+---
+
 ## 1.8.1 - 31.03.2023
 
 ### Forbedringer
