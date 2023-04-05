@@ -3,9 +3,17 @@ og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detaljert 'endringslogg' for siste versjon.
 
-## 1.8.1 - TBA
+## 1.8.2 - TBA
 
 ### Ny funksjonalitet
+
+### Forbedringer
+
+- Lagt inn nye knapper på 'Konfigurasjon' siden for Prosjektportalen (Prosjekter, Prosjektstatus og Tidslinjeinnhold), samt skjult 'Maloppsett' og 'Tidslinjeinnhold' fra områderinnhold [#1076](https://github.com/Puzzlepart/prosjektportalen365/pull/1076)
+
+### Feilrettinger
+
+## 1.8.1 - 31.03.2023
 
 ### Forbedringer
 
