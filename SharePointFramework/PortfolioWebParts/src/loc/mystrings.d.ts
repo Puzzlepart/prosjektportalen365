@@ -1,7 +1,10 @@
 declare interface IPortfolioWebPartsStrings {
   PortfolioOverviewDataFetchErrorView: string
   PortfolioOverviewDataFetchError: string
-  ColumnRenderDescription: string
+  ListViewText: string
+  CompactViewText: string
+  PersonalViewsHeaderText: string
+  ColumnRenderDescription: ReactNode
   DisplayNameDescription: string
   HideViewsLabel: string
   ProjectsAccessSearchBoxPlaceholderText: string

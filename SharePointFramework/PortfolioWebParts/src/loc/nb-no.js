@@ -209,5 +209,8 @@ define([], function () {
     ShowHideColumnsDescription: 'Velg kolonnene som skal vises for nåværende visning. Endringen vil oppdatere datakilden med kolonnene som velges.',
     PortfolioOverviewDataFetchError: 'Det skjedde en feil under henting av data for porteføljeoversikten. Vennligst prøv igjen senere.\n \n \n **Detaljert feilmelding:** `{0}`',
     PortfolioOverviewDataFetchErrorView: 'Det skjedde en feil under henting av data for porteføljeoversikten for visning "{0}". Vennligst prøv igjen senere, eller prøv en annen visning.\n \n \n **Detaljert feilmelding:** `{1}`',
+    PersonalViewsHeaderText: 'Personlige visninger',
+    ListViewText: 'Liste',
+    CompactViewText: 'Kompakt liste'
   }
 })
