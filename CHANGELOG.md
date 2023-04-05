@@ -8,7 +8,6 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 ### Ny funksjonalitet
 
 ### Forbedringer
-
 - Lagt inn nye knapper på 'Konfigurasjon' siden for Prosjektportalen (Prosjekter, Prosjektstatus og Tidslinjeinnhold), samt skjult 'Maloppsett' og 'Tidslinjeinnhold' fra områderinnhold [#1076](https://github.com/Puzzlepart/prosjektportalen365/pull/1076)
 
 ### Feilrettinger
@@ -19,17 +18,19 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 
 - Dersom bruker har "Full kontroll" tilgangsnivå på området får bruker fulle rettigheter på området [#1054](https://github.com/Puzzlepart/prosjektportalen365/issues/1054)
 - Tilgang for å opprette porteføljeoversikt-visninger er nå basert på tilgang til listen [#932](https://github.com/Puzzlepart/prosjektportalen365/issues/932)
-- Alfabetisk sortering av filterverdier for Ressursallokering [#1059](https://github.com/Puzzlepart/prosjektportalen365/issues/1059)
+- Alfabetisk sortering av filterverdier for ressursallokering [#1059](https://github.com/Puzzlepart/prosjektportalen365/issues/1059)
 - Håndterer ugyldig låst mal (i property bag) i prosjektoppsettet [#1057](https://github.com/Puzzlepart/prosjektportalen365/issues/1057)
-- Fiks for doble scrollbars på hjelpeinnhold-vindu [#997](https://github.com/Puzzlepart/prosjektportalen365/issues/997)
+- Fjerning av unødvendig ekstra scrollbar på hjelpeinnholdsvinduet [#997](https://github.com/Puzzlepart/prosjektportalen365/issues/997)
 
 ### Feilrettinger
 
-- Fikset et problem i oppgraderingsskript der noen tenants ikke kunne hente alle hub children
-- Fikset et problem hvor kommandolinje ikke ble vist som standard [#1042](https://github.com/Puzzlepart/prosjektportalen365/issues/1042)
-- Fikset et problem som noen gang oppstod under kopering av fasesjekkliste-elementer med valgt fase [#1052](https://github.com/Puzzlepart/prosjektportalen365/issues/1052)
-- Fikset problem hvor det ikke var mulig å synkronisere data fra 'Prosjektdata' listen (Idebehandling)
-- Fikset manglende termset for FNs bærekraftsmål [#1058](https://github.com/Puzzlepart/prosjektportalen365/issues/1058)
+- Rettet feil i oppgraderingsskriptet der noen tenants ikke kunne hente alle hub children [#1041](https://github.com/Puzzlepart/prosjektportalen365/pull/1041)
+- Rettet feil hvor kommandolinjen ikke ble vist som standard [#1042](https://github.com/Puzzlepart/prosjektportalen365/issues/1042)
+- Rettet feil ved provisjonering av Bygg- og anleggsprosjekter dersom Fasesjekkliste var valgt [#1052](https://github.com/Puzzlepart/prosjektportalen365/issues/1052)
+- Rettet feil hvor det ikke var mulig å synkronisere data fra 'Prosjektdata'-listen  (Idébehandling) [#1048](https://github.com/Puzzlepart/prosjektportalen365/pull/1048)
+- Rettet feil hvor termset for `FNs bærekraftsmål` manglet [#1058](https://github.com/Puzzlepart/prosjektportalen365/issues/1058)
+
+---
 
 ## 1.8.0 - 28.02.2023
 
@@ -46,7 +47,7 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Støtte for flere Planner planer per prosjekt [#906](https://github.com/Puzzlepart/prosjektportalen365/issues/906)
 - Støtte for etikett på prosjektleveranser - tidslinje [#917](https://github.com/Puzzlepart/prosjektportalen365/issues/917)
 - Dynamisk risiko- og mulighetsmatrise: Konfigurasjon av størrelse, farger osv... [#433](https://github.com/Puzzlepart/prosjektportalen365/issues/433)
-- Lagt til nye felter for muligheter (status og kommentar), til prosjektstatus listen med tilhørende statusrapport seksjon 'Muligheter' . [#499](https://github.com/Puzzlepart/prosjektportalen365/issues/#499)
+- Lagt til nye felter for muligheter (status og kommentar), til prosjektstatus listen med tilhørende statusrapport seksjon 'Muligheter' [#499](https://github.com/Puzzlepart/prosjektportalen365/issues/#499)
 - Søtte for å gjøre spesifikke maloppsett obligatoriske [#839](https://github.com/Puzzlepart/prosjektportalen365/issues/839)
 - Nytt standard prosjekttillegg for fasesider [#784](https://github.com/Puzzlepart/prosjektportalen365/issues/784)
 - Ny liste `Lists/Logg` [#842](https://github.com/Puzzlepart/prosjektportalen365/issues/842)
@@ -81,7 +82,7 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Rettet en feil hvor deler av 'Fasevelger' webdelen ikke ble vist ordentlig [#920](https://github.com/Puzzlepart/prosjektportalen365/issues/920)
 - Rettet en feil hvor planneroppgaver uten 'plannavn' i 'Listeinnhold' mislyktes under prosjektoppsett [#976](https://github.com/Puzzlepart/prosjektportalen365/issues/976)
 - Rettet en feil hvor lagring av øyeblikksbilde ikke fungerte i prosjektstatus [#955](https://github.com/Puzzlepart/prosjektportalen365/issues/955)
-- Rettet feil med prosjektutlistingswebdelen, hvor gjester kunne se fanen "Alle prosjekter". [#996](https://github.com/Puzzlepart/prosjektportalen365/issues/996)
+- Rettet feil med prosjektutlistingswebdelen, hvor gjester kunne se fanen "Alle prosjekter" [#996](https://github.com/Puzzlepart/prosjektportalen365/issues/996)
 - Rettet standard overskriftsetiketter for usikkerhetsmatrisene [#999](https://github.com/Puzzlepart/prosjektportalen365/issues/999)
 - Håndtering av ugyldige spesialtegn ved generering av et øyeblikksbilde for prosjektstatus [#1033](https://github.com/Puzzlepart/prosjektportalen365/issues/1033)
 
