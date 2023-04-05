@@ -51,6 +51,19 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   label: strings.HideViewsLabel,
                   options: viewOptions,
                   selectedKeys: this.properties.hideViews ?? []
+                }),
+                PropertyPaneDropdown('defaultRenderMode', {
+                  label: strings.DefaultRenderModeLabel,
+                  options: [
+                    {
+                      key: 'list',
+                      text: strings.RenderModeListText
+                    },
+                    {
+                      key: 'tiles',
+                      text: strings.RenderModeTilesText
+                    }
+                  ]
                 })
               ]
             },
