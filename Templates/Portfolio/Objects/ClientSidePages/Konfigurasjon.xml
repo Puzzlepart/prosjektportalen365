@@ -1,4 +1,5 @@
-<pnp:ClientSidePage PageName="{resource:ClientSidePages_Configuration_PageName}" Layout="Home" Overwrite="true" EnableComments="false" Title="{resource:ClientSidePages_Configuration_Title}" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+<pnp:ClientSidePage PageName="{resource:ClientSidePages_Configuration_PageName}" Layout="Home" Overwrite="true" EnableComments="false" Title="{resource:ClientSidePages_Configuration_Title}"
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:Sections>
         <pnp:Section Order="1" Type="ThreeColumn">
             <pnp:Controls>
@@ -588,9 +589,9 @@
                         &quot;items[2].description&quot;: &quot;Gi spesifikke brukere innsyn til alle prosjekter i porteføljen&quot;,
                         &quot;items[3].description&quot;: &quot;Konfigurasjon av roller som kan utføre administratorhandlinger i prosjektet&quot;,
                         &quot;items[4].description&quot;: &quot;Inneholder loggoppføringer fra de ulike komponentene i Prosjektportalen 365&quot;,
-                        &quot;items[5].description&quot;: &quot;Inneholder alle prosjektene i porteføljen, og egenskapene til disse.&quot;,
+                        &quot;items[5].description&quot;: &quot;Inneholder alle prosjektene i porteføljen, og egenskapene som er synkronisert for disse&quot;,
                         &quot;items[6].description&quot;: &quot;Inneholder alle statusrapporter for alle prosjekter&quot;,
-                        &quot;items[7].description&quot;: &quot;Her kan du legge til innhold som skal vises på tidslinjen&quot;,
+                        &quot;items[7].description&quot;: &quot;Inneholder alle tidslinjeelementer for alle prosjekter&quot;,
                         &quot;items[0].title&quot;: &quot;Installasjonslogg&quot;,
                         &quot;items[1].title&quot;: &quot;Konfigurasjonsfiler&quot;,
                         &quot;items[2].title&quot;: &quot;Porteføljeinnsyn&quot;,
