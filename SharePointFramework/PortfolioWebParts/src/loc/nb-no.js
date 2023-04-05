@@ -206,5 +206,8 @@ define([], function () {
     ProjectContentColumnItemNotFound: 'Prosjektinnholdskolonne ble ikke funnet',
     ShowHideColumnsLabel: 'Vis/skjul kolonner',
     ShowHideColumnsDescription: 'Velg kolonnene som skal vises for nåværende visning. Endringen vil oppdatere datakilden med kolonnene som velges.',
+    PersonalViewsHeaderText: 'Personlige visninger',
+    ListViewText: 'Liste',
+    CompactViewText: 'Kompakt liste'
   }
 })
