@@ -1,7 +1,7 @@
 Formatet er basert på [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detaljert 'endringslogg' for siste versjon.
+Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detaljert 'endringslogg' for siste hovedversjon.
 
 ## 1.8.2 - TBA
 
@@ -9,17 +9,19 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 
 ### Forbedringer
 
+- Lagt inn nye knapper på 'Konfigurasjon' siden for Prosjektportalen (Prosjekter, Prosjektstatus og Tidslinjeinnhold), samt skjult 'Maloppsett' og 'Tidslinjeinnhold' fra områderinnhold [#1072](https://github.com/Puzzlepart/prosjektportalen365/issues/1072)
 - Lagt inn mulighet for å angi sortering på Planner oppgaver som provisjoneres [#1056](https://github.com/Puzzlepart/prosjektportalen365/issues/1056)
+- Porteføljeoversikt: vis personlige visninger som egen "seksjon" [#1045](https://github.com/Puzzlepart/prosjektportalen365/issues/1045)
 
 ### Feilrettinger
 
 ---
 
-## 1.8.1 - TBA
+## 1.8.1 - 31.03.2023
 
 ### Forbedringer
 
-- Dersom brukeren har "Full kontroll"-tilgangsnivå på området, får brukeren fulle rettigheter på området. [#1054](https://github.com/Puzzlepart/prosjektportalen365/issues/1054)
+- Dersom bruker har "Full kontroll" tilgangsnivå på området får bruker fulle rettigheter på området [#1054](https://github.com/Puzzlepart/prosjektportalen365/issues/1054)
 - Tilgang for å opprette porteføljeoversikt-visninger er nå basert på tilgang til listen [#932](https://github.com/Puzzlepart/prosjektportalen365/issues/932)
 - Alfabetisk sortering av filterverdier for ressursallokering [#1059](https://github.com/Puzzlepart/prosjektportalen365/issues/1059)
 - Håndterer ugyldig låst mal (i property bag) i prosjektoppsettet [#1057](https://github.com/Puzzlepart/prosjektportalen365/issues/1057)

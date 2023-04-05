@@ -48,14 +48,16 @@ export class CopyListData extends BaseTask {
         switch (contentConfig.type) {
           case ContentConfigType.Planner:
             {
-              const items = await this._getSourceItems<IPlannerTaskSPItem>(contentConfig, [
+              const items = (await this._getSourceItems<IPlannerTaskSPItem>(contentConfig, [
                 'Title',
                 'GtDescription',
                 'GtCategory',
+                'GtSortOrder',
                 'GtChecklist',
                 'GtAttachments',
                 'GtPlannerPreviewType'
-              ])
+              ])).sort((a, b) => b.GtSortOrder - a.GtSortOrder)
+
               const configuration = this.parsePlannerConfiguration(items)
               await new PlannerConfiguration(contentConfig.plannerTitle, this.data, configuration, [
                 'Metodikk'
