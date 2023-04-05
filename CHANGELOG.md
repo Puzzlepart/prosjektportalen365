@@ -7,8 +7,8 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 
 ### Forbedringer
 
-- Porteføljeoversikt: vis personlige visninger som egen "seksjon" [#1045](https://github.com/Puzzlepart/prosjektportalen365/issues/1045)
 - Lagt inn mulighet for å angi sortering på Planner oppgaver som provisjoneres [#1056](https://github.com/Puzzlepart/prosjektportalen365/issues/1056)
+- Porteføljeoversikt: vis personlige visninger som egen "seksjon" [#1045](https://github.com/Puzzlepart/prosjektportalen365/issues/1045)
 
 ### Feilrettinger
 
