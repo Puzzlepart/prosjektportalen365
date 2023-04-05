@@ -89,6 +89,11 @@ export interface IProjectListProps extends IBaseComponentProps {
    * Views to show using Pivot component
    */
   views?: IProjectListView[]
+
+  /**
+   * Default render mode
+   */
+  defaultRenderMode?: ProjectListRenderMode
 }
 
 export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
@@ -115,7 +120,7 @@ export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
   /**
    * How the projects should be rendered. `tiles` or `list`
    */
-  renderAs?: ProjectListRenderMode
+  renderMode?: ProjectListRenderMode
   /**
    * Current selected view
    */

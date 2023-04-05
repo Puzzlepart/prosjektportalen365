@@ -143,8 +143,8 @@ define([], function () {
     SearchBoxPlaceholderFallbackText: 'Søk...',
     SearchBoxPlaceholderTextLabel: 'Søkebokstekst',
     ShowAllMeasurementsLinkText: 'Vis alle målinger',
-    RenderAsListText: 'Liste',
-    RenderAsTilesText: 'Fliser',
+    RenderModeListText: 'Liste',
+    RenderModeTilesText: 'Fliser',
     ShowCommandBarLabel: 'Vis kommandolinje',
     ShowExcelExportButtonLabel: 'Vis eksport til Excel-knapp',
     ShowFiltersLabel: 'Vis filtre',
@@ -212,5 +212,6 @@ define([], function () {
     PersonalViewsHeaderText: 'Personlige visninger',
     ListViewText: 'Liste',
     CompactViewText: 'Kompakt liste'
+    DefaultRenderModeLabel: 'Standard visningsmodus'
   }
 })

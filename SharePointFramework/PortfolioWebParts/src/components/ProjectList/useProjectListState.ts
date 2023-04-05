@@ -16,15 +16,21 @@ export function useProjectListState(props: IProjectListProps) {
   const defaultSort = { fieldName: props.sortBy, isSortedDescending: true }
   const [state, $setState] = useState<IProjectListState>({
     searchTerm: '',
-    renderAs: 'tiles',
+    renderMode: props.defaultRenderMode ?? 'tiles',
     selectedView: defaultSelectedView,
     projects: mockProjects,
     isUserInPortfolioManagerGroup: false,
     sort: defaultSort
   })
 
+  /**
+   * Set state like `setState` in class components where
+   * the new state is merged with the current state.
+   * 
+   * @param newState New state
+   */
   const setState = (newState: Partial<IProjectListState>) =>
-    $setState((state_) => ({ ...state_, ...newState }))
+    $setState((currentState) => ({ ...currentState, ...newState }))
 
   return { state, setState } as const
 }
