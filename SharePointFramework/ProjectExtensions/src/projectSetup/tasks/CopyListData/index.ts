@@ -56,8 +56,12 @@ export class CopyListData extends BaseTask {
                 'GtChecklist',
                 'GtAttachments',
                 'GtPlannerPreviewType'
-              ])).sort((a, b) => b.GtSortOrder - a.GtSortOrder)
-
+              ])).sort((a, b) => {
+                if (a.GtCategory === b.GtCategory) {
+                  return b.GtSortOrder - a.GtSortOrder
+                }
+              })
+              
               const configuration = this.parsePlannerConfiguration(items)
               await new PlannerConfiguration(contentConfig.plannerTitle, this.data, configuration, [
                 'Metodikk'
