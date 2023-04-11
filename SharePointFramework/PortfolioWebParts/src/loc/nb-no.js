@@ -208,7 +208,7 @@ define([], function () {
     ShowHideColumnsDescription: 'Velg kolonnene som skal vises for nåværende visning. Endringen vil oppdatere datakilden med kolonnene som velges.',
     PersonalViewsHeaderText: 'Personlige visninger',
     ListViewText: 'Liste',
-    CompactViewText: 'Kompakt liste'
+    CompactViewText: 'Kompakt liste',
     DefaultRenderModeLabel: 'Standard visningsmodus'
   }
 })

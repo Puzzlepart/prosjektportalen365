@@ -11,10 +11,10 @@
                 </OrderBy>
             </Query>
             <ViewFields>
+                <FieldRef Name="GtSortOrder" />
                 <FieldRef Name="Title" />
                 <FieldRef Name="GtDescription" />
                 <FieldRef Name="GtCategory" />
-                <FieldRef Name="GtSortOrder" />
                 <FieldRef Name="GtChecklist" />
                 <FieldRef Name="GtAttachments" />
                 <FieldRef Name="GtPlannerPreviewType" />
