@@ -1,7 +1,6 @@
 import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
 import { IFilterProps } from 'components/FilterPanel'
 import _ from 'lodash'
-import { isArray } from '@pnp/common'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ExcelExportService } from 'pp365-shared/lib/services'
 import { PortfolioOverviewView } from 'pp365-shared/lib/models/PortfolioOverviewView'
@@ -19,30 +18,12 @@ import {
 import { usePortfolioOverviewFilters } from '../usePortfolioOverviewFilters'
 import { IPortfolioOverviewCommandsProps } from './types'
 
-/**
- * Converts a collection of `PortfolioOverviewView` objects to 
- * a collection of `IContextualMenuItem` objects.
- * 
- * @param props Props for the PortfolioOverviewCommands component
- * @param filterFunc Optional filter function to filter the views
- */
-function convertViewsToContextualMenuItems(props: IPortfolioOverviewCommandsProps, filterFunc: (view: PortfolioOverviewView) => boolean) {
-  return  props.configuration.views.filter(filterFunc).map(view => (
-    {
-      key: view.id.toString(),
-      name: view.title,
-      iconProps: { iconName: view.iconName },
-      canCheck: true,
-      checked: view.id === props.currentView?.id,
-      onClick: () => props.events.onChangeView(view),
-    } as IContextualMenuItem
-  ))
-}
+
 
 /**
  * Component logic hook for the PortfolioOverviewCommands component. Handles the logic for
  * the command bar and the filter panel.
- * 
+ *
  * Renders the following context menu items for the command bar:
  * - `EXCEL_EXPORT`: Excel export button
  * - `NEW_VIEW`: New view button
@@ -55,8 +36,28 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
   const context = useContext(PortfolioOverviewContext)
   const filters = usePortfolioOverviewFilters()
 
-  const sharedViews = convertViewsToContextualMenuItems(props, (v) => !v.isPersonal)
-  const personalViews = convertViewsToContextualMenuItems(props, (v) => v.isPersonal)
+  /**
+ * Converts a collection of `PortfolioOverviewView` objects to
+ * a collection of `IContextualMenuItem` objects.
+ *
+ * @param props Props for the PortfolioOverviewCommands component
+ * @param filterFunc Optional filter function to filter the views
+ */
+  const convertViewsToContextualMenuItems = (filterFunc: (view: PortfolioOverviewView) => boolean) => {
+    return context.props.configuration.views.filter(filterFunc).map(view => (
+      {
+        key: view.id.toString(),
+        name: view.title,
+        iconProps: { iconName: view.iconName },
+        canCheck: true,
+        checked: view.id === context.state.currentView?.id,
+        onClick: () => context.dispatch(CHANGE_VIEW(view))
+      } as IContextualMenuItem
+    ))
+  }
+
+  const sharedViews = convertViewsToContextualMenuItems((v) => !v.isPersonal)
+  const personalViews = convertViewsToContextualMenuItems((v) => v.isPersonal)
 
   /**
    * Callback function for Excel export. Handles the export to Excel with state updates and
@@ -154,14 +155,14 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
           },
           ...context.props.configuration.views.map(
             (view) =>
-              ({
-                key: view.id.toString(),
-                name: view.title,
-                iconProps: { iconName: view.iconName },
-                canCheck: true,
-                checked: view.id === context.state.currentView?.id,
-                onClick: () => context.dispatch(CHANGE_VIEW(view))
-              } as IContextualMenuItem)
+            ({
+              key: view.id.toString(),
+              name: view.title,
+              iconProps: { iconName: view.iconName },
+              canCheck: true,
+              checked: view.id === context.state.currentView?.id,
+              onClick: () => context.dispatch(CHANGE_VIEW(view))
+            } as IContextualMenuItem)
           ),
           ...sharedViews,
           !_.isEmpty(personalViews) && {
