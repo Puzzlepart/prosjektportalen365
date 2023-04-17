@@ -1,0 +1,1 @@
+<Field Type="Note" DisplayName="{resource:SiteFields_GtPlannerTags_DisplayName}" Description="{resource:SiteFields_GtPlannerTags_Description}" Group="{resource:SiteFields_Portfolio_Group}" ID="{78ff1f94-122b-4865-abeb-7b3c2884ee60}" StaticName="GtPlannerTags" Name="GtPlannerTags" />

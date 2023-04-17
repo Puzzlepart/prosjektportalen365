@@ -16,6 +16,7 @@
                 <FieldRef Name="GtDescription" />
                 <FieldRef Name="GtCategory" />
                 <FieldRef Name="GtChecklist" />
+                <FieldRef Name="GtPlannerTags" />
                 <FieldRef Name="GtAttachments" />
                 <FieldRef Name="GtPlannerPreviewType" />
                 <FieldRef Name="Modified" />
