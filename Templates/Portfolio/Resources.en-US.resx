@@ -262,6 +262,15 @@
   <data name="Lists_IdeaRegistration_Url" xml:space="preserve">
     <value>Lists/Ideregistrering</value>
   </data>
+  <data name="Lists_Idea_Configuration_Title" xml:space="preserve">
+    <value>Idékonfigurasjon</value>
+  </data>
+  <data name="Lists_Idea_Configuration_Url" xml:space="preserve">
+    <value>Lists/Idekonfigurasjon</value>
+  </data>
+  <data name="Lists_Idea_Configuration_Field_GtDescription_Description" xml:space="preserve">
+    <value>Angi beskrivelse som skal vises i dialogen for Idébehandling</value>
+  </data>
   <data name="Lists_PhaseChecklistA_Title" xml:space="preserve">
     <value>Fasesjekkliste Anlegg</value>
   </data>
@@ -501,6 +510,12 @@
   </data>
   <data name="ContentTypes_IdeaProcessing_Description" xml:space="preserve">
     <value>Innholdstype for idébehandling (Idébehandling)</value>
+  </data>
+  <data name="ContentTypes_Idea_Configuration_Element_Name" xml:space="preserve">
+    <value>Idékonfigurasjonelement</value>
+  </data>
+  <data name="ContentTypes_Idea_Configuration_Element_Description" xml:space="preserve">
+    <value>Innholdstype for idékonfigurasjon (Idébehandling)</value>
   </data>
    <data name="ContentTypes_HelpContent_Name" xml:space="preserve">
     <value>Hjelpeinnhold</value>
@@ -1881,6 +1896,18 @@
   </data>
   <data name="SiteFields_GtRegistratedIdea_Description" xml:space="preserve">
     <value>Registrert idé tilknytning</value>
+  </data>
+  <data name="SiteFields_GtIdeaRegistrationList_DisplayName" xml:space="preserve">
+    <value>Idéregistrering</value>
+  </data>
+  <data name="SiteFields_GtIdeaRegistrationList_Description" xml:space="preserve">
+    <value>Hvilken idéregisreringsliste skal elementet kobles mot?</value>
+  </data>
+  <data name="SiteFields_GtIdeaProcessingList_DisplayName" xml:space="preserve">
+    <value>Idébehandling</value>
+  </data>
+  <data name="SiteFields_GtIdeaProcessingList_Description" xml:space="preserve">
+    <value>Hvilken idébehandlingsliste skal elementet kobles mot?</value>
   </data>
   <data name="SiteFields_GtBAEndDateOriginal_DisplayName" xml:space="preserve">
     <value>Opprinnelig overtakelsesdato</value>
