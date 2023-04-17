@@ -17,6 +17,7 @@ import { ClientsideText } from '@pnp/sp/clientside-pages'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { isUserAuthorized } from 'helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
+import { IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 
 Logger.subscribe(ConsoleListener())
 Logger.activeLogLevel = DEBUG ? LogLevel.Info : LogLevel.Warning
@@ -82,14 +83,27 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     }
   }
 
-  private _onListViewStateChanged = (): void => {
+  private _getIdeaConfiguration = async (): Promise<any> => {
+    const ideaConfig = await this._sp.web.lists
+      .getByTitle(strings.IdeaConfigurationTitle)
+      .select(...new SPIdeaConfigurationItem().fields).items()
+
+    return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
+  }
+
+  private _onListViewStateChanged = async (): Promise<void> => {
     Logger.log({
-      message: '(IdeaRegistrationCommand) onListViewStateChanged: ListView state changed',
+      message: '(IdeaRegistrationCommand) onListViewStateChanged: ListView X state changed',
       level: LogLevel.Info
     })
 
+    console.log(await this._getIdeaConfiguration())
+
     this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
+    const listName = this.context.pageContext.list.title
+    console.log('listName', listName)
     if (this._openCmd) {
+
       this._openCmd.visible =
         this.context.listView.selectedRows?.length === 1 &&
         this._userAuthorized &&

@@ -21,6 +21,7 @@ declare interface IPortfolioExtensionsStrings {
   IdeaRegistrationTitle: string
   IdeaRegistrationUrlTitle: string
   IdeaProjectDataTitle: string
+  IdeaConfigurationTitle: string
   ApproveChoice: string
   ConsiderationChoice: string
   RejectChoice: string
