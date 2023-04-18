@@ -30,6 +30,8 @@ export class PlannerConfiguration extends BaseTask {
     super('Planner', data)
   }
 
+  private _categoryDescriptions: { [key: string]: string } = {}
+
   /**
    * Replacing site tokens. For now it supports `{site}` which is replaced
    * with the site absolute URL. Encodes URL, replacing %, . and :
@@ -115,16 +117,15 @@ export class PlannerConfiguration extends BaseTask {
     this.logInformation(`Sleeping ${delay} seconds before updating the plan with labels`)
     await sleep(delay)
     if (this._labels.length > 0) {
-      this.logInformation(
-        `Sleeping before updating the plan with labels ${JSON.stringify(this._labels)}`
-      )
+      this.logInformation(`Sleeping before updating the plan with labels ${JSON.stringify(this._labels)}`)
       const eTag = (await MSGraphHelper.Get(`planner/plans/${plan.id}/details`))['@odata.etag']
-      const categoryDescriptions = this._labels
-        .splice(0, 6)
+      this._categoryDescriptions = this._labels
+        .slice(0, 25)
         .reduce((obj, value, idx) => ({ ...obj, [`category${idx + 1}`]: value }), {})
+
       await MSGraphHelper.Patch(
         `planner/plans/${plan.id}/details`,
-        JSON.stringify({ categoryDescriptions }),
+        JSON.stringify({ categoryDescriptions: this._categoryDescriptions }),
         eTag
       )
     }
@@ -169,13 +170,25 @@ export class PlannerConfiguration extends BaseTask {
     planId: string,
     bucket: IPlannerBucket,
     pageContext: PageContext,
-    appliedCategories: Record<string, boolean> = { category1: true },
+    appliedCategories: Record<string, boolean> = {},
     delay: number = 1
   ) {
     const tasks = Object.keys(this._configuration[bucket.name])
     for (let i = 0; i < tasks.length; i++) {
       const name = tasks[i]
       const { checklist } = this._configuration[bucket.name][name]
+      const { labels } = this._configuration[bucket.name][name]
+
+      if (labels) {
+        Object.keys(this._categoryDescriptions).forEach((key) => {
+          if (labels.includes(this._categoryDescriptions[key])) {
+            appliedCategories[key] = true
+          } else {
+            appliedCategories[key] = false
+          }
+        })
+      }
+
       try {
         this.logInformation(`Creating task ${name} in bucket ${bucket.name}`)
         const task = await this._createTask({
@@ -192,7 +205,8 @@ export class PlannerConfiguration extends BaseTask {
         )
         this.logInformation(`Succesfully created task ${name} in bucket ${bucket.name}`, {
           taskId: task.id,
-          checklist
+          checklist,
+          labels
         })
       } catch (error) {
         this.logWarning(`Failed to create task ${name} in bucket ${bucket.name}`)
@@ -217,6 +231,7 @@ export class PlannerConfiguration extends BaseTask {
     if (
       !taskDetails.description &&
       !taskDetails.checklist &&
+      !taskDetails.labels &&
       !taskDetails.attachments &&
       taskDetails.previewType === 'automatic'
     )
@@ -227,25 +242,26 @@ export class PlannerConfiguration extends BaseTask {
       description: taskDetails.description ?? '',
       checklist: taskDetails.checklist
         ? taskDetails.checklist.reduce(
-            (obj, title) => ({
-              ...obj,
-              [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
-            }),
-            {}
-          )
+          (obj, title) => ({
+            ...obj,
+            [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
+          }),
+          {}
+        )
         : {},
+      labels: taskDetails.labels,
       references: taskDetails.attachments
         ? taskDetails.attachments.reduce(
-            (obj, attachment) => ({
-              ...obj,
-              [this.replaceUrlTokens(attachment.url, pageContext)]: {
-                '@odata.type': 'microsoft.graph.plannerExternalReference',
-                alias: attachment.alias,
-                type: attachment.type
-              }
-            }),
-            {}
-          )
+          (obj, attachment) => ({
+            ...obj,
+            [this.replaceUrlTokens(attachment.url, pageContext)]: {
+              '@odata.type': 'microsoft.graph.plannerExternalReference',
+              alias: attachment.alias,
+              type: attachment.type
+            }
+          }),
+          {}
+        )
         : {},
       previewType: taskDetails.previewType
     }
