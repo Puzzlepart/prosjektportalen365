@@ -106,7 +106,7 @@ export interface IProjectInformationState
   properties?: ProjectPropertyModel[]
 
   /**
-   * All Properties
+   * All properties (used for the properties panel)
    */
   allProperties?: ProjectPropertyModel[]
 
