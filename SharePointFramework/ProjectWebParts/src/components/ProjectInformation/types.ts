@@ -101,17 +101,17 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
 export interface IProjectInformationState
   extends IBaseWebPartComponentState<IProjectInformationData> {
   /**
-   * Properties
+   * Properties 
    */
   properties?: ProjectPropertyModel[]
 
   /**
-   * All Properties
+   * All properties (used for the properties panel)
    */
   allProperties?: ProjectPropertyModel[]
 
   /**
-   * Progress
+   * Progress dialog props
    */
   progress?: IProgressDialogProps
 
@@ -151,7 +151,7 @@ export interface IProjectInformationState
   userHasEditPermission?: boolean
 
   /**
-   * Is Project data synced
+   * Is project data synced
    */
   isProjectDataSynced?: boolean
 }
