@@ -101,7 +101,7 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
 export interface IProjectInformationState
   extends IBaseWebPartComponentState<IProjectInformationData> {
   /**
-   * Properties 
+   * Properties
    */
   properties?: ProjectPropertyModel[]
 

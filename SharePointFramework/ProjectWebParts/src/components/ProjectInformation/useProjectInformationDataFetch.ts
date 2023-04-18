@@ -83,10 +83,13 @@ const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolea
  * Fetch project status reports, sections and column config  if `props.hideStatusReport` is false.
  * Catches errors and returns empty arrays to support e.g. the case where the user does not have
  * access to the hub site.
- * 
+ *
  * @param props Component properties for `ProjectInformation`
  */
-const fetchProjectStatusReports: DataFetchFunction<IProjectInformationProps, [StatusReport[], SectionModel[], ProjectColumnConfig[]]> = async (props) => {
+const fetchProjectStatusReports: DataFetchFunction<
+  IProjectInformationProps,
+  [StatusReport[], SectionModel[], ProjectColumnConfig[]]
+> = async (props) => {
   if (props.hideStatusReport) {
     return [[], [], []]
   }
@@ -99,11 +102,7 @@ const fetchProjectStatusReports: DataFetchFunction<IProjectInformationProps, [St
       SPDataAdapter.portal.getProjectStatusSections(),
       SPDataAdapter.portal.getProjectColumnConfig()
     ])
-    return [
-      reports,
-      sections,
-      columnConfig
-    ] 
+    return [reports, sections, columnConfig]
   } catch (error) {
     return [[], [], []]
   }
@@ -140,11 +139,11 @@ const fetchData: DataFetchFunction<
       SPDataAdapter.project.getPropertiesData(),
       props.page === 'Frontpage'
         ? SPDataAdapter.portal.getParentProjects(
-          props.webPartContext?.pageContext?.web?.absoluteUrl,
-          ProjectInformationParentProject
-        )
+            props.webPartContext?.pageContext?.web?.absoluteUrl,
+            ProjectInformationParentProject
+          )
         : Promise.resolve([]),
-      fetchProjectStatusReports(props),
+      fetchProjectStatusReports(props)
     ])
     const data: IProjectInformationData = {
       columns,
