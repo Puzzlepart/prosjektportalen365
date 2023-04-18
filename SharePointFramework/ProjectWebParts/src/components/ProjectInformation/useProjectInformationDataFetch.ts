@@ -1,9 +1,10 @@
 import { MessageBarType } from '@fluentui/react'
 import { LogLevel } from '@pnp/logging'
+import strings from 'ProjectWebPartsStrings'
 import _ from 'lodash'
 import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import { ListLogger } from 'pp365-shared/lib/logging'
-import strings from 'ProjectWebPartsStrings'
+import { ProjectColumnConfig, SectionModel, StatusReport } from 'pp365-shared/lib/models'
 import { useEffect } from 'react'
 import { isEmpty } from 'underscore'
 import { ProjectInformation } from '.'
@@ -79,6 +80,36 @@ const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolea
 }
 
 /**
+ * Fetch project status reports, sections and column config  if `props.hideStatusReport` is false.
+ * Catches errors and returns empty arrays to support e.g. the case where the user does not have
+ * access to the hub site.
+ * 
+ * @param props Component properties for `ProjectInformation`
+ */
+const fetchProjectStatusReports: DataFetchFunction<IProjectInformationProps, [StatusReport[], SectionModel[], ProjectColumnConfig[]]> = async (props) => {
+  if (props.hideStatusReport) {
+    return [[], [], []]
+  }
+  try {
+    const [reports, sections, columnConfig] = await Promise.all([
+      SPDataAdapter.portal.getStatusReports({
+        filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
+        publishedString: strings.GtModerationStatus_Choice_Published
+      }),
+      SPDataAdapter.portal.getProjectStatusSections(),
+      SPDataAdapter.portal.getProjectColumnConfig()
+    ])
+    return [
+      reports,
+      sections,
+      columnConfig
+    ] 
+  } catch (error) {
+    return [[], [], []]
+  }
+}
+
+/**
  * Fetch data for `ProjectInformation` component. This function is used in
  * `useProjectInformationDataFetch` hook.
  *
@@ -103,28 +134,17 @@ const fetchData: DataFetchFunction<
       columns,
       propertiesData,
       parentProjects,
-      reports,
-      sections,
-      columnConfig
+      [reports, sections, columnConfig]
     ] = await Promise.all([
       SPDataAdapter.portal.getProjectColumns(),
       SPDataAdapter.project.getPropertiesData(),
       props.page === 'Frontpage'
         ? SPDataAdapter.portal.getParentProjects(
-            props.webPartContext?.pageContext?.web?.absoluteUrl,
-            ProjectInformationParentProject
-          )
+          props.webPartContext?.pageContext?.web?.absoluteUrl,
+          ProjectInformationParentProject
+        )
         : Promise.resolve([]),
-      props.hideStatusReport
-        ? Promise.resolve([])
-        : SPDataAdapter.portal.getStatusReports({
-            filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
-            publishedString: strings.GtModerationStatus_Choice_Published
-          }),
-      props.hideStatusReport
-        ? Promise.resolve([])
-        : SPDataAdapter.portal.getProjectStatusSections(),
-      props.hideStatusReport ? Promise.resolve([]) : SPDataAdapter.portal.getProjectColumnConfig()
+      fetchProjectStatusReports(props),
     ])
     const data: IProjectInformationData = {
       columns,
