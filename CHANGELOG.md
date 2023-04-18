@@ -5,9 +5,10 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 
 ## 1.9.0 - TBA
 
-- Støtte for å installere til ulike kanaler for å støtte separate installasjoner i samme tenant [#1068](https://github.com/Puzzlepart/prosjektportalen365/issues/1068)
-
 ### Ny funksjonalitet
+
+- Støtte for å installere til ulike kanaler for å støtte separate installasjoner i samme tenant [#1068](https://github.com/Puzzlepart/prosjektportalen365/issues/1068)
+- Mulighet for å angi etiketter på planneroppgaver [#1083](https://github.com/Puzzlepart/prosjektportalen365/issues/1083)
 
 ### Forbedringer
 
