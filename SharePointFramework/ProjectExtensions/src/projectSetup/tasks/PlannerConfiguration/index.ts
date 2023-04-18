@@ -187,6 +187,8 @@ export class PlannerConfiguration extends BaseTask {
             appliedCategories[key] = false
           }
         })
+      } else {
+        appliedCategories = {}
       }
 
       try {
