@@ -471,7 +471,7 @@ export class PortalDataService {
     publishedString,
     useCaching = true
   }: GetStatusReportsOptions): Promise<StatusReport[]> {
-    if (!this._configuration.pageContext) throw 'Property pageContext missing in configuration'
+    if (!this._configuration.pageContext) throw 'Property {pageContext} is not the configuration.'
     if (stringIsNullOrEmpty(filter))
       filter = `GtSiteId eq '${this._configuration.pageContext.site.id.toString()}'`
     try {
