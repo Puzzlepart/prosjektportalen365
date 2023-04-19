@@ -48,7 +48,13 @@ export class SitePermissions extends BaseTask {
           await params.web.roleAssignments.add(data.Id, roleDefId)
           for (let j = 0; j < users.length; j++) {
             this.logInformation(`Adding user ${users[j]} to group ${groupName}...`)
-            await group.users.add(users[j])
+            try {
+              await group.users.add(users[j])
+              this.logInformation(`User ${users[j]} successfully added to group ${groupName}.`)
+            }
+            catch (error) {
+              this.logError(`Failed to add user ${users[j]} to group ${groupName}.`)
+            }
           }
         }
       }
@@ -83,10 +89,10 @@ export class SitePermissions extends BaseTask {
     }
     return (await list.getItemsByCAMLQuery(query)).map(
       (item: any) =>
-        ({
-          groupName: item.GtSPGroupName,
-          permissionLevel: item.GtPermissionLevel
-        } as IPermissionConfiguration)
+      ({
+        groupName: item.GtSPGroupName,
+        permissionLevel: item.GtPermissionLevel
+      } as IPermissionConfiguration)
     )
   }
 
