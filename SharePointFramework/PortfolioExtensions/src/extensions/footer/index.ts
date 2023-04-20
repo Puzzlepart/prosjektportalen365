@@ -20,17 +20,22 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private _links: { Url: string; Description: string }[]
   private _portal: PortalDataService
 
+  /**
+   * On init, fetch the installation logs, GitHub releases and links.
+   */
   public async onInit(): Promise<void> {
     await super.onInit()
     this._portal = await new PortalDataService().configure({
       pageContext: this.context.pageContext
     })
-    this._portal = await new PortalDataService().configure({
-      pageContext: this.context.pageContext
-    })
-    this._installEntries = await this._fetchInstallationLogs()
-    this._gitHubReleases = await this._fetchGitHubReleases()
-    this._links = await this._fetchLinks()
+    const [installEntries, gitHubReleases, links] = await Promise.all([
+      this._fetchInstallationLogs(),
+      this._fetchGitHubReleases(),
+      this._fetchLinks()
+    ])
+    this._installEntries = installEntries
+    this._gitHubReleases = gitHubReleases
+    this._links = links
     this._renderFooter(PlaceholderName.Bottom, {
       installEntries: this._installEntries,
       gitHubReleases: this._gitHubReleases,
@@ -58,9 +63,9 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   }
 
   /**
-   * Fetch the links from the `strings.LinksListName` list.
+   * Fetch the links from the `strings.LinksListName` list on the hub site.
    */
-  private async _fetchLinks(): Promise<any[]> {
+  private async _fetchLinks(): Promise<{ Url: string; Description: string }[]> {
     try {
       const linksList = this._portal.web.lists.getByTitle(strings.LinksListName)
       const linksItems = await linksList.items.get()
