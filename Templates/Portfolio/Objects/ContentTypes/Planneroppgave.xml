@@ -4,6 +4,7 @@
         <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" Required="false" UpdateChildren="true" />
         <pnp:FieldRef ID="5ff9d412-67f4-42a0-8e46-78bcf0ebc6d7" Name="GtCategory" Required="true" UpdateChildren="true" />
         <pnp:FieldRef ID="3eb0bf2f-9cda-47b7-9865-515e04d8a6f1" Name="GtChecklist" Required="false" UpdateChildren="true" />
+        <pnp:FieldRef ID="78ff1f94-122b-4865-abeb-7b3c2884ee60" Name="GtPlannerTags" Required="false" UpdateChildren="true" />
         <pnp:FieldRef ID="43a2aa45-0383-40ff-9baf-458981180fac" Name="GtAttachments" Required="false" UpdateChildren="true" />
         <pnp:FieldRef ID="196383e2-61b5-455d-b4db-4d12018a6755" Name="GtPlannerPreviewType" Required="false" UpdateChildren="true" />
     </pnp:FieldRefs>

@@ -1024,6 +1024,12 @@
   <data name="SiteFields_GtChecklist_Description" xml:space="preserve">
     <value>Sjekkpunkter separert med semikolon.</value>
   </data>
+  <data name="SiteFields_GtPlannerTags_DisplayName" xml:space="preserve">
+    <value>Etiketter</value>
+  </data>
+  <data name="SiteFields_GtPlannerTags_Description" xml:space="preserve">
+    <value>Etiketter separert med semikolon.</value>
+  </data>
   <data name="SiteFields_GtChecklistStatus_DisplayName" xml:space="preserve">
     <value>Status</value>
   </data>
