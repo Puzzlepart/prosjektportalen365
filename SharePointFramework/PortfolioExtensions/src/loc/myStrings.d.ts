@@ -1,4 +1,6 @@
 declare interface IPortfolioExtensionsStrings {
+  HelpContentListName: string
+  HelpContentLinkText: string
   SiteSettingsLinkText: ReactNode
   LinksListText: ReactNode
   LatestGitHubReleaseLinkTitle: string

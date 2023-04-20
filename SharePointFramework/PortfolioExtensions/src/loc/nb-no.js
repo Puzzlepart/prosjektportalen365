@@ -47,6 +47,8 @@ define([], function () {
     LatestGitHubReleaseLinkTitle: 'Se siste release på GitHub',
     LinksListName: 'Lenker',
     LinksListText: 'Nyttige lenker',
-    SiteSettingsLinkText: 'Områdeinnstillinger'
+    SiteSettingsLinkText: 'Områdeinnstillinger',
+    HelpContentLinkText: 'Hjelp tilgjengelig',
+    HelpContentListName: 'Hjelpeinnhold'
   }
 })

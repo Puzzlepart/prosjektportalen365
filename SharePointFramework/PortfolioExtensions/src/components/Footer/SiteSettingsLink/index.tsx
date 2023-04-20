@@ -5,15 +5,15 @@ import styles from './SiteSettingsLink.module.scss'
 import { FooterContext } from '../context'
 
 export const SiteSettingsLink: FC = () => {
-    const { props } = useContext(FooterContext)
-    const isHidden = props.portalUrl !== props.pageContext.web.absoluteUrl
-    return (
-        <Link
-            hidden={isHidden}
-            className={styles.root}
-            href={`${props.portalUrl}/_layouts/15/settings.aspx`}
-        >
-            {strings.SiteSettingsLinkText}
-        </Link>
-    )
+  const context = useContext(FooterContext)
+  const isHidden = context.props.portalUrl !== context.props.pageContext.web.absoluteUrl
+  return (
+    <Link
+      hidden={isHidden}
+      className={styles.root}
+      href={`${context.props.portalUrl}/_layouts/15/settings.aspx`}
+    >
+      {strings.SiteSettingsLinkText}
+    </Link>
+  )
 }

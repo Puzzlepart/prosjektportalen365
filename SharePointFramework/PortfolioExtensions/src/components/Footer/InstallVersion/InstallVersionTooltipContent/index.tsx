@@ -10,7 +10,8 @@ import { LatestGitHubRelease } from './LatestGitHubRelease'
  * of Prosjektportalen 365.
  */
 export const InstallVersionTooltipContent: FC = () => {
-  const { latestEntry, props } = useContext(FooterContext)
+  const context = useContext(FooterContext)
+  const latestEntry = context.latestEntry
   const dateTimeFormatOptions: Intl.DateTimeFormatOptions = {
     weekday: 'long',
     year: 'numeric',
@@ -48,7 +49,7 @@ export const InstallVersionTooltipContent: FC = () => {
       <div className={styles.footer}>
         <div className={styles.seeAllInstallationsLink}>
           <Link
-            href={`${props.pageContext.web.absoluteUrl}/Lists/Installasjonslogg/AllItems.aspx`}
+            href={`${context.props.pageContext.web.absoluteUrl}/Lists/Installasjonslogg/AllItems.aspx`}
             target='_blank'
             rel='noopener noreferrer'
           >

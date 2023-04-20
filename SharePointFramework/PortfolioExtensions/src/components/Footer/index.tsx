@@ -7,6 +7,7 @@ import { FooterContext } from './context'
 import { IFooterProps } from './types'
 import { useFooter } from './useFooter'
 import { SiteSettingsLink } from './SiteSettingsLink'
+import { HelpContent } from './HelpContent'
 
 export const Footer: FC<IFooterProps> = (props) => {
   const footer = useFooter(props)
@@ -21,6 +22,7 @@ export const Footer: FC<IFooterProps> = (props) => {
           </section>
           <section className={styles.right}>
             <InstallVersion />
+            <HelpContent />
           </section>
         </div>
       </div>

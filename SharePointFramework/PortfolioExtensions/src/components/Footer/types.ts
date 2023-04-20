@@ -1,4 +1,4 @@
-import { IGitHubRelease, InstallationEntry } from 'extensions/footer/types'
+import { HelpContentModel, IGitHubRelease, InstallationEntry } from 'extensions/footer/types'
 import { PageContext } from '@microsoft/sp-page-context'
 
 export interface IFooterProps {
@@ -13,6 +13,16 @@ export interface IFooterProps {
   gitHubReleases: IGitHubRelease[]
 
   /**
+   * Help content to display in the footer
+   */
+  helpContent: HelpContentModel[]
+
+  /**
+   * Links to display in the footer
+   */
+  links: { Url: string; Description: string }[]
+
+  /**
    * Page context object
    */
   pageContext: PageContext
@@ -21,9 +31,4 @@ export interface IFooterProps {
    * The URL to the portal root
    */
   portalUrl: string
-
-  /**
-   * Links to display in the footer
-   */
-  links: { Url: string; Description: string }[]
 }

@@ -5,23 +5,21 @@ import { FooterContext } from '../context'
 import styles from './PromotedLinks.module.scss'
 
 export const PromotedLinks: FC = () => {
-    const { props } = useContext(FooterContext)
-    return (
-        <TooltipHost
-            hostClassName={styles.tooltipHost}
-            content={(
-                <div className={styles.tooltipContent}>
-                    {props.links.map((link, idx) => (
-                        <div key={idx}>
-                            <Link href={link.Url}>{link.Description}</Link>
-                        </div>
-                    ))}
-
-                </div>
-            )}>
-            <Link>
-                {strings.LinksListText}
-            </Link>
-        </TooltipHost>
-    )
+  const context = useContext(FooterContext)
+  return (
+    <TooltipHost
+      hostClassName={styles.tooltipHost}
+      content={
+        <div className={styles.tooltipContent}>
+          {context.props.links.map((link, idx) => (
+            <div key={idx}>
+              <Link href={link.Url}>{link.Description}</Link>
+            </div>
+          ))}
+        </div>
+      }
+    >
+      <Link>{strings.LinksListText}</Link>
+    </TooltipHost>
+  )
 }
