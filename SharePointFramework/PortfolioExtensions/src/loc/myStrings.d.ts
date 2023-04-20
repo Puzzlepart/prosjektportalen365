@@ -1,4 +1,5 @@
 declare interface IPortfolioExtensionsStrings {
+  SiteSettingsLinkText: ReactNode
   LinksListText: ReactNode
   LatestGitHubReleaseLinkTitle: string
   LatestGitHubReleaseDownloadButtonText: string
