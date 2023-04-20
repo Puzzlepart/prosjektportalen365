@@ -240,10 +240,11 @@ export class PlannerConfiguration extends BaseTask {
       return
     this.logInformation(`Sleeping ${delay}s before updating task details for ${taskId}`)
     await sleep(delay)
+
     const taskDetailsJson: Record<string, any> = {
       description: taskDetails.description ?? '',
       checklist: taskDetails.checklist
-        ? taskDetails.checklist.reduce(
+        ? taskDetails.checklist.slice(0, 20).map((item) => item.substring(0, 100)).reduce(
           (obj, title) => ({
             ...obj,
             [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
@@ -253,7 +254,7 @@ export class PlannerConfiguration extends BaseTask {
         : {},
       labels: taskDetails.labels,
       references: taskDetails.attachments
-        ? taskDetails.attachments.reduce(
+        ? taskDetails.attachments.slice(0, 10).reduce(
           (obj, attachment) => ({
             ...obj,
             [this.replaceUrlTokens(attachment.url, pageContext)]: {
@@ -267,6 +268,7 @@ export class PlannerConfiguration extends BaseTask {
         : {},
       previewType: taskDetails.previewType
     }
+
     const eTag = (await MSGraphHelper.Get(`planner/tasks/${taskId}/details`))['@odata.etag']
     await MSGraphHelper.Patch(
       `planner/tasks/${taskId}/details`,
