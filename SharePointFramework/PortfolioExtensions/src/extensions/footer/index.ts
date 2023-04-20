@@ -11,7 +11,12 @@ import { Footer, IFooterProps } from 'components/Footer'
 import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
 import { createElement } from 'react'
 import { render } from 'react-dom'
-import { HelpContentModel, IFooterApplicationCustomizerProperties, IGitHubRelease, InstallationEntry } from './types'
+import {
+  HelpContentModel,
+  IFooterApplicationCustomizerProperties,
+  IGitHubRelease,
+  InstallationEntry
+} from './types'
 import { PnPClientStorage } from '@pnp/core/storage'
 import { dateAdd } from '@pnp/core/util'
 
@@ -31,7 +36,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     this._portal = await new PortalDataService().configure({
       pageContext: this.context.pageContext
     })
-    const [installEntries, gitHubReleases, helpContent,links] = await Promise.all([
+    const [installEntries, gitHubReleases, helpContent, links] = await Promise.all([
       this._fetchInstallationLogs(),
       this._fetchGitHubReleases(),
       this._fetchHelpContent(strings.HelpContentListName),
@@ -72,8 +77,6 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       return []
     }
   }
-
-
 
   /**
    * Fetch help content from the specified list. The content is stored in `sessionStorage` for 4 hours.

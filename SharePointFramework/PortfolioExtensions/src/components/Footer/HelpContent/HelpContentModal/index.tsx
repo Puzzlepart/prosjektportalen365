@@ -14,7 +14,8 @@ export const HelpContentModal: FC<IModalProps> = (props) => {
       onDismiss={props.onDismiss}
       styles={{ root: { overflow: 'hidden' } }}
       containerClassName={styles.root}
-      scrollableContentClassName={styles.scrollableContent}>
+      scrollableContentClassName={styles.scrollableContent}
+    >
       <div className={styles.body}>
         <Pivot>
           {context.props.helpContent.map((content, index) => (
@@ -22,14 +23,16 @@ export const HelpContentModal: FC<IModalProps> = (props) => {
               key={index}
               headerText={content.title}
               itemIcon={content.iconName}
-              style={{ overflow: 'auto', height: 'calc(100vh - 44px)' }}>
+              style={{ overflow: 'auto', height: 'calc(100vh - 44px)' }}
+            >
               <div className={styles.contentItem} title={content.title}>
                 <p dangerouslySetInnerHTML={{ __html: content.textContent }}></p>
                 {content.markdownContent && (
                   <ReactMarkdown
                     linkTarget='_blank'
                     rehypePlugins={[rehypeRaw]}
-                    transformImageUri={null}>
+                    transformImageUri={null}
+                  >
                     {content.markdownContent}
                   </ReactMarkdown>
                 )}
