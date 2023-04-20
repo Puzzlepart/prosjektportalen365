@@ -7,8 +7,9 @@ import { FooterContext } from '../context'
 export const HelpContent: FC = () => {
   const context = useContext(FooterContext)
   const [showModal, setShowModal] = useState(false)
+  const isHidden = context.props.helpContent.length === 0
   return (
-    <div style={{ display: context.props.helpContent.length === 0 ? 'none' : 'inline-block' }}>
+    <div style={{ display: isHidden ? 'none' : 'inline-block' }}>
       <ActionButton
         text={strings.HelpContentLinkText}
         iconProps={{ iconName: 'Help' }}

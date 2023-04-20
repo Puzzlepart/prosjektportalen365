@@ -1,4 +1,4 @@
-import { Link, TooltipHost } from '@fluentui/react'
+import { ActionButton, Link, TooltipHost } from '@fluentui/react'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useContext } from 'react'
 import { FooterContext } from '../context'
@@ -19,7 +19,11 @@ export const PromotedLinks: FC = () => {
         </div>
       }
     >
-      <Link>{strings.LinksListText}</Link>
+      <ActionButton
+        text={strings.LinksListText}
+        iconProps={{ iconName: 'Link' }}
+        styles={{ root: { fontSize: 12, height: 25 }, icon: { fontSize: 12 } }}
+      />
     </TooltipHost>
   )
 }
