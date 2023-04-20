@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - releases/1.9
+      - issues/1071
     paths:
       - "SharePointFramework/**"
       - "Install/**"
