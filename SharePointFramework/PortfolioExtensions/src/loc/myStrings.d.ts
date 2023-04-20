@@ -1,4 +1,5 @@
 declare interface IPortfolioExtensionsStrings {
+  LinksListText: ReactNode
   LatestGitHubReleaseLinkTitle: string
   LatestGitHubReleaseDownloadButtonText: string
   LatestGitHubReleaseIsNewerText: any
@@ -44,6 +45,7 @@ declare interface IPortfolioExtensionsStrings {
   ConfigurationLinkText: string
   InstallDurationLabel: string
   InstallDurationValueTemplate: string
+  LinksListName: string
 }
 
 declare module 'PortfolioExtensionsStrings' {
