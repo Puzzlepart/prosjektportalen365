@@ -25,14 +25,6 @@
           "manifest": "./src/templateSelector/manifest.json"
         }
       ]
-    },
-    "help-content-application-customizer": {
-      "components": [
-        {
-          "entrypoint": "./lib/helpContent/index.js",
-          "manifest": "./src/helpContent/manifest.json"
-        }
-      ]
     }
   },
   "externals": {},
