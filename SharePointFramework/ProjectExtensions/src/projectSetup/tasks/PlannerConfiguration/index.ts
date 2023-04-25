@@ -7,6 +7,8 @@ import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
+import { ListLogger } from 'pp365-shared/lib/logging'
+import { SPDataAdapter } from 'data'
 import { IPlannerBucket, IPlannerConfiguration, IPlannerPlan, ITaskDetails } from './types'
 import _ from 'underscore'
 /**
@@ -231,6 +233,7 @@ export class PlannerConfiguration extends BaseTask {
     delay: number = 1
   ) {
     if (
+      !taskDetails.name &&
       !taskDetails.description &&
       !taskDetails.checklist &&
       !taskDetails.labels &&
@@ -240,6 +243,35 @@ export class PlannerConfiguration extends BaseTask {
       return
     this.logInformation(`Sleeping ${delay}s before updating task details for ${taskId}`)
     await sleep(delay)
+
+    if (taskDetails.checklist.length > 20 || taskDetails.attachments.length > 10) {
+      console.log(taskDetails.name)
+      ListLogger.init(
+        SPDataAdapter.portal.web.lists.getByTitle('Logg'),
+        pageContext.web.absoluteUrl,
+        'PlannerConfiguration'
+      )
+
+      if (taskDetails.checklist.length > 20) {
+        await ListLogger.log({
+          message: format(
+            strings.PlannerTaskChecklistLimitLogText,
+            taskDetails.name ?? taskId,
+          ),
+          functionName: '_updateTaskDetails',
+          component: 'PlannerConfiguration'
+        })
+      } else if (taskDetails.attachments.length > 10) {
+        await ListLogger.log({
+          message: format(
+            strings.PlannerTaskAttachmentLimitLogText,
+            taskDetails.name ?? taskId,
+          ),
+          functionName: '_updateTaskDetails',
+          component: 'PlannerConfiguration'
+        })
+      }
+    }
 
     const taskDetailsJson: Record<string, any> = {
       description: taskDetails.description ?? '',

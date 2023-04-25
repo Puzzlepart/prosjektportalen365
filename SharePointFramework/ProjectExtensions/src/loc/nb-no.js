@@ -97,6 +97,8 @@ define([], function () {
         ProjectAlreadySetupStack: 'Det ser ut til at prosjektet allerede er satt opp. Vil du legge på mal (ikke anbefalt) eller hoppe over oppsett?',
         ProjectProvisioningSuccessLogText: 'Prosjektet {0} ble provisjonert uten feil.',
         ProjectProvisioningStartLogText: 'Starter provisjonering av prosjektet {0}.',
+        PlannerTaskChecklistLimitLogText: 'Kan ikke legge til mer enn 20 punkter i sjekklisten for oppgaven "{0}", fjerner overskytende punkter.',
+        PlannerTaskAttachmentLimitLogText: 'Kan ikke legge til mer enn 10 vedlegg til oppgaven "{0}", fjerner overskytende vedlegg.',
         ProvisionTemplateText: 'Gå til maloppsett',
         Lists_ProjectTemplateFiles_Title: 'Prosjektmaler',
         ContinueToProjectText: 'Fortsett til prosjekt',
