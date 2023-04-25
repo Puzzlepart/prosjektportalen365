@@ -50,6 +50,7 @@ export type TaskPreviewType = 'automatic' | 'noPreview' | 'checklist' | 'descrip
 export interface ITaskDetails {
   description?: string
   checklist?: string[]
+  labels?: string[]
   attachments?: TaskAttachment[]
   previewType?: TaskPreviewType
 }
