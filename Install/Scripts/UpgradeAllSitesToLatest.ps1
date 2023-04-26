@@ -151,6 +151,10 @@ Ensures the project aggregation web parts are correct.
 .DESCRIPTION
 Ensures the project aggregation web parts are correct by replacing the deprecated web parts with the new ones, 
 and ensuring correct web part properties.
+
+Reading the configuration file EnsureProjectAggregrationWebPart/$.json, the function will loop through the pages
+and replace the deprecated web parts with the new ones. The function will also ensure that the web part properties
+are correct by reading the configuration file EnsureProjectAggregrationWebPart/JsonControlData_$($Page.Name).json.
 #>
 function EnsureProjectAggregrationWebPart() {
     if ($global:__InstalledVersion -lt "1.8.2") {
@@ -169,6 +173,10 @@ function EnsureProjectAggregrationWebPart() {
     }
 }
 
+<#
+.SYNOPSIS
+Ensure help content extension is added to the site.
+#>
 function EnsureHelpContentExtension() {
     $ClientSideComponentId = "28987406-2a67-48a8-9297-fd2833bf0a09"
     if ($null -eq (Get-PnPCustomAction | Where-Object { $_.ClientSideComponentId -eq $ClientSideComponentId })) {
@@ -180,6 +188,10 @@ function EnsureHelpContentExtension() {
     }
 }
 
+<#
+.SYNOPSIS
+Ensure the GtTag site column is added to the Prosjektleveranser list on the site.
+#>
 function EnsureGtTagSiteColumn() {
     if ($global:__InstalledVersion -lt "1.8.0") {
         $ProjectDeliveries = Get-PnPList -Identity "Prosjektleveranser" -ErrorAction SilentlyContinue
