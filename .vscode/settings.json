@@ -5,6 +5,7 @@
         "**/node_modules": true,
         "**/lib": true,
         "**/dist": true,
+        "**/.dist": true,
         "**/temp": true,
         "README.md": true,
         ".development-guide/README.md": true,
