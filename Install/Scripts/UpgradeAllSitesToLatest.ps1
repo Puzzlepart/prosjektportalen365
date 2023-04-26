@@ -144,16 +144,27 @@ function EnsureProgramAggregrationWebPart() {
     }
 }
 
+<#
+.SYNOPSIS
+Ensures the project aggregation web parts are correct.
+
+.DESCRIPTION
+Ensures the project aggregation web parts are correct by replacing the deprecated web parts with the new ones, 
+and ensuring correct web part properties.
+#>
 function EnsureProjectAggregrationWebPart() {
-    $BaseDir = "$ScriptDir/EnsureProjectAggregrationWebPart"
-    $Pages = Get-Content "$BaseDir/$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
-    foreach ($Page in $Pages.PSObject.Properties.GetEnumerator()) {
-        $DeprecatedComponent = Get-PnPPageComponent -Page "$($Page.Name).aspx" -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $Page.Value } | Select-Object -First 1
-        if ($null -ne $DeprecatedComponent) {
-            Write-Host "`t`tReplacing deprecated component $($Page.Value) for $($Page.Name).aspx"
-            $JsonControlData = Get-Content "$BaseDir/JsonControlData_$($Page.Name).json" -Raw -Encoding UTF8
-            $Title = $JsonControlData | ConvertFrom-Json | Select-Object -ExpandProperty title
-            Invoke-PnPSiteTemplate -Path "$BaseDir/Template_ProjectAggregationWebPart.xml" -Parameters @{"JsonControlData" = $JsonControlData; "PageName" = "$($Page.Name).aspx"; "Title" = $Title }
+    if ($global:__InstalledVersion -lt "1.8.2") {
+        $BaseDir = "$ScriptDir/EnsureProjectAggregrationWebPart"
+        $Pages = Get-Content "$BaseDir/$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+        foreach ($Page in $Pages) {
+            $PageName = "$($Page.Name).aspx"
+            $DeprecatedComponent = Get-PnPPageComponent -Page $PageName -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $Page.ControlId } | Select-Object -First 1
+            if ($null -ne $DeprecatedComponent) {
+                Write-Host "`t`tReplacing deprecated component $($Page.ControlId) for $($PageName)"
+                $JsonControlData = Get-Content "$BaseDir/JsonControlData_$($Page.Name).json" -Raw -Encoding UTF8
+                $Title = $JsonControlData | ConvertFrom-Json | Select-Object -ExpandProperty title
+                Invoke-PnPSiteTemplate -Path "$BaseDir/Template_ProjectAggregationWebPart.xml" -Parameters @{"JsonControlData" = $JsonControlData; "PageName" = $PageName; "Title" = $Title }
+            }
         }
     }
 }
