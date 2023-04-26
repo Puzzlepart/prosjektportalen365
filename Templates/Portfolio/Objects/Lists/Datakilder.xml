@@ -14,6 +14,7 @@
                 <FieldRef Name="LinkTitle" />
                 <FieldRef Name="GtSearchQuery" />
                 <FieldRef Name="GtDataSourceCategory" />
+                <FieldRef Name="GtDataSourceLevel" />
                 <FieldRef Name="GtDataSourceDefault" />
                 <FieldRef Name="GtProjectContentColumns" />
                 <FieldRef Name="GtProjectContentRefiners" />
@@ -29,6 +30,7 @@
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="Tittel" Required="true" />
         <pnp:FieldRef ID="31e405e0-2890-439d-9c9f-42354154feda" Name="GtSearchQuery" DisplayName="{resource:SiteFields_GtSearchQuery_DisplayName}" Required="true" />
         <pnp:FieldRef ID="67a0a4b1-61d7-45c3-9157-7e302450a304" Name="GtDataSourceCategory" DisplayName="{resource:SiteFields_GtDataSourceCategory_DisplayName}" Required="true" />
+        <pnp:FieldRef ID="9f6b103c-17c6-4a9c-908e-9d53a5a9ca60" Name="GtDataSourceLevel" DisplayName="{resource:SiteFields_GtDataSourceLevel_DisplayName}" Required="true" />
         <pnp:FieldRef ID="1bfa0248-e65d-4fae-b5cf-fbffeb6c13da" Name="GtDataSourceDefault" DisplayName="{resource:SiteFields_GtDataSourceDefault_DisplayName}" Required="true" />
         <pnp:FieldRef ID="d4236349-e45d-4547-8a5e-9f417e5e50d7" Name="GtProjectContentColumns" DisplayName="{resource:SiteFields_GtProjectContentColumns_DisplayName}" />
         <pnp:FieldRef ID="e0b7c98e-1d80-48d9-b384-2daa795daca8" Name="GtProjectContentRefiners" DisplayName="{resource:SiteFields_GtProjectContentRefiners_DisplayName}" />
