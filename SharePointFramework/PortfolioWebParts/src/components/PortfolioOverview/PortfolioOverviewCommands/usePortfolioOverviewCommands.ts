@@ -10,29 +10,33 @@ import { IFilterProps } from '../../FilterPanel'
 import { IPortfolioOverviewCommandsProps, IPortfolioOverviewCommandsState } from './types'
 
 /**
- * Converts a collection of `PortfolioOverviewView` objects to 
+ * Converts a collection of `PortfolioOverviewView` objects to
  * a collection of `IContextualMenuItem` objects.
- * 
+ *
  * @param props Props for the PortfolioOverviewCommands component
  * @param filterFunc Optional filter function to filter the views
  */
-function convertViewsToContextualMenuItems(props: IPortfolioOverviewCommandsProps, filterFunc: (view: PortfolioOverviewView) => boolean) {
-  return  props.configuration.views.filter(filterFunc).map(view => (
-    {
-      key: view.id.toString(),
-      name: view.title,
-      iconProps: { iconName: view.iconName },
-      canCheck: true,
-      checked: view.id === props.currentView?.id,
-      onClick: () => props.events.onChangeView(view),
-    } as IContextualMenuItem
-  ))
+function convertViewsToContextualMenuItems(
+  props: IPortfolioOverviewCommandsProps,
+  filterFunc: (view: PortfolioOverviewView) => boolean
+) {
+  return props.configuration.views.filter(filterFunc).map(
+    (view) =>
+      ({
+        key: view.id.toString(),
+        name: view.title,
+        iconProps: { iconName: view.iconName },
+        canCheck: true,
+        checked: view.id === props.currentView?.id,
+        onClick: () => props.events.onChangeView(view)
+      } as IContextualMenuItem)
+  )
 }
 
 /**
  * Component logic hook for the PortfolioOverviewCommands component. Handles the logic for
  * the command bar and the filter panel.
- * 
+ *
  * Renders the following context menu items for the command bar:
  * - `EXCEL_EXPORT`: Excel export button
  * - `NEW_VIEW`: New view button
@@ -108,7 +112,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
           !_.isEmpty(personalViews) && {
             key: 'PERSONAL_VIEWS_HEADER',
             itemType: ContextualMenuItemType.Header,
-            text: strings.PersonalViewsHeaderText,
+            text: strings.PersonalViewsHeaderText
           },
           ...personalViews,
           {
