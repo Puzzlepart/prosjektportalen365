@@ -1,0 +1,14 @@
+<Field Type="Choice" DisplayName="{resource:SiteFields_GtDataSourceLevel_DisplayName}"
+    Description="{resource:SiteFields_GtDataSourceLevel_Description}"
+    Format="Dropdown"
+    Group="{resource:SiteFields_Portfolio_Group}" ID="{9f6b103c-17c6-4a9c-908e-9d53a5a9ca60}"
+    StaticName="GtDataSourceLevel"
+    Name="GtDataSourceLevel">
+    <Default>Portefølje</Default>
+    <CHOICES>
+        <CHOICE>Portefølje</CHOICE>
+        <CHOICE>Prosjekt</CHOICE>
+        <CHOICE>Program</CHOICE>
+        <CHOICE>Overordnet</CHOICE>
+    </CHOICES>
+</Field>
