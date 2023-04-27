@@ -787,7 +787,7 @@ export class DataAdapter implements IDataAdapter {
         throw new Error(format(strings.DataSourceNotFound, dataSourceName))
       }
       const dataSrcProperties = dataSrc.projectColumns.map((col) => col.fieldName) || []
-      if (dataSrc.category === 'Gevinstoversikt') {
+      if (dataSrc.category.startsWith('Gevinstoversikt')) {
         items = await this.fetchBenefitItemsWithSource(dataSrc, [
           ...selectProperties,
           ...dataSrcProperties
