@@ -4,16 +4,31 @@
     <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
     <pnp:FieldRef ID="f63038bc-55f4-4637-9709-bd10d8175f7c" Name="GtRegistratedIdea" Required="true" UpdateChildren="true" />
     <pnp:FieldRef ID="724036b3-ff76-40d7-a7df-9613e6f4e8fa" Name="GtIdeaUrl" Required="true" UpdateChildren="true" />
-    <pnp:FieldRef ID="67eba603-1c39-49ae-a91a-29664f0824c8" Name="GtIdeaOwner" Required="true" UpdateChildren="true" />
-    <pnp:FieldRef ID="a7e1a8b5-8c93-410f-a84d-45772f37293e" Name="GtIdeaSolutionDescription" Required="true" UpdateChildren="true" />
-    <pnp:FieldRef ID="75dfa9cc-7e6b-4b71-bfca-bb1bee9e1f55" Name="GtIdeaExpectedGain" Required="true" UpdateChildren="true" />
-    <pnp:FieldRef ID="2081191c-6c4e-452c-9b50-12e80a5047fa" Name="GtIdeaExecutionPlanApproach" Required="true" UpdateChildren="true" />
-    <pnp:FieldRef ID="70f7cd7a-1a5a-430c-9da6-1a2710de7eeb" Name="GtIdeaExecutionResourceNeeds" Required="true" UpdateChildren="true" />
-    <pnp:FieldRef ID="a43b99a2-1b4c-4993-a390-56343004895c" Name="GtIdeaExecutionSuccessFactors" Required="true" UpdateChildren="true" />
+    <pnp:FieldRef ID="acf4112b-cf26-4797-831e-a0b7d40975ab" Name="GtIdeaReporter" UpdateChildren="true" />
+    <pnp:FieldRef ID="67eba603-1c39-49ae-a91a-29664f0824c8" Name="GtIdeaOwner" UpdateChildren="true" />
+    <pnp:FieldRef ID="a7e1a8b5-8c93-410f-a84d-45772f37293e" Name="GtIdeaSolutionDescription" UpdateChildren="true" />
+    <pnp:FieldRef ID="75dfa9cc-7e6b-4b71-bfca-bb1bee9e1f55" Name="GtIdeaExpectedGain" UpdateChildren="true" />
+    <pnp:FieldRef ID="2081191c-6c4e-452c-9b50-12e80a5047fa" Name="GtIdeaExecutionPlanApproach" UpdateChildren="true" />
+    <pnp:FieldRef ID="70f7cd7a-1a5a-430c-9da6-1a2710de7eeb" Name="GtIdeaExecutionResourceNeeds" UpdateChildren="true" />
+    <pnp:FieldRef ID="a43b99a2-1b4c-4993-a390-56343004895c" Name="GtIdeaExecutionSuccessFactors" UpdateChildren="true" />
     <pnp:FieldRef ID="df578dbf-fb10-4834-be61-6b9355dbc1a9" Name="GtIdeaReference" UpdateChildren="true" />
     <pnp:FieldRef ID="86e2c34f-3522-4715-a18b-d0964b5efeb5" Name="GtIdeaDecision" UpdateChildren="true" />
     <pnp:FieldRef ID="ebb77296-0d25-42a3-b996-d7396f84d8ce" Name="GtIdeaOtherComments" UpdateChildren="true" />
     <pnp:FieldRef ID="01adb50d-0c5a-4e51-9ff6-01fbc71079a9" Name="GtIdeaDecisionComment" UpdateChildren="true" />
+    <pnp:FieldRef ID="d0f5911c-85bc-4403-a9c4-9ed943298164" Name="GtIdeaStrategicValue" UpdateChildren="true" />
+    <pnp:FieldRef ID="d8a940ba-d7ce-413a-ba26-2140f09a8c58" Name="GtIdeaStrategicNumber" UpdateChildren="true" />
+    <pnp:FieldRef ID="76eb1411-4a09-4b0d-bfe2-6ecd7e7c1e75" Name="GtIdeaQualityBenefit" UpdateChildren="true" />
+    <pnp:FieldRef ID="201dba9f-b85e-475c-8b7c-603b2cbe886c" Name="GtIdeaQualityNumber" UpdateChildren="true" />
+    <pnp:FieldRef ID="37b7f04e-b158-49eb-96f3-637ce1292e75" Name="GtIdeaEconomicBenefit" UpdateChildren="true" />
+    <pnp:FieldRef ID="d04ec769-0834-467b-84bf-bba219819ff2" Name="GtIdeaEconomicNumber" UpdateChildren="true" />
+    <pnp:FieldRef ID="d3dcbabd-2df6-4338-864d-33417f8220aa" Name="GtIdeaOperationalNeed" UpdateChildren="true" />
+    <pnp:FieldRef ID="28585ae1-e205-49a9-865e-00cb2c860fe0" Name="GtIdeaOperationalNumber" UpdateChildren="true" />
+    <pnp:FieldRef ID="cca3f2fd-5684-43e1-9fb5-acf05592b1f6" Name="GtIdeaRisk" UpdateChildren="true" />
+    <pnp:FieldRef ID="9f7444b0-2f69-4ad0-a347-2d85cedddebb" Name="GtIdeaRiskNumber" UpdateChildren="true" />
+    <pnp:FieldRef ID="15915e21-3ba3-4a39-8bf3-690b1cb044b5" Name="GtIdeaManualScore" UpdateChildren="true" />
+    <pnp:FieldRef ID="9b7cf4f7-641d-4a7f-be6a-245237dce476" Name="GtIdeaManualComment" UpdateChildren="true" />
+    <pnp:FieldRef ID="ce451f2c-a098-48ba-a8a5-d1d4ffc225d6" Name="GtIdeaScore" UpdateChildren="true" />
+    <pnp:FieldRef ID="8fef6c38-28e1-497a-97d7-72e1a854fae1" Name="GtIdeaPriority" UpdateChildren="true" />
     <pnp:FieldRef ID="8ac3248f-1b9c-4270-adeb-097ac9d02874" Name="GtIdeaProjectData" UpdateChildren="true" />
   </pnp:FieldRefs>
 </pnp:ContentType>

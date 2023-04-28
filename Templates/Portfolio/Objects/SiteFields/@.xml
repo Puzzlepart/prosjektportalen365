@@ -24,6 +24,21 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaSolutionProposals.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaUrl.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtRegistratedIdea.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaReporter.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaStrategicValue.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaStrategicNumber.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaEconomicBenefit.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaEconomicNumber.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaOperationalNeed.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaOperationalNumber.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaQualityBenefit.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaQualityNumber.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaRisk.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaRiskNumber.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaManualScore.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaManualComment.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaScore.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Idea/GtIdeaPriority.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Communication/GtActionChannel.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Communication/GtActionDate.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields/Communication/GtActionDescription.xml" />

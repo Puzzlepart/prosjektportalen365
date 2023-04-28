@@ -14,6 +14,7 @@
                 <FieldRef Name="LinkTitle" />
                 <FieldRef Name="GtIdeaUrl" />
                 <FieldRef Name="GtRegistratedIdea" />
+                <FieldRef Name="GtIdeaReporter" />
                 <FieldRef Name="GtIdeaOwner"/>
                 <FieldRef Name="GtIdeaSolutionDescription" />
                 <FieldRef Name="GtIdeaExpectedGain" />
@@ -29,6 +30,39 @@
             <RowLimit Paged="TRUE">100</RowLimit>
             <Aggregations Value="Off" />
             <JSLink>hierarchytaskslist.js</JSLink>
+        </View>
+        <View Type="HTML" DisplayName="{resource:View_Cards_DisplayName}" Url="{site}/{resource:Lists_IdeaProcessing_Url}/{resource:View_Cards_DisplayName}.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+            <Query>
+                <GroupBy Collapse="TRUE" GroupLimit="30">
+                    <FieldRef Name="GtIdeaPriority" />
+                </GroupBy>
+                <OrderBy>
+                    <FieldRef Name="GtIdeaScore" Ascending="FALSE" />
+                </OrderBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtIdeaStrategicValue" />
+                <FieldRef Name="GtIdeaStrategicNumber" />
+                <FieldRef Name="GtIdeaQualityBenefit" />
+                <FieldRef Name="GtIdeaQualityNumber" />
+                <FieldRef Name="GtIdeaEconomicBenefit" />
+                <FieldRef Name="GtIdeaEconomicNumber" />
+                <FieldRef Name="GtIdeaOperationalNeed" />
+                <FieldRef Name="GtIdeaOperationalNumber" />
+                <FieldRef Name="GtIdeaRisk" />
+                <FieldRef Name="GtIdeaRiskNumber" />
+                <FieldRef Name="GtIdeaManualScore" />
+                <FieldRef Name="GtIdeaManualComment" />
+                <FieldRef Name="GtIdeaScore" />
+                <FieldRef Name="GtIdeaPriority" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">30</RowLimit>
+            <Aggregations Value="Off" />
+            <JSLink>clienttemplates.js</JSLink>
+            <CustomFormatter><![CDATA[{"tileProps":{"$schema":"https://developer.microsoft.com/json-schemas/sp/v2/tile-formatting.schema.json","width":250,"height":325,"hideSelection":false,"fillHorizontally":true,"groupProps":{"headerFormatter":{"elmType":"div","children":[{"elmType":"div","style":{"flex-wrap":"wrap","display":"flex","box-sizing":"border-box","padding":"4px 8px 5px 8px","border-radius":"6px","align-items":"center","white-space":"nowrap","overflow":"hidden","margin":"1px 4px 4px 1px","width":"100%"},"attributes":{"class":"=if(@group.fieldData == ' Må ha', 'sp-css-backgroundColor-successBackground50',if(@group.fieldData == ' Bør ha', 'sp-css-backgroundColor-blueBackground37',if(@group.fieldData == ' Kan ha', 'sp-css-backgroundColor-warningBackground50',if(@group.fieldData == ' Skal ikke ha', 'sp-css-backgroundColor-blockingBackground50','ms-bgColor-gray30')))"},"children":[{"elmType":"div","children":[{"elmType":"span","style":{"padding":"5px 1px 5px 5px","font-weight":"500"},"txtContent":{"operator":"+","operands":["","@group.fieldData.displayValue"]}}]},{"elmType":"div","children":[{"elmType":"div","style":{"display":"flex","flex-direction":"row","justify-content":"center"},"children":[{"elmType":"div","txtContent":"=': ' + @group.count + if(@group.count > '1', ' Prosjekter', ' Prosjekt')","style":{"font-weight":"500"}}]}]}]}]}},"formatter":{"elmType":"div","attributes":{"class":"sp-card-container"},"children":[{"elmType":"div","attributes":{"class":"ms-bgColor-white sp-css-borderColor-neutralLight sp-card-borderHighlight sp-card-subContainer"},"children":[{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer"},"children":[{"elmType":"p","attributes":{"class":"ms-fontColor-neutralSecondary sp-card-label"},"txtContent":"[!Title.DisplayName]"},{"elmType":"p","attributes":{"title":"[$Title]","class":"ms-fontColor-neutralPrimary sp-card-content sp-card-highlightedContent"},"txtContent":"=if ([$Title] == '', '–', [$Title])"}]},{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer"},"children":[{"elmType":"p","attributes":{"class":"ms-fontColor-neutralSecondary sp-card-label, ms-fontSize-14","title":"=if ([$GtIdeaStrategicValue] == '', '–', [$GtIdeaStrategicValue])"},"txtContent":"=if ([$GtIdeaStrategicValue] == '', '[!GtIdeaStrategicValue.DisplayName]', '[!GtIdeaStrategicValue.DisplayName]' + ': ' + '[$GtIdeaStrategicNumber]'"}]},{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer"},"children":[{"elmType":"p","attributes":{"class":"ms-fontColor-neutralSecondary sp-card-label, ms-fontSize-14","title":"=if ([$GtIdeaQualityBenefit] == '', '–', [$GtIdeaQualityBenefit])"},"txtContent":"=if ([$GtIdeaQualityBenefit] == '', '[!GtIdeaQualityBenefit.DisplayName]', '[!GtIdeaQualityBenefit.DisplayName]' + ': ' + '[$GtIdeaQualityNumber]'"}]},{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer"},"children":[{"elmType":"p","attributes":{"class":"ms-fontColor-neutralSecondary sp-card-label, ms-fontSize-14","title":"=if ([$GtIdeaEconomicBenefit] == '', '–', [$GtIdeaEconomicBenefit])"},"txtContent":"=if ([$GtIdeaEconomicBenefit] == '', '[!GtIdeaEconomicBenefit.DisplayName]', '[!GtIdeaEconomicBenefit.DisplayName]' + ': ' + '[$GtIdeaEconomicNumber]'"}]},{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer","title":"=if ([$GtIdeaOperationalNeed] == '', '–', [$GtIdeaOperationalNeed])"},"children":[{"elmType":"p","attributes":{"class":"ms-fontColor-neutralSecondary sp-card-label, ms-fontSize-14"},"txtContent":"=if ([$GtIdeaOperationalNeed] == '', '[!GtIdeaOperationalNeed.DisplayName]', '[!GtIdeaOperationalNeed.DisplayName]' + ': ' + '[$GtIdeaOperationalNumber]'"}]},{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer","title":"=if ([$GtIdeaRisk] == '', '–', [$GtIdeaRisk])"},"children":[{"elmType":"p","attributes":{"class":"ms-fontColor-neutralSecondary sp-card-label, ms-fontSize-14"},"txtContent":"=if ([$GtIdeaRisk] == '', '[!GtIdeaRisk.DisplayName]', '[!GtIdeaRisk.DisplayName]' + ': ' + '[$GtIdeaRiskNumber]'"}]},{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer"},"children":[{"elmType":"p","attributes":{"class":"ms-fontColor-neutralSecondary sp-card-label, ms-fontSize-14"},"txtContent":"[!GtIdeaScore.DisplayName]"},{"elmType":"p","attributes":{"title":"=if ([$GtIdeaScore.displayValue] == '', '–', [$GtIdeaScore.displayValue])","class":"ms-fontColor-neutralPrimary sp-card-content, ms-fontSize-24 "},"style":{"border-bottom":"1px solid grey ","padding-bottom":"8px"},"txtContent":"=if ([$GtIdeaScore.displayValue] == '', '–', [$GtIdeaScore.displayValue])"}]},{"elmType":"div","style":{"display":"=if([$GtIdeaManualScore.displayValue] == '0', 'none', 'flex')","flex-direction":"row","flex-wrap":"nowrap","justify content":"center"},"children":[{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer"},"children":[{"elmType":"p","attributes":{"class":"ms-fontColor-neutralSecondary sp-card-label"},"txtContent":"[!GtIdeaManualScore.DisplayName]"},{"elmType":"p","attributes":{"title":"=if ([$GtIdeaScore.displayValue] == '', '–', [$GtIdeaScore.displayValue])","class":"ms-fontColor-neutralPrimary sp-card-content "},"txtContent":"=if ([$GtIdeaManualScore.displayValue] == '', '–', [$GtIdeaManualScore.displayValue])"}]},{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer"},"children":[{"elmType":"p","attributes":{"class":"ms-fontColor-neutralSecondary sp-card-label"},"txtContent":"Kommentar til justering"},{"elmType":"p","attributes":{"class":"ms-fontColor-neutralPrimary sp-card-content "},"style":{"overflow":"visible","white-space":"pre-wrap"},"txtContent":"[$GtIdeaManualComment.displayValue]"}]}]}]}]}}}]]></CustomFormatter>
+            <ViewType2>TILES</ViewType2>
+            <ViewData />
         </View>
     </pnp:Views>
 </pnp:ListInstance>

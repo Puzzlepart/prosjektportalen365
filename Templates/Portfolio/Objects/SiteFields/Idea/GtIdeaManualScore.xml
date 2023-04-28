@@ -1,0 +1,3 @@
+<Field ID="{15915e21-3ba3-4a39-8bf3-690b1cb044b5}" Name="GtIdeaManualScore" DisplayName="{resource:SiteFields_GtIdeaManualScore_DisplayName}" Description="{resource:SiteFields_GtIdeaManualScore_Description}" Type="Number" Group="{resource:SiteFields_Idea_Group}" StaticName="GtIdeaManualScore">
+  <Default>0</Default>
+</Field>
