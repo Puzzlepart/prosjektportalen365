@@ -3,7 +3,7 @@
     <CHOICE>1=Prosjektets leveranser har ikke dokumenterbar kvalitetshevende effekt, men kan ha indirekte påvirkning på kvalitet</CHOICE>
     <CHOICE>2=Prosjektets leveranser gir kvalitativ gevinst som er vanskelig å dokumentere, da også andre faktorer vil ha innvirkning</CHOICE>
     <CHOICE>3=Prosjektets leveranser gir dokumenterbar kvalitativ forbedring</CHOICE>
-    <CHOICE>4=Prosjektets leveranser gir dokumenterbar kvalitativ forbedring på områder som er strategisk viktige for Nittedal kommunes</CHOICE>
-    <CHOICE>5=Prosjektets leveranser gir vesentlig og dokumenterbar kvalitativ forbedring på områder som er strategisk viktige for Nittedal kommunes og på parametre Nittedal kommune måles på</CHOICE>
+    <CHOICE>4=Prosjektets leveranser gir dokumenterbar kvalitativ forbedring på områder som er strategisk viktige</CHOICE>
+    <CHOICE>5=Prosjektets leveranser gir vesentlig og dokumenterbar kvalitativ forbedring på områder som er strategisk viktige og på parametre det måles på.</CHOICE>
   </CHOICES>
 </Field>

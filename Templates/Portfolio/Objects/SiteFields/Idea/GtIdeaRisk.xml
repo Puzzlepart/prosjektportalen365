@@ -1,8 +1,8 @@
 <Field ID="{cca3f2fd-5684-43e1-9fb5-acf05592b1f6}" Name="GtIdeaRisk" StaticName="GtIdeaRisk" DisplayName="{resource:SiteFields_GtIdeaRisk_DisplayName}" Description="{resource:SiteFields_GtIdeaRisk_Description}" Type="Choice" Group="{resource:SiteFields_Idea_Group}" ShowInNewForm="TRUE" ShowInEditForm="TRUE">
   <CHOICES>
-    <CHOICE>1=Kritisk risiko: Prosjektet har svært høy risiko, og det er stor sannsynlighet for ikke å lykkes med de viktigste målene eller med å realisere gevinster. Feil kan medføre store økonomiske tap for Nittedal kommune. Kjernevirksomhet kan stoppe opp</CHOICE>
+    <CHOICE>1=Kritisk risiko: Prosjektet har svært høy risiko, og det er stor sannsynlighet for ikke å lykkes med de viktigste målene eller med å realisere gevinster. Feil kan medføre store økonomiske tap. Kjernevirksomhet kan stoppe opp</CHOICE>
     <CHOICE>2=Betydelig risiko: Prosjektet har høy risiko i gjennomføring og/eller i muligheten for å realisere gevinst etter at prosjektets leveranser er ferdigstilt</CHOICE>
-    <CHOICE>3=Middels risiko: Prosjektet har middels høy risiko. Det er risiko knyttet til om Nittedal kommune evner å realisere gevinster. Prosjektet kan mislykkes i å nå alle sine mål</CHOICE>
+    <CHOICE>3=Middels risiko: Prosjektet har middels høy risiko. Det er risiko knyttet til evner om å realisere gevinster. Prosjektet kan mislykkes i å nå alle sine mål</CHOICE>
     <CHOICE>4=Noe risiko: Prosjektet har ordinær risiko knyttet til tilgang på ressurser, beslutningskapasitet, kostnader etc. Risikoen er håndterbar ved å sette inn sannsynlighetsreduserende og konsekvensreduserende tiltak ved behov</CHOICE>
     <CHOICE>5=Lav risiko: Prosjektet har lav risiko. Det er god tilgang til ressurser og kompetanse for prosjektgjennomføring, og organisasjonens evne til å realisere gevinster er godt kjent</CHOICE>
   </CHOICES>
