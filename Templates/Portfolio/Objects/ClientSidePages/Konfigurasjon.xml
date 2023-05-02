@@ -412,7 +412,7 @@
                             &quot;items[5].title&quot;: &quot;Tidslinjekonfigurasjon&quot;,
                             &quot;items[6].title&quot;: &quot;Statusseksjoner&quot;,
                             &quot;items[7].title&quot;: &quot;Grafkonfigurasjon&quot;,
-                            &quot;items[8].title&quot;: &quot;Idékonfigurasjon&quot;
+                            &quot;items[8].title&quot;: &quot;Idékonfigurasjon&quot;,
                             &quot;items[9].title&quot;: &quot;Hjelpeinnhold&quot;
                         },
                         &quot;imageSources&quot;: {},
@@ -426,7 +426,7 @@
                             &quot;items[5].sourceItem.url&quot;: &quot;{site}/Lists/Tidslinjekonfigurasjon&quot;,
                             &quot;items[6].sourceItem.url&quot;: &quot;{site}/Lists/Statusseksjoner&quot;,
                             &quot;items[7].sourceItem.url&quot;: &quot;{site}/Lists/Grafkonfigurasjon&quot;,
-                            &quot;items[8].sourceItem.url&quot;: &quot;{site}/Lists/Idekonfigurasjon&quot;
+                            &quot;items[8].sourceItem.url&quot;: &quot;{site}/Lists/Idekonfigurasjon&quot;,
                             &quot;items[9].sourceItem.url&quot;: &quot;{site}/Lists/Hjelpeinnhold&quot;
                         },
                         &quot;componentDependencies&quot;: {
