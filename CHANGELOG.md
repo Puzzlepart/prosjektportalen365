@@ -20,6 +20,8 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Håndterer deaktiverte/stengte kontoer i kopiering av tillatelseskonfigurasjon [#1085](https://github.com/Puzzlepart/prosjektportalen365/issues/1085)
 - Fiks for feil som noen ganger kunne oppstå i Prosjektinformasjon-webdelen [#1086](https://github.com/Puzzlepart/prosjektportalen365/issues/1086)
 - Fiks for Gevinstoversikt på prosjektnivå [#1095](https://github.com/Puzzlepart/prosjektportalen365/issues/1095)
+- Fikset problem dersom det ble oppgitt for mange vedlegg eller sjekkpunkter i planneroppgaver og innhold manglet [#1039](https://github.com/Puzzlepart/prosjektportalen365/issues/1039)
+  - Det loggføres i `Logg` listen dersom begrensninger er nådd.
 
 ## 1.8.1 - 31.03.2023
 
