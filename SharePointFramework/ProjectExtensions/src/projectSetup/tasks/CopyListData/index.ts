@@ -145,6 +145,7 @@ export class CopyListData extends BaseTask {
           title: params.context.pageContext.web.title,
           owner: params.context.pageContext.legacyPageContext.groupId
         },
+        params.context.pageContext,
         false
       )
     }

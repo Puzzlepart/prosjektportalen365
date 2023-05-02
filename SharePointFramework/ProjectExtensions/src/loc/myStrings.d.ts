@@ -100,6 +100,7 @@ declare interface IProjectExtensionsStrings {
   ProjectProvisioningStartLogText: string
   PlannerTaskChecklistLimitLogText: string
   PlannerTaskAttachmentLimitLogText: string
+  PlannerTagsLimitLogText: string
   ProvisionTemplateText: string
   ContinueToProjectText: string
   RecycleBinText: string

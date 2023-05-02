@@ -99,6 +99,7 @@ define([], function () {
         ProjectProvisioningStartLogText: 'Starter provisjonering av prosjektet {0}.',
         PlannerTaskChecklistLimitLogText: 'Kan ikke legge til mer enn 20 punkter i sjekklisten for oppgaven "{0}", fjerner overskytende punkter.',
         PlannerTaskAttachmentLimitLogText: 'Kan ikke legge til mer enn 10 vedlegg til oppgaven "{0}", fjerner overskytende vedlegg.',
+        PlannerTagsLimitLogText: 'Kan ikke legge til mer enn 25 etiketter til planneren "{0}", fjerner overskytende etiketter.',
         ProvisionTemplateText: 'Gå til maloppsett',
         Lists_ProjectTemplateFiles_Title: 'Prosjektmaler',
         ContinueToProjectText: 'Fortsett til prosjekt',

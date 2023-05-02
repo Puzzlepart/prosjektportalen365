@@ -70,7 +70,7 @@ export class PlannerConfiguration extends BaseTask {
         owner: pageContext.legacyPageContext.groupId
       }
       this.logInformation(`Creating plan ${plan.title}`)
-      plan = await this.ensurePlan(plan)
+      plan = await this.ensurePlan(plan, pageContext)
       const existingBuckets = await this._fetchBuckets(plan.id)
       for (let i = 0; i < Object.keys(this._configuration).length; i++) {
         const bucketName = Object.keys(this._configuration)[i]
@@ -95,14 +95,14 @@ export class PlannerConfiguration extends BaseTask {
    * @param plan Plan object
    * @param setupLabels Setup labels for the plan
    */
-  public async ensurePlan(plan: IPlannerPlan, setupLabels = true): Promise<IPlannerPlan> {
+  public async ensurePlan(plan: IPlannerPlan, pageContext: PageContext, setupLabels = true): Promise<IPlannerPlan> {
     try {
       const existingGroupPlans = await this._fetchPlans(plan.owner)
       const existingPlan = _.find(existingGroupPlans, (p) => p.title === plan.title)
       if (!existingPlan) {
         plan = await MSGraphHelper.Post('planner/plans', JSON.stringify(plan))
       }
-      if (setupLabels) await this._setupLabels(plan)
+      if (setupLabels) await this._setupLabels(plan, pageContext)
       return plan
     } catch (error) {
       throw error
@@ -115,12 +115,31 @@ export class PlannerConfiguration extends BaseTask {
    * @param plan Plan
    * @param delay Delay in seconds before updating the plan to ensure it's created properly
    */
-  private async _setupLabels(plan: IPlannerPlan, delay: number = 5) {
+  private async _setupLabels(plan: IPlannerPlan, pageContext: PageContext, delay: number = 5) {
     this.logInformation(`Sleeping ${delay} seconds before updating the plan with labels`)
     await sleep(delay)
     if (this._labels.length > 0) {
       this.logInformation(`Sleeping before updating the plan with labels ${JSON.stringify(this._labels)}`)
       const eTag = (await MSGraphHelper.Get(`planner/plans/${plan.id}/details`))['@odata.etag']
+
+      if (this._labels.length > 25) {
+        ListLogger.init(
+          SPDataAdapter.portal.web.lists.getByTitle('Logg'),
+          pageContext.web.absoluteUrl,
+          'PlannerConfiguration'
+        )
+
+        await ListLogger.log({
+          message: format(
+            strings.PlannerTagsLimitLogText,
+            plan.title ?? plan.id,
+          ),
+          functionName: '_setupLabels',
+          level: 'Warning',
+          component: 'PlannerConfiguration'
+        })
+      }
+
       this._categoryDescriptions = this._labels
         .slice(0, 25)
         .reduce((obj, value, idx) => ({ ...obj, [`category${idx + 1}`]: value }), {})
@@ -258,6 +277,7 @@ export class PlannerConfiguration extends BaseTask {
             taskDetails.name ?? taskId,
           ),
           functionName: '_updateTaskDetails',
+          level: 'Warning',
           component: 'PlannerConfiguration'
         })
       }
@@ -269,6 +289,7 @@ export class PlannerConfiguration extends BaseTask {
             taskDetails.name ?? taskId,
           ),
           functionName: '_updateTaskDetails',
+          level: 'Warning',
           component: 'PlannerConfiguration'
         })
       }
