@@ -45,6 +45,7 @@ import {
   IDataAdapter,
   IFetchDataForViewItemResult
 } from './types'
+import { SearchQueryInit } from '@pnp/sp/src/search'
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -324,9 +325,8 @@ export class DataAdapter implements IDataAdapter {
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${
-          queryArray ?? ''
-        } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `${queryArray ?? ''
+          } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })
@@ -378,7 +378,7 @@ export class DataAdapter implements IDataAdapter {
         .filter((p) => p)
 
       return { reports, configElement }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -675,19 +675,27 @@ export class DataAdapter implements IDataAdapter {
 
   /**
    * Fetch items with `sp.search` using the specified `queryTemplate` and `selectProperties`.
+   * Uses a `while` loop to fetch all items in batches of 500 (maxiumum allowed by SharePoint).
    *
    * @param queryTemplate Query template
    * @param selectProperties Select properties
    */
-  private async _fetchItems(queryTemplate: string, selectProperties: string[]) {
-    const response = await sp.search({
+  private async _fetchItems(queryTemplate: string, selectProperties: string[]): Promise<SearchResult[]> {
+    const query: SearchQueryInit = {
       QueryTemplate: `${queryTemplate}`,
       Querytext: '*',
       RowLimit: 500,
       TrimDuplicates: false,
       SelectProperties: [...selectProperties, 'Path', 'SPWebURL', 'SiteTitle']
-    })
-    return response.PrimarySearchResults
+    }
+    const { PrimarySearchResults, TotalRows } = await sp.search(query)
+    const results = [...PrimarySearchResults]
+    while (results.length < TotalRows) {
+      query.StartRow = PrimarySearchResults.length
+      const response = await sp.search(query)
+      results.push(...response.PrimarySearchResults)
+    }
+    return results
   }
 
   /**
