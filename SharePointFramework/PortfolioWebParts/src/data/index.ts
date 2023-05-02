@@ -674,32 +674,34 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch items with `sp.search` using the specified `queryTemplate` and `selectProperties`.
-   * Uses a `while` loop to fetch all items in batches of 500 (maxiumum allowed by SharePoint).
+   * Fetch items with `sp.search` using the specified `{queryTemplate}` and `{selectProperties}`.
+   * Uses a `while` loop to fetch all items in batches of `{batchSize}`.
    *
    * @param queryTemplate Query template
    * @param selectProperties Select properties
+   * @param batchSize Batch size (default: 500)
    */
-  private async _fetchItems(queryTemplate: string, selectProperties: string[]): Promise<SearchResult[]> {
+  private async _fetchItems(queryTemplate: string, selectProperties: string[], batchSize = 500): Promise<SearchResult[]> {
     const query: SearchQueryInit = {
       QueryTemplate: `${queryTemplate}`,
       Querytext: '*',
-      RowLimit: 500,
+      RowLimit: batchSize,
       TrimDuplicates: false,
-      SelectProperties: [...selectProperties, 'Path', 'SPWebURL', 'SiteTitle']
+      SelectProperties: [...selectProperties, 'Path', 'SPWebURL', 'SiteTitle', 'UniqueID']
     }
     const { PrimarySearchResults, TotalRows } = await sp.search(query)
     const results = [...PrimarySearchResults]
     while (results.length < TotalRows) {
-      query.StartRow = PrimarySearchResults.length
-      const response = await sp.search(query)
+      const response = await sp.search({ ...query, StartRow: results.length })
       results.push(...response.PrimarySearchResults)
     }
     return results
   }
 
   /**
-   * Fetch items with the specified `dataSource` and `selectProperties`.
+   * Fetch benefit items with the specified `dataSource` and `selectProperties`. The result
+   * is transformed into `Benefit`, `BenefitMeasurement` and `BenefitMeasurementIndicator` objects
+   * which is the main difference from `_fetchItems`.
    *
    * @param dataSource Data source
    * @param selectProperties Select properties
