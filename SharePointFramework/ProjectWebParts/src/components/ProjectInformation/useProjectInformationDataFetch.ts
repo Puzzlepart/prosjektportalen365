@@ -80,7 +80,7 @@ const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolea
 }
 
 /**
- * Fetch project status reports, sections and column config  if `props.hideStatusReport` is false.
+ * Fetch project status reports (top: 1), sections and column config  if `props.hideStatusReport` is false.
  * Catches errors and returns empty arrays to support e.g. the case where the user does not have
  * access to the hub site.
  *
@@ -97,7 +97,8 @@ const fetchProjectStatusReports: DataFetchFunction<
     const [reports, sections, columnConfig] = await Promise.all([
       SPDataAdapter.portal.getStatusReports({
         filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
-        publishedString: strings.GtModerationStatus_Choice_Published
+        publishedString: strings.GtModerationStatus_Choice_Published,
+        top: 1
       }),
       SPDataAdapter.portal.getProjectStatusSections(),
       SPDataAdapter.portal.getProjectColumnConfig()
