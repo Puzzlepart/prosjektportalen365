@@ -245,7 +245,6 @@ export class PlannerConfiguration extends BaseTask {
     await sleep(delay)
 
     if (taskDetails.checklist.length > 20 || taskDetails.attachments.length > 10) {
-      console.log(taskDetails.name)
       ListLogger.init(
         SPDataAdapter.portal.web.lists.getByTitle('Logg'),
         pageContext.web.absoluteUrl,
@@ -261,7 +260,9 @@ export class PlannerConfiguration extends BaseTask {
           functionName: '_updateTaskDetails',
           component: 'PlannerConfiguration'
         })
-      } else if (taskDetails.attachments.length > 10) {
+      }
+
+      if (taskDetails.attachments.length > 10) {
         await ListLogger.log({
           message: format(
             strings.PlannerTaskAttachmentLimitLogText,
