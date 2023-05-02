@@ -168,7 +168,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
           !_.isEmpty(personalViews) && {
             key: 'PERSONAL_VIEWS_HEADER',
             itemType: ContextualMenuItemType.Header,
-            text: strings.PersonalViewsHeaderText,
+            text: strings.PersonalViewsHeaderText
           },
           ...personalViews,
           {

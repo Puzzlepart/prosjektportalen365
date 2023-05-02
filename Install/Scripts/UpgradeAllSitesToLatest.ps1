@@ -144,20 +144,39 @@ function EnsureProgramAggregrationWebPart() {
     }
 }
 
+<#
+.SYNOPSIS
+Ensures the project aggregation web parts are correct.
+
+.DESCRIPTION
+Ensures the project aggregation web parts are correct by replacing the deprecated web parts with the new ones, 
+and ensuring correct web part properties.
+
+Reading the configuration file EnsureProjectAggregrationWebPart/$.json, the function will loop through the pages
+and replace the deprecated web parts with the new ones. The function will also ensure that the web part properties
+are correct by reading the configuration file EnsureProjectAggregrationWebPart/JsonControlData_$($Page.Name).json.
+#>
 function EnsureProjectAggregrationWebPart() {
-    $BaseDir = "$ScriptDir/EnsureProjectAggregrationWebPart"
-    $Pages = Get-Content "$BaseDir/$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
-    foreach ($Page in $Pages.PSObject.Properties.GetEnumerator()) {
-        $DeprecatedComponent = Get-PnPPageComponent -Page "$($Page.Name).aspx" -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $Page.Value } | Select-Object -First 1
-        if ($null -ne $DeprecatedComponent) {
-            Write-Host "`t`tReplacing deprecated component $($Page.Value) for $($Page.Name).aspx"
-            $JsonControlData = Get-Content "$BaseDir/JsonControlData_$($Page.Name).json" -Raw -Encoding UTF8
-            $Title = $JsonControlData | ConvertFrom-Json | Select-Object -ExpandProperty title
-            Invoke-PnPSiteTemplate -Path "$BaseDir/Template_ProjectAggregationWebPart.xml" -Parameters @{"JsonControlData" = $JsonControlData; "PageName" = "$($Page.Name).aspx"; "Title" = $Title }
+    if ($global:__InstalledVersion -lt "1.8.2") {
+        $BaseDir = "$ScriptDir/EnsureProjectAggregrationWebPart"
+        $Pages = Get-Content "$BaseDir/$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+        foreach ($Page in $Pages) {
+            $PageName = "$($Page.Name).aspx"
+            $DeprecatedComponent = Get-PnPPageComponent -Page $PageName -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $Page.ControlId } | Select-Object -First 1
+            if ($null -ne $DeprecatedComponent) {
+                Write-Host "`t`tReplacing deprecated component $($Page.ControlId) for $($PageName)"
+                $JsonControlData = Get-Content "$BaseDir/JsonControlData_$($Page.Name).json" -Raw -Encoding UTF8
+                $Title = $JsonControlData | ConvertFrom-Json | Select-Object -ExpandProperty title
+                Invoke-PnPSiteTemplate -Path "$BaseDir/Template_ProjectAggregationWebPart.xml" -Parameters @{"JsonControlData" = $JsonControlData; "PageName" = $PageName; "Title" = $Title }
+            }
         }
     }
 }
 
+<#
+.SYNOPSIS
+Ensure help content extension is added to the site.
+#>
 function EnsureHelpContentExtension() {
     $ClientSideComponentId = "28987406-2a67-48a8-9297-fd2833bf0a09"
     if ($null -eq (Get-PnPCustomAction | Where-Object { $_.ClientSideComponentId -eq $ClientSideComponentId })) {
@@ -169,6 +188,10 @@ function EnsureHelpContentExtension() {
     }
 }
 
+<#
+.SYNOPSIS
+Ensure the GtTag site column is added to the Prosjektleveranser list on the site.
+#>
 function EnsureGtTagSiteColumn() {
     if ($global:__InstalledVersion -lt "1.8.0") {
         $ProjectDeliveries = Get-PnPList -Identity "Prosjektleveranser" -ErrorAction SilentlyContinue
