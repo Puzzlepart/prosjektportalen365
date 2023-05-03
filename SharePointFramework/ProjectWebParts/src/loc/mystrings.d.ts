@@ -1,4 +1,5 @@
 declare interface IProjectWebPartsStrings {
+  PublishStatusReportSectionDataWarning: string
   AdminPageLinkLabel: string
   AdvancedGroupName: string
   BarLabel: string
