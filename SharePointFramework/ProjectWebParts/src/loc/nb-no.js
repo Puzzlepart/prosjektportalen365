@@ -220,5 +220,6 @@ define([], function () {
     WidthFieldLabel: 'Bredde (piksler)',
     Yes: 'Ja',
     PublishStatusReportSectionDataWarning: 'Prosjektstatusen ble publisert, men uten å persistere listedata. Dette kan føre til feil ved visning av statusrapporten.',
+    PublishReportSpinnerText: 'Vennligst vent mens statusrapporten publiseres...'
   }
 })

@@ -65,6 +65,7 @@ export default createReducer(initialState, {
     state.data = { ...state.data, reports }
     state.selectedReport = payload.updatedReport
     state.userMessage = payload.message
+    state.isPublishing = false
   },
   REPORT_PUBLISH_ERROR: (
     state: IProjectStatusState,
