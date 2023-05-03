@@ -178,7 +178,7 @@ export class PortalDataService {
     if (attachment) {
       try {
         await list.items.getById(report.id).attachmentFiles.addMultiple([attachment])
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       await list.items.getById(report.id).update(properties)
@@ -340,7 +340,7 @@ export class PortalDataService {
           fieldToCreate.updateAndPushChanges(true)
         }
         await executeQuery(jsomContext)
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       Logger.log({
@@ -356,7 +356,7 @@ export class PortalDataService {
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch {}
+    } catch { }
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }
@@ -483,7 +483,15 @@ export class PortalDataService {
       if (top) items = items.top(top)
       if (select) items = items.select(...select)
       if (useCaching) items = items.usingCaching()
-      return (await items.get()).map((i) => new StatusReport(i, publishedString))
+      const [$items, attachments] = await Promise.all([
+        items.get(),
+        this.web.lists
+          .getByTitle(this._configuration.listNames.PROJECT_STATUS_ATTACHMENTS)
+          .rootFolder
+          .files
+          .get()
+      ])
+      return $items.map((i) => new StatusReport(i, publishedString))
     } catch (error) {
       throw error
     }

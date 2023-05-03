@@ -25,11 +25,10 @@ export function usePublishReport() {
     })
     if (!context.state.isPublishing) {
       try {
+        const attachmentsFolder = portalDataService.web.getFolderByServerRelativeUrl('/sites/pp365/Prosjektstatus_vedlegg')
         const attachment = await captureReport(context.state.selectedReport.values.Title)
         const properties: TypedHash<string> = {
-          GtModerationStatus: strings.GtModerationStatus_Choice_Published,
-          GtLastReportDate: moment().format('YYYY-MM-DD HH:mm'),
-          GtSectionDataJson: JSON.stringify(context.state.persistedSectionData)
+          GtLastReportDate: moment().format('YYYY-MM-DD HH:mm')
         }
         const updatedReport = await portalDataService.updateStatusReport(
           context.state.selectedReport,
@@ -37,8 +36,12 @@ export function usePublishReport() {
           attachment,
           strings.GtModerationStatus_Choice_Published
         )
+        await attachmentsFolder.files.add(`PersistedSectionData-${updatedReport.id}.txt`, JSON.stringify(context.state.persistedSectionData))
         context.dispatch(REPORT_PUBLISHED({ updatedReport }))
-      } catch (error) {}
+      } catch (error) { 
+        // eslint-disable-next-line no-console
+        console.error(error)
+      }
     }
   }
 }

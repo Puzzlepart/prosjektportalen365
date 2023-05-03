@@ -17,6 +17,7 @@ export interface IPortalDataServiceConfiguration extends Object {
     PROJECT_COLUMN_CONFIGURATION: string
     PROJECTS: string
     PROJECT_STATUS: string
+    PROJECT_STATUS_ATTACHMENTS: string
     PORTFOLIO_VIEWS: string
     PROJECT_CONTENT_COLUMNS: string
     DATA_SOURCES: string
@@ -31,6 +32,7 @@ export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceCo
     PROJECT_COLUMNS: 'Prosjektkolonner',
     PROJECT_COLUMN_CONFIGURATION: 'Prosjektkolonnekonfigurasjon',
     PROJECT_STATUS: 'Prosjektstatus',
+    PROJECT_STATUS_ATTACHMENTS: 'Prosjektstatusvedlegg',
     PROJECTS: 'Prosjekter',
     PORTFOLIO_VIEWS: 'Porteføljevisninger',
     PROJECT_CONTENT_COLUMNS: 'Prosjektinnholdskolonner',
