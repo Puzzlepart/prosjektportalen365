@@ -14,11 +14,14 @@ import { IUserMessageProps } from 'pp365-shared/lib/components/UserMessage/types
 
 /**
  * Update the status report with the persisted section data and attachment.
- * 
+ *
  * @param context Context for the `ProjectStatus` component
  * @param attachment Attachment file info for the report image
  */
-async function updateStatusReport(context: IProjectStatusContext, attachment: AttachmentFileInfo): Promise<{ updatedReport: StatusReport, message: Pick<IUserMessageProps, 'text' | 'type'> }> {
+async function updateStatusReport(
+  context: IProjectStatusContext,
+  attachment: AttachmentFileInfo
+): Promise<{ updatedReport: StatusReport; message: Pick<IUserMessageProps, 'text' | 'type'> }> {
   const portalDataService = await new PortalDataService().configure({
     pageContext: context.props.pageContext
   })
@@ -42,7 +45,10 @@ async function updateStatusReport(context: IProjectStatusContext, attachment: At
       attachment,
       strings.GtModerationStatus_Choice_Published
     )
-    return { updatedReport, message: { text: strings.PublishStatusReportSectionDataWarning, type: MessageBarType.warning } }
+    return {
+      updatedReport,
+      message: { text: strings.PublishStatusReportSectionDataWarning, type: MessageBarType.warning }
+    }
   }
 }
 
@@ -65,9 +71,10 @@ export function usePublishReport() {
         const { updatedReport, message } = await updateStatusReport(context, attachment)
         context.dispatch(REPORT_PUBLISHED({ updatedReport, message }))
       } catch (error) {
-        context.dispatch(REPORT_PUBLISH_ERROR({ message: { text: error.message, type: MessageBarType.error } }))
-      }
-      finally {
+        context.dispatch(
+          REPORT_PUBLISH_ERROR({ message: { text: error.message, type: MessageBarType.error } })
+        )
+      } finally {
         window.setTimeout(() => {
           context.dispatch(CLEAR_USER_MESSAGE())
         }, 8000)

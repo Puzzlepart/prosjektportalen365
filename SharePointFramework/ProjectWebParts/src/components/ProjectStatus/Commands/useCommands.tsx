@@ -14,7 +14,7 @@ import React from 'react'
 
 /**
  * Component logic hook for `Commands`. This hook is used to generate the commands for the `CommandBar` component.
- * 
+ *
  * The following commands are conditionally rendered:
  * - `NEW_STATUS_REPORT`: Renders a command to create a new status report. This command is disabled if there are any unpublished reports.
  * - `DELETE_REPORT`: Renders a command to delete the selected report. This command is disabled if the selected report is published or if the component is publishing a report.
@@ -42,38 +42,45 @@ export function useCommands() {
       onClick: redirectNewStatusReport
     },
     context.state.selectedReport &&
-    context.state.userHasAdminPermission && {
-      key: 'DELETE_REPORT',
-      name: strings.DeleteReportButtonText,
-      iconProps: { iconName: 'Delete' },
-      disabled: context.state.selectedReport?.published || context.state.isPublishing,
-      onClick: () => {
-        deleteReport()
-      }
-    },
+      context.state.userHasAdminPermission && {
+        key: 'DELETE_REPORT',
+        name: strings.DeleteReportButtonText,
+        iconProps: { iconName: 'Delete' },
+        disabled: context.state.selectedReport?.published || context.state.isPublishing,
+        onClick: () => {
+          deleteReport()
+        }
+      },
     context.state.selectedReport &&
-    context.state.userHasAdminPermission && {
-      key: 'EDIT_REPORT',
-      name: strings.EditReportButtonText,
-      iconProps: { iconName: 'Edit' },
-      href: getEditFormUrl(context.state.selectedReport),
-      disabled: context.state.selectedReport?.published || context.state.isPublishing
-    },
-    (context.state.selectedReport &&
-      context.state.userHasAdminPermission && !context.state.isPublishing) && {
-      key: 'PUBLISH_REPORT',
-      name: strings.PublishReportButtonText,
-      iconProps: { iconName: 'PublishContent' },
-      disabled: context.state.selectedReport?.published,
-      onClick: () => {
-        context.dispatch(REPORT_PUBLISHING())
-        publishReport()
-      }
-    },
+      context.state.userHasAdminPermission && {
+        key: 'EDIT_REPORT',
+        name: strings.EditReportButtonText,
+        iconProps: { iconName: 'Edit' },
+        href: getEditFormUrl(context.state.selectedReport),
+        disabled: context.state.selectedReport?.published || context.state.isPublishing
+      },
+    context.state.selectedReport &&
+      context.state.userHasAdminPermission &&
+      !context.state.isPublishing && {
+        key: 'PUBLISH_REPORT',
+        name: strings.PublishReportButtonText,
+        iconProps: { iconName: 'PublishContent' },
+        disabled: context.state.selectedReport?.published,
+        onClick: () => {
+          context.dispatch(REPORT_PUBLISHING())
+          publishReport()
+        }
+      },
     context.state.isPublishing && {
       key: 'IS_PUBLISHING',
       onRender: () => {
-        return <Spinner label={strings.PublishReportSpinnerText} size={SpinnerSize.small} labelPosition='right' />
+        return (
+          <Spinner
+            label={strings.PublishReportSpinnerText}
+            size={SpinnerSize.small}
+            labelPosition='right'
+          />
+        )
       }
     }
   ].filter(Boolean)

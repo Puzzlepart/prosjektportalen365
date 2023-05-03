@@ -8,8 +8,13 @@ import { IUserMessageProps } from 'pp365-shared/lib/components/UserMessage/types
 
 export const INIT_DATA = createAction<{ data: IProjectStatusData }>('INIT_DATA')
 export const REPORT_PUBLISHING = createAction('REPORT_PUBLISHING')
-export const REPORT_PUBLISHED = createAction<{ updatedReport: StatusReport, message: Pick<IUserMessageProps, 'text' | 'type'> }>('REPORT_PUBLISHED')
-export const REPORT_PUBLISH_ERROR = createAction<{ message: Pick<IUserMessageProps, 'text' | 'type'> }>('REPORT_PUBLISH_ERROR')
+export const REPORT_PUBLISHED = createAction<{
+  updatedReport: StatusReport
+  message: Pick<IUserMessageProps, 'text' | 'type'>
+}>('REPORT_PUBLISHED')
+export const REPORT_PUBLISH_ERROR = createAction<{
+  message: Pick<IUserMessageProps, 'text' | 'type'>
+}>('REPORT_PUBLISH_ERROR')
 export const REPORT_DELETED = createAction('REPORT_DELETED')
 export const REPORT_DELETE_ERROR = createAction<{ error: any }>('REPORT_DELETE_ERROR')
 export const SELECT_REPORT = createAction<{ report: StatusReport }>('SELECT_REPORT')
