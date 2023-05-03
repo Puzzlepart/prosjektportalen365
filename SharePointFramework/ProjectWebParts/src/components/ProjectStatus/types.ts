@@ -4,6 +4,7 @@ import { IRiskMatrixProps } from '../RiskMatrix'
 import { ProjectColumnConfig, SectionModel, SPField, StatusReport } from 'pp365-shared/lib/models'
 import { IGetPropertiesData } from 'pp365-shared/lib/services'
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
+import { IUserMessageProps } from 'pp365-shared/lib/components/UserMessage/types'
 
 export interface IProjectStatusProps extends IBaseWebPartComponentProps {
   riskMatrix?: IRiskMatrixProps
@@ -47,6 +48,11 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
    * Persist list data
    */
   persistedSectionData?: Record<string, any>
+
+  /**
+   * User message
+   */
+  userMessage?: Pick<IUserMessageProps, 'text' | 'type'>
 }
 
 export interface IProjectStatusHashState {
