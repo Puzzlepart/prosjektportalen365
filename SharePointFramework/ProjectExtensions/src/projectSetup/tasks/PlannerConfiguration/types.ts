@@ -48,6 +48,7 @@ export class TaskAttachment {
 export type TaskPreviewType = 'automatic' | 'noPreview' | 'checklist' | 'description' | 'reference'
 
 export interface ITaskDetails {
+  name?: string
   description?: string
   checklist?: string[]
   labels?: string[]
