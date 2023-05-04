@@ -4,11 +4,13 @@ import { ProjectColumn } from 'pp365-shared/lib/models'
 import React from 'react'
 import { IPortfolioOverviewProps } from '../types'
 import { TitleColumn } from './TitleColumn'
-import { IRenderItemColumnProps } from './IRenderItemColumnProps'
+import { IRenderItemColumnProps } from './types'
 import { TagsColumn } from './TagsColumn'
 import { UserColumn } from './UserColumn'
 import * as strings from 'PortfolioWebPartsStrings'
 import { IFetchDataForViewItemResult } from 'data/types'
+import { TooltipHost } from '@fluentui/react'
+import { stringIsNullOrEmpty } from '@pnp/common'
 
 /**
  * Mapping for rendering of the different data types
@@ -26,11 +28,11 @@ const renderDataTypeMap = {
 }
 
 /**
- * On render item activeFilters
+ * Renders the value for the column based on data type and config.
  *
  * @param item Item
  * @param column Column
- * @param props Props
+ * @param props Props for the `PortfolioOverview` component
  */
 export function renderItemColumn(
   item: IFetchDataForViewItemResult,
@@ -51,13 +53,26 @@ export function renderItemColumn(
   }
 
   const config = column.config ? column.config[columnValue] : null
+
   if (config) {
-    return (
+    const element: JSX.Element = (
       <span>
         <Icon iconName={config.iconName} style={{ color: config.color, marginRight: 4 }} />
         <span>{columnValue}</span>
       </span>
     )
+
+    const tooltipValue: string =
+      config.tooltipColumnPropertyName && item[config.tooltipColumnPropertyName]
+
+    if (!stringIsNullOrEmpty(tooltipValue)) {
+      return (
+        <TooltipHost content={tooltipValue} calloutProps={{ gapSpace: 0 }}>
+          {element}
+        </TooltipHost>
+      )
+    }
+    return element
   }
   return <span>{columnValue}</span>
 }

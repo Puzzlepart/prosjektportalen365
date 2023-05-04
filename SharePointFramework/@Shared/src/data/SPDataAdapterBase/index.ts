@@ -116,7 +116,9 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
           const userPermissions = []
           const rolesToCheck = properties.GtProjectAdminRoles
           if (!_.isArray(rolesToCheck) || _.isEmpty(rolesToCheck)) {
-            const currentUserHasManageWebPermisson = await sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
+            const currentUserHasManageWebPermisson = await sp.web.currentUserHasPermissions(
+              PermissionKind.ManageWeb
+            )
             if (currentUserHasManageWebPermisson) return true
           }
           const currentUser = await this.getCurrentUser(pageContext.user)
@@ -128,9 +130,10 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
             switch (role.type) {
               case ProjectAdminRoleType.SiteAdmin:
                 {
-                  const currentUserHasManageWebPermisson = await sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
-                  if (currentUserHasManageWebPermisson)
-                    userPermissions.push(...role.permissions)
+                  const currentUserHasManageWebPermisson = await sp.web.currentUserHasPermissions(
+                    PermissionKind.ManageWeb
+                  )
+                  if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
                 }
                 break
               case ProjectAdminRoleType.ProjectProperty:
@@ -166,7 +169,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                       ).length > 0
                     )
                       userPermissions.push(...role.permissions)
-                  } catch { }
+                  } catch {}
                 }
                 break
             }
