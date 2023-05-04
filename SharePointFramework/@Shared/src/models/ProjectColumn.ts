@@ -2,6 +2,7 @@
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
 import { ProjectColumnConfigDictionary, ProjectColumnConfig } from './ProjectColumnConfig'
 import { SearchValueType } from '../types/SearchValueType'
+import { pick } from 'underscore'
 
 export class SPProjectColumnItem {
   public Id: number = 0
@@ -94,11 +95,19 @@ export class ProjectColumn implements IColumn {
     return this
   }
 
+  /**
+   * Configures the column with the given configuration.
+   *
+   * @param config Column configuration
+   */
   public configure(config: ProjectColumnConfig[]): ProjectColumn {
     this.config = config
       .filter((col) => col.columnId === this.id)
       .reduce(
-        (obj, { value, color, iconName }) => ({ ...obj, [value]: { color, iconName } }),
+        (obj, c) => ({
+          ...obj,
+          [c.value]: pick(c, ['color', 'iconName', 'tooltipColumnPropertyName']),
+        }),
         {}
       ) as ProjectColumnConfigDictionary
     return this

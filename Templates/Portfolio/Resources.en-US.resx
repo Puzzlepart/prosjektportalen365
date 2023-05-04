@@ -676,6 +676,9 @@
   <data name="SiteFields_GtPortfolioColumns_DisplayName" xml:space="preserve">
     <value>Kolonner</value>
   </data>
+  <data name="SiteFields_GtPortfolioColumnTooltip_DisplayName" xml:space="preserve">
+    <value>Tooltip-kolonne</value>
+  </data>
   <data name="SiteFields_GtProjectContentColumns_DisplayName" xml:space="preserve">
     <value>Kolonner</value>
   </data>
@@ -878,7 +881,7 @@
     <value>Vedlegg</value>
   </data>
   <data name="SiteFields_GtAttachments_Description" xml:space="preserve">
-    <value>Vedlegg til oppgaven. Skrives på formatet url;tittel;type. Separer verdier med |. Type kan f.eks. være PowerPoint, Word, Excel eller Other.</value>
+    <value>Vedlegg til oppgaven. Skrives på formatet url;tittel;type. Separer verdier med |. Type kan f.eks. være PowerPoint, Word, Excel eller Other. Maks antall vedlegg for en oppgave er 10, dersom dette overskrides blir de overskytende ikke med ved opprettelse.</value>
   </data>
   <data name="SiteFields_GtActionChannel_DisplayName" xml:space="preserve">
     <value>Communication channel</value>
@@ -926,13 +929,13 @@
     <value>Sjekkliste</value>
   </data>
   <data name="SiteFields_GtChecklist_Description" xml:space="preserve">
-    <value>Sjekkpunkter separert med semikolon.</value>
+    <value>Sjekkpunkter separert med semikolon. Makslengde på beskrivelse er 100 tegn og antall sjekkpunkter for en oppgave er 20, dersom dette overskrides blir de overskytende ikke med ved opprettelse.</value>
   </data>
   <data name="SiteFields_GtPlannerTags_DisplayName" xml:space="preserve">
     <value>Etiketter</value>
   </data>
   <data name="SiteFields_GtPlannerTags_Description" xml:space="preserve">
-    <value>Etiketter separert med semikolon.</value>
+    <value>Etiketter separert med semikolon. Maks antall unike etiketter for en plan er 25, dersom dette overskrides blir de overskytende ikke med ved opprettelse.</value>
   </data>
   <data name="SiteFields_GtChecklistStatus_DisplayName" xml:space="preserve">
     <value>Status</value>
@@ -1653,6 +1656,9 @@
   </data>
   <data name="SiteFields_GtPortfolioColumnIconName_Description" xml:space="preserve">
     <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
+  </data>
+  <data name="SiteFields_GtPortfolioColumnTooltip_Description" xml:space="preserve">
+    <value>Velg en kolonne som du vil vise verdien fra når du holder musepekeren over den valgte kolonnen.</value>
   </data>
   <data name="SiteFields_GtLastSyncTime_Description" xml:space="preserve">
     <value></value>

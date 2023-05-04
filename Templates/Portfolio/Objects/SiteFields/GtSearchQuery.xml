@@ -1,3 +1,3 @@
-﻿<Field Type="Text" DisplayName="{resource:SiteFields_GtSearchQuery_DisplayName}" Description="{resource:SiteFields_GtSearchQuery_Description}" ID="{31e405e0-2890-439d-9c9f-42354154feda}" StaticName="GtSearchQuery" Name="GtSearchQuery" Group="{resource:SiteFields_Portfolio_Group}">
+﻿<Field Type="Note" DisplayName="{resource:SiteFields_GtSearchQuery_DisplayName}" Description="{resource:SiteFields_GtSearchQuery_Description}" ID="{31e405e0-2890-439d-9c9f-42354154feda}" StaticName="GtSearchQuery" Name="GtSearchQuery" UnlimitedLengthInDocumentLibrary="TRUE" Group="{resource:SiteFields_Portfolio_Group}">
     <Default>DepartmentId:{{sitecollectionid}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*</Default>
 </Field>

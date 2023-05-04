@@ -1,12 +1,15 @@
 .root {
     padding: 25px;
+    height: 25px;
+    box-sizing: border-box;
 
     .content {
         .left {
             float: left;
 
-            .configurationLink {
+            .configurationLink, .siteSettingsLink {
                 font-size: 12px;
+                margin: 0 8px 0 0;
             }
         }
         .right {

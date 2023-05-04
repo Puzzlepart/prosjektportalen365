@@ -2,7 +2,7 @@ import { Persona, PersonaPresence, PersonaSize } from '@fluentui/react/lib/Perso
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import React, { FC } from 'react'
 import { SearchValueType } from 'types'
-import { IRenderItemColumnProps } from '../IRenderItemColumnProps'
+import { IRenderItemColumnProps } from '../types'
 
 export const UserColumn: FC<IRenderItemColumnProps> = ({ columnValue, column }) => {
   const isMultiUser = columnValue?.indexOf(';') !== -1

@@ -3,10 +3,10 @@
     "actions": [
         {
             "verb": "associateExtension",
-            "title": "Hjelpeinnhold",
+            "title": "Footer",
             "location": "ClientSideExtension.ApplicationCustomizer",
-            "clientSideComponentId": "28987406-2a67-48a8-9297-fd2833bf0a09",
-            "clientSideComponentProperties": "{\"listName\":\"Hjelpeinnhold\",\"linkText\":\"Hjelp tilgjengelig\"}",
+            "clientSideComponentId": "84f27cec-ffde-4e00-a4cf-25c69f691054",
+            "clientSideComponentProperties": "{}",
             "scope": "Web"
         }
     ],

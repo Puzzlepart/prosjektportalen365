@@ -15,6 +15,7 @@
                 <FieldRef Name="GtPortfolioColumnValue" />
                 <FieldRef Name="GtPortfolioColumnColor" />
                 <FieldRef Name="GtPortfolioColumnIconName" />
+                <FieldRef Name="GtPortfolioColumnTooltip" />
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
             <Aggregations Value="Off" />

@@ -207,11 +207,12 @@ export class PortalDataService {
     const spItems = await this.web.lists
       .getByTitle(this._configuration.listNames.PROJECT_COLUMN_CONFIGURATION)
       .items.orderBy('ID', true)
-      .expand('GtPortfolioColumn')
+      .expand('GtPortfolioColumn', 'GtPortfolioColumnTooltip')
       .select(
         ...Object.keys(new SPProjectColumnConfigItem()),
         'GtPortfolioColumn/Title',
-        'GtPortfolioColumn/GtInternalName'
+        'GtPortfolioColumn/GtInternalName',
+        'GtPortfolioColumnTooltip/GtManagedProperty'
       )
       .usingCaching()
       .get<SPProjectColumnConfigItem[]>()
@@ -471,7 +472,7 @@ export class PortalDataService {
     publishedString,
     useCaching = true
   }: GetStatusReportsOptions): Promise<StatusReport[]> {
-    if (!this._configuration.pageContext) throw 'Property pageContext missing in configuration'
+    if (!this._configuration.pageContext) throw 'Property {pageContext} is not the configuration.'
     if (stringIsNullOrEmpty(filter))
       filter = `GtSiteId eq '${this._configuration.pageContext.site.id.toString()}'`
     try {
