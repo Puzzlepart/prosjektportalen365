@@ -676,6 +676,9 @@
   <data name="SiteFields_GtPortfolioColumns_DisplayName" xml:space="preserve">
     <value>Kolonner</value>
   </data>
+  <data name="SiteFields_GtPortfolioColumnTooltip_DisplayName" xml:space="preserve">
+    <value>Tooltip-kolonne</value>
+  </data>
   <data name="SiteFields_GtProjectContentColumns_DisplayName" xml:space="preserve">
     <value>Kolonner</value>
   </data>
@@ -1647,6 +1650,9 @@
   </data>
   <data name="SiteFields_GtPortfolioColumnIconName_Description" xml:space="preserve">
     <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
+  </data>
+  <data name="SiteFields_GtPortfolioColumnTooltip_Description" xml:space="preserve">
+    <value>Velg en kolonne som du vil vise verdien fra når du holder musepekeren over den valgte kolonnen.</value>
   </data>
   <data name="SiteFields_GtLastSyncTime_Description" xml:space="preserve">
     <value></value>
