@@ -1,4 +1,5 @@
 import { MessageBarType, IColumn, IGroup, Target } from '@fluentui/react'
+import { IPortfolioAggregationProps } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
 import { DataSource } from 'pp365-shared/lib/models/DataSource'
 import { IBaseProgramWebPartProps } from 'webparts/baseProgramWebPart'
 
@@ -8,67 +9,7 @@ export class ProgramAggregationErrorMessage extends Error {
   }
 }
 
-export interface IProgramAggregationProps extends IBaseProgramWebPartProps {
-  /**
-   * Data source name
-   */
-  dataSource?: string
-
-  /**
-   * Columns
-   */
-  columns?: IColumn[]
-
-  /**
-   * Select properties
-   */
-  selectProperties?: string[]
-
-  /**
-   * Show command bar
-   */
-  showCommandBar?: boolean
-
-  /**
-   * Show search box
-   */
-  showSearchBox?: boolean
-
-  /**
-   * Show filters
-   */
-  showFilters?: boolean
-
-  /**
-   * Placeholder text for searchbox
-   */
-  searchBoxPlaceholderText?: string
-
-  /**
-   * Show Excel export button
-   */
-  showExcelExportButton?: boolean
-
-  /**
-   * Show Excel export button
-   */
-  showViewSelector?: boolean
-
-  /**
-   * Default view id
-   */
-  defaultViewId?: string
-
-  /**
-   * Locked columns
-   */
-  lockedColumns?: boolean
-
-  /**
-   * On update property
-   */
-  onUpdateProperty?: (key: string, value: any) => void
-}
+export interface IProgramAggregationProps extends Omit<IBaseProgramWebPartProps, 'dataAdapter'>, IPortfolioAggregationProps {}
 
 export interface IProgramAggregationState {
   /**
