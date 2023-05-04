@@ -15,6 +15,7 @@ import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import IdeaDialog from 'components/IdeaDialog'
 import { isUserAuthorized } from 'helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
+import { IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 
 export interface IIdeaProjectDataCommandProperties {
   ideaId: number
@@ -27,6 +28,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   private _userAuthorized: boolean
   private _openCmd: Command
   private _sp: SPFI
+  private _ideaConfig: IdeaConfigurationModel
 
   @override
   public async onInit(): Promise<void> {
@@ -64,20 +66,33 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
     }
   }
 
-  private _onListViewStateChanged = (): void => {
+  private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
+    const ideaConfig = await this._sp.web.lists
+      .getByTitle(strings.IdeaConfigurationTitle)
+      .select(...new SPIdeaConfigurationItem().fields).items()
+
+    return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
+  }
+
+  private _onListViewStateChanged = async (): Promise<void> => {
     Logger.log({
       message: '(IdeaProjectDataCommand) onListViewStateChanged: ListView state changed',
       level: LogLevel.Info
     })
 
-    this._openCmd = this.tryGetCommand('OPEN_IDEA_PROJECTDATA_DIALOG')
-    if (this._openCmd) {
-      this._openCmd.visible =
-        this.context.listView.selectedRows?.length === 1 &&
-        this._userAuthorized &&
-        location.href.includes(strings.IdeaProcessingUrlTitle)
+    const listName = this.context.pageContext.list.title
+    const [ideaConfig] = (await this._getIdeaConfiguration()).filter((item) => item.processingList === listName)
+    this._ideaConfig = ideaConfig
+
+    if (ideaConfig) {
+      this._openCmd = this.tryGetCommand('OPEN_IDEA_PROJECTDATA_DIALOG')
+      if (this._openCmd) {
+        this._openCmd.visible =
+          this.context.listView.selectedRows?.length === 1 &&
+        this._userAuthorized && ideaConfig.processingList === listName
+      }
+      this.raiseOnChange()
     }
-    this.raiseOnChange()
   }
 
   /**
@@ -123,7 +138,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
    * @param item: Item
    */
   public async _updateItem(rowId: number, item: any): Promise<any> {
-    const list = this._sp.web.lists.getByTitle(strings.IdeaProcessingTitle)
+    const list = this._sp.web.lists.getByTitle(this._ideaConfig.processingList)
     const itemUpdateResult = await list.items.getById(rowId).update({
       GtIdeaProjectDataId: item.Id
     })

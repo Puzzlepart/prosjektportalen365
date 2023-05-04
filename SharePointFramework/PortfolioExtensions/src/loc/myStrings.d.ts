@@ -11,6 +11,7 @@ declare interface IPortfolioExtensionsStrings {
   LatestGitHubReleaseLabel: string | number | boolean | {} | ReactElement<any, string | JSXElementConstructor<any>> | ReactNodeArray | ReactPortal
   SetRecommendationTitle: string
   SetRecommendationSubtitle: string
+  SetRecommendationDefaultDescription: string
   IdeaProjectDataDialogTitle: string
   IdeaProjectDataDialogSubText: string
   IdeaProjectDataDialogInfoText: string

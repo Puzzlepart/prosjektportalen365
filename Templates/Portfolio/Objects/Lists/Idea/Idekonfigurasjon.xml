@@ -26,7 +26,7 @@
             <pnp:DataValue FieldName="Title">Standard</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaProcessingList">Idébehandling</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaRegistrationList">Idéregistrering</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDescription">Standard</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDescription">Dersom idéen blir godkjent vil det bli opprettet en detaljert idé-side for idéen og et element blir opprettet i Idébehandlingslisten.</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
 </pnp:ListInstance>

@@ -33,6 +33,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   private _userAuthorized: boolean
   private _openCmd: Command
   private _sp: SPFI
+  private _ideaConfig: IdeaConfigurationModel
 
   @override
   public async onInit(): Promise<void> {
@@ -61,6 +62,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         const row = event.selectedRows[0]
 
         dialog.ideaTitle = row.getValueByName('Title')
+        dialog.dialogDescription = this._ideaConfig.description || strings.SetRecommendationDefaultDescription
         await dialog.show()
         if (dialog.comment && dialog.selectedChoice === strings.ApproveChoice) {
           this._isIdeaRecommended(row)
@@ -79,11 +81,13 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         }
         break
       default:
-        throw new Error('Unknown command')
+        throw new Error('Unknown command, unable to execute')
     }
   }
 
-  private _getIdeaConfiguration = async (): Promise<any> => {
+  // TODO: REFRESH WHEN SUBMITTING
+
+  private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
     const ideaConfig = await this._sp.web.lists
       .getByTitle(strings.IdeaConfigurationTitle)
       .select(...new SPIdeaConfigurationItem().fields).items()
@@ -93,23 +97,29 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
   private _onListViewStateChanged = async (): Promise<void> => {
     Logger.log({
-      message: '(IdeaRegistrationCommand) onListViewStateChanged: ListView X state changed',
+      message: '(IdeaRegistrationCommand) onListViewStateChanged: ListView state changed',
       level: LogLevel.Info
     })
 
-    console.log(await this._getIdeaConfiguration())
-
-    this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
     const listName = this.context.pageContext.list.title
-    console.log('listName', listName)
-    if (this._openCmd) {
+    const [ideaConfig] = (await this._getIdeaConfiguration()).filter((item) => item.registrationList === listName)
+    this._ideaConfig = ideaConfig
 
-      this._openCmd.visible =
-        this.context.listView.selectedRows?.length === 1 &&
-        this._userAuthorized &&
-        location.href.includes(strings.IdeaRegistrationUrlTitle)
+    if (ideaConfig) {
+      this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
+      if (this._openCmd) {
+
+        this._openCmd.visible =
+          this.context.listView.selectedRows?.length === 1 &&
+          this._userAuthorized && ideaConfig.registrationList === listName
+      }
+      this.raiseOnChange()
+    } else {
+      Logger.log({
+        message: '(IdeaRegistrationCommand) onListViewStateChanged: You are currently not authorized to use this command or the list is not configured for this command',
+        level: LogLevel.Info
+      })
     }
-    this.raiseOnChange()
   }
 
   /**
@@ -121,13 +131,13 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   private _onSubmitRejected(row: RowAccessor, comment: string) {
     const rowId = row.getValueByName('ID')
     this._sp.web.lists
-      .getByTitle(strings.IdeaRegistrationTitle)
+      .getByTitle(this._ideaConfig.registrationList)
       .items.getById(rowId)
       .update({
         GtIdeaRecommendation: RecommendationType.Rejected,
         GtIdeaRecommendationComment: comment
       })
-      .then(() => Log.info(LOG_SOURCE, 'Updated Idéregistrering: Rejected'))
+      .then(() => Log.info(LOG_SOURCE, `Updated ${this._ideaConfig.registrationList}: Rejected`))
   }
 
   /**
@@ -139,13 +149,13 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   private _onSubmitConsideration(row: RowAccessor, comment: string) {
     const rowId = row.getValueByName('ID')
     this._sp.web.lists
-      .getByTitle(strings.IdeaRegistrationTitle)
+      .getByTitle(this._ideaConfig.registrationList)
       .items.getById(rowId)
       .update({
         GtIdeaRecommendation: RecommendationType.Consideration,
         GtIdeaRecommendationComment: comment
       })
-      .then(() => Log.info(LOG_SOURCE, 'Updated Idéregistrering: Consideration'))
+      .then(() => Log.info(LOG_SOURCE, `Updated ${this._ideaConfig.registrationList}: Consideration`))
   }
 
   /**
@@ -160,13 +170,13 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     const rowId = row.getValueByName('ID')
     const rowTitle = row.getValueByName('Title')
     this._sp.web.lists
-      .getByTitle(strings.IdeaRegistrationTitle)
+      .getByTitle(this._ideaConfig.registrationList)
       .items.getById(rowId)
       .update({
         GtIdeaRecommendation: RecommendationType.Approved,
         GtIdeaRecommendationComment: comment
       })
-      .then(() => Log.info(LOG_SOURCE, 'Updated Idéregistrering: Approved'))
+      .then(() => Log.info(LOG_SOURCE, `Updated ${this._ideaConfig.registrationList}: Approved`))
       .catch((e) => Log.error(LOG_SOURCE, e))
 
     this._updateProcessingList(rowId, rowTitle)
@@ -185,7 +195,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     const ideaUrl = baseUrl.concat('/SitePages/', url, '.aspx')
 
     this._sp.web.lists
-      .getByTitle(strings.IdeaProcessingTitle)
+      .getByTitle(this._ideaConfig.processingList)
       .items.add({
         Title: rowTitle,
         GtRegistratedIdeaId: rowId,
