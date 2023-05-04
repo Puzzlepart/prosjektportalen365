@@ -212,8 +212,7 @@ export class PortalDataService {
         ...Object.keys(new SPProjectColumnConfigItem()),
         'GtPortfolioColumn/Title',
         'GtPortfolioColumn/GtInternalName',
-        'GtPortfolioColumnTooltip/Title',
-        'GtPortfolioColumnTooltip/GtInternalName'
+        'GtPortfolioColumnTooltip/GtManagedProperty'
       )
       .usingCaching()
       .get<SPProjectColumnConfigItem[]>()

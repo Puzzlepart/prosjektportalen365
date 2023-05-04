@@ -18,8 +18,6 @@ import {
 import { usePortfolioOverviewFilters } from '../usePortfolioOverviewFilters'
 import { IPortfolioOverviewCommandsProps } from './types'
 
-
-
 /**
  * Component logic hook for the PortfolioOverviewCommands component. Handles the logic for
  * the command bar and the filter panel.
@@ -37,23 +35,26 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
   const filters = usePortfolioOverviewFilters()
 
   /**
- * Converts a collection of `PortfolioOverviewView` objects to
- * a collection of `IContextualMenuItem` objects.
- *
- * @param props Props for the PortfolioOverviewCommands component
- * @param filterFunc Optional filter function to filter the views
- */
-  const convertViewsToContextualMenuItems = (filterFunc: (view: PortfolioOverviewView) => boolean) => {
-    return context.props.configuration.views.filter(filterFunc).map(view => (
-      {
-        key: view.id.toString(),
-        name: view.title,
-        iconProps: { iconName: view.iconName },
-        canCheck: true,
-        checked: view.id === context.state.currentView?.id,
-        onClick: () => context.dispatch(CHANGE_VIEW(view))
-      } as IContextualMenuItem
-    ))
+   * Converts a collection of `PortfolioOverviewView` objects to
+   * a collection of `IContextualMenuItem` objects.
+   *
+   * @param props Props for the PortfolioOverviewCommands component
+   * @param filterFunc Optional filter function to filter the views
+   */
+  const convertViewsToContextualMenuItems = (
+    filterFunc: (view: PortfolioOverviewView) => boolean
+  ) => {
+    return context.props.configuration.views.filter(filterFunc).map(
+      (view) =>
+        ({
+          key: view.id.toString(),
+          name: view.title,
+          iconProps: { iconName: view.iconName },
+          canCheck: true,
+          checked: view.id === context.state.currentView?.id,
+          onClick: () => context.dispatch(CHANGE_VIEW(view))
+        } as IContextualMenuItem)
+    )
   }
 
   const sharedViews = convertViewsToContextualMenuItems((v) => !v.isPersonal)
@@ -155,20 +156,20 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
           },
           ...context.props.configuration.views.map(
             (view) =>
-            ({
-              key: view.id.toString(),
-              name: view.title,
-              iconProps: { iconName: view.iconName },
-              canCheck: true,
-              checked: view.id === context.state.currentView?.id,
-              onClick: () => context.dispatch(CHANGE_VIEW(view))
-            } as IContextualMenuItem)
+              ({
+                key: view.id.toString(),
+                name: view.title,
+                iconProps: { iconName: view.iconName },
+                canCheck: true,
+                checked: view.id === context.state.currentView?.id,
+                onClick: () => context.dispatch(CHANGE_VIEW(view))
+              } as IContextualMenuItem)
           ),
           ...sharedViews,
           !_.isEmpty(personalViews) && {
             key: 'PERSONAL_VIEWS_HEADER',
             itemType: ContextualMenuItemType.Header,
-            text: strings.PersonalViewsHeaderText,
+            text: strings.PersonalViewsHeaderText
           },
           ...personalViews,
           {

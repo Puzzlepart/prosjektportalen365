@@ -26,7 +26,7 @@ export function useProjectListState(props: IProjectListProps) {
   /**
    * Set state like `setState` in class components where
    * the new state is merged with the current state.
-   * 
+   *
    * @param newState New state
    */
   const setState = (newState: Partial<IProjectListState>) =>
