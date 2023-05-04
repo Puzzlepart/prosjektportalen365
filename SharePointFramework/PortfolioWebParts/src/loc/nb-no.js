@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    DataSourceLevelLabel: 'Nivå for datakilde',
+    DataSourceLevelDescription: 'Velg nivå for datakilde. Kun datakilder med dette nivået vil være tilgjengelig i webdelen.',
     HideViewsLabel: 'Skjul visninger',
     PortfolioAggregationNotConfiguredMessage: 'Webdelen må konfigureres med en datakilde. Rediger webdelen, og legg inn navnet på datakilden du vil bruke.',
     DataSourceCategoryDescription: 'Angi en datakildekategori for å kunne velge mellom flere datakilder i webdelen.',
@@ -142,6 +144,7 @@ define([], function () {
     SearchBoxPlaceholderText: 'Søk i {0}...',
     SearchBoxPlaceholderFallbackText: 'Søk...',
     SearchBoxPlaceholderTextLabel: 'Søkebokstekst',
+    SearchBoxPlaceholderTextDescription: 'Tekst som vises i søkeboksen når den er tom. Om det ikke settes en verdi baseres teksten på valgt datakilde.',
     ShowAllMeasurementsLinkText: 'Vis alle målinger',
     RenderModeListText: 'Liste',
     RenderModeTilesText: 'Fliser',

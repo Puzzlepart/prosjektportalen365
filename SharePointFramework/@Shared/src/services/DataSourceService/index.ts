@@ -44,14 +44,19 @@ export class DataSourceService {
   }
 
   /**
-   * Get by category
+   * Get by category and optional level
    *
-   * @param category Category
+   * @param category Category for data source
+   * @param level Level (optional)
    */
-  public async getByCategory(category: string): Promise<DataSource[]> {
+  public async getByCategory(category: string, level?: string): Promise<DataSource[]> {
+    let filter = `GtDataSourceCategory eq '${category}'`
+    if (level) {
+      filter += ` and GtDataSourceLevel eq '${level}'`
+    }
     const items = await this.list.items
       .select(...Object.keys(new SPDataSourceItem()))
-      .filter(`GtDataSourceCategory eq '${category}'`)
+      .filter(filter)
       .get<SPDataSourceItem[]>()
     return items.map((item) => new DataSource(item))
   }

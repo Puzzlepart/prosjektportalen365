@@ -1,4 +1,7 @@
 declare interface IPortfolioWebPartsStrings {
+  SearchBoxPlaceholderTextDescription: string
+  DataSourceLevelLabel: string
+  DataSourceLevelDescription: string
   PortfolioOverviewDataFetchErrorView: string
   PortfolioOverviewDataFetchError: string
   ListViewText: string

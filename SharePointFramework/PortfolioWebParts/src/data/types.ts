@@ -59,7 +59,7 @@ export const DEFAULT_GAINS_PROPERTIES = [
 export interface IDataAdapter {
   configure(): Promise<IDataAdapter>
   dataSourceService?: DataSourceService
-  fetchDataSources?(dataSourceCategory: string): Promise<DataSource[]>
+  fetchDataSources?(dataSourceCategory: string, level?: string): Promise<DataSource[]>
   fetchChartData?(
     currentView: any,
     configuration: any,

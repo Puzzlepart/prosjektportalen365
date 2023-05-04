@@ -7,6 +7,7 @@ export class SPDataSourceItem {
   public GtIconName?: string = ''
   public GtSearchQuery?: string = ''
   public GtDataSourceCategory?: string = ''
+  public GtDataSourceLevel?: string = ''
   public GtDataSourceDefault?: boolean = false
   public GtProjectContentColumnsId?: any[] = []
   public GtProjectContentRefinersId?: any[] = []
@@ -20,6 +21,7 @@ export class DataSource {
   public iconName: string
   public searchQuery: string
   public category: string
+  public level: string
   public isDefault: boolean
   public projectColumns: ProjectColumn[]
   public projectRefiners: any[]
@@ -38,6 +40,9 @@ export class DataSource {
     this.iconName = item.GtIconName
     this.searchQuery = item.GtSearchQuery
     this.category = item.GtDataSourceCategory
+    this.level = item.GtDataSourceLevel
+    // eslint-disable-next-line no-console
+    console.log(this.level)
     this.isDefault = item.GtDataSourceDefault
     this.projectColumns = columns.filter(
       (col) => item.GtProjectContentColumnsId.indexOf(col.id) !== -1

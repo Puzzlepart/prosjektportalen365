@@ -84,6 +84,11 @@ const persistColumns = (props: IPortfolioAggregationProps, columns: IProjectCont
   )
 }
 
+/**
+ * Initial state for `<PortfolioAggregation />` component based on props for the component.
+ *
+ * @param props Props for `<PortfolioAggregation />` component
+ */
 export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregationState => ({
   loading: true,
   isCompact: false,
@@ -92,10 +97,9 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
   filters: [],
   items: [],
   columns: props.columns ?? [],
-  dataSource: !props.configuration
-    ? props.dataSource
-    : first(props.configuration.views)?.title || props.dataSource,
+  dataSource: props.dataSource ?? first(props.configuration.views)?.title,
   dataSources: [],
+  dataSourceLevel: props.dataSourceLevel ?? props.configuration?.level,
   groups: null,
   addColumnPanel: { isOpen: false },
   showHideColumnPanel: { isOpen: false }
@@ -103,8 +107,27 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
 
 /**
  * Create reducer for `<PortfolioAggregation />`
+ *
+ * Handles all actions for the component:
+ *
+ * - `DATA_FETCHED` - Data fetched from data source
+ * - `TOGGLE_COLUMN_FORM_PANEL` - Toggle column form panel
+ * - `TOGGLE_SHOW_HIDE_COLUMN_PANEL` - Toggle show/hide column panel
+ * - `TOGGLE_FILTER_PANEL` - Toggle filter panel
+ * - `TOGGLE_COMPACT` - Toggle compact mode
+ * - `ADD_COLUMN` - Add column
+ * - `DELETE_COLUMN` - Delete column
+ * - `SHOW_HIDE_COLUMNS` - Show/hide columns
+ * - `COLUMN_HEADER_CONTEXT_MENU` - Column header context menu
+ * - `SET_GROUP_BY` - Set group by
+ * - `SET_COLLAPSED` - Set collapsed
+ * - `SET_ALL_COLLAPSED` - Set all collapsed
+ * - `SET_SORT` - Set sort
+ * - `MOVE_COLUMN` - Move column
+ *
+ * @param props Props for `<PortfolioAggregation />` component
  */
-export default (props: IPortfolioAggregationProps) =>
+const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
   createReducer(initState(props), {
     [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
       if (payload.items) {
@@ -209,9 +232,9 @@ export default (props: IPortfolioAggregationProps) =>
     ) => {
       state.columnContextMenu = payload
         ? {
-            column: payload.column,
-            target: payload.target as any
-          }
+          column: payload.column,
+          target: payload.target as any
+        }
         : null
     },
     [SET_ALL_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_ALL_COLLAPSED>) => {
@@ -289,22 +312,23 @@ export default (props: IPortfolioAggregationProps) =>
     [SET_CURRENT_VIEW.type]: (state) => {
       const hashState = parseUrlHash<IPortfolioAggregationHashState>()
       const viewIdUrlParam = new URLSearchParams(document.location.href).get('viewId')
-
-      const { configuration, defaultViewId } = props
-      const { views } = configuration
+      const { views } = props.configuration
       let currentView = null
 
       if (viewIdUrlParam) {
         currentView = _.find(views, (v) => v.id.toString() === viewIdUrlParam)
       } else if (hashState.viewId) {
         currentView = _.find(views, (v) => v.id.toString() === hashState.viewId)
-      } else if (defaultViewId) {
-        currentView = _.find(views, (v) => v.id.toString() === defaultViewId.toString())
+      } else if (props.defaultViewId) {
+        currentView = _.find(
+          views,
+          (v) => v.title === props.dataSource || v.id.toString() === props.defaultViewId.toString()
+        )
       } else {
         currentView = _.find(views, (v) => v.isDefault)
       }
-      if (!currentView && configuration.views.length > 0) {
-        currentView = first(configuration.views)
+      if (!currentView && views.length > 0) {
+        currentView = first(views)
       }
       if (!currentView) {
         throw new PortfolioAggregationErrorMessage(
@@ -425,3 +449,5 @@ export default (props: IPortfolioAggregationProps) =>
       state.error = payload.error
     }
   })
+
+export default createPortfolioAggregationReducer

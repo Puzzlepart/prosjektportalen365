@@ -49,7 +49,8 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
   public async onInit(): Promise<void> {
     await super.onInit()
     this._configuration = await this.dataAdapter.getAggregatedListConfig(
-      this.properties.dataSourceCategory
+      this.properties.dataSourceCategory,
+      this.properties.dataSourceLevel
     )
   }
 
@@ -57,10 +58,8 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
    * Get options for PropertyPaneDropdown
    */
   protected _getViewOptions(): IPropertyPaneDropdownOption[] {
-    if (this._configuration) {
-      return [...this._configuration.views.map((view) => ({ key: view.id, text: view.title }))]
-    }
-    return []
+    if (!this._configuration) return []
+    return [...this._configuration.views.map((view) => ({ key: view.id, text: view.title }))]
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -74,6 +73,11 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
                 PropertyPaneTextField('dataSourceCategory', {
                   label: strings.DataSourceCategoryLabel,
                   description: strings.DataSourceCategoryDescription
+                }),
+                PropertyPaneTextField('dataSourceLevel', {
+                  label: strings.DataSourceLevelLabel,
+                  description: strings.DataSourceLevelDescription,
+                  placeholder: this._configuration?.level
                 }),
                 PropertyPaneDropdown('defaultViewId', {
                   label: strings.DefaultDataSourceViewLabel,
@@ -112,6 +116,7 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
                 }),
                 PropertyPaneTextField('searchBoxPlaceholderText', {
                   label: strings.SearchBoxPlaceholderTextLabel,
+                  description: strings.SearchBoxPlaceholderTextDescription,
                   disabled: !this.properties.showSearchBox
                 })
               ]

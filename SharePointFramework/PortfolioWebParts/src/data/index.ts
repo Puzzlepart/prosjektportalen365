@@ -1,6 +1,6 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { dateAdd, PnPClientStorage } from '@pnp/common'
+import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/common'
 import {
   ItemUpdateResult,
   PermissionKind,
@@ -9,13 +9,13 @@ import {
   SortDirection,
   sp
 } from '@pnp/sp'
+import { SearchQueryInit } from '@pnp/sp/src/search'
 import * as cleanDeep from 'clean-deep'
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
 import { IAggregatedListConfiguration } from 'interfaces/IAggregatedListConfiguration'
 import { capitalize } from 'lodash'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
-import { isNull } from 'pp365-shared/lib/helpers'
 import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
 import { DataSource, PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
@@ -45,10 +45,10 @@ import {
   IDataAdapter,
   IFetchDataForViewItemResult
 } from './types'
-import { SearchQueryInit } from '@pnp/sp/src/search'
 
 /**
- * Data adapter for Portfolio Web Parts.
+ * Data adapter for Portfolio Web Parts. This class
+ * is responsible for fetching data from SharePoint.
  */
 export class DataAdapter implements IDataAdapter {
   private _portalDataService: PortalDataService
@@ -69,10 +69,10 @@ export class DataAdapter implements IDataAdapter {
    * of the `DataSourceService` and `PortalDataService`
    */
   public async configure(): Promise<DataAdapter> {
-    if (this.dataSourceService) return this
     this._portalDataService = await this._portalDataService.configure({
       pageContext: this.context.pageContext
     })
+    if (this.dataSourceService) return this
     this.dataSourceService = new DataSourceService(this._portalDataService.web)
     return this
   }
@@ -161,26 +161,35 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Get aggregated list config for the given category.
+   * Get aggregated list config for the given category. 
+   * 
+   * Returns `views`, `viewsUrls`, `columnUrls` and `level`. For now
+   * we only support two levels: `Portefølje` and `Prosjekt`. We need
+   * to also support `Program` and `Oveordnet` in the future (as part 
+   * of issue #1097).
    *
-   * @param category Category
+   * @param category Category for data source
+   * @param level Level for data source
    */
-  public async getAggregatedListConfig(category: string): Promise<IAggregatedListConfiguration> {
+  public async getAggregatedListConfig(
+    category: string,
+    level?: string
+  ): Promise<IAggregatedListConfiguration> {
     try {
-      if (category.includes('(Prosjektnivå)') || !category) {
-        this._portalDataService = await this._portalDataService.configure({
-          pageContext: this.context.pageContext
-        })
+      let calculatedLevel = 'Portefølje'
+      if(this._portalDataService.url !== this.context.pageContext.web.absoluteUrl) {
+        calculatedLevel = 'Prosjekt'
       }
       const [views, viewsUrls, columnUrls] = await Promise.all([
-        this.fetchDataSources(category),
+        this.fetchDataSources(category, level ?? calculatedLevel),
         this._portalDataService.getListFormUrls('DATA_SOURCES'),
         this._portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS')
       ])
       return {
         views,
         viewsUrls,
-        columnUrls
+        columnUrls,
+        level: calculatedLevel
       }
     } catch (error) {
       return null
@@ -825,48 +834,43 @@ export class DataAdapter implements IDataAdapter {
   /**
    * Fetch data sources by category.
    *
-   * @param category Data source category
+   * @param category Category for data source
+   * @param level Level for data source
    */
-  public async fetchDataSources(category: string): Promise<DataSource[]> {
+  public async fetchDataSources(category: string, level?: string): Promise<DataSource[]> {
     try {
-      return await this.dataSourceService.getByCategory(category)
+      const dataSources = await this.dataSourceService.getByCategory(category, level)
+      return dataSources
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, category))
     }
   }
 
   /**
-   * Fetch items from the project content columns SharePoint list.
+   * Fetch items from the project content columns SharePoint list on the hub site.
    *
-   * @param dataSourceCategory Data source category
+   * @param category Category for data source
    */
   public async fetchProjectContentColumns(dataSourceCategory: string): Promise<any> {
     try {
-      if (
-        isNull(dataSourceCategory) ||
-        !dataSourceCategory ||
-        dataSourceCategory === '' ||
-        dataSourceCategory.includes('(Prosjektnivå)')
-      ) {
-        return []
-      } else {
-        const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
-        const items = await list.items.get()
-        const filteredItems = items
-          .filter(
-            (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
-          )
-          .map((item) => {
-            const projectColumn = new ProjectColumn(item)
-            projectColumn['data'] = {
-              renderAs: (projectColumn.dataType ? projectColumn.dataType.toLowerCase() : 'text')
-                .split(' ')
-                .join('_')
-            }
-            return projectColumn
-          })
-        return filteredItems
-      }
+      if (stringIsNullOrEmpty(dataSourceCategory)) return []
+      const projectContentColumnsList = this._portalDataService.web.lists.getByTitle(
+        strings.ProjectContentColumnsListName
+      )
+      const projectContentColumnsListItems = await projectContentColumnsList.items.get()
+      const filteredItems = projectContentColumnsListItems
+        .filter(
+          (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
+        )
+        .map((item) => {
+          const projectColumn = new ProjectColumn(item)
+          const renderAs = (projectColumn.dataType ? projectColumn.dataType.toLowerCase() : 'text')
+            .split(' ')
+            .join('_')
+          projectColumn['data'] = { renderAs }
+          return projectColumn
+        })
+      return filteredItems
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, dataSourceCategory))
     }
