@@ -35,6 +35,9 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
         showGroupBy={this.properties.showGroupBy}
         showSearchBox={this.properties.showSearchBox}
         isParentProject={true}
+        columnConfigListName={undefined}
+        columnsListName={undefined}
+        viewsListName={undefined}
       />,
       this.domElement
     )

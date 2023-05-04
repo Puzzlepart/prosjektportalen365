@@ -19,7 +19,7 @@ import { Target, IGroup, MessageBarType } from '@fluentui/react'
 
 /**
  * Helper function to move an item in an array.
- * 
+ *
  * @param arr Array to move items in
  * @param old_index Old index of the item to move
  * @param new_index New index of the item to move
@@ -325,9 +325,9 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
     ) => {
       state.columnContextMenu = payload
         ? {
-          column: payload.column,
-          target: payload.target as any
-        }
+            column: payload.column,
+            target: payload.target as any
+          }
         : null
     },
     [SET_ALL_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_ALL_COLLAPSED>) => {

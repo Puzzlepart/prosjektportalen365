@@ -1,6 +1,6 @@
 {
   "name": "pp365-portfoliowebparts",
-  "version": "1.9.0",
+  "version": "1.9.0-1098.7",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -11,13 +11,13 @@
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
     "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\"",
     "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
-    "package:debug": "gulp clean && gulp default && gulp package-solution",
-    "build": "tsc --build",
+    "package:debug": "npm run build && gulp package-solution",
+    "build": "gulp clean && gulp default",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
     "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
-    "publish:temp": "npm install && npm run package && npm publish --tag temp"
+    "publish:temp": "npm install && npm run build && npm publish --tag temp"
   },
   "dependencies": {
     "@fluentui/react": "8.98.1",
@@ -47,7 +47,7 @@
     "moment": "2.24.0",
     "msgraph-helper": "0.7.3",
     "object-assign": "4.1.1",
-    "pp365-shared": "1.9.0-1098.2",
+    "pp365-shared": "1.9.0-1098.3",
     "react": "16.13.1",
     "react-calendar-timeline": "0.27.0",
     "react-dom": "16.13.1",

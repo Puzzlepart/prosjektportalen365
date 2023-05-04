@@ -16,13 +16,17 @@ import { IPortfolioAggregationProps, IPortfolioAggregationState } from './types'
 
 /**
  * Fetching data sources when `dataSourceCategory` or `defaultViewId` changes.
- * 
+ *
  * TODO: Check if this is neccessary as we're also fetching this in the web part
  * itself using `this.dataAdapter.getAggregatedListConfig`.
- * 
+ *
  * @param context Context for the Portfolio Aggregation component
  */
-const usePortfolioAggregationDataSources = ({ props, state, dispatch }: IPortfolioAggregationContext) => {
+const usePortfolioAggregationDataSources = ({
+  props,
+  state,
+  dispatch
+}: IPortfolioAggregationContext) => {
   useEffect(() => {
     if (props.dataSourceCategory) {
       props.dataAdapter
@@ -42,10 +46,14 @@ const usePortfolioAggregationDataSources = ({ props, state, dispatch }: IPortfol
 
 /**
  * Fetches data for the Portfolio Aggregation component.
- * 
+ *
  * @param context Context for the Portfolio Aggregation component
  */
-const usePortfolioAggregationDataFetch = ({ props, state, dispatch }: IPortfolioAggregationContext) => {
+const usePortfolioAggregationDataFetch = ({
+  props,
+  state,
+  dispatch
+}: IPortfolioAggregationContext) => {
   useEffect(() => {
     dispatch(START_FETCH())
     if (!state.currentView && props.dataSourceCategory) return
@@ -81,7 +89,7 @@ const usePortfolioAggregationDataFetch = ({ props, state, dispatch }: IPortfolio
 /**
  * Returns the list items and columns for the Portfolio Aggregation component filtered
  * by the active filters and search term.
- * 
+ *
  * @param state State for the Portfolio Aggregation component
  */
 const usePortfolioAggregationItems = (state: IPortfolioAggregationState) => {
@@ -110,7 +118,9 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
     if (props.dataSourceCategory) dispatch(SET_CURRENT_VIEW)
   }, [props.dataSourceCategory, props.defaultViewId])
 
-  const ctxValue = useMemo<IPortfolioAggregationContext>(() => ({ props, state, dispatch }), [state])
+  const ctxValue = useMemo<IPortfolioAggregationContext>(() => ({ props, state, dispatch }), [
+    state
+  ])
 
   usePortfolioAggregationDataSources(ctxValue)
   usePortfolioAggregationDataFetch(ctxValue)

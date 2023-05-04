@@ -1,11 +1,12 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { flatten } from '@microsoft/sp-lodash-subset'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { dateAdd } from '@pnp/common'
+import { dateAdd, stringIsNullOrEmpty } from '@pnp/common'
 import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
 import * as cleanDeep from 'clean-deep'
 import MSGraph from 'msgraph-helper'
 import {
+  IAggregatedListConfiguration,
   IGraphGroup,
   IPortfolioConfiguration,
   ISPProjectItem,
@@ -21,13 +22,18 @@ import {
 } from 'pp365-portfoliowebparts/lib/models'
 import { ISPDataAdapterBaseConfiguration, SPDataAdapterBase } from 'pp365-shared/lib/data'
 import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
-import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
+import { DataSource, PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import { DataSourceService, ProjectDataService } from 'pp365-shared/lib/services'
 import * as strings from 'ProgramWebPartsStrings'
-import { GAINS_DEFAULT_SELECT_PROPERTIES } from './config'
 import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
 import _ from 'underscore'
+import {
+  CONTENT_TYPE_ID_BENEFITS,
+  CONTENT_TYPE_ID_INDICATORS,
+  CONTENT_TYPE_ID_MEASUREMENTS,
+  DEFAULT_GAINS_PROPERTIES
+} from 'pp365-portfoliowebparts/lib/data/types'
 
 /**
  * SPDataAdapter for `ProgramWebParts`.
@@ -84,6 +90,38 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       views,
       viewsUrls,
       columnUrls
+    }
+  }
+
+  /**
+   * Get aggregated list config for the given category.
+   *
+   * Returns `views`, `viewsUrls`, `columnUrls` and `level`. For now
+   * we only support two levels: `Portefølje` and `Prosjekt`. We need
+   * to also support `Program` and `Oveordnet` in the future (as part
+   * of issue #1097).
+   *
+   * @param category Category for data source
+   * @param level Level for data source
+   */
+  public async getAggregatedListConfig(
+    category: string,
+    level: string = 'Program'
+  ): Promise<IAggregatedListConfiguration> {
+    try {
+      const [views, viewsUrls, columnUrls] = await Promise.all([
+        this.fetchDataSources(category, level),
+        this.portal.getListFormUrls('DATA_SOURCES'),
+        this.portal.getListFormUrls('PROJECT_CONTENT_COLUMNS')
+      ])
+      return {
+        views,
+        viewsUrls,
+        columnUrls,
+        level
+      }
+    } catch (error) {
+      return null
     }
   }
 
@@ -648,6 +686,84 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   }
 
   /**
+   * Fetch benefit items with the specified `dataSource` and `selectProperties`. The result
+   * is transformed into `Benefit`, `BenefitMeasurement` and `BenefitMeasurementIndicator` objects
+   * which is the main difference from `_fetchItems`.
+   *
+   * @param dataSource Data source
+   * @param selectProperties Select properties
+   */
+  public async fetchBenefitItemsWithSource(
+    dataSource: DataSource,
+    selectProperties: string[]
+  ): Promise<any> {
+    const results: any[] = await this._fetchItems(dataSource.searchQuery, [
+      ...DEFAULT_GAINS_PROPERTIES,
+      ...selectProperties
+    ])
+
+    const benefits = results
+      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_BENEFITS) === 0)
+      .map((res) => new Benefit(res))
+
+    const measurements = results
+      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_MEASUREMENTS) === 0)
+      .map((res) => new BenefitMeasurement(res))
+      .sort((a, b) => b.Date.getTime() - a.Date.getTime())
+
+    const indicactors = results
+      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_INDICATORS) === 0)
+      .map((res) => {
+        const indicator = new BenefitMeasurementIndicator(res)
+          .setMeasurements(measurements)
+          .setBenefit(benefits)
+        return indicator
+      })
+      .filter((i) => i.Benefit)
+
+    const items = indicactors.map((i) => {
+      const benefit = i.Benefit
+      const measurements = i.Measurements
+      const firstMeasurement = _.first(i.Measurements)
+
+      const item = {
+        ..._.pick(firstMeasurement?.Properties, _.identity),
+        ..._.pick(benefit.Properties, _.identity),
+        Title: benefit.Title,
+        GtGainsResponsible: benefit.Responsible,
+        GtGainsOwner: benefit.Owner,
+        MeasurementIndicator: i.Title,
+        GtMeasurementUnitOWSCHCS: i.Unit,
+        GtStartValueOWSNMBR: i.StartValue,
+        GtDesiredValueOWSNMBR: i.DesiredValue,
+        LastMeasurementValue: firstMeasurement?.Value,
+        MeasurementAchievement: JSON.stringify({
+          Achievement: firstMeasurement?.Achievement,
+          AchievementDisplay: firstMeasurement?.AchievementDisplay,
+          TrendIconProps: firstMeasurement?.TrendIconProps
+        }),
+        Measurements: JSON.stringify(
+          measurements?.map((m) => {
+            return {
+              Title: i.Title,
+              Value: m.Value,
+              ValueDisplay: m.ValueDisplay,
+              Comment: m.Comment,
+              Achievement: m.Achievement,
+              AchievementDisplay: m.AchievementDisplay,
+              DateDisplay: m.DateDisplay,
+              TrendIconProps: m.TrendIconProps
+            }
+          })
+        )
+      }
+      return item
+    })
+
+    return items
+  }
+
+  /**
    * Fetch items using the specified `queryTemplate` and `selectProperties`
    *
    * @param queryTemplate Query template
@@ -708,9 +824,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   }
 
   /**
-   * Fetch items with data source name. If the data source category
-   * is "Gevinstoversikt", the items are sent through the method
-   * `_postTransformGainsItems`.
+   * Fetch items with data source name.
    *
    * @param name Data source name
    * @param selectProperties Select properties
@@ -721,19 +835,22 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     selectProperties: string[],
     includeSelf: boolean = false
   ): Promise<any[]> {
+    let items: any[]
     const dataSrc = await this.dataSourceService.getByName(name)
     if (!dataSrc) throw new Error(format(strings.DataSourceNotFound, name))
     try {
-      switch (dataSrc.category) {
-        case 'Gevinstoversikt':
-          selectProperties.push(...GAINS_DEFAULT_SELECT_PROPERTIES)
-          break
-      }
-      let items = await this._fetchItems(dataSrc.searchQuery, selectProperties, includeSelf)
-      switch (dataSrc.category) {
-        case 'Gevinstoversikt':
-          items = this._postTransformGainsItems(items)
-          break
+      const dataSrcProperties = dataSrc.projectColumns.map((col) => col.fieldName) || []
+      if (dataSrc.category.startsWith('Gevinstoversikt')) {
+        items = await this.fetchBenefitItemsWithSource(dataSrc, [
+          ...selectProperties,
+          ...dataSrcProperties
+        ])
+      } else {
+        items = await this._fetchItems(
+          dataSrc.searchQuery,
+          [...selectProperties, ...dataSrcProperties],
+          includeSelf
+        )
       }
       return items
     } catch (error) {
@@ -745,12 +862,43 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    * Fetch data sources by category
    *
    * @param category Data source category
+   * @param level Level for data source
    */
-  public fetchDataSources(category: string): Promise<DataSource[]> {
+  public fetchDataSources(category: string, level?: string): Promise<DataSource[]> {
     try {
-      return this.dataSourceService.getByCategory(category)
+      return this.dataSourceService.getByCategory(category, level)
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, category))
+    }
+  }
+
+  /**
+   * Fetch items from the project content columns SharePoint list on the hub site.
+   *
+   * @param category Category for data source
+   */
+  public async fetchProjectContentColumns(dataSourceCategory: string): Promise<any> {
+    try {
+      if (stringIsNullOrEmpty(dataSourceCategory)) return []
+      const projectContentColumnsList = this.portal.web.lists.getByTitle(
+        strings.ProjectContentColumnsListName
+      )
+      const projectContentColumnsListItems = await projectContentColumnsList.items.get()
+      const filteredItems = projectContentColumnsListItems
+        .filter(
+          (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
+        )
+        .map((item) => {
+          const projectColumn = new ProjectColumn(item)
+          const renderAs = (projectColumn.dataType ? projectColumn.dataType.toLowerCase() : 'text')
+            .split(' ')
+            .join('_')
+          projectColumn['data'] = { renderAs }
+          return projectColumn
+        })
+      return filteredItems
+    } catch (error) {
+      throw new Error(format(strings.DataSourceCategoryError, dataSourceCategory))
     }
   }
 

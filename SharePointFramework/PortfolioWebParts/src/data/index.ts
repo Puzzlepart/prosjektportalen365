@@ -142,10 +142,7 @@ export class DataAdapter implements IDataAdapter {
       this._portal.getPortfolioOverviewViews(),
       this._portal.getListFormUrls('PORTFOLIO_VIEWS'),
       this._portal.getListFormUrls('PROJECT_COLUMNS'),
-      this._portal.currentUserHasPermissionsToList(
-        'PORTFOLIO_VIEWS',
-        PermissionKind.AddListItems
-      )
+      this._portal.currentUserHasPermissionsToList('PORTFOLIO_VIEWS', PermissionKind.AddListItems)
     ])
     columns = columns.map((col) => col.configure(columnConfig))
     const refiners = columns.filter((col) => col.isRefinable)
@@ -161,11 +158,11 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Get aggregated list config for the given category. 
-   * 
+   * Get aggregated list config for the given category.
+   *
    * Returns `views`, `viewsUrls`, `columnUrls` and `level`. For now
    * we only support two levels: `Portefølje` and `Prosjekt`. We need
-   * to also support `Program` and `Oveordnet` in the future (as part 
+   * to also support `Program` and `Oveordnet` in the future (as part
    * of issue #1097).
    *
    * @param category Category for data source
@@ -177,7 +174,7 @@ export class DataAdapter implements IDataAdapter {
   ): Promise<IAggregatedListConfiguration> {
     try {
       let calculatedLevel = 'Portefølje'
-      if(this._portal.url !== this.context.pageContext.web.absoluteUrl) {
+      if (this._portal.url !== this.context.pageContext.web.absoluteUrl) {
         calculatedLevel = 'Prosjekt'
       }
       const [views, viewsUrls, columnUrls] = await Promise.all([

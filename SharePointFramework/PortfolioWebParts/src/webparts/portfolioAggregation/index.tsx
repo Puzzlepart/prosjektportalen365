@@ -1,14 +1,12 @@
 import { IMessageBarProps, MessageBar } from '@fluentui/react/lib/MessageBar'
-import {
-  IPropertyPaneConfiguration
-} from '@microsoft/sp-property-pane'
 import * as strings from 'PortfolioWebPartsStrings'
 import { IPortfolioAggregationProps, PortfolioAggregation } from 'components/PortfolioAggregation'
 import { DataAdapter } from 'data'
 import { IAggregatedListConfiguration } from 'interfaces'
 import React from 'react'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
-import { getPropertyPaneConfiguration } from './getPropertyPaneConfiguration'
+import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption, PropertyPaneDropdown, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
+import _ from 'lodash'
 
 export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
   IPortfolioAggregationProps
@@ -49,7 +47,78 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
     )
   }
 
+  /**
+   * Get view options
+   *
+   * @param configuration Configuration
+   */
+  protected _getViewOptions(): IPropertyPaneDropdownOption[] {
+    if (!this._configuration) return []
+    return [...this._configuration.views.map((view) => ({ key: view.id, text: view.title }))]
+  }
+
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-  return getPropertyPaneConfiguration(this._configuration, this.properties)
+    return {
+      pages: [
+        {
+          groups: [
+            {
+              groupName: strings.DataSourceGroupName,
+              groupFields: [
+                PropertyPaneTextField('dataSourceCategory', {
+                  label: strings.DataSourceCategoryLabel,
+                  description: strings.DataSourceCategoryDescription
+                }),
+                PropertyPaneTextField('dataSourceLevel', {
+                  label: strings.DataSourceLevelLabel,
+                  description: strings.DataSourceLevelDescription,
+                  placeholder: this._configuration?.level
+                }),
+                PropertyPaneDropdown('defaultViewId', {
+                  label: strings.DefaultDataSourceViewLabel,
+                  options: this._getViewOptions(),
+                  selectedKey:
+                    _.find(this._configuration.views, (v) => v.isDefault)?.id ||
+                    _.first(this._configuration.views).id
+                })
+              ]
+            },
+            {
+              groupName: strings.CommandBarGroupName,
+              groupFields: [
+                PropertyPaneToggle('showCommandBar', {
+                  label: strings.ShowCommandBarLabel
+                }),
+                PropertyPaneToggle('showFilters', {
+                  label: strings.ShowFiltersLabel,
+                  disabled: !this.properties.showCommandBar
+                }),
+                PropertyPaneToggle('showExcelExportButton', {
+                  label: strings.ShowExcelExportButtonLabel,
+                  disabled: !this.properties.showCommandBar
+                }),
+                PropertyPaneToggle('showViewSelector', {
+                  label: strings.ShowViewSelectorLabel,
+                  disabled: !this.properties.showCommandBar
+                })
+              ]
+            },
+            {
+              groupName: strings.SearchBoxGroupName,
+              groupFields: [
+                PropertyPaneToggle('showSearchBox', {
+                  label: strings.ShowSearchBoxLabel
+                }),
+                PropertyPaneTextField('searchBoxPlaceholderText', {
+                  label: strings.SearchBoxPlaceholderTextLabel,
+                  description: strings.SearchBoxPlaceholderTextDescription,
+                  disabled: !this.properties.showSearchBox
+                })
+              ]
+            }
+          ]
+        }
+      ]
+    }
   }
 }
