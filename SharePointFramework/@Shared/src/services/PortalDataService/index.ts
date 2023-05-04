@@ -207,11 +207,13 @@ export class PortalDataService {
     const spItems = await this.web.lists
       .getByTitle(this._configuration.listNames.PROJECT_COLUMN_CONFIGURATION)
       .items.orderBy('ID', true)
-      .expand('GtPortfolioColumn')
+      .expand('GtPortfolioColumn', 'GtPortfolioColumnTooltip')
       .select(
         ...Object.keys(new SPProjectColumnConfigItem()),
         'GtPortfolioColumn/Title',
-        'GtPortfolioColumn/GtInternalName'
+        'GtPortfolioColumn/GtInternalName',
+        'GtPortfolioColumnTooltip/Title',
+        'GtPortfolioColumnTooltip/GtInternalName'
       )
       .usingCaching()
       .get<SPProjectColumnConfigItem[]>()
