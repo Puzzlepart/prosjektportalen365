@@ -1,6 +1,6 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 import React, { FC } from 'react'
-import { IRenderItemColumnProps } from '../IRenderItemColumnProps'
+import { IRenderItemColumnProps } from '../types'
 import { Tag } from './Tag'
 import styles from './TagsColumn.module.scss'
 

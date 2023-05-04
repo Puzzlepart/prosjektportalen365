@@ -4,12 +4,13 @@ import { ProjectColumn } from 'pp365-shared/lib/models'
 import React from 'react'
 import { IPortfolioOverviewProps } from '../types'
 import { TitleColumn } from './TitleColumn'
-import { IRenderItemColumnProps } from './IRenderItemColumnProps'
+import { IRenderItemColumnProps } from './types'
 import { TagsColumn } from './TagsColumn'
 import { UserColumn } from './UserColumn'
 import * as strings from 'PortfolioWebPartsStrings'
 import { IFetchDataForViewItemResult } from 'data/types'
 import { TooltipHost } from '@fluentui/react'
+import { stringIsNullOrEmpty } from '@pnp/common'
 
 /**
  * Mapping for rendering of the different data types
@@ -61,9 +62,10 @@ export function renderItemColumn(
       </span>
     )
 
-    const tooltipValue = config.tooltipColumnPropertyName && item[config.tooltipColumnPropertyName]
+    const tooltipValue: string =
+      config.tooltipColumnPropertyName && item[config.tooltipColumnPropertyName]
 
-    if (tooltipValue) {
+    if (!stringIsNullOrEmpty(tooltipValue)) {
       return (
         <TooltipHost content={tooltipValue} calloutProps={{ gapSpace: 0 }}>
           {element}
