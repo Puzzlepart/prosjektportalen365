@@ -62,11 +62,11 @@ const usePortfolioAggregationDataFetch = ({ props, state, dispatch }: IPortfolio
         ? props.dataAdapter.fetchProjects(props.configuration, state.dataSource)
         : Promise.resolve(undefined)
     ])
-      .then(([dataSrc, items, projectColumns, projects]) => {
+      .then(([dataSrc, items, columns, projects]) => {
         dispatch(
           DATA_FETCHED({
             items,
-            columns: projectColumns,
+            columns,
             fltColumns: dataSrc.projectColumns,
             projects
           })
@@ -109,7 +109,6 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
   useEffect(() => {
     if (props.dataSourceCategory) dispatch(SET_CURRENT_VIEW)
   }, [props.dataSourceCategory, props.defaultViewId])
-
 
   const ctxValue = useMemo<IPortfolioAggregationContext>(() => ({ props, state, dispatch }), [state])
 
