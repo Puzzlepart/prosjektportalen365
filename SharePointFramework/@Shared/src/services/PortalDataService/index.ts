@@ -2,7 +2,7 @@
 import { find } from '@microsoft/sp-lodash-subset'
 import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
-import { AttachmentFileInfo, CamlQuery, ListEnsureResult, PermissionKind, sp, Web } from '@pnp/sp'
+import { CamlQuery, Folder, ListEnsureResult, PermissionKind, sp, Web } from '@pnp/sp'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { transformFieldXml } from '../../helpers/transformFieldXml'
@@ -161,27 +161,44 @@ export class PortalDataService {
   }
 
   /**
-   * Update status report, and add snapshot as attachment.
+   * Ensures a folder in the attachments library for the status report.
+   * 
+   * @param report Status report
+   */
+  private async ensureAttachmentsFolder(report: StatusReport): Promise<Folder> {
+    const folderName = report.id.toString()
+    const { folder } = await this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS_ATTACHMENTS).rootFolder.folders.add(folderName)
+    return folder
+  }
+
+  /**
+   * Publish status report.
    *
    * @param report Status report
-   * @param properties Properties
-   * @param attachment Attachment
+   * @param reportDate Status report date¨
+   * @param persistedSectionData Persisted section data
+   * @param snapshot Snapshot blob content
    * @param publishedString String value for published state
    */
-  public async updateStatusReport(
+  public async publishStatusReport(
     report: StatusReport,
-    properties: Record<string, string>,
-    attachment?: AttachmentFileInfo,
+    reportDate: string,
+    persistedSectionData: string,
+    snapshot: string,
     publishedString?: string
   ): Promise<StatusReport> {
-    const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
-    if (attachment) {
-      try {
-        await list.items.getById(report.id).attachmentFiles.addMultiple([attachment])
-      } catch (error) { }
-    }
+    const projectStatusList = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
     try {
-      await list.items.getById(report.id).update(properties)
+      const attachmentsFolder = await this.ensureAttachmentsFolder(report)
+      const properties: Record<string, string> = {
+        GtModerationStatus: publishedString,
+        GtLastReportDate: reportDate
+      }
+      await Promise.all([
+        projectStatusList.items.getById(report.id).update(properties),
+        attachmentsFolder.files.add('PersistedSectionData.txt', persistedSectionData),
+        attachmentsFolder.files.add('Snapshot.png', snapshot),
+      ])
       return new StatusReport({ ...report.item, ...properties }, publishedString)
     } catch (error) {
       throw error
@@ -483,15 +500,7 @@ export class PortalDataService {
       if (top) items = items.top(top)
       if (select) items = items.select(...select)
       if (useCaching) items = items.usingCaching()
-      const [$items, attachments] = await Promise.all([
-        items.get(),
-        this.web.lists
-          .getByTitle(this._configuration.listNames.PROJECT_STATUS_ATTACHMENTS)
-          .rootFolder
-          .files
-          .get()
-      ])
-      return $items.map((i) => new StatusReport(i, publishedString))
+      return (await items.get()).map((i) => new StatusReport(i, publishedString))
     } catch (error) {
       throw error
     }

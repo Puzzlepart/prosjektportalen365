@@ -1,11 +1,12 @@
-import { TypedHash } from '@pnp/common'
+import strings from 'ProjectWebPartsStrings'
 import moment from 'moment'
 import { PortalDataService } from 'pp365-shared/lib/services'
-import strings from 'ProjectWebPartsStrings'
 import { useContext } from 'react'
 import { ProjectStatusContext } from '../context'
-import { REPORT_PUBLISHED } from '../reducer'
-import { useCaptureReport } from './useCaptureReport'
+import { CLEAR_USER_MESSAGE, REPORT_PUBLISHED, REPORT_PUBLISH_ERROR } from '../reducer'
+import { useCaptureReportSnapshot } from './useCaptureReportSnapshot'
+import { MessageBarType } from '@fluentui/react'
+
 
 /**
  * Hook for publishing of reports. Returns a callback function
@@ -18,29 +19,31 @@ import { useCaptureReport } from './useCaptureReport'
  */
 export function usePublishReport() {
   const context = useContext(ProjectStatusContext)
-  const captureReport = useCaptureReport()
+  const captureReportSnapshot = useCaptureReportSnapshot()
   return async (): Promise<void> => {
     const portalDataService = await new PortalDataService().configure({
       pageContext: context.props.pageContext
     })
     if (!context.state.isPublishing) {
       try {
-        const attachmentsFolder = portalDataService.web.getFolderByServerRelativeUrl('/sites/pp365/Prosjektstatus_vedlegg')
-        const attachment = await captureReport(context.state.selectedReport.values.Title)
-        const properties: TypedHash<string> = {
-          GtLastReportDate: moment().format('YYYY-MM-DD HH:mm')
-        }
-        const updatedReport = await portalDataService.updateStatusReport(
+        const snapshot = await captureReportSnapshot()
+        const updatedReport = await portalDataService.publishStatusReport(
           context.state.selectedReport,
-          properties,
-          attachment,
+          moment().format('YYYY-MM-DD HH:mm'),
+          JSON.stringify(context.state.persistedSectionData),
+          snapshot,
           strings.GtModerationStatus_Choice_Published
         )
-        await attachmentsFolder.files.add(`PersistedSectionData-${updatedReport.id}.txt`, JSON.stringify(context.state.persistedSectionData))
-        context.dispatch(REPORT_PUBLISHED({ updatedReport }))
-      } catch (error) { 
-        // eslint-disable-next-line no-console
-        console.error(error)
+        context.dispatch(REPORT_PUBLISHED({ updatedReport, message: null }))
+      } catch (error) {
+        context.dispatch(
+          REPORT_PUBLISH_ERROR({ message: { text: error.message, type: MessageBarType.error } })
+        )
+      }
+      finally {
+        window.setTimeout(() => {
+          context.dispatch(CLEAR_USER_MESSAGE())
+        }, 8000)
       }
     }
   }
