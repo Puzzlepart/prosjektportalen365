@@ -40,35 +40,35 @@ export function useCommands() {
       onClick: redirectNewStatusReport
     },
     context.state.selectedReport &&
-      context.state.userHasAdminPermission && {
-        key: 'DELETE_REPORT',
-        name: strings.DeleteReportButtonText,
-        iconProps: { iconName: 'Delete' },
-        disabled: context.state.selectedReport?.published || context.state.isPublishing,
-        onClick: () => {
-          deleteReport()
-        }
-      },
+    context.state.userHasAdminPermission && {
+      key: 'DELETE_REPORT',
+      name: strings.DeleteReportButtonText,
+      iconProps: { iconName: 'Delete' },
+      disabled: context.state.selectedReport?.published || context.state.isPublishing,
+      onClick: () => {
+        deleteReport()
+      }
+    },
     context.state.selectedReport &&
-      context.state.userHasAdminPermission && {
-        key: 'EDIT_REPORT',
-        name: strings.EditReportButtonText,
-        iconProps: { iconName: 'Edit' },
-        href: getEditFormUrl(context.state.selectedReport),
-        disabled: context.state.selectedReport?.published || context.state.isPublishing
-      },
+    context.state.userHasAdminPermission && {
+      key: 'EDIT_REPORT',
+      name: strings.EditReportButtonText,
+      iconProps: { iconName: 'Edit' },
+      href: getEditFormUrl(context.state.selectedReport),
+      disabled: context.state.selectedReport?.published || context.state.isPublishing
+    },
     context.state.selectedReport &&
-      context.state.userHasAdminPermission &&
-      !context.state.isPublishing && {
-        key: 'PUBLISH_REPORT',
-        name: strings.PublishReportButtonText,
-        iconProps: { iconName: 'PublishContent' },
-        disabled: context.state.selectedReport?.published,
-        onClick: () => {
-          context.dispatch(REPORT_PUBLISHING())
-          publishReport()
-        }
-      },
+    context.state.userHasAdminPermission &&
+    !context.state.isPublishing && {
+      key: 'PUBLISH_REPORT',
+      name: strings.PublishReportButtonText,
+      iconProps: { iconName: 'PublishContent' },
+      disabled: context.state.selectedReport?.published,
+      onClick: () => {
+        context.dispatch(REPORT_PUBLISHING())
+        publishReport()
+      }
+    },
     context.state.isPublishing && {
       key: 'IS_PUBLISHING',
       onRender: () => (
@@ -80,17 +80,14 @@ export function useCommands() {
       )
     }
   ].filter(Boolean)
-  const farItems: IContextualMenuItem[] = []
-  if (context.state.sourceUrl) {
-    farItems.push({
+  const farItems: IContextualMenuItem[] = [
+    context.state.sourceUrl && {
       key: 'NAVIGATE_TO_SOURCE_URL',
       name: strings.NavigateToSourceUrlText,
       iconProps: { iconName: 'NavigateBack' },
       href: context.state.sourceUrl
-    })
-  }
-  if (context.state.selectedReport) {
-    farItems.push({
+    },
+    context.state.selectedReport && {
       key: 'GET_SNAPSHOT',
       name: strings.GetSnapshotButtonText,
       iconProps: { iconName: 'Photo2' },
@@ -98,20 +95,17 @@ export function useCommands() {
       onClick: () => {
         window.open(context.state.selectedReport?.snapshotUrl)
       }
-    })
-  }
-  if (context.state.data.reports.length > 0) {
-    farItems.push({
+    },
+    context.state.data.reports.length > 0 && {
       key: 'REPORT_DROPDOWN',
       name: context.state.selectedReport
         ? formatDate(context.state.selectedReport.created, true)
         : '',
       iconProps: { iconName: 'FullHistory' },
-      subMenuProps: { items: reportOptions }
-    })
-  }
-  if (context.state.selectedReport) {
-    farItems.push({
+      subMenuProps: { items: reportOptions },
+      disabled: context.state.data.reports.length < 2
+    },
+    context.state.selectedReport && {
       id: getId('StatusIcon'),
       key: 'STATUS_ICON',
       name: context.state.selectedReport?.published
@@ -124,7 +118,7 @@ export function useCommands() {
         }
       },
       disabled: true
-    })
-  }
+    }
+  ].filter(Boolean)
   return { props: { items, farItems } } as const
 }
