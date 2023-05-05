@@ -1,8 +1,7 @@
-import { isEmpty } from 'underscore'
-
 export type StatusReportAttachment = {
-  FileName: string
-  ServerRelativeUrl: string
+  url: string
+  content: string | ArrayBuffer | Blob
+  shouldOverWrite?: boolean
 }
 
 export class StatusReport {
@@ -66,20 +65,6 @@ export class StatusReport {
    */
   public get values(): Record<string, any> {
     return this.item
-  }
-
-  /**
-   * Attachments
-   */
-  public get attachments(): StatusReportAttachment[] {
-    return this.item.AttachmentFiles || []
-  }
-
-  /**
-   * Has attachments
-   */
-  public get hasAttachments(): boolean {
-    return !isEmpty(this.attachments)
   }
 
   /**

@@ -18,14 +18,15 @@ import {
   SPProjectAdminRoleItem,
   SPProjectColumnConfigItem,
   SPProjectColumnItem,
-  StatusReport
+  StatusReport,
+  StatusReportAttachment
 } from '../../models'
-import { GetStatusReportsOptions } from './GetStatusReportsOptions'
 import {
+  GetStatusReportsOptions,
   IPortalDataServiceConfiguration,
   PortalDataServiceDefaultConfiguration,
   PortalDataServiceList
-} from './IPortalDataServiceConfiguration'
+} from './types'
 
 export class PortalDataService {
   private _configuration: IPortalDataServiceConfiguration
@@ -48,7 +49,7 @@ export class PortalDataService {
   }
 
   /**
-   * Get hub site
+   * Get hub site cached for a year to minimize calls to the API.
    *
    * @param expire Expire
    */
@@ -131,7 +132,7 @@ export class PortalDataService {
   }
 
   /**
-   * Get project columns
+   * Get project columns from the project columns list in the portfolio site.
    */
   public async getProjectColumns(): Promise<ProjectColumn[]> {
     try {
@@ -167,24 +168,31 @@ export class PortalDataService {
    */
   private async ensureAttachmentsFolder(report: StatusReport): Promise<Folder> {
     const folderName = report.id.toString()
-    const { folder } = await this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS_ATTACHMENTS).rootFolder.folders.add(folderName)
-    return folder
+    const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS_ATTACHMENTS)
+    try {
+      const folder = await list.rootFolder.folders.getByName(folderName).get()
+      console.log(folder)
+      return list.rootFolder.folders.getByName(folderName)
+    } catch (error) {
+      const { folder } = await list.rootFolder.folders.add(folderName)
+      return folder
+    }
   }
 
   /**
-   * Publish status report.
+   * Publish status report. Sets `GtModerationStatus` to `publishedString` and
+   * `GtLastReportDate` to `reportDate`. Then uploads the persisted section data
+   * and snapshot to the attachments folder (in a separate hidden library).
    *
    * @param report Status report
-   * @param reportDate Status report date¨
-   * @param persistedSectionData Persisted section data
-   * @param snapshot Snapshot blob content
+   * @param reportDate Status report date
+   * @param attachments Status report attachments
    * @param publishedString String value for published state
    */
   public async publishStatusReport(
     report: StatusReport,
     reportDate: string,
-    persistedSectionData: string,
-    snapshot: string,
+    attachments: StatusReportAttachment[],
     publishedString?: string
   ): Promise<StatusReport> {
     const projectStatusList = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
@@ -196,8 +204,7 @@ export class PortalDataService {
       }
       await Promise.all([
         projectStatusList.items.getById(report.id).update(properties),
-        attachmentsFolder.files.add('PersistedSectionData.txt', persistedSectionData),
-        attachmentsFolder.files.add('Snapshot.png', snapshot),
+        ...attachments.map(att => attachmentsFolder.files.add(att.url, att.content, att.shouldOverWrite))
       ])
       return new StatusReport({ ...report.item, ...properties }, publishedString)
     } catch (error) {
@@ -492,18 +499,40 @@ export class PortalDataService {
     if (stringIsNullOrEmpty(filter))
       filter = `GtSiteId eq '${this._configuration.pageContext.site.id.toString()}'`
     try {
-      let items = this.web.lists
-        .getByTitle(this._configuration.listNames.PROJECT_STATUS)
-        .items.filter(filter)
+      const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
+      let items = list.items.filter(filter)
         .expand('FieldValuesAsText', 'AttachmentFiles')
         .orderBy('Id', false)
       if (top) items = items.top(top)
       if (select) items = items.select(...select)
       if (useCaching) items = items.usingCaching()
-      return (await items.get()).map((i) => new StatusReport(i, publishedString))
+      const reports = (await items.get()).map((i) => new StatusReport(i, publishedString))
+      console.log(reports)
+      return reports
     } catch (error) {
       throw error
     }
+  }
+
+  /**
+   * Get attachments for the specified status report.
+   * 
+   * @param report Status report
+   */
+  public async getStatusReportAttachments(report: StatusReport): Promise<StatusReport> {
+    const attachmentsFolder = await this.ensureAttachmentsFolder(report)
+    const attachmentFiles = await attachmentsFolder.files.usingCaching().get()
+    const attachmentFilesContent = await Promise.all(
+      attachmentFiles.map(async (file) => {
+        const fileContent = await this.web.getFileByServerRelativeUrl(file.ServerRelativeUrl).getBlob()
+        return {
+          name: file.Name,
+          content: fileContent
+        }
+      })
+    )
+    console.log(attachmentFilesContent)
+    return report
   }
 
   /**
