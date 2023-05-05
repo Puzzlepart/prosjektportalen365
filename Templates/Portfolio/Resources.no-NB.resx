@@ -2650,10 +2650,4 @@
   <data name="SiteFields_InstallUser_DisplayName" xml:space="preserve">
     <value>Installasjonsbruker</value>
   </data>
-  <data name="SiteFields_GtSectionDataJson_DisplayName" xml:space="preserve">
-    <value>Seksjonsdata</value>
-  </data>
-  <data name="SiteFields_GtSectionDataJson_Description" xml:space="preserve">
-    <value></value>
-  </data>
 </root>
