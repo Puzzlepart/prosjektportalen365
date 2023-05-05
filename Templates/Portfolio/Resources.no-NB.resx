@@ -280,8 +280,11 @@
   <data name="Lists_Idea_Configuration_Url" xml:space="preserve">
     <value>Lists/Idekonfigurasjon</value>
   </data>
+  <data name="Lists_Idea_Configuration_Field_GtDescription_DisplayName" xml:space="preserve">
+    <value>Dialogbeskrivelser</value>
+  </data>
   <data name="Lists_Idea_Configuration_Field_GtDescription_Description" xml:space="preserve">
-    <value>Angi beskrivelse som skal vises i dialogen for Idébehandling</value>
+    <value>Dialog beskrivelser for 1. Idéregistrering, 2. Idébehandling og 3. Prosjektdata opprettelse, separert med semikolon</value>
   </data>
   <data name="Lists_PhaseChecklistA_Title" xml:space="preserve">
     <value>Fasesjekkliste Anlegg</value>
