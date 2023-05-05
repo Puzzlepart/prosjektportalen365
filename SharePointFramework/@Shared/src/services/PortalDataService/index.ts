@@ -186,7 +186,8 @@ export class PortalDataService {
    *
    * @param report Status report
    * @param reportDate Status report date
-   * @param attachments Status report attachments
+   * @param snapshotContent Snapshot content
+   * @param attachments Attachments to upload in the attachments folder (in a separate hidden library)
    * @param publishedString String value for published state
    */
   public async publishStatusReport(

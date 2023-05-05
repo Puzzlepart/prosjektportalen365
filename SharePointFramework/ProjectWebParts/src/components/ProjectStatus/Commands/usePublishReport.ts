@@ -27,11 +27,20 @@ export function usePublishReport() {
     if (!context.state.isPublishing) {
       try {
         const snapshot = await captureReportSnapshot()
+        const attachments = [
+          {
+            url: 'Snapshot.png',
+            content: snapshot
+          },
+          {
+            url: 'PersistedSectionData.json',
+            content: JSON.stringify(context.state.persistedSectionData)
+          }
+        ]
         const updatedReport = await portalDataService.publishStatusReport(
           context.state.selectedReport,
           moment().format('YYYY-MM-DD HH:mm'),
-          JSON.stringify(context.state.persistedSectionData),
-          snapshot,
+          attachments,
           strings.GtModerationStatus_Choice_Published
         )
         context.dispatch(REPORT_PUBLISHED({ updatedReport, message: null }))
