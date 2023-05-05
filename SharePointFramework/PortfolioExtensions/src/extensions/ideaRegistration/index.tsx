@@ -224,74 +224,92 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    */
   private async _createSitePage(row: RowAccessor) {
     const title: string = row.getValueByName('Title')
-    const page = await this._sp.web.addClientsidePage(title, title, 'Article')
+    const page = await this._sp.web.addClientsidePage(`KUR-${title}`, title, 'Article')
+
+    const reporter = row.getValueByName('GtIdeaReporter')[0] || ''
+
+    page.layoutType = 'NoImage'
+    page.showTopicHeader = true
+    page.topicHeader = 'Idé'
+    page.description = `Konsept utredningsrapport for: ${title}`
 
     page
       .addSection()
-      .addColumn(6)
+      .addColumn(4)
       .addControl(
         new ClientsideText(`
-    <h3>Tittel</h3><br>
+    <h3>Tittel</h3>
      ${row.getValueByName('Title')}
     `)
       )
       .addControl(
         new ClientsideText(`
-      <h3>Bakgrunn</h2><br>
+      <h3>Bakgrunn</h3>
       ${row.getValueByName('GtIdeaBackground')}
       `)
       )
       .addControl(
         new ClientsideText(`
-      <h3>Forslag til løsning</h2><br>
+      <h3>Forslag til løsning</h3>
       ${row.getValueByName('GtIdeaSolutionProposals')}
       `)
       )
       .addControl(
         new ClientsideText(`
-      <h3>Overordnet gjennomføringsplan</h2><br>
+      <h3>Overordnet gjennomføringsplan</h3>
       ${row.getValueByName('GtIdeaExecutionPlan')}
-      `)
-      )
-      .addControl(
-        new ClientsideText(`
-      <h3>Ressursbehov</h2><br>
-      ${row.getValueByName('GtIdeaResourceRequirements')}
       `)
       )
 
     page.sections[0]
-      .addColumn(6)
+      .addColumn(4)
       .addControl(
         new ClientsideText(`
-        <h3>Problemstilling</h2><br> 
+          <h3>Innmelder</h3>
+          <a href="mailto:${reporter.email}" target="_blank">${reporter.title}</a>
+          `)
+      )
+      .addControl(
+        new ClientsideText(`
+      <h3>Ressursbehov</h3>
+      ${row.getValueByName('GtIdeaResourceRequirements')}
+      `)
+      )
+      .addControl(
+        new ClientsideText(`
+        <h3>Problemstilling</h3>
         ${row.getValueByName('GtIdeaIssue')}
         `)
       )
       .addControl(
         new ClientsideText(`
-          <h3>Mulige gevinster</h2><br> 
+          <h3>Mulige gevinster</h3> 
           ${row.getValueByName('GtIdeaPossibleGains')}
           `)
       )
+
+    page.sections[0]
+      .addColumn(4)
       .addControl(
         new ClientsideText(`
-          <h3>Berørte parter</h2><br> 
+          <h3>Berørte parter</h3>
           ${row.getValueByName('GtIdeaAffectedParties')}
           `)
       )
       .addControl(
         new ClientsideText(`
-              <h3>Kritiske suksessfaktorer</h2><br> 
+              <h3>Kritiske suksessfaktorer</h3>
               ${row.getValueByName('GtIdeaCriticalSuccessFactors')}
               `)
       )
       .addControl(
         new ClientsideText(`
-              <h3>Andre kommentarer</h2><br> 
+              <h3>Andre kommentarer</h3>
               ${row.getValueByName('GtIdeaOtherComments')}
               `)
       )
+
+    page.sections[0].emphasis = 1
 
     await page.save()
     Log.info(LOG_SOURCE, 'Site created successfully')
