@@ -1,4 +1,5 @@
 import { IContextualMenuItem } from '@fluentui/react'
+import SPDataAdapter from 'data/SPDataAdapter'
 import { formatDate } from 'pp365-shared/lib/helpers'
 import { useContext } from 'react'
 import { ProjectStatusContext } from '../context'
@@ -13,14 +14,18 @@ import { SELECT_REPORT } from '../reducer'
 export function useReportOptions() {
   const context = useContext(ProjectStatusContext)
   const reportOptions: IContextualMenuItem[] = context.state.data.reports.map((report) => {
-    const isCurrent = context.state.selectedReport
-      ? report.id === context.state.selectedReport.id
-      : false
+    const isCurrent = report.id === context.state.selectedReport?.id
     return {
-      key: `${report.id}`,
+      key: report.id.toString(),
       name: formatDate(report.created, true),
       onClick: () => {
-        context.dispatch(SELECT_REPORT({ report }))
+        // eslint-disable-next-line @typescript-eslint/no-extra-semi
+        ;(async () => {
+          const reportWithAttachments = await SPDataAdapter.portal.getStatusReportAttachments(
+            report
+          )
+          context.dispatch(SELECT_REPORT({ report: reportWithAttachments }))
+        })()
       },
       canCheck: true,
       iconProps: {
