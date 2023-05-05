@@ -1,6 +1,7 @@
 export type StatusReportAttachment = {
+  name?: string
   url: string
-  content: string | ArrayBuffer | Blob
+  content?: string | ArrayBuffer | Blob
   shouldOverWrite?: boolean
 }
 
@@ -10,7 +11,7 @@ export class StatusReport {
   public defaultEditFormUrl: string
   public modified: Date
   public publishedDate: Date
-  public persistedSectionData: Record<string, any>
+  private _attachments: StatusReportAttachment[] = []
 
   /**
    * Creates a new instance of StatusReport
@@ -23,7 +24,31 @@ export class StatusReport {
     this.created = new Date(item.Created)
     this.modified = new Date(item.Modified)
     this.publishedDate = item.GtLastReportDate ? new Date(item.GtLastReportDate) : null
-    this.persistedSectionData = JSON.parse(item.GtSectionDataJson ?? '{}')
+  }
+
+  public initAttachments(attachments: StatusReportAttachment[]): StatusReport {
+    this._attachments = attachments
+    return this
+  }
+
+  public get persistedSectionData(): Record<string, any> {
+    const persistedSectionData = this._attachments.find(
+      (a) => a.name.toLowerCase() === 'persistedsectiondata.json'
+    )
+    try {
+      if (persistedSectionData) {
+        return JSON.parse(persistedSectionData.content as string)
+      }
+      return null
+    } catch (error) {
+      return null
+    }
+  }
+
+  public get snapshotUrl(): string {
+    const snapshot = this._attachments.find((a) => a.name.toLowerCase() === 'snapshot.png')
+    if (snapshot) return snapshot.url
+    return null
   }
 
   /**

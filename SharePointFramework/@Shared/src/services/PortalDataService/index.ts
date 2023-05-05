@@ -163,7 +163,7 @@ export class PortalDataService {
 
   /**
    * Ensures a folder in the attachments library for the status report.
-   * 
+   *
    * @param report Status report
    */
   private async ensureAttachmentsFolder(report: StatusReport): Promise<Folder> {
@@ -195,7 +195,9 @@ export class PortalDataService {
     attachments: StatusReportAttachment[],
     publishedString?: string
   ): Promise<StatusReport> {
-    const projectStatusList = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
+    const projectStatusList = this.web.lists.getByTitle(
+      this._configuration.listNames.PROJECT_STATUS
+    )
     try {
       const attachmentsFolder = await this.ensureAttachmentsFolder(report)
       const properties: Record<string, string> = {
@@ -204,7 +206,9 @@ export class PortalDataService {
       }
       await Promise.all([
         projectStatusList.items.getById(report.id).update(properties),
-        ...attachments.map(att => attachmentsFolder.files.add(att.url, att.content, att.shouldOverWrite))
+        ...attachments.map((att) =>
+          attachmentsFolder.files.add(att.url, att.content, att.shouldOverWrite)
+        )
       ])
       return new StatusReport({ ...report.item, ...properties }, publishedString)
     } catch (error) {
@@ -364,7 +368,7 @@ export class PortalDataService {
           fieldToCreate.updateAndPushChanges(true)
         }
         await executeQuery(jsomContext)
-      } catch (error) { }
+      } catch (error) {}
     }
     try {
       Logger.log({
@@ -380,7 +384,7 @@ export class PortalDataService {
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch { }
+    } catch {}
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }
@@ -500,14 +504,14 @@ export class PortalDataService {
       filter = `GtSiteId eq '${this._configuration.pageContext.site.id.toString()}'`
     try {
       const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
-      let items = list.items.filter(filter)
+      let items = list.items
+        .filter(filter)
         .expand('FieldValuesAsText', 'AttachmentFiles')
         .orderBy('Id', false)
       if (top) items = items.top(top)
       if (select) items = items.select(...select)
       if (useCaching) items = items.usingCaching()
       const reports = (await items.get()).map((i) => new StatusReport(i, publishedString))
-      console.log(reports)
       return reports
     } catch (error) {
       throw error
@@ -515,24 +519,28 @@ export class PortalDataService {
   }
 
   /**
-   * Get attachments for the specified status report.
-   * 
+   * Get attachments for the specified status report. If the attachment filename
+   * contains `.txt` or `.json` the content will be fetched and added to the
+   * attachment object.
+   *
    * @param report Status report
    */
   public async getStatusReportAttachments(report: StatusReport): Promise<StatusReport> {
     const attachmentsFolder = await this.ensureAttachmentsFolder(report)
     const attachmentFiles = await attachmentsFolder.files.usingCaching().get()
     const attachmentFilesContent = await Promise.all(
-      attachmentFiles.map(async (file) => {
-        const fileContent = await this.web.getFileByServerRelativeUrl(file.ServerRelativeUrl).getBlob()
-        return {
-          name: file.Name,
-          content: fileContent
+      attachmentFiles.map(async ({ Name: name, ServerRelativeUrl: url }) => {
+        const attachment: StatusReportAttachment = {
+          name,
+          url
         }
+        if (url.indexOf('.txt') !== -1 || url.indexOf('.json') !== -1) {
+          attachment.content = await this.web.getFileByServerRelativeUrl(url).getText()
+        }
+        return attachment
       })
     )
-    console.log(attachmentFilesContent)
-    return report
+    return report.initAttachments(attachmentFilesContent)
   }
 
   /**
