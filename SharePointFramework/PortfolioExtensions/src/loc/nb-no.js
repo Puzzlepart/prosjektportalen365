@@ -2,7 +2,7 @@ define([], function () {
   return {
     SetRecommendationTitle: 'Sett anbefaling',
     SetRecommendationSubtitle: 'Velg anbefaling for: {0}. \n\n{1}',
-    SetRecommendationDefaultDescription: 'Dersom idéen blir godkjent vil det bli opprettet en detaljert idé-side for idéen og et element i<a href="../Idebehandling/AllItems.aspx" target="_blank">Idébehandlingslisten</a>.',
+    SetRecommendationDefaultDescription: 'Dersom idéen blir godkjent vil det bli opprettet en detaljert idé-side for idéen og et element i<a href="../Idebehandling/AllItems.aspx" target="_blank">Idébehandlingslisten</a>.;Dersom idéen blir godkjent vil det være mulig å opprette prosjektdata som kan bli brukt for provisjonering av området.;Tilknytt prosjektdata til idéen for å synkronisere data til et prosjekt senere.',
     IdeaProjectDataDialogTitle: 'Opprett prosjektdata for idéen',
     IdeaProjectDataDialogSubText: 'Tilknytt prosjektdata til idéen for å synkronisere data til et prosjekt senere.',
     IdeaProjectDataDialogInfoText: 'Denne handlingen vil opprette et element i<a href="../Prosjektdata/AllItems.aspx" target="_blank">prosjektdata</a> listen for valgt idé.',

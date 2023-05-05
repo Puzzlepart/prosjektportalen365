@@ -12,7 +12,7 @@ export class SPIdeaConfigurationItem {
 
 export class IdeaConfigurationModel {
   public title: string
-  public description: string
+  public description: string[]
   public processingList: string
   public registrationList: string
 
@@ -23,7 +23,7 @@ export class IdeaConfigurationModel {
    */
   constructor(item: SPIdeaConfigurationItem) {
     this.title = item.Title
-    this.description = item.GtDescription
+    this.description = item.GtDescription.split(';')
     this.processingList = item.GtIdeaProcessingList
     this.registrationList = item.GtIdeaRegistrationList
   }

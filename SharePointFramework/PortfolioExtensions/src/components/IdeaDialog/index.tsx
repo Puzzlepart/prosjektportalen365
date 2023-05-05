@@ -18,6 +18,7 @@ interface IDialogContentProps {
   close: () => void
   submit: () => void
   ideaTitle?: string
+  dialogDescription?: string
   isBlocked?: boolean
 }
 
@@ -30,17 +31,17 @@ class IdeaDialog extends React.Component<IDialogContentProps> {
     return (
       <DialogContent
         title={strings.IdeaProjectDataDialogTitle}
-        subText={format(strings.IdeaProjectDataDialogSubText, this.props.ideaTitle)}
         onDismiss={this.props.close}
         type={DialogType.largeHeader}
         showCloseButton={true}
+        styles={{ content: { maxWidth: '420px' } }}
         closeButtonAriaLabel={strings.CloseLabel}
       >
         <UserMessage
           text={format(
             this.props.isBlocked
               ? strings.IdeaProjectDataDialogBlockedText
-              : strings.IdeaProjectDataDialogInfoText,
+              : this.props.dialogDescription,
             encodeURIComponent(window.location.href)
           )}
           type={this.props.isBlocked ? MessageBarType.warning : MessageBarType.info}
@@ -65,6 +66,7 @@ class IdeaDialog extends React.Component<IDialogContentProps> {
 
 export default class ProjectDataDialog extends BaseDialog {
   public ideaTitle: string
+  public dialogDescription: string
   public isBlocked: boolean
 
   public render(): void {
@@ -73,6 +75,7 @@ export default class ProjectDataDialog extends BaseDialog {
         close={this.close}
         submit={this.submit}
         ideaTitle={this.ideaTitle}
+        dialogDescription={this.dialogDescription}
         isBlocked={this.isBlocked}
       />,
       this.domElement

@@ -57,6 +57,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
         const row = event.selectedRows[0]
 
         dialog.ideaTitle = row.getValueByName('Title')
+        dialog.dialogDescription = this._ideaConfig.description[2] || strings.SetRecommendationDefaultDescription.split(';')[2]
         dialog.isBlocked = !!row.getValueByName('GtIdeaProjectData')
         dialog.show()
         dialog.submit = this._onSubmit.bind(this, row)
@@ -66,6 +67,9 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
     }
   }
 
+  /**
+   * Get the idea configuration from the IdeaConfiguration list
+   */
   private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
     const ideaConfig = await this._sp.web.lists
       .getByTitle(strings.IdeaConfigurationTitle)
@@ -74,6 +78,9 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
     return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
   }
 
+  /**
+   * On ListView state changed, check if the user is authorized to use this command
+   */
   private _onListViewStateChanged = async (): Promise<void> => {
     Logger.log({
       message: '(IdeaProjectDataCommand) onListViewStateChanged: ListView state changed',

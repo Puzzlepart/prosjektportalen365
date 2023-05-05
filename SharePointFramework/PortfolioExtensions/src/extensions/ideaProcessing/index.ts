@@ -59,7 +59,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         const row = event.selectedRows[0]
 
         dialog.ideaTitle = row.getValueByName('Title')
-        dialog.dialogDescription = this._ideaConfig.description || strings.SetRecommendationDefaultDescription
+        dialog.dialogDescription = this._ideaConfig.description[1] || strings.SetRecommendationDefaultDescription.split(';')[1]
         dialog.show().then(() => {
           if (dialog.comment && dialog.selectedChoice === strings.ApproveChoice) {
             this._onSubmit(row, dialog.comment)
@@ -77,6 +77,9 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
     }
   }
 
+  /**
+   * Get the idea configuration from the IdeaConfiguration list
+   */
   private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
     const ideaConfig = await this._sp.web.lists
       .getByTitle(strings.IdeaConfigurationTitle)
@@ -85,6 +88,9 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
     return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
   }
 
+  /**
+   * On ListView state changed, check if the user is authorized to use this command
+   */
   private _onListViewStateChanged = async (): Promise<void> => {
     Logger.log({
       message: '(IdeaProcessCommand) onListViewStateChanged: ListView state changed',
