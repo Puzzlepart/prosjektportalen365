@@ -11,10 +11,14 @@ import _ from 'lodash'
 import { parseUrlHash, getUrlParam } from 'pp365-shared/lib/util'
 import { StatusReport } from 'pp365-shared/lib/models'
 
-export type FetchDataResult = { data: IProjectStatusData, initialSelectedReport: StatusReport, sourceUrl: string }
+export type FetchDataResult = {
+  data: IProjectStatusData
+  initialSelectedReport: StatusReport
+  sourceUrl: string
+}
 
 /**
- * Fetch data for `ProjectStatus`. Feetches project properties, status report list properties, 
+ * Fetch data for `ProjectStatus`. Feetches project properties, status report list properties,
  * status reports, project status sections, project column config, and project status list fields.
  * If the selected report is published, the attachments for the report are also fetched.
  */
@@ -71,7 +75,9 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
       )
     }
     if (initialSelectedReport.published) {
-      initialSelectedReport = await SPDataAdapter.portal.getStatusReportAttachments(initialSelectedReport)
+      initialSelectedReport = await SPDataAdapter.portal.getStatusReportAttachments(
+        initialSelectedReport
+      )
       sortedReports = sortedReports.map((report) => {
         if (report.id === initialSelectedReport.id) {
           return initialSelectedReport
@@ -90,7 +96,7 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
         userHasAdminPermission
       },
       initialSelectedReport,
-      sourceUrl,
+      sourceUrl
     }
   } catch (error) {
     throw strings.ProjectStatusDataErrorText
@@ -99,7 +105,7 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
 
 /**
  * Fetch hook for `ProjectStatus`. Only fetches data on mount using
- * useEffect with an empty dependency array.
+ * `useEffect` with an empty dependency array.
  *
  * @param props Component properties for `ProjectStatus`
  * @param dispatch Dispatcer

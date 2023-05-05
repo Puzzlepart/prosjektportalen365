@@ -8,7 +8,7 @@ import { IProjectStatusState } from './types'
 import { FetchDataResult } from './useProjectStatusDataFetch'
 
 /**
- * `INIT_DATA`: Dispatched by `useProjectStatusDataFetch` when data is loaded 
+ * `INIT_DATA`: Dispatched by `useProjectStatusDataFetch` when data is loaded
  */
 export const INIT_DATA = createAction<FetchDataResult>('INIT_DATA')
 
@@ -118,7 +118,9 @@ const createProjectStatusReducer = createReducer(initialState, {
     state: IProjectStatusState,
     { payload }: ReturnType<typeof SELECT_REPORT>
   ) => {
-    state.data.reports = state.data.reports.map((r) => payload.report.id === r.id ? payload.report : r)
+    state.data.reports = state.data.reports.map((r) =>
+      payload.report.id === r.id ? payload.report : r
+    )
     state.selectedReport = payload.report
     state.isDataLoaded = true
   },

@@ -7,7 +7,6 @@ import { CLEAR_USER_MESSAGE, REPORT_PUBLISHED, REPORT_PUBLISH_ERROR } from '../r
 import { useCaptureReportSnapshot } from './useCaptureReportSnapshot'
 import { MessageBarType } from '@fluentui/react'
 
-
 /**
  * Hook for publishing of reports. Returns a callback function
  * for publishing the selected report. The hook `useCaptureReport`
@@ -48,8 +47,7 @@ export function usePublishReport() {
         context.dispatch(
           REPORT_PUBLISH_ERROR({ message: { text: error.message, type: MessageBarType.error } })
         )
-      }
-      finally {
+      } finally {
         window.setTimeout(() => {
           context.dispatch(CLEAR_USER_MESSAGE())
         }, 8000)

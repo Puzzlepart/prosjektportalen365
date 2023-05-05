@@ -5,6 +5,9 @@ export type StatusReportAttachment = {
   shouldOverWrite?: boolean
 }
 
+/**
+ * Status report model. Represents a status report item in SharePoint.
+ */
 export class StatusReport {
   public id: number
   public created: Date
@@ -26,11 +29,20 @@ export class StatusReport {
     this.publishedDate = item.GtLastReportDate ? new Date(item.GtLastReportDate) : null
   }
 
+  /**
+   * Initialize attachments for the report and returns the report.
+   * 
+   * @param attachments Attachments
+   */
   public initAttachments(attachments: StatusReportAttachment[]): StatusReport {
     this._attachments = attachments
     return this
   }
 
+  /**
+   * Get persisted section data from the report. If no persisted section data is found, null is returned.
+   * If the JSON is invalid, null is returned.
+   */
   public get persistedSectionData(): Record<string, any> {
     const persistedSectionData = this._attachments.find(
       (a) => a.name.toLowerCase() === 'persistedsectiondata.json'
@@ -45,6 +57,9 @@ export class StatusReport {
     }
   }
 
+  /**
+   * Get snapshot url for the report.
+   */
   public get snapshotUrl(): string {
     const snapshot = this._attachments.find((a) => a.name.toLowerCase() === 'snapshot.png')
     if (snapshot) return snapshot.url

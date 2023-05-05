@@ -24,7 +24,8 @@ export function useUncertaintySection() {
   const shouldRenderContent = !_.isEmpty(state.data?.items)
 
   useEffect(() => {
-    const persistedData = selectedReport.persistedSectionData && selectedReport.persistedSectionData[section.id]
+    const persistedData =
+      selectedReport.persistedSectionData && selectedReport.persistedSectionData[section.id]
     if (persistedData) {
       setState({ data: persistedData, isDataLoaded: true })
     } else {

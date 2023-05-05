@@ -40,35 +40,35 @@ export function useCommands() {
       onClick: redirectNewStatusReport
     },
     context.state.selectedReport &&
-    context.state.userHasAdminPermission && {
-      key: 'DELETE_REPORT',
-      name: strings.DeleteReportButtonText,
-      iconProps: { iconName: 'Delete' },
-      disabled: context.state.selectedReport?.published || context.state.isPublishing,
-      onClick: () => {
-        deleteReport()
-      }
-    },
+      context.state.userHasAdminPermission && {
+        key: 'DELETE_REPORT',
+        name: strings.DeleteReportButtonText,
+        iconProps: { iconName: 'Delete' },
+        disabled: context.state.selectedReport?.published || context.state.isPublishing,
+        onClick: () => {
+          deleteReport()
+        }
+      },
     context.state.selectedReport &&
-    context.state.userHasAdminPermission && {
-      key: 'EDIT_REPORT',
-      name: strings.EditReportButtonText,
-      iconProps: { iconName: 'Edit' },
-      href: getEditFormUrl(context.state.selectedReport),
-      disabled: context.state.selectedReport?.published || context.state.isPublishing
-    },
+      context.state.userHasAdminPermission && {
+        key: 'EDIT_REPORT',
+        name: strings.EditReportButtonText,
+        iconProps: { iconName: 'Edit' },
+        href: getEditFormUrl(context.state.selectedReport),
+        disabled: context.state.selectedReport?.published || context.state.isPublishing
+      },
     context.state.selectedReport &&
-    context.state.userHasAdminPermission &&
-    !context.state.isPublishing && {
-      key: 'PUBLISH_REPORT',
-      name: strings.PublishReportButtonText,
-      iconProps: { iconName: 'PublishContent' },
-      disabled: context.state.selectedReport?.published,
-      onClick: () => {
-        context.dispatch(REPORT_PUBLISHING())
-        publishReport()
-      }
-    },
+      context.state.userHasAdminPermission &&
+      !context.state.isPublishing && {
+        key: 'PUBLISH_REPORT',
+        name: strings.PublishReportButtonText,
+        iconProps: { iconName: 'PublishContent' },
+        disabled: context.state.selectedReport?.published,
+        onClick: () => {
+          context.dispatch(REPORT_PUBLISHING())
+          publishReport()
+        }
+      },
     context.state.isPublishing && {
       key: 'IS_PUBLISHING',
       onRender: () => (
@@ -96,7 +96,7 @@ export function useCommands() {
       iconProps: { iconName: 'Photo2' },
       disabled: !context.state.selectedReport?.snapshotUrl || context.state.isPublishing,
       onClick: () => {
-        window.open(context.state.selectedReport?.snapshotUrl, '_blank')
+        window.open(context.state.selectedReport?.snapshotUrl)
       }
     })
   }

@@ -19,8 +19,10 @@ export function useReportOptions() {
       key: report.id.toString(),
       name: formatDate(report.created, true),
       onClick: () => {
-        (async () => {
-          const reportWithAttachments = await SPDataAdapter.portal.getStatusReportAttachments(report)
+        ;(async () => {
+          const reportWithAttachments = await SPDataAdapter.portal.getStatusReportAttachments(
+            report
+          )
           context.dispatch(SELECT_REPORT({ report: reportWithAttachments }))
         })()
       },
