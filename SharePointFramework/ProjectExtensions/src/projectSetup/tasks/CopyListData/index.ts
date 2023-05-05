@@ -102,6 +102,9 @@ export class CopyListData extends BaseTask {
       obj[item.GtCategory] = obj[item.GtCategory] || {}
       const taskDetails: ITaskDetails = {}
       taskDetails.previewType = 'automatic'
+      if (!stringIsNullOrEmpty(item.Title)) {
+        taskDetails.name = item.Title
+      }
       if (!stringIsNullOrEmpty(item.GtDescription)) {
         taskDetails.description = item.GtDescription
       }
@@ -142,6 +145,7 @@ export class CopyListData extends BaseTask {
           title: params.context.pageContext.web.title,
           owner: params.context.pageContext.legacyPageContext.groupId
         },
+        params.context.pageContext,
         false
       )
     }

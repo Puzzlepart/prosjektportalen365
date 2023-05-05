@@ -219,5 +219,7 @@ define([], function () {
     WebPartNotConfiguredMessage: 'Webdelen er ikke konfigurert riktig. Du må angi webpartegenskaper riktig.',
     WidthFieldLabel: 'Bredde (piksler)',
     Yes: 'Ja',
+    PublishStatusReportSectionDataWarning: 'Prosjektstatusen ble publisert, men uten å persistere listedata. Dette kan føre til feil ved visning av statusrapporten.',
+    PublishReportSpinnerText: 'Vennligst vent mens statusrapporten publiseres...'
   }
 })
