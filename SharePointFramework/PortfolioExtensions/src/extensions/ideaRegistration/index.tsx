@@ -85,8 +85,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     }
   }
 
-  // TODO: REFRESH WHEN SUBMITTING
-
   private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
     const ideaConfig = await this._sp.web.lists
       .getByTitle(strings.IdeaConfigurationTitle)
@@ -137,7 +135,10 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         GtIdeaRecommendation: RecommendationType.Rejected,
         GtIdeaRecommendationComment: comment
       })
-      .then(() => Log.info(LOG_SOURCE, `Updated ${this._ideaConfig.registrationList}: Rejected`))
+      .then(() => {
+        Log.info(LOG_SOURCE, `Updated ${this._ideaConfig.registrationList}: Rejected`)
+        window.location.reload()
+      })
   }
 
   /**
@@ -155,7 +156,10 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         GtIdeaRecommendation: RecommendationType.Consideration,
         GtIdeaRecommendationComment: comment
       })
-      .then(() => Log.info(LOG_SOURCE, `Updated ${this._ideaConfig.registrationList}: Consideration`))
+      .then(() => {
+        Log.info(LOG_SOURCE, `Updated ${this._ideaConfig.registrationList}: Consideration`)
+        window.location.reload()
+      })
   }
 
   /**
@@ -176,7 +180,9 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         GtIdeaRecommendation: RecommendationType.Approved,
         GtIdeaRecommendationComment: comment
       })
-      .then(() => Log.info(LOG_SOURCE, `Updated ${this._ideaConfig.registrationList}: Approved`))
+      .then(() => {
+        Log.info(LOG_SOURCE, `Updated ${this._ideaConfig.registrationList}: Approved`)
+      })
       .catch((e) => Log.error(LOG_SOURCE, e))
 
     this._updateProcessingList(rowId, rowTitle)
@@ -283,6 +289,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
 
     await page.save()
     Log.info(LOG_SOURCE, 'Site created successfully')
+    window.location.reload()
   }
 
   /**

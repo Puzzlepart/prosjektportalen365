@@ -121,7 +121,10 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         GtIdeaDecision: RecommendationType.Rejected,
         GtIdeaDecisionComment: comment
       })
-      .then(() => Logger.log({ message: 'Updated Idébehandling', level: LogLevel.Info }))
+      .then(() => {
+        Logger.log({ message: 'Updated Idébehandling', level: LogLevel.Info })
+        window.location.reload()
+      })
   }
 
   /**
@@ -139,7 +142,10 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         GtIdeaDecision: RecommendationType.Consideration,
         GtIdeaDecisionComment: comment
       })
-      .then(() => Logger.log({ message: 'Updated Idébehandling', level: LogLevel.Info }))
+      .then(() => {
+        Logger.log({ message: 'Updated Idébehandling', level: LogLevel.Info })
+        window.location.reload()
+      })
   }
 
   /**
@@ -157,6 +163,9 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         GtIdeaDecision: RecommendationType.Approved,
         GtIdeaDecisionComment: comment
       })
-      .then(() => Logger.log({ message: 'Updated Idébehandling', level: LogLevel.Info }))
+      .then(() => {
+        Logger.log({ message: 'Updated Idébehandling', level: LogLevel.Info })
+        window.location.reload()
+      })
   }
 }
