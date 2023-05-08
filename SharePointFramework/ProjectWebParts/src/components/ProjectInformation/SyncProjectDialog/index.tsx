@@ -156,7 +156,6 @@ export const SyncProjectDialog: FC = () => {
 
     try {
       await projectPropertiesList.items.getById(propertiesItem.Id).update(properties).then(async () => {
-        console.log(properties)
         await updateIdeaProcessingItem(projectDataId).then(() => {
           setSyncing(false)
           setHasSynced(true)
