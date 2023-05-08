@@ -262,6 +262,18 @@
   <data name="Lists_IdeaRegistration_Url" xml:space="preserve">
     <value>Lists/Ideregistrering</value>
   </data>
+  <data name="Lists_Idea_Configuration_Title" xml:space="preserve">
+    <value>Idékonfigurasjon</value>
+  </data>
+  <data name="Lists_Idea_Configuration_Url" xml:space="preserve">
+    <value>Lists/Idekonfigurasjon</value>
+  </data>
+  <data name="Lists_Idea_Configuration_Field_GtDescription_DisplayName" xml:space="preserve">
+    <value>Dialogbeskrivelser</value>
+  </data>
+  <data name="Lists_Idea_Configuration_Field_GtDescription_Description" xml:space="preserve">
+    <value>Dialog beskrivelser for 1. Idéregistrering, 2. Idébehandling og 3. Prosjektdata opprettelse, separert med semikolon</value>
+  </data>
   <data name="Lists_PhaseChecklistA_Title" xml:space="preserve">
     <value>Fasesjekkliste Anlegg</value>
   </data>
@@ -303,6 +315,9 @@
   </data>
   <data name="View_AllDocuments_DisplayName" xml:space="preserve">
     <value>Alle dokumenter</value>
+  </data>
+  <data name="View_Cards_DisplayName" xml:space="preserve">
+    <value>Kortvisning</value>
   </data>
   <data name="ContentTypes_Group" xml:space="preserve">
     <value>Prosjektportalen innholdstyper</value>
@@ -501,6 +516,12 @@
   </data>
   <data name="ContentTypes_IdeaProcessing_Description" xml:space="preserve">
     <value>Innholdstype for idébehandling (Idébehandling)</value>
+  </data>
+  <data name="ContentTypes_Idea_Configuration_Element_Name" xml:space="preserve">
+    <value>Idékonfigurasjonelement</value>
+  </data>
+  <data name="ContentTypes_Idea_Configuration_Element_Description" xml:space="preserve">
+    <value>Innholdstype for idékonfigurasjon (Idébehandling)</value>
   </data>
    <data name="ContentTypes_HelpContent_Name" xml:space="preserve">
     <value>Hjelpeinnhold</value>
@@ -1881,6 +1902,108 @@
   </data>
   <data name="SiteFields_GtRegistratedIdea_Description" xml:space="preserve">
     <value>Registrert idé tilknytning</value>
+  </data>
+  <data name="SiteFields_GtIdeaRegistrationList_DisplayName" xml:space="preserve">
+    <value>Idéregistrering</value>
+  </data>
+  <data name="SiteFields_GtIdeaRegistrationList_Description" xml:space="preserve">
+    <value>Hvilken idéregisreringsliste skal elementet kobles mot?</value>
+  </data>
+  <data name="SiteFields_GtIdeaProcessingList_DisplayName" xml:space="preserve">
+    <value>Idébehandling</value>
+  </data>
+  <data name="SiteFields_GtIdeaProcessingList_Description" xml:space="preserve">
+    <value>Hvilken idébehandlingsliste skal elementet kobles mot?</value>
+  </data>
+  <data name="SiteFields_GtIdeaReporter_DisplayName" xml:space="preserve">
+    <value>Innmelder</value>
+  </data>
+  <data name="SiteFields_GtIdeaReporter_Description" xml:space="preserve">
+    <value>Innmelder av idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaStrategicValue_DisplayName" xml:space="preserve">
+    <value>Strategisk verdi</value>
+  </data>
+  <data name="SiteFields_GtIdeaStrategicValue_Description" xml:space="preserve">
+    <value>Den strategiske verdien for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaQualityBenefit_DisplayName" xml:space="preserve">
+    <value>Kvalitativ gevinst</value>
+  </data>
+  <data name="SiteFields_GtIdeaQualityBenefit_Description" xml:space="preserve">
+    <value>Den kvalitative gevinsten for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaEconomicBenefit_DisplayName" xml:space="preserve">
+    <value>Økonomisk gevinst</value>
+  </data>
+  <data name="SiteFields_GtIdeaEconomicBenefit_Description" xml:space="preserve">
+    <value>Den økonomiske gevinsten for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaOperationalNeed_DisplayName" xml:space="preserve">
+    <value>Operasjonelt behov/lovpålagt</value>
+  </data>
+  <data name="SiteFields_GtIdeaOperationalNeed_Description" xml:space="preserve">
+    <value>Operasjonelt behov for idéen (Lovpålagt)</value>
+  </data>
+  <data name="SiteFields_GtIdeaRisk_DisplayName" xml:space="preserve">
+    <value>Risiko</value>
+  </data>
+  <data name="SiteFields_GtIdeaRisk_Description" xml:space="preserve">
+    <value>Risiko for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaStrategicNumber_DisplayName" xml:space="preserve">
+    <value>Strategisk verdi (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaStrategicNumber_Description" xml:space="preserve">
+    <value>Strategisk verdi for idéen (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaQualityNumber_DisplayName" xml:space="preserve">
+    <value>Kvalitativ gevinst (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaQualityNumber_Description" xml:space="preserve">
+    <value>Kvalitativ gevinst for idéen (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaEconomicNumber_DisplayName" xml:space="preserve">
+    <value>Økonomisk gevinst (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaEconomicNumber_Description" xml:space="preserve">
+    <value>Økonomisk gevinst for idéen (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaOperationalNumber_DisplayName" xml:space="preserve">
+    <value>Operasjonelt behov/lovpålagt (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaOperationalNumber_Description" xml:space="preserve">
+    <value>Operasjonelt behov/lovpålagt for idéen (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaRiskNumber_DisplayName" xml:space="preserve">
+    <value>Risiko (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaRiskNumber_Description" xml:space="preserve">
+    <value>Risiko for idéen (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaManualScore_DisplayName" xml:space="preserve">
+    <value>Justering</value>
+  </data>
+  <data name="SiteFields_GtIdeaManualScore_Description" xml:space="preserve">
+    <value>Justering av idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaManualComment_DisplayName" xml:space="preserve">
+    <value>Kommentar til justering</value>
+  </data>
+  <data name="SiteFields_GtIdeaManualComment_Description" xml:space="preserve">
+    <value>Kommentar til justeringen for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaScore_DisplayName" xml:space="preserve">
+    <value>Score</value>
+  </data>
+  <data name="SiteFields_GtIdeaScore_Description" xml:space="preserve">
+    <value>Score for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaPriority_DisplayName" xml:space="preserve">
+    <value>Prioritering</value>
+  </data>
+  <data name="SiteFields_GtIdeaPriority_Description" xml:space="preserve">
+    <value>Prioritering for idéen</value>
   </data>
   <data name="SiteFields_GtBAEndDateOriginal_DisplayName" xml:space="preserve">
     <value>Opprinnelig overtakelsesdato</value>

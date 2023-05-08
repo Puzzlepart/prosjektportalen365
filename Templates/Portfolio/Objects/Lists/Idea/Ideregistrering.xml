@@ -21,6 +21,7 @@
                 <FieldRef Name="GtIdeaCriticalSuccessFactors" />
                 <FieldRef Name="GtIdeaResourceRequirements" />
                 <FieldRef Name="GtIdeaOtherComments" />
+                <FieldRef Name="GtIdeaReporter" />
                 <FieldRef Name="GtIdeaRecommendationComment" />
                 <FieldRef Name="GtIdeaRecommendation" />
             </ViewFields>

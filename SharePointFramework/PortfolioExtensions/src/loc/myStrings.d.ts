@@ -11,6 +11,7 @@ declare interface IPortfolioExtensionsStrings {
   LatestGitHubReleaseLabel: string | number | boolean | {} | ReactElement<any, string | JSXElementConstructor<any>> | ReactNodeArray | ReactPortal
   SetRecommendationTitle: string
   SetRecommendationSubtitle: string
+  SetRecommendationDefaultDescription: string
   IdeaProjectDataDialogTitle: string
   IdeaProjectDataDialogSubText: string
   IdeaProjectDataDialogInfoText: string
@@ -21,6 +22,7 @@ declare interface IPortfolioExtensionsStrings {
   IdeaRegistrationTitle: string
   IdeaRegistrationUrlTitle: string
   IdeaProjectDataTitle: string
+  IdeaConfigurationTitle: string
   ApproveChoice: string
   ConsiderationChoice: string
   RejectChoice: string

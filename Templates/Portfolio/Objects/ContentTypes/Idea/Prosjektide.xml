@@ -11,6 +11,7 @@
     <pnp:FieldRef ID="75128bec-1b29-401a-88d7-bfecb6f686f1" Name="GtIdeaCriticalSuccessFactors" UpdateChildren="true" />
     <pnp:FieldRef ID="31fe864a-4642-4e0f-bea3-6c1e2a0286be" Name="GtIdeaResourceRequirements" UpdateChildren="true" />
     <pnp:FieldRef ID="ebb77296-0d25-42a3-b996-d7396f84d8ce" Name="GtIdeaOtherComments" UpdateChildren="true" />
+    <pnp:FieldRef ID="acf4112b-cf26-4797-831e-a0b7d40975ab" Name="GtIdeaReporter" UpdateChildren="true" />
     <pnp:FieldRef ID="4a0afef0-8ddf-45a7-a3a3-07b0a8cd615a" Name="GtIdeaRecommendationComment" UpdateChildren="true" />
     <pnp:FieldRef ID="b6187d45-9848-4d13-89a2-e6049c7fbb9d" Name="GtIdeaRecommendation" UpdateChildren="true" />
   </pnp:FieldRefs>

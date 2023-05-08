@@ -1,0 +1,1 @@
+<Field Type="Text" DisplayName="{resource:SiteFields_GtIdeaProcessingList_DisplayName}" Description="{resource:SiteFields_GtIdeaProcessingList_Description}" Group="{resource:SiteFields_Idea_Group}" ID="{fb61c88d-33ff-4f00-b3c6-d503a94db8fb}" StaticName="GtIdeaProcessingList" Name="GtIdeaProcessingList" />

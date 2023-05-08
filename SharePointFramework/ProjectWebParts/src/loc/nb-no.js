@@ -76,6 +76,8 @@ define([], function () {
     IdeaProcessingTitle: 'Idébehandling',
     IdeaProcessingUrlTitle: 'Idebehandling',
     IdeaProjectDataTitle: 'Prosjektdata',
+    IdeaConfigurationTitle: 'Idékonfigurasjon',
+    IdeaConfigurationDescription: 'Hvilken konfigurasjon skal brukes for synkroniser av idéer?',
     LastPublishedStatusreport: 'Gå til siste statusrapport',
     ListNameFieldLabel: 'Listenavn',
     ListSectionDataErrorMessage: 'Det skjedde en feil under uthenting av data for seksjonen. Er den riktig konfigurert?',

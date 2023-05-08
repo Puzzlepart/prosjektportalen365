@@ -1,0 +1,9 @@
+<Field ID="{37b7f04e-b158-49eb-96f3-637ce1292e75}" Name="GtIdeaEconomicBenefit" StaticName="GtIdeaEconomicBenefit" DisplayName="{resource:SiteFields_GtIdeaEconomicBenefit_DisplayName}" Description="{resource:SiteFields_GtIdeaEconomicBenefit_Description}" Type="Choice" Group="{resource:SiteFields_Idea_Group}" ShowInNewForm="TRUE" ShowInEditForm="TRUE">
+  <CHOICES>
+    <CHOICE>1=Prosjektets leveranser gir ikke noen kjent økonomisk gevinst, eller vil lede til negativ økonomisk gevinst (f.eks. prosjekter som er lovpålagte/må gjennomføres, men som vil medføre kost)</CHOICE>
+    <CHOICE>2=Prosjektets leveranser gir begrenset målbar og realiserbar gevinst</CHOICE>
+    <CHOICE>3=Prosjektets leveranser gir potensielt målbar gevinst, men realiserbarheten er usikker. Det kan være vanskelig å ta ut gevinst</CHOICE>
+    <CHOICE>4=Prosjektets leveranser forventes å gi både målbar og realiserbar gevinst. Gevinsten kan tas ut i form av redusert kostnader</CHOICE>
+    <CHOICE>5=Prosjektets leveranser gir stor målbar og realiserbar økonomisk gevinst</CHOICE>
+  </CHOICES>
+</Field>
