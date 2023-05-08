@@ -10,6 +10,7 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Støtte for å installere til ulike kanaler for å støtte separate installasjoner i samme tenant [#1068](https://github.com/Puzzlepart/prosjektportalen365/issues/1068)
 - Mulighet for å angi etiketter på planneroppgaver [#1083](https://github.com/Puzzlepart/prosjektportalen365/issues/1083)
 - Støtte for tooltip-kolonne i porteføljeoversikten [#1079](https://github.com/Puzzlepart/prosjektportalen365/issues/1079)
+- Prosjektscoring og idékonfigurasjon for å støtte flere forskjellige idéoppsett [#1082](https://github.com/Puzzlepart/prosjektportalen365/issues/1082)
 
 ### Forbedringer
 
