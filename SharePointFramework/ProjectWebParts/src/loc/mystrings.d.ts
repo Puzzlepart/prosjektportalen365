@@ -70,6 +70,8 @@ declare interface IProjectWebPartsStrings {
   IdeaProcessingTitle: string
   IdeaProcessingUrlTitle: string
   IdeaProjectDataTitle: string
+  IdeaConfigurationTitle: string
+  IdeaConfigurationDescription: string
   LastPublishedStatusreport: string
   ListNameFieldLabel: string
   ListSectionDataErrorMessage: string
@@ -77,7 +79,7 @@ declare interface IProjectWebPartsStrings {
   LogListName: string
   LookAndFeelGroupName: string
   MatrixColorScaleConfigLabel: string
-  MatrixFullWidthLabel: string 
+  MatrixFullWidthLabel: string
   MatrixHeader_Critical: string
   MatrixHeader_ExtremelyHigh: string
   MatrixHeader_ExtremelyLarge: string

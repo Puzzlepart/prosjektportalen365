@@ -80,8 +80,10 @@ export const SyncProjectDialog: FC = () => {
 
   async function updateIdeaProcessingItem(projectDataItemId: number) {
     try {
+      const [ideaConfig] = (await SPDataAdapter.getIdeaConfiguration()).filter((item) => item.title === context.props.ideaConfiguration)
+
       const ideaProcessingList = SPDataAdapter.portal.web.lists.getByTitle(
-        strings.IdeaProcessingTitle
+        ideaConfig.processingList
       )
 
       const [ideaProcessingItem] = await ideaProcessingList.items
@@ -94,7 +96,7 @@ export const SyncProjectDialog: FC = () => {
       })
 
       return updatedResult
-    } catch (error) {}
+    } catch (error) { }
   }
 
   async function getProjectData() {
@@ -153,14 +155,16 @@ export const SyncProjectDialog: FC = () => {
     const [propertiesItem] = await projectPropertiesList.items.top(1).select('Id').get()
 
     try {
-      projectPropertiesList.items.getById(propertiesItem.Id).update(properties)
-
-      await updateIdeaProcessingItem(projectDataId).then(() => {
-        setSyncing(false)
-        setHasSynced(true)
-        context.setState({ displaySyncProjectDialog: false })
-        context.onSyncProperties(true)
+      await projectPropertiesList.items.getById(propertiesItem.Id).update(properties).then(async () => {
+        console.log(properties)
+        await updateIdeaProcessingItem(projectDataId).then(() => {
+          setSyncing(false)
+          setHasSynced(true)
+          context.setState({ displaySyncProjectDialog: false })
+          context.onSyncProperties(true)
+        })
       })
+
     } catch (error) {
       Logger.log({
         message: `(onSyncProperties): Unable to sync properties from 'Prosjektdata' list: ${error.message}`,
