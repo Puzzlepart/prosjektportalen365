@@ -14,6 +14,7 @@ import DialogPrompt from 'components/IdeaApprovalDialog'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { isUserAuthorized } from 'helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
+import { IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 
 Logger.subscribe(ConsoleListener())
 Logger.activeLogLevel = DEBUG ? LogLevel.Info : LogLevel.Warning
@@ -29,6 +30,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   private _userAuthorized: boolean
   private _openCmd: Command
   private _sp: SPFI
+  private _ideaConfig: IdeaConfigurationModel
 
   @override
   public async onInit(): Promise<void> {
@@ -57,6 +59,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         const row = event.selectedRows[0]
 
         dialog.ideaTitle = row.getValueByName('Title')
+        dialog.dialogDescription = this._ideaConfig.description[1] || strings.SetRecommendationDefaultDescription.split(';')[1]
         dialog.show().then(() => {
           if (dialog.comment && dialog.selectedChoice === strings.ApproveChoice) {
             this._onSubmit(row, dialog.comment)
@@ -74,20 +77,39 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
     }
   }
 
-  private _onListViewStateChanged = (): void => {
+  /**
+   * Get the idea configuration from the IdeaConfiguration list
+   */
+  private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
+    const ideaConfig = await this._sp.web.lists
+      .getByTitle(strings.IdeaConfigurationTitle)
+      .select(...new SPIdeaConfigurationItem().fields).items()
+
+    return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
+  }
+
+  /**
+   * On ListView state changed, check if the user is authorized to use this command
+   */
+  private _onListViewStateChanged = async (): Promise<void> => {
     Logger.log({
       message: '(IdeaProcessCommand) onListViewStateChanged: ListView state changed',
       level: LogLevel.Info
     })
 
-    this._openCmd = this.tryGetCommand('OPEN_IDEA_PROCESSING_DIALOG')
-    if (this._openCmd) {
-      this._openCmd.visible =
-        this.context.listView.selectedRows?.length === 1 &&
-        this._userAuthorized &&
-        location.href.includes(strings.IdeaProcessingUrlTitle)
+    const listName = this.context.pageContext.list.title
+    const [ideaConfig] = (await this._getIdeaConfiguration()).filter((item) => item.processingList === listName)
+    this._ideaConfig = ideaConfig
+
+    if (ideaConfig) {
+      this._openCmd = this.tryGetCommand('OPEN_IDEA_PROCESSING_DIALOG')
+      if (this._openCmd) {
+        this._openCmd.visible =
+          this.context.listView.selectedRows?.length === 1 &&
+          this._userAuthorized && ideaConfig.processingList === listName
+      }
+      this.raiseOnChange()
     }
-    this.raiseOnChange()
   }
 
   /**
@@ -99,13 +121,16 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   private _onSubmitRejected(row: RowAccessor, comment: string) {
     const rowId = row.getValueByName('ID')
     this._sp.web.lists
-      .getByTitle(strings.IdeaProcessingTitle)
+      .getByTitle(this._ideaConfig.processingList)
       .items.getById(rowId)
       .update({
         GtIdeaDecision: RecommendationType.Rejected,
         GtIdeaDecisionComment: comment
       })
-      .then(() => Logger.log({ message: 'Updated Idébehandling', level: LogLevel.Info }))
+      .then(() => {
+        Logger.log({ message: 'Updated Idébehandling', level: LogLevel.Info })
+        window.location.reload()
+      })
   }
 
   /**
@@ -117,13 +142,16 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   private _onSubmitConsideration(row: RowAccessor, comment: string) {
     const rowId = row.getValueByName('ID')
     this._sp.web.lists
-      .getByTitle(strings.IdeaProcessingTitle)
+      .getByTitle(this._ideaConfig.processingList)
       .items.getById(rowId)
       .update({
         GtIdeaDecision: RecommendationType.Consideration,
         GtIdeaDecisionComment: comment
       })
-      .then(() => Logger.log({ message: 'Updated Idébehandling', level: LogLevel.Info }))
+      .then(() => {
+        Logger.log({ message: 'Updated Idébehandling', level: LogLevel.Info })
+        window.location.reload()
+      })
   }
 
   /**
@@ -135,12 +163,15 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   private _onSubmit(row: RowAccessor, comment: string) {
     const rowId = row.getValueByName('ID')
     this._sp.web.lists
-      .getByTitle(strings.IdeaProcessingTitle)
+      .getByTitle(this._ideaConfig.processingList)
       .items.getById(rowId)
       .update({
         GtIdeaDecision: RecommendationType.Approved,
         GtIdeaDecisionComment: comment
       })
-      .then(() => Logger.log({ message: 'Updated Idébehandling', level: LogLevel.Info }))
+      .then(() => {
+        Logger.log({ message: 'Updated Idébehandling', level: LogLevel.Info })
+        window.location.reload()
+      })
   }
 }

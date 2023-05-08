@@ -1,0 +1,6 @@
+<Field ID="{201dba9f-b85e-475c-8b7c-603b2cbe886c}" Name="GtIdeaQualityNumber" DisplayName="{resource:SiteFields_GtIdeaQualityNumber_DisplayName}" Description="{resource:SiteFields_GtIdeaQualityNumber_Description}" Type="Calculated" Group="{resource:SiteFields_Idea_Group}" ResultType="Number" ShowInNewForm="FALSE" ShowInEditForm="FALSE" StaticName="GtIdeaQualityNumber">
+  <Formula>=IF(ISBLANK([{fieldtitle:GtIdeaQualityBenefit}]),0,LEFT([{fieldtitle:GtIdeaQualityBenefit}],1))</Formula>
+  <FieldRefs>
+    <FieldRef Name="GtIdeaQualityBenefit" ID="{76eb1411-4a09-4b0d-bfe2-6ecd7e7c1e75}" />
+  </FieldRefs>
+</Field>

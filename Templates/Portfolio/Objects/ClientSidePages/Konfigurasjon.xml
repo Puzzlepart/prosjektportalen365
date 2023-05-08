@@ -358,6 +358,20 @@
                                 &quot;thumbnailType&quot;: 2,
                                 &quot;id&quot;: 6,
                                 &quot;fabricReactIcon&quot;: {
+                                    &quot;iconName&quot;: &quot;Lightbulb&quot;
+                                },
+                                &quot;altText&quot;: &quot;&quot;,
+                                &quot;rawPreviewImageMinCanvasWidth&quot;: 32767
+                            },
+                            {
+                                &quot;sourceItem&quot;: {
+                                    &quot;itemType&quot;: 4,
+                                    &quot;fileExtension&quot;: &quot;&quot;,
+                                    &quot;progId&quot;: &quot;&quot;
+                                },
+                                &quot;thumbnailType&quot;: 2,
+                                &quot;id&quot;: 7,
+                                &quot;fabricReactIcon&quot;: {
                                     &quot;iconName&quot;: &quot;Help&quot;
                                 },
                                 &quot;altText&quot;: &quot;&quot;,
@@ -402,7 +416,8 @@
                             &quot;items[5].description&quot;: &quot;Konfigurasjon av tidslinjeelementenes farge, form og synlighet&quot;,
                             &quot;items[6].description&quot;: &quot;Oppsett av prosjektstatusrapport&quot;,
                             &quot;items[7].description&quot;: &quot;Administrer grafelementer i Porteføljeinnsikt&quot;,
-                            &quot;items[8].description&quot;: &quot;Konfigurasjon av hjelpeinnhold&quot;,
+                            &quot;items[8].description&quot;: &quot;Konfigurasjon av idémodulen&quot;,
+                            &quot;items[9].description&quot;: &quot;Konfigurasjon av hjelpeinnhold&quot;,
                             &quot;items[0].title&quot;: &quot;Datakilder&quot;,
                             &quot;items[1].title&quot;: &quot;Prosjektinnholdskolonner&quot;,
                             &quot;items[2].title&quot;: &quot;Porteføljevisninger&quot;,
@@ -411,7 +426,8 @@
                             &quot;items[5].title&quot;: &quot;Tidslinjekonfigurasjon&quot;,
                             &quot;items[6].title&quot;: &quot;Statusseksjoner&quot;,
                             &quot;items[7].title&quot;: &quot;Grafkonfigurasjon&quot;,
-                            &quot;items[8].title&quot;: &quot;Hjelpeinnhold&quot;
+                            &quot;items[8].title&quot;: &quot;Idékonfigurasjon&quot;,
+                            &quot;items[9].title&quot;: &quot;Hjelpeinnhold&quot;
                         },
                         &quot;imageSources&quot;: {},
                         &quot;links&quot;: {
@@ -424,7 +440,8 @@
                             &quot;items[5].sourceItem.url&quot;: &quot;{site}/Lists/Tidslinjekonfigurasjon&quot;,
                             &quot;items[6].sourceItem.url&quot;: &quot;{site}/Lists/Statusseksjoner&quot;,
                             &quot;items[7].sourceItem.url&quot;: &quot;{site}/Lists/Grafkonfigurasjon&quot;,
-                            &quot;items[8].sourceItem.url&quot;: &quot;{site}/Lists/Hjelpeinnhold&quot;
+                            &quot;items[8].sourceItem.url&quot;: &quot;{site}/Lists/Idekonfigurasjon&quot;,
+                            &quot;items[9].sourceItem.url&quot;: &quot;{site}/Lists/Hjelpeinnhold&quot;
                         },
                         &quot;componentDependencies&quot;: {
                             &quot;layoutComponentId&quot;: &quot;706e33c8-af37-4e7b-9d22-6e5694d92a6f&quot;
@@ -608,10 +625,10 @@
                         &quot;items[1].sourceItem.url&quot;: &quot;{site}/Konfigurasjonsfiler&quot;,
                         &quot;items[2].sourceItem.url&quot;: &quot;{site}/_layouts/15/groups.aspx&quot;,
                         &quot;items[3].sourceItem.url&quot;: &quot;{site}/Lists/Prosjektadministrasjonsroller&quot;,
-                        &quot;items[4].sourceItem.url&quot;: &quot;{site}/Lists/Logg/AllItems.aspx&quot;,
-                        &quot;items[5].sourceItem.url&quot;: &quot;{site}/Lists/Prosjekter/AllItems.aspx&quot;,
-                        &quot;items[6].sourceItem.url&quot;: &quot;{site}/Lists/Prosjektstatus/AllItems.aspx&quot;,
-                        &quot;items[7].sourceItem.url&quot;: &quot;{site}/Lists/Tidslinjeinnhold/AllItems.aspx&quot;
+                        &quot;items[4].sourceItem.url&quot;: &quot;{site}/Lists/Logg&quot;,
+                        &quot;items[5].sourceItem.url&quot;: &quot;{site}/Lists/Prosjekter&quot;,
+                        &quot;items[6].sourceItem.url&quot;: &quot;{site}/Lists/Prosjektstatus&quot;,
+                        &quot;items[7].sourceItem.url&quot;: &quot;{site}/Lists/Tidslinjeinnhold&quot;
                     },
                     &quot;componentDependencies&quot;: {
                         &quot;layoutComponentId&quot;: &quot;706e33c8-af37-4e7b-9d22-6e5694d92a6f&quot;

@@ -26,6 +26,7 @@
       "properties": {
         "title": "Prosjektinformasjon",
         "useIdeaProcessing": false,
+        "ideaConfiguration": "Standard",
         "hideAllActions": false,
         "useFramelessButtons": false,
         "hideActions": []

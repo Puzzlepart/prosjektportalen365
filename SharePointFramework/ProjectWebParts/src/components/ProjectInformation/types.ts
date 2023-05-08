@@ -78,6 +78,11 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   useIdeaProcessing?: boolean
 
   /**
+   * Which configuration to use for idea processing syncronization
+   */
+  ideaConfiguration?: string
+
+  /**
    * Hide parent projects section
    */
   hideParentProjects?: boolean

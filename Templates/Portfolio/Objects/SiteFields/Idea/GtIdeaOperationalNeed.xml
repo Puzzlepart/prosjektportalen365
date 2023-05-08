@@ -1,0 +1,9 @@
+<Field ID="{d3dcbabd-2df6-4338-864d-33417f8220aa}" Name="GtIdeaOperationalNeed" StaticName="GtIdeaOperationalNeed" DisplayName="{resource:SiteFields_GtIdeaOperationalNeed_DisplayName}" Description="{resource:SiteFields_GtIdeaOperationalNeed_Description}" Type="Choice" Group="{resource:SiteFields_Idea_Group}" ShowInNewForm="TRUE" ShowInEditForm="TRUE">
+  <CHOICES>
+    <CHOICE>1=Prosjektets leveranser har ikke betydning i forhold til eksisterende drift og aktiviteter</CHOICE>
+    <CHOICE>2=Prosjektets leveranser vil medføre mer stabil drift og aktiviteter</CHOICE>
+    <CHOICE>3=Det er en operasjonell risiko å ikke gjennomføre prosjektet. Vi er med sårbare uten gjennomføring, men risikoen er begrenset og håndterbar. Det kan settes i verk avdempende tiltak ved risikoen</CHOICE>
+    <CHOICE>4=Det er en vesentlig økt operasjonell risiko å ikke gjennomføre prosjektet. Vi kan få utfordringer med gjennomføring av kjernevirksomheten</CHOICE>
+    <CHOICE>5=Prosjektet er lovpålagt, juridisk nødvendig og må fullføres senest det tiden det tar å gjennomføre prosjektet. Manglende gjennomføring vil medføre vesentlig pålegg, påpakning fra eier eller tilsynsmyndighet (riksrevisjonen, datatilsynet m.v.)</CHOICE>
+  </CHOICES>
+</Field>

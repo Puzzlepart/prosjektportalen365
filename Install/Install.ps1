@@ -71,7 +71,7 @@ $InstallStartTime = (Get-Date -Format o)
 if ($Upgrade.IsPresent) {
     Write-Host "########################################################" -ForegroundColor Cyan
     Write-Host "### Upgrading Prosjektportalen 365 v{VERSION_PLACEHOLDER} #####" -ForegroundColor Cyan
-    if($Channel -ne "main") {
+    if ($Channel -ne "main") {
         Write-Host "### Channel: $Channel ####" -ForegroundColor Cyan
     }
     Write-Host "########################################################" -ForegroundColor Cyan
@@ -79,7 +79,7 @@ if ($Upgrade.IsPresent) {
 else {
     Write-Host "########################################################" -ForegroundColor Cyan
     Write-Host "### Installing Prosjektportalen 365 v{VERSION_PLACEHOLDER} ####" -ForegroundColor Cyan
-    if($Channel -ne "main") {
+    if ($Channel -ne "main") {
         Write-Host "### Channel: $Channel ####" -ForegroundColor Cyan
     }
     Write-Host "########################################################" -ForegroundColor Cyan
@@ -275,7 +275,7 @@ $SiteDesignName = [Uri]::UnescapeDataString($SiteDesignName)
 $SiteDesignDesc = [Uri]::UnescapeDataString("Samarbeid i et prosjektomr%C3%A5de fra Prosjektportalen")
 
 # Add channel to name for the site design if channel is specified and not main
-if($Channel -ne "main") {
+if ($Channel -ne "main") {
     $SiteDesignName += " - $Channel"
 }
 
@@ -290,7 +290,7 @@ if (-not $SkipSiteDesign.IsPresent) {
         foreach ($s in $SiteScriptSrc) {
             $Title = $s.BaseName.Substring(9)
             # Add channel to name for the site script if channel is specified and not main
-            if($Channel -ne "main") {
+            if ($Channel -ne "main") {
                 $Title += " - $Channel"
             }
             $Content = (Get-Content -Path $s.FullName -Raw | Out-String)
@@ -432,7 +432,13 @@ if (-not $SkipTemplate.IsPresent) {
 
         if ($Upgrade.IsPresent) {
             StartAction("Applying PnP template Portfolio to $($Uri.AbsoluteUri)")
-            Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+            try {
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+            }
+            catch {
+                Write-Host "`t[WARNING] Failed to apply PnP templates to, retrying..." -ForegroundColor Yellow
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+            }
             EndAction
 
             StartAction("Applying PnP content template to $($Uri.AbsoluteUri)")
@@ -450,7 +456,13 @@ if (-not $SkipTemplate.IsPresent) {
             $Instance = Read-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp"
             $Instance.SupportedUILanguages[0].LCID = $LanguageId
             Invoke-PnPSiteTemplate -InputInstance $Instance -Handlers SupportedUILanguages
-            Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+            try {
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+            }
+            catch {
+                Write-Host "`t[WARNING] Failed to apply PnP templates to, retrying..." -ForegroundColor Yellow
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+            }
             EndAction
 
             StartAction("Applying PnP content template to $($Uri.AbsoluteUri)")
@@ -558,7 +570,7 @@ if ($null -ne $CurrentUser.Email) {
 if (-not [string]::IsNullOrEmpty($CI)) {
     $InstallEntry.InstallCommand = "GitHub CI";
 }
-if($Channel -ne "main") {
+if ($Channel -ne "main") {
     $InstallEntry.InstallChannel = $Channel
 }
 

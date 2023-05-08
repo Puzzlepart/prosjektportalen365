@@ -1,0 +1,6 @@
+<Field ID="{8fef6c38-28e1-497a-97d7-72e1a854fae1}" Name="GtIdeaPriority" DisplayName="{resource:SiteFields_GtIdeaPriority_DisplayName}" Description="{resource:SiteFields_GtIdeaPriority_Description}" Type="Calculated" Group="{resource:SiteFields_Idea_Group}" ResultType="Text" StaticName="GtIdeaPriority">
+  <Formula>=IF([{fieldtitle:GtIdeaScore}]&gt;22," Må ha",IF([{fieldtitle:GtIdeaScore}]&gt;16," Bør ha",IF([{fieldtitle:GtIdeaScore}]&gt;8," Kan ha",IF([{fieldtitle:GtIdeaScore}]=0," Ikke satt",IF([{fieldtitle:GtIdeaScore}]&lt;9," Skal ikke ha")))))</Formula>
+  <FieldRefs>
+    <FieldRef Name="GtIdeaScore" ID="{ce451f2c-a098-48ba-a8a5-d1d4ffc225d6}" />
+  </FieldRefs>
+</Field>
