@@ -29,7 +29,7 @@
             <pnp:DataValue FieldName="Title">Standard</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaProcessingList">Idébehandling</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaRegistrationList">Idéregistrering</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDescription">Dersom idéen blir godkjent vil det bli opprettet en detaljert idé-side for idéen og et element i<a href="../Idebehandling/AllItems.aspx" target="_blank">Idébehandlingslisten</a>.;Dersom idéen blir godkjent vil det være mulig å opprette prosjektdata som kan bli brukt for provisjonering av området.;Tilknytt prosjektdata til idéen for å synkronisere data til et prosjekt senere.</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDescription">Dersom idéen blir godkjent vil det bli opprettet en detaljert idé-side for idéen og et element i Idébehandlingslisten.;Dersom idéen blir godkjent vil det være mulig å opprette prosjektdata som kan bli brukt for provisjonering av området.;Tilknytt prosjektdata til idéen for å synkronisere data til et prosjekt senere.</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
 </pnp:ListInstance>
