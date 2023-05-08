@@ -5,7 +5,6 @@ on:
     branches:
       - releases/1.8
       - issues/1106
-      
     paths:
       - "SharePointFramework/**"
       - "Install/**"

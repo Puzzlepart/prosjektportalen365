@@ -136,10 +136,10 @@ if ($null -ne $LastInstall) {
             $Title = $ProjectStatusItem["Title"]
             $PersistedSectionDataJson = $ProjectStatusItem["GtSectionDataJson"]
 
-            Write-Host "Processing item $($Id) ($Title)" -ForegroundColor Cyan
+            Write-Host "Processing item $($Id) ($Title)" -InformationAction Ignore
 
             # Create a folder for the item in the attachments folder
-            Write-Host "`tCreating folder for item $Id in "Prosjektstatusvedlegg""
+            Write-Host "`tCreating folder for item $Id in Prosjektstatusvedlegg" -InformationAction Ignore
             Add-PnPFolder -Folder $ProjectStatusAttachmentsFolder -Name $Id -ErrorAction SilentlyContinue | Out-Null
             $TempAttachmentFolder = "$($TEMP_FOLDER)/$Id"
 
@@ -153,17 +153,17 @@ if ($null -ne $LastInstall) {
 
             # Check if the field GtSectionDataJson has a value
             if (-not [string]::IsNullOrEmpty($PersistedSectionDataJson)) {
-                Write-Host "`tCreating $PERSISTED_SECTION_DATA_JSON_FILENAME for item $Id in "Prosjektstatusvedlegg"/$Id"
+                Write-Host "`tCreating $PERSISTED_SECTION_DATA_JSON_FILENAME for item $Id in Prosjektstatusvedlegg/$Id" -InformationAction Ignore
                 $PersistedSectionDataJson | Out-File "$($TempAttachmentFolder)/$($PERSISTED_SECTION_DATA_JSON_FILENAME)" -Encoding utf8
-                Add-PnPFile -Path "$($TempAttachmentFolder)/$($PERSISTED_SECTION_DATA_JSON_FILENAME)" -Folder ""Prosjektstatusvedlegg"/$Id" -NewFileName $PERSISTED_SECTION_DATA_JSON_FILENAME -ErrorAction SilentlyContinue | Out-Null
-                Write-Host "`tSuccessfully uploaded $PERSISTED_SECTION_DATA_JSON_FILENAME for item $Id in "Prosjektstatus"" -ForegroundColor Green
+                Add-PnPFile -Path "$($TempAttachmentFolder)/$($PERSISTED_SECTION_DATA_JSON_FILENAME)" -Folder "Prosjektstatusvedlegg/$Id" -NewFileName $PERSISTED_SECTION_DATA_JSON_FILENAME -ErrorAction SilentlyContinue | Out-Null
+                Write-Host "`tSuccessfully uploaded $PERSISTED_SECTION_DATA_JSON_FILENAME for item $Id in Prosjektstatus" -ForegroundColor Green -InformationAction Ignore
             }
 
             # Check $TempAttachmentFolder for PNG file starting with "Ny-statusrapport-for" to exclude potential attachments uploaded by the end users
             $Snapshot = Get-ChildItem -Path $TempAttachmentFolder | Where-Object { $_.Extension -eq ".png" -and $_.Name -like "Ny-statusrapport-for*" } | Select-Object -First 1
             if ($null -ne $Snapshot) {
-                Write-Host "`tCreating $SNAPSHOT_FILENAME for item $Id in "Prosjektstatusvedlegg"/$Id"
-                Add-PnPFile -Path $Snapshot.FullName -Folder ""Prosjektstatusvedlegg"/$Id" -NewFileName $SNAPSHOT_FILENAME -ErrorAction SilentlyContinue | Out-Null
+                Write-Host "`tCreating $SNAPSHOT_FILENAME for item $Id in Prosjektstatusvedlegg/$Id" -InformationAction Ignore
+                Add-PnPFile -Path $Snapshot.FullName -Folder "Prosjektstatusvedlegg/$Id" -NewFileName $SNAPSHOT_FILENAME -ErrorAction SilentlyContinue | Out-Null
             }
         }
         Write-Host "[SUCCESS] Project Status items successfully processed"
