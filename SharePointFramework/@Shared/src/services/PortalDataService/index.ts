@@ -151,9 +151,7 @@ export class PortalDataService {
     <Where>
       <Eq>
         <FieldRef Name="GtIsProgram" />
-        <Value Type="Boolean">
-          1
-        </Value>
+        <Value Type="Boolean">1</Value>
       </Eq>
   </Where>
   </Query>
