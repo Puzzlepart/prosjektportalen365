@@ -1,4 +1,9 @@
-import { ContextualMenuItemType, Dropdown, IContextualMenuItem } from '@fluentui/react'
+import {
+  ContextualMenuItemType,
+  Dropdown,
+  IContextualMenuItem,
+  IDropdownOption
+} from '@fluentui/react'
 import { IFilterProps } from 'components/FilterPanel'
 import _ from 'lodash'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -47,19 +52,26 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
   ) => {
     return context.props.configuration.views.filter(filterFunc).map(
       (view) =>
-      ({
-        key: view.id.toString(),
-        name: view.title,
-        iconProps: { iconName: view.iconName },
-        canCheck: true,
-        checked: view.id === context.state.currentView?.id,
-        onClick: () => context.dispatch(CHANGE_VIEW(view))
-      } as IContextualMenuItem)
+        ({
+          key: view.id.toString(),
+          name: view.title,
+          iconProps: { iconName: view.iconName },
+          canCheck: true,
+          checked: view.id === context.state.currentView?.id,
+          onClick: () => context.dispatch(CHANGE_VIEW(view))
+        } as IContextualMenuItem)
     )
   }
 
   const sharedViews = convertViewsToContextualMenuItems((v) => !v.isPersonal)
   const personalViews = convertViewsToContextualMenuItems((v) => v.isPersonal)
+  const programViewOptions: IDropdownOption[] = context.props.showProgramViews
+    ? context.props.configuration.programs.map((p) => ({
+        key: p.id,
+        text: p.name,
+        data: { searchQueryFilters: p.getSearchQueryFilters() }
+      }))
+    : []
 
   /**
    * Callback function for Excel export. Handles the export to Excel with state updates and
@@ -107,7 +119,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
         exportToExcel()
       }
     } as IContextualMenuItem
-  ].filter((i) => i.data.isVisible)
+  ].filter((i) => i.data?.isVisible)
 
   const farItems: IContextualMenuItem[] = [
     {
@@ -156,35 +168,35 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
             itemType: ContextualMenuItemType.Divider
           },
           ...sharedViews,
-          !_.isEmpty(context.props.configuration.programs) && {
+          !_.isEmpty(programViewOptions) && {
             key: 'PROGRAMS_HEADER',
             itemType: ContextualMenuItemType.Header,
             text: strings.ProgramsHeaderText
           },
-          !_.isEmpty(context.props.configuration.programs) && {
+          !_.isEmpty(programViewOptions) && {
             key: 'PROGRAMS_DROPDOWN',
             itemType: ContextualMenuItemType.Normal,
             onRender: () => (
               <div style={{ padding: '6px 12px' }}>
                 <Dropdown
                   placeholder={strings.SelectProgramText}
-                  options={context.props.configuration.programs.map((p) => ({
-                    key: p.id,
-                    text: p.name,
-                    data: { searchQueryFilters: p.getSearchQueryFilters() }
-                  }))}
+                  options={programViewOptions}
                   defaultSelectedKey={context.state.currentView?.id}
                   onChange={(_event, option) => {
                     const defaultView = context.props.configuration.views.find(
                       (v) => v.isDefaultView
                     )
-                    const view = new PortfolioOverviewView().configureFrom(defaultView)
-                    view.id = option.key
-                    view.title = option.text
-                    view.iconName = 'ProjectCollection'
-                    view.searchQuery += ` ${option.data?.searchQueryFilters}`
+                    const view = new PortfolioOverviewView()
+                      .configureFrom(defaultView)
+                      .set({
+                        id: option.key,
+                        title: option.text,
+                        iconName: 'ProjectCollection'
+                      })
+                      .appendToQuery(option.data?.searchQueryFilters)
                     context.dispatch(CHANGE_VIEW(view))
-                  }} />
+                  }}
+                />
               </div>
             )
           },
@@ -206,7 +218,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
           {
             key: 'EDIT_VIEW',
             name: strings.EditViewText,
-            disabled: context.state.loading || (typeof context.state.currentView?.id !== 'number'),
+            disabled: context.state.loading || typeof context.state.currentView?.id !== 'number',
             onClick: () =>
               redirect(
                 `${context.props.configuration.viewsUrls.defaultEditFormUrl}?ID=${context.state.currentView?.id}`
@@ -231,11 +243,13 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
         context.dispatch(TOGGLE_FILTER_PANEL())
       }
     } as IContextualMenuItem
-  ].filter((i) => i.data.isVisible)
+  ].filter((i) => i.data?.isVisible)
 
   return {
-    items,
-    farItems,
+    commandBarProps: {
+      items,
+      farItems
+    },
     filters: [
       {
         column: {

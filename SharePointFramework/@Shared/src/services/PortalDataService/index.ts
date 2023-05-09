@@ -135,9 +135,7 @@ export class PortalDataService {
    *
    * @param constructor Constructor / model class
    */
-  public async getPrograms<T>(
-    constructor: new (item: any, web: Web) => T
-  ): Promise<T[]> {
+  public async getPrograms<T>(constructor: new (item: any, web: Web) => T): Promise<T[]> {
     try {
       const items = await this.getItems(
         this._configuration.listNames.PROJECTS,
@@ -146,7 +144,7 @@ export class PortalDataService {
           ViewXml: `<View>
   <Query>
     <OrderBy>
-      <FieldRef Name="ID" />
+      <FieldRef Name="Title" />
     </OrderBy>
     <Where>
       <Eq>
@@ -213,7 +211,7 @@ export class PortalDataService {
     if (attachment) {
       try {
         await list.items.getById(report.id).attachmentFiles.addMultiple([attachment])
-      } catch (error) { }
+      } catch (error) {}
     }
     try {
       await list.items.getById(report.id).update(properties)
@@ -376,7 +374,7 @@ export class PortalDataService {
           fieldToCreate.updateAndPushChanges(true)
         }
         await executeQuery(jsomContext)
-      } catch (error) { }
+      } catch (error) {}
     }
     try {
       Logger.log({
@@ -392,7 +390,7 @@ export class PortalDataService {
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch { }
+    } catch {}
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }

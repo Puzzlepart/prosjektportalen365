@@ -40,7 +40,7 @@ export class PortfolioOverviewView {
 
   /**
    * Configure the view with columns.
-   * 
+   *
    * @param columns Columns to configure the view with
    */
   public configure(columns: ProjectColumn[] = []): PortfolioOverviewView {
@@ -55,8 +55,35 @@ export class PortfolioOverviewView {
   }
 
   /**
-   * Configure the view from another view, overriding properties.
-   * 
+   * Set properties on the view (id, title, iconName) and returns the updated
+   * properties.
+   *
+   * @param properties Properties to set on the view (id, title, iconName)
+   */
+  public set(
+    properties: Pick<PortfolioOverviewView, 'id' | 'title' | 'iconName'>
+  ): PortfolioOverviewView {
+    this.id = properties.id ?? this.id
+    this.title = properties.title ?? this.title
+    this.iconName = properties.iconName ?? this.iconName
+    return this
+  }
+
+  /**
+   * Append the specified `queryText` to the view's search query. Returns
+   * the view with the updated search query.
+   *
+   * @param queryText Query text to append to the view's search query
+   */
+  public appendToQuery(queryText: string): PortfolioOverviewView {
+    this.searchQuery = `${this.searchQuery} ${queryText}`
+    return this
+  }
+
+  /**
+   * Configure the view from another view (copies the columns, refiners,
+   * groupBy, scope and searchQuery properties).
+   *
    * @param view View to configure from≤
    */
   public configureFrom(view: PortfolioOverviewView): PortfolioOverviewView {

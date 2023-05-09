@@ -106,7 +106,7 @@ export class ProjectColumn implements IColumn {
       .reduce(
         (obj, c) => ({
           ...obj,
-          [c.value]: pick(c, ['color', 'iconName', 'tooltipColumnPropertyName']),
+          [c.value]: pick(c, ['color', 'iconName', 'tooltipColumnPropertyName'])
         }),
         {}
       ) as ProjectColumnConfigDictionary

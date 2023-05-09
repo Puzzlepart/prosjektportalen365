@@ -15,6 +15,7 @@ export const PROPERTYPANE_CONFIGURATION_PROPS = {
   COLUMN_CONFIG_LISTNAME: 'columnConfigListName',
   COLUMNS_LISTNAME: 'columnsListName',
   DEFAULT_VIEW_ID: 'defaultViewId',
+  SHOW_PROGRAM_VIEWS: 'showProgramViews',
   STATUSREPORTS_COUNT: 'statusReportsCount',
   SHOW_COMMANDBAR: 'showCommandBar',
   SHOW_EXCELEXPORT_BUTTON: 'showExcelExportButton',
@@ -42,7 +43,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<
   }
 
   /**
-   * Get options for PropertyPaneDropdown
+   * Get dropdown options for the specified properties.
    *
    * @param targetProperty Target property
    */
@@ -77,6 +78,9 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<
                 PropertyPaneDropdown(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID, {
                   label: strings.DefaultViewLabel,
                   options: this._getOptions(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID)
+                }),
+                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_PROGRAM_VIEWS, {
+                  label: strings.ShowProgramViewsLabel
                 })
               ]
             },
