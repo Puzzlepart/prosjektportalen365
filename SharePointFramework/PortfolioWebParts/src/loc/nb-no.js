@@ -212,6 +212,8 @@ define([], function () {
     PersonalViewsHeaderText: 'Personlige visninger',
     ListViewText: 'Liste',
     CompactViewText: 'Kompakt liste',
-    DefaultRenderModeLabel: 'Standard visningsmodus'
+    DefaultRenderModeLabel: 'Standard visningsmodus',
+    ProgramsHeaderText: 'Programmer',
+    SelectProgramText:'Velg et programområde'
   }
 })

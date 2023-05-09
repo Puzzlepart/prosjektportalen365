@@ -1,4 +1,6 @@
 declare interface IPortfolioWebPartsStrings {
+  SelectProgramText: string
+  ProgramsHeaderText: string
   PortfolioOverviewDataFetchErrorView: string
   PortfolioOverviewDataFetchError: string
   ListViewText: string

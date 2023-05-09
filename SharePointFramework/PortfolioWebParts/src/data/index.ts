@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-classes-per-file
 import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, PnPClientStorage } from '@pnp/common'
@@ -9,6 +10,7 @@ import {
   SortDirection,
   sp
 } from '@pnp/sp'
+import { SearchQueryInit } from '@pnp/sp/src/search'
 import * as cleanDeep from 'clean-deep'
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
 import { IAggregatedListConfiguration } from 'interfaces/IAggregatedListConfiguration'
@@ -29,6 +31,7 @@ import {
   ChartData,
   ChartDataItem,
   DataField,
+  ProgramItem,
   ProjectListModel,
   SPChartConfigurationItem,
   SPContentType,
@@ -45,7 +48,6 @@ import {
   IDataAdapter,
   IFetchDataForViewItemResult
 } from './types'
-import { SearchQueryInit } from '@pnp/sp/src/search'
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -55,12 +57,14 @@ export class DataAdapter implements IDataAdapter {
   public dataSourceService: DataSourceService
 
   /**
-   * Constructs the `DataAdapter` class
+   * Constructs the `DataAdapter` class with `context` and `siteIds`.
+   *
+   * **Note:** Unsure of current usage of `_siteIds` and if it is needed.
    *
    * @param context Web part context
-   * @param siteIds Site IDs
+   * @param _siteIds Site IDs
    */
-  constructor(public context: WebPartContext, private siteIds?: string[]) {
+  constructor(public context: WebPartContext, private _siteIds?: string[]) {
     this._portal = new PortalDataService()
   }
 
@@ -130,31 +134,38 @@ export class DataAdapter implements IDataAdapter {
    * - `columns` - Project columns
    * - `refiners` - Refinable columns
    * - `views` - Portfolio overview views
+   * - `programs` - Programs
    * - `viewsUrls` - Portfolio views list form URLs
    * - `columnUrls` - Project columns list form URLs
    * - `userCanAddViews` - User can add portfolio views
    */
   public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
     // eslint-disable-next-line prefer-const
-    let [columnConfig, columns, views, programs, viewsUrls, columnUrls, userCanAddViews] = await Promise.all([
+    const [
+      columnConfig,
+      columns,
+      views,
+      programs,
+      viewsUrls,
+      columnUrls,
+      userCanAddViews
+    ] = await Promise.all([
       this._portal.getProjectColumnConfig(),
       this._portal.getProjectColumns(),
       this._portal.getPortfolioOverviewViews(),
-      this._portal.getPrograms(),
+      this._portal.getPrograms(ProgramItem),
       this._portal.getListFormUrls('PORTFOLIO_VIEWS'),
       this._portal.getListFormUrls('PROJECT_COLUMNS'),
-      this._portal.currentUserHasPermissionsToList(
-        'PORTFOLIO_VIEWS',
-        PermissionKind.AddListItems
-      )
+      this._portal.currentUserHasPermissionsToList('PORTFOLIO_VIEWS', PermissionKind.AddListItems)
     ])
-    columns = columns.map((col) => col.configure(columnConfig))
+    const configuredColumns = columns.map((col) => col.configure(columnConfig))
     const refiners = columns.filter((col) => col.isRefinable)
-    views = views.map((view) => view.configure(columns))
+    const configuredViews = views.map((view) => view.configure(columns))
     return {
-      columns,
+      columns: configuredColumns,
       refiners,
-      views,
+      views: configuredViews,
+      programs,
       viewsUrls,
       columnUrls,
       userCanAddViews

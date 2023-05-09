@@ -171,7 +171,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
                   options={context.props.configuration.programs.map((p) => ({
                     key: p.id,
                     text: p.name,
-                    data: { searchQueryFilters: p.searchQueryFilters }
+                    data: { searchQueryFilters: p.getSearchQueryFilters() }
                   }))}
                   defaultSelectedKey={context.state.currentView?.id}
                   onChange={(_event, option) => {
@@ -206,7 +206,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
           {
             key: 'EDIT_VIEW',
             name: strings.EditViewText,
-            disabled: context.state.loading,
+            disabled: context.state.loading || (typeof context.state.currentView?.id !== 'number'),
             onClick: () =>
               redirect(
                 `${context.props.configuration.viewsUrls.defaultEditFormUrl}?ID=${context.state.currentView?.id}`
