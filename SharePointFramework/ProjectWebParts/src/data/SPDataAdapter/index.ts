@@ -10,7 +10,7 @@ import * as strings from 'ProjectWebPartsStrings'
 import { IEntityField } from 'sp-entityportal-service/types'
 import { find } from 'underscore'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
-import { IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
+import { IdeaConfigurationModel, SPIdeaConfigurationItem } from '../../models'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
@@ -313,10 +313,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   /**
    * Get the idea configuration from the IdeaConfiguration list
    */
-  public getIdeaConfiguration = async(): Promise<IdeaConfigurationModel[]> => {
+  public getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
     const ideaConfig = await this.portal.web.lists
       .getByTitle(strings.IdeaConfigurationTitle)
-      .select(...new SPIdeaConfigurationItem().fields).items.get()
+      .select(...new SPIdeaConfigurationItem().fields)
+      .items.get()
 
     return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
   }

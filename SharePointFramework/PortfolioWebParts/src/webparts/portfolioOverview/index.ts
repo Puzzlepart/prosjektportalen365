@@ -3,17 +3,14 @@ import {
   IPropertyPaneDropdownOption,
   PropertyPaneDropdown,
   PropertyPaneSlider,
-  PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { PortfolioOverview, IPortfolioOverviewProps } from '../../components/PortfolioOverview'
-import { IPortfolioConfiguration } from '../../interfaces'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
+import { IPortfolioOverviewProps, PortfolioOverview } from '../../components/PortfolioOverview'
+import { IPortfolioConfiguration } from '../../interfaces'
 
 export const PROPERTYPANE_CONFIGURATION_PROPS = {
-  COLUMN_CONFIG_LISTNAME: 'columnConfigListName',
-  COLUMNS_LISTNAME: 'columnsListName',
   DEFAULT_VIEW_ID: 'defaultViewId',
   SHOW_PROGRAM_VIEWS: 'showProgramViews',
   STATUSREPORTS_COUNT: 'statusReportsCount',
@@ -23,7 +20,6 @@ export const PROPERTYPANE_CONFIGURATION_PROPS = {
   SHOW_GROUPBY: 'showGroupBy',
   SHOW_SEARCH_BOX: 'showSearchBox',
   SHOW_VIEWSELECTOR: 'showViewSelector',
-  VIEWS_LISTNAME: 'viewsListName'
 }
 
 export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<
@@ -116,27 +112,6 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<
                   min: 0,
                   max: 10,
                   step: 1
-                })
-              ]
-            }
-          ]
-        },
-        {
-          groups: [
-            {
-              groupName: strings.ConfigurationGroupName,
-              groupFields: [
-                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.COLUMN_CONFIG_LISTNAME, {
-                  label: strings.ColumnConfigListNameLabel,
-                  disabled: true
-                }),
-                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.COLUMNS_LISTNAME, {
-                  label: strings.ColumnsListNameLabel,
-                  disabled: true
-                }),
-                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.VIEWS_LISTNAME, {
-                  label: strings.ViewsListNameLabel,
-                  disabled: true
                 })
               ]
             }

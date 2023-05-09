@@ -75,13 +75,14 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       this.portal.getListFormUrls('PORTFOLIO_VIEWS'),
       this.portal.getListFormUrls('PROJECT_COLUMNS')
     ])
-    columns = columns.map((col) => col.configure(columnConfig))
+    const configuredColumns = columns.map((col) => col.configure(columnConfig))
+    const configuredViews = views.map((view) => view.configure(columns))
     const refiners = columns.filter((col) => col.isRefinable)
-    views = views.map((view) => view.configure(columns))
     return {
-      columns,
+      columns: configuredColumns,
+      views: configuredViews,
       refiners,
-      views,
+      programs: [],
       viewsUrls,
       columnUrls
     }

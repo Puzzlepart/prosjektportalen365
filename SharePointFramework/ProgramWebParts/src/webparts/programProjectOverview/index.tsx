@@ -12,6 +12,7 @@ import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IProgramProjectOverviewProps } from './types'
+import _ from 'lodash'
 
 export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramProjectOverviewProps> {
   private _configuration: IPortfolioConfiguration
@@ -24,16 +25,20 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
   public render(): void {
     render(
       <PortfolioOverview
+        {..._.pick(
+          this.properties,
+          'title',
+          'showCommandBar',
+          'showExcelExportButton',
+          'showFilters',
+          'showViewSelector',
+          'showGroupBy',
+          'showSearchBox'
+        )}
         title={this.properties.title}
         pageContext={this.context.pageContext as any}
         configuration={this._configuration}
         dataAdapter={this.dataAdapter}
-        showCommandBar={this.properties.showCommandBar}
-        showExcelExportButton={this.properties.showExcelExportButton}
-        showFilters={this.properties.showFilters}
-        showViewSelector={this.properties.showViewSelector}
-        showGroupBy={this.properties.showGroupBy}
-        showSearchBox={this.properties.showSearchBox}
         isParentProject={true}
       />,
       this.domElement

@@ -84,9 +84,9 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<
                   selectedKeys: this.properties.hideActions ?? []
                 }),
                 !this.properties.hideAllActions &&
-                PropertyPaneToggle('useFramelessButtons', {
-                  label: strings.UseFramelessButtonsLabel
-                }),
+                  PropertyPaneToggle('useFramelessButtons', {
+                    label: strings.UseFramelessButtonsLabel
+                  }),
                 PropertyPaneTextField('adminPageLink', {
                   label: strings.AdminPageLinkLabel
                 })
@@ -109,18 +109,18 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<
                   checked: propertiesWithDefaults.hideStatusReport
                 }),
                 !propertiesWithDefaults.hideStatusReport &&
-                PropertyPaneToggle('statusReportShowOnlyIcons', {
-                  label: strings.StatusReportShowOnlyIconsLabel,
-                  checked: propertiesWithDefaults.statusReportShowOnlyIcons
-                }),
+                  PropertyPaneToggle('statusReportShowOnlyIcons', {
+                    label: strings.StatusReportShowOnlyIconsLabel,
+                    checked: propertiesWithDefaults.statusReportShowOnlyIcons
+                  }),
                 !propertiesWithDefaults.hideStatusReport &&
-                !propertiesWithDefaults.statusReportShowOnlyIcons &&
-                PropertyPaneSlider('statusReportTruncateComments', {
-                  label: strings.StatusReportTruncateCommentsLabel,
-                  min: 25,
-                  max: 150,
-                  step: 5
-                })
+                  !propertiesWithDefaults.statusReportShowOnlyIcons &&
+                  PropertyPaneSlider('statusReportTruncateComments', {
+                    label: strings.StatusReportTruncateCommentsLabel,
+                    min: 25,
+                    max: 150,
+                    step: 5
+                  })
               ].filter(Boolean)
             },
             {
