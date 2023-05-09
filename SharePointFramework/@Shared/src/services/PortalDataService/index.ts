@@ -20,12 +20,12 @@ import {
   SPProjectColumnItem,
   StatusReport
 } from '../../models'
-import { GetStatusReportsOptions } from './GetStatusReportsOptions'
 import {
+  GetStatusReportsOptions,
   IPortalDataServiceConfiguration,
   PortalDataServiceDefaultConfiguration,
   PortalDataServiceList
-} from './IPortalDataServiceConfiguration'
+} from './types'
 
 export class PortalDataService {
   private _configuration: IPortalDataServiceConfiguration
@@ -131,6 +131,43 @@ export class PortalDataService {
   }
 
   /**
+   * Get programs from the projects list in the portfolio site.
+   *
+   * @param constructor Constructor / model class
+   */
+  public async getPrograms<T>(
+    constructor: new (item: any, web: Web) => T
+  ): Promise<T[]> {
+    try {
+      const items = await this.getItems(
+        this._configuration.listNames.PROJECTS,
+        constructor,
+        {
+          ViewXml: `<View>
+  <Query>
+    <OrderBy>
+      <FieldRef Name="ID" />
+    </OrderBy>
+    <Where>
+      <Eq>
+        <FieldRef Name="GtIsProgram" />
+        <Value Type="Boolean">
+          1
+        </Value>
+      </Eq>
+  </Where>
+  </Query>
+</View>`
+        },
+        []
+      )
+      return items
+    } catch (error) {
+      return []
+    }
+  }
+
+  /**
    * Get project columns
    */
   public async getProjectColumns(): Promise<ProjectColumn[]> {
@@ -178,7 +215,7 @@ export class PortalDataService {
     if (attachment) {
       try {
         await list.items.getById(report.id).attachmentFiles.addMultiple([attachment])
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       await list.items.getById(report.id).update(properties)
@@ -341,7 +378,7 @@ export class PortalDataService {
           fieldToCreate.updateAndPushChanges(true)
         }
         await executeQuery(jsomContext)
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       Logger.log({
@@ -357,7 +394,7 @@ export class PortalDataService {
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch {}
+    } catch { }
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }
