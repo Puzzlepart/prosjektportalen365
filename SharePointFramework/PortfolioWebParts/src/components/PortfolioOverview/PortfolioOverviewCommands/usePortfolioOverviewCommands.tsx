@@ -1,4 +1,4 @@
-import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
+import { ContextualMenuItemType, Dropdown, IContextualMenuItem } from '@fluentui/react'
 import { IFilterProps } from 'components/FilterPanel'
 import _ from 'lodash'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -17,6 +17,7 @@ import {
 } from '../reducer'
 import { usePortfolioOverviewFilters } from '../usePortfolioOverviewFilters'
 import { IPortfolioOverviewCommandsProps } from './types'
+import React from 'react'
 
 /**
  * Component logic hook for the PortfolioOverviewCommands component. Handles the logic for
@@ -46,14 +47,14 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
   ) => {
     return context.props.configuration.views.filter(filterFunc).map(
       (view) =>
-        ({
-          key: view.id.toString(),
-          name: view.title,
-          iconProps: { iconName: view.iconName },
-          canCheck: true,
-          checked: view.id === context.state.currentView?.id,
-          onClick: () => context.dispatch(CHANGE_VIEW(view))
-        } as IContextualMenuItem)
+      ({
+        key: view.id.toString(),
+        name: view.title,
+        iconProps: { iconName: view.iconName },
+        canCheck: true,
+        checked: view.id === context.state.currentView?.id,
+        onClick: () => context.dispatch(CHANGE_VIEW(view))
+      } as IContextualMenuItem)
     )
   }
 
@@ -154,18 +155,39 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
             key: 'VIEWS_DIVIDER',
             itemType: ContextualMenuItemType.Divider
           },
-          ...context.props.configuration.views.map(
-            (view) =>
-              ({
-                key: view.id.toString(),
-                name: view.title,
-                iconProps: { iconName: view.iconName },
-                canCheck: true,
-                checked: view.id === context.state.currentView?.id,
-                onClick: () => context.dispatch(CHANGE_VIEW(view))
-              } as IContextualMenuItem)
-          ),
           ...sharedViews,
+          !_.isEmpty(context.props.configuration.programs) && {
+            key: 'PROGRAMS_HEADER',
+            itemType: ContextualMenuItemType.Header,
+            text: strings.ProgramsHeaderText
+          },
+          !_.isEmpty(context.props.configuration.programs) && {
+            key: 'PROGRAMS_DROPDOWN',
+            itemType: ContextualMenuItemType.Normal,
+            onRender: () => (
+              <div style={{ padding: '6px 12px' }}>
+                <Dropdown
+                  placeholder={strings.SelectProgramText}
+                  options={context.props.configuration.programs.map((p) => ({
+                    key: p.id,
+                    text: p.name,
+                    data: { searchQueryFilters: p.searchQueryFilters }
+                  }))}
+                  defaultSelectedKey={context.state.currentView?.id}
+                  onChange={(_event, option) => {
+                    const defaultView = context.props.configuration.views.find(
+                      (v) => v.isDefaultView
+                    )
+                    const view = new PortfolioOverviewView().configureFrom(defaultView)
+                    view.id = option.key
+                    view.title = option.text
+                    view.iconName = 'ProjectCollection'
+                    view.searchQuery += ` ${option.data?.searchQueryFilters}`
+                    context.dispatch(CHANGE_VIEW(view))
+                  }} />
+              </div>
+            )
+          },
           !_.isEmpty(personalViews) && {
             key: 'PERSONAL_VIEWS_HEADER',
             itemType: ContextualMenuItemType.Header,
