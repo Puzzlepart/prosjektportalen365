@@ -20,6 +20,7 @@ export class PortfolioOverviewView {
   public title: string
   public sortOrder: number
   public searchQuery: string
+  public searchQueries: string[]
   public isDefaultView: boolean
   public iconName: string
   public isPersonal: boolean
@@ -28,6 +29,11 @@ export class PortfolioOverviewView {
   public groupBy?: ProjectColumn
   public scope?: string
 
+  /**
+   * Constructor for the PortfolioOverviewView class.
+   * 
+   * @param _item SP list item to create the view from
+   */
   constructor(private _item?: SPPortfolioOverviewViewItem) {
     this.id = _item?.Id
     this.title = _item?.Title

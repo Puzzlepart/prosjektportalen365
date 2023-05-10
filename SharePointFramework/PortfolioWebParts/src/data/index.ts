@@ -317,8 +317,7 @@ export class DataAdapter implements IDataAdapter {
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
     siteId: string,
-    siteIdProperty: string = 'GtSiteIdOWSTEXT',
-    queryArray?: string
+    siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ) {
     let [
       { PrimarySearchResults: projects },
@@ -327,19 +326,17 @@ export class DataAdapter implements IDataAdapter {
     ] = await Promise.all([
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${queryArray ?? ''} ${view.searchQuery} `,
+        QueryTemplate: `${view.searchQuery} `,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${queryArray ?? ''} DepartmentId:{${siteId}} contentclass:STS_Site`,
+        QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
         SelectProperties: ['Path', 'Title', 'SiteId']
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${
-          queryArray ?? ''
-        } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })
