@@ -23,6 +23,7 @@ import {
 import { usePortfolioOverviewFilters } from '../usePortfolioOverviewFilters'
 import { IPortfolioOverviewCommandsProps } from './types'
 import React from 'react'
+import { ProgramItem } from 'models'
 
 /**
  * Component logic hook for the PortfolioOverviewCommands component. Handles the logic for
@@ -69,7 +70,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
     ? context.props.configuration.programs.map((p) => ({
         key: p.id,
         text: p.name,
-        data: { searchQueryFilters: p.getSearchQueryFilters() }
+        data: p
       }))
     : []
 
@@ -186,14 +187,14 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
                     const defaultView = context.props.configuration.views.find(
                       (v) => v.isDefaultView
                     )
-                    const view = new PortfolioOverviewView()
-                      .configureFrom(defaultView)
-                      .set({
-                        id: option.key,
-                        title: option.text,
-                        iconName: 'ProjectCollection'
-                      })
-                      .appendToQuery(option.data?.searchQueryFilters)
+                    const view = new PortfolioOverviewView().configureFrom(defaultView).set({
+                      id: option.key,
+                      title: option.text,
+                      iconName: 'ProjectCollection'
+                    })
+                    view.searchQueries = (option.data as ProgramItem).buildQueries(
+                      defaultView.searchQuery
+                    )
                     context.dispatch(CHANGE_VIEW(view))
                   }}
                 />

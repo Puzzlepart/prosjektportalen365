@@ -16,17 +16,69 @@ export class SPPortfolioOverviewViewItem {
 }
 
 export class PortfolioOverviewView {
+  /**
+   * ID of the view. This can be a string or a number. If it's a
+   * number it's typically the SharePoint list item ID.
+   */
   public id: string | number
+
+  /**
+   * Title of the view.
+   */
   public title: string
+
+  /**
+   * Sort order for the view. This property is set when the view is
+   * configured with a sort order.
+   */
   public sortOrder: number
+
+  /**
+   * Search query for the view. This property is set when the view is
+   * configured with a search query.
+   */
   public searchQuery: string
+
+  /**
+   * Array of search queries for the view. This properties is set in
+   * special cases where the query text is too long to fit in the
+   * `searchQuery` property.
+   */
   public searchQueries: string[]
+
+  /**
+   * `true` if the view is the default view, `false` otherwise.
+   */
   public isDefaultView: boolean
+
+  /**
+   * Icon name for the view.
+   */
   public iconName: string
+
+  /**
+   * `true` if the view is a personal view, `false` otherwise.
+   */
   public isPersonal: boolean
+
+  /**
+   * Columns for the view.
+   */
   public columns: ProjectColumn[]
+
+  /**
+   * Refiners for the view.
+   */
   public refiners: ProjectColumn[]
+
+  /**
+   * Column to group by.
+   */
   public groupBy?: ProjectColumn
+
+  /**
+   * Scope of the view (not sure of the current usage of this property).
+   */
   public scope?: string
 
   /**

@@ -284,7 +284,6 @@ export class DataAdapter implements IDataAdapter {
         siteId,
         siteIdProperty
       )
-
       const items = projects.map((project) => {
         const [statusReport] = statusReports.filter(
           (res) => res[siteIdProperty] === project[siteIdProperty]
@@ -305,9 +304,38 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
+   * Fetch items for the specified view. If the `view` has specified `searchQueries` it will use
+   * `Promise.all` to fetch all queries in parallel. Otherwise it will use a single query.
+   *
+   * @param view View configuration
+   * @param selectProperties Select properties
+   */
+  private async _fetchItemsForView(view: PortfolioOverviewView, selectProperties: string[] = []) {
+    if (_.isArray(view.searchQueries)) {
+      const result = await Promise.all(
+        view.searchQueries.map((query) =>
+          sp.search({
+            ...DEFAULT_SEARCH_SETTINGS,
+            QueryTemplate: query,
+            SelectProperties: selectProperties
+          })
+        )
+      )
+      return _.flatten(result.map((res) => res.PrimarySearchResults))
+    } else {
+      const { PrimarySearchResults } = await sp.search({
+        ...DEFAULT_SEARCH_SETTINGS,
+        QueryTemplate: view.searchQuery,
+        SelectProperties: selectProperties
+      })
+      return PrimarySearchResults
+    }
+  }
+
+  /**
    * Fetches data for portfolio views
    *
-   * @param view View
+   * @param view View configuration
    * @param configuration Configuration
    * @param siteId Site ID
    * @param siteIdProperty Site ID property (defaults to **GtSiteIdOWSTEXT**)
@@ -320,15 +348,11 @@ export class DataAdapter implements IDataAdapter {
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ) {
     let [
-      { PrimarySearchResults: projects },
+      projects,
       { PrimarySearchResults: sites },
       { PrimarySearchResults: statusReports }
     ] = await Promise.all([
-      sp.search({
-        ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${view.searchQuery} `,
-        SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
-      }),
+      this._fetchItemsForView(view, [...configuration.columns.map((f) => f.fieldName)]),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,

@@ -19,7 +19,7 @@ export const PROPERTYPANE_CONFIGURATION_PROPS = {
   SHOW_FILTERS: 'showFilters',
   SHOW_GROUPBY: 'showGroupBy',
   SHOW_SEARCH_BOX: 'showSearchBox',
-  SHOW_VIEWSELECTOR: 'showViewSelector',
+  SHOW_VIEWSELECTOR: 'showViewSelector'
 }
 
 export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<
