@@ -83,7 +83,7 @@ export class PortfolioOverviewView {
 
   /**
    * Constructor for the PortfolioOverviewView class.
-   * 
+   *
    * @param _item SP list item to create the view from
    */
   constructor(private _item?: SPPortfolioOverviewViewItem) {
