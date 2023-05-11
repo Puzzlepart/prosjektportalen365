@@ -23,9 +23,10 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Fiks for Gevinstoversikt på prosjektnivå [#1095](https://github.com/Puzzlepart/prosjektportalen365/issues/1095)
 - Aggregerte oversikter henter nå ut alle elementer - tidligere ble det kun hentet maksimalt 500 [#1099](https://github.com/Puzzlepart/prosjektportalen365/issues/1099)
 - Fikset problem dersom det ble oppgitt for mange vedlegg eller sjekkpunkter i planneroppgaver og innhold manglet [#1039](https://github.com/Puzzlepart/prosjektportalen365/issues/1039)
-  - Det loggføres i `Logg` listen dersom begrensninger er nådd.
+- Det loggføres i `Logg` listen dersom begrensninger er nådd.
 - Fiks for #1049 (feil ved publisering av statusrapporter) [#1049](https://github.com/Puzzlepart/prosjektportalen365/issues/1049)
 - Oppgraderingsoperasjonene som kjører før oppgradering varsler nå om feil, og det ble rettet feil som gjorde at oppgradering i 1.8.0 og 1.8.1 ikke fungerte fullstendig [#1094](https://github.com/Puzzlepart/prosjektportalen365/issues/1094)
+- Fikset et problem hvor "Vis i statusseksjonen" verdien ikke ble overholdt i visning av statusseksjoner
 
 ## 1.8.1 - 31.03.2023
 
