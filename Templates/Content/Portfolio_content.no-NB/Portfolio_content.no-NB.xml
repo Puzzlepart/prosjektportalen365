@@ -347,7 +347,7 @@
                             <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName="Title">Gjennomføre BP1 (sjekkliste og evt. faseovergang) og vurdere om vi skal gå videre til konseptfasen og utrede ulike konsepter for et mulig prosjekt</pnp:DataValue>
+                            <pnp:DataValue FieldName="Title">Gjennomføre BP1 (sjekkliste og ev. faseovergang) og vurdere om vi skal gå videre til konseptfasen og utrede ulike konsepter for et mulig prosjekt</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
                         </pnp:DataRow>
@@ -437,7 +437,7 @@
                             <pnp:DataValue FieldName="GtSortOrder">260</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName="Title">Gjennomføre BP2 (sjekkliste og evt. faseovergang) og vurdere om man skal gå videre til planleggingsfasen og planlegge prosjektet i detalj</pnp:DataValue>
+                            <pnp:DataValue FieldName="Title">Gjennomføre BP2 (sjekkliste og ev. faseovergang) og vurdere om man skal gå videre til planleggingsfasen og planlegge prosjektet i detalj</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Konsept</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">270</pnp:DataValue>
                         </pnp:DataRow>
@@ -497,7 +497,7 @@
                             <pnp:DataValue FieldName="GtSortOrder">380</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName="Title">Gjennomføre BP3 (sjekkliste og evt. faseovergang) og vurdere om man skal gå videre til gjennomføringsfasen(e)</pnp:DataValue>
+                            <pnp:DataValue FieldName="Title">Gjennomføre BP3 (sjekkliste og ev. faseovergang) og vurdere om man skal gå videre til gjennomføringsfasen(e)</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Planlegge</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">390</pnp:DataValue>
                         </pnp:DataRow>
@@ -552,17 +552,17 @@
                             <pnp:DataValue FieldName="GtSortOrder">490</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName="Title">Gjennomføre BP4 (sjekkliste og evt. faseovergang) og vurdere om man skal gå videre til avslutningsfasen</pnp:DataValue>
+                            <pnp:DataValue FieldName="Title">Gjennomføre BP4 (sjekkliste og ev. faseovergang) og vurdere om man skal gå videre til avslutningsfasen</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Gjennomføre</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">500</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName="Title">Komplettere evt. restanseliste og overlevere endelig leveranse til linjeorganisasjonen</pnp:DataValue>
+                            <pnp:DataValue FieldName="Title">Komplettere ev. restanseliste og overlevere endelig leveranse til linjeorganisasjonen</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Avslutte</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">510</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName="Title">Levere evt. avtalt støtte til linjeorganisasjonen i innføringsfasen</pnp:DataValue>
+                            <pnp:DataValue FieldName="Title">Levere ev. avtalt støtte til linjeorganisasjonen i innføringsfasen</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Avslutte</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">520</pnp:DataValue>
                         </pnp:DataRow>
@@ -607,7 +607,7 @@
                             <pnp:DataValue FieldName="GtSortOrder">600</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName="Title">Gjennomføre BP5 (sjekkliste og evt. faseovergang) og vurdere om man skal avslutte prosjektet og gå til realiseringsfasen</pnp:DataValue>
+                            <pnp:DataValue FieldName="Title">Gjennomføre BP5 (sjekkliste og ev. faseovergang) og vurdere om man skal avslutte prosjektet og gå til realiseringsfasen</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Avslutte</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">610</pnp:DataValue>
                         </pnp:DataRow>
@@ -632,7 +632,7 @@
                             <pnp:DataValue FieldName="GtSortOrder">650</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName="Title">Gjennomføre BP6 (sjekkliste) og vurdere om man har oppnådd ønsket effekt, og evt. vurdere nye tiltak</pnp:DataValue>
+                            <pnp:DataValue FieldName="Title">Gjennomføre BP6 (sjekkliste) og vurdere om man har oppnådd ønsket effekt, og ev. vurdere nye tiltak</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Realisere</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">660</pnp:DataValue>
                         </pnp:DataRow>
