@@ -29,6 +29,5 @@
         <pnp:FieldRef ID="9a81b4e1-64ea-40c2-9be1-946f20e78999" Name="GtModerationStatus" UpdateChildren="true" />
         <pnp:FieldRef ID="fba7ced6-9970-4b14-ab9c-7c809310d86d" Name="GtSiteId" UpdateChildren="true" />
         <pnp:FieldRef ID="B3004225-79DE-42CC-A4B7-80968A9AFC58" Name="GtLastReportDate" UpdateChildren="true" />
-        <pnp:FieldRef ID="8ccb7ac0-5cc7-48c5-9e80-d1b5bd09f724" Name="GtSectionDataJson" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

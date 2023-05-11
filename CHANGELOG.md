@@ -38,7 +38,7 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Aggregerte oversikter henter nå ut alle elementer - tidligere ble det kun hentet maksimalt 500 [#1099](https://github.com/Puzzlepart/prosjektportalen365/issues/1099)
 - Fikset problem dersom det ble oppgitt for mange vedlegg eller sjekkpunkter i planneroppgaver og innhold manglet [#1039](https://github.com/Puzzlepart/prosjektportalen365/issues/1039)
   - Det loggføres i `Logg` listen dersom begrensninger er nådd.
-- Midlertidig fiks for #1049 - en mer dekkende fiks kommer i en senere release [#1049](https://github.com/Puzzlepart/prosjektportalen365/issues/1049)
+- Fiks for #1049 (feil ved publisering av statusrapporter) [#1049](https://github.com/Puzzlepart/prosjektportalen365/issues/1049)
 
 ---
 
