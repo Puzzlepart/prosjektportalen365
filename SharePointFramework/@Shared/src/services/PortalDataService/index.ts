@@ -2,7 +2,7 @@
 import { find } from '@microsoft/sp-lodash-subset'
 import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
-import { AttachmentFileInfo, CamlQuery, ListEnsureResult, PermissionKind, sp, Web } from '@pnp/sp'
+import { CamlQuery, Folder, ListEnsureResult, PermissionKind, sp, Web } from '@pnp/sp'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { transformFieldXml } from '../../helpers/transformFieldXml'
@@ -18,7 +18,8 @@ import {
   SPProjectAdminRoleItem,
   SPProjectColumnConfigItem,
   SPProjectColumnItem,
-  StatusReport
+  StatusReport,
+  StatusReportAttachment
 } from '../../models'
 import {
   GetStatusReportsOptions,
@@ -48,7 +49,7 @@ export class PortalDataService {
   }
 
   /**
-   * Get hub site
+   * Get hub site cached for a year to minimize calls to the API.
    *
    * @param expire Expire
    */
@@ -194,27 +195,55 @@ export class PortalDataService {
   }
 
   /**
-   * Update status report, and add snapshot as attachment.
+   * Ensures a folder in the attachments library for the status report.
    *
    * @param report Status report
-   * @param properties Properties
-   * @param attachment Attachment
+   */
+  private async ensureAttachmentsFolder(report: StatusReport): Promise<Folder> {
+    const folderName = report.id.toString()
+    const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS_ATTACHMENTS)
+    try {
+      const folder = await list.rootFolder.folders.getByName(folderName).get()
+      console.log(folder)
+      return list.rootFolder.folders.getByName(folderName)
+    } catch (error) {
+      const { folder } = await list.rootFolder.folders.add(folderName)
+      return folder
+    }
+  }
+
+  /**
+   * Publish status report. Sets `GtModerationStatus` to `publishedString` and
+   * `GtLastReportDate` to `reportDate`. Then uploads the persisted section data
+   * and snapshot to the attachments folder (in a separate hidden library).
+   *
+   * @param report Status report
+   * @param reportDate Status report date
+   * @param snapshotContent Snapshot content
+   * @param attachments Attachments to upload in the attachments folder (in a separate hidden library)
    * @param publishedString String value for published state
    */
-  public async updateStatusReport(
+  public async publishStatusReport(
     report: StatusReport,
-    properties: Record<string, string>,
-    attachment?: AttachmentFileInfo,
+    reportDate: string,
+    attachments: StatusReportAttachment[],
     publishedString?: string
   ): Promise<StatusReport> {
-    const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
-    if (attachment) {
-      try {
-        await list.items.getById(report.id).attachmentFiles.addMultiple([attachment])
-      } catch (error) {}
-    }
+    const projectStatusList = this.web.lists.getByTitle(
+      this._configuration.listNames.PROJECT_STATUS
+    )
     try {
-      await list.items.getById(report.id).update(properties)
+      const attachmentsFolder = await this.ensureAttachmentsFolder(report)
+      const properties: Record<string, string> = {
+        GtModerationStatus: publishedString,
+        GtLastReportDate: reportDate
+      }
+      await Promise.all([
+        projectStatusList.items.getById(report.id).update(properties),
+        ...attachments.map((att) =>
+          attachmentsFolder.files.add(att.url, att.content, att.shouldOverWrite)
+        )
+      ])
       return new StatusReport({ ...report.item, ...properties }, publishedString)
     } catch (error) {
       throw error
@@ -509,18 +538,44 @@ export class PortalDataService {
     if (stringIsNullOrEmpty(filter))
       filter = `GtSiteId eq '${this._configuration.pageContext.site.id.toString()}'`
     try {
-      let items = this.web.lists
-        .getByTitle(this._configuration.listNames.PROJECT_STATUS)
-        .items.filter(filter)
+      const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
+      let items = list.items
+        .filter(filter)
         .expand('FieldValuesAsText', 'AttachmentFiles')
         .orderBy('Id', false)
       if (top) items = items.top(top)
       if (select) items = items.select(...select)
       if (useCaching) items = items.usingCaching()
-      return (await items.get()).map((i) => new StatusReport(i, publishedString))
+      const reports = (await items.get()).map((i) => new StatusReport(i, publishedString))
+      return reports
     } catch (error) {
       throw error
     }
+  }
+
+  /**
+   * Get attachments for the specified status report. If the attachment filename
+   * contains `.txt` or `.json` the content will be fetched and added to the
+   * attachment object.
+   *
+   * @param report Status report
+   */
+  public async getStatusReportAttachments(report: StatusReport): Promise<StatusReport> {
+    const attachmentsFolder = await this.ensureAttachmentsFolder(report)
+    const attachmentFiles = await attachmentsFolder.files.usingCaching().get()
+    const attachmentFilesContent = await Promise.all(
+      attachmentFiles.map(async ({ Name: name, ServerRelativeUrl: url }) => {
+        const attachment: StatusReportAttachment = {
+          name,
+          url
+        }
+        if (url.indexOf('.txt') !== -1 || url.indexOf('.json') !== -1) {
+          attachment.content = await this.web.getFileByServerRelativeUrl(url).getText()
+        }
+        return attachment
+      })
+    )
+    return report.initAttachments(attachmentFilesContent)
   }
 
   /**
