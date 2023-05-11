@@ -112,4 +112,60 @@ if ($null -ne $LastInstall) {
             
         }
     }
+
+    if ($PreviousVersion -lt "1.8.2") {
+        Write-Host "[INFO] In version v1.8.2 we did some adjustments to Project Status fields and attachments"
+        
+        $PERSISTED_SECTION_DATA_JSON_FILENAME = "PersistedSectionDataJson.json"
+        $SNAPSHOT_FILENAME = "Snapshot.png"
+        $TEMP_FOLDER = (Join-Path ([System.IO.Path]::GetTempPath()) ([System.Guid]::NewGuid()))
+
+        # Create the temp folder if it doesn't exist
+        if (-not (Test-Path $TEMP_FOLDER)) {
+            New-Item -ItemType Directory -Path $TEMP_FOLDER | Out-Null
+        }
+
+        # Get the folder where the attachments should be uploaded
+        $ProjectStatusAttachmentsFolder = Get-PnPFolder -Url "Prosjektstatusvedlegg"
+
+        # Get all the items in the list
+        $ProjectStatusItems = Get-PnPListItem -List "Prosjektstatus"
+
+        foreach ($ProjectStatusItem in $ProjectStatusItems) {
+            $Id = $ProjectStatusItem["ID"]
+            $Title = $ProjectStatusItem["Title"]
+            $PersistedSectionDataJson = $ProjectStatusItem["GtSectionDataJson"]
+
+            Write-Host "Processing item $($Id) ($Title)" -InformationAction Ignore
+
+            # Create a folder for the item in the attachments folder
+            Write-Host "`tCreating folder for item $Id in Prosjektstatusvedlegg" -InformationAction Ignore
+            Add-PnPFolder -Folder $ProjectStatusAttachmentsFolder -Name $Id -ErrorAction SilentlyContinue | Out-Null
+            $TempAttachmentFolder = "$($TEMP_FOLDER)/$Id"
+
+            # Create the temp folder if it doesn't exist locally
+            if (-not (Test-Path $TempAttachmentFolder)) {
+                New-Item -ItemType Directory -Path $TempAttachmentFolder | Out-Null
+            }
+
+            # Download the attachments for the item to the temp folder
+            Get-PnPListItemAttachment -List "Prosjektstatus" -Identity $Id -Path $TempAttachmentFolder -Force -WarningAction SilentlyContinue -ErrorAction SilentlyContinue
+
+            # Check if the field GtSectionDataJson has a value
+            if (-not [string]::IsNullOrEmpty($PersistedSectionDataJson)) {
+                Write-Host "`tCreating $PERSISTED_SECTION_DATA_JSON_FILENAME for item $Id in Prosjektstatusvedlegg/$Id" -InformationAction Ignore
+                $PersistedSectionDataJson | Out-File "$($TempAttachmentFolder)/$($PERSISTED_SECTION_DATA_JSON_FILENAME)" -Encoding utf8
+                Add-PnPFile -Path "$($TempAttachmentFolder)/$($PERSISTED_SECTION_DATA_JSON_FILENAME)" -Folder "Prosjektstatusvedlegg/$Id" -NewFileName $PERSISTED_SECTION_DATA_JSON_FILENAME -ErrorAction SilentlyContinue | Out-Null
+                Write-Host "`tSuccessfully uploaded $PERSISTED_SECTION_DATA_JSON_FILENAME for item $Id in Prosjektstatus" -ForegroundColor Green -InformationAction Ignore
+            }
+
+            # Check $TempAttachmentFolder for PNG file starting with "Ny-statusrapport-for" to exclude potential attachments uploaded by the end users
+            $Snapshot = Get-ChildItem -Path $TempAttachmentFolder | Where-Object { $_.Extension -eq ".png" -and $_.Name -like "Ny-statusrapport-for*" } | Select-Object -First 1
+            if ($null -ne $Snapshot) {
+                Write-Host "`tCreating $SNAPSHOT_FILENAME for item $Id in Prosjektstatusvedlegg/$Id" -InformationAction Ignore
+                Add-PnPFile -Path $Snapshot.FullName -Folder "Prosjektstatusvedlegg/$Id" -NewFileName $SNAPSHOT_FILENAME -ErrorAction SilentlyContinue | Out-Null
+            }
+        }
+        Write-Host "[SUCCESS] Project Status items successfully processed"
+    }
 }
