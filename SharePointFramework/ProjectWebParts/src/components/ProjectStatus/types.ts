@@ -11,6 +11,18 @@ export interface IProjectStatusProps extends IBaseWebPartComponentProps {
   opportunityMatrix?: IOpportunityMatrixProps
   fieldWidth?: number
   pageContext?: PageContext
+
+  /**
+   * File name for the persisted section data attachment stored in a separate
+   * hidden library. This is used to persist the section data when the report
+   * is published.
+   */
+  persistSectionDataAttachmentFileName?: string
+
+  /**
+   * File name for the snapshot attachment stored in a separate hidden library.
+   */
+  snapshotAttachmentFileName?: string
 }
 
 export interface IProjectStatusState extends IBaseWebPartComponentState<IProjectStatusData> {
