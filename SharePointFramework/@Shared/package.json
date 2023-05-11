@@ -7,7 +7,7 @@
     "directory": "SharePointFramework/@Shared"
   },
   "license": "MIT",
-  "description": "Shared utilities, helpers and models",
+  "description": "Shared utilities, helpers and models for Prosjektportalen 365",
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",

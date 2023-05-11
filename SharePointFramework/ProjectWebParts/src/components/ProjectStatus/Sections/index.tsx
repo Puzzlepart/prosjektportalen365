@@ -14,6 +14,7 @@ export const Sections: FC = () => {
   const { sections } = useSections()
 
   if (!context.state.selectedReport) return <UserMessage text={strings.NoStatusReportsMessage} />
+
   return (
     <div className={styles.root} id='pp-statussection'>
       {sections.map((sec, idx) => {

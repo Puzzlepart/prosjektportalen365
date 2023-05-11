@@ -1,17 +1,20 @@
-import { isEmpty } from 'underscore'
-
 export type StatusReportAttachment = {
-  FileName: string
-  ServerRelativeUrl: string
+  name?: string
+  url: string
+  content?: string | ArrayBuffer | Blob
+  shouldOverWrite?: boolean
 }
 
+/**
+ * Status report model. Represents a status report item in SharePoint.
+ */
 export class StatusReport {
   public id: number
   public created: Date
   public defaultEditFormUrl: string
   public modified: Date
   public publishedDate: Date
-  public persistedSectionData: Record<string, any>
+  private _attachments: StatusReportAttachment[] = []
 
   /**
    * Creates a new instance of StatusReport
@@ -24,7 +27,43 @@ export class StatusReport {
     this.created = new Date(item.Created)
     this.modified = new Date(item.Modified)
     this.publishedDate = item.GtLastReportDate ? new Date(item.GtLastReportDate) : null
-    this.persistedSectionData = JSON.parse(item.GtSectionDataJson ?? '{}')
+  }
+
+  /**
+   * Initialize attachments for the report and returns the report.
+   * 
+   * @param attachments Attachments
+   */
+  public initAttachments(attachments: StatusReportAttachment[]): StatusReport {
+    this._attachments = attachments
+    return this
+  }
+
+  /**
+   * Get persisted section data from the report. If no persisted section data is found, null is returned.
+   * If the JSON is invalid, null is returned.
+   */
+  public get persistedSectionData(): Record<string, any> {
+    const persistedSectionData = this._attachments.find(
+      (a) => a.name.toLowerCase() === 'persistedsectiondata.json'
+    )
+    try {
+      if (persistedSectionData) {
+        return JSON.parse(persistedSectionData.content as string)
+      }
+      return null
+    } catch (error) {
+      return null
+    }
+  }
+
+  /**
+   * Get snapshot url for the report.
+   */
+  public get snapshotUrl(): string {
+    const snapshot = this._attachments.find((a) => a.name.toLowerCase() === 'snapshot.png')
+    if (snapshot) return snapshot.url
+    return null
   }
 
   /**
@@ -66,20 +105,6 @@ export class StatusReport {
    */
   public get values(): Record<string, any> {
     return this.item
-  }
-
-  /**
-   * Attachments
-   */
-  public get attachments(): StatusReportAttachment[] {
-    return this.item.AttachmentFiles || []
-  }
-
-  /**
-   * Has attachments
-   */
-  public get hasAttachments(): boolean {
-    return !isEmpty(this.attachments)
   }
 
   /**

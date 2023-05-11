@@ -25,7 +25,7 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   selectedReport?: StatusReport
 
   /**
-   * Hash state
+   * Hash state from URL
    */
   hashState?: IProjectStatusHashState
 
@@ -35,7 +35,7 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   isPublishing?: boolean
 
   /**
-   * ID of the most recent report
+   * `ID` of the most recent report
    */
   mostRecentReportId?: number
 
@@ -45,12 +45,12 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   userHasAdminPermission?: boolean
 
   /**
-   * Persist list data
+   * Persisted section list data
    */
   persistedSectionData?: Record<string, any>
 
   /**
-   * User message
+   * User message to display in the UI
    */
   userMessage?: Pick<IUserMessageProps, 'text' | 'type'>
 }

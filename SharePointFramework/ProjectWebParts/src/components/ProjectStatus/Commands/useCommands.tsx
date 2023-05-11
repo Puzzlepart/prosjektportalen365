@@ -1,8 +1,7 @@
 import { getId, IContextualMenuItem, Spinner, SpinnerSize } from '@fluentui/react'
 import { formatDate } from 'pp365-shared/lib/helpers'
 import strings from 'ProjectWebPartsStrings'
-import { useContext } from 'react'
-import { first } from 'underscore'
+import React, { useContext } from 'react'
 import { ProjectStatusContext } from '../context'
 import { REPORT_PUBLISHING } from '../reducer'
 import { useDeleteReport } from './useDeleteReport'
@@ -10,7 +9,6 @@ import { useEditFormUrl } from './useEditFormUrl'
 import { usePublishReport } from './usePublishReport'
 import { useRedirectNewStatusReport } from './useRedirectNewStatusReport'
 import { useReportOptions } from './useReportOptions'
-import React from 'react'
 
 /**
  * Component logic hook for `Commands`. This hook is used to generate the commands for the `CommandBar` component.
@@ -73,49 +71,41 @@ export function useCommands() {
       },
     context.state.isPublishing && {
       key: 'IS_PUBLISHING',
-      onRender: () => {
-        return (
-          <Spinner
-            label={strings.PublishReportSpinnerText}
-            size={SpinnerSize.small}
-            labelPosition='right'
-          />
-        )
-      }
+      onRender: () => (
+        <Spinner
+          label={strings.PublishReportSpinnerText}
+          size={SpinnerSize.small}
+          labelPosition='right'
+        />
+      )
     }
   ].filter(Boolean)
-  const farItems: IContextualMenuItem[] = []
-  if (context.state.sourceUrl) {
-    farItems.push({
+  const farItems: IContextualMenuItem[] = [
+    context.state.sourceUrl && {
       key: 'NAVIGATE_TO_SOURCE_URL',
       name: strings.NavigateToSourceUrlText,
       iconProps: { iconName: 'NavigateBack' },
       href: context.state.sourceUrl
-    })
-  }
-  if (context.state.selectedReport) {
-    farItems.push({
+    },
+    context.state.selectedReport && {
       key: 'GET_SNAPSHOT',
       name: strings.GetSnapshotButtonText,
       iconProps: { iconName: 'Photo2' },
-      disabled: !context.state.selectedReport?.hasAttachments || context.state.isPublishing,
+      disabled: !context.state.selectedReport?.snapshotUrl || context.state.isPublishing,
       onClick: () => {
-        window.open(first(context.state.selectedReport.attachments).ServerRelativeUrl)
+        window.open(context.state.selectedReport?.snapshotUrl)
       }
-    })
-  }
-  if (context.state.data.reports.length > 0) {
-    farItems.push({
+    },
+    context.state.data.reports.length > 0 && {
       key: 'REPORT_DROPDOWN',
       name: context.state.selectedReport
         ? formatDate(context.state.selectedReport.created, true)
         : '',
       iconProps: { iconName: 'FullHistory' },
-      subMenuProps: { items: reportOptions }
-    })
-  }
-  if (context.state.selectedReport) {
-    farItems.push({
+      subMenuProps: { items: reportOptions },
+      disabled: context.state.data.reports.length < 2
+    },
+    context.state.selectedReport && {
       id: getId('StatusIcon'),
       key: 'STATUS_ICON',
       name: context.state.selectedReport?.published
@@ -128,7 +118,7 @@ export function useCommands() {
         }
       },
       disabled: true
-    })
-  }
+    }
+  ].filter(Boolean)
   return { props: { items, farItems } } as const
 }
