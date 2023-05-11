@@ -353,7 +353,10 @@ if ($Upgrade.IsPresent) {
         ."$PSScriptRoot\Scripts\PreInstallUpgrade.ps1"
         Disconnect-PnPOnline
     }
-    Catch {}
+    catch {
+        Write-Host "[ERROR] Failed to run pre-install upgrade steps: $($_.Exception.Message)" -ForegroundColor Red
+        exit 0
+    }
 }
 #endregion
 
