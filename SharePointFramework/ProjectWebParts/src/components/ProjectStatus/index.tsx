@@ -25,7 +25,7 @@ export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
 }
 
 ProjectStatus.defaultProps = {
-  persistSectionDataAttachmentFileName: 'PersistedSectionData.json',
+  persistSectionDataAttachmentFileName: 'PersistedSectionDataJson.json',
   snapshotAttachmentFileName: 'Snapshot.png'
 }
 
