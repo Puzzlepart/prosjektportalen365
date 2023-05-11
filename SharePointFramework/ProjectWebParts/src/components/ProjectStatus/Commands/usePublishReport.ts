@@ -28,11 +28,11 @@ export function usePublishReport() {
         const snapshot = await captureReportSnapshot()
         const attachments = [
           {
-            url: 'Snapshot.png',
+            url: context.props.snapshotAttachmentFileName,
             content: snapshot
           },
           {
-            url: 'PersistedSectionData.json',
+            url: context.props.persistSectionDataAttachmentFileName,
             content: JSON.stringify(context.state.persistedSectionData)
           }
         ]
