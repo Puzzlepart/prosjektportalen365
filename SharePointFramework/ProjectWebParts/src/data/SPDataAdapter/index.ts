@@ -102,7 +102,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         fieldValuesText,
         templateParameters
       )
-      await this.entityService.updateEntityItem(this.settings.siteId, properties)
+      await this.entityService.ensureEntity(this.settings.siteId, properties)
       Logger.log({
         message: `(${this._name}) (syncPropertyItemToHub) Successfully synced item to hub entity.`,
         data: { properties },
