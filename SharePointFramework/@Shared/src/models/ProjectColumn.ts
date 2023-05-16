@@ -79,7 +79,7 @@ export class ProjectColumn implements IColumn {
   private _getCustomSorts(value: string): ProjectColumnCustomSort[] {
     if (stringIsNullOrEmpty(value)) return []
     const regex = /(?<name>[\w\søæå]*)(\((?<icon>[\w\søæå,]*)\))?:(?<order>[\w\søæå,]*)/gm
-    const matches = [...value.matchAll(regex)].map((m) => m.groups)
+    const matches = [...value.matchAll(regex)].map((m) => m.groups).filter((g) => !!g.name)
     return matches.map(({ name, icon, order }) => ({
       name,
       iconName: icon,
