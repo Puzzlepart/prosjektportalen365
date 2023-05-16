@@ -22,6 +22,7 @@ export class SPProjectColumnItem {
 }
 
 export type ProjectColumnCustomSort = {
+  name: string
   order: string[]
   iconName?: string
 }
@@ -45,7 +46,7 @@ export class ProjectColumn implements IColumn {
   public isSortedDescending?: boolean
   public config?: ProjectColumnConfigDictionary
   public onColumnClick: any
-  public customSorts?: Record<string, ProjectColumnCustomSort>
+  public customSorts?: ProjectColumnCustomSort[]
 
   constructor(private _item?: SPProjectColumnItem) {
     if (_item) {
@@ -69,25 +70,21 @@ export class ProjectColumn implements IColumn {
   /**
    * Get custom sorts from value. Value is a string with the following format:
    * <key>:<value>,<value>,<value>;<key>:<value>,<value>,<value> separated by ;.
+   * Regex is used to match the values.
+   *
+   * **Example:** "Status:Active,On hold,Completed;Priority:High,Medium,Low"
    *
    * @param value Value for custom sort
    */
-  private _getCustomSorts(value: string): Record<string, ProjectColumnCustomSort> {
-    if (stringIsNullOrEmpty(value)) return {}
+  private _getCustomSorts(value: string): ProjectColumnCustomSort[] {
+    if (stringIsNullOrEmpty(value)) return []
     const regex = /(?<name>[\w\søæå]*)(\((?<icon>[\w\søæå,]*)\))?:(?<order>[\w\søæå,]*)/gm
     const matches = [...value.matchAll(regex)].map((m) => m.groups)
-    return matches.reduce((obj, item) => {
-      const { name, icon, order } = item
-      return name
-        ? {
-          ...obj,
-          [name]: {
-            order: order.split(','),
-            iconName: icon
-          }
-        }
-        : obj
-    }, {} as Record<string, ProjectColumnCustomSort>)
+    return matches.map(({ name, icon, order }) => ({
+      name,
+      iconName: icon,
+      order: order.split(',')
+    }))
   }
 
   public isVisible(page: 'Frontpage' | 'ProjectStatus' | 'Portfolio') {
