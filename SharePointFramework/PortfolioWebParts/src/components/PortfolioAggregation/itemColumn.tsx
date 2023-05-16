@@ -119,7 +119,10 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
  *
  * @param props Props
  */
-export const getDefaultColumns = ({ lockedColumns, webPartContext }: IPortfolioAggregationProps) => {
+export const getDefaultColumns = ({
+  lockedColumns,
+  webPartContext
+}: IPortfolioAggregationProps) => {
   if (lockedColumns) return []
   return [
     {
