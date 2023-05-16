@@ -140,8 +140,10 @@ export class PortalDataService {
         .getByTitle(this._configuration.listNames.PROJECT_COLUMNS)
         .items.select(...Object.keys(new SPProjectColumnItem()))
         .get<SPProjectColumnItem[]>()
+      console.log({ getProjectColumns: spItems })
       return spItems.map((item) => new ProjectColumn(item))
     } catch (error) {
+      console.log(error)
       return []
     }
   }
@@ -170,8 +172,7 @@ export class PortalDataService {
     const folderName = report.id.toString()
     const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS_ATTACHMENTS)
     try {
-      const folder = await list.rootFolder.folders.getByName(folderName).get()
-      console.log(folder)
+      await list.rootFolder.folders.getByName(folderName).get()
       return list.rootFolder.folders.getByName(folderName)
     } catch (error) {
       const { folder } = await list.rootFolder.folders.add(folderName)
@@ -370,7 +371,7 @@ export class PortalDataService {
           fieldToCreate.updateAndPushChanges(true)
         }
         await executeQuery(jsomContext)
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       Logger.log({
@@ -386,7 +387,7 @@ export class PortalDataService {
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch {}
+    } catch { }
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }

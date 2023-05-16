@@ -1,8 +1,9 @@
 /* eslint-disable max-classes-per-file */
+import { stringIsNullOrEmpty } from '@pnp/common'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
-import { ProjectColumnConfigDictionary, ProjectColumnConfig } from './ProjectColumnConfig'
-import { SearchValueType } from '../types/SearchValueType'
 import { pick } from 'underscore'
+import { SearchValueType } from '../types/SearchValueType'
+import { ProjectColumnConfig, ProjectColumnConfigDictionary } from './ProjectColumnConfig'
 
 export class SPProjectColumnItem {
   public Id: number = 0
@@ -39,6 +40,7 @@ export class ProjectColumn implements IColumn {
   public isSortedDescending?: boolean
   public config?: ProjectColumnConfigDictionary
   public onColumnClick: any
+  public customSorts?: Record<string, string[]>
 
   constructor(private _item?: SPProjectColumnItem) {
     if (_item) {
@@ -55,7 +57,25 @@ export class ProjectColumn implements IColumn {
       this.isResizable = true
       this.minWidth = _item.GtColMinWidth || 100
       this.searchType = this._getSearchType(this.fieldName.toLowerCase())
+      this.customSorts = this._getCustomSorts(_item.GtFieldCustomSort)
     }
+  }
+
+  /**
+   * Get custom sorts from value. Value is a string with the following format:
+   * <key>:<value>,<value>,<value>;<key>:<value>,<value>,<value> separated by ;.
+   * 
+   * @param value Value for custom sort
+   */
+  private _getCustomSorts(value: string): Record<string, string[]> {
+    if (stringIsNullOrEmpty(value)) return {}
+    return value?.split(';').filter(Boolean).reduce((obj, item) => {
+      const [key, val] = item.split(':')
+      return val ? {
+        ...obj,
+        [key]: val.split(','),
+      } : obj
+    }, {})
   }
 
   public isVisible(page: 'Frontpage' | 'ProjectStatus' | 'Portfolio') {
