@@ -54,7 +54,7 @@
     <Field Type="Boolean" DisplayName="Standard mal?" ID="{80a9dc17-834e-4c30-af28-87f3ef1900df}" SourceID="{{listid:Maloppsett}}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate">
       <Default>0</Default>
     </Field>
-    <Field Type="Boolean" DisplayName="Konfigurer automatisk" Description="Konfigurer prosjektet automatisk med denne malen om en eier besøker SharePoint-området. Malen må også være satt som standardmal." ID="{249ce763-d28e-4034-8dbc-64318ebc3b42}" SourceID="{{listid:Maloppsett}}" StaticName="IsAutoConfigurable" Name="IsAutoConfigurable">
+    <Field Type="Boolean" DisplayName="Konfigurer automatisk" Description="Konfigurer prosjektet automatisk med denne malen om en eier besøker SharePoint-området. Malen må også være satt som standardmal." ID="{dd341142-d60d-41ad-a206-57f52aa1e60a}" SourceID="{{listid:Maloppsett}}" StaticName="IsAutoConfigurable" Name="IsAutoConfigurable">
       <Default>0</Default>
     </Field>
   </pnp:Fields>
