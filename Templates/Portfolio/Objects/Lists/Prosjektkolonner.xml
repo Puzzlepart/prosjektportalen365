@@ -119,6 +119,7 @@
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldCustomSort">Logisk rekkefølge:Konsept,Planlegge,Gjennomføre,Avslutte,Realisere;</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 8 -->
             <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
