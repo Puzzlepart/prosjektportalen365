@@ -51,8 +51,7 @@ export class SitePermissions extends BaseTask {
             try {
               await group.users.add(users[j])
               this.logInformation(`User ${users[j]} successfully added to group ${groupName}.`)
-            }
-            catch (error) {
+            } catch (error) {
               this.logError(`Failed to add user ${users[j]} to group ${groupName}.`)
             }
           }
@@ -89,10 +88,10 @@ export class SitePermissions extends BaseTask {
     }
     return (await list.getItemsByCAMLQuery(query)).map(
       (item: any) =>
-      ({
-        groupName: item.GtSPGroupName,
-        permissionLevel: item.GtPermissionLevel
-      } as IPermissionConfiguration)
+        ({
+          groupName: item.GtSPGroupName,
+          permissionLevel: item.GtPermissionLevel
+        } as IPermissionConfiguration)
     )
   }
 

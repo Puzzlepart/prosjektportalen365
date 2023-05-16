@@ -95,7 +95,11 @@ export class PlannerConfiguration extends BaseTask {
    * @param plan Plan object
    * @param setupLabels Setup labels for the plan
    */
-  public async ensurePlan(plan: IPlannerPlan, pageContext: PageContext, setupLabels = true): Promise<IPlannerPlan> {
+  public async ensurePlan(
+    plan: IPlannerPlan,
+    pageContext: PageContext,
+    setupLabels = true
+  ): Promise<IPlannerPlan> {
     try {
       const existingGroupPlans = await this._fetchPlans(plan.owner)
       const existingPlan = _.find(existingGroupPlans, (p) => p.title === plan.title)
@@ -119,7 +123,9 @@ export class PlannerConfiguration extends BaseTask {
     this.logInformation(`Sleeping ${delay} seconds before updating the plan with labels`)
     await sleep(delay)
     if (this._labels.length > 0) {
-      this.logInformation(`Sleeping before updating the plan with labels ${JSON.stringify(this._labels)}`)
+      this.logInformation(
+        `Sleeping before updating the plan with labels ${JSON.stringify(this._labels)}`
+      )
       const eTag = (await MSGraphHelper.Get(`planner/plans/${plan.id}/details`))['@odata.etag']
 
       if (this._labels.length > 25) {
@@ -130,10 +136,7 @@ export class PlannerConfiguration extends BaseTask {
         )
 
         await ListLogger.log({
-          message: format(
-            strings.PlannerTagsLimitLogText,
-            plan.title ?? plan.id,
-          ),
+          message: format(strings.PlannerTagsLimitLogText, plan.title ?? plan.id),
           functionName: '_setupLabels',
           level: 'Warning',
           component: 'PlannerConfiguration'
@@ -272,10 +275,7 @@ export class PlannerConfiguration extends BaseTask {
 
       if (taskDetails.checklist.length > 20) {
         await ListLogger.log({
-          message: format(
-            strings.PlannerTaskChecklistLimitLogText,
-            taskDetails.name ?? taskId,
-          ),
+          message: format(strings.PlannerTaskChecklistLimitLogText, taskDetails.name ?? taskId),
           functionName: '_updateTaskDetails',
           level: 'Warning',
           component: 'PlannerConfiguration'
@@ -284,10 +284,7 @@ export class PlannerConfiguration extends BaseTask {
 
       if (taskDetails.attachments.length > 10) {
         await ListLogger.log({
-          message: format(
-            strings.PlannerTaskAttachmentLimitLogText,
-            taskDetails.name ?? taskId,
-          ),
+          message: format(strings.PlannerTaskAttachmentLimitLogText, taskDetails.name ?? taskId),
           functionName: '_updateTaskDetails',
           level: 'Warning',
           component: 'PlannerConfiguration'
@@ -298,27 +295,30 @@ export class PlannerConfiguration extends BaseTask {
     const taskDetailsJson: Record<string, any> = {
       description: taskDetails.description ?? '',
       checklist: taskDetails.checklist
-        ? taskDetails.checklist.slice(0, 20).map((item) => item.substring(0, 100)).reduce(
-          (obj, title) => ({
-            ...obj,
-            [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
-          }),
-          {}
-        )
+        ? taskDetails.checklist
+            .slice(0, 20)
+            .map((item) => item.substring(0, 100))
+            .reduce(
+              (obj, title) => ({
+                ...obj,
+                [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
+              }),
+              {}
+            )
         : {},
       labels: taskDetails.labels,
       references: taskDetails.attachments
         ? taskDetails.attachments.slice(0, 10).reduce(
-          (obj, attachment) => ({
-            ...obj,
-            [this.replaceUrlTokens(attachment.url, pageContext)]: {
-              '@odata.type': 'microsoft.graph.plannerExternalReference',
-              alias: attachment.alias,
-              type: attachment.type
-            }
-          }),
-          {}
-        )
+            (obj, attachment) => ({
+              ...obj,
+              [this.replaceUrlTokens(attachment.url, pageContext)]: {
+                '@odata.type': 'microsoft.graph.plannerExternalReference',
+                alias: attachment.alias,
+                type: attachment.type
+              }
+            }),
+            {}
+          )
         : {},
       previewType: taskDetails.previewType
     }
