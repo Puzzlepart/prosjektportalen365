@@ -32,6 +32,9 @@ declare interface IProjectExtensionsStrings {
   ApplyTemplateNavigation: string
   ApplyTemplateSiteFields: string
   ApplyTemplateWebSettings: string
+  ApplyTemplateHooks: string
+  ApplyExtensionHooks: string
+  RunHooksText: string
   CloseModalText: string
   CopyListDataErrorMessage: string
   CopyListItemsText: string
