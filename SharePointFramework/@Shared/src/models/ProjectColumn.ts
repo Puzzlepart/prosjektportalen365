@@ -21,6 +21,11 @@ export class SPProjectColumnItem {
   public GtIsGroupable: boolean = false
 }
 
+export type ProjectColumnCustomSort = {
+  order: string[]
+  iconName?: string
+}
+
 export class ProjectColumn implements IColumn {
   public key: string
   public fieldName: string
@@ -40,7 +45,7 @@ export class ProjectColumn implements IColumn {
   public isSortedDescending?: boolean
   public config?: ProjectColumnConfigDictionary
   public onColumnClick: any
-  public customSorts?: Record<string, string[]>
+  public customSorts?: Record<string, ProjectColumnCustomSort>
 
   constructor(private _item?: SPProjectColumnItem) {
     if (_item) {
@@ -64,18 +69,25 @@ export class ProjectColumn implements IColumn {
   /**
    * Get custom sorts from value. Value is a string with the following format:
    * <key>:<value>,<value>,<value>;<key>:<value>,<value>,<value> separated by ;.
-   * 
+   *
    * @param value Value for custom sort
    */
-  private _getCustomSorts(value: string): Record<string, string[]> {
+  private _getCustomSorts(value: string): Record<string, ProjectColumnCustomSort> {
     if (stringIsNullOrEmpty(value)) return {}
-    return value?.split(';').filter(Boolean).reduce((obj, item) => {
-      const [key, val] = item.split(':')
-      return val ? {
-        ...obj,
-        [key]: val.split(','),
-      } : obj
-    }, {})
+    const regex = /(?<name>[\w\søæå]*)(\((?<icon>[\w\søæå,]*)\))?:(?<order>[\w\søæå,]*)/gm
+    const matches = [...value.matchAll(regex)].map((m) => m.groups)
+    return matches.reduce((obj, item) => {
+      const { name, icon, order } = item
+      return name
+        ? {
+          ...obj,
+          [name]: {
+            order: order.split(','),
+            iconName: icon
+          }
+        }
+        : obj
+    }, {} as Record<string, ProjectColumnCustomSort>)
   }
 
   public isVisible(page: 'Frontpage' | 'ProjectStatus' | 'Portfolio') {
@@ -127,7 +139,7 @@ export class ProjectColumn implements IColumn {
       .reduce(
         (obj, c) => ({
           ...obj,
-          [c.value]: pick(c, ['color', 'iconName', 'tooltipColumnPropertyName']),
+          [c.value]: pick(c, ['color', 'iconName', 'tooltipColumnPropertyName'])
         }),
         {}
       ) as ProjectColumnConfigDictionary
