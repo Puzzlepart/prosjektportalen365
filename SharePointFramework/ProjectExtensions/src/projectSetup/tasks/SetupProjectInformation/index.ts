@@ -2,7 +2,7 @@ import { TypedHash } from '@pnp/common'
 import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
-import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
+import { OnProgressCallbackFunction } from '../types'
 
 export class SetupProjectInformation extends BaseTask {
   constructor(data: IProjectSetupData) {

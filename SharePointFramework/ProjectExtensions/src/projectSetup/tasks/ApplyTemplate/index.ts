@@ -5,9 +5,8 @@ import { Web, WebProvisioner } from 'sp-js-provisioning'
 import _ from 'underscore'
 import { IProjectSetupData } from '../../types'
 import { BaseTask, IBaseTaskParams } from '../@BaseTask'
-import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
-import { APPLY_TEMPLATE_STATUS_MAP } from './ApplyTemplateStatusMap'
-import { ApplyTemplateTaskError } from './ApplyTemplateTaskError'
+import { OnProgressCallbackFunction } from '../types'
+import { APPLY_TEMPLATE_STATUS_MAP, ApplyTemplateTaskError } from './types'
 
 export class ApplyTemplate extends BaseTask {
   constructor(data: IProjectSetupData) {

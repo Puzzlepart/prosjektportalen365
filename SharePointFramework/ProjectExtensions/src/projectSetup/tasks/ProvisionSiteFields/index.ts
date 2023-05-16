@@ -4,7 +4,7 @@ import * as strings from 'ProjectExtensionsStrings'
 import { transformFieldXml } from 'pp365-shared/lib/helpers'
 import { SPField } from 'pp365-shared/lib/models'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
-import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
+import { OnProgressCallbackFunction } from '../types'
 import SPDataAdapter from 'data/SPDataAdapter'
 
 export class ProvisionSiteFields extends BaseTask {
