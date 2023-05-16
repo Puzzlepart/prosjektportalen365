@@ -17,8 +17,8 @@ function createGroups(items: any[], columns: ProjectColumn[], state: IPortfolioO
   if (!state.groupBy) return { items, columns, groups: null }
   const itemsSort = { props: [state.groupBy.fieldName], opts: { reverse: false } }
   if (state.sortBy) {
-    itemsSort.props.push(state.sortBy.fieldName)
-    itemsSort.opts.reverse = !state.sortBy.isSortedDescending
+    itemsSort.props.push(state.sortBy.column.fieldName)
+    itemsSort.opts.reverse = !state.sortBy.column.isSortedDescending
   }
   items = sortArray([...items], itemsSort.props, itemsSort.opts)
   const groupNames: string[] = items.map((g) =>
@@ -44,17 +44,18 @@ function createGroups(items: any[], columns: ProjectColumn[], state: IPortfolioO
 }
 
 /**
- * Filter data based on `searchTerm` and `activeFilters`.
+ * Filter data based on `searchTerm` and `activeFilters`. Also, create groups based on `groupBy` field
+ * using `createGroups` function.
  *
  * @param props Props of `<PortfolioOverview />`
  * @param state State of `<PortfolioOverview />`
  */
 export function useFilteredData(props: IPortfolioOverviewProps, state: IPortfolioOverviewState) {
-  let columns = state.columns
-  let items = state.items.filter((item) => {
+  let columns = [...state.columns]
+  let items = [...state.items].filter((item) => {
     return (
       columns.filter(
-        (col) => get(item, col.fieldName, '').toLowerCase().indexOf(state.searchTerm) !== -1
+        (col) => get(item, col?.fieldName, '').toLowerCase().indexOf(state.searchTerm) !== -1
       ).length > 0
     )
   })

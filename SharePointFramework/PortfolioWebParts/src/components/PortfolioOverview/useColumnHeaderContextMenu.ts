@@ -14,6 +14,7 @@ import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
  * The menu contains the following items:
  * - `SORT_DESC`: Sorts the column in descending order
  * - `SORT_ASC`: Sorts the column in ascending order
+ * - `CUSTOM_SORT_{key}`: Custom sort options defined in the column configuration
  * - `DIVIDER_01`: Divider
  * - `GROUP_BY`: Group by column
  * - `DIVIDER_03`: Divider
@@ -35,16 +36,28 @@ export function useColumnHeaderContextMenu(context: IPortfolioOverviewContext) {
           key: 'SORT_DESC',
           name: strings.SortDescLabel,
           canCheck: true,
-          checked: column.isSorted && column.isSortedDescending,
+          checked:
+            column.isSorted && !context.state.sortBy?.customSort && column.isSortedDescending,
           onClick: () => context.dispatch(SET_SORT({ column, isSortedDescending: true }))
         },
         {
           key: 'SORT_ASC',
           name: strings.SortAscLabel,
           canCheck: true,
-          checked: column.isSorted && !column.isSortedDescending,
+          checked:
+            column.isSorted && !context.state.sortBy?.customSort && !column.isSortedDescending,
           onClick: () => context.dispatch(SET_SORT({ column, isSortedDescending: false }))
         },
+        ...column.customSorts.map((customSort, idx) => ({
+          key: `CUSTOM_SORT_${idx}`,
+          name: customSort.name,
+          canCheck: true,
+          iconProps: customSort.iconName && {
+            iconName: customSort.iconName
+          },
+          checked: column.isSorted && context.state.sortBy?.customSort?.name === customSort.name,
+          onClick: () => context.dispatch(SET_SORT({ column, customSort }))
+        })),
         {
           key: 'DIVIDER_01',
           itemType: ContextualMenuItemType.Divider
