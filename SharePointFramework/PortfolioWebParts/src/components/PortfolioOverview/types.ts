@@ -24,17 +24,17 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
   /**
    * SharePoint list name for the column configuration
    */
-  columnConfigListName: string
+  columnConfigListName?: string
 
   /**
    * SharePoint list name for the column configuration
    */
-  columnsListName: string
+  columnsListName?: string
 
   /**
    * SharePoint list name for the views configuration
    */
-  viewsListName: string
+  viewsListName?: string
 
   /**
    * Number of status reports to show
