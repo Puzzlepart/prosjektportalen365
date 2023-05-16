@@ -14,6 +14,7 @@ export class SPProjectColumnItem {
   public GtShowFieldFrontpage: boolean = false
   public GtShowFieldPortfolio: boolean = false
   public GtFieldDataType: string = ''
+  public GtFieldCustomSort: string = ''
   public GtColMinWidth: number = 0
   public GtIsRefinable: boolean = false
   public GtIsGroupable: boolean = false
