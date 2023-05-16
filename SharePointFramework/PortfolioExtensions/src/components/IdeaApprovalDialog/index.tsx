@@ -46,10 +46,14 @@ class DialogPrompt extends React.Component<IDialogContentProps, IDialogContentSt
         type={DialogType.largeHeader}
         onDismiss={this.props.close}
         showCloseButton={true}
-        styles={{ content: { maxWidth: '420px' }}}
+        styles={{ content: { maxWidth: '420px' } }}
       >
         <UserMessage
-          text={format(strings.SetRecommendationSubtitle, this.props.ideaTitle, this.props.dialogDescription)}
+          text={format(
+            strings.SetRecommendationSubtitle,
+            this.props.ideaTitle,
+            this.props.dialogDescription
+          )}
           type={MessageBarType.info}
         />
         <Dropdown
@@ -111,7 +115,12 @@ export default class RecommendationDialog extends BaseDialog {
 
   public render(): void {
     ReactDOM.render(
-      <DialogPrompt close={this.close} submit={this._submit} ideaTitle={this.ideaTitle} dialogDescription={this.dialogDescription} />,
+      <DialogPrompt
+        close={this.close}
+        submit={this._submit}
+        ideaTitle={this.ideaTitle}
+        dialogDescription={this.dialogDescription}
+      />,
       this.domElement
     )
   }
