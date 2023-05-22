@@ -74,7 +74,7 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
         (report) => report.id === parseInt(selectedReportUrlParam, 10)
       )
     }
-    if (initialSelectedReport.published) {
+    if (initialSelectedReport?.published) {
       initialSelectedReport = await SPDataAdapter.portal.getStatusReportAttachments(
         initialSelectedReport
       )
