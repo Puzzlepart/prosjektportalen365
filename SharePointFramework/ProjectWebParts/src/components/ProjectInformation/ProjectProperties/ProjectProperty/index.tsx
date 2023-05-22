@@ -55,7 +55,9 @@ export const ProjectProperty: FC<IProjectPropertyProps> = ({
         const [url, description] = model.value.split(', ')
         return (
           <div>
-            <Link href={url} target='_blank'>{description}</Link>
+            <Link href={url} target='_blank'>
+              {description}
+            </Link>
           </div>
         )
       }
