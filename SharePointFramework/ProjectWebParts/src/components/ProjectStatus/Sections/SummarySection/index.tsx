@@ -21,7 +21,9 @@ export const SummarySection: FC<ISummarySectionProps> = (props) => {
   function renderStatusElements() {
     return context.state.data.sections.map((sec, idx) => {
       const ctxValue = createContextValue(sec)
-      const shouldRender = sec.showInStatusSection && (ctxValue.headerProps.value || sec.fieldName === 'GtOverallStatus')
+      const shouldRender =
+        sec.showInStatusSection &&
+        (ctxValue.headerProps.value || sec.fieldName === 'GtOverallStatus')
       return shouldRender ? (
         <SectionContext.Provider key={idx} value={ctxValue}>
           <div

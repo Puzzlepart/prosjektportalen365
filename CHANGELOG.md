@@ -3,6 +3,13 @@ og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detaljert 'endringslogg' for siste hovedversjon.
 
+## 1.8.3 - TBA
+
+### Forbedringer
+
+- Porteføljeoversikten støtter nå visning av URL-kolonner
+
+
 ## 1.8.2 - TBA
 
 ### Ny funksjonalitet
