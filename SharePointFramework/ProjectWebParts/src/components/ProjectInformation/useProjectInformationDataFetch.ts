@@ -64,11 +64,11 @@ const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolea
       .select('Id')
       .get()
 
-    const [ideaConfig] = (await SPDataAdapter.getIdeaConfiguration()).filter((item) => item.title === props.ideaConfiguration)
-
-    const ideaProcessingList = SPDataAdapter.portal.web.lists.getByTitle(
-      ideaConfig.processingList
+    const [ideaConfig] = (await SPDataAdapter.getIdeaConfiguration()).filter(
+      (item) => item.title === props.ideaConfiguration
     )
+
+    const ideaProcessingList = SPDataAdapter.portal.web.lists.getByTitle(ideaConfig.processingList)
 
     const [ideaProcessingItem] = await ideaProcessingList.items
       .filter(`GtIdeaProjectDataId eq '${projectDataItem.Id}'`)

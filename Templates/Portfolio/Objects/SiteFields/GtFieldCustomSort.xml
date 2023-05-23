@@ -1,0 +1,1 @@
+<Field Type="Note" DisplayName="{resource:SiteFields_GtFieldCustomSort_DisplayName}" Description="{resource:SiteFields_GtFieldCustomSort_Description}" RichText="FALSE" RichTextMode="Compatible" IsolateStyles="FALSE"  Sortable="FALSE" Group="{resource:SiteFields_Portfolio_Group}" ID="{68568356-6f3c-4ebe-a738-70cec5c76f46}" StaticName="GtFieldCustomSort" Name="GtFieldCustomSort" />

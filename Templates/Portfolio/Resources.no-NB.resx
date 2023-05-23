@@ -2335,6 +2335,12 @@
   <data name="SiteFields_GtPlannerName_Description" xml:space="preserve">
     <value>Velg et eget navn for planen. Brukes om du vil opprette flere planer for samme prosjekt. Det fullstendige plannavnet vil også inneholde navnet på området/prosjektet.</value>
   </data>
+  <data name="SiteFields_GtFieldCustomSort_DisplayName" xml:space="preserve">
+    <value>Egendefinerte sorteringsrekkefølger</value>
+  </data>
+  <data name="SiteFields_GtFieldCustomSort_Description" xml:space="preserve">
+  <value>Spesifiser egne sorteringsrekkefølger for dette feltet. Formatet er [Navn på rekkefølge]:[Element],[Element],[Element]. Om du ønsker å spesifisere flere sorteringsrekkefølger bruk semikolon (;) for å skille dem.</value>
+  </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
   </data>

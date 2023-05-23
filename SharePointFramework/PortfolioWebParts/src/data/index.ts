@@ -126,7 +126,9 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Get portfolio configuration from SharePoint lists. This includes:
+   * Get portfolio configuration from SharePoint lists.
+   *
+   * This includes:
    * - `columns` - Project columns
    * - `refiners` - Refinable columns
    * - `views` - Portfolio overview views

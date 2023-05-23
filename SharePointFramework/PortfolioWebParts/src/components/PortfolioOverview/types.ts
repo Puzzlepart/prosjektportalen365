@@ -1,5 +1,9 @@
 import { IPortfolioConfiguration } from 'interfaces'
-import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
+import {
+  PortfolioOverviewView,
+  ProjectColumn,
+  ProjectColumnCustomSort
+} from 'pp365-shared/lib/models'
 import { IFilterProps } from '../FilterPanel'
 import { IBaseComponentProps } from '../types'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
@@ -20,17 +24,17 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
   /**
    * SharePoint list name for the column configuration
    */
-  columnConfigListName: string
+  columnConfigListName?: string
 
   /**
    * SharePoint list name for the column configuration
    */
-  columnsListName: string
+  columnsListName?: string
 
   /**
    * SharePoint list name for the views configuration
    */
-  viewsListName: string
+  viewsListName?: string
 
   /**
    * Number of status reports to show
@@ -147,9 +151,9 @@ export interface IPortfolioOverviewState {
   groupBy?: ProjectColumn
 
   /**
-   * Column to sort by
+   * Column to sort by, and custom sort order if applicable
    */
-  sortBy?: ProjectColumn
+  sortBy?: { column: ProjectColumn; customSort?: ProjectColumnCustomSort }
 
   /**
    * List should be rendered in compact mode

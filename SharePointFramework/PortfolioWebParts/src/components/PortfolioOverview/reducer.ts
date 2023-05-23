@@ -9,7 +9,11 @@ import { createAction, createReducer } from '@reduxjs/toolkit'
 import sortArray from 'array-sort'
 import { IFilterItemProps } from 'components/FilterPanel'
 import strings from 'PortfolioWebPartsStrings'
-import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
+import {
+  PortfolioOverviewView,
+  ProjectColumn,
+  ProjectColumnCustomSort
+} from 'pp365-shared/lib/models'
 import _ from 'underscore'
 import { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
 
@@ -95,9 +99,11 @@ export const SET_GROUP_BY = createAction<ProjectColumn>('SET_GROUP_BY')
 /**
  * `SET_SORT`: Action dispatched when user changes the sort column
  */
-export const SET_SORT = createAction<{ column: ProjectColumn; isSortedDescending: boolean }>(
-  'SET_SORT'
-)
+export const SET_SORT = createAction<{
+  column: ProjectColumn
+  isSortedDescending?: boolean
+  customSort?: ProjectColumnCustomSort
+}>('SET_SORT')
 
 /**
  * `SELECTION_CHANGED`: Action dispatched when user changes the selection in the list
@@ -213,15 +219,25 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       state.groupBy = payload.fieldName === state.groupBy.fieldName ? null : payload
     },
     [SET_SORT.type]: (state, { payload }: ReturnType<typeof SET_SORT>) => {
-      const itemsSorted = sortArray(state.items, [payload.column.fieldName], {
-        reverse: !payload.isSortedDescending
-      })
-      state.sortBy = payload.column
-      state.items = itemsSorted
+      const isSortedDescending = Object.keys(payload).includes('isSortedDescending')
+        ? payload.isSortedDescending
+        : !payload.column.isSortedDescending
+      if (payload.customSort) {
+        state.items = state.items.sort((a, b) => {
+          const $a = payload.customSort.order.indexOf(a[payload.column.fieldName])
+          const $b = payload.customSort.order.indexOf(b[payload.column.fieldName])
+          return isSortedDescending ? $a - $b : $b - $a
+        })
+      } else {
+        state.items = sortArray(state.items, [payload.column.fieldName], {
+          reverse: !isSortedDescending
+        })
+      }
+      state.sortBy = _.pick(payload, ['column', 'customSort'])
       state.columns = state.columns.map((col) => {
         col.isSorted = col.key === payload.column.key
         if (col.isSorted) {
-          col.isSortedDescending = payload.isSortedDescending
+          col.isSortedDescending = isSortedDescending
         }
         return col
       })
