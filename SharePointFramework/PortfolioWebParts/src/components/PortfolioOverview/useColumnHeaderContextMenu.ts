@@ -67,8 +67,7 @@ export function useColumnHeaderContextMenu(context: IPortfolioOverviewContext) {
         ...columnCustomSorts,
         {
           key: 'DIVIDER_02',
-          itemType: ContextualMenuItemType.Divider,
-          className: 'column-context-menu-divider'
+          itemType: ContextualMenuItemType.Divider
         },
         {
           key: 'GROUP_BY',
@@ -91,7 +90,7 @@ export function useColumnHeaderContextMenu(context: IPortfolioOverviewContext) {
             ),
           disabled: !context.props.pageContext.legacyPageContext.isSiteAdmin
         }
-      ],
+      ].filter(Boolean),
       onDismiss: () => context.dispatch(SET_COLUMN_CONTEXT_MENU(null))
     }
     context.dispatch(SET_COLUMN_CONTEXT_MENU(columnContextMenu))
