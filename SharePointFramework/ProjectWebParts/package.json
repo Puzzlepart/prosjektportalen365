@@ -1,6 +1,6 @@
 {
   "name": "pp365-projectwebparts",
-  "version": "1.9.0",
+  "version": "1.9.0-1128.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -47,7 +47,7 @@
     "get-value": "3.0.1",
     "interactjs": "1.6.2",
     "msgraph-helper": "0.7.1",
-    "pp365-shared": "1.8.2",
+    "pp365-shared": "1.9.0-1128.20",
     "pzl-spfx-components": "0.0.11",
     "react": "16.13.1",
     "react-calendar-timeline": "0.26.0",
@@ -89,7 +89,7 @@
     "find": "0.3.0",
     "gulp": "4.0.2",
     "livereload": "0.9.1",
-    "pp365-portfoliowebparts": "1.8.2",
+    "pp365-portfoliowebparts": "1.9.0-1128.2",
     "prettier": "2.1.1",
     "typescript": "4.5.5",
     "webpack": "5.74.0"

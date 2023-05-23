@@ -1,8 +1,9 @@
 /* eslint-disable max-classes-per-file */
+import { stringIsNullOrEmpty } from '@pnp/common'
 import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
-import { ProjectColumnConfigDictionary, ProjectColumnConfig } from './ProjectColumnConfig'
-import { SearchValueType } from '../types/SearchValueType'
 import { pick } from 'underscore'
+import { SearchValueType } from '../types/SearchValueType'
+import { ProjectColumnConfig, ProjectColumnConfigDictionary } from './ProjectColumnConfig'
 
 export class SPProjectColumnItem {
   public Id: number = 0
@@ -14,9 +15,16 @@ export class SPProjectColumnItem {
   public GtShowFieldFrontpage: boolean = false
   public GtShowFieldPortfolio: boolean = false
   public GtFieldDataType: string = ''
+  public GtFieldCustomSort: string = ''
   public GtColMinWidth: number = 0
   public GtIsRefinable: boolean = false
   public GtIsGroupable: boolean = false
+}
+
+export type ProjectColumnCustomSort = {
+  name: string
+  order: string[]
+  iconName?: string
 }
 
 export class ProjectColumn implements IColumn {
@@ -38,6 +46,7 @@ export class ProjectColumn implements IColumn {
   public isSortedDescending?: boolean
   public config?: ProjectColumnConfigDictionary
   public onColumnClick: any
+  public customSorts?: ProjectColumnCustomSort[]
 
   constructor(private _item?: SPProjectColumnItem) {
     if (_item) {
@@ -54,7 +63,28 @@ export class ProjectColumn implements IColumn {
       this.isResizable = true
       this.minWidth = _item.GtColMinWidth || 100
       this.searchType = this._getSearchType(this.fieldName.toLowerCase())
+      this.customSorts = this._getCustomSorts(_item.GtFieldCustomSort)
     }
+  }
+
+  /**
+   * Get custom sorts from value. Value is a string with the following format:
+   * <key>:<value>,<value>,<value>;<key>:<value>,<value>,<value> separated by ;.
+   * Regex is used to match the values.
+   *
+   * **Example:** "Status:Active,On hold,Completed;Priority:High,Medium,Low"
+   *
+   * @param value Value for custom sort
+   */
+  private _getCustomSorts(value: string): ProjectColumnCustomSort[] {
+    if (stringIsNullOrEmpty(value)) return []
+    const regex = /(?<name>[\w\søæå]*)(\((?<icon>[\w\søæå,]*)\))?:(?<order>[\w\søæå,]*)/gm
+    const matches = [...value.matchAll(regex)].map((m) => m.groups).filter((g) => !!g.name)
+    return matches.map(({ name, icon, order }) => ({
+      name,
+      iconName: icon,
+      order: order.split(',')
+    }))
   }
 
   public isVisible(page: 'Frontpage' | 'ProjectStatus' | 'Portfolio') {
@@ -106,7 +136,7 @@ export class ProjectColumn implements IColumn {
       .reduce(
         (obj, c) => ({
           ...obj,
-          [c.value]: pick(c, ['color', 'iconName', 'tooltipColumnPropertyName']),
+          [c.value]: pick(c, ['color', 'iconName', 'tooltipColumnPropertyName'])
         }),
         {}
       ) as ProjectColumnConfigDictionary

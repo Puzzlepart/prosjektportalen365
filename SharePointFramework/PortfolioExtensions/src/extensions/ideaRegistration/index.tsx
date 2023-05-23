@@ -62,7 +62,9 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         const row = event.selectedRows[0]
 
         dialog.ideaTitle = row.getValueByName('Title')
-        dialog.dialogDescription = this._ideaConfig.description[0] || strings.SetRecommendationDefaultDescription.split(';')[0]
+        dialog.dialogDescription =
+          this._ideaConfig.description[0] ||
+          strings.SetRecommendationDefaultDescription.split(';')[0]
         await dialog.show()
         if (dialog.comment && dialog.selectedChoice === strings.ApproveChoice) {
           this._isIdeaRecommended(row)
@@ -91,7 +93,8 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
     const ideaConfig = await this._sp.web.lists
       .getByTitle(strings.IdeaConfigurationTitle)
-      .select(...new SPIdeaConfigurationItem().fields).items()
+      .select(...new SPIdeaConfigurationItem().fields)
+      .items()
 
     return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
   }
@@ -106,21 +109,24 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     })
 
     const listName = this.context.pageContext.list.title
-    const [ideaConfig] = (await this._getIdeaConfiguration()).filter((item) => item.registrationList === listName)
+    const [ideaConfig] = (await this._getIdeaConfiguration()).filter(
+      (item) => item.registrationList === listName
+    )
     this._ideaConfig = ideaConfig
 
     if (ideaConfig) {
       this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
       if (this._openCmd) {
-
         this._openCmd.visible =
           this.context.listView.selectedRows?.length === 1 &&
-          this._userAuthorized && ideaConfig.registrationList === listName
+          this._userAuthorized &&
+          ideaConfig.registrationList === listName
       }
       this.raiseOnChange()
     } else {
       Logger.log({
-        message: '(IdeaRegistrationCommand) onListViewStateChanged: You are currently not authorized to use this command or the list is not configured for this command',
+        message:
+          '(IdeaRegistrationCommand) onListViewStateChanged: You are currently not authorized to use this command or the list is not configured for this command',
         level: LogLevel.Info
       })
     }

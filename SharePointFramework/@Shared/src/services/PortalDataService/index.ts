@@ -170,8 +170,7 @@ export class PortalDataService {
     const folderName = report.id.toString()
     const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS_ATTACHMENTS)
     try {
-      const folder = await list.rootFolder.folders.getByName(folderName).get()
-      console.log(folder)
+      await list.rootFolder.folders.getByName(folderName).get()
       return list.rootFolder.folders.getByName(folderName)
     } catch (error) {
       const { folder } = await list.rootFolder.folders.add(folderName)

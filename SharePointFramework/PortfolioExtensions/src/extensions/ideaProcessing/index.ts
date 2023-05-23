@@ -59,7 +59,9 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         const row = event.selectedRows[0]
 
         dialog.ideaTitle = row.getValueByName('Title')
-        dialog.dialogDescription = this._ideaConfig.description[1] || strings.SetRecommendationDefaultDescription.split(';')[1]
+        dialog.dialogDescription =
+          this._ideaConfig.description[1] ||
+          strings.SetRecommendationDefaultDescription.split(';')[1]
         dialog.show().then(() => {
           if (dialog.comment && dialog.selectedChoice === strings.ApproveChoice) {
             this._onSubmit(row, dialog.comment)
@@ -83,7 +85,8 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
     const ideaConfig = await this._sp.web.lists
       .getByTitle(strings.IdeaConfigurationTitle)
-      .select(...new SPIdeaConfigurationItem().fields).items()
+      .select(...new SPIdeaConfigurationItem().fields)
+      .items()
 
     return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
   }
@@ -98,7 +101,9 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
     })
 
     const listName = this.context.pageContext.list.title
-    const [ideaConfig] = (await this._getIdeaConfiguration()).filter((item) => item.processingList === listName)
+    const [ideaConfig] = (await this._getIdeaConfiguration()).filter(
+      (item) => item.processingList === listName
+    )
     this._ideaConfig = ideaConfig
 
     if (ideaConfig) {
@@ -106,7 +111,8 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
       if (this._openCmd) {
         this._openCmd.visible =
           this.context.listView.selectedRows?.length === 1 &&
-          this._userAuthorized && ideaConfig.processingList === listName
+          this._userAuthorized &&
+          ideaConfig.processingList === listName
       }
       this.raiseOnChange()
     }

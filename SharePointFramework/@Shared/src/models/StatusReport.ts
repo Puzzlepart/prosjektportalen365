@@ -31,7 +31,7 @@ export class StatusReport {
 
   /**
    * Initialize attachments for the report and returns the report.
-   * 
+   *
    * @param attachments Attachments
    */
   public initAttachments(attachments: StatusReportAttachment[]): StatusReport {

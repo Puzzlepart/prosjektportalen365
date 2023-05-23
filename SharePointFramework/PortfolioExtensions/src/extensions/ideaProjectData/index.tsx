@@ -57,7 +57,9 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
         const row = event.selectedRows[0]
 
         dialog.ideaTitle = row.getValueByName('Title')
-        dialog.dialogDescription = this._ideaConfig.description[2] || strings.SetRecommendationDefaultDescription.split(';')[2]
+        dialog.dialogDescription =
+          this._ideaConfig.description[2] ||
+          strings.SetRecommendationDefaultDescription.split(';')[2]
         dialog.isBlocked = !!row.getValueByName('GtIdeaProjectData')
         dialog.show()
         dialog.submit = this._onSubmit.bind(this, row)
@@ -73,7 +75,8 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
     const ideaConfig = await this._sp.web.lists
       .getByTitle(strings.IdeaConfigurationTitle)
-      .select(...new SPIdeaConfigurationItem().fields).items()
+      .select(...new SPIdeaConfigurationItem().fields)
+      .items()
 
     return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
   }
@@ -88,7 +91,9 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
     })
 
     const listName = this.context.pageContext.list.title
-    const [ideaConfig] = (await this._getIdeaConfiguration()).filter((item) => item.processingList === listName)
+    const [ideaConfig] = (await this._getIdeaConfiguration()).filter(
+      (item) => item.processingList === listName
+    )
     this._ideaConfig = ideaConfig
 
     if (ideaConfig) {
@@ -96,7 +101,8 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
       if (this._openCmd) {
         this._openCmd.visible =
           this.context.listView.selectedRows?.length === 1 &&
-        this._userAuthorized && ideaConfig.processingList === listName
+          this._userAuthorized &&
+          ideaConfig.processingList === listName
       }
       this.raiseOnChange()
     }
