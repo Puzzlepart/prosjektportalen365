@@ -8,7 +8,7 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 ### Forbedringer
 
 - Porteføljeoversikten støtter nå visning av URL-kolonner
-
+- Støtte for konfigurasjoner i risikomatrise [#1120](https://github.com/Puzzlepart/prosjektportalen365/issues/1120)
 
 ## 1.8.2 - TBA
 
