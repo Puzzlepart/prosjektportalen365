@@ -1,4 +1,10 @@
 declare interface IProjectWebPartsStrings {
+  ManualConfigurationPathDefaltValue: string
+  UseDynamicConfigurationOffText: string
+  UseDynamicConfigurationOnText: string
+  ManualConfigurationPathLabel: string
+  ManualConfigurationPathDescription: string
+  UseDynamicConfigurationLabel: string 
   PublishReportSpinnerText: string
   PublishStatusReportSectionDataWarning: string
   AdminPageLinkLabel: string

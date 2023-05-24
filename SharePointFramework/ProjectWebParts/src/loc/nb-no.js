@@ -1,5 +1,11 @@
 define([], function () {
   return {
+    ManualConfigurationPathDefaltValue: 'SiteAssets/Konfigurasjon/risiko-matrise-konfigurasjon.json',
+    UseDynamicConfigurationOffText: 'Nei, bruk manuell',
+    UseDynamicConfigurationOnText: 'Ja',
+    ManualConfigurationPathLabel: 'Sti til JSON-fil med manuell konfigurasjon',
+    ManualConfigurationPathDescription: 'Angi sti til JSON-fil med manuell konfigurasjon. Filen må være tilgjengelig for alle brukere. Eksempel: SiteAssets/Konfigurasjon/risiko-matrise-konfigurasjon.json',
+    UseDynamicConfigurationLabel: 'Bruk dynamisk konfigurasjon',
     AdminPageLinkLabel: 'Lenke til Administrasjonssiden (Etter /SitePages/)',
     AdvancedGroupName: 'Avansert',
     BarLabel: 'Bar',
