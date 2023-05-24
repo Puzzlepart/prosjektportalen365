@@ -11,7 +11,7 @@ import { useRiskMatrixConfiguration } from './useRiskMatrixConfiguration'
  */
 export function useRiskMatrix(props: IRiskMatrixProps) {
   const [showPostAction, setShowPostAction] = useState(false)
-  const configuration = useRiskMatrixConfiguration(props)
+  const { configuration, error } = useRiskMatrixConfiguration(props)
 
   function getElementsForCell(cell: IMatrixCell) {
     const elements = props.items
@@ -39,5 +39,5 @@ export function useRiskMatrix(props: IRiskMatrixProps) {
     return [...elements, ...postActionElements]
   }
 
-  return { configuration, getElementsForCell, setShowPostAction } as const
+  return { configuration, error, getElementsForCell, setShowPostAction } as const
 }

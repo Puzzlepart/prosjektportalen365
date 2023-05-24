@@ -1,5 +1,6 @@
 declare interface IProjectWebPartsStrings {
-  ManualConfigurationPathDefaltValue: string
+  ManualConfigurationNotFoundOrInvalid: SetStateAction<string>
+  RiskMatrixManualConfigurationPathDefaltValue: string
   UseDynamicConfigurationOffText: string
   UseDynamicConfigurationOnText: string
   ManualConfigurationPathLabel: string

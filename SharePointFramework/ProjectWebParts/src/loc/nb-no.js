@@ -1,6 +1,7 @@
 define([], function () {
   return {
-    ManualConfigurationPathDefaltValue: 'SiteAssets/Konfigurasjon/risiko-matrise-konfigurasjon.json',
+    ManualConfigurationNotFoundOrInvalid: 'Manuell konfigurasjon for Risikomatrise ikke funnet eller har ugyldig format.',
+    RiskMatrixManualConfigurationPathDefaltValue: 'SiteAssets/Konfigurasjon/risiko-matrise-konfigurasjon.json',
     UseDynamicConfigurationOffText: 'Nei, bruk manuell',
     UseDynamicConfigurationOnText: 'Ja',
     ManualConfigurationPathLabel: 'Sti til JSON-fil med manuell konfigurasjon',
