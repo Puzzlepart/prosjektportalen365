@@ -32,27 +32,32 @@
         {
             "cellType": 1,
             "x": 1,
-            "y": 5
+            "y": 5,
+            "backgroundColor": "#F39900" 
         },
         {
             "cellType": 1,
             "x": 2,
-            "y": 5
+            "y": 5,
+            "backgroundColor": "#F39900" 
         },
         {
             "cellType": 1,
             "x": 3,
-            "y": 5
+            "y": 5,
+            "backgroundColor": "#C8071D" 
         },
         {
             "cellType": 1,
             "x": 4,
-            "y": 5
+            "y": 5,
+            "backgroundColor": "#C8071D" 
         },
         {
             "cellType": 1,
             "x": 5,
-            "y": 5
+            "y": 5,
+            "backgroundColor": "#C8071D" 
         }
     ],
     [
@@ -63,27 +68,32 @@
         {
             "cellType": 1,
             "x": 1,
-            "y": 4
+            "y": 4,
+            "backgroundColor": "#FAE800" 
         },
         {
             "cellType": 1,
             "x": 2,
-            "y": 4
+            "y": 4,
+            "backgroundColor": "#F39900" 
         },
         {
             "cellType": 1,
             "x": 3,
-            "y": 4
+            "y": 4,
+            "backgroundColor": "#F39900" 
         },
         {
             "cellType": 1,
             "x": 4,
-            "y": 4
+            "y": 4,
+            "backgroundColor": "#C8071D" 
         },
         {
             "cellType": 1,
             "x": 5,
-            "y": 4
+            "y": 4,
+            "backgroundColor": "#C8071D" 
         }
     ],
     [
@@ -94,27 +104,32 @@
         {
             "cellType": 1,
             "x": 1,
-            "y": 3
+            "y": 3,
+            "backgroundColor": "#329259" 
         },
         {
             "cellType": 1,
             "x": 2,
-            "y": 3
+            "y": 3,
+            "backgroundColor": "#FAE800" 
         },
         {
             "cellType": 1,
             "x": 3,
-            "y": 3
+            "y": 3,
+            "backgroundColor": "#F39900" 
         },
         {
             "cellType": 1,
             "x": 4,
-            "y": 3
+            "y": 3,
+            "backgroundColor": "#C8071D" 
         },
         {
             "cellType": 1,
             "x": 5,
-            "y": 3
+            "y": 3,
+            "backgroundColor": "#C8071D" 
         }
     ],
     [
@@ -125,27 +140,32 @@
         {
             "cellType": 1,
             "x": 1,
-            "y": 2
+            "y": 2,
+            "backgroundColor": "#329259" 
         },
         {
             "cellType": 1,
             "x": 2,
-            "y": 2
+            "y": 2,
+            "backgroundColor": "#329259" 
         },
         {
             "cellType": 1,
             "x": 3,
-            "y": 2
+            "y": 2,
+            "backgroundColor": "#FAE800" 
         },
         {
             "cellType": 1,
             "x": 4,
-            "y": 2
+            "y": 2,
+            "backgroundColor": "#F39900" 
         },
         {
             "cellType": 1,
             "x": 5,
-            "y": 2
+            "y": 2,
+            "backgroundColor": "#C8071D" 
         }
     ],
     [
@@ -156,27 +176,32 @@
         {
             "cellType": 1,
             "x": 1,
-            "y": 1
+            "y": 1,
+            "backgroundColor": "#329259" 
         },
         {
             "cellType": 1,
             "x": 2,
-            "y": 1
+            "y": 1,
+            "backgroundColor": "#329259" 
         },
         {
             "cellType": 1,
             "x": 3,
-            "y": 1
+            "y": 1,
+            "backgroundColor": "#FAE800" 
         },
         {
             "cellType": 1,
             "x": 4,
-            "y": 1
+            "y": 1,
+            "backgroundColor": "#F39900" 
         },
         {
             "cellType": 1,
             "x": 5,
-            "y": 1
+            "y": 1,
+            "backgroundColor": "#F39900" 
         }
     ]
 ]
