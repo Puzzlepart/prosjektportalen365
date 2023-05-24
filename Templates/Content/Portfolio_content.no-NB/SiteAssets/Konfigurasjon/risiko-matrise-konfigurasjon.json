@@ -1,0 +1,182 @@
+[
+    [
+        {
+            "cellType": 0
+        },
+        {
+            "cellValue": "Ubetydelig",
+            "cellType": 0
+        },
+        {
+            "cellValue": "Lav",
+            "cellType": 0
+        },
+        {
+            "cellValue": "Moderat",
+            "cellType": 0
+        },
+        {
+            "cellValue": "Alvorlig",
+            "cellType": 0
+        },
+        {
+            "cellValue": "Svært avorlig",
+            "cellType": 0
+        }
+    ],
+    [
+        {
+            "cellValue": "Svært stor",
+            "cellType": 0
+        },
+        {
+            "cellType": 1,
+            "x": 1,
+            "y": 5
+        },
+        {
+            "cellType": 1,
+            "x": 2,
+            "y": 5
+        },
+        {
+            "cellType": 1,
+            "x": 3,
+            "y": 5
+        },
+        {
+            "cellType": 1,
+            "x": 4,
+            "y": 5
+        },
+        {
+            "cellType": 1,
+            "x": 5,
+            "y": 5
+        }
+    ],
+    [
+        {
+            "cellValue": "Stor",
+            "cellType": 0
+        },
+        {
+            "cellType": 1,
+            "x": 1,
+            "y": 4
+        },
+        {
+            "cellType": 1,
+            "x": 2,
+            "y": 4
+        },
+        {
+            "cellType": 1,
+            "x": 3,
+            "y": 4
+        },
+        {
+            "cellType": 1,
+            "x": 4,
+            "y": 4
+        },
+        {
+            "cellType": 1,
+            "x": 5,
+            "y": 4
+        }
+    ],
+    [
+        {
+            "cellValue": "Moderat",
+            "cellType": 0
+        },
+        {
+            "cellType": 1,
+            "x": 1,
+            "y": 3
+        },
+        {
+            "cellType": 1,
+            "x": 2,
+            "y": 3
+        },
+        {
+            "cellType": 1,
+            "x": 3,
+            "y": 3
+        },
+        {
+            "cellType": 1,
+            "x": 4,
+            "y": 3
+        },
+        {
+            "cellType": 1,
+            "x": 5,
+            "y": 3
+        }
+    ],
+    [
+        {
+            "cellValue": "Liten",
+            "cellType": 0
+        },
+        {
+            "cellType": 1,
+            "x": 1,
+            "y": 2
+        },
+        {
+            "cellType": 1,
+            "x": 2,
+            "y": 2
+        },
+        {
+            "cellType": 1,
+            "x": 3,
+            "y": 2
+        },
+        {
+            "cellType": 1,
+            "x": 4,
+            "y": 2
+        },
+        {
+            "cellType": 1,
+            "x": 5,
+            "y": 2
+        }
+    ],
+    [
+        {
+            "cellValue": "Meget liten",
+            "cellType": 0
+        },
+        {
+            "cellType": 1,
+            "x": 1,
+            "y": 1
+        },
+        {
+            "cellType": 1,
+            "x": 2,
+            "y": 1
+        },
+        {
+            "cellType": 1,
+            "x": 3,
+            "y": 1
+        },
+        {
+            "cellType": 1,
+            "x": 4,
+            "y": 1
+        },
+        {
+            "cellType": 1,
+            "x": 5,
+            "y": 1
+        }
+    ]
+]
