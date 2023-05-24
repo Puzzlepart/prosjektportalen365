@@ -2354,7 +2354,7 @@
     <value>Ikke relevant</value>
   </data>
   <data name="Choice_GtChecklistStatus_StillOpen" xml:space="preserve">
-    <value>Forsatt åpen</value>
+    <value>Fortsatt åpen</value>
   </data>
   <data name="Choice_GtStakeholderGroup_Colleagues" xml:space="preserve">
     <value>Medarbeidere</value>
