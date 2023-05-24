@@ -1,21 +1,28 @@
+import { Link } from '@fluentui/react'
 import { Icon } from '@fluentui/react/lib/Icon'
+import * as strings from 'PortfolioWebPartsStrings'
+import { IFetchDataForViewItemResult } from 'data/types'
 import { formatDate, tryParseCurrency } from 'pp365-shared/lib/helpers'
 import { ProjectColumn } from 'pp365-shared/lib/models'
 import React from 'react'
 import { IPortfolioOverviewProps } from '../types'
 import { TitleColumn } from './TitleColumn'
-import { IRenderItemColumnProps } from './types'
+import { IRenderItemColumnProps } from './IRenderItemColumnProps'
 import { TagsColumn } from './TagsColumn'
+import { TitleColumn } from './TitleColumn'
 import { UserColumn } from './UserColumn'
 import * as strings from 'PortfolioWebPartsStrings'
 import { IFetchDataForViewItemResult } from 'data/types'
 import { TooltipHost } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
 
+type RenderDataType = 'user' | 'date' | 'currency' | 'tags' | 'boolean' | 'url'
+type RenderFunction = (props: IRenderItemColumnProps) => JSX.Element
+
 /**
- * Mapping for rendering of the different data types
+ * Mapping for rendering of the different data types.
  */
-const renderDataTypeMap = {
+const renderDataTypeMap: Record<RenderDataType, RenderFunction> = {
   user: (props: IRenderItemColumnProps) => <UserColumn {...props} />,
   date: ({ columnValue: colValue }: IRenderItemColumnProps) => <span>{formatDate(colValue)}</span>,
   currency: ({ columnValue: colValue }: IRenderItemColumnProps) => (
@@ -24,15 +31,25 @@ const renderDataTypeMap = {
   tags: (props: IRenderItemColumnProps) => <TagsColumn {...props} />,
   boolean: ({ columnValue: colValue }: IRenderItemColumnProps) => (
     <span>{parseInt(colValue) === 1 ? strings.BooleanYes : strings.BooleanNo}</span>
-  )
+  ),
+  url: ({ columnValue: colValue }: IRenderItemColumnProps) => {
+    const [url, description] = colValue.split(', ')
+    return (
+      <Link href={url} target='_blank'>
+        {description}
+      </Link>
+    )
+  }
 }
 
 /**
- * Renders the value for the column based on data type and config.
+ * On render item column function. First checks if the column has a custom render function,
+ * if not it will use the default render function. Also the `Title` column has a custom render
+ * function by default and can not be overridden.
  *
- * @param item Item
- * @param column Column
- * @param props Props for the `PortfolioOverview` component
+ * @param item Item to render the value for
+ * @param column Column to render the value for
+ * @param props Props for the component
  */
 export function renderItemColumn(
   item: IFetchDataForViewItemResult,
