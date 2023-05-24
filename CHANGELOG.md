@@ -9,6 +9,8 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 
 - Porteføljeoversikten støtter nå visning av URL-kolonner
 - Støtte for manuelle konfigurasjoner (JSON-format) i risikomatrise [#1120](https://github.com/Puzzlepart/prosjektportalen365/issues/1120)
+- Porteføljeoversikten støtter nå visning av URL-kolonner [#1130](https://github.com/Puzzlepart/prosjektportalen365/pull/1130)
+- Fiks for synkronisering dersom prosjekt mangler i den sentrale prosjekter-listen [#1121](https://github.com/Puzzlepart/prosjektportalen365/issues/1121)
 
 ## 1.8.2 - TBA
 
@@ -21,6 +23,8 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Porteføljeoversikt: vis personlige visninger som egen "seksjon" [#1045](https://github.com/Puzzlepart/prosjektportalen365/issues/1045)
 - Endret feltet GtSearchQuery til Note for å støtte lange spørringer. NB: Vil ikke endres gjennom oppgradering. Endre manuelt felttype til "Flere linjer med tekst" ved behov. [#970](https://github.com/Puzzlepart/prosjektportalen365/issues/970)
 - Endra standardsortering av dokumentbiblioteker til å sortere på filnavn (var "Ingen" før)
+- Standard visningsmodus er nå lagt til som egenskap for prosjektliste-webdelen [#1053](https://github.com/Puzzlepart/prosjektportalen365/issues/1053)
+
 
 ### Feilrettinger
 
