@@ -218,7 +218,7 @@
                             <pnp:DataValue FieldName="GtSortOrder">300</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName='Title'>Er tiltak fra interessent analyse og evt. kommunikasjonsplan gjennomført?</pnp:DataValue>
+                            <pnp:DataValue FieldName='Title'>Er tiltak fra interessent analyse og ev. kommunikasjonsplan gjennomført?</pnp:DataValue>
                             <pnp:DataValue FieldName='GtProjectPhase'>Anleggsfase|9b45a1ca-ae8c-4f4a-baa3-40353b7dd8fc</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">310</pnp:DataValue>
                         </pnp:DataRow>
@@ -326,7 +326,7 @@
                         <pnp:DataRow>
                             <pnp:DataValue FieldName='Title'>Gjennomføre forprosjekt</pnp:DataValue>
                             <pnp:DataValue FieldName='GtCategory'>Prosjektering og kontrahering</pnp:DataValue>
-                            <pnp:DataValue FieldName='GtChecklist'>Vurdere behov for forhåndskonferanse eller rammesøknad;Foreløpig kalkyle;Gjennomføre miljøgjennomgang og evt skrive miljøplan;Gjennomføre Risikoanalyse (intern)</pnp:DataValue>
+                            <pnp:DataValue FieldName='GtChecklist'>Vurdere behov for forhåndskonferanse eller rammesøknad;Foreløpig kalkyle;Gjennomføre miljøgjennomgang og ev. skrive miljøplan;Gjennomføre Risikoanalyse (intern)</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
@@ -691,7 +691,7 @@
                             <pnp:DataValue FieldName="GtSortOrder">330</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName="Title">Er tiltak fra interessent analyse og evt kommunikasjonsplan gjennomført?</pnp:DataValue>
+                            <pnp:DataValue FieldName="Title">Er tiltak fra interessent analyse og ev. kommunikasjonsplan gjennomført?</pnp:DataValue>
                             <pnp:DataValue FieldName="GtProjectPhase">Detaljprosjektering|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">340</pnp:DataValue>
                         </pnp:DataRow>
@@ -781,12 +781,12 @@
                             <pnp:DataValue FieldName="GtSortOrder">510</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName="Title">Evt;  er det lagt en plan for utbedring av mangler?</pnp:DataValue>
+                            <pnp:DataValue FieldName="Title">Eventuelt; er det lagt en plan for utbedring av mangler?</pnp:DataValue>
                             <pnp:DataValue FieldName="GtProjectPhase">Detaljprosjektering|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">520</pnp:DataValue>
                         </pnp:DataRow>
                         <pnp:DataRow>
-                            <pnp:DataValue FieldName="Title">Er ansvar for evt. oppfølging av mangler og endringsønsker avklart?</pnp:DataValue>
+                            <pnp:DataValue FieldName="Title">Er ansvar for ev. oppfølging av mangler og endringsønsker avklart?</pnp:DataValue>
                             <pnp:DataValue FieldName="GtProjectPhase">Detaljprosjektering|41c4d900-ec57-4779-a218-35e302b69e21</pnp:DataValue>
                             <pnp:DataValue FieldName="GtSortOrder">530</pnp:DataValue>
                         </pnp:DataRow>

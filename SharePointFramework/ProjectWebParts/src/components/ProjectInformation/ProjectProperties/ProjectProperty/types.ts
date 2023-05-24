@@ -3,6 +3,8 @@ import { TypedHash } from '@pnp/common'
 import { IEntityField } from 'sp-entityportal-service'
 import { stringIsNullOrEmpty } from '@pnp/common'
 
+type ProjectPropertyModelType = 'user' | 'usermulti' | 'taxonomyfieldtypemulti' | 'url'
+
 export class ProjectPropertyModel {
   /**
    * Internal name of the field
@@ -27,7 +29,7 @@ export class ProjectPropertyModel {
   /**
    * Type of the field
    */
-  public type?: string
+  public type?: ProjectPropertyModelType
 
   /**
    * Creates an instance of ProjectPropertyModel
@@ -40,7 +42,7 @@ export class ProjectPropertyModel {
     this.displayName = field.Title
     this.description = field.Description
     this.value = value
-    this.type = field.TypeAsString
+    this.type = field.TypeAsString.toLowerCase() as ProjectPropertyModelType
   }
 
   public get empty() {
