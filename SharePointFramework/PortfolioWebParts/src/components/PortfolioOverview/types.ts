@@ -72,10 +72,10 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
   showViewSelector?: boolean
 
   /**
- * Show program views. A dropdown is displayed in the command bar to select
- * a program view. The children projects of the selected program will be
- * displayed in the list.
- */
+   * Show program views. A dropdown is displayed in the command bar to select
+   * a program view. The children projects of the selected program will be
+   * displayed in the list.
+   */
   showProgramViews?: boolean
 
   /**
@@ -140,7 +140,7 @@ export interface IPortfolioOverviewState {
   /**
    * Active filters
    */
-  activeFilters?: { SelectedColumns?: string[];[key: string]: string[] }
+  activeFilters?: { SelectedColumns?: string[]; [key: string]: string[] }
 
   /**
    * Error

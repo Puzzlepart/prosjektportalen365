@@ -1,4 +1,9 @@
-import { ContextualMenuItemType, Dropdown, IContextualMenuItem, IDropdownOption } from '@fluentui/react'
+import {
+  ContextualMenuItemType,
+  Dropdown,
+  IContextualMenuItem,
+  IDropdownOption
+} from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import { IFilterProps } from 'components/FilterPanel'
 import _ from 'lodash'
@@ -189,7 +194,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
                     view.searchQueries = (option.data as ProgramItem).buildQueries(
                       defaultView.searchQuery
                     )
-                      context.dispatch(CHANGE_VIEW(view))
+                    context.dispatch(CHANGE_VIEW(view))
                   }}
                 />
               </div>

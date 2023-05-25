@@ -304,12 +304,12 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
- * Fetch items for the specified view. If the `view` has specified `searchQueries` it will use
- * `Promise.all` to fetch all queries in parallel. Otherwise it will use a single query.
- *
- * @param view View configuration
- * @param selectProperties Select properties
- */
+   * Fetch items for the specified view. If the `view` has specified `searchQueries` it will use
+   * `Promise.all` to fetch all queries in parallel. Otherwise it will use a single query.
+   *
+   * @param view View configuration
+   * @param selectProperties Select properties
+   */
   private async _fetchItemsForView(view: PortfolioOverviewView, selectProperties: string[] = []) {
     if (_.isArray(view.searchQueries)) {
       const result = await Promise.all(
@@ -351,7 +351,10 @@ export class DataAdapter implements IDataAdapter {
       { PrimarySearchResults: sites },
       { PrimarySearchResults: statusReports }
     ] = await Promise.all([
-      this._fetchItemsForView(view, [...configuration.columns.map((f) => f.fieldName)]),
+      this._fetchItemsForView(view, [
+        ...configuration.columns.map((f) => f.fieldName),
+        siteIdProperty
+      ]),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
@@ -411,7 +414,7 @@ export class DataAdapter implements IDataAdapter {
         .filter((p) => p)
 
       return { reports, configElement }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
