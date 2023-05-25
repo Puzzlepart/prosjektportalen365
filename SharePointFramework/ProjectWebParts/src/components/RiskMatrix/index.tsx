@@ -1,4 +1,4 @@
-import { Toggle } from '@fluentui/react'
+import { MessageBar, MessageBarType, Toggle } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import { DynamicMatrix } from '../DynamicMatrix'
@@ -6,7 +6,10 @@ import { IRiskMatrixProps } from './types'
 import { useRiskMatrix } from './useRiskMatrix'
 
 export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
-  const { configuration, getElementsForCell, setShowPostAction } = useRiskMatrix(props)
+  const { configuration, error, getElementsForCell, setShowPostAction } = useRiskMatrix(props)
+  if (!!error) {
+    return <MessageBar messageBarType={MessageBarType.error}>{error}</MessageBar>
+  }
   return (
     <>
       <DynamicMatrix
@@ -20,6 +23,7 @@ export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
         onText={strings.ToggleUncertaintyPostActionOnText}
         offText={strings.ToggleUncertaintyPostActionOffText}
         onChange={(_event, checked) => setShowPostAction(checked)}
+        disabled={!!error}
       />
     </>
   )
@@ -33,7 +37,6 @@ RiskMatrix.defaultProps = {
   <p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n
   <p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n
   <p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>`,
-  customConfigUrl: 'SiteAssets/custom-cells.txt',
   size: '5',
   colorScaleConfig: [
     { p: 10, r: 44, g: 186, b: 0 },
@@ -41,7 +44,8 @@ RiskMatrix.defaultProps = {
     { p: 50, r: 255, g: 244, b: 0 },
     { p: 70, r: 255, g: 167, b: 0 },
     { p: 90, r: 255, g: 0, b: 0 }
-  ]
+  ],
+  manualConfigurationPath: strings.RiskMatrixManualConfigurationPathDefaltValue
 }
 
 export * from './types'
