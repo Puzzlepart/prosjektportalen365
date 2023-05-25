@@ -1,11 +1,13 @@
 define([], function () {
   return {
+    UnknownConfigurationName: 'Konfigurasjon uten navn',
     ManualConfigurationNotFoundOrInvalid: 'Manuell konfigurasjon for Risikomatrise ikke funnet eller har ugyldig format.',
-    RiskMatrixManualConfigurationPathDefaltValue: 'SiteAssets/Konfigurasjon/risiko-matrise-konfigurasjon.json',
+    RiskMatrixManualConfigurationPathDefaltValue: 'standard-konfigurasjon.json',
+    RiskMatrixConfigurationFolder: 'Risikomatrise',
+    SiteAssetsConfigurationFolder: 'SiteAssets/Konfigurasjon',
     UseDynamicConfigurationOffText: 'Nei, bruk manuell',
     UseDynamicConfigurationOnText: 'Ja',
-    ManualConfigurationPathLabel: 'Sti til JSON-fil med manuell konfigurasjon',
-    ManualConfigurationPathDescription: 'Angi sti til JSON-fil med manuell konfigurasjon. Filen må være tilgjengelig for alle brukere. Eksempel: SiteAssets/Konfigurasjon/risiko-matrise-konfigurasjon.json',
+    ManualConfigurationPathLabel: 'Manuell konfigurasjon',
     UseDynamicConfigurationLabel: 'Bruk dynamisk konfigurasjon',
     AdminPageLinkLabel: 'Lenke til Administrasjonssiden (Etter /SitePages/)',
     AdvancedGroupName: 'Avansert',
