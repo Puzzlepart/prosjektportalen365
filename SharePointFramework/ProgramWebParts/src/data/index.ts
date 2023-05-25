@@ -25,8 +25,7 @@ import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService, ProjectDataService } from 'pp365-shared/lib/services'
 import * as strings from 'ProgramWebPartsStrings'
 import { GAINS_DEFAULT_SELECT_PROPERTIES } from './config'
-import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
-import { DEFAULT_SEARCH_SETTINGS } from './types'
+import { DEFAULT_SEARCH_SETTINGS, IFetchDataForViewItemResult } from './types'
 import _ from 'underscore'
 
 /**
@@ -197,38 +196,40 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    * Create queries if number of projects exceeds threshold to avoid 4096 character limitation by SharePoint
    *
    * @param queryProperty Dependant on whether it is aggregated portfolio or portfolio overview
-   * @param maxQueryLength Maximum length of query before pushing to array
-   * @param maxProjects Maximum projects required before creating strings
+   * @param maxQueryLength Maximum length of query before pushing to array (default: 2500)
+   * @param maxProjects Maximum projects required before creating strings  (default: 25)
    */
   public aggregatedQueryBuilder(
     queryProperty: string,
     maxQueryLength: number = 2500,
     maxProjects: number = 25
   ): string[] {
-    const queryArray = []
+    const aggregatedQueries = []
     let queryString = ''
     if (this.childProjects.length > maxProjects) {
       this.childProjects.forEach((childProject, index) => {
         queryString += `${queryProperty}:${childProject.SiteId} `
         if (queryString.length > maxQueryLength) {
-          queryArray.push(queryString)
+          aggregatedQueries.push(queryString)
           queryString = ''
         }
         if (index === this.childProjects.length - 1) {
-          queryArray.push(queryString)
+          aggregatedQueries.push(queryString)
         }
       })
     } else {
       this.childProjects.forEach((childProject) => {
         queryString += `${queryProperty}:${childProject.SiteId} `
       })
-      queryArray.push(queryString)
+      aggregatedQueries.push(queryString)
     }
-    return queryArray
+    return aggregatedQueries.filter(Boolean)
   }
 
   /**
-   *  do a dynamic amount of sp.search calls
+   * Do a dynamic amount of `sp.search` calls based on the amount of projects
+   * to avoid 4096 character limitation by SharePoint. Uses `this.aggregatedQueryBuilder`
+   * to create queries.
    *
    * @description Used in `PortfolioOverview`
    *
