@@ -2,7 +2,14 @@ import strings from 'PortfolioWebPartsStrings'
 import { IProjectListView } from './types'
 
 /**
- * View configurations for `ProjectList`
+ * View configurations for `ProjectList`.
+ * 
+ * The following views are available:
+ * - `projects_access`: Projects the current user has access to
+ * - `my_projects`: Projects the current user is a member of
+ * - `all_projects`: All projects
+ * - `parent_projects`: Parent projects (only available for Portfolio Managers and users with access to the project)
+ * - `program_projects`: Program projects (only available for Portfolio Managers and users with access to the project)
  */
 export const ProjectListViews: IProjectListView[] = [
   {
@@ -33,7 +40,7 @@ export const ProjectListViews: IProjectListView[] = [
     itemIcon: 'ProductVariant',
     searchBoxPlaceholder: strings.ParentProjectsSearchBoxPlaceholderText,
     filter: (project, state) =>
-      project.isParent && (state.isUserInPortfolioManagerGroup || project.isUserMember)
+      project.isParent && (state.isUserInPortfolioManagerGroup || project.hasUserAccess)
   },
   {
     itemKey: 'program_projects',
@@ -41,6 +48,6 @@ export const ProjectListViews: IProjectListView[] = [
     itemIcon: 'ProductList',
     searchBoxPlaceholder: strings.ProgramSearchBoxPlaceholderText,
     filter: (project, state) =>
-      project.isProgram && (state.isUserInPortfolioManagerGroup || project.isUserMember)
+      project.isProgram && (state.isUserInPortfolioManagerGroup || project.hasUserAccess)
   }
 ]
