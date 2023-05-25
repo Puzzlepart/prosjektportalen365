@@ -13,7 +13,8 @@ export abstract class BaseProjectWebPart<
   public abstract render(): void
 
   /**
-   * Render component
+   * Render component with props as a combined object of `this.properties` and
+   * the `props` parameter.
    *
    * @param component Component
    * @param props Props

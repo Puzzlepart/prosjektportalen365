@@ -301,7 +301,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Get configuration files from the specified folder `folderPath` relative to the configuration folder in Site Assets.
+   * Get configuration files from the specified folder `folderPath` relative to
+   * the configuration folder (`strings.SiteAssetsConfigurationFolder`) in Site Assets.
    *
    * @param folderPath Folder path relative to the configuration folder in Site Assets
    */
@@ -320,7 +321,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         .get()
       return files.map((file) => ({
         name: file.Name,
-        title: file.ListItemAllFields.Title ?? `${strings.UnknownConfigurationName} ${file.Name}`,
+        title: file.ListItemAllFields.Title ?? `${strings.UnknownConfigurationName} (${file.Name})`,
         url: file.ServerRelativeUrl
       }))
     } catch {
