@@ -13,8 +13,9 @@ export interface IProjectListView extends IPivotItemProps {
    * Filter function for projects. If not provided, all projects are shown.
    *
    * @param project Project list model
+   * @param state State of the component
    */
-  filter?: (project?: ProjectListModel) => boolean
+  filter?: (project: ProjectListModel, state: IProjectListState) => boolean
 
   /**
    * Function to get header button props. If not provided, the default button props are used.

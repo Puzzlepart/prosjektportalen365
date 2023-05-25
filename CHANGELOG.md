@@ -12,6 +12,10 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Porteføljeoversikten støtter nå visning av URL-kolonner [#1130](https://github.com/Puzzlepart/prosjektportalen365/pull/1130)
 - Fiks for synkronisering dersom prosjekt mangler i den sentrale prosjekter-listen [#1121](https://github.com/Puzzlepart/prosjektportalen365/issues/1121)
 
+### Feilrettinger
+
+- Rettet et problem hvor låst mal hindret mulighet for å gjøre et prosjekt om til overordnet område [#1134](https://github.com/Puzzlepart/prosjektportalen365/issues/1134)
+
 ## 1.8.2 - TBA
 
 ### Ny funksjonalitet
