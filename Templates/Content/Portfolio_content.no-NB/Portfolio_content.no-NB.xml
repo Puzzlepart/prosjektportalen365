@@ -78,9 +78,9 @@
                         <pnp:Property Key="Title" Value="Styringsdokument" />
                     </pnp:Properties>
                 </pnp:File>
-                <pnp:File Src="SiteAssets/Konfigurasjon/risiko-matrise-konfigurasjon.json" Folder="SiteAssets/Konfigurasjon" Level="Published" Overwrite="true">
+                <pnp:File Src="SiteAssets/Konfigurasjon/Risikomatrise/standard-konfigurasjon.json" Folder="SiteAssets/Konfigurasjon/Risikomatrise" Level="Published" Overwrite="true">
                     <pnp:Properties>
-                        <pnp:Property Key="Title" Value="Manuell konfigurasjon for Risikomatrisen" />
+                        <pnp:Property Key="Title" Value="Standard 5x5 matrise" />
                     </pnp:Properties>
                 </pnp:File>
             </pnp:Files>
