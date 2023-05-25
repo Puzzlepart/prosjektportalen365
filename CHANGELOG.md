@@ -15,16 +15,6 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 ### Feilrettinger
 
 - Rettet et problem hvor låst mal hindret mulighet for å gjøre et prosjekt om til overordnet område [#1134](https://github.com/Puzzlepart/prosjektportalen365/issues/1134)
-
-
-## 1.8.2 - TBA
-
-### Ny funksjonalitet
-
-### Forbedringer
-
-### Feilrettinger
-
 - Fikset et problem hvor 'Hooks' ikke ble kjørt på slutten av provisjoneringen av et prosjekt. [#1127](https://github.com/Puzzlepart/prosjektportalen365/issues/1127)
 
 ---
