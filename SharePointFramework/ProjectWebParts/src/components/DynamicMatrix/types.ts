@@ -18,9 +18,9 @@ export interface IDynamicMatrixProps {
   configuration: DynamicMatrixConfiguration
 
   /**
-   * Size (4, 5 or 6)
+   * Size (4, 5 or 6) as string.
    */
-  size?: string
+  size?: DynamicMatrixSize
 
   /**
    * Width can be either `string` or `number`.
