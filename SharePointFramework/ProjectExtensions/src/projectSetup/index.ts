@@ -374,7 +374,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       },
       ['FieldValuesAsText']
     )
-    if (lockedTemplateName) {
+    if (this.properties.forceTemplate) {
+      return templates
+    } else if (lockedTemplateName) {
       const lockedTemplate = templates.find((t) => t.text === lockedTemplateName)
       if (lockedTemplate) {
         lockedTemplate.isForced = true
