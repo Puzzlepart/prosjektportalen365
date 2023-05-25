@@ -11,6 +11,7 @@ import { IEntityField } from 'sp-entityportal-service/types'
 import { find } from 'underscore'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
 import { IdeaConfigurationModel, SPIdeaConfigurationItem } from '../../models'
+import { IConfigurationFile } from 'types'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
@@ -320,6 +321,35 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       .items.get()
 
     return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
+  }
+
+  /**
+   * Get configuration files from the specified folder `folderPath` relative to
+   * the configuration folder (`strings.SiteAssetsConfigurationFolder`) in Site Assets.
+   *
+   * @param folderPath Folder path relative to the configuration folder in Site Assets
+   */
+  public async getConfigurations(folderPath: string): Promise<IConfigurationFile[]> {
+    try {
+      const { ServerRelativeUrl } = await this.portal.web.rootFolder
+        .select('ServerRelativeUrl')
+        .usingCaching()
+        .get<{ ServerRelativeUrl: string }>()
+      const folderRelativeUrl = `${ServerRelativeUrl}/${strings.SiteAssetsConfigurationFolder}/${folderPath}`
+      const folder = this.portal.web.getFolderByServerRelativeUrl(folderRelativeUrl)
+      const files = await folder.files
+        .select('Name', 'ServerRelativeUrl', 'ListItemAllFields/Title')
+        .expand('ListItemAllFields')
+        .usingCaching()
+        .get()
+      return files.map((file) => ({
+        name: file.Name,
+        title: file.ListItemAllFields.Title ?? `${strings.UnknownConfigurationName} (${file.Name})`,
+        url: file.ServerRelativeUrl
+      }))
+    } catch {
+      return []
+    }
   }
 }
 

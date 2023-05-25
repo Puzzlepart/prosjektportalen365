@@ -44,8 +44,7 @@ RiskMatrix.defaultProps = {
     { p: 50, r: 255, g: 244, b: 0 },
     { p: 70, r: 255, g: 167, b: 0 },
     { p: 90, r: 255, g: 0, b: 0 }
-  ],
-  manualConfigurationPath: strings.RiskMatrixManualConfigurationPathDefaltValue
+  ]
 }
 
 export * from './types'

@@ -21,7 +21,7 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
     if (props.pageContext && !props.useDynamicConfiguration) {
       fetchJsonConfiguration()
     }
-  }, [])
+  }, [props.useDynamicConfiguration])
 
   /**
    * Fetches the manual configuration from the specified URL.
@@ -29,10 +29,8 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
    */
   async function fetchJsonConfiguration() {
     try {
-      const { ServerRelativeUrl } = await SPDataAdapter.portal.web.get()
-      const fileRelativeUrl = `/${ServerRelativeUrl}/${props.manualConfigurationPath}`
       const manualConfiguration = await SPDataAdapter.portal.web
-        .getFileByServerRelativeUrl(fileRelativeUrl)
+        .getFileByServerRelativeUrl(props.manualConfigurationPath)
         .usingCaching()
         .getJSON()
       setConfiguration(manualConfiguration)
@@ -48,7 +46,7 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
         generateMatrixConfiguration(parseInt(props.size, 10), getMatrixHeaders(props))
       )
     }
-  }, [props])
+  }, [props.useDynamicConfiguration, props.size])
 
   return { configuration, error }
 }
