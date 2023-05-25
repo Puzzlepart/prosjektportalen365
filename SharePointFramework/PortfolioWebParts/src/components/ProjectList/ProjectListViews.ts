@@ -32,13 +32,15 @@ export const ProjectListViews: IProjectListView[] = [
     headerText: strings.ParentProjectsHeaderText,
     itemIcon: 'ProductVariant',
     searchBoxPlaceholder: strings.ParentProjectsSearchBoxPlaceholderText,
-    filter: (project) => project.isParent
+    filter: (project, state) =>
+      project.isParent && (state.isUserInPortfolioManagerGroup || project.isUserMember)
   },
   {
     itemKey: 'program_projects',
     headerText: strings.ProgramProjectsHeaderText,
     itemIcon: 'ProductList',
     searchBoxPlaceholder: strings.ProgramSearchBoxPlaceholderText,
-    filter: (project) => project.isProgram
+    filter: (project, state) =>
+      project.isProgram && (state.isUserInPortfolioManagerGroup || project.isUserMember)
   }
 ]
