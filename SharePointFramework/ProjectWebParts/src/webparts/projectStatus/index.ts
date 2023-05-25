@@ -83,21 +83,38 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
               groupFields: [
                 PropertyPaneToggle('riskMatrix.fullWidth', {
                   label: strings.MatrixFullWidthLabel
-                }),
-                PropertyPaneSlider('riskMatrix.width', {
-                  label: strings.WidthFieldLabel,
-                  min: 400,
-                  max: 1300,
-                  value: 400,
-                  showValue: true,
-                  disabled: this.properties.riskMatrix?.fullWidth
-                }),
+                }
+                ),
+                !this.properties.riskMatrix?.fullWidth && (
+                  PropertyPaneSlider('riskMatrix.width', {
+                    label: strings.WidthFieldLabel,
+                    min: 400,
+                    max: 1300,
+                    value: 400,
+                    showValue: true,
+                    disabled: this.properties.riskMatrix?.fullWidth
+                  })
+                ),
                 PropertyPaneTextField('riskMatrix.calloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,
                   resizable: true,
                   rows: 8
                 }),
+                PropertyPaneTextField('riskMatrix.manualConfigurationPath', {
+                  label: strings.ManualConfigurationPathLabel,
+                  description: strings.ManualConfigurationPathDescription,
+                  disabled: this.properties.riskMatrix?.useDynamicConfiguration,
+                  value:
+                    this.properties.riskMatrix?.manualConfigurationPath ??
+                    strings.RiskMatrixManualConfigurationPathDefaltValue
+                }),
+                PropertyPaneToggle('riskMatrix.useDynamicConfiguration', {
+                  label: strings.UseDynamicConfigurationLabel,
+                  offText: strings.UseDynamicConfigurationOffText,
+                  onText: strings.UseDynamicConfigurationOnText
+                }),
+                this.properties.riskMatrix.useDynamicConfiguration &&
                 PropertyPaneDropdown('riskMatrix.size', {
                   label: strings.MatrixSizeLabel,
                   options: [
@@ -116,6 +133,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   ],
                   selectedKey: this.properties.riskMatrix?.size ?? '5'
                 }),
+                this.properties.riskMatrix.useDynamicConfiguration &&
                 PropertyFieldColorConfiguration('riskMatrix.colorScaleConfig', {
                   key: 'riskMatrixColorScaleConfig',
                   label: strings.MatrixColorScaleConfigLabel,
@@ -128,12 +146,14 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   ],
                   value: this.properties.riskMatrix?.colorScaleConfig
                 }),
-                ...this.getMatrixHeaderLabelPropertyFields(
-                  'riskMatrix',
-                  RISK_MATRIX_DEFAULT_PROBABILITY_HEADERS,
-                  RISK_MATRIX_DEFAULT_CONSEQUENCE_HEADERS
-                )
-              ]
+                ...(this.properties.riskMatrix.useDynamicConfiguration
+                  ? this.getMatrixHeaderLabelPropertyFields(
+                    'riskMatrix',
+                    RISK_MATRIX_DEFAULT_PROBABILITY_HEADERS,
+                    RISK_MATRIX_DEFAULT_CONSEQUENCE_HEADERS
+                  )
+                  : [])
+              ].filter(Boolean)
             },
             {
               groupName: strings.OpportunityMatrixGroupName,
