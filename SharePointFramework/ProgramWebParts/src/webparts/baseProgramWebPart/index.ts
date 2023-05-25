@@ -3,12 +3,12 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { LogLevel } from '@pnp/logging'
 import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
-import assign from 'object-assign'
 import { IHubSite } from 'pp365-shared/lib/interfaces'
 import React, { ComponentClass, FC } from 'react'
-import * as ReactDom from 'react-dom'
+import ReactDom from 'react-dom'
 import { SPDataAdapter } from '../../data'
 import { IBaseProgramWebPartProps } from './types'
+import _ from 'lodash'
 
 export abstract class BaseProgramWebPart<
   T extends IBaseProgramWebPartProps
@@ -21,16 +21,27 @@ export abstract class BaseProgramWebPart<
   public abstract render(): void
 
   public renderComponent<T = any>(component: ComponentClass<T> | FC<T>, props?: T): void {
-    const combinedProps = assign(this.properties, props, {
-      pageContext: this.context.pageContext,
-      dataAdapter: this.dataAdapter,
-      displayMode: this.displayMode,
-      title: this.properties.title
-    })
+    const combinedProps = {
+      ...this.properties,
+      ...props,
+      ...{
+        pageContext: this.context.pageContext,
+        dataAdapter: this.dataAdapter,
+        displayMode: this.displayMode,
+        title: this.properties.title
+      }
+    }
     const element: React.ReactElement<T> = React.createElement(component, combinedProps)
     ReactDom.render(element, this.domElement)
   }
 
+  /**
+   * Get child projects from the Prosjektegenskaper list item. The note field GtChildProjects
+   * contains a JSON string with the child projects, and needs to be parsed. If the retrieve
+   * fails, an empty array is returned.
+   * 
+   * @returns {Promise<Array<Record<string, string>>>} Child projects
+   */
   public async getChildProjects(): Promise<Array<Record<string, string>>> {
     try {
       const projectProperties = await sp.web.lists
@@ -38,9 +49,7 @@ export abstract class BaseProgramWebPart<
         .items.getById(1)
         .get()
       const childProjects = JSON.parse(projectProperties.GtChildProjects)
-      return childProjects.length > 0
-        ? childProjects
-        : [{ SiteId: '00000000-0000-0000-0000-000000000000', Title: '' }]
+      return !_.isEmpty(childProjects) ? childProjects : []
     } catch (error) {
       return []
     }
