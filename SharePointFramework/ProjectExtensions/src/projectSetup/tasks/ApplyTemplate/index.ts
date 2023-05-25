@@ -55,7 +55,8 @@ export class ApplyTemplate extends BaseTask {
       })
       this.logInformation('Applying extensions to site', { parameters: params.templateParameters })
       for (let i = 0; i < this.data.selectedExtensions.length; i++) {
-        const extensionSchema = await this.data.selectedExtensions[i].getSchema()
+        let extensionSchema = await this.data.selectedExtensions[i].getSchema()
+        extensionSchema = _.omit(extensionSchema, 'Hooks')
         onProgress(
           strings.ApplyingExtensionsText,
           format(strings.ApplyExtensionText, this.data.selectedExtensions[i].text),
