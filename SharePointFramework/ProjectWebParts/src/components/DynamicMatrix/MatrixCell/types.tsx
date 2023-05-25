@@ -12,6 +12,7 @@ export interface IMatrixCell {
   style?: CSSProperties
   x?: number
   y?: number
+  backgroundColor?: string
 }
 
 export interface IMatrixCellProps extends HTMLProps<HTMLDivElement> {
