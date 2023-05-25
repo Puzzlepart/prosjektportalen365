@@ -1,4 +1,4 @@
-import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
+import { ContextualMenuItemType, IContextualMenuItem, IDropdownOption } from '@fluentui/react'
 import { IFilterProps } from 'components/FilterPanel'
 import _ from 'lodash'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -59,6 +59,13 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
 
   const sharedViews = convertViewsToContextualMenuItems((v) => !v.isPersonal)
   const personalViews = convertViewsToContextualMenuItems((v) => v.isPersonal)
+  const programViewOptions: IDropdownOption[] = context.props.showProgramViews
+    ? context.props.configuration.programs.map((p) => ({
+        key: p.id,
+        text: p.name,
+        data: p
+      }))
+    : []
 
   /**
    * Callback function for Excel export. Handles the export to Excel with state updates and
