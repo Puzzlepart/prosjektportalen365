@@ -51,7 +51,7 @@ import { SearchQueryInit } from '@pnp/sp/src/search'
  * Data adapter for Portfolio Web Parts.
  */
 export class DataAdapter implements IDataAdapter {
-  private _portalDataService: PortalDataService
+  private _portal: PortalDataService
   public dataSourceService: DataSourceService
 
   /**
@@ -61,7 +61,7 @@ export class DataAdapter implements IDataAdapter {
    * @param siteIds Site IDs
    */
   constructor(public context: WebPartContext, private siteIds?: string[]) {
-    this._portalDataService = new PortalDataService()
+    this._portal = new PortalDataService()
   }
 
   /**
@@ -70,10 +70,10 @@ export class DataAdapter implements IDataAdapter {
    */
   public async configure(): Promise<DataAdapter> {
     if (this.dataSourceService) return this
-    this._portalDataService = await this._portalDataService.configure({
+    this._portal = await this._portal.configure({
       pageContext: this.context.pageContext
     })
-    this.dataSourceService = new DataSourceService(this._portalDataService.web)
+    this.dataSourceService = new DataSourceService(this._portal.web)
     return this
   }
 
@@ -139,12 +139,12 @@ export class DataAdapter implements IDataAdapter {
   public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
     // eslint-disable-next-line prefer-const
     let [columnConfig, columns, views, viewsUrls, columnUrls, userCanAddViews] = await Promise.all([
-      this._portalDataService.getProjectColumnConfig(),
-      this._portalDataService.getProjectColumns(),
-      this._portalDataService.getPortfolioOverviewViews(),
-      this._portalDataService.getListFormUrls('PORTFOLIO_VIEWS'),
-      this._portalDataService.getListFormUrls('PROJECT_COLUMNS'),
-      this._portalDataService.currentUserHasPermissionsToList(
+      this._portal.getProjectColumnConfig(),
+      this._portal.getProjectColumns(),
+      this._portal.getPortfolioOverviewViews(),
+      this._portal.getListFormUrls('PORTFOLIO_VIEWS'),
+      this._portal.getListFormUrls('PROJECT_COLUMNS'),
+      this._portal.currentUserHasPermissionsToList(
         'PORTFOLIO_VIEWS',
         PermissionKind.AddListItems
       )
@@ -170,14 +170,14 @@ export class DataAdapter implements IDataAdapter {
   public async getAggregatedListConfig(category: string): Promise<IAggregatedListConfiguration> {
     try {
       if (category.includes('(Prosjektnivå)') || !category) {
-        this._portalDataService = await this._portalDataService.configure({
+        this._portal = await this._portal.configure({
           pageContext: this.context.pageContext
         })
       }
       const [views, viewsUrls, columnUrls] = await Promise.all([
         this.fetchDataSources(category),
-        this._portalDataService.getListFormUrls('DATA_SOURCES'),
-        this._portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS')
+        this._portal.getListFormUrls('DATA_SOURCES'),
+        this._portal.getListFormUrls('PROJECT_CONTENT_COLUMNS')
       ])
       return {
         views,
