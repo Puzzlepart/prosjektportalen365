@@ -185,16 +185,17 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                   resizable: true,
                   rows: 8
                 }),
-                PropertyPaneDropdown('riskMatrix.manualConfigurationPath', {
-                  label: strings.ManualConfigurationPathLabel,
-                  disabled: this.properties.useDynamicConfiguration,
-                  options: this._data.configurations.map((config) => ({
-                    key: config.url,
-                    text: config.title
-                  })),
-                  selectedKey:
-                    this.properties?.manualConfigurationPath ?? this._data.defaultConfiguration?.url
-                }),
+                !this.properties.useDynamicConfiguration &&
+                  PropertyPaneDropdown('manualConfigurationPath', {
+                    label: strings.ManualConfigurationPathLabel,
+                    options: this._data.configurations.map(({ url: key, title: text }) => ({
+                      key,
+                      text
+                    })),
+                    selectedKey:
+                      this.properties?.manualConfigurationPath ??
+                      this._data.defaultConfiguration?.url
+                  }),
                 PropertyPaneToggle('useDynamicConfiguration', {
                   label: strings.UseDynamicConfigurationLabel,
                   offText: strings.UseDynamicConfigurationOffText,

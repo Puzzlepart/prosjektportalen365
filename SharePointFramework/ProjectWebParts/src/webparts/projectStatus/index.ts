@@ -122,17 +122,16 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   resizable: true,
                   rows: 8
                 }),
-                PropertyPaneDropdown('riskMatrix.manualConfigurationPath', {
-                  label: strings.ManualConfigurationPathLabel,
-                  disabled: this.properties.riskMatrix?.useDynamicConfiguration,
-                  options: this._data.riskMatrixConfigurations.map((config) => ({
-                    key: config.url,
-                    text: config.title
-                  })),
-                  selectedKey:
-                    this.properties.riskMatrix?.manualConfigurationPath ??
-                    this._data.defaultRiskMatrixConfiguration?.url
-                }),
+                !this.properties.riskMatrix.useDynamicConfiguration &&
+                  PropertyPaneDropdown('riskMatrix.manualConfigurationPath', {
+                    label: strings.ManualConfigurationPathLabel,
+                    options: this._data.riskMatrixConfigurations.map(
+                      ({ url: key, title: text }) => ({ key, text })
+                    ),
+                    selectedKey:
+                      this.properties.riskMatrix?.manualConfigurationPath ??
+                      this._data.defaultRiskMatrixConfiguration?.url
+                  }),
                 PropertyPaneToggle('riskMatrix.useDynamicConfiguration', {
                   label: strings.UseDynamicConfigurationLabel,
                   offText: strings.UseDynamicConfigurationOffText,
