@@ -91,7 +91,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       this._initializeSetup({
         web: new Web(this.context.pageContext.web.absoluteUrl) as any,
         webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
-        templateExcludeHandlers: [],
+        templateExcludeHandlers: ['Hooks'],
         context: this.context,
         properties: this.properties
       })
@@ -275,7 +275,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         this._initializeSetup({
           web: new Web(this.context.pageContext.web.absoluteUrl) as any,
           webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
-          templateExcludeHandlers: [],
+          templateExcludeHandlers: ['Hooks'],
           context: this.context,
           properties: this.properties
         })
