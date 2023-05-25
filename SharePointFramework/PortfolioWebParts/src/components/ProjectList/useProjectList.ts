@@ -115,7 +115,7 @@ export const useProjectList = (props: IProjectListProps) => {
     views,
     getCardActions,
     searchBoxPlaceholder:
-      !state.isDataLoaded || state.projects.length === 0
+      !state.isDataLoaded || _.isEmpty(state.projects)
         ? ''
         : format(state.selectedView.searchBoxPlaceholder, projects.length),
     onListSort,
