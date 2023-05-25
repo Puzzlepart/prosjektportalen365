@@ -29,6 +29,7 @@ import {
   ChartData,
   ChartDataItem,
   DataField,
+  ProgramItem,
   ProjectListModel,
   SPChartConfigurationItem,
   SPContentType,
@@ -132,30 +133,38 @@ export class DataAdapter implements IDataAdapter {
    * - `columns` - Project columns
    * - `refiners` - Refinable columns
    * - `views` - Portfolio overview views
+   * - `programs` - Programs
    * - `viewsUrls` - Portfolio views list form URLs
    * - `columnUrls` - Project columns list form URLs
    * - `userCanAddViews` - User can add portfolio views
    */
   public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
     // eslint-disable-next-line prefer-const
-    let [columnConfig, columns, views, viewsUrls, columnUrls, userCanAddViews] = await Promise.all([
+    const [
+      columnConfig,
+      columns,
+      views,
+      programs,
+      viewsUrls,
+      columnUrls,
+      userCanAddViews
+    ] = await Promise.all([
       this._portal.getProjectColumnConfig(),
       this._portal.getProjectColumns(),
       this._portal.getPortfolioOverviewViews(),
+      this._portal.getPrograms(ProgramItem),
       this._portal.getListFormUrls('PORTFOLIO_VIEWS'),
       this._portal.getListFormUrls('PROJECT_COLUMNS'),
-      this._portal.currentUserHasPermissionsToList(
-        'PORTFOLIO_VIEWS',
-        PermissionKind.AddListItems
-      )
+      this._portal.currentUserHasPermissionsToList('PORTFOLIO_VIEWS', PermissionKind.AddListItems)
     ])
-    columns = columns.map((col) => col.configure(columnConfig))
+    const configuredColumns = columns.map((col) => col.configure(columnConfig))
     const refiners = columns.filter((col) => col.isRefinable)
-    views = views.map((view) => view.configure(columns))
+    const configuredViews = views.map((view) => view.configure(columns))
     return {
-      columns,
+      columns: configuredColumns,
       refiners,
-      views,
+      views: configuredViews,
+      programs,
       viewsUrls,
       columnUrls,
       userCanAddViews
@@ -327,9 +336,8 @@ export class DataAdapter implements IDataAdapter {
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${
-          queryArray ?? ''
-        } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `${queryArray ?? ''
+          } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })
@@ -381,7 +389,7 @@ export class DataAdapter implements IDataAdapter {
         .filter((p) => p)
 
       return { reports, configElement }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
