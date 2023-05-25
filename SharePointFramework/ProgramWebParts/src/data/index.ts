@@ -204,26 +204,26 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     maxQueryLength: number = 2500,
     maxProjects: number = 25
   ): string[] {
-    const queryArray = []
+    const aggregatedQueries = []
     let queryString = ''
     if (this.childProjects.length > maxProjects) {
       this.childProjects.forEach((childProject, index) => {
         queryString += `${queryProperty}:${childProject.SiteId} `
         if (queryString.length > maxQueryLength) {
-          queryArray.push(queryString)
+          aggregatedQueries.push(queryString)
           queryString = ''
         }
         if (index === this.childProjects.length - 1) {
-          queryArray.push(queryString)
+          aggregatedQueries.push(queryString)
         }
       })
     } else {
       this.childProjects.forEach((childProject) => {
         queryString += `${queryProperty}:${childProject.SiteId} `
       })
-      queryArray.push(queryString)
+      aggregatedQueries.push(queryString)
     }
-    return queryArray.filter(Boolean)
+    return aggregatedQueries.filter(Boolean)
   }
 
   /**

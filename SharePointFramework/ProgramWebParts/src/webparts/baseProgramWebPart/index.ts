@@ -39,7 +39,7 @@ export abstract class BaseProgramWebPart<
    * Get child projects from the Prosjektegenskaper list item. The note field GtChildProjects
    * contains a JSON string with the child projects, and needs to be parsed. If the retrieve
    * fails, an empty array is returned.
-   * 
+   *
    * @returns {Promise<Array<Record<string, string>>>} Child projects
    */
   public async getChildProjects(): Promise<Array<Record<string, string>>> {
