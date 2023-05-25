@@ -1,3 +1,4 @@
+import { ProgramItem } from 'models/ProgramItem'
 import { ProjectColumn, PortfolioOverviewView } from 'pp365-shared/lib/models'
 
 export interface IPortfolioConfiguration {
@@ -15,6 +16,11 @@ export interface IPortfolioConfiguration {
    * Available views
    */
   views: PortfolioOverviewView[]
+
+  /**
+   * Available programs
+   */
+  programs: ProgramItem[]
 
   /**
    * New forms and edit forms urls for views list

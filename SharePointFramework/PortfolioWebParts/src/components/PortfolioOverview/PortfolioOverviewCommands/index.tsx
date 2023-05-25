@@ -13,10 +13,10 @@ import { usePortfolioOverviewCommands } from './usePortfolioOverviewCommands'
  */
 export const PortfolioOverviewCommands: React.FC<IPortfolioOverviewCommandsProps> = (props) => {
   const context = useContext(PortfolioOverviewContext)
-  const { items, farItems, filters } = usePortfolioOverviewCommands(props)
+  const { commandBarProps, filters } = usePortfolioOverviewCommands(props)
   return (
     <div hidden={!context.props.showCommandBar}>
-      <CommandBar items={items} farItems={farItems} />
+      <CommandBar {...commandBarProps} />
       <FilterPanel
         isOpen={context.state.showFilterPanel}
         layerHostId={context.layerHostId}

@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    ShowProgramViewsLabel: 'Vis programvisninger',
+    ProgramsHeaderText: 'Programmer',
+    SelectProgramText:'Velg et programområde',
     HideViewsLabel: 'Skjul visninger',
     PortfolioAggregationNotConfiguredMessage: 'Webdelen må konfigureres med en datakilde. Rediger webdelen, og legg inn navnet på datakilden du vil bruke.',
     DataSourceCategoryDescription: 'Angi en datakildekategori for å kunne velge mellom flere datakilder i webdelen.',
