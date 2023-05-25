@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - releases/1.8
+      - rc/1.8.2
     paths:
       - "SharePointFramework/**"
       - "Install/**"
