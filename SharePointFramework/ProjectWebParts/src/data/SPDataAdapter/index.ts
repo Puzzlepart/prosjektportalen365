@@ -14,6 +14,7 @@ import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
   private _name = 'SPDataAdapter'
+  
 
   /**
    * Configure the SP data adapter
