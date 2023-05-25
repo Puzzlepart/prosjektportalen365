@@ -171,14 +171,14 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                   label: strings.MatrixFullWidthLabel
                 }),
                 !this.properties.fullWidth &&
-                PropertyPaneSlider('width', {
-                  label: strings.WidthFieldLabel,
-                  min: 400,
-                  max: 1000,
-                  value: 400,
-                  showValue: true,
-                  disabled: this.properties.fullWidth
-                }),
+                  PropertyPaneSlider('width', {
+                    label: strings.WidthFieldLabel,
+                    min: 400,
+                    max: 1000,
+                    value: 400,
+                    showValue: true,
+                    disabled: this.properties.fullWidth
+                  }),
                 PropertyPaneTextField('calloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,
@@ -201,37 +201,37 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                   onText: strings.UseDynamicConfigurationOnText
                 }),
                 this.properties.useDynamicConfiguration &&
-                PropertyPaneDropdown('size', {
-                  label: strings.MatrixSizeLabel,
-                  options: [
-                    {
-                      key: '4',
-                      text: '4x4'
-                    },
-                    {
-                      key: '5',
-                      text: '5x5'
-                    },
-                    {
-                      key: '6',
-                      text: '6x6'
-                    }
-                  ],
-                  selectedKey: this.properties.size ?? '5'
-                }),
+                  PropertyPaneDropdown('size', {
+                    label: strings.MatrixSizeLabel,
+                    options: [
+                      {
+                        key: '4',
+                        text: '4x4'
+                      },
+                      {
+                        key: '5',
+                        text: '5x5'
+                      },
+                      {
+                        key: '6',
+                        text: '6x6'
+                      }
+                    ],
+                    selectedKey: this.properties.size ?? '5'
+                  }),
                 this.properties.useDynamicConfiguration &&
-                PropertyFieldColorConfiguration('colorScaleConfig', {
-                  key: 'colorScaleConfig',
-                  label: strings.MatrixColorScaleConfigLabel,
-                  defaultValue: [
-                    { p: 10, r: 44, g: 186, b: 0 },
-                    { p: 30, r: 163, g: 255, b: 0 },
-                    { p: 50, r: 255, g: 244, b: 0 },
-                    { p: 70, r: 255, g: 167, b: 0 },
-                    { p: 90, r: 255, g: 0, b: 0 }
-                  ],
-                  value: this.properties.colorScaleConfig
-                }),
+                  PropertyFieldColorConfiguration('colorScaleConfig', {
+                    key: 'colorScaleConfig',
+                    label: strings.MatrixColorScaleConfigLabel,
+                    defaultValue: [
+                      { p: 10, r: 44, g: 186, b: 0 },
+                      { p: 30, r: 163, g: 255, b: 0 },
+                      { p: 50, r: 255, g: 244, b: 0 },
+                      { p: 70, r: 255, g: 167, b: 0 },
+                      { p: 90, r: 255, g: 0, b: 0 }
+                    ],
+                    value: this.properties.colorScaleConfig
+                  }),
                 ...(this.properties.useDynamicConfiguration ? this.headerLabelFields : [])
               ].filter(Boolean)
             }
