@@ -132,6 +132,39 @@ export class PortalDataService {
   }
 
   /**
+   * Get programs from the projects list in the portfolio site.
+   *
+   * @param constructor Constructor / model class
+   */
+  public async getPrograms<T>(constructor: new (item: any, web: Web) => T): Promise<T[]> {
+    try {
+      const items = await this.getItems(
+        this._configuration.listNames.PROJECTS,
+        constructor,
+        {
+          ViewXml: `<View>
+  <Query>
+    <OrderBy>
+      <FieldRef Name="Title" />
+    </OrderBy>
+    <Where>
+      <Eq>
+        <FieldRef Name="GtIsProgram" />
+        <Value Type="Boolean">1</Value>
+      </Eq>
+  </Where>
+  </Query>
+</View>`
+        },
+        []
+      )
+      return items
+    } catch (error) {
+      return []
+    }
+  }
+
+  /**
    * Get project columns from the project columns list in the portfolio site.
    */
   public async getProjectColumns(): Promise<ProjectColumn[]> {

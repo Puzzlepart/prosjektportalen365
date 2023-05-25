@@ -29,6 +29,7 @@ import {
   ChartData,
   ChartDataItem,
   DataField,
+  ProgramItem,
   ProjectListModel,
   SPChartConfigurationItem,
   SPContentType,
@@ -132,6 +133,7 @@ export class DataAdapter implements IDataAdapter {
    * - `columns` - Project columns
    * - `refiners` - Refinable columns
    * - `views` - Portfolio overview views
+   * - `programs` - Programs
    * - `viewsUrls` - Portfolio views list form URLs
    * - `columnUrls` - Project columns list form URLs
    * - `userCanAddViews` - User can add portfolio views
@@ -151,8 +153,28 @@ export class DataAdapter implements IDataAdapter {
     views = views.map((view) => view.configure(columns))
     return {
       columns,
-      refiners,
       views,
+      programs,
+      viewsUrls,
+      columnUrls,
+      userCanAddViews
+    ] = await Promise.all([
+      this._portal.getProjectColumnConfig(),
+      this._portal.getProjectColumns(),
+      this._portal.getPortfolioOverviewViews(),
+      this._portal.getPrograms(ProgramItem),
+      this._portal.getListFormUrls('PORTFOLIO_VIEWS'),
+      this._portal.getListFormUrls('PROJECT_COLUMNS'),
+      this._portal.currentUserHasPermissionsToList('PORTFOLIO_VIEWS', PermissionKind.AddListItems)
+    ])
+    const configuredColumns = columns.map((col) => col.configure(columnConfig))
+    const refiners = columns.filter((col) => col.isRefinable)
+    const configuredViews = views.map((view) => view.configure(columns))
+    return {
+      columns: configuredColumns,
+      refiners,
+      views: configuredViews,
+      programs,
       viewsUrls,
       columnUrls,
       userCanAddViews
@@ -301,41 +323,65 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetches data for portfolio views
+   * Fetch items for the specified view. If the `view` has specified `searchQueries` it will use
+   * `Promise.all` to fetch all queries in parallel. Otherwise it will use a single query.
    *
-   * @param view View
+   * @param view View configuration
+   * @param selectProperties Select properties
+   */
+  private async _fetchItemsForView(view: PortfolioOverviewView, selectProperties: string[] = []) {
+    if (_.isArray(view.searchQueries)) {
+      const result = await Promise.all(
+        view.searchQueries.map((query) =>
+          sp.search({
+            ...DEFAULT_SEARCH_SETTINGS,
+            QueryTemplate: query,
+            SelectProperties: selectProperties
+          })
+        )
+      )
+      return _.flatten(result.map((res) => res.PrimarySearchResults))
+    } else {
+      const { PrimarySearchResults } = await sp.search({
+        ...DEFAULT_SEARCH_SETTINGS,
+        QueryTemplate: view.searchQuery,
+        SelectProperties: selectProperties
+      })
+      return PrimarySearchResults
+    }
+  }
+
+  /**
+   * Fetches data for the specified portfolio view.
+   *
+   * @param view View configuration
    * @param configuration Configuration
    * @param siteId Site ID
    * @param siteIdProperty Site ID property (defaults to **GtSiteIdOWSTEXT**)
-   * @param queryArray Query array
    */
   private async _fetchDataForView(
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
     siteId: string,
-    siteIdProperty: string = 'GtSiteIdOWSTEXT',
-    queryArray?: string
+    siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ) {
     let [
-      { PrimarySearchResults: projects },
+      projects,
       { PrimarySearchResults: sites },
       { PrimarySearchResults: statusReports }
     ] = await Promise.all([
+      this._fetchItemsForView(view, [
+        ...configuration.columns.map((f) => f.fieldName),
+        siteIdProperty
+      ]),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${queryArray ?? ''} ${view.searchQuery} `,
-        SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
-      }),
-      sp.search({
-        ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${queryArray ?? ''} DepartmentId:{${siteId}} contentclass:STS_Site`,
+        QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
         SelectProperties: ['Path', 'Title', 'SiteId']
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${
-          queryArray ?? ''
-        } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        QueryTemplate: `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })

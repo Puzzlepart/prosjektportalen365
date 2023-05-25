@@ -5,25 +5,34 @@ import React, { FC } from 'react'
 import { ITitleColumnProps } from './types'
 
 export const TitleColumn: FC<ITitleColumnProps> = ({ item, props }) => {
-  let content = (
-    <span>
-      <span>{item.Title}</span>
-      <TooltipHost content={strings.NoProjectData}>
-        <Icon
-          iconName='Hide'
-          style={{
-            color: '666666',
-            marginLeft: 4,
-            position: 'relative',
-            top: '2px',
-            fontSize: '1.1em'
-          }}
-        />
-      </TooltipHost>
-    </span>
-  )
-  if (item.Path && !props.isParentProject) {
-    content = (
+  if (!item.Path) {
+    return (
+      <span>
+        <span>{item.Title}</span>
+        <TooltipHost content={strings.NoProjectData}>
+          <Icon
+            iconName='Hide'
+            style={{
+              color: '666666',
+              marginLeft: 4,
+              position: 'relative',
+              top: '2px',
+              fontSize: '1.1em'
+            }}
+          />
+        </TooltipHost>
+      </span>
+    )
+  }
+  if (props.isParentProject) {
+    return (
+      <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
+        {item.Title}
+      </Link>
+    )
+  }
+  else {
+    return (
       <div>
         <ProjectInformationPanel
           key={item.SiteId}
@@ -53,12 +62,5 @@ export const TitleColumn: FC<ITitleColumnProps> = ({ item, props }) => {
         </ProjectInformationPanel>
       </div>
     )
-  } else if (item.Path && props.isParentProject) {
-    content = (
-      <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
-        {item.Title}
-      </Link>
-    )
   }
-  return content
 }
