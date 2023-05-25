@@ -3,7 +3,7 @@
   "id": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
   "alias": "ProjectPhasesWebPart",
   "componentType": "WebPart",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": true,

@@ -1,6 +1,6 @@
 {
   "name": "pp365",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "description": "Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.",
   "scripts": {
     "sync-version": "node ./.tasks/automatic-versioning.js",
