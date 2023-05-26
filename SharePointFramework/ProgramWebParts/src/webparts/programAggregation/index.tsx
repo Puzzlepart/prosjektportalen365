@@ -1,31 +1,29 @@
-import {
-  IPropertyPaneConfiguration,
-  PropertyPaneTextField,
-  PropertyPaneToggle
-} from '@microsoft/sp-property-pane'
-import { IProgramAggregationProps, ProgramAggregation } from 'components/ProgramAggregation'
-import { IMessageBarProps, MessageBar } from '@fluentui/react/lib/MessageBar'
+import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption, PropertyPaneDropdown, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
 import strings from 'ProgramWebPartsStrings'
-import React from 'react'
+import _, { first } from 'lodash'
+import {
+  IPortfolioAggregationProps,
+  PortfolioAggregation
+} from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
+import { IAggregatedListConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
 import { BaseProgramWebPart } from 'webparts/baseProgramWebPart'
+import { IProgramAggregationWebPartProps } from './types'
 
-export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgramAggregationProps> {
+export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgramAggregationWebPartProps> {
+  private _configuration: IAggregatedListConfiguration
+
   public render(): void {
-    if (!this.properties.dataSource) {
-      this.renderComponent<IMessageBarProps>(MessageBar, {
-        children: <span></span>
-      })
-    } else {
-      this.renderComponent<IProgramAggregationProps>(ProgramAggregation, {
-        ...this.properties,
-        dataAdapter: this.dataAdapter,
-        onUpdateProperty: this._onUpdateProperty.bind(this)
-      })
-    }
+    this.renderComponent<IPortfolioAggregationProps>(PortfolioAggregation, {
+      ...this.properties,
+      dataAdapter: this.dataAdapter,
+      onUpdateProperty: this._onUpdateProperty.bind(this),
+      configuration: this._configuration
+    })
   }
 
   /**
-   * On update property
+   * On update property. Sets `key` to `value` and refreshes the property pane
+   * using `this.context.propertyPane.refresh()`
    *
    * @param key Key
    * @param value Value
@@ -37,6 +35,20 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
 
   public async onInit(): Promise<void> {
     await super.onInit()
+    this._configuration = await this.dataAdapter.getAggregatedListConfig(
+      this.properties.dataSourceCategory,
+      this.properties.dataSourceLevel
+    )
+  }
+
+  /**
+   * Get view options
+   *
+   * @param configuration Configuration
+   */
+  protected _getViewOptions(): IPropertyPaneDropdownOption[] {
+    if (!this._configuration) return []
+    return [...this._configuration.views.map((view) => ({ key: view.id, text: view.title }))]
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -45,10 +57,43 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
         {
           groups: [
             {
+              groupName: strings.DataSourceGroupName,
+              groupFields: [
+                PropertyPaneTextField('dataSourceCategory', {
+                  label: strings.DataSourceCategoryLabel,
+                  description: strings.DataSourceCategoryDescription
+                }),
+                PropertyPaneTextField('dataSourceLevel', {
+                  label: strings.DataSourceLevelLabel,
+                  description: strings.DataSourceLevelDescription,
+                  placeholder: this._configuration?.level
+                }),
+                PropertyPaneDropdown('defaultViewId', {
+                  label: strings.DefaultDataSourceViewLabel,
+                  options: this._getViewOptions(),
+                  selectedKey:
+                    _.find(this._configuration.views, (v) => v.isDefault)?.id ||
+                    first(this._configuration.views).id
+                })
+              ]
+            },
+            {
               groupName: strings.CommandBarGroupName,
               groupFields: [
                 PropertyPaneToggle('showCommandBar', {
                   label: strings.ShowCommandBarLabel
+                }),
+                PropertyPaneToggle('showFilters', {
+                  label: strings.ShowFiltersLabel,
+                  disabled: !this.properties.showCommandBar
+                }),
+                PropertyPaneToggle('showExcelExportButton', {
+                  label: strings.ShowExcelExportButtonLabel,
+                  disabled: !this.properties.showCommandBar
+                }),
+                PropertyPaneToggle('showViewSelector', {
+                  label: strings.ShowViewSelectorLabel,
+                  disabled: !this.properties.showCommandBar
                 })
               ]
             },
@@ -60,6 +105,7 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
                 }),
                 PropertyPaneTextField('searchBoxPlaceholderText', {
                   label: strings.SearchBoxPlaceholderTextLabel,
+                  description: strings.SearchBoxPlaceholderTextDescription,
                   disabled: !this.properties.showSearchBox
                 })
               ]

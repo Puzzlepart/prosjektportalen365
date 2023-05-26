@@ -6,6 +6,7 @@ import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp
 import * as cleanDeep from 'clean-deep'
 import MSGraph from 'msgraph-helper'
 import {
+  IAggregatedListConfiguration,
   IGraphGroup,
   IPortfolioConfiguration,
   ISPProjectItem,
@@ -83,6 +84,38 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       views,
       viewsUrls,
       columnUrls
+    } as IPortfolioConfiguration
+  }
+
+  /**
+   * Get aggregated list config for the given category.
+   *
+   * Returns `views`, `viewsUrls`, `columnUrls` and `level`. For now
+   * we only support two levels: `Portefølje` and `Prosjekt`. We need
+   * to also support `Program` and `Oveordnet` in the future (as part
+   * of issue #1097).
+   *
+   * @param category Category for data source
+   * @param level Level for data source
+   */
+  public async getAggregatedListConfig(
+    category: string,
+    level: string = 'Program'
+  ): Promise<IAggregatedListConfiguration> {
+    try {
+      const [views, viewsUrls, columnUrls] = await Promise.all([
+        this.fetchDataSources(category, level),
+        this.portal.getListFormUrls('DATA_SOURCES'),
+        this.portal.getListFormUrls('PROJECT_CONTENT_COLUMNS')
+      ])
+      return {
+        views,
+        viewsUrls,
+        columnUrls,
+        level
+      } as IAggregatedListConfiguration
+    } catch (error) {
+      return null
     }
   }
 
@@ -395,7 +428,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
             (child) =>
               child?.SiteId === item?.GtSiteIdLookup?.GtSiteId ||
               item?.GtSiteIdLookup?.GtSiteId ===
-                this?.spfxContext?.pageContext?.site?.id?.toString()
+              this?.spfxContext?.pageContext?.site?.id?.toString()
           )
         ) {
           if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
@@ -743,13 +776,14 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   }
 
   /**
-   * Fetch data sources by category
+   * Fetch data sources by category and optional level
    *
    * @param category Data source category
+   * @param level Level for data source
    */
-  public fetchDataSources(category: string): Promise<DataSource[]> {
+  public fetchDataSources(category: string, level?: string): Promise<DataSource[]> {
     try {
-      return this.dataSourceService.getByCategory(category)
+      return this.dataSourceService.getByCategory(category, level)
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, category))
     }
@@ -767,6 +801,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
         .filter(`GtSiteId eq '${this.spfxContext.pageContext.site.id.toString()}'`)
         .get()
       await list.items.getById(item.ID).update(properties)
-    } catch (error) {}
+    } catch (error) { }
   }
 }
