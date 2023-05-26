@@ -988,6 +988,12 @@
   <data name="SiteFields_GtDataSourceDefault_Description" xml:space="preserve">
     <value></value>
   </data>
+  <data name="SiteFields_GtDataSourceLevel_DisplayName" xml:space="preserve">
+    <value>Nivå</value>
+  </data>
+  <data name="SiteFields_GtDataSourceLevel_Description" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="SiteFields_GtDeliveryAcceptanceCriteria_DisplayName" xml:space="preserve">
     <value>Akseptansekriterier</value>
   </data>

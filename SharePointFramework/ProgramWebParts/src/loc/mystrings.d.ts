@@ -1,4 +1,8 @@
 declare interface IProgramWebPartsStrings {
+  DataSourceLevelLabel: string
+  DataSourceLevelDescription: string
+  DefaultDataSourceViewLabel: string
+  SearchBoxPlaceholderTextDescription: string
   ProgramTimelineInfoText: string
   CmdSelectionCountText: string
   ProgramAdministrationInfoMessage: string

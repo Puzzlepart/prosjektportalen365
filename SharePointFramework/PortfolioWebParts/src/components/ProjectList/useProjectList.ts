@@ -63,7 +63,7 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   /**
-   * Filter projects based on the `filter` function from the `selectedView` 
+   * Filter projects based on the `filter` function from the `selectedView`
    * and the `searchTerm`. Then sort the projects based on the `sort` state.
    *
    * @param projects - Projects

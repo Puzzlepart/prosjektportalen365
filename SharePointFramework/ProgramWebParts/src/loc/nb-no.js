@@ -1,5 +1,10 @@
 define([], function () {
     return {
+        DefaultViewLabel: 'Standardvisning',
+        DefaultDataSourceViewLabel: 'Standardvisning (datakilde)',
+        DataSourceLevelLabel: 'Nivå for datakilde',
+        DataSourceLevelDescription: 'Velg nivå for datakilde. Kun datakilder med dette nivået vil være tilgjengelig i webdelen.',
+        SearchBoxPlaceholderTextDescription: 'Tekst som vises i søkeboksen når den er tom. Om det ikke settes en verdi baseres teksten på valgt datakilde.',
         ProgramTimelineInfoText: "Her listes alle prosjektene med start- og sluttdato som er tilknyttet området. For å zoome inn/ut i tidslinje: ALT+Musehjul",
         CmdSelectionCountText: '{0} er merket',
         DataSourceCategoryDescription: 'Angi en datakildekategori for å kunne velge mellom flere datakilder i webdelen.',

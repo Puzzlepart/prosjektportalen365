@@ -1,3 +1,10 @@
+import { IMessageBarProps, MessageBar } from '@fluentui/react/lib/MessageBar'
+import * as strings from 'PortfolioWebPartsStrings'
+import { IPortfolioAggregationProps, PortfolioAggregation } from 'components/PortfolioAggregation'
+import { DataAdapter } from 'data'
+import { IAggregatedListConfiguration } from 'interfaces'
+import React from 'react'
+import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
@@ -5,15 +12,7 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { IPortfolioAggregationProps, PortfolioAggregation } from 'components/PortfolioAggregation'
-import { DataAdapter } from 'data'
-import { IAggregatedListConfiguration } from 'interfaces'
 import _ from 'lodash'
-import { IMessageBarProps, MessageBar } from '@fluentui/react/lib/MessageBar'
-import * as strings from 'PortfolioWebPartsStrings'
-import React from 'react'
-import { first } from 'underscore'
-import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
   IPortfolioAggregationProps
@@ -49,18 +48,19 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
   public async onInit(): Promise<void> {
     await super.onInit()
     this._configuration = await this.dataAdapter.getAggregatedListConfig(
-      this.properties.dataSourceCategory
+      this.properties.dataSourceCategory,
+      this.properties.dataSourceLevel
     )
   }
 
   /**
-   * Get options for PropertyPaneDropdown
+   * Get view options
+   *
+   * @param configuration Configuration
    */
   protected _getViewOptions(): IPropertyPaneDropdownOption[] {
-    if (this._configuration) {
-      return [...this._configuration.views.map((view) => ({ key: view.id, text: view.title }))]
-    }
-    return []
+    if (!this._configuration) return []
+    return [...this._configuration.views.map((view) => ({ key: view.id, text: view.title }))]
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -75,12 +75,17 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
                   label: strings.DataSourceCategoryLabel,
                   description: strings.DataSourceCategoryDescription
                 }),
+                PropertyPaneTextField('dataSourceLevel', {
+                  label: strings.DataSourceLevelLabel,
+                  description: strings.DataSourceLevelDescription,
+                  placeholder: this._configuration?.level
+                }),
                 PropertyPaneDropdown('defaultViewId', {
                   label: strings.DefaultDataSourceViewLabel,
                   options: this._getViewOptions(),
                   selectedKey:
                     _.find(this._configuration.views, (v) => v.isDefault)?.id ||
-                    first(this._configuration.views).id
+                    _.first(this._configuration.views).id
                 })
               ]
             },
@@ -112,6 +117,7 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
                 }),
                 PropertyPaneTextField('searchBoxPlaceholderText', {
                   label: strings.SearchBoxPlaceholderTextLabel,
+                  description: strings.SearchBoxPlaceholderTextDescription,
                   disabled: !this.properties.showSearchBox
                 })
               ]

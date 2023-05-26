@@ -10,9 +10,9 @@
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
     "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\"",
-    "package": "gulp clean && gulp default --ship && gulp package-solution --ship",
+    "package": "npm run build && gulp package-solution --ship",
     "package:debug": "gulp clean && gulp default && gulp package-solution",
-    "build": "tsc --build",
+    "build": "gulp clean --ship && gulp default --ship",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",

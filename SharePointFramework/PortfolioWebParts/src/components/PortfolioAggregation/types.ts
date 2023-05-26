@@ -30,6 +30,14 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   dataSourceCategory?: string
 
   /**
+   * Data source level is used to filter data sources
+   * by level. This is either set specifically by the
+   * user in the web part properties or calculated
+   * in the web part itself.
+   */
+  dataSourceLevel?: string
+
+  /**
    * Columns
    */
   columns?: IProjectContentColumn[]
@@ -95,7 +103,8 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   postTransform?: (results: SearchResult[]) => T[]
 }
 
-export interface IPortfolioAggregationState {
+export interface IPortfolioAggregationState
+  extends Pick<IPortfolioAggregationProps, 'dataSource' | 'dataSourceLevel'> {
   /**
    * Whether the component is loading
    */
@@ -105,11 +114,6 @@ export interface IPortfolioAggregationState {
    * Whether there's an export in progress
    */
   isExporting?: boolean
-
-  /**
-   * Data source name
-   */
-  dataSource?: string
 
   /**
    * Data sources

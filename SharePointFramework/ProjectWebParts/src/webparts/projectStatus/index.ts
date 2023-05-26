@@ -22,7 +22,7 @@ import {
   RISK_MATRIX_DEFAULT_CONSEQUENCE_HEADERS,
   RISK_MATRIX_DEFAULT_PROBABILITY_HEADERS
 } from '../../components/RiskMatrix'
-import SPDataAdapter from 'data'
+import SPDataAdapter from '../../data'
 import { IProjectStatusWebPartData } from './types'
 import _ from 'lodash'
 
