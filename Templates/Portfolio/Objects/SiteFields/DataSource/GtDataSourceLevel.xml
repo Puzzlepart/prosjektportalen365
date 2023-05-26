@@ -10,5 +10,6 @@
         <CHOICE>Prosjekt</CHOICE>
         <CHOICE>Program</CHOICE>
         <CHOICE>Overordnet</CHOICE>
+        <CHOICE>-</CHOICE>
     </CHOICES>
 </Field>

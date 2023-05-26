@@ -23,7 +23,11 @@
         "default": " "
       },
       "officeFabricIconFontName": "SearchAndApps",
-      "properties": {}
+      "properties": {
+        "showCommandBar": true,
+        "showViewSelector": true,
+        "showSearchBox": true
+      }
     }
   ]
 }

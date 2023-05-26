@@ -1,4 +1,4 @@
-﻿<pnp:ListInstance Title="{resource:Lists_DataSources_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_DataSources_Url}" Hidden="true" RemoveExistingContentTypes="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false" 
+﻿<pnp:ListInstance Title="{resource:Lists_DataSources_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_DataSources_Url}" Hidden="true" RemoveExistingContentTypes="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100A0AB42EFAB986D4A8E8038BC2391BEB2" Default="true" />
@@ -9,6 +9,12 @@
                 <OrderBy>
                     <FieldRef Name="ID" />
                 </OrderBy>
+                <Where>
+                    <Neq>
+                        <FieldRef Name="GtDataSourceDeprecated" />
+                        <Value Type="Boolean">1</Value>
+                    </Neq>
+                </Where>
             </Query>
             <ViewFields>
                 <FieldRef Name="LinkTitle" />
@@ -45,11 +51,11 @@
             <pnp:DataValue FieldName="GtProjectContentColumns">1,2,3,4,5</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">4</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">TimelineDelivery</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje;#Program</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Alle risikoelementer</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* DepartmentId:{{sitecollectionid}} GtShowInPortfolioOWSBOOL:1 -GtRiskStatusOWSCHCS="Ikke lenger aktuell"</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="Ikke lenger aktuell"</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Asterisk</pnp:DataValue>
@@ -66,7 +72,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Alle mulighetselementer</pnp:DataValue>
-            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89702* DepartmentId:{{sitecollectionid}} GtShowInPortfolioOWSBOOL:1 -GtRiskStatusOWSCHCS="Ikke lenger aktuell"</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89702* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="Ikke lenger aktuell"</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">BranchCommit</pnp:DataValue>
@@ -96,7 +102,7 @@
             <pnp:DataValue FieldName="GtProjectContentColumns">1,16,17,18,19,20,28,29,30,31</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">19</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Trophy</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje;#Program</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Gevinstelementer på porteføljenivå</pnp:DataValue>
@@ -153,9 +159,10 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Programrisiko</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="Ikke lenger aktuell"</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceCategory">Programusikkerhet</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Asterisk</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceLevel">Program</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">-</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceDeprecated">True</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
