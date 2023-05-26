@@ -5,4 +5,5 @@ export interface IAggregatedListConfiguration {
   columnUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
   views?: DataSource[]
   level?: string
+  levels?: string[]
 }

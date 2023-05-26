@@ -20,7 +20,7 @@ export interface IPortfolioConfiguration {
   /**
    * Available programs
    */
-  programs: ProgramItem[]
+  programs?: ProgramItem[]
 
   /**
    * New forms and edit forms urls for views list
