@@ -1,7 +1,6 @@
 declare interface IPortfolioWebPartsStrings {
   SearchBoxPlaceholderTextDescription: string
   DataSourceLevelLabel: string
-  DataSourceLevelDescription: string
   ShowProgramViewsLabel: string
   SelectProgramText: string
   ProgramsHeaderText: string

@@ -1,6 +1,6 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { dateAdd, PnPClientStorage } from '@pnp/common'
+import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/common'
 import {
   ItemUpdateResult,
   PermissionKind,
@@ -9,13 +9,13 @@ import {
   SortDirection,
   sp
 } from '@pnp/sp'
+import { SearchQueryInit } from '@pnp/sp/src/search'
 import * as cleanDeep from 'clean-deep'
 import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
 import { IAggregatedListConfiguration } from 'interfaces/IAggregatedListConfiguration'
 import { capitalize } from 'lodash'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
-import { isNull } from 'pp365-shared/lib/helpers'
 import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
 import { DataSource, PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
@@ -46,7 +46,6 @@ import {
   IDataAdapter,
   IFetchDataForViewItemResult
 } from './types'
-import { SearchQueryInit } from '@pnp/sp/src/search'
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -191,17 +190,22 @@ export class DataAdapter implements IDataAdapter {
       if (this._portal.url !== this.context.pageContext.web.absoluteUrl) {
         calculatedLevel = 'Prosjekt'
       }
-      const [views, viewsUrls, columnUrls] = await Promise.all([
+      const [views, viewsUrls, columnUrls, levels] = await Promise.all([
         this.fetchDataSources(category, level ?? calculatedLevel),
         this._portal.getListFormUrls('DATA_SOURCES'),
-        this._portal.getListFormUrls('PROJECT_CONTENT_COLUMNS')
+        this._portal.getListFormUrls('PROJECT_CONTENT_COLUMNS'),
+        this._portal.web.fields
+          .getByInternalNameOrTitle('GtDataSourceLevel')
+          .select('Choices')
+          .get()
       ])
       return {
         views,
         viewsUrls,
         columnUrls,
-        level: calculatedLevel
-      }
+        level: calculatedLevel,
+        levels: levels?.Choices ?? []
+      } as IAggregatedListConfiguration
     } catch (error) {
       return null
     }
@@ -882,37 +886,30 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch items from the project content columns SharePoint list.
+   * Fetch items from the project content columns SharePoint list on the hub site.
    *
-   * @param dataSourceCategory Data source category
+   * @param category Category for data source
    */
   public async fetchProjectContentColumns(dataSourceCategory: string): Promise<any> {
     try {
-      if (
-        isNull(dataSourceCategory) ||
-        !dataSourceCategory ||
-        dataSourceCategory === '' ||
-        dataSourceCategory.includes('(Prosjektnivå)')
-      ) {
-        return []
-      } else {
-        const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
-        const items = await list.items.get()
-        const filteredItems = items
-          .filter(
-            (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
-          )
-          .map((item) => {
-            const projectColumn = new ProjectColumn(item)
-            projectColumn['data'] = {
-              renderAs: (projectColumn.dataType ? projectColumn.dataType.toLowerCase() : 'text')
-                .split(' ')
-                .join('_')
-            }
-            return projectColumn
-          })
-        return filteredItems
-      }
+      if (stringIsNullOrEmpty(dataSourceCategory)) return []
+      const projectContentColumnsList = this._portal.web.lists.getByTitle(
+        strings.ProjectContentColumnsListName
+      )
+      const projectContentColumnsListItems = await projectContentColumnsList.items.get()
+      const filteredItems = projectContentColumnsListItems
+        .filter(
+          (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
+        )
+        .map((item) => {
+          const projectColumn = new ProjectColumn(item)
+          const renderAs = (projectColumn.dataType ? projectColumn.dataType.toLowerCase() : 'text')
+            .split(' ')
+            .join('_')
+          projectColumn['data'] = { renderAs }
+          return projectColumn
+        })
+      return filteredItems
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, dataSourceCategory))
     }

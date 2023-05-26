@@ -20,8 +20,8 @@
                 <FieldRef Name="LinkTitle" />
                 <FieldRef Name="GtSearchQuery" />
                 <FieldRef Name="GtDataSourceCategory" />
-                <FieldRef Name="GtDataSourceLevel" />
                 <FieldRef Name="GtDataSourceDefault" />
+                <FieldRef Name="GtDataSourceLevel" />
                 <FieldRef Name="GtProjectContentColumns" />
                 <FieldRef Name="GtProjectContentRefiners" />
                 <FieldRef Name="GtProjectContentGroupBy" />
@@ -45,23 +45,26 @@
     </pnp:FieldRefs>
     <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">fc9ff008-36cf-4531-9bce-ba545526834f</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Alle prosjektleveranser</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100D7B74DE815F946D3B0F99D19F9B36B68* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Leveranseoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,2,3,4,5</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">4</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">TimelineDelivery</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">d0b101ad-aed6-4ff0-85d1-689f9ded14a1</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Alle risikoelementer</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="Ikke lenger aktuell"</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Asterisk</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">1825226d-9f93-43e6-95e0-74c13716053c</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Risikoelementer på porteføljenivå</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* GtShowInPortfolioOWSBOOL:1 DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
@@ -71,6 +74,7 @@
             <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">bcca7fa3-8d99-4159-b5c1-1340f18314e1</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Alle mulighetselementer</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89702* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="Ikke lenger aktuell"</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
@@ -79,6 +83,7 @@
             <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">4b1ba958-0c8b-47c2-8c2a-499c230143cf</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Mulighetselementer på porteføljenivå</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89702* GtShowInPortfolioOWSBOOL:1 DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
@@ -87,6 +92,7 @@
             <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">d0b101ad-aed6-4ff0-85d1-689f9ded14a5</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Alle loggelementer</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x01004EDD18CB92C14EBA97103D909C897810* DepartmentId:{{sitecollectionid}} GtProjectLogExperienceOWSBOOL:1</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Erfaringslogg</pnp:DataValue>
@@ -96,15 +102,17 @@
             <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">fbac5398-13bb-433b-999f-ddd4e8cd59a9</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Alle gevinstelementer</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,16,17,18,19,20,28,29,30,31</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">19</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Trophy</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">a3b18405-acb6-4c2e-a785-9e98e98df142</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Gevinstelementer på porteføljenivå</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR (ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* AND GtShowInPortfolioOWSBOOL:1) OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
@@ -115,13 +123,24 @@
             <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">d0b101ad-aed6-4ff0-85d1-689f9ded14a8</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Gevinstoversikt (Prosjektnivå)</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) Path:{SiteCollection.URL}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt (Prosjektnivå)</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">-</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">Trophy</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Gevinstoversikt (Prosjektnivå)</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceDeprecated">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">31cfd343-383c-47c6-ac97-f253fc9dde6b</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Alle gevinstelementer for prosjektet</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) Path:{SiteCollection.URL}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Trophy</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">Prosjekt</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">22880c29-12a8-484b-b51c-6d3859eb07df</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Alle ressursallokeringer</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeId:0x010004EAFF7AFCC94C2680042E6881264120* OR ContentTypeId:0x010029F45E75BA9CE340A83EFFB2927E11F4*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Ressursallokering</pnp:DataValue>
@@ -129,6 +148,7 @@
             <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">ba35f65e-a2d2-4853-8f7e-732ac0997e99</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Alle prosjekter</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Prosjekter</pnp:DataValue>
@@ -136,6 +156,7 @@
             <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">d9eb55ac-53c7-49dc-9dc0-bf3ea3166fb3</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prosjektstatus</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Prosjektstatus</pnp:DataValue>
@@ -143,6 +164,7 @@
             <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">e821a59a-10b6-494f-a3fe-11a4365620f0</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prosjektstatus (siste 7 dager)</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* Created&gt;{TODAY-7} DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Prosjektstatus</pnp:DataValue>
@@ -150,6 +172,7 @@
             <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">f99ca828-38a0-42c4-9a3d-4861c38c20c4</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prosjektstatus (siste 30 dager)</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* Created&gt;{TODAY-30} DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Prosjektstatus</pnp:DataValue>
@@ -157,12 +180,42 @@
             <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">2251ff22-4c18-4548-9ec7-7ba553a16444</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Programrisiko</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="Ikke lenger aktuell"</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Asterisk</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">-</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceDeprecated">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">0d046ccc-e556-435f-9c56-429d7bfef1ff</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Alle prosjektleveranser for underområder</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100D7B74DE815F946D3B0F99D19F9B36B68* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Leveranseoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectContentColumns">1,2,3,4,5</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectContentRefiners">4</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">TimelineDelivery</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Program</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">b0ef3852-230e-4119-8156-5a2ba625e5e1</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Alle risikoelementer for underområder</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="Ikke lenger aktuell"</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">Asterisk</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Program</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">efd72d49-736d-47a1-923e-46a133efa299</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Alle gevinstelementer for underområder</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectContentColumns">1,16,17,18,19,20,28,29,30,31</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectContentRefiners">19</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">Trophy</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Program</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />

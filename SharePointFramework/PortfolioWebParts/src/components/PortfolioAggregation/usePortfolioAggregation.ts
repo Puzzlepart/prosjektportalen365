@@ -115,16 +115,17 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
   const layerHostId = getId('layerHost')
 
   useEffect(() => {
-    if (props.dataSourceCategory) dispatch(SET_CURRENT_VIEW)
+    if (props.dataSourceCategory) {
+      dispatch(SET_CURRENT_VIEW)
+    }
   }, [props.dataSourceCategory, props.defaultViewId])
 
-  const ctxValue = useMemo<IPortfolioAggregationContext>(() => ({ props, state, dispatch }), [
-    state
-  ])
+  const context = useMemo<IPortfolioAggregationContext>(() => ({ props, state, dispatch }), [state])
 
-  usePortfolioAggregationDataSources(ctxValue)
-  usePortfolioAggregationDataFetch(ctxValue)
+  usePortfolioAggregationDataSources(context)
+  usePortfolioAggregationDataFetch(context)
+
   const items = usePortfolioAggregationItems(state)
 
-  return { state, dispatch, items, layerHostId, ctxValue } as const
+  return { state, dispatch, items, layerHostId, context } as const
 }

@@ -8,7 +8,7 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">=12.13.0"
+    "node": ">=16.18.0"
   },
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
@@ -87,7 +87,7 @@
     "find": "0.3.0",
     "gulp": "4.0.2",
     "livereload": "0.9.1",
-    "pp365-portfoliowebparts": "1.9.0-1143.1",
+    "pp365-portfoliowebparts": "1.9.0-1146.1",
     "pp365-projectwebparts": "1.9.0-1142.2",
     "prettier": "2.3.2",
     "typescript": "4.5.5",

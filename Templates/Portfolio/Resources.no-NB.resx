@@ -1093,6 +1093,12 @@
   <data name="SiteFields_GtDataSourceDeprecated_Description" xml:space="preserve">
     <value>Datakilden er avviklet og skal ikke lenger brukes.</value>
   </data>
+  <data name="SiteFields_GtDataSourceId_DisplayName" xml:space="preserve">
+    <value>Unik identifikator</value>
+  </data>
+  <data name="SiteFields_GtDataSourceId_Description" xml:space="preserve">
+    <value>Unik identifikator for datakilden. Denne brukes internt og skal ikke endres.</value>
+  </data>
   <data name="SiteFields_GtDataSourceLevel_DisplayName" xml:space="preserve">
     <value>Nivå</value>
   </data>

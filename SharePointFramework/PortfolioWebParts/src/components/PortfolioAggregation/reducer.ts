@@ -424,10 +424,11 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
         currentView = first(views)
       }
       if (!currentView) {
-        throw new PortfolioAggregationErrorMessage(
+        state.error = new PortfolioAggregationErrorMessage(
           strings.ViewNotFoundMessage,
           MessageBarType.error
         )
+        return
       }
       const obj: IPortfolioAggregationHashState = {}
       if (currentView) obj.viewId = currentView.id.toString()

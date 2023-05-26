@@ -115,15 +115,13 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
 
 /**
  * Get default columns that should be included if the property `lockedColumns` is not
- * set to `true` in the web part properties.
+ * set to `true` in the web part properties, or if the data source level is set to
+ * `Prosjekt`.
  *
  * @param props Props
  */
-export const getDefaultColumns = ({
-  lockedColumns,
-  webPartContext
-}: IPortfolioAggregationProps) => {
-  if (lockedColumns) return []
+export const getDefaultColumns = (props: IPortfolioAggregationProps) => {
+  if (props.lockedColumns || props.dataSourceLevel === 'Prosjekt') return []
   return [
     {
       key: 'SiteTitle',
@@ -142,7 +140,7 @@ export const getDefaultColumns = ({
             webUrl={item.Path}
             page='Portfolio'
             hideAllActions={true}
-            webPartContext={webPartContext}
+            webPartContext={props.webPartContext}
             onRenderToggleElement={(onToggle) => (
               <Icon
                 iconName='Info'

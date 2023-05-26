@@ -27,21 +27,30 @@ import { IPortfolioAggregationProps } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
-  const { state, dispatch, items, layerHostId, ctxValue } = usePortfolioAggregation(props)
+  const { state, dispatch, items, layerHostId, context } = usePortfolioAggregation(props)
 
   if (state.error) {
-    return <UserMessage type={MessageBarType.error} text={state.error.message} />
+    return (
+      <div className={styles.root}>
+        <div className={styles.header}>
+          <div className={styles.title}>{props.title}</div>
+        </div>
+        <div className={styles.container}>
+          <UserMessage type={MessageBarType.error} text={state.error.message} />
+        </div>
+      </div>
+    )
   }
 
   return (
-    <PortfolioAggregationContext.Provider value={ctxValue}>
+    <PortfolioAggregationContext.Provider value={context}>
       <div className={styles.root}>
         <Commands />
         <div className={styles.header}>
           <div className={styles.title}>{props.title}</div>
         </div>
         <SearchBox />
-        <div className={styles.listContainer}>
+        <div className={styles.container}>
           <ShimmeredDetailsList
             selectionMode={SelectionMode.none}
             layoutMode={DetailsListLayoutMode.fixedColumns}

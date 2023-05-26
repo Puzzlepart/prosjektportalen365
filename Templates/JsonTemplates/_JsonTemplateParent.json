@@ -110,7 +110,6 @@
                                         "title": "Gevinster for underområder",
                                         "dataSource": "Alle gevinstelementer",
                                         "dataSourceCategory": "Gevinstoversikt",
-                                        "searchBoxPlaceholderText": "Søk i gevinster for underområder...",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -194,8 +193,7 @@
                                         "dataSourceCategory": "Usikkerhetsoversikt",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
-                                        "showSearchBox": true,
-                                        "searchBoxPlaceholderText": "Søk i usikkerheter for underområder..."
+                                        "showSearchBox": true
                                     }
                                 }
                             ]

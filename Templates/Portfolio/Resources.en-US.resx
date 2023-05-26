@@ -994,6 +994,12 @@
   <data name="SiteFields_GtDataSourceDeprecated_Description" xml:space="preserve">
     <value>The data source is deprecated and should not be used.</value>
   </data>
+  <data name="SiteFields_GtDataSourceId_DisplayName" xml:space="preserve">
+    <value>Unique ID</value>
+  </data>
+  <data name="SiteFields_GtDataSourceId_Description" xml:space="preserve">
+    <value>Unique ID for the data source. This is used internally and should not be changed.</value>
+  </data>
   <data name="SiteFields_GtDataSourceLevel_DisplayName" xml:space="preserve">
     <value>Nivå</value>
   </data>
