@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    SearchBoxPlaceholderTextDescription: 'Tekst som vises i søkeboksen når den er tom. Om det ikke settes en verdi baseres teksten på valgt datakilde.',
+    DataSourceLevelLabel: 'Nivå for datakilde',
+    DataSourceLevelDescription: 'Velg nivå for datakilde. Kun datakilder med dette nivået vil være tilgjengelig i webdelen.',
     ShowProgramViewsLabel: 'Vis programvisninger',
     ProgramsHeaderText: 'Programmer',
     SelectProgramText:'Velg et programområde',

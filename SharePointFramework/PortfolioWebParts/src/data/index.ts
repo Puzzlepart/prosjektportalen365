@@ -174,9 +174,10 @@ export class DataAdapter implements IDataAdapter {
   /**
    * Get aggregated list config for the given category.
    *
-   * @param category Category
+   * @param category Category for data source
+   * @param level Level for data source
    */
-  public async getAggregatedListConfig(category: string): Promise<IAggregatedListConfiguration> {
+  public async getAggregatedListConfig(category: string, level?: string): Promise<IAggregatedListConfiguration> {
     try {
       if (category.includes('(Prosjektnivå)') || !category) {
         this._portal = await this._portal.configure({
@@ -184,7 +185,7 @@ export class DataAdapter implements IDataAdapter {
         })
       }
       const [views, viewsUrls, columnUrls] = await Promise.all([
-        this.fetchDataSources(category),
+        this.fetchDataSources(category, level),
         this._portal.getListFormUrls('DATA_SOURCES'),
         this._portal.getListFormUrls('PROJECT_CONTENT_COLUMNS')
       ])
