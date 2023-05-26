@@ -7,6 +7,7 @@
         <pnp:FieldRef ID="9f6b103c-17c6-4a9c-908e-9d53a5a9ca60" Name="GtDataSourceLevel" Required="true" UpdateChildren="true" />
         <pnp:FieldRef ID="1bfa0248-e65d-4fae-b5cf-fbffeb6c13da" Name="GtDataSourceDefault" Required="true" UpdateChildren="true" />
         <pnp:FieldRef ID="a76fb686-cb27-4e99-a8de-e0a8f85c0c1b" Name="GtDataSourceDeprecated" UpdateChildren="true" />
+        <pnp:FieldRef ID="a119cc4a-de5f-4185-bf0b-28e115fe8198" Name="GtDataSourceId" UpdateChildren="true" />
         <pnp:FieldRef ID="d4236349-e45d-4547-8a5e-9f417e5e50d7" Name="GtProjectContentColumns" UpdateChildren="true" />
         <pnp:FieldRef ID="e0b7c98e-1d80-48d9-b384-2daa795daca8" Name="GtProjectContentRefiners" UpdateChildren="true" />
         <pnp:FieldRef ID="e4223ef9-c549-4038-8652-9ffd71118cb2" Name="GtProjectContentGroupBy" UpdateChildren="true" />
