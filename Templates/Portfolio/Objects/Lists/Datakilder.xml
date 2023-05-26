@@ -59,7 +59,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Asterisk</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje;#Program</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Risikoelementer på porteføljenivå</pnp:DataValue>
