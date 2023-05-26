@@ -190,17 +190,22 @@ export class DataAdapter implements IDataAdapter {
       if (this._portal.url !== this.context.pageContext.web.absoluteUrl) {
         calculatedLevel = 'Prosjekt'
       }
-      const [views, viewsUrls, columnUrls] = await Promise.all([
+      const [views, viewsUrls, columnUrls, levels] = await Promise.all([
         this.fetchDataSources(category, level ?? calculatedLevel),
         this._portal.getListFormUrls('DATA_SOURCES'),
-        this._portal.getListFormUrls('PROJECT_CONTENT_COLUMNS')
+        this._portal.getListFormUrls('PROJECT_CONTENT_COLUMNS'),
+        this._portal.web.fields
+          .getByInternalNameOrTitle('GtDataSourceLevel')
+          .select('Choices')
+          .get()
       ])
       return {
         views,
         viewsUrls,
         columnUrls,
-        level: calculatedLevel
-      }
+        level: calculatedLevel,
+        levels: levels?.Choices ?? []
+      } as IAggregatedListConfiguration
     } catch (error) {
       return null
     }
@@ -422,7 +427,7 @@ export class DataAdapter implements IDataAdapter {
         .filter((p) => p)
 
       return { reports, configElement }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
@@ -881,10 +886,10 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-  * Fetch items from the project content columns SharePoint list on the hub site.
-  *
-  * @param category Category for data source
-  */
+   * Fetch items from the project content columns SharePoint list on the hub site.
+   *
+   * @param category Category for data source
+   */
   public async fetchProjectContentColumns(dataSourceCategory: string): Promise<any> {
     try {
       if (stringIsNullOrEmpty(dataSourceCategory)) return []
