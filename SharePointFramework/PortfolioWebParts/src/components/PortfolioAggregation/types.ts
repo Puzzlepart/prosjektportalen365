@@ -25,6 +25,11 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   dataSource?: string
 
   /**
+   * Category for data sources
+   */
+  dataSourceCategory?: string
+
+  /**
   * Data source level is used to filter data sources
   * by level. This is either set specifically by the
   * user in the web part properties or calculated

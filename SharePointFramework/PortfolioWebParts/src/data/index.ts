@@ -414,7 +414,7 @@ export class DataAdapter implements IDataAdapter {
         .filter((p) => p)
 
       return { reports, configElement }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -858,13 +858,15 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch data sources by category.
+   * Fetch data sources by category and optional level.
    *
    * @param category Data source category
+   * @param level Level for data source
    */
-  public async fetchDataSources(category: string): Promise<DataSource[]> {
+  public async fetchDataSources(category: string, level?: string): Promise<DataSource[]> {
     try {
-      return await this.dataSourceService.getByCategory(category)
+      const dataSources = await this.dataSourceService.getByCategory(category, level)
+      return dataSources
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, category))
     }
