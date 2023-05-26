@@ -644,7 +644,7 @@
                                     "Id": "{{ControlId_PortfolioAggregationWebPart}}",
                                     "Properties": {
                                         "title": "Gevinstoversikt",
-                                        "dataSource": "Alle gevinster for prosjektet",
+                                        "dataSource": "Alle gevinstelementer for prosjektet",
                                         "dataSourceCategory": "Gevinstoversikt",
                                         "dataSourceLevel": "Prosjekt",
                                         "showCommandBar": true,
