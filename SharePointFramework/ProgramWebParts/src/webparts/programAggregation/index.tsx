@@ -42,7 +42,7 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
   }
 
   /**
-   * Get view options
+   * Get view options for the property pane dropdown 'defaultViewId'.
    *
    * @param configuration Configuration
    */
