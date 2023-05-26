@@ -174,25 +174,33 @@ export class DataAdapter implements IDataAdapter {
   /**
    * Get aggregated list config for the given category.
    *
+   * Returns `views`, `viewsUrls`, `columnUrls` and `level`. For now
+   * we only support two levels: `Portefølje` and `Prosjekt`. We need
+   * to also support `Program` and `Oveordnet` in the future (as part
+   * of issue #1097).
+   *
    * @param category Category for data source
    * @param level Level for data source
    */
-  public async getAggregatedListConfig(category: string, level?: string): Promise<IAggregatedListConfiguration> {
+  public async getAggregatedListConfig(
+    category: string,
+    level?: string
+  ): Promise<IAggregatedListConfiguration> {
     try {
-      if (category.includes('(Prosjektnivå)') || !category) {
-        this._portal = await this._portal.configure({
-          pageContext: this.context.pageContext
-        })
+      let calculatedLevel = 'Portefølje'
+      if (this._portal.url !== this.context.pageContext.web.absoluteUrl) {
+        calculatedLevel = 'Prosjekt'
       }
       const [views, viewsUrls, columnUrls] = await Promise.all([
-        this.fetchDataSources(category, level),
+        this.fetchDataSources(category, level ?? calculatedLevel),
         this._portal.getListFormUrls('DATA_SOURCES'),
         this._portal.getListFormUrls('PROJECT_CONTENT_COLUMNS')
       ])
       return {
         views,
         viewsUrls,
-        columnUrls
+        columnUrls,
+        level: calculatedLevel
       }
     } catch (error) {
       return null
