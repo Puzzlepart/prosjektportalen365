@@ -27,14 +27,14 @@ import { IPortfolioAggregationProps } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
-  const { state, dispatch, items, layerHostId, ctxValue } = usePortfolioAggregation(props)
+  const { state, dispatch, items, layerHostId, context } = usePortfolioAggregation(props)
 
   if (state.error) {
     return <UserMessage type={MessageBarType.error} text={state.error.message} />
   }
 
   return (
-    <PortfolioAggregationContext.Provider value={ctxValue}>
+    <PortfolioAggregationContext.Provider value={context}>
       <div className={styles.root}>
         <Commands />
         <div className={styles.header}>
