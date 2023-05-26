@@ -30,8 +30,7 @@ export const TitleColumn: FC<ITitleColumnProps> = ({ item, props }) => {
         {item.Title}
       </Link>
     )
-  }
-  else {
+  } else {
     return (
       <div>
         <ProjectInformationPanel

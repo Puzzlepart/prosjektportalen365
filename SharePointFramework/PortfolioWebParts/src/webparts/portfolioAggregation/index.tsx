@@ -5,7 +5,13 @@ import { DataAdapter } from 'data'
 import { IAggregatedListConfiguration } from 'interfaces'
 import React from 'react'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
-import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption, PropertyPaneDropdown, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane'
+import {
+  IPropertyPaneConfiguration,
+  IPropertyPaneDropdownOption,
+  PropertyPaneDropdown,
+  PropertyPaneTextField,
+  PropertyPaneToggle
+} from '@microsoft/sp-property-pane'
 import _ from 'lodash'
 
 export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<

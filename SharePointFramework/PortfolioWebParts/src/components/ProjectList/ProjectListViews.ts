@@ -3,7 +3,7 @@ import { IProjectListView } from './types'
 
 /**
  * View configurations for `ProjectList`.
- * 
+ *
  * The following views are available:
  * - `projects_access`: Projects the current user has access to
  * - `my_projects`: Projects the current user is a member of
