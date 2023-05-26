@@ -988,6 +988,12 @@
   <data name="SiteFields_GtDataSourceDefault_Description" xml:space="preserve">
     <value></value>
   </data>
+  <data name="SiteFields_GtDataSourceDeprecated_DisplayName" xml:space="preserve">
+    <value>Deprecated</value>
+  </data>
+  <data name="SiteFields_GtDataSourceDeprecated_Description" xml:space="preserve">
+    <value>The data source is deprecated and should not be used.</value>
+  </data>
   <data name="SiteFields_GtDataSourceLevel_DisplayName" xml:space="preserve">
     <value>Nivå</value>
   </data>

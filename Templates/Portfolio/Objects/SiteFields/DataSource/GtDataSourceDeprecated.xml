@@ -1,0 +1,3 @@
+<Field Type="Boolean" DisplayName="{resource:SiteFields_GtDataSourceDeprecated_DisplayName}" Description="{resource:SiteFields_GtDataSourceDeprecated_Description}" Group="{resource:SiteFields_Portfolio_Group}" ID="{a76fb686-cb27-4e99-a8de-e0a8f85c0c1b}" StaticName="GtDataSourceDeprecated" Name="GtDataSourceDeprecated">
+    <Default>0</Default>
+</Field>
