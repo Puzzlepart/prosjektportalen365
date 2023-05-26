@@ -1,10 +1,4 @@
 import { IMessageBarProps, MessageBar } from '@fluentui/react/lib/MessageBar'
-import * as strings from 'PortfolioWebPartsStrings'
-import { IPortfolioAggregationProps, PortfolioAggregation } from 'components/PortfolioAggregation'
-import { DataAdapter } from 'data'
-import { IAggregatedListConfiguration } from 'interfaces'
-import React from 'react'
-import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
@@ -12,7 +6,13 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
+import * as strings from 'PortfolioWebPartsStrings'
+import { IPortfolioAggregationProps, PortfolioAggregation } from 'components/PortfolioAggregation'
+import { DataAdapter } from 'data'
+import { IAggregatedListConfiguration } from 'interfaces'
 import _ from 'lodash'
+import React from 'react'
+import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
   IPortfolioAggregationProps
@@ -54,7 +54,7 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
   }
 
   /**
-   * Get view options
+   * Get view options for the property pane dropdown field `defaultViewId`.
    *
    * @param configuration Configuration
    */
@@ -75,17 +75,20 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
                   label: strings.DataSourceCategoryLabel,
                   description: strings.DataSourceCategoryDescription
                 }),
-                PropertyPaneTextField('dataSourceLevel', {
+                PropertyPaneDropdown('dataSourceLevel', {
                   label: strings.DataSourceLevelLabel,
-                  description: strings.DataSourceLevelDescription,
-                  placeholder: this._configuration?.level
+                  options: this._configuration?.levels.map((level) => ({
+                    key: level,
+                    text: level
+                  })),
+                  selectedKey: this.properties.dataSourceLevel ?? this._configuration?.level
                 }),
                 PropertyPaneDropdown('defaultViewId', {
                   label: strings.DefaultDataSourceViewLabel,
                   options: this._getViewOptions(),
                   selectedKey:
                     _.find(this._configuration.views, (v) => v.isDefault)?.id ||
-                    _.first(this._configuration.views).id
+                    _.first(this._configuration.views)?.id
                 })
               ]
             },
