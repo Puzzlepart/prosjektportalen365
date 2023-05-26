@@ -96,17 +96,14 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   /**
    * Get aggregated list config for the given category.
    *
-   * Returns `views`, `viewsUrls`, `columnUrls` and `level`. For now
-   * we only support two levels: `Portefølje` and `Prosjekt`. We need
-   * to also support `Program` and `Oveordnet` in the future (as part
-   * of issue #1097).
+   * Returns `views`, `viewsUrls`, `columnUrls` and `level`.
    *
    * @param category Category for data source
    * @param level Level for data source
    */
   public async getAggregatedListConfig(
     category: string,
-    level: string = 'Program'
+    level: string = 'Overordnet/Program'
   ): Promise<IAggregatedListConfiguration> {
     try {
       const [views, viewsUrls, columnUrls] = await Promise.all([

@@ -8,8 +8,7 @@
     <CHOICES>
         <CHOICE>Portefølje</CHOICE>
         <CHOICE>Prosjekt</CHOICE>
-        <CHOICE>Program</CHOICE>
-        <CHOICE>Overordnet</CHOICE>
+        <CHOICE>Overordnet/Program</CHOICE>
         <CHOICE>-</CHOICE>
     </CHOICES>
 </Field>

@@ -51,7 +51,7 @@
             <pnp:DataValue FieldName="GtProjectContentColumns">1,2,3,4,5</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">4</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">TimelineDelivery</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje;#Program</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje;#Overordnet/Program</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Alle risikoelementer</pnp:DataValue>
@@ -59,7 +59,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Asterisk</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje;#Program</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje;#Overordnet/Program</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Risikoelementer på porteføljenivå</pnp:DataValue>
@@ -102,7 +102,7 @@
             <pnp:DataValue FieldName="GtProjectContentColumns">1,16,17,18,19,20,28,29,30,31</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">19</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Trophy</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje;#Program</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje;#Overordnet/Program</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Gevinstelementer på porteføljenivå</pnp:DataValue>
