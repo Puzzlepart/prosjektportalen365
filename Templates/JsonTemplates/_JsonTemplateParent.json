@@ -190,7 +190,7 @@
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
                                         "title": "Usikkerheter for underområder",
-                                        "dataSource": "Programrisiko",
+                                        "dataSource": "Alle risikoelementer",
                                         "dataSourceCategory": "Usikkerhetsoversikt",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
