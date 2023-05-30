@@ -47,7 +47,7 @@ const usePortfolioAggregationDataSources = ({
 /**
  * Fetching data for the Portfolio Aggregation component. This includes
  * the data source, items, columns and projects.
- * 
+ *
  * @param context Context for the Portfolio Aggregation component
  */
 async function fetchData({ props, state }: IPortfolioAggregationContext) {

@@ -905,12 +905,9 @@ export class DataAdapter implements IDataAdapter {
           (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
         )
         .map((item) => {
-          const projectColumn = new ProjectColumn(item)
-          const renderAs = (projectColumn.dataType ? projectColumn.dataType.toLowerCase() : 'text')
-            .split(' ')
-            .join('_')
-          projectColumn['data'] = { renderAs }
-          return projectColumn
+          const col = new ProjectColumn(item)
+          const renderAs = (col.dataType ? col.dataType.toLowerCase() : 'text').split(' ').join('_')
+          return col.setData({ renderAs })
         })
       return filteredItems
     } catch (error) {

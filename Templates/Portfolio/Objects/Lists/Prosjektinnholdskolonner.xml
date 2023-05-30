@@ -18,6 +18,7 @@
                 <FieldRef Name="GtFieldDataType" />
                 <FieldRef Name="GtDataSourceCategory" />
                 <FieldRef Name="GtColMinWidth" />
+                <FieldRef Name="GtIsGroupable" />
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
             <Aggregations Value="Off" />

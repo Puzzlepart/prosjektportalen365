@@ -69,6 +69,9 @@ export class ProjectColumn implements IColumn {
       this.minWidth = _item.GtColMinWidth || 100
       this.searchType = this._getSearchType(this.fieldName.toLowerCase())
       this.customSorts = this._getCustomSorts(_item.GtFieldCustomSort)
+      this.data = {
+        isGroupable: this.isGroupable
+      }
     }
   }
 
@@ -185,7 +188,7 @@ export class ProjectColumn implements IColumn {
    * @returns 
    */
   public setData(data: any): ProjectColumn {
-    this.data = data
+    this.data = { ...this.data, ...data }
     return this
   }
 }
