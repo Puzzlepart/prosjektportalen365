@@ -35,6 +35,10 @@
                     {
                         "Url": "SitePages/OverordnetUsikkerheter.aspx",
                         "Title": "Usikkerheter"
+                    },
+                    {
+                        "Url": "SitePages/OverordnetKommunikasjon.aspx",
+                        "Title": "Kommunikasjonsplaner"
                     }
                 ]
             }
@@ -110,6 +114,34 @@
                                         "title": "Gevinster for underområder",
                                         "dataSource": "Alle gevinstelementer",
                                         "dataSourceCategory": "Gevinstoversikt",
+                                        "showCommandBar": true,
+                                        "showViewSelector": true,
+                                        "showSearchBox": true
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "OverordnetKommunikasjon.aspx",
+            "Title": "Gevinster",
+            "PageLayoutType": "SingleWebPartAppPage",
+            "CommentsDisabled": true,
+            "Sections": [
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
+                                {
+                                    "Id": "{{ControlId_ProgramAggregationWebPart}}",
+                                    "Properties": {
+                                        "title": "Kommunikasjonsplaner for underområder",
+                                        "dataSource": "Alle kommunikasjonsplaner for underområder",
+                                        "dataSourceCategory": "Kommunikasjonsoversikt",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true

@@ -303,6 +303,42 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
+        <pnp:DataRow>         
+            <pnp:DataValue FieldName="GtSortOrder">560</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Kommunikasjonskanal</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtActionChannel</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtActionChannelOWSTEXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Kommunikasjonsoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>         
+            <pnp:DataValue FieldName="GtSortOrder">570</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Status</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtActionStatus</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtActionStatusOWSCHCS</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Kommunikasjonsoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>         
+            <pnp:DataValue FieldName="GtSortOrder">580</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Tiltaksdato</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtActionDate</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtActionDateOWSDATE</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Kommunikasjonsoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>         
+            <pnp:DataValue FieldName="GtSortOrder">590</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Tiltaksansvarlig</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtActionResponsible</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtActionResponsibleOWSUSER</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Kommunikasjonsoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+        </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

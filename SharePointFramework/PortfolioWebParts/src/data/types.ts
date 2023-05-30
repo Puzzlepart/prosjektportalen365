@@ -1,10 +1,16 @@
 import { TypedHash } from '@pnp/common'
-import { ItemUpdateResult, QueryPropertyValueType, SearchQuery, SortDirection } from '@pnp/sp'
-import { IPortfolioConfiguration, IAggregatedListConfiguration } from 'interfaces'
+import {
+  ItemUpdateResult,
+  QueryPropertyValueType,
+  SearchQuery,
+  SearchResult,
+  SortDirection
+} from '@pnp/sp'
+import { IAggregatedListConfiguration, IPortfolioConfiguration } from 'interfaces'
+import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 import { ProjectListModel, TimelineConfigurationModel, TimelineContentModel } from 'models'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService } from 'pp365-shared/lib/services'
-import { SearchResult } from '@pnp/sp'
 
 export interface IFetchDataForViewItemResult extends SearchResult {
   SiteId: string
@@ -106,7 +112,7 @@ export interface IDataAdapter {
     selectProperties: string[],
     dataSourceCategory?: string
   ): Promise<any[]>
-  fetchProjectContentColumns?(dataSourceCategory: string): Promise<any[]>
+  fetchProjectContentColumns?(dataSourceCategory: string): Promise<IProjectContentColumn[]>
   updateProjectContentColumn?(column: Record<string, any>, persistRenderAs?: boolean): Promise<any>
   deleteProjectContentColumn?(property: TypedHash<any>): Promise<any>
   addItemToList?(listName: string, properties: TypedHash<any>): Promise<any[]>
