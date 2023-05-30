@@ -44,6 +44,12 @@ const usePortfolioAggregationDataSources = ({
   }, [props.dataSourceCategory, props.defaultViewId])
 }
 
+/**
+ * Fetching data for the Portfolio Aggregation component. This includes
+ * the data source, items, columns and projects.
+ * 
+ * @param context Context for the Portfolio Aggregation component
+ */
 async function fetchData({ props, state }: IPortfolioAggregationContext) {
   const columns = await (props.dataAdapter.fetchProjectContentColumns
     ? props.dataAdapter.fetchProjectContentColumns(props.dataSourceCategory)
@@ -63,7 +69,7 @@ async function fetchData({ props, state }: IPortfolioAggregationContext) {
 }
 
 /**
- * Fetches data for the Portfolio Aggregation component.
+ * Hook that fetches data for the Portfolio Aggregation component using `fetchData`.
  *
  * @param context Context for the Portfolio Aggregation component
  */
