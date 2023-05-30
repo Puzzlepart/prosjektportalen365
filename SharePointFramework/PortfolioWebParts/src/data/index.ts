@@ -46,6 +46,7 @@ import {
   IDataAdapter,
   IFetchDataForViewItemResult
 } from './types'
+import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -890,7 +891,9 @@ export class DataAdapter implements IDataAdapter {
    *
    * @param category Category for data source
    */
-  public async fetchProjectContentColumns(dataSourceCategory: string): Promise<any> {
+  public async fetchProjectContentColumns(
+    dataSourceCategory: string
+  ): Promise<IProjectContentColumn[]> {
     try {
       if (stringIsNullOrEmpty(dataSourceCategory)) return []
       const projectContentColumnsList = this._portal.web.lists.getByTitle(
