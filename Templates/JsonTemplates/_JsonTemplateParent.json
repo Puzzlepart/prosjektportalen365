@@ -35,6 +35,10 @@
                     {
                         "Url": "SitePages/OverordnetUsikkerheter.aspx",
                         "Title": "Usikkerheter"
+                    },
+                    {
+                        "Url": "SitePages/OverordnetKommunikasjon.aspx",
+                        "Title": "Kommunikasjonsplaner"
                     }
                 ]
             }

@@ -470,6 +470,10 @@
                     {
                         "Url": "SitePages/ProgramUsikkerheter.aspx",
                         "Title": "Usikkerheter"
+                    },
+                    {
+                        "Url": "SitePages/ProgramKommunikasjon.aspx",
+                        "Title": "Kommunikasjonsplaner"
                     }
                 ]
             },
