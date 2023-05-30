@@ -17,7 +17,8 @@ import {
   IGraphGroup,
   IPortfolioConfiguration,
   ISPProjectItem,
-  ISPUser
+  ISPUser,
+  IProjectContentColumn
 } from 'pp365-portfoliowebparts/lib/interfaces'
 import {
   Benefit,
@@ -876,7 +877,9 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    *
    * @param category Category for data source
    */
-  public async fetchProjectContentColumns(dataSourceCategory: string): Promise<any> {
+  public async fetchProjectContentColumns(
+    dataSourceCategory: string
+  ): Promise<IProjectContentColumn[]> {
     try {
       if (stringIsNullOrEmpty(dataSourceCategory)) return []
       const projectContentColumnsList = this.portal.web.lists.getByTitle(
