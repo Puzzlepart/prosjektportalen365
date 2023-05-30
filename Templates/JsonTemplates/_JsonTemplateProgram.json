@@ -670,7 +670,7 @@
             ]
         },
         {
-            "Name": "ProgramKommunikasjonsplaner.aspx",
+            "Name": "ProgramKommunikasjon.aspx",
             "Title": "Gevinster",
             "PageLayoutType": "SingleWebPartAppPage",
             "CommentsDisabled": true,
@@ -685,7 +685,7 @@
                                     "Properties": {
                                         "title": "Kommunikasjonsplaner for underområder",
                                         "dataSource": "Alle kommunikasjonsplaner for underområder",
-                                        "dataSourceCategory": "Kommunikasjonsplan",
+                                        "dataSourceCategory": "Kommunikasjonsoversikt",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
