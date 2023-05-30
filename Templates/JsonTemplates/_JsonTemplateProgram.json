@@ -670,6 +670,34 @@
             ]
         },
         {
+            "Name": "ProgramKommunikasjonsplaner.aspx",
+            "Title": "Gevinster",
+            "PageLayoutType": "SingleWebPartAppPage",
+            "CommentsDisabled": true,
+            "Sections": [
+                {
+                    "Columns": [
+                        {
+                            "Factor": 12,
+                            "Controls": [
+                                {
+                                    "Id": "{{ControlId_ProgramAggregationWebPart}}",
+                                    "Properties": {
+                                        "title": "Kommunikasjonsplaner for underområder",
+                                        "dataSource": "Alle kommunikasjonsplaner for underområder",
+                                        "dataSourceCategory": "Kommunikasjonsplan",
+                                        "showCommandBar": true,
+                                        "showViewSelector": true,
+                                        "showSearchBox": true
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "Name": "ProgramTidslinje.aspx",
             "Title": "Tidslinje",
             "PageLayoutType": "SingleWebPartAppPage",

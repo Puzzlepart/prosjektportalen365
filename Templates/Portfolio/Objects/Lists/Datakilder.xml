@@ -196,7 +196,7 @@
             <pnp:DataValue FieldName="GtProjectContentColumns">1,2,3,4,5</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">4</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">TimelineDelivery</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceLevel">Program</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Overordnet/Program</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">b0ef3852-230e-4119-8156-5a2ba625e5e1</pnp:DataValue>
@@ -205,7 +205,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Asterisk</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceLevel">Program</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Overordnet/Program</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">efd72d49-736d-47a1-923e-46a133efa299</pnp:DataValue>
@@ -215,7 +215,17 @@
             <pnp:DataValue FieldName="GtProjectContentColumns">1,16,17,18,19,20,28,29,30,31</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentRefiners">19</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Trophy</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceLevel">Program</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Overordnet/Program</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">425b6680-d6b7-47e6-98e5-91cad73ccc47</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Alle kommunikasjonsplaner for underområder</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeID:0x010065CE65D51354419EA794C6FACD4FA2EB* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Kommunikasjonsplan</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectContentColumns">1,16,17,18,19,20,28,29,30,31</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectContentRefiners">19</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">Comment</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Overordnet/Program</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
