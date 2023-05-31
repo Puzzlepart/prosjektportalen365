@@ -182,19 +182,23 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Checks for force template
+   * Checks for auto/force template. If found, returns the template
+   * and sets the state accordingly. If not found, returns null.
+   * The force/auto template can either be set in property
+   * `forceTemplate` or as a property on the template item itself.
    *
-   * @param data - Data
+   * To be able to use the force/auto template, the user must be a owner.
+   *
+   * @param data - Project setup data
    */
-  private _checkForceTemplate(data: IProjectSetupData): ITemplateSelectDialogState {
-    if (stringIsNullOrEmpty(this.properties.forceTemplate)) return null
-    const selectedTemplate = find(
-      data.templates,
-      (tmpl) => tmpl.text === this.properties.forceTemplate
+  private _checkAutoTemplate({ templates }: IProjectSetupData): ITemplateSelectDialogState {
+    const autoTemplate = find(
+      templates,
+      ({ text, autoConfigure }) => text === this.properties.forceTemplate || autoConfigure
     )
-    if (!selectedTemplate) return null
+    if (!autoTemplate) return null
     return {
-      selectedTemplate,
+      selectedTemplate: autoTemplate,
       selectedExtensions: [],
       selectedContentConfig: [],
       settings: new ProjectSetupSettings().useDefault()
@@ -209,10 +213,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   private _getProvisioningInfo(data: IProjectSetupData): Promise<ITemplateSelectDialogState> {
     return new Promise((resolve, reject) => {
       const placeholder = this._getPlaceholder('TemplateSelectDialog')
-      const forceTemplate = this._checkForceTemplate(data)
-      if (forceTemplate !== null) {
+      const autoTemplate = this._checkAutoTemplate(data)
+      if (autoTemplate !== null) {
         this._unmount(placeholder)
-        resolve(forceTemplate)
+        resolve(autoTemplate)
       } else {
         const element = createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
           data,
@@ -380,6 +384,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       const lockedTemplate = templates.find((t) => t.text === lockedTemplateName)
       if (lockedTemplate) {
         lockedTemplate.isForced = true
+        lockedTemplate.isLocked = true
         return [lockedTemplate]
       }
     }
@@ -472,7 +477,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Get container
+   * Get container element in `PlaceholderName.Top` placeholder
    */
   private get _container(): HTMLDivElement {
     const topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top)
@@ -505,6 +510,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     return true
   }
 
+  /**
+   * Returns the manifest version number, or 'Serving on localhost' if in debug mode.
+   */
   private get version() {
     return DEBUG ? 'Serving on localhost' : `v${this.manifest.version}`
   }
