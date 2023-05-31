@@ -13,6 +13,7 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Prosjektscoring og idékonfigurasjon for å støtte flere forskjellige idéoppsett [#1082](https://github.com/Puzzlepart/prosjektportalen365/issues/1082)
 - Støtte for egendefinerte rekkefølger for kolonner i porteføljeoversikten [#1114](https://github.com/Puzzlepart/prosjektportalen365/issues/1114)
 - Visninger for programmer i Porteføljeoversikt [#933](https://github.com/Puzzlepart/prosjektportalen365/issues/933)
+- Tving oppsett av prosjektmal dersom mal er låst og "Konfigurer automatisk" er satt til "Ja" i Maloppsett listen [#1115](https://github.com/Puzzlepart/prosjektportalen365/issues/1115)
 
 ### Forbedringer
 
