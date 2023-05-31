@@ -48,6 +48,11 @@ export class ProjectColumn implements IColumn {
   public onColumnClick: any
   public customSorts?: ProjectColumnCustomSort[]
 
+  /**
+   * Arbitrary data passthrough which can be used by the caller.
+   */
+  public data?: any
+
   constructor(private _item?: SPProjectColumnItem) {
     if (_item) {
       this.id = _item.Id
@@ -64,6 +69,9 @@ export class ProjectColumn implements IColumn {
       this.minWidth = _item.GtColMinWidth || 100
       this.searchType = this._getSearchType(this.fieldName.toLowerCase())
       this.customSorts = this._getCustomSorts(_item.GtFieldCustomSort)
+      this.data = {
+        isGroupable: this.isGroupable
+      }
     }
   }
 
@@ -87,6 +95,11 @@ export class ProjectColumn implements IColumn {
     }))
   }
 
+  /**
+   * Checks if the column is visible on the given page.
+   * 
+   * @param page Page to check
+   */
   public isVisible(page: 'Frontpage' | 'ProjectStatus' | 'Portfolio') {
     switch (page) {
       case 'Frontpage':
@@ -165,5 +178,17 @@ export class ProjectColumn implements IColumn {
       return SearchValueType.OWSMTXT
     }
     return SearchValueType.OWSTEXT
+  }
+
+  /**
+   * Set arbitrary data on the column. Such as `renderAs` or
+   * `isGroupable`.
+   * 
+   * @param data Data to set
+   * @returns 
+   */
+  public setData(data: any): ProjectColumn {
+    this.data = { ...this.data, ...data }
+    return this
   }
 }

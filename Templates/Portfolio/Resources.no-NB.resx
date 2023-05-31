@@ -1715,7 +1715,7 @@
     <value></value>
   </data>
   <data name="SiteFields_GtIsGroupable_Description" xml:space="preserve">
-    <value>Brukere kan gruppere på denne kolonnen i Portføljeoversikten.</value>
+    <value>Brukere kan gruppere på denne kolonnen i Portføljeoversikten, eller andre aggregerte oversikter.</value>
   </data>
   <data name="SiteFields_GtIsRefinable_Description" xml:space="preserve">
     <value>Brukere kan filtrere på denne kolonnen i Portføljeoversikten.</value>
