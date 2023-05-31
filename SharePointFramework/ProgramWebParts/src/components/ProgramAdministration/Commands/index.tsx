@@ -3,7 +3,6 @@ import { isEmpty } from '@microsoft/sp-lodash-subset'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { ProgramAdministrationContext } from '../context'
-import { removeChildProjects } from '../data'
 import { CHILD_PROJECTS_REMOVED, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
 
 export const Commands: FC = () => {
@@ -25,7 +24,7 @@ export const Commands: FC = () => {
       disabled:
         isEmpty(context.state.selectedProjectsToDelete) || !context.state.userHasManagePermission,
       onClick: () => {
-        removeChildProjects(context.props.dataAdapter, context.state.selectedProjectsToDelete).then(
+        context.props.dataAdapter.removeChildProjects(context.state.selectedProjectsToDelete).then(
           (childProjects) => {
             context.dispatch(CHILD_PROJECTS_REMOVED({ childProjects }))
           }
