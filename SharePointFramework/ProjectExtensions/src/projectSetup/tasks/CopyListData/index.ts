@@ -6,7 +6,7 @@ import * as strings from 'ProjectExtensionsStrings'
 import { SPField } from 'pp365-shared/lib/models/SPField'
 import { IPlannerTaskSPItem, ContentConfig, ContentConfigType } from '../../../models'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
-import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
+import { OnProgressCallbackFunction } from '../types'
 import {
   ITaskDetails,
   PlannerConfiguration,
