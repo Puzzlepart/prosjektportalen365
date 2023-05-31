@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_TemplateOptions_Title}" Url="{resource:Lists_TemplateOptions_Url}" Description="" DocumentTemplate="" TemplateType="100" EnableVersioning="true" Hidden="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" EnableFolderCreation="false" 
+<pnp:ListInstance Title="{resource:Lists_TemplateOptions_Title}" Url="{resource:Lists_TemplateOptions_Url}" Description="" DocumentTemplate="" TemplateType="100" EnableVersioning="true" Hidden="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" EnableFolderCreation="false"
   xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
   <pnp:Views>
     <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_TemplateOptions_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
@@ -51,7 +51,10 @@
     <Field Type="Text" DisplayName="Kundespesifikke kolonner" MaxLength="255" ID="{4efd9b9f-62ba-42e7-9dec-a37ad8b125a7}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectCustomColumns" Name="GtProjectCustomColumns">
       <Default>Egendefinerte kolonner for Prosjektportalen</Default>
     </Field>
-    <Field Type="Boolean" DisplayName="Standard mal?" ID="{80a9dc17-834e-4c30-af28-87f3ef1900df}" SourceID="{{listid:Maloppsett}}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate">
+    <Field Type="Boolean" DisplayName="Standard mal?" ID="{dd341142-d60d-41ad-a206-57f52aa1e60a}" SourceID="{{listid:Maloppsett}}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate">
+      <Default>0</Default>
+    </Field>
+    <Field Type="Boolean" DisplayName="Konfigurer automatisk" Description="Konfigurer prosjektet automatisk med denne malen om en eier besøker SharePoint-området. Malen må også være låst." ID="{249ce763-d28e-4034-8dbc-64318ebc3b42}" SourceID="{{listid:Maloppsett}}" StaticName="IsAutoConfigurable" Name="IsAutoConfigurable">
       <Default>0</Default>
     </Field>
   </pnp:Fields>

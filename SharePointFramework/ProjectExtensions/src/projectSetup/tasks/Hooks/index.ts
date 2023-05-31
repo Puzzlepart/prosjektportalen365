@@ -4,7 +4,7 @@ import { Web, WebProvisioner } from 'sp-js-provisioning'
 import _ from 'underscore'
 import { IProjectSetupData } from '../../types'
 import { BaseTask, IBaseTaskParams } from '../@BaseTask'
-import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
+import { OnProgressCallbackFunction } from '../types'
 import { HooksTaskError } from './HooksTaskError'
 
 export class Hooks extends BaseTask {

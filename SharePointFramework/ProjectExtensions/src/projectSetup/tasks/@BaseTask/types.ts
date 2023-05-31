@@ -1,3 +1,4 @@
+import { OnProgressCallbackFunction } from '../types'
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
 import { TypedHash } from '@pnp/common'
 import { PortalDataService } from 'pp365-shared/lib/services'
@@ -5,6 +6,7 @@ import { SpEntityPortalService } from 'sp-entityportal-service'
 import { Schema, Web } from 'sp-js-provisioning'
 import { ISpfxJsomContext } from 'spfx-jsom'
 import { IProjectSetupProperties } from '../../types'
+import { ProjectSetupError } from '../../ProjectSetupError'
 
 export interface IBaseTaskParams {
   /**
@@ -61,4 +63,23 @@ export interface IBaseTaskParams {
    * Miscellaneous data
    */
   data?: TypedHash<any>
+}
+
+export interface IBaseTask {
+  params: IBaseTaskParams
+  taskName: string
+  execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams>
+}
+
+export class BaseTaskError extends ProjectSetupError {
+  /**
+   * Creates a new instance of BaseTaskError
+   *
+   * @param taskName Task name
+   * @param message Message
+   * @param stack Stack
+   */
+  constructor(taskName: string, message: string, stack: any) {
+    super(taskName, message, stack)
+  }
 }

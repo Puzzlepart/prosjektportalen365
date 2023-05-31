@@ -1,9 +1,8 @@
 import { Logger, LogLevel } from '@pnp/logging'
 import { IProjectSetupData } from 'projectSetup'
 import { IProjectSetupSettings } from 'projectSetup/ProjectSetupSettings'
-import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
-import { IBaseTask } from './IBaseTask'
-import { IBaseTaskParams } from './IBaseTaskParams'
+import { OnProgressCallbackFunction } from '../types'
+import { IBaseTask, IBaseTaskParams } from './types'
 
 export abstract class BaseTask implements IBaseTask {
   public settings: IProjectSetupSettings
@@ -67,6 +66,4 @@ export abstract class BaseTask implements IBaseTask {
   }
 }
 
-export * from './BaseTaskError'
-export * from './IBaseTask'
-export * from './IBaseTaskParams'
+export * from './types'
