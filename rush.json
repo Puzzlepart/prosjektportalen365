@@ -22,7 +22,10 @@
         },
         {
             "packageName": "pp365-portfoliowebparts",
-            "projectFolder": "SharePointFramework/PortfolioWebParts"
+            "projectFolder": "SharePointFramework/PortfolioWebParts",
+            "decoupledLocalDependencies": [
+                "pp365-projectwebparts"
+            ]
         },
         {
             "packageName": "pp365-programwebparts",
@@ -34,7 +37,10 @@
         },
         {
             "packageName": "pp365-projectwebparts",
-            "projectFolder": "SharePointFramework/ProjectWebParts"
+            "projectFolder": "SharePointFramework/ProjectWebParts",
+            "decoupledLocalDependencies": [
+                "pp365-portfoliowebparts"
+            ]
         },
         {
             "packageName": "pp365-templates",

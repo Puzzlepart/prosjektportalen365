@@ -20,3 +20,4 @@ SharePointFramework/**/config/.generated-solution-config.json
 .dist
 Templates/*.ps1
 common/temp
+.pnpm-debug.log

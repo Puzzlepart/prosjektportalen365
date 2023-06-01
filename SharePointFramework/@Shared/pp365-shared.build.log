@@ -1,0 +1,2 @@
+Invoking: tsc 
+src/services/PortalDataService/index.ts(2,22): error TS2307: Cannot find module '@microsoft/sp-lodash-subset' or its corresponding type declarations.
