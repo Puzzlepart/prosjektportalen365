@@ -19,7 +19,9 @@ Param(
     [switch]$SkipBundle,
     [Parameter(Mandatory = $false)]
     [ValidateSet("test")]
-    [string]$Channel
+    [string]$Channel,
+    [Parameter(Mandatory = $false, HelpMessage = "Skip import of PnP.PowerShell module")]
+    [switch]$SkipImportModule
 )  
 
 #region Variables and functions
@@ -39,7 +41,7 @@ if ($USE_CHANNEL_CONFIG) {
     $CHANNEL_CONFIG_SCHEMA = Get-Content "$PSScriptRoot/../channels/`$schema.json" -Raw
     $CHANNEL_CONFIG_JSON = Get-Content $CHANNEL_CONFIG_PATH -Raw 
     $VALID_CONFIG_JSON = Test-Json -Json $CHANNEL_CONFIG_JSON -Schema $CHANNEL_CONFIG_SCHEMA -ErrorAction SilentlyContinue
-    if(-not $VALID_CONFIG_JSON) {
+    if (-not $VALID_CONFIG_JSON) {
         Write-Host "Channel configuration is not valid (the JSON does not match the schema). Aborting build of release." -ForegroundColor Red
         exit 1
     }
@@ -92,8 +94,12 @@ else {
 
 if ($CI.IsPresent) {
     Write-Host "[Running in CI mode]" -ForegroundColor Yellow
-    npm ci >$null 2>&1
+    npm i @microsoft/rush -g >$null 2>&1
+    rush update >$null 2>&1
     npm run generate-channel-replace-map >$null 2>&1
+}
+else {
+    rush update >$null 2>&1
 }
 
 if ($CI.IsPresent) {
@@ -102,7 +108,9 @@ if ($CI.IsPresent) {
     EndAction
 }
 else {
-    Import-Module $PNP_BUNDLE_PATH\PnP.PowerShell.psd1 -DisableNameChecking
+    if(-not $SkipImportModule.IsPresent) {
+        Import-Module $PNP_BUNDLE_PATH\PnP.PowerShell.psd1 -DisableNameChecking -ErrorAction SilentlyContinue
+    }
 }
 
 if ($CI.IsPresent) {
@@ -158,43 +166,26 @@ if ($Force.IsPresent) {
 
 #region Package SharePoint Framework solutions
 if (-not $SkipBuildSharePointFramework.IsPresent) {
-    StartAction("Building SharePointFramework\@Shared")
-    Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH\@Shared"
-    if ($CI.IsPresent) {  
-        npm ci --silent --no-audit --no-fund >$null 2>&1
-    }
-    else {
-        npm install --no-progress --silent --no-audit --no-fund >$null 2>&1
-    }
-    npm run build >$null 2>&1
-    EndAction
-}
-
-if (-not $SkipBuildSharePointFramework.IsPresent) {
-    $Solutions | ForEach-Object {
-        Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH\$_"
-        $Version = (Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json).solution.version
-        StartAction("Packaging SPFx solution $_")
-        if ($CI.IsPresent) {  
-            npm ci --silent --no-audit --no-fund >$null 2>&1
-        }
-        else {
-            npm install --no-progress --silent --no-audit --no-fund >$null 2>&1
-        }
-        if ($USE_CHANNEL_CONFIG) {
-            $SOLUTION_CONFIG = $CHANNEL_CONFIG.spfx.solutions.($_)
+    StartAction("Packaging SPFx solution $_")
+    if ($USE_CHANNEL_CONFIG) {
+        foreach ($Solution in $Solutions) {
+            Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH\$Solution"
+            $SOLUTION_CONFIG = $CHANNEL_CONFIG.spfx.solutions.($Solution)
             $SOLUTION_CONFIG_JSON = ($SOLUTION_CONFIG | ConvertTo-Json)
             $SOLUTION_CONFIG_JSON | Out-File -FilePath "./config/.generated-solution-config.json" -Encoding UTF8 -Force
             node ../.tasks/modifySolutionFiles.js >$null 2>&1
-            npm run package >$null 2>&1
+        }
+    }
+    Set-Location $SHAREPOINT_FRAMEWORK_BASEPATH
+    rush build >$null 2>&1
+    Get-ChildItem "*/sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
+    if ($USE_CHANNEL_CONFIG) {
+        foreach ($Solution in $Solutions) {
+            Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH\$Solution"
             node ../.tasks/modifySolutionFiles.js --revert >$null 2>&1 
         }
-        else {
-            npm run package >$null 2>&1
-        }
-        Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
-        EndAction
     }
+    EndAction
 }
 #endregion
 
