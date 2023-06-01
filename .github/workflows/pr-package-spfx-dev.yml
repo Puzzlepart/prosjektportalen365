@@ -9,6 +9,7 @@ on:
       - .github/workflows/pr-package-spfx-dev.yml
 jobs:
   build:
+    name: Rush Install and Rebuild
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
