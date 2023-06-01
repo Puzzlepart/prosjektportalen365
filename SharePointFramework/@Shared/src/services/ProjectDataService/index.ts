@@ -1,7 +1,7 @@
 import { dateAdd, PnPClientStorage, PnPClientStore } from '@pnp/common'
 import { ConsoleListener, Logger } from '@pnp/logging'
 import { SPConfiguration, Web } from '@pnp/sp'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { format } from '@fluentui/react'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { ISPList } from '../../interfaces/ISPList'
 import { ChecklistItemModel, ProjectPhaseChecklistData, ProjectPhaseModel } from '../../models'
