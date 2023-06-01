@@ -3,14 +3,16 @@
   "version": "1.9.0",
   "description": "Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.",
   "scripts": {
-    "build:spfx": "rush update && rush build",
     "sync-version": "node ./.tasks/automatic-versioning.js",
     "generate-readme": "npx @appnest/readme generate && npx @appnest/readme generate --config .development-guide/blueprint.json",
     "generate-channel-config": "node ./.tasks/generate-channel-config.js",
     "generate-channel-replace-map": "node ./.tasks/generate-channel-config.js --replace-map",
     "generate-pnp-templates": "node ./.tasks/generate-pnp-templates.js",
     "generate-site-scripts": "node ./.tasks/generate-site-scripts.js --silent",
-    "postversion": "npm run generate-readme && npm run sync-version"
+    "postversion": "npm run generate-readme && npm run sync-version",
+    "spfx:init": "npm run spfx:update && npm run spfx:build",
+    "spfx:build": "node common/scripts/install-run-rush.js rebuild --verbose",
+    "spfx:update": "node common/scripts/install-run-rush.js update"
   },
   "repository": {
     "type": "git",
