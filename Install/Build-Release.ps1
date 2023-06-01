@@ -94,6 +94,7 @@ else {
 
 if ($CI.IsPresent) {
     Write-Host "[Running in CI mode]" -ForegroundColor Yellow
+    p
     npm i @microsoft/rush -g >$null 2>&1
     rush update >$null 2>&1
     npm run generate-channel-replace-map >$null 2>&1
@@ -133,8 +134,7 @@ EndAction
 #region Copying source files
 StartAction("Copying Install.ps1, PostInstall.ps1 and site script source files")
 if ($USE_CHANNEL_CONFIG) {
-    # npm run generate-site-scripts >$null 2>&1
-    npm run generate-site-scripts
+    npm run generate-site-scripts >$null 2>&1
     $SITE_SCRIPTS_BASEPATH = "$ROOT_PATH/.dist/SiteScripts"
     Copy-Item -Path "$SITE_SCRIPTS_BASEPATH/*.txt" -Filter *.txt -Destination $RELEASE_PATH_SITESCRIPTS -Force
 }
