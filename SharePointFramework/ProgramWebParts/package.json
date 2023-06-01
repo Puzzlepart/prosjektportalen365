@@ -47,7 +47,7 @@
     "clean-deep": "3.0.2",
     "interactjs": "1.6.2",
     "jsom-ctx": "1.2.0",
-    "moment": "^2.24.0",
+    "moment": "2.11.1",
     "msgraph-helper": "0.7.3",
     "object-assign": "4.1.1",
     "pp365-shared": "1.9.0-1149.2",
@@ -56,7 +56,9 @@
     "react-calendar-timeline": "0.27.0",
     "react-dom": "16.13.1",
     "react-highcharts": "16.0.2",
-    "tslib": "2.3.1"
+    "tslib": "2.3.1",
+    "lodash": "4.17.21",
+    "underscore": "1.9.1"
   },
   "resolutions": {
     "@types/react": "16.8.8"
@@ -69,7 +71,7 @@
     "@microsoft/sp-module-interfaces": "1.15.2",
     "@rushstack/eslint-config": "2.5.1",
     "@types/object-assign": "4.0.30",
-    "@types/react": "16.9.51",
+    "@types/react": "16.8.8",
     "@types/react-calendar-timeline": "0.26.0",
     "@types/react-dom": "16.9.8",
     "@types/webpack-env": "1.15.2",
