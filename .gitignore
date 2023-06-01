@@ -21,3 +21,5 @@ SharePointFramework/**/config/.generated-solution-config.json
 Templates/*.ps1
 common/temp
 .pnpm-debug.log
+**/.rush/temp
+*.build.log
