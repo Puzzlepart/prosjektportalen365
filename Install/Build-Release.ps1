@@ -94,7 +94,6 @@ else {
 
 if ($CI.IsPresent) {
     Write-Host "[Running in CI mode]" -ForegroundColor Yellow
-    p
     npm i @microsoft/rush -g >$null 2>&1
     rush update >$null 2>&1
     npm run generate-channel-replace-map >$null 2>&1
