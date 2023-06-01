@@ -19,3 +19,4 @@ SharePointFramework/**/config/.generated-solution-config.json
 .channel-replace-map.json
 .dist
 Templates/*.ps1
+common/temp
