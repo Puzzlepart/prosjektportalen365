@@ -28,7 +28,7 @@ jobs:
       - name: Setup Node.js 16.18.0
         uses: actions/setup-node@v3
         with:
-          node-version: 16.18.0
+          node-version: ${{ vars.NODE_VERSION }}
 
       - name: Run Install/Build-Release.ps1 in CI mode for channel test
         run: Install/Build-Release.ps1 -CI -SkipBundle -Channel test
