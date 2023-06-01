@@ -20,5 +20,5 @@ jobs:
           node-version: ${{ vars.NODE_VERSION }}
       - name: Rush Install
         run: node common/scripts/install-run-rush.js install
-      - name: Rush rebuild
+      - name: Rush Rebuild
         run: node common/scripts/install-run-rush.js rebuild --verbose
