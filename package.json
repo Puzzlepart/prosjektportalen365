@@ -3,6 +3,7 @@
   "version": "1.9.0",
   "description": "Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.",
   "scripts": {
+    "build:spfx": "rush update && rush build",
     "sync-version": "node ./.tasks/automatic-versioning.js",
     "generate-readme": "npx @appnest/readme generate && npx @appnest/readme generate --config .development-guide/blueprint.json",
     "generate-channel-config": "node ./.tasks/generate-channel-config.js",
