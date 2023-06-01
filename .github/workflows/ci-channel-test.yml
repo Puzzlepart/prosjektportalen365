@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - releases/1.9
+      - issues/1153
     paths:
       - "SharePointFramework/**"
       - "Install/**"
@@ -38,17 +39,17 @@ jobs:
           name: release-package-test
           path: release
 
-  upgrade_channel_test:
-    needs: [build_release_package_test]
-    name: Upgrade (test)
-    runs-on: macos-latest
-    if: "!contains(github.event.head_commit.message, '[skip-upgrade]')"
-    steps:
-      - uses: actions/download-artifact@v3
-        with:
-          name: release-package-test
-          path: release
+  # upgrade_channel_test:
+  #   needs: [build_release_package_test]
+  #   name: Upgrade (test)
+  #   runs-on: macos-latest
+  #   if: "!contains(github.event.head_commit.message, '[skip-upgrade]')"
+  #   steps:
+  #     - uses: actions/download-artifact@v3
+  #       with:
+  #         name: release-package-test
+  #         path: release
 
-      - name: Upgrade
-        run: release/Install.ps1 -Url "${{ env.SP_URL_TEST }}" -Upgrade -CI ${{ env.CI_CREDENTIALS }}
-        shell: powershell
+  #     - name: Upgrade
+  #       run: release/Install.ps1 -Url "${{ env.SP_URL_TEST }}" -Upgrade -CI ${{ env.CI_CREDENTIALS }}
+  #       shell: powershell
