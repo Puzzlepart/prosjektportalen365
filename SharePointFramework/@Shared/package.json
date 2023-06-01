@@ -10,7 +10,7 @@
   "description": "Shared utilities, helpers and models for Prosjektportalen 365",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "npm run lint && tsc",
     "watch": "tsc --watch",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color",
