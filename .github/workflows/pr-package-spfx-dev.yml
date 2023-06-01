@@ -16,9 +16,7 @@ jobs:
           ref: ${{ github.head_ref }}
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.18.0
-      - name: Verify Change Logs
-        run: node common/scripts/install-run-rush.js change --verify
+          node-version: ${{ vars.NODE_VERSION }}
       - name: Rush Install
         run: node common/scripts/install-run-rush.js install
       - name: Rush rebuild
