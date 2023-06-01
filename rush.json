@@ -2,6 +2,9 @@
     "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/rush.schema.json",
     "rushVersion": "5.98.0",
     "npmVersion": "8.19.2",
+    "repository": {
+        "url": "https://github.com/Puzzlepart/prosjektportalen365"
+    },
     "eventHooks": {
         "preRushInstall": [],
         "postRushInstall": [],
@@ -9,6 +12,10 @@
         "postRushBuild": []
     },
     "projects": [
+        {
+            "packageName": "pp365",
+            "projectFolder": "./"
+        },
         {
             "packageName": "pp365-shared",
             "projectFolder": "SharePointFramework/@Shared"
