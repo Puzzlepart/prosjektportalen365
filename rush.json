@@ -13,10 +13,6 @@
     },
     "projects": [
         {
-            "packageName": "pp365",
-            "projectFolder": "./"
-        },
-        {
             "packageName": "pp365-shared",
             "projectFolder": "SharePointFramework/@Shared"
         },
