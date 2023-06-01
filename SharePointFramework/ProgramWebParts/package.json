@@ -1,6 +1,6 @@
 {
   "name": "pp365-programwebparts",
-  "version": "1.9.0-1149.1",
+  "version": "1.9.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -89,7 +89,7 @@
     "find": "0.3.0",
     "gulp": "4.0.2",
     "livereload": "0.9.1",
-    "pp365-portfoliowebparts": "1.9.0-1149.1",
+    "pp365-portfoliowebparts": "1.9.0-1155.1",
     "pp365-projectwebparts": "1.9.0-1155.1",
     "prettier": "2.3.2",
     "typescript": "4.5.5",

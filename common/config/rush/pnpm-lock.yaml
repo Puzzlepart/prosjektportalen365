@@ -70,7 +70,6 @@ dependencies:
   moment: 2.11.1
   object-assign: 4.1.1
   object-get: 2.1.1
-  pp365-portfoliowebparts: 1.9.0-1149.1_@types+react@16.8.8
   pp365-projectwebparts: 1.9.0-1155.1_@types+react@16.8.8
   pzl-react-reusable-components: 0.0.14_@types+react@16.8.8
   pzl-spfx-components: 0.0.11
@@ -5406,33 +5405,6 @@ packages:
       react-dom: '*'
     resolution:
       integrity: sha512-oKRQpcgU3zZXALmZx6EYuGUYbhZEaprED6JAO9GCEilJUDjKhnZ+DHbIsNiqfHs+ZLWsboBaVAo0bi3PGR/Qew==
-  /@microsoft/sp-webpart-base/1.11.0_8e35502d6a5f823690b8b14f4a66d21a:
-    dependencies:
-      '@microsoft/decorators': 1.11.0
-      '@microsoft/load-themed-styles': 1.10.20
-      '@microsoft/sp-component-base': 1.11.0
-      '@microsoft/sp-core-library': 1.11.0
-      '@microsoft/sp-diagnostics': 1.11.0
-      '@microsoft/sp-dynamic-data': 1.11.0
-      '@microsoft/sp-http': 1.11.0
-      '@microsoft/sp-loader': 1.11.0
-      '@microsoft/sp-lodash-subset': 1.11.0
-      '@microsoft/sp-module-interfaces': 1.11.0
-      '@microsoft/sp-page-context': 1.11.0
-      '@microsoft/sp-property-pane': 1.11.0
-      '@microsoft/teams-js': 1.4.2
-      '@types/es6-promise': 0.0.33
-      '@types/office-js': 1.0.36
-      '@types/webpack-env': 1.13.1
-      office-ui-fabric-react: 7.59.0_8e35502d6a5f823690b8b14f4a66d21a
-      tslib: 1.10.0
-    dev: false
-    peerDependencies:
-      '@types/react': '*'
-      react: '*'
-      react-dom: '*'
-    resolution:
-      integrity: sha512-oKRQpcgU3zZXALmZx6EYuGUYbhZEaprED6JAO9GCEilJUDjKhnZ+DHbIsNiqfHs+ZLWsboBaVAo0bi3PGR/Qew==
   /@microsoft/sp-webpart-base/1.11.0_d8ecccf2889e06c2a80080b62409afec:
     dependencies:
       '@microsoft/decorators': 1.11.0
@@ -6386,34 +6358,6 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-    requiresBuild: true
-    resolution:
-      integrity: sha512-hSAB0LeRecWifSKI1nACKXKSQIsoYkKzHvocbrmwdAqR3B3/MfajbeqDYlSjw5mRCYBd3E6PWc0xSYmUczpTTA==
-  /@pnp/spfx-property-controls/2.7.0_@types+react@16.8.8:
-    dependencies:
-      '@microsoft/sp-core-library': 1.11.0
-      '@microsoft/sp-lodash-subset': 1.11.0
-      '@microsoft/sp-office-ui-fabric-core': 1.11.0
-      '@microsoft/sp-webpart-base': 1.11.0_8e35502d6a5f823690b8b14f4a66d21a
-      '@pnp/common': 1.3.11
-      '@pnp/logging': 1.3.11
-      '@pnp/odata': 1.3.11_0735193bd073e5cc36fcb4261de894d9
-      '@pnp/sp': 1.3.11_97ef0e213a5999822e11d2e99b1ed457
-      '@pnp/sp-clientsvc': 1.3.11_5ebb02c573206a4d27a8d882b140be71
-      '@pnp/sp-taxonomy': 1.3.11_aeab9ef356b7306c5f0f03811326079a
-      '@pnp/telemetry-js': 2.0.0
-      '@uifabric/icons': 7.5.17_8e35502d6a5f823690b8b14f4a66d21a
-      lodash.omit: 4.5.0
-      markdown-to-jsx: 6.11.4_react@16.8.5
-      office-ui-fabric-react: 6.214.0_8e35502d6a5f823690b8b14f4a66d21a
-      react: 16.8.5
-      react-ace: 5.8.0_react-dom@16.8.5+react@16.8.5
-      react-dom: 16.8.5_react@16.8.5
-    dev: false
-    engines:
-      node: '>=0.10.0'
-    peerDependencies:
-      '@types/react': '*'
     requiresBuild: true
     resolution:
       integrity: sha512-hSAB0LeRecWifSKI1nACKXKSQIsoYkKzHvocbrmwdAqR3B3/MfajbeqDYlSjw5mRCYBd3E6PWc0xSYmUczpTTA==
@@ -8058,23 +8002,6 @@ packages:
       react-dom: ^0.14.9 || ^15.0.1-0 || ^16.0.0-0
     resolution:
       integrity: sha512-r3WhRj7Out8QAOe50BGA36R8zgRPy0D0GNPuwFK9BB9oIidf91ycj7/miY8U0TZRZi5fB3Kg+dy/uxSDfgC6Og==
-  /@uifabric/foundation/0.8.3_8e35502d6a5f823690b8b14f4a66d21a:
-    dependencies:
-      '@types/react': 16.8.8
-      '@uifabric/set-version': 1.1.3
-      '@uifabric/styling': 6.50.7_8e35502d6a5f823690b8b14f4a66d21a
-      '@uifabric/utilities': 6.45.2_8e35502d6a5f823690b8b14f4a66d21a
-      react: 16.8.5
-      react-dom: 16.8.5_react@16.8.5
-      tslib: 1.14.1
-    dev: false
-    peerDependencies:
-      '@types/react': ^0.14.x || ^15.x || ^16.x
-      '@types/react-dom': ^0.14.x || ^15.x || ^16.x
-      react: ^0.14.9 || ^15.0.1-0 || ^16.0.0-0
-      react-dom: ^0.14.9 || ^15.0.1-0 || ^16.0.0-0
-    resolution:
-      integrity: sha512-r3WhRj7Out8QAOe50BGA36R8zgRPy0D0GNPuwFK9BB9oIidf91ycj7/miY8U0TZRZi5fB3Kg+dy/uxSDfgC6Og==
   /@uifabric/foundation/0.8.3_d8ecccf2889e06c2a80080b62409afec:
     dependencies:
       '@types/react': 16.8.8
@@ -8322,18 +8249,6 @@ packages:
       react-dom: '*'
     resolution:
       integrity: sha512-cGjzdpT0jzQ2RJvzlCVTrewaHCi4rb+ZNL2LWoceMi+5h196Y32qJwKMsc0ggR6u5CjMrzBiAxUFNppBSCutdA==
-  /@uifabric/icons/6.5.5_8e35502d6a5f823690b8b14f4a66d21a:
-    dependencies:
-      '@uifabric/set-version': 1.1.3
-      '@uifabric/styling': 6.50.7_8e35502d6a5f823690b8b14f4a66d21a
-      tslib: 1.14.1
-    dev: false
-    peerDependencies:
-      '@types/react': '*'
-      react: '*'
-      react-dom: '*'
-    resolution:
-      integrity: sha512-cGjzdpT0jzQ2RJvzlCVTrewaHCi4rb+ZNL2LWoceMi+5h196Y32qJwKMsc0ggR6u5CjMrzBiAxUFNppBSCutdA==
   /@uifabric/icons/6.5.5_d8ecccf2889e06c2a80080b62409afec:
     dependencies:
       '@uifabric/set-version': 1.1.3
@@ -8407,18 +8322,6 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: '*'
-      react-dom: '*'
-    resolution:
-      integrity: sha512-2S1kse0gtseTuV2r59iWukLxxoOJ6GgP2Yhxt9oxzaP9QubpYdxCUepvJmfPQQvvy4GELdykDUWQ6/hbzliJyw==
-  /@uifabric/icons/7.5.17_8e35502d6a5f823690b8b14f4a66d21a:
-    dependencies:
-      '@uifabric/set-version': 7.0.24
-      '@uifabric/styling': 7.25.1_8e35502d6a5f823690b8b14f4a66d21a
-      tslib: 1.14.1
-    dev: false
-    peerDependencies:
-      '@types/react': '*'
       react: '*'
       react-dom: '*'
     resolution:
@@ -8875,20 +8778,6 @@ packages:
       react-dom: '*'
     resolution:
       integrity: sha512-F2aBiB30ZiFxlZzy5hzLXODWOl6jySvPFAsoaTofk37xucHiunBLZYjX6WkfZrCWiyGPva+DLssNcwly9ZHVjg==
-  /@uifabric/styling/6.50.7_8e35502d6a5f823690b8b14f4a66d21a:
-    dependencies:
-      '@microsoft/load-themed-styles': 1.10.295
-      '@uifabric/merge-styles': 6.19.4
-      '@uifabric/set-version': 1.1.3
-      '@uifabric/utilities': 6.45.2_8e35502d6a5f823690b8b14f4a66d21a
-      tslib: 1.14.1
-    dev: false
-    peerDependencies:
-      '@types/react': '*'
-      react: '*'
-      react-dom: '*'
-    resolution:
-      integrity: sha512-F2aBiB30ZiFxlZzy5hzLXODWOl6jySvPFAsoaTofk37xucHiunBLZYjX6WkfZrCWiyGPva+DLssNcwly9ZHVjg==
   /@uifabric/styling/6.50.7_d8ecccf2889e06c2a80080b62409afec:
     dependencies:
       '@microsoft/load-themed-styles': 1.10.295
@@ -9200,23 +9089,6 @@ packages:
     dependencies:
       '@types/react': 16.8.8
       '@types/react-dom': 16.8.3
-      '@uifabric/merge-styles': 6.19.4
-      '@uifabric/set-version': 1.1.3
-      prop-types: 15.8.1
-      react: 16.8.5
-      react-dom: 16.8.5_react@16.8.5
-      tslib: 1.14.1
-    dev: false
-    peerDependencies:
-      '@types/react': '>=16.3.0 <17.0.0'
-      '@types/react-dom': '>=16.3.0 <17.0.0'
-      react: '>=16.3.2-0 <17.0.0'
-      react-dom: '>=16.3.2-0 <17.0.0'
-    resolution:
-      integrity: sha512-JiC92OjMOkVoiIAeS2b3R9B1XQU0cJ5bDr9B7VvrxlwKe1W9xMtVsCer7b8gNCU5NFNYBN5ckM3Q7x2Zs5cH0A==
-  /@uifabric/utilities/6.45.2_8e35502d6a5f823690b8b14f4a66d21a:
-    dependencies:
-      '@types/react': 16.8.8
       '@uifabric/merge-styles': 6.19.4
       '@uifabric/set-version': 1.1.3
       prop-types: 15.8.1
@@ -18082,17 +17954,6 @@ packages:
       react-dom: '*'
     resolution:
       integrity: sha512-sD9NVZaJuA0PXHIxcQ1UUcUB7s55Zs1+bjL79xVRgV85AkakKiyjV3HyAZNjRO3y91msfzRGdXdKgfzWB+AUXw==
-  /msgraph-helper/0.7.3_53becf01d3d98d13e2ac8da408ca5736:
-    dependencies:
-      '@microsoft/microsoft-graph-client': 1.7.0
-      '@microsoft/sp-http': 1.17.3_a6d6943676f15e92c9ece60237ff46fe
-    dev: false
-    peerDependencies:
-      '@types/react': '*'
-      react: '*'
-      react-dom: '*'
-    resolution:
-      integrity: sha512-0S6rq3yT++zwU8rny/50ppvdvf3fCYYnq7rnZzwDxrRSCfmFLRPLZt9jJOjEanQeX83PsF/mNIbqW4gahB3WBQ==
   /msgraph-helper/0.7.3_6aef932d42fecf4c2f2341835c5e31c0:
     dependencies:
       '@microsoft/microsoft-graph-client': 1.7.0
@@ -18762,28 +18623,6 @@ packages:
       react-dom: '>=16.3.2-0 <17.0.0'
     resolution:
       integrity: sha512-sYqi0bhZSdEWpQAsHSropoHm0SxLJkdvQDE+3reSnP+rWABD+WCLvMxRuunoQIFjZKDHZ1f+w+L6Nr7nXc+wbQ==
-  /office-ui-fabric-react/6.214.0_8e35502d6a5f823690b8b14f4a66d21a:
-    dependencies:
-      '@microsoft/load-themed-styles': 1.10.295
-      '@types/react': 16.8.8
-      '@uifabric/foundation': 0.8.3_8e35502d6a5f823690b8b14f4a66d21a
-      '@uifabric/icons': 6.5.5_8e35502d6a5f823690b8b14f4a66d21a
-      '@uifabric/merge-styles': 6.19.4
-      '@uifabric/set-version': 1.1.3
-      '@uifabric/styling': 6.50.7_8e35502d6a5f823690b8b14f4a66d21a
-      '@uifabric/utilities': 6.45.2_8e35502d6a5f823690b8b14f4a66d21a
-      prop-types: 15.8.1
-      react: 16.8.5
-      react-dom: 16.8.5_react@16.8.5
-      tslib: 1.14.1
-    dev: false
-    peerDependencies:
-      '@types/react': '>=16.3.0 <17.0.0'
-      '@types/react-dom': '>=16.3.0 <17.0.0'
-      react: '>=16.3.2-0 <17.0.0'
-      react-dom: '>=16.3.2-0 <17.0.0'
-    resolution:
-      integrity: sha512-sYqi0bhZSdEWpQAsHSropoHm0SxLJkdvQDE+3reSnP+rWABD+WCLvMxRuunoQIFjZKDHZ1f+w+L6Nr7nXc+wbQ==
   /office-ui-fabric-react/6.214.0_d8ecccf2889e06c2a80080b62409afec:
     dependencies:
       '@microsoft/load-themed-styles': 1.10.295
@@ -19036,29 +18875,6 @@ packages:
       '@uifabric/set-version': 7.0.24
       '@uifabric/styling': 7.25.1_052fcf153ec79c77e0d1778fd73206f7
       '@uifabric/utilities': 7.38.2_052fcf153ec79c77e0d1778fd73206f7
-      prop-types: 15.8.1
-      react: 16.8.5
-      react-dom: 16.8.5_react@16.8.5
-      tslib: 1.14.1
-    dev: false
-    peerDependencies:
-      '@types/react': '>=16.8.0 <17.0.0'
-      '@types/react-dom': '>=16.8.0 <17.0.0'
-      react: '>=16.8.0 <17.0.0'
-      react-dom: '>=16.8.0 <17.0.0'
-    resolution:
-      integrity: sha512-bZg1Msffb7DKAawxzxmUYMEv+me6FzdPvRKbrG7pQrj/rRR8ofPbo43NRFfFmOdHnNs7290H0Cwpu3kRk+6msg==
-  /office-ui-fabric-react/7.59.0_8e35502d6a5f823690b8b14f4a66d21a:
-    dependencies:
-      '@microsoft/load-themed-styles': 1.10.295
-      '@types/react': 16.8.8
-      '@uifabric/foundation': 7.10.16_8e35502d6a5f823690b8b14f4a66d21a
-      '@uifabric/icons': 7.9.5_8e35502d6a5f823690b8b14f4a66d21a
-      '@uifabric/merge-styles': 7.20.2
-      '@uifabric/react-hooks': 7.16.4_8e35502d6a5f823690b8b14f4a66d21a
-      '@uifabric/set-version': 7.0.24
-      '@uifabric/styling': 7.25.1_8e35502d6a5f823690b8b14f4a66d21a
-      '@uifabric/utilities': 7.38.2_8e35502d6a5f823690b8b14f4a66d21a
       prop-types: 15.8.1
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
@@ -20204,10 +20020,11 @@ packages:
       '@types/react-dom': '*'
     resolution:
       integrity: sha512-nFDbQCUsILYp8QZsZiQeWAjN1xbjTYurpqFli0FlG3Np4X7Ul6+HCTWf6qY6cdh/R1NLpxuGIeDRk9D/0ozHFA==
-  /pp365-portfoliowebparts/1.9.0-1149.1_2efcd3fc76c9f2cc9f11fc0d4a781b22:
+  /pp365-portfoliowebparts/1.9.0-1155.1_2efcd3fc76c9f2cc9f11fc0d4a781b22:
     dependencies:
       '@fluentui/react': 8.98.1_6aef932d42fecf4c2f2341835c5e31c0
       '@fluentui/react-file-type-icons': 8.8.8_453b269bd7a8e2940a0e8fb00c615d82
+      '@fluentui/react-hooks': 8.6.27_453b269bd7a8e2940a0e8fb00c615d82
       '@microsoft/decorators': 1.15.2
       '@microsoft/sp-core-library': 1.15.2
       '@microsoft/sp-lodash-subset': 1.15.2
@@ -20227,15 +20044,17 @@ packages:
       '@reduxjs/toolkit': 1.5.0
       '@types/array-sort': 1.0.0
       array-sort: 1.0.0
+      array-unique: 0.3.2
       clean-deep: 3.0.2
       interactjs: 1.6.2
       jsom-ctx: 1.2.0
-      moment: 2.24.0
+      lodash: 4.17.21
+      moment: 2.11.1
       msgraph-helper: 0.7.3_6aef932d42fecf4c2f2341835c5e31c0
       object-assign: 4.1.1
-      pp365-shared: 1.9.0-1149.2_2efcd3fc76c9f2cc9f11fc0d4a781b22
+      pp365-shared: 1.9.0-1155.1_2efcd3fc76c9f2cc9f11fc0d4a781b22
       react: 16.13.1
-      react-calendar-timeline: 0.27.0_5fcd677774f135ee260c49611752762b
+      react-calendar-timeline: 0.27.0_05e86f17cf8862761e710683c186761e
       react-dom: 16.13.1_react@16.13.1
       react-highcharts: 16.0.2_react-dom@16.13.1+react@16.13.1
       tslib: 2.3.1
@@ -20245,48 +20064,7 @@ packages:
       '@types/react': '*'
       '@types/react-dom': '*'
     resolution:
-      integrity: sha512-nFDbQCUsILYp8QZsZiQeWAjN1xbjTYurpqFli0FlG3Np4X7Ul6+HCTWf6qY6cdh/R1NLpxuGIeDRk9D/0ozHFA==
-  /pp365-portfoliowebparts/1.9.0-1149.1_@types+react@16.8.8:
-    dependencies:
-      '@fluentui/react': 8.98.1_53becf01d3d98d13e2ac8da408ca5736
-      '@fluentui/react-file-type-icons': 8.8.8_453b269bd7a8e2940a0e8fb00c615d82
-      '@microsoft/decorators': 1.15.2
-      '@microsoft/sp-core-library': 1.15.2
-      '@microsoft/sp-lodash-subset': 1.15.2
-      '@microsoft/sp-office-ui-fabric-core': 1.15.2
-      '@microsoft/sp-page-context': 1.15.2
-      '@microsoft/sp-property-pane': 1.15.2_@types+react@16.8.8
-      '@microsoft/sp-webpart-base': 1.15.2_@types+react@16.8.8
-      '@pnp/common': 1.3.8
-      '@pnp/logging': 1.3.8
-      '@pnp/odata': 1.3.8_a15ea9e35f8185850c85b3a619175833
-      '@pnp/polyfill-ie11': 1.0.2_f8fb99f7f2658be775308e22c044cf7e
-      '@pnp/sp': 1.3.8_fba12607cd7ee0f0a4318bc1d2bd35d3
-      '@pnp/sp-clientsvc': 1.3.8_f8fb99f7f2658be775308e22c044cf7e
-      '@pnp/sp-taxonomy': 1.3.8_f441c4ed7afc3a82bcb936eabbdb3847
-      '@pnp/spfx-controls-react': 1.11.0_53becf01d3d98d13e2ac8da408ca5736
-      '@pnp/spfx-property-controls': 2.7.0_@types+react@16.8.8
-      '@reduxjs/toolkit': 1.5.0
-      '@types/array-sort': 1.0.0
-      array-sort: 1.0.0
-      clean-deep: 3.0.2
-      interactjs: 1.6.2
-      jsom-ctx: 1.2.0
-      moment: 2.24.0
-      msgraph-helper: 0.7.3_53becf01d3d98d13e2ac8da408ca5736
-      object-assign: 4.1.1
-      pp365-shared: 1.9.0-1149.2_@types+react@16.8.8
-      react: 16.13.1
-      react-calendar-timeline: 0.27.0_5fcd677774f135ee260c49611752762b
-      react-dom: 16.13.1_react@16.13.1
-      react-highcharts: 16.0.2_react-dom@16.13.1+react@16.13.1
-      tslib: 2.3.1
-      underscore: 1.9.1
-    dev: false
-    peerDependencies:
-      '@types/react': '*'
-    resolution:
-      integrity: sha512-nFDbQCUsILYp8QZsZiQeWAjN1xbjTYurpqFli0FlG3Np4X7Ul6+HCTWf6qY6cdh/R1NLpxuGIeDRk9D/0ozHFA==
+      integrity: sha512-11ju1RUUlqJKNfwPR/MSPb/gIwbRcEVFZY2X6qtd07nhY9Wtaufkb97KbaprrDIRymQiaiPZKb2JrTCo/13qLg==
   /pp365-projectwebparts/1.9.0-1155.1_1ca3516818190f66f3253793862e2abe:
     dependencies:
       '@fluentui/react': 8.98.1_9c4969b3be2ea41c89422e6bb8d9a16e
@@ -20532,82 +20310,13 @@ packages:
       scriptjs: 2.5.9
       sp-entityportal-service: 1.3.3
       spfx-jsom: 0.6.6_1ca3516818190f66f3253793862e2abe
-      underscore: 1.9.1
+      underscore: 1.13.6
       xlsx: 0.16.9
       xmldom: 0.1.31
     dev: false
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-    resolution:
-      integrity: sha512-VDVxPQD1kYwyCRrC4dI8r9j1Gz1eyVuvrO76UMCGPa2Bi7bj9jROZ2kLIyhss0xYWx/KAZb7OibXi6uctFOh0w==
-  /pp365-shared/1.9.0-1149.2_2efcd3fc76c9f2cc9f11fc0d4a781b22:
-    dependencies:
-      '@microsoft/sp-application-base': 1.15.2_2efcd3fc76c9f2cc9f11fc0d4a781b22
-      '@microsoft/sp-core-library': 1.15.2
-      '@microsoft/sp-listview-extensibility': 1.15.2_2efcd3fc76c9f2cc9f11fc0d4a781b22
-      '@microsoft/sp-page-context': 1.15.2
-      '@microsoft/sp-webpart-base': 1.15.2_2efcd3fc76c9f2cc9f11fc0d4a781b22
-      '@pnp/common': 1.3.8
-      '@pnp/logging': 1.3.8
-      '@pnp/odata': 1.3.8_a15ea9e35f8185850c85b3a619175833
-      '@pnp/polyfill-ie11': 1.0.2_f8fb99f7f2658be775308e22c044cf7e
-      '@pnp/sp': 1.3.8_fba12607cd7ee0f0a4318bc1d2bd35d3
-      '@pnp/sp-clientsvc': 1.3.8_f8fb99f7f2658be775308e22c044cf7e
-      '@pnp/sp-taxonomy': 1.3.8_f441c4ed7afc3a82bcb936eabbdb3847
-      es6-promise: 4.2.8
-      file-saver: 2.0.5
-      gulp: 4.0.2
-      object-get: 2.1.1
-      office-ui-fabric-react: 6.214.0_d8ecccf2889e06c2a80080b62409afec
-      react: 16.8.5
-      react-dom: 16.8.5_react@16.8.5
-      react-markdown: 8.0.7_@types+react@16.8.8+react@16.8.5
-      rehype-raw: 6.1.1
-      scriptjs: 2.5.9
-      sp-entityportal-service: 1.3.3
-      spfx-jsom: 0.6.6_2efcd3fc76c9f2cc9f11fc0d4a781b22
-      underscore: 1.9.1
-      xlsx: 0.16.9
-      xmldom: 0.1.31
-    dev: false
-    peerDependencies:
-      '@types/react': '*'
-      '@types/react-dom': '*'
-    resolution:
-      integrity: sha512-VDVxPQD1kYwyCRrC4dI8r9j1Gz1eyVuvrO76UMCGPa2Bi7bj9jROZ2kLIyhss0xYWx/KAZb7OibXi6uctFOh0w==
-  /pp365-shared/1.9.0-1149.2_@types+react@16.8.8:
-    dependencies:
-      '@microsoft/sp-application-base': 1.15.2_@types+react@16.8.8
-      '@microsoft/sp-core-library': 1.15.2
-      '@microsoft/sp-listview-extensibility': 1.15.2_@types+react@16.8.8
-      '@microsoft/sp-page-context': 1.15.2
-      '@microsoft/sp-webpart-base': 1.15.2_@types+react@16.8.8
-      '@pnp/common': 1.3.8
-      '@pnp/logging': 1.3.8
-      '@pnp/odata': 1.3.8_a15ea9e35f8185850c85b3a619175833
-      '@pnp/polyfill-ie11': 1.0.2_f8fb99f7f2658be775308e22c044cf7e
-      '@pnp/sp': 1.3.8_fba12607cd7ee0f0a4318bc1d2bd35d3
-      '@pnp/sp-clientsvc': 1.3.8_f8fb99f7f2658be775308e22c044cf7e
-      '@pnp/sp-taxonomy': 1.3.8_f441c4ed7afc3a82bcb936eabbdb3847
-      es6-promise: 4.2.8
-      file-saver: 2.0.5
-      gulp: 4.0.2
-      object-get: 2.1.1
-      office-ui-fabric-react: 6.214.0_8e35502d6a5f823690b8b14f4a66d21a
-      react: 16.8.5
-      react-dom: 16.8.5_react@16.8.5
-      react-markdown: 8.0.7_@types+react@16.8.8+react@16.8.5
-      rehype-raw: 6.1.1
-      scriptjs: 2.5.9
-      sp-entityportal-service: 1.3.3
-      spfx-jsom: 0.6.6_@types+react@16.8.8
-      underscore: 1.9.1
-      xlsx: 0.16.9
-      xmldom: 0.1.31
-    dev: false
-    peerDependencies:
-      '@types/react': '*'
     resolution:
       integrity: sha512-VDVxPQD1kYwyCRrC4dI8r9j1Gz1eyVuvrO76UMCGPa2Bi7bj9jROZ2kLIyhss0xYWx/KAZb7OibXi6uctFOh0w==
   /pp365-shared/1.9.0-1155.1_1ca3516818190f66f3253793862e2abe:
@@ -25509,7 +25218,7 @@ packages:
       moment: 2.11.1
       msgraph-helper: 0.7.3_6aef932d42fecf4c2f2341835c5e31c0
       object-assign: 4.1.1
-      pp365-portfoliowebparts: 1.9.0-1149.1_2efcd3fc76c9f2cc9f11fc0d4a781b22
+      pp365-portfoliowebparts: 1.9.0-1155.1_2efcd3fc76c9f2cc9f11fc0d4a781b22
       pp365-projectwebparts: 1.9.0-1155.1_2efcd3fc76c9f2cc9f11fc0d4a781b22
       prettier: 2.3.2
       pzl-react-reusable-components: 0.0.14_2efcd3fc76c9f2cc9f11fc0d4a781b22
@@ -25525,7 +25234,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-programwebparts'
     resolution:
-      integrity: sha512-faDpH9UBPKmLZlRt92PsTiFOKRY9TBXt53swcrtW9dWOcN7iF3/CMXWPGUcry13S0VD9cLsQOxi4gkbEEFRD0w==
+      integrity: sha512-NVk4nRbEkZW6qMU6R8sS/gYqLzZCRBcyqddA/9E91/IXDfdTZizSQTecVj9RFVCPSTpFwSv+MBuzAtulTN3uRw==
       tarball: file:projects/pp365-programwebparts.tgz
     version: 0.0.0
   file:projects/pp365-projectextensions.tgz:
@@ -25813,7 +25522,6 @@ specifiers:
   moment: 2.11.1
   object-assign: 4.1.1
   object-get: ^2.1.0
-  pp365-portfoliowebparts: 1.9.0-1149.1
   pp365-projectwebparts: 1.9.0-1155.1
   pzl-react-reusable-components: ^0.0.14
   pzl-spfx-components: 0.0.11
