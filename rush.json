@@ -1,0 +1,41 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/rush.schema.json",
+    "rushVersion": "5.98.0",
+    "npmVersion": "8.19.2",
+    "eventHooks": {
+        "preRushInstall": [],
+        "postRushInstall": [],
+        "preRushBuild": [],
+        "postRushBuild": []
+    },
+    "projects": [
+        {
+            "packageName": "pp365-shared",
+            "projectFolder": "SharePointFramework/@Shared"
+        },
+        {
+            "packageName": "pp365-portfolioextensions",
+            "projectFolder": "SharePointFramework/PortfolioExtensions"
+        },
+        {
+            "packageName": "pp365-portfoliowebparts",
+            "projectFolder": "SharePointFramework/PortfolioWebParts"
+        },
+        {
+            "packageName": "pp365-programwebparts",
+            "projectFolder": "SharePointFramework/ProgramWebParts"
+        },
+        {
+            "packageName": "pp365-projectextensions",
+            "projectFolder": "SharePointFramework/ProjectExtensions"
+        },
+        {
+            "packageName": "pp365-projectwebparts",
+            "projectFolder": "SharePointFramework/ProjectWebParts"
+        },
+        {
+            "packageName": "pp365-templates",
+            "projectFolder": "Templates"
+        }
+    ]
+}
