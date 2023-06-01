@@ -46,7 +46,7 @@
     "spfx-jsom": "0.6.6",
     "underscore": "1.13.6",
     "xlsx": "^0.16.9",
-    "xmldom": "^0.1.27"
+    "xmldom": "0.6.0"
   },
   "resolutions": {
     "@types/react": "16.8.8"
