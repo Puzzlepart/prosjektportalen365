@@ -29,7 +29,11 @@
         },
         {
             "packageName": "pp365-programwebparts",
-            "projectFolder": "SharePointFramework/ProgramWebParts"
+            "projectFolder": "SharePointFramework/ProgramWebParts",
+            "decoupledLocalDependencies": [
+                "pp365-portfoliowebparts",
+                "pp365-projectwebparts"
+            ]
         },
         {
             "packageName": "pp365-projectextensions",
