@@ -25,8 +25,8 @@ export interface ITimelineItem {
   id: number
   title: string
   group: number
-  start_time: moment.Moment
-  end_time: moment.Moment
+  start_time: moment.Moment | Date
+  end_time: moment.Moment | Date
   itemProps: React.HTMLProps<HTMLDivElement>
   props?: Record<string, any>
   data?: ITimelineItemData
