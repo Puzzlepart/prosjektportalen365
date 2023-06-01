@@ -1,8 +1,10 @@
 {
-  "name": "prosjektportalen365-templates",
+  "name": "pp365-templates",
+  "version": "1.9.0",
   "main": "generateTemplate.js",
   "scripts": {
     "watch": "chokidar \"./_JsonTemplate.json\" -c \"npm run generate-project-templates\"",
+    "build": "npm run generate-project-templates && npm run generate-resx-json",
     "generate-resx-json": "node ./.tasks/generateResxJson",
     "generate-project-templates": "npm run generate-resx-json && node ./.tasks/generateProjectTemplates"
   },
