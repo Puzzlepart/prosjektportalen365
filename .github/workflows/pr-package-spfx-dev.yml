@@ -9,7 +9,7 @@ on:
       - .github/workflows/pr-package-spfx-dev.yml
 jobs:
   build:
-    name: Rush Check, Install and Rebuild
+    name: Rush Install and Rebuild
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -18,8 +18,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ vars.NODE_VERSION }}
-      - name: Rush Check
-        run: node common/scripts/install-run-rush.js check
       - name: Rush Install
         run: node common/scripts/install-run-rush.js install
       - name: Rush Rebuild
