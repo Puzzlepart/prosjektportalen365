@@ -25,8 +25,7 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Setup Node.js 16.18.0
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ vars.NODE_VERSION }}
 
