@@ -109,14 +109,14 @@ export class CopyListData extends BaseTask {
         taskDetails.description = item.GtDescription
       }
       if (!stringIsNullOrEmpty(item.GtChecklist)) {
-        taskDetails.checklist = item.GtChecklist.split(';')
+        taskDetails.checklist = item.GtChecklist.replace(/\r?\n|\r/g, '').split(';')
       }
       if (!stringIsNullOrEmpty(item.GtPlannerTags)) {
-        taskDetails.labels = item.GtPlannerTags.split(';')
+        taskDetails.labels = item.GtPlannerTags.replace(/\r?\n|\r/g, '').split(';')
       }
       if (!stringIsNullOrEmpty(item.GtAttachments)) {
         try {
-          taskDetails.attachments = item.GtAttachments.split('|')
+          taskDetails.attachments = item.GtAttachments.replace(/\r?\n|\r/g, '').split('|')
             .map((str) => new TaskAttachment(str))
             .filter((attachment) => !stringIsNullOrEmpty(attachment.url))
         } catch (error) { }
