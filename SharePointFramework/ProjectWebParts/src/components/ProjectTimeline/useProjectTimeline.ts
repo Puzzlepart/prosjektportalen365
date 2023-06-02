@@ -14,6 +14,7 @@ import { IFilterItemProps, IFilterProps } from 'pp365-portfoliowebparts/lib/comp
 import strings from 'ProjectWebPartsStrings'
 import { TimelineTimeframe } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline'
 import { ITimelineItem } from 'pp365-portfoliowebparts/lib/interfaces/ITimelineItem'
+import moment from 'moment'
 
 /**
  * Component logic hook for `ProjectTimeline`

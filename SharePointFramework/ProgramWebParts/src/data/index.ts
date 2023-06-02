@@ -69,7 +69,9 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   }
 
   /**
-   * Get portfolio configuration
+   * Get portfolio configuration.
+   * 
+   * For now it uses `as any` to avoid type errors.
    *
    * @description Used in `PortfolioOverview`
    */
@@ -92,13 +94,15 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       viewsUrls,
       columnUrls,
       programs: []
-    }
+    } as any
   }
 
   /**
    * Get aggregated list config for the given category.
    *
    * Returns `views`, `viewsUrls`, `columnUrls` and `level`.
+   * 
+   * For now it uses `as any` to avoid type errors.
    *
    * @param category Category for data source
    * @param level Level for data source
@@ -118,7 +122,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
         viewsUrls,
         columnUrls,
         level
-      }
+      } as any
     } catch (error) {
       return null
     }

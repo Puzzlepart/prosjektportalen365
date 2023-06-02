@@ -1,5 +1,4 @@
-import { IColumn, Link } from '@fluentui/react'
-import { Icon } from 'office-ui-fabric-react'
+import { IColumn, Link, Icon } from '@fluentui/react'
 import React from 'react'
 
 /**

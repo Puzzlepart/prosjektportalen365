@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
-import { format } from 'office-ui-fabric-react/lib/Utilities'
+import { format, IColumn } from '@fluentui/react'
 import * as XLSX from 'xlsx'
 import * as FileSaver from 'file-saver'
 import { getObjectValue } from '../../helpers/getObjectValue'

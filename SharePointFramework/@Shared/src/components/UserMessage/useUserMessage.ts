@@ -1,8 +1,7 @@
-import { IMessageBarStyleProps, IMessageBarStyles } from 'office-ui-fabric-react/lib/MessageBar'
-import { IStyleFunctionOrObject } from 'office-ui-fabric-react'
+import { IMessageBarStyleProps, IMessageBarStyles, IStyleFunctionOrObject } from '@fluentui/react'
 import { IUserMessageProps } from './types'
 
-export function useUserMessage(props: IUserMessageProps) {
+export function useUserMessage(props: IUserMessageProps): { styles: Partial<IMessageBarStyles> } {
   const styles: IStyleFunctionOrObject<IMessageBarStyleProps, IMessageBarStyles> = {}
 
   if (props.fixedCenter) {

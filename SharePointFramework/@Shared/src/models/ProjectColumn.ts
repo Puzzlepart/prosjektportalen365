@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { IColumn } from 'office-ui-fabric-react/lib/DetailsList'
+import { IColumn } from '@fluentui/react'
 import { pick } from 'underscore'
 import { SearchValueType } from '../types/SearchValueType'
 import { ProjectColumnConfig, ProjectColumnConfigDictionary } from './ProjectColumnConfig'

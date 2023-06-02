@@ -1,6 +1,6 @@
 {
   "name": "pp365-shared",
-  "version": "1.9.0-1149.2",
+  "version": "1.9.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -10,7 +10,7 @@
   "description": "Shared utilities, helpers and models for Prosjektportalen 365",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "npm run lint && tsc",
     "watch": "tsc --watch",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color",
@@ -24,28 +24,29 @@
     "@microsoft/sp-listview-extensibility": "1.15.2",
     "@microsoft/sp-page-context": "1.15.2",
     "@microsoft/sp-webpart-base": "1.15.2",
+    "@microsoft/sp-lodash-subset": "1.15.2",
     "@pnp/common": "1.3.8",
     "@pnp/logging": "1.3.8",
     "@pnp/odata": "1.3.8",
-    "@pnp/polyfill-ie11": "^1.0.2",
+    "@pnp/polyfill-ie11": "1.0.2",
     "@pnp/sp": "1.3.8",
     "@pnp/sp-clientsvc": "1.3.8",
     "@pnp/sp-taxonomy": "1.3.8",
     "es6-promise": "^4.2.8",
     "file-saver": "^2.0.5",
-    "gulp": "^4.0.2",
+    "gulp": "4.0.2",
     "object-get": "^2.1.0",
-    "office-ui-fabric-react": "6.214.0",
-    "react": "16.8.5",
-    "react-dom": "16.8.5",
+    "@fluentui/react": "8.98.1",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
     "react-markdown": "^8.0.3",
     "rehype-raw": "^6.1.1",
     "scriptjs": "^2.5.9",
     "sp-entityportal-service": "1.3.3",
     "spfx-jsom": "0.6.6",
-    "underscore": "^1.9.1",
+    "underscore": "1.13.6",
     "xlsx": "^0.16.9",
-    "xmldom": "^0.1.27"
+    "xmldom": "0.6.0"
   },
   "resolutions": {
     "@types/react": "16.8.8"
@@ -54,9 +55,10 @@
     "@types/react": "16.8.8",
     "@types/react-dom": "16.8.3",
     "@types/scriptjs": "^0.0.2",
-    "@types/sharepoint": "^2016.1.5",
-    "@types/underscore": "^1.9.3",
+    "@types/sharepoint": "2016.1.10",
+    "@types/underscore": "1.11.5",
     "@types/xmldom": "^0.1.29",
+    "@types/webpack-env": "1.18.0",
     "@typescript-eslint/eslint-plugin": "5.40.0",
     "@typescript-eslint/parser": "5.40.0",
     "eslint": "8.25.0",
@@ -64,7 +66,7 @@
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-react": "7.31.10",
     "eslint-plugin-unused-imports": "2.0.0",
-    "prettier": "^2.1.1",
+    "prettier": "2.7.1",
     "typescript": "4.5.5"
   }
 }

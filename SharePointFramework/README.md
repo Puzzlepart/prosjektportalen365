@@ -6,7 +6,7 @@ _Due to the number of components, we decided to separate the components into 5 d
 
 Shared code for the SharePoint Framework solutions in Prosjektportalen 365.
 
-Build by `npm` script `build` and watch changes with `watch`.
+Watch changes with npm script `watch`.
 
 _Published to **npm** as `pp365-shared`_
 
@@ -18,7 +18,7 @@ _Published to **npm** as `pp365-shared`_
 
 Extension for the `portfolio` level of the portal.
 
-Build by `npm` script `package`.
+Watch changes with npm script `watch`.
 
 To package and deploy directly to SharePoint, see `2. Build, package and deploy`.
 
@@ -32,7 +32,7 @@ _Published to **npm** as `pp365-portfolioextensions`_
 
 Web parts for portfolio level of the portal.
 
-Build by `npm` script `package`.
+Watch changes with npm script `watch`.
 
 To package and deploy directly to SharePoint, see `2. Build, package and deploy`.
 
@@ -46,7 +46,7 @@ _Published to **npm** as `pp365-projectwebparts`_
 
 Web parts for project level of the portal.
 
-Build by `npm` script `package`.
+Watch changes with npm script `watch`.
 
 To package and deploy directly to SharePoint, see `2. Build, package and deploy`.
 
@@ -60,7 +60,7 @@ _Published to **npm** as `pp365-programwebparts`_
 
 Extension for the project level of the portal.
 
-Build by `npm` script `package`.
+Watch changes with npm script `watch`.
 
 To package and deploy directly to SharePoint, see `2. Build, package and deploy`.
 
@@ -74,7 +74,7 @@ _Published to **npm** as `pp365-projectextensions`_
 
 Web parts for `project` level of the portal.
 
-Build by `npm` script `package`.
+Watch changes with npm script `watch`.
 
 To package and deploy directly to SharePoint, see `2. Build, package and deploy`.
 
@@ -114,12 +114,7 @@ _Published to **npm** as `pp365-projectwebparts`_
 To work with the various solutions, you have to to the following
 
 1. Ensure you have `npm` installed
-2. Build the Shared solution. Navigate to [@Shared](./@Shared) and run `npm i` followed by `pnpm run build`
-3. Navigate to [PortfolioWebParts](./PortfolioWebParts) and run `npm i` followed by `npm run package`
-4. Navigate to [PortfolioExtensions](./PortfolioExtensions) and run `npm i` followed by `npm run package`
-5. Navigate to [ProjectExtensions](./ProjectExtensions) and run `npm i` followed by `npm run package`
-6. Navigate to [ProjectWebParts](./ProjectWebParts) and run `npm i` followed by `npm run package`
-7. Navigate to [ProgramWebParts](./ProgramWebParts) and run `npm i` followed by `npm run package`
+2. If you have `rush` installed run `rush update && rush build` (or use npm script `spfx:init` in the root of the project`
 
 # 4. Versioning
 Never update the version of the solutions independently. The version is automatically kept in sync with the other packages.

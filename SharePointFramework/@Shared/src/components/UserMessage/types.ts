@@ -1,4 +1,4 @@
-import { IMessageBarProps, MessageBarType } from 'office-ui-fabric-react'
+import { IMessageBarProps, MessageBarType } from '@fluentui/react'
 
 /**
  * @category UserMessage
