@@ -2,13 +2,11 @@
 
 _Due to the number of components, we decided to separate the components into 5 different solutions._
 
-## [@Shared](./@Shared/README.md)
+## [shared-library](./shared-library/README.md)
 
 Shared code for the SharePoint Framework solutions in Prosjektportalen 365.
 
-Watch changes with npm script `watch`.
-
-_Published to **npm** as `pp365-shared`_
+_Published to **npm** as `pp365-shared-library`_
 
 ## [PortfolioExtensions](./PortfolioExtensions/README.md)
 

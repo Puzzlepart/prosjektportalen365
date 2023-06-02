@@ -12,7 +12,7 @@ Param(
     [Parameter(Mandatory = $false, HelpMessage = "Clean node_modules for all SharePoint Framework solutions")]
     [switch]$Force,
     [Parameter(Mandatory = $false)]
-    [string[]]$Solutions = @("PortfolioExtensions", "PortfolioWebParts", "ProgramWebParts", "ProjectExtensions", "ProjectWebParts"),
+    [string[]]$Solutions = @("shared-library", "PortfolioExtensions", "PortfolioWebParts", "ProgramWebParts", "ProjectExtensions", "ProjectWebParts"),
     [Parameter(Mandatory = $false, HelpMessage = "CI mode. Installs PnP.PowerShell.")]
     [switch]$CI,
     [Parameter(Mandatory = $false)]

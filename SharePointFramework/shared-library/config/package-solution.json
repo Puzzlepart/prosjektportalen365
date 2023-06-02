@@ -27,6 +27,6 @@
     }
   },
   "paths": {
-    "zippedPackage": "solution/pp365-shared-library.sppkg"
+    "zippedPackage": "solution/pp-shared-library.sppkg"
   }
 }
