@@ -62,6 +62,14 @@
           "ProjectTimelineWebPart": "2fd903ad-3179-459a-b2b9-8d2963da8af1",
           "RiskMatrixWebPart": "b1500cba-4eef-437e-92db-7728dcd9502c"
         }
+      },
+      "shared-library": {
+        "id": "5968d36f-7835-4155-8569-13f83f11c032",
+        "name": "Prosjektportalen 365 - Shared Library - test",
+        "zippedPackage": "solution/pp-shared-library-test.sppkg",
+        "components": {
+          "SharedLibrary": "dbbc7e1a-42a4-48e4-bcd1-ae00437687c5"
+        }
       }
     }
   }
