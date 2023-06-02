@@ -1,5 +1,5 @@
 import SPDataAdapter from 'data/SPDataAdapter'
-import { ListLogger } from 'pp365-shared/lib/logging'
+import { ListLogger } from 'pp365-shared-library/lib/logging'
 import strings from 'ProjectWebPartsStrings'
 import { useReducer, useRef } from 'react'
 import { ProjectPhases } from '.'

@@ -1,10 +1,10 @@
 import { ContextualMenuItemType, format, IContextualMenuProps } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
-import { ProjectColumn } from 'pp365-shared/lib/models'
-import { redirect } from 'pp365-shared/lib/util/redirect'
+import { ProjectColumn } from 'pp365-shared-library/lib/models'
+import { redirect } from 'pp365-shared-library/lib/util/redirect'
 import { IPortfolioOverviewContext } from './context'
 import { SET_COLUMN_CONTEXT_MENU, SET_GROUP_BY, SET_SORT } from './reducer'
-import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
+import { getObjectValue as get } from 'pp365-shared-library/lib/helpers/getObjectValue'
 import _ from 'lodash'
 
 /**

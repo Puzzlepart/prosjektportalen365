@@ -1,10 +1,10 @@
 import { PageContext } from '@microsoft/sp-page-context'
 import { IOpportunityMatrixProps } from '../OpportunityMatrix'
 import { IRiskMatrixProps } from '../RiskMatrix'
-import { ProjectColumnConfig, SectionModel, SPField, StatusReport } from 'pp365-shared/lib/models'
-import { IGetPropertiesData } from 'pp365-shared/lib/services'
+import { ProjectColumnConfig, SectionModel, SPField, StatusReport } from 'pp365-shared-library/lib/models'
+import { IGetPropertiesData } from 'pp365-shared-library/lib/services'
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
-import { IUserMessageProps } from 'pp365-shared/lib/components/UserMessage/types'
+import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage/types'
 
 export interface IProjectStatusProps extends IBaseWebPartComponentProps {
   riskMatrix?: IRiskMatrixProps

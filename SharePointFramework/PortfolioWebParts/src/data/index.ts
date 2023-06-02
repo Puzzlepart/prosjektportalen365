@@ -16,10 +16,10 @@ import { IAggregatedListConfiguration } from 'interfaces/IAggregatedListConfigur
 import { capitalize } from 'lodash'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
-import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
-import { DataSource, PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
-import { DataSourceService } from 'pp365-shared/lib/services/DataSourceService'
-import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
+import { getUserPhoto } from 'pp365-shared-library/lib/helpers/getUserPhoto'
+import { DataSource, PortfolioOverviewView, ProjectColumn } from 'pp365-shared-library/lib/models'
+import { DataSourceService } from 'pp365-shared-library/lib/services/DataSourceService'
+import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
 import _ from 'underscore'
 import {
   Benefit,

@@ -1,4 +1,4 @@
-import { getObjectValue } from 'pp365-shared/lib/helpers/getObjectValue'
+import { getObjectValue } from 'pp365-shared-library/lib/helpers/getObjectValue'
 import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { ExecuteJsomQuery } from 'spfx-jsom'

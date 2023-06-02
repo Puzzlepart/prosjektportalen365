@@ -1,6 +1,6 @@
 import { CommandBar } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import { ProjectColumn } from 'pp365-shared/lib/models'
+import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import React, { useContext } from 'react'
 import { FilterPanel, IFilterItemProps } from '../../FilterPanel'
 import { PortfolioOverviewContext } from '../context'

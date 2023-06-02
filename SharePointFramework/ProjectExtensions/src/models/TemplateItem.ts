@@ -2,7 +2,7 @@ import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { FileAddResult, Folder, Web } from '@pnp/sp'
 import { FileIconType, getFileTypeIconProps, IFileTypeIconOptions } from '@uifabric/file-type-icons'
 import { IIconProps } from '@fluentui/react/lib/Icon'
-import { formatDate } from 'pp365-shared/lib/helpers'
+import { formatDate } from 'pp365-shared-library/lib/helpers'
 
 export interface ITemplateSPItem {
   Folder?: {

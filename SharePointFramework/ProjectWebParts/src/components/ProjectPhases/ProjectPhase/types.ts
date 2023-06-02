@@ -1,4 +1,4 @@
-import { ProjectPhaseModel } from 'pp365-shared/lib/models'
+import { ProjectPhaseModel } from 'pp365-shared-library/lib/models'
 
 export interface IProjectPhaseProps {
   /**

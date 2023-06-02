@@ -1,8 +1,8 @@
 import { createAction, createReducer, current } from '@reduxjs/toolkit'
 import sortArray from 'array-sort'
 import * as strings from 'PortfolioWebPartsStrings'
-import { getObjectValue as get } from 'pp365-shared/lib/helpers/getObjectValue'
-import { DataSource } from 'pp365-shared/lib/models/DataSource'
+import { getObjectValue as get } from 'pp365-shared-library/lib/helpers/getObjectValue'
+import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
 import { any, first, indexOf, isEmpty, omit, uniq } from 'underscore'
 import {
   IPortfolioAggregationHashState,
@@ -14,7 +14,7 @@ import { IFilterItemProps } from '../FilterPanel'
 import _, { filter } from 'lodash'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
-import { parseUrlHash, setUrlHash } from 'pp365-shared/lib/util'
+import { parseUrlHash, setUrlHash } from 'pp365-shared-library/lib/util'
 import { Target, IGroup, MessageBarType } from '@fluentui/react'
 
 /**
@@ -433,7 +433,7 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
       const obj: IPortfolioAggregationHashState = {}
       if (currentView) obj.viewId = currentView.id.toString()
       if (state.groupBy) obj.groupBy = state.groupBy.fieldName
-      setUrlHash<IPortfolioAggregationHashState>(obj)
+      setUrlHash(obj)
       state.currentView = currentView
       state.dataSource = currentView.title
       state.activeFilters = {}
@@ -442,7 +442,7 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
       const obj: IPortfolioAggregationHashState = {}
       if (state.currentView) obj.viewId = payload.dataSource.id.toString()
       if (state.groupBy) obj.groupBy = state.groupBy.fieldName
-      setUrlHash<IPortfolioAggregationHashState>(obj)
+      setUrlHash(obj)
       state.dataSource = payload.dataSource.title
       state.currentView = payload.dataSource
       state.activeFilters = {}

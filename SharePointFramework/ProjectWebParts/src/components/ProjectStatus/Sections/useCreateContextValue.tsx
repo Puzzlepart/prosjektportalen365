@@ -1,4 +1,4 @@
-import { SectionModel } from 'pp365-shared/lib/models'
+import { SectionModel } from 'pp365-shared-library/lib/models'
 import { useContext } from 'react'
 import { ProjectStatusContext } from '../context'
 import { ISectionContext } from './context'

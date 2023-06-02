@@ -1,4 +1,4 @@
-import { DataSource } from 'pp365-shared/lib/models'
+import { DataSource } from 'pp365-shared-library/lib/models'
 
 export interface IAggregatedListConfiguration {
   viewsUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }

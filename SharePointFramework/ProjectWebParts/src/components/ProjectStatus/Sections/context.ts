@@ -1,4 +1,4 @@
-import { SectionModel, StatusReport } from 'pp365-shared/lib/models'
+import { SectionModel, StatusReport } from 'pp365-shared-library/lib/models'
 import { createContext } from 'react'
 import { IStatusElement } from '../StatusElement/types'
 

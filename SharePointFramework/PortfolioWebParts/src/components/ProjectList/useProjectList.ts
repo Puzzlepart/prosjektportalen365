@@ -1,7 +1,7 @@
 /* eslint-disable prefer-spread */
 import { format, IButtonProps, IColumn } from '@fluentui/react'
 import { ProjectListModel } from 'models'
-import { sortAlphabetically } from 'pp365-shared/lib/helpers'
+import { sortAlphabetically } from 'pp365-shared-library/lib/helpers'
 import _ from 'underscore'
 import { IProjectListProps } from './types'
 import { useProjectListDataFetch } from './useProjectListDataFetch'

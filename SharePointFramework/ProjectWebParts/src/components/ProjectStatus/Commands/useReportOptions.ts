@@ -1,6 +1,6 @@
 import { IContextualMenuItem } from '@fluentui/react'
 import SPDataAdapter from '../../../data'
-import { formatDate } from 'pp365-shared/lib/helpers'
+import { formatDate } from 'pp365-shared-library/lib/helpers'
 import { useContext } from 'react'
 import { ProjectStatusContext } from '../context'
 import { SELECT_REPORT } from '../reducer'

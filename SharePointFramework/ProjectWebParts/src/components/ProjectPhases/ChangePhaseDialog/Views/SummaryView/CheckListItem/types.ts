@@ -1,4 +1,4 @@
-import { ChecklistItemModel } from 'pp365-shared/lib/models'
+import { ChecklistItemModel } from 'pp365-shared-library/lib/models'
 import strings from 'ProjectWebPartsStrings'
 
 export default interface IChecklistItemProps {

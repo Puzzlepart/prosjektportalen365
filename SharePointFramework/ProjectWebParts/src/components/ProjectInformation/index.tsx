@@ -1,5 +1,5 @@
 import { Shimmer } from '@fluentui/react/lib/Shimmer'
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
+import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
 import React, { FC } from 'react'
 import { ProgressDialog } from './ProgressDialog'

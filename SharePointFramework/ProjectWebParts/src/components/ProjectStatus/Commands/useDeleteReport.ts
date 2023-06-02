@@ -1,4 +1,4 @@
-import { PortalDataService } from 'pp365-shared/lib/services'
+import { PortalDataService } from 'pp365-shared-library/lib/services'
 import { useContext } from 'react'
 import { ProjectStatusContext } from '../context'
 import { REPORT_DELETED, REPORT_DELETE_ERROR } from '../reducer'

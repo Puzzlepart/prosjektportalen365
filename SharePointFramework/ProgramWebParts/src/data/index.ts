@@ -28,10 +28,10 @@ import {
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-portfoliowebparts/lib/models'
-import { ISPDataAdapterBaseConfiguration, SPDataAdapterBase } from 'pp365-shared/lib/data'
-import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
-import { DataSource, PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
-import { DataSourceService, ProjectDataService } from 'pp365-shared/lib/services'
+import { ISPDataAdapterBaseConfiguration, SPDataAdapterBase } from 'pp365-shared-library/lib/data'
+import { getUserPhoto } from 'pp365-shared-library/lib/helpers/getUserPhoto'
+import { DataSource, PortfolioOverviewView, ProjectColumn } from 'pp365-shared-library/lib/models'
+import { DataSourceService, ProjectDataService } from 'pp365-shared-library/lib/services'
 import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS, IFetchDataForViewItemResult } from './types'
 import { IProgramAdministrationProject } from 'components/ProgramAdministration/types'

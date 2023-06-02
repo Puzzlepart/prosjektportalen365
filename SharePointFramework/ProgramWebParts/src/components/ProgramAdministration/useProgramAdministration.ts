@@ -1,5 +1,5 @@
 import { sp } from '@pnp/sp'
-import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
+import { ProjectAdminPermission } from 'pp365-shared-library/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import { useReducer, useEffect } from 'react'
 import reducer, { initialState, DATA_LOADED, SET_SELECTED_TO_DELETE } from './reducer'
 import { IProgramAdministrationProps } from './types'

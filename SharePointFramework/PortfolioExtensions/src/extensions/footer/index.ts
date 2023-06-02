@@ -8,7 +8,7 @@ import '@pnp/sp/lists'
 import '@pnp/sp/webs'
 import strings from 'PortfolioExtensionsStrings'
 import { Footer, IFooterProps } from 'components/Footer'
-import { PortalDataService } from 'pp365-shared/lib/services/PortalDataService'
+import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
 import { createElement } from 'react'
 import { render } from 'react-dom'
 import {

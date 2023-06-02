@@ -1,6 +1,6 @@
 import { LogLevel } from '@pnp/logging'
-import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
-import { ListLogger } from 'pp365-shared/lib/logging'
+import { ProjectAdminPermission } from 'pp365-shared-library/lib/data/SPDataAdapterBase/ProjectAdminPermission'
+import { ListLogger } from 'pp365-shared-library/lib/logging'
 import * as strings from 'ProjectWebPartsStrings'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { IProjectPhasesData, IProjectPhasesProps, ProjectPhases } from '.'

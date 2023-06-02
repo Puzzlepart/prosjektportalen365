@@ -1,7 +1,7 @@
 import { OnProgressCallbackFunction } from '../types'
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
 import { TypedHash } from '@pnp/common'
-import { PortalDataService } from 'pp365-shared/lib/services'
+import { PortalDataService } from 'pp365-shared-library/lib/services'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import { Schema, Web } from 'sp-js-provisioning'
 import { ISpfxJsomContext } from 'spfx-jsom'

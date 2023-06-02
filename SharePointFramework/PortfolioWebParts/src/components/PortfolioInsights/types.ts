@@ -1,7 +1,7 @@
 import { IBaseComponentProps } from '../types'
 import { ChartConfiguration, ChartData } from 'models'
 import { IPortfolioConfiguration } from 'interfaces'
-import { PortfolioOverviewView } from 'pp365-shared/lib/models/PortfolioOverviewView'
+import { PortfolioOverviewView } from 'pp365-shared-library/lib/models/PortfolioOverviewView'
 
 export interface IPortfolioInsightsProps extends IBaseComponentProps {
   chartConfigurationListName: string

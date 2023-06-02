@@ -11,7 +11,7 @@ import {
 import { ProjectListModel } from 'models'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
-import { getObjectValue } from 'pp365-shared/lib/helpers'
+import { getObjectValue } from 'pp365-shared-library/lib/helpers'
 import React, { FC } from 'react'
 import { find, isEmpty } from 'underscore'
 import { ProjectCard } from './ProjectCard'

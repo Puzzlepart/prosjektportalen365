@@ -7,9 +7,9 @@ import {
 import * as strings from 'PortfolioWebPartsStrings'
 import { IFilterProps } from 'components/FilterPanel'
 import _ from 'lodash'
-import { PortfolioOverviewView } from 'pp365-shared/lib/models/PortfolioOverviewView'
-import { ExcelExportService } from 'pp365-shared/lib/services'
-import { redirect } from 'pp365-shared/lib/util'
+import { PortfolioOverviewView } from 'pp365-shared-library/lib/models/PortfolioOverviewView'
+import { ExcelExportService } from 'pp365-shared-library/lib/services'
+import { redirect } from 'pp365-shared-library/lib/util'
 import React, { useCallback, useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import {

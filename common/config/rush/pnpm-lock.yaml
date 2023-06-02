@@ -33,7 +33,7 @@ dependencies:
   '@rush-temp/pp365-programwebparts': file:projects/pp365-programwebparts.tgz
   '@rush-temp/pp365-projectextensions': file:projects/pp365-projectextensions.tgz
   '@rush-temp/pp365-projectwebparts': file:projects/pp365-projectwebparts.tgz
-  '@rush-temp/pp365-shared': file:projects/pp365-shared.tgz
+  '@rush-temp/pp365-shared-library': file:projects/pp365-shared-library.tgz
   '@rush-temp/pp365-templates': file:projects/pp365-templates.tgz
   '@rushstack/eslint-config': 2.5.1_eslint@8.25.0+typescript@4.5.5
   '@types/array-sort': 1.0.0
@@ -44,16 +44,13 @@ dependencies:
   '@types/react-autocomplete': 1.8.6
   '@types/react-calendar-timeline': 0.26.0
   '@types/react-dom': 16.8.3
-  '@types/scriptjs': 0.0.2
   '@types/sharepoint': 2016.1.10
   '@types/underscore': 1.11.5
-  '@types/webpack-env': 1.18.0
   '@types/xmldom': 0.1.31
   '@typescript-eslint/eslint-plugin': 5.40.0_8aa46ed5a6d8d59b0c62bf61e7e2510c
   '@typescript-eslint/parser': 5.40.0_eslint@8.25.0+typescript@4.5.5
   '@uifabric/file-type-icons': 7.6.27_9c4969b3be2ea41c89422e6bb8d9a16e
   '@uifabric/utilities': 6.45.1_9c4969b3be2ea41c89422e6bb8d9a16e
-  ajv: 6.12.5
   array-sort: 1.0.0
   array-unique: 0.3.2
   chokidar-cli: 2.1.0
@@ -62,7 +59,6 @@ dependencies:
   concurrently: 7.4.0
   dom-to-image: 2.6.0
   dotenv: 16.0.3
-  es6-promise: 4.2.8
   eslint: 8.25.0
   eslint-config-prettier: 8.5.0_eslint@8.25.0
   eslint-plugin-prettier: 4.2.1_3d430c1653672911bd9e295f62a81c27
@@ -80,7 +76,6 @@ dependencies:
   moment: 2.11.1
   msgraph-helper: 0.8.3_9c4969b3be2ea41c89422e6bb8d9a16e
   object-assign: 4.1.1
-  object-get: 2.1.1
   pp365-portfoliowebparts: 1.9.0-1155.1_1ca3516818190f66f3253793862e2abe
   pp365-projectwebparts: 1.9.0-1155.1_1ca3516818190f66f3253793862e2abe
   prettier: 2.7.1
@@ -97,7 +92,6 @@ dependencies:
   rehype-raw: 6.1.1
   replace: 1.2.2
   resx-json-typescript-converter: 1.0.2
-  scriptjs: 2.5.9
   sp-entityportal-service: 1.3.3
   sp-js-provisioning: 1.1.4_1ca3516818190f66f3253793862e2abe
   spfx-jsom: 0.6.6_1ca3516818190f66f3253793862e2abe
@@ -2157,7 +2151,7 @@ packages:
     dependencies:
       es6-promise: 4.2.8
       isomorphic-fetch: 3.0.0
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     resolution:
       integrity: sha512-BQN50r3tohWYOaQ0de7LJ5eCRjI6eg4RQqLhGDlgRmZIZhWzH0bhR6QBMmmxtYtwKWifhPhJSxYDW+cP67TJVw==
@@ -4987,10 +4981,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-61MNgoBY6iEsHhFGiElSjEu8HbHOahJLGh9BdGSfzgAN+2qOuFJKuG3f7F+/ggKr+0yEM3Y4fCWAgxU6es0otg==
-  /@types/scriptjs/0.0.2:
-    dev: false
-    resolution:
-      integrity: sha512-GFrUgzGYfNX3VWZwMyzr0JrBwzLv5Kes4BQBvo6hXdRy14/GBbpCiVwwB7v1o2xIEvFf+9GyznmYhuesQQjSag==
   /@types/semver/7.3.5:
     dev: false
     resolution:
@@ -5081,6 +5071,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-oHyg0NssP2RCpCvE35hhbSqMJRsc5lSW+GFe+Vc65JL+kHII1VMYM+0KeV/z4utFuUqPoQRmq8KMMp7ba0dj6Q==
+  /@types/webpack-env/1.15.3:
+    dev: false
+    resolution:
+      integrity: sha512-5oiXqR7kwDGZ6+gmzIO2lTC+QsriNuQXZDWNYRV3l2XRN/zmPgnC21DLSx2D05zvD8vnXW6qUg7JnXZ4I6qLVQ==
   /@types/webpack-env/1.18.0:
     dev: false
     resolution:
@@ -14472,7 +14466,7 @@ packages:
       integrity: sha512-cdShb+N1H3OyR1y46ij6OO7QzeqC6BxrbrNcouS4JBrr1+DnZ55TumxQKEzWmTXHvsbsuz5PCyXZl812Un8L9g==
   /msal/1.4.12:
     dependencies:
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     engines:
       node: '>=0.8.0'
@@ -20928,7 +20922,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-portfolioextensions'
     resolution:
-      integrity: sha512-p3LkIrNLXeaAPLEVP/waiaON5IFT7xWPijO6F7zY9V3NiDVXTkFFLyzgs6g5TNeZStbirNMPU65iRefmIxfK4g==
+      integrity: sha512-UeMj6FHdaUBMX8romVr2L1yEFHchU0P4bY2XiP0IyyJh42IYn1mT15iE9tbgo5lvqIUcyG0EwKxNUhjGifRh3w==
       tarball: file:projects/pp365-portfolioextensions.tgz
     version: 0.0.0
   file:projects/pp365-portfoliowebparts.tgz:
@@ -21001,7 +20995,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-portfoliowebparts'
     resolution:
-      integrity: sha512-EG4GrQBsESPb8eQvup4eelY+cNkibviN12pj7X9qak+5OCkcOTqCodr/R+GgaGArNL00yNHuR8tCXMvvAWcQ/w==
+      integrity: sha512-d315R0TPK74Cf+9ZPSjIfJu0opFcrxzxayl8mI3T067G1f7VLttywjXpRyPBI+KyOmle/oT3T/Ty5BvMAI9dvQ==
       tarball: file:projects/pp365-portfoliowebparts.tgz
     version: 0.0.0
   file:projects/pp365-programwebparts.tgz:
@@ -21075,7 +21069,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-programwebparts'
     resolution:
-      integrity: sha512-R9/wWuyjcfEAP+kp1ifLmi8nHyK/8JZgL+8A9iGCL6KowhU5olzUje7XLOs/o4Hyuz7g4JDpyVWfGNIFZ0l45A==
+      integrity: sha512-y8rUVLnUiGnEo/1li9JLKdkzOHXZhl6SxcuGFmMsS0q6Gj53PG+fSQXiaG/lxDx3QCrWDUZ2fWOgDeo6P6WUSg==
       tarball: file:projects/pp365-programwebparts.tgz
     version: 0.0.0
   file:projects/pp365-projectextensions.tgz:
@@ -21142,7 +21136,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectextensions'
     resolution:
-      integrity: sha512-KGjfII0/a6g48UtXDlM7LxwtZiPSUvp5aihExkLHi1/cMbtJ2UfF4y8nI1hUZ4mU2oVbRx6qE3FtA8Q49t98sw==
+      integrity: sha512-Tc1b34nAvj0pdsDRi7TRQUC8R8Iljz/7YTGjdean2MLJQywmMp+dbzf8IAVwIM9IUEvsy9n94QXm4gEGI94vaA==
       tarball: file:projects/pp365-projectextensions.tgz
     version: 0.0.0
   file:projects/pp365-projectwebparts.tgz:
@@ -21222,16 +21216,19 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectwebparts'
     resolution:
-      integrity: sha512-1L2sb72qhauhEpAnHpns2ngRPharL4eM+2Z7sMGqsu3X+qKlfy+qqi1AvAwfJjvlrfX6SwltXLPbZ3tJKDuPJw==
+      integrity: sha512-L4hnJO/xv5sjPbXcwy3mxba5iD3lc61cKmryIcdXtbPfIOy9aGrnxgEfjeLzzf76FpcxzQD3Vn3d5owgbvlUMQ==
       tarball: file:projects/pp365-projectwebparts.tgz
     version: 0.0.0
-  file:projects/pp365-shared.tgz:
+  file:projects/pp365-shared-library.tgz:
     dependencies:
       '@fluentui/react': 8.98.1_9c4969b3be2ea41c89422e6bb8d9a16e
+      '@microsoft/rush-stack-compiler-4.5': 0.2.2
       '@microsoft/sp-application-base': 1.15.2_1ca3516818190f66f3253793862e2abe
+      '@microsoft/sp-build-web': 1.15.2
       '@microsoft/sp-core-library': 1.15.2
       '@microsoft/sp-listview-extensibility': 1.15.2_1ca3516818190f66f3253793862e2abe
       '@microsoft/sp-lodash-subset': 1.15.2
+      '@microsoft/sp-module-interfaces': 1.15.2
       '@microsoft/sp-page-context': 1.15.2
       '@microsoft/sp-webpart-base': 1.15.2_1ca3516818190f66f3253793862e2abe
       '@pnp/common': 1.3.8
@@ -21243,14 +21240,12 @@ packages:
       '@pnp/sp-taxonomy': 1.3.8_f441c4ed7afc3a82bcb936eabbdb3847
       '@types/react': 16.8.8
       '@types/react-dom': 16.8.3
-      '@types/scriptjs': 0.0.2
-      '@types/sharepoint': 2016.1.10
       '@types/underscore': 1.11.5
-      '@types/webpack-env': 1.18.0
+      '@types/webpack-env': 1.15.3
       '@types/xmldom': 0.1.31
       '@typescript-eslint/eslint-plugin': 5.40.0_8aa46ed5a6d8d59b0c62bf61e7e2510c
       '@typescript-eslint/parser': 5.40.0_eslint@8.25.0+typescript@4.5.5
-      es6-promise: 4.2.8
+      ajv: 6.12.6
       eslint: 8.25.0
       eslint-config-prettier: 8.5.0_eslint@8.25.0
       eslint-plugin-prettier: 4.2.1_3d430c1653672911bd9e295f62a81c27
@@ -21258,24 +21253,23 @@ packages:
       eslint-plugin-unused-imports: 2.0.0_2fd626d7c0aba593d41fbdd5d99bd644
       file-saver: 2.0.5
       gulp: 4.0.2
-      object-get: 2.1.1
       prettier: 2.7.1
       react: 16.13.1
       react-dom: 16.13.1_react@16.13.1
       react-markdown: 8.0.7_453b269bd7a8e2940a0e8fb00c615d82
       rehype-raw: 6.1.1
-      scriptjs: 2.5.9
       sp-entityportal-service: 1.3.3
       spfx-jsom: 0.6.6_1ca3516818190f66f3253793862e2abe
+      tslib: 2.3.1
       typescript: 4.5.5
       underscore: 1.13.6
       xlsx: 0.16.9
       xmldom: 0.6.0
     dev: false
-    name: '@rush-temp/pp365-shared'
+    name: '@rush-temp/pp365-shared-library'
     resolution:
-      integrity: sha512-LU1bMZUjO2sWmgDwR70SZwM9ICil873zHv0wqcEYnHXVaLpS6QFdogxTfbcpyieamkv5iAjnG76Yg+pv1S+B6g==
-      tarball: file:projects/pp365-shared.tgz
+      integrity: sha512-dt5kfvm0WdrsS97xW2ZpyVejbMXKoobwuXY5ttiAxSKYTb+bcBvz/5otNLEPFKG97jYJSdJvb4FAsBGCDSmzNw==
+      tarball: file:projects/pp365-shared-library.tgz
     version: 0.0.0
   file:projects/pp365-templates.tgz:
     dependencies:
@@ -21324,7 +21318,7 @@ specifiers:
   '@rush-temp/pp365-programwebparts': file:./projects/pp365-programwebparts.tgz
   '@rush-temp/pp365-projectextensions': file:./projects/pp365-projectextensions.tgz
   '@rush-temp/pp365-projectwebparts': file:./projects/pp365-projectwebparts.tgz
-  '@rush-temp/pp365-shared': file:./projects/pp365-shared.tgz
+  '@rush-temp/pp365-shared-library': file:./projects/pp365-shared-library.tgz
   '@rush-temp/pp365-templates': file:./projects/pp365-templates.tgz
   '@rushstack/eslint-config': 2.5.1
   '@types/array-sort': 1.0.0
@@ -21335,16 +21329,13 @@ specifiers:
   '@types/react-autocomplete': ^1.8.6
   '@types/react-calendar-timeline': 0.26.0
   '@types/react-dom': 16.8.3
-  '@types/scriptjs': ^0.0.2
   '@types/sharepoint': 2016.1.10
   '@types/underscore': 1.11.5
-  '@types/webpack-env': 1.18.0
   '@types/xmldom': ^0.1.29
   '@typescript-eslint/eslint-plugin': 5.40.0
   '@typescript-eslint/parser': 5.40.0
   '@uifabric/file-type-icons': 7.6.27
   '@uifabric/utilities': 6.45.1
-  ajv: 6.12.5
   array-sort: 1.0.0
   array-unique: 0.3.2
   chokidar-cli: ^2.1.0
@@ -21353,7 +21344,6 @@ specifiers:
   concurrently: 7.4.0
   dom-to-image: 2.6.0
   dotenv: 16.0.3
-  es6-promise: ^4.2.8
   eslint: 8.25.0
   eslint-config-prettier: 8.5.0
   eslint-plugin-prettier: 4.2.1
@@ -21371,7 +21361,6 @@ specifiers:
   moment: 2.11.1
   msgraph-helper: 0.8.3
   object-assign: 4.1.1
-  object-get: ^2.1.0
   pp365-portfoliowebparts: 1.9.0-1155.1
   pp365-projectwebparts: 1.9.0-1155.1
   prettier: 2.7.1
@@ -21388,7 +21377,6 @@ specifiers:
   rehype-raw: ^6.1.1
   replace: 1.2.2
   resx-json-typescript-converter: ^1.0.1
-  scriptjs: ^2.5.9
   sp-entityportal-service: 1.3.3
   sp-js-provisioning: 1.1.4
   spfx-jsom: 0.6.6

@@ -1,5 +1,5 @@
 import { format } from '@fluentui/react'
-import { PortalDataService } from 'pp365-shared/lib/services'
+import { PortalDataService } from 'pp365-shared-library/lib/services'
 import strings from 'ProjectWebPartsStrings'
 import { useContext } from 'react'
 import { ProjectStatusContext } from '../context'

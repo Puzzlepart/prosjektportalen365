@@ -1,5 +1,5 @@
 import { TooltipHost } from '@fluentui/react'
-import { ConditionalWrapper } from 'pp365-shared/lib/components'
+import { ConditionalWrapper } from 'pp365-shared-library/lib/components'
 import React, { FC, ReactNode, useContext } from 'react'
 import { SectionContext } from '../Sections/context'
 import styles from './StatusElement.module.scss'

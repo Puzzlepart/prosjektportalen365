@@ -1,4 +1,4 @@
-import { conditionalClassName as className } from 'pp365-shared/lib/util'
+import { conditionalClassName as className } from 'pp365-shared-library/lib/util'
 import React, { FC, useContext } from 'react'
 import { pick } from 'underscore'
 import { ProjectInformation } from '../../../ProjectInformation'

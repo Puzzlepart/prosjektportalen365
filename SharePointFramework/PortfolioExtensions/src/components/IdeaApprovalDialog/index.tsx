@@ -15,7 +15,7 @@ import {
   MessageBarType
 } from '@fluentui/react'
 import strings from 'PortfolioExtensionsStrings'
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
+import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 
 interface IDialogContentProps {
   close: () => void

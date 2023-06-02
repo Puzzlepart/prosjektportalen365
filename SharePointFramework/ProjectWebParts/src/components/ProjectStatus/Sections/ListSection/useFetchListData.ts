@@ -1,7 +1,7 @@
 import { IColumn } from '@fluentui/react'
 import { CamlQuery, Web } from '@pnp/sp'
 import _ from 'lodash'
-import { SPField } from 'pp365-shared/lib/models'
+import { SPField } from 'pp365-shared-library/lib/models'
 import { useContext } from 'react'
 import { ProjectStatusContext } from '../../context'
 import { SectionContext } from '../context'
