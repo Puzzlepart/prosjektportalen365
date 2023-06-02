@@ -6,7 +6,7 @@ _Due to the number of components, we decided to separate the components into 5 d
 
 Shared code for the SharePoint Framework solutions in Prosjektportalen 365.
 
-Watch changes with npm scriot `watch`.
+Watch changes with npm script `watch`.
 
 _Published to **npm** as `pp365-shared`_
 
@@ -18,7 +18,7 @@ _Published to **npm** as `pp365-shared`_
 
 Extension for the `portfolio` level of the portal.
 
-Watch changes with npm scriot `watch`.
+Watch changes with npm script `watch`.
 
 To package and deploy directly to SharePoint, see `2. Build, package and deploy`.
 
@@ -32,7 +32,7 @@ _Published to **npm** as `pp365-portfolioextensions`_
 
 Web parts for portfolio level of the portal.
 
-Watch changes with npm scriot `watch`.
+Watch changes with npm script `watch`.
 
 To package and deploy directly to SharePoint, see `2. Build, package and deploy`.
 
@@ -46,7 +46,7 @@ _Published to **npm** as `pp365-projectwebparts`_
 
 Web parts for project level of the portal.
 
-Watch changes with npm scriot `watch`.
+Watch changes with npm script `watch`.
 
 To package and deploy directly to SharePoint, see `2. Build, package and deploy`.
 
@@ -60,7 +60,7 @@ _Published to **npm** as `pp365-programwebparts`_
 
 Extension for the project level of the portal.
 
-Watch changes with npm scriot `watch`.
+Watch changes with npm script `watch`.
 
 To package and deploy directly to SharePoint, see `2. Build, package and deploy`.
 
@@ -74,7 +74,7 @@ _Published to **npm** as `pp365-projectextensions`_
 
 Web parts for `project` level of the portal.
 
-Watch changes with npm scriot `watch`.
+Watch changes with npm script `watch`.
 
 To package and deploy directly to SharePoint, see `2. Build, package and deploy`.
 
