@@ -20,3 +20,5 @@ if (process.env.SERVE_CHANNEL && process.env.SERVE_CHANNEL !== 'main') {
 
     require('./modifySolutionFiles')
 }
+
+require('./setBundleConfig')

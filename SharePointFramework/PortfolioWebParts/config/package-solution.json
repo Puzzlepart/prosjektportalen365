@@ -1,8 +1,8 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "Prosjektportalen 365 - Portfolio Web Parts",
-    "id": "00483367-68e2-4977-9cc3-6cf0de623daa",
+    "name": "Prosjektportalen 365 - Portfolio Web Parts - test",
+    "id": "65422576-0c56-48e2-8a84-1a192685ceee",
     "version": "1.9.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
@@ -21,6 +21,6 @@
     }
   },
   "paths": {
-    "zippedPackage": "solution/pp-portfolio-web-parts.sppkg"
+    "zippedPackage": "solution/pp-portfolio-web-parts-test.sppkg"
   }
 }
