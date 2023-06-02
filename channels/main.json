@@ -64,7 +64,7 @@
         }
       },
       "shared-library": {
-        "id": "b69cb2f2-762d-425d-8e0b-d59c08918831",
+        "id": "805f6b14-7638-4e7f-8adb-f3927ebda6b8",
         "name": "Prosjektportalen 365 - Shared Library",
         "zippedPackage": "solution/pp-shared-library.sppkg",
         "components": {
