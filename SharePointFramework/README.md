@@ -114,6 +114,16 @@ To work with the various solutions, you have to to the following
 1. Ensure you have `npm` installed
 2. If you have `rush` installed run `rush update && rush build` (or use npm script `spfx:init` in the root of the project`
 
+## Updates to shared-library
+If you have changes in `shared-library` that you want to take effect in a solution dependent on it, you can use `rush rebuild`.
+
+Run the following to only rebuild `pp365-shared-library`:
+```pwsh
+rush rebuild -o pp365-shared-library
+```
+
+_It shouldn't take more than 30 seconds._
+
 ## Watch configuration and channels
 If you want to watch/serve changes for a specific channel, you can set `SERVE_CHANNEL` in the `.env` file of your solution.
 
