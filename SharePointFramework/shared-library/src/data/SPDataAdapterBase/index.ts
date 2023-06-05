@@ -1,33 +1,27 @@
+import { format } from '@fluentui/react'
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
 import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
 import { SPUser } from '@microsoft/sp-page-context'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { dateAdd, PnPClientStorage, PnPClientStore } from '@pnp/common'
-import '@pnp/polyfill-ie11'
-import { sp, SPConfiguration, SPRest, Web, PermissionKind } from '@pnp/sp'
-import { format } from '@fluentui/react'
+import { dateAdd, IPnPClientStore, PnPClientStorage } from '@pnp/core'
+import { spfi, SPFI, SPFx } from '@pnp/sp'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import _ from 'underscore'
 import { ProjectAdminRoleType } from '../../models'
 import { PortalDataService } from '../../services/PortalDataService'
 import { ISPDataAdapterBaseConfiguration } from './ISPDataAdapterBaseConfiguration'
 import { ProjectAdminPermission } from './ProjectAdminPermission'
+import '@pnp/sp/presets/all'
+import { IWeb, PermissionKind } from '@pnp/sp/presets/all'
 
 export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
-  public spConfiguration: SPConfiguration = {
-    defaultCachingStore: 'session',
-    defaultCachingTimeoutSeconds: 90,
-    enableCacheExpiration: true,
-    cacheExpirationIntervalMilliseconds: 2500,
-    globalCacheDisable: false
-  }
   public settings: T
   public portal: PortalDataService
   public entityService: SpEntityPortalService
-  public sp: SPRest
+  public sp: SPFI
   public isConfigured: boolean = false
   public spfxContext: ApplicationCustomizerContext | ListViewCommandSetContext | WebPartContext
-  private _storage: PnPClientStore
+  private _storage: IPnPClientStore
   private _storageKeys: Record<string, string> = {
     getProjectAdminPermissions: '{0}_project_admin_permissions'
   }
@@ -62,8 +56,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   public async configure(spfxContext: any, settings: T) {
     this.spfxContext = spfxContext
     this.settings = settings
-    sp.setup({ spfxContext, ...this.spConfiguration })
-    this.sp = sp
+    this.sp = spfi().using(SPFx(spfxContext))
     this.portal = await new PortalDataService().configure({
       pageContext: spfxContext.pageContext
     })
@@ -85,7 +78,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
    */
   private async getCurrentUser(user: SPUser) {
     try {
-      const { data: currentUser } = await sp.web.ensureUser(user.loginName ?? user.email)
+      const { data: currentUser } = await this.sp.web.ensureUser(user.loginName ?? user.email)
       return currentUser
     } catch {
       return null
@@ -116,7 +109,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
           const userPermissions = []
           const rolesToCheck = properties.GtProjectAdminRoles
           if (!_.isArray(rolesToCheck) || _.isEmpty(rolesToCheck)) {
-            const currentUserHasManageWebPermisson = await sp.web.currentUserHasPermissions(
+            const currentUserHasManageWebPermisson = await this.sp.web.currentUserHasPermissions(
               PermissionKind.ManageWeb
             )
             if (currentUserHasManageWebPermisson) return true
@@ -130,7 +123,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
             switch (role.type) {
               case ProjectAdminRoleType.SiteAdmin:
                 {
-                  const currentUserHasManageWebPermisson = await sp.web.currentUserHasPermissions(
+                  const currentUserHasManageWebPermisson = await this.sp.web.currentUserHasPermissions(
                     PermissionKind.ManageWeb
                   )
                   if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
@@ -150,10 +143,10 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                 break
               case ProjectAdminRoleType.SharePointGroup:
                 {
-                  let web: Web = null
+                  let web: IWeb = null
                   switch (role.groupLevel) {
                     case 'Prosjekt':
-                      web = sp.web
+                      web = this.sp.web
                       break
                     case 'Portefølje':
                       web = this.portal.web
@@ -164,8 +157,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                       (
                         await web.siteGroups
                           .getByName(role.groupName)
-                          .users.filter(`Email eq '${currentUser.Email}'`)
-                          .get()
+                          .users.filter(`Email eq '${currentUser.Email}'`)()
                       ).length > 0
                     )
                       userPermissions.push(...role.permissions)
