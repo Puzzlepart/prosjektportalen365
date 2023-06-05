@@ -1,4 +1,3 @@
-import { TypedHash } from '@pnp/common'
 import { IEntityField } from 'sp-entityportal-service'
 
 export interface IGetPropertiesData {
@@ -15,12 +14,12 @@ export interface IGetPropertiesData {
   /**
    * Field values
    */
-  fieldValues?: TypedHash<any>
+  fieldValues?: Record<string, any>
 
   /**
    * Field values as text
    */
-  fieldValuesText?: TypedHash<string>
+  fieldValuesText?: Record<string, string>
 
   /**
    * Entity fields
@@ -35,5 +34,5 @@ export interface IGetPropertiesData {
   /**
    *
    */
-  templateParameters?: TypedHash<any>
+  templateParameters?: Record<string, any>
 }

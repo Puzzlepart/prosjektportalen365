@@ -1,4 +1,3 @@
-import { TypedHash } from '@pnp/common'
 import { ChecklistItemModel } from './ChecklistItemModel'
 
 export type ProjectPhaseChecklistData = {
@@ -25,7 +24,7 @@ export class ProjectPhaseModel {
     public name: string,
     termId: string,
     checklistData: ProjectPhaseChecklistData,
-    public properties: TypedHash<any>
+    public properties: Record<string, any>
   ) {
     this.id = termId.substring(6, 42)
     this.checklistData = checklistData || { stats: {}, items: [] }

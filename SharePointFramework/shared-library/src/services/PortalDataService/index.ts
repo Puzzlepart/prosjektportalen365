@@ -1,8 +1,7 @@
 /* eslint-disable no-console */
 import { find } from '@microsoft/sp-lodash-subset'
-import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/common'
+import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
 import { Logger, LogLevel } from '@pnp/logging'
-import { CamlQuery, Folder, ListEnsureResult, PermissionKind, sp, Web } from '@pnp/sp'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { transformFieldXml } from '../../helpers/transformFieldXml'
@@ -27,10 +26,11 @@ import {
   PortalDataServiceDefaultConfiguration,
   PortalDataServiceList
 } from './types'
+import { IWeb, spfi } from '@pnp/sp/presets/all'
 
 export class PortalDataService {
   private _configuration: IPortalDataServiceConfiguration
-  public web: Web
+  public web: IWeb
   public url: string
 
   /**
@@ -82,7 +82,7 @@ export class PortalDataService {
           },
           expire
         )
-        return { url: SiteUrl, web: new Web(SiteUrl) }
+        return { url: SiteUrl, web: spfi() }
       }
     } catch (err) {
       throw err

@@ -21364,6 +21364,7 @@ packages:
       '@pnp/core': 3.15.0
       '@pnp/logging': 3.15.0
       '@pnp/polyfill-ie11': 1.0.2_a7629e8d20229a3725e3d43015ef669c
+      '@pnp/queryable': 3.15.0
       '@pnp/sp': 3.15.0
       '@pnp/sp-taxonomy': 1.3.8_85705db0304b2dbe135f68cd76214330
       '@types/react': 16.8.8
@@ -21402,7 +21403,7 @@ packages:
       '@pnp/odata': '*'
       '@pnp/sp-clientsvc': '*'
     resolution:
-      integrity: sha512-KaV/vIe7YjOMPKvoVNcrCcydpRUnCRni4V6G9rjYMvjoF0EgpXwkMNAroafBYoCqf6QzgqwHy52r7q5iQDniJg==
+      integrity: sha512-NV2nkP5ce9Y4H2QvV6q33sR6EY0xS7R5y3BC9kD5rDmlOJKl7rp2WMEq2n7B9PTSO49Uk4yU5qtzhTpadHAsVQ==
       tarball: file:projects/pp365-shared-library.tgz
     version: 0.0.0
   file:projects/pp365-spfx-tasks.tgz:

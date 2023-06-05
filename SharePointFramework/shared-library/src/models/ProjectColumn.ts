@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import { IColumn } from '@fluentui/react'
 import { pick } from 'underscore'
 import { SearchValueType } from '../types/SearchValueType'
