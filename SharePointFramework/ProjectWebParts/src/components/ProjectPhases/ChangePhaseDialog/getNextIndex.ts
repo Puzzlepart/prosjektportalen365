@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { ChecklistItemModel } from 'pp365-shared/lib/models'
+import { ChecklistItemModel } from 'pp365-shared-library/lib/models'
 import * as strings from 'ProjectWebPartsStrings'
 
 /**

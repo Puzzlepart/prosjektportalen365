@@ -4,7 +4,7 @@ import { IFilterProps } from 'components/FilterPanel'
 import { IDataAdapter } from 'data/types'
 import { IAggregatedListConfiguration } from 'interfaces'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
-import { DataSource } from 'pp365-shared/lib/models/DataSource'
+import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
 import { IBaseComponentProps } from '../types'
 
 export class PortfolioAggregationErrorMessage extends Error {

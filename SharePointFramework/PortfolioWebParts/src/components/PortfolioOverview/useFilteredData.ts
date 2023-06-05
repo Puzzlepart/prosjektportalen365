@@ -1,7 +1,7 @@
 import { IGroup } from '@fluentui/react'
 import { get } from '@microsoft/sp-lodash-subset'
 import strings from 'PortfolioWebPartsStrings'
-import { ProjectColumn } from 'pp365-shared/lib/models'
+import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
 import sortArray from 'array-sort'
 import _ from 'underscore'

@@ -255,6 +255,37 @@
                                 "zippedPackage",
                                 "components"
                             ]
+                        },
+                        "shared-library": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "$ref": "#/definitions/guid"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "zippedPackage": {
+                                    "$ref": "#/definitions/sppkg"
+                                },
+                                "components": {
+                                    "type": "object",
+                                    "properties": {
+                                        "SharedLibrary": {
+                                            "$ref": "#/definitions/guid"
+                                        }
+                                    },
+                                    "required": [
+                                        "SharedLibrary"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "name",
+                                "zippedPackage",
+                                "components"
+                            ]
                         }
                     },
                     "required": [

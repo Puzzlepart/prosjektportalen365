@@ -1,0 +1,2 @@
+require('./modifySolutionFiles')
+require('./setBundleConfig')

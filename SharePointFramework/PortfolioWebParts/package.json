@@ -15,7 +15,9 @@
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
     "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
-    "publish:temp": "npm install && npm run build && npm publish --tag temp"
+    "publish:temp": "npm install && npm run build && npm publish --tag temp",
+    "prewatch": "node ../.tasks/pre-watch.js",
+    "postwatch": "node ../.tasks/post-watch.js"
   },
   "dependencies": {
     "@fluentui/react": "8.98.1",
@@ -46,7 +48,7 @@
     "moment": "2.11.1",
     "msgraph-helper": "0.8.3",
     "object-assign": "4.1.1",
-    "pp365-shared": "1.9.0",
+    "pp365-shared-library": "1.9.0",
     "react": "16.13.1",
     "react-calendar-timeline": "0.27.0",
     "react-dom": "16.13.1",
@@ -72,7 +74,7 @@
     "@typescript-eslint/parser": "5.40.0",
     "ajv": "6.12.5",
     "concurrently": "7.4.0",
-    "dotenv": "16.0.3",
+    "dotenv": "~16.1.3",
     "eslint": "8.25.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.2.1",

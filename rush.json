@@ -13,8 +13,8 @@
     },
     "projects": [
         {
-            "packageName": "pp365-shared",
-            "projectFolder": "SharePointFramework/@Shared"
+            "packageName": "pp365-shared-library",
+            "projectFolder": "SharePointFramework/shared-library"
         },
         {
             "packageName": "pp365-portfolioextensions",
@@ -49,6 +49,10 @@
         {
             "packageName": "pp365-templates",
             "projectFolder": "Templates"
+        },
+        {
+            "packageName": "pp365-spfx-tasks",
+            "projectFolder": "SharePointFramework/.tasks"
         }
     ]
 }

@@ -1,6 +1,6 @@
 import { IColumn } from '@fluentui/react'
 import _ from 'lodash'
-import { getObjectValue as get } from 'pp365-shared/lib/helpers'
+import { getObjectValue as get } from 'pp365-shared-library/lib/helpers'
 import { useContext, useEffect, useState } from 'react'
 import { UncertaintyElementModel } from '../../../../models'
 import { ProjectStatusContext } from '../../context'

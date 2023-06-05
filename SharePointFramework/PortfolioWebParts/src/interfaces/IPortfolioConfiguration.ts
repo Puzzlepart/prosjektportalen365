@@ -1,5 +1,5 @@
 import { ProgramItem } from 'models/ProgramItem'
-import { ProjectColumn, PortfolioOverviewView } from 'pp365-shared/lib/models'
+import { ProjectColumn, PortfolioOverviewView } from 'pp365-shared-library/lib/models'
 
 export interface IPortfolioConfiguration {
   /**

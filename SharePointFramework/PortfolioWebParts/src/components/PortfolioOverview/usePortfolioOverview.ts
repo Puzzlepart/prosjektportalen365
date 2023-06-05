@@ -1,6 +1,6 @@
 import { Selection } from '@fluentui/react'
 import { useId } from '@fluentui/react-hooks'
-import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
+import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { useMemo, useReducer } from 'react'
 import { IPortfolioOverviewContext } from './context'
 import createReducer, { initState, SELECTION_CHANGED } from './reducer'

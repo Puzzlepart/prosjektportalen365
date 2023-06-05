@@ -11,8 +11,8 @@ import {
   SelectionMode,
   ShimmeredDetailsList
 } from '@fluentui/react'
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
-import { ProjectColumn } from 'pp365-shared/lib/models'
+import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
+import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import React, { FC } from 'react'
 import { PortfolioOverviewContext } from './context'
 import { ListHeader } from './ListHeader'

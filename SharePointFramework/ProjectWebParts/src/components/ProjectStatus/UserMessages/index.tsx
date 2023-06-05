@@ -1,5 +1,5 @@
 import { Shimmer } from '@fluentui/react'
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
+import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { any } from 'underscore'

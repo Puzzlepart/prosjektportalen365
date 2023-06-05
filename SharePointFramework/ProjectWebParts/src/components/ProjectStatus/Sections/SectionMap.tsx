@@ -1,4 +1,4 @@
-import { SectionType } from 'pp365-shared/lib/models'
+import { SectionType } from 'pp365-shared-library/lib/models'
 import React from 'react'
 import { ListSection } from './ListSection'
 import { ProjectPropertiesSection } from './ProjectPropertiesSection'

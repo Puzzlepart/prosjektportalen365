@@ -1,6 +1,5 @@
 import { MessageBar } from '@fluentui/react'
-import * as React from 'react'
-import { FC } from 'react'
+import React, { FC } from 'react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import { IUserMessageProps } from './types'

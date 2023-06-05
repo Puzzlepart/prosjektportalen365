@@ -1,10 +1,10 @@
 import SPDataAdapter from '../../data'
-import { ProjectPhaseModel } from 'pp365-shared/lib/models'
+import { ProjectPhaseModel } from 'pp365-shared-library/lib/models'
 import { changeWelcomePage } from './changeWelcomePage'
 import { runPhaseHook } from './runPhaseHook'
 import { modifyCurrentPhaseView } from './modifyCurrentPhaseView'
 import { IPhaseSitePageModel, IProjectPhasesProps } from './types'
-import { ListLogger } from 'pp365-shared/lib/logging'
+import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { ProjectPhases } from '.'
 import strings from 'ProjectWebPartsStrings'
 

@@ -1,6 +1,6 @@
 import { ChartData, ChartDataItem } from 'models'
 import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar'
-import { PortfolioOverviewView } from 'pp365-shared/lib/models'
+import { PortfolioOverviewView } from 'pp365-shared-library/lib/models'
 import React, { Component } from 'react'
 import Chart from './Chart'
 import { Commands } from './Commands'

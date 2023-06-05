@@ -5,8 +5,8 @@ import {
   CommandBar
 } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import ExcelExportService from 'pp365-shared/lib/services/ExcelExportService'
-import { redirect } from 'pp365-shared/lib/util'
+import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
+import { redirect } from 'pp365-shared-library/lib/util'
 import React, { FC, useContext } from 'react'
 import { isEmpty } from 'underscore'
 import { PortfolioAggregationContext } from '../context'

@@ -1,5 +1,5 @@
 import { Persona, PersonaPresence, PersonaSize } from '@fluentui/react/lib/Persona'
-import { ProjectColumn } from 'pp365-shared/lib/models'
+import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import React, { FC } from 'react'
 import { SearchValueType } from 'types'
 import { IRenderItemColumnProps } from '../types'

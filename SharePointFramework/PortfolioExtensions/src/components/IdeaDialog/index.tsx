@@ -11,7 +11,7 @@ import {
   format
 } from '@fluentui/react'
 import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog'
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
+import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import strings from 'PortfolioExtensionsStrings'
 
 interface IDialogContentProps {

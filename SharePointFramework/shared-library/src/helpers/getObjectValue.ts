@@ -1,4 +1,4 @@
-import * as objectGet from 'object-get'
+import { get } from '@microsoft/sp-lodash-subset'
 
 /**
  * Retrieves a value from the object using an expression, a fallback value must be specified
@@ -8,5 +8,5 @@ import * as objectGet from 'object-get'
  * @param fallback Fallback
  */
 export function getObjectValue<T>(object: any, expression: string, fallback: T): T {
-  return objectGet(object, expression) || fallback
+  return get(object, expression) || fallback
 }

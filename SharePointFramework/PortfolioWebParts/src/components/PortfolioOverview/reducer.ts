@@ -13,7 +13,7 @@ import {
   PortfolioOverviewView,
   ProjectColumn,
   ProjectColumnCustomSort
-} from 'pp365-shared/lib/models'
+} from 'pp365-shared-library/lib/models'
 import _ from 'underscore'
 import { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
 

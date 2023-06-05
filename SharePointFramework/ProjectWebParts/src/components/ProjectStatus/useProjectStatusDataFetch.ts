@@ -1,6 +1,6 @@
 import { LogLevel } from '@pnp/logging'
 import { AnyAction } from '@reduxjs/toolkit'
-import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
+import { ProjectAdminPermission } from 'pp365-shared-library/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import strings from 'ProjectWebPartsStrings'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
@@ -8,8 +8,8 @@ import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { INIT_DATA } from './reducer'
 import { IProjectStatusData, IProjectStatusHashState, IProjectStatusProps } from './types'
 import _ from 'lodash'
-import { parseUrlHash, getUrlParam } from 'pp365-shared/lib/util'
-import { StatusReport } from 'pp365-shared/lib/models'
+import { parseUrlHash, getUrlParam } from 'pp365-shared-library/lib/util'
+import { StatusReport } from 'pp365-shared-library/lib/models'
 
 export type FetchDataResult = {
   data: IProjectStatusData

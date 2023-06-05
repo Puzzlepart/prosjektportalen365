@@ -2,13 +2,11 @@
 
 _Due to the number of components, we decided to separate the components into 5 different solutions._
 
-## [@Shared](./@Shared/README.md)
+## [shared-library](./shared-library/README.md)
 
 Shared code for the SharePoint Framework solutions in Prosjektportalen 365.
 
-Watch changes with npm script `watch`.
-
-_Published to **npm** as `pp365-shared`_
+_Published to **npm** as `pp365-shared-library`_
 
 ## [PortfolioExtensions](./PortfolioExtensions/README.md)
 
@@ -115,6 +113,23 @@ To work with the various solutions, you have to to the following
 
 1. Ensure you have `npm` installed
 2. If you have `rush` installed run `rush update && rush build` (or use npm script `spfx:init` in the root of the project`
+
+## Watch configuration and channels
+If you want to watch/serve changes for a specific channel, you can set `SERVE_CHANNEL` in the `.env` file of your solution.
+
+Then execute `npm run watch` as you normally do.
+
+## Only build specific components
+If you want to make the watch/serve quicker, you can set `SERVE_BUNDLE_REGEX` to filter the components you want to build.
+
+**Example:**
+
+```
+SERVE_CHANNEL=test
+SERVE_BUNDLE_REGEX=latest-projects-web-part
+```
+
+Only the `LatestProject` component will be built. The `config.json` will automatically be reverted when you cancel the watch script.
 
 # 4. Versioning
 Never update the version of the solutions independently. The version is automatically kept in sync with the other packages.

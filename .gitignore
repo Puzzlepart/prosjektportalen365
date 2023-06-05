@@ -4,7 +4,7 @@ Install/Scripts/UpgradeSites_Log*
 release/*
 SharePointFramework/**/.vscode/launch.json
 SharePointFramework/**/config/serve.json
-SharePointFramework/**/config/__config__temp.json
+SharePointFramework/**/config/config.json.bak
 SharePointFramework/**/.env
 Templates/Portfolio/*.txt
 Templates/Content/**/ProjectTemplates/*.txt

@@ -1,5 +1,5 @@
 import { sp } from '@pnp/sp'
-import { ProjectPhaseModel } from 'pp365-shared/lib/models'
+import { ProjectPhaseModel } from 'pp365-shared-library/lib/models'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { IPhaseSitePageModel } from './types'
 

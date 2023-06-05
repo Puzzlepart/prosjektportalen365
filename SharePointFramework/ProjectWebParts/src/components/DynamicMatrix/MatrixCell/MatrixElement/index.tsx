@@ -1,5 +1,5 @@
 import { TooltipHost } from '@fluentui/react'
-import { replaceTokens } from 'pp365-shared/lib/util'
+import { replaceTokens } from 'pp365-shared-library/lib/util'
 import React, { FC, useContext } from 'react'
 import { DynamicMatrixContext } from '../../context'
 import styles from './MatrixElement.module.scss'

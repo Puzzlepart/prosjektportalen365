@@ -1,9 +1,9 @@
 /* eslint-disable prefer-spread */
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import _ from 'lodash'
-import { IUserMessageProps } from 'pp365-shared/lib/components/UserMessage/types'
-import { SectionModel, StatusReport } from 'pp365-shared/lib/models'
-import { getUrlParam } from 'pp365-shared/lib/util'
+import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage/types'
+import { SectionModel, StatusReport } from 'pp365-shared-library/lib/models'
+import { getUrlParam } from 'pp365-shared-library/lib/util'
 import { IProjectStatusState } from './types'
 import { FetchDataResult } from './useProjectStatusDataFetch'
 

@@ -1,7 +1,7 @@
 import { CommandBar, format, MessageBar, MessageBarType } from '@fluentui/react'
 import moment from 'moment'
 import * as strings from 'PortfolioWebPartsStrings'
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
+import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import React, { FC } from 'react'
 import Timeline, { TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'

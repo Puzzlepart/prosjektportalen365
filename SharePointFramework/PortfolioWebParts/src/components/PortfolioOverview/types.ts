@@ -3,7 +3,7 @@ import {
   PortfolioOverviewView,
   ProjectColumn,
   ProjectColumnCustomSort
-} from 'pp365-shared/lib/models'
+} from 'pp365-shared-library/lib/models'
 import { IFilterProps } from '../FilterPanel'
 import { IBaseComponentProps } from '../types'
 import { WebPartContext } from '@microsoft/sp-webpart-base'

@@ -8,7 +8,7 @@ declare interface IPortfolioExtensionsStrings {
   LatestGitHubReleaseIsNewerText: any
   LatestGitHubReleaseIsOlderText: any
   LatestGitHubReleaseIsSameText: any
-  LatestGitHubReleaseLabel: string | number | boolean | {} | ReactElement<any, string | JSXElementConstructor<any>> | ReactNodeArray | ReactPortal
+  LatestGitHubReleaseLabel: string
   SetRecommendationTitle: string
   SetRecommendationSubtitle: string
   SetRecommendationDefaultDescription: string
