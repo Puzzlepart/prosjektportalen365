@@ -48,18 +48,33 @@ export class CopyListData extends BaseTask {
         switch (contentConfig.type) {
           case ContentConfigType.Planner:
             {
-              const items = await this._getSourceItems<IPlannerTaskSPItem>(contentConfig, [
+              const items = (await this._getSourceItems<IPlannerTaskSPItem>(contentConfig, [
                 'Title',
                 'GtDescription',
                 'GtCategory',
+                'GtSortOrder',
                 'GtChecklist',
+                'GtPlannerTags',
                 'GtAttachments',
                 'GtPlannerPreviewType'
-              ])
+              ])).sort((a, b) => {
+                if (a.GtCategory === b.GtCategory) {
+                  return b.GtSortOrder - a.GtSortOrder
+                }
+              })
+
+              const labels = _.uniq(
+                _.flatten(
+                  items.map((item) => {
+                    if (!stringIsNullOrEmpty(item.GtPlannerTags)) {
+                      return item.GtPlannerTags.split(';')
+                    }
+                  })
+                )
+              ).filter((label) => label)
+
               const configuration = this.parsePlannerConfiguration(items)
-              await new PlannerConfiguration(contentConfig.plannerTitle, this.data, configuration, [
-                'Metodikk'
-              ]).execute(params, onProgress)
+              await new PlannerConfiguration(contentConfig.plannerTitle, this.data, configuration, labels).execute(params, onProgress)
             }
             break
           case ContentConfigType.List:
@@ -87,18 +102,24 @@ export class CopyListData extends BaseTask {
       obj[item.GtCategory] = obj[item.GtCategory] || {}
       const taskDetails: ITaskDetails = {}
       taskDetails.previewType = 'automatic'
+      if (!stringIsNullOrEmpty(item.Title)) {
+        taskDetails.name = item.Title
+      }
       if (!stringIsNullOrEmpty(item.GtDescription)) {
         taskDetails.description = item.GtDescription
       }
       if (!stringIsNullOrEmpty(item.GtChecklist)) {
-        taskDetails.checklist = item.GtChecklist.split(';')
+        taskDetails.checklist = item.GtChecklist.replace(/\r?\n|\r/g, '').split(';')
+      }
+      if (!stringIsNullOrEmpty(item.GtPlannerTags)) {
+        taskDetails.labels = item.GtPlannerTags.replace(/\r?\n|\r/g, '').split(';')
       }
       if (!stringIsNullOrEmpty(item.GtAttachments)) {
         try {
-          taskDetails.attachments = item.GtAttachments.split('|')
+          taskDetails.attachments = item.GtAttachments.replace(/\r?\n|\r/g, '').split('|')
             .map((str) => new TaskAttachment(str))
             .filter((attachment) => !stringIsNullOrEmpty(attachment.url))
-        } catch (error) {}
+        } catch (error) { }
       }
       if (!stringIsNullOrEmpty(item.GtPlannerPreviewType)) {
         let m: RegExpExecArray
@@ -124,6 +145,7 @@ export class CopyListData extends BaseTask {
           title: params.context.pageContext.web.title,
           owner: params.context.pageContext.legacyPageContext.groupId
         },
+        params.context.pageContext,
         false
       )
     }
@@ -248,9 +270,8 @@ export class CopyListData extends BaseTask {
   ): Promise<void> {
     try {
       await folders.sort().reduce((chain: Promise<any>, folder, index: number) => {
-        const folderServerRelUrl = `${
-          config.destListProps.RootFolder.ServerRelativeUrl
-        }/${folder.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
+        const folderServerRelUrl = `${config.destListProps.RootFolder.ServerRelativeUrl
+          }/${folder.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
         this.onProgress(
           progressText,
           format(strings.ProcessFolderText, index + 1, folders.length),
@@ -303,9 +324,8 @@ export class CopyListData extends BaseTask {
       const filesCopied = []
       for (let i = 0; i < filesWithContents.length; i++) {
         const file = filesWithContents[i]
-        const destFolderUrl = `${
-          config.destListProps.RootFolder.ServerRelativeUrl
-        }${file.FileDirRef.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
+        const destFolderUrl = `${config.destListProps.RootFolder.ServerRelativeUrl
+          }${file.FileDirRef.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
         try {
           this.logInformation(`Copying file ${file.LinkFilename}`)
           this.onProgress(
@@ -319,7 +339,7 @@ export class CopyListData extends BaseTask {
             .files.add(filename, file.Blob, true)
           filesCopied.push(fileAddResult)
           this.logInformation(`Successfully copied file ${file.LinkFilename}`)
-        } catch (err) {}
+        } catch (err) { }
       }
       return filesCopied
     } catch (error) {

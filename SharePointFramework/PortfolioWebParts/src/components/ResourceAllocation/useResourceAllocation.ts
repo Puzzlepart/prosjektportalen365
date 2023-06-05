@@ -12,9 +12,9 @@ import { useResourceAllocationDataFetch } from './useResourceAllocationDataFetch
  * Component logic hook for `<ResourceAllocation />`. Handles
  * state, command bar, filters and data fetching using the
  * `useResourceAllocationDataFetch` and `useFilteredData` hooks.
- * 
+ *
  * @param props Props for the `<ResourceAllocation />` component
- * @returns 
+ * @returns
  */
 export function useResourceAllocation(props: IResourceAllocationProps) {
   moment.locale('nb')

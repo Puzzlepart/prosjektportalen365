@@ -11,9 +11,11 @@
                 </OrderBy>
             </Query>
             <ViewFields>
+                <FieldRef Name="GtSortOrder" />
                 <FieldRef Name="Title" />
                 <FieldRef Name="GtCategory" />
                 <FieldRef Name="GtChecklist" />
+                <FieldRef Name="GtPlannerTags" />
                 <FieldRef Name="GtAttachments" />
                 <FieldRef Name="GtPlannerPreviewType" />
                 <FieldRef Name="Modified" />
@@ -23,5 +25,8 @@
             <JSLink>clienttemplates.js</JSLink>
         </View>
     </pnp:Views>
+    <pnp:FieldRefs>
+        <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" DisplayName="{resource:SiteFields_GtSortOrder_DisplayName}" />
+    </pnp:FieldRefs>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>

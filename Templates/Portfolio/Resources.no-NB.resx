@@ -184,6 +184,12 @@
   <data name="Lists_ProjectStatus_Url" xml:space="preserve">
     <value>Lists/Prosjektstatus</value>
   </data>
+  <data name="Lists_ProjectStatusAttachments_Title" xml:space="preserve">
+    <value>Prosjektstatusvedlegg</value>
+  </data>
+  <data name="Lists_ProjectStatusAttachments_Url" xml:space="preserve">
+    <value>Prosjektstatusvedlegg</value>
+  </data>
   <data name="Lists_ProjectExtensions_Title" xml:space="preserve">
     <value>Prosjekttillegg</value>
   </data>
@@ -974,7 +980,7 @@
     <value>Vedlegg</value>
   </data>
   <data name="SiteFields_GtAttachments_Description" xml:space="preserve">
-    <value>Vedlegg til oppgaven. Skrives på formatet url;tittel;type. Separer verdier med |. Type kan f.eks. være PowerPoint, Word, Excel eller Other.</value>
+    <value>Vedlegg til oppgaven. Skrives på formatet url;tittel;type. Separer verdier med |. Type kan f.eks. være PowerPoint, Word, Excel eller Other. Maks antall vedlegg for en oppgave er 10, dersom dette overskrides blir de overskytende ikke med ved opprettelse.</value>
   </data>
   <data name="SiteFields_GtActionChannel_DisplayName" xml:space="preserve">
     <value>Kommunikasjonskanal</value>
@@ -1022,7 +1028,13 @@
     <value>Sjekkliste</value>
   </data>
   <data name="SiteFields_GtChecklist_Description" xml:space="preserve">
-    <value>Sjekkpunkter separert med semikolon.</value>
+    <value>Sjekkpunkter separert med semikolon. Makslengde på beskrivelse er 100 tegn og antall sjekkpunkter for en oppgave er 20, dersom dette overskrides blir de overskytende ikke med ved opprettelse.</value>
+  </data>
+  <data name="SiteFields_GtPlannerTags_DisplayName" xml:space="preserve">
+    <value>Etiketter</value>
+  </data>
+  <data name="SiteFields_GtPlannerTags_Description" xml:space="preserve">
+    <value>Etiketter separert med semikolon. Maks antall unike etiketter for en plan er 25, dersom dette overskrides blir de overskytende ikke med ved opprettelse.</value>
   </data>
   <data name="SiteFields_GtChecklistStatus_DisplayName" xml:space="preserve">
     <value>Status</value>
@@ -2637,11 +2649,5 @@
   </data>
   <data name="SiteFields_InstallUser_DisplayName" xml:space="preserve">
     <value>Installasjonsbruker</value>
-  </data>
-  <data name="SiteFields_GtSectionDataJson_DisplayName" xml:space="preserve">
-    <value>Seksjonsdata</value>
-  </data>
-  <data name="SiteFields_GtSectionDataJson_Description" xml:space="preserve">
-    <value></value>
   </data>
 </root>

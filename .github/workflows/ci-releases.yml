@@ -3,7 +3,7 @@ name: CI (releases/*)
 on:
   push:
     branches:
-      - releases/*
+      - releases/1.8
     paths:
       - "SharePointFramework/**"
       - "Install/**"
@@ -28,10 +28,9 @@ jobs:
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
-      - name: Setup Node.js 16.18.0
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 16.18.0
+          node-version: ${{ vars.NODE_VERSION }}
 
       - name: Run Install/Build-Release.ps1 in CI mode
         run: Install/Build-Release.ps1 -CI -SkipBundle

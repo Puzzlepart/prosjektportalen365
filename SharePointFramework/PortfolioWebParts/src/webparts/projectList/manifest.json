@@ -3,7 +3,7 @@
   "id": "54fbeb7d-e463-4dcc-8873-50a3ab2f0f68",
   "alias": "ProjectListWebPart",
   "componentType": "WebPart",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": true,
@@ -25,7 +25,7 @@
       "officeFabricIconFontName": "ViewListGroup",
       "properties": {
         "sortBy": "Title",
-        "renderAs": "tiles",
+        "defaultRenderMode": "tiles",
         "showProjectOwner": true,
         "showProjectManager": true,
         "defaultView": "my_projects",

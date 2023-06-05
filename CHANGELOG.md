@@ -1,27 +1,52 @@
 Formatet er basert på [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detaljert 'endringslogg' for siste versjon.
+Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detaljert 'endringslogg' for siste hovedversjon.
 
-## 1.8.1 - TBA
+## 1.8.2 - TBA
 
 ### Ny funksjonalitet
 
 ### Forbedringer
 
-- Dersom bruker har "Full kontroll" tilgangsnivå på området får bruker fulle rettigheter på området [#1054](https://github.com/Puzzlepart/prosjektportalen365/issues/1054)
-- Tilgang for å opprette porteføljeoversikt-visninger er nå basert på tilgang til listen [#932](https://github.com/Puzzlepart/prosjektportalen365/issues/932)
-- Alfabetisk sortering av filterverdier for Ressursallokering [#1059](https://github.com/Puzzlepart/prosjektportalen365/issues/1059)
-- Håndterer ugyldig låst mal (i property bag) i prosjektoppsettet [#1057](https://github.com/Puzzlepart/prosjektportalen365/issues/1057)
-- Fiks for doble scrollbars på hjelpeinnhold-vindu [#997](https://github.com/Puzzlepart/prosjektportalen365/issues/997)
+- Lagt inn nye knapper på 'Konfigurasjon' siden for Prosjektportalen (Prosjekter, Prosjektstatus og Tidslinjeinnhold), samt skjult 'Maloppsett' og 'Tidslinjeinnhold' fra områderinnhold [#1072](https://github.com/Puzzlepart/prosjektportalen365/issues/1072)
+- Lagt inn mulighet for å angi sortering på Planner oppgaver som provisjoneres [#1056](https://github.com/Puzzlepart/prosjektportalen365/issues/1056)
+- Porteføljeoversikt: vis personlige visninger som egen "seksjon" [#1045](https://github.com/Puzzlepart/prosjektportalen365/issues/1045)
+- Endret feltet GtSearchQuery til Note for å støtte lange spørringer. NB: Vil ikke endres gjennom oppgradering. Endre manuelt felttype til "Flere linjer med tekst" ved behov. [#970](https://github.com/Puzzlepart/prosjektportalen365/issues/970)
+- Endra standardsortering av dokumentbiblioteker til å sortere på filnavn (var "Ingen" før)
 
 ### Feilrettinger
 
-- Fikset et problem i oppgraderingsskript der noen tenants ikke kunne hente alle hub children
-- Fikset et problem hvor kommandolinje ikke ble vist som standard [#1042](https://github.com/Puzzlepart/prosjektportalen365/issues/1042)
-- Fikset et problem som noen gang oppstod under kopering av fasesjekkliste-elementer med valgt fase [#1052](https://github.com/Puzzlepart/prosjektportalen365/issues/1052)
-- Fikset problem hvor det ikke var mulig å synkronisere data fra 'Prosjektdata' listen (Idebehandling)
-- Fikset manglende termset for FNs bærekraftsmål [#1058](https://github.com/Puzzlepart/prosjektportalen365/issues/1058)
+- Fiks for uthenting av prosjektinformasjon for brukere uten tilgang til hubområdet [#1080](https://github.com/Puzzlepart/prosjektportalen365/issues/1080)
+- Håndterer deaktiverte/stengte kontoer i kopiering av tillatelseskonfigurasjon [#1085](https://github.com/Puzzlepart/prosjektportalen365/issues/1085)
+- Fiks for feil som noen ganger kunne oppstå i Prosjektinformasjon-webdelen [#1086](https://github.com/Puzzlepart/prosjektportalen365/issues/1086)
+- Fiks for Gevinstoversikt på prosjektnivå [#1095](https://github.com/Puzzlepart/prosjektportalen365/issues/1095)
+- Aggregerte oversikter henter nå ut alle elementer - tidligere ble det kun hentet maksimalt 500 [#1099](https://github.com/Puzzlepart/prosjektportalen365/issues/1099)
+- Fikset problem dersom det ble oppgitt for mange vedlegg eller sjekkpunkter i planneroppgaver og innhold manglet [#1039](https://github.com/Puzzlepart/prosjektportalen365/issues/1039)
+  - Det loggføres i `Logg` listen dersom begrensninger er nådd.
+- Fiks for #1049 (feil ved publisering av statusrapporter) [#1049](https://github.com/Puzzlepart/prosjektportalen365/issues/1049)
+- Oppgraderingsoperasjonene som kjører før oppgradering varsler nå om feil, og det ble rettet feil som gjorde at oppgradering i 1.8.0 og 1.8.1 ikke fungerte fullstendig [#1094](https://github.com/Puzzlepart/prosjektportalen365/issues/1094)
+- Fikset et problem hvor "Vis i statusseksjonen" verdien ikke ble overholdt i visning av statusseksjoner
+
+## 1.8.1 - 31.03.2023
+
+### Forbedringer
+
+- Dersom bruker har "Full kontroll" tilgangsnivå på området får bruker fulle rettigheter på området [#1054](https://github.com/Puzzlepart/prosjektportalen365/issues/1054)
+- Tilgang for å opprette porteføljeoversikt-visninger er nå basert på tilgang til listen [#932](https://github.com/Puzzlepart/prosjektportalen365/issues/932)
+- Alfabetisk sortering av filterverdier for ressursallokering [#1059](https://github.com/Puzzlepart/prosjektportalen365/issues/1059)
+- Håndterer ugyldig låst mal (i property bag) i prosjektoppsettet [#1057](https://github.com/Puzzlepart/prosjektportalen365/issues/1057)
+- Fjerning av unødvendig ekstra scrollbar på hjelpeinnholdsvinduet [#997](https://github.com/Puzzlepart/prosjektportalen365/issues/997)
+
+### Feilrettinger
+
+- Rettet feil i oppgraderingsskriptet der noen tenants ikke kunne hente alle hub children [#1041](https://github.com/Puzzlepart/prosjektportalen365/pull/1041)
+- Rettet feil hvor kommandolinjen ikke ble vist som standard [#1042](https://github.com/Puzzlepart/prosjektportalen365/issues/1042)
+- Rettet feil ved provisjonering av Bygg- og anleggsprosjekter dersom Fasesjekkliste var valgt [#1052](https://github.com/Puzzlepart/prosjektportalen365/issues/1052)
+- Rettet feil hvor det ikke var mulig å synkronisere data fra 'Prosjektdata'-listen  (Idébehandling) [#1048](https://github.com/Puzzlepart/prosjektportalen365/pull/1048)
+- Rettet feil hvor termset for `FNs bærekraftsmål` manglet [#1058](https://github.com/Puzzlepart/prosjektportalen365/issues/1058)
+
+---
 
 ## 1.8.0 - 28.02.2023
 
@@ -38,7 +63,7 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Støtte for flere Planner planer per prosjekt [#906](https://github.com/Puzzlepart/prosjektportalen365/issues/906)
 - Støtte for etikett på prosjektleveranser - tidslinje [#917](https://github.com/Puzzlepart/prosjektportalen365/issues/917)
 - Dynamisk risiko- og mulighetsmatrise: Konfigurasjon av størrelse, farger osv... [#433](https://github.com/Puzzlepart/prosjektportalen365/issues/433)
-- Lagt til nye felter for muligheter (status og kommentar), til prosjektstatus listen med tilhørende statusrapport seksjon 'Muligheter' . [#499](https://github.com/Puzzlepart/prosjektportalen365/issues/#499)
+- Lagt til nye felter for muligheter (status og kommentar), til prosjektstatus listen med tilhørende statusrapport seksjon 'Muligheter' [#499](https://github.com/Puzzlepart/prosjektportalen365/issues/#499)
 - Søtte for å gjøre spesifikke maloppsett obligatoriske [#839](https://github.com/Puzzlepart/prosjektportalen365/issues/839)
 - Nytt standard prosjekttillegg for fasesider [#784](https://github.com/Puzzlepart/prosjektportalen365/issues/784)
 - Ny liste `Lists/Logg` [#842](https://github.com/Puzzlepart/prosjektportalen365/issues/842)
@@ -73,7 +98,7 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Rettet en feil hvor deler av 'Fasevelger' webdelen ikke ble vist ordentlig [#920](https://github.com/Puzzlepart/prosjektportalen365/issues/920)
 - Rettet en feil hvor planneroppgaver uten 'plannavn' i 'Listeinnhold' mislyktes under prosjektoppsett [#976](https://github.com/Puzzlepart/prosjektportalen365/issues/976)
 - Rettet en feil hvor lagring av øyeblikksbilde ikke fungerte i prosjektstatus [#955](https://github.com/Puzzlepart/prosjektportalen365/issues/955)
-- Rettet feil med prosjektutlistingswebdelen, hvor gjester kunne se fanen "Alle prosjekter". [#996](https://github.com/Puzzlepart/prosjektportalen365/issues/996)
+- Rettet feil med prosjektutlistingswebdelen, hvor gjester kunne se fanen "Alle prosjekter" [#996](https://github.com/Puzzlepart/prosjektportalen365/issues/996)
 - Rettet standard overskriftsetiketter for usikkerhetsmatrisene [#999](https://github.com/Puzzlepart/prosjektportalen365/issues/999)
 - Håndtering av ugyldige spesialtegn ved generering av et øyeblikksbilde for prosjektstatus [#1033](https://github.com/Puzzlepart/prosjektportalen365/issues/1033)
 

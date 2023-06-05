@@ -69,7 +69,7 @@ export const useProjectList = (props: IProjectListProps) => {
    */
   function filterProjets(projects: ProjectListModel[]) {
     return projects
-      .filter((project) => state.selectedView.filter(project))
+      .filter((project) => state.selectedView.filter(project, state))
       .filter((project) =>
         _.any(Object.keys(project), (key) => {
           const value = project[key]

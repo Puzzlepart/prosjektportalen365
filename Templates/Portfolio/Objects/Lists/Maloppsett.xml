@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_TemplateOptions_Title}" Url="{resource:Lists_TemplateOptions_Url}" Description="" DocumentTemplate="" TemplateType="100" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" EnableFolderCreation="false" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage=""
+<pnp:ListInstance Title="{resource:Lists_TemplateOptions_Title}" Url="{resource:Lists_TemplateOptions_Url}" Description="" DocumentTemplate="" TemplateType="100" EnableVersioning="true" Hidden="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" EnableFolderCreation="false" 
   xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
   <pnp:Views>
     <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_TemplateOptions_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">

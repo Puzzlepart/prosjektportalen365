@@ -22,7 +22,7 @@ if ($null -ne $LastInstall) {
 
     if ($PreviousVersion -lt "1.5.0") {
         Write-Host "[INFO] Applying PnP upgrade template [1.5.0] to [$Url]"
-        Invoke-PnPSiteTemplate -Path "$BasePath\1.5.0.pnp" -ErrorAction Stop
+        Invoke-PnPSiteTemplate -Path "$TemplatesBasePath\1.5.0.pnp" -ErrorAction Stop
         Write-Host "[SUCCESS] Successfully applied PnP template [1.5.0] to [$Url]" -ForegroundColor Green
     }
     
@@ -42,34 +42,45 @@ if ($null -ne $LastInstall) {
         }
     }
 
-    if ($PreviousVersion -lt "1.8.0" -or $PreviousVersion -like "*BA*") {
+    if ($PreviousVersion -lt "1.8.2" -or $PreviousVersion -like "*BA*") {
         Write-Host "[INFO] In version v1.8.0 we have integrated the 'Bygg & Anlegg' addon with standard installation. Checking to see if addon has been previously installed..." 
 
         $TermSetA = Get-PnPTermSet -Identity "cc6cdd18-c7d5-42e1-8d19-a336dd78f3f2" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
         $TermSetB = Get-PnPTermSet -Identity "ec5ceb95-7259-4282-811f-7c57304be71e" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
         if ($TermSetA -or $TermSetB) {
-            Write-Host "[INFO] 'Bygg & Anlegg' addon detected. Renaming old contenttypes to avoid conflicts..." 
+            Write-Host "[INFO] 'Bygg & Anlegg' addon detected. Renaming old contenttypes to avoid conflicts and confusion..." 
+
             $ProjectStatusBACT = Get-PnPContentType -Identity "Prosjektstatus (Bygg og anlegg)" -ErrorAction SilentlyContinue
-            $ProjectBACT = Get-PnPContentType -Identity "Prosjekt (Bygg og anlegg)" -ErrorAction SilentlyContinue
-
             if ($ProjectStatusBACT) {
-                $ProjectStatusBACT.Name = "Prosjektstatus (Bygg og anlegg) - UTDATERT"
-                $ProjectStatusBACT.SystemUpdate()
-                $ProjectStatusBACT.Context.ExecuteQuery()
+                $ProjectStatusList = Get-PnPList -Identity "Prosjektstatus" -ErrorAction SilentlyContinue
+                if ($null -ne $ProjectStatusList) {
+                    $ProjectStatusListBACT = Get-PnPContentType -Identity "Prosjektstatus (Bygg og anlegg)" -List $ProjectStatusList -ErrorAction SilentlyContinue
+                    if ($null -ne $ProjectStatusListBACT) {
+                        $ContentTypeOut = Set-PnPContentType -Identity $ProjectStatusListBACT -Name "Prosjektstatus (Bygg og anlegg) - UTDATERT"
+                    }
+                }
+                $ContentTypeOut = Set-PnPContentType -Identity $ProjectStatusBACT -Name "Prosjektstatus (Bygg og anlegg) - UTDATERT" -UpdateChildren
             }
 
+            $ProjectBACT = Get-PnPContentType -Identity "Prosjekt (Bygg og anlegg)" -ErrorAction SilentlyContinue
             if ($ProjectBACT) {
-                $ProjectBACT.Name = "Prosjekt (Bygg og anlegg) - UTDATERT"
-                $ProjectBACT.SystemUpdate()
-                $ProjectBACT.Context.ExecuteQuery()
+                $ProjectList = Get-PnPList -Identity "Prosjekter" -ErrorAction SilentlyContinue
+                if ($null -ne $ProjectList) {
+                    $ProjectListBACT = Get-PnPContentType -Identity "Prosjekt (Bygg og anlegg)" -List $ProjectList -ErrorAction SilentlyContinue
+                    if ($null -ne $ProjectListBACT) {
+                        $ContentTypeOut = Set-PnPContentType -Identity $ProjectListBACT -Name "Prosjekt (Bygg og anlegg) - UTDATERT"
+                    }
+                }
+                $ContentTypeOut = Set-PnPContentType -Identity $ProjectBACT -Name "Prosjekt (Bygg og anlegg) - UTDATERT" -UpdateChildren
             }
-            Write-Host "[SUCCESS] 'Bygg & Anlegg' contenttypes re-named" 
+            
+            Write-Host "[SUCCESS] 'Bygg & Anlegg' contenttypes re-named" -ForegroundColor Green
         }
     }
 
-    if ($PreviousVersion -lt "1.8.1") {
+    if ($PreviousVersion -lt "1.8.2") {
         Write-Host "[INFO] Applying PnP upgrade template [1.8.1] to [$Url]"
-        Invoke-PnPSiteTemplate -Path "$BasePath\1.8.1.pnp" -ErrorAction Stop
+        Invoke-PnPSiteTemplate -Path "$TemplatesBasePath\1.8.1.pnp" -ErrorAction Stop
         Write-Host "[SUCCESS] Successfully applied PnP template [1.8.1] to [$Url]" -ForegroundColor Green
     }
 }

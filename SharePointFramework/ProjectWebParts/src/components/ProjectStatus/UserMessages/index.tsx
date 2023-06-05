@@ -4,9 +4,9 @@ import strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { any } from 'underscore'
 import { ProjectStatusContext } from '../context'
-import styles from './UnpublishedStatusReportInfo.module.scss'
+import styles from './UserMessages.module.scss'
 
-export const UnpublishedStatusReportInfo: FC = () => {
+export const UserMessages: FC = () => {
   const context = useContext(ProjectStatusContext)
   return (
     <Shimmer isDataLoaded={context.state.isDataLoaded}>
@@ -14,6 +14,7 @@ export const UnpublishedStatusReportInfo: FC = () => {
         {any(context.state.data.reports, (report) => !report.published) && (
           <UserMessage text={strings.UnpublishedStatusReportInfo} />
         )}
+        {context.state.userMessage && <UserMessage {...context.state.userMessage} />}
       </div>
     </Shimmer>
   )

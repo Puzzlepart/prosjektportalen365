@@ -10,7 +10,9 @@ import {
 } from './types'
 
 export const RenderModeDropdown: FC<IRenderModeDropdownProps> = (props) => {
-  const [selectedOption, setSelectedOption] = useState<RenderModeDropdownOption>(TILE_OPTION)
+  const [selectedOption, setSelectedOption] = useState<RenderModeDropdownOption>(
+    props.renderAs === 'tiles' ? TILE_OPTION : LIST_OPTION
+  )
 
   useEffect(() => props.onChange(selectedOption.key as ProjectListRenderMode), [selectedOption])
 

@@ -13,8 +13,9 @@ export interface IProjectListView extends IPivotItemProps {
    * Filter function for projects. If not provided, all projects are shown.
    *
    * @param project Project list model
+   * @param state State of the component
    */
-  filter?: (project?: ProjectListModel) => boolean
+  filter?: (project: ProjectListModel, state: IProjectListState) => boolean
 
   /**
    * Function to get header button props. If not provided, the default button props are used.
@@ -89,6 +90,11 @@ export interface IProjectListProps extends IBaseComponentProps {
    * Views to show using Pivot component
    */
   views?: IProjectListView[]
+
+  /**
+   * Default render mode
+   */
+  defaultRenderMode?: ProjectListRenderMode
 }
 
 export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
@@ -115,7 +121,7 @@ export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
   /**
    * How the projects should be rendered. `tiles` or `list`
    */
-  renderAs?: ProjectListRenderMode
+  renderMode?: ProjectListRenderMode
   /**
    * Current selected view
    */

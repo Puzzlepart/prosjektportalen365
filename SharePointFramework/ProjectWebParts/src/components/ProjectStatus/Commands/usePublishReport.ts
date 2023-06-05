@@ -1,11 +1,11 @@
-import { TypedHash } from '@pnp/common'
+import strings from 'ProjectWebPartsStrings'
 import moment from 'moment'
 import { PortalDataService } from 'pp365-shared/lib/services'
-import strings from 'ProjectWebPartsStrings'
 import { useContext } from 'react'
 import { ProjectStatusContext } from '../context'
-import { REPORT_PUBLISHED } from '../reducer'
-import { useCaptureReport } from './useCaptureReport'
+import { CLEAR_USER_MESSAGE, REPORT_PUBLISHED, REPORT_PUBLISH_ERROR } from '../reducer'
+import { useCaptureReportSnapshot } from './useCaptureReportSnapshot'
+import { MessageBarType } from '@fluentui/react'
 
 /**
  * Hook for publishing of reports. Returns a callback function
@@ -18,27 +18,40 @@ import { useCaptureReport } from './useCaptureReport'
  */
 export function usePublishReport() {
   const context = useContext(ProjectStatusContext)
-  const captureReport = useCaptureReport()
+  const captureReportSnapshot = useCaptureReportSnapshot()
   return async (): Promise<void> => {
     const portalDataService = await new PortalDataService().configure({
       pageContext: context.props.pageContext
     })
     if (!context.state.isPublishing) {
       try {
-        const attachment = await captureReport(context.state.selectedReport.values.Title)
-        const properties: TypedHash<string> = {
-          GtModerationStatus: strings.GtModerationStatus_Choice_Published,
-          GtLastReportDate: moment().format('YYYY-MM-DD HH:mm'),
-          GtSectionDataJson: JSON.stringify(context.state.persistedSectionData)
-        }
-        const updatedReport = await portalDataService.updateStatusReport(
+        const snapshot = await captureReportSnapshot()
+        const attachments = [
+          {
+            url: context.props.snapshotAttachmentFileName,
+            content: snapshot
+          },
+          {
+            url: context.props.persistSectionDataAttachmentFileName,
+            content: JSON.stringify(context.state.persistedSectionData)
+          }
+        ]
+        const updatedReport = await portalDataService.publishStatusReport(
           context.state.selectedReport,
-          properties,
-          attachment,
+          moment().format('YYYY-MM-DD HH:mm'),
+          attachments,
           strings.GtModerationStatus_Choice_Published
         )
-        context.dispatch(REPORT_PUBLISHED({ updatedReport }))
-      } catch (error) {}
+        context.dispatch(REPORT_PUBLISHED({ updatedReport, message: null }))
+      } catch (error) {
+        context.dispatch(
+          REPORT_PUBLISH_ERROR({ message: { text: error.message, type: MessageBarType.error } })
+        )
+      } finally {
+        window.setTimeout(() => {
+          context.dispatch(CLEAR_USER_MESSAGE())
+        }, 8000)
+      }
     }
   }
 }

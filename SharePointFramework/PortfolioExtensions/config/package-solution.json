@@ -3,7 +3,7 @@
   "solution": {
     "name": "Prosjektportalen 365 - Portfolio Extensions",
     "id": "a3bf3315-0710-41f9-8836-2b61396d032f",
-    "version": "1.8.1.0",
+    "version": "1.8.2.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,

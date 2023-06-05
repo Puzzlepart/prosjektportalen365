@@ -1,19 +1,63 @@
 /* eslint-disable prefer-spread */
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import _ from 'lodash'
+import { IUserMessageProps } from 'pp365-shared/lib/components/UserMessage/types'
 import { SectionModel, StatusReport } from 'pp365-shared/lib/models'
-import { getUrlParam, parseUrlHash } from 'pp365-shared/lib/util'
-import { IProjectStatusData, IProjectStatusHashState, IProjectStatusState } from './types'
+import { getUrlParam } from 'pp365-shared/lib/util'
+import { IProjectStatusState } from './types'
+import { FetchDataResult } from './useProjectStatusDataFetch'
 
-export const INIT_DATA = createAction<{ data: IProjectStatusData }>('INIT_DATA')
+/**
+ * `INIT_DATA`: Dispatched by `useProjectStatusDataFetch` when data is loaded
+ */
+export const INIT_DATA = createAction<FetchDataResult>('INIT_DATA')
+
+/**
+ * `REPORT_PUBLISHING`: Dispatched by `usePublishReport` when a report is being published.
+ */
 export const REPORT_PUBLISHING = createAction('REPORT_PUBLISHING')
-export const REPORT_PUBLISHED = createAction<{ updatedReport: StatusReport }>('REPORT_PUBLISHED')
+
+/**
+ * `REPORT_PUBLISHED`: Dispatched by `usePublishReport` when a report is published.
+ */
+export const REPORT_PUBLISHED = createAction<{
+  updatedReport: StatusReport
+  message: Pick<IUserMessageProps, 'text' | 'type'>
+}>('REPORT_PUBLISHED')
+
+/**
+ * `REPORT_PUBLISH_ERROR`: Dispatched by `usePublishReport` when a report fails to publish.
+ */
+export const REPORT_PUBLISH_ERROR = createAction<{
+  message: Pick<IUserMessageProps, 'text' | 'type'>
+}>('REPORT_PUBLISH_ERROR')
+
+/**
+ * `REPORT_DELETED`: Dispatched by `useDeleteReport` when a report is deleted.
+ */
 export const REPORT_DELETED = createAction('REPORT_DELETED')
+
+/**
+ * `REPORT_DELETE_ERROR`: Dispatched by `useDeleteReport` when a report fails to delete.
+ */
 export const REPORT_DELETE_ERROR = createAction<{ error: any }>('REPORT_DELETE_ERROR')
+
+/**
+ * `SELECT_REPORT`: Dispatched by `useSelectReport` when a report is selected.
+ */
 export const SELECT_REPORT = createAction<{ report: StatusReport }>('SELECT_REPORT')
+
+/**
+ * `PERSIST_SECTION_DATA`: Dispatched by `usePersistSectionData` when section data is persisted.
+ */
 export const PERSIST_SECTION_DATA = createAction<{ section: SectionModel; data: any }>(
   'PERSIST_SECTION_DATA'
 )
+
+/**
+ * `PERSIST_SECTION_DATA_ERROR`: Dispatched anywhere to clear the current user message.
+ */
+export const CLEAR_USER_MESSAGE = createAction('CLEAR_USER_MESSAGE')
 
 export const initialState: IProjectStatusState = {
   isDataLoaded: false,
@@ -26,25 +70,11 @@ export const initialState: IProjectStatusState = {
   persistedSectionData: {}
 }
 
-export default createReducer(initialState, {
+const createProjectStatusReducer = createReducer(initialState, {
   [INIT_DATA.type]: (state: IProjectStatusState, { payload }: ReturnType<typeof INIT_DATA>) => {
-    let [selectedReport] = payload.data.reports
-    const hashState = parseUrlHash<IProjectStatusHashState>()
-    const selectedReportUrlParam = getUrlParam('selectedReport')
-    state.sourceUrl = decodeURIComponent(getUrlParam('Source') ?? '')
-    if (hashState.selectedReport) {
-      selectedReport = _.find(
-        payload.data.reports,
-        (report) => report.id === parseInt(hashState.selectedReport, 10)
-      )
-    } else if (selectedReportUrlParam) {
-      selectedReport = _.find(
-        payload.data.reports,
-        (report) => report.id === parseInt(selectedReportUrlParam, 10)
-      )
-    }
+    state.sourceUrl = payload.sourceUrl
     state.data = payload.data
-    state.selectedReport = selectedReport
+    state.selectedReport = payload.initialSelectedReport
     state.mostRecentReportId = _.first(payload.data.reports)?.id ?? 0
     state.userHasAdminPermission = payload.data.userHasAdminPermission
     state.isDataLoaded = true
@@ -61,6 +91,15 @@ export default createReducer(initialState, {
     })
     state.data = { ...state.data, reports }
     state.selectedReport = payload.updatedReport
+    state.userMessage = payload.message
+    state.isPublishing = false
+  },
+  REPORT_PUBLISH_ERROR: (
+    state: IProjectStatusState,
+    { payload }: ReturnType<typeof REPORT_PUBLISH_ERROR>
+  ) => {
+    state.isPublishing = false
+    state.userMessage = payload.message
   },
   [REPORT_DELETED.type]: (state: IProjectStatusState) => {
     const reports = state.data.reports.filter((r) => r.id !== state.selectedReport.id)
@@ -79,7 +118,11 @@ export default createReducer(initialState, {
     state: IProjectStatusState,
     { payload }: ReturnType<typeof SELECT_REPORT>
   ) => {
+    state.data.reports = state.data.reports.map((r) =>
+      payload.report.id === r.id ? payload.report : r
+    )
     state.selectedReport = payload.report
+    state.isDataLoaded = true
   },
   [PERSIST_SECTION_DATA.type]: (
     state: IProjectStatusState,
@@ -89,5 +132,10 @@ export default createReducer(initialState, {
       ...state.persistedSectionData,
       [payload.section.id]: payload.data
     }
+  },
+  [CLEAR_USER_MESSAGE.type]: (state: IProjectStatusState) => {
+    state.userMessage = null
   }
 })
+
+export default createProjectStatusReducer

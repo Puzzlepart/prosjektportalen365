@@ -1,13 +1,13 @@
 {
   "name": "pp365-shared",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
     "directory": "SharePointFramework/@Shared"
   },
   "license": "MIT",
-  "description": "Shared utilities, helpers and models",
+  "description": "Shared utilities, helpers and models for Prosjektportalen 365",
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",

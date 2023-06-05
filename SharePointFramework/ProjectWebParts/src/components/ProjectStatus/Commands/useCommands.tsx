@@ -1,8 +1,7 @@
-import { getId, IContextualMenuItem } from '@fluentui/react'
+import { getId, IContextualMenuItem, Spinner, SpinnerSize } from '@fluentui/react'
 import { formatDate } from 'pp365-shared/lib/helpers'
 import strings from 'ProjectWebPartsStrings'
-import { useContext } from 'react'
-import { first } from 'underscore'
+import React, { useContext } from 'react'
 import { ProjectStatusContext } from '../context'
 import { REPORT_PUBLISHING } from '../reducer'
 import { useDeleteReport } from './useDeleteReport'
@@ -12,7 +11,18 @@ import { useRedirectNewStatusReport } from './useRedirectNewStatusReport'
 import { useReportOptions } from './useReportOptions'
 
 /**
- * Component logic hook for `Commands`
+ * Component logic hook for `Commands`. This hook is used to generate the commands for the `CommandBar` component.
+ *
+ * The following commands are conditionally rendered:
+ * - `NEW_STATUS_REPORT`: Renders a command to create a new status report. This command is disabled if there are any unpublished reports.
+ * - `DELETE_REPORT`: Renders a command to delete the selected report. This command is disabled if the selected report is published or if the component is publishing a report.
+ * - `EDIT_REPORT`: Renders a command to edit the selected report. This command is disabled if the selected report is published or if the component is publishing a report.
+ * - `PUBLISH_REPORT`: Renders a command to publish the selected report. This command is disabled if the selected report is published or if the component is publishing a report.
+ * - `IS_PUBLISHING`: Renders a spinner if the component is publishing a report.
+ * - `NAVIGATE_TO_SOURCE_URL`: Renders a command to navigate to the source URL.
+ * - `GET_SNAPSHOT`: Renders a command to get the snapshot of the selected report. This command is disabled if the selected report does not have any attachments or if the component is publishing a report.
+ * - `REPORT_DROPDOWN`: Renders a dropdown menu of all the reports. This command is disabled if there are no reports.
+ * - `STATUS_ICON`: Renders an icon to indicate the status of the selected report. This command is disabled and only for display purposes.
  */
 export function useCommands() {
   const context = useContext(ProjectStatusContext)
@@ -34,7 +44,7 @@ export function useCommands() {
         key: 'DELETE_REPORT',
         name: strings.DeleteReportButtonText,
         iconProps: { iconName: 'Delete' },
-        disabled: context.state.selectedReport?.published,
+        disabled: context.state.selectedReport?.published || context.state.isPublishing,
         onClick: () => {
           deleteReport()
         }
@@ -45,10 +55,11 @@ export function useCommands() {
         name: strings.EditReportButtonText,
         iconProps: { iconName: 'Edit' },
         href: getEditFormUrl(context.state.selectedReport),
-        disabled: context.state.selectedReport?.published
+        disabled: context.state.selectedReport?.published || context.state.isPublishing
       },
     context.state.selectedReport &&
-      context.state.userHasAdminPermission && {
+      context.state.userHasAdminPermission &&
+      !context.state.isPublishing && {
         key: 'PUBLISH_REPORT',
         name: strings.PublishReportButtonText,
         iconProps: { iconName: 'PublishContent' },
@@ -57,40 +68,44 @@ export function useCommands() {
           context.dispatch(REPORT_PUBLISHING())
           publishReport()
         }
-      }
+      },
+    context.state.isPublishing && {
+      key: 'IS_PUBLISHING',
+      onRender: () => (
+        <Spinner
+          label={strings.PublishReportSpinnerText}
+          size={SpinnerSize.small}
+          labelPosition='right'
+        />
+      )
+    }
   ].filter(Boolean)
-  const farItems: IContextualMenuItem[] = []
-  if (context.state.sourceUrl) {
-    farItems.push({
+  const farItems: IContextualMenuItem[] = [
+    context.state.sourceUrl && {
       key: 'NAVIGATE_TO_SOURCE_URL',
       name: strings.NavigateToSourceUrlText,
       iconProps: { iconName: 'NavigateBack' },
       href: context.state.sourceUrl
-    })
-  }
-  if (context.state.selectedReport) {
-    farItems.push({
+    },
+    context.state.selectedReport && {
       key: 'GET_SNAPSHOT',
       name: strings.GetSnapshotButtonText,
       iconProps: { iconName: 'Photo2' },
-      disabled: !context.state.selectedReport?.hasAttachments,
+      disabled: !context.state.selectedReport?.snapshotUrl || context.state.isPublishing,
       onClick: () => {
-        window.open(first(context.state.selectedReport.attachments).ServerRelativeUrl)
+        window.open(context.state.selectedReport?.snapshotUrl)
       }
-    })
-  }
-  if (context.state.data.reports.length > 0) {
-    farItems.push({
+    },
+    context.state.data.reports.length > 0 && {
       key: 'REPORT_DROPDOWN',
       name: context.state.selectedReport
         ? formatDate(context.state.selectedReport.created, true)
         : '',
       iconProps: { iconName: 'FullHistory' },
-      subMenuProps: { items: reportOptions }
-    })
-  }
-  if (context.state.selectedReport) {
-    farItems.push({
+      subMenuProps: { items: reportOptions },
+      disabled: context.state.data.reports.length < 2
+    },
+    context.state.selectedReport && {
       id: getId('StatusIcon'),
       key: 'STATUS_ICON',
       name: context.state.selectedReport?.published
@@ -103,7 +118,7 @@ export function useCommands() {
         }
       },
       disabled: true
-    })
-  }
+    }
+  ].filter(Boolean)
   return { props: { items, farItems } } as const
 }
