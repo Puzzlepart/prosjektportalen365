@@ -29,7 +29,7 @@
     "@pnp/core": "^3.7.0",
     "@pnp/logging": "3.7.0",
     "@pnp/sp": "3.7.0",
-    "pp365-shared": "1.8.1",
+    "pp365-shared": "1.8.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "tslib": "2.3.1"
