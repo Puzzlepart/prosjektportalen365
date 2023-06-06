@@ -1,5 +1,0 @@
-define([], function() {
-  return {
-    LoadingText: 'Loading {0} ...'
-  }
-})

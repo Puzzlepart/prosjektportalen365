@@ -33,7 +33,7 @@ dependencies:
   '@rush-temp/pp365-programwebparts': file:projects/pp365-programwebparts.tgz
   '@rush-temp/pp365-projectextensions': file:projects/pp365-projectextensions.tgz
   '@rush-temp/pp365-projectwebparts': file:projects/pp365-projectwebparts.tgz
-  '@rush-temp/pp365-shared-library': file:projects/pp365-shared-library.tgz
+  '@rush-temp/pp365-shared-library': file:projects/pp365-shared-library.tgz_interactjs@1.6.2
   '@rush-temp/pp365-spfx-tasks': file:projects/pp365-spfx-tasks.tgz
   '@rush-temp/pp365-templates': file:projects/pp365-templates.tgz
   '@rushstack/eslint-config': 2.5.1_eslint@8.25.0+typescript@4.5.5
@@ -52,7 +52,6 @@ dependencies:
   '@typescript-eslint/parser': 5.40.0_eslint@8.25.0+typescript@4.5.5
   '@uifabric/file-type-icons': 7.6.27_9c4969b3be2ea41c89422e6bb8d9a16e
   '@uifabric/utilities': 6.45.1_9c4969b3be2ea41c89422e6bb8d9a16e
-  array-sort: 1.0.0
   array-unique: 0.3.2
   chokidar-cli: 2.1.0
   clean-deep: 3.0.2
@@ -69,22 +68,18 @@ dependencies:
   file-saver: 2.0.5
   find: 0.3.0
   get-value: 3.0.1
+  glob: 10.2.6
   gulp: 4.0.2
   interactjs: 1.6.2
   jsom-ctx: 1.2.0
   livereload: 0.9.3
-  lodash: 4.17.21
-  moment: 2.11.1
   msgraph-helper: 0.8.3_9c4969b3be2ea41c89422e6bb8d9a16e
   object-assign: 4.1.1
-  pp365-portfoliowebparts: 1.9.0-1155.1_1ca3516818190f66f3253793862e2abe
-  pp365-projectwebparts: 1.9.0-1155.1_1ca3516818190f66f3253793862e2abe
   prettier: 2.7.1
   pzl-react-reusable-components: 0.0.14_1ca3516818190f66f3253793862e2abe
   pzl-spfx-components: 0.0.11
   react: 16.13.1
   react-autocomplete: 1.8.1_react-dom@16.13.1+react@16.13.1
-  react-calendar-timeline: 0.27.0_05e86f17cf8862761e710683c186761e
   react-dom: 16.13.1_react@16.13.1
   react-highcharts: 16.0.2_react-dom@16.13.1+react@16.13.1
   react-image-fade-in: 1.0.2_react-dom@16.13.1+react@16.13.1
@@ -16969,6 +16964,26 @@ packages:
       react-dom: '>=16.3'
     resolution:
       integrity: sha512-LOC7yrLT5bkfZAhfUKDhDkxyYd14dMnb3jXJzkpOyciPJyUwYWhxCDhjxwddfXjcB317NJVpszcqpk7xJw0mQg==
+  /react-calendar-timeline/0.28.0_b346a0af0bef615fe8d35b6e6ca9978d:
+    dependencies:
+      classnames: 2.3.2
+      create-react-context: 0.3.0_react@16.13.1
+      element-resize-detector: 1.2.4
+      interactjs: 1.6.2
+      lodash.isequal: 4.5.0
+      memoize-one: 5.2.1
+      moment: 2.29.4
+      react: 16.13.1
+      react-dom: 16.13.1_react@16.13.1
+    dev: false
+    peerDependencies:
+      interactjs: ^1.3.4
+      moment: '*'
+      prop-types: ^15.6.2
+      react: '>=16.3'
+      react-dom: '>=16.3'
+    resolution:
+      integrity: sha512-uy/erjon2oZO6dRtpQri1Sc20w4AOlIOqwjOpD2QNiWZvWt19VzO8pqOFF6BcnkuE63TM1xGfLdMbzSnKBPfeA==
   /react-dom-factories/1.0.2:
     dev: false
     resolution:
@@ -21088,6 +21103,7 @@ packages:
       '@reduxjs/toolkit': 1.5.0
       '@rushstack/eslint-config': 2.5.1_eslint@8.25.0+typescript@4.5.5
       '@types/array-sort': 1.0.0
+      '@types/lodash': 4.14.195
       '@types/object-assign': 4.0.30
       '@types/react': 16.8.8
       '@types/react-calendar-timeline': 0.26.0
@@ -21130,7 +21146,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-portfoliowebparts'
     resolution:
-      integrity: sha512-4DfYvPmVBdHxFlN/W8FZ8H6Itg5IM0LuK63xkdNJ/YL/ev4g449ZkDTDn9BLKYmQZRU8TLAoZwGU+Y7oK5cm/w==
+      integrity: sha512-v3zEuxxrDbhucxZLAITsO/1rvqhCKmW2KZ77Sp28uOWQADIPCShXUCwmreD3nNIN2CNnWQCk2i7dx90FSQrtLQ==
       tarball: file:projects/pp365-portfoliowebparts.tgz
     version: 0.0.0
   file:projects/pp365-programwebparts.tgz:
@@ -21204,7 +21220,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-programwebparts'
     resolution:
-      integrity: sha512-wP34mBOgmGH/99Og1p1oARKNuVa5mU6W08g6jTBF67u/tKYSR35isZH4nOn/l+kGDKvd4L7czVmzpQ98ES4EPg==
+      integrity: sha512-0ililbJL3YWPHJYR+rUCtWSCdLNYL+fpnBq70YaXTETjdcjkJ3aghs2VrXaYKmXtiFf/MpWigayoTlBAp9Qt8A==
       tarball: file:projects/pp365-programwebparts.tgz
     version: 0.0.0
   file:projects/pp365-projectextensions.tgz:
@@ -21351,10 +21367,10 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectwebparts'
     resolution:
-      integrity: sha512-5+XOCENvIJZvBpuMDl1g+Xb56rs4E+c9czn2km3T3Y4mxLl0uAxYlmN+3rgE2IK4puqaZw4uprB1c5014KB6kw==
+      integrity: sha512-tDc5+1MIPO/vMXfO7oXpU0tFvpChsAe7Fmo5Ls7otCqqLfWVNczfO0CVUPavKKznQxGYHb7814LMiGDE2R94pg==
       tarball: file:projects/pp365-projectwebparts.tgz
     version: 0.0.0
-  file:projects/pp365-shared-library.tgz:
+  file:projects/pp365-shared-library.tgz_interactjs@1.6.2:
     dependencies:
       '@fluentui/react': 8.98.1_9c4969b3be2ea41c89422e6bb8d9a16e
       '@microsoft/rush-stack-compiler-4.5': 0.2.2
@@ -21381,6 +21397,7 @@ packages:
       '@typescript-eslint/eslint-plugin': 5.40.0_8aa46ed5a6d8d59b0c62bf61e7e2510c
       '@typescript-eslint/parser': 5.40.0_eslint@8.25.0+typescript@4.5.5
       ajv: 6.12.6
+      array-sort: 1.0.0
       dotenv: 16.1.3
       eslint: 8.25.0
       eslint-config-prettier: 8.5.0_eslint@8.25.0
@@ -21389,8 +21406,11 @@ packages:
       eslint-plugin-unused-imports: 2.0.0_2fd626d7c0aba593d41fbdd5d99bd644
       file-saver: 2.0.5
       gulp: 4.0.2
+      lodash: 4.17.21
+      moment: 2.29.4
       prettier: 2.7.1
       react: 16.13.1
+      react-calendar-timeline: 0.28.0_b346a0af0bef615fe8d35b6e6ca9978d
       react-dom: 16.13.1_react@16.13.1
       react-markdown: 8.0.7_453b269bd7a8e2940a0e8fb00c615d82
       rehype-raw: 6.1.1
@@ -21402,9 +21422,12 @@ packages:
       xlsx: 0.16.9
       xmldom: 0.6.0
     dev: false
+    id: file:projects/pp365-shared-library.tgz
     name: '@rush-temp/pp365-shared-library'
+    peerDependencies:
+      interactjs: '*'
     resolution:
-      integrity: sha512-zD5wQrhpJpG3XE4PGXLltaZhO1C20SnTKnjT9GNSdORgJY0K+KGRQ50f7qXPHHj7h62HNo+KsDiesAa8u+5PmA==
+      integrity: sha512-qtgY9yvo4LDGCJKDQ79BoZiHwyd0w/mnoA1RM3WD8Nkv3iRm69a5n4UqNml//l4ga+uo0/l7KKclGqjbyIPNwA==
       tarball: file:projects/pp365-shared-library.tgz
     version: 0.0.0
   file:projects/pp365-spfx-tasks.tgz:
@@ -21485,7 +21508,6 @@ specifiers:
   '@typescript-eslint/parser': 5.40.0
   '@uifabric/file-type-icons': 7.6.27
   '@uifabric/utilities': 6.45.1
-  array-sort: 1.0.0
   array-unique: 0.3.2
   chokidar-cli: ^2.1.0
   clean-deep: 3.0.2
@@ -21502,22 +21524,18 @@ specifiers:
   file-saver: ^2.0.5
   find: 0.3.0
   get-value: 3.0.1
+  glob: ~10.2.6
   gulp: 4.0.2
   interactjs: 1.6.2
   jsom-ctx: 1.2.0
   livereload: 0.9.3
-  lodash: 4.17.21
-  moment: 2.11.1
   msgraph-helper: 0.8.3
   object-assign: 4.1.1
-  pp365-portfoliowebparts: 1.9.0-1155.1
-  pp365-projectwebparts: 1.9.0-1155.1
   prettier: 2.7.1
   pzl-react-reusable-components: ^0.0.14
   pzl-spfx-components: 0.0.11
   react: 16.13.1
   react-autocomplete: 1.8.1
-  react-calendar-timeline: 0.27.0
   react-dom: 16.13.1
   react-highcharts: 16.0.2
   react-image-fade-in: 1.0.2
