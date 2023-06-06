@@ -13,7 +13,7 @@
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
     "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\"",
-    "build": "npm run lint && gulp clean && gulp bundle --ship && gulp package-solution --ship",
+    "build": "npm run lint && gulp bundle --ship && gulp package-solution --ship",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
@@ -57,7 +57,8 @@
     "react-highcharts": "16.0.2",
     "tslib": "2.3.1",
     "lodash": "4.17.21",
-    "underscore": "1.13.6"
+    "underscore": "~1.13.6",
+    "@types/underscore": "~1.11.5"
   },
   "resolutions": {
     "@types/react": "16.8.8"
