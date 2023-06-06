@@ -7,7 +7,6 @@ import {
 } from '@fluentui/react'
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import sortArray from 'array-sort'
-import { IFilterItemProps } from 'components/FilterPanel'
 import strings from 'PortfolioWebPartsStrings'
 import {
   PortfolioOverviewView,
@@ -16,6 +15,7 @@ import {
 } from 'pp365-shared-library/lib/models'
 import _ from 'underscore'
 import { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
+import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 
 interface IPortfolioOverviewReducerParams {
   props: IPortfolioOverviewProps

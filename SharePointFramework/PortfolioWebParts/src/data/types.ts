@@ -8,8 +8,7 @@ import {
 } from '@pnp/sp'
 import { IAggregatedListConfiguration, IPortfolioConfiguration } from 'interfaces'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
-import { ProjectListModel, TimelineConfigurationModel, TimelineContentModel } from 'models'
-import { DataSource, PortfolioOverviewView } from 'pp365-shared-library/lib/models'
+import { DataSource, PortfolioOverviewView, ProjectListModel, TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-library/lib/models'
 import { DataSourceService } from 'pp365-shared-library/lib/services'
 
 export interface IFetchDataForViewItemResult extends SearchResult {

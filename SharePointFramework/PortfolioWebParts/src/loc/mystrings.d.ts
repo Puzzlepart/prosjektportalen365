@@ -139,8 +139,6 @@ declare interface IPortfolioWebPartsStrings {
   ProjectStatusLinkText: string
   PropertyPaneDescription: string
   RecommendationLabel: string
-  ProjectTimelineInfoText: string
-  ProjectTimelineErrorTransformItemText: string
   ResourceAllocationInfoText: string
   ResourceAllocationErrorTransformGroupText: string
   ResourceLabel: string

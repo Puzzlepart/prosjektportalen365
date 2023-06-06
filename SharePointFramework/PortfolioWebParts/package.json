@@ -56,7 +56,8 @@
     "tslib": "2.3.1",
     "underscore": "1.13.6",
     "lodash": "4.17.21",
-    "array-unique": "0.3.2"
+    "array-unique": "0.3.2",
+    "@types/lodash": "~4.14.195"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.15.2",
@@ -84,7 +85,7 @@
     "find": "0.3.0",
     "gulp": "4.0.2",
     "livereload": "0.9.3",
-    "pp365-projectwebparts": "1.9.0-1155.1",
+    "pp365-projectwebparts": "1.9.0",
     "prettier": "2.7.1",
     "typescript": "4.5.5",
     "webpack": "5.74.0"

@@ -10,12 +10,12 @@ import {
   IPortfolioAggregationState,
   PortfolioAggregationErrorMessage
 } from './types'
-import { IFilterItemProps } from '../FilterPanel'
 import _, { filter } from 'lodash'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 import { parseUrlHash, setUrlHash } from 'pp365-shared-library/lib/util'
 import { Target, IGroup, MessageBarType } from '@fluentui/react'
+import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 
 /**
  * Helper function to move an item in an array.

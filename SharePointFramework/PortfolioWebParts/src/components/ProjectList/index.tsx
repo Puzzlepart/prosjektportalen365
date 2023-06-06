@@ -8,7 +8,6 @@ import {
   SelectionMode,
   ShimmeredDetailsList
 } from '@fluentui/react'
-import { ProjectListModel } from 'models'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import { getObjectValue } from 'pp365-shared-library/lib/helpers'
@@ -22,6 +21,7 @@ import { ProjectListViews } from './ProjectListViews'
 import { RenderModeDropdown } from './RenderModeDropdown'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
+import { ProjectListModel } from 'pp365-shared-library/lib/models'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const {

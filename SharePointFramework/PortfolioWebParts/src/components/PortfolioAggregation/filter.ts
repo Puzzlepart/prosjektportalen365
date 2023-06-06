@@ -1,7 +1,7 @@
-import { IFilterItemProps } from 'components/FilterPanel'
 import _ from 'lodash'
 import { IColumn } from '@fluentui/react/lib/DetailsList'
 import { getObjectValue as get } from 'pp365-shared-library/lib/helpers'
+import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 
 /**
  * Filter item

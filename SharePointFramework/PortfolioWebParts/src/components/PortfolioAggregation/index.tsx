@@ -7,7 +7,6 @@ import {
 import strings from 'PortfolioWebPartsStrings'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import React, { FC } from 'react'
-import { FilterPanel } from '../FilterPanel'
 import { ColumnContextMenu } from './ColumnContextMenu'
 import { addColumn, ColumnFormPanel } from './ColumnFormPanel'
 import { Commands } from './Commands'
@@ -25,6 +24,7 @@ import SearchBox from './SearchBox'
 import { ShowHideColumnPanel } from './ShowHideColumnPanel'
 import { IPortfolioAggregationProps } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
+import { FilterPanel } from 'pp365-shared-library/lib/components/FilterPanel'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
   const { state, dispatch, items, layerHostId, context } = usePortfolioAggregation(props)

@@ -1,7 +1,7 @@
 import { IButtonProps, IPivotItemProps, IShimmerProps } from '@fluentui/react'
 import { IColumn } from '@fluentui/react/lib/DetailsList'
-import { ProjectListModel } from 'models'
 import { IBaseComponentProps } from '../types'
+import { ProjectListModel } from 'pp365-shared-library/lib/models'
 
 export interface IProjectListView extends IPivotItemProps {
   /**

@@ -1,7 +1,7 @@
 import { IButtonProps } from '@fluentui/react/lib/Button'
-import { ProjectListModel } from 'models'
 import { createContext } from 'react'
 import { IProjectListProps } from '../types'
+import { ProjectListModel } from 'pp365-shared-library/lib/models'
 
 export interface IProjectCardContext
   extends Pick<IProjectListProps, 'showProjectLogo' | 'showProjectOwner' | 'showProjectManager'> {

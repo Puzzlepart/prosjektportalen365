@@ -5,7 +5,6 @@ import {
   IDropdownOption
 } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import { IFilterProps } from 'components/FilterPanel'
 import _ from 'lodash'
 import { PortfolioOverviewView } from 'pp365-shared-library/lib/models/PortfolioOverviewView'
 import { ExcelExportService } from 'pp365-shared-library/lib/services'
@@ -23,6 +22,7 @@ import {
 import { usePortfolioOverviewFilters } from '../usePortfolioOverviewFilters'
 import { IPortfolioOverviewCommandsProps } from './types'
 import { ProgramItem } from 'models'
+import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 
 /**
  * Component logic hook for the PortfolioOverviewCommands component. Handles the logic for
