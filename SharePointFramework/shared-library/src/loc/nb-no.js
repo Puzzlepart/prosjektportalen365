@@ -1,5 +1,5 @@
 define([], function() {
   return {
-    LoadingText: 'Loading {0} ...'
+    LoadingText: 'Laster {0}...'
   }
 })

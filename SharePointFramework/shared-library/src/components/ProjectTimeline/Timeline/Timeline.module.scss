@@ -1,0 +1,40 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+
+.root {
+  .commandBar {
+    margin: 0px auto;
+  }
+
+  .header {
+    padding: 23px 32px 20px 32px;
+
+    .title {
+      font-size: 28px;
+      font-weight: 100;
+      margin: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .infoText {
+    padding: 0 32px 23px 32px;
+  }
+
+  .timeline {
+    margin: 0px auto;
+    padding: 0 32px 0 32px;
+    font-size: 12px !important;
+
+    .timelineItem {
+      cursor: pointer !important;
+      min-width: 28px;
+      .itemContent {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+      }
+    }
+  }
+}
