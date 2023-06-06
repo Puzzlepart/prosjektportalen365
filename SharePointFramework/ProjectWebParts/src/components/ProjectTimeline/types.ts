@@ -1,8 +1,7 @@
 import { IColumn } from '@fluentui/react'
-import { IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
-import { ITimelineItem } from 'pp365-portfoliowebparts/lib/interfaces/ITimelineItem'
-import { TimelineConfigurationModel } from 'pp365-portfoliowebparts/lib/models'
-import { ProjectColumn } from 'pp365-shared-library/lib/models'
+import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
+import { ITimelineItem } from 'pp365-shared-library/lib/interfaces/ITimelineItem'
+import { TimelineConfigurationModel, ProjectColumn } from 'pp365-shared-library/lib/models'
 import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDataService'
 import { IEntityField } from 'sp-entityportal-service'
 import {

@@ -5,7 +5,7 @@ import _ from 'lodash'
 import {
   TimelineConfigurationModel,
   TimelineContentModel
-} from 'pp365-portfoliowebparts/lib/models'
+} from 'pp365-shared-library/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { IProjectTimelineProps } from '../types'
 

@@ -2,7 +2,7 @@ import SPDataAdapter from 'data/SPDataAdapter'
 import {
   SPTimelineConfigurationItem,
   TimelineConfigurationModel
-} from 'pp365-portfoliowebparts/lib/models'
+} from 'pp365-shared-library/lib/models'
 import strings from 'ProjectWebPartsStrings'
 
 /**
