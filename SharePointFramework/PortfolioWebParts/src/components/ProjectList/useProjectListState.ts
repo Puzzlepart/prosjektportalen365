@@ -19,7 +19,7 @@ export function useProjectListState(props: IProjectListProps) {
     renderMode: props.defaultRenderMode ?? 'tiles',
     selectedView: defaultSelectedView,
     projects: mockProjects,
-    isUserInPortfolioManagerGroup: false,
+    isUserInPortfolioManagerGroup: true,
     sort: defaultSort
   })
 
