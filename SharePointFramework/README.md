@@ -152,3 +152,6 @@ Only the `LatestProject` component will be built. The `config.json` will automat
 
 # 4. Versioning
 Never update the version of the solutions independently. The version is automatically kept in sync with the other packages.
+
+# 5. Tasks
+See [Tasks](.tasks/README.md).
