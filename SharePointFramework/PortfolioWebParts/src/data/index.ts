@@ -17,7 +17,7 @@ import { capitalize } from 'lodash'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getUserPhoto } from 'pp365-shared-library/lib/helpers/getUserPhoto'
-import { DataSource, PortfolioOverviewView, ProjectColumn } from 'pp365-shared-library/lib/models'
+import { DataSource, PortfolioOverviewView, ProjectColumn, ProjectListModel, SPTimelineConfigurationItem, TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-library/lib/models'
 import { DataSourceService } from 'pp365-shared-library/lib/services/DataSourceService'
 import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
 import _ from 'underscore'
@@ -30,12 +30,8 @@ import {
   ChartDataItem,
   DataField,
   ProgramItem,
-  ProjectListModel,
   SPChartConfigurationItem,
   SPContentType,
-  SPTimelineConfigurationItem,
-  TimelineConfigurationModel,
-  TimelineContentModel
 } from '../models'
 import {
   CONTENT_TYPE_ID_BENEFITS,

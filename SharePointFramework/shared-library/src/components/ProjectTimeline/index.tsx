@@ -1,6 +1,6 @@
 import { format, MessageBarType, Spinner } from '@fluentui/react'
-import * as strings from 'PortfolioWebPartsStrings'
-import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
+import * as strings from 'SharedLibraryStrings'
+import { UserMessage } from '../UserMessage'
 import React, { FC } from 'react'
 import styles from './ProjectTimeline.module.scss'
 import './ProjectTimeline.overrides.css'

@@ -1,10 +1,10 @@
 import _ from 'underscore'
 import * as uniq from 'array-unique'
-import { IFilterItemProps } from 'components/FilterPanel'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { useContext } from 'react'
 import { PortfolioOverviewContext } from './context'
 import { get } from '@microsoft/sp-lodash-subset'
+import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 
 export function usePortfolioOverviewFilters() {
   const context = useContext(PortfolioOverviewContext)

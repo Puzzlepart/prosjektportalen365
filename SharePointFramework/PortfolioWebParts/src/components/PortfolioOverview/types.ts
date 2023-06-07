@@ -4,10 +4,10 @@ import {
   ProjectColumn,
   ProjectColumnCustomSort
 } from 'pp365-shared-library/lib/models'
-import { IFilterProps } from '../FilterPanel'
 import { IBaseComponentProps } from '../types'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { MessageBarType, IContextualMenuProps } from '@fluentui/react'
+import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 
 export class PortfolioOverviewErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {

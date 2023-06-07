@@ -10,12 +10,11 @@
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
     "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\"",
-    "build": "npm run lint && gulp clean && gulp bundle --ship && gulp package-solution --ship",
+    "build": "npm run lint && gulp bundle --ship && gulp package-solution --ship",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
     "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
-    "publish:temp": "npm install && npm run build && npm publish --tag temp",
     "prewatch": "node ../.tasks/pre-watch.js",
     "postwatch": "node ../.tasks/post-watch.js"
   },
@@ -54,9 +53,10 @@
     "react-dom": "16.13.1",
     "react-highcharts": "16.0.2",
     "tslib": "2.3.1",
-    "underscore": "1.13.6",
+    "underscore": "~1.13.6",
     "lodash": "4.17.21",
-    "array-unique": "0.3.2"
+    "array-unique": "0.3.2",
+    "@types/lodash": "~4.14.195"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.15.2",
@@ -68,7 +68,7 @@
     "@types/react": "16.8.8",
     "@types/react-calendar-timeline": "0.26.0",
     "@types/react-dom": "16.8.3",
-    "@types/underscore": "1.11.5",
+    "@types/underscore": "~1.11.5",
     "@types/webpack-env": "1.18.0",
     "@typescript-eslint/eslint-plugin": "5.40.0",
     "@typescript-eslint/parser": "5.40.0",
@@ -84,7 +84,7 @@
     "find": "0.3.0",
     "gulp": "4.0.2",
     "livereload": "0.9.3",
-    "pp365-projectwebparts": "1.9.0-1155.1",
+    "pp365-projectwebparts": "1.9.0",
     "prettier": "2.7.1",
     "typescript": "4.5.5",
     "webpack": "5.74.0"

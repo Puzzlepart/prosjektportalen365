@@ -1,4 +1,4 @@
-import { ITimelineGroup, TimelineResourceType } from 'interfaces'
+import { ITimelineGroup, TimelineResourceType } from 'pp365-shared-library'
 import React from 'react'
 import { ReactCalendarGroupRendererProps } from 'react-calendar-timeline'
 

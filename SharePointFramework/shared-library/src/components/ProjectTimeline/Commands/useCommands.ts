@@ -1,5 +1,5 @@
 import { ICommandBarProps, ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
-import * as strings from 'PortfolioWebPartsStrings'
+import * as strings from 'SharedLibraryStrings'
 import { useState } from 'react'
 import { ICommandsProps } from './types'
 

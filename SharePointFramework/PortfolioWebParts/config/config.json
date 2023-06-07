@@ -65,6 +65,7 @@
     "PortfolioWebPartsStrings": "lib/loc/{locale}.js",
     "PzlSPFxComponentsStrings": "lib/loc/{locale}.js",
     "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js",
-    "ProjectWebPartsStrings": "node_modules/pp365-projectwebparts/lib/loc/{locale}.js"
+    "ProjectWebPartsStrings": "node_modules/pp365-projectwebparts/lib/loc/{locale}.js",
+    "SharedLibraryStrings": "node_modules/pp365-shared-library/lib/loc/{locale}.js"
   }
 }

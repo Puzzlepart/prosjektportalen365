@@ -5,7 +5,6 @@ import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import React, { FC } from 'react'
 import Timeline, { TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
-import { FilterPanel } from '../FilterPanel'
 import { DetailsCallout } from './DetailsCallout'
 import { groupRenderer } from './groupRenderer'
 import { itemRenderer } from './itemRenderer'
@@ -13,6 +12,7 @@ import styles from './ResourceAllocation.module.scss'
 import './Timeline.overrides.css'
 import { IResourceAllocationProps } from './types'
 import { useResourceAllocation } from './useResourceAllocation'
+import { FilterPanel } from 'pp365-shared-library/lib/components'
 
 export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
   const {

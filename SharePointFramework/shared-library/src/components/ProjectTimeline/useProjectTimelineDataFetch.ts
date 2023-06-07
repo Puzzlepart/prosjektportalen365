@@ -2,7 +2,7 @@ import { format } from '@fluentui/react/lib/Utilities'
 import sortArray from 'array-sort'
 import _ from 'lodash'
 import moment from 'moment'
-import strings from 'PortfolioWebPartsStrings'
+import strings from 'SharedLibraryStrings'
 import { CSSProperties, useEffect } from 'react'
 import {
   ITimelineGroup,
@@ -147,7 +147,7 @@ const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProject
       )
     ])
 
-    const filteredProjects = projects.filter((project) => {
+    const filteredProjects: any[] = projects.filter((project) => {
       return project.startDate !== null && project.endDate !== null
     })
 

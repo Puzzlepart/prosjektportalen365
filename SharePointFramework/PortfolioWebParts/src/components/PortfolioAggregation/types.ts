@@ -1,11 +1,11 @@
 import { MessageBarType, IGroup, IColumn, IPanelProps, Target } from '@fluentui/react'
 import { SearchResult } from '@pnp/sp'
-import { IFilterProps } from 'components/FilterPanel'
 import { IDataAdapter } from 'data/types'
 import { IAggregatedListConfiguration } from 'interfaces'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
 import { IBaseComponentProps } from '../types'
+import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 
 export class PortfolioAggregationErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {

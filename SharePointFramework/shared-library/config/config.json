@@ -12,5 +12,7 @@
     }
   },
   "externals": {},
-  "localizedResources": {}
+  "localizedResources": {
+    "SharedLibraryStrings": "lib/loc/{locale}.js"
+  }
 }

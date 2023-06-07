@@ -3,10 +3,10 @@ import { get } from '@microsoft/sp-lodash-subset'
 import moment from 'moment'
 import * as strings from 'PortfolioWebPartsStrings'
 import { useState } from 'react'
-import { IFilterItemProps } from '../FilterPanel'
 import { IResourceAllocationProps, IResourceAllocationState } from './types'
 import { useFilteredData } from './useFilteredData'
 import { useResourceAllocationDataFetch } from './useResourceAllocationDataFetch'
+import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 
 /**
  * Component logic hook for `<ResourceAllocation />`. Handles

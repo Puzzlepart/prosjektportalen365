@@ -1,6 +1,6 @@
 import { ITimelineItem } from '../../../interfaces'
 import { ReactCalendarItemRendererProps } from 'react-calendar-timeline'
-import * as strings from 'PortfolioWebPartsStrings'
+import * as strings from 'SharedLibraryStrings'
 import styles from './Timeline.module.scss'
 import React from 'react'
 

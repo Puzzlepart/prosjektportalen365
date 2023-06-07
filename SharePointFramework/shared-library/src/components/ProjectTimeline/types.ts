@@ -7,7 +7,7 @@ import { IBaseComponentProps } from '../types'
 import { ITimelineProps } from './Timeline'
 
 export interface IProjectTimelineProps
-  extends IBaseComponentProps,
+  extends IBaseComponentProps<any>,
     Pick<ITimelineProps, 'infoText' | 'showInfoText'> {
   /**
    * Timeline default start time

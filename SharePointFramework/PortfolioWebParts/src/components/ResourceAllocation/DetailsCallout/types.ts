@@ -1,4 +1,4 @@
-import { ITimelineItem } from 'interfaces/ITimelineItem'
+import { ITimelineItem } from 'pp365-shared-library/lib/interfaces'
 
 export interface IDetailsCalloutItem {
   item: ITimelineItem

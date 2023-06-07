@@ -1,11 +1,11 @@
 import { Checkbox, DefaultButton, Panel, PrimaryButton } from '@fluentui/react'
-import { IFilterItemProps } from 'components/FilterPanel/FilterItem/types'
 import _ from 'lodash'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC, useContext, useEffect, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
 import { SHOW_HIDE_COLUMNS, TOGGLE_SHOW_HIDE_COLUMN_PANEL } from '../reducer'
 import styles from './ShowHideColumnPanel.module.scss'
+import { IFilterItemProps } from 'pp365-shared-library'
 
 export const ShowHideColumnPanel: FC = () => {
   const { state, props, dispatch } = useContext(PortfolioAggregationContext)

@@ -2,7 +2,7 @@ import _ from 'lodash'
 import {
   TimelineConfigurationModel,
   TimelineContentModel
-} from 'pp365-portfoliowebparts/lib/models'
+} from 'pp365-shared-library/lib/models'
 import { ITimelineGroup, ITimelineGroups, TimelineGroupType } from '../types'
 
 /**

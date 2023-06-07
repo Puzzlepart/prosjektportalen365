@@ -1,5 +1,5 @@
 import { CommandBar } from '@fluentui/react'
-import * as strings from 'PortfolioWebPartsStrings'
+import * as strings from 'SharedLibraryStrings'
 import React, { FC } from 'react'
 import { ICommandsProps } from './types'
 import { useCommands } from './useCommands'

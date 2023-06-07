@@ -1,6 +1,6 @@
-import { ITimelineData } from 'interfaces'
 import _ from 'lodash'
 import { IResourceAllocationState } from './types'
+import { ITimelineData } from 'pp365-shared-library/lib/interfaces'
 
 /**
  * Get filtered data

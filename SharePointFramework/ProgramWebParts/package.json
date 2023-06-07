@@ -13,12 +13,11 @@
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
     "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\"",
-    "build": "npm run lint && gulp clean && gulp bundle --ship && gulp package-solution --ship",
+    "build": "npm run lint && gulp bundle --ship && gulp package-solution --ship",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
     "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
-    "publish:temp": "npm install && npm run build && npm publish --tag temp",
     "prewatch": "node ../.tasks/pre-watch.js",
     "postwatch": "node ../.tasks/post-watch.js"
   },
@@ -58,7 +57,8 @@
     "react-highcharts": "16.0.2",
     "tslib": "2.3.1",
     "lodash": "4.17.21",
-    "underscore": "1.13.6"
+    "underscore": "~1.13.6",
+    "@types/underscore": "~1.11.5"
   },
   "resolutions": {
     "@types/react": "16.8.8"
@@ -89,8 +89,8 @@
     "find": "0.3.0",
     "gulp": "4.0.2",
     "livereload": "0.9.3",
-    "pp365-portfoliowebparts": "1.9.0-1155.1",
-    "pp365-projectwebparts": "1.9.0-1155.1",
+    "pp365-portfoliowebparts": "1.9.0",
+    "pp365-projectwebparts": "1.9.0",
     "prettier": "2.7.1",
     "typescript": "4.5.5",
     "webpack": "5.74.0",

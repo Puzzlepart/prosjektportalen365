@@ -1,15 +1,15 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { sp } from '@pnp/sp'
 import sortArray from 'array-sort'
-import { IAllocationSearchResult, ITimelineData, TimelineResourceType } from 'interfaces'
+import { IAllocationSearchResult } from 'interfaces'
 import _ from 'lodash'
 import moment from 'moment'
 import strings from 'PortfolioWebPartsStrings'
 import { tryParsePercentage } from 'pp365-shared-library/lib/helpers'
 import { DataSourceService } from 'pp365-shared-library/lib/services'
 import { useEffect } from 'react'
-import { ITimelineGroup, ITimelineItem } from '../../interfaces'
 import { IResourceAllocationProps } from './types'
+import { ITimelineData, ITimelineGroup, ITimelineItem, TimelineResourceType } from 'pp365-shared-library/lib/interfaces'
 
 /**
  * Creating groups based on user property (`RefinableString71`) on the search result,
