@@ -114,6 +114,15 @@ To work with the various solutions, you have to to the following
 1. Ensure you have `npm` installed
 2. If you have `rush` installed run `rush update && rush build` (or use npm script `spfx:init` in the root of the project`
 
+_To install `rush` globally run `npm i @microsoft/rush -g` in your terminal._
+
+## Adding a new npm package with rush
+Don't use `npm i [package-name] -S` anymore. With rush we should use `rush add -p [package-name]`. 
+
+To install the package for all solutions append `--all` and apppend `-m` if you want to make the version consistent throughout your solutions.
+
+Read more about the `rush add` command [here](https://rushjs.io/pages/commands/rush_add/).
+
 ## Updates to shared-library
 If you have changes in `shared-library` that you want to take effect in a solution dependent on it, you can use `rush rebuild`.
 
