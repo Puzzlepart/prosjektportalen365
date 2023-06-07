@@ -6,6 +6,7 @@ require('dotenv').config()
 
 try {
     if (process.argv[2] === '--revert' || process.env.npm_lifecycle_event === 'postwatch') {
+        if(!fs.existsSync(configTempSrc)) return
         fs.copyFile(configTempSrc, configSrc, () => {
             fs.rm(configTempSrc, () => { })
         })

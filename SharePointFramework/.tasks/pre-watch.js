@@ -3,6 +3,8 @@ const path = require('path');
 const { getFileContent } = require('./util')
 require('dotenv').config()
 
+require('./createEnviromentFile')
+
 // Solution
 const solution = process.cwd().split(path.sep).pop()
 

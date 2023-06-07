@@ -5,6 +5,7 @@ const path = require('path');
  * Get file content for the given file path in JSON format
  * 
  * @param {*} file File path 
+ * 
  * @returns File contents as JSON
  */
 function getFileContent(file) {
