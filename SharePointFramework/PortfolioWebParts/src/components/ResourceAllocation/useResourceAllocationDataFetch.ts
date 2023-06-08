@@ -9,7 +9,12 @@ import { tryParsePercentage } from 'pp365-shared-library/lib/helpers'
 import { DataSourceService } from 'pp365-shared-library/lib/services'
 import { useEffect } from 'react'
 import { IResourceAllocationProps } from './types'
-import { ITimelineData, ITimelineGroup, ITimelineItem, TimelineResourceType } from 'pp365-shared-library/lib/interfaces'
+import {
+  ITimelineData,
+  ITimelineGroup,
+  ITimelineItem,
+  TimelineResourceType
+} from 'pp365-shared-library/lib/interfaces'
 
 /**
  * Creating groups based on user property (`RefinableString71`) on the search result,

@@ -14,9 +14,7 @@ import _ from 'lodash'
 import React from 'react'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
-export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<
-  IPortfolioAggregationProps
-> {
+export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IPortfolioAggregationProps> {
   private _configuration: IAggregatedListConfiguration
 
   public render(): void {

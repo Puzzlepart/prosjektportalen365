@@ -17,7 +17,15 @@ import { capitalize } from 'lodash'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getUserPhoto } from 'pp365-shared-library/lib/helpers/getUserPhoto'
-import { DataSource, PortfolioOverviewView, ProjectColumn, ProjectListModel, SPTimelineConfigurationItem, TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-library/lib/models'
+import {
+  DataSource,
+  PortfolioOverviewView,
+  ProjectColumn,
+  ProjectListModel,
+  SPTimelineConfigurationItem,
+  TimelineConfigurationModel,
+  TimelineContentModel
+} from 'pp365-shared-library/lib/models'
 import { DataSourceService } from 'pp365-shared-library/lib/services/DataSourceService'
 import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
 import _ from 'underscore'
@@ -31,7 +39,7 @@ import {
   DataField,
   ProgramItem,
   SPChartConfigurationItem,
-  SPContentType,
+  SPContentType
 } from '../models'
 import {
   CONTENT_TYPE_ID_BENEFITS,
@@ -136,23 +144,16 @@ export class DataAdapter implements IDataAdapter {
    */
   public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
     // eslint-disable-next-line prefer-const
-    const [
-      columnConfig,
-      columns,
-      views,
-      programs,
-      viewsUrls,
-      columnUrls,
-      userCanAddViews
-    ] = await Promise.all([
-      this._portal.getProjectColumnConfig(),
-      this._portal.getProjectColumns(),
-      this._portal.getPortfolioOverviewViews(),
-      this._portal.getPrograms(ProgramItem),
-      this._portal.getListFormUrls('PORTFOLIO_VIEWS'),
-      this._portal.getListFormUrls('PROJECT_COLUMNS'),
-      this._portal.currentUserHasPermissionsToList('PORTFOLIO_VIEWS', PermissionKind.AddListItems)
-    ])
+    const [columnConfig, columns, views, programs, viewsUrls, columnUrls, userCanAddViews] =
+      await Promise.all([
+        this._portal.getProjectColumnConfig(),
+        this._portal.getProjectColumns(),
+        this._portal.getPortfolioOverviewViews(),
+        this._portal.getPrograms(ProgramItem),
+        this._portal.getListFormUrls('PORTFOLIO_VIEWS'),
+        this._portal.getListFormUrls('PROJECT_COLUMNS'),
+        this._portal.currentUserHasPermissionsToList('PORTFOLIO_VIEWS', PermissionKind.AddListItems)
+      ])
     const configuredColumns = columns.map((col) => col.configure(columnConfig))
     const refiners = columns.filter((col) => col.isRefinable)
     const configuredViews = views.map((view) => view.configure(columns))
@@ -356,27 +357,24 @@ export class DataAdapter implements IDataAdapter {
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ) {
-    let [
-      projects,
-      { PrimarySearchResults: sites },
-      { PrimarySearchResults: statusReports }
-    ] = await Promise.all([
-      this._fetchItemsForView(view, [
-        ...configuration.columns.map((f) => f.fieldName),
-        siteIdProperty
-      ]),
-      sp.search({
-        ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
-        SelectProperties: ['Path', 'Title', 'SiteId']
-      }),
-      sp.search({
-        ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
-        SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
-        Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
-      })
-    ])
+    let [projects, { PrimarySearchResults: sites }, { PrimarySearchResults: statusReports }] =
+      await Promise.all([
+        this._fetchItemsForView(view, [
+          ...configuration.columns.map((f) => f.fieldName),
+          siteIdProperty
+        ]),
+        sp.search({
+          ...DEFAULT_SEARCH_SETTINGS,
+          QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
+          SelectProperties: ['Path', 'Title', 'SiteId']
+        }),
+        sp.search({
+          ...DEFAULT_SEARCH_SETTINGS,
+          QueryTemplate: `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+          SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
+          Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
+        })
+      ])
     projects = projects.map((item) => cleanDeep({ ...item }))
     sites = sites.map((item) => cleanDeep({ ...item }))
     statusReports = statusReports.map((item) => cleanDeep({ ...item }))

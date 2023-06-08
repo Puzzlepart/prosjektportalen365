@@ -33,7 +33,8 @@ export const ColumnFormPanel: FC = () => {
       headerText={state.editColumn ? strings.EditColumnHeaderText : strings.NewColumnHeaderText}
       onDismiss={onDismiss}
       isLightDismiss={true}
-      className={styles.root}>
+      className={styles.root}
+    >
       <div className={styles.field}>
         <TextField
           label={strings.SortOrderLabel}

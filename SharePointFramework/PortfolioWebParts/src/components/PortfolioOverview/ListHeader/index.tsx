@@ -29,7 +29,8 @@ export const ListHeader: FC<IListHeaderProps> = (props) => {
     <Sticky
       stickyClassName={styles.sticky}
       stickyPosition={StickyPositionType.Header}
-      isScrollSynced={true}>
+      isScrollSynced={true}
+    >
       <div className={styles.root}>
         <div className={styles.header}>
           <div className={styles.title}>{context.props.title}</div>

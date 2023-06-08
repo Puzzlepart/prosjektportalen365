@@ -4,9 +4,7 @@ import '@fluentui/react/dist/css/fabric.min.css'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
-export default class PortfolioInsightsWebPart extends BasePortfolioWebPart<
-  IPortfolioInsightsProps
-> {
+export default class PortfolioInsightsWebPart extends BasePortfolioWebPart<IPortfolioInsightsProps> {
   public render(): void {
     this.renderComponent<IPortfolioInsightsProps>(PortfolioInsights)
   }

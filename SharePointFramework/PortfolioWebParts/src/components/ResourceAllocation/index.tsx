@@ -15,15 +15,8 @@ import { useResourceAllocation } from './useResourceAllocation'
 import { FilterPanel } from 'pp365-shared-library/lib/components'
 
 export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
-  const {
-    state,
-    setState,
-    commandBar,
-    filters,
-    onFilterChange,
-    items,
-    groups
-  } = useResourceAllocation(props)
+  const { state, setState, commandBar, filters, onFilterChange, items, groups } =
+    useResourceAllocation(props)
 
   if (!state.isDataLoaded) return null
 
@@ -54,7 +47,8 @@ export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
                   strings.ResourceAllocationInfoText,
                   encodeURIComponent(window.location.href)
                 )
-              }}></div>
+              }}
+            ></div>
           </MessageBar>
         </div>
         <div className={styles.timeline}>
@@ -70,7 +64,8 @@ export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
             }
             groupRenderer={groupRenderer}
             defaultTimeStart={moment().add(...props.defaultTimeStart)}
-            defaultTimeEnd={moment().add(...props.defaultTimeEnd)}>
+            defaultTimeEnd={moment().add(...props.defaultTimeEnd)}
+          >
             <TimelineMarkers>
               <TodayMarker date={moment().toDate()} />
             </TimelineMarkers>

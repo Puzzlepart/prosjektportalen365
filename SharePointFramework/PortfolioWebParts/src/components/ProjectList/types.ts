@@ -22,9 +22,7 @@ export interface IProjectListView extends IPivotItemProps {
    *
    * @param state State of the component
    */
-  getHeaderButtonProps?: (
-    state: IProjectListState
-  ) =>
+  getHeaderButtonProps?: (state: IProjectListState) =>
     | IButtonProps
     | {
         [key: string]: string | number | boolean

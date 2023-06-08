@@ -62,7 +62,8 @@ export const ShowHideColumnPanel: FC = () => {
       headerText={strings.ShowHideColumnsLabel}
       onDismiss={onDismiss}
       isLightDismiss={true}
-      className={styles.root}>
+      className={styles.root}
+    >
       <p>{strings.ShowHideColumnsDescription}</p>
       {selectedColumns.map((col, idx) => {
         return (

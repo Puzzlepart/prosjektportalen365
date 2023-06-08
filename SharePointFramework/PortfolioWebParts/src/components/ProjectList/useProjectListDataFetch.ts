@@ -27,6 +27,7 @@ export function useProjectListDataFetch(
     ]).then(([projects, isUserInPortfolioManagerGroup]) => {
       const selectedView =
         _.find(views, (view) => view.itemKey === props.defaultView) ?? _.first(views)
+
       setState({
         projects,
         isDataLoaded: true,
