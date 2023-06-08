@@ -20,32 +20,24 @@ export function useProjectListDataFetch(
   views: IProjectListView[],
   setState: (newState: Partial<IProjectListState>) => void
 ) {
-  console.log(views)
-
   useEffect(() => {
     Promise.all([
       props.dataAdapter.fetchEnrichedProjects(),
       props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
     ]).then(([projects, isUserInPortfolioManagerGroup]) => {
-
       if (props.defaultView === 'all_projects' && !isUserInPortfolioManagerGroup) {
-        props.defaultView = 'projects_access'
+        props.defaultView = _.first(views).itemKey
 
-        // iterate through views and set view 'all_projects' to isHidden = true
         views.forEach((view) => {
           if (view.itemKey === 'all_projects') {
             view.isHidden = (state) => !state.isUserInPortfolioManagerGroup
           }
-        }
-        )
-
+        })
       }
-
 
       const selectedView =
         _.find(views, (view) => view.itemKey === props.defaultView) ?? _.first(views)
 
-      console.log(selectedView)
       setState({
         projects,
         isDataLoaded: true,
