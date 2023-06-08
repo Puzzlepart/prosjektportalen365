@@ -1,4 +1,3 @@
-import { TypedHash } from '@pnp/common'
 import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
@@ -74,9 +73,8 @@ export class SetupProjectInformation extends BaseTask {
         GtCurrentVersion: params.templateSchema.Version
       }
       const propertyItem = list.items.getById(1)
-      const items = await list.items.getAll()
-
-      if (items.length >= 1) {
+      const propertyItems = await list.items.getAll()
+      if (propertyItems.length >= 1) {
         await propertyItem.update(properties)
       } else {
         await list.items.add(properties)
@@ -103,12 +101,14 @@ export class SetupProjectInformation extends BaseTask {
         params.context.pageContext.legacyPageContext.groupId
       )
       if (entity) return
-      const properties: TypedHash<any> = {
+      const properties:  Record<string, string | boolean | number> = {
         Title: params.context.pageContext.web.title,
         GtSiteId: params.context.pageContext.site.id.toString(),
         GtProjectTemplate: this.data.selectedTemplate.text,
         GtIsProgram: this.data.selectedTemplate.isProgram,
-        GtIsParentProject: this.data.selectedTemplate.isParentProject
+        GtIsParentProject: this.data.selectedTemplate.isParentProject,
+        GtInstalledVersion: params.templateSchema.Version,
+        GtCurrentVersion: params.templateSchema.Version
       }
       if (params.templateSchema.Parameters.ProjectContentTypeId) {
         properties.ContentTypeId = params.templateSchema.Parameters.ProjectContentTypeId
