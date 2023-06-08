@@ -32,7 +32,8 @@ export const ProjectListViews: IProjectListView[] = [
     itemIcon: 'AllApps',
     searchBoxPlaceholder: strings.AllProjectsSearchBoxPlaceholderText,
     filter: (_, state) =>
-      (state.isUserInPortfolioManagerGroup)
+      (state.isUserInPortfolioManagerGroup),
+    isHidden: (state) => !state.isUserInPortfolioManagerGroup
   },
   {
     itemKey: 'parent_projects',

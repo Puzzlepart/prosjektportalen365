@@ -25,16 +25,6 @@ export function useProjectListDataFetch(
       props.dataAdapter.fetchEnrichedProjects(),
       props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
     ]).then(([projects, isUserInPortfolioManagerGroup]) => {
-      if (props.defaultView === 'all_projects' && !isUserInPortfolioManagerGroup) {
-        props.defaultView = _.first(views).itemKey
-
-        views.forEach((view) => {
-          if (view.itemKey === 'all_projects') {
-            view.isHidden = (state) => !state.isUserInPortfolioManagerGroup
-          }
-        })
-      }
-
       const selectedView =
         _.find(views, (view) => view.itemKey === props.defaultView) ?? _.first(views)
 
