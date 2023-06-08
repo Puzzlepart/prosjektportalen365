@@ -72,25 +72,13 @@ export class SetupProjectInformation extends BaseTask {
         GtInstalledVersion: params.templateSchema.Version,
         GtCurrentVersion: params.templateSchema.Version,
       }
+      const propertyItem = list.items.getById(1)
+      const items = await list.items.getAll()
 
-      if ((await list.items.getAll())?.length >= 1) {
-        await list.items.getById(1).update(properties)
+      if (items.length >= 1) {
+        await propertyItem.update(properties)
       } else {
         await list.items.add(properties)
-      }
-
-      const items = await list.items.getAll()
-      if (items.length >= 1) {
-        if (!(await list.items.getById(1).select('TemplateParameters').get()).TemplateParameters) {
-          await list.items.getById(1).update({
-            TemplateParameters: templateParametersString
-          })
-        }
-      } else {
-        await list.items.add({
-          Title: params.context.pageContext.web.title,
-          TemplateParameters: templateParametersString
-        })
       }
     } catch (error) {
       throw error
