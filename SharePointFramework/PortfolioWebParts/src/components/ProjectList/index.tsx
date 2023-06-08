@@ -119,7 +119,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
               setState({ selectedView: find(views, (v) => v.itemKey === props.itemKey) })
             }
             selectedKey={state.selectedView.itemKey}>
-            {views.map((view) => (
+            {state.isDataLoaded && views.map((view) => (
               <PivotItem
                 key={view.itemKey}
                 itemKey={view.itemKey}
