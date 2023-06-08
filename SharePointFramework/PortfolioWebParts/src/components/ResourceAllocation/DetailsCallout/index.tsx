@@ -13,7 +13,8 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
       gapSpace={10}
       target={props.viewItem.element}
       onDismiss={props.onDismiss}
-      setInitialFocus={true}>
+      setInitialFocus={true}
+    >
       <p>
         <b>{strings.ProjectLabel}:</b>{' '}
         <a href={item.data.projectUrl}>

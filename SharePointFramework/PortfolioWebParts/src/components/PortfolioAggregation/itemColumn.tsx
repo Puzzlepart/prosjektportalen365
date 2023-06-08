@@ -92,7 +92,8 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
             href={item.ServerRedirectedURL}
             rel='noopener noreferrer'
             target='_blank'
-            style={{ marginLeft: 8 }}>
+            style={{ marginLeft: 8 }}
+          >
             {columnValue}
           </Link>
         </span>
@@ -154,7 +155,8 @@ export const getDefaultColumns = (props: IPortfolioAggregationProps) => {
                 }}
                 onClick={onToggle}
               />
-            )}>
+            )}
+          >
             <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
               {item.SiteTitle}
             </Link>

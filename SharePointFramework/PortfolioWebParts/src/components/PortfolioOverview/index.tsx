@@ -27,13 +27,8 @@ import { usePortfolioOverview } from './usePortfolioOverview'
  * Component for displaying a portfolio overview - an overview of all projects in a portfolio.
  */
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
-  const {
-    state,
-    contextValue,
-    selection,
-    onColumnHeaderClick,
-    onColumnHeaderContextMenu
-  } = usePortfolioOverview(props)
+  const { state, contextValue, selection, onColumnHeaderClick, onColumnHeaderContextMenu } =
+    usePortfolioOverview(props)
   const { items, columns, groups } = useFilteredData(props, state)
 
   return (
@@ -57,7 +52,8 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
           ) : (
             <ScrollablePane
               scrollbarVisibility={ScrollbarVisibility.auto}
-              styles={{ root: { top: 75 } }}>
+              styles={{ root: { top: 75 } }}
+            >
               <MarqueeSelection selection={selection} className={styles.listContainer}>
                 <ShimmeredDetailsList
                   enableShimmer={state.loading || !!state.isChangingView}

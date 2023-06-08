@@ -51,7 +51,8 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
               project,
               actions: getCardActions(project),
               isDataLoaded: state.isDataLoaded
-            }}>
+            }}
+          >
             <ProjectCard />
           </ProjectCardContext.Provider>
         ))
@@ -118,35 +119,42 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             onLinkClick={({ props }) =>
               setState({ selectedView: find(views, (v) => v.itemKey === props.itemKey) })
             }
-            selectedKey={state.selectedView.itemKey}>
-            {state.isDataLoaded && views.map((view) => (
-              <PivotItem
-                key={view.itemKey}
-                itemKey={view.itemKey}
-                headerText={view.headerText}
-                itemIcon={view.itemIcon}
-                headerButtonProps={view.getHeaderButtonProps && view.getHeaderButtonProps(state)}>
-                <div className={styles.searchBox} hidden={!props.showSearchBox}>
-                  <SearchBox
-                    disabled={!state.isDataLoaded || isEmpty(state.projects)}
-                    value={state.searchTerm}
-                    placeholder={searchBoxPlaceholder}
-                    onChange={onSearch}
-                  />
-                </div>
-                <RenderModeDropdown
-                  hidden={!props.showViewSelector}
-                  renderAs={state.renderMode}
-                  onChange={(renderAs) => setState({ renderMode: renderAs })}
-                />
-                {state.isDataLoaded && isEmpty(projects) && (
-                  <div className={styles.emptyMessage}>
-                    <MessageBar>{strings.ProjectListEmptyText}</MessageBar>
-                  </div>
-                )}
-                <div className={styles.projects}>{renderProjects(projects)}</div>
-              </PivotItem>
-            ))}
+            selectedKey={state.selectedView.itemKey}
+          >
+            {state.isDataLoaded &&
+              views
+                .filter((view) => !view.isHidden || !view.isHidden(state))
+                .map((view) => (
+                  <PivotItem
+                    key={view.itemKey}
+                    itemKey={view.itemKey}
+                    headerText={view.headerText}
+                    itemIcon={view.itemIcon}
+                    headerButtonProps={
+                      view.getHeaderButtonProps && view.getHeaderButtonProps(state)
+                    }
+                  >
+                    <div className={styles.searchBox} hidden={!props.showSearchBox}>
+                      <SearchBox
+                        disabled={!state.isDataLoaded || isEmpty(state.projects)}
+                        value={state.searchTerm}
+                        placeholder={searchBoxPlaceholder}
+                        onChange={onSearch}
+                      />
+                    </div>
+                    <RenderModeDropdown
+                      hidden={!props.showViewSelector}
+                      renderAs={state.renderMode}
+                      onChange={(renderAs) => setState({ renderMode: renderAs })}
+                    />
+                    {state.isDataLoaded && isEmpty(projects) && (
+                      <div className={styles.emptyMessage}>
+                        <MessageBar>{strings.ProjectListEmptyText}</MessageBar>
+                      </div>
+                    )}
+                    <div className={styles.projects}>{renderProjects(projects)}</div>
+                  </PivotItem>
+                ))}
           </Pivot>
         </div>
       </div>

@@ -29,7 +29,8 @@ export default class ItemModal extends PureComponent<IItemModalProps, IItemModal
           isDarkOverlay={true}
           containerClassName={styles.itemModal}
           onDismiss={this._onCloseModal.bind(this)}
-          isBlocking={false}>
+          isBlocking={false}
+        >
           <div className={styles.header}>
             <div className={styles.title}>{this.props.title}</div>
           </div>

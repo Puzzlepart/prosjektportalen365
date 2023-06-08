@@ -22,9 +22,7 @@ export const PROPERTYPANE_CONFIGURATION_PROPS = {
   SHOW_VIEWSELECTOR: 'showViewSelector'
 }
 
-export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<
-  IPortfolioOverviewProps
-> {
+export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPortfolioOverviewProps> {
   private _configuration: IPortfolioConfiguration
 
   public render(): void {
