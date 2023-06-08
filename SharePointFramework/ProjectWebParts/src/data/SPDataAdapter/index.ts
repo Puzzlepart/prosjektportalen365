@@ -150,7 +150,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       ])
       const fieldsToSync = this._getFieldsToSync(fields, templateParameters?.CustomSiteFields, [
         'GtIsParentProject',
-        'GtIsProgram'
+        'GtIsProgram',
+        'GtCurrentVersion'
       ])
       const properties: TypedHash<any> = {}
       for (let i = 0; i < fieldsToSync.length; i++) {
