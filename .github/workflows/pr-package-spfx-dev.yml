@@ -11,6 +11,9 @@ jobs:
   build:
     name: Rush Install and Rebuild
     runs-on: ubuntu-latest
+    concurrency: 
+      group: ${{ github.ref }}_rush_rebuild
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
         with:
