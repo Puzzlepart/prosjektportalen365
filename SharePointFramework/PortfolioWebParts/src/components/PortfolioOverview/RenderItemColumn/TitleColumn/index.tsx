@@ -54,7 +54,8 @@ export const TitleColumn: FC<ITitleColumnProps> = ({ item, props }) => {
               }}
               onClick={onToggle}
             />
-          )}>
+          )}
+        >
           <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
             {item.Title}
           </Link>

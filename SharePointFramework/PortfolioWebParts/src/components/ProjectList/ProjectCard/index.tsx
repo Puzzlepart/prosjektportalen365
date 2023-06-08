@@ -28,7 +28,8 @@ export const ProjectCard: FC = () => {
             />
           </div>
         </div>
-      }>
+      }
+    >
       <DocumentCard {...documentCardProps}>
         <Link href={documentCardProps.onClickHref} target='_blank'>
           <ProjectCardHeader onImageLoad={() => setIsImageLoaded(true)} />

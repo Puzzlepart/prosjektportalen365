@@ -15,10 +15,12 @@ export function itemRenderer(
     <div
       {...htmlProps}
       className={`${styles.timelineItem} rc-item`}
-      onClick={(event) => onItemClick({ element: event.currentTarget, item: props.item })}>
+      onClick={(event) => onItemClick({ element: event.currentTarget, item: props.item })}
+    >
       <div
         className={`${styles.itemContent} rc-item-content`}
-        style={{ maxHeight: `${props.itemContext.dimensions.height}` }}>
+        style={{ maxHeight: `${props.itemContext.dimensions.height}` }}
+      >
         {props.item.title}
       </div>
     </div>

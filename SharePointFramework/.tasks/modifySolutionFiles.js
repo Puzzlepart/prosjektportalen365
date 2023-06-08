@@ -121,7 +121,6 @@ function generateComponentManifestFiles(solutionConfig, componentManifestFiles) 
         return
     }
     const componentManifestFiles = glob(path.join(process.cwd(), `src/**/manifest.json`));
-    console.log(process.env.SERVE_CHANNEL)
     if (revert || process.env.npm_lifecycle_event === 'postwatch') {
         revertPackageSolutionFile();
         revertComponentManifestFiles(componentManifestFiles);
