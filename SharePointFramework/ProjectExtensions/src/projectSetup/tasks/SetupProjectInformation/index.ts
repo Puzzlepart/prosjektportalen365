@@ -63,15 +63,7 @@ export class SetupProjectInformation extends BaseTask {
         strings.CreatingLocalProjectPropertiesListItemText,
         'AlignCenter'
       )
-      const templateParametersString = JSON.stringify(params.templateSchema.Parameters)
-      const properties: Record<string, string | boolean | number> = {
-        Title: params.context.pageContext.web.title,
-        TemplateParameters: templateParametersString,
-        GtIsProgram: this.data.selectedTemplate.isProgram,
-        GtIsParentProject: this.data.selectedTemplate.isParentProject,
-        GtInstalledVersion: params.templateSchema.Version,
-        GtCurrentVersion: params.templateSchema.Version
-      }
+      const properties = this._createPropertyItem(params)
       const propertyItem = list.items.getById(1)
       const propertyItems = await list.items.getAll()
       if (propertyItems.length >= 1) {
@@ -82,6 +74,28 @@ export class SetupProjectInformation extends BaseTask {
     } catch (error) {
       throw error
     }
+  }
+
+  /**
+   * Create property item with the following properties:
+   * - `Title`: The current web title
+   * - `TemplateParameters`: The template parameters as JSON string
+   * - `IsProgram`: `true` if the current project is a program, `false` otherwise
+   * - `IsParentProject`: `true` if the current project is a parent project, `false` otherwise
+   * - `GtInstalledVersion`: The installed version
+   * - `GtCurrentVersion`: The current version (same as installed version initially)
+   * 
+   * @param params Params 
+   */
+  private _createPropertyItem(params: IBaseTaskParams): Record<string, string | boolean | number> {
+    return {
+      Title: params.context.pageContext.web.title,
+      TemplateParameters: JSON.stringify(params.templateSchema.Parameters),
+      GtIsProgram: this.data.selectedTemplate.isProgram,
+      GtIsParentProject: this.data.selectedTemplate.isParentProject,
+      GtInstalledVersion: params.templateSchema.Version,
+      GtCurrentVersion: params.templateSchema.Version
+    } 
   }
 
   /**
@@ -102,13 +116,9 @@ export class SetupProjectInformation extends BaseTask {
       )
       if (entity) return
       const properties:  Record<string, string | boolean | number> = {
-        Title: params.context.pageContext.web.title,
+        ...this._createPropertyItem(params),
         GtSiteId: params.context.pageContext.site.id.toString(),
-        GtProjectTemplate: this.data.selectedTemplate.text,
-        GtIsProgram: this.data.selectedTemplate.isProgram,
-        GtIsParentProject: this.data.selectedTemplate.isParentProject,
-        GtInstalledVersion: params.templateSchema.Version,
-        GtCurrentVersion: params.templateSchema.Version
+        GtProjectTemplate: this.data.selectedTemplate.text
       }
       if (params.templateSchema.Parameters.ProjectContentTypeId) {
         properties.ContentTypeId = params.templateSchema.Parameters.ProjectContentTypeId
