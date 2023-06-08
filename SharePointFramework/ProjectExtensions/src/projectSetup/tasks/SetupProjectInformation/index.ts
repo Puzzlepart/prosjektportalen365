@@ -37,6 +37,14 @@ export class SetupProjectInformation extends BaseTask {
    * Sync local properties list on the current project site. If the list does not exist, it will be created
    * using `portal.syncList`. If the list exists, it will be updated with the current project information and
    * the template parameters.
+   * 
+   * The following properties are set for the property item initially:
+   * - `Title`: The current web title
+   * - `TemplateParameters`: The template parameters as JSON string
+   * - `IsProgram`: `true` if the current project is a program, `false` otherwise
+   * - `IsParentProject`: `true` if the current project is a parent project, `false` otherwise
+   * - `GtInstalledVersion`: The installed version 
+   * - `GtCurrentVersion`: The current version (same as installed version initially)
    *
    * @param params Task parameters
    * @param onProgress On progress funtion
