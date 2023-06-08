@@ -19,14 +19,8 @@ import { useContentConfigSection } from './useContentConfigSection'
  * @param props Props
  */
 export const ContentConfigSection: TemplateSelectDialogSectionComponent = (props) => {
-  const {
-    selection,
-    selectedCount,
-    items,
-    columns,
-    onSearch,
-    onRenderRow
-  } = useContentConfigSection()
+  const { selection, selectedCount, items, columns, onSearch, onRenderRow } =
+    useContentConfigSection()
 
   return (
     <div className={styles.root} style={props.style}>

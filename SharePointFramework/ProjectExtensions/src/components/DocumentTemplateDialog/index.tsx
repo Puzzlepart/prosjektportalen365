@@ -132,7 +132,8 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
           isDarkOverlay: state.locked
         }}
         onDismiss={onClose}
-        containerClassName={styles.root}>
+        containerClassName={styles.root}
+      >
         <div className={styles.container}>{onRenderContent()}</div>
         <DialogFooter>{onRenderFooter()}</DialogFooter>
       </BaseDialog>

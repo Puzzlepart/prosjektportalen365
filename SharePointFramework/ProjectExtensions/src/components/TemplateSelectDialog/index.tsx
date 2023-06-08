@@ -31,7 +31,8 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
           className: styles.content
         }}
         modalProps={{ containerClassName: styles.root, isBlocking: true, isDarkOverlay: true }}
-        onDismiss={props.onDismiss}>
+        onDismiss={props.onDismiss}
+      >
         <Pivot style={{ minHeight: 450 }}>
           <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
             <TemplateSelector />
@@ -44,7 +45,8 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
                 disabled: true,
                 style: { opacity: 0.3, cursor: 'default' }
               }
-            }>
+            }
+          >
             <ExtensionsSection style={{ height: 400 }} />
           </PivotItem>
           <PivotItem
@@ -55,7 +57,8 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
                 disabled: true,
                 style: { opacity: 0.3, cursor: 'default' }
               }
-            }>
+            }
+          >
             <ContentConfigSection style={{ height: 400 }} />
           </PivotItem>
         </Pivot>

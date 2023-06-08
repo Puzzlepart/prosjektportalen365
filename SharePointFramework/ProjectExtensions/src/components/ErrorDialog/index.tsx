@@ -41,7 +41,8 @@ export const ErrorDialog: FC<IErrorDialogProps> = ({
       version={version}
       dialogContentProps={{ title: error.message }}
       modalProps={{ containerClassName: styles.root, isBlocking: false, isDarkOverlay: true }}
-      onDismiss={onDismiss}>
+      onDismiss={onDismiss}
+    >
       <div style={{ marginTop: 15 }}>
         <MessageBar messageBarType={messageType} className={styles.errorMessage}>
           <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]}>
