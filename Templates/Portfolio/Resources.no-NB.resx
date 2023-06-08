@@ -2353,6 +2353,18 @@
   <data name="SiteFields_GtFieldCustomSort_Description" xml:space="preserve">
   <value>Spesifiser egne sorteringsrekkefølger for dette feltet. Formatet er [Navn på rekkefølge]:[Element],[Element],[Element]. Om du ønsker å spesifisere flere sorteringsrekkefølger bruk semikolon (;) for å skille dem.</value>
   </data>
+  <data name="SiteFields_GtInstalledVersion_DisplayName" xml:space="preserve">
+    <value>Installert versjon</value>
+  </data>
+  <data name="SiteFields_GtInstalledVersion_Description" xml:space="preserve">
+  <value>Versjonen for installasjonen i det prosjektet ble opprettet og konfigurert.</value>
+  </data>
+  <data name="SiteFields_GtCurrentVersion_DisplayName" xml:space="preserve">
+    <value>Gjeldende versjon</value>
+  </data>
+  <data name="SiteFields_GtCurrentVersion_Description" xml:space="preserve">
+  <value>Gjeldende versjon. Oppdateres når prosjektet oppgraderes.</value>
+  </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
   </data>

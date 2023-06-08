@@ -34,7 +34,9 @@ export class SetupProjectInformation extends BaseTask {
   }
 
   /**
-   * Sync properties list
+   * Sync local properties list on the current project site. If the list does not exist, it will be created
+   * using `portal.syncList`. If the list exists, it will be updated with the current project information and
+   * the template parameters.
    *
    * @param params Task parameters
    * @param onProgress On progress funtion
@@ -61,34 +63,33 @@ export class SetupProjectInformation extends BaseTask {
         strings.CreatingLocalProjectPropertiesListItemText,
         'AlignCenter'
       )
+      const templateParametersString = JSON.stringify(params.templateSchema.Parameters)
+      const properties: Record<string, string | boolean | number> = {
+        Title: params.context.pageContext.web.title,
+        TemplateParameters: templateParametersString,
+        GtIsProgram: isProgram,
+        GtIsParentProject: isParent,
+        GtInstalledVersion: params.templateSchema.Version,
+        GtCurrentVersion: params.templateSchema.Version,
+      }
 
       if ((await list.items.getAll())?.length >= 1) {
-        await list.items.getById(1).update({
-          Title: params.context.pageContext.web.title,
-          TemplateParameters: JSON.stringify(params.templateSchema.Parameters),
-          GtIsProgram: isProgram,
-          GtIsParentProject: isParent
-        })
+        await list.items.getById(1).update(properties)
       } else {
-        await list.items.add({
-          Title: params.context.pageContext.web.title,
-          TemplateParameters: JSON.stringify(params.templateSchema.Parameters),
-          GtIsProgram: isProgram,
-          GtIsParentProject: isParent
-        })
+        await list.items.add(properties)
       }
 
       const items = await list.items.getAll()
       if (items.length >= 1) {
         if (!(await list.items.getById(1).select('TemplateParameters').get()).TemplateParameters) {
           await list.items.getById(1).update({
-            TemplateParameters: JSON.stringify(params.templateSchema.Parameters)
+            TemplateParameters: templateParametersString
           })
         }
       } else {
         await list.items.add({
           Title: params.context.pageContext.web.title,
-          TemplateParameters: JSON.stringify(params.templateSchema.Parameters)
+          TemplateParameters: templateParametersString
         })
       }
     } catch (error) {

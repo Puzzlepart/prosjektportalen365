@@ -27,6 +27,8 @@
                 <FieldRef Name="GtBudgetLastReportDate" />
                 <FieldRef Name="GtProjectLifecycleStatus" />
                 <FieldRef Name="GtSiteUrl" />
+                <FieldRef Name="GtInstalledVersion" />
+                <FieldRef Name="GtCurrentVersion" />
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
             <Aggregations Value="Off" />
