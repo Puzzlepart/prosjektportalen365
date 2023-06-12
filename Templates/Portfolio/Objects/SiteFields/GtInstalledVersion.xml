@@ -1,0 +1,3 @@
+<Field Name="GtInstalledVersion" ID="{58a07891-1cf3-426a-8941-b37f5e1c8f3a}" DisplayName="{resource:SiteFields_GtInstalledVersion_DisplayName}" Type="Text" Group="{resource:SiteFields_Portfolio_Group}" UnlimitedLengthInDocumentLibrary="TRUE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtInstalledVersion">
+    <Default>0.0.0</Default>
+</Field>

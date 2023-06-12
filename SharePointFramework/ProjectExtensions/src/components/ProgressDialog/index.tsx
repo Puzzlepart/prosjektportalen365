@@ -16,7 +16,8 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
         className: styles.content,
         ...props.dialogContentProps
       }}
-      onDismiss={props.onDismiss}>
+      onDismiss={props.onDismiss}
+    >
       <div className={styles.icon}>
         <Icon
           iconName={props.iconName}

@@ -18,9 +18,7 @@ import { ITemplateSelectorCommandProperties } from './types'
 Logger.subscribe(new ConsoleListener())
 Logger.activeLogLevel = LogLevel.Info
 
-export default class TemplateSelectorCommand extends BaseListViewCommandSet<
-  ITemplateSelectorCommandProperties
-> {
+export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITemplateSelectorCommandProperties> {
   private _openCmd: Command
   private _ctxValue: ITemplateSelectorContext = {}
   private _placeholderIds = { DocumentTemplateDialog: getId('documenttemplatedialog') }

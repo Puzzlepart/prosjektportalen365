@@ -1,0 +1,3 @@
+<Field Name="GtCurrentVersion" ID="{f6660f3e-6d90-4c32-a1f6-955c10249066}" DisplayName="{resource:SiteFields_GtCurrentVersion_DisplayName}" Type="Text" Group="{resource:SiteFields_Portfolio_Group}" UnlimitedLengthInDocumentLibrary="TRUE" ShowInEditForm="FALSE" ShowInNewForm="FALSE" StaticName="GtCurrentVersion">
+    <Default>0.0.0</Default>
+</Field>

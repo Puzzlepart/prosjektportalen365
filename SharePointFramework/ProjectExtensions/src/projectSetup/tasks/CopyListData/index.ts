@@ -123,7 +123,8 @@ export class CopyListData extends BaseTask {
       }
       if (!stringIsNullOrEmpty(item.GtAttachments)) {
         try {
-          taskDetails.attachments = item.GtAttachments.replace(/\r?\n|\r/g, '').split('|')
+          taskDetails.attachments = item.GtAttachments.replace(/\r?\n|\r/g, '')
+            .split('|')
             .map((str) => new TaskAttachment(str))
             .filter((attachment) => !stringIsNullOrEmpty(attachment.url))
         } catch (error) {}

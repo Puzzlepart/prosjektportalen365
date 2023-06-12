@@ -1,4 +1,3 @@
-import { TypedHash } from '@pnp/common'
 import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
@@ -20,12 +19,7 @@ export class SetupProjectInformation extends BaseTask {
     onProgress: OnProgressCallbackFunction
   ): Promise<IBaseTaskParams> {
     try {
-      await this._syncPropertiesList(
-        params,
-        onProgress,
-        this.data.selectedTemplate.isProgram,
-        this.data.selectedTemplate.isParentProject
-      )
+      await this._syncPropertiesList(params, onProgress)
       await this._addEntryToHub(params)
       return params
     } catch (error) {
@@ -34,16 +28,24 @@ export class SetupProjectInformation extends BaseTask {
   }
 
   /**
-   * Sync properties list
+   * Sync local properties list on the current project site. If the list does not exist, it will be created
+   * using `portal.syncList`. If the list exists, it will be updated with the current project information and
+   * the template parameters.
+   *
+   * The following properties are set for the property item initially:
+   * - `Title`: The current web title
+   * - `TemplateParameters`: The template parameters as JSON string
+   * - `IsProgram`: `true` if the current project is a program, `false` otherwise
+   * - `IsParentProject`: `true` if the current project is a parent project, `false` otherwise
+   * - `GtInstalledVersion`: The installed version
+   * - `GtCurrentVersion`: The current version (same as installed version initially)
    *
    * @param params Task parameters
    * @param onProgress On progress funtion
    */
   private async _syncPropertiesList(
     params: IBaseTaskParams,
-    onProgress: OnProgressCallbackFunction,
-    isProgram: boolean,
-    isParent: boolean
+    onProgress: OnProgressCallbackFunction
   ) {
     try {
       onProgress(
@@ -61,39 +63,39 @@ export class SetupProjectInformation extends BaseTask {
         strings.CreatingLocalProjectPropertiesListItemText,
         'AlignCenter'
       )
-
-      if ((await list.items.getAll())?.length >= 1) {
-        await list.items.getById(1).update({
-          Title: params.context.pageContext.web.title,
-          TemplateParameters: JSON.stringify(params.templateSchema.Parameters),
-          GtIsProgram: isProgram,
-          GtIsParentProject: isParent
-        })
+      const properties = this._createPropertyItem(params)
+      const propertyItem = list.items.getById(1)
+      const propertyItems = await list.items.getAll()
+      if (propertyItems.length >= 1) {
+        await propertyItem.update(properties)
       } else {
-        await list.items.add({
-          Title: params.context.pageContext.web.title,
-          TemplateParameters: JSON.stringify(params.templateSchema.Parameters),
-          GtIsProgram: isProgram,
-          GtIsParentProject: isParent
-        })
-      }
-
-      const items = await list.items.getAll()
-      if (items.length >= 1) {
-        if (!(await list.items.getById(1).select('TemplateParameters').get()).TemplateParameters) {
-          await list.items.getById(1).update({
-            TemplateParameters: JSON.stringify(params.templateSchema.Parameters)
-          })
-        }
-      } else {
-        await list.items.add({
-          Title: params.context.pageContext.web.title,
-          TemplateParameters: JSON.stringify(params.templateSchema.Parameters)
-        })
+        await list.items.add(properties)
       }
     } catch (error) {
       throw error
     }
+  }
+
+  /**
+   * Create property item with the following properties:
+   * - `Title`: The current web title
+   * - `TemplateParameters`: The template parameters as JSON string
+   * - `IsProgram`: `true` if the current project is a program, `false` otherwise
+   * - `IsParentProject`: `true` if the current project is a parent project, `false` otherwise
+   * - `GtInstalledVersion`: The installed version
+   * - `GtCurrentVersion`: The current version (same as installed version initially)
+   * 
+   * @param params Params 
+   */
+  private _createPropertyItem(params: IBaseTaskParams): Record<string, string | boolean | number> {
+    return {
+      Title: params.context.pageContext.web.title,
+      TemplateParameters: JSON.stringify(params.templateSchema.Parameters),
+      GtIsProgram: this.data.selectedTemplate.isProgram,
+      GtIsParentProject: this.data.selectedTemplate.isParentProject,
+      GtInstalledVersion: params.templateSchema.Version,
+      GtCurrentVersion: params.templateSchema.Version
+    } 
   }
 
   /**
@@ -113,12 +115,10 @@ export class SetupProjectInformation extends BaseTask {
         params.context.pageContext.legacyPageContext.groupId
       )
       if (entity) return
-      const properties: TypedHash<any> = {
-        Title: params.context.pageContext.web.title,
+      const properties:  Record<string, string | boolean | number> = {
+        ...this._createPropertyItem(params),
         GtSiteId: params.context.pageContext.site.id.toString(),
-        GtProjectTemplate: this.data.selectedTemplate.text,
-        GtIsProgram: this.data.selectedTemplate.isProgram,
-        GtIsParentProject: this.data.selectedTemplate.isParentProject
+        GtProjectTemplate: this.data.selectedTemplate.text
       }
       if (params.templateSchema.Parameters.ProjectContentTypeId) {
         properties.ContentTypeId = params.templateSchema.Parameters.ProjectContentTypeId

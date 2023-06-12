@@ -25,9 +25,9 @@ export class ApplyTemplate extends BaseTask {
   ): Promise<IBaseTaskParams> {
     try {
       const web = new Web(params.context.pageContext.web.absoluteUrl)
-      const activeLogLevel = (sessionStorage.DEBUG === '1' || DEBUG
-        ? LogLevel.Info
-        : LogLevel.Error) as any
+      const activeLogLevel = (
+        sessionStorage.DEBUG === '1' || DEBUG ? LogLevel.Info : LogLevel.Error
+      ) as any
       const provisioner = new WebProvisioner(web).setup({
         spfxContext: params.context,
         logging: {
