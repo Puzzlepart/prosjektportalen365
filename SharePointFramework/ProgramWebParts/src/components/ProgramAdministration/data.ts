@@ -2,6 +2,37 @@ import { sp } from '@pnp/sp'
 import { SPDataAdapter } from 'data'
 import { IProgramAdministrationProject } from './types'
 import { dateAdd, PnPClientStorage } from '@pnp/common'
+import { SearchQueryInit, SearchResult } from '@pnp/sp/src/search'
+
+/**
+ * Fetch items with `sp.search` using the specified `{queryTemplate}` and `{selectProperties}`.
+ * Uses a `while` loop to fetch all items in batches of `{batchSize}`.
+ *
+ * @param queryTemplate Query template
+ * @param selectProperties Select properties
+ * @param batchSize Batch size (default: 500)
+ */
+async function fetchItems(
+  queryTemplate: string,
+  selectProperties: string[],
+  batchSize = 500
+): Promise<SearchResult[]> {
+  const query: SearchQueryInit = {
+    QueryTemplate: `${queryTemplate}`,
+    Querytext: '*',
+    RowLimit: batchSize,
+    TrimDuplicates: false,
+    ClientType: 'ContentSearchRegular',
+    SelectProperties: [...selectProperties, 'Path', 'SPWebURL', 'SiteTitle', 'UniqueID']
+  }
+  const { PrimarySearchResults, TotalRows } = await sp.search(query)
+  const results = [...PrimarySearchResults]
+  while (results.length < TotalRows) {
+    const response = await sp.search({ ...query, StartRow: results.length })
+    results.push(...response.PrimarySearchResults)
+  }
+  return results
+}
 
 /**
  * Fetches all projects associated with the current hubsite context. This is done by querying the
@@ -12,27 +43,18 @@ import { dateAdd, PnPClientStorage } from '@pnp/common'
 export async function getHubSiteProjects() {
   const { HubSiteId } = await sp.site.select('HubSiteId').usingCaching().get()
   return new PnPClientStorage().local.getOrPut(
-    `HubSiteProjects_${HubSiteId}`,
+    `hubsiteprojects_${HubSiteId}`,
     async () => {
-      const [{ PrimarySearchResults: sts_sites }, { PrimarySearchResults: items }] =
-        await Promise.all([
-          sp.search({
-            Querytext: `DepartmentId:{${HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
-            RowLimit: 500,
-            StartRow: 0,
-            ClientType: 'ContentSearchRegular',
-            SelectProperties: ['SPWebURL', 'Title', 'SiteId'],
-            TrimDuplicates: false
-          }),
-          sp.search({
-            Querytext: `DepartmentId:{${HubSiteId}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
-            RowLimit: 500,
-            StartRow: 0,
-            ClientType: 'ContentSearchRegular',
-            SelectProperties: ['GtSiteIdOWSTEXT', 'Title'],
-            TrimDuplicates: false
-          })
-        ])
+      const [sites, items] = await Promise.all([
+        fetchItems(
+          `DepartmentId:{${HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
+          ['Title', 'SiteId']
+        ),
+        fetchItems(
+          `DepartmentId:{${HubSiteId}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
+          ['GtSiteIdOWSTEXT', 'Title']
+        )
+      ])
       return items
         .filter(
           (item) =>
@@ -40,7 +62,7 @@ export async function getHubSiteProjects() {
             item['GtSiteIdOWSTEXT'] !== '00000000-0000-0000-0000-000000000000'
         )
         .map<IProgramAdministrationProject>((item) => {
-          const site = sts_sites.find((site) => site['SiteId'] === item['GtSiteIdOWSTEXT'])
+          const site = sites.find((site) => site['SiteId'] === item['GtSiteIdOWSTEXT'])
           return {
             SiteId: item['GtSiteIdOWSTEXT'],
             Title: site?.Title ?? item['Title'],
