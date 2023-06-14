@@ -229,9 +229,18 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
           return isSortedDescending ? $a - $b : $b - $a
         })
       } else {
-        state.items = sortArray(state.items, [payload.column.fieldName], {
-          reverse: !isSortedDescending
-        })
+        if (payload.column.dataType === 'currency') {
+          state.items = state.items.sort((a, b) => {
+            const $a = parseInt(a[payload.column.fieldName])
+            const $b = parseInt(b[payload.column.fieldName])
+            if (!isNaN($a) && isNaN($b)) return -1
+            return isSortedDescending ? $a - $b : $b - $a
+          })
+        } else {
+          state.items = sortArray(state.items, [payload.column.fieldName], {
+            reverse: !isSortedDescending
+          })
+        }
       }
       state.sortBy = _.pick(payload, ['column', 'customSort'])
       state.columns = state.columns.map((col) => {
