@@ -65,6 +65,7 @@ export async function fetchTimelineData(
           'GtSiteIdLookup/GtSiteId'
         )
         .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+        .filter(`GtSiteIdLookup/GtSiteId eq '${props.siteId}'`)
         .getAll(),
       timelineContentList.fields
         .filter(filterString)
@@ -73,9 +74,7 @@ export async function fetchTimelineData(
         .get()
     ])
 
-    let timelineListItems = timelineContentItems.filter(
-      (item) => item.GtSiteIdLookup.Title === props.webTitle
-    )
+    let timelineListItems = timelineContentItems.filter((item) => item.GtSiteIdLookup !== null)
 
     const columns = timelineColumns
       .filter((column) => column.InternalName !== 'GtSiteIdLookup')
@@ -125,6 +124,6 @@ export async function fetchTimelineData(
 
     return { timelineContentItems, timelineListItems, columns, timelineConfig } as const
   } catch (error) {
-    return null
+    return error
   }
 }
