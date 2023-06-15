@@ -272,12 +272,10 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   }
 
   /**
-   * Fetches data for portfolio views
-   *
-   * @description Used in `PortfolioOverview`
-   *
+   * Fetches data for the specified view.
+   * 
    * @param view View configuration
-   * @param configuration PortfolioOverviewConfiguration
+   * @param configuration Configuration
    * @param siteId Site ID
    * @param siteIdProperty Site ID property
    */
