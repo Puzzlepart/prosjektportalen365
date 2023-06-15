@@ -6,9 +6,8 @@
   "scripts": {
     "build": "gulp bundle --ship && gulp package-solution --ship",
     "postversion": "tsc && npm publish",
-    "lint": "eslint --ext .ts,.tsx ./src --color",
-    "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
-    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent"
+    "lint": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
+    "prettier": "prettier '**/*.ts*' --write --loglevel silent"
   },
   "dependencies": {
     "@microsoft/sp-application-base": "1.15.2",
@@ -108,5 +107,16 @@
         "version": "detect"
       }
     }
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "singleQuote": true,
+    "semi": false,
+    "arrowParens": "always",
+    "printWidth": 100,
+    "trailingComma": "none",
+    "bracketSpacing": true,
+    "jsxBracketSameLine": true,
+    "jsxSingleQuote": true
   }
 }
