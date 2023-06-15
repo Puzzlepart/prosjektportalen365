@@ -112,7 +112,7 @@ _Published to **npm** as `pp365-projectwebparts`_
 To work with the various solutions, you have to to the following
 
 1. Ensure you have `npm` installed
-2. If you have `rush` installed run `rush update && rush build` (or use npm script `spfx:init` in the root of the project`
+2. If you have `rush` installed run `rush update && rush build` (or use npm script `rush:init` in the root of the project`
 
 _To install `rush` globally run `npm i @microsoft/rush -g` in your terminal._
 

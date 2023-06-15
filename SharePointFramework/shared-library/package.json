@@ -4,7 +4,7 @@
   "private": false,
   "main": "lib/index.js",
   "scripts": {
-    "build": "npm run lint && gulp bundle --ship && gulp package-solution --ship",
+    "build": "gulp bundle --ship && gulp package-solution --ship",
     "postversion": "tsc && npm publish",
     "lint": "eslint --ext .ts,.tsx ./src --color",
     "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",

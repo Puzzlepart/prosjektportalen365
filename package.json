@@ -10,9 +10,9 @@
     "generate-pnp-templates": "node ./.tasks/generate-pnp-templates.js",
     "generate-site-scripts": "node ./.tasks/generate-site-scripts.js --silent",
     "postversion": "npm run generate-readme && npm run sync-version",
-    "spfx:init": "npm run spfx:update && npm run spfx:build",
-    "spfx:build": "node common/scripts/install-run-rush.js rebuild --verbose",
-    "spfx:update": "node common/scripts/install-run-rush.js update"
+    "rush:update": "node common/scripts/install-run-rush.js update",
+    "rush:build": "node common/scripts/install-run-rush.js rebuild --verbose",
+    "rush:lint": "node common/scripts/install-run-rush.js lint"
   },
   "repository": {
     "type": "git",
