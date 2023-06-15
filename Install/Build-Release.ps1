@@ -28,11 +28,34 @@ Param(
 $USE_CHANNEL_CONFIG = -not ([string]::IsNullOrEmpty($Channel))
 $CHANNEL_CONFIG_NAME = "main"
 
+$global:ACTIONS_COUNT = $USE_CHANNEL_CONFIG ? 14 : 13
+$global:ACTION_INDEX = 1
+
+<#
+Starts an action and writes the action name to the console. Make sure to update the $global:ACTIONS_COUNT before
+adding a new action. Uses -NoNewline to avoid a line break before the elapsed time is written.
+#>
+function StartAction($Action) {
+    $global:StopWatch_Action = [Diagnostics.Stopwatch]::StartNew()
+    Write-Host "[$($global:ACTION_INDEX)/$($global:ACTIONS_COUNT)] $Action... " -NoNewline
+    $global:ACTION_INDEX++
+}
+
+<#
+Ends an action and writes the elapsed time to the console.
+#>
+function EndAction() {
+    $global:StopWatch_Action.Stop()
+    $ElapsedSeconds = [math]::Round(($global:StopWatch_Action.ElapsedMilliseconds) / 1000, 2)
+    Write-Host "Completed in $($ElapsedSeconds)s" -ForegroundColor Green
+}
+
 <#
 Checks if parameter $CHANNEL_CONFIG_PATH is set and if so, loads the channel config,
 stores it as JSON in the root of the project and sets the $CHANNEL_CONFIG variable
 #>
 if ($USE_CHANNEL_CONFIG) {
+    StartAction("Preparing channel configuration for channel $Channel")
     $CHANNEL_CONFIG_PATH = "$PSScriptRoot/../channels/$Channel.json"
     if (-not (Test-Path $CHANNEL_CONFIG_PATH)) {
         Write-Host "Channel config file not found at $CHANNEL_CONFIG_PATH. Aborting build of release." -ForegroundColor Red
@@ -47,24 +70,14 @@ if ($USE_CHANNEL_CONFIG) {
     }
     $CHANNEL_CONFIG = $CHANNEL_CONFIG_JSON | ConvertFrom-Json
     $CHANNEL_CONFIG_NAME = $CHANNEL_CONFIG.name
-    $CHANNEL_CONFIG_JSON | Out-File -FilePath "$PSScriptRoot/../.current-channel-config.json" -Encoding UTF8 -Force
+    $CHANNEL_CONFIG_JSON | Out-File -Path "$PSScriptRoot/../.current-channel-config.json" -Encoding UTF8 -Force
+    EndAction
 }
 
 $NPM_PACKAGE_FILE = Get-Content "$PSScriptRoot/../package.json" -Raw | ConvertFrom-Json
 
 $StopWatch = [Diagnostics.Stopwatch]::StartNew()
 $global:StopWatch_Action = $null
-
-function StartAction($Action) {
-    $global:StopWatch_Action = [Diagnostics.Stopwatch]::StartNew()
-    Write-Host "[INFO] $Action...  " -NoNewline
-}
-
-function EndAction() {
-    $global:StopWatch_Action.Stop()
-    $ElapsedSeconds = [math]::Round(($global:StopWatch_Action.ElapsedMilliseconds) / 1000, 2)
-    Write-Host "Completed in $($ElapsedSeconds)s" -ForegroundColor Green
-}
 #endregion
 
 #region Paths
@@ -94,13 +107,18 @@ else {
 
 if ($CI.IsPresent) {
     Write-Host "[Running in CI mode]" -ForegroundColor Yellow
+    StartAction("Updating npm packages using rush")
     npm ci >$null 2>&1
     npm i @microsoft/rush -g >$null 2>&1
     rush update >$null 2>&1
     npm run generate-channel-replace-map >$null 2>&1
+    EndAction
 }
 else {
+    StartAction("Updating npm packages using rush")
     rush update >$null 2>&1
+    npm run generate-channel-replace-map >$null 2>&1
+    EndAction
 }
 
 if ($CI.IsPresent) {
@@ -167,7 +185,7 @@ if ($Force.IsPresent) {
 
 #region Package SharePoint Framework solutions
 if (-not $SkipBuildSharePointFramework.IsPresent) {
-    StartAction("Packaging SPFx solution $_")
+    StartAction("Packaging SPFx solutions")
     if ($USE_CHANNEL_CONFIG) {
         foreach ($Solution in $Solutions) {
             Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH\$Solution"
