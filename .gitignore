@@ -22,3 +22,4 @@ Templates/*.ps1
 common/temp
 **/.rush/temp/
 **/*.build.log
+**/package-lock.json
