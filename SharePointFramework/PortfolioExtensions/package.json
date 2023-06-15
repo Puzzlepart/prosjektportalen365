@@ -11,11 +11,10 @@
   "scripts": {
     "watch": "concurrently \"npm run serve\" \"livereload './dist/*.js' -e 'js' -w 250\"",
     "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\"",
-    "build": "npm run lint && gulp bundle --ship && gulp package-solution --ship",
+    "build": "gulp bundle --ship && gulp package-solution --ship",
     "postversion": "tsc && npm publish",
-    "lint": "eslint --ext .ts,.tsx ./src --color",
-    "lint:fix": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
-    "prettier": "prettier --config .prettierrc '**/*.ts*' --write --loglevel silent",
+    "lint": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
+    "prettier": "prettier '**/*.ts*' --write --loglevel silent",
     "prewatch": "node ../.tasks/pre-watch.js",
     "postwatch": "node ../.tasks/post-watch.js"
   },
@@ -65,5 +64,75 @@
     "prettier": "2.7.1",
     "typescript": "4.5.5",
     "webpack": "5.74.0"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+      "prettier",
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "plugins": [
+      "prettier",
+      "unused-imports"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2018,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "rules": {
+      "@typescript-eslint/interface-name-prefix": 0,
+      "@typescript-eslint/no-explicit-any": 0,
+      "@typescript-eslint/member-delimiter-style": 0,
+      "@typescript-eslint/explicit-function-return-type": 0,
+      "@typescript-eslint/explicit-module-boundary-types": 0,
+      "@typescript-eslint/no-inferrable-types": 0,
+      "react/prop-types": 0,
+      "no-inferrable-types": 0,
+      "react/display-name": 0,
+      "no-compare-neg-zero": 1,
+      "no-console": 2,
+      "default-case": 0,
+      "eqeqeq": 1,
+      "max-classes-per-file": 1,
+      "jsx-quotes": [
+        "error",
+        "prefer-single"
+      ],
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "yoda": 2,
+      "require-await": 1,
+      "semi": [
+        "error",
+        "never",
+        {}
+      ],
+      "unused-imports/no-unused-imports": "error"
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "singleQuote": true,
+    "semi": false,
+    "arrowParens": "always",
+    "printWidth": 100,
+    "trailingComma": "none",
+    "bracketSpacing": true,
+    "jsxBracketSameLine": true,
+    "jsxSingleQuote": true
   }
 }

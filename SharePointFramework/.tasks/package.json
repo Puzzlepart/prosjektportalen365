@@ -2,7 +2,8 @@
     "name": "pp365-spfx-tasks",
     "version": "1.9.0",
     "scripts": {
-      "build": "node ./build.js"
+      "build": "node ./build.js",
+      "lint": "echo \"No linting configured\""
     },
     "dependencies": {
       "dotenv": "~16.1.3",

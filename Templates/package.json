@@ -5,6 +5,7 @@
   "scripts": {
     "watch": "chokidar \"./_JsonTemplate.json\" -c \"npm run generate-project-templates\"",
     "build": "npm run generate-project-templates && npm run generate-resx-json",
+    "lint": "echo \"No linting configured\"",
     "generate-resx-json": "node ./.tasks/generateResxJson",
     "generate-project-templates": "npm run generate-resx-json && node ./.tasks/generateProjectTemplates"
   },
