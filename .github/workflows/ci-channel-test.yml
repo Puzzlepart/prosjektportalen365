@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - releases/1.9
+      - bugfix/ci-override
     paths:
       - "SharePointFramework/**"
       - "Install/**"
