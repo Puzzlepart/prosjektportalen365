@@ -28,7 +28,7 @@ export default new (class ExcelExportService {
       const _columns = columns.filter((column) => column.name)
       sheets.push({
         name: this.configuration.sheetName,
-        data: [ 
+        data: [
           _columns.map((column) => column.name),
           ...items.map((item) => _columns.map((column) => {
             return (column as any).dataType === 'date' ? getDateValue(item, column.fieldName) :

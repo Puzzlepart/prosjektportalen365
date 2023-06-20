@@ -12,7 +12,7 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Fiks for synkronisering dersom prosjekt mangler i den sentrale prosjekter-listen [#1121](https://github.com/Puzzlepart/prosjektportalen365/issues/1121)
 
 ### Feilrettinger
-
+- Rettet en feil hvor Excel eksporten gir feilmelding når datofelt mangler data. [#1180](https://github.com/Puzzlepart/prosjektportalen365/issues/1180)
 - Rettet et problem hvor låst mal hindret mulighet for å gjøre et prosjekt om til overordnet område [#1134](https://github.com/Puzzlepart/prosjektportalen365/issues/1134)
 - Fikset et problem hvor 'Hooks' ikke ble kjørt på slutten av provisjoneringen av et prosjekt [#1127](https://github.com/Puzzlepart/prosjektportalen365/issues/1127)
 - Fikset et problem hvor prosjekttidslinje på prosjektnivå ikke returnerte tidslinje-elementer for prosjektet [#1172](https://github.com/Puzzlepart/prosjektportalen365/pull/1172)
@@ -104,7 +104,6 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 
 ### Feilrettinger
 
-- Rettet en feil hvor Excel eksporten gir feilmelding når datofelt mangler data. [#1180](https://github.com/Puzzlepart/prosjektportalen365/issues/1180)
 - Rettet et feil hvor ressursallokeringswebdelen ikke lastet på grunn av elementer som ikke var tildelt bruker eller rolle [#904](https://github.com/Puzzlepart/prosjektportalen365/issues/904)
 - Rettet et problem hvor hubsite ikke ble funnet, noe som førte til inkonsekvenser og feil [#640](https://github.com/Puzzlepart/prosjektportalen365/issues/849)
 - Rettet et feil hvor noen ganger rollen ble vist som eier av en ressursallokeringsoppføring [#916](https://github.com/Puzzlepart/prosjektportalen365/issues/916)
