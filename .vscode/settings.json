@@ -7,6 +7,8 @@
         "**/dist": true,
         "**/.dist": true,
         "**/temp": true,
+        "**/tmp": true,
+        "**/common": true,
         "README.md": true,
         ".development-guide/README.md": true
     },
