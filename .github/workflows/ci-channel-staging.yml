@@ -9,7 +9,7 @@ on:
       - "Install/**"
       - "Templates/**"
       - .github/workflows/ci-channel-staging.yml
-
+      - channels/staging.json
 env:
   SP_URL_STAGING: "https://puzzlepart.sharepoint.com/sites/pp365_channels_staging"
   CI_CREDENTIALS: ${{ secrets.CI_DEV_CREDENTIALS }}
