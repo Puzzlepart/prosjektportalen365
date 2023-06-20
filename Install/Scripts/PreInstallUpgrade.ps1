@@ -22,7 +22,7 @@ if ($null -ne $LastInstall) {
 
     if ($PreviousVersion -lt "1.5.0") {
         Write-Host "[INFO] Applying PnP upgrade template [1.5.0] to [$Url]"
-        Invoke-PnPSiteTemplate -Path "$TemplatesBasePath\1.5.0.pnp" -ErrorAction Stop
+        Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/1.5.0.pnp" -ErrorAction Stop
         Write-Host "[SUCCESS] Successfully applied PnP template [1.5.0] to [$Url]" -ForegroundColor Green
     }
     
@@ -79,8 +79,8 @@ if ($null -ne $LastInstall) {
     }
 
     if ($PreviousVersion -lt "1.8.2") {
-        Write-Host "[INFO] Applying PnP upgrade template [$TemplatesBasePath\1.8.1.pnp] to [$Url]"
-        Invoke-PnPSiteTemplate -Path "$TemplatesBasePath\1.8.1.pnp" -ErrorAction Stop
+        Write-Host "[INFO] Applying PnP upgrade template [$TemplatesBasePath/1.8.1.pnp] to [$Url]"
+        Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/1.8.1.pnp" -ErrorAction Stop
         Write-Host "[SUCCESS] Successfully applied PnP template [1.8.1] to [$Url]" -ForegroundColor Green
     }
 }
