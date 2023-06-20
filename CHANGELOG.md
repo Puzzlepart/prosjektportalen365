@@ -104,6 +104,7 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 
 ### Feilrettinger
 
+- Rettet en feil hvor Excel eksporten gir feilmelding når datofelt mangler data. [#1180](https://github.com/Puzzlepart/prosjektportalen365/issues/1180)
 - Rettet et feil hvor ressursallokeringswebdelen ikke lastet på grunn av elementer som ikke var tildelt bruker eller rolle [#904](https://github.com/Puzzlepart/prosjektportalen365/issues/904)
 - Rettet et problem hvor hubsite ikke ble funnet, noe som førte til inkonsekvenser og feil [#640](https://github.com/Puzzlepart/prosjektportalen365/issues/849)
 - Rettet et feil hvor noen ganger rollen ble vist som eier av en ressursallokeringsoppføring [#916](https://github.com/Puzzlepart/prosjektportalen365/issues/916)
