@@ -4,7 +4,8 @@
         "ProvisionSiteFields": "{{SiteFields_Project_Group}}",
         "CustomSiteFields": "{{SiteFields_CustomFields_Group}}",
         "ProjectContentTypeId": "0x0100805E9E4FEAAB4F0EABAB2600D30DB70C",
-        "ProjectStatusContentTypeId": "0x010022252E35737A413FB56A1BA53862F6D5"
+        "ProjectStatusContentTypeId": "0x010022252E35737A413FB56A1BA53862F6D5",
+        "TemplateDocumentLibrary": "Malbibliotek"
     },
     "ContentTypes": [
         {
