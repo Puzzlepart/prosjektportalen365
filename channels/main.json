@@ -44,7 +44,6 @@
         "name": "Prosjektportalen 365 - Project Extensions",
         "zippedPackage": "solution/pp-project-extensions.sppkg",
         "components": {
-          "HelpContentApplicationCustomizer": "28987406-2a67-48a8-9297-fd2833bf0a09",
           "ProjectSetup": "ce34553d-ab47-4107-8dd1-e980d953996d",
           "ProjectUpgrade": "453a6c1e-e1d0-4b12-a3fc-690a36da1f0c",
           "TemplateSelectorCommand": "c9080212-e63e-47cc-8278-00ad38c3f5a5"
