@@ -9,7 +9,8 @@ import {
 } from '@fluentui/react'
 import { FileAddResult } from '@pnp/sp'
 import * as strings from 'ProjectExtensionsStrings'
-import React, { useReducer } from 'react'
+import React, { FC, useContext, useEffect, useReducer } from 'react'
+import { TemplateSelectorContext } from 'templateSelector/context'
 import { isEmpty } from 'underscore'
 import { SPDataAdapter } from '../../data'
 import { TemplateItem } from '../../models/index'
@@ -34,11 +35,20 @@ import {
   IDocumentTemplateDialogProps
 } from './types'
 
-export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
+export const DocumentTemplateDialog: FC<IDocumentTemplateDialogProps> = (
+  props
+) => {
+  const context = useContext(TemplateSelectorContext)
   const [state, dispatch] = useReducer(reducer, initState())
   const selection = new Selection({
     onSelectionChanged: () => dispatch(SELECTION_CHANGED({ selection }))
   })
+
+  useEffect(() => {
+    if (context.error) {
+      dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Error }))
+    }
+  }, [context.error])
 
   /**
    * On copy documents to the selected target URL
@@ -79,7 +89,15 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   }
 
   /**
-   * On render content
+   * Render content in the dialog based on the current screen.
+   *
+   * The following screens are available:
+   * - `Select` - Select templates to copy
+   * - `TargetFolder` - Select target folder
+   * - `EditCopy` - Edit copy settings
+   * - `CopyProgress` - Copy progress
+   * - `Summary` - Summary
+   * - `Error` - Error
    */
   function onRenderContent() {
     return (
@@ -97,7 +115,19 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
         [DocumentTemplateDialogScreen.Summary]: (
           <InfoMessage
             type={MessageBarType.success}
-            text={format(strings.SummaryText, state.uploaded.length)}
+            text={format(
+              strings.DocumentTemplateDialogSummaryText,
+              state.uploaded.length
+            )}
+          />
+        ),
+        [DocumentTemplateDialogScreen.Error]: (
+          <InfoMessage
+            type={MessageBarType.error}
+            text={format(
+              strings.DocumentTemplateDialogErrorText,
+              context.templateLibrary.title
+            )}
           />
         )
       }[state.screen] || null
@@ -138,7 +168,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
             <DefaultButton text={strings.CloseModalText} onClick={onClose} />
           </>
         )
-      }[state.screen] || null
+      }[state.screen] ?? null
     )
   }
 

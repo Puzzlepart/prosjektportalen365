@@ -141,12 +141,10 @@ export class ChartConfiguration {
                 {
                   type: 'pie',
                   colorByPoint: true,
-                  data: data
-                    .getItems(field)
-                    .map((i, index) => ({
-                      name: i.name,
-                      y: data.getPercentage(field, index)
-                    }))
+                  data: data.getItems(field).map((i, index) => ({
+                    name: i.name,
+                    y: data.getPercentage(field, index)
+                  }))
                 }
               ]
             }

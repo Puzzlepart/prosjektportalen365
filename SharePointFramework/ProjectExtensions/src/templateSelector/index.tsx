@@ -20,7 +20,7 @@ Logger.activeLogLevel = LogLevel.Info
 
 export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITemplateSelectorCommandProperties> {
   private _openCmd: Command
-  private _ctxValue: ITemplateSelectorContext = {}
+  private _ctxValue: ITemplateSelectorContext = { templates: [] }
   private _placeholderIds = {
     DocumentTemplateDialog: getId('documenttemplatedialog')
   }
@@ -46,7 +46,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
     if (!this._openCmd) return
     try {
       const propertiesData = await SPDataAdapter.project.getPropertiesData()
-      const templateLib =
+      const templateLib: string =
         propertiesData.templateParameters.TemplateDocumentLibrary ??
         this.properties.templateLibrary ??
         'Malbibliotek'
@@ -63,6 +63,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
         level: LogLevel.Info
       })
     } catch (error) {
+      this._ctxValue.error = error
       Logger.log({
         message: '(TemplateSelectorCommand) onInit: Failed to initialize',
         level: LogLevel.Warning

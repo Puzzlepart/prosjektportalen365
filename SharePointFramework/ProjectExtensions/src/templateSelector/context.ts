@@ -3,12 +3,12 @@ import { createContext } from 'react'
 
 export interface ITemplateSelectorContext {
   /**
-   * Templates
+   * Templates available for this project
    */
   templates?: TemplateItem[]
 
   /**
-   * Libraries
+   * Libraries available in the site
    */
   libraries?: SPFolder[]
 
@@ -18,9 +18,14 @@ export interface ITemplateSelectorContext {
   currentLibrary?: SPFolder
 
   /**
-   * Template library
+   * Template library `title` and `url`
    */
   templateLibrary?: { title: string; url: string }
+
+  /**
+   * Error object
+   */
+  error?: any
 }
 
 export const TemplateSelectorContext =

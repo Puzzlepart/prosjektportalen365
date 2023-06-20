@@ -20,7 +20,7 @@ export interface IDocumentTemplateDialogProps {
 
 export interface IDocumentTemplateDialogState {
   /**
-   * Screen
+   * Screen to show
    */
   screen: DocumentTemplateDialogScreen
 
@@ -74,5 +74,10 @@ export enum DocumentTemplateDialogScreen {
   /**
    * Summary scren
    */
-  Summary
+  Summary,
+
+  /**
+   * Error screen
+   */
+  Error
 }

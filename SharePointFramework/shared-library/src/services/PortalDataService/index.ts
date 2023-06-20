@@ -410,15 +410,13 @@ export class PortalDataService {
             newField.updateAndPushChanges(true)
           }
         } else {
-          const fieldToCreate = spList
-            .get_fields()
-            .addFieldAsXml(
-              transformFieldXml(field.SchemaXml, {
-                DisplayName: field.InternalName
-              }),
-              false,
-              SP.AddFieldOptions.addToDefaultContentType
-            )
+          const fieldToCreate = spList.get_fields().addFieldAsXml(
+            transformFieldXml(field.SchemaXml, {
+              DisplayName: field.InternalName
+            }),
+            false,
+            SP.AddFieldOptions.addToDefaultContentType
+          )
           if (fieldLink && fieldLink.Required) {
             fieldToCreate.set_required(true)
           }

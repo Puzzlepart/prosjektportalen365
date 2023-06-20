@@ -1,4 +1,5 @@
 declare interface IProjectExtensionsStrings {
+  DocumentTemplateDialogErrorText: string
   ConfiguredSpecifiedTaskMessage: string
   CmdSelectionCountText: string
   ExtensionLockedTooltipText: string
@@ -80,7 +81,7 @@ declare interface IProjectExtensionsStrings {
   SettingsSectionTitle: string
   SetupProjectInformationErrorMessage: string
   SetupProjectInformationText: string
-  SummaryText: string
+  DocumentTemplateDialogSummaryText: string
   TemplateLibrarySelectModalTitle: string
   TemplateSelectDialogInfoText: string
   TemplateSelectDialogSubmitButtonText: string
