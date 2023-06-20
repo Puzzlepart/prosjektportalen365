@@ -24,7 +24,9 @@ export const ProjectCard: FC = () => {
         <div>
           <div className={styles.shimmerGroup}>
             <ShimmerElementsGroup
-              shimmerElements={[{ type: ShimmerElementType.line, width: '100%', height: 440 }]}
+              shimmerElements={[
+                { type: ShimmerElementType.line, width: '100%', height: 440 }
+              ]}
             />
           </div>
         </div>

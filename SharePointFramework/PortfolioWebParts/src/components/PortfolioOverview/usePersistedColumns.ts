@@ -22,7 +22,9 @@ export function usePersistedColumns(
   localKeyPrefix = 'portfolio-overview-persisted-columns'
 ) {
   const localStore = new PnPClientStorage().local
-  const localKey = `${localKeyPrefix}-${props.pageContext.site.id.toString().replace(/-/g, '')}`
+  const localKey = `${localKeyPrefix}-${props.pageContext.site.id
+    .toString()
+    .replace(/-/g, '')}`
 
   /**
    * Sets the columns to persist in `localStorage` using `PnPClientStorage`.

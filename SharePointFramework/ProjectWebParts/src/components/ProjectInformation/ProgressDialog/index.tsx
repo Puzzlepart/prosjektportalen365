@@ -11,7 +11,8 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
       hidden={false}
       dialogContentProps={{ title: props.title, type: DialogType.largeHeader }}
       modalProps={{ isBlocking: true, isDarkOverlay: true }}
-      containerClassName={styles.root}>
+      containerClassName={styles.root}
+    >
       <ProgressIndicator {...props.progress} />
     </Dialog>
   )

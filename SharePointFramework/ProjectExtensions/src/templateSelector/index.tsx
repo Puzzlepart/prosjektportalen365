@@ -21,17 +21,23 @@ Logger.activeLogLevel = LogLevel.Info
 export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITemplateSelectorCommandProperties> {
   private _openCmd: Command
   private _ctxValue: ITemplateSelectorContext = {}
-  private _placeholderIds = { DocumentTemplateDialog: getId('documenttemplatedialog') }
+  private _placeholderIds = {
+    DocumentTemplateDialog: getId('documenttemplatedialog')
+  }
 
   @override
   public async onInit() {
     Logger.log({
       message: '(TemplateSelectorCommand) onInit: Initializing',
-      data: { version: this.context.manifest.version, placeholderIds: this._placeholderIds },
+      data: {
+        version: this.context.manifest.version,
+        placeholderIds: this._placeholderIds
+      },
       level: LogLevel.Info
     })
     Logger.subscribe(new ConsoleListener())
-    Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+    Logger.activeLogLevel =
+      sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     await SPDataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl
@@ -39,7 +45,11 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
     this._openCmd = this.tryGetCommand('OPEN_TEMPLATE_SELECTOR')
     if (!this._openCmd) return
     try {
-      const templateLib = 'Malbibliotek'
+      const propertiesData = await SPDataAdapter.project.getPropertiesData()
+      const templateLib =
+        propertiesData.templateParameters.TemplateDocumentLibrary ??
+        this.properties.templateLibrary ??
+        'Malbibliotek'
       this._ctxValue.templateLibrary = {
         title: templateLib,
         url: `${SPDataAdapter.portal.url}/${templateLib}`
@@ -67,7 +77,9 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
   }
 
   @override
-  public async onExecute(event: IListViewCommandSetExecuteEventParameters): Promise<void> {
+  public async onExecute(
+    event: IListViewCommandSetExecuteEventParameters
+  ): Promise<void> {
     // eslint-disable-next-line default-case
     switch (event.itemId) {
       case this._openCmd.id:

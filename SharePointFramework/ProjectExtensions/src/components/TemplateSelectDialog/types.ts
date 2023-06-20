@@ -5,9 +5,11 @@ import { IBaseDialogProps } from '../@BaseDialog/types'
 import React from 'react'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface ITemplateSelectDialogSectionProps extends React.HTMLProps<HTMLDivElement> {}
+interface ITemplateSelectDialogSectionProps
+  extends React.HTMLProps<HTMLDivElement> {}
 
-export type TemplateSelectDialogSectionComponent = React.FC<ITemplateSelectDialogSectionProps>
+export type TemplateSelectDialogSectionComponent =
+  React.FC<ITemplateSelectDialogSectionProps>
 
 export interface ITemplateSelectDialogProps extends IBaseDialogProps {
   /**

@@ -12,5 +12,7 @@ export async function isUserAuthorized(
   context: any
 ): Promise<boolean> {
   const users = await sp.web.siteGroups.getByName(siteGroup).users()
-  return users.some((user: { Email: string }) => user.Email === context.pageContext.user.email)
+  return users.some(
+    (user: { Email: string }) => user.Email === context.pageContext.user.email
+  )
 }

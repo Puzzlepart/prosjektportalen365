@@ -5,7 +5,10 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import '@pnp/polyfill-ie11'
-import { IProjectTimelineProps, ProjectTimeline } from 'components/ProjectTimeline'
+import {
+  IProjectTimelineProps,
+  ProjectTimeline
+} from 'components/ProjectTimeline'
 import '@fluentui/react/dist/css/fabric.min.css'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 
@@ -22,7 +25,10 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    const propertesWithDefaults = { ...ProjectTimeline.defaultProps, ...this.properties }
+    const propertesWithDefaults = {
+      ...ProjectTimeline.defaultProps,
+      ...this.properties
+    }
     return {
       pages: [
         {

@@ -54,7 +54,12 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
    */
   protected _getViewOptions(): IPropertyPaneDropdownOption[] {
     if (!this._configuration) return []
-    return [...this._configuration.views.map((view) => ({ key: view.id, text: view.title }))]
+    return [
+      ...this._configuration.views.map((view) => ({
+        key: view.id,
+        text: view.title
+      }))
+    ]
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {

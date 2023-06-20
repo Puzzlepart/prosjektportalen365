@@ -1,11 +1,6 @@
 export interface ITemplateSelectorCommandProperties {
   /**
-   * Phase term set id
+   * Template library URL
    */
-  phaseTermSetId: string
-
-  /**
-   * View xml
-   */
-  viewXml: string
+  templateLibrary: string
 }

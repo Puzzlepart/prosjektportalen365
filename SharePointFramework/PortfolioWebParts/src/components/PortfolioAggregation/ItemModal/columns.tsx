@@ -31,7 +31,9 @@ export const columns: IColumn[] = [
     onRender: (measurement: any) => (
       <span>
         <span style={{ display: 'inline-block', width: 20 }}>
-          {measurement.TrendIconProps && <Icon {...measurement.TrendIconProps} />}
+          {measurement.TrendIconProps && (
+            <Icon {...measurement.TrendIconProps} />
+          )}
         </span>
         <span>{measurement.AchievementDisplay}</span>
       </span>

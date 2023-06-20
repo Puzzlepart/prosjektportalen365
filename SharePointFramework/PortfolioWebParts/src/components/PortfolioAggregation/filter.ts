@@ -10,15 +10,20 @@ import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPane
  * @param columns Columns
  * @param activeFilters Active filters
  */
-export const filterItems = (items: IFilterItemProps[], columns: IColumn[], activeFilters: any) => {
+export const filterItems = (
+  items: IFilterItemProps[],
+  columns: IColumn[],
+  activeFilters: any
+) => {
   items = Object.keys(activeFilters)
     .filter((key) => key !== 'SelectedColumns')
     .reduce((arr, key) => {
       return arr.filter((i) => {
         const colValue = get<string>(i, key, '')
         return (
-          activeFilters[key].filter((filterValue) => colValue.indexOf(filterValue) !== -1).length >
-          0
+          activeFilters[key].filter(
+            (filterValue) => colValue.indexOf(filterValue) !== -1
+          ).length > 0
         )
       })
     }, items)

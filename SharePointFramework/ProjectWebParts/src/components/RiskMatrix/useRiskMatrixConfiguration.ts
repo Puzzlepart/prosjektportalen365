@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react'
-import { DynamicMatrixConfiguration, generateMatrixConfiguration } from '../DynamicMatrix'
+import {
+  DynamicMatrixConfiguration,
+  generateMatrixConfiguration
+} from '../DynamicMatrix'
 import { getMatrixHeaders } from './getMatrixHeaders'
 import { IRiskMatrixProps } from './types'
 import SPDataAdapter from '../../data'
@@ -13,7 +16,8 @@ import strings from 'ProjectWebPartsStrings'
  * @param props Props
  */
 export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
-  const [configuration, setConfiguration] = useState<DynamicMatrixConfiguration>([])
+  const [configuration, setConfiguration] =
+    useState<DynamicMatrixConfiguration>([])
   const [error, setError] = useState<string>()
 
   // Fetch manual configuration if `pageContext` is set and `useDynamicConfiguration` is not set
@@ -43,7 +47,10 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
   useEffect(() => {
     if (props.size && props.useDynamicConfiguration) {
       setConfiguration(
-        generateMatrixConfiguration(parseInt(props.size, 10), getMatrixHeaders(props))
+        generateMatrixConfiguration(
+          parseInt(props.size, 10),
+          getMatrixHeaders(props)
+        )
       )
     }
   }, [props.useDynamicConfiguration, props.size])

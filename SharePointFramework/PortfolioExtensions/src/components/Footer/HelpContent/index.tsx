@@ -16,7 +16,10 @@ export const HelpContent: FC = () => {
         styles={{ root: { fontSize: 12, height: 25 }, icon: { fontSize: 12 } }}
         onClick={() => setShowModal(true)}
       />
-      <HelpContentModal isOpen={showModal} onDismiss={() => setShowModal(false)} />
+      <HelpContentModal
+        isOpen={showModal}
+        onDismiss={() => setShowModal(false)}
+      />
     </div>
   )
 }

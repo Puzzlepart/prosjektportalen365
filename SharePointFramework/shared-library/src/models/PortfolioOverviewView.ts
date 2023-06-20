@@ -108,7 +108,10 @@ export class PortfolioOverviewView {
     this.refiners = this._item.GtPortfolioRefinersId.map((id) =>
       _.find(columns, (col) => col.id === id)
     ).sort((a, b) => a.sortOrder - b.sortOrder)
-    this.groupBy = _.find(columns, (col) => col.id === this._item.GtPortfolioGroupById)
+    this.groupBy = _.find(
+      columns,
+      (col) => col.id === this._item.GtPortfolioGroupById
+    )
     return this
   }
 

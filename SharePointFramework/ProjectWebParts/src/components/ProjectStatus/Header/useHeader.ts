@@ -9,7 +9,8 @@ export function useHeader() {
   const context = useContext(ProjectStatusContext)
   const formattedDate = context.state.selectedReport
     ? moment(
-        context.state.selectedReport.publishedDate ?? context.state.selectedReport.created
+        context.state.selectedReport.publishedDate ??
+          context.state.selectedReport.created
       ).format('DD.MM.YYYY')
     : null
   return {

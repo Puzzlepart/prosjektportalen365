@@ -19,7 +19,8 @@ import { ITemplateSelectDialogProps } from './types'
 import { useTemplateSelectDialog } from './useTemplateSelectDialog'
 
 export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
-  const { state, dispatch, onSubmit, isConfigDisabled } = useTemplateSelectDialog(props)
+  const { state, dispatch, onSubmit, isConfigDisabled } =
+    useTemplateSelectDialog(props)
 
   return (
     <TemplateSelectDialogContext.Provider value={{ props, state, dispatch }}>
@@ -30,11 +31,18 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
           subText: strings.TemplateSelectDialogInfoText,
           className: styles.content
         }}
-        modalProps={{ containerClassName: styles.root, isBlocking: true, isDarkOverlay: true }}
+        modalProps={{
+          containerClassName: styles.root,
+          isBlocking: true,
+          isDarkOverlay: true
+        }}
         onDismiss={props.onDismiss}
       >
         <Pivot style={{ minHeight: 450 }}>
-          <PivotItem headerText={strings.TemplateSelectorTitle} itemIcon='ViewListGroup'>
+          <PivotItem
+            headerText={strings.TemplateSelectorTitle}
+            itemIcon='ViewListGroup'
+          >
             <TemplateSelector />
           </PivotItem>
           <PivotItem
@@ -65,7 +73,10 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
         <DialogFooter>
           {props.tasks && (
             <MessageBar>
-              {format(strings.ConfiguredSpecifiedTaskMessage, props.tasks.join(', '))}
+              {format(
+                strings.ConfiguredSpecifiedTaskMessage,
+                props.tasks.join(', ')
+              )}
             </MessageBar>
           )}
           <PrimaryButton
@@ -73,7 +84,10 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
             text={strings.TemplateSelectDialogSubmitButtonText}
             onClick={onSubmit}
           />
-          <DefaultButton text={strings.CloseModalText} onClick={props.onDismiss} />
+          <DefaultButton
+            text={strings.CloseModalText}
+            onClick={props.onDismiss}
+          />
         </DialogFooter>
       </BaseDialog>
     </TemplateSelectDialogContext.Provider>

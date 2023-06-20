@@ -21,7 +21,12 @@ export const ListSection: FC = () => {
    */
   function renderList() {
     if (state.error)
-      return <UserMessage text={strings.ListSectionDataErrorMessage} type={MessageBarType.error} />
+      return (
+        <UserMessage
+          text={strings.ListSectionDataErrorMessage}
+          type={MessageBarType.error}
+        />
+      )
     return (
       <Shimmer isDataLoaded={state.isDataLoaded}>
         <div className={styles.list}>

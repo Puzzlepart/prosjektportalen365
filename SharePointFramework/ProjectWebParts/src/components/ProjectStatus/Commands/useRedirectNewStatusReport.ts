@@ -35,12 +35,16 @@ export function useRedirectNewStatusReport() {
           return obj
         }, {})
     }
-    properties.Title = format(strings.NewStatusReportTitle, context.props.webTitle)
+    properties.Title = format(
+      strings.NewStatusReportTitle,
+      context.props.webTitle
+    )
     properties.GtSiteId = context.props.siteId
     properties.GtModerationStatus = strings.GtModerationStatus_Choice_Draft
     const report = await portalDataService.addStatusReport(
       properties,
-      context.state.data.properties.templateParameters?.ProjectStatusContentTypeId
+      context.state.data.properties.templateParameters
+        ?.ProjectStatusContentTypeId
     )
     document.location.hash = ''
     document.location.href = getEditFormUrl(report)

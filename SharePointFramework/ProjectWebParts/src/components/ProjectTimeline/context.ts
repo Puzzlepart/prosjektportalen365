@@ -7,4 +7,5 @@ export interface IProjectTimelineContext {
   setState: (newState: Partial<IProjectTimelineState>) => void
 }
 
-export const ProjectTimelineContext = React.createContext<IProjectTimelineContext>(null)
+export const ProjectTimelineContext =
+  React.createContext<IProjectTimelineContext>(null)

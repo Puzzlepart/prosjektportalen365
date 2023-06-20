@@ -20,10 +20,12 @@ export const StatusElement: FC<IStatusElementProps> = (props) => {
             <div className={styles.tooltip}>
               <StatusElement />
             </div>
-          }>
+          }
+        >
           {children}
         </TooltipHost>
-      )}>
+      )}
+    >
       {props.iconsOnly ? (
         <StatusElementIcon iconSize={iconSize} />
       ) : (

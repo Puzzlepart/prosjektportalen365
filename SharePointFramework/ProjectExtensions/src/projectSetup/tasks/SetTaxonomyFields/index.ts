@@ -21,8 +21,12 @@ export class SetTaxonomyFields extends BaseTask {
       const {
         spfxJsomContext: { jsomContext, defaultTermStore }
       } = params
-      await ExecuteJsomQuery(jsomContext, [{ clientObject: defaultTermStore, exps: 'Id' }])
-      this.logInformation(`Retrieved ID ${defaultTermStore.get_id()} for default term store`)
+      await ExecuteJsomQuery(jsomContext, [
+        { clientObject: defaultTermStore, exps: 'Id' }
+      ])
+      this.logInformation(
+        `Retrieved ID ${defaultTermStore.get_id()} for default term store`
+      )
       const termSetIds = getObjectValue(
         params.templateSchema,
         'Parameters.TermSetIds',
@@ -34,11 +38,14 @@ export class SetTaxonomyFields extends BaseTask {
           return params
         }
         this.logInformation(`Setting Term Set ID ${termSetId} for ${fieldName}`)
-        const field: SP.Field = jsomContext.rootWeb.get_fields().getByInternalNameOrTitle(fieldName)
-        const taxField: SP.Taxonomy.TaxonomyField = jsomContext.clientContext.castTo(
-          field,
-          SP.Taxonomy.TaxonomyField
-        ) as SP.Taxonomy.TaxonomyField
+        const field: SP.Field = jsomContext.rootWeb
+          .get_fields()
+          .getByInternalNameOrTitle(fieldName)
+        const taxField: SP.Taxonomy.TaxonomyField =
+          jsomContext.clientContext.castTo(
+            field,
+            SP.Taxonomy.TaxonomyField
+          ) as SP.Taxonomy.TaxonomyField
         taxField.set_sspId(defaultTermStore.get_id())
         taxField.set_termSetId(new SP.Guid(termSetId))
         taxField.updateAndPushChanges(true)
@@ -46,7 +53,11 @@ export class SetTaxonomyFields extends BaseTask {
       await ExecuteJsomQuery(jsomContext)
       return params
     } catch (error) {
-      throw new BaseTaskError(this.taskName, strings.SetTaxonomyFieldsErrorMessage, error)
+      throw new BaseTaskError(
+        this.taskName,
+        strings.SetTaxonomyFieldsErrorMessage,
+        error
+      )
     }
   }
 }

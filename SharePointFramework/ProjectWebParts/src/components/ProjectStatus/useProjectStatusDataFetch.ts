@@ -6,7 +6,11 @@ import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { INIT_DATA } from './reducer'
-import { IProjectStatusData, IProjectStatusHashState, IProjectStatusProps } from './types'
+import {
+  IProjectStatusData,
+  IProjectStatusHashState,
+  IProjectStatusProps
+} from './types'
 import _ from 'lodash'
 import { parseUrlHash, getUrlParam } from 'pp365-shared-library/lib/util'
 import { StatusReport } from 'pp365-shared-library/lib/models'
@@ -22,13 +26,17 @@ export type FetchDataResult = {
  * status reports, project status sections, project column config, and project status list fields.
  * If the selected report is published, the attachments for the report are also fetched.
  */
-const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async (props) => {
+const fetchData: DataFetchFunction<
+  IProjectStatusProps,
+  FetchDataResult
+> = async (props) => {
   try {
     if (!SPDataAdapter.isConfigured) {
       SPDataAdapter.configure(props.webPartContext, {
         siteId: props.siteId,
         webUrl: props.webUrl,
-        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+        logLevel:
+          sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }
     const [
@@ -53,12 +61,17 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
         "Hidden eq false and Group ne 'Hidden'"
       )
     ])
-    const userHasAdminPermission = await SPDataAdapter.checkProjectAdminPermissions(
-      ProjectAdminPermission.ProjectStatusAdmin,
-      properties.fieldValues
+    const userHasAdminPermission =
+      await SPDataAdapter.checkProjectAdminPermissions(
+        ProjectAdminPermission.ProjectStatusAdmin,
+        properties.fieldValues
+      )
+    let sortedReports = reports.sort(
+      (a, b) => b.created.getTime() - a.created.getTime()
     )
-    let sortedReports = reports.sort((a, b) => b.created.getTime() - a.created.getTime())
-    const sortedSections = sections.sort((a, b) => (a.sortOrder < b.sortOrder ? -1 : 1))
+    const sortedSections = sections.sort((a, b) =>
+      a.sortOrder < b.sortOrder ? -1 : 1
+    )
     let [initialSelectedReport] = sortedReports
     const hashState = parseUrlHash<IProjectStatusHashState>()
     const selectedReportUrlParam = getUrlParam('selectedReport')
@@ -75,9 +88,10 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
       )
     }
     if (initialSelectedReport?.published) {
-      initialSelectedReport = await SPDataAdapter.portal.getStatusReportAttachments(
-        initialSelectedReport
-      )
+      initialSelectedReport =
+        await SPDataAdapter.portal.getStatusReportAttachments(
+          initialSelectedReport
+        )
       sortedReports = sortedReports.map((report) => {
         if (report.id === initialSelectedReport.id) {
           return initialSelectedReport

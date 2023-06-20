@@ -18,8 +18,11 @@ import { useExtensionsSection } from './useExtensionsSection'
  *
  * @param props Props
  */
-export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) => {
-  const { selection, selectedCount, items, columns, onSearch, onRenderRow } = useExtensionsSection()
+export const ExtensionsSection: TemplateSelectDialogSectionComponent = (
+  props
+) => {
+  const { selection, selectedCount, items, columns, onSearch, onRenderRow } =
+    useExtensionsSection()
 
   return (
     <div className={styles.root} style={props.style}>

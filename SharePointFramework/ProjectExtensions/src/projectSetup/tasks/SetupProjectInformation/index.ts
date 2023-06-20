@@ -23,7 +23,11 @@ export class SetupProjectInformation extends BaseTask {
       await this._addEntryToHub(params)
       return params
     } catch (error) {
-      throw new BaseTaskError(this.taskName, strings.SetupProjectInformationErrorMessage, error)
+      throw new BaseTaskError(
+        this.taskName,
+        strings.SetupProjectInformationErrorMessage,
+        error
+      )
     }
   }
 
@@ -84,10 +88,12 @@ export class SetupProjectInformation extends BaseTask {
    * - `IsParentProject`: `true` if the current project is a parent project, `false` otherwise
    * - `GtInstalledVersion`: The installed version
    * - `GtCurrentVersion`: The current version (same as installed version initially)
-   * 
-   * @param params Params 
+   *
+   * @param params Params
    */
-  private _createPropertyItem(params: IBaseTaskParams): Record<string, string | boolean | number> {
+  private _createPropertyItem(
+    params: IBaseTaskParams
+  ): Record<string, string | boolean | number> {
     return {
       Title: params.context.pageContext.web.title,
       TemplateParameters: JSON.stringify(params.templateSchema.Parameters),
@@ -95,7 +101,7 @@ export class SetupProjectInformation extends BaseTask {
       GtIsParentProject: this.data.selectedTemplate.isParentProject,
       GtInstalledVersion: params.templateSchema.Version,
       GtCurrentVersion: params.templateSchema.Version
-    } 
+    }
   }
 
   /**
@@ -115,13 +121,14 @@ export class SetupProjectInformation extends BaseTask {
         params.context.pageContext.legacyPageContext.groupId
       )
       if (entity) return
-      const properties:  Record<string, string | boolean | number> = {
+      const properties: Record<string, string | boolean | number> = {
         ...this._createPropertyItem(params),
         GtSiteId: params.context.pageContext.site.id.toString(),
         GtProjectTemplate: this.data.selectedTemplate.text
       }
       if (params.templateSchema.Parameters.ProjectContentTypeId) {
-        properties.ContentTypeId = params.templateSchema.Parameters.ProjectContentTypeId
+        properties.ContentTypeId =
+          params.templateSchema.Parameters.ProjectContentTypeId
       }
       await params.entityService.createNewEntity(
         params.context.pageContext.legacyPageContext.groupId,

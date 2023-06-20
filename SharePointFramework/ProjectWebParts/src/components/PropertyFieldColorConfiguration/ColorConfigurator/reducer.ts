@@ -4,11 +4,15 @@ import _, { pick } from 'underscore'
 import { DynamicMatrixColorScaleConfig } from '../../DynamicMatrix'
 import { IColorConfiguratorProps, IColorConfiguratorState } from './types'
 
-export const INIT = createAction<{ config: DynamicMatrixColorScaleConfig }>('INIT')
-export const SET_CONFIG = createAction<{ count: number }>('SET_CONFIG')
-export const CHANGE_CONFIG = createAction<{ index: number; color?: IColor; percentage?: number }>(
-  'CHANGE_CONFIG'
+export const INIT = createAction<{ config: DynamicMatrixColorScaleConfig }>(
+  'INIT'
 )
+export const SET_CONFIG = createAction<{ count: number }>('SET_CONFIG')
+export const CHANGE_CONFIG = createAction<{
+  index: number
+  color?: IColor
+  percentage?: number
+}>('CHANGE_CONFIG')
 export const REVERT_CONFIG = createAction('REVERT_CONFIG')
 
 export default (props: IColorConfiguratorProps) =>
@@ -24,7 +28,8 @@ export default (props: IColorConfiguratorProps) =>
       const lastConfig = _.last(state.config)
       if (inc > 0) {
         for (let i = 0; i < inc; i++) {
-          const newConfig = props.defaultValue[state.config.length + i] ?? lastConfig
+          const newConfig =
+            props.defaultValue[state.config.length + i] ?? lastConfig
           state.config.push(newConfig)
         }
       } else state.config = state.config.splice(0, payload.count)

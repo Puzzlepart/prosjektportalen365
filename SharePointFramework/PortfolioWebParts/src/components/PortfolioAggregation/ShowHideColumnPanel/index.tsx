@@ -15,10 +15,14 @@ export const ShowHideColumnPanel: FC = () => {
       id: column['id'],
       name: column.name,
       value: column.fieldName,
-      selected: _.some(state.fltColumns, (c) => c.fieldName === column.fieldName)
+      selected: _.some(
+        state.fltColumns,
+        (c) => c.fieldName === column.fieldName
+      )
     }
   })
-  const [selectedColumns, setSelectedColumns] = useState<IFilterItemProps[]>(initialSelection)
+  const [selectedColumns, setSelectedColumns] =
+    useState<IFilterItemProps[]>(initialSelection)
 
   useEffect(() => {
     setSelectedColumns(initialSelection)
@@ -67,11 +71,19 @@ export const ShowHideColumnPanel: FC = () => {
       <p>{strings.ShowHideColumnsDescription}</p>
       {selectedColumns.map((col, idx) => {
         return (
-          <CheckBox key={idx} {...col} onChanged={(_event, checked) => onChange(col, checked)} />
+          <CheckBox
+            key={idx}
+            {...col}
+            onChanged={(_event, checked) => onChange(col, checked)}
+          />
         )
       })}
       <div className={styles.footer}>
-        <PrimaryButton text={strings.SaveButtonLabel} onClick={onSave} disabled={!isChanged} />
+        <PrimaryButton
+          text={strings.SaveButtonLabel}
+          onClick={onSave}
+          disabled={!isChanged}
+        />
         <DefaultButton
           text={strings.CloseButtonLabel}
           style={{ marginLeft: 4 }}

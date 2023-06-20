@@ -47,7 +47,10 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
       strings.IdeaProcessorsSiteGroup,
       this.context
     )
-    this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)
+    this.context.listView.listViewStateChangedEvent.add(
+      this,
+      this._onListViewStateChanged
+    )
     return Promise.resolve()
   }
 
@@ -63,11 +66,20 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
           this._ideaConfig.description[1] ||
           strings.SetRecommendationDefaultDescription.split(';')[1]
         dialog.show().then(() => {
-          if (dialog.comment && dialog.selectedChoice === strings.ApproveChoice) {
+          if (
+            dialog.comment &&
+            dialog.selectedChoice === strings.ApproveChoice
+          ) {
             this._onSubmit(row, dialog.comment)
-          } else if (dialog.comment && dialog.selectedChoice === strings.ConsiderationChoice) {
+          } else if (
+            dialog.comment &&
+            dialog.selectedChoice === strings.ConsiderationChoice
+          ) {
             this._onSubmitConsideration(row, dialog.comment)
-          } else if (dialog.comment && dialog.selectedChoice === strings.RejectChoice) {
+          } else if (
+            dialog.comment &&
+            dialog.selectedChoice === strings.RejectChoice
+          ) {
             this._onSubmitRejected(row, dialog.comment)
           } else {
             Logger.log({ message: 'Rejected', level: LogLevel.Info })
@@ -82,13 +94,17 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
   /**
    * Get the idea configuration from the IdeaConfiguration list
    */
-  private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
+  private _getIdeaConfiguration = async (): Promise<
+    IdeaConfigurationModel[]
+  > => {
     const ideaConfig = await this._sp.web.lists
       .getByTitle(strings.IdeaConfigurationTitle)
       .select(...new SPIdeaConfigurationItem().fields)
       .items()
 
-    return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
+    return ideaConfig
+      .map((item) => new IdeaConfigurationModel(item))
+      .filter(Boolean)
   }
 
   /**
@@ -96,7 +112,8 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
    */
   private _onListViewStateChanged = async (): Promise<void> => {
     Logger.log({
-      message: '(IdeaProcessCommand) onListViewStateChanged: ListView state changed',
+      message:
+        '(IdeaProcessCommand) onListViewStateChanged: ListView state changed',
       level: LogLevel.Info
     })
 

@@ -3,7 +3,8 @@ import { IMessageBarProps, MessageBarType } from '@fluentui/react'
 /**
  * @category UserMessage
  */
-export interface IUserMessageProps extends Omit<IMessageBarProps, 'messageBarType'> {
+export interface IUserMessageProps
+  extends Omit<IMessageBarProps, 'messageBarType'> {
   /**
    * Text to show in the message
    *

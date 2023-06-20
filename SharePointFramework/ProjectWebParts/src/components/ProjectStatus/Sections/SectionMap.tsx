@@ -14,4 +14,10 @@ export const SectionMap = {
   [SectionType.ListSection]: <ListSection />
 }
 
-export { SummarySection, StatusSection, ProjectPropertiesSection, UncertaintySection, ListSection }
+export {
+  SummarySection,
+  StatusSection,
+  ProjectPropertiesSection,
+  UncertaintySection,
+  ListSection
+}

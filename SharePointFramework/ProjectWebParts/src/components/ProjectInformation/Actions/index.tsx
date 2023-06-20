@@ -1,4 +1,8 @@
-import { ActionButton, DefaultButton, IButtonProps } from '@fluentui/react/lib/Button'
+import {
+  ActionButton,
+  DefaultButton,
+  IButtonProps
+} from '@fluentui/react/lib/Button'
 import React, { FC, useContext } from 'react'
 import { isEmpty } from 'underscore'
 import { ProjectInformationContext } from '../context'
@@ -12,7 +16,11 @@ export const Actions: FC = () => {
   return (
     <div className={styles.root}>
       {actions.map(([text, hrefOrOnClick, iconName, disabled, hidden], idx) => {
-        const buttonProps: IButtonProps = { text, iconProps: { iconName }, disabled }
+        const buttonProps: IButtonProps = {
+          text,
+          iconProps: { iconName },
+          disabled
+        }
         if (typeof hrefOrOnClick === 'string') buttonProps.href = hrefOrOnClick
         else buttonProps.onClick = hrefOrOnClick
         return (

@@ -39,7 +39,9 @@ export const TargetFolderScreen: FC = () => {
 
   return (
     <div className={styles.root}>
-      <InfoMessage text={strings.DocumentTemplateDialogScreenTargetFolderInfoText} />
+      <InfoMessage
+        text={strings.DocumentTemplateDialogScreenTargetFolderInfoText}
+      />
       <FolderNavigation
         items={
           context.libraries.length > 1 && [
@@ -70,13 +72,19 @@ export const TargetFolderScreen: FC = () => {
           text={strings.CopyHereText}
           disabled={folder === null}
           onClick={() => {
-            dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.EditCopy }))
+            dispatch(
+              SET_SCREEN({ screen: DocumentTemplateDialogScreen.EditCopy })
+            )
             dispatch(SET_TARGET({ folder: folder || root.url }))
           }}
         />
         <DefaultButton
           text={strings.OnGoBackText}
-          onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))}
+          onClick={() =>
+            dispatch(
+              SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select })
+            )
+          }
         />
       </DialogFooter>
     </div>

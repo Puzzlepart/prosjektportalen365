@@ -26,7 +26,10 @@ export async function fetchProjectData(
       .filter(`GtSiteId eq '${props.siteId}'`)
       .getAll()
 
-    const config = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
+    const config = _.find(
+      timelineConfig,
+      (col) => col.title === strings.ProjectLabel
+    )
     return new TimelineContentModel(
       props.siteId,
       props.webTitle,
@@ -37,7 +40,12 @@ export async function fetchProjectData(
     ).usingConfig(config)
   } catch (error) {
     throw new Error(
-      format(strings.ProjectTimelineErrorFetchText, props.siteId, props.webTitle, error)
+      format(
+        strings.ProjectTimelineErrorFetchText,
+        props.siteId,
+        props.webTitle,
+        error
+      )
     )
   }
 }

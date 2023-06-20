@@ -4,9 +4,13 @@ import { IPropertyFieldColorConfigurationProps } from '../types'
 import createReducerWithProps, { INIT, REVERT_CONFIG } from './reducer'
 import { IColorConfiguratorState } from './types'
 
-export function usePropertyFieldColorConfiguration(props: IPropertyFieldColorConfigurationProps) {
+export function usePropertyFieldColorConfiguration(
+  props: IPropertyFieldColorConfigurationProps
+) {
   const reducer = useMemo(() => createReducerWithProps(props), [props])
-  const [state, dispatch] = useReducer(reducer, { config: [] } as IColorConfiguratorState)
+  const [state, dispatch] = useReducer(reducer, {
+    config: []
+  } as IColorConfiguratorState)
 
   useEffect(() => {
     dispatch(INIT())

@@ -25,7 +25,8 @@ export function useListSection() {
 
   useEffect(() => {
     const persistedData =
-      selectedReport.persistedSectionData && selectedReport.persistedSectionData[section.id]
+      selectedReport.persistedSectionData &&
+      selectedReport.persistedSectionData[section.id]
     if (persistedData) {
       setState({ data: persistedData, isDataLoaded: true })
     } else {

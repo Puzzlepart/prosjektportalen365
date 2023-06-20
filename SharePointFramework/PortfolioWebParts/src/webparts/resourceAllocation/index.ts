@@ -1,5 +1,8 @@
 import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
-import { IResourceAllocationProps, ResourceAllocation } from 'components/ResourceAllocation'
+import {
+  IResourceAllocationProps,
+  ResourceAllocation
+} from 'components/ResourceAllocation'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class ResourceAllocationWebPart extends BasePortfolioWebPart<IResourceAllocationProps> {

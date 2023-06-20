@@ -36,7 +36,8 @@ export interface IResourceAllocationProps extends IBaseComponentProps {
   selectProperties?: string[]
 }
 
-export interface IResourceAllocationState extends Pick<IShimmerProps, 'isDataLoaded'> {
+export interface IResourceAllocationState
+  extends Pick<IShimmerProps, 'isDataLoaded'> {
   /**
    * Active filters
    */

@@ -9,7 +9,12 @@ import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { SPDataAdapter } from 'data'
-import { IPlannerBucket, IPlannerConfiguration, IPlannerPlan, ITaskDetails } from './types'
+import {
+  IPlannerBucket,
+  IPlannerConfiguration,
+  IPlannerPlan,
+  ITaskDetails
+} from './types'
 import _ from 'underscore'
 /**
  * @class PlannerConfiguration
@@ -66,7 +71,9 @@ export class PlannerConfiguration extends BaseTask {
   ): Promise<IPlannerPlan> {
     try {
       let plan: IPlannerPlan = {
-        title: [pageContext.web.title, this.planTitle].filter(Boolean).join(' - '),
+        title: [pageContext.web.title, this.planTitle]
+          .filter(Boolean)
+          .join(' - '),
         owner: pageContext.legacyPageContext.groupId
       }
       this.logInformation(`Creating plan ${plan.title}`)
@@ -74,8 +81,14 @@ export class PlannerConfiguration extends BaseTask {
       const existingBuckets = await this._fetchBuckets(plan.id)
       for (let i = 0; i < Object.keys(this._configuration).length; i++) {
         const bucketName = Object.keys(this._configuration)[i]
-        this.logInformation(`Ensuring bucket ${bucketName} for plan ${plan.title}`)
-        const bucket = await this._ensureBucket(bucketName, existingBuckets, plan.id)
+        this.logInformation(
+          `Ensuring bucket ${bucketName} for plan ${plan.title}`
+        )
+        const bucket = await this._ensureBucket(
+          bucketName,
+          existingBuckets,
+          plan.id
+        )
         onProgress(
           strings.PlannerConfigurationText,
           format(strings.CreatingPlannerTaskText, bucketName),
@@ -102,7 +115,10 @@ export class PlannerConfiguration extends BaseTask {
   ): Promise<IPlannerPlan> {
     try {
       const existingGroupPlans = await this._fetchPlans(plan.owner)
-      const existingPlan = _.find(existingGroupPlans, (p) => p.title === plan.title)
+      const existingPlan = _.find(
+        existingGroupPlans,
+        (p) => p.title === plan.title
+      )
       if (!existingPlan) {
         plan = await MSGraphHelper.Post('planner/plans', JSON.stringify(plan))
       }
@@ -119,14 +135,24 @@ export class PlannerConfiguration extends BaseTask {
    * @param plan Plan
    * @param delay Delay in seconds before updating the plan to ensure it's created properly
    */
-  private async _setupLabels(plan: IPlannerPlan, pageContext: PageContext, delay: number = 5) {
-    this.logInformation(`Sleeping ${delay} seconds before updating the plan with labels`)
+  private async _setupLabels(
+    plan: IPlannerPlan,
+    pageContext: PageContext,
+    delay: number = 5
+  ) {
+    this.logInformation(
+      `Sleeping ${delay} seconds before updating the plan with labels`
+    )
     await sleep(delay)
     if (this._labels.length > 0) {
       this.logInformation(
-        `Sleeping before updating the plan with labels ${JSON.stringify(this._labels)}`
+        `Sleeping before updating the plan with labels ${JSON.stringify(
+          this._labels
+        )}`
       )
-      const eTag = (await MSGraphHelper.Get(`planner/plans/${plan.id}/details`))['@odata.etag']
+      const eTag = (
+        await MSGraphHelper.Get(`planner/plans/${plan.id}/details`)
+      )['@odata.etag']
 
       if (this._labels.length > 25) {
         ListLogger.init(
@@ -136,7 +162,10 @@ export class PlannerConfiguration extends BaseTask {
         )
 
         await ListLogger.log({
-          message: format(strings.PlannerTagsLimitLogText, plan.title ?? plan.id),
+          message: format(
+            strings.PlannerTagsLimitLogText,
+            plan.title ?? plan.id
+          ),
           functionName: '_setupLabels',
           level: 'Warning',
           component: 'PlannerConfiguration'
@@ -145,7 +174,10 @@ export class PlannerConfiguration extends BaseTask {
 
       this._categoryDescriptions = this._labels
         .slice(0, 25)
-        .reduce((obj, value, idx) => ({ ...obj, [`category${idx + 1}`]: value }), {})
+        .reduce(
+          (obj, value, idx) => ({ ...obj, [`category${idx + 1}`]: value }),
+          {}
+        )
 
       await MSGraphHelper.Patch(
         `planner/plans/${plan.id}/details`,
@@ -162,7 +194,11 @@ export class PlannerConfiguration extends BaseTask {
    * @param existingBuckets Existing buckets
    * @param planId Plan Id
    */
-  private async _ensureBucket(name: string, existingBuckets: IPlannerBucket[], planId: string) {
+  private async _ensureBucket(
+    name: string,
+    existingBuckets: IPlannerBucket[],
+    planId: string
+  ) {
     try {
       let [bucket] = existingBuckets.filter((p) => p.name === name)
       if (!bucket) {
@@ -229,13 +265,18 @@ export class PlannerConfiguration extends BaseTask {
           pageContext,
           delay
         )
-        this.logInformation(`Succesfully created task ${name} in bucket ${bucket.name}`, {
-          taskId: task.id,
-          checklist,
-          labels
-        })
+        this.logInformation(
+          `Succesfully created task ${name} in bucket ${bucket.name}`,
+          {
+            taskId: task.id,
+            checklist,
+            labels
+          }
+        )
       } catch (error) {
-        this.logWarning(`Failed to create task ${name} in bucket ${bucket.name}`)
+        this.logWarning(
+          `Failed to create task ${name} in bucket ${bucket.name}`
+        )
       }
     }
   }
@@ -263,10 +304,15 @@ export class PlannerConfiguration extends BaseTask {
       taskDetails.previewType === 'automatic'
     )
       return
-    this.logInformation(`Sleeping ${delay}s before updating task details for ${taskId}`)
+    this.logInformation(
+      `Sleeping ${delay}s before updating task details for ${taskId}`
+    )
     await sleep(delay)
 
-    if (taskDetails.checklist.length > 20 || taskDetails.attachments.length > 10) {
+    if (
+      taskDetails.checklist.length > 20 ||
+      taskDetails.attachments.length > 10
+    ) {
       ListLogger.init(
         SPDataAdapter.portal.web.lists.getByTitle('Logg'),
         pageContext.web.absoluteUrl,
@@ -275,7 +321,10 @@ export class PlannerConfiguration extends BaseTask {
 
       if (taskDetails.checklist.length > 20) {
         await ListLogger.log({
-          message: format(strings.PlannerTaskChecklistLimitLogText, taskDetails.name ?? taskId),
+          message: format(
+            strings.PlannerTaskChecklistLimitLogText,
+            taskDetails.name ?? taskId
+          ),
           functionName: '_updateTaskDetails',
           level: 'Warning',
           component: 'PlannerConfiguration'
@@ -284,7 +333,10 @@ export class PlannerConfiguration extends BaseTask {
 
       if (taskDetails.attachments.length > 10) {
         await ListLogger.log({
-          message: format(strings.PlannerTaskAttachmentLimitLogText, taskDetails.name ?? taskId),
+          message: format(
+            strings.PlannerTaskAttachmentLimitLogText,
+            taskDetails.name ?? taskId
+          ),
           functionName: '_updateTaskDetails',
           level: 'Warning',
           component: 'PlannerConfiguration'
@@ -301,7 +353,10 @@ export class PlannerConfiguration extends BaseTask {
             .reduce(
               (obj, title) => ({
                 ...obj,
-                [getGUID()]: { '@odata.type': 'microsoft.graph.plannerChecklistItem', title }
+                [getGUID()]: {
+                  '@odata.type': 'microsoft.graph.plannerChecklistItem',
+                  title
+                }
               }),
               {}
             )
@@ -323,7 +378,9 @@ export class PlannerConfiguration extends BaseTask {
       previewType: taskDetails.previewType
     }
 
-    const eTag = (await MSGraphHelper.Get(`planner/tasks/${taskId}/details`))['@odata.etag']
+    const eTag = (await MSGraphHelper.Get(`planner/tasks/${taskId}/details`))[
+      '@odata.etag'
+    ]
     await MSGraphHelper.Patch(
       `planner/tasks/${taskId}/details`,
       JSON.stringify(taskDetailsJson),
@@ -346,7 +403,10 @@ export class PlannerConfiguration extends BaseTask {
    * @param owner Owner (group id)
    */
   private _fetchPlans(owner: string) {
-    return MSGraphHelper.Get<IPlannerPlan[]>(`groups/${owner}/planner/plans`, ['id', 'title'])
+    return MSGraphHelper.Get<IPlannerPlan[]>(`groups/${owner}/planner/plans`, [
+      'id',
+      'title'
+    ])
   }
 
   /**
@@ -355,11 +415,10 @@ export class PlannerConfiguration extends BaseTask {
    * @param planId Plan Id
    */
   private _fetchBuckets(planId: string) {
-    return MSGraphHelper.Get<IPlannerBucket[]>(`planner/plans/${planId}/buckets`, [
-      'id',
-      'name',
-      'planId'
-    ])
+    return MSGraphHelper.Get<IPlannerBucket[]>(
+      `planner/plans/${planId}/buckets`,
+      ['id', 'name', 'planId']
+    )
   }
 
   /**
@@ -375,7 +434,10 @@ export class PlannerConfiguration extends BaseTask {
   ): Promise<IBaseTaskParams> {
     this.logInformation('Setting up Plans, Buckets and Task')
     try {
-      const groupPlan = await this._createPlan(params.context.pageContext, onProgress)
+      const groupPlan = await this._createPlan(
+        params.context.pageContext,
+        onProgress
+      )
       params.templateParameters = { defaultPlanId: groupPlan.id }
     } catch (error) {
       this.logWarning('Failed to set up Plans, Buckets and Tasks', error)

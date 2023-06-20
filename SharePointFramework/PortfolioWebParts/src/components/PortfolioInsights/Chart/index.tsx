@@ -37,11 +37,16 @@ export default class Chart extends Component<IChartProps, IChartState> {
 
     if (error) {
       return (
-        <div className={`ms-Grid-col ${this._getClassName()}`} style={{ marginTop: 10 }}>
+        <div
+          className={`ms-Grid-col ${this._getClassName()}`}
+          style={{ marginTop: 10 }}
+        >
           <div className='ms-Grid' dir='ltr'>
             <div className='ms-Grid-row'>
               <div className='ms-Grid-col ms-sm12'>
-                <MessageBar messageBarType={MessageBarType.error}>{error}</MessageBar>
+                <MessageBar messageBarType={MessageBarType.error}>
+                  {error}
+                </MessageBar>
               </div>
             </div>
           </div>
@@ -50,7 +55,10 @@ export default class Chart extends Component<IChartProps, IChartState> {
     }
 
     return (
-      <div className={`ms-Grid-col ${this._getClassName()}`} style={{ marginTop: 10 }}>
+      <div
+        className={`ms-Grid-col ${this._getClassName()}`}
+        style={{ marginTop: 10 }}
+      >
         <div className='ms-Grid' dir='ltr'>
           <div className='ms-Grid-row'>
             <div className='ms-Grid-col ms-sm12'>

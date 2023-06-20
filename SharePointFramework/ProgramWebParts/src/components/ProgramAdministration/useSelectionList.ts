@@ -16,12 +16,15 @@ export function useSelectionList(
       onSelectionChanged(selection.getSelection())
     }
   })
-  const [selection, setSelection] = useState<Selection<IObjectWithKey>>(__selection)
+  const [selection, setSelection] =
+    useState<Selection<IObjectWithKey>>(__selection)
   const [searchTerm, setSearchTerm] = useState<string>('')
 
   useEffect(() => {
     __selection.setChangeEvents(false)
-    selectedKeys.forEach((key) => __selection.setKeySelected(key as any, true, true))
+    selectedKeys.forEach((key) =>
+      __selection.setKeySelected(key as any, true, true)
+    )
     __selection.setChangeEvents(true)
     setSelection(__selection)
   }, [searchTerm])

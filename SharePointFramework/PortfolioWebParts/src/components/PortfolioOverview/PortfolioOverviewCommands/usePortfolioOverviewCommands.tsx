@@ -36,7 +36,9 @@ import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
  *
  * @param props Props for the component `<PortfolioOverviewCommands />`
  */
-export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsProps) {
+export function usePortfolioOverviewCommands(
+  props: IPortfolioOverviewCommandsProps
+) {
   const context = useContext(PortfolioOverviewContext)
   const filters = usePortfolioOverviewFilters()
 
@@ -82,7 +84,8 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
     try {
       // If no items are selected, export all items
       const items =
-        _.isArray(context.state.selectedItems) && context.state.selectedItems.length > 0
+        _.isArray(context.state.selectedItems) &&
+        context.state.selectedItems.length > 0
           ? context.state.selectedItems
           : props.filteredData.items
 
@@ -128,10 +131,13 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       iconProps: { iconName: 'CirclePlus' },
       buttonStyles: { root: { border: 'none' } },
       data: {
-        isVisible: context.props.configuration.userCanAddViews && context.props.showViewSelector
+        isVisible:
+          context.props.configuration.userCanAddViews &&
+          context.props.showViewSelector
       },
       disabled: context.state.loading,
-      onClick: () => redirect(context.props.configuration.viewsUrls.defaultNewFormUrl)
+      onClick: () =>
+        redirect(context.props.configuration.viewsUrls.defaultNewFormUrl)
     } as IContextualMenuItem,
     {
       key: 'VIEW_OPTIONS',
@@ -186,14 +192,16 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
                     const defaultView = context.props.configuration.views.find(
                       (v) => v.isDefaultView
                     )
-                    const view = new PortfolioOverviewView().configureFrom(defaultView).set({
-                      id: option.key,
-                      title: option.text,
-                      iconName: 'ProjectCollection'
-                    })
-                    view.searchQueries = (option.data as ProgramItem).buildQueries(
-                      defaultView.searchQuery
-                    )
+                    const view = new PortfolioOverviewView()
+                      .configureFrom(defaultView)
+                      .set({
+                        id: option.key,
+                        title: option.text,
+                        iconName: 'ProjectCollection'
+                      })
+                    view.searchQueries = (
+                      option.data as ProgramItem
+                    ).buildQueries(defaultView.searchQuery)
                     context.dispatch(CHANGE_VIEW(view))
                   }}
                 />
@@ -218,7 +226,9 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
           {
             key: 'EDIT_VIEW',
             name: strings.EditViewText,
-            disabled: context.state.loading || typeof context.state.currentView?.id !== 'number',
+            disabled:
+              context.state.loading ||
+              typeof context.state.currentView?.id !== 'number',
             onClick: () =>
               redirect(
                 `${context.props.configuration.viewsUrls.defaultEditFormUrl}?ID=${context.state.currentView?.id}`

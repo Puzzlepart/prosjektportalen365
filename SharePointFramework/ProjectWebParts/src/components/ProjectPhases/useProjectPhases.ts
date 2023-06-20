@@ -4,7 +4,12 @@ import strings from 'ProjectWebPartsStrings'
 import { useReducer, useRef } from 'react'
 import { ProjectPhases } from '.'
 import { changePhase } from './changePhase'
-import reducer, { CHANGE_PHASE_ERROR, initialState, INIT_CHANGE_PHASE, SET_PHASE } from './reducer'
+import reducer, {
+  CHANGE_PHASE_ERROR,
+  initialState,
+  INIT_CHANGE_PHASE,
+  SET_PHASE
+} from './reducer'
 import { IProjectPhasesProps } from './types'
 import { useProjectPhasesDataFetch } from './useProjectPhasesDataFetch'
 

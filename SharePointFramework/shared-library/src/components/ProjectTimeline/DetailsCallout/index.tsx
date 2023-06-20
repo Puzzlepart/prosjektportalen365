@@ -18,7 +18,9 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
             </p>
             <p>
               <b>{strings.MilestoneDateLabel}:</b>{' '}
-              <span>{formatDate(props.timelineItem.item.end_time.toString())}</span>
+              <span>
+                {formatDate(props.timelineItem.item.end_time.toString())}
+              </span>
             </p>
           </>
         )
@@ -32,11 +34,15 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
             </p>
             <p>
               <b>{strings.StartDateLabel}:</b>{' '}
-              <span>{formatDate(props.timelineItem.item.start_time.toString())}</span>
+              <span>
+                {formatDate(props.timelineItem.item.start_time.toString())}
+              </span>
             </p>
             <p>
               <b>{strings.EndDateLabel}:</b>{' '}
-              <span>{formatDate(props.timelineItem.item.end_time.toString())}</span>
+              <span>
+                {formatDate(props.timelineItem.item.end_time.toString())}
+              </span>
             </p>
           </>
         )
@@ -54,7 +60,8 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
               <a
                 target='_blank'
                 rel='noreferrer'
-                href={`${props.timelineItem.item.data.projectUrl}/SitePages/Prosjektstatus.aspx`}>
+                href={`${props.timelineItem.item.data.projectUrl}/SitePages/Prosjektstatus.aspx`}
+              >
                 <span>{strings.LastPublishedStatusreport}</span>
               </a>
             </p>
@@ -63,11 +70,15 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
             </p>
             <p>
               <b>{strings.StartDateLabel}:</b>{' '}
-              <span>{formatDate(props.timelineItem.item.start_time.toString())}</span>
+              <span>
+                {formatDate(props.timelineItem.item.start_time.toString())}
+              </span>
             </p>
             <p>
               <b>{strings.EndDateLabel}:</b>{' '}
-              <span>{formatDate(props.timelineItem.item.end_time.toString())}</span>
+              <span>
+                {formatDate(props.timelineItem.item.end_time.toString())}
+              </span>
             </p>
           </>
         )
@@ -76,19 +87,26 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
         return (
           <>
             <p>
-              <b>{strings.NameLabel}:</b> <span>{props.timelineItem.item.title}</span>
+              <b>{strings.NameLabel}:</b>{' '}
+              <span>{props.timelineItem.item.title}</span>
             </p>
             <p hidden={data.elementType !== strings.TriangleLabel}>
               <b>{strings.ColumnRenderOptionDate}:</b>{' '}
-              <span>{formatDate(props.timelineItem.item.end_time.toString())}</span>
+              <span>
+                {formatDate(props.timelineItem.item.end_time.toString())}
+              </span>
             </p>
             <p hidden={data.elementType === strings.TriangleLabel}>
               <b>{strings.StartDateLabel}:</b>{' '}
-              <span>{formatDate(props.timelineItem.item.start_time.toString())}</span>
+              <span>
+                {formatDate(props.timelineItem.item.start_time.toString())}
+              </span>
             </p>
             <p hidden={data.elementType === strings.TriangleLabel}>
               <b>{strings.EndDateLabel}:</b>{' '}
-              <span>{formatDate(props.timelineItem.item.end_time.toString())}</span>
+              <span>
+                {formatDate(props.timelineItem.item.end_time.toString())}
+              </span>
             </p>
           </>
         )
@@ -96,7 +114,9 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
     }
   }
 
-  const boundRect = document.getElementsByClassName('rct-scroll')[0].getBoundingClientRect()
+  const boundRect = document
+    .getElementsByClassName('rct-scroll')[0]
+    .getBoundingClientRect()
   const bounds = {
     top: boundRect.top,
     left: boundRect.left,
@@ -119,7 +139,8 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
       target={props.timelineItem.element}
       bounds={bounds}
       onDismiss={props.onDismiss}
-      setInitialFocus={true}>
+      setInitialFocus={true}
+    >
       <div className={styles.calloutHeader}>
         <div
           hidden={!data.tag}
@@ -127,16 +148,19 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
           className={styles.tag}
           style={{
             backgroundColor: data.bgColorHex
-          }}>
+          }}
+        >
           {data.tag}
         </div>
       </div>
       {calloutContent()}
       <p hidden={!data.budgetTotal}>
-        <b>{strings.BudgetTotalLabel}:</b> <span>{tryParseCurrency(data.budgetTotal)}</span>
+        <b>{strings.BudgetTotalLabel}:</b>{' '}
+        <span>{tryParseCurrency(data.budgetTotal)}</span>
       </p>
       <p hidden={!data.costsTotal}>
-        <b>{strings.CostsTotalLabel}:</b> <span>{tryParseCurrency(data.costsTotal)}</span>
+        <b>{strings.CostsTotalLabel}:</b>{' '}
+        <span>{tryParseCurrency(data.costsTotal)}</span>
       </p>
       <p hidden={!data.description}>
         <b>{strings.DescriptionFieldLabel}:</b> <span>{data.description}</span>

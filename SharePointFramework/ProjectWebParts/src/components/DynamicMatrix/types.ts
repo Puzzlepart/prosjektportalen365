@@ -3,7 +3,12 @@ import { IMatrixElementProps } from './MatrixCell/MatrixElement/types'
 
 export type DynamicMatrixSize = '4' | '5' | '6'
 export type DynamicMatrixConfiguration = IMatrixCell[][]
-export type DynamicMatrixColorScaleConfigItem = { p: number; r: number; g: number; b: number }
+export type DynamicMatrixColorScaleConfigItem = {
+  p: number
+  r: number
+  g: number
+  b: number
+}
 export type DynamicMatrixColorScaleConfig = DynamicMatrixColorScaleConfigItem[]
 
 export interface IDynamicMatrixProps {

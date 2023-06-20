@@ -1,4 +1,9 @@
-import { ContextualMenuItemType, getId, IColumn, ICommandBarProps } from '@fluentui/react'
+import {
+  ContextualMenuItemType,
+  getId,
+  IColumn,
+  ICommandBarProps
+} from '@fluentui/react'
 import { get } from '@microsoft/sp-lodash-subset'
 import moment from 'moment'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -74,5 +79,13 @@ export function useResourceAllocation(props: IResourceAllocationProps) {
     setState({ ...state, data, isDataLoaded: true })
   })
 
-  return { state, setState, commandBar, filters, onFilterChange, items, groups } as const
+  return {
+    state,
+    setState,
+    commandBar,
+    filters,
+    onFilterChange,
+    items,
+    groups
+  } as const
 }

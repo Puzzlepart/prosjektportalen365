@@ -29,7 +29,10 @@ import reducer, {
 } from './reducer'
 import { SelectScreen } from './SelectScreen'
 import { TargetFolderScreen } from './TargetFolderScreen'
-import { DocumentTemplateDialogScreen, IDocumentTemplateDialogProps } from './types'
+import {
+  DocumentTemplateDialogScreen,
+  IDocumentTemplateDialogProps
+} from './types'
 
 export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   const [state, dispatch] = useReducer(reducer, initState())
@@ -44,7 +47,9 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
    */
   async function onStartCopy(templates: TemplateItem[]): Promise<void> {
     dispatch(START_COPY())
-    const folder = SPDataAdapter.sp.web.getFolderByServerRelativeUrl(state.targetFolder)
+    const folder = SPDataAdapter.sp.web.getFolderByServerRelativeUrl(
+      state.targetFolder
+    )
     const filesAdded: FileAddResult[] = []
 
     for (let i = 0; i < templates.length; i++) {
@@ -68,7 +73,9 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
    * On close dialog
    */
   function onClose() {
-    props.onDismiss({ reload: state.screen === DocumentTemplateDialogScreen.Summary })
+    props.onDismiss({
+      reload: state.screen === DocumentTemplateDialogScreen.Summary
+    })
   }
 
   /**
@@ -81,8 +88,12 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
           <SelectScreen selection={selection} selectedItems={state.selected} />
         ),
         [DocumentTemplateDialogScreen.TargetFolder]: <TargetFolderScreen />,
-        [DocumentTemplateDialogScreen.EditCopy]: <EditCopyScreen onStartCopy={onStartCopy} />,
-        [DocumentTemplateDialogScreen.CopyProgress]: <CopyProgressScreen {...state.progress} />,
+        [DocumentTemplateDialogScreen.EditCopy]: (
+          <EditCopyScreen onStartCopy={onStartCopy} />
+        ),
+        [DocumentTemplateDialogScreen.CopyProgress]: (
+          <CopyProgressScreen {...state.progress} />
+        ),
         [DocumentTemplateDialogScreen.Summary]: (
           <InfoMessage
             type={MessageBarType.success}
@@ -104,7 +115,11 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
             <PrimaryButton
               text={strings.OnSubmitSelectionText}
               onClick={() =>
-                dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.TargetFolder }))
+                dispatch(
+                  SET_SCREEN({
+                    screen: DocumentTemplateDialogScreen.TargetFolder
+                  })
+                )
               }
               disabled={isEmpty(state.selected)}
             />
@@ -114,7 +129,11 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
           <>
             <PrimaryButton
               text={strings.GetMoreText}
-              onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))}
+              onClick={() =>
+                dispatch(
+                  SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select })
+                )
+              }
             />
             <DefaultButton text={strings.CloseModalText} onClick={onClose} />
           </>

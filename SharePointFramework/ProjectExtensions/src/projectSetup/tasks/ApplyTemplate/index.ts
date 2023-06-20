@@ -41,8 +41,13 @@ export class ApplyTemplate extends BaseTask {
           defaultCachingTimeoutSeconds: 60
         }
       })
-      this.logInformation('Applying template to site', { parameters: params.templateParameters })
-      const templateSchema = _.omit(params.templateSchema, params.templateExcludeHandlers)
+      this.logInformation('Applying template to site', {
+        parameters: params.templateParameters
+      })
+      const templateSchema = _.omit(
+        params.templateSchema,
+        params.templateExcludeHandlers
+      )
       await provisioner.applyTemplate(templateSchema, null, (handler) => {
         if (APPLY_TEMPLATE_STATUS_MAP[handler]) {
           onProgress(
@@ -52,13 +57,18 @@ export class ApplyTemplate extends BaseTask {
           )
         }
       })
-      this.logInformation('Applying extensions to site', { parameters: params.templateParameters })
+      this.logInformation('Applying extensions to site', {
+        parameters: params.templateParameters
+      })
       for (let i = 0; i < this.data.selectedExtensions.length; i++) {
         let extensionSchema = await this.data.selectedExtensions[i].getSchema()
         extensionSchema = _.omit(extensionSchema, 'Hooks')
         onProgress(
           strings.ApplyingExtensionsText,
-          format(strings.ApplyExtensionText, this.data.selectedExtensions[i].text),
+          format(
+            strings.ApplyExtensionText,
+            this.data.selectedExtensions[i].text
+          ),
           'ExternalBuild'
         )
         await provisioner.applyTemplate(extensionSchema, null)

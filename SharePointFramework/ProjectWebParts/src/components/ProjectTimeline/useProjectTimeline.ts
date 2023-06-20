@@ -10,7 +10,11 @@ import sortArray from 'array-sort'
 import { get } from '@microsoft/sp-lodash-subset'
 import { IColumn } from '@fluentui/react/lib/DetailsList'
 import { TimelineConfigurationModel } from 'pp365-shared-library/lib/models'
-import { IFilterItemProps, IFilterProps, TimelineTimeframe } from 'pp365-shared-library/lib/components'
+import {
+  IFilterItemProps,
+  IFilterProps,
+  TimelineTimeframe
+} from 'pp365-shared-library/lib/components'
 import strings from 'ProjectWebPartsStrings'
 import moment from 'moment'
 import { ITimelineItem } from 'pp365-shared-library/lib/interfaces'
@@ -46,10 +50,15 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
 
     if (activeFiltersKeys.length > 0) {
       const items = activeFiltersKeys.reduce(
-        (newItems, key) => newItems.filter((i) => activeFilters[key].indexOf(get(i, key)) !== -1),
+        (newItems, key) =>
+          newItems.filter(
+            (i) => activeFilters[key].indexOf(get(i, key)) !== -1
+          ),
         data.items
       )
-      const groups = data.groups.filter((grp) => items.filter((i) => i.group === grp.id).length > 0)
+      const groups = data.groups.filter(
+        (grp) => items.filter((i) => i.group === grp.id).length > 0
+      )
       return { items, groups }
     } else {
       return data
@@ -73,7 +82,9 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
       { fieldName: 'data.type', name: strings.TypeLabel },
       { fieldName: 'data.tag', name: strings.TagFieldLabel }
     ]
-    const hiddenItems = config.filter((item) => !item?.timelineFilter).map((item) => item.title)
+    const hiddenItems = config
+      .filter((item) => !item?.timelineFilter)
+      .map((item) => item.title)
 
     return columns.map((col) => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
@@ -95,7 +106,10 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
    * @param column Column
    * @param selectedItems Selected items
    */
-  const onFilterChange = (column: IColumn, selectedItems: IFilterItemProps[]) => {
+  const onFilterChange = (
+    column: IColumn,
+    selectedItems: IFilterItemProps[]
+  ) => {
     const { activeFilters } = state
 
     if (selectedItems.length > 0) {
@@ -128,7 +142,8 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
             selectedGroup = state.groups.categoryGroups
             updatedItems = state.data.items.map((item) => ({
               ...item,
-              group: selectedGroup.find((g) => g.title === item.data.category)?.id
+              group: selectedGroup.find((g) => g.title === item.data.category)
+                ?.id
             }))
           }
           break
@@ -146,14 +161,18 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
             selectedGroup = state.groups.projectGroups
             updatedItems = state.data.items.map((item) => ({
               ...item,
-              group: selectedGroup.find((g) => g.title === item.data?.project)?.id
+              group: selectedGroup.find((g) => g.title === item.data?.project)
+                ?.id
             }))
           }
           break
       }
     }
 
-    const filteredData = getFilteredData({ items: updatedItems, groups: selectedGroup })
+    const filteredData = getFilteredData({
+      items: updatedItems,
+      groups: selectedGroup
+    })
 
     setState({
       data: { ...state.data, items: updatedItems, groups: selectedGroup },

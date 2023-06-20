@@ -29,14 +29,25 @@ export abstract class BasePortfolioWebPart<
    * @param component Component
    * @param props Props
    */
-  public renderComponent<T = any>(component: React.ComponentClass<T> | FC<T>, props?: T): void {
-    const combinedProps = assign({ title: this._pageTitle }, this.properties, props, {
-      webPartContext: this.context,
-      pageContext: this.context.pageContext,
-      dataAdapter: this.dataAdapter,
-      displayMode: this.displayMode
-    })
-    const element: React.ReactElement<T> = React.createElement(component, combinedProps)
+  public renderComponent<T = any>(
+    component: React.ComponentClass<T> | FC<T>,
+    props?: T
+  ): void {
+    const combinedProps = assign(
+      { title: this._pageTitle },
+      this.properties,
+      props,
+      {
+        webPartContext: this.context,
+        pageContext: this.context.pageContext,
+        dataAdapter: this.dataAdapter,
+        displayMode: this.displayMode
+      }
+    )
+    const element: React.ReactElement<T> = React.createElement(
+      component,
+      combinedProps
+    )
     ReactDom.render(element, this.domElement)
   }
 
@@ -46,7 +57,8 @@ export abstract class BasePortfolioWebPart<
   private async _setup() {
     sp.setup({ spfxContext: this.context })
     Logger.subscribe(new ConsoleListener())
-    Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+    Logger.activeLogLevel =
+      sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     try {
       this._pageTitle = (
         await sp.web.lists

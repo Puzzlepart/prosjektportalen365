@@ -82,7 +82,9 @@ export function transformItems(
             ).id
             break
           case strings.TypeLabel:
-            timelineItem.group = timelineGroups.find((g) => g.title === timelineItem.data.type).id
+            timelineItem.group = timelineGroups.find(
+              (g) => g.title === timelineItem.data.type
+            ).id
             break
           default:
             timelineItem.group = timelineGroups.find(

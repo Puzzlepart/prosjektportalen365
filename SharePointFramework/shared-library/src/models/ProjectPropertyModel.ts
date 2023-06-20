@@ -16,6 +16,7 @@ export class ProjectPropertyModel {
     this.type = field.TypeAsString
     this.required = field.Required
     this.empty = value === ''
-    this.showInDisplayForm = field.SchemaXml.indexOf('ShowInDisplayForm="FALSE"') === -1
+    this.showInDisplayForm =
+      field.SchemaXml.indexOf('ShowInDisplayForm="FALSE"') === -1
   }
 }

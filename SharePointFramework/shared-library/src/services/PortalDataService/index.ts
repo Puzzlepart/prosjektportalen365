@@ -2,7 +2,14 @@
 import { find } from '@microsoft/sp-lodash-subset'
 import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
-import { CamlQuery, Folder, ListEnsureResult, PermissionKind, sp, Web } from '@pnp/sp'
+import {
+  CamlQuery,
+  Folder,
+  ListEnsureResult,
+  PermissionKind,
+  sp,
+  Web
+} from '@pnp/sp'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { transformFieldXml } from '../../helpers/transformFieldXml'
@@ -41,7 +48,10 @@ export class PortalDataService {
   public async configure(
     configuration: IPortalDataServiceConfiguration
   ): Promise<PortalDataService> {
-    this._configuration = { ...PortalDataServiceDefaultConfiguration, ...configuration }
+    this._configuration = {
+      ...PortalDataServiceDefaultConfiguration,
+      ...configuration
+    }
     const hubSite = await this.getHubSite()
     this.web = hubSite.web
     this.url = hubSite.url
@@ -53,9 +63,12 @@ export class PortalDataService {
    *
    * @param expire Expire
    */
-  private async getHubSite(expire: Date = dateAdd(new Date(), 'year', 1)): Promise<IHubSite> {
+  private async getHubSite(
+    expire: Date = dateAdd(new Date(), 'year', 1)
+  ): Promise<IHubSite> {
     try {
-      const hubSiteId = this._configuration.pageContext.legacyPageContext.hubSiteId || ''
+      const hubSiteId =
+        this._configuration.pageContext.legacyPageContext.hubSiteId || ''
       try {
         const { SiteUrl } = await (
           await fetch(
@@ -136,7 +149,9 @@ export class PortalDataService {
    *
    * @param constructor Constructor / model class
    */
-  public async getPrograms<T>(constructor: new (item: any, web: Web) => T): Promise<T[]> {
+  public async getPrograms<T>(
+    constructor: new (item: any, web: Web) => T
+  ): Promise<T[]> {
     try {
       const items = await this.getItems(
         this._configuration.listNames.PROJECTS,
@@ -201,7 +216,9 @@ export class PortalDataService {
    */
   private async ensureAttachmentsFolder(report: StatusReport): Promise<Folder> {
     const folderName = report.id.toString()
-    const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS_ATTACHMENTS)
+    const list = this.web.lists.getByTitle(
+      this._configuration.listNames.PROJECT_STATUS_ATTACHMENTS
+    )
     try {
       await list.rootFolder.folders.getByName(folderName).get()
       return list.rootFolder.folders.getByName(folderName)
@@ -243,7 +260,10 @@ export class PortalDataService {
           attachmentsFolder.files.add(att.url, att.content, att.shouldOverWrite)
         )
       ])
-      return new StatusReport({ ...report.item, ...properties }, publishedString)
+      return new StatusReport(
+        { ...report.item, ...properties },
+        publishedString
+      )
     } catch (error) {
       throw error
     }
@@ -372,7 +392,9 @@ export class PortalDataService {
         continue
       }
       try {
-        const [fieldLink] = hubContentType.FieldLinks.filter((fl) => fl.Name === field.InternalName)
+        const [fieldLink] = hubContentType.FieldLinks.filter(
+          (fl) => fl.Name === field.InternalName
+        )
         Logger.log({
           message: `(PortalDataService) (syncList) Adding field [${field.InternalName}] to list [${listName}].`,
           level: LogLevel.Info,
@@ -391,7 +413,9 @@ export class PortalDataService {
           const fieldToCreate = spList
             .get_fields()
             .addFieldAsXml(
-              transformFieldXml(field.SchemaXml, { DisplayName: field.InternalName }),
+              transformFieldXml(field.SchemaXml, {
+                DisplayName: field.InternalName
+              }),
               false,
               SP.AddFieldOptions.addToDefaultContentType
             )
@@ -430,7 +454,9 @@ export class PortalDataService {
    *
    * @param contentTypeId Content type ID
    */
-  private async _getHubContentType(contentTypeId: string): Promise<ISPContentType> {
+  private async _getHubContentType(
+    contentTypeId: string
+  ): Promise<ISPContentType> {
     const contentType = await this.web.contentTypes
       .getById(contentTypeId)
       .select(
@@ -454,7 +480,9 @@ export class PortalDataService {
    * @param web Web
    */
   private async _getSiteFields(web: Web): Promise<SPField[]> {
-    const siteFields = await web.fields.select(...Object.keys(new SPField())).get<SPField[]>()
+    const siteFields = await web.fields
+      .select(...Object.keys(new SPField()))
+      .get<SPField[]>()
     return siteFields
   }
 
@@ -468,7 +496,10 @@ export class PortalDataService {
     listName: string,
     constructor: new (file: any, web: Web) => T
   ): Promise<T[]> {
-    const files = await this.web.lists.getByTitle(listName).rootFolder.files.usingCaching().get()
+    const files = await this.web.lists
+      .getByTitle(listName)
+      .rootFolder.files.usingCaching()
+      .get()
     return files.map((file) => new constructor(file, this.web))
   }
 
@@ -490,7 +521,9 @@ export class PortalDataService {
       const list = this.web.lists.getByTitle(listName)
       let items: any[]
       if (query) {
-        items = await list.usingCaching().getItemsByCAMLQuery(query, ...(expands ?? []))
+        items = await list
+          .usingCaching()
+          .getItemsByCAMLQuery(query, ...(expands ?? []))
       } else {
         items = await list.usingCaching().items.usingCaching().get()
       }
@@ -510,10 +543,15 @@ export class PortalDataService {
     properties: Record<string, any>,
     contentTypeId: string
   ): Promise<StatusReport> {
-    const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
+    const list = this.web.lists.getByTitle(
+      this._configuration.listNames.PROJECT_STATUS
+    )
     if (contentTypeId) {
       const contentTypes = await list.contentTypes.get()
-      const ct = find(contentTypes, (ct) => ct.StringId.indexOf(contentTypeId) === 0)
+      const ct = find(
+        contentTypes,
+        (ct) => ct.StringId.indexOf(contentTypeId) === 0
+      )
       if (ct) properties.ContentTypeId = ct.StringId
     }
     const itemAddResult = await list.items.add(properties)
@@ -533,11 +571,14 @@ export class PortalDataService {
     publishedString,
     useCaching = true
   }: GetStatusReportsOptions): Promise<StatusReport[]> {
-    if (!this._configuration.pageContext) throw 'Property {pageContext} is not the configuration.'
+    if (!this._configuration.pageContext)
+      throw 'Property {pageContext} is not the configuration.'
     if (stringIsNullOrEmpty(filter))
       filter = `GtSiteId eq '${this._configuration.pageContext.site.id.toString()}'`
     try {
-      const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
+      const list = this.web.lists.getByTitle(
+        this._configuration.listNames.PROJECT_STATUS
+      )
       let items = list.items
         .filter(filter)
         .expand('FieldValuesAsText', 'AttachmentFiles')
@@ -545,7 +586,9 @@ export class PortalDataService {
       if (top) items = items.top(top)
       if (select) items = items.select(...select)
       if (useCaching) items = items.usingCaching()
-      const reports = (await items.get()).map((i) => new StatusReport(i, publishedString))
+      const reports = (await items.get()).map(
+        (i) => new StatusReport(i, publishedString)
+      )
       return reports
     } catch (error) {
       throw error
@@ -559,7 +602,9 @@ export class PortalDataService {
    *
    * @param report Status report
    */
-  public async getStatusReportAttachments(report: StatusReport): Promise<StatusReport> {
+  public async getStatusReportAttachments(
+    report: StatusReport
+  ): Promise<StatusReport> {
     const attachmentsFolder = await this.ensureAttachmentsFolder(report)
     const attachmentFiles = await attachmentsFolder.files.usingCaching().get()
     const attachmentFilesContent = await Promise.all(
@@ -569,7 +614,9 @@ export class PortalDataService {
           url
         }
         if (url.indexOf('.txt') !== -1 || url.indexOf('.json') !== -1) {
-          attachment.content = await this.web.getFileByServerRelativeUrl(url).getText()
+          attachment.content = await this.web
+            .getFileByServerRelativeUrl(url)
+            .getText()
         }
         return attachment
       })

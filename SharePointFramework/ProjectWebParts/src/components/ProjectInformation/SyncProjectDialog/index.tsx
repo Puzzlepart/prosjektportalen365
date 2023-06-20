@@ -37,7 +37,8 @@ export const SyncProjectDialog: FC = () => {
         type: DialogType.largeHeader,
         title: strings.SyncProjectModalTitle,
         subText: strings.SyncProjectModalSubText
-      }}>
+      }}
+    >
       {isLoading && (
         <Spinner
           label={format(strings.LoadingText, strings.IdeaProjectDataTitle)}
@@ -54,7 +55,9 @@ export const SyncProjectDialog: FC = () => {
         <DialogFooter>
           <DefaultButton
             text={strings.CancelText}
-            onClick={() => context.setState({ displaySyncProjectDialog: false })}
+            onClick={() =>
+              context.setState({ displaySyncProjectDialog: false })
+            }
             disabled={isSyncing}
           />
           <PrimaryButton
@@ -70,7 +73,9 @@ export const SyncProjectDialog: FC = () => {
         <DialogFooter>
           <PrimaryButton
             text={strings.CloseText}
-            onClick={() => context.setState({ displaySyncProjectDialog: false })}
+            onClick={() =>
+              context.setState({ displaySyncProjectDialog: false })
+            }
             disabled={isSyncing}
           />
         </DialogFooter>
@@ -93,9 +98,11 @@ export const SyncProjectDialog: FC = () => {
         .select('Id')
         .get()
 
-      const updatedResult = await ideaProcessingList.items.getById(ideaProcessingItem.Id).update({
-        GtIdeaDecision: 'Godkjent og synkronisert'
-      })
+      const updatedResult = await ideaProcessingList.items
+        .getById(ideaProcessingItem.Id)
+        .update({
+          GtIdeaDecision: 'Godkjent og synkronisert'
+        })
 
       return updatedResult
     } catch (error) {}
@@ -108,7 +115,9 @@ export const SyncProjectDialog: FC = () => {
       )
 
       const [projectDataItem] = await projectDataList.items
-        .filter(`GtSiteUrl eq '${context.props.webPartContext.pageContext.web.absoluteUrl}'`)
+        .filter(
+          `GtSiteUrl eq '${context.props.webPartContext.pageContext.web.absoluteUrl}'`
+        )
         .select('Id')
         .get()
 
@@ -149,12 +158,20 @@ export const SyncProjectDialog: FC = () => {
    * @param properties Properties
    * @param projectDataId Project data ID
    */
-  async function syncProperties(properties: TypedHash<any>, projectDataId: number) {
+  async function syncProperties(
+    properties: TypedHash<any>,
+    projectDataId: number
+  ) {
     setSyncing(true)
 
-    const projectPropertiesList = sp.web.lists.getByTitle(strings.ProjectPropertiesListName)
+    const projectPropertiesList = sp.web.lists.getByTitle(
+      strings.ProjectPropertiesListName
+    )
 
-    const [propertiesItem] = await projectPropertiesList.items.top(1).select('Id').get()
+    const [propertiesItem] = await projectPropertiesList.items
+      .top(1)
+      .select('Id')
+      .get()
 
     try {
       await projectPropertiesList.items

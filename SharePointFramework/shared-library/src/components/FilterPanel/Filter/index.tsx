@@ -15,10 +15,15 @@ export class Filter extends Component<IFilterProps, IFilterState> {
   public render(): React.ReactElement<IFilterProps> {
     return (
       <div className={styles.root}>
-        <div className={styles.filterSectionHeader} onClick={this._onToggleSectionContent}>
+        <div
+          className={styles.filterSectionHeader}
+          onClick={this._onToggleSectionContent}
+        >
           <span className={styles.titleText}>{this.props.column.name}</span>
           <span className={styles.titleIcon}>
-            <Icon iconName={this.state.isCollapsed ? 'ChevronUp' : 'ChevronDown'} />
+            <Icon
+              iconName={this.state.isCollapsed ? 'ChevronUp' : 'ChevronDown'}
+            />
           </span>
         </div>
         <div hidden={this.state.isCollapsed}>
@@ -32,7 +37,9 @@ export class Filter extends Component<IFilterProps, IFilterState> {
    * On toggle section content
    */
   private _onToggleSectionContent = () => {
-    this.setState((prevState: IFilterState) => ({ isCollapsed: !prevState.isCollapsed }))
+    this.setState((prevState: IFilterState) => ({
+      isCollapsed: !prevState.isCollapsed
+    }))
   }
 
   /**

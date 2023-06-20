@@ -13,9 +13,16 @@ import _ from 'underscore'
  * @param columns Columns
  * @param state State of `<PortfolioOverview />`
  */
-function createGroups(items: any[], columns: ProjectColumn[], state: IPortfolioOverviewState) {
+function createGroups(
+  items: any[],
+  columns: ProjectColumn[],
+  state: IPortfolioOverviewState
+) {
   if (!state.groupBy) return { items, columns, groups: null }
-  const itemsSort = { props: [state.groupBy.fieldName], opts: { reverse: false } }
+  const itemsSort = {
+    props: [state.groupBy.fieldName],
+    opts: { reverse: false }
+  }
   if (state.sortBy) {
     itemsSort.props.push(state.sortBy.column.fieldName)
     itemsSort.opts.reverse = !state.sortBy.column.isSortedDescending
@@ -50,12 +57,18 @@ function createGroups(items: any[], columns: ProjectColumn[], state: IPortfolioO
  * @param props Props of `<PortfolioOverview />`
  * @param state State of `<PortfolioOverview />`
  */
-export function useFilteredData(props: IPortfolioOverviewProps, state: IPortfolioOverviewState) {
+export function useFilteredData(
+  props: IPortfolioOverviewProps,
+  state: IPortfolioOverviewState
+) {
   let columns = [...state.columns]
   let items = [...state.items].filter((item) => {
     return (
       columns.filter(
-        (col) => get(item, col?.fieldName, '').toLowerCase().indexOf(state.searchTerm) !== -1
+        (col) =>
+          get(item, col?.fieldName, '')
+            .toLowerCase()
+            .indexOf(state.searchTerm) !== -1
       ).length > 0
     )
   })
@@ -66,8 +79,9 @@ export function useFilteredData(props: IPortfolioOverviewProps, state: IPortfoli
       return arr.filter((i) => {
         const colValue = get<string>(i, key, '')
         return (
-          state.activeFilters[key].filter((filterValue) => colValue.indexOf(filterValue) !== -1)
-            .length > 0
+          state.activeFilters[key].filter(
+            (filterValue) => colValue.indexOf(filterValue) !== -1
+          ).length > 0
         )
       })
     }, items)

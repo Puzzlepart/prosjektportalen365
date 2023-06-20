@@ -1,4 +1,9 @@
-import { getId, IContextualMenuItem, Spinner, SpinnerSize } from '@fluentui/react'
+import {
+  getId,
+  IContextualMenuItem,
+  Spinner,
+  SpinnerSize
+} from '@fluentui/react'
 import { formatDate } from 'pp365-shared-library/lib/helpers'
 import strings from 'ProjectWebPartsStrings'
 import React, { useContext } from 'react'
@@ -36,7 +41,9 @@ export function useCommands() {
       key: 'NEW_STATUS_REPORT',
       name: strings.NewStatusReportModalHeaderText,
       iconProps: { iconName: 'NewFolder' },
-      disabled: context.state.data.reports.filter((report) => !report.published).length !== 0,
+      disabled:
+        context.state.data.reports.filter((report) => !report.published)
+          .length !== 0,
       onClick: redirectNewStatusReport
     },
     context.state.selectedReport &&
@@ -44,7 +51,8 @@ export function useCommands() {
         key: 'DELETE_REPORT',
         name: strings.DeleteReportButtonText,
         iconProps: { iconName: 'Delete' },
-        disabled: context.state.selectedReport?.published || context.state.isPublishing,
+        disabled:
+          context.state.selectedReport?.published || context.state.isPublishing,
         onClick: () => {
           deleteReport()
         }
@@ -55,7 +63,8 @@ export function useCommands() {
         name: strings.EditReportButtonText,
         iconProps: { iconName: 'Edit' },
         href: getEditFormUrl(context.state.selectedReport),
-        disabled: context.state.selectedReport?.published || context.state.isPublishing
+        disabled:
+          context.state.selectedReport?.published || context.state.isPublishing
       },
     context.state.selectedReport &&
       context.state.userHasAdminPermission &&
@@ -91,7 +100,9 @@ export function useCommands() {
       key: 'GET_SNAPSHOT',
       name: strings.GetSnapshotButtonText,
       iconProps: { iconName: 'Photo2' },
-      disabled: !context.state.selectedReport?.snapshotUrl || context.state.isPublishing,
+      disabled:
+        !context.state.selectedReport?.snapshotUrl ||
+        context.state.isPublishing,
       onClick: () => {
         window.open(context.state.selectedReport?.snapshotUrl)
       }
@@ -112,7 +123,9 @@ export function useCommands() {
         ? strings.PublishedStatusReport
         : strings.NotPublishedStatusReport,
       iconProps: {
-        iconName: context.state.selectedReport?.published ? 'BoxCheckmarkSolid' : 'CheckboxFill',
+        iconName: context.state.selectedReport?.published
+          ? 'BoxCheckmarkSolid'
+          : 'CheckboxFill',
         style: {
           color: context.state.selectedReport?.published ? '#2DA748' : '#D2D2D2'
         }

@@ -86,7 +86,11 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
    * @param _index - Index
    * @param column - Column
    */
-  function onRenderItemColumn(project: ProjectListModel, _index: number, column: IColumn) {
+  function onRenderItemColumn(
+    project: ProjectListModel,
+    _index: number,
+    column: IColumn
+  ) {
     const colValue = getObjectValue(project, column.fieldName, null)
     if (column.fieldName === 'title') {
       if (project.isUserMember) return <a href={project.url}>{colValue}</a>
@@ -98,7 +102,9 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   if (state.projects.length === 0) {
     return (
       <div className={styles.root}>
-        <MessageBar messageBarType={MessageBarType.info}>{strings.NoProjectsFound}</MessageBar>
+        <MessageBar messageBarType={MessageBarType.info}>
+          {strings.NoProjectsFound}
+        </MessageBar>
       </div>
     )
   }
@@ -106,7 +112,9 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   if (state.error) {
     return (
       <div className={styles.root}>
-        <MessageBar messageBarType={MessageBarType.error}>{strings.ErrorText}</MessageBar>
+        <MessageBar messageBarType={MessageBarType.error}>
+          {strings.ErrorText}
+        </MessageBar>
       </div>
     )
   }
@@ -117,7 +125,9 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         <div className={styles.projectDisplaySelect}>
           <Pivot
             onLinkClick={({ props }) =>
-              setState({ selectedView: find(views, (v) => v.itemKey === props.itemKey) })
+              setState({
+                selectedView: find(views, (v) => v.itemKey === props.itemKey)
+              })
             }
             selectedKey={state.selectedView.itemKey}
           >
@@ -131,12 +141,18 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
                     headerText={view.headerText}
                     itemIcon={view.itemIcon}
                     headerButtonProps={
-                      view.getHeaderButtonProps && view.getHeaderButtonProps(state)
+                      view.getHeaderButtonProps &&
+                      view.getHeaderButtonProps(state)
                     }
                   >
-                    <div className={styles.searchBox} hidden={!props.showSearchBox}>
+                    <div
+                      className={styles.searchBox}
+                      hidden={!props.showSearchBox}
+                    >
                       <SearchBox
-                        disabled={!state.isDataLoaded || isEmpty(state.projects)}
+                        disabled={
+                          !state.isDataLoaded || isEmpty(state.projects)
+                        }
                         value={state.searchTerm}
                         placeholder={searchBoxPlaceholder}
                         onChange={onSearch}
@@ -145,14 +161,18 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
                     <RenderModeDropdown
                       hidden={!props.showViewSelector}
                       renderAs={state.renderMode}
-                      onChange={(renderAs) => setState({ renderMode: renderAs })}
+                      onChange={(renderAs) =>
+                        setState({ renderMode: renderAs })
+                      }
                     />
                     {state.isDataLoaded && isEmpty(projects) && (
                       <div className={styles.emptyMessage}>
                         <MessageBar>{strings.ProjectListEmptyText}</MessageBar>
                       </div>
                     )}
-                    <div className={styles.projects}>{renderProjects(projects)}</div>
+                    <div className={styles.projects}>
+                      {renderProjects(projects)}
+                    </div>
                   </PivotItem>
                 ))}
           </Pivot>

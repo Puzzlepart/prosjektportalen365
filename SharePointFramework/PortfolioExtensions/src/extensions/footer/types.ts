@@ -51,11 +51,17 @@ export class InstallationEntry {
     this.installCommand = entryItem.InstallCommand
     this.installStartTime = new Date(entryItem.InstallStartTime)
     this.installEndTime = new Date(entryItem.InstallEndTime)
-    const installDurationMs = this.installEndTime.getTime() - this.installStartTime.getTime()
-    this.installDuration = Math.round(((installDurationMs % 86400000) % 3600000) / 60000)
+    const installDurationMs =
+      this.installEndTime.getTime() - this.installStartTime.getTime()
+    this.installDuration = Math.round(
+      ((installDurationMs % 86400000) % 3600000) / 60000
+    )
     this.fullInstallVersion = entryItem.InstallVersion
     this.installVersion = Version.tryParse(
-      this.fullInstallVersion.substring(0, this.fullInstallVersion.lastIndexOf('.'))
+      this.fullInstallVersion.substring(
+        0,
+        this.fullInstallVersion.lastIndexOf('.')
+      )
     )
   }
 }
@@ -134,7 +140,8 @@ export class HelpContentModel {
    * @param publicMediaBasePath Public media base path
    */
   public async fetchExternalContent(publicMediaBasePath?: string) {
-    this._publicMediaBasePath = publicMediaBasePath ?? this._getPublicMediaBasePath()
+    this._publicMediaBasePath =
+      publicMediaBasePath ?? this._getPublicMediaBasePath()
     try {
       let md = await (await fetch(this.externalUrl, { method: 'GET' })).text()
       md = this._removeJekyllHeader(md)
@@ -148,7 +155,9 @@ export class HelpContentModel {
    */
   private _getPublicMediaBasePath() {
     const externalUrlParts = this.externalUrl.split('/')
-    return `${externalUrlParts.splice(0, externalUrlParts.length - 1).join('/')}/media`
+    return `${externalUrlParts
+      .splice(0, externalUrlParts.length - 1)
+      .join('/')}/media`
   }
 
   /**
@@ -165,7 +174,10 @@ export class HelpContentModel {
         regex.lastIndex++
       }
       const [, oldImageLink, image] = m
-      const newImageLink = `${this._publicMediaBasePath}/${image}`.replace(/ /g, '%20')
+      const newImageLink = `${this._publicMediaBasePath}/${image}`.replace(
+        / /g,
+        '%20'
+      )
       md = md.replace(oldImageLink, newImageLink)
     }
     return md

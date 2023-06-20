@@ -21,7 +21,9 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
   if (state.hidden) return null
 
   return (
-    <ProjectInformationContext.Provider value={{ props, state, setState, onSyncProperties }}>
+    <ProjectInformationContext.Provider
+      value={{ props, state, setState, onSyncProperties }}
+    >
       <div className={styles.root}>
         <div className={styles.container}>
           <div className={styles.header}>
@@ -38,10 +40,14 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
           ) : (
             <Shimmer
               isDataLoaded={state.isDataLoaded}
-              customElementsGroup={<CustomShimmerElementsGroup />}>
+              customElementsGroup={<CustomShimmerElementsGroup />}
+            >
               <ProjectProperties properties={state.properties} />
               {!props.hideAllActions && state.message && (
-                <UserMessage className={styles.userMessage} {...state.message} />
+                <UserMessage
+                  className={styles.userMessage}
+                  {...state.message}
+                />
               )}
               <Actions />
               <ParentProjectsList />
@@ -49,12 +55,16 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
               <ProgressDialog {...state.progress} />
               <AllPropertiesPanel />
               <CreateParentDialog />
-              {props.page === 'Frontpage' && props.useIdeaProcessing && <SyncProjectDialog />}
+              {props.page === 'Frontpage' && props.useIdeaProcessing && (
+                <SyncProjectDialog />
+              )}
             </Shimmer>
           )}
         </div>
       </div>
-      {state.confirmActionProps && <ConfirmDialog {...state.confirmActionProps} />}
+      {state.confirmActionProps && (
+        <ConfirmDialog {...state.confirmActionProps} />
+      )}
     </ProjectInformationContext.Provider>
   )
 }

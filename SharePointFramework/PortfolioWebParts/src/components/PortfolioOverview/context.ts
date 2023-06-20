@@ -9,4 +9,5 @@ export interface IPortfolioOverviewContext {
   layerHostId: string
 }
 
-export const PortfolioOverviewContext = createContext<IPortfolioOverviewContext>(null)
+export const PortfolioOverviewContext =
+  createContext<IPortfolioOverviewContext>(null)

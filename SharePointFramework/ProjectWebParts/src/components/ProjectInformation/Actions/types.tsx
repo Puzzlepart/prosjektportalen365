@@ -1,1 +1,7 @@
-export type ActionType = [string, string | (() => void), string, boolean?, boolean?]
+export type ActionType = [
+  string,
+  string | (() => void),
+  string,
+  boolean?,
+  boolean?
+]

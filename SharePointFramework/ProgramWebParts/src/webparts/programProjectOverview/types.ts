@@ -1,6 +1,7 @@
 import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
 
-export interface IProgramProjectOverviewProps extends IBaseWebPartComponentProps {
+export interface IProgramProjectOverviewProps
+  extends IBaseWebPartComponentProps {
   title: string
   showCommandBar: boolean
   showFilters: boolean

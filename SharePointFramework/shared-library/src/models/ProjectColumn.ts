@@ -3,7 +3,10 @@ import { stringIsNullOrEmpty } from '@pnp/common'
 import { IColumn } from '@fluentui/react'
 import { pick } from 'underscore'
 import { SearchValueType } from '../types/SearchValueType'
-import { ProjectColumnConfig, ProjectColumnConfigDictionary } from './ProjectColumnConfig'
+import {
+  ProjectColumnConfig,
+  ProjectColumnConfigDictionary
+} from './ProjectColumnConfig'
 
 export class SPProjectColumnItem {
   public Id: number = 0
@@ -61,7 +64,8 @@ export class ProjectColumn implements IColumn {
       this.name = _item.Title
       this.sortOrder = _item.GtSortOrder
       this.internalName = _item.GtInternalName
-      this.dataType = _item.GtFieldDataType && _item.GtFieldDataType.toLowerCase()
+      this.dataType =
+        _item.GtFieldDataType && _item.GtFieldDataType.toLowerCase()
       this.isMultiline = this.dataType === 'note' || this.dataType === 'tags'
       this.isRefinable = _item.GtIsRefinable
       this.isGroupable = _item.GtIsGroupable
@@ -86,8 +90,11 @@ export class ProjectColumn implements IColumn {
    */
   private _getCustomSorts(value: string): ProjectColumnCustomSort[] {
     if (stringIsNullOrEmpty(value)) return []
-    const regex = /(?<name>[\w\søæå]*)(\((?<icon>[\w\søæå,]*)\))?:(?<order>[\w\søæå,]*)/gm
-    const matches = [...value.matchAll(regex)].map((m) => m.groups).filter((g) => !!g.name)
+    const regex =
+      /(?<name>[\w\søæå]*)(\((?<icon>[\w\søæå,]*)\))?:(?<order>[\w\søæå,]*)/gm
+    const matches = [...value.matchAll(regex)]
+      .map((m) => m.groups)
+      .filter((g) => !!g.name)
     return matches.map(({ name, icon, order }) => ({
       name,
       iconName: icon,
@@ -97,7 +104,7 @@ export class ProjectColumn implements IColumn {
 
   /**
    * Checks if the column is visible on the given page.
-   * 
+   *
    * @param page Page to check
    */
   public isVisible(page: 'Frontpage' | 'ProjectStatus' | 'Portfolio') {
@@ -183,9 +190,9 @@ export class ProjectColumn implements IColumn {
   /**
    * Set arbitrary data on the column. Such as `renderAs` or
    * `isGroupable`.
-   * 
+   *
    * @param data Data to set
-   * @returns 
+   * @returns
    */
   public setData(data: any): ProjectColumn {
     this.data = { ...this.data, ...data }

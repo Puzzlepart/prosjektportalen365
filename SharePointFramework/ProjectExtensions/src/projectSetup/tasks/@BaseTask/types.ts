@@ -68,7 +68,10 @@ export interface IBaseTaskParams {
 export interface IBaseTask {
   params: IBaseTaskParams
   taskName: string
-  execute(params: IBaseTaskParams, onProgress: OnProgressCallbackFunction): Promise<IBaseTaskParams>
+  execute(
+    params: IBaseTaskParams,
+    onProgress: OnProgressCallbackFunction
+  ): Promise<IBaseTaskParams>
 }
 
 export class BaseTaskError extends ProjectSetupError {

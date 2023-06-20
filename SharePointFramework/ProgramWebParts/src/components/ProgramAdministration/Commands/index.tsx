@@ -22,16 +22,22 @@ export const Commands: FC = () => {
       iconProps: { iconName: 'Delete' },
       buttonStyles: { root: { border: 'none' } },
       disabled:
-        isEmpty(context.state.selectedProjectsToDelete) || !context.state.userHasManagePermission,
+        isEmpty(context.state.selectedProjectsToDelete) ||
+        !context.state.userHasManagePermission,
       onClick: () => {
-        context.props.dataAdapter.removeChildProjects(context.state.selectedProjectsToDelete).then(
-          (childProjects) => {
+        context.props.dataAdapter
+          .removeChildProjects(context.state.selectedProjectsToDelete)
+          .then((childProjects) => {
             context.dispatch(CHILD_PROJECTS_REMOVED({ childProjects }))
-          }
-        )
+          })
       }
     }
   ]
 
-  return <CommandBar items={items} style={{ backgroundColor: 'white', marginBottom: '5px' }} />
+  return (
+    <CommandBar
+      items={items}
+      style={{ backgroundColor: 'white', marginBottom: '5px' }}
+    />
+  )
 }

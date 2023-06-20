@@ -31,12 +31,15 @@ export const CreateParentDialog: FC = () => {
         type: DialogType.largeHeader,
         title: strings.CreateParentModalTitle,
         subText: strings.CreateParentModalSubText
-      }}>
+      }}
+    >
       {!isLoading && (
         <DialogFooter>
           <DefaultButton
             text={strings.CancelText}
-            onClick={() => context.setState({ displayCreateParentDialog: false })}
+            onClick={() =>
+              context.setState({ displayCreateParentDialog: false })
+            }
           />
           <PrimaryButton
             text={strings.RedoText}

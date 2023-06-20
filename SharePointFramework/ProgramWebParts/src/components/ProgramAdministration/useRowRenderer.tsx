@@ -10,8 +10,9 @@ export function useRowRenderer({ selectedKeys, searchTerm }) {
     defaultRender: (props?: IDetailsRowProps) => JSX.Element
   ) => {
     const shouldRenderRow =
-      detailsRowProps.item.Title.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
-      selectedKeys.includes(detailsRowProps.item.key)
+      detailsRowProps.item.Title.toLowerCase().indexOf(
+        searchTerm.toLowerCase()
+      ) !== -1 || selectedKeys.includes(detailsRowProps.item.key)
     return shouldRenderRow ? defaultRender(detailsRowProps) : null
   }
 }

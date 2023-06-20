@@ -1,6 +1,12 @@
-import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
+import {
+  IPropertyPaneConfiguration,
+  PropertyPaneTextField
+} from '@microsoft/sp-property-pane'
 import strings from 'PortfolioWebPartsStrings'
-import { IProjectTimelineProps, ProjectTimeline } from 'pp365-shared-library/lib/components'
+import {
+  IProjectTimelineProps,
+  ProjectTimeline
+} from 'pp365-shared-library/lib/components'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class ProjectTimelineWebPart extends BasePortfolioWebPart<IProjectTimelineProps> {

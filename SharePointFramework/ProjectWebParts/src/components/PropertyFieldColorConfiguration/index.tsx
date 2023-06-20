@@ -1,16 +1,23 @@
-import { IPropertyPaneField, PropertyPaneFieldType } from '@microsoft/sp-property-pane'
+import {
+  IPropertyPaneField,
+  PropertyPaneFieldType
+} from '@microsoft/sp-property-pane'
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import { ColorConfigurator } from './ColorConfigurator'
 import { IPropertyFieldColorConfigurationProps } from './types'
 
 class PropertyFieldColorConfigurationBuilder
-  implements IPropertyPaneField<IPropertyFieldColorConfigurationProps> {
+  implements IPropertyPaneField<IPropertyFieldColorConfigurationProps>
+{
   public targetProperty: string
   public type: PropertyPaneFieldType = PropertyPaneFieldType.Custom
   public properties: IPropertyFieldColorConfigurationProps
 
-  public constructor(_targetProperty: string, _properties: IPropertyFieldColorConfigurationProps) {
+  public constructor(
+    _targetProperty: string,
+    _properties: IPropertyFieldColorConfigurationProps
+  ) {
     this.targetProperty = _targetProperty
     this.properties = {
       ..._properties,

@@ -9,8 +9,12 @@ export const INIT = createAction('INIT')
 export const ON_LIST_CONTENT_CONFIG_CHANGED = createAction<ContentConfig[]>(
   'ON_LIST_CONTENT_CONFIG_CHANGED'
 )
-export const ON_EXTENSIONS_CHANGED = createAction<ProjectExtension[]>('ON_EXTENTIONS_CHANGED')
-export const ON_TEMPLATE_CHANGED = createAction<ProjectTemplate>('ON_TEMPLATE_CHANGED')
+export const ON_EXTENSIONS_CHANGED = createAction<ProjectExtension[]>(
+  'ON_EXTENTIONS_CHANGED'
+)
+export const ON_TEMPLATE_CHANGED = createAction<ProjectTemplate>(
+  'ON_TEMPLATE_CHANGED'
+)
 
 export const initialState: ITemplateSelectDialogState = {
   selectedTemplate: null,
@@ -28,7 +32,9 @@ export default (data: IProjectSetupData) =>
       let [template] = data.templates.filter((t) => t.isDefault)
       if (!template) template = first(data.templates)
       state.selectedTemplate = template
-      state.selectedContentConfig = template.getContentConfig(data.contentConfig)
+      state.selectedContentConfig = template.getContentConfig(
+        data.contentConfig
+      )
       state.selectedExtensions = template.getExtensions(data.extensions)
     },
 
@@ -36,8 +42,9 @@ export default (data: IProjectSetupData) =>
       state: ITemplateSelectDialogState,
       { payload }: ReturnType<typeof ON_LIST_CONTENT_CONFIG_CHANGED>
     ) => {
-      const mandatoryContentConfig = data.contentConfig.filter((contentConfig) =>
-        contentConfig.isMandatoryForTemplate(state.selectedTemplate)
+      const mandatoryContentConfig = data.contentConfig.filter(
+        (contentConfig) =>
+          contentConfig.isMandatoryForTemplate(state.selectedTemplate)
       )
       state.selectedContentConfig = uniq(
         [...mandatoryContentConfig, ...payload],
@@ -63,7 +70,8 @@ export default (data: IProjectSetupData) =>
       { payload: template }: ReturnType<typeof ON_TEMPLATE_CHANGED>
     ) => {
       state.selectedTemplate = template
-      state.selectedContentConfig = template?.getContentConfig(data.contentConfig) || []
+      state.selectedContentConfig =
+        template?.getContentConfig(data.contentConfig) || []
       state.selectedExtensions = template?.getExtensions(data.extensions) || []
     }
   })

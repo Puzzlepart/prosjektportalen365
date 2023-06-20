@@ -11,7 +11,10 @@ export default new (class ExcelExportService {
   public configuration: IExcelExportServiceConfiguration
 
   public configure(configuration: IExcelExportServiceConfiguration) {
-    this.configuration = { ...ExcelExportServiceDefaultConfiguration, ...configuration }
+    this.configuration = {
+      ...ExcelExportServiceDefaultConfiguration,
+      ...configuration
+    }
   }
 
   /**
@@ -29,19 +32,31 @@ export default new (class ExcelExportService {
         data: [
           _columns.map((column) => column.name),
           ...items.map((item) =>
-            _columns.map((column) => getObjectValue<string>(item, column.fieldName, null))
+            _columns.map((column) =>
+              getObjectValue<string>(item, column.fieldName, null)
+            )
           )
         ]
       })
       const workBook = XLSX.utils.book_new()
       sheets.forEach((s, index) => {
         const sheet = XLSX.utils.aoa_to_sheet(s.data)
-        XLSX.utils.book_append_sheet(workBook, sheet, s.name || `Sheet${index + 1}`)
+        XLSX.utils.book_append_sheet(
+          workBook,
+          sheet,
+          s.name || `Sheet${index + 1}`
+        )
       })
       const wbout = XLSX.write(workBook, this.configuration.options)
       FileSaver.saveAs(
-        new Blob([stringToArrayBuffer(wbout)], { type: 'application/octet-stream' }),
-        format('{0}-{1}.xlsx', this.configuration.name, new Date().toISOString())
+        new Blob([stringToArrayBuffer(wbout)], {
+          type: 'application/octet-stream'
+        }),
+        format(
+          '{0}-{1}.xlsx',
+          this.configuration.name,
+          new Date().toISOString()
+        )
       )
     } catch (error) {
       throw new Error(error)

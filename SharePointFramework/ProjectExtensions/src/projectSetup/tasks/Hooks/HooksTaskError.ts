@@ -12,7 +12,9 @@ export class HooksTaskError extends BaseTaskError {
   constructor(error: ProvisioningError) {
     super(
       'Hooks',
-      `${format(strings.ApplyTemplateErrorMessage, error.handler)}: ${error.message}`,
+      `${format(strings.ApplyTemplateErrorMessage, error.handler)}: ${
+        error.message
+      }`,
       error
     )
   }

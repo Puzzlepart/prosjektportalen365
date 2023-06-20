@@ -5,7 +5,9 @@ import { ReactCalendarGroupRendererProps } from 'react-calendar-timeline'
 /**
  * Timeline group renderer
  */
-export function groupRenderer({ group }: ReactCalendarGroupRendererProps<ITimelineGroup>) {
+export function groupRenderer({
+  group
+}: ReactCalendarGroupRendererProps<ITimelineGroup>) {
   const style: React.CSSProperties = { display: 'block', width: '100%' }
   if (group.resourceType === TimelineResourceType.Role) {
     style.fontStyle = 'italic'

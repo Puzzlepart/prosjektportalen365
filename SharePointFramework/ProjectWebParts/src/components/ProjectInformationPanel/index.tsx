@@ -3,7 +3,9 @@ import React, { FC, useEffect, useState } from 'react'
 import { ProjectInformation } from '../ProjectInformation'
 import { IProjectInformationPanelProps } from './types'
 
-export const ProjectInformationPanel: FC<IProjectInformationPanelProps> = (props) => {
+export const ProjectInformationPanel: FC<IProjectInformationPanelProps> = (
+  props
+) => {
   const [showPanel, setShowPanel] = useState(!props.hidden)
 
   useEffect(() => {
@@ -13,13 +15,15 @@ export const ProjectInformationPanel: FC<IProjectInformationPanelProps> = (props
   return (
     <>
       {props.children}
-      {props.onRenderToggleElement && props.onRenderToggleElement(() => setShowPanel(!showPanel))}
+      {props.onRenderToggleElement &&
+        props.onRenderToggleElement(() => setShowPanel(!showPanel))}
       <Panel
         isOpen={showPanel}
         type={PanelType.medium}
         onDismiss={() => setShowPanel(false)}
         isLightDismiss={true}
-        {...props.panelProps}>
+        {...props.panelProps}
+      >
         <ProjectInformation {...props} />
       </Panel>
     </>

@@ -7,7 +7,10 @@ import { ITimelineGroups } from '../types'
  * @param groups Timeline groups
  * @param defaultGroupBy Default group by
  */
-export function getSelectedGroups(groups: ITimelineGroups, defaultGroupBy: string) {
+export function getSelectedGroups(
+  groups: ITimelineGroups,
+  defaultGroupBy: string
+) {
   switch (defaultGroupBy) {
     case strings.CategoryFieldLabel:
       return groups.categoryGroups

@@ -31,7 +31,11 @@ export abstract class BaseTask implements IBaseTask {
    * @param data Data
    */
   public logError(message: string, data?: any) {
-    this._log(`(ProjectSetup) [${this.taskName}]: ${message}`, data, LogLevel.Error)
+    this._log(
+      `(ProjectSetup) [${this.taskName}]: ${message}`,
+      data,
+      LogLevel.Error
+    )
   }
 
   /**
@@ -41,7 +45,11 @@ export abstract class BaseTask implements IBaseTask {
    * @param data Data
    */
   public logWarning(message: string, data?: any) {
-    this._log(`(ProjectSetup) [${this.taskName}]: ${message}`, data, LogLevel.Warning)
+    this._log(
+      `(ProjectSetup) [${this.taskName}]: ${message}`,
+      data,
+      LogLevel.Warning
+    )
   }
 
   /**
@@ -51,7 +59,11 @@ export abstract class BaseTask implements IBaseTask {
    * @param data Data
    */
   public logInformation(message: string, data?: any) {
-    this._log(`(ProjectSetup) [${this.taskName}]: ${message}`, data, LogLevel.Info)
+    this._log(
+      `(ProjectSetup) [${this.taskName}]: ${message}`,
+      data,
+      LogLevel.Info
+    )
   }
 
   /**

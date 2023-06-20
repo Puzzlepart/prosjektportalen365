@@ -24,4 +24,5 @@ export interface IChangePhaseDialogContext {
   nextChecklistItem: (properties: Record<string, any>) => void
 }
 
-export const ChangePhaseDialogContext = createContext<IChangePhaseDialogContext>(null)
+export const ChangePhaseDialogContext =
+  createContext<IChangePhaseDialogContext>(null)

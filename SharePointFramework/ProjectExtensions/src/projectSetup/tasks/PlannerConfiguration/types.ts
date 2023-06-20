@@ -41,11 +41,22 @@ export class TaskAttachment {
    * @param url URL
    */
   private _encodeUrl(url: string) {
-    return url.split('%').join('%25').split('.').join('%2E').split(':').join('%3A')
+    return url
+      .split('%')
+      .join('%25')
+      .split('.')
+      .join('%2E')
+      .split(':')
+      .join('%3A')
   }
 }
 
-export type TaskPreviewType = 'automatic' | 'noPreview' | 'checklist' | 'description' | 'reference'
+export type TaskPreviewType =
+  | 'automatic'
+  | 'noPreview'
+  | 'checklist'
+  | 'description'
+  | 'reference'
 
 export interface ITaskDetails {
   name?: string

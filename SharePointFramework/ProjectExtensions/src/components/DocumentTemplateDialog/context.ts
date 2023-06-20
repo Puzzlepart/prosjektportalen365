@@ -7,4 +7,5 @@ export interface IDocumentTemplateDialogContext {
   dispatch: React.Dispatch<AnyAction>
 }
 
-export const DocumentTemplateDialogContext = createContext<IDocumentTemplateDialogContext>(null)
+export const DocumentTemplateDialogContext =
+  createContext<IDocumentTemplateDialogContext>(null)

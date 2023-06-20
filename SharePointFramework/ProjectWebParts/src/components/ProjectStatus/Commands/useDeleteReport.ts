@@ -16,7 +16,9 @@ export function useDeleteReport() {
       pageContext: context.props.pageContext
     })
     try {
-      await portalDataService.deleteStatusReport(context.state.selectedReport.id)
+      await portalDataService.deleteStatusReport(
+        context.state.selectedReport.id
+      )
       context.dispatch(REPORT_DELETED())
     } catch (error) {
       context.dispatch(REPORT_DELETE_ERROR())

@@ -24,12 +24,18 @@ export async function fetchTimelineData(
       strings.TimelineContentListName
     )
 
-    const projectDeliveries = (props.showProjectDeliveries
-      ? await sp.web.lists.getByTitle(props.projectDeliveriesListName).items.getAll()
-      : []
+    const projectDeliveries = (
+      props.showProjectDeliveries
+        ? await sp.web.lists
+            .getByTitle(props.projectDeliveriesListName)
+            .items.getAll()
+        : []
     )
       .map((item) => {
-        const config = _.find(timelineConfig, (col) => col.title === props.configItemTitle)
+        const config = _.find(
+          timelineConfig,
+          (col) => col.title === props.configItemTitle
+        )
         return new TimelineContentModel(
           props.siteId,
           props.webTitle,
@@ -48,10 +54,15 @@ export async function fetchTimelineData(
       .filter(Boolean)
 
     const defaultViewColumns = (
-      await timelineContentList.defaultView.fields.select('Items').top(500).get()
+      await timelineContentList.defaultView.fields
+        .select('Items')
+        .top(500)
+        .get()
     )['Items'] as string[]
 
-    const filterString = defaultViewColumns.map((col) => `(InternalName eq '${col}')`).join(' or ')
+    const filterString = defaultViewColumns
+      .map((col) => `(InternalName eq '${col}')`)
+      .join(' or ')
 
     // eslint-disable-next-line prefer-const
     let [timelineContentItems, timelineColumns] = await Promise.all([
@@ -123,7 +134,12 @@ export async function fetchTimelineData(
 
     timelineContentItems = [...timelineContentItems, ...projectDeliveries]
 
-    return { timelineContentItems, timelineListItems, columns, timelineConfig } as const
+    return {
+      timelineContentItems,
+      timelineListItems,
+      columns,
+      timelineConfig
+    } as const
   } catch (error) {
     return null
   }

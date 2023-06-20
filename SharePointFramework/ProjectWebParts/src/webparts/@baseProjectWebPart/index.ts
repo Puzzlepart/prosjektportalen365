@@ -48,7 +48,8 @@ export abstract class BaseProjectWebPart<
       logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     })
     Logger.subscribe(new ConsoleListener())
-    Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+    Logger.activeLogLevel =
+      sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
   }
 
   public async onInit(): Promise<void> {

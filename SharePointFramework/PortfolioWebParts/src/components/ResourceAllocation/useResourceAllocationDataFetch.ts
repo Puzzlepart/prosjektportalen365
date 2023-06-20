@@ -24,11 +24,15 @@ import {
  *
  * @returns Timeline groups
  */
-function transformGroups(searchResults: IAllocationSearchResult[]): ITimelineGroup[] {
+function transformGroups(
+  searchResults: IAllocationSearchResult[]
+): ITimelineGroup[] {
   const groupNames = _.uniq(
     searchResults
       .map(
-        (res) => res.RefinableString71 ?? (res.RefinableString72 && `${res.RefinableString72}|R`)
+        (res) =>
+          res.RefinableString71 ??
+          (res.RefinableString72 && `${res.RefinableString72}|R`)
       )
       .filter(Boolean)
   )
@@ -37,7 +41,8 @@ function transformGroups(searchResults: IAllocationSearchResult[]): ITimelineGro
     return {
       id: index,
       title,
-      resourceType: type === 'R' ? TimelineResourceType.Role : TimelineResourceType.User
+      resourceType:
+        type === 'R' ? TimelineResourceType.Role : TimelineResourceType.User
     }
   })
   return sortArray(groups, ['type', 'title'])
@@ -62,19 +67,31 @@ function transformItems(
       const group =
         _.find(
           groups,
-          (grp) => res.RefinableString71 && res.RefinableString71.indexOf(grp.title) !== -1
+          (grp) =>
+            res.RefinableString71 &&
+            res.RefinableString71.indexOf(grp.title) !== -1
         ) ??
         _.find(
           groups,
-          (grp) => res.RefinableString72 && res.RefinableString72.indexOf(grp.title) !== -1
+          (grp) =>
+            res.RefinableString72 &&
+            res.RefinableString72.indexOf(grp.title) !== -1
         )
 
-      const isAbsence = res.ContentTypeId.indexOf('0x010029F45E75BA9CE340A83EFFB2927E11F4') !== -1
+      const isAbsence =
+        res.ContentTypeId.indexOf('0x010029F45E75BA9CE340A83EFFB2927E11F4') !==
+        -1
       if (!group || (isAbsence && !res.GtResourceAbsenceOWSCHCS)) return null
-      const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number
+      const allocation = tryParsePercentage(
+        res.GtResourceLoadOWSNMBR,
+        false,
+        0
+      ) as number
       const itemOpacity = allocation < 30 ? 0.3 : allocation / 100
       const itemColor = allocation < 40 ? '#000' : '#fff'
-      const backgroundColor = isAbsence ? props.itemAbsenceBgColor : props.itemBgColor
+      const backgroundColor = isAbsence
+        ? props.itemAbsenceBgColor
+        : props.itemBgColor
       const style: React.CSSProperties = {
         color: itemColor,
         border: 'none',
@@ -116,8 +133,12 @@ function transformItems(
  *
  * @returns Timeline data
  */
-async function fetchData(props: IResourceAllocationProps): Promise<ITimelineData> {
-  const dataSource = await new DataSourceService(sp.web).getByName(props.dataSource)
+async function fetchData(
+  props: IResourceAllocationProps
+): Promise<ITimelineData> {
+  const dataSource = await new DataSourceService(sp.web).getByName(
+    props.dataSource
+  )
   if (!dataSource) throw format(strings.DataSourceNotFound, props.dataSource)
   try {
     const results = (

@@ -7,7 +7,10 @@ import { parseUrlHash } from 'pp365-shared-library/lib/util/parseUrlHash'
 import { useEffect } from 'react'
 import { IPortfolioOverviewContext } from './context'
 import { DATA_FETCHED, DATA_FETCH_ERROR, STARTING_DATA_FETCH } from './reducer'
-import { IPortfolioOverviewHashStateState, PortfolioOverviewErrorMessage } from './types'
+import {
+  IPortfolioOverviewHashStateState,
+  PortfolioOverviewErrorMessage
+} from './types'
 import { usePersistedColumns } from './usePersistedColumns'
 
 /**
@@ -22,29 +25,46 @@ function getCurrentView(
   context: IPortfolioOverviewContext
 ): PortfolioOverviewView {
   if (context.state.currentView) return context.state.currentView
-  const viewIdUrlParam = new UrlQueryParameterCollection(document.location.href).getValue('viewId')
+  const viewIdUrlParam = new UrlQueryParameterCollection(
+    document.location.href
+  ).getValue('viewId')
   const views = context.props.configuration.views
   let currentView = null
 
   if (viewIdUrlParam) {
     currentView = _.find(views, (v) => v.id.toString() === viewIdUrlParam)
     if (!currentView) {
-      throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
+      throw new PortfolioOverviewErrorMessage(
+        strings.ViewNotFoundMessage,
+        MessageBarType.error
+      )
     }
   } else if (hashState.viewId) {
     currentView = _.find(views, (v) => v.id.toString() === hashState.viewId)
     if (!currentView) {
-      throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
+      throw new PortfolioOverviewErrorMessage(
+        strings.ViewNotFoundMessage,
+        MessageBarType.error
+      )
     }
   } else if (context.props.defaultViewId) {
-    currentView = _.find(views, (v) => v.id.toString() === context.props.defaultViewId.toString())
+    currentView = _.find(
+      views,
+      (v) => v.id.toString() === context.props.defaultViewId.toString()
+    )
     if (!currentView) {
-      throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
+      throw new PortfolioOverviewErrorMessage(
+        strings.ViewNotFoundMessage,
+        MessageBarType.error
+      )
     }
   } else {
     currentView = _.find(views, (v) => v.isDefaultView)
     if (!currentView) {
-      throw new PortfolioOverviewErrorMessage(strings.NoDefaultViewMessage, MessageBarType.error)
+      throw new PortfolioOverviewErrorMessage(
+        strings.NoDefaultViewMessage,
+        MessageBarType.error
+      )
     }
   }
   return currentView
@@ -83,7 +103,10 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
             )
         let groupBy = currentView.groupBy
         if (hashState.groupBy && !groupBy) {
-          groupBy = _.find(configuration.columns, (fc) => fc.fieldName === hashState.groupBy)
+          groupBy = _.find(
+            configuration.columns,
+            (fc) => fc.fieldName === hashState.groupBy
+          )
         }
         set(currentView.columns)
         context.dispatch(

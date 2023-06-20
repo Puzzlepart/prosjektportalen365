@@ -33,6 +33,21 @@ Extension for copying templates from the hub/portal site to the project site.
 
 The templates should be stored in a library named `Malbibliotek`. This library is created when installing Prosjektportalen 365.
 
+The library name can be overrided in the template file:
+
+```json
+{
+    "Version": "1.9.0",
+    "Parameters": {
+        ...
+        "TemplateDocumentLibrary": "My Template Library"
+    },
+    "Navigation": {
+        ...
+    }
+}
+```
+
 #### Selecting templates
 
 In the initial screen the desired templates are selected by the user. They can navigate in the folder structure like in a SharePoint library.

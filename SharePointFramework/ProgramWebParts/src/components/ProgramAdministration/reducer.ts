@@ -1,16 +1,23 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import { IProgramAdministrationState } from './types'
 
-export const DATA_LOADED =
-  createAction<{ data: Partial<IProgramAdministrationState>; scope: string }>('DATA_LOADED')
-export const TOGGLE_ADD_PROJECT_DIALOG = createAction('TOGGLE_ADD_PROJECT_DIALOG')
+export const DATA_LOADED = createAction<{
+  data: Partial<IProgramAdministrationState>
+  scope: string
+}>('DATA_LOADED')
+export const TOGGLE_ADD_PROJECT_DIALOG = createAction(
+  'TOGGLE_ADD_PROJECT_DIALOG'
+)
 export const ADD_CHILD_PROJECTS = createAction('ADD_CHILD_PROJECTS')
-export const CHILD_PROJECTS_REMOVED =
-  createAction<{ childProjects: Record<string, string>[] }>('CHILD_PROJECTS_REMOVED')
-export const SET_SELECTED_TO_ADD =
-  createAction<{ selected: Record<string, string>[] }>('SET_SELECTED_TO_ADD')
-export const SET_SELECTED_TO_DELETE =
-  createAction<{ selected: Record<string, string>[] }>('SET_SELECTED_TO_DELETE')
+export const CHILD_PROJECTS_REMOVED = createAction<{
+  childProjects: Record<string, string>[]
+}>('CHILD_PROJECTS_REMOVED')
+export const SET_SELECTED_TO_ADD = createAction<{
+  selected: Record<string, string>[]
+}>('SET_SELECTED_TO_ADD')
+export const SET_SELECTED_TO_DELETE = createAction<{
+  selected: Record<string, string>[]
+}>('SET_SELECTED_TO_DELETE')
 
 export const initialState: IProgramAdministrationState = {
   loading: {
@@ -60,7 +67,10 @@ export default createReducer(initialState, {
     state.selectedProjectsToDelete = []
   },
   [ADD_CHILD_PROJECTS.type]: (state: IProgramAdministrationState) => {
-    state.childProjects = [...state.childProjects, ...state.selectedProjectsToAdd]
+    state.childProjects = [
+      ...state.childProjects,
+      ...state.selectedProjectsToAdd
+    ]
     state.selectedProjectsToAdd = []
     state.displayAddProjectDialog = false
   },

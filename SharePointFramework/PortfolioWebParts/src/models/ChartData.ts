@@ -21,7 +21,9 @@ export class ChartData {
    */
   public getItems(field?: DataField): ChartDataItem[] {
     if (field) {
-      return this._items.filter((item) => (this.includeEmptyValues ? true : item.hasValue(field)))
+      return this._items.filter((item) =>
+        this.includeEmptyValues ? true : item.hasValue(field)
+      )
     }
     return this._items
   }
@@ -41,7 +43,10 @@ export class ChartData {
    * @param field Field
    * @param value Value
    */
-  public getItemsWithStringValue(field: DataField, value: string): ChartDataItem[] {
+  public getItemsWithStringValue(
+    field: DataField,
+    value: string
+  ): ChartDataItem[] {
     return this.getItems(field).filter((i) => i.getValue(field) === value)
   }
 
@@ -93,7 +98,9 @@ export class ChartData {
    * @param field Field
    */
   public getValuesUnique(field: DataField): Array<string> {
-    return this.getValues(field).filter((value, index, self) => self.indexOf(value) === index)
+    return this.getValues(field).filter(
+      (value, index, self) => self.indexOf(value) === index
+    )
   }
 
   /**
@@ -142,7 +149,10 @@ export class ChartData {
    */
   public getPercentage(field: DataField, index: number, fractionDigits = 2) {
     return parseFloat(
-      ((this._items[index].getValue(field) / this.getTotal(field)) * 100).toFixed(fractionDigits)
+      (
+        (this._items[index].getValue(field) / this.getTotal(field)) *
+        100
+      ).toFixed(fractionDigits)
     )
   }
 }

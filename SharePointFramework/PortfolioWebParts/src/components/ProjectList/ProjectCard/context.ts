@@ -4,7 +4,10 @@ import { IProjectListProps } from '../types'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
 
 export interface IProjectCardContext
-  extends Pick<IProjectListProps, 'showProjectLogo' | 'showProjectOwner' | 'showProjectManager'> {
+  extends Pick<
+    IProjectListProps,
+    'showProjectLogo' | 'showProjectOwner' | 'showProjectManager'
+  > {
   /**
    * Project model
    */

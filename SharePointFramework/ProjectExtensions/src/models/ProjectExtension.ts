@@ -11,7 +11,12 @@ export interface IProjectExtensionSPItem {
   GtExtensionDefault?: boolean
   GtExtensionHidden?: boolean
   GtExtensionLocked?: boolean
-  File?: { UniqueId: string; Name: string; Title: string; ServerRelativeUrl: string }
+  File?: {
+    UniqueId: string
+    Name: string
+    Title: string
+    ServerRelativeUrl: string
+  }
 }
 
 /**
@@ -42,7 +47,8 @@ export class ProjectExtension extends UserSelectableObject {
   public isMandatoryForTemplate(template: ProjectTemplate): boolean {
     return (
       (this.isLocked && this.isDefault) ||
-      (template?.isDefaultExtensionsLocked && template?.extensions.includes(this.id))
+      (template?.isDefaultExtensionsLocked &&
+        template?.extensions.includes(this.id))
     )
   }
 
@@ -57,6 +63,8 @@ export class ProjectExtension extends UserSelectableObject {
   }
 
   public async getSchema(): Promise<Schema> {
-    return await this.web.getFileByServerRelativeUrl(this.serverRelativeUrl).getJSON()
+    return await this.web
+      .getFileByServerRelativeUrl(this.serverRelativeUrl)
+      .getJSON()
   }
 }

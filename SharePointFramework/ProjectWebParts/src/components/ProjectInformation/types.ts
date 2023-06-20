@@ -1,5 +1,8 @@
 import { TypedHash } from '@pnp/common'
-import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
+import {
+  IBaseWebPartComponentProps,
+  IBaseWebPartComponentState
+} from '../BaseWebPartComponent'
 import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import { IProgressDialogProps } from './ProgressDialog/types'
 import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage'
@@ -19,7 +22,9 @@ export class ProjectInformationParentProject {
   constructor(spItem: TypedHash<any>, public web: Web) {
     this.title = spItem.Title
     this.url = spItem.GtSiteUrl
-    this.childProjects = (JSON.parse(spItem.GtChildProjects ?? []) as any[]).map((i) => i.SPWebURL)
+    this.childProjects = (
+      JSON.parse(spItem.GtChildProjects ?? []) as any[]
+    ).map((i) => i.SPWebURL)
     if (spItem.GtIsParentProject) this.iconName = 'ProductVariant'
     else if (spItem.GtIsProgram) this.iconName = 'ProductList'
   }

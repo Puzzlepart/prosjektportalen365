@@ -95,7 +95,8 @@ class ListLogger {
   private _getEntryDefaults(): Partial<IListLoggerEntry> {
     return {
       level: 'Info',
-      webUrl: this.webUrl ?? document.location.href.split('/').slice(0, 5).join('/')
+      webUrl:
+        this.webUrl ?? document.location.href.split('/').slice(0, 5).join('/')
     } as Partial<IListLoggerEntry>
   }
 }

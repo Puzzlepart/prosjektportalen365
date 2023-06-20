@@ -10,8 +10,12 @@ import { useLatestGitHubRelease } from './useLatestGitHubRelease'
  * comparison between the latest GitHub release and the installed version.
  */
 export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
-  const { latestGitHubRelease, latestGitHubVersion, installedVersion, versionComparisonIconProps } =
-    useLatestGitHubRelease(props)
+  const {
+    latestGitHubRelease,
+    latestGitHubVersion,
+    installedVersion,
+    versionComparisonIconProps
+  } = useLatestGitHubRelease(props)
 
   return (
     <div className={styles.root}>
@@ -21,7 +25,11 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
           className={styles.latestGitHubReleaseLink}
           title={strings.LatestGitHubReleaseLinkTitle}
         >
-          <Link href={latestGitHubRelease.html_url} target='_blank' rel='noopener noreferrer'>
+          <Link
+            href={latestGitHubRelease.html_url}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
             {latestGitHubVersion.toString()}
           </Link>
         </span>
@@ -32,7 +40,10 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
       <div hidden={!latestGitHubVersion.greaterThan(installedVersion)}>
         <ActionButton
           text={strings.LatestGitHubReleaseDownloadButtonText}
-          iconProps={{ iconName: 'Download', styles: { root: { fontSize: 12 } } }}
+          iconProps={{
+            iconName: 'Download',
+            styles: { root: { fontSize: 12 } }
+          }}
           styles={{ root: { fontSize: 12 } }}
           href={latestGitHubRelease.assets[0].browser_download_url}
           target='_blank'

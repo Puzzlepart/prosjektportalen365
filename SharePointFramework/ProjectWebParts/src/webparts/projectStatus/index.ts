@@ -16,7 +16,10 @@ import {
   OPPORTUNITY_DEFAULT_MATRIX_CONSEQUENCE_HEADERS,
   OPPORTUNITY_DEFAULT_MATRIX_PROBABILITY_HEADERS
 } from '../../components/OpportunityMatrix/types'
-import { IProjectStatusProps, ProjectStatus } from '../../components/ProjectStatus'
+import {
+  IProjectStatusProps,
+  ProjectStatus
+} from '../../components/ProjectStatus'
 import PropertyFieldColorConfiguration from '../../components/PropertyFieldColorConfiguration'
 import {
   RISK_MATRIX_DEFAULT_CONSEQUENCE_HEADERS,
@@ -36,7 +39,8 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
     ])
     const defaultRiskMatrixConfiguration = _.find(
       riskMatrixConfigurations,
-      (config) => config.name === strings.RiskMatrixManualConfigurationPathDefaltValue
+      (config) =>
+        config.name === strings.RiskMatrixManualConfigurationPathDefaltValue
     )
     this._data = {
       riskMatrixConfigurations,
@@ -68,10 +72,15 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
     defaultConsequenceHeaders: string[]
   ): IPropertyPaneField<any>[] {
     const size = parseInt(get(this.properties, `${matrixKey}.size`, '5'))
-    const overrideHeaderLabels = PropertyPaneToggle(`${matrixKey}.overrideHeaderLabels.${size}`, {
-      label: format(strings.OverrideHeadersLabel, size)
-    })
-    if (!get(this.properties, `${matrixKey}.overrideHeaderLabels.${size}`, false)) {
+    const overrideHeaderLabels = PropertyPaneToggle(
+      `${matrixKey}.overrideHeaderLabels.${size}`,
+      {
+        label: format(strings.OverrideHeadersLabel, size)
+      }
+    )
+    if (
+      !get(this.properties, `${matrixKey}.overrideHeaderLabels.${size}`, false)
+    ) {
       return [overrideHeaderLabels]
     }
     const headerLabelFields: IPropertyPaneField<any>[] = []
@@ -157,18 +166,21 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                     selectedKey: this.properties.riskMatrix?.size ?? '5'
                   }),
                 this.properties.riskMatrix.useDynamicConfiguration &&
-                  PropertyFieldColorConfiguration('riskMatrix.colorScaleConfig', {
-                    key: 'riskMatrixColorScaleConfig',
-                    label: strings.MatrixColorScaleConfigLabel,
-                    defaultValue: [
-                      { p: 10, r: 44, g: 186, b: 0 },
-                      { p: 30, r: 163, g: 255, b: 0 },
-                      { p: 50, r: 255, g: 244, b: 0 },
-                      { p: 70, r: 255, g: 167, b: 0 },
-                      { p: 90, r: 255, g: 0, b: 0 }
-                    ],
-                    value: this.properties.riskMatrix?.colorScaleConfig
-                  }),
+                  PropertyFieldColorConfiguration(
+                    'riskMatrix.colorScaleConfig',
+                    {
+                      key: 'riskMatrixColorScaleConfig',
+                      label: strings.MatrixColorScaleConfigLabel,
+                      defaultValue: [
+                        { p: 10, r: 44, g: 186, b: 0 },
+                        { p: 30, r: 163, g: 255, b: 0 },
+                        { p: 50, r: 255, g: 244, b: 0 },
+                        { p: 70, r: 255, g: 167, b: 0 },
+                        { p: 90, r: 255, g: 0, b: 0 }
+                      ],
+                      value: this.properties.riskMatrix?.colorScaleConfig
+                    }
+                  ),
                 ...(this.properties.riskMatrix.useDynamicConfiguration
                   ? this.getMatrixHeaderLabelPropertyFields(
                       'riskMatrix',
@@ -216,43 +228,46 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   ],
                   selectedKey: this.properties.opportunityMatrix?.size ?? '5'
                 }),
-                PropertyFieldColorConfiguration('opportunityMatrix.colorScaleConfig', {
-                  key: 'opportunityMatrixColorScaleConfig',
-                  label: strings.MatrixColorScaleConfigLabel,
-                  defaultValue: [
-                    {
-                      p: 10,
-                      r: 255,
-                      g: 167,
-                      b: 0
-                    },
-                    {
-                      p: 30,
-                      r: 255,
-                      g: 214,
-                      b: 10
-                    },
-                    {
-                      p: 50,
-                      r: 255,
-                      g: 244,
-                      b: 0
-                    },
-                    {
-                      p: 70,
-                      r: 163,
-                      g: 255,
-                      b: 0
-                    },
-                    {
-                      p: 90,
-                      r: 44,
-                      g: 186,
-                      b: 0
-                    }
-                  ],
-                  value: this.properties.opportunityMatrix?.colorScaleConfig
-                }),
+                PropertyFieldColorConfiguration(
+                  'opportunityMatrix.colorScaleConfig',
+                  {
+                    key: 'opportunityMatrixColorScaleConfig',
+                    label: strings.MatrixColorScaleConfigLabel,
+                    defaultValue: [
+                      {
+                        p: 10,
+                        r: 255,
+                        g: 167,
+                        b: 0
+                      },
+                      {
+                        p: 30,
+                        r: 255,
+                        g: 214,
+                        b: 10
+                      },
+                      {
+                        p: 50,
+                        r: 255,
+                        g: 244,
+                        b: 0
+                      },
+                      {
+                        p: 70,
+                        r: 163,
+                        g: 255,
+                        b: 0
+                      },
+                      {
+                        p: 90,
+                        r: 44,
+                        g: 186,
+                        b: 0
+                      }
+                    ],
+                    value: this.properties.opportunityMatrix?.colorScaleConfig
+                  }
+                ),
                 ...this.getMatrixHeaderLabelPropertyFields(
                   'opportunityMatrix',
                   OPPORTUNITY_DEFAULT_MATRIX_PROBABILITY_HEADERS,

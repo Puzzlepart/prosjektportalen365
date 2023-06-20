@@ -22,11 +22,16 @@ export class StatusReport {
    * @param item - SP item
    * @param _publishedString Published string
    */
-  constructor(public item: Record<string, any>, private _publishedString?: string) {
+  constructor(
+    public item: Record<string, any>,
+    private _publishedString?: string
+  ) {
     this.id = item.Id
     this.created = new Date(item.Created)
     this.modified = new Date(item.Modified)
-    this.publishedDate = item.GtLastReportDate ? new Date(item.GtLastReportDate) : null
+    this.publishedDate = item.GtLastReportDate
+      ? new Date(item.GtLastReportDate)
+      : null
   }
 
   /**
@@ -61,7 +66,9 @@ export class StatusReport {
    * Get snapshot url for the report.
    */
   public get snapshotUrl(): string {
-    const snapshot = this._attachments.find((a) => a.name.toLowerCase() === 'snapshot.png')
+    const snapshot = this._attachments.find(
+      (a) => a.name.toLowerCase() === 'snapshot.png'
+    )
     if (snapshot) return snapshot.url
     return null
   }
@@ -72,9 +79,9 @@ export class StatusReport {
    * @param urlSourceParam - URL source param
    */
   public url(urlSourceParam: string) {
-    return `SitePages/Prosjektstatus.aspx?selectedReport=${this.id}&Source=${encodeURIComponent(
-      urlSourceParam
-    )}`
+    return `SitePages/Prosjektstatus.aspx?selectedReport=${
+      this.id
+    }&Source=${encodeURIComponent(urlSourceParam)}`
   }
 
   /**
@@ -82,7 +89,10 @@ export class StatusReport {
    */
   public get statusValues(): Record<string, string> {
     return Object.keys(this.item)
-      .filter((fieldName) => fieldName.indexOf('Status') !== -1 && fieldName.indexOf('Gt') === 0)
+      .filter(
+        (fieldName) =>
+          fieldName.indexOf('Status') !== -1 && fieldName.indexOf('Gt') === 0
+      )
       .reduce((obj, fieldName) => {
         obj[fieldName] = this.item[fieldName]
         return obj
@@ -134,6 +144,9 @@ export class StatusReport {
    * @param fieldName - Field name
    */
   public getStatusValue(fieldName: string): { value: string; comment: string } {
-    return { value: this.item[fieldName], comment: this.item[`${fieldName}Comment`] }
+    return {
+      value: this.item[fieldName],
+      comment: this.item[`${fieldName}Comment`]
+    }
   }
 }

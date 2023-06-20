@@ -25,9 +25,9 @@ export function createTimelineGroups(
     }
   ]
 
-  const categoryGroups = _.uniq(timelineConfiguration.map((config) => config.timelineCategory)).map<
-    ITimelineGroup
-  >((category, id) => {
+  const categoryGroups = _.uniq(
+    timelineConfiguration.map((config) => config.timelineCategory)
+  ).map<ITimelineGroup>((category, id) => {
     return {
       id,
       title: category,
@@ -35,9 +35,9 @@ export function createTimelineGroups(
     }
   })
 
-  const typeGroups = _.uniq(timelineConfiguration.map((config) => config.title)).map<
-    ITimelineGroup
-  >((type, id) => {
+  const typeGroups = _.uniq(
+    timelineConfiguration.map((config) => config.title)
+  ).map<ITimelineGroup>((type, id) => {
     return {
       id,
       title: type,

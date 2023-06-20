@@ -23,4 +23,5 @@ export interface ITemplateSelectorContext {
   templateLibrary?: { title: string; url: string }
 }
 
-export const TemplateSelectorContext = createContext<ITemplateSelectorContext>(null)
+export const TemplateSelectorContext =
+  createContext<ITemplateSelectorContext>(null)

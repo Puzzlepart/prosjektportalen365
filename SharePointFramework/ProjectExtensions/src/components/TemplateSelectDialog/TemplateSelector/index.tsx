@@ -12,7 +12,9 @@ import { TemplateSelectorItem } from './TemplateSelectorItem'
 
 export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
   const context = useContext(TemplateSelectDialogContext)
-  const [searchValue, setSearchValue] = useState(context.state.selectedTemplate?.text)
+  const [searchValue, setSearchValue] = useState(
+    context.state.selectedTemplate?.text
+  )
 
   return (
     <div className={styles.root}>
@@ -26,7 +28,10 @@ export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
           }
           renderItem={(template: ProjectTemplate, isHighlighted) => (
             <div key={template.id}>
-              <TemplateSelectorItem template={template} isHighlighted={isHighlighted} />
+              <TemplateSelectorItem
+                template={template}
+                isHighlighted={isHighlighted}
+              />
             </div>
           )}
           inputProps={{
@@ -37,7 +42,9 @@ export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
             <SearchBox
               {...(inputProps as ISearchBoxProps)}
               iconProps={context.state.selectedTemplate?.iconProps}
-              clearButtonProps={{ title: strings.TemplateSelectorSearchClearText }}
+              clearButtonProps={{
+                title: strings.TemplateSelectorSearchClearText
+              }}
               disabled={context.props.data.templates.length === 1}
               onClear={(event) => {
                 event.stopPropagation()

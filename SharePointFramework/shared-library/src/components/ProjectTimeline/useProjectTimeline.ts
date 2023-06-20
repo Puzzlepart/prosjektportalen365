@@ -45,16 +45,22 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     )?.id
     const topGroup = data.groups.find((i) => i.id === projectId)
     projectId &&
-      (data.groups = [topGroup, ...data.groups.filter((grp) => grp?.id !== projectId)].filter(
-        (grp) => grp
-      ))
+      (data.groups = [
+        topGroup,
+        ...data.groups.filter((grp) => grp?.id !== projectId)
+      ].filter((grp) => grp))
 
     if (activeFiltersKeys.length > 0) {
       const items = activeFiltersKeys.reduce(
-        (newItems, key) => newItems.filter((i) => activeFilters[key].indexOf(get(i, key)) !== -1),
+        (newItems, key) =>
+          newItems.filter(
+            (i) => activeFilters[key].indexOf(get(i, key)) !== -1
+          ),
         data.items
       )
-      const groups = data.groups.filter((grp) => items.filter((i) => i.group === grp.id).length > 0)
+      const groups = data.groups.filter(
+        (grp) => items.filter((i) => i.group === grp.id).length > 0
+      )
       return { items, groups }
     } else {
       return data
@@ -74,7 +80,8 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     data: ITimelineData
   ): IFilterProps[] => {
     const columns = [
-      config.find((item) => item?.title === strings.ProjectLabel).timelineFilter && {
+      config.find((item) => item?.title === strings.ProjectLabel)
+        .timelineFilter && {
         fieldName: 'project',
         name: strings.SiteTitleLabel,
         isCollapsed: true
@@ -83,7 +90,9 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
       { fieldName: 'data.type', name: strings.TypeLabel },
       { fieldName: 'data.tag', name: strings.TagFieldLabel }
     ]
-    const hiddenItems = config.filter((item) => !item?.timelineFilter).map((item) => item.title)
+    const hiddenItems = config
+      .filter((item) => !item?.timelineFilter)
+      .map((item) => item.title)
 
     return columns.map((col) => ({
       column: { key: col.fieldName, minWidth: 0, ...col },
@@ -106,7 +115,10 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
    * @param column Column
    * @param selectedItems Selected items
    */
-  const onFilterChange = (column: IColumn, selectedItems: IFilterItemProps[]) => {
+  const onFilterChange = (
+    column: IColumn,
+    selectedItems: IFilterItemProps[]
+  ) => {
     const { activeFilters } = state
 
     if (selectedItems.length > 0) {

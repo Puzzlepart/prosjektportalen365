@@ -9,7 +9,11 @@ export const ProgressDialog: FC<IProgressDialogProps> = (props) => {
   return (
     <BaseDialog
       version={props.version}
-      modalProps={{ isBlocking: true, isDarkOverlay: true, containerClassName: styles.root }}
+      modalProps={{
+        isBlocking: true,
+        isDarkOverlay: true,
+        containerClassName: styles.root
+      }}
       dialogContentProps={{
         title: strings.ProgressDialogTitle,
         subText: strings.ProgressDialogSubText,

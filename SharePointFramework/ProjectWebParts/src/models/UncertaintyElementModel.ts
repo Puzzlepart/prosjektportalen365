@@ -1,6 +1,8 @@
 import { IMatrixElementModel } from '../components/DynamicMatrix/MatrixCell/MatrixElement/types'
 
-export class UncertaintyElementModel implements IMatrixElementModel<Record<string, any>> {
+export class UncertaintyElementModel
+  implements IMatrixElementModel<Record<string, any>>
+{
   public id: number
   public title: string
   public probability: number

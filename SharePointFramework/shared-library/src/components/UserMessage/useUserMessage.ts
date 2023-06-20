@@ -1,8 +1,17 @@
-import { IMessageBarStyleProps, IMessageBarStyles, IStyleFunctionOrObject } from '@fluentui/react'
+import {
+  IMessageBarStyleProps,
+  IMessageBarStyles,
+  IStyleFunctionOrObject
+} from '@fluentui/react'
 import { IUserMessageProps } from './types'
 
-export function useUserMessage(props: IUserMessageProps): { styles: Partial<IMessageBarStyles> } {
-  const styles: IStyleFunctionOrObject<IMessageBarStyleProps, IMessageBarStyles> = {}
+export function useUserMessage(props: IUserMessageProps): {
+  styles: Partial<IMessageBarStyles>
+} {
+  const styles: IStyleFunctionOrObject<
+    IMessageBarStyleProps,
+    IMessageBarStyles
+  > = {}
 
   if (props.fixedCenter) {
     styles.root = {

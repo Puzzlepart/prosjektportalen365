@@ -27,7 +27,8 @@ import { usePortfolioAggregation } from './usePortfolioAggregation'
 import { FilterPanel } from 'pp365-shared-library/lib/components/FilterPanel'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
-  const { state, dispatch, items, layerHostId, context } = usePortfolioAggregation(props)
+  const { state, dispatch, items, layerHostId, context } =
+    usePortfolioAggregation(props)
 
   if (state.error) {
     return (

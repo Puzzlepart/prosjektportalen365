@@ -52,7 +52,10 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
           if (this._configuration) {
             return [
               { key: null, text: '' },
-              ...this._configuration.views.map((view) => ({ key: view.id, text: view.title }))
+              ...this._configuration.views.map((view) => ({
+                key: view.id,
+                text: view.title
+              }))
             ]
           }
         }
@@ -69,37 +72,60 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_SEARCH_BOX, {
-                  label: strings.ShowSearchBoxLabel
-                }),
-                PropertyPaneDropdown(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID, {
-                  label: strings.DefaultViewLabel,
-                  options: this._getOptions(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID)
-                })
+                PropertyPaneToggle(
+                  PROPERTYPANE_CONFIGURATION_PROPS.SHOW_SEARCH_BOX,
+                  {
+                    label: strings.ShowSearchBoxLabel
+                  }
+                ),
+                PropertyPaneDropdown(
+                  PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID,
+                  {
+                    label: strings.DefaultViewLabel,
+                    options: this._getOptions(
+                      PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID
+                    )
+                  }
+                )
               ]
             },
             {
               groupName: strings.CommandBarGroupName,
               groupFields: [
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_COMMANDBAR, {
-                  label: strings.ShowCommandBarLabel
-                }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_GROUPBY, {
-                  label: strings.ShowGroupByLabel,
-                  disabled: !this.properties.showCommandBar
-                }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_FILTERS, {
-                  label: strings.ShowFiltersLabel,
-                  disabled: !this.properties.showCommandBar
-                }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_EXCELEXPORT_BUTTON, {
-                  label: strings.ShowExcelExportButtonLabel,
-                  disabled: !this.properties.showCommandBar
-                }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_VIEWSELECTOR, {
-                  label: strings.ShowViewSelectorLabel,
-                  disabled: !this.properties.showCommandBar
-                })
+                PropertyPaneToggle(
+                  PROPERTYPANE_CONFIGURATION_PROPS.SHOW_COMMANDBAR,
+                  {
+                    label: strings.ShowCommandBarLabel
+                  }
+                ),
+                PropertyPaneToggle(
+                  PROPERTYPANE_CONFIGURATION_PROPS.SHOW_GROUPBY,
+                  {
+                    label: strings.ShowGroupByLabel,
+                    disabled: !this.properties.showCommandBar
+                  }
+                ),
+                PropertyPaneToggle(
+                  PROPERTYPANE_CONFIGURATION_PROPS.SHOW_FILTERS,
+                  {
+                    label: strings.ShowFiltersLabel,
+                    disabled: !this.properties.showCommandBar
+                  }
+                ),
+                PropertyPaneToggle(
+                  PROPERTYPANE_CONFIGURATION_PROPS.SHOW_EXCELEXPORT_BUTTON,
+                  {
+                    label: strings.ShowExcelExportButtonLabel,
+                    disabled: !this.properties.showCommandBar
+                  }
+                ),
+                PropertyPaneToggle(
+                  PROPERTYPANE_CONFIGURATION_PROPS.SHOW_VIEWSELECTOR,
+                  {
+                    label: strings.ShowViewSelectorLabel,
+                    disabled: !this.properties.showCommandBar
+                  }
+                )
               ]
             }
           ]

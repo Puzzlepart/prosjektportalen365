@@ -21,7 +21,11 @@ export const EditCopyScreen: FC<IEditCopyScreenProps> = ({ onStartCopy }) => {
    * @param properties Updated properties
    * @param errorMessage Error message
    */
-  function onInputChanged(id: string, properties: TypedHash<string>, errorMessage?: string) {
+  function onInputChanged(
+    id: string,
+    properties: TypedHash<string>,
+    errorMessage?: string
+  ) {
     setTemplates(
       templates.map((t) => {
         if (t.id === id) {
@@ -37,14 +41,22 @@ export const EditCopyScreen: FC<IEditCopyScreenProps> = ({ onStartCopy }) => {
    * Check if file names are valid
    */
   function isFileNamesValid(): boolean {
-    return templates.filter((t) => !stringIsNullOrEmpty(t.errorMessage)).length === 0
+    return (
+      templates.filter((t) => !stringIsNullOrEmpty(t.errorMessage)).length === 0
+    )
   }
 
   return (
     <div className={styles.root}>
-      <InfoMessage text={strings.DocumentTemplateDialogScreenEditCopyInfoText} />
+      <InfoMessage
+        text={strings.DocumentTemplateDialogScreenEditCopyInfoText}
+      />
       {state.selected.map((item, idx) => (
-        <DocumentTemplateItem key={idx} item={item} onInputChanged={onInputChanged} />
+        <DocumentTemplateItem
+          key={idx}
+          item={item}
+          onInputChanged={onInputChanged}
+        />
       ))}
       <DialogFooter>
         <PrimaryButton
@@ -55,7 +67,9 @@ export const EditCopyScreen: FC<IEditCopyScreenProps> = ({ onStartCopy }) => {
         <DefaultButton
           text={strings.OnGoBackText}
           onClick={() =>
-            dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.TargetFolder }))
+            dispatch(
+              SET_SCREEN({ screen: DocumentTemplateDialogScreen.TargetFolder })
+            )
           }
         />
       </DialogFooter>

@@ -22,5 +22,8 @@ export function useStatusElement(props: IStatusElementProps) {
       __html: comment
     }
   }
-  return { commentProps, iconSize: props.iconSize ?? headerProps.iconSize } as const
+  return {
+    commentProps,
+    iconSize: props.iconSize ?? headerProps.iconSize
+  } as const
 }

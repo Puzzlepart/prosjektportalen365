@@ -4,7 +4,11 @@ import { SPConfiguration, Web } from '@pnp/sp'
 import { format } from '@fluentui/react'
 import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
 import { ISPList } from '../../interfaces/ISPList'
-import { ChecklistItemModel, ProjectPhaseChecklistData, ProjectPhaseModel } from '../../models'
+import {
+  ChecklistItemModel,
+  ProjectPhaseChecklistData,
+  ProjectPhaseModel
+} from '../../models'
 import { tryParseJson } from '../../util/tryParseJson'
 import { IGetPropertiesData } from './IGetPropertiesData'
 import { IProjectDataServiceParams } from './IProjectDataServiceParams'
@@ -42,7 +46,10 @@ export class ProjectDataService {
   private _initStorage() {
     this._storage = new PnPClientStorage().session
     this._storageKeys = Object.keys(this._storageKeys).reduce((obj, key) => {
-      obj[key] = format(this._storageKeys[key], this._params.siteId.replace(/-/g, ''))
+      obj[key] = format(
+        this._storageKeys[key],
+        this._params.siteId.replace(/-/g, '')
+      )
       return obj
     }, {})
     this._storage.deleteExpired()
@@ -130,25 +137,26 @@ export class ProjectDataService {
     try {
       const propertyItemContext = await this._getPropertyItemContext()
       if (!propertyItemContext) return null
-      const [fieldValuesText, fieldValues, fields, welcomepage] = await Promise.all([
-        propertyItemContext.item.fieldValuesAsText.get(),
-        propertyItemContext.item.get(),
-        propertyItemContext.list.fields
-          .select(
-            'Id',
-            'InternalName',
-            'Title',
-            'Description',
-            'TypeAsString',
-            'SchemaXml',
-            'TextField'
-          )
-          // eslint-disable-next-line quotes
-          .filter("substringof('Gt', InternalName)")
-          .usingCaching()
-          .get(),
-        this.getWelcomePage()
-      ])
+      const [fieldValuesText, fieldValues, fields, welcomepage] =
+        await Promise.all([
+          propertyItemContext.item.fieldValuesAsText.get(),
+          propertyItemContext.item.get(),
+          propertyItemContext.list.fields
+            .select(
+              'Id',
+              'InternalName',
+              'Title',
+              'Description',
+              'TypeAsString',
+              'SchemaXml',
+              'TextField'
+            )
+            // eslint-disable-next-line quotes
+            .filter("substringof('Gt', InternalName)")
+            .usingCaching()
+            .get(),
+          this.getWelcomePage()
+        ])
 
       const modifiedSourceUrl = !sourceUrl.includes(welcomepage)
         ? sourceUrl
@@ -177,7 +185,16 @@ export class ProjectDataService {
   }
 
   /**
-   * Get properties data
+   * Get properties data for the current project. Uses the `entityService` to retrieve the data.
+   *
+   * The following properties are returned:
+   * - `fieldValues`: The field values of the property item
+   * - `fieldValuesText`: The field values of the property item as text
+   * - `editFormUrl`: The URL to the edit form of the property item
+   * - `versionHistoryUrl`: The URL to the version history of the property item
+   * - `fields`: The fields of the property item
+   * - `propertiesListId`: The ID of the properties list
+   * - `templateParameters`: The template parameters of the property item
    */
   public async getPropertiesData(): Promise<IGetPropertiesData> {
     const propertyItem = await this._getPropertyItem(
@@ -185,8 +202,13 @@ export class ProjectDataService {
     )
 
     if (propertyItem) {
-      const templateParameters = tryParseJson(propertyItem.fieldValuesText.TemplateParameters, {})
-      Logger.write('(ProjectDataService) (getPropertiesData) Local property item found.')
+      const templateParameters = tryParseJson(
+        propertyItem.fieldValuesText.TemplateParameters,
+        {}
+      )
+      Logger.write(
+        '(ProjectDataService) (getPropertiesData) Local property item found.'
+      )
       return {
         ...propertyItem,
         propertiesListId: propertyItem.propertiesListId,
@@ -215,7 +237,9 @@ export class ProjectDataService {
    *
    * @param data Data
    */
-  public async getPropertiesLastUpdated(data: IGetPropertiesData): Promise<number> {
+  public async getPropertiesLastUpdated(
+    data: IGetPropertiesData
+  ): Promise<number> {
     const { Modified } = await this.web.lists
       .getById(data.propertiesListId)
       .items.getById(data.fieldValues.Id)
@@ -230,14 +254,20 @@ export class ProjectDataService {
    * @param phase Phase
    * @param phaseTextField Phase text field
    */
-  public async updatePhase(phase: ProjectPhaseModel, phaseTextField: string): Promise<void> {
+  public async updatePhase(
+    phase: ProjectPhaseModel,
+    phaseTextField: string
+  ): Promise<void> {
     const properties = { [phaseTextField]: phase.toString() }
     try {
       const propertyItemContext = await this._getPropertyItemContext()
       if (propertyItemContext) {
         await propertyItemContext.item.update(properties)
       } else {
-        await this._params.entityService.updateEntityItem(this._params.siteId, properties)
+        await this._params.entityService.updateEntityItem(
+          this._params.siteId,
+          properties
+        )
       }
     } catch (error) {
       throw error
@@ -303,7 +333,13 @@ export class ProjectDataService {
     try {
       const items = await this.web.lists
         .getByTitle(listName)
-        .items.select('ID', 'Title', 'GtComment', 'GtChecklistStatus', 'GtProjectPhase')
+        .items.select(
+          'ID',
+          'Title',
+          'GtComment',
+          'GtChecklistStatus',
+          'GtProjectPhase'
+        )
         .get<Record<string, any>[]>()
       const checklistItems = items.map((item) => new ChecklistItemModel(item))
       const checklistData = checklistItems
@@ -313,7 +349,9 @@ export class ProjectDataService {
           obj[item.termGuid].stats = obj[item.termGuid].stats || {}
           obj[item.termGuid].items = obj[item.termGuid].items || []
           obj[item.termGuid].items.push(item)
-          obj[item.termGuid].stats[item.status] = obj[item.termGuid].stats[item.status]
+          obj[item.termGuid].stats[item.status] = obj[item.termGuid].stats[
+            item.status
+          ]
             ? obj[item.termGuid].stats[item.status] + 1
             : 1
           return obj
@@ -331,8 +369,15 @@ export class ProjectDataService {
    * @param id Id
    * @param properties Properties
    */
-  public async updateChecklistItem(listName: string, id: number, properties: Record<string, any>) {
-    return await this.web.lists.getByTitle(listName).items.getById(id).update(properties)
+  public async updateChecklistItem(
+    listName: string,
+    id: number,
+    properties: Record<string, any>
+  ) {
+    return await this.web.lists
+      .getByTitle(listName)
+      .items.getById(id)
+      .update(properties)
   }
 
   /**
@@ -341,7 +386,9 @@ export class ProjectDataService {
   public clearCache(): void {
     Object.keys(this._storageKeys).forEach((name) => {
       const key = this.getStorageKey(name)
-      Logger.write(`(ProjectDataService) Clearing key ${key} from sessionStorage.`)
+      Logger.write(
+        `(ProjectDataService) Clearing key ${key} from sessionStorage.`
+      )
       sessionStorage.removeItem(key)
     })
   }
@@ -352,7 +399,9 @@ export class ProjectDataService {
    */
   public async getWelcomePage() {
     try {
-      const { WelcomePage } = await this.web.rootFolder.select('WelcomePage').get()
+      const { WelcomePage } = await this.web.rootFolder
+        .select('WelcomePage')
+        .get()
       return WelcomePage
     } catch (error) {
       return 'SitePages/ProjectHome.aspx'

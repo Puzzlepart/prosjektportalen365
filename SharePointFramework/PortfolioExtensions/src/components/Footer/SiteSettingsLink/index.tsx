@@ -5,7 +5,8 @@ import { FooterContext } from '../context'
 
 export const SiteSettingsLink: FC = () => {
   const context = useContext(FooterContext)
-  const isHidden = context.props.portalUrl !== context.props.pageContext.web.absoluteUrl
+  const isHidden =
+    context.props.portalUrl !== context.props.pageContext.web.absoluteUrl
   return (
     <div style={{ display: isHidden ? 'none' : 'inline-block' }}>
       <ActionButton

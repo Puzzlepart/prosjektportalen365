@@ -9,7 +9,10 @@ import { useContext } from 'react'
  * @param comment Comment value
  * @param onNextChecklistItem On next checklist item callback
  */
-export function useActions(comment: string, onNextChecklistItem: (statusValue: string) => void) {
+export function useActions(
+  comment: string,
+  onNextChecklistItem: (statusValue: string) => void
+) {
   const context = useContext(ProjectPhasesContext)
   const isCommentValid = comment?.length >= context.props.commentMinLength
   const actions: IButtonProps[] = [

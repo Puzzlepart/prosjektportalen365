@@ -10,16 +10,24 @@ import {
 } from './types'
 
 export const RenderModeDropdown: FC<IRenderModeDropdownProps> = (props) => {
-  const [selectedOption, setSelectedOption] = useState<RenderModeDropdownOption>(
-    props.renderAs === 'tiles' ? TILE_OPTION : LIST_OPTION
+  const [selectedOption, setSelectedOption] =
+    useState<RenderModeDropdownOption>(
+      props.renderAs === 'tiles' ? TILE_OPTION : LIST_OPTION
+    )
+
+  useEffect(
+    () => props.onChange(selectedOption.key as ProjectListRenderMode),
+    [selectedOption]
   )
 
-  useEffect(() => props.onChange(selectedOption.key as ProjectListRenderMode), [selectedOption])
-
-  const onRenderOption: IRenderFunction<RenderModeDropdownOption> = (option) => {
+  const onRenderOption: IRenderFunction<RenderModeDropdownOption> = (
+    option
+  ) => {
     return (
       <div>
-        {option.data?.iconProps && <Icon style={{ marginRight: 8 }} {...option.data.iconProps} />}
+        {option.data?.iconProps && (
+          <Icon style={{ marginRight: 8 }} {...option.data.iconProps} />
+        )}
         <span>{option.text}</span>
       </div>
     )

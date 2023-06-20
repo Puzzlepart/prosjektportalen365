@@ -10,7 +10,11 @@ import { redirect } from 'pp365-shared-library/lib/util'
 import React, { FC, useContext } from 'react'
 import { isEmpty } from 'underscore'
 import { PortfolioAggregationContext } from '../context'
-import { SET_DATA_SOURCE, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL } from '../reducer'
+import {
+  SET_DATA_SOURCE,
+  TOGGLE_COMPACT,
+  TOGGLE_FILTER_PANEL
+} from '../reducer'
 
 export const Commands: FC = () => {
   const { props, state, dispatch } = useContext(PortfolioAggregationContext)
@@ -53,7 +57,9 @@ export const Commands: FC = () => {
         buttonStyles: { root: { border: 'none' } },
         disabled: !props.showViewSelector,
         data: {
-          isVisible: props.pageContext.legacyPageContext.isSiteAdmin && props.showViewSelector
+          isVisible:
+            props.pageContext.legacyPageContext.isSiteAdmin &&
+            props.showViewSelector
         },
         onClick: () => redirect(props.configuration.viewsUrls.defaultNewFormUrl)
       } as IContextualMenuItem,

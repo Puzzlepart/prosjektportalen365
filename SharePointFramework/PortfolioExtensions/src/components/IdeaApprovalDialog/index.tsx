@@ -29,7 +29,10 @@ interface IDialogContentState {
   comment: string
 }
 
-class DialogPrompt extends React.Component<IDialogContentProps, IDialogContentState> {
+class DialogPrompt extends React.Component<
+  IDialogContentProps,
+  IDialogContentState
+> {
   constructor(props: IDialogContentProps | Readonly<IDialogContentProps>) {
     super(props)
 
@@ -87,14 +90,21 @@ class DialogPrompt extends React.Component<IDialogContentProps, IDialogContentSt
             onClick={() => {
               this.props.submit(this.state.choice, this.state.comment)
             }}
-            disabled={this.state.comment.length > 0 && this.state.choice.length > 0 ? false : true}
+            disabled={
+              this.state.comment.length > 0 && this.state.choice.length > 0
+                ? false
+                : true
+            }
           />
         </DialogFooter>
       </DialogContent>
     )
   }
 
-  private _onChoiceChange = (_: React.FormEvent<HTMLDivElement>, choice: IDropdownOption) => {
+  private _onChoiceChange = (
+    _: React.FormEvent<HTMLDivElement>,
+    choice: IDropdownOption
+  ) => {
     this.setState({ choice: choice.text })
   }
 

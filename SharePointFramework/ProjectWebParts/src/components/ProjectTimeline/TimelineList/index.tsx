@@ -1,4 +1,9 @@
-import { CommandBar, DetailsList, DetailsListLayoutMode, SelectionMode } from '@fluentui/react'
+import {
+  CommandBar,
+  DetailsList,
+  DetailsListLayoutMode,
+  SelectionMode
+} from '@fluentui/react'
 import React, { FC, useContext } from 'react'
 import { ProjectTimelineContext } from '../context'
 import styles from './TimelineList.module.scss'

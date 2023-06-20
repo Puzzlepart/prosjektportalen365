@@ -41,7 +41,8 @@ export const useProjectList = (props: IProjectListProps) => {
       {
         id: 'ON_SELECT_PROJECT',
         iconProps: { iconName: 'OpenInNewWindow' },
-        onClick: (event: React.MouseEvent<any>) => onExecuteCardAction(event, project)
+        onClick: (event: React.MouseEvent<any>) =>
+          onExecuteCardAction(event, project)
       }
     ]
   }
@@ -52,7 +53,10 @@ export const useProjectList = (props: IProjectListProps) => {
    * @param event - Event
    * @param project - Project
    */
-  function onExecuteCardAction(event: React.MouseEvent<any>, project: ProjectListModel) {
+  function onExecuteCardAction(
+    event: React.MouseEvent<any>,
+    project: ProjectListModel
+  ) {
     event.preventDefault()
     event.stopPropagation()
     switch (event.currentTarget.id) {
@@ -97,12 +101,19 @@ export const useProjectList = (props: IProjectListProps) => {
    * @param _event - React change event
    * @param searchTerm - Search term
    */
-  function onSearch(_event: React.ChangeEvent<HTMLInputElement>, searchTerm: string) {
+  function onSearch(
+    _event: React.ChangeEvent<HTMLInputElement>,
+    searchTerm: string
+  ) {
     setState({ searchTerm })
   }
 
-  const projects = state.isDataLoaded ? filterProjets(state.projects) : state.projects
-  const views = props.views.filter((view) => !props.hideViews.includes(view.itemKey))
+  const projects = state.isDataLoaded
+    ? filterProjets(state.projects)
+    : state.projects
+  const views = props.views.filter(
+    (view) => !props.hideViews.includes(view.itemKey)
+  )
 
   useProjectListDataFetch(props, views, setState)
 

@@ -57,7 +57,8 @@ export class ContentConfig extends UserSelectableObject {
   public isMandatoryForTemplate(template: ProjectTemplate): boolean {
     return (
       (this.isLocked && this.isDefault) ||
-      (template?.isDefaultContentConfigLocked && template?.contentConfig.includes(this.id))
+      (template?.isDefaultContentConfigLocked &&
+        template?.contentConfig.includes(this.id))
     )
   }
 
@@ -72,12 +73,18 @@ export class ContentConfig extends UserSelectableObject {
   }
 
   public get type(): ContentConfigType {
-    if (this._spItem.ContentTypeId.indexOf('0x0100B8B4EE61A547B247B49CFC21B67D5B7D01') !== -1)
+    if (
+      this._spItem.ContentTypeId.indexOf(
+        '0x0100B8B4EE61A547B247B49CFC21B67D5B7D01'
+      ) !== -1
+    )
       return ContentConfigType.Planner
     return ContentConfigType.List
   }
   public get fields() {
-    return !stringIsNullOrEmpty(this._spItem.GtLccFields) ? this._spItem.GtLccFields.split(',') : []
+    return !stringIsNullOrEmpty(this._spItem.GtLccFields)
+      ? this._spItem.GtLccFields.split(',')
+      : []
   }
 
   public get sourceList(): List {
@@ -90,12 +97,22 @@ export class ContentConfig extends UserSelectableObject {
 
   public async load() {
     this.sourceListProps = await this.sourceList
-      .select('Title', 'ListItemEntityTypeFullName', 'ItemCount', 'BaseTemplate')
+      .select(
+        'Title',
+        'ListItemEntityTypeFullName',
+        'ItemCount',
+        'BaseTemplate'
+      )
       .expand('RootFolder')
       .get<IListProperties>()
     if (this.type === ContentConfigType.List) {
       this.destListProps = await this.destList
-        .select('Title', 'ListItemEntityTypeFullName', 'ItemCount', 'BaseTemplate')
+        .select(
+          'Title',
+          'ListItemEntityTypeFullName',
+          'ItemCount',
+          'BaseTemplate'
+        )
         .expand('RootFolder')
         .get<IListProperties>()
     }

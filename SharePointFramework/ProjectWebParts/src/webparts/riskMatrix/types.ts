@@ -3,7 +3,9 @@ import { IBaseWebPartComponentProps } from '../../components/BaseWebPartComponen
 import { IRiskMatrixProps } from '../../components/RiskMatrix'
 import { UncertaintyElementModel } from 'models'
 
-export interface IRiskMatrixWebPartProps extends IBaseWebPartComponentProps, IRiskMatrixProps {
+export interface IRiskMatrixWebPartProps
+  extends IBaseWebPartComponentProps,
+    IRiskMatrixProps {
   listName?: string
   viewXml?: string
   probabilityFieldName?: string

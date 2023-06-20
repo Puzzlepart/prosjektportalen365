@@ -15,7 +15,12 @@ export interface IProjectTemplateSPItem {
   IsAutoConfigurable?: boolean
   IconName?: string
   ListContentConfigLookupId?: number[]
-  File?: { UniqueId: string; Name: string; Title: string; ServerRelativeUrl: string }
+  File?: {
+    UniqueId: string
+    Name: string
+    Title: string
+    ServerRelativeUrl: string
+  }
   FieldValuesAsText?: TypedHash<string>
   GtProjectTemplateId?: number
   GtProjectExtensionsId?: number[]
@@ -73,7 +78,9 @@ export class ProjectTemplate extends UserSelectableObject {
     this.contentConfig = isArray(spItem.ListContentConfigLookupId)
       ? spItem.ListContentConfigLookupId
       : []
-    this.extensions = isArray(spItem.GtProjectExtensionsId) ? spItem.GtProjectExtensionsId : []
+    this.extensions = isArray(spItem.GtProjectExtensionsId)
+      ? spItem.GtProjectExtensionsId
+      : []
     this.isProgram = spItem.GtIsProgram
     this.isParentProject = spItem.GtIsParentProject
     this._autoConfigurable = spItem.IsAutoConfigurable
@@ -99,7 +106,9 @@ export class ProjectTemplate extends UserSelectableObject {
    */
   public getContentConfig(contentConfig: ContentConfig[]) {
     return contentConfig.filter(
-      (lcc) => lcc.isDefaultForTemplate(this) || this.contentConfig.some((id) => id === lcc.id)
+      (lcc) =>
+        lcc.isDefaultForTemplate(this) ||
+        this.contentConfig.some((id) => id === lcc.id)
     )
   }
 
@@ -110,7 +119,9 @@ export class ProjectTemplate extends UserSelectableObject {
    */
   public getExtensions(extensions: ProjectExtension[]) {
     return extensions.filter(
-      (ext) => ext.isDefaultForTemplate(this) || this.extensions.some((id) => id === ext.id)
+      (ext) =>
+        ext.isDefaultForTemplate(this) ||
+        this.extensions.some((id) => id === ext.id)
     )
   }
 
@@ -124,17 +135,25 @@ export class ProjectTemplate extends UserSelectableObject {
    * @returns The schema for the template
    */
   public async getSchema(): Promise<Schema> {
-    const schema = await this.web.getFileByServerRelativeUrl(this.projectTemplateUrl).getJSON()
+    const schema = await this.web
+      .getFileByServerRelativeUrl(this.projectTemplateUrl)
+      .getJSON()
     schema.Parameters = {
       ...(schema.Parameters ?? {}),
-      ProjectContentTypeId: this._projectContentType ?? schema.Parameters.ProjectContentTypeId,
+      ProjectContentTypeId:
+        this._projectContentType ?? schema.Parameters.ProjectContentTypeId,
       ProjectStatusContentTypeId:
-        this._projectStatusContentType ?? schema.Parameters.ProjectStatusContentTypeId,
-      ProvisionSiteFields: this._projectColumns ?? schema.Parameters.ProvisionSiteFields,
-      CustomSiteFields: this._projectCustomColumns ?? schema.Parameters.CustomSiteFields,
+        this._projectStatusContentType ??
+        schema.Parameters.ProjectStatusContentTypeId,
+      ProvisionSiteFields:
+        this._projectColumns ?? schema.Parameters.ProvisionSiteFields,
+      CustomSiteFields:
+        this._projectCustomColumns ?? schema.Parameters.CustomSiteFields,
       TermSetIds: {
         ...(schema.Parameters?.TermSetIds ?? {}),
-        GtProjectPhase: this._projectPhaseTermId ?? schema.Parameters.TermSetIds.GtProjectPhase
+        GtProjectPhase:
+          this._projectPhaseTermId ??
+          schema.Parameters.TermSetIds.GtProjectPhase
       }
     }
     return schema

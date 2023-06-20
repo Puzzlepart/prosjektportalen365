@@ -3,7 +3,8 @@
 import assign from 'object-assign'
 import { ChartData, DataField } from './'
 
-export const CHARTCONFIGBASE_CONTENTTYPEID = '0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D'
+export const CHARTCONFIGBASE_CONTENTTYPEID =
+  '0x0100FAC6DE5CA35FAB46ABCF3CD575663D9D'
 export const CHART_TYPES = ['bar', 'column', 'pie']
 
 export class SPChartConfigurationItem {
@@ -31,7 +32,10 @@ export class SPChartConfigurationItem {
 }
 
 export class ChartConfiguration {
-  constructor(public item: SPChartConfigurationItem, public fields: DataField[]) {
+  constructor(
+    public item: SPChartConfigurationItem,
+    public fields: DataField[]
+  ) {
     this.item = item
     this.fields = fields
   }
@@ -54,7 +58,10 @@ export class ChartConfiguration {
   public get type() {
     const typeIndex =
       parseInt(
-        this.item.ContentTypeId.replace(CHARTCONFIGBASE_CONTENTTYPEID, '').substring(0, 2),
+        this.item.ContentTypeId.replace(
+          CHARTCONFIGBASE_CONTENTTYPEID,
+          ''
+        ).substring(0, 2),
         10
       ) - 1
     return CHART_TYPES[typeIndex]
@@ -97,7 +104,10 @@ export class ChartConfiguration {
                   name: field.title,
                   data: data
                     .getValuesUnique(field)
-                    .map((value) => data.getItemsWithStringValue(field, value).length)
+                    .map(
+                      (value) =>
+                        data.getItemsWithStringValue(field, value).length
+                    )
                 }
               ]
             }
@@ -107,13 +117,19 @@ export class ChartConfiguration {
                   name: field.title,
                   data: data
                     .getValuesUnique(field)
-                    .map((value) => data.getItemsWithStringValue(field, value).length)
+                    .map(
+                      (value) =>
+                        data.getItemsWithStringValue(field, value).length
+                    )
                 }
               ]
             }
           }
         }
-        return this.fields.map((sf) => ({ name: sf.title, data: data.getValues(sf) }))
+        return this.fields.map((sf) => ({
+          name: sf.title,
+          data: data.getValues(sf)
+        }))
       }
       case 'pie': {
         if (this.fields.length === 1) {
@@ -127,7 +143,10 @@ export class ChartConfiguration {
                   colorByPoint: true,
                   data: data
                     .getItems(field)
-                    .map((i, index) => ({ name: i.name, y: data.getPercentage(field, index) }))
+                    .map((i, index) => ({
+                      name: i.name,
+                      y: data.getPercentage(field, index)
+                    }))
                 }
               ]
             }
@@ -137,7 +156,10 @@ export class ChartConfiguration {
                   type: 'pie',
                   colorByPoint: true,
                   data: data.getValuesUnique(field).map((value) => {
-                    const itemsMatch = data.getItemsWithStringValue(field, value)
+                    const itemsMatch = data.getItemsWithStringValue(
+                      field,
+                      value
+                    )
                     const name = value || 'N/A'
                     const y = (itemsMatch.length / data.getCount()) * 100
                     return { name, y, test: itemsMatch }
@@ -151,7 +173,10 @@ export class ChartConfiguration {
                   type: 'pie',
                   colorByPoint: true,
                   data: data.getValuesUnique(field).map((value) => {
-                    const itemsMatch = data.getItemsWithStringValue(field, value)
+                    const itemsMatch = data.getItemsWithStringValue(
+                      field,
+                      value
+                    )
                     const name = value ? value.split(';').join(', ') : 'N/A'
                     const y = (itemsMatch.length / data.getCount()) * 100
                     return { name, y, test: itemsMatch }
@@ -165,7 +190,10 @@ export class ChartConfiguration {
             {
               type: 'pie',
               colorByPoint: true,
-              data: this.fields.map((sf) => ({ name: sf.title, y: data.getAverage(sf) }))
+              data: this.fields.map((sf) => ({
+                name: sf.title,
+                y: data.getAverage(sf)
+              }))
             }
           ]
         }
@@ -208,13 +236,17 @@ export class ChartConfiguration {
                 dataLabels: {
                   enabled: true,
                   formatter: function () {
-                    return `<b>${this.point.name}</b>: ${this.point.percentage.toFixed(2)} %`
+                    return `<b>${
+                      this.point.name
+                    }</b>: ${this.point.percentage.toFixed(2)} %`
                   },
                   style: { color: 'black' }
                 }
               }
             }
-            chartConfig.tooltip = { pointFormat: '<b>{point.percentage: .1f}%</b>' }
+            chartConfig.tooltip = {
+              pointFormat: '<b>{point.percentage: .1f}%</b>'
+            }
           }
           break
       }

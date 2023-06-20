@@ -7,6 +7,10 @@ import { get } from '@microsoft/sp-lodash-subset'
  * @param expression Expression
  * @param fallback Fallback
  */
-export function getObjectValue<T>(object: any, expression: string, fallback: T): T {
+export function getObjectValue<T>(
+  object: any,
+  expression: string,
+  fallback: T
+): T {
   return get(object, expression) || fallback
 }

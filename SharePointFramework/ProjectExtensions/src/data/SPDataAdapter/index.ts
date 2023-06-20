@@ -38,7 +38,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param folderServerRelativeUrl Folder server relative URL
    * @param name File name
    */
-  public async isFilenameValid(folderServerRelativeUrl: string, name: string): Promise<string> {
+  public async isFilenameValid(
+    folderServerRelativeUrl: string,
+    name: string
+  ): Promise<string> {
     if (!validFilename(name)) return strings.FilenameInValidErrorText
     const [file] = await this.sp.web
       .getFolderByServerRelativeUrl(folderServerRelativeUrl)
@@ -85,7 +88,13 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    */
   public async getLibraries(): Promise<SPFolder[]> {
     const libraries = await this.sp.web.lists
-      .select('Id', 'Title', 'BaseTemplate', 'RootFolder/ServerRelativeUrl', 'RootFolder/Folders')
+      .select(
+        'Id',
+        'Title',
+        'BaseTemplate',
+        'RootFolder/ServerRelativeUrl',
+        'RootFolder/Folders'
+      )
       .expand('RootFolder', 'RootFolder/Folders')
       .filter(
         [

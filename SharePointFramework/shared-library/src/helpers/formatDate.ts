@@ -25,5 +25,8 @@ export function formatDate(
     }
   }
   if (!date) return fallback
-  return (typeof date === 'string' ? new Date(date) : date).toLocaleString(locale, options)
+  return (typeof date === 'string' ? new Date(date) : date).toLocaleString(
+    locale,
+    options
+  )
 }

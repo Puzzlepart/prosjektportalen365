@@ -40,7 +40,8 @@ export interface IProjectTimelineProps
   configItemTitle?: string
 }
 
-export interface IProjectTimelineState extends Pick<IShimmerProps, 'isDataLoaded'> {
+export interface IProjectTimelineState
+  extends Pick<IShimmerProps, 'isDataLoaded'> {
   /**
    * Filters
    */

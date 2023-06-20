@@ -13,29 +13,30 @@ import { SELECT_REPORT } from '../reducer'
  */
 export function useReportOptions() {
   const context = useContext(ProjectStatusContext)
-  const reportOptions: IContextualMenuItem[] = context.state.data.reports.map((report) => {
-    const isCurrent = report.id === context.state.selectedReport?.id
-    return {
-      key: report.id.toString(),
-      name: formatDate(report.created, true),
-      onClick: () => {
-        // eslint-disable-next-line @typescript-eslint/no-extra-semi
-        ;(async () => {
-          const reportWithAttachments = await SPDataAdapter.portal.getStatusReportAttachments(
-            report
-          )
-          context.dispatch(SELECT_REPORT({ report: reportWithAttachments }))
-        })()
-      },
-      canCheck: true,
-      iconProps: {
-        iconName: report.published ? 'BoxCheckmarkSolid' : 'CheckboxFill',
-        style: {
-          color: report.published ? '#2DA748' : '#D2D2D2'
-        }
-      },
-      isChecked: isCurrent
-    } as IContextualMenuItem
-  })
+  const reportOptions: IContextualMenuItem[] = context.state.data.reports.map(
+    (report) => {
+      const isCurrent = report.id === context.state.selectedReport?.id
+      return {
+        key: report.id.toString(),
+        name: formatDate(report.created, true),
+        onClick: () => {
+          // eslint-disable-next-line @typescript-eslint/no-extra-semi
+          ;(async () => {
+            const reportWithAttachments =
+              await SPDataAdapter.portal.getStatusReportAttachments(report)
+            context.dispatch(SELECT_REPORT({ report: reportWithAttachments }))
+          })()
+        },
+        canCheck: true,
+        iconProps: {
+          iconName: report.published ? 'BoxCheckmarkSolid' : 'CheckboxFill',
+          style: {
+            color: report.published ? '#2DA748' : '#D2D2D2'
+          }
+        },
+        isChecked: isCurrent
+      } as IContextualMenuItem
+    }
+  )
   return reportOptions
 }

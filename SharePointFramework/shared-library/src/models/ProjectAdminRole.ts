@@ -34,20 +34,36 @@ export class ProjectAdminRole {
     this.title = _item.Title
     this.groupName = _item.GtGroupName
     this.groupLevel = _item.GtGroupLevel
-    this.projectFieldName = _item.GtProjectFieldName ? `${_item.GtProjectFieldName}Id` : null
+    this.projectFieldName = _item.GtProjectFieldName
+      ? `${_item.GtProjectFieldName}Id`
+      : null
     if (isArray(_item.GtProjectAdminPermissions)) {
-      this.permissions = _item.GtProjectAdminPermissions.map((p) => p.GtProjectAdminPermissionId)
+      this.permissions = _item.GtProjectAdminPermissions.map(
+        (p) => p.GtProjectAdminPermissionId
+      )
     }
   }
 
   public get type(): ProjectAdminRoleType {
-    if (this._item.ContentTypeId.indexOf('0x0100618197F7C782A0459EB2FA5EBF1BDDF201') !== -1) {
+    if (
+      this._item.ContentTypeId.indexOf(
+        '0x0100618197F7C782A0459EB2FA5EBF1BDDF201'
+      ) !== -1
+    ) {
       return ProjectAdminRoleType.ProjectProperty
     }
-    if (this._item.ContentTypeId.indexOf('0x0100618197F7C782A0459EB2FA5EBF1BDDF202') !== -1) {
+    if (
+      this._item.ContentTypeId.indexOf(
+        '0x0100618197F7C782A0459EB2FA5EBF1BDDF202'
+      ) !== -1
+    ) {
       return ProjectAdminRoleType.SharePointGroup
     }
-    if (this._item.ContentTypeId.indexOf('0x0100618197F7C782A0459EB2FA5EBF1BDDF203') !== -1) {
+    if (
+      this._item.ContentTypeId.indexOf(
+        '0x0100618197F7C782A0459EB2FA5EBF1BDDF203'
+      ) !== -1
+    ) {
       return ProjectAdminRoleType.SiteAdmin
     }
   }

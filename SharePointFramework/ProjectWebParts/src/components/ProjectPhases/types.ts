@@ -1,5 +1,11 @@
-import { ProjectPhaseChecklistData, ProjectPhaseModel } from 'pp365-shared-library/lib/models'
-import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
+import {
+  ProjectPhaseChecklistData,
+  ProjectPhaseModel
+} from 'pp365-shared-library/lib/models'
+import {
+  IBaseWebPartComponentProps,
+  IBaseWebPartComponentState
+} from '../BaseWebPartComponent'
 import { IProjectPhaseCalloutProps } from './ProjectPhase/ProjectPhaseCallout'
 
 export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
@@ -56,7 +62,8 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   commentMinLength?: number
 }
 
-export interface IProjectPhasesState extends IBaseWebPartComponentState<IProjectPhasesData> {
+export interface IProjectPhasesState
+  extends IBaseWebPartComponentState<IProjectPhasesData> {
   /**
    * Phase
    */

@@ -16,11 +16,16 @@ export function useRowRenderer({ selectedKeys, searchTerm }) {
     defaultRender: (props?: IDetailsRowProps) => JSX.Element
   ) => {
     const ext = detailsRowProps.item as ProjectExtension
-    const isMandatory = ext.isMandatoryForTemplate(context.state.selectedTemplate)
+    const isMandatory = ext.isMandatoryForTemplate(
+      context.state.selectedTemplate
+    )
     detailsRowProps.disabled = isMandatory
     if (isMandatory) {
       detailsRowProps.onRenderCheck = (props) => (
-        <MandatoryCheck {...props} tooltip={{ text: strings.ExtensionLockedTooltipText }} />
+        <MandatoryCheck
+          {...props}
+          tooltip={{ text: strings.ExtensionLockedTooltipText }}
+        />
       )
       detailsRowProps.styles = {
         root: { background: 'rgb(237, 235, 233)', color: 'rgb(50, 49, 48)' }

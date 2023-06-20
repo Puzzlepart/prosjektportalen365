@@ -14,9 +14,12 @@ export const LIST_OPTION = {
   data: { iconProps: { iconName: 'PageList' } }
 } as RenderModeDropdownOption
 
-export type RenderModeDropdownOption = IDropdownOption<{ iconProps: IIconProps }>
+export type RenderModeDropdownOption = IDropdownOption<{
+  iconProps: IIconProps
+}>
 
-export interface IRenderModeDropdownProps extends Omit<IDropdownProps, 'options' | 'onChange'> {
+export interface IRenderModeDropdownProps
+  extends Omit<IDropdownProps, 'options' | 'onChange'> {
   renderAs: ProjectListRenderMode
   onChange: (renderMode: ProjectListRenderMode) => void
 }

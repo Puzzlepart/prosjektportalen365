@@ -10,7 +10,10 @@ import React from 'react'
  * @param onItemClick On item click
  */
 export function useItemRenderer(
-  onItemClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) => void
+  onItemClick: (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    item: ITimelineItem
+  ) => void
 ) {
   return (calProps: ReactCalendarItemRendererProps<ITimelineItem>) => {
     const htmlProps = calProps.getItemProps(calProps.item.itemProps)
@@ -21,7 +24,8 @@ export function useItemRenderer(
           <div
             {...htmlProps}
             className={`${styles.timelineItem} rc-item`}
-            onClick={(event) => onItemClick(event, calProps.item)}>
+            onClick={(event) => onItemClick(event, calProps.item)}
+          >
             <div
               className={`${styles.itemContent} rc-milestoneitem-content`}
               style={{
@@ -41,7 +45,8 @@ export function useItemRenderer(
           <div
             {...htmlProps}
             className={`${styles.timelineItem} rc-item`}
-            onClick={(event) => onItemClick(event, calProps.item)}>
+            onClick={(event) => onItemClick(event, calProps.item)}
+          >
             <div
               className={`${styles.itemContent} rc-milestoneitem-content`}
               style={{
@@ -50,7 +55,9 @@ export function useItemRenderer(
                 height: '0',
                 borderLeft: '11px solid transparent',
                 borderRight: '11px solid transparent',
-                borderBottom: `22px solid ${calProps.item.data.bgColorHex || 'lightblue'}`,
+                borderBottom: `22px solid ${
+                  calProps.item.data.bgColorHex || 'lightblue'
+                }`,
                 marginTop: '-3px'
               }}
             />
@@ -62,13 +69,15 @@ export function useItemRenderer(
           <div
             {...htmlProps}
             className={`${styles.timelineItem} rc-item`}
-            onClick={(event) => onItemClick(event, calProps.item)}>
+            onClick={(event) => onItemClick(event, calProps.item)}
+          >
             <div
               className={`${styles.itemContent} rc-item-content`}
               style={{
                 maxHeight: `${calProps.itemContext.dimensions.height}`,
                 paddingLeft: '8px'
-              }}>
+              }}
+            >
               {calProps.item.title}
             </div>
           </div>

@@ -33,7 +33,9 @@ function getHeaderLabel(
  *
  * @param props Component props
  */
-export function getMatrixHeaders(props: IRiskMatrixProps): Record<number, string[][]> {
+export function getMatrixHeaders(
+  props: IRiskMatrixProps
+): Record<number, string[][]> {
   return [4, 5, 6].reduce((headers, size) => {
     headers[size] = [
       [

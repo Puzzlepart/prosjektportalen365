@@ -18,7 +18,8 @@ import { useUncertaintySection } from './useUncertaintySection'
 
 export const UncertaintySection: FC = () => {
   const context = useContext(ProjectStatusContext)
-  const { state, matrixElements, items, columns, shouldRenderContent } = useUncertaintySection()
+  const { state, matrixElements, items, columns, shouldRenderContent } =
+    useUncertaintySection()
 
   /**
    * Render content for the Uncertainty section. Handles potential errors and renders OpportunityMatrix
@@ -26,7 +27,12 @@ export const UncertaintySection: FC = () => {
    */
   function renderContent() {
     if (state.error)
-      return <UserMessage text={strings.ListSectionDataErrorMessage} type={MessageBarType.error} />
+      return (
+        <UserMessage
+          text={strings.ListSectionDataErrorMessage}
+          type={MessageBarType.error}
+        />
+      )
 
     let matrix = null
     switch (state.data.contentTypeIndex) {
@@ -43,7 +49,12 @@ export const UncertaintySection: FC = () => {
         break
       case 2:
         {
-          matrix = <OpportunityMatrix {...context.props.opportunityMatrix} items={matrixElements} />
+          matrix = (
+            <OpportunityMatrix
+              {...context.props.opportunityMatrix}
+              items={matrixElements}
+            />
+          )
         }
         break
     }

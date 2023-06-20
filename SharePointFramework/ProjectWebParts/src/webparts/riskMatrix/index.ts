@@ -32,7 +32,8 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
       ])
       const defaultConfiguration = _.find(
         configurations,
-        (config) => config.name === strings.RiskMatrixManualConfigurationPathDefaltValue
+        (config) =>
+          config.name === strings.RiskMatrixManualConfigurationPathDefaltValue
       )
       this._data = { items, configurations, defaultConfiguration }
     } catch (error) {
@@ -91,9 +92,12 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
    */
   protected get headerLabelFields(): IPropertyPaneField<any>[] {
     const size = parseInt(this.properties.size ?? '5', 10)
-    const overrideHeaderLabels = PropertyPaneToggle(`overrideHeaderLabels.${size}`, {
-      label: format(strings.OverrideHeadersLabel, size)
-    })
+    const overrideHeaderLabels = PropertyPaneToggle(
+      `overrideHeaderLabels.${size}`,
+      {
+        label: format(strings.OverrideHeadersLabel, size)
+      }
+    )
     if (!get(this.properties, `overrideHeaderLabels.${size}`, false)) {
       return [overrideHeaderLabels]
     }
@@ -188,10 +192,12 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                 !this.properties.useDynamicConfiguration &&
                   PropertyPaneDropdown('manualConfigurationPath', {
                     label: strings.ManualConfigurationPathLabel,
-                    options: this._data.configurations.map(({ url: key, title: text }) => ({
-                      key,
-                      text
-                    })),
+                    options: this._data.configurations.map(
+                      ({ url: key, title: text }) => ({
+                        key,
+                        text
+                      })
+                    ),
                     selectedKey:
                       this.properties?.manualConfigurationPath ??
                       this._data.defaultConfiguration?.url
@@ -233,7 +239,9 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                     ],
                     value: this.properties.colorScaleConfig
                   }),
-                ...(this.properties.useDynamicConfiguration ? this.headerLabelFields : [])
+                ...(this.properties.useDynamicConfiguration
+                  ? this.headerLabelFields
+                  : [])
               ].filter(Boolean)
             }
           ]

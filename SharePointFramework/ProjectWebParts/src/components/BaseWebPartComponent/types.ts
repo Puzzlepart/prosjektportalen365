@@ -2,7 +2,8 @@ import { IShimmerProps } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 
-export interface IBaseWebPartComponentProps extends React.DOMAttributes<HTMLDivElement> {
+export interface IBaseWebPartComponentProps
+  extends React.DOMAttributes<HTMLDivElement> {
   /**
    * Title of the web part
    */
@@ -39,7 +40,8 @@ export interface IBaseWebPartComponentProps extends React.DOMAttributes<HTMLDivE
   webPartContext?: WebPartContext
 }
 
-export interface IBaseWebPartComponentState<T> extends Pick<IShimmerProps, 'isDataLoaded'> {
+export interface IBaseWebPartComponentState<T>
+  extends Pick<IShimmerProps, 'isDataLoaded'> {
   /**
    * Data
    */

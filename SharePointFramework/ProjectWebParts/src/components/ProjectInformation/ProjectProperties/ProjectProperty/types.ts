@@ -3,7 +3,11 @@ import { TypedHash } from '@pnp/common'
 import { IEntityField } from 'sp-entityportal-service'
 import { stringIsNullOrEmpty } from '@pnp/common'
 
-type ProjectPropertyModelType = 'user' | 'usermulti' | 'taxonomyfieldtypemulti' | 'url'
+type ProjectPropertyModelType =
+  | 'user'
+  | 'usermulti'
+  | 'taxonomyfieldtypemulti'
+  | 'url'
 
 export class ProjectPropertyModel {
   /**
@@ -50,7 +54,8 @@ export class ProjectPropertyModel {
   }
 }
 
-export interface IProjectPropertyProps extends React.HTMLAttributes<HTMLElement> {
+export interface IProjectPropertyProps
+  extends React.HTMLAttributes<HTMLElement> {
   /**
    * Project property model
    */

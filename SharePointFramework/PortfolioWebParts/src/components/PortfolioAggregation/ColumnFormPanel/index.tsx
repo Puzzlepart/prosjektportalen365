@@ -30,7 +30,11 @@ export const ColumnFormPanel: FC = () => {
   return (
     <Panel
       isOpen={state.addColumnPanel.isOpen}
-      headerText={state.editColumn ? strings.EditColumnHeaderText : strings.NewColumnHeaderText}
+      headerText={
+        state.editColumn
+          ? strings.EditColumnHeaderText
+          : strings.NewColumnHeaderText
+      }
       onDismiss={onDismiss}
       isLightDismiss={true}
       className={styles.root}
@@ -175,7 +179,9 @@ export const ColumnFormPanel: FC = () => {
             })
           }
         />
-        <div className={styles.fieldDescription}>{strings.ColumnRenderDescription}</div>
+        <div className={styles.fieldDescription}>
+          {strings.ColumnRenderDescription}
+        </div>
         {state.editColumn && (
           <Checkbox
             label={strings.ColumnRenderPersistGloballyLabel}

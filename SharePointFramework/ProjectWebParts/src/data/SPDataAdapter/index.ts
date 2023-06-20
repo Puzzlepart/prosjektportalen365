@@ -65,12 +65,15 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         TypeAsString: 'Note'
       },
       ...fields.filter(({ SchemaXml, InternalName, Group }) => {
-        const hideFromEditForm = SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1
+        const hideFromEditForm =
+          SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1
         const gtPrefix = InternalName.indexOf('Gt') === 0
         const inCustomGroup = Group === customGroupName
         // Include fields with Gt prefix or in custom group, or those in the forcedFields array
         if (
-          (!gtPrefix && !inCustomGroup && !forcedFields.includes(InternalName)) ||
+          (!gtPrefix &&
+            !inCustomGroup &&
+            !forcedFields.includes(InternalName)) ||
           hideFromEditForm
         )
           return false
@@ -104,7 +107,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         fieldValuesText,
         templateParameters
       )
-      await this.entityService.updateEntityItem(this.settings.siteId, properties)
+      await this.entityService.updateEntityItem(
+        this.settings.siteId,
+        properties
+      )
       Logger.log({
         message: `(${this._name}) (syncPropertyItemToHub) Successfully synced item to hub entity.`,
         data: { properties },
@@ -130,13 +136,18 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   ): Promise<any> {
     try {
       fieldValuesText = Object.keys(fieldValuesText).reduce(
-        (obj, key) => ({ ...obj, [key.replace(/_x005f_/gm, '_')]: fieldValuesText[key] }),
+        (obj, key) => ({
+          ...obj,
+          [key.replace(/_x005f_/gm, '_')]: fieldValuesText[key]
+        }),
         {}
       )
       const [fields, siteUsers] = await Promise.all([
         templateParameters?.ProjectContentTypeId
           ? this.entityService
-              .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
+              .usingParams({
+                contentTypeId: templateParameters.ProjectContentTypeId
+              })
               .getEntityFields()
           : this.entityService.getEntityFields(),
         this.sp.web.siteUsers.select('Id', 'Email', 'LoginName', 'Title').get<
@@ -148,11 +159,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
           }[]
         >()
       ])
-      const fieldsToSync = this._getFieldsToSync(fields, templateParameters?.CustomSiteFields, [
-        'GtIsParentProject',
-        'GtIsProgram',
-        'GtCurrentVersion'
-      ])
+      const fieldsToSync = this._getFieldsToSync(
+        fields,
+        templateParameters?.CustomSiteFields,
+        ['GtIsParentProject', 'GtIsProgram', 'GtCurrentVersion']
+      )
       const properties: TypedHash<any> = {}
       for (let i = 0; i < fieldsToSync.length; i++) {
         const fld = fieldsToSync[i]
@@ -165,13 +176,17 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
                 const term = { ...fldValue, WssId: -1, Label: fldValueTxt }
                 properties[fld.InternalName] = term || null
               } else {
-                let [textField] = fields.filter((f) => f.InternalName === `${fld.InternalName}Text`)
+                let [textField] = fields.filter(
+                  (f) => f.InternalName === `${fld.InternalName}Text`
+                )
                 if (textField)
-                  properties[textField.InternalName] = fieldValuesText[fld.InternalName]
+                  properties[textField.InternalName] =
+                    fieldValuesText[fld.InternalName]
                 else {
                   textField = find(fields, (f) => f.Id === fld.TextField)
                   if (!textField) continue
-                  properties[textField.InternalName] = fieldValuesText[textField.InternalName]
+                  properties[textField.InternalName] =
+                    fieldValuesText[textField.InternalName]
                 }
               }
             }
@@ -191,13 +206,17 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
                 // })
                 // properties[fld.InternalName] = termsString || null
               } else {
-                let [textField] = fields.filter((f) => f.InternalName === `${fld.InternalName}Text`)
+                let [textField] = fields.filter(
+                  (f) => f.InternalName === `${fld.InternalName}Text`
+                )
                 if (textField)
-                  properties[textField.InternalName] = fieldValuesText[fld.InternalName]
+                  properties[textField.InternalName] =
+                    fieldValuesText[fld.InternalName]
                 else {
                   textField = find(fields, (f) => f.Id === fld.TextField)
                   if (!textField) continue
-                  properties[textField.InternalName] = fieldValuesText[textField.InternalName]
+                  properties[textField.InternalName] =
+                    fieldValuesText[textField.InternalName]
                 }
               }
             }
@@ -208,13 +227,17 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
                 const [_user] = siteUsers.filter(
                   (u) => u.Title === fieldValuesText[fld.InternalName]
                 )
-                const user = _user ? await sp.web.ensureUser(_user.LoginName) : null
+                const user = _user
+                  ? await sp.web.ensureUser(_user.LoginName)
+                  : null
                 properties[`${fld.InternalName}Id`] = user ? user.data.Id : null
               } else {
                 const [_user] = siteUsers.filter(
                   (u) => u.Id === fieldValues[`${fld.InternalName}Id`]
                 )
-                const user = _user ? await this.entityService.web.ensureUser(_user.LoginName) : null
+                const user = _user
+                  ? await this.entityService.web.ensureUser(_user.LoginName)
+                  : null
                 properties[`${fld.InternalName}Id`] = user ? user.data.Id : null
               }
             }
@@ -223,7 +246,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
             {
               if (syncToProject) {
                 const userIds = fieldValuesText[fld.InternalName] || []
-                const users = siteUsers.filter((u) => userIds.indexOf(u.Title) !== -1)
+                const users = siteUsers.filter(
+                  (u) => userIds.indexOf(u.Title) !== -1
+                )
                 const ensured = await Promise.all(
                   users.map(({ LoginName }) => sp.web.ensureUser(LoginName))
                 )
@@ -232,9 +257,13 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
                 }
               } else {
                 const userIds = fieldValues[`${fld.InternalName}Id`] || []
-                const users = siteUsers.filter((u) => userIds.indexOf(u.Id) !== -1)
+                const users = siteUsers.filter(
+                  (u) => userIds.indexOf(u.Id) !== -1
+                )
                 const ensured = await Promise.all(
-                  users.map(({ LoginName }) => this.entityService.web.ensureUser(LoginName))
+                  users.map(({ LoginName }) =>
+                    this.entityService.web.ensureUser(LoginName)
+                  )
                 )
                 properties[`${fld.InternalName}Id`] = {
                   results: ensured.map(({ data }) => data.Id)
@@ -244,12 +273,16 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
             break
           case 'DateTime':
             {
-              properties[fld.InternalName] = fldValue ? new Date(fldValue) : null
+              properties[fld.InternalName] = fldValue
+                ? new Date(fldValue)
+                : null
             }
             break
           case 'Number':
           case 'Currency': {
-            properties[fld.InternalName] = fldValue ? parseFloat(fldValue) : null
+            properties[fld.InternalName] = fldValue
+              ? parseFloat(fldValue)
+              : null
           }
           case 'URL':
             {
@@ -321,7 +354,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       .select(...new SPIdeaConfigurationItem().fields)
       .items.get()
 
-    return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
+    return ideaConfig
+      .map((item) => new IdeaConfigurationModel(item))
+      .filter(Boolean)
   }
 
   /**
@@ -330,14 +365,17 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    *
    * @param folderPath Folder path relative to the configuration folder in Site Assets
    */
-  public async getConfigurations(folderPath: string): Promise<IConfigurationFile[]> {
+  public async getConfigurations(
+    folderPath: string
+  ): Promise<IConfigurationFile[]> {
     try {
       const { ServerRelativeUrl } = await this.portal.web.rootFolder
         .select('ServerRelativeUrl')
         .usingCaching()
         .get<{ ServerRelativeUrl: string }>()
       const folderRelativeUrl = `${ServerRelativeUrl}/${strings.SiteAssetsConfigurationFolder}/${folderPath}`
-      const folder = this.portal.web.getFolderByServerRelativeUrl(folderRelativeUrl)
+      const folder =
+        this.portal.web.getFolderByServerRelativeUrl(folderRelativeUrl)
       const files = await folder.files
         .select('Name', 'ServerRelativeUrl', 'ListItemAllFields/Title')
         .expand('ListItemAllFields')
@@ -345,7 +383,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         .get()
       return files.map((file) => ({
         name: file.Name,
-        title: file.ListItemAllFields.Title ?? `${strings.UnknownConfigurationName} (${file.Name})`,
+        title:
+          file.ListItemAllFields.Title ??
+          `${strings.UnknownConfigurationName} (${file.Name})`,
         url: file.ServerRelativeUrl
       }))
     } catch {

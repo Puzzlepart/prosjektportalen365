@@ -26,7 +26,11 @@ export class BaseWebPartComponent<
    * @param data Data
    */
   public logInfo(message: string, scope: string, data?: any) {
-    Logger.log({ message: `(${this._name}) (${scope}) ${message}`, data, level: LogLevel.Info })
+    Logger.log({
+      message: `(${this._name}) (${scope}) ${message}`,
+      data,
+      level: LogLevel.Info
+    })
   }
 
   /**
@@ -37,7 +41,11 @@ export class BaseWebPartComponent<
    * @param data Data
    */
   public logWarning(message: string, scope: string, data?: any) {
-    Logger.log({ message: `(${this._name}) (${scope}) ${message}`, data, level: LogLevel.Warning })
+    Logger.log({
+      message: `(${this._name}) (${scope}) ${message}`,
+      data,
+      level: LogLevel.Warning
+    })
   }
 
   /**
@@ -48,7 +56,11 @@ export class BaseWebPartComponent<
    * @param data Data
    */
   public logError(message: string, scope: string, data?: any) {
-    Logger.log({ message: `(${this._name}) (${scope}) ${message}`, data, level: LogLevel.Error })
+    Logger.log({
+      message: `(${this._name}) (${scope}) ${message}`,
+      data,
+      level: LogLevel.Error
+    })
   }
 }
 

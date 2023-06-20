@@ -27,8 +27,13 @@ import { usePortfolioOverview } from './usePortfolioOverview'
  * Component for displaying a portfolio overview - an overview of all projects in a portfolio.
  */
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
-  const { state, contextValue, selection, onColumnHeaderClick, onColumnHeaderContextMenu } =
-    usePortfolioOverview(props)
+  const {
+    state,
+    contextValue,
+    selection,
+    onColumnHeaderClick,
+    onColumnHeaderContextMenu
+  } = usePortfolioOverview(props)
   const { items, columns, groups } = useFilteredData(props, state)
 
   return (
@@ -46,7 +51,10 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
             <div className={styles.errorContainer}>
               <ListHeader />
               <div className={styles.error}>
-                <UserMessage text={state.error.message} type={state.error.type} />
+                <UserMessage
+                  text={state.error.message}
+                  type={state.error.type}
+                />
               </div>
             </div>
           ) : (
@@ -54,7 +62,10 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
               scrollbarVisibility={ScrollbarVisibility.auto}
               styles={{ root: { top: 75 } }}
             >
-              <MarqueeSelection selection={selection} className={styles.listContainer}>
+              <MarqueeSelection
+                selection={selection}
+                className={styles.listContainer}
+              >
                 <ShimmeredDetailsList
                   enableShimmer={state.loading || !!state.isChangingView}
                   isPlaceholderData={state.loading || !!state.isChangingView}
@@ -69,7 +80,12 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
                   onRenderDetailsHeader={(
                     headerProps: IDetailsHeaderProps,
                     defaultRender?: IRenderFunction<IDetailsHeaderProps>
-                  ) => <ListHeader headerProps={headerProps} defaultRender={defaultRender} />}
+                  ) => (
+                    <ListHeader
+                      headerProps={headerProps}
+                      defaultRender={defaultRender}
+                    />
+                  )}
                   onRenderItemColumn={(item, _index, column: ProjectColumn) =>
                     renderItemColumn(item, column, props)
                   }
@@ -82,7 +98,9 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
             </ScrollablePane>
           )}
         </div>
-        {state.columnContextMenu && <ContextualMenu {...state.columnContextMenu} />}
+        {state.columnContextMenu && (
+          <ContextualMenu {...state.columnContextMenu} />
+        )}
       </PortfolioOverviewContext.Provider>
     </div>
   )

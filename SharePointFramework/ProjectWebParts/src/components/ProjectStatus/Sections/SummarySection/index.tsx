@@ -31,8 +31,11 @@ export const SummarySection: FC<ISummarySectionProps> = (props) => {
             className={className([
               styles.statusElement,
               props.iconsOnly ? styles.iconsOnly : styles.halfWidth
-            ])}>
-            <StatusElement {...pick(props, 'iconSize', 'truncateComment', 'iconsOnly')} />
+            ])}
+          >
+            <StatusElement
+              {...pick(props, 'iconSize', 'truncateComment', 'iconsOnly')}
+            />
           </div>
         </SectionContext.Provider>
       ) : null
@@ -57,7 +60,8 @@ export const SummarySection: FC<ISummarySectionProps> = (props) => {
           className={className([
             styles.statusElements,
             !props.showProjectInformation && styles.fullWidth
-          ])}>
+          ])}
+        >
           <div className={styles.container} dir='ltr'>
             <div className={styles.row}>{renderStatusElements()}</div>
           </div>

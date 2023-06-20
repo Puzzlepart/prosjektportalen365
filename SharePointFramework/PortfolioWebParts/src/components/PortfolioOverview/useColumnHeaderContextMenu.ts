@@ -1,4 +1,8 @@
-import { ContextualMenuItemType, format, IContextualMenuProps } from '@fluentui/react'
+import {
+  ContextualMenuItemType,
+  format,
+  IContextualMenuProps
+} from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import { redirect } from 'pp365-shared-library/lib/util/redirect'
@@ -38,7 +42,9 @@ export function useColumnHeaderContextMenu(context: IPortfolioOverviewContext) {
       iconProps: customSort.iconName && {
         iconName: customSort.iconName
       },
-      checked: column.isSorted && context.state.sortBy?.customSort?.name === customSort.name,
+      checked:
+        column.isSorted &&
+        context.state.sortBy?.customSort?.name === customSort.name,
       onClick: () => context.dispatch(SET_SORT({ column, customSort }))
     }))
     const columnContextMenu: IContextualMenuProps = {
@@ -49,16 +55,22 @@ export function useColumnHeaderContextMenu(context: IPortfolioOverviewContext) {
           name: strings.SortDescLabel,
           canCheck: true,
           checked:
-            column.isSorted && !context.state.sortBy?.customSort && column.isSortedDescending,
-          onClick: () => context.dispatch(SET_SORT({ column, isSortedDescending: true }))
+            column.isSorted &&
+            !context.state.sortBy?.customSort &&
+            column.isSortedDescending,
+          onClick: () =>
+            context.dispatch(SET_SORT({ column, isSortedDescending: true }))
         },
         {
           key: 'SORT_ASC',
           name: strings.SortAscLabel,
           canCheck: true,
           checked:
-            column.isSorted && !context.state.sortBy?.customSort && !column.isSortedDescending,
-          onClick: () => context.dispatch(SET_SORT({ column, isSortedDescending: false }))
+            column.isSorted &&
+            !context.state.sortBy?.customSort &&
+            !column.isSortedDescending,
+          onClick: () =>
+            context.dispatch(SET_SORT({ column, isSortedDescending: false }))
         },
         !_.isEmpty(columnCustomSorts) && {
           key: 'DIVIDER_01',
@@ -73,7 +85,9 @@ export function useColumnHeaderContextMenu(context: IPortfolioOverviewContext) {
           key: 'GROUP_BY',
           name: format(strings.GroupByColumnLabel, column.name),
           canCheck: true,
-          checked: get<string>(context.state, 'groupBy.fieldName', '') === column.fieldName,
+          checked:
+            get<string>(context.state, 'groupBy.fieldName', '') ===
+            column.fieldName,
           disabled: !column.isGroupable,
           onClick: () => context.dispatch(SET_GROUP_BY(column))
         },

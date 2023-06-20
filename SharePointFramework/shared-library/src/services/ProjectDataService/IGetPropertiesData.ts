@@ -1,39 +1,38 @@
-import { TypedHash } from '@pnp/common'
 import { IEntityField } from 'sp-entityportal-service'
 
 export interface IGetPropertiesData {
   /**
-   * EditForm url
+   * Edit form URL
    */
   editFormUrl?: string
 
   /**
-   * Version history url
+   * Version history URL
    */
   versionHistoryUrl?: string
 
   /**
    * Field values
    */
-  fieldValues?: TypedHash<any>
+  fieldValues?: Record<string, any>
 
   /**
    * Field values as text
    */
-  fieldValuesText?: TypedHash<string>
+  fieldValuesText?: Record<string, string>
 
   /**
-   * Entity fields
+   * Property list fields
    */
   fields?: IEntityField[]
 
   /**
-   * Properties list id
+   * Properties list ID
    */
   propertiesListId?: string
 
   /**
-   *
+   * Parameters for the template the project was configured with
    */
-  templateParameters?: TypedHash<any>
+  templateParameters?: Record<string, any>
 }
