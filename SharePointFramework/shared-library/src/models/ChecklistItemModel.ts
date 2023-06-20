@@ -15,7 +15,6 @@ export class ChecklistItemModel {
     this.title = item.Title
     this.comment = item.GtComment
     this.status = item.GtChecklistStatus
-    this.termGuid =
-      item.GtProjectPhase && `/Guid(${item.GtProjectPhase.TermGuid})/`
+    this.termGuid = item.GtProjectPhase && `/Guid(${item.GtProjectPhase.TermGuid})/`
   }
 }

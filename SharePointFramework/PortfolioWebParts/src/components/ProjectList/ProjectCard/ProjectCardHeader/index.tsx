@@ -10,10 +10,7 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
     <div className={styles.root}>
       <div className={styles.logo} hidden={!context.showProjectLogo}>
         <img
-          src={
-            context.project.logo ??
-            `${context.project.url}/_api/siteiconmanager/getsitelogo`
-          }
+          src={context.project.logo ?? `${context.project.url}/_api/siteiconmanager/getsitelogo`}
           onLoad={props.onImageLoad}
         />
       </div>

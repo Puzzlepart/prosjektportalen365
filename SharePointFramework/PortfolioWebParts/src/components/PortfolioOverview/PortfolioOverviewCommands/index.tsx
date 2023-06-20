@@ -6,17 +6,12 @@ import { PortfolioOverviewContext } from '../context'
 import { ON_FILTER_CHANGED, TOGGLE_FILTER_PANEL } from '../reducer'
 import { IPortfolioOverviewCommandsProps } from './types'
 import { usePortfolioOverviewCommands } from './usePortfolioOverviewCommands'
-import {
-  FilterPanel,
-  IFilterItemProps
-} from 'pp365-shared-library/lib/components/FilterPanel'
+import { FilterPanel, IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 
 /**
  * Component for displaying the command bar and filter panel.
  */
-export const PortfolioOverviewCommands: React.FC<
-  IPortfolioOverviewCommandsProps
-> = (props) => {
+export const PortfolioOverviewCommands: React.FC<IPortfolioOverviewCommandsProps> = (props) => {
   const context = useContext(PortfolioOverviewContext)
   const { commandBarProps, filters } = usePortfolioOverviewCommands(props)
   return (
@@ -29,10 +24,7 @@ export const PortfolioOverviewCommands: React.FC<
         onDismiss={() => context.dispatch(TOGGLE_FILTER_PANEL())}
         isLightDismiss={true}
         filters={filters}
-        onFilterChange={(
-          column: ProjectColumn,
-          selectedItems: IFilterItemProps[]
-        ) => {
+        onFilterChange={(column: ProjectColumn, selectedItems: IFilterItemProps[]) => {
           context.dispatch(ON_FILTER_CHANGED({ column, selectedItems }))
         }}
       />

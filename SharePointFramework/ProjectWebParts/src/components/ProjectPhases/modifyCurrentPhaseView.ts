@@ -11,9 +11,7 @@ export const modifyCurrentPhaseView = async (
   phaseTermName: string,
   currentPhaseViewName: string
 ) => {
-  const documentsViews = sp.web.lists.getByTitle(
-    strings.DocumentsListName
-  ).views
+  const documentsViews = sp.web.lists.getByTitle(strings.DocumentsListName).views
   const [documentsFrontpageView] = await documentsViews
     .select('Id', 'ViewQuery')
     .filter(`Title eq '${currentPhaseViewName}'`)
@@ -30,8 +28,6 @@ export const modifyCurrentPhaseView = async (
     `<Where><Eq><FieldRef Name='GtProjectPhase' /><Value Type='Text'>${phaseTermName}</Value></Eq></Where>`
   ].join('')
   try {
-    await documentsViews
-      .getById(documentsFrontpageView.Id)
-      .update({ ViewQuery: newViewQuery })
+    await documentsViews.getById(documentsFrontpageView.Id).update({ ViewQuery: newViewQuery })
   } catch (err) {}
 }

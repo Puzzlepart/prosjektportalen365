@@ -4,9 +4,7 @@ import { IMandatoryCheckTooltipProps } from './types'
 import styles from './MandatoryCheckTooltip.module.scss'
 import { Icon } from '@fluentui/react'
 
-export const MandatoryCheckTooltip: FC<IMandatoryCheckTooltipProps> = (
-  props
-) => {
+export const MandatoryCheckTooltip: FC<IMandatoryCheckTooltipProps> = (props) => {
   return !stringIsNullOrEmpty(props.text) ? (
     <div className={styles.root}>
       <div className={styles.icon}>

@@ -1,10 +1,4 @@
-import {
-  MessageBarType,
-  IGroup,
-  IColumn,
-  IPanelProps,
-  Target
-} from '@fluentui/react'
+import { MessageBarType, IGroup, IColumn, IPanelProps, Target } from '@fluentui/react'
 import { SearchResult } from '@pnp/sp'
 import { IDataAdapter } from 'data/types'
 import { IAggregatedListConfiguration } from 'interfaces'
@@ -19,8 +13,7 @@ export class PortfolioAggregationErrorMessage extends Error {
   }
 }
 
-export interface IPortfolioAggregationProps<T = any>
-  extends IBaseComponentProps {
+export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps {
   /**
    * Configuration (columns and views etc)
    */

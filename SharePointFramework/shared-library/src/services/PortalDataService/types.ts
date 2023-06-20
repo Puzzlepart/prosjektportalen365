@@ -26,23 +26,22 @@ export interface IPortalDataServiceConfiguration extends Object {
   templateParametersFieldXml?: string
 }
 
-export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceConfiguration> =
-  {
-    listNames: {
-      STATUS_SECTIONS: 'Statusseksjoner',
-      PROJECT_COLUMNS: 'Prosjektkolonner',
-      PROJECT_COLUMN_CONFIGURATION: 'Prosjektkolonnekonfigurasjon',
-      PROJECT_STATUS: 'Prosjektstatus',
-      PROJECT_STATUS_ATTACHMENTS: 'Prosjektstatusvedlegg',
-      PROJECTS: 'Prosjekter',
-      PORTFOLIO_VIEWS: 'Porteføljevisninger',
-      PROJECT_CONTENT_COLUMNS: 'Prosjektinnholdskolonner',
-      DATA_SOURCES: 'Datakilder',
-      PROJECT_ADMIN_ROLES: 'Prosjektadministrasjonsroller'
-    },
-    templateParametersFieldXml:
-      '<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" Hidden="TRUE" />'
-  }
+export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceConfiguration> = {
+  listNames: {
+    STATUS_SECTIONS: 'Statusseksjoner',
+    PROJECT_COLUMNS: 'Prosjektkolonner',
+    PROJECT_COLUMN_CONFIGURATION: 'Prosjektkolonnekonfigurasjon',
+    PROJECT_STATUS: 'Prosjektstatus',
+    PROJECT_STATUS_ATTACHMENTS: 'Prosjektstatusvedlegg',
+    PROJECTS: 'Prosjekter',
+    PORTFOLIO_VIEWS: 'Porteføljevisninger',
+    PROJECT_CONTENT_COLUMNS: 'Prosjektinnholdskolonner',
+    DATA_SOURCES: 'Datakilder',
+    PROJECT_ADMIN_ROLES: 'Prosjektadministrasjonsroller'
+  },
+  templateParametersFieldXml:
+    '<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" Hidden="TRUE" />'
+}
 
 export type GetStatusReportsOptions = {
   filter?: string

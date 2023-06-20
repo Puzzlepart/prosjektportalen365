@@ -44,10 +44,7 @@ export class ApplyTemplate extends BaseTask {
       this.logInformation('Applying template to site', {
         parameters: params.templateParameters
       })
-      const templateSchema = _.omit(
-        params.templateSchema,
-        params.templateExcludeHandlers
-      )
+      const templateSchema = _.omit(params.templateSchema, params.templateExcludeHandlers)
       await provisioner.applyTemplate(templateSchema, null, (handler) => {
         if (APPLY_TEMPLATE_STATUS_MAP[handler]) {
           onProgress(
@@ -65,10 +62,7 @@ export class ApplyTemplate extends BaseTask {
         extensionSchema = _.omit(extensionSchema, 'Hooks')
         onProgress(
           strings.ApplyingExtensionsText,
-          format(
-            strings.ApplyExtensionText,
-            this.data.selectedExtensions[i].text
-          ),
+          format(strings.ApplyExtensionText, this.data.selectedExtensions[i].text),
           'ExternalBuild'
         )
         await provisioner.applyTemplate(extensionSchema, null)

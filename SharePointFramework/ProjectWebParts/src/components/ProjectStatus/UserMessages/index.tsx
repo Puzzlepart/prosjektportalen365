@@ -14,9 +14,7 @@ export const UserMessages: FC = () => {
         {any(context.state.data.reports, (report) => !report.published) && (
           <UserMessage text={strings.UnpublishedStatusReportInfo} />
         )}
-        {context.state.userMessage && (
-          <UserMessage {...context.state.userMessage} />
-        )}
+        {context.state.userMessage && <UserMessage {...context.state.userMessage} />}
       </div>
     </Shimmer>
   )

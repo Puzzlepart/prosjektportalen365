@@ -6,8 +6,7 @@ import { IColorConfigElementProps } from './types'
 import { useColorConfigElement } from './useColorConfigElement'
 
 export const ColorConfigElement: FC<IColorConfigElementProps> = (props) => {
-  const { ref, isEditing, setIsEditing, rgbColorString } =
-    useColorConfigElement(props)
+  const { ref, isEditing, setIsEditing, rgbColorString } = useColorConfigElement(props)
   return (
     <div
       ref={ref}

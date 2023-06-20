@@ -9,11 +9,9 @@ import { IColorConfigElementProps } from './types'
 export function useColorConfigElement(props: IColorConfigElementProps) {
   const [isEditing, setIsEditing] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
-  const rgbColorString = `rgb(${[
-    props.config.r,
-    props.config.g,
-    props.config.b
-  ].join(',')})` as string
+  const rgbColorString = `rgb(${[props.config.r, props.config.g, props.config.b].join(
+    ','
+  )})` as string
   return {
     ref,
     isEditing,

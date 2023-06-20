@@ -129,7 +129,7 @@
     "singleQuote": true,
     "semi": false,
     "arrowParens": "always",
-    "printWidth": 80,
+    "printWidth": 100,
     "trailingComma": "none",
     "bracketSpacing": true,
     "jsxBracketSameLine": true,

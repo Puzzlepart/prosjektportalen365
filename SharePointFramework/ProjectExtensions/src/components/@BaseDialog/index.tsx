@@ -1,9 +1,4 @@
-import {
-  Dialog,
-  DialogType,
-  IDialogContentProps,
-  IModalProps
-} from '@fluentui/react'
+import { Dialog, DialogType, IDialogContentProps, IModalProps } from '@fluentui/react'
 import React, { FC } from 'react'
 import styles from './BaseDialog.module.scss'
 import { IBaseDialogProps } from './types'

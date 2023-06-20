@@ -23,14 +23,8 @@ import { usePersistedColumns } from './usePersistedColumns'
  */
 export function usePortfolioOverview(props: IPortfolioOverviewProps) {
   const [placeholderColumns] = usePersistedColumns(props)
-  const reducer = useMemo(
-    () => createReducer({ props, placeholderColumns }),
-    []
-  )
-  const [state, dispatch] = useReducer(
-    reducer,
-    initState({ props, placeholderColumns })
-  )
+  const reducer = useMemo(() => createReducer({ props, placeholderColumns }), [])
+  const [state, dispatch] = useReducer(reducer, initState({ props, placeholderColumns }))
 
   const layerHostId = useId('layerHost')
 

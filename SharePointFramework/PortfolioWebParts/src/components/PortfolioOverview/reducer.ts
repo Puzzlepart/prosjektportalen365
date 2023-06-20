@@ -90,9 +90,7 @@ export const ON_FILTER_CHANGED = createAction<{
 /**
  * `SET_COLUMN_CONTEXT_MENU`: Action dispatched when user opens the column context menu
  */
-export const SET_COLUMN_CONTEXT_MENU = createAction<IContextualMenuProps>(
-  'SET_COLUMN_CONTEXT_MENU'
-)
+export const SET_COLUMN_CONTEXT_MENU = createAction<IContextualMenuProps>('SET_COLUMN_CONTEXT_MENU')
 
 /**
  * `SET_GROUP_BY`: Action dispatched when user changes the group by column
@@ -111,17 +109,14 @@ export const SET_SORT = createAction<{
 /**
  * `SELECTION_CHANGED`: Action dispatched when user changes the selection in the list
  */
-export const SELECTION_CHANGED =
-  createAction<Selection<IObjectWithKey>>('SELECTION_CHANGED')
+export const SELECTION_CHANGED = createAction<Selection<IObjectWithKey>>('SELECTION_CHANGED')
 
 /**
  * Initialize state for `<PortfolioOverview />`
  *
  * @param params Parameters for reducer initialization
  */
-export const initState = (
-  params: IPortfolioOverviewReducerParams
-): IPortfolioOverviewState => {
+export const initState = (params: IPortfolioOverviewReducerParams): IPortfolioOverviewState => {
   return {
     loading: true,
     isCompact: false,
@@ -161,10 +156,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
     [STARTING_DATA_FETCH.type]: (state) => {
       state.loading = true
     },
-    [DATA_FETCHED.type]: (
-      state,
-      { payload }: ReturnType<typeof DATA_FETCHED>
-    ) => {
+    [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
       state.items = payload.items
       state.currentView = payload.currentView
       state.columns = payload.currentView.columns
@@ -172,15 +164,9 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       state.loading = false
       state.error = null
     },
-    [DATA_FETCH_ERROR.type]: (
-      state,
-      { payload }: ReturnType<typeof DATA_FETCH_ERROR>
-    ) => {
+    [DATA_FETCH_ERROR.type]: (state, { payload }: ReturnType<typeof DATA_FETCH_ERROR>) => {
       state.loading = false
-      let message = format(
-        strings.PortfolioOverviewDataFetchError,
-        payload.error.message
-      )
+      let message = format(strings.PortfolioOverviewDataFetchError, payload.error.message)
       if (payload.view)
         message = format(
           strings.PortfolioOverviewDataFetchErrorView,
@@ -193,10 +179,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         type: MessageBarType.error
       }
     },
-    [EXECUTE_SEARCH.type]: (
-      state,
-      { payload }: ReturnType<typeof EXECUTE_SEARCH>
-    ) => {
+    [EXECUTE_SEARCH.type]: (state, { payload }: ReturnType<typeof EXECUTE_SEARCH>) => {
       state.searchTerm = payload.toLowerCase()
     },
     [TOGGLE_FILTER_PANEL.type]: (state) => {
@@ -214,24 +197,16 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
     [TOGGLE_COMPACT.type]: (state) => {
       state.isCompact = !state.isCompact
     },
-    [CHANGE_VIEW.type]: (
-      state,
-      { payload }: ReturnType<typeof CHANGE_VIEW>
-    ) => {
+    [CHANGE_VIEW.type]: (state, { payload }: ReturnType<typeof CHANGE_VIEW>) => {
       state.currentView = payload
       state.columns = payload.columns
     },
-    [ON_FILTER_CHANGED.type]: (
-      state,
-      { payload }: ReturnType<typeof ON_FILTER_CHANGED>
-    ) => {
+    [ON_FILTER_CHANGED.type]: (state, { payload }: ReturnType<typeof ON_FILTER_CHANGED>) => {
       const { column, selectedItems } = payload
       if (_.isEmpty(selectedItems)) {
         delete state.activeFilters[column.fieldName]
       } else {
-        state.activeFilters[column.fieldName] = selectedItems.map(
-          (i) => i.value
-        )
+        state.activeFilters[column.fieldName] = selectedItems.map((i) => i.value)
       }
     },
     [SET_COLUMN_CONTEXT_MENU.type]: (
@@ -241,27 +216,17 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       // Need to cast to any because of a bug in the typings
       state.columnContextMenu = payload as any
     },
-    [SET_GROUP_BY.type]: (
-      state,
-      { payload }: ReturnType<typeof SET_GROUP_BY>
-    ) => {
-      state.groupBy =
-        payload.fieldName === state.groupBy.fieldName ? null : payload
+    [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {
+      state.groupBy = payload.fieldName === state.groupBy.fieldName ? null : payload
     },
     [SET_SORT.type]: (state, { payload }: ReturnType<typeof SET_SORT>) => {
-      const isSortedDescending = Object.keys(payload).includes(
-        'isSortedDescending'
-      )
+      const isSortedDescending = Object.keys(payload).includes('isSortedDescending')
         ? payload.isSortedDescending
         : !payload.column.isSortedDescending
       if (payload.customSort) {
         state.items = state.items.sort((a, b) => {
-          const $a = payload.customSort.order.indexOf(
-            a[payload.column.fieldName]
-          )
-          const $b = payload.customSort.order.indexOf(
-            b[payload.column.fieldName]
-          )
+          const $a = payload.customSort.order.indexOf(a[payload.column.fieldName])
+          const $b = payload.customSort.order.indexOf(b[payload.column.fieldName])
           return isSortedDescending ? $a - $b : $b - $a
         })
       } else {
@@ -290,10 +255,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         return col
       })
     },
-    [SELECTION_CHANGED.type]: (
-      state,
-      { payload }: ReturnType<typeof SELECTION_CHANGED>
-    ) => {
+    [SELECTION_CHANGED.type]: (state, { payload }: ReturnType<typeof SELECTION_CHANGED>) => {
       state.selectedItems = payload.getSelection()
     }
   })

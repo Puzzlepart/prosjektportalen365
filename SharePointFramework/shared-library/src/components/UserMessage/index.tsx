@@ -10,9 +10,7 @@ import { useUserMessage } from './useUserMessage'
  *
  * @category UserMessage
  */
-export const UserMessage: FC<IUserMessageProps> = (
-  props: IUserMessageProps
-) => {
+export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => {
   const { styles } = useUserMessage(props)
   return (
     <div

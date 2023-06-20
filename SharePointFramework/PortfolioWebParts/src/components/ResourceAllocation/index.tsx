@@ -15,15 +15,8 @@ import { useResourceAllocation } from './useResourceAllocation'
 import { FilterPanel } from 'pp365-shared-library/lib/components'
 
 export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
-  const {
-    state,
-    setState,
-    commandBar,
-    filters,
-    onFilterChange,
-    items,
-    groups
-  } = useResourceAllocation(props)
+  const { state, setState, commandBar, filters, onFilterChange, items, groups } =
+    useResourceAllocation(props)
 
   if (!state.isDataLoaded) return null
 
@@ -67,9 +60,7 @@ export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
             canChangeGroup={false}
             sidebarWidth={250}
             itemRenderer={(props) =>
-              itemRenderer(props, (showDetails) =>
-                setState({ ...state, showDetails })
-              )
+              itemRenderer(props, (showDetails) => setState({ ...state, showDetails }))
             }
             groupRenderer={groupRenderer}
             defaultTimeStart={moment().add(...props.defaultTimeStart)}

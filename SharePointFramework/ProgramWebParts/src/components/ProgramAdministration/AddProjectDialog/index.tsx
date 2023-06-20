@@ -20,8 +20,7 @@ import { useAddProjectDialog } from './useAddProjectDialog'
 
 export const AddProjectDialog: FC = () => {
   const context = useContext(ProgramAdministrationContext)
-  const { selection, availableProjects, onSearch, onRenderRow } =
-    useAddProjectDialog()
+  const { selection, availableProjects, onSearch, onRenderRow } = useAddProjectDialog()
 
   return (
     <Dialog
@@ -63,9 +62,7 @@ export const AddProjectDialog: FC = () => {
           text={strings.Add}
           disabled={_.isEmpty(context.state.selectedProjectsToAdd)}
           onClick={async () => {
-            await context.props.dataAdapter.addChildProjects(
-              context.state.selectedProjectsToAdd
-            )
+            await context.props.dataAdapter.addChildProjects(context.state.selectedProjectsToAdd)
             context.dispatch(ADD_CHILD_PROJECTS())
           }}
         />

@@ -9,8 +9,7 @@ import { IColorConfiguratorProps } from './types'
 import { usePropertyFieldColorConfiguration } from './usePropertyFieldColorConfiguration'
 
 export const ColorConfigurator: FC<IColorConfiguratorProps> = (props) => {
-  const { state, dispatch, onSave, onRevertDefault } =
-    usePropertyFieldColorConfiguration(props)
+  const { state, dispatch, onSave, onRevertDefault } = usePropertyFieldColorConfiguration(props)
   return (
     <div className={styles.root}>
       <Label>{props.label}</Label>
@@ -25,12 +24,8 @@ export const ColorConfigurator: FC<IColorConfiguratorProps> = (props) => {
           <ColorConfigElement
             key={index}
             config={config}
-            onChangeColor={(_, color) =>
-              dispatch(CHANGE_CONFIG({ index, color }))
-            }
-            onChangePercentage={(percentage) =>
-              dispatch(CHANGE_CONFIG({ index, percentage }))
-            }
+            onChangeColor={(_, color) => dispatch(CHANGE_CONFIG({ index, color }))}
+            onChangePercentage={(percentage) => dispatch(CHANGE_CONFIG({ index, percentage }))}
             min={get(state, `config[${index - 1}].p`, 0) + 2}
             max={get(state, `config[${index + 1}].p`, 100) - 2}
           />

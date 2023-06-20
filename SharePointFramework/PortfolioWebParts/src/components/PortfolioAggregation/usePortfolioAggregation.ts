@@ -53,12 +53,8 @@ const usePortfolioAggregationDataSources = ({
 async function fetchData({ props, state }: IPortfolioAggregationContext) {
   const columns = await (props.dataAdapter.fetchProjectContentColumns
     ? props.dataAdapter.fetchProjectContentColumns(props.dataSourceCategory)
-    : (Promise.resolve(undefined) as Promise<
-        IPortfolioAggregationProps['columns']
-      >))
-  const selectProperties = [...(columns || []), ...state.columns].map(
-    (col) => col.fieldName
-  )
+    : (Promise.resolve(undefined) as Promise<IPortfolioAggregationProps['columns']>))
+  const selectProperties = [...(columns || []), ...state.columns].map((col) => col.fieldName)
   const [dataSrc, items, projects] = await Promise.all([
     props.dataAdapter.dataSourceService.getByName(state.dataSource),
     props.dataAdapter.fetchItemsWithSource(
@@ -77,9 +73,7 @@ async function fetchData({ props, state }: IPortfolioAggregationContext) {
  *
  * @param context Context for the Portfolio Aggregation component
  */
-const usePortfolioAggregationDataFetch = (
-  context: IPortfolioAggregationContext
-) => {
+const usePortfolioAggregationDataFetch = (context: IPortfolioAggregationContext) => {
   useEffect(() => {
     context.dispatch(START_FETCH())
     if (!context.state.currentView && context.props.dataSourceCategory) return
@@ -113,24 +107,12 @@ const usePortfolioAggregationDataFetch = (
  */
 const usePortfolioAggregationItems = (state: IPortfolioAggregationState) => {
   return useMemo(() => {
-    const filteredItems = filterItems(
-      state.items,
-      state.columns,
-      state.activeFilters
-    )
+    const filteredItems = filterItems(state.items, state.columns, state.activeFilters)
     return {
-      listItems: filteredItems.items.filter((i) =>
-        searchItem(i, state.searchTerm, state.columns)
-      ),
+      listItems: filteredItems.items.filter((i) => searchItem(i, state.searchTerm, state.columns)),
       columns: filteredItems.columns
     }
-  }, [
-    state.columnAdded,
-    state.searchTerm,
-    state.items,
-    state.activeFilters,
-    state.columns
-  ])
+  }, [state.columnAdded, state.searchTerm, state.items, state.activeFilters, state.columns])
 }
 
 /**
@@ -151,10 +133,7 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
     }
   }, [props.dataSourceCategory, props.defaultViewId])
 
-  const context = useMemo<IPortfolioAggregationContext>(
-    () => ({ props, state, dispatch }),
-    [state]
-  )
+  const context = useMemo<IPortfolioAggregationContext>(() => ({ props, state, dispatch }), [state])
 
   usePortfolioAggregationDataSources(context)
   usePortfolioAggregationDataFetch(context)

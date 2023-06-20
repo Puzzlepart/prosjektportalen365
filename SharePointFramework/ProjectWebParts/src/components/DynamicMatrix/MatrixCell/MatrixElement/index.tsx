@@ -15,22 +15,14 @@ export const MatrixElement: FC<IMatrixElementProps> = (props) => {
           <div className={styles.tooltip}>
             <span
               dangerouslySetInnerHTML={{
-                __html: replaceTokens(
-                  context.props?.calloutTemplate,
-                  props.model.item
-                )
+                __html: replaceTokens(context.props?.calloutTemplate, props.model.item)
               }}
             ></span>
           </div>
         )
       }
     >
-      <div
-        className={styles.root}
-        title={props.title}
-        style={props.style}
-        hidden={props.hidden}
-      >
+      <div className={styles.root} title={props.title} style={props.style} hidden={props.hidden}>
         {props.model.id}
       </div>
     </TooltipHost>

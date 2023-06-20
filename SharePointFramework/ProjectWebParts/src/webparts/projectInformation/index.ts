@@ -7,10 +7,7 @@ import {
 import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
 import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect'
 import { PropertyFieldToggleWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldToggleWithCallout'
-import {
-  IProjectInformationProps,
-  ProjectInformation
-} from 'components/ProjectInformation'
+import { IProjectInformationProps, ProjectInformation } from 'components/ProjectInformation'
 import * as strings from 'ProjectWebPartsStrings'
 import React from 'react'
 import { BaseProjectWebPart } from '../@baseProjectWebPart'
@@ -23,8 +20,7 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
   public render(): void {
     this.renderComponent<IProjectInformationProps>(ProjectInformation, {
       onFieldExternalChanged: this._onFieldExternalChanged.bind(this),
-      adminPageLink:
-        this.properties.adminPageLink ?? strings.DefaultAdminPageLink,
+      adminPageLink: this.properties.adminPageLink ?? strings.DefaultAdminPageLink,
       webPartContext: this.context
     })
   }
@@ -142,16 +138,8 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
                   offText: 'Av',
                   calloutWidth: 430,
                   calloutContent: [
-                    React.createElement(
-                      'h2',
-                      {},
-                      strings.UseIdeaProcessingFieldLabel
-                    ),
-                    React.createElement(
-                      'p',
-                      {},
-                      strings.UseIdeaProcessingCalloutText
-                    )
+                    React.createElement('h2', {}, strings.UseIdeaProcessingFieldLabel),
+                    React.createElement('p', {}, strings.UseIdeaProcessingCalloutText)
                   ],
                   checked: this.properties.useIdeaProcessing
                 }),

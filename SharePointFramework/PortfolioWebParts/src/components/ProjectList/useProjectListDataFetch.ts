@@ -26,8 +26,7 @@ export function useProjectListDataFetch(
       props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
     ]).then(([projects, isUserInPortfolioManagerGroup]) => {
       const selectedView =
-        _.find(views, (view) => view.itemKey === props.defaultView) ??
-        _.first(views)
+        _.find(views, (view) => view.itemKey === props.defaultView) ?? _.first(views)
 
       setState({
         projects,

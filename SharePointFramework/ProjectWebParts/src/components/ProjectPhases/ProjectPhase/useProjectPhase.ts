@@ -24,16 +24,11 @@ export function useProjectPhase(props: IProjectPhaseProps) {
     className: styles.phaseSubText,
     title: props.phase.subText,
     dangerouslySetInnerHTML: {
-      __html: truncateString(
-        props.phase.subText ?? '',
-        context.props.subTextTruncateLength ?? 50
-      )
+      __html: truncateString(props.phase.subText ?? '', context.props.subTextTruncateLength ?? 50)
     }
   }
   const onClick = () =>
-    context.dispatch(
-      OPEN_CALLOUT({ phase: props.phase, target: targetRef.current })
-    )
+    context.dispatch(OPEN_CALLOUT({ phase: props.phase, target: targetRef.current }))
   return {
     targetRef,
     onClick,

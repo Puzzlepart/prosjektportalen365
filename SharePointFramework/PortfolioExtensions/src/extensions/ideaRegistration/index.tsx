@@ -50,10 +50,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
       strings.IdeaProcessorsSiteGroup,
       this.context
     )
-    this.context.listView.listViewStateChangedEvent.add(
-      this,
-      this._onListViewStateChanged
-    )
+    this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)
     return Promise.resolve()
   }
 
@@ -73,17 +70,11 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
           this._isIdeaRecommended(row)
             ? Dialog.alert(strings.IdeaAlreadyApproved)
             : this._onSubmit(row, dialog.comment)
-        } else if (
-          dialog.comment &&
-          dialog.selectedChoice === strings.ConsiderationChoice
-        ) {
+        } else if (dialog.comment && dialog.selectedChoice === strings.ConsiderationChoice) {
           this._isIdeaRecommended(row)
             ? Dialog.alert(strings.IdeaAlreadyApproved)
             : this._onSubmitConsideration(row, dialog.comment)
-        } else if (
-          dialog.comment &&
-          dialog.selectedChoice === strings.RejectChoice
-        ) {
+        } else if (dialog.comment && dialog.selectedChoice === strings.RejectChoice) {
           this._isIdeaRecommended(row)
             ? Dialog.alert(strings.IdeaAlreadyApproved)
             : this._onSubmitRejected(row, dialog.comment)
@@ -99,17 +90,13 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
   /**
    * Get the idea configuration from the IdeaConfiguration list
    */
-  private _getIdeaConfiguration = async (): Promise<
-    IdeaConfigurationModel[]
-  > => {
+  private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
     const ideaConfig = await this._sp.web.lists
       .getByTitle(strings.IdeaConfigurationTitle)
       .select(...new SPIdeaConfigurationItem().fields)
       .items()
 
-    return ideaConfig
-      .map((item) => new IdeaConfigurationModel(item))
-      .filter(Boolean)
+    return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
   }
 
   /**
@@ -117,8 +104,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    */
   private _onListViewStateChanged = async (): Promise<void> => {
     Logger.log({
-      message:
-        '(IdeaRegistrationCommand) onListViewStateChanged: ListView state changed',
+      message: '(IdeaRegistrationCommand) onListViewStateChanged: ListView state changed',
       level: LogLevel.Info
     })
 
@@ -162,10 +148,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         GtIdeaRecommendationComment: comment
       })
       .then(() => {
-        Log.info(
-          LOG_SOURCE,
-          `Updated ${this._ideaConfig.registrationList}: Rejected`
-        )
+        Log.info(LOG_SOURCE, `Updated ${this._ideaConfig.registrationList}: Rejected`)
         window.location.reload()
       })
   }
@@ -186,10 +169,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         GtIdeaRecommendationComment: comment
       })
       .then(() => {
-        Log.info(
-          LOG_SOURCE,
-          `Updated ${this._ideaConfig.registrationList}: Consideration`
-        )
+        Log.info(LOG_SOURCE, `Updated ${this._ideaConfig.registrationList}: Consideration`)
         window.location.reload()
       })
   }
@@ -213,10 +193,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         GtIdeaRecommendationComment: comment
       })
       .then(() => {
-        Log.info(
-          LOG_SOURCE,
-          `Updated ${this._ideaConfig.registrationList}: Approved`
-        )
+        Log.info(LOG_SOURCE, `Updated ${this._ideaConfig.registrationList}: Approved`)
       })
       .catch((e) => Log.error(LOG_SOURCE, e))
 
@@ -253,11 +230,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    */
   private async _createSitePage(row: RowAccessor) {
     const title: string = row.getValueByName('Title')
-    const page = await this._sp.web.addClientsidePage(
-      `KUR-${title}`,
-      title,
-      'Article'
-    )
+    const page = await this._sp.web.addClientsidePage(`KUR-${title}`, title, 'Article')
 
     const reporter = row.getValueByName('GtIdeaReporter')[0] || ''
 
@@ -355,8 +328,6 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * @param row Selected row
    */
   private _isIdeaRecommended(row: RowAccessor): boolean {
-    return (
-      row.getValueByName('GtIdeaRecommendation') === RecommendationType.Approved
-    )
+    return row.getValueByName('GtIdeaRecommendation') === RecommendationType.Approved
   }
 }

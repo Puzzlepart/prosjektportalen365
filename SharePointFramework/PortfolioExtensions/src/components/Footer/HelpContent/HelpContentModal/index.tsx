@@ -1,10 +1,4 @@
-import {
-  Modal,
-  Pivot,
-  PivotItem,
-  ActionButton,
-  IModalProps
-} from '@fluentui/react'
+import { Modal, Pivot, PivotItem, ActionButton, IModalProps } from '@fluentui/react'
 import React, { FC, useContext } from 'react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
@@ -32,9 +26,7 @@ export const HelpContentModal: FC<IModalProps> = (props) => {
               style={{ overflow: 'auto', height: 'calc(100vh - 44px)' }}
             >
               <div className={styles.contentItem} title={content.title}>
-                <p
-                  dangerouslySetInnerHTML={{ __html: content.textContent }}
-                ></p>
+                <p dangerouslySetInnerHTML={{ __html: content.textContent }}></p>
                 {content.markdownContent && (
                   <ReactMarkdown
                     linkTarget='_blank'

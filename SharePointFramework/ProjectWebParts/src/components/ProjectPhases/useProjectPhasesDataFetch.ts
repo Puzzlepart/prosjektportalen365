@@ -13,39 +13,31 @@ import { INIT_DATA } from './reducer'
 /**
  * Fetch data for `ProjectPhases`.
  */
-const fetchData: DataFetchFunction<
-  IProjectPhasesProps,
-  IProjectPhasesData
-> = async (props) => {
+const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = async (props) => {
   try {
     if (!SPDataAdapter.isConfigured) {
       SPDataAdapter.configure(props.webPartContext, {
         siteId: props.siteId,
         webUrl: props.webUrl,
-        logLevel:
-          sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }
-    const [phaseFieldCtx, checklistData, welcomePage, properties] =
-      await Promise.all([
-        SPDataAdapter.getTermFieldContext(props.phaseField),
-        SPDataAdapter.project.getChecklistData(strings.PhaseChecklistName),
-        SPDataAdapter.project.getWelcomePage(),
-        SPDataAdapter.project.getPropertiesData()
-      ])
-    const [phases, currentPhaseName, userHasChangePhasePermission] =
-      await Promise.all([
-        SPDataAdapter.project.getPhases(phaseFieldCtx.termSetId, checklistData),
-        SPDataAdapter.project.getCurrentPhaseName(phaseFieldCtx.fieldName),
-        SPDataAdapter.checkProjectAdminPermissions(
-          ProjectAdminPermission.ChangePhase,
-          properties.fieldValues
-        )
-      ])
+    const [phaseFieldCtx, checklistData, welcomePage, properties] = await Promise.all([
+      SPDataAdapter.getTermFieldContext(props.phaseField),
+      SPDataAdapter.project.getChecklistData(strings.PhaseChecklistName),
+      SPDataAdapter.project.getWelcomePage(),
+      SPDataAdapter.project.getPropertiesData()
+    ])
+    const [phases, currentPhaseName, userHasChangePhasePermission] = await Promise.all([
+      SPDataAdapter.project.getPhases(phaseFieldCtx.termSetId, checklistData),
+      SPDataAdapter.project.getCurrentPhaseName(phaseFieldCtx.fieldName),
+      SPDataAdapter.checkProjectAdminPermissions(
+        ProjectAdminPermission.ChangePhase,
+        properties.fieldValues
+      )
+    ])
 
-    const phaseSitePages = props.useDynamicHomepage
-      ? await getPhaseSitePages(phases)
-      : []
+    const phaseSitePages = props.useDynamicHomepage ? await getPhaseSitePages(phases) : []
     const [currentPhase] = phases.filter((p) => p.name === currentPhaseName)
     return {
       currentPhase,

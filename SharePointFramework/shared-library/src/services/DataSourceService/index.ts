@@ -49,10 +49,7 @@ export class DataSourceService {
    * @param category Category
    * @param level Level (optional)
    */
-  public async getByCategory(
-    category: string,
-    level?: string
-  ): Promise<DataSource[]> {
+  public async getByCategory(category: string, level?: string): Promise<DataSource[]> {
     let filter = `GtDataSourceCategory eq '${category}'`
     if (level) {
       filter += ` and GtDataSourceLevel eq '${level}'`

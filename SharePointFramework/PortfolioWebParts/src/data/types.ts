@@ -6,10 +6,7 @@ import {
   SearchResult,
   SortDirection
 } from '@pnp/sp'
-import {
-  IAggregatedListConfiguration,
-  IPortfolioConfiguration
-} from 'interfaces'
+import { IAggregatedListConfiguration, IPortfolioConfiguration } from 'interfaces'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 import {
   DataSource,
@@ -38,16 +35,12 @@ export const DEFAULT_SEARCH_SETTINGS: SearchQuery = {
       }
     }
   ],
-  SortList: [
-    { Property: 'LastModifiedTime', Direction: SortDirection.Descending }
-  ]
+  SortList: [{ Property: 'LastModifiedTime', Direction: SortDirection.Descending }]
 }
 
 export const CONTENT_TYPE_ID_BENEFITS = '0x01004F466123309D46BAB9D5C6DE89A6CF67'
-export const CONTENT_TYPE_ID_MEASUREMENTS =
-  '0x010039EAFDC2A1624C1BA1A444FC8FE85DEC'
-export const CONTENT_TYPE_ID_INDICATORS =
-  '0x010073043EFE3E814A2BBEF96B8457623F95'
+export const CONTENT_TYPE_ID_MEASUREMENTS = '0x010039EAFDC2A1624C1BA1A444FC8FE85DEC'
+export const CONTENT_TYPE_ID_INDICATORS = '0x010073043EFE3E814A2BBEF96B8457623F95'
 export const DEFAULT_GAINS_PROPERTIES = [
   'Path',
   'SPWebURL',
@@ -77,10 +70,7 @@ export const DEFAULT_GAINS_PROPERTIES = [
 export interface IDataAdapter {
   configure(): Promise<IDataAdapter>
   dataSourceService?: DataSourceService
-  fetchDataSources?(
-    dataSourceCategory: string,
-    level?: string
-  ): Promise<DataSource[]>
+  fetchDataSources?(dataSourceCategory: string, level?: string): Promise<DataSource[]>
   fetchChartData?(
     currentView: any,
     configuration: any,
@@ -88,9 +78,7 @@ export interface IDataAdapter {
     siteId: string
   ): Promise<{ charts: any; chartData: any; contentTypes: any }>
   getPortfolioConfig?(): Promise<IPortfolioConfiguration>
-  getAggregatedListConfig?(
-    category: string
-  ): Promise<IAggregatedListConfiguration>
+  getAggregatedListConfig?(category: string): Promise<IAggregatedListConfiguration>
   fetchDataForViewBatch?(
     view: PortfolioOverviewView,
     configuration: IPortfolioConfiguration,
@@ -105,9 +93,7 @@ export interface IDataAdapter {
   fetchTimelineProjectData?(
     timelineConfig: any[]
   ): Promise<{ reports: any[]; configElement: TimelineConfigurationModel }>
-  fetchTimelineContentItems?(
-    timelineConfig: any[]
-  ): Promise<TimelineContentModel[]>
+  fetchTimelineContentItems?(timelineConfig: any[]): Promise<TimelineContentModel[]>
   fetchTimelineAggregatedContent?(
     configItemTitle: string,
     dataSourceName: string,
@@ -115,10 +101,7 @@ export interface IDataAdapter {
   ): Promise<TimelineContentModel[]>
   fetchTimelineConfiguration?(): Promise<TimelineConfigurationModel[]>
   fetchEnrichedProjects?(filter?: string): Promise<ProjectListModel[]>
-  fetchProjects?(
-    configuration?: IAggregatedListConfiguration,
-    dataSource?: string
-  ): Promise<any[]>
+  fetchProjects?(configuration?: IAggregatedListConfiguration, dataSource?: string): Promise<any[]>
   fetchProjectSites(
     rowLimit: number,
     sortProperty: string,
@@ -134,13 +117,8 @@ export interface IDataAdapter {
     selectProperties: string[],
     dataSourceCategory?: string
   ): Promise<any[]>
-  fetchProjectContentColumns?(
-    dataSourceCategory: string
-  ): Promise<IProjectContentColumn[]>
-  updateProjectContentColumn?(
-    column: Record<string, any>,
-    persistRenderAs?: boolean
-  ): Promise<any>
+  fetchProjectContentColumns?(dataSourceCategory: string): Promise<IProjectContentColumn[]>
+  updateProjectContentColumn?(column: Record<string, any>, persistRenderAs?: boolean): Promise<any>
   deleteProjectContentColumn?(property: TypedHash<any>): Promise<any>
   addItemToList?(listName: string, properties: TypedHash<any>): Promise<any[]>
   updateDataSourceItem?(

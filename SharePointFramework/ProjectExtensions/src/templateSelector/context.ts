@@ -28,5 +28,4 @@ export interface ITemplateSelectorContext {
   error?: any
 }
 
-export const TemplateSelectorContext =
-  createContext<ITemplateSelectorContext>(null)
+export const TemplateSelectorContext = createContext<ITemplateSelectorContext>(null)

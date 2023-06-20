@@ -26,10 +26,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   public entityService: SpEntityPortalService
   public sp: SPRest
   public isConfigured: boolean = false
-  public spfxContext:
-    | ApplicationCustomizerContext
-    | ListViewCommandSetContext
-    | WebPartContext
+  public spfxContext: ApplicationCustomizerContext | ListViewCommandSetContext | WebPartContext
   private _storage: PnPClientStore
   private _storageKeys: Record<string, string> = {
     getProjectAdminPermissions: '{0}_project_admin_permissions'
@@ -41,10 +38,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   private _initStorage() {
     this._storage = new PnPClientStorage().session
     this._storageKeys = Object.keys(this._storageKeys).reduce((obj, key) => {
-      obj[key] = format(
-        this._storageKeys[key],
-        this.settings.siteId.replace(/-/g, '')
-      )
+      obj[key] = format(this._storageKeys[key], this.settings.siteId.replace(/-/g, ''))
       return obj
     }, {})
     this._storage.deleteExpired()
@@ -91,9 +85,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
    */
   private async getCurrentUser(user: SPUser) {
     try {
-      const { data: currentUser } = await sp.web.ensureUser(
-        user.loginName ?? user.email
-      )
+      const { data: currentUser } = await sp.web.ensureUser(user.loginName ?? user.email)
       return currentUser
     } catch {
       return null
@@ -124,25 +116,24 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
           const userPermissions = []
           const rolesToCheck = properties.GtProjectAdminRoles
           if (!_.isArray(rolesToCheck) || _.isEmpty(rolesToCheck)) {
-            const currentUserHasManageWebPermisson =
-              await sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
+            const currentUserHasManageWebPermisson = await sp.web.currentUserHasPermissions(
+              PermissionKind.ManageWeb
+            )
             if (currentUserHasManageWebPermisson) return true
           }
           const currentUser = await this.getCurrentUser(pageContext.user)
-          const projectAdminRoles = (
-            await this.portal.getProjectAdminRoles()
-          ).filter((role) => rolesToCheck.indexOf(role.title) !== -1)
+          const projectAdminRoles = (await this.portal.getProjectAdminRoles()).filter(
+            (role) => rolesToCheck.indexOf(role.title) !== -1
+          )
           for (let i = 0; i < projectAdminRoles.length; i++) {
             const role = projectAdminRoles[i]
             switch (role.type) {
               case ProjectAdminRoleType.SiteAdmin:
                 {
-                  const currentUserHasManageWebPermisson =
-                    await sp.web.currentUserHasPermissions(
-                      PermissionKind.ManageWeb
-                    )
-                  if (currentUserHasManageWebPermisson)
-                    userPermissions.push(...role.permissions)
+                  const currentUserHasManageWebPermisson = await sp.web.currentUserHasPermissions(
+                    PermissionKind.ManageWeb
+                  )
+                  if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
                 }
                 break
               case ProjectAdminRoleType.ProjectProperty:

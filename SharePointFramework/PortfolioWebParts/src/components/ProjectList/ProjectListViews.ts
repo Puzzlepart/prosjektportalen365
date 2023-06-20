@@ -40,8 +40,7 @@ export const ProjectListViews: IProjectListView[] = [
     itemIcon: 'ProductVariant',
     searchBoxPlaceholder: strings.ParentProjectsSearchBoxPlaceholderText,
     filter: (project, state) =>
-      project.isParent &&
-      (state.isUserInPortfolioManagerGroup || project.hasUserAccess)
+      project.isParent && (state.isUserInPortfolioManagerGroup || project.hasUserAccess)
   },
   {
     itemKey: 'program_projects',
@@ -49,7 +48,6 @@ export const ProjectListViews: IProjectListView[] = [
     itemIcon: 'ProductList',
     searchBoxPlaceholder: strings.ProgramSearchBoxPlaceholderText,
     filter: (project, state) =>
-      project.isProgram &&
-      (state.isUserInPortfolioManagerGroup || project.hasUserAccess)
+      project.isProgram && (state.isUserInPortfolioManagerGroup || project.hasUserAccess)
   }
 ]

@@ -1,8 +1,4 @@
-import {
-  format,
-  IProgressIndicatorProps,
-  MessageBarType
-} from '@fluentui/react'
+import { format, IProgressIndicatorProps, MessageBarType } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { parseUrlHash, sleep } from 'pp365-shared-library/lib/util'
@@ -42,11 +38,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
    * @param type Message bar type
    * @param durationSec Duration in seconds
    */
-  const addMessage = (
-    text: string,
-    type: MessageBarType,
-    durationSec: number = 5
-  ) => {
+  const addMessage = (text: string, type: MessageBarType, durationSec: number = 5) => {
     return new Promise<void>((resolve) => {
       setState({
         message: {
@@ -69,9 +61,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
    */
   const onSyncProperties = async (force: boolean = false): Promise<void> => {
     if (!stringIsNullOrEmpty(state.data.propertiesListId)) {
-      const lastUpdated = await SPDataAdapter.project.getPropertiesLastUpdated(
-        state.data
-      )
+      const lastUpdated = await SPDataAdapter.project.getPropertiesLastUpdated(state.data)
       if (lastUpdated > 60 && !force) return
     }
     if (props.skipSyncToHub) return
@@ -111,9 +101,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
       SPDataAdapter.clearCache()
       await sleep(5)
       document.location.href =
-        sessionStorage.DEBUG || DEBUG
-          ? document.location.href.split('#')[0]
-          : props.webUrl
+        sessionStorage.DEBUG || DEBUG ? document.location.href.split('#')[0] : props.webUrl
     } catch (error) {
       ListLogger.log({
         message: error.message,
@@ -121,10 +109,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
         functionName: 'onSyncProperties',
         component: ProjectInformation.displayName
       })
-      addMessage(
-        strings.SyncProjectPropertiesErrorText,
-        MessageBarType.severeWarning
-      )
+      addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning)
     } finally {
       setState({ progress: null })
     }
@@ -135,8 +120,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
   useEffect(() => {
     if (state?.data?.fieldValues) {
       const urlHash = parseUrlHash<IProjectInformationUrlHash>(true)
-      if (urlHash.syncproperties === '1')
-        onSyncProperties(urlHash.force === '1')
+      if (urlHash.syncproperties === '1') onSyncProperties(urlHash.force === '1')
     }
   }, [state?.data?.fieldValues])
 

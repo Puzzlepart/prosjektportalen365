@@ -9,11 +9,7 @@ import { ActionType } from './types'
  */
 export const useActions = () => {
   const context = useContext(ProjectInformationContext)
-  if (
-    context.props.hideAllActions ||
-    context.props.displayMode === DisplayMode.Edit
-  )
-    return []
+  if (context.props.hideAllActions || context.props.displayMode === DisplayMode.Edit) return []
   const showAllProjectInformationAction: ActionType = [
     strings.ShowAllProjectInformationText,
     () => {
@@ -77,12 +73,8 @@ export const useActions = () => {
     viewVersionHistoryAction,
     editProjectInformationAction,
     editSiteInformationAction,
-    administerChildrenAction: context.state.isParentProject
-      ? administerChildrenAction
-      : null,
-    transformToParentProject: !context.state.isParentProject
-      ? transformToParentProject
-      : null,
+    administerChildrenAction: context.state.isParentProject ? administerChildrenAction : null,
+    transformToParentProject: !context.state.isParentProject ? transformToParentProject : null,
     syncProjectPropertiesAction
   }
   const actions = Object.keys(actionsMap)

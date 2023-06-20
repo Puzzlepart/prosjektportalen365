@@ -1,8 +1,4 @@
-import {
-  ActionButton,
-  DefaultButton,
-  IButtonProps
-} from '@fluentui/react/lib/Button'
+import { ActionButton, DefaultButton, IButtonProps } from '@fluentui/react/lib/Button'
 import React, { FC, useContext } from 'react'
 import { isEmpty } from 'underscore'
 import { ProjectInformationContext } from '../context'

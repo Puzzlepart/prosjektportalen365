@@ -6,10 +6,7 @@ import { columns } from './columns'
 import { IItemModalProps, IItemModalState } from './types'
 import styles from './ItemModal.module.scss'
 
-export default class ItemModal extends PureComponent<
-  IItemModalProps,
-  IItemModalState
-> {
+export default class ItemModal extends PureComponent<IItemModalProps, IItemModalState> {
   public static defaultProps: Partial<IItemModalProps> = {
     columns
   }

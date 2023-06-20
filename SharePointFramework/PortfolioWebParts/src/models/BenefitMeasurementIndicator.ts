@@ -42,16 +42,10 @@ export class BenefitMeasurementIndicator extends BenefitBase {
    *
    * @param measurements Measurements
    */
-  public setMeasurements(
-    measurements: BenefitMeasurement[]
-  ): BenefitMeasurementIndicator {
-    measurements = measurements.filter(
-      (m) => m.IndicatorId === this.Id && m.SiteId === this.SiteId
-    )
+  public setMeasurements(measurements: BenefitMeasurement[]): BenefitMeasurementIndicator {
+    measurements = measurements.filter((m) => m.IndicatorId === this.Id && m.SiteId === this.SiteId)
     measurements = measurements.map((m) => m.calculcateAchievement(this))
-    measurements = measurements.map((m, i) =>
-      m.setTrendIconProps(measurements[i + 1])
-    )
+    measurements = measurements.map((m, i) => m.setTrendIconProps(measurements[i + 1]))
     this.Measurements = measurements
     return this
   }

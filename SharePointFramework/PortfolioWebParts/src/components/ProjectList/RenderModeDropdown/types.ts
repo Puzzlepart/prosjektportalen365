@@ -18,8 +18,7 @@ export type RenderModeDropdownOption = IDropdownOption<{
   iconProps: IIconProps
 }>
 
-export interface IRenderModeDropdownProps
-  extends Omit<IDropdownProps, 'options' | 'onChange'> {
+export interface IRenderModeDropdownProps extends Omit<IDropdownProps, 'options' | 'onChange'> {
   renderAs: ProjectListRenderMode
   onChange: (renderMode: ProjectListRenderMode) => void
 }

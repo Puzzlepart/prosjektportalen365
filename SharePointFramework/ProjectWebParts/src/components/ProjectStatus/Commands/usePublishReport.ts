@@ -3,11 +3,7 @@ import moment from 'moment'
 import { PortalDataService } from 'pp365-shared-library/lib/services'
 import { useContext } from 'react'
 import { ProjectStatusContext } from '../context'
-import {
-  CLEAR_USER_MESSAGE,
-  REPORT_PUBLISHED,
-  REPORT_PUBLISH_ERROR
-} from '../reducer'
+import { CLEAR_USER_MESSAGE, REPORT_PUBLISHED, REPORT_PUBLISH_ERROR } from '../reducer'
 import { useCaptureReportSnapshot } from './useCaptureReportSnapshot'
 import { MessageBarType } from '@fluentui/react'
 

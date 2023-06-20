@@ -15,9 +15,7 @@ export function itemRenderer(
     <div
       {...htmlProps}
       className={`${styles.timelineItem} rc-item`}
-      onClick={(event) =>
-        onItemClick({ element: event.currentTarget, item: props.item })
-      }
+      onClick={(event) => onItemClick({ element: event.currentTarget, item: props.item })}
     >
       <div
         className={`${styles.itemContent} rc-item-content`}

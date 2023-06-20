@@ -2,12 +2,7 @@ import { format } from '@fluentui/react/lib/Utilities'
 import { flatten } from '@microsoft/sp-lodash-subset'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { PnPClientStorage, dateAdd, stringIsNullOrEmpty } from '@pnp/common'
-import {
-  QueryPropertyValueType,
-  SearchResult,
-  SortDirection,
-  sp
-} from '@pnp/sp'
+import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
 import * as strings from 'ProgramWebPartsStrings'
 import * as cleanDeep from 'clean-deep'
 import MSGraph from 'msgraph-helper'
@@ -30,10 +25,7 @@ import {
   BenefitMeasurement,
   BenefitMeasurementIndicator
 } from 'pp365-portfoliowebparts/lib/models'
-import {
-  ISPDataAdapterBaseConfiguration,
-  SPDataAdapterBase
-} from 'pp365-shared-library/lib/data'
+import { ISPDataAdapterBaseConfiguration, SPDataAdapterBase } from 'pp365-shared-library/lib/data'
 import { getUserPhoto } from 'pp365-shared-library/lib/helpers/getUserPhoto'
 import {
   DataSource,
@@ -43,10 +35,7 @@ import {
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-shared-library/lib/models'
-import {
-  DataSourceService,
-  ProjectDataService
-} from 'pp365-shared-library/lib/services'
+import { DataSourceService, ProjectDataService } from 'pp365-shared-library/lib/services'
 import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS, IFetchDataForViewItemResult } from './types'
 import { IProgramAdministrationProject } from 'components/ProgramAdministration/types'
@@ -92,14 +81,13 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    */
   public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
     // eslint-disable-next-line prefer-const
-    let [columnConfig, columns, views, viewsUrls, columnUrls] =
-      await Promise.all([
-        this.portal.getProjectColumnConfig(),
-        this.portal.getProjectColumns(),
-        this.portal.getPortfolioOverviewViews(),
-        this.portal.getListFormUrls('PORTFOLIO_VIEWS'),
-        this.portal.getListFormUrls('PROJECT_COLUMNS')
-      ])
+    let [columnConfig, columns, views, viewsUrls, columnUrls] = await Promise.all([
+      this.portal.getProjectColumnConfig(),
+      this.portal.getProjectColumns(),
+      this.portal.getPortfolioOverviewViews(),
+      this.portal.getListFormUrls('PORTFOLIO_VIEWS'),
+      this.portal.getListFormUrls('PROJECT_COLUMNS')
+    ])
     columns = columns.map((col) => col.configure(columnConfig))
     const refiners = columns.filter((col) => col.isRefinable)
     views = views.map((view) => view.configure(columns))
@@ -159,9 +147,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     siteId: string[]
   ): Promise<IFetchDataForViewItemResult[]> {
     siteId = this.spfxContext.pageContext.legacyPageContext.departmentId
-    const isCurrentUserInManagerGroup = await this.isUserInGroup(
-      strings.PortfolioManagerGroupName
-    )
+    const isCurrentUserInManagerGroup = await this.isUserInGroup(strings.PortfolioManagerGroupName)
     if (isCurrentUserInManagerGroup) {
       return await this.fetchDataForManagerView(view, configuration, siteId)
     } else {
@@ -193,12 +179,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
         siteIdProperty
       )
       const items = sites.map((site) => {
-        const [project] = projects.filter(
-          (res) => res[siteIdProperty] === site['SiteId']
-        )
-        const [statusReport] = statusReports.filter(
-          (res) => res[siteIdProperty] === site['SiteId']
-        )
+        const [project] = projects.filter((res) => res[siteIdProperty] === site['SiteId'])
+        const [statusReport] = statusReports.filter((res) => res[siteIdProperty] === site['SiteId'])
         return {
           ...statusReport,
           ...project,
@@ -241,9 +223,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
         const [statusReport] = statusReports.filter(
           (res) => res[siteIdProperty] === project[siteIdProperty]
         )
-        const [site] = sites.filter(
-          (res) => res['SiteId'] === project[siteIdProperty]
-        )
+        const [site] = sites.filter((res) => res['SiteId'] === project[siteIdProperty])
         return {
           ...statusReport,
           ...project,
@@ -323,9 +303,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
         const [statusReport] = statusReports.filter(
           (res) => res[siteIdProperty] === project[siteIdProperty]
         )
-        const [site] = sites.filter(
-          (res) => res['SiteId'] === project[siteIdProperty]
-        )
+        const [site] = sites.filter((res) => res['SiteId'] === project[siteIdProperty])
 
         return {
           ...statusReport,
@@ -365,10 +343,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: searchQuery,
-        SelectProperties: [
-          ...configuration.columns.map((f) => f.fieldName),
-          siteIdProperty
-        ]
+        SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
       }),
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
@@ -378,10 +353,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: `${queryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
-        SelectProperties: [
-          ...configuration.columns.map((f) => f.fieldName),
-          siteIdProperty
-        ],
+        SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
       })
     ])
@@ -389,9 +361,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     sites = sites.map((item) => cleanDeep({ ...item }))
     statusReports = statusReports.map((item) => cleanDeep({ ...item }))
     sites = sites.filter(
-      (site) =>
-        projects.filter((res) => res[siteIdProperty] === site['SiteId'])
-          .length === 1
+      (site) => projects.filter((res) => res[siteIdProperty] === site['SiteId']).length === 1
     )
 
     return {
@@ -406,16 +376,10 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    *
    * @param timelineConfig Timeline configuration
    */
-  public async fetchTimelineProjectData(
-    timelineConfig: TimelineConfigurationModel[]
-  ) {
+  public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationModel[]) {
     const searchQuery =
       'ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert'
-    const selectProperties = [
-      'GtSiteIdOWSTEXT',
-      'GtCostsTotalOWSCURR',
-      'GtBudgetTotalOWSCURR'
-    ]
+    const selectProperties = ['GtSiteIdOWSTEXT', 'GtCostsTotalOWSCURR', 'GtBudgetTotalOWSCURR']
 
     const statusReports = await this._fetchItems(
       searchQuery,
@@ -433,10 +397,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       })
       .filter((p) => p)
 
-    const configElement = _.find(
-      timelineConfig,
-      (col) => col.title === strings.ProjectLabel
-    )
+    const configElement = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
 
     return { reports, configElement }
   }
@@ -449,9 +410,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    *
    * @description Used in `ProjectTimeline`
    */
-  public async fetchTimelineContentItems(
-    timelineConfig: TimelineConfigurationModel[]
-  ) {
+  public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
     const [timelineItems] = await Promise.all([
       this.portal.web.lists
         .getByTitle(strings.TimelineContentListName)
@@ -473,8 +432,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
 
     return timelineItems
       .map((item) => {
-        const type =
-          item.GtTimelineTypeLookup && item.GtTimelineTypeLookup.Title
+        const type = item.GtTimelineTypeLookup && item.GtTimelineTypeLookup.Title
         const config = timelineConfig.find((col) => col.title === type)
 
         if (
@@ -486,11 +444,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
                 this?.spfxContext?.pageContext?.site?.id?.toString()
           )
         ) {
-          if (
-            item.GtSiteIdLookup?.Title &&
-            config &&
-            config.showElementPortfolio
-          ) {
+          if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
             return new TimelineContentModel(
               item.GtSiteIdLookup?.GtSiteId,
               item.GtSiteIdLookup?.Title,
@@ -529,9 +483,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       )
       .getAll()
 
-    return timelineConfig
-      .map((item) => new TimelineConfigurationModel(item))
-      .filter((p) => p)
+    return timelineConfig.map((item) => new TimelineConfigurationModel(item)).filter((p) => p)
   }
 
   /**
@@ -562,9 +514,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       )
         .then((deliveries) => {
           return deliveries.filter(
-            (delivery) =>
-              delivery.GtDeliveryStartTimeOWSDATE &&
-              delivery.GtDeliveryEndTimeOWSDATE
+            (delivery) => delivery.GtDeliveryStartTimeOWSDATE && delivery.GtDeliveryEndTimeOWSDATE
           )
         })
         .catch((error) => {
@@ -629,9 +579,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       ]
     })
     return response.PrimarySearchResults.filter(
-      (site) =>
-        this.spfxContext.pageContext.legacyPageContext.hubSiteId !==
-        site['SiteId']
+      (site) => this.spfxContext.pageContext.legacyPageContext.hubSiteId !== site['SiteId']
     )
   }
 
@@ -650,16 +598,9 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     let projects = items
       .map((item) => {
         const [group] = groups.filter((grp) => grp.id === item.GtGroupId)
-        const [owner] = users.filter(
-          (user) => user.Id === item.GtProjectOwnerId
-        )
-        const [manager] = users.filter(
-          (user) => user.Id === item.GtProjectManagerId
-        )
-        const model = new ProjectListModel(
-          group?.displayName ?? item.Title,
-          item
-        )
+        const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
+        const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
+        const model = new ProjectListModel(group?.displayName ?? item.Title, item)
         model.isUserMember = !!group
         if (manager)
           model.manager = {
@@ -779,22 +720,16 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     ])
 
     const benefits = results
-      .filter(
-        (res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_BENEFITS) === 0
-      )
+      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_BENEFITS) === 0)
       .map((res) => new Benefit(res))
 
     const measurements = results
-      .filter(
-        (res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_MEASUREMENTS) === 0
-      )
+      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_MEASUREMENTS) === 0)
       .map((res) => new BenefitMeasurement(res))
       .sort((a, b) => b.Date.getTime() - a.Date.getTime())
 
     const indicactors = results
-      .filter(
-        (res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_INDICATORS) === 0
-      )
+      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_INDICATORS) === 0)
       .map((res) => {
         const indicator = new BenefitMeasurementIndicator(res)
           .setMeasurements(measurements)
@@ -861,8 +796,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       spfxContext: this.spfxContext
     })
     const siteId = this.spfxContext.pageContext.site.id.toString()
-    const programFilter =
-      this.childProjects && this.aggregatedQueryBuilder(siteIdManagedProperty)
+    const programFilter = this.childProjects && this.aggregatedQueryBuilder(siteIdManagedProperty)
     if (includeSelf) programFilter.unshift(`${siteIdManagedProperty}:${siteId}`)
     const promises = []
     programFilter.forEach((element) => {
@@ -872,13 +806,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
           Querytext: '*',
           RowLimit: 500,
           TrimDuplicates: false,
-          SelectProperties: [
-            ...selectProperties,
-            'Path',
-            'Title',
-            'SiteTitle',
-            'SPWebURL'
-          ]
+          SelectProperties: [...selectProperties, 'Path', 'Title', 'SiteTitle', 'SPWebURL']
         })
       )
     })
@@ -902,8 +830,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     const dataSrc = await this.dataSourceService.getByName(name)
     if (!dataSrc) throw new Error(format(strings.DataSourceNotFound, name))
     try {
-      const dataSrcProperties =
-        dataSrc.projectColumns.map((col) => col.fieldName) || []
+      const dataSrcProperties = dataSrc.projectColumns.map((col) => col.fieldName) || []
       if (dataSrc.category.startsWith('Gevinstoversikt')) {
         items = await this.fetchBenefitItemsWithSource(dataSrc, [
           ...selectProperties,
@@ -928,10 +855,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    * @param category Data source category
    * @param level Level for data source
    */
-  public fetchDataSources(
-    category: string,
-    level?: string
-  ): Promise<DataSource[]> {
+  public fetchDataSources(category: string, level?: string): Promise<DataSource[]> {
     try {
       return this.dataSourceService.getByCategory(category, level)
     } catch (error) {
@@ -952,21 +876,14 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       const projectContentColumnsList = this.portal.web.lists.getByTitle(
         strings.ProjectContentColumnsListName
       )
-      const projectContentColumnsListItems =
-        await projectContentColumnsList.items.get()
+      const projectContentColumnsListItems = await projectContentColumnsList.items.get()
       const filteredItems = projectContentColumnsListItems
         .filter(
-          (item) =>
-            item.GtDataSourceCategory === dataSourceCategory ||
-            !item.GtDataSourceCategory
+          (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
         )
         .map((item) => {
           const projectColumn = new ProjectColumn(item)
-          const renderAs = (
-            projectColumn.dataType
-              ? projectColumn.dataType.toLowerCase()
-              : 'text'
-          )
+          const renderAs = (projectColumn.dataType ? projectColumn.dataType.toLowerCase() : 'text')
             .split(' ')
             .join('_')
           projectColumn['data'] = { renderAs }
@@ -974,9 +891,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
         })
       return filteredItems
     } catch (error) {
-      throw new Error(
-        format(strings.DataSourceCategoryError, dataSourceCategory)
-      )
+      throw new Error(format(strings.DataSourceCategoryError, dataSourceCategory))
     }
   }
 
@@ -985,9 +900,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    *
    * @param properties Properties to update
    */
-  public async updateProjectInHub(
-    properties: Record<string, any>
-  ): Promise<void> {
+  public async updateProjectInHub(properties: Record<string, any>): Promise<void> {
     try {
       const siteId = this.spfxContext.pageContext.site.id.toString()
       const list = this.portal.web.lists.getByTitle(strings.ProjectsListName)
@@ -1042,27 +955,25 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     return new PnPClientStorage().local.getOrPut(
       `HubSiteProjects_${HubSiteId}`,
       async () => {
-        const [
-          { PrimarySearchResults: sts_sites },
-          { PrimarySearchResults: items }
-        ] = await Promise.all([
-          sp.search({
-            Querytext: `DepartmentId:{${HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
-            RowLimit: 500,
-            StartRow: 0,
-            ClientType: 'ContentSearchRegular',
-            SelectProperties: ['SPWebURL', 'Title', 'SiteId'],
-            TrimDuplicates: false
-          }),
-          sp.search({
-            Querytext: `DepartmentId:{${HubSiteId}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
-            RowLimit: 500,
-            StartRow: 0,
-            ClientType: 'ContentSearchRegular',
-            SelectProperties: ['GtSiteIdOWSTEXT', 'Title'],
-            TrimDuplicates: false
-          })
-        ])
+        const [{ PrimarySearchResults: sts_sites }, { PrimarySearchResults: items }] =
+          await Promise.all([
+            sp.search({
+              Querytext: `DepartmentId:{${HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
+              RowLimit: 500,
+              StartRow: 0,
+              ClientType: 'ContentSearchRegular',
+              SelectProperties: ['SPWebURL', 'Title', 'SiteId'],
+              TrimDuplicates: false
+            }),
+            sp.search({
+              Querytext: `DepartmentId:{${HubSiteId}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
+              RowLimit: 500,
+              StartRow: 0,
+              ClientType: 'ContentSearchRegular',
+              SelectProperties: ['GtSiteIdOWSTEXT', 'Title'],
+              TrimDuplicates: false
+            })
+          ])
         return items
           .filter(
             (item) =>
@@ -1070,9 +981,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
               item['GtSiteIdOWSTEXT'] !== '00000000-0000-0000-0000-000000000000'
           )
           .map<IProgramAdministrationProject>((item) => {
-            const site = sts_sites.find(
-              (site) => site['SiteId'] === item['GtSiteIdOWSTEXT']
-            )
+            const site = sts_sites.find((site) => site['SiteId'] === item['GtSiteIdOWSTEXT'])
             return {
               SiteId: item['GtSiteIdOWSTEXT'],
               Title: site?.Title ?? item['Title'],
@@ -1116,12 +1025,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       this.getHubSiteProjects(),
       this.getChildProjects()
     ])
-    const childProjectsSiteIds = childProjects.map(
-      (p: Record<string, any>) => p.SiteId
-    )
-    return availableProjects.filter(
-      (p) => childProjectsSiteIds.indexOf(p.SiteId) !== -1
-    )
+    const childProjectsSiteIds = childProjects.map((p: Record<string, any>) => p.SiteId)
+    return availableProjects.filter((p) => childProjectsSiteIds.indexOf(p.SiteId) !== -1)
   }
 
   /**
@@ -1139,10 +1044,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     const updateProperties = {
       GtChildProjects: JSON.stringify(updatedProjects)
     }
-    await sp.web.lists
-      .getByTitle('Prosjektegenskaper')
-      .items.getById(1)
-      .update(updateProperties)
+    await sp.web.lists.getByTitle('Prosjektegenskaper').items.getById(1).update(updateProperties)
     await this.updateProjectInHub(updateProperties)
   }
 
@@ -1158,19 +1060,14 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       .getByTitle('Prosjektegenskaper')
       .items.select('GtChildProjects')
       .get()
-    const projects: Array<Record<string, string>> = JSON.parse(
-      currentData.GtChildProjects
-    )
+    const projects: Array<Record<string, string>> = JSON.parse(currentData.GtChildProjects)
     const updatedProjects = projects.filter(
       (p) => !projectToRemove.some((el) => el.SiteId === p.SiteId)
     )
     const updateProperties = {
       GtChildProjects: JSON.stringify(updatedProjects)
     }
-    await sp.web.lists
-      .getByTitle('Prosjektegenskaper')
-      .items.getById(1)
-      .update(updateProperties)
+    await sp.web.lists.getByTitle('Prosjektegenskaper').items.getById(1).update(updateProperties)
     await this.updateProjectInHub(updateProperties)
     return updatedProjects
   }

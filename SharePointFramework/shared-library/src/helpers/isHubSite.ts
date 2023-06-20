@@ -5,8 +5,6 @@ import { PageContext } from '@microsoft/sp-page-context'
  *
  * @param pageContext Page context
  */
-export function isHubSite({
-  legacyPageContext: { siteId, hubSiteId }
-}: PageContext) {
+export function isHubSite({ legacyPageContext: { siteId, hubSiteId } }: PageContext) {
   return siteId.indexOf(hubSiteId) !== -1
 }

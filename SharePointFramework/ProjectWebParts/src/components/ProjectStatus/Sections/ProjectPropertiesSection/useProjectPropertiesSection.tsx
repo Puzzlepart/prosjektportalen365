@@ -8,9 +8,6 @@ export function useProjectPropertiesSection() {
       ...context.state.data.properties.fieldValues,
       ...context.state.selectedReport.fieldValues
     },
-    fields: [
-      ...context.state.data.properties.fields,
-      ...context.state.data.reportFields
-    ]
+    fields: [...context.state.data.properties.fields, ...context.state.data.reportFields]
   } as const
 }

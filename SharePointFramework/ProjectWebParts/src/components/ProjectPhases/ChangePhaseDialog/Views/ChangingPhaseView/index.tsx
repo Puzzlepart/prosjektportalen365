@@ -8,10 +8,7 @@ export const ChangingPhaseView: FC = () => {
   return (
     <ProgressIndicator
       label={strings.PleaseWaitText}
-      description={format(
-        strings.ChangingPhaseDescription,
-        context.state.confirmPhase.name
-      )}
+      description={format(strings.ChangingPhaseDescription, context.state.confirmPhase.name)}
     />
   )
 }

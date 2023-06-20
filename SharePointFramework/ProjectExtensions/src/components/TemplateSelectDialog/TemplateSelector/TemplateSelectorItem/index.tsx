@@ -8,11 +8,7 @@ export const TemplateSelectorItem: FC<ITemplateSelectorItemProps> = ({
   isHighlighted
 }) => {
   return (
-    <div
-      className={[styles.root, isHighlighted && styles.isHighlighted]
-        .filter(Boolean)
-        .join(' ')}
-    >
+    <div className={[styles.root, isHighlighted && styles.isHighlighted].filter(Boolean).join(' ')}>
       <div className={styles.icon}>
         <Icon {...template.iconProps} />
       </div>

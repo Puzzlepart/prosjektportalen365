@@ -1,8 +1,4 @@
-import {
-  IDetailsHeaderProps,
-  ISearchBoxProps,
-  SelectAllVisibility
-} from '@fluentui/react'
+import { IDetailsHeaderProps, ISearchBoxProps, SelectAllVisibility } from '@fluentui/react'
 
 export interface IListHeaderSearchProps {
   search?: ISearchBoxProps

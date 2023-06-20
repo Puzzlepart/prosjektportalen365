@@ -1,10 +1,7 @@
 import { format } from '@fluentui/react'
 import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
-import {
-  TimelineConfigurationModel,
-  TimelineContentModel
-} from 'pp365-shared-library/lib/models'
+import { TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-library/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { first } from 'underscore'
 import { IProjectTimelineProps } from '../types'
@@ -26,10 +23,7 @@ export async function fetchProjectData(
       .filter(`GtSiteId eq '${props.siteId}'`)
       .getAll()
 
-    const config = _.find(
-      timelineConfig,
-      (col) => col.title === strings.ProjectLabel
-    )
+    const config = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
     return new TimelineContentModel(
       props.siteId,
       props.webTitle,
@@ -40,12 +34,7 @@ export async function fetchProjectData(
     ).usingConfig(config)
   } catch (error) {
     throw new Error(
-      format(
-        strings.ProjectTimelineErrorFetchText,
-        props.siteId,
-        props.webTitle,
-        error
-      )
+      format(strings.ProjectTimelineErrorFetchText, props.siteId, props.webTitle, error)
     )
   }
 }

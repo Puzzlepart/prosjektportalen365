@@ -48,9 +48,7 @@ export class DataSource {
     this.projectRefiners = columns.filter(
       (col) => item.GtProjectContentRefinersId.indexOf(col.id) !== -1
     )
-    this.projectGroupBy = columns.find(
-      (col) => col.id === item.GtProjectContentGroupById
-    )
+    this.projectGroupBy = columns.find((col) => col.id === item.GtProjectContentGroupById)
     this.odataQuery = item.GtODataQuery
   }
 }

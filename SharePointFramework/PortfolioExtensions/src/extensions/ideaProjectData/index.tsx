@@ -44,10 +44,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
       strings.IdeaProcessorsSiteGroup,
       this.context
     )
-    this.context.listView.listViewStateChangedEvent.add(
-      this,
-      this._onListViewStateChanged
-    )
+    this.context.listView.listViewStateChangedEvent.add(this, this._onListViewStateChanged)
     return Promise.resolve()
   }
 
@@ -74,17 +71,13 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
   /**
    * Get the idea configuration from the IdeaConfiguration list
    */
-  private _getIdeaConfiguration = async (): Promise<
-    IdeaConfigurationModel[]
-  > => {
+  private _getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
     const ideaConfig = await this._sp.web.lists
       .getByTitle(strings.IdeaConfigurationTitle)
       .select(...new SPIdeaConfigurationItem().fields)
       .items()
 
-    return ideaConfig
-      .map((item) => new IdeaConfigurationModel(item))
-      .filter(Boolean)
+    return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
   }
 
   /**
@@ -92,8 +85,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
    */
   private _onListViewStateChanged = async (): Promise<void> => {
     Logger.log({
-      message:
-        '(IdeaProjectDataCommand) onListViewStateChanged: ListView state changed',
+      message: '(IdeaProjectDataCommand) onListViewStateChanged: ListView state changed',
       level: LogLevel.Info
     })
 

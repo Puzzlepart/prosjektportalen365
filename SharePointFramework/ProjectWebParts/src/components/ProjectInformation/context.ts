@@ -8,5 +8,4 @@ export interface IProjectInformationContext {
   onSyncProperties: (force?: boolean) => void
 }
 
-export const ProjectInformationContext =
-  React.createContext<IProjectInformationContext>(null)
+export const ProjectInformationContext = React.createContext<IProjectInformationContext>(null)

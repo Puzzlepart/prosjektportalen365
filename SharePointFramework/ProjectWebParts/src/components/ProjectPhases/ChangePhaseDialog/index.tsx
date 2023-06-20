@@ -27,9 +27,7 @@ export const ChangePhaseDialog: FC = () => {
    *
    * @param properties Properties
    */
-  const nextChecklistItem = async (
-    properties: Partial<Record<string, any>>
-  ) => {
+  const nextChecklistItem = async (properties: Partial<Record<string, any>>) => {
     const currentItem = [...state.checklistItems][state.currentIdx]
     await SPDataAdapter.project.updateChecklistItem(
       strings.PhaseChecklistName,
@@ -40,9 +38,7 @@ export const ChangePhaseDialog: FC = () => {
   }
 
   return (
-    <ChangePhaseDialogContext.Provider
-      value={{ state, dispatch, nextChecklistItem }}
-    >
+    <ChangePhaseDialogContext.Provider value={{ state, dispatch, nextChecklistItem }}>
       <Dialog
         isOpen={true}
         containerClassName={styles.root}

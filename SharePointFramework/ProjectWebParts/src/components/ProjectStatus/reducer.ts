@@ -40,16 +40,12 @@ export const REPORT_DELETED = createAction('REPORT_DELETED')
 /**
  * `REPORT_DELETE_ERROR`: Dispatched by `useDeleteReport` when a report fails to delete.
  */
-export const REPORT_DELETE_ERROR = createAction<{ error: any }>(
-  'REPORT_DELETE_ERROR'
-)
+export const REPORT_DELETE_ERROR = createAction<{ error: any }>('REPORT_DELETE_ERROR')
 
 /**
  * `SELECT_REPORT`: Dispatched by `useSelectReport` when a report is selected.
  */
-export const SELECT_REPORT = createAction<{ report: StatusReport }>(
-  'SELECT_REPORT'
-)
+export const SELECT_REPORT = createAction<{ report: StatusReport }>('SELECT_REPORT')
 
 /**
  * `PERSIST_SECTION_DATA`: Dispatched by `usePersistSectionData` when section data is persisted.
@@ -69,19 +65,14 @@ export const initialState: IProjectStatusState = {
   selectedReport: new StatusReport({}),
   data: {
     reports: [],
-    sections: Array.apply(null, Array(6)).map(
-      () => new SectionModel({ ContentTypeId: '' })
-    ),
+    sections: Array.apply(null, Array(6)).map(() => new SectionModel({ ContentTypeId: '' })),
     columnConfig: []
   },
   persistedSectionData: {}
 }
 
 const createProjectStatusReducer = createReducer(initialState, {
-  [INIT_DATA.type]: (
-    state: IProjectStatusState,
-    { payload }: ReturnType<typeof INIT_DATA>
-  ) => {
+  [INIT_DATA.type]: (state: IProjectStatusState, { payload }: ReturnType<typeof INIT_DATA>) => {
     state.sourceUrl = payload.sourceUrl
     state.data = payload.data
     state.selectedReport = payload.initialSelectedReport
@@ -112,9 +103,7 @@ const createProjectStatusReducer = createReducer(initialState, {
     state.userMessage = payload.message
   },
   [REPORT_DELETED.type]: (state: IProjectStatusState) => {
-    const reports = state.data.reports.filter(
-      (r) => r.id !== state.selectedReport.id
-    )
+    const reports = state.data.reports.filter((r) => r.id !== state.selectedReport.id)
     state.data = { ...state.data, reports }
     state.selectedReport = _.first(reports)
     state.sourceUrl = decodeURIComponent(getUrlParam('Source') ?? '')

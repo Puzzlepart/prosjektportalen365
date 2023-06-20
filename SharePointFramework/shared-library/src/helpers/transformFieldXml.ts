@@ -11,13 +11,7 @@ import { TypedHash } from '@pnp/common'
 export function transformFieldXml(
   schemaXml: string,
   attributes: TypedHash<string> = {},
-  removeAttributes: string[] = [
-    'Version',
-    'SourceID',
-    'Required',
-    'WebId',
-    'List'
-  ]
+  removeAttributes: string[] = ['Version', 'SourceID', 'Required', 'WebId', 'List']
 ): string {
   const { documentElement } = new DOMParser().parseFromString(schemaXml)
   for (let i = 0; i < removeAttributes.length; i++) {

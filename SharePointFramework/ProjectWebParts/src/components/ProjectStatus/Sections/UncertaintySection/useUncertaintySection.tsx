@@ -28,23 +28,17 @@ export function useUncertaintySection() {
 
   useEffect(() => {
     const persistedData =
-      selectedReport.persistedSectionData &&
-      selectedReport.persistedSectionData[section.id]
+      selectedReport.persistedSectionData && selectedReport.persistedSectionData[section.id]
     if (persistedData) {
       setState({ data: persistedData, isDataLoaded: true })
     } else {
       fetchListData().then((_data) => {
         const contentTypeIndex = parseInt(
-          _.first(_data?.items)?.ContentType?.Id?.StringValue?.substring(
-            38,
-            40
-          ) ?? '-1'
+          _.first(_data?.items)?.ContentType?.Id?.StringValue?.substring(38, 40) ?? '-1'
         )
         const data: IUncertaintySectionData = {
           ..._data,
-          matrixElements: _data?.items?.map(
-            (i) => new UncertaintyElementModel(i)
-          ),
+          matrixElements: _data?.items?.map((i) => new UncertaintyElementModel(i)),
           contentTypeIndex
         }
         context.dispatch(

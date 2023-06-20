@@ -23,11 +23,7 @@ export class SetupProjectInformation extends BaseTask {
       await this._addEntryToHub(params)
       return params
     } catch (error) {
-      throw new BaseTaskError(
-        this.taskName,
-        strings.SetupProjectInformationErrorMessage,
-        error
-      )
+      throw new BaseTaskError(this.taskName, strings.SetupProjectInformationErrorMessage, error)
     }
   }
 
@@ -91,9 +87,7 @@ export class SetupProjectInformation extends BaseTask {
    *
    * @param params Params
    */
-  private _createPropertyItem(
-    params: IBaseTaskParams
-  ): Record<string, string | boolean | number> {
+  private _createPropertyItem(params: IBaseTaskParams): Record<string, string | boolean | number> {
     return {
       Title: params.context.pageContext.web.title,
       TemplateParameters: JSON.stringify(params.templateSchema.Parameters),
@@ -127,8 +121,7 @@ export class SetupProjectInformation extends BaseTask {
         GtProjectTemplate: this.data.selectedTemplate.text
       }
       if (params.templateSchema.Parameters.ProjectContentTypeId) {
-        properties.ContentTypeId =
-          params.templateSchema.Parameters.ProjectContentTypeId
+        properties.ContentTypeId = params.templateSchema.Parameters.ProjectContentTypeId
       }
       await params.entityService.createNewEntity(
         params.context.pageContext.legacyPageContext.groupId,

@@ -10,16 +10,10 @@ export const ProjectCardContent: FC = () => {
   return (
     <div className={styles.root}>
       <div className={styles.phase}>{phase}</div>
-      <div
-        className={styles.personaContainer}
-        hidden={!context.showProjectOwner}
-      >
+      <div className={styles.personaContainer} hidden={!context.showProjectOwner}>
         <Persona {...owner} />
       </div>
-      <div
-        className={styles.personaContainer}
-        hidden={!context.showProjectManager}
-      >
+      <div className={styles.personaContainer} hidden={!context.showProjectManager}>
         <Persona {...manager} />
       </div>
     </div>

@@ -1,16 +1,10 @@
-import {
-  ICommandBarProps,
-  ContextualMenuItemType,
-  IContextualMenuItem
-} from '@fluentui/react'
+import { ICommandBarProps, ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
 import * as strings from 'SharedLibraryStrings'
 import { useState } from 'react'
 import { ICommandsProps } from './types'
 
 export function useCommands(props: ICommandsProps) {
-  const [selectedGroupBy, setSelectedGroupBy] = useState<string>(
-    props.defaultGroupBy
-  )
+  const [selectedGroupBy, setSelectedGroupBy] = useState<string>(props.defaultGroupBy)
 
   const commandBarProps: ICommandBarProps = {
     items: [],

@@ -6,12 +6,9 @@ import { IRiskMatrixProps } from './types'
 import { useRiskMatrix } from './useRiskMatrix'
 
 export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
-  const { configuration, error, getElementsForCell, setShowPostAction } =
-    useRiskMatrix(props)
+  const { configuration, error, getElementsForCell, setShowPostAction } = useRiskMatrix(props)
   if (!!error) {
-    return (
-      <MessageBar messageBarType={MessageBarType.error}>{error}</MessageBar>
-    )
+    return <MessageBar messageBarType={MessageBarType.error}>{error}</MessageBar>
   }
   return (
     <>

@@ -29,11 +29,7 @@ export class SitePermissions extends BaseTask {
     onProgress: OnProgressCallbackFunction
   ): Promise<IBaseTaskParams> {
     try {
-      onProgress(
-        strings.SitePermissionsText,
-        strings.SitePermissionsSubText,
-        'Permissions'
-      )
+      onProgress(strings.SitePermissionsText, strings.SitePermissionsSubText, 'Permissions')
       const [permConfig, roleDefinitions, groups] = await Promise.all([
         this._getPermissionConfiguration(),
         this._getRoleDefinitions(params.web),
@@ -53,18 +49,12 @@ export class SitePermissions extends BaseTask {
           })
           await params.web.roleAssignments.add(data.Id, roleDefId)
           for (let j = 0; j < users.length; j++) {
-            this.logInformation(
-              `Adding user ${users[j]} to group ${groupName}...`
-            )
+            this.logInformation(`Adding user ${users[j]} to group ${groupName}...`)
             try {
               await group.users.add(users[j])
-              this.logInformation(
-                `User ${users[j]} successfully added to group ${groupName}.`
-              )
+              this.logInformation(`User ${users[j]} successfully added to group ${groupName}.`)
             } catch (error) {
-              this.logError(
-                `Failed to add user ${users[j]} to group ${groupName}.`
-              )
+              this.logError(`Failed to add user ${users[j]} to group ${groupName}.`)
             }
           }
         }
@@ -79,12 +69,8 @@ export class SitePermissions extends BaseTask {
   /**
    * Get configurations for the selected template from list
    */
-  private async _getPermissionConfiguration(): Promise<
-    IPermissionConfiguration[]
-  > {
-    const list = SPDataAdapter.portal.web.lists.getByTitle(
-      strings.PermissionConfigurationList
-    )
+  private async _getPermissionConfiguration(): Promise<IPermissionConfiguration[]> {
+    const list = SPDataAdapter.portal.web.lists.getByTitle(strings.PermissionConfigurationList)
     const query: CamlQuery = {
       ViewXml: `<View>
     <Query>
@@ -116,10 +102,7 @@ export class SitePermissions extends BaseTask {
    */
   private async _getSiteGroups() {
     return (
-      await SPDataAdapter.portal.web.siteGroups
-        .select('Title', 'Users')
-        .expand('Users')
-        .get()
+      await SPDataAdapter.portal.web.siteGroups.select('Title', 'Users').expand('Users').get()
     ).reduce(
       (grps, { Title, Users }) => ({
         ...grps,

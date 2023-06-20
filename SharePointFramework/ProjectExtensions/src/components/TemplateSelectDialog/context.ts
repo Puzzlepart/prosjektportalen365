@@ -8,5 +8,4 @@ export interface ITemplateSelectDialogContext {
   dispatch: React.Dispatch<AnyAction>
 }
 
-export const TemplateSelectDialogContext =
-  createContext<ITemplateSelectDialogContext>(null)
+export const TemplateSelectDialogContext = createContext<ITemplateSelectDialogContext>(null)

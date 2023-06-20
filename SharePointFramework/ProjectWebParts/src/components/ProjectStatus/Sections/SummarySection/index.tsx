@@ -33,9 +33,7 @@ export const SummarySection: FC<ISummarySectionProps> = (props) => {
               props.iconsOnly ? styles.iconsOnly : styles.halfWidth
             ])}
           >
-            <StatusElement
-              {...pick(props, 'iconSize', 'truncateComment', 'iconsOnly')}
-            />
+            <StatusElement {...pick(props, 'iconSize', 'truncateComment', 'iconsOnly')} />
           </div>
         </SectionContext.Provider>
       ) : null

@@ -1,9 +1,6 @@
 import { AnyAction } from '@reduxjs/toolkit'
 import { createContext } from 'react'
-import {
-  IProgramAdministrationProps,
-  IProgramAdministrationState
-} from './types'
+import { IProgramAdministrationProps, IProgramAdministrationState } from './types'
 
 export interface IProgramAdministrationContext {
   props: IProgramAdministrationProps
@@ -11,5 +8,4 @@ export interface IProgramAdministrationContext {
   dispatch: React.Dispatch<AnyAction>
 }
 
-export const ProgramAdministrationContext =
-  createContext<IProgramAdministrationContext>(null)
+export const ProgramAdministrationContext = createContext<IProgramAdministrationContext>(null)

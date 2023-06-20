@@ -25,24 +25,15 @@ export const InstallVersionTooltipContent: FC = () => {
       <h3>{strings.LastInstallHeaderText}</h3>
       <div>
         <b>{strings.InstallStartTimeLabel}</b>:{' '}
-        {latestEntry.installStartTime.toLocaleDateString(
-          'no',
-          dateTimeFormatOptions
-        )}
+        {latestEntry.installStartTime.toLocaleDateString('no', dateTimeFormatOptions)}
       </div>
       <div>
         <b>{strings.InstallEndTimeLabel}</b>:{' '}
-        {latestEntry.installEndTime.toLocaleDateString(
-          'no',
-          dateTimeFormatOptions
-        )}
+        {latestEntry.installEndTime.toLocaleDateString('no', dateTimeFormatOptions)}
       </div>
       <div>
         <b>{strings.InstallDurationLabel}</b>:{' '}
-        {format(
-          strings.InstallDurationValueTemplate,
-          latestEntry.installDuration
-        )}
+        {format(strings.InstallDurationValueTemplate, latestEntry.installDuration)}
       </div>
       <div>
         <b>{strings.InstallVersionLabel}</b>: {latestEntry.fullInstallVersion}

@@ -13,13 +13,9 @@ export function useSections() {
     sections = sections
       .filter(
         (sec) =>
-          !stringIsNullOrEmpty(
-            context.state.selectedReport?.getStatusValue(sec.fieldName)?.value
-          )
+          !stringIsNullOrEmpty(context.state.selectedReport?.getStatusValue(sec.fieldName)?.value)
       )
-      .filter(
-        (sec) => sec.showAsSection || sec.type === SectionType.SummarySection
-      )
+      .filter((sec) => sec.showAsSection || sec.type === SectionType.SummarySection)
   }
   return { sections } as const
 }

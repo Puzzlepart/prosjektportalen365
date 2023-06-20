@@ -8,5 +8,4 @@ export interface IPortfolioAggregationContext {
   dispatch: Dispatch<AnyAction>
 }
 
-export const PortfolioAggregationContext =
-  createContext<IPortfolioAggregationContext>(null)
+export const PortfolioAggregationContext = createContext<IPortfolioAggregationContext>(null)

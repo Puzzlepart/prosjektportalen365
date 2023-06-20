@@ -12,10 +12,7 @@ import * as strings from 'PortfolioWebPartsStrings'
  * @component PortfolioInsights
  * @extends Component
  */
-export class PortfolioInsights extends Component<
-  IPortfolioInsightsProps,
-  IPortfolioInsightsState
-> {
+export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortfolioInsightsState> {
   public static defaultProps: Partial<IPortfolioInsightsProps> = {}
 
   /**
@@ -32,13 +29,12 @@ export class PortfolioInsights extends Component<
     try {
       const configuration = await this.props.dataAdapter.getPortfolioConfig()
       const currentView = configuration.views[0]
-      const { charts, chartData, contentTypes } =
-        await this.props.dataAdapter.fetchChartData(
-          currentView,
-          configuration,
-          this.props.chartConfigurationListName,
-          this.props.pageContext.site.id.toString()
-        )
+      const { charts, chartData, contentTypes } = await this.props.dataAdapter.fetchChartData(
+        currentView,
+        configuration,
+        this.props.chartConfigurationListName,
+        this.props.pageContext.site.id.toString()
+      )
       this.setState({
         charts,
         contentTypes,
@@ -80,18 +76,14 @@ export class PortfolioInsights extends Component<
     if (this.state.error) {
       return (
         <div className={styles.inner}>
-          <MessageBar messageBarType={MessageBarType.error}>
-            {this.state.error}
-          </MessageBar>
+          <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
         </div>
       )
     }
     if (this.state.chartData.isEmpty()) {
       return (
         <div className={styles.inner}>
-          <MessageBar messageBarType={MessageBarType.info}>
-            {strings.NoProjectsFound}
-          </MessageBar>
+          <MessageBar messageBarType={MessageBarType.info}>{strings.NoProjectsFound}</MessageBar>
         </div>
       )
     }
@@ -115,9 +107,7 @@ export class PortfolioInsights extends Component<
       this.state.configuration,
       this.props.pageContext.site.id.toString()
     )
-    const chartData = new ChartData(
-      items.map((item) => new ChartDataItem(item.Title, item))
-    )
+    const chartData = new ChartData(items.map((item) => new ChartDataItem(item.Title, item)))
     this.setState({ currentView: view, chartData })
   }
 }

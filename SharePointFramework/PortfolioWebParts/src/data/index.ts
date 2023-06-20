@@ -11,12 +11,7 @@ import {
 } from '@pnp/sp'
 import { SearchQueryInit } from '@pnp/sp/src/search'
 import * as cleanDeep from 'clean-deep'
-import {
-  IGraphGroup,
-  IPortfolioConfiguration,
-  ISPProjectItem,
-  ISPUser
-} from 'interfaces'
+import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
 import { IAggregatedListConfiguration } from 'interfaces/IAggregatedListConfiguration'
 import { capitalize } from 'lodash'
 import msGraph from 'msgraph-helper'
@@ -120,9 +115,9 @@ export class DataAdapter implements IDataAdapter {
         const chart = new ChartConfiguration(item, fields)
         return chart
       })
-      const items = (
-        await this.fetchDataForView(view, configuration, siteId)
-      ).map((i) => new ChartDataItem(i.Title, i))
+      const items = (await this.fetchDataForView(view, configuration, siteId)).map(
+        (i) => new ChartDataItem(i.Title, i)
+      )
       const chartData = new ChartData(items)
 
       return {
@@ -149,26 +144,16 @@ export class DataAdapter implements IDataAdapter {
    */
   public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
     // eslint-disable-next-line prefer-const
-    const [
-      columnConfig,
-      columns,
-      views,
-      programs,
-      viewsUrls,
-      columnUrls,
-      userCanAddViews
-    ] = await Promise.all([
-      this._portal.getProjectColumnConfig(),
-      this._portal.getProjectColumns(),
-      this._portal.getPortfolioOverviewViews(),
-      this._portal.getPrograms(ProgramItem),
-      this._portal.getListFormUrls('PORTFOLIO_VIEWS'),
-      this._portal.getListFormUrls('PROJECT_COLUMNS'),
-      this._portal.currentUserHasPermissionsToList(
-        'PORTFOLIO_VIEWS',
-        PermissionKind.AddListItems
-      )
-    ])
+    const [columnConfig, columns, views, programs, viewsUrls, columnUrls, userCanAddViews] =
+      await Promise.all([
+        this._portal.getProjectColumnConfig(),
+        this._portal.getProjectColumns(),
+        this._portal.getPortfolioOverviewViews(),
+        this._portal.getPrograms(ProgramItem),
+        this._portal.getListFormUrls('PORTFOLIO_VIEWS'),
+        this._portal.getListFormUrls('PROJECT_COLUMNS'),
+        this._portal.currentUserHasPermissionsToList('PORTFOLIO_VIEWS', PermissionKind.AddListItems)
+      ])
     const configuredColumns = columns.map((col) => col.configure(columnConfig))
     const refiners = columns.filter((col) => col.isRefinable)
     const configuredViews = views.map((view) => view.configure(columns))
@@ -241,9 +226,7 @@ export class DataAdapter implements IDataAdapter {
     configuration: IPortfolioConfiguration,
     siteId: string
   ): Promise<IFetchDataForViewItemResult[]> {
-    const isCurrentUserInManagerGroup = await this.isUserInGroup(
-      strings.PortfolioManagerGroupName
-    )
+    const isCurrentUserInManagerGroup = await this.isUserInGroup(strings.PortfolioManagerGroupName)
     if (isCurrentUserInManagerGroup) {
       return await this.fetchDataForManagerView(view, configuration, siteId)
     } else {
@@ -273,12 +256,8 @@ export class DataAdapter implements IDataAdapter {
         siteIdProperty
       )
       const items = sites.map((site) => {
-        const [project] = projects.filter(
-          (res) => res[siteIdProperty] === site['SiteId']
-        )
-        const [statusReport] = statusReports.filter(
-          (res) => res[siteIdProperty] === site['SiteId']
-        )
+        const [project] = projects.filter((res) => res[siteIdProperty] === site['SiteId'])
+        const [statusReport] = statusReports.filter((res) => res[siteIdProperty] === site['SiteId'])
         return {
           ...statusReport,
           ...project,
@@ -320,9 +299,7 @@ export class DataAdapter implements IDataAdapter {
         const [statusReport] = statusReports.filter(
           (res) => res[siteIdProperty] === project[siteIdProperty]
         )
-        const [site] = sites.filter(
-          (res) => res['SiteId'] === project[siteIdProperty]
-        )
+        const [site] = sites.filter((res) => res['SiteId'] === project[siteIdProperty])
         return {
           ...statusReport,
           ...project,
@@ -344,10 +321,7 @@ export class DataAdapter implements IDataAdapter {
    * @param view View configuration
    * @param selectProperties Select properties
    */
-  private async _fetchItemsForView(
-    view: PortfolioOverviewView,
-    selectProperties: string[] = []
-  ) {
+  private async _fetchItemsForView(view: PortfolioOverviewView, selectProperties: string[] = []) {
     if (_.isArray(view.searchQueries)) {
       const result = await Promise.all(
         view.searchQueries.map((query) =>
@@ -383,37 +357,29 @@ export class DataAdapter implements IDataAdapter {
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ) {
-    let [
-      projects,
-      { PrimarySearchResults: sites },
-      { PrimarySearchResults: statusReports }
-    ] = await Promise.all([
-      this._fetchItemsForView(view, [
-        ...configuration.columns.map((f) => f.fieldName),
-        siteIdProperty
-      ]),
-      sp.search({
-        ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
-        SelectProperties: ['Path', 'Title', 'SiteId']
-      }),
-      sp.search({
-        ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
-        SelectProperties: [
+    let [projects, { PrimarySearchResults: sites }, { PrimarySearchResults: statusReports }] =
+      await Promise.all([
+        this._fetchItemsForView(view, [
           ...configuration.columns.map((f) => f.fieldName),
           siteIdProperty
-        ],
-        Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
-      })
-    ])
+        ]),
+        sp.search({
+          ...DEFAULT_SEARCH_SETTINGS,
+          QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
+          SelectProperties: ['Path', 'Title', 'SiteId']
+        }),
+        sp.search({
+          ...DEFAULT_SEARCH_SETTINGS,
+          QueryTemplate: `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+          SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
+          Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
+        })
+      ])
     projects = projects.map((item) => cleanDeep({ ...item }))
     sites = sites.map((item) => cleanDeep({ ...item }))
     statusReports = statusReports.map((item) => cleanDeep({ ...item }))
     sites = sites.filter(
-      (site) =>
-        projects.filter((res) => res[siteIdProperty] === site['SiteId'])
-          .length === 1
+      (site) => projects.filter((res) => res[siteIdProperty] === site['SiteId']).length === 1
     )
 
     return {
@@ -428,9 +394,7 @@ export class DataAdapter implements IDataAdapter {
    *
    * @param timelineConfig Timeline configuration
    */
-  public async fetchTimelineProjectData(
-    timelineConfig: TimelineConfigurationModel[]
-  ) {
+  public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationModel[]) {
     try {
       const [{ PrimarySearchResults: statusReports }] = await Promise.all([
         sp.search({
@@ -445,10 +409,7 @@ export class DataAdapter implements IDataAdapter {
         })
       ])
 
-      const configElement = _.find(
-        timelineConfig,
-        (col) => col.title === strings.ProjectLabel
-      )
+      const configElement = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
 
       const reports = statusReports
         .map((report) => {
@@ -472,9 +433,7 @@ export class DataAdapter implements IDataAdapter {
    *
    * @param timelineConfig Timeline configuration
    */
-  public async fetchTimelineContentItems(
-    timelineConfig: TimelineConfigurationModel[]
-  ) {
+  public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
     const timelineItems = await sp.web.lists
       .getByTitle(strings.TimelineContentListName)
       .items.select(
@@ -524,9 +483,7 @@ export class DataAdapter implements IDataAdapter {
       .items.select(...new SPTimelineConfigurationItem().fields)
       .getAll()
 
-    return timelineConfig
-      .map((item) => new TimelineConfigurationModel(item))
-      .filter(Boolean)
+    return timelineConfig.map((item) => new TimelineConfigurationModel(item)).filter(Boolean)
   }
 
   /**
@@ -560,9 +517,7 @@ export class DataAdapter implements IDataAdapter {
             ]
           )
           return deliveries.filter(
-            (delivery) =>
-              delivery.GtDeliveryStartTimeOWSDATE &&
-              delivery.GtDeliveryEndTimeOWSDATE
+            (delivery) => delivery.GtDeliveryStartTimeOWSDATE && delivery.GtDeliveryEndTimeOWSDATE
           ) as any[]
         } catch (error) {
           throw error
@@ -620,8 +575,7 @@ export class DataAdapter implements IDataAdapter {
       ]
     })
     return response.PrimarySearchResults.filter(
-      (site) =>
-        this.context.pageContext.legacyPageContext.hubSiteId !== site['SiteId']
+      (site) => this.context.pageContext.legacyPageContext.hubSiteId !== site['SiteId']
     )
   }
 
@@ -641,22 +595,12 @@ export class DataAdapter implements IDataAdapter {
   ): ProjectListModel[] {
     const projects = items
       .map((item) => {
-        const [owner] = users.filter(
-          (user) => user.Id === item.GtProjectOwnerId
-        )
-        const [manager] = users.filter(
-          (user) => user.Id === item.GtProjectManagerId
-        )
+        const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
+        const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
         const group = _.find(groups, (grp) => grp.id === item.GtGroupId)
-        const model = new ProjectListModel(
-          group?.displayName ?? item.Title,
-          item
-        )
+        const model = new ProjectListModel(group?.displayName ?? item.Title, item)
         model.isUserMember = !!group
-        model.hasUserAccess = _.any(
-          sites,
-          (site) => site['SiteId'] === item.GtSiteId
-        )
+        model.hasUserAccess = _.any(sites, (site) => site['SiteId'] === item.GtSiteId)
         if (manager)
           model.manager = {
             text: manager.Title,
@@ -713,10 +657,7 @@ export class DataAdapter implements IDataAdapter {
             .get<ISPProjectItem[]>(),
           this.fetchMemberGroups(),
           sp.web.siteUsers.select('Id', 'Title', 'Email').get<ISPUser[]>(),
-          this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, [
-            'Title',
-            'SiteId'
-          ])
+          this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId'])
         ])
       },
       dateAdd(new Date(), 'minute', 30)
@@ -756,9 +697,7 @@ export class DataAdapter implements IDataAdapter {
     configuration?: IAggregatedListConfiguration,
     dataSource?: string
   ): Promise<any[]> {
-    const odataQuery = (configuration?.views || []).find(
-      (v) => v.title === dataSource
-    )?.odataQuery
+    const odataQuery = (configuration?.views || []).find((v) => v.title === dataSource)?.odataQuery
     let projects: any[]
     if (odataQuery && !dataSource.includes('(Prosjektnivå)')) {
       projects = await sp.web.lists
@@ -804,13 +743,7 @@ export class DataAdapter implements IDataAdapter {
       Querytext: '*',
       RowLimit: batchSize,
       TrimDuplicates: false,
-      SelectProperties: [
-        ...selectProperties,
-        'Path',
-        'SPWebURL',
-        'SiteTitle',
-        'UniqueID'
-      ]
+      SelectProperties: [...selectProperties, 'Path', 'SPWebURL', 'SiteTitle', 'UniqueID']
     }
     const { PrimarySearchResults, TotalRows } = await sp.search(query)
     const results = [...PrimarySearchResults]
@@ -839,22 +772,16 @@ export class DataAdapter implements IDataAdapter {
     ])
 
     const benefits = results
-      .filter(
-        (res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_BENEFITS) === 0
-      )
+      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_BENEFITS) === 0)
       .map((res) => new Benefit(res))
 
     const measurements = results
-      .filter(
-        (res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_MEASUREMENTS) === 0
-      )
+      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_MEASUREMENTS) === 0)
       .map((res) => new BenefitMeasurement(res))
       .sort((a, b) => b.Date.getTime() - a.Date.getTime())
 
     const indicactors = results
-      .filter(
-        (res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_INDICATORS) === 0
-      )
+      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_INDICATORS) === 0)
       .map((res) => {
         const indicator = new BenefitMeasurementIndicator(res)
           .setMeasurements(measurements)
@@ -925,8 +852,7 @@ export class DataAdapter implements IDataAdapter {
       if (!dataSrc) {
         throw new Error(format(strings.DataSourceNotFound, dataSourceName))
       }
-      const dataSrcProperties =
-        dataSrc.projectColumns.map((col) => col.fieldName) || []
+      const dataSrcProperties = dataSrc.projectColumns.map((col) => col.fieldName) || []
       if (dataSrc.category.startsWith('Gevinstoversikt')) {
         items = await this.fetchBenefitItemsWithSource(dataSrc, [
           ...selectProperties,
@@ -953,15 +879,9 @@ export class DataAdapter implements IDataAdapter {
    * @param category Data source category
    * @param level Level for data source
    */
-  public async fetchDataSources(
-    category: string,
-    level?: string
-  ): Promise<DataSource[]> {
+  public async fetchDataSources(category: string, level?: string): Promise<DataSource[]> {
     try {
-      const dataSources = await this.dataSourceService.getByCategory(
-        category,
-        level
-      )
+      const dataSources = await this.dataSourceService.getByCategory(category, level)
       return dataSources
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, category))
@@ -981,26 +901,19 @@ export class DataAdapter implements IDataAdapter {
       const projectContentColumnsList = this._portal.web.lists.getByTitle(
         strings.ProjectContentColumnsListName
       )
-      const projectContentColumnsListItems =
-        await projectContentColumnsList.items.get()
+      const projectContentColumnsListItems = await projectContentColumnsList.items.get()
       const filteredItems = projectContentColumnsListItems
         .filter(
-          (item) =>
-            item.GtDataSourceCategory === dataSourceCategory ||
-            !item.GtDataSourceCategory
+          (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
         )
         .map((item) => {
           const col = new ProjectColumn(item)
-          const renderAs = (col.dataType ? col.dataType.toLowerCase() : 'text')
-            .split(' ')
-            .join('_')
+          const renderAs = (col.dataType ? col.dataType.toLowerCase() : 'text').split(' ').join('_')
           return col.setData({ renderAs })
         })
       return filteredItems
     } catch (error) {
-      throw new Error(
-        format(strings.DataSourceCategoryError, dataSourceCategory)
-      )
+      throw new Error(format(strings.DataSourceCategoryError, dataSourceCategory))
     }
   }
 
@@ -1015,29 +928,21 @@ export class DataAdapter implements IDataAdapter {
     persistRenderAs = false
   ): Promise<any> {
     try {
-      const list = sp.web.lists.getByTitle(
-        strings.ProjectContentColumnsListName
-      )
+      const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
       const items = await list.items.get()
       const item = items.find((i) => i.GtManagedProperty === column.fieldName)
 
       if (!item) {
-        throw new Error(
-          format(strings.ProjectContentColumnItemNotFound, column.fieldName)
-        )
+        throw new Error(format(strings.ProjectContentColumnItemNotFound, column.fieldName))
       }
 
       const properties: Record<string, any> = {
         GtColMinWidth: column.minWidth
       }
       if (persistRenderAs) {
-        properties.GtFieldDataType = capitalize(column.data.renderAs)
-          .split('_')
-          .join(' ')
+        properties.GtFieldDataType = capitalize(column.data.renderAs).split('_').join(' ')
       }
-      const itemUpdateResult = await list.items
-        .getById(item.Id)
-        .update(properties)
+      const itemUpdateResult = await list.items.getById(item.Id).update(properties)
       return itemUpdateResult
     } catch (error) {
       throw new Error(error)
@@ -1049,20 +954,14 @@ export class DataAdapter implements IDataAdapter {
    *
    * @param column Column to delete
    */
-  public async deleteProjectContentColumn(
-    column: Record<string, any>
-  ): Promise<any> {
+  public async deleteProjectContentColumn(column: Record<string, any>): Promise<any> {
     try {
-      const list = sp.web.lists.getByTitle(
-        strings.ProjectContentColumnsListName
-      )
+      const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
       const items = await list.items.get()
       const item = items.find((i) => i.GtManagedProperty === column.fieldName)
 
       if (!item) {
-        throw new Error(
-          format(strings.ProjectContentColumnItemNotFound, column.fieldName)
-        )
+        throw new Error(format(strings.ProjectContentColumnItemNotFound, column.fieldName))
       }
 
       const itemDeleteResult = list.items.getById(item.Id).delete()
@@ -1078,10 +977,7 @@ export class DataAdapter implements IDataAdapter {
    * @param listName List name
    * @param properties Properties
    */
-  public async addItemToList(
-    listName: string,
-    properties: Record<string, any>
-  ): Promise<any> {
+  public async addItemToList(listName: string, properties: Record<string, any>): Promise<any> {
     try {
       const list = sp.web.lists.getByTitle(listName)
       const itemAddResult = await list.items.add(properties)
@@ -1113,24 +1009,17 @@ export class DataAdapter implements IDataAdapter {
 
       if (item.GtProjectContentColumnsId && !shouldReplace) {
         properties.GtProjectContentColumnsId = {
-          results: [
-            ...item.GtProjectContentColumnsId,
-            properties.GtProjectContentColumnsId
-          ]
+          results: [...item.GtProjectContentColumnsId, properties.GtProjectContentColumnsId]
         }
 
-        const itemUpdateResult = await list.items
-          .getById(item.Id)
-          .update(properties)
+        const itemUpdateResult = await list.items.getById(item.Id).update(properties)
         return itemUpdateResult
       } else {
         properties.GtProjectContentColumnsId = {
           results: properties.GtProjectContentColumnsId
         }
 
-        const itemUpdateResult = await list.items
-          .getById(item.Id)
-          .update(properties)
+        const itemUpdateResult = await list.items.getById(item.Id).update(properties)
         return itemUpdateResult
       }
     } catch (error) {

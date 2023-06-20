@@ -1,7 +1,4 @@
-import {
-  IPropertyPaneConfiguration,
-  PropertyPaneTextField
-} from '@microsoft/sp-property-pane'
+import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
 import { ProjectTimeline } from 'pp365-shared-library/lib/components/ProjectTimeline'
 import strings from 'ProgramWebPartsStrings'
 import React from 'react'

@@ -58,9 +58,7 @@ export function useColumnFormPanel() {
         props.dataAdapter
           .updateProjectContentColumn(column, persistRenderAs)
           .then(() => {
-            dispatch(
-              ADD_COLUMN({ column: { ...column, key: column.fieldName } })
-            )
+            dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
           })
           .catch((error) => (state.error = error))
       )
@@ -86,9 +84,7 @@ export function useColumnFormPanel() {
             props.dataAdapter
               .updateDataSourceItem(updateItem, state.dataSource)
               .then(() => {
-                dispatch(
-                  ADD_COLUMN({ column: { ...column, key: column.fieldName } })
-                )
+                dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
               })
               .catch((error) => (state.error = error))
           })

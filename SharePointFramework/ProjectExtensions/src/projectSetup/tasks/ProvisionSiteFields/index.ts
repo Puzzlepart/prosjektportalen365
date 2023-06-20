@@ -36,19 +36,14 @@ export class ProvisionSiteFields extends BaseTask {
           )
           .select(...Object.keys(new SPField()))
           .get<SPField[]>()
-        this.logInformation(
-          `Retrieved ${siteFields.length} site fields from hub`
-        )
+        this.logInformation(`Retrieved ${siteFields.length} site fields from hub`)
         for (let i = 0; i < siteFields.length; i++) {
           const siteField = siteFields[i]
           if (
-            existingSiteFields.filter(
-              (exf) => exf.InternalName === siteField.InternalName
-            ).length > 0
+            existingSiteFields.filter((exf) => exf.InternalName === siteField.InternalName).length >
+            0
           ) {
-            this.logInformation(
-              `Site field ${siteField.InternalName} already exists in site`
-            )
+            this.logInformation(`Site field ${siteField.InternalName} already exists in site`)
             continue
           }
           onProgress(
@@ -70,11 +65,7 @@ export class ProvisionSiteFields extends BaseTask {
       return params
     } catch (error) {
       this.logError('Failed to provision site fields to site')
-      throw new BaseTaskError(
-        this.taskName,
-        strings.ProvisionSiteFieldsErrorMessage,
-        ''
-      )
+      throw new BaseTaskError(this.taskName, strings.ProvisionSiteFieldsErrorMessage, '')
     }
   }
 }

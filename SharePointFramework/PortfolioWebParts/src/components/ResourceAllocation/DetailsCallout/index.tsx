@@ -28,24 +28,19 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
         <b>{strings.RoleLabel}:</b> <span>{item.data.role}</span>
       </p>
       <p>
-        <b>{strings.AllocationPercetageLabel}:</b>{' '}
-        <span>{item.data.allocation}%</span>
+        <b>{strings.AllocationPercetageLabel}:</b> <span>{item.data.allocation}%</span>
       </p>
       <p>
-        <b>{strings.StartDateLabel}:</b>{' '}
-        <span>{formatDate(item.props.GtStartDateOWSDATE)}</span>
+        <b>{strings.StartDateLabel}:</b> <span>{formatDate(item.props.GtStartDateOWSDATE)}</span>
       </p>
       <p>
-        <b>{strings.EndDateLabel}:</b>{' '}
-        <span>{formatDate(item.props.GtEndDateOWSDATE)}</span>
+        <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.props.GtEndDateOWSDATE)}</span>
       </p>
       <p hidden={!item.props.GtAllocationStatusOWSCHCS}>
-        <b>{strings.AllocationStatusLabel}:</b>{' '}
-        <span>{item.props.GtAllocationStatusOWSCHCS}</span>
+        <b>{strings.AllocationStatusLabel}:</b> <span>{item.props.GtAllocationStatusOWSCHCS}</span>
       </p>
       <p hidden={!item.props.GtAllocationCommentOWSMTXT}>
-        <b>{strings.CommentLabel}:</b>{' '}
-        <span>{item.props.GtAllocationCommentOWSMTXT}</span>
+        <b>{strings.CommentLabel}:</b> <span>{item.props.GtAllocationCommentOWSMTXT}</span>
       </p>
     </Callout>
   )

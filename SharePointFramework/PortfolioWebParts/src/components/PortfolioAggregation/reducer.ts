@@ -66,23 +66,17 @@ export const TOGGLE_SHOW_HIDE_COLUMN_PANEL = createAction<{
 /**
  * `TOGGLE_FILTER_PANEL`: Toggling the filter panel.
  */
-export const TOGGLE_FILTER_PANEL = createAction<{ isOpen: boolean }>(
-  'TOGGLE_FILTER_PANEL'
-)
+export const TOGGLE_FILTER_PANEL = createAction<{ isOpen: boolean }>('TOGGLE_FILTER_PANEL')
 
 /**
  * `TOGGLE_COMPACT`: Toggling the compact mode.
  */
-export const TOGGLE_COMPACT = createAction<{ isCompact: boolean }>(
-  'TOGGLE_COMPACT'
-)
+export const TOGGLE_COMPACT = createAction<{ isCompact: boolean }>('TOGGLE_COMPACT')
 
 /**
  * `ADD_COLUMN`: Add column.
  */
-export const ADD_COLUMN = createAction<{ column: IProjectContentColumn }>(
-  'ADD_COLUMN'
-)
+export const ADD_COLUMN = createAction<{ column: IProjectContentColumn }>('ADD_COLUMN')
 
 /**
  * `DELETE_COLUMN`: Delete column.
@@ -92,9 +86,7 @@ export const DELETE_COLUMN = createAction('DELETE_COLUMN')
 /**
  * `SHOW_HIDE_COLUMNS`: Show/hide columns.
  */
-export const SHOW_HIDE_COLUMNS = createAction<{ columns: any[] }>(
-  'SHOW_HIDE_COLUMNS'
-)
+export const SHOW_HIDE_COLUMNS = createAction<{ columns: any[] }>('SHOW_HIDE_COLUMNS')
 
 /**
  * `COLUMN_HEADER_CONTEXT_MENU`: Column header context menu.
@@ -107,9 +99,7 @@ export const COLUMN_HEADER_CONTEXT_MENU = createAction<{
 /**
  * `SET_GROUP_BY`: Set group by.
  */
-export const SET_GROUP_BY = createAction<{ column: IProjectContentColumn }>(
-  'SET_GROUP_BY'
-)
+export const SET_GROUP_BY = createAction<{ column: IProjectContentColumn }>('SET_GROUP_BY')
 
 /**
  * `SET_COLLAPSED`: Set collapsed.
@@ -119,9 +109,7 @@ export const SET_COLLAPSED = createAction<{ group: IGroup }>('SET_COLLAPSED')
 /**
  * `SET_ALL_COLLAPSED`: Set all collapsed.
  */
-export const SET_ALL_COLLAPSED = createAction<{ isAllCollapsed: boolean }>(
-  'SET_ALL_COLLAPSED'
-)
+export const SET_ALL_COLLAPSED = createAction<{ isAllCollapsed: boolean }>('SET_ALL_COLLAPSED')
 
 /**
  * `SET_SORT`: Set sort.
@@ -147,9 +135,7 @@ export const SET_CURRENT_VIEW = createAction('SET_CURRENT_VIEW')
 /**
  * `SET_DATA_SOURCE`: Set data source.
  */
-export const SET_DATA_SOURCE = createAction<{ dataSource: DataSource }>(
-  'SET_DATA_SOURCE'
-)
+export const SET_DATA_SOURCE = createAction<{ dataSource: DataSource }>('SET_DATA_SOURCE')
 
 /**
  * `START_FETCH`: Start fetching data from the data source.
@@ -177,9 +163,7 @@ export const ON_FILTER_CHANGE = createAction<{
 /**
  * `DATA_FETCH_ERROR`: Error fetching data from the data source.
  */
-export const DATA_FETCH_ERROR = createAction<{ error: Error }>(
-  'DATA_FETCH_ERROR'
-)
+export const DATA_FETCH_ERROR = createAction<{ error: Error }>('DATA_FETCH_ERROR')
 
 /**
  * Persist columns in web part properties
@@ -187,10 +171,7 @@ export const DATA_FETCH_ERROR = createAction<{ error: Error }>(
  * @param props - Props
  * @param columns - State
  */
-const persistColumns = (
-  props: IPortfolioAggregationProps,
-  columns: IProjectContentColumn[]
-) => {
+const persistColumns = (props: IPortfolioAggregationProps, columns: IProjectContentColumn[]) => {
   props.onUpdateProperty(
     'columns',
     columns.map((col) => omit(col, 'calculatedWidth', 'currentWidth'))
@@ -202,9 +183,7 @@ const persistColumns = (
  *
  * @param props Props for `<PortfolioAggregation />` component
  */
-export const initState = (
-  props: IPortfolioAggregationProps
-): IPortfolioAggregationState => ({
+export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregationState => ({
   loading: true,
   isCompact: false,
   searchTerm: '',
@@ -245,21 +224,14 @@ export const initState = (
  */
 const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
   createReducer(initState(props), {
-    [DATA_FETCHED.type]: (
-      state,
-      { payload }: ReturnType<typeof DATA_FETCHED>
-    ) => {
+    [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
       if (payload.items) {
-        let items = props.postTransform
-          ? props.postTransform(payload.items)
-          : payload.items
+        let items = props.postTransform ? props.postTransform(payload.items) : payload.items
         items = sortArray(
           [...items],
           [state.sortBy?.fieldName ? state.sortBy.fieldName : 'SiteTitle'],
           {
-            reverse: state.sortBy?.isSortedDescending
-              ? state.sortBy.isSortedDescending
-              : false
+            reverse: state.sortBy?.isSortedDescending ? state.sortBy.isSortedDescending : false
           }
         )
         if (payload.projects) {
@@ -278,11 +250,7 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
           const mergedColumns = state.columns.map((col) => {
             const payCol = payload.columns.find((c) => c.key === col.key)
             if (payCol) {
-              const renderAs = (
-                col.data.renderAs ??
-                payCol.dataType ??
-                'text'
-              ).toLowerCase()
+              const renderAs = (col.data.renderAs ?? payCol.dataType ?? 'text').toLowerCase()
               return {
                 ...col,
                 id: payCol.id,
@@ -298,11 +266,9 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
             return !mergedColumns.find((c) => c.key === col.key)
           })
 
-          const filteredColumns = [...mergedColumns, ...newColumns].filter(
-            (col) => {
-              return payload.columns.find((c) => c.fieldName === col.fieldName)
-            }
-          )
+          const filteredColumns = [...mergedColumns, ...newColumns].filter((col) => {
+            return payload.columns.find((c) => c.fieldName === col.fieldName)
+          })
 
           if (mergedColumns.length >= 1) state.columns = filteredColumns
           else state.columns = sortArray(payload.columns, 'sortOrder')
@@ -325,16 +291,10 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
     ) => {
       state.showHideColumnPanel = { isOpen: payload.isOpen }
     },
-    [TOGGLE_FILTER_PANEL.type]: (
-      state,
-      { payload }: ReturnType<typeof TOGGLE_FILTER_PANEL>
-    ) => {
+    [TOGGLE_FILTER_PANEL.type]: (state, { payload }: ReturnType<typeof TOGGLE_FILTER_PANEL>) => {
       state.showFilterPanel = payload.isOpen
     },
-    [TOGGLE_COMPACT.type]: (
-      state,
-      { payload }: ReturnType<typeof TOGGLE_COMPACT>
-    ) => {
+    [TOGGLE_COMPACT.type]: (state, { payload }: ReturnType<typeof TOGGLE_COMPACT>) => {
       state.isCompact = payload.isCompact
     },
     [ADD_COLUMN.type]: (state, { payload }: ReturnType<typeof ADD_COLUMN>) => {
@@ -355,10 +315,7 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
       state.columnDeleted = new Date().getTime()
       persistColumns(props, current(state).columns)
     },
-    [SHOW_HIDE_COLUMNS.type]: (
-      state,
-      { payload }: ReturnType<typeof SHOW_HIDE_COLUMNS>
-    ) => {
+    [SHOW_HIDE_COLUMNS.type]: (state, { payload }: ReturnType<typeof SHOW_HIDE_COLUMNS>) => {
       payload
       state.showHideColumnPanel = { isOpen: false }
       state.columnShowHide = new Date().getTime()
@@ -375,28 +332,19 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
           }
         : null
     },
-    [SET_ALL_COLLAPSED.type]: (
-      state,
-      { payload }: ReturnType<typeof SET_ALL_COLLAPSED>
-    ) => {
+    [SET_ALL_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_ALL_COLLAPSED>) => {
       state.groups = state.groups.map((g) => {
         return { ...g, isCollapsed: payload.isAllCollapsed }
       })
     },
-    [SET_COLLAPSED.type]: (
-      state,
-      { payload }: ReturnType<typeof SET_COLLAPSED>
-    ) => {
+    [SET_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_COLLAPSED>) => {
       const { key, isCollapsed } = payload.group
       state.groups = state.groups.map((g) => {
         if (g.key === key) return { ...g, isCollapsed: !isCollapsed }
         return g
       })
     },
-    [SET_GROUP_BY.type]: (
-      state,
-      { payload }: ReturnType<typeof SET_GROUP_BY>
-    ) => {
+    [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {
       const { column } = payload
       if (column && column.fieldName !== state.groupBy?.fieldName) {
         state.items = sortArray([...state.items], [column.fieldName])
@@ -427,9 +375,7 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
           [...state.items],
           [state.sortBy?.fieldName ? state.sortBy.fieldName : 'SiteTitle'],
           {
-            reverse: state.sortBy?.isSortedDescending
-              ? state.sortBy.isSortedDescending
-              : false
+            reverse: state.sortBy?.isSortedDescending ? state.sortBy.isSortedDescending : false
           }
         )
       }
@@ -452,26 +398,17 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
         return col
       })
     },
-    [MOVE_COLUMN.type]: (
-      state,
-      { payload }: ReturnType<typeof MOVE_COLUMN>
-    ) => {
+    [MOVE_COLUMN.type]: (state, { payload }: ReturnType<typeof MOVE_COLUMN>) => {
       const index = indexOf(
         state.columns.map((c) => c.fieldName),
         payload.column.fieldName
       )
-      state.columns = arrayMove(
-        current(state).columns,
-        index,
-        index + payload.move
-      )
+      state.columns = arrayMove(current(state).columns, index, index + payload.move)
       persistColumns(props, current(state).columns)
     },
     [SET_CURRENT_VIEW.type]: (state) => {
       const hashState = parseUrlHash<IPortfolioAggregationHashState>()
-      const viewIdUrlParam = new URLSearchParams(document.location.href).get(
-        'viewId'
-      )
+      const viewIdUrlParam = new URLSearchParams(document.location.href).get('viewId')
       const { views } = props.configuration
       let currentView = null
 
@@ -483,8 +420,7 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
         currentView = _.find(
           views,
           (v: DataSource) =>
-            v.title === props.dataSource ||
-            v.id.toString() === props.defaultViewId?.toString()
+            v.title === props.dataSource || v.id.toString() === props.defaultViewId?.toString()
         )
       } else {
         currentView = _.find(views, (v) => v.isDefault)
@@ -507,10 +443,7 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
       state.dataSource = currentView.title
       state.activeFilters = {}
     },
-    [SET_DATA_SOURCE.type]: (
-      state,
-      { payload }: ReturnType<typeof SET_DATA_SOURCE>
-    ) => {
+    [SET_DATA_SOURCE.type]: (state, { payload }: ReturnType<typeof SET_DATA_SOURCE>) => {
       const obj: IPortfolioAggregationHashState = {}
       if (state.currentView) obj.viewId = payload.dataSource.id.toString()
       if (state.groupBy) obj.groupBy = state.groupBy.fieldName
@@ -525,10 +458,7 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
     [SEARCH.type]: (state, { payload }: ReturnType<typeof SEARCH>) => {
       state.searchTerm = payload.searchTerm
     },
-    [GET_FILTERS.type]: (
-      state,
-      { payload }: ReturnType<typeof GET_FILTERS>
-    ) => {
+    [GET_FILTERS.type]: (state, { payload }: ReturnType<typeof GET_FILTERS>) => {
       const payloadFilters = payload.filters.map((column) => {
         const uniqueValues = uniq(
           // eslint-disable-next-line prefer-spread
@@ -575,10 +505,7 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
             value: col.fieldName,
             selected:
               current(state).fltColumns.length > 0
-                ? _.some(
-                    current(state).fltColumns,
-                    (c) => c.fieldName === col.fieldName
-                  )
+                ? _.some(current(state).fltColumns, (c) => c.fieldName === col.fieldName)
                 : true
           })),
           defaultCollapsed: true
@@ -594,27 +521,20 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
             : current(state).columns.map((col) => col.fieldName)
       }
     },
-    [ON_FILTER_CHANGE.type]: (
-      state,
-      { payload }: ReturnType<typeof ON_FILTER_CHANGE>
-    ) => {
+    [ON_FILTER_CHANGE.type]: (state, { payload }: ReturnType<typeof ON_FILTER_CHANGE>) => {
       if (payload.selectedItems.length > 0) {
         state.activeFilters = {
           ...state.activeFilters,
           [payload.column.fieldName]: payload.selectedItems.map((i) => i.value)
         }
       } else {
-        state.activeFilters = omit(
-          state.activeFilters,
-          payload.column.fieldName
-        )
+        state.activeFilters = omit(state.activeFilters, payload.column.fieldName)
       }
       state.filters = state.filters.map((f) => {
         if (payload.column.key === f.column.key) {
           f.items = f.items.map((i) => {
             const isSelected =
-              filter(payload.selectedItems, (_i) => _i.value === i.value)
-                .length > 0
+              filter(payload.selectedItems, (_i) => _i.value === i.value).length > 0
             return {
               ...i,
               selected: isSelected
@@ -624,10 +544,7 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
         return f
       })
     },
-    [DATA_FETCH_ERROR.type]: (
-      state,
-      { payload }: ReturnType<typeof DATA_FETCH_ERROR>
-    ) => {
+    [DATA_FETCH_ERROR.type]: (state, { payload }: ReturnType<typeof DATA_FETCH_ERROR>) => {
       state.error = payload.error
     }
   })

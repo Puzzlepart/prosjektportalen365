@@ -10,10 +10,7 @@ export type TimelineTimeframe = [
 ]
 
 export interface ITimelineProps
-  extends Pick<
-    ICommandsProps,
-    'onGroupByChange' | 'isGroupByEnabled' | 'defaultGroupBy'
-  > {
+  extends Pick<ICommandsProps, 'onGroupByChange' | 'isGroupByEnabled' | 'defaultGroupBy'> {
   /**
    * Timeline default timeframe
    */

@@ -23,7 +23,6 @@ export class ProjectColumnConfig {
     this.value = item.GtPortfolioColumnValue
     this.color = item.GtPortfolioColumnColor
     this.iconName = item.GtPortfolioColumnIconName
-    this.tooltipColumnPropertyName =
-      item.GtPortfolioColumnTooltip?.GtManagedProperty
+    this.tooltipColumnPropertyName = item.GtPortfolioColumnTooltip?.GtManagedProperty
   }
 }

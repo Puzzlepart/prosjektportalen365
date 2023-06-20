@@ -9,10 +9,7 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { sp } from '@pnp/sp'
-import {
-  IOpportunityMatrixProps,
-  OpportunityMatrix
-} from 'components/OpportunityMatrix'
+import { IOpportunityMatrixProps, OpportunityMatrix } from 'components/OpportunityMatrix'
 import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
 import * as getValue from 'get-value'
 import * as strings from 'ProjectWebPartsStrings'
@@ -74,12 +71,9 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
 
   protected get headerLabelFields(): IPropertyPaneField<any>[] {
     const size = parseInt(this.properties.size ?? '5', 10)
-    const overrideHeaderLabels = PropertyPaneToggle(
-      `overrideHeaderLabels.${size}`,
-      {
-        label: format(strings.OverrideHeadersLabel, size)
-      }
-    )
+    const overrideHeaderLabels = PropertyPaneToggle(`overrideHeaderLabels.${size}`, {
+      label: format(strings.OverrideHeadersLabel, size)
+    })
     if (!get(this.properties, `overrideHeaderLabels.${size}`, false)) {
       return [overrideHeaderLabels]
     }

@@ -1,8 +1,4 @@
-import {
-  MessageBar,
-  SelectionMode,
-  ShimmeredDetailsList
-} from '@fluentui/react'
+import { MessageBar, SelectionMode, ShimmeredDetailsList } from '@fluentui/react'
 import { isEmpty } from '@microsoft/sp-lodash-subset'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FC } from 'react'
@@ -16,20 +12,15 @@ import { TooltipHeader } from './TooltipHeader'
 import { IProgramAdministrationProps } from './types'
 import { useProgramAdministration } from './useProgramAdministration'
 
-export const ProgramAdministration: FC<IProgramAdministrationProps> = (
-  props
-) => {
-  const { state, dispatch, selection, onSearch, onRenderRow } =
-    useProgramAdministration(props)
+export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) => {
+  const { state, dispatch, selection, onSearch, onRenderRow } = useProgramAdministration(props)
 
   if (state.error) {
     return (
       <>
         <div className={styles.root}>
           <h2>{strings.ProgramAdministrationHeader}</h2>
-          <MessageBar messageBarType={state.error.messageBarType}>
-            {state.error.text}
-          </MessageBar>
+          <MessageBar messageBarType={state.error.messageBarType}>{state.error.text}</MessageBar>
         </div>
       </>
     )
@@ -49,9 +40,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (
               columns={columns({ renderAsLink: true })}
               selection={selection}
               selectionMode={
-                state.userHasManagePermission
-                  ? SelectionMode.multiple
-                  : SelectionMode.none
+                state.userHasManagePermission ? SelectionMode.multiple : SelectionMode.none
               }
               selectionPreservedOnEmptyClick={true}
               onRenderRow={onRenderRow}
@@ -61,8 +50,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (
                   defaultRender={defaultRender}
                   selectedCount={state.selectedProjectsToDelete?.length ?? 0}
                   search={{
-                    placeholder:
-                      strings.ProgramAdministrationSearchBoxPlaceholder,
+                    placeholder: strings.ProgramAdministrationSearchBoxPlaceholder,
                     onSearch
                   }}
                 />

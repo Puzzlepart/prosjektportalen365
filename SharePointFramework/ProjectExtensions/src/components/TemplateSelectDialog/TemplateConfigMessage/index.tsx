@@ -5,9 +5,7 @@ import styles from './TemplateConfigMessage.module.scss'
 import { ITemplateConfigMessageProps } from './types'
 import { useTemplateConfigMessage } from './useTemplateConfigMessage'
 
-export const TemplateConfigMessage: FC<ITemplateConfigMessageProps> = (
-  props
-) => {
+export const TemplateConfigMessage: FC<ITemplateConfigMessageProps> = (props) => {
   const { hidden, text } = useTemplateConfigMessage(props)
 
   return (

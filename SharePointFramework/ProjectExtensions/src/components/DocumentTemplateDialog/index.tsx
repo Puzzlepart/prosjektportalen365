@@ -30,14 +30,9 @@ import reducer, {
 } from './reducer'
 import { SelectScreen } from './SelectScreen'
 import { TargetFolderScreen } from './TargetFolderScreen'
-import {
-  DocumentTemplateDialogScreen,
-  IDocumentTemplateDialogProps
-} from './types'
+import { DocumentTemplateDialogScreen, IDocumentTemplateDialogProps } from './types'
 
-export const DocumentTemplateDialog: FC<IDocumentTemplateDialogProps> = (
-  props
-) => {
+export const DocumentTemplateDialog: FC<IDocumentTemplateDialogProps> = (props) => {
   const context = useContext(TemplateSelectorContext)
   const [state, dispatch] = useReducer(reducer, initState())
   const selection = new Selection({
@@ -57,9 +52,7 @@ export const DocumentTemplateDialog: FC<IDocumentTemplateDialogProps> = (
    */
   async function onStartCopy(templates: TemplateItem[]): Promise<void> {
     dispatch(START_COPY())
-    const folder = SPDataAdapter.sp.web.getFolderByServerRelativeUrl(
-      state.targetFolder
-    )
+    const folder = SPDataAdapter.sp.web.getFolderByServerRelativeUrl(state.targetFolder)
     const filesAdded: FileAddResult[] = []
 
     for (let i = 0; i < templates.length; i++) {
@@ -106,28 +99,18 @@ export const DocumentTemplateDialog: FC<IDocumentTemplateDialogProps> = (
           <SelectScreen selection={selection} selectedItems={state.selected} />
         ),
         [DocumentTemplateDialogScreen.TargetFolder]: <TargetFolderScreen />,
-        [DocumentTemplateDialogScreen.EditCopy]: (
-          <EditCopyScreen onStartCopy={onStartCopy} />
-        ),
-        [DocumentTemplateDialogScreen.CopyProgress]: (
-          <CopyProgressScreen {...state.progress} />
-        ),
+        [DocumentTemplateDialogScreen.EditCopy]: <EditCopyScreen onStartCopy={onStartCopy} />,
+        [DocumentTemplateDialogScreen.CopyProgress]: <CopyProgressScreen {...state.progress} />,
         [DocumentTemplateDialogScreen.Summary]: (
           <InfoMessage
             type={MessageBarType.success}
-            text={format(
-              strings.DocumentTemplateDialogSummaryText,
-              state.uploaded.length
-            )}
+            text={format(strings.DocumentTemplateDialogSummaryText, state.uploaded.length)}
           />
         ),
         [DocumentTemplateDialogScreen.Error]: (
           <InfoMessage
             type={MessageBarType.error}
-            text={format(
-              strings.DocumentTemplateDialogErrorText,
-              context.templateLibrary.title
-            )}
+            text={format(strings.DocumentTemplateDialogErrorText, context.templateLibrary.title)}
           />
         )
       }[state.screen] || null
@@ -159,11 +142,7 @@ export const DocumentTemplateDialog: FC<IDocumentTemplateDialogProps> = (
           <>
             <PrimaryButton
               text={strings.GetMoreText}
-              onClick={() =>
-                dispatch(
-                  SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select })
-                )
-              }
+              onClick={() => dispatch(SET_SCREEN({ screen: DocumentTemplateDialogScreen.Select }))}
             />
             <DefaultButton text={strings.CloseModalText} onClick={onClose} />
           </>

@@ -11,12 +11,9 @@ import { useRowRenderer } from './useRowRenderer'
 export function useExtensionsSection() {
   const context = useContext(TemplateSelectDialogContext)
   const selectedKeys = context.state.selectedExtensions.map((lc) => lc.key)
-  const { selection, onSearch, searchTerm } = useSelectionList(
-    selectedKeys,
-    (selection) => {
-      context.dispatch(ON_EXTENSIONS_CHANGED(selection))
-    }
-  )
+  const { selection, onSearch, searchTerm } = useSelectionList(selectedKeys, (selection) => {
+    context.dispatch(ON_EXTENSIONS_CHANGED(selection))
+  })
   const items = context.props.data.extensions.filter((ext) => !ext.hidden)
   const columns = useColumns()
   const onRenderRow = useRowRenderer({ selectedKeys, searchTerm })

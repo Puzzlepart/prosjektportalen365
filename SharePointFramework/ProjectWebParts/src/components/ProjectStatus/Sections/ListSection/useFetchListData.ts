@@ -28,9 +28,7 @@ export function useFetchListData() {
   const context = useContext(ProjectStatusContext)
   const { section } = useContext(SectionContext)
   return async (): Promise<IListSectionData> => {
-    const list = new Web(context.props.webUrl).lists.getByTitle(
-      section.listTitle
-    )
+    const list = new Web(context.props.webUrl).lists.getByTitle(section.listTitle)
     try {
       let view: UseFetchListDataView = {
         ListViewXml: `<View><Query>${section.viewQuery}</Query><RowLimit>${section.rowLimit}</RowLimit></View>`,
@@ -46,29 +44,18 @@ export function useFetchListData() {
         } catch {}
       }
       const camlQuery: CamlQuery = {
-        ViewXml: view.ListViewXml.replace(
-          /<ViewFields>[\w\W]*<\/ViewFields>/gm,
-          ''
-        )
+        ViewXml: view.ListViewXml.replace(/<ViewFields>[\w\W]*<\/ViewFields>/gm, '')
       }
       const [items, fields] = await Promise.all([
-        list.getItemsByCAMLQuery(
-          camlQuery,
-          'FieldValuesAsText',
-          'ContentType'
-        ) as Promise<any[]>,
-        list.fields
-          .select('Title', 'InternalName', 'TypeAsString')
-          .get<SPField[]>()
+        list.getItemsByCAMLQuery(camlQuery, 'FieldValuesAsText', 'ContentType') as Promise<any[]>,
+        list.fields.select('Title', 'InternalName', 'TypeAsString').get<SPField[]>()
       ])
       if (_.isEmpty(items)) return null
       const itemValues = items.map((i) => ({
         ...i.FieldValuesAsText,
         ContentType: i?.ContentType
       }))
-      const columns = view.ViewFields.Items.map<string>((vf) =>
-        vf === 'LinkTitle' ? 'Title' : vf
-      )
+      const columns = view.ViewFields.Items.map<string>((vf) => (vf === 'LinkTitle' ? 'Title' : vf))
         .map<SPField>((vf) => fields.find((fld) => fld.InternalName === vf))
         .filter(Boolean)
         .map<IColumn>((field) => ({

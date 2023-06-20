@@ -9,23 +9,14 @@ import styles from './DynamicHomepageContent.module.scss'
 export const DynamicHomepageContent: FC = () => {
   const context = useContext(ProjectPhasesContext)
   const phaseSitePages = context.state.data.phaseSitePages ?? []
-  const phaseSitePage = _.find(
-    phaseSitePages,
-    (p) => p.title === context.state.confirmPhase.name
-  )
+  const phaseSitePage = _.find(phaseSitePages, (p) => p.title === context.state.confirmPhase.name)
   return (
     <div className={styles.root}>
       <UserMessage
         text={
           phaseSitePage
-            ? format(
-                strings.PhaseSitePageFoundDescription,
-                phaseSitePage?.fileLeafRef
-              )
-            : format(
-                strings.PhaseSitePageNotFoundDescription,
-                context.state.confirmPhase.name
-              )
+            ? format(strings.PhaseSitePageFoundDescription, phaseSitePage?.fileLeafRef)
+            : format(strings.PhaseSitePageNotFoundDescription, context.state.confirmPhase.name)
         }
         type={phaseSitePage ? MessageBarType.info : MessageBarType.warning}
       />

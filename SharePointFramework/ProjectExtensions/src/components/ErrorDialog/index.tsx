@@ -24,10 +24,7 @@ export const ErrorDialog: FC<IErrorDialogProps> = ({
     if (error.name === 'AlreadySetup') {
       return (
         <>
-          <DefaultButton
-            onClick={onSetupClick}
-            text={strings.ProvisionTemplateText}
-          />
+          <DefaultButton onClick={onSetupClick} text={strings.ProvisionTemplateText} />
           <PrimaryButton
             styles={{ root: { marginLeft: 6 } }}
             text={strings.ContinueToProjectText}
@@ -51,10 +48,7 @@ export const ErrorDialog: FC<IErrorDialogProps> = ({
       onDismiss={onDismiss}
     >
       <div style={{ marginTop: 15 }}>
-        <MessageBar
-          messageBarType={messageType}
-          className={styles.errorMessage}
-        >
+        <MessageBar messageBarType={messageType} className={styles.errorMessage}>
           <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]}>
             {error.stack}
           </ReactMarkdown>

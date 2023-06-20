@@ -36,8 +36,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
       level: LogLevel.Info
     })
     Logger.subscribe(new ConsoleListener())
-    Logger.activeLogLevel =
-      sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+    Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     await SPDataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl
@@ -78,9 +77,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
   }
 
   @override
-  public async onExecute(
-    event: IListViewCommandSetExecuteEventParameters
-  ): Promise<void> {
+  public async onExecute(event: IListViewCommandSetExecuteEventParameters): Promise<void> {
     // eslint-disable-next-line default-case
     switch (event.itemId) {
       case this._openCmd.id:

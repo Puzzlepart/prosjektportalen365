@@ -6,8 +6,7 @@ import { IOpportunityMatrixProps } from './types'
 import { useOpportunityMatrix } from './useOpportunityMatrix'
 
 export const OpportunityMatrix: FC<IOpportunityMatrixProps> = (props) => {
-  const { configuration, getElementsForCell, setShowPostAction } =
-    useOpportunityMatrix(props)
+  const { configuration, getElementsForCell, setShowPostAction } = useOpportunityMatrix(props)
   return (
     <>
       <DynamicMatrix

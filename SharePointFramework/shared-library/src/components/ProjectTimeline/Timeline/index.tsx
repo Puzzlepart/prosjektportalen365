@@ -3,10 +3,7 @@ import { ITimelineItem } from '../../../interfaces/ITimelineItem'
 import moment from 'moment'
 import * as strings from 'SharedLibraryStrings'
 import React, { FC } from 'react'
-import ReactTimeline, {
-  TimelineMarkers,
-  TodayMarker
-} from 'react-calendar-timeline'
+import ReactTimeline, { TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
 import { FilterPanel } from '../../FilterPanel'
 import { Commands } from '../Commands'
@@ -51,10 +48,7 @@ export const Timeline: FC<ITimelineProps> = (props) => {
           <MessageBar>
             <div
               dangerouslySetInnerHTML={{
-                __html: format(
-                  props.infoText,
-                  encodeURIComponent(window.location.href)
-                )
+                __html: format(props.infoText, encodeURIComponent(window.location.href))
               }}
             ></div>
           </MessageBar>
@@ -87,10 +81,7 @@ export const Timeline: FC<ITimelineProps> = (props) => {
         onDismiss={() => setShowFilterPanel(false)}
       />
       {showDetails && (
-        <DetailsCallout
-          timelineItem={showDetails}
-          onDismiss={() => setShowDetails(null)}
-        />
+        <DetailsCallout timelineItem={showDetails} onDismiss={() => setShowDetails(null)} />
       )}
     </div>
   )

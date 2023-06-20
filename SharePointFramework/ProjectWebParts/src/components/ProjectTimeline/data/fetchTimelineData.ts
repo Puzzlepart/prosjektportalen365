@@ -2,10 +2,7 @@ import { IColumn } from '@fluentui/react'
 import { sp } from '@pnp/sp'
 import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
-import {
-  TimelineConfigurationModel,
-  TimelineContentModel
-} from 'pp365-shared-library/lib/models'
+import { TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-library/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { IProjectTimelineProps } from '../types'
 
@@ -26,16 +23,11 @@ export async function fetchTimelineData(
 
     const projectDeliveries = (
       props.showProjectDeliveries
-        ? await sp.web.lists
-            .getByTitle(props.projectDeliveriesListName)
-            .items.getAll()
+        ? await sp.web.lists.getByTitle(props.projectDeliveriesListName).items.getAll()
         : []
     )
       .map((item) => {
-        const config = _.find(
-          timelineConfig,
-          (col) => col.title === props.configItemTitle
-        )
+        const config = _.find(timelineConfig, (col) => col.title === props.configItemTitle)
         return new TimelineContentModel(
           props.siteId,
           props.webTitle,
@@ -54,15 +46,10 @@ export async function fetchTimelineData(
       .filter(Boolean)
 
     const defaultViewColumns = (
-      await timelineContentList.defaultView.fields
-        .select('Items')
-        .top(500)
-        .get()
+      await timelineContentList.defaultView.fields.select('Items').top(500).get()
     )['Items'] as string[]
 
-    const filterString = defaultViewColumns
-      .map((col) => `(InternalName eq '${col}')`)
-      .join(' or ')
+    const filterString = defaultViewColumns.map((col) => `(InternalName eq '${col}')`).join(' or ')
 
     // eslint-disable-next-line prefer-const
     let [timelineContentItems, timelineColumns] = await Promise.all([

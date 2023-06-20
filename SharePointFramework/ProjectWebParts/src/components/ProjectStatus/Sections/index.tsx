@@ -13,8 +13,7 @@ export const Sections: FC = () => {
   const createContextValue = useCreateContextValue({ iconSize: 50 })
   const { sections } = useSections()
 
-  if (!context.state.selectedReport)
-    return <UserMessage text={strings.NoStatusReportsMessage} />
+  if (!context.state.selectedReport) return <UserMessage text={strings.NoStatusReportsMessage} />
 
   return (
     <div className={styles.root} id='pp-statussection'>

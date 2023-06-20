@@ -10,11 +10,7 @@ export interface IDocumentTemplateItemProps {
   /**
    * On input changed
    */
-  onInputChanged: (
-    id: string,
-    properties: TypedHash<string>,
-    errorMessage?: string
-  ) => void
+  onInputChanged: (id: string, properties: TypedHash<string>, errorMessage?: string) => void
 }
 
 export interface IDocumentTemplateItemState {

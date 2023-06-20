@@ -21,9 +21,7 @@ export function useOpportunityMatrix(props: IOpportunityMatrixProps) {
    */
   function getElementsForCell(cell: IMatrixCell) {
     const elements = props.items
-      .filter(
-        (item) => cell.y === item.probability && cell.x === item.consequence
-      )
+      .filter((item) => cell.y === item.probability && cell.x === item.consequence)
       .map(
         (item) =>
           ({
@@ -34,9 +32,7 @@ export function useOpportunityMatrix(props: IOpportunityMatrixProps) {
       )
     const postActionElements = props.items
       .filter(
-        (item) =>
-          cell.y === item.probabilityPostAction &&
-          cell.x === item.consequencePostAction
+        (item) => cell.y === item.probabilityPostAction && cell.x === item.consequencePostAction
       )
       .map(
         (item) =>

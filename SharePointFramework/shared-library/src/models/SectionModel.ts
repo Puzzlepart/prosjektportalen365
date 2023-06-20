@@ -40,9 +40,7 @@ export class SectionModel {
     this.source = _item.GtSecSource
     this.listTitle = _item.GtSecList
     this.viewQuery = _item.GtSecViewQuery
-    this.viewFields = _item.GtSecViewFields
-      ? _item.GtSecViewFields.split(',')
-      : []
+    this.viewFields = _item.GtSecViewFields ? _item.GtSecViewFields.split(',') : []
     this.rowLimit = _item.GtSecRowLimit
     this.viewName = _item.GtSecView
     this.fieldName = _item.GtSecFieldName
@@ -58,32 +56,16 @@ export class SectionModel {
     if (this.fieldName === 'GtOverallStatus') {
       return SectionType.SummarySection
     }
-    if (
-      this._item.ContentTypeId.indexOf(
-        '0x01004CEFE616A94A3A48A27D9DEBDF5EC82802'
-      ) !== -1
-    ) {
+    if (this._item.ContentTypeId.indexOf('0x01004CEFE616A94A3A48A27D9DEBDF5EC82802') !== -1) {
       return SectionType.StatusSection
     }
-    if (
-      this._item.ContentTypeId.indexOf(
-        '0x01004CEFE616A94A3A48A27D9DEBDF5EC82803'
-      ) !== -1
-    ) {
+    if (this._item.ContentTypeId.indexOf('0x01004CEFE616A94A3A48A27D9DEBDF5EC82803') !== -1) {
       return SectionType.ProjectPropertiesSection
     }
-    if (
-      this._item.ContentTypeId.indexOf(
-        '0x01004CEFE616A94A3A48A27D9DEBDF5EC82804'
-      ) !== -1
-    ) {
+    if (this._item.ContentTypeId.indexOf('0x01004CEFE616A94A3A48A27D9DEBDF5EC82804') !== -1) {
       return SectionType.UncertaintySection
     }
-    if (
-      this._item.ContentTypeId.indexOf(
-        '0x01004CEFE616A94A3A48A27D9DEBDF5EC82805'
-      ) !== -1
-    ) {
+    if (this._item.ContentTypeId.indexOf('0x01004CEFE616A94A3A48A27D9DEBDF5EC82805') !== -1) {
       return SectionType.ListSection
     }
   }

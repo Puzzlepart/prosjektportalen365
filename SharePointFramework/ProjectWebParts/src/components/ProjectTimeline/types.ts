@@ -1,10 +1,7 @@
 import { IColumn } from '@fluentui/react'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { ITimelineItem } from 'pp365-shared-library/lib/interfaces/ITimelineItem'
-import {
-  TimelineConfigurationModel,
-  ProjectColumn
-} from 'pp365-shared-library/lib/models'
+import { TimelineConfigurationModel, ProjectColumn } from 'pp365-shared-library/lib/models'
 import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDataService'
 import { IEntityField } from 'sp-entityportal-service'
 import {
@@ -27,8 +24,7 @@ export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   defaultCategory?: string
 }
 
-export interface IProjectTimelineState
-  extends IBaseWebPartComponentState<ITimelineData> {
+export interface IProjectTimelineState extends IBaseWebPartComponentState<ITimelineData> {
   /**
    * Groups
    */
@@ -101,8 +97,7 @@ export interface ITimelineGroups {
   typeGroups: ITimelineGroup[]
 }
 
-export interface IProjectTimelineData
-  extends ProjectDataService.IGetPropertiesData {
+export interface IProjectTimelineData extends ProjectDataService.IGetPropertiesData {
   /**
    * Column configuration
    */

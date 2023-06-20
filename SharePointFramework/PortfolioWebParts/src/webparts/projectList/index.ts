@@ -21,12 +21,10 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    const viewOptions = ProjectListViews.map<IPropertyPaneDropdownOption>(
-      (view) => ({
-        key: view.itemKey,
-        text: view.headerText
-      })
-    )
+    const viewOptions = ProjectListViews.map<IPropertyPaneDropdownOption>((view) => ({
+      key: view.itemKey,
+      text: view.headerText
+    }))
     return {
       pages: [
         {

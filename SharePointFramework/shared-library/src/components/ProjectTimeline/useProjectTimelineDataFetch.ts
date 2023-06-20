@@ -20,18 +20,14 @@ import { IProjectTimelineProps, IProjectTimelineState } from './types'
  *
  * @returns Timeline groups
  */
-const createProjectGroups = (
-  projects: ProjectListModel[]
-): ITimelineGroup[] => {
-  const mappedProjects = _.uniq(projects.map((project) => project.title)).map(
-    (title) => {
-      const project = projects.find((project) => project.title === title)
-      return {
-        title: project.title,
-        siteId: project.siteId
-      }
+const createProjectGroups = (projects: ProjectListModel[]): ITimelineGroup[] => {
+  const mappedProjects = _.uniq(projects.map((project) => project.title)).map((title) => {
+    const project = projects.find((project) => project.title === title)
+    return {
+      title: project.title,
+      siteId: project.siteId
     }
-  )
+  })
 
   const projectGroups = mappedProjects.map<ITimelineGroup>((project, id) => {
     return {
@@ -61,10 +57,7 @@ const transformItems = (
     const items = timelineItems.map<ITimelineItem>((item, id) => {
       _ctxItem = item
 
-      const group = _.find(
-        groups,
-        (grp) => item.siteId.indexOf(grp.siteId) !== -1
-      )
+      const group = _.find(groups, (grp) => item.siteId.indexOf(grp.siteId) !== -1)
 
       if (!group) return null
 
@@ -120,9 +113,7 @@ const transformItems = (
       format(
         strings.ProjectTimelineErrorTransformItemText,
         _ctxItem?.siteId ?? 'N/A',
-        _ctxItem.itemTitle
-          ? `${_ctxItem.itemTitle} (${_ctxItem.title})`
-          : _ctxItem.title,
+        _ctxItem.itemTitle ? `${_ctxItem.itemTitle} (${_ctxItem.title})` : _ctxItem.title,
         _ctxItem.type,
         error
       )
@@ -137,62 +128,52 @@ const transformItems = (
  *
  * @returns `ProjectTimeline` state
  */
-const fetchData = async (
-  props: IProjectTimelineProps
-): Promise<Partial<IProjectTimelineState>> => {
+const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProjectTimelineState>> => {
   try {
     const timelineConfig = await props.dataAdapter.fetchTimelineConfiguration()
-    const [
-      projects,
-      projectData,
-      timelineContentItems,
-      timelineAggregatedContent = []
-    ] = await Promise.all([
-      props.dataAdapter.fetchEnrichedProjects(),
-      props.dataAdapter.fetchTimelineProjectData(timelineConfig),
-      props.dataAdapter.fetchTimelineContentItems(timelineConfig),
-      props.dataAdapter.fetchTimelineAggregatedContent(
-        props.configItemTitle,
-        props.dataSourceName,
-        timelineConfig
-      )
-    ])
+    const [projects, projectData, timelineContentItems, timelineAggregatedContent = []] =
+      await Promise.all([
+        props.dataAdapter.fetchEnrichedProjects(),
+        props.dataAdapter.fetchTimelineProjectData(timelineConfig),
+        props.dataAdapter.fetchTimelineContentItems(timelineConfig),
+        props.dataAdapter.fetchTimelineAggregatedContent(
+          props.configItemTitle,
+          props.dataSourceName,
+          timelineConfig
+        )
+      ])
 
     const filteredProjects: any[] = projects.filter((project) => {
       return project.startDate !== null && project.endDate !== null
     })
 
-    const filteredTimelineItems = [
-      ...timelineContentItems,
-      ...timelineAggregatedContent
-    ].filter((item) =>
-      filteredProjects.some((project) => {
-        return project.title.indexOf(item.title) !== -1
-      })
+    const filteredTimelineItems = [...timelineContentItems, ...timelineAggregatedContent].filter(
+      (item) =>
+        filteredProjects.some((project) => {
+          return project.title.indexOf(item.title) !== -1
+        })
     )
 
-    let timelineItems = filteredProjects.map<TimelineContentModel>(
-      (project) => {
-        const config = projectData.configElement
-        const statusReport = projectData?.reports?.find((statusReport) => {
-          return statusReport.siteId === project.siteId
-        })
-        return new TimelineContentModel(
-          project.siteId,
-          project.title,
-          project.title,
-          strings.ProjectLabel,
-          project.startDate,
-          project.endDate,
-          '',
-          '',
-          statusReport?.budgetTotal,
-          statusReport?.costsTotal,
-          project.url,
-          project.phase
-        ).usingConfig(config)
-      }
-    )
+    let timelineItems = filteredProjects.map<TimelineContentModel>((project) => {
+      const config = projectData.configElement
+      const statusReport = projectData?.reports?.find((statusReport) => {
+        return statusReport.siteId === project.siteId
+      })
+      return new TimelineContentModel(
+        project.siteId,
+        project.title,
+        project.title,
+        strings.ProjectLabel,
+        project.startDate,
+        project.endDate,
+        '',
+        '',
+        statusReport?.budgetTotal,
+        statusReport?.costsTotal,
+        project.url,
+        project.phase
+      ).usingConfig(config)
+    })
 
     timelineItems = [...timelineItems, ...filteredTimelineItems]
     const groups = createProjectGroups(filteredProjects)

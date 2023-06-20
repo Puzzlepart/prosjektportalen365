@@ -20,10 +20,7 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
             </div>
           </div>
         ) : state.error ? (
-          <UserMessage
-            type={MessageBarType.severeWarning}
-            text={state.error.message}
-          />
+          <UserMessage type={MessageBarType.severeWarning} text={state.error.message} />
         ) : (
           <>
             <Timeline

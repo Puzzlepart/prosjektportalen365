@@ -12,10 +12,7 @@ import { ILatestProjectsProps, ILatestProjectsState } from './types'
  * @component LatestProjects
  * @extends Component
  */
-export class LatestProjects extends Component<
-  ILatestProjectsProps,
-  ILatestProjectsState
-> {
+export class LatestProjects extends Component<ILatestProjectsProps, ILatestProjectsState> {
   constructor(props: ILatestProjectsProps) {
     super(props)
     this.state = { loading: true, projects: [] }
@@ -61,8 +58,7 @@ export class LatestProjects extends Component<
    */
   private _renderProjectList() {
     const { projects } = this.state
-    if (projects.length === 0)
-      return <MessageBar>{this.props.emptyMessage}</MessageBar>
+    if (projects.length === 0) return <MessageBar>{this.props.emptyMessage}</MessageBar>
     return projects.splice(0, this.props.rowLimit).map((site, idx) => {
       const created = formatDate(site.Created, true)
       return (

@@ -17,10 +17,7 @@ export default () => {
       return props.searchBoxPlaceholderText
     }
     if (state.dataSource) {
-      return format(
-        strings.SearchBoxPlaceholderText,
-        state.dataSource.toLowerCase()
-      )
+      return format(strings.SearchBoxPlaceholderText, state.dataSource.toLowerCase())
     }
     return ''
   }

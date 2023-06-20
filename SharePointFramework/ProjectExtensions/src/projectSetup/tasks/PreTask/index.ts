@@ -25,12 +25,9 @@ export class PreTask extends BaseTask {
     }
 
     try {
-      params.spfxJsomContext = await initSpfxJsom(
-        params.context.pageContext.site.absoluteUrl,
-        {
-          loadTaxonomy: true
-        }
-      )
+      params.spfxJsomContext = await initSpfxJsom(params.context.pageContext.site.absoluteUrl, {
+        loadTaxonomy: true
+      })
       params.entityService = new SpEntityPortalService({
         portalUrl: SPDataAdapter.portal.url,
         listName: params.properties.projectsList,
@@ -55,12 +52,8 @@ export class PreTask extends BaseTask {
    * @param params - Task params
    */
   private async validateParameters(params: IBaseTaskParams): Promise<void> {
-    const parametersToValidate: string[] = _.toArray(
-      params.templateSchema.Parameters
-    ) as string[]
-    const [termSetIds] = parametersToValidate.filter((param) =>
-      _.isObject(param)
-    )
+    const parametersToValidate: string[] = _.toArray(params.templateSchema.Parameters) as string[]
+    const [termSetIds] = parametersToValidate.filter((param) => _.isObject(param))
     const contentTypesToValidate = parametersToValidate
       .filter((param) => !_.isObject(param))
       .filter((ct) => ct.includes('0x'))

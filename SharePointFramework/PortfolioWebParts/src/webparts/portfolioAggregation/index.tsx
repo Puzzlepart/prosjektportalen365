@@ -7,10 +7,7 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import * as strings from 'PortfolioWebPartsStrings'
-import {
-  IPortfolioAggregationProps,
-  PortfolioAggregation
-} from 'components/PortfolioAggregation'
+import { IPortfolioAggregationProps, PortfolioAggregation } from 'components/PortfolioAggregation'
 import { DataAdapter } from 'data'
 import { IAggregatedListConfiguration } from 'interfaces'
 import _ from 'lodash'
@@ -23,9 +20,7 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
   public render(): void {
     if (!this.properties.dataSource) {
       this.renderComponent<IMessageBarProps>(MessageBar, {
-        children: (
-          <span>{strings.PortfolioAggregationNotConfiguredMessage}</span>
-        )
+        children: <span>{strings.PortfolioAggregationNotConfiguredMessage}</span>
       })
     } else {
       this.renderComponent<IPortfolioAggregationProps>(PortfolioAggregation, {
@@ -89,9 +84,7 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
                     key: level,
                     text: level
                   })),
-                  selectedKey:
-                    this.properties.dataSourceLevel ??
-                    this._configuration?.level
+                  selectedKey: this.properties.dataSourceLevel ?? this._configuration?.level
                 }),
                 PropertyPaneDropdown('defaultViewId', {
                   label: strings.DefaultDataSourceViewLabel,

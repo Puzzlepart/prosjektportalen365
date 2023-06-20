@@ -10,11 +10,7 @@ export const ProjectPhase: FC<IProjectPhaseProps> = (props) => {
     <li className={className}>
       <a href='#' className={styles.container}>
         <div className={styles.phaseIcon}>
-          <span
-            className={styles.phaseLetter}
-            ref={targetRef}
-            onClick={onClick}
-          >
+          <span className={styles.phaseLetter} ref={targetRef} onClick={onClick}>
             {props.phase.letter}
           </span>
           <span className={styles.phaseText} onClick={onClick}>

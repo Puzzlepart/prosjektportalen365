@@ -1,12 +1,7 @@
 import React, { FC } from 'react'
 import { DynamicMatrixContext } from './context'
 import styles from './DynamicMatrix.module.scss'
-import {
-  MatrixCell,
-  MatrixCellType,
-  MatrixElement,
-  MatrixHeaderCell
-} from './MatrixCell'
+import { MatrixCell, MatrixCellType, MatrixElement, MatrixHeaderCell } from './MatrixCell'
 import { MatrixRow } from './MatrixRow'
 import { IDynamicMatrixProps } from './types'
 
@@ -19,11 +14,7 @@ export const DynamicMatrix: FC<IDynamicMatrixProps> = (props) => (
           switch (cell.cellType) {
             case MatrixCellType.Cell: {
               return (
-                <MatrixCell
-                  key={cellIndex}
-                  className={cell.className}
-                  cell={cell}
-                >
+                <MatrixCell key={cellIndex} className={cell.className} cell={cell}>
                   {elements.map((props, idx) => (
                     <MatrixElement key={idx} {...props} />
                   ))}

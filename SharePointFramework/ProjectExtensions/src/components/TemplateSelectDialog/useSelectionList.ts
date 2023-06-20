@@ -21,9 +21,7 @@ export function useSelectionList(
 
   useEffect(() => {
     __selection.setChangeEvents(false)
-    selectedKeys.forEach((key) =>
-      __selection.setKeySelected(key as any, true, true)
-    )
+    selectedKeys.forEach((key) => __selection.setKeySelected(key as any, true, true))
     __selection.setChangeEvents(true)
     setSelection(__selection)
   }, [searchTerm])

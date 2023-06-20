@@ -36,13 +36,12 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     this._portal = await new PortalDataService().configure({
       pageContext: this.context.pageContext
     })
-    const [installEntries, gitHubReleases, helpContent, links] =
-      await Promise.all([
-        this._fetchInstallationLogs(),
-        this._fetchGitHubReleases(),
-        this._fetchHelpContent(strings.HelpContentListName),
-        this._fetchLinks()
-      ])
+    const [installEntries, gitHubReleases, helpContent, links] = await Promise.all([
+      this._fetchInstallationLogs(),
+      this._fetchGitHubReleases(),
+      this._fetchHelpContent(strings.HelpContentListName),
+      this._fetchLinks()
+    ])
     this._installEntries = installEntries
     this._gitHubReleases = gitHubReleases
     this._helpContent = helpContent
@@ -69,9 +68,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     orderAscending = false
   ): Promise<InstallationEntry[]> {
     try {
-      const installationLogList = this._portal.web.lists.getByTitle(
-        strings.InstallationLogListName
-      )
+      const installationLogList = this._portal.web.lists.getByTitle(strings.InstallationLogListName)
       const installationLogItems = await installationLogList.items
         .orderBy(orderBy, orderAscending)
         .get()
@@ -86,9 +83,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
    *
    * @param listName Name of the list
    */
-  private async _fetchHelpContent(
-    listName: string
-  ): Promise<HelpContentModel[]> {
+  private async _fetchHelpContent(listName: string): Promise<HelpContentModel[]> {
     try {
       return await new PnPClientStorage().session.getOrPut(
         `pp365_help_content_${window.location.pathname}`,
@@ -97,14 +92,10 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
             ViewXml:
               '<View><Query><OrderBy><FieldRef Name="GtSortOrder" /></OrderBy></Query></View>'
           })
-          items = items
-            .filter((i) => i.matchPattern(window.location.pathname))
-            .splice(0, 3)
+          items = items.filter((i) => i.matchPattern(window.location.pathname)).splice(0, 3)
           for (let i = 0; i < items.length; i++) {
             if (items[i].externalUrl) {
-              await items[i].fetchExternalContent(
-                this.properties.publicMediaBasePath
-              )
+              await items[i].fetchExternalContent(this.properties.publicMediaBasePath)
             }
           }
           return items
@@ -137,9 +128,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private async _fetchGitHubReleases(
     repoName = 'puzzlepart/prosjektportalen365'
   ): Promise<IGitHubRelease[]> {
-    const response = await fetch(
-      `https://api.github.com/repos/${repoName}/releases`
-    )
+    const response = await fetch(`https://api.github.com/repos/${repoName}/releases`)
     const releases = await response.json()
     return releases
   }
@@ -152,15 +141,11 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
    * @param name Placeholder name
    * @param footerProps Props for the `Footer` component
    */
-  private _renderFooter(
-    name: PlaceholderName,
-    footerProps: IFooterProps
-  ): void {
+  private _renderFooter(name: PlaceholderName, footerProps: IFooterProps): void {
     if (!this._bottomPlaceholder) {
-      this._bottomPlaceholder =
-        this.context.placeholderProvider.tryCreateContent(name, {
-          onDispose: this._onDispose
-        })
+      this._bottomPlaceholder = this.context.placeholderProvider.tryCreateContent(name, {
+        onDispose: this._onDispose
+      })
     }
     const footerElement: HTMLDivElement = document.createElement('div')
     render(createElement(Footer, footerProps), footerElement)

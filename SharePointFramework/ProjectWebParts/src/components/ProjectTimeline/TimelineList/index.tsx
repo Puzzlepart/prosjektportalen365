@@ -1,9 +1,4 @@
-import {
-  CommandBar,
-  DetailsList,
-  DetailsListLayoutMode,
-  SelectionMode
-} from '@fluentui/react'
+import { CommandBar, DetailsList, DetailsListLayoutMode, SelectionMode } from '@fluentui/react'
 import React, { FC, useContext } from 'react'
 import { ProjectTimelineContext } from '../context'
 import styles from './TimelineList.module.scss'
@@ -11,12 +6,8 @@ import { useTimelineList } from './useTimelineList'
 
 export const TimelineList: FC = () => {
   const context = useContext(ProjectTimelineContext)
-  const {
-    getCommandBarProps,
-    onRenderItemColumn,
-    selection,
-    onColumnHeaderClick
-  } = useTimelineList()
+  const { getCommandBarProps, onRenderItemColumn, selection, onColumnHeaderClick } =
+    useTimelineList()
   return (
     <>
       <div className={styles.timelineList}>

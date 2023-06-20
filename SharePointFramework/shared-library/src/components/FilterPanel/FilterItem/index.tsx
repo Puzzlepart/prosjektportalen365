@@ -7,11 +7,7 @@ export const FilterItem: FC<IFilterItemProps> = (props) => {
   return (
     <li>
       <div className={styles.root}>
-        <Checkbox
-          label={props.name}
-          checked={props.selected}
-          onChange={props.onChanged}
-        />
+        <Checkbox label={props.name} checked={props.selected} onChange={props.onChanged} />
       </div>
     </li>
   )

@@ -1,16 +1,9 @@
-import {
-  getFileTypeIconProps,
-  initializeFileTypeIcons
-} from '@fluentui/react-file-type-icons'
+import { getFileTypeIconProps, initializeFileTypeIcons } from '@fluentui/react-file-type-icons'
 import { IColumn, Icon, Link } from '@fluentui/react/lib'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
-import {
-  formatDate,
-  tryParseCurrency,
-  tryParsePercentage
-} from 'pp365-shared-library/lib/helpers'
+import { formatDate, tryParseCurrency, tryParsePercentage } from 'pp365-shared-library/lib/helpers'
 import { getObjectValue as get } from 'pp365-shared-library/lib/helpers/getObjectValue'
 import React from 'react'
 import { isEmpty } from 'underscore'
@@ -51,9 +44,7 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
     case 'datetime':
       return formatDate(columnValue, true)
     case 'user':
-      return (
-        columnValue && <UserColumn column={column} columnValue={columnValue} />
-      )
+      return columnValue && <UserColumn column={column} columnValue={columnValue} />
     case 'list': {
       const values: string[] = columnValue ? columnValue.split(';#') : []
       if (isEmpty(values)) return null
@@ -85,12 +76,7 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
       )
     }
     case 'modal':
-      return (
-        <ItemModal
-          title={item.MeasurementIndicator}
-          value={JSON.parse(columnValue)}
-        />
-      )
+      return <ItemModal title={item.MeasurementIndicator} value={JSON.parse(columnValue)} />
     case 'filename_with_icon':
       return (
         <span>
@@ -171,11 +157,7 @@ export const getDefaultColumns = (props: IPortfolioAggregationProps) => {
               />
             )}
           >
-            <Link
-              href={item.SPWebURL}
-              rel='noopener noreferrer'
-              target='_blank'
-            >
+            <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
               {item.SiteTitle}
             </Link>
           </ProjectInformationPanel>

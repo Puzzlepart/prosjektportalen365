@@ -8,12 +8,7 @@ import { getObjectValue } from './'
  * @param ascending Sort ascending
  * @param property Property
  */
-export function sortAlphabetically<T>(
-  a: T,
-  b: T,
-  ascending?: boolean,
-  property?: string
-): number {
+export function sortAlphabetically<T>(a: T, b: T, ascending?: boolean, property?: string): number {
   const aValue = getObjectValue(a, property, '') || a
   const bValue = getObjectValue(b, property, '') || b
   if (aValue < bValue) {

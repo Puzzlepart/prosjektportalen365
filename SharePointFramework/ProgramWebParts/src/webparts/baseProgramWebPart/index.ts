@@ -19,10 +19,7 @@ export abstract class BaseProgramWebPart<
 
   public abstract render(): void
 
-  public renderComponent<T = any>(
-    component: ComponentClass<T> | FC<T>,
-    props?: T
-  ): void {
+  public renderComponent<T = any>(component: ComponentClass<T> | FC<T>, props?: T): void {
     const combinedProps = {
       ...this.properties,
       ...props,
@@ -33,10 +30,7 @@ export abstract class BaseProgramWebPart<
         title: this.properties.title
       }
     }
-    const element: React.ReactElement<T> = React.createElement(
-      component,
-      combinedProps
-    )
+    const element: React.ReactElement<T> = React.createElement(component, combinedProps)
     ReactDom.render(element, this.domElement)
   }
 

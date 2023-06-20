@@ -1,8 +1,4 @@
-import {
-  ContextualMenuItemType,
-  format,
-  IContextualMenuItem
-} from '@fluentui/react'
+import { ContextualMenuItemType, format, IContextualMenuItem } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import * as strings from 'PortfolioWebPartsStrings'
 import { useContext } from 'react'
@@ -28,9 +24,7 @@ export function useColumnContextMenu() {
     column.fieldName
   )
   const columnEditable =
-    props.displayMode === DisplayMode.Edit &&
-    columnIndex !== -1 &&
-    !props.lockedColumns
+    props.displayMode === DisplayMode.Edit && columnIndex !== -1 && !props.lockedColumns
 
   const addColumnItems: IContextualMenuItem[] = [
     {
@@ -95,8 +89,7 @@ export function useColumnContextMenu() {
       key: 'Edit',
       name: strings.EditColumnLabel,
       iconProps: { iconName: 'SingleColumnEdit' },
-      onClick: () =>
-        dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column }))
+      onClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column }))
     }
   ].filter((i) => i)
 

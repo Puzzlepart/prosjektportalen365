@@ -2,11 +2,7 @@ import React, { FC } from 'react'
 import { ICommandsProps } from './types'
 import styles from './PortfolioInsightsCommandBar.module.scss'
 import * as strings from 'PortfolioWebPartsStrings'
-import {
-  ICommandBarItemProps,
-  ContextualMenuItemType,
-  CommandBar
-} from '@fluentui/react'
+import { ICommandBarItemProps, ContextualMenuItemType, CommandBar } from '@fluentui/react'
 
 export const Commands: FC<ICommandsProps> = (props) => {
   const items: ICommandBarItemProps[] = [
@@ -20,9 +16,9 @@ export const Commands: FC<ICommandsProps> = (props) => {
         items: props.contentTypes.map((ct) => ({
           key: ct.StringId,
           name: ct.Name,
-          href: `${props.newFormUrl}?ContentTypeId=${
-            ct.StringId
-          }&Source=${encodeURIComponent(document.location.href)}`
+          href: `${props.newFormUrl}?ContentTypeId=${ct.StringId}&Source=${encodeURIComponent(
+            document.location.href
+          )}`
         }))
       }
     }

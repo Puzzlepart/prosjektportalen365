@@ -10,10 +10,7 @@ import React from 'react'
  * @param onItemClick On item click
  */
 export function useItemRenderer(
-  onItemClick: (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    item: ITimelineItem
-  ) => void
+  onItemClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, item: ITimelineItem) => void
 ) {
   return (calProps: ReactCalendarItemRendererProps<ITimelineItem>) => {
     const htmlProps = calProps.getItemProps(calProps.item.itemProps)
@@ -55,9 +52,7 @@ export function useItemRenderer(
                 height: '0',
                 borderLeft: '11px solid transparent',
                 borderRight: '11px solid transparent',
-                borderBottom: `22px solid ${
-                  calProps.item.data.bgColorHex || 'lightblue'
-                }`,
+                borderBottom: `22px solid ${calProps.item.data.bgColorHex || 'lightblue'}`,
                 marginTop: '-3px'
               }}
             />

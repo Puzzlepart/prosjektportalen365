@@ -102,8 +102,7 @@ export function useTimelineList() {
     }
 
     Logger.log({
-      message:
-        '(TimelineItem) _redirectNewTimelineItem: Created new timeline item',
+      message: '(TimelineItem) _redirectNewTimelineItem: Created new timeline item',
       data: { fieldValues: properties },
       level: LogLevel.Info
     })
@@ -119,9 +118,7 @@ export function useTimelineList() {
    * @param properties Properties
    */
   const addTimelineItem = async (properties: TypedHash<any>): Promise<any> => {
-    const list = SPDataAdapter.portal.web.lists.getByTitle(
-      strings.TimelineContentListName
-    )
+    const list = SPDataAdapter.portal.web.lists.getByTitle(strings.TimelineContentListName)
     const itemAddResult = await list.items.add(properties)
     return itemAddResult.data
   }
@@ -132,9 +129,7 @@ export function useTimelineList() {
    * @param item Item
    */
   const deleteTimelineItem = async (item: any) => {
-    const list = SPDataAdapter.portal.web.lists.getByTitle(
-      strings.TimelineContentListName
-    )
+    const list = SPDataAdapter.portal.web.lists.getByTitle(strings.TimelineContentListName)
     await list.items.getById(item.Id).delete()
     context.setState({
       refetch: new Date().getTime()
@@ -165,17 +160,11 @@ export function useTimelineList() {
    * @param isSortedDescending Is Sorted Descending?
    * @returns sorted timeline list items
    */
-  const copyAndSort = (
-    items: any[],
-    columnKey: string,
-    isSortedDescending?: boolean
-  ): any[] => {
+  const copyAndSort = (items: any[], columnKey: string, isSortedDescending?: boolean): any[] => {
     const key = columnKey as keyof any
     return items
       .slice(0)
-      .sort((a: any, b: any) =>
-        (isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1
-      )
+      .sort((a: any, b: any) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1))
   }
 
   /**
@@ -184,10 +173,7 @@ export function useTimelineList() {
    * @param _event Event
    * @param column Column
    */
-  const onColumnHeaderClick = (
-    _event: React.MouseEvent<HTMLElement>,
-    column: IColumn
-  ): void => {
+  const onColumnHeaderClick = (_event: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     const newColumns = context.state.data.listColumns.map((col: IColumn) => {
       if (col.key === column.key) {
         col.isSortedDescending = !col.isSortedDescending

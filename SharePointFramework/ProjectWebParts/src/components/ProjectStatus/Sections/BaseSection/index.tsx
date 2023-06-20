@@ -17,9 +17,7 @@ export const BaseSection: FC<IBaseSectionProps> = (props) => {
       ])}
     >
       <div className={styles.container}>
-        <Shimmer isDataLoaded={context.state.isDataLoaded}>
-          {props.children}
-        </Shimmer>
+        <Shimmer isDataLoaded={context.state.isDataLoaded}>{props.children}</Shimmer>
       </div>
     </div>
   )

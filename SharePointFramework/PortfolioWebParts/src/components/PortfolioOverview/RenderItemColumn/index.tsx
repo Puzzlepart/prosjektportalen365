@@ -20,17 +20,13 @@ type RenderFunction = (props: IRenderItemColumnProps) => JSX.Element
  */
 const renderDataTypeMap: Record<RenderDataType, RenderFunction> = {
   user: (props: IRenderItemColumnProps) => <UserColumn {...props} />,
-  date: ({ columnValue: colValue }: IRenderItemColumnProps) => (
-    <span>{formatDate(colValue)}</span>
-  ),
+  date: ({ columnValue: colValue }: IRenderItemColumnProps) => <span>{formatDate(colValue)}</span>,
   currency: ({ columnValue: colValue }: IRenderItemColumnProps) => (
     <span>{tryParseCurrency(colValue)}</span>
   ),
   tags: (props: IRenderItemColumnProps) => <TagsColumn {...props} />,
   boolean: ({ columnValue: colValue }: IRenderItemColumnProps) => (
-    <span>
-      {parseInt(colValue) === 1 ? strings.BooleanYes : strings.BooleanNo}
-    </span>
+    <span>{parseInt(colValue) === 1 ? strings.BooleanYes : strings.BooleanNo}</span>
   ),
   url: ({ columnValue: colValue }: IRenderItemColumnProps) => {
     const [url, description] = colValue.split(', ')
@@ -74,10 +70,7 @@ export function renderItemColumn(
   if (config) {
     const element: JSX.Element = (
       <span>
-        <Icon
-          iconName={config.iconName}
-          style={{ color: config.color, marginRight: 4 }}
-        />
+        <Icon iconName={config.iconName} style={{ color: config.color, marginRight: 4 }} />
         <span>{columnValue}</span>
       </span>
     )

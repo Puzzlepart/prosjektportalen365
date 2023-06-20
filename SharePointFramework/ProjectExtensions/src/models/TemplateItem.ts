@@ -1,10 +1,6 @@
 import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
 import { FileAddResult, Folder, Web } from '@pnp/sp'
-import {
-  FileIconType,
-  getFileTypeIconProps,
-  IFileTypeIconOptions
-} from '@uifabric/file-type-icons'
+import { FileIconType, getFileTypeIconProps, IFileTypeIconOptions } from '@uifabric/file-type-icons'
 import { IIconProps } from '@fluentui/react/lib/Icon'
 import { formatDate } from 'pp365-shared-library/lib/helpers'
 
@@ -83,17 +79,13 @@ export class TemplateItem {
   constructor(private _item: ITemplateSPItem, public web: Web) {
     this.id = _item.File?.UniqueId || _item.Folder.UniqueId
     this.name = _item.File?.Name || _item.Folder?.Name
-    this.title =
-      _item.File?.Title || this.nameWithoutExtension || _item.Folder?.Name
+    this.title = _item.File?.Title || this.nameWithoutExtension || _item.Folder?.Name
     this.description = _item.FieldValuesAsText.GtDescription
     this.phase = _item.FieldValuesAsText.GtProjectPhase
     this.newName = this.name
     this.newTitle = this.title
-    this.serverRelativeUrl =
-      _item.File?.ServerRelativeUrl || _item.Folder.ServerRelativeUrl
-    this.modified = formatDate(
-      _item.File?.TimeLastModified || _item.Folder?.TimeLastModified
-    )
+    this.serverRelativeUrl = _item.File?.ServerRelativeUrl || _item.Folder.ServerRelativeUrl
+    this.modified = formatDate(_item.File?.TimeLastModified || _item.Folder?.TimeLastModified)
   }
 
   /**
@@ -104,25 +96,14 @@ export class TemplateItem {
    *
    * @returns {true} if the operation is successful
    */
-  public async copyTo(
-    folder: Folder,
-    shouldOverwrite: boolean = true
-  ): Promise<FileAddResult> {
+  public async copyTo(folder: Folder, shouldOverwrite: boolean = true): Promise<FileAddResult> {
     try {
-      const content = await this.web
-        .getFileByServerRelativeUrl(this.serverRelativeUrl)
-        .getBlob()
+      const content = await this.web.getFileByServerRelativeUrl(this.serverRelativeUrl).getBlob()
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      const fileAddResult = await folder.files.addUsingPath(
-        this.newName,
-        content,
-        {
-          Overwrite: shouldOverwrite
-        }
-      )
-      await (
-        await fileAddResult.file.getItem()
-      ).update({ Title: this.newTitle })
+      const fileAddResult = await folder.files.addUsingPath(this.newName, content, {
+        Overwrite: shouldOverwrite
+      })
+      await (await fileAddResult.file.getItem()).update({ Title: this.newTitle })
       return fileAddResult
     } catch (error) {
       throw error

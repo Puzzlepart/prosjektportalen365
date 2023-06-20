@@ -1,10 +1,6 @@
 import { IDialogContentProps } from '@fluentui/react'
 import { ITemplateSelectDialogState } from 'components/TemplateSelectDialog'
-import {
-  ContentConfig,
-  ProjectExtension,
-  ProjectTemplate
-} from '../models/index'
+import { ContentConfig, ProjectExtension, ProjectTemplate } from '../models/index'
 
 export interface IProjectSetupProperties {
   /**

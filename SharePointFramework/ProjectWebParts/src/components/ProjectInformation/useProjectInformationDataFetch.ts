@@ -4,11 +4,7 @@ import strings from 'ProjectWebPartsStrings'
 import _ from 'lodash'
 import { ProjectAdminPermission } from 'pp365-shared-library/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
-import {
-  ProjectColumnConfig,
-  SectionModel,
-  StatusReport
-} from 'pp365-shared-library/lib/models'
+import { ProjectColumnConfig, SectionModel, StatusReport } from 'pp365-shared-library/lib/models'
 import { useEffect } from 'react'
 import { isEmpty } from 'underscore'
 import { ProjectInformation } from '.'
@@ -34,26 +30,18 @@ const transformProperties = (
   props: IProjectInformationProps,
   useVisibleFilter: boolean = true
 ) => {
-  const fieldNames: string[] = Object.keys(data.fieldValuesText).filter(
-    (fieldName) => {
-      const [field] = data.fields.filter(
-        (fld) => fld.InternalName === fieldName
-      )
-      if (!field) return false
-      if (
-        isEmpty(data.columns) &&
-        ((props.showFieldExternal || {})[fieldName] || props.skipSyncToHub)
-      ) {
-        return true
-      }
-      const [column] = data.columns.filter((c) => c.internalName === fieldName)
-      return column
-        ? useVisibleFilter
-          ? column.isVisible(props.page)
-          : true
-        : false
+  const fieldNames: string[] = Object.keys(data.fieldValuesText).filter((fieldName) => {
+    const [field] = data.fields.filter((fld) => fld.InternalName === fieldName)
+    if (!field) return false
+    if (
+      isEmpty(data.columns) &&
+      ((props.showFieldExternal || {})[fieldName] || props.skipSyncToHub)
+    ) {
+      return true
     }
-  )
+    const [column] = data.columns.filter((c) => c.internalName === fieldName)
+    return column ? (useVisibleFilter ? column.isVisible(props.page) : true) : false
+  })
 
   const properties = fieldNames.map((fn) => {
     const [field] = data.fields.filter((fld) => fld.InternalName === fn)
@@ -65,19 +53,14 @@ const transformProperties = (
 /**
  * Checks if project data is synced
  */
-const checkProjectDataSynced: DataFetchFunction<
-  IProjectInformationProps,
-  boolean
-> = async (props) => {
+const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolean> = async (
+  props
+) => {
   try {
     let isSynced = false
-    const projectDataList = SPDataAdapter.portal.web.lists.getByTitle(
-      strings.IdeaProjectDataTitle
-    )
+    const projectDataList = SPDataAdapter.portal.web.lists.getByTitle(strings.IdeaProjectDataTitle)
     const [projectDataItem] = await projectDataList.items
-      .filter(
-        `GtSiteUrl eq '${props.webPartContext.pageContext.web.absoluteUrl}'`
-      )
+      .filter(`GtSiteUrl eq '${props.webPartContext.pageContext.web.absoluteUrl}'`)
       .select('Id')
       .get()
 
@@ -85,9 +68,7 @@ const checkProjectDataSynced: DataFetchFunction<
       (item) => item.title === props.ideaConfiguration
     )
 
-    const ideaProcessingList = SPDataAdapter.portal.web.lists.getByTitle(
-      ideaConfig.processingList
-    )
+    const ideaProcessingList = SPDataAdapter.portal.web.lists.getByTitle(ideaConfig.processingList)
 
     const [ideaProcessingItem] = await ideaProcessingList.items
       .filter(`GtIdeaProjectDataId eq '${projectDataItem.Id}'`)
@@ -150,26 +131,21 @@ const fetchData: DataFetchFunction<
       await SPDataAdapter.configure(props.webPartContext, {
         siteId: props.siteId,
         webUrl: props.webUrl,
-        logLevel:
-          sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }
-    const [
-      columns,
-      propertiesData,
-      parentProjects,
-      [reports, sections, columnConfig]
-    ] = await Promise.all([
-      SPDataAdapter.portal.getProjectColumns(),
-      SPDataAdapter.project.getPropertiesData(),
-      props.page === 'Frontpage'
-        ? SPDataAdapter.portal.getParentProjects(
-            props.webPartContext?.pageContext?.web?.absoluteUrl,
-            ProjectInformationParentProject
-          )
-        : Promise.resolve([]),
-      fetchProjectStatusReports(props)
-    ])
+    const [columns, propertiesData, parentProjects, [reports, sections, columnConfig]] =
+      await Promise.all([
+        SPDataAdapter.portal.getProjectColumns(),
+        SPDataAdapter.project.getPropertiesData(),
+        props.page === 'Frontpage'
+          ? SPDataAdapter.portal.getParentProjects(
+              props.webPartContext?.pageContext?.web?.absoluteUrl,
+              ProjectInformationParentProject
+            )
+          : Promise.resolve([]),
+        fetchProjectStatusReports(props)
+      ])
     const data: IProjectInformationData = {
       columns,
       parentProjects,
@@ -187,11 +163,9 @@ const fetchData: DataFetchFunction<
         ProjectAdminPermission.EditProjectProperties,
         data.fieldValues
       )
-      isProjectDataSynced =
-        props.useIdeaProcessing && (await checkProjectDataSynced(props))
+      isProjectDataSynced = props.useIdeaProcessing && (await checkProjectDataSynced(props))
     }
-    const isParentProject =
-      data.fieldValues?.GtIsParentProject || data.fieldValues?.GtIsProgram
+    const isParentProject = data.fieldValues?.GtIsParentProject || data.fieldValues?.GtIsProgram
     return {
       data,
       isParentProject,

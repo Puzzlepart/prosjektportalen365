@@ -3,10 +3,7 @@ import * as strings from 'ProjectExtensionsStrings'
 import { ProvisioningError } from 'sp-js-provisioning'
 import { BaseTaskError } from '../@BaseTask'
 
-export const APPLY_TEMPLATE_STATUS_MAP: Record<
-  string,
-  { text: string; iconName: string }
-> = {
+export const APPLY_TEMPLATE_STATUS_MAP: Record<string, { text: string; iconName: string }> = {
   Files: { text: strings.ApplyTemplateFiles, iconName: 'OpenFile' },
   Lists: { text: strings.ApplyTemplateLists, iconName: 'PageListSolid' },
   Navigation: { text: strings.ApplyTemplateNavigation, iconName: 'MiniLink' },
@@ -35,9 +32,7 @@ export class ApplyTemplateTaskError extends BaseTaskError {
   constructor(error: ProvisioningError) {
     super(
       'ApplyTemplate',
-      `${format(strings.ApplyTemplateErrorMessage, error.handler)}: ${
-        error.message
-      }`,
+      `${format(strings.ApplyTemplateErrorMessage, error.handler)}: ${error.message}`,
       error
     )
   }
