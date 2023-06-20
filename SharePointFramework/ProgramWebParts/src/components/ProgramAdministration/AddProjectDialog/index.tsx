@@ -13,7 +13,6 @@ import * as strings from 'ProgramWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { columns } from '../columns'
 import { ProgramAdministrationContext } from '../context'
-import { addChildProjects } from '../data'
 import { ListHeaderSearch } from '../ListHeaderSearch'
 import { ADD_CHILD_PROJECTS, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
 import styles from './AddProjectDialog.module.scss'
@@ -62,7 +61,7 @@ export const AddProjectDialog: FC = () => {
           text={strings.Add}
           disabled={_.isEmpty(context.state.selectedProjectsToAdd)}
           onClick={async () => {
-            await addChildProjects(context.props.dataAdapter, context.state.selectedProjectsToAdd)
+            await context.props.dataAdapter.addChildProjects(context.state.selectedProjectsToAdd)
             context.dispatch(ADD_CHILD_PROJECTS())
           }}
         />

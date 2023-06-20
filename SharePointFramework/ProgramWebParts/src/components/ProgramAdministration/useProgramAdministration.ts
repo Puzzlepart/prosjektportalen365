@@ -1,7 +1,6 @@
 import { sp } from '@pnp/sp'
 import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import { useReducer, useEffect } from 'react'
-import { fetchChildProjects } from './data'
 import reducer, { initialState, DATA_LOADED, SET_SELECTED_TO_DELETE } from './reducer'
 import { IProgramAdministrationProps } from './types'
 import { useRowRenderer } from './useRowRenderer'
@@ -22,14 +21,14 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
   useEffect(() => {
     props.dataAdapter.project.getPropertiesData().then((properties) => {
       Promise.all([
-        fetchChildProjects(props.dataAdapter),
+        props.dataAdapter.fetchChildProjects(),
         props.dataAdapter.checkProjectAdminPermissions(
           ProjectAdminPermission.ChildProjectsAdmin,
           properties.fieldValues
         )
-      ]).then(([childProjects, userHasManagePermission]) =>
+      ]).then(([childProjects, userHasManagePermission]) => {
         dispatch(DATA_LOADED({ data: { childProjects, userHasManagePermission }, scope: 'root' }))
-      )
+      })
     })
   }, [])
 

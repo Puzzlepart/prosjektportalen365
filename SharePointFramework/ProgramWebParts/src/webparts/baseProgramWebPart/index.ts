@@ -8,7 +8,6 @@ import React, { ComponentClass, FC } from 'react'
 import ReactDom from 'react-dom'
 import { SPDataAdapter } from '../../data'
 import { IBaseProgramWebPartProps } from './types'
-import _ from 'lodash'
 
 export abstract class BaseProgramWebPart<
   T extends IBaseProgramWebPartProps
@@ -35,26 +34,6 @@ export abstract class BaseProgramWebPart<
     ReactDom.render(element, this.domElement)
   }
 
-  /**
-   * Get child projects from the Prosjektegenskaper list item. The note field GtChildProjects
-   * contains a JSON string with the child projects, and needs to be parsed. If the retrieve
-   * fails, an empty array is returned.
-   *
-   * @returns {Promise<Array<Record<string, string>>>} Child projects
-   */
-  public async getChildProjects(): Promise<Array<Record<string, string>>> {
-    try {
-      const projectProperties = await sp.web.lists
-        .getByTitle('Prosjektegenskaper')
-        .items.getById(1)
-        .get()
-      const childProjects = JSON.parse(projectProperties.GtChildProjects)
-      return !_.isEmpty(childProjects) ? childProjects : []
-    } catch (error) {
-      return []
-    }
-  }
-
   private async _setup() {
     await this.dataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
@@ -66,7 +45,7 @@ export abstract class BaseProgramWebPart<
   public async onInit(): Promise<void> {
     sp.setup({ spfxContext: this.context })
     this.dataAdapter = new SPDataAdapter()
-    this.dataAdapter.childProjects = await this.getChildProjects()
+    this.dataAdapter.initChildProjects()
     this.context.statusRenderer.clearLoadingIndicator(this.domElement)
     await this._setup()
   }
