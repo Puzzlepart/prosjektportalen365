@@ -177,9 +177,6 @@
                                 "components": {
                                     "type": "object",
                                     "properties": {
-                                        "HelpContentApplicationCustomizer": {
-                                            "$ref": "#/definitions/guid"
-                                        },
                                         "ProjectSetup": {
                                             "$ref": "#/definitions/guid"
                                         },
@@ -191,7 +188,6 @@
                                         }
                                     },
                                     "required": [
-                                        "HelpContentApplicationCustomizer",
                                         "ProjectSetup",
                                         "ProjectUpgrade",
                                         "TemplateSelectorCommand"
