@@ -7,6 +7,7 @@ import { getObjectValue } from '../../helpers/getObjectValue'
 import { stringToArrayBuffer } from '../../util'
 import { ExcelExportServiceDefaultConfiguration } from './ExcelExportServiceDefaultConfiguration'
 import { IExcelExportServiceConfiguration } from './IExcelExportServiceConfiguration'
+import { getDateValue } from '../../helpers/getDateValue'
 
 export default new (class ExcelExportService {
   public configuration: IExcelExportServiceConfiguration
@@ -29,8 +30,9 @@ export default new (class ExcelExportService {
         name: this.configuration.sheetName,
         data: [
           _columns.map((column) => column.name),
-          ...items.map((item) =>
-            _columns.map((column) => getObjectValue<string>(item, column.fieldName, null))
+          ...items.map((item) => _columns.map((column) => {
+            return (column as any).dataType === 'date' ? getDateValue(item, column.fieldName) :
+            getObjectValue<string>(item, column.fieldName, null)}) 
           )
         ]
       })
