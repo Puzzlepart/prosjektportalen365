@@ -1,3 +1,3 @@
-export function getDateValue(item, fieldName) {
+export function getDateValue(item: any, fieldName: string): string {
     return isNaN(item[fieldName]) ? '' : item[fieldName]
   }
