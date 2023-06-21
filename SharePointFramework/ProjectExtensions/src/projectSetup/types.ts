@@ -67,7 +67,6 @@ export interface IProjectSetupData extends ITemplateSelectDialogState {
    */
   contentConfig?: ContentConfig[]
 
-
   /**
    * Custom actions for the web
    */

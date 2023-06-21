@@ -19,24 +19,24 @@ export class CustomActions extends BaseTask {
     onProgress: OnProgressCallbackFunction
   ): Promise<IBaseTaskParams> {
     this.params = params
-    onProgress(
-      strings.CustomActionsText,
-      strings.CustomActionsSubText,
-      'SetAction'
-    )
+    onProgress(strings.CustomActionsText, strings.CustomActionsSubText, 'SetAction')
     await this._updateTemplateSelectorCustomAction()
     return params
   }
 
   /**
    * Update custom action for template selector based on value set for the selected template.
-   * 
+   *
    * @param customActionTitle Custom action title for the template selector.
    */
   private async _updateTemplateSelectorCustomAction(customActionTitle = 'Malvelger') {
     const templateLibraryUrl = this.data.selectedTemplate.templateLibraryUrl
-    const templateSelectorCustomAction = this.data.customActions.find(c => c.Title === customActionTitle)
-    let templateSelectorCustomActionProperties = JSON.parse(templateSelectorCustomAction.ClientSideComponentProperties)
+    const templateSelectorCustomAction = this.data.customActions.find(
+      (c) => c.Title === customActionTitle
+    )
+    let templateSelectorCustomActionProperties = JSON.parse(
+      templateSelectorCustomAction.ClientSideComponentProperties
+    )
     if (templateSelectorCustomActionProperties.templateLibrary !== templateLibraryUrl) {
       templateSelectorCustomActionProperties = {
         ...templateSelectorCustomActionProperties,

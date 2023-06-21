@@ -404,32 +404,33 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         pageContext: this.context.pageContext as any
       })
 
-      const [_templates, extensions, contentConfig, templateFiles, customActions] = await Promise.all([
-        this._getTemplates(),
-        this.properties.extensionsLibrary
-          ? this._portal.getItems(
-              this.properties.extensionsLibrary,
-              ProjectExtension,
-              {
-                ViewXml:
-                  '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-              },
-              ['File', 'FieldValuesAsText']
-            )
-          : Promise.resolve([]),
-        this.properties.contentConfigList
-          ? this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File'])
-          : Promise.resolve([]),
-        this._portal.getItems(
-          strings.Lists_ProjectTemplateFiles_Title,
-          ProjectTemplateFile,
-          {
-            ViewXml: '<View></View>'
-          },
-          ['File']
-        ),
-        web.userCustomActions.get()
-      ])
+      const [_templates, extensions, contentConfig, templateFiles, customActions] =
+        await Promise.all([
+          this._getTemplates(),
+          this.properties.extensionsLibrary
+            ? this._portal.getItems(
+                this.properties.extensionsLibrary,
+                ProjectExtension,
+                {
+                  ViewXml:
+                    '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+                },
+                ['File', 'FieldValuesAsText']
+              )
+            : Promise.resolve([]),
+          this.properties.contentConfigList
+            ? this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File'])
+            : Promise.resolve([]),
+          this._portal.getItems(
+            strings.Lists_ProjectTemplateFiles_Title,
+            ProjectTemplateFile,
+            {
+              ViewXml: '<View></View>'
+            },
+            ['File']
+          ),
+          web.userCustomActions.get()
+        ])
 
       const templates = _templates.map((tmpl) => {
         const [tmplFile] = templateFiles.filter((file) => file.id === tmpl.projectTemplateId)
