@@ -1,7 +1,7 @@
 Formatet er basert på [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detaljert 'endringslogg' for siste hovedversjon.
+Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
 ## 1.9.0 - TBA
 
@@ -19,6 +19,7 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 
 - Lagt inn mulighet for å angi sortering på Planner oppgaver som provisjoneres [#1056](https://github.com/Puzzlepart/prosjektportalen365/issues/1056)
 - Kolonner i aggregerte oversikter kan nå gjøres grupperbare [#1020](https://github.com/Puzzlepart/prosjektportalen365/issues/1020)
+- Malbibliotek-sti kan nå konfigureres i maloppsett-lista [#1179](https://github.com/Puzzlepart/prosjektportalen365/issues/1179)
 
 ### Feilrettinger
 

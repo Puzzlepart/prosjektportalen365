@@ -1,6 +1,8 @@
 define([], function () {
     return {
-        ConfiguredSpecifiedTaskMessage: 'Configured to run only the specified tasks: {0}',
+        CustomActionsText: 'Egendefinerte handlinger',
+        CustomActionsSubText: 'Justerer egendefinerte handlinger for prosjektområdet...',
+        ConfiguredSpecifiedTaskMessage: 'Konfigurert til å kun kjøre følgende steg: {0}',
         CmdSelectionCountText: '{0} er merket',
         ExtensionLockedTooltipText: 'Prosjekttilegget er låst og kan ikke velges bort.',
         ContentConfigLockedTooltipText: 'Standardinnhold-elementet er låst og kan ikke velges bort.',
