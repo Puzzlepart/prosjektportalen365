@@ -399,11 +399,12 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     try {
       await MSGraphHelper.Init(this.context.msGraphClientFactory)
       const data: IProjectSetupData = {}
+      const web = new Web(this.context.pageContext.web.absoluteUrl)
       this._portal = await new PortalDataService().configure({
         pageContext: this.context.pageContext as any
       })
 
-      const [_templates, extensions, contentConfig, templateFiles] = await Promise.all([
+      const [_templates, extensions, contentConfig, templateFiles, customActions] = await Promise.all([
         this._getTemplates(),
         this.properties.extensionsLibrary
           ? this._portal.getItems(
@@ -426,7 +427,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             ViewXml: '<View></View>'
           },
           ['File']
-        )
+        ),
+        web.userCustomActions.get()
       ])
 
       const templates = _templates.map((tmpl) => {
@@ -438,8 +440,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         ...data,
         extensions,
         contentConfig,
-        templates
-      }
+        templates,
+        customActions
+      } as IProjectSetupData
     } catch (error) {
       throw new ProjectSetupError(
         '_fetchData',
