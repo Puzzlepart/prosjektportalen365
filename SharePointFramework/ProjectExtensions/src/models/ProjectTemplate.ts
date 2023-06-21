@@ -27,6 +27,7 @@ export interface IProjectTemplateSPItem {
   GtIsParentProject: boolean
   IsHiddenTemplate: boolean
   GtProjectPhaseTermId: string
+  GtDocumentTemplateLibrary: string
 }
 
 /**
@@ -44,6 +45,7 @@ export class ProjectTemplate extends UserSelectableObject {
   public isParentProject: boolean
   public isForced: boolean = false
   public isLocked: boolean = false
+  public templateLibraryUrl: string
   private _autoConfigurable: boolean = false
   private _projectContentType: string
   private _projectStatusContentType: string
@@ -76,6 +78,7 @@ export class ProjectTemplate extends UserSelectableObject {
     this.extensions = isArray(spItem.GtProjectExtensionsId) ? spItem.GtProjectExtensionsId : []
     this.isProgram = spItem.GtIsProgram
     this.isParentProject = spItem.GtIsParentProject
+    this.templateLibraryUrl = spItem.GtDocumentTemplateLibrary
     this._autoConfigurable = spItem.IsAutoConfigurable
     this._projectContentType = spItem.GtProjectContentType
     this._projectStatusContentType = spItem.GtProjectStatusContentType
