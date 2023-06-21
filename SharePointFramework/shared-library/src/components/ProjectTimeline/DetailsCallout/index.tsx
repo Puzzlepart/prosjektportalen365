@@ -54,7 +54,8 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
               <a
                 target='_blank'
                 rel='noreferrer'
-                href={`${props.timelineItem.item.data.projectUrl}/SitePages/Prosjektstatus.aspx`}>
+                href={`${props.timelineItem.item.data.projectUrl}/SitePages/Prosjektstatus.aspx`}
+              >
                 <span>{strings.LastPublishedStatusreport}</span>
               </a>
             </p>
@@ -119,7 +120,8 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
       target={props.timelineItem.element}
       bounds={bounds}
       onDismiss={props.onDismiss}
-      setInitialFocus={true}>
+      setInitialFocus={true}
+    >
       <div className={styles.calloutHeader}>
         <div
           hidden={!data.tag}
@@ -127,7 +129,8 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
           className={styles.tag}
           style={{
             backgroundColor: data.bgColorHex
-          }}>
+          }}
+        >
           {data.tag}
         </div>
       </div>

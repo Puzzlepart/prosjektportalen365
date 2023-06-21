@@ -30,7 +30,8 @@ export const AddProjectDialog: FC = () => {
       dialogContentProps={{
         type: DialogType.largeHeader,
         title: strings.ProgramAdministrationAddChildsButtonText
-      }}>
+      }}
+    >
       <div className={styles.dialogContent}>
         <ScrollablePane>
           <ShimmeredDetailsList

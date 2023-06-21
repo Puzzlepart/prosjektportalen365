@@ -18,9 +18,7 @@ import { UncertaintyElementModel } from '../../models'
 import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
 import { IOpportunityMatrixWebPartProps } from './types'
 
-export default class OpportunityMatrixWebPart extends BaseProjectWebPart<
-  IOpportunityMatrixWebPartProps
-> {
+export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpportunityMatrixWebPartProps> {
   private _items: UncertaintyElementModel[] = []
   private _error: Error
 

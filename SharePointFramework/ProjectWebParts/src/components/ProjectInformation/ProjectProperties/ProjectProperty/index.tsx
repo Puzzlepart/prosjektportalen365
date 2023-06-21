@@ -67,7 +67,8 @@ export const ProjectProperty: FC<IProjectPropertyProps> = ({
             className={styles.value}
             dangerouslySetInnerHTML={{
               __html: model.value.replace(/\n/g, '<br />')
-            }}></div>
+            }}
+          ></div>
         )
       }
     }

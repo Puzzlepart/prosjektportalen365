@@ -21,7 +21,8 @@ export function useItemRenderer(
           <div
             {...htmlProps}
             className={`${styles.timelineItem} rc-item`}
-            onClick={(event) => onItemClick(event, calProps.item)}>
+            onClick={(event) => onItemClick(event, calProps.item)}
+          >
             <div
               className={`${styles.itemContent} rc-milestoneitem-content`}
               style={{
@@ -41,7 +42,8 @@ export function useItemRenderer(
           <div
             {...htmlProps}
             className={`${styles.timelineItem} rc-item`}
-            onClick={(event) => onItemClick(event, calProps.item)}>
+            onClick={(event) => onItemClick(event, calProps.item)}
+          >
             <div
               className={`${styles.itemContent} rc-milestoneitem-content`}
               style={{
@@ -62,13 +64,15 @@ export function useItemRenderer(
           <div
             {...htmlProps}
             className={`${styles.timelineItem} rc-item`}
-            onClick={(event) => onItemClick(event, calProps.item)}>
+            onClick={(event) => onItemClick(event, calProps.item)}
+          >
             <div
               className={`${styles.itemContent} rc-item-content`}
               style={{
                 maxHeight: `${calProps.itemContext.dimensions.height}`,
                 paddingLeft: '8px'
-              }}>
+              }}
+            >
               {calProps.item.title}
             </div>
           </div>

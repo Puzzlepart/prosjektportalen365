@@ -13,7 +13,8 @@ export const useAddProjectDialog = () => {
   })
 
   useEffect(() => {
-    context.props.dataAdapter.getHubSiteProjects()
+    context.props.dataAdapter
+      .getHubSiteProjects()
       .then((availableProjects) =>
         context.dispatch(DATA_LOADED({ data: { availableProjects }, scope: 'AddProjectDialog' }))
       )

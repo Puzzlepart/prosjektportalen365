@@ -49,7 +49,8 @@ export const ChangePhaseDialog: FC = () => {
         }
         dialogContentProps={{ type: DialogType.largeHeader }}
         modalProps={{ isDarkOverlay: true, isBlocking: false }}
-        onDismiss={() => context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())}>
+        onDismiss={() => context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())}
+      >
         {state.view === View.Confirm && context.props.useDynamicHomepage && (
           <DynamicHomepageContent />
         )}

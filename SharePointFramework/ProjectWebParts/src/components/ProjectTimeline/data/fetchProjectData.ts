@@ -1,10 +1,7 @@
 import { format } from '@fluentui/react'
 import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
-import {
-  TimelineConfigurationModel,
-  TimelineContentModel
-} from 'pp365-shared-library/lib/models'
+import { TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-library/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { first } from 'underscore'
 import { IProjectTimelineProps } from '../types'

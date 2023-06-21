@@ -6,12 +6,8 @@ import { useTimelineList } from './useTimelineList'
 
 export const TimelineList: FC = () => {
   const context = useContext(ProjectTimelineContext)
-  const {
-    getCommandBarProps,
-    onRenderItemColumn,
-    selection,
-    onColumnHeaderClick
-  } = useTimelineList()
+  const { getCommandBarProps, onRenderItemColumn, selection, onColumnHeaderClick } =
+    useTimelineList()
   return (
     <>
       <div className={styles.timelineList}>

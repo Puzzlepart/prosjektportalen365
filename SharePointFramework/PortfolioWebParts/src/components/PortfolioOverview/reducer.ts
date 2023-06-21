@@ -240,10 +240,10 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
             break
           default:
             state.items = sortArray(state.items, [payload.column.fieldName], {
-              reverse: !isSortedDescending,
+              reverse: !isSortedDescending
             })
             break
-        }        
+        }
       }
       state.sortBy = _.pick(payload, ['column', 'customSort'])
       state.columns = state.columns.map((col) => {

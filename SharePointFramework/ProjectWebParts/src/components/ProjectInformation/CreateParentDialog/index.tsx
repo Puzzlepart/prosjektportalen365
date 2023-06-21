@@ -31,7 +31,8 @@ export const CreateParentDialog: FC = () => {
         type: DialogType.largeHeader,
         title: strings.CreateParentModalTitle,
         subText: strings.CreateParentModalSubText
-      }}>
+      }}
+    >
       {!isLoading && (
         <DialogFooter>
           <DefaultButton

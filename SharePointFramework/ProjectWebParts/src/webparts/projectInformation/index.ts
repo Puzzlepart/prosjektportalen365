@@ -12,9 +12,7 @@ import * as strings from 'ProjectWebPartsStrings'
 import React from 'react'
 import { BaseProjectWebPart } from '../@baseProjectWebPart'
 
-export default class ProjectInformationWebPart extends BaseProjectWebPart<
-  IProjectInformationProps
-> {
+export default class ProjectInformationWebPart extends BaseProjectWebPart<IProjectInformationProps> {
   public async onInit() {
     await super.onInit()
   }

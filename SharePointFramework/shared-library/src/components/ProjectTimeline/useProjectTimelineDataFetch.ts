@@ -131,21 +131,17 @@ const transformItems = (
 const fetchData = async (props: IProjectTimelineProps): Promise<Partial<IProjectTimelineState>> => {
   try {
     const timelineConfig = await props.dataAdapter.fetchTimelineConfiguration()
-    const [
-      projects,
-      projectData,
-      timelineContentItems,
-      timelineAggregatedContent = []
-    ] = await Promise.all([
-      props.dataAdapter.fetchEnrichedProjects(),
-      props.dataAdapter.fetchTimelineProjectData(timelineConfig),
-      props.dataAdapter.fetchTimelineContentItems(timelineConfig),
-      props.dataAdapter.fetchTimelineAggregatedContent(
-        props.configItemTitle,
-        props.dataSourceName,
-        timelineConfig
-      )
-    ])
+    const [projects, projectData, timelineContentItems, timelineAggregatedContent = []] =
+      await Promise.all([
+        props.dataAdapter.fetchEnrichedProjects(),
+        props.dataAdapter.fetchTimelineProjectData(timelineConfig),
+        props.dataAdapter.fetchTimelineContentItems(timelineConfig),
+        props.dataAdapter.fetchTimelineAggregatedContent(
+          props.configItemTitle,
+          props.dataSourceName,
+          timelineConfig
+        )
+      ])
 
     const filteredProjects: any[] = projects.filter((project) => {
       return project.startDate !== null && project.endDate !== null

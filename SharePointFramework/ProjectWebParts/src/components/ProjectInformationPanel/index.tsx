@@ -19,7 +19,8 @@ export const ProjectInformationPanel: FC<IProjectInformationPanelProps> = (props
         type={PanelType.medium}
         onDismiss={() => setShowPanel(false)}
         isLightDismiss={true}
-        {...props.panelProps}>
+        {...props.panelProps}
+      >
         <ProjectInformation {...props} />
       </Panel>
     </>

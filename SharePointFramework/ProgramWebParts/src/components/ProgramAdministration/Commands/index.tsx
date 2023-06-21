@@ -24,11 +24,11 @@ export const Commands: FC = () => {
       disabled:
         isEmpty(context.state.selectedProjectsToDelete) || !context.state.userHasManagePermission,
       onClick: () => {
-        context.props.dataAdapter.removeChildProjects(context.state.selectedProjectsToDelete).then(
-          (childProjects) => {
+        context.props.dataAdapter
+          .removeChildProjects(context.state.selectedProjectsToDelete)
+          .then((childProjects) => {
             context.dispatch(CHILD_PROJECTS_REMOVED({ childProjects }))
-          }
-        )
+          })
       }
     }
   ]

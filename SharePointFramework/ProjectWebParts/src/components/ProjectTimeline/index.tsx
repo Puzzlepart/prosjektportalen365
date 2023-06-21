@@ -9,9 +9,8 @@ import { IProjectTimelineProps } from './types'
 import { useProjectTimeline } from './useProjectTimeline'
 
 export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
-  const { state, setState, onFilterChange, onGroupByChange, defaultTimeframe } = useProjectTimeline(
-    props
-  )
+  const { state, setState, onFilterChange, onGroupByChange, defaultTimeframe } =
+    useProjectTimeline(props)
 
   return (
     <ProjectTimelineContext.Provider value={{ props, state, setState }}>

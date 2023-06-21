@@ -20,7 +20,8 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
         <ProjectPhasesContext.Provider value={{ props, state, dispatch, onChangePhase }}>
           <Shimmer
             isDataLoaded={state.isDataLoaded || !!state.error}
-            shimmerElements={getShimmerElements(rootRef.current?.clientWidth)}>
+            shimmerElements={getShimmerElements(rootRef.current?.clientWidth)}
+          >
             <ul className={styles.phaseList}>
               {state.data.phases
                 .filter((p) => p.isVisible)

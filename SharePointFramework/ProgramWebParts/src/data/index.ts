@@ -23,11 +23,18 @@ import {
 import {
   Benefit,
   BenefitMeasurement,
-  BenefitMeasurementIndicator,
+  BenefitMeasurementIndicator
 } from 'pp365-portfoliowebparts/lib/models'
 import { ISPDataAdapterBaseConfiguration, SPDataAdapterBase } from 'pp365-shared-library/lib/data'
 import { getUserPhoto } from 'pp365-shared-library/lib/helpers/getUserPhoto'
-import { DataSource, PortfolioOverviewView, ProjectColumn, ProjectListModel, TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-library/lib/models'
+import {
+  DataSource,
+  PortfolioOverviewView,
+  ProjectColumn,
+  ProjectListModel,
+  TimelineConfigurationModel,
+  TimelineContentModel
+} from 'pp365-shared-library/lib/models'
 import { DataSourceService, ProjectDataService } from 'pp365-shared-library/lib/services'
 import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS, IFetchDataForViewItemResult } from './types'
@@ -67,7 +74,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
 
   /**
    * Get portfolio configuration.
-   * 
+   *
    * For now it uses `as any` to avoid type errors.
    *
    * @description Used in `PortfolioOverview`
@@ -98,7 +105,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    * Get aggregated list config for the given category.
    *
    * Returns `views`, `viewsUrls`, `columnUrls` and `level`.
-   * 
+   *
    * For now it uses `as any` to avoid type errors.
    *
    * @param category Category for data source
@@ -434,7 +441,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
             (child) =>
               child?.SiteId === item?.GtSiteIdLookup?.GtSiteId ||
               item?.GtSiteIdLookup?.GtSiteId ===
-              this?.spfxContext?.pageContext?.site?.id?.toString()
+                this?.spfxContext?.pageContext?.site?.id?.toString()
           )
         ) {
           if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
@@ -889,11 +896,9 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     try {
       const siteId = this.spfxContext.pageContext.site.id.toString()
       const list = this.portal.web.lists.getByTitle(strings.ProjectsListName)
-      const [item] = await list.items
-        .filter(`GtSiteId eq '${siteId}'`)
-        .get()
+      const [item] = await list.items.filter(`GtSiteId eq '${siteId}'`).get()
       await list.items.getById(item.ID).update(properties)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
@@ -907,8 +912,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     try {
       const projectProperties = await sp.web.lists
         .getByTitle('Prosjektegenskaper')
-        .items
-        .getById(1)
+        .items.getById(1)
         .usingCaching()
         .get()
       try {
@@ -929,9 +933,8 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   public async initChildProjects(): Promise<void> {
     try {
       this.childProjects = await this.getChildProjects()
-    } catch (error) { }
+    } catch (error) {}
   }
-
 
   /**
    * Fetches all projects associated with the current hubsite context. This is done by querying the
@@ -982,8 +985,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     )
   }
 
-
-
   /**
    * Get child project site IDs from the Prosjektegenskaper list item. The note field `GtChildProjects`
    * contains a JSON string with the child projects, and needs to be parsed. If the retrieve
@@ -993,8 +994,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     try {
       const projectProperties = await sp.web.lists
         .getByTitle('Prosjektegenskaper')
-        .items
-        .getById(1)
+        .items.getById(1)
         .usingCaching()
         .get()
       try {
@@ -1026,9 +1026,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    *
    * @param newProjects New projects to add
    */
-  public async addChildProjects(
-    newProjects: Array<Record<string, string>>
-  ) {
+  public async addChildProjects(newProjects: Array<Record<string, string>>) {
     const [{ GtChildProjects }] = await sp.web.lists
       .getByTitle('Prosjektegenskaper')
       .items.select('GtChildProjects')

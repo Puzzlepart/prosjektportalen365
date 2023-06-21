@@ -18,7 +18,8 @@ export const CheckListItem: FC<IChecklistItemProps> = ({ item }) => {
         <div
           className={styles.header}
           style={{ cursor: hasComment && 'pointer' }}
-          onClick={() => hasComment && setCommentHidden(!commentHidden)}>
+          onClick={() => hasComment && setCommentHidden(!commentHidden)}
+        >
           <div className={styles.title}>
             <span>
               {item.id}. {item.title}

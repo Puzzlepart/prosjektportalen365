@@ -84,8 +84,8 @@ export class SetupProjectInformation extends BaseTask {
    * - `IsParentProject`: `true` if the current project is a parent project, `false` otherwise
    * - `GtInstalledVersion`: The installed version
    * - `GtCurrentVersion`: The current version (same as installed version initially)
-   * 
-   * @param params Params 
+   *
+   * @param params Params
    */
   private _createPropertyItem(params: IBaseTaskParams): Record<string, string | boolean | number> {
     return {
@@ -95,7 +95,7 @@ export class SetupProjectInformation extends BaseTask {
       GtIsParentProject: this.data.selectedTemplate.isParentProject,
       GtInstalledVersion: params.templateSchema.Version,
       GtCurrentVersion: params.templateSchema.Version
-    } 
+    }
   }
 
   /**
@@ -115,7 +115,7 @@ export class SetupProjectInformation extends BaseTask {
         params.context.pageContext.legacyPageContext.groupId
       )
       if (entity) return
-      const properties:  Record<string, string | boolean | number> = {
+      const properties: Record<string, string | boolean | number> = {
         ...this._createPropertyItem(params),
         GtSiteId: params.context.pageContext.site.id.toString(),
         GtProjectTemplate: this.data.selectedTemplate.text

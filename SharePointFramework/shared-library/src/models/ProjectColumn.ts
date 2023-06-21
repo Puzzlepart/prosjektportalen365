@@ -97,7 +97,7 @@ export class ProjectColumn implements IColumn {
 
   /**
    * Checks if the column is visible on the given page.
-   * 
+   *
    * @param page Page to check
    */
   public isVisible(page: 'Frontpage' | 'ProjectStatus' | 'Portfolio') {
@@ -183,9 +183,9 @@ export class ProjectColumn implements IColumn {
   /**
    * Set arbitrary data on the column. Such as `renderAs` or
    * `isGroupable`.
-   * 
+   *
    * @param data Data to set
-   * @returns 
+   * @returns
    */
   public setData(data: any): ProjectColumn {
     this.data = { ...this.data, ...data }

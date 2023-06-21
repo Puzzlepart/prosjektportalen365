@@ -2,10 +2,7 @@ import { IColumn } from '@fluentui/react'
 import { sp } from '@pnp/sp'
 import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
-import {
-  TimelineConfigurationModel,
-  TimelineContentModel
-} from 'pp365-shared-library/lib/models'
+import { TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-library/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { IProjectTimelineProps } from '../types'
 
@@ -24,9 +21,10 @@ export async function fetchTimelineData(
       strings.TimelineContentListName
     )
 
-    const projectDeliveries = (props.showProjectDeliveries
-      ? await sp.web.lists.getByTitle(props.projectDeliveriesListName).items.getAll()
-      : []
+    const projectDeliveries = (
+      props.showProjectDeliveries
+        ? await sp.web.lists.getByTitle(props.projectDeliveriesListName).items.getAll()
+        : []
     )
       .map((item) => {
         const config = _.find(timelineConfig, (col) => col.title === props.configItemTitle)

@@ -16,10 +16,12 @@ export const MatrixElement: FC<IMatrixElementProps> = (props) => {
             <span
               dangerouslySetInnerHTML={{
                 __html: replaceTokens(context.props?.calloutTemplate, props.model.item)
-              }}></span>
+              }}
+            ></span>
           </div>
         )
-      }>
+      }
+    >
       <div className={styles.root} title={props.title} style={props.style} hidden={props.hidden}>
         {props.model.id}
       </div>

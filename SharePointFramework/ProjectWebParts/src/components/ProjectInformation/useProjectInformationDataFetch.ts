@@ -134,22 +134,18 @@ const fetchData: DataFetchFunction<
         logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }
-    const [
-      columns,
-      propertiesData,
-      parentProjects,
-      [reports, sections, columnConfig]
-    ] = await Promise.all([
-      SPDataAdapter.portal.getProjectColumns(),
-      SPDataAdapter.project.getPropertiesData(),
-      props.page === 'Frontpage'
-        ? SPDataAdapter.portal.getParentProjects(
-            props.webPartContext?.pageContext?.web?.absoluteUrl,
-            ProjectInformationParentProject
-          )
-        : Promise.resolve([]),
-      fetchProjectStatusReports(props)
-    ])
+    const [columns, propertiesData, parentProjects, [reports, sections, columnConfig]] =
+      await Promise.all([
+        SPDataAdapter.portal.getProjectColumns(),
+        SPDataAdapter.project.getPropertiesData(),
+        props.page === 'Frontpage'
+          ? SPDataAdapter.portal.getParentProjects(
+              props.webPartContext?.pageContext?.web?.absoluteUrl,
+              ProjectInformationParentProject
+            )
+          : Promise.resolve([]),
+        fetchProjectStatusReports(props)
+      ])
     const data: IProjectInformationData = {
       columns,
       parentProjects,

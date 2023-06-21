@@ -49,7 +49,8 @@ export const Timeline: FC<ITimelineProps> = (props) => {
             <div
               dangerouslySetInnerHTML={{
                 __html: format(props.infoText, encodeURIComponent(window.location.href))
-              }}></div>
+              }}
+            ></div>
           </MessageBar>
         </div>
       )}
@@ -64,7 +65,8 @@ export const Timeline: FC<ITimelineProps> = (props) => {
           canChangeGroup={false}
           sidebarWidth={sidebarWidth}
           itemRenderer={itemRenderer}
-          groupRenderer={groupRenderer}>
+          groupRenderer={groupRenderer}
+        >
           <TimelineMarkers>
             <TodayMarker date={moment().toDate()} />
           </TimelineMarkers>

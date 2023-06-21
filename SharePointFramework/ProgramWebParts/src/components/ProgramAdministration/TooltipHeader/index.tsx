@@ -14,7 +14,8 @@ export const TooltipHeader: FC = () => {
             <div>
               <p>{strings.ProgramAdministrationInfoMessage}</p>
             </div>
-          }>
+          }
+        >
           <span>{context.props.title}</span>
           <Icon iconName='Info' className={styles.icon} />
         </TooltipHost>

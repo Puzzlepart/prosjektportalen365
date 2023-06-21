@@ -38,7 +38,8 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
           ) : (
             <Shimmer
               isDataLoaded={state.isDataLoaded}
-              customElementsGroup={<CustomShimmerElementsGroup />}>
+              customElementsGroup={<CustomShimmerElementsGroup />}
+            >
               <ProjectProperties properties={state.properties} />
               {!props.hideAllActions && state.message && (
                 <UserMessage className={styles.userMessage} {...state.message} />

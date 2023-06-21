@@ -31,28 +31,22 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
         logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }
-    const [
-      properties,
-      reportList,
-      reports,
-      sections,
-      columnConfig,
-      reportFields
-    ] = await Promise.all([
-      SPDataAdapter.project.getPropertiesData(),
-      SPDataAdapter.portal.getStatusReportListProps(),
-      SPDataAdapter.portal.getStatusReports({
-        useCaching: false,
-        publishedString: strings.GtModerationStatus_Choice_Published
-      }),
-      SPDataAdapter.portal.getProjectStatusSections(),
-      SPDataAdapter.portal.getProjectColumnConfig(),
-      SPDataAdapter.portal.getListFields(
-        'PROJECT_STATUS',
-        // eslint-disable-next-line quotes
-        "Hidden eq false and Group ne 'Hidden'"
-      )
-    ])
+    const [properties, reportList, reports, sections, columnConfig, reportFields] =
+      await Promise.all([
+        SPDataAdapter.project.getPropertiesData(),
+        SPDataAdapter.portal.getStatusReportListProps(),
+        SPDataAdapter.portal.getStatusReports({
+          useCaching: false,
+          publishedString: strings.GtModerationStatus_Choice_Published
+        }),
+        SPDataAdapter.portal.getProjectStatusSections(),
+        SPDataAdapter.portal.getProjectColumnConfig(),
+        SPDataAdapter.portal.getListFields(
+          'PROJECT_STATUS',
+          // eslint-disable-next-line quotes
+          "Hidden eq false and Group ne 'Hidden'"
+        )
+      ])
     const userHasAdminPermission = await SPDataAdapter.checkProjectAdminPermissions(
       ProjectAdminPermission.ProjectStatusAdmin,
       properties.fieldValues

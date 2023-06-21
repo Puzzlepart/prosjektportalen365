@@ -14,7 +14,8 @@ export const BaseSection: FC<IBaseSectionProps> = (props) => {
         props.transparent && styles.transparent,
         props.noPadding && styles.noPadding,
         props.noMargin && styles.noMargin
-      ])}>
+      ])}
+    >
       <div className={styles.container}>
         <Shimmer isDataLoaded={context.state.isDataLoaded}>{props.children}</Shimmer>
       </div>

@@ -37,7 +37,8 @@ export const SyncProjectDialog: FC = () => {
         type: DialogType.largeHeader,
         title: strings.SyncProjectModalTitle,
         subText: strings.SyncProjectModalSubText
-      }}>
+      }}
+    >
       {isLoading && (
         <Spinner
           label={format(strings.LoadingText, strings.IdeaProjectDataTitle)}
