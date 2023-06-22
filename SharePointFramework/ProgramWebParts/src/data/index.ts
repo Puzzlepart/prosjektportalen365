@@ -37,6 +37,7 @@ import {
 } from 'pp365-shared-library/lib/models'
 import { DataSourceService, ProjectDataService } from 'pp365-shared-library/lib/services'
 import _ from 'underscore'
+import { GAINS_DEFAULT_SELECT_PROPERTIES } from './config'
 import { DEFAULT_SEARCH_SETTINGS, IFetchDataForViewItemResult } from './types'
 import { IProgramAdministrationProject } from 'components/ProgramAdministration/types'
 
@@ -439,7 +440,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
             (child) =>
               child?.SiteId === item?.GtSiteIdLookup?.GtSiteId ||
               item?.GtSiteIdLookup?.GtSiteId ===
-                this?.spfxContext?.pageContext?.site?.id?.toString()
+              this?.spfxContext?.pageContext?.site?.id?.toString()
           )
         ) {
           if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
@@ -894,9 +895,11 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     try {
       const siteId = this.spfxContext.pageContext.site.id.toString()
       const list = this.portal.web.lists.getByTitle(strings.ProjectsListName)
-      const [item] = await list.items.filter(`GtSiteId eq '${siteId}'`).get()
+      const [item] = await list.items
+        .filter(`GtSiteId eq '${siteId}'`)
+        .get()
       await list.items.getById(item.ID).update(properties)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
