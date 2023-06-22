@@ -233,6 +233,7 @@ Start-Transcript -Path "$PSScriptRoot/UpgradeSites_Log-$((Get-Date).ToString('yy
 
 Connect-SharePoint -Url $Url
 $global:__InstalledVersion = (Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1).FieldValues["InstallVersion"] 
+$ProjectItems = Get-PnPListItem -List "Prosjekter" -Query "<View></View>"
 
 [System.Uri]$Uri = $Url
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
@@ -267,11 +268,17 @@ if ($YesOrNo -eq "y" -or $CI_MODE) {
     }
 }
 
+# Converts the version string to a System.Version object
+[version]$InstalledVersion = $global:__InstalledVersion
+
 Write-Host "Upgrading existing sites"
-$ProjectsInHub | ForEach-Object {
-    Write-Host "`tUpgrading site $_"
-    UpgradeSite -Url $_
-    Write-Host "`t`tDone processing $_" -ForegroundColor Green
+foreach ($Project in $ProjectsInHub) {
+    Write-Host "`tUpgrading site $Project"
+    UpgradeSite -Url $Project
+    $ProjectItem = $ProjectItems | Where-Object { $_.FieldValues["GtSiteUrl"] -eq $Project }
+    Connect-SharePoint -Url $Url
+    Set-PnPListItem -List "Prosjekter" -Identity $ProjectItem.Id -Values @{"GtCurrentVersion" = ("{0}.{1}.{2}" -f $InstalledVersion.Major, $InstalledVersion.Minor, $InstalledVersion.Build) } | Out-Null
+    Write-Host "`t`tDone processing $Project" -ForegroundColor Green
 }
 
 if (-not $CI_MODE) {
