@@ -2,6 +2,7 @@ import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
+import _ from 'underscore'
 
 export class SetupProjectInformation extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -34,14 +35,12 @@ export class SetupProjectInformation extends BaseTask {
    *
    * The following properties are set for the property item initially:
    * - `Title`: The current web title
-   * - `TemplateParameters`: The template parameters as JSON string
    * - `IsProgram`: `true` if the current project is a program, `false` otherwise
    * - `IsParentProject`: `true` if the current project is a parent project, `false` otherwise
-   * - `GtInstalledVersion`: The installed version
-   * - `GtCurrentVersion`: The current version (same as installed version initially)
+   * - `TemplateParameters`: The template parameters as JSON string
    *
    * @param params Task parameters
-   * @param onProgress On progress funtion
+   * @param onProgress On progress function
    */
   private async _syncPropertiesList(
     params: IBaseTaskParams,
@@ -63,10 +62,12 @@ export class SetupProjectInformation extends BaseTask {
         strings.CreatingLocalProjectPropertiesListItemText,
         'AlignCenter'
       )
-      const properties = {
-        ...this._createPropertyItem(params),
-        TemplateParameters: JSON.stringify(params.templateSchema.Parameters),
-      }
+      const properties = this._createPropertyItem(params, [
+        'GtInstalledVersion',
+        'GtCurrentVersion',
+        'GtSiteId',
+        'GtProjectTemplate'
+      ])
       const propertyItem = list.items.getById(1)
       const propertyItems = await list.items.getAll()
       if (propertyItems.length >= 1) {
@@ -86,27 +87,35 @@ export class SetupProjectInformation extends BaseTask {
    * - `IsParentProject`: `true` if the current project is a parent project, `false` otherwise
    * - `GtInstalledVersion`: The installed version
    * - `GtCurrentVersion`: The current version (same as installed version initially)
+   * - `TemplateParameters`: The template parameters as JSON string
+   * - `GtSiteId`: The current site id
+   * - `GtProjectTemplate`: The selected project template
    *
    * @param params Params
+   * @param omit Properties to omit from the object
    */
-  private _createPropertyItem(params: IBaseTaskParams): Record<string, string | boolean | number> {
-    return {
-      Title: params.context.pageContext.web.title,
-      GtIsProgram: this.data.selectedTemplate.isProgram,
-      GtIsParentProject: this.data.selectedTemplate.isParentProject,
-      GtInstalledVersion: params.templateSchema.Version,
-      GtCurrentVersion: params.templateSchema.Version
-    }
+  private _createPropertyItem(
+    params: IBaseTaskParams,
+    omit: string[] = []
+  ): Record<string, string | boolean | number> {
+    return _.omit(
+      {
+        Title: params.context.pageContext.web.title,
+        GtIsProgram: this.data.selectedTemplate.isProgram,
+        GtIsParentProject: this.data.selectedTemplate.isParentProject,
+        GtInstalledVersion: params.templateSchema.Version,
+        GtCurrentVersion: params.templateSchema.Version,
+        TemplateParameters: JSON.stringify(params.templateSchema.Parameters),
+        GtSiteId: params.context.pageContext.site.id.toString(),
+        GtProjectTemplate: this.data.selectedTemplate.text
+      },
+      omit
+    )
   }
 
   /**
-   * Add entry to hub project list
-   *
-   * Stores the project with
-   * * Title
-   * * GtSiteId
-   * * GtProjectTemplate
-   * * ContentTypeId (if custom content type is specified in template parameters)
+   * Add entry to hub project list. Uses `this._createPropertyItem` to create the property item,
+   * and `entityService.createNewEntity` to create the entry in the hub site.
    *
    * @param params Task parameters
    */
@@ -117,9 +126,7 @@ export class SetupProjectInformation extends BaseTask {
       )
       if (entity) return
       const properties: Record<string, string | boolean | number> = {
-        ...this._createPropertyItem(params),
-        GtSiteId: params.context.pageContext.site.id.toString(),
-        GtProjectTemplate: this.data.selectedTemplate.text
+        ...this._createPropertyItem(params, ['TemplateParameters'])
       }
       if (params.templateSchema.Parameters.ProjectContentTypeId) {
         properties.ContentTypeId = params.templateSchema.Parameters.ProjectContentTypeId
