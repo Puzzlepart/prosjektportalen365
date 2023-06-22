@@ -8,8 +8,7 @@ Alle sjekkpunktene under må være sjekket av og godkjent for at vi skal kunne m
 
 - [ ] Sjekk at din branch ikke feiler på `linting`.
 - [ ] Legg ved beskrivelse i [CHANGELOG](https://github.com/Puzzlepart/prosjektportalen365/blob/dev/CHANGELOG.md), markert med **ID av issue** knyttet til PR-en
-- [ ] Angi korrekt `Milestone` på PR-en og issuet
-- [ ] Tilegn deg selv PR-en og legg til `labels`
+- [ ] Angi korrekt `Milestone` på PR-en og issuet, samt tilegn deg selv PR-en og legg til `labels`
 
 ### Beskrivelse
 
@@ -35,8 +34,11 @@ Vennligst beskriv hvordan noen andre (en vanlig bruker uten kodeferdigheter) kan
 
 -
 
-### Oppdatering av dokumentasjon
+## Sjekkliste for godkjenner
 
-Oppdater brukerhåndboken om nødvendig
+Alle sjekkpunktene under må være sjekket av og godkjent av reviewers for at vi skal kunne merge branchen din mot dev.
 
-- Dokumentasjon: Ta en titt på [Brukermanual for Prosjektportalen 365](https://puzzlepart.github.io/prosjektportalen-manual/) og vurder behovet for oppdateringer.
+- [ ] Sjekk at det er fylt ut testpunkter
+- [ ] Sjekk om det er nødvendig å nevne denne PR i release notes
+- [ ] Sjekk om det er nødvendig å oppdatere dokumentasjon for hjelpeinnhold
+  - Ta en titt på [Brukermanual for Prosjektportalen 365](https://puzzlepart.github.io/prosjektportalen-manual/) og vurder behovet for oppdateringer.

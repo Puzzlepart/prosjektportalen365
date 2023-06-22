@@ -100,7 +100,7 @@ export async function fetchTimelineData(
     }))
 
     timelineContentItems = timelineContentItems
-      .filter((item) => item.GtSiteIdLookup.Title === props.webTitle)
+      .filter((item) => item.GtSiteIdLookup !== null)
       .map((item) => {
         const type = item.GtTimelineTypeLookup?.Title
         const config = _.find(timelineConfig, (col) => col.title === type)
