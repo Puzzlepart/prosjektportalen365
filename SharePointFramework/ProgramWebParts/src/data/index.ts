@@ -1,9 +1,11 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { flatten } from '@microsoft/sp-lodash-subset'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { dateAdd } from '@pnp/common'
+import { PnPClientStorage, dateAdd } from '@pnp/common'
 import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
+import * as strings from 'ProgramWebPartsStrings'
 import * as cleanDeep from 'clean-deep'
+import { IProgramAdministrationProject } from 'components/ProgramAdministration/types'
 import MSGraph from 'msgraph-helper'
 import {
   IGraphGroup,
@@ -23,11 +25,9 @@ import { ISPDataAdapterBaseConfiguration, SPDataAdapterBase } from 'pp365-shared
 import { getUserPhoto } from 'pp365-shared/lib/helpers/getUserPhoto'
 import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
 import { DataSourceService, ProjectDataService } from 'pp365-shared/lib/services'
-import * as strings from 'ProgramWebPartsStrings'
-import { GAINS_DEFAULT_SELECT_PROPERTIES } from './config'
-import { IFetchDataForViewItemResult } from './IFetchDataForViewItemResult'
-import { DEFAULT_SEARCH_SETTINGS } from './types'
 import _ from 'underscore'
+import { GAINS_DEFAULT_SELECT_PROPERTIES } from './config'
+import { DEFAULT_SEARCH_SETTINGS, IFetchDataForViewItemResult } from './types'
 
 /**
  * SPDataAdapter for `ProgramWebParts`.
@@ -197,38 +197,40 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    * Create queries if number of projects exceeds threshold to avoid 4096 character limitation by SharePoint
    *
    * @param queryProperty Dependant on whether it is aggregated portfolio or portfolio overview
-   * @param maxQueryLength Maximum length of query before pushing to array
-   * @param maxProjects Maximum projects required before creating strings
+   * @param maxQueryLength Maximum length of query before pushing to array (default: 2500)
+   * @param maxProjects Maximum projects required before creating strings  (default: 25)
    */
   public aggregatedQueryBuilder(
     queryProperty: string,
     maxQueryLength: number = 2500,
     maxProjects: number = 25
   ): string[] {
-    const queryArray = []
+    const aggregatedQueries = []
     let queryString = ''
     if (this.childProjects.length > maxProjects) {
       this.childProjects.forEach((childProject, index) => {
         queryString += `${queryProperty}:${childProject.SiteId} `
         if (queryString.length > maxQueryLength) {
-          queryArray.push(queryString)
+          aggregatedQueries.push(queryString)
           queryString = ''
         }
         if (index === this.childProjects.length - 1) {
-          queryArray.push(queryString)
+          aggregatedQueries.push(queryString)
         }
       })
     } else {
       this.childProjects.forEach((childProject) => {
         queryString += `${queryProperty}:${childProject.SiteId} `
       })
-      queryArray.push(queryString)
+      aggregatedQueries.push(queryString)
     }
-    return queryArray
+    return aggregatedQueries.filter(Boolean)
   }
 
   /**
-   *  do a dynamic amount of sp.search calls
+   * Do a dynamic amount of `sp.search` calls based on the amount of projects
+   * to avoid 4096 character limitation by SharePoint. Uses `this.aggregatedQueryBuilder`
+   * to create queries.
    *
    * @description Used in `PortfolioOverview`
    *
@@ -271,12 +273,10 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   }
 
   /**
-   * Fetches data for portfolio views
-   *
-   * @description Used in `PortfolioOverview`
-   *
+   * Fetches data for the specified view.
+   * 
    * @param view View configuration
-   * @param configuration PortfolioOverviewConfiguration
+   * @param configuration Configuration
    * @param siteId Site ID
    * @param siteIdProperty Site ID property
    */
@@ -394,7 +394,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
             (child) =>
               child?.SiteId === item?.GtSiteIdLookup?.GtSiteId ||
               item?.GtSiteIdLookup?.GtSiteId ===
-                this?.spfxContext?.pageContext?.site?.id?.toString()
+              this?.spfxContext?.pageContext?.site?.id?.toString()
           )
         ) {
           if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
@@ -761,11 +761,178 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    */
   public async updateProjectInHub(properties: Record<string, any>): Promise<void> {
     try {
+      const siteId = this.spfxContext.pageContext.site.id.toString()
       const list = this.portal.web.lists.getByTitle(strings.ProjectsListName)
       const [item] = await list.items
-        .filter(`GtSiteId eq '${this.spfxContext.pageContext.site.id.toString()}'`)
+        .filter(`GtSiteId eq '${siteId}'`)
         .get()
       await list.items.getById(item.ID).update(properties)
-    } catch (error) {}
+    } catch (error) { }
+  }
+
+  /**
+   * Get child projects from the Prosjektegenskaper list item. The note field `GtChildProjects`
+   * contains a JSON string with the child projects, and needs to be parsed. If the retrieve
+   * fails, an empty array is returned.
+   *
+   * @returns {Promise<Array<Record<string, string>>>} Child projects
+   */
+  public async getChildProjects(): Promise<Array<Record<string, string>>> {
+    try {
+      const projectProperties = await sp.web.lists
+        .getByTitle('Prosjektegenskaper')
+        .items
+        .getById(1)
+        .usingCaching()
+        .get()
+      try {
+        const childProjects = JSON.parse(projectProperties.GtChildProjects)
+        return !_.isEmpty(childProjects) ? childProjects : []
+      } catch {
+        return []
+      }
+    } catch (error) {
+      return []
+    }
+  }
+
+  /**
+   * Initialize child projects. Runs `getChildProjects` and sets the `childProjects` property
+   * of the class.
+   */
+  public async initChildProjects(): Promise<void> {
+    try {
+      this.childProjects = await this.getChildProjects()
+    } catch (error) { }
+  }
+
+
+  /**
+   * Fetches all projects associated with the current hubsite context. This is done by querying the
+   * search index for all sites with the same DepartmentId as the current hubsite and all project items with
+   * the same DepartmentId as the current hubsite. The sites are then matched with the items to
+   * retrieve the SiteId and SPWebURL. The result are cached for 5 minutes.
+   */
+  public async getHubSiteProjects() {
+    const { HubSiteId } = await sp.site.select('HubSiteId').usingCaching().get()
+    return new PnPClientStorage().local.getOrPut(
+      `HubSiteProjects_${HubSiteId}`,
+      async () => {
+        const [{ PrimarySearchResults: sts_sites }, { PrimarySearchResults: items }] =
+          await Promise.all([
+            sp.search({
+              Querytext: `DepartmentId:{${HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
+              RowLimit: 500,
+              StartRow: 0,
+              ClientType: 'ContentSearchRegular',
+              SelectProperties: ['SPWebURL', 'Title', 'SiteId'],
+              TrimDuplicates: false
+            }),
+            sp.search({
+              Querytext: `DepartmentId:{${HubSiteId}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
+              RowLimit: 500,
+              StartRow: 0,
+              ClientType: 'ContentSearchRegular',
+              SelectProperties: ['GtSiteIdOWSTEXT', 'Title'],
+              TrimDuplicates: false
+            })
+          ])
+        return items
+          .filter(
+            (item) =>
+              item['GtSiteIdOWSTEXT'] &&
+              item['GtSiteIdOWSTEXT'] !== '00000000-0000-0000-0000-000000000000'
+          )
+          .map<IProgramAdministrationProject>((item) => {
+            const site = sts_sites.find((site) => site['SiteId'] === item['GtSiteIdOWSTEXT'])
+            return {
+              SiteId: item['GtSiteIdOWSTEXT'],
+              Title: site?.Title ?? item['Title'],
+              SPWebURL: site && site['SPWebURL']
+            }
+          })
+      },
+      dateAdd(new Date(), 'minute', 5)
+    )
+  }
+
+
+
+  /**
+   * Get child project site IDs from the Prosjektegenskaper list item. The note field `GtChildProjects`
+   * contains a JSON string with the child projects, and needs to be parsed. If the retrieve
+   * fails, an empty array is returned.
+   */
+  public async getChildProjectIds(): Promise<string[]> {
+    try {
+      const projectProperties = await sp.web.lists
+        .getByTitle('Prosjektegenskaper')
+        .items
+        .getById(1)
+        .usingCaching()
+        .get()
+      try {
+        const childProjects = JSON.parse(projectProperties.GtChildProjects)
+        return childProjects.map((p: Record<string, any>) => p.SiteId)
+      } catch {
+        return []
+      }
+    } catch (error) {
+      return []
+    }
+  }
+
+  /**
+   * Fetches current child projects. Fetches all available projects and filters out the ones that are not
+   * in the child projects project property `GtChildProjects`.
+   */
+  public async fetchChildProjects(): Promise<any[]> {
+    const [availableProjects, childProjects] = await Promise.all([
+      this.getHubSiteProjects(),
+      this.getChildProjects()
+    ])
+    const childProjectsSiteIds = childProjects.map((p: Record<string, any>) => p.SiteId)
+    return availableProjects.filter((p) => childProjectsSiteIds.indexOf(p.SiteId) !== -1)
+  }
+
+  /**
+   * Add child projects.
+   *
+   * @param newProjects New projects to add
+   */
+  public async addChildProjects(
+    newProjects: Array<Record<string, string>>
+  ) {
+    const [{ GtChildProjects }] = await sp.web.lists
+      .getByTitle('Prosjektegenskaper')
+      .items.select('GtChildProjects')
+      .get()
+    const projects = JSON.parse(GtChildProjects)
+    const updatedProjects = [...projects, ...newProjects]
+    const updateProperties = { GtChildProjects: JSON.stringify(updatedProjects) }
+    await sp.web.lists.getByTitle('Prosjektegenskaper').items.getById(1).update(updateProperties)
+    await this.updateProjectInHub(updateProperties)
+  }
+
+  /**
+   * Remove child projects.
+   *
+   * @param projectToRemove Projects to delete
+   */
+  public async removeChildProjects(
+    projectToRemove: Array<Record<string, string>>
+  ): Promise<Array<Record<string, string>>> {
+    const [currentData] = await sp.web.lists
+      .getByTitle('Prosjektegenskaper')
+      .items.select('GtChildProjects')
+      .get()
+    const projects: Array<Record<string, string>> = JSON.parse(currentData.GtChildProjects)
+    const updatedProjects = projects.filter(
+      (p) => !projectToRemove.some((el) => el.SiteId === p.SiteId)
+    )
+    const updateProperties = { GtChildProjects: JSON.stringify(updatedProjects) }
+    await sp.web.lists.getByTitle('Prosjektegenskaper').items.getById(1).update(updateProperties)
+    await this.updateProjectInHub(updateProperties)
+    return updatedProjects
   }
 }

@@ -293,7 +293,9 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetches data for portfolio views
+   * Internal method for fetching data for a view. Used by `this.fetchDataForRegularView`
+   * and `this.fetchDataForManagerView`. Uses `this._fetchItems` to fetch data from search
+   * supporting more than 500 items using batching.
    *
    * @param view View
    * @param configuration Configuration
@@ -308,29 +310,24 @@ export class DataAdapter implements IDataAdapter {
     siteIdProperty: string = 'GtSiteIdOWSTEXT',
     queryArray?: string
   ) {
-    let [
-      { PrimarySearchResults: projects },
-      { PrimarySearchResults: sites },
-      { PrimarySearchResults: statusReports }
-    ] = await Promise.all([
-      sp.search({
-        ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${queryArray ?? ''} ${view.searchQuery} `,
-        SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
-      }),
-      sp.search({
-        ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${queryArray ?? ''} DepartmentId:{${siteId}} contentclass:STS_Site`,
-        SelectProperties: ['Path', 'Title', 'SiteId']
-      }),
-      sp.search({
-        ...DEFAULT_SEARCH_SETTINGS,
-        QueryTemplate: `${
+    let [projects, sites, statusReports] = await Promise.all([
+      this._fetchItems(`${queryArray ?? ''} ${view.searchQuery} `, [
+        ...configuration.columns.map((f) => f.fieldName),
+        siteIdProperty
+      ]),
+      this._fetchItems(`${queryArray ?? ''} DepartmentId:{${siteId}} contentclass:STS_Site`, [
+        'Path',
+        'Title',
+        'SiteId'
+      ]),
+      this._fetchItems(
+        `${
           queryArray ?? ''
         } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
-        SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
-        Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',')
-      })
+        [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
+        500,
+        { Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',') }
+      )
     ])
     projects = projects.map((item) => cleanDeep({ ...item }))
     sites = sites.map((item) => cleanDeep({ ...item }))
@@ -601,9 +598,7 @@ export class DataAdapter implements IDataAdapter {
             )
             .filter(filter)
             .orderBy('Title')
-            .top(500)
-            .usingCaching()
-            .get<ISPProjectItem[]>(),
+            .getAll(),
           this.fetchMemberGroups(),
           sp.web.siteUsers.select('Id', 'Title', 'Email').get<ISPUser[]>(),
           this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId'])
@@ -681,18 +676,21 @@ export class DataAdapter implements IDataAdapter {
    * @param queryTemplate Query template
    * @param selectProperties Select properties
    * @param batchSize Batch size (default: 500)
+   * @param additionalQuery Additional query parameters
    */
   private async _fetchItems(
     queryTemplate: string,
     selectProperties: string[],
-    batchSize = 500
+    batchSize = 500,
+    additionalQuery: Record<string, any> = {}
   ): Promise<SearchResult[]> {
     const query: SearchQueryInit = {
       QueryTemplate: `${queryTemplate}`,
       Querytext: '*',
       RowLimit: batchSize,
       TrimDuplicates: false,
-      SelectProperties: [...selectProperties, 'Path', 'SPWebURL', 'SiteTitle', 'UniqueID']
+      SelectProperties: [...selectProperties, 'Path', 'SPWebURL', 'SiteTitle', 'UniqueID'],
+      ...additionalQuery
     }
     const { PrimarySearchResults, TotalRows } = await sp.search(query)
     const results = [...PrimarySearchResults]

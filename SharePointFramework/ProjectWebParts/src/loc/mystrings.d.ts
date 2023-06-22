@@ -1,4 +1,13 @@
 declare interface IProjectWebPartsStrings {
+  UnknownConfigurationName: any
+  SiteAssetsConfigurationFolder: string
+  RiskMatrixConfigurationFolder: string
+  ManualConfigurationNotFoundOrInvalid: string
+  RiskMatrixManualConfigurationPathDefaltValue: string
+  UseDynamicConfigurationOffText: string
+  UseDynamicConfigurationOnText: string
+  ManualConfigurationPathLabel: string
+  UseDynamicConfigurationLabel: string 
   PublishReportSpinnerText: string
   PublishStatusReportSectionDataWarning: string
   AdminPageLinkLabel: string

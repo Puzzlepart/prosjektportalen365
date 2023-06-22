@@ -1,4 +1,4 @@
-import { QueryPropertyValueType, SortDirection, SearchQuery } from '@pnp/sp'
+import { QueryPropertyValueType, SortDirection, SearchQuery, SearchResult } from '@pnp/sp'
 
 export const DEFAULT_SEARCH_SETTINGS: SearchQuery = {
   Querytext: '*',
@@ -14,4 +14,9 @@ export const DEFAULT_SEARCH_SETTINGS: SearchQuery = {
     }
   ],
   SortList: [{ Property: 'LastModifiedTime', Direction: SortDirection.Descending }]
+}
+
+export interface IFetchDataForViewItemResult extends SearchResult {
+  SiteId: string
+  [key: string]: any
 }

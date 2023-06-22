@@ -63,7 +63,8 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   /**
-   * Filter projects based on `selectedView` and `searchTerm`.
+   * Filter projects based on the `filter` function from the `selectedView` 
+   * and the `searchTerm`. Then sort the projects based on the `sort` state.
    *
    * @param projects - Projects
    */
@@ -114,7 +115,7 @@ export const useProjectList = (props: IProjectListProps) => {
     views,
     getCardActions,
     searchBoxPlaceholder:
-      !state.isDataLoaded || state.projects.length === 0
+      !state.isDataLoaded || _.isEmpty(state.projects)
         ? ''
         : format(state.selectedView.searchBoxPlaceholder, projects.length),
     onListSort,

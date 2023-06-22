@@ -4,7 +4,7 @@
   "alias": "HelpContentApplicationCustomizer",
   "componentType": "Extension",
   "extensionType": "ApplicationCustomizer",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "manifestVersion": 2,
   "requiresCustomScript": false
 }

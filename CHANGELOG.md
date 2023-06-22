@@ -3,7 +3,24 @@ og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detaljert 'endringslogg' for siste hovedversjon.
 
-## 1.8.2 - TBA
+## 1.8.3 - TBA
+
+### Forbedringer
+- Søk i aggregerte oversikter søker nå også på prosjektnavn [#1123](https://github.com/Puzzlepart/prosjektportalen365/issues/1123)
+- Støtte for manuelle konfigurasjoner (JSON-format) i risikomatrise [#1120](https://github.com/Puzzlepart/prosjektportalen365/issues/1120)
+- Porteføljeoversikten støtter nå visning av URL-kolonner [#1130](https://github.com/Puzzlepart/prosjektportalen365/pull/1130)
+- Fiks for synkronisering dersom prosjekt mangler i den sentrale prosjekter-listen [#1121](https://github.com/Puzzlepart/prosjektportalen365/issues/1121)
+
+### Feilrettinger
+- Rettet et problem hvor låst mal hindret mulighet for å gjøre et prosjekt om til overordnet område [#1134](https://github.com/Puzzlepart/prosjektportalen365/issues/1134)
+- Fikset et problem hvor 'Hooks' ikke ble kjørt på slutten av provisjoneringen av et prosjekt [#1127](https://github.com/Puzzlepart/prosjektportalen365/issues/1127)
+- Fikset et problem hvor prosjekttidslinje på prosjektnivå ikke returnerte tidslinje-elementer for prosjektet [#1172](https://github.com/Puzzlepart/prosjektportalen365/pull/1172)
+- Rettet en feil hvor Excel eksporten gir feilmelding når datofelt mangler data. [#1180](https://github.com/Puzzlepart/prosjektportalen365/issues/1180)
+- Fikset et program hvor prosjekter ble vist selvom det ikke var tilknyttet prosjekter til et program [#1150](https://github.com/Puzzlepart/prosjektportalen365/pull/1150)
+
+---
+
+## 1.8.2 - 08.06.23
 
 ### Ny funksjonalitet
 
@@ -14,6 +31,8 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Porteføljeoversikt: vis personlige visninger som egen "seksjon" [#1045](https://github.com/Puzzlepart/prosjektportalen365/issues/1045)
 - Endret feltet GtSearchQuery til Note for å støtte lange spørringer. NB: Vil ikke endres gjennom oppgradering. Endre manuelt felttype til "Flere linjer med tekst" ved behov. [#970](https://github.com/Puzzlepart/prosjektportalen365/issues/970)
 - Endra standardsortering av dokumentbiblioteker til å sortere på filnavn (var "Ingen" før)
+- Standard visningsmodus er nå lagt til som egenskap for prosjektliste-webdelen [#1053](https://github.com/Puzzlepart/prosjektportalen365/issues/1053)
+
 
 ### Feilrettinger
 
