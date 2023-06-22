@@ -63,7 +63,10 @@ export class SetupProjectInformation extends BaseTask {
         strings.CreatingLocalProjectPropertiesListItemText,
         'AlignCenter'
       )
-      const properties = this._createPropertyItem(params)
+      const properties = {
+        ...this._createPropertyItem(params),
+        TemplateParameters: JSON.stringify(params.templateSchema.Parameters),
+      }
       const propertyItem = list.items.getById(1)
       const propertyItems = await list.items.getAll()
       if (propertyItems.length >= 1) {
@@ -79,7 +82,6 @@ export class SetupProjectInformation extends BaseTask {
   /**
    * Create property item with the following properties:
    * - `Title`: The current web title
-   * - `TemplateParameters`: The template parameters as JSON string
    * - `IsProgram`: `true` if the current project is a program, `false` otherwise
    * - `IsParentProject`: `true` if the current project is a parent project, `false` otherwise
    * - `GtInstalledVersion`: The installed version
@@ -90,7 +92,6 @@ export class SetupProjectInformation extends BaseTask {
   private _createPropertyItem(params: IBaseTaskParams): Record<string, string | boolean | number> {
     return {
       Title: params.context.pageContext.web.title,
-      TemplateParameters: JSON.stringify(params.templateSchema.Parameters),
       GtIsProgram: this.data.selectedTemplate.isProgram,
       GtIsParentProject: this.data.selectedTemplate.isParentProject,
       GtInstalledVersion: params.templateSchema.Version,
