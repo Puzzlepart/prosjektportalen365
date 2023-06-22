@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { DynamicMatrixConfiguration, generateMatrixConfiguration } from '../DynamicMatrix'
 import { getMatrixHeaders } from './getMatrixHeaders'
 import { IRiskMatrixProps } from './types'
-import SPDataAdapter from 'data'
+import SPDataAdapter from '../../data'
 import strings from 'ProjectWebPartsStrings'
 
 /**
