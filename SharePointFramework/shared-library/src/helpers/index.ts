@@ -1,6 +1,7 @@
 export * from './sortAlphabetically'
 export * from './formatDate'
 export * from './getBreakpoint'
+export * from './getDateValue'
 export * from './getObjectValue'
 export * from './getUserPhoto'
 export * from './tryParseCurrency'

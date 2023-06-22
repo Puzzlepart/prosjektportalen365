@@ -114,7 +114,7 @@ if ($null -ne $LastInstall) {
     }
 
     if ($PreviousVersion -lt "1.8.2") {
-        Write-Host "[INFO] In version v1.8.2 we did some adjustments to Project Status fields and attachments"
+        Write-Host "[INFO] In version v1.8.2 we did some adjustments to Project Status attachments. This might take a while..."
         
         $PERSISTED_SECTION_DATA_JSON_FILENAME = "PersistedSectionDataJson.json"
         $SNAPSHOT_FILENAME = "Snapshot.png"
