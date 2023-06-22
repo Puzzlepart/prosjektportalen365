@@ -53,7 +53,7 @@ if ($CI.IsPresent) {
     EndAction
 }
 else {
-    Import-Module $PNP_BUNDLE_PATH\PnP.PowerShell.psd1 -DisableNameChecking
+    Import-Module $PNP_BUNDLE_PATH/PnP.PowerShell.psd1 -DisableNameChecking
 }
 
 if ($CI.IsPresent) {
@@ -90,7 +90,7 @@ if (-not $SkipBundle.IsPresent) {
 if ($Force.IsPresent) {
     $Solutions | ForEach-Object {
         StartAction("Clearing node_modules for SPFx solution [$_]")
-        rimraf "$SHAREPOINT_FRAMEWORK_BASEPATH\$_\node_modules\"
+        rimraf "$SHAREPOINT_FRAMEWORK_BASEPATH/$_/node_modules/"
         EndAction
     }
 }
@@ -98,8 +98,8 @@ if ($Force.IsPresent) {
 
 #region Package SharePoint Framework solutions
 if (-not $SkipBuildSharePointFramework.IsPresent) {
-    StartAction("Building SharePointFramework\@Shared")
-    Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH\@Shared"
+    StartAction("Building SharePointFramework/@Shared")
+    Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH/@Shared"
     if ($CI.IsPresent) {  
         npm ci --silent --no-audit --no-fund >$null 2>&1
     }
@@ -112,7 +112,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
 
 if (-not $SkipBuildSharePointFramework.IsPresent) {
     $Solutions | ForEach-Object {
-        Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH\$_"
+        Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH/$_"
         $Version = (Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json).solution.version
         StartAction("Packaging SPFx solution $_")
         if ($CI.IsPresent) {  
