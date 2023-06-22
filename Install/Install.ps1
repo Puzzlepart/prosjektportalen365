@@ -163,7 +163,7 @@ Load PnP.PowerShell from bundle
 Loaa PnP.PowerShell from bundle and return version.
 #>
 function LoadBundle() {
-    Import-Module "$PSScriptRoot\PnP.PowerShell\PnP.PowerShell.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
+    Import-Module "$PSScriptRoot/PnP.PowerShell/PnP.PowerShell.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
     return (Get-Command Connect-PnPOnline).Version
 }
 
@@ -333,7 +333,7 @@ if ($Upgrade.IsPresent) {
     Write-Host "[INFO] Running pre-install upgrade steps"
     try {
         Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
-        ."$PSScriptRoot\Scripts\PreInstallUpgrade.ps1"
+        ."$PSScriptRoot/Scripts/PreInstallUpgrade.ps1"
         Disconnect-PnPOnline
     }
     catch {
@@ -359,7 +359,7 @@ if (-not $SkipAppPackages.IsPresent) {
     }
     Try {
         StartAction("Installing SharePoint Framework app packages to $TenantAppCatalogUrl")
-        foreach ($AppPkg in (Get-ChildItem "$PSScriptRoot\Apps" -ErrorAction SilentlyContinue)) {
+        foreach ($AppPkg in (Get-ChildItem "$PSScriptRoot/Apps" -ErrorAction SilentlyContinue)) {
             Add-PnPApp -Path $AppPkg.FullName -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop >$null 2>&1
         }
         Disconnect-PnPOnline
@@ -495,7 +495,7 @@ Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
 #region Post install - running post-install scripts and applying PnP templates
 Write-Host "[INFO] Running post-install steps" 
 try {
-    ."$PSScriptRoot\Scripts\PostInstall.ps1"
+    ."$PSScriptRoot/Scripts/PostInstall.ps1"
     Write-Host "[SUCCESS] Successfully ran post-install steps" -ForegroundColor Green
 }
 catch {
@@ -505,7 +505,7 @@ catch {
 if ($Upgrade.IsPresent) {
     Write-Host "[INFO] Running post-install upgrade steps" 
     try {
-        ."$PSScriptRoot\Scripts\PostInstallUpgrade.ps1"
+        ."$PSScriptRoot/Scripts/PostInstallUpgrade.ps1"
         Write-Host "[SUCCESS] Successfully ran post-install upgrade steps" -ForegroundColor Green
     }
     catch {
