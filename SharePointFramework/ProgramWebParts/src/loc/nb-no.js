@@ -1,5 +1,6 @@
 define([], function () {
     return {
+        CmdSelectionCountTooltipText: 'Følgende prosjekter er valgt:',
         DefaultViewLabel: 'Standardvisning',
         DefaultDataSourceViewLabel: 'Standardvisning (datakilde)',
         DataSourceLevelLabel: 'Nivå for datakilde',
