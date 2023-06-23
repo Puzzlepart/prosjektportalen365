@@ -360,19 +360,17 @@ export class DataAdapter implements IDataAdapter {
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ) {
     let [projects, sites, statusReports] = await Promise.all([
-      this._fetchItems(`${queryArray ?? ''} ${view.searchQuery} `, [
+      this._fetchItems(view.searchQuery, [
         ...configuration.columns.map((f) => f.fieldName),
         siteIdProperty
       ]),
-      this._fetchItems(`${queryArray ?? ''} DepartmentId:{${siteId}} contentclass:STS_Site`, [
+      this._fetchItems(`DepartmentId:{${siteId}} contentclass:STS_Site`, [
         'Path',
         'Title',
         'SiteId'
       ]),
       this._fetchItems(
-        `${
-          queryArray ?? ''
-        } DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+        `DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
         500,
         { Refiners: configuration.refiners.map((ref) => ref.fieldName).join(',') }
