@@ -70,7 +70,7 @@ ProjectInformation.defaultProps = {
   hideStatusReport: false,
   hideParentProjects: false,
   statusReportShowOnlyIcons: true,
-  useIdeaProcessing: false,
+  useIdeaProcessing: false
 }
 
 export * from '../ProjectInformationPanel'

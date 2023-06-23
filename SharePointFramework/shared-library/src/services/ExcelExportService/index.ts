@@ -29,9 +29,12 @@ export default new (class ExcelExportService {
         name: this.configuration.sheetName,
         data: [
           _columns.map((column) => column.name),
-          ...items.map((item) => _columns.map((column) => {
-            return (column as any).dataType === 'date' ? getDateValue(item, column.fieldName) :
-            getObjectValue<string>(item, column.fieldName, null)}) 
+          ...items.map((item) =>
+            _columns.map((column) => {
+              return (column as any).dataType === 'date'
+                ? getDateValue(item, column.fieldName)
+                : getObjectValue<string>(item, column.fieldName, null)
+            })
           )
         ]
       })
