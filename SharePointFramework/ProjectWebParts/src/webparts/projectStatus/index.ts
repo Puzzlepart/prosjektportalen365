@@ -123,7 +123,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   resizable: true,
                   rows: 8
                 }),
-                !this.properties.riskMatrix.useDynamicConfiguration &&
+                !this.properties.riskMatrix?.useDynamicConfiguration &&
                   PropertyPaneDropdown('riskMatrix.manualConfigurationPath', {
                     label: strings.ManualConfigurationPathLabel,
                     options: this._data.riskMatrixConfigurations.map(
@@ -138,7 +138,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   offText: strings.UseDynamicConfigurationOffText,
                   onText: strings.UseDynamicConfigurationOnText
                 }),
-                this.properties.riskMatrix.useDynamicConfiguration &&
+                this.properties.riskMatrix?.useDynamicConfiguration &&
                   PropertyPaneDropdown('riskMatrix.size', {
                     label: strings.MatrixSizeLabel,
                     options: [
@@ -157,7 +157,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                     ],
                     selectedKey: this.properties.riskMatrix?.size ?? '5'
                   }),
-                this.properties.riskMatrix.useDynamicConfiguration &&
+                this.properties.riskMatrix?.useDynamicConfiguration &&
                   PropertyFieldColorConfiguration('riskMatrix.colorScaleConfig', {
                     key: 'riskMatrixColorScaleConfig',
                     label: strings.MatrixColorScaleConfigLabel,
@@ -170,7 +170,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                     ],
                     value: this.properties.riskMatrix?.colorScaleConfig
                   }),
-                ...(this.properties.riskMatrix.useDynamicConfiguration
+                ...(this.properties.riskMatrix?.useDynamicConfiguration
                   ? this.getMatrixHeaderLabelPropertyFields(
                       'riskMatrix',
                       RISK_MATRIX_DEFAULT_PROBABILITY_HEADERS,
