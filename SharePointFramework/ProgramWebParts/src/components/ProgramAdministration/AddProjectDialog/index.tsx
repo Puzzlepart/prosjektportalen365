@@ -13,7 +13,7 @@ import * as strings from 'ProgramWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { columns } from '../columns'
 import { ProgramAdministrationContext } from '../context'
-import { ListHeaderSearch } from '../ListHeaderSearch'
+import { ListHeaderSearch } from './ListHeaderSearch'
 import { ADD_CHILD_PROJECTS, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
 import styles from './AddProjectDialog.module.scss'
 import { useAddProjectDialog } from './useAddProjectDialog'
@@ -45,9 +45,9 @@ export const AddProjectDialog: FC = () => {
             onRenderRow={onRenderRow}
             onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
               <ListHeaderSearch
+              selectedItems={context.state.selectedProjectsToAdd}
                 detailsHeaderProps={detailsHeaderProps}
                 defaultRender={defaultRender}
-                selectedCount={context.state.selectedProjectsToAdd?.length ?? 0}
                 search={{
                   placeholder: strings.AddProjectDialogSearchBoxPlaceholder,
                   onSearch

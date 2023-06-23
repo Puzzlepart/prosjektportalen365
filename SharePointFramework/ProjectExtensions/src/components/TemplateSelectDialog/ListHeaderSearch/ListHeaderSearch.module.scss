@@ -12,8 +12,9 @@
 }
 
 .selectionCountTooltip {
+  width: 300px;
   margin: 0;
-  padding: 8px 6px;
+  padding: 6px 16px;
 
   p {
     font-size: $ms-font-size-m;

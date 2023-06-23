@@ -6,7 +6,7 @@ import { AddProjectDialog } from './AddProjectDialog'
 import { columns } from './columns'
 import { Commands } from './Commands'
 import { ProgramAdministrationContext } from './context'
-import { ListHeaderSearch } from './ListHeaderSearch'
+import { ListHeaderSearch } from './AddProjectDialog/ListHeaderSearch'
 import styles from './ProgramAdministration.module.scss'
 import { TooltipHeader } from './TooltipHeader'
 import { IProgramAdministrationProps } from './types'
@@ -46,9 +46,9 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
               onRenderRow={onRenderRow}
               onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
                 <ListHeaderSearch
+                  selectedItems={state.selectedProjectsToDelete}
                   detailsHeaderProps={detailsHeaderProps}
                   defaultRender={defaultRender}
-                  selectedCount={state.selectedProjectsToDelete?.length ?? 0}
                   search={{
                     placeholder: strings.ProgramAdministrationSearchBoxPlaceholder,
                     onSearch
