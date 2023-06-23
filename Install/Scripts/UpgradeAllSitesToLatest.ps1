@@ -219,12 +219,19 @@ function EnsureGtTagSiteColumn() {
 
 function UpgradeSite($Url) {
     Connect-SharePoint -Url $Url
-    EnsureProjectTimelinePage
-    EnsureResourceLoadIsSiteColumn
-    EnsureProgramAggregrationWebPart
-    EnsureProjectAggregrationWebPart
-    EnsureHelpContentExtension
-    EnsureGtTagSiteColumn
+
+    $ProjectPropertiesList = Get-PnPList -Identity "Prosjektegenskaper" -ErrorAction SilentlyContinue
+    if ($null -ne $ProjectPropertiesList) {
+        EnsureProjectTimelinePage
+        EnsureResourceLoadIsSiteColumn
+        EnsureProgramAggregrationWebPart
+        EnsureProjectAggregrationWebPart
+        EnsureHelpContentExtension
+        EnsureGtTagSiteColumn
+    }
+    else {
+        Write-Host "`t`tThe site does not have the Prosjektegenskaper list and we must assume it's not a Project site. Skipping upgrade." -ForegroundColor Yellow
+    }
 }
 
 Write-Host "This script will update all existing sites in a Prosjektportalen installation. This requires you to have the SharePoint admin role"
