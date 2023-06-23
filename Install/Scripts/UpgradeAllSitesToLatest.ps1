@@ -9,6 +9,7 @@ Param(
 $CI_MODE = (-not ([string]::IsNullOrEmpty($CI)))
 
 $global:__InstalledVersion = $null
+$global:__PreviousVersion = $null
 $global:__PnPConnection = $null
 
 $ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
@@ -70,7 +71,7 @@ function EnsureProjectTimelinePage() {
 }
 
 function EnsureResourceLoadIsSiteColumn() {
-    if ($global:__InstalledVersion -lt "1.7.2") {
+    if ($global:__PreviousVersion -lt "1.7.2") {
         $ResourceAllocation = Get-PnPList -Identity "Ressursallokering" -ErrorAction SilentlyContinue
         if ($null -ne $ResourceAllocation) {
             $ResourceLoadSiteColumn = Get-PnPField -Identity "GtResourceLoad"
@@ -157,7 +158,7 @@ and replace the deprecated web parts with the new ones. The function will also e
 are correct by reading the configuration file EnsureProjectAggregrationWebPart/JsonControlData_$($Page.Name).json.
 #>
 function EnsureProjectAggregrationWebPart() {
-    if ($global:__InstalledVersion -lt "1.8.2") {
+    if ($global:__PreviousVersion -lt "1.8.2") {
         $BaseDir = "$ScriptDir/EnsureProjectAggregrationWebPart"
         $Pages = Get-Content "$BaseDir/$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
         foreach ($Page in $Pages) {
@@ -193,7 +194,7 @@ function EnsureHelpContentExtension() {
 Ensure the GtTag site column is added to the Prosjektleveranser list on the site.
 #>
 function EnsureGtTagSiteColumn() {
-    if ($global:__InstalledVersion -lt "1.8.0") {
+    if ($global:__PreviousVersion -lt "1.8.0") {
         $ProjectDeliveries = Get-PnPList -Identity "Prosjektleveranser" -ErrorAction SilentlyContinue
         if ($null -ne $ProjectDeliveries) {
             $GtTagSiteColumn = Get-PnPField -Identity "GtTag" -ErrorAction SilentlyContinue
@@ -218,12 +219,19 @@ function EnsureGtTagSiteColumn() {
 
 function UpgradeSite($Url) {
     Connect-SharePoint -Url $Url
-    EnsureProjectTimelinePage
-    EnsureResourceLoadIsSiteColumn
-    EnsureProgramAggregrationWebPart
-    EnsureProjectAggregrationWebPart
-    EnsureHelpContentExtension
-    EnsureGtTagSiteColumn
+
+    $ProjectPropertiesList = Get-PnPList -Identity "Prosjektegenskaper" -ErrorAction SilentlyContinue
+    if ($null -ne $ProjectPropertiesList) {
+        EnsureProjectTimelinePage
+        EnsureResourceLoadIsSiteColumn
+        EnsureProgramAggregrationWebPart
+        EnsureProjectAggregrationWebPart
+        EnsureHelpContentExtension
+        EnsureGtTagSiteColumn
+    }
+    else {
+        Write-Host "`t`tThe site does not have the Prosjektegenskaper list and we must assume it's not a Project site. Skipping upgrade." -ForegroundColor Yellow
+    }
 }
 
 Write-Host "This script will update all existing sites in a Prosjektportalen installation. This requires you to have the SharePoint admin role"
@@ -232,7 +240,9 @@ Set-PnPTraceLog -Off
 Start-Transcript -Path "$PSScriptRoot/UpgradeSites_Log-$((Get-Date).ToString('yyyy-MM-dd-HH-mm')).txt"
 
 Connect-SharePoint -Url $Url
-$global:__InstalledVersion = (Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1).FieldValues["InstallVersion"] 
+$InstallLogEntries = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>"
+$global:__InstalledVersion = ($InstallLogEntries | Select-Object -First 1).FieldValues["InstallVersion"]
+$global:__PreviousVersion = ($InstallLogEntries | Select-Object -Skip 1 -First 1).FieldValues["InstallVersion"] 
 
 [System.Uri]$Uri = $Url
 $AdminSiteUrl = (@($Uri.Scheme, "://", $Uri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
