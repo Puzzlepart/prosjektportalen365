@@ -47,9 +47,9 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
   public render(): void {
     this.renderComponent<IProjectStatusProps>(ProjectStatus, {
       riskMatrix: {
-        ...this.properties.riskMatrix,
+        ...this.properties.riskMatrix ?? {},
         manualConfigurationPath:
-          this.properties.riskMatrix.manualConfigurationPath ??
+          this.properties.riskMatrix?.manualConfigurationPath ??
           this._data.defaultRiskMatrixConfiguration?.url
       }
     })
