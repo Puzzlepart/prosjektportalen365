@@ -13,14 +13,14 @@ import * as strings from 'ProgramWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { columns } from '../columns'
 import { ProgramAdministrationContext } from '../context'
-import { ListHeaderSearch } from './ListHeaderSearch'
+import { ListHeaderSearch } from '../ListHeaderSearch'
 import { ADD_CHILD_PROJECTS, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
 import styles from './AddProjectDialog.module.scss'
 import { useAddProjectDialog } from './useAddProjectDialog'
 
 export const AddProjectDialog: FC = () => {
   const context = useContext(ProgramAdministrationContext)
-  const { selection, availableProjects, onSearch, onRenderRow } = useAddProjectDialog()
+  const { selection, availableProjects, onSearch, onRenderRow, removeSelection } = useAddProjectDialog()
 
   return (
     <Dialog
