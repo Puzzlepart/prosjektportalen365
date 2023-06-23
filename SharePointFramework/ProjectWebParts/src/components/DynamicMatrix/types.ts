@@ -15,7 +15,7 @@ export interface IDynamicMatrixProps {
   /**
    * Matrix configuration.
    */
-  configuration: DynamicMatrixConfiguration
+  configuration?: DynamicMatrixConfiguration
 
   /**
    * Size (4, 5 or 6) as string.
@@ -32,12 +32,12 @@ export interface IDynamicMatrixProps {
   /**
    * Template for text to be shown in the callout for the matrix elements.
    */
-  calloutTemplate: string
+  calloutTemplate?: string
 
   /**
    * Function that should return the elements for the specified cell.
    */
-  getElementsForCell: (cell: IMatrixCell) => IMatrixElementProps[]
+  getElementsForCell?: (cell: IMatrixCell) => IMatrixElementProps[]
 
   /**
    * Color scale configuration contains color configurations for the matrix.
