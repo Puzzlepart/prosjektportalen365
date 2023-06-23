@@ -1,5 +1,6 @@
 import {
   CommandBar,
+  Icon,
   Link,
   SearchBox,
   SelectAllVisibility,
@@ -64,6 +65,7 @@ export const ListHeaderSearch: FC<IListHeaderSearchProps> = (props) => {
                                 <Link href={item.SPWebURL} target='_blank'>
                                   {item.Title}
                                 </Link>
+                                <Icon iconName='Remove' styles={{ root: { cursor: 'pointer' } }} />
                               </li>
                             ))}
                           </ul>

@@ -26,17 +26,5 @@ export function useSelectionList(
     setSelection($selection)
   }, [searchTerm])
 
-  /**
-   * Removes the item with the given key from the selection.
-   * 
-   * @param key Key to remove from selection
-   */
-  const removeSelection = (key: string | number) => {
-    $selection.setChangeEvents(false)
-    $selection.setKeySelected(key as any, false, true)
-    $selection.setChangeEvents(true)
-    setSelection($selection)
-  }
-
-  return { selection, onSearch: setSearchTerm, searchTerm, removeSelection } as const
+  return { selection, onSearch: setSearchTerm, searchTerm } as const
 }

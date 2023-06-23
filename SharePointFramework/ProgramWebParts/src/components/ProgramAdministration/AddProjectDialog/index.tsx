@@ -20,7 +20,7 @@ import { useAddProjectDialog } from './useAddProjectDialog'
 
 export const AddProjectDialog: FC = () => {
   const context = useContext(ProgramAdministrationContext)
-  const { selection, availableProjects, onSearch, onRenderRow, removeSelection } = useAddProjectDialog()
+  const { selection, availableProjects, onSearch, onRenderRow } = useAddProjectDialog()
 
   return (
     <Dialog
