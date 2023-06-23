@@ -27,7 +27,7 @@ export const OpportunityMatrix: FC<IOpportunityMatrixProps> = (props) => {
 
 OpportunityMatrix.defaultProps = {
   items: [],
-  width: 400,
+  fullWidth: true,
   calloutTemplate: `
   <h3>{Title}</h3>\n
   <p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n
