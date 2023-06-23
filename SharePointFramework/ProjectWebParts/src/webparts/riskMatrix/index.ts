@@ -169,7 +169,8 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
               groupFields: [
                 PropertyPaneToggle('fullWidth', {
                   label: strings.MatrixFullWidthLabel,
-                  checked: this.properties.fullWidth === undefined ? true : this.properties.fullWidth
+                  checked:
+                    this.properties.fullWidth === undefined ? true : this.properties.fullWidth
                 }),
                 !this.properties.fullWidth &&
                   PropertyPaneSlider('width', {

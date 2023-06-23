@@ -47,7 +47,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
   public render(): void {
     this.renderComponent<IProjectStatusProps>(ProjectStatus, {
       riskMatrix: {
-        ...this.properties.riskMatrix ?? {},
+        ...(this.properties.riskMatrix ?? {}),
         manualConfigurationPath:
           this.properties.riskMatrix?.manualConfigurationPath ??
           this._data.defaultRiskMatrixConfiguration?.url
@@ -106,7 +106,10 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
               groupFields: [
                 PropertyPaneToggle('riskMatrix.fullWidth', {
                   label: strings.MatrixFullWidthLabel,
-                  checked: this.properties.riskMatrix?.fullWidth === undefined ? true : this.properties.riskMatrix?.fullWidth
+                  checked:
+                    this.properties.riskMatrix?.fullWidth === undefined
+                      ? true
+                      : this.properties.riskMatrix?.fullWidth
                 }),
                 !this.properties.riskMatrix?.fullWidth &&
                   PropertyPaneSlider('riskMatrix.width', {
@@ -184,7 +187,10 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
               groupFields: [
                 PropertyPaneToggle('opportunityMatrix.fullWidth', {
                   label: strings.MatrixFullWidthLabel,
-                  checked: this.properties.opportunityMatrix?.fullWidth === undefined ? true : this.properties.opportunityMatrix?.fullWidth
+                  checked:
+                    this.properties.opportunityMatrix?.fullWidth === undefined
+                      ? true
+                      : this.properties.opportunityMatrix?.fullWidth
                 }),
                 PropertyPaneSlider('opportunityMatrix.width', {
                   label: strings.WidthFieldLabel,
