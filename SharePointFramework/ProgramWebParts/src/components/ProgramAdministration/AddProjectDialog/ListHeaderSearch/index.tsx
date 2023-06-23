@@ -61,7 +61,9 @@ export const ListHeaderSearch: FC<IListHeaderSearchProps> = (props) => {
                           <ul>
                             {props.selectedItems.map((item) => (
                               <li key={item.key}>
-                                <Link href={item.SPWebURL} target='_blank'>{item.Title}</Link>
+                                <Link href={item.SPWebURL} target='_blank'>
+                                  {item.Title}
+                                </Link>
                               </li>
                             ))}
                           </ul>
