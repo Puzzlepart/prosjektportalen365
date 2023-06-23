@@ -34,7 +34,7 @@ export const ContentConfigSection: TemplateSelectDialogSectionComponent = (props
           onRenderRow={onRenderRow}
           onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
             <ListHeaderSearch
-              selectedItems={context.state.selectedExtensions}
+              selectedItems={context.state.selectedContentConfig}
               detailsHeaderProps={detailsHeaderProps}
               defaultRender={defaultRender}
               search={{

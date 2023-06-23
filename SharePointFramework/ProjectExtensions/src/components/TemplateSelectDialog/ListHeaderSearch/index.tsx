@@ -15,7 +15,8 @@ import { IListHeaderSearchProps } from './types'
 
 /**
  * List header for `<DetailsList />` with a optional `<CommandBar />` with a
- * `<SearchBox />`.
+ * `<SearchBox />` and a `<TooltipHost />` showing the selected items and
+ * the count of selected items.
  *
  * @param props Props
  */
@@ -57,7 +58,9 @@ export const ListHeaderSearch: FC<IListHeaderSearchProps> = (props) => {
                           <p>{strings.CmdSelectionCountTooltipText}</p>
                           <ul>
                             {props.selectedItems.map((item) => (
-                              <li key={item.key}>{item.text}</li>
+                              <li key={item.key}>
+                                <span>{item.text}</span>
+                              </li>
                             ))}
                           </ul>
                         </div>
