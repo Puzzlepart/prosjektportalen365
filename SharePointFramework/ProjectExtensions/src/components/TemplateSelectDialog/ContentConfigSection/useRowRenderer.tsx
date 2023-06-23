@@ -7,7 +7,7 @@ import { TemplateSelectDialogContext } from '../context'
 
 /**
  * Row renderer hook for `ContentConfigSection`. Returns an instance of
- * `onRenderRow`.
+ * `onRenderRow` that is used by `DetailsList` to render rows.
  */
 export function useRowRenderer({ selectedKeys, searchTerm }) {
   const context = useContext(TemplateSelectDialogContext)
