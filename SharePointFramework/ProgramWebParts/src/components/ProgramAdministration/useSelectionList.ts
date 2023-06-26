@@ -11,19 +11,19 @@ export function useSelectionList(
   selectedKeys: (string | number)[],
   onSelectionChanged: (items: any[]) => void
 ) {
-  const __selection = new Selection<IObjectWithKey>({
+  const $selection = new Selection<IObjectWithKey>({
     onSelectionChanged: () => {
       onSelectionChanged(selection.getSelection())
     }
   })
-  const [selection, setSelection] = useState<Selection<IObjectWithKey>>(__selection)
+  const [selection, setSelection] = useState<Selection<IObjectWithKey>>($selection)
   const [searchTerm, setSearchTerm] = useState<string>('')
 
   useEffect(() => {
-    __selection.setChangeEvents(false)
-    selectedKeys.forEach((key) => __selection.setKeySelected(key as any, true, true))
-    __selection.setChangeEvents(true)
-    setSelection(__selection)
+    $selection.setChangeEvents(false)
+    selectedKeys.forEach((key) => $selection.setKeySelected(key as any, true, true))
+    $selection.setChangeEvents(true)
+    setSelection($selection)
   }, [searchTerm])
 
   return { selection, onSearch: setSearchTerm, searchTerm } as const

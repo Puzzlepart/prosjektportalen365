@@ -46,9 +46,9 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
               onRenderRow={onRenderRow}
               onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
                 <ListHeaderSearch
+                  selectedItems={state.selectedProjectsToDelete}
                   detailsHeaderProps={detailsHeaderProps}
                   defaultRender={defaultRender}
-                  selectedCount={state.selectedProjectsToDelete?.length ?? 0}
                   search={{
                     placeholder: strings.ProgramAdministrationSearchBoxPlaceholder,
                     onSearch

@@ -1,5 +1,6 @@
 define([], function () {
     return {
+        CmdSelectionCountTooltipText: 'Følgende elementer er valgt:',
         CustomActionsText: 'Egendefinerte handlinger',
         CustomActionsSubText: 'Justerer egendefinerte handlinger for prosjektområdet...',
         ConfiguredSpecifiedTaskMessage: 'Konfigurert til å kun kjøre følgende steg: {0}',

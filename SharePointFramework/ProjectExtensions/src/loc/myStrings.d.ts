@@ -1,4 +1,5 @@
 declare interface IProjectExtensionsStrings {
+  CmdSelectionCountTooltipText: string
   CustomActionsText: string
   CustomActionsSubText: string
   ConfiguredSpecifiedTaskMessage: string

@@ -5,3 +5,23 @@
   margin: 10px 0 0 0;
   box-sizing: border-box;
 }
+
+.selectionCount {
+  margin: 0;
+  cursor: pointer;
+}
+
+.selectionCountTooltip {
+  width: 300px;
+  margin: 0;
+  padding: 6px 16px;
+
+  p {
+    font-size: $ms-font-size-m;
+  }
+
+  ul {
+    margin: 0 0 0 12px;
+    padding: 0;
+  }
+}

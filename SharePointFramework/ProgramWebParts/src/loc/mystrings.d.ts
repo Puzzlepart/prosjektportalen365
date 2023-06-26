@@ -1,4 +1,5 @@
 declare interface IProgramWebPartsStrings {
+  CmdSelectionCountTooltipText: string
   DataSourceLevelLabel: string
   DataSourceLevelDescription: string
   DefaultDataSourceViewLabel: string

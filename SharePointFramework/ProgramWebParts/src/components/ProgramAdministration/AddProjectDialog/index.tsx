@@ -45,9 +45,9 @@ export const AddProjectDialog: FC = () => {
             onRenderRow={onRenderRow}
             onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
               <ListHeaderSearch
+                selectedItems={context.state.selectedProjectsToAdd}
                 detailsHeaderProps={detailsHeaderProps}
                 defaultRender={defaultRender}
-                selectedCount={context.state.selectedProjectsToAdd?.length ?? 0}
                 search={{
                   placeholder: strings.AddProjectDialogSearchBoxPlaceholder,
                   onSearch
