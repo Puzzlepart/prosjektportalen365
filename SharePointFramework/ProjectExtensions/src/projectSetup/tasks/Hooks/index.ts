@@ -40,14 +40,18 @@ export class Hooks extends BaseTask {
           defaultCachingTimeoutSeconds: 60
         }
       })
-      this.logInformation('Applying template with hooks to site', { parameters: params.templateParameters })
+      this.logInformation('Applying template with hooks to site', {
+        parameters: params.templateParameters
+      })
       const templateHooksSchema = _.pick(params.templateSchema, 'Hooks')
       if (templateHooksSchema.Hooks) {
         onProgress(strings.RunHooksText, strings.ApplyTemplateHooks, 'ProcessingRun')
         await provisioner.applyTemplate(templateHooksSchema, null)
       }
 
-      this.logInformation('Applying extensions with hooks to site', { parameters: params.templateParameters })
+      this.logInformation('Applying extensions with hooks to site', {
+        parameters: params.templateParameters
+      })
       for (let i = 0; i < this.data.selectedExtensions.length; i++) {
         const extensionSchema = await this.data.selectedExtensions[i].getSchema()
         const extensionHooksSchema = _.pick(extensionSchema, 'Hooks')

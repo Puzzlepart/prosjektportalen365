@@ -2,10 +2,6 @@
   max-width: 1000px;
   overflow: hidden;
 
-  .scrollableContent {
-    overflow: hidden;
-  }
-
   .body {
     font-size: initial;
     padding: 20px;
@@ -13,6 +9,7 @@
 
     .contentItem {
       margin: 10px 0 0 0;
+      overflow: auto;
     }
 
     img {
