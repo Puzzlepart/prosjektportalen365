@@ -4,18 +4,10 @@ import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import styles from './HelpContentModal.module.scss'
 import { IHelpContentModalProps } from './types'
+import { useHelpContentModal } from './useHelpContentModal'
 
 export const HelpContentModal: FC<IHelpContentModalProps> = (props) => {
-  /**
-   * Get height for the element based on the window height, minus the header
-   * and specified offset.
-   *
-   * @param offset Offset in pixels
-   */
-  const getHeight = (offset = 0) => ({
-    height: window.innerHeight - 100 - offset,
-    maxHeight: window.innerHeight - 100 - offset
-  })
+  const { getHeight } = useHelpContentModal()
 
   return (
     <Modal
