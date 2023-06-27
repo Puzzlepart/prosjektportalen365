@@ -49,7 +49,7 @@ export default class HelpContentApplicationCustomizer extends BaseApplicationCus
     if (helpContent.length === 0) ReactDOM.render(null, helpContentPlaceholder)
     else {
       ReactDOM.render(
-        <HelpContent linkText={this.properties.linkText} content={helpContent} />,
+        <HelpContent linkText={this.properties.linkText + ' (dev)'} content={helpContent} />,
         helpContentPlaceholder
       )
     }
