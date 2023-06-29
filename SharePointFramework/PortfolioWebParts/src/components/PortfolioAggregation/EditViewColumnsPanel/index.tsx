@@ -1,7 +1,6 @@
 import { ActionButton, Checkbox, Panel } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import _ from 'lodash'
-import React, { FC, useContext } from 'react'
+import React, { FC } from 'react'
 import {
   DragDropContext,
   Draggable,
@@ -9,7 +8,6 @@ import {
   Droppable,
   NotDraggingStyle
 } from 'react-beautiful-dnd'
-import { PortfolioAggregationContext } from '../context'
 import styles from './EditViewColumnsPanel.module.scss'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 
@@ -19,21 +17,13 @@ const getItemStyle = (_isDragging: boolean, draggableStyle: DraggingStyle | NotD
 })
 
 export const EditViewColumnsPanel: FC = () => {
-  const context = useContext(PortfolioAggregationContext)
-  const {
-    state,
-    onDismiss,
-    onDragEnd,
-    selectedColumns,
-    onChange,
-    onSave,
-    moveColumn
-  } = useEditViewColumnsPanel()
+  const { state, onDismiss, onDragEnd, selectedColumns, onChange, onSave, moveColumn } =
+    useEditViewColumnsPanel()
 
   return (
     <Panel
       isOpen={state.showHideColumnPanel.isOpen}
-      onRenderHeader  ={() => (
+      onRenderHeader={() => (
         <div className={styles.header}>
           <ActionButton text='Bruk' iconProps={{ iconName: 'CheckMark' }} onClick={onSave} />
         </div>
@@ -62,10 +52,7 @@ export const EditViewColumnsPanel: FC = () => {
                     >
                       <Checkbox
                         label={col.name}
-                        checked={_.some(
-                          context.state.fltColumns,
-                          (c) => c.fieldName === col.fieldName
-                        )}
+                        checked={col.data.selected}
                         onChange={(_event, checked) => onChange(col, checked)}
                       />
                       <div className={styles.columnItemActions}>

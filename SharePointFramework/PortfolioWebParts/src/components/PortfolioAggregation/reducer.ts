@@ -67,7 +67,7 @@ export const DELETE_COLUMN = createAction('DELETE_COLUMN')
 /**
  * `SHOW_HIDE_COLUMNS`: Show/hide columns.
  */
-export const SHOW_HIDE_COLUMNS = createAction<{ columns: any[] }>('SHOW_HIDE_COLUMNS')
+export const SHOW_HIDE_COLUMNS = createAction('SHOW_HIDE_COLUMNS')
 
 /**
  * `COLUMN_HEADER_CONTEXT_MENU`: Column header context menu.
@@ -300,8 +300,7 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
       state.columnDeleted = new Date().getTime()
       persistColumns(props, current(state).columns)
     },
-    [SHOW_HIDE_COLUMNS.type]: (state, { payload }: ReturnType<typeof SHOW_HIDE_COLUMNS>) => {
-      payload
+    [SHOW_HIDE_COLUMNS.type]: (state) => {
       state.showHideColumnPanel = { isOpen: false }
       state.columnShowHide = new Date().getTime()
       persistColumns(props, current(state).columns)
