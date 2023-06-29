@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    EditViewColumnsPanelHeaderText: 'Rediger visningskolonner',
     SearchBoxPlaceholderTextDescription: 'Tekst som vises i søkeboksen når den er tom. Om det ikke settes en verdi baseres teksten på valgt datakilde.',
     DataSourceLevelLabel: 'Nivå for datakilde',
     ShowProgramViewsLabel: 'Vis programvisninger',

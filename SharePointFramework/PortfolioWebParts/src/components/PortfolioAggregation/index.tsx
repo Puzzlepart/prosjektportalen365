@@ -21,7 +21,7 @@ import {
   TOGGLE_FILTER_PANEL
 } from './reducer'
 import SearchBox from './SearchBox'
-import { ShowHideColumnPanel } from './ShowHideColumnPanel'
+import { EditViewColumnsPanel } from './EditViewColumnsPanel'
 import { IPortfolioAggregationProps } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
 import { FilterPanel } from 'pp365-shared-library/lib/components/FilterPanel'
@@ -84,7 +84,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
         </div>
         <ColumnContextMenu />
         <ColumnFormPanel />
-        <ShowHideColumnPanel />
+        <EditViewColumnsPanel />
         <FilterPanel
           isOpen={state.showFilterPanel}
           layerHostId={layerHostId}

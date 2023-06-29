@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  EditViewColumnsPanelHeaderText: string
   SearchBoxPlaceholderTextDescription: string
   DataSourceLevelLabel: string
   ShowProgramViewsLabel: string
