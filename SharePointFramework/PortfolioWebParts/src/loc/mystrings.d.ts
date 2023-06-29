@@ -1,4 +1,8 @@
 declare interface IPortfolioWebPartsStrings {
+  ColumnSettingsDisabledTooltip: string
+  ColumnSettingsLabel: any
+  UseChangesButtonText: string
+  EditViewColumnsPanelHeaderText: string
   SearchBoxPlaceholderTextDescription: string
   DataSourceLevelLabel: string
   ShowProgramViewsLabel: string
@@ -216,7 +220,7 @@ declare interface IPortfolioWebPartsStrings {
   DataSourceItemNotFound: string
   ProjectContentColumnItemNotFound: string
   ShowHideColumnsLabel: string
-  ShowHideColumnsDescription: string
+  ShowEditViewColumnsPanelHelpText: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

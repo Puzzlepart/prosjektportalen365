@@ -1,3 +1,4 @@
+export * from './arrayMove'
 export * from './sortAlphabetically'
 export * from './formatDate'
 export * from './getBreakpoint'

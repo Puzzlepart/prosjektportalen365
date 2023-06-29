@@ -1,10 +1,11 @@
 define([], function () {
   return {
+    EditViewColumnsPanelHeaderText: 'Rediger visningskolonner',
     SearchBoxPlaceholderTextDescription: 'Tekst som vises i søkeboksen når den er tom. Om det ikke settes en verdi baseres teksten på valgt datakilde.',
     DataSourceLevelLabel: 'Nivå for datakilde',
     ShowProgramViewsLabel: 'Vis programvisninger',
     ProgramsHeaderText: 'Programmer',
-    SelectProgramText:'Velg et programområde',
+    SelectProgramText: 'Velg et programområde',
     HideViewsLabel: 'Skjul visninger',
     PortfolioAggregationNotConfiguredMessage: 'Webdelen må konfigureres med en datakilde. Rediger webdelen, og legg inn navnet på datakilden du vil bruke.',
     DataSourceCategoryDescription: 'Angi en datakildekategori for å kunne velge mellom flere datakilder i webdelen.',
@@ -208,13 +209,16 @@ define([], function () {
     SortOrderLabel: 'Sorteringsrekkefølge',
     DataSourceItemNotFound: 'Datakilde ble ikke funnet',
     ProjectContentColumnItemNotFound: 'Prosjektinnholdskolonne ble ikke funnet',
-    ShowHideColumnsLabel: 'Vis/skjul kolonner',
-    ShowHideColumnsDescription: 'Velg kolonnene som skal vises for nåværende visning. Endringen vil oppdatere datakilden med kolonnene som velges.',
+    ShowHideColumnsLabel: 'Rediger visningskolonner',
+    ShowEditViewColumnsPanelHelpText: 'Velg kolonnene som skal vises for nåværende visning. Hvis du vil endre rekkefølgen, kan du dra og slippe eller bruke opp- og ned-pilen ved siden av hver kolonne.',
     PortfolioOverviewDataFetchError: 'Det skjedde en feil under henting av data for porteføljeoversikten. Vennligst prøv igjen senere.\n \n \n **Detaljert feilmelding:** `{0}`',
     PortfolioOverviewDataFetchErrorView: 'Det skjedde en feil under henting av data for porteføljeoversikten for visning "{0}". Vennligst prøv igjen senere, eller prøv en annen visning.\n \n \n **Detaljert feilmelding:** `{1}`',
     PersonalViewsHeaderText: 'Personlige visninger',
     ListViewText: 'Liste',
     CompactViewText: 'Kompakt liste',
-    DefaultRenderModeLabel: 'Standard visningsmodus'
+    DefaultRenderModeLabel: 'Standard visningsmodus',
+    UseChangesButtonText: 'Bruk',
+    ColumnSettingsLabel: 'Kolonneinnstillinger',
+    ColumnSettingsDisabledTooltip: 'Kolonneinnstillinger er kun tilgjengelig når siden er i redigeringsmodus.'
   }
 })

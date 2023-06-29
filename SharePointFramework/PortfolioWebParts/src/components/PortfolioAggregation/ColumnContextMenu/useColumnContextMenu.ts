@@ -23,7 +23,7 @@ export function useColumnContextMenu() {
     state.columns.map((c) => c.fieldName),
     column.fieldName
   )
-  const columnEditable =
+  const isColumnEditable =
     props.displayMode === DisplayMode.Edit && columnIndex !== -1 && !props.lockedColumns
 
   const addColumnItems: IContextualMenuItem[] = [
@@ -67,31 +67,41 @@ export function useColumnContextMenu() {
       disabled: !column.data?.isGroupable,
       onClick: () => dispatch(SET_GROUP_BY({ column }))
     },
-    columnEditable && {
+    {
       key: 'Divider2',
       itemType: ContextualMenuItemType.Divider
     },
-    columnEditable && {
-      key: 'MoveLeft',
-      name: strings.MoveLeftLabel,
-      iconProps: { iconName: 'ChevronLeftMed' },
-      disabled: columnIndex === 0,
-      onClick: () => dispatch(MOVE_COLUMN({ column, move: -1 }))
-    },
-    columnEditable && {
-      key: 'MoveRight',
-      name: strings.MoveRightLabel,
-      iconProps: { iconName: 'ChevronRightMed' },
-      disabled: columnIndex === state.columns.length - 1,
-      onClick: () => dispatch(MOVE_COLUMN({ column, move: 1 }))
-    },
-    columnEditable && {
-      key: 'Edit',
-      name: strings.EditColumnLabel,
-      iconProps: { iconName: 'SingleColumnEdit' },
-      onClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column }))
+    {
+      key: 'ColumnSettings',
+      name: strings.ColumnSettingsLabel,
+      disabled: !isColumnEditable,
+      title: !isColumnEditable && strings.ColumnSettingsDisabledTooltip,
+      subMenuProps: {
+        items: [
+          {
+            key: 'MoveLeft',
+            name: strings.MoveLeftLabel,
+            iconProps: { iconName: 'ChevronLeftMed' },
+            disabled: columnIndex === 0,
+            onClick: () => dispatch(MOVE_COLUMN({ column, move: -1 }))
+          },
+          {
+            key: 'MoveRight',
+            name: strings.MoveRightLabel,
+            iconProps: { iconName: 'ChevronRightMed' },
+            disabled: columnIndex === state.columns.length - 1,
+            onClick: () => dispatch(MOVE_COLUMN({ column, move: 1 }))
+          },
+          {
+            key: 'Edit',
+            name: strings.EditColumnLabel,
+            iconProps: { iconName: 'SingleColumnEdit' },
+            onClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column }))
+          }
+        ]
+      }
     }
-  ].filter((i) => i)
+  ].filter(Boolean) as IContextualMenuItem[]
 
   return { target, column, addColumnItems, items, dispatch } as const
 }
