@@ -1,15 +1,45 @@
+@import "~@fluentui/react/dist/sass/References.scss";
+
 .root {
   position: inherit;
 
   .columnItem {
-    margin: 8px 0;
-    padding: 3px;
-    border-radius: 3px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 20px;
+    margin: 4px 0;
+    outline: 0;
+    padding: 6px;
+
+    &:hover {
+      background-color: "[theme: themeLighterAlt, default: #f9f9f9]";
+
+      .columnItemActions {
+        display: flex;
+      }
+    }
+
+    .columnItemActions {
+      display: none;
+      flex-direction: row;
+
+      .columnItemButton {
+        background: 0 0;
+        border: 0;
+        cursor: pointer;
+        font-size: 17px;
+        height: 32px;
+        line-height: 32px;
+        margin: 0;
+        outline: 0;
+        padding: 0;
+        width: 32px;
+      }
+    }
   }
 
   .footer {
     margin: 20px 0 0 0;
-    display: flex;
-    justify-content: space-between;
   }
 }

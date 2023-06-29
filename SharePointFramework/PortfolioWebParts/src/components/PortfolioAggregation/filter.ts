@@ -28,5 +28,5 @@ export const filterItems = (items: IFilterItemProps[], columns: IColumn[], activ
       _.some(activeFilters.SelectedColumns, (c) => c === col.fieldName)
     )
   }
-  return { columns, items }
+  return { columns, items } as const
 }

@@ -1,43 +1,41 @@
+import { IColumn } from '@fluentui/react'
 import _ from 'lodash'
-import { IFilterItemProps } from 'pp365-shared-library'
-import { useContext, useEffect, useState } from 'react'
-import { PortfolioAggregationContext } from '../context'
-import { SHOW_HIDE_COLUMNS, TOGGLE_SHOW_HIDE_COLUMN_PANEL } from '../reducer'
 import { arrayMove } from 'pp365-shared-library/lib/helpers/arrayMove'
+import { useContext, useEffect, useState } from 'react'
 import { OnDragEndResponder } from 'react-beautiful-dnd'
+import { PortfolioAggregationContext } from '../context'
+import { SET_COLUMNS, SHOW_HIDE_COLUMNS, TOGGLE_SHOW_HIDE_COLUMN_PANEL } from '../reducer'
+import { IProjectContentColumn } from 'interfaces'
 
 export function useEditViewColumnsPanel() {
-  const { state, props, dispatch } = useContext(PortfolioAggregationContext)
+  const context = useContext(PortfolioAggregationContext)
   const [isChanged, setIsChanged] = useState(false)
-  const initialSelection = state.columns.map((column) => ({
-    id: column['id'],
-    name: column.name,
-    value: column.fieldName,
-    selected: _.some(state.fltColumns, (c) => c.fieldName === column.fieldName)
-  }))
-  const [selectedColumns, setSelectedColumns] = useState<IFilterItemProps[]>(initialSelection)
+  const [selectedColumns, setSelectedColumns] = useState<IColumn[]>(context.state.columns)
 
   useEffect(() => {
-    setSelectedColumns(initialSelection)
-  }, [state.columns])
+    setSelectedColumns(context.state.columns)
+  }, [context.state.columns])
 
   /**
    * On save event handler.
    */
   const onSave = async () => {
-    const columns = selectedColumns.filter((c) => c.selected)
+    context.dispatch(SET_COLUMNS({ columns: selectedColumns }))
+    const columns = selectedColumns.filter((c) =>
+      _.some(context.state.fltColumns, (_c) => c.fieldName === _c.fieldName)
+    )
 
     const updateItems = {
       GtProjectContentColumnsId: columns.map((c) => c['id'])
     }
 
     await Promise.resolve(
-      props.dataAdapter
-        .updateDataSourceItem(updateItems, state.dataSource, true)
+      context.props.dataAdapter
+        .updateDataSourceItem(updateItems, context.state.dataSource, true)
         .then(() => {
-          dispatch(SHOW_HIDE_COLUMNS({ columns: selectedColumns }))
+          context.dispatch(SHOW_HIDE_COLUMNS({ columns: selectedColumns }))
         })
-        .catch((error) => (state.error = error))
+        .catch((error) => (context.state.error = error))
     )
   }
 
@@ -45,18 +43,18 @@ export function useEditViewColumnsPanel() {
    * On dismiss event handler.
    */
   const onDismiss = () => {
-    dispatch(TOGGLE_SHOW_HIDE_COLUMN_PANEL({ isOpen: false }))
+    context.dispatch(TOGGLE_SHOW_HIDE_COLUMN_PANEL({ isOpen: false }))
   }
 
   /**
    * On change event handler.
-   * 
+   *
    * @param col Column item
    * @param checked Checked state
    */
-  const onChange = (col: IFilterItemProps, checked: boolean) => {
+  const onChange = (col: IColumn, checked: boolean) => {
     const items = selectedColumns.map((i) => {
-      if (i.value === col.value) {
+      if (i.fieldName === col.fieldName) {
         return { ...i, selected: checked }
       }
       return i
@@ -67,26 +65,49 @@ export function useEditViewColumnsPanel() {
 
   /**
    * On drag end event handler.
-   * 
+   *
    * @param result Drag and drop result
    */
   const onDragEnd: OnDragEndResponder = (result) => {
     if (!result.destination) {
       return
     }
-    const _selectedColumns = arrayMove(selectedColumns, result.source.index, result.destination.index)
+    const _selectedColumns = arrayMove(
+      selectedColumns,
+      result.source.index,
+      result.destination.index
+    )
     setSelectedColumns(_selectedColumns)
     setIsChanged(true)
   }
 
+  /**
+   * Move column.
+   * 
+   * @param column Column item
+   * @param moveIndex Move index
+   */
+  const moveColumn = (column: IProjectContentColumn, moveIndex: number) => {
+    const columnIndex = selectedColumns.findIndex((c) => c.fieldName === column.fieldName)
+    if (columnIndex > -1) {
+      const _selectedColumns = arrayMove(
+        selectedColumns,
+        columnIndex,
+        columnIndex + moveIndex
+      )
+      setSelectedColumns(_selectedColumns)
+      setIsChanged(true)
+    }
+  }
+
   return {
-    state,
+    ...context,
     onDismiss,
     onDragEnd,
     selectedColumns,
     onChange,
     onSave,
     isChanged,
-    dispatch
+    moveColumn
   } as const
 }

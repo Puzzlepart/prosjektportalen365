@@ -16,26 +16,7 @@ import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 import { parseUrlHash, setUrlHash } from 'pp365-shared-library/lib/util'
 import { Target, IGroup, MessageBarType } from '@fluentui/react'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
-
-/**
- * Helper function to move an item in an array.
- *
- * @param arr Array to move items in
- * @param old_index Old index of the item to move
- * @param new_index New index of the item to move
- * @returns Array with moved item
- */
-function arrayMove<T = any>(arr: T[], old_index: number, new_index: number) {
-  const _arr = [...arr]
-  if (new_index >= _arr.length) {
-    let k = new_index - _arr.length + 1
-    while (k--) {
-      _arr.push(undefined)
-    }
-  }
-  _arr.splice(new_index, 0, _arr.splice(old_index, 1)[0])
-  return _arr
-}
+import { arrayMove } from 'pp365-shared-library/lib/helpers/arrayMove'
 
 /**
  * `DATA_FETCHED`: Fetching data from the data source.
@@ -124,6 +105,11 @@ export const SET_SORT = createAction<{ column: IProjectContentColumn; sortDesenc
 export const MOVE_COLUMN = createAction<{ column: IProjectContentColumn; move: number }>(
   'MOVE_COLUMN'
 )
+
+/**
+ * `SET_COLUMNS`: Set columns.
+ */
+export const SET_COLUMNS = createAction<{ columns: IProjectContentColumn[] }>('SET_COLUMNS')
 
 /**
  * `SET_CURRENT_VIEW`: Set current view.
@@ -217,6 +203,7 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
  * - `SET_ALL_COLLAPSED` - Set all collapsed
  * - `SET_SORT` - Set sort
  * - `MOVE_COLUMN` - Move column
+ * - `SET_COLUMNS` - Set columns
  *
  * @param props Props for `<PortfolioAggregation />` component
  */
@@ -400,6 +387,10 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
         payload.column.fieldName
       )
       state.columns = arrayMove(current(state).columns, index, index + payload.move)
+      persistColumns(props, current(state).columns)
+    },
+    [SET_COLUMNS.type]: (state, { payload }: ReturnType<typeof SET_COLUMNS>) => {
+      state.columns = payload.columns
       persistColumns(props, current(state).columns)
     },
     [SET_CURRENT_VIEW.type]: (state) => {

@@ -1,10 +1,18 @@
-import { Checkbox, DefaultButton, Panel, PrimaryButton } from '@fluentui/react'
+import { ActionButton, Checkbox, DefaultButton, Panel, PrimaryButton } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import React, { FC } from 'react'
-import { DragDropContext, Draggable, DraggingStyle, Droppable, NotDraggingStyle } from 'react-beautiful-dnd'
+import React, { FC, useContext } from 'react'
+import {
+  DragDropContext,
+  Draggable,
+  DraggingStyle,
+  Droppable,
+  NotDraggingStyle
+} from 'react-beautiful-dnd'
 import { TOGGLE_SHOW_HIDE_COLUMN_PANEL } from '../reducer'
 import styles from './EditViewColumnsPanel.module.scss'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
+import { PortfolioAggregationContext } from '../context'
+import _ from 'lodash'
 
 const getItemStyle = (_isDragging: boolean, draggableStyle: DraggingStyle | NotDraggingStyle) => ({
   userSelect: 'none',
@@ -12,7 +20,8 @@ const getItemStyle = (_isDragging: boolean, draggableStyle: DraggingStyle | NotD
 })
 
 export const EditViewColumnsPanel: FC = () => {
-  const { state, onDismiss, onDragEnd, selectedColumns, onChange, onSave, isChanged, dispatch } =
+  const context = useContext(PortfolioAggregationContext)
+  const { state, onDismiss, onDragEnd, selectedColumns, onChange, onSave, isChanged, dispatch,moveColumn } =
     useEditViewColumnsPanel()
 
   return (
@@ -36,12 +45,22 @@ export const EditViewColumnsPanel: FC = () => {
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      style={getItemStyle(snapshot.isDragging, provided.draggableProps.style) as any}
+                      style={
+                        getItemStyle(snapshot.isDragging, provided.draggableProps.style) as any
+                      }
                     >
                       <Checkbox
                         label={col.name}
-                        checked={col.selected}
-                        onChange={(_event, checked) => onChange(col, checked)} />
+                        checked={_.some(
+                          context.state.fltColumns,
+                          (c) => c.fieldName === col.fieldName
+                        )}
+                        onChange={(_event, checked) => onChange(col, checked)}
+                      />
+                      <div className={styles.columnItemActions}>
+                        <ActionButton iconProps={{ iconName: 'ChevronUp' }} className={styles.columnItemButton} onClick={() => moveColumn(col, -1)} />
+                        <ActionButton iconProps={{ iconName: 'ChevronDown' }} className={styles.columnItemButton} onClick={() => moveColumn(col, 1)} />
+                      </div>
                     </div>
                   )}
                 </Draggable>
