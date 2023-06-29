@@ -217,7 +217,7 @@ declare interface IPortfolioWebPartsStrings {
   DataSourceItemNotFound: string
   ProjectContentColumnItemNotFound: string
   ShowHideColumnsLabel: string
-  ShowHideColumnsDescription: string
+  ShowEditViewColumnsPanelHelpText: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

@@ -83,18 +83,14 @@ export function useEditViewColumnsPanel() {
 
   /**
    * Move column.
-   * 
+   *
    * @param column Column item
    * @param moveIndex Move index
    */
   const moveColumn = (column: IProjectContentColumn, moveIndex: number) => {
     const columnIndex = selectedColumns.findIndex((c) => c.fieldName === column.fieldName)
     if (columnIndex > -1) {
-      const _selectedColumns = arrayMove(
-        selectedColumns,
-        columnIndex,
-        columnIndex + moveIndex
-      )
+      const _selectedColumns = arrayMove(selectedColumns, columnIndex, columnIndex + moveIndex)
       setSelectedColumns(_selectedColumns)
       setIsChanged(true)
     }

@@ -1,5 +1,6 @@
-import { ActionButton, Checkbox, DefaultButton, Panel, PrimaryButton } from '@fluentui/react'
+import { ActionButton, Checkbox, Panel } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
+import _ from 'lodash'
 import React, { FC, useContext } from 'react'
 import {
   DragDropContext,
@@ -8,11 +9,9 @@ import {
   Droppable,
   NotDraggingStyle
 } from 'react-beautiful-dnd'
-import { TOGGLE_SHOW_HIDE_COLUMN_PANEL } from '../reducer'
+import { PortfolioAggregationContext } from '../context'
 import styles from './EditViewColumnsPanel.module.scss'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
-import { PortfolioAggregationContext } from '../context'
-import _ from 'lodash'
 
 const getItemStyle = (_isDragging: boolean, draggableStyle: DraggingStyle | NotDraggingStyle) => ({
   userSelect: 'none',
@@ -21,18 +20,30 @@ const getItemStyle = (_isDragging: boolean, draggableStyle: DraggingStyle | NotD
 
 export const EditViewColumnsPanel: FC = () => {
   const context = useContext(PortfolioAggregationContext)
-  const { state, onDismiss, onDragEnd, selectedColumns, onChange, onSave, isChanged, dispatch,moveColumn } =
-    useEditViewColumnsPanel()
+  const {
+    state,
+    onDismiss,
+    onDragEnd,
+    selectedColumns,
+    onChange,
+    onSave,
+    moveColumn
+  } = useEditViewColumnsPanel()
 
   return (
     <Panel
       isOpen={state.showHideColumnPanel.isOpen}
-      headerText={strings.EditViewColumnsPanelHeaderText}
+      onRenderHeader  ={() => (
+        <div className={styles.header}>
+          <ActionButton text='Bruk' iconProps={{ iconName: 'CheckMark' }} onClick={onSave} />
+        </div>
+      )}
       onDismiss={onDismiss}
       isLightDismiss={true}
       className={styles.root}
     >
-      <p>{strings.ShowHideColumnsDescription}</p>
+      <h2 className={styles.title}>{strings.EditViewColumnsPanelHeaderText}</h2>
+      <p className={styles.helpText}>{strings.ShowEditViewColumnsPanelHelpText}</p>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId='droppable'>
           {(provided) => (
@@ -58,8 +69,19 @@ export const EditViewColumnsPanel: FC = () => {
                         onChange={(_event, checked) => onChange(col, checked)}
                       />
                       <div className={styles.columnItemActions}>
-                        <ActionButton iconProps={{ iconName: 'ChevronUp' }} className={styles.columnItemButton} onClick={() => moveColumn(col, -1)} />
-                        <ActionButton iconProps={{ iconName: 'ChevronDown' }} className={styles.columnItemButton} onClick={() => moveColumn(col, 1)} />
+                        <ActionButton
+                          iconProps={{ iconName: 'ChevronUp', styles: { root: { fontSize: 20 } } }}
+                          className={styles.columnItemButton}
+                          onClick={() => moveColumn(col, -1)}
+                        />
+                        <ActionButton
+                          iconProps={{
+                            iconName: 'ChevronDown',
+                            styles: { root: { fontSize: 20 } }
+                          }}
+                          className={styles.columnItemButton}
+                          onClick={() => moveColumn(col, 1)}
+                        />
                       </div>
                     </div>
                   )}
@@ -70,16 +92,6 @@ export const EditViewColumnsPanel: FC = () => {
           )}
         </Droppable>
       </DragDropContext>
-      <div className={styles.footer}>
-        <PrimaryButton text={strings.SaveButtonLabel} onClick={onSave} disabled={!isChanged} />
-        <DefaultButton
-          text={strings.CloseButtonLabel}
-          style={{ marginLeft: 4 }}
-          onClick={() => {
-            dispatch(TOGGLE_SHOW_HIDE_COLUMN_PANEL({ isOpen: false }))
-          }}
-        />
-      </div>
     </Panel>
   )
 }
