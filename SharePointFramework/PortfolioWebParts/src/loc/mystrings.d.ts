@@ -1,4 +1,7 @@
 declare interface IPortfolioWebPartsStrings {
+  ColumnSettingsDisabledTooltip: string
+  ColumnSettingsLabel: any
+  UseChangesButtonText: string
   EditViewColumnsPanelHeaderText: string
   SearchBoxPlaceholderTextDescription: string
   DataSourceLevelLabel: string

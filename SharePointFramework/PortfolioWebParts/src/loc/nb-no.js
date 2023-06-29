@@ -5,7 +5,7 @@ define([], function () {
     DataSourceLevelLabel: 'Nivå for datakilde',
     ShowProgramViewsLabel: 'Vis programvisninger',
     ProgramsHeaderText: 'Programmer',
-    SelectProgramText:'Velg et programområde',
+    SelectProgramText: 'Velg et programområde',
     HideViewsLabel: 'Skjul visninger',
     PortfolioAggregationNotConfiguredMessage: 'Webdelen må konfigureres med en datakilde. Rediger webdelen, og legg inn navnet på datakilden du vil bruke.',
     DataSourceCategoryDescription: 'Angi en datakildekategori for å kunne velge mellom flere datakilder i webdelen.',
@@ -216,6 +216,9 @@ define([], function () {
     PersonalViewsHeaderText: 'Personlige visninger',
     ListViewText: 'Liste',
     CompactViewText: 'Kompakt liste',
-    DefaultRenderModeLabel: 'Standard visningsmodus'
+    DefaultRenderModeLabel: 'Standard visningsmodus',
+    UseChangesButtonText: 'Bruk',
+    ColumnSettingsLabel: 'Kolonneinnstillinger',
+    ColumnSettingsDisabledTooltip: 'Kolonneinnstillinger er kun tilgjengelig når siden er i redigeringsmodus.'
   }
 })

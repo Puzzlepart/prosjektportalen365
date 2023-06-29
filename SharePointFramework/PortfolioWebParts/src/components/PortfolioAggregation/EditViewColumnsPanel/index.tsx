@@ -25,7 +25,11 @@ export const EditViewColumnsPanel: FC = () => {
       isOpen={state.showHideColumnPanel.isOpen}
       onRenderHeader={() => (
         <div className={styles.header}>
-          <ActionButton text='Bruk' iconProps={{ iconName: 'CheckMark' }} onClick={onSave} />
+          <ActionButton
+            text={strings.UseChangesButtonText}
+            iconProps={{ iconName: 'CheckMark' }}
+            onClick={onSave}
+          />
         </div>
       )}
       onDismiss={onDismiss}
