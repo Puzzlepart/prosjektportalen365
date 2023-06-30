@@ -1,7 +1,9 @@
-import { ProjectColumn } from 'pp365-shared-library'
+import { ProjectColumn, SPProjectColumnItem } from 'pp365-shared-library'
 import { useContext, useEffect, useState } from 'react'
 import { PortfolioOverviewContext } from '../context'
-import { ADD_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
+import { TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
+import _ from 'lodash'
+import strings from 'PortfolioWebPartsStrings'
 
 const initialColumn = new ProjectColumn().create(null, '', '', '', null, 100)
 
@@ -10,69 +12,46 @@ const initialColumn = new ProjectColumn().create(null, '', '', '', null, 100)
  * Also provides methods for saving and deleting columns.
  */
 export function useColumnFormPanel() {
-  const { state, props, dispatch } = useContext(PortfolioOverviewContext)
-  const [column, setColumn] = useState<ProjectColumn>(initialColumn.set(state.editColumn))
-  const [persistRenderAs, setPersistRenderAs] = useState(false)
+  const context = useContext(PortfolioOverviewContext)
+  const [column, setColumn] = useState<ProjectColumn>(initialColumn.set(context.state.editColumn))
   useEffect(() => {
-    if (state.editColumn) {
-      setColumn(state.editColumn)
+    if (context.state.editColumn) {
+      setColumn(context.state.editColumn)
     }
-  }, [state.editColumn])
+  }, [context.state.editColumn])
 
   const onSave = async () => {
     setColumn(initialColumn)
-    if (state.editColumn)
+    if (context.state.editColumn) {
+      // TODO: Update existing column
+    } else {
+      const newColumnItem: SPProjectColumnItem = {
+        GtSortOrder: column.sortOrder || 100,
+        Title: column.name,
+        GtInternalName: column.internalName,
+        GtManagedProperty: column.fieldName,
+        GtFieldDataType: _.capitalize(column.data?.renderAs).split('_').join(' '),
+        GtColMinWidth: column.minWidth
+      }
       await Promise.resolve(
-        props.dataAdapter
-          .updateProjectContentColumn(column, persistRenderAs)
+        context.props.dataAdapter
+          .addItemToList(strings.ProjectColumnsListName, newColumnItem)
           .then(() => {
-            dispatch(ADD_COLUMN({ column }))
+            // TOD: Update item with ID
           })
-          .catch((error) => (state.error = error))
       )
-    else {
-      // const newItem: Record<string, any> = {
-      //   GtSortOrder: column.sortOrder || 100,
-      //   Title: column.name,
-      //   GtInternalName: column.internalName,
-      //   GtManagedProperty: column.fieldName,
-      //   GtFieldDataType: capitalize(column.data?.renderAs).split('_').join(' '),
-      //   GtDataSourceCategory: props.title,
-      //   GtColMinWidth: column.minWidth
-      // }
-      // await Promise.resolve(
-      //   props.dataAdapter
-      //     .addItemToList(strings.ProjectContentColumnsListName, newItem)
-      //     .then((result) => {
-      //       const updateItem = {
-      //         GtProjectContentColumnsId: result['Id']
-      //       }
-      //       props.dataAdapter
-      //         .updateDataSourceItem(updateItem, state.dataSource)
-      //         .then(() => {
-      //           dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
-      //         })
-      //         .catch((error) => (state.error = error))
-      //     })
-      //     .catch((error) => (state.error = error))
-      // )
     }
   }
 
   const onDismiss = () => {
     setColumn(initialColumn)
-    dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
+    context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
   }
 
   return {
-    state,
-    props,
-    dispatch,
     onSave,
     onDismiss,
     column,
-    setColumn,
-    persistRenderAs,
-    setPersistRenderAs
+    setColumn
   } as const
 }

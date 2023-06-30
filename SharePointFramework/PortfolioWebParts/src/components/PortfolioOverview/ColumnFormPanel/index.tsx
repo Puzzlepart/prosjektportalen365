@@ -1,36 +1,23 @@
-import {
-  Checkbox,
-  DefaultButton,
-  Dropdown,
-  Panel,
-  PrimaryButton,
-  TextField,
-  Toggle
-} from '@fluentui/react'
+import { DefaultButton, Dropdown, Panel, PrimaryButton, TextField, Toggle } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import React, { FC } from 'react'
-import { DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
+import React, { FC, useContext } from 'react'
+import { TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import styles from './ColumnFormPanel.module.scss'
-import { renderOptions } from './renderOptions'
+import { ColumnVisibilityField } from './ColumnVisibilityField'
+import { renderAsOptions } from './types'
 import { useColumnFormPanel } from './useColumnFormPanel'
+import { PortfolioOverviewContext } from '../context'
 
 export const ColumnFormPanel: FC = () => {
-  const {
-    state,
-    props,
-    dispatch,
-    onSave,
-    onDismiss,
-    column,
-    setColumn,
-    persistRenderAs,
-    setPersistRenderAs
-  } = useColumnFormPanel()
+  const context = useContext(PortfolioOverviewContext)
+  const { onSave, onDismiss, column, setColumn } = useColumnFormPanel()
 
   return (
     <Panel
-      isOpen={state.addColumnPanel.isOpen}
-      headerText={state.editColumn ? strings.EditColumnHeaderText : strings.NewColumnHeaderText}
+      isOpen={context.state.addColumnPanel.isOpen}
+      headerText={
+        context.state.editColumn ? strings.EditColumnHeaderText : strings.NewColumnHeaderText
+      }
       onDismiss={onDismiss}
       isLightDismiss={true}
       className={styles.root}
@@ -39,9 +26,9 @@ export const ColumnFormPanel: FC = () => {
         <TextField
           label={strings.SortOrderLabel}
           description={strings.SortOrderLabel}
-          type={'number'}
+          type='number'
           value={(column.sortOrder && column.sortOrder.toString()) || '100'}
-          disabled={!!state.editColumn}
+          disabled={!!context.state.editColumn}
           onChange={(_, value) => setColumn(column.set({ sortOrder: parseInt(value) }))}
         />
       </div>
@@ -51,7 +38,7 @@ export const ColumnFormPanel: FC = () => {
           description={strings.SearchPropertyDescription}
           required={true}
           value={column.fieldName}
-          disabled={!!state.editColumn}
+          disabled={!!context.state.editColumn}
           onChange={(_, value) => setColumn(column.set({ fieldName: value }))}
         />
       </div>
@@ -61,7 +48,7 @@ export const ColumnFormPanel: FC = () => {
           description={strings.InternalNameDescription}
           required={true}
           value={column.internalName}
-          disabled={!!state.editColumn}
+          disabled={!!context.state.editColumn}
           onChange={(_, value) => setColumn(column.set({ internalName: value }))}
         />
       </div>
@@ -85,10 +72,11 @@ export const ColumnFormPanel: FC = () => {
       </div>
       <div className={styles.field}>
         <Toggle
-          label={strings.IsResizableLabel}
-          defaultChecked={column.isResizable}
-          onChange={(_, checked) => setColumn(column.set({ isResizable: checked }))}
+          label={strings.IsRefinableLabel}
+          defaultChecked={column.isRefinable}
+          onChange={(_, checked) => setColumn(column.set({ isRefinable: checked }))}
         />
+        <div className={styles.fieldDescription}>{strings.IsRefinableDescription}</div>
       </div>
       <div className={styles.field}>
         <Toggle
@@ -96,24 +84,18 @@ export const ColumnFormPanel: FC = () => {
           defaultChecked={column.data?.isGroupable}
           onChange={(_, checked) => setColumn(column.setData({ isGroupable: checked }))}
         />
+        <div className={styles.fieldDescription}>{strings.IsGroupableDescription}</div>
       </div>
       <div className={styles.field}>
         <Dropdown
           label={strings.ColumnRenderLabel}
-          options={renderOptions}
+          options={renderAsOptions}
           defaultSelectedKey={column.data?.renderAs || 'text'}
           onChange={(_, opt) => setColumn(column.setData({ renderAs: opt.key as any }))}
         />
         <div className={styles.fieldDescription}>{strings.ColumnRenderDescription}</div>
-        {state.editColumn && (
-          <Checkbox
-            label={strings.ColumnRenderPersistGloballyLabel}
-            defaultChecked={persistRenderAs}
-            onChange={(_, checked) => setPersistRenderAs(checked)}
-            styles={{ root: { margin: '10px 0 15px 0' } }}
-          />
-        )}
       </div>
+      <ColumnVisibilityField onChange={(visibility) => setColumn(column.setData({ visibility }))} />
       <div className={styles.footer}>
         <PrimaryButton
           text={strings.SaveButtonLabel}
@@ -124,25 +106,9 @@ export const ColumnFormPanel: FC = () => {
           text={strings.CloseButtonLabel}
           style={{ marginLeft: 4 }}
           onClick={() => {
-            dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
+            context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
           }}
         />
-        {state.editColumn && state.editColumn.fieldName !== 'Title' && (
-          <DefaultButton
-            text={strings.DeleteButtonLabel}
-            style={{ marginLeft: 4 }}
-            onClick={async () => {
-              await Promise.resolve(
-                props.dataAdapter
-                  .deleteProjectContentColumn(state.editColumn)
-                  .then(() => {
-                    dispatch(DELETE_COLUMN())
-                  })
-                  .catch((error) => (state.error = error))
-              )
-            }}
-          />
-        )}
       </div>
     </Panel>
   )

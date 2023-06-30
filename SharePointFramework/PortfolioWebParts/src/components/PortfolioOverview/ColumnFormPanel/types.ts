@@ -1,7 +1,7 @@
 import { IDropdownOption } from '@fluentui/react/lib/Dropdown'
 import * as strings from 'PortfolioWebPartsStrings'
 
-export const renderOptions: IDropdownOption[] = [
+export const renderAsOptions: IDropdownOption[] = [
   {
     key: 'text',
     text: strings.ColumnRenderOptionText
@@ -49,5 +49,20 @@ export const renderOptions: IDropdownOption[] = [
   {
     key: 'filename_with_icon',
     text: strings.ColumnRenderOptionFilenameWithIcon
+  }
+]
+
+export const visibilityOptions: IDropdownOption[] = [
+  {
+    key: 'GtShowFieldProjectStatus',
+    text: strings.ShowFieldProjectStatusLabel
+  },
+  {
+    key: 'GtShowFieldFrontpage',
+    text: strings.ShowFieldFrontpageLabel
+  },
+  {
+    key: 'GtShowFieldPortfolio',
+    text: strings.ShowFieldPortfolioLabel
   }
 ]

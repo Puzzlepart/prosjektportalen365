@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    ShowFieldProjectStatusLabel: 'Prosjektstatus',
+    ShowFieldFrontpageLabel: 'Prosjektforside',
+    ShowFieldPortfolioLabel: 'Porteføljeoversikt',
     EditViewColumnsPanelHeaderText: 'Rediger visningskolonner',
     SearchBoxPlaceholderTextDescription: 'Tekst som vises i søkeboksen når den er tom. Om det ikke settes en verdi baseres teksten på valgt datakilde.',
     DataSourceLevelLabel: 'Nivå for datakilde',
@@ -35,6 +38,11 @@ define([], function () {
     MoveRightLabel: 'Flytt til høyre',
     MoveLeftLabel: 'Flytt til venstre',
     IsGroupableLabel: 'Grupperbar',
+    IsGroupableDescription: 'Brukere kan gruppere på denne kolonnen.',
+    IsRefinableLabel: 'Presiser',
+    IsRefinableDescription: 'Brukere kan filtrere på denne kolonnen.',
+    ColumnVisibilityLabel: 'Synlighet for kolonne',
+    ColumnVisibilityDescription: 'Angi hvor kolonnen skal vises. Prosjektforside, prosjektstatus-siden, porterføljeoversikten eller alle steder.',
     NewColumnHeaderText: 'Ny kolonne',
     EditColumnHeaderText: 'Rediger kolonne',
     AddColumnText: 'Legg til kolonne',
@@ -175,6 +183,7 @@ define([], function () {
     TimelineConfigurationListName: 'Tidslinjekonfigurasjon',
     DataSourceListName: 'Datakilder',
     ProjectContentColumnsListName: 'Prosjektinnholdskolonner',
+    ProjectColumnsListName: 'Prosjektkolonner',
     PortfolioManagerGroupName: 'Porteføljeinnsyn',
     ProjectTimelineItemInfo: '{0} - prosjektets tidsforløp',
     LastPublishedStatusreport: 'Gå til siste statusrapport',

@@ -1,4 +1,13 @@
 declare interface IPortfolioWebPartsStrings {
+  ProjectColumnsListName: string
+  ShowFieldProjectStatusLabel: string
+  ShowFieldFrontpageLabel: string
+  ShowFieldPortfolioLabel: string
+  ColumnVisibilityLabel: string
+  ColumnVisibilityDescription: string
+  IsGroupableDescription: string
+  IsRefinableDescription: string
+  IsRefinableLabel: string
   AddColumnLabel: string
   MinWidthDescription: string
   MaxWidthDescription: string
