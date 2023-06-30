@@ -1,7 +1,6 @@
 import { MessageBarType } from '@fluentui/react'
-import { UrlQueryParameterCollection } from '@microsoft/sp-core-library'
-import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
+import _ from 'lodash'
 import { PortfolioOverviewView } from 'pp365-shared-library/lib/models'
 import { parseUrlHash } from 'pp365-shared-library/lib/util/parseUrlHash'
 import { useEffect } from 'react'
@@ -22,7 +21,7 @@ function getCurrentView(
   context: IPortfolioOverviewContext
 ): PortfolioOverviewView {
   if (context.state.currentView) return context.state.currentView
-  const viewIdUrlParam = new UrlQueryParameterCollection(document.location.href).getValue('viewId')
+  const viewIdUrlParam = new URLSearchParams(document.location.search).get('viewId')
   const views = context.props.configuration.views
   let currentView = null
 
@@ -72,15 +71,15 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
         currentView = getCurrentView(hashState, context)
         const items = isParentProject
           ? await context.props.dataAdapter.fetchDataForViewBatch(
-              currentView,
-              configuration,
-              pageContext.legacyPageContext.hubSiteId
-            )
+            currentView,
+            configuration,
+            pageContext.legacyPageContext.hubSiteId
+          )
           : await context.props.dataAdapter.fetchDataForView(
-              currentView,
-              configuration,
-              pageContext.legacyPageContext.hubSiteId
-            )
+            currentView,
+            configuration,
+            pageContext.legacyPageContext.hubSiteId
+          )
         let groupBy = currentView.groupBy
         if (hashState.groupBy && !groupBy) {
           groupBy = _.find(configuration.columns, (fc) => fc.fieldName === hashState.groupBy)

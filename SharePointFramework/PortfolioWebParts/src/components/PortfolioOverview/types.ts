@@ -6,8 +6,10 @@ import {
 } from 'pp365-shared-library/lib/models'
 import { IBaseComponentProps } from '../types'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { MessageBarType, IContextualMenuProps } from '@fluentui/react'
+import { MessageBarType, IContextualMenuProps, IColumn } from '@fluentui/react'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
+import styles from './PortfolioOverview.module.scss'
+import strings from 'PortfolioWebPartsStrings'
 
 export class PortfolioOverviewErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -188,4 +190,13 @@ export interface IPortfolioOverviewHashStateState {
    * groupBy found in hash (document.location.hash)
    */
   groupBy?: string
+}
+
+export const addColumn: IColumn = {
+  key: 'AddColumn',
+  fieldName: '',
+  name: strings.AddColumnText,
+  iconName: 'CalculatorAddition',
+  iconClassName: styles.addColumnIcon,
+  minWidth: 175
 }

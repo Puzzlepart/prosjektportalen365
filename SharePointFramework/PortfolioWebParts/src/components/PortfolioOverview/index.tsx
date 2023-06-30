@@ -14,22 +14,28 @@ import {
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import React, { FC } from 'react'
-import { PortfolioOverviewContext } from './context'
 import { ListHeader } from './ListHeader'
 import styles from './PortfolioOverview.module.scss'
 import { PortfolioOverviewCommands } from './PortfolioOverviewCommands'
 import { renderItemColumn } from './RenderItemColumn'
-import { IPortfolioOverviewProps } from './types'
-import { useFilteredData } from './useFilteredData'
+import { PortfolioOverviewContext } from './context'
+import { IPortfolioOverviewProps, addColumn } from './types'
 import { usePortfolioOverview } from './usePortfolioOverview'
 
 /**
  * Component for displaying a portfolio overview - an overview of all projects in a portfolio.
  */
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
-  const { state, contextValue, selection, onColumnHeaderClick, onColumnHeaderContextMenu } =
-    usePortfolioOverview(props)
-  const { items, columns, groups } = useFilteredData(props, state)
+  const {
+    state,
+    contextValue,
+    selection,
+    onColumnHeaderClick,
+    onColumnHeaderContextMenu,
+    items,
+    columns,
+    groups
+  } = usePortfolioOverview(props)
 
   return (
     <div className={styles.root}>
@@ -61,7 +67,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
                   items={items}
                   constrainMode={ConstrainMode.unconstrained}
                   layoutMode={DetailsListLayoutMode.fixedColumns}
-                  columns={columns}
+                  columns={[...columns, addColumn]}
                   groups={groups}
                   selectionMode={SelectionMode.multiple}
                   selection={selection}
@@ -88,4 +94,4 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
   )
 }
 
-export * from './types'
+export { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'

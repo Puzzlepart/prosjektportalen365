@@ -28,14 +28,14 @@ export function useColumnContextMenu() {
 
   const addColumnItems: IContextualMenuItem[] = [
     {
-      key: 'AddColumn',
+      key: 'ADD_COLUMN',
       name: strings.AddColumnText,
       iconProps: { iconName: 'CalculatorAddition' },
       disabled: props.displayMode !== DisplayMode.Edit && !props.lockedColumns,
       onClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
     },
     {
-      key: 'ShowHideColumns',
+      key: 'SHOW_HIDE_COLUMNS',
       name: strings.ShowHideColumnsLabel,
       iconProps: { iconName: 'Settings' },
       onClick: () => dispatch(TOGGLE_SHOW_HIDE_COLUMN_PANEL({ isOpen: true }))
@@ -44,25 +44,25 @@ export function useColumnContextMenu() {
 
   const items: IContextualMenuItem[] = [
     {
-      key: 'SortDesc',
+      key: 'SORT_DESC',
       name: strings.SortDescLabel,
       canCheck: true,
       checked: column.isSorted && column.isSortedDescending,
       onClick: () => dispatch(SET_SORT({ column, sortDesencing: true }))
     },
     {
-      key: 'SortAsc',
+      key: 'SORT_ASC',
       name: strings.SortAscLabel,
       canCheck: true,
       checked: column.isSorted && !column.isSortedDescending,
       onClick: () => dispatch(SET_SORT({ column, sortDesencing: false }))
     },
     {
-      key: 'Divider1',
+      key: 'DIVIDER_01',
       itemType: ContextualMenuItemType.Divider
     },
     {
-      key: 'GroupBy',
+      key: 'GROUP_BY',
       name: format(strings.GroupByColumnLabel, column.name),
       canCheck: true,
       checked: state.groupBy?.fieldName === column.fieldName,
@@ -70,44 +70,44 @@ export function useColumnContextMenu() {
       onClick: () => dispatch(SET_GROUP_BY({ column }))
     },
     {
-      key: 'Divider2',
+      key: 'DIVIDER_02',
       itemType: ContextualMenuItemType.Divider
     },
     {
-      key: 'ColumnSettings',
+      key: 'COLUMN_SETTINGS',
       name: strings.ColumnSettingsLabel,
       disabled: !isColumnEditable,
       title: !isColumnEditable && strings.ColumnSettingsDisabledTooltip,
       subMenuProps: {
         items: [
           {
-            key: 'Edit',
+            key: 'EDIT_COLUMN',
             name: strings.EditColumnLabel,
             onClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column }))
           },
           {
-            key: 'MoveLeft',
+            key: 'MOVE_COLUMN_LEFT',
             name: strings.MoveLeftLabel,
             disabled: columnIndex === 0,
             onClick: () => dispatch(MOVE_COLUMN({ column, move: -1 }))
           },
           {
-            key: 'MoveRight',
+            key: 'MOVE_COLUMN_RIGHT',
             name: strings.MoveRightLabel,
             disabled: columnIndex === state.columns.length - 1,
             onClick: () => dispatch(MOVE_COLUMN({ column, move: 1 }))
           },
           {
-            key: 'Divider3',
+            key: 'DIVIDER_03',
             itemType: ContextualMenuItemType.Divider
           },
           {
-            key: 'ShowHideColumns',
+            key: 'SHOW_HIDE_COLUMNS',
             name: strings.ShowHideColumnsLabelShort,
             onClick: () => dispatch(TOGGLE_SHOW_HIDE_COLUMN_PANEL({ isOpen: true }))
           },
           {
-            key: 'AddColumn',
+            key: 'ADD_COLUMN',
             name: strings.AddColumnLabel,
             onClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
           }

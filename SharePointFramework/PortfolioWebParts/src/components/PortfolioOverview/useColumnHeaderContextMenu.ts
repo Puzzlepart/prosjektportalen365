@@ -1,11 +1,11 @@
 import { ContextualMenuItemType, format, IContextualMenuProps } from '@fluentui/react'
+import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
+import { getObjectValue as get } from 'pp365-shared-library/lib/helpers/getObjectValue'
 import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import { redirect } from 'pp365-shared-library/lib/util/redirect'
 import { IPortfolioOverviewContext } from './context'
 import { SET_COLUMN_CONTEXT_MENU, SET_GROUP_BY, SET_SORT } from './reducer'
-import { getObjectValue as get } from 'pp365-shared-library/lib/helpers/getObjectValue'
-import _ from 'lodash'
 
 /**
  * Hook for the column header context menu. Handles the logic for the context menu.
@@ -30,20 +30,41 @@ export function useColumnHeaderContextMenu(context: IPortfolioOverviewContext) {
     column?: ProjectColumn,
     ev?: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
-    if (column.key === 'AddColumn') return
-    const columnCustomSorts = column.customSorts.map((customSort, idx) => ({
-      key: `CUSTOM_SORT_${idx}`,
-      name: customSort.name,
-      canCheck: true,
-      iconProps: customSort.iconName && {
-        iconName: customSort.iconName
-      },
-      checked: column.isSorted && context.state.sortBy?.customSort?.name === customSort.name,
-      onClick: () => context.dispatch(SET_SORT({ column, customSort }))
-    }))
     const columnContextMenu: IContextualMenuProps = {
       target: ev.currentTarget,
-      items: [
+      items: [],
+      onDismiss: () => context.dispatch(SET_COLUMN_CONTEXT_MENU(null))
+    }
+    if (column.key === 'AddColumn') {
+      columnContextMenu.items = [
+        {
+          key: 'ADD_COLUMN',
+          name: strings.AddColumnText,
+          iconProps: { iconName: 'CalculatorAddition' },
+          onClick: () => redirect(
+            context.props.configuration.columnUrls.defaultNewFormUrl
+          ),
+        },
+        {
+          key: 'SHOW_HIDE_COLUMNS',
+          name: strings.ShowHideColumnsLabel,
+          iconProps: { iconName: 'Settings' },
+          disabled: true
+        }
+      ]
+      context.dispatch(SET_COLUMN_CONTEXT_MENU(columnContextMenu))
+    } else {
+      const columnCustomSorts = column.customSorts.map((customSort, idx) => ({
+        key: `CUSTOM_SORT_${idx}`,
+        name: customSort.name,
+        canCheck: true,
+        iconProps: customSort.iconName && {
+          iconName: customSort.iconName
+        },
+        checked: column.isSorted && context.state.sortBy?.customSort?.name === customSort.name,
+        onClick: () => context.dispatch(SET_SORT({ column, customSort }))
+      }))
+      columnContextMenu.items = [
         {
           key: 'SORT_DESC',
           name: strings.SortDescLabel,
@@ -88,10 +109,34 @@ export function useColumnHeaderContextMenu(context: IPortfolioOverviewContext) {
             redirect(
               `${context.props.configuration.columnUrls.defaultEditFormUrl}?ID=${column.id}`
             ),
-          disabled: !context.props.pageContext.legacyPageContext.isSiteAdmin
+          subMenuProps: {
+            items: [
+              {
+                key: 'EDIT_COLUMN',
+                name: strings.EditColumnLabel,
+                onClick: () =>
+                  redirect(
+                    `${context.props.configuration.columnUrls.defaultEditFormUrl}?ID=${column.id}`
+                  ),
+                disabled: !context.props.pageContext.legacyPageContext.isSiteAdmin,
+              },
+              {
+                key: 'DIVIDER_04',
+                itemType: ContextualMenuItemType.Divider
+              },
+              {
+                key: 'ADD_COLUMN',
+                name: strings.AddColumnText,
+                iconProps: { iconName: 'CalculatorAddition' },
+                onClick: () => redirect(
+                  context.props.configuration.columnUrls.defaultNewFormUrl
+                ),
+                disabled: !context.props.pageContext.legacyPageContext.isSiteAdmin,
+              }
+            ]
+          }
         }
-      ].filter(Boolean),
-      onDismiss: () => context.dispatch(SET_COLUMN_CONTEXT_MENU(null))
+      ].filter(Boolean)
     }
     context.dispatch(SET_COLUMN_CONTEXT_MENU(columnContextMenu))
   }

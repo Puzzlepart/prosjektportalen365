@@ -1,11 +1,13 @@
-import { MessageBarType, IGroup, IColumn, IPanelProps, Target } from '@fluentui/react'
+import { IColumn, IGroup, IPanelProps, MessageBarType, Target } from '@fluentui/react'
 import { SearchResult } from '@pnp/sp'
+import strings from 'PortfolioWebPartsStrings'
 import { IDataAdapter } from 'data/types'
 import { IAggregatedListConfiguration } from 'interfaces'
 import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
+import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
 import { IBaseComponentProps } from '../types'
-import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
+import styles from './PortfolioAggregation.module.scss'
 
 export class PortfolioAggregationErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -231,4 +233,13 @@ export interface IPortfolioAggregationHashState {
    * groupBy found in hash (document.location.hash)
    */
   groupBy?: string
+}
+
+export const addColumn: IColumn = {
+  key: 'AddColumn',
+  fieldName: '',
+  name: strings.AddColumnText,
+  iconName: 'CalculatorAddition',
+  iconClassName: styles.addColumnIcon,
+  minWidth: 175
 }

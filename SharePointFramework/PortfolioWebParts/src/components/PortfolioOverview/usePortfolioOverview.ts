@@ -9,6 +9,7 @@ import { useColumnHeaderClick } from './useColumnHeaderClick'
 import { useColumnHeaderContextMenu } from './useColumnHeaderContextMenu'
 import { useFetchData } from './useFetchData'
 import { usePersistedColumns } from './usePersistedColumns'
+import { useFilteredData } from './useFilteredData'
 
 /**
  * Component logic hook for `PortfolioOverview` component.
@@ -49,11 +50,16 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
 
   ExcelExportService.configure({ name: props.title })
 
+  const { items, columns, groups } = useFilteredData(props, state)
+
   return {
     state,
     contextValue,
     selection,
     onColumnHeaderClick,
-    onColumnHeaderContextMenu
+    onColumnHeaderContextMenu,
+    items,
+    columns,
+    groups
   } as const
 }

@@ -1,11 +1,12 @@
-@import '~@fluentui/react/dist/sass/References.scss';
+@import "~@fluentui/react/dist/sass/References.scss";
 
-[class^="mainContent"]{
+[class^="mainContent"] {
   position: relative !important;
 }
 
 .root {
   margin: 15px 0 0 0;
+
   .container {
     .searchBox {
       padding: 0 0 20px 0;
@@ -26,12 +27,16 @@
         }
       }
     }
-    
+
+    .addColumnIcon {
+      margin: 0 4px 0 0;
+    }
+
     .listContainer {
       padding: 0 32px;
     }
 
-    [class*='stickyAbove'] .headerColumns {
+    [class*="stickyAbove"] .headerColumns {
       padding-left: 32px;
     }
   }
