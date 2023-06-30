@@ -58,7 +58,7 @@ define([], function () {
     IsMultilineLabel: 'Flere linjer',
     IsResizableLabel: 'Justerbar',
     SaveButtonLabel: 'Lagre',
-    CloseButtonLabel: 'Lukk',
+    CloseButtonLabel: 'Avbryt',
     GroupByLabel: 'Grupper etter',
     GroupByColumnLabel: 'Grupper etter {0}',
     FilterBy: 'Filtrer etter',

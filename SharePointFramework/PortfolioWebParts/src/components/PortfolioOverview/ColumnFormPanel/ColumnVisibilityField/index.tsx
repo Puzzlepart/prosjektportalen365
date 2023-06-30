@@ -2,8 +2,7 @@ import { Dropdown } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import React, { FC, useState } from 'react'
 import styles from '../ColumnFormPanel.module.scss'
-import { visibilityOptions } from '../types'
-import { IColumnVisibilityFieldProps } from './types'
+import { IColumnVisibilityFieldProps, visibilityOptions } from './types'
 
 export const ColumnVisibilityField: FC<IColumnVisibilityFieldProps> = (props) => {
   const [selection, setSelection] = useState<string[]>([])
@@ -13,13 +12,15 @@ export const ColumnVisibilityField: FC<IColumnVisibilityFieldProps> = (props) =>
         label={strings.ColumnVisibilityLabel}
         multiSelect={true}
         options={visibilityOptions}
-        onChange={(_, opt) => {
-          if (opt.selected) {
-            setSelection([...selection, opt.key as string])
+        onChange={(_e, { key, selected }) => {
+          let _selection = [...selection]
+          if (selected) {
+            _selection.push(key as string)
           } else {
-            setSelection(selection.filter((s) => s !== opt.key))
+            _selection = _selection.filter((s) => s !== key)
           }
-          props.onChange(selection)
+          setSelection(_selection)
+          props.onChange(_selection)
         }}
       />
       <div className={styles.fieldDescription}>{strings.ColumnVisibilityDescription}</div>
