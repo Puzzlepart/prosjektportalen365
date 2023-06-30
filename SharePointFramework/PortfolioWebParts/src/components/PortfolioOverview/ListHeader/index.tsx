@@ -1,4 +1,10 @@
-import { format, Sticky, StickyPositionType } from '@fluentui/react'
+import {
+  format,
+  IDetailsHeaderProps,
+  IRenderFunction,
+  Sticky,
+  StickyPositionType
+} from '@fluentui/react'
 import { SearchBox } from '@fluentui/react/lib/SearchBox'
 import strings from 'PortfolioWebPartsStrings'
 import React, { FC, useContext } from 'react'
@@ -48,4 +54,17 @@ export const ListHeader: FC<IListHeaderProps> = (props) => {
       </div>
     </Sticky>
   )
+}
+
+/**
+ * Render function for `ListHeader`.
+ *
+ * @param headerProps Header props
+ * @param defaultRender Default render function
+ */
+export const onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (
+  headerProps,
+  defaultRender
+) => {
+  return <ListHeader headerProps={headerProps} defaultRender={defaultRender} />
 }
