@@ -1,4 +1,6 @@
 declare interface IPortfolioWebPartsStrings {
+  MinWidthDescription: string
+  MaxWidthDescription: string
   ColumnSettingsDisabledTooltip: string
   ColumnSettingsLabel: any
   UseChangesButtonText: string
