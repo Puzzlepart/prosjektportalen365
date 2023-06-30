@@ -8,6 +8,7 @@
         <pnp:FieldRef ID="7463d38f-5f51-4b25-a920-04ea1ec24a26" Name="GtFieldDataType" Required="true" UpdateChildren="true" />
         <pnp:FieldRef ID="67a0a4b1-61d7-45c3-9157-7e302450a304" Name="GtDataSourceCategory" UpdateChildren="true" />
         <pnp:FieldRef ID="a156e8b6-fc02-475c-a377-47c6795fed1d" Name="GtColMinWidth" UpdateChildren="true" />
+        <pnp:FieldRef ID="27c60000-e004-4932-aeaa-6045e197ff87" Name="GtColMaxWidth" UpdateChildren="true" />
         <pnp:FieldRef ID="b77be89a-346f-4897-b519-e55eedbc0aa9" Name="GtIsGroupable" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

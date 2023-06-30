@@ -1,0 +1,1 @@
+﻿<Field Decimals="0" Description="{resource:SiteFields_GtColMaxWidth_Description}" DisplayName="{resource:SiteFields_GtColMaxWidth_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="27c60000-e004-4932-aeaa-6045e197ff87" LCID="1044" Min="0" Name="GtColMaxWidth" StaticName="GtColMaxWidth" Type="Number" />

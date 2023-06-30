@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - releases/1.9
+      - feat/content-columns-max-width
     paths:
       - "SharePointFramework/**"
       - "Install/**"
