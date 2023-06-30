@@ -6,19 +6,19 @@ import { SearchValueType } from '../types/SearchValueType'
 import { ProjectColumnConfig, ProjectColumnConfigDictionary } from './ProjectColumnConfig'
 
 export class SPProjectColumnItem {
-  public Id: number = 0
+  public Id?: number = 0
   public Title: string = ''
   public GtSortOrder: number = 0
-  public GtInternalName: string = ''
-  public GtManagedProperty: string = ''
-  public GtShowFieldProjectStatus: boolean = false
-  public GtShowFieldFrontpage: boolean = false
-  public GtShowFieldPortfolio: boolean = false
-  public GtFieldDataType: string = ''
-  public GtFieldCustomSort: string = ''
-  public GtColMinWidth: number = 0
-  public GtIsRefinable: boolean = false
-  public GtIsGroupable: boolean = false
+  public GtInternalName?: string = ''
+  public GtManagedProperty?: string = ''
+  public GtShowFieldProjectStatus?: boolean = false
+  public GtShowFieldFrontpage?: boolean = false
+  public GtShowFieldPortfolio?: boolean = false
+  public GtFieldDataType?: string = ''
+  public GtFieldCustomSort?: string = ''
+  public GtColMinWidth?: number = 0
+  public GtIsRefinable?: boolean = false
+  public GtIsGroupable?: boolean = false
 }
 
 export type ProjectColumnCustomSort = {
@@ -74,7 +74,8 @@ export class ProjectColumn implements IColumn {
   }
 
   /**
-   * Returns `true` if the column is a multiline column.
+   * Returns `true` if the column is a multiline column - meaning `dataType`
+   * is `note` or `tags`.
    */
   public get isMultiline(): boolean {
     return this.dataType === 'note' || this.dataType === 'tags'
@@ -140,6 +141,11 @@ export class ProjectColumn implements IColumn {
     this.iconName = iconName
     this.onColumnClick = onColumnClick
     this.minWidth = minWidth
+    return this
+  }
+
+  public set(column: Partial<ProjectColumn>): ProjectColumn {
+    Object.assign(this, column)
     return this
   }
 
