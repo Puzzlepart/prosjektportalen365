@@ -20,8 +20,9 @@ import { getUserPhoto } from 'pp365-shared-library/lib/helpers/getUserPhoto'
 import {
   DataSource,
   PortfolioOverviewView,
-  ProjectColumn,
+  ProjectContentColumn,
   ProjectListModel,
+  SPProjectContentColumnItem,
   SPTimelineConfigurationItem,
   TimelineConfigurationModel,
   TimelineContentModel
@@ -50,7 +51,6 @@ import {
   IDataAdapter,
   IFetchDataForViewItemResult
 } from './types'
-import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -883,29 +883,35 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Fetch items from the project content columns SharePoint list on the hub site.
+   * Fetch project content columns from the project content columns SharePoint list on the hub site
+   * with the specified `dataSourceCategory` or without a category. The result is transformed into
+   * `ProjectColumn` objects. The `renderAs` property is set to the `dataType` property in lower case
+   * and with spaces replaced with underscores.
    *
    * @param category Category for data source
    */
   public async fetchProjectContentColumns(
     dataSourceCategory: string
-  ): Promise<IProjectContentColumn[]> {
+  ): Promise<ProjectContentColumn[]> {
     try {
       if (stringIsNullOrEmpty(dataSourceCategory)) return []
       const projectContentColumnsList = this._portal.web.lists.getByTitle(
         strings.ProjectContentColumnsListName
       )
-      const projectContentColumnsListItems = await projectContentColumnsList.items.get()
-      const filteredItems = projectContentColumnsListItems
+      const columnItems = await projectContentColumnsList.items
+        .select(...Object.keys(new SPProjectContentColumnItem()))
+        .usingCaching()
+        .get()
+      const filteredColumnItems = columnItems
         .filter(
           (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
         )
         .map((item) => {
-          const col = new ProjectColumn(item)
+          const col = new ProjectContentColumn(item)
           const renderAs = (col.dataType ? col.dataType.toLowerCase() : 'text').split(' ').join('_')
           return col.setData({ renderAs })
         })
-      return filteredItems
+      return filteredColumnItems
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, dataSourceCategory))
     }
