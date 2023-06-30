@@ -13,6 +13,7 @@ import createReducer, {
 } from './reducer'
 import { searchItem } from './search'
 import { IPortfolioAggregationProps, IPortfolioAggregationState } from './types'
+import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 
 /**
  * Fetching data sources when `dataSourceCategory` or `defaultViewId` changes.
@@ -51,9 +52,10 @@ const usePortfolioAggregationDataSources = ({
  * @param context Context for the Portfolio Aggregation component
  */
 async function fetchData({ props, state }: IPortfolioAggregationContext) {
-  const columns = await (props.dataAdapter.fetchProjectContentColumns
-    ? props.dataAdapter.fetchProjectContentColumns(props.dataSourceCategory)
-    : (Promise.resolve(undefined) as Promise<IPortfolioAggregationProps['columns']>))
+  let columns: IProjectContentColumn[] = []
+  if (props.dataAdapter.fetchProjectContentColumns) {
+    columns = await props.dataAdapter.fetchProjectContentColumns(props.dataSourceCategory)
+  }
   const selectProperties = [...(columns || []), ...state.columns].map((col) => col.fieldName)
   const [dataSrc, items, projects] = await Promise.all([
     props.dataAdapter.dataSourceService.getByName(state.dataSource),
@@ -65,7 +67,7 @@ async function fetchData({ props, state }: IPortfolioAggregationContext) {
       ? props.dataAdapter.fetchProjects(props.configuration, state.dataSource)
       : Promise.resolve(undefined)
   ])
-  return { dataSrc, items, columns, projects }
+  return { dataSrc, items, columns, projects } as const
 }
 
 /**
@@ -78,17 +80,17 @@ const usePortfolioAggregationDataFetch = (context: IPortfolioAggregationContext)
     context.dispatch(START_FETCH())
     if (!context.state.currentView && context.props.dataSourceCategory) return
     fetchData(context)
-      .then(({ dataSrc, items, columns, projects }) => {
+      .then((data) => {
         context.dispatch(
           DATA_FETCHED({
-            items,
-            columns,
-            fltColumns: dataSrc.projectColumns,
-            projects
+            items: data.items,
+            columns: data.columns,
+            fltColumns: data.dataSrc.projectColumns,
+            projects: data.projects
           })
         )
-        context.dispatch(GET_FILTERS({ filters: dataSrc.projectRefiners }))
-        context.dispatch(SET_GROUP_BY({ column: dataSrc.projectGroupBy }))
+        context.dispatch(GET_FILTERS({ filters: data.dataSrc.projectRefiners }))
+        context.dispatch(SET_GROUP_BY({ column: data.dataSrc.projectGroupBy }))
       })
       .catch((error) => context.dispatch(DATA_FETCH_ERROR({ error })))
   }, [

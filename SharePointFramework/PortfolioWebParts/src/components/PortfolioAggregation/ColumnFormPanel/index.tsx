@@ -97,8 +97,10 @@ export const ColumnFormPanel: FC = () => {
       <div className={styles.field}>
         <TextField
           label={strings.MinWidthLabel}
+          description={strings.MinWidthDescription}
           type='number'
           value={column.minWidth.toString()}
+          max={column.maxWidth}
           onChange={(_, value) =>
             setColumn({
               ...column,
@@ -110,9 +112,10 @@ export const ColumnFormPanel: FC = () => {
       <div className={styles.field}>
         <TextField
           label={strings.MaxWidthLabel}
-          disabled={true}
+          description={strings.MaxWidthDescription}
           type='number'
           value={column.maxWidth.toString()}
+          min={column.minWidth ?? 0}
           onChange={(_, value) =>
             setColumn({
               ...column,

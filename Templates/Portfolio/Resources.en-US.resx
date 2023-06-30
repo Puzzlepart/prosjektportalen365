@@ -886,6 +886,9 @@
   <data name="SiteFields_GtColMinWidth_DisplayName" xml:space="preserve">
     <value>Minimum bredde</value>
   </data>
+  <data name="SiteFields_GtColMaxWidth_DisplayName" xml:space="preserve">
+    <value>Maksimum bredde</value>
+  </data>
   <data name="SiteFields_GtPortfolioColumnValue_DisplayName" xml:space="preserve">
     <value>Kolonneverdi</value>
   </data>
@@ -1685,7 +1688,10 @@
     <value></value>
   </data>
   <data name="SiteFields_GtColMinWidth_Description" xml:space="preserve">
-    <value>Minimum bredde for denne kolonnen i piksler. Brukes blant annet i Porteføljeoversikten.</value>
+    <value>Minimum bredde for denne kolonnen i piksler. Brukes blant annet i Porteføljeoversikten og aggregerte visninger.</value>
+  </data>
+  <data name="SiteFields_GtColMaxWidth_Description" xml:space="preserve">
+    <value>Maksimum bredde for denne kolonnen i piksler. Brukes blant annet i Porteføljeoversikten og aggregerte visninger.</value>
   </data>
   <data name="SiteFields_GtPortfolioColumnValue_Description" xml:space="preserve">
     <value></value>

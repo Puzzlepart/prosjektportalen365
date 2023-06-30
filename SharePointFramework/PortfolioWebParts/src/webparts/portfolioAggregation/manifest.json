@@ -1,12 +1,12 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-  "id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
+  "id": "9ad033f7-106e-488e-bad4-9b66d7b26281",
   "alias": "PortfolioAggregationWebPart",
   "componentType": "WebPart",
   "version": "1.9.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
-  "hiddenFromToolbox": false,
+  "hiddenFromToolbox": true,
   "supportedHosts": [
     "SharePointWebPart"
   ],
