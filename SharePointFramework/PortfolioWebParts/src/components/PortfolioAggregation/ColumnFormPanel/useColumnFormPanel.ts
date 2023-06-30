@@ -15,10 +15,9 @@ export const addColumn = () => ({
   minWidth: 175
 })
 
-const initialColumn = {
+const initialColumn: IProjectContentColumn = {
   key: null,
   fieldName: '',
-  internalname: '',
   name: '',
   minWidth: 100,
   maxWidth: 150,

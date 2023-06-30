@@ -423,7 +423,7 @@ export class DataAdapter implements IDataAdapter {
         .filter((p) => p)
 
       return { reports, configElement }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -887,6 +887,8 @@ export class DataAdapter implements IDataAdapter {
    * with the specified `dataSourceCategory` or without a category. The result is transformed into
    * `ProjectColumn` objects. The `renderAs` property is set to the `dataType` property in lower case
    * and with spaces replaced with underscores.
+   * 
+   * If the `dataSourceCategory` is null or empty, an empty array is returned.
    *
    * @param category Category for data source
    */
@@ -899,12 +901,12 @@ export class DataAdapter implements IDataAdapter {
         strings.ProjectContentColumnsListName
       )
       const columnItems = await projectContentColumnsList.items
-        .select(...Object.keys(new SPProjectContentColumnItem()))
+        .select(..._.omit(Object.keys(new SPProjectContentColumnItem()), 'GtColMaxWidth'))
         .usingCaching()
-        .get()
+        .get<SPProjectContentColumnItem[]>()
       const filteredColumnItems = columnItems
         .filter(
-          (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
+          ({ GtDataSourceCategory }) => GtDataSourceCategory === dataSourceCategory || !GtDataSourceCategory
         )
         .map((item) => {
           const col = new ProjectContentColumn(item)
