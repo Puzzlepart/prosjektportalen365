@@ -1,8 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { IColumn } from '@fluentui/react'
-import { pick } from 'underscore'
 import { SearchValueType } from '../types/SearchValueType'
-import { ProjectColumnConfig, ProjectColumnConfigDictionary } from './ProjectColumnConfig'
 
 export class SPProjectContentColumnItem {
   public Id: number = 0
@@ -11,11 +9,11 @@ export class SPProjectContentColumnItem {
   public GtInternalName: string = ''
   public GtManagedProperty: string = ''
   public GtFieldDataType: string = ''
-  public GtFieldCustomSort: string = ''
   public GtColMinWidth: number = 0
   public GtColMaxWidth: number = 0
   public GtIsRefinable: boolean = false
   public GtIsGroupable: boolean = false
+  public GtDataSourceCategory: string
 }
 
 export class ProjectContentColumn implements IColumn {
@@ -36,7 +34,6 @@ export class ProjectContentColumn implements IColumn {
   public isResizable?: boolean
   public isSorted?: boolean
   public isSortedDescending?: boolean
-  public config?: ProjectColumnConfigDictionary
   public onColumnClick: any
   /**
    * Arbitrary data passthrough which can be used by the caller.
@@ -89,24 +86,6 @@ export class ProjectContentColumn implements IColumn {
     this.iconName = iconName
     this.onColumnClick = onColumnClick
     this.minWidth = minWidth
-    return this
-  }
-
-  /**
-   * Configures the column with the given configuration.
-   *
-   * @param config Column configuration
-   */
-  public configure(config: ProjectColumnConfig[]): ProjectContentColumn {
-    this.config = config
-      .filter((col) => col.columnId === this.id)
-      .reduce(
-        (obj, c) => ({
-          ...obj,
-          [c.value]: pick(c, ['color', 'iconName', 'tooltipColumnPropertyName'])
-        }),
-        {}
-      ) as ProjectColumnConfigDictionary
     return this
   }
 
