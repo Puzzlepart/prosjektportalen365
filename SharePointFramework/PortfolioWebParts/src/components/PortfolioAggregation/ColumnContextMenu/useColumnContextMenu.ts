@@ -30,12 +30,14 @@ export function useColumnContextMenu() {
     {
       key: 'AddColumn',
       name: strings.AddColumnText,
+      iconProps: { iconName: 'CalculatorAddition' },
       disabled: props.displayMode !== DisplayMode.Edit && !props.lockedColumns,
       onClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
     },
     {
       key: 'ShowHideColumns',
       name: strings.ShowHideColumnsLabel,
+      iconProps: { iconName: 'Settings' },
       onClick: () => dispatch(TOGGLE_SHOW_HIDE_COLUMN_PANEL({ isOpen: true }))
     }
   ]
@@ -79,24 +81,35 @@ export function useColumnContextMenu() {
       subMenuProps: {
         items: [
           {
+            key: 'Edit',
+            name: strings.EditColumnLabel,
+            onClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column }))
+          },
+          {
             key: 'MoveLeft',
             name: strings.MoveLeftLabel,
-            iconProps: { iconName: 'ChevronLeftMed' },
             disabled: columnIndex === 0,
             onClick: () => dispatch(MOVE_COLUMN({ column, move: -1 }))
           },
           {
             key: 'MoveRight',
             name: strings.MoveRightLabel,
-            iconProps: { iconName: 'ChevronRightMed' },
             disabled: columnIndex === state.columns.length - 1,
             onClick: () => dispatch(MOVE_COLUMN({ column, move: 1 }))
           },
           {
-            key: 'Edit',
-            name: strings.EditColumnLabel,
-            iconProps: { iconName: 'SingleColumnEdit' },
-            onClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column }))
+            key: 'Divider3',
+            itemType: ContextualMenuItemType.Divider
+          },
+          {
+            key: 'ShowHideColumns',
+            name: strings.ShowHideColumnsLabelShort,
+            onClick: () => dispatch(TOGGLE_SHOW_HIDE_COLUMN_PANEL({ isOpen: true }))
+          },
+          {
+            key: 'AddColumn',
+            name: strings.AddColumnLabel,
+            onClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
           }
         ]
       }

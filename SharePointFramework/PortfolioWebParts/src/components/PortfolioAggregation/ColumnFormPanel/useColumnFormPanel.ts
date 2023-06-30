@@ -5,8 +5,9 @@ import { useContext, useEffect, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
 import { ADD_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import styles from './ColumnFormPanel.module.scss'
+import { IColumn } from '@fluentui/react'
 
-export const addColumn = () => ({
+export const addColumn = (): IColumn => ({
   key: '',
   fieldName: '',
   name: strings.AddColumnText,

@@ -66,14 +66,14 @@ export const renderItemColumn = (item: any, index: number, column: IColumn) => {
       )
     case 'trend': {
       const trend = columnValue ? JSON.parse(columnValue) : null
-      return (
+      return trend ? (
         <span>
           <span style={{ display: 'inline-block', width: 20 }}>
             {trend.TrendIconProps && <Icon {...trend.TrendIconProps} />}
           </span>
           <span>{trend.AchievementDisplay}</span>
         </span>
-      )
+      ) : null
     }
     case 'modal':
       return <ItemModal title={item.MeasurementIndicator} value={JSON.parse(columnValue)} />

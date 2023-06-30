@@ -11,9 +11,8 @@ export class SPProjectContentColumnItem {
   public GtFieldDataType: string = ''
   public GtColMinWidth: number = 0
   public GtColMaxWidth: number = 0
-  public GtIsRefinable: boolean = false
   public GtIsGroupable: boolean = false
-  public GtDataSourceCategory: string
+  public GtDataSourceCategory: string = ''
 }
 
 export class ProjectContentColumn implements IColumn {
@@ -28,8 +27,6 @@ export class ProjectContentColumn implements IColumn {
   public iconName?: string
   public dataType?: string
   public searchType?: SearchValueType
-  public isMultiline?: boolean
-  public isRefinable?: boolean
   public isGroupable?: boolean
   public isResizable?: boolean
   public isSorted?: boolean
@@ -49,11 +46,9 @@ export class ProjectContentColumn implements IColumn {
       this.sortOrder = item.GtSortOrder
       this.internalName = item.GtInternalName
       this.dataType = item.GtFieldDataType && item.GtFieldDataType.toLowerCase()
-      this.isMultiline = this.dataType === 'note' || this.dataType === 'tags'
-      this.isRefinable = item.GtIsRefinable
       this.isGroupable = item.GtIsGroupable
       this.isResizable = true
-      this.minWidth = item.GtColMinWidth || 100
+      this.minWidth = item.GtColMinWidth ?? 100
       this.maxWidth = item.GtColMaxWidth
       this.searchType = this._getSearchType(this.fieldName.toLowerCase())
       this.data = {
@@ -61,7 +56,14 @@ export class ProjectContentColumn implements IColumn {
       }
     }
   }
-  
+
+  /**
+   * Returns `true` if the column is a multiline column.
+   */
+  public get isMultiline(): boolean {
+    return this.dataType === 'note' || this.dataType === 'tags'
+  }
+
   /**
    * Creates a new ProjectColumn
    *

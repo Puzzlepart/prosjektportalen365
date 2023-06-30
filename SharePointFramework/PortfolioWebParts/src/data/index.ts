@@ -423,7 +423,7 @@ export class DataAdapter implements IDataAdapter {
         .filter((p) => p)
 
       return { reports, configElement }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
@@ -887,7 +887,7 @@ export class DataAdapter implements IDataAdapter {
    * with the specified `dataSourceCategory` or without a category. The result is transformed into
    * `ProjectColumn` objects. The `renderAs` property is set to the `dataType` property in lower case
    * and with spaces replaced with underscores.
-   * 
+   *
    * If the `dataSourceCategory` is null or empty, an empty array is returned.
    *
    * @param category Category for data source
@@ -901,51 +901,43 @@ export class DataAdapter implements IDataAdapter {
         strings.ProjectContentColumnsListName
       )
       const columnItems = await projectContentColumnsList.items
-        .select(..._.omit(Object.keys(new SPProjectContentColumnItem()), 'GtColMaxWidth'))
+        .select(...Object.keys(new SPProjectContentColumnItem()))
         .usingCaching()
         .get<SPProjectContentColumnItem[]>()
-      const filteredColumnItems = columnItems
-        .filter(
-          ({ GtDataSourceCategory }) => GtDataSourceCategory === dataSourceCategory || !GtDataSourceCategory
-        )
-        .map((item) => {
-          const col = new ProjectContentColumn(item)
-          const renderAs = (col.dataType ? col.dataType.toLowerCase() : 'text').split(' ').join('_')
-          return col.setData({ renderAs })
-        })
-      return filteredColumnItems
+      const filteredColumnItems = columnItems.filter(
+        (col) => col.GtDataSourceCategory === dataSourceCategory || !col.GtDataSourceCategory
+      )
+      return filteredColumnItems.map((item) => {
+        const col = new ProjectContentColumn(item)
+        const renderAs = (col.dataType ? col.dataType.toLowerCase() : 'text').split(' ').join('_')
+        return col.setData({ renderAs })
+      })
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, dataSourceCategory))
     }
   }
 
   /**
-   * Update project content column. The column is identified by the field name.
+   * Update project content column with new values for properties `GtColMinWidth` and `GtColMaxWidth`,
+   * aswell as the `GtFieldDataType` property if parameter `persistRenderAs` is true.
    *
-   * @param column Column properties
+   * @param column Project content column
    * @param persistRenderAs Persist render as property
    */
   public async updateProjectContentColumn(
-    column: Record<string, any>,
+    column: ProjectContentColumn,
     persistRenderAs = false
   ): Promise<any> {
     try {
       const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
-      const items = await list.items.get()
-      const item = items.find((i) => i.GtManagedProperty === column.fieldName)
-
-      if (!item) {
-        throw new Error(format(strings.ProjectContentColumnItemNotFound, column.fieldName))
-      }
-
-      const properties: Record<string, any> = {
-        GtColMinWidth: column.minWidth
+      const properties: Partial<SPProjectContentColumnItem> = {
+        GtColMinWidth: column.minWidth,
+        GtColMaxWidth: column.maxWidth
       }
       if (persistRenderAs) {
         properties.GtFieldDataType = capitalize(column.data.renderAs).split('_').join(' ')
       }
-      const itemUpdateResult = await list.items.getById(item.Id).update(properties)
-      return itemUpdateResult
+      return await list.items.getById(column.id).update(properties)
     } catch (error) {
       throw new Error(error)
     }

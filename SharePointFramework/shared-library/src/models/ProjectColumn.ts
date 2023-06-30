@@ -38,7 +38,6 @@ export class ProjectColumn implements IColumn {
   public iconName?: string
   public dataType?: string
   public searchType?: SearchValueType
-  public isMultiline?: boolean
   public isRefinable?: boolean
   public isGroupable?: boolean
   public isResizable?: boolean
@@ -62,17 +61,23 @@ export class ProjectColumn implements IColumn {
       this.sortOrder = _item.GtSortOrder
       this.internalName = _item.GtInternalName
       this.dataType = _item.GtFieldDataType && _item.GtFieldDataType.toLowerCase()
-      this.isMultiline = this.dataType === 'note' || this.dataType === 'tags'
       this.isRefinable = _item.GtIsRefinable
       this.isGroupable = _item.GtIsGroupable
       this.isResizable = true
-      this.minWidth = _item.GtColMinWidth || 100
+      this.minWidth = _item.GtColMinWidth ?? 100
       this.searchType = this._getSearchType(this.fieldName.toLowerCase())
       this.customSorts = this._getCustomSorts(_item.GtFieldCustomSort)
       this.data = {
         isGroupable: this.isGroupable
       }
     }
+  }
+
+  /**
+   * Returns `true` if the column is a multiline column.
+   */
+  public get isMultiline(): boolean {
+    return this.dataType === 'note' || this.dataType === 'tags'
   }
 
   /**
@@ -161,7 +166,7 @@ export class ProjectColumn implements IColumn {
    *
    * @param fieldName Field name
    */
-  private _getSearchType?(fieldName: string): SearchValueType {
+  public _getSearchType?(fieldName: string): SearchValueType {
     if (fieldName.indexOf('owsdate') !== -1) {
       return SearchValueType.OWSDATE
     }

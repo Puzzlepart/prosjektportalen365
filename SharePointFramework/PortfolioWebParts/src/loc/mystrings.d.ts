@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  AddColumnLabel: string
   MinWidthDescription: string
   MaxWidthDescription: string
   ColumnSettingsDisabledTooltip: string
@@ -222,6 +223,7 @@ declare interface IPortfolioWebPartsStrings {
   DataSourceItemNotFound: string
   ProjectContentColumnItemNotFound: string
   ShowHideColumnsLabel: string
+  ShowHideColumnsLabelShort: string
   ShowEditViewColumnsPanelHelpText: string
 }
 
