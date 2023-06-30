@@ -18,11 +18,15 @@
                 <FieldRef Name="GtFieldDataType" />
                 <FieldRef Name="GtDataSourceCategory" />
                 <FieldRef Name="GtColMinWidth" />
-                <FieldRef Name="GtColMaxWidth" />
                 <FieldRef Name="GtIsGroupable" />
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
             <Aggregations Value="Off" />
+            <JSLink>clienttemplates.js</JSLink>
+            <ColumnWidth>
+                <FieldRef Name="Forvaltet egenskap" width="325" />
+                <FieldRef Name="Internt feltnavn" width="225" />
+            </ColumnWidth>
         </View>
     </pnp:Views>
     <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Overwrite">
@@ -305,7 +309,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>         
+        <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">560</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Kommunikasjonskanal</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtActionChannel</pnp:DataValue>
@@ -314,7 +318,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">Kommunikasjonsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>         
+        <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">570</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Status</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtActionStatus</pnp:DataValue>
@@ -323,7 +327,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">Kommunikasjonsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>         
+        <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">580</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Tiltaksdato</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtActionDate</pnp:DataValue>
@@ -332,7 +336,7 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">Kommunikasjonsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
-        <pnp:DataRow>         
+        <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">590</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Tiltaksansvarlig</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtActionResponsible</pnp:DataValue>
