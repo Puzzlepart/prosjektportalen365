@@ -15,9 +15,6 @@ import {
   DEFAULT_GAINS_PROPERTIES
 } from 'pp365-portfoliowebparts/lib/data/types'
 import {
-  IPortfolioConfiguration
-} from 'pp365-portfoliowebparts/lib/interfaces'
-import {
   Benefit,
   BenefitMeasurement,
   BenefitMeasurementIndicator
@@ -41,6 +38,7 @@ import {
 import { getUserPhoto } from 'pp365-shared-library/lib/helpers/getUserPhoto'
 import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS, IFetchDataForViewItemResult } from './types'
+import { IPortfolioOverviewConfiguration } from 'pp365-portfoliowebparts/lib/components'
 
 /**
  * SPDataAdapter for `ProgramWebParts`.
@@ -81,7 +79,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    *
    * @description Used in `PortfolioOverview`
    */
-  public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
+  public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
     // eslint-disable-next-line prefer-const
     let [columnConfig, columns, views, viewsUrls, columnUrls] = await Promise.all([
       this.portal.getProjectColumnConfig(),
@@ -145,7 +143,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    */
   public async fetchDataForView(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     siteId: string[]
   ): Promise<IFetchDataForViewItemResult[]> {
     siteId = this.spfxContext.pageContext.legacyPageContext.departmentId
@@ -169,7 +167,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    */
   public async fetchDataForRegularView(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     siteId: string[],
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
@@ -210,7 +208,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    */
   public async fetchDataForManagerView(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     siteId: string[],
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
@@ -287,7 +285,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    */
   public async fetchDataForViewBatch(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     siteId: string[],
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
@@ -329,7 +327,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    */
   private async _fetchDataForView(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     siteId: string[],
     siteIdProperty: string = 'GtSiteIdOWSTEXT',
     queryArray?: string

@@ -7,7 +7,11 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import * as strings from 'PortfolioWebPartsStrings'
-import { IPortfolioAggregationConfiguration, IPortfolioAggregationProps, PortfolioAggregation } from 'components/PortfolioAggregation'
+import {
+  IPortfolioAggregationConfiguration,
+  IPortfolioAggregationProps,
+  PortfolioAggregation
+} from 'components/PortfolioAggregation'
 import { DataAdapter } from 'data'
 import _ from 'lodash'
 import React from 'react'

@@ -5,7 +5,6 @@ import {
   SearchResult,
   SortDirection
 } from '@pnp/sp'
-import { IPortfolioConfiguration } from 'interfaces'
 import { IProjectContentColumn } from 'pp365-shared-library'
 import {
   DataSource,
@@ -16,7 +15,7 @@ import {
   TimelineContentModel
 } from 'pp365-shared-library/lib/models'
 import { DataSourceService } from 'pp365-shared-library/lib/services'
-import { IPortfolioAggregationConfiguration } from '../components/PortfolioAggregation'
+import { IPortfolioAggregationConfiguration, IPortfolioOverviewConfiguration } from '../components'
 
 export interface IFetchDataForViewItemResult extends SearchResult {
   SiteId: string
@@ -78,16 +77,16 @@ export interface IDataAdapter {
     chartConfigurationListName: string,
     siteId: string
   ): Promise<{ charts: any; chartData: any; contentTypes: any }>
-  getPortfolioConfig?(): Promise<IPortfolioConfiguration>
+  getPortfolioConfig?(): Promise<IPortfolioOverviewConfiguration>
   getAggregatedListConfig?(category: string): Promise<IPortfolioAggregationConfiguration>
   fetchDataForViewBatch?(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     hubSiteId: any
   ): Promise<any>
   fetchDataForView?(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     hubSiteId: any
   ): Promise<any>
   isUserInGroup?(groupName: string): Promise<boolean>
@@ -102,7 +101,10 @@ export interface IDataAdapter {
   ): Promise<TimelineContentModel[]>
   fetchTimelineConfiguration?(): Promise<TimelineConfigurationModel[]>
   fetchEnrichedProjects?(filter?: string): Promise<ProjectListModel[]>
-  fetchProjects?(configuration?: IPortfolioAggregationConfiguration, dataSource?: string): Promise<any[]>
+  fetchProjects?(
+    configuration?: IPortfolioAggregationConfiguration,
+    dataSource?: string
+  ): Promise<any[]>
   fetchProjectSites(
     rowLimit: number,
     sortProperty: string,

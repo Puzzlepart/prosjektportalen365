@@ -12,7 +12,6 @@ import {
 } from '@pnp/sp'
 import { SearchQueryInit } from '@pnp/sp/src/search'
 import * as cleanDeep from 'clean-deep'
-import { IPortfolioConfiguration } from 'interfaces'
 import { capitalize } from 'lodash'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -35,6 +34,7 @@ import {
 } from 'pp365-shared-library'
 import _ from 'underscore'
 import { IPortfolioAggregationConfiguration } from '../components/PortfolioAggregation'
+import { IPortfolioOverviewConfiguration } from '../components/PortfolioOverview/types'
 import {
   Benefit,
   BenefitMeasurement,
@@ -97,7 +97,7 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchChartData(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     chartConfigurationListName: string,
     siteId: string
   ) {
@@ -147,7 +147,7 @@ export class DataAdapter implements IDataAdapter {
    * - `columnUrls` - Project columns list form URLs
    * - `userCanAddViews` - User can add portfolio views
    */
-  public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
+  public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
     // eslint-disable-next-line prefer-const
     const [columnConfig, columns, views, programs, viewsUrls, columnUrls, userCanAddViews] =
       await Promise.all([
@@ -170,7 +170,7 @@ export class DataAdapter implements IDataAdapter {
       viewsUrls,
       columnUrls,
       userCanAddViews
-    } as IPortfolioConfiguration
+    } as IPortfolioOverviewConfiguration
   }
 
   /**
@@ -228,7 +228,7 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchDataForView(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     siteId: string
   ): Promise<IFetchDataForViewItemResult[]> {
     const isCurrentUserInManagerGroup = await this.isUserInGroup(strings.PortfolioManagerGroupName)
@@ -249,7 +249,7 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchDataForRegularView(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
@@ -288,7 +288,7 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchDataForManagerView(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
@@ -360,7 +360,7 @@ export class DataAdapter implements IDataAdapter {
    */
   private async _fetchDataForView(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ) {

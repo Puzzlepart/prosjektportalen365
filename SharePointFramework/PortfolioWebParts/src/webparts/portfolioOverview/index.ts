@@ -7,8 +7,11 @@ import {
 } from '@microsoft/sp-property-pane'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
-import { IPortfolioOverviewProps, PortfolioOverview } from '../../components/PortfolioOverview'
-import { IPortfolioConfiguration } from '../../interfaces'
+import {
+  IPortfolioOverviewConfiguration,
+  IPortfolioOverviewProps,
+  PortfolioOverview
+} from '../../components/PortfolioOverview'
 
 export const PROPERTYPANE_CONFIGURATION_PROPS = {
   DEFAULT_VIEW_ID: 'defaultViewId',
@@ -23,7 +26,7 @@ export const PROPERTYPANE_CONFIGURATION_PROPS = {
 }
 
 export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPortfolioOverviewProps> {
-  private _configuration: IPortfolioConfiguration
+  private _configuration: IPortfolioOverviewConfiguration
 
   public render(): void {
     this.renderComponent<IPortfolioOverviewProps>(PortfolioOverview, {

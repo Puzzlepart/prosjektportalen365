@@ -86,4 +86,8 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
   )
 }
 
-export { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
+export {
+  IPortfolioOverviewProps,
+  IPortfolioOverviewState,
+  IPortfolioOverviewConfiguration
+} from './types'

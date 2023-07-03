@@ -4,8 +4,7 @@ import {
   PropertyPaneDropdown,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { PortfolioOverview } from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
-import { IPortfolioConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
+import { IPortfolioOverviewConfiguration, PortfolioOverview } from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
 import { PROPERTYPANE_CONFIGURATION_PROPS } from 'pp365-portfoliowebparts/lib/webparts/portfolioOverview'
 import * as strings from 'ProgramWebPartsStrings'
 import React from 'react'
@@ -14,7 +13,7 @@ import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IProgramProjectOverviewProps } from './types'
 
 export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramProjectOverviewProps> {
-  private _configuration: IPortfolioConfiguration
+  private _configuration: IPortfolioOverviewConfiguration
 
   public async onInit(): Promise<void> {
     await super.onInit()

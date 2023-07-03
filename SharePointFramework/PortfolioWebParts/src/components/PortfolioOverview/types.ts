@@ -1,7 +1,6 @@
 import { IColumn, MessageBarType, Target } from '@fluentui/react'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import strings from 'PortfolioWebPartsStrings'
-import { IPortfolioConfiguration } from 'interfaces'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import {
   PortfolioOverviewView,
@@ -11,6 +10,7 @@ import {
 import { IBaseComponentProps } from '../types'
 import { IColumnFormPanel } from './ColumnFormPanel/types'
 import { IEditViewColumnsPanel } from './EditViewColumnsPanel/types'
+import { ProgramItem } from 'models/ProgramItem'
 import styles from './PortfolioOverview.module.scss'
 
 export class PortfolioOverviewErrorMessage extends Error {
@@ -19,11 +19,48 @@ export class PortfolioOverviewErrorMessage extends Error {
   }
 }
 
+export interface IPortfolioOverviewConfiguration {
+  /**
+   * Available columns
+   */
+  columns: ProjectColumn[]
+
+  /**
+   * Available refiners
+   */
+  refiners: ProjectColumn[]
+
+  /**
+   * Available views
+   */
+  views: PortfolioOverviewView[]
+
+  /**
+   * Available programs
+   */
+  programs?: ProgramItem[]
+
+  /**
+   * New forms and edit forms urls for views list
+   */
+  viewsUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
+
+  /**
+   * New form and edit form urls for columns list
+   */
+  columnUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
+
+  /**
+   * Current user can add views (has `ADD_LIST_ITEMS` permission)
+   */
+  userCanAddViews?: boolean
+}
+
 export interface IPortfolioOverviewProps extends IBaseComponentProps {
   /**
    * Configuration (columns and views etc).
    */
-  configuration: IPortfolioConfiguration
+  configuration: IPortfolioOverviewConfiguration
 
   /**
    * SharePoint list name for the column configuration
