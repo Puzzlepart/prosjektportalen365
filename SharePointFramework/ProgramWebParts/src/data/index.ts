@@ -18,7 +18,6 @@ import {
   IPortfolioConfiguration,
   ISPProjectItem,
   ISPUser,
-  IProjectContentColumn
 } from 'pp365-portfoliowebparts/lib/interfaces'
 import {
   Benefit,
@@ -39,6 +38,7 @@ import { DataSourceService, ProjectDataService } from 'pp365-shared-library/lib/
 import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS, IFetchDataForViewItemResult } from './types'
 import { IProgramAdministrationProject } from 'components/ProgramAdministration/types'
+import { IProjectContentColumn } from 'pp365-shared-library'
 
 /**
  * SPDataAdapter for `ProgramWebParts`.
