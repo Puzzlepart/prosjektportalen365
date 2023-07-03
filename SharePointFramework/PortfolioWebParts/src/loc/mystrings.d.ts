@@ -70,7 +70,7 @@ declare interface IPortfolioWebPartsStrings {
   MoveLeftLabel: string
   IsGroupableLabel: string
   NewColumnHeaderText: string
-  AddColumnText: string
+  ToggleColumnFormPanelLabel: string
   SearchPropertyLabel: string
   SearchPropertyDescription: string
   InternalNameLabel: string
@@ -240,8 +240,8 @@ declare interface IPortfolioWebPartsStrings {
   SortOrderLabel: string
   DataSourceItemNotFound: string
   ProjectContentColumnItemNotFound: string
+  ToggleEditViewColumnsLabel: string
   ShowHideColumnsLabel: string
-  ShowHideColumnsLabelShort: string
   ShowEditViewColumnsPanelHelpText: string
 }
 

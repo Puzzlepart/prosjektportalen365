@@ -110,6 +110,12 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
    * Transforms the data after it's fetched
    */
   postTransform?: (results: SearchResult[]) => T[]
+
+  /**
+   * Is parent project. Set to `true` if the web part is used in a parent project.
+   * For now the Add column button is hidden if this is set to `true`.
+   */
+  isParentProject?: boolean
 }
 
 export interface IPortfolioAggregationState
@@ -245,7 +251,7 @@ export interface IPortfolioAggregationHashState {
 export const addColumn: IColumn = {
   key: 'AddColumn',
   fieldName: '',
-  name: strings.AddColumnText,
+  name: strings.ToggleColumnFormPanelLabel,
   iconName: 'CalculatorAddition',
   iconClassName: styles.addColumnIcon,
   minWidth: 175

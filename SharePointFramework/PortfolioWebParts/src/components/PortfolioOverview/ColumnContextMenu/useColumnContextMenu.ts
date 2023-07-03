@@ -37,7 +37,7 @@ export function useColumnContextMenu(): IContextualMenuProps {
     columnContextMenu.items = [
       {
         key: 'TOGGLE_COLUMN_FORM_PANEL',
-        name: strings.AddColumnText,
+        name: strings.ToggleColumnFormPanelLabel,
         iconProps: { iconName: 'CalculatorAddition' },
         onClick: () => {
           context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
@@ -46,7 +46,7 @@ export function useColumnContextMenu(): IContextualMenuProps {
       },
       {
         key: 'TOGGLE_EDIT_VIEW_COLUMNS_PANEL',
-        name: strings.ShowHideColumnsLabel,
+        name: strings.ToggleEditViewColumnsLabel,
         iconProps: { iconName: 'Settings' },
         onClick: () => {
           context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: true }))

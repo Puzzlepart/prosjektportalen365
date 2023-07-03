@@ -9,36 +9,36 @@ import {
   SET_GROUP_BY,
   SET_SORT,
   TOGGLE_COLUMN_FORM_PANEL,
-  TOGGLE_SHOW_HIDE_COLUMN_PANEL
+  TOGGLE_EDIT_VIEW_COLUMNS_PANEL
 } from '../reducer'
 
 /**
- * Component logic hook for ColumnContextMenu. Handles state and dispatches actions to the reducer.
+ * Component logic hook for `ColumnContextMenu`. Handles state and dispatches actions to the reducer.
  **/
 export function useColumnContextMenu() {
-  const { props, state, dispatch } = useContext(PortfolioAggregationContext)
-  if (!state.columnContextMenu) return {}
-  const { column, target } = state.columnContextMenu
+  const context = useContext(PortfolioAggregationContext)
+  if (!context.state.columnContextMenu) return {}
+  const { column, target } = context.state.columnContextMenu
   const columnIndex = indexOf(
-    state.columns.map((c) => c.fieldName),
+    context.state.columns.map((c) => c.fieldName),
     column.fieldName
   )
   const isColumnEditable =
-    props.displayMode === DisplayMode.Edit && columnIndex !== -1 && !props.lockedColumns
+  context.props.displayMode === DisplayMode.Edit && columnIndex !== -1 && !context.props.lockedColumns
 
   const addColumnItems: IContextualMenuItem[] = [
     {
-      key: 'ADD_COLUMN',
-      name: strings.AddColumnText,
+      key: 'TOGGLE_COLUMN_FORM_PANEL',
+      name: strings.ToggleColumnFormPanelLabel,
       iconProps: { iconName: 'CalculatorAddition' },
-      disabled: props.displayMode !== DisplayMode.Edit && !props.lockedColumns,
-      onClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
+      disabled: context.props.displayMode !== DisplayMode.Edit && !context.props.lockedColumns,
+      onClick: () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
     },
     {
-      key: 'SHOW_HIDE_COLUMNS',
-      name: strings.ShowHideColumnsLabel,
+      key: 'TOGGLE_EDIT_VIEW_COLUMNS_PANEL',
+      name: strings.ToggleEditViewColumnsLabel,
       iconProps: { iconName: 'Settings' },
-      onClick: () => dispatch(TOGGLE_SHOW_HIDE_COLUMN_PANEL({ isOpen: true }))
+      onClick: () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: true }))
     }
   ]
 
@@ -48,14 +48,14 @@ export function useColumnContextMenu() {
       name: strings.SortDescLabel,
       canCheck: true,
       checked: column.isSorted && column.isSortedDescending,
-      onClick: () => dispatch(SET_SORT({ column, sortDesencing: true }))
+      onClick: () => context.dispatch(SET_SORT({ column, sortDesencing: true }))
     },
     {
       key: 'SORT_ASC',
       name: strings.SortAscLabel,
       canCheck: true,
       checked: column.isSorted && !column.isSortedDescending,
-      onClick: () => dispatch(SET_SORT({ column, sortDesencing: false }))
+      onClick: () => context.dispatch(SET_SORT({ column, sortDesencing: false }))
     },
     {
       key: 'DIVIDER_01',
@@ -65,9 +65,9 @@ export function useColumnContextMenu() {
       key: 'GROUP_BY',
       name: format(strings.GroupByColumnLabel, column.name),
       canCheck: true,
-      checked: state.groupBy?.fieldName === column.fieldName,
+      checked: context.state.groupBy?.fieldName === column.fieldName,
       disabled: !column.data?.isGroupable,
-      onClick: () => dispatch(SET_GROUP_BY({ column }))
+      onClick: () => context.dispatch(SET_GROUP_BY({ column }))
     },
     {
       key: 'DIVIDER_02',
@@ -76,26 +76,26 @@ export function useColumnContextMenu() {
     {
       key: 'COLUMN_SETTINGS',
       name: strings.ColumnSettingsLabel,
-      disabled: !isColumnEditable,
+      disabled: !isColumnEditable || context.props.isParentProject,
       title: !isColumnEditable && strings.ColumnSettingsDisabledTooltip,
       subMenuProps: {
         items: [
           {
             key: 'EDIT_COLUMN',
             name: strings.EditColumnLabel,
-            onClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column }))
+            onClick: () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column }))
           },
           {
             key: 'MOVE_COLUMN_LEFT',
             name: strings.MoveLeftLabel,
             disabled: columnIndex === 0,
-            onClick: () => dispatch(MOVE_COLUMN({ column, move: -1 }))
+            onClick: () => context.dispatch(MOVE_COLUMN({ column, move: -1 }))
           },
           {
             key: 'MOVE_COLUMN_RIGHT',
             name: strings.MoveRightLabel,
-            disabled: columnIndex === state.columns.length - 1,
-            onClick: () => dispatch(MOVE_COLUMN({ column, move: 1 }))
+            disabled: columnIndex === context.state.columns.length - 1,
+            onClick: () => context.dispatch(MOVE_COLUMN({ column, move: 1 }))
           },
           {
             key: 'DIVIDER_03',
@@ -103,18 +103,18 @@ export function useColumnContextMenu() {
           },
           {
             key: 'SHOW_HIDE_COLUMNS',
-            name: strings.ShowHideColumnsLabelShort,
-            onClick: () => dispatch(TOGGLE_SHOW_HIDE_COLUMN_PANEL({ isOpen: true }))
+            name: strings.ShowHideColumnsLabel,
+            onClick: () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: true }))
           },
           {
             key: 'ADD_COLUMN',
             name: strings.AddColumnLabel,
-            onClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
+            onClick: () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
           }
         ]
       }
     }
   ].filter(Boolean) as IContextualMenuItem[]
 
-  return { target, column, addColumnItems, items, dispatch } as const
+  return { target, column, addColumnItems, items } as const
 }

@@ -1052,7 +1052,7 @@ export class DataAdapter implements IDataAdapter {
   }
 
   /**
-   * Update datasource item
+   * Update the data source item with title `dataSourceTitle` with the properties in `properties`.
    *
    * @param properties Properties
    * @param dataSourceTitle Data source title

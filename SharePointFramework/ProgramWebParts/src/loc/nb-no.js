@@ -1,5 +1,7 @@
 define([], function () {
     return {
+        DataSourceListName: 'Datakilder',
+        DataSourceItemNotFound: 'Datakilde ble ikke funnet',
         ListViewText: 'Liste',
         CompactViewText: 'Kompakt liste',
         CmdSelectionCountTooltipText: 'Følgende prosjekter er valgt:',
@@ -30,7 +32,11 @@ define([], function () {
         IsGroupableLabel: 'Grupperbar',
         NewColumnHeaderText: 'Ny kolonne',
         EditColumnHeaderText: 'Rediger kolonne',
-        AddColumnText: 'Legg til kolonne',
+        ToggleColumnFormPanelLabel: 'Legg til kolonne',
+        ToggleEditViewColumnsLabel: 'Vis eller skjul kolonner',
+        ShowHideColumnsLabel: 'Vis/skjul kolonner',
+        EditViewColumnsPanelHeaderText: 'Rediger visningskolonner',
+        ShowEditViewColumnsPanelHelpText: 'Velg kolonnene som skal vises for nåværende visning. Hvis du vil endre rekkefølgen, kan du dra og slippe eller bruke opp- og ned-pilen ved siden av hver kolonne.',  
         SearchPropertyLabel: 'Søkeegenskap',
         DisplayNameLabel: 'Visningsnavn',
         MinWidthLabel: 'Minimum bredde',
@@ -197,6 +203,8 @@ define([], function () {
         ShowProjectDeliveriesLabel: 'Vis prosjektleveranser',
         ConfigItemTitleFieldLabel: 'Element tittel (konfigurasjon)',
         ConfigItemTitleFieldDescription: 'Dersom det er spesifisert et element med tittelen angitt her i tidslinjekonfigurasjon listen så vil dette vises på tidslinjen.',
-        ProjectContentColumnsListName: 'Prosjektinnholdskolonner'
+        ProjectContentColumnsListName: 'Prosjektinnholdskolonner',
+        UseChangesButtonText: 'Bruk',
+        ColumnSettingsLabel: 'Kolonneinnstillinger'
     }
 })

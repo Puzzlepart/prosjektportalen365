@@ -6,14 +6,14 @@ import { COLUMN_HEADER_CONTEXT_MENU } from '../reducer'
 import { useColumnContextMenu } from './useColumnContextMenu'
 
 export const ColumnContextMenu: FC = () => {
-  const { state, dispatch } = useContext(PortfolioAggregationContext)
+  const context = useContext(PortfolioAggregationContext)
   const { target, column, addColumnItems, items } = useColumnContextMenu()
-  if (!state.columnContextMenu) return null
+  if (!context.state.columnContextMenu) return null
   return (
     <ContextualMenu
       target={target}
-      items={column.name === strings.AddColumnText ? addColumnItems : items}
-      onDismiss={() => dispatch(COLUMN_HEADER_CONTEXT_MENU(null))}
+      items={column.name === strings.ToggleColumnFormPanelLabel ? addColumnItems : items}
+      onDismiss={() => context.dispatch(COLUMN_HEADER_CONTEXT_MENU(null))}
     />
   )
 }

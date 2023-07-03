@@ -247,7 +247,7 @@ export interface IPortfolioOverviewHashStateState {
 export const addColumn: IColumn = {
   key: 'AddColumn',
   fieldName: '',
-  name: strings.AddColumnText,
+  name: strings.ToggleColumnFormPanelLabel,
   iconName: 'CalculatorAddition',
   iconClassName: styles.addColumnIcon,
   minWidth: 175

@@ -4,7 +4,7 @@ import { arrayMove } from 'pp365-shared-library/lib/helpers/arrayMove'
 import { useContext, useEffect, useState } from 'react'
 import { OnDragEndResponder } from 'react-beautiful-dnd'
 import { IPortfolioAggregationContext, PortfolioAggregationContext } from '../context'
-import { SET_COLUMNS, SHOW_HIDE_COLUMNS, TOGGLE_SHOW_HIDE_COLUMN_PANEL } from '../reducer'
+import { SET_COLUMNS, SHOW_HIDE_COLUMNS, TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from '../reducer'
 import { IProjectContentColumn } from 'pp365-shared-library'
 
 /**
@@ -60,7 +60,7 @@ export function useEditViewColumnsPanel() {
    * On dismiss event handler.
    */
   const onDismiss = () => {
-    context.dispatch(TOGGLE_SHOW_HIDE_COLUMN_PANEL({ isOpen: false }))
+    context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false }))
   }
 
   /**

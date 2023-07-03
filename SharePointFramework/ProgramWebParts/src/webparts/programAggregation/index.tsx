@@ -23,7 +23,8 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
       ...this.properties,
       dataAdapter: this.dataAdapter,
       onUpdateProperty: this._onUpdateProperty.bind(this),
-      configuration: this._configuration
+      configuration: this._configuration,
+      isParentProject: true
     })
   }
 
