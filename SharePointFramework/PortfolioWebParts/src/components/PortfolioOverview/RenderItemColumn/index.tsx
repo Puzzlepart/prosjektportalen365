@@ -47,7 +47,7 @@ const renderDataTypeMap: Record<RenderDataType, RenderFunction> = {
  * @param column Column to render the value for
  * @param props Props for the component
  */
-export function renderItemColumn(
+function renderItemColumn(
   item: IFetchDataForViewItemResult,
   column: ProjectColumn,
   props: IPortfolioOverviewProps
@@ -89,3 +89,14 @@ export function renderItemColumn(
   }
   return <span>{columnValue}</span>
 }
+
+/**
+ * Render function for an item column.
+ *
+ * @param props Props for the component `PortfolioOverview`
+ */
+export const onRenderItemColumn =
+  (props: IPortfolioOverviewProps) =>
+  (item?: any, _index?: number, column?: ProjectColumn): React.ReactNode => {
+    return renderItemColumn(item, column, props)
+  }

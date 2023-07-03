@@ -1,4 +1,7 @@
 declare interface IProgramWebPartsStrings {
+  ColumnSettingsLabel: string
+  DataSourceListName: string
+  DataSourceItemNotFound: string
   CmdSelectionCountTooltipText: string
   DataSourceLevelLabel: string
   DataSourceLevelDescription: string
@@ -28,7 +31,10 @@ declare interface IProgramWebPartsStrings {
   MoveLeftLabel: string
   IsGroupableLabel: string
   NewColumnHeaderText: string
-  AddColumnText: string
+  ToggleColumnFormPanelLabel: string
+  ToggleEditViewColumnsLabel: string
+  ShowHideColumnsLabel: string
+  EditViewColumnsPanelHeaderText: string
   SearchPropertyLabel: string
   DisplayNameLabel: string
   MinWidthLabel: string
@@ -196,6 +202,10 @@ declare interface IProgramWebPartsStrings {
   ConfigItemTitleFieldLabel: string
   ConfigItemTitleFieldDescription: string
   ProjectContentColumnsListName: string
+  ShowEditViewColumnsPanelHelpText: string
+  UseChangesButtonText: string
+  PortfolioOverviewDataFetchErrorView: string
+  PortfolioOverviewDataFetchError: string
 }
 
 declare module 'ProgramWebPartsStrings' {

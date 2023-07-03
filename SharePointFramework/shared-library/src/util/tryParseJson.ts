@@ -1,13 +1,17 @@
 /**
- * Try parse JSON
+ * Parse JSON string to object or return fallback value. This try-catches the JSON.parse
+ * method and returns the fallback value if the parsing fails.
  *
  * @param string String to parse
- * @param fallback Fallback value
+ * @param fallbackValue Fallback value if parsing fails
  */
-export function tryParseJson<ValueType>(string: string, fallback: ValueType = null): ValueType {
+export function tryParseJson<ValueType>(
+  string: string,
+  fallbackValue: ValueType = null
+): ValueType {
   try {
-    return JSON.parse(string) || fallback
+    return !!string ? JSON.parse(string) : fallbackValue
   } catch {
-    return fallback
+    return fallbackValue
   }
 }

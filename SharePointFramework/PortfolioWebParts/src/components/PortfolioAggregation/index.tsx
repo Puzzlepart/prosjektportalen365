@@ -8,7 +8,7 @@ import strings from 'PortfolioWebPartsStrings'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import React, { FC } from 'react'
 import { ColumnContextMenu } from './ColumnContextMenu'
-import { addColumn, ColumnFormPanel } from './ColumnFormPanel'
+import { ColumnFormPanel } from './ColumnFormPanel'
 import { Commands } from './Commands'
 import { PortfolioAggregationContext } from './context'
 import { getDefaultColumns, renderItemColumn } from './itemColumn'
@@ -22,7 +22,7 @@ import {
 } from './reducer'
 import SearchBox from './SearchBox'
 import { EditViewColumnsPanel } from './EditViewColumnsPanel'
-import { IPortfolioAggregationProps } from './types'
+import { IPortfolioAggregationProps, addColumn } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
 import { FilterPanel } from 'pp365-shared-library/lib/components/FilterPanel'
 
@@ -68,7 +68,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             columns={[
               ...getDefaultColumns(props),
               ...items.columns,
-              !props.lockedColumns && addColumn()
+              !props.lockedColumns && !props.isParentProject && addColumn
             ].filter((c) => c)}
             groups={state.groups}
             compact={state.isCompact}

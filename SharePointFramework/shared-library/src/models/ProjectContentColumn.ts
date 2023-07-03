@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { IColumn } from '@fluentui/react'
+import { IProjectContentColumn } from '../interfaces/IProjectContentColumn'
 import { SearchValueType } from '../types/SearchValueType'
 
 export class SPProjectContentColumnItem {
@@ -15,7 +15,7 @@ export class SPProjectContentColumnItem {
   public GtDataSourceCategory: string = ''
 }
 
-export class ProjectContentColumn implements IColumn {
+export class ProjectContentColumn implements IProjectContentColumn {
   public key: string
   public fieldName: string
   public name: string

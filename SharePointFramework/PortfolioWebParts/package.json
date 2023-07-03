@@ -56,7 +56,8 @@
     "lodash": "4.17.21",
     "array-unique": "0.3.2",
     "@types/lodash": "~4.14.195",
-    "react-beautiful-dnd": "~13.1.1"
+    "react-beautiful-dnd": "~13.1.1",
+    "pzl-react-reusable-components": "~0.3.1"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.15.2",

@@ -3,6 +3,7 @@ import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/common'
 import {
   ItemUpdateResult,
+  ItemUpdateResultData,
   PermissionKind,
   QueryPropertyValueType,
   SearchResult,
@@ -11,25 +12,29 @@ import {
 } from '@pnp/sp'
 import { SearchQueryInit } from '@pnp/sp/src/search'
 import * as cleanDeep from 'clean-deep'
-import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
-import { IAggregatedListConfiguration } from 'interfaces/IAggregatedListConfiguration'
 import { capitalize } from 'lodash'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
-import { getUserPhoto } from 'pp365-shared-library/lib/helpers/getUserPhoto'
 import {
   DataSource,
+  DataSourceService,
+  getUserPhoto,
+  IGraphGroup,
+  ISPProjectItem,
+  ISPUser,
+  PortalDataService,
   PortfolioOverviewView,
   ProjectContentColumn,
   ProjectListModel,
+  SPProjectColumnItem,
   SPProjectContentColumnItem,
   SPTimelineConfigurationItem,
   TimelineConfigurationModel,
   TimelineContentModel
-} from 'pp365-shared-library/lib/models'
-import { DataSourceService } from 'pp365-shared-library/lib/services/DataSourceService'
-import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
+} from 'pp365-shared-library'
 import _ from 'underscore'
+import { IPortfolioAggregationConfiguration } from '../components/PortfolioAggregation'
+import { IPortfolioOverviewConfiguration } from '../components/PortfolioOverview/types'
 import {
   Benefit,
   BenefitMeasurement,
@@ -92,7 +97,7 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchChartData(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     chartConfigurationListName: string,
     siteId: string
   ) {
@@ -142,7 +147,7 @@ export class DataAdapter implements IDataAdapter {
    * - `columnUrls` - Project columns list form URLs
    * - `userCanAddViews` - User can add portfolio views
    */
-  public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
+  public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
     // eslint-disable-next-line prefer-const
     const [columnConfig, columns, views, programs, viewsUrls, columnUrls, userCanAddViews] =
       await Promise.all([
@@ -165,7 +170,7 @@ export class DataAdapter implements IDataAdapter {
       viewsUrls,
       columnUrls,
       userCanAddViews
-    } as IPortfolioConfiguration
+    } as IPortfolioOverviewConfiguration
   }
 
   /**
@@ -182,7 +187,7 @@ export class DataAdapter implements IDataAdapter {
   public async getAggregatedListConfig(
     category: string,
     level?: string
-  ): Promise<IAggregatedListConfiguration> {
+  ): Promise<IPortfolioAggregationConfiguration> {
     try {
       let calculatedLevel = 'Portefølje'
       if (this._portal.url !== this.context.pageContext.web.absoluteUrl) {
@@ -203,7 +208,7 @@ export class DataAdapter implements IDataAdapter {
         columnUrls,
         level: calculatedLevel,
         levels: levels?.Choices ?? []
-      } as IAggregatedListConfiguration
+      } as IPortfolioAggregationConfiguration
     } catch (error) {
       return null
     }
@@ -223,7 +228,7 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchDataForView(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     siteId: string
   ): Promise<IFetchDataForViewItemResult[]> {
     const isCurrentUserInManagerGroup = await this.isUserInGroup(strings.PortfolioManagerGroupName)
@@ -244,7 +249,7 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchDataForRegularView(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
@@ -283,7 +288,7 @@ export class DataAdapter implements IDataAdapter {
    */
   public async fetchDataForManagerView(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
@@ -355,7 +360,7 @@ export class DataAdapter implements IDataAdapter {
    */
   private async _fetchDataForView(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ) {
@@ -685,7 +690,7 @@ export class DataAdapter implements IDataAdapter {
    * @param dataSource Data source
    */
   public async fetchProjects(
-    configuration?: IAggregatedListConfiguration,
+    configuration?: IPortfolioAggregationConfiguration,
     dataSource?: string
   ): Promise<any[]> {
     const odataQuery = (configuration?.views || []).find((v) => v.title === dataSource)?.odataQuery
@@ -971,18 +976,83 @@ export class DataAdapter implements IDataAdapter {
    * @param listName List name
    * @param properties Properties
    */
-  public async addItemToList(listName: string, properties: Record<string, any>): Promise<any> {
+  public async addItemToList<T = any>(
+    listName: string,
+    properties: Record<string, any>
+  ): Promise<T> {
     try {
       const list = sp.web.lists.getByTitle(listName)
       const itemAddResult = await list.items.add(properties)
-      return itemAddResult.data
+      return itemAddResult.data as T
     } catch (error) {
       throw new Error(error)
     }
   }
 
   /**
-   * Update datasource item
+   * Update item in a list
+   *
+   * @param listName List name
+   * @param itemId Item ID
+   * @param properties Properties
+   */
+  public async updateItemInList<T = ItemUpdateResultData>(
+    listName: string,
+    itemId: number,
+    properties: Record<string, any>
+  ): Promise<T> {
+    try {
+      const list = sp.web.lists.getByTitle(listName)
+      const itemUpdateResult = await list.items.getById(itemId).update(properties)
+      return itemUpdateResult.data as unknown as T
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  /**
+   * Deletes the item with the specified ID from the specified list.
+   *
+   * @param listName List name
+   * @param itemId Item ID
+   */
+  public async deleteItemFromList(listName: string, itemId: number): Promise<boolean> {
+    try {
+      const list = sp.web.lists.getByTitle(listName)
+      await list.items.getById(itemId).delete()
+      return true
+    } catch {
+      return false
+    }
+  }
+
+  /**
+   * Adds a new column to the project columns list and adds the column to the specified view.
+   *
+   * @param properties Properties for the new column
+   * @param view The view to add the column to
+   */
+  public async addColumnToPortfolioView(
+    properties: SPProjectColumnItem,
+    view: PortfolioOverviewView
+  ): Promise<boolean> {
+    try {
+      const projectColumnsList = sp.web.lists.getByTitle(strings.ProjectColumnsListName)
+      const portfolioViewsList = sp.web.lists.getByTitle(strings.PortfolioViewsListName)
+      const column = await projectColumnsList.items.add(properties)
+      portfolioViewsList.items.getById(view.id as any).update({
+        GtPortfolioColumnsId: {
+          results: [...view.columns.map((c) => c.id), column.data.Id]
+        }
+      })
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+
+  /**
+   * Update the data source item with title `dataSourceTitle` with the properties in `properties`.
    *
    * @param properties Properties
    * @param dataSourceTitle Data source title

@@ -1,9 +1,6 @@
 import {
   ConstrainMode,
-  ContextualMenu,
   DetailsListLayoutMode,
-  IDetailsHeaderProps,
-  IRenderFunction,
   LayerHost,
   MarqueeSelection,
   ScrollablePane,
@@ -12,29 +9,29 @@ import {
   ShimmeredDetailsList
 } from '@fluentui/react'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
-import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import React, { FC } from 'react'
-import { PortfolioOverviewContext } from './context'
-import { ListHeader } from './ListHeader'
+import { ColumnContextMenu } from './ColumnContextMenu'
+import { ColumnFormPanel } from './ColumnFormPanel'
+import { ListHeader, onRenderDetailsHeader } from './ListHeader'
 import styles from './PortfolioOverview.module.scss'
-import { PortfolioOverviewCommands } from './PortfolioOverviewCommands'
-import { renderItemColumn } from './RenderItemColumn'
-import { IPortfolioOverviewProps } from './types'
-import { useFilteredData } from './useFilteredData'
+import { Commands } from './Commands'
+import { onRenderItemColumn } from './RenderItemColumn'
+import { PortfolioOverviewContext } from './context'
+import { IPortfolioOverviewProps, addColumn } from './types'
 import { usePortfolioOverview } from './usePortfolioOverview'
+import { EditViewColumnsPanel } from './EditViewColumnsPanel'
 
 /**
  * Component for displaying a portfolio overview - an overview of all projects in a portfolio.
  */
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
-  const { state, contextValue, selection, onColumnHeaderClick, onColumnHeaderContextMenu } =
+  const { state, contextValue, selection, onColumnHeaderContextMenu, items, columns, groups } =
     usePortfolioOverview(props)
-  const { items, columns, groups } = useFilteredData(props, state)
 
   return (
     <div className={styles.root}>
       <PortfolioOverviewContext.Provider value={contextValue}>
-        <PortfolioOverviewCommands
+        <Commands
           filteredData={{
             items,
             columns,
@@ -54,27 +51,26 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
               scrollbarVisibility={ScrollbarVisibility.auto}
               styles={{ root: { top: 75 } }}
             >
-              <MarqueeSelection selection={selection} className={styles.listContainer}>
+              <MarqueeSelection selection={selection}>
                 <ShimmeredDetailsList
                   enableShimmer={state.loading || !!state.isChangingView}
                   isPlaceholderData={state.loading || !!state.isChangingView}
                   items={items}
                   constrainMode={ConstrainMode.unconstrained}
                   layoutMode={DetailsListLayoutMode.fixedColumns}
-                  columns={columns}
+                  columns={[...columns, !props.isParentProject && addColumn].filter(Boolean)}
                   groups={groups}
                   selectionMode={SelectionMode.multiple}
                   selection={selection}
                   setKey='multiple'
-                  onRenderDetailsHeader={(
-                    headerProps: IDetailsHeaderProps,
-                    defaultRender?: IRenderFunction<IDetailsHeaderProps>
-                  ) => <ListHeader headerProps={headerProps} defaultRender={defaultRender} />}
-                  onRenderItemColumn={(item, _index, column: ProjectColumn) =>
-                    renderItemColumn(item, column, props)
+                  onRenderDetailsHeader={onRenderDetailsHeader}
+                  onRenderItemColumn={onRenderItemColumn(props)}
+                  onColumnHeaderClick={(event, column) =>
+                    onColumnHeaderContextMenu({ column, event })
                   }
-                  onColumnHeaderClick={onColumnHeaderClick}
-                  onColumnHeaderContextMenu={onColumnHeaderContextMenu}
+                  onColumnHeaderContextMenu={(column, event) =>
+                    onColumnHeaderContextMenu({ column, event })
+                  }
                   compact={state.isCompact}
                 />
               </MarqueeSelection>
@@ -82,10 +78,16 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
             </ScrollablePane>
           )}
         </div>
-        {state.columnContextMenu && <ContextualMenu {...state.columnContextMenu} />}
+        <ColumnContextMenu />
+        <ColumnFormPanel />
+        <EditViewColumnsPanel />
       </PortfolioOverviewContext.Provider>
     </div>
   )
 }
 
-export * from './types'
+export {
+  IPortfolioOverviewProps,
+  IPortfolioOverviewState,
+  IPortfolioOverviewConfiguration
+} from './types'

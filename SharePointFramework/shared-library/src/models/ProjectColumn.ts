@@ -1,24 +1,24 @@
 /* eslint-disable max-classes-per-file */
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { IColumn } from '@fluentui/react'
 import { pick } from 'underscore'
+import { IProjectColumn } from '../interfaces/IProjectColumn'
 import { SearchValueType } from '../types/SearchValueType'
 import { ProjectColumnConfig, ProjectColumnConfigDictionary } from './ProjectColumnConfig'
 
 export class SPProjectColumnItem {
-  public Id: number = 0
+  public Id?: number = 0
   public Title: string = ''
   public GtSortOrder: number = 0
-  public GtInternalName: string = ''
-  public GtManagedProperty: string = ''
-  public GtShowFieldProjectStatus: boolean = false
-  public GtShowFieldFrontpage: boolean = false
-  public GtShowFieldPortfolio: boolean = false
-  public GtFieldDataType: string = ''
-  public GtFieldCustomSort: string = ''
-  public GtColMinWidth: number = 0
-  public GtIsRefinable: boolean = false
-  public GtIsGroupable: boolean = false
+  public GtInternalName?: string = ''
+  public GtManagedProperty?: string = ''
+  public GtShowFieldProjectStatus?: boolean = false
+  public GtShowFieldFrontpage?: boolean = false
+  public GtShowFieldPortfolio?: boolean = false
+  public GtFieldDataType?: string = ''
+  public GtFieldCustomSort?: string = ''
+  public GtColMinWidth?: number = 0
+  public GtIsRefinable?: boolean = false
+  public GtIsGroupable?: boolean = false
 }
 
 export type ProjectColumnCustomSort = {
@@ -27,7 +27,7 @@ export type ProjectColumnCustomSort = {
   iconName?: string
 }
 
-export class ProjectColumn implements IColumn {
+export class ProjectColumn implements IProjectColumn {
   public key: string
   public fieldName: string
   public name: string
@@ -46,6 +46,7 @@ export class ProjectColumn implements IColumn {
   public config?: ProjectColumnConfigDictionary
   public onColumnClick: any
   public customSorts?: ProjectColumnCustomSort[]
+  public $map: Map<string, any>
 
   /**
    * Arbitrary data passthrough which can be used by the caller.
@@ -68,13 +69,20 @@ export class ProjectColumn implements IColumn {
       this.searchType = this._getSearchType(this.fieldName.toLowerCase())
       this.customSorts = this._getCustomSorts(_item.GtFieldCustomSort)
       this.data = {
-        isGroupable: this.isGroupable
+        isGroupable: this.isGroupable,
+        visibility: [
+          _item.GtShowFieldFrontpage && 'Frontpage',
+          _item.GtShowFieldProjectStatus && 'ProjectStatus',
+          _item.GtShowFieldPortfolio && 'Portfolio'
+        ].filter(Boolean)
       }
+      this.$map = this._toMap()
     }
   }
 
   /**
-   * Returns `true` if the column is a multiline column.
+   * Returns `true` if the column is a multiline column - meaning `dataType`
+   * is `note` or `tags`.
    */
   public get isMultiline(): boolean {
     return this.dataType === 'note' || this.dataType === 'tags'
@@ -190,10 +198,32 @@ export class ProjectColumn implements IColumn {
    * `isGroupable`.
    *
    * @param data Data to set
-   * @returns
+   *
+   * @public
    */
   public setData(data: any): ProjectColumn {
     this.data = { ...this.data, ...data }
     return this
+  }
+
+  /**
+   * Converts the column to a map used in `ColumnFormPanel`.
+   *
+   * @private
+   */
+  private _toMap(): Map<string, any> {
+    return new Map<string, any>([
+      ['key', this.key],
+      ['fieldName', this.fieldName],
+      ['name', this.name],
+      ['minWidth', this.minWidth],
+      ['id', this.id],
+      ['sortOrder', this.sortOrder],
+      ['internalName', this.internalName],
+      ['iconName', this.iconName],
+      ['dataType', this.dataType],
+      ['isRefinable', this.isRefinable],
+      ['data', this.data]
+    ])
   }
 }

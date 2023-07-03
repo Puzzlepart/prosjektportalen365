@@ -1,20 +1,9 @@
-import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
-import { capitalize } from 'lodash'
 import * as strings from 'PortfolioWebPartsStrings'
+import { capitalize } from 'lodash'
 import { useContext, useEffect, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
 import { ADD_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
-import styles from './ColumnFormPanel.module.scss'
-import { IColumn } from '@fluentui/react'
-
-export const addColumn = (): IColumn => ({
-  key: '',
-  fieldName: '',
-  name: strings.AddColumnText,
-  iconName: 'CalculatorAddition',
-  iconClassName: styles.addColumnIcon,
-  minWidth: 175
-})
+import { IProjectContentColumn } from 'pp365-shared-library'
 
 const initialColumn: IProjectContentColumn = {
   key: null,

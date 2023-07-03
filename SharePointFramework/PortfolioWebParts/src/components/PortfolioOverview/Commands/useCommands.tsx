@@ -72,12 +72,14 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
         data: p
       }))
     : []
+  const userCanManageViews =
+    !context.props.isParentProject && context.props.configuration.userCanAddViews
 
   /**
    * Callback function for Excel export. Handles the export to Excel with state updates and
    * error handling.
    */
-  const exportToExcel = useCallback(async () => {
+  const exportToExcel = useCallback(() => {
     context.dispatch(START_EXCEL_EXPORT())
     try {
       // If no items are selected, export all items
@@ -96,8 +98,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       })
 
       // Export to Excel using the `ExcelExportService` from `pp365-shared`
-      await ExcelExportService.export(items, props.filteredData.columns)
-
+      ExcelExportService.export(items, props.filteredData.columns)
       context.dispatch(EXCEL_EXPORT_SUCCESS())
     } catch (error) {
       context.dispatch(EXCEL_EXPORT_ERROR(error))
@@ -206,16 +207,16 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
             text: strings.PersonalViewsHeaderText
           },
           ...personalViews,
-          {
+          userCanManageViews && {
             key: 'VIEW_ACTIONS_DIVIDER',
             itemType: ContextualMenuItemType.Divider
           },
-          {
+          userCanManageViews && {
             key: 'SAVE_VIEW_AS',
             name: strings.SaveViewAsText,
             disabled: true
           },
-          {
+          userCanManageViews && {
             key: 'EDIT_VIEW',
             name: strings.EditViewText,
             disabled: context.state.loading || typeof context.state.currentView?.id !== 'number',
@@ -234,7 +235,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       buttonStyles: { root: { border: 'none' } },
       itemType: ContextualMenuItemType.Normal,
       canCheck: true,
-      checked: context.state.showFilterPanel,
+      checked: context.state.isFilterPanelOpen,
       disabled: context.state.loading,
       data: { isVisible: context.props.showFilters },
       onClick: (ev) => {

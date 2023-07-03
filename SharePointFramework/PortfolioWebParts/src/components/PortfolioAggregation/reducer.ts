@@ -12,11 +12,11 @@ import {
 } from './types'
 import _, { filter } from 'lodash'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 import { parseUrlHash, setUrlHash } from 'pp365-shared-library/lib/util'
 import { Target, IGroup, MessageBarType } from '@fluentui/react'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { arrayMove } from 'pp365-shared-library/lib/helpers/arrayMove'
+import { IProjectContentColumn } from 'pp365-shared-library'
 
 /**
  * `DATA_FETCHED`: Fetching data from the data source.
@@ -38,11 +38,11 @@ export const TOGGLE_COLUMN_FORM_PANEL = createAction<{
 }>('TOGGLE_COLUMN_FORM_PANEL')
 
 /**
- * `TOGGLE_SHOW_HIDE_COLUMN_PANEL`: Toggling the show/hide column panel.
+ * `TOGGLE_EDIT_VIEW_COLUMNS_PANEL`: Toggling the show/hide column panel.
  */
-export const TOGGLE_SHOW_HIDE_COLUMN_PANEL = createAction<{
+export const TOGGLE_EDIT_VIEW_COLUMNS_PANEL = createAction<{
   isOpen: boolean
-}>('TOGGLE_SHOW_HIDE_COLUMN_PANEL')
+}>('TOGGLE_EDIT_VIEW_COLUMNS_PANEL')
 
 /**
  * `TOGGLE_FILTER_PANEL`: Toggling the filter panel.
@@ -191,7 +191,7 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
  *
  * - `DATA_FETCHED` - Data fetched from data source
  * - `TOGGLE_COLUMN_FORM_PANEL` - Toggle column form panel
- * - `TOGGLE_SHOW_HIDE_COLUMN_PANEL` - Toggle show/hide column panel
+ * - `TOGGLE_EDIT_VIEW_COLUMNS_PANEL` - Toggle show/hide column panel
  * - `TOGGLE_FILTER_PANEL` - Toggle filter panel
  * - `TOGGLE_COMPACT` - Toggle compact mode
  * - `ADD_COLUMN` - Add column
@@ -270,9 +270,9 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
       state.editColumn = payload.column || null
       state.addColumnPanel = { isOpen: payload.isOpen }
     },
-    [TOGGLE_SHOW_HIDE_COLUMN_PANEL.type]: (
+    [TOGGLE_EDIT_VIEW_COLUMNS_PANEL.type]: (
       state,
-      { payload }: ReturnType<typeof TOGGLE_SHOW_HIDE_COLUMN_PANEL>
+      { payload }: ReturnType<typeof TOGGLE_EDIT_VIEW_COLUMNS_PANEL>
     ) => {
       state.showHideColumnPanel = { isOpen: payload.isOpen }
     },

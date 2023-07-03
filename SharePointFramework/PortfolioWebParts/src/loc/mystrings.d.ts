@@ -1,4 +1,22 @@
 declare interface IPortfolioWebPartsStrings {
+  PortfolioOverviewShowEditViewColumnsPanelHelpText: string
+  RevertCustomOrderButtonTooltip: string
+  RevertCustomOrderButtonText: string
+  ConfirmDeleteTitle: string
+  ConfirmDeleteSubText: string
+  ConfirmDeleteResponseConfirm: string
+  ConfirmDeleteResponseAbort: string
+  AddToCurrentViewLabel: string
+  PortfolioViewsListName: string
+  ProjectColumnsListName: string
+  ShowFieldProjectStatusLabel: string
+  ShowFieldFrontpageLabel: string
+  ShowFieldPortfolioLabel: string
+  ColumnVisibilityLabel: string
+  ColumnVisibilityDescription: string
+  IsGroupableDescription: string
+  IsRefinableDescription: string
+  IsRefinableLabel: string
   AddColumnLabel: string
   MinWidthDescription: string
   MaxWidthDescription: string
@@ -52,7 +70,7 @@ declare interface IPortfolioWebPartsStrings {
   MoveLeftLabel: string
   IsGroupableLabel: string
   NewColumnHeaderText: string
-  AddColumnText: string
+  ToggleColumnFormPanelLabel: string
   SearchPropertyLabel: string
   SearchPropertyDescription: string
   InternalNameLabel: string
@@ -222,8 +240,8 @@ declare interface IPortfolioWebPartsStrings {
   SortOrderLabel: string
   DataSourceItemNotFound: string
   ProjectContentColumnItemNotFound: string
+  ToggleEditViewColumnsLabel: string
   ShowHideColumnsLabel: string
-  ShowHideColumnsLabelShort: string
   ShowEditViewColumnsPanelHelpText: string
 }
 

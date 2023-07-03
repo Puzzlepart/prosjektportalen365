@@ -1,5 +1,9 @@
 define([], function () {
     return {
+        DataSourceListName: 'Datakilder',
+        DataSourceItemNotFound: 'Datakilde ble ikke funnet',
+        ListViewText: 'Liste',
+        CompactViewText: 'Kompakt liste',
         CmdSelectionCountTooltipText: 'Følgende prosjekter er valgt:',
         DefaultViewLabel: 'Standardvisning',
         DefaultDataSourceViewLabel: 'Standardvisning (datakilde)',
@@ -28,7 +32,11 @@ define([], function () {
         IsGroupableLabel: 'Grupperbar',
         NewColumnHeaderText: 'Ny kolonne',
         EditColumnHeaderText: 'Rediger kolonne',
-        AddColumnText: 'Legg til kolonne',
+        ToggleColumnFormPanelLabel: 'Legg til kolonne',
+        ToggleEditViewColumnsLabel: 'Vis eller skjul kolonner',
+        ShowHideColumnsLabel: 'Vis/skjul kolonner',
+        EditViewColumnsPanelHeaderText: 'Rediger visningskolonner',
+        ShowEditViewColumnsPanelHelpText: 'Velg kolonnene som skal vises for nåværende visning. Hvis du vil endre rekkefølgen, kan du dra og slippe eller bruke opp- og ned-pilen ved siden av hver kolonne.',  
         SearchPropertyLabel: 'Søkeegenskap',
         DisplayNameLabel: 'Visningsnavn',
         MinWidthLabel: 'Minimum bredde',
@@ -195,6 +203,10 @@ define([], function () {
         ShowProjectDeliveriesLabel: 'Vis prosjektleveranser',
         ConfigItemTitleFieldLabel: 'Element tittel (konfigurasjon)',
         ConfigItemTitleFieldDescription: 'Dersom det er spesifisert et element med tittelen angitt her i tidslinjekonfigurasjon listen så vil dette vises på tidslinjen.',
-        ProjectContentColumnsListName: 'Prosjektinnholdskolonner'
+        ProjectContentColumnsListName: 'Prosjektinnholdskolonner',
+        UseChangesButtonText: 'Bruk',
+        ColumnSettingsLabel: 'Kolonneinnstillinger',
+        PortfolioOverviewDataFetchError: 'Det skjedde en feil under henting av data for programoversikten. Vennligst prøv igjen senere.\n \n \n **Detaljert feilmelding:** `{0}`',
+        PortfolioOverviewDataFetchErrorView: 'Det skjedde en feil under henting av data for programoversikten for visning "{0}". Vennligst prøv igjen senere, eller prøv en annen visning.\n \n \n **Detaljert feilmelding:** `{1}`',
     }
 })

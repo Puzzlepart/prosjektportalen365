@@ -3,11 +3,10 @@ import { useId } from '@fluentui/react-hooks'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { useMemo, useReducer } from 'react'
 import { IPortfolioOverviewContext } from './context'
-import createReducer, { initState, SELECTION_CHANGED } from './reducer'
+import createReducer, { SELECTION_CHANGED, TOGGLE_COLUMN_CONTEXT_MENU, initState } from './reducer'
 import { IPortfolioOverviewProps } from './types'
-import { useColumnHeaderClick } from './useColumnHeaderClick'
-import { useColumnHeaderContextMenu } from './useColumnHeaderContextMenu'
 import { useFetchData } from './useFetchData'
+import { useFilteredData } from './useFilteredData'
 import { usePersistedColumns } from './usePersistedColumns'
 
 /**
@@ -41,19 +40,28 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
 
   const selection = new Selection({ onSelectionChanged })
 
-  const onColumnHeaderContextMenu = useColumnHeaderContextMenu(contextValue)
-
-  const onColumnHeaderClick = useColumnHeaderClick(onColumnHeaderContextMenu)
+  const onColumnHeaderContextMenu = ({ event, column }) => {
+    dispatch(
+      TOGGLE_COLUMN_CONTEXT_MENU({
+        column,
+        target: event.currentTarget
+      })
+    )
+  }
 
   useFetchData(contextValue)
 
   ExcelExportService.configure({ name: props.title })
 
+  const { items, columns, groups } = useFilteredData(props, state)
+
   return {
     state,
     contextValue,
     selection,
-    onColumnHeaderClick,
-    onColumnHeaderContextMenu
+    onColumnHeaderContextMenu,
+    items,
+    columns,
+    groups
   } as const
 }

@@ -1,11 +1,12 @@
-import { MessageBarType, IGroup, IColumn, IPanelProps, Target } from '@fluentui/react'
+import { IColumn, IGroup, IPanelProps, MessageBarType, Target } from '@fluentui/react'
 import { SearchResult } from '@pnp/sp'
+import strings from 'PortfolioWebPartsStrings'
 import { IDataAdapter } from 'data/types'
-import { IAggregatedListConfiguration } from 'interfaces'
-import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
+import { IProjectContentColumn } from 'pp365-shared-library'
+import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
 import { IBaseComponentProps } from '../types'
-import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
+import styles from './PortfolioAggregation.module.scss'
 
 export class PortfolioAggregationErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -13,11 +14,19 @@ export class PortfolioAggregationErrorMessage extends Error {
   }
 }
 
+export interface IPortfolioAggregationConfiguration {
+  viewsUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
+  columnUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
+  views?: DataSource[]
+  level?: string
+  levels?: string[]
+}
+
 export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps {
   /**
    * Configuration (columns and views etc)
    */
-  configuration?: IAggregatedListConfiguration
+  configuration?: IPortfolioAggregationConfiguration
 
   /**
    * Data source name
@@ -101,6 +110,12 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
    * Transforms the data after it's fetched
    */
   postTransform?: (results: SearchResult[]) => T[]
+
+  /**
+   * Is parent project. Set to `true` if the web part is used in a parent project.
+   * For now the Add column button is hidden if this is set to `true`.
+   */
+  isParentProject?: boolean
 }
 
 export interface IPortfolioAggregationState
@@ -231,4 +246,13 @@ export interface IPortfolioAggregationHashState {
    * groupBy found in hash (document.location.hash)
    */
   groupBy?: string
+}
+
+export const addColumn: IColumn = {
+  key: 'AddColumn',
+  fieldName: '',
+  name: strings.ToggleColumnFormPanelLabel,
+  iconName: 'CalculatorAddition',
+  iconClassName: styles.addColumnIcon,
+  minWidth: 175
 }

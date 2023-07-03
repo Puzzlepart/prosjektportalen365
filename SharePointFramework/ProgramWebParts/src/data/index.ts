@@ -5,7 +5,10 @@ import { PnPClientStorage, dateAdd, stringIsNullOrEmpty } from '@pnp/common'
 import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
 import * as strings from 'ProgramWebPartsStrings'
 import * as cleanDeep from 'clean-deep'
+import { IProgramAdministrationProject } from 'components/ProgramAdministration/types'
 import MSGraph from 'msgraph-helper'
+import { IPortfolioOverviewConfiguration } from 'pp365-portfoliowebparts/lib/components'
+import { IPortfolioAggregationConfiguration } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
 import {
   CONTENT_TYPE_ID_BENEFITS,
   CONTENT_TYPE_ID_INDICATORS,
@@ -13,32 +16,29 @@ import {
   DEFAULT_GAINS_PROPERTIES
 } from 'pp365-portfoliowebparts/lib/data/types'
 import {
-  IAggregatedListConfiguration,
-  IGraphGroup,
-  IPortfolioConfiguration,
-  ISPProjectItem,
-  ISPUser,
-  IProjectContentColumn
-} from 'pp365-portfoliowebparts/lib/interfaces'
-import {
   Benefit,
   BenefitMeasurement,
   BenefitMeasurementIndicator
 } from 'pp365-portfoliowebparts/lib/models'
-import { ISPDataAdapterBaseConfiguration, SPDataAdapterBase } from 'pp365-shared-library/lib/data'
-import { getUserPhoto } from 'pp365-shared-library/lib/helpers/getUserPhoto'
 import {
   DataSource,
+  DataSourceService,
+  IGraphGroup,
+  IProjectContentColumn,
+  ISPDataAdapterBaseConfiguration,
+  ISPProjectItem,
+  ISPUser,
   PortfolioOverviewView,
   ProjectColumn,
+  ProjectDataService,
   ProjectListModel,
+  SPDataAdapterBase,
   TimelineConfigurationModel,
   TimelineContentModel
-} from 'pp365-shared-library/lib/models'
-import { DataSourceService, ProjectDataService } from 'pp365-shared-library/lib/services'
+} from 'pp365-shared-library'
+import { getUserPhoto } from 'pp365-shared-library/lib/helpers/getUserPhoto'
 import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS, IFetchDataForViewItemResult } from './types'
-import { IProgramAdministrationProject } from 'components/ProgramAdministration/types'
 
 /**
  * SPDataAdapter for `ProgramWebParts`.
@@ -73,13 +73,13 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   }
 
   /**
-   * Get portfolio configuration.
+   * Get PortfolioOverview configuration for the `PortfolioOverview` component.
    *
-   * For now it uses `as any` to avoid type errors.
+   * Used by the `ProgramProjectOverview` web part.
    *
-   * @description Used in `PortfolioOverview`
+   * @returns `columns`, `refiners`, `views`, `viewsUrls`, `columnUrls`, `programs` and `userCanAddViews`.
    */
-  public async getPortfolioConfig(): Promise<IPortfolioConfiguration> {
+  public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
     // eslint-disable-next-line prefer-const
     let [columnConfig, columns, views, viewsUrls, columnUrls] = await Promise.all([
       this.portal.getProjectColumnConfig(),
@@ -97,24 +97,23 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       views,
       viewsUrls,
       columnUrls,
-      programs: []
-    } as any
+      programs: [],
+      userCanAddViews: false
+    } as IPortfolioOverviewConfiguration
   }
 
   /**
-   * Get aggregated list config for the given category.
-   *
-   * Returns `views`, `viewsUrls`, `columnUrls` and `level`.
-   *
-   * For now it uses `as any` to avoid type errors.
+   * Get PortfolioAggregation configuration for the `PortfolioAggregation` component.
    *
    * @param category Category for data source
-   * @param level Level for data source
+   * @param level Level for data source (defaults to `Overordnet/Program`)
+   *
+   * @returns `views`, `viewsUrls`, `columnUrls` and `level`.
    */
   public async getAggregatedListConfig(
     category: string,
     level: string = 'Overordnet/Program'
-  ): Promise<IAggregatedListConfiguration> {
+  ): Promise<IPortfolioAggregationConfiguration> {
     try {
       const [views, viewsUrls, columnUrls] = await Promise.all([
         this.fetchDataSources(category, level),
@@ -126,7 +125,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
         viewsUrls,
         columnUrls,
         level
-      } as any
+      } as IPortfolioAggregationConfiguration
     } catch (error) {
       return null
     }
@@ -143,7 +142,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    */
   public async fetchDataForView(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     siteId: string[]
   ): Promise<IFetchDataForViewItemResult[]> {
     siteId = this.spfxContext.pageContext.legacyPageContext.departmentId
@@ -167,7 +166,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    */
   public async fetchDataForRegularView(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     siteId: string[],
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
@@ -208,7 +207,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    */
   public async fetchDataForManagerView(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     siteId: string[],
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
@@ -277,15 +276,13 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    * to avoid 4096 character limitation by SharePoint. Uses `this.aggregatedQueryBuilder`
    * to create queries.
    *
-   * @description Used in `PortfolioOverview`
-   *
    * @param view View configuration
    * @param configuration PortfolioOverviewConfiguration
    * @param siteId Site ID
    */
   public async fetchDataForViewBatch(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     siteId: string[],
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IFetchDataForViewItemResult[]> {
@@ -327,7 +324,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    */
   private async _fetchDataForView(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     siteId: string[],
     siteIdProperty: string = 'GtSiteIdOWSTEXT',
     queryArray?: string
@@ -366,7 +363,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       projects,
       sites,
       statusReports
-    }
+    } as const
   }
 
   /**

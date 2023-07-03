@@ -703,6 +703,9 @@
   <data name="SiteFields_GtPortfolioColumns_DisplayName" xml:space="preserve">
     <value>Kolonner</value>
   </data>
+  <data name="SiteFields_GtPortfolioColumnOrder_DisplayName" xml:space="preserve">
+    <value>Kolonnerekkefølge</value>
+  </data>
   <data name="SiteFields_GtPortfolioColumnTooltip_DisplayName" xml:space="preserve">
     <value>Tooltip-kolonne</value>
   </data>
@@ -1509,6 +1512,9 @@
   </data>
   <data name="SiteFields_GtPortfolioColumns_Description" xml:space="preserve">
     <value></value>
+  </data>
+  <data name="SiteFields_GtPortfolioColumnOrder_Description" xml:space="preserve">
+    <value>Kolonnerekkefølge i porteføljeoversikten. Styres i webdelen Porteføljeoversikt.</value>
   </data>
   <data name="SiteFields_GtProjectContentColumns_Description" xml:space="preserve">
     <value></value>

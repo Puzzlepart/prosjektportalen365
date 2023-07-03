@@ -1,13 +1,17 @@
-import { IPortfolioConfiguration } from 'interfaces'
+import { IColumn, MessageBarType, Target } from '@fluentui/react'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
+import strings from 'PortfolioWebPartsStrings'
+import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import {
   PortfolioOverviewView,
   ProjectColumn,
   ProjectColumnCustomSort
 } from 'pp365-shared-library/lib/models'
 import { IBaseComponentProps } from '../types'
-import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { MessageBarType, IContextualMenuProps } from '@fluentui/react'
-import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
+import { IColumnFormPanel } from './ColumnFormPanel/types'
+import { IEditViewColumnsPanel } from './EditViewColumnsPanel/types'
+import { ProgramItem } from 'models/ProgramItem'
+import styles from './PortfolioOverview.module.scss'
 
 export class PortfolioOverviewErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -15,11 +19,48 @@ export class PortfolioOverviewErrorMessage extends Error {
   }
 }
 
+export interface IPortfolioOverviewConfiguration {
+  /**
+   * Available columns
+   */
+  columns: ProjectColumn[]
+
+  /**
+   * Available refiners
+   */
+  refiners: ProjectColumn[]
+
+  /**
+   * Available views
+   */
+  views: PortfolioOverviewView[]
+
+  /**
+   * Available programs
+   */
+  programs?: ProgramItem[]
+
+  /**
+   * New forms and edit forms urls for views list
+   */
+  viewsUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
+
+  /**
+   * New form and edit form urls for columns list
+   */
+  columnUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
+
+  /**
+   * Current user can add views (has `ADD_LIST_ITEMS` permission)
+   */
+  userCanAddViews?: boolean
+}
+
 export interface IPortfolioOverviewProps extends IBaseComponentProps {
   /**
    * Configuration (columns and views etc).
    */
-  configuration: IPortfolioConfiguration
+  configuration: IPortfolioOverviewConfiguration
 
   /**
    * SharePoint list name for the column configuration
@@ -148,9 +189,9 @@ export interface IPortfolioOverviewState {
   error?: PortfolioOverviewErrorMessage
 
   /**
-   * Show filter panel
+   * Is filter panel open
    */
-  showFilterPanel?: boolean
+  isFilterPanelOpen?: boolean
 
   /**
    * Column to group by
@@ -173,9 +214,22 @@ export interface IPortfolioOverviewState {
   programContext?: WebPartContext
 
   /**
-   * Props for column header context menu
+   * Column context menu contains the `column` and `target` (mouse event target)
+   * that is used to show the context menu in the correct position.
    */
-  columnContextMenu?: IContextualMenuProps
+  columnContextMenu?: { column: ProjectColumn; target: Target }
+
+  /**
+   * Column form panel props. Consists of two properties:
+   * - `isOpen` - whether the panel is open
+   * - `column` - the column to edit (if not specified, a new column will be created)
+   */
+  columnForm: IColumnFormPanel
+
+  /**
+   * Edit view columns panel props.
+   */
+  editViewColumns?: IEditViewColumnsPanel
 }
 
 export interface IPortfolioOverviewHashStateState {
@@ -188,4 +242,13 @@ export interface IPortfolioOverviewHashStateState {
    * groupBy found in hash (document.location.hash)
    */
   groupBy?: string
+}
+
+export const addColumn: IColumn = {
+  key: 'AddColumn',
+  fieldName: '',
+  name: strings.ToggleColumnFormPanelLabel,
+  iconName: 'CalculatorAddition',
+  iconClassName: styles.addColumnIcon,
+  minWidth: 175
 }

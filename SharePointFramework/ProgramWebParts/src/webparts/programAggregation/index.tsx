@@ -6,24 +6,25 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import strings from 'ProgramWebPartsStrings'
-import _, { first } from 'lodash'
+import _ from 'lodash'
 import {
+  IPortfolioAggregationConfiguration,
   IPortfolioAggregationProps,
   PortfolioAggregation
 } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
-import { IAggregatedListConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
 import { BaseProgramWebPart } from 'webparts/baseProgramWebPart'
 import { IProgramAggregationWebPartProps } from './types'
 
 export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgramAggregationWebPartProps> {
-  private _configuration: IAggregatedListConfiguration
+  private _configuration: IPortfolioAggregationConfiguration
 
   public render(): void {
     this.renderComponent<IPortfolioAggregationProps>(PortfolioAggregation, {
       ...this.properties,
       dataAdapter: this.dataAdapter,
       onUpdateProperty: this._onUpdateProperty.bind(this),
-      configuration: this._configuration
+      configuration: this._configuration,
+      isParentProject: true
     })
   }
 
@@ -79,7 +80,7 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
                   options: this._getViewOptions(),
                   selectedKey:
                     _.find(this._configuration.views, (v) => v.isDefault)?.id ||
-                    first(this._configuration.views).id
+                    _.first(this._configuration.views).id
                 })
               ]
             },
