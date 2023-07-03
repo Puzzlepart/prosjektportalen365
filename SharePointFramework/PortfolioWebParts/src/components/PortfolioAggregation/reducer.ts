@@ -12,11 +12,11 @@ import {
 } from './types'
 import _, { filter } from 'lodash'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 import { parseUrlHash, setUrlHash } from 'pp365-shared-library/lib/util'
 import { Target, IGroup, MessageBarType } from '@fluentui/react'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { arrayMove } from 'pp365-shared-library/lib/helpers/arrayMove'
+import { IProjectContentColumn } from 'pp365-shared-library'
 
 /**
  * `DATA_FETCHED`: Fetching data from the data source.

@@ -1,4 +1,7 @@
 declare interface IPortfolioWebPartsStrings {
+  PortfolioOverviewShowEditViewColumnsPanelHelpText: string
+  RevertCustomOrderButtonTooltip: string
+  RevertCustomOrderButtonText: string
   ConfirmDeleteTitle: string
   ConfirmDeleteSubText: string
   ConfirmDeleteResponseConfirm: string

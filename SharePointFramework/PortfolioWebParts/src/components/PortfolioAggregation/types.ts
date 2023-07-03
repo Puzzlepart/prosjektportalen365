@@ -3,11 +3,11 @@ import { SearchResult } from '@pnp/sp'
 import strings from 'PortfolioWebPartsStrings'
 import { IDataAdapter } from 'data/types'
 import { IAggregatedListConfiguration } from 'interfaces'
-import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
 import { IBaseComponentProps } from '../types'
 import styles from './PortfolioAggregation.module.scss'
+import { IProjectContentColumn } from 'pp365-shared-library'
 
 export class PortfolioAggregationErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {

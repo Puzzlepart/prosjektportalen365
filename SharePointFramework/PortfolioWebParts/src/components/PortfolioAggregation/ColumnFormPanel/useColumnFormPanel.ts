@@ -1,9 +1,9 @@
 import * as strings from 'PortfolioWebPartsStrings'
-import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
 import { capitalize } from 'lodash'
 import { useContext, useEffect, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
 import { ADD_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
+import { IProjectContentColumn } from 'pp365-shared-library'
 
 const initialColumn: IProjectContentColumn = {
   key: null,

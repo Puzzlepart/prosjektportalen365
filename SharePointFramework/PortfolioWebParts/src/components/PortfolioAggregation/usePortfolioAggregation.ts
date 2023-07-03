@@ -13,7 +13,7 @@ import createReducer, {
 } from './reducer'
 import { searchItem } from './search'
 import { IPortfolioAggregationProps, IPortfolioAggregationState } from './types'
-import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
+import { IProjectContentColumn } from 'pp365-shared-library'
 
 /**
  * Fetching data sources when `dataSourceCategory` or `defaultViewId` changes.

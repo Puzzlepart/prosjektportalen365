@@ -6,7 +6,7 @@ import {
   SortDirection
 } from '@pnp/sp'
 import { IAggregatedListConfiguration, IPortfolioConfiguration } from 'interfaces'
-import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
+import { IProjectContentColumn } from 'pp365-shared-library'
 import {
   DataSource,
   PortfolioOverviewView,

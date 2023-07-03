@@ -5,7 +5,10 @@
  * @param string String to parse
  * @param fallbackValue Fallback value if parsing fails
  */
-export function tryParseJson<ValueType>(string: string, fallbackValue: ValueType = null): ValueType {
+export function tryParseJson<ValueType>(
+  string: string,
+  fallbackValue: ValueType = null
+): ValueType {
   try {
     return !!string ? JSON.parse(string) : fallbackValue
   } catch {

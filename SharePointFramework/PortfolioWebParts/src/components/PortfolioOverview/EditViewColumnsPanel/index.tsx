@@ -1,6 +1,6 @@
 import { ActionButton, Checkbox, Panel, PanelType } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import React, { FC } from 'react'
+import React, { FC, useContext } from 'react'
 import {
   DragDropContext,
   Draggable,
@@ -10,6 +10,8 @@ import {
 } from 'react-beautiful-dnd'
 import styles from './EditViewColumnsPanel.module.scss'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
+import _ from 'lodash'
+import { PortfolioOverviewContext } from '../context'
 
 const getItemStyle = (_isDragging: boolean, draggableStyle: DraggingStyle | NotDraggingStyle) => ({
   userSelect: 'none',
@@ -17,12 +19,20 @@ const getItemStyle = (_isDragging: boolean, draggableStyle: DraggingStyle | NotD
 })
 
 export const EditViewColumnsPanel: FC = () => {
-  const { state, onDismiss, onDragEnd, selectedColumns, onChange, onSave, moveColumn } =
-    useEditViewColumnsPanel()
+  const context = useContext(PortfolioOverviewContext)
+  const {
+    onDismiss,
+    onDragEnd,
+    selectedColumns,
+    onChange,
+    onSave,
+    onRevertCustomOrder,
+    moveColumn
+  } = useEditViewColumnsPanel()
 
   return (
     <Panel
-      isOpen={state.editViewColumns.isOpen}
+      isOpen={context.state.editViewColumns.isOpen}
       type={PanelType.medium}
       onRenderHeader={() => (
         <div className={styles.header}>
@@ -31,6 +41,14 @@ export const EditViewColumnsPanel: FC = () => {
             iconProps={{ iconName: 'CheckMark' }}
             onClick={onSave}
           />
+          <ActionButton
+            text={strings.RevertCustomOrderButtonText}
+            title={strings.RevertCustomOrderButtonTooltip}
+            iconProps={{ iconName: 'Undo' }}
+            styles={{ root: { marginLeft: 3 } }}
+            onClick={onRevertCustomOrder}
+            disabled={_.isEmpty(context.state.currentView.columnOrder)}
+          />
         </div>
       )}
       onDismiss={onDismiss}
@@ -38,7 +56,7 @@ export const EditViewColumnsPanel: FC = () => {
       className={styles.root}
     >
       <h2 className={styles.title}>{strings.EditViewColumnsPanelHeaderText}</h2>
-      <p className={styles.helpText}>{strings.ShowEditViewColumnsPanelHelpText}</p>
+      <p className={styles.helpText}>{strings.PortfolioOverviewShowEditViewColumnsPanelHelpText}</p>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId='droppable'>
           {(provided) => (

@@ -121,6 +121,8 @@ export const COLUMN_DELETED = createAction<{ columnId: any }>('COLUMN_DELETED')
 /**
  * `TOGGLE_EDIT_VIEW_COLUMNS_PANEL`: Toggling the show/hide column panel.
  */
-export const TOGGLE_EDIT_VIEW_COLUMNS_PANEL = createAction<IEditViewColumnsPanel>(
-  'TOGGLE_EDIT_VIEW_COLUMNS_PANEL'
-)
+export const TOGGLE_EDIT_VIEW_COLUMNS_PANEL = createAction<{
+  isOpen: IEditViewColumnsPanel['isOpen']
+  columns?: IEditViewColumnsPanel['columns']
+  revertColumnOrder?: IEditViewColumnsPanel['revertColumnOrder']
+}>('TOGGLE_EDIT_VIEW_COLUMNS_PANEL')

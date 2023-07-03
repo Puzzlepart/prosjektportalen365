@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    PortfolioOverviewShowEditViewColumnsPanelHelpText: 'Velg kolonnene som skal vises for nåværende visning. Hvis du vil endre rekkefølgen, kan du dra og slippe eller bruke opp- og ned-pilen ved siden av hver kolonne. Bruk \'Tilbakestill rekkefølge\'-knappen for å tilbakestille rekkefølgen til standard rekkefølge spesifisert i Prosjektkolonner-listen.',
+    RevertCustomOrderButtonTooltip: 'Tilbakestill rekkefølge til standard rekkefølge for kolonner spesifisert i Prosjektkolonner-listen.',
+    RevertCustomOrderButtonText: 'Tilbakestill rekkefølge',
     ConfirmDeleteTitle: 'Vil du slette?',
     ConfirmDeleteSubText: 'Denne kolonnen fjernes fra Prosjektkolonner-listen og fra alle visninger som bruker den. Er du sikker på at du vil slette denne kolonnen?',
     ConfirmDeleteResponseConfirm: 'Slett',

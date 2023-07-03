@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { IColumn } from '@fluentui/react'
 import { pick } from 'underscore'
+import { IProjectColumn } from '../interfaces/IProjectColumn'
 import { SearchValueType } from '../types/SearchValueType'
 import { ProjectColumnConfig, ProjectColumnConfigDictionary } from './ProjectColumnConfig'
 
@@ -27,7 +27,7 @@ export type ProjectColumnCustomSort = {
   iconName?: string
 }
 
-export class ProjectColumn implements IColumn {
+export class ProjectColumn implements IProjectColumn {
   public key: string
   public fieldName: string
   public name: string

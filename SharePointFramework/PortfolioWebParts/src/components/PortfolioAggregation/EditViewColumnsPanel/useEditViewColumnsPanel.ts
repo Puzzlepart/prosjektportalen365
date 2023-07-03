@@ -1,18 +1,20 @@
 import { IColumn } from '@fluentui/react'
-import { IProjectContentColumn } from 'interfaces'
 import _ from 'lodash'
 import { arrayMove } from 'pp365-shared-library/lib/helpers/arrayMove'
 import { useContext, useEffect, useState } from 'react'
 import { OnDragEndResponder } from 'react-beautiful-dnd'
 import { IPortfolioAggregationContext, PortfolioAggregationContext } from '../context'
 import { SET_COLUMNS, SHOW_HIDE_COLUMNS, TOGGLE_SHOW_HIDE_COLUMN_PANEL } from '../reducer'
+import { IProjectContentColumn } from 'pp365-shared-library'
 
 /**
  * Get columns with selected state.
  *
  * @param context Context
  */
-function getColumnsWithSelectedState(context: IPortfolioAggregationContext) {
+function getColumnsWithSelectedState(
+  context: IPortfolioAggregationContext
+): IProjectContentColumn[] {
   return context.state.columns.map((c) => ({
     ...c,
     data: {

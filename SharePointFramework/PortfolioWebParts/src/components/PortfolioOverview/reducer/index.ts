@@ -26,6 +26,7 @@ import {
   TOGGLE_FILTER_PANEL,
   TOGGLE_EDIT_VIEW_COLUMNS_PANEL
 } from './actions'
+import { ProjectColumn } from 'pp365-shared-library'
 
 /**
  * Initialize state for `<PortfolioOverview />`
@@ -58,31 +59,31 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       .addCase(STARTING_DATA_FETCH, (state) => {
         state.loading = true
       })
-      .addCase(DATA_FETCHED, (state, action) => {
-        state.items = action.payload.items
-        state.currentView = action.payload.currentView
-        state.columns = action.payload.currentView.columns
-        state.groupBy = action.payload.groupBy
+      .addCase(DATA_FETCHED, (state, { payload }) => {
+        state.items = payload.items
+        state.currentView = payload.currentView
+        state.columns = payload.currentView.columns
+        state.groupBy = payload.groupBy
         state.loading = false
         state.error = null
       })
-      .addCase(DATA_FETCH_ERROR, (state, action) => {
+      .addCase(DATA_FETCH_ERROR, (state, { payload }) => {
         state.loading = false
-        let message = format(strings.PortfolioOverviewDataFetchError, action.payload.error.message)
-        if (action.payload.view)
+        let message = format(strings.PortfolioOverviewDataFetchError, payload.error.message)
+        if (payload.view)
           message = format(
             strings.PortfolioOverviewDataFetchErrorView,
-            action.payload.view.title,
-            action.payload.error.message
+            payload.view.title,
+            payload.error.message
           )
         state.error = {
-          name: action.payload.error?.name,
+          name: payload.error?.name,
           message,
           type: MessageBarType.error
         }
       })
-      .addCase(EXECUTE_SEARCH, (state, action) => {
-        state.searchTerm = action.payload.toLowerCase()
+      .addCase(EXECUTE_SEARCH, (state, { payload }) => {
+        state.searchTerm = payload.toLowerCase()
       })
       .addCase(TOGGLE_FILTER_PANEL, (state) => {
         state.isFilterPanelOpen = !state.isFilterPanelOpen
@@ -99,82 +100,85 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       .addCase(TOGGLE_COMPACT, (state) => {
         state.isCompact = !state.isCompact
       })
-      .addCase(CHANGE_VIEW, (state, action) => {
-        state.currentView = action.payload
-        state.columns = action.payload.columns
+      .addCase(CHANGE_VIEW, (state, { payload }) => {
+        state.currentView = payload
+        state.columns = payload.columns
       })
-      .addCase(ON_FILTER_CHANGED, (state, action) => {
-        const { column, selectedItems } = action.payload
+      .addCase(ON_FILTER_CHANGED, (state, { payload }) => {
+        const { column, selectedItems } = payload
         if (_.isEmpty(selectedItems)) {
           delete state.activeFilters[column.fieldName]
         } else {
           state.activeFilters[column.fieldName] = selectedItems.map((i) => i.value)
         }
       })
-      .addCase(TOGGLE_COLUMN_CONTEXT_MENU, (state, action) => {
+      .addCase(TOGGLE_COLUMN_CONTEXT_MENU, (state, { payload }) => {
         // Need to cast to any because of a bug in the typings
-        state.columnContextMenu = action.payload as any
+        state.columnContextMenu = payload as any
       })
-      .addCase(SET_GROUP_BY, (state, action) => {
-        state.groupBy = action.payload.fieldName === state.groupBy.fieldName ? null : action.payload
+      .addCase(SET_GROUP_BY, (state, { payload }) => {
+        state.groupBy = payload.fieldName === state.groupBy.fieldName ? null : payload
       })
-      .addCase(SET_SORT, (state, action) => {
-        const isSortedDescending = Object.keys(action.payload).includes('isSortedDescending')
-          ? action.payload.isSortedDescending
-          : !action.payload.column.isSortedDescending
-        if (action.payload.customSort) {
+      .addCase(SET_SORT, (state, { payload }) => {
+        const isSortedDescending = Object.keys(payload).includes('isSortedDescending')
+          ? payload.isSortedDescending
+          : !payload.column.isSortedDescending
+        if (payload.customSort) {
           state.items = state.items.sort((a, b) => {
-            const $a = action.payload.customSort.order.indexOf(a[action.payload.column.fieldName])
-            const $b = action.payload.customSort.order.indexOf(b[action.payload.column.fieldName])
+            const $a = payload.customSort.order.indexOf(a[payload.column.fieldName])
+            const $b = payload.customSort.order.indexOf(b[payload.column.fieldName])
             return isSortedDescending ? $a - $b : $b - $a
           })
         } else {
-          switch (action.payload.column.dataType) {
+          switch (payload.column.dataType) {
             case 'currency':
               state.items = state.items.sort((a, b) => {
-                const $a = parseInt(a[action.payload.column.fieldName])
-                const $b = parseInt(b[action.payload.column.fieldName])
+                const $a = parseInt(a[payload.column.fieldName])
+                const $b = parseInt(b[payload.column.fieldName])
                 if (!isNaN($a) && isNaN($b)) return -1
                 return isSortedDescending ? $a - $b : $b - $a
               })
               break
             default:
-              state.items = sortArray(state.items, [action.payload.column.fieldName], {
+              state.items = sortArray(state.items, [payload.column.fieldName], {
                 reverse: !isSortedDescending
               })
               break
           }
         }
       })
-      .addCase(SELECTION_CHANGED, (state, action) => {
-        state.selectedItems = action.payload.getSelection()
+      .addCase(SELECTION_CHANGED, (state, { payload }) => {
+        state.selectedItems = payload.getSelection()
       })
-      .addCase(TOGGLE_COLUMN_FORM_PANEL, (state, action) => {
-        state.columnForm = action.payload
+      .addCase(TOGGLE_COLUMN_FORM_PANEL, (state, { payload }) => {
+        state.columnForm = payload
       })
-      .addCase(COLUMN_FORM_PANEL_ON_SAVED, (state, action) => {
-        if (action.payload.isNew) {
-          state.columns = [...state.columns, action.payload.column].sort(
+      .addCase(COLUMN_FORM_PANEL_ON_SAVED, (state, { payload }) => {
+        if (payload.isNew) {
+          state.columns = [...state.columns, payload.column].sort(
             (a, b) => a.sortOrder - b.sortOrder
           )
         } else {
           state.columns = state.columns.map((col) =>
-            col.key === action.payload.column.key ? action.payload.column : col
+            col.key === payload.column.key ? payload.column : col
           )
         }
         state.columnForm = { isOpen: false }
       })
-      .addCase(COLUMN_DELETED, (state, action) => {
-        state.columns = state.columns.filter((c) => c.id !== action.payload.columnId)
+      .addCase(COLUMN_DELETED, (state, { payload }) => {
+        state.columns = state.columns.filter((c) => c.id !== payload.columnId)
         state.columnForm = { isOpen: false }
       })
-      .addCase(TOGGLE_EDIT_VIEW_COLUMNS_PANEL, (state, action) => {
+      .addCase(TOGGLE_EDIT_VIEW_COLUMNS_PANEL, (state, { payload }) => {
         state.editViewColumns = {
-          isOpen: action.payload['isOpen']
+          isOpen: payload.isOpen
         }
-        if (action.payload['columns']) {
-          state.currentView.columns = action.payload['columns']
-          state.columns = action.payload['columns']
+        if (payload.columns) {
+          state.currentView.columns = payload.columns
+          state.currentView.columnOrder = payload.revertColumnOrder
+            ? []
+            : (payload.columns as ProjectColumn[]).map((c) => c.id)
+          state.columns = payload.columns
         }
       })
   })
