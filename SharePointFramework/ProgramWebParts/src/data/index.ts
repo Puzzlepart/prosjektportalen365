@@ -74,9 +74,9 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
 
   /**
    * Get PortfolioOverview configuration for the `PortfolioOverview` component.
-   * 
+   *
    * Used by the `ProgramProjectOverview` web part.
-   * 
+   *
    * @returns `columns`, `refiners`, `views`, `viewsUrls`, `columnUrls`, `programs` and `userCanAddViews`.
    */
   public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
@@ -107,7 +107,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    *
    * @param category Category for data source
    * @param level Level for data source (defaults to `Overordnet/Program`)
-   * 
+   *
    * @returns `views`, `viewsUrls`, `columnUrls` and `level`.
    */
   public async getAggregatedListConfig(
@@ -436,7 +436,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
             (child) =>
               child?.SiteId === item?.GtSiteIdLookup?.GtSiteId ||
               item?.GtSiteIdLookup?.GtSiteId ===
-              this?.spfxContext?.pageContext?.site?.id?.toString()
+                this?.spfxContext?.pageContext?.site?.id?.toString()
           )
         ) {
           if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
@@ -893,7 +893,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       const list = this.portal.web.lists.getByTitle(strings.ProjectsListName)
       const [item] = await list.items.filter(`GtSiteId eq '${siteId}'`).get()
       await list.items.getById(item.ID).update(properties)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
@@ -928,7 +928,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   public async initChildProjects(): Promise<void> {
     try {
       this.childProjects = await this.getChildProjects()
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**

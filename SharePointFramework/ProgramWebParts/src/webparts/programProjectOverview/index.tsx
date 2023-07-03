@@ -4,7 +4,10 @@ import {
   PropertyPaneDropdown,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { IPortfolioOverviewConfiguration, PortfolioOverview } from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
+import {
+  IPortfolioOverviewConfiguration,
+  PortfolioOverview
+} from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
 import { PROPERTYPANE_CONFIGURATION_PROPS } from 'pp365-portfoliowebparts/lib/webparts/portfolioOverview'
 import * as strings from 'ProgramWebPartsStrings'
 import React from 'react'

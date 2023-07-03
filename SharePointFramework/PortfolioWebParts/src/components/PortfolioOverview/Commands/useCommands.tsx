@@ -52,14 +52,14 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
   ) => {
     return context.props.configuration.views.filter(filterFunc).map(
       (view) =>
-      ({
-        key: view.id.toString(),
-        name: view.title,
-        iconProps: { iconName: view.iconName },
-        canCheck: true,
-        checked: view.id === context.state.currentView?.id,
-        onClick: () => context.dispatch(CHANGE_VIEW(view))
-      } as IContextualMenuItem)
+        ({
+          key: view.id.toString(),
+          name: view.title,
+          iconProps: { iconName: view.iconName },
+          canCheck: true,
+          checked: view.id === context.state.currentView?.id,
+          onClick: () => context.dispatch(CHANGE_VIEW(view))
+        } as IContextualMenuItem)
     )
   }
 
@@ -67,12 +67,13 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
   const personalViews = convertViewsToContextualMenuItems((v) => v.isPersonal)
   const programViewOptions: IDropdownOption[] = context.props.showProgramViews
     ? context.props.configuration.programs.map((p) => ({
-      key: p.id,
-      text: p.name,
-      data: p
-    }))
+        key: p.id,
+        text: p.name,
+        data: p
+      }))
     : []
-  const userCanManageViews = !context.props.isParentProject && context.props.configuration.userCanAddViews
+  const userCanManageViews =
+    !context.props.isParentProject && context.props.configuration.userCanAddViews
 
   /**
    * Callback function for Excel export. Handles the export to Excel with state updates and

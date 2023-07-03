@@ -24,7 +24,9 @@ export function useColumnContextMenu() {
     column.fieldName
   )
   const isColumnEditable =
-  context.props.displayMode === DisplayMode.Edit && columnIndex !== -1 && !context.props.lockedColumns
+    context.props.displayMode === DisplayMode.Edit &&
+    columnIndex !== -1 &&
+    !context.props.lockedColumns
 
   const addColumnItems: IContextualMenuItem[] = [
     {
