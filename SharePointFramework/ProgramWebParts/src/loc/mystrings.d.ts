@@ -204,6 +204,8 @@ declare interface IProgramWebPartsStrings {
   ProjectContentColumnsListName: string
   ShowEditViewColumnsPanelHelpText: string
   UseChangesButtonText: string
+  PortfolioOverviewDataFetchErrorView: string
+  PortfolioOverviewDataFetchError: string
 }
 
 declare module 'ProgramWebPartsStrings' {

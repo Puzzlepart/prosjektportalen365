@@ -52,14 +52,14 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
   ) => {
     return context.props.configuration.views.filter(filterFunc).map(
       (view) =>
-        ({
-          key: view.id.toString(),
-          name: view.title,
-          iconProps: { iconName: view.iconName },
-          canCheck: true,
-          checked: view.id === context.state.currentView?.id,
-          onClick: () => context.dispatch(CHANGE_VIEW(view))
-        } as IContextualMenuItem)
+      ({
+        key: view.id.toString(),
+        name: view.title,
+        iconProps: { iconName: view.iconName },
+        canCheck: true,
+        checked: view.id === context.state.currentView?.id,
+        onClick: () => context.dispatch(CHANGE_VIEW(view))
+      } as IContextualMenuItem)
     )
   }
 
@@ -67,17 +67,18 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
   const personalViews = convertViewsToContextualMenuItems((v) => v.isPersonal)
   const programViewOptions: IDropdownOption[] = context.props.showProgramViews
     ? context.props.configuration.programs.map((p) => ({
-        key: p.id,
-        text: p.name,
-        data: p
-      }))
+      key: p.id,
+      text: p.name,
+      data: p
+    }))
     : []
+  const userCanManageViews = !context.props.isParentProject && context.props.configuration.userCanAddViews
 
   /**
    * Callback function for Excel export. Handles the export to Excel with state updates and
    * error handling.
    */
-  const exportToExcel = useCallback(async () => {
+  const exportToExcel = useCallback(() => {
     context.dispatch(START_EXCEL_EXPORT())
     try {
       // If no items are selected, export all items
@@ -96,8 +97,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       })
 
       // Export to Excel using the `ExcelExportService` from `pp365-shared`
-      await ExcelExportService.export(items, props.filteredData.columns)
-
+      ExcelExportService.export(items, props.filteredData.columns)
       context.dispatch(EXCEL_EXPORT_SUCCESS())
     } catch (error) {
       context.dispatch(EXCEL_EXPORT_ERROR(error))
@@ -206,16 +206,16 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
             text: strings.PersonalViewsHeaderText
           },
           ...personalViews,
-          {
+          userCanManageViews && {
             key: 'VIEW_ACTIONS_DIVIDER',
             itemType: ContextualMenuItemType.Divider
           },
-          {
+          userCanManageViews && {
             key: 'SAVE_VIEW_AS',
             name: strings.SaveViewAsText,
             disabled: true
           },
-          {
+          userCanManageViews && {
             key: 'EDIT_VIEW',
             name: strings.EditViewText,
             disabled: context.state.loading || typeof context.state.currentView?.id !== 'number',

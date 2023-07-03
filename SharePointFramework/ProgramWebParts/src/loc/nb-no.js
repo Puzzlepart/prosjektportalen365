@@ -205,6 +205,8 @@ define([], function () {
         ConfigItemTitleFieldDescription: 'Dersom det er spesifisert et element med tittelen angitt her i tidslinjekonfigurasjon listen så vil dette vises på tidslinjen.',
         ProjectContentColumnsListName: 'Prosjektinnholdskolonner',
         UseChangesButtonText: 'Bruk',
-        ColumnSettingsLabel: 'Kolonneinnstillinger'
+        ColumnSettingsLabel: 'Kolonneinnstillinger',
+        PortfolioOverviewDataFetchError: 'Det skjedde en feil under henting av data for porteføljeoversikten. Vennligst prøv igjen senere.\n \n \n **Detaljert feilmelding:** `{0}`',
+        PortfolioOverviewDataFetchErrorView: 'Det skjedde en feil under henting av data for porteføljeoversikten for visning "{0}". Vennligst prøv igjen senere, eller prøv en annen visning.\n \n \n **Detaljert feilmelding:** `{1}`',
     }
 })

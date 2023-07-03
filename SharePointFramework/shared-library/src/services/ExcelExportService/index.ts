@@ -16,7 +16,13 @@ export default new (class ExcelExportService {
   }
 
   /**
-   * Export to Excel
+   * Export the items with the given columns to an Excel file.
+   * - The columns are used to create the header row.
+   * - The items are used to create the data rows.
+   * - The sheet name is taken from the configuration.
+   * - The file name is taken from the configuration.
+   * - The file extension is taken from the configuration.
+   * - The file type is taken from the configuration.
    *
    * @param items Items
    * @param columns Columns
