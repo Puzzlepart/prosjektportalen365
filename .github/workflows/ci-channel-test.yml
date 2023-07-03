@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - releases/1.9
+      - feat/portfolio-overview-add-column
     paths:
       - "SharePointFramework/**"
       - "Install/**"
