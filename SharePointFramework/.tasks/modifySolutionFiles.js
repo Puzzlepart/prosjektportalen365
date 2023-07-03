@@ -27,14 +27,18 @@ const configFolder = path.join(process.cwd(), `config`)
 // Generated solution config file path
 const solutionConfigFile = path.join(configFolder, `.generated-solution-config.json`)
 
+// Package solution file path
+const packageSolutionFile = path.join(configFolder, `package-solution.json`)
+
+// Backup package solution file path
+const packageSolutionFileCopy = path.join(configFolder, `package-solution.json.bak`)
+
 /**
  * Revert package solution file to the backup file and delete the backup file. Also deletes
  * the generated solution config file.
  */
 function revertPackageSolutionFile() {
     console.log('Reverting package solution file to the backup file and deleting the backup file')
-    const packageSolutionFile = path.join(configFolder, `package-solution.json`)
-    const packageSolutionFileCopy = path.join(configFolder, `package-solution.json.bak`)
     fs.copyFileSync(packageSolutionFileCopy, packageSolutionFile)
     fs.unlinkSync(packageSolutionFileCopy)
     fs.unlinkSync(solutionConfigFile)
@@ -60,8 +64,6 @@ function revertComponentManifestFiles(componentManifestFiles) {
  */
 function copyExistingPackageSolutionFile() {
     console.log('Copying existing package solution file to a backup file')
-    const packageSolutionFile = path.join(configFolder, `package-solution.json`)
-    const packageSolutionFileCopy = path.join(configFolder, `package-solution.json.bak`)
     fs.copyFileSync(packageSolutionFile, packageSolutionFileCopy)
 }
 
@@ -74,7 +76,6 @@ function copyExistingPackageSolutionFile() {
  */
 function generatePackageSolutionFile(id, name, zippedPackage) {
     console.log('Generating package solution file with the given parameters')
-    const packageSolutionFile = path.join(configFolder, `package-solution.json`)
     const packageSolution = getFileContent(packageSolutionFile)
     packageSolution.solution.id = id
     packageSolution.solution.name = name
