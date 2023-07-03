@@ -29,8 +29,8 @@ export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
         <DefaultButton
           text={strings.DeleteButtonLabel}
           style={{ marginLeft: 4 }}
-          onClick={() => {
-            const response = getConfirmDeleteResponse({
+          onClick={async () => {
+            const response = await getConfirmDeleteResponse({
               title: strings.ConfirmDeleteTitle,
               subText: strings.ConfirmDeleteSubText,
               responses: [

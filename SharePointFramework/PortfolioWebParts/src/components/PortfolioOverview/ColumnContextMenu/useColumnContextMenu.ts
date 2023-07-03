@@ -102,7 +102,7 @@ export function useColumnContextMenu(): IContextualMenuProps {
               key: 'EDIT_COLUMN',
               name: strings.EditColumnLabel,
               onClick: () => {
-                context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column: column.$map }))
+                context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column }))
               },
               disabled: !context.props.pageContext.legacyPageContext.isSiteAdmin
             },

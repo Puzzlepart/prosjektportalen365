@@ -1,5 +1,6 @@
 import { IPanelProps } from '@fluentui/react'
+import { ProjectColumn } from 'pp365-shared-library'
 
-export interface IColumnFormPanelProps extends Pick<IPanelProps, 'isOpen' | 'onDismiss'> {
-  column?: Map<string, any>
+export interface IColumnFormPanel extends Pick<IPanelProps, 'isOpen'> {
+  column?: ProjectColumn
 }

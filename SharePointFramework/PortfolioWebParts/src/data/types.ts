@@ -121,8 +121,12 @@ export interface IDataAdapter {
   updateProjectContentColumn?(column: Record<string, any>, persistRenderAs?: boolean): Promise<any>
   deleteProjectContentColumn?(property: Record<string, any>): Promise<any>
   addItemToList?<T>(listName: string, properties: Record<string, any>): Promise<T>
-  updateItemInList?<T>(listName: string, itemId: any, properties: Record<string, any>): Promise<T>
-  deleteItemFromList?(listName: string, itemId: any): Promise<boolean>
+  updateItemInList?<T>(
+    listName: string,
+    itemId: number,
+    properties: Record<string, any>
+  ): Promise<T>
+  deleteItemFromList?(listName: string, itemId: number): Promise<boolean>
   addColumnToPortfolioView?(
     properties: SPProjectColumnItem,
     view: PortfolioOverviewView

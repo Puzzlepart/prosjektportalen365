@@ -995,7 +995,7 @@ export class DataAdapter implements IDataAdapter {
    */
   public async updateItemInList<T = ItemUpdateResultData>(
     listName: string,
-    itemId: any,
+    itemId: number,
     properties: Record<string, any>
   ): Promise<T> {
     try {
@@ -1013,7 +1013,7 @@ export class DataAdapter implements IDataAdapter {
    * @param listName List name
    * @param itemId Item ID
    */
-  public async deleteItemFromList(listName: string, itemId: any): Promise<boolean> {
+  public async deleteItemFromList(listName: string, itemId: number): Promise<boolean> {
     try {
       const list = sp.web.lists.getByTitle(listName)
       await list.items.getById(itemId).delete()

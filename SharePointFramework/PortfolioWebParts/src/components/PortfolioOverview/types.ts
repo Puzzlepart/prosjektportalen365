@@ -9,7 +9,7 @@ import {
   ProjectColumnCustomSort
 } from 'pp365-shared-library/lib/models'
 import { IBaseComponentProps } from '../types'
-import { IColumnFormPanelProps } from './ColumnFormPanel/types'
+import { IColumnFormPanel } from './ColumnFormPanel/types'
 import styles from './PortfolioOverview.module.scss'
 
 export class PortfolioOverviewErrorMessage extends Error {
@@ -151,9 +151,9 @@ export interface IPortfolioOverviewState {
   error?: PortfolioOverviewErrorMessage
 
   /**
-   * Show filter panel
+   * Is filter panel open
    */
-  showFilterPanel?: boolean
+  isFilterPanelOpen?: boolean
 
   /**
    * Column to group by
@@ -184,10 +184,9 @@ export interface IPortfolioOverviewState {
   /**
    * Column form panel props. Consists of two properties:
    * - `isOpen` - whether the panel is open
-   * - `onDismiss` - function to call when the panel is dismissed
    * - `column` - the column to edit (if not specified, a new column will be created)
    */
-  columnForm: IColumnFormPanelProps
+  columnForm: IColumnFormPanel
 }
 
 export interface IPortfolioOverviewHashStateState {

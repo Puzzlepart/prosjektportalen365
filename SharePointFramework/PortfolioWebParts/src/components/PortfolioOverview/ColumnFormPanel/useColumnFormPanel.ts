@@ -2,7 +2,7 @@ import strings from 'PortfolioWebPartsStrings'
 import { ProjectColumn, SPProjectColumnItem } from 'pp365-shared-library'
 import { useContext, useEffect, useState } from 'react'
 import { PortfolioOverviewContext } from '../context'
-import { COLUMN_FORM_PANEL_ON_SAVED, DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
+import { COLUMN_FORM_PANEL_ON_SAVED, COLUMN_DELETED, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import _ from 'lodash'
 
 const initialColumn = new Map<string, any>([
@@ -30,7 +30,7 @@ export function useColumnFormPanel() {
 
   useEffect(() => {
     if (isEditing) {
-      $setColumn(context.state.columnForm.column)
+      $setColumn(context.state.columnForm.column.$map)
     } else {
       $setColumn(initialColumn)
     }
@@ -47,10 +47,16 @@ export function useColumnFormPanel() {
    * Saves the column to the list. If the column is new, it will
    * also add the column to the current view. If the column is
    * being edited, it will update the column in the list.
+   *
+   * If the column is being edited, it will update the column in the list
+   * using `updateItemInList` from the `dataAdapter`. If the column is new,
+   * it will add the column to the list using `addColumnToPortfolioView` from
+   * the `dataAdapter`.
    */
   const onSave = async () => {
     const colummData = column.get('data') ?? {}
     const columnItem: SPProjectColumnItem = {
+      Id: column.get('id'),
       GtSortOrder: column.get('sortOrder'),
       Title: column.get('name'),
       GtInternalName: column.get('internalName'),
@@ -64,15 +70,14 @@ export function useColumnFormPanel() {
       GtIsRefinable: column.get('isRefinable')
     }
     if (isEditing) {
-      const id = column.get('id')
       await context.props.dataAdapter.updateItemInList(
         strings.ProjectColumnsListName,
-        id,
-        _.omit(columnItem, ['GtInternalName', 'GtManagedProperty'])
+        context.state.columnForm.column.id,
+        _.omit(columnItem, ['Id', 'GtInternalName', 'GtManagedProperty'])
       )
     } else {
       await context.props.dataAdapter.addColumnToPortfolioView(
-        columnItem,
+        _.omit(columnItem, ['Id']),
         context.state.currentView
       )
     }
@@ -85,18 +90,19 @@ export function useColumnFormPanel() {
   }
 
   /**
-   * Deletes the column from the columns list.
+   * Deletes the column from the columns list. Deletes the column using
+   * `deleteItemFromList` from the data adapter. If the column is deleted
+   * successfully, it will dispatch the `COLUMN_DELETED` action to the reducer.
    */
   const onDeleteColumn = async () => {
-    const columnId = column.get('id')
     const isDeleted = await context.props.dataAdapter.deleteItemFromList(
       strings.ProjectColumnsListName,
-      columnId
+      context.state.columnForm.column.id
     )
-    if (!isDeleted) {
+    if (isDeleted) {
       context.dispatch(
-        DELETE_COLUMN({
-          columnId
+        COLUMN_DELETED({
+          columnId: context.state.columnForm.column.id
         })
       )
     }

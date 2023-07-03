@@ -234,7 +234,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       buttonStyles: { root: { border: 'none' } },
       itemType: ContextualMenuItemType.Normal,
       canCheck: true,
-      checked: context.state.showFilterPanel,
+      checked: context.state.isFilterPanelOpen,
       disabled: context.state.loading,
       data: { isVisible: context.props.showFilters },
       onClick: (ev) => {

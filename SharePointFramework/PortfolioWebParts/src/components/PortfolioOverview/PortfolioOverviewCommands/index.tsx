@@ -18,7 +18,7 @@ export const PortfolioOverviewCommands: React.FC<IPortfolioOverviewCommandsProps
     <div hidden={!context.props.showCommandBar}>
       <CommandBar {...commandBarProps} />
       <FilterPanel
-        isOpen={context.state.showFilterPanel}
+        isOpen={context.state.isFilterPanelOpen}
         layerHostId={context.layerHostId}
         headerText={strings.FiltersString}
         onDismiss={() => context.dispatch(TOGGLE_FILTER_PANEL())}

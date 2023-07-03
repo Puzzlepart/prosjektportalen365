@@ -10,7 +10,7 @@ import {
 } from 'pp365-shared-library/lib/models'
 import _ from 'underscore'
 import { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
-import { IColumnFormPanelProps } from './ColumnFormPanel/types'
+import { IColumnFormPanel } from './ColumnFormPanel/types'
 
 interface IPortfolioOverviewReducerParams {
   props: IPortfolioOverviewProps
@@ -110,9 +110,7 @@ export const SELECTION_CHANGED = createAction<Selection<IObjectWithKey>>('SELECT
 /**
  * `TOGGLE_COLUMN_FORM_PANEL`: Toggling the column form panel.
  */
-export const TOGGLE_COLUMN_FORM_PANEL = createAction<IColumnFormPanelProps>(
-  'TOGGLE_COLUMN_FORM_PANEL'
-)
+export const TOGGLE_COLUMN_FORM_PANEL = createAction<IColumnFormPanel>('TOGGLE_COLUMN_FORM_PANEL')
 
 /**
  * `COLUMN_FORM_PANEL_ON_SAVED`: Column form panel on saved.
@@ -123,9 +121,9 @@ export const COLUMN_FORM_PANEL_ON_SAVED = createAction<{
 }>('COLUMN_FORM_PANEL_ON_SAVED')
 
 /**
- * `DELETE_COLUMN`: Add column.
+ * `COLUMN_DELETED`: Column deleted - updates the `columns` and `columnForm` state
  */
-export const DELETE_COLUMN = createAction<{ columnId: any }>('DELETE_COLUMN')
+export const COLUMN_DELETED = createAction<{ columnId: any }>('COLUMN_DELETED')
 
 /**
  * Initialize state for `<PortfolioOverview />`
@@ -168,141 +166,124 @@ export const initState = (params: IPortfolioOverviewReducerParams): IPortfolioOv
  * - `SELECTION_CHANGED`: Action dispatched when user changes the selection in the list
  * - `TOGGLE_COLUMN_FORM_PANEL`: Toggling the column form panel
  * - `COLUMN_FORM_PANEL_ON_SAVED`: Column form panel on saved
+ * - `COLUMN_DELETED`: Column deleted - updates the `columns` and `columnForm` state
  *
  * @param params Parameters for reducer initialization
  */
 const $createReducer = (params: IPortfolioOverviewReducerParams) =>
-  createReducer(initState(params), {
-    [STARTING_DATA_FETCH.type]: (state) => {
-      state.loading = true
-    },
-    [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
-      state.items = payload.items
-      state.currentView = payload.currentView
-      state.columns = payload.currentView.columns
-      state.groupBy = payload.groupBy
-      state.loading = false
-      state.error = null
-    },
-    [DATA_FETCH_ERROR.type]: (state, { payload }: ReturnType<typeof DATA_FETCH_ERROR>) => {
-      state.loading = false
-      let message = format(strings.PortfolioOverviewDataFetchError, payload.error.message)
-      if (payload.view)
-        message = format(
-          strings.PortfolioOverviewDataFetchErrorView,
-          payload.view.title,
-          payload.error.message
-        )
-      state.error = {
-        name: payload.error?.name,
-        message,
-        type: MessageBarType.error
-      }
-    },
-    [EXECUTE_SEARCH.type]: (state, { payload }: ReturnType<typeof EXECUTE_SEARCH>) => {
-      state.searchTerm = payload.toLowerCase()
-    },
-    [TOGGLE_FILTER_PANEL.type]: (state) => {
-      state.showFilterPanel = !state.showFilterPanel
-    },
-    [START_EXCEL_EXPORT.type]: (state) => {
-      state.isExporting = true
-    },
-    [EXCEL_EXPORT_SUCCESS.type]: (state) => {
-      state.isExporting = false
-    },
-    [EXCEL_EXPORT_ERROR.type]: (state) => {
-      state.isExporting = false
-    },
-    [TOGGLE_COMPACT.type]: (state) => {
-      state.isCompact = !state.isCompact
-    },
-    [CHANGE_VIEW.type]: (state, { payload }: ReturnType<typeof CHANGE_VIEW>) => {
-      state.currentView = payload
-      state.columns = payload.columns
-    },
-    [ON_FILTER_CHANGED.type]: (state, { payload }: ReturnType<typeof ON_FILTER_CHANGED>) => {
-      const { column, selectedItems } = payload
-      if (_.isEmpty(selectedItems)) {
-        delete state.activeFilters[column.fieldName]
-      } else {
-        state.activeFilters[column.fieldName] = selectedItems.map((i) => i.value)
-      }
-    },
-    [TOGGLE_COLUMN_CONTEXT_MENU.type]: (
-      state,
-      { payload }: ReturnType<typeof TOGGLE_COLUMN_CONTEXT_MENU>
-    ) => {
-      // Need to cast to any because of a bug in the typings
-      state.columnContextMenu = payload as any
-    },
-    [SET_GROUP_BY.type]: (state, { payload }: ReturnType<typeof SET_GROUP_BY>) => {
-      state.groupBy = payload.fieldName === state.groupBy.fieldName ? null : payload
-    },
-    [SET_SORT.type]: (state, { payload }: ReturnType<typeof SET_SORT>) => {
-      const isSortedDescending = Object.keys(payload).includes('isSortedDescending')
-        ? payload.isSortedDescending
-        : !payload.column.isSortedDescending
-      if (payload.customSort) {
-        state.items = state.items.sort((a, b) => {
-          const $a = payload.customSort.order.indexOf(a[payload.column.fieldName])
-          const $b = payload.customSort.order.indexOf(b[payload.column.fieldName])
-          return isSortedDescending ? $a - $b : $b - $a
-        })
-      } else {
-        switch (payload.column.dataType) {
-          case 'currency':
-            state.items = state.items.sort((a, b) => {
-              const $a = parseInt(a[payload.column.fieldName])
-              const $b = parseInt(b[payload.column.fieldName])
-              if (!isNaN($a) && isNaN($b)) return -1
-              return isSortedDescending ? $a - $b : $b - $a
-            })
-            break
-          default:
-            state.items = sortArray(state.items, [payload.column.fieldName], {
-              reverse: !isSortedDescending
-            })
-            break
-        }
-      }
-      state.sortBy = _.pick(payload, ['column', 'customSort'])
-      state.columns = state.columns.map((col) => {
-        col.isSorted = col.key === payload.column.key
-        if (col.isSorted) {
-          col.isSortedDescending = isSortedDescending
-        }
-        return col
+  createReducer(initState(params), (builder) => {
+    builder
+      .addCase(STARTING_DATA_FETCH, (state) => {
+        state.loading = true
       })
-    },
-    [SELECTION_CHANGED.type]: (state, { payload }: ReturnType<typeof SELECTION_CHANGED>) => {
-      state.selectedItems = payload.getSelection()
-    },
-    [TOGGLE_COLUMN_FORM_PANEL.type]: (
-      state,
-      { payload }: ReturnType<typeof TOGGLE_COLUMN_FORM_PANEL>
-    ) => {
-      state.columnForm = payload
-    },
-    [COLUMN_FORM_PANEL_ON_SAVED.type]: (
-      state,
-      { payload }: ReturnType<typeof COLUMN_FORM_PANEL_ON_SAVED>
-    ) => {
-      if (payload.isNew) {
-        state.columns = [...state.columns, payload.column]
-      } else {
-        state.columns = state.columns.map((col) => {
-          if (col.key === payload.column.key) {
-            return payload.column
+      .addCase(DATA_FETCHED, (state, action) => {
+        state.items = action.payload.items
+        state.currentView = action.payload.currentView
+        state.columns = action.payload.currentView.columns
+        state.groupBy = action.payload.groupBy
+        state.loading = false
+        state.error = null
+      })
+      .addCase(DATA_FETCH_ERROR, (state, action) => {
+        state.loading = false
+        let message = format(strings.PortfolioOverviewDataFetchError, action.payload.error.message)
+        if (action.payload.view)
+          message = format(
+            strings.PortfolioOverviewDataFetchErrorView,
+            action.payload.view.title,
+            action.payload.error.message
+          )
+        state.error = {
+          name: action.payload.error?.name,
+          message,
+          type: MessageBarType.error
+        }
+      })
+      .addCase(EXECUTE_SEARCH, (state, action) => {
+        state.searchTerm = action.payload.toLowerCase()
+      })
+      .addCase(TOGGLE_FILTER_PANEL, (state) => {
+        state.isFilterPanelOpen = !state.isFilterPanelOpen
+      })
+      .addCase(START_EXCEL_EXPORT, (state) => {
+        state.isExporting = true
+      })
+      .addCase(EXCEL_EXPORT_SUCCESS, (state) => {
+        state.isExporting = false
+      })
+      .addCase(EXCEL_EXPORT_ERROR, (state) => {
+        state.isExporting = false
+      })
+      .addCase(TOGGLE_COMPACT, (state) => {
+        state.isCompact = !state.isCompact
+      })
+      .addCase(CHANGE_VIEW, (state, action) => {
+        state.currentView = action.payload
+        state.columns = action.payload.columns
+      })
+      .addCase(ON_FILTER_CHANGED, (state, action) => {
+        const { column, selectedItems } = action.payload
+        if (_.isEmpty(selectedItems)) {
+          delete state.activeFilters[column.fieldName]
+        } else {
+          state.activeFilters[column.fieldName] = selectedItems.map((i) => i.value)
+        }
+      })
+      .addCase(TOGGLE_COLUMN_CONTEXT_MENU, (state, action) => {
+        // Need to cast to any because of a bug in the typings
+        state.columnContextMenu = action.payload as any
+      })
+      .addCase(SET_GROUP_BY, (state, action) => {
+        state.groupBy = action.payload.fieldName === state.groupBy.fieldName ? null : action.payload
+      })
+      .addCase(SET_SORT, (state, action) => {
+        const isSortedDescending = Object.keys(action.payload).includes('isSortedDescending')
+          ? action.payload.isSortedDescending
+          : !action.payload.column.isSortedDescending
+        if (action.payload.customSort) {
+          state.items = state.items.sort((a, b) => {
+            const $a = action.payload.customSort.order.indexOf(a[action.payload.column.fieldName])
+            const $b = action.payload.customSort.order.indexOf(b[action.payload.column.fieldName])
+            return isSortedDescending ? $a - $b : $b - $a
+          })
+        } else {
+          switch (action.payload.column.dataType) {
+            case 'currency':
+              state.items = state.items.sort((a, b) => {
+                const $a = parseInt(a[action.payload.column.fieldName])
+                const $b = parseInt(b[action.payload.column.fieldName])
+                if (!isNaN($a) && isNaN($b)) return -1
+                return isSortedDescending ? $a - $b : $b - $a
+              })
+              break
+            default:
+              state.items = sortArray(state.items, [action.payload.column.fieldName], {
+                reverse: !isSortedDescending
+              })
+              break
           }
-          return col
-        })
-      }
-      state.columnForm = { isOpen: false }
-    },
-    [DELETE_COLUMN.type]: (state, { payload }: ReturnType<typeof DELETE_COLUMN>) => {
-      state.columns = state.columns.filter((col) => col.id !== payload.columnId)
-    }
+        }
+      })
+      .addCase(SELECTION_CHANGED, (state, action) => {
+        state.selectedItems = action.payload.getSelection()
+      })
+      .addCase(TOGGLE_COLUMN_FORM_PANEL, (state, action) => {
+        state.columnForm = action.payload
+      })
+      .addCase(COLUMN_FORM_PANEL_ON_SAVED, (state, action) => {
+        if (action.payload.isNew) {
+          state.columns = [...state.columns, action.payload.column].sort(
+            (a, b) => a.sortOrder - b.sortOrder
+          )
+        } else {
+          state.columns = state.columns.map((col) => col.key === action.payload.column.key ? action.payload.column : col)
+        }
+        state.columnForm = { isOpen: false }
+      })
+      .addCase(COLUMN_DELETED, (state, action) => {
+        state.columns = state.columns.filter((c) => c.id !== action.payload.columnId)
+        state.columnForm = { isOpen: false }
+      })
   })
 
 export default $createReducer
