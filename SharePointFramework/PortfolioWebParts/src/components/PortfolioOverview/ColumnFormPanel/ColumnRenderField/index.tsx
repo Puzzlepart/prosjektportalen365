@@ -1,9 +1,4 @@
-import {
-  Dropdown,
-  IRenderFunction,
-  ISelectableOption,
-  Icon
-} from '@fluentui/react'
+import { Dropdown, IRenderFunction, ISelectableOption, Icon } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import React, { FC } from 'react'
@@ -13,7 +8,7 @@ import { IColumnRenderFieldProps, renderAsOptions } from './types'
 export const ColumnRenderField: FC<IColumnRenderFieldProps> = (props) => {
   /**
    * Render function for dropdown options.
-   * 
+   *
    * @param option Option to render
    */
   const onRenderOption: IRenderFunction<ISelectableOption<any>> = (option) => (

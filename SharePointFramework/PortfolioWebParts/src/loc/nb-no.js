@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    PortfolioViewsListName: 'Porteføljevisninger',
     ShowFieldProjectStatusLabel: 'Prosjektstatus',
     ShowFieldFrontpageLabel: 'Prosjektforside',
     ShowFieldPortfolioLabel: 'Porteføljeoversikt',

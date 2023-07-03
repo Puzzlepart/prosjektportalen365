@@ -115,14 +115,17 @@ export const TOGGLE_COLUMN_FORM_PANEL = createAction<{
 }>('TOGGLE_COLUMN_FORM_PANEL')
 
 /**
+ * `COLUMN_FORM_PANEL_ON_SAVED`: Column form panel on saved.
+ */
+export const COLUMN_FORM_PANEL_ON_SAVED = createAction<{
+  column: ProjectColumn
+  isNew: boolean
+}>('COLUMN_FORM_PANEL_ON_SAVED')
+
+/**
  * `ADD_COLUMN`: Add column.
  */
 export const ADD_COLUMN = createAction<{ column: ProjectColumn }>('ADD_COLUMN')
-
-/**
- * `DELETE_COLUMN`: Delete column.
- */
-export const DELETE_COLUMN = createAction('DELETE_COLUMN')
 
 /**
  * Initialize state for `<PortfolioOverview />`
@@ -164,6 +167,7 @@ export const initState = (params: IPortfolioOverviewReducerParams): IPortfolioOv
  * - `SET_SORT`: Action dispatched when user changes the sort column
  * - `SELECTION_CHANGED`: Action dispatched when user changes the selection in the list
  * - `TOGGLE_COLUMN_FORM_PANEL`: Toggling the column form panel
+ * - `COLUMN_FORM_PANEL_ON_SAVED`: Column form panel on saved
  *
  * @param params Parameters for reducer initialization
  */
@@ -280,6 +284,19 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
     ) => {
       state.editColumn = payload.column ?? null
       state.addColumnPanel = { isOpen: payload.isOpen }
+    },
+    [COLUMN_FORM_PANEL_ON_SAVED.type]: (state, { payload }: ReturnType<typeof COLUMN_FORM_PANEL_ON_SAVED>) => {
+      if(payload.isNew) {
+        state.columns = [...state.columns, payload.column]
+      } else {
+        state.columns = state.columns.map((col) => {
+          if(col.key === payload.column.key) {
+            return payload.column
+          }
+          return col
+        })
+      }
+      state.addColumnPanel = { isOpen: false }
     }
   })
 

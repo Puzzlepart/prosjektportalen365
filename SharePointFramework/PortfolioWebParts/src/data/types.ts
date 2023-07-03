@@ -120,6 +120,11 @@ export interface IDataAdapter {
   updateProjectContentColumn?(column: Record<string, any>, persistRenderAs?: boolean): Promise<any>
   deleteProjectContentColumn?(property: Record<string, any>): Promise<any>
   addItemToList?<T>(listName: string, properties: Record<string, any>): Promise<T>
+  updateItemInList?<T>(
+    listName: string,
+    itemId: any,
+    properties: Record<string, any>
+  ): Promise<T>
   updateDataSourceItem?(
     properties: Record<string, any>,
     dataSourceTitle: string,

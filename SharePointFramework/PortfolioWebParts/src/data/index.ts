@@ -3,6 +3,7 @@ import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/common'
 import {
   ItemUpdateResult,
+  ItemUpdateResultData,
   PermissionKind,
   QueryPropertyValueType,
   SearchResult,
@@ -979,6 +980,27 @@ export class DataAdapter implements IDataAdapter {
       const list = sp.web.lists.getByTitle(listName)
       const itemAddResult = await list.items.add(properties)
       return itemAddResult.data as T
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  /**
+   * Update item in a list
+   *
+   * @param listName List name
+   * @param itemId Item ID
+   * @param properties Properties
+   */
+  public async updateItemInList<T = ItemUpdateResultData>(
+    listName: string,
+    itemId: any,
+    properties: Record<string, any>
+  ): Promise<T> {
+    try {
+      const list = sp.web.lists.getByTitle(listName)
+      const itemUpdateResult = await list.items.getById(itemId).update(properties)
+      return itemUpdateResult.data as unknown as T
     } catch (error) {
       throw new Error(error)
     }

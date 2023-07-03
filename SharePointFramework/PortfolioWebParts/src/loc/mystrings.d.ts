@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  PortfolioViewsListName: string
   ProjectColumnsListName: string
   ShowFieldProjectStatusLabel: string
   ShowFieldFrontpageLabel: string

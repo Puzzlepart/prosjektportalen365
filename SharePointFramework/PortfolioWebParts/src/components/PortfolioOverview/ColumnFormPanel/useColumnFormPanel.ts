@@ -1,8 +1,9 @@
 import strings from 'PortfolioWebPartsStrings'
-import { SPProjectColumnItem } from 'pp365-shared-library'
+import { ProjectColumn, SPProjectColumnItem } from 'pp365-shared-library'
 import { useContext, useEffect, useState } from 'react'
 import { PortfolioOverviewContext } from '../context'
-import { TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
+import { COLUMN_FORM_PANEL_ON_SAVED, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
+import _ from 'lodash'
 
 const initialColumn = new Map<string, any>([
   ['name', ''],
@@ -40,29 +41,51 @@ export function useColumnFormPanel() {
   }
 
   /**
-   * Saves the column to the list.
+   * Saves the column to the list. If the column is new, it will 
+   * also add the column to the current view. If the column is
+   * being edited, it will update the column in the list.
    */
   const onSave = async () => {
-    if (context.state.editColumn) {
-      // TODO: Update existing column
-    } else {
-      const colummData = column.get('data') ?? {}
-      const newColumnItem: SPProjectColumnItem = {
-        GtSortOrder: column.get('sortOrder'),
-        Title: column.get('name'),
-        GtInternalName: column.get('internalName'),
-        GtManagedProperty: column.get('fieldName'),
-        GtFieldDataType: colummData.renderAs,
-        GtColMinWidth: column.get('minWidth'),
-        GtShowFieldFrontpage: colummData.visibility.includes('Frontpage'),
-        GtShowFieldPortfolio: colummData.visibility.includes('Portfolio'),
-        GtShowFieldProjectStatus: colummData.visibility.includes('ProjectStatus'),
-        GtIsGroupable: colummData.isGroupable,
-        GtIsRefinable: column.get('isRefinable')
-      }
-      await context.props.dataAdapter.addItemToList(strings.ProjectColumnsListName, newColumnItem)
+    const colummData = column.get('data') ?? {}
+    const columnItem: SPProjectColumnItem = {
+      GtSortOrder: column.get('sortOrder'),
+      Title: column.get('name'),
+      GtInternalName: column.get('internalName'),
+      GtManagedProperty: column.get('fieldName'),
+      GtFieldDataType: colummData.renderAs ?? 'Text',
+      GtColMinWidth: column.get('minWidth'),
+      GtShowFieldFrontpage: colummData.visibility.includes('Frontpage'),
+      GtShowFieldPortfolio: colummData.visibility.includes('Portfolio'),
+      GtShowFieldProjectStatus: colummData.visibility.includes('ProjectStatus'),
+      GtIsGroupable: colummData.isGroupable,
+      GtIsRefinable: column.get('isRefinable')
     }
-    onDismiss()
+    if (context.state.editColumn) {
+      const id = column.get('id')
+      await context.props.dataAdapter.updateItemInList(
+        strings.ProjectColumnsListName,
+        id,
+        _.omit(columnItem, ['GtInternalName', 'GtManagedProperty'])
+      )
+    } else {
+      const item = await context.props.dataAdapter.addItemToList<any>(strings.ProjectColumnsListName, columnItem)
+      columnItem.Id = item.Id
+      const currentViewColumnIds = context.state.currentView.columns.map((c) => c.id)
+      await context.props.dataAdapter.updateItemInList(
+        strings.PortfolioViewsListName,
+        context.state.currentView.id,
+        {
+          GtPortfolioColumnsId: {
+            results: [...currentViewColumnIds, columnItem.Id]
+          }
+        }
+      )
+    }
+    $setColumn(initialColumn)
+    context.dispatch(COLUMN_FORM_PANEL_ON_SAVED({
+      column: new ProjectColumn(columnItem),
+      isNew: !context.state.editColumn
+    }))
   }
 
   /**
@@ -89,8 +112,10 @@ export function useColumnFormPanel() {
     $setColumn((prev) => {
       const newColumn = new Map(prev)
       const data = newColumn.get('data')
-      data[key] = value
-      newColumn.set('data', data)
+      newColumn.set('data', {
+        ...data,
+        [key]: value
+      })
       return newColumn
     })
   }
