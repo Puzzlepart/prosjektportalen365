@@ -1,13 +1,13 @@
 import { Dropdown } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
+import { FormFieldContainer } from 'pp365-shared-library'
 import React, { FC, useState } from 'react'
-import styles from '../ColumnFormPanel.module.scss'
 import { IColumnVisibilityFieldProps, visibilityOptions } from './types'
 
 export const ColumnVisibilityField: FC<IColumnVisibilityFieldProps> = (props) => {
   const [selection, setSelection] = useState<string[]>([])
   return (
-    <div className={styles.field}>
+    <FormFieldContainer description={strings.ColumnVisibilityDescription}>
       <Dropdown
         label={strings.ColumnVisibilityLabel}
         multiSelect={true}
@@ -24,7 +24,6 @@ export const ColumnVisibilityField: FC<IColumnVisibilityFieldProps> = (props) =>
           props.onChange(_selection)
         }}
       />
-      <div className={styles.fieldDescription}>{strings.ColumnVisibilityDescription}</div>
-    </div>
+    </FormFieldContainer>
   )
 }

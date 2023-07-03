@@ -1,4 +1,9 @@
 declare interface IPortfolioWebPartsStrings {
+  ConfirmDeleteTitle: string
+  ConfirmDeleteSubText: string
+  ConfirmDeleteResponseConfirm: string
+  ConfirmDeleteResponseAbort: string
+  AddToCurrentViewLabel: string
   PortfolioViewsListName: string
   ProjectColumnsListName: string
   ShowFieldProjectStatusLabel: string

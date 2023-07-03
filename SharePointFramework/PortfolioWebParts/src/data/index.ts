@@ -23,6 +23,7 @@ import {
   PortfolioOverviewView,
   ProjectContentColumn,
   ProjectListModel,
+  SPProjectColumnItem,
   SPProjectContentColumnItem,
   SPTimelineConfigurationItem,
   TimelineConfigurationModel,
@@ -1003,6 +1004,47 @@ export class DataAdapter implements IDataAdapter {
       return itemUpdateResult.data as unknown as T
     } catch (error) {
       throw new Error(error)
+    }
+  }
+
+  /**
+   * Deletes the item with the specified ID from the specified list.
+   *
+   * @param listName List name
+   * @param itemId Item ID
+   */
+  public async deleteItemFromList(listName: string, itemId: any): Promise<boolean> {
+    try {
+      const list = sp.web.lists.getByTitle(listName)
+      await list.items.getById(itemId).delete()
+      return true
+    } catch {
+      return false
+    }
+  }
+
+  /**
+   * Adds a new column to the project columns list and adds the column to the specified view.
+   *
+   * @param properties Properties for the new column
+   * @param view The view to add the column to
+   */
+  public async addColumnToPortfolioView(
+    properties: SPProjectColumnItem,
+    view: PortfolioOverviewView
+  ): Promise<boolean> {
+    try {
+      const projectColumnsList = sp.web.lists.getByTitle(strings.ProjectColumnsListName)
+      const portfolioViewsList = sp.web.lists.getByTitle(strings.PortfolioViewsListName)
+      const column = await projectColumnsList.items.add(properties)
+      portfolioViewsList.items.getById(view.id as any).update({
+        GtPortfolioColumnsId: {
+          results: [...view.columns.map((c) => c.id), column.data.Id]
+        }
+      })
+      return true
+    } catch (error) {
+      return false
     }
   }
 

@@ -10,6 +10,7 @@ import {
 } from 'pp365-shared-library/lib/models'
 import _ from 'underscore'
 import { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
+import { IColumnFormPanelProps } from './ColumnFormPanel/types'
 
 interface IPortfolioOverviewReducerParams {
   props: IPortfolioOverviewProps
@@ -109,10 +110,9 @@ export const SELECTION_CHANGED = createAction<Selection<IObjectWithKey>>('SELECT
 /**
  * `TOGGLE_COLUMN_FORM_PANEL`: Toggling the column form panel.
  */
-export const TOGGLE_COLUMN_FORM_PANEL = createAction<{
-  isOpen: boolean
-  column?: IPortfolioOverviewState['editColumn']
-}>('TOGGLE_COLUMN_FORM_PANEL')
+export const TOGGLE_COLUMN_FORM_PANEL = createAction<IColumnFormPanelProps>(
+  'TOGGLE_COLUMN_FORM_PANEL'
+)
 
 /**
  * `COLUMN_FORM_PANEL_ON_SAVED`: Column form panel on saved.
@@ -123,9 +123,9 @@ export const COLUMN_FORM_PANEL_ON_SAVED = createAction<{
 }>('COLUMN_FORM_PANEL_ON_SAVED')
 
 /**
- * `ADD_COLUMN`: Add column.
+ * `DELETE_COLUMN`: Add column.
  */
-export const ADD_COLUMN = createAction<{ column: ProjectColumn }>('ADD_COLUMN')
+export const DELETE_COLUMN = createAction<{ columnId: any }>('DELETE_COLUMN')
 
 /**
  * Initialize state for `<PortfolioOverview />`
@@ -141,7 +141,7 @@ export const initState = (params: IPortfolioOverviewReducerParams): IPortfolioOv
     items: [],
     columns: params.placeholderColumns,
     filters: [],
-    addColumnPanel: { isOpen: false },
+    columnForm: { isOpen: false },
     columnContextMenu: null
   }
 }
@@ -282,21 +282,26 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       state,
       { payload }: ReturnType<typeof TOGGLE_COLUMN_FORM_PANEL>
     ) => {
-      state.editColumn = payload.column ?? null
-      state.addColumnPanel = { isOpen: payload.isOpen }
+      state.columnForm = payload
     },
-    [COLUMN_FORM_PANEL_ON_SAVED.type]: (state, { payload }: ReturnType<typeof COLUMN_FORM_PANEL_ON_SAVED>) => {
-      if(payload.isNew) {
+    [COLUMN_FORM_PANEL_ON_SAVED.type]: (
+      state,
+      { payload }: ReturnType<typeof COLUMN_FORM_PANEL_ON_SAVED>
+    ) => {
+      if (payload.isNew) {
         state.columns = [...state.columns, payload.column]
       } else {
         state.columns = state.columns.map((col) => {
-          if(col.key === payload.column.key) {
+          if (col.key === payload.column.key) {
             return payload.column
           }
           return col
         })
       }
-      state.addColumnPanel = { isOpen: false }
+      state.columnForm = { isOpen: false }
+    },
+    [DELETE_COLUMN.type]: (state, { payload }: ReturnType<typeof DELETE_COLUMN>) => {
+      state.columns = state.columns.filter((col) => col.id !== payload.columnId)
     }
   })
 

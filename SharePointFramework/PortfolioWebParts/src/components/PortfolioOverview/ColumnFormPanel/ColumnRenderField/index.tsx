@@ -1,8 +1,8 @@
 import { Dropdown, IRenderFunction, ISelectableOption, Icon } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
+import { FormFieldContainer } from 'pp365-shared-library'
 import React, { FC } from 'react'
-import styles from '../ColumnFormPanel.module.scss'
 import { IColumnRenderFieldProps, renderAsOptions } from './types'
 
 export const ColumnRenderField: FC<IColumnRenderFieldProps> = (props) => {
@@ -21,7 +21,7 @@ export const ColumnRenderField: FC<IColumnRenderFieldProps> = (props) => {
   )
 
   return (
-    <div className={styles.field}>
+    <FormFieldContainer>
       <Dropdown
         label={strings.ColumnRenderLabel}
         options={renderAsOptions}
@@ -35,6 +35,6 @@ export const ColumnRenderField: FC<IColumnRenderFieldProps> = (props) => {
         onRenderTitle={(options) => onRenderOption(_.first(options))}
         onRenderOption={onRenderOption}
       />
-    </div>
+    </FormFieldContainer>
   )
 }

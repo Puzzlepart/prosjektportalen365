@@ -1,4 +1,4 @@
-import { IColumn, IPanelProps, MessageBarType, Target } from '@fluentui/react'
+import { IColumn, MessageBarType, Target } from '@fluentui/react'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import strings from 'PortfolioWebPartsStrings'
 import { IPortfolioConfiguration } from 'interfaces'
@@ -9,6 +9,7 @@ import {
   ProjectColumnCustomSort
 } from 'pp365-shared-library/lib/models'
 import { IBaseComponentProps } from '../types'
+import { IColumnFormPanelProps } from './ColumnFormPanel/types'
 import styles from './PortfolioOverview.module.scss'
 
 export class PortfolioOverviewErrorMessage extends Error {
@@ -181,14 +182,12 @@ export interface IPortfolioOverviewState {
   columnContextMenu?: { column: ProjectColumn; target: Target }
 
   /**
-   * Add column panel properties
+   * Column form panel props. Consists of two properties:
+   * - `isOpen` - whether the panel is open
+   * - `onDismiss` - function to call when the panel is dismissed
+   * - `column` - the column to edit (if not specified, a new column will be created)
    */
-  addColumnPanel?: IPanelProps
-
-  /**
-   * Edit column converted to a map using `ProjectColumn.toMap()`
-   */
-  editColumn?: Map<string, any>
+  columnForm: IColumnFormPanelProps
 }
 
 export interface IPortfolioOverviewHashStateState {

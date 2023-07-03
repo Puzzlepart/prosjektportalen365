@@ -1,5 +1,10 @@
 define([], function () {
   return {
+    ConfirmDeleteTitle: 'Vil du slette?',
+    ConfirmDeleteSubText: 'Denne kolonnen fjernes fra Prosjektkolonner-listen og fra alle visninger som bruker den. Er du sikker på at du vil slette denne kolonnen?',
+    ConfirmDeleteResponseConfirm: 'Slett',
+    ConfirmDeleteResponseAbort: 'Avbryt',
+    AddToCurrentViewLabel: 'Legg til kolonnen i gjeldende visning',
     PortfolioViewsListName: 'Porteføljevisninger',
     ShowFieldProjectStatusLabel: 'Prosjektstatus',
     ShowFieldFrontpageLabel: 'Prosjektforside',

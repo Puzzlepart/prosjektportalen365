@@ -2,7 +2,7 @@ import strings from 'PortfolioWebPartsStrings'
 import { ProjectColumn, SPProjectColumnItem } from 'pp365-shared-library'
 import { useContext, useEffect, useState } from 'react'
 import { PortfolioOverviewContext } from '../context'
-import { COLUMN_FORM_PANEL_ON_SAVED, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
+import { COLUMN_FORM_PANEL_ON_SAVED, DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import _ from 'lodash'
 
 const initialColumn = new Map<string, any>([
@@ -18,6 +18,7 @@ const initialColumn = new Map<string, any>([
     }
   ]
 ])
+
 /**
  * Component logic hook for `ColumnFormPanel`. Handles state and dispatches actions to the reducer.
  * Also provides methods for saving columns to the list.
@@ -25,23 +26,25 @@ const initialColumn = new Map<string, any>([
 export function useColumnFormPanel() {
   const context = useContext(PortfolioOverviewContext)
   const [column, $setColumn] = useState<Map<string, any>>(initialColumn)
+  const isEditing = !!context.state.columnForm.column
 
   useEffect(() => {
-    if (context.state.editColumn) {
-      $setColumn(context.state.editColumn)
+    if (isEditing) {
+      $setColumn(context.state.columnForm.column)
+    } else {
+      $setColumn(initialColumn)
     }
-  }, [context.state.editColumn])
+  }, [context.state.columnForm])
 
   /**
    * Dismisses the form panel and resets the column state.
    */
   const onDismiss = () => {
-    $setColumn(initialColumn)
     context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
   }
 
   /**
-   * Saves the column to the list. If the column is new, it will 
+   * Saves the column to the list. If the column is new, it will
    * also add the column to the current view. If the column is
    * being edited, it will update the column in the list.
    */
@@ -60,7 +63,7 @@ export function useColumnFormPanel() {
       GtIsGroupable: colummData.isGroupable,
       GtIsRefinable: column.get('isRefinable')
     }
-    if (context.state.editColumn) {
+    if (isEditing) {
       const id = column.get('id')
       await context.props.dataAdapter.updateItemInList(
         strings.ProjectColumnsListName,
@@ -68,24 +71,35 @@ export function useColumnFormPanel() {
         _.omit(columnItem, ['GtInternalName', 'GtManagedProperty'])
       )
     } else {
-      const item = await context.props.dataAdapter.addItemToList<any>(strings.ProjectColumnsListName, columnItem)
-      columnItem.Id = item.Id
-      const currentViewColumnIds = context.state.currentView.columns.map((c) => c.id)
-      await context.props.dataAdapter.updateItemInList(
-        strings.PortfolioViewsListName,
-        context.state.currentView.id,
-        {
-          GtPortfolioColumnsId: {
-            results: [...currentViewColumnIds, columnItem.Id]
-          }
-        }
+      await context.props.dataAdapter.addColumnToPortfolioView(
+        columnItem,
+        context.state.currentView
       )
     }
-    $setColumn(initialColumn)
-    context.dispatch(COLUMN_FORM_PANEL_ON_SAVED({
-      column: new ProjectColumn(columnItem),
-      isNew: !context.state.editColumn
-    }))
+    context.dispatch(
+      COLUMN_FORM_PANEL_ON_SAVED({
+        column: new ProjectColumn(columnItem),
+        isNew: !isEditing
+      })
+    )
+  }
+
+  /**
+   * Deletes the column from the columns list.
+   */
+  const onDeleteColumn = async () => {
+    const columnId = column.get('id')
+    const isDeleted = await context.props.dataAdapter.deleteItemFromList(
+      strings.ProjectColumnsListName,
+      columnId
+    )
+    if (!isDeleted) {
+      context.dispatch(
+        DELETE_COLUMN({
+          columnId
+        })
+      )
+    }
   }
 
   /**
@@ -120,11 +134,19 @@ export function useColumnFormPanel() {
     })
   }
 
+  /**
+   * Save is disabled if the column name or field name is less than 2 characters.
+   */
+  const isSaveDisabled = column.get('fieldName').length < 2 || column.get('name').length < 2
+
   return {
     onSave,
     onDismiss,
     column,
     setColumn,
-    setColumnData
+    setColumnData,
+    isEditing,
+    isSaveDisabled,
+    onDeleteColumn
   } as const
 }

@@ -11,6 +11,7 @@ import {
   DataSource,
   PortfolioOverviewView,
   ProjectListModel,
+  SPProjectColumnItem,
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-shared-library/lib/models'
@@ -120,11 +121,12 @@ export interface IDataAdapter {
   updateProjectContentColumn?(column: Record<string, any>, persistRenderAs?: boolean): Promise<any>
   deleteProjectContentColumn?(property: Record<string, any>): Promise<any>
   addItemToList?<T>(listName: string, properties: Record<string, any>): Promise<T>
-  updateItemInList?<T>(
-    listName: string,
-    itemId: any,
-    properties: Record<string, any>
-  ): Promise<T>
+  updateItemInList?<T>(listName: string, itemId: any, properties: Record<string, any>): Promise<T>
+  deleteItemFromList?(listName: string, itemId: any): Promise<boolean>
+  addColumnToPortfolioView?(
+    properties: SPProjectColumnItem,
+    view: PortfolioOverviewView
+  ): Promise<boolean>
   updateDataSourceItem?(
     properties: Record<string, any>,
     dataSourceTitle: string,
