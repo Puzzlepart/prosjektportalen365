@@ -118,9 +118,9 @@ export const COLUMN_FORM_PANEL_ON_SAVED = createAction<{
 export const COLUMN_DELETED = createAction<{ columnId: any }>('COLUMN_DELETED')
 
 /**
- * `TOGGLE_SHOW_HIDE_COLUMN_PANEL`: Toggling the show/hide column panel.
+ * `TOGGLE_EDIT_VIEW_COLUMNS_PANEL`: Toggling the show/hide column panel.
  */
-export const TOGGLE_SHOW_HIDE_COLUMN_PANEL = createAction<{
+export const TOGGLE_EDIT_VIEW_COLUMNS_PANEL = createAction<{
     isOpen: boolean
-  }>('TOGGLE_SHOW_HIDE_COLUMN_PANEL')
+  }>('TOGGLE_EDIT_VIEW_COLUMNS_PANEL')
   

@@ -5,16 +5,10 @@
 }
 
 .root {
-  margin: 15px 0 0 0;
+  margin: 0;
 
   .container {
-    .searchBox {
-      padding: 0 0 20px 0;
-    }
-
-    .statusBar {
-      padding: 0 32px 0 32px;
-    }
+    padding: 0 32px 0 32px;
 
     .errorContainer {
       padding: 0 32px;
@@ -30,10 +24,6 @@
 
     .addColumnIcon {
       margin: 0 4px 0 0;
-    }
-
-    .listContainer {
-      padding: 0 32px;
     }
 
     [class*="stickyAbove"] .headerColumns {

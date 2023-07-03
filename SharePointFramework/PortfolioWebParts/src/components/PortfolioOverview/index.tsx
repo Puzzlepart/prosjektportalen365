@@ -50,7 +50,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
               scrollbarVisibility={ScrollbarVisibility.auto}
               styles={{ root: { top: 75 } }}
             >
-              <MarqueeSelection selection={selection} className={styles.listContainer}>
+              <MarqueeSelection selection={selection}>
                 <ShimmeredDetailsList
                   enableShimmer={state.loading || !!state.isChangingView}
                   isPlaceholderData={state.loading || !!state.isChangingView}

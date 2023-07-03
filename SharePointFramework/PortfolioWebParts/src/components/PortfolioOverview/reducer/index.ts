@@ -5,7 +5,7 @@ import strings from 'PortfolioWebPartsStrings'
 import _ from 'underscore'
 import { IPortfolioOverviewState } from '../types'
 import { IPortfolioOverviewReducerParams } from './types'
-import { CHANGE_VIEW, COLUMN_DELETED, COLUMN_FORM_PANEL_ON_SAVED, DATA_FETCH_ERROR, DATA_FETCHED, EXCEL_EXPORT_ERROR, EXCEL_EXPORT_SUCCESS, EXECUTE_SEARCH, ON_FILTER_CHANGED, SELECTION_CHANGED, SET_GROUP_BY, SET_SORT, START_EXCEL_EXPORT, STARTING_DATA_FETCH, TOGGLE_COLUMN_CONTEXT_MENU, TOGGLE_COLUMN_FORM_PANEL, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL, TOGGLE_SHOW_HIDE_COLUMN_PANEL } from './actions'
+import { CHANGE_VIEW, COLUMN_DELETED, COLUMN_FORM_PANEL_ON_SAVED, DATA_FETCH_ERROR, DATA_FETCHED, EXCEL_EXPORT_ERROR, EXCEL_EXPORT_SUCCESS, EXECUTE_SEARCH, ON_FILTER_CHANGED, SELECTION_CHANGED, SET_GROUP_BY, SET_SORT, START_EXCEL_EXPORT, STARTING_DATA_FETCH, TOGGLE_COLUMN_CONTEXT_MENU, TOGGLE_COLUMN_FORM_PANEL, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL, TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from './actions'
 
 
 /**
@@ -23,6 +23,7 @@ export const initState = (params: IPortfolioOverviewReducerParams): IPortfolioOv
     columns: params.placeholderColumns,
     filters: [],
     columnForm: { isOpen: false },
+    editViewColumns: { isOpen: false },
     columnContextMenu: null
   }
 }
@@ -146,7 +147,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.columns = state.columns.filter((c) => c.id !== action.payload.columnId)
         state.columnForm = { isOpen: false }
       })
-      .addCase(TOGGLE_SHOW_HIDE_COLUMN_PANEL, (state, action) => {
+      .addCase(TOGGLE_EDIT_VIEW_COLUMNS_PANEL, (state, action) => {
         state.editViewColumns = action.payload
       })
   })

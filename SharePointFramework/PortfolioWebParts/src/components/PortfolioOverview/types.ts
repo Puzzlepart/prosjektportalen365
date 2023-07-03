@@ -1,4 +1,4 @@
-import { IColumn, MessageBarType, Target } from '@fluentui/react'
+import { IColumn, IPanelProps, MessageBarType, Target } from '@fluentui/react'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import strings from 'PortfolioWebPartsStrings'
 import { IPortfolioConfiguration } from 'interfaces'
@@ -187,6 +187,11 @@ export interface IPortfolioOverviewState {
    * - `column` - the column to edit (if not specified, a new column will be created)
    */
   columnForm: IColumnFormPanel
+
+  /**
+   * Edit view columns panel props.
+   */
+  editViewColumns?: IPanelProps
 }
 
 export interface IPortfolioOverviewHashStateState {
