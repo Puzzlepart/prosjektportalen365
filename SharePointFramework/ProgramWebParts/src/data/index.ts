@@ -73,11 +73,11 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   }
 
   /**
-   * Get portfolio configuration.
-   *
-   * For now it uses `as any` to avoid type errors.
-   *
-   * @description Used in `PortfolioOverview`
+   * Get PortfolioOverview configuration for the `PortfolioOverview` component.
+   * 
+   * Used by the `ProgramProjectOverview` web part.
+   * 
+   * @returns `columns`, `refiners`, `views`, `viewsUrls`, `columnUrls`, `programs` and `userCanAddViews`.
    */
   public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
     // eslint-disable-next-line prefer-const
@@ -97,19 +97,18 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       views,
       viewsUrls,
       columnUrls,
-      programs: []
-    } as any
+      programs: [],
+      userCanAddViews: false
+    } as IPortfolioOverviewConfiguration
   }
 
   /**
-   * Get aggregated list config for the given category.
-   *
-   * Returns `views`, `viewsUrls`, `columnUrls` and `level`.
-   *
-   * For now it uses `as any` to avoid type errors.
+   * Get PortfolioAggregation configuration for the `PortfolioAggregation` component.
    *
    * @param category Category for data source
-   * @param level Level for data source
+   * @param level Level for data source (defaults to `Overordnet/Program`)
+   * 
+   * @returns `views`, `viewsUrls`, `columnUrls` and `level`.
    */
   public async getAggregatedListConfig(
     category: string,
@@ -126,7 +125,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
         viewsUrls,
         columnUrls,
         level
-      } as any
+      } as IPortfolioAggregationConfiguration
     } catch (error) {
       return null
     }
@@ -277,8 +276,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
    * to avoid 4096 character limitation by SharePoint. Uses `this.aggregatedQueryBuilder`
    * to create queries.
    *
-   * @description Used in `PortfolioOverview`
-   *
    * @param view View configuration
    * @param configuration PortfolioOverviewConfiguration
    * @param siteId Site ID
@@ -366,7 +363,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
       projects,
       sites,
       statusReports
-    }
+    } as const
   }
 
   /**

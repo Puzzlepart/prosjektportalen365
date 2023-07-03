@@ -206,7 +206,7 @@ define([], function () {
         ProjectContentColumnsListName: 'Prosjektinnholdskolonner',
         UseChangesButtonText: 'Bruk',
         ColumnSettingsLabel: 'Kolonneinnstillinger',
-        PortfolioOverviewDataFetchError: 'Det skjedde en feil under henting av data for porteføljeoversikten. Vennligst prøv igjen senere.\n \n \n **Detaljert feilmelding:** `{0}`',
-        PortfolioOverviewDataFetchErrorView: 'Det skjedde en feil under henting av data for porteføljeoversikten for visning "{0}". Vennligst prøv igjen senere, eller prøv en annen visning.\n \n \n **Detaljert feilmelding:** `{1}`',
+        PortfolioOverviewDataFetchError: 'Det skjedde en feil under henting av data for programoversikten. Vennligst prøv igjen senere.\n \n \n **Detaljert feilmelding:** `{0}`',
+        PortfolioOverviewDataFetchErrorView: 'Det skjedde en feil under henting av data for programoversikten for visning "{0}". Vennligst prøv igjen senere, eller prøv en annen visning.\n \n \n **Detaljert feilmelding:** `{1}`',
     }
 })
