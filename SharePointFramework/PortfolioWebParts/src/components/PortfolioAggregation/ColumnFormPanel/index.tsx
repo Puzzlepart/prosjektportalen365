@@ -13,6 +13,7 @@ import { DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import styles from './ColumnFormPanel.module.scss'
 import { renderOptions } from './renderOptions'
 import { useColumnFormPanel } from './useColumnFormPanel'
+import { FormFieldContainer } from 'pp365-shared-library'
 
 export const ColumnFormPanel: FC = () => {
   const {
@@ -35,7 +36,7 @@ export const ColumnFormPanel: FC = () => {
       isLightDismiss={true}
       className={styles.root}
     >
-      <div className={styles.field}>
+      <FormFieldContainer>
         <TextField
           label={strings.SortOrderLabel}
           description={strings.SortOrderLabel}
@@ -49,8 +50,8 @@ export const ColumnFormPanel: FC = () => {
             })
           }
         />
-      </div>
-      <div className={styles.field}>
+      </FormFieldContainer>
+      <FormFieldContainer>
         <TextField
           label={strings.SearchPropertyLabel}
           description={strings.SearchPropertyDescription}
@@ -64,8 +65,8 @@ export const ColumnFormPanel: FC = () => {
             })
           }
         />
-      </div>
-      <div className={styles.field}>
+      </FormFieldContainer>
+      <FormFieldContainer>
         <TextField
           label={strings.InternalNameLabel}
           description={strings.InternalNameDescription}
@@ -79,8 +80,8 @@ export const ColumnFormPanel: FC = () => {
             })
           }
         />
-      </div>
-      <div className={styles.field}>
+      </FormFieldContainer>
+      <FormFieldContainer>
         <TextField
           label={strings.DisplayNameLabel}
           description={strings.DisplayNameDescription}
@@ -93,8 +94,8 @@ export const ColumnFormPanel: FC = () => {
             })
           }
         />
-      </div>
-      <div className={styles.field}>
+      </FormFieldContainer>
+      <FormFieldContainer>
         <TextField
           label={strings.MinWidthLabel}
           description={strings.MinWidthDescription}
@@ -108,8 +109,8 @@ export const ColumnFormPanel: FC = () => {
             })
           }
         />
-      </div>
-      <div className={styles.field}>
+      </FormFieldContainer>
+      <FormFieldContainer>
         <TextField
           label={strings.MaxWidthLabel}
           description={strings.MaxWidthDescription}
@@ -123,8 +124,8 @@ export const ColumnFormPanel: FC = () => {
             })
           }
         />
-      </div>
-      <div className={styles.field}>
+      </FormFieldContainer>
+      <FormFieldContainer>
         <Toggle
           label={strings.IsMultilineLabel}
           defaultChecked={column.isMultiline}
@@ -135,8 +136,8 @@ export const ColumnFormPanel: FC = () => {
             })
           }
         />
-      </div>
-      <div className={styles.field}>
+      </FormFieldContainer>
+      <FormFieldContainer>
         <Toggle
           label={strings.IsResizableLabel}
           defaultChecked={column.isResizable}
@@ -147,8 +148,8 @@ export const ColumnFormPanel: FC = () => {
             })
           }
         />
-      </div>
-      <div className={styles.field}>
+      </FormFieldContainer>
+      <FormFieldContainer>
         <Toggle
           label={strings.IsGroupableLabel}
           defaultChecked={column.data?.isGroupable}
@@ -162,8 +163,8 @@ export const ColumnFormPanel: FC = () => {
             })
           }
         />
-      </div>
-      <div className={styles.field}>
+      </FormFieldContainer>
+      <FormFieldContainer description={strings.ColumnRenderDescription}>
         <Dropdown
           label={strings.ColumnRenderLabel}
           options={renderOptions}
@@ -178,7 +179,6 @@ export const ColumnFormPanel: FC = () => {
             })
           }
         />
-        <div className={styles.fieldDescription}>{strings.ColumnRenderDescription}</div>
         {state.editColumn && (
           <Checkbox
             label={strings.ColumnRenderPersistGloballyLabel}
@@ -187,7 +187,7 @@ export const ColumnFormPanel: FC = () => {
             styles={{ root: { margin: '10px 0 15px 0' } }}
           />
         )}
-      </div>
+      </FormFieldContainer>
       <div className={styles.footer}>
         <PrimaryButton
           text={strings.SaveButtonLabel}
