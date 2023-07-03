@@ -1,7 +1,7 @@
-import { IDropdownOption } from '@fluentui/react'
+import { IDropdownOption, IDropdownProps } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 
-export interface IColumnVisibilityFieldProps {
+export interface IColumnVisibilityFieldProps extends Pick<IDropdownProps, 'defaultSelectedKeys'> {
   onChange: (selection: string[]) => void
 }
 

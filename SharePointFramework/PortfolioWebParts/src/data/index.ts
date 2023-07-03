@@ -971,11 +971,14 @@ export class DataAdapter implements IDataAdapter {
    * @param listName List name
    * @param properties Properties
    */
-  public async addItemToList(listName: string, properties: Record<string, any>): Promise<any> {
+  public async addItemToList<T = any>(
+    listName: string,
+    properties: Record<string, any>
+  ): Promise<T> {
     try {
       const list = sp.web.lists.getByTitle(listName)
       const itemAddResult = await list.items.add(properties)
-      return itemAddResult.data
+      return itemAddResult.data as T
     } catch (error) {
       throw new Error(error)
     }

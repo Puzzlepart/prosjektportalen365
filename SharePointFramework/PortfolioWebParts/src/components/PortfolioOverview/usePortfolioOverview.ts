@@ -3,13 +3,11 @@ import { useId } from '@fluentui/react-hooks'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { useMemo, useReducer } from 'react'
 import { IPortfolioOverviewContext } from './context'
-import createReducer, { initState, SELECTION_CHANGED } from './reducer'
+import createReducer, { SELECTION_CHANGED, TOGGLE_COLUMN_CONTEXT_MENU, initState } from './reducer'
 import { IPortfolioOverviewProps } from './types'
-import { useColumnHeaderClick } from './useColumnHeaderClick'
-import { useColumnHeaderContextMenu } from './useColumnHeaderContextMenu'
 import { useFetchData } from './useFetchData'
-import { usePersistedColumns } from './usePersistedColumns'
 import { useFilteredData } from './useFilteredData'
+import { usePersistedColumns } from './usePersistedColumns'
 
 /**
  * Component logic hook for `PortfolioOverview` component.
@@ -42,9 +40,14 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
 
   const selection = new Selection({ onSelectionChanged })
 
-  const onColumnHeaderContextMenu = useColumnHeaderContextMenu(contextValue)
-
-  const onColumnHeaderClick = useColumnHeaderClick(onColumnHeaderContextMenu)
+  const onColumnHeaderContextMenu = ({ event, column }) => {
+    dispatch(
+      TOGGLE_COLUMN_CONTEXT_MENU({
+        column,
+        target: event.currentTarget
+      })
+    )
+  }
 
   useFetchData(contextValue)
 
@@ -56,7 +59,6 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
     state,
     contextValue,
     selection,
-    onColumnHeaderClick,
     onColumnHeaderContextMenu,
     items,
     columns,

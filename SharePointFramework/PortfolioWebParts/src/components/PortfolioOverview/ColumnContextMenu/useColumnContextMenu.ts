@@ -2,14 +2,9 @@ import { ContextualMenuItemType, format, IContextualMenuProps } from '@fluentui/
 import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared-library/lib/helpers/getObjectValue'
-import { redirect } from 'pp365-shared-library/lib/util/redirect'
 import { useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
-import {
-  SET_GROUP_BY,
-  SET_SORT,
-  TOGGLE_COLUMN_FORM_PANEL
-} from '../reducer'
+import { SET_GROUP_BY, SET_SORT, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 
 /**
  * Hook for the column header context menu. Handles the logic for the context menu. Creates a context menu
@@ -26,9 +21,9 @@ import {
  * - `COLUMN_SETTINGS`: Column settings
  */
 export function useColumnContextMenu(): IContextualMenuProps {
-  const { props, state, dispatch } = useContext(PortfolioOverviewContext)
-  if (!state.columnContextMenu) return null
-  const { column, target } = state.columnContextMenu
+  const context = useContext(PortfolioOverviewContext)
+  if (!context.state.columnContextMenu) return null
+  const { column, target } = context.state.columnContextMenu
   const columnContextMenu: IContextualMenuProps = {
     target,
     items: []
@@ -40,9 +35,9 @@ export function useColumnContextMenu(): IContextualMenuProps {
         name: strings.AddColumnText,
         iconProps: { iconName: 'CalculatorAddition' },
         onClick: () => {
-          dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
+          context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
         },
-        disabled: !props.pageContext.legacyPageContext.isSiteAdmin
+        disabled: !context.props.pageContext.legacyPageContext.isSiteAdmin
       },
       {
         key: 'SHOW_HIDE_COLUMNS',
@@ -59,23 +54,23 @@ export function useColumnContextMenu(): IContextualMenuProps {
       iconProps: customSort.iconName && {
         iconName: customSort.iconName
       },
-      checked: column.isSorted && state.sortBy?.customSort?.name === customSort.name,
-      onClick: () => dispatch(SET_SORT({ column, customSort }))
+      checked: column.isSorted && context.state.sortBy?.customSort?.name === customSort.name,
+      onClick: () => context.dispatch(SET_SORT({ column, customSort }))
     }))
     columnContextMenu.items = [
       {
         key: 'SORT_DESC',
         name: strings.SortDescLabel,
         canCheck: true,
-        checked: column.isSorted && !state.sortBy?.customSort && column.isSortedDescending,
-        onClick: () => dispatch(SET_SORT({ column, isSortedDescending: true }))
+        checked: column.isSorted && !context.state.sortBy?.customSort && column.isSortedDescending,
+        onClick: () => context.dispatch(SET_SORT({ column, isSortedDescending: true }))
       },
       {
         key: 'SORT_ASC',
         name: strings.SortAscLabel,
         canCheck: true,
-        checked: column.isSorted && !state.sortBy?.customSort && !column.isSortedDescending,
-        onClick: () => dispatch(SET_SORT({ column, isSortedDescending: false }))
+        checked: column.isSorted && !context.state.sortBy?.customSort && !column.isSortedDescending,
+        onClick: () => context.dispatch(SET_SORT({ column, isSortedDescending: false }))
       },
       !_.isEmpty(columnCustomSorts) && {
         key: 'DIVIDER_01',
@@ -90,9 +85,9 @@ export function useColumnContextMenu(): IContextualMenuProps {
         key: 'GROUP_BY',
         name: format(strings.GroupByColumnLabel, column.name),
         canCheck: true,
-        checked: get<string>(state, 'groupBy.fieldName', '') === column.fieldName,
+        checked: get<string>(context.state, 'groupBy.fieldName', '') === column.fieldName,
         disabled: !column.isGroupable,
-        onClick: () => dispatch(SET_GROUP_BY(column))
+        onClick: () => context.dispatch(SET_GROUP_BY(column))
       },
       {
         key: 'DIVIDER_03',
@@ -101,16 +96,15 @@ export function useColumnContextMenu(): IContextualMenuProps {
       {
         key: 'COLUMN_SETTINGS',
         name: strings.ColumSettingsLabel,
-        onClick: () =>
-          redirect(`${props.configuration.columnUrls.defaultEditFormUrl}?ID=${column.id}`),
         subMenuProps: {
           items: [
             {
               key: 'EDIT_COLUMN',
               name: strings.EditColumnLabel,
-              onClick: () =>
-                redirect(`${props.configuration.columnUrls.defaultEditFormUrl}?ID=${column.id}`),
-              disabled: !props.pageContext.legacyPageContext.isSiteAdmin
+              onClick: () => {
+                context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column: column.$map }))
+              },
+              disabled: !context.props.pageContext.legacyPageContext.isSiteAdmin
             },
             {
               key: 'DIVIDER_04',
@@ -120,9 +114,9 @@ export function useColumnContextMenu(): IContextualMenuProps {
               key: 'ADD_COLUMN',
               name: strings.AddColumnLabel,
               onClick: () => {
-                dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
+                context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
               },
-              disabled: !props.pageContext.legacyPageContext.isSiteAdmin
+              disabled: !context.props.pageContext.legacyPageContext.isSiteAdmin
             }
           ]
         }

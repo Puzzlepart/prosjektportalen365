@@ -85,8 +85,14 @@ export const ColumnFormPanel: FC = () => {
         />
         <div className={styles.fieldDescription}>{strings.IsGroupableDescription}</div>
       </div>
-      <ColumnRenderField onChange={(renderAs) => setColumnData('renderAs', renderAs)} />
-      <ColumnVisibilityField onChange={(visibility) => setColumnData('visibility', visibility)} />
+      <ColumnRenderField
+        defaultSelectedKey={column.get('dataType')}
+        onChange={(renderAs) => setColumnData('renderAs', renderAs)}
+      />
+      <ColumnVisibilityField
+        defaultSelectedKeys={column.get('data')?.visibility}
+        onChange={(visibility) => setColumnData('visibility', visibility)}
+      />
       <div className={styles.footer}>
         <PrimaryButton
           text={strings.SaveButtonLabel}

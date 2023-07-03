@@ -12,6 +12,7 @@ export const ColumnVisibilityField: FC<IColumnVisibilityFieldProps> = (props) =>
         label={strings.ColumnVisibilityLabel}
         multiSelect={true}
         options={visibilityOptions}
+        defaultSelectedKeys={props.defaultSelectedKeys}
         onChange={(_e, { key, selected }) => {
           let _selection = [...selection]
           if (selected) {

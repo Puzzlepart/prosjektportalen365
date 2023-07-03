@@ -1,4 +1,3 @@
-import { TypedHash } from '@pnp/common'
 import {
   ItemUpdateResult,
   QueryPropertyValueType,
@@ -119,10 +118,10 @@ export interface IDataAdapter {
   ): Promise<any[]>
   fetchProjectContentColumns?(dataSourceCategory: string): Promise<IProjectContentColumn[]>
   updateProjectContentColumn?(column: Record<string, any>, persistRenderAs?: boolean): Promise<any>
-  deleteProjectContentColumn?(property: TypedHash<any>): Promise<any>
-  addItemToList?(listName: string, properties: TypedHash<any>): Promise<any[]>
+  deleteProjectContentColumn?(property: Record<string, any>): Promise<any>
+  addItemToList?<T>(listName: string, properties: Record<string, any>): Promise<T>
   updateDataSourceItem?(
-    properties: TypedHash<any>,
+    properties: Record<string, any>,
     dataSourceTitle: string,
     shouldReplace?: boolean
   ): Promise<ItemUpdateResult>

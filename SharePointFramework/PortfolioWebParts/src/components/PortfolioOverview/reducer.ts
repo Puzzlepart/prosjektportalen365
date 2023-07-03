@@ -1,13 +1,8 @@
-import {
-  format,
-  IContextualMenuProps,
-  IObjectWithKey,
-  MessageBarType,
-  Selection
-} from '@fluentui/react'
+import { format, IObjectWithKey, MessageBarType, Selection } from '@fluentui/react'
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import sortArray from 'array-sort'
 import strings from 'PortfolioWebPartsStrings'
+import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import {
   PortfolioOverviewView,
   ProjectColumn,
@@ -15,7 +10,6 @@ import {
 } from 'pp365-shared-library/lib/models'
 import _ from 'underscore'
 import { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
-import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 
 interface IPortfolioOverviewReducerParams {
   props: IPortfolioOverviewProps
@@ -87,9 +81,11 @@ export const ON_FILTER_CHANGED = createAction<{
 }>('ON_FILTER_CHANGED')
 
 /**
- * `SET_COLUMN_CONTEXT_MENU`: Action dispatched when user opens the column context menu
+ * `TOGGLE_COLUMN_CONTEXT_MENU`: Action dispatched when user opens the column context menu
  */
-export const SET_COLUMN_CONTEXT_MENU = createAction<IContextualMenuProps>('SET_COLUMN_CONTEXT_MENU')
+export const TOGGLE_COLUMN_CONTEXT_MENU = createAction<
+  IPortfolioOverviewState['columnContextMenu']
+>('TOGGLE_COLUMN_CONTEXT_MENU')
 
 /**
  * `SET_GROUP_BY`: Action dispatched when user changes the group by column
@@ -111,6 +107,24 @@ export const SET_SORT = createAction<{
 export const SELECTION_CHANGED = createAction<Selection<IObjectWithKey>>('SELECTION_CHANGED')
 
 /**
+ * `TOGGLE_COLUMN_FORM_PANEL`: Toggling the column form panel.
+ */
+export const TOGGLE_COLUMN_FORM_PANEL = createAction<{
+  isOpen: boolean
+  column?: IPortfolioOverviewState['editColumn']
+}>('TOGGLE_COLUMN_FORM_PANEL')
+
+/**
+ * `ADD_COLUMN`: Add column.
+ */
+export const ADD_COLUMN = createAction<{ column: ProjectColumn }>('ADD_COLUMN')
+
+/**
+ * `DELETE_COLUMN`: Delete column.
+ */
+export const DELETE_COLUMN = createAction('DELETE_COLUMN')
+
+/**
  * Initialize state for `<PortfolioOverview />`
  *
  * @param params Parameters for reducer initialization
@@ -123,7 +137,9 @@ export const initState = (params: IPortfolioOverviewReducerParams): IPortfolioOv
     activeFilters: {},
     items: [],
     columns: params.placeholderColumns,
-    filters: []
+    filters: [],
+    addColumnPanel: { isOpen: false },
+    columnContextMenu: null
   }
 }
 
@@ -143,10 +159,11 @@ export const initState = (params: IPortfolioOverviewReducerParams): IPortfolioOv
  * - `TOGGLE_COMPACT`: Action dispatched when user toggles compact mode for the list
  * - `CHANGE_VIEW`: Action dispatched when user changes the view
  * - `ON_FILTER_CHANGED`: Action dispatched when user changes a filter
- * - `SET_COLUMN_CONTEXT_MENU`: Action dispatched when user opens the column context menu
+ * - `TOGGLE_COLUMN_CONTEXT_MENU`: Action dispatched when user opens the column context menu
  * - `SET_GROUP_BY`: Action dispatched when user changes the group by column
  * - `SET_SORT`: Action dispatched when user changes the sort column
  * - `SELECTION_CHANGED`: Action dispatched when user changes the selection in the list
+ * - `TOGGLE_COLUMN_FORM_PANEL`: Toggling the column form panel
  *
  * @param params Parameters for reducer initialization
  */
@@ -208,9 +225,9 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.activeFilters[column.fieldName] = selectedItems.map((i) => i.value)
       }
     },
-    [SET_COLUMN_CONTEXT_MENU.type]: (
+    [TOGGLE_COLUMN_CONTEXT_MENU.type]: (
       state,
-      { payload }: ReturnType<typeof SET_COLUMN_CONTEXT_MENU>
+      { payload }: ReturnType<typeof TOGGLE_COLUMN_CONTEXT_MENU>
     ) => {
       // Need to cast to any because of a bug in the typings
       state.columnContextMenu = payload as any
@@ -256,6 +273,13 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
     },
     [SELECTION_CHANGED.type]: (state, { payload }: ReturnType<typeof SELECTION_CHANGED>) => {
       state.selectedItems = payload.getSelection()
+    },
+    [TOGGLE_COLUMN_FORM_PANEL.type]: (
+      state,
+      { payload }: ReturnType<typeof TOGGLE_COLUMN_FORM_PANEL>
+    ) => {
+      state.editColumn = payload.column ?? null
+      state.addColumnPanel = { isOpen: payload.isOpen }
     }
   })
 

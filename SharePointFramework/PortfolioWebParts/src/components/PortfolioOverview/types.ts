@@ -1,15 +1,15 @@
+import { IColumn, IPanelProps, MessageBarType, Target } from '@fluentui/react'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
+import strings from 'PortfolioWebPartsStrings'
 import { IPortfolioConfiguration } from 'interfaces'
+import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import {
   PortfolioOverviewView,
   ProjectColumn,
   ProjectColumnCustomSort
 } from 'pp365-shared-library/lib/models'
 import { IBaseComponentProps } from '../types'
-import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { MessageBarType, IContextualMenuProps, IColumn } from '@fluentui/react'
-import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import styles from './PortfolioOverview.module.scss'
-import strings from 'PortfolioWebPartsStrings'
 
 export class PortfolioOverviewErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -175,9 +175,20 @@ export interface IPortfolioOverviewState {
   programContext?: WebPartContext
 
   /**
-   * Props for column header context menu
+   * Column context menu contains the `column` and `target` (mouse event target)
+   * that is used to show the context menu in the correct position.
    */
-  columnContextMenu?: IContextualMenuProps
+  columnContextMenu?: { column: ProjectColumn; target: Target }
+
+  /**
+   * Add column panel properties
+   */
+  addColumnPanel?: IPanelProps
+
+  /**
+   * Edit column converted to a map using `ProjectColumn.toMap()`
+   */
+  editColumn?: Map<string, any>
 }
 
 export interface IPortfolioOverviewHashStateState {

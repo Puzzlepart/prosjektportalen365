@@ -1,7 +1,7 @@
-import { IDropdownOption } from '@fluentui/react'
+import { IDropdownOption, IDropdownProps } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 
-export interface IColumnRenderFieldProps {
+export interface IColumnRenderFieldProps extends Pick<IDropdownProps, 'defaultSelectedKey'> {
   onChange: (value: string) => void
 }
 

@@ -46,6 +46,7 @@ export class ProjectColumn implements IColumn {
   public config?: ProjectColumnConfigDictionary
   public onColumnClick: any
   public customSorts?: ProjectColumnCustomSort[]
+  public $map: Map<string, any>
 
   /**
    * Arbitrary data passthrough which can be used by the caller.
@@ -68,8 +69,14 @@ export class ProjectColumn implements IColumn {
       this.searchType = this._getSearchType(this.fieldName.toLowerCase())
       this.customSorts = this._getCustomSorts(_item.GtFieldCustomSort)
       this.data = {
-        isGroupable: this.isGroupable
+        isGroupable: this.isGroupable,
+        visibility: [
+          _item.GtShowFieldFrontpage && 'Frontpage',
+          _item.GtShowFieldProjectStatus && 'ProjectStatus',
+          _item.GtShowFieldPortfolio && 'Portfolio'
+        ].filter(Boolean)
       }
+      this.$map = this._toMap()
     }
   }
 
@@ -144,11 +151,6 @@ export class ProjectColumn implements IColumn {
     return this
   }
 
-  public set(column: Partial<ProjectColumn>): ProjectColumn {
-    Object.assign(this, column)
-    return this
-  }
-
   /**
    * Configures the column with the given configuration.
    *
@@ -196,10 +198,32 @@ export class ProjectColumn implements IColumn {
    * `isGroupable`.
    *
    * @param data Data to set
-   * @returns
+   *
+   * @public
    */
   public setData(data: any): ProjectColumn {
     this.data = { ...this.data, ...data }
     return this
+  }
+
+  /**
+   * Converts the column to a map used in `ColumnFormPanel`.
+   *
+   * @private
+   */
+  private _toMap(): Map<string, any> {
+    return new Map<string, any>([
+      ['key', this.key],
+      ['fieldName', this.fieldName],
+      ['name', this.name],
+      ['minWidth', this.minWidth],
+      ['id', this.id],
+      ['sortOrder', this.sortOrder],
+      ['internalName', this.internalName],
+      ['iconName', this.iconName],
+      ['dataType', this.dataType],
+      ['isRefinable', this.isRefinable],
+      ['data', this.data]
+    ])
   }
 }

@@ -1,6 +1,6 @@
 import strings from 'PortfolioWebPartsStrings'
 import { SPProjectColumnItem } from 'pp365-shared-library'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import { TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 
@@ -24,6 +24,12 @@ const initialColumn = new Map<string, any>([
 export function useColumnFormPanel() {
   const context = useContext(PortfolioOverviewContext)
   const [column, $setColumn] = useState<Map<string, any>>(initialColumn)
+
+  useEffect(() => {
+    if (context.state.editColumn) {
+      $setColumn(context.state.editColumn)
+    }
+  }, [context.state.editColumn])
 
   /**
    * Dismisses the form panel and resets the column state.
