@@ -1,4 +1,4 @@
-import { IColumn, IPanelProps, MessageBarType, Target } from '@fluentui/react'
+import { IColumn, MessageBarType, Target } from '@fluentui/react'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import strings from 'PortfolioWebPartsStrings'
 import { IPortfolioConfiguration } from 'interfaces'
@@ -10,6 +10,7 @@ import {
 } from 'pp365-shared-library/lib/models'
 import { IBaseComponentProps } from '../types'
 import { IColumnFormPanel } from './ColumnFormPanel/types'
+import { IEditViewColumnsPanel } from './EditViewColumnsPanel/types'
 import styles from './PortfolioOverview.module.scss'
 
 export class PortfolioOverviewErrorMessage extends Error {
@@ -191,7 +192,7 @@ export interface IPortfolioOverviewState {
   /**
    * Edit view columns panel props.
    */
-  editViewColumns?: IPanelProps
+  editViewColumns?: IEditViewColumnsPanel
 }
 
 export interface IPortfolioOverviewHashStateState {

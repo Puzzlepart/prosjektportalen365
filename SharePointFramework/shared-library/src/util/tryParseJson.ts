@@ -1,5 +1,6 @@
 /**
- * Try parse JSON
+ * Parse JSON string to object or return fallback value. This try-catches the JSON.parse
+ * method and returns the fallback value if the parsing fails.
  *
  * @param string String to parse
  * @param fallback Fallback value

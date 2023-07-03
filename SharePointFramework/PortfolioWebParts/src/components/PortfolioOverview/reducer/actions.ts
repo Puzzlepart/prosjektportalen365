@@ -2,12 +2,13 @@ import { IObjectWithKey, Selection } from '@fluentui/react'
 import { createAction } from '@reduxjs/toolkit'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import {
-    PortfolioOverviewView,
-    ProjectColumn,
-    ProjectColumnCustomSort
+  PortfolioOverviewView,
+  ProjectColumn,
+  ProjectColumnCustomSort
 } from 'pp365-shared-library/lib/models'
 import { IColumnFormPanel } from '../ColumnFormPanel/types'
 import { IPortfolioOverviewState } from '../types'
+import { IEditViewColumnsPanel } from '../EditViewColumnsPanel/types'
 
 /**
  * `STARTING_DATA_FETCH`: Action dispatched when data fetch is started
@@ -120,7 +121,6 @@ export const COLUMN_DELETED = createAction<{ columnId: any }>('COLUMN_DELETED')
 /**
  * `TOGGLE_EDIT_VIEW_COLUMNS_PANEL`: Toggling the show/hide column panel.
  */
-export const TOGGLE_EDIT_VIEW_COLUMNS_PANEL = createAction<{
-    isOpen: boolean
-  }>('TOGGLE_EDIT_VIEW_COLUMNS_PANEL')
-  
+export const TOGGLE_EDIT_VIEW_COLUMNS_PANEL = createAction<IEditViewColumnsPanel>(
+  'TOGGLE_EDIT_VIEW_COLUMNS_PANEL'
+)

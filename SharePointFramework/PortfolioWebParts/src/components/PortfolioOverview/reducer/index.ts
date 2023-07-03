@@ -5,8 +5,27 @@ import strings from 'PortfolioWebPartsStrings'
 import _ from 'underscore'
 import { IPortfolioOverviewState } from '../types'
 import { IPortfolioOverviewReducerParams } from './types'
-import { CHANGE_VIEW, COLUMN_DELETED, COLUMN_FORM_PANEL_ON_SAVED, DATA_FETCH_ERROR, DATA_FETCHED, EXCEL_EXPORT_ERROR, EXCEL_EXPORT_SUCCESS, EXECUTE_SEARCH, ON_FILTER_CHANGED, SELECTION_CHANGED, SET_GROUP_BY, SET_SORT, START_EXCEL_EXPORT, STARTING_DATA_FETCH, TOGGLE_COLUMN_CONTEXT_MENU, TOGGLE_COLUMN_FORM_PANEL, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL, TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from './actions'
-
+import {
+  CHANGE_VIEW,
+  COLUMN_DELETED,
+  COLUMN_FORM_PANEL_ON_SAVED,
+  DATA_FETCH_ERROR,
+  DATA_FETCHED,
+  EXCEL_EXPORT_ERROR,
+  EXCEL_EXPORT_SUCCESS,
+  EXECUTE_SEARCH,
+  ON_FILTER_CHANGED,
+  SELECTION_CHANGED,
+  SET_GROUP_BY,
+  SET_SORT,
+  START_EXCEL_EXPORT,
+  STARTING_DATA_FETCH,
+  TOGGLE_COLUMN_CONTEXT_MENU,
+  TOGGLE_COLUMN_FORM_PANEL,
+  TOGGLE_COMPACT,
+  TOGGLE_FILTER_PANEL,
+  TOGGLE_EDIT_VIEW_COLUMNS_PANEL
+} from './actions'
 
 /**
  * Initialize state for `<PortfolioOverview />`
@@ -139,7 +158,9 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
             (a, b) => a.sortOrder - b.sortOrder
           )
         } else {
-          state.columns = state.columns.map((col) => col.key === action.payload.column.key ? action.payload.column : col)
+          state.columns = state.columns.map((col) =>
+            col.key === action.payload.column.key ? action.payload.column : col
+          )
         }
         state.columnForm = { isOpen: false }
       })
@@ -148,7 +169,13 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.columnForm = { isOpen: false }
       })
       .addCase(TOGGLE_EDIT_VIEW_COLUMNS_PANEL, (state, action) => {
-        state.editViewColumns = action.payload
+        state.editViewColumns = {
+          isOpen: action.payload['isOpen']
+        }
+        if (action.payload['columns']) {
+          state.currentView.columns = action.payload['columns']
+          state.columns = action.payload['columns']
+        }
       })
   })
 

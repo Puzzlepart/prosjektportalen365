@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import * as _ from 'underscore'
 import { ProjectColumn } from './ProjectColumn'
+import { tryParseJson } from '../util/tryParseJson'
 
 export class SPPortfolioOverviewViewItem {
   public Id: number = 0
@@ -13,6 +14,7 @@ export class SPPortfolioOverviewViewItem {
   public GtPortfolioColumnsId: number[] = []
   public GtPortfolioRefinersId: number[] = []
   public GtPortfolioGroupById: number = 0
+  public GtPortfolioColumnOrder: string = ''
 }
 
 export class PortfolioOverviewView {
@@ -82,33 +84,65 @@ export class PortfolioOverviewView {
   public scope?: string
 
   /**
+   * Custom column order for the view.
+   */
+  public columnOrder: number[]
+
+  /**
+   * Column IDs for the view.
+   */
+  private _columnIds: number[]
+
+  /**
+   * Refiner IDs for the view.
+   */
+  private _refinerIds: number[]
+
+  /**
+   * Group by ID for the view.
+   */
+  private _groupById: number
+
+  /**
    * Constructor for the PortfolioOverviewView class.
    *
-   * @param _item SP list item to create the view from
+   * @param item SP list item to create the view from
    */
-  constructor(private _item?: SPPortfolioOverviewViewItem) {
-    this.id = _item?.Id
-    this.title = _item?.Title
-    this.sortOrder = _item?.GtSortOrder
-    this.searchQuery = _item?.GtSearchQuery
-    this.isDefaultView = _item?.GtPortfolioIsDefaultView
-    this.iconName = _item?.GtPortfolioFabricIcon
-    this.isPersonal = _item?.GtPortfolioIsPersonalView
+  constructor(item?: SPPortfolioOverviewViewItem) {
+    this.id = item?.Id
+    this.title = item?.Title
+    this.sortOrder = item?.GtSortOrder
+    this.searchQuery = item?.GtSearchQuery
+    this.isDefaultView = item?.GtPortfolioIsDefaultView
+    this.iconName = item?.GtPortfolioFabricIcon
+    this.isPersonal = item?.GtPortfolioIsPersonalView
+    this.columnOrder = tryParseJson<number[]>(item?.GtPortfolioColumnOrder, [])
+    this._columnIds = item?.GtPortfolioColumnsId ?? []
+    this._refinerIds = item?.GtPortfolioRefinersId ?? []
+    this._groupById = item?.GtPortfolioGroupById
   }
 
   /**
-   * Configure the view with columns.
+   * Configure the view with columns. If `columnOrder` is set, the columns
+   * will be sorted according to the order in the `columnOrder` array. Otherwise
+   * the columns will be sorted according to the `sortOrder` property on the
+   * columns.
    *
    * @param columns Columns to configure the view with
    */
   public configure(columns: ProjectColumn[] = []): PortfolioOverviewView {
-    this.columns = this._item.GtPortfolioColumnsId.map((id) =>
-      _.find(columns, (col) => col.id === id)
-    ).sort((a, b) => a.sortOrder - b.sortOrder)
-    this.refiners = this._item.GtPortfolioRefinersId.map((id) =>
-      _.find(columns, (col) => col.id === id)
-    ).sort((a, b) => a.sortOrder - b.sortOrder)
-    this.groupBy = _.find(columns, (col) => col.id === this._item.GtPortfolioGroupById)
+    this.columns = this._columnIds.map((id) => _.find(columns, (col) => col.id === id))
+    if (!_.isEmpty(this.columnOrder)) {
+      this.columns = this.columns.sort(
+        (a, b) => this.columnOrder.indexOf(a.id) - this.columnOrder.indexOf(b.id)
+      )
+    } else {
+      this.columns = this.columns.sort((a, b) => a.sortOrder - b.sortOrder)
+    }
+    this.refiners = this._refinerIds
+      .map((id) => _.find(columns, (col) => col.id === id))
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+    this.groupBy = _.find(columns, (col) => col.id === this._groupById)
     return this
   }
 
@@ -150,6 +184,7 @@ export class PortfolioOverviewView {
     this.groupBy = view.groupBy
     this.scope = view.scope
     this.searchQuery = view.searchQuery
+    this.columnOrder = view.columnOrder
     return this
   }
 }

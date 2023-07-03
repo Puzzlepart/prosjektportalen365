@@ -4,7 +4,12 @@ import strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared-library/lib/helpers/getObjectValue'
 import { useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
-import { SET_GROUP_BY, SET_SORT, TOGGLE_COLUMN_FORM_PANEL, TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from '../reducer'
+import {
+  SET_GROUP_BY,
+  SET_SORT,
+  TOGGLE_COLUMN_FORM_PANEL,
+  TOGGLE_EDIT_VIEW_COLUMNS_PANEL
+} from '../reducer'
 
 /**
  * Hook for the column header context menu. Handles the logic for the context menu. Creates a context menu
@@ -31,7 +36,7 @@ export function useColumnContextMenu(): IContextualMenuProps {
   if (column.key === 'AddColumn') {
     columnContextMenu.items = [
       {
-        key: 'ADD_COLUMN',
+        key: 'TOGGLE_COLUMN_FORM_PANEL',
         name: strings.AddColumnText,
         iconProps: { iconName: 'CalculatorAddition' },
         onClick: () => {
@@ -40,7 +45,7 @@ export function useColumnContextMenu(): IContextualMenuProps {
         disabled: !context.props.pageContext.legacyPageContext.isSiteAdmin
       },
       {
-        key: 'SHOW_HIDE_COLUMNS',
+        key: 'TOGGLE_EDIT_VIEW_COLUMNS_PANEL',
         name: strings.ShowHideColumnsLabel,
         iconProps: { iconName: 'Settings' },
         onClick: () => {

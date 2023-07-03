@@ -1,4 +1,4 @@
-import { ActionButton, Checkbox, Panel } from '@fluentui/react'
+import { ActionButton, Checkbox, Panel, PanelType } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC } from 'react'
 import {
@@ -23,6 +23,7 @@ export const EditViewColumnsPanel: FC = () => {
   return (
     <Panel
       isOpen={state.editViewColumns.isOpen}
+      type={PanelType.medium}
       onRenderHeader={() => (
         <div className={styles.header}>
           <ActionButton

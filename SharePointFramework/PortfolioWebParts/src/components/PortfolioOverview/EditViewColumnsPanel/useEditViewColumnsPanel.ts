@@ -6,14 +6,16 @@ import { useContext, useEffect, useState } from 'react'
 import { OnDragEndResponder } from 'react-beautiful-dnd'
 import { IPortfolioOverviewContext, PortfolioOverviewContext } from '../context'
 import { TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from '../reducer'
+import strings from 'PortfolioWebPartsStrings'
 
 /**
- * Get columns with selected state.
+ * Get all columns from `context.props.configuration.columns` with the selected state
+ * based on the `context.state.columns`.
  *
  * @param context Context
  */
 function getColumnsWithSelectedState(context: IPortfolioOverviewContext) {
-  return context.state.columns.map((c) => ({
+  return context.props.configuration.columns.map((c) => ({
     ...c,
     data: {
       ...c.data,
@@ -37,21 +39,22 @@ export function useEditViewColumnsPanel() {
    * On save event handler.
    */
   const onSave = async () => {
-    // context.dispatch(SET_COLUMNS({ columns: selectedColumns }))
-    // const columns = selectedColumns.filter((c) => c.data.selected)
+    const columns = selectedColumns.filter((c) => c.data.selected)
 
-    // const updateItems = {
-    //   GtProjectContentColumnsId: columns.map((c) => c.id)
-    // }
+    const properties: Record<string, any> = {
+      GtPortfolioColumnsId: {
+        results: columns.map((c) => c.id)
+      },
+      GtPortfolioColumnOrder: JSON.stringify(columns.map((c) => c.id))
+    }
 
-    // await Promise.resolve(
-    //   context.props.dataAdapter
-    //     .updateDataSourceItem(updateItems, context.state.dataSource, true)
-    //     .then(() => {
-    //       context.dispatch(SHOW_HIDE_COLUMNS())
-    //     })
-    //     .catch((error) => (context.state.error = error))
-    // )
+    await context.props.dataAdapter.updateItemInList(
+      strings.PortfolioViewsListName,
+      context.state.currentView.id as any,
+      properties
+    )
+
+    context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false, columns }))
   }
 
   /**
