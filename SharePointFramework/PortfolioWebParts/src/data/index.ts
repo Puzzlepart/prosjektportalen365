@@ -12,13 +12,13 @@ import {
 } from '@pnp/sp'
 import { SearchQueryInit } from '@pnp/sp/src/search'
 import * as cleanDeep from 'clean-deep'
-import { IGraphGroup, IPortfolioConfiguration, ISPProjectItem, ISPUser } from 'interfaces'
+import { IPortfolioConfiguration } from 'interfaces'
 import { IAggregatedListConfiguration } from 'interfaces/IAggregatedListConfiguration'
 import { capitalize } from 'lodash'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
-import { getUserPhoto } from 'pp365-shared-library/lib/helpers/getUserPhoto'
 import {
+  getUserPhoto,
   DataSource,
   PortfolioOverviewView,
   ProjectContentColumn,
@@ -27,10 +27,13 @@ import {
   SPProjectContentColumnItem,
   SPTimelineConfigurationItem,
   TimelineConfigurationModel,
-  TimelineContentModel
-} from 'pp365-shared-library/lib/models'
-import { DataSourceService } from 'pp365-shared-library/lib/services/DataSourceService'
-import { PortalDataService } from 'pp365-shared-library/lib/services/PortalDataService'
+  TimelineContentModel,
+  DataSourceService,
+  IGraphGroup,
+  ISPProjectItem,
+  ISPUser,
+  PortalDataService
+} from 'pp365-shared-library'
 import _ from 'underscore'
 import {
   Benefit,
