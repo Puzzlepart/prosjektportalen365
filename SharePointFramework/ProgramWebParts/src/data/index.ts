@@ -14,31 +14,33 @@ import {
 } from 'pp365-portfoliowebparts/lib/data/types'
 import {
   IAggregatedListConfiguration,
-  IGraphGroup,
-  IPortfolioConfiguration,
-  ISPProjectItem,
-  ISPUser,
+  IPortfolioConfiguration
 } from 'pp365-portfoliowebparts/lib/interfaces'
 import {
   Benefit,
   BenefitMeasurement,
   BenefitMeasurementIndicator
 } from 'pp365-portfoliowebparts/lib/models'
-import { ISPDataAdapterBaseConfiguration, SPDataAdapterBase } from 'pp365-shared-library/lib/data'
 import { getUserPhoto } from 'pp365-shared-library/lib/helpers/getUserPhoto'
-import {
-  DataSource,
-  PortfolioOverviewView,
-  ProjectColumn,
-  ProjectListModel,
-  TimelineConfigurationModel,
-  TimelineContentModel
-} from 'pp365-shared-library/lib/models'
-import { DataSourceService, ProjectDataService } from 'pp365-shared-library/lib/services'
 import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS, IFetchDataForViewItemResult } from './types'
 import { IProgramAdministrationProject } from 'components/ProgramAdministration/types'
-import { IProjectContentColumn } from 'pp365-shared-library'
+import {
+  DataSource,
+  DataSourceService,
+  IGraphGroup,
+  IProjectContentColumn,
+  ISPDataAdapterBaseConfiguration,
+  ISPProjectItem,
+  ISPUser,
+  PortfolioOverviewView,
+  ProjectColumn,
+  ProjectDataService,
+  ProjectListModel,
+  SPDataAdapterBase,
+  TimelineConfigurationModel,
+  TimelineContentModel
+} from 'pp365-shared-library'
 
 /**
  * SPDataAdapter for `ProgramWebParts`.

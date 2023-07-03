@@ -104,6 +104,7 @@ export function useColumnContextMenu(): IContextualMenuProps {
       {
         key: 'COLUMN_SETTINGS',
         name: strings.ColumSettingsLabel,
+        disabled: context.props.isParentProject,
         subMenuProps: {
           items: [
             {

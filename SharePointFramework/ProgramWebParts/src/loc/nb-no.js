@@ -1,5 +1,7 @@
 define([], function () {
     return {
+        ListViewText: 'Liste',
+        CompactViewText: 'Kompakt liste',
         CmdSelectionCountTooltipText: 'Følgende prosjekter er valgt:',
         DefaultViewLabel: 'Standardvisning',
         DefaultDataSourceViewLabel: 'Standardvisning (datakilde)',

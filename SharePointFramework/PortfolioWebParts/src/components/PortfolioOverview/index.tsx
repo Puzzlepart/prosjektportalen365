@@ -14,7 +14,7 @@ import { ColumnContextMenu } from './ColumnContextMenu'
 import { ColumnFormPanel } from './ColumnFormPanel'
 import { ListHeader, onRenderDetailsHeader } from './ListHeader'
 import styles from './PortfolioOverview.module.scss'
-import { PortfolioOverviewCommands } from './PortfolioOverviewCommands'
+import { Commands } from './Commands'
 import { onRenderItemColumn } from './RenderItemColumn'
 import { PortfolioOverviewContext } from './context'
 import { IPortfolioOverviewProps, addColumn } from './types'
@@ -31,7 +31,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
   return (
     <div className={styles.root}>
       <PortfolioOverviewContext.Provider value={contextValue}>
-        <PortfolioOverviewCommands
+        <Commands
           filteredData={{
             items,
             columns,
@@ -58,7 +58,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
                   items={items}
                   constrainMode={ConstrainMode.unconstrained}
                   layoutMode={DetailsListLayoutMode.fixedColumns}
-                  columns={[...columns, addColumn]}
+                  columns={[...columns, !props.isParentProject && addColumn].filter(Boolean)}
                   groups={groups}
                   selectionMode={SelectionMode.multiple}
                   selection={selection}

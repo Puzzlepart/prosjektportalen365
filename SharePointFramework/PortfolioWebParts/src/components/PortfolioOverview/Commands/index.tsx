@@ -5,13 +5,13 @@ import React, { useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import { ON_FILTER_CHANGED, TOGGLE_FILTER_PANEL } from '../reducer'
 import { IPortfolioOverviewCommandsProps } from './types'
-import { usePortfolioOverviewCommands } from './usePortfolioOverviewCommands'
+import { usePortfolioOverviewCommands } from './useCommands'
 import { FilterPanel, IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 
 /**
- * Component for displaying the command bar and filter panel.
+ * Component for displaying the command bar and filter panel for the `PortfolioOverview` component.
  */
-export const PortfolioOverviewCommands: React.FC<IPortfolioOverviewCommandsProps> = (props) => {
+export const Commands: React.FC<IPortfolioOverviewCommandsProps> = (props) => {
   const context = useContext(PortfolioOverviewContext)
   const { commandBarProps, filters } = usePortfolioOverviewCommands(props)
   return (
