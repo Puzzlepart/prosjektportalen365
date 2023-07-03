@@ -78,7 +78,6 @@ dependencies:
   msgraph-helper: 0.8.3_9c4969b3be2ea41c89422e6bb8d9a16e
   object-assign: 4.1.1
   prettier: 2.7.1
-  pzl-react-reusable-components: 0.0.14_1ca3516818190f66f3253793862e2abe
   pzl-spfx-components: 0.0.11
   react: 16.13.1
   react-autocomplete: 1.8.1_react-dom@16.13.1+react@16.13.1
@@ -692,7 +691,7 @@ packages:
   /@fluentui/dom-utilities/1.1.2:
     dependencies:
       '@uifabric/set-version': 7.0.24
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     resolution:
       integrity: sha512-XqPS7l3YoMwxdNlaYF6S2Mp0K3FmVIOIy2K3YkMc+eRxu9wFK6emr2Q/3rBhtG5u/On37NExRT7/5CTLnoi9gw==
@@ -936,7 +935,7 @@ packages:
       '@uifabric/utilities': 7.38.2_052fcf153ec79c77e0d1778fd73206f7
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -956,7 +955,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9c4969b3be2ea41c89422e6bb8d9a16e
       react: 16.13.1
       react-dom: 16.13.1_react@16.13.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -1080,7 +1079,7 @@ packages:
       '@uifabric/utilities': 7.38.2_052fcf153ec79c77e0d1778fd73206f7
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -1240,7 +1239,7 @@ packages:
       '@uifabric/set-version': 7.0.24
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -1256,7 +1255,7 @@ packages:
       '@uifabric/set-version': 7.0.24
       react: 16.13.1
       react-dom: 16.13.1_react@16.13.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -5797,7 +5796,7 @@ packages:
       '@uifabric/utilities': 7.38.2_052fcf153ec79c77e0d1778fd73206f7
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -5816,7 +5815,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9c4969b3be2ea41c89422e6bb8d9a16e
       react: 16.13.1
       react-dom: 16.13.1_react@16.13.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -5934,7 +5933,7 @@ packages:
       '@uifabric/set-version': 7.0.24
       '@uifabric/styling': 7.25.1_052fcf153ec79c77e0d1778fd73206f7
       '@uifabric/utilities': 7.38.2_052fcf153ec79c77e0d1778fd73206f7
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -5948,7 +5947,7 @@ packages:
       '@uifabric/set-version': 7.0.24
       '@uifabric/styling': 7.25.1_9c4969b3be2ea41c89422e6bb8d9a16e
       '@uifabric/utilities': 7.38.2_9c4969b3be2ea41c89422e6bb8d9a16e
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -5973,7 +5972,7 @@ packages:
   /@uifabric/merge-styles/7.20.2:
     dependencies:
       '@uifabric/set-version': 7.0.24
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     resolution:
       integrity: sha512-cJy8hW9smlWOKgz9xSDMCz/A0yMl4mdo466pcGlIOn84vz+e94grfA7OoTuTzg3Cl0Gj6ODBSf1o0ZwIXYL1Xg==
@@ -5986,7 +5985,7 @@ packages:
       '@uifabric/utilities': 7.38.2_052fcf153ec79c77e0d1778fd73206f7
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -6004,7 +6003,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9c4969b3be2ea41c89422e6bb8d9a16e
       react: 16.13.1
       react-dom: 16.13.1_react@16.13.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -6149,7 +6148,7 @@ packages:
       prop-types: 15.8.1
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -6168,7 +6167,7 @@ packages:
       prop-types: 15.8.1
       react: 16.13.1
       react-dom: 16.13.1_react@16.13.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -15402,7 +15401,7 @@ packages:
       prop-types: 15.8.1
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <17.0.0'
@@ -21510,6 +21509,7 @@ packages:
       '@reduxjs/toolkit': 1.5.0
       '@rushstack/eslint-config': 2.5.1_eslint@8.25.0+typescript@4.5.5
       '@types/array-sort': 1.0.0
+      '@types/lodash': 4.14.195
       '@types/object-assign': 4.0.30
       '@types/react': 16.8.8
       '@types/react-calendar-timeline': 0.26.0
@@ -21555,7 +21555,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-programwebparts'
     resolution:
-      integrity: sha512-qFN1ulEzpa6asViP9VfotkfWRN8C0O+NSCZWfwh/bO/KJb++hfAkzfUTQ2cMTuRr18eS69lq0qrbpZ56UeXvkg==
+      integrity: sha512-NkD/0UGUdnow0xddZVda9hQBgJ+ZAdFO+molFql6rvOgrbvsNELZreezXznniXLrn4mbLee6qLqHFKWPLUoHXQ==
       tarball: file:projects/pp365-programwebparts.tgz
     version: 0.0.0
   file:projects/pp365-projectextensions.tgz:
@@ -21873,7 +21873,6 @@ specifiers:
   msgraph-helper: 0.8.3
   object-assign: 4.1.1
   prettier: 2.7.1
-  pzl-react-reusable-components: ^0.0.14
   pzl-spfx-components: 0.0.11
   react: 16.13.1
   react-autocomplete: 1.8.1

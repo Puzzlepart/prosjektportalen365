@@ -7,15 +7,14 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import * as strings from 'PortfolioWebPartsStrings'
-import { IPortfolioAggregationProps, PortfolioAggregation } from 'components/PortfolioAggregation'
+import { IPortfolioAggregationConfiguration, IPortfolioAggregationProps, PortfolioAggregation } from 'components/PortfolioAggregation'
 import { DataAdapter } from 'data'
-import { IAggregatedListConfiguration } from 'interfaces'
 import _ from 'lodash'
 import React from 'react'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
 
 export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IPortfolioAggregationProps> {
-  private _configuration: IAggregatedListConfiguration
+  private _configuration: IPortfolioAggregationConfiguration
 
   public render(): void {
     if (!this.properties.dataSource) {

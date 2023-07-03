@@ -1,4 +1,5 @@
 import { getId } from '@fluentui/react'
+import { IProjectContentColumn } from 'pp365-shared-library'
 import { useEffect, useMemo, useReducer } from 'react'
 import { IPortfolioAggregationContext } from './context'
 import { filterItems } from './filter'
@@ -13,7 +14,6 @@ import createReducer, {
 } from './reducer'
 import { searchItem } from './search'
 import { IPortfolioAggregationProps, IPortfolioAggregationState } from './types'
-import { IProjectContentColumn } from 'pp365-shared-library'
 
 /**
  * Fetching data sources when `dataSourceCategory` or `defaultViewId` changes.

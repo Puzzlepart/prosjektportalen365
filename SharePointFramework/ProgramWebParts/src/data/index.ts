@@ -5,7 +5,9 @@ import { PnPClientStorage, dateAdd, stringIsNullOrEmpty } from '@pnp/common'
 import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
 import * as strings from 'ProgramWebPartsStrings'
 import * as cleanDeep from 'clean-deep'
+import { IProgramAdministrationProject } from 'components/ProgramAdministration/types'
 import MSGraph from 'msgraph-helper'
+import { IPortfolioAggregationConfiguration } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
 import {
   CONTENT_TYPE_ID_BENEFITS,
   CONTENT_TYPE_ID_INDICATORS,
@@ -13,7 +15,6 @@ import {
   DEFAULT_GAINS_PROPERTIES
 } from 'pp365-portfoliowebparts/lib/data/types'
 import {
-  IAggregatedListConfiguration,
   IPortfolioConfiguration
 } from 'pp365-portfoliowebparts/lib/interfaces'
 import {
@@ -21,10 +22,6 @@ import {
   BenefitMeasurement,
   BenefitMeasurementIndicator
 } from 'pp365-portfoliowebparts/lib/models'
-import { getUserPhoto } from 'pp365-shared-library/lib/helpers/getUserPhoto'
-import _ from 'underscore'
-import { DEFAULT_SEARCH_SETTINGS, IFetchDataForViewItemResult } from './types'
-import { IProgramAdministrationProject } from 'components/ProgramAdministration/types'
 import {
   DataSource,
   DataSourceService,
@@ -41,6 +38,9 @@ import {
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-shared-library'
+import { getUserPhoto } from 'pp365-shared-library/lib/helpers/getUserPhoto'
+import _ from 'underscore'
+import { DEFAULT_SEARCH_SETTINGS, IFetchDataForViewItemResult } from './types'
 
 /**
  * SPDataAdapter for `ProgramWebParts`.
@@ -116,7 +116,7 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
   public async getAggregatedListConfig(
     category: string,
     level: string = 'Overordnet/Program'
-  ): Promise<IAggregatedListConfiguration> {
+  ): Promise<IPortfolioAggregationConfiguration> {
     try {
       const [views, viewsUrls, columnUrls] = await Promise.all([
         this.fetchDataSources(category, level),

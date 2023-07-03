@@ -1,4 +1,3 @@
-export * from './IAggregatedListConfiguration'
 export * from './IAggregatedSearchListColumn'
 export * from './IAllocationSearchResult'
 export * from './IBenefitsSearchResult'

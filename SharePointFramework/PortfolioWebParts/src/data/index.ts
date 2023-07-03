@@ -13,13 +13,17 @@ import {
 import { SearchQueryInit } from '@pnp/sp/src/search'
 import * as cleanDeep from 'clean-deep'
 import { IPortfolioConfiguration } from 'interfaces'
-import { IAggregatedListConfiguration } from 'interfaces/IAggregatedListConfiguration'
 import { capitalize } from 'lodash'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
 import {
-  getUserPhoto,
   DataSource,
+  DataSourceService,
+  getUserPhoto,
+  IGraphGroup,
+  ISPProjectItem,
+  ISPUser,
+  PortalDataService,
   PortfolioOverviewView,
   ProjectContentColumn,
   ProjectListModel,
@@ -27,14 +31,10 @@ import {
   SPProjectContentColumnItem,
   SPTimelineConfigurationItem,
   TimelineConfigurationModel,
-  TimelineContentModel,
-  DataSourceService,
-  IGraphGroup,
-  ISPProjectItem,
-  ISPUser,
-  PortalDataService
+  TimelineContentModel
 } from 'pp365-shared-library'
 import _ from 'underscore'
+import { IPortfolioAggregationConfiguration } from '../components/PortfolioAggregation'
 import {
   Benefit,
   BenefitMeasurement,
@@ -187,7 +187,7 @@ export class DataAdapter implements IDataAdapter {
   public async getAggregatedListConfig(
     category: string,
     level?: string
-  ): Promise<IAggregatedListConfiguration> {
+  ): Promise<IPortfolioAggregationConfiguration> {
     try {
       let calculatedLevel = 'Portefølje'
       if (this._portal.url !== this.context.pageContext.web.absoluteUrl) {
@@ -208,7 +208,7 @@ export class DataAdapter implements IDataAdapter {
         columnUrls,
         level: calculatedLevel,
         levels: levels?.Choices ?? []
-      } as IAggregatedListConfiguration
+      } as IPortfolioAggregationConfiguration
     } catch (error) {
       return null
     }
@@ -690,7 +690,7 @@ export class DataAdapter implements IDataAdapter {
    * @param dataSource Data source
    */
   public async fetchProjects(
-    configuration?: IAggregatedListConfiguration,
+    configuration?: IPortfolioAggregationConfiguration,
     dataSource?: string
   ): Promise<any[]> {
     const odataQuery = (configuration?.views || []).find((v) => v.title === dataSource)?.odataQuery
