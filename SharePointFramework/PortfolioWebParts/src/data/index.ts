@@ -26,6 +26,7 @@ import {
   PortfolioOverviewView,
   ProjectContentColumn,
   ProjectListModel,
+  SPContentType,
   SPProjectColumnItem,
   SPProjectContentColumnItem,
   SPTimelineConfigurationItem,
@@ -44,8 +45,7 @@ import {
   ChartDataItem,
   DataField,
   ProgramItem,
-  SPChartConfigurationItem,
-  SPContentType
+  SPChartConfigurationItem
 } from '../models'
 import {
   CONTENT_TYPE_ID_BENEFITS,
