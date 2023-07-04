@@ -1,4 +1,10 @@
 declare interface IPortfolioWebPartsStrings {
+  ColumnRenderOptionCurrencyPrefixLabel: string
+  ColumnRenderOptionCurrency: string
+  ColumnRenderOptionBooleanTrue: string
+  ColumnRenderOptionBooleanFalse: string
+  ColumnRenderDataTypePropertiesHeaderText: string
+  ColumnRenderOptionBoolean: string
   CustomSortsText: string
   PortfolioOverviewColumnRenderDescription: string
   SearchPropertyFoundMessage: string
