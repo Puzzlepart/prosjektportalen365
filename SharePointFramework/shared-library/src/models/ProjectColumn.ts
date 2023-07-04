@@ -4,6 +4,7 @@ import { pick } from 'underscore'
 import { IProjectColumn } from '../interfaces/IProjectColumn'
 import { SearchValueType } from '../types/SearchValueType'
 import { ProjectColumnConfig, ProjectColumnConfigDictionary } from './ProjectColumnConfig'
+import { tryParseJson } from '../helpers'
 
 export class SPProjectColumnItem {
   public Id?: number = 0
@@ -16,6 +17,7 @@ export class SPProjectColumnItem {
   public GtShowFieldPortfolio?: boolean = false
   public GtFieldDataType?: string = ''
   public GtFieldCustomSort?: string = ''
+  public GtFieldDataTypeProperties?: string = ''
   public GtColMinWidth?: number = 0
   public GtIsRefinable?: boolean = false
   public GtIsGroupable?: boolean = false
@@ -76,7 +78,8 @@ export class ProjectColumn implements IProjectColumn {
           _item.GtShowFieldFrontpage && 'Frontpage',
           _item.GtShowFieldProjectStatus && 'ProjectStatus',
           _item.GtShowFieldPortfolio && 'Portfolio'
-        ].filter(Boolean)
+        ].filter(Boolean),
+        dataTypeProperties: tryParseJson(_item.GtFieldDataTypeProperties, {})
       }
       this.$map = this._toMap()
     }

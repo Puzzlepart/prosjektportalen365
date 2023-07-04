@@ -5,4 +5,5 @@ export interface IRenderItemColumnProps extends React.HTMLAttributes<HTMLDivElem
   column?: ProjectColumn | IColumn
   columnValue: string
   valueSeparator?: string
+  dataTypeProperties?: Map<string, any>
 }
