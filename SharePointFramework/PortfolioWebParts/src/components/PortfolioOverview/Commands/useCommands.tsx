@@ -1,16 +1,10 @@
-import {
-  ContextualMenuItemType,
-  Dropdown,
-  IContextualMenuItem,
-  IDropdownOption
-} from '@fluentui/react'
+import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
-import { ProgramItem } from 'models'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { PortfolioOverviewView } from 'pp365-shared-library/lib/models/PortfolioOverviewView'
 import { ExcelExportService } from 'pp365-shared-library/lib/services'
-import React, { useCallback, useContext } from 'react'
+import { useCallback, useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import {
   CHANGE_VIEW,
@@ -52,14 +46,14 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
   ) => {
     return context.props.configuration.views.filter(filterFunc).map(
       (view) =>
-      ({
-        key: view.id.toString(),
-        name: view.title,
-        iconProps: { iconName: view.iconName },
-        canCheck: true,
-        checked: view.id === context.state.currentView?.id,
-        onClick: () => context.dispatch(CHANGE_VIEW(view))
-      } as IContextualMenuItem)
+        ({
+          key: view.id.toString(),
+          name: view.title,
+          iconProps: { iconName: view.iconName },
+          canCheck: true,
+          checked: view.id === context.state.currentView?.id,
+          onClick: () => context.dispatch(CHANGE_VIEW(view))
+        } as IContextualMenuItem)
     )
   }
 
@@ -86,6 +80,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
           })
         }
       })
+
       ExcelExportService.export(items, props.filteredData.columns)
       context.dispatch(EXCEL_EXPORT_SUCCESS())
     } catch (error) {
@@ -120,6 +115,11 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
     data: { isVisible: context.props.showViewSelector },
     disabled: context.state.loading,
     subMenuProps: {
+      styles: {
+        root: {
+          minWidth: 300
+        }
+      },
       items: [
         {
           key: 'VIEW_LIST',
@@ -158,41 +158,37 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
     viewOptionsItem.subMenuProps.items.push(...personalViews)
   }
   if (context.props.showProgramViews && !_.isEmpty(context.props.configuration.programs)) {
-    const programViewOptions: IDropdownOption[] = context.props.configuration.programs.map((p) => ({
-      key: p.id,
-      text: p.name,
-      data: p
-    }))
     viewOptionsItem.subMenuProps.items.push({
       key: 'PROGRAMS_HEADER',
       itemType: ContextualMenuItemType.Header,
       text: strings.ProgramsHeaderText
     })
-    viewOptionsItem.subMenuProps.items.push({
-      key: 'PROGRAMS_DROPDOWN',
-      itemType: ContextualMenuItemType.Normal,
-      onRender: () => (
-        <div style={{ padding: '6px 12px' }}>
-          <Dropdown
-            placeholder={strings.SelectProgramText}
-            options={programViewOptions}
-            defaultSelectedKey={context.state.currentView?.id}
-            onChange={(_event, option) => {
-              const defaultView = context.props.configuration.views.find((v) => v.isDefaultView)
-              const view = new PortfolioOverviewView().configureFrom(defaultView).set({
-                id: option.key,
-                title: option.text,
-                iconName: 'ProjectCollection'
-              })
-              view.searchQueries = (option.data as ProgramItem).buildQueries(
-                defaultView.searchQuery
-              )
-              context.dispatch(CHANGE_VIEW(view))
-            }}
-          />
-        </div>
-      )
-    })
+    const selectProgramItem: IContextualMenuItem = {
+      key: 'SELECT_PROGRAM',
+      name: strings.SelectProgramText,
+      subMenuProps: {
+        items: context.props.configuration.programs.map(
+          (p) =>
+            ({
+              key: p.id,
+              text: p.name,
+              canCheck: true,
+              checked: context.state.currentView?.id === p.id,
+              onClick: () => {
+                const defaultView = context.props.configuration.views.find((v) => v.isDefaultView)
+                if (!defaultView) return
+                const view = new PortfolioOverviewView().configureFrom(defaultView).set({
+                  id: p.id,
+                  title: p.name
+                })
+                view.searchQueries = p.buildQueries(defaultView.searchQuery)
+                context.dispatch(CHANGE_VIEW(view))
+              }
+            } as IContextualMenuItem)
+        )
+      }
+    }
+    viewOptionsItem.subMenuProps.items.push(selectProgramItem)
   }
   if (userCanManageViews) {
     viewOptionsItem.subMenuProps.items.push({

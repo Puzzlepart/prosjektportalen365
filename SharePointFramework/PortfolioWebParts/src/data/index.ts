@@ -276,7 +276,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   /**
    * Fetch items for the specified view. If the `view` has specified `searchQueries` it will use
-   * `Promise.all` to fetch all queries in parallel. Otherwise it will use a single query.
+   * `Promise.all` to fetch all queries in parallel. Otherwise it will use a single query. The
+   * support for `searchQueries` is added to support program views in the portfolio overview.
    *
    * @param view View configuration
    * @param selectProperties Select properties
@@ -320,7 +321,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ) {
     let [projects, sites, statusReports] = await Promise.all([
-      this._fetchItems(view.searchQuery, [
+      this._fetchItemsForView(view, [
         ...configuration.columns.map((f) => f.fieldName),
         siteIdProperty
       ]),
@@ -347,7 +348,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       projects,
       sites,
       statusReports
-    }
+    } as const
   }
 
   public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationModel[]) {

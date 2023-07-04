@@ -37,7 +37,7 @@ export interface IPortfolioOverviewConfiguration {
   views: PortfolioOverviewView[]
 
   /**
-   * Available programs
+   * Available programs that can be used to generate views for the portfolio overview
    */
   programs?: ProgramItem[]
 
