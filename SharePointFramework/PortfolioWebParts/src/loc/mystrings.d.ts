@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  CustomSortsText: string
   PortfolioOverviewColumnRenderDescription: string
   SearchPropertyFoundMessage: string
   SearchPropertyPlaceholder: string

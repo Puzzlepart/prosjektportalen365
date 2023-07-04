@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    CustomSortsText: 'Egendefinert sortering',
     SearchPropertyFoundMessage: 'Fant en forvaltet egenskap `{0}` som matcher det interne feltnavnet `{1}`.',
     SearchPropertyPlaceholder: 'Søk i forvaltede egenskaper...',
     IncludeViewNameInExcelExportFilenameLabel: 'Inkluder visningsnavn i Excel-filnavn',

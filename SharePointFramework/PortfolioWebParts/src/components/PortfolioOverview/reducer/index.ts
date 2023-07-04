@@ -124,32 +124,29 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.groupBy = payload.fieldName === state.groupBy?.fieldName ? null : payload
       })
       .addCase(SET_SORT, (state, { payload }) => {
+        const isCustomSort = payload.customSort
         const isSortedDescending = Object.keys(payload).includes('isSortedDescending')
           ? payload.isSortedDescending
           : !payload.column.isSortedDescending
-        if (payload.customSort) {
+        if (isCustomSort) {
           state.items = state.items.sort((a, b) => {
             const $a = payload.customSort.order.indexOf(a[payload.column.fieldName])
             const $b = payload.customSort.order.indexOf(b[payload.column.fieldName])
             return isSortedDescending ? $a - $b : $b - $a
           })
         } else {
-          switch (payload.column.dataType) {
-            case 'currency':
-              state.items = state.items.sort((a, b) => {
-                const $a = parseInt(a[payload.column.fieldName])
-                const $b = parseInt(b[payload.column.fieldName])
-                if (!isNaN($a) && isNaN($b)) return -1
-                return isSortedDescending ? $a - $b : $b - $a
-              })
-              break
-            default:
-              state.items = sortArray(state.items, [payload.column.fieldName], {
-                reverse: !isSortedDescending
-              })
-              break
-          }
+          state.items = sortArray(state.items, [payload.column.fieldName], {
+            reverse: !isSortedDescending
+          })
         }
+        state.sortBy = _.pick(payload, ['column', 'customSort'])
+        state.columns = state.columns.map((col) => {
+          col.isSorted = col.key === payload.column.key
+          if (col.isSorted) {
+            col.isSortedDescending = isSortedDescending
+          }
+          return col
+        })
       })
       .addCase(SELECTION_CHANGED, (state, { payload }) => {
         state.selectedItems = payload.getSelection()
