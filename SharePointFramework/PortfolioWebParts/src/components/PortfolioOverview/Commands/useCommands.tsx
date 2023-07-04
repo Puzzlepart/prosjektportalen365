@@ -6,9 +6,10 @@ import {
 } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
+import { ProgramItem } from 'models'
+import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { PortfolioOverviewView } from 'pp365-shared-library/lib/models/PortfolioOverviewView'
 import { ExcelExportService } from 'pp365-shared-library/lib/services'
-import { redirect } from 'pp365-shared-library/lib/util'
 import React, { useCallback, useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import {
@@ -22,8 +23,6 @@ import {
 } from '../reducer'
 import { usePortfolioOverviewFilters } from '../usePortfolioOverviewFilters'
 import { IPortfolioOverviewCommandsProps } from './types'
-import { ProgramItem } from 'models'
-import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 
 /**
  * Component logic hook for the PortfolioOverviewCommands component. Handles the logic for
@@ -76,13 +75,10 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
   const exportToExcel = useCallback(() => {
     context.dispatch(START_EXCEL_EXPORT())
     try {
-      // If no items are selected, export all items
       const items =
         _.isArray(context.state.selectedItems) && context.state.selectedItems.length > 0
           ? context.state.selectedItems
           : props.filteredData.items
-
-      // Convert date columns to Date objects
       props.filteredData.columns.forEach((col) => {
         if (col.dataType === 'date') {
           items.map((item) => {
@@ -90,8 +86,6 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
           })
         }
       })
-
-      // Export to Excel using the `ExcelExportService` from `pp365-shared`
       ExcelExportService.export(items, props.filteredData.columns)
       context.dispatch(EXCEL_EXPORT_SUCCESS())
     } catch (error) {
@@ -168,6 +162,14 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       ]
     }
   } as IContextualMenuItem
+  if (!_.isEmpty(personalViews)) {
+    viewOptions.subMenuProps.items.push({
+      key: 'PERSONAL_VIEWS_HEADER',
+      itemType: ContextualMenuItemType.Header,
+      text: strings.PersonalViewsHeaderText
+    })
+    viewOptions.subMenuProps.items.push(...personalViews)
+  }
   if (context.props.showProgramViews && !_.isEmpty(context.props.configuration.programs)) {
     const programViewOptions: IDropdownOption[] = context.props.configuration.programs.map((p) => ({
       key: p.id,
@@ -205,14 +207,6 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       )
     })
   }
-  if (!_.isEmpty(personalViews)) {
-    viewOptions.subMenuProps.items.push({
-      key: 'PERSONAL_VIEWS_HEADER',
-      itemType: ContextualMenuItemType.Header,
-      text: strings.PersonalViewsHeaderText
-    })
-    viewOptions.subMenuProps.items.push(...personalViews)
-  }
   if (userCanManageViews) {
     viewOptions.subMenuProps.items.push({
       key: 'VIEW_ACTIONS_DIVIDER',
@@ -222,10 +216,9 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       key: 'EDIT_VIEW',
       name: strings.EditViewText,
       disabled: context.state.loading || context.state.currentView?.isProgramView,
-      onClick: () =>
-        redirect(
-          `${context.props.configuration.viewsUrls.defaultEditFormUrl}?ID=${context.state.currentView?.id}`
-        )
+      onClick: () => {
+        context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView }))
+      }
     })
   }
   farItems.push(viewOptions)
