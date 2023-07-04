@@ -2,6 +2,7 @@ import { PortfolioOverviewView, SPPortfolioOverviewViewItem } from 'pp365-shared
 import { useContext, useEffect, useState } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import { TOGGLE_VIEW_FORM_PANEL } from '../reducer'
+import _ from 'lodash'
 
 /**
  * Component logic hook for `ViewFormPanel`.
@@ -14,10 +15,12 @@ export function useViewFormPanel() {
   const isEditing = !!context.state.viewForm.view
 
   useEffect(() => {
-    if (!isEditing) {
+    if (isEditing) {
+      $setView(context.state.viewForm.view.$map)
+    } else {
       $setView(new PortfolioOverviewView().createDefault('', context.state.currentView).$map)
     }
-  }, [context.state.currentView])
+  }, [context.state.viewForm, context.state.currentView])
 
   /**
    * Dismisses the form panel by dispatching the `TOGGLE_VIEW_FORM_PANEL` action.
@@ -55,7 +58,8 @@ export function useViewFormPanel() {
         GtPortfolioRefinersId: {
           results: currentView.refiners.map((refiner) => refiner.id)
         },
-        GtPortfolioGroupById: currentView.groupBy?.id
+        GtPortfolioGroupById: currentView.groupBy?.id,
+        GtPortfolioColumnOrder: JSON.stringify(currentView.columnOrder)
       }
       await context.props.dataAdapter.portalDataService.addItemToList('PORTFOLIO_VIEWS', properties)
     }
@@ -81,12 +85,17 @@ export function useViewFormPanel() {
    */
   const isSaveDisabled = view.get('title').length < 2 || view.get('searchQuery').length < 51
 
+  /**
+   * `true` if any of the views is set as the default view.
+   */
+  const isDefaultViewSet = _.some(context.props.configuration.views, (v) => v.isDefaultView)
+
   return {
-    onSave,
+    onSave: !isSaveDisabled ? onSave : undefined,
     isEditing: false,
     onDismiss,
     view,
     setView,
-    isSaveDisabled
+    isDefaultViewSet
   } as const
 }

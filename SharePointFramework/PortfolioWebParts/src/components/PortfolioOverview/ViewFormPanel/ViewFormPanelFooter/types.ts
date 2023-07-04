@@ -1,3 +1,3 @@
 export interface IViewFormPanelFooterProps {
-  isSaveDisabled: boolean
+  onSave: () => Promise<void>
 }
