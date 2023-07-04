@@ -7,7 +7,8 @@ import { ColumnRenderField } from './ColumnRenderField'
 import { ColumnVisibilityField } from './ColumnVisibilityField'
 import { useColumnFormPanel } from './useColumnFormPanel'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
-import { FormFieldContainer } from 'pp365-shared-library'
+import { FormFieldContainer, UserMessage } from 'pp365-shared-library'
+import { ColumnSearchPropertyField } from './ColumnSearchPropertyField'
 
 export const ColumnFormPanel: FC = () => {
   const context = useContext(PortfolioOverviewContext)
@@ -19,7 +20,9 @@ export const ColumnFormPanel: FC = () => {
     setColumnData,
     isEditing,
     isSaveDisabled,
-    onDeleteColumn
+    onDeleteColumn,
+    findMatchingSearchProperty,
+    columnMessages
   } = useColumnFormPanel()
 
   return (
@@ -51,24 +54,27 @@ export const ColumnFormPanel: FC = () => {
       </FormFieldContainer>
       <FormFieldContainer>
         <TextField
-          label={strings.SearchPropertyLabel}
-          description={strings.SearchPropertyDescription}
-          required={true}
-          value={column.get('fieldName')}
-          disabled={isEditing}
-          onChange={(_, value) => setColumn('fieldName', value)}
-        />
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <TextField
           label={strings.InternalNameLabel}
           description={strings.InternalNameDescription}
           required={true}
           value={column.get('internalName')}
           disabled={isEditing}
           onChange={(_, value) => setColumn('internalName', value)}
+          onBlur={findMatchingSearchProperty}
         />
       </FormFieldContainer>
+      <ColumnSearchPropertyField
+        value={column.get('fieldName')}
+        onChange={(value) => setColumn('fieldName', value)}
+        disabled={isEditing}
+      >
+        {columnMessages.get('fieldName') && (
+          <UserMessage
+            styles={{ root: { margin: '8px 0' } }}
+            text={columnMessages.get('fieldName')}
+          />
+        )}
+      </ColumnSearchPropertyField>
       <FormFieldContainer>
         <TextField
           label={strings.DisplayNameLabel}
@@ -86,6 +92,14 @@ export const ColumnFormPanel: FC = () => {
           onChange={(_, value) => setColumn('minWidth', parseInt(value))}
         />
       </FormFieldContainer>
+      <ColumnRenderField
+        defaultSelectedKey={column.get('dataType')}
+        onChange={(renderAs) => setColumnData('renderAs', renderAs)}
+      />
+      <ColumnVisibilityField
+        defaultSelectedKeys={column.get('data')?.visibility}
+        onChange={(visibility) => setColumnData('visibility', visibility)}
+      />
       <FormFieldContainer description={strings.IsRefinableDescription}>
         <Toggle
           label={strings.IsRefinableLabel}
@@ -100,14 +114,6 @@ export const ColumnFormPanel: FC = () => {
           onChange={(_, checked) => setColumnData('isGroupable', checked)}
         />
       </FormFieldContainer>
-      <ColumnRenderField
-        defaultSelectedKey={column.get('dataType')}
-        onChange={(renderAs) => setColumnData('renderAs', renderAs)}
-      />
-      <ColumnVisibilityField
-        defaultSelectedKeys={column.get('data')?.visibility}
-        onChange={(visibility) => setColumnData('visibility', visibility)}
-      />
     </Panel>
   )
 }

@@ -1,8 +1,11 @@
+import { format } from '@fluentui/react'
+import { stringIsNullOrEmpty } from '@pnp/common'
 import _ from 'lodash'
 import { ProjectColumn, SPProjectColumnItem } from 'pp365-shared-library'
 import { useContext, useEffect, useState } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import { COLUMN_DELETED, COLUMN_FORM_PANEL_ON_SAVED, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
+import strings from 'PortfolioWebPartsStrings'
 
 const initialColumn = new Map<string, any>([
   ['name', ''],
@@ -25,6 +28,7 @@ const initialColumn = new Map<string, any>([
 export function useColumnFormPanel() {
   const context = useContext(PortfolioOverviewContext)
   const [column, $setColumn] = useState<Map<string, any>>(initialColumn)
+  const [columnMessages, setColumnMessages] = useState<Map<string, string>>(new Map())
   const isEditing = !!context.state.columnForm.column
 
   useEffect(() => {
@@ -144,6 +148,50 @@ export function useColumnFormPanel() {
    */
   const isSaveDisabled = column.get('fieldName').length < 2 || column.get('name').length < 2
 
+  /**
+   * Set column message for a specific column for a specific duration (default 5 seconds)
+   *
+   * @param key Key of the column to set the message for
+   * @param message Message to set
+   * @param durationSeconds Duration in seconds to show the message
+   */
+  const setColumnMessage = (key: string, message: string, durationSeconds = 5) => {
+    setColumnMessages((prev) => {
+      const newMessages = new Map(prev)
+      newMessages.set(key, message)
+      return newMessages
+    })
+    setTimeout(() => {
+      setColumnMessages((prev) => {
+        const newMessages = new Map(prev)
+        newMessages.delete(key)
+        return newMessages
+      })
+    }, durationSeconds * 1000)
+  }
+
+  /**
+   * Finds a matching search property for the column internal name. If a search property
+   * is found in `context.state.managedProperties` and the column field name is empty,
+   * it will set the column field name to the search property.
+   *
+   * A message wil shown under the field name input if a search property is found.
+   */
+  const findMatchingSearchProperty = () => {
+    const internalName = (column.get('internalName') ?? '') as string
+    if (internalName.length > 3) {
+      const property = _.find(context.state.managedProperties, (p) => _.startsWith(p, internalName))
+      if (property && stringIsNullOrEmpty(column.get('fieldName'))) {
+        setColumn('fieldName', property)
+        setColumnMessage(
+          'fieldName',
+          format(strings.SearchPropertyFoundMessage, property, internalName),
+          8
+        )
+      }
+    }
+  }
+
   return {
     onSave,
     onDismiss,
@@ -152,6 +200,8 @@ export function useColumnFormPanel() {
     setColumnData,
     isEditing,
     isSaveDisabled,
-    onDeleteColumn
+    onDeleteColumn,
+    findMatchingSearchProperty,
+    columnMessages
   } as const
 }
