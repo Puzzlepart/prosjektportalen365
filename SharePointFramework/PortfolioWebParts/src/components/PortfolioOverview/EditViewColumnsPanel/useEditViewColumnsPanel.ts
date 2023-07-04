@@ -10,7 +10,9 @@ import { IProjectColumn } from 'pp365-shared-library'
 
 /**
  * Get all columns from `context.props.configuration.columns` with the selected state
- * based on the `context.state.columns`.
+ * based on the `context.state.columns`. The sorting of the columns is based on the
+ * `context.state.currentView.columnOrder` if it exists, otherwise the default order
+ * is used. The selected columns are sorted first, followed by the unselected columns.
  *
  * @param context Context
  */
