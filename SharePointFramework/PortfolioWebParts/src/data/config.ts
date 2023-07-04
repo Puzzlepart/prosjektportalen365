@@ -1,8 +1,4 @@
-import {
-  QueryPropertyValueType,
-  SearchQuery, SortDirection
-} from '@pnp/sp'
-
+import { QueryPropertyValueType, SearchQuery, SortDirection } from '@pnp/sp'
 
 export const DEFAULT_SEARCH_SETTINGS: SearchQuery = {
   Querytext: '*',

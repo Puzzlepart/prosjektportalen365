@@ -47,10 +47,7 @@ import {
   ProgramItem,
   SPChartConfigurationItem
 } from '../models'
-import {
-  IPortfolioWebPartsDataAdapter,
-  IFetchDataForViewItemResult
-} from './types'
+import { IPortfolioWebPartsDataAdapter, IFetchDataForViewItemResult } from './types'
 import {
   CONTENT_TYPE_ID_BENEFITS,
   CONTENT_TYPE_ID_INDICATORS,

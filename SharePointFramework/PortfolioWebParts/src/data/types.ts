@@ -1,9 +1,5 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import {
-  ItemUpdateResult,
-  SearchResult,
-  SortDirection
-} from '@pnp/sp'
+import { ItemUpdateResult, SearchResult, SortDirection } from '@pnp/sp'
 import { IProjectContentColumn } from 'pp365-shared-library'
 import {
   DataSource,
