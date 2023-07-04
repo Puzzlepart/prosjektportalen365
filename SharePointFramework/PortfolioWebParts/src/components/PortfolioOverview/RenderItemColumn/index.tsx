@@ -12,7 +12,7 @@ import { TitleColumn } from './TitleColumn'
 import { UserColumn } from './UserColumn'
 import { IRenderItemColumnProps } from './types'
 
-type RenderDataType = 'user' | 'date' | 'currency' | 'tags' | 'boolean' | 'url'
+type RenderDataType = 'user' | 'date' | 'currency' | 'tags' | 'boolean' | 'url' | 'datetime'
 type RenderFunction = (props: IRenderItemColumnProps) => JSX.Element
 
 /**
@@ -21,6 +21,9 @@ type RenderFunction = (props: IRenderItemColumnProps) => JSX.Element
 const renderDataTypeMap: Record<RenderDataType, RenderFunction> = {
   user: (props: IRenderItemColumnProps) => <UserColumn {...props} />,
   date: ({ columnValue: colValue }: IRenderItemColumnProps) => <span>{formatDate(colValue)}</span>,
+  datetime: ({ columnValue: colValue }: IRenderItemColumnProps) => (
+    <span>{formatDate(colValue, true)}</span>
+  ),
   currency: ({ columnValue: colValue }: IRenderItemColumnProps) => (
     <span>{tryParseCurrency(colValue)}</span>
   ),

@@ -2,10 +2,18 @@
 import { find } from '@microsoft/sp-lodash-subset'
 import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
-import { CamlQuery, Folder, ListEnsureResult, PermissionKind, sp, Web } from '@pnp/sp'
+import {
+  CamlQuery,
+  Folder,
+  ItemUpdateResultData,
+  List,
+  ListEnsureResult,
+  PermissionKind,
+  sp,
+  Web
+} from '@pnp/sp'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
-import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
-import { transformFieldXml } from '../../helpers/transformFieldXml'
+import { getClassProperties, makeUrlAbsolute, transformFieldXml } from '../../helpers'
 import { IHubSite, ISPContentType } from '../../interfaces'
 import {
   PortfolioOverviewView,
@@ -30,6 +38,7 @@ import {
 
 export class PortalDataService {
   private _configuration: IPortalDataServiceConfiguration
+  private _isConfigured: boolean = false
   public web: Web
   public url: string
 
@@ -45,7 +54,15 @@ export class PortalDataService {
     const hubSite = await this.getHubSite()
     this.web = hubSite.web
     this.url = hubSite.url
+    this._isConfigured = true
     return this
+  }
+
+  /**
+   * Returns `true` if the PortalDataService is configured, `false` otherwise.
+   */
+  public get isConfigured(): boolean {
+    return this._isConfigured
   }
 
   /**
@@ -169,9 +186,8 @@ export class PortalDataService {
    */
   public async getProjectColumns(): Promise<ProjectColumn[]> {
     try {
-      const spItems = await this.web.lists
-        .getByTitle(this._configuration.listNames.PROJECT_COLUMNS)
-        .items.select(...Object.keys(new SPProjectColumnItem()))
+      const spItems = await this._getList('PROJECT_COLUMNS')
+        .items.select(...getClassProperties(SPProjectColumnItem))
         .get<SPProjectColumnItem[]>()
       return spItems.map((item) => new ProjectColumn(item))
     } catch (error) {
@@ -184,10 +200,7 @@ export class PortalDataService {
    */
   public async getProjectStatusSections(): Promise<SectionModel[]> {
     try {
-      const items = await this.web.lists
-        .getByTitle(this._configuration.listNames.STATUS_SECTIONS)
-        .items.usingCaching()
-        .get()
+      const items = await this._getList('STATUS_SECTIONS').items.usingCaching().get()
       return items.map((item) => new SectionModel(item))
     } catch (error) {
       return []
@@ -201,7 +214,7 @@ export class PortalDataService {
    */
   private async ensureAttachmentsFolder(report: StatusReport): Promise<Folder> {
     const folderName = report.id.toString()
-    const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS_ATTACHMENTS)
+    const list = this._getList('PROJECT_STATUS_ATTACHMENTS')
     try {
       await list.rootFolder.folders.getByName(folderName).get()
       return list.rootFolder.folders.getByName(folderName)
@@ -228,9 +241,7 @@ export class PortalDataService {
     attachments: StatusReportAttachment[],
     publishedString?: string
   ): Promise<StatusReport> {
-    const projectStatusList = this.web.lists.getByTitle(
-      this._configuration.listNames.PROJECT_STATUS
-    )
+    const projectStatusList = this._getList('PROJECT_STATUS')
     try {
       const attachmentsFolder = await this.ensureAttachmentsFolder(report)
       const properties: Record<string, string> = {
@@ -255,22 +266,18 @@ export class PortalDataService {
    * @param id Id
    */
   public async deleteStatusReport(id: number): Promise<void> {
-    await this.web.lists
-      .getByTitle(this._configuration.listNames.PROJECT_STATUS)
-      .items.getById(id)
-      .delete()
+    await this._getList('PROJECT_STATUS').items.getById(id).delete()
   }
 
   /**
    * Get project column configuration using caching.
    */
   public async getProjectColumnConfig(): Promise<ProjectColumnConfig[]> {
-    const spItems = await this.web.lists
-      .getByTitle(this._configuration.listNames.PROJECT_COLUMN_CONFIGURATION)
+    const spItems = await this._getList('PROJECT_COLUMN_CONFIGURATION')
       .items.orderBy('ID', true)
       .expand('GtPortfolioColumn', 'GtPortfolioColumnTooltip')
       .select(
-        ...Object.keys(new SPProjectColumnConfigItem()),
+        ...getClassProperties(SPProjectColumnConfigItem),
         'GtPortfolioColumn/Title',
         'GtPortfolioColumn/GtInternalName',
         'GtPortfolioColumnTooltip/GtManagedProperty'
@@ -281,12 +288,14 @@ export class PortalDataService {
   }
 
   /**
-   * Get portfolio overview views
+   * Get portfolio overview views. Returns all shared views and personal views.
    */
   public async getPortfolioOverviewViews(): Promise<PortfolioOverviewView[]> {
-    const spItems = await this.web.lists
-      .getByTitle(this._configuration.listNames.PORTFOLIO_VIEWS)
-      .items.orderBy('GtSortOrder', true)
+    const filter = `GtPortfolioIsPersonalView eq 0 or (GtPortfolioIsPersonalView eq 1 and Author/EMail eq '${this._configuration.pageContext.user.email}')`
+    const spItems = await this._getList('PORTFOLIO_VIEWS')
+      .items.select(...getClassProperties(SPPortfolioOverviewViewItem))
+      .filter(filter)
+      .orderBy('GtSortOrder', true)
       .get<SPPortfolioOverviewViewItem[]>()
     return spItems.map((item) => new PortfolioOverviewView(item))
   }
@@ -299,8 +308,7 @@ export class PortalDataService {
   public async getListFormUrls(
     list: PortalDataServiceList
   ): Promise<{ defaultNewFormUrl: string; defaultEditFormUrl: string }> {
-    const urls = await this.web.lists
-      .getByTitle(this._configuration.listNames[list])
+    const urls = await this._getList(list)
       .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
       .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')
       .get<{ DefaultNewFormUrl: string; DefaultEditFormUrl: string }>()
@@ -321,9 +329,7 @@ export class PortalDataService {
     list: PortalDataServiceList,
     permissionKind: PermissionKind
   ): Promise<boolean> {
-    return await this.web.lists
-      .getByTitle(this._configuration.listNames[list])
-      .currentUserHasPermissions(permissionKind)
+    return await this._getList(list).currentUserHasPermissions(permissionKind)
   }
 
   /**
@@ -454,7 +460,7 @@ export class PortalDataService {
    * @param web Web
    */
   private async _getSiteFields(web: Web): Promise<SPField[]> {
-    const siteFields = await web.fields.select(...Object.keys(new SPField())).get<SPField[]>()
+    const siteFields = await web.fields.select(...getClassProperties(SPField)).get<SPField[]>()
     return siteFields
   }
 
@@ -510,7 +516,7 @@ export class PortalDataService {
     properties: Record<string, any>,
     contentTypeId: string
   ): Promise<StatusReport> {
-    const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
+    const list = this._getList('PROJECT_STATUS')
     if (contentTypeId) {
       const contentTypes = await list.contentTypes.get()
       const ct = find(contentTypes, (ct) => ct.StringId.indexOf(contentTypeId) === 0)
@@ -518,6 +524,59 @@ export class PortalDataService {
     }
     const itemAddResult = await list.items.add(properties)
     return new StatusReport(itemAddResult.data)
+  }
+
+  /**
+   * Add item to a list
+   *
+   * @param list List
+   * @param properties Properties
+   */
+  public async addItemToList<T = any>(
+    list: PortalDataServiceList,
+    properties: Record<string, any>
+  ): Promise<T> {
+    try {
+      const itemAddResult = await this._getList(list).items.add(properties)
+      return itemAddResult.data as T
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  /**
+   * Update item in a list
+   *
+   * @param list List
+   * @param itemId Item ID
+   * @param properties Properties
+   */
+  public async updateItemInList<T = ItemUpdateResultData>(
+    list: PortalDataServiceList,
+    itemId: number,
+    properties: Record<string, any>
+  ): Promise<T> {
+    try {
+      const itemUpdateResult = await this._getList(list).items.getById(itemId).update(properties)
+      return itemUpdateResult.data as unknown as T
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  /**
+   * Deletes the item with the specified ID from the specified list.
+   *
+   * @param list List
+   * @param itemId Item ID
+   */
+  public async deleteItemFromList(list: PortalDataServiceList, itemId: number): Promise<boolean> {
+    try {
+      await this._getList(list).items.getById(itemId).delete()
+      return true
+    } catch {
+      return false
+    }
   }
 
   /**
@@ -537,7 +596,7 @@ export class PortalDataService {
     if (stringIsNullOrEmpty(filter))
       filter = `GtSiteId eq '${this._configuration.pageContext.site.id.toString()}'`
     try {
-      const list = this.web.lists.getByTitle(this._configuration.listNames.PROJECT_STATUS)
+      const list = this._getList('PROJECT_STATUS')
       let items = list.items
         .filter(filter)
         .expand('FieldValuesAsText', 'AttachmentFiles')
@@ -582,8 +641,7 @@ export class PortalDataService {
    */
   public getStatusReportListProps(): Promise<{ DefaultEditFormUrl: string }> {
     try {
-      return this.web.lists
-        .getByTitle(this._configuration.listNames.PROJECT_STATUS)
+      return this._getList('PROJECT_STATUS')
         .select('DefaultEditFormUrl')
         .expand('DefaultEditFormUrl')
         .usingCaching()
@@ -607,7 +665,7 @@ export class PortalDataService {
   ): Promise<SPField[]> {
     let fields = web.lists
       .getByTitle(this._configuration.listNames[list] || list)
-      .fields.select(...Object.keys(new SPField()))
+      .fields.select(...getClassProperties(SPField))
     if (filter) {
       fields = fields.filter(filter)
     }
@@ -632,5 +690,14 @@ export class PortalDataService {
       .expand('GtProjectAdminPermissions')
       .get<SPProjectAdminRoleItem[]>()
     return spItems.map((item) => new ProjectAdminRole(item))
+  }
+
+  /**
+   * Get list by `PortalDataServiceList` enum
+   *
+   * @param list List to get items from
+   */
+  private _getList(list: PortalDataServiceList): List {
+    return this.web.lists.getByTitle(this._configuration.listNames[list])
   }
 }

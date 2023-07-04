@@ -24,37 +24,40 @@ import {
   TOGGLE_COLUMN_FORM_PANEL,
   TOGGLE_COMPACT,
   TOGGLE_FILTER_PANEL,
-  TOGGLE_EDIT_VIEW_COLUMNS_PANEL
+  TOGGLE_EDIT_VIEW_COLUMNS_PANEL,
+  TOGGLE_VIEW_FORM_PANEL
 } from './actions'
 import { ProjectColumn } from 'pp365-shared-library'
 
 /**
- * Initialize state for `<PortfolioOverview />`
+ * Get initial state for `<PortfolioOverview />` based on `params` provided.
  *
- * @param params Parameters for reducer initialization
+ * @param params Parameters for reducer state initialization
  */
-export const initState = (params: IPortfolioOverviewReducerParams): IPortfolioOverviewState => {
-  return {
-    loading: true,
-    isCompact: false,
-    searchTerm: '',
-    activeFilters: {},
-    items: [],
-    columns: params.placeholderColumns,
-    filters: [],
-    columnForm: { isOpen: false },
-    editViewColumns: { isOpen: false },
-    columnContextMenu: null
-  }
-}
+export const getInitialState = (
+  params: IPortfolioOverviewReducerParams
+): IPortfolioOverviewState => ({
+  loading: true,
+  isCompact: false,
+  searchTerm: '',
+  activeFilters: {},
+  items: [],
+  columns: params.placeholderColumns,
+  filters: [],
+  columnForm: { isOpen: false },
+  viewForm: { isOpen: false },
+  editViewColumns: { isOpen: false },
+  columnContextMenu: null
+})
 
 /**
- * Create reducer for `<PortfolioOverview />`
+ * Create reducer for `<PortfolioOverview />`. Using `ActionReducerMapBuilder`
+ * from `@reduxjs/toolkit` to create a reducer with a "fluent" API.
  *
  * @param params Parameters for reducer initialization
  */
 const $createReducer = (params: IPortfolioOverviewReducerParams) =>
-  createReducer(initState(params), (builder) => {
+  createReducer(getInitialState(params), (builder) => {
     builder
       .addCase(STARTING_DATA_FETCH, (state) => {
         state.loading = true
@@ -64,6 +67,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.currentView = payload.currentView
         state.columns = payload.currentView.columns
         state.groupBy = payload.groupBy
+        state.managedProperties = payload.managedProperties ?? []
         state.loading = false
         state.error = null
       })
@@ -117,35 +121,32 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.columnContextMenu = payload as any
       })
       .addCase(SET_GROUP_BY, (state, { payload }) => {
-        state.groupBy = payload.fieldName === state.groupBy.fieldName ? null : payload
+        state.groupBy = payload.fieldName === state.groupBy?.fieldName ? null : payload
       })
       .addCase(SET_SORT, (state, { payload }) => {
+        const isCustomSort = payload.customSort
         const isSortedDescending = Object.keys(payload).includes('isSortedDescending')
           ? payload.isSortedDescending
           : !payload.column.isSortedDescending
-        if (payload.customSort) {
+        if (isCustomSort) {
           state.items = state.items.sort((a, b) => {
             const $a = payload.customSort.order.indexOf(a[payload.column.fieldName])
             const $b = payload.customSort.order.indexOf(b[payload.column.fieldName])
             return isSortedDescending ? $a - $b : $b - $a
           })
         } else {
-          switch (payload.column.dataType) {
-            case 'currency':
-              state.items = state.items.sort((a, b) => {
-                const $a = parseInt(a[payload.column.fieldName])
-                const $b = parseInt(b[payload.column.fieldName])
-                if (!isNaN($a) && isNaN($b)) return -1
-                return isSortedDescending ? $a - $b : $b - $a
-              })
-              break
-            default:
-              state.items = sortArray(state.items, [payload.column.fieldName], {
-                reverse: !isSortedDescending
-              })
-              break
-          }
+          state.items = sortArray(state.items, [payload.column.fieldName], {
+            reverse: !isSortedDescending
+          })
         }
+        state.sortBy = _.pick(payload, ['column', 'customSort'])
+        state.columns = state.columns.map((col) => {
+          col.isSorted = col.key === payload.column.key
+          if (col.isSorted) {
+            col.isSortedDescending = isSortedDescending
+          }
+          return col
+        })
       })
       .addCase(SELECTION_CHANGED, (state, { payload }) => {
         state.selectedItems = payload.getSelection()
@@ -180,6 +181,9 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
             : (payload.columns as ProjectColumn[]).map((c) => c.id)
           state.columns = payload.columns
         }
+      })
+      .addCase(TOGGLE_VIEW_FORM_PANEL, (state, { payload }) => {
+        state.viewForm = payload
       })
   })
 

@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import { IUserMessageProps } from './types'
 import { useUserMessage } from './useUserMessage'
+import styles from './UserMessage.module.scss'
 
 /**
  * A component that supports a MessageBar with markdown using react-markdown
@@ -11,24 +12,24 @@ import { useUserMessage } from './useUserMessage'
  * @category UserMessage
  */
 export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => {
-  const { styles } = useUserMessage(props)
+  const messageBarProps = useUserMessage(props)
   return (
     <div
       id={props.id}
-      className={props.className}
+      className={[props.className, styles.root].filter(Boolean).join(' ')}
       style={props.containerStyle}
       hidden={props.hidden}
       onClick={props.onClick}
     >
       <MessageBar
-        styles={styles}
+        {...messageBarProps}
         isMultiline={props.isMultiline}
         messageBarType={props.type}
         onDismiss={props.onDismiss}
         actions={props.actions}
       >
         {props.text && (
-          <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]}>
+          <ReactMarkdown linkTarget={props.linkTarget} rehypePlugins={[rehypeRaw]}>
             {props.text}
           </ReactMarkdown>
         )}
@@ -36,6 +37,10 @@ export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => 
       </MessageBar>
     </div>
   )
+}
+
+UserMessage.defaultProps = {
+  linkTarget: '_blank'
 }
 
 export * from './types'

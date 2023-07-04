@@ -1,4 +1,9 @@
-import { ContextualMenuItemType, format, IContextualMenuProps } from '@fluentui/react'
+import {
+  ContextualMenuItemType,
+  format,
+  IContextualMenuItem,
+  IContextualMenuProps
+} from '@fluentui/react'
 import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared-library/lib/helpers/getObjectValue'
@@ -59,13 +64,10 @@ export function useColumnContextMenu(): IContextualMenuProps {
       }
     ]
   } else {
-    const columnCustomSorts = column.customSorts.map((customSort, idx) => ({
+    const columnCustomSorts = column.customSorts.map<IContextualMenuItem>((customSort, idx) => ({
       key: `CUSTOM_SORT_${idx}`,
       name: customSort.name,
       canCheck: true,
-      iconProps: customSort.iconName && {
-        iconName: customSort.iconName
-      },
       checked: column.isSorted && context.state.sortBy?.customSort?.name === customSort.name,
       onClick: () => context.dispatch(SET_SORT({ column, customSort }))
     }))
@@ -84,13 +86,16 @@ export function useColumnContextMenu(): IContextualMenuProps {
         checked: column.isSorted && !context.state.sortBy?.customSort && !column.isSortedDescending,
         onClick: () => context.dispatch(SET_SORT({ column, isSortedDescending: false }))
       },
-      !_.isEmpty(columnCustomSorts) && {
-        key: 'DIVIDER_01',
-        itemType: ContextualMenuItemType.Divider
-      },
-      ...columnCustomSorts,
+      !_.isEmpty(columnCustomSorts) &&
+        ({
+          key: 'CUSTOM_SORTS_HEADER',
+          text: strings.CustomSortsText,
+          subMenuProps: {
+            items: columnCustomSorts
+          }
+        } as IContextualMenuItem),
       {
-        key: 'DIVIDER_02',
+        key: 'DIVIDER_01',
         itemType: ContextualMenuItemType.Divider
       },
       {
@@ -102,7 +107,7 @@ export function useColumnContextMenu(): IContextualMenuProps {
         onClick: () => context.dispatch(SET_GROUP_BY(column))
       },
       {
-        key: 'DIVIDER_03',
+        key: 'DIVIDER_02',
         itemType: ContextualMenuItemType.Divider
       },
       {
@@ -120,7 +125,7 @@ export function useColumnContextMenu(): IContextualMenuProps {
               disabled: !context.props.pageContext.legacyPageContext.isSiteAdmin
             },
             {
-              key: 'DIVIDER_04',
+              key: 'DIVIDER_03',
               itemType: ContextualMenuItemType.Divider
             },
             {

@@ -21,7 +21,7 @@ export const ColumnRenderField: FC<IColumnRenderFieldProps> = (props) => {
   )
 
   return (
-    <FormFieldContainer>
+    <FormFieldContainer description={strings.PortfolioOverviewColumnRenderDescription}>
       <Dropdown
         label={strings.ColumnRenderLabel}
         options={renderAsOptions}

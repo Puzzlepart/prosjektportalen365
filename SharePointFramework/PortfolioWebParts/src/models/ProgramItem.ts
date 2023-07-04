@@ -1,4 +1,5 @@
 import { Web } from '@pnp/sp'
+import { tryParseJson } from 'pp365-shared-library'
 
 interface IProgramSPItem {
   Title: string
@@ -25,30 +26,30 @@ export class ProgramItem {
    * @param queryTemplate Query template to be used as the base
    * @param maxQueryLength Maximum length of query before pushing to array
    * @param maxProjects Maximum projects required before creating strings
+   * @param fieldName Name of the field to search for
    */
   public buildQueries(
     queryTemplate: string,
     maxQueryLength: number = 2500,
-    maxProjects: number = 25
+    maxProjects: number = 25,
+    fieldName: string = 'GtSiteIdOWSTEXT'
   ): string[] {
     const queryArray: string[] = []
     let queryString = ''
     if (this._children.length > maxProjects) {
       this._children.forEach((c, index) => {
-        queryString += `GtSiteIdOWSTEXT:${c} `
+        queryString += `${fieldName}:${c} `
         if (queryString.length > maxQueryLength) {
-          queryArray.push(`${queryTemplate} (${queryString})`)
+          queryArray.push(`${queryTemplate} (${queryString.trim()})`)
           queryString = ''
         }
         if (index === this._children.length - 1) {
-          queryArray.push(`${queryTemplate} (${queryString})`)
+          queryArray.push(`${queryTemplate} (${queryString.trim()})`)
         }
       })
     } else {
-      queryString = this._children.reduce((str, c) => {
-        return `${str} GtSiteIdOWSTEXT:${c} `
-      }, queryString)
-      queryArray.push(queryString)
+      queryString = this._children.map((c) => `${fieldName}:${c}`).join(' ')
+      queryArray.push(`${queryTemplate} (${queryString.trim()})`)
     }
     return queryArray
   }
@@ -57,12 +58,8 @@ export class ProgramItem {
    * Get the child project site IDs for this program.
    */
   private get _children(): string[] {
-    try {
-      return JSON.parse(this._item.GtChildProjects).map(
-        (c: { SPWebURL: string; SiteId: string }) => c.SiteId
-      )
-    } catch (e) {
-      return []
-    }
+    return tryParseJson<{ SPWebURL: string; SiteId: string }[]>(this._item.GtChildProjects, []).map(
+      (c) => c.SiteId
+    )
   }
 }

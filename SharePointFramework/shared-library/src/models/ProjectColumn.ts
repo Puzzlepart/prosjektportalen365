@@ -43,6 +43,7 @@ export class ProjectColumn implements IProjectColumn {
   public isResizable?: boolean
   public isSorted?: boolean
   public isSortedDescending?: boolean
+  public isMultiline?: boolean
   public config?: ProjectColumnConfigDictionary
   public onColumnClick: any
   public customSorts?: ProjectColumnCustomSort[]
@@ -65,6 +66,7 @@ export class ProjectColumn implements IProjectColumn {
       this.isRefinable = _item.GtIsRefinable
       this.isGroupable = _item.GtIsGroupable
       this.isResizable = true
+      this.isMultiline = this.dataType === 'note' || this.dataType === 'tags'
       this.minWidth = _item.GtColMinWidth ?? 100
       this.searchType = this._getSearchType(this.fieldName.toLowerCase())
       this.customSorts = this._getCustomSorts(_item.GtFieldCustomSort)
@@ -78,14 +80,6 @@ export class ProjectColumn implements IProjectColumn {
       }
       this.$map = this._toMap()
     }
-  }
-
-  /**
-   * Returns `true` if the column is a multiline column - meaning `dataType`
-   * is `note` or `tags`.
-   */
-  public get isMultiline(): boolean {
-    return this.dataType === 'note' || this.dataType === 'tags'
   }
 
   /**

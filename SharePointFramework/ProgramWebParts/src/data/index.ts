@@ -9,13 +9,8 @@ import { IProgramAdministrationProject } from 'components/ProgramAdministration/
 import MSGraph from 'msgraph-helper'
 import { IPortfolioOverviewConfiguration } from 'pp365-portfoliowebparts/lib/components'
 import { IPortfolioAggregationConfiguration } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
-import {
-  CONTENT_TYPE_ID_BENEFITS,
-  CONTENT_TYPE_ID_INDICATORS,
-  CONTENT_TYPE_ID_MEASUREMENTS,
-  DEFAULT_GAINS_PROPERTIES,
-  IPortfolioWebPartsDataAdapter
-} from 'pp365-portfoliowebparts/lib/data/types'
+import { IPortfolioViewData, IPortfolioWebPartsDataAdapter } from 'pp365-portfoliowebparts/lib/data'
+import * as PortfolioWebPartsDataConfig from 'pp365-portfoliowebparts/lib/data/config'
 import {
   Benefit,
   BenefitMeasurement,
@@ -39,7 +34,7 @@ import {
 } from 'pp365-shared-library'
 import { getUserPhoto } from 'pp365-shared-library/lib/helpers/getUserPhoto'
 import _ from 'underscore'
-import { DEFAULT_SEARCH_SETTINGS, IFetchDataForViewItemResult } from './types'
+import { DEFAULT_SEARCH_SETTINGS } from './types'
 
 /**
  * SPDataAdapter for `ProgramWebParts`.
@@ -126,7 +121,7 @@ export class SPDataAdapter
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
     siteId: string[]
-  ): Promise<IFetchDataForViewItemResult[]> {
+  ): Promise<IPortfolioViewData> {
     siteId = this.spfxContext.pageContext.legacyPageContext.departmentId
     const isCurrentUserInManagerGroup = await this.isUserInGroup(strings.PortfolioManagerGroupName)
     if (isCurrentUserInManagerGroup) {
@@ -136,22 +131,12 @@ export class SPDataAdapter
     }
   }
 
-  /**
-   * Fetch data for regular view
-   *
-   * @description Used in `PortfolioOverview`
-   *
-   * @param view View configuration
-   * @param configuration PortfolioOverviewConfiguration
-   * @param siteId Site ID
-   * @param siteIdProperty Site ID property
-   */
   public async fetchDataForRegularView(
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
     siteId: string[],
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
-  ): Promise<IFetchDataForViewItemResult[]> {
+  ): Promise<IPortfolioViewData> {
     try {
       const { projects, sites, statusReports } = await this._fetchDataForView(
         view,
@@ -171,28 +156,18 @@ export class SPDataAdapter
         }
       })
 
-      return items
+      return { items }
     } catch (err) {
       throw err
     }
   }
 
-  /**
-   * Fetch data for manager view
-   *
-   * @description Used in `PortfolioOverview`
-   *
-   * @param view View configuration
-   * @param configuration PortfolioOverviewConfiguration
-   * @param siteId Site ID
-   * @param siteIdProperty Site ID property
-   */
   public async fetchDataForManagerView(
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
     siteId: string[],
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
-  ): Promise<IFetchDataForViewItemResult[]> {
+  ): Promise<IPortfolioViewData> {
     try {
       const { projects, sites, statusReports } = await this._fetchDataForView(
         view,
@@ -213,7 +188,7 @@ export class SPDataAdapter
         }
       })
 
-      return items
+      return { items }
     } catch (err) {
       throw err
     }
@@ -258,7 +233,7 @@ export class SPDataAdapter
     configuration: IPortfolioOverviewConfiguration,
     siteId: string[],
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
-  ): Promise<IFetchDataForViewItemResult[]> {
+  ): Promise<IPortfolioViewData> {
     const queryArray = this.aggregatedQueryBuilder(siteIdProperty)
     const items = []
     for (let i = 0; i < queryArray.length; i++) {
@@ -284,7 +259,7 @@ export class SPDataAdapter
       })
       items.push(...item)
     }
-    return items
+    return { items }
   }
 
   /**
@@ -630,21 +605,30 @@ export class SPDataAdapter
     selectProperties: string[]
   ): Promise<any> {
     const results: any[] = await this._fetchItems(dataSource.searchQuery, [
-      ...DEFAULT_GAINS_PROPERTIES,
+      ...PortfolioWebPartsDataConfig.DEFAULT_GAINS_PROPERTIES,
       ...selectProperties
     ])
 
     const benefits = results
-      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_BENEFITS) === 0)
+      .filter(
+        (res) =>
+          res.ContentTypeID.indexOf(PortfolioWebPartsDataConfig.CONTENT_TYPE_ID_BENEFITS) === 0
+      )
       .map((res) => new Benefit(res))
 
     const measurements = results
-      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_MEASUREMENTS) === 0)
+      .filter(
+        (res) =>
+          res.ContentTypeID.indexOf(PortfolioWebPartsDataConfig.CONTENT_TYPE_ID_MEASUREMENTS) === 0
+      )
       .map((res) => new BenefitMeasurement(res))
       .sort((a, b) => b.Date.getTime() - a.Date.getTime())
 
     const indicactors = results
-      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_INDICATORS) === 0)
+      .filter(
+        (res) =>
+          res.ContentTypeID.indexOf(PortfolioWebPartsDataConfig.CONTENT_TYPE_ID_INDICATORS) === 0
+      )
       .map((res) => {
         const indicator = new BenefitMeasurementIndicator(res)
           .setMeasurements(measurements)

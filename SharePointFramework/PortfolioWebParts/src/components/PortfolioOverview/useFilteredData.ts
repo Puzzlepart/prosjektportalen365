@@ -1,10 +1,10 @@
 import { IGroup } from '@fluentui/react'
-import { get } from '@microsoft/sp-lodash-subset'
 import strings from 'PortfolioWebPartsStrings'
-import { ProjectColumn } from 'pp365-shared-library/lib/models'
-import { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
 import sortArray from 'array-sort'
+import { getObjectValue as get } from 'pp365-shared-library'
+import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import _ from 'underscore'
+import { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
 
 /**
  * Create groups based on `items`, `columns` and `groupBy` field.

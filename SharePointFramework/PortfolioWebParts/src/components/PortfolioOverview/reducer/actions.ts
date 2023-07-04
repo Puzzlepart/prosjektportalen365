@@ -22,6 +22,7 @@ export const DATA_FETCHED = createAction<{
   items: any[]
   currentView: PortfolioOverviewView
   groupBy: ProjectColumn
+  managedProperties: string[]
 }>('DATA_FETCHED')
 
 /**
@@ -126,3 +127,11 @@ export const TOGGLE_EDIT_VIEW_COLUMNS_PANEL = createAction<{
   columns?: IEditViewColumnsPanel['columns']
   revertColumnOrder?: IEditViewColumnsPanel['revertColumnOrder']
 }>('TOGGLE_EDIT_VIEW_COLUMNS_PANEL')
+
+/**
+ * `TOGGLE_VIEW_FORM_PANEL`: Toggling the view form panel.
+ */
+export const TOGGLE_VIEW_FORM_PANEL = createAction<{
+  isOpen: boolean
+  view?: PortfolioOverviewView
+}>('TOGGLE_VIEW_FORM_PANEL')

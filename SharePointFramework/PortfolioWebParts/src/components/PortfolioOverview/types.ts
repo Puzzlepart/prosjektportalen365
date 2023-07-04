@@ -12,6 +12,7 @@ import { IColumnFormPanel } from './ColumnFormPanel/types'
 import { IEditViewColumnsPanel } from './EditViewColumnsPanel/types'
 import { ProgramItem } from 'models/ProgramItem'
 import styles from './PortfolioOverview.module.scss'
+import { IViewFormPanel } from './ViewFormPanel/types'
 
 export class PortfolioOverviewErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -36,7 +37,7 @@ export interface IPortfolioOverviewConfiguration {
   views: PortfolioOverviewView[]
 
   /**
-   * Available programs
+   * Available programs that can be used to generate views for the portfolio overview
    */
   programs?: ProgramItem[]
 
@@ -88,6 +89,11 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
   showExcelExportButton?: boolean
 
   /**
+   * Include view name in Excel export filename
+   */
+  includeViewNameInExcelExportFilename?: boolean
+
+  /**
    * Show command bar
    */
   showCommandBar?: boolean
@@ -108,7 +114,7 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
   showFilters?: boolean
 
   /**
-   * Show view selector
+   * Show view selector where users can select view, create new views and edit views
    */
   showViewSelector?: boolean
 
@@ -151,12 +157,12 @@ export interface IPortfolioOverviewState {
   /**
    * Items
    */
-  items?: any[]
+  items?: Record<string, any>[]
 
   /**
    * Selected items in the list
    */
-  selectedItems?: any[]
+  selectedItems?: Record<string, any>[]
 
   /**
    * Columns
@@ -179,12 +185,12 @@ export interface IPortfolioOverviewState {
   currentView?: PortfolioOverviewView
 
   /**
-   * Active filters
+   * Active filters (selected columns and refiners)
    */
   activeFilters?: { SelectedColumns?: string[]; [key: string]: string[] }
 
   /**
-   * Error
+   * Error if any
    */
   error?: PortfolioOverviewErrorMessage
 
@@ -227,9 +233,21 @@ export interface IPortfolioOverviewState {
   columnForm: IColumnFormPanel
 
   /**
+   * View form panel props. Consists of two properties:
+   * - `isOpen` - whether the panel is open
+   * - `view` - the view to edit (if not specified, a new view will be created)
+   */
+  viewForm: IViewFormPanel
+
+  /**
    * Edit view columns panel props.
    */
   editViewColumns?: IEditViewColumnsPanel
+
+  /**
+   * Available managed properties for the current search query
+   */
+  managedProperties?: string[]
 }
 
 export interface IPortfolioOverviewHashStateState {

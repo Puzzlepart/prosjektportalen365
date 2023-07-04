@@ -4,17 +4,17 @@ import { ProjectColumn } from './ProjectColumn'
 import { tryParseJson } from '../util/tryParseJson'
 
 export class SPPortfolioOverviewViewItem {
-  public Id: number = 0
+  public Id?: number = 0
   public Title: string = ''
-  public GtSortOrder: number = 0
   public GtSearchQuery: string = ''
-  public GtPortfolioIsDefaultView: boolean = false
-  public GtPortfolioFabricIcon: string = ''
-  public GtPortfolioIsPersonalView: boolean = false
-  public GtPortfolioColumnsId: number[] = []
-  public GtPortfolioRefinersId: number[] = []
-  public GtPortfolioGroupById: number = 0
-  public GtPortfolioColumnOrder: string = ''
+  public GtSortOrder?: number = 0
+  public GtPortfolioIsDefaultView?: boolean = false
+  public GtPortfolioFabricIcon?: string = ''
+  public GtPortfolioIsPersonalView?: boolean = false
+  public GtPortfolioColumnsId?: number[] | { results: number[] } = []
+  public GtPortfolioRefinersId?: number[] | { results: number[] } = []
+  public GtPortfolioGroupById?: number = 0
+  public GtPortfolioColumnOrder?: string = ''
 }
 
 export class PortfolioOverviewView {
@@ -56,7 +56,7 @@ export class PortfolioOverviewView {
   /**
    * Icon name for the view.
    */
-  public iconName: string
+  public iconName?: string
 
   /**
    * `true` if the view is a personal view, `false` otherwise.
@@ -104,7 +104,13 @@ export class PortfolioOverviewView {
   private _groupById: number
 
   /**
-   * Constructor for the PortfolioOverviewView class.
+   * The view properties as a map. Used in the `PortfolioOverview`
+   * component to edit and create views.
+   */
+  public $map: Map<string, any>
+
+  /**
+   * Constructor for the `PortfolioOverviewView` class.
    *
    * @param item SP list item to create the view from
    */
@@ -117,9 +123,33 @@ export class PortfolioOverviewView {
     this.iconName = item?.GtPortfolioFabricIcon
     this.isPersonal = item?.GtPortfolioIsPersonalView
     this.columnOrder = tryParseJson<number[]>(item?.GtPortfolioColumnOrder, [])
-    this._columnIds = item?.GtPortfolioColumnsId ?? []
-    this._refinerIds = item?.GtPortfolioRefinersId ?? []
+    this._columnIds = (item?.GtPortfolioColumnsId as number[]) ?? []
+    this._refinerIds = (item?.GtPortfolioRefinersId as number[]) ?? []
     this._groupById = item?.GtPortfolioGroupById
+    this.$map = this._toMap()
+  }
+
+  /**
+   * Create a default view. The search query will be based on the
+   * specified view if provided. Otherwise it will be an empty string.
+   *
+   * @param title Title of the view
+   * @param view View to create the default view from
+   * @param sortOrder Sort order for the view if no view is provided
+   */
+  public createDefault(
+    title: string,
+    view?: PortfolioOverviewView,
+    sortOrder?: number
+  ): PortfolioOverviewView {
+    this.title = title
+    this.sortOrder = view ? view.sortOrder + 1 : sortOrder
+    this.searchQuery = view?.searchQuery ?? ''
+    this.iconName = 'LocationCircle'
+    this.isDefaultView = false
+    this.isPersonal = false
+    this.$map = this._toMap()
+    return this
   }
 
   /**
@@ -193,5 +223,21 @@ export class PortfolioOverviewView {
     this.searchQuery = view.searchQuery
     this.columnOrder = view.columnOrder
     return this
+  }
+
+  /**
+   * Converts the view to a map used in `ColumnFormPanel`.
+   *
+   * @private
+   */
+  private _toMap(): Map<string, any> {
+    return new Map<string, any>([
+      ['title', this.title],
+      ['sortOrder', this.sortOrder],
+      ['searchQuery', this.searchQuery],
+      ['iconName', this.iconName],
+      ['isDefaultView', this.isDefaultView],
+      ['isPersonalView', this.isPersonal]
+    ])
   }
 }

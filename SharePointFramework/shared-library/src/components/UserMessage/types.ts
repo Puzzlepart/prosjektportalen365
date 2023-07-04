@@ -40,4 +40,9 @@ export interface IUserMessageProps extends Omit<IMessageBarProps, 'messageBarTyp
    * To reduce size of the message bar and make it compact
    */
   isCompact?: boolean
+
+  /**
+   * Link target for markdown links
+   */
+  linkTarget?: string
 }

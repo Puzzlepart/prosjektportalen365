@@ -1,4 +1,18 @@
 declare interface IPortfolioWebPartsStrings {
+  CustomSortsText: string
+  PortfolioOverviewColumnRenderDescription: string
+  SearchPropertyFoundMessage: string
+  SearchPropertyPlaceholder: string
+  IncludeViewNameInExcelExportFilenameLabel: string
+  DefaultViewSetWarningMessage: string
+  PortfolioViewSearchQueryDescription: string
+  SearchQueryLabel: string
+  SearchQueryDescription: string
+  IconNameLabel: string
+  IconNameDescription: string
+  DefaultViewDescription: string
+  PersonalViewDescription: string
+  PersonalViewLabel: string
   PortfolioOverviewShowEditViewColumnsPanelHelpText: string
   RevertCustomOrderButtonTooltip: string
   RevertCustomOrderButtonText: string

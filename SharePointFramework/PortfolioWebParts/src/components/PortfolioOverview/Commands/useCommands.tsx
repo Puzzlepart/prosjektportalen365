@@ -1,28 +1,20 @@
-import {
-  ContextualMenuItemType,
-  Dropdown,
-  IContextualMenuItem,
-  IDropdownOption
-} from '@fluentui/react'
+import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
+import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { PortfolioOverviewView } from 'pp365-shared-library/lib/models/PortfolioOverviewView'
-import { ExcelExportService } from 'pp365-shared-library/lib/services'
-import { redirect } from 'pp365-shared-library/lib/util'
-import React, { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import {
   CHANGE_VIEW,
-  EXCEL_EXPORT_ERROR,
-  EXCEL_EXPORT_SUCCESS,
-  START_EXCEL_EXPORT,
   TOGGLE_COMPACT,
-  TOGGLE_FILTER_PANEL
+  TOGGLE_FILTER_PANEL,
+  TOGGLE_VIEW_FORM_PANEL
 } from '../reducer'
 import { usePortfolioOverviewFilters } from '../usePortfolioOverviewFilters'
 import { IPortfolioOverviewCommandsProps } from './types'
-import { ProgramItem } from 'models'
-import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
+import { useConvertViewsToContextualMenuItems } from './useConvertViewsToContextualMenuItems'
+import { useExcelExport } from './useExcelExport'
 
 /**
  * Component logic hook for the PortfolioOverviewCommands component. Handles the logic for
@@ -39,95 +31,17 @@ import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsProps) {
   const context = useContext(PortfolioOverviewContext)
   const filters = usePortfolioOverviewFilters()
-
-  /**
-   * Converts a collection of `PortfolioOverviewView` objects to
-   * a collection of `IContextualMenuItem` objects.
-   *
-   * @param props Props for the PortfolioOverviewCommands component
-   * @param filterFunc Optional filter function to filter the views
-   */
-  const convertViewsToContextualMenuItems = (
-    filterFunc: (view: PortfolioOverviewView) => boolean
-  ) => {
-    return context.props.configuration.views.filter(filterFunc).map(
-      (view) =>
-        ({
-          key: view.id.toString(),
-          name: view.title,
-          iconProps: { iconName: view.iconName },
-          canCheck: true,
-          checked: view.id === context.state.currentView?.id,
-          onClick: () => context.dispatch(CHANGE_VIEW(view))
-        } as IContextualMenuItem)
-    )
-  }
+  const convertViewsToContextualMenuItems = useConvertViewsToContextualMenuItems()
+  const { exportToExcelContextualMenuItem } = useExcelExport(props)
 
   const sharedViews = convertViewsToContextualMenuItems((v) => !v.isPersonal)
   const personalViews = convertViewsToContextualMenuItems((v) => v.isPersonal)
   const userCanManageViews =
     !context.props.isParentProject && context.props.configuration.userCanAddViews
 
-  /**
-   * Callback function for Excel export. Handles the export to Excel with state updates and
-   * error handling.
-   */
-  const exportToExcel = useCallback(() => {
-    context.dispatch(START_EXCEL_EXPORT())
-    try {
-      // If no items are selected, export all items
-      const items =
-        _.isArray(context.state.selectedItems) && context.state.selectedItems.length > 0
-          ? context.state.selectedItems
-          : props.filteredData.items
-
-      // Convert date columns to Date objects
-      props.filteredData.columns.forEach((col) => {
-        if (col.dataType === 'date') {
-          items.map((item) => {
-            item[col.fieldName] = new Date(item[col.fieldName])
-          })
-        }
-      })
-
-      // Export to Excel using the `ExcelExportService` from `pp365-shared`
-      ExcelExportService.export(items, props.filteredData.columns)
-      context.dispatch(EXCEL_EXPORT_SUCCESS())
-    } catch (error) {
-      context.dispatch(EXCEL_EXPORT_ERROR(error))
-    }
-  }, [context.state])
-
-  const items: IContextualMenuItem[] = [
-    {
-      key: 'EXCEL_EXPORT',
-      name: strings.ExcelExportButtonLabel,
-      iconProps: {
-        iconName: 'ExcelDocument',
-        styles: { root: { color: 'green !important' } }
-      },
-      buttonStyles: { root: { border: 'none' } },
-      data: { isVisible: context.props.showExcelExportButton },
-      disabled: context.state.isExporting || context.state.loading,
-      onClick: () => {
-        exportToExcel()
-      }
-    } as IContextualMenuItem
-  ].filter((i) => i.data.isVisible)
-
+  const items = [exportToExcelContextualMenuItem]
   const farItems: IContextualMenuItem[] = []
-  farItems.push({
-    key: 'NEW_VIEW',
-    name: strings.NewViewText,
-    iconProps: { iconName: 'CirclePlus' },
-    buttonStyles: { root: { border: 'none' } },
-    data: {
-      isVisible: context.props.configuration.userCanAddViews && context.props.showViewSelector
-    },
-    disabled: context.state.loading,
-    onClick: () => redirect(context.props.configuration.viewsUrls.defaultNewFormUrl)
-  })
-  const viewOptions = {
+  const viewOptionsItem: IContextualMenuItem = {
     key: 'VIEW_OPTIONS',
     name: context.state.currentView?.title,
     iconProps: { iconName: 'List' },
@@ -136,6 +50,11 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
     data: { isVisible: context.props.showViewSelector },
     disabled: context.state.loading,
     subMenuProps: {
+      styles: {
+        root: {
+          minWidth: 300
+        }
+      },
       items: [
         {
           key: 'VIEW_LIST',
@@ -164,68 +83,71 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
         ...sharedViews
       ]
     }
-  } as IContextualMenuItem
-  if (context.props.showProgramViews && !_.isEmpty(context.props.configuration.programs)) {
-    const programViewOptions: IDropdownOption[] = context.props.configuration.programs.map((p) => ({
-      key: p.id,
-      text: p.name,
-      data: p
-    }))
-    viewOptions.subMenuProps.items.push({
-      key: 'PROGRAMS_HEADER',
-      itemType: ContextualMenuItemType.Header,
-      text: strings.ProgramsHeaderText
-    })
-    viewOptions.subMenuProps.items.push({
-      key: 'PROGRAMS_DROPDOWN',
-      itemType: ContextualMenuItemType.Normal,
-      onRender: () => (
-        <div style={{ padding: '6px 12px' }}>
-          <Dropdown
-            placeholder={strings.SelectProgramText}
-            options={programViewOptions}
-            defaultSelectedKey={context.state.currentView?.id}
-            onChange={(_event, option) => {
-              const defaultView = context.props.configuration.views.find((v) => v.isDefaultView)
-              const view = new PortfolioOverviewView().configureFrom(defaultView).set({
-                id: option.key,
-                title: option.text,
-                iconName: 'ProjectCollection'
-              })
-              view.searchQueries = (option.data as ProgramItem).buildQueries(
-                defaultView.searchQuery
-              )
-              context.dispatch(CHANGE_VIEW(view))
-            }}
-          />
-        </div>
-      )
-    })
   }
   if (!_.isEmpty(personalViews)) {
-    viewOptions.subMenuProps.items.push({
+    viewOptionsItem.subMenuProps.items.push({
       key: 'PERSONAL_VIEWS_HEADER',
       itemType: ContextualMenuItemType.Header,
       text: strings.PersonalViewsHeaderText
     })
-    viewOptions.subMenuProps.items.push(...personalViews)
+    viewOptionsItem.subMenuProps.items.push(...personalViews)
+  }
+  if (context.props.showProgramViews && !_.isEmpty(context.props.configuration.programs)) {
+    viewOptionsItem.subMenuProps.items.push({
+      key: 'PROGRAMS_HEADER',
+      itemType: ContextualMenuItemType.Header,
+      text: strings.ProgramsHeaderText
+    })
+    const selectProgramItem: IContextualMenuItem = {
+      key: 'SELECT_PROGRAM',
+      name: strings.SelectProgramText,
+      subMenuProps: {
+        items: context.props.configuration.programs.map(
+          (p) =>
+            ({
+              key: p.id,
+              text: p.name,
+              canCheck: true,
+              checked: context.state.currentView?.id === p.id,
+              onClick: () => {
+                const defaultView = context.props.configuration.views.find((v) => v.isDefaultView)
+                if (!defaultView) return
+                const view = new PortfolioOverviewView().configureFrom(defaultView).set({
+                  id: p.id,
+                  title: p.name
+                })
+                view.searchQueries = p.buildQueries(defaultView.searchQuery)
+                context.dispatch(CHANGE_VIEW(view))
+              }
+            } as IContextualMenuItem)
+        )
+      }
+    }
+    viewOptionsItem.subMenuProps.items.push(selectProgramItem)
   }
   if (userCanManageViews) {
-    viewOptions.subMenuProps.items.push({
+    viewOptionsItem.subMenuProps.items.push({
       key: 'VIEW_ACTIONS_DIVIDER',
       itemType: ContextualMenuItemType.Divider
     })
-    viewOptions.subMenuProps.items.push({
+    viewOptionsItem.subMenuProps.items.push({
+      key: 'NEW_VIEW',
+      name: strings.NewViewText,
+      disabled: context.state.loading,
+      onClick: () => {
+        context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: true }))
+      }
+    })
+    viewOptionsItem.subMenuProps.items.push({
       key: 'EDIT_VIEW',
       name: strings.EditViewText,
       disabled: context.state.loading || context.state.currentView?.isProgramView,
-      onClick: () =>
-        redirect(
-          `${context.props.configuration.viewsUrls.defaultEditFormUrl}?ID=${context.state.currentView?.id}`
-        )
+      onClick: () => {
+        context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView }))
+      }
     })
   }
-  farItems.push(viewOptions)
+  farItems.push(viewOptionsItem)
   farItems.push({
     key: 'FILTERS',
     name: '',

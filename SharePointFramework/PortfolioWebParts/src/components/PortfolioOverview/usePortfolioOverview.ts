@@ -3,7 +3,11 @@ import { useId } from '@fluentui/react-hooks'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { useMemo, useReducer } from 'react'
 import { IPortfolioOverviewContext } from './context'
-import createReducer, { SELECTION_CHANGED, TOGGLE_COLUMN_CONTEXT_MENU, initState } from './reducer'
+import createReducer, {
+  SELECTION_CHANGED,
+  TOGGLE_COLUMN_CONTEXT_MENU,
+  getInitialState
+} from './reducer'
 import { IPortfolioOverviewProps } from './types'
 import { useFetchData } from './useFetchData'
 import { useFilteredData } from './useFilteredData'
@@ -23,7 +27,7 @@ import { usePersistedColumns } from './usePersistedColumns'
 export function usePortfolioOverview(props: IPortfolioOverviewProps) {
   const [placeholderColumns] = usePersistedColumns(props)
   const reducer = useMemo(() => createReducer({ props, placeholderColumns }), [])
-  const [state, dispatch] = useReducer(reducer, initState({ props, placeholderColumns }))
+  const [state, dispatch] = useReducer(reducer, getInitialState({ props, placeholderColumns }))
 
   const layerHostId = useId('layerHost')
 

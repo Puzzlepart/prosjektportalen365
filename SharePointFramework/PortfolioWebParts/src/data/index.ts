@@ -48,20 +48,17 @@ import {
   SPChartConfigurationItem
 } from '../models'
 import {
-  CONTENT_TYPE_ID_BENEFITS,
-  CONTENT_TYPE_ID_INDICATORS,
-  CONTENT_TYPE_ID_MEASUREMENTS,
-  DEFAULT_GAINS_PROPERTIES,
-  DEFAULT_SEARCH_SETTINGS,
   IPortfolioWebPartsDataAdapter,
-  IFetchDataForViewItemResult
+  IFetchDataForViewItemResult,
+  IPortfolioViewData
 } from './types'
+import * as config from './config'
 
 /**
  * Data adapter for Portfolio Web Parts.
  */
 export class DataAdapter implements IPortfolioWebPartsDataAdapter {
-  private _portal: PortalDataService
+  public portalDataService: PortalDataService
   public dataSourceService: DataSourceService
 
   /**
@@ -71,19 +68,21 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    * @param siteIds Site IDs
    */
   constructor(public context: WebPartContext, private siteIds?: string[]) {
-    this._portal = new PortalDataService()
+    this.portalDataService = new PortalDataService()
   }
 
   /**
-   * Configuring the `DataAdapter` enabling use
-   * of the `DataSourceService` and `PortalDataService`
+   * Configuring the `DataAdapter` enabling use of the `DataSourceService` and `PortalDataService`
+   *
+   * The `dataSourceService` is dependent on the `portalDataService` being configured, as it needs
+   * `portalDataService.web` to be passed as a parameter to its constructor.
    */
   public async configure(): Promise<DataAdapter> {
-    if (this.dataSourceService) return this
-    this._portal = await this._portal.configure({
+    if (this.dataSourceService && this.portalDataService.isConfigured) return this
+    this.portalDataService = await this.portalDataService.configure({
       pageContext: this.context.pageContext
     })
-    this.dataSourceService = new DataSourceService(this._portal.web)
+    this.dataSourceService = new DataSourceService(this.portalDataService.web)
     return this
   }
 
@@ -112,7 +111,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         const chart = new ChartConfiguration(item, fields)
         return chart
       })
-      const items = (await this.fetchDataForView(view, configuration, siteId)).map(
+      const items = (await this.fetchDataForView(view, configuration, siteId)).items.map(
         (i) => new ChartDataItem(i.Title, i)
       )
       const chartData = new ChartData(items)
@@ -131,13 +130,16 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     // eslint-disable-next-line prefer-const
     const [columnConfig, columns, views, programs, viewsUrls, columnUrls, userCanAddViews] =
       await Promise.all([
-        this._portal.getProjectColumnConfig(),
-        this._portal.getProjectColumns(),
-        this._portal.getPortfolioOverviewViews(),
-        this._portal.getPrograms(ProgramItem),
-        this._portal.getListFormUrls('PORTFOLIO_VIEWS'),
-        this._portal.getListFormUrls('PROJECT_COLUMNS'),
-        this._portal.currentUserHasPermissionsToList('PORTFOLIO_VIEWS', PermissionKind.AddListItems)
+        this.portalDataService.getProjectColumnConfig(),
+        this.portalDataService.getProjectColumns(),
+        this.portalDataService.getPortfolioOverviewViews(),
+        this.portalDataService.getPrograms(ProgramItem),
+        this.portalDataService.getListFormUrls('PORTFOLIO_VIEWS'),
+        this.portalDataService.getListFormUrls('PROJECT_COLUMNS'),
+        this.portalDataService.currentUserHasPermissionsToList(
+          'PORTFOLIO_VIEWS',
+          PermissionKind.AddListItems
+        )
       ])
     const configuredColumns = columns.map((col) => col.configure(columnConfig))
     const refiners = columns.filter((col) => col.isRefinable)
@@ -159,14 +161,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ): Promise<IPortfolioAggregationConfiguration> {
     try {
       let calculatedLevel = 'Portefølje'
-      if (this._portal.url !== this.context.pageContext.web.absoluteUrl) {
+      if (this.portalDataService.url !== this.context.pageContext.web.absoluteUrl) {
         calculatedLevel = 'Prosjekt'
       }
       const [views, viewsUrls, columnUrls, levels] = await Promise.all([
         this.fetchDataSources(category, level ?? calculatedLevel),
-        this._portal.getListFormUrls('DATA_SOURCES'),
-        this._portal.getListFormUrls('PROJECT_CONTENT_COLUMNS'),
-        this._portal.web.fields
+        this.portalDataService.getListFormUrls('DATA_SOURCES'),
+        this.portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS'),
+        this.portalDataService.web.fields
           .getByInternalNameOrTitle('GtDataSourceLevel')
           .select('Choices')
           .get()
@@ -187,7 +189,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
     siteId: string
-  ): Promise<IFetchDataForViewItemResult[]> {
+  ): Promise<IPortfolioViewData> {
     const isCurrentUserInManagerGroup = await this.isUserInGroup(strings.PortfolioManagerGroupName)
     if (isCurrentUserInManagerGroup) {
       return await this.fetchDataForManagerView(view, configuration, siteId)
@@ -196,22 +198,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  /**
-   * Fetch data for regular view
-   *
-   * @param view View configuration
-   * @param configuration PortfolioOverviewConfiguration
-   * @param siteId Site ID
-   * @param siteIdProperty Site ID property
-   */
   public async fetchDataForRegularView(
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
-  ): Promise<IFetchDataForViewItemResult[]> {
+  ): Promise<IPortfolioViewData> {
     try {
-      const { projects, sites, statusReports } = await this._fetchDataForView(
+      const { projects, sites, statusReports, managedProperties } = await this._fetchDataForView(
         view,
         configuration,
         siteId,
@@ -229,35 +223,27 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         }
       })
 
-      return items
+      return { items, managedProperties } as IPortfolioViewData
     } catch (err) {
       throw err
     }
   }
 
-  /**
-   * Fetch data for manager view.
-   *
-   * @param view View
-   * @param configuration Configuration
-   * @param siteId Site ID
-   * @param siteIdProperty Site ID property (defaults to **GtSiteIdOWSTEXT**)
-   */
   public async fetchDataForManagerView(
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
-  ): Promise<IFetchDataForViewItemResult[]> {
+  ): Promise<IPortfolioViewData> {
     try {
-      const { projects, sites, statusReports } = await this._fetchDataForView(
+      const { projects, sites, statusReports, managedProperties } = await this._fetchDataForView(
         view,
         configuration,
         siteId,
         siteIdProperty
       )
 
-      const items = projects.map((project) => {
+      const items: IFetchDataForViewItemResult[] = projects.map((project) => {
         const [statusReport] = statusReports.filter(
           (res) => res[siteIdProperty] === project[siteIdProperty]
         )
@@ -270,7 +256,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         }
       })
 
-      return items
+      return { items, managedProperties } as IPortfolioViewData
     } catch (err) {
       throw err
     }
@@ -278,7 +264,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   /**
    * Fetch items for the specified view. If the `view` has specified `searchQueries` it will use
-   * `Promise.all` to fetch all queries in parallel. Otherwise it will use a single query.
+   * `Promise.all` to fetch all queries in parallel. Otherwise it will use a single query. The
+   * support for `searchQueries` is added to support program views in the portfolio overview.
    *
    * @param view View configuration
    * @param selectProperties Select properties
@@ -288,20 +275,27 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const result = await Promise.all(
         view.searchQueries.map((query) =>
           sp.search({
-            ...DEFAULT_SEARCH_SETTINGS,
+            ...config.DEFAULT_SEARCH_SETTINGS,
             QueryTemplate: query,
             SelectProperties: selectProperties
           })
         )
       )
-      return _.flatten(result.map((res) => res.PrimarySearchResults))
+      return {
+        results: _.flatten(result.map(({ PrimarySearchResults }) => PrimarySearchResults)),
+        managedProperties: []
+      } as const
     } else {
-      const { PrimarySearchResults } = await sp.search({
-        ...DEFAULT_SEARCH_SETTINGS,
+      const { PrimarySearchResults, RawSearchResults } = await sp.search({
+        ...config.DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: view.searchQuery,
-        SelectProperties: selectProperties
+        SelectProperties: selectProperties,
+        Refiners: 'managedproperties(filter=600/0/*)'
       })
-      return PrimarySearchResults
+      const managedProperties = _.first(
+        RawSearchResults?.PrimaryQueryResult?.RefinementResults?.Refiners ?? []
+      )?.Entries?.map((entry) => entry.RefinementName)
+      return { results: PrimarySearchResults, managedProperties }
     }
   }
 
@@ -321,8 +315,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ) {
-    let [projects, sites, statusReports] = await Promise.all([
-      this._fetchItems(view.searchQuery, [
+    // eslint-disable-next-line prefer-const
+    let [{ results: projects, managedProperties }, sites, statusReports] = await Promise.all([
+      this._fetchItemsForView(view, [
         ...configuration.columns.map((f) => f.fieldName),
         siteIdProperty
       ]),
@@ -348,15 +343,16 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return {
       projects,
       sites,
-      statusReports
-    }
+      statusReports,
+      managedProperties
+    } as const
   }
 
   public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationModel[]) {
     try {
       const [{ PrimarySearchResults: statusReports }] = await Promise.all([
         sp.search({
-          ...DEFAULT_SEARCH_SETTINGS,
+          ...config.DEFAULT_SEARCH_SETTINGS,
           QueryTemplate: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
           SelectProperties: [
             'Title',
@@ -676,21 +672,21 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     selectProperties: string[]
   ): Promise<any> {
     const results: any[] = await this._fetchItems(dataSource.searchQuery, [
-      ...DEFAULT_GAINS_PROPERTIES,
+      ...config.DEFAULT_GAINS_PROPERTIES,
       ...selectProperties
     ])
 
     const benefits = results
-      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_BENEFITS) === 0)
+      .filter((res) => res.ContentTypeID.indexOf(config.CONTENT_TYPE_ID_BENEFITS) === 0)
       .map((res) => new Benefit(res))
 
     const measurements = results
-      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_MEASUREMENTS) === 0)
+      .filter((res) => res.ContentTypeID.indexOf(config.CONTENT_TYPE_ID_MEASUREMENTS) === 0)
       .map((res) => new BenefitMeasurement(res))
       .sort((a, b) => b.Date.getTime() - a.Date.getTime())
 
     const indicactors = results
-      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_INDICATORS) === 0)
+      .filter((res) => res.ContentTypeID.indexOf(config.CONTENT_TYPE_ID_INDICATORS) === 0)
       .map((res) => {
         const indicator = new BenefitMeasurementIndicator(res)
           .setMeasurements(measurements)
@@ -787,7 +783,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ): Promise<ProjectContentColumn[]> {
     try {
       if (stringIsNullOrEmpty(dataSourceCategory)) return []
-      const projectContentColumnsList = this._portal.web.lists.getByTitle(
+      const projectContentColumnsList = this.portalDataService.web.lists.getByTitle(
         strings.ProjectContentColumnsListName
       )
       const columnItems = await projectContentColumnsList.items
@@ -933,3 +929,5 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 }
+
+export * from './types'

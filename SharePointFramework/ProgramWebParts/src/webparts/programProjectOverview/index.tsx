@@ -8,7 +8,6 @@ import {
   IPortfolioOverviewConfiguration,
   PortfolioOverview
 } from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
-import { PROPERTYPANE_CONFIGURATION_PROPS } from 'pp365-portfoliowebparts/lib/webparts/portfolioOverview'
 import * as strings from 'ProgramWebPartsStrings'
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
@@ -49,7 +48,7 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
   protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
     // eslint-disable-next-line default-case
     switch (targetProperty) {
-      case PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID:
+      case 'defaultViewId':
         {
           if (this._configuration) {
             return [
@@ -71,38 +70,38 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_SEARCH_BOX, {
+                PropertyPaneToggle('showSearchBox', {
                   label: strings.ShowSearchBoxLabel
                 }),
-                PropertyPaneDropdown(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID, {
+                PropertyPaneDropdown('defaultViewId', {
                   label: strings.DefaultViewLabel,
-                  options: this._getOptions(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID)
+                  options: this._getOptions('defaultViewId')
                 })
               ]
             },
             {
               groupName: strings.CommandBarGroupName,
               groupFields: [
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_COMMANDBAR, {
+                PropertyPaneToggle('showCommandBar', {
                   label: strings.ShowCommandBarLabel
                 }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_GROUPBY, {
-                  label: strings.ShowGroupByLabel,
-                  disabled: !this.properties.showCommandBar
-                }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_FILTERS, {
-                  label: strings.ShowFiltersLabel,
-                  disabled: !this.properties.showCommandBar
-                }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_EXCELEXPORT_BUTTON, {
-                  label: strings.ShowExcelExportButtonLabel,
-                  disabled: !this.properties.showCommandBar
-                }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_VIEWSELECTOR, {
-                  label: strings.ShowViewSelectorLabel,
-                  disabled: !this.properties.showCommandBar
-                })
-              ]
+                this.properties.showCommandBar &&
+                  PropertyPaneToggle('showGroupBy', {
+                    label: strings.ShowGroupByLabel
+                  }),
+                this.properties.showCommandBar &&
+                  PropertyPaneToggle('showFilters', {
+                    label: strings.ShowFiltersLabel
+                  }),
+                this.properties.showCommandBar &&
+                  PropertyPaneToggle('showExcelExportButton', {
+                    label: strings.ShowExcelExportButtonLabel
+                  }),
+                this.properties.showCommandBar &&
+                  PropertyPaneToggle('showViewSelector', {
+                    label: strings.ShowViewSelectorLabel
+                  })
+              ].filter(Boolean)
             }
           ]
         }

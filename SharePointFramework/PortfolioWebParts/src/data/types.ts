@@ -1,10 +1,5 @@
-import {
-  ItemUpdateResult,
-  QueryPropertyValueType,
-  SearchQuery,
-  SearchResult,
-  SortDirection
-} from '@pnp/sp'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { ItemUpdateResult, SearchResult, SortDirection } from '@pnp/sp'
 import { IProjectContentColumn } from 'pp365-shared-library'
 import {
   DataSource,
@@ -14,66 +9,25 @@ import {
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-shared-library/lib/models'
-import { DataSourceService } from 'pp365-shared-library/lib/services'
+import { DataSourceService, PortalDataService } from 'pp365-shared-library/lib/services'
 import { IPortfolioAggregationConfiguration, IPortfolioOverviewConfiguration } from '../components'
-import { WebPartContext } from '@microsoft/sp-webpart-base'
 
 export interface IFetchDataForViewItemResult extends SearchResult {
   SiteId: string
   [key: string]: any
 }
 
-export const DEFAULT_SEARCH_SETTINGS: SearchQuery = {
-  Querytext: '*',
-  RowLimit: 500,
-  TrimDuplicates: false,
-  Properties: [
-    {
-      Name: 'EnableDynamicGroups',
-      Value: {
-        BoolVal: true,
-        QueryPropertyValueTypeIndex: QueryPropertyValueType.BooleanType
-      }
-    }
-  ],
-  SortList: [{ Property: 'LastModifiedTime', Direction: SortDirection.Descending }]
+export type IPortfolioViewData = {
+  items: IFetchDataForViewItemResult[]
+  managedProperties?: string[]
 }
-
-export const CONTENT_TYPE_ID_BENEFITS = '0x01004F466123309D46BAB9D5C6DE89A6CF67'
-export const CONTENT_TYPE_ID_MEASUREMENTS = '0x010039EAFDC2A1624C1BA1A444FC8FE85DEC'
-export const CONTENT_TYPE_ID_INDICATORS = '0x010073043EFE3E814A2BBEF96B8457623F95'
-export const DEFAULT_GAINS_PROPERTIES = [
-  'Path',
-  'SPWebURL',
-  'Title',
-  'ListItemId',
-  'SiteTitle',
-  'SiteId',
-  'ContentTypeID',
-  'GtDesiredValueOWSNMBR',
-  'GtMeasureIndicatorOWSTEXT',
-  'GtMeasurementUnitOWSCHCS',
-  'GtStartValueOWSNMBR',
-  'GtMeasurementValueOWSNMBR',
-  'GtMeasurementCommentOWSMTXT',
-  'GtMeasurementDateOWSDATE',
-  'GtGainsResponsibleOWSUSER',
-  'GtGainsTurnoverOWSMTXT',
-  'GtGainsTypeOWSCHCS',
-  'GtPrereqProfitAchievementOWSMTXT',
-  'GtRealizationTimeOWSDATE',
-  'GtGainLookupId',
-  'GtMeasureIndicatorLookupId',
-  'GtGainsResponsible',
-  'GtGainsOwner'
-]
 
 export interface IPortfolioWebPartsDataAdapter {
   /**
    * Configure data adapter - returns an configured instance of the data adapter.
    *
-   * @param spfxContext SPFx context
-   * @param configuration Configuration for data adapter
+   * @param spfxContext SPFx context (optional)
+   * @param configuration Configuration for data adapter (optional)
    */
   configure(
     spfxContext?: WebPartContext,
@@ -81,7 +35,12 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<IPortfolioWebPartsDataAdapter | void>
 
   /**
-   * An instance of the data source service.
+   * An optional instance of the portal data service.
+   */
+  portalDataService?: PortalDataService
+
+  /**
+   * An optional instance of the data source service.
    */
   dataSourceService?: DataSourceService
 
@@ -148,10 +107,10 @@ export interface IPortfolioWebPartsDataAdapter {
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
     hubSiteId: any
-  ): Promise<any>
+  ): Promise<IPortfolioViewData>
 
   /**
-   * Fetch data for view
+   * Fetch data for view. Items and managed properties are returned.
    *
    * @param view View configuration
    * @param configuration PortfolioOverviewConfiguration
@@ -161,7 +120,37 @@ export interface IPortfolioWebPartsDataAdapter {
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
     hubSiteId: any
-  ): Promise<any>
+  ): Promise<IPortfolioViewData>
+
+  /**
+   * Fetch data for regular view
+   *
+   * @param view View configuration
+   * @param configuration PortfolioOverviewConfiguration
+   * @param siteId Site ID
+   * @param siteIdProperty Site ID property
+   */
+  fetchDataForRegularView(
+    view: PortfolioOverviewView,
+    configuration: IPortfolioOverviewConfiguration,
+    siteId: string | string[],
+    siteIdProperty?: string
+  ): Promise<IPortfolioViewData>
+
+  /**
+   * Fetch data for manager view.
+   *
+   * @param view View
+   * @param configuration Configuration
+   * @param siteId Site ID
+   * @param siteIdProperty Site ID property (defaults to **GtSiteIdOWSTEXT**)
+   */
+  fetchDataForManagerView(
+    view: PortfolioOverviewView,
+    configuration: IPortfolioOverviewConfiguration,
+    siteId: string | string[],
+    siteIdProperty?: string
+  ): Promise<IPortfolioViewData>
 
   /**
    * Checks if the current is in the specified group.
@@ -300,35 +289,6 @@ export interface IPortfolioWebPartsDataAdapter {
    * @param column Column to delete
    */
   deleteProjectContentColumn?(property: Record<string, any>): Promise<any>
-
-  /**
-   * Add item to a list
-   *
-   * @param listName List name
-   * @param properties Properties
-   */
-  addItemToList?<T>(listName: string, properties: Record<string, any>): Promise<T>
-
-  /**
-   * Update item in a list
-   *
-   * @param listName List name
-   * @param itemId Item ID
-   * @param properties Properties
-   */
-  updateItemInList?<T>(
-    listName: string,
-    itemId: number,
-    properties: Record<string, any>
-  ): Promise<T>
-
-  /**
-   * Deletes the item with the specified ID from the specified list.
-   *
-   * @param listName List name
-   * @param itemId Item ID
-   */
-  deleteItemFromList?(listName: string, itemId: number): Promise<boolean>
 
   /**
    * Adds a new column to the project columns list and adds the column to the specified view.

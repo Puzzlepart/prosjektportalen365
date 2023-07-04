@@ -13,18 +13,6 @@ import {
   PortfolioOverview
 } from '../../components/PortfolioOverview'
 
-export const PROPERTYPANE_CONFIGURATION_PROPS = {
-  DEFAULT_VIEW_ID: 'defaultViewId',
-  SHOW_PROGRAM_VIEWS: 'showProgramViews',
-  STATUSREPORTS_COUNT: 'statusReportsCount',
-  SHOW_COMMANDBAR: 'showCommandBar',
-  SHOW_EXCELEXPORT_BUTTON: 'showExcelExportButton',
-  SHOW_FILTERS: 'showFilters',
-  SHOW_GROUPBY: 'showGroupBy',
-  SHOW_SEARCH_BOX: 'showSearchBox',
-  SHOW_VIEWSELECTOR: 'showViewSelector'
-}
-
 export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPortfolioOverviewProps> {
   private _configuration: IPortfolioOverviewConfiguration
 
@@ -47,7 +35,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
   protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
     // eslint-disable-next-line default-case
     switch (targetProperty) {
-      case PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID:
+      case 'defaultViewId':
         {
           if (this._configuration) {
             return [
@@ -69,46 +57,53 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_SEARCH_BOX, {
+                PropertyPaneToggle('showSearchBox', {
                   label: strings.ShowSearchBoxLabel
                 }),
-                PropertyPaneDropdown(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID, {
+                PropertyPaneDropdown('defaultViewId', {
                   label: strings.DefaultViewLabel,
-                  options: this._getOptions(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID)
-                }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_PROGRAM_VIEWS, {
-                  label: strings.ShowProgramViewsLabel
+                  options: this._getOptions('defaultViewId')
                 })
               ]
             },
             {
               groupName: strings.CommandBarGroupName,
               groupFields: [
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_COMMANDBAR, {
+                PropertyPaneToggle('showCommandBar', {
                   label: strings.ShowCommandBarLabel
                 }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_GROUPBY, {
-                  label: strings.ShowGroupByLabel,
-                  disabled: !this.properties.showCommandBar
-                }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_FILTERS, {
-                  label: strings.ShowFiltersLabel,
-                  disabled: !this.properties.showCommandBar
-                }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_EXCELEXPORT_BUTTON, {
-                  label: strings.ShowExcelExportButtonLabel,
-                  disabled: !this.properties.showCommandBar
-                }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_VIEWSELECTOR, {
-                  label: strings.ShowViewSelectorLabel,
-                  disabled: !this.properties.showCommandBar
-                })
-              ]
+                this.properties.showCommandBar &&
+                  PropertyPaneToggle('showGroupBy', {
+                    label: strings.ShowGroupByLabel
+                  }),
+                this.properties.showCommandBar &&
+                  PropertyPaneToggle('showFilters', {
+                    label: strings.ShowFiltersLabel
+                  }),
+                this.properties.showCommandBar &&
+                  PropertyPaneToggle('showExcelExportButton', {
+                    label: strings.ShowExcelExportButtonLabel
+                  }),
+                this.properties.showCommandBar &&
+                  this.properties.showExcelExportButton &&
+                  PropertyPaneToggle('includeViewNameInExcelExportFilename', {
+                    label: strings.IncludeViewNameInExcelExportFilenameLabel
+                  }),
+                this.properties.showCommandBar &&
+                  PropertyPaneToggle('showViewSelector', {
+                    label: strings.ShowViewSelectorLabel
+                  }),
+                this.properties.showCommandBar &&
+                  this.properties.showViewSelector &&
+                  PropertyPaneToggle('showProgramViews', {
+                    label: strings.ShowProgramViewsLabel
+                  })
+              ].filter(Boolean)
             },
             {
               groupName: strings.ProjectInformationGroupName,
               groupFields: [
-                PropertyPaneSlider(PROPERTYPANE_CONFIGURATION_PROPS.STATUSREPORTS_COUNT, {
+                PropertyPaneSlider('statusReportsCount', {
                   label: strings.StatusReportsCountLabel,
                   min: 0,
                   max: 10,

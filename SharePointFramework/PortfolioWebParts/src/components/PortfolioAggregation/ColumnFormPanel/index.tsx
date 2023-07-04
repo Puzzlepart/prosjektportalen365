@@ -13,7 +13,7 @@ import { DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import styles from './ColumnFormPanel.module.scss'
 import { renderOptions } from './renderOptions'
 import { useColumnFormPanel } from './useColumnFormPanel'
-import { FormFieldContainer } from 'pp365-shared-library'
+import { ColumnSearchPropertyField, FormFieldContainer } from 'pp365-shared-library'
 
 export const ColumnFormPanel: FC = () => {
   const {
@@ -53,21 +53,6 @@ export const ColumnFormPanel: FC = () => {
       </FormFieldContainer>
       <FormFieldContainer>
         <TextField
-          label={strings.SearchPropertyLabel}
-          description={strings.SearchPropertyDescription}
-          required={true}
-          value={column.fieldName}
-          disabled={!!state.editColumn}
-          onChange={(_, value) =>
-            setColumn({
-              ...column,
-              fieldName: value
-            })
-          }
-        />
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <TextField
           label={strings.InternalNameLabel}
           description={strings.InternalNameDescription}
           required={true}
@@ -81,6 +66,19 @@ export const ColumnFormPanel: FC = () => {
           }
         />
       </FormFieldContainer>
+      <ColumnSearchPropertyField
+        label={strings.SearchPropertyLabel}
+        description={strings.SearchPropertyDescription}
+        required={true}
+        value={column.fieldName}
+        disabled={!!state.editColumn}
+        onChange={(value) =>
+          setColumn({
+            ...column,
+            fieldName: value
+          })
+        }
+      />
       <FormFieldContainer>
         <TextField
           label={strings.DisplayNameLabel}

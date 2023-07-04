@@ -102,7 +102,7 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
    * @param view View
    */
   private async _onViewChanged(view: PortfolioOverviewView) {
-    const items = await this.props.dataAdapter.fetchDataForView(
+    const { items } = await this.props.dataAdapter.fetchDataForView(
       view,
       this.state.configuration,
       this.props.pageContext.site.id.toString()

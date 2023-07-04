@@ -1,16 +1,17 @@
 import { IColumn } from '@fluentui/react'
-import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
+import { IProjectColumn } from 'pp365-shared-library'
 import { arrayMove } from 'pp365-shared-library/lib/helpers/arrayMove'
 import { useContext, useEffect, useState } from 'react'
 import { OnDragEndResponder } from 'react-beautiful-dnd'
 import { IPortfolioOverviewContext, PortfolioOverviewContext } from '../context'
 import { TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from '../reducer'
-import { IProjectColumn } from 'pp365-shared-library'
 
 /**
  * Get all columns from `context.props.configuration.columns` with the selected state
- * based on the `context.state.columns`.
+ * based on the `context.state.columns`. The sorting of the columns is based on the
+ * `context.state.currentView.columnOrder` if it exists, otherwise the default order
+ * is used. The selected columns are sorted first, followed by the unselected columns.
  *
  * @param context Context
  */
@@ -65,8 +66,8 @@ export function useEditViewColumnsPanel() {
       GtPortfolioColumnOrder: JSON.stringify(columns.map((c) => c.id))
     }
 
-    await context.props.dataAdapter.updateItemInList(
-      strings.PortfolioViewsListName,
+    await context.props.dataAdapter.portalDataService.updateItemInList(
+      'PORTFOLIO_VIEWS',
       context.state.currentView.id as any,
       properties
     )
@@ -85,8 +86,8 @@ export function useEditViewColumnsPanel() {
       GtPortfolioColumnOrder: null
     }
 
-    await context.props.dataAdapter.updateItemInList(
-      strings.PortfolioViewsListName,
+    await context.props.dataAdapter.portalDataService.updateItemInList(
+      'PORTFOLIO_VIEWS',
       context.state.currentView.id as any,
       properties
     )

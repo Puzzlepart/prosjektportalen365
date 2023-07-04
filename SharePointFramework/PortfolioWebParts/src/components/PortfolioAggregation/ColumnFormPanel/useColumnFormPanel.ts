@@ -1,9 +1,12 @@
-import * as strings from 'PortfolioWebPartsStrings'
 import { capitalize } from 'lodash'
+import {
+  IProjectContentColumn,
+  SPDataSourceItem,
+  SPProjectContentColumnItem
+} from 'pp365-shared-library'
 import { useContext, useEffect, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
 import { ADD_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
-import { IProjectContentColumn } from 'pp365-shared-library'
 
 const initialColumn: IProjectContentColumn = {
   key: null,
@@ -52,8 +55,8 @@ export function useColumnFormPanel() {
           .catch((error) => (state.error = error))
       )
     else {
-      const newItem: Record<string, any> = {
-        GtSortOrder: column.sortOrder || 100,
+      const properties: SPProjectContentColumnItem = {
+        GtSortOrder: column.sortOrder ?? 100,
         Title: column.name,
         GtInternalName: column.internalName,
         GtManagedProperty: column.fieldName,
@@ -63,13 +66,12 @@ export function useColumnFormPanel() {
       }
 
       await Promise.resolve(
-        props.dataAdapter
-          .addItemToList(strings.ProjectContentColumnsListName, newItem)
+        props.dataAdapter.portalDataService
+          .addItemToList('PROJECT_CONTENT_COLUMNS', properties)
           .then((result) => {
-            const updateItem = {
+            const updateItem: SPDataSourceItem = {
               GtProjectContentColumnsId: result['Id']
             }
-
             props.dataAdapter
               .updateDataSourceItem(updateItem, state.dataSource)
               .then(() => {
