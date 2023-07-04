@@ -9,15 +9,15 @@ import { useStatusElement } from './useStatusElement'
 
 export const StatusElement: FC<IStatusElementProps> = (props) => {
   const { headerProps } = useContext(SectionContext)
-  const { commentProps, iconSize } = useStatusElement(props)
+  const { commentProps, iconSize, useWrapper } = useStatusElement(props)
   return (
     <ConditionalWrapper
-      condition={!!props.truncateComment || props.iconsOnly}
+      condition={useWrapper}
       wrapper={(children: ReactNode) => (
         <TooltipHost
-          styles={{ root: { cursor: 'pointer' } }}
+          className={styles.tooltipHost}
           content={
-            <div className={styles.tooltip}>
+            <div className={styles.tooltipContent}>
               <StatusElement />
             </div>
           }
