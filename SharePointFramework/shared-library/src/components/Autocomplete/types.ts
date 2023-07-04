@@ -4,9 +4,7 @@ import { ISuggestionItem } from './SuggestionItem/types'
 /**
  * @ignore
  */
-export type AutocompleteSelectCallback<T = any> = (
-  item: ISuggestionItem<T>
-) => void
+export type AutocompleteSelectCallback<T = any> = (item: ISuggestionItem<T>) => void
 
 /**
  * @ignore

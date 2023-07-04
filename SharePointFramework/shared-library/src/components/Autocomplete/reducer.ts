@@ -2,14 +2,7 @@ import { createReducer } from '@reduxjs/toolkit'
 import { useMemo, useReducer } from 'react'
 import _ from 'underscore'
 import { typeOfArray } from '../../helpers'
-import {
-  DISMISS_CALLOUT,
-  INIT,
-  ON_KEY_DOWN,
-  ON_SEARCH,
-  RESET,
-  SET_SELECTED_INDEX
-} from './actions'
+import { DISMISS_CALLOUT, INIT, ON_KEY_DOWN, ON_SEARCH, RESET, SET_SELECTED_INDEX } from './actions'
 import { IAutocompleteState, ISuggestionItem } from './types'
 
 /**
@@ -23,11 +16,14 @@ export const createAutocompleteReducer = (initialState: IAutocompleteState) =>
   createReducer<IAutocompleteState>(initialState, (builder) =>
     builder
       .addCase(INIT, (state, { payload }) => {
-        state.items = typeOfArray(payload.props.items) === 'string' ? (payload.props.items as string[]).map(i => ({
-          key: i,
-          text: i,
-          searchValue: i
-        })) : (payload.props.items as ISuggestionItem<any>[])
+        state.items =
+          typeOfArray(payload.props.items) === 'string'
+            ? (payload.props.items as string[]).map((i) => ({
+                key: i,
+                text: i,
+                searchValue: i
+              }))
+            : (payload.props.items as ISuggestionItem<any>[])
         state.suggestions = []
         state.selectedItem = _.find(
           state.items,
@@ -46,10 +42,8 @@ export const createAutocompleteReducer = (initialState: IAutocompleteState) =>
         state.suggestions =
           state.value.length > 0
             ? state.items.filter((index) =>
-              index.searchValue
-                .toLowerCase()
-                .includes(payload.searchTerm.toLowerCase())
-            )
+                index.searchValue.toLowerCase().includes(payload.searchTerm.toLowerCase())
+              )
             : []
       })
       .addCase(ON_KEY_DOWN, (state, { payload }) => {

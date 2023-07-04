@@ -67,6 +67,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.currentView = payload.currentView
         state.columns = payload.currentView.columns
         state.groupBy = payload.groupBy
+        state.managedProperties = payload.managedProperties ?? []
         state.loading = false
         state.error = null
       })

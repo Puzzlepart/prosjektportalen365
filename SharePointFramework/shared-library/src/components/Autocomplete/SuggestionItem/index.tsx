@@ -25,11 +25,7 @@ export const SuggestionItem: FC<ISuggestionItemProps> = (props) => {
       data-is-focusable={true}
     >
       <div className={styles.container}>
-        <div
-          className={styles.icon}
-          style={iconStyles}
-          hidden={!props.itemIcons}
-        >
+        <div className={styles.icon} style={iconStyles} hidden={!props.itemIcons}>
           <Icon iconName={props.item.iconName || 'Page'} />
         </div>
         <div className={styles.content}>

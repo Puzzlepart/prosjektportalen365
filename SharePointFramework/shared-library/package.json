@@ -39,7 +39,8 @@
     "moment": "~2.29.4",
     "array-sort": "~1.0.0",
     "react-calendar-timeline": "~0.28.0",
-    "lodash": "~4.17.21"
+    "lodash": "~4.17.21",
+    "@reduxjs/toolkit": "~1.9.5"
   },
   "devDependencies": {
     "@microsoft/rush-stack-compiler-4.5": "0.2.2",

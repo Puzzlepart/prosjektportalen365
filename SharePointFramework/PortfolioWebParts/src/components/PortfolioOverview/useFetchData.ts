@@ -63,7 +63,7 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
   const [, set] = usePersistedColumns(context.props)
   useEffect(() => {
     const fetchInitialData = async () => {
-      let currentView = null
+      let currentView: PortfolioOverviewView = null
       try {
         context.dispatch(STARTING_DATA_FETCH())
         const { configuration, pageContext, isParentProject } = context.props

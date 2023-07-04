@@ -1,11 +1,4 @@
-import {
-  Callout,
-  FocusZone,
-  FocusZoneDirection,
-  Label,
-  List,
-  SearchBox
-} from '@fluentui/react'
+import { Callout, FocusZone, FocusZoneDirection, Label, List, SearchBox } from '@fluentui/react'
 import React, { FC } from 'react'
 import _ from 'underscore'
 import { IAutocompleteProps } from '.'
@@ -43,7 +36,7 @@ export const Autocomplete: FC<IAutocompleteProps> = (props) => {
           defaultValue={state.value}
           iconProps={{
             iconName: state.selectedItem?.iconName || 'Search',
-            ...props.iconProps,
+            ...props.iconProps
           }}
           placeholder={props.placeholder}
           disabled={props.disabled}

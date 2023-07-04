@@ -86,21 +86,21 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
                   label: strings.ShowCommandBarLabel
                 }),
                 this.properties.showCommandBar &&
-                PropertyPaneToggle('showGroupBy', {
-                  label: strings.ShowGroupByLabel
-                }),
+                  PropertyPaneToggle('showGroupBy', {
+                    label: strings.ShowGroupByLabel
+                  }),
                 this.properties.showCommandBar &&
-                PropertyPaneToggle('showFilters', {
-                  label: strings.ShowFiltersLabel
-                }),
+                  PropertyPaneToggle('showFilters', {
+                    label: strings.ShowFiltersLabel
+                  }),
                 this.properties.showCommandBar &&
-                PropertyPaneToggle('showExcelExportButton', {
-                  label: strings.ShowExcelExportButtonLabel
-                }),
+                  PropertyPaneToggle('showExcelExportButton', {
+                    label: strings.ShowExcelExportButtonLabel
+                  }),
                 this.properties.showCommandBar &&
-                PropertyPaneToggle('showViewSelector', {
-                  label: strings.ShowViewSelectorLabel
-                })
+                  PropertyPaneToggle('showViewSelector', {
+                    label: strings.ShowViewSelectorLabel
+                  })
               ].filter(Boolean)
             }
           ]

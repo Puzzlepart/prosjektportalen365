@@ -157,12 +157,12 @@ export interface IPortfolioOverviewState {
   /**
    * Items
    */
-  items?: any[]
+  items?: Record<string, any>[]
 
   /**
    * Selected items in the list
    */
-  selectedItems?: any[]
+  selectedItems?: Record<string, any>[]
 
   /**
    * Columns
@@ -243,6 +243,11 @@ export interface IPortfolioOverviewState {
    * Edit view columns panel props.
    */
   editViewColumns?: IEditViewColumnsPanel
+
+  /**
+   * Available managed properties for the current search query
+   */
+  managedProperties?: string[]
 }
 
 export interface IPortfolioOverviewHashStateState {
