@@ -1,9 +1,8 @@
-import strings from 'PortfolioWebPartsStrings'
+import _ from 'lodash'
 import { ProjectColumn, SPProjectColumnItem } from 'pp365-shared-library'
 import { useContext, useEffect, useState } from 'react'
 import { PortfolioOverviewContext } from '../context'
-import { COLUMN_FORM_PANEL_ON_SAVED, COLUMN_DELETED, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
-import _ from 'lodash'
+import { COLUMN_DELETED, COLUMN_FORM_PANEL_ON_SAVED, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 
 const initialColumn = new Map<string, any>([
   ['name', ''],
@@ -70,8 +69,8 @@ export function useColumnFormPanel() {
       GtIsRefinable: column.get('isRefinable')
     }
     if (isEditing) {
-      await context.props.dataAdapter.updateItemInList(
-        strings.ProjectColumnsListName,
+      await context.props.dataAdapter.portalDataService.updateItemInList(
+        'PROJECT_COLUMNS',
         context.state.columnForm.column.id,
         _.omit(columnItem, ['Id', 'GtInternalName', 'GtManagedProperty'])
       )
@@ -95,8 +94,8 @@ export function useColumnFormPanel() {
    * successfully, it will dispatch the `COLUMN_DELETED` action to the reducer.
    */
   const onDeleteColumn = async () => {
-    const isDeleted = await context.props.dataAdapter.deleteItemFromList(
-      strings.ProjectColumnsListName,
+    const isDeleted = await context.props.dataAdapter.portalDataService.deleteItemFromList(
+      'PROJECT_COLUMNS',
       context.state.columnForm.column.id
     )
     if (isDeleted) {

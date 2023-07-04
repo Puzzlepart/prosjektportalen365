@@ -1,8 +1,7 @@
+import { PortfolioOverviewView, SPPortfolioOverviewViewItem } from 'pp365-shared-library'
 import { useContext, useEffect, useState } from 'react'
 import { PortfolioOverviewContext } from '../context'
-import { PortfolioOverviewView, SPPortfolioOverviewViewItem } from 'pp365-shared-library'
 import { TOGGLE_VIEW_FORM_PANEL } from '../reducer'
-import strings from 'PortfolioWebPartsStrings'
 
 /**
  * Component logic hook for `ViewFormPanel`.
@@ -37,8 +36,8 @@ export function useViewFormPanel() {
         GtPortfolioIsDefaultView: view.get('isDefaultView'),
         GtPortfolioFabricIcon: view.get('iconName')
       }
-      await context.props.dataAdapter.updateItemInList(
-        strings.PortfolioViewsListName,
+      await context.props.dataAdapter.portalDataService.updateItemInList(
+        'PORTFOLIO_VIEWS',
         currentView.id as number,
         properties
       )
@@ -58,7 +57,7 @@ export function useViewFormPanel() {
         },
         GtPortfolioGroupById: currentView.groupBy?.id
       }
-      await context.props.dataAdapter.addItemToList(strings.PortfolioViewsListName, properties)
+      await context.props.dataAdapter.portalDataService.addItemToList('PORTFOLIO_VIEWS', properties)
     }
     context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: false }))
   }

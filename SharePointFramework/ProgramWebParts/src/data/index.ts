@@ -15,7 +15,7 @@ import {
   CONTENT_TYPE_ID_MEASUREMENTS,
   DEFAULT_GAINS_PROPERTIES,
   IPortfolioWebPartsDataAdapter
-} from 'pp365-portfoliowebparts/lib/data/types'
+} from 'pp365-portfoliowebparts/lib/data'
 import {
   Benefit,
   BenefitMeasurement,

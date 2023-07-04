@@ -48,14 +48,16 @@ import {
   SPChartConfigurationItem
 } from '../models'
 import {
+  IPortfolioWebPartsDataAdapter,
+  IFetchDataForViewItemResult
+} from './types'
+import {
   CONTENT_TYPE_ID_BENEFITS,
   CONTENT_TYPE_ID_INDICATORS,
   CONTENT_TYPE_ID_MEASUREMENTS,
   DEFAULT_GAINS_PROPERTIES,
-  DEFAULT_SEARCH_SETTINGS,
-  IPortfolioWebPartsDataAdapter,
-  IFetchDataForViewItemResult
-} from './types'
+  DEFAULT_SEARCH_SETTINGS
+} from './config'
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -76,7 +78,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   /**
    * Configuring the `DataAdapter` enabling use of the `DataSourceService` and `PortalDataService`
-   * 
+   *
    * The `dataSourceService` is dependent on the `portalDataService` being configured, as it needs
    * `portalDataService.web` to be passed as a parameter to its constructor.
    */
@@ -139,7 +141,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         this.portalDataService.getPrograms(ProgramItem),
         this.portalDataService.getListFormUrls('PORTFOLIO_VIEWS'),
         this.portalDataService.getListFormUrls('PROJECT_COLUMNS'),
-        this.portalDataService.currentUserHasPermissionsToList('PORTFOLIO_VIEWS', PermissionKind.AddListItems)
+        this.portalDataService.currentUserHasPermissionsToList(
+          'PORTFOLIO_VIEWS',
+          PermissionKind.AddListItems
+        )
       ])
     const configuredColumns = columns.map((col) => col.configure(columnConfig))
     const refiners = columns.filter((col) => col.isRefinable)
@@ -935,3 +940,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 }
+
+export * from './types'
+export * from './config'
