@@ -17,15 +17,16 @@ export function useExcelExport(props: IPortfolioOverviewCommandsProps) {
   const exportToExcel = useCallback(() => {
     context.dispatch(START_EXCEL_EXPORT())
     try {
-      const items =
+      let items =
         _.isArray(context.state.selectedItems) && context.state.selectedItems.length > 0
           ? context.state.selectedItems
           : props.filteredData.items
       props.filteredData.columns.forEach((col) => {
         if (col.dataType === 'date') {
-          items.map((item) => {
-            item[col.fieldName] = new Date(item[col.fieldName])
-          })
+          items = items.map((item) => ({
+            ...item,
+            [col.fieldName]: new Date(item[col.fieldName])
+          }))
         }
       })
 
@@ -51,5 +52,5 @@ export function useExcelExport(props: IPortfolioOverviewCommandsProps) {
     }
   }
 
-  return { exportToExcel, exportToExcelContextualMenuItem } as const
+  return { exportToExcelContextualMenuItem } as const
 }

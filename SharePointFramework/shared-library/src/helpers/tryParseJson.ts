@@ -6,7 +6,7 @@
  */
 export function tryParseJson<T = any>(str: string, fallback: T): T {
   try {
-    const parsed = str ? JSON.parse(str) : fallback
+    const parsed: T = str ? JSON.parse(str) : fallback
     return parsed
   } catch {
     return fallback

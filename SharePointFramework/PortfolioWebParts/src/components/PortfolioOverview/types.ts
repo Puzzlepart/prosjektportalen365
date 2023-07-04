@@ -109,7 +109,7 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
   showFilters?: boolean
 
   /**
-   * Show view selector
+   * Show view selector where users can select view, create new views and edit views
    */
   showViewSelector?: boolean
 
