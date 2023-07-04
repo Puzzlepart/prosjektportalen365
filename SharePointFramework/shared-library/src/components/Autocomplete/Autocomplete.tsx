@@ -42,8 +42,8 @@ export const Autocomplete: FC<IAutocompleteProps> = (props) => {
           key={state.selectedItem?.key}
           defaultValue={state.value}
           iconProps={{
+            iconName: state.selectedItem?.iconName || 'Search',
             ...props.iconProps,
-            iconName: state.selectedItem?.iconName || 'Search'
           }}
           placeholder={props.placeholder}
           disabled={props.disabled}

@@ -46,9 +46,10 @@ export interface IAutocompleteProps<T = any> extends ISearchBoxProps {
   onSelected: AutocompleteSelectCallback<T>
 
   /**
-   * Items to be displayed in the autocomplete component.
+   * Items to be displayed in the autocomplete component. Either an array of
+   * `ISuggestionItem` or an array of strings.
    */
-  items?: ISuggestionItem<T>[]
+  items?: ISuggestionItem<T>[] | string[]
 
   /**
    * Text to be displayed when there are no suggestions.

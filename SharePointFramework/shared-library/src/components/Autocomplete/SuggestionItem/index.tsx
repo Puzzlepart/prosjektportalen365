@@ -1,4 +1,3 @@
-/* eslint-disable tsdoc/syntax */
 import { Icon } from '@fluentui/react'
 import React, { FC } from 'react'
 import _ from 'underscore'
