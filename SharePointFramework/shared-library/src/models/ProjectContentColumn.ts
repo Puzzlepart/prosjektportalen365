@@ -3,16 +3,16 @@ import { IProjectContentColumn } from '../interfaces/IProjectContentColumn'
 import { SearchValueType } from '../types/SearchValueType'
 
 export class SPProjectContentColumnItem {
-  public Id: number = 0
+  public Id?: number = 0
   public Title: string = ''
-  public GtSortOrder: number = 0
-  public GtInternalName: string = ''
-  public GtManagedProperty: string = ''
-  public GtFieldDataType: string = ''
+  public GtSortOrder?: number = 0
+  public GtInternalName?: string = ''
+  public GtManagedProperty?: string = ''
+  public GtFieldDataType?: string = ''
   public GtColMinWidth: number = 0
-  public GtColMaxWidth: number = 0
-  public GtIsGroupable: boolean = false
-  public GtDataSourceCategory: string = ''
+  public GtColMaxWidth?: number = 0
+  public GtIsGroupable?: boolean = false
+  public GtDataSourceCategory?: string = ''
 }
 
 export class ProjectContentColumn implements IProjectContentColumn {

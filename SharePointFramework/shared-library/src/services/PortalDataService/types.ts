@@ -8,6 +8,7 @@ export type PortalDataServiceList =
   | 'PORTFOLIO_VIEWS'
   | 'PROJECT_CONTENT_COLUMNS'
   | 'DATA_SOURCES'
+  | 'PROJECT_STATUS_ATTACHMENTS'
 
 export interface IPortalDataServiceConfiguration extends Object {
   pageContext?: PageContext
