@@ -56,7 +56,7 @@ export class PortfolioOverviewView {
   /**
    * Icon name for the view.
    */
-  public iconName: string
+  public iconName?: string
 
   /**
    * `true` if the view is a personal view, `false` otherwise.
