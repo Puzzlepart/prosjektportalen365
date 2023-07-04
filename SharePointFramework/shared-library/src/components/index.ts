@@ -1,4 +1,5 @@
 export * from './Autocomplete'
+export * from './ColumnSearchPropertyField'
 export * from './UserMessage'
 export * from './FilterPanel'
 export * from './ProjectTimeline'

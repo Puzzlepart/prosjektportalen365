@@ -55,6 +55,7 @@ define([], function () {
     ColumnRenderPersistGloballyLabel: 'Oppdater globalt',
     ColumnRenderLabel: 'Vis som',
     ColumnRenderDescription: 'Overskriv Vis som for denne webdelen. Om du ønsker å endre Vis som for alle webdeler, huk av sjekkboksen under.',
+    PortfolioOverviewColumnRenderDescription: 'Velg hvordan kolonnen skal vises. Om det er tekstfelt som skal vises over flere linjer, velg Notat.',
     EditColumnLabel: 'Rediger',
     MoveRightLabel: 'Flytt til høyre',
     MoveLeftLabel: 'Flytt til venstre',

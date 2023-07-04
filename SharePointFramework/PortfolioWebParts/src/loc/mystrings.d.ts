@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  PortfolioOverviewColumnRenderDescription: string
   SearchPropertyFoundMessage: string
   SearchPropertyPlaceholder: string
   IncludeViewNameInExcelExportFilenameLabel: string

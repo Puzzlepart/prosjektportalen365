@@ -7,8 +7,7 @@ import { ColumnRenderField } from './ColumnRenderField'
 import { ColumnVisibilityField } from './ColumnVisibilityField'
 import { useColumnFormPanel } from './useColumnFormPanel'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
-import { FormFieldContainer, UserMessage } from 'pp365-shared-library'
-import { ColumnSearchPropertyField } from './ColumnSearchPropertyField'
+import { ColumnSearchPropertyField, FormFieldContainer, UserMessage } from 'pp365-shared-library'
 
 export const ColumnFormPanel: FC = () => {
   const context = useContext(PortfolioOverviewContext)
@@ -64,9 +63,13 @@ export const ColumnFormPanel: FC = () => {
         />
       </FormFieldContainer>
       <ColumnSearchPropertyField
+        label={strings.SearchPropertyLabel}
+        description={strings.SearchPropertyDescription}
+        placeholder={strings.SearchPropertyPlaceholder}
         value={column.get('fieldName')}
         onChange={(value) => setColumn('fieldName', value)}
         disabled={isEditing}
+        managedProperties={context.state.managedProperties}
       >
         {columnMessages.get('fieldName') && (
           <UserMessage
