@@ -104,12 +104,13 @@ export class PortfolioOverviewView {
   private _groupById: number
 
   /**
-   * The view properties as a map.
+   * The view properties as a map. Used in the `PortfolioOverview`
+   * component to edit and create views.
    */
   public $map: Map<string, any>
 
   /**
-   * Constructor for the PortfolioOverviewView class.
+   * Constructor for the `PortfolioOverviewView` class.
    *
    * @param item SP list item to create the view from
    */
@@ -134,10 +135,15 @@ export class PortfolioOverviewView {
    *
    * @param title Title of the view
    * @param view View to create the default view from
+   * @param sortOrder Sort order for the view if no view is provided
    */
-  public createDefault(title: string, view?: PortfolioOverviewView): PortfolioOverviewView {
+  public createDefault(
+    title: string,
+    view?: PortfolioOverviewView,
+    sortOrder?: number
+  ): PortfolioOverviewView {
     this.title = title
-    this.sortOrder = 100
+    this.sortOrder = view ? view.sortOrder + 1 : sortOrder
     this.searchQuery = view?.searchQuery ?? ''
     this.iconName = 'LocationCircle'
     this.isDefaultView = false
@@ -229,9 +235,9 @@ export class PortfolioOverviewView {
       ['title', this.title],
       ['sortOrder', this.sortOrder],
       ['searchQuery', this.searchQuery],
-      ['isDefaultView', this.isDefaultView],
       ['iconName', this.iconName],
-      ['isPersonal', this.isPersonal]
+      ['isDefaultView', this.isDefaultView],
+      ['isPersonalView', this.isPersonal]
     ])
   }
 }

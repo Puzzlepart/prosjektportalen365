@@ -13,8 +13,7 @@ import {
   Web
 } from '@pnp/sp'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
-import { makeUrlAbsolute } from '../../helpers/makeUrlAbsolute'
-import { transformFieldXml } from '../../helpers/transformFieldXml'
+import { getClassProperties, makeUrlAbsolute, transformFieldXml } from '../../helpers'
 import { IHubSite, ISPContentType } from '../../interfaces'
 import {
   PortfolioOverviewView,
@@ -188,7 +187,7 @@ export class PortalDataService {
   public async getProjectColumns(): Promise<ProjectColumn[]> {
     try {
       const spItems = await this._getList('PROJECT_COLUMNS')
-        .items.select(...Object.keys(new SPProjectColumnItem()))
+        .items.select(...getClassProperties(SPProjectColumnItem))
         .get<SPProjectColumnItem[]>()
       return spItems.map((item) => new ProjectColumn(item))
     } catch (error) {
@@ -278,7 +277,7 @@ export class PortalDataService {
       .items.orderBy('ID', true)
       .expand('GtPortfolioColumn', 'GtPortfolioColumnTooltip')
       .select(
-        ...Object.keys(new SPProjectColumnConfigItem()),
+        ...getClassProperties(SPProjectColumnConfigItem),
         'GtPortfolioColumn/Title',
         'GtPortfolioColumn/GtInternalName',
         'GtPortfolioColumnTooltip/GtManagedProperty'
@@ -289,11 +288,14 @@ export class PortalDataService {
   }
 
   /**
-   * Get portfolio overview views
+   * Get portfolio overview views. Returns all shared views and personal views.
    */
   public async getPortfolioOverviewViews(): Promise<PortfolioOverviewView[]> {
+    const filter = `GtPortfolioIsPersonalView eq 0 or (GtPortfolioIsPersonalView eq 1 and Author/EMail eq '${this._configuration.pageContext.user.email}')`
     const spItems = await this._getList('PORTFOLIO_VIEWS')
-      .items.orderBy('GtSortOrder', true)
+      .items.select(...getClassProperties(SPPortfolioOverviewViewItem))
+      .filter(filter)
+      .orderBy('GtSortOrder', true)
       .get<SPPortfolioOverviewViewItem[]>()
     return spItems.map((item) => new PortfolioOverviewView(item))
   }
@@ -458,7 +460,7 @@ export class PortalDataService {
    * @param web Web
    */
   private async _getSiteFields(web: Web): Promise<SPField[]> {
-    const siteFields = await web.fields.select(...Object.keys(new SPField())).get<SPField[]>()
+    const siteFields = await web.fields.select(...getClassProperties(SPField)).get<SPField[]>()
     return siteFields
   }
 
@@ -663,7 +665,7 @@ export class PortalDataService {
   ): Promise<SPField[]> {
     let fields = web.lists
       .getByTitle(this._configuration.listNames[list] || list)
-      .fields.select(...Object.keys(new SPField()))
+      .fields.select(...getClassProperties(SPField))
     if (filter) {
       fields = fields.filter(filter)
     }
