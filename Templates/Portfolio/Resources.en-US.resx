@@ -772,6 +772,9 @@
   <data name="SiteFields_GtFieldDataType_DisplayName" xml:space="preserve">
     <value>Datatype</value>
   </data>
+  <data name="SiteFields_GtFieldDataTypeProperties_DisplayName" xml:space="preserve">
+    <value>Egenskaper for datatype</value>
+  </data>
   <data name="SiteFields_GtResourceRole_DisplayName" xml:space="preserve">
     <value>Rolle</value>
   </data>
@@ -1575,6 +1578,9 @@
   </data>
   <data name="SiteFields_GtFieldDataType_Description" xml:space="preserve">
     <value>Datatype for denne kolonnen. Styrer hvordan kolonnen blir vist i Porteføljeoversikten.</value>
+  </data>
+  <data name="SiteFields_GtFieldDataTypeProperties_Description" xml:space="preserve">
+    <value></value>
   </data>
   <data name="SiteFields_GtResourceRole_Description" xml:space="preserve">
     <value>Velg den rollen personen skal ha i prosjektet</value>
