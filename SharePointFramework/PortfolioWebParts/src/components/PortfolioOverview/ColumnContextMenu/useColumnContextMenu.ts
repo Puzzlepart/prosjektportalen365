@@ -1,4 +1,9 @@
-import { ContextualMenuItemType, format, IContextualMenuItem, IContextualMenuProps } from '@fluentui/react'
+import {
+  ContextualMenuItemType,
+  format,
+  IContextualMenuItem,
+  IContextualMenuProps
+} from '@fluentui/react'
 import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared-library/lib/helpers/getObjectValue'
@@ -81,13 +86,14 @@ export function useColumnContextMenu(): IContextualMenuProps {
         checked: column.isSorted && !context.state.sortBy?.customSort && !column.isSortedDescending,
         onClick: () => context.dispatch(SET_SORT({ column, isSortedDescending: false }))
       },
-      !_.isEmpty(columnCustomSorts) && ({
-        key: 'CUSTOM_SORTS_HEADER',
-        text: strings.CustomSortsText,
-        subMenuProps: {
-          items: columnCustomSorts
-        }
-      } as IContextualMenuItem),
+      !_.isEmpty(columnCustomSorts) &&
+        ({
+          key: 'CUSTOM_SORTS_HEADER',
+          text: strings.CustomSortsText,
+          subMenuProps: {
+            items: columnCustomSorts
+          }
+        } as IContextualMenuItem),
       {
         key: 'DIVIDER_01',
         itemType: ContextualMenuItemType.Divider
