@@ -4,11 +4,7 @@ import _ from 'lodash'
 import { ExcelExportService } from 'pp365-shared-library/lib/services'
 import { useCallback, useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
-import {
-  EXCEL_EXPORT_ERROR,
-  EXCEL_EXPORT_SUCCESS,
-  START_EXCEL_EXPORT
-} from '../reducer'
+import { EXCEL_EXPORT_ERROR, EXCEL_EXPORT_SUCCESS, START_EXCEL_EXPORT } from '../reducer'
 import { IPortfolioOverviewCommandsProps } from './types'
 
 export function useExcelExport(props: IPortfolioOverviewCommandsProps) {
@@ -21,9 +17,10 @@ export function useExcelExport(props: IPortfolioOverviewCommandsProps) {
   const exportToExcel = useCallback(() => {
     context.dispatch(START_EXCEL_EXPORT())
     try {
-      const items = _.isArray(context.state.selectedItems) && context.state.selectedItems.length > 0
-        ? context.state.selectedItems
-        : props.filteredData.items
+      const items =
+        _.isArray(context.state.selectedItems) && context.state.selectedItems.length > 0
+          ? context.state.selectedItems
+          : props.filteredData.items
       props.filteredData.columns.forEach((col) => {
         if (col.dataType === 'date') {
           items.map((item) => {

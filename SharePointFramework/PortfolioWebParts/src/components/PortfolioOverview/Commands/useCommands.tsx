@@ -32,14 +32,14 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
   const context = useContext(PortfolioOverviewContext)
   const filters = usePortfolioOverviewFilters()
   const convertViewsToContextualMenuItems = useConvertViewsToContextualMenuItems()
-  const {exportToExcelContextualMenuItem} = useExcelExport(props)
+  const { exportToExcelContextualMenuItem } = useExcelExport(props)
 
   const sharedViews = convertViewsToContextualMenuItems((v) => !v.isPersonal)
   const personalViews = convertViewsToContextualMenuItems((v) => v.isPersonal)
   const userCanManageViews =
     !context.props.isParentProject && context.props.configuration.userCanAddViews
 
-  const items= [exportToExcelContextualMenuItem]
+  const items = [exportToExcelContextualMenuItem]
   const farItems: IContextualMenuItem[] = []
   const viewOptionsItem: IContextualMenuItem = {
     key: 'VIEW_OPTIONS',
@@ -104,22 +104,22 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       subMenuProps: {
         items: context.props.configuration.programs.map(
           (p) =>
-          ({
-            key: p.id,
-            text: p.name,
-            canCheck: true,
-            checked: context.state.currentView?.id === p.id,
-            onClick: () => {
-              const defaultView = context.props.configuration.views.find((v) => v.isDefaultView)
-              if (!defaultView) return
-              const view = new PortfolioOverviewView().configureFrom(defaultView).set({
-                id: p.id,
-                title: p.name
-              })
-              view.searchQueries = p.buildQueries(defaultView.searchQuery)
-              context.dispatch(CHANGE_VIEW(view))
-            }
-          } as IContextualMenuItem)
+            ({
+              key: p.id,
+              text: p.name,
+              canCheck: true,
+              checked: context.state.currentView?.id === p.id,
+              onClick: () => {
+                const defaultView = context.props.configuration.views.find((v) => v.isDefaultView)
+                if (!defaultView) return
+                const view = new PortfolioOverviewView().configureFrom(defaultView).set({
+                  id: p.id,
+                  title: p.name
+                })
+                view.searchQueries = p.buildQueries(defaultView.searchQuery)
+                context.dispatch(CHANGE_VIEW(view))
+              }
+            } as IContextualMenuItem)
         )
       }
     }
