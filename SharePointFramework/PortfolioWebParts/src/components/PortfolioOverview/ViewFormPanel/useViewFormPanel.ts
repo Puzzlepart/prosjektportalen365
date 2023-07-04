@@ -1,26 +1,64 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { PortfolioOverviewContext } from '../context'
-
+import { PortfolioOverviewView } from 'pp365-shared-library'
+import { TOGGLE_VIEW_FORM_PANEL } from '../reducer'
 
 /**
  * Component logic hook for `ViewFormPanel`.
  */
 export function useViewFormPanel() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const context = useContext(PortfolioOverviewContext)
+  const [view, $setView] = useState<PortfolioOverviewView['$map']>(
+    new PortfolioOverviewView().createDefault('', context.state.currentView).$map
+  )
+  const isEditing = !!context.state.viewForm.view
 
+  useEffect(() => {
+    if (!isEditing) {
+      $setView(new PortfolioOverviewView().createDefault('', context.state.currentView).$map)
+    }
+  }, [context.state.currentView])
 
-
-  const onSave = async () => {
-    // TODO: Save the view
+  /**
+   * Dismisses the form panel by dispatching the `TOGGLE_VIEW_FORM_PANEL` action.
+   */
+  const onDismiss = () => {
+    context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: false }))
   }
 
+  const onSave = async () => {
+    if (isEditing) {
+      // TODO: Update the view
+    } else {
+      // TODO: Add the view
+    }
+  }
+
+  /**
+   * Sets a view property.
+   *
+   * @param key Key of the view property to set
+   * @param value Value of the view property to set
+   */
+  const setView = (key: string, value: any) => {
+    $setView((prev) => {
+      const newView = new Map(prev)
+      newView.set(key, value)
+      return newView
+    })
+  }
+
+  /**
+   * Save is disabled if the view title is less than 2 characters or the search query is less than 51 characters.
+   */
+  const isSaveDisabled = view.get('title').length < 2 || view.get('searchQuery').length < 51
 
   return {
     onSave,
     isEditing: false,
-    onDismiss: () => {
-      // TODO: Dispatch action to close the panel
-    }
+    onDismiss,
+    view,
+    setView,
+    isSaveDisabled
   } as const
 }

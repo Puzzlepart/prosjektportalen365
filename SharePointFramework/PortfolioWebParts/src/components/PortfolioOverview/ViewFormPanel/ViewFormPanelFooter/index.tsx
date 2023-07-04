@@ -6,11 +6,11 @@ import { TOGGLE_VIEW_FORM_PANEL } from '../../reducer'
 import styles from './ViewFormPanelFooter.module.scss'
 import { IViewFormPanelFooterProps } from './types'
 
-export const ViewFormPanelFooter: FC<IViewFormPanelFooterProps> = () => {
+export const ViewFormPanelFooter: FC<IViewFormPanelFooterProps> = ({ isSaveDisabled }) => {
   const context = useContext(PortfolioOverviewContext)
   return (
     <div className={styles.root}>
-      <PrimaryButton text={strings.SaveButtonLabel}/>
+      <PrimaryButton text={strings.SaveButtonLabel} disabled={isSaveDisabled} />
       <DefaultButton
         text={strings.CloseButtonLabel}
         style={{ marginLeft: 4 }}
