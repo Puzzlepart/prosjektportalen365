@@ -65,13 +65,6 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
 
   const sharedViews = convertViewsToContextualMenuItems((v) => !v.isPersonal)
   const personalViews = convertViewsToContextualMenuItems((v) => v.isPersonal)
-  const programViewOptions: IDropdownOption[] = context.props.showProgramViews
-    ? context.props.configuration.programs.map((p) => ({
-        key: p.id,
-        text: p.name,
-        data: p
-      }))
-    : []
   const userCanManageViews =
     !context.props.isParentProject && context.props.configuration.userCanAddViews
 
@@ -122,134 +115,138 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
     } as IContextualMenuItem
   ].filter((i) => i.data.isVisible)
 
-  const farItems: IContextualMenuItem[] = [
-    {
-      key: 'NEW_VIEW',
-      name: strings.NewViewText,
-      iconProps: { iconName: 'CirclePlus' },
-      buttonStyles: { root: { border: 'none' } },
-      data: {
-        isVisible: context.props.configuration.userCanAddViews && context.props.showViewSelector
-      },
-      disabled: context.state.loading,
-      onClick: () => redirect(context.props.configuration.viewsUrls.defaultNewFormUrl)
-    } as IContextualMenuItem,
-    {
-      key: 'VIEW_OPTIONS',
-      name: context.state.currentView?.title,
-      iconProps: { iconName: 'List' },
-      buttonStyles: { root: { border: 'none' } },
-      itemType: ContextualMenuItemType.Header,
-      data: { isVisible: context.props.showViewSelector },
-      disabled: context.state.loading,
-      subMenuProps: {
-        items: [
-          {
-            key: 'VIEW_LIST',
-            name: strings.ListViewText,
-            iconProps: { iconName: 'List' },
-            canCheck: true,
-            checked: !context.state.isCompact,
-            onClick: () => {
-              context.dispatch(TOGGLE_COMPACT())
-            }
-          },
-          {
-            key: 'VIEW_COMPACT',
-            name: strings.CompactViewText,
-            iconProps: { iconName: 'AlignLeft' },
-            canCheck: true,
-            checked: context.state.isCompact,
-            onClick: () => {
-              context.dispatch(TOGGLE_COMPACT())
-            }
-          },
-          {
-            key: 'VIEWS_DIVIDER',
-            itemType: ContextualMenuItemType.Divider
-          },
-          ...sharedViews,
-          !_.isEmpty(programViewOptions) && {
-            key: 'PROGRAMS_HEADER',
-            itemType: ContextualMenuItemType.Header,
-            text: strings.ProgramsHeaderText
-          },
-          !_.isEmpty(programViewOptions) && {
-            key: 'PROGRAMS_DROPDOWN',
-            itemType: ContextualMenuItemType.Normal,
-            onRender: () => (
-              <div style={{ padding: '6px 12px' }}>
-                <Dropdown
-                  placeholder={strings.SelectProgramText}
-                  options={programViewOptions}
-                  defaultSelectedKey={context.state.currentView?.id}
-                  onChange={(_event, option) => {
-                    const defaultView = context.props.configuration.views.find(
-                      (v) => v.isDefaultView
-                    )
-                    const view = new PortfolioOverviewView().configureFrom(defaultView).set({
-                      id: option.key,
-                      title: option.text,
-                      iconName: 'ProjectCollection'
-                    })
-                    view.searchQueries = (option.data as ProgramItem).buildQueries(
-                      defaultView.searchQuery
-                    )
-                    context.dispatch(CHANGE_VIEW(view))
-                  }}
-                />
-              </div>
-            )
-          },
-          !_.isEmpty(personalViews) && {
-            key: 'PERSONAL_VIEWS_HEADER',
-            itemType: ContextualMenuItemType.Header,
-            text: strings.PersonalViewsHeaderText
-          },
-          ...personalViews,
-          userCanManageViews && {
-            key: 'VIEW_ACTIONS_DIVIDER',
-            itemType: ContextualMenuItemType.Divider
-          },
-          userCanManageViews && {
-            key: 'SAVE_VIEW_AS',
-            name: strings.SaveViewAsText,
-            disabled: true
-          },
-          userCanManageViews && {
-            key: 'EDIT_VIEW',
-            name: strings.EditViewText,
-            disabled: context.state.loading || typeof context.state.currentView?.id !== 'number',
-            onClick: () =>
-              redirect(
-                `${context.props.configuration.viewsUrls.defaultEditFormUrl}?ID=${context.state.currentView?.id}`
-              )
+  const farItems: IContextualMenuItem[] = []
+  farItems.push({
+    key: 'NEW_VIEW',
+    name: strings.NewViewText,
+    iconProps: { iconName: 'CirclePlus' },
+    buttonStyles: { root: { border: 'none' } },
+    data: {
+      isVisible: context.props.configuration.userCanAddViews && context.props.showViewSelector
+    },
+    disabled: context.state.loading,
+    onClick: () => redirect(context.props.configuration.viewsUrls.defaultNewFormUrl)
+  })
+  const viewOptions = {
+    key: 'VIEW_OPTIONS',
+    name: context.state.currentView?.title,
+    iconProps: { iconName: 'List' },
+    buttonStyles: { root: { border: 'none' } },
+    itemType: ContextualMenuItemType.Header,
+    data: { isVisible: context.props.showViewSelector },
+    disabled: context.state.loading,
+    subMenuProps: {
+      items: [
+        {
+          key: 'VIEW_LIST',
+          name: strings.ListViewText,
+          iconProps: { iconName: 'List' },
+          canCheck: true,
+          checked: !context.state.isCompact,
+          onClick: () => {
+            context.dispatch(TOGGLE_COMPACT())
           }
-        ].filter(Boolean)
-      }
-    } as IContextualMenuItem,
-    {
-      key: 'FILTERS',
-      name: '',
-      iconProps: { iconName: 'Filter' },
-      buttonStyles: { root: { border: 'none' } },
+        },
+        {
+          key: 'VIEW_COMPACT',
+          name: strings.CompactViewText,
+          iconProps: { iconName: 'AlignLeft' },
+          canCheck: true,
+          checked: context.state.isCompact,
+          onClick: () => {
+            context.dispatch(TOGGLE_COMPACT())
+          }
+        },
+        {
+          key: 'VIEWS_DIVIDER',
+          itemType: ContextualMenuItemType.Divider
+        },
+        ...sharedViews
+      ]
+    }
+  } as IContextualMenuItem
+  if (context.props.showProgramViews && !_.isEmpty(context.props.configuration.programs)) {
+    const programViewOptions: IDropdownOption[] = context.props.configuration.programs.map((p) => ({
+      key: p.id,
+      text: p.name,
+      data: p
+    }))
+    viewOptions.subMenuProps.items.push({
+      key: 'PROGRAMS_HEADER',
+      itemType: ContextualMenuItemType.Header,
+      text: strings.ProgramsHeaderText
+    })
+    viewOptions.subMenuProps.items.push({
+      key: 'PROGRAMS_DROPDOWN',
       itemType: ContextualMenuItemType.Normal,
-      canCheck: true,
-      checked: context.state.isFilterPanelOpen,
-      disabled: context.state.loading,
-      data: { isVisible: context.props.showFilters },
-      onClick: (ev) => {
-        ev.preventDefault()
-        ev.stopPropagation()
-        context.dispatch(TOGGLE_FILTER_PANEL())
-      }
-    } as IContextualMenuItem
-  ].filter((i) => i.data.isVisible)
+      onRender: () => (
+        <div style={{ padding: '6px 12px' }}>
+          <Dropdown
+            placeholder={strings.SelectProgramText}
+            options={programViewOptions}
+            defaultSelectedKey={context.state.currentView?.id}
+            onChange={(_event, option) => {
+              const defaultView = context.props.configuration.views.find((v) => v.isDefaultView)
+              const view = new PortfolioOverviewView().configureFrom(defaultView).set({
+                id: option.key,
+                title: option.text,
+                iconName: 'ProjectCollection'
+              })
+              view.searchQueries = (option.data as ProgramItem).buildQueries(
+                defaultView.searchQuery
+              )
+              context.dispatch(CHANGE_VIEW(view))
+            }}
+          />
+        </div>
+      )
+    })
+  }
+  if (!_.isEmpty(personalViews)) {
+    viewOptions.subMenuProps.items.push({
+      key: 'PERSONAL_VIEWS_HEADER',
+      itemType: ContextualMenuItemType.Header,
+      text: strings.PersonalViewsHeaderText
+    })
+    viewOptions.subMenuProps.items.push(...personalViews)
+  }
+  if (userCanManageViews) {
+    viewOptions.subMenuProps.items.push({
+      key: 'VIEW_ACTIONS_DIVIDER',
+      itemType: ContextualMenuItemType.Divider
+    })
+    viewOptions.subMenuProps.items.push({
+      key: 'EDIT_VIEW',
+      name: strings.EditViewText,
+      disabled: context.state.loading || context.state.currentView?.isProgramView,
+      onClick: () =>
+        redirect(
+          `${context.props.configuration.viewsUrls.defaultEditFormUrl}?ID=${context.state.currentView?.id}`
+        )
+    })
+  }
+  farItems.push(viewOptions)
+  farItems.push({
+    key: 'FILTERS',
+    name: '',
+    iconProps: { iconName: 'Filter' },
+    buttonStyles: { root: { border: 'none' } },
+    itemType: ContextualMenuItemType.Normal,
+    canCheck: true,
+    checked: context.state.isFilterPanelOpen,
+    disabled: context.state.loading,
+    data: { isVisible: context.props.showFilters },
+    onClick: (ev) => {
+      ev.preventDefault()
+      ev.stopPropagation()
+      context.dispatch(TOGGLE_FILTER_PANEL())
+    }
+  })
 
   return {
     commandBarProps: {
       items,
-      farItems
+      farItems: farItems.filter((i) => i.data?.isVisible)
     },
     filters: [
       {

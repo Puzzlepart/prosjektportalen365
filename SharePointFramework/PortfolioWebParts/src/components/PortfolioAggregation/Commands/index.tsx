@@ -100,11 +100,6 @@ export const Commands: FC = () => {
               itemType: ContextualMenuItemType.Divider
             },
             {
-              key: 'SaveViewAs',
-              name: strings.SaveViewAsText,
-              disabled: true
-            },
-            {
               key: 'EditView',
               name: strings.EditViewText,
               onClick: () =>

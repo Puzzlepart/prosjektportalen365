@@ -42,7 +42,9 @@ export function useColumnContextMenu(): IContextualMenuProps {
         onClick: () => {
           context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
         },
-        disabled: !context.props.pageContext.legacyPageContext.isSiteAdmin
+        disabled:
+          !context.props.pageContext.legacyPageContext.isSiteAdmin ||
+          context.state.currentView?.isProgramView
       },
       {
         key: 'TOGGLE_EDIT_VIEW_COLUMNS_PANEL',
@@ -51,7 +53,9 @@ export function useColumnContextMenu(): IContextualMenuProps {
         onClick: () => {
           context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: true }))
         },
-        disabled: !context.props.pageContext.legacyPageContext.isSiteAdmin
+        disabled:
+          !context.props.pageContext.legacyPageContext.isSiteAdmin ||
+          context.state.currentView?.isProgramView
       }
     ]
   } else {

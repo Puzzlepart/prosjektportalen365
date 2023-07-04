@@ -155,7 +155,6 @@ define([], function () {
     AllocationPercetageLabel: 'Allokeringsprosent',
     AllocationStatusLabel: 'Allokeringsstatus',
     CommentLabel: 'Kommentar',
-    SaveViewAsText: 'Lagre visning som',
     ProjectsAccessSearchBoxPlaceholderText: 'Søk i {0} prosjekter du har tilgang til...',
     MyProjectsSearchBoxPlaceholderText: 'Søk i {0} prosjekter du er medlem av...',
     AllProjectsSearchBoxPlaceholderText: 'Søk i alle {0} prosjekter...',

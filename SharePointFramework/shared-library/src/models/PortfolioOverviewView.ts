@@ -123,6 +123,13 @@ export class PortfolioOverviewView {
   }
 
   /**
+   * Returns `true` if the view is a program view, `false` otherwise.
+   */
+  public get isProgramView(): boolean {
+    return typeof this.id === 'string'
+  }
+
+  /**
    * Configure the view with columns. If `columnOrder` is set, the columns
    * will be sorted according to the order in the `columnOrder` array. Otherwise
    * the columns will be sorted according to the `sortOrder` property on the

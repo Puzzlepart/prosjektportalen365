@@ -172,7 +172,6 @@ declare interface IPortfolioWebPartsStrings {
   AllocationPercetageLabel: string
   AllocationStatusLabel: string
   CommentLabel: string
-  SaveViewAsText: string
   MyProjectsSearchBoxPlaceholderText: string
   AllProjectsSearchBoxPlaceholderText: string
   ParentProjectsSearchBoxPlaceholderText: string
