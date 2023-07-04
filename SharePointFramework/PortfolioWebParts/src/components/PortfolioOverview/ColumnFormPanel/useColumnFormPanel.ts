@@ -73,7 +73,7 @@ export function useColumnFormPanel() {
       GtIsRefinable: column.get('isRefinable')
     }
     if (colummData.dataTypeProperties) {
-      columnItem.GtFieldDataTypeProperties = JSON.stringify(colummData.dataTypeProperties)
+      columnItem.GtFieldDataTypeProperties = JSON.stringify(colummData.dataTypeProperties, null, 2)
     }
     if (isEditing) {
       await context.props.dataAdapter.portalDataService.updateItemInList(

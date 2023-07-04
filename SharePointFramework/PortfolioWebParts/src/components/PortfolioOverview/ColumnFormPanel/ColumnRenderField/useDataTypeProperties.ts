@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { useEffect, useState } from 'react'
 import {
   ColumnRenderFieldOption,
@@ -18,8 +19,14 @@ export function useDataTypeProperties(
   useEffect(() => {
     if (selectedOption?.data?.getDataTypeProperties) {
       setFields(
-        selectedOption.data.getDataTypeProperties((key: string, value: any) => {
-          setDataTypeProperties((prev) => ({ ...prev, [key]: value }))
+        selectedOption.data.getDataTypeProperties((key, value) => {
+          setDataTypeProperties((prev) => {
+            if (value === '' || value === undefined || value === null) return _.omit(prev, key)
+            return {
+              ...prev,
+              [key]: value
+            }
+          })
         }, dataTypeProperties)
       )
     }

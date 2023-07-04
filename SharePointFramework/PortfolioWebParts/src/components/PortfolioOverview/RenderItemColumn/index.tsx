@@ -53,9 +53,7 @@ const renderDataTypeMap: Record<RenderDataType, RenderFunction> = {
     let [url, description] = props.columnValue.split(', ').filter((v) => !stringIsNullOrEmpty(v))
     const target = props.dataTypeProperties.get('openInNewTab') === false ? '_self' : '_blank'
     if (stringIsNullOrEmpty(description)) {
-      description = stringIsNullOrEmpty(props.dataTypeProperties.get('description'))
-        ? url
-        : props.dataTypeProperties.get('description')
+      description = props.dataTypeProperties.get('description') ?? url
     }
     return (
       <Link href={url} target={target} rel='noopener noreferrer'>
