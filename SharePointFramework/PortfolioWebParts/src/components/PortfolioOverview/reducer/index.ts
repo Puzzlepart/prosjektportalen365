@@ -121,7 +121,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.columnContextMenu = payload as any
       })
       .addCase(SET_GROUP_BY, (state, { payload }) => {
-        state.groupBy = payload.fieldName === state.groupBy.fieldName ? null : payload
+        state.groupBy = payload.fieldName === state.groupBy?.fieldName ? null : payload
       })
       .addCase(SET_SORT, (state, { payload }) => {
         const isSortedDescending = Object.keys(payload).includes('isSortedDescending')
