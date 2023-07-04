@@ -1,4 +1,5 @@
 import { Link, TooltipHost } from '@fluentui/react'
+
 import { Icon } from '@fluentui/react/lib/Icon'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -12,7 +13,7 @@ import { TitleColumn } from './TitleColumn'
 import { UserColumn } from './UserColumn'
 import { IRenderItemColumnProps } from './types'
 
-type RenderDataType = 'user' | 'date' | 'currency' | 'tags' | 'boolean' | 'url' | 'datetime'
+type RenderDataType = 'user' | 'date' | 'currency' | 'tags' | 'boolean' | 'url'
 type RenderFunction = (props: IRenderItemColumnProps) => JSX.Element
 
 /**
@@ -20,21 +21,44 @@ type RenderFunction = (props: IRenderItemColumnProps) => JSX.Element
  */
 const renderDataTypeMap: Record<RenderDataType, RenderFunction> = {
   user: (props: IRenderItemColumnProps) => <UserColumn {...props} />,
-  date: ({ columnValue: colValue }: IRenderItemColumnProps) => <span>{formatDate(colValue)}</span>,
-  datetime: ({ columnValue: colValue }: IRenderItemColumnProps) => (
-    <span>{formatDate(colValue, true)}</span>
-  ),
-  currency: ({ columnValue: colValue }: IRenderItemColumnProps) => (
-    <span>{tryParseCurrency(colValue)}</span>
-  ),
-  tags: (props: IRenderItemColumnProps) => <TagsColumn {...props} />,
-  boolean: ({ columnValue: colValue }: IRenderItemColumnProps) => (
-    <span>{parseInt(colValue) === 1 ? strings.BooleanYes : strings.BooleanNo}</span>
-  ),
-  url: ({ columnValue: colValue }: IRenderItemColumnProps) => {
-    const [url, description] = colValue.split(', ')
+  date: (props: IRenderItemColumnProps) => {
+    const includeTime = props.dataTypeProperties.get('includeTime') ?? false
+    return <span>{formatDate(props.columnValue, includeTime)}</span>
+  },
+  currency: (props: IRenderItemColumnProps) => {
+    const currencyPrefix = props.dataTypeProperties.get('currencyPrefix') ?? 'kr'
+    const minimumFractionDigits = props.dataTypeProperties.get('minimumFractionDigits') ?? 0
+    const maximumFractionDigits = props.dataTypeProperties.get('maximumFractionDigits') ?? 0
     return (
-      <Link href={url} target='_blank'>
+      <span>
+        {tryParseCurrency(
+          props.columnValue,
+          undefined,
+          currencyPrefix,
+          minimumFractionDigits,
+          maximumFractionDigits
+        )}
+      </span>
+    )
+  },
+  tags: (props: IRenderItemColumnProps) => <TagsColumn {...props} />,
+  boolean: (props: IRenderItemColumnProps) => {
+    const valueIfTrue = props.dataTypeProperties.get('valueIfTrue') ?? strings.BooleanYes
+    const valueIfFalse = props.dataTypeProperties.get('valueIfFalse') ?? strings.BooleanNo
+    const displayValue = parseInt(props.columnValue) === 1 ? valueIfTrue : valueIfFalse
+    return <span>{displayValue}</span>
+  },
+  url: (props: IRenderItemColumnProps) => {
+    // eslint-disable-next-line prefer-const
+    let [url, description] = props.columnValue.split(', ').filter((v) => !stringIsNullOrEmpty(v))
+    const target = props.dataTypeProperties.get('openInNewTab') === false ? '_self' : '_blank'
+    if (stringIsNullOrEmpty(description)) {
+      description = stringIsNullOrEmpty(props.dataTypeProperties.get('description'))
+        ? url
+        : props.dataTypeProperties.get('description')
+    }
+    return (
+      <Link href={url} target={target} rel='noopener noreferrer'>
         {description}
       </Link>
     )
@@ -56,7 +80,10 @@ function renderItemColumn(
   props: IPortfolioOverviewProps
 ) {
   const columnValue = item[column.fieldName]
-  if (!columnValue) return null
+  const dataTypeProperties = new Map(Object.entries(column.data?.dataTypeProperties ?? {}))
+  if (!columnValue) {
+    return dataTypeProperties.get('fallbackValue') ?? null
+  }
 
   switch (column.fieldName) {
     case 'Title': {
@@ -65,7 +92,11 @@ function renderItemColumn(
   }
 
   if (renderDataTypeMap[column.dataType]) {
-    return renderDataTypeMap[column.dataType]({ column, columnValue })
+    return renderDataTypeMap[column.dataType]({
+      column,
+      columnValue,
+      dataTypeProperties
+    } as IRenderItemColumnProps)
   }
 
   const config = column.config ? column.config[columnValue] : null

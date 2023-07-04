@@ -1,4 +1,12 @@
 declare interface IPortfolioWebPartsStrings {
+  ColumnRenderOptionDateIncludeTimeLabel: string
+  ColumnRenderOptionUrlDescriptionDescription: string
+  ColumnRenderOptionUrlDescriptionLabel: string
+  ColumnRenderOptionUrlOpenInNewTabLabel: string
+  ColumnRenderOptionUrl: string
+  ColumnRenderOptionCurrencyMinimumFractionDigitsLabel: string
+  ColumnRenderOptionCurrencyMaximumFractionDigitsLabel: string
+  ColumnRenderOptionCurrencyFallbackValueLabel: string
   ColumnRenderOptionCurrencyPrefixLabel: string
   ColumnRenderOptionCurrency: string
   ColumnRenderOptionBooleanTrue: string

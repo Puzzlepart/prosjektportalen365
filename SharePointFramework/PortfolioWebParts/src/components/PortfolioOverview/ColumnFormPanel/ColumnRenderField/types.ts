@@ -3,7 +3,9 @@ import {
   IIconProps,
   ISelectableOption,
   ITextFieldProps,
-  TextField
+  IToggleProps,
+  TextField,
+  Toggle
 } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 
@@ -112,12 +114,19 @@ export const renderAsOptions: ColumnRenderFieldOption[] = [
   {
     key: 'date',
     text: strings.ColumnRenderOptionDate,
-    data: { iconProps: { iconName: 'Calendar' } }
-  },
-  {
-    key: 'datetime',
-    text: strings.ColumnRenderOptionDateTime,
-    data: { iconProps: { iconName: 'DateTime' } }
+    data: {
+      iconProps: { iconName: 'Calendar' },
+      getDataTypeProperties: (onChange, dataTypeProperties: Record<string, any>) => [
+        [
+          Toggle,
+          {
+            label: strings.ColumnRenderOptionDateIncludeTimeLabel,
+            checked: dataTypeProperties['includeTime'] ?? false,
+            onChange: (_, checked) => onChange('includeTime', checked)
+          } as IToggleProps
+        ]
+      ]
+    }
   },
   {
     key: 'user',
@@ -138,5 +147,32 @@ export const renderAsOptions: ColumnRenderFieldOption[] = [
     key: 'percentage',
     text: strings.ColumnRenderOptionPercentage,
     data: { iconProps: { iconName: 'CalculatorPercentage' } }
+  },
+  {
+    key: 'url',
+    id: 'URL',
+    text: strings.ColumnRenderOptionUrl,
+    data: {
+      iconProps: { iconName: 'Link' },
+      getDataTypeProperties: (onChange, dataTypeProperties: Record<string, any>) => [
+        [
+          Toggle,
+          {
+            label: strings.ColumnRenderOptionUrlOpenInNewTabLabel,
+            checked: dataTypeProperties['openInNewTab'] ?? false,
+            onChange: (_, checked) => onChange('openInNewTab', checked)
+          } as IToggleProps
+        ],
+        [
+          TextField,
+          {
+            label: strings.ColumnRenderOptionUrlDescriptionLabel,
+            description: strings.ColumnRenderOptionUrlDescriptionDescription,
+            value: dataTypeProperties['description'],
+            onChange: (_, value) => onChange('description', value)
+          } as ITextFieldProps
+        ]
+      ]
+    }
   }
 ]

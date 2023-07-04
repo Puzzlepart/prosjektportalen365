@@ -72,6 +72,9 @@ export function useColumnFormPanel() {
       GtIsGroupable: colummData.isGroupable,
       GtIsRefinable: column.get('isRefinable')
     }
+    if (colummData.dataTypeProperties) {
+      columnItem.GtFieldDataTypeProperties = JSON.stringify(colummData.dataTypeProperties)
+    }
     if (isEditing) {
       await context.props.dataAdapter.portalDataService.updateItemInList(
         'PROJECT_COLUMNS',
