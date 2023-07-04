@@ -89,6 +89,11 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
   showExcelExportButton?: boolean
 
   /**
+   * Include view name in Excel export filename
+   */
+  includeViewNameInExcelExportFilename?: boolean
+
+  /**
    * Show command bar
    */
   showCommandBar?: boolean

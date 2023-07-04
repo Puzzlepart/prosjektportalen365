@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  IncludeViewNameInExcelExportFilenameLabel: string
   DefaultViewSetWarningMessage: string
   PortfolioViewSearchQueryDescription: string
   SearchQueryLabel: string

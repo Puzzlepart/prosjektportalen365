@@ -17,20 +17,15 @@ export function useExcelExport(props: IPortfolioOverviewCommandsProps) {
   const exportToExcel = useCallback(() => {
     context.dispatch(START_EXCEL_EXPORT())
     try {
-      let items =
+      const items =
         _.isArray(context.state.selectedItems) && context.state.selectedItems.length > 0
           ? context.state.selectedItems
           : props.filteredData.items
-      props.filteredData.columns.forEach((col) => {
-        if (col.dataType === 'date') {
-          items = items.map((item) => ({
-            ...item,
-            [col.fieldName]: new Date(item[col.fieldName])
-          }))
-        }
-      })
-
-      ExcelExportService.export(items, props.filteredData.columns)
+      let fileNamePart: string
+      if (context.props.includeViewNameInExcelExportFilename) {
+        fileNamePart = context.state.currentView?.title.replace(/[^a-z0-9]/gi, '-')
+      }
+      ExcelExportService.export(items, props.filteredData.columns, fileNamePart)
       context.dispatch(EXCEL_EXPORT_SUCCESS())
     } catch (error) {
       context.dispatch(EXCEL_EXPORT_ERROR(error))
