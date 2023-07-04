@@ -17,19 +17,21 @@ export function useDataTypeProperties(
   const [fields, setFields] = useState<ColumnRenderFieldOptionAdditionalField[]>([])
 
   useEffect(() => {
-    if (selectedOption?.data?.getDataTypeProperties) {
-      setFields(
-        selectedOption.data.getDataTypeProperties((key, value) => {
-          setDataTypeProperties((prev) => {
-            if (value === '' || value === undefined || value === null) return _.omit(prev, key)
-            return {
-              ...prev,
-              [key]: value
-            }
-          })
-        }, dataTypeProperties)
-      )
+    if (!selectedOption?.data?.getDataTypeProperties) {
+      setFields([])
+      return
     }
+    setFields(
+      selectedOption.data.getDataTypeProperties((key, value) => {
+        setDataTypeProperties((prev) => {
+          if (value === '' || value === undefined || value === null) return _.omit(prev, key)
+          return {
+            ...prev,
+            [key]: value
+          }
+        })
+      }, dataTypeProperties)
+    )
   }, [selectedOption, dataTypeProperties])
 
   useEffect(() => {
