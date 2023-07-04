@@ -22,6 +22,7 @@ export const DATA_FETCHED = createAction<{
   items: any[]
   currentView: PortfolioOverviewView
   groupBy: ProjectColumn
+  managedProperties: string[]
 }>('DATA_FETCHED')
 
 /**

@@ -47,7 +47,11 @@ import {
   ProgramItem,
   SPChartConfigurationItem
 } from '../models'
-import { IPortfolioWebPartsDataAdapter, IFetchDataForViewItemResult } from './types'
+import {
+  IPortfolioWebPartsDataAdapter,
+  IFetchDataForViewItemResult,
+  IPortfolioViewData
+} from './types'
 import * as config from './config'
 
 /**
@@ -107,7 +111,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         const chart = new ChartConfiguration(item, fields)
         return chart
       })
-      const items = (await this.fetchDataForView(view, configuration, siteId)).map(
+      const items = (await this.fetchDataForView(view, configuration, siteId)).items.map(
         (i) => new ChartDataItem(i.Title, i)
       )
       const chartData = new ChartData(items)
@@ -185,7 +189,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
     siteId: string
-  ): Promise<IFetchDataForViewItemResult[]> {
+  ): Promise<IPortfolioViewData> {
     const isCurrentUserInManagerGroup = await this.isUserInGroup(strings.PortfolioManagerGroupName)
     if (isCurrentUserInManagerGroup) {
       return await this.fetchDataForManagerView(view, configuration, siteId)
@@ -194,22 +198,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  /**
-   * Fetch data for regular view
-   *
-   * @param view View configuration
-   * @param configuration PortfolioOverviewConfiguration
-   * @param siteId Site ID
-   * @param siteIdProperty Site ID property
-   */
   public async fetchDataForRegularView(
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
-  ): Promise<IFetchDataForViewItemResult[]> {
+  ): Promise<IPortfolioViewData> {
     try {
-      const { projects, sites, statusReports } = await this._fetchDataForView(
+      const { projects, sites, statusReports, managedProperties } = await this._fetchDataForView(
         view,
         configuration,
         siteId,
@@ -227,35 +223,27 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         }
       })
 
-      return items
+      return { items, managedProperties } as IPortfolioViewData
     } catch (err) {
       throw err
     }
   }
 
-  /**
-   * Fetch data for manager view.
-   *
-   * @param view View
-   * @param configuration Configuration
-   * @param siteId Site ID
-   * @param siteIdProperty Site ID property (defaults to **GtSiteIdOWSTEXT**)
-   */
   public async fetchDataForManagerView(
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
-  ): Promise<IFetchDataForViewItemResult[]> {
+  ): Promise<IPortfolioViewData> {
     try {
-      const { projects, sites, statusReports } = await this._fetchDataForView(
+      const { projects, sites, statusReports, managedProperties } = await this._fetchDataForView(
         view,
         configuration,
         siteId,
         siteIdProperty
       )
 
-      const items = projects.map((project) => {
+      const items: IFetchDataForViewItemResult[] = projects.map((project) => {
         const [statusReport] = statusReports.filter(
           (res) => res[siteIdProperty] === project[siteIdProperty]
         )
@@ -268,7 +256,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         }
       })
 
-      return items
+      return { items, managedProperties } as IPortfolioViewData
     } catch (err) {
       throw err
     }
@@ -293,14 +281,21 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           })
         )
       )
-      return _.flatten(result.map((res) => res.PrimarySearchResults))
+      return {
+        results: _.flatten(result.map(({ PrimarySearchResults }) => PrimarySearchResults)),
+        managedProperties: []
+      } as const
     } else {
-      const { PrimarySearchResults } = await sp.search({
+      const { PrimarySearchResults, RawSearchResults } = await sp.search({
         ...config.DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: view.searchQuery,
-        SelectProperties: selectProperties
+        SelectProperties: selectProperties,
+        Refiners: 'managedproperties(filter=600/0/*)'
       })
-      return PrimarySearchResults
+      const managedProperties = _.first(
+        RawSearchResults?.PrimaryQueryResult?.RefinementResults?.Refiners ?? []
+      )?.Entries?.map((entry) => entry.RefinementName)
+      return { results: PrimarySearchResults, managedProperties }
     }
   }
 
@@ -320,7 +315,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     siteId: string,
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ) {
-    let [projects, sites, statusReports] = await Promise.all([
+    // eslint-disable-next-line prefer-const
+    let [{ results: projects, managedProperties }, sites, statusReports] = await Promise.all([
       this._fetchItemsForView(view, [
         ...configuration.columns.map((f) => f.fieldName),
         siteIdProperty
@@ -347,7 +343,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     return {
       projects,
       sites,
-      statusReports
+      statusReports,
+      managedProperties
     } as const
   }
 

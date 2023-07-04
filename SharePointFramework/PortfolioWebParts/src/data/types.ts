@@ -17,6 +17,11 @@ export interface IFetchDataForViewItemResult extends SearchResult {
   [key: string]: any
 }
 
+export type IPortfolioViewData = {
+  items: IFetchDataForViewItemResult[]
+  managedProperties?: string[]
+}
+
 export interface IPortfolioWebPartsDataAdapter {
   /**
    * Configure data adapter - returns an configured instance of the data adapter.
@@ -102,10 +107,10 @@ export interface IPortfolioWebPartsDataAdapter {
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
     hubSiteId: any
-  ): Promise<any>
+  ): Promise<IPortfolioViewData>
 
   /**
-   * Fetch data for view
+   * Fetch data for view. Items and managed properties are returned.
    *
    * @param view View configuration
    * @param configuration PortfolioOverviewConfiguration
@@ -115,7 +120,37 @@ export interface IPortfolioWebPartsDataAdapter {
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
     hubSiteId: any
-  ): Promise<any>
+  ): Promise<IPortfolioViewData>
+
+  /**
+   * Fetch data for regular view
+   *
+   * @param view View configuration
+   * @param configuration PortfolioOverviewConfiguration
+   * @param siteId Site ID
+   * @param siteIdProperty Site ID property
+   */
+  fetchDataForRegularView(
+    view: PortfolioOverviewView,
+    configuration: IPortfolioOverviewConfiguration,
+    siteId: string | string[],
+    siteIdProperty?: string
+  ): Promise<IPortfolioViewData>
+
+  /**
+   * Fetch data for manager view.
+   *
+   * @param view View
+   * @param configuration Configuration
+   * @param siteId Site ID
+   * @param siteIdProperty Site ID property (defaults to **GtSiteIdOWSTEXT**)
+   */
+  fetchDataForManagerView(
+    view: PortfolioOverviewView,
+    configuration: IPortfolioOverviewConfiguration,
+    siteId: string | string[],
+    siteIdProperty?: string
+  ): Promise<IPortfolioViewData>
 
   /**
    * Checks if the current is in the specified group.

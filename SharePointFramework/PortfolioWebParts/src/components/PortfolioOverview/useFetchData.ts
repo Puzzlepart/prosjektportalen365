@@ -69,7 +69,7 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
         const { configuration, pageContext, isParentProject } = context.props
         const hashState = parseUrlHash<IPortfolioOverviewHashStateState>()
         currentView = getCurrentView(hashState, context)
-        const items = isParentProject
+        const { items, managedProperties } = isParentProject
           ? await context.props.dataAdapter.fetchDataForViewBatch(
               currentView,
               configuration,
@@ -89,7 +89,8 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
           DATA_FETCHED({
             items,
             currentView,
-            groupBy
+            groupBy,
+            managedProperties
           })
         )
       } catch (error) {
