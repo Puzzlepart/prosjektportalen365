@@ -27,6 +27,11 @@ export const renderAsOptions: IDropdownOption[] = [
     data: { iconProps: { iconName: 'Calendar' } }
   },
   {
+    key: 'datetime',
+    text: strings.ColumnRenderOptionDateTime,
+    data: { iconProps: { iconName: 'DateTime' } }
+  },
+  {
     key: 'user',
     text: strings.ColumnRenderOptionUser,
     data: { iconProps: { iconName: 'Contact' } }
