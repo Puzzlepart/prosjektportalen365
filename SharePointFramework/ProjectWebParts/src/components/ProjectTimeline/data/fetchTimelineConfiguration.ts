@@ -5,9 +5,6 @@ import {
 } from 'pp365-shared-library/lib/models'
 import strings from 'ProjectWebPartsStrings'
 
-/**
- * Fetch timeline configuration
- */
 export async function fetchTimelineConfiguration() {
   return (
     await SPDataAdapter.portal.web.lists

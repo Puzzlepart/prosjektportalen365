@@ -1,7 +1,7 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { PageContext } from '@microsoft/sp-page-context'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { IDataAdapter } from 'data/types'
+import { IPortfolioWebPartsDataAdapter } from 'data/types'
 
 export interface IBaseComponentProps {
   /**
@@ -21,9 +21,9 @@ export interface IBaseComponentProps {
   pageContext?: PageContext
 
   /**
-   * An instance of a Data Adapter inheriting `IDataAdapter`.
+   * An instance of a Data Adapter inheriting `IPortfolioWebPartsDataAdapter`.
    */
-  dataAdapter?: IDataAdapter
+  dataAdapter?: IPortfolioWebPartsDataAdapter
 
   /**
    * Display mode of the component.

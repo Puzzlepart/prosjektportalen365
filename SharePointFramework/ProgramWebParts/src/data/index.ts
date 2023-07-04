@@ -13,7 +13,8 @@ import {
   CONTENT_TYPE_ID_BENEFITS,
   CONTENT_TYPE_ID_INDICATORS,
   CONTENT_TYPE_ID_MEASUREMENTS,
-  DEFAULT_GAINS_PROPERTIES
+  DEFAULT_GAINS_PROPERTIES,
+  IPortfolioWebPartsDataAdapter
 } from 'pp365-portfoliowebparts/lib/data/types'
 import {
   Benefit,
@@ -43,9 +44,14 @@ import { DEFAULT_SEARCH_SETTINGS, IFetchDataForViewItemResult } from './types'
 /**
  * SPDataAdapter for `ProgramWebParts`.
  *
+ * @implements IDataAdapter (from package `pp365-portfoliowebparts`)
+ *
  * @extends SPDataAdapterBase (from package `pp365-shared`)
  */
-export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfiguration> {
+export class SPDataAdapter
+  extends SPDataAdapterBase<ISPDataAdapterBaseConfiguration>
+  implements IPortfolioWebPartsDataAdapter
+{
   public project: ProjectDataService
   public dataSourceService: DataSourceService
   public childProjects: Array<Record<string, string>>
@@ -72,13 +78,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     )
   }
 
-  /**
-   * Get PortfolioOverview configuration for the `PortfolioOverview` component.
-   *
-   * Used by the `ProgramProjectOverview` web part.
-   *
-   * @returns `columns`, `refiners`, `views`, `viewsUrls`, `columnUrls`, `programs` and `userCanAddViews`.
-   */
   public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
     // eslint-disable-next-line prefer-const
     let [columnConfig, columns, views, viewsUrls, columnUrls] = await Promise.all([
@@ -102,14 +101,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     } as IPortfolioOverviewConfiguration
   }
 
-  /**
-   * Get PortfolioAggregation configuration for the `PortfolioAggregation` component.
-   *
-   * @param category Category for data source
-   * @param level Level for data source (defaults to `Overordnet/Program`)
-   *
-   * @returns `views`, `viewsUrls`, `columnUrls` and `level`.
-   */
   public async getAggregatedListConfig(
     category: string,
     level: string = 'Overordnet/Program'
@@ -131,15 +122,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     }
   }
 
-  /**
-   * Fetch data for view
-   *
-   * @description Used in `PortfolioOverview`
-   *
-   * @param view View configuration
-   * @param configuration PortfolioOverviewConfiguration
-   * @param siteId Site ID
-   */
   public async fetchDataForView(
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
@@ -271,15 +253,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     return aggregatedQueries.filter(Boolean)
   }
 
-  /**
-   * Do a dynamic amount of `sp.search` calls based on the amount of projects
-   * to avoid 4096 character limitation by SharePoint. Uses `this.aggregatedQueryBuilder`
-   * to create queries.
-   *
-   * @param view View configuration
-   * @param configuration PortfolioOverviewConfiguration
-   * @param siteId Site ID
-   */
   public async fetchDataForViewBatch(
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
@@ -397,14 +370,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     return { reports, configElement }
   }
 
-  /**
-   *  Fetches items from timeline content list
-   *
-   * * Fetching list items
-   * * Maps the items to `TimelineContentModel`
-   *
-   * @description Used in `ProjectTimeline`
-   */
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
     const [timelineItems] = await Promise.all([
       this.portal.web.lists
@@ -481,11 +446,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     return timelineConfig.map((item) => new TimelineConfigurationModel(item)).filter((p) => p)
   }
 
-  /**
-   * Fetches configuration data for the `ProjectTimeline`
-   *
-   * @description Used in `ProjectTimeline`
-   */
   public async fetchTimelineAggregatedContent(
     configItemTitle: string,
     dataSourceName: string,
@@ -540,13 +500,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     }
   }
 
-  /**
-   * Fetch project sites
-   *
-   * @param rowLimit Row limit
-   * @param sortProperty Sort property
-   * @param sortDirection Sort direction
-   */
   public async fetchProjectSites(
     rowLimit: number,
     sortProperty: string,
@@ -618,16 +571,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     return projects
   }
 
-  /**
-   * Fetch enriched projects
-   *
-   * Fetching the following:
-   * - Project list items
-   * - Graph groups
-   * - Site users
-   *
-   * Then combines/joins the data
-   */
   public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
     await MSGraph.Init(this.spfxContext.msGraphClientFactory)
     const [items, groups, users] = await Promise.all([
@@ -670,13 +613,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     return projects
   }
 
-  /**
-   * Checks if the current is in the specified group
-   *
-   * @public
-   *
-   * @param groupName
-   */
   public async isUserInGroup(groupName: string): Promise<boolean> {
     try {
       const [siteGroup] = await sp.web.siteGroups
@@ -689,14 +625,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     }
   }
 
-  /**
-   * Fetch benefit items with the specified `dataSource` and `selectProperties`. The result
-   * is transformed into `Benefit`, `BenefitMeasurement` and `BenefitMeasurementIndicator` objects
-   * which is the main difference from `_fetchItems`.
-   *
-   * @param dataSource Data source
-   * @param selectProperties Select properties
-   */
   public async fetchBenefitItemsWithSource(
     dataSource: DataSource,
     selectProperties: string[]
@@ -801,13 +729,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     return flatten(responses.map((r) => r.PrimarySearchResults))
   }
 
-  /**
-   * Fetch items with data source name.
-   *
-   * @param name Data source name
-   * @param selectProperties Select properties
-   * @param includeSelf Include self (defaults to `false`)
-   */
   public async fetchItemsWithSource(
     name: string,
     selectProperties: string[],
@@ -836,12 +757,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     }
   }
 
-  /**
-   * Fetch data sources by category
-   *
-   * @param category Data source category
-   * @param level Level for data source
-   */
   public fetchDataSources(category: string, level?: string): Promise<DataSource[]> {
     try {
       return this.dataSourceService.getByCategory(category, level)
@@ -850,11 +765,6 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
     }
   }
 
-  /**
-   * Fetch items from the project content columns SharePoint list on the hub site.
-   *
-   * @param category Category for data source
-   */
   public async fetchProjectContentColumns(
     dataSourceCategory: string
   ): Promise<IProjectContentColumn[]> {

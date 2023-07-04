@@ -1,7 +1,6 @@
 import { IColumn, IGroup, IPanelProps, MessageBarType, Target } from '@fluentui/react'
 import { SearchResult } from '@pnp/sp'
 import strings from 'PortfolioWebPartsStrings'
-import { IDataAdapter } from 'data/types'
 import { IProjectContentColumn } from 'pp365-shared-library'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
@@ -95,11 +94,6 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
    * Locked columns
    */
   lockedColumns?: boolean
-
-  /**
-   * Data adapter
-   */
-  dataAdapter?: IDataAdapter
 
   /**
    * On update property

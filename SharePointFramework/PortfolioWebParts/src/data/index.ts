@@ -53,14 +53,14 @@ import {
   CONTENT_TYPE_ID_MEASUREMENTS,
   DEFAULT_GAINS_PROPERTIES,
   DEFAULT_SEARCH_SETTINGS,
-  IDataAdapter,
+  IPortfolioWebPartsDataAdapter,
   IFetchDataForViewItemResult
 } from './types'
 
 /**
  * Data adapter for Portfolio Web Parts.
  */
-export class DataAdapter implements IDataAdapter {
+export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   private _portal: PortalDataService
   public dataSourceService: DataSourceService
 
@@ -87,14 +87,6 @@ export class DataAdapter implements IDataAdapter {
     return this
   }
 
-  /**
-   * Fetch chart data for a view
-   *
-   * @param view View configuration
-   * @param configuration PortfolioOverviewConfiguration
-   * @param chartConfigurationListName List name for chart configuration
-   * @param siteId Site ID
-   */
   public async fetchChartData(
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
@@ -135,18 +127,6 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
-  /**
-   * Get portfolio configuration from SharePoint lists.
-   *
-   * This includes:
-   * - `columns` - Project columns
-   * - `refiners` - Refinable columns
-   * - `views` - Portfolio overview views
-   * - `programs` - Programs
-   * - `viewsUrls` - Portfolio views list form URLs
-   * - `columnUrls` - Project columns list form URLs
-   * - `userCanAddViews` - User can add portfolio views
-   */
   public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
     // eslint-disable-next-line prefer-const
     const [columnConfig, columns, views, programs, viewsUrls, columnUrls, userCanAddViews] =
@@ -173,17 +153,6 @@ export class DataAdapter implements IDataAdapter {
     } as IPortfolioOverviewConfiguration
   }
 
-  /**
-   * Get aggregated list config for the given category.
-   *
-   * Returns `views`, `viewsUrls`, `columnUrls` and `level`. For now
-   * we only support two levels: `Portefølje` and `Prosjekt`. We need
-   * to also support `Program` and `Oveordnet` in the future (as part
-   * of issue #1097).
-   *
-   * @param category Category for data source
-   * @param level Level for data source
-   */
   public async getAggregatedListConfig(
     category: string,
     level?: string
@@ -214,18 +183,6 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
-  /**
-   * Fetch data for the specified view. Uses `this.fetchDataForManagerView` or `this.fetchDataForRegularView`
-   * depending on the user's group membership (needs to be member of `strings.PortfolioManagerGroupName`).
-   *
-   * @description Used by `PortfolioOverview` and `PortfolioInsights`
-   *
-   * @param view
-   * @param configuration
-   * @param siteId
-   *
-   * @returns {Promise<IFetchDataForViewItemResult[]>}
-   */
   public async fetchDataForView(
     view: PortfolioOverviewView,
     configuration: IPortfolioOverviewConfiguration,
@@ -395,11 +352,6 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
-  /**
-   * Fetches data for the Projecttimeline project.
-   *
-   * @param timelineConfig Timeline configuration
-   */
   public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationModel[]) {
     try {
       const [{ PrimarySearchResults: statusReports }] = await Promise.all([
@@ -479,10 +431,6 @@ export class DataAdapter implements IDataAdapter {
       .filter(Boolean)
   }
 
-  /**
-   * Fetches configuration data for the Project Timeline and
-   * maps them to `TimelineConfigurationModel`.
-   */
   public async fetchTimelineConfiguration() {
     const timelineConfig = await sp.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
@@ -492,14 +440,6 @@ export class DataAdapter implements IDataAdapter {
     return timelineConfig.map((item) => new TimelineConfigurationModel(item)).filter(Boolean)
   }
 
-  /**
-   * Fetches configuration data for the Project Timeline and
-   * maps them to `TimelineContentModel`.
-   *
-   * @param configItemTitle Configuration item title
-   * @param dataSourceName Data source name
-   * @param timelineConfig Timeline configuration
-   */
   public async fetchTimelineAggregatedContent(
     configItemTitle: string,
     dataSourceName: string,
@@ -547,13 +487,6 @@ export class DataAdapter implements IDataAdapter {
     } else return []
   }
 
-  /**
-   * Fetch project sites using search.
-   *
-   * @param rowLimit Row limit
-   * @param sortProperty Sort property
-   * @param sortDirection Sort direction
-   */
   public async fetchProjectSites(
     rowLimit: number,
     sortProperty: string,
@@ -615,13 +548,6 @@ export class DataAdapter implements IDataAdapter {
     return projects
   }
 
-  /**
-   * Fetching enriched projects by combining list items from projects list,
-   * Graph Groups and site users. The result are cached in `localStorage`
-   * for 30 minutes.
-   *
-   * @param filter Filter for project items
-   */
   public async fetchEnrichedProjects(
     // eslint-disable-next-line quotes
     filter = "GtProjectLifecycleStatus ne 'Avsluttet'"
@@ -681,14 +607,6 @@ export class DataAdapter implements IDataAdapter {
     })
   }
 
-  /**
-   * Fetch projects from the projects list. If a data source is specified,
-   * the projects are filtered using the `odataQuery` property from the
-   * specified view.
-   *
-   * @param configuration Configuration
-   * @param dataSource Data source
-   */
   public async fetchProjects(
     configuration?: IPortfolioAggregationConfiguration,
     dataSource?: string
@@ -753,14 +671,6 @@ export class DataAdapter implements IDataAdapter {
     return results
   }
 
-  /**
-   * Fetch benefit items with the specified `dataSource` and `selectProperties`. The result
-   * is transformed into `Benefit`, `BenefitMeasurement` and `BenefitMeasurementIndicator` objects
-   * which is the main difference from `_fetchItems`.
-   *
-   * @param dataSource Data source
-   * @param selectProperties Select properties
-   */
   public async fetchBenefitItemsWithSource(
     dataSource: DataSource,
     selectProperties: string[]
@@ -831,15 +741,6 @@ export class DataAdapter implements IDataAdapter {
     return items
   }
 
-  /**
-   * Fetch items with data source name. If the data source is a benefit overview,
-   * the items are fetched using `fetchBenefitItemsWithSource`.
-   *
-   * The properties 'FileExtension' and 'ServerRedirectedURL' is always added to the select properties.
-   *
-   * @param dataSourceName Data source name
-   * @param selectProperties Select properties
-   */
   public async fetchItemsWithSource(
     dataSourceName: string,
     selectProperties: string[]
@@ -872,12 +773,6 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
-  /**
-   * Fetch data sources by category and optional level.
-   *
-   * @param category Data source category
-   * @param level Level for data source
-   */
   public async fetchDataSources(category: string, level?: string): Promise<DataSource[]> {
     try {
       const dataSources = await this.dataSourceService.getByCategory(category, level)
@@ -887,16 +782,6 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
-  /**
-   * Fetch project content columns from the project content columns SharePoint list on the hub site
-   * with the specified `dataSourceCategory` or without a category. The result is transformed into
-   * `ProjectColumn` objects. The `renderAs` property is set to the `dataType` property in lower case
-   * and with spaces replaced with underscores.
-   *
-   * If the `dataSourceCategory` is null or empty, an empty array is returned.
-   *
-   * @param category Category for data source
-   */
   public async fetchProjectContentColumns(
     dataSourceCategory: string
   ): Promise<ProjectContentColumn[]> {
@@ -922,13 +807,6 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
-  /**
-   * Update project content column with new values for properties `GtColMinWidth` and `GtColMaxWidth`,
-   * aswell as the `GtFieldDataType` property if parameter `persistRenderAs` is true.
-   *
-   * @param column Project content column
-   * @param persistRenderAs Persist render as property
-   */
   public async updateProjectContentColumn(
     column: ProjectContentColumn,
     persistRenderAs = false
@@ -948,11 +826,6 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
-  /**
-   * Delete project content column
-   *
-   * @param column Column to delete
-   */
   public async deleteProjectContentColumn(column: Record<string, any>): Promise<any> {
     try {
       const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
@@ -970,12 +843,6 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
-  /**
-   * Add item to a list
-   *
-   * @param listName List name
-   * @param properties Properties
-   */
   public async addItemToList<T = any>(
     listName: string,
     properties: Record<string, any>
@@ -989,13 +856,6 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
-  /**
-   * Update item in a list
-   *
-   * @param listName List name
-   * @param itemId Item ID
-   * @param properties Properties
-   */
   public async updateItemInList<T = ItemUpdateResultData>(
     listName: string,
     itemId: number,
@@ -1010,12 +870,6 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
-  /**
-   * Deletes the item with the specified ID from the specified list.
-   *
-   * @param listName List name
-   * @param itemId Item ID
-   */
   public async deleteItemFromList(listName: string, itemId: number): Promise<boolean> {
     try {
       const list = sp.web.lists.getByTitle(listName)
@@ -1026,12 +880,6 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
-  /**
-   * Adds a new column to the project columns list and adds the column to the specified view.
-   *
-   * @param properties Properties for the new column
-   * @param view The view to add the column to
-   */
   public async addColumnToPortfolioView(
     properties: SPProjectColumnItem,
     view: PortfolioOverviewView
@@ -1051,12 +899,6 @@ export class DataAdapter implements IDataAdapter {
     }
   }
 
-  /**
-   * Update the data source item with title `dataSourceTitle` with the properties in `properties`.
-   *
-   * @param properties Properties
-   * @param dataSourceTitle Data source title
-   */
   public async updateDataSourceItem(
     properties: Record<string, any>,
     dataSourceTitle: string,
