@@ -48,13 +48,7 @@ import {
   SPChartConfigurationItem
 } from '../models'
 import { IPortfolioWebPartsDataAdapter, IFetchDataForViewItemResult } from './types'
-import {
-  CONTENT_TYPE_ID_BENEFITS,
-  CONTENT_TYPE_ID_INDICATORS,
-  CONTENT_TYPE_ID_MEASUREMENTS,
-  DEFAULT_GAINS_PROPERTIES,
-  DEFAULT_SEARCH_SETTINGS
-} from './config'
+import * as config from './config'
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -292,7 +286,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const result = await Promise.all(
         view.searchQueries.map((query) =>
           sp.search({
-            ...DEFAULT_SEARCH_SETTINGS,
+            ...config.DEFAULT_SEARCH_SETTINGS,
             QueryTemplate: query,
             SelectProperties: selectProperties
           })
@@ -301,7 +295,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       return _.flatten(result.map((res) => res.PrimarySearchResults))
     } else {
       const { PrimarySearchResults } = await sp.search({
-        ...DEFAULT_SEARCH_SETTINGS,
+        ...config.DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: view.searchQuery,
         SelectProperties: selectProperties
       })
@@ -360,7 +354,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     try {
       const [{ PrimarySearchResults: statusReports }] = await Promise.all([
         sp.search({
-          ...DEFAULT_SEARCH_SETTINGS,
+          ...config.DEFAULT_SEARCH_SETTINGS,
           QueryTemplate: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
           SelectProperties: [
             'Title',
@@ -680,21 +674,21 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     selectProperties: string[]
   ): Promise<any> {
     const results: any[] = await this._fetchItems(dataSource.searchQuery, [
-      ...DEFAULT_GAINS_PROPERTIES,
+      ...config.DEFAULT_GAINS_PROPERTIES,
       ...selectProperties
     ])
 
     const benefits = results
-      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_BENEFITS) === 0)
+      .filter((res) => res.ContentTypeID.indexOf(config.CONTENT_TYPE_ID_BENEFITS) === 0)
       .map((res) => new Benefit(res))
 
     const measurements = results
-      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_MEASUREMENTS) === 0)
+      .filter((res) => res.ContentTypeID.indexOf(config.CONTENT_TYPE_ID_MEASUREMENTS) === 0)
       .map((res) => new BenefitMeasurement(res))
       .sort((a, b) => b.Date.getTime() - a.Date.getTime())
 
     const indicactors = results
-      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_INDICATORS) === 0)
+      .filter((res) => res.ContentTypeID.indexOf(config.CONTENT_TYPE_ID_INDICATORS) === 0)
       .map((res) => {
         const indicator = new BenefitMeasurementIndicator(res)
           .setMeasurements(measurements)
@@ -939,4 +933,3 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 }
 
 export * from './types'
-export * from './config'

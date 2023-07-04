@@ -9,13 +9,8 @@ import { IProgramAdministrationProject } from 'components/ProgramAdministration/
 import MSGraph from 'msgraph-helper'
 import { IPortfolioOverviewConfiguration } from 'pp365-portfoliowebparts/lib/components'
 import { IPortfolioAggregationConfiguration } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
-import {
-  CONTENT_TYPE_ID_BENEFITS,
-  CONTENT_TYPE_ID_INDICATORS,
-  CONTENT_TYPE_ID_MEASUREMENTS,
-  DEFAULT_GAINS_PROPERTIES,
-  IPortfolioWebPartsDataAdapter
-} from 'pp365-portfoliowebparts/lib/data'
+import { IPortfolioWebPartsDataAdapter } from 'pp365-portfoliowebparts/lib/data'
+import * as PortfolioWebPartsDataConfig from 'pp365-portfoliowebparts/lib/data/config'
 import {
   Benefit,
   BenefitMeasurement,
@@ -630,21 +625,30 @@ export class SPDataAdapter
     selectProperties: string[]
   ): Promise<any> {
     const results: any[] = await this._fetchItems(dataSource.searchQuery, [
-      ...DEFAULT_GAINS_PROPERTIES,
+      ...PortfolioWebPartsDataConfig.DEFAULT_GAINS_PROPERTIES,
       ...selectProperties
     ])
 
     const benefits = results
-      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_BENEFITS) === 0)
+      .filter(
+        (res) =>
+          res.ContentTypeID.indexOf(PortfolioWebPartsDataConfig.CONTENT_TYPE_ID_BENEFITS) === 0
+      )
       .map((res) => new Benefit(res))
 
     const measurements = results
-      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_MEASUREMENTS) === 0)
+      .filter(
+        (res) =>
+          res.ContentTypeID.indexOf(PortfolioWebPartsDataConfig.CONTENT_TYPE_ID_MEASUREMENTS) === 0
+      )
       .map((res) => new BenefitMeasurement(res))
       .sort((a, b) => b.Date.getTime() - a.Date.getTime())
 
     const indicactors = results
-      .filter((res) => res.ContentTypeID.indexOf(CONTENT_TYPE_ID_INDICATORS) === 0)
+      .filter(
+        (res) =>
+          res.ContentTypeID.indexOf(PortfolioWebPartsDataConfig.CONTENT_TYPE_ID_INDICATORS) === 0
+      )
       .map((res) => {
         const indicator = new BenefitMeasurementIndicator(res)
           .setMeasurements(measurements)
