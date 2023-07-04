@@ -1,5 +1,13 @@
 define([], function () {
   return {
+    SearchQueryLabel: 'Søkespørring',
+    SearchQueryDescription: 'Søkespørringen for å hente data. DepartmentId refererer til Prosjektportalen-huben og bør ikke endres. ContentTypeId refererer til innholdstypen til dataelementet du vil hente. Gå til Datakilder-listen for å se eksempler.',
+    PortfolioViewSearchQueryDescription: 'Søkespørringen for å hente prosjekter i porteføljen. DepartmentId refererer til Prosjektportalen-huben og bør ikke endres.',
+    IconNameLabel: 'Ikonnavn',
+    IconNameDescription: 'Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.',
+    DefaultViewDescription: 'Velg om dette er standardvisningen for Porteføljeoversikten.',
+    PersonalViewDescription: 'Velg om dette er en personlig visning. Personlige visninger kan kun redigeres av deg.',
+    PersonalViewLabel: 'Personlig visning',
     PortfolioOverviewShowEditViewColumnsPanelHelpText: 'Velg kolonnene som skal vises for nåværende visning. Hvis du vil endre rekkefølgen, kan du dra og slippe eller bruke opp- og ned-pilen ved siden av hver kolonne. Bruk \'Tilbakestill rekkefølge\'-knappen for å tilbakestille rekkefølgen til standard rekkefølge spesifisert i Prosjektkolonner-listen.',
     RevertCustomOrderButtonTooltip: 'Tilbakestill rekkefølge til standard rekkefølge for kolonner spesifisert i Prosjektkolonner-listen.',
     RevertCustomOrderButtonText: 'Tilbakestill rekkefølge',

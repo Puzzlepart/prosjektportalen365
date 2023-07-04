@@ -1,3 +1,4 @@
+import { WebPartContext } from '@microsoft/sp-webpart-base'
 import {
   ItemUpdateResult,
   QueryPropertyValueType,
@@ -14,9 +15,8 @@ import {
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-shared-library/lib/models'
-import { DataSourceService } from 'pp365-shared-library/lib/services'
+import { DataSourceService, PortalDataService } from 'pp365-shared-library/lib/services'
 import { IPortfolioAggregationConfiguration, IPortfolioOverviewConfiguration } from '../components'
-import { WebPartContext } from '@microsoft/sp-webpart-base'
 
 export interface IFetchDataForViewItemResult extends SearchResult {
   SiteId: string
@@ -72,8 +72,8 @@ export interface IPortfolioWebPartsDataAdapter {
   /**
    * Configure data adapter - returns an configured instance of the data adapter.
    *
-   * @param spfxContext SPFx context
-   * @param configuration Configuration for data adapter
+   * @param spfxContext SPFx context (optional)
+   * @param configuration Configuration for data adapter (optional)
    */
   configure(
     spfxContext?: WebPartContext,
@@ -81,7 +81,12 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<IPortfolioWebPartsDataAdapter | void>
 
   /**
-   * An instance of the data source service.
+   * An optional instance of the portal data service.
+   */
+  portalDataService?: PortalDataService
+
+  /**
+   * An optional instance of the data source service.
    */
   dataSourceService?: DataSourceService
 

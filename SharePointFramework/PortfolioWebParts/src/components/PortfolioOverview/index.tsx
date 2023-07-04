@@ -20,6 +20,7 @@ import { PortfolioOverviewContext } from './context'
 import { IPortfolioOverviewProps, addColumn } from './types'
 import { usePortfolioOverview } from './usePortfolioOverview'
 import { EditViewColumnsPanel } from './EditViewColumnsPanel'
+import { ViewFormPanel } from './ViewFormPanel'
 
 /**
  * Component for displaying a portfolio overview - an overview of all projects in a portfolio.
@@ -81,6 +82,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
         <ColumnContextMenu />
         <ColumnFormPanel />
         <EditViewColumnsPanel />
+        <ViewFormPanel />
       </PortfolioOverviewContext.Provider>
     </div>
   )

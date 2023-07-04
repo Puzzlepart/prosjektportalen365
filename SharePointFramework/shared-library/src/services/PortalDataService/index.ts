@@ -30,6 +30,7 @@ import {
 
 export class PortalDataService {
   private _configuration: IPortalDataServiceConfiguration
+  private _isConfigured: boolean = false
   public web: Web
   public url: string
 
@@ -45,7 +46,15 @@ export class PortalDataService {
     const hubSite = await this.getHubSite()
     this.web = hubSite.web
     this.url = hubSite.url
+    this._isConfigured = true
     return this
+  }
+
+  /**
+   * Returns `true` if the PortalDataService is configured, `false` otherwise.
+   */
+  public get isConfigured(): boolean {
+    return this._isConfigured
   }
 
   /**

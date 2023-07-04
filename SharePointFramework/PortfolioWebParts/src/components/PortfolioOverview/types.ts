@@ -12,6 +12,7 @@ import { IColumnFormPanel } from './ColumnFormPanel/types'
 import { IEditViewColumnsPanel } from './EditViewColumnsPanel/types'
 import { ProgramItem } from 'models/ProgramItem'
 import styles from './PortfolioOverview.module.scss'
+import { IViewFormPanel } from './ViewFormPanel/types'
 
 export class PortfolioOverviewErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -179,12 +180,12 @@ export interface IPortfolioOverviewState {
   currentView?: PortfolioOverviewView
 
   /**
-   * Active filters
+   * Active filters (selected columns and refiners)
    */
   activeFilters?: { SelectedColumns?: string[]; [key: string]: string[] }
 
   /**
-   * Error
+   * Error if any
    */
   error?: PortfolioOverviewErrorMessage
 
@@ -225,6 +226,13 @@ export interface IPortfolioOverviewState {
    * - `column` - the column to edit (if not specified, a new column will be created)
    */
   columnForm: IColumnFormPanel
+
+  /**
+   * View form panel props. Consists of two properties:
+   * - `isOpen` - whether the panel is open
+   * - `view` - the view to edit (if not specified, a new view will be created)
+   */
+  viewForm: IViewFormPanel
 
   /**
    * Edit view columns panel props.

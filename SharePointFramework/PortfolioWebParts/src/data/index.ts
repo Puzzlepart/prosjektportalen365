@@ -61,7 +61,7 @@ import {
  * Data adapter for Portfolio Web Parts.
  */
 export class DataAdapter implements IPortfolioWebPartsDataAdapter {
-  private _portal: PortalDataService
+  public portalDataService: PortalDataService
   public dataSourceService: DataSourceService
 
   /**
@@ -71,19 +71,21 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    * @param siteIds Site IDs
    */
   constructor(public context: WebPartContext, private siteIds?: string[]) {
-    this._portal = new PortalDataService()
+    this.portalDataService = new PortalDataService()
   }
 
   /**
-   * Configuring the `DataAdapter` enabling use
-   * of the `DataSourceService` and `PortalDataService`
+   * Configuring the `DataAdapter` enabling use of the `DataSourceService` and `PortalDataService`
+   * 
+   * The `dataSourceService` is dependent on the `portalDataService` being configured, as it needs
+   * `portalDataService.web` to be passed as a parameter to its constructor.
    */
   public async configure(): Promise<DataAdapter> {
-    if (this.dataSourceService) return this
-    this._portal = await this._portal.configure({
+    if (this.dataSourceService && this.portalDataService.isConfigured) return this
+    this.portalDataService = await this.portalDataService.configure({
       pageContext: this.context.pageContext
     })
-    this.dataSourceService = new DataSourceService(this._portal.web)
+    this.dataSourceService = new DataSourceService(this.portalDataService.web)
     return this
   }
 
@@ -131,13 +133,13 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     // eslint-disable-next-line prefer-const
     const [columnConfig, columns, views, programs, viewsUrls, columnUrls, userCanAddViews] =
       await Promise.all([
-        this._portal.getProjectColumnConfig(),
-        this._portal.getProjectColumns(),
-        this._portal.getPortfolioOverviewViews(),
-        this._portal.getPrograms(ProgramItem),
-        this._portal.getListFormUrls('PORTFOLIO_VIEWS'),
-        this._portal.getListFormUrls('PROJECT_COLUMNS'),
-        this._portal.currentUserHasPermissionsToList('PORTFOLIO_VIEWS', PermissionKind.AddListItems)
+        this.portalDataService.getProjectColumnConfig(),
+        this.portalDataService.getProjectColumns(),
+        this.portalDataService.getPortfolioOverviewViews(),
+        this.portalDataService.getPrograms(ProgramItem),
+        this.portalDataService.getListFormUrls('PORTFOLIO_VIEWS'),
+        this.portalDataService.getListFormUrls('PROJECT_COLUMNS'),
+        this.portalDataService.currentUserHasPermissionsToList('PORTFOLIO_VIEWS', PermissionKind.AddListItems)
       ])
     const configuredColumns = columns.map((col) => col.configure(columnConfig))
     const refiners = columns.filter((col) => col.isRefinable)
@@ -159,14 +161,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ): Promise<IPortfolioAggregationConfiguration> {
     try {
       let calculatedLevel = 'Portefølje'
-      if (this._portal.url !== this.context.pageContext.web.absoluteUrl) {
+      if (this.portalDataService.url !== this.context.pageContext.web.absoluteUrl) {
         calculatedLevel = 'Prosjekt'
       }
       const [views, viewsUrls, columnUrls, levels] = await Promise.all([
         this.fetchDataSources(category, level ?? calculatedLevel),
-        this._portal.getListFormUrls('DATA_SOURCES'),
-        this._portal.getListFormUrls('PROJECT_CONTENT_COLUMNS'),
-        this._portal.web.fields
+        this.portalDataService.getListFormUrls('DATA_SOURCES'),
+        this.portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS'),
+        this.portalDataService.web.fields
           .getByInternalNameOrTitle('GtDataSourceLevel')
           .select('Choices')
           .get()
@@ -787,7 +789,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ): Promise<ProjectContentColumn[]> {
     try {
       if (stringIsNullOrEmpty(dataSourceCategory)) return []
-      const projectContentColumnsList = this._portal.web.lists.getByTitle(
+      const projectContentColumnsList = this.portalDataService.web.lists.getByTitle(
         strings.ProjectContentColumnsListName
       )
       const columnItems = await projectContentColumnsList.items

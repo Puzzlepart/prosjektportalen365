@@ -1,4 +1,12 @@
 declare interface IPortfolioWebPartsStrings {
+  PortfolioViewSearchQueryDescription: string
+  SearchQueryLabel: string
+  SearchQueryDescription: string
+  IconNameLabel: string
+  IconNameDescription: string
+  DefaultViewDescription: string
+  PersonalViewDescription: string
+  PersonalViewLabel: string
   PortfolioOverviewShowEditViewColumnsPanelHelpText: string
   RevertCustomOrderButtonTooltip: string
   RevertCustomOrderButtonText: string

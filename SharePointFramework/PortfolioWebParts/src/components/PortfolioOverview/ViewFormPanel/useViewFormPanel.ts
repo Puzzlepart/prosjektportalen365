@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from 'react'
 import { PortfolioOverviewContext } from '../context'
-import { PortfolioOverviewView } from 'pp365-shared-library'
+import { PortfolioOverviewView, SPPortfolioOverviewViewItem } from 'pp365-shared-library'
 import { TOGGLE_VIEW_FORM_PANEL } from '../reducer'
+import strings from 'PortfolioWebPartsStrings'
 
 /**
  * Component logic hook for `ViewFormPanel`.
@@ -27,11 +28,39 @@ export function useViewFormPanel() {
   }
 
   const onSave = async () => {
+    const { currentView } = context.state
     if (isEditing) {
-      // TODO: Update the view
+      const properties: SPPortfolioOverviewViewItem = {
+        Title: view.get('title'),
+        GtSearchQuery: view.get('searchQuery'),
+        GtPortfolioIsPersonalView: view.get('isPersonalView'),
+        GtPortfolioIsDefaultView: view.get('isDefaultView'),
+        GtPortfolioFabricIcon: view.get('iconName')
+      }
+      await context.props.dataAdapter.updateItemInList(
+        strings.PortfolioViewsListName,
+        currentView.id as number,
+        properties
+      )
     } else {
-      // TODO: Add the view
+      const properties: SPPortfolioOverviewViewItem = {
+        Title: view.get('title'),
+        GtSearchQuery: view.get('searchQuery'),
+        GtSortOrder: view.get('sortOrder'),
+        GtPortfolioFabricIcon: view.get('iconName'),
+        GtPortfolioIsDefaultView: view.get('isDefaultView'),
+        GtPortfolioIsPersonalView: view.get('isPersonalView'),
+        GtPortfolioColumnsId: {
+          results: currentView.columns.map((column) => column.id)
+        },
+        GtPortfolioRefinersId: {
+          results: currentView.refiners.map((refiner) => refiner.id)
+        },
+        GtPortfolioGroupById: currentView.groupBy?.id
+      }
+      await context.props.dataAdapter.addItemToList(strings.PortfolioViewsListName, properties)
     }
+    context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: false }))
   }
 
   /**

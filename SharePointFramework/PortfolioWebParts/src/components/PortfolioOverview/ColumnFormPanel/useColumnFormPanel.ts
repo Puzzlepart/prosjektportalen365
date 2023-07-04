@@ -37,7 +37,7 @@ export function useColumnFormPanel() {
   }, [context.state.columnForm])
 
   /**
-   * Dismisses the form panel and resets the column state.
+   * Dismisses the form panel by dispatching the `TOGGLE_COLUMN_FORM_PANEL` action.
    */
   const onDismiss = () => {
     context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))

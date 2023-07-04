@@ -17,7 +17,8 @@ import {
   EXCEL_EXPORT_SUCCESS,
   START_EXCEL_EXPORT,
   TOGGLE_COMPACT,
-  TOGGLE_FILTER_PANEL
+  TOGGLE_FILTER_PANEL,
+  TOGGLE_VIEW_FORM_PANEL
 } from '../reducer'
 import { usePortfolioOverviewFilters } from '../usePortfolioOverviewFilters'
 import { IPortfolioOverviewCommandsProps } from './types'
@@ -125,7 +126,9 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       isVisible: context.props.configuration.userCanAddViews && context.props.showViewSelector
     },
     disabled: context.state.loading,
-    onClick: () => redirect(context.props.configuration.viewsUrls.defaultNewFormUrl)
+    onClick: () => {
+      context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: true }))
+    }
   })
   const viewOptions = {
     key: 'VIEW_OPTIONS',

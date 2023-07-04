@@ -24,37 +24,40 @@ import {
   TOGGLE_COLUMN_FORM_PANEL,
   TOGGLE_COMPACT,
   TOGGLE_FILTER_PANEL,
-  TOGGLE_EDIT_VIEW_COLUMNS_PANEL
+  TOGGLE_EDIT_VIEW_COLUMNS_PANEL,
+  TOGGLE_VIEW_FORM_PANEL
 } from './actions'
 import { ProjectColumn } from 'pp365-shared-library'
 
 /**
- * Initialize state for `<PortfolioOverview />`
+ * Get initial state for `<PortfolioOverview />` based on `params` provided.
  *
- * @param params Parameters for reducer initialization
+ * @param params Parameters for reducer state initialization
  */
-export const initState = (params: IPortfolioOverviewReducerParams): IPortfolioOverviewState => {
-  return {
-    loading: true,
-    isCompact: false,
-    searchTerm: '',
-    activeFilters: {},
-    items: [],
-    columns: params.placeholderColumns,
-    filters: [],
-    columnForm: { isOpen: false },
-    editViewColumns: { isOpen: false },
-    columnContextMenu: null
-  }
-}
+export const getInitialState = (
+  params: IPortfolioOverviewReducerParams
+): IPortfolioOverviewState => ({
+  loading: true,
+  isCompact: false,
+  searchTerm: '',
+  activeFilters: {},
+  items: [],
+  columns: params.placeholderColumns,
+  filters: [],
+  columnForm: { isOpen: false },
+  viewForm: { isOpen: false },
+  editViewColumns: { isOpen: false },
+  columnContextMenu: null
+})
 
 /**
- * Create reducer for `<PortfolioOverview />`
+ * Create reducer for `<PortfolioOverview />`. Using `ActionReducerMapBuilder`
+ * from `@reduxjs/toolkit` to create a reducer with a "fluent" API.
  *
  * @param params Parameters for reducer initialization
  */
 const $createReducer = (params: IPortfolioOverviewReducerParams) =>
-  createReducer(initState(params), (builder) => {
+  createReducer(getInitialState(params), (builder) => {
     builder
       .addCase(STARTING_DATA_FETCH, (state) => {
         state.loading = true
@@ -180,6 +183,9 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
             : (payload.columns as ProjectColumn[]).map((c) => c.id)
           state.columns = payload.columns
         }
+      })
+      .addCase(TOGGLE_VIEW_FORM_PANEL, (state, { payload }) => {
+        state.viewForm = payload
       })
   })
 
