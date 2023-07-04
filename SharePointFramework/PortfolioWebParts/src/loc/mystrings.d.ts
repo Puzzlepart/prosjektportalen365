@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  DefaultViewSetWarningMessage: string
   PortfolioViewSearchQueryDescription: string
   SearchQueryLabel: string
   SearchQueryDescription: string

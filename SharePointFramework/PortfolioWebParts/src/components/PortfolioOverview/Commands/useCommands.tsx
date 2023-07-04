@@ -52,14 +52,14 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
   ) => {
     return context.props.configuration.views.filter(filterFunc).map(
       (view) =>
-        ({
-          key: view.id.toString(),
-          name: view.title,
-          iconProps: { iconName: view.iconName },
-          canCheck: true,
-          checked: view.id === context.state.currentView?.id,
-          onClick: () => context.dispatch(CHANGE_VIEW(view))
-        } as IContextualMenuItem)
+      ({
+        key: view.id.toString(),
+        name: view.title,
+        iconProps: { iconName: view.iconName },
+        canCheck: true,
+        checked: view.id === context.state.currentView?.id,
+        onClick: () => context.dispatch(CHANGE_VIEW(view))
+      } as IContextualMenuItem)
     )
   }
 
@@ -111,20 +111,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
   ].filter((i) => i.data.isVisible)
 
   const farItems: IContextualMenuItem[] = []
-  farItems.push({
-    key: 'NEW_VIEW',
-    name: strings.NewViewText,
-    iconProps: { iconName: 'CirclePlus' },
-    buttonStyles: { root: { border: 'none' } },
-    data: {
-      isVisible: context.props.configuration.userCanAddViews && context.props.showViewSelector
-    },
-    disabled: context.state.loading,
-    onClick: () => {
-      context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: true }))
-    }
-  })
-  const viewOptions = {
+  const viewOptionsItem: IContextualMenuItem = {
     key: 'VIEW_OPTIONS',
     name: context.state.currentView?.title,
     iconProps: { iconName: 'List' },
@@ -161,14 +148,14 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
         ...sharedViews
       ]
     }
-  } as IContextualMenuItem
+  }
   if (!_.isEmpty(personalViews)) {
-    viewOptions.subMenuProps.items.push({
+    viewOptionsItem.subMenuProps.items.push({
       key: 'PERSONAL_VIEWS_HEADER',
       itemType: ContextualMenuItemType.Header,
       text: strings.PersonalViewsHeaderText
     })
-    viewOptions.subMenuProps.items.push(...personalViews)
+    viewOptionsItem.subMenuProps.items.push(...personalViews)
   }
   if (context.props.showProgramViews && !_.isEmpty(context.props.configuration.programs)) {
     const programViewOptions: IDropdownOption[] = context.props.configuration.programs.map((p) => ({
@@ -176,12 +163,12 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       text: p.name,
       data: p
     }))
-    viewOptions.subMenuProps.items.push({
+    viewOptionsItem.subMenuProps.items.push({
       key: 'PROGRAMS_HEADER',
       itemType: ContextualMenuItemType.Header,
       text: strings.ProgramsHeaderText
     })
-    viewOptions.subMenuProps.items.push({
+    viewOptionsItem.subMenuProps.items.push({
       key: 'PROGRAMS_DROPDOWN',
       itemType: ContextualMenuItemType.Normal,
       onRender: () => (
@@ -208,11 +195,19 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
     })
   }
   if (userCanManageViews) {
-    viewOptions.subMenuProps.items.push({
+    viewOptionsItem.subMenuProps.items.push({
       key: 'VIEW_ACTIONS_DIVIDER',
       itemType: ContextualMenuItemType.Divider
     })
-    viewOptions.subMenuProps.items.push({
+    viewOptionsItem.subMenuProps.items.push({
+      key: 'NEW_VIEW',
+      name: strings.NewViewText,
+      disabled: context.state.loading,
+      onClick: () => {
+        context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: true }))
+      }
+    })
+    viewOptionsItem.subMenuProps.items.push({
       key: 'EDIT_VIEW',
       name: strings.EditViewText,
       disabled: context.state.loading || context.state.currentView?.isProgramView,
@@ -221,7 +216,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
       }
     })
   }
-  farItems.push(viewOptions)
+  farItems.push(viewOptionsItem)
   farItems.push({
     key: 'FILTERS',
     name: '',

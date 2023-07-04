@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    DefaultViewSetWarningMessage: 'Det er allerede en visning som er satt som standard. Du må først endre denne visningen før du kan sette en ny som standard. Personlige visninger kan ikke settes som standard.',
     SearchQueryLabel: 'Søkespørring',
     SearchQueryDescription: 'Søkespørringen for å hente data. DepartmentId refererer til Prosjektportalen-huben og bør ikke endres. ContentTypeId refererer til innholdstypen til dataelementet du vil hente. Gå til Datakilder-listen for å se eksempler.',
     PortfolioViewSearchQueryDescription: 'Søkespørringen for å hente prosjekter i porteføljen. DepartmentId refererer til Prosjektportalen-huben og bør ikke endres.',
