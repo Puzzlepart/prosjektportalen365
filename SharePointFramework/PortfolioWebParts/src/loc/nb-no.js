@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    SearchPropertyFoundMessage: 'Fant en forvaltet egenskap `{0}` som matcher det interne feltnavnet `{1}`.',
+    SearchPropertyPlaceholder: 'Søk i forvaltede egenskaper...',
     IncludeViewNameInExcelExportFilenameLabel: 'Inkluder visningsnavn i Excel-filnavn',
     DefaultViewSetWarningMessage: 'Det er allerede en visning som er satt som standard. Du må først endre denne visningen før du kan sette en ny som standard. Personlige visninger kan ikke settes som standard.',
     SearchQueryLabel: 'Søkespørring',
