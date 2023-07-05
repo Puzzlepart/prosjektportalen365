@@ -1,10 +1,10 @@
 import { stringIsNullOrEmpty } from '@pnp/common'
 import React, { FC } from 'react'
-import { IRenderItemColumnProps } from '../types'
 import { Tag } from './Tag'
 import styles from './TagsColumn.module.scss'
+import { ITagsColumnProps } from './types'
 
-export const TagsColumn: FC<IRenderItemColumnProps> = (props) => {
+export const TagsColumn: FC<ITagsColumnProps> = (props) => {
   if (!props.columnValue) return null
   const tags: string[] = props.columnValue
     .split(props.valueSeparator)
@@ -18,7 +18,6 @@ export const TagsColumn: FC<IRenderItemColumnProps> = (props) => {
   )
 }
 
-TagsColumn.displayName = 'TagsColumn'
 TagsColumn.defaultProps = {
   valueSeparator: ';'
 }

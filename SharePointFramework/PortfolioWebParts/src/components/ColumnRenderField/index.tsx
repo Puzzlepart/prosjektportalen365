@@ -25,6 +25,7 @@ export const ColumnRenderField: FC<IColumnRenderFieldProps> = (props) => {
           onChange={(_e, option) => setSelectedOption(option)}
           onRenderTitle={(options) => onRenderOption(_.first(options))}
           onRenderOption={onRenderOption}
+          disabled={selectedOption.disabled}
         />
         {props.children}
       </FormFieldContainer>

@@ -1,23 +1,20 @@
-import { IColumn, Link, TooltipHost } from '@fluentui/react'
+import { IColumn, TooltipHost } from '@fluentui/react'
 
 import { Icon } from '@fluentui/react/lib/Icon'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import * as strings from 'PortfolioWebPartsStrings'
-import {
-  ColumnDataType,
-  formatDate,
-  tryParseCurrency,
-  tryParseJson,
-  getObjectValue as get
-} from 'pp365-shared-library'
+import { ColumnDataType, formatDate, getObjectValue as get } from 'pp365-shared-library'
 import React from 'react'
+import ItemModal from '../ItemModal'
 import { IListProps } from '../types'
+import { BooleanColumn } from './BooleanColumn'
+import { CurrencyColumn } from './CurrencyColumn'
 import { TagsColumn } from './TagsColumn'
 import { TitleColumn } from './TitleColumn'
+import { TrendColumn } from './TrendColumn'
+import { UrlColumn } from './UrlColumn'
 import { UserColumn } from './UserColumn'
 import { IRenderItemColumnProps, ItemRenderFunction } from './types'
-import ItemModal from '../ItemModal'
-import { getFileTypeIconProps } from '@fluentui/react-file-type-icons'
+import { FileNameColumn } from './FileNameColumn'
 
 /**
  * Mapping for rendering of the different data types.
@@ -30,82 +27,38 @@ const renderDataTypeMap: Record<ColumnDataType, ItemRenderFunction> = {
     const includeTime = props.dataTypeProperties.get('includeTime') ?? false
     return <span>{formatDate(props.columnValue, includeTime)}</span>
   },
-  currency: (props: IRenderItemColumnProps) => {
-    const currencyPrefix = props.dataTypeProperties.get('currencyPrefix') ?? 'kr'
-    const minimumFractionDigits = props.dataTypeProperties.get('minimumFractionDigits') ?? 0
-    const maximumFractionDigits = props.dataTypeProperties.get('maximumFractionDigits') ?? 0
-    return (
-      <span>
-        {tryParseCurrency(
-          props.columnValue,
-          undefined,
-          currencyPrefix,
-          minimumFractionDigits,
-          maximumFractionDigits
-        )}
-      </span>
-    )
-  },
+  currency: (props: IRenderItemColumnProps) => (
+    <CurrencyColumn
+      {...props}
+      currencyPrefix={props.dataTypeProperties.get('currencyPrefix')}
+      minimumFractionDigits={props.dataTypeProperties.get('minimumFractionDigits')}
+      maximumFractionDigits={props.dataTypeProperties.get('maximumFractionDigits')}
+    />
+  ),
   tags: (props: IRenderItemColumnProps) => (
     <TagsColumn {...props} valueSeparator={props.dataTypeProperties.get('valueSeparator')} />
   ),
-  boolean: (props: IRenderItemColumnProps) => {
-    const valueIfTrue = props.dataTypeProperties.get('valueIfTrue') ?? strings.BooleanYes
-    const valueIfFalse = props.dataTypeProperties.get('valueIfFalse') ?? strings.BooleanNo
-    const displayValue = parseInt(props.columnValue) === 1 ? valueIfTrue : valueIfFalse
-    return <span>{displayValue}</span>
-  },
-  url: (props: IRenderItemColumnProps) => {
-    // eslint-disable-next-line prefer-const
-    let [url, description] = props.columnValue.split(', ').filter((v) => !stringIsNullOrEmpty(v))
-    const target = props.dataTypeProperties.get('openInNewTab') === false ? '_self' : '_blank'
-    if (stringIsNullOrEmpty(description)) {
-      description = props.dataTypeProperties.get('description') ?? url
-    }
-    return (
-      <Link href={url} target={target} rel='noopener noreferrer'>
-        {description}
-      </Link>
-    )
-  },
-  trend: (props: IRenderItemColumnProps) => {
-    const trend = tryParseJson(props.columnValue, null)
-    return trend ? (
-      <span>
-        <span style={{ display: 'inline-block', width: 20 }}>
-          {trend.TrendIconProps && <Icon {...trend.TrendIconProps} />}
-        </span>
-        <span>{trend.AchievementDisplay}</span>
-      </span>
-    ) : null
-  },
-  modal: (props: IRenderItemColumnProps) => {
-    return (
-      <ItemModal title={props.item.MeasurementIndicator} value={JSON.parse(props.columnValue)} />
-    )
-  },
-  filename_with_icon: (props: IRenderItemColumnProps) => {
-    return (
-      <span>
-        <Icon
-          {...getFileTypeIconProps({
-            extension: props.item.FileExtension,
-            size: 16,
-            imageFileType: 'png'
-          })}
-          styles={{ root: { verticalAlign: 'bottom' } }}
-        />
-        <Link
-          href={props.item.ServerRedirectedURL}
-          rel='noopener noreferrer'
-          target='_blank'
-          style={{ marginLeft: 8 }}
-        >
-          {props.columnValue}
-        </Link>
-      </span>
-    )
-  }
+  boolean: (props: IRenderItemColumnProps) => (
+    <BooleanColumn
+      {...props}
+      valueIfTrue={props.dataTypeProperties.get('valueIfTrue')}
+      valueIfFalse={props.dataTypeProperties.get('valueIfFalse')}
+    />
+  ),
+  url: (props: IRenderItemColumnProps) => (
+    <UrlColumn
+      {...props}
+      openInNewTab={props.dataTypeProperties.get('openInNewTab')}
+      description={props.dataTypeProperties.get('description')}
+    />
+  ),
+  trend: (props: IRenderItemColumnProps) => <TrendColumn {...props} />,
+  modal: (props: IRenderItemColumnProps) => (
+    <ItemModal title={props.item.MeasurementIndicator} value={JSON.parse(props.columnValue)} />
+  ),
+  filename_with_icon: (props: IRenderItemColumnProps) => (
+    <FileNameColumn {...props} showFileExtensionIcon />
+  )
 }
 
 /**
