@@ -10,7 +10,7 @@ import strings from 'PortfolioWebPartsStrings'
 import { ColumnRenderFieldOption, IColumnRenderFieldProps } from './types'
 import React, { useEffect, useState } from 'react'
 import _ from 'lodash'
-import { TagsColumn } from 'components/List/RenderItemColumn/TagsColumn'
+import { BooleanColumn, CurrencyColumn, TagsColumn, UrlColumn } from '../List'
 
 /**
  * Hook to work with render as options. Returns the options, the selected option,
@@ -38,7 +38,7 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
             {
               label: strings.ColumnRenderOptionBooleanTrue,
               placeholder: strings.ColumnRenderOptionBooleanTrue,
-              value: dataTypeProperties['valueIfTrue'] ?? strings.BooleanYes,
+              value: dataTypeProperties['valueIfTrue'] ?? BooleanColumn.defaultProps.valueIfTrue,
               onChange: (_, value) => onChange('valueIfTrue', value)
             } as ITextFieldProps
           ],
@@ -47,7 +47,8 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
             {
               label: strings.ColumnRenderOptionBooleanFalse,
               placeholder: strings.ColumnRenderOptionBooleanFalse,
-              defaultValue: dataTypeProperties['valueIfFalse'] ?? strings.BooleanNo,
+              defaultValue:
+                dataTypeProperties['valueIfFalse'] ?? BooleanColumn.defaultProps.valueIfFalse,
               onChange: (_, value) => onChange('valueIfFalse', value)
             } as ITextFieldProps
           ]
@@ -78,7 +79,9 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
             {
               type: 'number',
               label: strings.ColumnRenderOptionCurrencyMinimumFractionDigitsLabel,
-              value: dataTypeProperties['minimumFractionDigits'] ?? '0',
+              value:
+                dataTypeProperties['minimumFractionDigits'] ??
+                CurrencyColumn.defaultProps.minimumFractionDigits,
               onChange: (_, value) => onChange('minimumFractionDigits', parseInt(value))
             } as ITextFieldProps
           ],
@@ -87,7 +90,9 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
             {
               type: 'number',
               label: strings.ColumnRenderOptionCurrencyMaximumFractionDigitsLabel,
-              value: dataTypeProperties['maximumFractionDigits'] ?? '0',
+              value:
+                dataTypeProperties['maximumFractionDigits'] ??
+                CurrencyColumn.defaultProps.maximumFractionDigits,
               onChange: (_, value) => onChange('maximumFractionDigits', parseInt(value))
             } as ITextFieldProps
           ],
@@ -95,7 +100,7 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
             TextField,
             {
               label: strings.ColumnRenderOptionCurrencyFallbackValueLabel,
-              value: dataTypeProperties['fallbackValue'] ?? '',
+              value: dataTypeProperties['fallbackValue'],
               onChange: (_, value) => onChange('fallbackValue', value)
             } as ITextFieldProps
           ],
@@ -103,7 +108,8 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
             TextField,
             {
               label: strings.ColumnRenderOptionCurrencyPrefixLabel,
-              value: dataTypeProperties['currencyPrefix'] ?? 'kr',
+              value:
+                dataTypeProperties['currencyPrefix'] ?? CurrencyColumn.defaultProps.currencyPrefix,
               onChange: (_, value) => onChange('currencyPrefix', value)
             } as ITextFieldProps
           ]
@@ -184,7 +190,7 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
             Toggle,
             {
               label: strings.ColumnRenderOptionUrlOpenInNewTabLabel,
-              checked: dataTypeProperties['openInNewTab'] ?? false,
+              checked: dataTypeProperties['openInNewTab'] ?? UrlColumn.defaultProps.openInNewTab,
               onChange: (_, checked) => onChange('openInNewTab', checked)
             } as IToggleProps
           ],

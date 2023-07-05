@@ -143,3 +143,14 @@ export const onRenderItemColumn =
   (item?: any, _index?: number, column?: IColumn): React.ReactNode => {
     return renderItemColumn(item, column, props)
   }
+
+export {
+  TitleColumn,
+  FileNameColumn,
+  UrlColumn,
+  TrendColumn,
+  TagsColumn,
+  CurrencyColumn,
+  BooleanColumn,
+  UserColumn
+}

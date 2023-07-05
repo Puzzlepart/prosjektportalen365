@@ -7,7 +7,7 @@ import { DataTypeFields } from './DataTypeFields'
 import { IColumnRenderFieldProps } from './types'
 import { useDataTypeProperties } from './useDataTypeProperties'
 import { useRenderAsOptions } from './useRenderAsOptions'
-import styles from 'components/ResourceAllocation/ResourceAllocation.module.scss'
+import styles from './ColumnRenderField.module.scss'
 
 export const ColumnRenderField: FC<IColumnRenderFieldProps> = (props) => {
   const { renderAsOptions, selectedOption, setSelectedOption, onRenderOption } =

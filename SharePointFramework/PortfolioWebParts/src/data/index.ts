@@ -777,9 +777,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  public async fetchProjectContentColumns(
-    dataSourceCategory: string
-  ): Promise<ProjectContentColumn[]> {
+  public async fetchProjectContentColumns(dataSourceCategory: string) {
     try {
       if (stringIsNullOrEmpty(dataSourceCategory)) return []
       const projectContentColumnsList = this.portalDataService.web.lists.getByTitle(

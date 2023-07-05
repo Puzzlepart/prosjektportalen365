@@ -7,7 +7,7 @@ import {
 import React, { FC } from 'react'
 import { IListProps } from './types'
 import { useAddColumn } from './useAddColumn'
-import { onRenderItemColumn } from './RenderItemColumn'
+import { onRenderItemColumn } from './ItemColumn'
 
 /**
  * List component using `ShimmeredDetailsList` from `@fluentui/react`.
@@ -45,4 +45,5 @@ List.defaultProps = {
 }
 
 export * from './types'
+export * from './ItemColumn'
 export * from './useAddColumn'
