@@ -258,7 +258,7 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
     {
       key: 'filename',
       id: 'Filename',
-      text: strings.ColumnRenderOptionFilenameWithIcon,
+      text: strings.ColumnRenderOptionFilename,
       data: { iconProps: { iconName: 'FileImage' } }
     },
     {

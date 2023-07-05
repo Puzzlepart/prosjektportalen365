@@ -92,7 +92,7 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionTrend: string
   ColumnRenderOptionTaxonomy: string
   ColumnRenderOptionModal: string
-  ColumnRenderOptionFilenameWithIcon: string
+  ColumnRenderOptionFilename: string
   ColumnPersistRenderGloballyFieldLabel: string
   DataSourceGroupName: string
   CommandBarGroupName: string
