@@ -1,11 +1,11 @@
 /* eslint-disable max-classes-per-file */
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { pick } from 'underscore'
+import { tryParseJson } from '../helpers'
 import { IProjectColumn } from '../interfaces/IProjectColumn'
+import { ColumnDataType } from '../types'
 import { SearchValueType } from '../types/SearchValueType'
 import { ProjectColumnConfig, ProjectColumnConfigDictionary } from './ProjectColumnConfig'
-import { tryParseJson } from '../helpers'
-import { ColumnDataType } from '../types'
 
 export class SPProjectColumnItem {
   public Id?: number = 0
@@ -36,6 +36,9 @@ export type ProjectColumnData = {
   dataTypeProperties?: Record<string, any>
   isSelected?: boolean
   renderAs?: ColumnDataType
+  searchType?: SearchValueType
+  config?: ProjectColumnConfigDictionary
+  customSorts?: ProjectColumnCustomSort[]
 }
 
 export class ProjectColumn implements IProjectColumn {
@@ -48,16 +51,11 @@ export class ProjectColumn implements IProjectColumn {
   public internalName?: string
   public iconName?: string
   public dataType?: ColumnDataType
-  public searchType?: SearchValueType
   public isRefinable?: boolean
-  public isGroupable?: boolean
   public isResizable?: boolean
   public isSorted?: boolean
   public isSortedDescending?: boolean
   public isMultiline?: boolean
-  public config?: ProjectColumnConfigDictionary
-  public onColumnClick: any
-  public customSorts?: ProjectColumnCustomSort[]
   public data?: ProjectColumnData
 
   constructor(item?: SPProjectColumnItem) {
@@ -71,27 +69,28 @@ export class ProjectColumn implements IProjectColumn {
       item?.GtFieldDataType ? item?.GtFieldDataType.toLowerCase() : 'text'
     ) as ColumnDataType
     this.isRefinable = item?.GtIsRefinable
-    this.isGroupable = item?.GtIsGroupable
     this.isResizable = true
     this.isMultiline = this.dataType === 'note' || this.dataType === 'tags'
     this.minWidth = item?.GtColMinWidth ?? 100
-    this.searchType = this._getSearchType()
-    this.customSorts = this._getCustomSorts(item?.GtFieldCustomSort)
     this.data = {
-      isGroupable: this.isGroupable,
+      isGroupable: item?.GtIsGroupable,
       visibility: [
         item?.GtShowFieldFrontpage && 'Frontpage',
         item?.GtShowFieldProjectStatus && 'ProjectStatus',
         item?.GtShowFieldPortfolio && 'Portfolio'
       ].filter(Boolean),
-      dataTypeProperties: tryParseJson(item?.GtFieldDataTypeProperties, {})
+      dataTypeProperties: tryParseJson(item?.GtFieldDataTypeProperties, {}),
+      searchType: this._getSearchType(),
+      customSorts: this._getCustomSorts(item?.GtFieldCustomSort),
+      config: {}
     }
   }
 
   /**
    * Get custom sorts from value. Value is a string with the following format:
    * <key>:<value>,<value>,<value>;<key>:<value>,<value>,<value> separated by ;.
-   * Regex is used to match the values.
+   * Regex is used to match the values. If no match is found or no value is
+   * found in the field, an empty array is returned.
    *
    * **Example:** "Status:Active,On hold,Completed;Priority:High,Medium,Low"
    *
@@ -118,39 +117,13 @@ export class ProjectColumn implements IProjectColumn {
   }
 
   /**
-   * Creates a new ProjectColumn
-   *
-   * @param key Key
-   * @param fieldName Field name
-   * @param name Name
-   * @param iconName Icon name
-   * @param onColumnClick On column click
-   * @param minWidth Min width
-   */
-  public create(
-    key: string,
-    fieldName: string,
-    name: string,
-    iconName: string,
-    onColumnClick: any,
-    minWidth: number
-  ): ProjectColumn {
-    this.key = key
-    this.fieldName = fieldName
-    this.name = name
-    this.iconName = iconName
-    this.onColumnClick = onColumnClick
-    this.minWidth = minWidth
-    return this
-  }
-
-  /**
-   * Configures the column with the given configuration.
+   * Configures the column with the given configuration and returns
+   * the configured column.
    *
    * @param config Column configuration
    */
   public configure(config: ProjectColumnConfig[]): ProjectColumn {
-    this.config = config
+    this.data.config = config
       .filter((col) => col.columnId === this.id)
       .reduce(
         (obj, c) => ({
@@ -165,7 +138,7 @@ export class ProjectColumn implements IProjectColumn {
   /**
    * Get search type from field name
    */
-  public _getSearchType?(): SearchValueType {
+  private _getSearchType?(): SearchValueType {
     const fieldNameLower = this.fieldName.toLowerCase()
     const searchTypeMap: Record<string, SearchValueType> = {
       owsdate: SearchValueType.OWSDATE,

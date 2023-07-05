@@ -5,7 +5,7 @@ import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
 import { IBaseComponentProps } from 'components/types'
 import assign from 'object-assign'
-import React, { FC } from 'react'
+import React, { ComponentClass, createElement, FC } from 'react'
 import * as ReactDom from 'react-dom'
 import { DataAdapter } from '../../data'
 
@@ -21,22 +21,23 @@ export abstract class BasePortfolioWebPart<
    * Render component specified in `component` parameter, with the props
    * specified in `props` parameter. The props will be merged with the
    * web part properties and the following props:
-   * - `webPartContext`
-   * - `pageContext`
-   * - `dataAdapter`
-   * - `displayMode`
    *
-   * @param component Component
+   * - `webPartContext` (from `this.context`)
+   * - `pageContext` (from `this.context.pageContext`)
+   * - `dataAdapter` (configured in `onInit`)
+   * - `displayMode` (from `this.displayMode`)
+   *
+   * @param component Component to render
    * @param props Props
    */
-  public renderComponent<T = any>(component: React.ComponentClass<T> | FC<T>, props?: T): void {
+  public renderComponent<T = any>(component: ComponentClass<T> | FC<T>, props?: T): void {
     const combinedProps = assign({ title: this._pageTitle }, this.properties, props, {
       webPartContext: this.context,
       pageContext: this.context.pageContext,
       dataAdapter: this.dataAdapter,
       displayMode: this.displayMode
     })
-    const element: React.ReactElement<T> = React.createElement(component, combinedProps)
+    const element: React.ReactElement<T> = createElement(component, combinedProps)
     ReactDom.render(element, this.domElement)
   }
 
@@ -59,7 +60,10 @@ export abstract class BasePortfolioWebPart<
   }
 
   public async onInit(): Promise<void> {
-    this.dataAdapter = await new DataAdapter(this.context).configure()
+    this.dataAdapter = await new DataAdapter(
+      this.context.pageContext,
+      this.context.msGraphClientFactory
+    ).configure()
     this.context.statusRenderer.clearLoadingIndicator(this.domElement)
     await this._setup()
   }

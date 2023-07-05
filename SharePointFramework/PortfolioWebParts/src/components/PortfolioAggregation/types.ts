@@ -95,6 +95,13 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   lockedColumns?: boolean
 
   /**
+   * Render list in justified layout mode. Manages which columns are visible, tries
+   * to size them according to their min/max rules and drops  off columns that can't
+   * fit and have isCollapsible set.
+   */
+  listLayoutModeJustified?: boolean
+
+  /**
    * On update property
    */
   onUpdateProperty?: (key: string, value: any) => void
@@ -129,17 +136,19 @@ export interface IPortfolioAggregationState
   dataSources?: DataSource[]
 
   /**
-   * Items to show in the details list
+   * Items to show in the list
    */
   items?: any[]
 
   /**
-   * Columns
+   * Columns to be shown in the list
    */
   columns?: ProjectContentColumn[]
 
   /**
-   * Columns for the selected data source
+   * Columns for the selected data source or all columns available
+   * for the data source category if no columns are defined
+   * for the selected data source.
    */
   dataSourceColumns?: ProjectContentColumn[]
 

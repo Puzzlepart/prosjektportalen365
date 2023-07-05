@@ -1,4 +1,4 @@
-import { MessageBarType } from '@fluentui/react'
+import { DetailsListLayoutMode, MessageBarType } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { FilterPanel } from 'pp365-shared-library/lib/components/FilterPanel'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
@@ -64,6 +64,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             renderTitleProjectInformationPanel={false}
             groups={context.state.groups}
             compact={context.state.isCompact}
+            layoutMode={props.listLayoutModeJustified && DetailsListLayoutMode.justified}
             groupProps={{
               // TODO: Temporary fix for collapsing groups, the new state handling throws errors
               onToggleCollapseAll: (isAllCollapsed) =>

@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    ListViewGroupName: 'Listevisning',
+    ListLayoutModeJustifiedLabel: 'Juster kolonner etter skjermbredde',
     ColumnPersistRenderGloballyFieldDescription: 'Om du ønsker å endre visningsmodus for kolonnene som for alle webdeler og visninger, huk av sjekkboksen over.',
     ColumnRenderOptionTrendShowTrendIconLabel: 'Vis ikon',
     ColumnRenderOptionModalLinkTextLabel: 'Tekst for lenke',

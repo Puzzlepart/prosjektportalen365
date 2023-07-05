@@ -1,5 +1,4 @@
 import { Persona, PersonaPresence, PersonaSize } from '@fluentui/react/lib/Persona'
-import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import React, { FC } from 'react'
 import { SearchValueType } from 'types'
 import { IRenderItemColumnProps } from '../types'
@@ -23,7 +22,7 @@ export const UserColumn: FC<IRenderItemColumnProps> = ({ columnValue, column }) 
     )
   }
   if (
-    (column as ProjectColumn)?.searchType === SearchValueType.OWSUSER ||
+    column?.data?.searchType === SearchValueType.OWSUSER ||
     column.fieldName.indexOf('OWSUSER') !== -1
   ) {
     const [email, text] = columnValue.split(' | ')

@@ -1,4 +1,5 @@
 import {
+  DetailsListLayoutMode,
   LayerHost,
   MarqueeSelection,
   ScrollablePane,
@@ -75,6 +76,9 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
                     onColumnHeaderContextMenu({ column, event })
                   }
                   compact={state.isCompact}
+                  layoutMode={props.listLayoutModeJustified && DetailsListLayoutMode.justified}
+                  renderTitleProjectInformationPanel={true}
+                  webPartContext={props.webPartContext}
                 />
               </MarqueeSelection>
               <LayerHost id={contextValue.layerHostId} />

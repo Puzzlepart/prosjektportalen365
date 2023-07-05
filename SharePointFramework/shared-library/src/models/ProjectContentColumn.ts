@@ -2,7 +2,6 @@
 import { tryParseJson } from '../helpers'
 import { IProjectContentColumn } from '../interfaces/IProjectContentColumn'
 import { ColumnDataType } from '../types'
-import { SearchValueType } from '../types/SearchValueType'
 
 export class SPProjectContentColumnItem {
   public Id?: number = 0
@@ -36,7 +35,6 @@ export class ProjectContentColumn implements IProjectContentColumn {
   public internalName?: string
   public iconName?: string
   public dataType?: ColumnDataType
-  public searchType?: SearchValueType
   public isGroupable?: boolean
   public isResizable?: boolean
   public isSorted?: boolean
@@ -60,7 +58,6 @@ export class ProjectContentColumn implements IProjectContentColumn {
     this.isMultiline = this.dataType === 'note' || this.dataType === 'tags'
     this.minWidth = item?.GtColMinWidth ?? 100
     this.maxWidth = item?.GtColMaxWidth
-    this.searchType = this._getSearchType()
     this.data = {
       isGroupable: this.isGroupable,
       dataTypeProperties: tryParseJson(item?.GtFieldDataTypeProperties, {}),
@@ -69,59 +66,18 @@ export class ProjectContentColumn implements IProjectContentColumn {
   }
 
   /**
-   * Creates a new ProjectColumn
+   * Set arbitrary data on the column. Such as `renderAs`,
+   * `isGroupable`, `dataTypeProperties`, etc.
    *
-   * @param key Key
-   * @param fieldName Field name
-   * @param name Name
-   * @param iconName Icon name
-   * @param onColumnClick On column click
-   * @param minWidth Min width
-   */
-  public create(
-    key: string,
-    fieldName: string,
-    name: string,
-    iconName: string,
-    onColumnClick: any,
-    minWidth: number
-  ): ProjectContentColumn {
-    this.key = key
-    this.fieldName = fieldName
-    this.name = name
-    this.iconName = iconName
-    this.onColumnClick = onColumnClick
-    this.minWidth = minWidth
-    return this
-  }
-
-  /**
-   * Get search type from field name
-   */
-  private _getSearchType?(): SearchValueType {
-    const fieldNameLower = this.fieldName.toLowerCase()
-    const searchTypeMap: Record<string, SearchValueType> = {
-      owsdate: SearchValueType.OWSDATE,
-      owsuser: SearchValueType.OWSUSER,
-      owstaxid: SearchValueType.OWSTAXID,
-      owscurr: SearchValueType.OWSCURR,
-      owsmtxt: SearchValueType.OWSMTXT
-    }
-    const searchType = Object.keys(searchTypeMap).find((key) => fieldNameLower.indexOf(key) !== -1)
-    if (searchType) {
-      return searchTypeMap[searchType]
-    }
-    return SearchValueType.OWSTEXT
-  }
-
-  /**
-   * Set arbitrary data on the column. Such as `renderAs` or
-   * `isGroupable`.
+   * If `renderAs` is specified, the property `dataType` will be set to the same value.
    *
    * @param data Data to set
    */
-  public setData(data: ProjectContentColumnData): ProjectContentColumn {
+  public setData(data: ProjectContentColumnData = {}): ProjectContentColumn {
     this.data = { ...this.data, ...data }
+    if (this.data.renderAs) {
+      this.dataType = this.data.renderAs
+    }
     return this
   }
 }

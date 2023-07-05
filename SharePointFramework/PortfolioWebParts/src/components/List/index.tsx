@@ -42,7 +42,7 @@ List.defaultProps = {
   selectionMode: SelectionMode.none,
   constrainMode: ConstrainMode.unconstrained,
   layoutMode: DetailsListLayoutMode.fixedColumns,
-  renderTitleProjectInformationPanel: true
+  renderTitleProjectInformationPanel: false
 }
 
 export * from './types'

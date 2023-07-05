@@ -1,9 +1,12 @@
 import { SPProjectColumnConfigItem } from './SPProjectColumnConfigItem'
 
-export type ProjectColumnConfigDictionary = Record<
-  string,
-  { color: string; iconName: string; tooltipColumnPropertyName: string }
->
+export type ProjectColumnConfigDictionaryItem = {
+  color: string
+  iconName: string
+  tooltipColumnPropertyName: string
+}
+
+export type ProjectColumnConfigDictionary = Record<string, ProjectColumnConfigDictionaryItem>
 
 export class ProjectColumnConfig {
   public id?: number

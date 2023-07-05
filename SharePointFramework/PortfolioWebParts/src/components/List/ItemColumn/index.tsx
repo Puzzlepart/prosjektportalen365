@@ -1,6 +1,11 @@
 import { IColumn, Icon, TooltipHost } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import { ColumnDataType, formatDate, getObjectValue as get } from 'pp365-shared-library'
+import {
+  ColumnDataType,
+  ProjectColumnConfigDictionaryItem,
+  formatDate,
+  getObjectValue as get
+} from 'pp365-shared-library'
 import React from 'react'
 import { IListProps } from '../types'
 import { BooleanColumn } from './BooleanColumn'
@@ -13,20 +18,20 @@ import { TitleColumn } from './TitleColumn'
 import { TrendColumn } from './TrendColumn'
 import { UrlColumn } from './UrlColumn'
 import { UserColumn } from './UserColumn'
-import { IRenderItemColumnProps, ItemRenderFunction } from './types'
+import { ItemColumnRenderFunction } from './types'
 
 /**
  * Mapping for rendering of the different data types.
  */
-const renderDataTypeMap: Record<ColumnDataType, ItemRenderFunction> = {
-  text: (props: IRenderItemColumnProps) => <span>{props.columnValue}</span>,
-  note: (props: IRenderItemColumnProps) => <span>{props.columnValue}</span>,
-  user: (props: IRenderItemColumnProps) => <UserColumn {...props} />,
-  date: (props: IRenderItemColumnProps) => {
+const renderDataTypeMap: Record<ColumnDataType, ItemColumnRenderFunction> = {
+  text: null,
+  note: null,
+  user: (props) => <UserColumn {...props} />,
+  date: (props) => {
     const includeTime = props.dataTypeProperties.get('includeTime') ?? false
     return <span>{formatDate(props.columnValue, includeTime)}</span>
   },
-  currency: (props: IRenderItemColumnProps) => (
+  currency: (props) => (
     <CurrencyColumn
       {...props}
       currencyPrefix={props.dataTypeProperties.get('currencyPrefix')}
@@ -34,33 +39,33 @@ const renderDataTypeMap: Record<ColumnDataType, ItemRenderFunction> = {
       maximumFractionDigits={props.dataTypeProperties.get('maximumFractionDigits')}
     />
   ),
-  tags: (props: IRenderItemColumnProps) => (
+  tags: (props) => (
     <TagsColumn {...props} valueSeparator={props.dataTypeProperties.get('valueSeparator')} />
   ),
-  boolean: (props: IRenderItemColumnProps) => (
+  boolean: (props) => (
     <BooleanColumn
       {...props}
       valueIfTrue={props.dataTypeProperties.get('valueIfTrue')}
       valueIfFalse={props.dataTypeProperties.get('valueIfFalse')}
     />
   ),
-  url: (props: IRenderItemColumnProps) => (
+  url: (props) => (
     <UrlColumn
       {...props}
       openInNewTab={props.dataTypeProperties.get('openInNewTab')}
       description={props.dataTypeProperties.get('description')}
     />
   ),
-  trend: (props: IRenderItemColumnProps) => <TrendColumn {...props} />,
-  modal: (props: IRenderItemColumnProps) => (
+  trend: (props) => <TrendColumn {...props} />,
+  modal: (props) => (
     <ModalColumn
       linkText={props.dataTypeProperties.get('linkText')}
       headerText={props.item.MeasurementIndicator}
       items={JSON.parse(props.columnValue)}
     />
   ),
-  filename: (props: IRenderItemColumnProps) => <FileNameColumn {...props} showFileExtensionIcon />,
-  list: (props: IRenderItemColumnProps) => <ListColumn {...props} />
+  filename: (props) => <FileNameColumn {...props} showFileExtensionIcon />,
+  list: (props) => <ListColumn {...props} />
 }
 
 /**
@@ -87,9 +92,6 @@ function renderItemColumn(item: Record<string, any>, column: IColumn, props: ILi
     return dataTypeProperties.get('fallbackValue') ?? null
   }
 
-  // eslint-disable-next-line no-console
-  console.log('renderItemColumn', columnValue, column)
-
   if (column.fieldName === 'Title' && column['dataType'] === 'text') {
     return (
       <TitleColumn
@@ -100,19 +102,18 @@ function renderItemColumn(item: Record<string, any>, column: IColumn, props: ILi
     )
   }
 
-  const renderFunction = renderDataTypeMap[column['dataType']]
+  const renderFunction: ItemColumnRenderFunction = renderDataTypeMap[column['dataType']]
 
   if (renderFunction) {
-    const renderProps: IRenderItemColumnProps = {
+    return renderFunction({
       column,
       item,
       columnValue,
       dataTypeProperties
-    }
-    return renderFunction(renderProps)
+    })
   }
 
-  const config = column['config'] ? column['config'][columnValue] : null
+  const config = get<ProjectColumnConfigDictionaryItem>(column, `data.config.${columnValue}`, null)
 
   if (config) {
     const element: JSX.Element = (

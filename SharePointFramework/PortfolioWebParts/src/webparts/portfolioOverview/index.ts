@@ -19,7 +19,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
   public render(): void {
     this.renderComponent<IPortfolioOverviewProps>(PortfolioOverview, {
       configuration: this._configuration
-    } as IPortfolioOverviewProps)
+    })
   }
 
   public async onInit(): Promise<void> {
@@ -28,12 +28,13 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
   }
 
   /**
-   * Get dropdown options for the specified `targetProperty`.
+   * Get dropdown options for the specified `targetProperty`. For now it only
+   * handles the `defaultViewId` property, but in the future it could be used
+   * to populate other dropdowns in the property pane.
    *
    * @param targetProperty Target property
    */
   protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
-    // eslint-disable-next-line default-case
     switch (targetProperty) {
       case 'defaultViewId':
         {
@@ -99,6 +100,14 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
                     label: strings.ShowProgramViewsLabel
                   })
               ].filter(Boolean)
+            },
+            {
+              groupName: strings.ListViewGroupName,
+              groupFields: [
+                PropertyPaneToggle('listLayoutModeJustified', {
+                  label: strings.ListLayoutModeJustifiedLabel
+                })
+              ]
             },
             {
               groupName: strings.ProjectInformationGroupName,

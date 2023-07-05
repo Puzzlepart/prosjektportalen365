@@ -1,4 +1,6 @@
 declare interface IPortfolioWebPartsStrings {
+  ListViewGroupName: string
+  ListLayoutModeJustifiedLabel: string
   ColumnPersistRenderGloballyFieldDescription: string
   ColumnRenderOptionTrendShowTrendIconLabel: string
   ColumnRenderOptionModalLinkTextLabel: string

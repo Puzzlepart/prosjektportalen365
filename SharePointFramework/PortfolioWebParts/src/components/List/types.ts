@@ -8,7 +8,7 @@ export interface IListProps extends IShimmeredDetailsListProps {
   isAddColumnEnabled?: boolean
 
   /**
-   * Render a ´<ProjectInformationPanel />´ component when clicking on the title column
+   * Render a ´ProjectInformationPanel´ component when clicking on the title column
    */
   renderTitleProjectInformationPanel?: boolean
 

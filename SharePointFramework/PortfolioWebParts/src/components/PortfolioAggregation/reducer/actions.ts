@@ -6,7 +6,7 @@ import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
 import { IColumnFormPanel } from '../ColumnFormPanel/types'
 
 /**
- * `DATA_FETCHED`: Fetching data from the data source.
+ * `DATA_FETCHED`: Action is called after all data has been fetched.
  */
 export const DATA_FETCHED = createAction<{
   items: any[]

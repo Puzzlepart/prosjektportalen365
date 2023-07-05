@@ -51,13 +51,15 @@ export function useColumnContextMenu(): IContextualMenuProps {
       context.state.currentView?.isProgramView
     )
   } else {
-    const columnCustomSorts = column.customSorts.map<IContextualMenuItem>((customSort, idx) => ({
-      key: `CUSTOM_SORT_${idx}`,
-      name: customSort.name,
-      canCheck: true,
-      checked: column.isSorted && context.state.sortBy?.customSort?.name === customSort.name,
-      onClick: () => context.dispatch(SET_SORT({ column, customSort }))
-    }))
+    const columnCustomSorts = column.data?.customSorts.map<IContextualMenuItem>(
+      (customSort, idx) => ({
+        key: `CUSTOM_SORT_${idx}`,
+        name: customSort.name,
+        canCheck: true,
+        checked: column.isSorted && context.state.sortBy?.customSort?.name === customSort.name,
+        onClick: () => context.dispatch(SET_SORT({ column, customSort }))
+      })
+    )
     columnContextMenu.items = [
       {
         key: 'SORT_DESC',
@@ -90,7 +92,7 @@ export function useColumnContextMenu(): IContextualMenuProps {
         name: format(strings.GroupByColumnLabel, column.name),
         canCheck: true,
         checked: get<string>(context.state, 'groupBy.fieldName', '') === column.fieldName,
-        disabled: !column.isGroupable,
+        disabled: !column?.data?.isGroupable,
         onClick: () => context.dispatch(SET_GROUP_BY(column))
       },
       {

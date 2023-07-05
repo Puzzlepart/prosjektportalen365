@@ -7,4 +7,4 @@ export interface IRenderItemColumnProps extends React.HTMLAttributes<HTMLDivElem
   dataTypeProperties?: Map<string, any>
 }
 
-export type ItemRenderFunction = (props: IRenderItemColumnProps) => JSX.Element
+export type ItemColumnRenderFunction = (props: IRenderItemColumnProps) => JSX.Element

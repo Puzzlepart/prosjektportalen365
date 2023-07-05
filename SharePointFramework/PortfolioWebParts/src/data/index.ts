@@ -1,5 +1,5 @@
 import { format } from '@fluentui/react/lib/Utilities'
-import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { PageContext } from '@microsoft/sp-page-context'
 import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/common'
 import {
   ItemUpdateResult,
@@ -64,10 +64,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   /**
    * Constructs the `DataAdapter` class
    *
-   * @param context Web part context
-   * @param siteIds Site IDs
+   * @param _pageContext Web part context
+   * @param _msGraphClientFactory MS Graph client factory (set to `any` due to missing typings)
    */
-  constructor(public context: WebPartContext, private siteIds?: string[]) {
+  constructor(public _pageContext: PageContext, private _msGraphClientFactory: any) {
     this.portalDataService = new PortalDataService()
   }
 
@@ -80,7 +80,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   public async configure(): Promise<DataAdapter> {
     if (this.dataSourceService && this.portalDataService.isConfigured) return this
     this.portalDataService = await this.portalDataService.configure({
-      pageContext: this.context.pageContext
+      pageContext: this._pageContext
     })
     this.dataSourceService = new DataSourceService(this.portalDataService.web)
     return this
@@ -161,7 +161,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ): Promise<IPortfolioAggregationConfiguration> {
     try {
       let calculatedLevel = 'Portefølje'
-      if (this.portalDataService.url !== this.context.pageContext.web.absoluteUrl) {
+      if (this.portalDataService.url !== this._pageContext.web.absoluteUrl) {
         calculatedLevel = 'Prosjekt'
       }
       const [views, viewsUrls, columnUrls, levels] = await Promise.all([
@@ -353,7 +353,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const [{ PrimarySearchResults: statusReports }] = await Promise.all([
         sp.search({
           ...config.DEFAULT_SEARCH_SETTINGS,
-          QueryTemplate: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+          QueryTemplate: `DepartmentId:{${this._pageContext.legacyPageContext.hubSiteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
           SelectProperties: [
             'Title',
             'GtSiteIdOWSTEXT',
@@ -489,7 +489,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     sortDirection: SortDirection
   ): Promise<SearchResult[]> {
     const response = await sp.search({
-      Querytext: `DepartmentId:{${this.context.pageContext.legacyPageContext.hubSiteId}} contentclass:STS_Site`,
+      Querytext: `DepartmentId:{${this._pageContext.legacyPageContext.hubSiteId}} contentclass:STS_Site`,
       TrimDuplicates: false,
       RowLimit: rowLimit,
       SelectProperties: ['Title', 'Path', 'SiteId', 'Created'],
@@ -510,7 +510,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       ]
     })
     return response.PrimarySearchResults.filter(
-      (site) => this.context.pageContext.legacyPageContext.hubSiteId !== site['SiteId']
+      (site) => this._pageContext.legacyPageContext.hubSiteId !== site['SiteId']
     )
   }
 
@@ -548,9 +548,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     // eslint-disable-next-line quotes
     filter = "GtProjectLifecycleStatus ne 'Avsluttet'"
   ): Promise<ProjectListModel[]> {
-    await msGraph.Init(this.context.msGraphClientFactory)
+    await msGraph.Init(this._msGraphClientFactory)
     const localStore = new PnPClientStorage().local
-    const siteId = this.context.pageContext.site.id.toString()
+    const siteId = this._pageContext.site.id.toString()
     const [items, groups, users, sites] = await localStore.getOrPut(
       `pp365_fetchenrichedprojects_${siteId}`,
       async () => {

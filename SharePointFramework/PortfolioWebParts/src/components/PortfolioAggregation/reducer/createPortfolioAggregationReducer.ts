@@ -81,25 +81,7 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
 })
 
 /**
- * Create reducer for `<PortfolioAggregation />`
- *
- * Handles all actions for the component:
- *
- * - `DATA_FETCHED` - Data fetched from data source
- * - `TOGGLE_COLUMN_FORM_PANEL` - Toggle column form panel
- * - `TOGGLE_EDIT_VIEW_COLUMNS_PANEL` - Toggle show/hide column panel
- * - `TOGGLE_FILTER_PANEL` - Toggle filter panel
- * - `TOGGLE_COMPACT` - Toggle compact mode
- * - `ADD_COLUMN` - Add column
- * - `DELETE_COLUMN` - Delete column
- * - `SHOW_HIDE_COLUMNS` - Show/hide columns
- * - `COLUMN_HEADER_CONTEXT_MENU` - Column header context menu
- * - `SET_GROUP_BY` - Set group by
- * - `SET_COLLAPSED` - Set collapsed
- * - `SET_ALL_COLLAPSED` - Set all collapsed
- * - `SET_SORT` - Set sort
- * - `MOVE_COLUMN` - Move column
- * - `SET_COLUMNS` - Set columns
+ * Create reducer for `<PortfolioAggregation />` using `createReducer` from `@reduxjs/toolkit`.
  *
  * @param props Props for `<PortfolioAggregation />` component
  */
@@ -108,13 +90,9 @@ export const createPortfolioAggregationReducer = (props: IPortfolioAggregationPr
     [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
       if (payload.items) {
         let items = props.postTransform ? props.postTransform(payload.items) : payload.items
-        items = sortArray(
-          [...items],
-          [state.sortBy?.fieldName ? state.sortBy.fieldName : 'SiteTitle'],
-          {
-            reverse: state.sortBy?.isSortedDescending ? state.sortBy.isSortedDescending : false
-          }
-        )
+        items = sortArray([...items], [state.sortBy?.fieldName ?? 'SiteTitle'], {
+          reverse: state.sortBy?.isSortedDescending ? state.sortBy.isSortedDescending : false
+        })
         if (payload.projects) {
           items = items.filter((item) =>
             any(payload.projects, (project) => project.GtSiteId === item.SiteId)
@@ -123,47 +101,32 @@ export const createPortfolioAggregationReducer = (props: IPortfolioAggregationPr
         state.items = items
         state.loading = false
       }
-      if (payload.columns) {
-        if (!isEmpty(payload.dataSource?.columns))
-          state.dataSourceColumns = payload.dataSource.columns
-        else state.dataSourceColumns = payload.columns
-
-        if (isEmpty(payload.columns)) {
-          state.columns = props.columns ?? []
-        } else {
-          const mergedColumns = current(state).columns.map((col) => {
-            const payCol = _.find(payload.columns, (c) => c.key === col.key)
-            const dataType = (col.data.renderAs ?? payCol.dataType ?? 'text').toLowerCase()
-            return payCol
-              ? {
-                  ...payCol,
-                  ...col,
-                  id: payCol.id,
-                  internalName: payCol.internalName,
-                  minWidth: payCol.minWidth,
-                  dataType,
-                  data: {
-                    ...payCol.data,
-                    ...col.data,
-                    renderAs: dataType
-                  }
-                }
-              : col
-          })
-
-          const newColumns = payload.columns.filter((col) => {
-            return !_.some(mergedColumns, (c) => c.key === col.key)
-          })
-
-          const filteredColumns = [...mergedColumns, ...newColumns].filter((col) => {
-            return payload.columns.find((c) => c.fieldName === col.fieldName)
-          })
-
-          if (mergedColumns.length >= 1) state.columns = filteredColumns
-          else state.columns = sortArray(payload.columns, 'sortOrder')
-        }
-      }
       if (payload.dataSources) state.dataSources = payload.dataSources
+      if (!payload.columns) return
+      if (!isEmpty(payload.dataSource?.columns))
+        state.dataSourceColumns = payload.dataSource.columns
+      else state.dataSourceColumns = payload.columns
+
+      if (isEmpty(payload.columns)) {
+        state.columns = props.columns ?? []
+      } else {
+        const mergedColumns = current(state).columns.map((col) => {
+          const payCol = _.find(payload.columns, (c) => c.key === col.key)
+          return payCol
+            ? payCol.setData({ renderAs: col.data.renderAs ?? payCol.dataType ?? 'text' })
+            : col
+        })
+
+        const newColumns = payload.columns.filter(
+          (col) => !_.some(mergedColumns, (c) => c.key === col.key)
+        )
+
+        const filteredColumns = [...mergedColumns, ...newColumns].filter((col) => {
+          return payload.columns.find((c) => c.fieldName === col.fieldName)
+        })
+        if (_.isEmpty(mergedColumns)) state.columns = filteredColumns
+        else state.columns = sortArray(payload.columns, 'sortOrder')
+      }
     },
     [TOGGLE_COLUMN_FORM_PANEL.type]: (
       state,

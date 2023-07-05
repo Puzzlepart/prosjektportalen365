@@ -12,7 +12,6 @@ import {
   IPortfolioAggregationProps,
   PortfolioAggregation
 } from 'components/PortfolioAggregation'
-import { DataAdapter } from 'data'
 import _ from 'lodash'
 import React from 'react'
 import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
@@ -28,7 +27,6 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
     } else {
       this.renderComponent<IPortfolioAggregationProps>(PortfolioAggregation, {
         ...this.properties,
-        dataAdapter: new DataAdapter(this.context),
         configuration: this._configuration,
         onUpdateProperty: this._onUpdateProperty.bind(this)
       })
@@ -110,6 +108,14 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
                 PropertyPaneToggle('showViewSelector', {
                   label: strings.ShowViewSelectorLabel,
                   disabled: !this.properties.showCommandBar
+                })
+              ]
+            },
+            {
+              groupName: strings.ListViewGroupName,
+              groupFields: [
+                PropertyPaneToggle('listLayoutModeJustified', {
+                  label: strings.ListLayoutModeJustifiedLabel
                 })
               ]
             },
