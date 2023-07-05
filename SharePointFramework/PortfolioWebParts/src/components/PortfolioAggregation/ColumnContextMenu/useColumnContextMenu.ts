@@ -3,7 +3,7 @@ import { DisplayMode } from '@microsoft/sp-core-library'
 import * as strings from 'PortfolioWebPartsStrings'
 import { useContext } from 'react'
 import { indexOf } from 'underscore'
-import { useAddColumn } from '../../PortfolioOverview/useAddColumn'
+import { useAddColumn } from '../../List'
 import { PortfolioAggregationContext } from '../context'
 import {
   MOVE_COLUMN,

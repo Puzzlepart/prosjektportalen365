@@ -1,18 +1,17 @@
-import {
-  MessageBarType,
-  ShimmeredDetailsList,
-  SelectionMode,
-  DetailsListLayoutMode
-} from '@fluentui/react'
+import { MessageBarType } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
+import { FilterPanel } from 'pp365-shared-library/lib/components/FilterPanel'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import React, { FC } from 'react'
+import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
+import { List } from '../List'
 import { ColumnContextMenu } from './ColumnContextMenu'
 import { ColumnFormPanel } from './ColumnFormPanel'
 import { Commands } from './Commands'
-import { PortfolioAggregationContext } from './context'
-import { getDefaultColumns, renderItemColumn } from './itemColumn'
 import styles from './PortfolioAggregation.module.scss'
+import SearchBox from './SearchBox'
+import { PortfolioAggregationContext } from './context'
+import { getDefaultColumns } from './getDefaultColumns'
 import {
   COLUMN_HEADER_CONTEXT_MENU,
   ON_FILTER_CHANGE,
@@ -20,17 +19,12 @@ import {
   SET_COLLAPSED,
   TOGGLE_FILTER_PANEL
 } from './reducer'
-import SearchBox from './SearchBox'
 import { IPortfolioAggregationProps } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
-import { FilterPanel } from 'pp365-shared-library/lib/components/FilterPanel'
-import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
-import { useAddColumn } from '../PortfolioOverview/useAddColumn'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
   const { state, dispatch, items, layerHostId, context, editViewColumnsPanelProps } =
     usePortfolioAggregation(props)
-  const { addColumn } = useAddColumn(!props.lockedColumns && !props.isParentProject)
 
   if (state.error) {
     return (
@@ -54,12 +48,9 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
         </div>
         <SearchBox />
         <div className={styles.container}>
-          <ShimmeredDetailsList
-            selectionMode={SelectionMode.none}
-            layoutMode={DetailsListLayoutMode.fixedColumns}
+          <List
             enableShimmer={state.loading}
             items={items.listItems}
-            onRenderItemColumn={renderItemColumn}
             onColumnHeaderClick={(ev, col) => {
               dispatch(
                 COLUMN_HEADER_CONTEXT_MENU({
@@ -68,7 +59,8 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
                 })
               )
             }}
-            columns={[...getDefaultColumns(props), ...items.columns, addColumn].filter(Boolean)}
+            columns={[...getDefaultColumns(props), ...items.columns]}
+            isAddColumnEnabled={!props.lockedColumns && !props.isParentProject}
             groups={state.groups}
             compact={state.isCompact}
             groupProps={{

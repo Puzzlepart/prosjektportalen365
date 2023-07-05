@@ -1,5 +1,5 @@
 import { getId } from '@fluentui/react'
-import { IProjectContentColumn } from 'pp365-shared-library'
+import { ProjectContentColumn } from 'pp365-shared-library'
 import { useEffect, useMemo, useReducer } from 'react'
 import { IPortfolioAggregationContext } from './context'
 import { filterItems } from './filter'
@@ -53,7 +53,7 @@ const usePortfolioAggregationDataSources = ({
  * @param context Context for the Portfolio Aggregation component
  */
 async function fetchData({ props, state }: IPortfolioAggregationContext) {
-  let columns: IProjectContentColumn[] = []
+  let columns: ProjectContentColumn[] = []
   if (props.dataAdapter.fetchProjectContentColumns) {
     columns = await props.dataAdapter.fetchProjectContentColumns(props.dataSourceCategory)
   }

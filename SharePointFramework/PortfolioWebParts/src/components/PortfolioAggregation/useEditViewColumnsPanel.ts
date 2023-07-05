@@ -22,10 +22,10 @@ export function useEditViewColumnsPanel(
         ...c,
         data: {
           ...c.data,
-          isSelected: _.some(context.state.fltColumns, (_c) => _c.fieldName === c.fieldName)
+          isSelected: _.some(context.state.filteredColumns, (_c) => _c.fieldName === c.fieldName)
         }
       })),
-    [context.state.columns, context.state.fltColumns]
+    [context.state.columns, context.state.filteredColumns]
   )
 
   /**

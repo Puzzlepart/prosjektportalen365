@@ -141,7 +141,7 @@ export interface IPortfolioAggregationState
   /**
    * Filtered columns
    */
-  fltColumns?: IProjectContentColumn[]
+  filteredColumns?: IProjectContentColumn[]
 
   /**
    * Groups

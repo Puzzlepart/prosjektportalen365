@@ -10,7 +10,7 @@ import {
   IPortfolioAggregationState,
   PortfolioAggregationErrorMessage
 } from './types'
-import _, { filter } from 'lodash'
+import _ from 'lodash'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { parseUrlHash, setUrlHash } from 'pp365-shared-library/lib/util'
 import { Target, IGroup, MessageBarType } from '@fluentui/react'
@@ -173,7 +173,7 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
   filters: [],
   items: [],
   columns: props.columns ?? [],
-  fltColumns: props.columns ?? [],
+  filteredColumns: props.columns ?? [],
   dataSource: props.dataSource ?? first(props.configuration.views)?.title,
   dataSources: [],
   dataSourceLevel: props.dataSourceLevel ?? props.configuration?.level,
@@ -226,10 +226,13 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
         state.loading = false
       }
       if (payload.columns) {
-        if (!isEmpty(payload.fltColumns)) state.fltColumns = payload.fltColumns
-        else state.fltColumns = payload.columns
+        if (!isEmpty(payload.fltColumns)) state.filteredColumns = payload.fltColumns
+        else state.filteredColumns = payload.columns
 
-        if (!isEmpty(payload.columns)) {
+        if (isEmpty(payload.columns)) {
+          state.columns = props.columns ?? []
+        }
+        else {
           const mergedColumns = state.columns.map((col) => {
             const payCol = payload.columns.find((c) => c.key === col.key)
             if (payCol) {
@@ -246,7 +249,7 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
           })
 
           const newColumns = payload.columns.filter((col) => {
-            return !mergedColumns.find((c) => c.key === col.key)
+            return !_.some(mergedColumns, (c) => c.key === col.key)
           })
 
           const filteredColumns = [...mergedColumns, ...newColumns].filter((col) => {
@@ -255,8 +258,6 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
 
           if (mergedColumns.length >= 1) state.columns = filteredColumns
           else state.columns = sortArray(payload.columns, 'sortOrder')
-        } else {
-          state.columns = props.columns || []
         }
       }
       if (payload.dataSources) state.dataSources = payload.dataSources
@@ -306,9 +307,9 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
     ) => {
       state.columnContextMenu = payload
         ? {
-            column: payload.column,
-            target: payload.target as any
-          }
+          column: payload.column,
+          target: payload.target as any
+        }
         : null
     },
     [SET_ALL_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_ALL_COLLAPSED>) => {
@@ -485,8 +486,8 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
             name: col.name,
             value: col.fieldName,
             selected:
-              current(state).fltColumns.length > 0
-                ? _.some(current(state).fltColumns, (c) => c.fieldName === col.fieldName)
+              current(state).filteredColumns.length > 0
+                ? _.some(current(state).filteredColumns, (c) => c.fieldName === col.fieldName)
                 : true
           })),
           defaultCollapsed: true
@@ -497,8 +498,8 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
       state.activeFilters = {
         ...state.activeFilters,
         ['SelectedColumns']:
-          current(state).fltColumns.length > 0
-            ? current(state).fltColumns.map((col) => col.fieldName)
+          current(state).filteredColumns.length > 0
+            ? current(state).filteredColumns.map((col) => col.fieldName)
             : current(state).columns.map((col) => col.fieldName)
       }
     },
@@ -515,7 +516,7 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
         if (payload.column.key === f.column.key) {
           f.items = f.items.map((i) => {
             const isSelected =
-              filter(payload.selectedItems, (_i) => _i.value === i.value).length > 0
+              _.filter(payload.selectedItems, (_i) => _i.value === i.value).length > 0
             return {
               ...i,
               selected: isSelected

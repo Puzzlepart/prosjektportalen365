@@ -1,11 +1,4 @@
-import {
-  Checkbox,
-  DefaultButton,
-  Panel,
-  PrimaryButton,
-  TextField,
-  Toggle
-} from '@fluentui/react'
+import { Checkbox, DefaultButton, Panel, PrimaryButton, TextField, Toggle } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ColumnSearchPropertyField, FormFieldContainer } from 'pp365-shared-library'
 import React, { FC, useContext } from 'react'
@@ -110,7 +103,12 @@ export const ColumnFormPanel: FC = () => {
       <ColumnRenderField
         description={strings.ColumnRenderDescription}
         defaultSelectedKey={column.get('dataType')}
-        onChange={(renderAs) => setColumnData('renderAs', renderAs)} >
+        onChange={(renderAs) => setColumnData('renderAs', renderAs)}
+        dataTypeProperties={column.get('data')?.dataTypeProperties ?? {}}
+        onDataTypePropertiesChange={(dataTypeProperties) =>
+          setColumnData('dataTypeProperties', dataTypeProperties)
+        }
+      >
         {!isEditing && (
           <Checkbox
             label={strings.ColumnRenderPersistGloballyLabel}

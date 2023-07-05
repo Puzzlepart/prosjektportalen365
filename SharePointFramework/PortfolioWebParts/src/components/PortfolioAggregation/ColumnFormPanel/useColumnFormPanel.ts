@@ -1,26 +1,14 @@
+import _ from 'lodash'
 import {
-  ProjectContentColumn,
   SPDataSourceItem,
   SPProjectContentColumnItem
 } from 'pp365-shared-library'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
 import { ADD_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
+import { useEditableColumn } from './useEditableColumn'
 
-const initialColumn = new Map<string, any>([
-  ['name', ''],
-  ['internalName', ''],
-  ['fieldName', ''],
-  ['sortOrder', 100],
-  ['minWidth', 100],
-  ['maxWidth', 150],
-  [
-    'data',
-    {
-      renderAs: 'text'
-    }
-  ]
-])
+
 
 /**
  * Component logic hook for ColumnFormPanel. Handles state and dispatches actions to the reducer.
@@ -28,31 +16,29 @@ const initialColumn = new Map<string, any>([
  */
 export function useColumnFormPanel() {
   const context = useContext(PortfolioAggregationContext)
-  const [column, $setColumn] = useState<ProjectContentColumn['$map']>(initialColumn)
+  const { column, setColumn, setColumnData, isEditing } = useEditableColumn(context)
   const [persistRenderAs, setPersistRenderAs] = useState(false)
-  const isEditing = !!context.state.columnForm.column
-
-  useEffect(() => {
-    if (isEditing) {
-      $setColumn(context.state.columnForm.column.$map)
-    } else {
-      $setColumn(initialColumn)
-    }
-  }, [context.state.columnForm])
 
   const onSave = async () => {
+    const colummData = column.get('data') ?? {}
+    const columnItem: SPProjectContentColumnItem = {
+      Id: column.get('id'),
+      GtSortOrder: column.get('sortOrder'),
+      Title: column.get('name'),
+      GtInternalName: column.get('internalName'),
+      GtManagedProperty: column.get('fieldName'),
+      GtFieldDataType: colummData.renderAs ?? 'Text',
+      GtDataSourceCategory: context.props.title,
+      GtColMinWidth: column.get('minWidth'),
+      GtColMaxWidth: column.get('maxWidth')
+    }
+    if (colummData.dataTypeProperties) {
+      columnItem.GtFieldDataTypeProperties = JSON.stringify(colummData.dataTypeProperties, null, 2)
+    }
     if (isEditing) {
       await Promise.resolve(
         context.props.dataAdapter
-          .updateProjectContentColumn(
-            {
-              id: context.state.columnForm.column.id,
-              minWidth: column.get('minWidth'),
-              maxWidth: column.get('maxWidth'),
-              renderAs: column.get('data').renderAs
-            },
-            persistRenderAs
-          )
+          .updateProjectContentColumn(columnItem, persistRenderAs)
           .then(() => {
             context.dispatch(
               ADD_COLUMN({
@@ -60,27 +46,17 @@ export function useColumnFormPanel() {
                   key: column.get('fieldName'),
                   fieldName: column.get('fieldName'),
                   name: column.get('name'),
-                  minWidth: column.get('minWidth')
+                  minWidth: column.get('minWidth'),
+                  maxWidth: column.get('maxWidth')
                 }
               })
             )
           })
       )
     } else {
-      const colummData = column.get('data') ?? {}
-      const properties: SPProjectContentColumnItem = {
-        GtSortOrder: column.get('sortOrder'),
-        Title: column.get('name'),
-        GtInternalName: column.get('internalName'),
-        GtManagedProperty: column.get('fieldName'),
-        GtFieldDataType: colummData.renderAs ?? 'Text',
-        GtDataSourceCategory: context.props.title,
-        GtColMinWidth: column.get('minWidth')
-      }
-
       await Promise.resolve(
         context.props.dataAdapter.portalDataService
-          .addItemToList('PROJECT_CONTENT_COLUMNS', properties)
+          .addItemToList('PROJECT_CONTENT_COLUMNS', _.omit(columnItem, ['Id']))
           .then((result) => {
             const updateItem: SPDataSourceItem = {
               GtProjectContentColumnsId: result['Id']
@@ -106,38 +82,6 @@ export function useColumnFormPanel() {
 
   const onDismiss = () => {
     context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
-  }
-
-  /**
-   * Sets a property of the column.
-   *
-   * @param key Key of the column to update
-   * @param value Value to update the column with
-   */
-  const setColumn = (key: string, value: any) => {
-    $setColumn((prev) => {
-      const newColumn = new Map(prev)
-      newColumn.set(key, value)
-      return newColumn
-    })
-  }
-
-  /**
-   * Set the data object of the column.
-   *
-   * @param key Key of the data object to update
-   * @param value Value to update the data object with
-   */
-  const setColumnData = (key: string, value: any) => {
-    $setColumn((prev) => {
-      const newColumn = new Map(prev)
-      const data = newColumn.get('data')
-      newColumn.set('data', {
-        ...data,
-        [key]: value
-      })
-      return newColumn
-    })
   }
 
   return {
