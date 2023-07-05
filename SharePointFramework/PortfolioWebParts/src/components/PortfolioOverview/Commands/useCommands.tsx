@@ -133,7 +133,6 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
     viewOptionsItem.subMenuProps.items.push({
       key: 'NEW_VIEW',
       name: strings.NewViewText,
-      disabled: context.state.loading,
       onClick: () => {
         context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: true }))
       }
@@ -141,7 +140,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
     viewOptionsItem.subMenuProps.items.push({
       key: 'EDIT_VIEW',
       name: strings.EditViewText,
-      disabled: context.state.loading || context.state.currentView?.isProgramView,
+      disabled: context.state.currentView?.isProgramView,
       onClick: () => {
         context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView }))
       }
@@ -150,10 +149,8 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
   farItems.push(viewOptionsItem)
   farItems.push({
     key: 'FILTERS',
-    name: '',
     iconProps: { iconName: 'Filter' },
     buttonStyles: { root: { border: 'none' } },
-    itemType: ContextualMenuItemType.Normal,
     canCheck: true,
     checked: context.state.isFilterPanelOpen,
     disabled: context.state.loading,

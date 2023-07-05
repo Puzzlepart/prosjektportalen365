@@ -13,14 +13,14 @@ import { PortfolioAggregationContext } from '../context'
 import { SET_DATA_SOURCE, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL } from '../reducer'
 
 export const Commands: FC = () => {
-  const { props, state, dispatch } = useContext(PortfolioAggregationContext)
+  const context = useContext(PortfolioAggregationContext)
 
   const cmd: ICommandBarProps = {
     items: [],
     farItems: []
   }
 
-  if (props.showExcelExportButton) {
+  if (context.props.showExcelExportButton) {
     cmd.items.push({
       key: 'EXCEL_EXPORT',
       name: strings.ExcelExportButtonLabel,
@@ -30,107 +30,99 @@ export const Commands: FC = () => {
       },
       buttonStyles: { root: { border: 'none' } },
       onClick: () => {
-        ExcelExportService.configure({ name: props.title })
-        ExcelExportService.export(state.items, [
+        ExcelExportService.configure({ name: context.props.title })
+        ExcelExportService.export(context.state.items, [
           {
             key: 'SiteTitle',
             fieldName: 'SiteTitle',
             name: strings.SiteTitleLabel,
             minWidth: null
           },
-          ...(state.columns as any[])
+          ...(context.state.columns as any[])
         ])
       }
     })
   }
 
-  if (!isEmpty(state.dataSources)) {
+  if (!isEmpty(context.state.dataSources)) {
     cmd.farItems.push(
       {
-        key: 'NEW_VIEW',
-        name: strings.NewViewText,
-        iconProps: { iconName: 'CirclePlus' },
-        buttonStyles: { root: { border: 'none' } },
-        disabled: !props.showViewSelector,
-        data: {
-          isVisible: props.pageContext.legacyPageContext.isSiteAdmin && props.showViewSelector
-        },
-        onClick: () => redirect(props.configuration.viewsUrls.defaultNewFormUrl)
-      } as IContextualMenuItem,
-      {
         key: 'VIEW_OPTIONS',
-        name: state.dataSource,
+        name: context.state.dataSource,
         iconProps: { iconName: 'List' },
         buttonStyles: { root: { border: 'none' } },
         itemType: ContextualMenuItemType.Header,
-        disabled: !props.showViewSelector,
-        data: { isVisible: props.showViewSelector },
+        disabled: !context.props.showViewSelector || context.state.loading,
+        data: { isVisible: context.props.showViewSelector },
         subMenuProps: {
           items: [
             {
               key: 'VIEW_LIST',
-              name: 'Liste',
+              name: strings.ListViewText,
               iconProps: { iconName: 'List' },
               canCheck: true,
-              checked: !state.isCompact,
-              onClick: () => dispatch(TOGGLE_COMPACT({ isCompact: false }))
+              checked: !context.state.isCompact,
+              onClick: () => context.dispatch(TOGGLE_COMPACT({ isCompact: false }))
             },
             {
               key: 'VIEW_COMPACT',
-              name: 'Kompakt liste',
+              name: strings.CompactViewText,
               iconProps: { iconName: 'AlignLeft' },
               canCheck: true,
-              checked: state.isCompact,
-              onClick: () => dispatch(TOGGLE_COMPACT({ isCompact: true }))
+              checked: context.state.isCompact,
+              onClick: () => context.dispatch(TOGGLE_COMPACT({ isCompact: true }))
             },
             {
               key: 'DIVIDER_01',
               itemType: ContextualMenuItemType.Divider
             },
-            ...(state.dataSources.map((ds) => ({
-              key: `DATA_SOURCE_${ds.id}`,
-              name: ds.title,
-              iconProps: { iconName: ds.iconName || 'DataConnectionLibrary' },
+            ...(context.state.dataSources.map((dataSource) => ({
+              key: `DATA_SOURCE_${dataSource.id}`,
+              name: dataSource.title,
+              iconProps: { iconName: dataSource.iconName || 'DataConnectionLibrary' },
               canCheck: true,
-              checked: ds.title === state.dataSource,
-              onClick: () => dispatch(SET_DATA_SOURCE({ dataSource: ds }))
+              checked: dataSource.title === context.state.dataSource,
+              onClick: () => context.dispatch(SET_DATA_SOURCE({ dataSource }))
             })) as IContextualMenuItem[]),
             {
               key: 'DIVIDER_02',
               itemType: ContextualMenuItemType.Divider
             },
             {
+              key: 'NEW_VIEW',
+              name: strings.NewViewText,
+              onClick: () => redirect(context.props.configuration.viewsUrls.defaultNewFormUrl)
+            },
+            {
               key: 'EDIT_VIEW',
               name: strings.EditViewText,
               onClick: () =>
                 redirect(
-                  `${props.configuration.viewsUrls.defaultEditFormUrl}?ID=${state.currentView.id}`
+                  `${context.props.configuration.viewsUrls.defaultEditFormUrl}?ID=${context.state.currentView.id}`
                 )
             }
-          ]
+          ].filter(Boolean)
         }
       } as IContextualMenuItem,
       {
         key: 'FILTERS',
-        name: '',
         iconProps: { iconName: 'Filter' },
         buttonStyles: { root: { border: 'none' } },
-        itemType: ContextualMenuItemType.Normal,
         canCheck: true,
-        checked: state.isFilterPanelOpen,
-        disabled: !props.showFilters,
-        data: { isVisible: props.showFilters },
+        checked: context.state.isFilterPanelOpen,
+        disabled: !context.props.showFilters,
+        data: { isVisible: context.props.showFilters },
         onClick: (ev) => {
           ev.preventDefault()
           ev.stopPropagation()
-          dispatch(TOGGLE_FILTER_PANEL({ isOpen: true }))
+          context.dispatch(TOGGLE_FILTER_PANEL({ isOpen: true }))
         }
       } as IContextualMenuItem
     )
   }
 
   return (
-    <div hidden={!props.showCommandBar}>
+    <div hidden={!context.props.showCommandBar}>
       <CommandBar {...cmd} />
     </div>
   )
