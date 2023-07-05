@@ -1,8 +1,4 @@
-import {
-  IDropdownProps,
-  IIconProps,
-  ISelectableOption
-} from '@fluentui/react'
+import { IDropdownProps, IIconProps, ISelectableOption } from '@fluentui/react'
 
 export type ColumnRenderFieldOptionAdditionalField = [React.ComponentType, any]
 
