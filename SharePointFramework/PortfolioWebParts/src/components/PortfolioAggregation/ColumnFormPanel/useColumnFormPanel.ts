@@ -6,7 +6,7 @@ import {
 } from 'pp365-shared-library'
 import { useContext, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
-import { ADD_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
+import { ADD_COLUMN, DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import { useEditableColumn } from './useEditableColumn'
 
 /**
@@ -70,12 +70,33 @@ export function useColumnFormPanel() {
     }
   }
 
+  const onDeleteColumn = async () => {
+    await context.props.dataAdapter
+      .deleteProjectContentColumn(context.state.columnForm.column)
+      .then(() => {
+        context.dispatch(DELETE_COLUMN())
+      })
+  }
+
   const onDismiss = () => {
     context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
   }
 
+  /**
+   * Save is disabled if the column name or field name is less than 2 characters.
+   */
+  const isSaveDisabled = column.get('fieldName').length < 2 || column.get('name').length < 2
+
+  /**
+   * Save is disabled if the column field name is Title
+   */
+  const isDeleteDisabled = context.state.columnForm?.column?.fieldName === 'Title'
+
   return {
     onSave,
+    isSaveDisabled,
+    onDeleteColumn,
+    isDeleteDisabled,
     onDismiss,
     column,
     setColumn,

@@ -1,4 +1,6 @@
 declare interface IPortfolioWebPartsStrings {
+  ConfirmDeleteProjectContentColumnTitle: string
+  ConfirmDeleteProjectContentColumnSubText: string
   ColumnRenderOptionTagsValueSeparatorLabel: string
   ColumnRenderOptionTagsValueSeparatorDescription: string
   ColumnRenderOptionDateIncludeTimeLabel: string
@@ -32,8 +34,8 @@ declare interface IPortfolioWebPartsStrings {
   PortfolioOverviewShowEditViewColumnsPanelHelpText: string
   RevertCustomOrderButtonTooltip: string
   RevertCustomOrderButtonText: string
-  ConfirmDeleteTitle: string
-  ConfirmDeleteSubText: string
+  ConfirmDeleteProjectColumnTitle: string
+  ConfirmDeleteProjectColumnSubText: string
   ConfirmDeleteResponseConfirm: string
   ConfirmDeleteResponseAbort: string
   AddToCurrentViewLabel: string

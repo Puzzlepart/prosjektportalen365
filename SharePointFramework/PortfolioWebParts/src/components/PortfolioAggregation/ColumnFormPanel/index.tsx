@@ -1,17 +1,20 @@
-import { Checkbox, DefaultButton, Panel, PrimaryButton, TextField, Toggle } from '@fluentui/react'
+import { Checkbox, Panel, TextField, Toggle } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ColumnSearchPropertyField, FormFieldContainer } from 'pp365-shared-library'
 import React, { FC, useContext } from 'react'
 import { ColumnRenderField } from '../../../components/ColumnRenderField'
 import { PortfolioAggregationContext } from '../context'
-import { DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import styles from './ColumnFormPanel.module.scss'
+import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
 import { useColumnFormPanel } from './useColumnFormPanel'
 
 export const ColumnFormPanel: FC = () => {
   const context = useContext(PortfolioAggregationContext)
   const {
     onSave,
+    isSaveDisabled,
+    onDeleteColumn,
+    isDeleteDisabled,
     onDismiss,
     column,
     setColumn,
@@ -25,6 +28,15 @@ export const ColumnFormPanel: FC = () => {
     <Panel
       isOpen={context.state.columnForm.isOpen}
       headerText={isEditing ? strings.EditColumnHeaderText : strings.NewColumnHeaderText}
+      onRenderFooterContent={() => (
+        <ColumnFormPanelFooter
+          onSave={onSave}
+          onDeleteColumn={onDeleteColumn}
+          isEditing={isEditing}
+          isSaveDisabled={isSaveDisabled}
+          isDeleteDisabled={isDeleteDisabled}
+        />
+      )}
       onDismiss={onDismiss}
       isLightDismiss={true}
       className={styles.root}
@@ -114,38 +126,9 @@ export const ColumnFormPanel: FC = () => {
           defaultChecked={persistRenderAs || !isEditing}
           onChange={(_, checked) => setPersistRenderAs(checked)}
           styles={{ root: { margin: '10px 0 15px 0' } }}
-          disabled={!isEditing}
+          disabled={!isEditing || column.get('fieldName') === 'Title'}
         />
       </ColumnRenderField>
-      <div className={styles.footer}>
-        <PrimaryButton
-          text={strings.SaveButtonLabel}
-          onClick={onSave}
-          disabled={column.get('fieldName').length < 2 || column.get('name').length < 2}
-        />
-        <DefaultButton
-          text={strings.CloseButtonLabel}
-          style={{ marginLeft: 4 }}
-          onClick={() => {
-            context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
-          }}
-        />
-        {isEditing && context.state.columnForm?.column?.fieldName !== 'Title' && (
-          <DefaultButton
-            text={strings.DeleteButtonLabel}
-            style={{ marginLeft: 4 }}
-            onClick={async () => {
-              await Promise.resolve(
-                context.props.dataAdapter
-                  .deleteProjectContentColumn(context.state.columnForm.column)
-                  .then(() => {
-                    context.dispatch(DELETE_COLUMN())
-                  })
-              )
-            }}
-          />
-        )}
-      </div>
     </Panel>
   )
 }

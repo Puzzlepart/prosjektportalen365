@@ -54,7 +54,7 @@ const persistColumnsInWebPartProperties = (
 ) => {
   onUpdateProperty(
     'columns',
-    columns.map((col) => omit(col, 'calculatedWidth', 'currentWidth'))
+    columns.map((col) => omit(col, 'calculatedWidth', 'currentWidth', '_item'))
   )
 }
 
