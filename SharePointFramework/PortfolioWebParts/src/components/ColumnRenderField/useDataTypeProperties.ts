@@ -35,7 +35,9 @@ export function useDataTypeProperties(
   }, [selectedOption, dataTypeProperties])
 
   useEffect(() => {
-    props.onDataTypePropertiesChange(dataTypeProperties)
+    if (props.onDataTypePropertiesChange) {
+      props.onDataTypePropertiesChange(dataTypeProperties)
+    }
   }, [dataTypeProperties])
 
   return {

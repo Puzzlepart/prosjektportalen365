@@ -4,6 +4,7 @@ import { IProjectContentColumn } from 'pp365-shared-library'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
 import { IBaseComponentProps } from '../types'
+import { IColumnFormPanel } from './ColumnFormPanel/types'
 
 export class PortfolioAggregationErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -148,11 +149,6 @@ export interface IPortfolioAggregationState
   groups?: IGroup[]
 
   /**
-   * Column currently being edited
-   */
-  editColumn?: IProjectContentColumn
-
-  /**
    * Column to group by
    */
   groupBy?: IColumn
@@ -168,9 +164,9 @@ export interface IPortfolioAggregationState
   searchTerm?: string
 
   /**
-   * Is add column panel open
+   * Column form panel properties
    */
-  isAddColumnPanelOpen?: boolean
+  columnForm?: IColumnFormPanel
 
   /**
    * Is edit view columns panel open

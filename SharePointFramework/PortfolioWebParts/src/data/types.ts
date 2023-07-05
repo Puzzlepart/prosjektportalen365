@@ -281,7 +281,15 @@ export interface IPortfolioWebPartsDataAdapter {
    * @param column Project content column
    * @param persistRenderAs Persist render as property
    */
-  updateProjectContentColumn?(column: Record<string, any>, persistRenderAs?: boolean): Promise<any>
+  updateProjectContentColumn?(
+    column: {
+      id: number
+      minWidth?: number
+      maxWidth?: number
+      renderAs?: string
+    },
+    persistRenderAs?: boolean
+  ): Promise<any>
 
   /**
    * Delete project content column

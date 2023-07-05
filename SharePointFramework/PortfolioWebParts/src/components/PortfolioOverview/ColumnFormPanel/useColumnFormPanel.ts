@@ -27,7 +27,7 @@ const initialColumn = new Map<string, any>([
  */
 export function useColumnFormPanel() {
   const context = useContext(PortfolioOverviewContext)
-  const [column, $setColumn] = useState<Map<string, any>>(initialColumn)
+  const [column, $setColumn] = useState<ProjectColumn['$map']>(initialColumn)
   const [columnMessages, setColumnMessages] = useState<Map<string, string>>(new Map())
   const isEditing = !!context.state.columnForm.column
 

@@ -1,37 +1,37 @@
 import {
   Checkbox,
   DefaultButton,
-  Dropdown,
   Panel,
   PrimaryButton,
   TextField,
   Toggle
 } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import React, { FC } from 'react'
+import { ColumnSearchPropertyField, FormFieldContainer } from 'pp365-shared-library'
+import React, { FC, useContext } from 'react'
+import { ColumnRenderField } from '../../../components/ColumnRenderField'
+import { PortfolioAggregationContext } from '../context'
 import { DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import styles from './ColumnFormPanel.module.scss'
-import { renderOptions } from './renderOptions'
 import { useColumnFormPanel } from './useColumnFormPanel'
-import { ColumnSearchPropertyField, FormFieldContainer } from 'pp365-shared-library'
 
 export const ColumnFormPanel: FC = () => {
+  const context = useContext(PortfolioAggregationContext)
   const {
-    state,
-    props,
-    dispatch,
     onSave,
     onDismiss,
     column,
     setColumn,
+    setColumnData,
     persistRenderAs,
-    setPersistRenderAs
+    setPersistRenderAs,
+    isEditing
   } = useColumnFormPanel()
 
   return (
     <Panel
-      isOpen={state.isAddColumnPanelOpen}
-      headerText={state.editColumn ? strings.EditColumnHeaderText : strings.NewColumnHeaderText}
+      isOpen={context.state.columnForm.isOpen}
+      headerText={isEditing ? strings.EditColumnHeaderText : strings.NewColumnHeaderText}
       onDismiss={onDismiss}
       isLightDismiss={true}
       className={styles.root}
@@ -41,14 +41,9 @@ export const ColumnFormPanel: FC = () => {
           label={strings.SortOrderLabel}
           description={strings.SortOrderLabel}
           type={'number'}
-          value={(column.sortOrder && column.sortOrder.toString()) || '100'}
-          disabled={!!state.editColumn}
-          onChange={(_, value) =>
-            setColumn({
-              ...column,
-              sortOrder: parseInt(value)
-            })
-          }
+          value={column.get('sortOrder')}
+          disabled={isEditing}
+          onChange={(_, value) => setColumn('sortOrder', parseInt(value))}
         />
       </FormFieldContainer>
       <FormFieldContainer>
@@ -56,41 +51,26 @@ export const ColumnFormPanel: FC = () => {
           label={strings.InternalNameLabel}
           description={strings.InternalNameDescription}
           required={true}
-          value={column.internalName}
-          disabled={!!state.editColumn}
-          onChange={(_, value) =>
-            setColumn({
-              ...column,
-              internalName: value
-            })
-          }
+          value={column.get('internalName')}
+          disabled={isEditing}
+          onChange={(_, value) => setColumn('internalName', value)}
         />
       </FormFieldContainer>
       <ColumnSearchPropertyField
         label={strings.SearchPropertyLabel}
         description={strings.SearchPropertyDescription}
         required={true}
-        value={column.fieldName}
-        disabled={!!state.editColumn}
-        onChange={(value) =>
-          setColumn({
-            ...column,
-            fieldName: value
-          })
-        }
+        value={column.get('fieldName')}
+        onChange={(value) => setColumn('fieldName', value)}
+        disabled={isEditing}
       />
       <FormFieldContainer>
         <TextField
           label={strings.DisplayNameLabel}
           description={strings.DisplayNameDescription}
           required={true}
-          value={column.name}
-          onChange={(_, value) =>
-            setColumn({
-              ...column,
-              name: value
-            })
-          }
+          value={column.get('name')}
+          onChange={(_, value) => setColumn('name', value)}
         />
       </FormFieldContainer>
       <FormFieldContainer>
@@ -98,14 +78,9 @@ export const ColumnFormPanel: FC = () => {
           label={strings.MinWidthLabel}
           description={strings.MinWidthDescription}
           type='number'
-          value={column.minWidth.toString()}
-          max={column.maxWidth}
-          onChange={(_, value) =>
-            setColumn({
-              ...column,
-              minWidth: parseInt(value)
-            })
-          }
+          value={column.get('minWidth')?.toString()}
+          onChange={(_, value) => setColumn('minWidth', parseInt(value))}
+          max={column.get('maxWidth')}
         />
       </FormFieldContainer>
       <FormFieldContainer>
@@ -113,71 +88,30 @@ export const ColumnFormPanel: FC = () => {
           label={strings.MaxWidthLabel}
           description={strings.MaxWidthDescription}
           type='number'
-          value={column.maxWidth.toString()}
-          min={column.minWidth ?? 0}
-          onChange={(_, value) =>
-            setColumn({
-              ...column,
-              maxWidth: parseInt(value)
-            })
-          }
-        />
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <Toggle
-          label={strings.IsMultilineLabel}
-          defaultChecked={column.isMultiline}
-          onChange={(_, checked) =>
-            setColumn({
-              ...column,
-              isMultiline: checked
-            })
-          }
+          value={column.get('maxWidth')?.toString()}
+          onChange={(_, value) => setColumn('maxWidth', parseInt(value))}
+          min={column.get('minWidth') ?? 0}
         />
       </FormFieldContainer>
       <FormFieldContainer>
         <Toggle
           label={strings.IsResizableLabel}
-          defaultChecked={column.isResizable}
-          onChange={(_, checked) =>
-            setColumn({
-              ...column,
-              isResizable: checked
-            })
-          }
+          checked={column.get('isResizable')}
+          onChange={(_, checked) => setColumn('isResizable', checked)}
         />
       </FormFieldContainer>
       <FormFieldContainer>
         <Toggle
           label={strings.IsGroupableLabel}
-          defaultChecked={column.data?.isGroupable}
-          onChange={(_, checked) =>
-            setColumn({
-              ...column,
-              data: {
-                ...column.data,
-                isGroupable: checked
-              }
-            })
-          }
+          checked={column.get('data').isGroupable}
+          onChange={(_, checked) => setColumnData('isGroupable', checked)}
         />
       </FormFieldContainer>
-      <FormFieldContainer description={strings.ColumnRenderDescription}>
-        <Dropdown
-          label={strings.ColumnRenderLabel}
-          options={renderOptions}
-          defaultSelectedKey={column.data?.renderAs ?? 'text'}
-          onChange={(_, opt) =>
-            setColumn({
-              ...column,
-              data: {
-                ...column.data,
-                renderAs: opt.key as string
-              }
-            })
-          }
-        />
-        {state.editColumn && (
+      <ColumnRenderField
+        description={strings.ColumnRenderDescription}
+        defaultSelectedKey={column.get('dataType')}
+        onChange={(renderAs) => setColumnData('renderAs', renderAs)} >
+        {!isEditing && (
           <Checkbox
             label={strings.ColumnRenderPersistGloballyLabel}
             defaultChecked={persistRenderAs}
@@ -185,37 +119,31 @@ export const ColumnFormPanel: FC = () => {
             styles={{ root: { margin: '10px 0 15px 0' } }}
           />
         )}
-      </FormFieldContainer>
+      </ColumnRenderField>
       <div className={styles.footer}>
         <PrimaryButton
           text={strings.SaveButtonLabel}
           onClick={onSave}
-          disabled={column.fieldName.length < 2 || column.name.length < 2}
+          disabled={column.get('fieldName').length < 2 || column.get('name').length < 2}
         />
         <DefaultButton
           text={strings.CloseButtonLabel}
           style={{ marginLeft: 4 }}
           onClick={() => {
-            dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
-            setColumn({
-              ...column,
-              name: '',
-              fieldName: ''
-            })
+            context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
           }}
         />
-        {state.editColumn && state.editColumn.fieldName !== 'Title' && (
+        {isEditing && context.state.columnForm?.column?.fieldName !== 'Title' && (
           <DefaultButton
             text={strings.DeleteButtonLabel}
             style={{ marginLeft: 4 }}
             onClick={async () => {
               await Promise.resolve(
-                props.dataAdapter
-                  .deleteProjectContentColumn(state.editColumn)
+                context.props.dataAdapter
+                  .deleteProjectContentColumn(context.state.columnForm.column)
                   .then(() => {
-                    dispatch(DELETE_COLUMN())
+                    context.dispatch(DELETE_COLUMN())
                   })
-                  .catch((error) => (state.error = error))
               )
             }}
           />

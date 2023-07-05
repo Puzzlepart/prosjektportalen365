@@ -1,46 +1,28 @@
-import { Dropdown, IRenderFunction, Icon } from '@fluentui/react'
+import { Dropdown } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import { FormFieldContainer } from 'pp365-shared-library'
 import React, { FC, createElement, useEffect, useState } from 'react'
-import { ColumnRenderFieldOption, IColumnRenderFieldProps, renderAsOptions } from './types'
 import styles from './ColumnRenderField.module.scss'
+import { ColumnRenderFieldOption, IColumnRenderFieldProps } from './types'
 import { useDataTypeProperties } from './useDataTypeProperties'
+import { useRenderAsOptions } from './useRenderAsOptions'
 
 export const ColumnRenderField: FC<IColumnRenderFieldProps> = (props) => {
+  const { renderAsOptions, onChange, onRenderOption } = useRenderAsOptions(props)
   const [selectedOption, setSelectedOption] = useState<ColumnRenderFieldOption>(
     _.find(renderAsOptions, (option) => option.key === props.defaultSelectedKey)
   )
   const { dataTypeFields, isDataTypeFieldsVisible, toggleIsDataTypeFieldsVisible } =
     useDataTypeProperties(props, selectedOption)
 
-  /**
-   * Render function for dropdown options.
-   *
-   * @param option Option to render
-   */
-  const onRenderOption: IRenderFunction<ColumnRenderFieldOption> = (option) => (
-    <div>
-      {option.data?.iconProps && (
-        <Icon {...option.data.iconProps} styles={{ root: { marginRight: 6 } }} />
-      )}
-      <span>{option.text}</span>
-    </div>
-  )
-
   useEffect(() => {
-    if (!selectedOption) return
-    const value =
-      selectedOption.id ??
-      _.capitalize(selectedOption.key as string)
-        .split('_')
-        .join(' ')
-    props.onChange(value)
+    onChange(selectedOption)
   }, [selectedOption])
 
   return (
     <>
-      <FormFieldContainer description={strings.PortfolioOverviewColumnRenderDescription}>
+      <FormFieldContainer description={props.description}>
         <Dropdown
           label={strings.ColumnRenderLabel}
           options={renderAsOptions}
@@ -49,9 +31,10 @@ export const ColumnRenderField: FC<IColumnRenderFieldProps> = (props) => {
           onRenderTitle={(options) => onRenderOption(_.first(options))}
           onRenderOption={onRenderOption}
         />
+        {props.children}
       </FormFieldContainer>
       {!_.isEmpty(dataTypeFields) && (
-        <div className={styles.dataTypeFields}>
+        <div className={styles.dataTypeFields} hidden={!props.dataTypeProperties}>
           <div className={styles.header} onClick={toggleIsDataTypeFieldsVisible}>
             <span className={styles.title}>{strings.ColumnRenderDataTypePropertiesHeaderText}</span>
           </div>
@@ -68,3 +51,5 @@ export const ColumnRenderField: FC<IColumnRenderFieldProps> = (props) => {
     </>
   )
 }
+
+ColumnRenderField.defaultProps = {}

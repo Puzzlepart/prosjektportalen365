@@ -17,6 +17,7 @@ import { Target, IGroup, MessageBarType } from '@fluentui/react'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { arrayMove } from 'pp365-shared-library/lib/helpers/arrayMove'
 import { IProjectContentColumn } from 'pp365-shared-library'
+import { IColumnFormPanel } from './ColumnFormPanel/types'
 
 /**
  * `DATA_FETCHED`: Fetching data from the data source.
@@ -32,10 +33,7 @@ export const DATA_FETCHED = createAction<{
 /**
  * `TOGGLE_COLUMN_FORM_PANEL`: Toggling the column form panel.
  */
-export const TOGGLE_COLUMN_FORM_PANEL = createAction<{
-  isOpen: boolean
-  column?: IProjectContentColumn
-}>('TOGGLE_COLUMN_FORM_PANEL')
+export const TOGGLE_COLUMN_FORM_PANEL = createAction<IColumnFormPanel>('TOGGLE_COLUMN_FORM_PANEL')
 
 /**
  * `TOGGLE_EDIT_VIEW_COLUMNS_PANEL`: Toggling the show/hide column panel.
@@ -180,7 +178,7 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
   dataSources: [],
   dataSourceLevel: props.dataSourceLevel ?? props.configuration?.level,
   groups: null,
-  isAddColumnPanelOpen: false,
+  columnForm: { isOpen: false, column: null },
   isEditViewColumnsPanelOpen: false
 })
 
@@ -267,8 +265,7 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
       state,
       { payload }: ReturnType<typeof TOGGLE_COLUMN_FORM_PANEL>
     ) => {
-      state.editColumn = payload.column || null
-      state.isAddColumnPanelOpen = payload.isOpen
+      state.columnForm = payload
     },
     [TOGGLE_EDIT_VIEW_COLUMNS_PANEL.type]: (
       state,
@@ -283,20 +280,18 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
       state.isCompact = payload.isCompact
     },
     [ADD_COLUMN.type]: (state, { payload }: ReturnType<typeof ADD_COLUMN>) => {
-      if (state.editColumn) {
+      if (state.columnForm?.column) {
         state.columns = [...state.columns].map((c) => {
           if (c.fieldName === payload.column.fieldName) return payload.column
           return c
         })
       }
-      state.editColumn = null
-      state.isAddColumnPanelOpen = false
+      state.columnForm = { isOpen: false }
       state.columnAdded = new Date().getTime()
       persistColumns(props, current(state).columns)
     },
     [DELETE_COLUMN.type]: (state) => {
-      state.editColumn = null
-      state.isAddColumnPanelOpen = false
+      state.columnForm = { isOpen: false }
       state.columnDeleted = new Date().getTime()
       persistColumns(props, current(state).columns)
     },

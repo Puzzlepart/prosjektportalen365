@@ -22,13 +22,13 @@
       }
     }
 
-    .addColumnIcon {
-      margin: 0 4px 0 0;
-      vertical-align: bottom;
-    }
-
     [class*="stickyAbove"] .headerColumns {
       padding-left: 32px;
     }
   }
+}
+
+.addColumnIcon {
+  margin: 0 4px 0 0;
+  vertical-align: bottom;
 }

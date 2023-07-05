@@ -804,7 +804,12 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   public async updateProjectContentColumn(
-    column: ProjectContentColumn,
+    column: {
+      id: number
+      minWidth?: number
+      maxWidth?: number
+      renderAs?: string
+    },
     persistRenderAs = false
   ): Promise<any> {
     try {
@@ -814,7 +819,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         GtColMaxWidth: column.maxWidth
       }
       if (persistRenderAs) {
-        properties.GtFieldDataType = capitalize(column.data.renderAs).split('_').join(' ')
+        properties.GtFieldDataType = capitalize(column.renderAs).split('_').join(' ')
       }
       return await list.items.getById(column.id).update(properties)
     } catch (error) {

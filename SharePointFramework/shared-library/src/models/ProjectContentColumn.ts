@@ -31,37 +31,29 @@ export class ProjectContentColumn implements IProjectContentColumn {
   public isResizable?: boolean
   public isSorted?: boolean
   public isSortedDescending?: boolean
+  public isMultiline?: boolean
   public onColumnClick: any
-  /**
-   * Arbitrary data passthrough which can be used by the caller.
-   */
   public data?: any
+  public $map: Map<string, any>
 
   constructor(item?: SPProjectContentColumnItem) {
-    if (item) {
-      this.id = item.Id
-      this.fieldName = item.GtManagedProperty || item.GtInternalName
-      this.key = item.GtManagedProperty
-      this.name = item.Title
-      this.sortOrder = item.GtSortOrder
-      this.internalName = item.GtInternalName
-      this.dataType = item.GtFieldDataType && item.GtFieldDataType.toLowerCase()
-      this.isGroupable = item.GtIsGroupable
-      this.isResizable = true
-      this.minWidth = item.GtColMinWidth ?? 100
-      this.maxWidth = item.GtColMaxWidth
-      this.searchType = this._getSearchType(this.fieldName.toLowerCase())
-      this.data = {
-        isGroupable: this.isGroupable
-      }
+    this.id = item?.Id
+    this.fieldName = item?.GtManagedProperty ?? item?.GtInternalName ?? ''
+    this.key = item?.GtManagedProperty
+    this.name = item?.Title
+    this.sortOrder = item?.GtSortOrder
+    this.internalName = item?.GtInternalName
+    this.dataType = item?.GtFieldDataType ? item?.GtFieldDataType.toLowerCase() : 'text'
+    this.isGroupable = item?.GtIsGroupable
+    this.isResizable = true
+    this.isMultiline = this.dataType === 'note' || this.dataType === 'tags'
+    this.minWidth = item?.GtColMinWidth ?? 100
+    this.maxWidth = item?.GtColMaxWidth
+    this.searchType = this._getSearchType()
+    this.data = {
+      isGroupable: this.isGroupable
     }
-  }
-
-  /**
-   * Returns `true` if the column is a multiline column.
-   */
-  public get isMultiline(): boolean {
-    return this.dataType === 'note' || this.dataType === 'tags'
+    this.$map = this._toMap()
   }
 
   /**
@@ -93,24 +85,19 @@ export class ProjectContentColumn implements IProjectContentColumn {
 
   /**
    * Get search type from field name
-   *
-   * @param fieldName Field name
    */
-  private _getSearchType?(fieldName: string): SearchValueType {
-    if (fieldName.indexOf('owsdate') !== -1) {
-      return SearchValueType.OWSDATE
+  private _getSearchType?(): SearchValueType {
+    const fieldNameLower = this.fieldName.toLowerCase()
+    const searchTypeMap: Record<string, SearchValueType> = {
+      owsdate: SearchValueType.OWSDATE,
+      owsuser: SearchValueType.OWSUSER,
+      owstaxid: SearchValueType.OWSTAXID,
+      owscurr: SearchValueType.OWSCURR,
+      owsmtxt: SearchValueType.OWSMTXT
     }
-    if (fieldName.indexOf('owsuser') !== -1) {
-      return SearchValueType.OWSUSER
-    }
-    if (fieldName.indexOf('owstaxid') !== -1) {
-      return SearchValueType.OWSTAXID
-    }
-    if (fieldName.indexOf('owscurr') !== -1) {
-      return SearchValueType.OWSCURR
-    }
-    if (fieldName.indexOf('owsmtxt') !== -1) {
-      return SearchValueType.OWSMTXT
+    const searchType = Object.keys(searchTypeMap).find((key) => fieldNameLower.indexOf(key) !== -1)
+    if (searchType) {
+      return searchTypeMap[searchType]
     }
     return SearchValueType.OWSTEXT
   }
@@ -125,5 +112,26 @@ export class ProjectContentColumn implements IProjectContentColumn {
   public setData(data: any): ProjectContentColumn {
     this.data = { ...this.data, ...data }
     return this
+  }
+
+  /**
+   * Converts the column to a map used in `ColumnFormPanel`.
+   *
+   * @private
+   */
+  private _toMap(): Map<string, any> {
+    return new Map<string, any>([
+      ['id', this.id],
+      ['key', this.key],
+      ['fieldName', this.fieldName],
+      ['name', this.name],
+      ['minWidth', this.minWidth],
+      ['maxWidth', this.maxWidth],
+      ['sortOrder', this.sortOrder],
+      ['internalName', this.internalName],
+      ['iconName', this.iconName],
+      ['dataType', this.dataType],
+      ['data', this.data]
+    ])
   }
 }

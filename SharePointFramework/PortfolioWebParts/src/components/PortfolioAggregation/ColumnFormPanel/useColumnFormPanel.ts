@@ -1,6 +1,5 @@
-import { capitalize } from 'lodash'
 import {
-  IProjectContentColumn,
+  ProjectContentColumn,
   SPDataSourceItem,
   SPProjectContentColumnItem
 } from 'pp365-shared-library'
@@ -8,96 +7,147 @@ import { useContext, useEffect, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
 import { ADD_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 
-const initialColumn: IProjectContentColumn = {
-  key: null,
-  fieldName: '',
-  name: '',
-  minWidth: 100,
-  maxWidth: 150,
-  data: {
-    renderAs: 'text'
-  }
-}
+const initialColumn = new Map<string, any>([
+  ['name', ''],
+  ['internalName', ''],
+  ['fieldName', ''],
+  ['sortOrder', 100],
+  ['minWidth', 100],
+  ['maxWidth', 150],
+  [
+    'data',
+    {
+      renderAs: 'text'
+    }
+  ]
+])
 
 /**
  * Component logic hook for ColumnFormPanel. Handles state and dispatches actions to the reducer.
  * Also provides methods for saving and deleting columns.
  */
 export function useColumnFormPanel() {
-  const { state, props, dispatch } = useContext(PortfolioAggregationContext)
-  const [column, setColumn] = useState<IProjectContentColumn>({
-    ...initialColumn,
-    ...(state.editColumn || {})
-  })
+  const context = useContext(PortfolioAggregationContext)
+  const [column, $setColumn] = useState<ProjectContentColumn['$map']>(initialColumn)
   const [persistRenderAs, setPersistRenderAs] = useState(false)
+  const isEditing = !!context.state.columnForm.column
+
   useEffect(() => {
-    if (state.editColumn) {
-      setColumn({
-        minWidth: 100,
-        maxWidth: 150,
-        data: {
-          renderAs: state.editColumn.dataType ?? 'text'
-        },
-        ...state.editColumn
-      })
+    if (isEditing) {
+      $setColumn(context.state.columnForm.column.$map)
+    } else {
+      $setColumn(initialColumn)
     }
-  }, [state.editColumn])
+  }, [context.state.columnForm])
 
   const onSave = async () => {
-    setColumn(initialColumn)
-    if (state.editColumn)
+    if (isEditing) {
       await Promise.resolve(
-        props.dataAdapter
-          .updateProjectContentColumn(column, persistRenderAs)
+        context.props.dataAdapter
+          .updateProjectContentColumn(
+            {
+              id: context.state.columnForm.column.id,
+              minWidth: column.get('minWidth'),
+              maxWidth: column.get('maxWidth'),
+              renderAs: column.get('data').renderAs
+            },
+            persistRenderAs
+          )
           .then(() => {
-            dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
+            context.dispatch(
+              ADD_COLUMN({
+                column: {
+                  key: column.get('fieldName'),
+                  fieldName: column.get('fieldName'),
+                  name: column.get('name'),
+                  minWidth: column.get('minWidth')
+                }
+              })
+            )
           })
-          .catch((error) => (state.error = error))
       )
-    else {
+    } else {
+      const colummData = column.get('data') ?? {}
       const properties: SPProjectContentColumnItem = {
-        GtSortOrder: column.sortOrder ?? 100,
-        Title: column.name,
-        GtInternalName: column.internalName,
-        GtManagedProperty: column.fieldName,
-        GtFieldDataType: capitalize(column.data?.renderAs).split('_').join(' '),
-        GtDataSourceCategory: props.title,
-        GtColMinWidth: column.minWidth
+        GtSortOrder: column.get('sortOrder'),
+        Title: column.get('name'),
+        GtInternalName: column.get('internalName'),
+        GtManagedProperty: column.get('fieldName'),
+        GtFieldDataType: colummData.renderAs ?? 'Text',
+        GtDataSourceCategory: context.props.title,
+        GtColMinWidth: column.get('minWidth')
       }
 
       await Promise.resolve(
-        props.dataAdapter.portalDataService
+        context.props.dataAdapter.portalDataService
           .addItemToList('PROJECT_CONTENT_COLUMNS', properties)
           .then((result) => {
             const updateItem: SPDataSourceItem = {
               GtProjectContentColumnsId: result['Id']
             }
-            props.dataAdapter
-              .updateDataSourceItem(updateItem, state.dataSource)
+            context.props.dataAdapter
+              .updateDataSourceItem(updateItem, context.state.dataSource)
               .then(() => {
-                dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
+                context.dispatch(
+                  ADD_COLUMN({
+                    column: {
+                      key: column.get('fieldName'),
+                      fieldName: column.get('fieldName'),
+                      name: column.get('name'),
+                      minWidth: column.get('minWidth')
+                    }
+                  })
+                )
               })
-              .catch((error) => (state.error = error))
           })
-          .catch((error) => (state.error = error))
       )
     }
   }
 
   const onDismiss = () => {
-    setColumn(initialColumn)
-    dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
+    context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
+  }
+
+  /**
+   * Sets a property of the column.
+   *
+   * @param key Key of the column to update
+   * @param value Value to update the column with
+   */
+  const setColumn = (key: string, value: any) => {
+    $setColumn((prev) => {
+      const newColumn = new Map(prev)
+      newColumn.set(key, value)
+      return newColumn
+    })
+  }
+
+  /**
+   * Set the data object of the column.
+   *
+   * @param key Key of the data object to update
+   * @param value Value to update the data object with
+   */
+  const setColumnData = (key: string, value: any) => {
+    $setColumn((prev) => {
+      const newColumn = new Map(prev)
+      const data = newColumn.get('data')
+      newColumn.set('data', {
+        ...data,
+        [key]: value
+      })
+      return newColumn
+    })
   }
 
   return {
-    state,
-    props,
-    dispatch,
     onSave,
     onDismiss,
     column,
     setColumn,
+    setColumnData,
     persistRenderAs,
-    setPersistRenderAs
+    setPersistRenderAs,
+    isEditing
   } as const
 }

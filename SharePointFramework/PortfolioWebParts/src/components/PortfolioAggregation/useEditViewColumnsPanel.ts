@@ -25,7 +25,7 @@ export function useEditViewColumnsPanel(
           isSelected: _.some(context.state.fltColumns, (_c) => _c.fieldName === c.fieldName)
         }
       })),
-    [context.state.columns, context.state.currentView]
+    [context.state.columns, context.state.fltColumns]
   )
 
   /**
