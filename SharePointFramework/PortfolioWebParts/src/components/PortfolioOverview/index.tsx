@@ -19,15 +19,23 @@ import { onRenderItemColumn } from './RenderItemColumn'
 import { PortfolioOverviewContext } from './context'
 import { IPortfolioOverviewProps, addColumn } from './types'
 import { usePortfolioOverview } from './usePortfolioOverview'
-import { EditViewColumnsPanel } from './EditViewColumnsPanel'
+import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
 import { ViewFormPanel } from './ViewFormPanel'
 
 /**
  * Component for displaying a portfolio overview - an overview of all projects in a portfolio.
  */
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
-  const { state, contextValue, selection, onColumnHeaderContextMenu, items, columns, groups } =
-    usePortfolioOverview(props)
+  const {
+    state,
+    contextValue,
+    selection,
+    onColumnHeaderContextMenu,
+    editViewColumnsPanelProps,
+    items,
+    columns,
+    groups
+  } = usePortfolioOverview(props)
 
   return (
     <div className={styles.root}>
@@ -81,7 +89,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
         </div>
         <ColumnContextMenu />
         <ColumnFormPanel />
-        <EditViewColumnsPanel />
+        <EditViewColumnsPanel {...editViewColumnsPanelProps} />
         <ViewFormPanel />
       </PortfolioOverviewContext.Provider>
     </div>

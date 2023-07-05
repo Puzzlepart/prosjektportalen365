@@ -9,7 +9,6 @@ import {
 } from 'pp365-shared-library/lib/models'
 import { IBaseComponentProps } from '../types'
 import { IColumnFormPanel } from './ColumnFormPanel/types'
-import { IEditViewColumnsPanel } from './EditViewColumnsPanel/types'
 import { ProgramItem } from 'models/ProgramItem'
 import styles from './PortfolioOverview.module.scss'
 import { IViewFormPanel } from './ViewFormPanel/types'
@@ -240,9 +239,9 @@ export interface IPortfolioOverviewState {
   viewForm: IViewFormPanel
 
   /**
-   * Edit view columns panel props.
+   * Is edit view columns panel open
    */
-  editViewColumns?: IEditViewColumnsPanel
+  isEditViewColumnsPanelOpen?: boolean
 
   /**
    * Available managed properties for the current search query

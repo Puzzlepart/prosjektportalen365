@@ -16,7 +16,7 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
    * On save event handler.
    */
   const onSave = () => {
-    const columns = selectedColumns.filter((c) => c.data.selected)
+    const columns = selectedColumns.filter((c) => c.data.isSelected)
     props.onSave(columns)
   }
 
@@ -24,11 +24,11 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
    * On change event handler.
    *
    * @param col Column item
-   * @param selected Selected state
+   * @param isSelected Selected state
    */
-  const onChange = (col: IColumn, checked: boolean) => {
+  const onChange = (col: IColumn, isSelected: boolean) => {
     const items = selectedColumns.map((i) => {
-      return i.fieldName === col.fieldName ? { ...i, data: { ...i.data, selected: checked } } : i
+      return i.fieldName === col.fieldName ? { ...i, data: { ...i.data, isSelected } } : i
     })
     setSelectedColumns(items)
     setIsChanged(true)

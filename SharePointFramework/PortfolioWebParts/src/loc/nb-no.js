@@ -257,7 +257,7 @@ define([], function () {
     ProjectContentColumnItemNotFound: 'Prosjektinnholdskolonne ble ikke funnet',
     ToggleEditViewColumnsLabel: 'Vis eller skjul kolonner',
     ShowHideColumnsLabel: 'Vis/skjul kolonner',
-    ShowEditViewColumnsPanelHelpText: 'Velg kolonnene som skal vises for nåværende visning. Hvis du vil endre rekkefølgen, kan du dra og slippe eller bruke opp- og ned-pilen ved siden av hver kolonne.',
+    EditViewColumnsPanelHelpText: 'Velg kolonnene som skal vises for nåværende visning. Hvis du vil endre rekkefølgen, kan du dra og slippe eller bruke opp- og ned-pilen ved siden av hver kolonne.',
     PortfolioOverviewDataFetchError: 'Det skjedde en feil under henting av data for porteføljeoversikten. Vennligst prøv igjen senere.\n \n \n **Detaljert feilmelding:** `{0}`',
     PortfolioOverviewDataFetchErrorView: 'Det skjedde en feil under henting av data for porteføljeoversikten for visning "{0}". Vennligst prøv igjen senere, eller prøv en annen visning.\n \n \n **Detaljert feilmelding:** `{1}`',
     PersonalViewsHeaderText: 'Personlige visninger',

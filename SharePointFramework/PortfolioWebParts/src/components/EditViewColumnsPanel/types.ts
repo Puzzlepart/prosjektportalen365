@@ -18,7 +18,7 @@ export interface IEditViewColumnsPanelProps extends IPanelProps {
   onSave(columns: IColumn[]): void
 
   /**
-   * Columns with selected state in the `data` property.
+   * Columns with selected state in the `data.isSelected` property.
    */
   columns?: IColumn[]
 

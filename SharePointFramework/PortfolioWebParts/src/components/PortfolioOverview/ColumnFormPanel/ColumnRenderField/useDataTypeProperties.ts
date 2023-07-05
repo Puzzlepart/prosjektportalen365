@@ -14,14 +14,14 @@ export function useDataTypeProperties(
   const [dataTypeProperties, setDataTypeProperties] = useState<Record<string, any>>({
     ...props.dataTypeProperties
   })
-  const [fields, setFields] = useState<ColumnRenderFieldOptionAdditionalField[]>([])
+  const [dataTypeFields, setDataTypeFields] = useState<ColumnRenderFieldOptionAdditionalField[]>([])
 
   useEffect(() => {
     if (!selectedOption?.data?.getDataTypeProperties) {
-      setFields([])
+      setDataTypeFields([])
       return
     }
-    setFields(
+    setDataTypeFields(
       selectedOption.data.getDataTypeProperties((key, value) => {
         setDataTypeProperties((prev) => {
           if (value === '' || value === undefined || value === null) return _.omit(prev, key)
@@ -39,7 +39,7 @@ export function useDataTypeProperties(
   }, [dataTypeProperties])
 
   return {
-    fields,
+    dataTypeFields,
     isDataTypeFieldsVisible,
     toggleIsDataTypeFieldsVisible: () => setIsDataTypeFieldsVisible((prev) => !prev)
   } as const

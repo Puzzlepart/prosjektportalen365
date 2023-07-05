@@ -72,7 +72,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
                     >
                       <Checkbox
                         label={col.name}
-                        checked={col.data.selected}
+                        checked={col.data.isSelected}
                         onChange={(_event, checked) => onChange(col, checked)}
                       />
                       <div className={styles.columnItemActions}>

@@ -11,11 +11,8 @@ export const ColumnRenderField: FC<IColumnRenderFieldProps> = (props) => {
   const [selectedOption, setSelectedOption] = useState<ColumnRenderFieldOption>(
     _.find(renderAsOptions, (option) => option.key === props.defaultSelectedKey)
   )
-  const {
-    fields: dataTypeFields,
-    isDataTypeFieldsVisible,
-    toggleIsDataTypeFieldsVisible
-  } = useDataTypeProperties(props, selectedOption)
+  const { dataTypeFields, isDataTypeFieldsVisible, toggleIsDataTypeFieldsVisible } =
+    useDataTypeProperties(props, selectedOption)
 
   /**
    * Render function for dropdown options.

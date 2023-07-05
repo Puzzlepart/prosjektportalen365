@@ -14,6 +14,7 @@ import createReducer, {
 } from './reducer'
 import { searchItem } from './search'
 import { IPortfolioAggregationProps, IPortfolioAggregationState } from './types'
+import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 
 /**
  * Fetching data sources when `dataSourceCategory` or `defaultViewId` changes.
@@ -142,5 +143,7 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
 
   const items = usePortfolioAggregationItems(state)
 
-  return { state, dispatch, items, layerHostId, context } as const
+  const editViewColumnsPanelProps = useEditViewColumnsPanel(context)
+
+  return { state, dispatch, items, layerHostId, context,editViewColumnsPanelProps } as const
 }

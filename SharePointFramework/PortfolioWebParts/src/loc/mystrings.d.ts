@@ -269,7 +269,7 @@ declare interface IPortfolioWebPartsStrings {
   ProjectContentColumnItemNotFound: string
   ToggleEditViewColumnsLabel: string
   ShowHideColumnsLabel: string
-  ShowEditViewColumnsPanelHelpText: string
+  EditViewColumnsPanelHelpText: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

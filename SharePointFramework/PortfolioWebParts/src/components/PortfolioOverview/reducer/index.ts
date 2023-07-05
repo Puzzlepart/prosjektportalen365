@@ -46,7 +46,7 @@ export const getInitialState = (
   filters: [],
   columnForm: { isOpen: false },
   viewForm: { isOpen: false },
-  editViewColumns: { isOpen: false },
+  isEditViewColumnsPanelOpen: false,
   columnContextMenu: null
 })
 
@@ -171,9 +171,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.columnForm = { isOpen: false }
       })
       .addCase(TOGGLE_EDIT_VIEW_COLUMNS_PANEL, (state, { payload }) => {
-        state.editViewColumns = {
-          isOpen: payload.isOpen
-        }
+        state.isEditViewColumnsPanelOpen = payload.isOpen
         if (payload.columns) {
           state.currentView.columns = payload.columns
           state.currentView.columnOrder = payload.revertColumnOrder
