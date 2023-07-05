@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { IProjectContentColumn } from 'pp365-shared-library'
+import { ProjectContentColumn } from 'pp365-shared-library'
 import { useMemo } from 'react'
 import { IEditViewColumnsPanelProps } from '../EditViewColumnsPanel/types'
 import { IPortfolioAggregationContext } from './context'
@@ -14,7 +14,7 @@ export function useEditViewColumnsPanel(
   context: IPortfolioAggregationContext
 ): IEditViewColumnsPanelProps {
   /**
-   * Add `isSelected` property to `props.configuration.columns` based on `state.columns`.
+   * Add `isSelected` property to `context.state.columns` based on `context.state.dataSourceColumns`
    */
   const columnsWithSelectedState = useMemo(
     () =>
@@ -22,10 +22,10 @@ export function useEditViewColumnsPanel(
         ...c,
         data: {
           ...c.data,
-          isSelected: _.some(context.state.filteredColumns, (_c) => _c.fieldName === c.fieldName)
+          isSelected: _.some(context.state.dataSourceColumns, (_c) => _c.fieldName === c.fieldName)
         }
       })),
-    [context.state.columns, context.state.filteredColumns]
+    [context.state.columns, context.state.dataSourceColumns]
   )
 
   /**
@@ -33,7 +33,7 @@ export function useEditViewColumnsPanel(
    *
    * @param columns Selected columns
    */
-  const onSaveViewColumns = async (columns: IProjectContentColumn[]) => {
+  const onSaveViewColumns = async (columns: ProjectContentColumn[]) => {
     const updateItems = {
       GtProjectContentColumnsId: columns.map((c) => c.id)
     }

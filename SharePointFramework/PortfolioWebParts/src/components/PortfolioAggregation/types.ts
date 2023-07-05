@@ -1,6 +1,6 @@
 import { IColumn, IGroup, MessageBarType, Target } from '@fluentui/react'
 import { SearchResult } from '@pnp/sp'
-import { IProjectContentColumn } from 'pp365-shared-library'
+import { ProjectContentColumn } from 'pp365-shared-library'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
 import { IBaseComponentProps } from '../types'
@@ -47,7 +47,7 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   /**
    * Columns
    */
-  columns?: IProjectContentColumn[]
+  columns?: ProjectContentColumn[]
 
   /**
    * Select properties
@@ -136,12 +136,12 @@ export interface IPortfolioAggregationState
   /**
    * Columns
    */
-  columns?: IProjectContentColumn[]
+  columns?: ProjectContentColumn[]
 
   /**
-   * Filtered columns
+   * Columns for the selected data source
    */
-  filteredColumns?: IProjectContentColumn[]
+  dataSourceColumns?: ProjectContentColumn[]
 
   /**
    * Groups
@@ -176,12 +176,12 @@ export interface IPortfolioAggregationState
   /**
    * Column context menu
    */
-  columnContextMenu?: { column: IColumn; target: Target }
+  columnContextMenu?: { column: ProjectContentColumn; target: Target }
 
   /**
-   * Column added timestamp
+   * Timestamp for when a new column was added or updated
    */
-  columnAdded?: number
+  columnAddedOrUpdated?: number
 
   /**
    * Column deleted timestamp

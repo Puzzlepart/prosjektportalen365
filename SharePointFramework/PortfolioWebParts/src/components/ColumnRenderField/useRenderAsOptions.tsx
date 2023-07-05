@@ -13,9 +13,9 @@ import _ from 'lodash'
 import { TagsColumn } from 'components/List/RenderItemColumn/TagsColumn'
 
 /**
- * Hook to work with render as options. Returns the options, the selected option, 
+ * Hook to work with render as options. Returns the options, the selected option,
  * and a function to render the option.
- * 
+ *
  * @param props ColumnRenderField props
  */
 export function useRenderAsOptions(props: IColumnRenderFieldProps) {
@@ -255,5 +255,5 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
     onChange(selectedOption)
   }, [selectedOption])
 
-  return { renderAsOptions, onChange,selectedOption,setSelectedOption, onRenderOption } as const
+  return { renderAsOptions, onChange, selectedOption, setSelectedOption, onRenderOption } as const
 }

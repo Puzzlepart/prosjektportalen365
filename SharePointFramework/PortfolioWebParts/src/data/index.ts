@@ -747,7 +747,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       if (!dataSrc) {
         throw new Error(format(strings.DataSourceNotFound, dataSourceName))
       }
-      const dataSrcProperties = dataSrc.projectColumns.map((col) => col.fieldName) || []
+      const dataSrcProperties = dataSrc.columns.map((col) => col.fieldName) || []
       if (dataSrc.category.startsWith('Gevinstoversikt')) {
         items = await this.fetchBenefitItemsWithSource(dataSrc, [
           ...selectProperties,

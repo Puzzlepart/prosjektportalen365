@@ -10,7 +10,8 @@ import { useRenderAsOptions } from './useRenderAsOptions'
 import styles from 'components/ResourceAllocation/ResourceAllocation.module.scss'
 
 export const ColumnRenderField: FC<IColumnRenderFieldProps> = (props) => {
-  const { renderAsOptions, selectedOption, setSelectedOption, onRenderOption } = useRenderAsOptions(props)
+  const { renderAsOptions, selectedOption, setSelectedOption, onRenderOption } =
+    useRenderAsOptions(props)
   const { dataTypeFields, isDataTypeFieldsVisible, toggleIsDataTypeFieldsVisible } =
     useDataTypeProperties(props, selectedOption)
 
@@ -31,7 +32,8 @@ export const ColumnRenderField: FC<IColumnRenderFieldProps> = (props) => {
         dataTypeProperties={props.dataTypeProperties}
         dataTypeFields={dataTypeFields}
         isDataTypeFieldsVisible={isDataTypeFieldsVisible}
-        toggleIsDataTypeFieldsVisible={toggleIsDataTypeFieldsVisible} />
+        toggleIsDataTypeFieldsVisible={toggleIsDataTypeFieldsVisible}
+      />
     </div>
   )
 }

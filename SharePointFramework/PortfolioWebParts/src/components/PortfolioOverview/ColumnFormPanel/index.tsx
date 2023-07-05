@@ -100,9 +100,7 @@ export const ColumnFormPanel: FC = () => {
         defaultSelectedKey={column.get('dataType')}
         onChange={(renderAs) => setColumnData('renderAs', renderAs)}
         dataTypeProperties={column.get('data')?.dataTypeProperties ?? {}}
-        onDataTypePropertiesChange={(properties) =>
-          setColumnData('dataTypeProperties', properties)
-        }
+        onDataTypePropertiesChange={(properties) => setColumnData('dataTypeProperties', properties)}
       />
       <ColumnVisibilityField
         defaultSelectedKeys={column.get('data')?.visibility}

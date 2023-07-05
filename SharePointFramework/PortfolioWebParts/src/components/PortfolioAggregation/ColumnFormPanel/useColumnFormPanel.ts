@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import {
+  ProjectContentColumn,
   SPDataSourceItem,
   SPProjectContentColumnItem
 } from 'pp365-shared-library'
@@ -7,8 +8,6 @@ import { useContext, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
 import { ADD_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import { useEditableColumn } from './useEditableColumn'
-
-
 
 /**
  * Component logic hook for ColumnFormPanel. Handles state and dispatches actions to the reducer.
@@ -40,16 +39,10 @@ export function useColumnFormPanel() {
         context.props.dataAdapter
           .updateProjectContentColumn(columnItem, persistRenderAs)
           .then(() => {
+            const editedColumn = new ProjectContentColumn(columnItem)
             context.dispatch(
               ADD_COLUMN({
-                column: {
-                  key: column.get('fieldName'),
-                  fieldName: column.get('fieldName'),
-                  name: column.get('name'),
-                  minWidth: column.get('minWidth'),
-                  maxWidth: column.get('maxWidth'),
-                  data: column.get('data')
-                }
+                column: editedColumn
               })
             )
           })
@@ -58,22 +51,17 @@ export function useColumnFormPanel() {
       await Promise.resolve(
         context.props.dataAdapter.portalDataService
           .addItemToList('PROJECT_CONTENT_COLUMNS', _.omit(columnItem, ['Id']))
-          .then((result) => {
+          .then((properties) => {
+            const newColumn = new ProjectContentColumn(properties)
             const updateItem: SPDataSourceItem = {
-              GtProjectContentColumnsId: result['Id']
+              GtProjectContentColumnsId: properties.Id
             }
             context.props.dataAdapter
               .updateDataSourceItem(updateItem, context.state.dataSource)
               .then(() => {
                 context.dispatch(
                   ADD_COLUMN({
-                    column: {
-                      key: column.get('fieldName'),
-                      fieldName: column.get('fieldName'),
-                      name: column.get('name'),
-                      minWidth: column.get('minWidth'),
-                      data: column.get('data')
-                    }
+                    column: newColumn
                   })
                 )
               })

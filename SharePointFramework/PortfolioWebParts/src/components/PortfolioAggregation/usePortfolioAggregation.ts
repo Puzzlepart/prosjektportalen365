@@ -86,16 +86,16 @@ const usePortfolioAggregationDataFetch = (context: IPortfolioAggregationContext)
           DATA_FETCHED({
             items: data.items,
             columns: data.columns,
-            fltColumns: data.dataSrc.projectColumns,
+            dataSourceColumns: data.dataSrc.columns,
             projects: data.projects
           })
         )
-        context.dispatch(GET_FILTERS({ filters: data.dataSrc.projectRefiners }))
-        context.dispatch(SET_GROUP_BY({ column: data.dataSrc.projectGroupBy }))
+        context.dispatch(GET_FILTERS({ filters: data.dataSrc.columns }))
+        context.dispatch(SET_GROUP_BY({ column: data.dataSrc.groupBy }))
       })
       .catch((error) => context.dispatch(DATA_FETCH_ERROR({ error })))
   }, [
-    context.state.columnAdded,
+    context.state.columnAddedOrUpdated,
     context.state.columnDeleted,
     context.state.columnShowHide,
     context.state.currentView
@@ -115,7 +115,13 @@ const usePortfolioAggregationItems = (state: IPortfolioAggregationState) => {
       listItems: filteredItems.items.filter((i) => searchItem(i, state.searchTerm, state.columns)),
       columns: filteredItems.columns
     }
-  }, [state.columnAdded, state.searchTerm, state.items, state.activeFilters, state.columns])
+  }, [
+    state.columnAddedOrUpdated,
+    state.searchTerm,
+    state.items,
+    state.activeFilters,
+    state.columns
+  ])
 }
 
 /**

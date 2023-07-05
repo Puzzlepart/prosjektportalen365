@@ -16,7 +16,7 @@ import { parseUrlHash, setUrlHash } from 'pp365-shared-library/lib/util'
 import { Target, IGroup, MessageBarType } from '@fluentui/react'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { arrayMove } from 'pp365-shared-library/lib/helpers/arrayMove'
-import { IProjectContentColumn } from 'pp365-shared-library'
+import { ProjectContentColumn } from 'pp365-shared-library'
 import { IColumnFormPanel } from '../ColumnFormPanel/types'
 
 /**
@@ -25,8 +25,8 @@ import { IColumnFormPanel } from '../ColumnFormPanel/types'
 export const DATA_FETCHED = createAction<{
   items: any[]
   dataSources?: DataSource[]
-  columns?: IProjectContentColumn[]
-  fltColumns?: IProjectContentColumn[]
+  columns?: ProjectContentColumn[]
+  dataSourceColumns?: ProjectContentColumn[]
   projects?: any[]
 }>('DATA_FETCHED')
 
@@ -55,7 +55,7 @@ export const TOGGLE_COMPACT = createAction<{ isCompact: boolean }>('TOGGLE_COMPA
 /**
  * `ADD_COLUMN`: Add column.
  */
-export const ADD_COLUMN = createAction<{ column: IProjectContentColumn }>('ADD_COLUMN')
+export const ADD_COLUMN = createAction<{ column: ProjectContentColumn }>('ADD_COLUMN')
 
 /**
  * `DELETE_COLUMN`: Delete column.
@@ -71,14 +71,14 @@ export const SHOW_HIDE_COLUMNS = createAction('SHOW_HIDE_COLUMNS')
  * `COLUMN_HEADER_CONTEXT_MENU`: Column header context menu.
  */
 export const COLUMN_HEADER_CONTEXT_MENU = createAction<{
-  column: IProjectContentColumn
+  column: ProjectContentColumn
   target: Target
 }>('COLUMN_HEADER_CONTEXT_MENU')
 
 /**
  * `SET_GROUP_BY`: Set group by.
  */
-export const SET_GROUP_BY = createAction<{ column: IProjectContentColumn }>('SET_GROUP_BY')
+export const SET_GROUP_BY = createAction<{ column: ProjectContentColumn }>('SET_GROUP_BY')
 
 /**
  * `SET_COLLAPSED`: Set collapsed.
@@ -93,21 +93,21 @@ export const SET_ALL_COLLAPSED = createAction<{ isAllCollapsed: boolean }>('SET_
 /**
  * `SET_SORT`: Set sort.
  */
-export const SET_SORT = createAction<{ column: IProjectContentColumn; sortDesencing: boolean }>(
+export const SET_SORT = createAction<{ column: ProjectContentColumn; sortDesencing: boolean }>(
   'SET_SORT'
 )
 
 /**
  * `MOVE_COLUMN`: Move column.
  */
-export const MOVE_COLUMN = createAction<{ column: IProjectContentColumn; move: number }>(
+export const MOVE_COLUMN = createAction<{ column: ProjectContentColumn; move: number }>(
   'MOVE_COLUMN'
 )
 
 /**
  * `SET_COLUMNS`: Set columns.
  */
-export const SET_COLUMNS = createAction<{ columns: IProjectContentColumn[] }>('SET_COLUMNS')
+export const SET_COLUMNS = createAction<{ columns: ProjectContentColumn[] }>('SET_COLUMNS')
 
 /**
  * `SET_CURRENT_VIEW`: Set current view.
@@ -138,7 +138,7 @@ export const GET_FILTERS = createAction<{ filters: any[] }>('GET_FILTERS')
  * `ON_FILTER_CHANGE`: Filter change.
  */
 export const ON_FILTER_CHANGE = createAction<{
-  column: IProjectContentColumn
+  column: ProjectContentColumn
   selectedItems: IFilterItemProps[]
 }>('ON_FILTER_CHANGE')
 
@@ -150,10 +150,10 @@ export const DATA_FETCH_ERROR = createAction<{ error: Error }>('DATA_FETCH_ERROR
 /**
  * Persist columns in web part properties
  *
- * @param props - Props
- * @param columns - State
+ * @param props Props for `<PortfolioAggregation />` component
+ * @param columns Columns
  */
-const persistColumns = (props: IPortfolioAggregationProps, columns: IProjectContentColumn[]) => {
+const persistColumns = (props: IPortfolioAggregationProps, columns: any[]) => {
   props.onUpdateProperty(
     'columns',
     columns.map((col) => omit(col, 'calculatedWidth', 'currentWidth'))
@@ -173,7 +173,7 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
   filters: [],
   items: [],
   columns: props.columns ?? [],
-  filteredColumns: props.columns ?? [],
+  dataSourceColumns: props.columns ?? [],
   dataSource: props.dataSource ?? first(props.configuration.views)?.title,
   dataSources: [],
   dataSourceLevel: props.dataSourceLevel ?? props.configuration?.level,
@@ -226,29 +226,28 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
         state.loading = false
       }
       if (payload.columns) {
-        if (!isEmpty(payload.fltColumns)) state.filteredColumns = payload.fltColumns
-        else state.filteredColumns = payload.columns
+        if (!isEmpty(payload.dataSourceColumns)) state.dataSourceColumns = payload.dataSourceColumns
+        else state.dataSourceColumns = payload.columns
 
         if (isEmpty(payload.columns)) {
           state.columns = props.columns ?? []
-        }
-        else {
-          const mergedColumns = state.columns.map((col) => {
-            const payCol = payload.columns.find((c) => c.key === col.key)
-            if (payCol) {
-              const renderAs = (col.data.renderAs ?? payCol.dataType ?? 'text').toLowerCase()
-              return {
-                ...col,
-                id: payCol.id,
-                internalName: payCol.internalName,
-                minWidth: payCol.minWidth,
-                dataType: payCol.dataType,
-                data: { 
-                  ...col.data,
-                  renderAs
-                 }
-              }
-            } else return col
+        } else {
+          const mergedColumns = current(state).columns.map((col) => {
+            const payCol = _.find(payload.columns, (c) => c.key === col.key)
+            return payCol
+              ? {
+                  ...col,
+                  id: payCol.id,
+                  internalName: payCol.internalName,
+                  minWidth: payCol.minWidth,
+                  dataType: payCol.dataType,
+                  data: {
+                    ...payCol.data,
+                    ...col.data,
+                    renderAs: (col.data.renderAs ?? payCol.dataType ?? 'text').toLowerCase()
+                  }
+                }
+              : col
           })
 
           const newColumns = payload.columns.filter((col) => {
@@ -285,13 +284,14 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
     },
     [ADD_COLUMN.type]: (state, { payload }: ReturnType<typeof ADD_COLUMN>) => {
       if (state.columnForm?.column) {
-        state.columns = [...state.columns].map((c) => {
-          if (c.fieldName === payload.column.fieldName) return payload.column
-          return c
-        })
+        state.columns = [...state.columns].map((c) =>
+          c.fieldName === payload.column.fieldName ? payload.column : c
+        )
+      } else {
+        state.columns = [...state.columns, payload.column]
       }
       state.columnForm = { isOpen: false }
-      state.columnAdded = new Date().getTime()
+      state.columnAddedOrUpdated = new Date().getTime()
       persistColumns(props, current(state).columns)
     },
     [DELETE_COLUMN.type]: (state) => {
@@ -310,9 +310,9 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
     ) => {
       state.columnContextMenu = payload
         ? {
-          column: payload.column,
-          target: payload.target as any
-        }
+            column: payload.column,
+            target: payload.target as any
+          }
         : null
     },
     [SET_ALL_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_ALL_COLLAPSED>) => {
@@ -489,8 +489,8 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
             name: col.name,
             value: col.fieldName,
             selected:
-              current(state).filteredColumns.length > 0
-                ? _.some(current(state).filteredColumns, (c) => c.fieldName === col.fieldName)
+              current(state).dataSourceColumns.length > 0
+                ? _.some(current(state).dataSourceColumns, (c) => c.fieldName === col.fieldName)
                 : true
           })),
           defaultCollapsed: true
@@ -501,8 +501,8 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
       state.activeFilters = {
         ...state.activeFilters,
         ['SelectedColumns']:
-          current(state).filteredColumns.length > 0
-            ? current(state).filteredColumns.map((col) => col.fieldName)
+          current(state).dataSourceColumns.length > 0
+            ? current(state).dataSourceColumns.map((col) => col.fieldName)
             : current(state).columns.map((col) => col.fieldName)
       }
     },

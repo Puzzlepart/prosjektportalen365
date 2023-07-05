@@ -1,6 +1,6 @@
 import { List, Web } from '@pnp/sp'
 import { DataSource, SPDataSourceItem } from '../../models/DataSource'
-import { ProjectColumn } from '../../models/ProjectColumn'
+import { ProjectContentColumn } from '../../models'
 
 export class DataSourceService {
   private list: List
@@ -28,19 +28,19 @@ export class DataSourceService {
    * @param name Name
    */
   public async getByName(name: string): Promise<DataSource> {
-    const [[item], _columns] = await Promise.all([
+    const [[item], columns] = await Promise.all([
       this.list.items
         .select(...Object.keys(new SPDataSourceItem()))
         .filter(`Title eq '${name}'`)
         .get<SPDataSourceItem[]>(),
       this.columnsList.items.get()
     ])
-    if (item) {
-      const columns = _columns.map((item) => new ProjectColumn(item))
-      return new DataSource(item, columns)
-    } else {
-      return null
-    }
+    return item
+      ? new DataSource(
+          item,
+          columns.map((item) => new ProjectContentColumn(item))
+        )
+      : null
   }
 
   /**

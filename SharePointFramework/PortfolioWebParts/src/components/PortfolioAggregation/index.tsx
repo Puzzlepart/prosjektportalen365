@@ -21,6 +21,7 @@ import {
 } from './reducer'
 import { IPortfolioAggregationProps } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
+import { ProjectContentColumn } from 'pp365-shared-library'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
   const { state, dispatch, items, layerHostId, context, editViewColumnsPanelProps } =
@@ -51,7 +52,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
           <List
             enableShimmer={state.loading}
             items={items.listItems}
-            onColumnHeaderClick={(ev, col) => {
+            onColumnHeaderClick={(ev, col: ProjectContentColumn) => {
               dispatch(
                 COLUMN_HEADER_CONTEXT_MENU({
                   column: col,
@@ -83,7 +84,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
           onDismiss={() => dispatch(TOGGLE_FILTER_PANEL({ isOpen: false }))}
           isLightDismiss={true}
           filters={state.filters}
-          onFilterChange={(column, selectedItems) => {
+          onFilterChange={(column: ProjectContentColumn, selectedItems) => {
             dispatch(ON_FILTER_CHANGE({ column, selectedItems }))
           }}
         />
