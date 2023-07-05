@@ -24,17 +24,17 @@ import { usePortfolioAggregation } from './usePortfolioAggregation'
 import { ProjectContentColumn } from 'pp365-shared-library'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
-  const { state, dispatch, items, layerHostId, context, editViewColumnsPanelProps } =
+  const { context, items, layerHostId, editViewColumnsPanelProps } =
     usePortfolioAggregation(props)
 
-  if (state.error) {
+  if (context.state.error) {
     return (
       <div className={styles.root}>
         <div className={styles.header}>
           <div className={styles.title}>{props.title}</div>
         </div>
         <div className={styles.container}>
-          <UserMessage type={MessageBarType.error} text={state.error.message} />
+          <UserMessage type={MessageBarType.error} text={context.state.error.message} />
         </div>
       </div>
     )
@@ -50,10 +50,10 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
         <SearchBox />
         <div className={styles.container}>
           <List
-            enableShimmer={state.loading}
+            enableShimmer={context.state.loading}
             items={items.listItems}
             onColumnHeaderClick={(ev, col: ProjectContentColumn) => {
-              dispatch(
+              context.dispatch(
                 COLUMN_HEADER_CONTEXT_MENU({
                   column: col,
                   target: ev.currentTarget
@@ -62,14 +62,14 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             }}
             columns={[...getDefaultColumns(props), ...items.columns]}
             isAddColumnEnabled={!props.lockedColumns && !props.isParentProject}
-            groups={state.groups}
-            compact={state.isCompact}
+            groups={context.state.groups}
+            compact={context.state.isCompact}
             groupProps={{
               // TODO: Temporary fix for collapsing groups, the new state handling throws errors
               onToggleCollapseAll: (isAllCollapsed) =>
-                dispatch(SET_ALL_COLLAPSED({ isAllCollapsed })),
+              context.dispatch(SET_ALL_COLLAPSED({ isAllCollapsed })),
               headerProps: {
-                onToggleCollapse: (group) => dispatch(SET_COLLAPSED({ group }))
+                onToggleCollapse: (group) => context.dispatch(SET_COLLAPSED({ group }))
               }
             }}
           />
@@ -78,14 +78,14 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
         <ColumnFormPanel />
         <EditViewColumnsPanel {...editViewColumnsPanelProps} />
         <FilterPanel
-          isOpen={state.showFilterPanel}
+          isOpen={context.state.isFilterPanelOpen}
           layerHostId={layerHostId}
           headerText={strings.FiltersString}
-          onDismiss={() => dispatch(TOGGLE_FILTER_PANEL({ isOpen: false }))}
+          onDismiss={() => context.dispatch(TOGGLE_FILTER_PANEL({ isOpen: false }))}
           isLightDismiss={true}
-          filters={state.filters}
+          filters={context.state.filters}
           onFilterChange={(column: ProjectContentColumn, selectedItems) => {
-            dispatch(ON_FILTER_CHANGE({ column, selectedItems }))
+            context.dispatch(ON_FILTER_CHANGE({ column, selectedItems }))
           }}
         />
       </div>

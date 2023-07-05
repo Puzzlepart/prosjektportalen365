@@ -1,19 +1,19 @@
 import { getId } from '@fluentui/react'
 import { ProjectContentColumn } from 'pp365-shared-library'
-import { useEffect, useMemo, useReducer } from 'react'
+import { useEffect, useMemo } from 'react'
 import { IPortfolioAggregationContext } from './context'
 import { filterItems } from './filter'
-import createReducer, {
+import {
   DATA_FETCHED,
   DATA_FETCH_ERROR,
   GET_FILTERS,
   SET_CURRENT_VIEW,
   SET_GROUP_BY,
   START_FETCH,
-  initState
+  usePortfolioAggregationReducer
 } from './reducer'
 import { searchItem } from './search'
-import { IPortfolioAggregationProps, IPortfolioAggregationState } from './types'
+import { IPortfolioAggregationProps } from './types'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 
 /**
@@ -106,9 +106,9 @@ const usePortfolioAggregationDataFetch = (context: IPortfolioAggregationContext)
  * Returns the list items and columns for the Portfolio Aggregation component filtered
  * by the active filters and search term.
  *
- * @param state State for the Portfolio Aggregation component
+ * @param context Context for the Portfolio Aggregation component
  */
-const usePortfolioAggregationItems = (state: IPortfolioAggregationState) => {
+const usePortfolioAggregationItems = ({ state }: IPortfolioAggregationContext) => {
   return useMemo(() => {
     const filteredItems = filterItems(state.items, state.columns, state.activeFilters)
     return {
@@ -132,24 +132,22 @@ const usePortfolioAggregationItems = (state: IPortfolioAggregationState) => {
  * @param props Props for the Portfolio Aggregation component
  */
 export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
-  const reducer = useMemo(() => createReducer(props), [])
-  const [state, dispatch] = useReducer(reducer, initState(props))
+  const context = usePortfolioAggregationReducer(props)
   const layerHostId = getId('layerHost')
 
   useEffect(() => {
     if (props.dataSourceCategory) {
-      dispatch(SET_CURRENT_VIEW)
+      context.dispatch(SET_CURRENT_VIEW)
     }
   }, [props.dataSourceCategory, props.defaultViewId])
 
-  const context = useMemo<IPortfolioAggregationContext>(() => ({ props, state, dispatch }), [state])
 
   usePortfolioAggregationDataSources(context)
   usePortfolioAggregationDataFetch(context)
 
-  const items = usePortfolioAggregationItems(state)
+  const items = usePortfolioAggregationItems(context)
 
   const editViewColumnsPanelProps = useEditViewColumnsPanel(context)
 
-  return { state, dispatch, items, layerHostId, context, editViewColumnsPanelProps } as const
+  return { context, items, layerHostId, editViewColumnsPanelProps } as const
 }

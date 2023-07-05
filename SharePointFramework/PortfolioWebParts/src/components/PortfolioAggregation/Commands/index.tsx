@@ -117,7 +117,7 @@ export const Commands: FC = () => {
         buttonStyles: { root: { border: 'none' } },
         itemType: ContextualMenuItemType.Normal,
         canCheck: true,
-        checked: state.showFilterPanel,
+        checked: state.isFilterPanelOpen,
         disabled: !props.showFilters,
         data: { isVisible: props.showFilters },
         onClick: (ev) => {

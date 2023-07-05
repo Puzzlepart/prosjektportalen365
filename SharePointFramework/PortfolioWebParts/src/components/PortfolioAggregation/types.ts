@@ -199,9 +199,9 @@ export interface IPortfolioAggregationState
   error?: Error
 
   /**
-   * Show filter panel
+   * Is filter panel open
    */
-  showFilterPanel?: boolean
+  isFilterPanelOpen?: boolean
 
   /**
    * Is compact
