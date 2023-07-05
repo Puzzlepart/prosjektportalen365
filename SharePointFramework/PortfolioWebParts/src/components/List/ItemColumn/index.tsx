@@ -59,16 +59,15 @@ const renderDataTypeMap: Record<ColumnDataType, ItemRenderFunction> = {
       items={JSON.parse(props.columnValue)}
     />
   ),
-  filename_with_icon: (props: IRenderItemColumnProps) => (
-    <FileNameColumn {...props} showFileExtensionIcon />
-  ),
+  filename: (props: IRenderItemColumnProps) => <FileNameColumn {...props} showFileExtensionIcon />,
   list: (props: IRenderItemColumnProps) => <ListColumn {...props} />
 }
 
 /**
  * On render item column function. First checks if the column has a custom render function,
  * if not it will use the default render function. Also the `Title` column has a custom render
- * function by default and can not be overridden.
+ * function by default that will be used as long as the `dataType` has not be changed to
+ * something else than `text`.
  *
  * @param item Item to render the value for
  * @param column Column to render the value for
@@ -88,16 +87,17 @@ function renderItemColumn(item: Record<string, any>, column: IColumn, props: ILi
     return dataTypeProperties.get('fallbackValue') ?? null
   }
 
-  switch (column.fieldName) {
-    case 'Title': {
-      return (
-        <TitleColumn
-          item={item}
-          renderProjectInformationPanel={props.renderTitleProjectInformationPanel}
-          webPartContext={props.webPartContext}
-        />
-      )
-    }
+  // eslint-disable-next-line no-console
+  console.log('renderItemColumn', columnValue, column)
+
+  if (column.fieldName === 'Title' && column['dataType'] === 'text') {
+    return (
+      <TitleColumn
+        item={item}
+        renderProjectInformationPanel={props.renderTitleProjectInformationPanel}
+        webPartContext={props.webPartContext}
+      />
+    )
   }
 
   const renderFunction = renderDataTypeMap[column['dataType']]

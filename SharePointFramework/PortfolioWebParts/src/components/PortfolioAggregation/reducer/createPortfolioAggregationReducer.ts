@@ -133,6 +133,7 @@ export const createPortfolioAggregationReducer = (props: IPortfolioAggregationPr
         } else {
           const mergedColumns = current(state).columns.map((col) => {
             const payCol = _.find(payload.columns, (c) => c.key === col.key)
+            const dataType = (col.data.renderAs ?? payCol.dataType ?? 'text').toLowerCase()
             return payCol
               ? {
                   ...payCol,
@@ -140,11 +141,11 @@ export const createPortfolioAggregationReducer = (props: IPortfolioAggregationPr
                   id: payCol.id,
                   internalName: payCol.internalName,
                   minWidth: payCol.minWidth,
-                  dataType: payCol.dataType,
+                  dataType,
                   data: {
                     ...payCol.data,
                     ...col.data,
-                    renderAs: (col.data.renderAs ?? payCol.dataType ?? 'text').toLowerCase()
+                    renderAs: dataType
                   }
                 }
               : col

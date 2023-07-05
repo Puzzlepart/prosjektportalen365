@@ -791,11 +791,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const filteredColumnItems = columnItems.filter(
         (col) => col.GtDataSourceCategory === dataSourceCategory || !col.GtDataSourceCategory
       )
-      return filteredColumnItems.map((item) => {
-        const col = new ProjectContentColumn(item)
-        const renderAs = (col.dataType ? col.dataType.toLowerCase() : 'text').split(' ').join('_')
-        return col.setData({ renderAs })
-      })
+      return filteredColumnItems.map((item) => new ProjectContentColumn(item))
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, dataSourceCategory))
     }
