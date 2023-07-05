@@ -35,6 +35,7 @@ export type ProjectColumnData = {
   visibility?: string[]
   dataTypeProperties?: Record<string, any>
   isSelected?: boolean
+  renderAs?: ColumnDataType
 }
 
 export class ProjectColumn implements IProjectColumn {

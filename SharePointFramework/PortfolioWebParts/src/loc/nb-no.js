@@ -72,7 +72,7 @@ define([], function () {
     ColumnRenderOptionTrend: 'Trend',
     ColumnRenderOptionTaxonomy: 'Taksonomi',
     ColumnRenderOptionModal: 'Modal',
-    ColumnRenderOptionFilename: 'Filnavn med ikon',
+    ColumnRenderOptionFilename: 'Filnavn',
     ColumnPersistRenderGloballyFieldLabel: 'Oppdater globalt',
     ColumnRenderOptionBoolean: 'Ja/nei',
     ColumnRenderLabel: 'Vis som',

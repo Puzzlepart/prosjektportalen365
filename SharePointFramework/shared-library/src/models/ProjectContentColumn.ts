@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { tryParseJson } from '../helpers'
 import { IProjectContentColumn } from '../interfaces/IProjectContentColumn'
+import { ColumnDataType } from '../types'
 import { SearchValueType } from '../types/SearchValueType'
 
 export class SPProjectContentColumnItem {
@@ -17,6 +18,13 @@ export class SPProjectContentColumnItem {
   public GtFieldDataTypeProperties?: string = ''
 }
 
+export type ProjectContentColumnData = {
+  isGroupable?: boolean
+  dataTypeProperties?: Record<string, any>
+  isSelected?: boolean
+  renderAs?: any
+}
+
 export class ProjectContentColumn implements IProjectContentColumn {
   public key: string
   public fieldName: string
@@ -27,7 +35,7 @@ export class ProjectContentColumn implements IProjectContentColumn {
   public sortOrder?: number
   public internalName?: string
   public iconName?: string
-  public dataType?: string
+  public dataType?: ColumnDataType
   public searchType?: SearchValueType
   public isGroupable?: boolean
   public isResizable?: boolean
@@ -35,7 +43,7 @@ export class ProjectContentColumn implements IProjectContentColumn {
   public isSortedDescending?: boolean
   public isMultiline?: boolean
   public onColumnClick: any
-  public data?: any
+  public data?: ProjectContentColumnData
 
   constructor(item?: SPProjectContentColumnItem) {
     this.id = item?.Id
@@ -44,7 +52,9 @@ export class ProjectContentColumn implements IProjectContentColumn {
     this.name = item?.Title
     this.sortOrder = item?.GtSortOrder
     this.internalName = item?.GtInternalName
-    this.dataType = item?.GtFieldDataType ? item?.GtFieldDataType.toLowerCase() : 'text'
+    this.dataType = (
+      item?.GtFieldDataType ? item?.GtFieldDataType.toLowerCase() : 'text'
+    ) as ColumnDataType
     this.isGroupable = item?.GtIsGroupable
     this.isResizable = true
     this.isMultiline = this.dataType === 'note' || this.dataType === 'tags'
@@ -53,7 +63,8 @@ export class ProjectContentColumn implements IProjectContentColumn {
     this.searchType = this._getSearchType()
     this.data = {
       isGroupable: this.isGroupable,
-      dataTypeProperties: tryParseJson(item?.GtFieldDataTypeProperties, {})
+      dataTypeProperties: tryParseJson(item?.GtFieldDataTypeProperties, {}),
+      renderAs: this.dataType
     }
   }
 
@@ -108,9 +119,8 @@ export class ProjectContentColumn implements IProjectContentColumn {
    * `isGroupable`.
    *
    * @param data Data to set
-   * @returns
    */
-  public setData(data: any): ProjectContentColumn {
+  public setData(data: ProjectContentColumnData): ProjectContentColumn {
     this.data = { ...this.data, ...data }
     return this
   }
