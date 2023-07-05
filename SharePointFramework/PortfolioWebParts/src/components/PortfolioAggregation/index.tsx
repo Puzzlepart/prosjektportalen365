@@ -64,7 +64,11 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             renderTitleProjectInformationPanel={false}
             groups={context.state.groups}
             compact={context.state.isCompact}
-            layoutMode={props.listLayoutModeJustified && DetailsListLayoutMode.justified}
+            layoutMode={
+              props.listLayoutModeJustified
+                ? DetailsListLayoutMode.justified
+                : DetailsListLayoutMode.fixedColumns
+            }
             groupProps={{
               // TODO: Temporary fix for collapsing groups, the new state handling throws errors
               onToggleCollapseAll: (isAllCollapsed) =>

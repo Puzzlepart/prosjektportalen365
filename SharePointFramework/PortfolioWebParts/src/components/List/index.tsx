@@ -1,13 +1,8 @@
-import {
-  ConstrainMode,
-  DetailsListLayoutMode,
-  SelectionMode,
-  ShimmeredDetailsList
-} from '@fluentui/react'
+import { ConstrainMode, SelectionMode, ShimmeredDetailsList } from '@fluentui/react'
 import React, { FC } from 'react'
+import { onRenderItemColumn } from './ItemColumn'
 import { IListProps } from './types'
 import { useAddColumn } from './useAddColumn'
-import { onRenderItemColumn } from './ItemColumn'
 
 /**
  * List component using `ShimmeredDetailsList` from `@fluentui/react`.
@@ -41,10 +36,9 @@ List.defaultProps = {
   isAddColumnEnabled: false,
   selectionMode: SelectionMode.none,
   constrainMode: ConstrainMode.unconstrained,
-  layoutMode: DetailsListLayoutMode.fixedColumns,
   renderTitleProjectInformationPanel: false
 }
 
-export * from './types'
 export * from './ItemColumn'
+export * from './types'
 export * from './useAddColumn'

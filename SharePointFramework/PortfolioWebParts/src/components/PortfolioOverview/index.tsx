@@ -76,7 +76,11 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
                     onColumnHeaderContextMenu({ column, event })
                   }
                   compact={state.isCompact}
-                  layoutMode={props.listLayoutModeJustified && DetailsListLayoutMode.justified}
+                  layoutMode={
+                    props.listLayoutModeJustified
+                      ? DetailsListLayoutMode.justified
+                      : DetailsListLayoutMode.fixedColumns
+                  }
                   renderTitleProjectInformationPanel={true}
                   webPartContext={props.webPartContext}
                 />
