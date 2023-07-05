@@ -57,7 +57,6 @@ export class ProjectColumn implements IProjectColumn {
   public config?: ProjectColumnConfigDictionary
   public onColumnClick: any
   public customSorts?: ProjectColumnCustomSort[]
-  public $map: Map<string, any>
   public data?: ProjectColumnData
 
   constructor(item?: SPProjectColumnItem) {
@@ -86,7 +85,6 @@ export class ProjectColumn implements IProjectColumn {
       ].filter(Boolean),
       dataTypeProperties: tryParseJson(item?.GtFieldDataTypeProperties, {})
     }
-    this.$map = this._toMap()
   }
 
   /**
@@ -191,26 +189,5 @@ export class ProjectColumn implements IProjectColumn {
   public setData(data: ProjectColumnData): ProjectColumn {
     this.data = { ...this.data, ...data }
     return this
-  }
-
-  /**
-   * Converts the column to a map used in `ColumnFormPanel`.
-   *
-   * @private
-   */
-  private _toMap(): Map<string, any> {
-    return new Map<string, any>([
-      ['key', this.key],
-      ['fieldName', this.fieldName],
-      ['name', this.name],
-      ['minWidth', this.minWidth],
-      ['id', this.id],
-      ['sortOrder', this.sortOrder],
-      ['internalName', this.internalName],
-      ['iconName', this.iconName],
-      ['dataType', this.dataType],
-      ['isRefinable', this.isRefinable],
-      ['data', this.data]
-    ])
   }
 }

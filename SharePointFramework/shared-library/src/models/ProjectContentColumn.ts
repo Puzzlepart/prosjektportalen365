@@ -36,7 +36,6 @@ export class ProjectContentColumn implements IProjectContentColumn {
   public isMultiline?: boolean
   public onColumnClick: any
   public data?: any
-  public $map: Map<string, any>
 
   constructor(item?: SPProjectContentColumnItem) {
     this.id = item?.Id
@@ -56,7 +55,6 @@ export class ProjectContentColumn implements IProjectContentColumn {
       isGroupable: this.isGroupable,
       dataTypeProperties: tryParseJson(item?.GtFieldDataTypeProperties, {})
     }
-    this.$map = this._toMap()
   }
 
   /**
@@ -115,26 +113,5 @@ export class ProjectContentColumn implements IProjectContentColumn {
   public setData(data: any): ProjectContentColumn {
     this.data = { ...this.data, ...data }
     return this
-  }
-
-  /**
-   * Converts the column to a map used in `ColumnFormPanel`.
-   *
-   * @private
-   */
-  private _toMap(): Map<string, any> {
-    return new Map<string, any>([
-      ['id', this.id],
-      ['key', this.key],
-      ['fieldName', this.fieldName],
-      ['name', this.name],
-      ['minWidth', this.minWidth],
-      ['maxWidth', this.maxWidth],
-      ['sortOrder', this.sortOrder],
-      ['internalName', this.internalName],
-      ['iconName', this.iconName],
-      ['dataType', this.dataType],
-      ['data', this.data]
-    ])
   }
 }

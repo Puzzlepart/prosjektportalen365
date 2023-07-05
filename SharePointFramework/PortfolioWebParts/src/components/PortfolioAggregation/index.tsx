@@ -24,8 +24,7 @@ import { usePortfolioAggregation } from './usePortfolioAggregation'
 import { ProjectContentColumn } from 'pp365-shared-library'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
-  const { context, items, layerHostId, editViewColumnsPanelProps } =
-    usePortfolioAggregation(props)
+  const { context, items, layerHostId, editViewColumnsPanelProps } = usePortfolioAggregation(props)
 
   if (context.state.error) {
     return (
@@ -67,7 +66,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             groupProps={{
               // TODO: Temporary fix for collapsing groups, the new state handling throws errors
               onToggleCollapseAll: (isAllCollapsed) =>
-              context.dispatch(SET_ALL_COLLAPSED({ isAllCollapsed })),
+                context.dispatch(SET_ALL_COLLAPSED({ isAllCollapsed })),
               headerProps: {
                 onToggleCollapse: (group) => context.dispatch(SET_COLLAPSED({ group }))
               }

@@ -298,7 +298,7 @@ export interface IPortfolioWebPartsDataAdapter {
   /**
    * Adds a new column to the project columns list and adds the column to the specified view.
    *
-   * @param properties Properties for the new column
+   * @param properties Properties for the new column (`Id` will be omitted)
    * @param view The view to add the column to
    */
   addColumnToPortfolioView?(

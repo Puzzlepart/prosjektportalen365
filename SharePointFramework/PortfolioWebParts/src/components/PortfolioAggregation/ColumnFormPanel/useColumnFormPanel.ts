@@ -15,7 +15,7 @@ import { useEditableColumn } from './useEditableColumn'
  */
 export function useColumnFormPanel() {
   const context = useContext(PortfolioAggregationContext)
-  const { column, setColumn, setColumnData, isEditing } = useEditableColumn(context)
+  const { column, setColumn, setColumnData, isEditing } = useEditableColumn()
   const [persistRenderAs, setPersistRenderAs] = useState(false)
 
   const onSave = async () => {

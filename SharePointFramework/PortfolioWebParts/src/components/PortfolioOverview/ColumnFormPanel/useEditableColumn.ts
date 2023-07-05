@@ -1,6 +1,8 @@
-import { ProjectContentColumn } from 'pp365-shared-library'
+import { ProjectColumn } from 'pp365-shared-library'
 import { useContext, useEffect, useState } from 'react'
-import { PortfolioAggregationContext } from '../context'
+import { PortfolioOverviewContext } from '../context'
+
+type EditableColumn = Map<string, any>
 
 /**
  * Intial column with default values.
@@ -11,29 +13,33 @@ const initialColumn = new Map<string, any>([
   ['fieldName', ''],
   ['sortOrder', 100],
   ['minWidth', 100],
-  ['maxWidth', 150],
-  ['data', {}]
+  [
+    'data',
+    {
+      visibility: []
+    }
+  ]
 ])
 
-const convertToMap = (column: ProjectContentColumn) => {
+const convertToMap = (column: ProjectColumn): EditableColumn => {
   return new Map<string, any>([
     ['id', column.id],
     ['key', column.key],
     ['fieldName', column.fieldName],
     ['name', column.name],
     ['minWidth', column.minWidth],
-    ['maxWidth', column.maxWidth],
     ['sortOrder', column.sortOrder],
     ['internalName', column.internalName],
     ['iconName', column.iconName],
     ['dataType', column.dataType],
+    ['isRefinable', column.isRefinable],
     ['data', column.data]
   ])
 }
 
 export function useEditableColumn() {
-  const context = useContext(PortfolioAggregationContext)
-  const [column, $setColumn] = useState<Map<string, any>>(initialColumn)
+  const context = useContext(PortfolioOverviewContext)
+  const [column, $setColumn] = useState<EditableColumn>(initialColumn)
   const isEditing = !!context.state.columnForm.column
 
   useEffect(() => {

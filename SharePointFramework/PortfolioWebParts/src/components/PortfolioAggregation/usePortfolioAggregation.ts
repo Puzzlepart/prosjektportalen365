@@ -141,7 +141,6 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
     }
   }, [props.dataSourceCategory, props.defaultViewId])
 
-
   usePortfolioAggregationDataSources(context)
   usePortfolioAggregationDataFetch(context)
 
