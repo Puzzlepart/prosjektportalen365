@@ -10,10 +10,10 @@ import { IColumnFormPanel } from '../ColumnFormPanel/types'
  */
 export const DATA_FETCHED = createAction<{
   items: any[]
+  projects?: any[]
   dataSources?: DataSource[]
   columns?: ProjectContentColumn[]
-  dataSourceColumns?: ProjectContentColumn[]
-  projects?: any[]
+  dataSource?: DataSource
 }>('DATA_FETCHED')
 
 /**

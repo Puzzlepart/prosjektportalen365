@@ -124,7 +124,8 @@ export const createPortfolioAggregationReducer = (props: IPortfolioAggregationPr
         state.loading = false
       }
       if (payload.columns) {
-        if (!isEmpty(payload.dataSourceColumns)) state.dataSourceColumns = payload.dataSourceColumns
+        if (!isEmpty(payload.dataSource?.columns))
+          state.dataSourceColumns = payload.dataSource.columns
         else state.dataSourceColumns = payload.columns
 
         if (isEmpty(payload.columns)) {

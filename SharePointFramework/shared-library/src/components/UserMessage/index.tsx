@@ -40,7 +40,10 @@ export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => 
 }
 
 UserMessage.defaultProps = {
-  linkTarget: '_blank'
+  linkTarget: '_blank',
+  styles: {
+    root: {}
+  }
 }
 
 export * from './types'
