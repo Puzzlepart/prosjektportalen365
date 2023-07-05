@@ -32,4 +32,10 @@ export interface IEditViewColumnsPanelProps extends IPanelProps {
    * Revert order button props.
    */
   revertOrder?: IRevertOrderButtonProps
+
+  /**
+   * Custom column order. If provided, the columns will be sorted
+   * based on this order.
+   */
+  customColumnOrder?: number[]
 }

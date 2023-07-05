@@ -7,6 +7,7 @@ import {
   PortfolioOverviewView,
   ProjectContentColumn,
   ProjectListModel,
+  SPDataSourceItem,
   SPProjectColumnItem,
   SPProjectContentColumnItem,
   TimelineConfigurationModel,
@@ -311,9 +312,10 @@ export interface IPortfolioWebPartsDataAdapter {
    *
    * @param properties Properties
    * @param dataSourceTitle Data source title
+   * @param shouldReplace Should replace the existing columns
    */
   updateDataSourceItem?(
-    properties: Record<string, any>,
+    properties: SPDataSourceItem,
     dataSourceTitle: string,
     shouldReplace?: boolean
   ): Promise<ItemUpdateResult>

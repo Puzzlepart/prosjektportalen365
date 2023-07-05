@@ -22,28 +22,9 @@ export function useEditViewColumnsPanel(
    */
   const columnsWithSelectedState = useMemo(
     () =>
-      context.props.configuration.columns
-        .map((c) =>
-          c.setData({ isSelected: _.some(context.state.columns, (_c) => _c.id === c.id) })
-        )
-        .sort((a, b) => {
-          const customColumnOrder = context.state?.currentView?.columnOrder ?? []
-          const customColumnOrderIndexA = customColumnOrder.indexOf(a.id)
-          const customColumnOrderIndexB = customColumnOrder.indexOf(b.id)
-          if (a.data.isSelected && !b.data.isSelected) {
-            return -1
-          } else if (!a.data.isSelected && b.data.isSelected) {
-            return 1
-          } else if (customColumnOrderIndexA !== -1 && customColumnOrderIndexB !== -1) {
-            return customColumnOrderIndexA - customColumnOrderIndexB || a.sortOrder - b.sortOrder
-          } else if (customColumnOrderIndexA !== -1) {
-            return -1
-          } else if (customColumnOrderIndexB !== -1) {
-            return 1
-          } else {
-            return a.sortOrder - b.sortOrder
-          }
-        }),
+      context.props.configuration.columns.map((c) =>
+        c.setData({ isSelected: _.some(context.state.columns, (_c) => _c.id === c.id) })
+      ),
     [context.state.columns, context.state.currentView]
   )
 
@@ -103,6 +84,7 @@ export function useEditViewColumnsPanel(
       disabled: _.isEmpty(context.state.currentView?.columnOrder),
       onClick: onRevertViewColumnOrder
     },
-    helpText: strings.PortfolioOverviewShowEditViewColumnsPanelHelpText
+    helpText: strings.PortfolioOverviewShowEditViewColumnsPanelHelpText,
+    customColumnOrder: context.state.currentView?.columnOrder
   } as IEditViewColumnsPanelProps
 }

@@ -27,12 +27,12 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   configuration?: IPortfolioAggregationConfiguration
 
   /**
-   * Data source name
+   * Name of the currently selected data source (also called view)
    */
   dataSource?: string
 
   /**
-   * Category for data sources
+   * Category for data sources (also called views)
    */
   dataSourceCategory?: string
 

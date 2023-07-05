@@ -10,9 +10,9 @@ export class SPDataSourceItem {
   public GtDataSourceCategory?: string = ''
   public GtDataSourceLevel?: string[] = []
   public GtDataSourceDefault?: boolean = false
-  public GtProjectContentColumnsId?: any[] = []
-  public GtProjectContentRefinersId?: any[] = []
-  public GtProjectContentGroupById?: any = null
+  public GtProjectContentColumnsId?: number[] | { results: number[] } = []
+  public GtProjectContentRefinersId?: number[] | { results: number[] } = []
+  public GtProjectContentGroupById?: number = null
   public GtODataQuery?: string = ''
 }
 
@@ -43,8 +43,12 @@ export class DataSource {
     this.category = item.GtDataSourceCategory
     this.level = item.GtDataSourceLevel
     this.isDefault = item.GtDataSourceDefault
-    this.columns = columns.filter((col) => _.includes(item.GtProjectContentColumnsId, col.id))
-    this.refiners = columns.filter((col) => _.includes(item.GtProjectContentRefinersId, col.id))
+    this.columns = columns.filter((col) =>
+      _.includes(item.GtProjectContentColumnsId as number[], col.id)
+    )
+    this.refiners = columns.filter((col) =>
+      _.includes(item.GtProjectContentRefinersId as number[], col.id)
+    )
     this.groupBy = columns.find((col) => col.id === item.GtProjectContentGroupById)
     this.odataQuery = item.GtODataQuery
   }

@@ -26,6 +26,7 @@ import {
   ProjectContentColumn,
   ProjectListModel,
   SPContentType,
+  SPDataSourceItem,
   SPProjectColumnItem,
   SPProjectContentColumnItem,
   SPTimelineConfigurationItem,
@@ -895,7 +896,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   public async updateDataSourceItem(
-    properties: Record<string, any>,
+    properties: SPDataSourceItem,
     dataSourceTitle: string,
     shouldReplace: boolean = false
   ): Promise<ItemUpdateResult> {
@@ -913,15 +914,12 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           results: [...item.GtProjectContentColumnsId, properties.GtProjectContentColumnsId]
         }
 
-        const itemUpdateResult = await list.items.getById(item.Id).update(properties)
-        return itemUpdateResult
+        return await list.items.getById(item.Id).update(properties)
       } else {
         properties.GtProjectContentColumnsId = {
-          results: properties.GtProjectContentColumnsId
+          results: properties.GtProjectContentColumnsId as number[]
         }
-
-        const itemUpdateResult = await list.items.getById(item.Id).update(properties)
-        return itemUpdateResult
+        return await list.items.getById(item.Id).update(properties)
       }
     } catch (error) {
       throw new Error(error)

@@ -105,5 +105,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
 
 EditViewColumnsPanel.defaultProps = {
   title: strings.EditViewColumnsPanelHeaderText,
-  helpText: strings.EditViewColumnsPanelHelpText
+  helpText: strings.EditViewColumnsPanelHelpText,
+  columns: [],
+  customColumnOrder: []
 }

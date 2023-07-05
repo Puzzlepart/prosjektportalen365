@@ -4,12 +4,38 @@ import { useEffect, useState } from 'react'
 import { OnDragEndResponder } from 'react-beautiful-dnd'
 import { IEditViewColumnsPanelProps } from './types'
 
+/**
+ * Sorts columns based on `props.customColumnOrder` if set. The selected columns
+ * will always be on top. The rest of the columns will be sorted based on their `sortOrder`
+ * set in the corresponding list.
+ *
+ * @param props Props for `EditViewColumnsPanel` component
+ */
+const sortColumns = (props: IEditViewColumnsPanelProps) =>
+  props.columns.sort((a, b) => {
+    const customColumnOrderIndexA = props.customColumnOrder.indexOf(a['id'])
+    const customColumnOrderIndexB = props.customColumnOrder.indexOf(b['id'])
+    if (a.data.isSelected && !b.data.isSelected) {
+      return -1
+    } else if (!a.data.isSelected && b.data.isSelected) {
+      return 1
+    } else if (customColumnOrderIndexA !== -1 && customColumnOrderIndexB !== -1) {
+      return customColumnOrderIndexA - customColumnOrderIndexB || a['sortOrder'] - b['sortOrder']
+    } else if (customColumnOrderIndexA !== -1) {
+      return -1
+    } else if (customColumnOrderIndexB !== -1) {
+      return 1
+    } else {
+      return a['sortOrder'] - b['sortOrder']
+    }
+  })
+
 export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
   const [isChanged, setIsChanged] = useState(false)
   const [selectedColumns, setSelectedColumns] = useState<IColumn[]>(props.columns ?? [])
 
   useEffect(() => {
-    setSelectedColumns(props.columns ?? [])
+    setSelectedColumns(sortColumns(props))
   }, [props.columns])
 
   /**
