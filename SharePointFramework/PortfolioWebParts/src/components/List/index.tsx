@@ -1,4 +1,9 @@
-import { ShimmeredDetailsList } from '@fluentui/react'
+import {
+  ConstrainMode,
+  DetailsListLayoutMode,
+  SelectionMode,
+  ShimmeredDetailsList
+} from '@fluentui/react'
 import React, { FC } from 'react'
 import { IListProps } from './types'
 import { useAddColumn } from './useAddColumn'
@@ -15,25 +20,29 @@ import { onRenderItemColumn } from './RenderItemColumn'
  * - `currency`: Renders a formatted currency
  * - `tags`: Renders tags for multiple values
  * - `boolean`: Renders a boolean value
- * - `url`: Renders a link 
- * 
+ * - `url`: Renders a link
+ *
  * @param props List properties
  */
 export const List: FC<IListProps> = (props) => {
   const { addColumn } = useAddColumn(props.isAddColumnEnabled)
   return (
-
     <ShimmeredDetailsList
       {...props}
-      columns={[
-        ...props.columns,
-        addColumn
-      ].filter(Boolean)}
+      columns={[...props.columns, addColumn].filter(Boolean)}
       onRenderItemColumn={onRenderItemColumn(props)}
+      isPlaceholderData={props.enableShimmer}
     />
   )
 }
 
 List.defaultProps = {
-  isAddColumnEnabled: false
+  compact: false,
+  isAddColumnEnabled: false,
+  selectionMode: SelectionMode.none,
+  constrainMode: ConstrainMode.unconstrained,
+  layoutMode: DetailsListLayoutMode.fixedColumns
 }
+
+export * from './types'
+export * from './useAddColumn'

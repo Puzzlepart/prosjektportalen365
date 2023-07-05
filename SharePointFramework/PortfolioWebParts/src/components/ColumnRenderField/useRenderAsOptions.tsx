@@ -10,7 +10,14 @@ import strings from 'PortfolioWebPartsStrings'
 import { ColumnRenderFieldOption, IColumnRenderFieldProps } from './types'
 import React, { useEffect, useState } from 'react'
 import _ from 'lodash'
+import { TagsColumn } from 'components/List/RenderItemColumn/TagsColumn'
 
+/**
+ * Hook to work with render as options. Returns the options, the selected option, 
+ * and a function to render the option.
+ * 
+ * @param props ColumnRenderField props
+ */
 export function useRenderAsOptions(props: IColumnRenderFieldProps) {
   const renderAsOptions: ColumnRenderFieldOption[] = [
     {
@@ -153,7 +160,7 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
             {
               label: strings.ColumnRenderOptionTagsValueSeparatorLabel,
               description: strings.ColumnRenderOptionTagsValueSeparatorDescription,
-              value: dataTypeProperties['valueSeparator'] ?? ',',
+              value: dataTypeProperties['valueSeparator'] ?? TagsColumn.defaultProps.valueSeparator,
               onChange: (_, value) => onChange('valueSeparator', value)
             } as ITextFieldProps
           ]

@@ -3,21 +3,28 @@ import { IColumn, Link, TooltipHost } from '@fluentui/react'
 import { Icon } from '@fluentui/react/lib/Icon'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import * as strings from 'PortfolioWebPartsStrings'
-import { formatDate, tryParseCurrency } from 'pp365-shared-library/lib/helpers'
+import {
+  ColumnDataType,
+  formatDate,
+  tryParseCurrency,
+  tryParseJson,
+  getObjectValue as get
+} from 'pp365-shared-library'
 import React from 'react'
 import { IListProps } from '../types'
 import { TagsColumn } from './TagsColumn'
 import { TitleColumn } from './TitleColumn'
 import { UserColumn } from './UserColumn'
-import { IRenderItemColumnProps } from './types'
-
-type RenderDataType = 'user' | 'date' | 'currency' | 'tags' | 'boolean' | 'url'
-type RenderFunction = (props: IRenderItemColumnProps) => JSX.Element
+import { IRenderItemColumnProps, ItemRenderFunction } from './types'
+import ItemModal from '../ItemModal'
+import { getFileTypeIconProps } from '@fluentui/react-file-type-icons'
 
 /**
  * Mapping for rendering of the different data types.
  */
-const renderDataTypeMap: Record<RenderDataType, RenderFunction> = {
+const renderDataTypeMap: Record<ColumnDataType, ItemRenderFunction> = {
+  text: (props: IRenderItemColumnProps) => <span>{props.columnValue}</span>,
+  note: (props: IRenderItemColumnProps) => <span>{props.columnValue}</span>,
   user: (props: IRenderItemColumnProps) => <UserColumn {...props} />,
   date: (props: IRenderItemColumnProps) => {
     const includeTime = props.dataTypeProperties.get('includeTime') ?? false
@@ -39,7 +46,9 @@ const renderDataTypeMap: Record<RenderDataType, RenderFunction> = {
       </span>
     )
   },
-  tags: (props: IRenderItemColumnProps) => <TagsColumn {...props} />,
+  tags: (props: IRenderItemColumnProps) => (
+    <TagsColumn {...props} valueSeparator={props.dataTypeProperties.get('valueSeparator')} />
+  ),
   boolean: (props: IRenderItemColumnProps) => {
     const valueIfTrue = props.dataTypeProperties.get('valueIfTrue') ?? strings.BooleanYes
     const valueIfFalse = props.dataTypeProperties.get('valueIfFalse') ?? strings.BooleanNo
@@ -58,6 +67,44 @@ const renderDataTypeMap: Record<RenderDataType, RenderFunction> = {
         {description}
       </Link>
     )
+  },
+  trend: (props: IRenderItemColumnProps) => {
+    const trend = tryParseJson(props.columnValue, null)
+    return trend ? (
+      <span>
+        <span style={{ display: 'inline-block', width: 20 }}>
+          {trend.TrendIconProps && <Icon {...trend.TrendIconProps} />}
+        </span>
+        <span>{trend.AchievementDisplay}</span>
+      </span>
+    ) : null
+  },
+  modal: (props: IRenderItemColumnProps) => {
+    return (
+      <ItemModal title={props.item.MeasurementIndicator} value={JSON.parse(props.columnValue)} />
+    )
+  },
+  filename_with_icon: (props: IRenderItemColumnProps) => {
+    return (
+      <span>
+        <Icon
+          {...getFileTypeIconProps({
+            extension: props.item.FileExtension,
+            size: 16,
+            imageFileType: 'png'
+          })}
+          styles={{ root: { verticalAlign: 'bottom' } }}
+        />
+        <Link
+          href={props.item.ServerRedirectedURL}
+          rel='noopener noreferrer'
+          target='_blank'
+          style={{ marginLeft: 8 }}
+        >
+          {props.columnValue}
+        </Link>
+      </span>
+    )
   }
 }
 
@@ -70,13 +117,16 @@ const renderDataTypeMap: Record<RenderDataType, RenderFunction> = {
  * @param column Column to render the value for
  * @param props Props for the component `<List />`
  */
-function renderItemColumn(
-  item: Record<string, any>,
-  column: IColumn,
-  props: IListProps
-) {
+function renderItemColumn(item: Record<string, any>, column: IColumn, props: IListProps) {
+  if (!column.fieldName) return null
+  if (column.onRender) return column.onRender(item, undefined, column)
+  if (!stringIsNullOrEmpty(column['fieldNameDisplay'])) {
+    return get(item, column['fieldNameDisplay'], null)
+  }
   const columnValue = item[column.fieldName]
-  const dataTypeProperties = new Map(Object.entries(column.data?.dataTypeProperties ?? {}))
+  const dataTypeProperties = new Map<string, any>(
+    Object.entries(column.data?.dataTypeProperties ?? {})
+  )
   if (!columnValue) {
     return dataTypeProperties.get('fallbackValue') ?? null
   }
@@ -87,19 +137,22 @@ function renderItemColumn(
         <TitleColumn
           item={item}
           renderProjectInformationPanel={true}
-          webPartContext={props.webPartContext} />
+          webPartContext={props.webPartContext}
+        />
       )
     }
   }
 
-  const dataType = renderDataTypeMap[column['dataType']]
+  const renderFunction = renderDataTypeMap[column['dataType']]
 
-  if (dataType) {
-    return renderDataTypeMap[dataType]({
+  if (renderFunction) {
+    const renderProps: IRenderItemColumnProps = {
       column,
+      item,
       columnValue,
       dataTypeProperties
-    } as IRenderItemColumnProps)
+    }
+    return renderFunction(renderProps)
   }
 
   const config = column['config'] ? column['config'][columnValue] : null
@@ -134,6 +187,6 @@ function renderItemColumn(
  */
 export const onRenderItemColumn =
   (props: IListProps) =>
-    (item?: any, _index?: number, column?: IColumn): React.ReactNode => {
-      return renderItemColumn(item, column, props)
-    }
+  (item?: any, _index?: number, column?: IColumn): React.ReactNode => {
+    return renderItemColumn(item, column, props)
+  }

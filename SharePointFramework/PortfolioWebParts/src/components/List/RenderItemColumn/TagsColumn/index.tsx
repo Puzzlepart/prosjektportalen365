@@ -4,18 +4,21 @@ import { IRenderItemColumnProps } from '../types'
 import { Tag } from './Tag'
 import styles from './TagsColumn.module.scss'
 
-export const TagsColumn: FC<IRenderItemColumnProps> = ({
-  columnValue,
-  valueSeparator = ';',
-  style
-}: IRenderItemColumnProps) => {
-  if (!columnValue) return null
-  const tags: string[] = columnValue.split(valueSeparator).filter((t) => !stringIsNullOrEmpty(t))
+export const TagsColumn: FC<IRenderItemColumnProps> = (props) => {
+  if (!props.columnValue) return null
+  const tags: string[] = props.columnValue
+    .split(props.valueSeparator)
+    .filter((t) => !stringIsNullOrEmpty(t))
   return (
-    <div className={styles.root} style={style}>
+    <div className={styles.root} style={props.style}>
       {tags.map((text, idx) => (
         <Tag key={idx} text={text} />
       ))}
     </div>
   )
+}
+
+TagsColumn.displayName = 'TagsColumn'
+TagsColumn.defaultProps = {
+  valueSeparator: ';'
 }
