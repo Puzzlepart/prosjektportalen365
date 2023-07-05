@@ -51,6 +51,7 @@ export function useEditViewColumnsPanel(
     isOpen: context.state.isEditViewColumnsPanelOpen,
     columns: columnsWithSelectedState,
     onSave: onSaveViewColumns,
-    onDismiss
+    onDismiss,
+    sortMode: 'selectedOnTop'
   } as IEditViewColumnsPanelProps
 }

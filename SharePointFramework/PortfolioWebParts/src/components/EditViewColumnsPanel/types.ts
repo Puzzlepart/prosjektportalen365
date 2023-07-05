@@ -38,4 +38,13 @@ export interface IEditViewColumnsPanelProps extends IPanelProps {
    * based on this order.
    */
   customColumnOrder?: number[]
+
+  /**
+   * Sort mode for the columns.
+   * 
+   * - `selectedOnTop`: Selected columns will be on top, the rest will be based on the columns order in the provided
+   * `columns` property.
+   * - `customSelectedOnTop`: Selected columns will be on top, the rest will be based on `sortOrder` and `customColumnOrder`.
+   */
+  sortMode: 'selectedOnTop' | 'customSelectedOnTop'
 }

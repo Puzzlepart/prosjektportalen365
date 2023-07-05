@@ -26,7 +26,7 @@ const sortColumns = (props: IEditViewColumnsPanelProps) =>
     } else if (customColumnOrderIndexB !== -1) {
       return 1
     } else {
-      return a['sortOrder'] - b['sortOrder']
+      return props.sortMode === 'customSelectedOnTop' ? a['sortOrder'] - b['sortOrder'] : 0
     }
   })
 

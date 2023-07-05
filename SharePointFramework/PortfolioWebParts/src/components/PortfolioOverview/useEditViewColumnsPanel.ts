@@ -85,6 +85,7 @@ export function useEditViewColumnsPanel(
       onClick: onRevertViewColumnOrder
     },
     helpText: strings.PortfolioOverviewShowEditViewColumnsPanelHelpText,
-    customColumnOrder: context.state.currentView?.columnOrder
+    customColumnOrder: context.state.currentView?.columnOrder,
+    sortMode: 'customSelectedOnTop'
   } as IEditViewColumnsPanelProps
 }
