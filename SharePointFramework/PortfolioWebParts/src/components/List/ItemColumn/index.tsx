@@ -59,7 +59,7 @@ const renderDataTypeMap: Record<ColumnDataType, ItemRenderFunction> = {
       items={JSON.parse(props.columnValue)}
     />
   ),
-  filename_with_icon: (props: IRenderItemColumnProps) => (
+  filename: (props: IRenderItemColumnProps) => (
     <FileNameColumn {...props} showFileExtensionIcon />
   ),
   list: (props: IRenderItemColumnProps) => <ListColumn {...props} />
@@ -88,16 +88,14 @@ function renderItemColumn(item: Record<string, any>, column: IColumn, props: ILi
     return dataTypeProperties.get('fallbackValue') ?? null
   }
 
-  switch (column.fieldName) {
-    case 'Title': {
-      return (
-        <TitleColumn
-          item={item}
-          renderProjectInformationPanel={props.renderTitleProjectInformationPanel}
-          webPartContext={props.webPartContext}
-        />
-      )
-    }
+  if (column.fieldName === 'Title' && column['dataType'] === 'text') {
+    return (
+      <TitleColumn
+        item={item}
+        renderProjectInformationPanel={props.renderTitleProjectInformationPanel}
+        webPartContext={props.webPartContext}
+      />
+    )
   }
 
   const renderFunction = renderDataTypeMap[column['dataType']]
@@ -144,9 +142,9 @@ function renderItemColumn(item: Record<string, any>, column: IColumn, props: ILi
  */
 export const onRenderItemColumn =
   (props: IListProps) =>
-  (item?: any, _index?: number, column?: IColumn): React.ReactNode => {
-    return renderItemColumn(item, column, props)
-  }
+    (item?: any, _index?: number, column?: IColumn): React.ReactNode => {
+      return renderItemColumn(item, column, props)
+    }
 
 export {
   BooleanColumn,
