@@ -5,4 +5,7 @@ export interface IProjectContentColumn extends IColumn {
   internalName?: string
   sortOrder?: number
   dataType?: string
+  data?: {
+    isSelected?: boolean
+  }
 }

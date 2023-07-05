@@ -17,10 +17,11 @@ import styles from './PortfolioOverview.module.scss'
 import { Commands } from './Commands'
 import { onRenderItemColumn } from './RenderItemColumn'
 import { PortfolioOverviewContext } from './context'
-import { IPortfolioOverviewProps, addColumn } from './types'
+import { IPortfolioOverviewProps } from './types'
 import { usePortfolioOverview } from './usePortfolioOverview'
 import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
 import { ViewFormPanel } from './ViewFormPanel'
+import { useAddColumn } from './useAddColumn'
 
 /**
  * Component for displaying a portfolio overview - an overview of all projects in a portfolio.
@@ -36,6 +37,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
     columns,
     groups
   } = usePortfolioOverview(props)
+  const { addColumn } = useAddColumn(!props.isParentProject)
 
   return (
     <div className={styles.root}>
@@ -67,7 +69,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
                   items={items}
                   constrainMode={ConstrainMode.unconstrained}
                   layoutMode={DetailsListLayoutMode.fixedColumns}
-                  columns={[...columns, !props.isParentProject && addColumn].filter(Boolean)}
+                  columns={[...columns, addColumn].filter(Boolean)}
                   groups={groups}
                   selectionMode={SelectionMode.multiple}
                   selection={selection}

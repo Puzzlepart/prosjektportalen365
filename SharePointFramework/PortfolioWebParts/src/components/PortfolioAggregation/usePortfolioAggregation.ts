@@ -145,5 +145,5 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
 
   const editViewColumnsPanelProps = useEditViewColumnsPanel(context)
 
-  return { state, dispatch, items, layerHostId, context,editViewColumnsPanelProps } as const
+  return { state, dispatch, items, layerHostId, context, editViewColumnsPanelProps } as const
 }

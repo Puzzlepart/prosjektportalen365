@@ -16,24 +16,23 @@ export function useEditViewColumnsPanel(
 ): IEditViewColumnsPanelProps {
   /**
    * Add `isSelected` property to `props.configuration.columns` based on `state.columns`.
+   * Sorts columns based on `state.currentView.columnOrder` if it exists. The selected columns
+   * will always be on top. The rest of the columns will be sorted based on their `sortOrder`
+   * from the project columns list.
    */
   const columnsWithSelectedState = useMemo(
     () =>
       context.props.configuration.columns
-        .map((c) => ({
-          ...c,
-          data: {
-            ...c.data,
-            isSelected: _.some(context.state.columns, (_c) => _c.fieldName === c.fieldName)
-          }
-        }))
+        .map((c) =>
+          c.setData({ isSelected: _.some(context.state.columns, (_c) => _c.id === c.id) })
+        )
         .sort((a, b) => {
           const customColumnOrder = context.state?.currentView?.columnOrder ?? []
           const customColumnOrderIndexA = customColumnOrder.indexOf(a.id)
           const customColumnOrderIndexB = customColumnOrder.indexOf(b.id)
-          if (a.data.selected && !b.data.selected) {
+          if (a.data.isSelected && !b.data.isSelected) {
             return -1
-          } else if (!a.data.selected && b.data.selected) {
+          } else if (!a.data.isSelected && b.data.isSelected) {
             return 1
           } else if (customColumnOrderIndexA !== -1 && customColumnOrderIndexB !== -1) {
             return customColumnOrderIndexA - customColumnOrderIndexB || a.sortOrder - b.sortOrder
@@ -79,7 +78,7 @@ export function useEditViewColumnsPanel(
     const columns = selectedColumns
       .filter((c) => c.data.isSelected)
       .sort((a, b) => a.sortOrder - b.sortOrder)
-      
+
     const properties: Record<string, any> = {
       GtPortfolioColumnOrder: null
     }
@@ -99,6 +98,7 @@ export function useEditViewColumnsPanel(
     isOpen: context.state.isEditViewColumnsPanelOpen,
     columns: columnsWithSelectedState,
     onSave: onSaveViewColumns,
+    onDismiss: () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false })),
     revertOrder: {
       disabled: _.isEmpty(context.state.currentView?.columnOrder),
       onClick: onRevertViewColumnOrder

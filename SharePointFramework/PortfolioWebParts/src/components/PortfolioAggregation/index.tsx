@@ -27,7 +27,8 @@ import { FilterPanel } from 'pp365-shared-library/lib/components/FilterPanel'
 import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
-  const { state, dispatch, items, layerHostId, context, editViewColumnsPanelProps } = usePortfolioAggregation(props)
+  const { state, dispatch, items, layerHostId, context, editViewColumnsPanelProps } =
+    usePortfolioAggregation(props)
 
   if (state.error) {
     return (

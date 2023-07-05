@@ -3,7 +3,7 @@ import { IProjectContentColumn } from 'pp365-shared-library'
 import { useMemo } from 'react'
 import { IEditViewColumnsPanelProps } from '../EditViewColumnsPanel/types'
 import { IPortfolioAggregationContext } from './context'
-import { SHOW_HIDE_COLUMNS } from './reducer'
+import { SHOW_HIDE_COLUMNS, TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from './reducer'
 
 /**
  * Creates props for `EditViewColumnsPanel` component based on the context.
@@ -49,8 +49,9 @@ export function useEditViewColumnsPanel(
   }
 
   return {
-    isOpen: context.state.showHideColumnPanel.isOpen,
+    isOpen: context.state.isEditViewColumnsPanelOpen,
     columns: columnsWithSelectedState,
     onSave: onSaveViewColumns,
+    onDismiss: () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false })),
   } as IEditViewColumnsPanelProps
 }

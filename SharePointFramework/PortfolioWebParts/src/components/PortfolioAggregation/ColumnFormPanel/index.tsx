@@ -30,7 +30,7 @@ export const ColumnFormPanel: FC = () => {
 
   return (
     <Panel
-      isOpen={state.addColumnPanel.isOpen}
+      isOpen={state.isAddColumnPanelOpen}
       headerText={state.editColumn ? strings.EditColumnHeaderText : strings.NewColumnHeaderText}
       onDismiss={onDismiss}
       isLightDismiss={true}

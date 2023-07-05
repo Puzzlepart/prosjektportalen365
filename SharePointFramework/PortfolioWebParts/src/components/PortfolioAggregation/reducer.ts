@@ -180,8 +180,8 @@ export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregat
   dataSources: [],
   dataSourceLevel: props.dataSourceLevel ?? props.configuration?.level,
   groups: null,
-  addColumnPanel: { isOpen: false },
-  showHideColumnPanel: { isOpen: false }
+  isAddColumnPanelOpen: false,
+  isEditViewColumnsPanelOpen: false
 })
 
 /**
@@ -268,13 +268,13 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
       { payload }: ReturnType<typeof TOGGLE_COLUMN_FORM_PANEL>
     ) => {
       state.editColumn = payload.column || null
-      state.addColumnPanel = { isOpen: payload.isOpen }
+      state.isAddColumnPanelOpen = payload.isOpen
     },
     [TOGGLE_EDIT_VIEW_COLUMNS_PANEL.type]: (
       state,
       { payload }: ReturnType<typeof TOGGLE_EDIT_VIEW_COLUMNS_PANEL>
     ) => {
-      state.showHideColumnPanel = { isOpen: payload.isOpen }
+      state.isEditViewColumnsPanelOpen = payload.isOpen
     },
     [TOGGLE_FILTER_PANEL.type]: (state, { payload }: ReturnType<typeof TOGGLE_FILTER_PANEL>) => {
       state.showFilterPanel = payload.isOpen
@@ -290,18 +290,18 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
         })
       }
       state.editColumn = null
-      state.addColumnPanel = { isOpen: false }
+      state.isAddColumnPanelOpen = false
       state.columnAdded = new Date().getTime()
       persistColumns(props, current(state).columns)
     },
     [DELETE_COLUMN.type]: (state) => {
       state.editColumn = null
-      state.addColumnPanel = { isOpen: false }
+      state.isAddColumnPanelOpen = false
       state.columnDeleted = new Date().getTime()
       persistColumns(props, current(state).columns)
     },
     [SHOW_HIDE_COLUMNS.type]: (state) => {
-      state.showHideColumnPanel = { isOpen: false }
+      state.isEditViewColumnsPanelOpen = false
       state.columnShowHide = new Date().getTime()
       persistColumns(props, current(state).columns)
     },
@@ -311,9 +311,9 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
     ) => {
       state.columnContextMenu = payload
         ? {
-            column: payload.column,
-            target: payload.target as any
-          }
+          column: payload.column,
+          target: payload.target as any
+        }
         : null
     },
     [SET_ALL_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_ALL_COLLAPSED>) => {

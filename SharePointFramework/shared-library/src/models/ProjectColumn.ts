@@ -29,6 +29,13 @@ export type ProjectColumnCustomSort = {
   iconName?: string
 }
 
+export type ProjectColumnData = {
+  isGroupable?: boolean
+  visibility?: string[]
+  dataTypeProperties?: Record<string, any>
+  isSelected?: boolean
+}
+
 export class ProjectColumn implements IProjectColumn {
   public key: string
   public fieldName: string
@@ -50,39 +57,33 @@ export class ProjectColumn implements IProjectColumn {
   public onColumnClick: any
   public customSorts?: ProjectColumnCustomSort[]
   public $map: Map<string, any>
+  public data?: ProjectColumnData
 
-  /**
-   * Arbitrary data passthrough which can be used by the caller.
-   */
-  public data?: any
-
-  constructor(private _item?: SPProjectColumnItem) {
-    if (_item) {
-      this.id = _item.Id
-      this.fieldName = _item.GtManagedProperty || _item.GtInternalName
-      this.key = _item.GtManagedProperty
-      this.name = _item.Title
-      this.sortOrder = _item.GtSortOrder
-      this.internalName = _item.GtInternalName
-      this.dataType = _item.GtFieldDataType && _item.GtFieldDataType.toLowerCase()
-      this.isRefinable = _item.GtIsRefinable
-      this.isGroupable = _item.GtIsGroupable
-      this.isResizable = true
-      this.isMultiline = this.dataType === 'note' || this.dataType === 'tags'
-      this.minWidth = _item.GtColMinWidth ?? 100
-      this.searchType = this._getSearchType(this.fieldName.toLowerCase())
-      this.customSorts = this._getCustomSorts(_item.GtFieldCustomSort)
-      this.data = {
-        isGroupable: this.isGroupable,
-        visibility: [
-          _item.GtShowFieldFrontpage && 'Frontpage',
-          _item.GtShowFieldProjectStatus && 'ProjectStatus',
-          _item.GtShowFieldPortfolio && 'Portfolio'
-        ].filter(Boolean),
-        dataTypeProperties: tryParseJson(_item.GtFieldDataTypeProperties, {})
-      }
-      this.$map = this._toMap()
+  constructor(item?: SPProjectColumnItem) {
+    this.id = item?.Id
+    this.fieldName = item?.GtManagedProperty ?? item?.GtInternalName ?? ''
+    this.key = item?.GtManagedProperty
+    this.name = item?.Title
+    this.sortOrder = item?.GtSortOrder
+    this.internalName = item?.GtInternalName
+    this.dataType = item?.GtFieldDataType ? item?.GtFieldDataType.toLowerCase() : 'text'
+    this.isRefinable = item?.GtIsRefinable
+    this.isGroupable = item?.GtIsGroupable
+    this.isResizable = true
+    this.isMultiline = this.dataType === 'note' || this.dataType === 'tags'
+    this.minWidth = item?.GtColMinWidth ?? 100
+    this.searchType = this._getSearchType()
+    this.customSorts = this._getCustomSorts(item?.GtFieldCustomSort)
+    this.data = {
+      isGroupable: this.isGroupable,
+      visibility: [
+        item?.GtShowFieldFrontpage && 'Frontpage',
+        item?.GtShowFieldProjectStatus && 'ProjectStatus',
+        item?.GtShowFieldPortfolio && 'Portfolio'
+      ].filter(Boolean),
+      dataTypeProperties: tryParseJson(item?.GtFieldDataTypeProperties, {})
     }
+    this.$map = this._toMap()
   }
 
   /**
@@ -111,14 +112,7 @@ export class ProjectColumn implements IProjectColumn {
    * @param page Page to check
    */
   public isVisible(page: 'Frontpage' | 'ProjectStatus' | 'Portfolio') {
-    switch (page) {
-      case 'Frontpage':
-        return this._item.GtShowFieldFrontpage
-      case 'ProjectStatus':
-        return this._item.GtShowFieldProjectStatus
-      case 'Portfolio':
-        return this._item.GtShowFieldPortfolio
-    }
+    return this.data?.visibility?.includes(page)
   }
 
   /**
@@ -168,24 +162,19 @@ export class ProjectColumn implements IProjectColumn {
 
   /**
    * Get search type from field name
-   *
-   * @param fieldName Field name
    */
-  public _getSearchType?(fieldName: string): SearchValueType {
-    if (fieldName.indexOf('owsdate') !== -1) {
-      return SearchValueType.OWSDATE
+  public _getSearchType?(): SearchValueType {
+    const fieldNameLower = this.fieldName.toLowerCase()
+    const searchTypeMap: Record<string, SearchValueType> = {
+      owsdate: SearchValueType.OWSDATE,
+      owsuser: SearchValueType.OWSUSER,
+      owstaxid: SearchValueType.OWSTAXID,
+      owscurr: SearchValueType.OWSCURR,
+      owsmtxt: SearchValueType.OWSMTXT
     }
-    if (fieldName.indexOf('owsuser') !== -1) {
-      return SearchValueType.OWSUSER
-    }
-    if (fieldName.indexOf('owstaxid') !== -1) {
-      return SearchValueType.OWSTAXID
-    }
-    if (fieldName.indexOf('owscurr') !== -1) {
-      return SearchValueType.OWSCURR
-    }
-    if (fieldName.indexOf('owsmtxt') !== -1) {
-      return SearchValueType.OWSMTXT
+    const searchType = Object.keys(searchTypeMap).find((key) => fieldNameLower.indexOf(key) !== -1)
+    if (searchType) {
+      return searchTypeMap[searchType]
     }
     return SearchValueType.OWSTEXT
   }
@@ -195,10 +184,8 @@ export class ProjectColumn implements IProjectColumn {
    * `isGroupable`.
    *
    * @param data Data to set
-   *
-   * @public
    */
-  public setData(data: any): ProjectColumn {
+  public setData(data: ProjectColumnData): ProjectColumn {
     this.data = { ...this.data, ...data }
     return this
   }

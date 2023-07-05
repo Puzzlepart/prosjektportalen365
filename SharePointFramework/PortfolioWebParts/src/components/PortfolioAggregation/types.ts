@@ -1,4 +1,4 @@
-import { IColumn, IGroup, IPanelProps, MessageBarType, Target } from '@fluentui/react'
+import { IColumn, IGroup, MessageBarType, Target } from '@fluentui/react'
 import { SearchResult } from '@pnp/sp'
 import strings from 'PortfolioWebPartsStrings'
 import { IProjectContentColumn } from 'pp365-shared-library'
@@ -170,14 +170,14 @@ export interface IPortfolioAggregationState
   searchTerm?: string
 
   /**
-   * Add column panel
+   * Is add column panel open
    */
-  addColumnPanel?: IPanelProps
+  isAddColumnPanelOpen?: boolean
 
   /**
-   * Show/hide column panel
+   * Is edit view columns panel open
    */
-  showHideColumnPanel?: IPanelProps
+  isEditViewColumnsPanelOpen?: boolean
 
   /**
    * Column context menu
