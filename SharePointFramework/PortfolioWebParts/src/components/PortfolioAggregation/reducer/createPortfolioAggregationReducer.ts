@@ -13,7 +13,6 @@ import { any, first, indexOf, isEmpty, omit, uniq } from 'underscore'
 import {
   IPortfolioAggregationHashState,
   IPortfolioAggregationProps,
-  IPortfolioAggregationState,
   PortfolioAggregationErrorMessage
 } from '../types'
 import {
@@ -25,7 +24,7 @@ import {
   GET_FILTERS,
   MOVE_COLUMN,
   ON_FILTER_CHANGE,
-  SEARCH,
+  EXECUTE_SEARCH,
   SET_ALL_COLLAPSED,
   SET_COLLAPSED,
   SET_COLUMNS,
@@ -40,6 +39,7 @@ import {
   TOGGLE_EDIT_VIEW_COLUMNS_PANEL,
   TOGGLE_FILTER_PANEL
 } from './actions'
+import { getInitialState } from './getInitialState'
 
 /**
  * Persist columns in web part properties for `<PortfolioAggregation />` component
@@ -59,34 +59,12 @@ const persistColumnsInWebPartProperties = (
 }
 
 /**
- * Initial state for `<PortfolioAggregation />` component based on props for the component.
- *
- * @param props Props for `<PortfolioAggregation />` component
- */
-export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregationState => ({
-  loading: true,
-  isCompact: false,
-  searchTerm: '',
-  activeFilters: {},
-  filters: [],
-  items: [],
-  columns: props.columns ?? [],
-  dataSourceColumns: props.columns ?? [],
-  dataSource: props.dataSource ?? first(props.configuration.views)?.title,
-  dataSources: [],
-  dataSourceLevel: props.dataSourceLevel ?? props.configuration?.level,
-  groups: null,
-  columnForm: { isOpen: false, column: null },
-  isEditViewColumnsPanelOpen: false
-})
-
-/**
  * Create reducer for `<PortfolioAggregation />` using `createReducer` from `@reduxjs/toolkit`.
  *
  * @param props Props for `<PortfolioAggregation />` component
  */
 export const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
-  createReducer(initState(props), {
+  createReducer(getInitialState(props), {
     [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
       if (payload.items) {
         let items = props.postTransform ? props.postTransform(payload.items) : payload.items
@@ -183,9 +161,9 @@ export const createPortfolioAggregationReducer = (props: IPortfolioAggregationPr
     ) => {
       state.columnContextMenu = payload
         ? {
-            column: payload.column,
-            target: payload.target as any
-          }
+          column: payload.column,
+          target: payload.target as any
+        }
         : null
     },
     [SET_ALL_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_ALL_COLLAPSED>) => {
@@ -313,8 +291,8 @@ export const createPortfolioAggregationReducer = (props: IPortfolioAggregationPr
     [START_FETCH.type]: (state) => {
       state.loading = true
     },
-    [SEARCH.type]: (state, { payload }: ReturnType<typeof SEARCH>) => {
-      state.searchTerm = payload.searchTerm
+    [EXECUTE_SEARCH.type]: (state, { payload }: ReturnType<typeof EXECUTE_SEARCH>) => {
+      state.searchTerm = payload
     },
     [GET_FILTERS.type]: (state, { payload }: ReturnType<typeof GET_FILTERS>) => {
       const payloadFilters = payload.filters.map((column) => {
@@ -350,34 +328,7 @@ export const createPortfolioAggregationReducer = (props: IPortfolioAggregationPr
         })
       }
 
-      state.filters = [
-        {
-          column: {
-            key: 'SelectedColumns',
-            fieldName: 'SelectedColumns',
-            name: strings.SelectedColumnsLabel,
-            minWidth: 0
-          },
-          items: current(state).columns.map((col) => ({
-            name: col.name,
-            value: col.fieldName,
-            selected:
-              current(state).dataSourceColumns.length > 0
-                ? _.some(current(state).dataSourceColumns, (c) => c.fieldName === col.fieldName)
-                : true
-          })),
-          defaultCollapsed: true
-        },
-        ...payloadFilters
-      ]
-
-      state.activeFilters = {
-        ...state.activeFilters,
-        ['SelectedColumns']:
-          current(state).dataSourceColumns.length > 0
-            ? current(state).dataSourceColumns.map((col) => col.fieldName)
-            : current(state).columns.map((col) => col.fieldName)
-      }
+      state.filters = payloadFilters
     },
     [ON_FILTER_CHANGE.type]: (state, { payload }: ReturnType<typeof ON_FILTER_CHANGE>) => {
       if (payload.selectedItems.length > 0) {

@@ -111,9 +111,9 @@ export const SET_DATA_SOURCE = createAction<{ dataSource: DataSource }>('SET_DAT
 export const START_FETCH = createAction('START_FETCH')
 
 /**
- * `SEARCH`: Search.
+ * `EXECUTE_SEARCH`: Executes a search.
  */
-export const SEARCH = createAction<{ searchTerm: string }>('SEARCH')
+export const EXECUTE_SEARCH = createAction<string>('EXECUTE_SEARCH')
 
 /**
  * `GET_FILTERS`: Get filters.
