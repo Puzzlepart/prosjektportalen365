@@ -1,8 +1,9 @@
-import { ConstrainMode, SelectionMode, ShimmeredDetailsList } from '@fluentui/react'
+import { ConstrainMode, LayerHost, MarqueeSelection, ScrollablePane, ScrollbarVisibility, SelectionMode, ShimmeredDetailsList } from '@fluentui/react'
 import React, { FC } from 'react'
 import { onRenderItemColumn } from './ItemColumn'
 import { IListProps } from './types'
 import { useAddColumn } from './useAddColumn'
+import { onRenderDetailsHeader } from './ListHeader'
 
 /**
  * List component using `ShimmeredDetailsList` from `@fluentui/react`.
@@ -22,21 +23,33 @@ import { useAddColumn } from './useAddColumn'
 export const List: FC<IListProps> = (props) => {
   const { addColumn } = useAddColumn(props.isAddColumnEnabled)
   return (
-    <ShimmeredDetailsList
-      {...props}
-      columns={[...props.columns, addColumn].filter(Boolean)}
-      onRenderItemColumn={onRenderItemColumn(props)}
-      isPlaceholderData={props.enableShimmer}
-    />
+    <ScrollablePane {...props.scrollablePane} >
+      <MarqueeSelection selection={props.selection}>
+        <ShimmeredDetailsList
+          {...props}
+          columns={[...props.columns, addColumn]}
+          onRenderItemColumn={onRenderItemColumn(props)}
+          onRenderDetailsHeader={onRenderDetailsHeader(props)}
+        />
+      </MarqueeSelection>
+      {props.layerHostId && <LayerHost id={props.layerHostId} />}
+    </ScrollablePane>
   )
 }
 
 List.defaultProps = {
   compact: false,
   isAddColumnEnabled: false,
-  selectionMode: SelectionMode.none,
+  selectionMode: SelectionMode.multiple,
   constrainMode: ConstrainMode.unconstrained,
-  renderTitleProjectInformationPanel: false
+  scrollablePane: {
+    scrollbarVisibility: ScrollbarVisibility.auto,
+    styles: {
+      root: {
+        top: 75
+      }
+    }
+  }
 }
 
 export * from './ItemColumn'
