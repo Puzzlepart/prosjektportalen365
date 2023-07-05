@@ -1,15 +1,17 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { ItemUpdateResult, SearchResult, SortDirection } from '@pnp/sp'
-import { IProjectContentColumn } from 'pp365-shared-library'
 import {
   DataSource,
+  DataSourceService,
+  PortalDataService,
   PortfolioOverviewView,
+  ProjectContentColumn,
   ProjectListModel,
   SPProjectColumnItem,
+  SPProjectContentColumnItem,
   TimelineConfigurationModel,
   TimelineContentModel
-} from 'pp365-shared-library/lib/models'
-import { DataSourceService, PortalDataService } from 'pp365-shared-library/lib/services'
+} from 'pp365-shared-library'
 import { IPortfolioAggregationConfiguration, IPortfolioOverviewConfiguration } from '../components'
 
 export interface IFetchDataForViewItemResult extends SearchResult {
@@ -272,7 +274,7 @@ export interface IPortfolioWebPartsDataAdapter {
    *
    * @param category Category for data source
    */
-  fetchProjectContentColumns?(dataSourceCategory: string): Promise<IProjectContentColumn[]>
+  fetchProjectContentColumns?(dataSourceCategory: string): Promise<ProjectContentColumn[]>
 
   /**
    * Update project content column with new values for properties `GtColMinWidth` and `GtColMaxWidth`,
@@ -282,12 +284,7 @@ export interface IPortfolioWebPartsDataAdapter {
    * @param persistRenderAs Persist render as property
    */
   updateProjectContentColumn?(
-    column: {
-      id: number
-      minWidth?: number
-      maxWidth?: number
-      renderAs?: string
-    },
+    columnItem: SPProjectContentColumnItem,
     persistRenderAs?: boolean
   ): Promise<any>
 

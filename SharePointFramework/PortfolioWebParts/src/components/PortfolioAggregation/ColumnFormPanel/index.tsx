@@ -109,14 +109,12 @@ export const ColumnFormPanel: FC = () => {
           setColumnData('dataTypeProperties', dataTypeProperties)
         }
       >
-        {!isEditing && (
-          <Checkbox
-            label={strings.ColumnRenderPersistGloballyLabel}
-            defaultChecked={persistRenderAs}
-            onChange={(_, checked) => setPersistRenderAs(checked)}
-            styles={{ root: { margin: '10px 0 15px 0' } }}
-          />
-        )}
+        <Checkbox
+          label={strings.ColumnRenderPersistGloballyLabel}
+          defaultChecked={persistRenderAs}
+          onChange={(_, checked) => setPersistRenderAs(checked)}
+          styles={{ root: { margin: '10px 0 15px 0' } }}
+        />
       </ColumnRenderField>
       <div className={styles.footer}>
         <PrimaryButton

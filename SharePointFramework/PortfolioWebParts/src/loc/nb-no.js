@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    ColumnRenderOptionTagsValueSeparatorLabel: 'Separator for verdier',
+    ColumnRenderOptionTagsValueSeparatorDescription: 'Angi et tegn som skal brukes for å skille verdier i etikettfeltet. Standard er semikolon.',
     ColumnRenderOptionDateIncludeTimeLabel: 'Inkluder tidspunkt',
     ColumnRenderOptionUrlDescriptionDescription: 'Beskrivelse av lenken. Om du ikke angir en verdi, brukes eventuelt beskrivelse fra lenken.',
     ColumnRenderOptionUrlDescriptionLabel: 'Beskrivelse',

@@ -9,7 +9,7 @@ import {
   IPortfolioAggregationProps,
   IPortfolioAggregationState,
   PortfolioAggregationErrorMessage
-} from './types'
+} from '../types'
 import _ from 'lodash'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { parseUrlHash, setUrlHash } from 'pp365-shared-library/lib/util'
@@ -17,7 +17,7 @@ import { Target, IGroup, MessageBarType } from '@fluentui/react'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { arrayMove } from 'pp365-shared-library/lib/helpers/arrayMove'
 import { IProjectContentColumn } from 'pp365-shared-library'
-import { IColumnFormPanel } from './ColumnFormPanel/types'
+import { IColumnFormPanel } from '../ColumnFormPanel/types'
 
 /**
  * `DATA_FETCHED`: Fetching data from the data source.
@@ -243,7 +243,10 @@ const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
                 internalName: payCol.internalName,
                 minWidth: payCol.minWidth,
                 dataType: payCol.dataType,
-                data: { renderAs }
+                data: { 
+                  ...col.data,
+                  renderAs
+                 }
               }
             } else return col
           })

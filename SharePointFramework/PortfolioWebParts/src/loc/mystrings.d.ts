@@ -1,4 +1,6 @@
 declare interface IPortfolioWebPartsStrings {
+  ColumnRenderOptionTagsValueSeparatorLabel: string
+  ColumnRenderOptionTagsValueSeparatorDescription: string
   ColumnRenderOptionDateIncludeTimeLabel: string
   ColumnRenderOptionUrlDescriptionDescription: string
   ColumnRenderOptionUrlDescriptionLabel: string

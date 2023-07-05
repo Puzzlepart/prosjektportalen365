@@ -47,7 +47,8 @@ export function useColumnFormPanel() {
                   fieldName: column.get('fieldName'),
                   name: column.get('name'),
                   minWidth: column.get('minWidth'),
-                  maxWidth: column.get('maxWidth')
+                  maxWidth: column.get('maxWidth'),
+                  data: column.get('data')
                 }
               })
             )
@@ -70,7 +71,8 @@ export function useColumnFormPanel() {
                       key: column.get('fieldName'),
                       fieldName: column.get('fieldName'),
                       name: column.get('name'),
-                      minWidth: column.get('minWidth')
+                      minWidth: column.get('minWidth'),
+                      data: column.get('data')
                     }
                   })
                 )

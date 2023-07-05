@@ -15,7 +15,7 @@ import {
   TOGGLE_COLUMN_FORM_PANEL,
   TOGGLE_EDIT_VIEW_COLUMNS_PANEL
 } from '../reducer'
-import { useAddColumn } from '../useAddColumn'
+import { useAddColumn } from '../../List'
 
 /**
  * Hook for the column header context menu. Handles the logic for the context menu. Creates a context menu

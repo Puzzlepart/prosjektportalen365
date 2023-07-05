@@ -1,18 +1,20 @@
 /* eslint-disable max-classes-per-file */
+import { tryParseJson } from '../helpers'
 import { IProjectContentColumn } from '../interfaces/IProjectContentColumn'
 import { SearchValueType } from '../types/SearchValueType'
 
 export class SPProjectContentColumnItem {
   public Id?: number = 0
-  public Title: string = ''
+  public Title?: string = ''
   public GtSortOrder?: number = 0
   public GtInternalName?: string = ''
   public GtManagedProperty?: string = ''
   public GtFieldDataType?: string = ''
-  public GtColMinWidth: number = 0
+  public GtColMinWidth?: number = 0
   public GtColMaxWidth?: number = 0
   public GtIsGroupable?: boolean = false
   public GtDataSourceCategory?: string = ''
+  public GtFieldDataTypeProperties?: string = ''
 }
 
 export class ProjectContentColumn implements IProjectContentColumn {
@@ -51,7 +53,8 @@ export class ProjectContentColumn implements IProjectContentColumn {
     this.maxWidth = item?.GtColMaxWidth
     this.searchType = this._getSearchType()
     this.data = {
-      isGroupable: this.isGroupable
+      isGroupable: this.isGroupable,
+      dataTypeProperties: tryParseJson(item?.GtFieldDataTypeProperties, {})
     }
     this.$map = this._toMap()
   }

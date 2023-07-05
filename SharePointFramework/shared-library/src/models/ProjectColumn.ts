@@ -5,6 +5,7 @@ import { IProjectColumn } from '../interfaces/IProjectColumn'
 import { SearchValueType } from '../types/SearchValueType'
 import { ProjectColumnConfig, ProjectColumnConfigDictionary } from './ProjectColumnConfig'
 import { tryParseJson } from '../helpers'
+import { ColumnDataType } from '../types'
 
 export class SPProjectColumnItem {
   public Id?: number = 0
@@ -45,7 +46,7 @@ export class ProjectColumn implements IProjectColumn {
   public sortOrder?: number
   public internalName?: string
   public iconName?: string
-  public dataType?: string
+  public dataType?: ColumnDataType
   public searchType?: SearchValueType
   public isRefinable?: boolean
   public isGroupable?: boolean
@@ -66,7 +67,9 @@ export class ProjectColumn implements IProjectColumn {
     this.name = item?.Title
     this.sortOrder = item?.GtSortOrder
     this.internalName = item?.GtInternalName
-    this.dataType = item?.GtFieldDataType ? item?.GtFieldDataType.toLowerCase() : 'text'
+    this.dataType = (
+      item?.GtFieldDataType ? item?.GtFieldDataType.toLowerCase() : 'text'
+    ) as ColumnDataType
     this.isRefinable = item?.GtIsRefinable
     this.isGroupable = item?.GtIsGroupable
     this.isResizable = true

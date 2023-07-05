@@ -12,7 +12,6 @@ import {
 } from '@pnp/sp'
 import { SearchQueryInit } from '@pnp/sp/src/search'
 import * as cleanDeep from 'clean-deep'
-import { capitalize } from 'lodash'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
 import {
@@ -47,12 +46,12 @@ import {
   ProgramItem,
   SPChartConfigurationItem
 } from '../models'
-import {
-  IPortfolioWebPartsDataAdapter,
-  IFetchDataForViewItemResult,
-  IPortfolioViewData
-} from './types'
 import * as config from './config'
+import {
+  IFetchDataForViewItemResult,
+  IPortfolioViewData,
+  IPortfolioWebPartsDataAdapter
+} from './types'
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -804,24 +803,21 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   public async updateProjectContentColumn(
-    column: {
-      id: number
-      minWidth?: number
-      maxWidth?: number
-      renderAs?: string
-    },
+    columnItem: SPProjectContentColumnItem,
     persistRenderAs = false
   ): Promise<any> {
     try {
       const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
-      const properties: Partial<SPProjectContentColumnItem> = {
-        GtColMinWidth: column.minWidth,
-        GtColMaxWidth: column.maxWidth
-      }
-      if (persistRenderAs) {
-        properties.GtFieldDataType = capitalize(column.renderAs).split('_').join(' ')
-      }
-      return await list.items.getById(column.id).update(properties)
+      const properties: SPProjectContentColumnItem = _.pick(
+        columnItem,
+        [
+          'GtColMinWidth',
+          'GtColMaxWidth',
+          persistRenderAs && 'GtFieldDataTypeProperties',
+          persistRenderAs && 'GtFieldDataType'
+        ].filter(Boolean)
+      )
+      return await list.items.getById(columnItem.Id).update(properties)
     } catch (error) {
       throw new Error(error)
     }
