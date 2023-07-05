@@ -37,8 +37,8 @@ import {
 } from './types'
 
 export class PortalDataService {
-  private _configuration: IPortalDataServiceConfiguration
-  private _isConfigured: boolean = false
+  #configuration: IPortalDataServiceConfiguration
+  #isConfigured: boolean = false
   public web: Web
   public url: string
 
@@ -50,11 +50,11 @@ export class PortalDataService {
   public async configure(
     configuration: IPortalDataServiceConfiguration
   ): Promise<PortalDataService> {
-    this._configuration = { ...PortalDataServiceDefaultConfiguration, ...configuration }
+    this.#configuration = { ...PortalDataServiceDefaultConfiguration, ...configuration }
     const hubSite = await this.getHubSite()
     this.web = hubSite.web
     this.url = hubSite.url
-    this._isConfigured = true
+    this.#isConfigured = true
     return this
   }
 
@@ -62,7 +62,7 @@ export class PortalDataService {
    * Returns `true` if the PortalDataService is configured, `false` otherwise.
    */
   public get isConfigured(): boolean {
-    return this._isConfigured
+    return this.#isConfigured
   }
 
   /**
@@ -72,11 +72,11 @@ export class PortalDataService {
    */
   private async getHubSite(expire: Date = dateAdd(new Date(), 'year', 1)): Promise<IHubSite> {
     try {
-      const hubSiteId = this._configuration.pageContext.legacyPageContext.hubSiteId || ''
+      const hubSiteId = this.#configuration.pageContext.legacyPageContext.hubSiteId || ''
       try {
         const { SiteUrl } = await (
           await fetch(
-            `${this._configuration.pageContext.web.absoluteUrl}/_api/HubSites/GetById('${hubSiteId}')`,
+            `${this.#configuration.pageContext.web.absoluteUrl}/_api/HubSites/GetById('${hubSiteId}')`,
             {
               method: 'GET',
               headers: {
@@ -121,7 +121,7 @@ export class PortalDataService {
   ): Promise<T[]> {
     try {
       const projectItems = await this.getItems(
-        this._configuration.listNames.PROJECTS,
+        this.#configuration.listNames.PROJECTS,
         constructor,
         {
           ViewXml: `<View>
@@ -156,7 +156,7 @@ export class PortalDataService {
   public async getPrograms<T>(constructor: new (item: any, web: Web) => T): Promise<T[]> {
     try {
       const items = await this.getItems(
-        this._configuration.listNames.PROJECTS,
+        this.#configuration.listNames.PROJECTS,
         constructor,
         {
           ViewXml: `<View>
@@ -291,7 +291,7 @@ export class PortalDataService {
    * Get portfolio overview views. Returns all shared views and personal views.
    */
   public async getPortfolioOverviewViews(): Promise<PortfolioOverviewView[]> {
-    const filter = `GtPortfolioIsPersonalView eq 0 or (GtPortfolioIsPersonalView eq 1 and Author/EMail eq '${this._configuration.pageContext.user.email}')`
+    const filter = `GtPortfolioIsPersonalView eq 0 or (GtPortfolioIsPersonalView eq 1 and Author/EMail eq '${this.#configuration.pageContext.user.email}')`
     const spItems = await this._getList('PORTFOLIO_VIEWS')
       .items.select(...getClassProperties(SPPortfolioOverviewViewItem))
       .filter(filter)
@@ -408,7 +408,7 @@ export class PortalDataService {
           fieldToCreate.updateAndPushChanges(true)
         }
         await executeQuery(jsomContext)
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       Logger.log({
@@ -418,13 +418,13 @@ export class PortalDataService {
       const templateParametersField = spList
         .get_fields()
         .addFieldAsXml(
-          this._configuration.templateParametersFieldXml,
+          this.#configuration.templateParametersFieldXml,
           false,
           SP.AddFieldOptions.addToDefaultContentType
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch {}
+    } catch { }
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }
@@ -592,9 +592,9 @@ export class PortalDataService {
     publishedString,
     useCaching = true
   }: GetStatusReportsOptions): Promise<StatusReport[]> {
-    if (!this._configuration.pageContext) throw 'Property {pageContext} is not the configuration.'
+    if (!this.#configuration.pageContext) throw 'Property {pageContext} is not the configuration.'
     if (stringIsNullOrEmpty(filter))
-      filter = `GtSiteId eq '${this._configuration.pageContext.site.id.toString()}'`
+      filter = `GtSiteId eq '${this.#configuration.pageContext.site.id.toString()}'`
     try {
       const list = this._getList('PROJECT_STATUS')
       let items = list.items
@@ -664,7 +664,7 @@ export class PortalDataService {
     web: Web = this.web
   ): Promise<SPField[]> {
     let fields = web.lists
-      .getByTitle(this._configuration.listNames[list] || list)
+      .getByTitle(this.#configuration.listNames[list] || list)
       .fields.select(...getClassProperties(SPField))
     if (filter) {
       fields = fields.filter(filter)
@@ -677,7 +677,7 @@ export class PortalDataService {
    */
   public async getProjectAdminRoles(): Promise<ProjectAdminRole[]> {
     const spItems = await this.web.lists
-      .getByTitle(this._configuration.listNames.PROJECT_ADMIN_ROLES)
+      .getByTitle(this.#configuration.listNames.PROJECT_ADMIN_ROLES)
       .items.select(
         'ContentTypeId',
         'Id',
@@ -698,6 +698,6 @@ export class PortalDataService {
    * @param list List to get items from
    */
   private _getList(list: PortalDataServiceList): List {
-    return this.web.lists.getByTitle(this._configuration.listNames[list])
+    return this.web.lists.getByTitle(this.#configuration.listNames[list])
   }
 }
