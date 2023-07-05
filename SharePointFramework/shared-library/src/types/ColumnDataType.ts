@@ -9,5 +9,5 @@ export type ColumnDataType =
   | 'note'
   | 'trend'
   | 'modal'
-  | 'filename_with_icon'
+  | 'filename'
   | 'list'
