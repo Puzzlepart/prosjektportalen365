@@ -52,6 +52,6 @@ export function useEditViewColumnsPanel(
     isOpen: context.state.isEditViewColumnsPanelOpen,
     columns: columnsWithSelectedState,
     onSave: onSaveViewColumns,
-    onDismiss: () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false })),
+    onDismiss: () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false }))
   } as IEditViewColumnsPanelProps
 }

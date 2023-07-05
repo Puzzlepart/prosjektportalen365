@@ -35,7 +35,10 @@ export function useColumnContextMenu(): IContextualMenuProps {
   const context = useContext(PortfolioOverviewContext)
   if (!context.state.columnContextMenu) return null
   const { column, target } = context.state.columnContextMenu
-  const { isAddColumn, createContextualMenuItems } = useAddColumn(true, context.props.pageContext.legacyPageContext.isSiteAdmin)
+  const { isAddColumn, createContextualMenuItems } = useAddColumn(
+    true,
+    context.props.pageContext.legacyPageContext.isSiteAdmin
+  )
   const columnContextMenu: IContextualMenuProps = {
     target,
     items: []
@@ -71,13 +74,13 @@ export function useColumnContextMenu(): IContextualMenuProps {
         onClick: () => context.dispatch(SET_SORT({ column, isSortedDescending: false }))
       },
       !_.isEmpty(columnCustomSorts) &&
-      ({
-        key: 'CUSTOM_SORTS_HEADER',
-        text: strings.CustomSortsText,
-        subMenuProps: {
-          items: columnCustomSorts
-        }
-      } as IContextualMenuItem),
+        ({
+          key: 'CUSTOM_SORTS_HEADER',
+          text: strings.CustomSortsText,
+          subMenuProps: {
+            items: columnCustomSorts
+          }
+        } as IContextualMenuItem),
       {
         key: 'DIVIDER_01',
         itemType: ContextualMenuItemType.Divider

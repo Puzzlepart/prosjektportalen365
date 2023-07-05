@@ -6,6 +6,8 @@ export interface IProjectContentColumn extends IColumn {
   sortOrder?: number
   dataType?: string
   data?: {
+    isGroupable?: boolean
     isSelected?: boolean
+    renderAs?: string
   }
 }

@@ -21,14 +21,16 @@ import {
   TOGGLE_FILTER_PANEL
 } from './reducer'
 import SearchBox from './SearchBox'
-import { IPortfolioAggregationProps, addColumn } from './types'
+import { IPortfolioAggregationProps } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
 import { FilterPanel } from 'pp365-shared-library/lib/components/FilterPanel'
 import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
+import { useAddColumn } from '../PortfolioOverview/useAddColumn'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
   const { state, dispatch, items, layerHostId, context, editViewColumnsPanelProps } =
     usePortfolioAggregation(props)
+  const { addColumn } = useAddColumn(!props.lockedColumns && !props.isParentProject)
 
   if (state.error) {
     return (
@@ -66,11 +68,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
                 })
               )
             }}
-            columns={[
-              ...getDefaultColumns(props),
-              ...items.columns,
-              !props.lockedColumns && !props.isParentProject && addColumn
-            ].filter((c) => c)}
+            columns={[...getDefaultColumns(props), ...items.columns, addColumn].filter(Boolean)}
             groups={state.groups}
             compact={state.isCompact}
             groupProps={{

@@ -166,13 +166,13 @@ export const ColumnFormPanel: FC = () => {
         <Dropdown
           label={strings.ColumnRenderLabel}
           options={renderOptions}
-          defaultSelectedKey={column.data?.renderAs || 'text'}
+          defaultSelectedKey={column.data?.renderAs ?? 'text'}
           onChange={(_, opt) =>
             setColumn({
               ...column,
               data: {
                 ...column.data,
-                renderAs: opt.key
+                renderAs: opt.key as string
               }
             })
           }
