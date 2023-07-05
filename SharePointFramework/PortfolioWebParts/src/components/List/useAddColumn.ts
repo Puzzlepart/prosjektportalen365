@@ -24,7 +24,7 @@ export function useAddColumn(
     name: strings.ToggleColumnFormPanelLabel,
     iconName: 'CalculatorAddition',
     iconClassName: styles.addColumnIcon,
-    minWidth: 175,
+    minWidth: 175
   }
 
   /**
