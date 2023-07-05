@@ -1,33 +1,38 @@
 import {
-  ConstrainMode,
-  DetailsListLayoutMode,
   LayerHost,
   MarqueeSelection,
   ScrollablePane,
   ScrollbarVisibility,
-  SelectionMode,
-  ShimmeredDetailsList
+  SelectionMode
 } from '@fluentui/react'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import React, { FC } from 'react'
+import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
+import { List } from '../List'
 import { ColumnContextMenu } from './ColumnContextMenu'
 import { ColumnFormPanel } from './ColumnFormPanel'
+import { Commands } from './Commands'
 import { ListHeader, onRenderDetailsHeader } from './ListHeader'
 import styles from './PortfolioOverview.module.scss'
-import { Commands } from './Commands'
-import { onRenderItemColumn } from './RenderItemColumn'
-import { PortfolioOverviewContext } from './context'
-import { IPortfolioOverviewProps, addColumn } from './types'
-import { usePortfolioOverview } from './usePortfolioOverview'
-import { EditViewColumnsPanel } from './EditViewColumnsPanel'
 import { ViewFormPanel } from './ViewFormPanel'
+import { PortfolioOverviewContext } from './context'
+import { IPortfolioOverviewProps } from './types'
+import { usePortfolioOverview } from './usePortfolioOverview'
 
 /**
  * Component for displaying a portfolio overview - an overview of all projects in a portfolio.
  */
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
-  const { state, contextValue, selection, onColumnHeaderContextMenu, items, columns, groups } =
-    usePortfolioOverview(props)
+  const {
+    state,
+    contextValue,
+    selection,
+    onColumnHeaderContextMenu,
+    editViewColumnsPanelProps,
+    items,
+    columns,
+    groups
+  } = usePortfolioOverview(props)
 
   return (
     <div className={styles.root}>
@@ -53,19 +58,16 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
               styles={{ root: { top: 75 } }}
             >
               <MarqueeSelection selection={selection}>
-                <ShimmeredDetailsList
+                <List
                   enableShimmer={state.loading || !!state.isChangingView}
-                  isPlaceholderData={state.loading || !!state.isChangingView}
                   items={items}
-                  constrainMode={ConstrainMode.unconstrained}
-                  layoutMode={DetailsListLayoutMode.fixedColumns}
-                  columns={[...columns, !props.isParentProject && addColumn].filter(Boolean)}
+                  columns={columns}
                   groups={groups}
+                  isAddColumnEnabled={!props.isParentProject}
                   selectionMode={SelectionMode.multiple}
                   selection={selection}
                   setKey='multiple'
                   onRenderDetailsHeader={onRenderDetailsHeader}
-                  onRenderItemColumn={onRenderItemColumn(props)}
                   onColumnHeaderClick={(event, column) =>
                     onColumnHeaderContextMenu({ column, event })
                   }
@@ -81,7 +83,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
         </div>
         <ColumnContextMenu />
         <ColumnFormPanel />
-        <EditViewColumnsPanel />
+        <EditViewColumnsPanel {...editViewColumnsPanelProps} />
         <ViewFormPanel />
       </PortfolioOverviewContext.Provider>
     </div>
@@ -89,7 +91,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
 }
 
 export {
+  IPortfolioOverviewConfiguration,
   IPortfolioOverviewProps,
-  IPortfolioOverviewState,
-  IPortfolioOverviewConfiguration
+  IPortfolioOverviewState
 } from './types'

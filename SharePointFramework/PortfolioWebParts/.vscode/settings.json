@@ -6,6 +6,7 @@
     "**/coverage": true,
     "**/lib-amd": true,
     "src/**/*.scss.ts": true,
+    "src/**/*.bak": true,
     "dist": true,
     "lib": true,
     "sharepoint": true,

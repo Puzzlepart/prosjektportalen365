@@ -12,7 +12,6 @@ import {
 } from '@pnp/sp'
 import { SearchQueryInit } from '@pnp/sp/src/search'
 import * as cleanDeep from 'clean-deep'
-import { capitalize } from 'lodash'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
 import {
@@ -27,6 +26,7 @@ import {
   ProjectContentColumn,
   ProjectListModel,
   SPContentType,
+  SPDataSourceItem,
   SPProjectColumnItem,
   SPProjectContentColumnItem,
   SPTimelineConfigurationItem,
@@ -47,12 +47,12 @@ import {
   ProgramItem,
   SPChartConfigurationItem
 } from '../models'
-import {
-  IPortfolioWebPartsDataAdapter,
-  IFetchDataForViewItemResult,
-  IPortfolioViewData
-} from './types'
 import * as config from './config'
+import {
+  IFetchDataForViewItemResult,
+  IPortfolioViewData,
+  IPortfolioWebPartsDataAdapter
+} from './types'
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -748,7 +748,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       if (!dataSrc) {
         throw new Error(format(strings.DataSourceNotFound, dataSourceName))
       }
-      const dataSrcProperties = dataSrc.projectColumns.map((col) => col.fieldName) || []
+      const dataSrcProperties = dataSrc.columns.map((col) => col.fieldName) || []
       if (dataSrc.category.startsWith('Gevinstoversikt')) {
         items = await this.fetchBenefitItemsWithSource(dataSrc, [
           ...selectProperties,
@@ -778,9 +778,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  public async fetchProjectContentColumns(
-    dataSourceCategory: string
-  ): Promise<ProjectContentColumn[]> {
+  public async fetchProjectContentColumns(dataSourceCategory: string) {
     try {
       if (stringIsNullOrEmpty(dataSourceCategory)) return []
       const projectContentColumnsList = this.portalDataService.web.lists.getByTitle(
@@ -804,19 +802,21 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   public async updateProjectContentColumn(
-    column: ProjectContentColumn,
+    columnItem: SPProjectContentColumnItem,
     persistRenderAs = false
   ): Promise<any> {
     try {
       const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
-      const properties: Partial<SPProjectContentColumnItem> = {
-        GtColMinWidth: column.minWidth,
-        GtColMaxWidth: column.maxWidth
-      }
-      if (persistRenderAs) {
-        properties.GtFieldDataType = capitalize(column.data.renderAs).split('_').join(' ')
-      }
-      return await list.items.getById(column.id).update(properties)
+      const properties: SPProjectContentColumnItem = _.pick(
+        columnItem,
+        [
+          'GtColMinWidth',
+          'GtColMaxWidth',
+          persistRenderAs && 'GtFieldDataTypeProperties',
+          persistRenderAs && 'GtFieldDataType'
+        ].filter(Boolean)
+      )
+      return await list.items.getById(columnItem.Id).update(properties)
     } catch (error) {
       throw new Error(error)
     }
@@ -883,7 +883,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     try {
       const projectColumnsList = sp.web.lists.getByTitle(strings.ProjectColumnsListName)
       const portfolioViewsList = sp.web.lists.getByTitle(strings.PortfolioViewsListName)
-      const column = await projectColumnsList.items.add(properties)
+      const column = await projectColumnsList.items.add(_.omit(properties, ['Id']))
       portfolioViewsList.items.getById(view.id as any).update({
         GtPortfolioColumnsId: {
           results: [...view.columns.map((c) => c.id), column.data.Id]
@@ -896,7 +896,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   public async updateDataSourceItem(
-    properties: Record<string, any>,
+    properties: SPDataSourceItem,
     dataSourceTitle: string,
     shouldReplace: boolean = false
   ): Promise<ItemUpdateResult> {
@@ -914,15 +914,12 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           results: [...item.GtProjectContentColumnsId, properties.GtProjectContentColumnsId]
         }
 
-        const itemUpdateResult = await list.items.getById(item.Id).update(properties)
-        return itemUpdateResult
+        return await list.items.getById(item.Id).update(properties)
       } else {
         properties.GtProjectContentColumnsId = {
-          results: properties.GtProjectContentColumnsId
+          results: properties.GtProjectContentColumnsId as number[]
         }
-
-        const itemUpdateResult = await list.items.getById(item.Id).update(properties)
-        return itemUpdateResult
+        return await list.items.getById(item.Id).update(properties)
       }
     } catch (error) {
       throw new Error(error)

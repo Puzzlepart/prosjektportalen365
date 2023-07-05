@@ -1,4 +1,11 @@
 declare interface IPortfolioWebPartsStrings {
+  ColumnPersistRenderGloballyFieldDescription: string
+  ColumnRenderOptionTrendShowTrendIconLabel: string
+  ColumnRenderOptionModalLinkTextLabel: string
+  ConfirmDeleteProjectContentColumnTitle: string
+  ConfirmDeleteProjectContentColumnSubText: string
+  ColumnRenderOptionTagsValueSeparatorLabel: string
+  ColumnRenderOptionTagsValueSeparatorDescription: string
   ColumnRenderOptionDateIncludeTimeLabel: string
   ColumnRenderOptionUrlDescriptionDescription: string
   ColumnRenderOptionUrlDescriptionLabel: string
@@ -30,8 +37,8 @@ declare interface IPortfolioWebPartsStrings {
   PortfolioOverviewShowEditViewColumnsPanelHelpText: string
   RevertCustomOrderButtonTooltip: string
   RevertCustomOrderButtonText: string
-  ConfirmDeleteTitle: string
-  ConfirmDeleteSubText: string
+  ConfirmDeleteProjectColumnTitle: string
+  ConfirmDeleteProjectColumnSubText: string
   ConfirmDeleteResponseConfirm: string
   ConfirmDeleteResponseAbort: string
   AddToCurrentViewLabel: string
@@ -86,7 +93,7 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionTaxonomy: string
   ColumnRenderOptionModal: string
   ColumnRenderOptionFilenameWithIcon: string
-  ColumnRenderPersistGloballyLabel: string
+  ColumnPersistRenderGloballyFieldLabel: string
   DataSourceGroupName: string
   CommandBarGroupName: string
   SearchBoxGroupName: string
@@ -269,7 +276,7 @@ declare interface IPortfolioWebPartsStrings {
   ProjectContentColumnItemNotFound: string
   ToggleEditViewColumnsLabel: string
   ShowHideColumnsLabel: string
-  ShowEditViewColumnsPanelHelpText: string
+  EditViewColumnsPanelHelpText: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

@@ -9,6 +9,7 @@ import createReducer, {
   getInitialState
 } from './reducer'
 import { IPortfolioOverviewProps } from './types'
+import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 import { useFetchData } from './useFetchData'
 import { useFilteredData } from './useFilteredData'
 import { usePersistedColumns } from './usePersistedColumns'
@@ -59,11 +60,14 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
 
   const { items, columns, groups } = useFilteredData(props, state)
 
+  const editViewColumnsPanelProps = useEditViewColumnsPanel(contextValue)
+
   return {
     state,
     contextValue,
     selection,
     onColumnHeaderContextMenu,
+    editViewColumnsPanelProps,
     items,
     columns,
     groups

@@ -20,15 +20,15 @@ import {
   DataSource,
   DataSourceService,
   IGraphGroup,
-  IProjectContentColumn,
   ISPDataAdapterBaseConfiguration,
   ISPProjectItem,
   ISPUser,
   PortfolioOverviewView,
-  ProjectColumn,
+  ProjectContentColumn,
   ProjectDataService,
   ProjectListModel,
   SPDataAdapterBase,
+  SPProjectContentColumnItem,
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-shared-library'
@@ -722,7 +722,7 @@ export class SPDataAdapter
     const dataSrc = await this.dataSourceService.getByName(name)
     if (!dataSrc) throw new Error(format(strings.DataSourceNotFound, name))
     try {
-      const dataSrcProperties = dataSrc.projectColumns.map((col) => col.fieldName) || []
+      const dataSrcProperties = dataSrc.columns.map((col) => col.fieldName) || []
       if (dataSrc.category.startsWith('Gevinstoversikt')) {
         items = await this.fetchBenefitItemsWithSource(dataSrc, [
           ...selectProperties,
@@ -749,28 +749,24 @@ export class SPDataAdapter
     }
   }
 
-  public async fetchProjectContentColumns(
-    dataSourceCategory: string
-  ): Promise<IProjectContentColumn[]> {
+  public async fetchProjectContentColumns(dataSourceCategory: string) {
     try {
       if (stringIsNullOrEmpty(dataSourceCategory)) return []
       const projectContentColumnsList = this.portal.web.lists.getByTitle(
         strings.ProjectContentColumnsListName
       )
-      const projectContentColumnsListItems = await projectContentColumnsList.items.get()
-      const filteredItems = projectContentColumnsListItems
-        .filter(
-          (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
-        )
-        .map((item) => {
-          const projectColumn = new ProjectColumn(item)
-          const renderAs = (projectColumn.dataType ? projectColumn.dataType.toLowerCase() : 'text')
-            .split(' ')
-            .join('_')
-          projectColumn['data'] = { renderAs }
-          return projectColumn
-        })
-      return filteredItems
+      const columnItems = await projectContentColumnsList.items
+        .select(...Object.keys(new SPProjectContentColumnItem()))
+        .usingCaching()
+        .get<SPProjectContentColumnItem[]>()
+      const filteredColumnItems = columnItems.filter(
+        (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
+      )
+      return filteredColumnItems.map((item) => {
+        const col = new ProjectContentColumn(item)
+        const renderAs = (col.dataType ? col.dataType.toLowerCase() : 'text').split(' ').join('_')
+        return col.setData({ renderAs })
+      })
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, dataSourceCategory))
     }

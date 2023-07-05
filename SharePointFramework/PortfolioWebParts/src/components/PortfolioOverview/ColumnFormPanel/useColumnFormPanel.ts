@@ -1,25 +1,12 @@
 import { format } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
+import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import { ProjectColumn, SPProjectColumnItem } from 'pp365-shared-library'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import { COLUMN_DELETED, COLUMN_FORM_PANEL_ON_SAVED, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
-import strings from 'PortfolioWebPartsStrings'
-
-const initialColumn = new Map<string, any>([
-  ['name', ''],
-  ['internalName', ''],
-  ['fieldName', ''],
-  ['sortOrder', 100],
-  ['minWidth', 100],
-  [
-    'data',
-    {
-      visibility: []
-    }
-  ]
-])
+import { useEditableColumn } from './useEditableColumn'
 
 /**
  * Component logic hook for `ColumnFormPanel`. Handles state and dispatches actions to the reducer.
@@ -27,17 +14,8 @@ const initialColumn = new Map<string, any>([
  */
 export function useColumnFormPanel() {
   const context = useContext(PortfolioOverviewContext)
-  const [column, $setColumn] = useState<Map<string, any>>(initialColumn)
+  const { column, setColumn, setColumnData, isEditing } = useEditableColumn()
   const [columnMessages, setColumnMessages] = useState<Map<string, string>>(new Map())
-  const isEditing = !!context.state.columnForm.column
-
-  useEffect(() => {
-    if (isEditing) {
-      $setColumn(context.state.columnForm.column.$map)
-    } else {
-      $setColumn(initialColumn)
-    }
-  }, [context.state.columnForm])
 
   /**
    * Dismisses the form panel by dispatching the `TOGGLE_COLUMN_FORM_PANEL` action.
@@ -83,7 +61,7 @@ export function useColumnFormPanel() {
       )
     } else {
       await context.props.dataAdapter.addColumnToPortfolioView(
-        _.omit(columnItem, ['Id']),
+        columnItem,
         context.state.currentView
       )
     }
@@ -112,38 +90,6 @@ export function useColumnFormPanel() {
         })
       )
     }
-  }
-
-  /**
-   * Sets a property of the column.
-   *
-   * @param key Key of the column to update
-   * @param value Value to update the column with
-   */
-  const setColumn = (key: string, value: any) => {
-    $setColumn((prev) => {
-      const newColumn = new Map(prev)
-      newColumn.set(key, value)
-      return newColumn
-    })
-  }
-
-  /**
-   * Set the data object of the column.
-   *
-   * @param key Key of the data object to update
-   * @param value Value to update the data object with
-   */
-  const setColumnData = (key: string, value: any) => {
-    $setColumn((prev) => {
-      const newColumn = new Map(prev)
-      const data = newColumn.get('data')
-      newColumn.set('data', {
-        ...data,
-        [key]: value
-      })
-      return newColumn
-    })
   }
 
   /**

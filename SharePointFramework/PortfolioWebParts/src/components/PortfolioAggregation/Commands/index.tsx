@@ -22,7 +22,7 @@ export const Commands: FC = () => {
 
   if (props.showExcelExportButton) {
     cmd.items.push({
-      key: 'ExcelExport',
+      key: 'EXCEL_EXPORT',
       name: strings.ExcelExportButtonLabel,
       iconProps: {
         iconName: 'ExcelDocument',
@@ -47,7 +47,7 @@ export const Commands: FC = () => {
   if (!isEmpty(state.dataSources)) {
     cmd.farItems.push(
       {
-        key: 'NewView',
+        key: 'NEW_VIEW',
         name: strings.NewViewText,
         iconProps: { iconName: 'CirclePlus' },
         buttonStyles: { root: { border: 'none' } },
@@ -58,7 +58,7 @@ export const Commands: FC = () => {
         onClick: () => redirect(props.configuration.viewsUrls.defaultNewFormUrl)
       } as IContextualMenuItem,
       {
-        key: 'ViewOptions',
+        key: 'VIEW_OPTIONS',
         name: state.dataSource,
         iconProps: { iconName: 'List' },
         buttonStyles: { root: { border: 'none' } },
@@ -68,7 +68,7 @@ export const Commands: FC = () => {
         subMenuProps: {
           items: [
             {
-              key: 'ViewList',
+              key: 'VIEW_LIST',
               name: 'Liste',
               iconProps: { iconName: 'List' },
               canCheck: true,
@@ -76,7 +76,7 @@ export const Commands: FC = () => {
               onClick: () => dispatch(TOGGLE_COMPACT({ isCompact: false }))
             },
             {
-              key: 'ViewCompact',
+              key: 'VIEW_COMPACT',
               name: 'Kompakt liste',
               iconProps: { iconName: 'AlignLeft' },
               canCheck: true,
@@ -84,11 +84,11 @@ export const Commands: FC = () => {
               onClick: () => dispatch(TOGGLE_COMPACT({ isCompact: true }))
             },
             {
-              key: 'Divider01',
+              key: 'DIVIDER_01',
               itemType: ContextualMenuItemType.Divider
             },
             ...(state.dataSources.map((ds) => ({
-              key: `DataSources_${ds.id}`,
+              key: `DATA_SOURCE_${ds.id}`,
               name: ds.title,
               iconProps: { iconName: ds.iconName || 'DataConnectionLibrary' },
               canCheck: true,
@@ -96,11 +96,11 @@ export const Commands: FC = () => {
               onClick: () => dispatch(SET_DATA_SOURCE({ dataSource: ds }))
             })) as IContextualMenuItem[]),
             {
-              key: 'Divider02',
+              key: 'DIVIDER_02',
               itemType: ContextualMenuItemType.Divider
             },
             {
-              key: 'EditView',
+              key: 'EDIT_VIEW',
               name: strings.EditViewText,
               onClick: () =>
                 redirect(
@@ -111,13 +111,13 @@ export const Commands: FC = () => {
         }
       } as IContextualMenuItem,
       {
-        key: 'Filters',
+        key: 'FILTERS',
         name: '',
         iconProps: { iconName: 'Filter' },
         buttonStyles: { root: { border: 'none' } },
         itemType: ContextualMenuItemType.Normal,
         canCheck: true,
-        checked: state.showFilterPanel,
+        checked: state.isFilterPanelOpen,
         disabled: !props.showFilters,
         data: { isVisible: props.showFilters },
         onClick: (ev) => {

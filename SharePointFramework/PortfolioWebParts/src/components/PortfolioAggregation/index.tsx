@@ -1,18 +1,17 @@
-import {
-  MessageBarType,
-  ShimmeredDetailsList,
-  SelectionMode,
-  DetailsListLayoutMode
-} from '@fluentui/react'
+import { MessageBarType } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
+import { FilterPanel } from 'pp365-shared-library/lib/components/FilterPanel'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import React, { FC } from 'react'
+import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
+import { List } from '../List'
 import { ColumnContextMenu } from './ColumnContextMenu'
 import { ColumnFormPanel } from './ColumnFormPanel'
 import { Commands } from './Commands'
-import { PortfolioAggregationContext } from './context'
-import { getDefaultColumns, renderItemColumn } from './itemColumn'
 import styles from './PortfolioAggregation.module.scss'
+import SearchBox from './SearchBox'
+import { PortfolioAggregationContext } from './context'
+import { getDefaultColumns } from './getDefaultColumns'
 import {
   COLUMN_HEADER_CONTEXT_MENU,
   ON_FILTER_CHANGE,
@@ -20,23 +19,21 @@ import {
   SET_COLLAPSED,
   TOGGLE_FILTER_PANEL
 } from './reducer'
-import SearchBox from './SearchBox'
-import { EditViewColumnsPanel } from './EditViewColumnsPanel'
-import { IPortfolioAggregationProps, addColumn } from './types'
+import { IPortfolioAggregationProps } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
-import { FilterPanel } from 'pp365-shared-library/lib/components/FilterPanel'
+import { ProjectContentColumn } from 'pp365-shared-library'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
-  const { state, dispatch, items, layerHostId, context } = usePortfolioAggregation(props)
+  const { context, items, layerHostId, editViewColumnsPanelProps } = usePortfolioAggregation(props)
 
-  if (state.error) {
+  if (context.state.error) {
     return (
       <div className={styles.root}>
         <div className={styles.header}>
           <div className={styles.title}>{props.title}</div>
         </div>
         <div className={styles.container}>
-          <UserMessage type={MessageBarType.error} text={state.error.message} />
+          <UserMessage type={MessageBarType.error} text={context.state.error.message} />
         </div>
       </div>
     )
@@ -51,49 +48,44 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
         </div>
         <SearchBox />
         <div className={styles.container}>
-          <ShimmeredDetailsList
-            selectionMode={SelectionMode.none}
-            layoutMode={DetailsListLayoutMode.fixedColumns}
-            enableShimmer={state.loading}
+          <List
+            enableShimmer={context.state.loading}
             items={items.listItems}
-            onRenderItemColumn={renderItemColumn}
-            onColumnHeaderClick={(ev, col) => {
-              dispatch(
+            onColumnHeaderClick={(ev, col: ProjectContentColumn) => {
+              context.dispatch(
                 COLUMN_HEADER_CONTEXT_MENU({
                   column: col,
                   target: ev.currentTarget
                 })
               )
             }}
-            columns={[
-              ...getDefaultColumns(props),
-              ...items.columns,
-              !props.lockedColumns && !props.isParentProject && addColumn
-            ].filter((c) => c)}
-            groups={state.groups}
-            compact={state.isCompact}
+            columns={[...getDefaultColumns(props), ...items.columns]}
+            isAddColumnEnabled={!props.lockedColumns && !props.isParentProject}
+            renderTitleProjectInformationPanel={false}
+            groups={context.state.groups}
+            compact={context.state.isCompact}
             groupProps={{
               // TODO: Temporary fix for collapsing groups, the new state handling throws errors
               onToggleCollapseAll: (isAllCollapsed) =>
-                dispatch(SET_ALL_COLLAPSED({ isAllCollapsed })),
+                context.dispatch(SET_ALL_COLLAPSED({ isAllCollapsed })),
               headerProps: {
-                onToggleCollapse: (group) => dispatch(SET_COLLAPSED({ group }))
+                onToggleCollapse: (group) => context.dispatch(SET_COLLAPSED({ group }))
               }
             }}
           />
         </div>
         <ColumnContextMenu />
         <ColumnFormPanel />
-        <EditViewColumnsPanel />
+        <EditViewColumnsPanel {...editViewColumnsPanelProps} />
         <FilterPanel
-          isOpen={state.showFilterPanel}
+          isOpen={context.state.isFilterPanelOpen}
           layerHostId={layerHostId}
           headerText={strings.FiltersString}
-          onDismiss={() => dispatch(TOGGLE_FILTER_PANEL({ isOpen: false }))}
+          onDismiss={() => context.dispatch(TOGGLE_FILTER_PANEL({ isOpen: false }))}
           isLightDismiss={true}
-          filters={state.filters}
-          onFilterChange={(column, selectedItems) => {
-            dispatch(ON_FILTER_CHANGE({ column, selectedItems }))
+          filters={context.state.filters}
+          onFilterChange={(column: ProjectContentColumn, selectedItems) => {
+            context.dispatch(ON_FILTER_CHANGE({ column, selectedItems }))
           }}
         />
       </div>

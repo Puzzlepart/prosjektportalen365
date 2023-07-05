@@ -3,7 +3,7 @@ import { IUserMessageProps } from './types'
 
 export function useUserMessage(props: IUserMessageProps): { styles: Partial<IMessageBarStyles> } {
   const styles: IStyleFunctionOrObject<IMessageBarStyleProps, IMessageBarStyles> = {
-    root: props.styles['root']
+    root: props.styles ? props.styles['root'] : {}
   }
 
   if (props.fixedCenter) {

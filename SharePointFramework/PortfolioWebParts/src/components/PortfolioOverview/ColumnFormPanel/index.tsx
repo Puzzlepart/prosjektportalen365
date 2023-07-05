@@ -3,11 +3,11 @@ import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
-import { ColumnRenderField } from './ColumnRenderField'
 import { ColumnVisibilityField } from './ColumnVisibilityField'
 import { useColumnFormPanel } from './useColumnFormPanel'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
 import { ColumnSearchPropertyField, FormFieldContainer, UserMessage } from 'pp365-shared-library'
+import { ColumnRenderField } from '../../ColumnRenderField'
 
 export const ColumnFormPanel: FC = () => {
   const context = useContext(PortfolioOverviewContext)
@@ -96,12 +96,11 @@ export const ColumnFormPanel: FC = () => {
         />
       </FormFieldContainer>
       <ColumnRenderField
+        description={strings.PortfolioOverviewColumnRenderDescription}
         defaultSelectedKey={column.get('dataType')}
         onChange={(renderAs) => setColumnData('renderAs', renderAs)}
         dataTypeProperties={column.get('data')?.dataTypeProperties ?? {}}
-        onDataTypePropertiesChange={(dataTypeProperties) =>
-          setColumnData('dataTypeProperties', dataTypeProperties)
-        }
+        onDataTypePropertiesChange={(properties) => setColumnData('dataTypeProperties', properties)}
       />
       <ColumnVisibilityField
         defaultSelectedKeys={column.get('data')?.visibility}

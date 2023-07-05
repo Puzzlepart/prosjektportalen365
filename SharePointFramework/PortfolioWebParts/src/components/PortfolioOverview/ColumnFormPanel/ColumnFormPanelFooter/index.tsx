@@ -31,8 +31,8 @@ export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
           style={{ marginLeft: 4 }}
           onClick={async () => {
             const response = await getConfirmDeleteResponse({
-              title: strings.ConfirmDeleteTitle,
-              subText: strings.ConfirmDeleteSubText,
+              title: strings.ConfirmDeleteProjectColumnTitle,
+              subText: strings.ConfirmDeleteProjectColumnSubText,
               responses: [
                 [strings.ConfirmDeleteResponseConfirm, true, true],
                 [strings.ConfirmDeleteResponseAbort, false, false]

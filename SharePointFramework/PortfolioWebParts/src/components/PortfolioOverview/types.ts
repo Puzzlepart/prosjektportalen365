@@ -1,6 +1,6 @@
-import { IColumn, MessageBarType, Target } from '@fluentui/react'
+import { MessageBarType, Target } from '@fluentui/react'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import strings from 'PortfolioWebPartsStrings'
+import { ProgramItem } from 'models/ProgramItem'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import {
   PortfolioOverviewView,
@@ -9,9 +9,6 @@ import {
 } from 'pp365-shared-library/lib/models'
 import { IBaseComponentProps } from '../types'
 import { IColumnFormPanel } from './ColumnFormPanel/types'
-import { IEditViewColumnsPanel } from './EditViewColumnsPanel/types'
-import { ProgramItem } from 'models/ProgramItem'
-import styles from './PortfolioOverview.module.scss'
 import { IViewFormPanel } from './ViewFormPanel/types'
 
 export class PortfolioOverviewErrorMessage extends Error {
@@ -180,7 +177,7 @@ export interface IPortfolioOverviewState {
   filters?: IFilterProps[]
 
   /**
-   * Current view
+   * Current view selected by the user in the view selector
    */
   currentView?: PortfolioOverviewView
 
@@ -240,9 +237,9 @@ export interface IPortfolioOverviewState {
   viewForm: IViewFormPanel
 
   /**
-   * Edit view columns panel props.
+   * Is edit view columns panel open
    */
-  editViewColumns?: IEditViewColumnsPanel
+  isEditViewColumnsPanelOpen?: boolean
 
   /**
    * Available managed properties for the current search query
@@ -260,13 +257,4 @@ export interface IPortfolioOverviewHashStateState {
    * groupBy found in hash (document.location.hash)
    */
   groupBy?: string
-}
-
-export const addColumn: IColumn = {
-  key: 'AddColumn',
-  fieldName: '',
-  name: strings.ToggleColumnFormPanelLabel,
-  iconName: 'CalculatorAddition',
-  iconClassName: styles.addColumnIcon,
-  minWidth: 175
 }

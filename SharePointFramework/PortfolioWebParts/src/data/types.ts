@@ -1,15 +1,18 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { ItemUpdateResult, SearchResult, SortDirection } from '@pnp/sp'
-import { IProjectContentColumn } from 'pp365-shared-library'
 import {
   DataSource,
+  DataSourceService,
+  PortalDataService,
   PortfolioOverviewView,
+  ProjectContentColumn,
   ProjectListModel,
+  SPDataSourceItem,
   SPProjectColumnItem,
+  SPProjectContentColumnItem,
   TimelineConfigurationModel,
   TimelineContentModel
-} from 'pp365-shared-library/lib/models'
-import { DataSourceService, PortalDataService } from 'pp365-shared-library/lib/services'
+} from 'pp365-shared-library'
 import { IPortfolioAggregationConfiguration, IPortfolioOverviewConfiguration } from '../components'
 
 export interface IFetchDataForViewItemResult extends SearchResult {
@@ -272,7 +275,7 @@ export interface IPortfolioWebPartsDataAdapter {
    *
    * @param category Category for data source
    */
-  fetchProjectContentColumns?(dataSourceCategory: string): Promise<IProjectContentColumn[]>
+  fetchProjectContentColumns?(dataSourceCategory: string): Promise<ProjectContentColumn[]>
 
   /**
    * Update project content column with new values for properties `GtColMinWidth` and `GtColMaxWidth`,
@@ -281,7 +284,10 @@ export interface IPortfolioWebPartsDataAdapter {
    * @param column Project content column
    * @param persistRenderAs Persist render as property
    */
-  updateProjectContentColumn?(column: Record<string, any>, persistRenderAs?: boolean): Promise<any>
+  updateProjectContentColumn?(
+    columnItem: SPProjectContentColumnItem,
+    persistRenderAs?: boolean
+  ): Promise<any>
 
   /**
    * Delete project content column
@@ -293,7 +299,7 @@ export interface IPortfolioWebPartsDataAdapter {
   /**
    * Adds a new column to the project columns list and adds the column to the specified view.
    *
-   * @param properties Properties for the new column
+   * @param properties Properties for the new column (`Id` will be omitted)
    * @param view The view to add the column to
    */
   addColumnToPortfolioView?(
@@ -306,9 +312,10 @@ export interface IPortfolioWebPartsDataAdapter {
    *
    * @param properties Properties
    * @param dataSourceTitle Data source title
+   * @param shouldReplace Should replace the existing columns
    */
   updateDataSourceItem?(
-    properties: Record<string, any>,
+    properties: SPDataSourceItem,
     dataSourceTitle: string,
     shouldReplace?: boolean
   ): Promise<ItemUpdateResult>

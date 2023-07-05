@@ -1,103 +1,108 @@
-import { capitalize } from 'lodash'
+import _ from 'lodash'
 import {
-  IProjectContentColumn,
+  ProjectContentColumn,
   SPDataSourceItem,
   SPProjectContentColumnItem
 } from 'pp365-shared-library'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
-import { ADD_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
-
-const initialColumn: IProjectContentColumn = {
-  key: null,
-  fieldName: '',
-  name: '',
-  minWidth: 100,
-  maxWidth: 150,
-  data: {
-    renderAs: 'text'
-  }
-}
+import { ADD_COLUMN, DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
+import { useEditableColumn } from './useEditableColumn'
 
 /**
  * Component logic hook for ColumnFormPanel. Handles state and dispatches actions to the reducer.
  * Also provides methods for saving and deleting columns.
  */
 export function useColumnFormPanel() {
-  const { state, props, dispatch } = useContext(PortfolioAggregationContext)
-  const [column, setColumn] = useState<IProjectContentColumn>({
-    ...initialColumn,
-    ...(state.editColumn || {})
-  })
-  const [persistRenderAs, setPersistRenderAs] = useState(false)
-  useEffect(() => {
-    if (state.editColumn) {
-      setColumn({
-        minWidth: 100,
-        maxWidth: 150,
-        data: {
-          renderAs: state.editColumn.dataType ?? 'text'
-        },
-        ...state.editColumn
-      })
-    }
-  }, [state.editColumn])
+  const context = useContext(PortfolioAggregationContext)
+  const { column, setColumn, setColumnData, isEditing } = useEditableColumn()
+  const [persistRenderGlobally, setPersistRenderGlobally] = useState(false)
 
   const onSave = async () => {
-    setColumn(initialColumn)
-    if (state.editColumn)
+    const colummData = column.get('data') ?? {}
+    const columnItem: SPProjectContentColumnItem = {
+      Id: column.get('id'),
+      GtSortOrder: column.get('sortOrder'),
+      Title: column.get('name'),
+      GtInternalName: column.get('internalName'),
+      GtManagedProperty: column.get('fieldName'),
+      GtFieldDataType: colummData.renderAs ?? 'Text',
+      GtDataSourceCategory: context.props.title,
+      GtColMinWidth: column.get('minWidth'),
+      GtColMaxWidth: column.get('maxWidth')
+    }
+    if (colummData.dataTypeProperties) {
+      columnItem.GtFieldDataTypeProperties = JSON.stringify(colummData.dataTypeProperties, null, 2)
+    }
+    if (isEditing) {
       await Promise.resolve(
-        props.dataAdapter
-          .updateProjectContentColumn(column, persistRenderAs)
+        context.props.dataAdapter
+          .updateProjectContentColumn(columnItem, persistRenderGlobally)
           .then(() => {
-            dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
-          })
-          .catch((error) => (state.error = error))
-      )
-    else {
-      const properties: SPProjectContentColumnItem = {
-        GtSortOrder: column.sortOrder ?? 100,
-        Title: column.name,
-        GtInternalName: column.internalName,
-        GtManagedProperty: column.fieldName,
-        GtFieldDataType: capitalize(column.data?.renderAs).split('_').join(' '),
-        GtDataSourceCategory: props.title,
-        GtColMinWidth: column.minWidth
-      }
-
-      await Promise.resolve(
-        props.dataAdapter.portalDataService
-          .addItemToList('PROJECT_CONTENT_COLUMNS', properties)
-          .then((result) => {
-            const updateItem: SPDataSourceItem = {
-              GtProjectContentColumnsId: result['Id']
-            }
-            props.dataAdapter
-              .updateDataSourceItem(updateItem, state.dataSource)
-              .then(() => {
-                dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
+            const editedColumn = new ProjectContentColumn(columnItem)
+            context.dispatch(
+              ADD_COLUMN({
+                column: editedColumn
               })
-              .catch((error) => (state.error = error))
+            )
           })
-          .catch((error) => (state.error = error))
+      )
+    } else {
+      await Promise.resolve(
+        context.props.dataAdapter.portalDataService
+          .addItemToList('PROJECT_CONTENT_COLUMNS', _.omit(columnItem, ['Id']))
+          .then((properties) => {
+            const newColumn = new ProjectContentColumn(properties)
+            const updateItem: SPDataSourceItem = {
+              GtProjectContentColumnsId: properties.Id
+            }
+            context.props.dataAdapter
+              .updateDataSourceItem(updateItem, context.state.dataSource)
+              .then(() => {
+                context.dispatch(
+                  ADD_COLUMN({
+                    column: newColumn
+                  })
+                )
+              })
+          })
       )
     }
+  }
+
+  const onDeleteColumn = async () => {
+    await context.props.dataAdapter
+      .deleteProjectContentColumn(context.state.columnForm.column)
+      .then(() => {
+        context.dispatch(DELETE_COLUMN())
+      })
   }
 
   const onDismiss = () => {
-    setColumn(initialColumn)
-    dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
+    context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
   }
 
+  /**
+   * Save is disabled if the column name or field name is less than 2 characters.
+   */
+  const isSaveDisabled = column.get('fieldName').length < 2 || column.get('name').length < 2
+
+  /**
+   * Save is disabled if the column field name is Title
+   */
+  const isDeleteDisabled = context.state.columnForm?.column?.fieldName === 'Title'
+
   return {
-    state,
-    props,
-    dispatch,
     onSave,
+    isSaveDisabled,
+    onDeleteColumn,
+    isDeleteDisabled,
     onDismiss,
     column,
     setColumn,
-    persistRenderAs,
-    setPersistRenderAs
+    setColumnData,
+    persistRenderGlobally,
+    setPersistRenderGlobally,
+    isEditing
   } as const
 }

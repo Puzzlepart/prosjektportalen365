@@ -1,11 +1,10 @@
-import { IColumn, IGroup, IPanelProps, MessageBarType, Target } from '@fluentui/react'
+import { IColumn, IGroup, MessageBarType, Target } from '@fluentui/react'
 import { SearchResult } from '@pnp/sp'
-import strings from 'PortfolioWebPartsStrings'
-import { IProjectContentColumn } from 'pp365-shared-library'
+import { ProjectContentColumn } from 'pp365-shared-library'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
 import { IBaseComponentProps } from '../types'
-import styles from './PortfolioAggregation.module.scss'
+import { IColumnFormPanel } from './ColumnFormPanel/types'
 
 export class PortfolioAggregationErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -28,12 +27,12 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   configuration?: IPortfolioAggregationConfiguration
 
   /**
-   * Data source name
+   * Name of the currently selected data source (also called view)
    */
   dataSource?: string
 
   /**
-   * Category for data sources
+   * Category for data sources (also called views)
    */
   dataSourceCategory?: string
 
@@ -48,7 +47,7 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   /**
    * Columns
    */
-  columns?: IProjectContentColumn[]
+  columns?: ProjectContentColumn[]
 
   /**
    * Select properties
@@ -137,22 +136,17 @@ export interface IPortfolioAggregationState
   /**
    * Columns
    */
-  columns?: IProjectContentColumn[]
+  columns?: ProjectContentColumn[]
 
   /**
-   * Filtered columns
+   * Columns for the selected data source
    */
-  fltColumns?: IProjectContentColumn[]
+  dataSourceColumns?: ProjectContentColumn[]
 
   /**
    * Groups
    */
   groups?: IGroup[]
-
-  /**
-   * Column currently being edited
-   */
-  editColumn?: IProjectContentColumn
 
   /**
    * Column to group by
@@ -170,24 +164,24 @@ export interface IPortfolioAggregationState
   searchTerm?: string
 
   /**
-   * Add column panel
+   * Column form panel properties
    */
-  addColumnPanel?: IPanelProps
+  columnForm?: IColumnFormPanel
 
   /**
-   * Show/hide column panel
+   * Is edit view columns panel open
    */
-  showHideColumnPanel?: IPanelProps
+  isEditViewColumnsPanelOpen?: boolean
 
   /**
    * Column context menu
    */
-  columnContextMenu?: { column: IColumn; target: Target }
+  columnContextMenu?: { column: ProjectContentColumn; target: Target }
 
   /**
-   * Column added timestamp
+   * Timestamp for when a new column was added or updated
    */
-  columnAdded?: number
+  columnAddedOrUpdated?: number
 
   /**
    * Column deleted timestamp
@@ -205,9 +199,9 @@ export interface IPortfolioAggregationState
   error?: Error
 
   /**
-   * Show filter panel
+   * Is filter panel open
    */
-  showFilterPanel?: boolean
+  isFilterPanelOpen?: boolean
 
   /**
    * Is compact
@@ -240,13 +234,4 @@ export interface IPortfolioAggregationHashState {
    * groupBy found in hash (document.location.hash)
    */
   groupBy?: string
-}
-
-export const addColumn: IColumn = {
-  key: 'AddColumn',
-  fieldName: '',
-  name: strings.ToggleColumnFormPanelLabel,
-  iconName: 'CalculatorAddition',
-  iconClassName: styles.addColumnIcon,
-  minWidth: 175
 }
