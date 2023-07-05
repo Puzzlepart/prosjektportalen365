@@ -3,8 +3,8 @@ import { IRenderItemColumnProps } from '../types'
 
 export interface IModalColumnProps
   extends IModalProps,
-  IRenderItemColumnProps,
-  Pick<IDetailsListProps, 'columns' | 'items' | 'selectionMode'> {
+    IRenderItemColumnProps,
+    Pick<IDetailsListProps, 'columns' | 'items' | 'selectionMode'> {
   headerText: string
-  linkText: string
+  linkText?: string
 }

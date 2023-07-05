@@ -61,6 +61,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             }}
             columns={[...getDefaultColumns(props), ...items.columns]}
             isAddColumnEnabled={!props.lockedColumns && !props.isParentProject}
+            renderTitleProjectInformationPanel={false}
             groups={context.state.groups}
             compact={context.state.isCompact}
             groupProps={{

@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    ColumnPersistRenderGloballyFieldDescription: 'Om du ønsker å endre visningsmodus for kolonnene som for alle webdeler og visninger, huk av sjekkboksen over.',
+    ColumnRenderOptionTrendShowTrendIconLabel: 'Vis ikon',
+    ColumnRenderOptionModalLinkTextLabel: 'Tekst for lenke',
     ColumnRenderOptionTagsValueSeparatorLabel: 'Separator for verdier',
     ColumnRenderOptionTagsValueSeparatorDescription: 'Angi et tegn som skal brukes for å skille verdier i etikettfeltet. Standard er semikolon.',
     ColumnRenderOptionDateIncludeTimeLabel: 'Inkluder tidspunkt',
@@ -70,10 +73,10 @@ define([], function () {
     ColumnRenderOptionTaxonomy: 'Taksonomi',
     ColumnRenderOptionModal: 'Modal',
     ColumnRenderOptionFilenameWithIcon: 'Filnavn med ikon',
-    ColumnRenderPersistGloballyLabel: 'Oppdater globalt',
+    ColumnPersistRenderGloballyFieldLabel: 'Oppdater globalt',
     ColumnRenderOptionBoolean: 'Ja/nei',
     ColumnRenderLabel: 'Vis som',
-    ColumnRenderDescription: 'Overskriv Vis som for denne webdelen. Om du ønsker å endre Vis som for alle webdeler, huk av sjekkboksen under.',
+    ColumnRenderDescription: 'Velg hvordan kolonnen skal vises. Om det er tekstfelt som skal vises over flere linjer, velg Notat.',
     PortfolioOverviewColumnRenderDescription: 'Velg hvordan kolonnen skal vises. Om det er tekstfelt som skal vises over flere linjer, velg Notat.',
     EditColumnLabel: 'Rediger',
     MoveRightLabel: 'Flytt til høyre',

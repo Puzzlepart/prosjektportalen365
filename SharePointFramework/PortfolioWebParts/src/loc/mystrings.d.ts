@@ -1,4 +1,7 @@
 declare interface IPortfolioWebPartsStrings {
+  ColumnPersistRenderGloballyFieldDescription: string
+  ColumnRenderOptionTrendShowTrendIconLabel: string
+  ColumnRenderOptionModalLinkTextLabel: string
   ConfirmDeleteProjectContentColumnTitle: string
   ConfirmDeleteProjectContentColumnSubText: string
   ColumnRenderOptionTagsValueSeparatorLabel: string
@@ -90,7 +93,7 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionTaxonomy: string
   ColumnRenderOptionModal: string
   ColumnRenderOptionFilenameWithIcon: string
-  ColumnRenderPersistGloballyLabel: string
+  ColumnPersistRenderGloballyFieldLabel: string
   DataSourceGroupName: string
   CommandBarGroupName: string
   SearchBoxGroupName: string

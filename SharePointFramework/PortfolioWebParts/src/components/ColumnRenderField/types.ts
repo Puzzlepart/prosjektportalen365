@@ -1,4 +1,4 @@
-import { IDropdownProps, IIconProps, ISelectableOption } from '@fluentui/react'
+import { ICheckboxProps, IDropdownProps, IIconProps, ISelectableOption } from '@fluentui/react'
 
 export type ColumnRenderFieldOptionAdditionalField = [React.ComponentType, any]
 
@@ -15,4 +15,5 @@ export interface IColumnRenderFieldProps extends Pick<IDropdownProps, 'defaultSe
   onChange: (value: string) => void
   dataTypeProperties?: Record<string, any>
   onDataTypePropertiesChange?: (properties: Record<string, any>) => void
+  persistRenderGloballyField?: ICheckboxProps
 }

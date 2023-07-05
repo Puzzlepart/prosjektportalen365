@@ -1,4 +1,4 @@
-import { Checkbox, Panel, TextField, Toggle } from '@fluentui/react'
+import { Panel, TextField, Toggle } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ColumnSearchPropertyField, FormFieldContainer } from 'pp365-shared-library'
 import React, { FC, useContext } from 'react'
@@ -19,8 +19,8 @@ export const ColumnFormPanel: FC = () => {
     column,
     setColumn,
     setColumnData,
-    persistRenderAs,
-    setPersistRenderAs,
+    persistRenderGlobally,
+    setPersistRenderGlobally,
     isEditing
   } = useColumnFormPanel()
 
@@ -120,15 +120,12 @@ export const ColumnFormPanel: FC = () => {
         onDataTypePropertiesChange={(dataTypeProperties) =>
           setColumnData('dataTypeProperties', dataTypeProperties)
         }
-      >
-        <Checkbox
-          label={strings.ColumnRenderPersistGloballyLabel}
-          defaultChecked={persistRenderAs || !isEditing}
-          onChange={(_, checked) => setPersistRenderAs(checked)}
-          styles={{ root: { margin: '10px 0 15px 0' } }}
-          disabled={!isEditing || column.get('fieldName') === 'Title'}
-        />
-      </ColumnRenderField>
+        persistRenderGloballyField={{
+          defaultChecked: persistRenderGlobally || !isEditing,
+          onChange: (_, checked) => setPersistRenderGlobally(checked),
+          disabled: !isEditing || column.get('fieldName') === 'Title'
+        }}
+      />
     </Panel>
   )
 }

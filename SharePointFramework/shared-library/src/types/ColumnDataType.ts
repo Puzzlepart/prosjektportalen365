@@ -10,3 +10,4 @@ export type ColumnDataType =
   | 'trend'
   | 'modal'
   | 'filename_with_icon'
+  | 'list'

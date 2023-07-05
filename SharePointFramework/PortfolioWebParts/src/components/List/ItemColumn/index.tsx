@@ -1,20 +1,19 @@
-import { IColumn, TooltipHost } from '@fluentui/react'
-
-import { Icon } from '@fluentui/react/lib/Icon'
+import { IColumn, Icon, TooltipHost } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { ColumnDataType, formatDate, getObjectValue as get } from 'pp365-shared-library'
 import React from 'react'
-import ItemModal from '../ItemModal'
 import { IListProps } from '../types'
 import { BooleanColumn } from './BooleanColumn'
 import { CurrencyColumn } from './CurrencyColumn'
+import { FileNameColumn } from './FileNameColumn'
+import { ListColumn } from './ListColumn'
+import { ModalColumn } from './ModalColumn'
 import { TagsColumn } from './TagsColumn'
 import { TitleColumn } from './TitleColumn'
 import { TrendColumn } from './TrendColumn'
 import { UrlColumn } from './UrlColumn'
 import { UserColumn } from './UserColumn'
 import { IRenderItemColumnProps, ItemRenderFunction } from './types'
-import { FileNameColumn } from './FileNameColumn'
 
 /**
  * Mapping for rendering of the different data types.
@@ -54,11 +53,16 @@ const renderDataTypeMap: Record<ColumnDataType, ItemRenderFunction> = {
   ),
   trend: (props: IRenderItemColumnProps) => <TrendColumn {...props} />,
   modal: (props: IRenderItemColumnProps) => (
-    <ItemModal title={props.item.MeasurementIndicator} value={JSON.parse(props.columnValue)} />
+    <ModalColumn
+      linkText={props.dataTypeProperties.get('linkText')}
+      headerText={props.item.MeasurementIndicator}
+      items={JSON.parse(props.columnValue)}
+    />
   ),
   filename_with_icon: (props: IRenderItemColumnProps) => (
     <FileNameColumn {...props} showFileExtensionIcon />
-  )
+  ),
+  list: (props: IRenderItemColumnProps) => <ListColumn {...props} />
 }
 
 /**
@@ -89,7 +93,7 @@ function renderItemColumn(item: Record<string, any>, column: IColumn, props: ILi
       return (
         <TitleColumn
           item={item}
-          renderProjectInformationPanel={true}
+          renderProjectInformationPanel={props.renderTitleProjectInformationPanel}
           webPartContext={props.webPartContext}
         />
       )
@@ -145,12 +149,14 @@ export const onRenderItemColumn =
   }
 
 export {
-  TitleColumn,
-  FileNameColumn,
-  UrlColumn,
-  TrendColumn,
-  TagsColumn,
-  CurrencyColumn,
   BooleanColumn,
+  CurrencyColumn,
+  FileNameColumn,
+  ListColumn,
+  ModalColumn,
+  TagsColumn,
+  TitleColumn,
+  TrendColumn,
+  UrlColumn,
   UserColumn
 }

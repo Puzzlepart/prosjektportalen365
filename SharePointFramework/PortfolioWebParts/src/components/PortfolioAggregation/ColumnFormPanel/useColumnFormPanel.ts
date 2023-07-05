@@ -16,7 +16,7 @@ import { useEditableColumn } from './useEditableColumn'
 export function useColumnFormPanel() {
   const context = useContext(PortfolioAggregationContext)
   const { column, setColumn, setColumnData, isEditing } = useEditableColumn()
-  const [persistRenderAs, setPersistRenderAs] = useState(false)
+  const [persistRenderGlobally, setPersistRenderGlobally] = useState(false)
 
   const onSave = async () => {
     const colummData = column.get('data') ?? {}
@@ -37,7 +37,7 @@ export function useColumnFormPanel() {
     if (isEditing) {
       await Promise.resolve(
         context.props.dataAdapter
-          .updateProjectContentColumn(columnItem, persistRenderAs)
+          .updateProjectContentColumn(columnItem, persistRenderGlobally)
           .then(() => {
             const editedColumn = new ProjectContentColumn(columnItem)
             context.dispatch(
@@ -101,8 +101,8 @@ export function useColumnFormPanel() {
     column,
     setColumn,
     setColumnData,
-    persistRenderAs,
-    setPersistRenderAs,
+    persistRenderGlobally,
+    setPersistRenderGlobally,
     isEditing
   } as const
 }

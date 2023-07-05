@@ -3,7 +3,7 @@ import { IColumn } from '@fluentui/react'
 export interface IRenderItemColumnProps extends React.HTMLAttributes<HTMLDivElement> {
   column?: IColumn
   item?: Record<string, any>
-  columnValue: string
+  columnValue?: string
   dataTypeProperties?: Map<string, any>
 }
 

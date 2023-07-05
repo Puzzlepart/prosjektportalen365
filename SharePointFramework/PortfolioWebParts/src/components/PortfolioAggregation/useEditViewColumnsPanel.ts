@@ -14,17 +14,32 @@ export function useEditViewColumnsPanel(
   context: IPortfolioAggregationContext
 ): IEditViewColumnsPanelProps {
   /**
-   * Add `isSelected` property to `context.state.columns` based on `context.state.dataSourceColumns`
+   * Add `isSelected` property to `context.state.columns` based on `context.state.dataSourceColumns`.
+   * Sorts columns based on `sortOrder` from the project columns list. The selected columns will always
+   * be on top.
    */
   const columnsWithSelectedState = useMemo(
     () =>
-      context.state.columns.map((c) => ({
-        ...c,
-        data: {
-          ...c.data,
-          isSelected: _.some(context.state.dataSourceColumns, (_c) => _c.fieldName === c.fieldName)
-        }
-      })),
+      context.state.columns
+        .map((c) => ({
+          ...c,
+          data: {
+            ...c.data,
+            isSelected: _.some(
+              context.state.dataSourceColumns,
+              (_c) => _c.fieldName === c.fieldName
+            )
+          }
+        }))
+        .sort((a, b) => {
+          if (a.data.isSelected && !b.data.isSelected) {
+            return -1
+          } else if (!a.data.isSelected && b.data.isSelected) {
+            return 1
+          } else {
+            return a.sortOrder - b.sortOrder
+          }
+        }),
     [context.state.columns, context.state.dataSourceColumns]
   )
 

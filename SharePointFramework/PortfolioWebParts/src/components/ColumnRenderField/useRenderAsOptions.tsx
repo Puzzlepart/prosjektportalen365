@@ -1,4 +1,6 @@
 import {
+  Checkbox,
+  ICheckboxProps,
   IRenderFunction,
   ITextFieldProps,
   IToggleProps,
@@ -10,7 +12,14 @@ import strings from 'PortfolioWebPartsStrings'
 import { ColumnRenderFieldOption, IColumnRenderFieldProps } from './types'
 import React, { useEffect, useState } from 'react'
 import _ from 'lodash'
-import { BooleanColumn, CurrencyColumn, TagsColumn, UrlColumn } from '../List'
+import {
+  BooleanColumn,
+  CurrencyColumn,
+  TagsColumn,
+  UrlColumn,
+  ModalColumn,
+  TrendColumn
+} from '../List'
 
 /**
  * Hook to work with render as options. Returns the options, the selected option,
@@ -210,14 +219,40 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
       key: 'trend',
       id: 'Trend',
       text: strings.ColumnRenderOptionTrend,
-      data: { iconProps: { iconName: 'Trending12' } },
+      data: {
+        iconProps: { iconName: 'Trending12' },
+        getDataTypeProperties: (onChange, dataTypeProperties: Record<string, any>) => [
+          [
+            Checkbox,
+            {
+              label: strings.ColumnRenderOptionTrendShowTrendIconLabel,
+              defaultChecked: TrendColumn.defaultProps.showTrendIcon,
+              checked: dataTypeProperties['showTrendIcon'],
+              onChange: (_, checked) => onChange('showTrendIcon', checked)
+            } as ICheckboxProps
+          ]
+        ]
+      },
       disabled: true
     },
     {
       key: 'modal',
       id: 'Modal',
       text: strings.ColumnRenderOptionModal,
-      data: { iconProps: { iconName: 'WindowEdit' } },
+      data: {
+        iconProps: { iconName: 'WindowEdit' },
+        getDataTypeProperties: (onChange, dataTypeProperties: Record<string, any>) => [
+          [
+            TextField,
+            {
+              label: strings.ColumnRenderOptionModalLinkTextLabel,
+              placeholder: ModalColumn.defaultProps.linkText,
+              value: dataTypeProperties['linkText'],
+              onChange: (_, value) => onChange('linkText', value)
+            } as ITextFieldProps
+          ]
+        ]
+      },
       disabled: true
     },
     {

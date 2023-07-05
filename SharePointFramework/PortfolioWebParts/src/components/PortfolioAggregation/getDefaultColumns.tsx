@@ -7,7 +7,7 @@ import { IPortfolioAggregationProps } from './types'
 /**
  * Get default columns that should be included if the property `lockedColumns` is not
  * set to `true` in the web part properties, or if the data source level is set to
- * `Prosjekt`.
+ * `Prosjekt`. An empty array is returned in these cases.
  *
  * @param props Props
  */
@@ -22,37 +22,35 @@ export const getDefaultColumns = (props: IPortfolioAggregationProps) => {
       minWidth: 150,
       maxWidth: 225,
       isResizable: true,
-      onRender: (item: any) => {
-        return (
-          <ProjectInformationPanel
-            key={item.SiteId}
-            title={item.Title}
-            siteId={item.SiteId}
-            webUrl={item.Path}
-            page='Portfolio'
-            hideAllActions={true}
-            webPartContext={props.webPartContext}
-            onRenderToggleElement={(onToggle) => (
-              <Icon
-                iconName='Info'
-                style={{
-                  color: '666666',
-                  marginLeft: 4,
-                  position: 'relative',
-                  top: '2px',
-                  fontSize: '1.1em',
-                  cursor: 'pointer'
-                }}
-                onClick={onToggle}
-              />
-            )}
-          >
-            <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
-              {item.SiteTitle}
-            </Link>
-          </ProjectInformationPanel>
-        )
-      },
+      onRender: (item: any) => (
+        <ProjectInformationPanel
+          key={item.SiteId}
+          title={item.SiteTitle}
+          siteId={item.SiteId}
+          webUrl={item.Path}
+          page='Portfolio'
+          hideAllActions={true}
+          webPartContext={props.webPartContext}
+          onRenderToggleElement={(onToggle) => (
+            <Icon
+              iconName='Info'
+              style={{
+                color: '666666',
+                marginLeft: 4,
+                position: 'relative',
+                top: '2px',
+                fontSize: '1.1em',
+                cursor: 'pointer'
+              }}
+              onClick={onToggle}
+            />
+          )}
+        >
+          <Link href={item.SPWebURL} rel='noopener noreferrer' target='_blank'>
+            {item.SiteTitle}
+          </Link>
+        </ProjectInformationPanel>
+      ),
       data: { isGroupable: true }
     }
   ]

@@ -41,7 +41,8 @@ List.defaultProps = {
   isAddColumnEnabled: false,
   selectionMode: SelectionMode.none,
   constrainMode: ConstrainMode.unconstrained,
-  layoutMode: DetailsListLayoutMode.fixedColumns
+  layoutMode: DetailsListLayoutMode.fixedColumns,
+  renderTitleProjectInformationPanel: true
 }
 
 export * from './types'

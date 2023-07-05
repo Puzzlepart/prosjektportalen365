@@ -4,6 +4,7 @@ import React, { FC, useState } from 'react'
 import styles from './ItemModal.module.scss'
 import { columns } from './columns'
 import { IModalColumnProps } from './types'
+import strings from 'PortfolioWebPartsStrings'
 
 export const ModalColumn: FC<IModalColumnProps> = (props) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -17,9 +18,7 @@ export const ModalColumn: FC<IModalColumnProps> = (props) => {
 
   return (
     <div>
-      <Link onClick={() => setIsOpen(true)}>
-        {props.linkText}
-      </Link>
+      <Link onClick={() => setIsOpen(true)}>{props.linkText}</Link>
       <Modal
         isOpen={isOpen}
         isDarkOverlay={props.isDarkOverlay}
@@ -42,6 +41,7 @@ export const ModalColumn: FC<IModalColumnProps> = (props) => {
 }
 
 ModalColumn.defaultProps = {
+  linkText: strings.ShowAllMeasurementsLinkText,
   isDarkOverlay: true,
   isBlocking: false,
   columns,

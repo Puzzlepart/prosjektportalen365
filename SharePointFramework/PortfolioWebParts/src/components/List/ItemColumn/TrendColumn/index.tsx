@@ -8,11 +8,13 @@ export const TrendColumn: FC<ITrendColumnProps> = (props) => {
   return trend ? (
     <span>
       <span style={{ display: 'inline-block', width: 20 }}>
-        {trend.TrendIconProps && <Icon {...trend.TrendIconProps} />}
+        {trend.TrendIconProps && props.showTrendIcon && <Icon {...trend.TrendIconProps} />}
       </span>
       <span>{trend.AchievementDisplay}</span>
     </span>
   ) : null
 }
 
-TrendColumn.defaultProps = {}
+TrendColumn.defaultProps = {
+  showTrendIcon: true
+}

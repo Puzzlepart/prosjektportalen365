@@ -1,4 +1,4 @@
-import { Dropdown } from '@fluentui/react'
+import { Checkbox, Dropdown } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import { FormFieldContainer } from 'pp365-shared-library'
@@ -35,6 +35,16 @@ export const ColumnRenderField: FC<IColumnRenderFieldProps> = (props) => {
         isDataTypeFieldsVisible={isDataTypeFieldsVisible}
         toggleIsDataTypeFieldsVisible={toggleIsDataTypeFieldsVisible}
       />
+      {props.persistRenderGloballyField && (
+        <FormFieldContainer description={strings.ColumnPersistRenderGloballyFieldDescription}>
+          <Checkbox
+            {...props.persistRenderGloballyField}
+            disabled={props.persistRenderGloballyField.disabled || selectedOption.disabled}
+            label={strings.ColumnPersistRenderGloballyFieldLabel}
+            styles={{ root: { margin: '10px 0 15px 0' } }}
+          />
+        </FormFieldContainer>
+      )}
     </div>
   )
 }
