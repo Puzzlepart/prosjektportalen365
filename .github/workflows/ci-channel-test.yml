@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - releases/1.9
+      - src/components/EditViewColumnsPanel
     paths:
       - "SharePointFramework/**"
       - "Install/**"
