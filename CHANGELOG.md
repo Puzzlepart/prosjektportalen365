@@ -14,12 +14,17 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Støtte for egendefinerte rekkefølger for kolonner i porteføljeoversikten [#1114](https://github.com/Puzzlepart/prosjektportalen365/issues/1114)
 - Visninger for programmer i Porteføljeoversikt [#933](https://github.com/Puzzlepart/prosjektportalen365/issues/933)
 - Tving oppsett av prosjektmal dersom mal er låst og "Konfigurer automatisk" er satt til "Ja" i Maloppsett listen [#1115](https://github.com/Puzzlepart/prosjektportalen365/issues/1115)
+- Opprett og rediger eksisterende visninger direkte i Porteføljeoversikten [#1202](https://github.com/Puzzlepart/prosjektportalen365/issues/1202)
+- Opprett og rediger eksisterende kolonner  direkte i Porteføljeoversikten [#1203](https://github.com/Puzzlepart/prosjektportalen365/issues/1203)
+- Støtte egenskaper for visningstyper i Porteføljeoversikt og Porteføleinnholdseaggregering [#1204](https://github.com/Puzzlepart/prosjektportalen365/issues/1204)
+- Støtte for kolonneredigering for Porteføljeoversikt med bruk av drag and drop for å endre rekkefølge på feltene [#1206](https://github.com/Puzzlepart/prosjektportalen365/issues/1206)
 
 ### Forbedringer
 
 - Lagt inn mulighet for å angi sortering på Planner oppgaver som provisjoneres [#1056](https://github.com/Puzzlepart/prosjektportalen365/issues/1056)
 - Kolonner i aggregerte oversikter kan nå gjøres grupperbare [#1020](https://github.com/Puzzlepart/prosjektportalen365/issues/1020)
 - Malbibliotek-sti kan nå konfigureres i maloppsett-lista [#1179](https://github.com/Puzzlepart/prosjektportalen365/issues/1179)
+- Forbedret kolonneredigering for Porteføleinnholdseaggregering med bruk av drag and drop for å endre rekkefølge på feltene [#1205](https://github.com/Puzzlepart/prosjektportalen365/issues/1205)
 
 ### Feilrettinger
 
