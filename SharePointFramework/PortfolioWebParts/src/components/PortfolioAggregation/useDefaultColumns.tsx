@@ -2,7 +2,7 @@ import { Icon, Link } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformation'
 import React from 'react'
-import { IPortfolioAggregationProps } from './types'
+import { IPortfolioAggregationContext } from './context'
 
 /**
  * Get default columns that should be included if the property `lockedColumns` is not
@@ -11,8 +11,10 @@ import { IPortfolioAggregationProps } from './types'
  *
  * @param props Props
  */
-export const getDefaultColumns = (props: IPortfolioAggregationProps) => {
-  if (props.lockedColumns || props.dataSourceLevel === 'Prosjekt') return []
+export function useDefaultColumns(context: IPortfolioAggregationContext) {
+  if (context.props.lockedColumns || context.props.dataSourceLevel === 'Prosjekt') {
+    return context.state.columns
+  }
   return [
     {
       key: 'SiteTitle',
@@ -30,7 +32,7 @@ export const getDefaultColumns = (props: IPortfolioAggregationProps) => {
           webUrl={item.Path}
           page='Portfolio'
           hideAllActions={true}
-          webPartContext={props.webPartContext}
+          webPartContext={context.props.webPartContext}
           onRenderToggleElement={(onToggle) => (
             <Icon
               iconName='Info'
@@ -52,6 +54,7 @@ export const getDefaultColumns = (props: IPortfolioAggregationProps) => {
         </ProjectInformationPanel>
       ),
       data: { isGroupable: true }
-    }
+    },
+    ...context.state.columns
   ]
 }
