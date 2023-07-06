@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - releases/1.9
-      - feat/modal-column-render
     paths:
       - "SharePointFramework/**"
       - "Install/**"
