@@ -6,33 +6,31 @@ import { ColumnRenderComponent } from '../types'
 import { IFileNameColumnProps } from './types'
 import { ColumnRenderComponentRegistry } from '../registry'
 
-export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (props) => {
-  return (
-    <span>
-      {props.showFileExtensionIcon && (
-        <Icon
-          {...getFileTypeIconProps({
-            extension: props.item.FileExtension,
-            size: 16,
-            imageFileType: 'png'
-          })}
-          styles={{ root: { verticalAlign: 'bottom' } }}
-        />
-      )}
-      <Link
-        href={props.item.ServerRedirectedURL}
-        rel='noopener noreferrer'
-        target='_blank'
-        style={{ marginLeft: 8 }}
-      >
-        {props.columnValue}
-      </Link>
-    </span>
-  )
-}
+export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (props) => (
+  <span>
+    {props.showFileExtensionIcon && (
+      <Icon
+        {...getFileTypeIconProps({
+          extension: props.item.FileExtension,
+          size: 16,
+          imageFileType: 'png'
+        })}
+        styles={{ root: { verticalAlign: 'bottom' } }}
+      />
+    )}
+    <Link
+      href={props.item.ServerRedirectedURL}
+      rel='noopener noreferrer'
+      target='_blank'
+      style={{ marginLeft: 8 }}
+    >
+      {props.columnValue}
+    </Link>
+  </span>
+)
 
 FileNameColumn.defaultProps = {
-  showFileExtensionIcon: false
+  showFileExtensionIcon: true
 }
 FileNameColumn.key = 'filename'
 FileNameColumn.id = 'Filename'

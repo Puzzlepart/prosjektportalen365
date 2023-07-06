@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  ModalColumnEmptyListText: string
   ColumnRenderOptionModalInfoTextTemplateDescription: string
   ColumnRenderOptionModalShowInfoTextLabel: string
   ColumnRenderOptionModalInfoTextTemplateLabel: string

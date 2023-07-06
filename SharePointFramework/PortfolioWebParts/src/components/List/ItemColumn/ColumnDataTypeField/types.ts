@@ -23,6 +23,22 @@ export interface IColumnDataTypePropertyFieldProps<
 }
 export type IColumnDataTypePropertyField<T = any> = IColumnDataTypePropertyFieldProps<T>
 
+/**
+ * Creates an object with a function component and its props.
+ *
+ * @template T The type of the props for the function component.
+ * @param type A function component with the props specified by `T`.
+ * @param props The property field props for the component.
+ *
+ * @returns An object with the function component and its props.
+ */
+export function ColumnDataTypePropertyField<T>(
+  type: FunctionComponent<T>,
+  props: T
+): IColumnDataTypePropertyField<T> {
+  return { type, props } as IColumnDataTypePropertyField<T>
+}
+
 export type GetDataTypeProperties = (
   onChange: (key: string, value: any) => void,
   dataTypeProperties: Record<string, any>

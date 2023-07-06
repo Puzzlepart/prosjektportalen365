@@ -42,6 +42,12 @@ export interface ColumnRenderComponent<T extends IRenderItemColumnProps = IRende
   iconName: string
 
   /**
+   * Indicates whether the column render component is disabled, the option will be
+   * disabled in the data type field dropdown, but will still be visible.
+   */
+  isDisabled?: boolean
+
+  /**
    * Gets an dropdown option for the data type field.
    *
    * @returns An option for the data type field.

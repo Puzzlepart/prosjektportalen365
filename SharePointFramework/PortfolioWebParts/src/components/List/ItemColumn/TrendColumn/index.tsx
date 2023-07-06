@@ -36,6 +36,7 @@ TrendColumn.key = 'trend'
 TrendColumn.id = 'Trend'
 TrendColumn.displayName = strings.ColumnRenderOptionTrend
 TrendColumn.iconName = 'Trending12'
+TrendColumn.isDisabled = true
 ColumnRenderComponentRegistry.register(
   TrendColumn,
   (onChange, dataTypeProperties: Record<string, any>) => [

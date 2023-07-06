@@ -58,13 +58,16 @@ export class ColumnRenderComponentRegistry {
     component: ColumnRenderComponent<any>,
     getDataTypeProperties: GetDataTypeProperties
   ): IColumnDataTypeFieldOption {
-    return ColumnRenderComponentRegistry.createOption(
-      component.key,
-      component.id,
-      component.displayName,
-      component.iconName,
-      { getDataTypeProperties }
-    )
+    return {
+      ...ColumnRenderComponentRegistry.createOption(
+        component.key,
+        component.id,
+        component.displayName,
+        component.iconName,
+        { getDataTypeProperties }
+      ),
+      disabled: component.isDisabled
+    }
   }
 
   /**
@@ -175,5 +178,20 @@ export class ColumnRenderComponentRegistry {
       return ColumnRenderComponentRegistry.options.find((option) => option.key === key)
     }
     return ColumnRenderComponentRegistry.getOptions().find((option) => option.key === key)
+  }
+
+  /**
+   * Returns the column render component with the specified key.
+   *
+   * @param key The unique key of the column render component to retrieve.
+   *
+   * @returns The column render component with the specified key.
+   */
+  static getComponent(key: string) {
+    const component = ColumnRenderComponentRegistry.components.get(key)
+    if (typeof component === 'function') {
+      return component
+    }
+    return null
   }
 }

@@ -54,6 +54,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
                 onToggleCollapse: (group) => context.dispatch(SET_COLLAPSED({ group }))
               }
             }}
+            webPartContext={props.webPartContext}
             layerHostId={context.layerHostId}
           />
         </div>
