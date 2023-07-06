@@ -7,6 +7,7 @@ import {
   ProjectColumn,
   ProjectColumnCustomSort
 } from 'pp365-shared-library/lib/models'
+import { IListProps } from '../List'
 import { IBaseComponentProps } from '../types'
 import { IColumnFormPanel } from './ColumnFormPanel/types'
 import { IViewFormPanel } from './ViewFormPanel/types'
@@ -54,7 +55,9 @@ export interface IPortfolioOverviewConfiguration {
   userCanAddViews?: boolean
 }
 
-export interface IPortfolioOverviewProps extends IBaseComponentProps {
+export interface IPortfolioOverviewProps
+  extends IBaseComponentProps,
+    Pick<IListProps, 'isListLayoutModeJustified'> {
   /**
    * Configuration (columns and views etc).
    */
@@ -99,13 +102,6 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
    * Show group by
    */
   showGroupBy?: boolean
-
-  /**
-   * Render list in justified layout mode. Manages which columns are visible, tries
-   * to size them according to their min/max rules and drops  off columns that can't
-   * fit and have isCollapsible set.
-   */
-  listLayoutModeJustified?: boolean
 
   /**
    * Show search box

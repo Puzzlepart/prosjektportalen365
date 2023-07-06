@@ -1,5 +1,9 @@
 define([], function () {
   return {
+    ColumnRenderOptionModalShowInfoTextLabel: 'Vis infotekst',
+    ColumnRenderOptionModalInfoTextTemplateDescription: 'Mal for infotekst. Bruk {{GtMeasurementOWSCHCS}} for å vise måleindikatoren, {{GtStartValueOWSNMBR}} for å vise startverdien og {{GtDesiredValueOWSNMBR}} for å vise målet. Du kan også bruke andre kolonnenavn fra gevinstarbeidet.',
+    ColumnRenderOptionModalInfoTextTemplateLabel: 'Mal for infotekst',
+    ShowAllMeasurementsInfoTextFormat: 'Måleindikatoren måles i {{GtMeasurementUnitOWSCHCS}}, startverdien var {{GtStartValueOWSNMBR}} og målet er {{GtDesiredValueOWSNMBR}}.',
     ListViewGroupName: 'Listevisning',
     ListLayoutModeJustifiedLabel: 'Juster kolonner etter skjermbredde',
     ColumnPersistRenderGloballyFieldDescription: 'Om du ønsker å endre visningsmodus for kolonnene som for alle webdeler og visninger, huk av sjekkboksen over.',

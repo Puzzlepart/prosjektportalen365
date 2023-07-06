@@ -1,4 +1,4 @@
-import { DetailsListLayoutMode, MessageBarType } from '@fluentui/react'
+import { MessageBarType } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectContentColumn } from 'pp365-shared-library'
 import { FilterPanel } from 'pp365-shared-library/lib/components/FilterPanel'
@@ -14,17 +14,16 @@ import { PortfolioAggregationContext } from './context'
 import {
   COLUMN_HEADER_CONTEXT_MENU,
   ON_FILTER_CHANGE,
-  EXECUTE_SEARCH,
   SET_ALL_COLLAPSED,
   SET_COLLAPSED,
   TOGGLE_FILTER_PANEL
 } from './reducer'
 import { IPortfolioAggregationProps } from './types'
-import { usePortfolioAggregation } from './usePortfolioAggregation'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
+import { usePortfolioAggregation } from './usePortfolioAggregation'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
-  const context = usePortfolioAggregation(props)
+  const { context, searchBox } = usePortfolioAggregation(props)
   const editViewColumnsPanelProps = useEditViewColumnsPanel(context)
 
   if (context.state.error) {
@@ -49,9 +48,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             items={context.items}
             columns={context.columns}
             groups={context.state.groups}
-            searchBox={{
-              onChange: (_event, searchTerm) => context.dispatch(EXECUTE_SEARCH(searchTerm))
-            }}
+            searchBox={searchBox}
             onColumnHeaderClick={(ev, col: ProjectContentColumn) => {
               context.dispatch(
                 COLUMN_HEADER_CONTEXT_MENU({
@@ -62,11 +59,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             }}
             isAddColumnEnabled={!props.lockedColumns && !props.isParentProject}
             compact={context.state.isCompact}
-            layoutMode={
-              props.listLayoutModeJustified
-                ? DetailsListLayoutMode.justified
-                : DetailsListLayoutMode.fixedColumns
-            }
+            isListLayoutModeJustified={props.isListLayoutModeJustified}
             groupProps={{
               // TODO: Temporary fix for collapsing groups, the new state handling throws errors
               onToggleCollapseAll: (isAllCollapsed) =>

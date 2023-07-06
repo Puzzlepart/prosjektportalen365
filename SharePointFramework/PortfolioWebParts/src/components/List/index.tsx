@@ -1,5 +1,6 @@
 import {
   ConstrainMode,
+  DetailsListLayoutMode,
   LayerHost,
   MarqueeSelection,
   ScrollablePane,
@@ -9,9 +10,9 @@ import {
 } from '@fluentui/react'
 import React, { FC } from 'react'
 import { onRenderItemColumn } from './ItemColumn'
+import { onRenderDetailsHeader } from './ListHeader'
 import { IListProps } from './types'
 import { useAddColumn } from './useAddColumn'
-import { onRenderDetailsHeader } from './ListHeader'
 
 /**
  * List component using `ShimmeredDetailsList` from `@fluentui/react`.
@@ -38,6 +39,11 @@ export const List: FC<IListProps> = (props) => {
           columns={[...props.columns, addColumn]}
           onRenderItemColumn={onRenderItemColumn(props)}
           onRenderDetailsHeader={onRenderDetailsHeader(props)}
+          layoutMode={
+            props.isListLayoutModeJustified
+              ? DetailsListLayoutMode.justified
+              : DetailsListLayoutMode.fixedColumns
+          }
         />
       </MarqueeSelection>
       {props.layerHostId && <LayerHost id={props.layerHostId} />}

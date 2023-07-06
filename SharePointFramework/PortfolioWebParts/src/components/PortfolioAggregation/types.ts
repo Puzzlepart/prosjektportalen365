@@ -3,6 +3,7 @@ import { SearchResult } from '@pnp/sp'
 import { ProjectContentColumn } from 'pp365-shared-library'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
+import { IListProps } from '../List'
 import { IBaseComponentProps } from '../types'
 import { IColumnFormPanel } from './ColumnFormPanel/types'
 
@@ -20,7 +21,9 @@ export interface IPortfolioAggregationConfiguration {
   levels?: string[]
 }
 
-export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps {
+export interface IPortfolioAggregationProps<T = any>
+  extends IBaseComponentProps,
+    Pick<IListProps, 'isListLayoutModeJustified'> {
   /**
    * Configuration (columns and views etc)
    */
@@ -88,13 +91,6 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
    * Locked columns
    */
   lockedColumns?: boolean
-
-  /**
-   * Render list in justified layout mode. Manages which columns are visible, tries
-   * to size them according to their min/max rules and drops  off columns that can't
-   * fit and have isCollapsible set.
-   */
-  listLayoutModeJustified?: boolean
 
   /**
    * On update property

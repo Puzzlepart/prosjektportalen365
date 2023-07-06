@@ -1,4 +1,8 @@
 declare interface IPortfolioWebPartsStrings {
+  ColumnRenderOptionModalInfoTextTemplateDescription: string
+  ColumnRenderOptionModalShowInfoTextLabel: string
+  ColumnRenderOptionModalInfoTextTemplateLabel: string
+  ShowAllMeasurementsInfoTextFormat: string
   ListViewGroupName: string
   ListLayoutModeJustifiedLabel: string
   ColumnPersistRenderGloballyFieldDescription: string

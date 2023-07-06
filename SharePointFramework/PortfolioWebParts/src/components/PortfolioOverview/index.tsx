@@ -1,4 +1,3 @@
-import { DetailsListLayoutMode } from '@fluentui/react'
 import React, { FC } from 'react'
 import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
 import { List } from '../List'
@@ -10,13 +9,12 @@ import { ViewFormPanel } from './ViewFormPanel'
 import { PortfolioOverviewContext } from './context'
 import { IPortfolioOverviewProps } from './types'
 import { usePortfolioOverview } from './usePortfolioOverview'
-import { EXECUTE_SEARCH } from './reducer'
 
 /**
  * Component for displaying a portfolio overview - an overview of all projects in a portfolio.
  */
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
-  const { context, selection, onColumnHeaderContextMenu, editViewColumnsPanelProps } =
+  const { context, selection, onColumnHeaderContextMenu, editViewColumnsPanelProps, searchBox } =
     usePortfolioOverview(props)
 
   return (
@@ -30,9 +28,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
             items={context.items}
             columns={context.columns}
             groups={context.groups}
-            searchBox={{
-              onChange: (_, searchTerm) => context.dispatch(EXECUTE_SEARCH(searchTerm))
-            }}
+            searchBox={searchBox}
             isAddColumnEnabled={!props.isParentProject}
             selection={selection}
             setKey='multiple'
@@ -41,11 +37,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
               onColumnHeaderContextMenu({ column, event })
             }
             compact={context.state.isCompact}
-            layoutMode={
-              props.listLayoutModeJustified
-                ? DetailsListLayoutMode.justified
-                : DetailsListLayoutMode.fixedColumns
-            }
+            isListLayoutModeJustified={props.isListLayoutModeJustified}
             renderTitleProjectInformationPanel={true}
             webPartContext={props.webPartContext}
             layerHostId={context.layerHostId}
