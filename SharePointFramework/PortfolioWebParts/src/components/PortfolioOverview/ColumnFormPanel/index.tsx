@@ -7,7 +7,7 @@ import { ColumnVisibilityField } from './ColumnVisibilityField'
 import { useColumnFormPanel } from './useColumnFormPanel'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
 import { ColumnSearchPropertyField, FormFieldContainer, UserMessage } from 'pp365-shared-library'
-import { ColumnRenderField } from '../../ColumnRenderField'
+import { ColumnDataTypeField } from '../../ColumnDataTypeField'
 
 export const ColumnFormPanel: FC = () => {
   const context = useContext(PortfolioOverviewContext)
@@ -95,7 +95,7 @@ export const ColumnFormPanel: FC = () => {
           onChange={(_, value) => setColumn('minWidth', parseInt(value))}
         />
       </FormFieldContainer>
-      <ColumnRenderField
+      <ColumnDataTypeField
         description={strings.PortfolioOverviewColumnRenderDescription}
         defaultSelectedKey={column.get('dataType')}
         onChange={(renderAs) => setColumnData('renderAs', renderAs)}

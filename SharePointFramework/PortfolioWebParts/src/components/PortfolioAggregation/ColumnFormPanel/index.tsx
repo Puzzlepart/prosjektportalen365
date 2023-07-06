@@ -2,7 +2,7 @@ import { Panel, TextField, Toggle } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ColumnSearchPropertyField, FormFieldContainer } from 'pp365-shared-library'
 import React, { FC, useContext } from 'react'
-import { ColumnRenderField } from '../../../components/ColumnRenderField'
+import { ColumnDataTypeField } from '../../ColumnDataTypeField'
 import { PortfolioAggregationContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
@@ -112,7 +112,7 @@ export const ColumnFormPanel: FC = () => {
           onChange={(_, checked) => setColumnData('isGroupable', checked)}
         />
       </FormFieldContainer>
-      <ColumnRenderField
+      <ColumnDataTypeField
         description={strings.ColumnRenderDescription}
         defaultSelectedKey={column.get('dataType')}
         onChange={(renderAs) => setColumnData('renderAs', renderAs)}

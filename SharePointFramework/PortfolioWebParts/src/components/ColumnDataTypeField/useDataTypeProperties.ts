@@ -1,27 +1,25 @@
 import _ from 'lodash'
 import { useEffect, useState } from 'react'
-import {
-  ColumnRenderFieldOption,
-  ColumnRenderFieldOptionAdditionalField,
-  IColumnRenderFieldProps
-} from './types'
+import { IDataTypeFieldsProps } from './DataTypeFields/types'
+import { IColumnDataTypeFieldProps, IColumnDataTypePropertyField } from './types'
+import { useDataTypeDropdown } from './useDataTypeDropdown'
 
 export function useDataTypeProperties(
-  props: IColumnRenderFieldProps,
-  selectedOption: ColumnRenderFieldOption
+  props: IColumnDataTypeFieldProps,
+  { selectedOption }: ReturnType<typeof useDataTypeDropdown>
 ) {
-  const [isDataTypeFieldsVisible, setIsDataTypeFieldsVisible] = useState<boolean>(false)
+  const [isFieldsVisible, setIsFieldsVisible] = useState(false)
   const [dataTypeProperties, setDataTypeProperties] = useState<Record<string, any>>({
     ...props.dataTypeProperties
   })
-  const [dataTypeFields, setDataTypeFields] = useState<ColumnRenderFieldOptionAdditionalField[]>([])
+  const [fields, setFields] = useState<IColumnDataTypePropertyField[]>([])
 
   useEffect(() => {
     if (!selectedOption?.data?.getDataTypeProperties) {
-      setDataTypeFields([])
+      setFields([])
       return
     }
-    setDataTypeFields(
+    setFields(
       selectedOption.data.getDataTypeProperties((key, value) => {
         setDataTypeProperties((prev) => {
           if (value === '' || value === undefined || value === null) return _.omit(prev, key)
@@ -41,8 +39,9 @@ export function useDataTypeProperties(
   }, [dataTypeProperties])
 
   return {
-    dataTypeFields,
-    isDataTypeFieldsVisible,
-    toggleIsDataTypeFieldsVisible: () => setIsDataTypeFieldsVisible((prev) => !prev)
-  } as const
+    dataTypeProperties,
+    fields,
+    isFieldsVisible,
+    toggleIsFieldsVisible: () => setIsFieldsVisible((prev) => !prev)
+  } as IDataTypeFieldsProps
 }
