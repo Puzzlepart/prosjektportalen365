@@ -1,8 +1,9 @@
-import { IGroup, Target } from '@fluentui/react'
+import { IGroup } from '@fluentui/react'
 import { createAction } from '@reduxjs/toolkit'
 import { ProjectContentColumn } from 'pp365-shared-library'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
+import { OnColumnContextMenu } from '../../List'
 import { IColumnFormPanel } from '../ColumnFormPanel/types'
 
 /**
@@ -54,12 +55,11 @@ export const DELETE_COLUMN = createAction('DELETE_COLUMN')
 export const SHOW_HIDE_COLUMNS = createAction('SHOW_HIDE_COLUMNS')
 
 /**
- * `COLUMN_HEADER_CONTEXT_MENU`: Column header context menu.
+ * `TOGGLE_COLUMN_CONTEXT_MENU`: Column header context menu.
  */
-export const COLUMN_HEADER_CONTEXT_MENU = createAction<{
-  column: ProjectContentColumn
-  target: Target
-}>('COLUMN_HEADER_CONTEXT_MENU')
+export const TOGGLE_COLUMN_CONTEXT_MENU = createAction<OnColumnContextMenu>(
+  'TOGGLE_COLUMN_CONTEXT_MENU'
+)
 
 /**
  * `SET_GROUP_BY`: Set group by.

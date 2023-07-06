@@ -9,13 +9,25 @@ import { ViewFormPanel } from './ViewFormPanel'
 import { PortfolioOverviewContext } from './context'
 import { IPortfolioOverviewProps } from './types'
 import { usePortfolioOverview } from './usePortfolioOverview'
+import { UserMessage } from 'pp365-shared-library'
+import { MessageBarType } from '@fluentui/react'
 
 /**
  * Component for displaying a portfolio overview - an overview of all projects in a portfolio.
  */
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
-  const { context, selection, onColumnHeaderContextMenu, editViewColumnsPanelProps, searchBox } =
+  const { context, selection, onColumnContextMenu, editViewColumnsPanelProps, searchBox } =
     usePortfolioOverview(props)
+
+  if (context.state.error) {
+    return (
+      <div className={styles.root}>
+        <div className={styles.container}>
+          <UserMessage type={MessageBarType.error} text={context.state.error.message} />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className={styles.root}>
@@ -32,10 +44,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
             isAddColumnEnabled={!props.isParentProject}
             selection={selection}
             setKey='multiple'
-            onColumnHeaderClick={(event, column) => onColumnHeaderContextMenu({ column, event })}
-            onColumnHeaderContextMenu={(column, event) =>
-              onColumnHeaderContextMenu({ column, event })
-            }
+            onColumnContextMenu={onColumnContextMenu}
             compact={context.state.isCompact}
             isListLayoutModeJustified={props.isListLayoutModeJustified}
             renderTitleProjectInformationPanel={true}

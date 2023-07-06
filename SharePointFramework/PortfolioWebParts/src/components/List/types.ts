@@ -1,7 +1,21 @@
-import { IScrollablePaneProps, ISearchBoxProps, IShimmeredDetailsListProps } from '@fluentui/react'
+import {
+  IScrollablePaneProps,
+  ISearchBoxProps,
+  IShimmeredDetailsListProps,
+  Target
+} from '@fluentui/react'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 
-export interface IListProps extends Omit<IShimmeredDetailsListProps, 'layoutMode'> {
+export type OnColumnContextMenu = {
+  column: any
+  target: Target
+}
+
+export interface IListProps
+  extends Omit<
+    IShimmeredDetailsListProps,
+    'layoutMode' | 'onColumnHeaderClick' | 'onColumnHeaderContextMenu'
+  > {
   /**
    * Title to display in the list header
    */
@@ -44,4 +58,10 @@ export interface IListProps extends Omit<IShimmeredDetailsListProps, 'layoutMode
    * fit and have isCollapsible set.
    */
   isListLayoutModeJustified?: boolean
+
+  /**
+   * On column context menu event is triggered on both `onColumnHeaderClick`
+   * and `onColumnHeaderContextMenu`.
+   */
+  onColumnContextMenu?: ({ column, target }: OnColumnContextMenu) => void
 }

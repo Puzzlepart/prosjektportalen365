@@ -15,6 +15,7 @@ import { useFetchData } from './useFetchData'
 import { useFilteredData } from './useFilteredData'
 import { usePersistedColumns } from './usePersistedColumns'
 import strings from 'PortfolioWebPartsStrings'
+import { OnColumnContextMenu } from '../List'
 
 /**
  * Component logic hook for `PortfolioOverview` component.
@@ -47,13 +48,8 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
 
   const selection = new Selection({ onSelectionChanged })
 
-  const onColumnHeaderContextMenu = ({ event, column }) => {
-    dispatch(
-      TOGGLE_COLUMN_CONTEXT_MENU({
-        column,
-        target: event.currentTarget
-      })
-    )
+  const onColumnContextMenu = (contextMenu: OnColumnContextMenu) => {
+    context.dispatch(TOGGLE_COLUMN_CONTEXT_MENU(contextMenu))
   }
 
   useFetchData(context)
@@ -82,7 +78,7 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
       groups
     },
     selection,
-    onColumnHeaderContextMenu,
+    onColumnContextMenu,
     editViewColumnsPanelProps,
     searchBox
   } as const

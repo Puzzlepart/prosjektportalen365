@@ -6,7 +6,8 @@ import {
   ScrollablePane,
   ScrollbarVisibility,
   SelectionMode,
-  ShimmeredDetailsList
+  ShimmeredDetailsList,
+  Target
 } from '@fluentui/react'
 import React, { FC } from 'react'
 import { onRenderItemColumn } from './ItemColumn'
@@ -44,6 +45,12 @@ export const List: FC<IListProps> = (props) => {
               ? DetailsListLayoutMode.justified
               : DetailsListLayoutMode.fixedColumns
           }
+          onColumnHeaderClick={(event, column) =>
+            props.onColumnContextMenu({ column, target: event.target as Target })
+          }
+          onColumnHeaderContextMenu={(column, event) =>
+            props.onColumnContextMenu({ column, target: event.target as Target })
+          }
         />
       </MarqueeSelection>
       {props.layerHostId && <LayerHost id={props.layerHostId} />}
@@ -52,8 +59,6 @@ export const List: FC<IListProps> = (props) => {
 }
 
 List.defaultProps = {
-  compact: false,
-  isAddColumnEnabled: false,
   selectionMode: SelectionMode.multiple,
   constrainMode: ConstrainMode.unconstrained,
   scrollablePane: {

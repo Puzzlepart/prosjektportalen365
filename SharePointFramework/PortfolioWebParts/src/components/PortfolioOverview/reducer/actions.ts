@@ -6,8 +6,8 @@ import {
   ProjectColumn,
   ProjectColumnCustomSort
 } from 'pp365-shared-library/lib/models'
+import { OnColumnContextMenu } from '../../List'
 import { IColumnFormPanel } from '../ColumnFormPanel/types'
-import { IPortfolioOverviewState } from '../types'
 
 /**
  * `STARTING_DATA_FETCH`: Action dispatched when data fetch is started
@@ -77,9 +77,9 @@ export const ON_FILTER_CHANGED = createAction<{
 /**
  * `TOGGLE_COLUMN_CONTEXT_MENU`: Action dispatched when user opens the column context menu
  */
-export const TOGGLE_COLUMN_CONTEXT_MENU = createAction<
-  IPortfolioOverviewState['columnContextMenu']
->('TOGGLE_COLUMN_CONTEXT_MENU')
+export const TOGGLE_COLUMN_CONTEXT_MENU = createAction<OnColumnContextMenu>(
+  'TOGGLE_COLUMN_CONTEXT_MENU'
+)
 
 /**
  * `SET_GROUP_BY`: Action dispatched when user changes the group by column

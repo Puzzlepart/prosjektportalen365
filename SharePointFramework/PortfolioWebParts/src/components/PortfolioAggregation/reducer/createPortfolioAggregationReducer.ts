@@ -17,7 +17,7 @@ import {
 } from '../types'
 import {
   ADD_COLUMN,
-  COLUMN_HEADER_CONTEXT_MENU,
+  TOGGLE_COLUMN_CONTEXT_MENU,
   DATA_FETCHED,
   DATA_FETCH_ERROR,
   DELETE_COLUMN,
@@ -150,9 +150,9 @@ export const createPortfolioAggregationReducer = (
       state.columnShowHide = new Date().getTime()
       persistSelectedColumnsInWebPartProperties(props, current(state).columns)
     },
-    [COLUMN_HEADER_CONTEXT_MENU.type]: (
+    [TOGGLE_COLUMN_CONTEXT_MENU.type]: (
       state,
-      { payload }: ReturnType<typeof COLUMN_HEADER_CONTEXT_MENU>
+      { payload }: ReturnType<typeof TOGGLE_COLUMN_CONTEXT_MENU>
     ) => {
       state.columnContextMenu = payload
         ? {

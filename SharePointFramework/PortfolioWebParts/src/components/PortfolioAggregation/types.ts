@@ -1,9 +1,9 @@
-import { IColumn, IGroup, MessageBarType, Target } from '@fluentui/react'
+import { IColumn, IGroup, MessageBarType } from '@fluentui/react'
 import { SearchResult } from '@pnp/sp'
 import { ProjectContentColumn } from 'pp365-shared-library'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
-import { IListProps } from '../List'
+import { IListProps, OnColumnContextMenu } from '../List'
 import { IBaseComponentProps } from '../types'
 import { IColumnFormPanel } from './ColumnFormPanel/types'
 
@@ -172,7 +172,7 @@ export interface IPortfolioAggregationState
   /**
    * Column context menu
    */
-  columnContextMenu?: { column: ProjectContentColumn; target: Target }
+  columnContextMenu?: OnColumnContextMenu
 
   /**
    * Timestamp for when a new column was added or updated

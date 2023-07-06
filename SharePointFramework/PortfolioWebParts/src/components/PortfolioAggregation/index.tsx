@@ -11,20 +11,13 @@ import { ColumnFormPanel } from './ColumnFormPanel'
 import { Commands } from './Commands'
 import styles from './PortfolioAggregation.module.scss'
 import { PortfolioAggregationContext } from './context'
-import {
-  COLUMN_HEADER_CONTEXT_MENU,
-  ON_FILTER_CHANGE,
-  SET_ALL_COLLAPSED,
-  SET_COLLAPSED,
-  TOGGLE_FILTER_PANEL
-} from './reducer'
+import { ON_FILTER_CHANGE, SET_ALL_COLLAPSED, SET_COLLAPSED, TOGGLE_FILTER_PANEL } from './reducer'
 import { IPortfolioAggregationProps } from './types'
-import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
-  const { context, searchBox } = usePortfolioAggregation(props)
-  const editViewColumnsPanelProps = useEditViewColumnsPanel(context)
+  const { context, searchBox, editViewColumnsPanelProps, onColumnContextMenu } =
+    usePortfolioAggregation(props)
 
   if (context.state.error) {
     return (
@@ -49,14 +42,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             columns={context.columns}
             groups={context.state.groups}
             searchBox={searchBox}
-            onColumnHeaderClick={(ev, col: ProjectContentColumn) => {
-              context.dispatch(
-                COLUMN_HEADER_CONTEXT_MENU({
-                  column: col,
-                  target: ev.currentTarget
-                })
-              )
-            }}
+            onColumnContextMenu={onColumnContextMenu}
             isAddColumnEnabled={!props.lockedColumns && !props.isParentProject}
             compact={context.state.isCompact}
             isListLayoutModeJustified={props.isListLayoutModeJustified}

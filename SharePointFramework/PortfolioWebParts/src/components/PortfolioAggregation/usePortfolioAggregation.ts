@@ -1,5 +1,10 @@
 import { useEffect } from 'react'
-import { EXECUTE_SEARCH, SET_CURRENT_VIEW, usePortfolioAggregationReducer } from './reducer'
+import {
+  EXECUTE_SEARCH,
+  SET_CURRENT_VIEW,
+  TOGGLE_COLUMN_CONTEXT_MENU,
+  usePortfolioAggregationReducer
+} from './reducer'
 import { IPortfolioAggregationProps } from './types'
 import { useDefaultColumns } from './useDefaultColumns'
 import { usePortfolioAggregationDataFetch } from './usePortfolioAggregationDataFetch'
@@ -7,6 +12,8 @@ import { usePortfolioAggregationFilteredItems } from './usePortfolioAggregationF
 import { ISearchBoxProps, format } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import strings from 'PortfolioWebPartsStrings'
+import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
+import { OnColumnContextMenu } from '../List'
 
 /**
  * Component logic hook for the Portfolio Aggregation component. This
@@ -38,5 +45,11 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
     onClear: () => context.dispatch(EXECUTE_SEARCH(''))
   }
 
-  return { context, searchBox } as const
+  const onColumnContextMenu = (contextMenu: OnColumnContextMenu) => {
+    context.dispatch(TOGGLE_COLUMN_CONTEXT_MENU(contextMenu))
+  }
+
+  const editViewColumnsPanelProps = useEditViewColumnsPanel(context)
+
+  return { context, editViewColumnsPanelProps, onColumnContextMenu, searchBox } as const
 }
