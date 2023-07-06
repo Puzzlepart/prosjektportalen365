@@ -40,7 +40,6 @@ export class ProjectContentColumn implements IProjectContentColumn {
   public isSorted?: boolean
   public isSortedDescending?: boolean
   public isMultiline?: boolean
-  public onColumnClick: any
   public data?: ProjectContentColumnData
 
   constructor(item?: SPProjectContentColumnItem) {
@@ -73,7 +72,7 @@ export class ProjectContentColumn implements IProjectContentColumn {
    *
    * @param data Data to set
    */
-  public setData(data: ProjectContentColumnData = {}): ProjectContentColumn {
+  public setData?(data: ProjectContentColumnData = {}): ProjectContentColumn {
     this.data = { ...this.data, ...data }
     if (this.data.renderAs) {
       this.dataType = this.data.renderAs

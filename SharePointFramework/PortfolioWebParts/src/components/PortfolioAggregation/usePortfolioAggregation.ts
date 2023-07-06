@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { SET_CURRENT_VIEW, usePortfolioAggregationReducer } from './reducer'
 import { IPortfolioAggregationProps } from './types'
 import { useDefaultColumns } from './useDefaultColumns'
-import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 import { usePortfolioAggregationDataFetch } from './usePortfolioAggregationDataFetch'
 import { usePortfolioAggregationFilteredItems } from './usePortfolioAggregationFilteredItems'
 
@@ -24,11 +23,8 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
 
   usePortfolioAggregationDataFetch(context, [context.state.currentView])
 
-  const items = usePortfolioAggregationFilteredItems(context)
+  context.items = usePortfolioAggregationFilteredItems(context)
+  context.columns = useDefaultColumns(context)
 
-  const editViewColumnsPanelProps = useEditViewColumnsPanel(context)
-
-  const columns = useDefaultColumns(context)
-
-  return { context: { ...context, items, columns }, columns, editViewColumnsPanelProps } as const
+  return context
 }

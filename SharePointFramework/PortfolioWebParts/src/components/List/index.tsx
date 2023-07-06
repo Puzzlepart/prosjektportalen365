@@ -1,4 +1,12 @@
-import { ConstrainMode, LayerHost, MarqueeSelection, ScrollablePane, ScrollbarVisibility, SelectionMode, ShimmeredDetailsList } from '@fluentui/react'
+import {
+  ConstrainMode,
+  LayerHost,
+  MarqueeSelection,
+  ScrollablePane,
+  ScrollbarVisibility,
+  SelectionMode,
+  ShimmeredDetailsList
+} from '@fluentui/react'
 import React, { FC } from 'react'
 import { onRenderItemColumn } from './ItemColumn'
 import { IListProps } from './types'
@@ -23,7 +31,7 @@ import { onRenderDetailsHeader } from './ListHeader'
 export const List: FC<IListProps> = (props) => {
   const { addColumn } = useAddColumn(props.isAddColumnEnabled)
   return (
-    <ScrollablePane {...props.scrollablePane} >
+    <ScrollablePane {...props.scrollablePane}>
       <MarqueeSelection selection={props.selection}>
         <ShimmeredDetailsList
           {...props}

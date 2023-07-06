@@ -12,7 +12,6 @@ import {
   TOGGLE_VIEW_FORM_PANEL
 } from '../reducer'
 import { usePortfolioOverviewFilters } from '../usePortfolioOverviewFilters'
-import { IPortfolioOverviewCommandsProps } from './types'
 import { useConvertViewsToContextualMenuItems } from './useConvertViewsToContextualMenuItems'
 import { useExcelExport } from './useExcelExport'
 
@@ -25,14 +24,12 @@ import { useExcelExport } from './useExcelExport'
  * - `NEW_VIEW`: New view button
  * - `VIEW_OPTIONS`: View options button
  * - `FILTERS`: Filters button
- *
- * @param props Props for the component `<PortfolioOverviewCommands />`
  */
-export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsProps) {
+export function useCommands() {
   const context = useContext(PortfolioOverviewContext)
   const filters = usePortfolioOverviewFilters()
   const convertViewsToContextualMenuItems = useConvertViewsToContextualMenuItems()
-  const { exportToExcelContextualMenuItem } = useExcelExport(props)
+  const { exportToExcelContextualMenuItem } = useExcelExport()
 
   const sharedViews = convertViewsToContextualMenuItems((v) => !v.isPersonal)
   const personalViews = convertViewsToContextualMenuItems((v) => v.isPersonal)
@@ -178,7 +175,7 @@ export function usePortfolioOverviewCommands(props: IPortfolioOverviewCommandsPr
         items: context.props.configuration.columns.map((col) => ({
           name: col.name,
           value: col.fieldName,
-          selected: props.filteredData.columns.indexOf(col) !== -1
+          selected: context.columns.indexOf(col) !== -1
         })),
         defaultCollapsed: true
       },

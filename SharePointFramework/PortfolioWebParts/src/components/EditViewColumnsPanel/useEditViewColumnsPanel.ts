@@ -12,7 +12,7 @@ import { IEditViewColumnsPanelProps } from './types'
  * @param props Props for `EditViewColumnsPanel` component
  */
 const sortColumns = (props: IEditViewColumnsPanelProps) =>
-  props.columns.sort((a, b) => {
+  [...props.columns].sort((a, b) => {
     const customColumnOrderIndexA = props.customColumnOrder.indexOf(a['id'])
     const customColumnOrderIndexB = props.customColumnOrder.indexOf(b['id'])
     if (a.data.isSelected && !b.data.isSelected) {

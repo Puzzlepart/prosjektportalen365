@@ -122,13 +122,9 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
             {
               groupName: strings.SearchBoxGroupName,
               groupFields: [
-                PropertyPaneToggle('showSearchBox', {
-                  label: strings.ShowSearchBoxLabel
-                }),
                 PropertyPaneTextField('searchBoxPlaceholderText', {
                   label: strings.SearchBoxPlaceholderTextLabel,
-                  description: strings.SearchBoxPlaceholderTextDescription,
-                  disabled: !this.properties.showSearchBox
+                  description: strings.SearchBoxPlaceholderTextDescription
                 })
               ]
             }

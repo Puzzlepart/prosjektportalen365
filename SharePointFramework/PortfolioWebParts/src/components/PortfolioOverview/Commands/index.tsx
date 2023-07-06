@@ -1,19 +1,18 @@
 import { CommandBar } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
+import { FilterPanel, IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import React, { useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import { ON_FILTER_CHANGED, TOGGLE_FILTER_PANEL } from '../reducer'
-import { IPortfolioOverviewCommandsProps } from './types'
-import { usePortfolioOverviewCommands } from './useCommands'
-import { FilterPanel, IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
+import { useCommands } from './useCommands'
 
 /**
  * Component for displaying the command bar and filter panel for the `PortfolioOverview` component.
  */
-export const Commands: React.FC<IPortfolioOverviewCommandsProps> = (props) => {
+export const Commands: React.FC = () => {
   const context = useContext(PortfolioOverviewContext)
-  const { commandBarProps, filters } = usePortfolioOverviewCommands(props)
+  const { commandBarProps, filters } = useCommands()
   return (
     <div hidden={!context.props.showCommandBar}>
       <CommandBar {...commandBarProps} />

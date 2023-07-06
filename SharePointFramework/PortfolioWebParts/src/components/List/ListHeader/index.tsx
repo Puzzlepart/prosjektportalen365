@@ -1,9 +1,4 @@
-import {
-  IDetailsHeaderProps,
-  IRenderFunction,
-  Sticky,
-  StickyPositionType
-} from '@fluentui/react'
+import { IDetailsHeaderProps, IRenderFunction, Sticky, StickyPositionType } from '@fluentui/react'
 import { SearchBox } from '@fluentui/react/lib/SearchBox'
 import React, { FC } from 'react'
 import { IListProps } from '../types'
@@ -13,7 +8,8 @@ import { IListHeaderProps } from './types'
 /**
  * Component for displaying a Sticky list header.
  */
-export const ListHeader: FC<IListHeaderProps> = (props) => {/*  */
+export const ListHeader: FC<IListHeaderProps> = (props) => {
+  /*  */
   return (
     <Sticky
       stickyClassName={styles.sticky}
@@ -40,7 +36,7 @@ export const ListHeader: FC<IListHeaderProps> = (props) => {/*  */
  *
  * @param props List props
  */
-export const onRenderDetailsHeader = (props: IListProps): IRenderFunction<IDetailsHeaderProps> => (
-  headerProps,
-  defaultRender
-) => <ListHeader {...props} headerProps={headerProps} defaultRender={defaultRender} />
+export const onRenderDetailsHeader =
+  (props: IListProps): IRenderFunction<IDetailsHeaderProps> =>
+  (headerProps, defaultRender) =>
+    <ListHeader {...props} headerProps={headerProps} defaultRender={defaultRender} />

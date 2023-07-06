@@ -11,7 +11,10 @@ import _ from 'lodash'
  * @param items Items
  * @param activeFilters Active filters
  */
-const filterItems = (items: IFilterItemProps[], activeFilters: Record<string, string[]>): Record<string, any>[] => {
+const filterItems = (
+  items: IFilterItemProps[],
+  activeFilters: Record<string, string[]>
+): Record<string, any>[] => {
   return Object.keys(activeFilters).reduce((arr, key) => {
     return _.filter(arr, (f) => {
       const colValue = get<string>(f, key, '')
@@ -19,7 +22,6 @@ const filterItems = (items: IFilterItemProps[], activeFilters: Record<string, st
     })
   }, items)
 }
-
 
 /**
  * Returns the list items and columns for the Portfolio Aggregation component filtered
@@ -31,9 +33,5 @@ export function usePortfolioAggregationFilteredItems({ state }: IPortfolioAggreg
   return useMemo(() => {
     const filteredItems = filterItems(state.items, state.activeFilters)
     return filteredItems.filter((i) => searchItem(i, state.searchTerm, state.columns))
-  }, [
-    state.searchTerm,
-    state.items,
-    state.activeFilters
-  ])
+  }, [state.searchTerm, state.items, state.activeFilters])
 }

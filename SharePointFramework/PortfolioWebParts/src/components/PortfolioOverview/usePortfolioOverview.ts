@@ -32,7 +32,7 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
 
   const layerHostId = useId('layerHost')
 
-  const contextValue: IPortfolioOverviewContext = {
+  const context: IPortfolioOverviewContext = {
     props,
     state,
     dispatch,
@@ -54,22 +54,24 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
     )
   }
 
-  useFetchData(contextValue)
+  useFetchData(context)
 
   ExcelExportService.configure({ name: props.title })
 
   const { items, columns, groups } = useFilteredData(props, state)
 
-  const editViewColumnsPanelProps = useEditViewColumnsPanel(contextValue)
+  const editViewColumnsPanelProps = useEditViewColumnsPanel(context)
 
   return {
     state,
-    contextValue,
+    context: {
+      ...context,
+      items,
+      columns,
+      groups
+    },
     selection,
     onColumnHeaderContextMenu,
-    editViewColumnsPanelProps,
-    items,
-    columns,
-    groups
+    editViewColumnsPanelProps
   } as const
 }

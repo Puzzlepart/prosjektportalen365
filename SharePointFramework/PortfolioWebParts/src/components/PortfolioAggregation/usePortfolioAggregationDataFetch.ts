@@ -1,7 +1,7 @@
 import { ProjectContentColumn } from 'pp365-shared-library'
 import { useEffect } from 'react'
 import { IPortfolioAggregationContext } from './context'
-import { DATA_FETCHED, DATA_FETCH_ERROR, START_FETCH } from './reducer'
+import { DATA_FETCHED, DATA_FETCH_ERROR, GET_FILTERS, SET_GROUP_BY, START_FETCH } from './reducer'
 
 /**
  * Fetching data for the Portfolio Aggregation component. This includes
@@ -30,7 +30,7 @@ async function fetchData({ props, state }: IPortfolioAggregationContext) {
 
 /**
  * Hook that fetches data for the Portfolio Aggregation component using `fetchData`.
- * 
+ *
  * This hook is called when the component is mounted and when one of the
  * specified dependencies changes.
  *
@@ -44,6 +44,8 @@ export function usePortfolioAggregationDataFetch(context: IPortfolioAggregationC
     fetchData(context)
       .then((data) => {
         context.dispatch(DATA_FETCHED(data))
+        context.dispatch(GET_FILTERS({ filters: data.dataSource.refiners }))
+        context.dispatch(SET_GROUP_BY({ column: data.dataSource.groupBy }))
       })
       .catch((error) => context.dispatch(DATA_FETCH_ERROR({ error })))
   }, [...deps])

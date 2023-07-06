@@ -13,6 +13,7 @@ import { any, first, indexOf, isEmpty, omit, uniq } from 'underscore'
 import {
   IPortfolioAggregationHashState,
   IPortfolioAggregationProps,
+  IPortfolioAggregationState,
   PortfolioAggregationErrorMessage
 } from '../types'
 import {
@@ -21,10 +22,10 @@ import {
   DATA_FETCHED,
   DATA_FETCH_ERROR,
   DELETE_COLUMN,
+  EXECUTE_SEARCH,
   GET_FILTERS,
   MOVE_COLUMN,
   ON_FILTER_CHANGE,
-  EXECUTE_SEARCH,
   SET_ALL_COLLAPSED,
   SET_COLLAPSED,
   SET_COLUMNS,
@@ -39,7 +40,6 @@ import {
   TOGGLE_EDIT_VIEW_COLUMNS_PANEL,
   TOGGLE_FILTER_PANEL
 } from './actions'
-import { getInitialState } from './getInitialState'
 
 /**
  * Persist columns in web part properties for `<PortfolioAggregation />` component
@@ -62,9 +62,13 @@ const persistColumnsInWebPartProperties = (
  * Create reducer for `<PortfolioAggregation />` using `createReducer` from `@reduxjs/toolkit`.
  *
  * @param props Props for `<PortfolioAggregation />` component
+ * @param initialState Initial state for reducer
  */
-export const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
-  createReducer(getInitialState(props), {
+export const createPortfolioAggregationReducer = (
+  props: IPortfolioAggregationProps,
+  initialState: IPortfolioAggregationState
+) =>
+  createReducer(initialState, {
     [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
       if (payload.items) {
         let items = props.postTransform ? props.postTransform(payload.items) : payload.items
@@ -77,34 +81,33 @@ export const createPortfolioAggregationReducer = (props: IPortfolioAggregationPr
           )
         }
         state.items = items
-        state.loading = false
       }
       if (payload.dataSources) state.dataSources = payload.dataSources
-      if (!payload.columns) return
-      if (!isEmpty(payload.dataSource?.columns))
-        state.dataSourceColumns = payload.dataSource.columns
-      else state.dataSourceColumns = payload.columns
-
-      if (isEmpty(payload.columns)) {
-        state.columns = props.columns ?? []
-      } else {
-        const mergedColumns = current(state).columns.map((col) => {
-          const payCol = _.find(payload.columns, (c) => c.key === col.key)
-          return payCol
-            ? payCol.setData({ renderAs: col.data.renderAs ?? payCol.dataType ?? 'text' })
-            : col
-        })
-
-        const newColumns = payload.columns.filter(
-          (col) => !_.some(mergedColumns, (c) => c.key === col.key)
-        )
-
-        const filteredColumns = [...mergedColumns, ...newColumns].filter((col) => {
-          return payload.columns.find((c) => c.fieldName === col.fieldName)
-        })
-        if (_.isEmpty(mergedColumns)) state.columns = filteredColumns
-        else state.columns = sortArray(payload.columns, 'sortOrder')
+      if (!payload.columns) {
+        state.allColumnsForCategory = []
+        state.columns = []
+        return
       }
+      const selectedColumns = !isEmpty(props.columns)
+        ? props.columns
+        : payload.dataSource.columns ?? []
+      const allColumnsForCategory = payload.columns.map((c) =>
+        c.setData({ isSelected: _.some(selectedColumns, ({ key }) => key === c.key) })
+      )
+      const selectedColumnsMerged = selectedColumns
+        .map((c) => {
+          const col = _.find(allColumnsForCategory, ({ key }) => key === c.key)
+          return col && col.setData({ renderAs: c.data.renderAs ?? col.dataType ?? 'text' })
+        })
+        .filter(Boolean)
+      const availableColumns = payload.columns.filter(
+        (c) => !_.some(selectedColumnsMerged, ({ key }) => key === c.key)
+      )
+      state.columns = !_.isEmpty(selectedColumnsMerged)
+        ? [...selectedColumnsMerged, ...availableColumns]
+        : sortArray(allColumnsForCategory, 'sortOrder')
+      state.allColumnsForCategory = allColumnsForCategory
+      state.loading = false
     },
     [TOGGLE_COLUMN_FORM_PANEL.type]: (
       state,
@@ -127,7 +130,7 @@ export const createPortfolioAggregationReducer = (props: IPortfolioAggregationPr
     [ADD_COLUMN.type]: (state, { payload }: ReturnType<typeof ADD_COLUMN>) => {
       const isEdit = !!state.columnForm?.column
       let columns = [...current(state).columns]
-      let dataSourceColumns = [...current(state).dataSourceColumns]
+      let dataSourceColumns = [...current(state).allColumnsForCategory]
       if (isEdit) {
         columns = columns.map((c) =>
           c.fieldName === payload.column.fieldName ? payload.column : c
@@ -140,7 +143,7 @@ export const createPortfolioAggregationReducer = (props: IPortfolioAggregationPr
         dataSourceColumns = [...dataSourceColumns, payload.column]
       }
       state.columns = columns
-      state.dataSourceColumns = dataSourceColumns
+      state.allColumnsForCategory = dataSourceColumns
       state.columnForm = { isOpen: false }
       state.columnAddedOrUpdated = new Date().getTime()
       persistColumnsInWebPartProperties(props, columns)
@@ -161,9 +164,9 @@ export const createPortfolioAggregationReducer = (props: IPortfolioAggregationPr
     ) => {
       state.columnContextMenu = payload
         ? {
-          column: payload.column,
-          target: payload.target as any
-        }
+            column: payload.column,
+            target: payload.target as any
+          }
         : null
     },
     [SET_ALL_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_ALL_COLLAPSED>) => {
