@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    NewViewHeaderText: 'Opprett visning',
+    EditViewHeaderText: 'Rediger visning',
+    PortfolioAggregationViewSearchQueryDescription: 'Søkespørringen for å hente data. DepartmentId refererer til Prosjektportalen-huben og bør ikke endres. ContentTypeId refererer til innholdstypen til dataelementet du vil hente. Gå til Datakilder-listen for å se eksempler.',
     ModalColumnEmptyListText: 'Ingen elementer funnet.',
     ColumnRenderOptionModalShowInfoTextLabel: 'Vis infotekst',
     ColumnRenderOptionModalInfoTextTemplateDescription: 'Mal for infotekst. Bruk {{GtMeasurementOWSCHCS}} for å vise måleindikatoren, {{GtStartValueOWSNMBR}} for å vise startverdien og {{GtDesiredValueOWSNMBR}} for å vise målet. Du kan også bruke andre kolonnenavn fra gevinstarbeidet.',
@@ -55,6 +58,7 @@ define([], function () {
     EditViewColumnsPanelHeaderText: 'Rediger visningskolonner',
     SearchBoxPlaceholderTextDescription: 'Tekst som vises i søkeboksen når den er tom. Om det ikke settes en verdi baseres teksten på valgt datakilde.',
     DataSourceLevelLabel: 'Nivå for datakilde',
+    DataSourceLevelDescription: 'Angi nivået for datakilden. Dette brukes for å filtrere datakilder i webdelen basert på hvor man henter data fra.',
     ShowProgramViewsLabel: 'Vis programvisninger',
     ProgramsHeaderText: 'Programmer',
     SelectProgramText: 'Velg et programområde',

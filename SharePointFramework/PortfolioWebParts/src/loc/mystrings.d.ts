@@ -1,4 +1,8 @@
 declare interface IPortfolioWebPartsStrings {
+  NewViewHeaderText: string
+  EditViewHeaderText: string
+  DataSourceLevelDescription: string
+  PortfolioAggregationViewSearchQueryDescription: string
   ModalColumnEmptyListText: string
   ColumnRenderOptionModalInfoTextTemplateDescription: string
   ColumnRenderOptionModalShowInfoTextLabel: string

@@ -1,16 +1,20 @@
 import {
-  ICommandBarProps,
-  IContextualMenuItem,
+  CommandBar,
   ContextualMenuItemType,
-  CommandBar
+  ICommandBarProps,
+  IContextualMenuItem
 } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
-import { redirect } from 'pp365-shared-library/lib/util'
 import React, { FC, useContext } from 'react'
 import { isEmpty } from 'underscore'
 import { PortfolioAggregationContext } from '../context'
-import { SET_DATA_SOURCE, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL } from '../reducer'
+import {
+  SET_DATA_SOURCE,
+  TOGGLE_COMPACT,
+  TOGGLE_FILTER_PANEL,
+  TOGGLE_VIEW_FORM_PANEL
+} from '../reducer'
 
 export const Commands: FC = () => {
   const context = useContext(PortfolioAggregationContext)
@@ -91,15 +95,18 @@ export const Commands: FC = () => {
             {
               key: 'NEW_VIEW',
               name: strings.NewViewText,
-              onClick: () => redirect(context.props.configuration.viewsUrls.defaultNewFormUrl)
+              onClick: () => {
+                context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: true }))
+              }
             },
             {
               key: 'EDIT_VIEW',
               name: strings.EditViewText,
-              onClick: () =>
-                redirect(
-                  `${context.props.configuration.viewsUrls.defaultEditFormUrl}?ID=${context.state.currentView.id}`
+              onClick: () => {
+                context.dispatch(
+                  TOGGLE_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
                 )
+              }
             }
           ].filter(Boolean)
         }

@@ -14,6 +14,7 @@ import { PortfolioAggregationContext } from './context'
 import { ON_FILTER_CHANGE, SET_ALL_COLLAPSED, SET_COLLAPSED, TOGGLE_FILTER_PANEL } from './reducer'
 import { IPortfolioAggregationProps } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
+import { ViewFormPanel } from './ViewFormPanel'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
   const { context, searchBox, editViewColumnsPanelProps, onColumnContextMenu } =
@@ -61,6 +62,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
         <ColumnContextMenu />
         <ColumnFormPanel />
         <EditViewColumnsPanel {...editViewColumnsPanelProps} />
+        <ViewFormPanel />
         <FilterPanel
           isOpen={context.state.isFilterPanelOpen}
           layerHostId={context.layerHostId}

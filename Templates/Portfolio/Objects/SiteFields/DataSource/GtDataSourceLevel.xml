@@ -1,14 +1,9 @@
-<Field Type="MultiChoice" DisplayName="{resource:SiteFields_GtDataSourceLevel_DisplayName}"
-    Description="{resource:SiteFields_GtDataSourceLevel_Description}"
-    Format="Dropdown"
-    Group="{resource:SiteFields_Portfolio_Group}" ID="{9f6b103c-17c6-4a9c-908e-9d53a5a9ca60}"
-    StaticName="GtDataSourceLevel"
-    Name="GtDataSourceLevel">
+<Field Type="MultiChoice" DisplayName="{resource:SiteFields_GtDataSourceLevel_DisplayName}" Description="{resource:SiteFields_GtDataSourceLevel_Description}" Format="Dropdown" Group="{resource:SiteFields_Portfolio_Group}" ID="{9f6b103c-17c6-4a9c-908e-9d53a5a9ca60}" StaticName="GtDataSourceLevel" Name="GtDataSourceLevel" CustomFormatter="{&quot;elmType&quot;:&quot;div&quot;,&quot;style&quot;:{&quot;flex-wrap&quot;:&quot;wrap&quot;,&quot;display&quot;:&quot;flex&quot;},&quot;children&quot;:[{&quot;forEach&quot;:&quot;__INTERNAL__ in @currentField&quot;,&quot;elmType&quot;:&quot;div&quot;,&quot;style&quot;:{&quot;box-sizing&quot;:&quot;border-box&quot;,&quot;padding&quot;:&quot;4px 8px 5px 8px&quot;,&quot;overflow&quot;:&quot;hidden&quot;,&quot;text-overflow&quot;:&quot;ellipsis&quot;,&quot;display&quot;:&quot;flex&quot;,&quot;border-radius&quot;:&quot;16px&quot;,&quot;height&quot;:&quot;24px&quot;,&quot;align-items&quot;:&quot;center&quot;,&quot;white-space&quot;:&quot;nowrap&quot;,&quot;margin&quot;:&quot;4px 4px 4px 4px&quot;},&quot;attributes&quot;:{&quot;class&quot;:{&quot;operator&quot;:&quot;:&quot;,&quot;operands&quot;:[{&quot;operator&quot;:&quot;==&quot;,&quot;operands&quot;:[&quot;[$__INTERNAL__]&quot;,&quot;Portefølje&quot;]},&quot;sp-css-backgroundColor-BgCornflowerBlue sp-css-color-CornflowerBlueFont&quot;,{&quot;operator&quot;:&quot;:&quot;,&quot;operands&quot;:[{&quot;operator&quot;:&quot;==&quot;,&quot;operands&quot;:[&quot;[$__INTERNAL__]&quot;,&quot;Prosjekt&quot;]},&quot;sp-css-backgroundColor-BgMintGreen sp-css-color-MintGreenFont&quot;,{&quot;operator&quot;:&quot;:&quot;,&quot;operands&quot;:[{&quot;operator&quot;:&quot;==&quot;,&quot;operands&quot;:[&quot;[$__INTERNAL__]&quot;,&quot;Overordnet/Program&quot;]},&quot;sp-css-backgroundColor-BgGold sp-css-color-GoldFont&quot;,{&quot;operator&quot;:&quot;:&quot;,&quot;operands&quot;:[{&quot;operator&quot;:&quot;==&quot;,&quot;operands&quot;:[&quot;[$__INTERNAL__]&quot;,&quot;Ikke i bruk&quot;]},&quot;sp-css-backgroundColor-BgDarkRed sp-field-borderAllRegular sp-field-borderAllSolid sp-css-borderColor-WhiteFont sp-css-color-WhiteFont&quot;,&quot;sp-field-borderAllRegular sp-field-borderAllSolid sp-css-borderColor-neutralSecondary&quot;]}]}]}]}},&quot;txtContent&quot;:&quot;[$__INTERNAL__]&quot;}],&quot;templateId&quot;:&quot;BgColorChoicePill&quot;}">
     <Default>Portefølje</Default>
     <CHOICES>
+        <CHOICE>Ikke i bruk</CHOICE>
         <CHOICE>Portefølje</CHOICE>
         <CHOICE>Prosjekt</CHOICE>
         <CHOICE>Overordnet/Program</CHOICE>
-        <CHOICE>-</CHOICE>
     </CHOICES>
 </Field>

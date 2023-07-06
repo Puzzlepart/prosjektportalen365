@@ -6,6 +6,7 @@ import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
 import { IListProps, OnColumnContextMenu } from '../List'
 import { IBaseComponentProps } from '../types'
 import { IColumnFormPanel } from './ColumnFormPanel/types'
+import { IViewFormPanel } from './ViewFormPanel/types'
 
 export class PortfolioAggregationErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -155,7 +156,10 @@ export interface IPortfolioAggregationState
   sortBy?: IColumn
 
   /**
-   * Search term
+   * Initial search term that should be
+   * set to a blank string initially
+   * in `getInitialState()` for the
+   * reducer.
    */
   searchTerm?: string
 
@@ -215,9 +219,16 @@ export interface IPortfolioAggregationState
   filters?: IFilterProps[]
 
   /**
-   * Current view
+   * Current view (or data source) selected in the view selector.
    */
   currentView?: DataSource
+
+  /**
+   * View form panel props. Consists of two properties:
+   * - `isOpen` - whether the panel is open
+   * - `view` - the view (data source) to edit (if not specified, a new view will be created)
+   */
+  viewForm: IViewFormPanel
 }
 
 export interface IPortfolioAggregationHashState {
