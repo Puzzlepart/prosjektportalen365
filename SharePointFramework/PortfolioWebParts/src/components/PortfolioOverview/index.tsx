@@ -10,7 +10,6 @@ import { ViewFormPanel } from './ViewFormPanel'
 import { PortfolioOverviewContext } from './context'
 import { IPortfolioOverviewProps } from './types'
 import { usePortfolioOverview } from './usePortfolioOverview'
-import { EXECUTE_SEARCH } from './reducer'
 
 /**
  * Component for displaying a portfolio overview - an overview of all projects in a portfolio.

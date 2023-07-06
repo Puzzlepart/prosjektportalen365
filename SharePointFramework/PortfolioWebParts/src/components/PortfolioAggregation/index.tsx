@@ -14,7 +14,6 @@ import { PortfolioAggregationContext } from './context'
 import {
   COLUMN_HEADER_CONTEXT_MENU,
   ON_FILTER_CHANGE,
-  EXECUTE_SEARCH,
   SET_ALL_COLLAPSED,
   SET_COLLAPSED,
   TOGGLE_FILTER_PANEL
