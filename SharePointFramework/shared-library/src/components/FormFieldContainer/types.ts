@@ -1,6 +1,6 @@
-import { ReactNode } from 'react'
+import { ReactNode, HTMLAttributes } from 'react'
 
-export interface IFormFieldContainerProps {
+export interface IFormFieldContainerProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode
   description?: string
 }

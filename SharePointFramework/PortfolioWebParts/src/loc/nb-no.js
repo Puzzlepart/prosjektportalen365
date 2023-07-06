@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    SortOrderDescription: 'Sorteringsrekkefølgen bestemmer hvilken rekkefølge visningene vises i. Lavest verdi vises først.',
     NewViewHeaderText: 'Opprett visning',
     EditViewHeaderText: 'Rediger visning',
     PortfolioAggregationViewSearchQueryDescription: 'Søkespørringen for å hente data. DepartmentId refererer til Prosjektportalen-huben og bør ikke endres. ContentTypeId refererer til innholdstypen til dataelementet du vil hente. Gå til Datakilder-listen for å se eksempler.',

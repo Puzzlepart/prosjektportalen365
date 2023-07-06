@@ -3,6 +3,11 @@ import * as _ from 'underscore'
 import { ProjectColumn } from './ProjectColumn'
 import { tryParseJson } from '../util/tryParseJson'
 
+/**
+ * Represents an item in a SharePoint portfolio overview views
+ * list. This is the list that contains the views that are available
+ * for the portfolio overview.
+ */
 export class SPPortfolioOverviewViewItem {
   public Id?: number = 0
   public Title: string = ''
@@ -17,6 +22,9 @@ export class SPPortfolioOverviewViewItem {
   public GtPortfolioColumnOrder?: string = ''
 }
 
+/**
+ * Represents a portfolio overview view.
+ */
 export class PortfolioOverviewView {
   /**
    * ID of the view. This can be a string or a number. If it's a
@@ -91,17 +99,17 @@ export class PortfolioOverviewView {
   /**
    * Column IDs for the view.
    */
-  private _columnIds: number[]
+  public columnIds: number[]
 
   /**
    * Refiner IDs for the view.
    */
-  private _refinerIds: number[]
+  public refinerIds: number[]
 
   /**
    * Group by ID for the view.
    */
-  private _groupById: number
+  public groupById: number
 
   /**
    * The view properties as a map. Used in the `PortfolioOverview`
@@ -123,9 +131,9 @@ export class PortfolioOverviewView {
     this.iconName = item?.GtPortfolioFabricIcon
     this.isPersonal = item?.GtPortfolioIsPersonalView
     this.columnOrder = tryParseJson<number[]>(item?.GtPortfolioColumnOrder, [])
-    this._columnIds = (item?.GtPortfolioColumnsId as number[]) ?? []
-    this._refinerIds = (item?.GtPortfolioRefinersId as number[]) ?? []
-    this._groupById = item?.GtPortfolioGroupById
+    this.columnIds = (item?.GtPortfolioColumnsId as number[]) ?? []
+    this.refinerIds = (item?.GtPortfolioRefinersId as number[]) ?? []
+    this.groupById = item?.GtPortfolioGroupById
     this.$map = this._toMap()
   }
 
@@ -168,7 +176,7 @@ export class PortfolioOverviewView {
    * @param columns Columns to configure the view with
    */
   public configure(columns: ProjectColumn[] = []): PortfolioOverviewView {
-    this.columns = this._columnIds.map((id) => _.find(columns, (col) => col.id === id))
+    this.columns = this.columnIds.map((id) => _.find(columns, (col) => col.id === id))
     if (!_.isEmpty(this.columnOrder)) {
       this.columns = this.columns.sort(
         (a, b) => this.columnOrder.indexOf(a.id) - this.columnOrder.indexOf(b.id)
@@ -176,10 +184,10 @@ export class PortfolioOverviewView {
     } else {
       this.columns = this.columns.sort((a, b) => a.sortOrder - b.sortOrder)
     }
-    this.refiners = this._refinerIds
+    this.refiners = this.refinerIds
       .map((id) => _.find(columns, (col) => col.id === id))
       .sort((a, b) => a.sortOrder - b.sortOrder)
-    this.groupBy = _.find(columns, (col) => col.id === this._groupById)
+    this.groupBy = _.find(columns, (col) => col.id === this.groupById)
     return this
   }
 
@@ -232,6 +240,7 @@ export class PortfolioOverviewView {
    */
   private _toMap(): Map<string, any> {
     return new Map<string, any>([
+      ['id', this.id],
       ['title', this.title],
       ['sortOrder', this.sortOrder],
       ['searchQuery', this.searchQuery],

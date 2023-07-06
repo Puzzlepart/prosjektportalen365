@@ -1,6 +1,6 @@
 import { PortfolioOverviewView } from 'pp365-shared-library'
-import { useContext, useEffect, useState } from 'react'
-import { PortfolioOverviewContext } from '../context'
+import { useEffect, useMemo, useState } from 'react'
+import { usePortfolioOverviewContext } from '../usePortfolioOverviewContext'
 
 /**
  * Hook that provides an editable view object and a function to update it.
@@ -11,11 +11,11 @@ import { PortfolioOverviewContext } from '../context'
  * @returns An object containing the view object, a function to update the view object, and a boolean indicating whether the user is editing a view.
  */
 export function useEditableView() {
-  const context = useContext(PortfolioOverviewContext)
+  const context = usePortfolioOverviewContext()
   const [view, $setView] = useState<PortfolioOverviewView['$map']>(
     new PortfolioOverviewView().createDefault('', context.state.currentView).$map
   )
-  const isEditing = !!context.state.viewForm.view
+  const isEditing = useMemo(() => !!context.state.viewForm?.view, [context.state.viewForm?.view])
 
   useEffect(() => {
     if (isEditing) {

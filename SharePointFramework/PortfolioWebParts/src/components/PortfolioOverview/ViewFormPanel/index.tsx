@@ -1,4 +1,4 @@
-import { MessageBarType, Panel, TextField, Toggle } from '@fluentui/react'
+import { MessageBarType, Panel, Slider, TextField, Toggle } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import { FormFieldContainer, UserMessage } from 'pp365-shared-library'
 import React, { FC, useContext } from 'react'
@@ -20,15 +20,16 @@ export const ViewFormPanel: FC = () => {
       isLightDismiss={true}
       className={styles.root}
     >
-      <FormFieldContainer>
-        <TextField
+      <FormFieldContainer description={strings.SortOrderDescription}>
+        <Slider
           label={strings.SortOrderLabel}
-          description={strings.SortOrderLabel}
-          type='number'
-          disabled={isEditing}
-          required={true}
-          value={view.get('sortOrder')}
-          onChange={(_, value) => setView('sortOrder', parseInt(value))}
+          defaultValue={view.get('sortOrder')}
+          onChanged={(_, value) => setView('sortOrder', value)}
+          showValue={true}
+          min={10}
+          max={100}
+          step={1}
+          disabled={view.get('isDefaultView')}
         />
       </FormFieldContainer>
       <FormFieldContainer>
@@ -46,8 +47,8 @@ export const ViewFormPanel: FC = () => {
           required={true}
           multiline={true}
           rows={12}
-          value={view.get('searchQuery')}
-          onChange={(_, value) => setView('searchQuery', value)}
+          defaultValue={view.get('searchQuery')}
+          onBlur={(event) => setView('searchQuery', event.target.value)}
         />
       </FormFieldContainer>
       <FormFieldContainer>
@@ -60,23 +61,28 @@ export const ViewFormPanel: FC = () => {
           iconProps={{ iconName: view.get('iconName') }}
         />
       </FormFieldContainer>
-      <FormFieldContainer description={strings.DefaultViewDescription}>
+      <FormFieldContainer
+        description={strings.DefaultViewDescription}
+        hidden={view.get('isPersonalView')}
+      >
         <Toggle
           label={strings.DefaultViewLabel}
           checked={view.get('isDefaultView')}
           onChange={(_, checked) => setView('isDefaultView', checked)}
-          disabled={isDefaultViewSet || view.get('isPersonalView')}
+          disabled={isDefaultViewSet}
         />
         {isDefaultViewSet && (
           <UserMessage text={strings.DefaultViewSetWarningMessage} type={MessageBarType.warning} />
         )}
       </FormFieldContainer>
-      <FormFieldContainer description={strings.PersonalViewDescription}>
+      <FormFieldContainer
+        description={strings.PersonalViewDescription}
+        hidden={view.get('isDefaultView')}
+      >
         <Toggle
           label={strings.PersonalViewLabel}
           checked={view.get('isPersonalView')}
           onChange={(_, checked) => setView('isPersonalView', checked)}
-          disabled={view.get('isDefaultView')}
         />
       </FormFieldContainer>
     </Panel>

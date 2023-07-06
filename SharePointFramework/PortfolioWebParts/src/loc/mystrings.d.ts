@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  SortOrderDescription: string
   NewViewHeaderText: string
   EditViewHeaderText: string
   DataSourceLevelDescription: string
