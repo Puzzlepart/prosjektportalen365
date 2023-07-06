@@ -3,10 +3,10 @@ import { ITextFieldProps, IToggleProps, Link, TextField, Toggle } from '@fluentu
 import { stringIsNullOrEmpty } from '@pnp/common'
 import strings from 'PortfolioWebPartsStrings'
 import React from 'react'
-import { IColumnDataTypePropertyField } from '../../../ColumnDataTypeField/types'
+import { IColumnDataTypePropertyField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
 import { IUrlColumnProps } from './types'
-import { registerColumnRenderComponent } from '../columnRenderComponentRegistry'
+import { ColumnRenderComponentRegistry } from '../registry'
 
 export const UrlColumn: ColumnRenderComponent<IUrlColumnProps> = (props) => {
   let [url, description] = props.columnValue.split(', ').filter((v) => !stringIsNullOrEmpty(v))
@@ -29,23 +29,26 @@ UrlColumn.key = 'url'
 UrlColumn.id = 'URL'
 UrlColumn.displayName = strings.ColumnRenderOptionUrl
 UrlColumn.iconName = 'Link'
-registerColumnRenderComponent(UrlColumn, (onChange, dataTypeProperties: Record<string, any>) => [
-  {
-    type: Toggle,
-    props: {
-      label: strings.ColumnRenderOptionUrlOpenInNewTabLabel,
-      defaultChecked: UrlColumn.defaultProps.openInNewTab,
-      checked: dataTypeProperties.openInNewTab,
-      onChange: (_, checked) => onChange('openInNewTab', checked)
-    }
-  } as IColumnDataTypePropertyField<IToggleProps>,
-  {
-    type: TextField,
-    props: {
-      label: strings.ColumnRenderOptionUrlDescriptionLabel,
-      description: strings.ColumnRenderOptionUrlDescriptionDescription,
-      value: dataTypeProperties.description,
-      onChange: (_, value) => onChange('description', value)
-    }
-  } as IColumnDataTypePropertyField<ITextFieldProps>
-])
+ColumnRenderComponentRegistry.register(
+  UrlColumn,
+  (onChange, dataTypeProperties: Record<string, any>) => [
+    {
+      type: Toggle,
+      props: {
+        label: strings.ColumnRenderOptionUrlOpenInNewTabLabel,
+        defaultChecked: UrlColumn.defaultProps.openInNewTab,
+        checked: dataTypeProperties.openInNewTab,
+        onChange: (_, checked) => onChange('openInNewTab', checked)
+      }
+    } as IColumnDataTypePropertyField<IToggleProps>,
+    {
+      type: TextField,
+      props: {
+        label: strings.ColumnRenderOptionUrlDescriptionLabel,
+        description: strings.ColumnRenderOptionUrlDescriptionDescription,
+        value: dataTypeProperties.description,
+        onChange: (_, value) => onChange('description', value)
+      }
+    } as IColumnDataTypePropertyField<ITextFieldProps>
+  ]
+)

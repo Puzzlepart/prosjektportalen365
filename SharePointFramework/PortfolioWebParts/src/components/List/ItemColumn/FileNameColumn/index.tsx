@@ -4,7 +4,7 @@ import strings from 'PortfolioWebPartsStrings'
 import React from 'react'
 import { ColumnRenderComponent } from '../types'
 import { IFileNameColumnProps } from './types'
-import { registerColumnRenderComponent } from '../columnRenderComponentRegistry'
+import { ColumnRenderComponentRegistry } from '../registry'
 
 export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (props) => {
   return (
@@ -38,4 +38,4 @@ FileNameColumn.key = 'filename'
 FileNameColumn.id = 'Filename'
 FileNameColumn.displayName = strings.ColumnRenderOptionFilename
 FileNameColumn.iconName = 'FileImage'
-registerColumnRenderComponent(FileNameColumn)
+ColumnRenderComponentRegistry.register(FileNameColumn)

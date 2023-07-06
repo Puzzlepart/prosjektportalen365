@@ -7,10 +7,10 @@ import {
   getObjectValue as get,
   tryParseJson
 } from 'pp365-shared-library'
-import React, { useMemo } from 'react'
-import { IColumnDataTypeFieldOption } from '../../ColumnDataTypeField/types'
+import React, { useEffect, useMemo } from 'react'
 import { IListProps } from '../types'
 import { BooleanColumn } from './BooleanColumn'
+import { ColumnDataTypeField } from './ColumnDataTypeField'
 import { CurrencyColumn } from './CurrencyColumn'
 import { DateColumn } from './DateColumn'
 import { FileNameColumn } from './FileNameColumn'
@@ -21,6 +21,7 @@ import { TitleColumn } from './TitleColumn'
 import { TrendColumn } from './TrendColumn'
 import { UrlColumn } from './UrlColumn'
 import { UserColumn } from './UserColumn'
+import { ColumnRenderComponentRegistry } from './registry'
 import { ItemColumnRenderFunction } from './types'
 
 /**
@@ -148,64 +149,63 @@ function renderItemColumn(item: Record<string, any>, column: IColumn, props: ILi
 }
 
 /**
- * Get column data type options that doesn't have a render component.
+ * Hook for handling the `onRenderItemColumn` function.
+ * Returns an instane of the function `onRenderItemColumn`,
+ * and registers column render options for data types
+ * that doesn't have a custom render component.
  *
- * For now this is the following data types:
- *
+ * This includes:
  * - `text`
  * - `note`
  * - `number`
  * - `datetime`
  * - `percentage`
  */
-export const getColumnDataTypeOptionsWithoutRenderComponent = (): IColumnDataTypeFieldOption[] => {
-  return [
-    {
-      key: 'text',
-      id: 'Text',
-      text: strings.ColumnRenderOptionText,
-      data: { iconProps: { iconName: 'FontColor' } }
-    },
-    {
-      key: 'note',
-      id: 'Note',
-      text: strings.ColumnRenderOptionNote,
-      data: { iconProps: { iconName: 'EditStyle' } }
-    },
-    {
-      key: 'number',
-      id: 'Number',
-      text: strings.ColumnRenderOptionNumber,
-      data: { iconProps: { iconName: 'NumberedList' } }
-    },
-    {
-      key: 'datetime',
-      id: 'DateTime',
-      text: strings.ColumnRenderOptionDateTime,
-      data: {
-        iconProps: { iconName: 'DateTime' }
-      }
-    },
-    {
-      key: 'percentage',
-      id: 'Percentage',
-      text: strings.ColumnRenderOptionPercentage,
-      data: { iconProps: { iconName: 'CalculatorPercentage' } }
-    }
-  ]
-}
-
-export const useOnRenderItemColumn = (props: IListProps) =>
-  useMemo(
+export const useOnRenderItemColumn = (props: IListProps) => {
+  useEffect(() => {
+    ColumnRenderComponentRegistry.registerColumnRenderOption(
+      'text',
+      'Text',
+      strings.ColumnRenderOptionText,
+      'FontColor'
+    )
+    ColumnRenderComponentRegistry.registerColumnRenderOption(
+      'note',
+      'Note',
+      strings.ColumnRenderOptionNote,
+      'EditStyle'
+    )
+    ColumnRenderComponentRegistry.registerColumnRenderOption(
+      'number',
+      'Number',
+      strings.ColumnRenderOptionNumber,
+      'NumberedList'
+    )
+    ColumnRenderComponentRegistry.registerColumnRenderOption(
+      'datetime',
+      'DateTime',
+      strings.ColumnRenderOptionDateTime,
+      'DateTime'
+    )
+    ColumnRenderComponentRegistry.registerColumnRenderOption(
+      'percentage',
+      'Percentage',
+      strings.ColumnRenderOptionPercentage,
+      'CalculatorPercentage'
+    )
+  }, [])
+  return useMemo(
     () =>
       (item?: any, _index?: number, column?: IColumn): React.ReactNode => {
         return renderItemColumn(item, column, props)
       },
     [props]
   )
+}
 
 export {
   BooleanColumn,
+  ColumnDataTypeField,
   CurrencyColumn,
   DateColumn,
   FileNameColumn,

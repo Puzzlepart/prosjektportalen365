@@ -18,9 +18,28 @@ import styles from './ModalColumn.module.scss'
 import { columns } from './columns'
 import { IModalColumnProps } from './types'
 import { useInfoText } from './useInfoText'
-import { IColumnDataTypePropertyField } from '../../..//ColumnDataTypeField/types'
-import { registerColumnRenderComponent } from '../columnRenderComponentRegistry'
+import { IColumnDataTypePropertyField } from '../ColumnDataTypeField'
+import { ColumnRenderComponentRegistry } from '../registry'
 
+/**
+ * A column render component that displays a link in the cell. When the link is clicked, a modal dialog is displayed
+ * that shows a list of items with columns. The columns can be customized using the `columns` prop. The link text can
+ * be customized using the `linkText` prop. The modal dialog can be customized using various props such as `isDarkOverlay`,
+ * `isBlocking`, and `containerClassName`. The component also supports showing an information text below the list of items
+ * using the `infoTextTemplate` prop. The information text can be customized using placeholders such as `{{Title}}` and
+ * `{{Count}}`. The `{{Title}}` placeholder will be replaced with the title of the column.
+ *
+ * @param props - The props for the component.
+ * @param props.items - The items to display in the modal dialog.
+ * @param props.columns - The columns to display in the modal dialog.
+ * @param props.linkText - The text to display in the link.
+ * @param props.isDarkOverlay - Whether to use a dark overlay for the modal dialog.
+ * @param props.isBlocking - Whether to block the UI when the modal dialog is displayed.
+ * @param props.selectionMode - The selection mode for the list of items.
+ * @param props.header - The header to display in the modal dialog.
+ * @param props.infoTextTemplate - The template for the information text to display below the list of items.
+ * @param props.showInfoText - Whether to show the information text.
+ */
 export const ModalColumn: ColumnRenderComponent<IModalColumnProps> = (props) => {
   const [isOpen, setIsOpen] = useState(false)
   const infoText = useInfoText(props)
@@ -70,35 +89,38 @@ ModalColumn.key = 'modal'
 ModalColumn.id = 'Modal'
 ModalColumn.displayName = strings.ColumnRenderOptionModal
 ModalColumn.iconName = 'WindowEdit'
-registerColumnRenderComponent(ModalColumn, (onChange, dataTypeProperties: Record<string, any>) => [
-  {
-    type: TextField,
-    props: {
-      label: strings.ColumnRenderOptionModalLinkTextLabel,
-      placeholder: ModalColumn.defaultProps.linkText,
-      value: dataTypeProperties['linkText'],
-      onChange: (_, value) => onChange('linkText', value)
-    }
-  } as IColumnDataTypePropertyField<ITextFieldProps>,
-  {
-    type: Checkbox,
-    props: {
-      label: strings.ColumnRenderOptionModalShowInfoTextLabel,
-      defaultChecked: ModalColumn.defaultProps.showInfoText,
-      checked: dataTypeProperties.showInfoText,
-      onChange: (_, value) => onChange('showInfoText', value)
-    }
-  } as IColumnDataTypePropertyField<ICheckboxProps>,
-  {
-    type: TextField,
-    props: {
-      label: strings.ColumnRenderOptionModalInfoTextTemplateLabel,
-      description: strings.ColumnRenderOptionModalInfoTextTemplateDescription,
-      placeholder: ModalColumn.defaultProps.infoTextTemplate,
-      value: dataTypeProperties.infoTextTemplate,
-      multiline: true,
-      disabled: !dataTypeProperties.showInfoText,
-      onChange: (_, value) => onChange('infoTextTemplate', value)
-    }
-  } as IColumnDataTypePropertyField<ITextFieldProps>
-])
+ColumnRenderComponentRegistry.register(
+  ModalColumn,
+  (onChange, dataTypeProperties: Record<string, any>) => [
+    {
+      type: TextField,
+      props: {
+        label: strings.ColumnRenderOptionModalLinkTextLabel,
+        placeholder: ModalColumn.defaultProps.linkText,
+        value: dataTypeProperties['linkText'],
+        onChange: (_, value) => onChange('linkText', value)
+      }
+    } as IColumnDataTypePropertyField<ITextFieldProps>,
+    {
+      type: Checkbox,
+      props: {
+        label: strings.ColumnRenderOptionModalShowInfoTextLabel,
+        defaultChecked: ModalColumn.defaultProps.showInfoText,
+        checked: dataTypeProperties.showInfoText,
+        onChange: (_, value) => onChange('showInfoText', value)
+      }
+    } as IColumnDataTypePropertyField<ICheckboxProps>,
+    {
+      type: TextField,
+      props: {
+        label: strings.ColumnRenderOptionModalInfoTextTemplateLabel,
+        description: strings.ColumnRenderOptionModalInfoTextTemplateDescription,
+        placeholder: ModalColumn.defaultProps.infoTextTemplate,
+        value: dataTypeProperties.infoTextTemplate,
+        multiline: true,
+        disabled: !dataTypeProperties.showInfoText,
+        onChange: (_, value) => onChange('infoTextTemplate', value)
+      }
+    } as IColumnDataTypePropertyField<ITextFieldProps>
+  ]
+)

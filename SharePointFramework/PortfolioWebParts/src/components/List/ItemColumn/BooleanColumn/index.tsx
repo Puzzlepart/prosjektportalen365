@@ -3,8 +3,8 @@ import strings from 'PortfolioWebPartsStrings'
 import React from 'react'
 import { ColumnRenderComponent } from '../types'
 import { IBooleanColumnProps } from './types'
-import { IColumnDataTypePropertyField } from '../../../ColumnDataTypeField/types'
-import { registerColumnRenderComponent } from '../columnRenderComponentRegistry'
+import { IColumnDataTypePropertyField } from '../ColumnDataTypeField'
+import { ColumnRenderComponentRegistry } from '../registry'
 
 /**
  * Renders a boolean column that displays a custom string value for true and false values.
@@ -29,7 +29,7 @@ BooleanColumn.key = 'boolean'
 BooleanColumn.id = 'Boolean'
 BooleanColumn.displayName = strings.ColumnRenderOptionBoolean
 BooleanColumn.iconName = 'CheckboxComposite'
-registerColumnRenderComponent(
+ColumnRenderComponentRegistry.register(
   BooleanColumn,
   (onChange, dataTypeProperties: Record<string, any>) => {
     const properties: IColumnDataTypePropertyField<any>[] = [

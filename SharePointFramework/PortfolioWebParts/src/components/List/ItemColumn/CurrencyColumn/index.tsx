@@ -2,24 +2,22 @@ import { ITextFieldProps, TextField } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { tryParseCurrency } from 'pp365-shared-library'
 import React from 'react'
-import { IColumnDataTypePropertyField } from '../../../ColumnDataTypeField/types'
-import { registerColumnRenderComponent } from '../columnRenderComponentRegistry'
+import { IColumnDataTypePropertyField } from '../ColumnDataTypeField'
+import { ColumnRenderComponentRegistry } from '../registry'
 import { ColumnRenderComponent } from '../types'
 import { ICurrencyColumnProps } from './types'
 
-export const CurrencyColumn: ColumnRenderComponent<ICurrencyColumnProps> = (props) => {
-  return (
-    <span>
-      {tryParseCurrency(
-        props.columnValue,
-        undefined,
-        props.currencyPrefix,
-        props.minimumFractionDigits,
-        props.maximumFractionDigits
-      )}
-    </span>
-  )
-}
+export const CurrencyColumn: ColumnRenderComponent<ICurrencyColumnProps> = (props) => (
+  <span>
+    {tryParseCurrency(
+      props.columnValue,
+      undefined,
+      props.currencyPrefix,
+      props.minimumFractionDigits,
+      props.maximumFractionDigits
+    )}
+  </span>
+)
 
 CurrencyColumn.defaultProps = {
   currencyPrefix: 'kr',
@@ -30,7 +28,7 @@ CurrencyColumn.key = 'currency'
 CurrencyColumn.id = 'Currency'
 CurrencyColumn.displayName = strings.ColumnRenderOptionCurrency
 CurrencyColumn.iconName = 'Money'
-registerColumnRenderComponent(
+ColumnRenderComponentRegistry.register(
   CurrencyColumn,
   (onChange, dataTypeProperties: Record<string, any>) => [
     {

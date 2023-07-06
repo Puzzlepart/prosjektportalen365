@@ -7,7 +7,7 @@ import { ColumnVisibilityField } from './ColumnVisibilityField'
 import { useColumnFormPanel } from './useColumnFormPanel'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
 import { ColumnSearchPropertyField, FormFieldContainer, UserMessage } from 'pp365-shared-library'
-import { ColumnDataTypeField } from '../../ColumnDataTypeField'
+import { ColumnDataTypeField } from '../../List/ItemColumn/ColumnDataTypeField'
 
 export const ColumnFormPanel: FC = () => {
   const context = useContext(PortfolioOverviewContext)

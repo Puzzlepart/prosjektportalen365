@@ -4,8 +4,8 @@ import React from 'react'
 import { ColumnRenderComponent } from '../types'
 import { IDateColumnProps } from './types'
 import { formatDate } from 'pp365-shared-library'
-import { IColumnDataTypePropertyField } from '../../../ColumnDataTypeField/types'
-import { registerColumnRenderComponent } from '../columnRenderComponentRegistry'
+import { IColumnDataTypePropertyField } from '../ColumnDataTypeField'
+import { ColumnRenderComponentRegistry } from '../registry'
 
 export const DateColumn: ColumnRenderComponent<IDateColumnProps> = (props) => {
   return <span>{formatDate(props.columnValue, props.includeTime)}</span>
@@ -15,13 +15,16 @@ DateColumn.key = 'date'
 DateColumn.id = 'Date'
 DateColumn.displayName = strings.ColumnRenderOptionDate
 DateColumn.iconName = 'Calendar'
-registerColumnRenderComponent(DateColumn, (onChange, dataTypeProperties: Record<string, any>) => [
-  {
-    type: Toggle,
-    props: {
-      label: strings.ColumnRenderOptionDateIncludeTimeLabel,
-      checked: dataTypeProperties.includeTime ?? false,
-      onChange: (_, checked) => onChange('includeTime', checked)
-    }
-  } as IColumnDataTypePropertyField<IToggleProps>
-])
+ColumnRenderComponentRegistry.register(
+  DateColumn,
+  (onChange, dataTypeProperties: Record<string, any>) => [
+    {
+      type: Toggle,
+      props: {
+        label: strings.ColumnRenderOptionDateIncludeTimeLabel,
+        checked: dataTypeProperties.includeTime ?? false,
+        onChange: (_, checked) => onChange('includeTime', checked)
+      }
+    } as IColumnDataTypePropertyField<IToggleProps>
+  ]
+)

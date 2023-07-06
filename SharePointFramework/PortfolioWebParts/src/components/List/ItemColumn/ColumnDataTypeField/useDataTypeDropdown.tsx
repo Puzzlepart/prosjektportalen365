@@ -2,34 +2,8 @@ import { IDropdownProps, IRenderFunction, Icon } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
-import {
-  BooleanColumn,
-  CurrencyColumn,
-  DateColumn,
-  FileNameColumn,
-  ListColumn,
-  ModalColumn,
-  TagsColumn,
-  TrendColumn,
-  UrlColumn,
-  UserColumn,
-  getColumnDataTypeOptionsWithoutRenderComponent
-} from '../List'
+import { ColumnRenderComponentRegistry } from '../registry'
 import { IColumnDataTypeFieldOption, IColumnDataTypeFieldProps } from './types'
-
-const dataTypeOptions: IColumnDataTypeFieldOption[] = [
-  ...getColumnDataTypeOptionsWithoutRenderComponent(),
-  BooleanColumn.getDataTypeOption(),
-  CurrencyColumn.getDataTypeOption(),
-  DateColumn.getDataTypeOption(),
-  UserColumn.getDataTypeOption(),
-  TagsColumn.getDataTypeOption(),
-  UrlColumn.getDataTypeOption(),
-  TrendColumn.getDataTypeOption(),
-  ModalColumn.getDataTypeOption(),
-  FileNameColumn.getDataTypeOption(),
-  ListColumn.getDataTypeOption()
-].sort((a, b) => a.text.localeCompare(b.text))
 
 interface IUseDataTypeDropdown extends IDropdownProps {
   selectedOption: IColumnDataTypeFieldOption
@@ -44,7 +18,7 @@ interface IUseDataTypeDropdown extends IDropdownProps {
  */
 export function useDataTypeDropdown(props: IColumnDataTypeFieldProps) {
   const [selectedOption, setSelectedOption] = useState<IColumnDataTypeFieldOption>(
-    _.find(dataTypeOptions, (option) => option.key === props.defaultSelectedKey)
+    ColumnRenderComponentRegistry.getOption(props.defaultSelectedKey as string)
   )
 
   const onChange = (option?: IColumnDataTypeFieldOption) => {
@@ -73,7 +47,7 @@ export function useDataTypeDropdown(props: IColumnDataTypeFieldProps) {
   return {
     selectedOption,
     label: strings.ColumnRenderLabel,
-    options: dataTypeOptions,
+    options: ColumnRenderComponentRegistry.getOptions(),
     selectedKey: selectedOption?.key,
     onChange: (_event, option) => setSelectedOption(option),
     onRenderTitle: (options) => onRenderOption(_.first(options)),
