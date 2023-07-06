@@ -1,26 +1,16 @@
-import { PortfolioOverviewView, SPPortfolioOverviewViewItem } from 'pp365-shared-library'
-import { useContext, useEffect, useState } from 'react'
+import _ from 'lodash'
+import { SPPortfolioOverviewViewItem } from 'pp365-shared-library'
+import { useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import { TOGGLE_VIEW_FORM_PANEL } from '../reducer'
-import _ from 'lodash'
+import { useEditableView } from './useEditableView'
 
 /**
  * Component logic hook for `ViewFormPanel`.
  */
 export function useViewFormPanel() {
   const context = useContext(PortfolioOverviewContext)
-  const [view, $setView] = useState<PortfolioOverviewView['$map']>(
-    new PortfolioOverviewView().createDefault('', context.state.currentView).$map
-  )
-  const isEditing = !!context.state.viewForm.view
-
-  useEffect(() => {
-    if (isEditing) {
-      $setView(context.state.viewForm.view.$map)
-    } else {
-      $setView(new PortfolioOverviewView().createDefault('', context.state.currentView).$map)
-    }
-  }, [context.state.viewForm, context.state.currentView])
+  const { view, setView, isEditing } = useEditableView()
 
   /**
    * Dismisses the form panel by dispatching the `TOGGLE_VIEW_FORM_PANEL` action.
@@ -64,20 +54,6 @@ export function useViewFormPanel() {
       await context.props.dataAdapter.portalDataService.addItemToList('PORTFOLIO_VIEWS', properties)
     }
     context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: false }))
-  }
-
-  /**
-   * Sets a view property.
-   *
-   * @param key Key of the view property to set
-   * @param value Value of the view property to set
-   */
-  const setView = (key: string, value: any) => {
-    $setView((prev) => {
-      const newView = new Map(prev)
-      newView.set(key, value)
-      return newView
-    })
   }
 
   /**
