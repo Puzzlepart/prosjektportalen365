@@ -132,3 +132,11 @@ export const ON_FILTER_CHANGE = createAction<{
  * `DATA_FETCH_ERROR`: Error fetching data from the data source.
  */
 export const DATA_FETCH_ERROR = createAction<{ error: Error }>('DATA_FETCH_ERROR')
+
+/**
+ * `TOGGLE_VIEW_FORM_PANEL`: Toggling the view form panel.
+ */
+export const TOGGLE_VIEW_FORM_PANEL = createAction<{
+  isOpen: boolean
+  view?: DataSource
+}>('TOGGLE_VIEW_FORM_PANEL')
