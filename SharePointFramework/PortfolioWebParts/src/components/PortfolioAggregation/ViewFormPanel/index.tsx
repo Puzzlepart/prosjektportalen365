@@ -13,7 +13,7 @@ export const ViewFormPanel: FC = () => {
   return (
     <Panel
       isOpen={context.state.viewForm?.isOpen}
-      headerText={isEditing ? strings.EditColumnHeaderText : strings.NewColumnHeaderText}
+      headerText={isEditing ? strings.EditViewHeaderText : strings.NewViewHeaderText}
       onRenderFooterContent={() => <ViewFormPanelFooter onSave={onSave} />}
       isFooterAtBottom={true}
       onDismiss={onDismiss}
@@ -43,9 +43,9 @@ export const ViewFormPanel: FC = () => {
         <TextField
           label={strings.IconNameLabel}
           description={strings.IconNameDescription}
-          required={true}
           value={view.get('iconName')}
           onChange={(_, value) => setView('iconName', value)}
+          iconProps={{ iconName: view.get('iconName') }}
         />
       </FormFieldContainer>
       <FormFieldContainer>

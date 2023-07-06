@@ -15,7 +15,7 @@ export const ViewFormPanelFooter: FC<IViewFormPanelFooterProps> = ({ onSave }) =
         text={strings.CloseButtonLabel}
         style={{ marginLeft: 4 }}
         onClick={() => {
-        context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: false }))
+          context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: false }))
         }}
       />
     </div>
