@@ -1,9 +1,10 @@
-import { Selection } from '@fluentui/react'
+import { ISearchBoxProps, Selection, format } from '@fluentui/react'
 import { useId } from '@fluentui/react-hooks'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { useMemo, useReducer } from 'react'
 import { IPortfolioOverviewContext } from './context'
 import createReducer, {
+  EXECUTE_SEARCH,
   SELECTION_CHANGED,
   TOGGLE_COLUMN_CONTEXT_MENU,
   getInitialState
@@ -13,6 +14,7 @@ import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 import { useFetchData } from './useFetchData'
 import { useFilteredData } from './useFilteredData'
 import { usePersistedColumns } from './usePersistedColumns'
+import strings from 'PortfolioWebPartsStrings'
 
 /**
  * Component logic hook for `PortfolioOverview` component.
@@ -62,6 +64,15 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
 
   const editViewColumnsPanelProps = useEditViewColumnsPanel(context)
 
+  const searchBox: ISearchBoxProps = {
+    placeholder: !!context.state.currentView
+      ? format(strings.SearchBoxPlaceholderText, context.state.currentView.title.toLowerCase())
+      : strings.SearchBoxPlaceholderFallbackText,
+    onChange: (_, searchTerm) => context.dispatch(EXECUTE_SEARCH(searchTerm)),
+    onClear: () => context.dispatch(EXECUTE_SEARCH('')),
+    hidden: !props.showSearchBox
+  }
+
   return {
     state,
     context: {
@@ -72,6 +83,7 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
     },
     selection,
     onColumnHeaderContextMenu,
-    editViewColumnsPanelProps
+    editViewColumnsPanelProps,
+    searchBox
   } as const
 }

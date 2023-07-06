@@ -1,5 +1,9 @@
 define([], function () {
   return {
+    ColumnRenderOptionModalShowInfoTextLabel: 'Vis infotekst',
+    ColumnRenderOptionModalInfoTextTemplateDescription: 'Format for infotekst. {0} erstattes med måleenhet for måleindikatoren, {1} med startverdi og {2} med målverdi.',
+    ColumnRenderOptionModalInfoTextTemplateLabel: 'Format for infotekst',
+    ShowAllMeasurementsInfoTextFormat: 'Måleindikatoren måles i {{GtMeasurementUnitOWSCHCS}}, startverdien var {{GtStartValueOWSNMBR}} og målet er {{GtDesiredValueOWSNMBR}}.',
     ListViewGroupName: 'Listevisning',
     ListLayoutModeJustifiedLabel: 'Juster kolonner etter skjermbredde',
     ColumnPersistRenderGloballyFieldDescription: 'Om du ønsker å endre visningsmodus for kolonnene som for alle webdeler og visninger, huk av sjekkboksen over.',

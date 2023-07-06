@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { IListProps } from '../types'
 import styles from './ListHeader.module.scss'
 import { IListHeaderProps } from './types'
+import strings from 'PortfolioWebPartsStrings'
 
 /**
  * Component for displaying a Sticky list header.
@@ -20,8 +21,11 @@ export const ListHeader: FC<IListHeaderProps> = (props) => {
         <div className={styles.header}>
           <div className={styles.title}>{props.title}</div>
         </div>
-        <div className={styles.searchBoxContainer} hidden={!props.searchBox}>
-          <SearchBox {...props.searchBox} />
+        <div
+          className={styles.searchBoxContainer}
+          hidden={!props.searchBox || props?.searchBox?.hidden}
+        >
+          <SearchBox placeholder={strings.SearchBoxPlaceholderFallbackText} {...props.searchBox} />
         </div>
         {props.defaultRender && (
           <div className={styles.headerColumns}>{props.defaultRender(props.headerProps)}</div>

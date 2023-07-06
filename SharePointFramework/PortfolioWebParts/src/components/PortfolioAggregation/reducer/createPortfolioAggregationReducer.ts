@@ -9,7 +9,6 @@ import { arrayMove } from 'pp365-shared-library/lib/helpers/arrayMove'
 import { getObjectValue as get } from 'pp365-shared-library/lib/helpers/getObjectValue'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
 import { parseUrlHash, setUrlHash } from 'pp365-shared-library/lib/util'
-import { any, first, indexOf, isEmpty, omit, uniq } from 'underscore'
 import {
   IPortfolioAggregationHashState,
   IPortfolioAggregationProps,
@@ -40,23 +39,7 @@ import {
   TOGGLE_EDIT_VIEW_COLUMNS_PANEL,
   TOGGLE_FILTER_PANEL
 } from './actions'
-
-/**
- * Persist columns in web part properties for `<PortfolioAggregation />` component
- * using the `onUpdateProperty` callback and property key `columns`.
- *
- * @param props Props for `<PortfolioAggregation />` component
- * @param columns Columns to persist to property `columns`
- */
-const persistColumnsInWebPartProperties = (
-  { onUpdateProperty }: IPortfolioAggregationProps,
-  columns: any[]
-) => {
-  onUpdateProperty(
-    'columns',
-    columns.map((col) => omit(col, 'calculatedWidth', 'currentWidth', '_item'))
-  )
-}
+import { persistSelectedColumnsInWebPartProperties } from './persistSelectedColumnsInWebPartProperties'
 
 /**
  * Create reducer for `<PortfolioAggregation />` using `createReducer` from `@reduxjs/toolkit`.
@@ -77,7 +60,7 @@ export const createPortfolioAggregationReducer = (
         })
         if (payload.projects) {
           items = items.filter((item) =>
-            any(payload.projects, (project) => project.GtSiteId === item.SiteId)
+            _.some(payload.projects, (project) => project.GtSiteId === item.SiteId)
           )
         }
         state.items = items
@@ -88,7 +71,7 @@ export const createPortfolioAggregationReducer = (
         state.columns = []
         return
       }
-      const selectedColumns = !isEmpty(props.columns)
+      const selectedColumns = !_.isEmpty(props.columns)
         ? props.columns
         : payload.dataSource.columns ?? []
       const allColumnsForCategory = payload.columns.map((c) =>
@@ -97,7 +80,17 @@ export const createPortfolioAggregationReducer = (
       const selectedColumnsMerged = selectedColumns
         .map((c) => {
           const col = _.find(allColumnsForCategory, ({ key }) => key === c.key)
-          return col && col.setData({ renderAs: c.data.renderAs ?? col.dataType ?? 'text' })
+          return (
+            col &&
+            col.setData({
+              ...c.data,
+              dataTypeProperties: {
+                ...col.data.dataTypeProperties,
+                ...c.data.dataTypeProperties
+              },
+              renderAs: c.data.renderAs ?? col.dataType ?? 'text'
+            })
+          )
         })
         .filter(Boolean)
       const availableColumns = payload.columns.filter(
@@ -129,34 +122,33 @@ export const createPortfolioAggregationReducer = (
     },
     [ADD_COLUMN.type]: (state, { payload }: ReturnType<typeof ADD_COLUMN>) => {
       const isEdit = !!state.columnForm?.column
-      let columns = [...current(state).columns]
-      let dataSourceColumns = [...current(state).allColumnsForCategory]
+      const column = payload.column.setData({ isSelected: true })
+      let columns = [...state.columns]
+      let allColumnsForCategory = [...state.allColumnsForCategory]
       if (isEdit) {
-        columns = columns.map((c) =>
-          c.fieldName === payload.column.fieldName ? payload.column : c
-        )
-        dataSourceColumns = dataSourceColumns.map((c) =>
-          c.fieldName === payload.column.fieldName ? payload.column : c
+        columns = columns.map((c) => (c.fieldName === column.fieldName ? column : c))
+        allColumnsForCategory = allColumnsForCategory.map((c) =>
+          c.fieldName === column.fieldName ? column : c
         )
       } else {
-        columns = [...columns, payload.column]
-        dataSourceColumns = [...dataSourceColumns, payload.column]
+        columns = [...columns, column]
+        allColumnsForCategory = [...allColumnsForCategory, column]
       }
       state.columns = columns
-      state.allColumnsForCategory = dataSourceColumns
+      state.allColumnsForCategory = allColumnsForCategory
       state.columnForm = { isOpen: false }
       state.columnAddedOrUpdated = new Date().getTime()
-      persistColumnsInWebPartProperties(props, columns)
+      persistSelectedColumnsInWebPartProperties(props, current(state).columns)
     },
     [DELETE_COLUMN.type]: (state) => {
       state.columnForm = { isOpen: false }
       state.columnDeleted = new Date().getTime()
-      persistColumnsInWebPartProperties(props, current(state).columns)
+      persistSelectedColumnsInWebPartProperties(props, current(state).columns)
     },
     [SHOW_HIDE_COLUMNS.type]: (state) => {
       state.isEditViewColumnsPanelOpen = false
       state.columnShowHide = new Date().getTime()
-      persistColumnsInWebPartProperties(props, current(state).columns)
+      persistSelectedColumnsInWebPartProperties(props, current(state).columns)
     },
     [COLUMN_HEADER_CONTEXT_MENU.type]: (
       state,
@@ -189,7 +181,7 @@ export const createPortfolioAggregationReducer = (
         const groupNames: string[] = state.items.map((g) =>
           get<string>(g, state.groupBy.fieldName, strings.NotSet)
         )
-        const uniqueGroupNames: string[] = uniq(groupNames)
+        const uniqueGroupNames: string[] = _.uniq(groupNames)
         state.groups = uniqueGroupNames
           .sort((a, b) => (a > b ? 1 : -1))
           .map((name, idx) => {
@@ -234,16 +226,16 @@ export const createPortfolioAggregationReducer = (
       })
     },
     [MOVE_COLUMN.type]: (state, { payload }: ReturnType<typeof MOVE_COLUMN>) => {
-      const index = indexOf(
+      const index = _.indexOf(
         state.columns.map((c) => c.fieldName),
         payload.column.fieldName
       )
       state.columns = arrayMove(current(state).columns, index, index + payload.move)
-      persistColumnsInWebPartProperties(props, current(state).columns)
+      persistSelectedColumnsInWebPartProperties(props, current(state).columns)
     },
     [SET_COLUMNS.type]: (state, { payload }: ReturnType<typeof SET_COLUMNS>) => {
       state.columns = payload.columns
-      persistColumnsInWebPartProperties(props, current(state).columns)
+      persistSelectedColumnsInWebPartProperties(props, current(state).columns)
     },
     [SET_CURRENT_VIEW.type]: (state) => {
       const hashState = parseUrlHash<IPortfolioAggregationHashState>()
@@ -265,7 +257,7 @@ export const createPortfolioAggregationReducer = (
         currentView = _.find(views, (v) => v.isDefault)
       }
       if (!currentView && views.length > 0) {
-        currentView = first(views)
+        currentView = _.first(views)
       }
       if (!currentView) {
         state.error = new PortfolioAggregationErrorMessage(
@@ -299,7 +291,7 @@ export const createPortfolioAggregationReducer = (
     },
     [GET_FILTERS.type]: (state, { payload }: ReturnType<typeof GET_FILTERS>) => {
       const payloadFilters = payload.filters.map((column) => {
-        const uniqueValues = uniq(
+        const uniqueValues = _.uniq(
           // eslint-disable-next-line prefer-spread
           [].concat.apply(
             [],
@@ -340,7 +332,7 @@ export const createPortfolioAggregationReducer = (
           [payload.column.fieldName]: payload.selectedItems.map((i) => i.value)
         }
       } else {
-        state.activeFilters = omit(state.activeFilters, payload.column.fieldName)
+        state.activeFilters = _.omit(state.activeFilters, payload.column.fieldName)
       }
       state.filters = state.filters.map((f) => {
         if (payload.column.key === f.column.key) {

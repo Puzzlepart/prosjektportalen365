@@ -20,11 +20,11 @@ import {
   TOGGLE_FILTER_PANEL
 } from './reducer'
 import { IPortfolioAggregationProps } from './types'
-import { usePortfolioAggregation } from './usePortfolioAggregation'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
+import { usePortfolioAggregation } from './usePortfolioAggregation'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
-  const context = usePortfolioAggregation(props)
+  const { context, searchBox } = usePortfolioAggregation(props)
   const editViewColumnsPanelProps = useEditViewColumnsPanel(context)
 
   if (context.state.error) {
@@ -49,9 +49,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             items={context.items}
             columns={context.columns}
             groups={context.state.groups}
-            searchBox={{
-              onChange: (_event, searchTerm) => context.dispatch(EXECUTE_SEARCH(searchTerm))
-            }}
+            searchBox={searchBox}
             onColumnHeaderClick={(ev, col: ProjectContentColumn) => {
               context.dispatch(
                 COLUMN_HEADER_CONTEXT_MENU({

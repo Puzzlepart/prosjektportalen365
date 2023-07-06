@@ -89,7 +89,7 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
               type: 'number',
               label: strings.ColumnRenderOptionCurrencyMinimumFractionDigitsLabel,
               value:
-                dataTypeProperties['minimumFractionDigits'] ??
+                dataTypeProperties.minimumFractionDigits ??
                 CurrencyColumn.defaultProps.minimumFractionDigits,
               onChange: (_, value) => onChange('minimumFractionDigits', parseInt(value))
             } as ITextFieldProps
@@ -100,7 +100,7 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
               type: 'number',
               label: strings.ColumnRenderOptionCurrencyMaximumFractionDigitsLabel,
               value:
-                dataTypeProperties['maximumFractionDigits'] ??
+                dataTypeProperties.maximumFractionDigits ??
                 CurrencyColumn.defaultProps.maximumFractionDigits,
               onChange: (_, value) => onChange('maximumFractionDigits', parseInt(value))
             } as ITextFieldProps
@@ -109,7 +109,7 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
             TextField,
             {
               label: strings.ColumnRenderOptionCurrencyFallbackValueLabel,
-              value: dataTypeProperties['fallbackValue'],
+              value: dataTypeProperties.fallbackValue,
               onChange: (_, value) => onChange('fallbackValue', value)
             } as ITextFieldProps
           ],
@@ -118,7 +118,7 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
             {
               label: strings.ColumnRenderOptionCurrencyPrefixLabel,
               value:
-                dataTypeProperties['currencyPrefix'] ?? CurrencyColumn.defaultProps.currencyPrefix,
+                dataTypeProperties.currencyPrefix ?? CurrencyColumn.defaultProps.currencyPrefix,
               onChange: (_, value) => onChange('currencyPrefix', value)
             } as ITextFieldProps
           ]
@@ -136,7 +136,7 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
             Toggle,
             {
               label: strings.ColumnRenderOptionDateIncludeTimeLabel,
-              checked: dataTypeProperties['includeTime'] ?? false,
+              checked: dataTypeProperties.includeTime ?? false,
               onChange: (_, checked) => onChange('includeTime', checked)
             } as IToggleProps
           ]
@@ -175,7 +175,7 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
             {
               label: strings.ColumnRenderOptionTagsValueSeparatorLabel,
               description: strings.ColumnRenderOptionTagsValueSeparatorDescription,
-              value: dataTypeProperties['valueSeparator'] ?? TagsColumn.defaultProps.valueSeparator,
+              value: dataTypeProperties.valueSeparator ?? TagsColumn.defaultProps.valueSeparator,
               onChange: (_, value) => onChange('valueSeparator', value)
             } as ITextFieldProps
           ]
@@ -199,7 +199,7 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
             Toggle,
             {
               label: strings.ColumnRenderOptionUrlOpenInNewTabLabel,
-              checked: dataTypeProperties['openInNewTab'] ?? UrlColumn.defaultProps.openInNewTab,
+              checked: dataTypeProperties.openInNewTab ?? UrlColumn.defaultProps.openInNewTab,
               onChange: (_, checked) => onChange('openInNewTab', checked)
             } as IToggleProps
           ],
@@ -208,7 +208,7 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
             {
               label: strings.ColumnRenderOptionUrlDescriptionLabel,
               description: strings.ColumnRenderOptionUrlDescriptionDescription,
-              value: dataTypeProperties['description'],
+              value: dataTypeProperties.description,
               onChange: (_, value) => onChange('description', value)
             } as ITextFieldProps
           ]
@@ -227,7 +227,7 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
             {
               label: strings.ColumnRenderOptionTrendShowTrendIconLabel,
               defaultChecked: TrendColumn.defaultProps.showTrendIcon,
-              checked: dataTypeProperties['showTrendIcon'],
+              checked: dataTypeProperties.showTrendIcon,
               onChange: (_, checked) => onChange('showTrendIcon', checked)
             } as ICheckboxProps
           ]
@@ -249,6 +249,27 @@ export function useRenderAsOptions(props: IColumnRenderFieldProps) {
               placeholder: ModalColumn.defaultProps.linkText,
               value: dataTypeProperties['linkText'],
               onChange: (_, value) => onChange('linkText', value)
+            } as ITextFieldProps
+          ],
+          [
+            Checkbox,
+            {
+              label: strings.ColumnRenderOptionModalShowInfoTextLabel,
+              defaultChecked: ModalColumn.defaultProps.showInfoText,
+              checked: dataTypeProperties.showInfoText,
+              onChange: (_, value) => onChange('showInfoText', value)
+            } as ICheckboxProps
+          ],
+          [
+            TextField,
+            {
+              label: strings.ColumnRenderOptionModalInfoTextTemplateLabel,
+              description: strings.ColumnRenderOptionModalInfoTextTemplateDescription,
+              placeholder: ModalColumn.defaultProps.infoTextTemplate,
+              value: dataTypeProperties.infoTextTemplate,
+              multiline: true,
+              disabled: !dataTypeProperties.showInfoText,
+              onChange: (_, value) => onChange('infoTextTemplate', value)
             } as ITextFieldProps
           ]
         ]

@@ -16,7 +16,7 @@ import { EXECUTE_SEARCH } from './reducer'
  * Component for displaying a portfolio overview - an overview of all projects in a portfolio.
  */
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
-  const { context, selection, onColumnHeaderContextMenu, editViewColumnsPanelProps } =
+  const { context, selection, onColumnHeaderContextMenu, editViewColumnsPanelProps, searchBox } =
     usePortfolioOverview(props)
 
   return (
@@ -30,9 +30,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
             items={context.items}
             columns={context.columns}
             groups={context.groups}
-            searchBox={{
-              onChange: (_, searchTerm) => context.dispatch(EXECUTE_SEARCH(searchTerm))
-            }}
+            searchBox={searchBox}
             isAddColumnEnabled={!props.isParentProject}
             selection={selection}
             setKey='multiple'

@@ -4,7 +4,8 @@ import {
   ColumnDataType,
   ProjectColumnConfigDictionaryItem,
   formatDate,
-  getObjectValue as get
+  getObjectValue as get,
+  tryParseJson
 } from 'pp365-shared-library'
 import React from 'react'
 import { IListProps } from '../types'
@@ -59,9 +60,16 @@ const renderDataTypeMap: Record<ColumnDataType, ItemColumnRenderFunction> = {
   trend: (props) => <TrendColumn {...props} />,
   modal: (props) => (
     <ModalColumn
+      {...props}
+      header={{
+        title: get(props.item, props.dataTypeProperties.get('headerTitleField')),
+        subTitle: get(props.item, props.dataTypeProperties.get('headerSubTitleField'))
+      }}
+      showInfoText={props.dataTypeProperties.get('showInfoText')}
+      infoTextTemplate={props.dataTypeProperties.get('infoTextTemplate')}
       linkText={props.dataTypeProperties.get('linkText')}
-      headerText={props.item.MeasurementIndicator}
       items={JSON.parse(props.columnValue)}
+      columns={tryParseJson(props.dataTypeProperties.get('columns'), undefined)}
     />
   ),
   filename: (props) => <FileNameColumn {...props} showFileExtensionIcon />,
