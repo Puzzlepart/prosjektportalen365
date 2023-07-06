@@ -35,6 +35,13 @@ interface IUseDataTypeDropdown extends IDropdownProps {
   selectedOption: IColumnDataTypeFieldOption
 }
 
+/**
+ * Hook that returns props for a dropdown component that allows users to select a column data type.
+ *
+ * @param props Props for the column data type dropdown component.
+ * 
+ * @returns Props for a dropdown component that allows users to select a column data type.
+ */
 export function useDataTypeDropdown(props: IColumnDataTypeFieldProps) {
   const [selectedOption, setSelectedOption] = useState<IColumnDataTypeFieldOption>(
     _.find(dataTypeOptions, (option) => option.key === props.defaultSelectedKey)

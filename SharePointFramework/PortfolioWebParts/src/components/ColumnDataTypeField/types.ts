@@ -1,17 +1,26 @@
-import { ICheckboxProps, IDropdownProps, IIconProps, ISelectableOption } from '@fluentui/react'
+import { ICheckboxProps, IDropdownProps, IIconProps, ISelectableOption, ITextFieldProps, IToggleProps } from '@fluentui/react'
+import { FunctionComponent } from 'react'
 
-export type IColumnDataTypePropertyField = [React.ComponentType, any]
+export interface IColumnDataTypePropertyFieldProps<T = ITextFieldProps | ICheckboxProps | IToggleProps> {
+  /**
+   * A function component with the props specified by `T`.
+   */
+  type: FunctionComponent<T>
+
+  /**
+   * The property field props for the component.
+   */
+  props: T
+}
+export type IColumnDataTypePropertyField<T = any> = IColumnDataTypePropertyFieldProps<T>
 
 type IColumnDataTypeFieldOptionData = {
   /**
-   * Sort order for the option
+   * Icon props for the option. Only `iconName` is supported,
+   * as we've not implemented propert support for any
+   * additional icon props.
    */
-  sortOrder?: number
-
-  /**
-   * Icon props for the option
-   */
-  iconProps: IIconProps
+  iconProps: Pick<IIconProps, 'iconName'>
 
   /**
    * Get properties for the data type.
@@ -29,8 +38,28 @@ export type IColumnDataTypeFieldOption = ISelectableOption<IColumnDataTypeFieldO
 
 export interface IColumnDataTypeFieldProps extends Pick<IDropdownProps, 'defaultSelectedKey'> {
   description: string
+
+  /**
+   * Change event handler for the data type field.
+   * 
+   * @param value New value for the data type property
+   */
   onChange: (value: string) => void
+
+  /**
+   * Current properties for the data type
+   */
   dataTypeProperties?: Record<string, any>
+
+  /**
+   * On data type properties change handler.
+   * 
+   * @param properties Properties for the data type
+   */
   onDataTypePropertiesChange?: (properties: Record<string, any>) => void
+
+  /**
+   * Checkbox field for persisting render globally
+   */
   persistRenderGloballyField?: ICheckboxProps
 }

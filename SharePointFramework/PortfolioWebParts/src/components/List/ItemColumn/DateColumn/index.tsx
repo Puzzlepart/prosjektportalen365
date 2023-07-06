@@ -4,6 +4,7 @@ import React from 'react'
 import { ColumnRenderComponent } from '../types'
 import { IDateColumnProps } from './types'
 import { formatDate } from 'pp365-shared-library'
+import { IColumnDataTypePropertyField } from '../../../ColumnDataTypeField/types'
 
 export const DateColumn: ColumnRenderComponent<IDateColumnProps> = (props) => {
   return <span>{formatDate(props.columnValue, props.includeTime)}</span>
@@ -20,14 +21,14 @@ DateColumn.getDataTypeOption = () => ({
   data: {
     iconProps: { iconName: DateColumn.iconName },
     getDataTypeProperties: (onChange, dataTypeProperties: Record<string, any>) => [
-      [
-        Toggle,
-        {
+      {
+        type: Toggle,
+        props: {
           label: strings.ColumnRenderOptionDateIncludeTimeLabel,
           checked: dataTypeProperties.includeTime ?? false,
           onChange: (_, checked) => onChange('includeTime', checked)
-        } as IToggleProps
-      ]
+        }
+      } as IColumnDataTypePropertyField<IToggleProps>
     ]
   }
 })

@@ -18,6 +18,7 @@ import styles from './ItemModal.module.scss'
 import { columns } from './columns'
 import { IModalColumnProps } from './types'
 import { useInfoText } from './useInfoText'
+import { IColumnDataTypePropertyField } from '../../..//ColumnDataTypeField/types'
 
 export const ModalColumn: ColumnRenderComponent<IModalColumnProps> = (props) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -76,27 +77,27 @@ ModalColumn.getDataTypeOption = () => ({
   data: {
     iconProps: { iconName: ModalColumn.iconName },
     getDataTypeProperties: (onChange, dataTypeProperties: Record<string, any>) => [
-      [
-        TextField,
-        {
+      {
+        type: TextField,
+        props: {
           label: strings.ColumnRenderOptionModalLinkTextLabel,
           placeholder: ModalColumn.defaultProps.linkText,
           value: dataTypeProperties['linkText'],
           onChange: (_, value) => onChange('linkText', value)
-        } as ITextFieldProps
-      ],
-      [
-        Checkbox,
-        {
+        }
+      } as IColumnDataTypePropertyField<ITextFieldProps>,
+      {
+        type: Checkbox,
+        props: {
           label: strings.ColumnRenderOptionModalShowInfoTextLabel,
           defaultChecked: ModalColumn.defaultProps.showInfoText,
           checked: dataTypeProperties.showInfoText,
           onChange: (_, value) => onChange('showInfoText', value)
-        } as ICheckboxProps
-      ],
-      [
-        TextField,
-        {
+        }
+      } as IColumnDataTypePropertyField<ICheckboxProps>,
+      {
+        type: TextField,
+        props: {
           label: strings.ColumnRenderOptionModalInfoTextTemplateLabel,
           description: strings.ColumnRenderOptionModalInfoTextTemplateDescription,
           placeholder: ModalColumn.defaultProps.infoTextTemplate,
@@ -104,8 +105,8 @@ ModalColumn.getDataTypeOption = () => ({
           multiline: true,
           disabled: !dataTypeProperties.showInfoText,
           onChange: (_, value) => onChange('infoTextTemplate', value)
-        } as ITextFieldProps
-      ]
+        }
+      } as IColumnDataTypePropertyField<ITextFieldProps>
     ]
   }
 })

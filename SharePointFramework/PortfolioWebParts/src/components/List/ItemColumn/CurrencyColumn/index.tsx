@@ -4,6 +4,7 @@ import { ColumnRenderComponent } from '../types'
 import { ICurrencyColumnProps } from './types'
 import strings from 'PortfolioWebPartsStrings'
 import { TextField, ITextFieldProps } from '@fluentui/react'
+import { IColumnDataTypePropertyField } from '../../../ColumnDataTypeField/types'
 
 export const CurrencyColumn: ColumnRenderComponent<ICurrencyColumnProps> = (props) => {
   return (
@@ -35,43 +36,43 @@ CurrencyColumn.getDataTypeOption = () => ({
   data: {
     iconProps: { iconName: CurrencyColumn.iconName },
     getDataTypeProperties: (onChange, dataTypeProperties: Record<string, any>) => [
-      [
-        TextField,
-        {
+      {
+        type: TextField,
+        props: {
           type: 'number',
           label: strings.ColumnRenderOptionCurrencyMinimumFractionDigitsLabel,
           placeholder: CurrencyColumn.defaultProps.minimumFractionDigits.toString(),
           value: dataTypeProperties.minimumFractionDigits,
           onChange: (_, value) => onChange('minimumFractionDigits', parseInt(value))
-        } as ITextFieldProps
-      ],
-      [
-        TextField,
-        {
+        }
+      } as IColumnDataTypePropertyField<ITextFieldProps>,
+      {
+        type: TextField,
+        props: {
           type: 'number',
           label: strings.ColumnRenderOptionCurrencyMaximumFractionDigitsLabel,
           placeholder: CurrencyColumn.defaultProps.maximumFractionDigits.toString(),
           value: dataTypeProperties.maximumFractionDigits,
           onChange: (_, value) => onChange('maximumFractionDigits', parseInt(value))
-        } as ITextFieldProps
-      ],
-      [
-        TextField,
-        {
+        }
+      } as IColumnDataTypePropertyField<ITextFieldProps>,
+      {
+        type: TextField,
+        props: {
           label: strings.ColumnRenderOptionCurrencyFallbackValueLabel,
           value: dataTypeProperties.fallbackValue,
           onChange: (_, value) => onChange('fallbackValue', value)
-        } as ITextFieldProps
-      ],
-      [
-        TextField,
-        {
+        }
+      } as IColumnDataTypePropertyField<ITextFieldProps>,
+      {
+        type: TextField,
+        props: {
           label: strings.ColumnRenderOptionCurrencyPrefixLabel,
           placeholder: CurrencyColumn.defaultProps.currencyPrefix,
           value: dataTypeProperties.currencyPrefix,
           onChange: (_, value) => onChange('currencyPrefix', value)
-        } as ITextFieldProps
-      ]
+        }
+      } as IColumnDataTypePropertyField<ITextFieldProps>
     ]
   }
 })

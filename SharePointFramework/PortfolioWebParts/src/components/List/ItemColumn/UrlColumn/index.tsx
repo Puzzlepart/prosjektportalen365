@@ -1,10 +1,11 @@
 /* eslint-disable prefer-const */
 import { ITextFieldProps, IToggleProps, Link, TextField, Toggle } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
+import strings from 'PortfolioWebPartsStrings'
 import React from 'react'
+import { IColumnDataTypePropertyField } from '../../../ColumnDataTypeField/types'
 import { ColumnRenderComponent } from '../types'
 import { IUrlColumnProps } from './types'
-import strings from 'PortfolioWebPartsStrings'
 
 export const UrlColumn: ColumnRenderComponent<IUrlColumnProps> = (props) => {
   let [url, description] = props.columnValue.split(', ').filter((v) => !stringIsNullOrEmpty(v))
@@ -34,23 +35,24 @@ UrlColumn.getDataTypeOption = () => ({
   data: {
     iconProps: { iconName: UrlColumn.iconName },
     getDataTypeProperties: (onChange, dataTypeProperties: Record<string, any>) => [
-      [
-        Toggle,
-        {
+      {
+        type: Toggle,
+        props: {
           label: strings.ColumnRenderOptionUrlOpenInNewTabLabel,
-          checked: dataTypeProperties.openInNewTab ?? UrlColumn.defaultProps.openInNewTab,
+          defaultChecked: UrlColumn.defaultProps.openInNewTab,
+          checked: dataTypeProperties.openInNewTab,
           onChange: (_, checked) => onChange('openInNewTab', checked)
-        } as IToggleProps
-      ],
-      [
-        TextField,
-        {
+        }
+      } as IColumnDataTypePropertyField<IToggleProps>,
+      {
+        type: TextField,
+        props: {
           label: strings.ColumnRenderOptionUrlDescriptionLabel,
           description: strings.ColumnRenderOptionUrlDescriptionDescription,
           value: dataTypeProperties.description,
           onChange: (_, value) => onChange('description', value)
-        } as ITextFieldProps
-      ]
+        }
+      } as IColumnDataTypePropertyField<ITextFieldProps>
     ]
   }
 })

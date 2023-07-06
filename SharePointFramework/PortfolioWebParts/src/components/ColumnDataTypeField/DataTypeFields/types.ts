@@ -2,7 +2,7 @@ import { IColumnDataTypeFieldProps, IColumnDataTypePropertyField } from '../type
 
 export interface IDataTypeFieldsProps
   extends Pick<IColumnDataTypeFieldProps, 'dataTypeProperties'> {
-  fields: IColumnDataTypePropertyField[]
+  fields: IColumnDataTypePropertyField<any>[]
   isFieldsVisible: boolean
   toggleIsFieldsVisible: () => void
 }

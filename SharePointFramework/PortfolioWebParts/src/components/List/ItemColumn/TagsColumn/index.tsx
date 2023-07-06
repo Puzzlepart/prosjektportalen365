@@ -6,6 +6,7 @@ import { ColumnRenderComponent } from '../types'
 import { Tag } from './Tag'
 import styles from './TagsColumn.module.scss'
 import { ITagsColumnProps } from './types'
+import { IColumnDataTypePropertyField } from '../../../ColumnDataTypeField/types'
 
 export const TagsColumn: ColumnRenderComponent<ITagsColumnProps> = (props) => {
   if (!props.columnValue) return null
@@ -35,16 +36,16 @@ TagsColumn.getDataTypeOption = () => ({
   data: {
     iconProps: { iconName: TagsColumn.iconName },
     getDataTypeProperties: (onChange, dataTypeProperties: Record<string, any>) => [
-      [
-        TextField,
-        {
+      {
+        type: TextField,
+        props: {
           label: strings.ColumnRenderOptionTagsValueSeparatorLabel,
           description: strings.ColumnRenderOptionTagsValueSeparatorDescription,
           placeholder: TagsColumn.defaultProps.valueSeparator,
           value: dataTypeProperties.valueSeparator,
           onChange: (_, value) => onChange('valueSeparator', value)
-        } as ITextFieldProps
-      ]
+        }
+      } as IColumnDataTypePropertyField<ITextFieldProps>
     ]
   }
 })

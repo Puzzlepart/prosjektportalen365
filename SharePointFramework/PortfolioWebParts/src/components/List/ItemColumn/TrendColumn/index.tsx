@@ -1,9 +1,10 @@
 import { Checkbox, ICheckboxProps, Icon } from '@fluentui/react'
+import strings from 'PortfolioWebPartsStrings'
 import { tryParseJson } from 'pp365-shared-library'
 import React from 'react'
+import { IColumnDataTypePropertyField } from '../../../ColumnDataTypeField/types'
 import { ColumnRenderComponent } from '../types'
 import { ITrendColumnProps } from './types'
-import strings from 'PortfolioWebPartsStrings'
 
 export const TrendColumn: ColumnRenderComponent<ITrendColumnProps> = (props) => {
   const trend = tryParseJson(props.columnValue, null)
@@ -32,15 +33,15 @@ TrendColumn.getDataTypeOption = () => ({
   data: {
     iconProps: { iconName: TrendColumn.iconName },
     getDataTypeProperties: (onChange, dataTypeProperties: Record<string, any>) => [
-      [
-        Checkbox,
-        {
+      {
+        type: Checkbox,
+        props: {
           label: strings.ColumnRenderOptionTrendShowTrendIconLabel,
           defaultChecked: TrendColumn.defaultProps.showTrendIcon,
           checked: dataTypeProperties.showTrendIcon,
           onChange: (_, checked) => onChange('showTrendIcon', checked)
-        } as ICheckboxProps
-      ]
+        }
+      } as IColumnDataTypePropertyField<ICheckboxProps>
     ]
   }
 })
