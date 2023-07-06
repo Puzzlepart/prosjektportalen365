@@ -6,12 +6,12 @@ import { IDataTypeFieldsProps } from './types'
 
 /**
  * Renders a list of fields based on the data type properties.
- * 
+ *
  * @param fields - The list of fields to render.
  * @param dataTypeProperties - The data type properties to use for rendering the fields.
  * @param toggleIsFieldsVisible - A function to toggle the visibility of the fields.
  * @param isFieldsVisible - A boolean indicating whether the fields are visible or not.
- * 
+ *
  * @returns A React component that renders the list of fields.
  */
 export const DataTypeFields: FC<IDataTypeFieldsProps> = (props) => {

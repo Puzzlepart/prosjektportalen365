@@ -1,7 +1,16 @@
-import { ICheckboxProps, IDropdownProps, IIconProps, ISelectableOption, ITextFieldProps, IToggleProps } from '@fluentui/react'
+import {
+  ICheckboxProps,
+  IDropdownProps,
+  IIconProps,
+  ISelectableOption,
+  ITextFieldProps,
+  IToggleProps
+} from '@fluentui/react'
 import { FunctionComponent } from 'react'
 
-export interface IColumnDataTypePropertyFieldProps<T = ITextFieldProps | ICheckboxProps | IToggleProps> {
+export interface IColumnDataTypePropertyFieldProps<
+  T = ITextFieldProps | ICheckboxProps | IToggleProps
+> {
   /**
    * A function component with the props specified by `T`.
    */
@@ -13,6 +22,11 @@ export interface IColumnDataTypePropertyFieldProps<T = ITextFieldProps | ICheckb
   props: T
 }
 export type IColumnDataTypePropertyField<T = any> = IColumnDataTypePropertyFieldProps<T>
+
+export type GetDataTypeProperties = (
+  onChange: (key: string, value: any) => void,
+  dataTypeProperties: Record<string, any>
+) => IColumnDataTypePropertyField[]
 
 type IColumnDataTypeFieldOptionData = {
   /**
@@ -28,10 +42,7 @@ type IColumnDataTypeFieldOptionData = {
    * @param onChange On change handler for the property field
    * @param dataTypeProperties Current data type properties for the data type
    */
-  getDataTypeProperties?: (
-    onChange: (key: string, value: any) => void,
-    dataTypeProperties: Record<string, any>
-  ) => IColumnDataTypePropertyField[]
+  getDataTypeProperties?: GetDataTypeProperties
 }
 
 export type IColumnDataTypeFieldOption = ISelectableOption<IColumnDataTypeFieldOptionData>
@@ -41,7 +52,7 @@ export interface IColumnDataTypeFieldProps extends Pick<IDropdownProps, 'default
 
   /**
    * Change event handler for the data type field.
-   * 
+   *
    * @param value New value for the data type property
    */
   onChange: (value: string) => void
@@ -53,7 +64,7 @@ export interface IColumnDataTypeFieldProps extends Pick<IDropdownProps, 'default
 
   /**
    * On data type properties change handler.
-   * 
+   *
    * @param properties Properties for the data type
    */
   onDataTypePropertiesChange?: (properties: Record<string, any>) => void

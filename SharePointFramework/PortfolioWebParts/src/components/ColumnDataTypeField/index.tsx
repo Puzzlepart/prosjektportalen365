@@ -16,7 +16,7 @@ import { useDataTypeProperties } from './useDataTypeProperties'
  * @param props.description - The description to display above the dropdown field.
  * @param props.persistRenderGloballyField - The checkbox field for persisting the render globally.
  * @param props.children - Additional child components to render.
- * 
+ *
  * @returns The rendered component.
  */
 export const ColumnDataTypeField: FC<IColumnDataTypeFieldProps> = (props) => {

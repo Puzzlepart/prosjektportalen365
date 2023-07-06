@@ -5,6 +5,7 @@ import React from 'react'
 import { IColumnDataTypePropertyField } from '../../../ColumnDataTypeField/types'
 import { ColumnRenderComponent } from '../types'
 import { ITrendColumnProps } from './types'
+import { registerColumnRenderComponent } from '../columnRenderComponentRegistry'
 
 export const TrendColumn: ColumnRenderComponent<ITrendColumnProps> = (props) => {
   const trend = tryParseJson(props.columnValue, null)
@@ -25,23 +26,14 @@ TrendColumn.key = 'trend'
 TrendColumn.id = 'Trend'
 TrendColumn.displayName = strings.ColumnRenderOptionTrend
 TrendColumn.iconName = 'Trending12'
-TrendColumn.getDataTypeOption = () => ({
-  key: TrendColumn.key,
-  id: TrendColumn.id,
-  text: TrendColumn.displayName,
-  disabled: true,
-  data: {
-    iconProps: { iconName: TrendColumn.iconName },
-    getDataTypeProperties: (onChange, dataTypeProperties: Record<string, any>) => [
-      {
-        type: Checkbox,
-        props: {
-          label: strings.ColumnRenderOptionTrendShowTrendIconLabel,
-          defaultChecked: TrendColumn.defaultProps.showTrendIcon,
-          checked: dataTypeProperties.showTrendIcon,
-          onChange: (_, checked) => onChange('showTrendIcon', checked)
-        }
-      } as IColumnDataTypePropertyField<ICheckboxProps>
-    ]
-  }
-})
+registerColumnRenderComponent(TrendColumn, (onChange, dataTypeProperties: Record<string, any>) => [
+  {
+    type: Checkbox,
+    props: {
+      label: strings.ColumnRenderOptionTrendShowTrendIconLabel,
+      defaultChecked: TrendColumn.defaultProps.showTrendIcon,
+      checked: dataTypeProperties.showTrendIcon,
+      onChange: (_, checked) => onChange('showTrendIcon', checked)
+    }
+  } as IColumnDataTypePropertyField<ICheckboxProps>
+])

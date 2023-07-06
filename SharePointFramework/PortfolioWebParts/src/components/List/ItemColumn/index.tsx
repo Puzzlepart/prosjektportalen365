@@ -7,7 +7,7 @@ import {
   getObjectValue as get,
   tryParseJson
 } from 'pp365-shared-library'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { IColumnDataTypeFieldOption } from '../../ColumnDataTypeField/types'
 import { IListProps } from '../types'
 import { BooleanColumn } from './BooleanColumn'
@@ -195,16 +195,14 @@ export const getColumnDataTypeOptionsWithoutRenderComponent = (): IColumnDataTyp
   ]
 }
 
-/**
- * Render function for an item column.
- *
- * @param props Props for the component `PortfolioOverview`
- */
-export const onRenderItemColumn =
-  (props: IListProps) =>
-  (item?: any, _index?: number, column?: IColumn): React.ReactNode => {
-    return renderItemColumn(item, column, props)
-  }
+export const useOnRenderItemColumn = (props: IListProps) =>
+  useMemo(
+    () =>
+      (item?: any, _index?: number, column?: IColumn): React.ReactNode => {
+        return renderItemColumn(item, column, props)
+      },
+    [props]
+  )
 
 export {
   BooleanColumn,

@@ -39,7 +39,7 @@ interface IUseDataTypeDropdown extends IDropdownProps {
  * Hook that returns props for a dropdown component that allows users to select a column data type.
  *
  * @param props Props for the column data type dropdown component.
- * 
+ *
  * @returns Props for a dropdown component that allows users to select a column data type.
  */
 export function useDataTypeDropdown(props: IColumnDataTypeFieldProps) {

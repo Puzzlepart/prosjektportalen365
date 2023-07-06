@@ -3,6 +3,7 @@ import React from 'react'
 import { SearchValueType } from 'types'
 import { ColumnRenderComponent, IRenderItemColumnProps } from '../types'
 import strings from 'PortfolioWebPartsStrings'
+import { registerColumnRenderComponent } from '../columnRenderComponentRegistry'
 
 export const UserColumn: ColumnRenderComponent<IRenderItemColumnProps> = ({
   columnValue,
@@ -56,9 +57,4 @@ UserColumn.key = 'user'
 UserColumn.id = 'User'
 UserColumn.displayName = strings.ColumnRenderOptionUser
 UserColumn.iconName = 'Contact'
-UserColumn.getDataTypeOption = () => ({
-  key: UserColumn.key,
-  id: UserColumn.id,
-  text: UserColumn.displayName,
-  data: { iconProps: { iconName: UserColumn.iconName } }
-})
+registerColumnRenderComponent(UserColumn)

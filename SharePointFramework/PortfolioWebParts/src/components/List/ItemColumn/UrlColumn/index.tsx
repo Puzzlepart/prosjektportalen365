@@ -6,6 +6,7 @@ import React from 'react'
 import { IColumnDataTypePropertyField } from '../../../ColumnDataTypeField/types'
 import { ColumnRenderComponent } from '../types'
 import { IUrlColumnProps } from './types'
+import { registerColumnRenderComponent } from '../columnRenderComponentRegistry'
 
 export const UrlColumn: ColumnRenderComponent<IUrlColumnProps> = (props) => {
   let [url, description] = props.columnValue.split(', ').filter((v) => !stringIsNullOrEmpty(v))
@@ -28,31 +29,23 @@ UrlColumn.key = 'url'
 UrlColumn.id = 'URL'
 UrlColumn.displayName = strings.ColumnRenderOptionUrl
 UrlColumn.iconName = 'Link'
-UrlColumn.getDataTypeOption = () => ({
-  key: UrlColumn.key,
-  id: UrlColumn.id,
-  text: UrlColumn.displayName,
-  data: {
-    iconProps: { iconName: UrlColumn.iconName },
-    getDataTypeProperties: (onChange, dataTypeProperties: Record<string, any>) => [
-      {
-        type: Toggle,
-        props: {
-          label: strings.ColumnRenderOptionUrlOpenInNewTabLabel,
-          defaultChecked: UrlColumn.defaultProps.openInNewTab,
-          checked: dataTypeProperties.openInNewTab,
-          onChange: (_, checked) => onChange('openInNewTab', checked)
-        }
-      } as IColumnDataTypePropertyField<IToggleProps>,
-      {
-        type: TextField,
-        props: {
-          label: strings.ColumnRenderOptionUrlDescriptionLabel,
-          description: strings.ColumnRenderOptionUrlDescriptionDescription,
-          value: dataTypeProperties.description,
-          onChange: (_, value) => onChange('description', value)
-        }
-      } as IColumnDataTypePropertyField<ITextFieldProps>
-    ]
-  }
-})
+registerColumnRenderComponent(UrlColumn, (onChange, dataTypeProperties: Record<string, any>) => [
+  {
+    type: Toggle,
+    props: {
+      label: strings.ColumnRenderOptionUrlOpenInNewTabLabel,
+      defaultChecked: UrlColumn.defaultProps.openInNewTab,
+      checked: dataTypeProperties.openInNewTab,
+      onChange: (_, checked) => onChange('openInNewTab', checked)
+    }
+  } as IColumnDataTypePropertyField<IToggleProps>,
+  {
+    type: TextField,
+    props: {
+      label: strings.ColumnRenderOptionUrlDescriptionLabel,
+      description: strings.ColumnRenderOptionUrlDescriptionDescription,
+      value: dataTypeProperties.description,
+      onChange: (_, value) => onChange('description', value)
+    }
+  } as IColumnDataTypePropertyField<ITextFieldProps>
+])

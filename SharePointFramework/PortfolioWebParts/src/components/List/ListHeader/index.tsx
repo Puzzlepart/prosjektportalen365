@@ -1,6 +1,6 @@
 import { IDetailsHeaderProps, IRenderFunction, Sticky, StickyPositionType } from '@fluentui/react'
 import { SearchBox } from '@fluentui/react/lib/SearchBox'
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import { IListProps } from '../types'
 import styles from './ListHeader.module.scss'
 import { IListHeaderProps } from './types'
@@ -35,12 +35,9 @@ export const ListHeader: FC<IListHeaderProps> = (props) => {
   )
 }
 
-/**
- * A function that returns a render function for the list header.
- *
- * @param props List props
- */
-export const onRenderDetailsHeader =
-  (props: IListProps): IRenderFunction<IDetailsHeaderProps> =>
-  (headerProps, defaultRender) =>
-    <ListHeader {...props} headerProps={headerProps} defaultRender={defaultRender} />
+export const useOnRenderDetailsHeader = (props: IListProps): IRenderFunction<IDetailsHeaderProps> =>
+  useMemo(
+    () => (headerProps, defaultRender) =>
+      <ListHeader {...props} headerProps={headerProps} defaultRender={defaultRender} />,
+    [props]
+  )

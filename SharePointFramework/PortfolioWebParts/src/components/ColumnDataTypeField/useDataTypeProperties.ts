@@ -6,10 +6,10 @@ import { useDataTypeDropdown } from './useDataTypeDropdown'
 
 /**
  * A custom hook that manages the state of the data type properties for a column data type field.
- * 
+ *
  * @param props - The props for the column data type field.
  * @param selectedOption - The selected option from the data type dropdown.
- * 
+ *
  * @returns An object containing the data type properties, fields, and visibility state, as well as a function to toggle the visibility state.
  */
 export function useDataTypeProperties(

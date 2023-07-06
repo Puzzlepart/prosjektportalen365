@@ -10,8 +10,8 @@ import {
   Target
 } from '@fluentui/react'
 import React, { FC } from 'react'
-import { onRenderItemColumn } from './ItemColumn'
-import { onRenderDetailsHeader } from './ListHeader'
+import { useOnRenderItemColumn } from './ItemColumn'
+import { useOnRenderDetailsHeader } from './ListHeader'
 import { IListProps } from './types'
 import { useAddColumn } from './useAddColumn'
 
@@ -32,14 +32,16 @@ import { useAddColumn } from './useAddColumn'
  */
 export const List: FC<IListProps> = (props) => {
   const { addColumn } = useAddColumn(props.isAddColumnEnabled)
+  const onRenderItemColumn = useOnRenderItemColumn(props)
+  const onRenderDetailsHeader = useOnRenderDetailsHeader(props)
   return (
     <ScrollablePane {...props.scrollablePane}>
       <MarqueeSelection selection={props.selection}>
         <ShimmeredDetailsList
           {...props}
           columns={[...props.columns, addColumn]}
-          onRenderItemColumn={onRenderItemColumn(props)}
-          onRenderDetailsHeader={onRenderDetailsHeader(props)}
+          onRenderItemColumn={onRenderItemColumn}
+          onRenderDetailsHeader={onRenderDetailsHeader}
           layoutMode={
             props.isListLayoutModeJustified
               ? DetailsListLayoutMode.justified

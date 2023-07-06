@@ -2,6 +2,7 @@ import _ from 'lodash'
 import React from 'react'
 import { ColumnRenderComponent } from '../types'
 import { IListColumnProps } from './types'
+import { registerColumnRenderComponent } from '../columnRenderComponentRegistry'
 
 export const ListColumn: ColumnRenderComponent<IListColumnProps> = (props) => {
   const values: string[] = props.columnValue ? props.columnValue.split(props.valueSeparator) : []
@@ -27,11 +28,4 @@ ListColumn.key = 'list'
 ListColumn.id = 'List'
 ListColumn.displayName = 'List'
 ListColumn.iconName = 'List'
-ListColumn.getDataTypeOption = () => ({
-  key: ListColumn.key,
-  id: ListColumn.id,
-  text: ListColumn.displayName,
-  data: {
-    iconProps: { iconName: ListColumn.iconName }
-  }
-})
+registerColumnRenderComponent(ListColumn)
