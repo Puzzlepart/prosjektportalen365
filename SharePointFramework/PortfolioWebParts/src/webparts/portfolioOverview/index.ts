@@ -104,7 +104,7 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
             {
               groupName: strings.ListViewGroupName,
               groupFields: [
-                PropertyPaneToggle('listLayoutModeJustified', {
+                PropertyPaneToggle('isListLayoutModeJustified', {
                   label: strings.ListLayoutModeJustifiedLabel
                 })
               ]

@@ -114,7 +114,7 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
             {
               groupName: strings.ListViewGroupName,
               groupFields: [
-                PropertyPaneToggle('listLayoutModeJustified', {
+                PropertyPaneToggle('isListLayoutModeJustified', {
                   label: strings.ListLayoutModeJustifiedLabel
                 })
               ]

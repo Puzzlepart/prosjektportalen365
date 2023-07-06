@@ -1,4 +1,3 @@
-import { DetailsListLayoutMode } from '@fluentui/react'
 import React, { FC } from 'react'
 import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
 import { List } from '../List'
@@ -38,11 +37,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
               onColumnHeaderContextMenu({ column, event })
             }
             compact={context.state.isCompact}
-            layoutMode={
-              props.listLayoutModeJustified
-                ? DetailsListLayoutMode.justified
-                : DetailsListLayoutMode.fixedColumns
-            }
+            isListLayoutModeJustified={props.isListLayoutModeJustified}
             renderTitleProjectInformationPanel={true}
             webPartContext={props.webPartContext}
             layerHostId={context.layerHostId}

@@ -1,4 +1,4 @@
-import { DetailsListLayoutMode, MessageBarType } from '@fluentui/react'
+import { MessageBarType } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectContentColumn } from 'pp365-shared-library'
 import { FilterPanel } from 'pp365-shared-library/lib/components/FilterPanel'
@@ -59,11 +59,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             }}
             isAddColumnEnabled={!props.lockedColumns && !props.isParentProject}
             compact={context.state.isCompact}
-            layoutMode={
-              props.listLayoutModeJustified
-                ? DetailsListLayoutMode.justified
-                : DetailsListLayoutMode.fixedColumns
-            }
+            isListLayoutModeJustified={props.isListLayoutModeJustified}
             groupProps={{
               // TODO: Temporary fix for collapsing groups, the new state handling throws errors
               onToggleCollapseAll: (isAllCollapsed) =>

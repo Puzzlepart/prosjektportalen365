@@ -5,17 +5,17 @@ import { IPortfolioWebPartsDataAdapter } from 'data/types'
 
 export interface IBaseComponentProps {
   /**
-   * Component title.
+   * Component title. Often rendered as a header.
    */
   title?: string
 
   /**
-   * SPFx web part context
+   * SPFx web part context needed for miscellanous operations in the components.
    */
   webPartContext?: WebPartContext
 
   /**
-   * Page context. It might be neccessary to pass `this.context.pageContext as any` due to
+   * Page context from `webPartContext`. It might be neccessary to pass `this.context.pageContext as any` due to
    * mismatch in version of `@microsoft/sp-page-context`.
    */
   pageContext?: PageContext
