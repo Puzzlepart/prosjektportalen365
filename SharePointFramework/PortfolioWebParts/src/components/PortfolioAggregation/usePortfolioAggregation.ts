@@ -1,10 +1,8 @@
-import { getId } from '@fluentui/react'
 import { useEffect } from 'react'
 import { SET_CURRENT_VIEW, usePortfolioAggregationReducer } from './reducer'
 import { IPortfolioAggregationProps } from './types'
-import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
+import { useDefaultColumns } from './useDefaultColumns'
 import { usePortfolioAggregationDataFetch } from './usePortfolioAggregationDataFetch'
-import { usePortfolioAggregationDataSources } from './usePortfolioAggregationDataSources'
 import { usePortfolioAggregationFilteredItems } from './usePortfolioAggregationFilteredItems'
 
 /**
@@ -16,7 +14,6 @@ import { usePortfolioAggregationFilteredItems } from './usePortfolioAggregationF
  */
 export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
   const context = usePortfolioAggregationReducer(props)
-  const layerHostId = getId('layerHost')
 
   useEffect(() => {
     if (props.dataSourceCategory) {
@@ -24,12 +21,10 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
     }
   }, [props.dataSourceCategory, props.defaultViewId])
 
-  usePortfolioAggregationDataSources(context)
-  usePortfolioAggregationDataFetch(context)
+  usePortfolioAggregationDataFetch(context, [context.state.currentView])
 
-  const items = usePortfolioAggregationFilteredItems(context)
+  context.items = usePortfolioAggregationFilteredItems(context)
+  context.columns = useDefaultColumns(context)
 
-  const editViewColumnsPanelProps = useEditViewColumnsPanel(context)
-
-  return { context, items, layerHostId, editViewColumnsPanelProps } as const
+  return context
 }

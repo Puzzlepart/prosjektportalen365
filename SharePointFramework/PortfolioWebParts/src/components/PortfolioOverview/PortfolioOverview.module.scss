@@ -1,29 +1,9 @@
 @import "~@fluentui/react/dist/sass/References.scss";
 
-[class^="mainContent"] {
-  position: relative !important;
-}
-
 .root {
   margin: 0;
 
   .container {
-    padding: 0 32px 0 32px;
-
-    .errorContainer {
-      padding: 0 32px;
-
-      .error {
-        margin: 12px 0 0 0;
-
-        p {
-          margin: 0;
-        }
-      }
-    }
-
-    [class*="stickyAbove"] .headerColumns {
-      padding-left: 32px;
-    }
+    margin: 0;
   }
 }

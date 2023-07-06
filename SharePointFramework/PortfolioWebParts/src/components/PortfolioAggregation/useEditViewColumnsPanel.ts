@@ -1,9 +1,8 @@
-import _ from 'lodash'
 import { ProjectContentColumn, SPDataSourceItem } from 'pp365-shared-library'
-import { useMemo } from 'react'
 import { IEditViewColumnsPanelProps } from '../EditViewColumnsPanel/types'
 import { IPortfolioAggregationContext } from './context'
 import { SET_COLUMNS, TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from './reducer'
+import { useMemo } from 'react'
 
 /**
  * Creates props for `EditViewColumnsPanel` component based on the context.
@@ -13,21 +12,6 @@ import { SET_COLUMNS, TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from './reducer'
 export function useEditViewColumnsPanel(
   context: IPortfolioAggregationContext
 ): IEditViewColumnsPanelProps {
-  /**
-   * Add `isSelected` property to `context.state.columns` based on `context.state.dataSourceColumns`.
-   */
-  const columnsWithSelectedState = useMemo(
-    () =>
-      context.state.columns.map((c) => ({
-        ...c,
-        data: {
-          ...c.data,
-          isSelected: _.some(context.state.dataSourceColumns, (_c) => _c.fieldName === c.fieldName)
-        }
-      })),
-    [context.state.columns, context.state.dataSourceColumns]
-  )
-
   const onDismiss = () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false }))
 
   /**
@@ -47,11 +31,14 @@ export function useEditViewColumnsPanel(
       })
   }
 
-  return {
-    isOpen: context.state.isEditViewColumnsPanelOpen,
-    columns: columnsWithSelectedState,
-    onSave: onSaveViewColumns,
-    onDismiss,
-    sortMode: 'selectedOnTop'
-  } as IEditViewColumnsPanelProps
+  return useMemo(
+    () => ({
+      isOpen: context.state.isEditViewColumnsPanelOpen,
+      columns: context.state.allColumnsForCategory,
+      onSave: onSaveViewColumns,
+      onDismiss,
+      sortMode: 'selectedOnTop'
+    }),
+    [context.state]
+  )
 }

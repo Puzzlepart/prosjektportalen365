@@ -22,10 +22,10 @@ import {
   DATA_FETCHED,
   DATA_FETCH_ERROR,
   DELETE_COLUMN,
+  EXECUTE_SEARCH,
   GET_FILTERS,
   MOVE_COLUMN,
   ON_FILTER_CHANGE,
-  SEARCH,
   SET_ALL_COLLAPSED,
   SET_COLLAPSED,
   SET_COLUMNS,
@@ -59,34 +59,16 @@ const persistColumnsInWebPartProperties = (
 }
 
 /**
- * Initial state for `<PortfolioAggregation />` component based on props for the component.
- *
- * @param props Props for `<PortfolioAggregation />` component
- */
-export const initState = (props: IPortfolioAggregationProps): IPortfolioAggregationState => ({
-  loading: true,
-  isCompact: false,
-  searchTerm: '',
-  activeFilters: {},
-  filters: [],
-  items: [],
-  columns: props.columns ?? [],
-  dataSourceColumns: props.columns ?? [],
-  dataSource: props.dataSource ?? first(props.configuration.views)?.title,
-  dataSources: [],
-  dataSourceLevel: props.dataSourceLevel ?? props.configuration?.level,
-  groups: null,
-  columnForm: { isOpen: false, column: null },
-  isEditViewColumnsPanelOpen: false
-})
-
-/**
  * Create reducer for `<PortfolioAggregation />` using `createReducer` from `@reduxjs/toolkit`.
  *
  * @param props Props for `<PortfolioAggregation />` component
+ * @param initialState Initial state for reducer
  */
-export const createPortfolioAggregationReducer = (props: IPortfolioAggregationProps) =>
-  createReducer(initState(props), {
+export const createPortfolioAggregationReducer = (
+  props: IPortfolioAggregationProps,
+  initialState: IPortfolioAggregationState
+) =>
+  createReducer(initialState, {
     [DATA_FETCHED.type]: (state, { payload }: ReturnType<typeof DATA_FETCHED>) => {
       if (payload.items) {
         let items = props.postTransform ? props.postTransform(payload.items) : payload.items
@@ -99,34 +81,33 @@ export const createPortfolioAggregationReducer = (props: IPortfolioAggregationPr
           )
         }
         state.items = items
-        state.loading = false
       }
       if (payload.dataSources) state.dataSources = payload.dataSources
-      if (!payload.columns) return
-      if (!isEmpty(payload.dataSource?.columns))
-        state.dataSourceColumns = payload.dataSource.columns
-      else state.dataSourceColumns = payload.columns
-
-      if (isEmpty(payload.columns)) {
-        state.columns = props.columns ?? []
-      } else {
-        const mergedColumns = current(state).columns.map((col) => {
-          const payCol = _.find(payload.columns, (c) => c.key === col.key)
-          return payCol
-            ? payCol.setData({ renderAs: col.data.renderAs ?? payCol.dataType ?? 'text' })
-            : col
-        })
-
-        const newColumns = payload.columns.filter(
-          (col) => !_.some(mergedColumns, (c) => c.key === col.key)
-        )
-
-        const filteredColumns = [...mergedColumns, ...newColumns].filter((col) => {
-          return payload.columns.find((c) => c.fieldName === col.fieldName)
-        })
-        if (_.isEmpty(mergedColumns)) state.columns = filteredColumns
-        else state.columns = sortArray(payload.columns, 'sortOrder')
+      if (!payload.columns) {
+        state.allColumnsForCategory = []
+        state.columns = []
+        return
       }
+      const selectedColumns = !isEmpty(props.columns)
+        ? props.columns
+        : payload.dataSource.columns ?? []
+      const allColumnsForCategory = payload.columns.map((c) =>
+        c.setData({ isSelected: _.some(selectedColumns, ({ key }) => key === c.key) })
+      )
+      const selectedColumnsMerged = selectedColumns
+        .map((c) => {
+          const col = _.find(allColumnsForCategory, ({ key }) => key === c.key)
+          return col && col.setData({ renderAs: c.data.renderAs ?? col.dataType ?? 'text' })
+        })
+        .filter(Boolean)
+      const availableColumns = payload.columns.filter(
+        (c) => !_.some(selectedColumnsMerged, ({ key }) => key === c.key)
+      )
+      state.columns = !_.isEmpty(selectedColumnsMerged)
+        ? [...selectedColumnsMerged, ...availableColumns]
+        : sortArray(allColumnsForCategory, 'sortOrder')
+      state.allColumnsForCategory = allColumnsForCategory
+      state.loading = false
     },
     [TOGGLE_COLUMN_FORM_PANEL.type]: (
       state,
@@ -149,7 +130,7 @@ export const createPortfolioAggregationReducer = (props: IPortfolioAggregationPr
     [ADD_COLUMN.type]: (state, { payload }: ReturnType<typeof ADD_COLUMN>) => {
       const isEdit = !!state.columnForm?.column
       let columns = [...current(state).columns]
-      let dataSourceColumns = [...current(state).dataSourceColumns]
+      let dataSourceColumns = [...current(state).allColumnsForCategory]
       if (isEdit) {
         columns = columns.map((c) =>
           c.fieldName === payload.column.fieldName ? payload.column : c
@@ -162,7 +143,7 @@ export const createPortfolioAggregationReducer = (props: IPortfolioAggregationPr
         dataSourceColumns = [...dataSourceColumns, payload.column]
       }
       state.columns = columns
-      state.dataSourceColumns = dataSourceColumns
+      state.allColumnsForCategory = dataSourceColumns
       state.columnForm = { isOpen: false }
       state.columnAddedOrUpdated = new Date().getTime()
       persistColumnsInWebPartProperties(props, columns)
@@ -313,8 +294,8 @@ export const createPortfolioAggregationReducer = (props: IPortfolioAggregationPr
     [START_FETCH.type]: (state) => {
       state.loading = true
     },
-    [SEARCH.type]: (state, { payload }: ReturnType<typeof SEARCH>) => {
-      state.searchTerm = payload.searchTerm
+    [EXECUTE_SEARCH.type]: (state, { payload }: ReturnType<typeof EXECUTE_SEARCH>) => {
+      state.searchTerm = payload
     },
     [GET_FILTERS.type]: (state, { payload }: ReturnType<typeof GET_FILTERS>) => {
       const payloadFilters = payload.filters.map((column) => {
@@ -350,34 +331,7 @@ export const createPortfolioAggregationReducer = (props: IPortfolioAggregationPr
         })
       }
 
-      state.filters = [
-        {
-          column: {
-            key: 'SelectedColumns',
-            fieldName: 'SelectedColumns',
-            name: strings.SelectedColumnsLabel,
-            minWidth: 0
-          },
-          items: current(state).columns.map((col) => ({
-            name: col.name,
-            value: col.fieldName,
-            selected:
-              current(state).dataSourceColumns.length > 0
-                ? _.some(current(state).dataSourceColumns, (c) => c.fieldName === col.fieldName)
-                : true
-          })),
-          defaultCollapsed: true
-        },
-        ...payloadFilters
-      ]
-
-      state.activeFilters = {
-        ...state.activeFilters,
-        ['SelectedColumns']:
-          current(state).dataSourceColumns.length > 0
-            ? current(state).dataSourceColumns.map((col) => col.fieldName)
-            : current(state).columns.map((col) => col.fieldName)
-      }
+      state.filters = payloadFilters
     },
     [ON_FILTER_CHANGE.type]: (state, { payload }: ReturnType<typeof ON_FILTER_CHANGE>) => {
       if (payload.selectedItems.length > 0) {

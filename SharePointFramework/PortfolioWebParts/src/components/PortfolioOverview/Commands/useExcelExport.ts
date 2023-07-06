@@ -5,9 +5,8 @@ import { ExcelExportService } from 'pp365-shared-library/lib/services'
 import { useCallback, useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import { EXCEL_EXPORT_ERROR, EXCEL_EXPORT_SUCCESS, START_EXCEL_EXPORT } from '../reducer'
-import { IPortfolioOverviewCommandsProps } from './types'
 
-export function useExcelExport(props: IPortfolioOverviewCommandsProps) {
+export function useExcelExport() {
   const context = useContext(PortfolioOverviewContext)
 
   /**
@@ -20,12 +19,12 @@ export function useExcelExport(props: IPortfolioOverviewCommandsProps) {
       const items =
         _.isArray(context.state.selectedItems) && context.state.selectedItems.length > 0
           ? context.state.selectedItems
-          : props.filteredData.items
+          : context.items
       let fileNamePart: string
       if (context.props.includeViewNameInExcelExportFilename) {
         fileNamePart = context.state.currentView?.title.replace(/[^a-z0-9]/gi, '-')
       }
-      ExcelExportService.export(items, props.filteredData.columns, fileNamePart)
+      ExcelExportService.export(items, context.columns, fileNamePart)
       context.dispatch(EXCEL_EXPORT_SUCCESS())
     } catch (error) {
       context.dispatch(EXCEL_EXPORT_ERROR(error))

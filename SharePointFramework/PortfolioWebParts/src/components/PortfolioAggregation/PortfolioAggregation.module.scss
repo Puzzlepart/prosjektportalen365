@@ -1,26 +1,5 @@
 .root {
-  .header {
-    padding: 23px 32px 20px 32px;
-
-    .title {
-      font-size: 28px;
-      font-weight: 100;
-      margin: 0;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-  }
-
-  .searchBox {
-    padding: 23px 32px 23px 32px;
-  }
-
   .container {
-    padding: 0 32px 0 32px;
-
-    [class*="ms-MessageBar-content"] p {
-      margin: 0;
-    }
+    margin: 0;
   }
 }

@@ -45,7 +45,7 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   dataSourceLevel?: string
 
   /**
-   * Columns
+   * Columns selected for the current view
    */
   columns?: ProjectContentColumn[]
 
@@ -58,11 +58,6 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
    * Show command bar
    */
   showCommandBar?: boolean
-
-  /**
-   * Show search box
-   */
-  showSearchBox?: boolean
 
   /**
    * Show filters
@@ -119,14 +114,15 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
 }
 
 export interface IPortfolioAggregationState
-  extends Pick<IPortfolioAggregationProps, 'dataSource' | 'dataSourceLevel'> {
+  extends Pick<IPortfolioAggregationProps, 'dataSource' | 'dataSourceLevel' | 'columns'> {
   /**
-   * Whether the component is loading
+   * `true` if the component is loading data. The list will be
+   * rendered with shimmer placeholders if the component is loading.
    */
   loading?: boolean
 
   /**
-   * Whether there's an export in progress
+   * `true` if the component is exporting to Excel
    */
   isExporting?: boolean
 
@@ -141,29 +137,24 @@ export interface IPortfolioAggregationState
   items?: any[]
 
   /**
-   * Columns to be shown in the list
+   * All columns available for the data source category. Property `data.isSelected` is
+   * set to `true`for all columns that are selected for the current view
+   * in property `columns`.
    */
-  columns?: ProjectContentColumn[]
+  allColumnsForCategory?: ProjectContentColumn[]
 
   /**
-   * Columns for the selected data source or all columns available
-   * for the data source category if no columns are defined
-   * for the selected data source.
-   */
-  dataSourceColumns?: ProjectContentColumn[]
-
-  /**
-   * Groups
+   * Groups to be rendered in the list
    */
   groups?: IGroup[]
 
   /**
-   * Column to group by
+   * Column to group by in the list
    */
   groupBy?: IColumn
 
   /**
-   * Column to sort by
+   * Column to sort by in the list
    */
   sortBy?: IColumn
 
@@ -220,7 +211,7 @@ export interface IPortfolioAggregationState
   /**
    * Active filters
    */
-  activeFilters?: { SelectedColumns?: string[]; [key: string]: string[] }
+  activeFilters?: Record<string, string[]>
 
   /**
    * Filters
