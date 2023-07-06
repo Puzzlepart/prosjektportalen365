@@ -25,6 +25,29 @@
             <Aggregations Value="Off" />
             <JSLink>clienttemplates.js</JSLink>
         </View>
+        <View MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_GroupedByCategory_DisplayName}" Url="{site}/{resource:Lists_ProjectContentColumns_Url}/GroupedByCategory.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+            <Query>
+                <OrderBy>
+                    <FieldRef Name="GtSortOrder" />
+                </OrderBy>
+                <GroupBy>
+                    <FieldRef Name="GtDataSourceCategory" Ascending="TRUE" />
+                </GroupBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="GtSortOrder" />
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtInternalName" />
+                <FieldRef Name="GtManagedProperty" />
+                <FieldRef Name="GtFieldDataType" />
+                <FieldRef Name="GtColMinWidth" />
+                <FieldRef Name="GtColMaxWidth" />
+                <FieldRef Name="GtIsGroupable" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">100</RowLimit>
+            <Aggregations Value="Off" />
+            <JSLink>clienttemplates.js</JSLink>
+        </View>
     </pnp:Views>
     <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Overwrite">
         <pnp:DataRow>            <!-- ID: 1 -->

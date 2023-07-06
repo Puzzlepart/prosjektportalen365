@@ -319,6 +319,9 @@
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>Alle elementer</value>
   </data>
+  <data name="View_GroupedByCategory_DisplayName" xml:space="preserve">
+    <value>Gruppert etter kategori</value>
+  </data>
   <data name="View_AllDocuments_DisplayName" xml:space="preserve">
     <value>Alle dokumenter</value>
   </data>
