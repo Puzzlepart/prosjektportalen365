@@ -1,16 +1,18 @@
 import { IColumn, Icon, TooltipHost } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
+import strings from 'PortfolioWebPartsStrings'
 import {
   ColumnDataType,
   ProjectColumnConfigDictionaryItem,
-  formatDate,
   getObjectValue as get,
   tryParseJson
 } from 'pp365-shared-library'
 import React from 'react'
+import { IColumnDataTypeFieldOption } from '../../ColumnDataTypeField/types'
 import { IListProps } from '../types'
 import { BooleanColumn } from './BooleanColumn'
 import { CurrencyColumn } from './CurrencyColumn'
+import { DateColumn } from './DateColumn'
 import { FileNameColumn } from './FileNameColumn'
 import { ListColumn } from './ListColumn'
 import { ModalColumn } from './ModalColumn'
@@ -28,10 +30,9 @@ const renderDataTypeMap: Record<ColumnDataType, ItemColumnRenderFunction> = {
   text: null,
   note: null,
   user: (props) => <UserColumn {...props} />,
-  date: (props) => {
-    const includeTime = props.dataTypeProperties.get('includeTime') ?? false
-    return <span>{formatDate(props.columnValue, includeTime)}</span>
-  },
+  date: (props) => (
+    <DateColumn {...props} includeTime={props.dataTypeProperties.get('includeTime')} />
+  ),
   currency: (props) => (
     <CurrencyColumn
       {...props}
@@ -147,6 +148,54 @@ function renderItemColumn(item: Record<string, any>, column: IColumn, props: ILi
 }
 
 /**
+ * Get column data type options that doesn't have a render component.
+ *
+ * For now this is the following data types:
+ *
+ * - `text`
+ * - `note`
+ * - `number`
+ * - `datetime`
+ * - `percentage`
+ */
+export const getColumnDataTypeOptionsWithoutRenderComponent = (): IColumnDataTypeFieldOption[] => {
+  return [
+    {
+      key: 'text',
+      id: 'Text',
+      text: strings.ColumnRenderOptionText,
+      data: { iconProps: { iconName: 'FontColor' } }
+    },
+    {
+      key: 'note',
+      id: 'Note',
+      text: strings.ColumnRenderOptionNote,
+      data: { iconProps: { iconName: 'EditStyle' } }
+    },
+    {
+      key: 'number',
+      id: 'Number',
+      text: strings.ColumnRenderOptionNumber,
+      data: { iconProps: { iconName: 'NumberedList' } }
+    },
+    {
+      key: 'datetime',
+      id: 'DateTime',
+      text: strings.ColumnRenderOptionDateTime,
+      data: {
+        iconProps: { iconName: 'DateTime' }
+      }
+    },
+    {
+      key: 'percentage',
+      id: 'Percentage',
+      text: strings.ColumnRenderOptionPercentage,
+      data: { iconProps: { iconName: 'CalculatorPercentage' } }
+    }
+  ]
+}
+
+/**
  * Render function for an item column.
  *
  * @param props Props for the component `PortfolioOverview`
@@ -160,6 +209,7 @@ export const onRenderItemColumn =
 export {
   BooleanColumn,
   CurrencyColumn,
+  DateColumn,
   FileNameColumn,
   ListColumn,
   ModalColumn,

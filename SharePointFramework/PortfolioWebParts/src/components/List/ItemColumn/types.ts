@@ -10,7 +10,8 @@ export interface IRenderItemColumnProps extends React.HTMLAttributes<HTMLDivElem
 
 export type ItemColumnRenderFunction = (props: IRenderItemColumnProps) => JSX.Element
 
-export interface ColumnRenderComponent<T extends IRenderItemColumnProps> extends React.FunctionComponent<T> {
+export interface ColumnRenderComponent<T extends IRenderItemColumnProps>
+  extends React.FunctionComponent<T> {
   key: string
   id: string
   displayName: string

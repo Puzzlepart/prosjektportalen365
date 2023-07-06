@@ -4,6 +4,11 @@ export type IColumnDataTypePropertyField = [React.ComponentType, any]
 
 type IColumnDataTypeFieldOptionData = {
   /**
+   * Sort order for the option
+   */
+  sortOrder?: number
+
+  /**
    * Icon props for the option
    */
   iconProps: IIconProps

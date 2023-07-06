@@ -1,9 +1,11 @@
-import React, { FC } from 'react'
-import { IFileNameColumnProps } from './types'
 import { Icon, Link } from '@fluentui/react'
 import { getFileTypeIconProps } from '@fluentui/react-file-type-icons'
+import strings from 'PortfolioWebPartsStrings'
+import React from 'react'
+import { ColumnRenderComponent } from '../types'
+import { IFileNameColumnProps } from './types'
 
-export const FileNameColumn: FC<IFileNameColumnProps> = (props) => {
+export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (props) => {
   return (
     <span>
       {props.showFileExtensionIcon && (
@@ -31,3 +33,15 @@ export const FileNameColumn: FC<IFileNameColumnProps> = (props) => {
 FileNameColumn.defaultProps = {
   showFileExtensionIcon: false
 }
+FileNameColumn.key = 'filename'
+FileNameColumn.id = 'Filename'
+FileNameColumn.displayName = strings.ColumnRenderOptionFilename
+FileNameColumn.iconName = 'FileImage'
+FileNameColumn.getDataTypeOption = () => ({
+  key: FileNameColumn.key,
+  id: FileNameColumn.id,
+  text: FileNameColumn.displayName,
+  data: {
+    iconProps: { iconName: FileNameColumn.iconName }
+  }
+})

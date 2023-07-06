@@ -1,9 +1,13 @@
 import { Persona, PersonaPresence, PersonaSize } from '@fluentui/react/lib/Persona'
-import React, { FC } from 'react'
+import React from 'react'
 import { SearchValueType } from 'types'
-import { IRenderItemColumnProps } from '../types'
+import { ColumnRenderComponent, IRenderItemColumnProps } from '../types'
+import strings from 'PortfolioWebPartsStrings'
 
-export const UserColumn: FC<IRenderItemColumnProps> = ({ columnValue, column }) => {
+export const UserColumn: ColumnRenderComponent<IRenderItemColumnProps> = ({
+  columnValue,
+  column
+}) => {
   const isMultiUser = columnValue?.indexOf(';') !== -1
   if (isMultiUser) {
     return (
@@ -47,3 +51,14 @@ export const UserColumn: FC<IRenderItemColumnProps> = ({ columnValue, column }) 
     </span>
   )
 }
+
+UserColumn.key = 'user'
+UserColumn.id = 'User'
+UserColumn.displayName = strings.ColumnRenderOptionUser
+UserColumn.iconName = 'Contact'
+UserColumn.getDataTypeOption = () => ({
+  key: UserColumn.key,
+  id: UserColumn.id,
+  text: UserColumn.displayName,
+  data: { iconProps: { iconName: UserColumn.iconName } }
+})

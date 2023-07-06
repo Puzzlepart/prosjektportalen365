@@ -1,10 +1,13 @@
+import { ITextFieldProps, TextField } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import React, { FC } from 'react'
+import strings from 'PortfolioWebPartsStrings'
+import React from 'react'
+import { ColumnRenderComponent } from '../types'
 import { Tag } from './Tag'
 import styles from './TagsColumn.module.scss'
 import { ITagsColumnProps } from './types'
 
-export const TagsColumn: FC<ITagsColumnProps> = (props) => {
+export const TagsColumn: ColumnRenderComponent<ITagsColumnProps> = (props) => {
   if (!props.columnValue) return null
   const tags: string[] = props.columnValue
     .split(props.valueSeparator)
@@ -21,3 +24,27 @@ export const TagsColumn: FC<ITagsColumnProps> = (props) => {
 TagsColumn.defaultProps = {
   valueSeparator: ';'
 }
+TagsColumn.key = 'tags'
+TagsColumn.id = 'Tags'
+TagsColumn.displayName = strings.ColumnRenderOptionTags
+TagsColumn.iconName = 'Tag'
+TagsColumn.getDataTypeOption = () => ({
+  key: TagsColumn.key,
+  id: TagsColumn.id,
+  text: TagsColumn.displayName,
+  data: {
+    iconProps: { iconName: TagsColumn.iconName },
+    getDataTypeProperties: (onChange, dataTypeProperties: Record<string, any>) => [
+      [
+        TextField,
+        {
+          label: strings.ColumnRenderOptionTagsValueSeparatorLabel,
+          description: strings.ColumnRenderOptionTagsValueSeparatorDescription,
+          placeholder: TagsColumn.defaultProps.valueSeparator,
+          value: dataTypeProperties.valueSeparator,
+          onChange: (_, value) => onChange('valueSeparator', value)
+        } as ITextFieldProps
+      ]
+    ]
+  }
+})

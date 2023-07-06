@@ -1,8 +1,9 @@
-import React, { FC } from 'react'
-import { IListColumnProps } from './types'
 import _ from 'lodash'
+import React from 'react'
+import { ColumnRenderComponent } from '../types'
+import { IListColumnProps } from './types'
 
-export const ListColumn: FC<IListColumnProps> = (props) => {
+export const ListColumn: ColumnRenderComponent<IListColumnProps> = (props) => {
   const values: string[] = props.columnValue ? props.columnValue.split(props.valueSeparator) : []
   if (_.isEmpty(values)) return null
   return (
@@ -22,3 +23,15 @@ ListColumn.defaultProps = {
   margin: 0,
   padding: 0
 }
+ListColumn.key = 'list'
+ListColumn.id = 'List'
+ListColumn.displayName = 'List'
+ListColumn.iconName = 'List'
+ListColumn.getDataTypeOption = () => ({
+  key: ListColumn.key,
+  id: ListColumn.id,
+  text: ListColumn.displayName,
+  data: {
+    iconProps: { iconName: ListColumn.iconName }
+  }
+})

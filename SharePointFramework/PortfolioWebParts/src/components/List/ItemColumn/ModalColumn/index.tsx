@@ -1,14 +1,25 @@
-import { DetailsList, IColumn, Link, Modal, SelectionMode } from '@fluentui/react'
+import {
+  Checkbox,
+  DetailsList,
+  ICheckboxProps,
+  IColumn,
+  ITextFieldProps,
+  Link,
+  Modal,
+  SelectionMode,
+  TextField
+} from '@fluentui/react'
+import { stringIsNullOrEmpty } from '@pnp/common'
+import strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared-library'
-import React, { FC, useState } from 'react'
+import React, { useState } from 'react'
+import { ColumnRenderComponent } from '../types'
 import styles from './ItemModal.module.scss'
 import { columns } from './columns'
 import { IModalColumnProps } from './types'
-import strings from 'PortfolioWebPartsStrings'
 import { useInfoText } from './useInfoText'
-import { stringIsNullOrEmpty } from '@pnp/common'
 
-export const ModalColumn: FC<IModalColumnProps> = (props) => {
+export const ModalColumn: ColumnRenderComponent<IModalColumnProps> = (props) => {
   const [isOpen, setIsOpen] = useState(false)
   const infoText = useInfoText(props)
 
@@ -53,3 +64,48 @@ ModalColumn.defaultProps = {
   selectionMode: SelectionMode.none,
   infoTextTemplate: strings.ShowAllMeasurementsInfoTextFormat
 }
+ModalColumn.key = 'modal'
+ModalColumn.id = 'Modal'
+ModalColumn.displayName = strings.ColumnRenderOptionModal
+ModalColumn.iconName = 'WindowEdit'
+ModalColumn.getDataTypeOption = () => ({
+  key: ModalColumn.key,
+  id: ModalColumn.id,
+  text: ModalColumn.displayName,
+  disabled: true,
+  data: {
+    iconProps: { iconName: ModalColumn.iconName },
+    getDataTypeProperties: (onChange, dataTypeProperties: Record<string, any>) => [
+      [
+        TextField,
+        {
+          label: strings.ColumnRenderOptionModalLinkTextLabel,
+          placeholder: ModalColumn.defaultProps.linkText,
+          value: dataTypeProperties['linkText'],
+          onChange: (_, value) => onChange('linkText', value)
+        } as ITextFieldProps
+      ],
+      [
+        Checkbox,
+        {
+          label: strings.ColumnRenderOptionModalShowInfoTextLabel,
+          defaultChecked: ModalColumn.defaultProps.showInfoText,
+          checked: dataTypeProperties.showInfoText,
+          onChange: (_, value) => onChange('showInfoText', value)
+        } as ICheckboxProps
+      ],
+      [
+        TextField,
+        {
+          label: strings.ColumnRenderOptionModalInfoTextTemplateLabel,
+          description: strings.ColumnRenderOptionModalInfoTextTemplateDescription,
+          placeholder: ModalColumn.defaultProps.infoTextTemplate,
+          value: dataTypeProperties.infoTextTemplate,
+          multiline: true,
+          disabled: !dataTypeProperties.showInfoText,
+          onChange: (_, value) => onChange('infoTextTemplate', value)
+        } as ITextFieldProps
+      ]
+    ]
+  }
+})
