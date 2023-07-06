@@ -12,7 +12,7 @@ export const ViewFormPanel: FC = () => {
   const { view, setView, isEditing, onDismiss, onSave } = useViewFormPanel()
   return (
     <Panel
-      isOpen={true}
+      isOpen={context.state.viewForm?.isOpen}
       headerText={isEditing ? strings.EditColumnHeaderText : strings.NewColumnHeaderText}
       onRenderFooterContent={() => <ViewFormPanelFooter onSave={onSave} />}
       isFooterAtBottom={true}
@@ -61,7 +61,7 @@ export const ViewFormPanel: FC = () => {
           label={strings.DataSourceLevelLabel}
           description={strings.DataSourceLevelDescription}
           disabled={true}
-          value={context.props.dataSourceLevel}
+          value={context.props.configuration?.level}
         />
       </FormFieldContainer>
     </Panel>

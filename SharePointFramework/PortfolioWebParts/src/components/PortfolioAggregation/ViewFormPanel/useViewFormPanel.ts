@@ -1,6 +1,7 @@
-import { SPPortfolioOverviewViewItem } from 'pp365-shared-library'
-import { useContext, useState } from 'react'
+import { SPDataSourceItem } from 'pp365-shared-library'
+import { useContext, useEffect, useState } from 'react'
 import { PortfolioAggregationContext } from '../context'
+import { TOGGLE_VIEW_FORM_PANEL } from '../reducer'
 
 
 /**
@@ -10,64 +11,57 @@ import { PortfolioAggregationContext } from '../context'
  */
 export function useViewFormPanel() {
   const context = useContext(PortfolioAggregationContext)
-  const [view, $setView] = useState(new Map<string, any>([
-    ['title', ''],
-    ['searchQuery', ''],
-  ]))
-  const isEditing = false
+  const [view, $setView] = useState(new Map<string, any>())
+  const isEditing = !!context.state.viewForm.view
 
-  // useEffect(() => {
-  //   if (isEditing) {
-  //     $setView(new Map())
-  //   } else {
-  //     $setView(new Map())
-  //   }
-  // }, [context.state.currentView])
+  useEffect(() => {
+    if (isEditing) {
+      $setView(new Map([
+        ['title', context.state.viewForm.view.title],
+        ['searchQuery', context.state.viewForm.view.searchQuery],
+        ['iconName', context.state.viewForm.view.iconName],
+      ]))
+    } else {
+      $setView(new Map())
+    }
+  }, [context.state.viewForm, context.state.currentView])
 
   /**
    * Dismisses the form panel by dispatching the `TOGGLE_VIEW_FORM_PANEL` action.
    */
   const onDismiss = () => {
-    // TODO: Dispatch action to close the form panel
-    // context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: false }))
+    context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: false }))
   }
 
   const onSave = async () => {
     const { currentView } = context.state
+    let properties: SPDataSourceItem = {
+      Title: view.get('title'),
+      GtSearchQuery: view.get('searchQuery'),
+      GtIconName: view.get('iconName')
+    }
     if (isEditing) {
-      const properties: SPPortfolioOverviewViewItem = {
-        Title: view.get('title'),
-        GtSearchQuery: view.get('searchQuery'),
-        GtPortfolioIsPersonalView: view.get('isPersonalView'),
-        GtPortfolioIsDefaultView: view.get('isDefaultView'),
-        GtPortfolioFabricIcon: view.get('iconName')
-      }
       await context.props.dataAdapter.portalDataService.updateItemInList(
-        'PORTFOLIO_VIEWS',
+        'DATA_SOURCES',
         currentView.id as number,
         properties
       )
     } else {
-      const properties: SPPortfolioOverviewViewItem = {
-        Title: view.get('title'),
-        GtSearchQuery: view.get('searchQuery'),
-        GtSortOrder: view.get('sortOrder'),
-        GtPortfolioFabricIcon: view.get('iconName'),
-        GtPortfolioIsDefaultView: view.get('isDefaultView'),
-        GtPortfolioIsPersonalView: view.get('isPersonalView'),
-        GtPortfolioColumnsId: {
+      properties = {
+        ...properties,
+        GtProjectContentColumnsId: {
           results: currentView.columns.map((column) => column.id)
         },
-        GtPortfolioRefinersId: {
+        GtProjectContentRefinersId: {
           results: currentView.refiners.map((refiner) => refiner.id)
         },
-        GtPortfolioGroupById: currentView.groupBy?.id,
+        GtProjectContentGroupById: currentView.groupBy?.id,
+        GtDataSourceCategory: context.props.dataSourceCategory,
+        GtDataSourceLevel: [context.props.configuration?.level].filter(Boolean)
       }
-      await context.props.dataAdapter.portalDataService.addItemToList('PORTFOLIO_VIEWS', properties)
+      await context.props.dataAdapter.portalDataService.addItemToList('DATA_SOURCES', properties)
     }
-    //context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: false }))
-
-    // TODO: Dispatch action to close the form panel
+    context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: false }))
   }
 
   /**
@@ -85,9 +79,9 @@ export function useViewFormPanel() {
   }
 
   /**
-   * Save is disabled if the view title is less than 2 characters or the search query is less than 51 characters.
+   * Determines whether the save button should be disabled based on the length of the view title and search query.
    */
-  const isSaveDisabled = view.get('title').length < 2 || view.get('searchQuery').length < 51
+  const isSaveDisabled = view.get('title')?.length < 2 || view.get('searchQuery')?.length < 51
 
   return {
     onSave: !isSaveDisabled ? onSave : undefined,

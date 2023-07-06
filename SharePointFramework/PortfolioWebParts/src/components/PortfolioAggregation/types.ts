@@ -6,6 +6,7 @@ import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
 import { IListProps, OnColumnContextMenu } from '../List'
 import { IBaseComponentProps } from '../types'
 import { IColumnFormPanel } from './ColumnFormPanel/types'
+import { IViewFormPanel } from './ViewFormPanel/types'
 
 export class PortfolioAggregationErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -218,6 +219,13 @@ export interface IPortfolioAggregationState
    * Current view
    */
   currentView?: DataSource
+
+  /**
+   * View form panel props. Consists of two properties:
+   * - `isOpen` - whether the panel is open
+   * - `view` - the view (data source) to edit (if not specified, a new view will be created)
+   */
+  viewForm: IViewFormPanel
 }
 
 export interface IPortfolioAggregationHashState {
