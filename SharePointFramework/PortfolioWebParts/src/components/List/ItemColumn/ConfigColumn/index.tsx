@@ -30,5 +30,5 @@ export const ConfigColumn: FC<IConfigColumnProps> = (props) => {
 
 ConfigColumn.defaultProps = {
   tooltipColumnPropertyName: null,
-  calloutProps: { gapSpace: 10 }
+  calloutProps: { gapSpace: 0 }
 }
