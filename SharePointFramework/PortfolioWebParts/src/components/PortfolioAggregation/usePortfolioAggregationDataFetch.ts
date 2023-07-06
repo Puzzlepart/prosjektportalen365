@@ -12,9 +12,13 @@ import { DATA_FETCHED, DATA_FETCH_ERROR, GET_FILTERS, SET_GROUP_BY, START_FETCH 
 async function fetchData(context: IPortfolioAggregationContext) {
   let columns: ProjectContentColumn[] = []
   if (context.props.dataAdapter.fetchProjectContentColumns) {
-    columns = await context.props.dataAdapter.fetchProjectContentColumns(context.props.dataSourceCategory)
+    columns = await context.props.dataAdapter.fetchProjectContentColumns(
+      context.props.dataSourceCategory
+    )
   }
-  const selectProperties = [...(columns || []), ...context.state.columns].map((col) => col.fieldName)
+  const selectProperties = [...(columns || []), ...context.state.columns].map(
+    (col) => col.fieldName
+  )
   const [dataSource, items, projects] = await Promise.all([
     context.props.dataAdapter.dataSourceService.getByName(context.state.dataSource),
     context.props.dataAdapter.fetchItemsWithSource(
@@ -22,7 +26,10 @@ async function fetchData(context: IPortfolioAggregationContext) {
       context.props.selectProperties ?? selectProperties
     ),
     context.props.dataAdapter.fetchProjects
-      ? context.props.dataAdapter.fetchProjects(context.props.configuration, context.state.dataSource)
+      ? context.props.dataAdapter.fetchProjects(
+          context.props.configuration,
+          context.state.dataSource
+        )
       : Promise.resolve(undefined)
   ])
   return { dataSource, items, columns, projects } as const

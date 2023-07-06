@@ -8,11 +8,13 @@ import { PortfolioAggregationContext } from '../context'
  */
 export function useEditableView() {
   const context = useContext(PortfolioAggregationContext)
-  const [view, $setView] = useState( new Map([
-    ['title', ''],
-    ['searchQuery', ''],
-    ['iconName', 'ViewList'],
-  ]))
+  const [view, $setView] = useState(
+    new Map([
+      ['title', ''],
+      ['searchQuery', ''],
+      ['iconName', 'ViewList']
+    ])
+  )
   const isEditing = !!context.state.viewForm.view
 
   useEffect(() => {
@@ -29,7 +31,7 @@ export function useEditableView() {
         new Map([
           ['title', ''],
           ['searchQuery', context.state.currentView?.searchQuery ?? ''],
-          ['iconName', 'ViewList'],
+          ['iconName', 'ViewList']
         ])
       )
     }

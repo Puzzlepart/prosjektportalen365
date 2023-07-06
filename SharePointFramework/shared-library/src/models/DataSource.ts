@@ -47,8 +47,8 @@ export class DataSource {
     this.level = item.GtDataSourceLevel as string[]
     this.isDefault = item.GtDataSourceDefault
     this.odataQuery = item.GtODataQuery
-    this.columnIds = item.GtProjectContentColumnsId as number[] ?? []
-    this.refinerIds = item.GtProjectContentRefinersId as number[] ?? []
+    this.columnIds = (item.GtProjectContentColumnsId as number[]) ?? []
+    this.refinerIds = (item.GtProjectContentRefinersId as number[]) ?? []
     this.groupById = item.GtProjectContentGroupById
     this.configure(columns)
   }
@@ -59,16 +59,12 @@ export class DataSource {
    * Sets the columns, refiners, and groupBy properties of the DataSource instance.
    *
    * @param columns The project content columns to filter and configure the DataSource instance with.
-   * 
+   *
    * @returns The configured DataSource instance.
    */
   public configure(columns: ProjectContentColumn[] = []) {
-    this.columns = columns.filter((col) =>
-      _.includes(this.columnIds, col.id)
-    )
-    this.refiners = columns.filter((col) =>
-      _.includes(this.refinerIds, col.id)
-    )
+    this.columns = columns.filter((col) => _.includes(this.columnIds, col.id))
+    this.refiners = columns.filter((col) => _.includes(this.refinerIds, col.id))
     this.groupBy = columns.find((col) => col.id === this.groupById)
     return this
   }
