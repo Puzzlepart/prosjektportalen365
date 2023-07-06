@@ -9,7 +9,12 @@ import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportSer
 import React, { FC, useContext } from 'react'
 import { isEmpty } from 'underscore'
 import { PortfolioAggregationContext } from '../context'
-import { SET_DATA_SOURCE, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL, TOGGLE_VIEW_FORM_PANEL } from '../reducer'
+import {
+  SET_DATA_SOURCE,
+  TOGGLE_COMPACT,
+  TOGGLE_FILTER_PANEL,
+  TOGGLE_VIEW_FORM_PANEL
+} from '../reducer'
 
 export const Commands: FC = () => {
   const context = useContext(PortfolioAggregationContext)
@@ -98,7 +103,9 @@ export const Commands: FC = () => {
               key: 'EDIT_VIEW',
               name: strings.EditViewText,
               onClick: () => {
-                context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: true,view:context.state.currentView }))
+                context.dispatch(
+                  TOGGLE_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
+                )
               }
             }
           ].filter(Boolean)

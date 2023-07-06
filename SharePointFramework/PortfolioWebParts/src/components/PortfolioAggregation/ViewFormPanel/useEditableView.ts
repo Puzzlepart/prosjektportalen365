@@ -21,21 +21,12 @@ export function useEditableView() {
         ])
       )
     } else {
-      $setView(new Map([['iconName', 'ViewList']]))
-    }
-  }, [context.state.viewForm, context.state.currentView])
-
-  useEffect(() => {
-    if (isEditing) {
       $setView(
         new Map([
-          ['title', context.state.viewForm.view.title],
-          ['searchQuery', context.state.viewForm.view.searchQuery],
-          ['iconName', context.state.viewForm.view.iconName]
+          ['iconName', 'ViewList'],
+          ['searchQuery', context.state.currentView?.searchQuery]
         ])
       )
-    } else {
-      $setView(new Map([['iconName', 'ViewList']]))
     }
   }, [context.state.viewForm, context.state.currentView])
 

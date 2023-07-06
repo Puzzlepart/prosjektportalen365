@@ -156,7 +156,10 @@ export interface IPortfolioAggregationState
   sortBy?: IColumn
 
   /**
-   * Search term
+   * Initial search term that should be
+   * set to a blank string initially
+   * in `getInitialState()` for the
+   * reducer.
    */
   searchTerm?: string
 

@@ -352,7 +352,10 @@ export const createPortfolioAggregationReducer = (
     [DATA_FETCH_ERROR.type]: (state, { payload }: ReturnType<typeof DATA_FETCH_ERROR>) => {
       state.error = payload.error
     },
-    [TOGGLE_VIEW_FORM_PANEL.type]: (state, {payload}: ReturnType<typeof TOGGLE_VIEW_FORM_PANEL>) => {
+    [TOGGLE_VIEW_FORM_PANEL.type]: (
+      state,
+      { payload }: ReturnType<typeof TOGGLE_VIEW_FORM_PANEL>
+    ) => {
       state.viewForm = payload
-    },
+    }
   })
