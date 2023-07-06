@@ -20,6 +20,10 @@ export function useViewFormPanel() {
     context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: false }))
   }
 
+  /**
+   * Saves the changes made to the view by updating the item in the `DATA_SOURCES` list or adding a new item to the list.
+   * Dismisses the form panel by dispatching the `TOGGLE_VIEW_FORM_PANEL` action.
+   */
   const onSave = async () => {
     const { currentView } = context.state
     let properties: SPDataSourceItem = {
@@ -37,14 +41,16 @@ export function useViewFormPanel() {
       properties = {
         ...properties,
         GtProjectContentColumnsId: {
-          results: currentView.columns.map((column) => column.id)
+          results: currentView.columnIds
         },
         GtProjectContentRefinersId: {
-          results: currentView.refiners.map((refiner) => refiner.id)
+          results: currentView.refinerIds
         },
-        GtProjectContentGroupById: currentView.groupBy?.id,
+        GtProjectContentGroupById: currentView.groupById,
         GtDataSourceCategory: context.props.dataSourceCategory,
-        GtDataSourceLevel: [context.props.configuration?.level].filter(Boolean)
+        GtDataSourceLevel: {
+          results: [context.props.configuration?.level].filter(Boolean)
+        }
       }
       await context.props.dataAdapter.portalDataService.addItemToList('DATA_SOURCES', properties)
     }
@@ -54,7 +60,7 @@ export function useViewFormPanel() {
   /**
    * Determines whether the save button should be disabled based on the length of the view title and search query.
    */
-  const isSaveDisabled = view.get('title')?.length < 2 || view.get('searchQuery')?.length < 51
+  const isSaveDisabled = view.get('title').length < 2 || view.get('searchQuery').length < 51
 
   return {
     onSave: !isSaveDisabled ? onSave : undefined,

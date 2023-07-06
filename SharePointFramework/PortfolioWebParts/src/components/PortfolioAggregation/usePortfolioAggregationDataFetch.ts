@@ -9,20 +9,20 @@ import { DATA_FETCHED, DATA_FETCH_ERROR, GET_FILTERS, SET_GROUP_BY, START_FETCH 
  *
  * @param context Context for the Portfolio Aggregation component
  */
-async function fetchData({ props, state }: IPortfolioAggregationContext) {
+async function fetchData(context: IPortfolioAggregationContext) {
   let columns: ProjectContentColumn[] = []
-  if (props.dataAdapter.fetchProjectContentColumns) {
-    columns = await props.dataAdapter.fetchProjectContentColumns(props.dataSourceCategory)
+  if (context.props.dataAdapter.fetchProjectContentColumns) {
+    columns = await context.props.dataAdapter.fetchProjectContentColumns(context.props.dataSourceCategory)
   }
-  const selectProperties = [...(columns || []), ...state.columns].map((col) => col.fieldName)
+  const selectProperties = [...(columns || []), ...context.state.columns].map((col) => col.fieldName)
   const [dataSource, items, projects] = await Promise.all([
-    props.dataAdapter.dataSourceService.getByName(state.dataSource),
-    props.dataAdapter.fetchItemsWithSource(
-      state.dataSource,
-      props.selectProperties ?? selectProperties
+    context.props.dataAdapter.dataSourceService.getByName(context.state.dataSource),
+    context.props.dataAdapter.fetchItemsWithSource(
+      context.state.dataSource,
+      context.props.selectProperties ?? selectProperties
     ),
-    props.dataAdapter.fetchProjects
-      ? props.dataAdapter.fetchProjects(props.configuration, state.dataSource)
+    context.props.dataAdapter.fetchProjects
+      ? context.props.dataAdapter.fetchProjects(context.props.configuration, context.state.dataSource)
       : Promise.resolve(undefined)
   ])
   return { dataSource, items, columns, projects } as const

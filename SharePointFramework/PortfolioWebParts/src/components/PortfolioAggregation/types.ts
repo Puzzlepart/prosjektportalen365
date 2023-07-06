@@ -219,7 +219,7 @@ export interface IPortfolioAggregationState
   filters?: IFilterProps[]
 
   /**
-   * Current view
+   * Current view (or data source) selected in the view selector.
    */
   currentView?: DataSource
 
