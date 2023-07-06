@@ -36,7 +36,7 @@ export function useEditableView() {
    * @param key Key of the view property to set
    * @param value Value of the view property to set
    */
-  const setView = (key: string, value: any) => {
+  const setView = (key: 'title' | 'iconName' | 'searchQuery', value: any) => {
     $setView((prev) => {
       const newView = new Map(prev)
       newView.set(key, value)
