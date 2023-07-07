@@ -18,6 +18,7 @@
     "underscore": "~1.13.6"
   },
   "devDependencies": {
-    "replace": "1.2.2"
+    "replace": "1.2.2",
+    "@types/lodash": "~4.14.195"
   }
 }
