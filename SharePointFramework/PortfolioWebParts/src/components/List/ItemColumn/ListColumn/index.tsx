@@ -2,7 +2,6 @@ import _ from 'lodash'
 import React from 'react'
 import { ColumnRenderComponent } from '../types'
 import { IListColumnProps } from './types'
-import { ColumnRenderComponentRegistry } from '../registry'
 
 export const ListColumn: ColumnRenderComponent<IListColumnProps> = (props) => {
   const values: string[] = props.columnValue ? props.columnValue.split(props.valueSeparator) : []
@@ -28,4 +27,3 @@ ListColumn.key = 'list'
 ListColumn.id = 'List'
 ListColumn.displayName = 'List'
 ListColumn.iconName = 'List'
-ColumnRenderComponentRegistry.register(ListColumn)

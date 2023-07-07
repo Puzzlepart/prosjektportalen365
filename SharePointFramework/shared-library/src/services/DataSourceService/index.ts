@@ -10,8 +10,8 @@ export class DataSourceService {
    * Creates a new instance of DataSourceService
    *
    * @param web Web
-   * @param listName List name
-   * @param columnsListName Columns list name
+   * @param listName List name is default set to 'Datakilder' but can be overridden (not recommended)
+   * @param columnsListName Columns list name is default set to 'Prosjektinnholdskolonner' but can be overridden (not recommended)
    */
   constructor(
     public web: Web,
@@ -44,12 +44,17 @@ export class DataSourceService {
   }
 
   /**
-   * Get by category and optional level
+   * Get data sources by category and optional level.
    *
    * @param category Category
    * @param level Level (optional)
+   * @param columns Columns to configure data source with (optional)
    */
-  public async getByCategory(category: string, level?: string): Promise<DataSource[]> {
+  public async getByCategory(
+    category: string,
+    level?: string,
+    columns: ProjectContentColumn[] = []
+  ): Promise<DataSource[]> {
     let filter = `GtDataSourceCategory eq '${category}'`
     if (level) {
       filter += ` and GtDataSourceLevel eq '${level}'`
@@ -59,6 +64,6 @@ export class DataSourceService {
       .filter(`GtDataSourceCategory eq '${category}'`)
       .filter(filter)
       .get<SPDataSourceItem[]>()
-    return items.map((item) => new DataSource(item))
+    return items.map((item) => new DataSource(item, columns))
   }
 }

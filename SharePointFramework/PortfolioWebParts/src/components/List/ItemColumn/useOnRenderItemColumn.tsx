@@ -1,12 +1,11 @@
 import { IColumn } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/common'
-import strings from 'PortfolioWebPartsStrings'
 import { ProjectColumnConfigDictionaryItem, getObjectValue as get } from 'pp365-shared-library'
-import React, { ReactNode, createElement, useEffect, useMemo } from 'react'
+import React, { ReactNode, createElement, useMemo } from 'react'
 import { IListProps } from '../types'
 import { ConfigColumn } from './ConfigColumn'
 import { TitleColumn } from './TitleColumn'
-import { ColumnRenderComponentRegistry } from './registry'
+import { ColumnRenderComponentRegistry, useColumnRenderComponentRegistry } from './registry'
 import { IRenderItemColumnProps } from './types'
 
 /**
@@ -74,32 +73,7 @@ function renderItemColumn(
  * render component.
  */
 export const useOnRenderItemColumn = (props: IListProps) => {
-  useEffect(() => {
-    ColumnRenderComponentRegistry.registerColumnRenderOption(
-      'text',
-      'Text',
-      strings.ColumnRenderOptionText,
-      'FontColor'
-    )
-    ColumnRenderComponentRegistry.registerColumnRenderOption(
-      'note',
-      'Note',
-      strings.ColumnRenderOptionNote,
-      'EditStyle'
-    )
-    ColumnRenderComponentRegistry.registerColumnRenderOption(
-      'number',
-      'Number',
-      strings.ColumnRenderOptionNumber,
-      'NumberedList'
-    )
-    ColumnRenderComponentRegistry.registerColumnRenderOption(
-      'percentage',
-      'Percentage',
-      strings.ColumnRenderOptionPercentage,
-      'CalculatorPercentage'
-    )
-  }, [])
+  useColumnRenderComponentRegistry()
   return useMemo(
     () => (item?: any, _index?: number, column?: IColumn) => renderItemColumn(item, column, props),
     [props]

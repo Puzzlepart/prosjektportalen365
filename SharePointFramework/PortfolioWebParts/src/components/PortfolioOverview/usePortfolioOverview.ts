@@ -56,11 +56,11 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
 
   ExcelExportService.configure({ name: props.title })
 
-  const { items, columns, groups } = useFilteredData(props, state)
+  const { items, groups } = useFilteredData(context)
 
   const editViewColumnsPanelProps = useEditViewColumnsPanel(context)
 
-  const searchBox: ISearchBoxProps = {
+  const searchBoxProps: ISearchBoxProps = {
     placeholder: !!context.state.currentView
       ? format(strings.SearchBoxPlaceholderText, context.state.currentView.title.toLowerCase())
       : strings.SearchBoxPlaceholderFallbackText,
@@ -70,16 +70,14 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
   }
 
   return {
-    state,
     context: {
       ...context,
       items,
-      columns,
       groups
     },
     selection,
     onColumnContextMenu,
     editViewColumnsPanelProps,
-    searchBox
+    searchBoxProps
   } as const
 }

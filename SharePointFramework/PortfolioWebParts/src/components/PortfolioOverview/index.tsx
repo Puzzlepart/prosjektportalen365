@@ -9,25 +9,13 @@ import { ViewFormPanel } from './ViewFormPanel'
 import { PortfolioOverviewContext } from './context'
 import { IPortfolioOverviewProps } from './types'
 import { usePortfolioOverview } from './usePortfolioOverview'
-import { UserMessage } from 'pp365-shared-library'
-import { MessageBarType } from '@fluentui/react'
 
 /**
  * Component for displaying a portfolio overview - an overview of all projects in a portfolio.
  */
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
-  const { context, selection, onColumnContextMenu, editViewColumnsPanelProps, searchBox } =
+  const { context, selection, onColumnContextMenu, editViewColumnsPanelProps, searchBoxProps } =
     usePortfolioOverview(props)
-
-  if (context.state.error) {
-    return (
-      <div className={styles.root}>
-        <div className={styles.container}>
-          <UserMessage type={MessageBarType.error} text={context.state.error.message} />
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className={styles.root}>
@@ -38,9 +26,9 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
             title={props.title}
             enableShimmer={context.state.loading || !!context.state.isChangingView}
             items={context.items}
-            columns={context.columns}
+            columns={context.state.columns}
             groups={context.groups}
-            searchBox={searchBox}
+            searchBox={searchBoxProps}
             isAddColumnEnabled={!props.isParentProject}
             selection={selection}
             setKey='multiple'
@@ -50,6 +38,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
             renderTitleProjectInformationPanel={true}
             webPartContext={props.webPartContext}
             layerHostId={context.layerHostId}
+            error={context.state.error}
           />
         </div>
         <ColumnContextMenu />

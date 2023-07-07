@@ -1,7 +1,6 @@
-import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
+import { ContextualMenuItemType, ICommandBarProps, IContextualMenuItem } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
-import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { PortfolioOverviewView } from 'pp365-shared-library/lib/models/PortfolioOverviewView'
 import { useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
@@ -45,7 +44,6 @@ export function useCommands() {
     buttonStyles: { root: { border: 'none' } },
     itemType: ContextualMenuItemType.Header,
     data: { isVisible: context.props.showViewSelector },
-    disabled: context.state.loading,
     subMenuProps: {
       styles: {
         root: {
@@ -150,7 +148,6 @@ export function useCommands() {
     buttonStyles: { root: { border: 'none' } },
     canCheck: true,
     checked: context.state.isFilterPanelOpen,
-    disabled: context.state.loading,
     data: { isVisible: context.props.showFilters },
     onClick: (ev) => {
       ev.preventDefault()
@@ -159,27 +156,27 @@ export function useCommands() {
     }
   })
 
+  const commandItemsDisabled =
+    context.state.loading || !!context.state.error || !!context.state.isChangingView
+
+  const commandBarProps: ICommandBarProps = {
+    items: []
+  }
+  commandBarProps.items = items
+    .filter((i) => i.data?.isVisible !== false)
+    .map((i) => ({
+      ...i,
+      disabled: i.disabled || commandItemsDisabled
+    }))
+  commandBarProps.farItems = farItems
+    .filter((i) => i.data?.isVisible !== false)
+    .map((i) => ({
+      ...i,
+      disabled: i.disabled || commandItemsDisabled
+    }))
+
   return {
-    commandBarProps: {
-      items,
-      farItems: farItems.filter((i) => i.data?.isVisible)
-    },
-    filters: [
-      {
-        column: {
-          key: 'SelectedColumns',
-          fieldName: 'SelectedColumns',
-          name: strings.SelectedColumnsLabel,
-          minWidth: 0
-        },
-        items: context.props.configuration.columns.map((col) => ({
-          name: col.name,
-          value: col.fieldName,
-          selected: context.columns.indexOf(col) !== -1
-        })),
-        defaultCollapsed: true
-      },
-      ...filters
-    ] as IFilterProps[]
+    commandBarProps,
+    filters
   } as const
 }

@@ -1,4 +1,5 @@
 import {
+  IColumn,
   IScrollablePaneProps,
   ISearchBoxProps,
   IShimmeredDetailsListProps,
@@ -11,7 +12,7 @@ export type OnColumnContextMenu = {
   target: Target
 }
 
-export interface IListProps
+export interface IListProps<T extends IColumn = IColumn>
   extends Omit<
     IShimmeredDetailsListProps,
     'layoutMode' | 'onColumnHeaderClick' | 'onColumnHeaderContextMenu'
@@ -64,4 +65,14 @@ export interface IListProps
    * and `onColumnHeaderContextMenu`.
    */
   onColumnContextMenu?: ({ column, target }: OnColumnContextMenu) => void
+
+  /**
+   * Column definitions. If none are provided, default columns will be an empty array.
+   */
+  columns?: T[]
+
+  /**
+   * Error to render in the list if the data fetch or something else fails.
+   */
+  error?: Error
 }

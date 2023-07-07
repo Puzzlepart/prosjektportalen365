@@ -1,23 +1,17 @@
-import { ProjectContentColumn } from 'pp365-shared-library'
+import _ from 'lodash'
 import { useEffect } from 'react'
 import { IPortfolioAggregationContext } from './context'
 import { DATA_FETCHED, DATA_FETCH_ERROR, GET_FILTERS, SET_GROUP_BY, START_FETCH } from './reducer'
-import _ from 'lodash'
 
 /**
  * Fetching data for the Portfolio Aggregation component. This includes
  * the data source (if `state.currentView` is not set), the items, the columns
- * and the the projects if `props.dataAdapter.fetchProjects` is set.
+ * and the the projects (if `props.dataAdapter.fetchProjects` is set).
  *
  * @param context Context for the Portfolio Aggregation component
  */
 async function fetchData(context: IPortfolioAggregationContext) {
-  let columns: ProjectContentColumn[] = []
-  if (context.props.dataAdapter.fetchProjectContentColumns) {
-    columns = await context.props.dataAdapter.fetchProjectContentColumns(
-      context.props.dataSourceCategory
-    )
-  }
+  const columns = context.props.configuration.columns ?? []
   const selectProperties = _.uniq(
     [...columns, ...context.state.columns].map((col) => col.fieldName)
   )

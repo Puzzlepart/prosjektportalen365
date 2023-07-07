@@ -1,6 +1,6 @@
 import { IColumn } from '@fluentui/react'
 import { ColumnDataType } from 'pp365-shared-library'
-import { IColumnDataTypeFieldOption } from './ColumnDataTypeField'
+import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataTypeField'
 
 export interface IRenderItemColumnProps extends React.HTMLAttributes<HTMLDivElement> {
   column?: IColumn
@@ -53,4 +53,9 @@ export interface ColumnRenderComponent<T extends IRenderItemColumnProps = IRende
    * @returns An option for the data type field.
    */
   getDataTypeOption?: () => IColumnDataTypeFieldOption
+
+  /**
+   * Function that returns an array of data type properties for the component.
+   */
+  getDataTypeProperties?: GetDataTypeProperties
 }

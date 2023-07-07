@@ -4,9 +4,8 @@ import { tryParseJson } from 'pp365-shared-library'
 import React from 'react'
 import { IColumnDataTypePropertyField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
-import { ITrendColumnProps } from './types'
-import { ColumnRenderComponentRegistry } from '../registry'
 import styles from './TrendColumn.module.scss'
+import { ITrendColumnProps } from './types'
 
 /**
  * Renders a column that displays a trend icon and an achievement display value.
@@ -37,17 +36,14 @@ TrendColumn.id = 'Trend'
 TrendColumn.displayName = strings.ColumnRenderOptionTrend
 TrendColumn.iconName = 'Trending12'
 TrendColumn.isDisabled = true
-ColumnRenderComponentRegistry.register(
-  TrendColumn,
-  (onChange, dataTypeProperties: Record<string, any>) => [
-    {
-      type: Checkbox,
-      props: {
-        label: strings.ColumnRenderOptionTrendShowTrendIconLabel,
-        defaultChecked: TrendColumn.defaultProps.showTrendIcon,
-        checked: dataTypeProperties.showTrendIcon,
-        onChange: (_, checked) => onChange('showTrendIcon', checked)
-      }
-    } as IColumnDataTypePropertyField<ICheckboxProps>
-  ]
-)
+TrendColumn.getDataTypeProperties = (onChange, dataTypeProperties: Record<string, any>) => [
+  {
+    type: Checkbox,
+    props: {
+      label: strings.ColumnRenderOptionTrendShowTrendIconLabel,
+      defaultChecked: TrendColumn.defaultProps.showTrendIcon,
+      checked: dataTypeProperties.showTrendIcon,
+      onChange: (_, checked) => onChange('showTrendIcon', checked)
+    }
+  } as IColumnDataTypePropertyField<ICheckboxProps>
+]

@@ -24,7 +24,10 @@ export function useAddColumn(
     name: strings.ToggleColumnFormPanelLabel,
     iconName: 'CalculatorAddition',
     iconClassName: styles.addColumnIcon,
-    minWidth: 175
+    minWidth: 175,
+    data: {
+      isHidden: !condition
+    }
   }
 
   /**
@@ -68,7 +71,7 @@ export function useAddColumn(
   const isAddColumn = (column: IColumn) => column.key === addColumn.key
 
   return {
-    addColumn: condition ? addColumn : undefined,
+    addColumn,
     isAddColumn,
     createContextualMenuItems
   } as const

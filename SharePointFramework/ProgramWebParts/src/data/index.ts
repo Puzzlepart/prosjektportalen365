@@ -30,18 +30,19 @@ import {
   SPDataAdapterBase,
   SPProjectContentColumnItem,
   TimelineConfigurationModel,
-  TimelineContentModel
+  TimelineContentModel,
+  getUserPhoto
 } from 'pp365-shared-library'
-import { getUserPhoto } from 'pp365-shared-library/lib/helpers/getUserPhoto'
 import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
 
 /**
- * SPDataAdapter for `ProgramWebParts`.
- *
- * @implements IDataAdapter (from package `pp365-portfoliowebparts`)
+ * `SPDataAdapter` is a class that extends the `SPDataAdapterBase` class and implements the `IPortfolioWebPartsDataAdapter` interface.
+ * It provides methods to configure the SP data adapter with the SPFx context and the configuration, and to get the portfolio configuration and the aggregated list configuration.
  *
  * @extends SPDataAdapterBase (from package `pp365-shared`)
+ *
+ * @implements IPortfolioWebPartsDataAdapter (from package `pp365-portfoliowebparts`)
  */
 export class SPDataAdapter
   extends SPDataAdapterBase<ISPDataAdapterBaseConfiguration>
@@ -52,10 +53,10 @@ export class SPDataAdapter
   public childProjects: Array<Record<string, string>>
 
   /**
-   * Configure the SP data adapter
+   * Configure the SP data adapter with the SPFx context and the configuration.
    *
-   * @param spfxContext Context
-   * @param configuration Configuration
+   * @param spfxContext SPFx WebPart context
+   * @param configuration Configuration for the data adapter
    */
   public async configure(
     spfxContext: WebPartContext,
@@ -101,12 +102,14 @@ export class SPDataAdapter
     level: string = 'Overordnet/Program'
   ): Promise<IPortfolioAggregationConfiguration> {
     try {
+      const columns = await this.fetchProjectContentColumns(category)
       const [views, viewsUrls, columnUrls] = await Promise.all([
-        this.fetchDataSources(category, level),
+        this.fetchDataSources(category, level, columns),
         this.portal.getListFormUrls('DATA_SOURCES'),
         this.portal.getListFormUrls('PROJECT_CONTENT_COLUMNS')
       ])
       return {
+        columns,
         views,
         viewsUrls,
         columnUrls,
@@ -235,16 +238,15 @@ export class SPDataAdapter
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IPortfolioViewData> {
     const queryArray = this.aggregatedQueryBuilder(siteIdProperty)
-    const items = []
-    for (let i = 0; i < queryArray.length; i++) {
+    const promises = queryArray.map(async (query) => {
       const { projects, sites, statusReports } = await this._fetchDataForView(
         view,
         configuration,
         siteId,
         siteIdProperty,
-        queryArray[i]
+        query
       )
-      const item = projects.map((project) => {
+      return projects.map((project) => {
         const [statusReport] = statusReports.filter(
           (res) => res[siteIdProperty] === project[siteIdProperty]
         )
@@ -253,13 +255,13 @@ export class SPDataAdapter
         return {
           ...statusReport,
           ...project,
-          Path: site && site.Path,
+          Path: site?.Path,
           SiteId: project[siteIdProperty]
         }
       })
-      items.push(...item)
-    }
-    return { items }
+    })
+    const items = await Promise.all(promises).then((results) => _.flatten(results))
+    return { items, managedProperties: [] }
   }
 
   /**
@@ -507,11 +509,13 @@ export class SPDataAdapter
   }
 
   /**
-   * Map projects
+   * Maps project items to project list models.
    *
-   * @param items Items
-   * @param groups Groups
-   * @param users Users
+   * @param items Project items to map.
+   * @param groups Groups to use for mapping.
+   * @param users Users to use for mapping.
+   *
+   * @returns An array of project list models.
    */
   private _mapProjects(
     items: ISPProjectItem[],
@@ -741,9 +745,13 @@ export class SPDataAdapter
     }
   }
 
-  public fetchDataSources(category: string, level?: string): Promise<DataSource[]> {
+  public fetchDataSources(
+    category: string,
+    level?: string,
+    columns?: ProjectContentColumn[]
+  ): Promise<DataSource[]> {
     try {
-      return this.dataSourceService.getByCategory(category, level)
+      return this.dataSourceService.getByCategory(category, level, columns)
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, category))
     }
@@ -787,11 +795,11 @@ export class SPDataAdapter
   }
 
   /**
-   * Get child projects from the Prosjektegenskaper list item. The note field `GtChildProjects`
+   * Fetches child projects from the Prosjektegenskaper list item. The note field `GtChildProjects`
    * contains a JSON string with the child projects, and needs to be parsed. If the retrieve
    * fails, an empty array is returned.
    *
-   * @returns {Promise<Array<Record<string, string>>>} Child projects
+   * @returns An array of child projects, each represented as a record with `SiteId` and `Title` properties.
    */
   public async getChildProjects(): Promise<Array<Record<string, string>>> {
     try {
