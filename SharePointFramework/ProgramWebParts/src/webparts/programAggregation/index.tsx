@@ -20,8 +20,6 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
 
   public render(): void {
     this.renderComponent<IPortfolioAggregationProps>(PortfolioAggregation, {
-      ...this.properties,
-      dataAdapter: this.dataAdapter,
       onUpdateProperty: this._onUpdateProperty.bind(this),
       configuration: this._configuration,
       isParentProject: true
@@ -40,6 +38,12 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
     this.context.propertyPane.refresh()
   }
 
+  /**
+   * Initializes the web part. Overrides the base `onInit` method to retrieve the configuration
+   * for the aggregated list from the data adapter.
+   *
+   * @returns A promise that resolves when the initialization is complete.
+   */
   public async onInit(): Promise<void> {
     await super.onInit()
     this._configuration = await this.dataAdapter.getAggregatedListConfig(

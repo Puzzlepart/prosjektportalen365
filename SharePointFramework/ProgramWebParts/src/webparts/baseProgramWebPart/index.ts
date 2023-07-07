@@ -4,8 +4,8 @@ import { LogLevel } from '@pnp/logging'
 import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
 import { IHubSite } from 'pp365-shared-library/lib/interfaces'
-import React, { ComponentClass, FC } from 'react'
-import ReactDom from 'react-dom'
+import  { ComponentClass, FC, createElement } from 'react'
+import {render} from 'react-dom'
 import { SPDataAdapter } from '../../data'
 import { IBaseProgramWebPartProps } from './types'
 
@@ -30,8 +30,8 @@ export abstract class BaseProgramWebPart<
         title: this.properties.title
       }
     }
-    const element: React.ReactElement<T> = React.createElement(component, combinedProps)
-    ReactDom.render(element, this.domElement)
+    const element: React.ReactElement<T> = createElement(component, combinedProps)
+    render(element, this.domElement)
   }
 
   public async onInit(): Promise<void> {

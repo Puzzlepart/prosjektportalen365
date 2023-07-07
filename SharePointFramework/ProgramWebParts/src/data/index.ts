@@ -30,32 +30,32 @@ import {
   SPDataAdapterBase,
   SPProjectContentColumnItem,
   TimelineConfigurationModel,
-  TimelineContentModel
+  TimelineContentModel,
+  getUserPhoto
 } from 'pp365-shared-library'
-import { getUserPhoto } from 'pp365-shared-library/lib/helpers/getUserPhoto'
 import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
 
 /**
- * SPDataAdapter for `ProgramWebParts`.
- *
- * @implements IDataAdapter (from package `pp365-portfoliowebparts`)
+ * `SPDataAdapter` is a class that extends the `SPDataAdapterBase` class and implements the `IPortfolioWebPartsDataAdapter` interface.
+ * It provides methods to configure the SP data adapter with the SPFx context and the configuration, and to get the portfolio configuration and the aggregated list configuration.
  *
  * @extends SPDataAdapterBase (from package `pp365-shared`)
+ * 
+ * @implements IPortfolioWebPartsDataAdapter (from package `pp365-portfoliowebparts`)
  */
 export class SPDataAdapter
   extends SPDataAdapterBase<ISPDataAdapterBaseConfiguration>
-  implements IPortfolioWebPartsDataAdapter
-{
+  implements IPortfolioWebPartsDataAdapter {
   public project: ProjectDataService
   public dataSourceService: DataSourceService
   public childProjects: Array<Record<string, string>>
 
   /**
-   * Configure the SP data adapter
+   * Configure the SP data adapter with the SPFx context and the configuration.
    *
-   * @param spfxContext Context
-   * @param configuration Configuration
+   * @param spfxContext SPFx WebPart context
+   * @param configuration Configuration for the data adapter
    */
   public async configure(
     spfxContext: WebPartContext,
@@ -259,7 +259,7 @@ export class SPDataAdapter
       })
       items.push(...item)
     }
-    return { items }
+    return { items, managedProperties: [] }
   }
 
   /**
@@ -376,7 +376,7 @@ export class SPDataAdapter
             (child) =>
               child?.SiteId === item?.GtSiteIdLookup?.GtSiteId ||
               item?.GtSiteIdLookup?.GtSiteId ===
-                this?.spfxContext?.pageContext?.site?.id?.toString()
+              this?.spfxContext?.pageContext?.site?.id?.toString()
           )
         ) {
           if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
@@ -507,11 +507,13 @@ export class SPDataAdapter
   }
 
   /**
-   * Map projects
+   * Maps project items to project list models.
    *
-   * @param items Items
-   * @param groups Groups
-   * @param users Users
+   * @param items Project items to map.
+   * @param groups Groups to use for mapping.
+   * @param users Users to use for mapping.
+   * 
+   * @returns An array of project list models.
    */
   private _mapProjects(
     items: ISPProjectItem[],
@@ -783,7 +785,7 @@ export class SPDataAdapter
       const list = this.portal.web.lists.getByTitle(strings.ProjectsListName)
       const [item] = await list.items.filter(`GtSiteId eq '${siteId}'`).get()
       await list.items.getById(item.ID).update(properties)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -818,7 +820,7 @@ export class SPDataAdapter
   public async initChildProjects(): Promise<void> {
     try {
       this.childProjects = await this.getChildProjects()
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**

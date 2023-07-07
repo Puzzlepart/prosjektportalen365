@@ -4,13 +4,12 @@ import {
   PropertyPaneDropdown,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
+import * as strings from 'ProgramWebPartsStrings'
 import {
   IPortfolioOverviewConfiguration,
   PortfolioOverview
 } from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
-import * as strings from 'ProgramWebPartsStrings'
-import React from 'react'
-import { render, unmountComponentAtNode } from 'react-dom'
+import { unmountComponentAtNode } from 'react-dom'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IProgramProjectOverviewProps } from './types'
 
@@ -18,18 +17,21 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
   private _configuration: IPortfolioOverviewConfiguration
 
   public render(): void {
-    render(
-      <PortfolioOverview
-        {...this.properties}
-        pageContext={this.context.pageContext as any}
-        configuration={this._configuration}
-        dataAdapter={this.dataAdapter}
-        isParentProject={true}
-      />,
-      this.domElement
+    this.renderComponent(
+      PortfolioOverview,
+      {
+        isParentProject: true,
+        configuration: this._configuration,
+      }
     )
   }
 
+  /**
+   * Initializes the web part. This method is called when the web part is first loaded on the page.
+   * It calls the base `onInit` method and then retrieves the portfolio configuration from the data adapter.
+   * 
+   * @returns A promise that resolves when the initialization is complete.
+   */
   public async onInit(): Promise<void> {
     await super.onInit()
     this._configuration = await this.dataAdapter.getPortfolioConfig()
@@ -39,6 +41,13 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
     unmountComponentAtNode(this.domElement)
   }
 
+  /**
+   * Returns an array of dropdown options for the specified target property.
+   * 
+   * @param targetProperty The target property for which to retrieve dropdown options.
+   * 
+   * @returns An array of dropdown options for the specified target property.
+   */
   protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
     // eslint-disable-next-line default-case
     switch (targetProperty) {
