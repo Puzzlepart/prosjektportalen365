@@ -16,7 +16,7 @@ export default class ProgramTimelineWebPart extends BaseProgramWebPart<IProgramT
       <>
         <ProjectTimeline
           title={this.properties.title}
-          dataAdapter={this.dataAdapter}
+          dataAdapter={this._dataAdapter}
           pageContext={this.context.pageContext as any}
           dataSourceName={this.properties.dataSourceName}
           configItemTitle={this.properties.configItemTitle}

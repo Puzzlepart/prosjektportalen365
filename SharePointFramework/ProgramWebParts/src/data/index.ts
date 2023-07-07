@@ -41,12 +41,13 @@ import { DEFAULT_SEARCH_SETTINGS } from './types'
  * It provides methods to configure the SP data adapter with the SPFx context and the configuration, and to get the portfolio configuration and the aggregated list configuration.
  *
  * @extends SPDataAdapterBase (from package `pp365-shared`)
- * 
+ *
  * @implements IPortfolioWebPartsDataAdapter (from package `pp365-portfoliowebparts`)
  */
 export class SPDataAdapter
   extends SPDataAdapterBase<ISPDataAdapterBaseConfiguration>
-  implements IPortfolioWebPartsDataAdapter {
+  implements IPortfolioWebPartsDataAdapter
+{
   public project: ProjectDataService
   public dataSourceService: DataSourceService
   public childProjects: Array<Record<string, string>>
@@ -101,12 +102,14 @@ export class SPDataAdapter
     level: string = 'Overordnet/Program'
   ): Promise<IPortfolioAggregationConfiguration> {
     try {
+      const columns = await this.fetchProjectContentColumns(category)
       const [views, viewsUrls, columnUrls] = await Promise.all([
-        this.fetchDataSources(category, level),
+        this.fetchDataSources(category, level, columns),
         this.portal.getListFormUrls('DATA_SOURCES'),
         this.portal.getListFormUrls('PROJECT_CONTENT_COLUMNS')
       ])
       return {
+        columns,
         views,
         viewsUrls,
         columnUrls,
@@ -235,16 +238,15 @@ export class SPDataAdapter
     siteIdProperty: string = 'GtSiteIdOWSTEXT'
   ): Promise<IPortfolioViewData> {
     const queryArray = this.aggregatedQueryBuilder(siteIdProperty)
-    const items = []
-    for (let i = 0; i < queryArray.length; i++) {
+    const promises = queryArray.map(async (query) => {
       const { projects, sites, statusReports } = await this._fetchDataForView(
         view,
         configuration,
         siteId,
         siteIdProperty,
-        queryArray[i]
+        query
       )
-      const item = projects.map((project) => {
+      return projects.map((project) => {
         const [statusReport] = statusReports.filter(
           (res) => res[siteIdProperty] === project[siteIdProperty]
         )
@@ -253,12 +255,12 @@ export class SPDataAdapter
         return {
           ...statusReport,
           ...project,
-          Path: site && site.Path,
+          Path: site?.Path,
           SiteId: project[siteIdProperty]
         }
       })
-      items.push(...item)
-    }
+    })
+    const items = await Promise.all(promises).then((results) => _.flatten(results))
     return { items, managedProperties: [] }
   }
 
@@ -376,7 +378,7 @@ export class SPDataAdapter
             (child) =>
               child?.SiteId === item?.GtSiteIdLookup?.GtSiteId ||
               item?.GtSiteIdLookup?.GtSiteId ===
-              this?.spfxContext?.pageContext?.site?.id?.toString()
+                this?.spfxContext?.pageContext?.site?.id?.toString()
           )
         ) {
           if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
@@ -512,7 +514,7 @@ export class SPDataAdapter
    * @param items Project items to map.
    * @param groups Groups to use for mapping.
    * @param users Users to use for mapping.
-   * 
+   *
    * @returns An array of project list models.
    */
   private _mapProjects(
@@ -743,9 +745,13 @@ export class SPDataAdapter
     }
   }
 
-  public fetchDataSources(category: string, level?: string): Promise<DataSource[]> {
+  public fetchDataSources(
+    category: string,
+    level?: string,
+    columns?: ProjectContentColumn[]
+  ): Promise<DataSource[]> {
     try {
-      return this.dataSourceService.getByCategory(category, level)
+      return this.dataSourceService.getByCategory(category, level, columns)
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, category))
     }
@@ -785,15 +791,15 @@ export class SPDataAdapter
       const list = this.portal.web.lists.getByTitle(strings.ProjectsListName)
       const [item] = await list.items.filter(`GtSiteId eq '${siteId}'`).get()
       await list.items.getById(item.ID).update(properties)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
-   * Get child projects from the Prosjektegenskaper list item. The note field `GtChildProjects`
+   * Fetches child projects from the Prosjektegenskaper list item. The note field `GtChildProjects`
    * contains a JSON string with the child projects, and needs to be parsed. If the retrieve
    * fails, an empty array is returned.
    *
-   * @returns {Promise<Array<Record<string, string>>>} Child projects
+   * @returns An array of child projects, each represented as a record with `SiteId` and `Title` properties.
    */
   public async getChildProjects(): Promise<Array<Record<string, string>>> {
     try {
@@ -820,7 +826,7 @@ export class SPDataAdapter
   public async initChildProjects(): Promise<void> {
     try {
       this.childProjects = await this.getChildProjects()
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**

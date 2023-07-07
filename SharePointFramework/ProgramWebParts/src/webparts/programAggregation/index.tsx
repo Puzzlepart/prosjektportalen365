@@ -2,8 +2,7 @@ import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
   PropertyPaneDropdown,
-  PropertyPaneTextField,
-  PropertyPaneToggle
+  PropertyPaneTextField
 } from '@microsoft/sp-property-pane'
 import strings from 'ProgramWebPartsStrings'
 import _ from 'lodash'
@@ -46,7 +45,7 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
    */
   public async onInit(): Promise<void> {
     await super.onInit()
-    this._configuration = await this.dataAdapter.getAggregatedListConfig(
+    this._configuration = await this._dataAdapter.getAggregatedListConfig(
       this.properties.dataSourceCategory,
       this.properties.dataSourceLevel
     )
@@ -85,26 +84,6 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
                   selectedKey:
                     _.find(this._configuration.views, (v) => v.isDefault)?.id ||
                     _.first(this._configuration.views).id
-                })
-              ]
-            },
-            {
-              groupName: strings.CommandBarGroupName,
-              groupFields: [
-                PropertyPaneToggle('showCommandBar', {
-                  label: strings.ShowCommandBarLabel
-                }),
-                PropertyPaneToggle('showFilters', {
-                  label: strings.ShowFiltersLabel,
-                  disabled: !this.properties.showCommandBar
-                }),
-                PropertyPaneToggle('showExcelExportButton', {
-                  label: strings.ShowExcelExportButtonLabel,
-                  disabled: !this.properties.showCommandBar
-                }),
-                PropertyPaneToggle('showViewSelector', {
-                  label: strings.ShowViewSelectorLabel,
-                  disabled: !this.properties.showCommandBar
                 })
               ]
             },

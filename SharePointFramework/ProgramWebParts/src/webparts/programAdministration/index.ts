@@ -16,7 +16,7 @@ export default class ProgramAdministrationWebPart extends BaseProgramWebPart<IPr
       title: this.properties.title,
       description: this.description,
       context: this.context,
-      dataAdapter: this.dataAdapter
+      dataAdapter: this._dataAdapter
     })
   }
 
