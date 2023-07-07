@@ -1,8 +1,7 @@
+import { IGroup } from '@fluentui/react'
 import { AnyAction } from '@reduxjs/toolkit'
 import { createContext } from 'react'
 import { IPortfolioOverviewProps, IPortfolioOverviewState } from './types'
-import { ProjectColumn } from 'pp365-shared-library'
-import { IGroup } from '@fluentui/react'
 
 export interface IPortfolioOverviewContext {
   props: IPortfolioOverviewProps
@@ -10,7 +9,6 @@ export interface IPortfolioOverviewContext {
   dispatch: React.Dispatch<AnyAction>
   layerHostId: string
   items?: Record<string, any>[]
-  columns?: ProjectColumn[]
   groups?: IGroup[]
 }
 
