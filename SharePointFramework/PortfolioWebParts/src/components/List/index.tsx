@@ -13,7 +13,7 @@ import { IListProps } from './types'
 import { useList } from './useList'
 
 /**
- * List component using `ShimmeredDetailsList` from `@fluentui/react`.  
+ * List component using `ShimmeredDetailsList` from `@fluentui/react`.
  *
  * @param props List properties
  */
@@ -55,4 +55,3 @@ List.defaultProps = {
 export * from './ItemColumn'
 export * from './types'
 export * from './useAddColumn'
-
