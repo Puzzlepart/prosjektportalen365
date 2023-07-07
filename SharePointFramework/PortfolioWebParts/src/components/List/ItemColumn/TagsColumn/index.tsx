@@ -34,14 +34,11 @@ TagsColumn.id = 'Tags'
 TagsColumn.displayName = strings.ColumnRenderOptionTags
 TagsColumn.iconName = 'Tag'
 TagsColumn.getDataTypeProperties = (onChange, dataTypeProperties: Record<string, any>) => [
-  ColumnDataTypePropertyField(
-    TextField,
-    {
-      label: strings.ColumnRenderOptionTagsValueSeparatorLabel,
-      description: strings.ColumnRenderOptionTagsValueSeparatorDescription,
-      placeholder: TagsColumn.defaultProps.valueSeparator,
-      value: dataTypeProperties.valueSeparator,
-      onChange: (_, value) => onChange('valueSeparator', value)
-    }
-  )
+  ColumnDataTypePropertyField(TextField, {
+    label: strings.ColumnRenderOptionTagsValueSeparatorLabel,
+    description: strings.ColumnRenderOptionTagsValueSeparatorDescription,
+    placeholder: TagsColumn.defaultProps.valueSeparator,
+    value: dataTypeProperties.valueSeparator,
+    onChange: (_, value) => onChange('valueSeparator', value)
+  })
 ]

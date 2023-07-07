@@ -55,7 +55,7 @@ function renderItemColumn(
 
   if (renderFunction) {
     return createElement(renderFunction, columnRenderProps)
-  } 
+  }
 
   const config = get<ProjectColumnConfigDictionaryItem>(column, `data.config.${columnValue}`, null)
 

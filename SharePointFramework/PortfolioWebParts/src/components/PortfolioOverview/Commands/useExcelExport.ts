@@ -24,7 +24,7 @@ export function useExcelExport() {
       if (context.props.includeViewNameInExcelExportFilename) {
         fileNamePart = context.state.currentView?.title.replace(/[^a-z0-9]/gi, '-')
       }
-      ExcelExportService.export(items, context.columns, fileNamePart)
+      ExcelExportService.export(items, context.state.columns, fileNamePart)
       context.dispatch(EXCEL_EXPORT_SUCCESS())
     } catch (error) {
       context.dispatch(EXCEL_EXPORT_ERROR(error))

@@ -30,25 +30,18 @@ BooleanColumn.displayName = strings.ColumnRenderOptionBoolean
 BooleanColumn.iconName = 'CheckboxComposite'
 BooleanColumn.getDataTypeProperties = (onChange, dataTypeProperties: Record<string, any>) => {
   const properties: IColumnDataTypePropertyField<any>[] = [
-    ColumnDataTypePropertyField(
-      TextField,
-      {
-        label: strings.ColumnRenderOptionBooleanTrue,
-        placeholder: BooleanColumn.defaultProps.valueIfTrue,
-        value: dataTypeProperties['valueIfTrue'],
-        onChange: (_, value) => onChange('valueIfTrue', value)
-      }
-    ),
-    ColumnDataTypePropertyField(
-      TextField,
-      {
-        label: strings.ColumnRenderOptionBooleanFalse,
-        placeholder: BooleanColumn.defaultProps.valueIfFalse,
-        defaultValue: dataTypeProperties['valueIfFalse'],
-        onChange: (_, value) => onChange('valueIfFalse', value)
-      }
-    )
+    ColumnDataTypePropertyField(TextField, {
+      label: strings.ColumnRenderOptionBooleanTrue,
+      placeholder: BooleanColumn.defaultProps.valueIfTrue,
+      value: dataTypeProperties['valueIfTrue'],
+      onChange: (_, value) => onChange('valueIfTrue', value)
+    }),
+    ColumnDataTypePropertyField(TextField, {
+      label: strings.ColumnRenderOptionBooleanFalse,
+      placeholder: BooleanColumn.defaultProps.valueIfFalse,
+      defaultValue: dataTypeProperties['valueIfFalse'],
+      onChange: (_, value) => onChange('valueIfFalse', value)
+    })
   ]
   return properties
 }
-

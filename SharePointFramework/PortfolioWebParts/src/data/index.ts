@@ -164,8 +164,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       if (this.portalDataService.url !== this._pageContext.web.absoluteUrl) {
         calculatedLevel = 'Prosjekt'
       }
+      const columns = await this.fetchProjectContentColumns(category)
       const [views, viewsUrls, columnUrls, levels] = await Promise.all([
-        this.fetchDataSources(category, level ?? calculatedLevel),
+        this.fetchDataSources(category, level ?? calculatedLevel, columns),
         this.portalDataService.getListFormUrls('DATA_SOURCES'),
         this.portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS'),
         this.portalDataService.web.fields
@@ -174,6 +175,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           .get()
       ])
       return {
+        columns,
         views,
         viewsUrls,
         columnUrls,
@@ -769,10 +771,13 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  public async fetchDataSources(category: string, level?: string): Promise<DataSource[]> {
+  public async fetchDataSources(
+    category: string,
+    level?: string,
+    columns?: ProjectContentColumn[]
+  ): Promise<DataSource[]> {
     try {
-      const dataSources = await this.dataSourceService.getByCategory(category, level)
-      return dataSources
+      return await this.dataSourceService.getByCategory(category, level, columns)
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, category))
     }

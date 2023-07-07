@@ -52,8 +52,13 @@ export interface IPortfolioWebPartsDataAdapter {
    *
    * @param category Data source category
    * @param level Level for data source
+   * @param columns Columns available for the data source category
    */
-  fetchDataSources?(dataSourceCategory: string, level?: string): Promise<DataSource[]>
+  fetchDataSources?(
+    dataSourceCategory: string,
+    level?: string,
+    columns?: ProjectContentColumn[]
+  ): Promise<DataSource[]>
 
   /**
    * Fetch chart data for a view
@@ -100,7 +105,7 @@ export interface IPortfolioWebPartsDataAdapter {
   /**
    * Do a dynamic amount of `sp.search` calls based on the amount of projects
    * to avoid 4096 character limitation by SharePoint. Uses `this.aggregatedQueryBuilder`
-   * to create queries.
+   * to create queries and `Promise.all` to execute them and flatten the results.
    *
    * @param view View configuration
    * @param configuration PortfolioOverviewConfiguration

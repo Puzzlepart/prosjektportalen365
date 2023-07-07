@@ -28,41 +28,29 @@ CurrencyColumn.id = 'Currency'
 CurrencyColumn.displayName = strings.ColumnRenderOptionCurrency
 CurrencyColumn.iconName = 'Money'
 CurrencyColumn.getDataTypeProperties = (onChange, dataTypeProperties: Record<string, any>) => [
-  ColumnDataTypePropertyField(
-    TextField,
-    {
-      type: 'number',
-      label: strings.ColumnRenderOptionCurrencyMinimumFractionDigitsLabel,
-      placeholder: CurrencyColumn.defaultProps.minimumFractionDigits.toString(),
-      value: dataTypeProperties.minimumFractionDigits,
-      onChange: (_, value) => onChange('minimumFractionDigits', parseInt(value))
-    }
-  ),
-  ColumnDataTypePropertyField(
-    TextField,
-    {
-      type: 'number',
-      label: strings.ColumnRenderOptionCurrencyMaximumFractionDigitsLabel,
-      placeholder: CurrencyColumn.defaultProps.maximumFractionDigits.toString(),
-      value: dataTypeProperties.maximumFractionDigits,
-      onChange: (_, value) => onChange('maximumFractionDigits', parseInt(value))
-    }
-  ),
-  ColumnDataTypePropertyField(
-    TextField,
-    {
-      label: strings.ColumnRenderOptionCurrencyFallbackValueLabel,
-      value: dataTypeProperties.fallbackValue,
-      onChange: (_, value) => onChange('fallbackValue', value)
-    }
-  ),
-  ColumnDataTypePropertyField(
-    TextField,
-    {
-      label: strings.ColumnRenderOptionCurrencyPrefixLabel,
-      placeholder: CurrencyColumn.defaultProps.currencyPrefix,
-      value: dataTypeProperties.currencyPrefix,
-      onChange: (_, value) => onChange('currencyPrefix', value)
-    }
-  )
+  ColumnDataTypePropertyField(TextField, {
+    type: 'number',
+    label: strings.ColumnRenderOptionCurrencyMinimumFractionDigitsLabel,
+    placeholder: CurrencyColumn.defaultProps.minimumFractionDigits.toString(),
+    value: dataTypeProperties.minimumFractionDigits,
+    onChange: (_, value) => onChange('minimumFractionDigits', parseInt(value))
+  }),
+  ColumnDataTypePropertyField(TextField, {
+    type: 'number',
+    label: strings.ColumnRenderOptionCurrencyMaximumFractionDigitsLabel,
+    placeholder: CurrencyColumn.defaultProps.maximumFractionDigits.toString(),
+    value: dataTypeProperties.maximumFractionDigits,
+    onChange: (_, value) => onChange('maximumFractionDigits', parseInt(value))
+  }),
+  ColumnDataTypePropertyField(TextField, {
+    label: strings.ColumnRenderOptionCurrencyFallbackValueLabel,
+    value: dataTypeProperties.fallbackValue,
+    onChange: (_, value) => onChange('fallbackValue', value)
+  }),
+  ColumnDataTypePropertyField(TextField, {
+    label: strings.ColumnRenderOptionCurrencyPrefixLabel,
+    placeholder: CurrencyColumn.defaultProps.currencyPrefix,
+    value: dataTypeProperties.currencyPrefix,
+    onChange: (_, value) => onChange('currencyPrefix', value)
+  })
 ]

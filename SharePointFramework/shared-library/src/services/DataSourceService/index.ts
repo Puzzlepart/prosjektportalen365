@@ -48,8 +48,13 @@ export class DataSourceService {
    *
    * @param category Category
    * @param level Level (optional)
+   * @param columns Columns to configure data source with (optional)
    */
-  public async getByCategory(category: string, level?: string): Promise<DataSource[]> {
+  public async getByCategory(
+    category: string,
+    level?: string,
+    columns: ProjectContentColumn[] = []
+  ): Promise<DataSource[]> {
     let filter = `GtDataSourceCategory eq '${category}'`
     if (level) {
       filter += ` and GtDataSourceLevel eq '${level}'`
@@ -59,6 +64,6 @@ export class DataSourceService {
       .filter(`GtDataSourceCategory eq '${category}'`)
       .filter(filter)
       .get<SPDataSourceItem[]>()
-    return items.map((item) => new DataSource(item))
+    return items.map((item) => new DataSource(item, columns))
   }
 }

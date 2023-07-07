@@ -15,12 +15,9 @@ DateColumn.id = 'Date'
 DateColumn.displayName = strings.ColumnRenderOptionDate
 DateColumn.iconName = 'Calendar'
 DateColumn.getDataTypeProperties = (onChange, dataTypeProperties: Record<string, any>) => [
-  ColumnDataTypePropertyField(
-    Toggle,
-    {
-      label: strings.ColumnRenderOptionDateIncludeTimeLabel,
-      checked: dataTypeProperties.includeTime ?? false,
-      onChange: (_, checked) => onChange('includeTime', checked)
-    }
-  )
+  ColumnDataTypePropertyField(Toggle, {
+    label: strings.ColumnRenderOptionDateIncludeTimeLabel,
+    checked: dataTypeProperties.includeTime ?? false,
+    onChange: (_, checked) => onChange('includeTime', checked)
+  })
 ]

@@ -29,22 +29,16 @@ UrlColumn.id = 'URL'
 UrlColumn.displayName = strings.ColumnRenderOptionUrl
 UrlColumn.iconName = 'Link'
 UrlColumn.getDataTypeProperties = (onChange, dataTypeProperties: Record<string, any>) => [
-  ColumnDataTypePropertyField(
-    Toggle,
-    {
-      label: strings.ColumnRenderOptionUrlOpenInNewTabLabel,
-      defaultChecked: UrlColumn.defaultProps.openInNewTab,
-      checked: dataTypeProperties.openInNewTab,
-      onChange: (_, checked) => onChange('openInNewTab', checked)
-    }
-  ),
-  ColumnDataTypePropertyField(
-    TextField,
-    {
-      label: strings.ColumnRenderOptionUrlDescriptionLabel,
-      description: strings.ColumnRenderOptionUrlDescriptionDescription,
-      value: dataTypeProperties.description,
-      onChange: (_, value) => onChange('description', value)
-    }
-  )
+  ColumnDataTypePropertyField(Toggle, {
+    label: strings.ColumnRenderOptionUrlOpenInNewTabLabel,
+    defaultChecked: UrlColumn.defaultProps.openInNewTab,
+    checked: dataTypeProperties.openInNewTab,
+    onChange: (_, checked) => onChange('openInNewTab', checked)
+  }),
+  ColumnDataTypePropertyField(TextField, {
+    label: strings.ColumnRenderOptionUrlDescriptionLabel,
+    description: strings.ColumnRenderOptionUrlDescriptionDescription,
+    value: dataTypeProperties.description,
+    onChange: (_, value) => onChange('description', value)
+  })
 ]

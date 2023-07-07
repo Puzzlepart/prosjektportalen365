@@ -100,9 +100,7 @@ export class ColumnRenderComponentRegistry {
    * @param component The column render component to register.
    * @param getDataTypeProperties A function that returns an array of data type properties for the component.
    */
-  public static register(
-    component: ColumnRenderComponent<any>
-  ) {
+  public static register(component: ColumnRenderComponent<any>) {
     if (ColumnRenderComponentRegistry.components.has(component.key)) {
       return
     }
@@ -179,12 +177,14 @@ export class ColumnRenderComponentRegistry {
     }
     ColumnRenderComponentRegistry.options = Array.from(
       ColumnRenderComponentRegistry.components.values()
-    ).map((component) => {
-      if (typeof component === 'function') {
-        return component.getDataTypeOption()
-      }
-      return component
-    }).filter(Boolean)
+    )
+      .map((component) => {
+        if (typeof component === 'function') {
+          return component.getDataTypeOption()
+        }
+        return component
+      })
+      .filter(Boolean)
     return ColumnRenderComponentRegistry.options
   }
 

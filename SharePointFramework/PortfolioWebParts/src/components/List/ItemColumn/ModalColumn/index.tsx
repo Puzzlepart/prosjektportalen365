@@ -72,7 +72,7 @@ ModalColumn.id = 'Modal'
 ModalColumn.displayName = strings.ColumnRenderOptionModal
 ModalColumn.iconName = 'WindowEdit'
 ModalColumn.isDisabled = true
-ModalColumn.getDataTypeProperties = (onChange, dataTypeProperties) =>[
+ModalColumn.getDataTypeProperties = (onChange, dataTypeProperties) => [
   ColumnDataTypePropertyField(TextField, {
     label: strings.ColumnRenderOptionModalLinkTextLabel,
     placeholder: ModalColumn.defaultProps.linkText,
