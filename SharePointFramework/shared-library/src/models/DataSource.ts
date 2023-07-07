@@ -54,6 +54,21 @@ export class DataSource {
   }
 
   /**
+   * Updates the DataSource instance with the provided `SPDataSourceItem` instance.
+   * Sets the `title`, `iconName`, and `searchQuery` properties of the `DataSource` instance.
+   *
+   * @param item The `SPDataSourceItem` instance to update the `DataSource` instance with.
+   *
+   * @returns The updated `DataSource` instance.
+   */
+  public update(item: SPDataSourceItem): DataSource {
+    this.title = item.Title
+    this.iconName = item.GtIconName
+    this.searchQuery = item.GtSearchQuery
+    return this
+  }
+
+  /**
    * Configures the DataSource instance with the provided project content columns.
    * Filters the provided columns to match the columns specified in the SPDataSourceItem instance.
    * Sets the columns, refiners, and groupBy properties of the DataSource instance.

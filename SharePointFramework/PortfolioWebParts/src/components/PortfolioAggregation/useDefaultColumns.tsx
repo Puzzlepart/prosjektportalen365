@@ -1,14 +1,17 @@
 import { Icon, Link } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
+import _ from 'lodash'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformation'
 import React, { useMemo } from 'react'
 import { IPortfolioAggregationContext } from './context'
-import _ from 'lodash'
 
 /**
  * Get default columns that should be included if the property `lockedColumns` is not
  * set to `true` in the web part properties, or if the data source level is set to
  * `Prosjekt`. An empty array is returned in these cases.
+ * 
+ * In the future the `SiteTitle` column should be in the list _Prosjektinnholdskolonner_,
+ * instead of hard coded here.
  *
  * @param props Props
  */
@@ -20,7 +23,6 @@ export function useDefaultColumns(context: IPortfolioAggregationContext) {
     () => [
       {
         key: 'SiteTitle',
-        idx: 0,
         fieldName: 'SiteTitle',
         name: strings.SiteTitleLabel,
         minWidth: 150,

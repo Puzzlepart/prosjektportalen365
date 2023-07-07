@@ -134,9 +134,10 @@ export const ON_FILTER_CHANGE = createAction<{
 export const DATA_FETCH_ERROR = createAction<{ error: Error }>('DATA_FETCH_ERROR')
 
 /**
- * `TOGGLE_VIEW_FORM_PANEL`: Toggling the view form panel.
+ * `SET_VIEW_FORM_PANEL`: Set view form panel. 
  */
-export const TOGGLE_VIEW_FORM_PANEL = createAction<{
+export const SET_VIEW_FORM_PANEL = createAction<{
   isOpen: boolean
-  view?: DataSource
-}>('TOGGLE_VIEW_FORM_PANEL')
+  view?: DataSource,
+  submitAction?: 'add' | 'edit'
+}>('SET_VIEW_FORM_PANEL')

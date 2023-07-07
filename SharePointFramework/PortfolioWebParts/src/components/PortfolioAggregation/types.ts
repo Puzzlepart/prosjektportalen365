@@ -124,9 +124,9 @@ export interface IPortfolioAggregationState
   isExporting?: boolean
 
   /**
-   * Data sources
+   * Views available for the data source category.
    */
-  dataSources?: DataSource[]
+  views?: DataSource[]
 
   /**
    * Items to show in the list
