@@ -76,7 +76,7 @@ export class ColumnRenderComponentRegistry {
         component.id,
         component.displayName,
         component.iconName,
-        { getDataTypeProperties }
+        { getDataTypeProperties: component.getDataTypeProperties ?? getDataTypeProperties }
       ),
       disabled: component.isDisabled
     }
