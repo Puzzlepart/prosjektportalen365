@@ -34,20 +34,17 @@ export abstract class BaseProgramWebPart<
     ReactDom.render(element, this.domElement)
   }
 
-  private async _setup() {
-    await this.dataAdapter.configure(this.context, {
+  public async onInit(): Promise<void> {
+    await super.onInit()
+    sp.setup({ spfxContext: this.context })
+    this.dataAdapter = new SPDataAdapter()
+    await this.dataAdapter .configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
       logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     })
-  }
-
-  public async onInit(): Promise<void> {
-    sp.setup({ spfxContext: this.context })
-    this.dataAdapter = new SPDataAdapter()
     this.dataAdapter.initChildProjects()
     this.context.statusRenderer.clearLoadingIndicator(this.domElement)
-    await this._setup()
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {

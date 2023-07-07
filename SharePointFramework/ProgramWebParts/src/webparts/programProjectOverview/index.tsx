@@ -17,28 +17,22 @@ import { IProgramProjectOverviewProps } from './types'
 export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramProjectOverviewProps> {
   private _configuration: IPortfolioOverviewConfiguration
 
-  public async onInit(): Promise<void> {
-    await super.onInit()
-    this._configuration = await this.dataAdapter.getPortfolioConfig()
-  }
-
   public render(): void {
     render(
       <PortfolioOverview
-        title={this.properties.title}
+        {...this.properties}
         pageContext={this.context.pageContext as any}
         configuration={this._configuration}
         dataAdapter={this.dataAdapter}
-        showCommandBar={this.properties.showCommandBar}
-        showExcelExportButton={this.properties.showExcelExportButton}
-        showFilters={this.properties.showFilters}
-        showViewSelector={this.properties.showViewSelector}
-        showGroupBy={this.properties.showGroupBy}
-        showSearchBox={this.properties.showSearchBox}
         isParentProject={true}
       />,
       this.domElement
     )
+  }
+
+  public async onInit(): Promise<void> {
+    await super.onInit()
+    this._configuration = await this.dataAdapter.getPortfolioConfig()
   }
 
   protected onDispose(): void {
@@ -86,21 +80,21 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
                   label: strings.ShowCommandBarLabel
                 }),
                 this.properties.showCommandBar &&
-                  PropertyPaneToggle('showGroupBy', {
-                    label: strings.ShowGroupByLabel
-                  }),
+                PropertyPaneToggle('showGroupBy', {
+                  label: strings.ShowGroupByLabel
+                }),
                 this.properties.showCommandBar &&
-                  PropertyPaneToggle('showFilters', {
-                    label: strings.ShowFiltersLabel
-                  }),
+                PropertyPaneToggle('showFilters', {
+                  label: strings.ShowFiltersLabel
+                }),
                 this.properties.showCommandBar &&
-                  PropertyPaneToggle('showExcelExportButton', {
-                    label: strings.ShowExcelExportButtonLabel
-                  }),
+                PropertyPaneToggle('showExcelExportButton', {
+                  label: strings.ShowExcelExportButtonLabel
+                }),
                 this.properties.showCommandBar &&
-                  PropertyPaneToggle('showViewSelector', {
-                    label: strings.ShowViewSelectorLabel
-                  })
+                PropertyPaneToggle('showViewSelector', {
+                  label: strings.ShowViewSelectorLabel
+                })
               ].filter(Boolean)
             }
           ]
