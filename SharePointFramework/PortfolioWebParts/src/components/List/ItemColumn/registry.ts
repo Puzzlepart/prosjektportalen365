@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import strings from 'PortfolioWebPartsStrings'
+import _ from 'lodash'
 import { useEffect } from 'react'
 import { BooleanColumn } from './BooleanColumn'
 import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataTypeField'
-import { CurrencyColumn } from './CurrencyColumn'
 import { DateColumn } from './DateColumn'
 import { FileNameColumn } from './FileNameColumn'
 import { ListColumn } from './ListColumn'
@@ -13,12 +13,12 @@ import { TrendColumn } from './TrendColumn'
 import { UrlColumn } from './UrlColumn'
 import { UserColumn } from './UserColumn'
 import { ColumnRenderComponent } from './types'
-import _ from 'lodash'
 
 /**
  * A registry for column render components and column data type field options.
  *
  * @method register Registers a new column render component to the registry.
+ * @method registerMultiple Registers multiple column render components to the registry.
  * @method registerColumnRenderOption Registers a new column data type field option to the registry without a corresponding column render component.
  * @method getComponents Returns an array of all registered column render components.
  * @method getOptions Returns an array of column data type field dropdown options for all registered column render components.
@@ -70,6 +70,9 @@ export class ColumnRenderComponentRegistry {
     component: ColumnRenderComponent<any>,
     getDataTypeProperties: GetDataTypeProperties = () => []
   ): IColumnDataTypeFieldOption {
+    if (!component.displayName) {
+      return null
+    }
     return {
       ...ColumnRenderComponentRegistry.createOption(
         component.key,
@@ -80,6 +83,15 @@ export class ColumnRenderComponentRegistry {
       ),
       disabled: component.isDisabled
     }
+  }
+
+  /**
+   * Registers multiple column render components to the registry.
+   *
+   * @param components An array of column render components to register.
+   */
+  public static registerMultiple(...components: ColumnRenderComponent<any>[]) {
+    components.forEach((component) => ColumnRenderComponentRegistry.register(component))
   }
 
   /**
@@ -172,7 +184,7 @@ export class ColumnRenderComponentRegistry {
         return component.getDataTypeOption()
       }
       return component
-    })
+    }).filter(Boolean)
     return ColumnRenderComponentRegistry.options
   }
 
@@ -213,16 +225,17 @@ export class ColumnRenderComponentRegistry {
  */
 export function useColumnRenderComponentRegistry() {
   useEffect(() => {
-    ColumnRenderComponentRegistry.register(BooleanColumn)
-    ColumnRenderComponentRegistry.register(CurrencyColumn)
-    ColumnRenderComponentRegistry.register(DateColumn)
-    ColumnRenderComponentRegistry.register(FileNameColumn)
-    ColumnRenderComponentRegistry.register(ListColumn)
-    ColumnRenderComponentRegistry.register(ModalColumn)
-    ColumnRenderComponentRegistry.register(TagsColumn)
-    ColumnRenderComponentRegistry.register(TrendColumn)
-    ColumnRenderComponentRegistry.register(UrlColumn)
-    ColumnRenderComponentRegistry.register(UserColumn)
+    ColumnRenderComponentRegistry.registerMultiple(
+      BooleanColumn,
+      DateColumn,
+      FileNameColumn,
+      ListColumn,
+      ModalColumn,
+      TagsColumn,
+      TrendColumn,
+      UrlColumn,
+      UserColumn
+    )
     ColumnRenderComponentRegistry.registerColumnRenderOption(
       'text',
       'Text',
