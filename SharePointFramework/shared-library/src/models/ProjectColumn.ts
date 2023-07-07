@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { pick } from 'underscore'
-import { tryParseJson } from '../helpers'
+import { tryParseJson } from '../util'
 import { IProjectColumn } from '../interfaces/IProjectColumn'
 import { ColumnDataType } from '../types'
 import { SearchValueType } from '../types/SearchValueType'

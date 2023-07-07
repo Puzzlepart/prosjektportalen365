@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit'
 import { useMemo, useReducer } from 'react'
 import _ from 'underscore'
-import { typeOfArray } from '../../helpers'
+import { typeOfArray } from '../../util'
 import { DISMISS_CALLOUT, INIT, ON_KEY_DOWN, ON_SEARCH, RESET, SET_SELECTED_INDEX } from './actions'
 import { IAutocompleteState, ISuggestionItem } from './types'
 

@@ -1,6 +1,6 @@
 import { Callout } from '@fluentui/react/lib/Callout'
 import * as strings from 'SharedLibraryStrings'
-import { formatDate, tryParseCurrency } from '../../../helpers'
+import { formatDate, tryParseCurrency } from '../../../util'
 import styles from './DetailsCallout.module.scss'
 import React, { FC } from 'react'
 import { IDetailsCalloutProps } from './types'

@@ -1,17 +1,15 @@
 /**
- * Parse JSON string to object or return fallback value. This try-catches the JSON.parse
- * method and returns the fallback value if the parsing fails.
+ * Try to parse a string as JSON, if it fails, return fallback
+ * which defaults to `null`.
  *
- * @param string String to parse
- * @param fallbackValue Fallback value if parsing fails
+ * @param str The string to parse as JSON
+ * @param fallback Fallback if parse fails (default: `null`)
  */
-export function tryParseJson<ValueType>(
-  string: string,
-  fallbackValue: ValueType = null
-): ValueType {
+export function tryParseJson<T = any>(str: string, fallback: T = null): T {
   try {
-    return !!string ? JSON.parse(string) : fallbackValue
+    const parsed: T = str ? JSON.parse(str) : fallback
+    return parsed
   } catch {
-    return fallbackValue
+    return fallback
   }
 }
