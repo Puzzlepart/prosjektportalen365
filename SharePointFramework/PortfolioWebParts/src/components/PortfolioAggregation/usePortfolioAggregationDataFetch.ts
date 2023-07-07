@@ -2,10 +2,12 @@ import { ProjectContentColumn } from 'pp365-shared-library'
 import { useEffect } from 'react'
 import { IPortfolioAggregationContext } from './context'
 import { DATA_FETCHED, DATA_FETCH_ERROR, GET_FILTERS, SET_GROUP_BY, START_FETCH } from './reducer'
+import _ from 'lodash'
 
 /**
  * Fetching data for the Portfolio Aggregation component. This includes
- * the data source, items, columns and projects.
+ * the data source (if `state.currentView` is not set), the items, the columns
+ * and the the projects if `props.dataAdapter.fetchProjects` is set.
  *
  * @param context Context for the Portfolio Aggregation component
  */
@@ -16,20 +18,24 @@ async function fetchData(context: IPortfolioAggregationContext) {
       context.props.dataSourceCategory
     )
   }
-  const selectProperties = [...(columns || []), ...context.state.columns].map(
-    (col) => col.fieldName
+  const selectProperties = _.uniq(
+    [...columns, ...context.state.columns].map((col) => col.fieldName)
   )
-  const [dataSource, items, projects] = await Promise.all([
-    context.props.dataAdapter.dataSourceService.getByName(context.state.dataSource),
+
+  let dataSource = context.state.currentView
+  if (!dataSource) {
+    dataSource = await context.props.dataAdapter.dataSourceService.getByName(
+      context.props.dataSource
+    )
+  }
+
+  const [items, projects] = await Promise.all([
     context.props.dataAdapter.fetchItemsWithSource(
-      context.state.dataSource,
+      dataSource.title,
       context.props.selectProperties ?? selectProperties
     ),
     context.props.dataAdapter.fetchProjects
-      ? context.props.dataAdapter.fetchProjects(
-          context.props.configuration,
-          context.state.dataSource
-        )
+      ? context.props.dataAdapter.fetchProjects(context.props.configuration, dataSource.title)
       : Promise.resolve(undefined)
   ])
   return { dataSource, items, columns, projects } as const

@@ -24,7 +24,7 @@ export function useEditViewColumnsPanel(
       GtProjectContentColumnsId: columns.map((c) => c.id)
     }
     await context.props.dataAdapter
-      .updateDataSourceItem(properties, context.state.dataSource, true)
+      .updateDataSourceItem(properties, context.state.currentView?.title, true)
       .then(() => {
         context.dispatch(SET_COLUMNS({ columns }))
         onDismiss()

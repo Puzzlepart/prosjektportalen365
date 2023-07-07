@@ -13,7 +13,7 @@ import {
   SET_DATA_SOURCE,
   TOGGLE_COMPACT,
   TOGGLE_FILTER_PANEL,
-  TOGGLE_VIEW_FORM_PANEL
+  SET_VIEW_FORM_PANEL
 } from '../reducer'
 
 export const Commands: FC = () => {
@@ -48,16 +48,15 @@ export const Commands: FC = () => {
     })
   }
 
-  if (!isEmpty(context.state.dataSources)) {
+  if (!isEmpty(context.state.views)) {
     cmd.farItems.push(
       {
         key: 'VIEW_OPTIONS',
-        name: context.state.dataSource,
+        name: context.state.currentView?.title,
         iconProps: { iconName: 'List' },
         buttonStyles: { root: { border: 'none' } },
         itemType: ContextualMenuItemType.Header,
-        disabled: !context.props.showViewSelector || context.state.loading,
-        data: { isVisible: context.props.showViewSelector },
+        disabled: context.state.loading,
         subMenuProps: {
           items: [
             {
@@ -80,12 +79,12 @@ export const Commands: FC = () => {
               key: 'DIVIDER_01',
               itemType: ContextualMenuItemType.Divider
             },
-            ...(context.state.dataSources.map((dataSource) => ({
+            ...(context.state.views.map((dataSource) => ({
               key: `DATA_SOURCE_${dataSource.id}`,
               name: dataSource.title,
-              iconProps: { iconName: dataSource.iconName || 'DataConnectionLibrary' },
+              iconProps: { iconName: dataSource.iconName ?? 'DataConnectionLibrary' },
               canCheck: true,
-              checked: dataSource.title === context.state.dataSource,
+              checked: dataSource.title === context.state.currentView?.title,
               onClick: () => context.dispatch(SET_DATA_SOURCE({ dataSource }))
             })) as IContextualMenuItem[]),
             {
@@ -96,7 +95,7 @@ export const Commands: FC = () => {
               key: 'NEW_VIEW',
               name: strings.NewViewText,
               onClick: () => {
-                context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: true }))
+                context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
               }
             },
             {
@@ -104,7 +103,7 @@ export const Commands: FC = () => {
               name: strings.EditViewText,
               onClick: () => {
                 context.dispatch(
-                  TOGGLE_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
+                  SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
                 )
               }
             }
@@ -118,7 +117,6 @@ export const Commands: FC = () => {
         canCheck: true,
         checked: context.state.isFilterPanelOpen,
         disabled: !context.props.showFilters,
-        data: { isVisible: context.props.showFilters },
         onClick: (ev) => {
           ev.preventDefault()
           ev.stopPropagation()

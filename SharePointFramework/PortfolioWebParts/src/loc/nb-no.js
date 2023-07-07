@@ -59,7 +59,7 @@ define([], function () {
     EditViewColumnsPanelHeaderText: 'Rediger visningskolonner',
     SearchBoxPlaceholderTextDescription: 'Tekst som vises i søkeboksen når den er tom. Om det ikke settes en verdi baseres teksten på valgt datakilde.',
     DataSourceLevelLabel: 'Nivå for datakilde',
-    DataSourceLevelDescription: 'Angi nivået for datakilden. Dette brukes for å filtrere datakilder i webdelen basert på hvor man henter data fra.',
+    DataSourceLevelDescription: 'Angi nivået for datakilden. Dette brukes for å filtrere datakilder i webdelen basert på hvor man henter data fra. Dette kan endres i ettertid i \'Datakilder\'-listen om du ønsker å gjøre spørringen/visningen tilgjengelig andre steder.',
     ShowProgramViewsLabel: 'Vis programvisninger',
     ProgramsHeaderText: 'Programmer',
     SelectProgramText: 'Velg et programområde',

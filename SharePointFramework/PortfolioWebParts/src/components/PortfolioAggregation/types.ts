@@ -111,7 +111,7 @@ export interface IPortfolioAggregationProps<T = any>
 }
 
 export interface IPortfolioAggregationState
-  extends Pick<IPortfolioAggregationProps, 'dataSource' | 'dataSourceLevel' | 'columns'> {
+  extends Pick<IPortfolioAggregationProps, 'dataSourceLevel' | 'columns'> {
   /**
    * `true` if the component is loading data. The list will be
    * rendered with shimmer placeholders if the component is loading.
@@ -124,9 +124,9 @@ export interface IPortfolioAggregationState
   isExporting?: boolean
 
   /**
-   * Data sources
+   * Views available for the data source category.
    */
-  dataSources?: DataSource[]
+  views?: DataSource[]
 
   /**
    * Items to show in the list

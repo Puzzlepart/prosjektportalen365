@@ -18,6 +18,7 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Opprett og rediger eksisterende kolonner  direkte i Porteføljeoversikten [#1203](https://github.com/Puzzlepart/prosjektportalen365/issues/1203)
 - Støtte egenskaper for visningstyper i Porteføljeoversikt og Porteføleinnholdseaggregering [#1204](https://github.com/Puzzlepart/prosjektportalen365/issues/1204)
 - Støtte for kolonneredigering for Porteføljeoversikt med bruk av drag and drop for å endre rekkefølge på feltene [#1206](https://github.com/Puzzlepart/prosjektportalen365/issues/1206)
+- Opprett og rediger eksisterende visninger direkte i Porteføljeaggregering [#1210](https://github.com/Puzzlepart/prosjektportalen365/issues/1210)
 
 ### Forbedringer
 

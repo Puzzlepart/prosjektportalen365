@@ -38,7 +38,7 @@ import {
   TOGGLE_COMPACT,
   TOGGLE_EDIT_VIEW_COLUMNS_PANEL,
   TOGGLE_FILTER_PANEL,
-  TOGGLE_VIEW_FORM_PANEL
+  SET_VIEW_FORM_PANEL
 } from './actions'
 import { persistSelectedColumnsInWebPartProperties } from './persistSelectedColumnsInWebPartProperties'
 
@@ -66,7 +66,7 @@ export const createPortfolioAggregationReducer = (
         }
         state.items = items
       }
-      if (payload.dataSources) state.dataSources = payload.dataSources
+      if (payload.dataSources) state.views = payload.dataSources
       if (!payload.columns) {
         state.allColumnsForCategory = []
         state.columns = []
@@ -241,24 +241,22 @@ export const createPortfolioAggregationReducer = (
     [SET_CURRENT_VIEW.type]: (state) => {
       const hashState = parseUrlHash<IPortfolioAggregationHashState>()
       const viewIdUrlParam = new URLSearchParams(document.location.href).get('viewId')
-      const { views } = props.configuration
-      let currentView = null
+      let currentView: DataSource = null
 
       if (viewIdUrlParam) {
-        currentView = _.find(views, (v) => v.id.toString() === viewIdUrlParam)
+        currentView = _.find(state.views, (v) => v.id.toString() === viewIdUrlParam)
       } else if (hashState.viewId) {
-        currentView = _.find(views, (v) => v.id.toString() === hashState.viewId)
+        currentView = _.find(state.views, (v) => v.id.toString() === hashState.viewId)
       } else if (props.dataSource || props.defaultViewId) {
         currentView = _.find(
-          views,
-          (v: DataSource) =>
-            v.title === props.dataSource || v.id.toString() === props.defaultViewId?.toString()
+          state.views,
+          (v) => v.title === props.dataSource || v.id.toString() === props.defaultViewId?.toString()
         )
       } else {
-        currentView = _.find(views, (v) => v.isDefault)
+        currentView = _.find(state.views, (v) => v.isDefault)
       }
-      if (!currentView && views.length > 0) {
-        currentView = _.first(views)
+      if (!currentView && state.views.length > 0) {
+        currentView = _.first(state.views)
       }
       if (!currentView) {
         state.error = new PortfolioAggregationErrorMessage(
@@ -272,7 +270,6 @@ export const createPortfolioAggregationReducer = (
       if (state.groupBy) obj.groupBy = state.groupBy.fieldName
       setUrlHash(obj)
       state.currentView = currentView
-      state.dataSource = currentView.title
       state.activeFilters = {}
     },
     [SET_DATA_SOURCE.type]: (state, { payload }: ReturnType<typeof SET_DATA_SOURCE>) => {
@@ -280,7 +277,6 @@ export const createPortfolioAggregationReducer = (
       if (state.currentView) obj.viewId = payload.dataSource.id.toString()
       if (state.groupBy) obj.groupBy = state.groupBy.fieldName
       setUrlHash(obj)
-      state.dataSource = payload.dataSource.title
       state.currentView = payload.dataSource
       state.activeFilters = {}
     },
@@ -352,10 +348,30 @@ export const createPortfolioAggregationReducer = (
     [DATA_FETCH_ERROR.type]: (state, { payload }: ReturnType<typeof DATA_FETCH_ERROR>) => {
       state.error = payload.error
     },
-    [TOGGLE_VIEW_FORM_PANEL.type]: (
-      state,
-      { payload }: ReturnType<typeof TOGGLE_VIEW_FORM_PANEL>
-    ) => {
-      state.viewForm = payload
+    [SET_VIEW_FORM_PANEL.type]: (state, { payload }: ReturnType<typeof SET_VIEW_FORM_PANEL>) => {
+      switch (payload.submitAction) {
+        case 'add':
+          {
+            state.currentView = payload.view
+            state.views = [...state.views, payload.view]
+            state.viewForm = { isOpen: false }
+          }
+          break
+        case 'edit':
+          {
+            state.currentView = payload.view
+            state.views = state.views.map((v) => {
+              if (v.id === payload.view.id) {
+                return payload.view
+              }
+              return v
+            })
+            state.viewForm = { isOpen: false }
+          }
+          break
+        default: {
+          state.viewForm = _.omit(payload, 'submitAction')
+        }
+      }
     }
   })

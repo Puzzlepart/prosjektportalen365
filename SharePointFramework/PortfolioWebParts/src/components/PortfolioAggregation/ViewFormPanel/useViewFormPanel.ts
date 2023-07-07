@@ -1,7 +1,7 @@
-import { SPDataSourceItem } from 'pp365-shared-library'
+import { DataSource, SPDataSourceItem } from 'pp365-shared-library'
 import { useContext } from 'react'
 import { PortfolioAggregationContext } from '../context'
-import { TOGGLE_VIEW_FORM_PANEL } from '../reducer'
+import { SET_VIEW_FORM_PANEL } from '../reducer'
 import { useEditableView } from './useEditableView'
 
 /**
@@ -14,15 +14,15 @@ export function useViewFormPanel() {
   const { view, setView, isEditing } = useEditableView()
 
   /**
-   * Dismisses the form panel by dispatching the `TOGGLE_VIEW_FORM_PANEL` action.
+   * Dismisses the form panel by dispatching the `SET_VIEW_FORM_PANEL` action.
    */
   const onDismiss = () => {
-    context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: false }))
+    context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: false }))
   }
 
   /**
    * Saves the changes made to the view by updating the item in the `DATA_SOURCES` list or adding a new item to the list.
-   * Dismisses the form panel by dispatching the `TOGGLE_VIEW_FORM_PANEL` action.
+   * Dismisses the form panel by dispatching the `SET_VIEW_FORM_PANEL` action.
    */
   const onSave = async () => {
     const { currentView } = context.state
@@ -36,6 +36,13 @@ export function useViewFormPanel() {
         'DATA_SOURCES',
         currentView.id as number,
         properties
+      )
+      context.dispatch(
+        SET_VIEW_FORM_PANEL({
+          isOpen: false,
+          submitAction: 'edit',
+          view: currentView.update(properties)
+        })
       )
     } else {
       properties = {
@@ -53,8 +60,15 @@ export function useViewFormPanel() {
         }
       }
       await context.props.dataAdapter.portalDataService.addItemToList('DATA_SOURCES', properties)
+      const newView = new DataSource(properties, currentView.columns)
+      context.dispatch(
+        SET_VIEW_FORM_PANEL({
+          isOpen: false,
+          submitAction: 'add',
+          view: newView
+        })
+      )
     }
-    context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: false }))
   }
 
   /**
