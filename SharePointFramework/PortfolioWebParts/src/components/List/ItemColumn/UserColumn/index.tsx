@@ -2,7 +2,6 @@ import { Persona, PersonaPresence, PersonaSize } from '@fluentui/react/lib/Perso
 import strings from 'PortfolioWebPartsStrings'
 import React from 'react'
 import { SearchValueType } from 'types'
-import { ColumnRenderComponentRegistry } from '../registry'
 import { ColumnRenderComponent } from '../types'
 
 export const UserColumn: ColumnRenderComponent = ({ columnValue, column }) => {
@@ -54,4 +53,3 @@ UserColumn.key = 'user'
 UserColumn.id = 'User'
 UserColumn.displayName = strings.ColumnRenderOptionUser
 UserColumn.iconName = 'Contact'
-ColumnRenderComponentRegistry.register(UserColumn)
