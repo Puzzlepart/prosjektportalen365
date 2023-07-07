@@ -14,8 +14,9 @@ export interface IEditViewColumnsPanelProps extends IPanelProps {
    * Callback to call when the user clicks the save button.
    *
    * @param columns The selected columns
+   * @param columnIds The selected column IDs
    */
-  onSave(columns: IColumn[]): void
+  onSave(columns: IColumn[], columnIds?: number[]): void
 
   /**
    * Columns with selected state in the `data.isSelected` property.

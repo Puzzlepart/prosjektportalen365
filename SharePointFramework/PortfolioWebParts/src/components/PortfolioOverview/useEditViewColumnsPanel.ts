@@ -32,13 +32,14 @@ export function useEditViewColumnsPanel(
    * On save view columns callback sent to `EditViewColumnsPanel`.
    *
    * @param columns Selected columns
+   * @param columnIds Selected column IDs
    */
-  const onSaveViewColumns = async (columns: ProjectColumn[]) => {
+  const onSaveViewColumns = async (columns: ProjectColumn[], columnIds: number[]) => {
     const properties: Record<string, any> = {
       GtPortfolioColumnsId: {
-        results: columns.map((c) => c['id'])
+        results: columnIds
       },
-      GtPortfolioColumnOrder: JSON.stringify(columns.map((c) => c['id']))
+      GtPortfolioColumnOrder: JSON.stringify(columnIds)
     }
 
     await context.props.dataAdapter.portalDataService.updateItemInList(

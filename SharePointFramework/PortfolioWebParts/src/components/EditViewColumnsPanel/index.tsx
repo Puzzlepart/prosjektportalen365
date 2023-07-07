@@ -18,7 +18,7 @@ const getItemStyle = (_isDragging: boolean, draggableStyle: DraggingStyle | NotD
 })
 
 export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
-  const { onDragEnd, selectedColumns, onChange, onSave, moveColumn } =
+  const { onDragEnd, selectableColumns, onChange, onSave, moveColumn, isChanged } =
     useEditViewColumnsPanel(props)
 
   return (
@@ -31,6 +31,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
             text={strings.UseChangesButtonText}
             iconProps={{ iconName: 'CheckMark' }}
             onClick={onSave}
+            disabled={!isChanged}
           />
           {props.revertOrder && (
             <ActionButton
@@ -40,7 +41,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
               styles={{ root: { marginLeft: 3 } }}
               disabled={props.revertOrder.disabled}
               onClick={() => {
-                props.revertOrder.onClick(selectedColumns)
+                props.revertOrder.onClick(selectableColumns)
               }}
             />
           )}
@@ -58,7 +59,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
         <Droppable droppableId='droppable'>
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {selectedColumns.map((col, idx) => (
+              {selectableColumns.map((col, idx) => (
                 <Draggable key={col.name} draggableId={col.name} index={idx}>
                   {(provided, snapshot) => (
                     <div
