@@ -1,8 +1,4 @@
-import {
-  ContextualMenuItemType,
-  ICommandBarProps,
-  IContextualMenuItem
-} from '@fluentui/react'
+import { ContextualMenuItemType, ICommandBarProps, IContextualMenuItem } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { useContext } from 'react'
@@ -17,7 +13,7 @@ import {
 
 /**
  * Hook that returns the command bar properties for the Portfolio Aggregation web part.
- * 
+ *
  * @returns An object containing the command bar properties.
  */
 export function useCommands() {

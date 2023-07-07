@@ -1,8 +1,6 @@
-import { MessageBarType } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectContentColumn } from 'pp365-shared-library'
 import { FilterPanel } from 'pp365-shared-library/lib/components/FilterPanel'
-import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import React, { FC } from 'react'
 import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
 import { List } from '../List'
@@ -10,25 +8,15 @@ import { ColumnContextMenu } from './ColumnContextMenu'
 import { ColumnFormPanel } from './ColumnFormPanel'
 import { Commands } from './Commands'
 import styles from './PortfolioAggregation.module.scss'
+import { ViewFormPanel } from './ViewFormPanel'
 import { PortfolioAggregationContext } from './context'
 import { ON_FILTER_CHANGE, SET_ALL_COLLAPSED, SET_COLLAPSED, TOGGLE_FILTER_PANEL } from './reducer'
 import { IPortfolioAggregationProps } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
-import { ViewFormPanel } from './ViewFormPanel'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
   const { context, searchBox, editViewColumnsPanelProps, onColumnContextMenu } =
     usePortfolioAggregation(props)
-
-  if (context.state.error) {
-    return (
-      <div className={styles.root}>
-        <div className={styles.container}>
-          <UserMessage type={MessageBarType.error} text={context.state.error.message} />
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className={styles.root}>
@@ -57,6 +45,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             }}
             webPartContext={props.webPartContext}
             layerHostId={context.layerHostId}
+            error={context.state.error}
           />
         </div>
         <ColumnContextMenu />
