@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { tryParseJson } from '../helpers'
+import { tryParseJson } from '../util'
 import { IProjectContentColumn } from '../interfaces/IProjectContentColumn'
 import { ColumnDataType } from '../types'
 

@@ -13,7 +13,7 @@ import {
   Web
 } from '@pnp/sp'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
-import { getClassProperties, makeUrlAbsolute, transformFieldXml } from '../../helpers'
+import { getClassProperties, makeUrlAbsolute, transformFieldXml } from '../../util'
 import { IHubSite, ISPContentType } from '../../interfaces'
 import {
   PortfolioOverviewView,

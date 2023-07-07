@@ -6,7 +6,7 @@ import {
 } from '@fluentui/react'
 import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
-import { getObjectValue as get } from 'pp365-shared-library/lib/helpers/getObjectValue'
+import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
 import { useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import {

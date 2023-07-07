@@ -1,5 +1,5 @@
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
-import { getObjectValue as get } from 'pp365-shared-library/lib/helpers'
+import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
 import { useMemo } from 'react'
 import { IPortfolioAggregationContext } from './context'
 import { searchItem } from './search'

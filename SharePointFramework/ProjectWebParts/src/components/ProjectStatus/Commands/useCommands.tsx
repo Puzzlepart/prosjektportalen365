@@ -1,5 +1,5 @@
 import { getId, IContextualMenuItem, Spinner, SpinnerSize } from '@fluentui/react'
-import { formatDate } from 'pp365-shared-library/lib/helpers'
+import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 import strings from 'ProjectWebPartsStrings'
 import React, { useContext } from 'react'
 import { ProjectStatusContext } from '../context'

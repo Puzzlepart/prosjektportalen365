@@ -1,4 +1,4 @@
-import { parseErrorStack } from 'pp365-shared-library/lib/helpers/parseErrorStack'
+import { parseErrorStack } from 'pp365-shared-library/lib/util/parseErrorStack'
 import { MessageBarType } from '@fluentui/react/lib/MessageBar'
 
 export class ProjectSetupError extends Error {

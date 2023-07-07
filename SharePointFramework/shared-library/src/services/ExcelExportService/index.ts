@@ -2,11 +2,10 @@
 import { format, IColumn } from '@fluentui/react'
 import * as XLSX from 'xlsx'
 import * as FileSaver from 'file-saver'
-import { getObjectValue } from '../../helpers/getObjectValue'
 import { stringToArrayBuffer } from '../../util'
 import { ExcelExportServiceDefaultConfiguration } from './ExcelExportServiceDefaultConfiguration'
 import { IExcelExportServiceConfiguration } from './IExcelExportServiceConfiguration'
-import { getDateValue } from '../../helpers/getDateValue'
+import { getDateValue, getObjectValue as get } from '../../util'
 
 class ExcelExportService {
   public configuration: IExcelExportServiceConfiguration
@@ -40,7 +39,7 @@ class ExcelExportService {
             _columns.map((column) => {
               return (column as any).dataType === 'date'
                 ? getDateValue(item, column.fieldName)
-                : getObjectValue<string>(item, column.fieldName, null)
+                : get<string>(item, column.fieldName, null)
             })
           )
         ]
