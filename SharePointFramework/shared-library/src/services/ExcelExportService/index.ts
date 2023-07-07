@@ -5,7 +5,7 @@ import * as FileSaver from 'file-saver'
 import { stringToArrayBuffer } from '../../util'
 import { ExcelExportServiceDefaultConfiguration } from './ExcelExportServiceDefaultConfiguration'
 import { IExcelExportServiceConfiguration } from './IExcelExportServiceConfiguration'
-import { getDateValue,getObjectValue as get } from '../../util'
+import { getDateValue, getObjectValue as get } from '../../util'
 
 class ExcelExportService {
   public configuration: IExcelExportServiceConfiguration
