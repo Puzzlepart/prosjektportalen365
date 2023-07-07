@@ -3,7 +3,6 @@ import strings from 'PortfolioWebPartsStrings'
 import { UserMessage } from 'pp365-shared-library'
 import React from 'react'
 import { ColumnDataTypePropertyField } from '../ColumnDataTypeField'
-import { ColumnRenderComponentRegistry } from '../registry'
 import { ColumnRenderComponent } from '../types'
 import { Header } from './Header'
 import styles from './ModalColumn.module.scss'
@@ -72,29 +71,26 @@ ModalColumn.id = 'Modal'
 ModalColumn.displayName = strings.ColumnRenderOptionModal
 ModalColumn.iconName = 'WindowEdit'
 ModalColumn.isDisabled = true
-ColumnRenderComponentRegistry.register(
-  ModalColumn,
-  (onChange, dataTypeProperties: Record<string, any>) => [
-    ColumnDataTypePropertyField(TextField, {
-      label: strings.ColumnRenderOptionModalLinkTextLabel,
-      placeholder: ModalColumn.defaultProps.linkText,
-      value: dataTypeProperties['linkText'],
-      onChange: (_, value) => onChange('linkText', value)
-    }),
-    ColumnDataTypePropertyField(Checkbox, {
-      label: strings.ColumnRenderOptionModalShowInfoTextLabel,
-      defaultChecked: ModalColumn.defaultProps.showInfoText,
-      checked: dataTypeProperties.showInfoText,
-      onChange: (_, value) => onChange('showInfoText', value)
-    }),
-    ColumnDataTypePropertyField(TextField, {
-      label: strings.ColumnRenderOptionModalInfoTextTemplateLabel,
-      description: strings.ColumnRenderOptionModalInfoTextTemplateDescription,
-      placeholder: ModalColumn.defaultProps.infoTextTemplate,
-      value: dataTypeProperties.infoTextTemplate,
-      multiline: true,
-      disabled: !dataTypeProperties.showInfoText,
-      onChange: (_, value) => onChange('infoTextTemplate', value)
-    })
-  ]
-)
+ModalColumn.getDataTypeProperties = (onChange, dataTypeProperties) =>[
+  ColumnDataTypePropertyField(TextField, {
+    label: strings.ColumnRenderOptionModalLinkTextLabel,
+    placeholder: ModalColumn.defaultProps.linkText,
+    value: dataTypeProperties['linkText'],
+    onChange: (_, value) => onChange('linkText', value)
+  }),
+  ColumnDataTypePropertyField(Checkbox, {
+    label: strings.ColumnRenderOptionModalShowInfoTextLabel,
+    defaultChecked: ModalColumn.defaultProps.showInfoText,
+    checked: dataTypeProperties.showInfoText,
+    onChange: (_, value) => onChange('showInfoText', value)
+  }),
+  ColumnDataTypePropertyField(TextField, {
+    label: strings.ColumnRenderOptionModalInfoTextTemplateLabel,
+    description: strings.ColumnRenderOptionModalInfoTextTemplateDescription,
+    placeholder: ModalColumn.defaultProps.infoTextTemplate,
+    value: dataTypeProperties.infoTextTemplate,
+    multiline: true,
+    disabled: !dataTypeProperties.showInfoText,
+    onChange: (_, value) => onChange('infoTextTemplate', value)
+  })
+]
