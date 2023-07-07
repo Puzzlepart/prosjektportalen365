@@ -134,10 +134,10 @@ export const ON_FILTER_CHANGE = createAction<{
 export const DATA_FETCH_ERROR = createAction<{ error: Error }>('DATA_FETCH_ERROR')
 
 /**
- * `SET_VIEW_FORM_PANEL`: Set view form panel. 
+ * `SET_VIEW_FORM_PANEL`: Set view form panel.
  */
 export const SET_VIEW_FORM_PANEL = createAction<{
   isOpen: boolean
-  view?: DataSource,
+  view?: DataSource
   submitAction?: 'add' | 'edit'
 }>('SET_VIEW_FORM_PANEL')

@@ -157,9 +157,9 @@ export const createPortfolioAggregationReducer = (
     ) => {
       state.columnContextMenu = payload
         ? {
-          column: payload.column,
-          target: payload.target as any
-        }
+            column: payload.column,
+            target: payload.target as any
+          }
         : null
     },
     [SET_ALL_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_ALL_COLLAPSED>) => {
@@ -250,8 +250,7 @@ export const createPortfolioAggregationReducer = (
       } else if (props.dataSource || props.defaultViewId) {
         currentView = _.find(
           state.views,
-          (v) =>
-            v.title === props.dataSource || v.id.toString() === props.defaultViewId?.toString()
+          (v) => v.title === props.dataSource || v.id.toString() === props.defaultViewId?.toString()
         )
       } else {
         currentView = _.find(state.views, (v) => v.isDefault)
@@ -271,7 +270,6 @@ export const createPortfolioAggregationReducer = (
       if (state.groupBy) obj.groupBy = state.groupBy.fieldName
       setUrlHash(obj)
       state.currentView = currentView
-      state.dataSource = currentView.title
       state.activeFilters = {}
     },
     [SET_DATA_SOURCE.type]: (state, { payload }: ReturnType<typeof SET_DATA_SOURCE>) => {
@@ -279,7 +277,6 @@ export const createPortfolioAggregationReducer = (
       if (state.currentView) obj.viewId = payload.dataSource.id.toString()
       if (state.groupBy) obj.groupBy = state.groupBy.fieldName
       setUrlHash(obj)
-      state.dataSource = payload.dataSource.title
       state.currentView = payload.dataSource
       state.activeFilters = {}
     },
@@ -351,10 +348,7 @@ export const createPortfolioAggregationReducer = (
     [DATA_FETCH_ERROR.type]: (state, { payload }: ReturnType<typeof DATA_FETCH_ERROR>) => {
       state.error = payload.error
     },
-    [SET_VIEW_FORM_PANEL.type]: (
-      state,
-      { payload }: ReturnType<typeof SET_VIEW_FORM_PANEL>
-    ) => {
+    [SET_VIEW_FORM_PANEL.type]: (state, { payload }: ReturnType<typeof SET_VIEW_FORM_PANEL>) => {
       switch (payload.submitAction) {
         case 'add':
           {
@@ -363,16 +357,17 @@ export const createPortfolioAggregationReducer = (
             state.viewForm = { isOpen: false }
           }
           break
-        case 'edit': {
-          state.currentView = payload.view
-          state.views = state.views.map((v) => {
-            if (v.id === payload.view.id) {
-              return payload.view
-            }
-            return v
-          })
-          state.viewForm = { isOpen: false }
-        }
+        case 'edit':
+          {
+            state.currentView = payload.view
+            state.views = state.views.map((v) => {
+              if (v.id === payload.view.id) {
+                return payload.view
+              }
+              return v
+            })
+            state.viewForm = { isOpen: false }
+          }
           break
         default: {
           state.viewForm = _.omit(payload, 'submitAction')

@@ -37,11 +37,13 @@ export function useViewFormPanel() {
         currentView.id as number,
         properties
       )
-      context.dispatch(SET_VIEW_FORM_PANEL({
-        isOpen: false,
-        submitAction: 'edit',
-        view: currentView.update(properties)
-      }))
+      context.dispatch(
+        SET_VIEW_FORM_PANEL({
+          isOpen: false,
+          submitAction: 'edit',
+          view: currentView.update(properties)
+        })
+      )
     } else {
       properties = {
         ...properties,
@@ -59,11 +61,13 @@ export function useViewFormPanel() {
       }
       await context.props.dataAdapter.portalDataService.addItemToList('DATA_SOURCES', properties)
       const newView = new DataSource(properties, currentView.columns)
-      context.dispatch(SET_VIEW_FORM_PANEL({
-        isOpen: false,
-        submitAction: 'add',
-        view: newView
-      }))
+      context.dispatch(
+        SET_VIEW_FORM_PANEL({
+          isOpen: false,
+          submitAction: 'add',
+          view: newView
+        })
+      )
     }
   }
 

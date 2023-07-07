@@ -57,7 +57,7 @@ export function useColumnFormPanel() {
               GtProjectContentColumnsId: properties.Id
             }
             context.props.dataAdapter
-              .updateDataSourceItem(updateItem, context.state.dataSource)
+              .updateDataSourceItem(updateItem, context.state.currentView?.title)
               .then(() => {
                 context.dispatch(
                   ADD_COLUMN({
