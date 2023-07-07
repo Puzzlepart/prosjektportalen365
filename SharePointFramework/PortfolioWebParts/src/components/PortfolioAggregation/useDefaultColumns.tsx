@@ -16,9 +16,13 @@ import { IPortfolioAggregationContext } from './context'
  * @param props Props
  */
 export function useDefaultColumns(context: IPortfolioAggregationContext) {
-  if (context.props.lockedColumns || context.props.dataSourceLevel === 'Prosjekt') {
-    return context.state.columns
-  }
+  const isColumnsLocked =
+    context.props.lockedColumns || context.props.dataSourceLevel === 'Prosjekt'
+  const selectedColumns = useMemo(
+    () => _.filter([...context.state.columns], (c) => c.data?.isSelected),
+    [context.state.columns]
+  )
+  if (isColumnsLocked) return selectedColumns
   return useMemo(
     () => [
       {
@@ -59,7 +63,7 @@ export function useDefaultColumns(context: IPortfolioAggregationContext) {
         ),
         data: { isGroupable: true }
       },
-      ..._.filter([...context.state.columns], (c) => c.data?.isSelected)
+      ...selectedColumns
     ],
     [context.state.columns]
   )
