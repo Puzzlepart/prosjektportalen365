@@ -24,7 +24,10 @@ export function useAddColumn(
     name: strings.ToggleColumnFormPanelLabel,
     iconName: 'CalculatorAddition',
     iconClassName: styles.addColumnIcon,
-    minWidth: 175
+    minWidth: 175,
+    data: {
+      isHidden: !condition
+    }
   }
 
   /**
@@ -41,21 +44,21 @@ export function useAddColumn(
     isToggleColumnFormPanelDisabled = false,
     isToggleEditViewColumnsPanelDisabled = false
   ): IContextualMenuItem[] => [
-    {
-      key: 'TOGGLE_COLUMN_FORM_PANEL',
-      name: strings.ToggleColumnFormPanelLabel,
-      iconProps: { iconName: 'CalculatorAddition' },
-      onClick: onToggleColumnFormPanel,
-      disabled: isToggleColumnFormPanelDisabled || !permissionCheck
-    },
-    {
-      key: 'TOGGLE_EDIT_VIEW_COLUMNS_PANEL',
-      name: strings.ToggleEditViewColumnsLabel,
-      iconProps: { iconName: 'Settings' },
-      onClick: onToggleEditViewColumnsPanel,
-      disabled: isToggleEditViewColumnsPanelDisabled || !permissionCheck
-    }
-  ]
+      {
+        key: 'TOGGLE_COLUMN_FORM_PANEL',
+        name: strings.ToggleColumnFormPanelLabel,
+        iconProps: { iconName: 'CalculatorAddition' },
+        onClick: onToggleColumnFormPanel,
+        disabled: isToggleColumnFormPanelDisabled || !permissionCheck
+      },
+      {
+        key: 'TOGGLE_EDIT_VIEW_COLUMNS_PANEL',
+        name: strings.ToggleEditViewColumnsLabel,
+        iconProps: { iconName: 'Settings' },
+        onClick: onToggleEditViewColumnsPanel,
+        disabled: isToggleEditViewColumnsPanelDisabled || !permissionCheck
+      }
+    ]
 
   /**
    * Returns `true` if the column is the add column. This is typically
@@ -68,7 +71,7 @@ export function useAddColumn(
   const isAddColumn = (column: IColumn) => column.key === addColumn.key
 
   return {
-    addColumn: condition ? addColumn : undefined,
+    addColumn,
     isAddColumn,
     createContextualMenuItems
   } as const

@@ -1,6 +1,5 @@
 import {
   ConstrainMode,
-  DetailsListLayoutMode,
   LayerHost,
   MarqueeSelection,
   ScrollablePane,
@@ -10,43 +9,21 @@ import {
   Target
 } from '@fluentui/react'
 import React, { FC } from 'react'
-import { useOnRenderItemColumn } from './ItemColumn'
-import { useOnRenderDetailsHeader } from './ListHeader'
 import { IListProps } from './types'
-import { useAddColumn } from './useAddColumn'
+import { useList } from './useList'
 
 /**
- * List component using `ShimmeredDetailsList` from `@fluentui/react`.
- *
- * Supports different render types for the columns:
- * - `text`: Renders the text value of the column
- * - `user`: Renders an user using the `Persona` component from `@fluentui/react`
- * - `date`: Renders a formatted date
- * - `number`: Renders a formatted number
- * - `currency`: Renders a formatted currency
- * - `tags`: Renders tags for multiple values
- * - `boolean`: Renders a boolean value
- * - `url`: Renders a link
+ * List component using `ShimmeredDetailsList` from `@fluentui/react`.  
  *
  * @param props List properties
  */
-export const List: FC<IListProps> = (props) => {
-  const { addColumn } = useAddColumn(props.isAddColumnEnabled)
-  const onRenderItemColumn = useOnRenderItemColumn(props)
-  const onRenderDetailsHeader = useOnRenderDetailsHeader(props)
+export const List: FC<IListProps<any>> = (props) => {
+  const listProps = useList(props)
   return (
     <ScrollablePane {...props.scrollablePane}>
       <MarqueeSelection selection={props.selection}>
         <ShimmeredDetailsList
-          {...props}
-          columns={[...props.columns, addColumn]}
-          onRenderItemColumn={onRenderItemColumn}
-          onRenderDetailsHeader={onRenderDetailsHeader}
-          layoutMode={
-            props.isListLayoutModeJustified
-              ? DetailsListLayoutMode.justified
-              : DetailsListLayoutMode.fixedColumns
-          }
+          {...listProps}
           onColumnHeaderClick={(event, column) =>
             props.onColumnContextMenu({ column, target: event.target as Target })
           }
@@ -61,6 +38,8 @@ export const List: FC<IListProps> = (props) => {
 }
 
 List.defaultProps = {
+  items: [],
+  columns: [],
   selectionMode: SelectionMode.multiple,
   constrainMode: ConstrainMode.unconstrained,
   scrollablePane: {
@@ -76,3 +55,4 @@ List.defaultProps = {
 export * from './ItemColumn'
 export * from './types'
 export * from './useAddColumn'
+
