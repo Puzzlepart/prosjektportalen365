@@ -12,9 +12,21 @@ import { IBaseProgramWebPartProps } from './types'
 export abstract class BaseProgramWebPart<
   T extends IBaseProgramWebPartProps
 > extends BaseClientSideWebPart<T> {
+  /**
+   * The data adapter used to communicate with SharePoint.
+   */
   protected _dataAdapter: SPDataAdapter
+
+  /**
+   * The hub site associated with the current site.
+   */
   public hubSite: IHubSite
+
+  /**
+   * An array of child project objects
+   */
   public childProjects: Array<Record<string, string>>
+
   public siteIds: string[]
 
   public abstract render(): void
