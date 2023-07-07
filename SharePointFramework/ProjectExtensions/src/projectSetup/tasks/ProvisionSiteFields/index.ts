@@ -1,10 +1,11 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import SPDataAdapter from 'data/SPDataAdapter'
-import { SPField, transformFieldXml } from 'pp365-shared-library'
 import { IProjectSetupData } from 'projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
+import { SPField } from 'pp365-shared-library/lib/models/SPField'
+import { transformFieldXml } from 'pp365-shared-library/lib/util/transformFieldXml'
 
 export class ProvisionSiteFields extends BaseTask {
   constructor(data: IProjectSetupData) {
