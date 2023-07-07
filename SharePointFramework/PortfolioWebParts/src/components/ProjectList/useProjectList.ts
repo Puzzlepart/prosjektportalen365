@@ -1,6 +1,6 @@
 /* eslint-disable prefer-spread */
 import { format, IButtonProps, IColumn } from '@fluentui/react'
-import { sortAlphabetically } from 'pp365-shared-library/lib/helpers'
+import { sortAlphabetically } from 'pp365-shared-library/lib/util/sortAlphabetically'
 import _ from 'underscore'
 import { IProjectListProps } from './types'
 import { useProjectListDataFetch } from './useProjectListDataFetch'

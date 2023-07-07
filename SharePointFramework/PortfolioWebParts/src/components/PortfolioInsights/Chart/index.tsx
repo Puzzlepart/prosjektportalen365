@@ -1,6 +1,6 @@
 import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar'
 import * as strings from 'PortfolioWebPartsStrings'
-import { getBreakpoint } from 'pp365-shared-library/lib/helpers'
+import { getBreakpoint } from 'pp365-shared-library/lib/util/getBreakpoint'
 import React, { Component } from 'react'
 import * as ReactHighcharts from 'react-highcharts'
 import { IChartProps } from './IChartProps'

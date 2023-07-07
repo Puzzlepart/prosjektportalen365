@@ -1,5 +1,5 @@
 import { IColumn } from '@fluentui/react/lib/DetailsList'
-import { getObjectValue as get } from 'pp365-shared-library/lib/helpers'
+import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
 
 /**
  * Search item by search term. Search term is matched against all columns,

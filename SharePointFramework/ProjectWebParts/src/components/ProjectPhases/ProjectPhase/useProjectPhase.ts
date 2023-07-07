@@ -1,4 +1,4 @@
-import { truncateString } from 'pp365-shared-library/lib/helpers/truncateString'
+import { truncateString } from 'pp365-shared-library/lib/util/truncateString'
 import { HTMLProps, useContext, useRef } from 'react'
 import { ProjectPhasesContext } from '../context'
 import { OPEN_CALLOUT } from '../reducer'
