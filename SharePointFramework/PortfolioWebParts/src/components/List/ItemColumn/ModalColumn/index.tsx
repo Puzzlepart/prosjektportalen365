@@ -64,7 +64,8 @@ ModalColumn.defaultProps = {
   linkText: strings.ShowAllMeasurementsLinkText,
   isDarkOverlay: true,
   columns,
-  selectionMode: SelectionMode.none
+  selectionMode: SelectionMode.none,
+  infoTextTemplate: ''
 }
 ModalColumn.key = 'modal'
 ModalColumn.id = 'Modal'
