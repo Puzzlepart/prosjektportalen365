@@ -10,8 +10,8 @@ export class DataSourceService {
    * Creates a new instance of DataSourceService
    *
    * @param web Web
-   * @param listName List name
-   * @param columnsListName Columns list name
+   * @param listName List name is default set to 'Datakilder' but can be overridden (not recommended)
+   * @param columnsListName Columns list name is default set to 'Prosjektinnholdskolonner' but can be overridden (not recommended)
    */
   constructor(
     public web: Web,
@@ -44,7 +44,7 @@ export class DataSourceService {
   }
 
   /**
-   * Get by category and optional level
+   * Get data sources by category and optional level.
    *
    * @param category Category
    * @param level Level (optional)
