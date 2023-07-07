@@ -17,6 +17,7 @@ export class PortfolioAggregationErrorMessage extends Error {
 export interface IPortfolioAggregationConfiguration {
   viewsUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
   columnUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
+  columns?: ProjectContentColumn[]
   views?: DataSource[]
   level?: string
   levels?: string[]
