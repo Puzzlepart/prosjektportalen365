@@ -1,5 +1,17 @@
 /* eslint-disable no-console */
+import strings from 'PortfolioWebPartsStrings'
+import { useEffect } from 'react'
+import { BooleanColumn } from './BooleanColumn'
 import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataTypeField'
+import { CurrencyColumn } from './CurrencyColumn'
+import { DateColumn } from './DateColumn'
+import { FileNameColumn } from './FileNameColumn'
+import { ListColumn } from './ListColumn'
+import { ModalColumn } from './ModalColumn'
+import { TagsColumn } from './TagsColumn'
+import { TrendColumn } from './TrendColumn'
+import { UrlColumn } from './UrlColumn'
+import { UserColumn } from './UserColumn'
 import { ColumnRenderComponent } from './types'
 import _ from 'lodash'
 
@@ -56,7 +68,7 @@ export class ColumnRenderComponentRegistry {
    */
   private static createOptionFromComponent(
     component: ColumnRenderComponent<any>,
-    getDataTypeProperties: GetDataTypeProperties
+    getDataTypeProperties: GetDataTypeProperties = () => []
   ): IColumnDataTypeFieldOption {
     return {
       ...ColumnRenderComponentRegistry.createOption(
@@ -77,15 +89,13 @@ export class ColumnRenderComponentRegistry {
    * @param getDataTypeProperties A function that returns an array of data type properties for the component.
    */
   public static register(
-    component: ColumnRenderComponent<any>,
-    getDataTypeProperties: GetDataTypeProperties = () => []
+    component: ColumnRenderComponent<any>
   ) {
     if (ColumnRenderComponentRegistry.components.has(component.key)) {
       return
     }
     if (!component.displayName) {
-      console.warn('Column render components needs to have property "displayName" defined.')
-      return
+      component.isDisabled = true
     }
     if (!component.key) {
       console.warn(
@@ -106,7 +116,7 @@ export class ColumnRenderComponentRegistry {
       return
     }
     component.getDataTypeOption = () =>
-      ColumnRenderComponentRegistry.createOptionFromComponent(component, getDataTypeProperties)
+      ColumnRenderComponentRegistry.createOptionFromComponent(component)
     ColumnRenderComponentRegistry.components.set(component.key, component)
   }
 
@@ -194,4 +204,48 @@ export class ColumnRenderComponentRegistry {
     }
     return null
   }
+}
+
+/**
+ * A hook that provides access to the column render component registry.
+ *
+ * @returns An object containing methods to interact with the column render component registry.
+ */
+export function useColumnRenderComponentRegistry() {
+  useEffect(() => {
+    ColumnRenderComponentRegistry.register(BooleanColumn)
+    ColumnRenderComponentRegistry.register(CurrencyColumn)
+    ColumnRenderComponentRegistry.register(DateColumn)
+    ColumnRenderComponentRegistry.register(FileNameColumn)
+    ColumnRenderComponentRegistry.register(ListColumn)
+    ColumnRenderComponentRegistry.register(ModalColumn)
+    ColumnRenderComponentRegistry.register(TagsColumn)
+    ColumnRenderComponentRegistry.register(TrendColumn)
+    ColumnRenderComponentRegistry.register(UrlColumn)
+    ColumnRenderComponentRegistry.register(UserColumn)
+    ColumnRenderComponentRegistry.registerColumnRenderOption(
+      'text',
+      'Text',
+      strings.ColumnRenderOptionText,
+      'FontColor'
+    )
+    ColumnRenderComponentRegistry.registerColumnRenderOption(
+      'note',
+      'Note',
+      strings.ColumnRenderOptionNote,
+      'EditStyle'
+    )
+    ColumnRenderComponentRegistry.registerColumnRenderOption(
+      'number',
+      'Number',
+      strings.ColumnRenderOptionNumber,
+      'NumberedList'
+    )
+    ColumnRenderComponentRegistry.registerColumnRenderOption(
+      'percentage',
+      'Percentage',
+      strings.ColumnRenderOptionPercentage,
+      'CalculatorPercentage'
+    )
+  }, [])
 }
