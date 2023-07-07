@@ -57,7 +57,7 @@ export interface IPortfolioOverviewConfiguration {
 
 export interface IPortfolioOverviewProps
   extends IBaseComponentProps,
-    Pick<IListProps, 'isListLayoutModeJustified'> {
+    Pick<IListProps<ProjectColumn>, 'isListLayoutModeJustified'> {
   /**
    * Configuration (columns and views etc).
    */
@@ -138,7 +138,8 @@ export interface IPortfolioOverviewProps
   isParentProject?: boolean
 }
 
-export interface IPortfolioOverviewState {
+export interface IPortfolioOverviewState
+  extends Pick<IListProps<ProjectColumn>, 'items' | 'columns'> {
   /**
    * Whether the component is loading
    */
@@ -155,19 +156,9 @@ export interface IPortfolioOverviewState {
   isChangingView?: PortfolioOverviewView
 
   /**
-   * Items
-   */
-  items?: Record<string, any>[]
-
-  /**
    * Selected items in the list
    */
   selectedItems?: Record<string, any>[]
-
-  /**
-   * Columns
-   */
-  columns?: ProjectColumn[]
 
   /**
    * Search term
@@ -185,9 +176,9 @@ export interface IPortfolioOverviewState {
   currentView?: PortfolioOverviewView
 
   /**
-   * Active filters (selected columns and refiners)
+   * Active filters for the current view
    */
-  activeFilters?: { SelectedColumns?: string[]; [key: string]: string[] }
+  activeFilters?: { [key: string]: string[] }
 
   /**
    * Error if any
