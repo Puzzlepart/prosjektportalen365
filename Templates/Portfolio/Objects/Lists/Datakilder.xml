@@ -126,7 +126,7 @@
             <pnp:DataValue FieldName="GtDataSourceId">d0b101ad-aed6-4ff0-85d1-689f9ded14a8</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Gevinstoversikt (Prosjektnivå)</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) Path:{SiteCollection.URL}</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceCategory">-</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Ikke i bruk</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Trophy</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">Gevinstoversikt (Prosjektnivå)</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceDeprecated">True</pnp:DataValue>
@@ -136,6 +136,8 @@
             <pnp:DataValue FieldName="Title">Alle gevinstelementer for prosjektet</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) Path:{SiteCollection.URL}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectContentColumns">1,16,17,18,19,20,28,29,30,31</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectContentRefiners">19</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Trophy</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">Prosjekt</pnp:DataValue>
         </pnp:DataRow>
@@ -185,7 +187,7 @@
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89701* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="Ikke lenger aktuell"</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName">Asterisk</pnp:DataValue>
-            <pnp:DataValue FieldName="GtDataSourceLevel">-</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Ikke i bruk</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceDeprecated">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
