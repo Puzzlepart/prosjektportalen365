@@ -362,22 +362,26 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    *
    * @param propertyBagRegex - Regex to match property bag key for locked template
    */
-  private async _getTemplates(propertyBagRegex = /^pp_.*_template$/) {
+  private async _getTemplates(propertyBagRegex = /^pp_.*_template$/): Promise<ProjectTemplate[]> {
     const webAllProperties = (
       await sp.web.select('Title', 'AllProperties').expand('AllProperties').get()
     )['AllProperties']
     const lockedTemplateProperty = Object.keys(webAllProperties).find((key) =>
       propertyBagRegex.test(key)
     )
-    const lockedTemplateName = webAllProperties[lockedTemplateProperty]
-    const templates = await this._portal.getItems(
-      this.properties.templatesLibrary,
-      ProjectTemplate,
-      {
-        ViewXml: '<View></View>'
-      },
-      ['FieldValuesAsText']
-    )
+
+    const [lockedTemplateName, templates] = await Promise.all([
+      webAllProperties[lockedTemplateProperty],
+      this._portal.getItems(
+        this.properties.templatesLibrary,
+        ProjectTemplate,
+        {
+          ViewXml: '<View></View>'
+        },
+        ['FieldValuesAsText']
+      )
+    ])
+
     if (this.properties.forceTemplate) {
       return templates
     } else if (lockedTemplateName) {
