@@ -58,6 +58,7 @@
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory"></pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">120</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldLocked">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 2 -->
             <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
@@ -376,7 +377,9 @@
             <pnp:DataValue FieldName="GtDataSourceCategory"></pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">175</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">225</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldLocked">True</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
