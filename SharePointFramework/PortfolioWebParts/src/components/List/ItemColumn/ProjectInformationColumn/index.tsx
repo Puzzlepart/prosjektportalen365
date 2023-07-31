@@ -6,7 +6,9 @@ import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/Pr
 import { ListContext } from '../../context'
 import { IProjectInformationColumnProps } from './types'
 
-export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformationColumnProps> = (props) => {
+export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformationColumnProps> = (
+  props
+) => {
   const context = useContext(ListContext)
   return (
     <ProjectInformationPanel
@@ -18,11 +20,7 @@ export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformation
       hideAllActions={true}
       webPartContext={context.props.webPartContext}
       onRenderToggleElement={(onToggle) => (
-        <Icon
-          iconName={props.iconName}
-          style={props.iconStyles}
-          onClick={onToggle}
-        />
+        <Icon iconName={props.iconName} style={props.iconStyles} onClick={onToggle} />
       )}
     >
       <Link href={props.item.SPWebURL} rel='noopener noreferrer' target='_blank'>
@@ -42,7 +40,7 @@ ProjectInformationColumn.defaultProps = {
     top: '2px',
     fontSize: '1.1em',
     cursor: 'pointer'
-  },
+  }
 }
 ProjectInformationColumn.key = 'projectinformationmodal'
 ProjectInformationColumn.id = 'projectinformationmodal'

@@ -15,6 +15,7 @@ export class SPProjectContentColumnItem {
   public GtIsGroupable?: boolean = false
   public GtDataSourceCategory?: string = ''
   public GtFieldDataTypeProperties?: string = ''
+  public GtFieldLocked?: boolean = false
 }
 
 export type ProjectContentColumnData = {
@@ -22,6 +23,7 @@ export type ProjectContentColumnData = {
   dataTypeProperties?: Record<string, any>
   isSelected?: boolean
   renderAs?: any
+  isLocked?: boolean
 }
 
 export class ProjectContentColumn implements IProjectContentColumn {
@@ -60,7 +62,8 @@ export class ProjectContentColumn implements IProjectContentColumn {
     this.data = {
       isGroupable: this.isGroupable,
       dataTypeProperties: tryParseJson(item?.GtFieldDataTypeProperties, {}),
-      renderAs: this.dataType
+      renderAs: this.dataType,
+      isLocked: item?.GtFieldLocked
     }
   }
 

@@ -16,10 +16,7 @@ import { IRenderItemColumnProps } from './types'
  * @param item Item to render the value for
  * @param column Column to render the value for
  */
-function renderItemColumn(
-  item: Record<string, any>,
-  column: IColumn
-): ReactNode {
+function renderItemColumn(item: Record<string, any>, column: IColumn): ReactNode {
   if (!column.fieldName) return null
   if (column.onRender) return column.onRender(item, undefined, column)
   if (!stringIsNullOrEmpty(column['fieldNameDisplay'])) {

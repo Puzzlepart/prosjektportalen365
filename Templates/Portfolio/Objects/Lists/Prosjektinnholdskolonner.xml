@@ -20,6 +20,7 @@
                 <FieldRef Name="GtColMinWidth" />
                 <FieldRef Name="GtColMaxWidth" />
                 <FieldRef Name="GtIsGroupable" />
+                <FieldRef Name="GtFieldLocked" />
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
             <Aggregations Value="Off" />

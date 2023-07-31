@@ -9,5 +9,6 @@ export interface IProjectContentColumn extends IColumn {
     isGroupable?: boolean
     isSelected?: boolean
     renderAs?: string
+    isLocked?: boolean
   }
 }
