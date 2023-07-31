@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    ColumnRenderOptionProjectInformationModal: 'Prosjektinformasjon',
     SortOrderDescription: 'Sorteringsrekkefølgen bestemmer hvilken rekkefølge visningene vises i. Lavest verdi vises først.',
     NewViewHeaderText: 'Opprett visning',
     EditViewHeaderText: 'Rediger visning',
