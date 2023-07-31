@@ -2839,4 +2839,10 @@
   <data name="SiteFields_InstallChannel_DisplayName" xml:space="preserve">
     <value>Installasjonskanal</value>
   </data>
+  <data name="SiteFields_GtFieldLocked_DisplayName" xml:space="preserve">
+    <value>Låst</value>
+  </data>
+  <data name="SiteFields_GtFieldLocked_Description" xml:space="preserve">
+    <value>Kolonnen er låst og kan ikke redigeres eller velges bort.</value>
+  </data>
 </root>

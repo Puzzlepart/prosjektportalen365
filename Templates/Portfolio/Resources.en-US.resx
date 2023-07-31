@@ -2584,4 +2584,10 @@
   <data name="ClientSidePages_ProjectTimeline_Title" xml:space="preserve">
     <value>Prosjekttidslinje</value>
   </data>
+  <data name="SiteFields_GtFieldLocked_DisplayName" xml:space="preserve">
+    <value>Låst</value>
+  </data>
+  <data name="SiteFields_GtFieldLocked_Description" xml:space="preserve">
+    <value>Kolonnen er låst og kan ikke redigeres eller velges bort.</value>
+  </data>
 </root>

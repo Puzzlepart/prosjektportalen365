@@ -1,0 +1,3 @@
+<Field Description="{resource:SiteFields_GtFieldLocked_Description}" DisplayName="{resource:SiteFields_GtFieldLocked_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{09b7ae78-f5f9-4d82-8db5-b27c187b7872}" Name="GtFieldLocked" StaticName="GtFieldLocked" Type="Boolean">
+    <Default>0</Default>
+</Field>

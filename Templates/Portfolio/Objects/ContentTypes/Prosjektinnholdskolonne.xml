@@ -1,4 +1,4 @@
-<pnp:ContentType ID="0x0100033E98164175442BAAFDC0BCD98F037E" Name="{resource:ContentTypes_ProjectContentColumn_Name}" Description="{resource:ContentTypes_ProjectContentColumn_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true" 
+<pnp:ContentType ID="0x0100033E98164175442BAAFDC0BCD98F037E" Name="{resource:ContentTypes_ProjectContentColumn_Name}" Description="{resource:ContentTypes_ProjectContentColumn_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
@@ -12,5 +12,6 @@
         <pnp:FieldRef ID="a156e8b6-fc02-475c-a377-47c6795fed1d" Name="GtColMinWidth" UpdateChildren="true" />
         <pnp:FieldRef ID="27c60000-e004-4932-aeaa-6045e197ff87" Name="GtColMaxWidth" UpdateChildren="true" />
         <pnp:FieldRef ID="b77be89a-346f-4897-b519-e55eedbc0aa9" Name="GtIsGroupable" UpdateChildren="true" />
+        <pnp:FieldRef ID="09b7ae78-f5f9-4d82-8db5-b27c187b7872" Name="GtFieldLocked" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>
