@@ -1,0 +1,47 @@
+define([], function () {
+  return {
+    ActionLabel: 'Action',
+    ActionLabelPlaceholder: 'Please select action...',
+    ApproveChoice: 'Approve',
+    ApprovedSyncText: 'Approved and synchronized',
+    CancelLabel: 'Cancel',
+    CloseLabel: 'Close',
+    CommentLabel: 'Comment',
+    CommentLabelPlaceholder: 'Comment on choice...',
+    ConfigurationLinkText: 'Configuration of Prosjektportalen', //---------------riktig?----------------
+    ConsiderationChoice: 'Under consideration',
+    CreateLabel: 'Create',
+    HelpContentLinkText: 'Help available',
+    HelpContentListName: 'Hjelpeinnhold', //-------
+    IdeaAlreadyApproved: 'This idea has already been approved',
+    IdeaConfigurationTitle: 'Idékonfigurasjon', //--------
+    IdeaProcessorsSiteGroup: 'Idebehandlere', //--------
+    IdeaProjectDataDialogBlockedText: 'Project data for this idea has already been created and associated.',
+    IdeaProjectDataDialogTitle: 'Create project data for this idea',
+    IdeaProjectDataTitle: 'Prosjektdata',  //-----------
+    InstallationLogListName: 'Installasjonslogg',
+    InstallChannelLabel: 'Installation channel',
+    InstallCommandLabel: 'Installation command',
+    InstallDurationLabel: 'Installation duration',
+    InstallDurationValueTemplate: '{0} minutes',
+    InstallEndTimeLabel: 'Installation end time',
+    InstallStartTimeLabel: 'Start time for installation',
+    InstallVersionLabel: 'Version',
+    LastInstallHeaderText: 'Last installation',
+    LatestGitHubReleaseDownloadButtonText: 'Download the latest release from GitHub',
+    LatestGitHubReleaseIsNewerText: 'A newer version is available on GitHub',
+    LatestGitHubReleaseIsOlderText: 'The version installed is newer than the latest release from GitHub',
+    LatestGitHubReleaseIsSameText: 'The version installed is the latest release from GitHub',
+    LatestGitHubReleaseLabel: 'Latest release from GitHub:',
+    LatestGitHubReleaseLinkTitle: 'See the latest release on GitHub',
+    LinksListName: 'Lenker',
+    LinksListText: 'Useful links',
+    RejectChoice: 'Reject',
+    SeeAllInstallationsLinkText: 'See all installations',
+    SetRecommendationDefaultDescription: 'If the idea is approved, a detailed idea page will be created for the idea and an element in the <a href="../Idebehandling/AllItems.aspx" target="_blank">Idébehandlingslisten</a>.;If the idea is approved it will be possible to create project data that can be used for provisioning the site.;Associate project data to the idea to synchronize data to a project later.',
+    SetRecommendationSubtitle: 'Select recommendation for: {0}. \n\n{1}',
+    SetRecommendationTitle: 'Set recommendation',
+    SiteSettingsLinkText: 'Områdeinnstillinger',
+    SubmitLabel: 'Send'
+  }
+})

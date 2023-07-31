@@ -1,56 +1,47 @@
 declare interface IPortfolioExtensionsStrings {
-  HelpContentListName: string
+  ActionLabel: string
+  ActionLabelPlaceholder: string
+  ApproveChoice: string
+  ApprovedSyncText: string
+  CancelLabel: string
+  CloseLabel: string
+  CommentLabel: string
+  CommentLabelPlaceholder: string
+  ConfigurationLinkText: string
+  ConsiderationChoice: string
+  CreateLabel: string
   HelpContentLinkText: string
-  SiteSettingsLinkText: ReactNode
-  LinksListText: ReactNode
-  LatestGitHubReleaseLinkTitle: string
+  HelpContentListName: string
+  IdeaAlreadyApproved: string
+  IdeaConfigurationTitle: string
+  IdeaProcessorsSiteGroup: string
+  IdeaProjectDataDialogBlockedText: string
+  IdeaProjectDataDialogTitle: string
+  IdeaProjectDataTitle: string
+  InstallationLogListName: string
+  InstallChannelLabel: string
+  InstallCommandLabel: string
+  InstallDurationLabel: string
+  InstallDurationValueTemplate: string
+  InstallEndTimeLabel: string
+  InstallStartTimeLabel: string
+  InstallVersionLabel: string
+  LastInstallHeaderText: string
   LatestGitHubReleaseDownloadButtonText: string
   LatestGitHubReleaseIsNewerText: any
   LatestGitHubReleaseIsOlderText: any
   LatestGitHubReleaseIsSameText: any
   LatestGitHubReleaseLabel: string
-  SetRecommendationTitle: string
-  SetRecommendationSubtitle: string
-  SetRecommendationDefaultDescription: string
-  IdeaProjectDataDialogTitle: string
-  IdeaProjectDataDialogSubText: string
-  IdeaProjectDataDialogInfoText: string
-  IdeaProjectDataDialogBlockedText: string
-  IdeaProcessorsSiteGroup: string
-  IdeaProcessingTitle: string
-  IdeaProcessingUrlTitle: string
-  IdeaRegistrationTitle: string
-  IdeaRegistrationUrlTitle: string
-  IdeaProjectDataTitle: string
-  IdeaConfigurationTitle: string
-  ApproveChoice: string
-  ConsiderationChoice: string
-  RejectChoice: string
-  ApprovedSyncText: string
-  ApprovedText: string
-  ConsiderationText: string
-  RejectedText: string
-  IdeaAlreadyApproved: string
-  ActionLabel: string
-  ActionLabelPlaceholder: string
-  CommentLabel: string
-  CommentLabelPlaceholder: string
-  CancelLabel: string
-  CloseLabel: string
-  SubmitLabel: string
-  CreateLabel: string
-  InstallStartTimeLabel: string
-  InstallEndTimeLabel: string
-  InstallVersionLabel: string
-  InstallCommandLabel: string
-  InstallChannelLabel: string
-  LastInstallHeaderText: string
-  SeeAllInstallationsLinkText: string
-  InstallationLogListName: string
-  ConfigurationLinkText: string
-  InstallDurationLabel: string
-  InstallDurationValueTemplate: string
+  LatestGitHubReleaseLinkTitle: string
   LinksListName: string
+  LinksListText: ReactNode
+  RejectChoice: string
+  SeeAllInstallationsLinkText: string
+  SetRecommendationDefaultDescription: string
+  SetRecommendationSubtitle: string
+  SetRecommendationTitle: string
+  SiteSettingsLinkText: ReactNode
+  SubmitLabel: string
 }
 
 declare module 'PortfolioExtensionsStrings' {
