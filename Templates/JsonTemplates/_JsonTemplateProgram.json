@@ -765,7 +765,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "{{ControlId_ProjectTimelineWebPart}}",
+                                    "Id": "{{ControlId_ProgramTimelineWebPart}}",
                                     "Properties": {
                                         "listName": "Tidslinjeinnhold",
                                         "showTimeline": true,

@@ -32,7 +32,7 @@ export class TimelineContentModel {
     public costsTotal?: string,
     public url?: string,
     public phase?: string
-  ) {}
+  ) { }
 
   /**
    * Returns the `TimelineContentModel` using the specified `config`.

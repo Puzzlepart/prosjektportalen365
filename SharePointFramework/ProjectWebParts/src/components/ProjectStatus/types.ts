@@ -8,7 +8,7 @@ import {
   StatusReport
 } from 'pp365-shared-library/lib/models'
 import { IGetPropertiesData } from 'pp365-shared-library/lib/services'
-import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
+import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from 'pp365-shared-library/src/components/BaseWebPartComponent'
 import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage/types'
 
 export interface IProjectStatusProps extends IBaseWebPartComponentProps {
