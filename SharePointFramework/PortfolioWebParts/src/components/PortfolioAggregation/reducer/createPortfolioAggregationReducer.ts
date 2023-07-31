@@ -76,7 +76,7 @@ export const createPortfolioAggregationReducer = (
         ? props.columns
         : payload.dataSource.columns ?? []
       const allColumnsForCategory = payload.columns.map((c) =>
-        c.setData({ isSelected: _.some(selectedColumns, ({ key }) => key === c.key) })
+        c.setData({ isSelected: _.some(selectedColumns, ({ key }) => key === c.key) || c.data.isLocked })
       )
       const selectedColumnsMerged = selectedColumns
         .map((c) => {

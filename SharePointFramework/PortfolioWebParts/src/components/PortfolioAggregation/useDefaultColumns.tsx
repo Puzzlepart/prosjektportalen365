@@ -3,18 +3,13 @@ import { useMemo } from 'react'
 import { IPortfolioAggregationContext } from './context'
 
 /**
- * Get default columns that should be included if the property `lockedColumns` is not
- * set to `true` in the web part properties, or if the data source level is set to
- * `Prosjekt`. An empty array is returned in these cases.
+ * Get default columns that should be included in the list view.
  *
- * In the future the `SiteTitle` column should be in the list _Prosjektinnholdskolonner_,
- * instead of hard coded here.
- *
- * @param props Props
+ * @param context Context for the Portfolio Aggregation component
  */
 export function useDefaultColumns(context: IPortfolioAggregationContext) {
   const selectedColumns = useMemo(
-    () => _.filter([...context.state.columns], (c) => c.data?.isSelected),
+    () => _.filter([...context.state.columns], (c) => c.data?.isSelected || c.data?.isLocked),
     [context.state.columns]
   )
   return selectedColumns

@@ -22,6 +22,9 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
     [selectedColumns, initialSelectedColumns]
   )
 
+  // eslint-disable-next-line no-console
+  console.log(initialSelectedColumns.map((c) => c.fieldName).join(','))
+
   /**
    * On save event handler.
    */

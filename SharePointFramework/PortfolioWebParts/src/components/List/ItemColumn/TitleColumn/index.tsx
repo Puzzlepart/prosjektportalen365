@@ -1,10 +1,12 @@
 import { Icon, Link, TooltipHost } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
-import React, { FC } from 'react'
+import React, { FC, useContext } from 'react'
 import { ITitleColumnProps } from './types'
+import { ListContext } from '../../context'
 
 export const TitleColumn: FC<ITitleColumnProps> = (props) => {
+  const context = useContext(ListContext)
   if (!props.item.Path) {
     return (
       <span>
@@ -24,7 +26,7 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
       </span>
     )
   }
-  if (!props.renderProjectInformationPanel) {
+  if (!context.props.renderTitleProjectInformationPanel) {
     return (
       <Link href={props.item.Path} rel='noopener noreferrer' target='_blank'>
         {props.item.Title}
@@ -40,7 +42,7 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
           webUrl={props.item.Path}
           page='Portfolio'
           hideAllActions={true}
-          webPartContext={props.webPartContext}
+          webPartContext={context.props.webPartContext}
           onRenderToggleElement={(onToggle) => (
             <Icon
               iconName='Info'

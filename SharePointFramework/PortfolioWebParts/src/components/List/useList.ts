@@ -16,7 +16,7 @@ import { DetailsListLayoutMode } from '@fluentui/react'
  */
 export function useList(props: IListProps<any>) {
   const { addColumn } = useAddColumn(props.isAddColumnEnabled)
-  const onRenderItemColumn = useOnRenderItemColumn(props)
+  const onRenderItemColumn = useOnRenderItemColumn()
   const onRenderDetailsHeader = useOnRenderDetailsHeader(props)
   const columns = useMemo(
     () => [...props.columns, addColumn].filter((col) => !col.data?.isHidden),
