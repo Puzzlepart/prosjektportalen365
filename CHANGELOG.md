@@ -3,7 +3,40 @@ og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detaljert 'endringslogg' for siste hovedversjon.
 
-## 1.8.3 - TBA
+## 1.9.0 - TBA
+
+### Ny funksjonalitet
+
+- Støtte for å installere til ulike kanaler for å støtte separate installasjoner i samme tenant [#1068](https://github.com/Puzzlepart/prosjektportalen365/issues/1068)
+- Mulighet for å angi etiketter på planneroppgaver [#1083](https://github.com/Puzzlepart/prosjektportalen365/issues/1083)
+- Støtte for tooltip-kolonne i porteføljeoversikten [#1079](https://github.com/Puzzlepart/prosjektportalen365/issues/1079)
+- Prosjektscoring og idékonfigurasjon for å støtte flere forskjellige idéoppsett [#1082](https://github.com/Puzzlepart/prosjektportalen365/issues/1082)
+- Støtte for egendefinerte rekkefølger for kolonner i porteføljeoversikten [#1114](https://github.com/Puzzlepart/prosjektportalen365/issues/1114)
+- Visninger for programmer i Porteføljeoversikt [#933](https://github.com/Puzzlepart/prosjektportalen365/issues/933)
+- Tving oppsett av prosjektmal dersom mal er låst og "Konfigurer automatisk" er satt til "Ja" i Maloppsett listen [#1115](https://github.com/Puzzlepart/prosjektportalen365/issues/1115)
+- Opprett og rediger eksisterende visninger direkte i Porteføljeoversikten [#1202](https://github.com/Puzzlepart/prosjektportalen365/issues/1202)
+- Opprett og rediger eksisterende kolonner  direkte i Porteføljeoversikten [#1203](https://github.com/Puzzlepart/prosjektportalen365/issues/1203)
+- Støtte egenskaper for visningstyper i Porteføljeoversikt og Porteføleinnholdseaggregering [#1204](https://github.com/Puzzlepart/prosjektportalen365/issues/1204)
+- Støtte for kolonneredigering for Porteføljeoversikt med bruk av drag and drop for å endre rekkefølge på feltene [#1206](https://github.com/Puzzlepart/prosjektportalen365/issues/1206)
+- Opprett og rediger eksisterende visninger direkte i Porteføljeaggregering [#1210](https://github.com/Puzzlepart/prosjektportalen365/issues/1210)
+
+### Forbedringer
+
+- Lagt inn mulighet for å angi sortering på Planner oppgaver som provisjoneres [#1056](https://github.com/Puzzlepart/prosjektportalen365/issues/1056)
+- Kolonner i aggregerte oversikter kan nå gjøres grupperbare [#1020](https://github.com/Puzzlepart/prosjektportalen365/issues/1020)
+- Malbibliotek-sti kan nå konfigureres i maloppsett-lista [#1179](https://github.com/Puzzlepart/prosjektportalen365/issues/1179)
+- Forbedret kolonneredigering for Porteføleinnholdseaggregering med bruk av drag and drop for å endre rekkefølge på feltene [#1205](https://github.com/Puzzlepart/prosjektportalen365/issues/1205)
+- Forbedringer av Modal for å vise målinger for måleindikatorer [#1208](https://github.com/Puzzlepart/prosjektportalen365/issues/1208)
+- Støtte for å søke i forvaltede egenskaper når man legger til en ny kolonne i Porteføljeoversikten [#1203](https://github.com/Puzzlepart/prosjektportalen365/issues/1203)
+
+### Feilrettinger
+
+- Fikset et problem hvor 'Alle prosjekter' ikke kunne settes som standard vertikal [#1163](https://github.com/Puzzlepart/prosjektportalen365/issues/1163)
+- Fikset sortering for valuta i Porteføljeoversikt [#1113](https://github.com/Puzzlepart/prosjektportalen365/issues/1113)
+
+---
+
+## 1.8.3 - 23.06.23
 
 ### Forbedringer
 - Søk i aggregerte oversikter søker nå også på prosjektnavn [#1123](https://github.com/Puzzlepart/prosjektportalen365/issues/1123)
@@ -17,8 +50,6 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Fikset et problem hvor prosjekttidslinje på prosjektnivå ikke returnerte tidslinje-elementer for prosjektet [#1172](https://github.com/Puzzlepart/prosjektportalen365/pull/1172)
 - Rettet en feil hvor Excel eksporten gir feilmelding når datofelt mangler data. [#1180](https://github.com/Puzzlepart/prosjektportalen365/issues/1180)
 - Fikset et program hvor prosjekter ble vist selvom det ikke var tilknyttet prosjekter til et program [#1150](https://github.com/Puzzlepart/prosjektportalen365/pull/1150)
-
----
 
 ## 1.8.2 - 08.06.23
 
