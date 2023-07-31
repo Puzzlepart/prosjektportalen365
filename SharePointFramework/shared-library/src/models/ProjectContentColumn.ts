@@ -16,6 +16,7 @@ export class SPProjectContentColumnItem {
   public GtDataSourceCategory?: string = ''
   public GtFieldDataTypeProperties?: string = ''
   public GtFieldLocked?: boolean = false
+  public GtDataSourceLevel?: string[] = []
 }
 
 export type ProjectContentColumnData = {

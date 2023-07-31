@@ -279,8 +279,12 @@ export interface IPortfolioWebPartsDataAdapter {
    * If the `dataSourceCategory` is null or empty, an empty array is returned.
    *
    * @param category Category for data source
+   * @param level Level for data source
    */
-  fetchProjectContentColumns?(dataSourceCategory: string): Promise<ProjectContentColumn[]>
+  fetchProjectContentColumns?(
+    dataSourceCategory: string,
+    level?: string
+  ): Promise<ProjectContentColumn[]>
 
   /**
    * Update project content column with new values for properties `GtColMinWidth` and `GtColMaxWidth`,
