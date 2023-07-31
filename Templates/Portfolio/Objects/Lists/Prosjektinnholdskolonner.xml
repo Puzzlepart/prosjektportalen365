@@ -367,6 +367,17 @@
             <pnp:DataValue FieldName="GtDataSourceCategory">Kommunikasjonsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
         </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">1</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Prosjekt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">SiteTitle</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">SiteTitle</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">ProjectInformationModal</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory"></pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">175</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>
