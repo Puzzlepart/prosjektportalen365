@@ -1,17 +1,17 @@
 import strings from 'PortfolioWebPartsStrings'
-import { IProjectListView } from './types'
+import { IProjectListVertical } from './types'
 
 /**
- * View configurations for `ProjectList`.
+ * Vertical configurations for `ProjectList`.
  *
- * The following views are available:
+ * The following verticals are available:
  * - `projects_access`: Projects the current user has access to
  * - `my_projects`: Projects the current user is a member of
- * - `all_projects`: All projects
+ * - `all_projects`: All projects (not available for users with guest access)
  * - `parent_projects`: Parent projects (only available for Portfolio Managers and users with access to the project)
  * - `program_projects`: Program projects (only available for Portfolio Managers and users with access to the project)
  */
-export const ProjectListViews: IProjectListView[] = [
+export const ProjectListVerticals: IProjectListVertical[] = [
   {
     itemKey: 'projects_access',
     headerText: strings.ProjectsAccessHeaderText,

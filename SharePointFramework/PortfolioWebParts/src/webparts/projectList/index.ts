@@ -1,15 +1,20 @@
 import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
-  PropertyPaneDropdown,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls'
+import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
+import {
+  PropertyFieldDropdownWithCallout,
+  PropertyFieldMultiSelect,
+  PropertyFieldToggleWithCallout
+} from '@pnp/spfx-property-controls'
 import { IProjectListProps, ProjectList } from 'components/ProjectList'
-import { ProjectListViews } from 'components/ProjectList/ProjectListViews'
+import { ProjectListVerticals } from 'components/ProjectList/ProjectListVerticals'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../@basePortfolioWebPart'
+import React from 'react'
 
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
   public render(): void {
@@ -21,10 +26,11 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    const viewOptions = ProjectListViews.map<IPropertyPaneDropdownOption>((view) => ({
-      key: view.itemKey,
-      text: view.headerText
+    const verticalOptions = ProjectListVerticals.map<IPropertyPaneDropdownOption>((vertical) => ({
+      key: vertical.itemKey,
+      text: vertical.headerText
     }))
+
     return {
       pages: [
         {
@@ -34,25 +40,38 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
               groupFields: [
                 PropertyPaneTextField('sortBy', {
                   label: strings.SortByFieldLabel,
+                  description: 'Internt feltnavn som brukes til sortinerg av prosjektene',
                   disabled: true
                 }),
-                PropertyPaneToggle('showSearchBox', {
-                  label: strings.ShowSearchBoxLabel
+                PropertyFieldToggleWithCallout('showSearchBox', {
+                  calloutTrigger: CalloutTriggers.Click,
+                  key: 'showSearchBoxFieldId',
+                  label: strings.ShowSearchBoxLabel,
+                  calloutContent: React.createElement(
+                    'p',
+                    {},
+                    'Her kan du velge om søkeboksen skal vises eller ikke.'
+                  ),
+                  onText: strings.BooleanOn,
+                  offText: strings.BooleanOff,
+                  checked: this.properties.showSearchBox
                 }),
-                PropertyPaneToggle('showViewSelector', {
-                  label: strings.ShowViewSelectorLabel
+                PropertyFieldToggleWithCallout('showRenderModeSelector', {
+                  calloutTrigger: CalloutTriggers.Click,
+                  key: 'showRenderModeSelectorFieldId',
+                  label: strings.ShowRenderModeSelectorLabel,
+                  calloutContent: React.createElement(
+                    'p',
+                    {},
+                    'Her kan du velge om visningsvelgeren skal vises eller ikke.'
+                  ),
+                  onText: strings.BooleanOn,
+                  offText: strings.BooleanOff,
+                  checked: this.properties.showRenderModeSelector
                 }),
-                PropertyPaneDropdown('defaultView', {
-                  label: strings.DefaultViewLabel,
-                  options: viewOptions
-                }),
-                PropertyFieldMultiSelect('hideViews', {
-                  key: 'hideViews',
-                  label: strings.HideViewsLabel,
-                  options: viewOptions,
-                  selectedKeys: this.properties.hideViews ?? []
-                }),
-                PropertyPaneDropdown('defaultRenderMode', {
+                PropertyFieldDropdownWithCallout('defaultRenderMode', {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'defaultVerticalFieldId',
                   label: strings.DefaultRenderModeLabel,
                   options: [
                     {
@@ -63,7 +82,31 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                       key: 'tiles',
                       text: strings.RenderModeTilesText
                     }
-                  ]
+                  ],
+                  selectedKey: this.properties.defaultRenderMode,
+                  calloutContent: React.createElement(
+                    'p',
+                    {},
+                    'Her kan du velge hvilken visning som skal være standard.'
+                  )
+                }),
+                PropertyFieldDropdownWithCallout('defaultVertical', {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'defaultVerticalFieldId',
+                  label: strings.DefaultVerticalLabel,
+                  options: verticalOptions,
+                  selectedKey: this.properties.defaultVertical,
+                  calloutContent: React.createElement(
+                    'p',
+                    {},
+                    "Her kan du velge hvilken vertikal som skal være standard. Merk! dersom vertikalen 'Alle prosjekter' er valgt som standard og brukere ikke har tilgang til 'Alle prosjekter' vertikalen, vil standard bli 'Mine prosjekter'."
+                  )
+                }),
+                PropertyFieldMultiSelect('hideVerticals', {
+                  key: 'hideVerticalsFieldId',
+                  label: strings.HideVerticalsLabel,
+                  options: verticalOptions,
+                  selectedKeys: this.properties.hideVerticals ?? []
                 })
               ]
             },

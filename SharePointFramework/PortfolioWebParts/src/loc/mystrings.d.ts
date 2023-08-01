@@ -85,7 +85,7 @@ declare interface IPortfolioWebPartsStrings {
   DefaultRenderModeLabel: string
   ColumnRenderDescription: ReactNode
   DisplayNameDescription: string
-  HideViewsLabel: string
+  HideVerticalsLabel: string
   ProjectsAccessSearchBoxPlaceholderText: string
   ProjectsAccessHeaderText: string
   ProjectListLoadingText: string
@@ -162,6 +162,7 @@ declare interface IPortfolioWebPartsStrings {
   DataSourceError: string
   DataSourceCategoryError: string
   DataSourceNotFound: string
+  DefaultVerticalLabel: string
   DefaultViewLabel: string
   DefaultDataSourceViewLabel: string
   DeliveryDescriptionLabel: string
@@ -238,6 +239,7 @@ declare interface IPortfolioWebPartsStrings {
   ShowProjectManagerFieldLabel: string
   ShowProjectOwnerFieldLabel: string
   ShowSearchBoxLabel: string
+  ShowRenderModeSelectorLabel: string
   ShowViewSelectorLabel: string
   SiteTitleLabel: string
   SortByFieldLabel: string
@@ -280,6 +282,8 @@ declare interface IPortfolioWebPartsStrings {
   NoAccessMessage: string
   BooleanYes: string
   BooleanNo: string
+  BooleanOn: string
+  BooleanOff: string
   ProjectDeliveriesGroupName: string
   ShowProjectDeliveriesLabel: string
   ConfigItemTitleFieldLabel: string

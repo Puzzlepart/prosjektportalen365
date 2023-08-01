@@ -17,7 +17,7 @@ import { ProjectCard } from './ProjectCard'
 import { ProjectCardContext } from './ProjectCard/context'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
-import { ProjectListViews } from './ProjectListViews'
+import { ProjectListVerticals } from './ProjectListVerticals'
 import { RenderModeDropdown } from './RenderModeDropdown'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
@@ -28,7 +28,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     state,
     setState,
     projects,
-    views,
+    verticals,
     getCardActions,
     onListSort,
     onSearch,
@@ -117,21 +117,21 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         <div className={styles.projectDisplaySelect}>
           <Pivot
             onLinkClick={({ props }) =>
-              setState({ selectedView: find(views, (v) => v.itemKey === props.itemKey) })
+              setState({ selectedVertical: find(verticals, (v) => v.itemKey === props.itemKey) })
             }
-            selectedKey={state.selectedView.itemKey}
+            selectedKey={state.selectedVertical.itemKey}
           >
             {state.isDataLoaded &&
-              views
-                .filter((view) => !view.isHidden || !view.isHidden(state))
-                .map((view) => (
+              verticals
+                .filter((vertical) => !vertical.isHidden || !vertical.isHidden(state))
+                .map((vertical) => (
                   <PivotItem
-                    key={view.itemKey}
-                    itemKey={view.itemKey}
-                    headerText={view.headerText}
-                    itemIcon={view.itemIcon}
+                    key={vertical.itemKey}
+                    itemKey={vertical.itemKey}
+                    headerText={vertical.headerText}
+                    itemIcon={vertical.itemIcon}
                     headerButtonProps={
-                      view.getHeaderButtonProps && view.getHeaderButtonProps(state)
+                      vertical.getHeaderButtonProps && vertical.getHeaderButtonProps(state)
                     }
                   >
                     <div className={styles.searchBox} hidden={!props.showSearchBox}>
@@ -143,7 +143,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
                       />
                     </div>
                     <RenderModeDropdown
-                      hidden={!props.showViewSelector}
+                      hidden={!props.showRenderModeSelector}
                       renderAs={state.renderMode}
                       onChange={(renderAs) => setState({ renderMode: renderAs })}
                     />
@@ -175,8 +175,12 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
 ProjectList.defaultProps = {
   columns: PROJECTLIST_COLUMNS,
   sortBy: 'Title',
-  views: ProjectListViews,
-  hideViews: []
+  showSearchBox: true,
+  showRenderModeSelector: true,
+  defaultRenderMode: 'tiles',
+  defaultVertical: 'my_projects',
+  verticals: ProjectListVerticals,
+  hideVerticals: []
 }
 
 export * from './types'

@@ -63,14 +63,14 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   /**
-   * Filter projects based on the `filter` function from the `selectedView`
+   * Filter projects based on the `filter` function from the `selectedVertical`
    * and the `searchTerm`. Then sort the projects based on the `sort` state.
    *
    * @param projects - Projects
    */
   function filterProjets(projects: ProjectListModel[]) {
     return projects
-      .filter((project) => state.selectedView.filter(project, state))
+      .filter((project) => state.selectedVertical.filter(project, state))
       .filter((project) =>
         _.any(Object.keys(project), (key) => {
           const value = project[key]
@@ -102,20 +102,22 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   const projects = state.isDataLoaded ? filterProjets(state.projects) : state.projects
-  const views = props.views.filter((view) => !props.hideViews.includes(view.itemKey))
+  const verticals = props.verticals.filter(
+    (vertical) => !props.hideVerticals.includes(vertical.itemKey)
+  )
 
-  useProjectListDataFetch(props, views, setState)
+  useProjectListDataFetch(props, verticals, setState)
 
   return {
     state,
     setState,
     projects,
-    views,
+    verticals,
     getCardActions,
     searchBoxPlaceholder:
       !state.isDataLoaded || _.isEmpty(state.projects)
         ? ''
-        : format(state.selectedView.searchBoxPlaceholder, projects.length),
+        : format(state.selectedVertical.searchBoxPlaceholder, projects.length),
     onListSort,
     onSearch
   } as const

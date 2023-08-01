@@ -3,7 +3,7 @@ import { IColumn } from '@fluentui/react/lib/DetailsList'
 import { IBaseComponentProps } from '../types'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
 
-export interface IProjectListView extends IPivotItemProps {
+export interface IProjectListVertical extends IPivotItemProps {
   /**
    * Placeholder text for search box.
    */
@@ -29,7 +29,7 @@ export interface IProjectListView extends IPivotItemProps {
       }
 
   /**
-   * Function to determine if the view should be hidden. If not provided, the view is not hidden.
+   * Function to determine if the vertical should be hidden. If not provided, the vertical is not hidden.
    *
    * @param state State of the component
    */
@@ -45,14 +45,14 @@ export interface IProjectListProps extends IBaseComponentProps {
   sortBy?: string
 
   /**
-   *Show search box
+   * Show search box
    */
   showSearchBox?: boolean
 
   /**
-   * Show view selector
+   * Show render mode selector
    */
-  showViewSelector?: boolean
+  showRenderModeSelector?: boolean
 
   /**
    * Show Project Logo on the project card
@@ -75,19 +75,19 @@ export interface IProjectListProps extends IBaseComponentProps {
   columns?: IColumn[]
 
   /**
-   * Default view
+   * Default vertical
    */
-  defaultView?: string
+  defaultVertical?: string
 
   /**
-   * Array of views to hide
+   * Array of verticals to hide
    */
-  hideViews?: string[]
+  hideVerticals?: string[]
 
   /**
-   * Views to show using Pivot component
+   * Vertical to show in the Tab component
    */
-  views?: IProjectListView[]
+  verticals?: IProjectListVertical[]
 
   /**
    * Default render mode
@@ -120,10 +120,11 @@ export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
    * How the projects should be rendered. `tiles` or `list`
    */
   renderMode?: ProjectListRenderMode
+
   /**
-   * Current selected view
+   * Current selected vertical
    */
-  selectedView?: IProjectListView
+  selectedVertical?: IProjectListVertical
 
   /**
    * Is the current user in the PortfolioManagerGroup?
