@@ -1,0 +1,28 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "watch",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "watch",
+			"detail": "Watching for file changes and rebuilding"
+		},
+		{
+			"type": "npm",
+			"script": "build",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "build",
+			"detail": "Builds bundle in production mode"
+		},
+		{
+			"type": "gulp",
+			"task": "clean",
+			"problemMatcher": [],
+			"label": "clean",
+			"detail": "Cleans the dist, build, and coverage directories"
+		}
+	]
+}
