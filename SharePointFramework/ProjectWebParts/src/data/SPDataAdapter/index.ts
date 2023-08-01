@@ -1,6 +1,5 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { Logger, LogLevel } from '@pnp/logging'
-import { taxonomy } from '@pnp/sp-taxonomy'
 import { IProgressIndicatorProps } from '@fluentui/react/lib/ProgressIndicator'
 import { SPDataAdapterBase } from 'pp365-shared-library/lib/data'
 import { ProjectDataService } from 'pp365-shared-library/lib/services'
@@ -26,12 +25,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     configuration: ISPDataAdapterConfiguration
   ): Promise<void> {
     await super.configure(spfxContext, configuration)
-    taxonomy.setup({ spfxContext })
     this.project = new ProjectDataService({
       ...this.settings,
       entityService: this.entityService,
-      propertiesListName: strings.ProjectPropertiesListName,
-      taxonomy
+      propertiesListName: strings.ProjectPropertiesListName
     })
   }
 
