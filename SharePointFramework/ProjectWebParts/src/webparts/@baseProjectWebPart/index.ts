@@ -1,6 +1,5 @@
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
-import '@pnp/polyfill-ie11'
 import { SPFI } from '@pnp/sp'
 import { createSpfiInstance } from 'pp365-shared-library/lib/data'
 import React from 'react'
