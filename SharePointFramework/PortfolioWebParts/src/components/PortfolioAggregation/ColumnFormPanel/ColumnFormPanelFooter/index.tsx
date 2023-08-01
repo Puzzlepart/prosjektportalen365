@@ -18,7 +18,7 @@ export const ColumnFormPanelFooter: FC<ColumnFormPanelFooterProps> = (props) => 
         disabled={props.isSaveDisabled}
       />
       <DefaultButton
-        text={strings.CloseButtonLabel}
+        text={strings.CancelButtonLabel}
         style={{ marginLeft: 4 }}
         onClick={() => {
           context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
