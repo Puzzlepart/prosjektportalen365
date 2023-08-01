@@ -1,12 +1,13 @@
-import { OnProgressCallbackFunction } from '../types'
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
+import { SPFI } from '@pnp/sp'
+import { IWeb } from '@pnp/sp/webs'
 import { PortalDataService } from 'pp365-shared-library/lib/services'
 import { SpEntityPortalService } from 'sp-entityportal-service'
-import { Schema, Web } from 'sp-js-provisioning'
+import { Schema } from 'sp-js-provisioning'
 import { ISpfxJsomContext } from 'spfx-jsom'
-import { IProjectSetupProperties } from '../../types'
 import { ProjectSetupError } from '../../ProjectSetupError'
-import { SPFI } from '@pnp/sp'
+import { IProjectSetupProperties } from '../../types'
+import { OnProgressCallbackFunction } from '../types'
 
 export interface IBaseTaskParams {
   /**
@@ -17,7 +18,7 @@ export interface IBaseTaskParams {
   /**
    * Web instance
    */
-  web: Web
+  web: IWeb
 
   /**
    * Web absolute URL

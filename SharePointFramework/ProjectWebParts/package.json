@@ -56,7 +56,8 @@
     "lodash": "4.17.21",
     "moment": "2.11.1",
     "array-sort": "1.0.0",
-    "@pnp/core": "3.17.0"
+    "@pnp/core": "3.17.0",
+    "@pnp/queryable": "3.17.0"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.15.2",

@@ -13,7 +13,7 @@ export async function deleteCustomizer(
   componentId: string,
   reload: boolean
 ): Promise<void> {
-  const web =  Web(webAbsoluteUrl)
+  const web = Web(webAbsoluteUrl)
   const customActions = await web.userCustomActions<
     { Id: string; ClientSideComponentId: string }[]
   >()

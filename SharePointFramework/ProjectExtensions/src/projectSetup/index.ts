@@ -2,13 +2,17 @@ import { MessageBarType } from '@fluentui/react'
 import { override } from '@microsoft/decorators'
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base'
 import { isArray, stringIsNullOrEmpty } from '@pnp/core'
-import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
+import { ConsoleListener, LogLevel, Logger } from '@pnp/logging'
+import { SPFI } from '@pnp/sp'
+import { IMenuNode } from '@pnp/sp/navigation'
+import { Web } from '@pnp/sp/webs'
 import { format, getId } from '@uifabric/utilities'
+import * as strings from 'ProjectExtensionsStrings'
 import { SPDataAdapter } from 'data'
 import { default as MSGraphHelper } from 'msgraph-helper'
+import { createSpfiInstance } from 'pp365-shared-library/lib/data/createSpfiInstance'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { PortalDataService } from 'pp365-shared-library/lib/services'
-import * as strings from 'ProjectExtensionsStrings'
 import { createElement } from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import { find, uniq } from 'underscore'
@@ -22,16 +26,19 @@ import {
   TemplateSelectDialog
 } from '../components'
 import { ContentConfig, ProjectExtension, ProjectTemplate, ProjectTemplateFile } from '../models'
-import { deleteCustomizer } from './deleteCustomizer'
 import { ProjectSetupError } from './ProjectSetupError'
 import { ProjectSetupSettings } from './ProjectSetupSettings'
+import { deleteCustomizer } from './deleteCustomizer'
 import * as Tasks from './tasks'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
-import { SPFI, SPFx, spfi } from '@pnp/sp'
-import { Web } from '@pnp/sp/webs'
-import { IMenuNode } from '@pnp/sp/navigation'
+
+Logger.subscribe(ConsoleListener())
+Logger.activeLogLevel = sessionStorage.DEBUG === '1' || DEBUG ? LogLevel.Info : LogLevel.Warning
 
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
+  /**
+   * Configured SPFI instance from `@pnp/sp`
+   */
   private _sp: SPFI
   private _portal: PortalDataService
   private _isSetup = true
@@ -43,14 +50,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
   @override
   public async onInit(): Promise<void> {
-    this._sp = spfi().using(SPFx(this.context))
-    Logger.subscribe(ConsoleListener())
-    Logger.activeLogLevel = sessionStorage.DEBUG === '1' || DEBUG ? LogLevel.Info : LogLevel.Warning
-    if (
-      !this.context.pageContext.legacyPageContext.isSiteAdmin ||
-      !this.context.pageContext.legacyPageContext.groupId
-    )
-      return
+    this._sp = createSpfiInstance(this.context)
+    const { isSiteAdmin, groupId } = this.context.pageContext.legacyPageContext
+    if (!isSiteAdmin || !groupId) return
     try {
       this._isSetup = await this._isProjectSetup()
 
@@ -92,12 +94,12 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       }
 
       this._initializeSetup({
-        web:  Web(this.context.pageContext.web.absoluteUrl) as any,
+        sp: this._sp,
+        web: this._sp.web,
         webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
         templateExcludeHandlers: ['Hooks'],
         context: this.context,
-        properties: this.properties,
-        sp: this._sp
+        properties: this.properties
       })
     } catch (error) {
       this._renderErrorDialog({ error })
@@ -280,7 +282,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       messageType: props.error['messageType'],
       onSetupClick: () => {
         this._initializeSetup({
-          web:  Web(this.context.pageContext.web.absoluteUrl) as any,
+          web: Web(this.context.pageContext.web.absoluteUrl) as any,
           webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
           templateExcludeHandlers: ['Hooks'],
           context: this.context,
@@ -366,36 +368,40 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    * @param propertyBagRegex - Regex to match property bag key for locked template
    */
   private async _getTemplates(propertyBagRegex = /^pp_.*_template$/): Promise<ProjectTemplate[]> {
-    const webAllProperties = (
-      await this._sp.web.select('Title', 'AllProperties').expand('AllProperties')()
-    )['AllProperties']
-    const lockedTemplateProperty = Object.keys(webAllProperties).find((key) =>
-      propertyBagRegex.test(key)
-    )
-
-    const [lockedTemplateName, templates] = await Promise.all([
-      webAllProperties[lockedTemplateProperty],
-      this._portal.getItems(
-        this.properties.templatesLibrary,
-        ProjectTemplate,
-        {
-          ViewXml: '<View></View>'
-        },
-        ['FieldValuesAsText']
+    try {
+      const webAllProperties = (
+        await this._sp.web.select('Title', 'AllProperties').expand('AllProperties')()
+      )['AllProperties']
+      const lockedTemplateProperty = Object.keys(webAllProperties).find((key) =>
+        propertyBagRegex.test(key)
       )
-    ])
 
-    if (this.properties.forceTemplate) {
-      return templates
-    } else if (lockedTemplateName) {
-      const lockedTemplate = templates.find((t) => t.text === lockedTemplateName)
-      if (lockedTemplate) {
-        lockedTemplate.isForced = true
-        lockedTemplate.isLocked = true
-        return [lockedTemplate]
+      const [lockedTemplateName, templates] = await Promise.all([
+        webAllProperties[lockedTemplateProperty],
+        this._portal.getItems(
+          this.properties.templatesLibrary,
+          ProjectTemplate,
+          {
+            ViewXml: '<View></View>'
+          },
+          ['FieldValuesAsText']
+        )
+      ])
+
+      if (this.properties.forceTemplate) {
+        return templates
+      } else if (lockedTemplateName) {
+        const lockedTemplate = templates.find((t) => t.text === lockedTemplateName)
+        if (lockedTemplate) {
+          lockedTemplate.isForced = true
+          lockedTemplate.isLocked = true
+          return [lockedTemplate]
+        }
       }
+      return templates
+    } catch (error) {
+      throw new Error(`Error getting templates: ${error.message}`)
     }
-    return templates
   }
 
   /**
@@ -406,7 +412,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     try {
       await MSGraphHelper.Init(this.context.msGraphClientFactory)
       const data: IProjectSetupData = {}
-      const web =  Web(this.context.pageContext.web.absoluteUrl)
       this._portal = await new PortalDataService().configure({
         spfxContext: this.context
       })
@@ -416,14 +421,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           this._getTemplates(),
           this.properties.extensionsLibrary
             ? this._portal.getItems(
-              this.properties.extensionsLibrary,
-              ProjectExtension,
-              {
-                ViewXml:
-                  '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-              },
-              ['File', 'FieldValuesAsText']
-            )
+                this.properties.extensionsLibrary,
+                ProjectExtension,
+                {
+                  ViewXml:
+                    '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+                },
+                ['File', 'FieldValuesAsText']
+              )
             : Promise.resolve([]),
           this.properties.contentConfigList
             ? this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File'])
@@ -436,7 +441,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             },
             ['File']
           ),
-          web.userCustomActions()
+          this._sp.web.userCustomActions()
         ])
 
       const templates = _templates.map((tmpl) => {

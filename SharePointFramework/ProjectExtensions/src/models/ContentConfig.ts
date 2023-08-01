@@ -93,13 +93,11 @@ export class ContentConfig extends UserSelectableObject {
   public async load() {
     this.sourceListProps = await this.sourceList
       .select('Title', 'ListItemEntityTypeFullName', 'ItemCount', 'BaseTemplate')
-      .expand('RootFolder')
-      <IListProperties>()
+      .expand('RootFolder')<IListProperties>()
     if (this.type === ContentConfigType.List) {
       this.destListProps = await this.destList
         .select('Title', 'ListItemEntityTypeFullName', 'ItemCount', 'BaseTemplate')
-        .expand('RootFolder')
-        <IListProperties>()
+        .expand('RootFolder')<IListProperties>()
     }
   }
 }

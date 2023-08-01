@@ -5,8 +5,23 @@ import { TemplateItem } from 'models/TemplateItem'
 import { SPDataAdapterBase } from 'pp365-shared-library/lib/data'
 import { ProjectDataService } from 'pp365-shared-library/lib/services'
 import * as strings from 'ProjectExtensionsStrings'
-import * as validFilename from 'valid-filename'
+import validFilename from 'valid-filename'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
+import { getHashCode, dateAdd } from '@pnp/core'
+import { Caching } from '@pnp/queryable'
+
+/**
+ * Default caching configuration for `SPDataAdapter`.
+ *
+ * - `store`: `local`
+ * - `keyFactory`: Hash code of the URL
+ * - `expireFunc`: 60 minutes from now
+ */
+const DefaultCaching = Caching({
+  store: 'local',
+  keyFactory: (url) => getHashCode(url.toLowerCase()).toString(),
+  expireFunc: () => dateAdd(new Date(), 'minute', 60)
+})
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
@@ -22,13 +37,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     settings: ISPDataAdapterConfiguration
   ) {
     await super.configure(spfxContext, settings)
-    this.project = new ProjectDataService(
-      {
-        ...this.settings,
-        entityService: this.entityService,
-        propertiesListName: strings.ProjectPropertiesListName
-      }
-    )
+    this.project = new ProjectDataService({
+      ...this.settings,
+      entityService: this.entityService,
+      propertiesListName: strings.ProjectPropertiesListName
+    })
   }
 
   /**
@@ -71,10 +84,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param folderRelativeUrl Folder URL
    */
   public async getFolders(folderRelativeUrl: string): Promise<any[]> {
-    // TODO: Caching
-    const folders = await this.sp.web
-      .getFolderByServerRelativePath(folderRelativeUrl)
-      .folders()
+    const folders = await this.sp.web.getFolderByServerRelativePath(folderRelativeUrl).folders.using(DefaultCaching)()
     return folders.map((f) => new SPFolder(f)).filter((f) => !f.isSystemFolder)
   }
 
@@ -82,7 +92,6 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * Get libraries in the current web
    */
   public async getLibraries(): Promise<SPFolder[]> {
-    // TODO: Caching
     const libraries = await this.sp.web.lists
       .select('Id', 'Title', 'BaseTemplate', 'RootFolder/ServerRelativeUrl', 'RootFolder/Folders')
       .expand('RootFolder', 'RootFolder/Folders')
@@ -94,7 +103,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
           // eslint-disable-next-line quotes
           "ListItemEntityTypeFullName ne 'SP.Data.FormServerTemplatesItem'"
         ].join(' and ')
-      )()
+      )
+      .using(DefaultCaching)()
     return libraries.map((lib) => new SPFolder(lib))
   }
 }

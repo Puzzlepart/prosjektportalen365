@@ -30,16 +30,16 @@ export class DataSourceService {
    */
   public async getByName(name: string): Promise<DataSource> {
     const [[item], columns] = await Promise.all([
-      this.list.items
-        .select(...Object.keys(new SPDataSourceItem()))
-        .filter(`Title eq '${name}'`)<SPDataSourceItem[]>(),
+      this.list.items.select(...Object.keys(new SPDataSourceItem())).filter(`Title eq '${name}'`)<
+        SPDataSourceItem[]
+      >(),
       this.columnsList.items()
     ])
     return item
       ? new DataSource(
-        item,
-        columns.map((item) => new ProjectContentColumn(item))
-      )
+          item,
+          columns.map((item) => new ProjectContentColumn(item))
+        )
       : null
   }
 

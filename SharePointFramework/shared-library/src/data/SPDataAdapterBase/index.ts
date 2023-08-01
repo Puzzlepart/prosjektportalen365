@@ -124,9 +124,8 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
             switch (role.type) {
               case ProjectAdminRoleType.SiteAdmin:
                 {
-                  const currentUserHasManageWebPermisson = await this.sp.web.currentUserHasPermissions(
-                    PermissionKind.ManageWeb
-                  )
+                  const currentUserHasManageWebPermisson =
+                    await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
                   if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
                 }
                 break
