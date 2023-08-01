@@ -19,8 +19,9 @@ dependencies:
   '@microsoft/sp-property-pane': 1.15.2_1ca3516818190f66f3253793862e2abe
   '@microsoft/sp-webpart-base': 1.15.2_1ca3516818190f66f3253793862e2abe
   '@pnp/core': 3.15.0
+  '@pnp/logging': 3.17.0
   '@pnp/sp': 3.17.0
-  '@pnp/sp-taxonomy': 1.3.8_@pnp+sp@3.17.0
+  '@pnp/sp-taxonomy': 1.3.8_1d668b60139fd354e760eeb6cc15dcff
   '@pnp/spfx-controls-react': 3.10.0_1ca3516818190f66f3253793862e2abe
   '@pnp/spfx-property-controls': 3.4.0_1ca3516818190f66f3253793862e2abe
   '@ptkdev/json-token-replace': 1.2.2
@@ -4021,19 +4022,6 @@ packages:
   /@pnp/sp-taxonomy/1.3.8_1d668b60139fd354e760eeb6cc15dcff:
     dependencies:
       '@pnp/logging': 3.17.0
-      '@pnp/sp': 3.17.0
-      tslib: 1.10.0
-    dev: false
-    peerDependencies:
-      '@pnp/common': 1.3.8
-      '@pnp/logging': 1.3.8
-      '@pnp/odata': 1.3.8
-      '@pnp/sp': 1.3.8
-      '@pnp/sp-clientsvc': 1.3.8
-    resolution:
-      integrity: sha512-nYPhuWx1U8QK6p+lLsnjCJ7pT9v9FQNmdAW8E7QxOG5zVOX3n7919O/Hcpm7lZYuJvIdNJXxhV7QGKoyXYglpw==
-  /@pnp/sp-taxonomy/1.3.8_@pnp+sp@3.17.0:
-    dependencies:
       '@pnp/sp': 3.17.0
       tslib: 1.10.0
     dev: false
@@ -21422,7 +21410,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-portfolioextensions'
     resolution:
-      integrity: sha512-eHSE4xlWbFEGF8jzulB2th6rA4L7GmpsS7gaX7tHluxdvDD85YMBUlHypGULewDEmB/i61YxCtAG5KbvpHbXSw==
+      integrity: sha512-tDkrbhJBlhp4EZAvDl9yQlvyuuoW7n9Pek1c2WaT/nKrIxU6iC+q/OPuZdb0S8uJMcP0RCAL0pwcwJ3KzH0SPQ==
       tarball: file:projects/pp365-portfolioextensions.tgz
     version: 0.0.0
   file:projects/pp365-portfoliowebparts.tgz:
@@ -21442,6 +21430,7 @@ packages:
       '@microsoft/sp-property-pane': 1.15.2_1ca3516818190f66f3253793862e2abe
       '@microsoft/sp-webpart-base': 1.15.2_1ca3516818190f66f3253793862e2abe
       '@pnp/common': 1.3.8
+      '@pnp/core': 3.17.0
       '@pnp/logging': 3.17.0
       '@pnp/odata': 1.3.8_a15ea9e35f8185850c85b3a619175833
       '@pnp/polyfill-ie11': 1.0.2_29941d2a26c888c8ed28b1cafa8dc6ed
@@ -21500,7 +21489,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-portfoliowebparts'
     resolution:
-      integrity: sha512-MeGZ0iAIPXl5OLuRGBWZFXE0e9a0R1DJpOI8nYDJ4ykW4VReTD8x1wALq87pWmP/kq8F4GrfQs+o/rwBBY6x2w==
+      integrity: sha512-kVDM8i39mRBLd2IdZsCT4YCLJe+qDvfaOKLcR6tTeRc/j3PhKOdFZwfs6PNm6vSi1OgffmyUFNShNcRKhZYH6Q==
       tarball: file:projects/pp365-portfoliowebparts.tgz
     version: 0.0.0
   file:projects/pp365-programwebparts.tgz:
@@ -21519,6 +21508,7 @@ packages:
       '@microsoft/sp-property-pane': 1.15.2_1ca3516818190f66f3253793862e2abe
       '@microsoft/sp-webpart-base': 1.15.2_1ca3516818190f66f3253793862e2abe
       '@pnp/common': 1.3.8
+      '@pnp/core': 3.17.0
       '@pnp/logging': 3.17.0
       '@pnp/odata': 1.3.8_a15ea9e35f8185850c85b3a619175833
       '@pnp/polyfill-ie11': 1.0.2_29941d2a26c888c8ed28b1cafa8dc6ed
@@ -21576,7 +21566,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-programwebparts'
     resolution:
-      integrity: sha512-vfrE3mz/f2oXE2cjP/3nRuWtUDl862TYfOdWJ64pj0rVKkqtVzEJeF4zLAdyCbt+X7UKEl/lOSW7MdPezA4dxg==
+      integrity: sha512-o+HP30IC/m7h/A3owg6NHoIv5X2OWvlMtEfM5AfaMHKNhVF3r2d2o4FDce2DAEpWWbCwu+twachAX+5DB46iSw==
       tarball: file:projects/pp365-programwebparts.tgz
     version: 0.0.0
   file:projects/pp365-projectextensions.tgz:
@@ -21594,6 +21584,7 @@ packages:
       '@microsoft/sp-office-ui-fabric-core': 1.15.2
       '@microsoft/sp-page-context': 1.15.2
       '@pnp/common': 1.3.8
+      '@pnp/core': 3.17.0
       '@pnp/logging': 3.17.0
       '@pnp/odata': 1.3.8_a15ea9e35f8185850c85b3a619175833
       '@pnp/polyfill-ie11': 1.0.2_29941d2a26c888c8ed28b1cafa8dc6ed
@@ -21644,7 +21635,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectextensions'
     resolution:
-      integrity: sha512-5GPm614gx0BS+UkOGSdKCLnbEDonO+8E/oLxE6B5XTo+iSpeo9rg6VIIoOBY3Wj7Ns4MsvrzmDSFeHwTOKqPcg==
+      integrity: sha512-hD+u2+4zeO6LtJspml4aLNE77Yc32rsI2L16BuhZ77dssx9rfRCDRL5DKyDAw8nlJ2kb+yFusxG9q+QqZx1cOQ==
       tarball: file:projects/pp365-projectextensions.tgz
     version: 0.0.0
   file:projects/pp365-projectwebparts.tgz:
@@ -21666,6 +21657,7 @@ packages:
       '@microsoft/sp-property-pane': 1.15.2_1ca3516818190f66f3253793862e2abe
       '@microsoft/sp-webpart-base': 1.15.2_1ca3516818190f66f3253793862e2abe
       '@pnp/common': 1.3.8
+      '@pnp/core': 3.17.0
       '@pnp/logging': 3.17.0
       '@pnp/odata': 1.3.8_a15ea9e35f8185850c85b3a619175833
       '@pnp/polyfill-ie11': 1.0.2_29941d2a26c888c8ed28b1cafa8dc6ed
@@ -21725,7 +21717,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectwebparts'
     resolution:
-      integrity: sha512-8IlWbHtEBTjVhI/6aPNfj5guEmEMZeBt/yMKWxKyfsjX38C3BY8pXNpEnGRv8BCa8L0kU7bjskscjGIM0obsbQ==
+      integrity: sha512-9knuO8oWUzCfJDsbyPXbiR7MmW+nOxhr77fKlQmm91GuwWWM2gePy1e680XMSVplDGR7mt+kyas2/82WLQSntQ==
       tarball: file:projects/pp365-projectwebparts.tgz
     version: 0.0.0
   file:projects/pp365-shared-library.tgz_interactjs@1.6.2:
@@ -21741,6 +21733,7 @@ packages:
       '@microsoft/sp-page-context': 1.15.2
       '@microsoft/sp-webpart-base': 1.15.2_1ca3516818190f66f3253793862e2abe
       '@pnp/common': 1.3.8
+      '@pnp/core': 3.17.0
       '@pnp/logging': 3.17.0
       '@pnp/odata': 1.3.8_a15ea9e35f8185850c85b3a619175833
       '@pnp/polyfill-ie11': 1.0.2_29941d2a26c888c8ed28b1cafa8dc6ed
@@ -21787,11 +21780,12 @@ packages:
     peerDependencies:
       interactjs: '*'
     resolution:
-      integrity: sha512-UhTQYWID5jhHj2W6dVfnQxfBps5NheX47TY/ft6gLyri6bQsnXa1vHgKLWaHJt349LVfKtp7wp7h9jT+rjideA==
+      integrity: sha512-IXZE11kmKnlg/SW6Hx7vwmC5uv8qGmqB4OKzWYu0LK/iAa8fLMedGkVQjTZ0cU8pfJ2eeWRZRdRoWOxB7dNU9g==
       tarball: file:projects/pp365-shared-library.tgz
     version: 0.0.0
   file:projects/pp365-spfx-tasks.tgz:
     dependencies:
+      '@pnp/core': 3.17.0
       '@pnp/logging': 3.17.0
       '@types/lodash': 4.14.195
       '@types/underscore': 1.11.5
@@ -21802,11 +21796,12 @@ packages:
     dev: false
     name: '@rush-temp/pp365-spfx-tasks'
     resolution:
-      integrity: sha512-7D7YakDlQAh/l5Bkh5AUwh8ffQKTOBp0OYMFllYm1jPdcnS+ylsEzDt/nMmvDP4qIJwmCLMwD5kNaK0L7mBvUg==
+      integrity: sha512-1ph3Z2kF9pQt0rM8VysX504ZbF2qQcAMT6UqAMDanmbOb14NzrqsdDs03v4bWTDNyEa5FzLWzQHsZx0BrkR2aQ==
       tarball: file:projects/pp365-spfx-tasks.tgz
     version: 0.0.0
   file:projects/pp365-templates.tgz:
     dependencies:
+      '@pnp/core': 3.17.0
       '@pnp/logging': 3.17.0
       '@ptkdev/json-token-replace': 1.2.2
       '@types/lodash': 4.14.195
@@ -21819,7 +21814,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-templates'
     resolution:
-      integrity: sha512-rAfkS/jeb6/hpMyfZyDWp6vtjAUOS862ONaysnQy+lGcPo/lhGsapAOYJmR/TJPqipPJbM4Z0f+sE6n3WyhrFQ==
+      integrity: sha512-KP/on0usuknkUZ6IOFl4U1/swIWIBkFS9lm58tQszd5Sq2HXeqZOLFjKz5G3DR/NnEVdFUjU2sYinUhPLlxnHQ==
       tarball: file:projects/pp365-templates.tgz
     version: 0.0.0
 specifiers:
@@ -21843,6 +21838,7 @@ specifiers:
   '@microsoft/sp-property-pane': 1.15.2
   '@microsoft/sp-webpart-base': 1.15.2
   '@pnp/core': ^3.7.0
+  '@pnp/logging': 3.17.0
   '@pnp/sp': 3.17.0
   '@pnp/sp-taxonomy': 1.3.8
   '@pnp/spfx-controls-react': 3.10.0

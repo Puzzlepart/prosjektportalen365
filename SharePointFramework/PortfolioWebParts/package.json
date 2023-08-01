@@ -53,7 +53,8 @@
     "array-unique": "0.3.2",
     "@types/lodash": "~4.14.195",
     "react-beautiful-dnd": "~13.1.1",
-    "pzl-react-reusable-components": "~0.3.1"
+    "pzl-react-reusable-components": "~0.3.1",
+    "@pnp/core": "3.17.0"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.15.2",
