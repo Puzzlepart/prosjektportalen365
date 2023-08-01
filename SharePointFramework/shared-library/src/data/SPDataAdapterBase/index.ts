@@ -4,13 +4,14 @@ import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
 import { SPUser } from '@microsoft/sp-page-context'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, IPnPClientStore, PnPClientStorage } from '@pnp/core'
-import { SPFI, spfi, SPFx } from '@pnp/sp'
+import { SPFI } from '@pnp/sp'
 import '@pnp/sp/presets/all'
 import { IWeb, PermissionKind } from '@pnp/sp/presets/all'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import _ from 'underscore'
 import { ProjectAdminRoleType } from '../../models'
 import { PortalDataService } from '../../services/PortalDataService'
+import { createSpfiInstance } from '../createSpfiInstance'
 import { ISPDataAdapterBaseConfiguration } from './ISPDataAdapterBaseConfiguration'
 import { ProjectAdminPermission } from './ProjectAdminPermission'
 
@@ -56,7 +57,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   public async configure(spfxContext: any, settings: T) {
     this.spfxContext = spfxContext
     this.settings = settings
-    this.sp = spfi().using(SPFx(spfxContext))
+    this.sp = createSpfiInstance(spfxContext)
     this.portal = await new PortalDataService().configure({
       spfxContext
     })

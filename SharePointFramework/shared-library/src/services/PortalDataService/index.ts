@@ -5,10 +5,11 @@ import { Logger, LogLevel } from '@pnp/logging'
 import { IFolder } from '@pnp/sp/folders'
 import { ICamlQuery, IList, IListEnsureResult } from '@pnp/sp/lists'
 import '@pnp/sp/presets/all'
-import { IItemUpdateResultData, spfi, SPFI, SPFx } from '@pnp/sp/presets/all'
+import { IItemUpdateResultData, SPFI } from '@pnp/sp/presets/all'
 import { PermissionKind } from '@pnp/sp/security'
 import { IWeb, Web } from '@pnp/sp/webs'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
+import { createSpfiInstance } from '../../data'
 import { IHubSite, ISPContentType } from '../../interfaces'
 import {
   PortfolioOverviewView,
@@ -49,7 +50,7 @@ export class PortalDataService {
   ): Promise<PortalDataService> {
     this._configuration = { ...PortalDataServiceDefaultConfiguration, ...configuration }
     const hubSite = await this.getHubSite()
-    this.sp = spfi().using(SPFx(configuration.spfxContext))
+    this.sp = createSpfiInstance(this._configuration.spfxContext)
     this.web = hubSite.web
     this.url = hubSite.url
     this._isConfigured = true
@@ -481,12 +482,12 @@ export class PortalDataService {
   }
 
   /**
-   * Get items
+   * Get items and maps them to the specified constructor.
    *
    * @param listName List name
-   * @param constructor Constructor
-   * @param query Query
-   * @param expands Expands
+   * @param constructor Constructor function
+   * @param query Caml query if `getItemsByCAMLQuery` should be used
+   * @param expands Expands for `getItemsByCAMLQuery`
    */
   public async getItems<T>(
     listName: string,
@@ -498,13 +499,11 @@ export class PortalDataService {
     try {
       const list = this.web.lists.getByTitle(listName)
       let items: any[]
-      if (query) {
-        items = await list.getItemsByCAMLQuery(query, ...(expands ?? []))
-      } else {
-        items = await list.items()
-      }
+      if (query) items = await list.getItemsByCAMLQuery(query, ...(expands ?? []))
+      else items = await list.items()
       return items.map((item) => new constructor(item, this.web, this.sp))
     } catch (error) {
+      console.log(error, query, expands)
       throw error
     }
   }
