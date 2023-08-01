@@ -1,14 +1,12 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
-import { sp } from '@pnp/sp'
 import { taxonomy } from '@pnp/sp-taxonomy'
 import { IProgressIndicatorProps } from '@fluentui/react/lib/ProgressIndicator'
 import { SPDataAdapterBase } from 'pp365-shared-library/lib/data'
 import { ProjectDataService } from 'pp365-shared-library/lib/services'
 import * as strings from 'ProjectWebPartsStrings'
 import { IEntityField } from 'sp-entityportal-service/types'
-import { find } from 'underscore'
+import { find, get } from 'underscore'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
 import { IdeaConfigurationModel, SPIdeaConfigurationItem } from '../../models'
 import { IConfigurationFile } from 'types'
@@ -29,15 +27,12 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   ): Promise<void> {
     await super.configure(spfxContext, configuration)
     taxonomy.setup({ spfxContext })
-    this.project = new ProjectDataService(
-      {
-        ...this.settings,
-        entityService: this.entityService,
-        propertiesListName: strings.ProjectPropertiesListName,
-        taxonomy
-      },
-      this.spConfiguration
-    )
+    this.project = new ProjectDataService({
+      ...this.settings,
+      entityService: this.entityService,
+      propertiesListName: strings.ProjectPropertiesListName,
+      taxonomy
+    })
   }
 
   /**
@@ -89,9 +84,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param progressFunc Progress function
    */
   public async syncPropertyItemToHub(
-    fieldValues: TypedHash<any>,
-    fieldValuesText: TypedHash<string>,
-    templateParameters: TypedHash<any>,
+    fieldValues: Record<string, any>,
+    fieldValuesText: Record<string, string>,
+    templateParameters: Record<string, any>,
     progressFunc: (props: IProgressIndicatorProps) => void
   ): Promise<void> {
     try {
@@ -121,11 +116,13 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param fieldValues - Field values for the properties item
    * @param fieldValuesText - Field values in text format for the properties item
    * @param templateParameters - Template parameters
+   *
+   * // TODO: This function should be renamed to something more descriptive
    */
   public async getMappedProjectProperties(
-    fieldValues: TypedHash<any>,
-    fieldValuesText: TypedHash<string>,
-    templateParameters: TypedHash<any>,
+    fieldValues: Record<string, any>,
+    fieldValuesText: Record<string, string>,
+    templateParameters: Record<string, any>,
     syncToProject: boolean = false
   ): Promise<any> {
     try {
@@ -139,21 +136,14 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
               .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
               .getEntityFields()
           : this.entityService.getEntityFields(),
-        this.sp.web.siteUsers.select('Id', 'Email', 'LoginName', 'Title').get<
-          {
-            Id: number
-            Email: string
-            LoginName: string
-            Title: string
-          }[]
-        >()
+        this.sp.web.siteUsers.select('Id', 'Email', 'LoginName', 'Title')()
       ])
       const fieldsToSync = this._getFieldsToSync(fields, templateParameters?.CustomSiteFields, [
         'GtIsParentProject',
         'GtIsProgram',
         'GtCurrentVersion'
       ])
-      const properties: TypedHash<any> = {}
+      const properties: Record<string, any> = {}
       for (let i = 0; i < fieldsToSync.length; i++) {
         const fld = fieldsToSync[i]
         const fldValue = fieldValues[fld.InternalName]
@@ -208,7 +198,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
                 const [_user] = siteUsers.filter(
                   (u) => u.Title === fieldValuesText[fld.InternalName]
                 )
-                const user = _user ? await sp.web.ensureUser(_user.LoginName) : null
+                const user = _user ? await this.sp.web.ensureUser(_user.LoginName) : null
                 properties[`${fld.InternalName}Id`] = user ? user.data.Id : null
               } else {
                 const [_user] = siteUsers.filter(
@@ -225,7 +215,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
                 const userIds = fieldValuesText[fld.InternalName] || []
                 const users = siteUsers.filter((u) => userIds.indexOf(u.Title) !== -1)
                 const ensured = await Promise.all(
-                  users.map(({ LoginName }) => sp.web.ensureUser(LoginName))
+                  users.map(({ LoginName }) => this.sp.web.ensureUser(LoginName))
                 )
                 properties[`${fld.InternalName}Id`] = {
                   results: ensured.map(({ data }) => data.Id)
@@ -288,16 +278,18 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param fieldName Field name for phase
    */
   public async getTermFieldContext(fieldName: string) {
+    // TODO: Use caching when fetching phase field
     const phaseField = await this.sp.web.fields
       .getByInternalNameOrTitle(fieldName)
-      .select('InternalName', 'TermSetId', 'TextField')
-      .usingCaching()
-      .get<{ InternalName: string; TermSetId: string; TextField: string }>()
+      .select('InternalName', 'TermSetId', 'TextField')<{
+      InternalName: string
+      TermSetId: string
+      TextField: string
+    }>()
+    // TODO: Use caching when fetching phase text field
     const phaseTextField = await this.sp.web.fields
       .getById(phaseField.TextField)
-      .select('InternalName')
-      .usingCaching()
-      .get<{ InternalName: string }>()
+      .select('InternalName')<{ InternalName: string }>()
     return {
       fieldName: phaseField.InternalName,
       termSetId: phaseField.TermSetId,
@@ -319,7 +311,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     const ideaConfig = await this.portal.web.lists
       .getByTitle(strings.IdeaConfigurationTitle)
       .select(...new SPIdeaConfigurationItem().fields)
-      .items.get()
+      .items()
 
     return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
   }
@@ -332,20 +324,22 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    */
   public async getConfigurations(folderPath: string): Promise<IConfigurationFile[]> {
     try {
-      const { ServerRelativeUrl } = await this.portal.web.rootFolder
-        .select('ServerRelativeUrl')
-        .usingCaching()
-        .get<{ ServerRelativeUrl: string }>()
+      // TODO: Using caching to get ServerRelativeUrl of web root folder
+      const { ServerRelativeUrl } = await this.portal.web.rootFolder.select('ServerRelativeUrl')<{
+        ServerRelativeUrl: string
+      }>()
       const folderRelativeUrl = `${ServerRelativeUrl}/${strings.SiteAssetsConfigurationFolder}/${folderPath}`
-      const folder = this.portal.web.getFolderByServerRelativeUrl(folderRelativeUrl)
+      const folder = this.portal.web.getFolderByServerRelativePath(folderRelativeUrl)
+
+      // TODO: Using caching to fetch folder files
       const files = await folder.files
         .select('Name', 'ServerRelativeUrl', 'ListItemAllFields/Title')
-        .expand('ListItemAllFields')
-        .usingCaching()
-        .get()
+        .expand('ListItemAllFields')()
       return files.map((file) => ({
         name: file.Name,
-        title: file.ListItemAllFields.Title ?? `${strings.UnknownConfigurationName} (${file.Name})`,
+        title:
+          get(file, 'ListItemAllFields.Title') ??
+          `${strings.UnknownConfigurationName} (${file.Name})`,
         url: file.ServerRelativeUrl
       }))
     } catch {

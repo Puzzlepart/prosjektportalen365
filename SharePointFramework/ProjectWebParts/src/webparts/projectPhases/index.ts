@@ -8,7 +8,6 @@ import {
 import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
 import { PropertyFieldToggleWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldToggleWithCallout'
 import '@pnp/polyfill-ie11'
-import { sp } from '@pnp/sp'
 import React from 'react'
 import { IProjectPhasesProps, ProjectPhases } from 'components/ProjectPhases'
 import '@fluentui/react/dist/css/fabric.min.css'
@@ -20,11 +19,10 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
 
   public async onInit() {
     await super.onInit()
-    this._fields = await sp.web.fields
+    this._fields = await this.sp.web.fields
       // eslint-disable-next-line quotes
       .filter("TypeAsString eq 'TaxonomyFieldType'")
-      .select('Title', 'InternalName')
-      .get()
+      .select('Title', 'InternalName')()
   }
 
   public render(): void {

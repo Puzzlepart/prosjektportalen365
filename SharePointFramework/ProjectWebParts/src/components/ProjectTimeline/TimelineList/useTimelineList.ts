@@ -1,6 +1,6 @@
 import { getId, IColumn, ICommandBarProps, Selection } from '@fluentui/react'
 import { get } from '@microsoft/sp-lodash-subset'
-import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import { Logger, LogLevel } from '@pnp/logging'
 import SPDataAdapter from 'data/SPDataAdapter'
 import moment from 'moment'
@@ -89,14 +89,14 @@ export function useTimelineList() {
    * Create new timeline item and send the user to the edit form
    */
   const redirectNewTimelineItem = async () => {
+    // TODO: getAll method not supported in v3
     const [project] = (
       await SPDataAdapter.portal.web.lists
         .getByTitle(strings.ProjectsListName)
-        .items.select('Id', 'GtSiteId')
-        .getAll()
+        .items.select('Id', 'GtSiteId')()
     ).filter(({ GtSiteId }) => GtSiteId === context.props.siteId)
 
-    const properties: TypedHash<any> = {
+    const properties: Record<string, any> = {
       Title: 'Nytt element på tidslinjen',
       GtSiteIdLookupId: project.Id
     }
@@ -117,7 +117,7 @@ export function useTimelineList() {
    *
    * @param properties Properties
    */
-  const addTimelineItem = async (properties: TypedHash<any>): Promise<any> => {
+  const addTimelineItem = async (properties: Record<string, any>): Promise<any> => {
     const list = SPDataAdapter.portal.web.lists.getByTitle(strings.TimelineContentListName)
     const itemAddResult = await list.items.add(properties)
     return itemAddResult.data

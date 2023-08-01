@@ -17,11 +17,11 @@ export async function fetchProjectData(
   timelineConfig: TimelineConfigurationModel[]
 ): Promise<TimelineContentModel> {
   try {
+    // TODO: Method getAll not support in v3
     const projectData = await SPDataAdapter.portal.web.lists
       .getByTitle(strings.ProjectsListName)
       .items.select('Id', 'GtStartDate', 'GtEndDate')
-      .filter(`GtSiteId eq '${props.siteId}'`)
-      .getAll()
+      .filter(`GtSiteId eq '${props.siteId}'`)()
 
     const config = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
     return new TimelineContentModel(

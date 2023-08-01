@@ -37,7 +37,9 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
       )
     ])
 
-    const phaseSitePages = props.useDynamicHomepage ? await getPhaseSitePages(phases) : []
+    const phaseSitePages = props.useDynamicHomepage
+      ? await getPhaseSitePages({ phases, sp: props.sp })
+      : []
     const [currentPhase] = phases.filter((p) => p.name === currentPhaseName)
     return {
       currentPhase,

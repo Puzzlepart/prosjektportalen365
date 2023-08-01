@@ -1,14 +1,16 @@
-import { sp } from '@pnp/sp'
+import { SPFI } from '@pnp/sp'
 
 /**
  * Run hook when changing phase
  *
  * @param hookUrl Hook url
  * @param hookAuth Hook auth
+ * @param sp SPFI instance
  */
-export const runPhaseHook = async (hookUrl: string, hookAuth: string) => {
+export const runPhaseHook = async (hookUrl: string, hookAuth: string, sp: SPFI) => {
   try {
-    const web = await sp.web.get()
+    // TODO: Is this needed? Isn't the URL available in the SPFx context?
+    const web = await sp.web.select('Url')()
 
     const body = {
       apiKey: hookAuth,

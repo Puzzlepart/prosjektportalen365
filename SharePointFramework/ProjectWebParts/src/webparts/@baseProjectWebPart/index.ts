@@ -1,15 +1,20 @@
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import '@pnp/polyfill-ie11'
-import { sp } from '@pnp/sp'
+import { SPFI } from '@pnp/sp'
+import { createSpfiInstance } from 'pp365-shared-library/lib/data'
 import React from 'react'
 import ReactDom from 'react-dom'
 import { IBaseWebPartComponentProps } from '../../components/BaseWebPartComponent'
 import SPDataAdapter from '../../data'
 
+Logger.subscribe(ConsoleListener())
+Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+
 export abstract class BaseProjectWebPart<
   T extends IBaseWebPartComponentProps
 > extends BaseClientSideWebPart<T> {
+  public sp: SPFI
   public abstract render(): void
 
   /**
@@ -30,7 +35,8 @@ export abstract class BaseProjectWebPart<
       isSiteAdmin: this.context.pageContext.legacyPageContext.isSiteAdmin,
       displayMode: this.displayMode,
       pageContext: this.context.pageContext,
-      webPartContext: this.context
+      webPartContext: this.context,
+      sp: this.sp
     }
 
     const element = React.createElement(component, combinedProps)
@@ -41,14 +47,12 @@ export abstract class BaseProjectWebPart<
    * Setup sp, data adapter, logging etc
    */
   private async _setup() {
-    sp.setup({ spfxContext: this.context })
+    this.sp = createSpfiInstance(this.context)
     await SPDataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
       webUrl: this.context.pageContext.web.absoluteUrl,
       logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     })
-    Logger.subscribe(new ConsoleListener())
-    Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
   }
 
   public async onInit(): Promise<void> {

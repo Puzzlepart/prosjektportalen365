@@ -29,9 +29,9 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
    */
   async function fetchJsonConfiguration() {
     try {
+      // TODO: Use caching for manual configuration
       const manualConfiguration = await SPDataAdapter.portal.web
-        .getFileByServerRelativeUrl(props.manualConfigurationPath)
-        .usingCaching()
+        .getFileByServerRelativePath(props.manualConfigurationPath)
         .getJSON()
       setConfiguration(manualConfiguration)
     } catch {

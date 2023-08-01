@@ -13,7 +13,7 @@ import { IBaseProgramWebPartProps } from './types'
 export abstract class BaseProgramWebPart<
   T extends IBaseProgramWebPartProps
 > extends BaseClientSideWebPart<T> {
-protected _sp: SPFI
+  protected _sp: SPFI
 
   /**
    * The data adapter used to communicate with SharePoint.

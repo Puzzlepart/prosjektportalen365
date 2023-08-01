@@ -1,4 +1,3 @@
-import { TypedHash } from '@pnp/common'
 import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
 import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import { IProgressDialogProps } from './ProgressDialog/types'
@@ -7,8 +6,8 @@ import { IEntityField } from 'sp-entityportal-service'
 import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDataService'
 import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 import { ActionType } from './Actions/types'
-import { Web } from '@pnp/sp'
 import { IProjectStatusData } from '../ProjectStatus'
+import { IWeb } from '@pnp/sp/webs'
 
 export class ProjectInformationParentProject {
   public title: string
@@ -16,7 +15,7 @@ export class ProjectInformationParentProject {
   public childProjects: any[]
   public iconName: 'ProductVariant' | 'ProductList'
 
-  constructor(spItem: TypedHash<any>, public web: Web) {
+  constructor(spItem: Record<string, any>, public web: IWeb) {
     this.title = spItem.Title
     this.url = spItem.GtSiteUrl
     this.childProjects = (JSON.parse(spItem.GtChildProjects ?? []) as any[]).map((i) => i.SPWebURL)
@@ -54,7 +53,7 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   /**
    * A hash object of fields to show for external users
    */
-  showFieldExternal?: TypedHash<boolean>
+  showFieldExternal?: Record<string, boolean>
 
   /**
    * Link to the admin page

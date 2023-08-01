@@ -8,9 +8,7 @@ import {
   Spinner,
   SpinnerSize
 } from '@fluentui/react'
-import { TypedHash } from '@pnp/common'
 import { Logger, LogLevel } from '@pnp/logging'
-import { sp } from '@pnp/sp'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext, useEffect, useState } from 'react'
 import SPDataAdapter from '../../../data'
@@ -91,8 +89,7 @@ export const SyncProjectDialog: FC = () => {
 
       const [ideaProcessingItem] = await ideaProcessingList.items
         .filter(`GtIdeaProjectDataId eq '${projectDataItemId}'`)
-        .select('Id')
-        .get()
+        .select('Id')()
 
       const updatedResult = await ideaProcessingList.items.getById(ideaProcessingItem.Id).update({
         GtIdeaDecision: 'Godkjent og synkronisert'
@@ -110,16 +107,12 @@ export const SyncProjectDialog: FC = () => {
 
       const [projectDataItem] = await projectDataList.items
         .filter(`GtSiteUrl eq '${context.props.webPartContext.pageContext.web.absoluteUrl}'`)
-        .select('Id')
-        .get()
+        .select('Id')()
 
       if (projectDataItem) {
         const item = projectDataList.items.getById(projectDataItem.Id)
 
-        const [fieldValuesText, fieldValues] = await Promise.all([
-          item.fieldValuesAsText.get(),
-          item.get()
-        ])
+        const [fieldValuesText, fieldValues] = await Promise.all([item.fieldValuesAsText(), item()])
 
         const itemProperties = await SPDataAdapter.getMappedProjectProperties(
           fieldValues,
@@ -150,12 +143,14 @@ export const SyncProjectDialog: FC = () => {
    * @param properties Properties
    * @param projectDataId Project data ID
    */
-  async function syncProperties(properties: TypedHash<any>, projectDataId: number) {
+  async function syncProperties(properties: Record<string, any>, projectDataId: number) {
     setSyncing(true)
 
-    const projectPropertiesList = sp.web.lists.getByTitle(strings.ProjectPropertiesListName)
+    const projectPropertiesList = context.props.sp.web.lists.getByTitle(
+      strings.ProjectPropertiesListName
+    )
 
-    const [propertiesItem] = await projectPropertiesList.items.top(1).select('Id').get()
+    const [propertiesItem] = await projectPropertiesList.items.top(1).select('Id')()
 
     try {
       await projectPropertiesList.items

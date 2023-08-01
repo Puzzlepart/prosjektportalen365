@@ -26,14 +26,14 @@ export const changePhase = async (
 ) => {
   try {
     await SPDataAdapter.project.updatePhase(phase, phaseTextField)
-    if (props.usePhaseHooks) runPhaseHook(props.hookUrl, props.hookAuth)
+    if (props.usePhaseHooks) runPhaseHook(props.hookUrl, props.hookAuth, props.sp)
     if (props.useDynamicHomepage)
       await changeWelcomePage(
         phase.name,
         props.webPartContext.pageContext.web.absoluteUrl,
         phaseSitePages
       )
-    await modifyCurrentPhaseView(phase.name, props.currentPhaseViewName)
+    await modifyCurrentPhaseView(phase.name, props)
     sessionStorage.clear()
   } catch (error) {
     ListLogger.log({

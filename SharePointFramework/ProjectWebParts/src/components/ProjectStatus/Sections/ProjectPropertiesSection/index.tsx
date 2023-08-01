@@ -1,4 +1,4 @@
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import { ProjectStatusContext } from '../../../ProjectStatus/context'
 import React, { FC, useContext } from 'react'
 import { StatusElement } from '../../StatusElement'

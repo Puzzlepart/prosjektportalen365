@@ -69,8 +69,10 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   ): Promise<InstallationEntry[]> {
     try {
       const installationLogList = this._portal.web.lists.getByTitle(strings.InstallationLogListName)
-      const installationLogItems = await installationLogList.items
-        .orderBy(orderBy, orderAscending)()
+      const installationLogItems = await installationLogList.items.orderBy(
+        orderBy,
+        orderAscending
+      )()
       return installationLogItems.map((item) => new InstallationEntry(item))
     } catch (error) {
       return []

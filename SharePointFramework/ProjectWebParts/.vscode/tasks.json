@@ -7,7 +7,10 @@
 			"group": "build",
 			"problemMatcher": [],
 			"label": "watch",
-			"detail": "Watching for file changes and rebuilding"
+			"detail": "Watching for file changes and rebuilding",
+			"runOptions": {
+				"instanceLimit": 1
+			}
 		},
 		{
 			"type": "npm",
@@ -15,14 +18,20 @@
 			"group": "build",
 			"problemMatcher": [],
 			"label": "build",
-			"detail": "Builds bundle in production mode"
+			"detail": "Builds bundle in production mode",
+			"runOptions": {
+				"instanceLimit": 1
+			}
 		},
 		{
 			"type": "gulp",
 			"task": "clean",
 			"problemMatcher": [],
 			"label": "clean",
-			"detail": "Cleans the dist, build, and coverage directories"
+			"detail": "Cleans the dist, build, and coverage directories",
+			"runOptions": {
+				"instanceLimit": 1
+			}
 		}
 	]
 }
