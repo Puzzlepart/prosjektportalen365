@@ -53,9 +53,9 @@ body:
       label: Hvilke nettleser(e) oppleves feilen på?
       multiple: true
       options:
+        - Microsoft Edge
         - Chrome
         - Firefox
-        - Microsoft Edge
         - Safari
         - Annet (spesifiser over)
   - type: dropdown
@@ -64,10 +64,9 @@ body:
       label: Versjon
       description: Hvilken versjon av Prosjektportalen 365 oppsto feilen på?
       options:
-        - 1.8.0
-        - 1.7.2
-        - 1.6.1
-        - Annet (spesifiser over)
+        - 1.9.0
+        - 1.8.x (siste stabile)
+        - Eldre (spesifiser over)
     validations:
       required: true
   - type: textarea
