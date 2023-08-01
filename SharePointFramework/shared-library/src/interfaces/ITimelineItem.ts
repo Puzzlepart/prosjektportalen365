@@ -5,7 +5,7 @@ export interface ITimelineItemData {
   projectUrl?: string
   phase?: string
   description?: string
-  milestoneDate?: moment.Moment
+  milestoneDate?: moment.Moment | Date
   type?: string
   budgetTotal?: string
   costsTotal?: string

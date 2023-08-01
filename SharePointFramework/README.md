@@ -91,7 +91,7 @@ _Published to **npm** as `pp365-projectwebparts`_
 | PortfolioOverviewWebPart      | e58e3d32-057a-4418-97ce-172b92482ba2 | PortfolioWebParts   |
 | ProjectListWebPart            | 54fbeb7d-e463-4dcc-8873-50a3ab2f0f68 | PortfolioWebParts   |
 | ResourceAllocationWebPart     | 2ef269b2-6370-4841-8b35-2185b7ccb22a | PortfolioWebParts   |
-| ProjectTimelineWebPart        | 7284c568-f66c-4218-bb2c-3734a3cfa581 | PortfolioWebParts   |
+| PortfolioTimelineWebPart      | 7284c568-f66c-4218-bb2c-3734a3cfa581 | PortfolioWebParts   |
 | ProgramAdministrationWebpart  | 9570e369-21a6-4bf5-8198-13506499de52 | ProgramWebParts     |
 | ProgramAggregationWebPart     | 37c7e990-483d-4f70-b9b9-def1790817e7 | ProgramWebParts     |
 | ProgramProjectOverviewWebPart | 01417142-67c8-498b-a6da-6e78003023dd | ProgramWebParts     |

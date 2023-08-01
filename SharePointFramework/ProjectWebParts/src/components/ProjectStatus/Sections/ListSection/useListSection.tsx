@@ -1,5 +1,5 @@
 import { IColumn } from '@fluentui/react'
-import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'  
+import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
 import { useContext, useEffect, useState } from 'react'
 import _ from 'lodash'
 import { ProjectStatusContext } from '../../../ProjectStatus/context'

@@ -1,5 +1,8 @@
 import { TypedHash } from '@pnp/common'
-import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
+import {
+  IBaseWebPartComponentProps,
+  IBaseWebPartComponentState
+} from 'pp365-shared-library/src/components/BaseWebPartComponent'
 import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import { IProgressDialogProps } from './ProgressDialog/types'
 import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage'

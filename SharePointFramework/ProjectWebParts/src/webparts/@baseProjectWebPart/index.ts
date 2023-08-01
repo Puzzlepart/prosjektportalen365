@@ -4,7 +4,7 @@ import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
 import React from 'react'
 import ReactDom from 'react-dom'
-import { IBaseWebPartComponentProps } from '../../components/BaseWebPartComponent'
+import { IBaseWebPartComponentProps } from 'pp365-shared-library/src/components/BaseWebPartComponent'
 import SPDataAdapter from '../../data'
 
 export abstract class BaseProjectWebPart<
