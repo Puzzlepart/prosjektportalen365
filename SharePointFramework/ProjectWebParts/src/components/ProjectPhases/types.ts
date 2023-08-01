@@ -1,5 +1,8 @@
 import { ProjectPhaseChecklistData, ProjectPhaseModel } from 'pp365-shared-library/lib/models'
-import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from 'pp365-shared-library/src/components/BaseWebPartComponent'
+import {
+  IBaseWebPartComponentProps,
+  IBaseWebPartComponentState
+} from 'pp365-shared-library/src/components/BaseWebPartComponent'
 import { IProjectPhaseCalloutProps } from './ProjectPhase/ProjectPhaseCallout'
 
 export interface IProjectPhasesProps extends IBaseWebPartComponentProps {

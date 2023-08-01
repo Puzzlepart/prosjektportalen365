@@ -1,5 +1,8 @@
 import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
-import { ProjectTimeline, IProjectTimelineProps } from 'pp365-shared-library/lib/components/ProjectTimeline'
+import {
+  ProjectTimeline,
+  IProjectTimelineProps
+} from 'pp365-shared-library/lib/components/ProjectTimeline'
 import strings from 'ProgramWebPartsStrings'
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
