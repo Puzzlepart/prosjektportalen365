@@ -1,16 +1,21 @@
 import { OnProgressCallbackFunction } from '../types'
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
-import { TypedHash } from '@pnp/common'
 import { PortalDataService } from 'pp365-shared-library/lib/services'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import { Schema, Web } from 'sp-js-provisioning'
 import { ISpfxJsomContext } from 'spfx-jsom'
 import { IProjectSetupProperties } from '../../types'
 import { ProjectSetupError } from '../../ProjectSetupError'
+import { SPFI } from '@pnp/sp'
 
 export interface IBaseTaskParams {
   /**
-   * Web
+   * Configured SP instance from `@pnp/sp`
+   */
+  sp?: SPFI
+
+  /**
+   * Web instance
    */
   web: Web
 
@@ -62,7 +67,7 @@ export interface IBaseTaskParams {
   /**
    * Miscellaneous data
    */
-  data?: TypedHash<any>
+  data?: Record<string, any>
 }
 
 export interface IBaseTask {

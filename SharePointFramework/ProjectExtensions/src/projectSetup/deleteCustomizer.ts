@@ -1,5 +1,5 @@
 import { Logger, LogLevel } from '@pnp/logging'
-import { Web } from '@pnp/sp'
+import { Web } from '@pnp/sp/webs'
 
 /**
  * Delete customizer by componentId
@@ -13,8 +13,8 @@ export async function deleteCustomizer(
   componentId: string,
   reload: boolean
 ): Promise<void> {
-  const web = new Web(webAbsoluteUrl)
-  const customActions = await web.userCustomActions.get<
+  const web =  Web(webAbsoluteUrl)
+  const customActions = await web.userCustomActions<
     { Id: string; ClientSideComponentId: string }[]
   >()
   for (let i = 0; i < customActions.length; i++) {

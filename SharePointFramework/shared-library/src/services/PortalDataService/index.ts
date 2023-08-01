@@ -490,7 +490,7 @@ export class PortalDataService {
    */
   public async getItems<T>(
     listName: string,
-    constructor: new (item: any, web: IWeb) => T,
+    constructor: new (item: any, web: IWeb, sp?: SPFI) => T,
     query?: ICamlQuery,
     expands?: string[]
   ): Promise<T[]> {
@@ -503,7 +503,7 @@ export class PortalDataService {
       } else {
         items = await list.items()
       }
-      return items.map((item) => new constructor(item, this.web))
+      return items.map((item) => new constructor(item, this.web, this.sp))
     } catch (error) {
       throw error
     }

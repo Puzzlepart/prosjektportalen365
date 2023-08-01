@@ -35,7 +35,7 @@ export class ProvisionSiteFields extends BaseTask {
             `Group eq '${params.templateSchema.Parameters.ProvisionSiteFields}' and TypeAsString ne 'Calculated'`
           )
           .select(...Object.keys(new SPField()))
-          .get<SPField[]>()
+          <SPField[]>()
         this.logInformation(`Retrieved ${siteFields.length} site fields from hub`)
         for (let i = 0; i < siteFields.length; i++) {
           const siteField = siteFields[i]

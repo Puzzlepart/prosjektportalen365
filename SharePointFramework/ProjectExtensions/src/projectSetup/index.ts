@@ -1,9 +1,8 @@
 import { MessageBarType } from '@fluentui/react'
 import { override } from '@microsoft/decorators'
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base'
-import { isArray, stringIsNullOrEmpty } from '@pnp/common'
+import { isArray, stringIsNullOrEmpty } from '@pnp/core'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
-import { MenuNode, sp, Web } from '@pnp/sp'
 import { format, getId } from '@uifabric/utilities'
 import { SPDataAdapter } from 'data'
 import { default as MSGraphHelper } from 'msgraph-helper'
@@ -28,8 +27,12 @@ import { ProjectSetupError } from './ProjectSetupError'
 import { ProjectSetupSettings } from './ProjectSetupSettings'
 import * as Tasks from './tasks'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
+import { SPFI, SPFx, spfi } from '@pnp/sp'
+import { Web } from '@pnp/sp/webs'
+import { IMenuNode } from '@pnp/sp/navigation'
 
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
+  private _sp: SPFI
   private _portal: PortalDataService
   private _isSetup = true
   private _placeholderIds = {
@@ -40,8 +43,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
   @override
   public async onInit(): Promise<void> {
-    sp.setup({ spfxContext: this.context })
-    Logger.subscribe(new ConsoleListener())
+    this._sp = spfi().using(SPFx(this.context))
+    Logger.subscribe(ConsoleListener())
     Logger.activeLogLevel = sessionStorage.DEBUG === '1' || DEBUG ? LogLevel.Info : LogLevel.Warning
     if (
       !this.context.pageContext.legacyPageContext.isSiteAdmin ||
@@ -89,11 +92,12 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       }
 
       this._initializeSetup({
-        web: new Web(this.context.pageContext.web.absoluteUrl) as any,
+        web:  Web(this.context.pageContext.web.absoluteUrl) as any,
         webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
         templateExcludeHandlers: ['Hooks'],
         context: this.context,
-        properties: this.properties
+        properties: this.properties,
+        sp: this._sp
       })
     } catch (error) {
       this._renderErrorDialog({ error })
@@ -105,8 +109,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       .getByTitle(this.properties.projectsList)
       .items.filter(
         `GtSiteId eq '${this.context.pageContext.legacyPageContext.siteId.replace(/([{}])/g, '')}'`
-      )
-      .get()
+      )()
     await SPDataAdapter.portal.web.lists
       .getByTitle(this.properties.projectsList)
       .items.getById(singleItem.Id)
@@ -145,7 +148,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
       if (!stringIsNullOrEmpty(this.properties.forceTemplate)) {
         await this.recreateNavMenu()
-        await sp.web.lists
+        await this._sp.web.lists
           .getByTitle(strings.ProjectPropertiesListName)
           .items.getById(1)
           .update({ GtIsParentProject: true, GtChildProjects: JSON.stringify([]) })
@@ -166,13 +169,13 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    * Adds the old custom navigation nodes to the quick launch menu
    */
   private async recreateNavMenu() {
-    const oldNodes: MenuNode[] = await JSON.parse(localStorage.getItem('pp_navigationNodes'))
+    const oldNodes: IMenuNode[] = await JSON.parse(localStorage.getItem('pp_navigationNodes'))
     const navigationNodes = uniq([...oldNodes])
     for await (const node of navigationNodes) {
       if (node.Title === strings.RecycleBinText) {
         continue
       }
-      const addedNode = await sp.web.navigation.quicklaunch.add(node.Title, node.SimpleUrl)
+      const addedNode = await this._sp.web.navigation.quicklaunch.add(node.Title, node.SimpleUrl)
       if (node.Nodes.length > 0) {
         for await (const childNode of node.Nodes) {
           await addedNode.node.children.add(childNode.Title, childNode.SimpleUrl)
@@ -277,7 +280,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       messageType: props.error['messageType'],
       onSetupClick: () => {
         this._initializeSetup({
-          web: new Web(this.context.pageContext.web.absoluteUrl) as any,
+          web:  Web(this.context.pageContext.web.absoluteUrl) as any,
           webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
           templateExcludeHandlers: ['Hooks'],
           context: this.context,
@@ -364,7 +367,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    */
   private async _getTemplates(propertyBagRegex = /^pp_.*_template$/): Promise<ProjectTemplate[]> {
     const webAllProperties = (
-      await sp.web.select('Title', 'AllProperties').expand('AllProperties').get()
+      await this._sp.web.select('Title', 'AllProperties').expand('AllProperties')()
     )['AllProperties']
     const lockedTemplateProperty = Object.keys(webAllProperties).find((key) =>
       propertyBagRegex.test(key)
@@ -403,9 +406,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     try {
       await MSGraphHelper.Init(this.context.msGraphClientFactory)
       const data: IProjectSetupData = {}
-      const web = new Web(this.context.pageContext.web.absoluteUrl)
+      const web =  Web(this.context.pageContext.web.absoluteUrl)
       this._portal = await new PortalDataService().configure({
-        pageContext: this.context.pageContext as any
+        spfxContext: this.context
       })
 
       const [_templates, extensions, contentConfig, templateFiles, customActions] =
@@ -413,14 +416,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           this._getTemplates(),
           this.properties.extensionsLibrary
             ? this._portal.getItems(
-                this.properties.extensionsLibrary,
-                ProjectExtension,
-                {
-                  ViewXml:
-                    '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-                },
-                ['File', 'FieldValuesAsText']
-              )
+              this.properties.extensionsLibrary,
+              ProjectExtension,
+              {
+                ViewXml:
+                  '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+              },
+              ['File', 'FieldValuesAsText']
+            )
             : Promise.resolve([]),
           this.properties.contentConfigList
             ? this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File'])
@@ -433,7 +436,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             },
             ['File']
           ),
-          web.userCustomActions.get()
+          web.userCustomActions()
         ])
 
       const templates = _templates.map((tmpl) => {
@@ -513,7 +516,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    * Check if the project is previously set up.
    */
   private async _isProjectSetup() {
-    const { WelcomePage } = await sp.web.rootFolder.select('WelcomePage').get()
+    const { WelcomePage } = await this._sp.web.rootFolder.select('WelcomePage')()
     if (WelcomePage === 'SitePages/Home.aspx') return false
     return true
   }

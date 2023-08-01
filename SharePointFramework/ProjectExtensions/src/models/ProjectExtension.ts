@@ -1,13 +1,12 @@
 /* eslint-disable max-classes-per-file */
-import { TypedHash } from '@pnp/common'
-import { Web } from '@pnp/sp'
+import { IWeb } from '@pnp/sp/webs'
 import { Schema } from 'sp-js-provisioning'
 import { ProjectTemplate } from './ProjectTemplate'
 import { UserSelectableObject } from './UserSelectableObject'
 
 export interface IProjectExtensionSPItem {
   Id: number
-  FieldValuesAsText?: TypedHash<string>
+  FieldValuesAsText?: Record<string, string>
   GtExtensionDefault?: boolean
   GtExtensionHidden?: boolean
   GtExtensionLocked?: boolean
@@ -20,7 +19,7 @@ export interface IProjectExtensionSPItem {
 export class ProjectExtension extends UserSelectableObject {
   public serverRelativeUrl: string
 
-  constructor(spItem: IProjectExtensionSPItem, public web: Web) {
+  constructor(spItem: IProjectExtensionSPItem, public web: IWeb) {
     super(
       spItem.Id,
       spItem.File.Title,
@@ -57,6 +56,7 @@ export class ProjectExtension extends UserSelectableObject {
   }
 
   public async getSchema(): Promise<Schema> {
-    return await this.web.getFileByServerRelativeUrl(this.serverRelativeUrl).getJSON()
+    // TODO: Check potential issues with `getFileByServerRelativePath`
+    return await this.web.getFileByServerRelativePath(this.serverRelativeUrl).getJSON()
   }
 }

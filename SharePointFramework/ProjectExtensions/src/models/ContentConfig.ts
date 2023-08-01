@@ -1,8 +1,10 @@
-import { stringIsNullOrEmpty } from '@pnp/common'
-import { List, sp, Web } from '@pnp/sp'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import { IListProperties } from './IListProperties'
 import { ProjectTemplate } from './ProjectTemplate'
 import { UserSelectableObject } from './UserSelectableObject'
+import { IWeb } from '@pnp/sp/webs'
+import { IList } from '@pnp/sp/lists'
+import { SPFI } from '@pnp/sp'
 
 export interface IContentConfigSPItem {
   ContentTypeId: string
@@ -33,7 +35,7 @@ export class ContentConfig extends UserSelectableObject {
   private _sourceList: string
   private _destinationList: string
 
-  constructor(private _spItem: IContentConfigSPItem, public web: Web) {
+  constructor(private _spItem: IContentConfigSPItem, public web: IWeb, private _sp?: SPFI) {
     super(
       _spItem.Id,
       _spItem.Title,
@@ -80,24 +82,24 @@ export class ContentConfig extends UserSelectableObject {
     return !stringIsNullOrEmpty(this._spItem.GtLccFields) ? this._spItem.GtLccFields.split(',') : []
   }
 
-  public get sourceList(): List {
+  public get sourceList(): IList {
     return this.web.lists.getByTitle(this._sourceList)
   }
 
-  public get destList(): List {
-    return sp.web.lists.getByTitle(this._destinationList)
+  public get destList(): IList {
+    return this._sp.web.lists.getByTitle(this._destinationList)
   }
 
   public async load() {
     this.sourceListProps = await this.sourceList
       .select('Title', 'ListItemEntityTypeFullName', 'ItemCount', 'BaseTemplate')
       .expand('RootFolder')
-      .get<IListProperties>()
+      <IListProperties>()
     if (this.type === ContentConfigType.List) {
       this.destListProps = await this.destList
         .select('Title', 'ListItemEntityTypeFullName', 'ItemCount', 'BaseTemplate')
         .expand('RootFolder')
-        .get<IListProperties>()
+        <IListProperties>()
     }
   }
 }

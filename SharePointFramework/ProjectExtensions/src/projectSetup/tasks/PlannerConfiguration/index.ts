@@ -1,5 +1,5 @@
 import { PageContext } from '@microsoft/sp-page-context'
-import { getGUID } from '@pnp/common'
+import { getGUID } from '@pnp/core'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import { format } from '@fluentui/react/lib/Utilities'
 import { sleep } from 'pp365-shared-library/lib/util'

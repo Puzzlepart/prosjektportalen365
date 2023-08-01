@@ -27,8 +27,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         ...this.settings,
         entityService: this.entityService,
         propertiesListName: strings.ProjectPropertiesListName
-      },
-      this.spConfiguration
+      }
     )
   }
 
@@ -41,9 +40,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public async isFilenameValid(folderServerRelativeUrl: string, name: string): Promise<string> {
     if (!validFilename(name)) return strings.FilenameInValidErrorText
     const [file] = await this.sp.web
-      .getFolderByServerRelativeUrl(folderServerRelativeUrl)
-      .files.filter(`Name eq '${name}'`)
-      .get()
+      .getFolderByServerRelativePath(folderServerRelativeUrl)
+      .files.filter(`Name eq '${name}'`)()
     if (file) {
       return strings.FilenameAlreadyInUseErrorText
     }
@@ -73,10 +71,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param folderRelativeUrl Folder URL
    */
   public async getFolders(folderRelativeUrl: string): Promise<any[]> {
+    // TODO: Caching
     const folders = await this.sp.web
       .getFolderByServerRelativePath(folderRelativeUrl)
-      .folders.usingCaching()
-      .get()
+      .folders()
     return folders.map((f) => new SPFolder(f)).filter((f) => !f.isSystemFolder)
   }
 
@@ -84,6 +82,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * Get libraries in the current web
    */
   public async getLibraries(): Promise<SPFolder[]> {
+    // TODO: Caching
     const libraries = await this.sp.web.lists
       .select('Id', 'Title', 'BaseTemplate', 'RootFolder/ServerRelativeUrl', 'RootFolder/Folders')
       .expand('RootFolder', 'RootFolder/Folders')
@@ -95,9 +94,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
           // eslint-disable-next-line quotes
           "ListItemEntityTypeFullName ne 'SP.Data.FormServerTemplatesItem'"
         ].join(' and ')
-      )
-      .usingCaching()
-      .get()
+      )()
     return libraries.map((lib) => new SPFolder(lib))
   }
 }

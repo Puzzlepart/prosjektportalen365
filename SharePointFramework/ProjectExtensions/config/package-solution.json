@@ -1,8 +1,8 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "Prosjektportalen 365 - Project Extensions",
-    "id": "fe723971-d5c2-4698-91e3-c16e2f72fb5b",
+    "name": "Prosjektportalen 365 - Project Extensions - test",
+    "id": "7883f20d-a353-4107-84aa-ec6ebc2e24fe",
     "version": "1.9.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
@@ -21,6 +21,6 @@
     }
   },
   "paths": {
-    "zippedPackage": "solution/pp-project-extensions.sppkg"
+    "zippedPackage": "solution/pp-project-extensions-test.sppkg"
   }
 }

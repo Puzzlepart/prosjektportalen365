@@ -1,5 +1,4 @@
-import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
-import { sp, Web } from '@pnp/sp'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import { IProjectSetupData } from 'projectSetup'
 import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
@@ -14,6 +13,7 @@ import {
   TaskPreviewType
 } from '../PlannerConfiguration'
 import _ from 'underscore'
+import { IWeb } from '@pnp/sp/webs'
 
 export class CopyListData extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -38,6 +38,7 @@ export class CopyListData extends BaseTask {
     params: IBaseTaskParams,
     onProgress: OnProgressCallbackFunction
   ): Promise<IBaseTaskParams> {
+    this.params = params
     this.onProgress = onProgress
     try {
       await this.createDefaultPlannerPlan(params)
@@ -127,7 +128,7 @@ export class CopyListData extends BaseTask {
             .split('|')
             .map((str) => new TaskAttachment(str))
             .filter((attachment) => !stringIsNullOrEmpty(attachment.url))
-        } catch (error) {}
+        } catch (error) { }
       }
       if (!stringIsNullOrEmpty(item.GtPlannerPreviewType)) {
         let m: RegExpExecArray
@@ -167,13 +168,13 @@ export class CopyListData extends BaseTask {
    */
   private async _getSourceItems<T = any>(config: ContentConfig, fields?: string[]): Promise<T[]> {
     try {
+      // TODO: Missing .getAll()
       return await config.sourceList.items
         .select(...(fields || config.fields), 'TaxCatchAll/ID', 'TaxCatchAll/Term')
-        .expand('TaxCatchAll')
-        .getAll()
+        .expand('TaxCatchAll')()
     } catch (error) {
       try {
-        return await config.sourceList.items.select(...(fields || config.fields)).getAll()
+        return await config.sourceList.items.select(...(fields || config.fields))()
       } catch (error) {
         return []
       }
@@ -187,7 +188,7 @@ export class CopyListData extends BaseTask {
    */
   private async _getSourceFields(config: ContentConfig): Promise<SPField[]> {
     try {
-      return await config.sourceList.fields.select(...Object.keys(new SPField())).get<SPField[]>()
+      return await config.sourceList.fields.select(...Object.keys(new SPField()))<SPField[]>()
     } catch (error) {
       return []
     }
@@ -219,21 +220,22 @@ export class CopyListData extends BaseTask {
         this._getProperties(config.fields, itm, sourceFields)
       )
 
+      // TODO: Fix batch processing
       for (let i = 0, j = 0; i < itemsToAdd.length; i += batchChunkSize, j++) {
-        const batch = sp.createBatch()
-        const batchItems = itemsToAdd.slice(i, i + batchChunkSize)
-        this.logInformation(`Processing batch ${j + 1} with ${batchItems.length} items`, {})
-        this.onProgress(
-          progressText,
-          format(strings.ProcessListItemText, j + 1, batchItems.length),
-          'List'
-        )
-        batchItems.forEach((item) =>
-          config.destList.items
-            .inBatch(batch)
-            .add(item, config.destListProps.ListItemEntityTypeFullName)
-        )
-        await batch.execute()
+        // const batch = sp.createBatch()
+        // const batchItems = itemsToAdd.slice(i, i + batchChunkSize)
+        // this.logInformation(`Processing batch ${j + 1} with ${batchItems.length} items`, {})
+        // this.onProgress(
+        //   progressText,
+        //   format(strings.ProcessListItemText, j + 1, batchItems.length),
+        //   'List'
+        // )
+        // batchItems.forEach((item) =>
+        //   config.destList.items
+        //     .inBatch(batch)
+        //     .add(item, config.destListProps.ListItemEntityTypeFullName)
+        // )
+        // await batch.execute()
       }
     } catch (error) {
       throw error
@@ -246,13 +248,14 @@ export class CopyListData extends BaseTask {
    * @param web Web
    * @param files Files to get content for
    */
-  private async _getFileContents(web: Web, files: any[]): Promise<any[]> {
+  private async _getFileContents(web: IWeb, files: any[]): Promise<any[]> {
     try {
+      // TODO: Check potential issues with `getFileByServerRelativePath`
       const fileContents = await Promise.all(
         files.map(
           (file) =>
             new Promise<any>(async (resolve) => {
-              const blob = await web.getFileByServerRelativeUrl(file.FileRef).getBlob()
+              const blob = await web.getFileByServerRelativePath(file.FileRef).getBlob()
               file.Blob = blob
               resolve(file)
             })
@@ -278,16 +281,15 @@ export class CopyListData extends BaseTask {
   ): Promise<void> {
     try {
       await folders.sort().reduce((chain: Promise<any>, folder, index: number) => {
-        const folderServerRelUrl = `${
-          config.destListProps.RootFolder.ServerRelativeUrl
-        }/${folder.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
+        const folderServerRelUrl = `${config.destListProps.RootFolder.ServerRelativeUrl
+          }/${folder.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
         this.onProgress(
           progressText,
           format(strings.ProcessFolderText, index + 1, folders.length),
           'Documentation'
         )
         return chain.then(() =>
-          sp.web
+          this.params.web
             .getFolderByServerRelativeUrl(config.destListProps.RootFolder.ServerRelativeUrl)
             .folders.add(folderServerRelUrl)
         )
@@ -316,8 +318,7 @@ export class CopyListData extends BaseTask {
 
       const spItems = await config.sourceList.items
         .expand('Folder')
-        .select('Title', 'LinkFilename', 'FileRef', 'FileDirRef', 'Folder/ServerRelativeUrl')
-        .getAll()
+        .select('Title', 'LinkFilename', 'FileRef', 'FileDirRef', 'Folder/ServerRelativeUrl')()
 
       const folders: string[] = []
       const files: any[] = []
@@ -333,9 +334,8 @@ export class CopyListData extends BaseTask {
       const filesCopied = []
       for (let i = 0; i < filesWithContents.length; i++) {
         const file = filesWithContents[i]
-        const destFolderUrl = `${
-          config.destListProps.RootFolder.ServerRelativeUrl
-        }${file.FileDirRef.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
+        const destFolderUrl = `${config.destListProps.RootFolder.ServerRelativeUrl
+          }${file.FileDirRef.replace(config.sourceListProps.RootFolder.ServerRelativeUrl, '')}`
         try {
           this.logInformation(`Copying file ${file.LinkFilename}`)
           this.onProgress(
@@ -344,12 +344,12 @@ export class CopyListData extends BaseTask {
             'Documentation'
           )
           const filename = file.LinkFilename
-          const fileAddResult = await sp.web
+          const fileAddResult = await this.params.web
             .getFolderByServerRelativeUrl(destFolderUrl)
             .files.add(filename, file.Blob, true)
           filesCopied.push(fileAddResult)
           this.logInformation(`Successfully copied file ${file.LinkFilename}`)
-        } catch (err) {}
+        } catch (err) { }
       }
       return filesCopied
     } catch (error) {
@@ -368,8 +368,8 @@ export class CopyListData extends BaseTask {
    * @param sourceItem Source item
    * @param sourceFields Source fields
    */
-  private _getProperties(fields: string[], sourceItem: TypedHash<any>, sourceFields: SPField[]) {
-    return fields.reduce((obj: TypedHash<any>, fieldName: string) => {
+  private _getProperties(fields: string[], sourceItem: Record<string, any>, sourceFields: SPField[]) {
+    return fields.reduce((obj: Record<string, any>, fieldName: string) => {
       const fieldValue = sourceItem[fieldName]
       if (fieldValue) {
         const [field] = sourceFields.filter((fld) => fld.InternalName === fieldName)

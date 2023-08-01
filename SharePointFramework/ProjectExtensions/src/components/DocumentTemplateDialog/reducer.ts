@@ -1,13 +1,13 @@
-import { FileAddResult } from '@pnp/sp'
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import { TemplateItem } from 'models'
 import { Selection } from '@fluentui/react/lib/DetailsList'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogState } from './types'
+import { IFileAddResult } from '@pnp/sp/files'
 
 export const SELECTION_CHANGED = createAction<{ selection: Selection }>('SELECTION_CHANGED')
 export const START_COPY = createAction('START_COPY')
 export const COPY_PROGRESS = createAction<any>('COPY_PROGRESS')
-export const COPY_DONE = createAction<{ files: FileAddResult[] }>('COPY_DONE')
+export const COPY_DONE = createAction<{ files: IFileAddResult[] }>('COPY_DONE')
 export const SET_SCREEN = createAction<{ screen: DocumentTemplateDialogScreen }>('SET_SCREEN')
 export const SET_TARGET = createAction<{ folder: string }>('SET_TARGET')
 

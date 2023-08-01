@@ -68,7 +68,7 @@ export class SetupProjectInformation extends BaseTask {
         TemplateParameters: JSON.stringify(params.templateSchema.Parameters)
       }
       const propertyItem = list.items.getById(1)
-      const propertyItems = await list.items.getAll()
+      const propertyItems = await list.items()
       if (propertyItems.length >= 1) {
         await propertyItem.update(properties)
       } else {

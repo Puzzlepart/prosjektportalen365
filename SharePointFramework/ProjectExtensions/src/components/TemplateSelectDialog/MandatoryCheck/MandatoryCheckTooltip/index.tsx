@@ -1,4 +1,4 @@
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import React, { FC } from 'react'
 import { IMandatoryCheckTooltipProps } from './types'
 import styles from './MandatoryCheckTooltip.module.scss'
