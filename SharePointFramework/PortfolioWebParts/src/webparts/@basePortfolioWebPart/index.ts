@@ -3,8 +3,8 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { IBaseComponentProps } from 'components/types'
 import assign from 'object-assign'
-import React, { ComponentClass, createElement, FC } from 'react'
-import * as ReactDom from 'react-dom'
+import { ComponentClass, createElement, FC, ReactElement } from 'react'
+import { render } from 'react-dom'
 import { DataAdapter } from '../../data'
 import { SPFI } from '@pnp/sp'
 import { createSpfiInstance } from 'pp365-shared-library'
@@ -27,6 +27,7 @@ export abstract class BasePortfolioWebPart<
    * - `pageContext` (from `this.context.pageContext`)
    * - `dataAdapter` (configured in `onInit`)
    * - `displayMode` (from `this.displayMode`)
+   * - `sp` (from `this.sp`)
    *
    * @param component Component to render
    * @param props Props
@@ -39,8 +40,8 @@ export abstract class BasePortfolioWebPart<
       displayMode: this.displayMode,
       sp: this.sp
     })
-    const element: React.ReactElement<T> = createElement(component, combinedProps)
-    ReactDom.render(element, this.domElement)
+    const element: ReactElement<T> = createElement(component, combinedProps)
+    render(element, this.domElement)
   }
 
   /**
@@ -57,7 +58,7 @@ export abstract class BasePortfolioWebPart<
           .items.getById(this.context.pageContext.listItem.id)
           .select('Title')<{ Title: string }>()
       ).Title
-    } catch (error) {}
+    } catch (error) { }
   }
 
   public async onInit(): Promise<void> {
