@@ -1,6 +1,6 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/command-set-extension-manifest.schema.json",
-  "id": "32f5eb06-353c-4561-b095-4703e3144989",
+  "id": "c9080212-e63e-47cc-8278-00ad38c3f5a5",
   "alias": "TemplateSelectorCommand",
   "componentType": "Extension",
   "extensionType": "ListViewCommandSet",
