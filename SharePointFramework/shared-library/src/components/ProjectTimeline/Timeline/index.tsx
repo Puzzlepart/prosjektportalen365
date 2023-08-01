@@ -9,7 +9,6 @@ import { FilterPanel } from '../../FilterPanel'
 import { Commands } from '../Commands'
 import { DetailsCallout } from '../DetailsCallout'
 import styles from './Timeline.module.scss'
-import './Timeline.overrides.css'
 import { ITimelineProps } from './types'
 import { useTimeline } from './useTimeline'
 

@@ -1,4 +1,4 @@
-import { IBaseWebPartComponentProps } from 'pp365-projectwebparts/lib/components/BaseWebPartComponent/types'
+import { IBaseWebPartComponentProps } from 'pp365-shared-library/src/components/BaseWebPartComponent/types'
 
 export interface IProgramProjectOverviewProps extends IBaseWebPartComponentProps {
   title: string

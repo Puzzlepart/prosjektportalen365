@@ -24,7 +24,7 @@
           "PortfolioInsightsWebPart": "fb8e6170-c2bf-4026-9953-dc1b72701946",
           "PortfolioOverviewWebPart": "909d00a8-c563-4b52-a7a4-1fb5876f9058",
           "ProjectListWebPart": "397a0947-7d83-4084-871b-d8e0d1edc770",
-          "ProjectTimelineWebPart": "58446c7e-4a78-49e0-8ae0-2efee199e58d",
+          "PortfolioTimelineWebPart": "58446c7e-4a78-49e0-8ae0-2efee199e58d",
           "ResourceAllocationWebPart": "29759c81-896f-4128-818c-e2fc60ff0087"
         }
       },
