@@ -2,7 +2,8 @@ import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { LogLevel } from '@pnp/logging'
 import '@pnp/polyfill-ie11'
-import { sp } from '@pnp/sp'
+import { SPFI } from '@pnp/sp'
+import { createSpfiInstance } from 'pp365-shared-library'
 import { IHubSite } from 'pp365-shared-library/lib/interfaces'
 import { ComponentClass, FC, ReactElement, createElement } from 'react'
 import { render } from 'react-dom'
@@ -12,6 +13,8 @@ import { IBaseProgramWebPartProps } from './types'
 export abstract class BaseProgramWebPart<
   T extends IBaseProgramWebPartProps
 > extends BaseClientSideWebPart<T> {
+protected _sp: SPFI
+
   /**
    * The data adapter used to communicate with SharePoint.
    */
@@ -27,6 +30,9 @@ export abstract class BaseProgramWebPart<
    */
   public childProjects: Array<Record<string, string>>
 
+  /**
+   * An array of site IDs for the child projects.
+   */
   public siteIds: string[]
 
   public abstract render(): void
@@ -44,6 +50,7 @@ export abstract class BaseProgramWebPart<
       ...this.properties,
       ...props,
       ...{
+        sp: this._sp,
         pageContext: this.context.pageContext,
         dataAdapter: this._dataAdapter,
         displayMode: this.displayMode,
@@ -56,7 +63,7 @@ export abstract class BaseProgramWebPart<
 
   public async onInit(): Promise<void> {
     await super.onInit()
-    sp.setup({ spfxContext: this.context })
+    this._sp = createSpfiInstance(this.context)
     this._dataAdapter = new SPDataAdapter()
     await this._dataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),
