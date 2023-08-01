@@ -84,7 +84,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param folderRelativeUrl Folder URL
    */
   public async getFolders(folderRelativeUrl: string): Promise<any[]> {
-    const folders = await this.sp.web.getFolderByServerRelativePath(folderRelativeUrl).folders.using(DefaultCaching)()
+    const folders = await this.sp.web
+      .getFolderByServerRelativePath(folderRelativeUrl)
+      .folders.using(DefaultCaching)()
     return folders.map((f) => new SPFolder(f)).filter((f) => !f.isSystemFolder)
   }
 
