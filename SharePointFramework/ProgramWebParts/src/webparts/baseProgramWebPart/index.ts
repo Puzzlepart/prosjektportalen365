@@ -1,7 +1,6 @@
 import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { LogLevel } from '@pnp/logging'
-import '@pnp/polyfill-ie11'
 import { SPFI } from '@pnp/sp'
 import { createSpfiInstance } from 'pp365-shared-library'
 import { IHubSite } from 'pp365-shared-library/lib/interfaces'
