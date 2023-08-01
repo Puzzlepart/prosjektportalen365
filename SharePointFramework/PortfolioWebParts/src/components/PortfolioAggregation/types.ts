@@ -1,5 +1,4 @@
 import { IColumn, IGroup, MessageBarType } from '@fluentui/react'
-import { SearchResult } from '@pnp/sp'
 import { ProjectContentColumn } from 'pp365-shared-library'
 import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
@@ -7,6 +6,7 @@ import { IListProps, OnColumnContextMenu } from '../List'
 import { IBaseComponentProps } from '../types'
 import { IColumnFormPanel } from './ColumnFormPanel/types'
 import { IViewFormPanel } from './ViewFormPanel/types'
+import { ISearchResult } from '@pnp/sp/search'
 
 export class PortfolioAggregationErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -102,7 +102,7 @@ export interface IPortfolioAggregationProps<T = any>
   /**
    * Transforms the data after it's fetched
    */
-  postTransform?: (results: SearchResult[]) => T[]
+  postTransform?: (results: ISearchResult[]) => T[]
 
   /**
    * Is parent project. Set to `true` if the web part is used in a parent project.

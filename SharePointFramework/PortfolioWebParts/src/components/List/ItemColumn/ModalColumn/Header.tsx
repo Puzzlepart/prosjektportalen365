@@ -1,4 +1,4 @@
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import React, { FC } from 'react'
 import styles from './ModalColumn.module.scss'
 import { IModalColumnProps } from './types'

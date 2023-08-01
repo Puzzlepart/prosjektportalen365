@@ -1,8 +1,5 @@
 import { format } from '@fluentui/react'
-import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
-import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
 import { SPUser } from '@microsoft/sp-page-context'
-import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, IPnPClientStore, PnPClientStorage } from '@pnp/core'
 import { SPFI } from '@pnp/sp'
 import '@pnp/sp/presets/all'
@@ -11,6 +8,7 @@ import { SpEntityPortalService } from 'sp-entityportal-service'
 import _ from 'underscore'
 import { ProjectAdminRoleType } from '../../models'
 import { PortalDataService } from '../../services/PortalDataService'
+import { SPFxContext } from '../../types'
 import { createSpfiInstance } from '../createSpfiInstance'
 import { ISPDataAdapterBaseConfiguration } from './ISPDataAdapterBaseConfiguration'
 import { ProjectAdminPermission } from './ProjectAdminPermission'
@@ -21,7 +19,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   public entityService: SpEntityPortalService
   public sp: SPFI
   public isConfigured: boolean = false
-  public spfxContext: ApplicationCustomizerContext | ListViewCommandSetContext | WebPartContext
+  public spfxContext: SPFxContext
   private _storage: IPnPClientStore
   private _storageKeys: Record<string, string> = {
     getProjectAdminPermissions: '{0}_project_admin_permissions'

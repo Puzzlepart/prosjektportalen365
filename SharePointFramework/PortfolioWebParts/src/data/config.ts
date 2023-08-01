@@ -1,6 +1,6 @@
-import { QueryPropertyValueType, SearchQuery, SortDirection } from '@pnp/sp'
+import { ISearchQuery, QueryPropertyValueType, SortDirection } from '@pnp/sp/search'
 
-export const DEFAULT_SEARCH_SETTINGS: SearchQuery = {
+export const DEFAULT_SEARCH_SETTINGS: ISearchQuery = {
   Querytext: '*',
   RowLimit: 500,
   TrimDuplicates: false,

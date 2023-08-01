@@ -1,6 +1,4 @@
-import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
-import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
-import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { SPFxContext } from '../../types'
 
 export type PortalDataServiceList =
   | 'STATUS_SECTIONS'
@@ -13,7 +11,7 @@ export type PortalDataServiceList =
   | 'PROJECT_STATUS_ATTACHMENTS'
 
 export interface IPortalDataServiceConfiguration extends Object {
-  spfxContext?: ApplicationCustomizerContext | ListViewCommandSetContext | WebPartContext
+  spfxContext?: SPFxContext
   listNames?: {
     STATUS_SECTIONS: string
     PROJECT_COLUMNS: string
