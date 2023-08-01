@@ -1,19 +1,14 @@
 /* eslint-disable no-console */
 import { find } from '@microsoft/sp-lodash-subset'
-import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/common'
+import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
 import { Logger, LogLevel } from '@pnp/logging'
-import {
-  CamlQuery,
-  Folder,
-  ItemUpdateResultData,
-  List,
-  ListEnsureResult,
-  PermissionKind,
-  sp,
-  Web
-} from '@pnp/sp'
+import { IFolder } from '@pnp/sp/folders'
+import { ICamlQuery, IList, IListEnsureResult } from '@pnp/sp/lists'
+import '@pnp/sp/presets/all'
+import { IItemUpdateResultData, spfi, SPFI, SPFx } from '@pnp/sp/presets/all'
+import { PermissionKind } from '@pnp/sp/security'
+import { IWeb, Web } from '@pnp/sp/webs'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
-import { getClassProperties, makeUrlAbsolute, transformFieldXml } from '../../util'
 import { IHubSite, ISPContentType } from '../../interfaces'
 import {
   PortfolioOverviewView,
@@ -29,6 +24,7 @@ import {
   StatusReport,
   StatusReportAttachment
 } from '../../models'
+import { getClassProperties, makeUrlAbsolute, transformFieldXml } from '../../util'
 import {
   GetStatusReportsOptions,
   IPortalDataServiceConfiguration,
@@ -39,7 +35,8 @@ import {
 export class PortalDataService {
   private _configuration: IPortalDataServiceConfiguration
   private _isConfigured: boolean = false
-  public web: Web
+  public sp: SPFI
+  public web: IWeb
   public url: string
 
   /**
@@ -52,6 +49,7 @@ export class PortalDataService {
   ): Promise<PortalDataService> {
     this._configuration = { ...PortalDataServiceDefaultConfiguration, ...configuration }
     const hubSite = await this.getHubSite()
+    this.sp = spfi().using(SPFx(configuration.spfxContext))
     this.web = hubSite.web
     this.url = hubSite.url
     this._isConfigured = true
@@ -72,11 +70,11 @@ export class PortalDataService {
    */
   private async getHubSite(expire: Date = dateAdd(new Date(), 'year', 1)): Promise<IHubSite> {
     try {
-      const hubSiteId = this._configuration.pageContext.legacyPageContext.hubSiteId || ''
+      const hubSiteId = this._configuration.spfxContext.pageContext.legacyPageContext.hubSiteId || ''
       try {
         const { SiteUrl } = await (
           await fetch(
-            `${this._configuration.pageContext.web.absoluteUrl}/_api/HubSites/GetById('${hubSiteId}')`,
+            `${this._configuration.spfxContext.pageContext.web.absoluteUrl}/_api/HubSites/GetById('${hubSiteId}')`,
             {
               method: 'GET',
               headers: {
@@ -86,12 +84,12 @@ export class PortalDataService {
             }
           )
         ).json()
-        return { url: SiteUrl, web: new Web(SiteUrl) }
+        return { url: SiteUrl, web: Web(SiteUrl) }
       } catch (error) {
         const SiteUrl = await new PnPClientStorage().local.getOrPut(
           `hubsite_${hubSiteId.replace(/-/g, '')}_url`,
           async () => {
-            const { PrimarySearchResults } = await sp.search({
+            const { PrimarySearchResults } = await this.sp.search({
               Querytext: `SiteId:${hubSiteId} contentclass:STS_Site`,
               SelectProperties: ['Path']
             })
@@ -99,7 +97,7 @@ export class PortalDataService {
           },
           expire
         )
-        return { url: SiteUrl, web: new Web(SiteUrl) }
+        return { url: SiteUrl, web: Web(SiteUrl) }
       }
     } catch (err) {
       throw err
@@ -117,7 +115,7 @@ export class PortalDataService {
    */
   public async getParentProjects<T>(
     webUrl: string,
-    constructor: new (item: any, web: Web) => T
+    constructor: new (item: any, web: IWeb) => T
   ): Promise<T[]> {
     try {
       const projectItems = await this.getItems(
@@ -153,7 +151,7 @@ export class PortalDataService {
    *
    * @param constructor Constructor / model class
    */
-  public async getPrograms<T>(constructor: new (item: any, web: Web) => T): Promise<T[]> {
+  public async getPrograms<T>(constructor: new (item: any, web: IWeb) => T): Promise<T[]> {
     try {
       const items = await this.getItems(
         this._configuration.listNames.PROJECTS,
@@ -188,7 +186,7 @@ export class PortalDataService {
     try {
       const spItems = await this._getList('PROJECT_COLUMNS')
         .items.select(...getClassProperties(SPProjectColumnItem))
-        .get<SPProjectColumnItem[]>()
+        <SPProjectColumnItem[]>()
       return spItems.map((item) => new ProjectColumn(item))
     } catch (error) {
       return []
@@ -199,8 +197,9 @@ export class PortalDataService {
    * Get project status sections using caching.
    */
   public async getProjectStatusSections(): Promise<SectionModel[]> {
+    // TODO: Use caching with @pnp/sp v3
     try {
-      const items = await this._getList('STATUS_SECTIONS').items.usingCaching().get()
+      const items = await this._getList('STATUS_SECTIONS').items()
       return items.map((item) => new SectionModel(item))
     } catch (error) {
       return []
@@ -212,14 +211,15 @@ export class PortalDataService {
    *
    * @param report Status report
    */
-  private async ensureAttachmentsFolder(report: StatusReport): Promise<Folder> {
+  private async ensureAttachmentsFolder(report: StatusReport): Promise<IFolder> {
+    // TODO: Potential issues with `list.rootFolder.folders.getByUrl`
     const folderName = report.id.toString()
     const list = this._getList('PROJECT_STATUS_ATTACHMENTS')
     try {
-      await list.rootFolder.folders.getByName(folderName).get()
-      return list.rootFolder.folders.getByName(folderName)
+      await list.rootFolder.folders.getByUrl(folderName)()
+      return list.rootFolder.folders.getByUrl(folderName)
     } catch (error) {
-      const { folder } = await list.rootFolder.folders.add(folderName)
+      const { folder } = await list.rootFolder.folders.addUsingPath(folderName)
       return folder
     }
   }
@@ -251,7 +251,7 @@ export class PortalDataService {
       await Promise.all([
         projectStatusList.items.getById(report.id).update(properties),
         ...attachments.map((att) =>
-          attachmentsFolder.files.add(att.url, att.content, att.shouldOverWrite)
+          attachmentsFolder.files.addUsingPath(att.url, att.content, { Overwrite: att.shouldOverWrite })
         )
       ])
       return new StatusReport({ ...report.item, ...properties }, publishedString)
@@ -273,6 +273,7 @@ export class PortalDataService {
    * Get project column configuration using caching.
    */
   public async getProjectColumnConfig(): Promise<ProjectColumnConfig[]> {
+    // TODO: Use caching with @pnp/sp v3
     const spItems = await this._getList('PROJECT_COLUMN_CONFIGURATION')
       .items.orderBy('ID', true)
       .expand('GtPortfolioColumn', 'GtPortfolioColumnTooltip')
@@ -282,8 +283,7 @@ export class PortalDataService {
         'GtPortfolioColumn/GtInternalName',
         'GtPortfolioColumnTooltip/GtManagedProperty'
       )
-      .usingCaching()
-      .get<SPProjectColumnConfigItem[]>()
+      <SPProjectColumnConfigItem[]>()
     return spItems.map((item) => new ProjectColumnConfig(item))
   }
 
@@ -291,12 +291,13 @@ export class PortalDataService {
    * Get portfolio overview views. Returns all shared views and personal views.
    */
   public async getPortfolioOverviewViews(): Promise<PortfolioOverviewView[]> {
-    const filter = `GtPortfolioIsPersonalView eq 0 or (GtPortfolioIsPersonalView eq 1 and Author/EMail eq '${this._configuration.pageContext.user.email}')`
+    const email = this._configuration.spfxContext.pageContext.user.email
+    const filter = `GtPortfolioIsPersonalView eq 0 or (GtPortfolioIsPersonalView eq 1 and Author/EMail eq '${email}')`
     const spItems = await this._getList('PORTFOLIO_VIEWS')
       .items.select(...getClassProperties(SPPortfolioOverviewViewItem))
       .filter(filter)
       .orderBy('GtSortOrder', true)
-      .get<SPPortfolioOverviewViewItem[]>()
+      <SPPortfolioOverviewViewItem[]>()
     return spItems.map((item) => new PortfolioOverviewView(item))
   }
 
@@ -311,7 +312,7 @@ export class PortalDataService {
     const urls = await this._getList(list)
       .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
       .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')
-      .get<{ DefaultNewFormUrl: string; DefaultEditFormUrl: string }>()
+      <{ DefaultNewFormUrl: string; DefaultEditFormUrl: string }>()
     return {
       defaultNewFormUrl: makeUrlAbsolute(urls.DefaultNewFormUrl),
       defaultEditFormUrl: makeUrlAbsolute(urls.DefaultEditFormUrl)
@@ -347,8 +348,8 @@ export class PortalDataService {
     listName: string,
     contentTypeId: string,
     properties?: Record<string, string>
-  ): Promise<ListEnsureResult> {
-    const targetWeb = new Web(url)
+  ): Promise<IListEnsureResult> {
+    const targetWeb = Web(url)
     const { jsomContext } = await initJsom(url, { loadTaxonomy: true })
     const [hubContentType, targetSiteFields, ensureList] = await Promise.all([
       this._getHubContentType(contentTypeId),
@@ -408,7 +409,7 @@ export class PortalDataService {
           fieldToCreate.updateAndPushChanges(true)
         }
         await executeQuery(jsomContext)
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       Logger.log({
@@ -424,7 +425,7 @@ export class PortalDataService {
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch {}
+    } catch { }
     if (ensureList.created && properties) {
       ensureList.list.items.add(properties)
     }
@@ -450,7 +451,7 @@ export class PortalDataService {
         'FieldLinks/Required'
       )
       .expand('Fields', 'FieldLinks')
-      .get<ISPContentType>()
+      <ISPContentType>()
     return contentType
   }
 
@@ -459,8 +460,8 @@ export class PortalDataService {
    *
    * @param web Web
    */
-  private async _getSiteFields(web: Web): Promise<SPField[]> {
-    const siteFields = await web.fields.select(...getClassProperties(SPField)).get<SPField[]>()
+  private async _getSiteFields(web: IWeb): Promise<SPField[]> {
+    const siteFields = await web.fields.select(...getClassProperties(SPField))<SPField[]>()
     return siteFields
   }
 
@@ -472,9 +473,10 @@ export class PortalDataService {
    */
   public async getFiles<T>(
     listName: string,
-    constructor: new (file: any, web: Web) => T
+    constructor: new (file: any, web: IWeb) => T
   ): Promise<T[]> {
-    const files = await this.web.lists.getByTitle(listName).rootFolder.files.usingCaching().get()
+    // TODO: Use caching with @pnp/sp v3
+    const files = await this.web.lists.getByTitle(listName).rootFolder.files()
     return files.map((file) => new constructor(file, this.web))
   }
 
@@ -488,17 +490,18 @@ export class PortalDataService {
    */
   public async getItems<T>(
     listName: string,
-    constructor: new (item: any, web: Web) => T,
-    query?: CamlQuery,
+    constructor: new (item: any, web: IWeb) => T,
+    query?: ICamlQuery,
     expands?: string[]
   ): Promise<T[]> {
+    // TODO: Use caching with @pnp/sp v3
     try {
       const list = this.web.lists.getByTitle(listName)
       let items: any[]
       if (query) {
-        items = await list.usingCaching().getItemsByCAMLQuery(query, ...(expands ?? []))
+        items = await list.getItemsByCAMLQuery(query, ...(expands ?? []))
       } else {
-        items = await list.usingCaching().items.usingCaching().get()
+        items = await list.items()
       }
       return items.map((item) => new constructor(item, this.web))
     } catch (error) {
@@ -518,7 +521,7 @@ export class PortalDataService {
   ): Promise<StatusReport> {
     const list = this._getList('PROJECT_STATUS')
     if (contentTypeId) {
-      const contentTypes = await list.contentTypes.get()
+      const contentTypes = await list.contentTypes()
       const ct = find(contentTypes, (ct) => ct.StringId.indexOf(contentTypeId) === 0)
       if (ct) properties.ContentTypeId = ct.StringId
     }
@@ -551,7 +554,7 @@ export class PortalDataService {
    * @param itemId Item ID
    * @param properties Properties
    */
-  public async updateItemInList<T = ItemUpdateResultData>(
+  public async updateItemInList<T = IItemUpdateResultData>(
     list: PortalDataServiceList,
     itemId: number,
     properties: Record<string, any>
@@ -590,11 +593,13 @@ export class PortalDataService {
     top,
     select,
     publishedString,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     useCaching = true
   }: GetStatusReportsOptions): Promise<StatusReport[]> {
-    if (!this._configuration.pageContext) throw 'Property {pageContext} is not the configuration.'
+    // TODO: Use caching with @pnp/sp v3
+    if (!this._configuration.spfxContext.pageContext) throw 'Property {pageContext} is not the configuration.'
     if (stringIsNullOrEmpty(filter))
-      filter = `GtSiteId eq '${this._configuration.pageContext.site.id.toString()}'`
+      filter = `GtSiteId eq '${this._configuration.spfxContext.pageContext.site.id.toString()}'`
     try {
       const list = this._getList('PROJECT_STATUS')
       let items = list.items
@@ -603,8 +608,7 @@ export class PortalDataService {
         .orderBy('Id', false)
       if (top) items = items.top(top)
       if (select) items = items.select(...select)
-      if (useCaching) items = items.usingCaching()
-      const reports = (await items.get()).map((i) => new StatusReport(i, publishedString))
+      const reports = (await items()).map((i) => new StatusReport(i, publishedString))
       return reports
     } catch (error) {
       throw error
@@ -619,8 +623,9 @@ export class PortalDataService {
    * @param report Status report
    */
   public async getStatusReportAttachments(report: StatusReport): Promise<StatusReport> {
+    // TODO: Use caching with @pnp/sp v3
     const attachmentsFolder = await this.ensureAttachmentsFolder(report)
-    const attachmentFiles = await attachmentsFolder.files.usingCaching().get()
+    const attachmentFiles = await attachmentsFolder.files()
     const attachmentFilesContent = await Promise.all(
       attachmentFiles.map(async ({ Name: name, ServerRelativeUrl: url }) => {
         const attachment: StatusReportAttachment = {
@@ -628,7 +633,7 @@ export class PortalDataService {
           url
         }
         if (url.indexOf('.txt') !== -1 || url.indexOf('.json') !== -1) {
-          attachment.content = await this.web.getFileByServerRelativeUrl(url).getText()
+          attachment.content = await this.web.getFileByServerRelativePath(url).getText()
         }
         return attachment
       })
@@ -638,14 +643,15 @@ export class PortalDataService {
 
   /**
    * Get status report list props
+   * 
+   * TODO: Use caching with @pnp/sp v3
    */
   public getStatusReportListProps(): Promise<{ DefaultEditFormUrl: string }> {
     try {
       return this._getList('PROJECT_STATUS')
         .select('DefaultEditFormUrl')
         .expand('DefaultEditFormUrl')
-        .usingCaching()
-        .get<{ DefaultEditFormUrl: string }>()
+        <{ DefaultEditFormUrl: string }>()
     } catch (error) {
       throw error
     }
@@ -661,7 +667,7 @@ export class PortalDataService {
   public getListFields(
     list: PortalDataServiceList | string,
     filter?: string,
-    web: Web = this.web
+    web: IWeb = this.web
   ): Promise<SPField[]> {
     let fields = web.lists
       .getByTitle(this._configuration.listNames[list] || list)
@@ -669,7 +675,7 @@ export class PortalDataService {
     if (filter) {
       fields = fields.filter(filter)
     }
-    return fields.get<SPField[]>()
+    return fields<SPField[]>()
   }
 
   /**
@@ -688,7 +694,7 @@ export class PortalDataService {
         'GtProjectAdminPermissions/GtProjectAdminPermissionId'
       )
       .expand('GtProjectAdminPermissions')
-      .get<SPProjectAdminRoleItem[]>()
+      <SPProjectAdminRoleItem[]>()
     return spItems.map((item) => new ProjectAdminRole(item))
   }
 
@@ -697,7 +703,7 @@ export class PortalDataService {
    *
    * @param list List to get items from
    */
-  private _getList(list: PortalDataServiceList): List {
+  private _getList(list: PortalDataServiceList): IList {
     return this.web.lists.getByTitle(this._configuration.listNames[list])
   }
 }

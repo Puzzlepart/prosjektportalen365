@@ -1,10 +1,10 @@
 /* eslint-disable max-classes-per-file */
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import { pick } from 'underscore'
-import { tryParseJson } from '../util'
 import { IProjectColumn } from '../interfaces/IProjectColumn'
 import { ColumnDataType } from '../types'
 import { SearchValueType } from '../types/SearchValueType'
+import { tryParseJson } from '../util'
 import { ProjectColumnConfig, ProjectColumnConfigDictionary } from './ProjectColumnConfig'
 
 export class SPProjectColumnItem {

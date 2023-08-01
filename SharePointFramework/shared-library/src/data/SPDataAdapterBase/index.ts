@@ -58,7 +58,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
     this.settings = settings
     this.sp = spfi().using(SPFx(spfxContext))
     this.portal = await new PortalDataService().configure({
-      pageContext: spfxContext.pageContext
+      spfxContext
     })
     this.entityService = new SpEntityPortalService({
       portalUrl: this.portal.url,

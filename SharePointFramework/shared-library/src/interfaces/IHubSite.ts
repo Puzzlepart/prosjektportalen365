@@ -1,6 +1,6 @@
-import { Web } from '@pnp/sp'
+import { IWeb } from '@pnp/sp/webs'
 
 export interface IHubSite {
   url: string
-  web: Web
+  web: IWeb
 }

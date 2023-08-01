@@ -1,6 +1,4 @@
-import { dateAdd, PnPClientStorage, PnPClientStore } from '@pnp/common'
 import { ConsoleListener, Logger } from '@pnp/logging'
-import { SPConfiguration, Web } from '@pnp/sp'
 import { format } from '@fluentui/react'
 import { makeUrlAbsolute } from '../../util/makeUrlAbsolute'
 import { ISPList } from '../../interfaces/ISPList'
@@ -9,31 +7,32 @@ import { tryParseJson } from '../../util/tryParseJson'
 import { IGetPropertiesData } from './IGetPropertiesData'
 import { IProjectDataServiceParams } from './IProjectDataServiceParams'
 import { IPropertyItemContext } from './IPropertyItemContext'
+import { IPnPClientStore, PnPClientStorage, dateAdd } from '@pnp/core'
+import '@pnp/sp/presets/all'
+import { IWeb, Web } from '@pnp/sp/presets/all'
 
 export class ProjectDataService {
-  private _storage: PnPClientStore
+  private _storage: IPnPClientStore
   private _storageKeys: Record<string, string> = {
     _getPropertyItemContext: '{0}_propertyitemcontext',
     getPhases: '{0}_projectphases_terms'
   }
-  public web: Web
+  public web: IWeb
 
   /**
    * Creates a new instance of ProjectDataService
    *
    * @param _params - Parameters
-   * @param  _spConfiguration - SP configuration
    */
   constructor(
-    private _params: IProjectDataServiceParams,
-    private _spConfiguration: SPConfiguration
+    private _params: IProjectDataServiceParams
   ) {
     this._initStorage()
     if (_params.logLevel) {
-      Logger.subscribe(new ConsoleListener())
+      Logger.subscribe(ConsoleListener())
       Logger.activeLogLevel = _params.logLevel
     }
-    this.web = new Web(this._params.webUrl)
+    this.web = Web(this._params.webUrl)
   }
 
   /**
@@ -65,6 +64,7 @@ export class ProjectDataService {
   private async _getPropertyItemContext(
     expire: Date = dateAdd(new Date(), 'minute', 15)
   ): Promise<IPropertyItemContext> {
+    // TODO: Caching is not working
     const context: Partial<IPropertyItemContext> = await this._storage.getOrPut(
       this.getStorageKey('_getPropertyItemContext'),
       async () => {
@@ -75,8 +75,7 @@ export class ProjectDataService {
           const [list] = await this.web.lists
             .filter(`Title eq '${this._params.propertiesListName}'`)
             .select('Id', 'DefaultEditFormUrl')
-            .usingCaching()
-            .get<ISPList[]>()
+            <ISPList[]>()
           if (!list) {
             Logger.write(
               `(ProjectDataService) List ${this._params.propertiesListName} does not exist in web.`
@@ -90,8 +89,7 @@ export class ProjectDataService {
             .getById(list.Id)
             .items.select('Id')
             .top(1)
-            .usingCaching()
-            .get<{ Id: number }[]>()
+            <{ Id: number }[]>()
           if (!item) {
             Logger.write(
               `(ProjectDataService) (_getPropertyItemContext) No entry found in list ${this._params.propertiesListName}.`
@@ -112,11 +110,13 @@ export class ProjectDataService {
       },
       expire
     )
+    const list = this.web.lists.getById(context.listId)
+    const item = list.items.getById(context.itemId)
     return {
       ...context,
-      list: this.web.lists.getById(context.listId),
-      item: this.web.lists.getById(context.listId).items.getById(context.itemId)
-    }
+      list,
+      item
+    } as IPropertyItemContext
   }
 
   /**
@@ -128,11 +128,12 @@ export class ProjectDataService {
     sourceUrl: string = document.location.href
   ): Promise<IGetPropertiesData> {
     try {
+      // TODO: Caching is not working
       const propertyItemContext = await this._getPropertyItemContext()
       if (!propertyItemContext) return null
       const [fieldValuesText, fieldValues, fields, welcomepage] = await Promise.all([
-        propertyItemContext.item.fieldValuesAsText.get(),
-        propertyItemContext.item.get(),
+        propertyItemContext.item.fieldValuesAsText(),
+        propertyItemContext.item(),
         propertyItemContext.list.fields
           .select(
             'Id',
@@ -144,21 +145,18 @@ export class ProjectDataService {
             'TextField'
           )
           // eslint-disable-next-line quotes
-          .filter("substringof('Gt', InternalName)")
-          .usingCaching()
-          .get(),
+          .filter("substringof('Gt', InternalName)")(),
         this.getWelcomePage()
       ])
 
       const modifiedSourceUrl = !sourceUrl.includes(welcomepage)
         ? sourceUrl
-            .replace('#syncproperties=1', `/${welcomepage}#syncproperties=1`)
-            .replace('//SitePages', '/SitePages')
+          .replace('#syncproperties=1', `/${welcomepage}#syncproperties=1`)
+          .replace('//SitePages', '/SitePages')
         : sourceUrl
 
       const editFormUrl = makeUrlAbsolute(
-        `${propertyItemContext.defaultEditFormUrl}?ID=${
-          propertyItemContext.itemId
+        `${propertyItemContext.defaultEditFormUrl}?ID=${propertyItemContext.itemId
         }&Source=${encodeURIComponent(modifiedSourceUrl)}`
       )
 
@@ -180,6 +178,7 @@ export class ProjectDataService {
    * Get properties data
    */
   public async getPropertiesData(): Promise<IGetPropertiesData> {
+    // TODO: Potential issues with `this._params.entityService.configure({})`
     const propertyItem = await this._getPropertyItem(
       `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
     )
@@ -197,7 +196,7 @@ export class ProjectDataService {
         '(ProjectDataService) (getPropertiesData) Local property item not found. Retrieving data from portal site.'
       )
       const entity = await this._params.entityService
-        .configure(this._spConfiguration)
+        .configure({})
         .fetchEntity(this._params.siteId, this._params.webUrl)
       return {
         fieldValues: entity.fieldValues,
@@ -220,7 +219,7 @@ export class ProjectDataService {
       .getById(data.propertiesListId)
       .items.getById(data.fieldValues.Id)
       .select('Modified')
-      .get<{ Modified: string }>()
+      <{ Modified: string }>()
     return (new Date().getTime() - new Date(Modified).getTime()) / 1000
   }
 
@@ -304,7 +303,7 @@ export class ProjectDataService {
       const items = await this.web.lists
         .getByTitle(listName)
         .items.select('ID', 'Title', 'GtComment', 'GtChecklistStatus', 'GtProjectPhase')
-        .get<Record<string, any>[]>()
+        <Record<string, any>[]>()
       const checklistItems = items.map((item) => new ChecklistItemModel(item))
       const checklistData = checklistItems
         .filter((item) => item.termGuid)
@@ -352,7 +351,7 @@ export class ProjectDataService {
    */
   public async getWelcomePage() {
     try {
-      const { WelcomePage } = await this.web.rootFolder.select('WelcomePage').get()
+      const { WelcomePage } = await this.web.rootFolder.select('WelcomePage')()
       return WelcomePage
     } catch (error) {
       return 'SitePages/ProjectHome.aspx'
