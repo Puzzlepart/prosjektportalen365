@@ -228,7 +228,6 @@ export class PortalDataService {
    * @param report Status report
    */
   private async ensureAttachmentsFolder(report: StatusReport): Promise<IFolder> {
-    // TODO: Potential issues with `list.rootFolder.folders.getByUrl`
     const folderName = report.id.toString()
     const list = this._getList('PROJECT_STATUS_ATTACHMENTS')
     try {
