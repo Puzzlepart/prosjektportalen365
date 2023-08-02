@@ -55,8 +55,10 @@ export class ProjectExtension extends UserSelectableObject {
     return this.isDefault || template?.extensions.includes(this.id)
   }
 
+  /**
+   * Get the schema of the project extension (JSON)
+   */
   public async getSchema(): Promise<Schema> {
-    // TODO: Check potential issues with `getFileByServerRelativePath`
     return await this.web.getFileByServerRelativePath(this.serverRelativeUrl).getJSON()
   }
 }
