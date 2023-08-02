@@ -128,7 +128,17 @@ export class ProjectDataService {
   }
 
   /**
-   * Get property item from site
+   * Get project properties for the site/web. 
+   * 
+   * Returns the following properties:
+   * - `fieldValuesText`: Field values in text format
+   * - `fieldValues`: Field values in object format
+   * - `fields`: All fields in the list
+   * - `editFormUrl`: Edit form URL including generated source URL
+   * - `versionHistoryUrl`: Version history URL
+   * - `propertiesListId`: List ID of the properties list
+   * 
+   * Returns null if no properties are found.
    *
    * @param sourceUrl Source url to append to edit form url
    */
