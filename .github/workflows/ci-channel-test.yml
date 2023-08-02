@@ -69,9 +69,9 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: release-package
+          name: release-package-test
           path: release
 
       - name: Install
-        run: release/Install.ps1 -Url "${{ env.SP_URL }}_${{ needs.build_release_package_test.outputs.sha_short }}" -Title "Prosjektportalen 365 ${{ needs.build_release_package_test.outputs.sha_short }}" -CI ${{ env.CI_CREDENTIALS }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
+        run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}_${{ needs.build_release_package_test.outputs.sha_short }}" -Title "Prosjektportalen 365 ${{ needs.build_release_package_test.outputs.sha_short }}" -CI ${{ env.CI_CREDENTIALS }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
         shell: powershell
