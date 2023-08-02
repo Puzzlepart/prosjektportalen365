@@ -89,13 +89,11 @@ export function useTimelineList() {
    * Create new timeline item and send the user to the edit form.
    */
   const redirectNewTimelineItem = async () => {
-    // TODO: Add a filter to the query instead of filtering the result after fetching all items.
-    const [project] = (
-      await SPDataAdapter.portal.web.lists
-        .getByTitle(strings.ProjectsListName)
-        .items.select('Id', 'GtSiteId')
-        .getAll()
-    ).filter(({ GtSiteId }) => GtSiteId === context.props.siteId)
+    const [project] = await SPDataAdapter.portal.web.lists
+      .getByTitle(strings.ProjectsListName)
+      .items
+      .select('Id')
+      .filter(`GtSiteId eq ${context.props.siteId}`)()
 
     const properties: Record<string, any> = {
       Title: 'Nytt element på tidslinjen',
