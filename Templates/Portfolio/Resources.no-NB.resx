@@ -770,7 +770,7 @@
     <value>Vis i statusseksjonen</value>
   </data>
   <data name="SiteFields_GtSecRowLimit_DisplayName" xml:space="preserve">
-    <value>Antal elementer</value>
+    <value>Antall elementer</value>
   </data>
   <data name="SiteFields_GtSecShowAsSection_DisplayName" xml:space="preserve">
     <value>Vis som egen seksjon</value>

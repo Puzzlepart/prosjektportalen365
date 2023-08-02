@@ -49,7 +49,6 @@ declare interface IProjectExtensionsStrings {
   IsHubSiteErrorStack: string
   Library: string
   LibraryDropdownLabel: string
-  Lists_ProjectTemplateFiles_Title: string,
   ModifiedLabel: string
   NameLabel: string
   NoHubSiteErrorMessage: string
@@ -79,6 +78,7 @@ declare interface IProjectExtensionsStrings {
   ProjectPropertiesListName: string
   ProjectProvisioningStartLogText: string
   ProjectProvisioningSuccessLogText: string
+  ProjectTemplateFilesListName: string,
   ProvisionSiteFieldsErrorMessage: string
   ProvisionSiteFieldsText: string
   ProvisionSiteFieldText: string

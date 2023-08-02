@@ -8,24 +8,24 @@ define([], function () {
     CloseLabel: 'Close',
     CommentLabel: 'Comment',
     CommentLabelPlaceholder: 'Comment on choice...',
-    ConfigurationLinkText: 'Configuration of Prosjektportalen', //---------------riktig?----------------
+    ConfigurationLinkText: 'Configuration of the Project Portal',
     ConsiderationChoice: 'Under consideration',
     CreateLabel: 'Create',
     HelpContentLinkText: 'Help available',
-    HelpContentListName: 'Hjelpeinnhold', //-------
+    HelpContentListName: 'Hjelpeinnhold',
     IdeaAlreadyApproved: 'This idea has already been approved',
-    IdeaConfigurationTitle: 'Idékonfigurasjon', //--------
-    IdeaProcessorsSiteGroup: 'Idebehandlere', //--------
+    IdeaConfigurationTitle: 'Idékonfigurasjon',
+    IdeaProcessorsSiteGroup: 'Idebehandlere',
     IdeaProjectDataDialogBlockedText: 'Project data for this idea has already been created and associated.',
-    IdeaProjectDataDialogTitle: 'Create project data for this idea',
-    IdeaProjectDataTitle: 'Prosjektdata',  //-----------
+    IdeaProjectDataDialogTitle: 'Create project data for the idea',
+    IdeaProjectDataTitle: 'Prosjektdata',
     InstallationLogListName: 'Installasjonslogg',
     InstallChannelLabel: 'Installation channel',
     InstallCommandLabel: 'Installation command',
     InstallDurationLabel: 'Installation duration',
     InstallDurationValueTemplate: '{0} minutes',
     InstallEndTimeLabel: 'Installation end time',
-    InstallStartTimeLabel: 'Start time for installation',
+    InstallStartTimeLabel: 'Installation start time',
     InstallVersionLabel: 'Version',
     LastInstallHeaderText: 'Last installation',
     LatestGitHubReleaseDownloadButtonText: 'Download the latest release from GitHub',
@@ -38,10 +38,10 @@ define([], function () {
     LinksListText: 'Useful links',
     RejectChoice: 'Reject',
     SeeAllInstallationsLinkText: 'See all installations',
-    SetRecommendationDefaultDescription: 'If the idea is approved, a detailed idea page will be created for the idea and an element in the <a href="../Idebehandling/AllItems.aspx" target="_blank">Idébehandlingslisten</a>.;If the idea is approved it will be possible to create project data that can be used for provisioning the site.;Associate project data to the idea to synchronize data to a project later.',
+    SetRecommendationDefaultDescription: 'If the idea is approved, a detailed idea page will be created for the idea and an element in the <a href="../Idebehandling/AllItems.aspx" target="_blank">Idea processing list</a>.;If the idea is approved it will be possible to create project data that can be used for provisioning the site.;Associate project data to the idea to synchronize data to a project later.',
     SetRecommendationSubtitle: 'Select recommendation for: {0}. \n\n{1}',
     SetRecommendationTitle: 'Set recommendation',
-    SiteSettingsLinkText: 'Områdeinnstillinger',
-    SubmitLabel: 'Send'
+    SiteSettingsLinkText: 'Site settings',
+    SubmitLabel: 'Submit'
   }
 })
