@@ -123,13 +123,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Sync project data from associated hub to site's property item
+   * Get mapped project properties.
    *
    * @param fieldValues - Field values for the properties item
    * @param fieldValuesText - Field values in text format for the properties item
    * @param templateParameters - Template parameters
-   *
-   * // TODO: This function should be renamed to something more descriptive
    */
   public async getMappedProjectProperties(
     fieldValues: Record<string, any>,
