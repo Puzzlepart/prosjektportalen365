@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - releases/1.9
+      - issues/865
     paths:
       - "SharePointFramework/**"
       - "Install/**"
@@ -26,6 +27,10 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
+      - name: Set sha_short
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ vars.NODE_VERSION }}
@@ -38,6 +43,8 @@ jobs:
         with:
           name: release-package-test
           path: release
+    outputs:
+      sha_short: ${{ steps.vars.outputs.sha_short }}
 
   upgrade_channel_test:
     needs: [build_release_package_test]
@@ -52,4 +59,19 @@ jobs:
 
       - name: Upgrade
         run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI ${{ env.CI_CREDENTIALS }}
+        shell: powershell
+
+  install_channel_test:
+    needs: [build_release_package_test]
+    name: Install (test)
+    runs-on: macos-latest
+    if: "contains(github.event.head_commit.message, '[new-install]')"
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: release-package
+          path: release
+
+      - name: Install
+        run: release/Install.ps1 -Url "${{ env.SP_URL }}_${{ needs.build_release_package_test.outputs.sha_short }}" -Title "Prosjektportalen 365 ${{ needs.build_release_package_test.outputs.sha_short }}" -CI ${{ env.CI_CREDENTIALS }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
         shell: powershell
