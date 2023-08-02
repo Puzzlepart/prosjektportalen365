@@ -9,7 +9,6 @@ import { SPFI } from '@pnp/sp'
  */
 export const runPhaseHook = async (hookUrl: string, hookAuth: string, sp: SPFI) => {
   try {
-    // TODO: Is this needed? Isn't the URL available in the SPFx context?
     const web = await sp.web.select('Url')()
 
     const body = {
