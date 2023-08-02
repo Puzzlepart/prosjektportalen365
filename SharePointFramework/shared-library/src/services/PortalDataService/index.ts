@@ -2,13 +2,13 @@
 import { find } from '@microsoft/sp-lodash-subset'
 import { AssignFrom, dateAdd, getHashCode, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
 import { Logger, LogLevel } from '@pnp/logging'
+import { Caching } from '@pnp/queryable'
 import { IFolder } from '@pnp/sp/folders'
 import { ICamlQuery, IList, IListEnsureResult } from '@pnp/sp/lists'
 import '@pnp/sp/presets/all'
 import { IItemUpdateResultData, spfi, SPFI } from '@pnp/sp/presets/all'
 import { PermissionKind } from '@pnp/sp/security'
-import { Caching } from '@pnp/queryable'
-import { IWeb, Web } from '@pnp/sp/webs'
+import { IWeb } from '@pnp/sp/webs'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
 import { createSpfiInstance } from '../../data'
 import { ISPContentType } from '../../interfaces'
@@ -351,12 +351,12 @@ export class PortalDataService {
   }
 
   /**
-   * Sync list from hub to the specified URL
+   * Sync list with project properties from hub site.
    *
    * Skips fields that has `ShowInEditForm` set to `FALSE`
    *
    * @param url Url
-   * @param listName List name
+   * @param listName List name for the project properties list
    * @param contentTypeId Content type id for project properties
    * @param properties Create a new item in the list with specified properties if the list was created
    */
@@ -366,18 +366,18 @@ export class PortalDataService {
     contentTypeId: string,
     properties?: Record<string, string>
   ): Promise<IListEnsureResult> {
-    const targetWeb = Web(url)
+    const web = spfi(url).using(AssignFrom(this._sp.web)).web
     const { jsomContext } = await initJsom(url, { loadTaxonomy: true })
     const [hubContentType, targetSiteFields, ensureList] = await Promise.all([
       this._getHubContentType(contentTypeId),
-      this._getSiteFields(targetWeb),
-      targetWeb.lists.ensure(listName, '', 100, false, {
+      this._getSiteFields(web),
+      web.lists.ensure(listName, '', 100, false, {
         Hidden: true,
         EnableAttachments: false,
         EnableVersioning: true
       })
     ])
-    const listFields = await this.getListFields(listName, undefined, targetWeb)
+    const listFields = await this.getListFields(listName, undefined, web)
     const spList = jsomContext.web.get_lists().getByTitle(listName)
     for (const field of hubContentType.Fields) {
       const [[listField], [siteField]] = [

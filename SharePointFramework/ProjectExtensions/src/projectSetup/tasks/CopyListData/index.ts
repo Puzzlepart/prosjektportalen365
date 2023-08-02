@@ -44,7 +44,7 @@ export class CopyListData extends BaseTask {
     params: IBaseTaskParams,
     onProgress: OnProgressCallbackFunction
   ): Promise<IBaseTaskParams> {
-    super.initExecute(params, onProgress) 
+    super.initExecute(params, onProgress)
     try {
       await this.createDefaultPlannerPlan(params)
       for (let i = 0; i < this.data.selectedContentConfig.length; i++) {

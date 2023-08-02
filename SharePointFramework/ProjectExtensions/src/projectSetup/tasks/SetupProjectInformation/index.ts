@@ -9,7 +9,7 @@ export class SetupProjectInformation extends BaseTask {
   }
 
   /**
-   * Executes the SetupProjectInformation task
+   * Executes the `SetupProjectInformation` task
    *
    * @param params Task parameters
    * @param onProgress On progress funtion
@@ -18,9 +18,10 @@ export class SetupProjectInformation extends BaseTask {
     params: IBaseTaskParams,
     onProgress: OnProgressCallbackFunction
   ): Promise<IBaseTaskParams> {
+    super.initExecute(params, onProgress)
     try {
-      await this._syncPropertiesList(params, onProgress)
-      await this._addEntryToHub(params)
+      await this._syncPropertiesList()
+      await this._addEntryToHub()
       return params
     } catch (error) {
       throw new BaseTaskError(this.taskName, strings.SetupProjectInformationErrorMessage, error)
@@ -39,41 +40,32 @@ export class SetupProjectInformation extends BaseTask {
    * - `IsParentProject`: `true` if the current project is a parent project, `false` otherwise
    * - `GtInstalledVersion`: The installed version
    * - `GtCurrentVersion`: The current version (same as installed version initially)
-   *
-   * @param params Task parameters
-   * @param onProgress On progress funtion
    */
-  private async _syncPropertiesList(
-    params: IBaseTaskParams,
-    onProgress: OnProgressCallbackFunction
-  ) {
+  private async _syncPropertiesList() {
     try {
-      onProgress(
+      this.onProgress(
         strings.SetupProjectInformationText,
         strings.SyncLocalProjectPropertiesListText,
         'AlignCenter'
       )
-      const { list } = await params.portal.syncList(
-        params.webAbsoluteUrl,
+      const { list } = await this.params.portal.syncList(
+        this.params.webAbsoluteUrl,
         strings.ProjectPropertiesListName,
-        params.templateSchema.Parameters.ProjectContentTypeId
+        this.params.templateSchema.Parameters.ProjectContentTypeId
       )
-      onProgress(
+      this.onProgress(
         strings.SetupProjectInformationText,
         strings.CreatingLocalProjectPropertiesListItemText,
         'AlignCenter'
       )
-      const properties = {
-        ...this._createPropertyItem(params),
-        TemplateParameters: JSON.stringify(params.templateSchema.Parameters)
+      const properties: Record<string, any> = {
+        ...this._createPropertyItem(this.params),
+        TemplateParameters: JSON.stringify(this.params.templateSchema.Parameters)
       }
       const propertyItem = list.items.getById(1)
       const propertyItems = await list.items()
-      if (propertyItems.length >= 1) {
-        await propertyItem.update(properties)
-      } else {
-        await list.items.add(properties)
-      }
+      if (propertyItems.length > 0) await propertyItem.update(properties)
+      else await list.items.add(properties)
     } catch (error) {
       throw error
     }
@@ -107,26 +99,24 @@ export class SetupProjectInformation extends BaseTask {
    * * GtSiteId
    * * GtProjectTemplate
    * * ContentTypeId (if custom content type is specified in template parameters)
-   *
-   * @param params Task parameters
    */
-  private async _addEntryToHub(params: IBaseTaskParams) {
+  private async _addEntryToHub() {
     try {
-      const entity = await params.entityService.getEntityItem(
-        params.context.pageContext.legacyPageContext.groupId
+      const entity = await this.params.entityService.getEntityItem(
+        this.params.context.pageContext.legacyPageContext.groupId
       )
       if (entity) return
       const properties: Record<string, string | boolean | number> = {
-        ...this._createPropertyItem(params),
-        GtSiteId: params.context.pageContext.site.id.toString(),
+        ...this._createPropertyItem(this.params),
+        GtSiteId: this.params.context.pageContext.site.id.toString(),
         GtProjectTemplate: this.data.selectedTemplate.text
       }
-      if (params.templateSchema.Parameters.ProjectContentTypeId) {
-        properties.ContentTypeId = params.templateSchema.Parameters.ProjectContentTypeId
+      if (this.params.templateSchema.Parameters.ProjectContentTypeId) {
+        properties.ContentTypeId = this.params.templateSchema.Parameters.ProjectContentTypeId
       }
-      await params.entityService.createNewEntity(
-        params.context.pageContext.legacyPageContext.groupId,
-        params.context.pageContext.web.absoluteUrl,
+      await this.params.entityService.createNewEntity(
+        this.params.context.pageContext.legacyPageContext.groupId,
+        this.params.context.pageContext.web.absoluteUrl,
         properties
       )
     } catch (error) {
