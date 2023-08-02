@@ -1,5 +1,16 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { dateAdd, getHashCode, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
+import { Caching } from '@pnp/queryable'
+import { SPFI } from '@pnp/sp'
+import { IItemUpdateResult, IItemUpdateResultData } from '@pnp/sp/items'
+import '@pnp/sp/items/get-all'
+import {
+  ISearchResult,
+  QueryPropertyValueType,
+  SearchQueryInit,
+  SortDirection
+} from '@pnp/sp/search'
+import { PermissionKind } from '@pnp/sp/security'
 import * as cleanDeep from 'clean-deep'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -43,16 +54,6 @@ import {
   IPortfolioViewData,
   IPortfolioWebPartsDataAdapter
 } from './types'
-import { PermissionKind } from '@pnp/sp/security'
-import { SPFI } from '@pnp/sp'
-import { IItemUpdateResult, IItemUpdateResultData } from '@pnp/sp/items'
-import {
-  ISearchResult,
-  QueryPropertyValueType,
-  SearchQueryInit,
-  SortDirection
-} from '@pnp/sp/search'
-import { Caching } from '@pnp/queryable'
 
 /**
  * Default caching configuration for `DataAdapter`.
@@ -403,7 +404,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    * @param timelineConfig Timeline configuration
    */
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
-    // TODO: Method getAll not supported in v3
     const timelineItems = await this._sp.web.lists
       .getByTitle(strings.TimelineContentListName)
       .items.select(
@@ -418,7 +418,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         'GtSiteIdLookup/Title',
         'GtSiteIdLookup/GtSiteId'
       )
-      .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')()
+      .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+      .getAll()
 
     return timelineItems
       .map((item) => {
@@ -567,7 +568,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       `pp365_fetchenrichedprojects_${siteId}`,
       async () => {
         return await Promise.all([
-          // TODO: Method getAll() is not supported by v3
           this._sp.web.lists
             .getByTitle(strings.ProjectsListName)
             .items.select(
@@ -584,7 +584,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
               'GtIsProgram'
             )
             .filter(filter)
-            .orderBy('Title')(),
+            .orderBy('Title')
+            .getAll(),
           this.fetchMemberGroups(),
           this._sp.web.siteUsers.select('Id', 'Title', 'Email')<ISPUser[]>(),
           this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId'])

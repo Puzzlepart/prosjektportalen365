@@ -36,6 +36,7 @@ import {
 } from 'pp365-shared-library'
 import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
+import '@pnp/sp/items/get-all'
 
 /**
  * Default caching configuration for `SPDataAdapter`.
@@ -359,7 +360,6 @@ export class SPDataAdapter
   }
 
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
-    // TODO: Missing support for getAll() in v3 of @pnp/sp
     const [timelineItems] = await Promise.all([
       this.portal.web.lists
         .getByTitle(strings.TimelineContentListName)
@@ -375,7 +375,8 @@ export class SPDataAdapter
           'GtSiteIdLookup/Title',
           'GtSiteIdLookup/GtSiteId'
         )
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')()
+        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+        .getAll()
     ])
 
     return timelineItems
@@ -417,7 +418,6 @@ export class SPDataAdapter
    * @description Used in `ProjectTimeline`
    */
   public async fetchTimelineConfiguration() {
-    // TODO: Missing support for getAll() in v3 of @pnp/sp
     const timelineConfig = await this.portal.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
       .items.select(
@@ -429,7 +429,8 @@ export class SPDataAdapter
         'GtShowElementPortfolio',
         'GtShowElementProgram',
         'GtTimelineFilter'
-      )()
+      )
+      .getAll()
 
     return timelineConfig.map((item) => new TimelineConfigurationModel(item)).filter((p) => p)
   }

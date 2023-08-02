@@ -14,6 +14,7 @@ import {
 } from '../PlannerConfiguration'
 import _ from 'underscore'
 import { IWeb } from '@pnp/sp/webs'
+import '@pnp/sp/items/get-all'
 
 export class CopyListData extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -168,10 +169,10 @@ export class CopyListData extends BaseTask {
    */
   private async _getSourceItems<T = any>(config: ContentConfig, fields?: string[]): Promise<T[]> {
     try {
-      // TODO: Missing .getAll()
       return await config.sourceList.items
         .select(...(fields || config.fields), 'TaxCatchAll/ID', 'TaxCatchAll/Term')
-        .expand('TaxCatchAll')()
+        .expand('TaxCatchAll')
+        .getAll()
     } catch (error) {
       try {
         return await config.sourceList.items.select(...(fields || config.fields))()

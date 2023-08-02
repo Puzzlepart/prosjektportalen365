@@ -5,6 +5,7 @@ import { TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-l
 import strings from 'ProjectWebPartsStrings'
 import { first } from 'underscore'
 import { IProjectTimelineProps } from '../types'
+import '@pnp/sp/items/get-all'
 
 /**
  * Fetch project data
@@ -17,11 +18,11 @@ export async function fetchProjectData(
   timelineConfig: TimelineConfigurationModel[]
 ): Promise<TimelineContentModel> {
   try {
-    // TODO: Method getAll not support in v3
     const projectData = await SPDataAdapter.portal.web.lists
       .getByTitle(strings.ProjectsListName)
       .items.select('Id', 'GtStartDate', 'GtEndDate')
-      .filter(`GtSiteId eq '${props.siteId}'`)()
+      .filter(`GtSiteId eq '${props.siteId}'`)
+      .getAll()
 
     const config = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
     return new TimelineContentModel(

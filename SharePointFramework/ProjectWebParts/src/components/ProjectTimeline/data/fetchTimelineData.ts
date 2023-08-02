@@ -4,9 +4,10 @@ import _ from 'lodash'
 import { TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-library/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { IProjectTimelineProps } from '../types'
+import '@pnp/sp/items/get-all'
 
 /**
- * Fetch timeline items and columns
+ * Fetch timeline items and columns.
  *
  * @param props Component properties for `ProjectTimeline`
  * @param timelineConfig Timeline configuration
@@ -19,10 +20,9 @@ export async function fetchTimelineData(
     const timelineContentList = SPDataAdapter.portal.web.lists.getByTitle(
       strings.TimelineContentListName
     )
-    // TODO: Method getAll not support in v3
     const projectDeliveries = (
       props.showProjectDeliveries
-        ? await props.sp.web.lists.getByTitle(props.projectDeliveriesListName).items()
+        ? await props.sp.web.lists.getByTitle(props.projectDeliveriesListName).items.getAll()
         : []
     )
       .map((item) => {
@@ -52,7 +52,6 @@ export async function fetchTimelineData(
 
     // eslint-disable-next-line prefer-const
     let [timelineContentItems, timelineColumns] = await Promise.all([
-      // TODO: Method getAll not support in v3
       timelineContentList.items
         .select(
           ...defaultViewColumns,
@@ -62,7 +61,8 @@ export async function fetchTimelineData(
           'GtSiteIdLookup/Title',
           'GtSiteIdLookup/GtSiteId'
         )
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')(),
+        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
+        .getAll(),
       timelineContentList.fields
         .filter(filterString)
         .select('InternalName', 'Title', 'TypeAsString')
