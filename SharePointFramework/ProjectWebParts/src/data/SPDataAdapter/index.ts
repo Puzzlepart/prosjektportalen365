@@ -334,7 +334,6 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    */
   public async getConfigurations(folderPath: string): Promise<IConfigurationFile[]> {
     try {
-      // TODO: Using caching to get ServerRelativeUrl of web root folder
       const { ServerRelativeUrl } = await this.portal.web.rootFolder
         .select('ServerRelativeUrl')
         .using(DefaultCaching)<{
