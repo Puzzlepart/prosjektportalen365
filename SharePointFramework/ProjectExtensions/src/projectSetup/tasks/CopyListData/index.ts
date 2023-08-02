@@ -27,7 +27,7 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Execute CopyListData.
+   * Execute `CopyListData`.
    *
    * Creates a Planner plan for the Microsoft 365 group, then loops
    * through all list data configurations. For each configuration,
@@ -44,8 +44,7 @@ export class CopyListData extends BaseTask {
     params: IBaseTaskParams,
     onProgress: OnProgressCallbackFunction
   ): Promise<IBaseTaskParams> {
-    this.params = params
-    this.onProgress = onProgress
+    super.initExecute(params, onProgress) 
     try {
       await this.createDefaultPlannerPlan(params)
       for (let i = 0; i < this.data.selectedContentConfig.length; i++) {
@@ -190,7 +189,7 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Get source fields
+   * Get fields from the `config.sourceList` list.
    *
    * @param config Content config
    */
@@ -203,10 +202,11 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Process list items
+   * Process list items in batches the size of the `batchChunkSize` parameter.
+   * This is to prevent throttling, and to increase performance.
    *
    * @param config Content config
-   * @param batchChunkSize Batch chunk size (defaults to 25)
+   * @param batchChunkSize Batch chunk size (defaults to `25`)
    */
   private async _processListItems(config: ContentConfig, batchChunkSize = 25) {
     try {
