@@ -15,6 +15,11 @@ import {
 import _ from 'underscore'
 import { IWeb } from '@pnp/sp/webs'
 import '@pnp/sp/items/get-all'
+import '@pnp/sp/webs'
+import '@pnp/sp/lists'
+import '@pnp/sp/items'
+import '@pnp/sp/batching'
+import { createBatch } from '@pnp/sp/batching'
 
 export class CopyListData extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -162,7 +167,9 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Get source items
+   * Get all items from the `config.sourceList`. First it will try to get
+   * all items with the `TaxCatchAll` field, if that fails it will try to
+   * get all items without the `TaxCatchAll` field.
    *
    * @param config List content config
    * @param fields Fields
@@ -175,7 +182,7 @@ export class CopyListData extends BaseTask {
         .getAll()
     } catch (error) {
       try {
-        return await config.sourceList.items.select(...(fields || config.fields))()
+        return await config.sourceList.items.select(...(fields || config.fields)).getAll()
       } catch (error) {
         return []
       }
@@ -221,22 +228,18 @@ export class CopyListData extends BaseTask {
         this._getProperties(config.fields, itm, sourceFields)
       )
 
-      // TODO: Fix batch processing
+      const list = config.destList
       for (let i = 0, j = 0; i < itemsToAdd.length; i += batchChunkSize, j++) {
-        // const batch = sp.createBatch()
-        // const batchItems = itemsToAdd.slice(i, i + batchChunkSize)
-        // this.logInformation(`Processing batch ${j + 1} with ${batchItems.length} items`, {})
-        // this.onProgress(
-        //   progressText,
-        //   format(strings.ProcessListItemText, j + 1, batchItems.length),
-        //   'List'
-        // )
-        // batchItems.forEach((item) =>
-        //   config.destList.items
-        //     .inBatch(batch)
-        //     .add(item, config.destListProps.ListItemEntityTypeFullName)
-        // )
-        // await batch.execute()
+        const [batch, execute] = createBatch(list)
+        const batchItems = itemsToAdd.slice(i, i + batchChunkSize)
+        this.logInformation(`Processing batch ${j + 1} with ${batchItems.length} items`, {})
+        this.onProgress(
+          progressText,
+          format(strings.ProcessListItemText, j + 1, batchItems.length),
+          'List'
+        )
+        batchItems.forEach((properties) => list.items.using(batch).add(properties))
+        await execute()
       }
     } catch (error) {
       throw error

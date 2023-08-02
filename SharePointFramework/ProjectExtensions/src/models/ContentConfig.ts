@@ -29,11 +29,11 @@ export enum ContentConfigType {
  * @model ContentConfig
  */
 export class ContentConfig extends UserSelectableObject {
-  public plannerTitle: string
   public sourceListProps: IListProperties = {}
   public destListProps: IListProperties = {}
-  private _sourceList: string
-  private _destinationList: string
+  public plannerTitle: string
+  private _sourceListName: string
+  private _destinationListName: string
 
   constructor(private _spItem: IContentConfigSPItem, public web: IWeb, private _sp?: SPFI) {
     super(
@@ -44,9 +44,9 @@ export class ContentConfig extends UserSelectableObject {
       _spItem.GtLccLocked,
       _spItem.GtLccHidden
     )
-    this._sourceList = _spItem.GtLccSourceList
-    this._destinationList = _spItem.GtLccDestinationList
-    this.plannerTitle = _spItem.GtPlannerName || _spItem.Title
+    this.plannerTitle = _spItem.GtPlannerName ?? _spItem.Title
+    this._sourceListName = _spItem.GtLccSourceList
+    this._destinationListName = _spItem.GtLccDestinationList
   }
 
   /**
@@ -83,11 +83,11 @@ export class ContentConfig extends UserSelectableObject {
   }
 
   public get sourceList(): IList {
-    return this.web.lists.getByTitle(this._sourceList)
+    return this.web.lists.getByTitle(this._sourceListName)
   }
 
   public get destList(): IList {
-    return this._sp.web.lists.getByTitle(this._destinationList)
+    return this._sp.web.lists.getByTitle(this._destinationListName)
   }
 
   public async load() {

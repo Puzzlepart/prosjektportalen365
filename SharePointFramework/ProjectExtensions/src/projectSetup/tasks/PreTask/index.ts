@@ -18,7 +18,7 @@ export class PreTask extends BaseTask {
    * @param params Task parameters
    */
   public async execute(params: IBaseTaskParams): Promise<IBaseTaskParams> {
-    this.params = params
+    super.initExecute(params)
     params.templateSchema = await this.data.selectedTemplate.getSchema()
     if (!params.properties.forceTemplate) {
       await this.validateParameters(params)
@@ -67,9 +67,8 @@ export class PreTask extends BaseTask {
    * @param termSetIds - Term set IDs
    */
   private async validateTermSetIds(termSetIds: any) {
-    // TODO: Check if working
     const termSet = await this.params.sp.termStore.sets.getById(termSetIds.GtProjectPhase)()
-    if (!termSet.localizedNames.length) {
+    if (!termSet?.localizedNames[0]?.name) {
       this.logError(`Failed to validate term set ${termSetIds.GtProjectPhase}`)
       throw new BaseTaskError(
         this.taskName,
