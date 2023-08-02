@@ -12,7 +12,6 @@ import { find, get } from 'underscore'
 import { IdeaConfigurationModel, SPIdeaConfigurationItem } from '../../models'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
 
-
 /**
  * Default caching configuration for `SPDataAdapter`.
  *
@@ -146,8 +145,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       const [fields, siteUsers] = await Promise.all([
         templateParameters?.ProjectContentTypeId
           ? this.entityService
-            .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
-            .getEntityFields()
+              .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
+              .getEntityFields()
           : this.entityService.getEntityFields(),
         this.sp.web.siteUsers.select('Id', 'Email', 'LoginName', 'Title')()
       ])
@@ -295,10 +294,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       .getByInternalNameOrTitle(fieldName)
       .select('InternalName', 'TermSetId', 'TextField')
       .using(DefaultCaching)<{
-        InternalName: string
-        TermSetId: string
-        TextField: string
-      }>()
+      InternalName: string
+      TermSetId: string
+      TextField: string
+    }>()
     const phaseTextField = await this.sp.web.fields
       .getById(phaseField.TextField)
       .select('InternalName')
@@ -343,11 +342,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       }>()
       const folderRelativeUrl = `${ServerRelativeUrl}/${strings.SiteAssetsConfigurationFolder}/${folderPath}`
       const folder = this.portal.web.getFolderByServerRelativePath(folderRelativeUrl)
-
-      // TODO: Using caching to fetch folder files
       const files = await folder.files
         .select('Name', 'ServerRelativeUrl', 'ListItemAllFields/Title')
-        .expand('ListItemAllFields')()
+        .expand('ListItemAllFields')
+        .using(DefaultCaching)()
       return files.map((file) => ({
         name: file.Name,
         title:

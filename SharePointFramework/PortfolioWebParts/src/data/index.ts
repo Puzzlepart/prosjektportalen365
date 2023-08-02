@@ -1,5 +1,5 @@
 import { format } from '@fluentui/react/lib/Utilities'
-import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
+import { dateAdd, getHashCode, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
 import * as cleanDeep from 'clean-deep'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -52,6 +52,20 @@ import {
   SearchQueryInit,
   SortDirection
 } from '@pnp/sp/search'
+import { Caching } from '@pnp/queryable'
+
+/**
+ * Default caching configuration for `DataAdapter`.
+ *
+ * - `store`: `local`
+ * - `keyFactory`: Hash code of the URL
+ * - `expireFunc`: 60 minutes from now
+ */
+const DefaultCaching = Caching({
+  store: 'local',
+  keyFactory: (url) => getHashCode(url.toLowerCase()).toString(),
+  expireFunc: () => dateAdd(new Date(), 'minute', 60)
+})
 
 /**
  * Data adapter for Portfolio Web Parts.
@@ -783,10 +797,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const projectContentColumnsList = this.portalDataService.web.lists.getByTitle(
         strings.ProjectContentColumnsListName
       )
-      // TODO: Use caching for this
-      const columnItems = await projectContentColumnsList.items.select(
-        ...Object.keys(new SPProjectContentColumnItem())
-      )<SPProjectContentColumnItem[]>()
+      const columnItems = await projectContentColumnsList.items
+        .select(...Object.keys(new SPProjectContentColumnItem()))
+        .using(DefaultCaching)<SPProjectContentColumnItem[]>()
       const filteredColumnItems = columnItems.filter(
         (col) => col.GtDataSourceCategory === dataSourceCategory || !col.GtDataSourceCategory
       )

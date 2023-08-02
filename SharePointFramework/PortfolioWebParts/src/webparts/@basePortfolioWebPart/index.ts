@@ -58,7 +58,7 @@ export abstract class BasePortfolioWebPart<
           .items.getById(this.context.pageContext.listItem.id)
           .select('Title')<{ Title: string }>()
       ).Title
-    } catch (error) { }
+    } catch (error) {}
   }
 
   public async onInit(): Promise<void> {

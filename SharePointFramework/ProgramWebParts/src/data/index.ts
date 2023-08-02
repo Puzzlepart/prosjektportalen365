@@ -1,7 +1,9 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { flatten } from '@microsoft/sp-lodash-subset'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { PnPClientStorage, dateAdd, stringIsNullOrEmpty } from '@pnp/core'
+import { PnPClientStorage, dateAdd, getHashCode, stringIsNullOrEmpty } from '@pnp/core'
+import { Caching } from '@pnp/queryable'
+import { ISearchResult, QueryPropertyValueType, SortDirection } from '@pnp/sp/search'
 import * as strings from 'ProgramWebPartsStrings'
 import * as cleanDeep from 'clean-deep'
 import { IProgramAdministrationProject } from 'components/ProgramAdministration/types'
@@ -34,7 +36,19 @@ import {
 } from 'pp365-shared-library'
 import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
-import { ISearchResult, QueryPropertyValueType, SortDirection } from '@pnp/sp/search'
+
+/**
+ * Default caching configuration for `SPDataAdapter`.
+ *
+ * - `store`: `local`
+ * - `keyFactory`: Hash code of the URL
+ * - `expireFunc`: 60 minutes from now
+ */
+const DefaultCaching = Caching({
+  store: 'local',
+  keyFactory: (url) => getHashCode(url.toLowerCase()).toString(),
+  expireFunc: () => dateAdd(new Date(), 'minute', 60)
+})
 
 /**
  * `SPDataAdapter` is a class that extends the `SPDataAdapterBase` class and implements the `IPortfolioWebPartsDataAdapter` interface.
@@ -548,7 +562,6 @@ export class SPDataAdapter
   }
 
   public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
-    // TODO: Add default caching
     await MSGraph.Init(this.spfxContext.msGraphClientFactory)
     const [items, groups, users] = await Promise.all([
       this.portal.web.lists
@@ -567,14 +580,15 @@ export class SPDataAdapter
         // eslint-disable-next-line quotes
         .filter("GtProjectLifecycleStatus ne 'Avsluttet'")
         .orderBy('Title')
-        .top(500)<ISPProjectItem[]>(),
+        .top(500)
+        .using(DefaultCaching)<ISPProjectItem[]>(),
       MSGraph.Get<IGraphGroup[]>(
         '/me/memberOf/$/microsoft.graph.group',
         ['id', 'displayName'],
         // eslint-disable-next-line quotes
         "groupTypes/any(a:a%20eq%20'unified')"
       ),
-      this.sp.web.siteUsers.select('Id', 'Title', 'Email')<ISPUser[]>()
+      this.sp.web.siteUsers.select('Id', 'Title', 'Email').using(DefaultCaching)<ISPUser[]>()
     ])
 
     const projects = this._mapProjects(items, groups, users)
@@ -748,10 +762,9 @@ export class SPDataAdapter
       const projectContentColumnsList = this.portal.web.lists.getByTitle(
         strings.ProjectContentColumnsListName
       )
-      // TODO: Add caching
-      const columnItems = await projectContentColumnsList.items.select(
-        ...Object.keys(new SPProjectContentColumnItem())
-      )<SPProjectContentColumnItem[]>()
+      const columnItems = await projectContentColumnsList.items
+        .select(...Object.keys(new SPProjectContentColumnItem()))
+        .using(DefaultCaching)<SPProjectContentColumnItem[]>()
       const filteredColumnItems = columnItems.filter(
         (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
       )
@@ -788,10 +801,10 @@ export class SPDataAdapter
    */
   public async getChildProjects(): Promise<Array<Record<string, string>>> {
     try {
-      // TODO: Add caching
       const projectProperties = await this.sp.web.lists
         .getByTitle('Prosjektegenskaper')
-        .items.getById(1)()
+        .items.getById(1)
+        .using(DefaultCaching)()
       try {
         const childProjects = JSON.parse(projectProperties.GtChildProjects)
         return !_.isEmpty(childProjects) ? childProjects : []
@@ -820,7 +833,6 @@ export class SPDataAdapter
    * retrieve the SiteId and SPWebURL. The result are cached for 5 minutes.
    */
   public async getHubSiteProjects() {
-    // TODO: Caching this for 30 minutes
     const { HubSiteId } = await this.sp.site.select('HubSiteId')()
     return new PnPClientStorage().local.getOrPut(
       `HubSiteProjects_${HubSiteId}`,
@@ -870,10 +882,10 @@ export class SPDataAdapter
    */
   public async getChildProjectIds(): Promise<string[]> {
     try {
-      // TODO: Add caching
       const projectProperties = await this.sp.web.lists
         .getByTitle('Prosjektegenskaper')
-        .items.getById(1)()
+        .items.getById(1)
+        .using(DefaultCaching)()
       try {
         const childProjects = JSON.parse(projectProperties.GtChildProjects)
         return childProjects.map((p: Record<string, any>) => p.SiteId)

@@ -1,9 +1,11 @@
+import { dateAdd, getHashCode } from '@pnp/core'
+import { Caching } from '@pnp/queryable'
+import strings from 'ProjectWebPartsStrings'
 import { useEffect, useState } from 'react'
+import SPDataAdapter from '../../data'
 import { DynamicMatrixConfiguration, generateMatrixConfiguration } from '../DynamicMatrix'
 import { getMatrixHeaders } from './getMatrixHeaders'
 import { IRiskMatrixProps } from './types'
-import SPDataAdapter from '../../data'
-import strings from 'ProjectWebPartsStrings'
 
 /**
  * Configuration hook for `RiskMatrix`. This hook will fetch the manual configuration
@@ -29,9 +31,15 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
    */
   async function fetchJsonConfiguration() {
     try {
-      // TODO: Use caching for manual configuration
       const manualConfiguration = await SPDataAdapter.portal.web
         .getFileByServerRelativePath(props.manualConfigurationPath)
+        .using(
+          Caching({
+            store: 'local',
+            keyFactory: (url) => getHashCode(url.toLowerCase()).toString(),
+            expireFunc: () => dateAdd(new Date(), 'minute', 60)
+          })
+        )
         .getJSON()
       setConfiguration(manualConfiguration)
     } catch {
