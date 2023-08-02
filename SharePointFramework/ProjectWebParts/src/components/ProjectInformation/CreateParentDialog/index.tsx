@@ -39,10 +39,8 @@ export const CreateParentDialog: FC = () => {
 
   async function getNavigationNodes(): Promise<IMenuNode[]> {
     try {
-      // TODO: v3 of @pnp/sp does not support getMenuState()
-      // const menuState = await context.props.sp.web.navigation.getMenuState()
-      // return menuState.Nodes
-      return await Promise.resolve([])
+      const menuState = await context.props.sp.navigation.getMenuState()
+      return menuState.Nodes
     } catch (error) {
       throw error
     }
