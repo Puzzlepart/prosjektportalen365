@@ -1,14 +1,30 @@
-import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { Logger, LogLevel } from '@pnp/logging'
 import { IProgressIndicatorProps } from '@fluentui/react/lib/ProgressIndicator'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { dateAdd, getHashCode } from '@pnp/core'
+import { Logger, LogLevel } from '@pnp/logging'
+import { Caching } from '@pnp/queryable'
 import { SPDataAdapterBase } from 'pp365-shared-library/lib/data'
 import { ProjectDataService } from 'pp365-shared-library/lib/services'
 import * as strings from 'ProjectWebPartsStrings'
 import { IEntityField } from 'sp-entityportal-service/types'
-import { find, get } from 'underscore'
-import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
-import { IdeaConfigurationModel, SPIdeaConfigurationItem } from '../../models'
 import { IConfigurationFile } from 'types'
+import { find, get } from 'underscore'
+import { IdeaConfigurationModel, SPIdeaConfigurationItem } from '../../models'
+import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
+
+
+/**
+ * Default caching configuration for `SPDataAdapter`.
+ *
+ * - `store`: `local`
+ * - `keyFactory`: Hash code of the URL
+ * - `expireFunc`: 60 minutes from now
+ */
+const DefaultCaching = Caching({
+  store: 'local',
+  keyFactory: (url) => getHashCode(url.toLowerCase()).toString(),
+  expireFunc: () => dateAdd(new Date(), 'minute', 60)
+})
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
@@ -130,8 +146,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       const [fields, siteUsers] = await Promise.all([
         templateParameters?.ProjectContentTypeId
           ? this.entityService
-              .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
-              .getEntityFields()
+            .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
+            .getEntityFields()
           : this.entityService.getEntityFields(),
         this.sp.web.siteUsers.select('Id', 'Email', 'LoginName', 'Title')()
       ])
@@ -275,18 +291,18 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param fieldName Field name for phase
    */
   public async getTermFieldContext(fieldName: string) {
-    // TODO: Use caching when fetching phase field
     const phaseField = await this.sp.web.fields
       .getByInternalNameOrTitle(fieldName)
-      .select('InternalName', 'TermSetId', 'TextField')<{
-      InternalName: string
-      TermSetId: string
-      TextField: string
-    }>()
-    // TODO: Use caching when fetching phase text field
+      .select('InternalName', 'TermSetId', 'TextField')
+      .using(DefaultCaching)<{
+        InternalName: string
+        TermSetId: string
+        TextField: string
+      }>()
     const phaseTextField = await this.sp.web.fields
       .getById(phaseField.TextField)
-      .select('InternalName')<{ InternalName: string }>()
+      .select('InternalName')
+      .using(DefaultCaching)<{ InternalName: string }>()
     return {
       fieldName: phaseField.InternalName,
       termSetId: phaseField.TermSetId,
