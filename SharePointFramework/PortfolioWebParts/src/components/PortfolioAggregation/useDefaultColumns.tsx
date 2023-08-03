@@ -17,7 +17,7 @@ import { IPortfolioAggregationContext } from './context'
  */
 export function useDefaultColumns(context: IPortfolioAggregationContext) {
   const isColumnsLocked =
-    context.props.lockedColumns || context.props.dataSourceLevel === 'Prosjekt'
+    context.props.lockedColumns || context.props.dataSourceLevel === strings.DataSourceLevelProject
   const selectedColumns = useMemo(
     () => _.filter([...context.state.columns], (c) => c.data?.isSelected),
     [context.state.columns]

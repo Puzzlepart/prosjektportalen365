@@ -1,17 +1,68 @@
 import { IPersonaSharedProps } from '@fluentui/react'
 
 export class ProjectListModel {
+  /**
+   * Site ID of the project site.
+   */
   public siteId?: string
+
+  /**
+   * Group ID of the project site.
+   */
   public groupId?: string
+
+  /**
+   * URL of the project site.
+   */
   public url?: string
+
+  /**
+   * The lifecycle status of the project.
+   *
+   * Can be one of the following:
+   * - `Aktiv`
+   * - `Avsluttet`
+   */
   public lifecycleStatus?: string
+
+  /**
+   * The project types. Can have multiple values.
+   */
   public type?: string[]
+
+  /**
+   * The project service areas. Can have multiple values.
+   */
   public serviceArea?: string[]
+
+  /**
+   * The project phase.
+   */
   public phase?: string
+
+  /**
+   * Start date of the project as a string.
+   */
   public startDate?: string
+
+  /**
+   * End date of the project as a string.
+   */
   public endDate?: string
+
+  /**
+   * The project manager properties.
+   */
   public manager?: IPersonaSharedProps
+
+  /**
+   * The project owner properties.
+   */
   public owner?: IPersonaSharedProps
+
+  /**
+   * The project logo URL.
+   */
   public logo?: string
 
   /**
@@ -25,6 +76,7 @@ export class ProjectListModel {
    * to all group resources like Planner, Teams etc.
    */
   public hasUserAccess?: boolean
+
   public data?: any[]
 
   /**

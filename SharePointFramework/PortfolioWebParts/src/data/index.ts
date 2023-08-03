@@ -19,8 +19,6 @@ import {
   DefaultCaching,
   getUserPhoto,
   IGraphGroup,
-  ISPProjectItem,
-  ISPUser,
   PortalDataService,
   PortfolioOverviewView,
   ProjectContentColumn,
@@ -30,6 +28,7 @@ import {
   SPFxContext,
   SPProjectColumnItem,
   SPProjectContentColumnItem,
+  SPProjectItem,
   SPTimelineConfigurationItem,
   TimelineConfigurationModel,
   TimelineContentModel
@@ -52,7 +51,8 @@ import * as config from './config'
 import {
   IFetchDataForViewItemResult,
   IPortfolioViewData,
-  IPortfolioWebPartsDataAdapter
+  IPortfolioWebPartsDataAdapter,
+  IProjectsData
 } from './types'
 
 /**
@@ -79,6 +79,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    * `portalDataService.web` to be passed as a parameter to its constructor.
    */
   public async configure(): Promise<DataAdapter> {
+    await msGraph.Init(this._spfxContext.msGraphClientFactory)
     if (this.dataSourceService && this.portalDataService.isConfigured) return this
     this.portalDataService = await this.portalDataService.configure({
       spfxContext: this._spfxContext
@@ -160,9 +161,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     level?: string
   ): Promise<IPortfolioAggregationConfiguration> {
     try {
-      let calculatedLevel = 'Portefølje'
+      let calculatedLevel = strings.DataSourceLevelPortfolio
       if (this.portalDataService.url !== this._spfxContext.pageContext.web.absoluteUrl) {
-        calculatedLevel = 'Prosjekt'
+        calculatedLevel = strings.DataSourceLevelProject
       }
       const columns = await this.fetchProjectContentColumns(category)
       const [views, viewsUrls, columnUrls, levels] = await Promise.all([
@@ -378,7 +379,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .filter((p) => p)
 
       return { reports, configElement }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -514,24 +515,21 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   /**
-   * Mapping projects combing `items`, `groups`, `sites` and `users`.
+   * Combine the result data (items, sites, users, groups) to a list of `ProjectListModel`.@
    *
-   * @param items Items from projects list
-   * @param groups Groups from Microsoft Graph API
-   * @param sites Sites search results
-   * @param users Site users
+   * @param param0 Deconstructed object containing the result data
    */
-  private _mapProjects(
-    items: ISPProjectItem[],
-    groups: IGraphGroup[],
-    sites: ISearchResult[],
-    users: ISPUser[]
-  ): ProjectListModel[] {
-    const projects = items
+  private _combineResultData({
+    items,
+    sites,
+    memberOfGroups,
+    users
+  }: IProjectsData): ProjectListModel[] {
+    return items
       .map((item) => {
         const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
         const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
-        const group = _.find(groups, (grp) => grp.id === item.GtGroupId)
+        const group = _.find(memberOfGroups, (grp) => grp.id === item.GtGroupId)
         const model = new ProjectListModel(group?.displayName ?? item.Title, item)
         model.isUserMember = !!group
         model.hasUserAccess = _.any(sites, (site) => site['SiteId'] === item.GtSiteId)
@@ -540,30 +538,32 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         return model
       })
       .filter(Boolean)
-    return projects
   }
 
-  public async fetchEnrichedProjects(
-    // eslint-disable-next-line quotes, @typescript-eslint/no-unused-vars
-    _filter = "GtProjectLifecycleStatus ne 'Avsluttet'"
-  ): Promise<ProjectListModel[]> {
-    await msGraph.Init(this._spfxContext.msGraphClientFactory)
+  public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
     const localStore = new PnPClientStorage().local
     const siteId = this._spfxContext.pageContext.site.id.toString()
     const list = this._sp.web.lists.getByTitle(strings.ProjectsListName)
-    const [items, groups, users, sites] = await localStore.getOrPut(
+    const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
       `pp365_fetchenrichedprojects_${siteId}`,
-      async () => {
-        return await Promise.all([
-          list.items.getAll(),
+      async () =>
+        await Promise.all([
+          list.items.select(...Object.keys(new SPProjectItem())).getAll<SPProjectItem>(),
+          this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
           this.fetchMemberGroups(),
-          this._sp.web.siteUsers.select('Id', 'Title', 'Email')<ISPUser[]>(),
-          this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId'])
-        ])
-      },
+          this._sp.web.siteUsers.select('Id', 'Title', 'Email')()
+        ]),
       dateAdd(new Date(), 'minute', 30)
     )
-    const projects = this._mapProjects(items, groups, sites, users)
+    const result: IProjectsData = {
+      items,
+      sites,
+      memberOfGroups,
+      users
+    }
+    let projects = this._combineResultData(result)
+    projects = projects.filter((m) => m.lifecycleStatus !== 'Avsluttet')
+    projects = projects.sort((a, b) => a.title.localeCompare(b.title))
     return projects
   }
 
