@@ -275,8 +275,6 @@ export class ProjectDataService {
       .getById(termSetId)
       .terms.select('*', 'localProperties')
       .using(DefaultCaching)()
-    // eslint-disable-next-line no-console
-    console.log(termSetId, terms)
     return terms.map((term) => new ProjectPhaseModel(term, termSetId, checklistData[term.id]))
   }
 
