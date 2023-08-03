@@ -18,12 +18,11 @@ dependencies:
   '@microsoft/sp-page-context': 1.15.2
   '@microsoft/sp-property-pane': 1.15.2_1ca3516818190f66f3253793862e2abe
   '@microsoft/sp-webpart-base': 1.15.2_1ca3516818190f66f3253793862e2abe
-  '@pnp/common': 1.3.8
-  '@pnp/core': 3.15.0
-  '@pnp/odata': 1.3.8_@pnp+common@1.3.8
-  '@pnp/polyfill-ie11': 1.0.2_10fc058781bab4d85f24acf345bf6fe8
-  '@pnp/sp-clientsvc': 1.3.8_10fc058781bab4d85f24acf345bf6fe8
-  '@pnp/sp-taxonomy': 1.3.8_d8ebd6641d6ccbf071325c03ba7219fa
+  '@pnp/core': 3.17.0
+  '@pnp/logging': 3.17.0
+  '@pnp/queryable': 3.17.0
+  '@pnp/sp': 3.17.0
+  '@pnp/sp-taxonomy': 1.3.8_1d668b60139fd354e760eeb6cc15dcff
   '@pnp/spfx-controls-react': 3.10.0_1ca3516818190f66f3253793862e2abe
   '@pnp/spfx-property-controls': 3.4.0_1ca3516818190f66f3253793862e2abe
   '@ptkdev/json-token-replace': 1.2.2
@@ -89,7 +88,7 @@ dependencies:
   rehype-raw: 6.1.1
   replace: 1.2.2
   resx-json-typescript-converter: 1.0.2
-  sp-entityportal-service: 1.3.3
+  sp-entityportal-service: 2.2.12
   sp-js-provisioning: 1.1.4_1ca3516818190f66f3253793862e2abe
   spfx-jsom: 0.6.6_1ca3516818190f66f3253793862e2abe
   tslib: 2.3.1
@@ -3775,22 +3774,22 @@ packages:
     dev: false
     resolution:
       integrity: sha512-ea4zTNC3sjLolrHZXP+/2SrJM+yC8PygmPW/yRfgbErdvdwYMUSogT69dW+NUaqhkfYZfkkAoWn42irlLMSpdw==
-  /@pnp/core/3.15.0:
+  /@pnp/core/3.17.0:
     dependencies:
       tslib: 2.4.1
     dev: false
     engines:
       node: '>=14.15.1'
     resolution:
-      integrity: sha512-Hu9zIzU7ZsTGArTrdFcwa1YYdG7olaKUaR6XYKLAbWGN7OxvpqQ7r1aZ3ZBI4ftwTar+T0nl9/pXCmSZnoccvw==
-  /@pnp/core/3.7.0:
+      integrity: sha512-h+nu1eHEQ0VpiRcLDQjPyVJHnrHruFJ/v8ZsSbJx1Vg2EoP/X5wDaZNXSjEmF3Xy3yD9aURDkdMw7eVb7PMfEw==
+  /@pnp/core/3.9.0:
     dependencies:
       tslib: 2.4.0
     dev: false
     engines:
       node: '>=14.15.1'
     resolution:
-      integrity: sha512-ULDdU0dxW4tKjkENjs/Y0Mo5nThgJ3KH17WU7kfS0koTkkXN474d3XpRe5CGEkyqA9wJLo2F/PfB4cMa94RJbg==
+      integrity: sha512-EzuU6jD2qGEARkcBsSf3RM2Q+tZ6WwQc/Dd/klKO23eYV9M4fQnUFKtmVDAyE+pfJTot3bN3vXVny6llAdNxjg==
   /@pnp/logging/1.0.1:
     dependencies:
       tslib: 1.8.1
@@ -3821,14 +3820,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-SnmMCN6oADjiHKAIR23FfTqXeQZeXPBnWeVfyZAgzJfRn9uEQoUlkyET3jHjl9kkrFOVkiOD1CRI7TWMIxURbA==
-  /@pnp/logging/3.7.0:
+  /@pnp/logging/3.17.0:
     dependencies:
-      tslib: 2.4.0
+      tslib: 2.4.1
     dev: false
     engines:
       node: '>=14.15.1'
     resolution:
-      integrity: sha512-W3IqBfPrccVepAGp9cz+1p8FyVLkUhnY5gqsngvFH5meMtXGsuvlg16WuZJk/svocXP5ABWYUUBPop3AieOsNQ==
+      integrity: sha512-AdsPdecbzvvNrm4DzSrgzRXyMkF87PZ+XBaZotXLw4r4NQZFTKfB9agEO5aSfjOCaBbbij81m3D0ZGo4gGvzqg==
   /@pnp/nodejs/1.3.6_6795127a97b2dcfc80caadca5f95a675:
     dependencies:
       '@pnp/common': 1.3.6
@@ -3877,16 +3876,6 @@ packages:
       '@pnp/logging': 1.3.6
     resolution:
       integrity: sha512-5WM8GQQ3C+wOzBXFcEZKZM9P1G4tWu+aL0CXuk6tTSs8rojs73hXB7QyOWA+HSF72iXyBdPaaaJ47js9Q+nD1g==
-  /@pnp/odata/1.3.8_@pnp+common@1.3.8:
-    dependencies:
-      '@pnp/common': 1.3.8
-      tslib: 1.10.0
-    dev: false
-    peerDependencies:
-      '@pnp/common': 1.3.8
-      '@pnp/logging': 1.3.8
-    resolution:
-      integrity: sha512-uGcV+Dx59W/yO6xOlMoObF8IYWZJnUqCsbuH/KI4BQ+izcPXi4N2tnj2i2OOEso0dobduoADR8q8XK7+SpXjOQ==
   /@pnp/odata/1.3.8_a15ea9e35f8185850c85b3a619175833:
     dependencies:
       '@pnp/common': 1.3.8
@@ -3924,10 +3913,12 @@ packages:
       '@pnp/sp': '*'
     resolution:
       integrity: sha512-IdJPRPtx5OzCsiABnxrAH6kxlJUwLT6ISPsJu+IJzFMjwThC2mO7bf9zGzOhNIJyF4aPj667nRKJ4VmPgH+ZvA==
-  /@pnp/polyfill-ie11/1.0.2_10fc058781bab4d85f24acf345bf6fe8:
+  /@pnp/polyfill-ie11/1.0.2_29941d2a26c888c8ed28b1cafa8dc6ed:
     dependencies:
       '@pnp/common': 1.3.8
-      '@pnp/odata': 1.3.8_@pnp+common@1.3.8
+      '@pnp/logging': 1.3.8
+      '@pnp/odata': 1.3.8_a15ea9e35f8185850c85b3a619175833
+      '@pnp/sp': 3.17.0
       '@types/core-js': 2.5.0
       core-js: 2.6.2
       es6-map: 0.1.5
@@ -3958,15 +3949,24 @@ packages:
       '@pnp/sp': '*'
     resolution:
       integrity: sha512-vJstDMgwCsRWbZIzUJGvBmd8932jL1DwItyESQFV0HWaOKIe5erjnbeVHSOHkxTWNNx/KWDjB2IcbW6er0MfMw==
-  /@pnp/queryable/3.7.0:
+  /@pnp/queryable/3.17.0:
     dependencies:
-      '@pnp/core': 3.7.0
+      '@pnp/core': 3.17.0
+      tslib: 2.4.1
+    dev: false
+    engines:
+      node: '>=14.15.1'
+    resolution:
+      integrity: sha512-kF2fi1pRZr70jGi9qrlA7wLi9Eh1AS+szPGT8C665cko18pahY8OLd8ra8d08Cw8TTuNG/AvJ6Z4BU1I3kSWYg==
+  /@pnp/queryable/3.9.0:
+    dependencies:
+      '@pnp/core': 3.9.0
       tslib: 2.4.0
     dev: false
     engines:
       node: '>=14.15.1'
     resolution:
-      integrity: sha512-sFYSV86VPyb9W+Yjm3F1cpwSMlrFJTDoE4plxZYtmgOqwh4RbftrAQ/qJlWRK7mafPYdu59axY5FL955Hd6HkQ==
+      integrity: sha512-05n4BLKd1Tjbb5piQyvEtcUse13CQf9hfLwFj8sLb33stFX48QzKBW8ZGbk57MfH6Wkj4SPSHbYg9vZd2+UZZQ==
   /@pnp/sp-clientsvc/1.3.11_5ebb02c573206a4d27a8d882b140be71:
     dependencies:
       '@pnp/common': 1.3.11
@@ -3982,10 +3982,12 @@ packages:
       '@pnp/sp': 1.3.11
     resolution:
       integrity: sha512-eIUnmDWjizcWJzhWxAbfsxEyHF1dabkGlihnDnlcYGhtvh8BwuM67A57qc5fbxzCS59c0YU57szB1EucoNmV4A==
-  /@pnp/sp-clientsvc/1.3.8_10fc058781bab4d85f24acf345bf6fe8:
+  /@pnp/sp-clientsvc/1.3.8_29941d2a26c888c8ed28b1cafa8dc6ed:
     dependencies:
       '@pnp/common': 1.3.8
-      '@pnp/odata': 1.3.8_@pnp+common@1.3.8
+      '@pnp/logging': 1.3.8
+      '@pnp/odata': 1.3.8_a15ea9e35f8185850c85b3a619175833
+      '@pnp/sp': 3.17.0
       tslib: 1.10.0
     dev: false
     peerDependencies:
@@ -4027,11 +4029,10 @@ packages:
       '@pnp/sp-clientsvc': 1.3.11
     resolution:
       integrity: sha512-shzCSjmOlr6mojCXJkfD8Xf9lJnhphq4Fj6mdUQGwpak+VIU+Fogf6AI0j6AReCKtKsKyqfud9X7C8tH07C3DA==
-  /@pnp/sp-taxonomy/1.3.8_d8ebd6641d6ccbf071325c03ba7219fa:
+  /@pnp/sp-taxonomy/1.3.8_1d668b60139fd354e760eeb6cc15dcff:
     dependencies:
-      '@pnp/common': 1.3.8
-      '@pnp/odata': 1.3.8_@pnp+common@1.3.8
-      '@pnp/sp-clientsvc': 1.3.8_10fc058781bab4d85f24acf345bf6fe8
+      '@pnp/logging': 3.17.0
+      '@pnp/sp': 3.17.0
       tslib: 1.10.0
     dev: false
     peerDependencies:
@@ -4120,17 +4121,28 @@ packages:
     dev: false
     resolution:
       integrity: sha512-4s2p+X5qvkXR72NViKb8DIfC+pvj/a3psZ3Im5PRIan2ErMtu9ch3Lb9nkSaMCF3NTJxWOhkUQ/R6tx8ApaUkg==
-  /@pnp/sp/3.7.0:
+  /@pnp/sp/3.17.0:
     dependencies:
-      '@pnp/core': 3.7.0
-      '@pnp/queryable': 3.7.0
+      '@pnp/core': 3.17.0
+      '@pnp/queryable': 3.17.0
+      tslib: 2.4.1
+    dev: false
+    engines:
+      node: '>=14.15.1'
+    requiresBuild: true
+    resolution:
+      integrity: sha512-PTeLI+D5oddALX+Xogs9PzcebfSXdidS0QU8Ral7HU8797lFSzlMx3FTG+nAPHTLerTHsUvAAtkmCw1rI6MBXQ==
+  /@pnp/sp/3.9.0:
+    dependencies:
+      '@pnp/core': 3.9.0
+      '@pnp/queryable': 3.9.0
       tslib: 2.4.0
     dev: false
     engines:
       node: '>=14.15.1'
     requiresBuild: true
     resolution:
-      integrity: sha512-96y3LaJ4ZHmnd4xBPnqH7R2QtUoY0nHiVo3m4F2DVUIERPj0aj2NGipSaGj9rgBmBU45SkrfvkttnkTnXWnHLg==
+      integrity: sha512-AHDZe/e0kIzOHu7FIrYsjWqzxY31sSo2NV9Jdo8wHDGV5YF1+9GRHxC2M4tTFIw9Hn6gZv2RyhnqHJhBFw9owg==
   /@pnp/spfx-controls-react/1.11.0_9c4969b3be2ea41c89422e6bb8d9a16e:
     dependencies:
       '@pnp/common': 1.0.1_@pnp+logging@1.0.1
@@ -18847,6 +18859,24 @@ packages:
     dev: false
     resolution:
       integrity: sha512-03IMu8tFLFzdGm2vTZRKzglrp62s7IPmWveBPlkUz4NVgCuhel0YSvbzjY8hYRK9jyo6a/p5xa/dRbcXzsVHyw==
+  /sp-entityportal-service/2.2.12:
+    dependencies:
+      '@microsoft/sp-page-context': 1.15.2
+      '@pnp/core': 3.9.0
+      '@pnp/logging': 3.17.0
+      '@pnp/sp': 3.9.0
+    dev: false
+    resolution:
+      integrity: sha512-fu4rC7IMomrTZxDQMB7od+OEPcXM73LGbRuUCJjpVU62bh9V8p1D/RFFRwyHTl6sWo1IoT0SlCia6Hs1jSYHuA==
+  /sp-entityportal-service/2.2.13:
+    dependencies:
+      '@microsoft/sp-page-context': 1.15.2
+      '@pnp/core': 3.9.0
+      '@pnp/logging': 3.17.0
+      '@pnp/sp': 3.9.0
+    dev: false
+    resolution:
+      integrity: sha512-8K9FQuxAQCJN+qNugrORDTI0SNtXH0CWcm2wYoN/cZ6nZ3hQ6tATgjfysxkH4USOdRsHIbs3jmWPD9kJhEL8Pg==
   /sp-js-provisioning/1.1.4_1ca3516818190f66f3253793862e2abe:
     dependencies:
       '@pnp/common': 1.3.6
@@ -21389,9 +21419,10 @@ packages:
       '@microsoft/sp-listview-extensibility': 1.15.2_1ca3516818190f66f3253793862e2abe
       '@microsoft/sp-module-interfaces': 1.15.2
       '@microsoft/sp-page-context': 1.15.2
-      '@pnp/core': 3.15.0
-      '@pnp/logging': 3.7.0
-      '@pnp/sp': 3.7.0
+      '@pnp/core': 3.17.0
+      '@pnp/logging': 3.17.0
+      '@pnp/queryable': 3.17.0
+      '@pnp/sp': 3.17.0
       '@rushstack/eslint-config': 2.5.1_eslint@8.25.0+typescript@4.5.5
       '@types/lodash': 4.14.195
       '@types/react': 16.8.8
@@ -21416,6 +21447,7 @@ packages:
       react-dom: 16.13.1_react@16.13.1
       react-markdown: 8.0.7_453b269bd7a8e2940a0e8fb00c615d82
       rehype-raw: 6.1.1
+      sp-entityportal-service: 2.2.13
       tslib: 2.3.1
       typescript: 4.5.5
       underscore: 1.13.6
@@ -21423,7 +21455,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-portfolioextensions'
     resolution:
-      integrity: sha512-7WtmHDlmfashTPQr5hX9eTsiF9vQ9rizsJT0X7t3jbicNBgQyyS07VzXzwWNjHjelqIXfi/6TxgiRoJ3nS3DjQ==
+      integrity: sha512-p0hc6cO0l3GYC/cae0Y43yeqeXHVqKyt/sYHLLTSTPvLndG6X+ASAX+Oan1ZGCJJt8OBx9vtFyDSZVl9PDoQvw==
       tarball: file:projects/pp365-portfolioextensions.tgz
     version: 0.0.0
   file:projects/pp365-portfoliowebparts.tgz:
@@ -21443,12 +21475,14 @@ packages:
       '@microsoft/sp-property-pane': 1.15.2_1ca3516818190f66f3253793862e2abe
       '@microsoft/sp-webpart-base': 1.15.2_1ca3516818190f66f3253793862e2abe
       '@pnp/common': 1.3.8
-      '@pnp/logging': 1.3.8
+      '@pnp/core': 3.17.0
+      '@pnp/logging': 3.17.0
       '@pnp/odata': 1.3.8_a15ea9e35f8185850c85b3a619175833
-      '@pnp/polyfill-ie11': 1.0.2_f8fb99f7f2658be775308e22c044cf7e
-      '@pnp/sp': 1.3.8_fba12607cd7ee0f0a4318bc1d2bd35d3
-      '@pnp/sp-clientsvc': 1.3.8_f8fb99f7f2658be775308e22c044cf7e
-      '@pnp/sp-taxonomy': 1.3.8_f441c4ed7afc3a82bcb936eabbdb3847
+      '@pnp/polyfill-ie11': 1.0.2_29941d2a26c888c8ed28b1cafa8dc6ed
+      '@pnp/queryable': 3.17.0
+      '@pnp/sp': 3.17.0
+      '@pnp/sp-clientsvc': 1.3.8_29941d2a26c888c8ed28b1cafa8dc6ed
+      '@pnp/sp-taxonomy': 1.3.8_1d668b60139fd354e760eeb6cc15dcff
       '@pnp/spfx-controls-react': 3.10.0_1ca3516818190f66f3253793862e2abe
       '@pnp/spfx-property-controls': 3.4.0_1ca3516818190f66f3253793862e2abe
       '@reduxjs/toolkit': 1.5.0
@@ -21494,6 +21528,7 @@ packages:
       react-dom: 16.13.1_react@16.13.1
       react-draggable: 4.4.5_react-dom@16.13.1+react@16.13.1
       react-highcharts: 16.0.2_react-dom@16.13.1+react@16.13.1
+      sp-entityportal-service: 2.2.13
       tslib: 2.3.1
       typescript: 4.5.5
       underscore: 1.13.6
@@ -21501,7 +21536,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-portfoliowebparts'
     resolution:
-      integrity: sha512-7NincL2vEvpDef+VzR1pyfEnjRWTKENu4moIPAzfhp3cwwnnwBi0RF++fMp3Pv4/HTsCPwduSmhmaWpVx0gXYQ==
+      integrity: sha512-wEg9xROm4Kyg4XMp4gPn0GKN9kPVjnzU21SJUAU/FL0f7sZ/RLMQkQ7BSuafJQ9RXw/SnkDtGadCJj7XKjzrvQ==
       tarball: file:projects/pp365-portfoliowebparts.tgz
     version: 0.0.0
   file:projects/pp365-programwebparts.tgz:
@@ -21520,12 +21555,14 @@ packages:
       '@microsoft/sp-property-pane': 1.15.2_1ca3516818190f66f3253793862e2abe
       '@microsoft/sp-webpart-base': 1.15.2_1ca3516818190f66f3253793862e2abe
       '@pnp/common': 1.3.8
-      '@pnp/logging': 1.3.8
+      '@pnp/core': 3.17.0
+      '@pnp/logging': 3.17.0
       '@pnp/odata': 1.3.8_a15ea9e35f8185850c85b3a619175833
-      '@pnp/polyfill-ie11': 1.0.2_f8fb99f7f2658be775308e22c044cf7e
-      '@pnp/sp': 1.3.8_fba12607cd7ee0f0a4318bc1d2bd35d3
-      '@pnp/sp-clientsvc': 1.3.8_f8fb99f7f2658be775308e22c044cf7e
-      '@pnp/sp-taxonomy': 1.3.8_f441c4ed7afc3a82bcb936eabbdb3847
+      '@pnp/polyfill-ie11': 1.0.2_29941d2a26c888c8ed28b1cafa8dc6ed
+      '@pnp/queryable': 3.17.0
+      '@pnp/sp': 3.17.0
+      '@pnp/sp-clientsvc': 1.3.8_29941d2a26c888c8ed28b1cafa8dc6ed
+      '@pnp/sp-taxonomy': 1.3.8_1d668b60139fd354e760eeb6cc15dcff
       '@pnp/spfx-controls-react': 3.10.0_1ca3516818190f66f3253793862e2abe
       '@pnp/spfx-property-controls': 3.4.0_1ca3516818190f66f3253793862e2abe
       '@reduxjs/toolkit': 1.5.0
@@ -21569,6 +21606,7 @@ packages:
       react-calendar-timeline: 0.27.0_05e86f17cf8862761e710683c186761e
       react-dom: 16.13.1_react@16.13.1
       react-highcharts: 16.0.2_react-dom@16.13.1+react@16.13.1
+      sp-entityportal-service: 2.2.13
       tslib: 2.3.1
       typescript: 4.5.5
       underscore: 1.13.6
@@ -21577,7 +21615,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-programwebparts'
     resolution:
-      integrity: sha512-NkD/0UGUdnow0xddZVda9hQBgJ+ZAdFO+molFql6rvOgrbvsNELZreezXznniXLrn4mbLee6qLqHFKWPLUoHXQ==
+      integrity: sha512-fGt/o5pu6B6xMGMxMOQaDmVE/z1a2ocpasDUj9p4FkRqLRQcV964jN4PLQ8FaDleC0kVWYDVZPm9+2lFxIHeqg==
       tarball: file:projects/pp365-programwebparts.tgz
     version: 0.0.0
   file:projects/pp365-projectextensions.tgz:
@@ -21595,12 +21633,14 @@ packages:
       '@microsoft/sp-office-ui-fabric-core': 1.15.2
       '@microsoft/sp-page-context': 1.15.2
       '@pnp/common': 1.3.8
-      '@pnp/logging': 1.3.8
+      '@pnp/core': 3.17.0
+      '@pnp/logging': 3.17.0
       '@pnp/odata': 1.3.8_a15ea9e35f8185850c85b3a619175833
-      '@pnp/polyfill-ie11': 1.0.2_f8fb99f7f2658be775308e22c044cf7e
-      '@pnp/sp': 1.3.8_fba12607cd7ee0f0a4318bc1d2bd35d3
-      '@pnp/sp-clientsvc': 1.3.8_f8fb99f7f2658be775308e22c044cf7e
-      '@pnp/sp-taxonomy': 1.3.8_f441c4ed7afc3a82bcb936eabbdb3847
+      '@pnp/polyfill-ie11': 1.0.2_29941d2a26c888c8ed28b1cafa8dc6ed
+      '@pnp/queryable': 3.17.0
+      '@pnp/sp': 3.17.0
+      '@pnp/sp-clientsvc': 1.3.8_29941d2a26c888c8ed28b1cafa8dc6ed
+      '@pnp/sp-taxonomy': 1.3.8_1d668b60139fd354e760eeb6cc15dcff
       '@reduxjs/toolkit': 1.5.0
       '@rushstack/eslint-config': 2.5.1_eslint@8.25.0+typescript@4.5.5
       '@types/lodash': 4.14.195
@@ -21634,7 +21674,7 @@ packages:
       react-dom: 16.13.1_react@16.13.1
       react-markdown: 8.0.7_453b269bd7a8e2940a0e8fb00c615d82
       rehype-raw: 6.1.1
-      sp-entityportal-service: 1.3.3
+      sp-entityportal-service: 2.2.13
       sp-js-provisioning: 1.1.4_1ca3516818190f66f3253793862e2abe
       spfx-jsom: 0.6.6_1ca3516818190f66f3253793862e2abe
       tslib: 2.3.1
@@ -21645,7 +21685,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectextensions'
     resolution:
-      integrity: sha512-gvybhHvzg1mYVzyxiRdcnFbTzp4qn4zUD4CHb9paCqi273yxVnm5aRVuUaM/52fZXMFyls5k/vm+EicORBDwKA==
+      integrity: sha512-x99bdsgc6lED9umze7a+pf7+PGYoycIvTYtxLD37jM/20au/+4z3oTly1V//rjCssvNu+6Mgk++9h+oz78imhQ==
       tarball: file:projects/pp365-projectextensions.tgz
     version: 0.0.0
   file:projects/pp365-projectwebparts.tgz:
@@ -21667,12 +21707,14 @@ packages:
       '@microsoft/sp-property-pane': 1.15.2_1ca3516818190f66f3253793862e2abe
       '@microsoft/sp-webpart-base': 1.15.2_1ca3516818190f66f3253793862e2abe
       '@pnp/common': 1.3.8
-      '@pnp/logging': 1.3.8
+      '@pnp/core': 3.17.0
+      '@pnp/logging': 3.17.0
       '@pnp/odata': 1.3.8_a15ea9e35f8185850c85b3a619175833
-      '@pnp/polyfill-ie11': 1.0.2_f8fb99f7f2658be775308e22c044cf7e
-      '@pnp/sp': 1.3.8_fba12607cd7ee0f0a4318bc1d2bd35d3
-      '@pnp/sp-clientsvc': 1.3.8_f8fb99f7f2658be775308e22c044cf7e
-      '@pnp/sp-taxonomy': 1.3.8_f441c4ed7afc3a82bcb936eabbdb3847
+      '@pnp/polyfill-ie11': 1.0.2_29941d2a26c888c8ed28b1cafa8dc6ed
+      '@pnp/queryable': 3.17.0
+      '@pnp/sp': 3.17.0
+      '@pnp/sp-clientsvc': 1.3.8_29941d2a26c888c8ed28b1cafa8dc6ed
+      '@pnp/sp-taxonomy': 1.3.8_1d668b60139fd354e760eeb6cc15dcff
       '@pnp/spfx-controls-react': 3.10.0_1ca3516818190f66f3253793862e2abe
       '@pnp/spfx-property-controls': 3.4.0_1ca3516818190f66f3253793862e2abe
       '@reduxjs/toolkit': 1.5.0
@@ -21717,7 +21759,7 @@ packages:
       react-markdown: 8.0.7_453b269bd7a8e2940a0e8fb00c615d82
       react-scroll: 1.7.11_react-dom@16.13.1+react@16.13.1
       rehype-raw: 6.1.1
-      sp-entityportal-service: 1.3.3
+      sp-entityportal-service: 2.2.13
       spfx-jsom: 0.6.6_1ca3516818190f66f3253793862e2abe
       tslib: 2.3.1
       typescript: 4.5.5
@@ -21726,7 +21768,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectwebparts'
     resolution:
-      integrity: sha512-IcFw4GJKhl9fPFMdXrlSPgBTS3EXSCAWKNiqjyWLkDS6jOp9knP8qiG9w07JKhIvmsqbF5nyfNqKgB8rFVpxTg==
+      integrity: sha512-vITa8hzb7pj4wkQ0U8k7jQQ9+CAREHg6vqzEtyVvsquIdUHoXCnv3SKFPkVCd+De2cumb/PjiECHQcGwAoycKw==
       tarball: file:projects/pp365-projectwebparts.tgz
     version: 0.0.0
   file:projects/pp365-shared-library.tgz_interactjs@1.6.2:
@@ -21742,12 +21784,14 @@ packages:
       '@microsoft/sp-page-context': 1.15.2
       '@microsoft/sp-webpart-base': 1.15.2_1ca3516818190f66f3253793862e2abe
       '@pnp/common': 1.3.8
-      '@pnp/logging': 1.3.8
+      '@pnp/core': 3.17.0
+      '@pnp/logging': 3.17.0
       '@pnp/odata': 1.3.8_a15ea9e35f8185850c85b3a619175833
-      '@pnp/polyfill-ie11': 1.0.2_f8fb99f7f2658be775308e22c044cf7e
-      '@pnp/sp': 1.3.8_fba12607cd7ee0f0a4318bc1d2bd35d3
-      '@pnp/sp-clientsvc': 1.3.8_f8fb99f7f2658be775308e22c044cf7e
-      '@pnp/sp-taxonomy': 1.3.8_f441c4ed7afc3a82bcb936eabbdb3847
+      '@pnp/polyfill-ie11': 1.0.2_29941d2a26c888c8ed28b1cafa8dc6ed
+      '@pnp/queryable': 3.17.0
+      '@pnp/sp': 3.17.0
+      '@pnp/sp-clientsvc': 1.3.8_29941d2a26c888c8ed28b1cafa8dc6ed
+      '@pnp/sp-taxonomy': 1.3.8_1d668b60139fd354e760eeb6cc15dcff
       '@reduxjs/toolkit': 1.9.5_react@16.13.1
       '@types/lodash': 4.14.195
       '@types/react': 16.8.8
@@ -21775,7 +21819,7 @@ packages:
       react-dom: 16.13.1_react@16.13.1
       react-markdown: 8.0.7_453b269bd7a8e2940a0e8fb00c615d82
       rehype-raw: 6.1.1
-      sp-entityportal-service: 1.3.3
+      sp-entityportal-service: 2.2.13
       spfx-jsom: 0.6.6_1ca3516818190f66f3253793862e2abe
       tslib: 2.3.1
       typescript: 4.5.5
@@ -21788,25 +21832,32 @@ packages:
     peerDependencies:
       interactjs: '*'
     resolution:
-      integrity: sha512-6iDzSrq9aHw122rJ1UD6Y896wqlMG8pMiBAKmYTdnoMaaUUWucN+BxdLaHcjXlpKzFPho2vFoERcjrS8BrL4OA==
+      integrity: sha512-mBgeP8PzHnKSLr0rxy4kjL23Y4g3Q2BYZw8/S3qA9HlUfnCUEQLzSQH6G4zxh5VLQSkKsOAaYBRStsI3oie/eA==
       tarball: file:projects/pp365-shared-library.tgz
     version: 0.0.0
   file:projects/pp365-spfx-tasks.tgz:
     dependencies:
+      '@pnp/core': 3.17.0
+      '@pnp/logging': 3.17.0
+      '@pnp/queryable': 3.17.0
       '@types/lodash': 4.14.195
       '@types/underscore': 1.11.5
       dotenv: 16.1.3
       glob: 10.2.6
+      sp-entityportal-service: 2.2.13
       underscore: 1.13.6
       yargs: 17.7.2
     dev: false
     name: '@rush-temp/pp365-spfx-tasks'
     resolution:
-      integrity: sha512-njXg6Kn4pgrQU3YnNezWb3E38UHEDyKklCO3shL7epuTmLUTO7LqF4f1TvvyUbI8mkaDCSrJRiIfkneCD8k6SA==
+      integrity: sha512-7DfgxIiMLGITkmM7w9/nJFxVfwKQSZTNKGZGI/KsEiRLmVaFWru8bDNIgF0+b8sKQQZqvP7cm3+crO616Tjdkw==
       tarball: file:projects/pp365-spfx-tasks.tgz
     version: 0.0.0
   file:projects/pp365-templates.tgz:
     dependencies:
+      '@pnp/core': 3.17.0
+      '@pnp/logging': 3.17.0
+      '@pnp/queryable': 3.17.0
       '@ptkdev/json-token-replace': 1.2.2
       '@types/lodash': 4.14.195
       '@types/underscore': 1.11.5
@@ -21814,11 +21865,12 @@ packages:
       dotenv: 16.1.3
       replace: 1.2.2
       resx-json-typescript-converter: 1.0.2
+      sp-entityportal-service: 2.2.13
       underscore: 1.13.6
     dev: false
     name: '@rush-temp/pp365-templates'
     resolution:
-      integrity: sha512-qMQ4aWgQ7UQyOLnQ9U6z4zclLX94kxj8rzjoxx+FadXOE6SA6lZKdiq5BSATsClbv91bJOcBXb8CmPCyiFl0Lg==
+      integrity: sha512-DJIWXWNuaETF+KcIlYFcgH8oEsB3wWNLTRiVJzee0vgX9pAlPoBR2glYRVh2x4/yDVa0jtL8q7EOhI7/g/bGLg==
       tarball: file:projects/pp365-templates.tgz
     version: 0.0.0
 specifiers:
@@ -21841,11 +21893,10 @@ specifiers:
   '@microsoft/sp-page-context': 1.15.2
   '@microsoft/sp-property-pane': 1.15.2
   '@microsoft/sp-webpart-base': 1.15.2
-  '@pnp/common': 1.3.8
-  '@pnp/core': ^3.7.0
-  '@pnp/odata': 1.3.8
-  '@pnp/polyfill-ie11': 1.0.2
-  '@pnp/sp-clientsvc': 1.3.8
+  '@pnp/core': 3.17.0
+  '@pnp/logging': 3.17.0
+  '@pnp/queryable': 3.17.0
+  '@pnp/sp': 3.17.0
   '@pnp/sp-taxonomy': 1.3.8
   '@pnp/spfx-controls-react': 3.10.0
   '@pnp/spfx-property-controls': 3.4.0
@@ -21912,7 +21963,7 @@ specifiers:
   rehype-raw: ^6.1.1
   replace: 1.2.2
   resx-json-typescript-converter: ^1.0.1
-  sp-entityportal-service: 1.3.3
+  sp-entityportal-service: 2.2.12
   sp-js-provisioning: 1.1.4
   spfx-jsom: 0.6.6
   tslib: 2.3.1

@@ -34,7 +34,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   public async onInit(): Promise<void> {
     await super.onInit()
     this._portal = await new PortalDataService().configure({
-      pageContext: this.context.pageContext
+      spfxContext: this.context
     })
     const [installEntries, gitHubReleases, helpContent, links] = await Promise.all([
       this._fetchInstallationLogs(),
@@ -69,9 +69,10 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   ): Promise<InstallationEntry[]> {
     try {
       const installationLogList = this._portal.web.lists.getByTitle(strings.InstallationLogListName)
-      const installationLogItems = await installationLogList.items
-        .orderBy(orderBy, orderAscending)
-        .get()
+      const installationLogItems = await installationLogList.items.orderBy(
+        orderBy,
+        orderAscending
+      )()
       return installationLogItems.map((item) => new InstallationEntry(item))
     } catch (error) {
       return []
@@ -113,7 +114,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private async _fetchLinks(): Promise<{ Url: string; Description: string }[]> {
     try {
       const linksList = this._portal.web.lists.getByTitle(strings.LinksListName)
-      const linksItems = await linksList.items.get()
+      const linksItems = await linksList.items()
       return linksItems.map((item) => item.URL)
     } catch (error) {
       return []

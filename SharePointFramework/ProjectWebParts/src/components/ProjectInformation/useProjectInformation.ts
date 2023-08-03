@@ -1,5 +1,5 @@
 import { format, IProgressIndicatorProps, MessageBarType } from '@fluentui/react'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { parseUrlHash, sleep } from 'pp365-shared-library/lib/util'
 import strings from 'ProjectWebPartsStrings'

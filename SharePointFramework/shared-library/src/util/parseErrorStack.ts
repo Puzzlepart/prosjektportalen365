@@ -1,4 +1,4 @@
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 
 interface IODataError {
   code: string

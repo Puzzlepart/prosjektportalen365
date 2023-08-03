@@ -8,7 +8,6 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { sp } from '@pnp/sp'
 import { IOpportunityMatrixProps, OpportunityMatrix } from 'components/OpportunityMatrix'
 import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
 import * as getValue from 'get-value'
@@ -50,7 +49,7 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
       probabilityPostActionFieldName,
       consequencePostActionFieldName
     } = this.properties
-    const items: any[] = await sp.web.lists
+    const items: any[] = await this.sp.web.lists
       .getByTitle(this.properties.listName)
       .getItemsByCAMLQuery({ ViewXml: this.properties.viewXml })
     return items.map(

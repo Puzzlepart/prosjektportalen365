@@ -1,11 +1,10 @@
 import { IIconProps } from '@fluentui/react'
-import { TypedHash } from '@pnp/common'
-import { Web } from '@pnp/sp'
 import { Schema } from 'sp-js-provisioning'
 import { isArray } from 'underscore'
 import { ContentConfig } from './ContentConfig'
 import { ProjectExtension } from './ProjectExtension'
 import { UserSelectableObject } from './UserSelectableObject'
+import { IWeb } from '@pnp/sp/webs'
 
 export interface IProjectTemplateSPItem {
   Id?: number
@@ -16,7 +15,7 @@ export interface IProjectTemplateSPItem {
   IconName?: string
   ListContentConfigLookupId?: number[]
   File?: { UniqueId: string; Name: string; Title: string; ServerRelativeUrl: string }
-  FieldValuesAsText?: TypedHash<string>
+  FieldValuesAsText?: Record<string, string>
   GtProjectTemplateId?: number
   GtProjectExtensionsId?: number[]
   GtProjectColumns: string
@@ -59,7 +58,7 @@ export class ProjectTemplate extends UserSelectableObject {
    * @param spItem SharePoint list item
    * @param web The `Web` instance (from `@pnp/sp`) to use when loading the template
    */
-  constructor(spItem: IProjectTemplateSPItem, public web: Web) {
+  constructor(spItem: IProjectTemplateSPItem, public web: IWeb) {
     super(
       spItem.Id,
       spItem.FieldValuesAsText.Title,
@@ -127,7 +126,7 @@ export class ProjectTemplate extends UserSelectableObject {
    * @returns The schema for the template
    */
   public async getSchema(): Promise<Schema> {
-    const schema = await this.web.getFileByServerRelativeUrl(this.projectTemplateUrl).getJSON()
+    const schema = await this.web.getFileByServerRelativePath(this.projectTemplateUrl).getJSON()
     schema.Parameters = {
       ...(schema.Parameters ?? {}),
       ProjectContentTypeId: this._projectContentType ?? schema.Parameters.ProjectContentTypeId,

@@ -14,10 +14,22 @@ export abstract class BaseTask implements IBaseTask {
   }
 
   /**
+   * Initialize execute setting parameters and on progress callback function
+   * on the task instance.
+   *
+   * @param params Parameters
+   * @param onProgress On progress callback function
+   */
+  public initExecute(params: IBaseTaskParams, onProgress?: OnProgressCallbackFunction) {
+    this.params = params
+    this.onProgress = onProgress
+  }
+
+  /**
    * Execute task
    *
    * @param params Task parameters
-   * @param onProgress Progress function
+   * @param onProgress On progress callback function
    */
   public abstract execute(
     params: IBaseTaskParams,

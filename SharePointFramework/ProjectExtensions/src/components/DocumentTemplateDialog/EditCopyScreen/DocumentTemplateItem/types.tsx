@@ -1,4 +1,3 @@
-import { TypedHash } from '@pnp/common'
 import { TemplateItem } from 'models/TemplateItem'
 
 export interface IDocumentTemplateItemProps {
@@ -10,7 +9,7 @@ export interface IDocumentTemplateItemProps {
   /**
    * On input changed
    */
-  onInputChanged: (id: string, properties: TypedHash<string>, errorMessage?: string) => void
+  onInputChanged: (id: string, properties: Record<string, string>, errorMessage?: string) => void
 }
 
 export interface IDocumentTemplateItemState {

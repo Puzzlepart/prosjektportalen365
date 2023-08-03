@@ -1,5 +1,5 @@
 import { IColumn } from '@fluentui/react'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import { ProjectColumnConfigDictionaryItem, getObjectValue as get } from 'pp365-shared-library'
 import React, { ReactNode, createElement, useMemo } from 'react'
 import { ConfigColumn } from './ConfigColumn'

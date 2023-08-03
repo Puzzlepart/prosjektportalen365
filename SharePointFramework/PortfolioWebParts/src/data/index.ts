@@ -1,16 +1,15 @@
 import { format } from '@fluentui/react/lib/Utilities'
-import { PageContext } from '@microsoft/sp-page-context'
-import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/common'
+import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
+import { SPFI } from '@pnp/sp'
+import { IItemUpdateResult, IItemUpdateResultData } from '@pnp/sp/items'
+import '@pnp/sp/items/get-all'
 import {
-  ItemUpdateResult,
-  ItemUpdateResultData,
-  PermissionKind,
+  ISearchResult,
   QueryPropertyValueType,
-  SearchResult,
-  SortDirection,
-  sp
-} from '@pnp/sp'
-import { SearchQueryInit } from '@pnp/sp/src/search'
+  SearchQueryInit,
+  SortDirection
+} from '@pnp/sp/search'
+import { PermissionKind } from '@pnp/sp/security'
 import * as cleanDeep from 'clean-deep'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -27,11 +26,13 @@ import {
   ProjectListModel,
   SPContentType,
   SPDataSourceItem,
+  SPFxContext,
   SPProjectColumnItem,
   SPProjectContentColumnItem,
   SPTimelineConfigurationItem,
   TimelineConfigurationModel,
-  TimelineContentModel
+  TimelineContentModel,
+  DefaultCaching
 } from 'pp365-shared-library'
 import _ from 'underscore'
 import { IPortfolioAggregationConfiguration } from '../components/PortfolioAggregation'
@@ -64,10 +65,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   /**
    * Constructs the `DataAdapter` class
    *
-   * @param _pageContext Web part context
-   * @param _msGraphClientFactory MS Graph client factory (set to `any` due to missing typings)
+   * @param _spfxContext SPFx context
+   * @param _sp SPFI instance
    */
-  constructor(public _pageContext: PageContext, private _msGraphClientFactory: any) {
+  constructor(private _spfxContext: SPFxContext, private _sp: SPFI) {
     this.portalDataService = new PortalDataService()
   }
 
@@ -80,7 +81,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   public async configure(): Promise<DataAdapter> {
     if (this.dataSourceService && this.portalDataService.isConfigured) return this
     this.portalDataService = await this.portalDataService.configure({
-      pageContext: this._pageContext
+      spfxContext: this._spfxContext
     })
     this.dataSourceService = new DataSourceService(this.portalDataService.web)
     return this
@@ -94,14 +95,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ) {
     try {
       const [chartItems, contentTypes] = await Promise.all([
-        sp.web.lists
+        this._sp.web.lists
           .getByTitle(chartConfigurationListName)
-          .items.select(...Object.keys(new SPChartConfigurationItem()))
-          .get<SPChartConfigurationItem[]>(),
-        sp.web.lists
+          .items.select(...Object.keys(new SPChartConfigurationItem()))<
+          SPChartConfigurationItem[]
+        >(),
+        this._sp.web.lists
           .getByTitle(chartConfigurationListName)
-          .contentTypes.select(...Object.keys(new SPContentType()))
-          .get<SPContentType[]>()
+          .contentTypes.select(...Object.keys(new SPContentType()))<SPContentType[]>()
       ])
       const charts: ChartConfiguration[] = chartItems.map((item) => {
         const fields = item.GtPiFieldsId.map((id) => {
@@ -161,7 +162,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ): Promise<IPortfolioAggregationConfiguration> {
     try {
       let calculatedLevel = 'Portefølje'
-      if (this.portalDataService.url !== this._pageContext.web.absoluteUrl) {
+      if (this.portalDataService.url !== this._spfxContext.pageContext.web.absoluteUrl) {
         calculatedLevel = 'Prosjekt'
       }
       level = level ?? calculatedLevel
@@ -172,8 +173,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         this.portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS'),
         this.portalDataService.web.fields
           .getByInternalNameOrTitle('GtDataSourceLevel')
-          .select('Choices')
-          .get()
+          .select('Choices')()
       ])
       return {
         columns,
@@ -277,7 +277,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     if (_.isArray(view.searchQueries)) {
       const result = await Promise.all(
         view.searchQueries.map((query) =>
-          sp.search({
+          this._sp.search({
             ...config.DEFAULT_SEARCH_SETTINGS,
             QueryTemplate: query,
             SelectProperties: selectProperties
@@ -289,7 +289,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         managedProperties: []
       } as const
     } else {
-      const { PrimarySearchResults, RawSearchResults } = await sp.search({
+      const { PrimarySearchResults, RawSearchResults } = await this._sp.search({
         ...config.DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: view.searchQuery,
         SelectProperties: selectProperties,
@@ -353,10 +353,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   public async fetchTimelineProjectData(timelineConfig: TimelineConfigurationModel[]) {
     try {
+      const hubSiteId = this._spfxContext.pageContext.legacyPageContext.hubSiteId
       const [{ PrimarySearchResults: statusReports }] = await Promise.all([
-        sp.search({
+        this._sp.search({
           ...config.DEFAULT_SEARCH_SETTINGS,
-          QueryTemplate: `DepartmentId:{${this._pageContext.legacyPageContext.hubSiteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
+          QueryTemplate: `DepartmentId:{${hubSiteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
           SelectProperties: [
             'Title',
             'GtSiteIdOWSTEXT',
@@ -391,7 +392,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    * @param timelineConfig Timeline configuration
    */
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
-    const timelineItems = await sp.web.lists
+    const timelineItems = await this._sp.web.lists
       .getByTitle(strings.TimelineContentListName)
       .items.select(
         'Title',
@@ -431,11 +432,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   public async fetchTimelineConfiguration() {
-    const timelineConfig = await sp.web.lists
+    const timelineConfig = await this._sp.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
-      .items.select(...new SPTimelineConfigurationItem().fields)
-      .getAll()
-
+      .items.select(...new SPTimelineConfigurationItem().fields)()
     return timelineConfig.map((item) => new TimelineConfigurationModel(item)).filter(Boolean)
   }
 
@@ -490,9 +489,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     rowLimit: number,
     sortProperty: string,
     sortDirection: SortDirection
-  ): Promise<SearchResult[]> {
-    const response = await sp.search({
-      Querytext: `DepartmentId:{${this._pageContext.legacyPageContext.hubSiteId}} contentclass:STS_Site`,
+  ): Promise<ISearchResult[]> {
+    const hubSiteId = this._spfxContext.pageContext.legacyPageContext.hubSiteId
+    const response = await this._sp.search({
+      Querytext: `DepartmentId:{${hubSiteId}} contentclass:STS_Site`,
       TrimDuplicates: false,
       RowLimit: rowLimit,
       SelectProperties: ['Title', 'Path', 'SiteId', 'Created'],
@@ -512,9 +512,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         }
       ]
     })
-    return response.PrimarySearchResults.filter(
-      (site) => this._pageContext.legacyPageContext.hubSiteId !== site['SiteId']
-    )
+    return response.PrimarySearchResults.filter((site) => hubSiteId !== site['SiteId'])
   }
 
   /**
@@ -528,7 +526,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   private _mapProjects(
     items: ISPProjectItem[],
     groups: IGraphGroup[],
-    sites: SearchResult[],
+    sites: ISearchResult[],
     users: ISPUser[]
   ): ProjectListModel[] {
     const projects = items
@@ -551,14 +549,14 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     // eslint-disable-next-line quotes
     filter = "GtProjectLifecycleStatus ne 'Avsluttet'"
   ): Promise<ProjectListModel[]> {
-    await msGraph.Init(this._msGraphClientFactory)
+    await msGraph.Init(this._spfxContext.msGraphClientFactory)
     const localStore = new PnPClientStorage().local
-    const siteId = this._pageContext.site.id.toString()
+    const siteId = this._spfxContext.pageContext.site.id.toString()
     const [items, groups, users, sites] = await localStore.getOrPut(
       `pp365_fetchenrichedprojects_${siteId}`,
       async () => {
         return await Promise.all([
-          sp.web.lists
+          this._sp.web.lists
             .getByTitle(strings.ProjectsListName)
             .items.select(
               'GtGroupId',
@@ -577,7 +575,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
             .orderBy('Title')
             .getAll(),
           this.fetchMemberGroups(),
-          sp.web.siteUsers.select('Id', 'Title', 'Email').get<ISPUser[]>(),
+          this._sp.web.siteUsers.select('Id', 'Title', 'Email')<ISPUser[]>(),
           this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId'])
         ])
       },
@@ -613,10 +611,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     const odataQuery = (configuration?.views || []).find((v) => v.title === dataSource)?.odataQuery
     let projects: any[]
     if (odataQuery && !dataSource.includes('(Prosjektnivå)')) {
-      projects = await sp.web.lists
+      projects = await this._sp.web.lists
         .getByTitle(strings.ProjectsListName)
-        .items.filter(`${odataQuery}`)
-        .get<any[]>()
+        .items.filter(`${odataQuery}`)<any[]>()
     }
     return projects
   }
@@ -628,18 +625,17 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
    */
   public async isUserInGroup(groupName: string): Promise<boolean> {
     try {
-      const [siteGroup] = await sp.web.siteGroups
+      const [siteGroup] = await this._sp.web.siteGroups
         .select('CanCurrentUserViewMembership', 'Title')
-        .filter(`Title eq '${groupName}'`)
-        .get()
-      return siteGroup && siteGroup.CanCurrentUserViewMembership
+        .filter(`Title eq '${groupName}'`)()
+      return siteGroup && siteGroup['CanCurrentUserViewMembership']
     } catch (error) {
       return false
     }
   }
 
   /**
-   * Fetch items with `sp.search` using the specified `{queryTemplate}` and `{selectProperties}`.
+   * Fetch items with `this._sp.search` using the specified `{queryTemplate}` and `{selectProperties}`.
    * Uses a `while` loop to fetch all items in batches of `{batchSize}`.
    *
    * @param queryTemplate Query template
@@ -652,7 +648,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     selectProperties: string[],
     batchSize = 500,
     additionalQuery: Record<string, any> = {}
-  ): Promise<SearchResult[]> {
+  ): Promise<ISearchResult[]> {
     const query: SearchQueryInit = {
       QueryTemplate: `${queryTemplate}`,
       Querytext: '*',
@@ -661,10 +657,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       SelectProperties: [...selectProperties, 'Path', 'SPWebURL', 'SiteTitle', 'UniqueID'],
       ...additionalQuery
     }
-    const { PrimarySearchResults, TotalRows } = await sp.search(query)
+    const { PrimarySearchResults, TotalRows } = await this._sp.search(query)
     const results = [...PrimarySearchResults]
     while (results.length < TotalRows) {
-      const response = await sp.search({ ...query, StartRow: results.length })
+      const response = await this._sp.search({ ...query, StartRow: results.length })
       results.push(...response.PrimarySearchResults)
     }
     return results
@@ -792,8 +788,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       )
       const columnItems = await projectContentColumnsList.items
         .select(...Object.keys(new SPProjectContentColumnItem()))
-        .usingCaching()
-        .get<SPProjectContentColumnItem[]>()
+        .using(DefaultCaching)<SPProjectContentColumnItem[]>()
       const filteredColumnItems = columnItems.filter(
         (col) =>
           col.GtDataSourceCategory === dataSourceCategory ||
@@ -811,7 +806,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     persistRenderAs = false
   ): Promise<any> {
     try {
-      const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
+      const list = this._sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
       const properties: SPProjectContentColumnItem = _.pick(
         columnItem,
         [
@@ -829,8 +824,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   public async deleteProjectContentColumn(column: Record<string, any>): Promise<any> {
     try {
-      const list = sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
-      const items = await list.items.get()
+      const list = this._sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
+      const items = await list.items()
       const item = items.find((i) => i.GtManagedProperty === column.fieldName)
 
       if (!item) {
@@ -849,7 +844,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     properties: Record<string, any>
   ): Promise<T> {
     try {
-      const list = sp.web.lists.getByTitle(listName)
+      const list = this._sp.web.lists.getByTitle(listName)
       const itemAddResult = await list.items.add(properties)
       return itemAddResult.data as T
     } catch (error) {
@@ -857,13 +852,13 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  public async updateItemInList<T = ItemUpdateResultData>(
+  public async updateItemInList<T = IItemUpdateResultData>(
     listName: string,
     itemId: number,
     properties: Record<string, any>
   ): Promise<T> {
     try {
-      const list = sp.web.lists.getByTitle(listName)
+      const list = this._sp.web.lists.getByTitle(listName)
       const itemUpdateResult = await list.items.getById(itemId).update(properties)
       return itemUpdateResult.data as unknown as T
     } catch (error) {
@@ -873,7 +868,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   public async deleteItemFromList(listName: string, itemId: number): Promise<boolean> {
     try {
-      const list = sp.web.lists.getByTitle(listName)
+      const list = this._sp.web.lists.getByTitle(listName)
       await list.items.getById(itemId).delete()
       return true
     } catch {
@@ -886,8 +881,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     view: PortfolioOverviewView
   ): Promise<boolean> {
     try {
-      const projectColumnsList = sp.web.lists.getByTitle(strings.ProjectColumnsListName)
-      const portfolioViewsList = sp.web.lists.getByTitle(strings.PortfolioViewsListName)
+      const projectColumnsList = this._sp.web.lists.getByTitle(strings.ProjectColumnsListName)
+      const portfolioViewsList = this._sp.web.lists.getByTitle(strings.PortfolioViewsListName)
       const column = await projectColumnsList.items.add(_.omit(properties, ['Id']))
       portfolioViewsList.items.getById(view.id as any).update({
         GtPortfolioColumnsId: {
@@ -904,10 +899,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     properties: SPDataSourceItem,
     dataSourceTitle: string,
     shouldReplace: boolean = false
-  ): Promise<ItemUpdateResult> {
+  ): Promise<IItemUpdateResult> {
     try {
-      const list = sp.web.lists.getByTitle(strings.DataSourceListName)
-      const items = await list.items.get()
+      const list = this._sp.web.lists.getByTitle(strings.DataSourceListName)
+      const items = await list.items()
       const item = items.find((i) => i.Title === dataSourceTitle)
 
       if (!item) {

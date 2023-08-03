@@ -10,8 +10,7 @@ export async function fetchTimelineConfiguration() {
     await SPDataAdapter.portal.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
       .items.select(...new SPTimelineConfigurationItem().fields)
-      .orderBy('GtSortOrder')
-      .getAll()
+      .orderBy('GtSortOrder')()
   )
     .map((item) => new TimelineConfigurationModel(item))
     .filter(Boolean)

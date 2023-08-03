@@ -27,15 +27,14 @@ export class ProvisionSiteFields extends BaseTask {
         this.logInformation('Provisionining site fields to site', {
           parameters: params.templateSchema.Parameters
         })
-        const existingSiteFields = await params.web.fields
-          .select(...Object.keys(new SPField()))
-          .get<SPField[]>()
+        const existingSiteFields = await params.web.fields.select(...Object.keys(new SPField()))<
+          SPField[]
+        >()
         const siteFields = await SPDataAdapter.portal.web.fields
           .filter(
             `Group eq '${params.templateSchema.Parameters.ProvisionSiteFields}' and TypeAsString ne 'Calculated'`
           )
-          .select(...Object.keys(new SPField()))
-          .get<SPField[]>()
+          .select(...Object.keys(new SPField()))<SPField[]>()
         this.logInformation(`Retrieved ${siteFields.length} site fields from hub`)
         for (let i = 0; i < siteFields.length; i++) {
           const siteField = siteFields[i]

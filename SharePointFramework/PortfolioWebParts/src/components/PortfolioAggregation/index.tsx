@@ -36,7 +36,6 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             compact={context.state.isCompact}
             isListLayoutModeJustified={props.isListLayoutModeJustified}
             groupProps={{
-              // TODO: Temporary fix for collapsing groups, the new state handling throws errors
               onToggleCollapseAll: (isAllCollapsed) =>
                 context.dispatch(SET_ALL_COLLAPSED({ isAllCollapsed })),
               headerProps: {

@@ -94,7 +94,7 @@
                                         "ProjectListWebPart": {
                                             "$ref": "#/definitions/guid"
                                         },
-                                        "ProjectTimelineWebPart": {
+                                        "PortfolioTimelineWebPart": {
                                             "$ref": "#/definitions/guid"
                                         },
                                         "ResourceAllocationWebPart": {
@@ -107,7 +107,7 @@
                                         "PortfolioInsightsWebPart",
                                         "PortfolioOverviewWebPart",
                                         "ProjectListWebPart",
-                                        "ProjectTimelineWebPart",
+                                        "PortfolioTimelineWebPart",
                                         "ResourceAllocationWebPart"
                                     ]
                                 }

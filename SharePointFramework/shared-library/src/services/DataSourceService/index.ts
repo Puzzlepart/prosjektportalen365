@@ -1,10 +1,11 @@
-import { List, Web } from '@pnp/sp'
 import { DataSource, SPDataSourceItem } from '../../models/DataSource'
 import { ProjectContentColumn } from '../../models'
+import { IList } from '@pnp/sp/lists'
+import { IWeb } from '@pnp/sp/webs'
 
 export class DataSourceService {
-  private list: List
-  private columnsList: List
+  private list: IList
+  private columnsList: IList
 
   /**
    * Creates a new instance of DataSourceService
@@ -14,7 +15,7 @@ export class DataSourceService {
    * @param columnsListName Columns list name is default set to 'Prosjektinnholdskolonner' but can be overridden (not recommended)
    */
   constructor(
-    public web: Web,
+    public web: IWeb,
     listName = 'Datakilder',
     columnsListName = 'Prosjektinnholdskolonner'
   ) {
@@ -29,11 +30,10 @@ export class DataSourceService {
    */
   public async getByName(name: string): Promise<DataSource> {
     const [[item], columns] = await Promise.all([
-      this.list.items
-        .select(...Object.keys(new SPDataSourceItem()))
-        .filter(`Title eq '${name}'`)
-        .get<SPDataSourceItem[]>(),
-      this.columnsList.items.get()
+      this.list.items.select(...Object.keys(new SPDataSourceItem())).filter(`Title eq '${name}'`)<
+        SPDataSourceItem[]
+      >(),
+      this.columnsList.items()
     ])
     return item
       ? new DataSource(
@@ -62,8 +62,7 @@ export class DataSourceService {
     const items = await this.list.items
       .select(...Object.keys(new SPDataSourceItem()))
       .filter(`GtDataSourceCategory eq '${category}'`)
-      .filter(filter)
-      .get<SPDataSourceItem[]>()
+      .filter(filter)<SPDataSourceItem[]>()
     return items.map((item) => new DataSource(item, columns))
   }
 }
