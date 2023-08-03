@@ -81,6 +81,7 @@ export class SPDataAdapter
     this.dataSourceService = new DataSourceService(this.portal.web)
     this.project = new ProjectDataService({
       ...this.settings,
+      spfxContext,
       entityService: this.entityService,
       propertiesListName: strings.ProjectPropertiesListName
     })
