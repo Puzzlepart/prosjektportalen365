@@ -88,7 +88,7 @@ function generatePackageSolutionFile(id, name, zippedPackage) {
  * 
  * @param {*} componentManifestFiles Component manifest files
  */
-async function copyExistingComponentManifestFiles(componentManifestFiles) {
+function copyExistingComponentManifestFiles(componentManifestFiles) {
     console.log('Copying existing manifest files to backup files')
     for (let i = 0; i < componentManifestFiles.length; i++) {
         const componentManifestFile = componentManifestFiles[i]
@@ -145,7 +145,7 @@ function generateComponentManifestFiles(solutionConfig, componentManifestFiles) 
         const solutionConfig = getFileContent(solutionConfigFile)
         copyExistingPackageSolutionFile()
         generatePackageSolutionFile(solutionConfig.id, solutionConfig.name, solutionConfig.zippedPackage)
-        await copyExistingComponentManifestFiles(componentManifestFiles)
+        copyExistingComponentManifestFiles(componentManifestFiles)
         generateComponentManifestFiles(solutionConfig, componentManifestFiles)
     }
 })()
