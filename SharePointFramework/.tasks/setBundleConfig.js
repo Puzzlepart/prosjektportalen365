@@ -38,7 +38,7 @@ try {
                         [b]: json.bundles[b]
                     }), {})
                 fs.writeFile(bundleConfigFile, JSON.stringify(json, null, 2), () => {
-                    log(`${colors.cyan('config.json')} now only includes the bundles matching the regex ${colors.magenta(process.env.SERVE_BUNDLE_REGEX)}`, 'setBundleConfig')
+                    log(`${colors.magenta('config.json')} now only includes the bundles matching the regex ${colors.magenta(process.env.SERVE_BUNDLE_REGEX)}`, 'setBundleConfig')
                 })
             })
         })

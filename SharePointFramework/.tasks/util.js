@@ -31,7 +31,7 @@ function joinPath(...paths) {
  * @param {*} prefix The prefix to use - will be wrapped in square brackets
  */
 function log(message, prefix) {
-    console.log(`${colors.yellow(`[${prefix}]`)} ${message}`)
+    console.log(`${colors.cyan(`[${prefix}]`)} ${message}`)
 }
 module.exports = {
     getFileContent,

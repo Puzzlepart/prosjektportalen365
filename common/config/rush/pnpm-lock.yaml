@@ -36,6 +36,7 @@ dependencies:
   '@rush-temp/pp365-templates': file:projects/pp365-templates.tgz
   '@rushstack/eslint-config': 2.5.1_eslint@8.25.0+typescript@4.5.5
   '@types/array-sort': 1.0.0
+  '@types/colors': 1.2.1
   '@types/dom-to-image': 2.6.4
   '@types/get-value': 3.0.1
   '@types/lodash': 4.14.196
@@ -88,7 +89,7 @@ dependencies:
   replace: 1.2.2
   resx-json-typescript-converter: 1.0.3
   sp-entityportal-service: 2.2.13
-  sp-js-provisioning: 1.2.0-beta.1_1ca3516818190f66f3253793862e2abe
+  sp-js-provisioning: 1.2.0_1ca3516818190f66f3253793862e2abe
   spfx-jsom: 0.6.6_1ca3516818190f66f3253793862e2abe
   tslib: 2.3.1
   typescript: 4.5.5
@@ -1485,7 +1486,7 @@ packages:
       '@uifabric/utilities': 7.38.2_052fcf153ec79c77e0d1778fd73206f7
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -1503,7 +1504,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9c4969b3be2ea41c89422e6bb8d9a16e
       react: 16.13.1
       react-dom: 16.13.1_react@16.13.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -5483,7 +5484,7 @@ packages:
       '@uifabric/merge-styles': 7.20.2
       '@uifabric/set-version': 7.0.24
       '@uifabric/utilities': 7.38.2_052fcf153ec79c77e0d1778fd73206f7
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -5499,7 +5500,7 @@ packages:
       '@uifabric/merge-styles': 7.20.2
       '@uifabric/set-version': 7.0.24
       '@uifabric/utilities': 7.38.2_9c4969b3be2ea41c89422e6bb8d9a16e
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -17752,7 +17753,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-8K9FQuxAQCJN+qNugrORDTI0SNtXH0CWcm2wYoN/cZ6nZ3hQ6tATgjfysxkH4USOdRsHIbs3jmWPD9kJhEL8Pg==
-  /sp-js-provisioning/1.2.0-beta.1_1ca3516818190f66f3253793862e2abe:
+  /sp-js-provisioning/1.2.0_1ca3516818190f66f3253793862e2abe:
     dependencies:
       '@pnp/core': 3.17.0
       '@pnp/logging': 3.17.0
@@ -17767,7 +17768,7 @@ packages:
       '@types/react': '*'
       '@types/react-dom': '*'
     resolution:
-      integrity: sha512-5G9k7z1vNiSNRcMg11Zn+JTWBJt0cfsaHpwoDCxSHPE++2gC4cGtfz1G8lI55cz0htJSva1u5FVxDYnxpF29gg==
+      integrity: sha512-OPYZHN9dbM6SyMEr0YGgNhzhEGsxtAAH7JKaJU7xsvzM5o/Kj63SZGNFS5q4ZfNZcNa9a/N2OcvaJAku1Pd92A==
   /space-separated-tokens/2.0.2:
     dev: false
     resolution:
@@ -20536,7 +20537,7 @@ packages:
       react-markdown: 8.0.7_453b269bd7a8e2940a0e8fb00c615d82
       rehype-raw: 6.1.1
       sp-entityportal-service: 2.2.13
-      sp-js-provisioning: 1.2.0-beta.1_1ca3516818190f66f3253793862e2abe
+      sp-js-provisioning: 1.2.0_1ca3516818190f66f3253793862e2abe
       spfx-jsom: 0.6.6_1ca3516818190f66f3253793862e2abe
       tslib: 2.3.1
       typescript: 4.5.5
@@ -20546,7 +20547,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectextensions'
     resolution:
-      integrity: sha512-snfM+8UVKLPA3Dz0pKuSpkaZ3gXUyUcH4lsFkI78YFCgZtcy59pxswle0fGpV5mpzPTyk6NVHebKBCR1+xSZ2g==
+      integrity: sha512-UN+E8rGSq3wiQxY2SmvqZ1NqAs427X5ak10CDTzgY1V716hyttp3y+0810vGp8gubzs6KJhnSO2XiHmZHO9KKA==
       tarball: file:projects/pp365-projectextensions.tgz
     version: 0.0.0
   file:projects/pp365-projectwebparts.tgz:
@@ -20752,6 +20753,7 @@ specifiers:
   '@rush-temp/pp365-templates': file:./projects/pp365-templates.tgz
   '@rushstack/eslint-config': 2.5.1
   '@types/array-sort': 1.0.0
+  '@types/colors': ~1.2.1
   '@types/dom-to-image': 2.6.4
   '@types/get-value': 3.0.1
   '@types/lodash': ~4.14.195
@@ -20804,7 +20806,7 @@ specifiers:
   replace: 1.2.2
   resx-json-typescript-converter: ^1.0.1
   sp-entityportal-service: 2.2.13
-  sp-js-provisioning: 1.2.0-beta.1
+  sp-js-provisioning: 1.2.0
   spfx-jsom: 0.6.6
   tslib: 2.3.1
   typescript: 4.5.5
