@@ -31,7 +31,7 @@ export class ProjectPhaseModel {
   }
 
   public get name(): string {
-    const localizedLabel = _.find(this.term.labels, l => l.languageTag === 'nb-NO')
+    const localizedLabel = _.find(this.term.labels, (l) => l.languageTag === 'nb-NO')
     return localizedLabel?.name ?? this.term.labels[0].name
   }
 
@@ -40,7 +40,7 @@ export class ProjectPhaseModel {
    * the term set ID.
    */
   public get properties(): Record<string, string> {
-    const { properties } = _.find(this.term.localProperties, p => p.setId === this._termSetId)
+    const { properties } = _.find(this.term.localProperties, (p) => p.setId === this._termSetId)
     if (!properties) return {}
     return properties.reduce((acc, p) => {
       acc[p.key] = p.value

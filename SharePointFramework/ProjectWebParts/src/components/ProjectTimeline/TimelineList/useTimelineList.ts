@@ -91,8 +91,7 @@ export function useTimelineList() {
   const redirectNewTimelineItem = async () => {
     const [project] = await SPDataAdapter.portal.web.lists
       .getByTitle(strings.ProjectsListName)
-      .items
-      .select('Id')
+      .items.select('Id')
       .filter(`GtSiteId eq ${context.props.siteId}`)()
 
     const properties: Record<string, any> = {

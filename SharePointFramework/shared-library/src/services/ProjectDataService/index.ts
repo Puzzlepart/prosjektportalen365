@@ -84,23 +84,38 @@ export class ProjectDataService {
       this.getStorageKey('_getPropertyItemContext'),
       async () => {
         try {
-          this._logInfo(`Checking if list ${this._params.propertiesListName} exists in web.`, '_getPropertyItemContext')
+          this._logInfo(
+            `Checking if list ${this._params.propertiesListName} exists in web.`,
+            '_getPropertyItemContext'
+          )
           const [list] = await this.web.lists
             .filter(`Title eq '${this._params.propertiesListName}'`)
             .select('Id', 'DefaultEditFormUrl')<ISPList[]>()
           if (!list) {
-            this._logInfo(`List ${this._params.propertiesListName} does not exist in web.`, '_getPropertyItemContext')
+            this._logInfo(
+              `List ${this._params.propertiesListName} does not exist in web.`,
+              '_getPropertyItemContext'
+            )
             return null
           }
-          this._logInfo(`Checking if there's a entry in list ${this._params.propertiesListName}.`, '_getPropertyItemContext')
+          this._logInfo(
+            `Checking if there's a entry in list ${this._params.propertiesListName}.`,
+            '_getPropertyItemContext'
+          )
           const [item] = await this.web.lists.getById(list.Id).items.select('Id').top(1)<
             { Id: number }[]
           >()
           if (!item) {
-            this._logInfo(`No entry found in list ${this._params.propertiesListName}.`, '_getPropertyItemContext')
+            this._logInfo(
+              `No entry found in list ${this._params.propertiesListName}.`,
+              '_getPropertyItemContext'
+            )
             return null
           }
-          this._logInfo(`Entry with ID ${item.Id} found in list ${this._params.propertiesListName}.`, '_getPropertyItemContext')
+          this._logInfo(
+            `Entry with ID ${item.Id} found in list ${this._params.propertiesListName}.`,
+            '_getPropertyItemContext'
+          )
           return {
             itemId: item.Id,
             listId: list.Id,
@@ -124,8 +139,8 @@ export class ProjectDataService {
   }
 
   /**
-   * Get project properties for the site/web. 
-   * 
+   * Get project properties for the site/web.
+   *
    * Returns the following properties:
    * - `fieldValuesText`: Field values in text format
    * - `fieldValues`: Field values in object format
@@ -133,7 +148,7 @@ export class ProjectDataService {
    * - `editFormUrl`: Edit form URL including generated source URL
    * - `versionHistoryUrl`: Version history URL
    * - `propertiesListId`: List ID of the properties list
-   * 
+   *
    * Returns null if no properties are found.
    *
    * @param sourceUrl Source url to append to edit form url
@@ -165,12 +180,13 @@ export class ProjectDataService {
 
       const modifiedSourceUrl = !sourceUrl.includes(welcomepage)
         ? sourceUrl
-          .replace('#syncproperties=1', `/${welcomepage}#syncproperties=1`)
-          .replace('//SitePages', '/SitePages')
+            .replace('#syncproperties=1', `/${welcomepage}#syncproperties=1`)
+            .replace('//SitePages', '/SitePages')
         : sourceUrl
 
       const editFormUrl = makeUrlAbsolute(
-        `${propertyItemContext.defaultEditFormUrl}?ID=${propertyItemContext.itemId
+        `${propertyItemContext.defaultEditFormUrl}?ID=${
+          propertyItemContext.itemId
         }&Source=${encodeURIComponent(modifiedSourceUrl)}`
       )
 
@@ -204,8 +220,14 @@ export class ProjectDataService {
         templateParameters
       }
     } else {
-      this._logInfo('Local property item not found. Retrieving data from portal site.', 'getPropertiesData')
-      const entity = await this._params.entityService.fetchEntity(this._params.siteId, this._params.webUrl)
+      this._logInfo(
+        'Local property item not found. Retrieving data from portal site.',
+        'getPropertiesData'
+      )
+      const entity = await this._params.entityService.fetchEntity(
+        this._params.siteId,
+        this._params.webUrl
+      )
       return {
         fieldValues: entity.fieldValues,
         fieldValuesText: entity.fieldValues,
@@ -260,11 +282,9 @@ export class ProjectDataService {
     termSetId: string,
     checklistData: { [termGuid: string]: ProjectPhaseChecklistData } = {}
   ): Promise<ProjectPhaseModel[]> {
-    const terms = await this._sp.termStore
-      .sets
+    const terms = await this._sp.termStore.sets
       .getById(termSetId)
-      .terms
-      .select('*', 'localProperties')
+      .terms.select('*', 'localProperties')
       .using(DefaultCaching)()
     // eslint-disable-next-line no-console
     console.log(termSetId, terms)
@@ -300,8 +320,8 @@ export class ProjectDataService {
       const items = await this.web.lists
         .getByTitle(listName)
         .items.select('ID', 'Title', 'GtComment', 'GtChecklistStatus', 'GtProjectPhase')<
-          Record<string, any>[]
-        >()
+        Record<string, any>[]
+      >()
       const checklistItems = items.map((item) => new ChecklistItemModel(item))
       const checklistData = checklistItems
         .filter((item) => item.termGuid)
