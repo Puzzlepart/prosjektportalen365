@@ -18,20 +18,20 @@ const path = require('path')
 const glob = require('glob').sync
 const revert = argv.revert
 const force = argv.force
-const { getFileContent } = require('./util')
+const { getFileContent, joinPath } = require('./util')
 require('dotenv').config()
 
 // Config folder path
-const configFolder = path.join(process.cwd(), `config`)
+const configFolder = joinPath(process.cwd(), `config`)
 
 // Generated solution config file path
-const solutionConfigFile = path.join(configFolder, `.generated-solution-config.json`)
+const solutionConfigFile = joinPath(configFolder, `.generated-solution-config.json`)
 
 // Package solution file path
-const packageSolutionFile = path.join(configFolder, `package-solution.json`)
+const packageSolutionFile = joinPath(configFolder, `package-solution.json`)
 
 // Backup package solution file path
-const packageSolutionFileCopy = path.join(configFolder, `package-solution.json.bak`)
+const packageSolutionFileCopy = joinPath(configFolder, `package-solution.json.bak`)
 
 /**
  * Revert package solution file to the backup file and delete the backup file. Also deletes
@@ -137,7 +137,7 @@ function generateComponentManifestFiles(solutionConfig, componentManifestFiles) 
     if (process.env.SERVE_CHANNEL === 'main' || (!process.env.SERVE_CHANNEL && !force)) {
         return
     }
-    const componentManifestFiles = glob(path.join(process.cwd(), `src/**/manifest.json`))
+    const componentManifestFiles = glob(joinPath(process.cwd(), `src/**/manifest.json`))
     if (revert || process.env.npm_lifecycle_event === 'postwatch') {
         revertPackageSolutionFile()
         revertComponentManifestFiles(componentManifestFiles)

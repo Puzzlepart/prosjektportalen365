@@ -14,6 +14,16 @@ function getFileContent(file) {
     return fileContentJson
 }
 
+/**
+ * Join paths and replace backslashes with forward slashes to support Windows.
+ * 
+ * @param  {...any} paths Paths to join
+ */
+function joinPath(...paths) {
+    return path.join(...paths).replace(/\\/g,'/')
+}
+
 module.exports = {
-    getFileContent
+    getFileContent,
+    joinPath
 }
