@@ -1,5 +1,5 @@
 import { DefaultButton, DialogFooter, PrimaryButton } from '@fluentui/react'
-import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { FC, useContext, useState } from 'react'
 import { InfoMessage } from '../../InfoMessage'
@@ -21,7 +21,7 @@ export const EditCopyScreen: FC<IEditCopyScreenProps> = ({ onStartCopy }) => {
    * @param properties Updated properties
    * @param errorMessage Error message
    */
-  function onInputChanged(id: string, properties: TypedHash<string>, errorMessage?: string) {
+  function onInputChanged(id: string, properties: Record<string, string>, errorMessage?: string) {
     setTemplates(
       templates.map((t) => {
         if (t.id === id) {

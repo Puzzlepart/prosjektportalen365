@@ -1,5 +1,5 @@
 import { Icon, TooltipHost } from '@fluentui/react'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import React, { FC } from 'react'
 import { IConfigColumnProps } from './types'
 import styles from './ConfigColumn.module.scss'

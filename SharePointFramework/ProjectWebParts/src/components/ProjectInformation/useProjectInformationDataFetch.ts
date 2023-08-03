@@ -61,8 +61,7 @@ const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolea
     const projectDataList = SPDataAdapter.portal.web.lists.getByTitle(strings.IdeaProjectDataTitle)
     const [projectDataItem] = await projectDataList.items
       .filter(`GtSiteUrl eq '${props.webPartContext.pageContext.web.absoluteUrl}'`)
-      .select('Id')
-      .get()
+      .select('Id')()
 
     const [ideaConfig] = (await SPDataAdapter.getIdeaConfiguration()).filter(
       (item) => item.title === props.ideaConfiguration
@@ -72,8 +71,7 @@ const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolea
 
     const [ideaProcessingItem] = await ideaProcessingList.items
       .filter(`GtIdeaProjectDataId eq '${projectDataItem.Id}'`)
-      .select('Id, GtIdeaDecision')
-      .get()
+      .select('Id, GtIdeaDecision')()
     if (ideaProcessingItem.GtIdeaDecision === 'Godkjent og synkronisert') {
       isSynced = true
     }

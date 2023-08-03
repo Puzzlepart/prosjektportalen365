@@ -8,7 +8,6 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { sp } from '@pnp/sp'
 import * as strings from 'ProjectWebPartsStrings'
 import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
 import { IRiskMatrixProps, RiskMatrix } from 'components/RiskMatrix'
@@ -67,7 +66,7 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
       viewXml,
       listName
     } = this.properties
-    const items: any[] = await sp.web.lists
+    const items: any[] = await this.sp.web.lists
       .getByTitle(listName)
       .getItemsByCAMLQuery({ ViewXml: viewXml })
     return items.map(

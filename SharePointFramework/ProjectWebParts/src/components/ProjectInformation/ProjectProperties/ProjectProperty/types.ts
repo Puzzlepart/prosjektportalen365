@@ -1,7 +1,6 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
-import { TypedHash } from '@pnp/common'
 import { IEntityField } from 'sp-entityportal-service'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 
 type ProjectPropertyModelType = 'user' | 'usermulti' | 'taxonomyfieldtypemulti' | 'url'
 
@@ -69,5 +68,5 @@ export interface IProjectPropertyProps extends React.HTMLAttributes<HTMLElement>
   /**
    * A hash object of fields to show for external users
    */
-  showFieldExternal?: TypedHash<boolean>
+  showFieldExternal?: Record<string, boolean>
 }

@@ -5,6 +5,7 @@ import { TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-l
 import strings from 'ProjectWebPartsStrings'
 import { first } from 'underscore'
 import { IProjectTimelineProps } from '../types'
+import '@pnp/sp/items/get-all'
 
 /**
  * Fetch project data

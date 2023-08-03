@@ -1,13 +1,13 @@
 import { IColumn } from '@fluentui/react'
-import { sp } from '@pnp/sp'
 import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
 import { TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-library/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { IProjectTimelineProps } from '../types'
+import '@pnp/sp/items/get-all'
 
 /**
- * Fetch timeline items and columns
+ * Fetch timeline items and columns.
  *
  * @param props Component properties for `ProjectTimeline`
  * @param timelineConfig Timeline configuration
@@ -20,10 +20,9 @@ export async function fetchTimelineData(
     const timelineContentList = SPDataAdapter.portal.web.lists.getByTitle(
       strings.TimelineContentListName
     )
-
     const projectDeliveries = (
       props.showProjectDeliveries
-        ? await sp.web.lists.getByTitle(props.projectDeliveriesListName).items.getAll()
+        ? await props.sp.web.lists.getByTitle(props.projectDeliveriesListName).items.getAll()
         : []
     )
       .map((item) => {
@@ -46,7 +45,7 @@ export async function fetchTimelineData(
       .filter(Boolean)
 
     const defaultViewColumns = (
-      await timelineContentList.defaultView.fields.select('Items').top(500).get()
+      await timelineContentList.defaultView.fields.select('Items').top(500)()
     )['Items'] as string[]
 
     const filterString = defaultViewColumns.map((col) => `(InternalName eq '${col}')`).join(' or ')
@@ -67,8 +66,7 @@ export async function fetchTimelineData(
       timelineContentList.fields
         .filter(filterString)
         .select('InternalName', 'Title', 'TypeAsString')
-        .top(500)
-        .get()
+        .top(500)()
     ])
 
     let timelineListItems = timelineContentItems.filter(

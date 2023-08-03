@@ -1,6 +1,6 @@
 import _ from 'underscore'
 import * as uniq from 'array-unique'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import { useContext } from 'react'
 import { PortfolioOverviewContext } from './context'
 import { get } from '@microsoft/sp-lodash-subset'

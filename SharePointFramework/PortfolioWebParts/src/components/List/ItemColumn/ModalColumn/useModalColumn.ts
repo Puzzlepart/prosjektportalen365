@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { IModalColumnProps } from './types'
 import { useInfoText } from './useInfoText'
 import _ from 'lodash'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 
 /**
  * Hook that returns the necessary props for rendering a modal with a list of items.

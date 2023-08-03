@@ -1,5 +1,4 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { ItemUpdateResult, SearchResult, SortDirection } from '@pnp/sp'
 import {
   DataSource,
   DataSourceService,
@@ -14,8 +13,10 @@ import {
   TimelineContentModel
 } from 'pp365-shared-library'
 import { IPortfolioAggregationConfiguration, IPortfolioOverviewConfiguration } from '../components'
+import { ISearchResult, SortDirection } from '@pnp/sp/search'
+import { IItemUpdateResult } from '@pnp/sp/items'
 
-export interface IFetchDataForViewItemResult extends SearchResult {
+export interface IFetchDataForViewItemResult extends ISearchResult {
   SiteId: string
   [key: string]: any
 }
@@ -323,5 +324,5 @@ export interface IPortfolioWebPartsDataAdapter {
     properties: SPDataSourceItem,
     dataSourceTitle: string,
     shouldReplace?: boolean
-  ): Promise<ItemUpdateResult>
+  ): Promise<IItemUpdateResult>
 }

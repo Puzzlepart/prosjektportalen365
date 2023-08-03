@@ -1,8 +1,9 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { flatten } from '@microsoft/sp-lodash-subset'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { PnPClientStorage, dateAdd, stringIsNullOrEmpty } from '@pnp/common'
-import { QueryPropertyValueType, SearchResult, SortDirection, sp } from '@pnp/sp'
+import { PnPClientStorage, dateAdd, stringIsNullOrEmpty } from '@pnp/core'
+import '@pnp/sp/items/get-all'
+import { ISearchResult, QueryPropertyValueType, SortDirection } from '@pnp/sp/search'
 import * as strings from 'ProgramWebPartsStrings'
 import * as cleanDeep from 'clean-deep'
 import { IProgramAdministrationProject } from 'components/ProgramAdministration/types'
@@ -19,6 +20,7 @@ import {
 import {
   DataSource,
   DataSourceService,
+  DefaultCaching,
   IGraphGroup,
   ISPDataAdapterBaseConfiguration,
   ISPProjectItem,
@@ -64,14 +66,12 @@ export class SPDataAdapter
   ) {
     await super.configure(spfxContext, configuration)
     this.dataSourceService = new DataSourceService(this.portal.web)
-    this.project = new ProjectDataService(
-      {
-        ...this.settings,
-        entityService: this.entityService,
-        propertiesListName: strings.ProjectPropertiesListName
-      },
-      this.spConfiguration
-    )
+    this.project = new ProjectDataService({
+      ...this.settings,
+      spfxContext,
+      entityService: this.entityService,
+      propertiesListName: strings.ProjectPropertiesListName
+    })
   }
 
   public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
@@ -285,17 +285,17 @@ export class SPDataAdapter
       { PrimarySearchResults: sites },
       { PrimarySearchResults: statusReports }
     ] = await Promise.all([
-      sp.search({
+      this.sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: searchQuery,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty]
       }),
-      sp.search({
+      this.sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: `DepartmentId:{${siteId}} contentclass:STS_Site`,
         SelectProperties: ['Path', 'Title', 'SiteId']
       }),
-      sp.search({
+      this.sp.search({
         ...DEFAULT_SEARCH_SETTINGS,
         QueryTemplate: `${queryArray} DepartmentId:{${siteId}} ContentTypeId:0x010022252E35737A413FB56A1BA53862F6D5* GtModerationStatusOWSCHCS:Publisert`,
         SelectProperties: [...configuration.columns.map((f) => f.fieldName), siteIdProperty],
@@ -481,8 +481,8 @@ export class SPDataAdapter
     rowLimit: number,
     sortProperty: string,
     sortDirection: SortDirection
-  ): Promise<SearchResult[]> {
-    const response = await sp.search({
+  ): Promise<ISearchResult[]> {
+    const response = await this.sp.search({
       Querytext: `DepartmentId:{${this.spfxContext.pageContext.legacyPageContext.hubSiteId}} contentclass:STS_Site`,
       TrimDuplicates: false,
       RowLimit: rowLimit,
@@ -570,22 +570,14 @@ export class SPDataAdapter
         .filter("GtProjectLifecycleStatus ne 'Avsluttet'")
         .orderBy('Title')
         .top(500)
-        .usingCaching()
-        .get<ISPProjectItem[]>(),
+        .using(DefaultCaching)<ISPProjectItem[]>(),
       MSGraph.Get<IGraphGroup[]>(
         '/me/memberOf/$/microsoft.graph.group',
         ['id', 'displayName'],
         // eslint-disable-next-line quotes
         "groupTypes/any(a:a%20eq%20'unified')"
       ),
-      sp.web.siteUsers
-        .select('Id', 'Title', 'Email')
-        .usingCaching({
-          key: 'fetchenrichedprojects_siteusers',
-          storeName: 'session',
-          expiration: dateAdd(new Date(), 'minute', 15)
-        })
-        .get<ISPUser[]>()
+      this.sp.web.siteUsers.select('Id', 'Title', 'Email').using(DefaultCaching)<ISPUser[]>()
     ])
 
     const projects = this._mapProjects(items, groups, users)
@@ -594,11 +586,10 @@ export class SPDataAdapter
 
   public async isUserInGroup(groupName: string): Promise<boolean> {
     try {
-      const [siteGroup] = await sp.web.siteGroups
+      const [siteGroup] = await this.sp.web.siteGroups
         .select('CanCurrentUserViewMembership', 'Title')
-        .filter(`Title eq '${groupName}'`)
-        .get()
-      return siteGroup && siteGroup.CanCurrentUserViewMembership
+        .filter(`Title eq '${groupName}'`)()
+      return siteGroup && siteGroup['CanCurrentUserViewMembership']
     } catch (error) {
       return false
     }
@@ -695,16 +686,13 @@ export class SPDataAdapter
     includeSelf: boolean = false,
     siteIdManagedProperty: string = 'SiteId'
   ) {
-    sp.setup({
-      spfxContext: this.spfxContext
-    })
     const siteId = this.spfxContext.pageContext.site.id.toString()
     const programFilter = this.childProjects && this.aggregatedQueryBuilder(siteIdManagedProperty)
     if (includeSelf) programFilter.unshift(`${siteIdManagedProperty}:${siteId}`)
     const promises = []
     programFilter.forEach((element) => {
       promises.push(
-        sp.search({
+        this.sp.search({
           QueryTemplate: `${element} ${queryTemplate}`,
           Querytext: '*',
           RowLimit: 500,
@@ -765,8 +753,7 @@ export class SPDataAdapter
       )
       const columnItems = await projectContentColumnsList.items
         .select(...Object.keys(new SPProjectContentColumnItem()))
-        .usingCaching()
-        .get<SPProjectContentColumnItem[]>()
+        .using(DefaultCaching)<SPProjectContentColumnItem[]>()
       const filteredColumnItems = columnItems.filter(
         (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
       )
@@ -789,7 +776,7 @@ export class SPDataAdapter
     try {
       const siteId = this.spfxContext.pageContext.site.id.toString()
       const list = this.portal.web.lists.getByTitle(strings.ProjectsListName)
-      const [item] = await list.items.filter(`GtSiteId eq '${siteId}'`).get()
+      const [item] = await list.items.filter(`GtSiteId eq '${siteId}'`)()
       await list.items.getById(item.ID).update(properties)
     } catch (error) {}
   }
@@ -803,11 +790,10 @@ export class SPDataAdapter
    */
   public async getChildProjects(): Promise<Array<Record<string, string>>> {
     try {
-      const projectProperties = await sp.web.lists
+      const projectProperties = await this.sp.web.lists
         .getByTitle('Prosjektegenskaper')
         .items.getById(1)
-        .usingCaching()
-        .get()
+        .using(DefaultCaching)()
       try {
         const childProjects = JSON.parse(projectProperties.GtChildProjects)
         return !_.isEmpty(childProjects) ? childProjects : []
@@ -836,13 +822,13 @@ export class SPDataAdapter
    * retrieve the SiteId and SPWebURL. The result are cached for 5 minutes.
    */
   public async getHubSiteProjects() {
-    const { HubSiteId } = await sp.site.select('HubSiteId').usingCaching().get()
+    const { HubSiteId } = await this.sp.site.select('HubSiteId')()
     return new PnPClientStorage().local.getOrPut(
       `HubSiteProjects_${HubSiteId}`,
       async () => {
         const [{ PrimarySearchResults: sts_sites }, { PrimarySearchResults: items }] =
           await Promise.all([
-            sp.search({
+            this.sp.search({
               Querytext: `DepartmentId:{${HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
               RowLimit: 500,
               StartRow: 0,
@@ -850,7 +836,7 @@ export class SPDataAdapter
               SelectProperties: ['SPWebURL', 'Title', 'SiteId'],
               TrimDuplicates: false
             }),
-            sp.search({
+            this.sp.search({
               Querytext: `DepartmentId:{${HubSiteId}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
               RowLimit: 500,
               StartRow: 0,
@@ -885,11 +871,10 @@ export class SPDataAdapter
    */
   public async getChildProjectIds(): Promise<string[]> {
     try {
-      const projectProperties = await sp.web.lists
+      const projectProperties = await this.sp.web.lists
         .getByTitle('Prosjektegenskaper')
         .items.getById(1)
-        .usingCaching()
-        .get()
+        .using(DefaultCaching)()
       try {
         const childProjects = JSON.parse(projectProperties.GtChildProjects)
         return childProjects.map((p: Record<string, any>) => p.SiteId)
@@ -920,14 +905,16 @@ export class SPDataAdapter
    * @param newProjects New projects to add
    */
   public async addChildProjects(newProjects: Array<Record<string, string>>) {
-    const [{ GtChildProjects }] = await sp.web.lists
+    const [{ GtChildProjects }] = await this.sp.web.lists
       .getByTitle('Prosjektegenskaper')
-      .items.select('GtChildProjects')
-      .get()
+      .items.select('GtChildProjects')()
     const projects = JSON.parse(GtChildProjects)
     const updatedProjects = [...projects, ...newProjects]
     const updateProperties = { GtChildProjects: JSON.stringify(updatedProjects) }
-    await sp.web.lists.getByTitle('Prosjektegenskaper').items.getById(1).update(updateProperties)
+    await this.sp.web.lists
+      .getByTitle('Prosjektegenskaper')
+      .items.getById(1)
+      .update(updateProperties)
     await this.updateProjectInHub(updateProperties)
   }
 
@@ -939,16 +926,18 @@ export class SPDataAdapter
   public async removeChildProjects(
     projectToRemove: Array<Record<string, string>>
   ): Promise<Array<Record<string, string>>> {
-    const [currentData] = await sp.web.lists
+    const [currentData] = await this.sp.web.lists
       .getByTitle('Prosjektegenskaper')
-      .items.select('GtChildProjects')
-      .get()
+      .items.select('GtChildProjects')()
     const projects: Array<Record<string, string>> = JSON.parse(currentData.GtChildProjects)
     const updatedProjects = projects.filter(
       (p) => !projectToRemove.some((el) => el.SiteId === p.SiteId)
     )
     const updateProperties = { GtChildProjects: JSON.stringify(updatedProjects) }
-    await sp.web.lists.getByTitle('Prosjektegenskaper').items.getById(1).update(updateProperties)
+    await this.sp.web.lists
+      .getByTitle('Prosjektegenskaper')
+      .items.getById(1)
+      .update(updateProperties)
     await this.updateProjectInHub(updateProperties)
     return updatedProjects
   }

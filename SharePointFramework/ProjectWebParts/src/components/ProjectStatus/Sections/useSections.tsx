@@ -1,4 +1,4 @@
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import { SectionType } from 'pp365-shared-library/lib/models'
 import { useContext } from 'react'
 import { ProjectStatusContext } from '../context'

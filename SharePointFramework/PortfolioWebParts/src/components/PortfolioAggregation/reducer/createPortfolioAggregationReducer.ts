@@ -1,5 +1,5 @@
 import { MessageBarType } from '@fluentui/react'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import { createReducer, current } from '@reduxjs/toolkit'
 import * as strings from 'PortfolioWebPartsStrings'
 import sortArray from 'array-sort'

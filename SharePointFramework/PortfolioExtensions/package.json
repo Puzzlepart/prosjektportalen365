@@ -1,6 +1,6 @@
 {
   "name": "pp365-portfolioextensions",
-  "version": "1.9.0-1128.1",
+  "version": "1.9.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -28,14 +28,16 @@
     "@microsoft/sp-listview-extensibility": "1.15.2",
     "react-markdown": "^8.0.3",
     "rehype-raw": "^6.1.1",
-    "@pnp/core": "^3.7.0",
-    "@pnp/logging": "3.7.0",
-    "@pnp/sp": "3.7.0",
+    "@pnp/core": "3.17.0",
+    "@pnp/logging": "3.17.0",
+    "@pnp/sp": "3.17.0",
     "pp365-shared-library": "1.9.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "tslib": "2.3.1",
-    "underscore": "~1.13.6"
+    "underscore": "~1.13.6",
+    "@pnp/queryable": "3.17.0",
+    "sp-entityportal-service": "2.2.13"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.15.2",
