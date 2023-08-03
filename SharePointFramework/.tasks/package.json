@@ -8,9 +8,7 @@
     "dependencies": {
       "dotenv": "~16.1.3",
       "yargs": "~17.7.2",
-      "glob": "~10.2.6",
-      "@types/underscore": "~1.11.5",
-      "underscore": "~1.13.6"
+      "glob": "~10.2.6"
     },
     "devDependencies": {
       "@types/lodash": "~4.14.195"

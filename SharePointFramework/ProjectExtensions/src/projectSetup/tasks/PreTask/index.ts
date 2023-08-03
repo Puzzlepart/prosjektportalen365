@@ -28,7 +28,7 @@ export class PreTask extends BaseTask {
       params.spfxJsomContext = await initSpfxJsom(params.context.pageContext.site.absoluteUrl, {
         loadTaxonomy: true
       })
-      params.entityService = new SpEntityPortalService({
+      params.entityService = new SpEntityPortalService(params.context, {
         portalUrl: SPDataAdapter.portal.url,
         listName: params.properties.projectsList,
         identityFieldName: 'GtGroupId',

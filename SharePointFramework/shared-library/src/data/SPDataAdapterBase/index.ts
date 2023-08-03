@@ -52,14 +52,14 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
    * @param spfxContext Context
    * @param settings Settings
    */
-  public async configure(spfxContext: any, settings: T) {
+  public async configure(spfxContext: SPFxContext, settings: T) {
     this.spfxContext = spfxContext
     this.settings = settings
     this.sp = createSpfiInstance(spfxContext)
     this.portal = await new PortalDataService().configure({
       spfxContext
     })
-    this.entityService = new SpEntityPortalService({
+    this.entityService = new SpEntityPortalService(spfxContext, {
       portalUrl: this.portal.url,
       listName: 'Prosjekter',
       contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',

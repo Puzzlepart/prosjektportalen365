@@ -39,6 +39,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     await super.configure(spfxContext, settings)
     this.project = new ProjectDataService({
       ...this.settings,
+      spfxContext,
       entityService: this.entityService,
       propertiesListName: strings.ProjectPropertiesListName
     })

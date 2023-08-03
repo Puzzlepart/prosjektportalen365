@@ -78,7 +78,7 @@ export class PortalDataService {
   }
 
   /**
-   * Initialize portal site setting `url`, `hubSite` and `web` properties. Caches the result in local storage
+   * Initialize portal site setting `url`, `_spPortal` and `web` properties. Caches the result in local storage
    * to avoid unnecessary requests.
    *
    * @param expire Expire (defaults to 1 year)
