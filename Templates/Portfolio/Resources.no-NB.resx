@@ -638,7 +638,7 @@
     <value>Beskrivelse av usikkerhet</value>
   </data>
   <data name="SiteFields_GtRiskDescription_Description" xml:space="preserve">
-    <value></value>
+    <value>Detaljert beskrivelse av den usikkerheten som er identifisert.</value>
   </data>
   <data name="SiteFields_GtSortOrder_DisplayName" xml:space="preserve">
     <value>Sorteringsrekkefølge</value>
@@ -1133,7 +1133,7 @@
     <value>Godkjenningsmetode</value>
   </data>
   <data name="SiteFields_GtDeliveryAcceptanceMethod_Description" xml:space="preserve">
-    <value>Hvordan blir godkjenningen av leveransen bekreftet? Eksempelvis ved testing, brukerundersøkelse, demonstrasjon, muntlig eller skriftlig avtale/overlering.</value>
+    <value>Metoden som brukes for å godkjenne leveransen.</value>
   </data>
   <data name="SiteFields_GtDeliveryAcceptanceResponsible_DisplayName" xml:space="preserve">
     <value>Godkjenningsansvar</value>
@@ -1175,7 +1175,7 @@
     <value>Starttidspunkt</value>
   </data>
   <data name="SiteFields_GtDeliveryStartTime_Description" xml:space="preserve">
-    <value>Oppgi (forventet) starttidspunkt for denne prosjektleveransen</value>
+    <value>Oppgi (forventet) starttidspunkt for denne prosjektleveransen.</value>
   </data>
   <data name="SiteFields_GtDeliveryStatus_DisplayName" xml:space="preserve">
     <value>Leveransestatus</value>
@@ -1223,49 +1223,49 @@
     <value>Key</value>
   </data>
   <data name="SiteFields_GtKey_Description" xml:space="preserve">
-    <value></value>
+    <value>Dette feltet oppbevarer en nøkkelverdi, hvis det er nødvendig for organisasjonens bruk av denne ressursen.</value>
   </data>
   <data name="SiteFields_GtLogContext_DisplayName" xml:space="preserve">
     <value>Context</value>
   </data>
   <data name="SiteFields_GtLogContext_Description" xml:space="preserve">
-    <value></value>
+    <value>Kontekst knyttet til loggen.</value>
   </data>
   <data name="SiteFields_GtLogFunctionName_DisplayName" xml:space="preserve">
     <value>Function Name</value>
   </data>
   <data name="SiteFields_GtLogFunctionName_Description" xml:space="preserve">
-    <value></value>
+    <value>Navnet på funksjonen som loggen refererer til.</value>
   </data>
   <data name="SiteFields_GtLogComponentName_DisplayName" xml:space="preserve">
     <value>Component Name</value>
   </data>
   <data name="SiteFields_GtLogComponentName_Description" xml:space="preserve">
-    <value></value>
+    <value>Navnet på komponenten som loggen refererer til.</value>
   </data>
   <data name="SiteFields_GtLogLevel_DisplayName" xml:space="preserve">
     <value>Log Level</value>
   </data>
   <data name="SiteFields_GtLogLevel_Description" xml:space="preserve">
-    <value></value>
+    <value>Nivået på loggmeldingen.</value>
   </data>
   <data name="SiteFields_GtLogMessage_DisplayName" xml:space="preserve">
     <value>Message</value>
   </data>
   <data name="SiteFields_GtLogMessage_Description" xml:space="preserve">
-    <value></value>
+    <value>Innholdet i loggmeldingen.</value>
   </data>
   <data name="SiteFields_GtLogScope_DisplayName" xml:space="preserve">
     <value>Scope</value>
   </data>
   <data name="SiteFields_GtLogScope_Description" xml:space="preserve">
-    <value></value>
+    <value>Angir rekkevidden for loggmeldingen.</value>
   </data>
   <data name="SiteFields_GtLogWebUrl_DisplayName" xml:space="preserve">
     <value>Web URL</value>
   </data>
   <data name="SiteFields_GtLogWebUrl_Description" xml:space="preserve">
-    <value></value>
+    <value>Nettadressen som loggen refererer til.</value>
   </data>
   <data name="SiteFields_GtMeasurementComment_DisplayName" xml:space="preserve">
     <value>Kommentar til måling</value>
@@ -1295,7 +1295,7 @@
     <value>Status</value>
   </data>
   <data name="SiteFields_GtModerationStatus_Description" xml:space="preserve">
-    <value></value>
+    <value>Statusen på en gitt moderasjonsprosess.</value>
   </data>
   <data name="SiteFields_GtParentProjects_DisplayName" xml:space="preserve">
     <value>Overordnede prosjekter</value>
@@ -1316,7 +1316,7 @@
     <value>Beskrivelse</value>
   </data>
   <data name="SiteFields_GtProjectInfoDescription_Description" xml:space="preserve">
-    <value></value>
+    <value>Oppgi en detaljert beskrivelse av prosjektet.</value>
   </data>
   <data name="SiteFields_GtProjectLogActors_DisplayName" xml:space="preserve">
     <value>Aktører</value>
@@ -1385,7 +1385,7 @@
     <value>Prosjektmal</value>
   </data>
   <data name="SiteFields_GtProjectTemplate_Description" xml:space="preserve">
-    <value></value>
+  <value>Malen som skal brukes for prosjektet</value>
   </data>
   <data name="SiteFields_GtRiskConsequence_Description" xml:space="preserve">
     <value>Oppgi konsekvensen (0-5) av usikkerheten dersom den skulle inntreffe</value>
@@ -1394,31 +1394,25 @@
     <value>K etter tiltak</value>
   </data>
   <data name="SiteFields_GtRiskConsequencePostAction_Description" xml:space="preserve">
-    <value>Oppgi konsekvensen (0-5) av usikkerheten dersom den skulle inntreffe etter at tiltakk er iverksatt</value>
+    <value>Oppgi konsekvensen (0-5) av usikkerheten dersom den skulle inntreffe etter at tiltak er iverksatt</value>
   </data>
   <data name="SiteFields_GtRiskFactor_DisplayName" xml:space="preserve">
     <value>Risikofaktor</value>
   </data>
   <data name="SiteFields_GtRiskFactor_Description" xml:space="preserve">
-    <value></value>
+    <value>Relevant risikofaktor før tiltakene iverksettes</value>
   </data>
   <data name="SiteFields_GtRiskFactorPostAction_DisplayName" xml:space="preserve">
     <value>Risikofaktor etter tiltak</value>
   </data>
   <data name="SiteFields_GtRiskFactorPostAction_Description" xml:space="preserve">
-    <value></value>
+    <value>Oppgi den relevante risikofaktoren etter at tiltakene er iverksatt</value>
   </data>
   <data name="SiteFields_GtRiskProbability_DisplayName" xml:space="preserve">
     <value>Sannsynlighet (S)</value>
   </data>
   <data name="SiteFields_GtRiskProbability_Description" xml:space="preserve">
     <value>Oppgi sannsynligheten (0-5) for at usikkerheten inntreffer</value>
-  </data>
-  <data name="SiteFields_GtRiskProbabilityPostAction_DisplayName" xml:space="preserve">
-    <value>S etter tiltak</value>
-  </data>
-  <data name="SiteFields_GtRiskProbabilityPostAction_Description" xml:space="preserve">
-    <value>Oppgi sannsynligheten (0-5) for at usikkerheten inntreffer etter at tiltak er iverksatt</value>
   </data>
   <data name="SiteFields_GtRiskProximity_DisplayName" xml:space="preserve">
     <value>Nærhet</value>
@@ -1496,7 +1490,7 @@
     <value>Value</value>
   </data>
   <data name="SiteFields_GtValue_Description" xml:space="preserve">
-    <value></value>
+    <value>Oppgi verdien for feltet</value>
   </data>
   <data name="SiteFields_GtAllocationStatus_Description" xml:space="preserve">
     <value>Oppgi status for allokeringen (oppdateres ved behov/endring)</value>
@@ -1529,7 +1523,7 @@
     <value>Oppsummer kort det totale risikobildet for prosjektet og hvilke tiltak prosjektet planlegger for neste periode.</value>
   </data>
   <data name="SiteFields_GtStatusOpportunitiesComment_Description" xml:space="preserve">
-    <value></value>
+      <value>Oppsummer kort det totale mulighetsbildet for prosjektet og hvilke tiltak prosjektet planlegger for neste periode.</value>
   </data>
   <data name="SiteFields_GtArchiveReference_Description" xml:space="preserve">
     <value>Hvis relevant, legg inn tilhørende sak- og arkivreferanse</value>
@@ -1580,7 +1574,7 @@
     <value>Legg inn eventuelle tilleggs-/utfyllende kommentarer til gevinstrapporteringen</value>
   </data>
   <data name="SiteFields_GtProjectPhase_Description" xml:space="preserve">
-    <value></value>
+    <value>Nåværende fase</value>
   </data>
   <data name="SiteFields_GtProjectFinanceName_Description" xml:space="preserve">
     <value>Hvis relevant, legg inn tilhørende prosjektnavn fra økonomisystemet</value>
@@ -1601,37 +1595,37 @@
     <value>Dersom gevinstene skal realiseres i ulike deler av organisasjonen (eller i flere virksomheter) anbefales det å oppnevne en gevinsteier i de ulike delene av linjeorganisasjonen (eller virksomhetene) som eier ulike deler av de planlagte gevinstene. Gevinsteiere har da et distribuert ansvar for sin del av gevinstene, og har en viktig rolle som den gevinstansvarliges forlengede arm og lokale støttespiller.</value>
   </data>
   <data name="SiteFields_GtSecViewFields_Description" xml:space="preserve">
-    <value></value>
+      <value>Felt som skal vises i sikkerhetsvisningen.</value>
   </data>
   <data name="SiteFields_GtSecIcon_Description" xml:space="preserve">
     <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
   </data>
   <data name="SiteFields_GtSecShowInNavbar_Description" xml:space="preserve">
-    <value></value>
+      <value>Skal elementet vises i navigasjonsfeltet?</value>
   </data>
   <data name="SiteFields_GtSecViewQuery_Description" xml:space="preserve">
-    <value></value>
+    <value>Spørring for å generere visning.</value>
   </data>
   <data name="SiteFields_GtSecFieldName_Description" xml:space="preserve">
-    <value></value>
+      <value>Navnet på feltet som skal vises.</value>
   </data>
   <data name="SiteFields_GtSecShowInStatusSection_Description" xml:space="preserve">
-    <value></value>
+    <value>Skal elementet vises i statusseksjonen?</value>
   </data>
   <data name="SiteFields_GtSecRowLimit_Description" xml:space="preserve">
-    <value></value>
+    <value>Max antall rader som skal vises.</value>
   </data>
   <data name="SiteFields_GtSecShowAsSection_Description" xml:space="preserve">
-    <value></value>
+      <value>Skal elementet vises som en egen seksjon?</value>
   </data>
   <data name="SiteFields_GtSecSource_Description" xml:space="preserve">
     <value>Om seksjonen skal lenke til en annen side eller ett dokument</value>
   </data>
   <data name="SiteFields_GtSecShowRiskMatrix_Description" xml:space="preserve">
-    <value></value>
+    <value>Skal risikomatrisen vises?</value>
   </data>
   <data name="SiteFields_GtSecList_Description" xml:space="preserve">
-    <value></value>
+        <value>Velg liste</value>
   </data>
   <data name="SiteFields_GtSecView_Description" xml:space="preserve">
     <value>Velg en visning for listen. Spørring, felter og elementgrense fra listevisningen blir gjeldende.</value>
@@ -1640,22 +1634,22 @@
     <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
   </data>
   <data name="SiteFields_GtPortfolioColumn_Description" xml:space="preserve">
-    <value></value>
+    <value>Kolonnen i porteføljeoversikten.</value>
   </data>
   <data name="SiteFields_GtPortfolioColumns_Description" xml:space="preserve">
-    <value></value>
+    <value>Kolonner som skal vises i porteføljeoversikten.</value>
   </data>
   <data name="SiteFields_GtPortfolioColumnOrder_Description" xml:space="preserve">
     <value>Kolonnerekkefølge i porteføljeoversikten. Styres i webdelen Porteføljeoversikt.</value>
   </data>
   <data name="SiteFields_GtProjectContentColumns_Description" xml:space="preserve">
-    <value></value>
+        <value>Kolonner som skal vises i prosjektets innholdsoversikt.</value>
   </data>
   <data name="SiteFields_GtPortfolioIsDefaultView_Description" xml:space="preserve">
-    <value></value>
+    <value>Er om porteføljen standardvisning?</value>
   </data>
   <data name="SiteFields_GtPortfolioIsPersonalView_Description" xml:space="preserve">
-    <value></value>
+    <value>Angir om dette er en personlig visning i porteføljeoversikten.</value>
   </data>
   <data name="SiteFields_GtManagedProperty_Description" xml:space="preserve">
     <value>Navnet på den forvaltede egenskapen for denne kolonnen. Må settes om kolonnen skal kunne brukes i Porteføljeoversikten.</value>
@@ -1667,16 +1661,16 @@
     <value>Søkespørringen for å hente data. DepartmentId refererer til Prosjektportalen-huben og bør ikke endres. ContentTypeId refererer til innholdstypen til dataelementet du vil hente. Gå til Datakilder-listen for å se eksempler.</value>
   </data>
   <data name="SiteFields_GtPortfolioRefiners_Description" xml:space="preserve">
-    <value></value>
+    <value>Raffineringskriterier som kan brukes til å filtrere visningen i porteføljeoversikten.</value>
   </data>
   <data name="SiteFields_GtProjectContentRefiners_Description" xml:space="preserve">
-    <value></value>
+    <value>Raffineringskriterier som kan brukes til å filtrere visningen i prosjektinnholdsoversikten.</value>
   </data>
   <data name="SiteFields_GtPortfolioGroupBy_Description" xml:space="preserve">
-    <value></value>
+    <value>Angir hvilken kolonne som skal grupperes i porteføljeoversikten.</value> //--------------TROR IKKE DENNE TRAFF HELT
   </data>
   <data name="SiteFields_GtProjectContentGroupBy_Description" xml:space="preserve">
-    <value></value>
+    <value>Angir hvilken kolonne som skal grupperes i prosjektinnholdsoversikten.</value> //--------------TROR IKKE DENNE TRAFF HELT
   </data>
   <data name="SiteFields_GtLccDefault_Description" xml:space="preserve">
     <value>Velges som standard</value>
@@ -1685,13 +1679,13 @@
     <value>Om elementet skjules, kan det ikke velges av brukerne i dialogen for oppsett av nytt prosjektområde.</value>
   </data>
   <data name="SiteFields_GtLccDestinationList_Description" xml:space="preserve">
-    <value></value>
+    <value>Mål-listen der elementene skal kopieres til.</value>
   </data>
   <data name="SiteFields_GtLccFields_Description" xml:space="preserve">
     <value>Felter som skal kopieres</value>
   </data>
   <data name="SiteFields_GtLccSourceList_Description" xml:space="preserve">
-    <value></value>
+    <value>Listen hvor elementene skal kopieres fra.</value>
   </data>
   <data name="SiteFields_GtLccDestinationLibrary_Description" xml:space="preserve">
     <value>Om det er dokumenter som skal kopieres, skriv inn relativ URL for biblioteket dokumentene skal kopieres til. F.eks. Delte dokumenter.</value>
@@ -1703,13 +1697,13 @@
     <value>Skal kolonnen være synlig i Prosjektinformasjon på forsiden av prosjektet.</value>
   </data>
   <data name="SiteFields_GtShowFieldPortfolio_Description" xml:space="preserve">
-    <value></value>
+    <value>Skal kolonnen være synlig i Porteføljeoversikten.</value>
   </data>
   <data name="SiteFields_GtFieldDataType_Description" xml:space="preserve">
     <value>Datatype for denne kolonnen. Styrer hvordan kolonnen blir vist i Porteføljeoversikten.</value>
   </data>
   <data name="SiteFields_GtFieldDataTypeProperties_Description" xml:space="preserve">
-    <value></value>
+    <value>Egenskaper til datatypen for kolonnen.</value>
   </data>
   <data name="SiteFields_GtResourceRole_Description" xml:space="preserve">
     <value>Velg den rollen personen skal ha i prosjektet</value>
@@ -1727,10 +1721,10 @@
     <value>Oppgi (forventet) allokeringsgrad, oppgis i tall som indikerer prosent</value>
   </data>
   <data name="SiteFields_GtDescription_Description" xml:space="preserve">
-    <value></value>
+    <value>Beskrivelse av elementet, prosjektet eller ressursen.</value>  //----------Hva er det snakk om her? prosjekt, element, område..
   </data>
   <data name="SiteFields_GtGroupId_Description" xml:space="preserve">
-    <value></value>
+    <value>ID til gruppen elementet er en del av.</value>
   </data>
   <data name="SiteFields_GtIsGroupable_Description" xml:space="preserve">
     <value>Brukere kan gruppere på denne kolonnen i Portføljeoversikten, eller andre aggregerte oversikter.</value>
@@ -1742,10 +1736,10 @@
     <value>Automatisk oppdatering av data</value>
   </data>
   <data name="SiteFields_GtPiAutomaticRefreshInterval_Description" xml:space="preserve">
-    <value></value>
+    <value>Intervallet for automatisk oppdatering av data.</value>  //----------Hvilken enhet skal oppgis her?
   </data>
   <data name="SiteFields_GtPiCategoryField_Description" xml:space="preserve">
-    <value>Kolonnefor kategorisering. Velges fra listen Prosjektkolonner.</value>
+    <value>Kolonne for kategorisering. Velges fra listen Prosjektkolonner.</value>
   </data>
   <data name="SiteFields_GtPiColorsMap_Description" xml:space="preserve">
     <value>Farger for verdien i formatet [VERDI1]:[FARGE1];[VERDI2]:[FARGE2]</value>
@@ -1757,7 +1751,7 @@
     <value>Type diagram</value>
   </data>
   <data name="SiteFields_GtPiExpandProperty_Description" xml:space="preserve">
-    <value>Om feltet er et brukerfelt (e.l.) må du velge en egenskap ? ekspandere</value>
+    <value>Om feltet er et brukerfelt (e.l.) må du velge en egenskap ? ekspandere</value>//---------Regner med det skal være en å her.
   </data>
   <data name="SiteFields_GtPiFields_Description" xml:space="preserve">
     <value>Hvilke felter skal inkluderes i diagrammet/datakilden. Velges fra listen Prosjektkolonner.</value>
@@ -1772,19 +1766,19 @@
     <value>Hvilken kolonne skal brukes for Z. Velges fra listen Prosjektkolonner.</value>
   </data>
   <data name="SiteFields_GtPiShowLegend_Description" xml:space="preserve">
-    <value></value>
+    <value>Angir om et tegnforklaring (legend) skal vises for diagrammet.</value>  //-------------Sjekk denne
   </data>
   <data name="SiteFields_GtPiStacking_Description" xml:space="preserve">
-    <value></value>
+    <value>Angir om dataene i diagrammet skal stables.</value>  //-------Sjekk denne
   </data>
   <data name="SiteFields_GtPiSubTitle_Description" xml:space="preserve">
-    <value></value>
+    <value>Undertekst for diagrammet.</value>
   </data>
   <data name="SiteFields_GtPiValueOrder_Description" xml:space="preserve">
     <value>Rekkefølge for verdiene (f.eks. Konsept,Planlegge,Gjennomføre,Avslutte,Realisere)</value>
   </data>
   <data name="SiteFields_GtPiValueSuffix_Description" xml:space="preserve">
-    <value></value>
+    <value>Tegn eller streng som skal legges til etter hver verdi i diagrammet.</value>  //-------Sjekk denne
   </data>
   <data name="SiteFields_GtPiWidthLg_Description" xml:space="preserve">
     <value>Bredde (1-12) for 640px til 1023px</value>
@@ -1817,16 +1811,16 @@
     <value>Minimum verdi for Y-aksen</value>
   </data>
   <data name="SiteFields_GtPiYTickInterval_Description" xml:space="preserve">
-    <value></value>
+    <value>Intervall mellom hver markering på Y-aksen</value>
   </data>
   <data name="SiteFields_GtProjectForecast_Description" xml:space="preserve">
     <value>Hva er de forventede totalkostnadene for prosjektet?</value>
   </data>
   <data name="SiteFields_GtSiteId_Description" xml:space="preserve">
-    <value></value>
+    <value>Id for området</value>  //--------------Riktig ordbruk?
   </data>
   <data name="SiteFields_GtSiteUrl_Description" xml:space="preserve">
-    <value></value>
+    <value>URL for området</value>  //--------------Riktig ordbruk?
   </data>
   <data name="SiteFields_GtColMinWidth_Description" xml:space="preserve">
     <value>Minimum bredde for denne kolonnen i piksler. Brukes blant annet i Porteføljeoversikten og aggregerte visninger.</value>
@@ -1835,10 +1829,10 @@
     <value>Maksimum bredde for denne kolonnen i piksler. Brukes blant annet i Porteføljeoversikten og aggregerte visninger.</value>
   </data>
   <data name="SiteFields_GtPortfolioColumnValue_Description" xml:space="preserve">
-    <value></value>
+    <value>Verdi for kolonnen.</value>
   </data>
   <data name="SiteFields_GtPortfolioColumnColor_Description" xml:space="preserve">
-    <value></value>
+    <value>Fargen for kolonnen.</value>
   </data>
   <data name="SiteFields_GtPortfolioColumnIconName_Description" xml:space="preserve">
     <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
@@ -1847,7 +1841,7 @@
     <value>Velg en kolonne som du vil vise verdien fra når du holder musepekeren over den valgte kolonnen.</value>
   </data>
   <data name="SiteFields_GtLastSyncTime_Description" xml:space="preserve">
-    <value></value>
+    <value>Tidspunkt for siste synkronisering av data.</value>
   </data>
   <data name="SiteFields_GtProjectLifecycleStatus_Description" xml:space="preserve">
     <value>Hvilken status har prosjektet ditt?</value>
@@ -1874,7 +1868,7 @@
     <value>SharePoint gruppenavn</value>
   </data>
   <data name="SiteFields_GtSPGroupName_Description" xml:space="preserve">
-    <value></value>
+    <value>Navnet på SharePoint-gruppen.</value>
   </data>
   <data name="SiteFields_GtPermissionLevel_DisplayName" xml:space="preserve">
     <value>Rettighetsnivå</value>
@@ -1928,13 +1922,13 @@
     <value>Vis på portefølje</value>
   </data>
   <data name="SiteFields_GtShowElementPortfolio_Description" xml:space="preserve">
-    <value>Velg 'Ja' dersom elementet skal synliggjøes i på porteføljetidslinjen</value>
+    <value>Velg 'Ja' dersom elementet skal synliggjøes på porteføljetidslinjen</value>
   </data>
   <data name="SiteFields_GtShowElementProgram_DisplayName" xml:space="preserve">
     <value>Vis på program</value>
   </data>
   <data name="SiteFields_GtShowElementProgram_Description" xml:space="preserve">
-    <value>Velg 'Ja' dersom elementet skal synliggjøes i på programtidslinjen</value>
+    <value>Velg 'Ja' dersom elementet skal synliggjøres på programtidslinjen</value>
   </data>
   <data name="SiteFields_GtTimelineFilter_DisplayName" xml:space="preserve">
     <value>Filter</value>
@@ -2216,7 +2210,7 @@
     <value>HP-fase</value>
   </data>
   <data name="SiteFields_GtBAProjectInvestementPhase_Description" xml:space="preserve">
-    <value></value>
+    <value>Investeringsfasen for prosjektet?</value>
   </data>
   <data name="SiteFields_GtBAProjectPolitical_DisplayName" xml:space="preserve">
     <value>Siste politiske vedtak</value>
@@ -2240,7 +2234,7 @@
     <value>Prognose i år</value>
   </data>
   <data name="SiteFields_GtBAProjectPrognosisThisYear_Description" xml:space="preserve">
-    <value></value>
+    <value>Prognosen for dette året for prosjektet?</value>
   </data>
   <data name="SiteFields_GtBAProjectSHA_DisplayName" xml:space="preserve">
     <value>Status SHA</value>
@@ -2270,7 +2264,7 @@
     <value>Status tilskudd</value>
   </data>
   <data name="SiteFields_GtBAProjectSupport_Description" xml:space="preserve">
-    <value>Hva er status på eventuelle tilskuddsmuligehter for prosjektet?</value>
+    <value>Hva er status på eventuelle tilskuddsmuligheter for prosjektet?</value>
   </data>
   <data name="SiteFields_GtBAProjectSupportComment_DisplayName" xml:space="preserve">
     <value>Kommentar, tilskudd</value>
@@ -2387,7 +2381,7 @@
   <value>Gjeldende versjon. Oppdateres når prosjektet oppgraderes.</value>
   </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
-    <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
+    <value>Gå til &lt;a href="{0}" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
   </data>
   <data name="Choice_GtPermissionLevel_Read" xml:space="preserve">
     <value>Lese</value>
