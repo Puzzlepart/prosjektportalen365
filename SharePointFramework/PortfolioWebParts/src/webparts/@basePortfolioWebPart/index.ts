@@ -57,9 +57,11 @@ export abstract class BasePortfolioWebPart<
     const sitePagesLibrary = this.sp.web.lists.getById(this.context.pageContext.list.id.toString())
     try {
       this._pageTitle = (
-        await sitePagesLibrary.items.getById(this.context.pageContext.listItem.id).select('Title')<{ Title: string }>()
+        await sitePagesLibrary.items.getById(this.context.pageContext.listItem.id).select('Title')<{
+          Title: string
+        }>()
       ).Title
-    } catch (error) { }
+    } catch (error) {}
   }
 
   public async onInit(): Promise<void> {
@@ -72,7 +74,7 @@ export abstract class BasePortfolioWebPart<
    * Get the property pane configuration. This method is overridden by
    * the web part class extending this class. If not overridden, it will
    * return an empty configuration with no pages.
-   * 
+   *
    * @returns Empty property pane configuration
    */
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {

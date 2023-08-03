@@ -1,6 +1,15 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
-import { IItemUpdateResult, IItemUpdateResultData, ISearchResult, PermissionKind, QueryPropertyValueType, SearchQueryInit, SortDirection, SPFI } from '@pnp/sp/presets/all'
+import {
+  IItemUpdateResult,
+  IItemUpdateResultData,
+  ISearchResult,
+  PermissionKind,
+  QueryPropertyValueType,
+  SearchQueryInit,
+  SortDirection,
+  SPFI
+} from '@pnp/sp/presets/all'
 import * as cleanDeep from 'clean-deep'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -90,7 +99,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         chartConfigurationList.items.select(...Object.keys(new SPChartConfigurationItem()))<
           SPChartConfigurationItem[]
         >(),
-        chartConfigurationList.contentTypes.select(...Object.keys(new SPContentType()))<SPContentType[]>()
+        chartConfigurationList.contentTypes.select(...Object.keys(new SPContentType()))<
+          SPContentType[]
+        >()
       ])
       const charts: ChartConfiguration[] = chartItems.map((item) => {
         const fields = item.GtPiFieldsId.map((id) => {
@@ -367,7 +378,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .filter((p) => p)
 
       return { reports, configElement }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
