@@ -1,8 +1,7 @@
 /* eslint-disable no-console */
 import { find } from '@microsoft/sp-lodash-subset'
-import { AssignFrom, dateAdd, getHashCode, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
+import { AssignFrom, dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
 import { Logger, LogLevel } from '@pnp/logging'
-import { Caching } from '@pnp/queryable'
 import { IFolder } from '@pnp/sp/folders'
 import { ICamlQuery, IList, IListEnsureResult } from '@pnp/sp/lists'
 import '@pnp/sp/presets/all'
@@ -10,7 +9,7 @@ import { IItemUpdateResultData, spfi, SPFI } from '@pnp/sp/presets/all'
 import { PermissionKind } from '@pnp/sp/security'
 import { IWeb } from '@pnp/sp/webs'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
-import { createSpfiInstance } from '../../data'
+import { createSpfiInstance, DefaultCaching } from '../../data'
 import { ISPContentType } from '../../interfaces'
 import {
   PortfolioOverviewView,
@@ -33,19 +32,6 @@ import {
   PortalDataServiceDefaultConfiguration,
   PortalDataServiceList
 } from './types'
-
-/**
- * Default caching configuration for `PortalDataService`.
- *
- * - `store`: `local`
- * - `keyFactory`: Hash code of the URL
- * - `expireFunc`: 60 minutes from now
- */
-const DefaultCaching = Caching({
-  store: 'local',
-  keyFactory: (url) => getHashCode(url.toLowerCase()).toString(),
-  expireFunc: () => dateAdd(new Date(), 'minute', 60)
-})
 
 export class PortalDataService {
   private _configuration: IPortalDataServiceConfiguration

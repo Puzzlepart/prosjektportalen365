@@ -1,8 +1,8 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { flatten } from '@microsoft/sp-lodash-subset'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { PnPClientStorage, dateAdd, getHashCode, stringIsNullOrEmpty } from '@pnp/core'
-import { Caching } from '@pnp/queryable'
+import { PnPClientStorage, dateAdd, stringIsNullOrEmpty } from '@pnp/core'
+import '@pnp/sp/items/get-all'
 import { ISearchResult, QueryPropertyValueType, SortDirection } from '@pnp/sp/search'
 import * as strings from 'ProgramWebPartsStrings'
 import * as cleanDeep from 'clean-deep'
@@ -20,6 +20,7 @@ import {
 import {
   DataSource,
   DataSourceService,
+  DefaultCaching,
   IGraphGroup,
   ISPDataAdapterBaseConfiguration,
   ISPProjectItem,
@@ -36,20 +37,6 @@ import {
 } from 'pp365-shared-library'
 import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS } from './types'
-import '@pnp/sp/items/get-all'
-
-/**
- * Default caching configuration for `SPDataAdapter`.
- *
- * - `store`: `local`
- * - `keyFactory`: Hash code of the URL
- * - `expireFunc`: 60 minutes from now
- */
-const DefaultCaching = Caching({
-  store: 'local',
-  keyFactory: (url) => getHashCode(url.toLowerCase()).toString(),
-  expireFunc: () => dateAdd(new Date(), 'minute', 60)
-})
 
 /**
  * `SPDataAdapter` is a class that extends the `SPDataAdapterBase` class and implements the `IPortfolioWebPartsDataAdapter` interface.

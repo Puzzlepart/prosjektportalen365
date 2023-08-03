@@ -1,6 +1,5 @@
 import { format } from '@fluentui/react/lib/Utilities'
-import { dateAdd, getHashCode, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
-import { Caching } from '@pnp/queryable'
+import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
 import { SPFI } from '@pnp/sp'
 import { IItemUpdateResult, IItemUpdateResultData } from '@pnp/sp/items'
 import '@pnp/sp/items/get-all'
@@ -32,7 +31,8 @@ import {
   SPProjectContentColumnItem,
   SPTimelineConfigurationItem,
   TimelineConfigurationModel,
-  TimelineContentModel
+  TimelineContentModel,
+  DefaultCaching
 } from 'pp365-shared-library'
 import _ from 'underscore'
 import { IPortfolioAggregationConfiguration } from '../components/PortfolioAggregation'
@@ -54,19 +54,6 @@ import {
   IPortfolioViewData,
   IPortfolioWebPartsDataAdapter
 } from './types'
-
-/**
- * Default caching configuration for `DataAdapter`.
- *
- * - `store`: `local`
- * - `keyFactory`: Hash code of the URL
- * - `expireFunc`: 60 minutes from now
- */
-const DefaultCaching = Caching({
-  store: 'local',
-  keyFactory: (url) => getHashCode(url.toLowerCase()).toString(),
-  expireFunc: () => dateAdd(new Date(), 'minute', 60)
-})
 
 /**
  * Data adapter for Portfolio Web Parts.

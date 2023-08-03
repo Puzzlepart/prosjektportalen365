@@ -88,7 +88,7 @@ dependencies:
   rehype-raw: 6.1.1
   replace: 1.2.2
   resx-json-typescript-converter: 1.0.2
-  sp-entityportal-service: 2.2.11
+  sp-entityportal-service: 2.2.12
   sp-js-provisioning: 1.1.4_1ca3516818190f66f3253793862e2abe
   spfx-jsom: 0.6.6_1ca3516818190f66f3253793862e2abe
   tslib: 2.3.1
@@ -18859,15 +18859,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-03IMu8tFLFzdGm2vTZRKzglrp62s7IPmWveBPlkUz4NVgCuhel0YSvbzjY8hYRK9jyo6a/p5xa/dRbcXzsVHyw==
-  /sp-entityportal-service/2.2.11:
-    dependencies:
-      '@microsoft/sp-page-context': 1.15.2
-      '@pnp/core': 3.9.0
-      '@pnp/logging': 3.17.0
-      '@pnp/sp': 3.9.0
-    dev: false
-    resolution:
-      integrity: sha512-kbarunQTOWUTzGHW5ocgqzIT2C/g6G8Mm7AZe7Xv/lnWr5r7zmAJIYc665LityXRo4pnQ9+BmgUKrDw3UabqDw==
   /sp-entityportal-service/2.2.12:
     dependencies:
       '@microsoft/sp-page-context': 1.15.2
@@ -18877,6 +18868,15 @@ packages:
     dev: false
     resolution:
       integrity: sha512-fu4rC7IMomrTZxDQMB7od+OEPcXM73LGbRuUCJjpVU62bh9V8p1D/RFFRwyHTl6sWo1IoT0SlCia6Hs1jSYHuA==
+  /sp-entityportal-service/2.2.13:
+    dependencies:
+      '@microsoft/sp-page-context': 1.15.2
+      '@pnp/core': 3.9.0
+      '@pnp/logging': 3.17.0
+      '@pnp/sp': 3.9.0
+    dev: false
+    resolution:
+      integrity: sha512-8K9FQuxAQCJN+qNugrORDTI0SNtXH0CWcm2wYoN/cZ6nZ3hQ6tATgjfysxkH4USOdRsHIbs3jmWPD9kJhEL8Pg==
   /sp-js-provisioning/1.1.4_1ca3516818190f66f3253793862e2abe:
     dependencies:
       '@pnp/common': 1.3.6
@@ -21447,7 +21447,7 @@ packages:
       react-dom: 16.13.1_react@16.13.1
       react-markdown: 8.0.7_453b269bd7a8e2940a0e8fb00c615d82
       rehype-raw: 6.1.1
-      sp-entityportal-service: 2.2.12
+      sp-entityportal-service: 2.2.13
       tslib: 2.3.1
       typescript: 4.5.5
       underscore: 1.13.6
@@ -21455,7 +21455,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-portfolioextensions'
     resolution:
-      integrity: sha512-Ufn/IrZNtZ0RN+uUxlB9TNclA/uGOu9M4Hc2pOSdfUj7H1Z4Mx2jlBEZE0VXRzctmo6/+lxg3bG7Hy8XVueBRQ==
+      integrity: sha512-p0hc6cO0l3GYC/cae0Y43yeqeXHVqKyt/sYHLLTSTPvLndG6X+ASAX+Oan1ZGCJJt8OBx9vtFyDSZVl9PDoQvw==
       tarball: file:projects/pp365-portfolioextensions.tgz
     version: 0.0.0
   file:projects/pp365-portfoliowebparts.tgz:
@@ -21528,7 +21528,7 @@ packages:
       react-dom: 16.13.1_react@16.13.1
       react-draggable: 4.4.5_react-dom@16.13.1+react@16.13.1
       react-highcharts: 16.0.2_react-dom@16.13.1+react@16.13.1
-      sp-entityportal-service: 2.2.12
+      sp-entityportal-service: 2.2.13
       tslib: 2.3.1
       typescript: 4.5.5
       underscore: 1.13.6
@@ -21536,7 +21536,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-portfoliowebparts'
     resolution:
-      integrity: sha512-UYbO9MB/XFMzddutYavpqWmV2QEya3eYy0hZbvuGT8HEQjiSs32UUTr99tW74unXeHUrxLpXwPxKKrvsgiwgYQ==
+      integrity: sha512-wEg9xROm4Kyg4XMp4gPn0GKN9kPVjnzU21SJUAU/FL0f7sZ/RLMQkQ7BSuafJQ9RXw/SnkDtGadCJj7XKjzrvQ==
       tarball: file:projects/pp365-portfoliowebparts.tgz
     version: 0.0.0
   file:projects/pp365-programwebparts.tgz:
@@ -21606,7 +21606,7 @@ packages:
       react-calendar-timeline: 0.27.0_05e86f17cf8862761e710683c186761e
       react-dom: 16.13.1_react@16.13.1
       react-highcharts: 16.0.2_react-dom@16.13.1+react@16.13.1
-      sp-entityportal-service: 2.2.12
+      sp-entityportal-service: 2.2.13
       tslib: 2.3.1
       typescript: 4.5.5
       underscore: 1.13.6
@@ -21615,7 +21615,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-programwebparts'
     resolution:
-      integrity: sha512-P0o/eYQau7gtCIx3Mh2urVmq2mGfF1mlD8dACTmlijzjX4x39K9kJ4u5USyXg226N5WTk+/Ia76SvZc5148M0A==
+      integrity: sha512-fGt/o5pu6B6xMGMxMOQaDmVE/z1a2ocpasDUj9p4FkRqLRQcV964jN4PLQ8FaDleC0kVWYDVZPm9+2lFxIHeqg==
       tarball: file:projects/pp365-programwebparts.tgz
     version: 0.0.0
   file:projects/pp365-projectextensions.tgz:
@@ -21674,7 +21674,7 @@ packages:
       react-dom: 16.13.1_react@16.13.1
       react-markdown: 8.0.7_453b269bd7a8e2940a0e8fb00c615d82
       rehype-raw: 6.1.1
-      sp-entityportal-service: 2.2.12
+      sp-entityportal-service: 2.2.13
       sp-js-provisioning: 1.1.4_1ca3516818190f66f3253793862e2abe
       spfx-jsom: 0.6.6_1ca3516818190f66f3253793862e2abe
       tslib: 2.3.1
@@ -21685,7 +21685,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectextensions'
     resolution:
-      integrity: sha512-rr/t5aKTRGkdxGQeeWLLkTR6IFVwTBUdi1L9hIUenXfUL/xeVcDQA2KILoTxuhWGNMHO19+bSFNcbTAUQGry5g==
+      integrity: sha512-x99bdsgc6lED9umze7a+pf7+PGYoycIvTYtxLD37jM/20au/+4z3oTly1V//rjCssvNu+6Mgk++9h+oz78imhQ==
       tarball: file:projects/pp365-projectextensions.tgz
     version: 0.0.0
   file:projects/pp365-projectwebparts.tgz:
@@ -21759,7 +21759,7 @@ packages:
       react-markdown: 8.0.7_453b269bd7a8e2940a0e8fb00c615d82
       react-scroll: 1.7.11_react-dom@16.13.1+react@16.13.1
       rehype-raw: 6.1.1
-      sp-entityportal-service: 2.2.12
+      sp-entityportal-service: 2.2.13
       spfx-jsom: 0.6.6_1ca3516818190f66f3253793862e2abe
       tslib: 2.3.1
       typescript: 4.5.5
@@ -21768,7 +21768,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectwebparts'
     resolution:
-      integrity: sha512-DtKidY2a4DL5IieetRnqizfFzvVQd4cZmljejqaOdYeRYVM2mBWJcBmw3ipx6f6qCrQgKKblV7NRAiGEcaHYBQ==
+      integrity: sha512-vITa8hzb7pj4wkQ0U8k7jQQ9+CAREHg6vqzEtyVvsquIdUHoXCnv3SKFPkVCd+De2cumb/PjiECHQcGwAoycKw==
       tarball: file:projects/pp365-projectwebparts.tgz
     version: 0.0.0
   file:projects/pp365-shared-library.tgz_interactjs@1.6.2:
@@ -21819,7 +21819,7 @@ packages:
       react-dom: 16.13.1_react@16.13.1
       react-markdown: 8.0.7_453b269bd7a8e2940a0e8fb00c615d82
       rehype-raw: 6.1.1
-      sp-entityportal-service: 2.2.12
+      sp-entityportal-service: 2.2.13
       spfx-jsom: 0.6.6_1ca3516818190f66f3253793862e2abe
       tslib: 2.3.1
       typescript: 4.5.5
@@ -21832,7 +21832,7 @@ packages:
     peerDependencies:
       interactjs: '*'
     resolution:
-      integrity: sha512-WwPW2xwSyhEFKY3D019XmsrWPN5ZC43YsqPJZG39kTY+ALSxKsrHqN62B+zpAzyEwbDGYfgEaA4A+dvNLagKAw==
+      integrity: sha512-mBgeP8PzHnKSLr0rxy4kjL23Y4g3Q2BYZw8/S3qA9HlUfnCUEQLzSQH6G4zxh5VLQSkKsOAaYBRStsI3oie/eA==
       tarball: file:projects/pp365-shared-library.tgz
     version: 0.0.0
   file:projects/pp365-spfx-tasks.tgz:
@@ -21844,13 +21844,13 @@ packages:
       '@types/underscore': 1.11.5
       dotenv: 16.1.3
       glob: 10.2.6
-      sp-entityportal-service: 2.2.12
+      sp-entityportal-service: 2.2.13
       underscore: 1.13.6
       yargs: 17.7.2
     dev: false
     name: '@rush-temp/pp365-spfx-tasks'
     resolution:
-      integrity: sha512-fAdBIyTTChAskEmEagGGwgVyS/42bv66TN5P0SlzArXPzhKgDr4MkoiX237cTnZwsOyVjK6mU0GoYexeWuDvzg==
+      integrity: sha512-7DfgxIiMLGITkmM7w9/nJFxVfwKQSZTNKGZGI/KsEiRLmVaFWru8bDNIgF0+b8sKQQZqvP7cm3+crO616Tjdkw==
       tarball: file:projects/pp365-spfx-tasks.tgz
     version: 0.0.0
   file:projects/pp365-templates.tgz:
@@ -21865,12 +21865,12 @@ packages:
       dotenv: 16.1.3
       replace: 1.2.2
       resx-json-typescript-converter: 1.0.2
-      sp-entityportal-service: 2.2.12
+      sp-entityportal-service: 2.2.13
       underscore: 1.13.6
     dev: false
     name: '@rush-temp/pp365-templates'
     resolution:
-      integrity: sha512-Koubqoo+9IPE0n8HaL/5rVi4SjbYnhS79YUU+XI+QzJsf4eLvTKC4FPBo0oMXHxIAon7VlUvQPIrzzVCNoD1JA==
+      integrity: sha512-DJIWXWNuaETF+KcIlYFcgH8oEsB3wWNLTRiVJzee0vgX9pAlPoBR2glYRVh2x4/yDVa0jtL8q7EOhI7/g/bGLg==
       tarball: file:projects/pp365-templates.tgz
     version: 0.0.0
 specifiers:
@@ -21963,7 +21963,7 @@ specifiers:
   rehype-raw: ^6.1.1
   replace: 1.2.2
   resx-json-typescript-converter: ^1.0.1
-  sp-entityportal-service: 2.2.11
+  sp-entityportal-service: 2.2.12
   sp-js-provisioning: 1.1.4
   spfx-jsom: 0.6.6
   tslib: 2.3.1

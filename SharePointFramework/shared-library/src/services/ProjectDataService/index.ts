@@ -1,10 +1,9 @@
 import { format } from '@fluentui/react'
-import { AssignFrom, IPnPClientStore, PnPClientStorage, dateAdd, getHashCode } from '@pnp/core'
+import { AssignFrom, IPnPClientStore, PnPClientStorage, dateAdd } from '@pnp/core'
 import { ConsoleListener, Logger } from '@pnp/logging'
-import { Caching } from '@pnp/queryable'
 import '@pnp/sp/presets/all'
 import { IWeb, SPFI, spfi } from '@pnp/sp/presets/all'
-import { createSpfiInstance } from '../../data'
+import { DefaultCaching, createSpfiInstance } from '../../data'
 import { ISPList } from '../../interfaces/ISPList'
 import { ChecklistItemModel, ProjectPhaseChecklistData, ProjectPhaseModel } from '../../models'
 import { makeUrlAbsolute } from '../../util/makeUrlAbsolute'
@@ -12,19 +11,6 @@ import { tryParseJson } from '../../util/tryParseJson'
 import { IGetPropertiesData } from './IGetPropertiesData'
 import { IProjectDataServiceParams } from './IProjectDataServiceParams'
 import { IPropertyItemContext } from './IPropertyItemContext'
-
-/**
- * Default caching configuration for `ProjectDataService`.
- *
- * - `store`: `local`
- * - `keyFactory`: Hash code of the URL
- * - `expireFunc`: 60 minutes from now
- */
-const DefaultCaching = Caching({
-  store: 'local',
-  keyFactory: (url) => getHashCode(url.toLowerCase()).toString(),
-  expireFunc: () => dateAdd(new Date(), 'minute', 60)
-})
 
 export class ProjectDataService {
   private _storage: IPnPClientStore
@@ -52,7 +38,7 @@ export class ProjectDataService {
   }
 
   /**
-   * Initialize storage
+   * Initialize storage and storage keys.
    */
   private _initStorage() {
     this._storage = new PnPClientStorage().session
@@ -122,8 +108,6 @@ export class ProjectDataService {
             defaultEditFormUrl: list.DefaultEditFormUrl
           }
         } catch (error) {
-          // eslint-disable-next-line no-console
-          console.log(error)
           return null
         }
       },
@@ -151,18 +135,22 @@ export class ProjectDataService {
    *
    * Returns null if no properties are found.
    *
+   * @remarks The queries `ctx.item.fieldValuesAsText()` and `ctx.item()` needs to be run
+   * separately, as expanding `ctx.item()` with `FieldValuesAsText` will result in
+   * corrupt data.
+   *
    * @param sourceUrl Source url to append to edit form url
    */
   private async _getPropertyItem(
     sourceUrl: string = document.location.href
   ): Promise<IGetPropertiesData> {
     try {
-      const propertyItemContext = await this._getPropertyItemContext()
-      if (!propertyItemContext) return null
-      const [fieldValuesText, fieldValues, fields, welcomepage] = await Promise.all([
-        propertyItemContext.item.fieldValuesAsText(),
-        propertyItemContext.item(),
-        propertyItemContext.list.fields
+      const ctx = await this._getPropertyItemContext()
+      if (!ctx) return null
+      const [fieldValuesText, fieldValues, fields, welcomePageUrl] = await Promise.all([
+        ctx.item.fieldValuesAsText(),
+        ctx.item(),
+        ctx.list.fields
           .select(
             'Id',
             'InternalName',
@@ -178,34 +166,35 @@ export class ProjectDataService {
         this.getWelcomePage()
       ])
 
-      const modifiedSourceUrl = !sourceUrl.includes(welcomepage)
-        ? sourceUrl
-            .replace('#syncproperties=1', `/${welcomepage}#syncproperties=1`)
-            .replace('//SitePages', '/SitePages')
-        : sourceUrl
-
-      const editFormUrl = makeUrlAbsolute(
-        `${propertyItemContext.defaultEditFormUrl}?ID=${
-          propertyItemContext.itemId
-        }&Source=${encodeURIComponent(modifiedSourceUrl)}`
-      )
-
-      const versionHistoryUrl = `${this._params.webUrl}/_layouts/15/versions.aspx?list=${propertyItemContext.listId}&ID=${propertyItemContext.itemId}`
-      return {
+      const propertiesData: IGetPropertiesData = {
         fieldValuesText,
         fieldValues,
-        editFormUrl,
-        versionHistoryUrl,
         fields,
-        propertiesListId: propertyItemContext.listId
+        versionHistoryUrl: '{0}/_layouts/15/versions.aspx?list={1}&ID={2}'
       }
+
+      const modifiedSourceUrl = !sourceUrl.includes(welcomePageUrl)
+        ? sourceUrl
+            .replace('#syncproperties=1', `/${welcomePageUrl}#syncproperties=1`)
+            .replace('//SitePages', '/SitePages')
+        : sourceUrl
+      propertiesData.editFormUrl = makeUrlAbsolute(
+        `${ctx.defaultEditFormUrl}?ID=${ctx.itemId}&Source=${encodeURIComponent(modifiedSourceUrl)}`
+      )
+      propertiesData.versionHistoryUrl = format(
+        propertiesData.versionHistoryUrl,
+        this._params.webUrl,
+        ctx.listId,
+        ctx.itemId
+      )
+      return propertiesData
     } catch (error) {
       return null
     }
   }
 
   /**
-   * Get properties data
+   * Get properties data for the site/web.
    */
   public async getPropertiesData(): Promise<IGetPropertiesData> {
     const propertyItem = await this._getPropertyItem(
@@ -218,7 +207,7 @@ export class ProjectDataService {
         ...propertyItem,
         propertiesListId: propertyItem.propertiesListId,
         templateParameters
-      }
+      } as IGetPropertiesData
     } else {
       this._logInfo(
         'Local property item not found. Retrieving data from portal site.',
@@ -235,7 +224,7 @@ export class ProjectDataService {
         ...entity.urls,
         propertiesListId: null,
         templateParameters: {}
-      }
+      } as IGetPropertiesData
     }
   }
 

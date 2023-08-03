@@ -1,27 +1,12 @@
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
 import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
+import * as strings from 'ProjectExtensionsStrings'
 import { SPFolder } from 'models'
 import { TemplateItem } from 'models/TemplateItem'
-import { SPDataAdapterBase } from 'pp365-shared-library/lib/data'
+import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library/lib/data'
 import { ProjectDataService } from 'pp365-shared-library/lib/services'
-import * as strings from 'ProjectExtensionsStrings'
 import validFilename from 'valid-filename'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
-import { getHashCode, dateAdd } from '@pnp/core'
-import { Caching } from '@pnp/queryable'
-
-/**
- * Default caching configuration for `SPDataAdapter`.
- *
- * - `store`: `local`
- * - `keyFactory`: Hash code of the URL
- * - `expireFunc`: 60 minutes from now
- */
-const DefaultCaching = Caching({
-  store: 'local',
-  keyFactory: (url) => getHashCode(url.toLowerCase()).toString(),
-  expireFunc: () => dateAdd(new Date(), 'minute', 60)
-})
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService

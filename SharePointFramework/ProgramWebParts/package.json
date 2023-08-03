@@ -55,7 +55,8 @@
     "underscore": "~1.13.6",
     "@types/underscore": "~1.11.5",
     "@pnp/core": "3.17.0",
-    "@pnp/queryable": "3.17.0"
+    "@pnp/queryable": "3.17.0",
+    "sp-entityportal-service": "2.2.13"
   },
   "resolutions": {
     "@types/react": "16.8.8"

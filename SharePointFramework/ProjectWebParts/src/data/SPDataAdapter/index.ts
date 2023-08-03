@@ -1,9 +1,7 @@
 import { IProgressIndicatorProps } from '@fluentui/react/lib/ProgressIndicator'
-import { dateAdd, getHashCode } from '@pnp/core'
 import { LogLevel, Logger } from '@pnp/logging'
-import { Caching } from '@pnp/queryable'
 import * as strings from 'ProjectWebPartsStrings'
-import { SPDataAdapterBase } from 'pp365-shared-library/lib/data'
+import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library/lib/data'
 import { ProjectDataService } from 'pp365-shared-library/lib/services'
 import { SPFxContext } from 'pp365-shared-library/lib/types'
 import { IEntityField } from 'sp-entityportal-service/types'
@@ -12,19 +10,6 @@ import { find, get } from 'underscore'
 import { IdeaConfigurationModel, SPIdeaConfigurationItem } from '../../models'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
 
-/**
- * Default caching configuration for `SPDataAdapter`.
- *
- * - `store`: `local`
- * - `keyFactory`: Hash code of the URL
- * - `expireFunc`: 60 minutes from now
- */
-const DefaultCaching = Caching({
-  store: 'local',
-  keyFactory: (url) => getHashCode(url.toLowerCase()).toString(),
-  expireFunc: () => dateAdd(new Date(), 'minute', 60)
-})
-
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
   private _name = 'SPDataAdapter'
@@ -32,7 +17,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   /**
    * Configure the SP data adapter
    *
-   * @param spfxContext Context
+   * @param spfxContext SPFx context
    * @param configuration Configuration
    */
   public async configure(
