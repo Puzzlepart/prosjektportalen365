@@ -205,10 +205,7 @@ export class ProjectDataService {
       }
     } else {
       this._logInfo('Local property item not found. Retrieving data from portal site.', 'getPropertiesData')
-      // TODO: Potential issues with `this._params.entityService.configure({})`
-      const entity = await this._params.entityService
-        .configure({})
-        .fetchEntity(this._params.siteId, this._params.webUrl)
+      const entity = await this._params.entityService.fetchEntity(this._params.siteId, this._params.webUrl)
       return {
         fieldValues: entity.fieldValues,
         fieldValuesText: entity.fieldValues,
@@ -269,9 +266,9 @@ export class ProjectDataService {
       .terms
       .select('*', 'localProperties')
       .using(DefaultCaching)()
-      // eslint-disable-next-line no-console
-      console.log(termSetId, terms)
-    return terms.map((term) => new ProjectPhaseModel(term,termSetId, checklistData[term.id]))
+    // eslint-disable-next-line no-console
+    console.log(termSetId, terms)
+    return terms.map((term) => new ProjectPhaseModel(term, termSetId, checklistData[term.id]))
   }
 
   /**
