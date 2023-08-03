@@ -1,13 +1,12 @@
 import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
+import { SPFI } from '@pnp/sp/presets/all'
 import { IBaseComponentProps } from 'components/types'
-import assign from 'object-assign'
+import { createSpfiInstance } from 'pp365-shared-library'
 import { ComponentClass, createElement, FC, ReactElement } from 'react'
 import { render } from 'react-dom'
 import { DataAdapter } from '../../data'
-import { SPFI } from '@pnp/sp'
-import { createSpfiInstance } from 'pp365-shared-library'
 
 export abstract class BasePortfolioWebPart<
   T extends IBaseComponentProps
@@ -33,40 +32,49 @@ export abstract class BasePortfolioWebPart<
    * @param props Props
    */
   public renderComponent<T = any>(component: ComponentClass<T> | FC<T>, props?: T): void {
-    const combinedProps = assign({ title: this._pageTitle }, this.properties, props, {
+    const combinedProps: T = {
+      title: this._pageTitle,
+      ...this.properties,
+      ...props,
       webPartContext: this.context,
       pageContext: this.context.pageContext,
       dataAdapter: this.dataAdapter,
       displayMode: this.displayMode,
       sp: this.sp
-    })
+    }
     const element: ReactElement<T> = createElement(component, combinedProps)
     render(element, this.domElement)
   }
 
   /**
-   * Setup
+   * Setup the web part initializing the SPFI instance and the data adapter,
+   * aswell as the logger.
    */
   private async _setup() {
     this.sp = createSpfiInstance(this.context)
     Logger.subscribe(ConsoleListener())
     Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+    const sitePagesLibrary = this.sp.web.lists.getById(this.context.pageContext.list.id.toString())
     try {
       this._pageTitle = (
-        await this.sp.web.lists
-          .getById(this.context.pageContext.list.id.toString())
-          .items.getById(this.context.pageContext.listItem.id)
-          .select('Title')<{ Title: string }>()
+        await sitePagesLibrary.items.getById(this.context.pageContext.listItem.id).select('Title')<{ Title: string }>()
       ).Title
-    } catch (error) {}
+    } catch (error) { }
   }
 
   public async onInit(): Promise<void> {
+    await this._setup()
     this.dataAdapter = await new DataAdapter(this.context, this.sp).configure()
     this.context.statusRenderer.clearLoadingIndicator(this.domElement)
-    await this._setup()
   }
 
+  /**
+   * Get the property pane configuration. This method is overridden by
+   * the web part class extending this class. If not overridden, it will
+   * return an empty configuration with no pages.
+   * 
+   * @returns Empty property pane configuration
+   */
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return { pages: [] }
   }

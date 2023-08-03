@@ -1,21 +1,13 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
-import { SPFI } from '@pnp/sp'
-import { IItemUpdateResult, IItemUpdateResultData } from '@pnp/sp/items'
-import '@pnp/sp/items/get-all'
-import {
-  ISearchResult,
-  QueryPropertyValueType,
-  SearchQueryInit,
-  SortDirection
-} from '@pnp/sp/search'
-import { PermissionKind } from '@pnp/sp/security'
+import { IItemUpdateResult, IItemUpdateResultData, ISearchResult, PermissionKind, QueryPropertyValueType, SearchQueryInit, SortDirection, SPFI } from '@pnp/sp/presets/all'
 import * as cleanDeep from 'clean-deep'
 import msGraph from 'msgraph-helper'
 import * as strings from 'PortfolioWebPartsStrings'
 import {
   DataSource,
   DataSourceService,
+  DefaultCaching,
   getUserPhoto,
   IGraphGroup,
   ISPProjectItem,
@@ -31,8 +23,7 @@ import {
   SPProjectContentColumnItem,
   SPTimelineConfigurationItem,
   TimelineConfigurationModel,
-  TimelineContentModel,
-  DefaultCaching
+  TimelineContentModel
 } from 'pp365-shared-library'
 import _ from 'underscore'
 import { IPortfolioAggregationConfiguration } from '../components/PortfolioAggregation'
@@ -93,16 +84,13 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     chartConfigurationListName: string,
     siteId: string
   ) {
+    const chartConfigurationList = this._sp.web.lists.getByTitle(chartConfigurationListName)
     try {
       const [chartItems, contentTypes] = await Promise.all([
-        this._sp.web.lists
-          .getByTitle(chartConfigurationListName)
-          .items.select(...Object.keys(new SPChartConfigurationItem()))<
+        chartConfigurationList.items.select(...Object.keys(new SPChartConfigurationItem()))<
           SPChartConfigurationItem[]
         >(),
-        this._sp.web.lists
-          .getByTitle(chartConfigurationListName)
-          .contentTypes.select(...Object.keys(new SPContentType()))<SPContentType[]>()
+        chartConfigurationList.contentTypes.select(...Object.keys(new SPContentType()))<SPContentType[]>()
       ])
       const charts: ChartConfiguration[] = chartItems.map((item) => {
         const fields = item.GtPiFieldsId.map((id) => {
@@ -379,7 +367,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .filter((p) => p)
 
       return { reports, configElement }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -545,34 +533,18 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   }
 
   public async fetchEnrichedProjects(
-    // eslint-disable-next-line quotes
-    filter = "GtProjectLifecycleStatus ne 'Avsluttet'"
+    // eslint-disable-next-line quotes, @typescript-eslint/no-unused-vars
+    _filter = "GtProjectLifecycleStatus ne 'Avsluttet'"
   ): Promise<ProjectListModel[]> {
     await msGraph.Init(this._spfxContext.msGraphClientFactory)
     const localStore = new PnPClientStorage().local
     const siteId = this._spfxContext.pageContext.site.id.toString()
+    const list = this._sp.web.lists.getByTitle(strings.ProjectsListName)
     const [items, groups, users, sites] = await localStore.getOrPut(
       `pp365_fetchenrichedprojects_${siteId}`,
       async () => {
         return await Promise.all([
-          this._sp.web.lists
-            .getByTitle(strings.ProjectsListName)
-            .items.select(
-              'GtGroupId',
-              'GtSiteId',
-              'GtSiteUrl',
-              'GtProjectOwnerId',
-              'GtProjectManagerId',
-              'GtProjectPhaseText',
-              'GtStartDate',
-              'GtEndDate',
-              'Title',
-              'GtIsParentProject',
-              'GtIsProgram'
-            )
-            .filter(filter)
-            .orderBy('Title')
-            .getAll(),
+          list.items.getAll(),
           this.fetchMemberGroups(),
           this._sp.web.siteUsers.select('Id', 'Title', 'Email')<ISPUser[]>(),
           this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId'])
