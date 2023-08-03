@@ -5,7 +5,6 @@ const { getFileContent } = require('./util')
 const { log } = require('./util')
 require('dotenv').config()
 
-require('./createEnviromentFile')
 
 // Solution
 const solution = process.cwd().split(path.sep).pop()
@@ -26,4 +25,5 @@ if (process.env.SERVE_CHANNEL && process.env.SERVE_CHANNEL !== 'main') {
 }
 
 require('./createServeConfig')
+require('./createEnviromentFile')
 require('./setBundleConfig')
