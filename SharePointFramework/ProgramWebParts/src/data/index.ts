@@ -23,20 +23,19 @@ import {
   DefaultCaching,
   IGraphGroup,
   ISPDataAdapterBaseConfiguration,
-  ISPProjectItem,
-  ISPUser,
   PortfolioOverviewView,
   ProjectContentColumn,
   ProjectDataService,
   ProjectListModel,
   SPDataAdapterBase,
   SPProjectContentColumnItem,
+  SPProjectItem,
   TimelineConfigurationModel,
   TimelineContentModel,
   getUserPhoto
 } from 'pp365-shared-library'
 import _ from 'underscore'
-import { DEFAULT_SEARCH_SETTINGS } from './types'
+import { DEFAULT_SEARCH_SETTINGS, IProjectsData } from './types'
 
 /**
  * `SPDataAdapter` is a class that extends the `SPDataAdapterBase` class and implements the `IPortfolioWebPartsDataAdapter` interface.
@@ -509,22 +508,14 @@ export class SPDataAdapter
   }
 
   /**
-   * Maps project items to project list models.
+   * Combine the result data (items, sites, users, groups) to a list of `ProjectListModel`.@
    *
-   * @param items Project items to map.
-   * @param groups Groups to use for mapping.
-   * @param users Users to use for mapping.
-   *
-   * @returns An array of project list models.
+   * @param param0 Deconstructed object containing the result data
    */
-  private _mapProjects(
-    items: ISPProjectItem[],
-    groups: IGraphGroup[],
-    users: ISPUser[]
-  ): ProjectListModel[] {
+  private _combineResultData({ items, memberOfGroups, users }: IProjectsData): ProjectListModel[] {
     let projects = items
       .map((item) => {
-        const [group] = groups.filter((grp) => grp.id === item.GtGroupId)
+        const [group] = memberOfGroups.filter((grp) => grp.id === item.GtGroupId)
         const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
         const [manager] = users.filter((user) => user.Id === item.GtProjectManagerId)
         const model = new ProjectListModel(group?.displayName ?? item.Title, item)
@@ -552,35 +543,29 @@ export class SPDataAdapter
 
   public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
     await MSGraph.Init(this.spfxContext.msGraphClientFactory)
-    const [items, groups, users] = await Promise.all([
+    const [items, memberOfGroups, users] = await Promise.all([
       this.portal.web.lists
         .getByTitle(strings.ProjectsListName)
-        .items.select(
-          'GtGroupId',
-          'GtSiteId',
-          'GtSiteUrl',
-          'GtProjectOwnerId',
-          'GtProjectManagerId',
-          'GtProjectPhaseText',
-          'GtStartDate',
-          'GtEndDate',
-          'Title'
-        )
+        .items.select(...Object.keys(new SPProjectItem()))
         // eslint-disable-next-line quotes
         .filter("GtProjectLifecycleStatus ne 'Avsluttet'")
         .orderBy('Title')
         .top(500)
-        .using(DefaultCaching)<ISPProjectItem[]>(),
+        .using(DefaultCaching)<SPProjectItem[]>(),
       MSGraph.Get<IGraphGroup[]>(
         '/me/memberOf/$/microsoft.graph.group',
         ['id', 'displayName'],
         // eslint-disable-next-line quotes
         "groupTypes/any(a:a%20eq%20'unified')"
       ),
-      this.sp.web.siteUsers.select('Id', 'Title', 'Email').using(DefaultCaching)<ISPUser[]>()
+      this.sp.web.siteUsers.select('Id', 'Title', 'Email').using(DefaultCaching)()
     ])
-
-    const projects = this._mapProjects(items, groups, users)
+    const result: IProjectsData = {
+      items,
+      memberOfGroups,
+      users
+    }
+    const projects = this._combineResultData(result)
     return projects
   }
 

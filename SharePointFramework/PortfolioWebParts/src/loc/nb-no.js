@@ -288,5 +288,7 @@ define([], function () {
     ColumnSettingsDisabledTooltip: 'Kolonneinnstillinger er kun tilgjengelig når siden er i redigeringsmodus.',
     MinWidthDescription: 'Minimum bredde for kolonnen. Kan ikke overstige maksimum bredde.',
     MaxWidthDescription: 'Maksimum bredde for kolonnen. Kan ikke være mindre enn minimum bredde.',
+    DataSourceLevelPortfolio: 'Portefølje',
+    DataSourceLevelProject: 'Prosjekt'
   }
 })
