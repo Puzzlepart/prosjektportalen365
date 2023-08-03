@@ -1,6 +1,6 @@
 import { LogLevel } from '@pnp/logging'
 import * as strings from 'ProjectExtensionsStrings'
-import { Web, WebProvisioner } from 'sp-js-provisioning'
+import { WebProvisioner } from 'sp-js-provisioning'
 import _ from 'underscore'
 import { IProjectSetupData } from '../../types'
 import { BaseTask, IBaseTaskParams } from '../@BaseTask'
@@ -23,21 +23,14 @@ export class Hooks extends BaseTask {
     onProgress: OnProgressCallbackFunction
   ): Promise<IBaseTaskParams> {
     try {
-      const web = new Web(params.context.pageContext.web.absoluteUrl)
       const activeLogLevel = (
         sessionStorage.DEBUG === '1' || DEBUG ? LogLevel.Info : LogLevel.Error
       ) as any
-      const provisioner = new WebProvisioner(web).setup({
+      const provisioner = new WebProvisioner(params.web).setup({
         spfxContext: params.context,
         logging: {
           prefix: '(ProjectSetup) (Hooks)',
           activeLogLevel
-        },
-        spConfiguration: {
-          cacheExpirationIntervalMilliseconds: 5000,
-          defaultCachingStore: 'session',
-          enableCacheExpiration: true,
-          defaultCachingTimeoutSeconds: 60
         }
       })
       this.logInformation('Applying template with hooks to site', {
