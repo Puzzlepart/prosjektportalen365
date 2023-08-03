@@ -36,7 +36,8 @@
     "react-dom": "16.13.1",
     "tslib": "2.3.1",
     "underscore": "~1.13.6",
-    "@pnp/queryable": "3.17.0"
+    "@pnp/queryable": "3.17.0",
+    "sp-entityportal-service": "2.2.8"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.15.2",
