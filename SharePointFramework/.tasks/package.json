@@ -9,9 +9,10 @@
       "dotenv": "~16.1.3",
       "yargs": "~17.7.2",
       "glob": "~10.2.6",
-      "sp-entityportal-service": "2.2.13"
+      "colors": "~1.4.0"
     },
     "devDependencies": {
-      "@types/lodash": "~4.14.195"
+      "@types/lodash": "~4.14.195",
+      "@types/colors": "~1.2.1"
     }
 }
