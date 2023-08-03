@@ -1,16 +1,17 @@
-import { ConsoleListener, Logger } from '@pnp/logging'
 import { format } from '@fluentui/react'
-import { makeUrlAbsolute } from '../../util/makeUrlAbsolute'
+import { AssignFrom, IPnPClientStore, PnPClientStorage, dateAdd, getHashCode } from '@pnp/core'
+import { ConsoleListener, Logger } from '@pnp/logging'
+import { Caching } from '@pnp/queryable'
+import '@pnp/sp/presets/all'
+import { IWeb, SPFI, spfi } from '@pnp/sp/presets/all'
+import { createSpfiInstance } from '../../data'
 import { ISPList } from '../../interfaces/ISPList'
 import { ChecklistItemModel, ProjectPhaseChecklistData, ProjectPhaseModel } from '../../models'
+import { makeUrlAbsolute } from '../../util/makeUrlAbsolute'
 import { tryParseJson } from '../../util/tryParseJson'
 import { IGetPropertiesData } from './IGetPropertiesData'
 import { IProjectDataServiceParams } from './IProjectDataServiceParams'
 import { IPropertyItemContext } from './IPropertyItemContext'
-import { IPnPClientStore, PnPClientStorage, dateAdd, getHashCode } from '@pnp/core'
-import '@pnp/sp/presets/all'
-import { IWeb, Web } from '@pnp/sp/presets/all'
-import { Caching } from '@pnp/queryable'
 
 /**
  * Default caching configuration for `ProjectDataService`.
@@ -31,10 +32,12 @@ export class ProjectDataService {
     _getPropertyItemContext: '{0}_propertyitemcontext',
     getPhases: '{0}_projectphases_terms'
   }
+  private _sp: SPFI
   public web: IWeb
 
   /**
-   * Creates a new instance of ProjectDataService
+   * Creates a new instance of `ProjectDataService`. Initialize the storage and logger,
+   * aswell as configuring the SPFx context and setting the web from `params.webUrl`.
    *
    * @param _params - Parameters
    */
@@ -44,7 +47,8 @@ export class ProjectDataService {
       Logger.subscribe(ConsoleListener())
       Logger.activeLogLevel = _params.logLevel
     }
-    this.web = Web(this._params.webUrl)
+    this._sp = createSpfiInstance(this._params.spfxContext)
+    this.web = spfi(_params.webUrl).using(AssignFrom(this._sp.web)).web
   }
 
   /**
@@ -69,7 +73,7 @@ export class ProjectDataService {
   }
 
   /**
-   * Get property item context from site
+   * Get property item context from site.
    *
    * @param expire Date of expire for cache
    */
@@ -80,39 +84,31 @@ export class ProjectDataService {
       this.getStorageKey('_getPropertyItemContext'),
       async () => {
         try {
-          Logger.write(
-            `(ProjectDataService) (_getPropertyItemContext) Checking if list ${this._params.propertiesListName} exists in web.`
-          )
+          this._logInfo(`Checking if list ${this._params.propertiesListName} exists in web.`, '_getPropertyItemContext')
           const [list] = await this.web.lists
             .filter(`Title eq '${this._params.propertiesListName}'`)
             .select('Id', 'DefaultEditFormUrl')<ISPList[]>()
           if (!list) {
-            Logger.write(
-              `(ProjectDataService) List ${this._params.propertiesListName} does not exist in web.`
-            )
+            this._logInfo(`List ${this._params.propertiesListName} does not exist in web.`, '_getPropertyItemContext')
             return null
           }
-          Logger.write(
-            `(ProjectDataService) (_getPropertyItemContext) Checking if there's a entry in list ${this._params.propertiesListName}.`
-          )
+          this._logInfo(`Checking if there's a entry in list ${this._params.propertiesListName}.`, '_getPropertyItemContext')
           const [item] = await this.web.lists.getById(list.Id).items.select('Id').top(1)<
             { Id: number }[]
           >()
           if (!item) {
-            Logger.write(
-              `(ProjectDataService) (_getPropertyItemContext) No entry found in list ${this._params.propertiesListName}.`
-            )
+            this._logInfo(`No entry found in list ${this._params.propertiesListName}.`, '_getPropertyItemContext')
             return null
           }
-          Logger.write(
-            `(ProjectDataService) (_getPropertyItemContext) Entry with ID ${item.Id} found in list ${this._params.propertiesListName}.`
-          )
+          this._logInfo(`Entry with ID ${item.Id} found in list ${this._params.propertiesListName}.`, '_getPropertyItemContext')
           return {
             itemId: item.Id,
             listId: list.Id,
             defaultEditFormUrl: list.DefaultEditFormUrl
           }
         } catch (error) {
+          // eslint-disable-next-line no-console
+          console.log(error)
           return null
         }
       },
@@ -169,13 +165,12 @@ export class ProjectDataService {
 
       const modifiedSourceUrl = !sourceUrl.includes(welcomepage)
         ? sourceUrl
-            .replace('#syncproperties=1', `/${welcomepage}#syncproperties=1`)
-            .replace('//SitePages', '/SitePages')
+          .replace('#syncproperties=1', `/${welcomepage}#syncproperties=1`)
+          .replace('//SitePages', '/SitePages')
         : sourceUrl
 
       const editFormUrl = makeUrlAbsolute(
-        `${propertyItemContext.defaultEditFormUrl}?ID=${
-          propertyItemContext.itemId
+        `${propertyItemContext.defaultEditFormUrl}?ID=${propertyItemContext.itemId
         }&Source=${encodeURIComponent(modifiedSourceUrl)}`
       )
 
@@ -197,23 +192,20 @@ export class ProjectDataService {
    * Get properties data
    */
   public async getPropertiesData(): Promise<IGetPropertiesData> {
-    // TODO: Potential issues with `this._params.entityService.configure({})`
     const propertyItem = await this._getPropertyItem(
       `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
     )
-
     if (propertyItem) {
       const templateParameters = tryParseJson(propertyItem.fieldValuesText.TemplateParameters, {})
-      Logger.write('(ProjectDataService) (getPropertiesData) Local property item found.')
+      this._logInfo('Local property item found.', 'getPropertiesData')
       return {
         ...propertyItem,
         propertiesListId: propertyItem.propertiesListId,
         templateParameters
       }
     } else {
-      Logger.write(
-        '(ProjectDataService) (getPropertiesData) Local property item not found. Retrieving data from portal site.'
-      )
+      this._logInfo('Local property item not found. Retrieving data from portal site.', 'getPropertiesData')
+      // TODO: Potential issues with `this._params.entityService.configure({})`
       const entity = await this._params.entityService
         .configure({})
         .fetchEntity(this._params.siteId, this._params.webUrl)
@@ -271,25 +263,15 @@ export class ProjectDataService {
     termSetId: string,
     checklistData: { [termGuid: string]: ProjectPhaseChecklistData } = {}
   ): Promise<ProjectPhaseModel[]> {
-    const terms = await this._params.taxonomy
-      .getDefaultSiteCollectionTermStore()
-      .getTermSetById(termSetId)
-      .terms.select('Id', 'Name', 'LocalCustomProperties')
-      .usingCaching({
-        key: this._storageKeys.getPhases,
-        storeName: 'session',
-        expiration: dateAdd(new Date(), 'day', 1)
-      })
-      .get()
-    return terms.map(
-      (term) =>
-        new ProjectPhaseModel(
-          term.Name,
-          term.Id,
-          checklistData[term.Id],
-          term.LocalCustomProperties
-        )
-    )
+    const terms = await this._sp.termStore
+      .sets
+      .getById(termSetId)
+      .terms
+      .select('*', 'localProperties')
+      .using(DefaultCaching)()
+      // eslint-disable-next-line no-console
+      console.log(termSetId, terms)
+    return terms.map((term) => new ProjectPhaseModel(term,termSetId, checklistData[term.id]))
   }
 
   /**
@@ -321,8 +303,8 @@ export class ProjectDataService {
       const items = await this.web.lists
         .getByTitle(listName)
         .items.select('ID', 'Title', 'GtComment', 'GtChecklistStatus', 'GtProjectPhase')<
-        Record<string, any>[]
-      >()
+          Record<string, any>[]
+        >()
       const checklistItems = items.map((item) => new ChecklistItemModel(item))
       const checklistData = checklistItems
         .filter((item) => item.termGuid)
@@ -375,6 +357,10 @@ export class ProjectDataService {
     } catch (error) {
       return 'SitePages/ProjectHome.aspx'
     }
+  }
+
+  private _logInfo(message: string, method: string) {
+    Logger.write(`(ProjectDataService) (${method}) ${message}`)
   }
 }
 

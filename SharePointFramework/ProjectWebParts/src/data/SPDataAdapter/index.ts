@@ -1,11 +1,11 @@
 import { IProgressIndicatorProps } from '@fluentui/react/lib/ProgressIndicator'
-import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, getHashCode } from '@pnp/core'
-import { Logger, LogLevel } from '@pnp/logging'
+import { LogLevel, Logger } from '@pnp/logging'
 import { Caching } from '@pnp/queryable'
+import * as strings from 'ProjectWebPartsStrings'
 import { SPDataAdapterBase } from 'pp365-shared-library/lib/data'
 import { ProjectDataService } from 'pp365-shared-library/lib/services'
-import * as strings from 'ProjectWebPartsStrings'
+import { SPFxContext } from 'pp365-shared-library/lib/types'
 import { IEntityField } from 'sp-entityportal-service/types'
 import { IConfigurationFile } from 'types'
 import { find, get } from 'underscore'
@@ -36,12 +36,13 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param configuration Configuration
    */
   public async configure(
-    spfxContext: WebPartContext,
+    spfxContext: SPFxContext,
     configuration: ISPDataAdapterConfiguration
   ): Promise<void> {
     await super.configure(spfxContext, configuration)
     this.project = new ProjectDataService({
       ...this.settings,
+      spfxContext,
       entityService: this.entityService,
       propertiesListName: strings.ProjectPropertiesListName
     })
@@ -61,7 +62,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     fields: IEntityField[],
     customGroupName: string,
     forcedFields: string[]
-  ): any[] {
+  ) {
     const fieldsToSync = [
       {
         InternalName: 'Title',
@@ -75,7 +76,6 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         const hideFromEditForm = SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1
         const gtPrefix = InternalName.indexOf('Gt') === 0
         const inCustomGroup = Group === customGroupName
-        // Include fields with Gt prefix or in custom group, or those in the forcedFields array
         if (
           (!gtPrefix && !inCustomGroup && !forcedFields.includes(InternalName)) ||
           hideFromEditForm
@@ -123,7 +123,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Get mapped project properties.
+   * Get mapped project properties from `fieldValues` and `fieldValuesText`, using
+   * `templateParameters` to determine which fields to include.
    *
    * @param fieldValues - Field values for the properties item
    * @param fieldValuesText - Field values in text format for the properties item
@@ -143,8 +144,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       const [fields, siteUsers] = await Promise.all([
         templateParameters?.ProjectContentTypeId
           ? this.entityService
-              .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
-              .getEntityFields()
+            .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
+            .getEntityFields()
           : this.entityService.getEntityFields(),
         this.sp.web.siteUsers.select('Id', 'Email', 'LoginName', 'Title')()
       ])
@@ -292,10 +293,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       .getByInternalNameOrTitle(fieldName)
       .select('InternalName', 'TermSetId', 'TextField')
       .using(DefaultCaching)<{
-      InternalName: string
-      TermSetId: string
-      TextField: string
-    }>()
+        InternalName: string
+        TermSetId: string
+        TextField: string
+      }>()
     const phaseTextField = await this.sp.web.fields
       .getById(phaseField.TextField)
       .select('InternalName')
@@ -337,8 +338,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       const { ServerRelativeUrl } = await this.portal.web.rootFolder
         .select('ServerRelativeUrl')
         .using(DefaultCaching)<{
-        ServerRelativeUrl: string
-      }>()
+          ServerRelativeUrl: string
+        }>()
       const folderRelativeUrl = `${ServerRelativeUrl}/${strings.SiteAssetsConfigurationFolder}/${folderPath}`
       const folder = this.portal.web.getFolderByServerRelativePath(folderRelativeUrl)
       const files = await folder.files
