@@ -11,12 +11,12 @@
     "prettier": "prettier '**/*.ts*' --write --loglevel silent"
   },
   "dependencies": {
-    "@microsoft/sp-application-base": "1.15.2",
-    "@microsoft/sp-core-library": "1.15.2",
-    "@microsoft/sp-listview-extensibility": "1.15.2",
-    "@microsoft/sp-page-context": "1.15.2",
-    "@microsoft/sp-webpart-base": "1.15.2",
-    "@microsoft/sp-lodash-subset": "1.15.2",
+    "@microsoft/sp-application-base": "1.17.2",
+    "@microsoft/sp-core-library": "1.17.2",
+    "@microsoft/sp-listview-extensibility": "1.17.2",
+    "@microsoft/sp-page-context": "1.17.2",
+    "@microsoft/sp-webpart-base": "1.17.2",
+    "@microsoft/sp-lodash-subset": "1.17.2",
     "@pnp/logging": "3.17.0",
     "@pnp/sp": "3.17.0",
     "tslib": "2.3.1",
@@ -50,7 +50,7 @@
     "eslint-plugin-unused-imports": "2.0.0",
     "@typescript-eslint/eslint-plugin": "5.40.0",
     "@typescript-eslint/parser": "5.40.0",
-    "@microsoft/sp-build-web": "1.15.2",
+    "@microsoft/sp-build-web": "1.17.2",
     "@types/react": "16.8.8",
     "@types/react-dom": "16.8.3",
     "@types/webpack-env": "~1.15.2",
@@ -59,7 +59,7 @@
     "ajv": "^6.12.5",
     "gulp": "4.0.2",
     "typescript": "4.5.5",
-    "@microsoft/sp-module-interfaces": "1.15.2",
+    "@microsoft/sp-module-interfaces": "1.17.2",
     "@types/lodash": "~4.14.195"
   },
   "eslintConfig": {
