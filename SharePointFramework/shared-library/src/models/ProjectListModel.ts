@@ -18,7 +18,7 @@ export class ProjectListModel {
 
   /**
    * The lifecycle status of the project.
-   * 
+   *
    * Can be one of the following:
    * - `Aktiv`
    * - `Avsluttet`
