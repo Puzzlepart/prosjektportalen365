@@ -161,9 +161,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     level?: string
   ): Promise<IPortfolioAggregationConfiguration> {
     try {
-      let calculatedLevel = 'Portefølje'
+      let calculatedLevel = strings.DataSourceLevelPortfolio
       if (this.portalDataService.url !== this._spfxContext.pageContext.web.absoluteUrl) {
-        calculatedLevel = 'Prosjekt'
+        calculatedLevel = strings.DataSourceLevelProject
       }
       const columns = await this.fetchProjectContentColumns(category)
       const [views, viewsUrls, columnUrls, levels] = await Promise.all([
@@ -516,10 +516,15 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   /**
    * Combine the result data (items, sites, users, groups) to a list of `ProjectListModel`.@
-   * 
+   *
    * @param param0 Deconstructed object containing the result data
    */
-  private _combineResultData({ items, sites, memberOfGroups, users }: IProjectsData): ProjectListModel[] {
+  private _combineResultData({
+    items,
+    sites,
+    memberOfGroups,
+    users
+  }: IProjectsData): ProjectListModel[] {
     return items
       .map((item) => {
         const [owner] = users.filter((user) => user.Id === item.GtProjectOwnerId)
@@ -539,17 +544,15 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     const localStore = new PnPClientStorage().local
     const siteId = this._spfxContext.pageContext.site.id.toString()
     const list = this._sp.web.lists.getByTitle(strings.ProjectsListName)
-    const [items, sites, memberOfGroups, users] = await   localStore.getOrPut(
+    const [items, sites, memberOfGroups, users] = await localStore.getOrPut(
       `pp365_fetchenrichedprojects_${siteId}`,
-      async () => await Promise.all([
-        list
-          .items
-          .select(...Object.keys(new SPProjectItem()))
-          .getAll<SPProjectItem>(),
-        this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
-        this.fetchMemberGroups(),
-        this._sp.web.siteUsers.select('Id', 'Title', 'Email')(),
-      ]),
+      async () =>
+        await Promise.all([
+          list.items.select(...Object.keys(new SPProjectItem())).getAll<SPProjectItem>(),
+          this._fetchItems(`DepartmentId:${siteId} contentclass:STS_Site`, ['Title', 'SiteId']),
+          this.fetchMemberGroups(),
+          this._sp.web.siteUsers.select('Id', 'Title', 'Email')()
+        ]),
       dateAdd(new Date(), 'minute', 30)
     )
     const result: IProjectsData = {
@@ -559,7 +562,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       users
     }
     let projects = this._combineResultData(result)
-    projects = projects.filter(m => m.lifecycleStatus !== 'Avsluttet')
+    projects = projects.filter((m) => m.lifecycleStatus !== 'Avsluttet')
     projects = projects.sort((a, b) => a.title.localeCompare(b.title))
     return projects
   }

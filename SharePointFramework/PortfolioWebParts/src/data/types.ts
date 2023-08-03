@@ -107,10 +107,7 @@ export interface IPortfolioWebPartsDataAdapter {
   /**
    * Get aggregated list config for the given category.
    *
-   * Returns `views`, `viewsUrls`, `columnUrls` and `level`. For now
-   * we only support two levels: `Portefølje` and `Prosjekt`. We need
-   * to also support `Program` and `Oveordnet` in the future (as part
-   * of issue #1097).
+   * Returns `views`, `viewsUrls`, `columnUrls` and `level`.
    *
    * @param category Category for data source
    * @param level Level for data source
