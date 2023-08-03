@@ -26,7 +26,7 @@ export function useProjectListDataFetch(
       props.dataAdapter.isUserInGroup(strings.PortfolioManagerGroupName)
     ]).then(([projects, isUserInPortfolioManagerGroup]) => {
       const selectedVertical =
-        _.find(verticals, (vertical) => vertical.itemKey === props.defaultVertical) ??
+        _.find(verticals, (vertical) => vertical.key === props.defaultVertical) ??
         _.first(verticals)
 
       setState({

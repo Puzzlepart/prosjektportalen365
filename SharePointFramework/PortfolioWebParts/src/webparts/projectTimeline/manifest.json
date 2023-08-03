@@ -1,6 +1,6 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-  "id": "7284c568-f66c-4218-bb2c-3734a3cfa581",
+  "id": "58446c7e-4a78-49e0-8ae0-2efee199e58d",
   "alias": "PortfolioTimelineWebPart",
   "componentType": "WebPart",
   "version": "1.9.0",

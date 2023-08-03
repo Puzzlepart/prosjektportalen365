@@ -6,6 +6,7 @@ import { IProjectListProps } from './types'
 import { useProjectListDataFetch } from './useProjectListDataFetch'
 import { useProjectListState } from './useProjectListState'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
+import { SearchBoxProps } from '@fluentui/react-search-preview'
 
 /**
  * Component logic hook for `ProjectList`. This hook is responsible for
@@ -94,16 +95,16 @@ export const useProjectList = (props: IProjectListProps) => {
   /**
    * On search callback handler
    *
-   * @param _event - React change event
+   * @param _ - React change event
    * @param searchTerm - Search term
    */
-  function onSearch(_event: React.ChangeEvent<HTMLInputElement>, searchTerm: string) {
-    setState({ searchTerm })
+  const onSearch: SearchBoxProps['onChange'] = (_, data) => {
+    setState({ searchTerm: data?.value })
   }
 
   const projects = state.isDataLoaded ? filterProjets(state.projects) : state.projects
   const verticals = props.verticals.filter(
-    (vertical) => !props.hideVerticals.includes(vertical.itemKey)
+    (vertical) => !props.hideVerticals.includes(vertical.key.toString())
   )
 
   useProjectListDataFetch(props, verticals, setState)

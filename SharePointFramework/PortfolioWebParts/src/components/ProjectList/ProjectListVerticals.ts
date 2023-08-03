@@ -1,5 +1,16 @@
 import strings from 'PortfolioWebPartsStrings'
 import { IProjectListVertical } from './types'
+import {
+  BoxFilled,
+  BoxRegular,
+  BoxToolboxFilled,
+  BoxToolboxRegular,
+  LockOpenFilled,
+  LockOpenRegular,
+  PersonCircleFilled,
+  PersonCircleRegular,
+  bundleIcon
+} from '@fluentui/react-icons'
 
 /**
  * Vertical configurations for `ProjectList`.
@@ -13,39 +24,44 @@ import { IProjectListVertical } from './types'
  */
 export const ProjectListVerticals: IProjectListVertical[] = [
   {
-    itemKey: 'projects_access',
-    headerText: strings.ProjectsAccessHeaderText,
-    itemIcon: 'ViewList',
+    key: 'projects_access',
+    value: 'projects_access',
+    text: strings.ProjectsAccessHeaderText,
+    icon: bundleIcon(LockOpenFilled, LockOpenRegular),
     searchBoxPlaceholder: strings.ProjectsAccessSearchBoxPlaceholderText,
     filter: (project) => project.hasUserAccess
   },
   {
-    itemKey: 'my_projects',
-    headerText: strings.MyProjectsHeaderText,
-    itemIcon: 'FabricUserFolder',
+    key: 'my_projects',
+    value: 'my_projects',
+    text: strings.MyProjectsHeaderText,
+    icon: bundleIcon(PersonCircleFilled, PersonCircleRegular),
     searchBoxPlaceholder: strings.MyProjectsSearchBoxPlaceholderText,
     filter: (project) => project.isUserMember
   },
   {
-    itemKey: 'all_projects',
-    headerText: strings.AllProjectsHeaderText,
-    itemIcon: 'AllApps',
+    key: 'all_projects',
+    value: 'all_projects',
+    text: strings.AllProjectsHeaderText,
+    icon: bundleIcon(BoxFilled, BoxRegular),
     searchBoxPlaceholder: strings.AllProjectsSearchBoxPlaceholderText,
     filter: (_, state) => state.isUserInPortfolioManagerGroup,
     isHidden: (state) => !state.isUserInPortfolioManagerGroup
   },
   {
-    itemKey: 'parent_projects',
-    headerText: strings.ParentProjectsHeaderText,
-    itemIcon: 'ProductVariant',
+    key: 'parent_projects',
+    value: 'parent_projects',
+    text: strings.ParentProjectsHeaderText,
+    icon: bundleIcon(BoxToolboxFilled, BoxToolboxRegular),
     searchBoxPlaceholder: strings.ParentProjectsSearchBoxPlaceholderText,
     filter: (project, state) =>
       project.isParent && (state.isUserInPortfolioManagerGroup || project.hasUserAccess)
   },
   {
-    itemKey: 'program_projects',
-    headerText: strings.ProgramProjectsHeaderText,
-    itemIcon: 'ProductList',
+    key: 'program_projects',
+    value: 'program_projects',
+    text: strings.ProgramProjectsHeaderText,
+    icon: bundleIcon(BoxToolboxFilled, BoxToolboxRegular),
     searchBoxPlaceholder: strings.ProgramSearchBoxPlaceholderText,
     filter: (project, state) =>
       project.isProgram && (state.isUserInPortfolioManagerGroup || project.hasUserAccess)

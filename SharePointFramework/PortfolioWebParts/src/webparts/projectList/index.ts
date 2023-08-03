@@ -27,8 +27,8 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     const verticalOptions = ProjectListVerticals.map<IPropertyPaneDropdownOption>((vertical) => ({
-      key: vertical.itemKey,
-      text: vertical.headerText
+      key: vertical.key,
+      text: vertical.text
     }))
 
     return {

@@ -1,9 +1,21 @@
-import { IButtonProps, IPivotItemProps, IShimmerProps } from '@fluentui/react'
+import { IShimmerProps } from '@fluentui/react'
 import { IColumn } from '@fluentui/react/lib/DetailsList'
 import { IBaseComponentProps } from '../types'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
+import { TabProps } from '@fluentui/react-components'
+import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
 
-export interface IProjectListVertical extends IPivotItemProps {
+export interface IProjectListVertical extends Omit<TabProps, 'icon'> {
+  /**
+   * Text to display for the tab
+   */
+  text?: string
+
+  /**
+   * Icon to display for the tab
+   */
+  icon?: FluentIcon
+
   /**
    * Placeholder text for search box.
    */
@@ -16,17 +28,6 @@ export interface IProjectListVertical extends IPivotItemProps {
    * @param state State of the component
    */
   filter?: (project: ProjectListModel, state: IProjectListState) => boolean
-
-  /**
-   * Function to get header button props. If not provided, the default button props are used.
-   *
-   * @param state State of the component
-   */
-  getHeaderButtonProps?: (state: IProjectListState) =>
-    | IButtonProps
-    | {
-        [key: string]: string | number | boolean
-      }
 
   /**
    * Function to determine if the vertical should be hidden. If not provided, the vertical is not hidden.

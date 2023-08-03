@@ -1,10 +1,12 @@
 dependencies:
-  '@fluentui/react': 8.98.1_9c907a7ccd27a2e2d0ee9de5366482d1
-  '@fluentui/react-file-type-icons': 8.8.8_4865287ef69aa4f3fc3f709d3560286e
-  '@fluentui/react-hooks': 8.6.27_4865287ef69aa4f3fc3f709d3560286e
-  '@microsoft/decorators': 1.17.4
-  '@microsoft/eslint-config-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
-  '@microsoft/eslint-plugin-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
+  '@fluentui/react': 8.98.1_9c4969b3be2ea41c89422e6bb8d9a16e
+  '@fluentui/react-components': 9.27.2_9c4969b3be2ea41c89422e6bb8d9a16e
+  '@fluentui/react-file-type-icons': 8.8.8_453b269bd7a8e2940a0e8fb00c615d82
+  '@fluentui/react-hooks': 8.6.27_453b269bd7a8e2940a0e8fb00c615d82
+  '@fluentui/react-icons': 2.0.209_react@16.13.1
+  '@microsoft/decorators': 1.15.2
+  '@microsoft/eslint-config-spfx': 1.15.2_eslint@8.25.0+typescript@4.5.5
+  '@microsoft/eslint-plugin-spfx': 1.15.2_eslint@8.25.0+typescript@4.5.5
   '@microsoft/rush-stack-compiler-4.5': 0.2.2
   '@microsoft/sp-adaptive-card-extension-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
   '@microsoft/sp-application-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
@@ -32,8 +34,8 @@ dependencies:
   '@rush-temp/pp365-projectextensions': file:projects/pp365-projectextensions.tgz
   '@rush-temp/pp365-projectwebparts': file:projects/pp365-projectwebparts.tgz
   '@rush-temp/pp365-shared-library': file:projects/pp365-shared-library.tgz_interactjs@1.6.2
-  '@rush-temp/pp365-spfx-tasks': file:projects/pp365-spfx-tasks.tgz_9c4969b3be2ea41c89422e6bb8d9a16e
-  '@rush-temp/pp365-templates': file:projects/pp365-templates.tgz_9c4969b3be2ea41c89422e6bb8d9a16e
+  '@rush-temp/pp365-spfx-tasks': file:projects/pp365-spfx-tasks.tgz_react@16.13.1
+  '@rush-temp/pp365-templates': file:projects/pp365-templates.tgz_react@16.13.1
   '@rushstack/eslint-config': 2.5.1_eslint@8.25.0+typescript@4.5.5
   '@types/array-sort': 1.0.0
   '@types/colors': 1.2.1
@@ -1968,6 +1970,27 @@ packages:
       scheduler: ^0.19.0 || ^0.20.0
     resolution:
       integrity: sha512-hBzVnQTOE4EQlsG2QSpjie3fFsFh/87zshAQIjZfw4TyKQ3tfOKa1jsEeq09fB4GRi7B5CzGcSjzv7YkrpcNxg==
+  /@fluentui/react-search-preview/0.1.3_9c4969b3be2ea41c89422e6bb8d9a16e:
+    dependencies:
+      '@fluentui/react-icons': 2.0.209_react@16.13.1
+      '@fluentui/react-input': 9.4.24_9c4969b3be2ea41c89422e6bb8d9a16e
+      '@fluentui/react-jsx-runtime': 9.0.0-alpha.12_453b269bd7a8e2940a0e8fb00c615d82
+      '@fluentui/react-theme': 9.1.9
+      '@fluentui/react-utilities': 9.10.1_453b269bd7a8e2940a0e8fb00c615d82
+      '@griffel/react': 1.5.14_react@16.13.1
+      '@swc/helpers': 0.4.14
+      '@types/react': 16.8.8
+      '@types/react-dom': 16.8.3
+      react: 16.13.1
+      react-dom: 16.13.1_react@16.13.1
+    dev: false
+    peerDependencies:
+      '@types/react': '>=16.8.0 <19.0.0'
+      '@types/react-dom': '>=16.8.0 <19.0.0'
+      react: '>=16.8.0 <19.0.0'
+      react-dom: '>=16.8.0 <19.0.0'
+    resolution:
+      integrity: sha512-pzTjN3zft4gD7mvOrKjp9DINQXv91jdX9ud8wE5iEogEaRJhjzPZ2egi6xX00dhuYkfzI0SzUa43h9PDbHHrmg==
   /@fluentui/react-select/9.1.24_9c4969b3be2ea41c89422e6bb8d9a16e:
     dependencies:
       '@fluentui/react-field': 9.1.14_9c4969b3be2ea41c89422e6bb8d9a16e
@@ -22285,6 +22308,7 @@ packages:
     dependencies:
       '@fluentui/react': 8.98.1_9c4969b3be2ea41c89422e6bb8d9a16e
       '@fluentui/react-components': 9.27.2_9c4969b3be2ea41c89422e6bb8d9a16e
+      '@fluentui/react-icons': 2.0.209_react@16.13.1
       '@microsoft/decorators': 1.15.2
       '@microsoft/eslint-config-spfx': 1.15.2_eslint@8.25.0+typescript@4.5.5
       '@microsoft/eslint-plugin-spfx': 1.15.2_eslint@8.25.0+typescript@4.5.5
@@ -22341,6 +22365,8 @@ packages:
       '@fluentui/react-components': 9.27.2_9c4969b3be2ea41c89422e6bb8d9a16e
       '@fluentui/react-file-type-icons': 8.8.8_453b269bd7a8e2940a0e8fb00c615d82
       '@fluentui/react-hooks': 8.6.27_453b269bd7a8e2940a0e8fb00c615d82
+      '@fluentui/react-icons': 2.0.209_react@16.13.1
+      '@fluentui/react-search-preview': 0.1.3_9c4969b3be2ea41c89422e6bb8d9a16e
       '@microsoft/decorators': 1.15.2
       '@microsoft/eslint-config-spfx': 1.15.2_eslint@8.25.0+typescript@4.5.5
       '@microsoft/eslint-plugin-spfx': 1.15.2_eslint@8.25.0+typescript@4.5.5
@@ -22415,6 +22441,7 @@ packages:
     dependencies:
       '@fluentui/react': 8.98.1_9c4969b3be2ea41c89422e6bb8d9a16e
       '@fluentui/react-components': 9.27.2_9c4969b3be2ea41c89422e6bb8d9a16e
+      '@fluentui/react-icons': 2.0.209_react@16.13.1
       '@microsoft/eslint-config-spfx': 1.15.2_eslint@8.25.0+typescript@4.5.5
       '@microsoft/eslint-plugin-spfx': 1.15.2_eslint@8.25.0+typescript@4.5.5
       '@microsoft/rush-stack-compiler-4.5': 0.2.2
@@ -22489,6 +22516,7 @@ packages:
     dependencies:
       '@fluentui/react': 8.98.1_9c4969b3be2ea41c89422e6bb8d9a16e
       '@fluentui/react-components': 9.27.2_9c4969b3be2ea41c89422e6bb8d9a16e
+      '@fluentui/react-icons': 2.0.209_react@16.13.1
       '@microsoft/decorators': 1.15.2
       '@microsoft/eslint-config-spfx': 1.15.2_eslint@8.25.0+typescript@4.5.5
       '@microsoft/eslint-plugin-spfx': 1.15.2_eslint@8.25.0+typescript@4.5.5
@@ -22555,6 +22583,7 @@ packages:
     dependencies:
       '@fluentui/react': 8.98.1_9c4969b3be2ea41c89422e6bb8d9a16e
       '@fluentui/react-components': 9.27.2_9c4969b3be2ea41c89422e6bb8d9a16e
+      '@fluentui/react-icons': 2.0.209_react@16.13.1
       '@microsoft/decorators': 1.15.2
       '@microsoft/eslint-config-spfx': 1.15.2_eslint@8.25.0+typescript@4.5.5
       '@microsoft/eslint-plugin-spfx': 1.15.2_eslint@8.25.0+typescript@4.5.5
@@ -22633,6 +22662,7 @@ packages:
     dependencies:
       '@fluentui/react': 8.98.1_9c4969b3be2ea41c89422e6bb8d9a16e
       '@fluentui/react-components': 9.27.2_9c4969b3be2ea41c89422e6bb8d9a16e
+      '@fluentui/react-icons': 2.0.209_react@16.13.1
       '@microsoft/rush-stack-compiler-4.5': 0.2.2
       '@microsoft/sp-application-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
       '@microsoft/sp-build-web': 1.17.4
@@ -22689,7 +22719,7 @@ packages:
       integrity: sha512-vN6lQ174JX9Npr2kR/fahdHa6tw6HZEwzL62Bsnp1eryMqYj45ikKJkprZWD66C5LsfcPlR8yKxRHBk214Qp+A==
       tarball: file:projects/pp365-shared-library.tgz
     version: 0.0.0
-  file:projects/pp365-spfx-tasks.tgz_9c4969b3be2ea41c89422e6bb8d9a16e:
+  file:projects/pp365-spfx-tasks.tgz_react@16.13.1:
     dependencies:
       '@types/colors': 1.2.1
       '@types/lodash': 4.14.195
@@ -22701,15 +22731,12 @@ packages:
     id: file:projects/pp365-spfx-tasks.tgz
     name: '@rush-temp/pp365-spfx-tasks'
     peerDependencies:
-      '@types/react': '*'
-      '@types/react-dom': '*'
       react: '*'
-      react-dom: '*'
     resolution:
       integrity: sha512-U8Y+qBdRnMQd7ZixHVxjJ90f0MGpBaPrTaVSl3dFWAMw3e3yPJ2RrbQCQmncNF9cI3pBPOZD336IJhjjM1TwAQ==
       tarball: file:projects/pp365-spfx-tasks.tgz
     version: 0.0.0
-  file:projects/pp365-templates.tgz_9c4969b3be2ea41c89422e6bb8d9a16e:
+  file:projects/pp365-templates.tgz_react@16.13.1:
     dependencies:
       '@ptkdev/json-token-replace': 1.2.2
       '@types/lodash': 4.14.196
@@ -22721,21 +22748,20 @@ packages:
     id: file:projects/pp365-templates.tgz
     name: '@rush-temp/pp365-templates'
     peerDependencies:
-      '@types/react': '*'
-      '@types/react-dom': '*'
       react: '*'
-      react-dom: '*'
     resolution:
       integrity: sha512-/Eh+BWBuiuFds3/ew9rQEu2ijQaIBZIST31xniswNUdQLyOpG180dgDZEHGNvZefFVYL3lZI/W+0FCr3yBiV0Q==
       tarball: file:projects/pp365-templates.tgz
     version: 0.0.0
 specifiers:
   '@fluentui/react': 8.98.1
+  '@fluentui/react-components': ~9.27.2
   '@fluentui/react-file-type-icons': 8.8.8
   '@fluentui/react-hooks': 8.6.27
-  '@microsoft/decorators': 1.17.4
-  '@microsoft/eslint-config-spfx': 1.17.4
-  '@microsoft/eslint-plugin-spfx': 1.17.4
+  '@fluentui/react-icons': ~2.0.209
+  '@microsoft/decorators': 1.15.2
+  '@microsoft/eslint-config-spfx': 1.15.2
+  '@microsoft/eslint-plugin-spfx': 1.15.2
   '@microsoft/rush-stack-compiler-4.5': 0.2.2
   '@microsoft/sp-adaptive-card-extension-base': 1.17.4
   '@microsoft/sp-application-base': 1.17.4

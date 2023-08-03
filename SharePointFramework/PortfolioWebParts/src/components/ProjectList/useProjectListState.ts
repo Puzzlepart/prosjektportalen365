@@ -11,7 +11,7 @@ import { IProjectListProps, IProjectListState } from './types'
  */
 export function useProjectListState(props: IProjectListProps) {
   const defaultSelectedVertical =
-    _.find(props.verticals, (vertical) => vertical.itemKey === props.defaultVertical) ??
+    _.find(props.verticals, (vertical) => vertical.key === props.defaultVertical) ??
     _.first(ProjectListVerticals)
   const mockProjects = Array.apply(null, Array(Math.floor(Math.random() * 10) + 10)).map(() => 0)
   const defaultSort = { fieldName: props.sortBy, isSortedDescending: true }

@@ -1,17 +1,17 @@
+import React, { FC } from 'react'
+import { IColumn, SelectionMode, ShimmeredDetailsList } from '@fluentui/react'
 import {
-  IColumn,
-  MessageBar,
-  MessageBarType,
-  Pivot,
-  PivotItem,
-  SearchBox,
-  SelectionMode,
-  ShimmeredDetailsList
-} from '@fluentui/react'
+  FluentProvider,
+  SelectTabData,
+  Tab,
+  TabList,
+  webLightTheme
+} from '@fluentui/react-components'
+import { Alert } from '@fluentui/react-components/unstable'
+import { SearchBox } from '@fluentui/react-search-preview'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import { getObjectValue } from 'pp365-shared-library/lib/util/getObjectValue'
-import React, { FC } from 'react'
 import { find, isEmpty } from 'underscore'
 import { ProjectCard } from './ProjectCard'
 import { ProjectCardContext } from './ProjectCard/context'
@@ -97,67 +97,77 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
 
   if (state.projects.length === 0) {
     return (
-      <div className={styles.root}>
-        <MessageBar messageBarType={MessageBarType.info}>{strings.NoProjectsFound}</MessageBar>
-      </div>
+      <FluentProvider theme={webLightTheme}>
+        <section className={styles.projectList}>
+          <Alert intent={'info'}>{strings.NoProjectsFound}</Alert>
+        </section>
+      </FluentProvider>
     )
   }
 
   if (state.error) {
     return (
-      <div className={styles.root}>
-        <MessageBar messageBarType={MessageBarType.error}>{strings.ErrorText}</MessageBar>
-      </div>
+      <FluentProvider theme={webLightTheme}>
+        <section className={styles.projectList}>
+          <Alert intent={'error'}>{strings.ErrorText}</Alert>
+        </section>
+      </FluentProvider>
     )
   }
 
   return (
-    <div className={styles.root}>
-      <div className={styles.container}>
-        <div className={styles.projectDisplaySelect}>
-          <Pivot
-            onLinkClick={({ props }) =>
-              setState({ selectedVertical: find(verticals, (v) => v.itemKey === props.itemKey) })
+    <FluentProvider theme={webLightTheme}>
+      <section className={styles.projectList}>
+        <div className={styles.tabs}>
+          <TabList
+            onTabSelect={(_, data: SelectTabData) =>
+              setState({ selectedVertical: find(verticals, (v) => v.key === data.value) })
             }
-            selectedKey={state.selectedVertical.itemKey}
+            selectedValue={state.selectedVertical.key}
           >
             {state.isDataLoaded &&
               verticals
                 .filter((vertical) => !vertical.isHidden || !vertical.isHidden(state))
-                .map((vertical) => (
-                  <PivotItem
-                    key={vertical.itemKey}
-                    itemKey={vertical.itemKey}
-                    headerText={vertical.headerText}
-                    itemIcon={vertical.itemIcon}
-                    headerButtonProps={
-                      vertical.getHeaderButtonProps && vertical.getHeaderButtonProps(state)
-                    }
-                  >
-                    <div className={styles.searchBox} hidden={!props.showSearchBox}>
-                      <SearchBox
-                        disabled={!state.isDataLoaded || isEmpty(state.projects)}
-                        value={state.searchTerm}
-                        placeholder={searchBoxPlaceholder}
-                        onChange={onSearch}
-                      />
-                    </div>
-                    <RenderModeDropdown
-                      hidden={!props.showRenderModeSelector}
-                      renderAs={state.renderMode}
-                      onChange={(renderAs) => setState({ renderMode: renderAs })}
-                    />
-                    {state.isDataLoaded && isEmpty(projects) && (
-                      <div className={styles.emptyMessage}>
-                        <MessageBar>{strings.ProjectListEmptyText}</MessageBar>
-                      </div>
-                    )}
-                    <div className={styles.projects}>{renderProjects(projects)}</div>
-                  </PivotItem>
-                ))}
-          </Pivot>
+                .map((vertical) => {
+                  const Icon = vertical.icon
+                  return (
+                    <Tab key={vertical.key} value={vertical.value} icon={<Icon />}>
+                      {vertical.text}
+                    </Tab>
+                  )
+                })}
+          </TabList>
         </div>
-      </div>
+        <div
+          className={styles.commandBar}
+          hidden={!props.showSearchBox && !props.showRenderModeSelector}
+        >
+          <SearchBox
+            className={styles.searchBox}
+            disabled={!state.isDataLoaded || isEmpty(state.projects)}
+            value={state.searchTerm}
+            placeholder={searchBoxPlaceholder}
+            aria-label={searchBoxPlaceholder}
+            size={'large'}
+            onChange={onSearch}
+            style={{ boxShadow: 'var(--shadow2)', maxWidth: '820px' }}
+            appearance={'filled-lighter-shadow'}
+            hidden={!props.showSearchBox}
+          />
+          <RenderModeDropdown
+            hidden={!props.showRenderModeSelector}
+            renderAs={state.renderMode}
+            onOptionSelect={(renderAs) => setState({ renderMode: renderAs })}
+          />
+        </div>
+
+        {state.isDataLoaded && isEmpty(projects) && (
+          <div className={styles.emptyMessage}>
+            <Alert intent={'info'}>{strings.ProjectListEmptyText}</Alert>
+          </div>
+        )}
+        <div className={styles.projects}>{renderProjects(projects)}</div>
+      </section>
       <ProjectInformationPanel
         key={state.showProjectInfo?.siteId}
         title={state.showProjectInfo?.title}
@@ -168,7 +178,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         hidden={!state.showProjectInfo}
         hideAllActions={true}
       />
-    </div>
+    </FluentProvider>
   )
 }
 
