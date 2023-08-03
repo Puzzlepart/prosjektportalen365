@@ -14,11 +14,11 @@
  */
 const argv = require('yargs').argv
 const fs = require('fs')
-const path = require('path')
+const colors = require('colors/safe')
 const glob = require('glob').sync
 const revert = argv.revert
 const force = argv.force
-const { getFileContent, joinPath } = require('./util')
+const { getFileContent, joinPath, log } = require('./util')
 require('dotenv').config()
 
 // Config folder path
@@ -38,7 +38,7 @@ const packageSolutionFileCopy = joinPath(configFolder, `package-solution.json.ba
  * the generated solution config file.
  */
 function revertPackageSolutionFile() {
-    console.log('Reverting package solution file to the backup file and deleting the backup file')
+    log('Reverting package solution file to the backup file and deleting the backup file', 'modifySolutionFiles')
     fs.copyFileSync(packageSolutionFileCopy, packageSolutionFile)
     fs.unlinkSync(packageSolutionFileCopy)
     fs.unlinkSync(solutionConfigFile)
@@ -50,7 +50,7 @@ function revertPackageSolutionFile() {
  * @param {*} componentManifestFiles Component manifest files
  */
 function revertComponentManifestFiles(componentManifestFiles) {
-    console.log('Reverting component manifest files to the backup files and deleting the backup files')
+    log('Reverting component manifest files to the backup files and deleting the backup files', 'modifySolutionFiles')
     for (let i = 0; i < componentManifestFiles.length; i++) {
         const componentManifestFile = componentManifestFiles[i]
         const componentManifestFileCopy = componentManifestFile + '.bak'
@@ -63,7 +63,7 @@ function revertComponentManifestFiles(componentManifestFiles) {
  * Copy existing package solution file to a backup file
  */
 function copyExistingPackageSolutionFile() {
-    console.log('Copying existing package solution file to a backup file')
+    log('Copying existing package solution file to a backup file', 'modifySolutionFiles')
     fs.copyFileSync(packageSolutionFile, packageSolutionFileCopy)
 }
 
@@ -75,7 +75,7 @@ function copyExistingPackageSolutionFile() {
  * @param {*} zippedPackage Zipped package path
  */
 function generatePackageSolutionFile(id, name, zippedPackage) {
-    console.log('Generating package solution file with the given parameters')
+    log('Generating package solution file with the given parameters', 'modifySolutionFiles')
     const packageSolution = getFileContent(packageSolutionFile)
     packageSolution.solution.id = id
     packageSolution.solution.name = name
@@ -89,7 +89,7 @@ function generatePackageSolutionFile(id, name, zippedPackage) {
  * @param {*} componentManifestFiles Component manifest files
  */
 function copyExistingComponentManifestFiles(componentManifestFiles) {
-    console.log('Copying existing manifest files to backup files')
+    log('Copying existing manifest files to backup files', 'modifySolutionFiles')
     for (let i = 0; i < componentManifestFiles.length; i++) {
         const componentManifestFile = componentManifestFiles[i]
         const componentManifestFileCopy = componentManifestFile + '.bak'
@@ -104,7 +104,7 @@ function copyExistingComponentManifestFiles(componentManifestFiles) {
  * @param {*} componentManifestFiles Component manifest files
  */
 function generateComponentManifestFiles(solutionConfig, componentManifestFiles) {
-    console.log('Generating component manifest files with a new ID based on the solution config file')
+    log('Generating component manifest files with a new ID based on the solution config file', 'modifySolutionFiles')
     for (let i = 0; i < componentManifestFiles.length; i++) {
         const componentManifestFile = componentManifestFiles[i]
         const componentManifest = getFileContent(componentManifestFile)

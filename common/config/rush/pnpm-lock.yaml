@@ -55,7 +55,6 @@ dependencies:
   array-unique: 0.3.2
   chokidar-cli: 2.1.0
   clean-deep: 3.0.2
-  colors: 1.4.0
   concurrently: 7.4.0
   dom-to-image: 2.6.0
   dotenv: 16.1.4
@@ -704,14 +703,14 @@ packages:
   /@fluentui/date-time-utilities/8.5.13:
     dependencies:
       '@fluentui/set-version': 8.2.11
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     resolution:
       integrity: sha512-X3clbPKh0URkDj21QoARw6SNec7dWg7Gt7SkTlkVYFzmZUdC4ZIrYk3n36xKe3U1wcGp26EVmKjhAhB262ugpw==
   /@fluentui/dom-utilities/1.1.2:
     dependencies:
       '@uifabric/set-version': 7.0.24
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     resolution:
       integrity: sha512-XqPS7l3YoMwxdNlaYF6S2Mp0K3FmVIOIy2K3YkMc+eRxu9wFK6emr2Q/3rBhtG5u/On37NExRT7/5CTLnoi9gw==
@@ -727,7 +726,7 @@ packages:
       '@fluentui/set-version': 8.2.11
       '@fluentui/style-utilities': 8.9.16_453b269bd7a8e2940a0e8fb00c615d82
       '@fluentui/utilities': 8.13.18_453b269bd7a8e2940a0e8fb00c615d82
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -739,7 +738,7 @@ packages:
       '@fluentui/set-version': 8.2.11
       '@fluentui/style-utilities': 8.9.16_@types+react@16.8.8+react@17.0.1
       '@fluentui/utilities': 8.13.18_@types+react@16.8.8+react@17.0.1
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -751,7 +750,7 @@ packages:
       '@fluentui/set-version': 8.2.11
       '@fluentui/style-utilities': 8.9.16_@types+react@16.8.8+react@17.0.2
       '@fluentui/utilities': 8.13.18_@types+react@16.8.8+react@17.0.2
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -766,7 +765,7 @@ packages:
       '@fluentui/utilities': 8.13.18_453b269bd7a8e2940a0e8fb00c615d82
       '@types/react': 16.8.8
       react: 16.13.1
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <19.0.0'
@@ -781,7 +780,7 @@ packages:
       '@fluentui/utilities': 8.13.18_@types+react@16.8.8+react@17.0.1
       '@types/react': 16.8.8
       react: 17.0.1
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <19.0.0'
@@ -796,7 +795,7 @@ packages:
       '@fluentui/utilities': 8.13.18_@types+react@16.8.8+react@17.0.2
       '@types/react': 16.8.8
       react: 17.0.2
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <19.0.0'
@@ -805,20 +804,20 @@ packages:
       integrity: sha512-rXr71KxNcWDH2LmTsFZbP75p8HssLlVLaFAqEdLE+sKf/LNKmqkDVTNhDbHZxzxy0QnguI4aNHcyGhMZUH3MPA==
   /@fluentui/keyboard-key/0.2.17:
     dependencies:
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     resolution:
       integrity: sha512-iT1bU56rKrKEOfODoW6fScY11qj3iaYrZ+z11T6fo5+TDm84UGkkXjLXJTE57ZJzg0/gbccHQWYv+chY7bJN8Q==
   /@fluentui/keyboard-key/0.4.11:
     dependencies:
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     resolution:
       integrity: sha512-TVB/EloWado9AVp1niChgcdDOQAHGP5B30Dinmtfe7zi8OnstwPoxwFP6dHJDdpLQ6ZEUTaEHViSzvewl7Chag==
   /@fluentui/merge-styles/8.5.12:
     dependencies:
       '@fluentui/set-version': 8.2.11
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     resolution:
       integrity: sha512-ZnUo0YuMP7AYi68dkknFqVxopIAgbrUnqR/MZlemmRvBYyy1SMj1WQeHcoiLFA8mF8YKn7B+jxQgJbN2bfcrRw==
@@ -955,7 +954,7 @@ packages:
       '@uifabric/utilities': 7.38.2_052fcf153ec79c77e0d1778fd73206f7
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -975,7 +974,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9c4969b3be2ea41c89422e6bb8d9a16e
       react: 16.13.1
       react-dom: 16.13.1_react@16.13.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -993,7 +992,7 @@ packages:
       '@fluentui/utilities': 8.13.18_453b269bd7a8e2940a0e8fb00c615d82
       '@types/react': 16.8.8
       react: 16.13.1
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <19.0.0'
@@ -1009,7 +1008,7 @@ packages:
       '@fluentui/utilities': 8.13.18_@types+react@16.8.8+react@17.0.1
       '@types/react': 16.8.8
       react: 17.0.1
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <19.0.0'
@@ -1025,7 +1024,7 @@ packages:
       '@fluentui/utilities': 8.13.18_@types+react@16.8.8+react@17.0.2
       '@types/react': 16.8.8
       react: 17.0.2
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <19.0.0'
@@ -1046,20 +1045,6 @@ packages:
       react: '>=16.8.0 <19.0.0'
     resolution:
       integrity: sha512-4Thtr8LgM3/aGExWrIFtTfPX1sHirPTD9DxEkD2/GOPniN/dFBKYp0q1eyMkRu2/KXV6HUVyQL9hK+yfD9sIQQ==
-  /@fluentui/react-hooks/8.6.27_@types+react@16.8.8+react@17.0.2:
-    dependencies:
-      '@fluentui/react-window-provider': 2.2.15_@types+react@16.8.8+react@17.0.2
-      '@fluentui/set-version': 8.2.11
-      '@fluentui/utilities': 8.13.18_@types+react@16.8.8+react@17.0.2
-      '@types/react': 16.8.8
-      react: 17.0.2
-      tslib: 2.3.1
-    dev: false
-    peerDependencies:
-      '@types/react': '>=16.8.0 <19.0.0'
-      react: '>=16.8.0 <19.0.0'
-    resolution:
-      integrity: sha512-4Thtr8LgM3/aGExWrIFtTfPX1sHirPTD9DxEkD2/GOPniN/dFBKYp0q1eyMkRu2/KXV6HUVyQL9hK+yfD9sIQQ==
   /@fluentui/react-hooks/8.6.29_@types+react@16.8.8+react@17.0.1:
     dependencies:
       '@fluentui/react-window-provider': 2.2.15_@types+react@16.8.8+react@17.0.1
@@ -1067,6 +1052,20 @@ packages:
       '@fluentui/utilities': 8.13.18_@types+react@16.8.8+react@17.0.1
       '@types/react': 16.8.8
       react: 17.0.1
+      tslib: 2.6.0
+    dev: false
+    peerDependencies:
+      '@types/react': '>=16.8.0 <19.0.0'
+      react: '>=16.8.0 <19.0.0'
+    resolution:
+      integrity: sha512-MeVevmGJtrYxdhoarrkVWE0Hs4XdzOc9A3tiOjMBIcwOvoOYOAoOELoHK/wuulPVwUn2R9Y+7JpJ6oCe4ImdJw==
+  /@fluentui/react-hooks/8.6.29_@types+react@16.8.8+react@17.0.2:
+    dependencies:
+      '@fluentui/react-window-provider': 2.2.15_@types+react@16.8.8+react@17.0.2
+      '@fluentui/set-version': 8.2.11
+      '@fluentui/utilities': 8.13.18_@types+react@16.8.8+react@17.0.2
+      '@types/react': 16.8.8
+      react: 17.0.2
       tslib: 2.6.0
     dev: false
     peerDependencies:
@@ -1099,7 +1098,7 @@ packages:
       '@uifabric/utilities': 7.38.2_052fcf153ec79c77e0d1778fd73206f7
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -1259,7 +1258,7 @@ packages:
       '@uifabric/set-version': 7.0.24
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -1275,7 +1274,7 @@ packages:
       '@uifabric/set-version': 7.0.24
       react: 16.13.1
       react-dom: 16.13.1_react@16.13.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -1355,7 +1354,7 @@ packages:
       '@fluentui/foundation-legacy': 8.2.43_@types+react@16.8.8+react@17.0.2
       '@fluentui/merge-styles': 8.5.12
       '@fluentui/react-focus': 8.8.30_@types+react@16.8.8+react@17.0.2
-      '@fluentui/react-hooks': 8.6.27_@types+react@16.8.8+react@17.0.2
+      '@fluentui/react-hooks': 8.6.29_@types+react@16.8.8+react@17.0.2
       '@fluentui/react-portal-compat-context': 9.0.6_@types+react@16.8.8+react@17.0.2
       '@fluentui/react-window-provider': 2.2.15_@types+react@16.8.8+react@17.0.2
       '@fluentui/set-version': 8.2.11
@@ -1520,7 +1519,7 @@ packages:
       '@fluentui/utilities': 8.13.18_453b269bd7a8e2940a0e8fb00c615d82
       '@types/react': 16.8.8
       react: 16.13.1
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <19.0.0'
@@ -1534,7 +1533,7 @@ packages:
       '@fluentui/utilities': 8.13.18_@types+react@16.8.8+react@17.0.1
       '@types/react': 16.8.8
       react: 17.0.1
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <19.0.0'
@@ -1548,7 +1547,7 @@ packages:
       '@fluentui/utilities': 8.13.18_@types+react@16.8.8+react@17.0.2
       '@types/react': 16.8.8
       react: 17.0.2
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <19.0.0'
@@ -2287,7 +2286,7 @@ packages:
     dependencies:
       es6-promise: 4.2.8
       isomorphic-fetch: 3.0.0
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     resolution:
       integrity: sha512-BQN50r3tohWYOaQ0de7LJ5eCRjI6eg4RQqLhGDlgRmZIZhWzH0bhR6QBMmmxtYtwKWifhPhJSxYDW+cP67TJVw==
@@ -2303,7 +2302,7 @@ packages:
     dependencies:
       '@azure/msal-browser': 2.22.0
       '@babel/runtime': 7.22.6
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     engines:
       node: '>=12.0.0'
@@ -4351,7 +4350,7 @@ packages:
       integrity: sha512-Ky+XkAkqPZSm3NLBeUng77EBQl3cmeJhITaGHdYH8kjVB+aun3S4XBRti2zt17mtt0mIUDiNxYeoJm6drVvBJQ==
   /@swc/helpers/0.4.14:
     dependencies:
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     resolution:
       integrity: sha512-4C7nX/dvpzB7za4Ql9K81xK3HPxCpHMgwTZVyf+9JQ6VUbn9jjZVN7/Nkdz/Ugzs2CSjqnL/UPXroiVBVHUWUw==
@@ -4422,6 +4421,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-zeOWb0JGBoVmlQoznvqXbE0tEC/HONsnoUNH19Hc96NFsTAwTXbTqb8FMYkru1F/iqp7a18Ws3nWJvtA1sHD1A==
+  /@types/colors/1.2.1:
+    dependencies:
+      colors: 1.4.0
+    deprecated: This is a stub types definition. colors provides its own type definitions, so you don't need this installed.
+    dev: false
+    resolution:
+      integrity: sha512-7jNkpfN2lVO07nJ1RWzyMnNhH/I5N9iWuMPx9pedptxJ4MODf8rRV0lbJi6RakQ4sKQk231Fw4e2W9n3D7gZ3w==
   /@types/debug/4.1.8:
     dependencies:
       '@types/ms': 0.7.31
@@ -5299,7 +5305,7 @@ packages:
       '@uifabric/utilities': 7.38.2_052fcf153ec79c77e0d1778fd73206f7
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -5318,7 +5324,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9c4969b3be2ea41c89422e6bb8d9a16e
       react: 16.13.1
       react-dom: 16.13.1_react@16.13.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -5385,7 +5391,7 @@ packages:
       '@uifabric/set-version': 7.0.24
       '@uifabric/styling': 7.25.1_052fcf153ec79c77e0d1778fd73206f7
       '@uifabric/utilities': 7.38.2_052fcf153ec79c77e0d1778fd73206f7
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -5399,7 +5405,7 @@ packages:
       '@uifabric/set-version': 7.0.24
       '@uifabric/styling': 7.25.1_9c4969b3be2ea41c89422e6bb8d9a16e
       '@uifabric/utilities': 7.38.2_9c4969b3be2ea41c89422e6bb8d9a16e
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -5418,7 +5424,7 @@ packages:
   /@uifabric/merge-styles/7.20.2:
     dependencies:
       '@uifabric/set-version': 7.0.24
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     resolution:
       integrity: sha512-cJy8hW9smlWOKgz9xSDMCz/A0yMl4mdo466pcGlIOn84vz+e94grfA7OoTuTzg3Cl0Gj6ODBSf1o0ZwIXYL1Xg==
@@ -5431,7 +5437,7 @@ packages:
       '@uifabric/utilities': 7.38.2_052fcf153ec79c77e0d1778fd73206f7
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -5449,7 +5455,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9c4969b3be2ea41c89422e6bb8d9a16e
       react: 16.13.1
       react-dom: 16.13.1_react@16.13.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -5466,7 +5472,7 @@ packages:
       integrity: sha512-IYpwVIuN7MJOeiWzZzr9AmFSvA5zc6gJn4fNHtEFIQnNB8WVWIcYrvx8Tbf7wWj9MvhdHYp70F054zZlHbL/Ag==
   /@uifabric/set-version/7.0.24:
     dependencies:
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     resolution:
       integrity: sha512-t0Pt21dRqdC707/ConVJC0WvcQ/KF7tKLU8AZY7YdjgJpMHi1c0C427DB4jfUY19I92f60LOQyhJ4efH+KpFEg==
@@ -5530,7 +5536,7 @@ packages:
       prop-types: 15.8.1
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -5549,7 +5555,7 @@ packages:
       prop-types: 15.8.1
       react: 16.13.1
       react-dom: 16.13.1_react@16.13.1
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <18.0.0'
@@ -13974,7 +13980,7 @@ packages:
       integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
   /msal/1.4.12:
     dependencies:
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     engines:
       node: '>=0.8.0'
@@ -14570,7 +14576,7 @@ packages:
       prop-types: 15.8.1
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <17.0.0'
@@ -20681,7 +20687,9 @@ packages:
     version: 0.0.0
   file:projects/pp365-spfx-tasks.tgz:
     dependencies:
+      '@types/colors': 1.2.1
       '@types/lodash': 4.14.196
+      colors: 1.4.0
       dotenv: 16.1.4
       glob: 10.2.7
       sp-entityportal-service: 2.2.13
@@ -20689,7 +20697,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-spfx-tasks'
     resolution:
-      integrity: sha512-7DfgxIiMLGITkmM7w9/nJFxVfwKQSZTNKGZGI/KsEiRLmVaFWru8bDNIgF0+b8sKQQZqvP7cm3+crO616Tjdkw==
+      integrity: sha512-DE1xnhK3P6LP42mNbzPeXKyPMKgTtTETDrKGUj6OntCT4zAgq7KR+mBFnAXjVC0TJjwGVF5ogi58zQXPUAwexQ==
       tarball: file:projects/pp365-spfx-tasks.tgz
     version: 0.0.0
   file:projects/pp365-templates.tgz:
@@ -20763,7 +20771,6 @@ specifiers:
   array-unique: 0.3.2
   chokidar-cli: ^2.1.0
   clean-deep: 3.0.2
-  colors: 1.4.0
   concurrently: 7.4.0
   dom-to-image: 2.6.0
   dotenv: ~16.1.3

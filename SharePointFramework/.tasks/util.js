@@ -1,5 +1,6 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require('fs')
+const path = require('path')
+const colors = require('colors/safe')
 
 /**
  * Get file content for the given file path in JSON format
@@ -23,7 +24,17 @@ function joinPath(...paths) {
     return path.join(...paths).replace(/\\/g,'/')
 }
 
+/**
+ * Logs a message with a colored prefix.
+ * 
+ * @param {*} message The message to log
+ * @param {*} prefix The prefix to use - will be wrapped in square brackets
+ */
+function log(message, prefix) {
+    console.log(`${colors.yellow(`[${prefix}]`)} ${message}`)
+}
 module.exports = {
     getFileContent,
-    joinPath
+    joinPath,
+    log
 }
