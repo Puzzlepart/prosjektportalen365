@@ -290,6 +290,8 @@ declare interface IPortfolioWebPartsStrings {
   ToggleEditViewColumnsLabel: string
   ShowHideColumnsLabel: string
   EditViewColumnsPanelHelpText: string
+  DataSourceLevelPortfolio: string
+  DataSourceLevelProject: string
 }
 
 declare module 'PortfolioWebPartsStrings' {
