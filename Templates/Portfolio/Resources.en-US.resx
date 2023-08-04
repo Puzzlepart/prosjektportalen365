@@ -557,7 +557,7 @@
     <value>Description of uncertainty</value>
   </data>
   <data name="SiteFields_GtRiskDescription_Description" xml:space="preserve">
-    <value></value>
+    <value>Provides a detailed description of the associated uncertainty.</value>
   </data>
   <data name="SiteFields_GtSortOrder_DisplayName" xml:space="preserve">
     <value>Sort order</value>
@@ -872,19 +872,19 @@
     <value>Width (1920px og oppover)</value>
   </data>
   <data name="SiteFields_GtPiXAxisTitle_DisplayName" xml:space="preserve">
-    <value>Title (X-akse)</value>
+    <value>Title (X-axis)</value>
   </data>
   <data name="SiteFields_GtPiYAxisTitle_DisplayName" xml:space="preserve">
-    <value>Title (Y-akse)</value>
+    <value>Title (Y-axis)</value>
   </data>
   <data name="SiteFields_GtPiYMax_DisplayName" xml:space="preserve">
-    <value>Max (Y-akse)</value>
+    <value>Max (Y-axis)</value>
   </data>
   <data name="SiteFields_GtPiYMin_DisplayName" xml:space="preserve">
-    <value>Min (Y-akse)</value>
+    <value>Min (Y-axis)</value>
   </data>
   <data name="SiteFields_GtPiYTickInterval_DisplayName" xml:space="preserve">
-    <value>Interval (Y-akse)</value>
+    <value>Interval (Y-axis)</value>
   </data>
   <data name="SiteFields_GtSiteId_DisplayName" xml:space="preserve">
     <value>Site-ID</value>
