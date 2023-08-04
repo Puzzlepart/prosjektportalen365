@@ -1,43 +1,13 @@
-import strings from 'ProjectWebPartsStrings'
-import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { useContext } from 'react'
-import { ProjectPhases } from '.'
 import SPDataAdapter from '../../data'
-import { changeWelcomePage } from './changeWelcomePage'
-import { IProjectPhasesContext, ProjectPhasesContext } from './context'
-import { modifyCurrentPhaseView } from './modifyCurrentPhaseView'
+import { ProjectPhasesContext } from './context'
 import { CHANGE_PHASE_ERROR, INIT_CHANGE_PHASE, SET_PHASE } from './reducer'
-import { runPhaseHook } from './runPhaseHook'
-
-/**
- * Change phase for the current project. Runs `SPDataAdapter.project.updatePhase`, runs phase
- * hooks if specified, and changes the welcome page if `useDynamicHomepage` is enabled. Also modified
- * current phase view for documents library.
- *
- * @param context Context for `ProjectPhases`
- */
-const changePhase = async ({ state, props }: IProjectPhasesContext) => {
-  try {
-    await SPDataAdapter.project.updatePhase(state.confirmPhase, state.data.phaseTextField)
-    if (props.usePhaseHooks) runPhaseHook(props.hookUrl, props.hookAuth, props.sp)
-    if (props.useDynamicHomepage)
-      await changeWelcomePage(
-        state.phase.name,
-        props.webPartContext.pageContext.web.absoluteUrl,
-        state.data.phaseSitePages
-      )
-    await modifyCurrentPhaseView(state.confirmPhase.name, props)
-    sessionStorage.clear()
-  } catch (error) {
-    ListLogger.log({
-      message: error.message,
-      level: 'Error',
-      functionName: 'changePhase',
-      component: ProjectPhases.displayName
-    })
-    throw new Error(strings.ProjectPhasesChangePhaseError)
-  }
-}
+import { usePhaseHooks } from './usePhaseHooks'
+import { ProjectPhases } from '.'
+import { ListLogger } from 'pp365-shared-library/lib/logging'
+import { useChangeWelcomePage } from './useChangeWelcomePage'
+import { useModifyCurrentPhaseView } from './useModifyCurrentPhaseView'
+import strings from 'ProjectWebPartsStrings'
 
 /**
  * Hook for changing the current phase for the current project. Returns
@@ -47,10 +17,22 @@ const changePhase = async ({ state, props }: IProjectPhasesContext) => {
  */
 export function useChangePhase(delayBeforeReload: number = 1000) {
   const context = useContext(ProjectPhasesContext)
+  const [runPhaseHook] = usePhaseHooks()
+  const changeWelcomePage = useChangeWelcomePage()
+  const modifyCurrentPhaseView = useModifyCurrentPhaseView()
   return async () => {
     context.dispatch(INIT_CHANGE_PHASE())
     try {
-      await changePhase(context)
+      await SPDataAdapter.project.updatePhase(
+        context.state.confirmPhase,
+        context.state.data.phaseTextField
+      )
+      if (context.props.usePhaseHooks) runPhaseHook()
+      if (context.props.useDynamicHomepage) {
+        await changeWelcomePage()
+      }
+      await modifyCurrentPhaseView()
+      sessionStorage.clear()
       context.dispatch(SET_PHASE({ phase: context.state.confirmPhase }))
       if (context.props.syncPropertiesAfterPhaseChange) {
         const currentUrlIsPageRelative =
@@ -66,7 +48,15 @@ export function useChangePhase(delayBeforeReload: number = 1000) {
         }, delayBeforeReload)
       }
     } catch (error) {
-      context.dispatch(CHANGE_PHASE_ERROR({ error }))
+      ListLogger.log({
+        message: error.message,
+        level: 'Error',
+        functionName: 'changePhase',
+        component: ProjectPhases.displayName
+      })
+      context.dispatch(
+        CHANGE_PHASE_ERROR({ error: new Error(strings.ProjectPhasesChangePhaseError) })
+      )
     }
   }
 }

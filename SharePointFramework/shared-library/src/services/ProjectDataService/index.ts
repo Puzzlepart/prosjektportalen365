@@ -250,13 +250,8 @@ export class ProjectDataService {
     const properties = { [phaseTextField]: phase.toString() }
     try {
       const propertyItemContext = await this._getPropertyItemContext()
-      // eslint-disable-next-line no-console
-      console.log(propertyItemContext)
-      if (propertyItemContext) {
-        await propertyItemContext.item.update(properties)
-      } else {
-        await this._params.entityService.updateEntityItem(this._params.siteId, properties)
-      }
+      if (propertyItemContext) await propertyItemContext.item.update(properties)
+      await this._params.entityService.updateEntityItem(this._params.siteId, properties)
     } catch (error) {
       throw error
     }
