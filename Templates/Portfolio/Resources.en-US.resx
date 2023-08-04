@@ -1872,301 +1872,301 @@
     <value>Expected gains for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaIssue_DisplayName" xml:space="preserve">
-    <value>Problemstilling</value>
+    <value>Problem statement</value>
   </data>
   <data name="SiteFields_GtIdeaIssue_Description" xml:space="preserve">
-    <value>Problemstilling for idéen</value>
+    <value>Problem statement for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaOtherComments_DisplayName" xml:space="preserve">
-    <value>Andre kommentarer</value>
+    <value>Other comments</value>
   </data>
   <data name="SiteFields_GtIdeaOtherComments_Description" xml:space="preserve">
-    <value>Andre kommentarer for idéen</value>
+    <value>Other comments for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaOwner_DisplayName" xml:space="preserve">
-    <value>Idéeier</value>
+    <value>Idea owner</value>
   </data>
   <data name="SiteFields_GtIdeaOwner_Description" xml:space="preserve">
-    <value>Eier av idéen</value>
+    <value>Owner of the idea</value>
   </data>
   <data name="SiteFields_GtIdeaPossibleGains_DisplayName" xml:space="preserve">
-    <value>Mulige gevinster</value>
+    <value>Possible gains</value>
   </data>
   <data name="SiteFields_GtIdeaPossibleGains_Description" xml:space="preserve">
-    <value>Mulige gevinster for idéen</value>
+    <value>Possible gains for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaRecommendation_DisplayName" xml:space="preserve">
-    <value>Anbefaling</value>
+    <value>Recommendation</value>
   </data>
   <data name="SiteFields_GtIdeaRecommendation_Description" xml:space="preserve">
-    <value>Anbefaling for idéen</value>
+    <value>Recommendation for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaRecommendationComment_DisplayName" xml:space="preserve">
-    <value>Kommentar til anbefaling</value>
+    <value>Comment to recommendation</value>
   </data>
   <data name="SiteFields_GtIdeaRecommendationComment_Description" xml:space="preserve">
-    <value>Kommentar til anbefaling for idéen</value>
+    <value>Comment to recommendation for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaReference_DisplayName" xml:space="preserve">
-    <value>Referanse</value>
+    <value>Reference</value>
   </data>
   <data name="SiteFields_GtIdeaReference_Description" xml:space="preserve">
-    <value>Referanse for idéen</value>
+    <value>Reference for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaResourceRequirements_DisplayName" xml:space="preserve">
-    <value>Ressursbehov</value>
+    <value>Resource requirements</value>
   </data>
   <data name="SiteFields_GtIdeaResourceRequirements_Description" xml:space="preserve">
-    <value>Ressursbehov for idéen</value>
+    <value>Resource requirements for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaSolutionDescription_DisplayName" xml:space="preserve">
-    <value>Overordnet løsningsbeskrivelse</value>
+    <value>Solution description</value>
   </data>
   <data name="SiteFields_GtIdeaSolutionDescription_Description" xml:space="preserve">
-    <value>Overordnet løsningsbeskrivelse for idéen</value>
+    <value>Overall solution description for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaSolutionProposals_DisplayName" xml:space="preserve">
-    <value>Løsningsforslag</value>
+    <value>Solution proposals</value>
   </data>
   <data name="SiteFields_GtIdeaSolutionProposals_Description" xml:space="preserve">
-    <value>Løsningsforslag for idéen</value>
+    <value>Solution proposals for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaUrl_DisplayName" xml:space="preserve">
     <value>KUR</value>
   </data>
   <data name="SiteFields_GtIdeaUrl_Description" xml:space="preserve">
-    <value>Konsept utredningsrapport (KUR) for idéen</value>
+    <value>Concept investigation report (KUR) for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaProjectData_DisplayName" xml:space="preserve">
-    <value>Prosjektdata-tilknytning</value>
+    <value>Project data association</value>
   </data>
   <data name="SiteFields_GtIdeaProjectData_Description" xml:space="preserve">
-    <value>Hvilken prosjektdata er idéen knyttet til?</value>
+    <value>Which project data is the idea associated with?</value>
   </data>
   <data name="SiteFields_GtRegistratedIdea_DisplayName" xml:space="preserve">
-    <value>Registrert idé</value>
+    <value>Registered idea</value>
   </data>
   <data name="SiteFields_GtRegistratedIdea_Description" xml:space="preserve">
-    <value>Registrert idé tilknytning</value>
+    <value>Registered idea association</value>
   </data>
   <data name="SiteFields_GtIdeaRegistrationList_DisplayName" xml:space="preserve">
-    <value>Idéregistrering</value>
+    <value>Idea registration</value>
   </data>
   <data name="SiteFields_GtIdeaRegistrationList_Description" xml:space="preserve">
-    <value>Hvilken idéregisreringsliste skal elementet kobles mot?</value>
+    <value>Which idea registration list should the item be linked to?</value>
   </data>
   <data name="SiteFields_GtIdeaProcessingList_DisplayName" xml:space="preserve">
-    <value>Idébehandling</value>
+    <value>Idea processing</value>
   </data>
   <data name="SiteFields_GtIdeaProcessingList_Description" xml:space="preserve">
-    <value>Hvilken idébehandlingsliste skal elementet kobles mot?</value>
+    <value>Which idea processing list should the item be linked to?</value>
   </data>
   <data name="SiteFields_GtIdeaReporter_DisplayName" xml:space="preserve">
-    <value>Innmelder</value>
+    <value>Reporter</value>
   </data>
   <data name="SiteFields_GtIdeaReporter_Description" xml:space="preserve">
-    <value>Innmelder av idéen</value>
+    <value>Reporter of the idea</value>
   </data>
   <data name="SiteFields_GtIdeaStrategicValue_DisplayName" xml:space="preserve">
-    <value>Strategisk verdi</value>
+    <value>Strategic value</value>
   </data>
   <data name="SiteFields_GtIdeaStrategicValue_Description" xml:space="preserve">
-    <value>Den strategiske verdien for idéen</value>
+    <value>The strategic value of the idea</value>
   </data>
   <data name="SiteFields_GtIdeaQualityBenefit_DisplayName" xml:space="preserve">
-    <value>Kvalitativ gevinst</value>
+    <value>Qualitative benefit</value>
   </data>
   <data name="SiteFields_GtIdeaQualityBenefit_Description" xml:space="preserve">
-    <value>Den kvalitative gevinsten for idéen</value>
+    <value>The qualitative benefit of the idea</value>
   </data>
   <data name="SiteFields_GtIdeaEconomicBenefit_DisplayName" xml:space="preserve">
-    <value>Økonomisk gevinst</value>
+    <value>Economic benefit</value>
   </data>
   <data name="SiteFields_GtIdeaEconomicBenefit_Description" xml:space="preserve">
-    <value>Den økonomiske gevinsten for idéen</value>
+    <value>The economic benefit of the idea</value>
   </data>
   <data name="SiteFields_GtIdeaOperationalNeed_DisplayName" xml:space="preserve">
-    <value>Operasjonelt behov/lovpålagt</value>
+    <value>Operational need/Legal requirement</value>
   </data>
   <data name="SiteFields_GtIdeaOperationalNeed_Description" xml:space="preserve">
-    <value>Operasjonelt behov for idéen (Lovpålagt)</value>
+    <value>Operational need for the idea (Legal requirement)</value>
   </data>
   <data name="SiteFields_GtIdeaRisk_DisplayName" xml:space="preserve">
-    <value>Risiko</value>
+    <value>Risk</value>
   </data>
   <data name="SiteFields_GtIdeaRisk_Description" xml:space="preserve">
-    <value>Risiko for idéen</value>
+    <value>Risk for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaStrategicNumber_DisplayName" xml:space="preserve">
-    <value>Strategisk verdi (tall)</value>
+    <value>Strategic value (number)</value>
   </data>
   <data name="SiteFields_GtIdeaStrategicNumber_Description" xml:space="preserve">
-    <value>Strategisk verdi for idéen (tall)</value>
+    <value>Strategic value of the idea (number)</value>
   </data>
   <data name="SiteFields_GtIdeaQualityNumber_DisplayName" xml:space="preserve">
-    <value>Kvalitativ gevinst (tall)</value>
+    <value>Qualitative benefit (number)</value>
   </data>
   <data name="SiteFields_GtIdeaQualityNumber_Description" xml:space="preserve">
-    <value>Kvalitativ gevinst for idéen (tall)</value>
+    <value>Qualitative benefit for the idea (number)</value>
   </data>
   <data name="SiteFields_GtIdeaEconomicNumber_DisplayName" xml:space="preserve">
-    <value>Økonomisk gevinst (tall)</value>
+    <value>Economic benefit (number)</value>
   </data>
   <data name="SiteFields_GtIdeaEconomicNumber_Description" xml:space="preserve">
-    <value>Økonomisk gevinst for idéen (tall)</value>
+    <value>Economic benefit for the idea (number)</value>
   </data>
   <data name="SiteFields_GtIdeaOperationalNumber_DisplayName" xml:space="preserve">
-    <value>Operasjonelt behov/lovpålagt (tall)</value>
+    <value>Operational need/Legal requirement (number)</value>
   </data>
   <data name="SiteFields_GtIdeaOperationalNumber_Description" xml:space="preserve">
-    <value>Operasjonelt behov/lovpålagt for idéen (tall)</value>
+    <value>Operational need/Legal requirement for the idea (number)</value>
   </data>
   <data name="SiteFields_GtIdeaRiskNumber_DisplayName" xml:space="preserve">
-    <value>Risiko (tall)</value>
+    <value>Risk (number)</value>
   </data>
   <data name="SiteFields_GtIdeaRiskNumber_Description" xml:space="preserve">
-    <value>Risiko for idéen (tall)</value>
+    <value>Risk for the idea (number)</value>
   </data>
   <data name="SiteFields_GtIdeaManualScore_DisplayName" xml:space="preserve">
-    <value>Justering</value>
+    <value>Adjustment</value>
   </data>
   <data name="SiteFields_GtIdeaManualScore_Description" xml:space="preserve">
-    <value>Justering av idéen</value>
+    <value>Adjustment of the idea</value>
   </data>
   <data name="SiteFields_GtIdeaManualComment_DisplayName" xml:space="preserve">
-    <value>Kommentar til justering</value>
+    <value>Comment on adjustment</value>
   </data>
   <data name="SiteFields_GtIdeaManualComment_Description" xml:space="preserve">
-    <value>Kommentar til justeringen for idéen</value>
+    <value>Comment on the adjustment for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaScore_DisplayName" xml:space="preserve">
     <value>Score</value>
   </data>
   <data name="SiteFields_GtIdeaScore_Description" xml:space="preserve">
-    <value>Score for idéen</value>
+    <value>Score for the idea</value>
   </data>
   <data name="SiteFields_GtIdeaPriority_DisplayName" xml:space="preserve">
-    <value>Prioritering</value>
+    <value>Priority</value>
   </data>
   <data name="SiteFields_GtIdeaPriority_Description" xml:space="preserve">
-    <value>Prioritering for idéen</value>
+    <value>Priority for the idea</value>
   </data>
   <data name="SiteFields_GtBAEndDateOriginal_DisplayName" xml:space="preserve">
-    <value>Opprinnelig overtakelsesdato</value>
+    <value>Original handover date</value>
   </data>
   <data name="SiteFields_GtBAEndDateOriginal_Description" xml:space="preserve">
-    <value>Hva er (planlagt) overtakelsesdato hvor bestiller overtar prosjektleveransene</value>
+    <value>What is the (planned) handover date where the customer takes over the project deliveries?</value>
   </data>
   <data name="SiteFields_GtBAProjectEnv_DisplayName" xml:space="preserve">
-    <value>Status miljø</value>
+    <value>Status environment</value>
   </data>
   <data name="SiteFields_GtBAProjectEnv_Description" xml:space="preserve">
-    <value>Har det vært hendelser knyttet til miljø i siste periode?</value>
+    <value>Have there been events related to the environment in the last period?</value>
   </data>
   <data name="SiteFields_GtBAProjectEnvComment_DisplayName" xml:space="preserve">
-    <value>Kommentar, miljø</value>
+    <value>Comment, environment</value>
   </data>
   <data name="SiteFields_GtBAProjectEnvComment_Description" xml:space="preserve">
-    <value>Oppsummer kort det totale miljø-bildet for prosjektet og hvilke tiltak det planlegges for i neste periode</value>
+    <value>Summarize briefly the total environmental picture for the project and what measures are planned for in the next period</value>
   </data>
   <data name="SiteFields_GtBAProjectInvestementPhase_DisplayName" xml:space="preserve">
-    <value>HP-fase</value>
+    <value>HP phase</value>
   </data>
   <data name="SiteFields_GtBAProjectInvestementPhase_Description" xml:space="preserve">
-    <value></value>
+    <value>The current phase of the investment process in the HP project</value>
   </data>
   <data name="SiteFields_GtBAProjectPolitical_DisplayName" xml:space="preserve">
-    <value>Siste politiske vedtak</value>
+    <value>Last political decision</value>
   </data>
   <data name="SiteFields_GtBAProjectPolitical_Description" xml:space="preserve">
-    <value>Når ble siste politiske vedtak som påvirker prosjektet fattet?</value>
+    <value>When was the last political decision that affects the project made?</value>
   </data>
   <data name="SiteFields_GtBAProjectPoliticalComment_DisplayName" xml:space="preserve">
-    <value>Kommentar, siste politiske vedtak</value>
+    <value>Comment, last political decision</value>
   </data>
   <data name="SiteFields_GtBAProjectPoliticalComment_Description" xml:space="preserve">
-    <value>Kommentar til hvordan siste politiske vedtak påvirker prosjektet</value>
+    <value>Comment on how the last political decision affects the project</value>
   </data>
   <data name="SiteFields_GtBAProjectPoliticalLink_DisplayName" xml:space="preserve">
-    <value>Lenke til siste politiske vedtak</value>
+    <value>Link to last political decision</value>
   </data>
   <data name="SiteFields_GtBAProjectPoliticalLink_Description" xml:space="preserve">
-    <value>Lenke til f. eks dokument/artikkel om siste politiske vedtak</value>
+    <value>Link to e.g. document/article about the last political decision</value>
   </data>
   <data name="SiteFields_GtBAProjectPrognosisThisYear_DisplayName" xml:space="preserve">
-    <value>Prognose i år</value>
+    <value>Prognosis this year</value>
   </data>
   <data name="SiteFields_GtBAProjectPrognosisThisYear_Description" xml:space="preserve">
-    <value></value>
+    <value>Estimated prospects of the project for the current year</value>
   </data>
   <data name="SiteFields_GtBAProjectSHA_DisplayName" xml:space="preserve">
     <value>Status SHA</value>
   </data>
   <data name="SiteFields_GtBAProjectSHA_Description" xml:space="preserve">
-    <value>Har det vært hendelser knyttet til SHA (Sikkerhet, helse, arbeidsmiljø) i siste periode?</value>
+    <value>Have there been any events related to SHA (Safety, Health, Working Environment) in the last period?</value> //-------SHA på engelsk?
   </data>
   <data name="SiteFields_GtBAProjectSHAComment_DisplayName" xml:space="preserve">
-    <value>Kommentar, SHA</value>
+    <value>Comment, SHA</value>
   </data>
   <data name="SiteFields_GtBAProjectSHAComment_Description" xml:space="preserve">
-    <value>Oppsummer kort det totale SHA-bildet for prosjektet og hvilke tiltak det planlegges for i neste periode</value>
+    <value>Summarize briefly the total SHA picture for the project and what measures are planned for in the next period</value>
   </data>
   <data name="SiteFields_GtBAProjectStatusCase_DisplayName" xml:space="preserve">
-    <value>Status plan- og byggesak</value>
+    <value>Status of planning and construction case</value>
   </data>
   <data name="SiteFields_GtBAProjectStatusCase_Description" xml:space="preserve">
-    <value>Hva er status på plan- og byggsak for prosjektet?</value>
+    <value>What is the status of the planning and construction case for the project?</value>
   </data>
   <data name="SiteFields_GtBAProjectStatusCaseComment_DisplayName" xml:space="preserve">
-    <value>Kommentar, plan- og byggesak</value>
+    <value>Comment, planning and construction case</value>
   </data>
   <data name="SiteFields_GtBAProjectStatusCaseComment_Description" xml:space="preserve">
-    <value>Beskriv eventuelle utfordringer knyttet til plan- og byggesak, samt planlagte tiltak for neste periode</value>
+    <value>Describe any challenges related to the planning and construction case, as well as planned measures for the next period</value>
   </data>
   <data name="SiteFields_GtBAProjectSupport_DisplayName" xml:space="preserve">
-    <value>Status tilskudd</value>
+    <value>Status of grant</value>
   </data>
   <data name="SiteFields_GtBAProjectSupport_Description" xml:space="preserve">
-    <value>Hva er status på eventuelle tilskuddsmuligehter for prosjektet?</value>
+    <value>What is the status of possible grant opportunities for the project?</value>
   </data>
   <data name="SiteFields_GtBAProjectSupportComment_DisplayName" xml:space="preserve">
-    <value>Kommentar, tilskudd</value>
+    <value>Comment, grants</value>
   </data>
   <data name="SiteFields_GtBAProjectSupportComment_Description" xml:space="preserve">
-    <value>Hvis relevant, beskriv hvor i søknadsprosessen prosjektet er og hva som er planlagt for neste periode</value>
+    <value>If relevant, describe where in the application process the project currently is and what is planned for the next period</value>
   </data>
   <data name="SiteFields_GtBAStakeholderGroup_DisplayName" xml:space="preserve">
-    <value>Interessentgruppe</value>
+    <value>Stakeholder group</value>
   </data>
   <data name="SiteFields_GtBAStakeholderGroup_Description" xml:space="preserve">
-    <value>Hvilken interessentgruppe tilhører interessenten?</value>
+    <value>Which stakeholder group does the stakeholder belong to?</value>
   </data>
    <data name="SiteFields_GtResourceLink_DisplayName" xml:space="preserve">
-    <value>Link til ressurs</value>
+    <value>Link to resource</value>
   </data>
   <data name="SiteFields_GtResourceLink_Description" xml:space="preserve">
-    <value>Lenk opp en ressurs om ønskelig. Om denne settes, vil det legges til en knapp under teksten.</value>
+    <value>Link up a resource if desired. If this is set, a button will be added under the text.</value>
   </data>
   <data name="SiteFields_GtTextContent_DisplayName" xml:space="preserve">
-    <value>Innhold</value>
+    <value>Content</value>
   </data>
   <data name="SiteFields_GtTextContent_Description" xml:space="preserve">
-    <value>Tekst som skal vises.</value>
+    <value>Text to be displayed.</value>
   </data>
   <data name="SiteFields_GtExternalURL_DisplayName" xml:space="preserve">
-    <value>Ekstern URL</value>
+    <value>External URL</value>
   </data>
   <data name="SiteFields_GtExternalURL_Description" xml:space="preserve">
-    <value>Ekstern URL. Normalt sett en .md fil fra https://raw.githubusercontent.com/wiki/.</value>
+    <value>External URL. Usually a .md file from https://raw.githubusercontent.com/wiki/.</value>
   </data>
   <data name="SiteFields_GtURL_DisplayName" xml:space="preserve">
     <value>URL</value>
   </data>
   <data name="SiteFields_GtURL_Description" xml:space="preserve">
-    <value>URL hvor hjelpeinnholdet skal vises. For eksempel SitePages/Hjem.aspx om du vil at innholdet skal vises på forsiden av prosjektet.</value>
+    <value>URL where the help content should be displayed. For example, SitePages/Home.aspx if you want the content to be displayed on the front page of the project.</value>//--------skal SitePages/Home.aspx oversettes?
   </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
-    <value>Gå til &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (åpnes i ny fane)</value>
+    <value>Go to &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (opens in a new tab)</value>
   </data>
   <data name="Choice_GtPermissionLevel_Read" xml:space="preserve">
     <value>Read</value>
@@ -2178,411 +2178,411 @@
     <value>Edit</value>
   </data>
   <data name="Choice_GtRiskStatus_Identified" xml:space="preserve">
-    <value>Identifisert</value>
+    <value>Identified</value>
   </data>
   <data name="Choice_GtRiskStatus_ActionTaken" xml:space="preserve">
-    <value>Tiltak gjennomført</value>
+    <value>Action taken</value>
   </data>
   <data name="Choice_GtRiskStatus_NoLongerRelevant" xml:space="preserve">
-    <value>Ikke lenger aktuell</value>
+    <value>No longer relevant</value>
   </data>
   <data name="Choice_GtMeasurementUnit_Number" xml:space="preserve">
-    <value>Antall</value>
+    <value>Number</value>
   </data>
   <data name="Choice_GtMeasurementUnit_Currency" xml:space="preserve">
     <value>Kroner</value>
   </data>
   <data name="Choice_GtMeasurementUnit_Percentage" xml:space="preserve">
-    <value>Prosent</value>
+    <value>Percentage</value>
   </data>
   <data name="Choice_GtMeasurementUnit_Hours" xml:space="preserve">
-    <value>Timer</value>
+    <value>Hours</value>
   </data>
   <data name="Choice_GtFeedbackStatus_Open" xml:space="preserve">
-    <value>Åpen</value>
+    <value>Open</value>
   </data>
   <data name="Choice_GtFeedbackStatus_UnderDevelopment" xml:space="preserve">
-    <value>Under utvikling</value>
+    <value>Under development</value>
   </data>
   <data name="Choice_GtFeedbackStatus_Done" xml:space="preserve">
-    <value>Fullført</value>
+    <value>Completed</value>
   </data>
   <data name="Choice_GtFeedbackStatus_Declined" xml:space="preserve">
-    <value>Avvist</value>
+    <value>Declined</value>
   </data>
   <data name="Choice_GtFeedbackCriticality_GeniousIdea" xml:space="preserve">
-    <value>Genial idè</value>
+    <value>Genius idea</value>
   </data>
   <data name="Choice_GtFeedbackCriticality_NiceToHave" xml:space="preserve">
-    <value>Kjekt å ha</value>
+    <value>Nice to have</value>
   </data>
   <data name="Choice_GtFeedbackCriticality_AnnoyingError" xml:space="preserve">
-    <value>Irriterende feil</value>
+    <value>Annoying error</value>
   </data>
   <data name="Choice_GtFeedbackCriticality_SeriousError" xml:space="preserve">
-    <value>Alvorlig feil</value>
+    <value>Serious error</value>
   </data>
   <data name="Choice_GtGainsType_Directly" xml:space="preserve">
-    <value>Direkte</value>
+    <value>Directly</value>
   </data>
   <data name="Choice_GtGainsType_Indirectly" xml:space="preserve">
-    <value>Indirekte</value>
+    <value>Indirectly</value>
   </data>
   <data name="Choice_GtGainsType_Qualitative" xml:space="preserve">
-    <value>Kvalitativ</value>
+    <value>Qualitative</value>
   </data>
   <data name="Choice_GtProjectLogResponsible_ProjectOwner" xml:space="preserve">
-    <value>Prosjekteier</value>
+    <value>Project owner</value>
   </data>
   <data name="Choice_GtProjectLogResponsible_Organization" xml:space="preserve">
-    <value>Linjeorganisasjon</value>
+    <value>Line organization</value>
   </data>
   <data name="Choice_GtProjectLogResponsible_ProjectLeader" xml:space="preserve">
-    <value>Prosjektleder</value>
+    <value>Project leader</value>
   </data>
   <data name="Choice_GtProjectLogResponsible_ProjectGroup" xml:space="preserve">
-    <value>Prosjektgruppe</value>
+    <value>Project group</value>
   </data>
   <data name="Choice_GtProjectLogResponsible_Vendor" xml:space="preserve">
-    <value>Leverandør</value>
+    <value>Vendor</value>
   </data>
   <data name="Choice_GtProjectLogResponsible_ReferenceGroups" xml:space="preserve">
-    <value>Referansegrupper</value>
+    <value>Reference groups</value>
   </data>
   <data name="Choice_GtProjectLogResponsible_Other" xml:space="preserve">
-    <value>Andre</value>
+    <value>Others</value>
   </data>
   <data name="Choice_GtStatusTime_OnSchedule" xml:space="preserve">
-    <value>På plan</value>
+    <value>On schedule</value>
   </data>
   <data name="Choice_GtStatusTime_AheadOfSchedule" xml:space="preserve">
-    <value>Foran plan</value>
+    <value>Ahead of schedule</value>
   </data>
   <data name="Choice_GtStatusTime_SmallDelay" xml:space="preserve">
-    <value>Mindre forsinkelser</value>
+    <value>Minor delays</value>
   </data>
   <data name="Choice_GtStatusTime_Delayed" xml:space="preserve">
-    <value>Forsinket</value>
+    <value>Delayed</value>
   </data>
   <data name="Choice_GtStakeholderInfluencePossibilty_Large" xml:space="preserve">
-    <value>Stor</value>
+    <value>Large</value>
   </data>
   <data name="Choice_GtStakeholderInfluencePossibilty_Medium" xml:space="preserve">
-    <value>Middels</value>
+    <value>Medium</value>
   </data>
   <data name="Choice_GtStakeholderInfluencePossibilty_Small" xml:space="preserve">
-    <value>Liten</value>
+    <value>Small</value>
   </data>
   <data name="Choice_GtStakeholderInfluencePossibilty_None" xml:space="preserve">
-    <value>Ingen</value>
+    <value>None</value>
   </data>
   <data name="Choice_GtRiskProximity_Immediately" xml:space="preserve">
-    <value>Umiddelbart</value>
+    <value>Immediately</value>
   </data>
   <data name="Choice_GtRiskProximity_ThisPhase" xml:space="preserve">
-    <value>I denne fasen</value>
+    <value>In this phase</value>
   </data>
   <data name="Choice_GtRiskProximity_InsideProject" xml:space="preserve">
-    <value>Innenfor prosjektet</value>
+    <value>Inside the project</value>
   </data>
   <data name="Choice_GtRiskProximity_OutsideProject" xml:space="preserve">
-    <value>Utenfor prosjektet</value>
+    <value>Outside the project</value>
   </data>
   <data name="Choice_GtProjectLogType_CommentNote" xml:space="preserve">
-    <value>Kommentar/Bekymring/Hendelse</value>
+    <value>Comment/Concern/Event</value>
   </data>
   <data name="Choice_GtProjectLogType_Change" xml:space="preserve">
-    <value>Endringsforespørsel</value>
+    <value>Change request</value>
   </data>
   <data name="Choice_GtProjectLogType_Deviation" xml:space="preserve">
-    <value>Avvik fra spesifikasjon</value>
+    <value>Deviation from specification</value>
   </data>
   <data name="Choice_GtProjectLogType_Decision" xml:space="preserve">
-    <value>Beslutning</value>
+    <value>Decision</value>
   </data>
   <data name="Choice_GtProjectLogActors_Vendors" xml:space="preserve">
-    <value>Leverandører</value>
+    <value>Vendors</value>
   </data>
   <data name="Choice_GtProjectLogActors_ProjectBoard" xml:space="preserve">
-    <value>Prosjektstyre</value>
+    <value>Project Board</value>
   </data>
   <data name="Choice_GtProjectLogActors_ProjectGroup" xml:space="preserve">
-    <value>Prosjektgruppe</value>
+    <value>Project Group</value>
   </data>
   <data name="Choice_GtProjectLogActors_ReferenceGroup" xml:space="preserve">
-    <value>Referansegruppe</value>
+    <value>Reference Group</value>
   </data>
   <data name="Choice_GtProjectLogActors_OtherStakeholders" xml:space="preserve">
-    <value>Andre interessenter</value>
+    <value>Other Stakeholders</value>
   </data>
   <data name="Choice_GtStatusBudget_OnBudget" xml:space="preserve">
-    <value>På budsjett</value>
+    <value>On Budget</value>
   </data>
   <data name="Choice_GtStatusBudget_BelowBudget" xml:space="preserve">
-    <value>Under budsjett</value>
+    <value>Below Budget</value>
   </data>
   <data name="Choice_GtStatusBudget_SlighlyBehindBudget" xml:space="preserve">
-    <value>Mindre overskridelser</value>
+    <value>Minor Overspending</value>
   </data>
   <data name="Choice_GtStatusBudget_OverBudget" xml:space="preserve">
-    <value>Over budsjett</value>
+    <value>Over Budget</value>
   </data>
   <data name="Choice_GtStatusBudget_UnknownBudget" xml:space="preserve">
-    <value>Vet ikke</value>
+    <value>Unknown</value>
   </data>
   <data name="Choice_GtStatusRisk_Low" xml:space="preserve">
-    <value>Lav</value>
+    <value>Low</value>
   </data>
   <data name="Choice_GtStatusRisk_Medium" xml:space="preserve">
     <value>Medium</value>
   </data>
   <data name="Choice_GtStatusRisk_High" xml:space="preserve">
-    <value>Høy</value>
+    <value>High</value>
   </data>
   <data name="Choice_GtStatusOpportunities_Low" xml:space="preserve">
-    <value>Lav</value>
+    <value>Low</value>
   </data>
   <data name="Choice_GtStatusOpportunities_Medium" xml:space="preserve">
     <value>Medium</value>
   </data>
   <data name="Choice_GtStatusOpportunities_High" xml:space="preserve">
-    <value>Høy</value>
+    <value>High</value>
   </data>
   <data name="Choice_GtStatusGainAchievement_NotStarted" xml:space="preserve">
-    <value>Ikke påbegynt</value>
+    <value>Not started</value>
   </data>
   <data name="Choice_GtStatusGainAchievement_AheadOfSchedule" xml:space="preserve">
-    <value>Foran plan</value>
+    <value>Ahead of schedule</value>
   </data>
   <data name="Choice_GtStatusGainAchievement_OnSchedule" xml:space="preserve">
-    <value>På plan</value>
+    <value>On schedule</value>
   </data>
   <data name="Choice_GtStatusGainAchievement_MinorDelays" xml:space="preserve">
-    <value>Mindre forsinkelser</value>
+    <value>Minor delays</value>
   </data>
   <data name="Choice_GtStatusGainAchievement_BehindSchedule" xml:space="preserve">
-    <value>Forsinket</value>
+    <value>Delayed</value>
   </data>
   <data name="Choice_GtStatusQuality_LargeDeviation" xml:space="preserve">
-    <value>Større avvik fra spesifikasjon</value>
+    <value>Large deviation from specification</value>
   </data>
   <data name="Choice_GtStatusQuality_SmallDeviation" xml:space="preserve">
-    <value>Mindre avvik fra spesifikasjon</value>
+    <value>Minor deviation from specification</value>
   </data>
   <data name="Choice_GtStatusQuality_AsExpected" xml:space="preserve">
-    <value>Ihht. spesifikasjon</value>
+    <value>As per specification</value>
   </data>
   <data name="Choice_GtStatusQuality_ExceedsExpectations" xml:space="preserve">
-    <value>Bedre enn spesifikasjon</value>
+    <value>Better than specification</value>
   </data>
   <data name="Choice_GtChecklistStatus_Archived" xml:space="preserve">
-    <value>Arkivert</value>
+    <value>Archived</value>
   </data>
   <data name="Choice_GtChecklistStatus_Open" xml:space="preserve">
-    <value>Åpen</value>
+    <value>Open</value>
   </data>
   <data name="Choice_GtChecklistStatus_Closed" xml:space="preserve">
-    <value>Utført</value>
+    <value>Closed</value>
   </data>
   <data name="Choice_GtChecklistStatus_NotRelevant" xml:space="preserve">
-    <value>Ikke relevant</value>
+    <value>Not relevant</value>
   </data>
   <data name="Choice_GtChecklistStatus_StillOpen" xml:space="preserve">
-    <value>Fortsatt åpen</value>
+    <value>Still open</value>
   </data>
   <data name="Choice_GtStakeholderGroup_Colleagues" xml:space="preserve">
-    <value>Medarbeidere</value>
+    <value>Colleagues</value>
   </data>
   <data name="Choice_GtStakeholderGroup_Leaders" xml:space="preserve">
-    <value>Ledelse</value>
+    <value>Leadership</value>
   </data>
   <data name="Choice_GtStakeholderGroup_Inhabitants" xml:space="preserve">
-    <value>Innbyggere</value>
+    <value>Inhabitants</value>
   </data>
   <data name="Choice_GtStakeholderGroup_Business" xml:space="preserve">
-    <value>Næringsliv</value>
+    <value>Business</value>
   </data>
   <data name="Choice_GtStakeholderGroup_Volenteers" xml:space="preserve">
-    <value>Frivillighet/Organisasjon</value>
+    <value>Volunteering/Organization</value>
   </data>
   <data name="Choice_GtStakeholderGroup_Union" xml:space="preserve">
-    <value>Fagforening</value>
+    <value>Union</value>
   </data>
   <data name="Choice_GtStakeholderGroup_OtherPublicStakeholders" xml:space="preserve">
-    <value>Andre offentlige aktører</value>
+    <value>Other public stakeholders</value>
   </data>
   <data name="Choice_GtStakeholderGroup_Academics" xml:space="preserve">
-    <value>Akademia</value>
+    <value>Academia</value>
   </data>
   <data name="Choice_GtStakeholderGroup_InstrumentDevice" xml:space="preserve">
-    <value>Virkemiddelapparat</value>
+    <value>Instrument device</value>
   </data>
   <data name="Choice_GtStakeholderGroup_Users" xml:space="preserve">
-    <value>Brukere</value>
+    <value>Users</value>
   </data>
   <data name="Choice_GtRiskStrategy_Reduce" xml:space="preserve">
-    <value>Redusere</value>
+    <value>Reduce</value>
   </data>
   <data name="Choice_GtRiskStrategy_Monitor" xml:space="preserve">
-    <value>Overvåke</value>
+    <value>Monitor</value>
   </data>
   <data name="Choice_GtRiskStrategy_Avoid" xml:space="preserve">
-    <value>Unngå</value>
+    <value>Avoid</value>
   </data>
   <data name="Choice_GtRiskStrategy_Transfer" xml:space="preserve">
-    <value>Overføre</value>
+    <value>Transfer</value>
   </data>
   <data name="Choice_GtRiskStrategy_Share" xml:space="preserve">
-    <value>Dele</value>
+    <value>Share</value>
   </data>
   <data name="Choice_GtRiskStrategy_Accept" xml:space="preserve">
-    <value>Akseptere</value>
+    <value>Accept</value>
   </data>
   <data name="Choice_GtRiskStrategy_Increase" xml:space="preserve">
-    <value>Øke</value>
+    <value>Increase</value>
   </data>
   <data name="Choice_GtRiskStrategy_Exploit" xml:space="preserve">
-    <value>Utnytte</value>
+    <value>Exploit</value>
   </data>
   <data name="Choice_GtActionStatus_NotStarted" xml:space="preserve">
-    <value>Ikke påbegynt</value>
+    <value>Not started</value>
   </data>
   <data name="Choice_GtActionStatus_Started" xml:space="preserve">
-    <value>Påbegynt</value>
+    <value>Started</value>
   </data>
   <data name="Choice_GtActionStatus_Completed" xml:space="preserve">
-    <value>Fullført</value>
+    <value>Completed</value>
   </data>
   <data name="Choice_GtActionStatus_Delayed" xml:space="preserve">
-    <value>Utsatt</value>
+    <value>Delayed</value>
   </data>
   <data name="Choice_GtProjectPhaseChoice_StartingUp" xml:space="preserve">
-    <value>Konsept</value>
+    <value>Concept</value>
   </data>
   <data name="Choice_GtProjectPhaseChoice_Initiating" xml:space="preserve">
-    <value>Planlegge</value>
+    <value>Initiating</value>
   </data>
-  <data name="Choice_GtProjectPhaseChoice_Directing" xml:space="preserve">
-    <value>Gjennomføre</value>
+   <data name="Choice_GtProjectPhaseChoice_Directing" xml:space="preserve">
+    <value>Executing</value>
   </data>
   <data name="Choice_GtProjectPhaseChoice_Closing" xml:space="preserve">
-    <value>Avslutte</value>
+    <value>Closing</value>
   </data>
   <data name="Choice_GtProjectPhaseChoice_BenefitsRealization" xml:space="preserve">
-    <value>Realisere</value>
+    <value>Realization</value>
   </data>
   <data name="Choice_GtProjectPhaseChoice_NoPhase" xml:space="preserve">
-    <value>Ingen fase</value>
+    <value>No Phase</value>
   </data>
   <data name="Choice_GtProjectPhaseChoice_SeveralPhases" xml:space="preserve">
-    <value>Flere faser</value>
+    <value>Multiple Phases</value>
   </data>
   <data name="Choice_GtResourceAbsence_Linetasks" xml:space="preserve">
-    <value>Linjeoppgaver</value>
+    <value>Line Tasks</value>
   </data>
   <data name="Choice_GtResourceAbsence_Leave" xml:space="preserve">
-    <value>Fravær</value>
+    <value>Absence</value>
   </data>
   <data name="Choice_GtResourceAbsence_Competency" xml:space="preserve">
-    <value>Kompetanseheving</value>
+    <value>Competency Enhancement</value>
   </data>
   <data name="Choice_GtResourceAbsence_OtherAssignments" xml:space="preserve">
-    <value>Andre arbeidsoppgaver</value>
+    <value>Other Assignments</value>
   </data>
   <data name="Choice_GtResourceAbsence_Other" xml:space="preserve">
-    <value>Annet</value>
+    <value>Other</value>
   </data>
   <data name="Choice_GtIdeaDecision_ApprovedSync" xml:space="preserve">
-    <value>Godkjent og synkronisert</value>
+    <value>Approved and Synchronized</value>
   </data>
   <data name="Choice_GtIdeaDecision_ApprovedConcept" xml:space="preserve">
-    <value>Godkjent for konseptutredning</value>
+    <value>Approved for Concept Examination</value>
   </data>
   <data name="Choice_GtIdeaDecision_Consideration" xml:space="preserve">
-    <value>Under vurdering</value>
+    <value>Under Consideration</value>
   </data>
   <data name="Choice_GtIdeaDecision_Rejected" xml:space="preserve">
-    <value>Avvist</value>
+    <value>Rejected</value>
   </data>
   <data name="Choice_GtIdeaRecommendation_ApprovedConcept" xml:space="preserve">
-    <value>Godkjent for detaljering av idé</value>
+    <value>Approved for Detailed Idea Development</value>
   </data>
   <data name="Choice_GtIdeaRecommendation_Consideration" xml:space="preserve">
-    <value>Under vurdering</value>
+    <value>Under Consideration</value>
   </data>
   <data name="Choice_GtIdeaRecommendation_Rejected" xml:space="preserve">
-    <value>Avvist</value>
+    <value>Rejected</value>
   </data>
   <data name="DiceCalculator_LessThan10Additional" xml:space="preserve">
-    <value>&lt;10% ekstrainnsats</value>
+    <value>&lt;10% Extra Effort</value>
   </data>
   <data name="DiceCalculator_10To20Additional" xml:space="preserve">
-    <value>10-20% ekstrainnsats</value>
+    <value>10-20% Extra Effort</value>
   </data>
   <data name="DiceCalculator_20To40Additional" xml:space="preserve">
-    <value>20-40% ekstrainnsats</value>
+    <value>20-40% Extra Effort</value>
   </data>
   <data name="DiceCalculator_Above40Additional" xml:space="preserve">
-    <value>&gt;40% ekstrainnsats</value>
+    <value>&gt;40% Extra Effort</value>
   </data>
   <data name="ClientSidePages_ExperienceLog_PageName" xml:space="preserve">
-    <value>Erfaringslogg.aspx</value>
+    <value>ExperienceLog.aspx</value>
   </data>
   <data name="ClientSidePages_ExperienceLog_Title" xml:space="preserve">
-    <value>Erfaringslogg</value>
+    <value>Experience Log</value>
   </data>
   <data name="ClientSidePages_BenefitOverview_PageName" xml:space="preserve">
     <value>Gevinstoversikt.aspx</value>
   </data>
   <data name="ClientSidePages_BenefitOverview_Title" xml:space="preserve">
-    <value>Gevinstoversikt</value>
+      <value>Benefit Overview</value>
   </data>
   <data name="ClientSidePages_Home_PageName" xml:space="preserve">
-    <value>Home.aspx</value>
+      <value>Home.aspx</value>
   </data>
   <data name="ClientSidePages_Home_Title" xml:space="preserve">
-    <value>Hjem</value>
+      <value>Home</value>
   </data>
   <data name="ClientSidePages_Configuration_PageName" xml:space="preserve">
-    <value>Konfigurasjon.aspx</value>
+      <value>Konfigurasjon.aspx</value>
   </data>
   <data name="ClientSidePages_Configuration_Title" xml:space="preserve">
-    <value>Konfigurasjon</value>
+      <value>Configuration</value>
   </data>
   <data name="ClientSidePages_DeliveryOverview_PageName" xml:space="preserve">
-    <value>Leveranseoversikt.aspx</value>
+      <value>Leveranseoversikt.aspx</value>
   </data>
   <data name="ClientSidePages_DeliveryOverview_Title" xml:space="preserve">
-    <value>Leveranseoversikt</value>
+      <value>Delivery Overview</value>
   </data>
   <data name="ClientSidePages_PortfolioInsights_PageName" xml:space="preserve">
-    <value>Porteføljeinnsikt.aspx</value>
+      <value>Porteføljeinnsikt.aspx</value>
   </data>
   <data name="ClientSidePages_PortfolioInsights_Title" xml:space="preserve">
-    <value>Porteføljeinnsikt</value>
+      <value>Portfolio Insights</value>
   </data>
   <data name="ClientSidePages_PortfolioOverview_PageName" xml:space="preserve">
-    <value>Porteføljeoversikt.aspx</value>
+      <value>Porteføljeoversikt.aspx</value>
   </data>
   <data name="ClientSidePages_PortfolioOverview_Title" xml:space="preserve">
-    <value>Porteføljeoversikt</value>
+      <value>Portfolio Overview</value>
   </data>
   <data name="ClientSidePages_ResourceAllocation_PageName" xml:space="preserve">
-    <value>Ressursallokering.aspx</value>
+      <value>Ressursallokering.aspx</value>
   </data>
   <data name="ClientSidePages_ResourceAllocation_Title" xml:space="preserve">
-    <value>Ressursallokering</value>
+      <value>Resource Allocation</value>
   </data>
   <data name="ClientSidePages_UncertaintyOverview_PageName" xml:space="preserve">
     <value>Usikkerhetsoversikt.aspx</value>
   </data>
   <data name="ClientSidePages_UncertaintyOverview_Title" xml:space="preserve">
-    <value>Usikkerhetsoversikt</value>
+    <value>Uncertainty Overview</value>
   </data>
   <data name="ClientSidePages_ProjectTimeline_PageName" xml:space="preserve">
     <value>Prosjekttidslinje.aspx</value>
   </data>
   <data name="ClientSidePages_ProjectTimeline_Title" xml:space="preserve">
-    <value>Prosjekttidslinje</value>
+    <value>Project Timeline</value>
   </data>
 </root>
