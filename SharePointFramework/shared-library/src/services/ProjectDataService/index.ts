@@ -15,8 +15,7 @@ import { IPropertyItemContext } from './IPropertyItemContext'
 export class ProjectDataService {
   private _storage: IPnPClientStore
   private _storageKeys: Record<string, string> = {
-    _getPropertyItemContext: '{0}_propertyitemcontext',
-    getPhases: '{0}_projectphases_terms'
+    _getPropertyItemContext: '{0}_propertyitemcontext'
   }
   private _sp: SPFI
   public web: IWeb
@@ -251,6 +250,8 @@ export class ProjectDataService {
     const properties = { [phaseTextField]: phase.toString() }
     try {
       const propertyItemContext = await this._getPropertyItemContext()
+      // eslint-disable-next-line no-console
+      console.log(propertyItemContext)
       if (propertyItemContext) {
         await propertyItemContext.item.update(properties)
       } else {

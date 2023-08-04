@@ -26,7 +26,7 @@ export class ProjectPhaseModel {
     private _termSetId: string,
     checklistData: ProjectPhaseChecklistData
   ) {
-    this.id = term.id.substring(6, 42)
+    this.id = term.id
     this.checklistData = checklistData ?? { stats: {}, items: [] }
   }
 
@@ -49,7 +49,7 @@ export class ProjectPhaseModel {
   }
 
   /**
-   * Phase letter
+   * Phase letter is the first letter of the phase name in uppercase.
    */
   public get letter() {
     if (this.properties.PhaseLetter) return this.properties.PhaseLetter
@@ -67,9 +67,9 @@ export class ProjectPhaseModel {
   }
 
   /**
-   * Is visible
+   * Is visible on frontpage.
    *
-   * Uses local custom property ShowOnFrontpage
+   * Uses local custom property `ShowOnFrontpage`
    */
   public get isVisible(): boolean {
     try {
@@ -80,14 +80,16 @@ export class ProjectPhaseModel {
   }
 
   /**
-   * Returns a string representation of the phase model
+   * Returns a string representation of the phase model that can
+   * be used to update the term field using the `TextField` connected
+   * to the field.
    */
   public toString() {
     return `-1;#${this.name}|${this.id}`
   }
 
   /**
-   * Get filtered phase checklist view url
+   * Get filtered phase checklist view url for the phase.
    *
    * @param baseUrl base URL
    */
