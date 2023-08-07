@@ -269,12 +269,13 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Fetch term field context
+   * Fetch term field context. Fetches the `InternalName` and `TermSetId` for the field,
+   * aswell as the `InternalName` for the text field.
    *
    * @param fieldName Field name for phase
    */
   public async getTermFieldContext(fieldName: string) {
-    const phaseField = await this.sp.web.fields
+    const field = await this.sp.web.fields
       .getByInternalNameOrTitle(fieldName)
       .select('InternalName', 'TermSetId', 'TextField')
       .using(DefaultCaching)<{
@@ -282,15 +283,15 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       TermSetId: string
       TextField: string
     }>()
-    const phaseTextField = await this.sp.web.fields
-      .getById(phaseField.TextField)
+    const textField = await this.sp.web.fields
+      .getById(field.TextField)
       .select('InternalName')
       .using(DefaultCaching)<{ InternalName: string }>()
     return {
-      fieldName: phaseField.InternalName,
-      termSetId: phaseField.TermSetId,
-      phaseTextField: phaseTextField.InternalName
-    }
+      fieldName: field.InternalName,
+      termSetId: field.TermSetId,
+      textField: textField.InternalName
+    } as const
   }
 
   /**
