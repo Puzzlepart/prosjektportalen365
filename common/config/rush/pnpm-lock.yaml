@@ -2,22 +2,22 @@ dependencies:
   '@fluentui/react': 8.98.1_9c907a7ccd27a2e2d0ee9de5366482d1
   '@fluentui/react-file-type-icons': 8.8.8_4865287ef69aa4f3fc3f709d3560286e
   '@fluentui/react-hooks': 8.6.27_4865287ef69aa4f3fc3f709d3560286e
-  '@microsoft/decorators': 1.17.2
-  '@microsoft/eslint-config-spfx': 1.17.2_eslint@8.25.0+typescript@4.5.5
-  '@microsoft/eslint-plugin-spfx': 1.17.2_eslint@8.25.0+typescript@4.5.5
+  '@microsoft/decorators': 1.17.4
+  '@microsoft/eslint-config-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
+  '@microsoft/eslint-plugin-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
   '@microsoft/rush-stack-compiler-4.5': 0.2.2
-  '@microsoft/sp-adaptive-card-extension-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-  '@microsoft/sp-application-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-  '@microsoft/sp-build-web': 1.17.2
-  '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-  '@microsoft/sp-dialog': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
-  '@microsoft/sp-listview-extensibility': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-  '@microsoft/sp-lodash-subset': 1.17.2
-  '@microsoft/sp-module-interfaces': 1.17.2
-  '@microsoft/sp-office-ui-fabric-core': 1.17.2
-  '@microsoft/sp-page-context': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-  '@microsoft/sp-property-pane': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
-  '@microsoft/sp-webpart-base': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
+  '@microsoft/sp-adaptive-card-extension-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+  '@microsoft/sp-application-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+  '@microsoft/sp-build-web': 1.17.4
+  '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+  '@microsoft/sp-dialog': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
+  '@microsoft/sp-listview-extensibility': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+  '@microsoft/sp-lodash-subset': 1.17.4
+  '@microsoft/sp-module-interfaces': 1.17.4
+  '@microsoft/sp-office-ui-fabric-core': 1.17.4
+  '@microsoft/sp-page-context': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+  '@microsoft/sp-property-pane': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
+  '@microsoft/sp-webpart-base': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
   '@pnp/core': 3.17.0
   '@pnp/logging': 3.17.0
   '@pnp/queryable': 3.17.0
@@ -826,7 +826,7 @@ packages:
   /@fluentui/merge-styles/8.5.12:
     dependencies:
       '@fluentui/set-version': 8.2.11
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     resolution:
       integrity: sha512-ZnUo0YuMP7AYi68dkknFqVxopIAgbrUnqR/MZlemmRvBYyy1SMj1WQeHcoiLFA8mF8YKn7B+jxQgJbN2bfcrRw==
@@ -1105,7 +1105,7 @@ packages:
       '@uifabric/utilities': 7.38.2_9f7147fa6acafed13e71b068ea0d74dc
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '*'
@@ -1334,7 +1334,7 @@ packages:
       '@types/react-dom': 17.0.17
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
-      tslib: 2.4.1
+      tslib: 2.6.0
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <19.0.0'
@@ -2055,17 +2055,17 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-/Y/n+QOc1vM6Vg3OAUByT/wXdZciE7jV3ay33+vxl3aKva5cNsuOauL14T7XQWUiLko3ilPwrcnFcEjzXpLsuA==
-  /@microsoft/decorators/1.17.2:
+  /@microsoft/decorators/1.17.4:
     dependencies:
       tslib: 2.3.1
     dev: false
     engines:
       node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
     resolution:
-      integrity: sha512-7Res0AzykUVf1z2LArs9mbKHxItF7KJpMvO1vSzfXh5wV3Vvj0/dL6hHRgokSM81CsUqmuEtkTDazBemuNS7Uw==
-  /@microsoft/eslint-config-spfx/1.17.2_eslint@8.25.0+typescript@4.5.5:
+      integrity: sha512-u7UFo9RCdJ4UE7lMTXu4TkzRve4P0lxsWzSvg3IWZslnA6geSH9siLZ2iPwL61m2IwEqAUlQfsRmR0zPgSoJ7g==
+  /@microsoft/eslint-config-spfx/1.17.4_eslint@8.25.0+typescript@4.5.5:
     dependencies:
-      '@microsoft/eslint-plugin-spfx': 1.17.2_eslint@8.25.0+typescript@4.5.5
+      '@microsoft/eslint-plugin-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
       '@rushstack/eslint-config': 3.2.0_eslint@8.25.0+typescript@4.5.5
       '@typescript-eslint/experimental-utils': 5.38.1_eslint@8.25.0+typescript@4.5.5
       eslint: 8.25.0
@@ -2076,8 +2076,8 @@ packages:
       eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
       typescript: '*'
     resolution:
-      integrity: sha512-cBrQ8r5U+qja3Yv3GwKFkN2TIBiOFLA1pvUCcVe1U49xWexjqTks9bF3T3UU9+JTsgrS+03qY/tA/D1avpYAHg==
-  /@microsoft/eslint-plugin-spfx/1.17.2_eslint@8.25.0+typescript@4.5.5:
+      integrity: sha512-7q/HyZe5w3gzFafVOnduu+WI3qWn4ddFyoz9ksMkX5YiKT6/IM9qQ2KxvWg4KxETyJEJJGxKEPa2Un686Uft0A==
+  /@microsoft/eslint-plugin-spfx/1.17.4_eslint@8.25.0+typescript@4.5.5:
     dependencies:
       '@typescript-eslint/experimental-utils': 5.38.1_eslint@8.25.0+typescript@4.5.5
       eslint: 8.25.0
@@ -2086,7 +2086,7 @@ packages:
       eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
       typescript: '*'
     resolution:
-      integrity: sha512-HVZFJel7vRXALJ+y0CS1hiIoOeSHrwmnxgo/3Dv+v8dFjRFcDTo0H6GAoDqJLelkoiPtIgi2MZQlYj9n20hfyw==
+      integrity: sha512-pF72hH//brzPWsUzCRkyCJga7qfB4jioEXNi+BUUikS24IG+ScpOU2pWZmo2lay13gFyGQLIkkz0l8KZ3gXt6Q==
   /@microsoft/fast-colors/5.3.1:
     dev: false
     resolution:
@@ -2344,7 +2344,7 @@ packages:
     dependencies:
       es6-promise: 4.2.8
       isomorphic-fetch: 3.0.0
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     resolution:
       integrity: sha512-BQN50r3tohWYOaQ0de7LJ5eCRjI6eg4RQqLhGDlgRmZIZhWzH0bhR6QBMmmxtYtwKWifhPhJSxYDW+cP67TJVw==
@@ -2489,17 +2489,17 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-nRlomAZwOYUR3qmFxxVcn8A3wmkjQ4eS3hoKzYylOqEU8SYPFxDFSN4I+2Y+hGTYG0gpm3NSL4Wvb0I180pCbg==
-  /@microsoft/sp-adaptive-card-extension-base/1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1:
+  /@microsoft/sp-adaptive-card-extension-base/1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
-      '@microsoft/sp-component-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-diagnostics': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-http': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-http-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-loader': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
-      '@microsoft/sp-lodash-subset': 1.17.2
-      '@microsoft/sp-module-interfaces': 1.17.2
-      '@microsoft/sp-property-pane': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-component-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-diagnostics': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-http': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-http-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-loader': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-lodash-subset': 1.17.4
+      '@microsoft/sp-module-interfaces': 1.17.4
+      '@microsoft/sp-property-pane': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
       adaptivecards: 2.11.1
       tslib: 2.3.1
     dev: false
@@ -2511,21 +2511,21 @@ packages:
       react: '*'
       react-dom: '*'
     resolution:
-      integrity: sha512-0G3r1Ew5Z/KOOQbLgg69DsR6tOvh2akCW7RBqi3MBpdzo9nUwTV251mqaJa23FgCXsfmJ8G4ehbNEZ0MXNFmrg==
-  /@microsoft/sp-application-base/1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1:
+      integrity: sha512-nltW7S7dVeERCg6JQmb33y275pHrI/zw7jhRxkWcC9euZUYIyAsiCP5o6vuWdWWpd9JPTJNr2WrjUC4qY7yQpg==
+  /@microsoft/sp-application-base/1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
-      '@microsoft/sp-component-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-diagnostics': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-extension-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-http': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-http-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-loader': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
-      '@microsoft/sp-lodash-subset': 1.17.2
-      '@microsoft/sp-module-interfaces': 1.17.2
-      '@microsoft/sp-odata-types': 1.17.2
-      '@microsoft/sp-page-context': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-search-extensibility': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-component-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-diagnostics': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-extension-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-http': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-http-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-loader': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-lodash-subset': 1.17.4
+      '@microsoft/sp-module-interfaces': 1.17.4
+      '@microsoft/sp-odata-types': 1.17.4
+      '@microsoft/sp-page-context': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-search-extensibility': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
       tslib: 2.3.1
     dev: false
     engines:
@@ -2536,13 +2536,13 @@ packages:
       react: '*'
       react-dom: '*'
     resolution:
-      integrity: sha512-Z8vrfIQDeXaWAl3IKANAipp5K+b4GihdEIQ4poJ5whvtP+rvh3e/eFCkO8mQBR/I4RfY36lUVZkY7LpyMwaLVw==
-  /@microsoft/sp-build-core-tasks/1.17.2:
+      integrity: sha512-J00uGWauLZdWwcnYi8J33UGbGaOsYb4nv2gdeIzOx2WrZS44z9sGOICcIukTjyPdI0BRMORUrxK6J9Ql8i06Cg==
+  /@microsoft/sp-build-core-tasks/1.17.4:
     dependencies:
       '@microsoft/gulp-core-build': 3.17.20
       '@microsoft/gulp-core-build-serve': 3.12.0
       '@microsoft/gulp-core-build-webpack': 5.2.30
-      '@microsoft/spfx-heft-plugins': 1.17.2_@types+webpack@4.41.24
+      '@microsoft/spfx-heft-plugins': 1.17.4_@types+webpack@4.41.24
       '@rushstack/node-core-library': 3.55.2
       '@types/glob': 5.0.30
       '@types/lodash': 4.14.117
@@ -2556,8 +2556,8 @@ packages:
     engines:
       node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
     resolution:
-      integrity: sha512-REmnPfkVW5xetiCkvEMnadZM163cveIdHYicBDpvOAPje5PaOmhEiKAodSMb/SmBp50dBA7aRMFOkw6ca0ytQA==
-  /@microsoft/sp-build-web/1.17.2:
+      integrity: sha512-MwzOv7xQ5j9TFvJMrzay2KWurH0eKPR1x1r4UgfyM/HLbRPxnjpo068ohZSRmo0kkMnvI+RfbcqapB1ZO69QQw==
+  /@microsoft/sp-build-web/1.17.4:
     dependencies:
       '@microsoft/gulp-core-build': 3.17.20
       '@microsoft/gulp-core-build-sass': 4.16.1
@@ -2565,7 +2565,7 @@ packages:
       '@microsoft/gulp-core-build-typescript': 8.5.35
       '@microsoft/gulp-core-build-webpack': 5.2.30
       '@microsoft/rush-lib': 5.93.1
-      '@microsoft/sp-build-core-tasks': 1.17.2
+      '@microsoft/sp-build-core-tasks': 1.17.4
       '@rushstack/node-core-library': 3.55.2
       '@types/webpack': 4.41.24
       gulp: 4.0.2
@@ -2578,7 +2578,7 @@ packages:
     engines:
       node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
     resolution:
-      integrity: sha512-1XiwFOogk8eqvJrpkT5fLnryqFruhZ+oLl5NACcItCIXBWoywf48q9kIwF/2R/ftjVwJn/2ruLfMX72RbmrEZA==
+      integrity: sha512-60Sy5aMFkouPa0H1Z0Eyd/w9N14vAWAJx88bKYcv3bMilS2zgmn0K36xAlE29gxeOrZx4RVRrZBjGYykmMnqIA==
   /@microsoft/sp-component-base/1.13.1_5bb3879ba087c0ef402ac2f0f80f9922:
     dependencies:
       '@microsoft/office-ui-fabric-react-bundle': 1.13.1_5bb3879ba087c0ef402ac2f0f80f9922
@@ -2617,16 +2617,16 @@ packages:
       '@types/react-dom': '*'
     resolution:
       integrity: sha512-Uf7nZ6Ohf68FQ4ABDs+8GVyqAb87rybaTJh/xBYz7DAjUUk/G1urq9wqTih8hSaHGog4P7ovuVeBKNYpmOU3Tg==
-  /@microsoft/sp-component-base/1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1:
+  /@microsoft/sp-component-base/1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
       '@fluentui/react': 8.110.12_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-diagnostics': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-dynamic-data': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-http': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-lodash-subset': 1.17.2
-      '@microsoft/sp-module-interfaces': 1.17.2
-      '@microsoft/sp-page-context': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-diagnostics': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-dynamic-data': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-http': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-lodash-subset': 1.17.4
+      '@microsoft/sp-module-interfaces': 1.17.4
+      '@microsoft/sp-page-context': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
       tslib: 2.3.1
     dev: false
     engines:
@@ -2637,7 +2637,7 @@ packages:
       react: '*'
       react-dom: '*'
     resolution:
-      integrity: sha512-rL7z8RgX5DeN5fmEvZJZzfcfi0hMD8nRU/E2lTXS0eS6D2Aj18BKHytQfy/u5RwyUNRVyI5PbtzKG1EOHphM0A==
+      integrity: sha512-DFLbyedhbxILJsgMtQ5MX7dm5qwUbWQIOC7P1ZF6MNfOlnP2KUDqtIO4kf/tpAVxEUzn7raqId9COcFCtZwTYw==
   /@microsoft/sp-core-library/1.12.1:
     dependencies:
       '@microsoft/sp-lodash-subset': 1.12.1
@@ -2671,26 +2671,6 @@ packages:
       node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
     resolution:
       integrity: sha512-sEotaC8+jUMZa5wc3lvtDYOGpAzzcl1fSZ0FnANIrJGyBC6tTqred0fzpkXptd4R0G/wi3746ivrccAOkzONkQ==
-  /@microsoft/sp-core-library/1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1:
-    dependencies:
-      '@microsoft/sp-lodash-subset': 1.17.2
-      '@microsoft/sp-module-interfaces': 1.17.2
-      '@microsoft/sp-odata-types': 1.17.2
-      '@types/react': 17.0.45
-      '@types/react-dom': 17.0.17
-      react: 17.0.1
-      react-dom: 17.0.1_react@17.0.1
-      tslib: 2.3.1
-    dev: false
-    engines:
-      node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
-    peerDependencies:
-      '@types/react': '>=16.9.51 <18.0.0'
-      '@types/react-dom': '>=16.9.8 <18.0.0'
-      react: '>=16.13.1 <18.0.0'
-      react-dom: '>=16.13.1 <18.0.0'
-    resolution:
-      integrity: sha512-EqdlOv+pF2VSjXxqxV30m7P0f/CJemmkXf0m2tjuFWFVqjHs8WWyyA7Lat8yv972OJhwiyGIDvdB1uBWpVVsEw==
   /@microsoft/sp-core-library/1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
       '@microsoft/sp-lodash-subset': 1.17.4
@@ -2711,7 +2691,7 @@ packages:
       react-dom: '>=16.13.1 <18.0.0'
     resolution:
       integrity: sha512-Zcw6hM2JVJh5gguzWICLmTWrh04IgPo74kThzuA2ZV1EqMwhP7pUNAhS0QTkxK4F4PmV8czc5ZzAy61RKDp2pg==
-  /@microsoft/sp-css-loader/1.17.2:
+  /@microsoft/sp-css-loader/1.17.4:
     dependencies:
       '@microsoft/load-themed-styles': 1.10.292
       '@rushstack/node-core-library': 3.55.2
@@ -2727,7 +2707,7 @@ packages:
       webpack: 4.44.2
     dev: false
     resolution:
-      integrity: sha512-SBx0XUvKcBpE2hpHdVIGFcua7cAC7/QNElaLJUDA6qKA485XWp716nSyTMR+nixtg8ZrHXSyiacWoKHQGMP/iA==
+      integrity: sha512-HBzv+/cu1Mxc5j0LA04EhoXndaNhCGk4Xhqy1KZioNSZgz5DbrsEWtNklexy0wXoJP+dbro+mtZYb/B07EvV6Q==
   /@microsoft/sp-diagnostics/1.13.1:
     dependencies:
       '@microsoft/sp-core-library': 1.13.1
@@ -2746,20 +2726,6 @@ packages:
       node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
     resolution:
       integrity: sha512-9OJQwkdy3kqATQISpI4SG+5OUMB90KesupsWIE31aAyPcQiilh0XGhWmaYnCxCgGATAWcaYrFeptlDOTQNpuiA==
-  /@microsoft/sp-diagnostics/1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1:
-    dependencies:
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-lodash-subset': 1.17.2
-    dev: false
-    engines:
-      node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
-    peerDependencies:
-      '@types/react': '*'
-      '@types/react-dom': '*'
-      react: '*'
-      react-dom: '*'
-    resolution:
-      integrity: sha512-IK8I0zLlLcKwEg0xw3sm1qX2rKIwdrTkw80jdR7EkXRAC1YfIICxx3GKDAsQy1mk9O8Eg8lHk51PiqpHTbXTGA==
   /@microsoft/sp-diagnostics/1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
       '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
@@ -2774,12 +2740,12 @@ packages:
       react-dom: '*'
     resolution:
       integrity: sha512-Me8tZWyy66oSwpfRPJPe8Y5pyoBRYHK9BELhveJ42GLILCVWNU8W2As6mn0yfmZzk36UM9nSa7z6yjX0yBz0Aw==
-  /@microsoft/sp-dialog/1.17.2_5bb3879ba087c0ef402ac2f0f80f9922:
+  /@microsoft/sp-dialog/1.17.4_5bb3879ba087c0ef402ac2f0f80f9922:
     dependencies:
       '@fluentui/react': 8.110.12_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-application-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-diagnostics': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-application-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-diagnostics': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
       '@types/react': 17.0.45
       '@types/react-dom': 17.0.17
       react: 17.0.1
@@ -2792,7 +2758,7 @@ packages:
       '@types/react': '>=16.9.51 <18.0.0'
       '@types/react-dom': '>=16.9.8 <18.0.0'
     resolution:
-      integrity: sha512-8y/4aIK8aNB+uOgd/HDypzhGeJbgvkCeJ0VraFkrKD16EHJB8MTx62H5qRbOWZZesXAWdCk4JSHqnxsj1s1pRw==
+      integrity: sha512-U2CREzN+yQO3jgpgW59HTnCEJ4jX0Q7ENHryJXHwaQy4z0m29kI8siBqOlj0G5z9HCcCvrNxz7+4VOJ1rqEGVg==
   /@microsoft/sp-dynamic-data/1.13.1:
     dependencies:
       '@microsoft/sp-core-library': 1.13.1
@@ -2817,23 +2783,6 @@ packages:
       node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
     resolution:
       integrity: sha512-6ks5GUBSatsijQC8NUjaLjYCv4efAbEJcbSVTj8lySpTVCWu8aKsFtKB1b/Vc3I1g9Adq6z2e9sgTaPwm6HTlA==
-  /@microsoft/sp-dynamic-data/1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1:
-    dependencies:
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-diagnostics': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-lodash-subset': 1.17.2
-      '@microsoft/sp-module-interfaces': 1.17.2
-      tslib: 2.3.1
-    dev: false
-    engines:
-      node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
-    peerDependencies:
-      '@types/react': '*'
-      '@types/react-dom': '*'
-      react: '*'
-      react-dom: '*'
-    resolution:
-      integrity: sha512-RPsLJXCRO9VD2pLVe3z+y30BqcDhZxhwri2RMZlwX8nJYgfmQmj2fEajBHD3aRX5R9quzbp6ElumZWhHlyUOfg==
   /@microsoft/sp-dynamic-data/1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
       '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
@@ -2867,13 +2816,13 @@ packages:
       '@types/react-dom': '*'
     resolution:
       integrity: sha512-S/ks3vZF98fx56Rt/WOgmyo5Fsf3O9+ibDLapuO5TIylvb3GuBEOdxPONv5fqVcWauWB9IkrP0ymTNauuBB+Dw==
-  /@microsoft/sp-extension-base/1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1:
+  /@microsoft/sp-extension-base/1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
-      '@microsoft/sp-component-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-diagnostics': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-loader': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
-      '@microsoft/sp-module-interfaces': 1.17.2
+      '@microsoft/sp-component-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-diagnostics': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-loader': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-module-interfaces': 1.17.4
       tslib: 2.3.1
     dev: false
     engines:
@@ -2884,27 +2833,7 @@ packages:
       react: '*'
       react-dom: '*'
     resolution:
-      integrity: sha512-oCaFvEmpojSt5yPBGgvYhEO9/TrwypUJ1uGTayiO3cn6jy/UEndQiw72TuCKhnagJC2h/RRHC2/CMSp5tu618w==
-  /@microsoft/sp-http-base/1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1:
-    dependencies:
-      '@azure/msal-browser': 2.28.1
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-diagnostics': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-page-context': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/teams-js-v2': /@microsoft/teams-js/2.9.1
-      adal-angular: 1.0.16
-      msal: 1.4.17
-      msalBrowserLegacy: /@azure/msal-browser/2.22.0
-      msalLegacy: /msal/1.4.12
-      tslib: 2.3.1
-    dev: false
-    peerDependencies:
-      '@types/react': '*'
-      '@types/react-dom': '*'
-      react: '*'
-      react-dom: '*'
-    resolution:
-      integrity: sha512-ZpQOxXbfG1309rh030HHNn/KNPdwxhGqvMOvGwvc+SiAp6pzYfNjGrVT+UBsB/ZdxPbhaEvSU6TmyuvM/7LCPQ==
+      integrity: sha512-nwa0ku93j8WZhr+3WS/1btUB9JzwHs1w97v4TbgdYR3sofZNJnyLM6I0HnMLLIEVEZokTYmkP28m27KR2dLw+g==
   /@microsoft/sp-http-base/1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
       '@azure/msal-browser': 2.28.1
@@ -2925,13 +2854,13 @@ packages:
       react-dom: '*'
     resolution:
       integrity: sha512-Yk5tKHX7B52YX9O6mXtA2OFttdS8Ievc3v64i6lZ2tnFw90sZyVFNGEsPOaTSCp/4IEve2CGBJv24Zi6iKPdkA==
-  /@microsoft/sp-http-msgraph/1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1:
+  /@microsoft/sp-http-msgraph/1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
       '@microsoft/microsoft-graph-clientv1': /@microsoft/microsoft-graph-client/1.7.2-spfx
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-diagnostics': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-http-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-loader': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-diagnostics': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-http-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-loader': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
       tslib: 2.3.1
     dev: false
     peerDependencies:
@@ -2941,7 +2870,7 @@ packages:
       react: '*'
       react-dom: '*'
     resolution:
-      integrity: sha512-fJ0NqynpWMrxdF1m66Av1n2nxy89sl1V9Pgft47/bqG9VCfAR1jYsb+BY1pA/yYWs3+Gq886MCg6KrHZgfKCgA==
+      integrity: sha512-yd34To9rVhfe6J4tD7+zyP1e+DTuR/e43aSLxEzkMhGS1criSIjA84Vjs9WCnwHNtlmi7rBZRe4RqZyHitgfcg==
   /@microsoft/sp-http-msgraph/1.17.4_e101253d713f965c6886742b579b9dba:
     dependencies:
       '@microsoft/microsoft-graph-client': 1.7.0
@@ -2992,13 +2921,13 @@ packages:
       node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
     resolution:
       integrity: sha512-vP3heQlje3YVTgyaGKZmrHksqmWP+zczuhQP116cCl6z52ZdUiuJIZpDcu+WGZaG1HdznAyrNGkkiZauTytIHw==
-  /@microsoft/sp-http/1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1:
+  /@microsoft/sp-http/1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
       '@microsoft/microsoft-graph-clientv1': /@microsoft/microsoft-graph-client/1.7.2-spfx
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-diagnostics': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-http-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-http-msgraph': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-diagnostics': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-http-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-http-msgraph': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
       tslib: 2.3.1
     dev: false
     engines:
@@ -3009,7 +2938,7 @@ packages:
       react: '*'
       react-dom: '*'
     resolution:
-      integrity: sha512-Eiu+700Wm95DBkVB+AWq2NjXkI2EuABwwWh1lKA8EIch1OA7mzwRuNrF1vFoY6w/ekvlxArUMrvZkS/lD/+33Q==
+      integrity: sha512-ilWn1R5SXlTIxZscXboKEjHVyv45aQcGgMUVbHS2SJ7QdDBy5YXFye6ClteNHqM661EvJGDJIJtHriFNucmHMQ==
   /@microsoft/sp-http/1.17.4_e101253d713f965c6886742b579b9dba:
     dependencies:
       '@microsoft/microsoft-graph-clientv1': /@microsoft/microsoft-graph-client/1.7.2-spfx
@@ -3047,15 +2976,15 @@ packages:
       '@types/react-dom': '*'
     resolution:
       integrity: sha512-vNwymXZtGLFdgkNaV0j/Oi5t8Pz2FV9LgS2gnbAKuRzLSXtCSZ9hfP+5eC5LrVBWkSzxHC+8e+gAGaxqbr2asA==
-  /@microsoft/sp-image-helper/1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1:
+  /@microsoft/sp-image-helper/1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-diagnostics': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-http': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-http-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-loader': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
-      '@microsoft/sp-lodash-subset': 1.17.2
-      '@microsoft/sp-page-context': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-diagnostics': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-http': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-http-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-loader': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-lodash-subset': 1.17.4
+      '@microsoft/sp-page-context': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
       '@types/react': 17.0.45
       '@types/react-dom': 17.0.17
       react: 17.0.1
@@ -3070,7 +2999,7 @@ packages:
       react: '>=16.13.1 <18.0.0'
       react-dom: '>=16.13.1 <18.0.0'
     resolution:
-      integrity: sha512-FQdj0WJiDdHi1uqArCIas+8jS/vpTTUHbn3+oeBYcrM9vxi+Ry6T779rE36RVPzby67sIWgCgPJhMLqAGx+jFQ==
+      integrity: sha512-NKhy1RRR8dTsXH9D7a+0Ed+lam0TLpzRRgPmUf1sOG3/2+bRQuvPmPfDvoDQi6gKMDH2QqsjaFL1N6nq7yjiiw==
   /@microsoft/sp-listview-extensibility/1.15.2_5bb3879ba087c0ef402ac2f0f80f9922:
     dependencies:
       '@microsoft/sp-core-library': 1.15.2
@@ -3086,12 +3015,12 @@ packages:
       '@types/react-dom': '*'
     resolution:
       integrity: sha512-78kkdPYYg3HqEAHw5hIafW/5foBXcsBZ2vaeI9zxZ+1qCY4lnS1MpXdQ9ajX1mDNrImMxvAEw2btUCA0QqY1zQ==
-  /@microsoft/sp-listview-extensibility/1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1:
+  /@microsoft/sp-listview-extensibility/1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-extension-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-module-interfaces': 1.17.2
-      '@microsoft/sp-page-context': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-extension-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-module-interfaces': 1.17.4
+      '@microsoft/sp-page-context': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
       tslib: 2.3.1
     dev: false
     engines:
@@ -3102,7 +3031,7 @@ packages:
       react: '*'
       react-dom: '*'
     resolution:
-      integrity: sha512-fGc4m+E67ks6GWEGBWsFEW8RiF7kUy4QQO6qaADrsn0XTi2eBCMAqohj2tZk5ODJmtjehMVG54KCTl8402ahjA==
+      integrity: sha512-YZXi10JCi4Q/vciGR9RPMbGc71WHBKcCjHieqisxs0E9aMqs9NDyX9MM8tIfesFZfsEO+0lSlvhup/0p1G46ag==
   /@microsoft/sp-loader/1.13.1_5bb3879ba087c0ef402ac2f0f80f9922:
     dependencies:
       '@microsoft/office-ui-fabric-react-bundle': 1.13.1_5bb3879ba087c0ef402ac2f0f80f9922
@@ -3159,34 +3088,6 @@ packages:
       '@types/react-dom': '*'
     resolution:
       integrity: sha512-w1EbIrP7AXH5Oq0cQwKW5OZUK6+c3amiImGUBSAlyHaEyC5/gSKMCDM0XJ0xkrihWs0ICWj/yX2o0aLaaReO3g==
-  /@microsoft/sp-loader/1.17.2_5bb3879ba087c0ef402ac2f0f80f9922:
-    dependencies:
-      '@fluentui/react': 8.110.12_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-diagnostics': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-dynamic-data': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-http-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-lodash-subset': 1.17.2
-      '@microsoft/sp-module-interfaces': 1.17.2
-      '@microsoft/sp-odata-types': 1.17.2
-      '@microsoft/sp-page-context': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@rushstack/loader-raw-script': 1.3.281
-      '@types/react': 17.0.45
-      '@types/react-dom': 17.0.17
-      '@types/requirejs': 2.1.29
-      raw-loader: 0.5.1
-      react: 17.0.1
-      react-dom: 17.0.1_react@17.0.1
-      requirejs: 2.3.6
-      tslib: 2.3.1
-    dev: false
-    engines:
-      node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
-    peerDependencies:
-      '@types/react': '>=16.9.51 <18.0.0'
-      '@types/react-dom': '>=16.9.8 <18.0.0'
-    resolution:
-      integrity: sha512-4vT2H8K8FKwxR/BWYUaISddVhjM6vVqu4Pcysphy7IClxDT47HWp5E/ybItTn3KTsdX2z1KagDuYXEhYgw428Q==
   /@microsoft/sp-loader/1.17.4_5bb3879ba087c0ef402ac2f0f80f9922:
     dependencies:
       '@fluentui/react': 8.110.12_9c907a7ccd27a2e2d0ee9de5366482d1
@@ -3242,15 +3143,6 @@ packages:
       node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
     resolution:
       integrity: sha512-XLqSltvz9W0hft76fylqVFNUIVS1sLjdUF3+lIQyj0g+4R9kDy9VsGhpxX7qLGAdW10yZ6Z40qfmBWgn8NN4MA==
-  /@microsoft/sp-lodash-subset/1.17.2:
-    dependencies:
-      '@types/lodash': 4.14.117
-      tslib: 2.3.1
-    dev: false
-    engines:
-      node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
-    resolution:
-      integrity: sha512-UBMLz2vIrweo9x/lrPXoW4W9CPehuSF+5jK5ZNnDgzt0rIFfHtgRcppj4ircHjCB3O0TjRBO5DKLAB9n5z4PjQ==
   /@microsoft/sp-lodash-subset/1.17.4:
     dependencies:
       '@types/lodash': 4.14.117
@@ -3284,15 +3176,6 @@ packages:
       node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
     resolution:
       integrity: sha512-JGOjK8f5ww+r4ax8TBAPDyZhDhGWVg1Jk4PvKE0cU6qjywM0DzWWkzHJFcyFXdjr8UE/+wzJOKasCCtu1RjWQg==
-  /@microsoft/sp-module-interfaces/1.17.2:
-    dependencies:
-      '@rushstack/node-core-library': 3.55.2
-      z-schema: 4.2.4
-    dev: false
-    engines:
-      node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
-    resolution:
-      integrity: sha512-5LN3XF8SEdDb1GSmihaDgmJcr6R+m4pAMmzIBGE0xkkMnUQ0Iod1nDDzPfO1FRWgJ9U/9y3849PKZZyBWh9iEg==
   /@microsoft/sp-module-interfaces/1.17.4:
     dependencies:
       '@rushstack/node-core-library': 3.55.2
@@ -3326,14 +3209,6 @@ packages:
       node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
     resolution:
       integrity: sha512-Eb5MAWRAOkRAGXSdacg8p/KdSpYDJBNwyqNCZwrsCbgf/66h28oK0KUqQ6o8Hcy+vAZpa16x6bvpJQw5u1u8ZA==
-  /@microsoft/sp-odata-types/1.17.2:
-    dependencies:
-      tslib: 2.3.1
-    dev: false
-    engines:
-      node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
-    resolution:
-      integrity: sha512-SvaewZ/6q9ZVcOeskwzv22nr8m2xwmCDcXGkiuLJkO44OvE+j7lK2TDEGL0+vgOjh/ptfQeOYPoLp6L9VF4v6Q==
   /@microsoft/sp-odata-types/1.17.4:
     dependencies:
       tslib: 2.3.1
@@ -3360,7 +3235,7 @@ packages:
       node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
     resolution:
       integrity: sha512-/AO94rEE8NJqyVRiKkTzmdVbwqht8fVULvsikpJUTGd4Cczp8nUs9YsTwGxbdlW9Mu3gQ7CM9Rq7J24pNmEJWA==
-  /@microsoft/sp-office-ui-fabric-core/1.17.2:
+  /@microsoft/sp-office-ui-fabric-core/1.17.4:
     dependencies:
       office-ui-fabric-core: 11.0.1
       tslib: 2.3.1
@@ -3368,7 +3243,7 @@ packages:
     engines:
       node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
     resolution:
-      integrity: sha512-8ZCS4vYfDLkyPxVuk6CmyQkqbBiBMSRq21X65gBZIwiGW0p7Krplq94npNq6avUX4XnKJgxDS07KhQDRU2ImrQ==
+      integrity: sha512-LwnRLgXMWLHsr/WoIIdj+g5KNXwHZaCu3Y/sbkDm7LC4r20k25rKDHrT+03tbkgC/Cr/EDQlEYk6kk9/JZo0kQ==
   /@microsoft/sp-page-context/1.13.1:
     dependencies:
       '@microsoft/sp-core-library': 1.13.1
@@ -3395,24 +3270,6 @@ packages:
       node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
     resolution:
       integrity: sha512-gq7q2vq5rzAwkOn4/jpdL/VgHCrtDWNZqjcU62W6iIW4TNT3nVykcof9llpghPcYx5dOuTtrRizXfa+vtQ+rzw==
-  /@microsoft/sp-page-context/1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1:
-    dependencies:
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-diagnostics': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-dynamic-data': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-lodash-subset': 1.17.2
-      '@microsoft/sp-odata-types': 1.17.2
-      tslib: 2.3.1
-    dev: false
-    engines:
-      node: '>=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0'
-    peerDependencies:
-      '@types/react': '*'
-      '@types/react-dom': '*'
-      react: '*'
-      react-dom: '*'
-    resolution:
-      integrity: sha512-kV4sd6MY2Y85EgWv8PxTcJvbxEqu2bWKF1nbaYAelnjt1wW0q1wUgEzgK3Pr+801QK9VEeCmvLAE8TTt5gqZmg==
   /@microsoft/sp-page-context/1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
       '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
@@ -3497,16 +3354,16 @@ packages:
       '@types/react-dom': '*'
     resolution:
       integrity: sha512-V78aUGZa4gM/MMmOg14iWYPoknHe9jrormvTXpltjcIvipRm5H5bRr6D4SfuzJ7uu0roJ53zfGddCDdvn05ezA==
-  /@microsoft/sp-property-pane/1.17.2_5bb3879ba087c0ef402ac2f0f80f9922:
+  /@microsoft/sp-property-pane/1.17.4_5bb3879ba087c0ef402ac2f0f80f9922:
     dependencies:
       '@fluentui/react': 8.110.12_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-component-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-diagnostics': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-dynamic-data': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-image-helper': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-lodash-subset': 1.17.2
-      '@microsoft/sp-page-context': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-component-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-diagnostics': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-dynamic-data': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-image-helper': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-lodash-subset': 1.17.4
+      '@microsoft/sp-page-context': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
       '@types/react': 17.0.45
       '@types/react-dom': 17.0.17
       react: 17.0.1
@@ -3519,13 +3376,13 @@ packages:
       '@types/react': '>=16.9.51 <18.0.0'
       '@types/react-dom': '>=16.9.8 <18.0.0'
     resolution:
-      integrity: sha512-Zg+VajoS4Iq4iu/Wm/Q5Jj0viGZnfDfrVmCXVLskwsdkyO6peFKrzYWRCyYRBBH+SUD5UHh5ubVnNUlUpc8x7g==
-  /@microsoft/sp-search-extensibility/1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1:
+      integrity: sha512-69VtmRMJ2L8ZT09lFJ8NaaL+qLO9cpjK5rBoDkwROJQJoTW8x1kuIXRB5n2llZGEXcZPgC8DUf/bp1Kw3IFyKA==
+  /@microsoft/sp-search-extensibility/1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-diagnostics': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-extension-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-loader': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-diagnostics': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-extension-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-loader': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
       tslib: 2.3.1
     dev: false
     engines:
@@ -3536,11 +3393,11 @@ packages:
       react: '*'
       react-dom: '*'
     resolution:
-      integrity: sha512-TiFihUSkf0CN2h83Gljop9pDwjHhJjQBa6qNgUJdq8V6r7Np4tYilOwzHuc51zvN7dBbyyALrMlqQW5HHiaKpg==
-  /@microsoft/sp-top-actions/1.17.2:
+      integrity: sha512-VnWfTugtxJFgMPOL4BBLJipHv8A6zTMppVrQ6V2F0yIkReScrzg2MBZoO19mbEpTHGhRPq0dtkUOkLmc364xGQ==
+  /@microsoft/sp-top-actions/1.17.4:
     dev: false
     resolution:
-      integrity: sha512-z51iNOleO0J0GFPvyMavSyDqTadpC35ru0gsRqB+Rl8ExvoZSGhvUgZVWBmBkkmfF1lvTncWqBkGH6OqmLoY3w==
+      integrity: sha512-jSwMihjw218eDq49pT3ac8Av0YwuuxRbFmyK6cFbi35ZcKiUEF6vRDJdyra3Cb3TAW72ubf8LfGwLvJnJpMpOQ==
   /@microsoft/sp-webpart-base/1.13.1_5bb3879ba087c0ef402ac2f0f80f9922:
     dependencies:
       '@microsoft/sp-component-base': 1.13.1_5bb3879ba087c0ef402ac2f0f80f9922
@@ -3593,21 +3450,21 @@ packages:
       '@types/react-dom': '*'
     resolution:
       integrity: sha512-dFQBwmRg81EDyV5RzA7JEhtdKyjk3vjKZBn3pWvaY/4Yo+oGyzKdQ8o/z2A9OO6KwXXlXkFiGJgoau57c/EALQ==
-  /@microsoft/sp-webpart-base/1.17.2_5bb3879ba087c0ef402ac2f0f80f9922:
+  /@microsoft/sp-webpart-base/1.17.4_5bb3879ba087c0ef402ac2f0f80f9922:
     dependencies:
       '@fluentui/react': 8.110.12_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-component-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-diagnostics': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-dynamic-data': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-http': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-http-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-loader': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
-      '@microsoft/sp-lodash-subset': 1.17.2
-      '@microsoft/sp-module-interfaces': 1.17.2
-      '@microsoft/sp-page-context': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-property-pane': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
-      '@microsoft/sp-top-actions': 1.17.2
+      '@microsoft/sp-component-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-diagnostics': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-dynamic-data': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-http': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-http-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-loader': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-lodash-subset': 1.17.4
+      '@microsoft/sp-module-interfaces': 1.17.4
+      '@microsoft/sp-page-context': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-property-pane': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-top-actions': 1.17.4
       '@microsoft/teams-js-v2': /@microsoft/teams-js/2.9.1
       '@types/office-js': 1.0.36
       '@types/react': 17.0.45
@@ -3622,15 +3479,15 @@ packages:
       '@types/react': '>=16.9.51 <18.0.0'
       '@types/react-dom': '>=16.9.8 <18.0.0'
     resolution:
-      integrity: sha512-M8hdzJXfZdD33QfneyFJkz7qQzpReZ7vRuQcbE4W3Gjb5Jproz3Da6qND4uoukh+0n33ulX/vjquR7gdebCd1A==
-  /@microsoft/spfx-heft-plugins/1.17.2_@types+webpack@4.41.24:
+      integrity: sha512-WIlAXml7HlPiqR5EAAYGoqal2it0ce7vqS3ThNr3Ty5bF8nRv4Z9om0fPLd7fLoyFNpY5iX6XrZIZpJIu9xrXQ==
+  /@microsoft/spfx-heft-plugins/1.17.4_@types+webpack@4.41.24:
     dependencies:
       '@azure/storage-blob': 12.11.0
       '@microsoft/load-themed-styles': 1.10.292
       '@microsoft/loader-load-themed-styles': 2.0.27_a390d97c158b74d136a220496038ec85
       '@microsoft/rush-lib': 5.93.1
-      '@microsoft/sp-css-loader': 1.17.2
-      '@microsoft/sp-module-interfaces': 1.17.2
+      '@microsoft/sp-css-loader': 1.17.4
+      '@microsoft/sp-module-interfaces': 1.17.4
       '@rushstack/heft-config-file': 0.11.9
       '@rushstack/localization-utilities': 0.8.46
       '@rushstack/node-core-library': 3.55.2
@@ -3670,7 +3527,7 @@ packages:
     peerDependencies:
       '@types/webpack': '*'
     resolution:
-      integrity: sha512-tYf+3Gjpw7CG6iK820TwKJQ8ON4ernWUmfNUp5GvrMqirrRvl6n8N/7tuXlGqScKUuuQe/yfKpyHVMpGeGJqTQ==
+      integrity: sha512-BOTYm5H1coXpgp529PbI1XtrNGSI42c2EwxuR48ZThM20N8OagQeto5wpQh4z2wqdUhDpFVLu5gFqAEmG5v1Bg==
   /@microsoft/teams-js/1.10.0:
     dev: false
     resolution:
@@ -4918,7 +4775,7 @@ packages:
       integrity: sha512-Pla+0sjwKHH9d5aejg9hSXd+NxlKnaLutTpckENtCNTnrC+EmAsQsqhp+WJX8LgOBDDiRtiBj5kX8PwAfL+KdQ==
   /@types/glob-stream/8.0.0:
     dependencies:
-      '@types/node': 12.20.24
+      '@types/node': 20.4.8
       '@types/picomatch': 2.3.0
       '@types/streamx': 2.9.1
     dev: false
@@ -4933,7 +4790,7 @@ packages:
       integrity: sha512-ZM05wDByI+WA153sfirJyEHoYYoIuZ7lA2dB/Gl8ymmpMTR78fNRtDMqa7Z6SdH4fZdLWZNRE6mZpx3XqBOrHw==
   /@types/graceful-fs/4.1.6:
     dependencies:
-      '@types/node': 12.20.24
+      '@types/node': 20.4.8
     dev: false
     resolution:
       integrity: sha512-Sig0SNORX9fdW+bQuTEovKj3uHcUL6LQKbCrrqb1X7J6/ReAbhCXRAhc+SMejhLELFj2QcyuxmUooZ4bt5ReSw==
@@ -5068,7 +4925,7 @@ packages:
       integrity: sha512-1ZX9fcN4Rvkvgv4E6PAY5WXUFWFcRWxZa3EW83UjycOB9ljJCedb2CupIP4RZMEwF/M3eTcCihbBRgwtGbg5Rg==
   /@types/node-notifier/8.0.2:
     dependencies:
-      '@types/node': 12.20.24
+      '@types/node': 20.4.8
     dev: false
     resolution:
       integrity: sha512-5v0PhPv0AManpxT7W25Zipmj/Lxp1WqfkcpZHyqSloB+gGoAHRBuzhrCelFKrPvNF5ki3gAcO4kxaGO2/21u8g==
@@ -5241,7 +5098,7 @@ packages:
       integrity: sha512-l42BggppR6zLmpfU6fq9HEa2oGPEI8yrSPL3GITjfRInppYFahObbIQOQK3UGxEnyQpltZLaPe75046NOZQikw==
   /@types/streamx/2.9.1:
     dependencies:
-      '@types/node': 12.20.24
+      '@types/node': 20.4.8
     dev: false
     resolution:
       integrity: sha512-9bywzhouyedmci7WCIPFwJ8zASDnxt2gaVUy52X0p0Tt085IJSAEP0L6j4SSNeDMSLzpYu6cPz0GrJZ7kPJ6Bg==
@@ -5257,7 +5114,7 @@ packages:
       integrity: sha512-WA0xhgs1wenECj1psxojjYOIc1Zkn+4gNtuWmF+dcFs5UfsQa8WhWs+8WG4D2RuaX7DufNPU+KsOEF7KqlByuw==
   /@types/through2/2.0.32:
     dependencies:
-      '@types/node': 12.20.24
+      '@types/node': 20.4.8
     dev: false
     resolution:
       integrity: sha512-VYclBauj55V0qPDHs9QMdKBdxdob6zta8mcayjTyOzlRgl+PNERnvNol99W1PBnvQXaYoTTqSce97rr9dz9oXQ==
@@ -5283,7 +5140,7 @@ packages:
       integrity: sha512-Z4TYuEKn9+RbNVk1Ll2SS4x1JeLHecolIbM/a8gveaHsW0Hr+RQMraZACwTO2VD7JvepgA6UO1A1VrbktQrIbQ==
   /@types/undertaker/1.2.8:
     dependencies:
-      '@types/node': 12.20.24
+      '@types/node': 20.4.8
       '@types/undertaker-registry': 1.0.1
       async-done: 1.3.2
     dev: false
@@ -5296,14 +5153,14 @@ packages:
   /@types/vinyl-fs/3.0.2:
     dependencies:
       '@types/glob-stream': 8.0.0
-      '@types/node': 12.20.24
+      '@types/node': 20.4.8
       '@types/vinyl': 2.0.3
     dev: false
     resolution:
       integrity: sha512-ctNcmmzbMIKooXjRkyyUCOu2Z4AyqibL+RhXoF3pb7K7j+ezItnakmpm31LymkYHSIM5ey0tjIFzTvFOTSBCGw==
   /@types/vinyl/2.0.3:
     dependencies:
-      '@types/node': 12.20.24
+      '@types/node': 20.4.8
     dev: false
     resolution:
       integrity: sha512-hrT6xg16CWSmndZqOTJ6BGIn2abKyTw0B58bI+7ioUoj3Sma6u8ftZ1DTI2yCaJamOVGLOnQWiPH3a74+EaqTA==
@@ -9156,7 +9013,7 @@ packages:
       cosmiconfig: 7.1.0
       debug: 4.3.4
       deps-regex: 0.1.4
-      ignore: 5.1.9
+      ignore: 5.2.4
       is-core-module: 2.13.0
       js-yaml: 3.14.1
       json5: 2.2.3
@@ -9170,7 +9027,7 @@ packages:
       resolve: 1.22.4
       sass: 1.64.2
       scss-parser: 1.0.6
-      semver: 7.3.8
+      semver: 7.5.4
       yargs: 16.2.0
     dev: false
     engines:
@@ -9195,7 +9052,7 @@ packages:
       '@pnpm/crypto.base32-hash': 1.0.1
       '@pnpm/types': 8.9.0
       encode-registry: 3.0.0
-      semver: 7.3.8
+      semver: 7.5.4
     dev: false
     engines:
       node: '>=14.6'
@@ -11359,7 +11216,7 @@ packages:
     dependencies:
       array-union: 1.0.2
       arrify: 1.0.1
-      glob: 7.0.6
+      glob: 7.2.3
       object-assign: 4.1.1
       pify: 2.3.0
       pinkie-promise: 2.0.1
@@ -11890,7 +11747,7 @@ packages:
       depd: 1.1.2
       inherits: 2.0.3
       setprototypeof: 1.1.0
-      statuses: 1.4.0
+      statuses: 1.5.0
     dev: false
     engines:
       node: '>= 0.6'
@@ -14831,7 +14688,7 @@ packages:
       integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
   /msal/1.4.12:
     dependencies:
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     engines:
       node: '>=0.8.0'
@@ -14847,7 +14704,7 @@ packages:
       integrity: sha512-uFEa4KGlpGqNMwa7/1OQc6WQUF8iwHbaiHMVn0Cl66Ec7o30ZTtX9s9OWrf0wAxp8Mwg0JEE886z/PHpsiZUxQ==
   /msal/1.4.17:
     dependencies:
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     engines:
       node: '>=0.8.0'
@@ -15094,7 +14951,7 @@ packages:
     dependencies:
       growly: 1.3.0
       is-wsl: 2.2.0
-      semver: 7.3.8
+      semver: 7.5.4
       shellwords: 0.1.1
       uuid: 8.3.2
       which: 2.0.2
@@ -15204,7 +15061,7 @@ packages:
       pkg-dir: 5.0.0
       preferred-pm: 3.0.3
       rc-config-loader: 4.1.3
-      semver: 7.3.8
+      semver: 7.5.4
       semver-diff: 3.1.1
       strip-ansi: 6.0.1
       text-table: 0.2.0
@@ -15457,7 +15314,7 @@ packages:
       prop-types: 15.8.1
       react: 16.8.5
       react-dom: 16.8.5_react@16.8.5
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     peerDependencies:
       '@types/react': '>=16.8.0 <17.0.0'
@@ -16245,7 +16102,7 @@ packages:
       loader-utils: 2.0.4
       postcss: 8.4.27
       schema-utils: 3.3.0
-      semver: 7.3.8
+      semver: 7.5.4
       webpack: 4.44.2
     dev: false
     engines:
@@ -18047,7 +17904,7 @@ packages:
       integrity: sha512-ntymy489o0/QQplUDnpYAYUsO50K9SBrIVaKCWDOJzYJts0f9WH9RFJkyagebkw5+y1oi00R7ynNW/d12GBumg==
   /rxjs/6.6.7:
     dependencies:
-      tslib: 1.10.0
+      tslib: 1.14.1
     dev: false
     engines:
       npm: '>=2.0.0'
@@ -20113,7 +19970,7 @@ packages:
       is-yarn-global: 0.3.0
       latest-version: 5.1.0
       pupa: 2.1.1
-      semver: 7.3.8
+      semver: 7.5.4
       semver-diff: 3.1.1
       xdg-basedir: 4.0.0
     dev: false
@@ -21239,17 +21096,17 @@ packages:
   file:projects/pp365-portfolioextensions.tgz:
     dependencies:
       '@fluentui/react': 8.98.1_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/decorators': 1.17.2
-      '@microsoft/eslint-config-spfx': 1.17.2_eslint@8.25.0+typescript@4.5.5
-      '@microsoft/eslint-plugin-spfx': 1.17.2_eslint@8.25.0+typescript@4.5.5
+      '@microsoft/decorators': 1.17.4
+      '@microsoft/eslint-config-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
+      '@microsoft/eslint-plugin-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
       '@microsoft/rush-stack-compiler-4.5': 0.2.2
-      '@microsoft/sp-application-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-build-web': 1.17.2
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-dialog': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
-      '@microsoft/sp-listview-extensibility': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-module-interfaces': 1.17.2
-      '@microsoft/sp-page-context': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-application-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-build-web': 1.17.4
+      '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-dialog': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-listview-extensibility': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-module-interfaces': 1.17.4
+      '@microsoft/sp-page-context': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
       '@pnp/core': 3.17.0
       '@pnp/logging': 3.17.0
       '@pnp/queryable': 3.17.0
@@ -21286,7 +21143,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-portfolioextensions'
     resolution:
-      integrity: sha512-pFuDOxeL2M/5vK3ZsB55mxYG+VoXQkwOKBCkohZ8Rq2NUdvS7cf4JTpkU41kfAyb79+ppTX7b61WjNdMix39Mg==
+      integrity: sha512-qOe8bF8+25k9MYbHZnLUIfeed2bMXcUMAHdGk6qYVSdi22UHJoNDX+zyaTYGOzR1cJeQUTyncwqAEsWEH67JZQ==
       tarball: file:projects/pp365-portfolioextensions.tgz
     version: 0.0.0
   file:projects/pp365-portfoliowebparts.tgz:
@@ -21294,17 +21151,17 @@ packages:
       '@fluentui/react': 8.98.1_9c907a7ccd27a2e2d0ee9de5366482d1
       '@fluentui/react-file-type-icons': 8.8.8_4865287ef69aa4f3fc3f709d3560286e
       '@fluentui/react-hooks': 8.6.27_4865287ef69aa4f3fc3f709d3560286e
-      '@microsoft/decorators': 1.17.2
-      '@microsoft/eslint-config-spfx': 1.17.2_eslint@8.25.0+typescript@4.5.5
-      '@microsoft/eslint-plugin-spfx': 1.17.2_eslint@8.25.0+typescript@4.5.5
+      '@microsoft/decorators': 1.17.4
+      '@microsoft/eslint-config-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
+      '@microsoft/eslint-plugin-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
       '@microsoft/rush-stack-compiler-4.5': 0.2.2
-      '@microsoft/sp-build-web': 1.17.2
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-lodash-subset': 1.17.2
-      '@microsoft/sp-office-ui-fabric-core': 1.17.2
-      '@microsoft/sp-page-context': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-property-pane': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
-      '@microsoft/sp-webpart-base': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-build-web': 1.17.4
+      '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-lodash-subset': 1.17.4
+      '@microsoft/sp-office-ui-fabric-core': 1.17.4
+      '@microsoft/sp-page-context': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-property-pane': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-webpart-base': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
       '@pnp/core': 3.17.0
       '@pnp/logging': 3.17.0
       '@pnp/queryable': 3.17.0
@@ -21361,24 +21218,24 @@ packages:
     dev: false
     name: '@rush-temp/pp365-portfoliowebparts'
     resolution:
-      integrity: sha512-GGnb0RqzLxm1eVViAHprCK3NXGHe7d/yqSZIhfOgBam0618rLajgfm7kwyfvXHo0Tdufw0wuygbHwvPzMM7Bww==
+      integrity: sha512-BxZ0Zn32qfgZIg1azDxVqBQjDetMX79d3+xxRxOfgvtOidyx86WqVeJm5VYXWI0YSGaQbNUrPr/qcHnZOhPD0Q==
       tarball: file:projects/pp365-portfoliowebparts.tgz
     version: 0.0.0
   file:projects/pp365-programwebparts.tgz:
     dependencies:
       '@fluentui/react': 8.98.1_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/eslint-config-spfx': 1.17.2_eslint@8.25.0+typescript@4.5.5
-      '@microsoft/eslint-plugin-spfx': 1.17.2_eslint@8.25.0+typescript@4.5.5
+      '@microsoft/eslint-config-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
+      '@microsoft/eslint-plugin-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
       '@microsoft/rush-stack-compiler-4.5': 0.2.2
-      '@microsoft/sp-adaptive-card-extension-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-build-web': 1.17.2
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-lodash-subset': 1.17.2
-      '@microsoft/sp-module-interfaces': 1.17.2
-      '@microsoft/sp-office-ui-fabric-core': 1.17.2
-      '@microsoft/sp-page-context': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-property-pane': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
-      '@microsoft/sp-webpart-base': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-adaptive-card-extension-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-build-web': 1.17.4
+      '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-lodash-subset': 1.17.4
+      '@microsoft/sp-module-interfaces': 1.17.4
+      '@microsoft/sp-office-ui-fabric-core': 1.17.4
+      '@microsoft/sp-page-context': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-property-pane': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-webpart-base': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
       '@pnp/core': 3.17.0
       '@pnp/logging': 3.17.0
       '@pnp/queryable': 3.17.0
@@ -21434,23 +21291,23 @@ packages:
     dev: false
     name: '@rush-temp/pp365-programwebparts'
     resolution:
-      integrity: sha512-pJkKjGY7ZxXtvuOKhldOrLcqXmXhTgCvGV5wROaUMx+V3RGC1sMh1/n0XqQSeObKIbwhvGZwceQ5/90pqLnTgg==
+      integrity: sha512-AEptQkWGcIYA076AJbevUAC2gFrergFJfPFbnDiVDNaKUJkXn/15UcegdubWPsAsg23AWvYSgvvlb9Pzyl3zjw==
       tarball: file:projects/pp365-programwebparts.tgz
     version: 0.0.0
   file:projects/pp365-projectextensions.tgz:
     dependencies:
       '@fluentui/react': 8.98.1_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/decorators': 1.17.2
-      '@microsoft/eslint-config-spfx': 1.17.2_eslint@8.25.0+typescript@4.5.5
-      '@microsoft/eslint-plugin-spfx': 1.17.2_eslint@8.25.0+typescript@4.5.5
+      '@microsoft/decorators': 1.17.4
+      '@microsoft/eslint-config-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
+      '@microsoft/eslint-plugin-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
       '@microsoft/rush-stack-compiler-4.5': 0.2.2
-      '@microsoft/sp-application-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-build-web': 1.17.2
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-dialog': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
-      '@microsoft/sp-listview-extensibility': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-office-ui-fabric-core': 1.17.2
-      '@microsoft/sp-page-context': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-application-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-build-web': 1.17.4
+      '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-dialog': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-listview-extensibility': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-office-ui-fabric-core': 1.17.4
+      '@microsoft/sp-page-context': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
       '@pnp/core': 3.17.0
       '@pnp/logging': 3.17.0
       '@pnp/queryable': 3.17.0
@@ -21499,27 +21356,27 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectextensions'
     resolution:
-      integrity: sha512-EER1YcxcI8z5GjhqJGgL+AHZSrWIeJg6KIpqA7XhV8p6rj1rLSTlUXo8i30eJACeA4FezJLxQPbEkbVGmQRXrQ==
+      integrity: sha512-1Mu2CNysvLtoV5rFBYr1bpUaSMScfJKOR+lGf/LP9hPdBKPgj+K/NdoN4+8jUZB/9tHAR19tVtrXOwUd3d6WaQ==
       tarball: file:projects/pp365-projectextensions.tgz
     version: 0.0.0
   file:projects/pp365-projectwebparts.tgz:
     dependencies:
       '@fluentui/react': 8.98.1_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/decorators': 1.17.2
-      '@microsoft/eslint-config-spfx': 1.17.2_eslint@8.25.0+typescript@4.5.5
-      '@microsoft/eslint-plugin-spfx': 1.17.2_eslint@8.25.0+typescript@4.5.5
+      '@microsoft/decorators': 1.17.4
+      '@microsoft/eslint-config-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
+      '@microsoft/eslint-plugin-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
       '@microsoft/rush-stack-compiler-4.5': 0.2.2
-      '@microsoft/sp-adaptive-card-extension-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-build-web': 1.17.2
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-dialog': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
-      '@microsoft/sp-listview-extensibility': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-lodash-subset': 1.17.2
-      '@microsoft/sp-module-interfaces': 1.17.2
-      '@microsoft/sp-office-ui-fabric-core': 1.17.2
-      '@microsoft/sp-page-context': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-property-pane': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
-      '@microsoft/sp-webpart-base': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-adaptive-card-extension-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-build-web': 1.17.4
+      '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-dialog': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-listview-extensibility': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-lodash-subset': 1.17.4
+      '@microsoft/sp-module-interfaces': 1.17.4
+      '@microsoft/sp-office-ui-fabric-core': 1.17.4
+      '@microsoft/sp-page-context': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-property-pane': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-webpart-base': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
       '@pnp/core': 3.17.0
       '@pnp/logging': 3.17.0
       '@pnp/queryable': 3.17.0
@@ -21576,21 +21433,21 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectwebparts'
     resolution:
-      integrity: sha512-eSvmHkNIr5eWZLDXaLCcv8a9IOeQMepZskUuwcKBJaZfWl2gjzZ3AmtLEO0Mg1rdPH2mVehuyBygI3M9535odw==
+      integrity: sha512-hqCS7Hl2X5VZpBbiyuJ74vtPPQqmVX5yO/kSGJjJynFnePnJZxbOLaKT+4pboRg8o5u7JMFLZlq8zBeXgRfEiQ==
       tarball: file:projects/pp365-projectwebparts.tgz
     version: 0.0.0
   file:projects/pp365-shared-library.tgz_interactjs@1.6.2:
     dependencies:
       '@fluentui/react': 8.98.1_9c907a7ccd27a2e2d0ee9de5366482d1
       '@microsoft/rush-stack-compiler-4.5': 0.2.2
-      '@microsoft/sp-application-base': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-build-web': 1.17.2
-      '@microsoft/sp-core-library': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-listview-extensibility': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-lodash-subset': 1.17.2
-      '@microsoft/sp-module-interfaces': 1.17.2
-      '@microsoft/sp-page-context': 1.17.2_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@microsoft/sp-webpart-base': 1.17.2_5bb3879ba087c0ef402ac2f0f80f9922
+      '@microsoft/sp-application-base': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-build-web': 1.17.4
+      '@microsoft/sp-core-library': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-listview-extensibility': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-lodash-subset': 1.17.4
+      '@microsoft/sp-module-interfaces': 1.17.4
+      '@microsoft/sp-page-context': 1.17.4_9c907a7ccd27a2e2d0ee9de5366482d1
+      '@microsoft/sp-webpart-base': 1.17.4_5bb3879ba087c0ef402ac2f0f80f9922
       '@pnp/core': 3.17.0
       '@pnp/logging': 3.17.0
       '@pnp/queryable': 3.17.0
@@ -21635,7 +21492,7 @@ packages:
     peerDependencies:
       interactjs: '*'
     resolution:
-      integrity: sha512-v4mzQeACi+0/sOvcXD/iCJcPA0veTRySMb+hakOsDRr3QCiX3U1JGLgTDG90e8UgajCoDHYZ2yOJBLPo6rCiVg==
+      integrity: sha512-vN6lQ174JX9Npr2kR/fahdHa6tw6HZEwzL62Bsnp1eryMqYj45ikKJkprZWD66C5LsfcPlR8yKxRHBk214Qp+A==
       tarball: file:projects/pp365-shared-library.tgz
     version: 0.0.0
   file:projects/pp365-spfx-tasks.tgz:
@@ -21670,22 +21527,22 @@ specifiers:
   '@fluentui/react': 8.98.1
   '@fluentui/react-file-type-icons': 8.8.8
   '@fluentui/react-hooks': 8.6.27
-  '@microsoft/decorators': 1.17.2
-  '@microsoft/eslint-config-spfx': 1.17.2
-  '@microsoft/eslint-plugin-spfx': 1.17.2
+  '@microsoft/decorators': 1.17.4
+  '@microsoft/eslint-config-spfx': 1.17.4
+  '@microsoft/eslint-plugin-spfx': 1.17.4
   '@microsoft/rush-stack-compiler-4.5': 0.2.2
-  '@microsoft/sp-adaptive-card-extension-base': 1.17.2
-  '@microsoft/sp-application-base': 1.17.2
-  '@microsoft/sp-build-web': 1.17.2
-  '@microsoft/sp-core-library': 1.17.2
-  '@microsoft/sp-dialog': 1.17.2
-  '@microsoft/sp-listview-extensibility': 1.17.2
-  '@microsoft/sp-lodash-subset': 1.17.2
-  '@microsoft/sp-module-interfaces': 1.17.2
-  '@microsoft/sp-office-ui-fabric-core': 1.17.2
-  '@microsoft/sp-page-context': 1.17.2
-  '@microsoft/sp-property-pane': 1.17.2
-  '@microsoft/sp-webpart-base': 1.17.2
+  '@microsoft/sp-adaptive-card-extension-base': 1.17.4
+  '@microsoft/sp-application-base': 1.17.4
+  '@microsoft/sp-build-web': 1.17.4
+  '@microsoft/sp-core-library': 1.17.4
+  '@microsoft/sp-dialog': 1.17.4
+  '@microsoft/sp-listview-extensibility': 1.17.4
+  '@microsoft/sp-lodash-subset': 1.17.4
+  '@microsoft/sp-module-interfaces': 1.17.4
+  '@microsoft/sp-office-ui-fabric-core': 1.17.4
+  '@microsoft/sp-page-context': 1.17.4
+  '@microsoft/sp-property-pane': 1.17.4
+  '@microsoft/sp-webpart-base': 1.17.4
   '@pnp/core': 3.17.0
   '@pnp/logging': 3.17.0
   '@pnp/queryable': 3.17.0
