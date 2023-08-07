@@ -13,9 +13,11 @@ import strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext, useEffect, useState } from 'react'
 import SPDataAdapter from '../../../data'
 import { ProjectInformationContext } from '../context'
+import { usePropertiesSync } from '../usePropertiesSync'
 
 export const SyncProjectDialog: FC = () => {
   const context = useContext(ProjectInformationContext)
+  const onSyncProperties = usePropertiesSync(context)
   const [isLoading, setLoading] = useState(true)
   const [isSyncing, setSyncing] = useState(false)
   const [hasSynced, setHasSynced] = useState(false)
@@ -161,7 +163,7 @@ export const SyncProjectDialog: FC = () => {
             setSyncing(false)
             setHasSynced(true)
             context.setState({ displaySyncProjectDialog: false })
-            context.onSyncProperties(true)
+            onSyncProperties(true)
           })
         })
     } catch (error) {

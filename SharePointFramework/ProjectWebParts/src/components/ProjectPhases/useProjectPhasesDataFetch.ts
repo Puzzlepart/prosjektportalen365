@@ -44,11 +44,11 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
     return {
       currentPhase,
       phases,
-      phaseTextField: phaseFieldCtx.phaseTextField,
+      phaseTextField: phaseFieldCtx.textField,
       phaseSitePages,
       welcomePage,
       userHasChangePhasePermission
-    }
+    } as IProjectPhasesData
   } catch (error) {
     ListLogger.log({
       message: error.message,
