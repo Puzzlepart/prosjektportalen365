@@ -56,7 +56,7 @@
     "pzl-react-reusable-components": "~0.3.1",
     "@pnp/core": "3.17.0",
     "@pnp/queryable": "3.17.0",
-    "sp-entityportal-service": "2.2.13"
+    "sp-entityportal-service": "2.3.0"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.15.2",

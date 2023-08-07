@@ -6,7 +6,7 @@ import { ProjectDataService } from 'pp365-shared-library/lib/services'
 import { SPFxContext } from 'pp365-shared-library/lib/types'
 import { IEntityField } from 'sp-entityportal-service/types'
 import { IConfigurationFile } from 'types'
-import { find, get } from 'underscore'
+import _ from 'underscore'
 import { IdeaConfigurationModel, SPIdeaConfigurationItem } from '../../models'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
 
@@ -73,7 +73,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Sync property item from site to associated hub
+   * Sync property item from site to associated hub. `this.getMappedProjectProperties` is used to
+   * map the properties item fields to the hub fields. `updateEntityItem` from `sp-entityportal-service`
+   * is used to update the hub entity item. If any errors occur, the original error is passed to the caller.
    *
    * @param fieldValues Field values for the properties item
    * @param fieldValuesText Field values in text format for the properties item
@@ -114,12 +116,15 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param fieldValues - Field values for the properties item
    * @param fieldValuesText - Field values in text format for the properties item
    * @param templateParameters - Template parameters
+   * @param syncToProject - Whether to sync to the project
+   * @param wrapMultiValuesInResultsArray - Whether to wrap multi-values in results array (default: false)
    */
   public async getMappedProjectProperties(
     fieldValues: Record<string, any>,
     fieldValuesText: Record<string, string>,
     templateParameters: Record<string, any>,
-    syncToProject: boolean = false
+    syncToProject: boolean = false,
+    wrapMultiValuesInResultsArray: boolean = false
   ): Promise<any> {
     try {
       fieldValuesText = Object.keys(fieldValuesText).reduce(
@@ -155,7 +160,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
                 if (textField)
                   properties[textField.InternalName] = fieldValuesText[fld.InternalName]
                 else {
-                  textField = find(fields, (f) => f.Id === fld.TextField)
+                  textField = _.find(fields, (f) => f.Id === fld.TextField)
                   if (!textField) continue
                   properties[textField.InternalName] = fieldValuesText[textField.InternalName]
                 }
@@ -181,7 +186,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
                 if (textField)
                   properties[textField.InternalName] = fieldValuesText[fld.InternalName]
                 else {
-                  textField = find(fields, (f) => f.Id === fld.TextField)
+                  textField = _.find(fields, (f) => f.Id === fld.TextField)
                   if (!textField) continue
                   properties[textField.InternalName] = fieldValuesText[textField.InternalName]
                 }
@@ -219,12 +224,14 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
               } else {
                 const userIds = fieldValues[`${fld.InternalName}Id`] || []
                 const users = siteUsers.filter((u) => userIds.indexOf(u.Id) !== -1)
-                const ensured = await Promise.all(
-                  users.map(({ LoginName }) => this.entityService.web.ensureUser(LoginName))
-                )
-                properties[`${fld.InternalName}Id`] = {
-                  results: ensured.map(({ data }) => data.Id)
-                }
+                const ensured = (
+                  await Promise.all(
+                    users.map(({ LoginName }) => this.entityService.web.ensureUser(LoginName))
+                  )
+                ).map(({ data }) => data.Id)
+                properties[`${fld.InternalName}Id`] = wrapMultiValuesInResultsArray
+                  ? { results: ensured }
+                  : ensured
               }
             }
             break
@@ -250,7 +257,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
           case 'MultiChoice':
             {
               if (fldValue) {
-                properties[fld.InternalName] = { results: fldValue }
+                properties[fld.InternalName] = wrapMultiValuesInResultsArray
+                  ? { results: fldValue }
+                  : fldValue
               }
             }
             break
@@ -335,7 +344,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       return files.map((file) => ({
         name: file.Name,
         title:
-          get(file, 'ListItemAllFields.Title') ??
+          _.get(file, 'ListItemAllFields.Title') ??
           `${strings.UnknownConfigurationName} (${file.Name})`,
         url: file.ServerRelativeUrl
       }))
