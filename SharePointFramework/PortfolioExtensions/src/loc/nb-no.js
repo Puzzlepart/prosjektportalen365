@@ -1,7 +1,8 @@
 define([], function () {
   return {
     SetRecommendationTitle: 'Sett anbefaling',
-    SetRecommendationSubtitle: 'Velg anbefaling for: {0}',
+    SetRecommendationSubtitle: 'Velg anbefaling for: {0}. \n\n{1}',
+    SetRecommendationDefaultDescription: 'Dersom idéen blir godkjent vil det bli opprettet en detaljert idé-side for idéen og et element i<a href="../Idebehandling/AllItems.aspx" target="_blank">Idébehandlingslisten</a>.;Dersom idéen blir godkjent vil det være mulig å opprette prosjektdata som kan bli brukt for provisjonering av området.;Tilknytt prosjektdata til idéen for å synkronisere data til et prosjekt senere.',
     IdeaProjectDataDialogTitle: 'Opprett prosjektdata for idéen',
     IdeaProjectDataDialogSubText: 'Tilknytt prosjektdata til idéen for å synkronisere data til et prosjekt senere.',
     IdeaProjectDataDialogInfoText: 'Denne handlingen vil opprette et element i<a href="../Prosjektdata/AllItems.aspx" target="_blank">prosjektdata</a> listen for valgt idé.',
@@ -12,6 +13,7 @@ define([], function () {
     IdeaRegistrationTitle: 'Idéregistrering',
     IdeaRegistrationUrlTitle: 'Ideregistrering',
     IdeaProjectDataTitle: 'Prosjektdata',
+    IdeaConfigurationTitle: 'Idékonfigurasjon',
     ApproveChoice: 'Godkjenn',
     ConsiderationChoice: 'Under vurdering',
     RejectChoice: 'Avvis',
@@ -27,6 +29,28 @@ define([], function () {
     CancelLabel: 'Avbryt',
     CloseLabel: 'Lukk',
     SubmitLabel: 'Send',
-    CreateLabel: 'Opprett'
+    CreateLabel: 'Opprett',
+    InstallStartTimeLabel: 'Starttidspunkt for installasjon',
+    InstallEndTimeLabel: 'Sluttidspunkt for installasjon',
+    InstallVersionLabel: 'Versjon',
+    InstallCommandLabel: 'Installasjonskommando',
+    InstallChannelLabel: 'Installasjonskanal',
+    LastInstallHeaderText: 'Siste installasjon',
+    SeeAllInstallationsLinkText: 'Se alle installasjoner',
+    InstallationLogListName: 'Installasjonslogg',
+    ConfigurationLinkText: 'Konfigurasjon av Prosjektportalen',
+    InstallDurationLabel: 'Installasjonsvarighet',
+    InstallDurationValueTemplate: '{0} minutter',
+    LatestGitHubReleaseLabel: 'Siste release fra GitHub: ',
+    LatestGitHubReleaseIsNewerText: 'En nyere versjon er tilgjengelig på GitHub',
+    LatestGitHubReleaseIsOlderText: 'Versjonen som er installert er nyere enn den siste release fra GitHub',
+    LatestGitHubReleaseIsSameText: 'Versjonen som er installert er den siste release fra GitHub',
+    LatestGitHubReleaseDownloadButtonText: 'Last ned siste release fra GitHub',
+    LatestGitHubReleaseLinkTitle: 'Se siste release på GitHub',
+    LinksListName: 'Lenker',
+    LinksListText: 'Nyttige lenker',
+    SiteSettingsLinkText: 'Områdeinnstillinger',
+    HelpContentLinkText: 'Hjelp tilgjengelig',
+    HelpContentListName: 'Hjelpeinnhold'
   }
-});
+})

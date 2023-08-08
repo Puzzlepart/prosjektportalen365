@@ -1,5 +1,5 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
-import { Persona, PersonaSize } from '@fluentui/react'
+import { Link, Persona, PersonaSize } from '@fluentui/react'
 import { Toggle } from '@fluentui/react/lib/Toggle'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
@@ -15,7 +15,7 @@ export const ProjectProperty: FC<IProjectPropertyProps> = ({
 }) => {
   const renderValue = () => {
     switch (model.type) {
-      case 'User': {
+      case 'user': {
         return (
           <div>
             <Persona
@@ -26,7 +26,7 @@ export const ProjectProperty: FC<IProjectPropertyProps> = ({
           </div>
         )
       }
-      case 'UserMulti': {
+      case 'usermulti': {
         return (
           <div>
             {model.value.split(';').map((text, key) => (
@@ -40,7 +40,7 @@ export const ProjectProperty: FC<IProjectPropertyProps> = ({
           </div>
         )
       }
-      case 'TaxonomyFieldTypeMulti': {
+      case 'taxonomyfieldtypemulti': {
         return (
           <div className={styles.labels}>
             {model.value.split(';').map((text, key) => (
@@ -51,13 +51,24 @@ export const ProjectProperty: FC<IProjectPropertyProps> = ({
           </div>
         )
       }
+      case 'url': {
+        const [url, description] = model.value.split(', ')
+        return (
+          <div>
+            <Link href={url} target='_blank'>
+              {description}
+            </Link>
+          </div>
+        )
+      }
       default: {
         return (
           <div
             className={styles.value}
             dangerouslySetInnerHTML={{
               __html: model.value.replace(/\n/g, '<br />')
-            }}></div>
+            }}
+          ></div>
         )
       }
     }

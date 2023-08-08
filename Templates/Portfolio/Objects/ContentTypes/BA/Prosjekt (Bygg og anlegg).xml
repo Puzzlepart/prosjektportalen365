@@ -1,4 +1,5 @@
-﻿<pnp:ContentType ID="0x0100C4784EA80C45433792E60E1DD000C5B7" Name="{resource:ContentTypes_ProjectBA_Name}" Description="{resource:ContentTypes_ProjectBA_Description}" Group="{resource:ContentTypes_Group}" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+﻿<pnp:ContentType ID="0x0100805E9E4FEAAB4F0EABAB2600D30DB70CBA" Name="{resource:ContentTypes_ProjectBA_Name}" Description="{resource:ContentTypes_ProjectBA_Description}" Group="{resource:ContentTypes_Group}"
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" UpdateChildren="true" />
         <pnp:FieldRef ID="983d5ab3-0a6c-4f6a-a7b5-d34d52d73676" Name="GtProjectFinanceName" UpdateChildren="true" />
@@ -38,5 +39,7 @@
         <pnp:FieldRef ID="e007ef7e-9c47-4bc2-8171-5c32688f3e0c" Name="GtChildProjects" UpdateChildren="true" />
         <pnp:FieldRef ID="8f1f38cb-7eb2-4122-a866-4c9e99b2ebed" Name="GtIsParentProject" UpdateChildren="true" />
         <pnp:FieldRef ID="77baede1-38df-454c-a53a-dd7904ba0046" Name="GtIsProgram" UpdateChildren="true" />
+        <pnp:FieldRef ID="58a07891-1cf3-426a-8941-b37f5e1c8f3a" Name="GtInstalledVersion" UpdateChildren="true" />
+        <pnp:FieldRef ID="f6660f3e-6d90-4c32-a1f6-955c10249066" Name="GtCurrentVersion" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

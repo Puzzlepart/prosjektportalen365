@@ -6,7 +6,7 @@ import {
   ShimmeredDetailsList
 } from '@fluentui/react'
 import { OpportunityMatrix } from '../../../OpportunityMatrix'
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
+import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { RiskMatrix } from '../../../RiskMatrix'
@@ -21,7 +21,8 @@ export const UncertaintySection: FC = () => {
   const { state, matrixElements, items, columns, shouldRenderContent } = useUncertaintySection()
 
   /**
-   * Render content
+   * Render content for the Uncertainty section. Handles potential errors and renders OpportunityMatrix
+   * or RiskMatrix based on the content type of the first item in the list.
    */
   function renderContent() {
     if (state.error)

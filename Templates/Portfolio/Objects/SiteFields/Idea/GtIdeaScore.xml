@@ -1,0 +1,11 @@
+<Field ID="{ce451f2c-a098-48ba-a8a5-d1d4ffc225d6}" Name="GtIdeaScore" DisplayName="{resource:SiteFields_GtIdeaScore_DisplayName}" Description="{resource:SiteFields_GtIdeaScore_Description}" Type="Calculated" Group="{resource:SiteFields_Idea_Group}" ResultType="Number" StaticName="GtIdeaScore">
+  <Formula>=[{fieldtitle:GtIdeaQualityNumber}]+[{fieldtitle:GtIdeaOperationalNumber}]+[{fieldtitle:GtIdeaRiskNumber}]+[{fieldtitle:GtIdeaStrategicNumber}]+[{fieldtitle:GtIdeaEconomicNumber}]+[{fieldtitle:GtIdeaManualScore}]</Formula>
+  <FieldRefs>
+    <FieldRef Name="GtIdeaQualityNumber" ID="{201dba9f-b85e-475c-8b7c-603b2cbe886c}" />
+    <FieldRef Name="GtIdeaOperationalNumber" ID="{28585ae1-e205-49a9-865e-00cb2c860fe0}" />
+    <FieldRef Name="GtIdeaRiskNumber" ID="{9f7444b0-2f69-4ad0-a347-2d85cedddebb}" />
+    <FieldRef Name="GtIdeaStrategicNumber" ID="{d8a940ba-d7ce-413a-ba26-2140f09a8c58}" />
+    <FieldRef Name="GtIdeaEconomicNumber" ID="{d04ec769-0834-467b-84bf-bba219819ff2}" />
+    <FieldRef Name="GtIdeaManualScore" ID="{15915e21-3ba3-4a39-8bf3-690b1cb044b5}" />
+  </FieldRefs>
+</Field>

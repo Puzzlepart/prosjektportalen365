@@ -25,10 +25,19 @@
           "manifest": "./src/extensions/ideaRegistration/manifest.json"
         }
       ]
+    },
+    "footer-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/footer/index.js",
+          "manifest": "./src/extensions/footer/manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
   "localizedResources": {
-    "PortfolioExtensionsStrings": "lib/loc/{locale}.js"
+    "PortfolioExtensionsStrings": "lib/loc/{locale}.js",
+    "SharedLibraryStrings": "node_modules/pp365-shared-library/lib/loc/{locale}.js"
   }
 }

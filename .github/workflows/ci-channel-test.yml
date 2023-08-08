@@ -1,0 +1,61 @@
+name: CI (channels/test)
+
+on:
+  push:
+    branches:
+      - releases/1.9
+    paths:
+      - "SharePointFramework/**"
+      - "Install/**"
+      - "Templates/**"
+      - .github/workflows/ci-channel-test.yml
+
+env:
+  CI_CREDENTIALS: ${{ secrets.CI_DEV_CREDENTIALS }}
+
+jobs:
+  build_release_package_test:
+    name: Build release package for test channel
+    runs-on: macos-latest
+    concurrency: 
+      group: ${{ github.ref }}_build_release_package_for_test_channel
+      cancel-in-progress: true
+    if: "!contains(github.event.head_commit.message, '[skip-ci]')"
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Set sha_short
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ vars.NODE_VERSION }}
+
+      - name: Run Install/Build-Release.ps1 in CI mode for channel test
+        run: Install/Build-Release.ps1 -CI -SkipBundle -Channel test
+        shell: pwsh
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: release-package-test
+          path: release
+    outputs:
+      sha_short: ${{ steps.vars.outputs.sha_short }}
+
+  upgrade_channel_test:
+    needs: [build_release_package_test]
+    name: Upgrade (test)
+    runs-on: macos-latest
+    if: "!contains(github.event.head_commit.message, '[skip-upgrade]')"
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: release-package-test
+          path: release
+
+      - name: Upgrade
+        run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI ${{ env.CI_CREDENTIALS }}
+        shell: powershell

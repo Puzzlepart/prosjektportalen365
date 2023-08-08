@@ -1,8 +1,8 @@
-<pnp:ListInstance Title="{resource:Lists_Projects_Title}" TemplateType="100" Url="{resource:Lists_Projects_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" ContentTypesEnabled="true" RemoveExistingContentTypes="false" EnableFolderCreation="false" EnableAttachments="false"
+<pnp:ListInstance Title="{resource:Lists_Projects_Title}" TemplateType="100" Url="{resource:Lists_Projects_Url}" EnableVersioning="true" Hidden="false" MinorVersionLimit="0" MaxVersionLimit="5000" ContentTypesEnabled="true" RemoveExistingContentTypes="false" EnableFolderCreation="false" EnableAttachments="false"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100805E9E4FEAAB4F0EABAB2600D30DB70C" Default="true" />
-        <pnp:ContentTypeBinding ContentTypeID="0x0100C4784EA80C45433792E60E1DD000C5B7" />
+        <pnp:ContentTypeBinding ContentTypeID="0x0100805E9E4FEAAB4F0EABAB2600D30DB70CBA" />
         <pnp:ContentTypeBinding ContentTypeID="0x01" Remove="true" />
     </pnp:ContentTypeBindings>
     <pnp:Views>
@@ -27,6 +27,8 @@
                 <FieldRef Name="GtBudgetLastReportDate" />
                 <FieldRef Name="GtProjectLifecycleStatus" />
                 <FieldRef Name="GtSiteUrl" />
+                <FieldRef Name="GtInstalledVersion" />
+                <FieldRef Name="GtCurrentVersion" />
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
             <Aggregations Value="Off" />

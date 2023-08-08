@@ -19,7 +19,6 @@ export function useExtensionsSection() {
   const onRenderRow = useRowRenderer({ selectedKeys, searchTerm })
   return {
     selection,
-    selectedCount: selectedKeys.length,
     items,
     columns,
     onSearch,

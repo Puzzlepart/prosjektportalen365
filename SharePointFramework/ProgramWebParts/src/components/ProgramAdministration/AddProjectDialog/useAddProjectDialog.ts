@@ -1,6 +1,5 @@
 import { useContext, useEffect } from 'react'
 import { ProgramAdministrationContext } from '../context'
-import { getHubSiteProjects } from '../data'
 import { DATA_LOADED, SET_SELECTED_TO_ADD } from '../reducer'
 import { useRowRenderer } from '../useRowRenderer'
 import { useSelectionList } from '../useSelectionList'
@@ -14,7 +13,8 @@ export const useAddProjectDialog = () => {
   })
 
   useEffect(() => {
-    getHubSiteProjects()
+    context.props.dataAdapter
+      .getHubSiteProjects()
       .then((availableProjects) =>
         context.dispatch(DATA_LOADED({ data: { availableProjects }, scope: 'AddProjectDialog' }))
       )
@@ -28,8 +28,7 @@ export const useAddProjectDialog = () => {
   const availableProjects = context.state.availableProjects.filter(
     (project) =>
       !context.state.childProjects.some((el) => el.SiteId === project.SiteId) &&
-      project.SiteId !== context.props.context.pageContext.site.id.toString() &&
-      project.SPWebURL
+      project.SiteId !== context.props.context.pageContext.site.id.toString()
   )
 
   const onRenderRow = useRowRenderer({

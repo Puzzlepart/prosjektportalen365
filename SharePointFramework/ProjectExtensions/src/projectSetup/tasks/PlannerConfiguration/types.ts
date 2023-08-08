@@ -1,4 +1,4 @@
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 
 export interface IPlannerPlan {
   title: string
@@ -48,8 +48,10 @@ export class TaskAttachment {
 export type TaskPreviewType = 'automatic' | 'noPreview' | 'checklist' | 'description' | 'reference'
 
 export interface ITaskDetails {
+  name?: string
   description?: string
   checklist?: string[]
+  labels?: string[]
   attachments?: TaskAttachment[]
   previewType?: TaskPreviewType
 }

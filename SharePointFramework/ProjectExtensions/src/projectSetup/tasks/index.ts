@@ -2,6 +2,8 @@ import { IProjectSetupData } from 'projectSetup'
 import { IBaseTask } from './@BaseTask'
 import { ApplyTemplate } from './ApplyTemplate'
 import { CopyListData } from './CopyListData'
+import { CustomActions } from './CustomActions'
+import { Hooks } from './Hooks'
 import { PreTask } from './PreTask'
 import { ProvisionSiteFields } from './ProvisionSiteFields'
 import { SetTaxonomyFields } from './SetTaxonomyFields'
@@ -15,13 +17,15 @@ const tasks: (new (data: IProjectSetupData) => IBaseTask)[] = [
   ProvisionSiteFields,
   ApplyTemplate,
   SetTaxonomyFields,
-  CopyListData
+  CopyListData,
+  CustomActions,
+  Hooks
 ]
 
 /**
- * Get tasks
+ * Get tasks to run for project setup.
  *
- * @param data Data
+ * @param data Data to initialize tasks with.
  */
 export function getTasks(data: IProjectSetupData) {
   return tasks.map((ctor) => new ctor(data))

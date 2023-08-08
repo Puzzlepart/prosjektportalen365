@@ -1,8 +1,10 @@
-import { stringIsNullOrEmpty } from '@pnp/common'
-import { List, sp, Web } from '@pnp/sp'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import { IListProperties } from './IListProperties'
 import { ProjectTemplate } from './ProjectTemplate'
 import { UserSelectableObject } from './UserSelectableObject'
+import { IWeb } from '@pnp/sp/webs'
+import { IList } from '@pnp/sp/lists'
+import { SPFI } from '@pnp/sp'
 
 export interface IContentConfigSPItem {
   ContentTypeId: string
@@ -27,13 +29,13 @@ export enum ContentConfigType {
  * @model ContentConfig
  */
 export class ContentConfig extends UserSelectableObject {
-  public plannerTitle: string
   public sourceListProps: IListProperties = {}
   public destListProps: IListProperties = {}
-  private _sourceList: string
-  private _destinationList: string
+  public plannerTitle: string
+  private _sourceListName: string
+  private _destinationListName: string
 
-  constructor(private _spItem: IContentConfigSPItem, public web: Web) {
+  constructor(private _spItem: IContentConfigSPItem, public web: IWeb, private _sp?: SPFI) {
     super(
       _spItem.Id,
       _spItem.Title,
@@ -42,9 +44,9 @@ export class ContentConfig extends UserSelectableObject {
       _spItem.GtLccLocked,
       _spItem.GtLccHidden
     )
-    this._sourceList = _spItem.GtLccSourceList
-    this._destinationList = _spItem.GtLccDestinationList
-    this.plannerTitle = _spItem.GtPlannerName
+    this.plannerTitle = _spItem.GtPlannerName ?? _spItem.Title
+    this._sourceListName = _spItem.GtLccSourceList
+    this._destinationListName = _spItem.GtLccDestinationList
   }
 
   /**
@@ -80,24 +82,22 @@ export class ContentConfig extends UserSelectableObject {
     return !stringIsNullOrEmpty(this._spItem.GtLccFields) ? this._spItem.GtLccFields.split(',') : []
   }
 
-  public get sourceList(): List {
-    return this.web.lists.getByTitle(this._sourceList)
+  public get sourceList(): IList {
+    return this.web.lists.getByTitle(this._sourceListName)
   }
 
-  public get destList(): List {
-    return sp.web.lists.getByTitle(this._destinationList)
+  public get destList(): IList {
+    return this._sp.web.lists.getByTitle(this._destinationListName)
   }
 
   public async load() {
     this.sourceListProps = await this.sourceList
       .select('Title', 'ListItemEntityTypeFullName', 'ItemCount', 'BaseTemplate')
-      .expand('RootFolder')
-      .get<IListProperties>()
+      .expand('RootFolder')<IListProperties>()
     if (this.type === ContentConfigType.List) {
       this.destListProps = await this.destList
         .select('Title', 'ListItemEntityTypeFullName', 'ItemCount', 'BaseTemplate')
-        .expand('RootFolder')
-        .get<IListProperties>()
+        .expand('RootFolder')<IListProperties>()
     }
   }
 }

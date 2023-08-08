@@ -1,0 +1,3 @@
+<pnp:ListInstance Title="Prosjektstatusvedlegg" Description="" DocumentTemplate="{site}/Prosjektstatusvedlegg/Forms/template.dotx" TemplateType="101" Url="Prosjektstatusvedlegg" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="500" DraftVersionVisibility="0" Hidden="true" EnableAttachments="false"
+	xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+</pnp:ListInstance>

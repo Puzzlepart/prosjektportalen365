@@ -4,11 +4,9 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import '@pnp/polyfill-ie11'
 import { IProjectTimelineProps, ProjectTimeline } from 'components/ProjectTimeline'
 import '@fluentui/react/dist/css/fabric.min.css'
-import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
-
+import { BaseProjectWebPart } from '../@baseProjectWebPart'
 import * as strings from 'ProjectWebPartsStrings'
 import { format } from '@fluentui/react'
 

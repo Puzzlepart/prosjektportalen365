@@ -1,4 +1,4 @@
-import { getObjectValue } from 'pp365-shared/lib/helpers/getObjectValue'
+import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
 import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { ExecuteJsomQuery } from 'spfx-jsom'
@@ -23,7 +23,7 @@ export class SetTaxonomyFields extends BaseTask {
       } = params
       await ExecuteJsomQuery(jsomContext, [{ clientObject: defaultTermStore, exps: 'Id' }])
       this.logInformation(`Retrieved ID ${defaultTermStore.get_id()} for default term store`)
-      const termSetIds = getObjectValue(
+      const termSetIds = get(
         params.templateSchema,
         'Parameters.TermSetIds',
         params.properties.termSetIds

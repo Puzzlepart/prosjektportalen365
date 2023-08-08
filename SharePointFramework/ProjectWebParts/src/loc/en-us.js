@@ -54,6 +54,8 @@ define([], function () {
     IdeaProcessingTitle: 'Idea Processsing',
     IdeaProcessingUrlTitle: 'IdeaProcesssing',
     IdeaProjectDataTitle: 'ProjectData',
+    IdeaConfigurationTitle: 'Idékonfigurasjon',
+    IdeaConfigurationDescription: 'Hvilken konfigurasjon skal brukes for synkroniser av idéer?',
     LastPublishedStatusreport: 'Go to last published status report',
     ListNameFieldLabel: 'List name',
     ListSectionDataErrorMessage: 'An error occurred while retrieving data for the section. Is it configured correctly? ',

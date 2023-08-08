@@ -1,37 +1,37 @@
 {
-    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-    "id": "d156652b-9121-47af-89ae-1fe8427c53da",
-    "alias": "ProjectTimelineWebPart",
-    "componentType": "WebPart",
-    "version": "1.7.3",
-    "manifestVersion": 2,
-    "requiresCustomScript": false,
-    "hiddenFromToolbox": true,
-    "supportedHosts": [
-        "SharePointWebPart"
-    ],
-    "preconfiguredEntries": [
-        {
-            "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
-            "group": {
-                "default": "Other"
-            },
-            "title": {
-                "default": "Prosjekttidslinje"
-            },
-            "description": {
-                "default": " "
-            },
-            "officeFabricIconFontName": "TimelineDelivery",
-            "properties": {
-                "listName": "Tidslinjeinnhold",
-                "showTimeline": true,
-                "showTimelineListCommands": true,
-                "showTimelineList": true,
-                "showProjectDeliveries": false,
-                "projectDeliveriesListName": "Prosjektleveranser",
-                "configItemTitle": "Prosjektleveranse"
-            }
-        }
-    ]
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "d156652b-9121-47af-89ae-1fe8427c53da",
+  "alias": "ProjectTimelineWebPart",
+  "componentType": "WebPart",
+  "version": "1.9.0",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "hiddenFromToolbox": true,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Prosjekttidslinje"
+      },
+      "description": {
+        "default": " "
+      },
+      "officeFabricIconFontName": "TimelineDelivery",
+      "properties": {
+        "listName": "Tidslinjeinnhold",
+        "showTimeline": true,
+        "showTimelineListCommands": true,
+        "showTimelineList": true,
+        "showProjectDeliveries": false,
+        "projectDeliveriesListName": "Prosjektleveranser",
+        "configItemTitle": "Prosjektleveranse"
+      }
+    }
+  ]
 }

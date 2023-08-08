@@ -6,7 +6,7 @@ import { Header } from './Header'
 import styles from './ProjectStatus.module.scss'
 import { Sections } from './Sections'
 import { IProjectStatusProps } from './types'
-import { UnpublishedStatusReportInfo } from './UnpublishedStatusReportInfo'
+import { UserMessages } from './UserMessages'
 
 export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
   const ctx = useProjectStatus(props)
@@ -15,13 +15,18 @@ export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
       <div className={styles.root}>
         <Commands />
         <div className={styles.container}>
-          <UnpublishedStatusReportInfo />
+          <UserMessages />
           <Header />
           <Sections />
         </div>
       </div>
     </ProjectStatusContext.Provider>
   )
+}
+
+ProjectStatus.defaultProps = {
+  persistSectionDataAttachmentFileName: 'PersistedSectionDataJson.json',
+  snapshotAttachmentFileName: 'Snapshot.png'
 }
 
 export * from './types'

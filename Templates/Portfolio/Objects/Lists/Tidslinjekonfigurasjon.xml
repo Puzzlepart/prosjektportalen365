@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_Timeline_Configuration_Title}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Timeline_Configuration_Url}" Hidden="false" RemoveExistingContentTypes="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false"
+<pnp:ListInstance Title="{resource:Lists_Timeline_Configuration_Title}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Timeline_Configuration_Url}" Hidden="true" RemoveExistingContentTypes="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentTypeBindings>
         <pnp:ContentTypeBinding ContentTypeID="0x0100DAFD9901A59F445EB29B2CE3D663A87D" Default="true" />
@@ -26,7 +26,7 @@
             <JSLink>clienttemplates.js</JSLink>
         </View>
     </pnp:Views>
-    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
+    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prosjekt</pnp:DataValue>
@@ -80,6 +80,17 @@
             <pnp:DataValue FieldName="GtTimelineCategory">Leveranse</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowElementPortfolio">1</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowElementProgram">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTimelineFilter">1</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Prosjektleveranse</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHexColor">#ff9933</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHexColorText">#ffffff</pnp:DataValue>
+            <pnp:DataValue FieldName="GtElementType">Bar</pnp:DataValue>
+            <pnp:DataValue FieldName="GtTimelineCategory">Leveranse</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowElementPortfolio">0</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowElementProgram">0</pnp:DataValue>
             <pnp:DataValue FieldName="GtTimelineFilter">1</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>

@@ -5,7 +5,8 @@ import { IOpportunityMatrixProps } from './types'
 import { useOpportunityMatrixConfiguration } from './useOpportunityMatrixConfiguration'
 
 /**
- * Component logic hook for `OpportunityMatrix`
+ * Component logic hook for `OpportunityMatrix`. Builds the matrix elements and configuration
+ * for the matrix.
  *
  * @param props Props
  */
@@ -13,6 +14,11 @@ export function useOpportunityMatrix(props: IOpportunityMatrixProps) {
   const [showPostAction, setShowPostAction] = useState(false)
   const configuration = useOpportunityMatrixConfiguration(props)
 
+  /**
+   * Get the matrix elements for a given cell.
+   *
+   * @param cell Matrix cell
+   */
   function getElementsForCell(cell: IMatrixCell) {
     const elements = props.items
       .filter((item) => cell.y === item.probability && cell.x === item.consequence)

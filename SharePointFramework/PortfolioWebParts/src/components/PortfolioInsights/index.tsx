@@ -1,6 +1,6 @@
 import { ChartData, ChartDataItem } from 'models'
 import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar'
-import { PortfolioOverviewView } from 'pp365-shared/lib/models'
+import { PortfolioOverviewView } from 'pp365-shared-library/lib/models'
 import React, { Component } from 'react'
 import Chart from './Chart'
 import { Commands } from './Commands'
@@ -102,7 +102,7 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
    * @param view View
    */
   private async _onViewChanged(view: PortfolioOverviewView) {
-    const items = await this.props.dataAdapter.fetchDataForView(
+    const { items } = await this.props.dataAdapter.fetchDataForView(
       view,
       this.state.configuration,
       this.props.pageContext.site.id.toString()

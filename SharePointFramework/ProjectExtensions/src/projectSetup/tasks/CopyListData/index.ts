@@ -1,18 +1,25 @@
-import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
-import { sp, Web } from '@pnp/sp'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import { IProjectSetupData } from 'projectSetup'
 import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
-import { SPField } from 'pp365-shared/lib/models/SPField'
+import { SPField } from 'pp365-shared-library/lib/models/SPField'
 import { IPlannerTaskSPItem, ContentConfig, ContentConfigType } from '../../../models'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
-import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
+import { OnProgressCallbackFunction } from '../types'
 import {
   ITaskDetails,
   PlannerConfiguration,
   TaskAttachment,
   TaskPreviewType
 } from '../PlannerConfiguration'
+import _ from 'underscore'
+import { IWeb } from '@pnp/sp/webs'
+import '@pnp/sp/items/get-all'
+import '@pnp/sp/webs'
+import '@pnp/sp/lists'
+import '@pnp/sp/items'
+import '@pnp/sp/batching'
+import { createBatch } from '@pnp/sp/batching'
 
 export class CopyListData extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -20,10 +27,15 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Execute CopyListData.
+   * Execute `CopyListData`.
    *
    * Creates a Planner plan for the Microsoft 365 group, then loops
-   * through all list data configurations.
+   * through all list data configurations. For each configuration,
+   * it will either create a Planner plan or copy list items based
+   * on the configuration type.
+   *
+   * If there's no Planner configuration, it will create a default
+   * one.
    *
    * @param params Task parameters
    * @param onProgress On progress function
@@ -32,15 +44,9 @@ export class CopyListData extends BaseTask {
     params: IBaseTaskParams,
     onProgress: OnProgressCallbackFunction
   ): Promise<IBaseTaskParams> {
-    this.onProgress = onProgress
+    super.initExecute(params, onProgress)
     try {
-      await new PlannerConfiguration(null, this.data, {}).ensurePlan(
-        {
-          title: params.context.pageContext.web.title,
-          owner: params.context.pageContext.legacyPageContext.groupId
-        },
-        false
-      )
+      await this.createDefaultPlannerPlan(params)
       for (let i = 0; i < this.data.selectedContentConfig.length; i++) {
         const contentConfig = this.data.selectedContentConfig[i]
         await contentConfig.load()
@@ -48,43 +54,40 @@ export class CopyListData extends BaseTask {
         switch (contentConfig.type) {
           case ContentConfigType.Planner:
             {
-              const items = await this._getSourceItems<IPlannerTaskSPItem>(contentConfig, [
-                'Title',
-                'GtDescription',
-                'GtCategory',
-                'GtChecklist',
-                'GtAttachments',
-                'GtPlannerPreviewType'
-              ])
-              const configuration = items.reduce((obj, item) => {
-                obj[item.GtCategory] = obj[item.GtCategory] || {}
-                const taskDetails: ITaskDetails = {}
-                taskDetails.previewType = 'automatic'
-                if (!stringIsNullOrEmpty(item.GtDescription)) {
-                  taskDetails.description = item.GtDescription
+              const items = (
+                await this._getSourceItems<IPlannerTaskSPItem>(contentConfig, [
+                  'Title',
+                  'GtDescription',
+                  'GtCategory',
+                  'GtSortOrder',
+                  'GtChecklist',
+                  'GtPlannerTags',
+                  'GtAttachments',
+                  'GtPlannerPreviewType'
+                ])
+              ).sort((a, b) => {
+                if (a.GtCategory === b.GtCategory) {
+                  return b.GtSortOrder - a.GtSortOrder
                 }
-                if (!stringIsNullOrEmpty(item.GtChecklist)) {
-                  taskDetails.checklist = item.GtChecklist.split(';')
-                }
-                if (!stringIsNullOrEmpty(item.GtAttachments)) {
-                  try {
-                    taskDetails.attachments = item.GtAttachments.split('|')
-                      .map((str) => new TaskAttachment(str))
-                      .filter((attachment) => !stringIsNullOrEmpty(attachment.url))
-                  } catch (error) {}
-                }
-                if (!stringIsNullOrEmpty(item.GtPlannerPreviewType)) {
-                  let m: RegExpExecArray
-                  if ((m = /\(([^)]+)\)/.exec(item.GtPlannerPreviewType)) !== null) {
-                    taskDetails.previewType = (m[1] ?? 'automatic') as TaskPreviewType
-                  }
-                }
-                obj[item.GtCategory][item.Title] = taskDetails
-                return obj
-              }, {})
-              await new PlannerConfiguration(contentConfig.plannerTitle, this.data, configuration, [
-                'Metodikk'
-              ]).execute(params, onProgress)
+              })
+
+              const labels = _.uniq(
+                _.flatten(
+                  items.map((item) => {
+                    if (!stringIsNullOrEmpty(item.GtPlannerTags)) {
+                      return item.GtPlannerTags.split(';')
+                    }
+                  })
+                )
+              ).filter((label) => label)
+
+              const configuration = this.parsePlannerConfiguration(items)
+              await new PlannerConfiguration(
+                contentConfig.plannerTitle,
+                this.data,
+                configuration,
+                labels
+              ).execute(params, onProgress)
             }
             break
           case ContentConfigType.List:
@@ -103,7 +106,69 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Get source items
+   * Parses Planner configuration from Planner task items.
+   *
+   * @param items Planner task items
+   */
+  private parsePlannerConfiguration(items: IPlannerTaskSPItem[]) {
+    return items.reduce((obj, item) => {
+      obj[item.GtCategory] = obj[item.GtCategory] || {}
+      const taskDetails: ITaskDetails = {}
+      taskDetails.previewType = 'automatic'
+      if (!stringIsNullOrEmpty(item.Title)) {
+        taskDetails.name = item.Title
+      }
+      if (!stringIsNullOrEmpty(item.GtDescription)) {
+        taskDetails.description = item.GtDescription
+      }
+      if (!stringIsNullOrEmpty(item.GtChecklist)) {
+        taskDetails.checklist = item.GtChecklist.replace(/\r?\n|\r/g, '').split(';')
+      }
+      if (!stringIsNullOrEmpty(item.GtPlannerTags)) {
+        taskDetails.labels = item.GtPlannerTags.replace(/\r?\n|\r/g, '').split(';')
+      }
+      if (!stringIsNullOrEmpty(item.GtAttachments)) {
+        try {
+          taskDetails.attachments = item.GtAttachments.replace(/\r?\n|\r/g, '')
+            .split('|')
+            .map((str) => new TaskAttachment(str))
+            .filter((attachment) => !stringIsNullOrEmpty(attachment.url))
+        } catch (error) {}
+      }
+      if (!stringIsNullOrEmpty(item.GtPlannerPreviewType)) {
+        let m: RegExpExecArray
+        if ((m = /\(([^)]+)\)/.exec(item.GtPlannerPreviewType)) !== null) {
+          taskDetails.previewType = (m[1] ?? 'automatic') as TaskPreviewType
+        }
+      }
+      obj[item.GtCategory][item.Title] = taskDetails
+      return obj
+    }, {})
+  }
+
+  /**
+   * Creates a default Planner plan if there's no Planner configuration. This
+   * makes sure we have a Planner web part that doesn't throw errors.
+   *
+   * @param params Task parameters
+   */
+  private async createDefaultPlannerPlan(params: IBaseTaskParams) {
+    if (!_.any(this.data.selectedContentConfig, (c) => c.type === ContentConfigType.Planner)) {
+      await new PlannerConfiguration(null, this.data, {}).ensurePlan(
+        {
+          title: params.context.pageContext.web.title,
+          owner: params.context.pageContext.legacyPageContext.groupId
+        },
+        params.context.pageContext,
+        false
+      )
+    }
+  }
+
+  /**
+   * Get all items from the `config.sourceList`. First it will try to get
+   * all items with the `TaxCatchAll` field, if that fails it will try to
+   * get all items without the `TaxCatchAll` field.
    *
    * @param config List content config
    * @param fields Fields
@@ -124,23 +189,24 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Get source fields
+   * Get fields from the `config.sourceList` list.
    *
    * @param config Content config
    */
   private async _getSourceFields(config: ContentConfig): Promise<SPField[]> {
     try {
-      return await config.sourceList.fields.select(...Object.keys(new SPField())).get<SPField[]>()
+      return await config.sourceList.fields.select(...Object.keys(new SPField()))<SPField[]>()
     } catch (error) {
       return []
     }
   }
 
   /**
-   * Process list items
+   * Process list items in batches the size of the `batchChunkSize` parameter.
+   * This is to prevent throttling, and to increase performance.
    *
    * @param config Content config
-   * @param batchChunkSize Batch chunk size (defaults to 25)
+   * @param batchChunkSize Batch chunk size (defaults to `25`)
    */
   private async _processListItems(config: ContentConfig, batchChunkSize = 25) {
     try {
@@ -162,8 +228,9 @@ export class CopyListData extends BaseTask {
         this._getProperties(config.fields, itm, sourceFields)
       )
 
+      const list = config.destList
       for (let i = 0, j = 0; i < itemsToAdd.length; i += batchChunkSize, j++) {
-        const batch = sp.createBatch()
+        const [batch, execute] = createBatch(list)
         const batchItems = itemsToAdd.slice(i, i + batchChunkSize)
         this.logInformation(`Processing batch ${j + 1} with ${batchItems.length} items`, {})
         this.onProgress(
@@ -171,12 +238,8 @@ export class CopyListData extends BaseTask {
           format(strings.ProcessListItemText, j + 1, batchItems.length),
           'List'
         )
-        batchItems.forEach((item) =>
-          config.destList.items
-            .inBatch(batch)
-            .add(item, config.destListProps.ListItemEntityTypeFullName)
-        )
-        await batch.execute()
+        batchItems.forEach((properties) => list.items.using(batch).add(properties))
+        await execute()
       }
     } catch (error) {
       throw error
@@ -184,18 +247,18 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Get file contents
+   * Get file contents for the specified files.
    *
    * @param web Web
    * @param files Files to get content for
    */
-  private async _getFileContents(web: Web, files: any[]): Promise<any[]> {
+  private async _getFileContents(web: IWeb, files: any[]): Promise<any[]> {
     try {
       const fileContents = await Promise.all(
         files.map(
           (file) =>
             new Promise<any>(async (resolve) => {
-              const blob = await web.getFileByServerRelativeUrl(file.FileRef).getBlob()
+              const blob = await web.getFileByServerRelativePath(file.FileRef).getBlob()
               file.Blob = blob
               resolve(file)
             })
@@ -230,9 +293,9 @@ export class CopyListData extends BaseTask {
           'Documentation'
         )
         return chain.then(() =>
-          sp.web
-            .getFolderByServerRelativeUrl(config.destListProps.RootFolder.ServerRelativeUrl)
-            .folders.add(folderServerRelUrl)
+          this.params.web
+            .getFolderByServerRelativePath(config.destListProps.RootFolder.ServerRelativeUrl)
+            .folders.addUsingPath(folderServerRelUrl)
         )
       }, Promise.resolve())
       return
@@ -242,7 +305,7 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Process files
+   * Process files.
    *
    * @param config Content config
    */
@@ -259,8 +322,7 @@ export class CopyListData extends BaseTask {
 
       const spItems = await config.sourceList.items
         .expand('Folder')
-        .select('Title', 'LinkFilename', 'FileRef', 'FileDirRef', 'Folder/ServerRelativeUrl')
-        .getAll()
+        .select('Title', 'LinkFilename', 'FileRef', 'FileDirRef', 'Folder/ServerRelativeUrl')()
 
       const folders: string[] = []
       const files: any[] = []
@@ -287,9 +349,9 @@ export class CopyListData extends BaseTask {
             'Documentation'
           )
           const filename = file.LinkFilename
-          const fileAddResult = await sp.web
-            .getFolderByServerRelativeUrl(destFolderUrl)
-            .files.add(filename, file.Blob, true)
+          const fileAddResult = await this.params.web
+            .getFolderByServerRelativePath(destFolderUrl)
+            .files.addUsingPath(filename, file.Blob, { Overwrite: true })
           filesCopied.push(fileAddResult)
           this.logInformation(`Successfully copied file ${file.LinkFilename}`)
         } catch (err) {}
@@ -301,14 +363,22 @@ export class CopyListData extends BaseTask {
   }
 
   /**
-   * Get item properties
+   * Get item properties from the source items. This is used to create the destination items
+   * with the properties specified in the config list. For the taxonomy fields, the text field
+   * name for the term is also retrieved and added to the destination item. The term field is
+   * storing internal names longer than 32 characters, which is not allowed for field names so
+   * we need to substring the name to 32 characters.
    *
    * @param fields Fields
    * @param sourceItem Source item
    * @param sourceFields Source fields
    */
-  private _getProperties(fields: string[], sourceItem: TypedHash<any>, sourceFields: SPField[]) {
-    return fields.reduce((obj: TypedHash<any>, fieldName: string) => {
+  private _getProperties(
+    fields: string[],
+    sourceItem: Record<string, any>,
+    sourceFields: SPField[]
+  ) {
+    return fields.reduce((obj: Record<string, any>, fieldName: string) => {
       const fieldValue = sourceItem[fieldName]
       if (fieldValue) {
         const [field] = sourceFields.filter((fld) => fld.InternalName === fieldName)
@@ -322,9 +392,8 @@ export class CopyListData extends BaseTask {
                     (tax: any) => tax.ID === fieldValue.WssId
                   )
                   if (taxonomyFieldValue) {
-                    obj[
-                      textField.InternalName
-                    ] = `-1;#${taxonomyFieldValue.Term}|${fieldValue.TermGuid}`
+                    const textFieldName = textField.InternalName.substring(0, 32)
+                    obj[textFieldName] = `-1;#${taxonomyFieldValue.Term}|${fieldValue.TermGuid}`
                   }
                 }
               }

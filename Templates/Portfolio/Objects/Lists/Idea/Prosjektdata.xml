@@ -1,0 +1,35 @@
+<pnp:ListInstance Title="{resource:Lists_ProjectData_Title}" TemplateType="100" Url="{resource:Lists_ProjectData_Url}" Hidden="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" ContentTypesEnabled="true" RemoveExistingContentTypes="false" EnableFolderCreation="false" EnableAttachments="false"
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+    <pnp:ContentTypeBindings>
+        <pnp:ContentTypeBinding ContentTypeID="0x0100805E9E4FEAAB4F0EABAB2600D30DB70C" Default="true" />
+        <pnp:ContentTypeBinding ContentTypeID="0x01" Remove="true" />
+    </pnp:ContentTypeBindings>
+    <pnp:Views>
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_ProjectData_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+            <ViewFields>
+                <FieldRef Name="ID" />
+                <FieldRef Name="Title" Hidden="true" />
+                <FieldRef Name="GtProjectFinanceName" />
+                <FieldRef Name="GtProjectNumber" />
+                <FieldRef Name="GtArchiveReference" />
+                <FieldRef Name="GtProjectPhase" />
+                <FieldRef Name="GtProjectManager" />
+                <FieldRef Name="GtProjectOwner" />
+                <FieldRef Name="GtProjectSupport" />
+                <FieldRef Name="GtGainsResponsible" />
+                <FieldRef Name="GtStartDate" />
+                <FieldRef Name="GtEndDate" />
+                <FieldRef Name="GtProjectGoals" />
+                <FieldRef Name="GtBudgetTotal" />
+                <FieldRef Name="GtCostsTotal" />
+                <FieldRef Name="GtProjectForecast" />
+                <FieldRef Name="GtBudgetLastReportDate" />
+                <FieldRef Name="GtProjectLifecycleStatus" />
+                <FieldRef Name="GtSiteUrl" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">100</RowLimit>
+            <Aggregations Value="Off" />
+            <JSLink>clienttemplates.js</JSLink>
+        </View>
+    </pnp:Views>
+</pnp:ListInstance>

@@ -1,7 +1,8 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
-import { TypedHash } from '@pnp/common'
 import { IEntityField } from 'sp-entityportal-service'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
+
+type ProjectPropertyModelType = 'user' | 'usermulti' | 'taxonomyfieldtypemulti' | 'url'
 
 export class ProjectPropertyModel {
   /**
@@ -27,7 +28,7 @@ export class ProjectPropertyModel {
   /**
    * Type of the field
    */
-  public type?: string
+  public type?: ProjectPropertyModelType
 
   /**
    * Creates an instance of ProjectPropertyModel
@@ -40,7 +41,7 @@ export class ProjectPropertyModel {
     this.displayName = field.Title
     this.description = field.Description
     this.value = value
-    this.type = field.TypeAsString
+    this.type = field.TypeAsString.toLowerCase() as ProjectPropertyModelType
   }
 
   public get empty() {
@@ -67,5 +68,5 @@ export interface IProjectPropertyProps extends React.HTMLAttributes<HTMLElement>
   /**
    * A hash object of fields to show for external users
    */
-  showFieldExternal?: TypedHash<boolean>
+  showFieldExternal?: Record<string, boolean>
 }

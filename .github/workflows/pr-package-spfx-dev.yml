@@ -3,193 +3,27 @@ on:
   pull_request:
     types: [assigned, opened, synchronize, reopened]
     branches:
-      - main
-      - dev
+      - releases/*
     paths:
-      - "SharePointFramework/**"
+      - SharePointFramework/**
+      - .github/workflows/pr-package-spfx-dev.yml
 jobs:
-  build_shared:
-    name: Build @Shared
+  build:
+    name: Rush Install and Rebuild
     runs-on: ubuntu-latest
     concurrency: 
-      group: ${{ github.ref }}_build_shared
+      group: ${{ github.ref }}_rush_rebuild
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
-
-      - name: Setup Node.js 16.18.0
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 16.18.0
-
-      - name: Install npm packages
-        working-directory: ./SharePointFramework/@Shared
-        run: |
-          npm ci --no-audit --no-fund --loglevel=error
-
-      - name: Run npm run-script build
-        working-directory: ./SharePointFramework/@Shared
-        run: |
-          npm run-script build
-
-      - name: Run 'npm run-script lint'
-        working-directory: ./SharePointFramework/@Shared
-        run: |
-          npm run-script lint
-  
-  package_portfolioextensions:
-    name: Package PortfolioExtensions
-    runs-on: ubuntu-latest
-    concurrency: 
-      group: ${{ github.ref }}_package_portfolioextensions
-      cancel-in-progress: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.head_ref }}
-
-      - name: Setup Node.js 16.18.0
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.18.0
-
-      - name: Install npm packages
-        working-directory: ./SharePointFramework/PortfolioExtensions
-        run: |
-          npm ci --no-audit --no-fund --loglevel=error
-
-      - name: Run 'npm run-script package:debug'
-        working-directory: ./SharePointFramework/PortfolioExtensions
-        run: |
-          npm run package:debug
-
-      - name: Run 'npm run-script lint'
-        working-directory: ./SharePointFramework/PortfolioExtensions
-        run: |
-          npm run-script lint
-
-  package_portfoliowebparts:
-    name: Package PortfolioWebParts
-    runs-on: ubuntu-latest
-    concurrency: 
-      group: ${{ github.ref }}_package_portfoliowebparts
-      cancel-in-progress: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.head_ref }}
-
-      - name: Setup Node.js 16.18.0
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.18.0
-
-      - name: Install npm packages
-        working-directory: ./SharePointFramework/PortfolioWebParts
-        run: |
-          npm ci --no-audit --no-fund --loglevel=error
-
-      - name: Run 'npm run-script package:debug'
-        working-directory: ./SharePointFramework/PortfolioWebParts
-        run: |
-          npm run-script package:debug
-
-      - name: Run 'npm run-script lint'
-        working-directory: ./SharePointFramework/PortfolioWebParts
-        run: |
-          npm run-script lint
-
-  package_programwebparts:
-    name: Package ProgramWebParts
-    runs-on: ubuntu-latest
-    concurrency: 
-      group: ${{ github.ref }}_package_programwebparts
-      cancel-in-progress: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.head_ref }}
-
-      - name: Setup Node.js 16.18.0
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.18.0
-
-      - name: Install npm packages
-        working-directory: ./SharePointFramework/ProgramWebParts
-        run: |
-          npm ci --no-audit --no-fund --loglevel=error
-
-      - name: Run 'npm run-script package:debug'
-        working-directory: ./SharePointFramework/ProgramWebParts
-        run: |
-          npm run-script package:debug
-
-      - name: Run 'npm run-script lint'
-        working-directory: ./SharePointFramework/ProgramWebParts
-        run: |
-          npm run-script lint
-
-  package_projectextensions:
-    name: Package ProjectExtensions
-    runs-on: ubuntu-latest
-    concurrency: 
-      group: ${{ github.ref }}_package_projectextensions
-      cancel-in-progress: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.head_ref }}
-
-      - name: Setup Node.js 16.18.0
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.18.0
-
-      - name: Install npm packages
-        working-directory: ./SharePointFramework/ProjectExtensions
-        run: |
-          npm ci --no-audit --no-fund --loglevel=error
-
-      - name: Run 'npm run-script package:debug'
-        working-directory: ./SharePointFramework/ProjectExtensions
-        run: |
-          npm run package:debug
-
-      - name: Run 'npm run-script lint'
-        working-directory: ./SharePointFramework/ProjectExtensions
-        run: |
-          npm run-script lint
-
-  package_projectwebparts:
-    name: Package ProjectWebParts
-    runs-on: ubuntu-latest
-    concurrency: 
-      group: ${{ github.ref }}_package_projectwebparts
-      cancel-in-progress: true
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.head_ref }}
-
-      - name: Setup Node.js 16.18.0
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.18.0
-
-      - name: Install npm packages
-        working-directory: ./SharePointFramework/ProjectWebParts
-        run: |
-          npm ci --no-audit --no-fund --loglevel=error
-
-      - name: Run 'npm run-script package:debug'
-        working-directory: ./SharePointFramework/ProjectWebParts
-        run: |
-          npm run-script package:debug
-
-      - name: Run 'npm run-script lint'
-        working-directory: ./SharePointFramework/ProjectWebParts
-        run: |
-          npm run-script lint
+          node-version: ${{ vars.NODE_VERSION }}
+      - name: Rush Install
+        run: node common/scripts/install-run-rush.js install
+      - name: Rush Lint
+        run: node common/scripts/install-run-rush.js lint
+      - name: Rush Rebuild
+        run: node common/scripts/install-run-rush.js rebuild --verbose

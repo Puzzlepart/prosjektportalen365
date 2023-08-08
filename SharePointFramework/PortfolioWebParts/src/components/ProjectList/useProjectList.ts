@@ -1,14 +1,15 @@
 /* eslint-disable prefer-spread */
 import { format, IButtonProps, IColumn } from '@fluentui/react'
-import { ProjectListModel } from 'models'
-import { sortAlphabetically } from 'pp365-shared/lib/helpers'
+import { sortAlphabetically } from 'pp365-shared-library/lib/util/sortAlphabetically'
 import _ from 'underscore'
 import { IProjectListProps } from './types'
 import { useProjectListDataFetch } from './useProjectListDataFetch'
 import { useProjectListState } from './useProjectListState'
+import { ProjectListModel } from 'pp365-shared-library/lib/models'
 
 /**
- * Component logic hook for `ProjectList`.
+ * Component logic hook for `ProjectList`. This hook is responsible for
+ * fetching data, sorting, filtering and other logic.
  *
  * @param props Props
  */
@@ -31,7 +32,7 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   /**
-   * Get card ations
+   * Get card ations. For now only `ON_SELECT_PROJECT` is handled.
    *
    * @param project - Project
    */
@@ -46,7 +47,7 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   /**
-   * On execute card action
+   * On execute card action. For now only `ON_SELECT_PROJECT` is handled.
    *
    * @param event - Event
    * @param project - Project
@@ -62,20 +63,21 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   /**
-   * Filter projects based on `selectedView` and `searchTerm`
+   * Filter projects based on the `filter` function from the `selectedView`
+   * and the `searchTerm`. Then sort the projects based on the `sort` state.
    *
    * @param projects - Projects
    */
   function filterProjets(projects: ProjectListModel[]) {
     return projects
-      .filter((project) => state.selectedView.filter(project))
+      .filter((project) => state.selectedView.filter(project, state))
       .filter((project) =>
         _.any(Object.keys(project), (key) => {
           const value = project[key]
           return (
             value &&
             typeof value === 'string' &&
-            value.toLowerCase().indexOf(state.searchTerm) !== -1
+            value.toLowerCase().indexOf(state.searchTerm.toLowerCase()) !== -1
           )
         })
       )
@@ -90,13 +92,13 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   /**
-   * On search callback
+   * On search callback handler
    *
    * @param _event - React change event
    * @param searchTerm - Search term
    */
   function onSearch(_event: React.ChangeEvent<HTMLInputElement>, searchTerm: string) {
-    setState({ searchTerm: searchTerm.toLowerCase() })
+    setState({ searchTerm })
   }
 
   const projects = state.isDataLoaded ? filterProjets(state.projects) : state.projects
@@ -110,7 +112,10 @@ export const useProjectList = (props: IProjectListProps) => {
     projects,
     views,
     getCardActions,
-    searchBoxPlaceholder: format(state.selectedView.searchBoxPlaceholder, projects.length),
+    searchBoxPlaceholder:
+      !state.isDataLoaded || _.isEmpty(state.projects)
+        ? ''
+        : format(state.selectedView.searchBoxPlaceholder, projects.length),
     onListSort,
     onSearch
   } as const

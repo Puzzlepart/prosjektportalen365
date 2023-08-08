@@ -1,5 +1,5 @@
 import { Shimmer } from '@fluentui/react/lib/Shimmer'
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
+import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
 import React, { FC } from 'react'
 import { ProgressDialog } from './ProgressDialog'
@@ -17,11 +17,11 @@ import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
 
 export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
-  const { state, setState, onSyncProperties } = useProjectInformation(props)
-  if (state.hidden) return null
+  const { context } = useProjectInformation(props)
+  if (context.state.hidden) return null
 
   return (
-    <ProjectInformationContext.Provider value={{ props, state, setState, onSyncProperties }}>
+    <ProjectInformationContext.Provider value={context}>
       <div className={styles.root}>
         <div className={styles.container}>
           <div className={styles.header}>
@@ -29,32 +29,33 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
               {props.title}
             </span>
           </div>
-          {state.error ? (
+          {context.state.error ? (
             <UserMessage
               className={styles.userMessage}
-              type={state.error.type}
-              text={state.error.message}
+              type={context.state.error.type}
+              text={context.state.error.message}
             />
           ) : (
             <Shimmer
-              isDataLoaded={state.isDataLoaded}
-              customElementsGroup={<CustomShimmerElementsGroup />}>
-              <ProjectProperties properties={state.properties} />
-              {!props.hideAllActions && state.message && (
-                <UserMessage className={styles.userMessage} {...state.message} />
+              isDataLoaded={context.state.isDataLoaded}
+              customElementsGroup={<CustomShimmerElementsGroup />}
+            >
+              <ProjectProperties properties={context.state.properties} />
+              {!props.hideAllActions && context.state.message && (
+                <UserMessage className={styles.userMessage} {...context.state.message} />
               )}
               <Actions />
               <ParentProjectsList />
               <ProjectStatusReport />
-              <ProgressDialog {...state.progress} />
+              <ProgressDialog {...context.state.progress} />
               <AllPropertiesPanel />
               <CreateParentDialog />
-              <SyncProjectDialog />
+              {props.page === 'Frontpage' && props.useIdeaProcessing && <SyncProjectDialog />}
             </Shimmer>
           )}
         </div>
       </div>
-      {state.confirmActionProps && <ConfirmDialog {...state.confirmActionProps} />}
+      {context.state.confirmActionProps && <ConfirmDialog {...context.state.confirmActionProps} />}
     </ProjectInformationContext.Provider>
   )
 }
@@ -66,9 +67,10 @@ ProjectInformation.defaultProps = {
   hideActions: [],
   hideAllActions: false,
   useFramelessButtons: false,
-  hideStatusReport: true,
-  hideParentProjects: true,
-  statusReportShowOnlyIcons: true
+  hideStatusReport: false,
+  hideParentProjects: false,
+  statusReportShowOnlyIcons: true,
+  useIdeaProcessing: false
 }
 
 export * from '../ProjectInformationPanel'

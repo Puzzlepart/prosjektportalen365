@@ -1,13 +1,12 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { LogLevel } from '@pnp/logging'
 import * as strings from 'ProjectExtensionsStrings'
-import { Web, WebProvisioner } from 'sp-js-provisioning'
+import { WebProvisioner } from 'sp-js-provisioning'
 import _ from 'underscore'
 import { IProjectSetupData } from '../../types'
 import { BaseTask, IBaseTaskParams } from '../@BaseTask'
-import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
-import { APPLY_TEMPLATE_STATUS_MAP } from './ApplyTemplateStatusMap'
-import { ApplyTemplateTaskError } from './ApplyTemplateTaskError'
+import { OnProgressCallbackFunction } from '../types'
+import { APPLY_TEMPLATE_STATUS_MAP, ApplyTemplateTaskError } from './types'
 
 export class ApplyTemplate extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -25,21 +24,14 @@ export class ApplyTemplate extends BaseTask {
     onProgress: OnProgressCallbackFunction
   ): Promise<IBaseTaskParams> {
     try {
-      const web = new Web(params.context.pageContext.web.absoluteUrl)
-      const activeLogLevel = (sessionStorage.DEBUG === '1' || DEBUG
-        ? LogLevel.Info
-        : LogLevel.Error) as any
-      const provisioner = new WebProvisioner(web).setup({
+      const activeLogLevel = (
+        sessionStorage.DEBUG === '1' || DEBUG ? LogLevel.Info : LogLevel.Error
+      ) as any
+      const provisioner = new WebProvisioner(params.web).setup({
         spfxContext: params.context,
         logging: {
           prefix: '(ProjectSetup) (ApplyTemplate)',
           activeLogLevel
-        },
-        spConfiguration: {
-          cacheExpirationIntervalMilliseconds: 5000,
-          defaultCachingStore: 'session',
-          enableCacheExpiration: true,
-          defaultCachingTimeoutSeconds: 60
         }
       })
       this.logInformation('Applying template to site', { parameters: params.templateParameters })
@@ -55,7 +47,8 @@ export class ApplyTemplate extends BaseTask {
       })
       this.logInformation('Applying extensions to site', { parameters: params.templateParameters })
       for (let i = 0; i < this.data.selectedExtensions.length; i++) {
-        const extensionSchema = await this.data.selectedExtensions[i].getSchema()
+        let extensionSchema = await this.data.selectedExtensions[i].getSchema()
+        extensionSchema = _.omit(extensionSchema, 'Hooks')
         onProgress(
           strings.ApplyingExtensionsText,
           format(strings.ApplyExtensionText, this.data.selectedExtensions[i].text),

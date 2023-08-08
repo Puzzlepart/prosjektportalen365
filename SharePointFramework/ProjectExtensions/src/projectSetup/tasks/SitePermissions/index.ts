@@ -1,11 +1,12 @@
-import { CamlQuery, SiteUserProps } from '@pnp/sp'
 import SPDataAdapter from 'data/SPDataAdapter'
 import strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { isEmpty } from 'underscore'
 import { BaseTask, IBaseTaskParams } from '../@BaseTask'
-import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
+import { OnProgressCallbackFunction } from '../types'
 import { IPermissionConfiguration } from './types'
+import { ICamlQuery } from '@pnp/sp/lists'
+import { ISiteUserProps } from '@pnp/sp/site-users'
 
 /**
  * Sets up permissions for the SP web.
@@ -48,7 +49,12 @@ export class SitePermissions extends BaseTask {
           await params.web.roleAssignments.add(data.Id, roleDefId)
           for (let j = 0; j < users.length; j++) {
             this.logInformation(`Adding user ${users[j]} to group ${groupName}...`)
-            await group.users.add(users[j])
+            try {
+              await group.users.add(users[j])
+              this.logInformation(`User ${users[j]} successfully added to group ${groupName}.`)
+            } catch (error) {
+              this.logError(`Failed to add user ${users[j]} to group ${groupName}.`)
+            }
           }
         }
       }
@@ -64,7 +70,7 @@ export class SitePermissions extends BaseTask {
    */
   private async _getPermissionConfiguration(): Promise<IPermissionConfiguration[]> {
     const list = SPDataAdapter.portal.web.lists.getByTitle(strings.PermissionConfigurationList)
-    const query: CamlQuery = {
+    const query: ICamlQuery = {
       ViewXml: `<View>
     <Query>
       <Where>
@@ -95,11 +101,11 @@ export class SitePermissions extends BaseTask {
    */
   private async _getSiteGroups() {
     return (
-      await SPDataAdapter.portal.web.siteGroups.select('Title', 'Users').expand('Users').get()
+      await SPDataAdapter.portal.web.siteGroups.select('Title', 'Users').expand('Users')()
     ).reduce(
-      (grps, { Title, Users }) => ({
+      (grps, grp) => ({
         ...grps,
-        [Title]: Users.map((u: SiteUserProps) => u.LoginName)
+        [grp.Title]: grp['Users'] && grp['Users'].map((u: ISiteUserProps) => u.LoginName)
       }),
       {}
     )

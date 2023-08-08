@@ -1,105 +1,18 @@
-import {
-  IContextualMenuItem,
-  ContextualMenuItemType,
-  format,
-  ContextualMenu
-} from '@fluentui/react'
-import { DisplayMode } from '@microsoft/sp-core-library'
-import * as strings from 'PortfolioWebPartsStrings'
-import React, { useContext } from 'react'
-import { indexOf } from 'underscore'
+import { ContextualMenu } from '@fluentui/react'
+import React, { FC, useContext } from 'react'
 import { PortfolioAggregationContext } from '../context'
-import {
-  COLUMN_HEADER_CONTEXT_MENU,
-  MOVE_COLUMN,
-  SET_GROUP_BY,
-  SET_SORT,
-  TOGGLE_COLUMN_FORM_PANEL,
-  TOGGLE_SHOW_HIDE_COLUMN_PANEL
-} from '../reducer'
+import { TOGGLE_COLUMN_CONTEXT_MENU } from '../reducer'
+import { useColumnContextMenu } from './useColumnContextMenu'
 
-export const ColumnContextMenu = () => {
-  const { props, state, dispatch } = useContext(PortfolioAggregationContext)
-  if (!state.columnContextMenu) return null
-  const { column, target } = state.columnContextMenu
-  const columnIndex = indexOf(
-    state.columns.map((c) => c.fieldName),
-    column.fieldName
-  )
-  const columnEditable =
-    props.displayMode === DisplayMode.Edit && columnIndex !== -1 && !props.lockedColumns
-
-  const addColumnItems: IContextualMenuItem[] = [
-    {
-      key: 'AddColumn',
-      name: strings.AddColumnText,
-      disabled: props.displayMode !== DisplayMode.Edit && !props.lockedColumns,
-      onClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
-    },
-    {
-      key: 'ShowHideColumns',
-      name: strings.ShowHideColumnsLabel,
-      onClick: () => dispatch(TOGGLE_SHOW_HIDE_COLUMN_PANEL({ isOpen: true }))
-    }
-  ]
-
-  const items: IContextualMenuItem[] = [
-    {
-      key: 'SortDesc',
-      name: strings.SortDescLabel,
-      canCheck: true,
-      checked: column.isSorted && column.isSortedDescending,
-      onClick: () => dispatch(SET_SORT({ column, sortDesencing: true }))
-    },
-    {
-      key: 'SortAsc',
-      name: strings.SortAscLabel,
-      canCheck: true,
-      checked: column.isSorted && !column.isSortedDescending,
-      onClick: () => dispatch(SET_SORT({ column, sortDesencing: false }))
-    },
-    {
-      key: 'Divider1',
-      itemType: ContextualMenuItemType.Divider
-    },
-    {
-      key: 'GroupBy',
-      name: format(strings.GroupByColumnLabel, column.name),
-      canCheck: true,
-      checked: state.groupBy?.fieldName === column.fieldName,
-      disabled: !column.data?.isGroupable,
-      onClick: () => dispatch(SET_GROUP_BY({ column }))
-    },
-    columnEditable && {
-      key: 'Divider2',
-      itemType: ContextualMenuItemType.Divider
-    },
-    columnEditable && {
-      key: 'MoveLeft',
-      name: strings.MoveLeftLabel,
-      iconProps: { iconName: 'ChevronLeftMed' },
-      disabled: columnIndex === 0,
-      onClick: () => dispatch(MOVE_COLUMN({ column, move: -1 }))
-    },
-    columnEditable && {
-      key: 'MoveRight',
-      name: strings.MoveRightLabel,
-      iconProps: { iconName: 'ChevronRightMed' },
-      disabled: columnIndex === state.columns.length - 1,
-      onClick: () => dispatch(MOVE_COLUMN({ column, move: 1 }))
-    },
-    columnEditable && {
-      key: 'Edit',
-      name: strings.EditColumnLabel,
-      iconProps: { iconName: 'SingleColumnEdit' },
-      onClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column }))
-    }
-  ].filter((i) => i)
+export const ColumnContextMenu: FC = () => {
+  const context = useContext(PortfolioAggregationContext)
+  const { target, items } = useColumnContextMenu()
+  if (!context.state.columnContextMenu) return null
   return (
     <ContextualMenu
       target={target}
-      items={column.name === strings.AddColumnText ? addColumnItems : items}
-      onDismiss={() => dispatch(COLUMN_HEADER_CONTEXT_MENU(null))}
+      items={items}
+      onDismiss={() => context.dispatch(TOGGLE_COLUMN_CONTEXT_MENU(null))}
     />
   )
 }

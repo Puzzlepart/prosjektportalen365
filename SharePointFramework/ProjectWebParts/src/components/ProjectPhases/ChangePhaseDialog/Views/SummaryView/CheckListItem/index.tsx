@@ -1,5 +1,5 @@
 import { Icon } from '@fluentui/react/lib/Icon'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useState } from 'react'
 import styles from './CheckListItem.module.scss'
@@ -18,7 +18,8 @@ export const CheckListItem: FC<IChecklistItemProps> = ({ item }) => {
         <div
           className={styles.header}
           style={{ cursor: hasComment && 'pointer' }}
-          onClick={() => hasComment && setCommentHidden(!commentHidden)}>
+          onClick={() => hasComment && setCommentHidden(!commentHidden)}
+        >
           <div className={styles.title}>
             <span>
               {item.id}. {item.title}

@@ -1,20 +1,31 @@
 import { IContextualMenuItem } from '@fluentui/react'
-import { formatDate } from 'pp365-shared/lib/helpers'
+import SPDataAdapter from '../../../data'
+import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 import { useContext } from 'react'
 import { ProjectStatusContext } from '../context'
 import { SELECT_REPORT } from '../reducer'
 
+/**
+ * Hook for returning the report options for the report dropdown. Handles
+ * dispatching the `SELECT_REPORT` action to the reducer when a report is
+ * selected in the dropdown. The icon and color of the report is also
+ * determined here based on the `published` property of the report.
+ */
 export function useReportOptions() {
   const context = useContext(ProjectStatusContext)
   const reportOptions: IContextualMenuItem[] = context.state.data.reports.map((report) => {
-    const isCurrent = context.state.selectedReport
-      ? report.id === context.state.selectedReport.id
-      : false
+    const isCurrent = report.id === context.state.selectedReport?.id
     return {
-      key: `${report.id}`,
+      key: report.id.toString(),
       name: formatDate(report.created, true),
       onClick: () => {
-        context.dispatch(SELECT_REPORT({ report }))
+        // eslint-disable-next-line @typescript-eslint/no-extra-semi
+        ;(async () => {
+          const reportWithAttachments = await SPDataAdapter.portal.getStatusReportAttachments(
+            report
+          )
+          context.dispatch(SELECT_REPORT({ report: reportWithAttachments }))
+        })()
       },
       canCheck: true,
       iconProps: {

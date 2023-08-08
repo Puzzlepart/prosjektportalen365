@@ -39,7 +39,7 @@ Param(
     [string]$Language = "Norwegian",
     [Parameter(Mandatory = $false, HelpMessage = "Used by Continuous Integration")]
     [string]$CI,
-    [Parameter(Mandatory = $false, HelpMessage = "Do you want to include B&A content (only when upgrading)")]
+    [Parameter(Mandatory = $false, HelpMessage = "Do you want to include Bygg & Anlegg content (only when upgrading)")]
     [switch]$IncludeBAContent
 )
 
@@ -57,6 +57,7 @@ $LanguageCodes = @{
     "English (US)" = 'en-US';
 }
 
+$Channel = "{CHANNEL_PLACEHOLDER}"
 $LanguageId = $LanguageIds[$Language]
 $LanguageCode = $LanguageCodes[$Language]
 #endregion
@@ -70,11 +71,17 @@ $InstallStartTime = (Get-Date -Format o)
 if ($Upgrade.IsPresent) {
     Write-Host "########################################################" -ForegroundColor Cyan
     Write-Host "### Upgrading Prosjektportalen 365 v{VERSION_PLACEHOLDER} #####" -ForegroundColor Cyan
+    if ($Channel -ne "main") {
+        Write-Host "### Channel: $Channel ####" -ForegroundColor Cyan
+    }
     Write-Host "########################################################" -ForegroundColor Cyan
 }
 else {
     Write-Host "########################################################" -ForegroundColor Cyan
     Write-Host "### Installing Prosjektportalen 365 v{VERSION_PLACEHOLDER} ####" -ForegroundColor Cyan
+    if ($Channel -ne "main") {
+        Write-Host "### Channel: $Channel ####" -ForegroundColor Cyan
+    }
     Write-Host "########################################################" -ForegroundColor Cyan
 }
 
@@ -163,7 +170,7 @@ Load PnP.PowerShell from bundle
 Loaa PnP.PowerShell from bundle and return version.
 #>
 function LoadBundle() {
-    Import-Module "$PSScriptRoot\PnP.PowerShell\PnP.PowerShell.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
+    Import-Module "$PSScriptRoot/PnP.PowerShell/PnP.PowerShell.psd1" -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
     return (Get-Command Connect-PnPOnline).Version
 }
 
@@ -204,7 +211,8 @@ if ($Alias.Length -lt 2 -or (@("sites/", "teams/") -notcontains $ManagedPath) -o
 }
 #endregion
 
-Set-PnPTraceLog -On -Level Debug -LogFile "Install_Log_$([datetime]::Now.Ticks).txt"
+$LogFilePath = "$PSScriptRoot/Install_Log_$([datetime]::Now.Ticks).txt"
+Set-PnPTraceLog -On -Level Debug -LogFile $LogFilePath
 
 #region Create site
 if (-not $SkipSiteCreation.IsPresent -and -not $Upgrade.IsPresent) {
@@ -266,6 +274,11 @@ if (-not $Upgrade.IsPresent) {
 $SiteDesignName = [Uri]::UnescapeDataString($SiteDesignName)
 $SiteDesignDesc = [Uri]::UnescapeDataString("Samarbeid i et prosjektomr%C3%A5de fra Prosjektportalen")
 
+# Add channel to name for the site design if channel is specified and not main
+if ($Channel -ne "main") {
+    $SiteDesignName += " - $Channel"
+}
+
 if (-not $SkipSiteDesign.IsPresent) {
     $SiteScriptIds = @()
 
@@ -276,6 +289,10 @@ if (-not $SkipSiteDesign.IsPresent) {
         $SiteScriptSrc = Get-ChildItem "$PSScriptRoot/SiteScripts/*.txt"
         foreach ($s in $SiteScriptSrc) {
             $Title = $s.BaseName.Substring(9)
+            # Add channel to name for the site script if channel is specified and not main
+            if ($Channel -ne "main") {
+                $Title += " - $Channel"
+            }
             $Content = (Get-Content -Path $s.FullName -Raw | Out-String)
             $SiteScript = $SiteScripts | Where-Object { $_.Title -eq $Title }
             if ($null -ne $SiteScript) {
@@ -330,14 +347,16 @@ if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
 
 #region Running pre-install upgrade steps
 if ($Upgrade.IsPresent) {
-    StartAction("Running pre-install upgrade steps")
+    Write-Host "[INFO] Running pre-install upgrade steps"
     try {
         Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
-        ."$PSScriptRoot\Scripts\PreInstallUpgrade.ps1"
+        ."$PSScriptRoot/Scripts/PreInstallUpgrade.ps1"
         Disconnect-PnPOnline
     }
-    Catch {}
-    EndAction
+    catch {
+        Write-Host "[ERROR] Failed to run pre-install upgrade steps: $($_.Exception.Message)" -ForegroundColor Red
+        exit 0
+    }
 }
 #endregion
 
@@ -357,7 +376,7 @@ if (-not $SkipAppPackages.IsPresent) {
     }
     Try {
         StartAction("Installing SharePoint Framework app packages to $TenantAppCatalogUrl")
-        foreach ($AppPkg in (Get-ChildItem "$PSScriptRoot\Apps" -ErrorAction SilentlyContinue)) {
+        foreach ($AppPkg in (Get-ChildItem "$PSScriptRoot/Apps" -ErrorAction SilentlyContinue)) {
             Add-PnPApp -Path $AppPkg.FullName -Scope Tenant -Publish -Overwrite -SkipFeatureDeployment -ErrorAction Stop >$null 2>&1
         }
         Disconnect-PnPOnline
@@ -401,12 +420,28 @@ if (-not $SkipTemplate.IsPresent) {
         if (-not $SkipTaxonomy.IsPresent -and -not $Upgrade.IsPresent) {
             StartAction("Applying PnP template Taxonomy to $($Uri.AbsoluteUri)")
             Invoke-PnPSiteTemplate "$TemplatesBasePath/Taxonomy.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
+            Invoke-PnPSiteTemplate "$TemplatesBasePath/TaxonomyBA.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
+            EndAction
+        }
+        elseif (-not $SkipTaxonomy.IsPresent -and $Upgrade.IsPresent) {
+            StartAction("Applying PnP template Taxonomy (B&A) to $($Uri.AbsoluteUri)")
+            $TermSetA = Get-PnPTermSet -Identity "cc6cdd18-c7d5-42e1-8d19-a336dd78f3f2" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
+            $TermSetB = Get-PnPTermSet -Identity "ec5ceb95-7259-4282-811f-7c57304be71e" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
+            if (-not $TermSetA -or -not $TermSetB) {
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/TaxonomyBA.pnp" -ErrorAction Stop -WarningAction SilentlyContinue
+            }
             EndAction
         }
 
         if ($Upgrade.IsPresent) {
             StartAction("Applying PnP template Portfolio to $($Uri.AbsoluteUri)")
-            Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+            try {
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+            }
+            catch {
+                Write-Host "`t[WARNING] Failed to apply PnP templates to, retrying..." -ForegroundColor Yellow
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers Navigation, SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+            }
             EndAction
 
             StartAction("Applying PnP content template to $($Uri.AbsoluteUri)")
@@ -424,7 +459,13 @@ if (-not $SkipTemplate.IsPresent) {
             $Instance = Read-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp"
             $Instance.SupportedUILanguages[0].LCID = $LanguageId
             Invoke-PnPSiteTemplate -InputInstance $Instance -Handlers SupportedUILanguages
-            Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+            try {
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+            }
+            catch {
+                Write-Host "`t[WARNING] Failed to apply PnP templates to, retrying..." -ForegroundColor Yellow
+                Invoke-PnPSiteTemplate "$TemplatesBasePath/Portfolio.pnp" -ExcludeHandlers SupportedUILanguages -ErrorAction Stop -WarningAction SilentlyContinue
+            }
             EndAction
 
             StartAction("Applying PnP content template to $($Uri.AbsoluteUri)")
@@ -443,7 +484,7 @@ if (-not $SkipTemplate.IsPresent) {
         Disconnect-PnPOnline
     }
     Catch {
-        Write-Host ("[ERROR] Failed to apply PnP templates to ${0}: ${1}" -f $Uri.AbsoluteUri,$_.Exception.Message) -ForegroundColor Red
+        Write-Host "[ERROR] Failed to apply PnP templates to $($Uri.AbsoluteUri): $($_.Exception.Message)" -ForegroundColor Red
         exit 0
     }
 }
@@ -477,13 +518,11 @@ if (-not $SkipSearchConfiguration.IsPresent) {
 }
 #endregion
 
-
-Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
-
 #region Post install - running post-install scripts and applying PnP templates
 Write-Host "[INFO] Running post-install steps" 
+Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
 try {
-    ."$PSScriptRoot\Scripts\PostInstall.ps1"
+    ."$PSScriptRoot/Scripts/PostInstall.ps1"
     Write-Host "[SUCCESS] Successfully ran post-install steps" -ForegroundColor Green
 }
 catch {
@@ -493,7 +532,7 @@ catch {
 if ($Upgrade.IsPresent) {
     Write-Host "[INFO] Running post-install upgrade steps" 
     try {
-        ."$PSScriptRoot\Scripts\PostInstallUpgrade.ps1"
+        ."$PSScriptRoot/Scripts/PostInstallUpgrade.ps1"
         Write-Host "[SUCCESS] Successfully ran post-install upgrade steps" -ForegroundColor Green
     }
     catch {
@@ -521,21 +560,30 @@ Write-Host "[INFO] Logged installation entry"
 $InstallEndTime = (Get-Date -Format o)
 
 $InstallEntry = @{
+    Title            = "PP365 {VERSION_PLACEHOLDER}"
     InstallStartTime = $InstallStartTime; 
     InstallEndTime   = $InstallEndTime; 
     InstallVersion   = "{VERSION_PLACEHOLDER}";
     InstallCommand   = $MyInvocation.Line.Substring(2);
 }
 
-if($null -ne $CurrentUser.Email) {
+if ($null -ne $CurrentUser.Email) {
     $InstallEntry.InstallUser = $CurrentUser.Email
 }
 if (-not [string]::IsNullOrEmpty($CI)) {
     $InstallEntry.InstallCommand = "GitHub CI";
 }
+if ($Channel -ne "main") {
+    $InstallEntry.InstallChannel = $Channel
+}
 
 ## Logging installation to SharePoint list
-Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -ErrorAction SilentlyContinue >$null 2>&1
+$InstallationEntry = Add-PnPListItem -List "Installasjonslogg" -Values $InstallEntry -ErrorAction SilentlyContinue
+
+## Attempting to attach the log file to installation entry
+if ($null -ne $InstallationEntry) {
+    Add-PnPListItemAttachment -List "Installasjonslogg" -Identity $InstallationEntry.Id -Path $LogFilePath -ErrorAction SilentlyContinue >$null 2>&1 
+}
 
 Disconnect-PnPOnline
 

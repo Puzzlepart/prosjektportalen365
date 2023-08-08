@@ -1,4 +1,7 @@
 declare interface IProjectExtensionsStrings {
+  CmdSelectionCountTooltipText: string
+  CustomActionsText: string
+  CustomActionsSubText: string
   ConfiguredSpecifiedTaskMessage: string
   CmdSelectionCountText: string
   ExtensionLockedTooltipText: string
@@ -32,6 +35,9 @@ declare interface IProjectExtensionsStrings {
   ApplyTemplateNavigation: string
   ApplyTemplateSiteFields: string
   ApplyTemplateWebSettings: string
+  ApplyTemplateHooks: string
+  ApplyExtensionHooks: string
+  RunHooksText: string
   CloseModalText: string
   CopyListDataErrorMessage: string
   CopyListItemsText: string
@@ -98,6 +104,9 @@ declare interface IProjectExtensionsStrings {
   ProjectAlreadySetupStack: string
   ProjectProvisioningSuccessLogText: string
   ProjectProvisioningStartLogText: string
+  PlannerTaskChecklistLimitLogText: string
+  PlannerTaskAttachmentLimitLogText: string
+  PlannerTagsLimitLogText: string
   ProvisionTemplateText: string
   ContinueToProjectText: string
   RecycleBinText: string

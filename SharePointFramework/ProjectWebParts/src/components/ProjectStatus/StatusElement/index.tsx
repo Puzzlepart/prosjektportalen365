@@ -1,5 +1,5 @@
 import { TooltipHost } from '@fluentui/react'
-import { ConditionalWrapper } from 'pp365-shared/lib/components'
+import { ConditionalWrapper } from 'pp365-shared-library/lib/components'
 import React, { FC, ReactNode, useContext } from 'react'
 import { SectionContext } from '../Sections/context'
 import styles from './StatusElement.module.scss'
@@ -9,21 +9,23 @@ import { useStatusElement } from './useStatusElement'
 
 export const StatusElement: FC<IStatusElementProps> = (props) => {
   const { headerProps } = useContext(SectionContext)
-  const { commentProps, iconSize } = useStatusElement(props)
+  const { commentProps, iconSize, useWrapper } = useStatusElement(props)
   return (
     <ConditionalWrapper
-      condition={!!props.truncateComment || props.iconsOnly}
+      condition={useWrapper}
       wrapper={(children: ReactNode) => (
         <TooltipHost
-          styles={{ root: { cursor: 'pointer' } }}
+          className={styles.tooltipHost}
           content={
-            <div className={styles.tooltip}>
+            <div className={styles.tooltipContent}>
               <StatusElement />
             </div>
-          }>
+          }
+        >
           {children}
         </TooltipHost>
-      )}>
+      )}
+    >
       {props.iconsOnly ? (
         <StatusElementIcon iconSize={iconSize} />
       ) : (

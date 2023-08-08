@@ -3,17 +3,20 @@ import {
   SearchBox,
   SelectAllVisibility,
   Sticky,
-  StickyPositionType
+  StickyPositionType,
+  TooltipHost
 } from '@fluentui/react'
 import { format } from '@uifabric/utilities'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC } from 'react'
+import _ from 'underscore'
 import styles from './ListHeaderSearch.module.scss'
 import { IListHeaderSearchProps } from './types'
 
 /**
  * List header for `<DetailsList />` with a optional `<CommandBar />` with a
- * `<SearchBox />`.
+ * `<SearchBox />` and a `<TooltipHost />` showing the selected items and
+ * the count of selected items.
  *
  * @param props Props
  */
@@ -38,7 +41,37 @@ export const ListHeaderSearch: FC<IListHeaderSearchProps> = (props) => {
         farItems={[
           {
             key: 'cmdSelectionCount',
-            text: format(strings.CmdSelectionCountText, props.selectedCount)
+            onRender: () => (
+              <div className={styles.selectionCount}>
+                <TooltipHost
+                  calloutProps={{
+                    isBeakVisible: !_.isEmpty(props.selectedItems)
+                  }}
+                  tooltipProps={{
+                    onRenderContent: () => {
+                      if (_.isEmpty(props.selectedItems)) return null
+                      return (
+                        <div
+                          className={styles.selectionCountTooltip}
+                          hidden={_.isEmpty(props.selectedItems)}
+                        >
+                          <p>{strings.CmdSelectionCountTooltipText}</p>
+                          <ul>
+                            {props.selectedItems.map((item) => (
+                              <li key={item.key}>
+                                <span>{item.text}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )
+                    }
+                  }}
+                >
+                  {format(strings.CmdSelectionCountText, props.selectedItems.length)}
+                </TooltipHost>
+              </div>
+            )
           }
         ]}
       />

@@ -12,7 +12,8 @@ export const StatusElementIcon: FC<IStatusElementIconProps> = (props) => {
       style={{
         fontSize: props.iconSize,
         color: headerProps.iconColor
-      }}>
+      }}
+    >
       <Icon iconName={headerProps.iconName} />
     </div>
   )

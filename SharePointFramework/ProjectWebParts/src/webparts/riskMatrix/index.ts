@@ -8,24 +8,32 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { sp } from '@pnp/sp'
+import * as strings from 'ProjectWebPartsStrings'
 import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
 import { IRiskMatrixProps, RiskMatrix } from 'components/RiskMatrix'
-import * as getValue from 'get-value'
-import * as strings from 'ProjectWebPartsStrings'
 import ReactDom from 'react-dom'
+import { BaseProjectWebPart } from '../@baseProjectWebPart'
 import { UncertaintyElementModel } from '../../models'
-import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
-import { IRiskMatrixWebPartProps } from './types'
+import { IRiskMatrixWebPartData, IRiskMatrixWebPartProps } from './types'
+import SPDataAdapter from '../../data'
+import _ from 'lodash'
 
 export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWebPartProps> {
-  private _items: UncertaintyElementModel[] = []
+  private _data: IRiskMatrixWebPartData = {}
   private _error: Error
 
   public async onInit() {
     await super.onInit()
     try {
-      this._items = await this._getItems()
+      const [items, configurations] = await Promise.all([
+        this._getItems(),
+        SPDataAdapter.getConfigurations(strings.RiskMatrixConfigurationFolder)
+      ])
+      const defaultConfiguration = _.find(
+        configurations,
+        (config) => config.name === strings.RiskMatrixManualConfigurationPathDefaltValue
+      )
+      this._data = { items, configurations, defaultConfiguration }
     } catch (error) {
       this._error = error
     }
@@ -35,32 +43,40 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
     if (this._error) {
       this.renderError(this._error)
     } else {
+      const { items, defaultConfiguration } = this._data
       this.renderComponent<IRiskMatrixProps>(RiskMatrix, {
         ...this.properties,
         width: this.properties.fullWidth ? '100%' : this.properties.width,
-        items: this._items
+        items: items,
+        manualConfigurationPath:
+          this.properties.manualConfigurationPath ?? defaultConfiguration?.url
       })
     }
   }
 
+  /**
+   * Get items from list `this.properties.listName` using CAML query
+   */
   protected async _getItems(): Promise<UncertaintyElementModel[]> {
     const {
       probabilityFieldName,
       consequenceFieldName,
       probabilityPostActionFieldName,
-      consequencePostActionFieldName
+      consequencePostActionFieldName,
+      viewXml,
+      listName
     } = this.properties
-    const items: any[] = await sp.web.lists
-      .getByTitle(this.properties.listName)
-      .getItemsByCAMLQuery({ ViewXml: this.properties.viewXml })
+    const items: any[] = await this.sp.web.lists
+      .getByTitle(listName)
+      .getItemsByCAMLQuery({ ViewXml: viewXml })
     return items.map(
       (i) =>
         new UncertaintyElementModel(
           i,
-          getValue(i, probabilityFieldName, { default: '' }),
-          getValue(i, consequenceFieldName, { default: '' }),
-          getValue(i, probabilityPostActionFieldName, { default: '' }),
-          getValue(i, consequencePostActionFieldName, { default: '' })
+          get(i, probabilityFieldName, { default: '' }),
+          get(i, consequenceFieldName, { default: '' }),
+          get(i, probabilityPostActionFieldName, { default: '' }),
+          get(i, consequencePostActionFieldName, { default: '' })
         )
     )
   }
@@ -69,6 +85,9 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
     ReactDom.unmountComponentAtNode(this.domElement)
   }
 
+  /**
+   * Get header label fields for the property pane.
+   */
   protected get headerLabelFields(): IPropertyPaneField<any>[] {
     const size = parseInt(this.properties.size ?? '5', 10)
     const overrideHeaderLabels = PropertyPaneToggle(`overrideHeaderLabels.${size}`, {
@@ -150,52 +169,71 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                 PropertyPaneToggle('fullWidth', {
                   label: strings.MatrixFullWidthLabel
                 }),
-                PropertyPaneSlider('width', {
-                  label: strings.WidthFieldLabel,
-                  min: 400,
-                  max: 1000,
-                  value: 400,
-                  showValue: true,
-                  disabled: this.properties.fullWidth
-                }),
+                !this.properties.fullWidth &&
+                  PropertyPaneSlider('width', {
+                    label: strings.WidthFieldLabel,
+                    min: 400,
+                    max: 1000,
+                    value: 400,
+                    showValue: true,
+                    disabled: this.properties.fullWidth
+                  }),
                 PropertyPaneTextField('calloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,
                   resizable: true,
                   rows: 8
                 }),
-                PropertyPaneDropdown('size', {
-                  label: strings.MatrixSizeLabel,
-                  options: [
-                    {
-                      key: '4',
-                      text: '4x4'
-                    },
-                    {
-                      key: '5',
-                      text: '5x5'
-                    },
-                    {
-                      key: '6',
-                      text: '6x6'
-                    }
-                  ],
-                  selectedKey: this.properties.size ?? '5'
+                !this.properties.useDynamicConfiguration &&
+                  PropertyPaneDropdown('manualConfigurationPath', {
+                    label: strings.ManualConfigurationPathLabel,
+                    options: this._data.configurations.map(({ url: key, title: text }) => ({
+                      key,
+                      text
+                    })),
+                    selectedKey:
+                      this.properties?.manualConfigurationPath ??
+                      this._data.defaultConfiguration?.url
+                  }),
+                PropertyPaneToggle('useDynamicConfiguration', {
+                  label: strings.UseDynamicConfigurationLabel,
+                  offText: strings.UseDynamicConfigurationOffText,
+                  onText: strings.UseDynamicConfigurationOnText
                 }),
-                PropertyFieldColorConfiguration('colorScaleConfig', {
-                  key: 'colorScaleConfig',
-                  label: strings.MatrixColorScaleConfigLabel,
-                  defaultValue: [
-                    { p: 10, r: 44, g: 186, b: 0 },
-                    { p: 30, r: 163, g: 255, b: 0 },
-                    { p: 50, r: 255, g: 244, b: 0 },
-                    { p: 70, r: 255, g: 167, b: 0 },
-                    { p: 90, r: 255, g: 0, b: 0 }
-                  ],
-                  value: this.properties.colorScaleConfig
-                }),
-                ...this.headerLabelFields
-              ]
+                this.properties.useDynamicConfiguration &&
+                  PropertyPaneDropdown('size', {
+                    label: strings.MatrixSizeLabel,
+                    options: [
+                      {
+                        key: '4',
+                        text: '4x4'
+                      },
+                      {
+                        key: '5',
+                        text: '5x5'
+                      },
+                      {
+                        key: '6',
+                        text: '6x6'
+                      }
+                    ],
+                    selectedKey: this.properties.size ?? '5'
+                  }),
+                this.properties.useDynamicConfiguration &&
+                  PropertyFieldColorConfiguration('colorScaleConfig', {
+                    key: 'colorScaleConfig',
+                    label: strings.MatrixColorScaleConfigLabel,
+                    defaultValue: [
+                      { p: 10, r: 44, g: 186, b: 0 },
+                      { p: 30, r: 163, g: 255, b: 0 },
+                      { p: 50, r: 255, g: 244, b: 0 },
+                      { p: 70, r: 255, g: 167, b: 0 },
+                      { p: 90, r: 255, g: 0, b: 0 }
+                    ],
+                    value: this.properties.colorScaleConfig
+                  }),
+                ...(this.properties.useDynamicConfiguration ? this.headerLabelFields : [])
+              ].filter(Boolean)
             }
           ]
         }

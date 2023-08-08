@@ -1,11 +1,10 @@
 import { CommandBar, format, MessageBar, MessageBarType } from '@fluentui/react'
 import moment from 'moment'
 import * as strings from 'PortfolioWebPartsStrings'
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
+import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import React, { FC } from 'react'
 import Timeline, { TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
-import { FilterPanel } from '../FilterPanel'
 import { DetailsCallout } from './DetailsCallout'
 import { groupRenderer } from './groupRenderer'
 import { itemRenderer } from './itemRenderer'
@@ -13,17 +12,11 @@ import styles from './ResourceAllocation.module.scss'
 import './Timeline.overrides.css'
 import { IResourceAllocationProps } from './types'
 import { useResourceAllocation } from './useResourceAllocation'
+import { FilterPanel } from 'pp365-shared-library/lib/components'
 
 export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
-  const {
-    state,
-    setState,
-    commandBar,
-    filters,
-    onFilterChange,
-    items,
-    groups
-  } = useResourceAllocation(props)
+  const { state, setState, commandBar, filters, onFilterChange, items, groups } =
+    useResourceAllocation(props)
 
   if (!state.isDataLoaded) return null
 
@@ -54,7 +47,8 @@ export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
                   strings.ResourceAllocationInfoText,
                   encodeURIComponent(window.location.href)
                 )
-              }}></div>
+              }}
+            ></div>
           </MessageBar>
         </div>
         <div className={styles.timeline}>
@@ -70,7 +64,8 @@ export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
             }
             groupRenderer={groupRenderer}
             defaultTimeStart={moment().add(...props.defaultTimeStart)}
-            defaultTimeEnd={moment().add(...props.defaultTimeEnd)}>
+            defaultTimeEnd={moment().add(...props.defaultTimeEnd)}
+          >
             <TimelineMarkers>
               <TodayMarker date={moment().toDate()} />
             </TimelineMarkers>

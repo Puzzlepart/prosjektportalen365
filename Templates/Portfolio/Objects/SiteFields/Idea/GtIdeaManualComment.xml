@@ -1,0 +1,1 @@
+<Field ID="{9b7cf4f7-641d-4a7f-be6a-245237dce476}" Name="GtIdeaManualComment" DisplayName="{resource:SiteFields_GtIdeaManualComment_DisplayName}" Description="{resource:SiteFields_GtIdeaManualComment_Description}" Type="Text" Group="{resource:SiteFields_Idea_Group}" StaticName="GtIdeaManualComment" />

@@ -2,6 +2,12 @@ import { MessageBarType } from '@fluentui/react'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { SPDataAdapter } from 'data'
 
+export interface IProgramAdministrationProject {
+  SiteId: string
+  Title: string
+  SPWebURL: string
+}
+
 export interface IProgramAdministrationProps {
   title: string
   description: string
@@ -31,7 +37,7 @@ export interface IProgramAdministrationState {
   /**
    * Projects available to add to parent project
    */
-  availableProjects: Record<string, any>[]
+  availableProjects: IProgramAdministrationProject[]
 
   /**
    * Projects selected by user to add

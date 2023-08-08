@@ -6,9 +6,10 @@ import {
   StickyPositionType
 } from '@fluentui/react'
 import strings from 'ProjectExtensionsStrings'
-import React from 'react'
+import React, { useContext } from 'react'
 import { ListHeaderSearch } from '../ListHeaderSearch'
 import { TemplateConfigMessage } from '../TemplateConfigMessage'
+import { TemplateSelectDialogContext } from '../context'
 import { TemplateSelectDialogSectionComponent } from '../types'
 import styles from './ExtensionsSection.module.scss'
 import { useExtensionsSection } from './useExtensionsSection'
@@ -19,7 +20,8 @@ import { useExtensionsSection } from './useExtensionsSection'
  * @param props Props
  */
 export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) => {
-  const { selection, selectedCount, items, columns, onSearch, onRenderRow } = useExtensionsSection()
+  const context = useContext(TemplateSelectDialogContext)
+  const { selection, items, columns, onSearch, onRenderRow } = useExtensionsSection()
 
   return (
     <div className={styles.root} style={props.style}>
@@ -32,9 +34,9 @@ export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) =
           onRenderRow={onRenderRow}
           onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
             <ListHeaderSearch
+              selectedItems={context.state.selectedExtensions}
               detailsHeaderProps={detailsHeaderProps}
               defaultRender={defaultRender}
-              selectedCount={selectedCount}
               search={{
                 placeholder: strings.ExtensionsSectionSearchPlaceholder,
                 onSearch,

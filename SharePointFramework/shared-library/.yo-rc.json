@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.17.4",
+    "libraryName": "pp-65-shared-library",
+    "libraryId": "805f6b14-7638-4e7f-8adb-f3927ebda6b8",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "pp365-shared-library",
+    "solutionShortDescription": " ",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "library"
+  }
+}

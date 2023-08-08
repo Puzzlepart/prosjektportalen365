@@ -9,7 +9,7 @@ import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls'
 import { IProjectListProps, ProjectList } from 'components/ProjectList'
 import { ProjectListViews } from 'components/ProjectList/ProjectListViews'
 import * as strings from 'PortfolioWebPartsStrings'
-import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
+import { BasePortfolioWebPart } from '../@basePortfolioWebPart'
 
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
   public render(): void {
@@ -51,6 +51,19 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   label: strings.HideViewsLabel,
                   options: viewOptions,
                   selectedKeys: this.properties.hideViews ?? []
+                }),
+                PropertyPaneDropdown('defaultRenderMode', {
+                  label: strings.DefaultRenderModeLabel,
+                  options: [
+                    {
+                      key: 'list',
+                      text: strings.RenderModeListText
+                    },
+                    {
+                      key: 'tiles',
+                      text: strings.RenderModeTilesText
+                    }
+                  ]
                 })
               ]
             },

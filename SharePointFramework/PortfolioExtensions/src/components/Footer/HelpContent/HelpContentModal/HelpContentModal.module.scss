@@ -1,0 +1,22 @@
+.root {
+  max-width: 1000px;
+  overflow: hidden;
+
+  .scrollableContent {
+    overflow: hidden;
+  }
+
+  .body {
+    font-size: initial;
+    padding: 20px;
+    overflow: hidden;
+
+    .contentItem {
+      margin: 10px 0 0 0;
+    }
+
+    img {
+      max-width: 75%;
+    }
+  }
+}

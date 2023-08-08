@@ -1,4 +1,4 @@
-<pnp:ListInstance Title="{resource:Lists_TemplateOptions_Title}" Url="{resource:Lists_TemplateOptions_Url}" Description="" DocumentTemplate="" TemplateType="100" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" EnableFolderCreation="false" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage=""
+<pnp:ListInstance Title="{resource:Lists_TemplateOptions_Title}" Url="{resource:Lists_TemplateOptions_Url}" Description="" DocumentTemplate="" TemplateType="100" EnableVersioning="true" Hidden="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" EnableFolderCreation="false"
   xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
   <pnp:Views>
     <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_TemplateOptions_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
@@ -51,8 +51,14 @@
     <Field Type="Text" DisplayName="Kundespesifikke kolonner" MaxLength="255" ID="{4efd9b9f-62ba-42e7-9dec-a37ad8b125a7}" SourceID="{{listid:Maloppsett}}" StaticName="GtProjectCustomColumns" Name="GtProjectCustomColumns">
       <Default>Egendefinerte kolonner for Prosjektportalen</Default>
     </Field>
-    <Field Type="Boolean" DisplayName="Standard mal?" ID="{80a9dc17-834e-4c30-af28-87f3ef1900df}" SourceID="{{listid:Maloppsett}}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate">
+    <Field Type="Boolean" DisplayName="Standard mal?" ID="{dd341142-d60d-41ad-a206-57f52aa1e60a}" SourceID="{{listid:Maloppsett}}" StaticName="IsDefaultTemplate" Name="IsDefaultTemplate">
       <Default>0</Default>
+    </Field>
+    <Field Type="Boolean" DisplayName="Konfigurer automatisk" Description="Konfigurer prosjektet automatisk med denne malen om en eier besøker SharePoint-området. Malen må også være låst." ID="{249ce763-d28e-4034-8dbc-64318ebc3b42}" SourceID="{{listid:Maloppsett}}" StaticName="IsAutoConfigurable" Name="IsAutoConfigurable">
+      <Default>0</Default>
+    </Field>
+    <Field Type="Text" DisplayName="Malbibliotek" Description="Velg malbibliotek som skal brukes som kilde for maler som kan hentes inn til dokumentbibliotekene i prosjektet." MaxLength="255" ID="{02e86b34-2916-4010-afac-cf33eff03d54}" SourceID="{{listid:Maloppsett}}" StaticName="GtDocumentTemplateLibrary" Name="GtDocumentTemplateLibrary">
+      <Default>Malbibliotek</Default>
     </Field>
   </pnp:Fields>
   <pnp:FieldRefs>
@@ -64,8 +70,6 @@
       <pnp:DataValue FieldName="Title">Standardmal</pnp:DataValue>
       <pnp:DataValue FieldName="Order">100</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectTemplate">1</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectExtensions" />
-      <pnp:DataValue FieldName="ListContentConfigLookup" />
       <pnp:DataValue FieldName="GtProjectContentType">0x0100805E9E4FEAAB4F0EABAB2600D30DB70C</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectStatusContentType">0x010022252E35737A413FB56A1BA53862F6D5</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectColumns">Kolonner for Prosjektportalen (Prosjekt)</pnp:DataValue>
@@ -75,27 +79,26 @@
       <pnp:DataValue FieldName="IsDefaultListContentLocked">False</pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">Dette er standardmalen for prosjekt som følger med Prosjektportalen 365.</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">Page</pnp:DataValue>
+      <pnp:DataValue FieldName="GtDocumentTemplateLibrary">Malbibliotek</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="Title">Overordnet mal</pnp:DataValue>
       <pnp:DataValue FieldName="Order">110</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectTemplate">2</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectExtensions" />
       <pnp:DataValue FieldName="GtProjectContentType">0x0100805E9E4FEAAB4F0EABAB2600D30DB70C</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectStatusContentType">0x010022252E35737A413FB56A1BA53862F6D5</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectColumns">Kolonner for Prosjektportalen (Prosjekt)</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectCustomColumns">Egendefinerte kolonner for Prosjektportalen</pnp:DataValue>
       <pnp:DataValue FieldName="IsDefaultTemplate">False</pnp:DataValue>
       <pnp:DataValue FieldName="IsHiddenTemplate">True</pnp:DataValue>
-      <pnp:DataValue FieldName="ListContentConfigLookup"></pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">Dette er standardmalen for overordnet prosjekt som følger med Prosjektportalen 365.</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">ProductVariant</pnp:DataValue>
+      <pnp:DataValue FieldName="GtDocumentTemplateLibrary">Malbibliotek</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="Title">Programmal</pnp:DataValue>
       <pnp:DataValue FieldName="Order">120</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectTemplate">3</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectExtensions" />
       <pnp:DataValue FieldName="GtProjectContentType">0x0100805E9E4FEAAB4F0EABAB2600D30DB70C</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectStatusContentType">0x010022252E35737A413FB56A1BA53862F6D5</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectPhaseTermId">54f92279-2602-4d70-95b5-e6113f27666e</pnp:DataValue>
@@ -103,39 +106,37 @@
       <pnp:DataValue FieldName="GtProjectCustomColumns">Egendefinerte kolonner for Prosjektportalen</pnp:DataValue>
       <pnp:DataValue FieldName="IsDefaultTemplate">False</pnp:DataValue>
       <pnp:DataValue FieldName="GtIsProgram">True</pnp:DataValue>
-      <pnp:DataValue FieldName="ListContentConfigLookup"></pnp:DataValue>
       <pnp:DataValue FieldName="GtDescription">Dette er standardmalen for program som følger med Prosjektportalen 365.</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">ProductList</pnp:DataValue>
+      <pnp:DataValue FieldName="GtDocumentTemplateLibrary">Malbibliotek</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="Title">Byggprosjekt</pnp:DataValue>
       <pnp:DataValue FieldName="Order">150</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectTemplate">1</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectExtensions" />
-      <pnp:DataValue FieldName="GtProjectContentType">0x0100C4784EA80C45433792E60E1DD000C5B7</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectStatusContentType">0x0100676A5FAB1C974B6A9276279850EA2806</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectContentType">0x0100805E9E4FEAAB4F0EABAB2600D30DB70CBA</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectStatusContentType">0x010022252E35737A413FB56A1BA53862F6D5BA</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectPhaseTermId">ec5ceb95-7259-4282-811f-7c57304be71e</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectColumns">Kolonner for Prosjektportalen (Prosjekt)</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectCustomColumns">Egendefinerte kolonner for Prosjektportalen</pnp:DataValue>
       <pnp:DataValue FieldName="IsDefaultTemplate">False</pnp:DataValue>
-      <pnp:DataValue FieldName="ListContentConfigLookup" />
       <pnp:DataValue FieldName="GtDescription">Dette er malen for byggeprosjekter. Byggeprosjekter har egne faser, egne prosjektegenskaper og egne felter i prosjektstatus</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">BuildDefinition</pnp:DataValue>
+      <pnp:DataValue FieldName="GtDocumentTemplateLibrary">Malbibliotek</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="Title">Anleggsprosjekt</pnp:DataValue>
       <pnp:DataValue FieldName="Order">200</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectTemplate">1</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectExtensions" />
-      <pnp:DataValue FieldName="GtProjectContentType">0x0100C4784EA80C45433792E60E1DD000C5B7</pnp:DataValue>
-      <pnp:DataValue FieldName="GtProjectStatusContentType">0x0100676A5FAB1C974B6A9276279850EA2806</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectContentType">0x0100805E9E4FEAAB4F0EABAB2600D30DB70CBA</pnp:DataValue>
+      <pnp:DataValue FieldName="GtProjectStatusContentType">0x010022252E35737A413FB56A1BA53862F6D5BA</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectPhaseTermId">cc6cdd18-c7d5-42e1-8d19-a336dd78f3f2</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectColumns">Kolonner for Prosjektportalen (Prosjekt)</pnp:DataValue>
       <pnp:DataValue FieldName="GtProjectCustomColumns">Egendefinerte kolonner for Prosjektportalen</pnp:DataValue>
       <pnp:DataValue FieldName="IsDefaultTemplate">False</pnp:DataValue>
-      <pnp:DataValue FieldName="ListContentConfigLookup" />
       <pnp:DataValue FieldName="GtDescription">Anleggsprosjekter har egne faser, egne prosjektegenskaper og egne felter i prosjektstatus</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">DeliveryTruck</pnp:DataValue>
+      <pnp:DataValue FieldName="GtDocumentTemplateLibrary">Malbibliotek</pnp:DataValue>
     </pnp:DataRow>
   </pnp:DataRows>
 </pnp:ListInstance>

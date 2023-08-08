@@ -8,11 +8,9 @@ import {
   SelectionMode,
   ShimmeredDetailsList
 } from '@fluentui/react'
-import { Web } from '@pnp/sp'
-import { ProjectListModel } from 'models'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
-import { getObjectValue } from 'pp365-shared/lib/helpers'
+import { getObjectValue } from 'pp365-shared-library/lib/util/getObjectValue'
 import React, { FC } from 'react'
 import { find, isEmpty } from 'underscore'
 import { ProjectCard } from './ProjectCard'
@@ -23,6 +21,7 @@ import { ProjectListViews } from './ProjectListViews'
 import { RenderModeDropdown } from './RenderModeDropdown'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
+import { ProjectListModel } from 'pp365-shared-library/lib/models'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const {
@@ -42,7 +41,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
    * @param projects - Projects to render
    */
   function renderProjects(projects: ProjectListModel[]) {
-    switch (state.renderAs) {
+    switch (state.renderMode) {
       case 'tiles': {
         return projects.map((project, idx) => (
           <ProjectCardContext.Provider
@@ -52,7 +51,8 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
               project,
               actions: getCardActions(project),
               isDataLoaded: state.isDataLoaded
-            }}>
+            }}
+          >
             <ProjectCard />
           </ProjectCardContext.Provider>
         ))
@@ -95,6 +95,14 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     return colValue
   }
 
+  if (state.projects.length === 0) {
+    return (
+      <div className={styles.root}>
+        <MessageBar messageBarType={MessageBarType.info}>{strings.NoProjectsFound}</MessageBar>
+      </div>
+    )
+  }
+
   if (state.error) {
     return (
       <div className={styles.root}>
@@ -111,33 +119,42 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             onLinkClick={({ props }) =>
               setState({ selectedView: find(views, (v) => v.itemKey === props.itemKey) })
             }
-            selectedKey={state.selectedView.itemKey}>
-            {views.map((view) => (
-              <PivotItem
-                key={view.itemKey}
-                itemKey={view.itemKey}
-                headerText={view.headerText}
-                itemIcon={view.itemIcon}
-                headerButtonProps={view.getHeaderButtonProps && view.getHeaderButtonProps(state)}>
-                <div className={styles.searchBox} hidden={!props.showSearchBox}>
-                  <SearchBox
-                    disabled={!state.isDataLoaded || isEmpty(state.projects)}
-                    placeholder={searchBoxPlaceholder}
-                    onChange={onSearch}
-                  />
-                </div>
-                <RenderModeDropdown
-                  hidden={!props.showViewSelector}
-                  onChange={(renderAs) => setState({ renderAs })}
-                />
-                {state.isDataLoaded && isEmpty(projects) && (
-                  <div className={styles.emptyMessage}>
-                    <MessageBar>{strings.ProjectListEmptyText}</MessageBar>
-                  </div>
-                )}
-                <div className={styles.projects}>{renderProjects(projects)}</div>
-              </PivotItem>
-            ))}
+            selectedKey={state.selectedView.itemKey}
+          >
+            {state.isDataLoaded &&
+              views
+                .filter((view) => !view.isHidden || !view.isHidden(state))
+                .map((view) => (
+                  <PivotItem
+                    key={view.itemKey}
+                    itemKey={view.itemKey}
+                    headerText={view.headerText}
+                    itemIcon={view.itemIcon}
+                    headerButtonProps={
+                      view.getHeaderButtonProps && view.getHeaderButtonProps(state)
+                    }
+                  >
+                    <div className={styles.searchBox} hidden={!props.showSearchBox}>
+                      <SearchBox
+                        disabled={!state.isDataLoaded || isEmpty(state.projects)}
+                        value={state.searchTerm}
+                        placeholder={searchBoxPlaceholder}
+                        onChange={onSearch}
+                      />
+                    </div>
+                    <RenderModeDropdown
+                      hidden={!props.showViewSelector}
+                      renderAs={state.renderMode}
+                      onChange={(renderAs) => setState({ renderMode: renderAs })}
+                    />
+                    {state.isDataLoaded && isEmpty(projects) && (
+                      <div className={styles.emptyMessage}>
+                        <MessageBar>{strings.ProjectListEmptyText}</MessageBar>
+                      </div>
+                    )}
+                    <div className={styles.projects}>{renderProjects(projects)}</div>
+                  </PivotItem>
+                ))}
           </Pivot>
         </div>
       </div>
@@ -146,10 +163,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         title={state.showProjectInfo?.title}
         siteId={state.showProjectInfo?.siteId}
         webUrl={state.showProjectInfo?.url}
-        hubSite={{
-          web: new Web(props.pageContext.site.absoluteUrl),
-          url: props.pageContext.site.absoluteUrl
-        }}
+        webPartContext={props.webPartContext}
         page='Portfolio'
         hidden={!state.showProjectInfo}
         hideAllActions={true}
@@ -161,7 +175,8 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
 ProjectList.defaultProps = {
   columns: PROJECTLIST_COLUMNS,
   sortBy: 'Title',
-  views: ProjectListViews
+  views: ProjectListViews,
+  hideViews: []
 }
 
 export * from './types'

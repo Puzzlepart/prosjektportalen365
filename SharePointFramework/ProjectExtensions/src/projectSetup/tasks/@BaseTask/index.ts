@@ -1,24 +1,31 @@
 import { Logger, LogLevel } from '@pnp/logging'
 import { IProjectSetupData } from 'projectSetup'
-import { IProjectSetupSettings } from 'projectSetup/ProjectSetupSettings'
-import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
-import { IBaseTask } from './IBaseTask'
-import { IBaseTaskParams } from './IBaseTaskParams'
+import { OnProgressCallbackFunction } from '../types'
+import { IBaseTask, IBaseTaskParams } from './types'
 
 export abstract class BaseTask implements IBaseTask {
-  public settings: IProjectSetupSettings
   public params: IBaseTaskParams
   public onProgress: OnProgressCallbackFunction
 
-  constructor(public taskName: string, public data: IProjectSetupData) {
-    this.settings = data.settings.values
+  constructor(public taskName: string, public data: IProjectSetupData) {}
+
+  /**
+   * Initialize execute setting parameters and on progress callback function
+   * on the task instance.
+   *
+   * @param params Parameters
+   * @param onProgress On progress callback function
+   */
+  public initExecute(params: IBaseTaskParams, onProgress?: OnProgressCallbackFunction) {
+    this.params = params
+    this.onProgress = onProgress
   }
 
   /**
    * Execute task
    *
    * @param params Task parameters
-   * @param onProgress Progress function
+   * @param onProgress On progress callback function
    */
   public abstract execute(
     params: IBaseTaskParams,
@@ -67,6 +74,4 @@ export abstract class BaseTask implements IBaseTask {
   }
 }
 
-export * from './BaseTaskError'
-export * from './IBaseTask'
-export * from './IBaseTaskParams'
+export * from './types'

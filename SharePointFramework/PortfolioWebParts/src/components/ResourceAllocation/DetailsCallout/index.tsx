@@ -1,6 +1,6 @@
 import { Callout } from '@fluentui/react/lib/Callout'
 import * as strings from 'PortfolioWebPartsStrings'
-import { formatDate } from 'pp365-shared/lib/helpers/formatDate'
+import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 import React, { FC } from 'react'
 import styles from './DetailsCallout.module.scss'
 import { IDetailsCalloutProps } from './types'
@@ -13,7 +13,8 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
       gapSpace={10}
       target={props.viewItem.element}
       onDismiss={props.onDismiss}
-      setInitialFocus={true}>
+      setInitialFocus={true}
+    >
       <p>
         <b>{strings.ProjectLabel}:</b>{' '}
         <a href={item.data.projectUrl}>

@@ -1,5 +1,22 @@
 {
   "@microsoft/generator-sharepoint": {
-    "version": "1.15.2"
+    "version": "1.16.1",
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "16.18.0",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.4.1"
+    },
+    "libraryName": "pp-365-portfolioextensions",
+    "libraryId": "37b9d88b-d41a-4f93-adf9-8499d299c107",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "pp-365-portfolioextensions",
+    "solutionShortDescription": "pp-365-portfolioextensions description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "extension",
+    "extensionType": "ApplicationCustomizer"
   }
 }

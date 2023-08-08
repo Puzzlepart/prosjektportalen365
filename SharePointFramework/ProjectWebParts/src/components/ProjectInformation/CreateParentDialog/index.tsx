@@ -1,4 +1,3 @@
-import { MenuNode, sp } from '@pnp/sp'
 import {
   DefaultButton,
   Dialog,
@@ -12,6 +11,7 @@ import strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext, useState } from 'react'
 import { ProjectInformationContext } from '../context'
 import { ProjectSetupCustomAction } from './ProjectSetupCustomAction'
+import { IMenuNode } from '@pnp/sp/navigation'
 
 export const CreateParentDialog: FC = () => {
   const context = useContext(ProjectInformationContext)
@@ -19,8 +19,31 @@ export const CreateParentDialog: FC = () => {
 
   async function applyCustomAction() {
     setLoading(true)
-    await sp.web.userCustomActions.add(ProjectSetupCustomAction)
+    await context.props.sp.web.userCustomActions.add(ProjectSetupCustomAction)
     location.reload()
+  }
+
+  /**
+   * Fetches current navigation nodes and stores it in local storage.
+   * The nodes are used to create new nodes in the navigation menu
+   * after the template is applied.
+   */
+  async function saveNavigationNodes() {
+    try {
+      const nodes = await getNavigationNodes()
+      localStorage.setItem('pp_navigationNodes', JSON.stringify(nodes))
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async function getNavigationNodes(): Promise<IMenuNode[]> {
+    try {
+      const menuState = await context.props.sp.navigation.getMenuState()
+      return menuState.Nodes
+    } catch (error) {
+      throw error
+    }
   }
 
   return (
@@ -31,7 +54,8 @@ export const CreateParentDialog: FC = () => {
         type: DialogType.largeHeader,
         title: strings.CreateParentModalTitle,
         subText: strings.CreateParentModalSubText
-      }}>
+      }}
+    >
       {!isLoading && (
         <DialogFooter>
           <DefaultButton
@@ -50,27 +74,4 @@ export const CreateParentDialog: FC = () => {
       {isLoading && <Spinner size={SpinnerSize.medium} />}
     </Dialog>
   )
-}
-
-/**
- * Fetches current navigation nodes and stores it in local storage.
- * The nodes are used to create new nodes in the navigation menu
- * after the template is applied.
- */
-async function saveNavigationNodes() {
-  try {
-    const nodes = await getNavigationNodes()
-    localStorage.setItem('pp_navigationNodes', JSON.stringify(nodes))
-  } catch (error) {
-    throw error
-  }
-}
-
-async function getNavigationNodes(): Promise<MenuNode[]> {
-  try {
-    const menuState = await sp.navigation.getMenuState()
-    return menuState.Nodes
-  } catch (error) {
-    throw error
-  }
 }

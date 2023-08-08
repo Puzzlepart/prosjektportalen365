@@ -1,5 +1,8 @@
-import { ProjectPhaseChecklistData, ProjectPhaseModel } from 'pp365-shared/lib/models'
-import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
+import { ProjectPhaseChecklistData, ProjectPhaseModel } from 'pp365-shared-library/lib/models'
+import {
+  IBaseWebPartComponentProps,
+  IBaseWebPartComponentState
+} from 'pp365-shared-library/src/components/BaseWebPartComponent'
 import { IProjectPhaseCalloutProps } from './ProjectPhase/ProjectPhaseCallout'
 
 export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
@@ -24,7 +27,8 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   subTextTruncateLength: number
 
   /**
-   * Sync properties after phase change
+   * Sync properties to the portal site (hub site in SharePoint terms)
+   * after phase change.
    */
   syncPropertiesAfterPhaseChange: boolean
 
@@ -34,12 +38,13 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   useDynamicHomepage: boolean
 
   /**
-   * Use and run hooks when switching phases
+   * Use and run hooks when switching phases. Needs to specify `hookUrl` and `hookAuth`
+   * aswell as setting this to `true` to use this functionality.
    */
   usePhaseHooks: boolean
 
   /**
-   * Hook url - for running hooks when switching phases
+   * Hook URL - for running hooks when switching phases
    */
   hookUrl: string
 
@@ -97,7 +102,9 @@ export interface IProjectPhasesData {
   checklistData?: ChecklistData
 
   /**
-   * Phase text field name
+   * Phase text field name. Used to update the phase
+   * of the project. This is the `TextField` that is
+   * connected to the term field in SharePoint.
    */
   phaseTextField?: string
 
@@ -112,7 +119,7 @@ export interface IProjectPhasesData {
   welcomePage?: string
 
   /**
-   * Current user has change phase permission (75a08ae0-d69a-41b2-adf4-ae233c6bff9f)
+   * Current user has change phase permission (`75a08ae0-d69a-41b2-adf4-ae233c6bff9f`)
    */
   userHasChangePhasePermission?: boolean
 }

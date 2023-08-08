@@ -1,4 +1,90 @@
 declare interface IPortfolioWebPartsStrings {
+  ColumnRenderOptionProjectInformationModal: string
+  SortOrderDescription: string
+  NewViewHeaderText: string
+  EditViewHeaderText: string
+  DataSourceLevelDescription: string
+  PortfolioAggregationViewSearchQueryDescription: string
+  ModalColumnEmptyListText: string
+  ColumnRenderOptionModalInfoTextTemplateDescription: string
+  ColumnRenderOptionModalShowInfoTextLabel: string
+  ColumnRenderOptionModalInfoTextTemplateLabel: string
+  ShowAllMeasurementsInfoTextFormat: string
+  ListViewGroupName: string
+  ListLayoutModeJustifiedLabel: string
+  ColumnPersistRenderGloballyFieldDescription: string
+  ColumnRenderOptionTrendShowTrendIconLabel: string
+  ColumnRenderOptionModalLinkTextLabel: string
+  ConfirmDeleteProjectContentColumnTitle: string
+  ConfirmDeleteProjectContentColumnSubText: string
+  ColumnRenderOptionTagsValueSeparatorLabel: string
+  ColumnRenderOptionTagsValueSeparatorDescription: string
+  ColumnRenderOptionDateIncludeTimeLabel: string
+  ColumnRenderOptionUrlDescriptionDescription: string
+  ColumnRenderOptionUrlDescriptionLabel: string
+  ColumnRenderOptionUrlOpenInNewTabLabel: string
+  ColumnRenderOptionUrl: string
+  ColumnRenderOptionCurrencyMinimumFractionDigitsLabel: string
+  ColumnRenderOptionCurrencyMaximumFractionDigitsLabel: string
+  ColumnRenderOptionCurrencyFallbackValueLabel: string
+  ColumnRenderOptionCurrencyPrefixLabel: string
+  ColumnRenderOptionCurrency: string
+  ColumnRenderOptionBooleanTrue: string
+  ColumnRenderOptionBooleanFalse: string
+  ColumnRenderDataTypePropertiesHeaderText: string
+  ColumnRenderOptionBoolean: string
+  CustomSortsText: string
+  PortfolioOverviewColumnRenderDescription: string
+  SearchPropertyFoundMessage: string
+  SearchPropertyPlaceholder: string
+  IncludeViewNameInExcelExportFilenameLabel: string
+  DefaultViewSetWarningMessage: string
+  PortfolioViewSearchQueryDescription: string
+  SearchQueryLabel: string
+  SearchQueryDescription: string
+  IconNameLabel: string
+  IconNameDescription: string
+  DefaultViewDescription: string
+  PersonalViewDescription: string
+  PersonalViewLabel: string
+  PortfolioOverviewShowEditViewColumnsPanelHelpText: string
+  RevertCustomOrderButtonTooltip: string
+  RevertCustomOrderButtonText: string
+  ConfirmDeleteProjectColumnTitle: string
+  ConfirmDeleteProjectColumnSubText: string
+  ConfirmDeleteResponseConfirm: string
+  ConfirmDeleteResponseAbort: string
+  AddToCurrentViewLabel: string
+  PortfolioViewsListName: string
+  ProjectColumnsListName: string
+  ShowFieldProjectStatusLabel: string
+  ShowFieldFrontpageLabel: string
+  ShowFieldPortfolioLabel: string
+  ColumnVisibilityLabel: string
+  ColumnVisibilityDescription: string
+  IsGroupableDescription: string
+  IsRefinableDescription: string
+  IsRefinableLabel: string
+  AddColumnLabel: string
+  MinWidthDescription: string
+  MaxWidthDescription: string
+  ColumnSettingsDisabledTooltip: string
+  ColumnSettingsLabel: any
+  UseChangesButtonText: string
+  EditViewColumnsPanelHeaderText: string
+  SearchBoxPlaceholderTextDescription: string
+  DataSourceLevelLabel: string
+  ShowProgramViewsLabel: string
+  SelectProgramText: string
+  ProgramsHeaderText: string
+  PortfolioOverviewDataFetchErrorView: string
+  PortfolioOverviewDataFetchError: string
+  ListViewText: string
+  CompactViewText: string
+  PersonalViewsHeaderText: string
+  DefaultRenderModeLabel: string
+  ColumnRenderDescription: ReactNode
+  DisplayNameDescription: string
   HideViewsLabel: string
   ProjectsAccessSearchBoxPlaceholderText: string
   ProjectsAccessHeaderText: string
@@ -19,6 +105,8 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionTrend: string
   ColumnRenderOptionTaxonomy: string
   ColumnRenderOptionModal: string
+  ColumnRenderOptionFilename: string
+  ColumnPersistRenderGloballyFieldLabel: string
   DataSourceGroupName: string
   CommandBarGroupName: string
   SearchBoxGroupName: string
@@ -30,7 +118,7 @@ declare interface IPortfolioWebPartsStrings {
   MoveLeftLabel: string
   IsGroupableLabel: string
   NewColumnHeaderText: string
-  AddColumnText: string
+  ToggleColumnFormPanelLabel: string
   SearchPropertyLabel: string
   SearchPropertyDescription: string
   InternalNameLabel: string
@@ -124,8 +212,6 @@ declare interface IPortfolioWebPartsStrings {
   ProjectStatusLinkText: string
   PropertyPaneDescription: string
   RecommendationLabel: string
-  ProjectTimelineInfoText: string
-  ProjectTimelineErrorTransformItemText: string
   ResourceAllocationInfoText: string
   ResourceAllocationErrorTransformGroupText: string
   ResourceLabel: string
@@ -134,16 +220,16 @@ declare interface IPortfolioWebPartsStrings {
   AllocationPercetageLabel: string
   AllocationStatusLabel: string
   CommentLabel: string
-  SaveViewAsText: string
   MyProjectsSearchBoxPlaceholderText: string
   AllProjectsSearchBoxPlaceholderText: string
   ParentProjectsSearchBoxPlaceholderText: string
   ProgramSearchBoxPlaceholderText: string
   SearchBoxPlaceholderText: string
+  SearchBoxPlaceholderFallbackText: string
   SearchBoxPlaceholderTextLabel: string
   ShowAllMeasurementsLinkText: string
-  RenderAsListText: string
-  RenderAsTilesText: string
+  RenderModeListText: string
+  RenderModeTilesText: string
   ShowCommandBarLabel: string
   ShowExcelExportButtonLabel: string
   ShowFiltersLabel: string
@@ -186,7 +272,6 @@ declare interface IPortfolioWebPartsStrings {
   CostsTotalLabel: string
   NoProjectsFound: string
   NewLabel: string
-  ReadOnlyGroupName: string
   DisplayAllProjects: string
   MyProjectsHeaderText: string
   AllProjectsHeaderText: string
@@ -202,8 +287,11 @@ declare interface IPortfolioWebPartsStrings {
   SortOrderLabel: string
   DataSourceItemNotFound: string
   ProjectContentColumnItemNotFound: string
+  ToggleEditViewColumnsLabel: string
   ShowHideColumnsLabel: string
-  ShowHideColumnsDescription: string
+  EditViewColumnsPanelHelpText: string
+  DataSourceLevelPortfolio: string
+  DataSourceLevelProject: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

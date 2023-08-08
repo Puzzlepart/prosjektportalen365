@@ -1,0 +1,122 @@
+{
+  "name": "pp365-shared-library",
+  "version": "1.9.0",
+  "sideEffects": false,
+  "private": false,
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "gulp bundle --ship && gulp package-solution --ship",
+    "postversion": "tsc && npm publish",
+    "lint": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
+    "prettier": "prettier '**/*.ts*' --write --loglevel silent"
+  },
+  "dependencies": {
+    "@microsoft/sp-application-base": "1.17.4",
+    "@microsoft/sp-core-library": "1.17.4",
+    "@microsoft/sp-listview-extensibility": "1.17.4",
+    "@microsoft/sp-page-context": "1.17.4",
+    "@microsoft/sp-webpart-base": "1.17.4",
+    "@microsoft/sp-lodash-subset": "1.17.4",
+    "@pnp/logging": "3.17.0",
+    "@pnp/sp": "3.17.0",
+    "tslib": "2.3.1",
+    "file-saver": "^2.0.5",
+    "react-markdown": "^8.0.3",
+    "rehype-raw": "^6.1.1",
+    "@fluentui/react": "8.98.1",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "sp-entityportal-service": "2.3.0",
+    "spfx-jsom": "0.6.6",
+    "underscore": "~1.13.6",
+    "xlsx": "^0.16.9",
+    "xmldom": "0.6.0",
+    "dotenv": "~16.1.3",
+    "moment": "~2.29.4",
+    "array-sort": "~1.0.0",
+    "react-calendar-timeline": "~0.28.0",
+    "lodash": "~4.17.21",
+    "@reduxjs/toolkit": "~1.9.5",
+    "@pnp/core": "3.17.0",
+    "@pnp/queryable": "3.17.0"
+  },
+  "devDependencies": {
+    "@microsoft/rush-stack-compiler-4.5": "0.2.2",
+    "eslint": "8.25.0",
+    "prettier": "2.7.1",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-prettier": "4.2.1",
+    "eslint-plugin-react": "7.31.10",
+    "eslint-plugin-unused-imports": "2.0.0",
+    "@typescript-eslint/eslint-plugin": "5.40.0",
+    "@typescript-eslint/parser": "5.40.0",
+    "@microsoft/sp-build-web": "1.17.4",
+    "@types/react": "17.0.45",
+    "@types/react-dom": "17.0.17",
+    "@types/webpack-env": "~1.15.2",
+    "@types/underscore": "~1.11.5",
+    "@types/xmldom": "^0.1.29",
+    "ajv": "^6.12.5",
+    "gulp": "4.0.2",
+    "typescript": "4.5.5",
+    "@microsoft/sp-module-interfaces": "1.17.4",
+    "@types/lodash": "~4.14.195"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+      "prettier",
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "plugins": ["prettier", "unused-imports"],
+    "parserOptions": {
+      "ecmaVersion": 2018,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "rules": {
+      "@typescript-eslint/interface-name-prefix": 0,
+      "@typescript-eslint/no-explicit-any": 0,
+      "@typescript-eslint/member-delimiter-style": 0,
+      "@typescript-eslint/explicit-function-return-type": 0,
+      "@typescript-eslint/explicit-module-boundary-types": 0,
+      "@typescript-eslint/no-inferrable-types": 0,
+      "react/prop-types": 0,
+      "no-inferrable-types": 0,
+      "react/display-name": 0,
+      "no-compare-neg-zero": 1,
+      "no-console": 2,
+      "default-case": 0,
+      "eqeqeq": 1,
+      "max-classes-per-file": 1,
+      "jsx-quotes": ["error", "prefer-single"],
+      "quotes": ["error", "single"],
+      "yoda": 2,
+      "require-await": 1,
+      "semi": ["error", "never", {}],
+      "unused-imports/no-unused-imports": "error"
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "singleQuote": true,
+    "semi": false,
+    "arrowParens": "always",
+    "printWidth": 100,
+    "trailingComma": "none",
+    "bracketSpacing": true,
+    "jsxBracketSameLine": true,
+    "jsxSingleQuote": true
+  }
+}

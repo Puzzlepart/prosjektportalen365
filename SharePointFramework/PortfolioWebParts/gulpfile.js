@@ -1,5 +1,3 @@
-/* eslint-disable quotes */
-/* eslint-disable @typescript-eslint/no-var-requires */
 'use strict'
 const path = require('path')
 const gulp = require('gulp')

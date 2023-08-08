@@ -1,87 +1,76 @@
-import {
-  MessageBarType,
-  ShimmeredDetailsList,
-  SelectionMode,
-  DetailsListLayoutMode
-} from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
+import { ProjectContentColumn } from 'pp365-shared-library'
+import { FilterPanel } from 'pp365-shared-library/lib/components/FilterPanel'
 import React, { FC } from 'react'
-import { FilterPanel } from '../FilterPanel'
+import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
+import { List } from '../List'
 import { ColumnContextMenu } from './ColumnContextMenu'
-import { addColumn, ColumnFormPanel } from './ColumnFormPanel'
+import { ColumnFormPanel } from './ColumnFormPanel'
 import { Commands } from './Commands'
-import { PortfolioAggregationContext } from './context'
-import { getDefaultColumns, renderItemColumn } from './itemColumn'
 import styles from './PortfolioAggregation.module.scss'
-import { COLUMN_HEADER_CONTEXT_MENU, ON_FILTER_CHANGE, TOGGLE_FILTER_PANEL } from './reducer'
-import SearchBox from './SearchBox'
-import { ShowHideColumnPanel } from './ShowHideColumnPanel'
+import { ViewFormPanel } from './ViewFormPanel'
+import { PortfolioAggregationContext } from './context'
+import { ON_FILTER_CHANGE, SET_ALL_COLLAPSED, SET_COLLAPSED, TOGGLE_FILTER_PANEL } from './reducer'
 import { IPortfolioAggregationProps } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
-  const { state, dispatch, items, layerHostId, ctxValue } = usePortfolioAggregation(props)
-
-  if (state.error) {
-    return <UserMessage type={MessageBarType.error} text={state.error.message} />
-  }
+  const { context, searchBox, editViewColumnsPanelProps, onColumnContextMenu } =
+    usePortfolioAggregation(props)
 
   return (
-    <PortfolioAggregationContext.Provider value={ctxValue}>
-      <div className={styles.root}>
+    <div className={styles.root}>
+      <PortfolioAggregationContext.Provider value={context}>
         <Commands />
-        <div className={styles.header}>
-          <div className={styles.title}>{props.title}</div>
-        </div>
-        <SearchBox />
-        <div className={styles.listContainer}>
-          <ShimmeredDetailsList
-            selectionMode={SelectionMode.none}
-            layoutMode={DetailsListLayoutMode.fixedColumns}
-            enableShimmer={state.loading}
-            items={items.listItems}
-            onRenderItemColumn={renderItemColumn}
-            onColumnHeaderClick={(ev, col) => {
-              dispatch(
-                COLUMN_HEADER_CONTEXT_MENU({
-                  column: col,
-                  target: ev.currentTarget
-                })
-              )
+        <div className={styles.container}>
+          <List
+            key={context.state.currentView?.id}
+            title={props.title}
+            enableShimmer={context.state.loading}
+            items={context.items}
+            columns={context.columns}
+            groups={context.state.groups}
+            searchBox={searchBox}
+            onColumnContextMenu={onColumnContextMenu}
+            isAddColumnEnabled={!props.lockedColumns && !props.isParentProject}
+            compact={context.state.isCompact}
+            isListLayoutModeJustified={props.isListLayoutModeJustified}
+            groupProps={{
+              onToggleCollapseAll: (isAllCollapsed) =>
+                context.dispatch(SET_ALL_COLLAPSED({ isAllCollapsed })),
+              headerProps: {
+                onToggleCollapse: (group) => context.dispatch(SET_COLLAPSED({ group }))
+              }
             }}
-            columns={[
-              ...getDefaultColumns(props),
-              ...items.columns,
-              !props.lockedColumns && addColumn()
-            ].filter((c) => c)}
-            groups={state.groups}
-            compact={state.isCompact}
+            webPartContext={props.webPartContext}
+            layerHostId={context.layerHostId}
+            error={context.state.error}
           />
         </div>
         <ColumnContextMenu />
         <ColumnFormPanel />
-        <ShowHideColumnPanel />
+        <EditViewColumnsPanel {...editViewColumnsPanelProps} />
+        <ViewFormPanel />
         <FilterPanel
-          isOpen={state.showFilterPanel}
-          layerHostId={layerHostId}
+          isOpen={context.state.isFilterPanelOpen}
+          layerHostId={context.layerHostId}
           headerText={strings.FiltersString}
-          onDismiss={() => dispatch(TOGGLE_FILTER_PANEL({ isOpen: false }))}
+          onDismiss={() => context.dispatch(TOGGLE_FILTER_PANEL({ isOpen: false }))}
           isLightDismiss={true}
-          filters={state.filters}
-          onFilterChange={(column, selectedItems) => {
-            dispatch(ON_FILTER_CHANGE({ column, selectedItems }))
+          filters={context.state.filters}
+          onFilterChange={(column: ProjectContentColumn, selectedItems) => {
+            context.dispatch(ON_FILTER_CHANGE({ column, selectedItems }))
           }}
         />
-      </div>
-    </PortfolioAggregationContext.Provider>
+      </PortfolioAggregationContext.Provider>
+    </div>
   )
 }
 
 PortfolioAggregation.defaultProps = {
   showCommandBar: true,
   showExcelExportButton: true,
-  showSearchBox: true
+  lockedColumns: false
 }
 
 export * from './types'

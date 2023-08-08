@@ -9,11 +9,15 @@ import { useProjectTimelineDataFetch } from './data/useProjectTimelineDataFetch'
 import sortArray from 'array-sort'
 import { get } from '@microsoft/sp-lodash-subset'
 import { IColumn } from '@fluentui/react/lib/DetailsList'
-import { TimelineConfigurationModel } from 'pp365-portfoliowebparts/lib/models'
-import { IFilterItemProps, IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
+import { TimelineConfigurationModel } from 'pp365-shared-library/lib/models'
+import {
+  IFilterItemProps,
+  IFilterProps,
+  TimelineTimeframe
+} from 'pp365-shared-library/lib/components'
 import strings from 'ProjectWebPartsStrings'
-import { TimelineTimeframe } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline'
-import { ITimelineItem } from 'pp365-portfoliowebparts/lib/interfaces/ITimelineItem'
+import moment from 'moment'
+import { ITimelineItem } from 'pp365-shared-library/lib/interfaces'
 
 /**
  * Component logic hook for `ProjectTimeline`

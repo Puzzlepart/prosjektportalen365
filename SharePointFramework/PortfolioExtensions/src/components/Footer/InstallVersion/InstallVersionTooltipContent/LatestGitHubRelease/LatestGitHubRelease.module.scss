@@ -1,0 +1,16 @@
+.root {
+    margin: 15px 0 0 0;
+
+    .label {
+        font-weight: 600;
+    }
+    
+    .latestGitHubReleaseLink {
+        color: inherit;
+    }
+
+    .versionComparisonIcon {
+        margin: 0 3px;
+        vertical-align: middle;
+    }
+}

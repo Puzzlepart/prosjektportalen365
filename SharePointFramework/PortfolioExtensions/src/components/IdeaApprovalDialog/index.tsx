@@ -11,9 +11,11 @@ import {
   Dropdown,
   IDropdownOption,
   TextField,
-  format
+  format,
+  MessageBarType
 } from '@fluentui/react'
 import strings from 'PortfolioExtensionsStrings'
+import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 
 interface IDialogContentProps {
   close: () => void
@@ -41,11 +43,19 @@ class DialogPrompt extends React.Component<IDialogContentProps, IDialogContentSt
     return (
       <DialogContent
         title={strings.SetRecommendationTitle}
-        subText={format(strings.SetRecommendationSubtitle, this.props.ideaTitle)}
         type={DialogType.largeHeader}
         onDismiss={this.props.close}
         showCloseButton={true}
+        styles={{ content: { maxWidth: '420px' } }}
       >
+        <UserMessage
+          text={format(
+            strings.SetRecommendationSubtitle,
+            this.props.ideaTitle,
+            this.props.dialogDescription
+          )}
+          type={MessageBarType.info}
+        />
         <Dropdown
           label={strings.ActionLabel}
           placeholder={strings.ActionLabelPlaceholder}
@@ -100,11 +110,17 @@ export default class RecommendationDialog extends BaseDialog {
   public message: string
   public selectedChoice: string
   public ideaTitle: string
+  public dialogDescription: string
   public comment: string
 
   public render(): void {
     ReactDOM.render(
-      <DialogPrompt close={this.close} submit={this._submit} ideaTitle={this.ideaTitle} />,
+      <DialogPrompt
+        close={this.close}
+        submit={this._submit}
+        ideaTitle={this.ideaTitle}
+        dialogDescription={this.dialogDescription}
+      />,
       this.domElement
     )
   }

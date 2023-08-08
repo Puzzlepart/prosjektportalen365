@@ -1,35 +1,34 @@
 {
-    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-    "id": "b8bec0be-2354-443d-a3ca-24b36e8ea7dc",
-    "alias": "ProjectInformationWebPart",
-    "componentType": "WebPart",
-    "version": "1.7.3",
-    "manifestVersion": 2,
-    "requiresCustomScript": false,
-    "hiddenFromToolbox": true,
-    "supportedHosts": [
-        "SharePointWebPart"
-    ],
-    "preconfiguredEntries": [
-        {
-            "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
-            "group": {
-                "default": "Other"
-            },
-            "title": {
-                "default": "Prosjektinformasjon"
-            },
-            "description": {
-                "default": " "
-            },
-            "officeFabricIconFontName": "ProjectCollection",
-            "properties": {
-                "title": "Prosjektinformasjon",
-                "useIdeaProcessing": false,
-                "hideAllActions": false,
-                "useFramelessButtons": false,
-                "hideActions": []
-            }
-        }
-    ]
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "b8bec0be-2354-443d-a3ca-24b36e8ea7dc",
+  "alias": "ProjectInformationWebPart",
+  "componentType": "WebPart",
+  "version": "1.9.0",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "hiddenFromToolbox": true,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Prosjektinformasjon"
+      },
+      "description": {
+        "default": " "
+      },
+      "officeFabricIconFontName": "ProjectCollection",
+      "properties": {
+        "title": "Prosjektinformasjon",
+        "hideAllActions": false,
+        "useFramelessButtons": false,
+        "hideActions": []
+      }
+    }
+  ]
 }

@@ -15,12 +15,10 @@ import { find, first } from 'underscore'
 import { ITemplateSelectorContext, TemplateSelectorContext } from './context'
 import { ITemplateSelectorCommandProperties } from './types'
 
-Logger.subscribe(new ConsoleListener())
+Logger.subscribe(ConsoleListener())
 Logger.activeLogLevel = LogLevel.Info
 
-export default class TemplateSelectorCommand extends BaseListViewCommandSet<
-  ITemplateSelectorCommandProperties
-> {
+export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITemplateSelectorCommandProperties> {
   private _openCmd: Command
   private _ctxValue: ITemplateSelectorContext = {}
   private _placeholderIds = { DocumentTemplateDialog: getId('documenttemplatedialog') }
@@ -32,7 +30,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<
       data: { version: this.context.manifest.version, placeholderIds: this._placeholderIds },
       level: LogLevel.Info
     })
-    Logger.subscribe(new ConsoleListener())
+    Logger.subscribe(ConsoleListener())
     Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     await SPDataAdapter.configure(this.context, {
       siteId: this.context.pageContext.site.id.toString(),

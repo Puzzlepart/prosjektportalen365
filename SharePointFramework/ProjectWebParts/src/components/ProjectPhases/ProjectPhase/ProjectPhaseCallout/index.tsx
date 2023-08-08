@@ -19,7 +19,8 @@ export const ProjectPhaseCallout: FC<IProjectPhaseCalloutProps> = (props) => {
       target={props.target}
       onDismiss={() => context.dispatch(DISMISS_CALLOUT())}
       setInitialFocus={true}
-      className={styles.root}>
+      className={styles.root}
+    >
       <div className={styles.container}>
         <div className={styles.header}>
           <span className={styles.title}>{phase.name}</span>

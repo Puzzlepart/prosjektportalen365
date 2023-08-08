@@ -18,9 +18,9 @@ export interface IDynamicMatrixProps {
   configuration: DynamicMatrixConfiguration
 
   /**
-   * Size (4, 5 or 6)
+   * Size (4, 5 or 6) as string.
    */
-  size?: string
+  size?: DynamicMatrixSize
 
   /**
    * Width can be either `string` or `number`.
@@ -35,7 +35,7 @@ export interface IDynamicMatrixProps {
   calloutTemplate: string
 
   /**
-   * Function that should return the elements for the specified `cell`.
+   * Function that should return the elements for the specified cell.
    */
   getElementsForCell: (cell: IMatrixCell) => IMatrixElementProps[]
 

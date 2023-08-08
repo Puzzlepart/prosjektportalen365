@@ -1,15 +1,36 @@
 import { PageContext } from '@microsoft/sp-page-context'
 import { IOpportunityMatrixProps } from '../OpportunityMatrix'
 import { IRiskMatrixProps } from '../RiskMatrix'
-import { ProjectColumnConfig, SectionModel, SPField, StatusReport } from 'pp365-shared/lib/models'
-import { IGetPropertiesData } from 'pp365-shared/lib/services'
-import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
+import {
+  ProjectColumnConfig,
+  SectionModel,
+  SPField,
+  StatusReport
+} from 'pp365-shared-library/lib/models'
+import { IGetPropertiesData } from 'pp365-shared-library/lib/services'
+import {
+  IBaseWebPartComponentProps,
+  IBaseWebPartComponentState
+} from 'pp365-shared-library/src/components/BaseWebPartComponent'
+import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage/types'
 
 export interface IProjectStatusProps extends IBaseWebPartComponentProps {
   riskMatrix?: IRiskMatrixProps
   opportunityMatrix?: IOpportunityMatrixProps
   fieldWidth?: number
   pageContext?: PageContext
+
+  /**
+   * File name for the persisted section data attachment stored in a separate
+   * hidden library. This is used to persist the section data when the report
+   * is published.
+   */
+  persistSectionDataAttachmentFileName?: string
+
+  /**
+   * File name for the snapshot attachment stored in a separate hidden library.
+   */
+  snapshotAttachmentFileName?: string
 }
 
 export interface IProjectStatusState extends IBaseWebPartComponentState<IProjectStatusData> {
@@ -24,7 +45,7 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   selectedReport?: StatusReport
 
   /**
-   * Hash state
+   * Hash state from URL
    */
   hashState?: IProjectStatusHashState
 
@@ -34,7 +55,7 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   isPublishing?: boolean
 
   /**
-   * ID of the most recent report
+   * `ID` of the most recent report
    */
   mostRecentReportId?: number
 
@@ -44,9 +65,14 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   userHasAdminPermission?: boolean
 
   /**
-   * Persist list data
+   * Persisted section list data
    */
   persistedSectionData?: Record<string, any>
+
+  /**
+   * User message to display in the UI
+   */
+  userMessage?: Pick<IUserMessageProps, 'text' | 'type'>
 }
 
 export interface IProjectStatusHashState {

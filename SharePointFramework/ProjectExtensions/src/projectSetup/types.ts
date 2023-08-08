@@ -66,6 +66,11 @@ export interface IProjectSetupData extends ITemplateSelectDialogState {
    * Content config
    */
   contentConfig?: ContentConfig[]
+
+  /**
+   * Custom actions for the web
+   */
+  customActions?: any[]
 }
 
 export enum ProjectSetupValidation {

@@ -184,6 +184,12 @@
   <data name="Lists_ProjectStatus_Url" xml:space="preserve">
     <value>Lists/Prosjektstatus</value>
   </data>
+  <data name="Lists_ProjectStatusAttachments_Title" xml:space="preserve">
+    <value>Prosjektstatusvedlegg</value>
+  </data>
+  <data name="Lists_ProjectStatusAttachments_Url" xml:space="preserve">
+    <value>Prosjektstatusvedlegg</value>
+  </data>
   <data name="Lists_ProjectExtensions_Title" xml:space="preserve">
     <value>Prosjekttillegg</value>
   </data>
@@ -262,6 +268,18 @@
   <data name="Lists_IdeaRegistration_Url" xml:space="preserve">
     <value>Lists/Ideregistrering</value>
   </data>
+  <data name="Lists_Idea_Configuration_Title" xml:space="preserve">
+    <value>Idékonfigurasjon</value>
+  </data>
+  <data name="Lists_Idea_Configuration_Url" xml:space="preserve">
+    <value>Lists/Idekonfigurasjon</value>
+  </data>
+  <data name="Lists_Idea_Configuration_Field_GtDescription_DisplayName" xml:space="preserve">
+    <value>Dialogbeskrivelser</value>
+  </data>
+  <data name="Lists_Idea_Configuration_Field_GtDescription_Description" xml:space="preserve">
+    <value>Dialog beskrivelser for 1. Idéregistrering, 2. Idébehandling og 3. Prosjektdata opprettelse, separert med semikolon</value>
+  </data>
   <data name="Lists_PhaseChecklistA_Title" xml:space="preserve">
     <value>Fasesjekkliste Anlegg</value>
   </data>
@@ -301,8 +319,14 @@
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>Alle elementer</value>
   </data>
+  <data name="View_GroupedByCategory_DisplayName" xml:space="preserve">
+    <value>Gruppert etter kategori</value>
+  </data>
   <data name="View_AllDocuments_DisplayName" xml:space="preserve">
     <value>Alle dokumenter</value>
+  </data>
+  <data name="View_Cards_DisplayName" xml:space="preserve">
+    <value>Kortvisning</value>
   </data>
   <data name="ContentTypes_Group" xml:space="preserve">
     <value>Prosjektportalen innholdstyper</value>
@@ -416,13 +440,13 @@
     <value></value>
   </data>
   <data name="ContentTypes_ProjectBA_Name" xml:space="preserve">
-    <value>Prosjekt (Bygg og anlegg)</value>
+    <value>Prosjekt (ByggAnlegg)</value>
   </data>
   <data name="ContentTypes_ProjectBA_Description" xml:space="preserve">
     <value>Prosjekt innholdstype for bygg- og anleggsprosjekter</value>
   </data>
   <data name="ContentTypes_ProjectStatusBA_Name" xml:space="preserve">
-    <value>Prosjektstatus (Bygg og anlegg)</value>
+    <value>Prosjektstatus (ByggAnlegg)</value>
   </data>
   <data name="ContentTypes_ProjectStatusBA_Description" xml:space="preserve">
     <value>Prosjektstatus innholdstype for bygg- og anleggsprosjekter</value>
@@ -501,6 +525,12 @@
   </data>
   <data name="ContentTypes_IdeaProcessing_Description" xml:space="preserve">
     <value>Innholdstype for idébehandling (Idébehandling)</value>
+  </data>
+  <data name="ContentTypes_Idea_Configuration_Element_Name" xml:space="preserve">
+    <value>Idékonfigurasjonelement</value>
+  </data>
+  <data name="ContentTypes_Idea_Configuration_Element_Description" xml:space="preserve">
+    <value>Innholdstype for idékonfigurasjon (Idébehandling)</value>
   </data>
    <data name="ContentTypes_HelpContent_Name" xml:space="preserve">
     <value>Hjelpeinnhold</value>
@@ -676,6 +706,12 @@
   <data name="SiteFields_GtPortfolioColumns_DisplayName" xml:space="preserve">
     <value>Kolonner</value>
   </data>
+  <data name="SiteFields_GtPortfolioColumnOrder_DisplayName" xml:space="preserve">
+    <value>Kolonnerekkefølge</value>
+  </data>
+  <data name="SiteFields_GtPortfolioColumnTooltip_DisplayName" xml:space="preserve">
+    <value>Tooltip-kolonne</value>
+  </data>
   <data name="SiteFields_GtProjectContentColumns_DisplayName" xml:space="preserve">
     <value>Kolonner</value>
   </data>
@@ -738,6 +774,9 @@
   </data>
   <data name="SiteFields_GtFieldDataType_DisplayName" xml:space="preserve">
     <value>Datatype</value>
+  </data>
+  <data name="SiteFields_GtFieldDataTypeProperties_DisplayName" xml:space="preserve">
+    <value>Egenskaper for datatype</value>
   </data>
   <data name="SiteFields_GtResourceRole_DisplayName" xml:space="preserve">
     <value>Rolle</value>
@@ -856,6 +895,9 @@
   <data name="SiteFields_GtColMinWidth_DisplayName" xml:space="preserve">
     <value>Minimum bredde</value>
   </data>
+  <data name="SiteFields_GtColMaxWidth_DisplayName" xml:space="preserve">
+    <value>Maksimum bredde</value>
+  </data>
   <data name="SiteFields_GtPortfolioColumnValue_DisplayName" xml:space="preserve">
     <value>Kolonneverdi</value>
   </data>
@@ -878,7 +920,7 @@
     <value>Vedlegg</value>
   </data>
   <data name="SiteFields_GtAttachments_Description" xml:space="preserve">
-    <value>Vedlegg til oppgaven. Skrives på formatet url;tittel;type. Separer verdier med |. Type kan f.eks. være PowerPoint, Word, Excel eller Other.</value>
+    <value>Vedlegg til oppgaven. Skrives på formatet url;tittel;type. Separer verdier med |. Type kan f.eks. være PowerPoint, Word, Excel eller Other. Maks antall vedlegg for en oppgave er 10, dersom dette overskrides blir de overskytende ikke med ved opprettelse.</value>
   </data>
   <data name="SiteFields_GtActionChannel_DisplayName" xml:space="preserve">
     <value>Communication channel</value>
@@ -926,7 +968,13 @@
     <value>Sjekkliste</value>
   </data>
   <data name="SiteFields_GtChecklist_Description" xml:space="preserve">
-    <value>Sjekkpunkter separert med semikolon.</value>
+    <value>Sjekkpunkter separert med semikolon. Makslengde på beskrivelse er 100 tegn og antall sjekkpunkter for en oppgave er 20, dersom dette overskrides blir de overskytende ikke med ved opprettelse.</value>
+  </data>
+  <data name="SiteFields_GtPlannerTags_DisplayName" xml:space="preserve">
+    <value>Etiketter</value>
+  </data>
+  <data name="SiteFields_GtPlannerTags_Description" xml:space="preserve">
+    <value>Etiketter separert med semikolon. Maks antall unike etiketter for en plan er 25, dersom dette overskrides blir de overskytende ikke med ved opprettelse.</value>
   </data>
   <data name="SiteFields_GtChecklistStatus_DisplayName" xml:space="preserve">
     <value>Status</value>
@@ -950,6 +998,24 @@
     <value>Standard for kategori</value>
   </data>
   <data name="SiteFields_GtDataSourceDefault_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SiteFields_GtDataSourceDeprecated_DisplayName" xml:space="preserve">
+    <value>Deprecated</value>
+  </data>
+  <data name="SiteFields_GtDataSourceDeprecated_Description" xml:space="preserve">
+    <value>The data source is deprecated and should not be used.</value>
+  </data>
+  <data name="SiteFields_GtDataSourceId_DisplayName" xml:space="preserve">
+    <value>Unique ID</value>
+  </data>
+  <data name="SiteFields_GtDataSourceId_Description" xml:space="preserve">
+    <value>Unique ID for the data source. This is used internally and should not be changed.</value>
+  </data>
+  <data name="SiteFields_GtDataSourceLevel_DisplayName" xml:space="preserve">
+    <value>Nivå</value>
+  </data>
+  <data name="SiteFields_GtDataSourceLevel_Description" xml:space="preserve">
     <value></value>
   </data>
   <data name="SiteFields_GtDeliveryAcceptanceCriteria_DisplayName" xml:space="preserve">
@@ -1453,6 +1519,9 @@
   <data name="SiteFields_GtPortfolioColumns_Description" xml:space="preserve">
     <value></value>
   </data>
+  <data name="SiteFields_GtPortfolioColumnOrder_Description" xml:space="preserve">
+    <value>Kolonnerekkefølge i porteføljeoversikten. Styres i webdelen Porteføljeoversikt.</value>
+  </data>
   <data name="SiteFields_GtProjectContentColumns_Description" xml:space="preserve">
     <value></value>
   </data>
@@ -1512,6 +1581,9 @@
   </data>
   <data name="SiteFields_GtFieldDataType_Description" xml:space="preserve">
     <value>Datatype for denne kolonnen. Styrer hvordan kolonnen blir vist i Porteføljeoversikten.</value>
+  </data>
+  <data name="SiteFields_GtFieldDataTypeProperties_Description" xml:space="preserve">
+    <value></value>
   </data>
   <data name="SiteFields_GtResourceRole_Description" xml:space="preserve">
     <value>Velg den rollen personen skal ha i prosjektet</value>
@@ -1631,7 +1703,10 @@
     <value></value>
   </data>
   <data name="SiteFields_GtColMinWidth_Description" xml:space="preserve">
-    <value>Minimum bredde for denne kolonnen i piksler. Brukes blant annet i Porteføljeoversikten.</value>
+    <value>Minimum bredde for denne kolonnen i piksler. Brukes blant annet i Porteføljeoversikten og aggregerte visninger.</value>
+  </data>
+  <data name="SiteFields_GtColMaxWidth_Description" xml:space="preserve">
+    <value>Maksimum bredde for denne kolonnen i piksler. Brukes blant annet i Porteføljeoversikten og aggregerte visninger.</value>
   </data>
   <data name="SiteFields_GtPortfolioColumnValue_Description" xml:space="preserve">
     <value></value>
@@ -1641,6 +1716,9 @@
   </data>
   <data name="SiteFields_GtPortfolioColumnIconName_Description" xml:space="preserve">
     <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
+  </data>
+  <data name="SiteFields_GtPortfolioColumnTooltip_Description" xml:space="preserve">
+    <value>Velg en kolonne som du vil vise verdien fra når du holder musepekeren over den valgte kolonnen.</value>
   </data>
   <data name="SiteFields_GtLastSyncTime_Description" xml:space="preserve">
     <value></value>
@@ -1869,6 +1947,108 @@
   </data>
   <data name="SiteFields_GtRegistratedIdea_Description" xml:space="preserve">
     <value>Registrert idé tilknytning</value>
+  </data>
+  <data name="SiteFields_GtIdeaRegistrationList_DisplayName" xml:space="preserve">
+    <value>Idéregistrering</value>
+  </data>
+  <data name="SiteFields_GtIdeaRegistrationList_Description" xml:space="preserve">
+    <value>Hvilken idéregisreringsliste skal elementet kobles mot?</value>
+  </data>
+  <data name="SiteFields_GtIdeaProcessingList_DisplayName" xml:space="preserve">
+    <value>Idébehandling</value>
+  </data>
+  <data name="SiteFields_GtIdeaProcessingList_Description" xml:space="preserve">
+    <value>Hvilken idébehandlingsliste skal elementet kobles mot?</value>
+  </data>
+  <data name="SiteFields_GtIdeaReporter_DisplayName" xml:space="preserve">
+    <value>Innmelder</value>
+  </data>
+  <data name="SiteFields_GtIdeaReporter_Description" xml:space="preserve">
+    <value>Innmelder av idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaStrategicValue_DisplayName" xml:space="preserve">
+    <value>Strategisk verdi</value>
+  </data>
+  <data name="SiteFields_GtIdeaStrategicValue_Description" xml:space="preserve">
+    <value>Den strategiske verdien for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaQualityBenefit_DisplayName" xml:space="preserve">
+    <value>Kvalitativ gevinst</value>
+  </data>
+  <data name="SiteFields_GtIdeaQualityBenefit_Description" xml:space="preserve">
+    <value>Den kvalitative gevinsten for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaEconomicBenefit_DisplayName" xml:space="preserve">
+    <value>Økonomisk gevinst</value>
+  </data>
+  <data name="SiteFields_GtIdeaEconomicBenefit_Description" xml:space="preserve">
+    <value>Den økonomiske gevinsten for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaOperationalNeed_DisplayName" xml:space="preserve">
+    <value>Operasjonelt behov/lovpålagt</value>
+  </data>
+  <data name="SiteFields_GtIdeaOperationalNeed_Description" xml:space="preserve">
+    <value>Operasjonelt behov for idéen (Lovpålagt)</value>
+  </data>
+  <data name="SiteFields_GtIdeaRisk_DisplayName" xml:space="preserve">
+    <value>Risiko</value>
+  </data>
+  <data name="SiteFields_GtIdeaRisk_Description" xml:space="preserve">
+    <value>Risiko for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaStrategicNumber_DisplayName" xml:space="preserve">
+    <value>Strategisk verdi (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaStrategicNumber_Description" xml:space="preserve">
+    <value>Strategisk verdi for idéen (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaQualityNumber_DisplayName" xml:space="preserve">
+    <value>Kvalitativ gevinst (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaQualityNumber_Description" xml:space="preserve">
+    <value>Kvalitativ gevinst for idéen (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaEconomicNumber_DisplayName" xml:space="preserve">
+    <value>Økonomisk gevinst (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaEconomicNumber_Description" xml:space="preserve">
+    <value>Økonomisk gevinst for idéen (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaOperationalNumber_DisplayName" xml:space="preserve">
+    <value>Operasjonelt behov/lovpålagt (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaOperationalNumber_Description" xml:space="preserve">
+    <value>Operasjonelt behov/lovpålagt for idéen (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaRiskNumber_DisplayName" xml:space="preserve">
+    <value>Risiko (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaRiskNumber_Description" xml:space="preserve">
+    <value>Risiko for idéen (tall)</value>
+  </data>
+  <data name="SiteFields_GtIdeaManualScore_DisplayName" xml:space="preserve">
+    <value>Justering</value>
+  </data>
+  <data name="SiteFields_GtIdeaManualScore_Description" xml:space="preserve">
+    <value>Justering av idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaManualComment_DisplayName" xml:space="preserve">
+    <value>Kommentar til justering</value>
+  </data>
+  <data name="SiteFields_GtIdeaManualComment_Description" xml:space="preserve">
+    <value>Kommentar til justeringen for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaScore_DisplayName" xml:space="preserve">
+    <value>Score</value>
+  </data>
+  <data name="SiteFields_GtIdeaScore_Description" xml:space="preserve">
+    <value>Score for idéen</value>
+  </data>
+  <data name="SiteFields_GtIdeaPriority_DisplayName" xml:space="preserve">
+    <value>Prioritering</value>
+  </data>
+  <data name="SiteFields_GtIdeaPriority_Description" xml:space="preserve">
+    <value>Prioritering for idéen</value>
   </data>
   <data name="SiteFields_GtBAEndDateOriginal_DisplayName" xml:space="preserve">
     <value>Opprinnelig overtakelsesdato</value>
@@ -2207,7 +2387,7 @@
     <value>Ikke relevant</value>
   </data>
   <data name="Choice_GtChecklistStatus_StillOpen" xml:space="preserve">
-    <value>Forsatt åpen</value>
+    <value>Fortsatt åpen</value>
   </data>
   <data name="Choice_GtStakeholderGroup_Colleagues" xml:space="preserve">
     <value>Medarbeidere</value>
@@ -2403,5 +2583,11 @@
   </data>
   <data name="ClientSidePages_ProjectTimeline_Title" xml:space="preserve">
     <value>Prosjekttidslinje</value>
+  </data>
+  <data name="SiteFields_GtFieldLocked_DisplayName" xml:space="preserve">
+    <value>Låst</value>
+  </data>
+  <data name="SiteFields_GtFieldLocked_Description" xml:space="preserve">
+    <value>Kolonnen er låst og kan ikke redigeres eller velges bort.</value>
   </data>
 </root>

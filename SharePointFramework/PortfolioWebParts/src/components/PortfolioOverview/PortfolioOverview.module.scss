@@ -1,48 +1,9 @@
-@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
-
-[class^="mainContent"]{
-  position: relative !important;
-}
+@import "~@fluentui/react/dist/sass/References.scss";
 
 .root {
-  margin: 15px 0 0 0;
+  margin: 0;
+
   .container {
-    .header {
-      padding: 20px 0 20px 0;
-      .title {
-        font-size: 28px;
-        font-weight: 100;
-        margin: 0;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
-    }
-    .searchBox {
-      padding: 0 0 20px 0;
-    }
-    .statusBar {
-      padding: 0 32px 0 32px;
-    }
-    .listContainer {
-      padding: 0 32px;
-    }
-
-    .stickyHeader {
-      .header {
-        padding-left: 32px;
-        padding-right: 32px;
-      }
-      .searchBox {
-        display: none;
-      }
-      .headerColumns {
-        position: inherit;
-      }
-    }
-
-    [class*='stickyAbove'] .headerColumns {
-      padding-left: 32px;
-    }
+    margin: 0;
   }
 }

@@ -1,15 +1,15 @@
 import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
-import { IProjectTimelineProps, ProjectTimeline } from 'components/ProjectTimeline'
 import strings from 'PortfolioWebPartsStrings'
-import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
+import { ProjectTimeline, IProjectTimelineProps } from 'pp365-shared-library/lib/components'
+import { BasePortfolioWebPart } from '../@basePortfolioWebPart'
 
-export default class ProjectTimelineWebPart extends BasePortfolioWebPart<IProjectTimelineProps> {
-  public render(): void {
-    this.renderComponent<IProjectTimelineProps>(ProjectTimeline)
-  }
-
+export default class PortfolioTimelineWebPart extends BasePortfolioWebPart<IProjectTimelineProps> {
   public async onInit(): Promise<void> {
     await super.onInit()
+  }
+
+  public render(): void {
+    this.renderComponent<IProjectTimelineProps>(ProjectTimeline)
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {

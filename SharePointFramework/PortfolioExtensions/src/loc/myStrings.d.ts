@@ -1,6 +1,17 @@
 declare interface IPortfolioExtensionsStrings {
+  HelpContentListName: string
+  HelpContentLinkText: string
+  SiteSettingsLinkText: ReactNode
+  LinksListText: ReactNode
+  LatestGitHubReleaseLinkTitle: string
+  LatestGitHubReleaseDownloadButtonText: string
+  LatestGitHubReleaseIsNewerText: any
+  LatestGitHubReleaseIsOlderText: any
+  LatestGitHubReleaseIsSameText: any
+  LatestGitHubReleaseLabel: string
   SetRecommendationTitle: string
   SetRecommendationSubtitle: string
+  SetRecommendationDefaultDescription: string
   IdeaProjectDataDialogTitle: string
   IdeaProjectDataDialogSubText: string
   IdeaProjectDataDialogInfoText: string
@@ -11,6 +22,7 @@ declare interface IPortfolioExtensionsStrings {
   IdeaRegistrationTitle: string
   IdeaRegistrationUrlTitle: string
   IdeaProjectDataTitle: string
+  IdeaConfigurationTitle: string
   ApproveChoice: string
   ConsiderationChoice: string
   RejectChoice: string
@@ -27,6 +39,18 @@ declare interface IPortfolioExtensionsStrings {
   CloseLabel: string
   SubmitLabel: string
   CreateLabel: string
+  InstallStartTimeLabel: string
+  InstallEndTimeLabel: string
+  InstallVersionLabel: string
+  InstallCommandLabel: string
+  InstallChannelLabel: string
+  LastInstallHeaderText: string
+  SeeAllInstallationsLinkText: string
+  InstallationLogListName: string
+  ConfigurationLinkText: string
+  InstallDurationLabel: string
+  InstallDurationValueTemplate: string
+  LinksListName: string
 }
 
 declare module 'PortfolioExtensionsStrings' {

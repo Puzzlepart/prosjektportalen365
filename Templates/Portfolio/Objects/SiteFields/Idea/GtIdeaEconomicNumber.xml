@@ -1,0 +1,6 @@
+<Field ID="{d04ec769-0834-467b-84bf-bba219819ff2}" Name="GtIdeaEconomicNumber" DisplayName="{resource:SiteFields_GtIdeaEconomicNumber_DisplayName}" Description="{resource:SiteFields_GtIdeaEconomicNumber_Description}" Type="Calculated" Group="{resource:SiteFields_Idea_Group}" ResultType="Number" ShowInNewForm="FALSE" ShowInEditForm="FALSE" StaticName="GtIdeaEconomicNumber">
+  <Formula>=IF(ISBLANK([{fieldtitle:GtIdeaEconomicBenefit}]),0,LEFT([{fieldtitle:GtIdeaEconomicBenefit}],1))</Formula>
+  <FieldRefs>
+    <FieldRef Name="GtIdeaEconomicBenefit" ID="{37b7f04e-b158-49eb-96f3-637ce1292e75}" />
+  </FieldRefs>
+</Field>

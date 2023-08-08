@@ -1,5 +1,14 @@
 define([], function () {
   return {
+    UnknownConfigurationName: 'Konfigurasjon uten navn',
+    ManualConfigurationNotFoundOrInvalid: 'Manuell konfigurasjon for Risikomatrise ikke funnet eller har ugyldig format.',
+    RiskMatrixManualConfigurationPathDefaltValue: 'standard-konfigurasjon.json',
+    RiskMatrixConfigurationFolder: 'Risikomatrise',
+    SiteAssetsConfigurationFolder: 'SiteAssets/Konfigurasjon',
+    UseDynamicConfigurationOffText: 'Nei, bruk manuell',
+    UseDynamicConfigurationOnText: 'Ja',
+    ManualConfigurationPathLabel: 'Manuell konfigurasjon',
+    UseDynamicConfigurationLabel: 'Bruk dynamisk konfigurasjon',
     AdminPageLinkLabel: 'Lenke til Administrasjonssiden (Etter /SitePages/)',
     AdvancedGroupName: 'Avansert',
     BarLabel: 'Bar',
@@ -15,7 +24,7 @@ define([], function () {
     CheckpointNotRelevantTooltip: 'Sjekkpunktet er ikke relevant',
     CheckpointNotRelevantTooltipCommentEmpty: 'Du kan ikke sette sjekkpunktet som \'Ikke relevant\' uten å legge inn enn kommentar.',
     CheckPointsStatus: '{0} sjekkpunkter markert som **{1}**',
-    CheckpointStillOpenTooltip: 'Sjekkpunktet er forsatt åpent',
+    CheckpointStillOpenTooltip: 'Sjekkpunktet er fortsatt åpent',
     CheckpointStillOpenTooltipCommentEmpty: 'Du kan ikke sette sjekkpunktet som \'Fortsatt åpen\' uten å legge inn enn kommentar.',
     ChildProjectAdminLabel: 'Administrer underområder',
     CloseText: 'Lukk',
@@ -76,6 +85,8 @@ define([], function () {
     IdeaProcessingTitle: 'Idébehandling',
     IdeaProcessingUrlTitle: 'Idebehandling',
     IdeaProjectDataTitle: 'Prosjektdata',
+    IdeaConfigurationTitle: 'Idékonfigurasjon',
+    IdeaConfigurationDescription: 'Hvilken konfigurasjon skal brukes for synkroniser av idéer?',
     LastPublishedStatusreport: 'Gå til siste statusrapport',
     ListNameFieldLabel: 'Listenavn',
     ListSectionDataErrorMessage: 'Det skjedde en feil under uthenting av data for seksjonen. Er den riktig konfigurert?',
@@ -178,7 +189,7 @@ define([], function () {
     StatusReportsHeaderLabel: 'Overskrift',
     StatusReportShowOnlyIconsLabel: 'Vis kun ikoner',
     StatusReportTruncateCommentsLabel: 'Avkort kommentarer',
-    StatusStillOpen: 'Forsatt åpen',
+    StatusStillOpen: 'Fortsatt åpen',
     SubPhaseLabel: 'Delfase',
     SubTextTruncateLengthFieldLabel: 'Max lengde fasetekst',
     SyncNowText: 'Synkroniser nå',
@@ -219,5 +230,7 @@ define([], function () {
     WebPartNotConfiguredMessage: 'Webdelen er ikke konfigurert riktig. Du må angi webpartegenskaper riktig.',
     WidthFieldLabel: 'Bredde (piksler)',
     Yes: 'Ja',
+    PublishStatusReportSectionDataWarning: 'Prosjektstatusen ble publisert, men uten å persistere listedata. Dette kan føre til feil ved visning av statusrapporten.',
+    PublishReportSpinnerText: 'Vennligst vent mens statusrapporten publiseres...'
   }
 })

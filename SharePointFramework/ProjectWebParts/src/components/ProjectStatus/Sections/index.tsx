@@ -1,4 +1,4 @@
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
+import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { ProjectStatusContext } from '../context'
@@ -14,8 +14,9 @@ export const Sections: FC = () => {
   const { sections } = useSections()
 
   if (!context.state.selectedReport) return <UserMessage text={strings.NoStatusReportsMessage} />
+
   return (
-    <div className={styles.root}>
+    <div className={styles.root} id='pp-statussection'>
       {sections.map((sec, idx) => {
         return (
           <SectionContext.Provider key={idx} value={createContextValue(sec)}>

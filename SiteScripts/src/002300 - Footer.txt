@@ -1,0 +1,15 @@
+﻿{
+    "bindata": {},
+    "actions": [
+        {
+            "verb": "associateExtension",
+            "title": "Footer",
+            "location": "ClientSideExtension.ApplicationCustomizer",
+            "clientSideComponentId": "84f27cec-ffde-4e00-a4cf-25c69f691054",
+            "clientSideComponentProperties": "{}",
+            "scope": "Web"
+        }
+    ],
+    "$schema": "schema.json",
+    "version": 1
+}

@@ -1,12 +1,11 @@
 /**
- * Automatically updates version for SPFx packages.
+ * @fileoverview Automatically updates version for SPFx packages.
  * 
  * Updates the following files:
  * * package.json
  * * package-solution.js
  * * manifest.json
  */
-
 if (process.env.npm_package_version === undefined) {
     throw 'Package version cannot be evaluated'
 }
@@ -27,7 +26,7 @@ const version = pkgVersion.indexOf('-') === -1
  * @returns file content as JSON
  */
 function getFileContent(file) {
-    const fileContent = fs.readFileSync(path.resolve(__dirname, "..", file), 'UTF-8')
+    const fileContent = fs.readFileSync(path.resolve(__dirname, '..', file), 'UTF-8')
     const fileContentJson = JSON.parse(fileContent)
     return fileContentJson
 }
@@ -39,7 +38,7 @@ function getFileContent(file) {
  * @param {*} json - JSON
  */
 function setFileContent(file, json) {
-    fs.writeFileSync(path.resolve(__dirname, "..", file), JSON.stringify(json, null, 2), 'UTF-8')
+    fs.writeFileSync(path.resolve(__dirname, '..', file), JSON.stringify(json, null, 2), 'UTF-8')
 }
 
 /**

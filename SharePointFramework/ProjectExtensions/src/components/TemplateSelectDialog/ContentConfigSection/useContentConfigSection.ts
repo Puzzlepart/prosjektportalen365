@@ -19,7 +19,6 @@ export function useContentConfigSection() {
   const onRenderRow = useRowRenderer({ selectedKeys, searchTerm })
   return {
     selection,
-    selectedCount: selectedKeys.length,
     items,
     columns,
     onSearch,

@@ -1,7 +1,7 @@
 import { MessageBarType } from '@fluentui/react'
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import _ from 'lodash'
-import { ProjectPhaseModel } from 'pp365-shared/lib/models'
+import { ProjectPhaseModel } from 'pp365-shared-library/lib/models'
 import { IProjectPhaseCalloutProps } from './ProjectPhase/ProjectPhaseCallout'
 import { IProjectPhasesData, IProjectPhasesState } from './types'
 

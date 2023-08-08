@@ -5,7 +5,7 @@ import {
 } from '@microsoft/sp-property-pane'
 import { ILatestProjectsProps, LatestProjects } from 'components/LatestProjects'
 import * as strings from 'PortfolioWebPartsStrings'
-import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
+import { BasePortfolioWebPart } from '../@basePortfolioWebPart'
 
 export default class LatestProjectsWebPart extends BasePortfolioWebPart<ILatestProjectsProps> {
   public render(): void {

@@ -4,50 +4,51 @@ import {
   PropertyPaneDropdown,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { PortfolioOverview } from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
-import { IPortfolioConfiguration } from 'pp365-portfoliowebparts/lib/interfaces'
-import { PROPERTYPANE_CONFIGURATION_PROPS } from 'pp365-portfoliowebparts/lib/webparts/portfolioOverview'
 import * as strings from 'ProgramWebPartsStrings'
-import React from 'react'
-import { render, unmountComponentAtNode } from 'react-dom'
+import {
+  IPortfolioOverviewConfiguration,
+  PortfolioOverview
+} from 'pp365-portfoliowebparts/lib/components/PortfolioOverview'
+import { unmountComponentAtNode } from 'react-dom'
 import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IProgramProjectOverviewProps } from './types'
 
 export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramProjectOverviewProps> {
-  private _configuration: IPortfolioConfiguration
-
-  public async onInit(): Promise<void> {
-    await super.onInit()
-    this._configuration = await this.dataAdapter.getPortfolioConfig()
-  }
+  private _configuration: IPortfolioOverviewConfiguration
 
   public render(): void {
-    render(
-      <PortfolioOverview
-        title={this.properties.title}
-        pageContext={this.context.pageContext as any}
-        configuration={this._configuration}
-        dataAdapter={this.dataAdapter}
-        showCommandBar={this.properties.showCommandBar}
-        showExcelExportButton={this.properties.showExcelExportButton}
-        showFilters={this.properties.showFilters}
-        showViewSelector={this.properties.showViewSelector}
-        showGroupBy={this.properties.showGroupBy}
-        showSearchBox={this.properties.showSearchBox}
-        isParentProject={true}
-      />,
-      this.domElement
-    )
+    this.renderComponent(PortfolioOverview, {
+      isParentProject: true,
+      configuration: this._configuration
+    })
+  }
+
+  /**
+   * Initializes the web part. This method is called when the web part is first loaded on the page.
+   * It calls the base `onInit` method and then retrieves the portfolio configuration from the data adapter.
+   *
+   * @returns A promise that resolves when the initialization is complete.
+   */
+  public async onInit(): Promise<void> {
+    await super.onInit()
+    this._configuration = await this._dataAdapter.getPortfolioConfig()
   }
 
   protected onDispose(): void {
     unmountComponentAtNode(this.domElement)
   }
 
+  /**
+   * Returns an array of dropdown options for the specified target property.
+   *
+   * @param targetProperty The target property for which to retrieve dropdown options.
+   *
+   * @returns An array of dropdown options for the specified target property.
+   */
   protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
     // eslint-disable-next-line default-case
     switch (targetProperty) {
-      case PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID:
+      case 'defaultViewId':
         {
           if (this._configuration) {
             return [
@@ -69,38 +70,38 @@ export default class ProgramProjectOverview extends BaseProgramWebPart<IProgramP
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_SEARCH_BOX, {
+                PropertyPaneToggle('showSearchBox', {
                   label: strings.ShowSearchBoxLabel
                 }),
-                PropertyPaneDropdown(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID, {
+                PropertyPaneDropdown('defaultViewId', {
                   label: strings.DefaultViewLabel,
-                  options: this._getOptions(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID)
+                  options: this._getOptions('defaultViewId')
                 })
               ]
             },
             {
               groupName: strings.CommandBarGroupName,
               groupFields: [
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_COMMANDBAR, {
+                PropertyPaneToggle('showCommandBar', {
                   label: strings.ShowCommandBarLabel
                 }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_GROUPBY, {
-                  label: strings.ShowGroupByLabel,
-                  disabled: !this.properties.showCommandBar
-                }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_FILTERS, {
-                  label: strings.ShowFiltersLabel,
-                  disabled: !this.properties.showCommandBar
-                }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_EXCELEXPORT_BUTTON, {
-                  label: strings.ShowExcelExportButtonLabel,
-                  disabled: !this.properties.showCommandBar
-                }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_VIEWSELECTOR, {
-                  label: strings.ShowViewSelectorLabel,
-                  disabled: !this.properties.showCommandBar
-                })
-              ]
+                this.properties.showCommandBar &&
+                  PropertyPaneToggle('showGroupBy', {
+                    label: strings.ShowGroupByLabel
+                  }),
+                this.properties.showCommandBar &&
+                  PropertyPaneToggle('showFilters', {
+                    label: strings.ShowFiltersLabel
+                  }),
+                this.properties.showCommandBar &&
+                  PropertyPaneToggle('showExcelExportButton', {
+                    label: strings.ShowExcelExportButtonLabel
+                  }),
+                this.properties.showCommandBar &&
+                  PropertyPaneToggle('showViewSelector', {
+                    label: strings.ShowViewSelectorLabel
+                  })
+              ].filter(Boolean)
             }
           ]
         }

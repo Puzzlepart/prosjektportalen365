@@ -1,0 +1,35 @@
+<pnp:ListInstance Title="{resource:Lists_Idea_Configuration_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Idea_Configuration_Url}" Hidden="true" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false"
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+    <pnp:ContentTypeBindings>
+        <pnp:ContentTypeBinding ContentTypeID="0x0100C21DA86A3A3245E78C51758E7B8F3041" Default="true" />
+    </pnp:ContentTypeBindings>
+    <pnp:Views RemoveExistingViews="true">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_Idea_Configuration_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+            <Query>
+                <OrderBy>
+                    <FieldRef Name="Modified" />
+                </OrderBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtIdeaProcessingList" />
+                <FieldRef Name="GtIdeaRegistrationList" />
+                <FieldRef Name="GtDescription" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">100</RowLimit>
+            <Aggregations Value="Off" />
+            <JSLink>hierarchytaskslist.js</JSLink>
+        </View>
+    </pnp:Views>
+    <pnp:Fields>
+        <Field DisplayName="{resource:Lists_Idea_Configuration_Field_GtDescription_DisplayName}" Description="{resource:Lists_Idea_Configuration_Field_GtDescription_Description}" ID="{c3beecea-c0e5-4d18-9b45-3c7d7949bee4}" Name="GtDescription" StaticName="GtDescription" Type="Note" UnlimitedLengthInDocumentLibrary="TRUE" />
+    </pnp:Fields>
+    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Standard</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaProcessingList">Idébehandling</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaRegistrationList">Idéregistrering</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDescription">Dersom idéen blir godkjent vil det bli opprettet en detaljert idé-side for idéen og et element i Idébehandlingslisten.;Dersom idéen blir godkjent vil det være mulig å opprette prosjektdata som kan bli brukt for provisjonering av området.;Tilknytt prosjektdata til idéen for å synkronisere data til et prosjekt senere.</pnp:DataValue>
+        </pnp:DataRow>
+    </pnp:DataRows>
+</pnp:ListInstance>

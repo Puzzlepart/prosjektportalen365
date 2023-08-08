@@ -1,11 +1,12 @@
-import { MessageBarType, IGroup, IColumn, IPanelProps, Target } from '@fluentui/react'
-import { SearchResult } from '@pnp/sp'
-import { IFilterProps } from 'components/FilterPanel'
-import { IDataAdapter } from 'data/types'
-import { IAggregatedListConfiguration } from 'interfaces'
-import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
-import { DataSource } from 'pp365-shared/lib/models/DataSource'
+import { IColumn, IGroup, MessageBarType } from '@fluentui/react'
+import { ProjectContentColumn } from 'pp365-shared-library'
+import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
+import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
+import { IListProps, OnColumnContextMenu } from '../List'
 import { IBaseComponentProps } from '../types'
+import { IColumnFormPanel } from './ColumnFormPanel/types'
+import { IViewFormPanel } from './ViewFormPanel/types'
+import { ISearchResult } from '@pnp/sp/search'
 
 export class PortfolioAggregationErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -13,26 +14,45 @@ export class PortfolioAggregationErrorMessage extends Error {
   }
 }
 
-export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps {
+export interface IPortfolioAggregationConfiguration {
+  viewsUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
+  columnUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
+  columns?: ProjectContentColumn[]
+  views?: DataSource[]
+  level?: string
+  levels?: string[]
+}
+
+export interface IPortfolioAggregationProps<T = any>
+  extends IBaseComponentProps,
+    Pick<IListProps, 'isListLayoutModeJustified'> {
   /**
    * Configuration (columns and views etc)
    */
-  configuration?: IAggregatedListConfiguration
+  configuration?: IPortfolioAggregationConfiguration
 
   /**
-   * Data source name
+   * Name of the currently selected data source (also called view)
    */
   dataSource?: string
 
   /**
-   * Category for data sources
+   * Category for data sources (also called views)
    */
   dataSourceCategory?: string
 
   /**
-   * Columns
+   * Data source level is used to filter data sources
+   * by level. This is either set specifically by the
+   * user in the web part properties or calculated
+   * in the web part itself.
    */
-  columns?: IProjectContentColumn[]
+  dataSourceLevel?: string
+
+  /**
+   * Columns selected for the current view
+   */
+  columns?: ProjectContentColumn[]
 
   /**
    * Select properties
@@ -43,11 +63,6 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
    * Show command bar
    */
   showCommandBar?: boolean
-
-  /**
-   * Show search box
-   */
-  showSearchBox?: boolean
 
   /**
    * Show filters
@@ -80,11 +95,6 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   lockedColumns?: boolean
 
   /**
-   * Data adapter
-   */
-  dataAdapter?: IDataAdapter
-
-  /**
    * On update property
    */
   onUpdateProperty?: (key: string, value: any) => void
@@ -92,89 +102,87 @@ export interface IPortfolioAggregationProps<T = any> extends IBaseComponentProps
   /**
    * Transforms the data after it's fetched
    */
-  postTransform?: (results: SearchResult[]) => T[]
+  postTransform?: (results: ISearchResult[]) => T[]
+
+  /**
+   * Is parent project. Set to `true` if the web part is used in a parent project.
+   * For now the Add column button is hidden if this is set to `true`.
+   */
+  isParentProject?: boolean
 }
 
-export interface IPortfolioAggregationState {
+export interface IPortfolioAggregationState
+  extends Pick<IPortfolioAggregationProps, 'dataSourceLevel' | 'columns'> {
   /**
-   * Whether the component is loading
+   * `true` if the component is loading data. The list will be
+   * rendered with shimmer placeholders if the component is loading.
    */
   loading?: boolean
 
   /**
-   * Whether there's an export in progress
+   * `true` if the component is exporting to Excel
    */
   isExporting?: boolean
 
   /**
-   * Data source name
+   * Views available for the data source category.
    */
-  dataSource?: string
+  views?: DataSource[]
 
   /**
-   * Data sources
-   */
-  dataSources?: DataSource[]
-
-  /**
-   * Items to show in the details list
+   * Items to show in the list
    */
   items?: any[]
 
   /**
-   * Columns
+   * All columns available for the data source category. Property `data.isSelected` is
+   * set to `true`for all columns that are selected for the current view
+   * in property `columns`.
    */
-  columns?: IProjectContentColumn[]
+  allColumnsForCategory?: ProjectContentColumn[]
 
   /**
-   * Filtered columns
-   */
-  fltColumns?: IProjectContentColumn[]
-
-  /**
-   * Groups
+   * Groups to be rendered in the list
    */
   groups?: IGroup[]
 
   /**
-   * Column currently being edited
-   */
-  editColumn?: IProjectContentColumn
-
-  /**
-   * Column to group by
+   * Column to group by in the list
    */
   groupBy?: IColumn
 
   /**
-   * Column to sort by
+   * Column to sort by in the list
    */
   sortBy?: IColumn
 
   /**
-   * Search term
+   * Initial search term that should be
+   * set to a blank string initially
+   * in `getInitialState()` for the
+   * reducer.
    */
   searchTerm?: string
 
   /**
-   * Add column panel
+   * Column form panel properties
    */
-  addColumnPanel?: IPanelProps
+  columnForm?: IColumnFormPanel
 
   /**
-   * Show/hide column panel
+   * Is edit view columns panel open
    */
-  showHideColumnPanel?: IPanelProps
+  isEditViewColumnsPanelOpen?: boolean
 
   /**
    * Column context menu
    */
-  columnContextMenu?: { column: IColumn; target: Target }
+  columnContextMenu?: OnColumnContextMenu
 
   /**
-   * Column added timestamp
+   * Timestamp for when a new column was added or updated
    */
-  columnAdded?: number
+  columnAddedOrUpdated?: number
 
   /**
    * Column deleted timestamp
@@ -192,9 +200,9 @@ export interface IPortfolioAggregationState {
   error?: Error
 
   /**
-   * Show filter panel
+   * Is filter panel open
    */
-  showFilterPanel?: boolean
+  isFilterPanelOpen?: boolean
 
   /**
    * Is compact
@@ -204,7 +212,7 @@ export interface IPortfolioAggregationState {
   /**
    * Active filters
    */
-  activeFilters?: { SelectedColumns?: string[]; [key: string]: string[] }
+  activeFilters?: Record<string, string[]>
 
   /**
    * Filters
@@ -212,9 +220,16 @@ export interface IPortfolioAggregationState {
   filters?: IFilterProps[]
 
   /**
-   * Current view
+   * Current view (or data source) selected in the view selector.
    */
   currentView?: DataSource
+
+  /**
+   * View form panel props. Consists of two properties:
+   * - `isOpen` - whether the panel is open
+   * - `view` - the view (data source) to edit (if not specified, a new view will be created)
+   */
+  viewForm: IViewFormPanel
 }
 
 export interface IPortfolioAggregationHashState {

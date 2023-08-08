@@ -1,0 +1,89 @@
+name: CI (releases/*)
+
+on:
+  push:
+    branches:
+      - rc/1.8.2
+    paths:
+      - "SharePointFramework/**"
+      - "Install/**"
+      - "Templates/**"
+      - .github/workflows/ci-releases.yml
+
+env:
+  SP_URL: "https://puzzlepart.sharepoint.com/sites/pp365"
+  CI_CREDENTIALS: ${{ secrets.CI_DEV_CREDENTIALS }}
+
+jobs:
+  build_release_package:
+    name: Build release package
+    runs-on: macos-latest
+    if: "!contains(github.event.head_commit.message, '[skip-ci]')"
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Set sha_short
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ vars.NODE_VERSION }}
+
+      - name: Run Install/Build-Release.ps1 in CI mode
+        run: Install/Build-Release.ps1 -CI -SkipBundle
+        shell: pwsh
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: release-package
+          path: release
+    outputs:
+      sha_short: ${{ steps.vars.outputs.sha_short }}
+
+  upgrade:
+    needs: build_release_package
+    name: Upgrade
+    runs-on: macos-latest
+    if: "!contains(github.event.head_commit.message, '[skip-upgrade]')"
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: release-package
+          path: release
+
+      - name: Upgrade
+        run: release/Install.ps1 -Url ${{ env.SP_URL }} -Upgrade -CI ${{ env.CI_CREDENTIALS }}
+        shell: powershell
+
+  install:
+    needs: [build_release_package, upgrade]
+    name: Install
+    runs-on: macos-latest
+    if: "!contains(github.event.head_commit.message, '[skip-install]')"
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: release-package
+          path: release
+
+      - name: Install
+        run: release/Install.ps1 -Url "${{ env.SP_URL }}_${{ needs.build_release_package.outputs.sha_short }}" -Title "Prosjektportalen 365 ${{ needs.build_release_package.outputs.sha_short }}" -CI ${{ env.CI_CREDENTIALS }} -SkipAppPackages -SkipSiteDesign -SkipTaxonomy -SkipSearchConfiguration
+        shell: powershell
+
+  upgrade_all_sites_to_latest:
+    needs: [build_release_package, upgrade]
+    name: Upgrade all sites to latest
+    runs-on: macos-latest
+    if: "contains(github.event.head_commit.message, '[upgrade-all-sites-to-latest]')"
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: release-package
+          path: release
+
+      - name: Run script UpgradeAllSitesToLatest.ps1 in CI mode
+        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ env.SP_URL }} -CI ${{ env.CI_CREDENTIALS }}
+        shell: powershell

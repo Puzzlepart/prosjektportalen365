@@ -1,7 +1,6 @@
 import { LogLevel } from '@pnp/logging'
-import { sp } from '@pnp/sp'
-import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
-import { ListLogger } from 'pp365-shared/lib/logging'
+import { ProjectAdminPermission } from 'pp365-shared-library/lib/data/SPDataAdapterBase/ProjectAdminPermission'
+import { ListLogger } from 'pp365-shared-library/lib/logging'
 import * as strings from 'ProjectWebPartsStrings'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { IProjectPhasesData, IProjectPhasesProps, ProjectPhases } from '.'
@@ -12,31 +11,21 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { INIT_DATA } from './reducer'
 
 /**
- * Get welcome page of the web
- */
-async function getWelcomePage() {
-  try {
-    const { WelcomePage } = await sp.web.rootFolder.select('welcomepage').get()
-    return WelcomePage
-  } catch (error) {
-    throw error
-  }
-}
-
-/**
  * Fetch data for `ProjectPhases`.
  */
 const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = async (props) => {
   try {
-    SPDataAdapter.configure(props.webPartContext, {
-      siteId: props.siteId,
-      webUrl: props.webUrl,
-      logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-    })
+    if (!SPDataAdapter.isConfigured) {
+      SPDataAdapter.configure(props.webPartContext, {
+        siteId: props.siteId,
+        webUrl: props.webUrl,
+        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+      })
+    }
     const [phaseFieldCtx, checklistData, welcomePage, properties] = await Promise.all([
       SPDataAdapter.getTermFieldContext(props.phaseField),
       SPDataAdapter.project.getChecklistData(strings.PhaseChecklistName),
-      getWelcomePage(),
+      SPDataAdapter.project.getWelcomePage(),
       SPDataAdapter.project.getPropertiesData()
     ])
     const [phases, currentPhaseName, userHasChangePhasePermission] = await Promise.all([
@@ -48,16 +37,18 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
       )
     ])
 
-    const phaseSitePages = props.useDynamicHomepage ? await getPhaseSitePages(phases) : []
+    const phaseSitePages = props.useDynamicHomepage
+      ? await getPhaseSitePages({ phases, sp: props.sp })
+      : []
     const [currentPhase] = phases.filter((p) => p.name === currentPhaseName)
     return {
       currentPhase,
       phases,
-      phaseTextField: phaseFieldCtx.phaseTextField,
+      phaseTextField: phaseFieldCtx.textField,
       phaseSitePages,
       welcomePage,
       userHasChangePhasePermission
-    }
+    } as IProjectPhasesData
   } catch (error) {
     ListLogger.log({
       message: error.message,

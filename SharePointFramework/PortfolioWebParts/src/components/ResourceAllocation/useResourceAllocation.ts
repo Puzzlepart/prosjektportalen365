@@ -3,11 +3,19 @@ import { get } from '@microsoft/sp-lodash-subset'
 import moment from 'moment'
 import * as strings from 'PortfolioWebPartsStrings'
 import { useState } from 'react'
-import { IFilterItemProps } from '../FilterPanel'
 import { IResourceAllocationProps, IResourceAllocationState } from './types'
 import { useFilteredData } from './useFilteredData'
 import { useResourceAllocationDataFetch } from './useResourceAllocationDataFetch'
+import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 
+/**
+ * Component logic hook for `<ResourceAllocation />`. Handles
+ * state, command bar, filters and data fetching using the
+ * `useResourceAllocationDataFetch` and `useFilteredData` hooks.
+ *
+ * @param props Props for the `<ResourceAllocation />` component
+ * @returns
+ */
 export function useResourceAllocation(props: IResourceAllocationProps) {
   moment.locale('nb')
   const [state, setState] = useState<IResourceAllocationState>({
@@ -34,8 +42,9 @@ export function useResourceAllocation(props: IResourceAllocationProps) {
   ].map((col) => ({
     column: { key: col.fieldName, minWidth: 0, ...col },
     items: state.data.items
-      .map((i) => get(i, col.fieldName))
+      .map<string>((i) => get(i, col.fieldName))
       .filter((value, index, self) => value && self.indexOf(value) === index)
+      .sort((a, b) => a.localeCompare(b))
       .map((name) => {
         const filter = state.activeFilters[col.fieldName]
         const selected = filter ? filter.indexOf(name) !== -1 : false

@@ -1,4 +1,15 @@
 declare interface IProjectWebPartsStrings {
+  UnknownConfigurationName: any
+  SiteAssetsConfigurationFolder: string
+  RiskMatrixConfigurationFolder: string
+  ManualConfigurationNotFoundOrInvalid: string
+  RiskMatrixManualConfigurationPathDefaltValue: string
+  UseDynamicConfigurationOffText: string
+  UseDynamicConfigurationOnText: string
+  ManualConfigurationPathLabel: string
+  UseDynamicConfigurationLabel: string 
+  PublishReportSpinnerText: string
+  PublishStatusReportSectionDataWarning: string
   AdminPageLinkLabel: string
   AdvancedGroupName: string
   BarLabel: string
@@ -70,6 +81,8 @@ declare interface IProjectWebPartsStrings {
   IdeaProcessingTitle: string
   IdeaProcessingUrlTitle: string
   IdeaProjectDataTitle: string
+  IdeaConfigurationTitle: string
+  IdeaConfigurationDescription: string
   LastPublishedStatusreport: string
   ListNameFieldLabel: string
   ListSectionDataErrorMessage: string
@@ -77,7 +90,7 @@ declare interface IProjectWebPartsStrings {
   LogListName: string
   LookAndFeelGroupName: string
   MatrixColorScaleConfigLabel: string
-  MatrixFullWidthLabel: string 
+  MatrixFullWidthLabel: string
   MatrixHeader_Critical: string
   MatrixHeader_ExtremelyHigh: string
   MatrixHeader_ExtremelyLarge: string

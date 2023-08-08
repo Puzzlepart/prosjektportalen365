@@ -1,4 +1,13 @@
 declare interface IProgramWebPartsStrings {
+  ColumnSettingsLabel: string
+  DataSourceListName: string
+  DataSourceItemNotFound: string
+  CmdSelectionCountTooltipText: string
+  DataSourceLevelLabel: string
+  DataSourceLevelDescription: string
+  DefaultDataSourceViewLabel: string
+  SearchBoxPlaceholderTextDescription: string
+  ProgramTimelineInfoText: string
   CmdSelectionCountText: string
   ProgramAdministrationInfoMessage: string
   EditColumnHeaderText: string
@@ -22,7 +31,10 @@ declare interface IProgramWebPartsStrings {
   MoveLeftLabel: string
   IsGroupableLabel: string
   NewColumnHeaderText: string
-  AddColumnText: string
+  ToggleColumnFormPanelLabel: string
+  ToggleEditViewColumnsLabel: string
+  ShowHideColumnsLabel: string
+  EditViewColumnsPanelHeaderText: string
   SearchPropertyLabel: string
   DisplayNameLabel: string
   MinWidthLabel: string
@@ -167,7 +179,6 @@ declare interface IProgramWebPartsStrings {
   CostsTotalLabel: string
   NoProjectsFound: string
   NewLabel: string
-  ReadOnlyGroupName: string
   DisplayAllProjects: string
   MyProjectsLabel: string
   AllProjectsLabel: string
@@ -191,6 +202,10 @@ declare interface IProgramWebPartsStrings {
   ConfigItemTitleFieldLabel: string
   ConfigItemTitleFieldDescription: string
   ProjectContentColumnsListName: string
+  ShowEditViewColumnsPanelHelpText: string
+  UseChangesButtonText: string
+  PortfolioOverviewDataFetchErrorView: string
+  PortfolioOverviewDataFetchError: string
 }
 
 declare module 'ProgramWebPartsStrings' {

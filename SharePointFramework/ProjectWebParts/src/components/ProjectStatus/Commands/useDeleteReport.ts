@@ -1,10 +1,11 @@
-import { PortalDataService } from 'pp365-shared/lib/services'
+import { PortalDataService } from 'pp365-shared-library/lib/services'
 import { useContext } from 'react'
 import { ProjectStatusContext } from '../context'
 import { REPORT_DELETED, REPORT_DELETE_ERROR } from '../reducer'
 
 /**
- * Hook for deletion of report.
+ * Hook for deletion of report. Returns a callback function
+ * for deleting the selected report.
  *
  * @returns A function callback
  */
@@ -12,7 +13,7 @@ export function useDeleteReport() {
   const context = useContext(ProjectStatusContext)
   return async () => {
     const portalDataService = await new PortalDataService().configure({
-      pageContext: context.props.pageContext
+      spfxContext: context.props.webPartContext
     })
     try {
       await portalDataService.deleteStatusReport(context.state.selectedReport.id)

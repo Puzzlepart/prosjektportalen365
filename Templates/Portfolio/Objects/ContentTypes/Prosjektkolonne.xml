@@ -1,4 +1,4 @@
-<pnp:ContentType ID="0x0100248005C277FADD45B7266F9151442472" Name="{resource:ContentTypes_ProjectColumn_Name}" Description="{resource:ContentTypes_ProjectColumn_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true" 
+<pnp:ContentType ID="0x0100248005C277FADD45B7266F9151442472" Name="{resource:ContentTypes_ProjectColumn_Name}" Description="{resource:ContentTypes_ProjectColumn_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true"
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:FieldRefs>
         <pnp:FieldRef ID="0e82c395-9ed9-43f9-871a-208215b18558" Name="GtSortOrder" UpdateChildren="true" />
@@ -9,6 +9,8 @@
         <pnp:FieldRef ID="6c72e8a8-1bfa-4323-9103-8baa067bbfb3" Name="GtShowFieldFrontpage" UpdateChildren="true" />
         <pnp:FieldRef ID="7441ace5-d9e4-4c1d-85fc-ce1614b056ca" Name="GtShowFieldPortfolio" UpdateChildren="true" />
         <pnp:FieldRef ID="7463d38f-5f51-4b25-a920-04ea1ec24a26" Name="GtFieldDataType" Required="true" UpdateChildren="true" />
+        <pnp:FieldRef ID="0512df49-8fd7-459a-b144-b3017cbbffaa" Name="GtFieldDataTypeProperties" UpdateChildren="true" />
+        <pnp:FieldRef ID="68568356-6f3c-4ebe-a738-70cec5c76f46" Name="GtFieldCustomSort" UpdateChildren="true" />
         <pnp:FieldRef ID="a156e8b6-fc02-475c-a377-47c6795fed1d" Name="GtColMinWidth" UpdateChildren="true" />
         <pnp:FieldRef ID="0956cadc-1268-4bc1-9baf-5d2e16190d06" Name="GtIsRefinable" UpdateChildren="true" />
         <pnp:FieldRef ID="b77be89a-346f-4897-b519-e55eedbc0aa9" Name="GtIsGroupable" UpdateChildren="true" />

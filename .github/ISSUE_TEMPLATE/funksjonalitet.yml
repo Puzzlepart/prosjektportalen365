@@ -1,0 +1,36 @@
+name: Ny funksjonalitet
+description: Foreslå ny funksjonalitet
+labels: enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Takk for at du tar deg tid til å fylle ut skjemaet og foreslå ny funksjonalitet.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Er forespørselen din relatert til et problem? Vennligst beskriv.
+      description: En klar og kortfattet beskrivelse av hva problemet er. (Eks. Jeg blir alltid frustrert når...)
+    validations:
+      required: false
+  - type: textarea
+    id: forslag
+    attributes:
+      label: Beskriv løsningen du ønsker
+      description: En klar og kortfattet beskrivelse av hva du ønsker skal skje.
+    validations:
+      required: true
+  - type: textarea
+    id: annet
+    attributes:
+      label: Ytterligere informasjon
+      description: Legg til annen informasjon som kan være relevant her.
+    validations:
+      required: false
+  - type: textarea
+    id: bidra
+    attributes:
+      label: Er dette noe din organisasjon er villig til å bidra med økonomisk?
+      description: Prosjektportalen 365 er et samfunnsdrevet og dugnad-drevet prosjekt, støttet av organisasjoner både i offentlig og privat sektor. Hvis dere er villig til å bidra, vennligst gi oss beskjed (dette vil øke sjansen for at funksjonen blir implementert). Merk! Dette er ikke en forpliktelse, vi vil komme tilbake til deg for å gå i dialog og gi dere et estimat på ønsket.
+    validations:
+      required: false

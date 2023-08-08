@@ -1,5 +1,5 @@
 import { Shimmer } from '@fluentui/react'
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
+import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import React, { FC } from 'react'
 import { ChangePhaseDialog } from './ChangePhaseDialog'
 import { ProjectPhasesContext } from './context'
@@ -12,32 +12,33 @@ import { IProjectPhasesProps } from './types'
 import { useProjectPhases } from './useProjectPhases'
 
 export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
-  const { rootRef, state, dispatch, onChangePhase } = useProjectPhases(props)
+  const { rootRef, context } = useProjectPhases(props)
 
   return (
     <div className={styles.root} ref={rootRef}>
       <div className={styles.container}>
-        <ProjectPhasesContext.Provider value={{ props, state, dispatch, onChangePhase }}>
+        <ProjectPhasesContext.Provider value={context}>
           <Shimmer
-            isDataLoaded={state.isDataLoaded || !!state.error}
-            shimmerElements={getShimmerElements(rootRef.current?.clientWidth)}>
+            isDataLoaded={context.state.isDataLoaded || !!context.state.error}
+            shimmerElements={getShimmerElements(rootRef.current?.clientWidth)}
+          >
             <ul className={styles.phaseList}>
-              {state.data.phases
+              {context.state.data.phases
                 .filter((p) => p.isVisible)
                 .map((phase, idx) => (
                   <ProjectPhase key={idx} phase={phase} />
                 ))}
             </ul>
-            <ProjectPhaseCallout {...(state.callout || {})} />
+            <ProjectPhaseCallout {...(context.state.callout || {})} />
             <ChangePhaseDialog />
           </Shimmer>
         </ProjectPhasesContext.Provider>
-        {state.error && (
+        {context.state.error && (
           <UserMessage
             className={styles.userMessage}
-            type={state.error.type}
-            onDismiss={() => dispatch(DISMISS_ERROR_MESSAGE())}
-            text={state.error.message}
+            type={context.state.error.type}
+            onDismiss={() => context.dispatch(DISMISS_ERROR_MESSAGE())}
+            text={context.state.error.message}
           />
         )}
       </div>

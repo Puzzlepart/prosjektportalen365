@@ -1,8 +1,10 @@
 import { MessageBarType } from '@fluentui/react'
-import _ from 'lodash'
-import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
-import { ListLogger } from 'pp365-shared/lib/logging'
+import { LogLevel } from '@pnp/logging'
 import strings from 'ProjectWebPartsStrings'
+import _ from 'lodash'
+import { ProjectAdminPermission } from 'pp365-shared-library/lib/data/SPDataAdapterBase/ProjectAdminPermission'
+import { ListLogger } from 'pp365-shared-library/lib/logging'
+import { ProjectColumnConfig, SectionModel, StatusReport } from 'pp365-shared-library/lib/models'
 import { useEffect } from 'react'
 import { isEmpty } from 'underscore'
 import { ProjectInformation } from '.'
@@ -59,15 +61,17 @@ const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolea
     const projectDataList = SPDataAdapter.portal.web.lists.getByTitle(strings.IdeaProjectDataTitle)
     const [projectDataItem] = await projectDataList.items
       .filter(`GtSiteUrl eq '${props.webPartContext.pageContext.web.absoluteUrl}'`)
-      .select('Id')
-      .get()
-    const ideaProcessingList = SPDataAdapter.portal.web.lists.getByTitle(
-      strings.IdeaProcessingTitle
+      .select('Id')()
+
+    const [ideaConfig] = (await SPDataAdapter.getIdeaConfiguration()).filter(
+      (item) => item.title === props.ideaConfiguration
     )
+
+    const ideaProcessingList = SPDataAdapter.portal.web.lists.getByTitle(ideaConfig.processingList)
+
     const [ideaProcessingItem] = await ideaProcessingList.items
       .filter(`GtIdeaProjectDataId eq '${projectDataItem.Id}'`)
-      .select('Id, GtIdeaDecision')
-      .get()
+      .select('Id, GtIdeaDecision')()
     if (ideaProcessingItem.GtIdeaDecision === 'Godkjent og synkronisert') {
       isSynced = true
     }
@@ -78,40 +82,68 @@ const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolea
 }
 
 /**
- * Fetch data for `ProjectInformation`
+ * Fetch project status reports (top: 1), sections and column config  if `props.hideStatusReport` is false.
+ * Catches errors and returns empty arrays to support e.g. the case where the user does not have
+ * access to the hub site.
+ *
+ * @param props Component properties for `ProjectInformation`
+ */
+const fetchProjectStatusReports: DataFetchFunction<
+  IProjectInformationProps,
+  [StatusReport[], SectionModel[], ProjectColumnConfig[]]
+> = async (props) => {
+  if (props.hideStatusReport) {
+    return [[], [], []]
+  }
+  try {
+    const [reports, sections, columnConfig] = await Promise.all([
+      SPDataAdapter.portal.getStatusReports({
+        filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
+        publishedString: strings.GtModerationStatus_Choice_Published,
+        top: 1
+      }),
+      SPDataAdapter.portal.getProjectStatusSections(),
+      SPDataAdapter.portal.getProjectColumnConfig()
+    ])
+    return [reports, sections, columnConfig]
+  } catch (error) {
+    return [[], [], []]
+  }
+}
+
+/**
+ * Fetch data for `ProjectInformation` component. This function is used in
+ * `useProjectInformationDataFetch` hook.
+ *
+ * @remarks Ensures that `SPDataAdapter` is configured
+ * before fetching data. Normally the `SPDataAdapter` is not configured
+ * if the component is used in a web part in a different SharePoint Framework solution
+ * like `PortfolioWebParts`.
  */
 const fetchData: DataFetchFunction<
   IProjectInformationProps,
   Partial<IProjectInformationState>
 > = async (props) => {
   try {
-    const [
-      columns,
-      propertiesData,
-      parentProjects,
-      reports,
-      sections,
-      columnConfig
-    ] = await Promise.all([
-      SPDataAdapter.portal.getProjectColumns(),
-      SPDataAdapter.project.getPropertiesData(),
-      props.page === 'Frontpage'
-        ? SPDataAdapter.portal.getParentProjects(
-            props.webPartContext?.pageContext?.web?.absoluteUrl,
-            ProjectInformationParentProject
-          )
-        : Promise.resolve([]),
-      props.hideStatusReport
-        ? Promise.resolve([])
-        : SPDataAdapter.portal.getStatusReports({
-            filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
-            publishedString: strings.GtModerationStatus_Choice_Published
-          }),
-      props.hideStatusReport
-        ? Promise.resolve([])
-        : SPDataAdapter.portal.getProjectStatusSections(),
-      props.hideStatusReport ? Promise.resolve([]) : SPDataAdapter.portal.getProjectColumnConfig()
-    ])
+    if (!SPDataAdapter.isConfigured) {
+      await SPDataAdapter.configure(props.webPartContext, {
+        siteId: props.siteId,
+        webUrl: props.webUrl,
+        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+      })
+    }
+    const [columns, propertiesData, parentProjects, [reports, sections, columnConfig]] =
+      await Promise.all([
+        SPDataAdapter.portal.getProjectColumns(),
+        SPDataAdapter.project.getPropertiesData(),
+        props.page === 'Frontpage'
+          ? SPDataAdapter.portal.getParentProjects(
+              props.webPartContext?.pageContext?.web?.absoluteUrl,
+              ProjectInformationParentProject
+            )
+          : Promise.resolve([]),
+        fetchProjectStatusReports(props)
+      ])
     const data: IProjectInformationData = {
       columns,
       parentProjects,
@@ -152,7 +184,8 @@ const fetchData: DataFetchFunction<
 }
 
 /**
- * Fetch hook for ProjectInformation
+ * Fetch hook for ProjectInformation. Fetches data for `ProjectInformation` component
+ * using `fetchData` function together with React `useEffect` hook.
  *
  * @param props Component properties for `ProjectInformation`
  * @param setState Set state function for `ProjectInformation`

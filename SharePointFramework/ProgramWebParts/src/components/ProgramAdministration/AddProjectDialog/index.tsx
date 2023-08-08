@@ -5,15 +5,14 @@ import {
   DialogType,
   PrimaryButton,
   SelectionMode,
-  ShimmeredDetailsList
+  ShimmeredDetailsList,
+  ScrollablePane
 } from '@fluentui/react'
 import _ from 'lodash'
-import { ScrollablePane } from 'office-ui-fabric-react'
 import * as strings from 'ProgramWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { columns } from '../columns'
 import { ProgramAdministrationContext } from '../context'
-import { addChildProject } from '../data'
 import { ListHeaderSearch } from '../ListHeaderSearch'
 import { ADD_CHILD_PROJECTS, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
 import styles from './AddProjectDialog.module.scss'
@@ -31,7 +30,8 @@ export const AddProjectDialog: FC = () => {
       dialogContentProps={{
         type: DialogType.largeHeader,
         title: strings.ProgramAdministrationAddChildsButtonText
-      }}>
+      }}
+    >
       <div className={styles.dialogContent}>
         <ScrollablePane>
           <ShimmeredDetailsList
@@ -45,9 +45,9 @@ export const AddProjectDialog: FC = () => {
             onRenderRow={onRenderRow}
             onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
               <ListHeaderSearch
+                selectedItems={context.state.selectedProjectsToAdd}
                 detailsHeaderProps={detailsHeaderProps}
                 defaultRender={defaultRender}
-                selectedCount={context.state.selectedProjectsToAdd?.length ?? 0}
                 search={{
                   placeholder: strings.AddProjectDialogSearchBoxPlaceholder,
                   onSearch
@@ -62,7 +62,7 @@ export const AddProjectDialog: FC = () => {
           text={strings.Add}
           disabled={_.isEmpty(context.state.selectedProjectsToAdd)}
           onClick={async () => {
-            await addChildProject(context.props.dataAdapter, context.state.selectedProjectsToAdd)
+            await context.props.dataAdapter.addChildProjects(context.state.selectedProjectsToAdd)
             context.dispatch(ADD_CHILD_PROJECTS())
           }}
         />
