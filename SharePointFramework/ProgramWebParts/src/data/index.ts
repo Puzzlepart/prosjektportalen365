@@ -47,8 +47,7 @@ import { DEFAULT_SEARCH_SETTINGS, IProjectsData } from './types'
  */
 export class SPDataAdapter
   extends SPDataAdapterBase<ISPDataAdapterBaseConfiguration>
-  implements IPortfolioWebPartsDataAdapter
-{
+  implements IPortfolioWebPartsDataAdapter {
   public project: ProjectDataService
   public dataSourceService: DataSourceService
   public childProjects: Array<Record<string, string>>
@@ -101,7 +100,7 @@ export class SPDataAdapter
     level: string = 'Overordnet/Program'
   ): Promise<IPortfolioAggregationConfiguration> {
     try {
-      const columns = await this.fetchProjectContentColumns(category)
+      const columns = await this.fetchProjectContentColumns(category, level)
       const [views, viewsUrls, columnUrls] = await Promise.all([
         this.fetchDataSources(category, level, columns),
         this.portal.getListFormUrls('DATA_SOURCES'),
@@ -377,7 +376,7 @@ export class SPDataAdapter
             (child) =>
               child?.SiteId === item?.GtSiteIdLookup?.GtSiteId ||
               item?.GtSiteIdLookup?.GtSiteId ===
-                this?.spfxContext?.pageContext?.site?.id?.toString()
+              this?.spfxContext?.pageContext?.site?.id?.toString()
           )
         ) {
           if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
@@ -730,7 +729,7 @@ export class SPDataAdapter
     }
   }
 
-  public async fetchProjectContentColumns(dataSourceCategory: string) {
+  public async fetchProjectContentColumns(dataSourceCategory: string, level?: string) {
     try {
       if (stringIsNullOrEmpty(dataSourceCategory)) return []
       const projectContentColumnsList = this.portal.web.lists.getByTitle(
@@ -740,7 +739,10 @@ export class SPDataAdapter
         .select(...Object.keys(new SPProjectContentColumnItem()))
         .using(DefaultCaching)<SPProjectContentColumnItem[]>()
       const filteredColumnItems = columnItems.filter(
-        (item) => item.GtDataSourceCategory === dataSourceCategory || !item.GtDataSourceCategory
+        (col) =>
+          col.GtDataSourceCategory === dataSourceCategory ||
+          (!col.GtDataSourceCategory && !col.GtDataSourceLevel) ||
+          (!col.GtDataSourceCategory && _.contains(col.GtDataSourceLevel, level))
       )
       return filteredColumnItems.map((item) => {
         const col = new ProjectContentColumn(item)
@@ -763,7 +765,7 @@ export class SPDataAdapter
       const list = this.portal.web.lists.getByTitle(strings.ProjectsListName)
       const [item] = await list.items.filter(`GtSiteId eq '${siteId}'`)()
       await list.items.getById(item.ID).update(properties)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -797,7 +799,7 @@ export class SPDataAdapter
   public async initChildProjects(): Promise<void> {
     try {
       this.childProjects = await this.getChildProjects()
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**

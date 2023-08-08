@@ -165,9 +165,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       if (this.portalDataService.url !== this._spfxContext.pageContext.web.absoluteUrl) {
         calculatedLevel = strings.DataSourceLevelProject
       }
-      const columns = await this.fetchProjectContentColumns(category)
+      level = level ?? calculatedLevel
+      const columns = await this.fetchProjectContentColumns(category, level)
       const [views, viewsUrls, columnUrls, levels] = await Promise.all([
-        this.fetchDataSources(category, level ?? calculatedLevel, columns),
+        this.fetchDataSources(category, level, columns),
         this.portalDataService.getListFormUrls('DATA_SOURCES'),
         this.portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS'),
         this.portalDataService.web.fields
@@ -179,7 +180,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         views,
         viewsUrls,
         columnUrls,
-        level: calculatedLevel,
+        level,
         levels: levels?.Choices ?? []
       } as IPortfolioAggregationConfiguration
     } catch (error) {
@@ -762,7 +763,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  public async fetchProjectContentColumns(dataSourceCategory: string) {
+  public async fetchProjectContentColumns(dataSourceCategory: string, level?: string) {
     try {
       if (stringIsNullOrEmpty(dataSourceCategory)) return []
       const projectContentColumnsList = this.portalDataService.web.lists.getByTitle(
@@ -772,7 +773,10 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .select(...Object.keys(new SPProjectContentColumnItem()))
         .using(DefaultCaching)<SPProjectContentColumnItem[]>()
       const filteredColumnItems = columnItems.filter(
-        (col) => col.GtDataSourceCategory === dataSourceCategory || !col.GtDataSourceCategory
+        (col) =>
+          col.GtDataSourceCategory === dataSourceCategory ||
+          (!col.GtDataSourceCategory && !col.GtDataSourceLevel) ||
+          (!col.GtDataSourceCategory && _.contains(col.GtDataSourceLevel, level))
       )
       return filteredColumnItems.map((item) => new ProjectContentColumn(item))
     } catch (error) {

@@ -1,4 +1,5 @@
 declare interface IPortfolioWebPartsStrings {
+  ColumnRenderOptionProjectInformationModal: string
   SortOrderDescription: string
   NewViewHeaderText: string
   EditViewHeaderText: string
