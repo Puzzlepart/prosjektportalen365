@@ -1,42 +1,32 @@
-import {
-  DocumentCard,
-  DocumentCardActions,
-  Link,
-  Shimmer,
-  ShimmerElementsGroup,
-  ShimmerElementType
-} from '@fluentui/react'
-import React, { FC, useContext } from 'react'
-import { ProjectCardContext } from './context'
+import { Shimmer, ShimmerElementsGroup, ShimmerElementType } from '@fluentui/react'
+import { Card } from '@fluentui/react-components'
+import React, { FC } from 'react'
 import styles from './ProjectCard.module.scss'
+import { ProjectCardFooter } from './ProjectCardFooter'
+import { useProjectCard } from './useProjectCard'
 import { ProjectCardContent } from './ProjectCardContent'
 import { ProjectCardHeader } from './ProjectCardHeader'
-import { useProjectCard } from './useProjectCard'
 
-export const ProjectCard: FC = () => {
-  const context = useContext(ProjectCardContext)
-  const { isDataLoaded, setIsImageLoaded, documentCardProps } = useProjectCard()
+export const ProjectCard: FC = (props) => {
+  const { isDataLoaded, setIsImageLoaded } = useProjectCard()
+
   return (
     <Shimmer
       className={styles.root}
       isDataLoaded={isDataLoaded}
       customElementsGroup={
-        <div>
-          <div className={styles.shimmerGroup}>
-            <ShimmerElementsGroup
-              shimmerElements={[{ type: ShimmerElementType.line, width: '100%', height: 440 }]}
-            />
-          </div>
+        <div className={styles.shimmerGroup}>
+          <ShimmerElementsGroup
+            shimmerElements={[{ type: ShimmerElementType.line, width: '100%', height: 312 }]}
+          />
         </div>
       }
     >
-      <DocumentCard {...documentCardProps}>
-        <Link href={documentCardProps.onClickHref} target='_blank'>
-          <ProjectCardHeader onImageLoad={() => setIsImageLoaded(true)} />
-        </Link>
+      <Card className={styles.card} {...props}>
+        <ProjectCardHeader onImageLoad={() => setIsImageLoaded(true)} />
         <ProjectCardContent />
-        <DocumentCardActions actions={context.actions} />
-      </DocumentCard>
+        <ProjectCardFooter />
+      </Card>
     </Shimmer>
   )
 }

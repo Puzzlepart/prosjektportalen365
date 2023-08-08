@@ -264,7 +264,7 @@ define([], function () {
     DisplayAllProjects: 'Vis alle prosjekter',
     ProjectsAccessHeaderText: 'Tilgang til',
     MyProjectsHeaderText: 'Mine prosjekter',
-    AllProjectsHeaderText: 'Alle prosjekter',
+    AllProjectsHeaderText: 'Alle prosjekter/program',
     ParentProjectsHeaderText: 'Overordnede prosjekter',
     ProgramProjectsHeaderText: 'Program',
     NoAccessMessage: 'Du har ikke tilgang til dette prosjektet',

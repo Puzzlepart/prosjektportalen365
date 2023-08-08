@@ -1,6 +1,11 @@
-@import '~@fluentui/react/dist/sass/References.scss';
+@import "~@fluentui/react/dist/sass/References.scss";
 
-.root {
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+
   .phase {
     color: rgb(51, 51, 51);
     font-weight: 100;
@@ -13,8 +18,23 @@
     margin: 7px 0 7px 0;
   }
 
-  .personaContainer {
-    margin: 12px 0 12px 0;
-    padding: 0 15px 0 15px;
+  .menuItem {
+    padding: var(--spacingVerticalSNudge) var(--spacingHorizontalXS);
+  }
+
+  .tagGroup {
+    display: flex;
+  }
+
+  .statusTagGroup {
+    display: flex;
+    gap: var(--spacingHorizontalXS);
+
+    .statusTag {
+      button {
+        background-color: inherit;
+        color: inherit;
+      }
+    }
   }
 }

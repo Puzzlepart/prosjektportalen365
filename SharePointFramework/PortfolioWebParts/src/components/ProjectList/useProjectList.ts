@@ -1,5 +1,5 @@
 /* eslint-disable prefer-spread */
-import { format, IButtonProps, IColumn } from '@fluentui/react'
+import { format, IColumn } from '@fluentui/react'
 import { sortAlphabetically } from 'pp365-shared-library/lib/util/sortAlphabetically'
 import _ from 'underscore'
 import { IProjectListProps } from './types'
@@ -7,6 +7,7 @@ import { useProjectListDataFetch } from './useProjectListDataFetch'
 import { useProjectListState } from './useProjectListState'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import { SearchBoxProps } from '@fluentui/react-search-preview'
+import { ButtonProps } from '@fluentui/react-components'
 
 /**
  * Component logic hook for `ProjectList`. This hook is responsible for
@@ -33,22 +34,22 @@ export const useProjectList = (props: IProjectListProps) => {
   }
 
   /**
-   * Get card ations. For now only `ON_SELECT_PROJECT` is handled.
+   * Get card actions. For now only `showProjectInfo` is handled.
    *
    * @param project - Project
    */
-  function getCardActions(project: ProjectListModel): IButtonProps[] {
+  function getCardActions(project: ProjectListModel): ButtonProps[] {
     return [
       {
-        id: 'ON_SELECT_PROJECT',
-        iconProps: { iconName: 'OpenInNewWindow' },
-        onClick: (event: React.MouseEvent<any>) => onExecuteCardAction(event, project)
+        id: 'showProjectInfo',
+        onClick: (event: React.MouseEvent<any>) => onExecuteCardAction(event, project),
+        title: 'Show project info'
       }
     ]
   }
 
   /**
-   * On execute card action. For now only `ON_SELECT_PROJECT` is handled.
+   * On execute card action. For now only `showProjectInfo` is handled.
    *
    * @param event - Event
    * @param project - Project
@@ -57,7 +58,7 @@ export const useProjectList = (props: IProjectListProps) => {
     event.preventDefault()
     event.stopPropagation()
     switch (event.currentTarget.id) {
-      case 'ON_SELECT_PROJECT':
+      case 'showProjectInfo':
         setState({ showProjectInfo: project })
         break
     }

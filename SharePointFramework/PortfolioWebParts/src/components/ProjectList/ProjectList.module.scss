@@ -18,6 +18,8 @@
 
     .searchBox {
       width: 100%;
+      box-shadow: var(--shadow2);
+      max-width: 820px;
     }
   }
 
@@ -32,5 +34,6 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+    gap: 12px;
   }
 }

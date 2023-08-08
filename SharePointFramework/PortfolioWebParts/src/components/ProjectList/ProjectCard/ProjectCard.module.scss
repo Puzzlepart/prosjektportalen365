@@ -1,13 +1,23 @@
-@import '~@fluentui/react/dist/sass/References.scss';
+@import "~@fluentui/react/dist/sass/References.scss";
 
 .root {
   object-fit: cover;
-  margin: 5px 10px 5px 0;
   padding: 0;
   width: 240px;
   box-sizing: border-box;
 
   .shimmerGroup > div {
     display: block;
+  }
+
+  .card {
+    max-width: 100%;
+    height: fit-content;
+    min-height: 312px;
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow8);
+    background-color: var(--colorNeutralBackground1Hover);
   }
 }

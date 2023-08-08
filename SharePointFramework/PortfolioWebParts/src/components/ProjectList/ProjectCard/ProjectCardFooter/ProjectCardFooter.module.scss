@@ -1,0 +1,14 @@
+@import "~@fluentui/react/dist/sass/References.scss";
+.footer {
+  display: flex;
+
+  .persona {
+    display: flex;
+    gap: 4px;
+  }
+
+  .templateTag {
+    margin-left: 60px;
+    cursor: pointer;
+  }
+}

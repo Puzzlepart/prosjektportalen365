@@ -3,6 +3,7 @@ import { Dropdown, Option } from '@fluentui/react-components'
 import { IRenderModeDropdownProps } from './IRenderModeDropdownProps'
 import { listOption, tileOption } from './types'
 import { ProjectListRenderMode } from '../types'
+import styles from './RenderModeDropdown.module.scss'
 
 export const RenderModeDropdown: FC<IRenderModeDropdownProps> = (props) => {
   const options = [tileOption, listOption]
@@ -17,10 +18,10 @@ export const RenderModeDropdown: FC<IRenderModeDropdownProps> = (props) => {
 
   return (
     <Dropdown
+      className={styles.renderModeDropdown}
       appearance={'filled-lighter'}
       aria-aria-label={'Render mode dropdown'}
       size={'large'}
-      style={{ boxShadow: 'var(--shadow2)', minWidth: '160px' }}
       defaultValue={selectedOption.text}
       defaultSelectedOptions={[selectedOption.value]}
       onOptionSelect={(_, option) =>

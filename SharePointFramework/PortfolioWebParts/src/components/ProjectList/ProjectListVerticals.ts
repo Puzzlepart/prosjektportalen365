@@ -1,10 +1,10 @@
 import strings from 'PortfolioWebPartsStrings'
 import { IProjectListVertical } from './types'
 import {
-  BoxFilled,
-  BoxRegular,
-  BoxToolboxFilled,
-  BoxToolboxRegular,
+  CubeFilled,
+  BoxMultipleFilled,
+  BoxMultipleRegular,
+  CubeRegular,
   LockOpenFilled,
   LockOpenRegular,
   PersonCircleFilled,
@@ -43,7 +43,7 @@ export const ProjectListVerticals: IProjectListVertical[] = [
     key: 'all_projects',
     value: 'all_projects',
     text: strings.AllProjectsHeaderText,
-    icon: bundleIcon(BoxFilled, BoxRegular),
+    icon: bundleIcon(CubeFilled, CubeRegular),
     searchBoxPlaceholder: strings.AllProjectsSearchBoxPlaceholderText,
     filter: (_, state) => state.isUserInPortfolioManagerGroup,
     isHidden: (state) => !state.isUserInPortfolioManagerGroup
@@ -52,7 +52,7 @@ export const ProjectListVerticals: IProjectListVertical[] = [
     key: 'parent_projects',
     value: 'parent_projects',
     text: strings.ParentProjectsHeaderText,
-    icon: bundleIcon(BoxToolboxFilled, BoxToolboxRegular),
+    icon: bundleIcon(BoxMultipleFilled, BoxMultipleRegular),
     searchBoxPlaceholder: strings.ParentProjectsSearchBoxPlaceholderText,
     filter: (project, state) =>
       project.isParent && (state.isUserInPortfolioManagerGroup || project.hasUserAccess)
@@ -61,7 +61,7 @@ export const ProjectListVerticals: IProjectListVertical[] = [
     key: 'program_projects',
     value: 'program_projects',
     text: strings.ProgramProjectsHeaderText,
-    icon: bundleIcon(BoxToolboxFilled, BoxToolboxRegular),
+    icon: bundleIcon(BoxMultipleFilled, BoxMultipleRegular),
     searchBoxPlaceholder: strings.ProgramSearchBoxPlaceholderText,
     filter: (project, state) =>
       project.isProgram && (state.isUserInPortfolioManagerGroup || project.hasUserAccess)

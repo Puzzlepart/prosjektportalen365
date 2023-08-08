@@ -150,8 +150,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             aria-label={searchBoxPlaceholder}
             size={'large'}
             onChange={onSearch}
-            style={{ boxShadow: 'var(--shadow2)', maxWidth: '820px' }}
-            appearance={'filled-lighter-shadow'}
+            appearance={'filled-lighter'}
             hidden={!props.showSearchBox}
           />
           <RenderModeDropdown
@@ -160,7 +159,6 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             onOptionSelect={(renderAs) => setState({ renderMode: renderAs })}
           />
         </div>
-
         {state.isDataLoaded && isEmpty(projects) && (
           <div className={styles.emptyMessage}>
             <Alert intent={'info'}>{strings.ProjectListEmptyText}</Alert>

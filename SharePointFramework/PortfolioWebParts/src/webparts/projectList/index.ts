@@ -99,7 +99,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   calloutContent: React.createElement(
                     'p',
                     {},
-                    "Her kan du velge hvilken vertikal som skal være standard. Merk! dersom vertikalen 'Alle prosjekter' er valgt som standard og brukere ikke har tilgang til 'Alle prosjekter' vertikalen, vil standard bli 'Mine prosjekter'."
+                    'Her kan du velge hvilken vertikal som skal være standard. Merk! dersom vertikalen \'Alle prosjekter\' er valgt som standard og brukere ikke har tilgang til \'Alle prosjekter\' vertikalen, vil standard bli \'Mine prosjekter\'.'
                   )
                 }),
                 PropertyFieldMultiSelect('hideVerticals', {
