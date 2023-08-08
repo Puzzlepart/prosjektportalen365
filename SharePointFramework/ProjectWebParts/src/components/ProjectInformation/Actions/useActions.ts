@@ -13,7 +13,7 @@ export const useActions = () => {
   const showAllProjectInformationAction: ActionType = [
     strings.ShowAllProjectInformationText,
     () => {
-      context.setState({ showAllPropertiesPanel: true })
+      context.setState({ displayAllPropertiesPanel: true })
     },
     'EntryView',
     false
@@ -27,7 +27,9 @@ export const useActions = () => {
   ]
   const editProjectInformationAction: ActionType = [
     strings.EditProjectInformationText,
-    context.state.data?.editFormUrl,
+    () => {
+      context.setState({ displayEditPropertiesPanel: true })
+    },
     'Edit',
     false,
     !context.state.userHasEditPermission

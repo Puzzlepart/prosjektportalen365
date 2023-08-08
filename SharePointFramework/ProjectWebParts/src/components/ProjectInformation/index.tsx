@@ -15,6 +15,7 @@ import { ProjectStatusReport } from './ProjectStatusReport'
 import { SyncProjectDialog } from './SyncProjectDialog'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
+import { EditPropertiesPanel } from './EditPropertiesPanel'
 
 export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
   const { context } = useProjectInformation(props)
@@ -49,6 +50,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
               <ProjectStatusReport />
               <ProgressDialog {...context.state.progress} />
               <AllPropertiesPanel />
+              <EditPropertiesPanel />
               <CreateParentDialog />
               {props.page === 'Frontpage' && props.useIdeaProcessing && <SyncProjectDialog />}
             </Shimmer>

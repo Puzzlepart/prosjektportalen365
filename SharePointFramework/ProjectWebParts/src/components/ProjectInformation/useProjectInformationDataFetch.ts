@@ -132,11 +132,12 @@ const fetchData: DataFetchFunction<
         logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }
+    const isFrontpage = props.page === 'Frontpage'
     const [columns, propertiesData, parentProjects, [reports, sections, columnConfig]] =
       await Promise.all([
         SPDataAdapter.portal.getProjectColumns(),
         SPDataAdapter.project.getPropertiesData(),
-        props.page === 'Frontpage'
+        isFrontpage
           ? SPDataAdapter.portal.getParentProjects(
               props.webPartContext?.pageContext?.web?.absoluteUrl,
               ProjectInformationParentProject
@@ -156,7 +157,7 @@ const fetchData: DataFetchFunction<
     const allProperties = transformProperties(data, props, false)
     let userHasEditPermission = false
     let isProjectDataSynced = false
-    if (props.page === 'Frontpage') {
+    if (isFrontpage) {
       userHasEditPermission = await SPDataAdapter.checkProjectAdminPermissions(
         ProjectAdminPermission.EditProjectProperties,
         data.fieldValues

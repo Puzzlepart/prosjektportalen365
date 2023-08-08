@@ -10,8 +10,8 @@ export const AllPropertiesPanel: FC = () => {
     <Panel
       type={PanelType.medium}
       headerText={strings.ProjectPropertiesListName}
-      isOpen={context.state.showAllPropertiesPanel}
-      onDismiss={() => context.setState({ showAllPropertiesPanel: false })}
+      isOpen={context.state.displayAllPropertiesPanel}
+      onDismiss={() => context.setState({ displayAllPropertiesPanel: false })}
       isLightDismiss
       closeButtonAriaLabel={strings.CloseText}
     >

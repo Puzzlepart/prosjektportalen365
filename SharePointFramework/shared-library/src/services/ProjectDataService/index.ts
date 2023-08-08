@@ -122,6 +122,20 @@ export class ProjectDataService {
   }
 
   /**
+   * Mapping fields to include `ShowInEditForm`, `ShowInNewForm` and `ShowInDisplayForm`.
+   * 
+   * @param fields Fields to map
+   */
+  private _mapFields(fields: any[]): any {
+    return fields.map(fld => ({
+      ...fld,
+      ShowInEditForm: fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') === -1,
+      ShowInNewForm: fld.SchemaXml.indexOf('ShowInNewForm="FALSE"') === -1,
+      ShowInDisplayForm: fld.SchemaXml.indexOf('ShowInDisplayForm="FALSE"') === -1
+    }))
+  }
+
+  /**
    * Get project properties for the site/web.
    *
    * Returns the following properties:
@@ -157,7 +171,8 @@ export class ProjectDataService {
             'Description',
             'TypeAsString',
             'SchemaXml',
-            'TextField'
+            'TextField',
+            'Hidden'
           )
           // eslint-disable-next-line quotes
           .filter("substringof('Gt', InternalName)")
@@ -168,7 +183,7 @@ export class ProjectDataService {
       const propertiesData: IGetPropertiesData = {
         fieldValuesText,
         fieldValues,
-        fields,
+        fields: this._mapFields(fields),
         versionHistoryUrl: '{0}/_layouts/15/versions.aspx?list={1}&ID={2}'
       }
 

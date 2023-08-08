@@ -150,7 +150,12 @@ export interface IProjectInformationState
   /**
    * Show project properties panel
    */
-  showAllPropertiesPanel?: boolean
+  displayAllPropertiesPanel?: boolean
+
+  /**
+   * Show edit properties panel
+   */
+  displayEditPropertiesPanel?: boolean
 
   /**
    * Current user has edit permission (edc568a8-9cfc-4547-9af2-d9d3aeb5aa2a)
