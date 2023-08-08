@@ -12,9 +12,9 @@ import '@pnp/sp/items'
 import '@pnp/sp/site-groups/web'
 import DialogPrompt from 'components/IdeaApprovalDialog'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
-import { isUserAuthorized } from 'helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
 import { IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
+import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 
 Logger.subscribe(ConsoleListener())
 Logger.activeLogLevel = DEBUG ? LogLevel.Info : LogLevel.Warning

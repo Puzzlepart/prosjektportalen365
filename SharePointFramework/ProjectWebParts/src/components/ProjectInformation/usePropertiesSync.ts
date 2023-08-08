@@ -1,7 +1,7 @@
 import { IProgressIndicatorProps, MessageBarType } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'ProjectWebPartsStrings'
-import SPDataAdapter from 'data'
+import SPDataAdapter from '../../data'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { sleep } from 'pp365-shared-library/lib/util'
 import { ProjectInformation } from '.'

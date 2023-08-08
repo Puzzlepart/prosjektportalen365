@@ -1,4 +1,4 @@
-import { DataFieldType } from 'types'
+import { DataFieldType } from 'pp365-shared-library'
 
 export class DataField {
   public type: DataFieldType

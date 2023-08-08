@@ -1,17 +1,13 @@
 import { Logger, LogLevel } from '@pnp/logging'
 import { IProjectSetupData } from 'projectSetup'
-import { IProjectSetupSettings } from 'projectSetup/ProjectSetupSettings'
 import { OnProgressCallbackFunction } from '../types'
 import { IBaseTask, IBaseTaskParams } from './types'
 
 export abstract class BaseTask implements IBaseTask {
-  public settings: IProjectSetupSettings
   public params: IBaseTaskParams
   public onProgress: OnProgressCallbackFunction
 
-  constructor(public taskName: string, public data: IProjectSetupData) {
-    this.settings = data.settings.values
-  }
+  constructor(public taskName: string, public data: IProjectSetupData) {}
 
   /**
    * Initialize execute setting parameters and on progress callback function

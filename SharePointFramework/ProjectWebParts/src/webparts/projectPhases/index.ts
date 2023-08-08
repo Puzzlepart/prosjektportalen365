@@ -11,7 +11,7 @@ import React from 'react'
 import { IProjectPhasesProps, ProjectPhases } from 'components/ProjectPhases'
 import '@fluentui/react/dist/css/fabric.min.css'
 import * as strings from 'ProjectWebPartsStrings'
-import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
+import { BaseProjectWebPart } from '../@baseProjectWebPart'
 
 export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPhasesProps> {
   private _fields: { Title: string; InternalName: string }[] = []
