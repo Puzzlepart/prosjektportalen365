@@ -26,7 +26,6 @@ import {
 } from '../components'
 import { ContentConfig, ProjectExtension, ProjectTemplate, ProjectTemplateFile } from '../models'
 import { ProjectSetupError } from './ProjectSetupError'
-import { ProjectSetupSettings } from './ProjectSetupSettings'
 import { deleteCustomizer } from './deleteCustomizer'
 import * as Tasks from './tasks'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
@@ -200,8 +199,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     return {
       selectedTemplate: autoTemplate,
       selectedExtensions: [],
-      selectedContentConfig: [],
-      settings: new ProjectSetupSettings().useDefault()
+      selectedContentConfig: []
     }
   }
 

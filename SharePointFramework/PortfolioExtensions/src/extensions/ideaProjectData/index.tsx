@@ -12,7 +12,7 @@ import '@pnp/sp/lists'
 import '@pnp/sp/site-groups/web'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import IdeaDialog from 'components/IdeaDialog'
-import { isUserAuthorized } from 'helpers/isUserAuthorized'
+import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
 import { IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 

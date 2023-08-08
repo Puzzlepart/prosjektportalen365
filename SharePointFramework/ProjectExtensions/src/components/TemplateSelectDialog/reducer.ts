@@ -1,6 +1,5 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import { ContentConfig, ProjectExtension, ProjectTemplate } from 'models'
-import { ProjectSetupSettings } from 'projectSetup/ProjectSetupSettings'
 import { first, uniq } from 'underscore'
 import { IProjectSetupData } from '../../projectSetup/types'
 import { ITemplateSelectDialogState } from './types'
@@ -15,8 +14,7 @@ export const ON_TEMPLATE_CHANGED = createAction<ProjectTemplate>('ON_TEMPLATE_CH
 export const initialState: ITemplateSelectDialogState = {
   selectedTemplate: null,
   selectedContentConfig: [],
-  selectedExtensions: [],
-  settings: new ProjectSetupSettings().useDefault()
+  selectedExtensions: []
 }
 
 /**

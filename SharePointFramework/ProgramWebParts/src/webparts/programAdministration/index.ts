@@ -2,7 +2,7 @@ import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp
 import { ProgramAdministration } from 'components/ProgramAdministration'
 import { IProgramAdministrationProps } from 'components/ProgramAdministration/types'
 import { unmountComponentAtNode } from 'react-dom'
-import { BaseProgramWebPart } from 'webparts/baseProgramWebPart'
+import { BaseProgramWebPart } from '../baseProgramWebPart'
 
 export default class ProgramAdministrationWebPart extends BaseProgramWebPart<IProgramAdministrationProps> {
   public render(): void {

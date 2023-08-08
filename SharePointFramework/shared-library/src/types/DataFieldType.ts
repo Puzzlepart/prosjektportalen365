@@ -1,1 +1,1 @@
-export type DataFieldType = 'text' | 'tags' | 'number' | 'percentage'
+export type DataFieldType = 'text' | 'tags' | 'number' | 'percentage' | 'currency'

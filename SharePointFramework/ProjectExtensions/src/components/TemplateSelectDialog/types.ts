@@ -1,4 +1,3 @@
-import { ProjectSetupSettings } from 'projectSetup/ProjectSetupSettings'
 import { IProjectSetupData } from 'projectSetup/types'
 import { ContentConfig, ProjectExtension, ProjectTemplate } from 'models'
 import { IBaseDialogProps } from '../@BaseDialog/types'
@@ -41,9 +40,4 @@ export interface ITemplateSelectDialogState {
    * Currently selected content configuration
    */
   selectedContentConfig?: ContentConfig[]
-
-  /**
-   * Settings
-   */
-  settings?: ProjectSetupSettings
 }
