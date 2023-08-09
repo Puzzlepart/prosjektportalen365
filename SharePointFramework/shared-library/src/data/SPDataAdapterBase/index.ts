@@ -14,13 +14,44 @@ import { ISPDataAdapterBaseConfiguration } from './ISPDataAdapterBaseConfigurati
 import { ProjectAdminPermission } from './ProjectAdminPermission'
 
 export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
+  /**
+   * Settings for the data adapter
+   */
   public settings: T
+
+  /**
+   * Portal data service instance
+   */
   public portal: PortalDataService
+
+  /**
+   * Entity service instance
+   */
   public entityService: SpEntityPortalService
+
+  /**
+   * SPFI instance
+   */
   public sp: SPFI
+
+  /**
+   * Whether the data adapter is configured
+   */
   public isConfigured: boolean = false
+
+  /**
+   * SPF context
+   */
   public spfxContext: SPFxContext
+
+  /**
+   * Instance of `IPnPClientStore`
+   */
   private _storage: IPnPClientStore
+
+  /**
+   * Storage keys definitions
+   */
   private _storageKeys: Record<string, string> = {
     getProjectAdminPermissions: '{0}_project_admin_permissions'
   }

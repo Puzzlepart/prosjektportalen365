@@ -56,11 +56,6 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<ITimel
   timelineConfig?: TimelineConfigurationModel[]
 
   /**
-   * Error
-   */
-  error?: Error
-
-  /**
    * Item to show details for
    */
   showDetails?: { item: ITimelineItem; element: HTMLElement }

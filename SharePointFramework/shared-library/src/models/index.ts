@@ -1,4 +1,5 @@
 export * from './ChecklistItemModel'
+export * from './CustomError'
 export * from './DataSource'
 export * from './ProjectPropertyModel'
 export * from './ProjectColumnConfig'

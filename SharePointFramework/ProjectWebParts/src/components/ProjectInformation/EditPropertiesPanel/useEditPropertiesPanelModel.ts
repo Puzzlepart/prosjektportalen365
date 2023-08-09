@@ -29,22 +29,18 @@ export function useEditPropertiesPanelModel() {
   ): T {
     const { fieldValues, fieldValuesText } = context.state.data
     const value = (model.get(field.internalName) as string) ?? fieldValuesText[field.internalName]
+    const isValueString = typeof value === 'string'
     if (!value) return null
+    if (!isValueString) return value as unknown as T
     switch (type) {
-      case 'tags': {
-        return typeof value === 'string'
-          ? (value.split(';').map((v) => ({ key: v, name: v })) as unknown as T)
-          : (value as unknown as T)
-      }
-      case 'date': {
-        return typeof value === 'string'
-          ? (new Date(fieldValues[field.internalName]) as unknown as T)
-          : (value as unknown as T)
-      }
+      case 'tags':
+        return value.split(';').map((v) => ({ key: v, name: v })) as unknown as T
+      case 'date':
+        return new Date(fieldValues[field.internalName]) as unknown as T
+      case 'multichoice':
+        return value.split(', ') as unknown as T
       case 'users': {
-        if (typeof value !== 'string') return value as unknown as T
         const fieldValue = fieldValues[field.internalName]
-        if (!fieldValue) return [] as unknown as T
         const users = (
           (_.isArray(fieldValue) ? fieldValue : [fieldValue]) as Array<{
             Id: number
@@ -58,13 +54,6 @@ export function useEditPropertiesPanelModel() {
           imageUrl: `/_layouts/15/userphoto.aspx?size=L&username=${v.EMail}`
         }))
         return users as unknown as T
-      }
-      case 'multichoice': {
-        // eslint-disable-next-line no-console
-        console.log(value)
-        return typeof value === 'string'
-          ? (value.split(';') as unknown as T)
-          : (value as unknown as T)
       }
       default: {
         return value as unknown as T

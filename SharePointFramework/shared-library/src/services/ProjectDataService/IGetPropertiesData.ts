@@ -12,12 +12,12 @@ export interface IGetPropertiesData {
   versionHistoryUrl?: string
 
   /**
-   * Field values
+   * Field values - all fields in complex format
    */
   fieldValues?: Record<string, any>
 
   /**
-   * Field values as text
+   * Field values as text - all field values in string format
    */
   fieldValuesText?: Record<string, string>
 
