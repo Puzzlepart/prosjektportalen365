@@ -16,49 +16,64 @@ import { SyncProjectDialog } from './SyncProjectDialog'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
 import { EditPropertiesPanel } from './EditPropertiesPanel'
+import { ErrorBoundary } from 'react-error-boundary'
+
+function ErrorFallback({ error, resetErrorBoundary }) {
+  return (
+    <div role='alert'>
+      <p>Something went wrong:</p>
+      <pre>{error.message}</pre>
+      <button onClick={resetErrorBoundary}>Try again</button>
+    </div>
+  )
+}
 
 export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
   const { context } = useProjectInformation(props)
   if (context.state.hidden) return null
 
   return (
-    <ProjectInformationContext.Provider value={context}>
-      <div className={styles.root}>
-        <div className={styles.container}>
-          <div className={styles.header}>
-            <span role='heading' aria-level={2}>
-              {props.title}
-            </span>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <ProjectInformationContext.Provider value={context}>
+        <div className={styles.root}>
+          <div className={styles.container}>
+            <div className={styles.header}>
+              <span role='heading' aria-level={2}>
+                {props.title}
+              </span>
+            </div>
+            {context.state.error ? (
+              <UserMessage
+                className={styles.userMessage}
+                type={context.state.error.type}
+                text={context.state.error.message}
+              />
+            ) : (
+              <Shimmer
+                isDataLoaded={context.state.isDataLoaded}
+                customElementsGroup={<CustomShimmerElementsGroup />}
+              >
+                <ProjectProperties properties={context.state.properties} />
+                {!props.hideAllActions && context.state.message && (
+                  <UserMessage className={styles.userMessage} {...context.state.message} />
+                )}
+                <Actions />
+                <ParentProjectsList />
+                <ProjectStatusReport />
+                <ProgressDialog {...context.state.progress} />
+                <AllPropertiesPanel />
+                <EditPropertiesPanel />
+                <CreateParentDialog />
+                {props.page === 'Frontpage' && props.useIdeaProcessing && <SyncProjectDialog />}
+              </Shimmer>
+            )}
           </div>
-          {context.state.error ? (
-            <UserMessage
-              className={styles.userMessage}
-              type={context.state.error.type}
-              text={context.state.error.message}
-            />
-          ) : (
-            <Shimmer
-              isDataLoaded={context.state.isDataLoaded}
-              customElementsGroup={<CustomShimmerElementsGroup />}
-            >
-              <ProjectProperties properties={context.state.properties} />
-              {!props.hideAllActions && context.state.message && (
-                <UserMessage className={styles.userMessage} {...context.state.message} />
-              )}
-              <Actions />
-              <ParentProjectsList />
-              <ProjectStatusReport />
-              <ProgressDialog {...context.state.progress} />
-              <AllPropertiesPanel />
-              <EditPropertiesPanel />
-              <CreateParentDialog />
-              {props.page === 'Frontpage' && props.useIdeaProcessing && <SyncProjectDialog />}
-            </Shimmer>
-          )}
         </div>
-      </div>
-      {context.state.confirmActionProps && <ConfirmDialog {...context.state.confirmActionProps} />}
-    </ProjectInformationContext.Provider>
+        {context.state.confirmActionProps && (
+          <ConfirmDialog {...context.state.confirmActionProps} />
+        )}
+      </ProjectInformationContext.Provider>
+    </ErrorBoundary>
   )
 }
 
@@ -66,13 +81,7 @@ ProjectInformation.displayName = 'Project Information'
 ProjectInformation.defaultProps = {
   page: 'Frontpage',
   customActions: [],
-  hideActions: [],
-  hideAllActions: false,
-  useFramelessButtons: false,
-  hideStatusReport: false,
-  hideParentProjects: false,
-  statusReportShowOnlyIcons: true,
-  useIdeaProcessing: false
+  hideActions: []
 }
 
 export * from '../ProjectInformationPanel'

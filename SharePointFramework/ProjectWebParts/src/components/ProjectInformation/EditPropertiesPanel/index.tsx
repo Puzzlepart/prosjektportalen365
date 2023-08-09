@@ -1,25 +1,25 @@
-import { Panel, PanelType } from '@fluentui/react'
+import { DefaultButton, Panel, PanelType, PrimaryButton } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { ProjectInformationContext } from '../context'
+import { IEditPropertiesPanel } from './types'
 import { useEditPropertiesPanel } from './useEditPropertiesPanel'
-import _ from 'lodash'
 
-export const EditPropertiesPanel: FC = () => {
+export const EditPropertiesPanel: FC<IEditPropertiesPanel> = (props) => {
   const context = useContext(ProjectInformationContext)
   const { fields, getFieldElement } = useEditPropertiesPanel()
-  // eslint-disable-next-line no-console
-  console.log(
-    fields.map((fld) => _.pick(fld, 'Title', 'TypeAsString', 'Choices', 'ShowInEditForm'))
-  )
+
   return (
     <Panel
-      type={PanelType.medium}
-      headerText={strings.EditProjectInformationText}
+      {...props}
       isOpen={context.state.displayEditPropertiesPanel}
       onDismiss={() => context.setState({ displayEditPropertiesPanel: false })}
-      isLightDismiss
-      closeButtonAriaLabel={strings.CloseText}
+      onRenderFooterContent={() => (
+        <div>
+          <PrimaryButton text={strings.SaveText} />
+          <DefaultButton text={strings.CancelText} styles={{ root: { marginLeft: 8 } }} />
+        </div>
+      )}
     >
       {fields.map((field, key) => {
         const fieldElement = getFieldElement(field)
@@ -27,4 +27,11 @@ export const EditPropertiesPanel: FC = () => {
       })}
     </Panel>
   )
+}
+
+EditPropertiesPanel.defaultProps = {
+  type: PanelType.medium,
+  headerText: strings.EditProjectInformationText,
+  isLightDismiss: true,
+  closeButtonAriaLabel: strings.CloseText
 }
