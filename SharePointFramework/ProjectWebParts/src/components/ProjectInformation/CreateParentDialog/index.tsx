@@ -7,14 +7,14 @@ import {
   Spinner,
   SpinnerSize
 } from '@fluentui/react'
-import strings from 'ProjectWebPartsStrings'
-import React, { FC, useContext, useState } from 'react'
-import { ProjectInformationContext } from '../context'
-import { ProjectSetupCustomAction } from './ProjectSetupCustomAction'
 import { IMenuNode } from '@pnp/sp/navigation'
+import strings from 'ProjectWebPartsStrings'
+import React, { FC, useState } from 'react'
+import { useProjectInformationContext } from '../context'
+import { ProjectSetupCustomAction } from './ProjectSetupCustomAction'
 
 export const CreateParentDialog: FC = () => {
-  const context = useContext(ProjectInformationContext)
+  const context = useProjectInformationContext()
   const [isLoading, setLoading] = useState(false)
 
   async function applyCustomAction() {

@@ -61,7 +61,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     )
   }
 
-  useProjectInformationDataFetch(props, setState)
+  useProjectInformationDataFetch(context)
 
   useEffect(() => {
     if (state?.data?.fieldValues) {

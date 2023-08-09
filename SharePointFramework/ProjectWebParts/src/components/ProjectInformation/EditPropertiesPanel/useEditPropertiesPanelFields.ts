@@ -1,6 +1,6 @@
-import { useContext, useMemo } from 'react'
-import { ProjectInformationContext } from '../context'
-import { ProjectInformationField } from '../types'
+import { useMemo } from 'react'
+import { ProjectInformationField } from '../ProjectInformationField'
+import { useProjectInformationContext } from '../context'
 
 /**
  * Hook for the `EditPropertiesPanel` fields.
@@ -8,7 +8,7 @@ import { ProjectInformationField } from '../types'
  * @returns Fields to be used in the `EditPropertiesPanel`.
  */
 export function useEditPropertiesPanelFields() {
-  const context = useContext(ProjectInformationContext)
+  const context = useProjectInformationContext()
   return useMemo<ProjectInformationField[]>(
     () =>
       context.state.data.fields

@@ -1,6 +1,6 @@
-import React from 'react'
-import { IProjectInformationProps, IProjectInformationState } from './types'
 import { MessageBarType } from '@fluentui/react'
+import { createContext, useContext } from 'react'
+import { IProjectInformationProps, IProjectInformationState } from './types'
 
 export interface IProjectInformationContext {
   props: IProjectInformationProps
@@ -9,4 +9,8 @@ export interface IProjectInformationContext {
   addMessage: (text: string, type: MessageBarType, durationSec?: number) => Promise<void>
 }
 
-export const ProjectInformationContext = React.createContext<IProjectInformationContext>(null)
+const ProjectInformationContext = createContext<IProjectInformationContext>(null)
+
+export const useProjectInformationContext = () => useContext(ProjectInformationContext)
+
+export const ProjectInformationContextProvider = ProjectInformationContext.Provider

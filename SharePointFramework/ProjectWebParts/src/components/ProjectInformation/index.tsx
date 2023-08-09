@@ -5,7 +5,7 @@ import React, { FC } from 'react'
 import { ProgressDialog } from './ProgressDialog'
 import { Actions } from './Actions'
 import { AllPropertiesPanel } from './AllPropertiesPanel'
-import { ProjectInformationContext } from './context'
+import { ProjectInformationContextProvider } from './context'
 import { CreateParentDialog } from './CreateParentDialog'
 import { CustomShimmerElementsGroup } from './CustomShimmerElementsGroup'
 import { ParentProjectsList } from './ParentProjectsList'
@@ -34,7 +34,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <ProjectInformationContext.Provider value={context}>
+      <ProjectInformationContextProvider value={context}>
         <div className={styles.root}>
           <div className={styles.container}>
             <div className={styles.header}>
@@ -72,7 +72,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
         {context.state.confirmActionProps && (
           <ConfirmDialog {...context.state.confirmActionProps} />
         )}
-      </ProjectInformationContext.Provider>
+      </ProjectInformationContextProvider>
     </ErrorBoundary>
   )
 }

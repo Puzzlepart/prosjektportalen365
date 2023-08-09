@@ -10,13 +10,13 @@ import {
 } from '@fluentui/react'
 import { Logger, LogLevel } from '@pnp/logging'
 import strings from 'ProjectWebPartsStrings'
-import React, { FC, useContext, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import SPDataAdapter from '../../../data'
-import { ProjectInformationContext } from '../context'
+import { useProjectInformationContext } from '../context'
 import { usePropertiesSync } from '../usePropertiesSync'
 
 export const SyncProjectDialog: FC = () => {
-  const context = useContext(ProjectInformationContext)
+  const context = useProjectInformationContext()
   const onSyncProperties = usePropertiesSync(context)
   const [isLoading, setLoading] = useState(true)
   const [isSyncing, setSyncing] = useState(false)

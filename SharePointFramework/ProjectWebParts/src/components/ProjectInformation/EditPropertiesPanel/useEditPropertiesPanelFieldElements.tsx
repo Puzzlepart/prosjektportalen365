@@ -10,7 +10,7 @@ import {
 } from '@fluentui/react'
 import React from 'react'
 import SPDataAdapter from '../../../data'
-import { ProjectInformationField } from '../types'
+import { ProjectInformationField } from '../ProjectInformationField'
 import { useEditPropertiesPanelModel } from './useEditPropertiesPanelModel'
 import { FieldDescription } from 'pp365-shared-library/lib/components'
 

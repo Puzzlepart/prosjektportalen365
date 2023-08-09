@@ -1,9 +1,9 @@
-import { useContext, useState } from 'react'
-import { ProjectInformationContext } from '../context'
-import { ProjectInformationField } from '../types'
 import { IPersonaSharedProps, ITag } from '@fluentui/react'
-import { DefaultCaching } from 'pp365-shared-library/lib/data'
 import _ from 'lodash'
+import { DefaultCaching } from 'pp365-shared-library/lib/data'
+import { useState } from 'react'
+import { ProjectInformationField } from '../ProjectInformationField'
+import { useProjectInformationContext } from '../context'
 
 /**
  * Hook for the `EditPropertiesPanel` model. This hook is used to get and set the values for
@@ -11,7 +11,7 @@ import _ from 'lodash'
  * for the `property` object that can be sent as a request body to the API.
  */
 export function useEditPropertiesPanelModel() {
-  const context = useContext(ProjectInformationContext)
+  const context = useProjectInformationContext()
   const [model, setModel] = useState(new Map<string, any>())
   const [properties, setProperties] = useState({})
 
@@ -106,7 +106,7 @@ export function useEditPropertiesPanelModel() {
 
   /**
    * Set value for field.
-   * 
+   *
    * @param field Field to set value for
    * @param value Value to set (will be transformed to the correct type for the field)
    */
@@ -122,5 +122,13 @@ export function useEditPropertiesPanelModel() {
    */
   const isChanged = model.size > 0
 
-  return { model, set, get, properties, isChanged }
+  /**
+   * Reset the model and properties.
+   */
+  const reset = () => {
+    setModel(new Map())
+    setProperties({})
+  }
+
+  return { model, set, get, properties, isChanged, reset }
 }

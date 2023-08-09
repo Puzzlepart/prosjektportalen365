@@ -296,7 +296,7 @@ export class ProjectDataService {
       const propertyItemContext = await this._getPropertyItemContext()
       // eslint-disable-next-line no-console
       console.log(propertyItemContext, properties)
-      if (propertyItemContext){
+      if (propertyItemContext) {
         const updateResult = await propertyItemContext.item.update(properties)
         // eslint-disable-next-line no-console
         console.log(updateResult)

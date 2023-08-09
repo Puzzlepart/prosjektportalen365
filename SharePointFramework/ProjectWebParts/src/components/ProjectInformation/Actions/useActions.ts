@@ -1,14 +1,13 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import strings from 'ProjectWebPartsStrings'
-import { useContext } from 'react'
-import { ProjectInformationContext } from '../context'
+import { useProjectInformationContext } from '../context'
 import { ActionType } from './types'
 
 /**
  * Logic hook for `<Actions />` component.
  */
 export const useActions = () => {
-  const context = useContext(ProjectInformationContext)
+  const context = useProjectInformationContext()
   if (context.props.hideAllActions || context.props.displayMode === DisplayMode.Edit) return []
   const showAllProjectInformationAction: ActionType = [
     strings.ShowAllProjectInformationText,

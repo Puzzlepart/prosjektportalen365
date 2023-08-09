@@ -1,32 +1,21 @@
-import { Pivot, PivotItem, MessageBarType } from '@fluentui/react'
+import { MessageBarType, Pivot, PivotItem } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { stringIsNullOrEmpty } from '@pnp/core'
-import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FC, useContext } from 'react'
+import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
+import React, { FC } from 'react'
 import { isEmpty } from 'underscore'
-import { ProjectInformationContext } from '../context'
+import { useProjectInformationContext } from '../context'
 import styles from './ProjectProperties.module.scss'
 import { ProjectProperty } from './ProjectProperty'
 import { IProjectPropertiesProps } from './types'
 
 export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
-  const context = useContext(ProjectInformationContext)
+  const context = useProjectInformationContext()
   const nonEmptyProperties = props.properties?.filter(({ empty }) => !empty) ?? []
 
-  if (context.props.displayMode !== DisplayMode.Edit) {
-    if (isEmpty(nonEmptyProperties)) {
-      return <UserMessage text={strings.NoPropertiesMessage} />
-    }
-    return (
-      <div className={styles.projectProperties}>
-        {nonEmptyProperties.map((model, idx) => (
-          <ProjectProperty key={idx} model={model} />
-        ))}
-      </div>
-    )
-  } else {
-    return (
+  switch (context.props.displayMode) {
+    case DisplayMode.Edit: {
       <div className={styles.projectProperties}>
         <Pivot>
           <PivotItem headerText={context.props.title}>
@@ -65,7 +54,19 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
           )}
         </Pivot>
       </div>
-    )
+    }
+    case DisplayMode.Read: {
+      if (isEmpty(nonEmptyProperties)) {
+        return <UserMessage text={strings.NoPropertiesMessage} />
+      }
+      return (
+        <div className={styles.projectProperties}>
+          {nonEmptyProperties.map((model, idx) => (
+            <ProjectProperty key={idx} model={model} />
+          ))}
+        </div>
+      )
+    }
   }
 }
 

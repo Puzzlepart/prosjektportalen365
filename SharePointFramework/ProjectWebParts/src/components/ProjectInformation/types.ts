@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import { IWeb } from '@pnp/sp/webs'
 import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage'
 import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDataService'
@@ -11,69 +10,7 @@ import { IProjectStatusData } from '../ProjectStatus'
 import { ActionType } from './Actions/types'
 import { IProgressDialogProps } from './ProgressDialog/types'
 import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
-import { IDropdownOption } from '@fluentui/react'
-
-export class ProjectInformationParentProject {
-  public title: string
-  public url: string
-  public childProjects: any[]
-  public iconName: 'ProductVariant' | 'ProductList'
-
-  constructor(spItem: Record<string, any>, public web: IWeb) {
-    this.title = spItem.Title
-    this.url = spItem.GtSiteUrl
-    this.childProjects = (JSON.parse(spItem.GtChildProjects ?? []) as any[]).map((i) => i.SPWebURL)
-    if (spItem.GtIsParentProject) this.iconName = 'ProductVariant'
-    else if (spItem.GtIsProgram) this.iconName = 'ProductList'
-  }
-}
-
-export class ProjectInformationField {
-  id: string
-  internalName: string
-  title: string
-  description: string
-  type: string
-
-  /**
-   * Constructs a new `ProjectInformationField` object from
-   * a field from the entity and a column configuration.
-   *
-   * @param _field Field from the entity
-   * @param column Column configuration
-   */
-  constructor(private _field: Record<string, any>, column: ProjectColumn) {
-    this.id = _field.Id
-    this.internalName = _field.InternalName
-    this.title = column?.name ?? _field.Title
-    this.description = _field.Description
-    this.type = _field.TypeAsString
-  }
-
-  /**
-   * Get a property for the field by property name.
-   *
-   * @param propertyName Property name
-   */
-  public getProperty(propertyName: string): string {
-    return this._field[propertyName]
-  }
-
-  /**
-   * Get choices for a choice field as `IDropdownOption[]`.
-   */
-  public get choices(): IDropdownOption[] {
-    return (this._field.Choices as string[]).map((c) => ({ key: c, text: c }))
-  }
-
-  /**
-   * Returns `true` if the field should be visible in edit form.
-   * `ShowInEditForm` must be `true` and `Hidden` must be `false`.
-   */
-  public get showInEditForm(): boolean {
-    return this._field.ShowInEditForm && !this._field.Hidden
-  }
-}
+import { ProjectInformationParentProject } from './ProjectInformationParentProject'
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   /**
@@ -214,6 +151,11 @@ export interface IProjectInformationState
    * Is project data synced
    */
   isProjectDataSynced?: boolean
+
+  /**
+   * Properties last updated date/time
+   */
+  propertiesLastUpdated?: Date
 }
 
 export interface IProjectInformationUrlHash {

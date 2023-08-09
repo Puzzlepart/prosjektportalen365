@@ -14,9 +14,9 @@ import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 import {
   IProjectInformationData,
   IProjectInformationProps,
-  IProjectInformationState,
-  ProjectInformationParentProject
-} from './types'
+  IProjectInformationState} from './types'
+import { ProjectInformationParentProject } from './ProjectInformationParentProject'
+import { IProjectInformationContext } from './context'
 
 /**
  * Transform properties to model `ProjectPropertyModel`
@@ -190,21 +190,19 @@ const fetchData: DataFetchFunction<
  * Fetch hook for ProjectInformation. Fetches data for `ProjectInformation` component
  * using `fetchData` function together with React `useEffect` hook.
  *
- * @param props Component properties for `ProjectInformation`
- * @param setState Set state function for `ProjectInformation`
+ * @param context Context for `ProjectInformation`
  */
 export const useProjectInformationDataFetch = (
-  props: IProjectInformationProps,
-  setState: (newState: Partial<IProjectInformationState>) => void
+  context: IProjectInformationContext
 ) => {
   useEffect(() => {
-    fetchData(props)
-      .then((data) => setState({ ...data, isDataLoaded: true }))
+    fetchData(context.props)
+      .then((data) => context.setState({ ...data, isDataLoaded: true }))
       .catch((error) =>
-        setState({
+        context.setState({
           isDataLoaded: true,
           error: { ..._.pick(error, 'message', 'stack'), type: MessageBarType.severeWarning }
         })
       )
-  }, [])
+  }, [context.state.propertiesLastUpdated])
 }
