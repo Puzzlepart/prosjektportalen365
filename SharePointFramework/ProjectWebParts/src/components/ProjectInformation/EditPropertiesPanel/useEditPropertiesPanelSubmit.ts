@@ -4,10 +4,8 @@ import SPDataAdapter from '../../../data'
 export function useEditPropertiesPanelSubmit(model: ReturnType<typeof useEditPropertiesPanelModel>) {
 
   const onSave = async () => {
+    await SPDataAdapter.project.updateProperties(model.properties)
     alert('Saved')
-    // eslint-disable-next-line no-console
-    console.log(model.values)
-    await SPDataAdapter.project.updateProperties(model.values)
   }
 
   return { onSave } as const

@@ -1,15 +1,28 @@
 import { useContext, useState } from 'react'
 import { ProjectInformationContext } from '../context'
 import { ProjectInformationField } from '../types'
+import { ITag } from '@fluentui/react'
+import { DefaultCaching } from 'pp365-shared-library/lib/data'
 
 /**
- * Hook for the `EditPropertiesPanel` model.
+ * Hook for the `EditPropertiesPanel` model. This hook is used to get and set the values for 
+ * the fields in the `EditPropertiesPanel`, aswell as to transform the values to the correct type
+ * for the `property` object that can be sent as a request body to the API.
  */
 export function useEditPropertiesPanelModel() {
   const context = useContext(ProjectInformationContext)
   const [model, setModel] = useState(new Map<string, any>())
+  const [properties, setProperties] = useState({})
 
-  function get<T>(field: ProjectInformationField, type: string = null): T {
+  /**
+   * Get value for field. 
+   * 
+   * Supports getting values for fields of type `tags`, `date`, `users` and `multichoice`.
+   * 
+   * @param field Field to get value for
+   * @param type Type of field to get value for (for parsing the value to the correct type)
+   */
+  function get<T>(field: ProjectInformationField, type: 'tags' | 'date' | 'users' | 'multichoice' = null): T {
     const { fieldValues, fieldValuesText } = context.state.data
     const value = (model.get(field.internalName) as string) ?? fieldValuesText[field.internalName]
     if (!value) return null
@@ -20,11 +33,16 @@ export function useEditPropertiesPanelModel() {
           : (value as unknown as T)
       }
       case 'date': {
-        return new Date(fieldValues[field.internalName]) as unknown as T
+        return typeof value === 'string' ? new Date(fieldValues[field.internalName]) as unknown as T : (value as unknown as T)
       }
       case 'users': {
         return typeof value === 'string'
           ? (value.split(';').map((v) => ({ key: v, text: v })) as unknown as T)
+          : (value as unknown as T)
+      }
+      case 'multichoice': {
+        return typeof value === 'string'
+          ? (value.split(';') as unknown as T)
           : (value as unknown as T)
       }
       default: {
@@ -33,10 +51,44 @@ export function useEditPropertiesPanelModel() {
     }
   }
 
-  function set(field: ProjectInformationField, value: any) {
-    model.set(field.internalName, value)
-    setModel(new Map(model))
+  /**
+   * Transform value for the field returning the internal name of the field and the transformed value.
+   * 
+   * @param value Value to be transformed
+   * @param field Field to transform the value for
+   * 
+   * @returns The transformed value and the internal name of the field (might be different from the field's internal name)
+   */
+  const transformValue = async (value: any, field: ProjectInformationField) => {
+    const propertiesList = context.props.sp.web.lists.getById(context.state.data.propertiesListId)
+    switch (field.type) {
+      case 'TaxonomyFieldTypeMulti':
+      case 'TaxonomyFieldType': {
+        const textField = await propertiesList.fields.getById(field.getProperty('TextField')).select('InternalName').using(DefaultCaching)()
+        return [
+          textField.InternalName,
+          (value as ITag[]).map((v) => `-1;#${v.key}|${v.name}`).join(';#'),
+        ]
+      }
+      case 'User': {
+        return [field.internalName, value]
+      }
+      case 'UserMulti': {
+        return [field.internalName, value]
+      }
+      default: {
+        return [field.internalName, value]
+      }
+    }
+
   }
 
-  return { model, set, get, values: Object['fromEntries'](model.entries()) } as const
+  const set = async<T>(field: ProjectInformationField, value: T) => {
+    const [internalName, transformedValue] = await transformValue(value, field)
+    model.set(field.internalName, value)
+    setModel(new Map(model))
+    setProperties({ ...properties, [internalName]: transformedValue })
+  }
+
+  return { model, set, get, properties }
 }

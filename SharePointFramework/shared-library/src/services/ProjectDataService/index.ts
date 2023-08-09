@@ -37,7 +37,8 @@ export class ProjectDataService {
   }
 
   /**
-   * Initialize storage and storage keys.
+   * Initialize storage and storage keys. The storage keys are formatted with the site id
+   * from `params.siteId`.
    */
   private _initStorage() {
     this._storage = new PnPClientStorage().session
@@ -161,25 +162,32 @@ export class ProjectDataService {
     try {
       const ctx = await this._getPropertyItemContext()
       if (!ctx) return null
-      const [fieldValuesText, fieldValues, fields, welcomePageUrl] = await Promise.all([
+      const fields = await ctx.list.fields
+        .select(
+          'Id',
+          'InternalName',
+          'Title',
+          'Description',
+          'TypeAsString',
+          'SchemaXml',
+          'TextField',
+          'Choices',
+          'Hidden',
+          'TermSetId'
+        )
+        // eslint-disable-next-line quotes
+        .filter("substringof('Gt', InternalName)")
+        .using(DefaultCaching)()
+      const userFields = fields.filter((fld) => fld.TypeAsString.indexOf('User') === 0)
+      const [fieldValuesText, fieldValues, welcomePageUrl] = await Promise.all([
         ctx.item.fieldValuesAsText(),
-        ctx.item(),
-        ctx.list.fields
-          .select(
-            'Id',
-            'InternalName',
-            'Title',
-            'Description',
-            'TypeAsString',
-            'SchemaXml',
-            'TextField',
-            'Choices',
-            'Hidden',
-            'TermSetId'
+        ctx.item
+          .select
+          ('*',
+            ...userFields.map((fld) => `${fld.InternalName}/Id`),
+            ...userFields.map((fld) => `${fld.InternalName}/EMail`)
           )
-          // eslint-disable-next-line quotes
-          .filter("substringof('Gt', InternalName)")
-          .using(DefaultCaching)(),
+          .expand(...userFields.map((fld) => fld.InternalName))(),
         this.getWelcomePage()
       ])
 
@@ -187,7 +195,8 @@ export class ProjectDataService {
         fieldValuesText,
         fieldValues,
         fields: this._mapFields(fields),
-        versionHistoryUrl: '{0}/_layouts/15/versions.aspx?list={1}&ID={2}'
+        versionHistoryUrl: '{0}/_layouts/15/versions.aspx?list={1}&ID={2}',
+        propertiesListId: ctx.listId
       }
 
       const modifiedSourceUrl = !sourceUrl.includes(welcomePageUrl)
@@ -246,9 +255,9 @@ export class ProjectDataService {
   }
 
   /**
-   * Get last updated time in seconds since now
+   * Get last updated time in seconds since now.
    *
-   * @param data Data
+   * @param data Data from `getPropertiesData`
    */
   public async getPropertiesLastUpdated(data: IGetPropertiesData): Promise<number> {
     const { Modified } = await this.web.lists

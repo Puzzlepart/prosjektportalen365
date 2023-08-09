@@ -196,7 +196,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
     })
     // eslint-disable-next-line no-console
     console.log(selectedItems)
-    return profiles.map((profile) => ({
+    const items = profiles.map((profile) => ({
       text: profile.DisplayText,
       secondaryText: profile.EntityData.Email,
       tertiaryText: profile.EntityData.Title,
@@ -204,6 +204,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
       imageUrl: `/_layouts/15/userphoto.aspx?AccountName=${profile.EntityData.Email}&size=L`,
       id: profile.Key
     }))
+    return items
   }
 
   /**
@@ -225,7 +226,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
     const tags = terms.map<ITag>((term) => {
       const name = term.labels.find((label) => label.languageTag === languageTag).name
       return {
-        key: name,
+        key: term.id,
         name
       }
     })

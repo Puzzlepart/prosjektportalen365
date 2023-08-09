@@ -78,14 +78,15 @@ export function useEditPropertiesPanelFieldElements(
           label={field.title}
           options={field.choices}
           multiSelect
-          selectedKeys={model.get<string[]>(field)}
+          selectedKeys={model.get<string[]>(field, 'multichoice')}
           onChange={(_, option) => {
+            const selectedKeys = model.get<string[]>(field, 'multichoice')
             if (option.selected) {
-              model.set(field, [...model.get<string[]>(field), option.key as string])
+              model.set<string[]>(field, [...selectedKeys, option.key as string])
             } else {
-              model.set(
+              model.set<string[]>(
                 field,
-                model.get<string[]>(field).filter((key) => key !== option.key)
+                selectedKeys.filter((key) => key !== option.key)
               )
             }
           }}
