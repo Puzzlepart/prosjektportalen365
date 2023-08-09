@@ -7,7 +7,7 @@ import { useEditPropertiesPanel } from './useEditPropertiesPanel'
 
 export const EditPropertiesPanel: FC<IEditPropertiesPanel> = (props) => {
   const context = useContext(ProjectInformationContext)
-  const { fields, getFieldElement } = useEditPropertiesPanel()
+  const { fields, getFieldElement, model,onSave } = useEditPropertiesPanel()
 
   return (
     <Panel
@@ -16,11 +16,20 @@ export const EditPropertiesPanel: FC<IEditPropertiesPanel> = (props) => {
       onDismiss={() => context.setState({ displayEditPropertiesPanel: false })}
       onRenderFooterContent={() => (
         <div>
-          <PrimaryButton text={strings.SaveText} />
-          <DefaultButton text={strings.CancelText} styles={{ root: { marginLeft: 8 } }} />
+          <PrimaryButton 
+          text={strings.SaveText}
+          onClick={onSave} />
+          <DefaultButton 
+          text={strings.CancelText} 
+          styles={{ root: { marginLeft: 8 } }}
+          onClick={() => context.setState({ displayEditPropertiesPanel: false })}
+           />
         </div>
       )}
     >
+      <div style={{ marginTop: 20 }}>
+        {JSON.stringify(model.values, null, 2)}
+      </div>
       {fields.map((field, key) => {
         const fieldElement = getFieldElement(field)
         return fieldElement && <div key={key}>{fieldElement}</div>

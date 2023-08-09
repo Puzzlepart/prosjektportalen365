@@ -34,8 +34,6 @@ export class ProjectInformationField {
   title: string
   description: string
   type: string
-  schemaXml: string
-  textField: string
 
   /**
    * Constructs a new `ProjectInformationField` object from
@@ -50,10 +48,20 @@ export class ProjectInformationField {
     this.title = column?.name ?? _field.Title
     this.description = _field.Description
     this.type = _field.TypeAsString
-    this.schemaXml = _field.SchemaXml
-    this.textField = _field.TextField
   }
 
+  /**
+   * Get a property for the field by property name.
+   *
+   * @param propertyName Property name
+   */
+  public getProperty(propertyName: string): string {
+    return this._field[propertyName]
+  }
+
+  /**
+   * Get choices for a choice field as `IDropdownOption[]`.
+   */
   public get choices(): IDropdownOption[] {
     return (this._field.Choices as string[]).map((c) => ({ key: c, text: c }))
   }

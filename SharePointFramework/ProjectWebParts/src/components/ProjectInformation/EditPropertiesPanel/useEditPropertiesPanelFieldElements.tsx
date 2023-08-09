@@ -9,8 +9,10 @@ import {
   TextField
 } from '@fluentui/react'
 import React from 'react'
+import SPDataAdapter from '../../../data'
 import { ProjectInformationField } from '../types'
 import { useEditPropertiesPanelModel } from './useEditPropertiesPanelModel'
+import { FieldDescription } from 'pp365-shared-library/lib/components'
 
 /**
  * Hook for field elements of `EditPropertiesPanel` component. This hook is used to render field elements
@@ -37,6 +39,7 @@ export function useEditPropertiesPanelFieldElements(
         label={field.title}
         description={field.description}
         defaultValue={model.get<string>(field)}
+        onChange={(_, value) => model.set(field, value)}
       />
     ),
     Note: (field) => (
@@ -45,20 +48,17 @@ export function useEditPropertiesPanelFieldElements(
         description={field.description}
         multiline
         defaultValue={model.get<string>(field)}
+        onChange={(_, value) => model.set(field, value)}
       />
     ),
     DateTime: (field) => (
       <>
-        <DatePicker label={field.title} value={model.get(field, 'date')} />
-        <div
-          style={{
-            margin: '2px 0 0 0',
-            color: 'rgb(97, 97, 97)',
-            fontSize: 10
-          }}
-        >
-          {field.description}
-        </div>
+        <DatePicker
+          label={field.title}
+          value={model.get(field, 'date')}
+          onSelectDate={(date) => model.set(field, date)}
+        />
+        <FieldDescription description={field.description} />
       </>
     ),
     Choice: (field) => (
@@ -67,88 +67,92 @@ export function useEditPropertiesPanelFieldElements(
           label={field.title}
           options={field.choices}
           defaultSelectedKey={model.get<string>(field)}
+          onChange={(_, option) => model.set(field, option.key)}
         />
-        <div
-          style={{
-            margin: '2px 0 0 0',
-            color: 'rgb(97, 97, 97)',
-            fontSize: 10
-          }}
-        >
-          {field.description}
-        </div>
+        <FieldDescription description={field.description} />
       </>
     ),
     MultiChoice: (field) => (
       <>
-        <Dropdown label={field.title} options={field.choices} multiSelect />
-        <div
-          style={{
-            margin: '2px 0 0 0',
-            color: 'rgb(97, 97, 97)',
-            fontSize: 10
+        <Dropdown
+          label={field.title}
+          options={field.choices}
+          multiSelect
+          selectedKeys={model.get<string[]>(field)}
+          onChange={(_, option) => {
+            if (option.selected) {
+              model.set(field, [...model.get<string[]>(field), option.key as string])
+            } else {
+              model.set(
+                field,
+                model.get<string[]>(field).filter((key) => key !== option.key)
+              )
+            }
           }}
-        >
-          {field.description}
-        </div>
+        />
+        <FieldDescription description={field.description} />
       </>
     ),
     User: (field) => (
       <>
         <Label>{field.title}</Label>
         <NormalPeoplePicker
-          onResolveSuggestions={async () => await Promise.resolve([])}
+          onResolveSuggestions={async (filter, selectedItems) =>
+            (await SPDataAdapter.clientPeoplePickerSearchUser(
+              filter,
+              selectedItems
+            )) as IPersonaProps[]
+          }
           defaultSelectedItems={model.get<IPersonaProps[]>(field, 'users')}
           itemLimit={1}
+          onChange={(items) => model.set(field, items)}
         />
-        <div
-          style={{
-            margin: '2px 0 0 0',
-            color: 'rgb(97, 97, 97)',
-            fontSize: 10
-          }}
-        >
-          {field.description}
-        </div>
+        <FieldDescription description={field.description} />
       </>
     ),
     UserMulti: (field) => (
       <>
         <Label>{field.title}</Label>
         <NormalPeoplePicker
-          onResolveSuggestions={async () => await Promise.resolve([])}
+          onResolveSuggestions={async (filter, selectedItems) =>
+            (await SPDataAdapter.clientPeoplePickerSearchUser(
+              filter,
+              selectedItems
+            )) as IPersonaProps[]
+          }
           defaultSelectedItems={model.get<IPersonaProps[]>(field, 'users')}
           itemLimit={20}
+          onChange={(items) => model.set(field, items)}
         />
-        <div
-          style={{
-            margin: '2px 0 0 0',
-            color: 'rgb(97, 97, 97)',
-            fontSize: 10
-          }}
-        >
-          {field.description}
-        </div>
+        <FieldDescription description={field.description} />
       </>
     ),
     TaxonomyFieldType: (field) => (
       <>
         <Label>{field.title}</Label>
         <TagPicker
-          onResolveSuggestions={async () => await Promise.resolve([])}
+          onResolveSuggestions={async (filter, selectedItems) =>
+            await SPDataAdapter.getTerms(field.getProperty('TermSetId'), filter, selectedItems)
+          }
           defaultSelectedItems={model.get<ITag[]>(field, 'tags')}
           itemLimit={1}
+          onChange={(items) => model.set(field, items)}
         />
+        <FieldDescription description={field.description} />
       </>
     ),
     TaxonomyFieldTypeMulti: (field) => (
       <>
         <Label>{field.title}</Label>
         <TagPicker
-          onResolveSuggestions={async () => await Promise.resolve([])}
+          onResolveSuggestions={async (filter, selectedItems) =>
+            await SPDataAdapter.getTerms(field.getProperty('TermSetId'), filter, selectedItems)
+          }
           defaultSelectedItems={model.get<ITag[]>(field, 'tags')}
           itemLimit={20}
+          onChange={(items) => model.set(field, items)}
         />
+        <FieldDescription description={field.description} />
       </>
     )
   }

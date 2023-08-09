@@ -58,7 +58,8 @@ export class ProjectDataService {
   }
 
   /**
-   * Get property item context from site.
+   * Get property item context from site. Stores the context in session storage
+   * for 15 minutes.
    *
    * @param expire Date of expire for cache
    */
@@ -174,7 +175,7 @@ export class ProjectDataService {
             'TextField',
             'Choices',
             'Hidden',
-            'TermSetId',
+            'TermSetId'
           )
           // eslint-disable-next-line quotes
           .filter("substringof('Gt', InternalName)")
@@ -191,8 +192,8 @@ export class ProjectDataService {
 
       const modifiedSourceUrl = !sourceUrl.includes(welcomePageUrl)
         ? sourceUrl
-            .replace('#syncproperties=1', `/${welcomePageUrl}#syncproperties=1`)
-            .replace('//SitePages', '/SitePages')
+          .replace('#syncproperties=1', `/${welcomePageUrl}#syncproperties=1`)
+          .replace('//SitePages', '/SitePages')
         : sourceUrl
       propertiesData.editFormUrl = makeUrlAbsolute(
         `${ctx.defaultEditFormUrl}?ID=${ctx.itemId}&Source=${encodeURIComponent(modifiedSourceUrl)}`
@@ -275,6 +276,21 @@ export class ProjectDataService {
   }
 
   /**
+   * Update properties for the project using the local property list.
+   * 
+   * @param properties Properties to update
+   */
+  public async updateProperties(properties: { [key: string]: string }): Promise<void> {
+    try {
+      const propertyItemContext = await this._getPropertyItemContext()
+      if (propertyItemContext) await propertyItemContext.item.update(properties)
+    }
+    catch (error) {
+      throw error
+    }
+  }
+
+  /**
    * Get phases for the project.
    *
    * @param termSetId Term set ID
@@ -320,8 +336,8 @@ export class ProjectDataService {
       const items = await this.web.lists
         .getByTitle(listName)
         .items.select('ID', 'Title', 'GtComment', 'GtChecklistStatus', 'GtProjectPhase')<
-        Record<string, any>[]
-      >()
+          Record<string, any>[]
+        >()
       const checklistItems = items.map((item) => new ChecklistItemModel(item))
       const checklistData = checklistItems
         .filter((item) => item.termGuid)

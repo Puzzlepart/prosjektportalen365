@@ -15,13 +15,17 @@ export function useEditPropertiesPanelModel() {
     if (!value) return null
     switch (type) {
       case 'tags': {
-        return value.split(';').map((v) => ({ key: v, name: v })) as unknown as T
+        return typeof value === 'string'
+          ? (value.split(';').map((v) => ({ key: v, name: v })) as unknown as T)
+          : (value as unknown as T)
       }
       case 'date': {
         return new Date(fieldValues[field.internalName]) as unknown as T
       }
       case 'users': {
-        return value.split(';').map((v) => ({ key: v, text: v })) as unknown as T
+        return typeof value === 'string'
+          ? (value.split(';').map((v) => ({ key: v, text: v })) as unknown as T)
+          : (value as unknown as T)
       }
       default: {
         return value as unknown as T
@@ -34,5 +38,5 @@ export function useEditPropertiesPanelModel() {
     setModel(new Map(model))
   }
 
-  return { model, set, get } as const
+  return { model, set, get, values: Object['fromEntries'](model.entries()) } as const
 }

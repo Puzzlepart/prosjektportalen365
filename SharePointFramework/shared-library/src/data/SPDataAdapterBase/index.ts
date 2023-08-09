@@ -1,4 +1,4 @@
-import { format, IPersonaSharedProps } from '@fluentui/react'
+import { format, IPersonaSharedProps, ITag } from '@fluentui/react'
 import { SPUser } from '@microsoft/sp-page-context'
 import { dateAdd, IPnPClientStore, PnPClientStorage } from '@pnp/core'
 import { SPFI } from '@pnp/sp'
@@ -177,26 +177,61 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
 
   /**
    * Search for users using `sp.profiles.clientPeoplePickerSearchUser`.
-   * 
+   *
    * @param queryString Query string
+   * @param selectedItems Selected items that should be excluded from the result
    * @param maximumEntitySuggestions Maximum entity suggestions
    */
-  public async clientPeoplePickerSearchUser(queryString: string, maximumEntitySuggestions = 50): Promise<IPersonaSharedProps[]> {
+  public async clientPeoplePickerSearchUser(
+    queryString: string,
+    selectedItems: any[],
+    maximumEntitySuggestions = 50
+  ): Promise<IPersonaSharedProps[]> {
     const profiles = await this.sp.profiles.clientPeoplePickerSearchUser({
       QueryString: queryString,
       MaximumEntitySuggestions: maximumEntitySuggestions,
       AllowEmailAddresses: true,
       PrincipalSource: 15,
-      PrincipalType: 1,
+      PrincipalType: 1
     })
-    return profiles.map(profile => ({
+    // eslint-disable-next-line no-console
+    console.log(selectedItems)
+    return profiles.map((profile) => ({
       text: profile.DisplayText,
       secondaryText: profile.EntityData.Email,
       tertiaryText: profile.EntityData.Title,
       optionalText: profile.EntityData.Department,
       imageUrl: `/_layouts/15/userphoto.aspx?AccountName=${profile.EntityData.Email}&size=L`,
-      id: profile.Key,
+      id: profile.Key
     }))
+  }
+
+  /**
+   * Get terms from term set as `ITag[]`. The result is filtered by `filter` and `selectedItems`.
+   * Specify `languageTag` to get terms in a specific language (default `nb-NO`).
+   *
+   * @param termSetId Term set ID
+   * @param filter Filter string
+   * @param selectedItems Selected items that should be excluded from the result
+   * @param languageTag Language tag (default `nb-NO`)
+   */
+  public async getTerms(
+    termSetId: string,
+    filter: string,
+    selectedItems: any[],
+    languageTag = 'nb-NO'
+  ): Promise<ITag[]> {
+    const terms = await this.sp.termStore.sets.getById(termSetId).terms()
+    const tags = terms.map<ITag>((term) => {
+      const name = term.labels.find((label) => label.languageTag === languageTag).name
+      return {
+        key: name,
+        name
+      }
+    })
+    return tags
+      .filter((tag) => tag.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1)
+      .filter((tag) => !selectedItems.find((item) => item.name === tag.name))
   }
 }
 

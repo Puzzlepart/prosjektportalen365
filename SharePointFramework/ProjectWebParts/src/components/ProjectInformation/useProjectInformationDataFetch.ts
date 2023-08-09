@@ -52,6 +52,8 @@ const transformProperties = (
 
 /**
  * Checks if project data is synced
+ *
+ * @param props Component properties for `ProjectInformation`
  */
 const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolean> = async (
   props
