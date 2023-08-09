@@ -1,16 +1,16 @@
+/* eslint-disable max-classes-per-file */
+import { IWeb } from '@pnp/sp/webs'
+import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage'
+import { ProjectColumn } from 'pp365-shared-library/lib/models'
+import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDataService'
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState
 } from 'pp365-shared-library/src/components/BaseWebPartComponent'
-import { ProjectColumn } from 'pp365-shared-library/lib/models'
-import { IProgressDialogProps } from './ProgressDialog/types'
-import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage'
-import { IEntityField } from 'sp-entityportal-service'
-import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDataService'
-import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
-import { ActionType } from './Actions/types'
 import { IProjectStatusData } from '../ProjectStatus'
-import { IWeb } from '@pnp/sp/webs'
+import { ActionType } from './Actions/types'
+import { IProgressDialogProps } from './ProgressDialog/types'
+import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 
 export class ProjectInformationParentProject {
   public title: string
@@ -27,19 +27,37 @@ export class ProjectInformationParentProject {
   }
 }
 
-export interface IProjectInformationField {
-  Id: string
-  InternalName: string
-  Title: string
-  Description: string
-  TypeAsString: string
-  SchemaXml: string
-  TextField: string
-  Choices: string[]
-  Hidden: boolean
-  ShowInEditForm: boolean
-  ShowInNewForm: boolean
-  ShowInDisplayForm: boolean
+export class ProjectInformationField {
+  id: string
+  internalName: string
+  title: string
+  description: string
+  type: string
+  schemaXml: string
+  textField: string
+  choices: string[]
+
+  /**
+   * Constructs a new `ProjectInformationField` object from
+   * a field from the entity and a column configuration.
+   * 
+   * @param _field Field from the entity
+   * @param _column Column configuration
+   */
+  constructor(private _field: Record<string, any>, private _column: ProjectColumn) {
+    this.id = this._field.Id
+    this.internalName = this._field.InternalName
+    this.title = this._column.name ?? _field.Title
+    this.description = this._field.Description
+    this.type = this._field.TypeAsString
+    this.schemaXml = this._field.SchemaXml
+    this.textField = this._field.TextField
+    this.choices = this._field.Choices
+  }
+
+  public get showInEditForm(): boolean {
+    return this._field.ShowInEditForm && !this._field.Hidden
+  }
 }
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
