@@ -11,7 +11,7 @@ import { IGetPropertiesData } from 'pp365-shared-library/lib/services'
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState
-} from 'pp365-shared-library/src/components/BaseWebPartComponent'
+} from 'pp365-shared-library/lib/components/BaseWebPartComponent'
 import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage/types'
 
 export interface IProjectStatusProps extends IBaseWebPartComponentProps {

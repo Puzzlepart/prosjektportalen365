@@ -4,7 +4,7 @@ import { SPFI } from '@pnp/sp'
 import { createSpfiInstance } from 'pp365-shared-library/lib/data'
 import React from 'react'
 import ReactDom from 'react-dom'
-import { IBaseWebPartComponentProps } from 'pp365-shared-library/src/components/BaseWebPartComponent'
+import { IBaseWebPartComponentProps } from 'pp365-shared-library/lib/components/BaseWebPartComponent'
 import SPDataAdapter from '../../data'
 
 Logger.subscribe(ConsoleListener())

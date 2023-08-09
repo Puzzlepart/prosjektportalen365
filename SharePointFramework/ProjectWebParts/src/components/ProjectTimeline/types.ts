@@ -7,7 +7,7 @@ import { IEntityField } from 'sp-entityportal-service'
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState
-} from 'pp365-shared-library/src/components/BaseWebPartComponent/types'
+} from 'pp365-shared-library/lib/components/BaseWebPartComponent/types'
 
 export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   listName?: string

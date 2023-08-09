@@ -1,16 +1,13 @@
 /* eslint-disable max-classes-per-file */
+import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from 'pp365-shared-library/lib/components/BaseWebPartComponent/types'
 import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage'
 import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDataService'
-import {
-  IBaseWebPartComponentProps,
-  IBaseWebPartComponentState
-} from 'pp365-shared-library/src/components/BaseWebPartComponent'
 import { IProjectStatusData } from '../ProjectStatus'
 import { ActionType } from './Actions/types'
 import { IProgressDialogProps } from './ProgressDialog/types'
-import { ProjectInformationParentProject } from './ProjectInformationParentProject'
 import { ProjectInformationField } from './ProjectInformationField'
+import { ProjectInformationParentProject } from './ProjectInformationParentProject'
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   /**
