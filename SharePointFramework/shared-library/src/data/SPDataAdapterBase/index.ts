@@ -159,7 +159,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                       ).length > 0
                     )
                       userPermissions.push(...role.permissions)
-                  } catch { }
+                  } catch {}
                 }
                 break
             }

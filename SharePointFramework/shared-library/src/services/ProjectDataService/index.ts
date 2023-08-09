@@ -269,12 +269,13 @@ export class ProjectDataService {
   }
 
   /**
-   * Update phase to the specified `phase` for the project.
+   * Update phase to the specified `phase` for the project. Updates the local property item, with
+   * fallback to updating the entity item if the local property item is not found.
    *
    * @param phase Phase
    * @param phaseTextField Phase text field
    */
-  public async updatePhase(phase: ProjectPhaseModel, phaseTextField: string): Promise<void> {
+  public async updateProjectPhase(phase: ProjectPhaseModel, phaseTextField: string): Promise<void> {
     const properties = { [phaseTextField]: phase.toString() }
     try {
       const propertyItemContext = await this._getPropertyItemContext()
@@ -290,10 +291,16 @@ export class ProjectDataService {
    *
    * @param properties Properties to update
    */
-  public async updateProperties(properties: { [key: string]: string }): Promise<void> {
+  public async updateProjectProperties(properties: { [key: string]: string }): Promise<void> {
     try {
       const propertyItemContext = await this._getPropertyItemContext()
-      if (propertyItemContext) await propertyItemContext.item.update(properties)
+      // eslint-disable-next-line no-console
+      console.log(propertyItemContext, properties)
+      if (propertyItemContext){
+        const updateResult = await propertyItemContext.item.update(properties)
+        // eslint-disable-next-line no-console
+        console.log(updateResult)
+      }
     } catch (error) {
       throw error
     }

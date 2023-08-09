@@ -89,7 +89,7 @@ export function useEditPropertiesPanelModel() {
           .using(DefaultCaching)()
         return [
           textField.InternalName,
-          (value as ITag[]).map((v) => `-1;#${v.key}|${v.name}`).join(';#')
+          (value as ITag[]).map((v) => `-1;#${v.name}|${v.key}`).join(';#')
         ]
       }
       case 'User': {
@@ -104,6 +104,12 @@ export function useEditPropertiesPanelModel() {
     }
   }
 
+  /**
+   * Set value for field.
+   * 
+   * @param field Field to set value for
+   * @param value Value to set (will be transformed to the correct type for the field)
+   */
   const set = async <T>(field: ProjectInformationField, value: T) => {
     const [internalName, transformedValue] = await transformValue(value, field)
     model.set(field.internalName, value)
@@ -111,5 +117,10 @@ export function useEditPropertiesPanelModel() {
     setProperties({ ...properties, [internalName]: transformedValue })
   }
 
-  return { model, set, get, properties }
+  /**
+   * Returns `true` if any of the fields have been changed.
+   */
+  const isChanged = model.size > 0
+
+  return { model, set, get, properties, isChanged }
 }

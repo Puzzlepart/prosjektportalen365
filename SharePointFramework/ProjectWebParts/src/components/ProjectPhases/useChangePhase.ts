@@ -23,7 +23,7 @@ export function useChangePhase(delayBeforeReload: number = 1000) {
   return async () => {
     context.dispatch(INIT_CHANGE_PHASE())
     try {
-      await SPDataAdapter.project.updatePhase(
+      await SPDataAdapter.project.updateProjectPhase(
         context.state.confirmPhase,
         context.state.data.phaseTextField
       )

@@ -1,7 +1,8 @@
-import { DefaultButton, Panel, PanelType, PrimaryButton } from '@fluentui/react'
+import { Panel, PanelType } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
 import { ProjectInformationContext } from '../context'
+import { EditPropertiesPanelFooter } from './EditPropertiesPanelFooter'
 import { IEditPropertiesPanel } from './types'
 import { useEditPropertiesPanel } from './useEditPropertiesPanel'
 
@@ -15,17 +16,20 @@ export const EditPropertiesPanel: FC<IEditPropertiesPanel> = (props) => {
       isOpen={context.state.displayEditPropertiesPanel}
       onDismiss={() => context.setState({ displayEditPropertiesPanel: false })}
       onRenderFooterContent={() => (
-        <div>
-          <PrimaryButton text={strings.SaveText} onClick={onSave} />
-          <DefaultButton
-            text={strings.CancelText}
-            styles={{ root: { marginLeft: 8 } }}
-            onClick={() => context.setState({ displayEditPropertiesPanel: false })}
-          />
-        </div>
+        <EditPropertiesPanelFooter onSave={onSave} isChanged={model.isChanged} />
       )}
     >
-      <div style={{ marginTop: 20, padding: 8 }}>{JSON.stringify(model.properties, null, 2)}</div>
+      <div
+        style={{
+          fontSize: 10,
+          marginTop: 20,
+          padding: 15,
+          backgroundColor: 'rgb(240, 240, 240)',
+          whiteSpace: 'pre'
+        }}
+      >
+        {JSON.stringify(model.properties, null, '\t')}
+      </div>
       {fields.map((field, key) => {
         const fieldElement = getFieldElement(field)
         return fieldElement && <div key={key}>{fieldElement}</div>
