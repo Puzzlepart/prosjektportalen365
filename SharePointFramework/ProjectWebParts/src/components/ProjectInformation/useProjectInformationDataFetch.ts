@@ -81,8 +81,8 @@ const fetchProjectStatusReports: DataFetchFunction<
  * Fetch data for `ProjectInformation` component. This function is used in
  * `useProjectInformationDataFetch` hook.
  *
- * @remarks Ensures that `SPDataAdapter` is configured before fetching data. 
- * Normally the `SPDataAdapter` is not configured  if the component is used in 
+ * @remarks Ensures that `SPDataAdapter` is configured before fetching data.
+ * Normally the `SPDataAdapter` is not configured  if the component is used in
  * a web part in a different SharePoint Framework solution like for instance
  * `PortfolioWebParts`.
  *
@@ -108,9 +108,9 @@ const fetchData: DataFetchFunction<
         SPDataAdapter.project.getPropertiesData(),
         isFrontpage
           ? SPDataAdapter.portal.getParentProjects(
-            context.props.webPartContext?.pageContext?.web?.absoluteUrl,
-            ProjectInformationParentProject
-          )
+              context.props.webPartContext?.pageContext?.web?.absoluteUrl,
+              ProjectInformationParentProject
+            )
           : Promise.resolve([]),
         fetchProjectStatusReports(context)
       ])
@@ -163,10 +163,10 @@ export const useProjectInformationDataFetch = (context: IProjectInformationConte
       .then(transformProperties)
       .then((data) => context.setState({ ...data, isDataLoaded: true }))
       .catch((e) => {
-        // eslint-disable-next-line no-console
-        console.log(e)
-        context.setState({ isDataLoaded: true, error: CustomError.createError(e, MessageBarType.severeWarning) })
-      }
-      )
+        context.setState({
+          isDataLoaded: true,
+          error: CustomError.createError(e, MessageBarType.severeWarning)
+        })
+      })
   }, [context.state.propertiesLastUpdated])
 }

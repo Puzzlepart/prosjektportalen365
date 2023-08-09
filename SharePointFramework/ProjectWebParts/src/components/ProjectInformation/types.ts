@@ -1,5 +1,8 @@
 /* eslint-disable max-classes-per-file */
-import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from 'pp365-shared-library/lib/components/BaseWebPartComponent/types'
+import {
+  IBaseWebPartComponentProps,
+  IBaseWebPartComponentState
+} from 'pp365-shared-library/lib/components/BaseWebPartComponent/types'
 import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage'
 import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDataService'

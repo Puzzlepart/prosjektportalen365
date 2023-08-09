@@ -81,7 +81,8 @@ ProjectInformation.displayName = 'Project Information'
 ProjectInformation.defaultProps = {
   page: 'Frontpage',
   customActions: [],
-  hideActions: []
+  hideActions: [],
+  showFieldExternal: {}
 }
 
 export * from '../ProjectInformationPanel'
