@@ -1,4 +1,4 @@
-import { format } from '@fluentui/react'
+import { format, IPersonaSharedProps } from '@fluentui/react'
 import { SPUser } from '@microsoft/sp-page-context'
 import { dateAdd, IPnPClientStore, PnPClientStorage } from '@pnp/core'
 import { SPFI } from '@pnp/sp'
@@ -173,6 +173,30 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
     } catch {
       return false
     }
+  }
+
+  /**
+   * Search for users using `sp.profiles.clientPeoplePickerSearchUser`.
+   * 
+   * @param queryString Query string
+   * @param maximumEntitySuggestions Maximum entity suggestions
+   */
+  public async clientPeoplePickerSearchUser(queryString: string, maximumEntitySuggestions = 50): Promise<IPersonaSharedProps[]> {
+    const profiles = await this.sp.profiles.clientPeoplePickerSearchUser({
+      QueryString: queryString,
+      MaximumEntitySuggestions: maximumEntitySuggestions,
+      AllowEmailAddresses: true,
+      PrincipalSource: 15,
+      PrincipalType: 1,
+    })
+    return profiles.map(profile => ({
+      text: profile.DisplayText,
+      secondaryText: profile.EntityData.Email,
+      tertiaryText: profile.EntityData.Title,
+      optionalText: profile.EntityData.Department,
+      imageUrl: `/_layouts/15/userphoto.aspx?AccountName=${profile.EntityData.Email}&size=L`,
+      id: profile.Key,
+    }))
   }
 }
 
