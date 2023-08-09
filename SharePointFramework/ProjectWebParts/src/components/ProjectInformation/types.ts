@@ -9,8 +9,8 @@ import {
 import { IProjectStatusData } from '../ProjectStatus'
 import { ActionType } from './Actions/types'
 import { IProgressDialogProps } from './ProgressDialog/types'
-import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 import { ProjectInformationParentProject } from './ProjectInformationParentProject'
+import { ProjectInformationField } from './ProjectInformationField'
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   /**
@@ -95,12 +95,12 @@ export interface IProjectInformationState
   /**
    * Properties
    */
-  properties?: ProjectPropertyModel[]
+  properties?: ProjectInformationField[]
 
   /**
    * All properties (used for the properties panel)
    */
-  allProperties?: ProjectPropertyModel[]
+  allProperties?: ProjectInformationField[]
 
   /**
    * Progress dialog props

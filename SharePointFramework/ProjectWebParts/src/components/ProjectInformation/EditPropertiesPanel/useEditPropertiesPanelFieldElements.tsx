@@ -36,7 +36,7 @@ export function useEditPropertiesPanelFieldElements(
   const fieldElements: Record<string, (field: ProjectInformationField) => JSX.Element> = {
     Text: (field) => (
       <TextField
-        label={field.title}
+        label={field.displayName}
         description={field.description}
         defaultValue={model.get<string>(field)}
         onChange={(_, value) => model.set(field, value)}
@@ -44,7 +44,7 @@ export function useEditPropertiesPanelFieldElements(
     ),
     Note: (field) => (
       <TextField
-        label={field.title}
+        label={field.displayName}
         description={field.description}
         multiline
         defaultValue={model.get<string>(field)}
@@ -54,7 +54,7 @@ export function useEditPropertiesPanelFieldElements(
     DateTime: (field) => (
       <>
         <DatePicker
-          label={field.title}
+          label={field.displayName}
           value={model.get(field, 'date')}
           onSelectDate={(date) => model.set(field, date)}
         />
@@ -64,7 +64,7 @@ export function useEditPropertiesPanelFieldElements(
     Choice: (field) => (
       <>
         <Dropdown
-          label={field.title}
+          label={field.displayName}
           options={field.choices}
           defaultSelectedKey={model.get<string>(field)}
           onChange={(_, option) => model.set(field, option.key)}
@@ -75,7 +75,7 @@ export function useEditPropertiesPanelFieldElements(
     MultiChoice: (field) => (
       <>
         <Dropdown
-          label={field.title}
+          label={field.displayName}
           options={field.choices}
           multiSelect
           selectedKeys={model.get<string[]>(field, 'multichoice')}
@@ -96,7 +96,7 @@ export function useEditPropertiesPanelFieldElements(
     ),
     User: (field) => (
       <>
-        <Label>{field.title}</Label>
+        <Label>{field.displayName}</Label>
         <NormalPeoplePicker
           onResolveSuggestions={async (filter, selectedItems) =>
             (await SPDataAdapter.clientPeoplePickerSearchUser(
@@ -113,7 +113,7 @@ export function useEditPropertiesPanelFieldElements(
     ),
     UserMulti: (field) => (
       <>
-        <Label>{field.title}</Label>
+        <Label>{field.displayName}</Label>
         <NormalPeoplePicker
           onResolveSuggestions={async (filter, selectedItems) =>
             (await SPDataAdapter.clientPeoplePickerSearchUser(
@@ -130,7 +130,7 @@ export function useEditPropertiesPanelFieldElements(
     ),
     TaxonomyFieldType: (field) => (
       <>
-        <Label>{field.title}</Label>
+        <Label>{field.displayName}</Label>
         <TagPicker
           onResolveSuggestions={async (filter, selectedItems) =>
             await SPDataAdapter.getTerms(field.getProperty('TermSetId'), filter, selectedItems)
@@ -144,7 +144,7 @@ export function useEditPropertiesPanelFieldElements(
     ),
     TaxonomyFieldTypeMulti: (field) => (
       <>
-        <Label>{field.title}</Label>
+        <Label>{field.displayName}</Label>
         <TagPicker
           onResolveSuggestions={async (filter, selectedItems) =>
             await SPDataAdapter.getTerms(field.getProperty('TermSetId'), filter, selectedItems)

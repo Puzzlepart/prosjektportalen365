@@ -5,31 +5,28 @@ import * as strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import styles from './ProjectProperty.module.scss'
 import { IProjectPropertyProps } from './types'
+import { useProjectInformationContext } from '../../context'
 
-export const ProjectProperty: FC<IProjectPropertyProps> = ({
-  model,
-  style,
-  displayMode = DisplayMode.Read,
-  onFieldExternalChanged,
-  showFieldExternal
-}) => {
-  const renderValue = () => {
+export const ProjectProperty: FC<IProjectPropertyProps> = ({ model, style }) => {
+  const context = useProjectInformationContext()
+
+  const renderValueForField = () => {
     switch (model.type) {
-      case 'user': {
+      case 'User': {
         return (
           <div>
             <Persona
-              text={model.value}
+              text={model.getValue()}
               size={PersonaSize.size24}
               styles={{ root: { marginTop: 6 } }}
             />
           </div>
         )
       }
-      case 'usermulti': {
+      case 'UserMulti': {
         return (
           <div>
-            {model.value.split(';').map((text, key) => (
+            {model.getValue<string[]>(';').map((text, key) => (
               <Persona
                 key={key}
                 text={text}
@@ -40,10 +37,10 @@ export const ProjectProperty: FC<IProjectPropertyProps> = ({
           </div>
         )
       }
-      case 'taxonomyfieldtypemulti': {
+      case 'TaxonomyFieldTypeMulti': {
         return (
           <div className={styles.labels}>
-            {model.value.split(';').map((text, key) => (
+            {model.getValue<string[]>(';').map((text, key) => (
               <div key={key} title={text} className={styles.termLabel}>
                 {text}
               </div>
@@ -51,8 +48,8 @@ export const ProjectProperty: FC<IProjectPropertyProps> = ({
           </div>
         )
       }
-      case 'url': {
-        const [url, description] = model.value.split(', ')
+      case 'Url': {
+        const [url, description] = model.getValue<string[]>(', ')
         return (
           <div>
             <Link href={url} target='_blank'>
@@ -66,7 +63,7 @@ export const ProjectProperty: FC<IProjectPropertyProps> = ({
           <div
             className={styles.value}
             dangerouslySetInnerHTML={{
-              __html: model.value.replace(/\n/g, '<br />')
+              __html: model.getValue<string>().replace(/\n/g, '<br />')
             }}
           ></div>
         )
@@ -74,9 +71,11 @@ export const ProjectProperty: FC<IProjectPropertyProps> = ({
     }
   }
 
-  switch (displayMode) {
+  switch (context.props.displayMode) {
     case DisplayMode.Edit: {
-      const defaultChecked = showFieldExternal ? showFieldExternal[model.internalName] : false
+      const defaultChecked = context.props.showFieldExternal
+        ? context.props.showFieldExternal[model.internalName]
+        : false
       return (
         <div className={styles.root} title={model.description} style={style}>
           <div className={styles.label}>{model.displayName}</div>
@@ -85,7 +84,9 @@ export const ProjectProperty: FC<IProjectPropertyProps> = ({
               label={strings.ShowFieldExternalUsers}
               inlineLabel={true}
               defaultChecked={defaultChecked}
-              onChange={(_event, checked) => onFieldExternalChanged(model.internalName, checked)}
+              onChange={(_event, checked) =>
+                context.props.onFieldExternalChanged(model.internalName, checked)
+              }
             />
           </div>
         </div>
@@ -95,7 +96,7 @@ export const ProjectProperty: FC<IProjectPropertyProps> = ({
       return (
         <div className={styles.root} style={style}>
           <div className={styles.label}>{model.displayName}</div>
-          {renderValue()}
+          {renderValueForField()}
         </div>
       )
     }

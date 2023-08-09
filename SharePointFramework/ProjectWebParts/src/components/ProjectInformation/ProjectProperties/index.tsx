@@ -10,50 +10,48 @@ import styles from './ProjectProperties.module.scss'
 import { ProjectProperty } from './ProjectProperty'
 import { IProjectPropertiesProps } from './types'
 
-export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
+export const ProjectProperties: FC<IProjectPropertiesProps> = ({ displayAllProperties }) => {
   const context = useProjectInformationContext()
-  const nonEmptyProperties = props.properties?.filter(({ empty }) => !empty) ?? []
+  const properties =
+    (displayAllProperties ? context.state.allProperties : context.state.properties) ?? []
+  const nonEmptyProperties = properties.filter((p) => !p.isEmpty)
 
   switch (context.props.displayMode) {
     case DisplayMode.Edit: {
-      ;<div className={styles.projectProperties}>
-        <Pivot>
-          <PivotItem headerText={context.props.title}>
-            <div className={styles.pivotItem}>
-              {nonEmptyProperties.map((model, idx) => (
-                <ProjectProperty key={idx} model={model} />
-              ))}
-            </div>
-          </PivotItem>
-          {context.props.isSiteAdmin && (
-            <PivotItem headerText={strings.ExternalUsersConfigText} itemIcon='FilterSettings'>
+      return (
+        <div className={styles.projectProperties}>
+          <Pivot>
+            <PivotItem headerText={context.props.title}>
               <div className={styles.pivotItem}>
-                <UserMessage
-                  className={styles.pivotItemUserMessage}
-                  text={strings.ExternalUsersConfigInfoText}
-                />
-                <UserMessage
-                  hidden={!stringIsNullOrEmpty(context.state.data.propertiesListId)}
-                  className={styles.pivotItemUserMessage}
-                  text={strings.NoLocalPropertiesListWarningText}
-                  type={MessageBarType.warning}
-                />
-                <div hidden={stringIsNullOrEmpty(context.state.data.propertiesListId)}>
-                  {props.properties.map((model, idx) => (
-                    <ProjectProperty
-                      key={idx}
-                      model={model}
-                      displayMode={DisplayMode.Edit}
-                      onFieldExternalChanged={context.props.onFieldExternalChanged}
-                      showFieldExternal={context.props.showFieldExternal}
-                    />
-                  ))}
-                </div>
+                {nonEmptyProperties.map((model, idx) => (
+                  <ProjectProperty key={idx} model={model} />
+                ))}
               </div>
             </PivotItem>
-          )}
-        </Pivot>
-      </div>
+            {context.props.isSiteAdmin && (
+              <PivotItem headerText={strings.ExternalUsersConfigText} itemIcon='FilterSettings'>
+                <div className={styles.pivotItem}>
+                  <UserMessage
+                    className={styles.pivotItemUserMessage}
+                    text={strings.ExternalUsersConfigInfoText}
+                  />
+                  <UserMessage
+                    hidden={!stringIsNullOrEmpty(context.state.data.propertiesListId)}
+                    className={styles.pivotItemUserMessage}
+                    text={strings.NoLocalPropertiesListWarningText}
+                    type={MessageBarType.warning}
+                  />
+                  <div hidden={stringIsNullOrEmpty(context.state.data.propertiesListId)}>
+                    {context.state.properties.map((model, idx) => (
+                      <ProjectProperty key={idx} model={model} />
+                    ))}
+                  </div>
+                </div>
+              </PivotItem>
+            )}
+          </Pivot>
+        </div>
+      )
     }
     case DisplayMode.Read: {
       if (isEmpty(nonEmptyProperties)) {
@@ -68,8 +66,4 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
       )
     }
   }
-}
-
-ProjectProperties.defaultProps = {
-  properties: []
 }

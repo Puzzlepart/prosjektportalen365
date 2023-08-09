@@ -10,17 +10,17 @@ import { isEmpty } from 'underscore'
 import { ProjectInformation } from '.'
 import SPDataAdapter from '../../data'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
-import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
+import { ProjectInformationField } from './ProjectInformationField'
+import { ProjectInformationParentProject } from './ProjectInformationParentProject'
+import { IProjectInformationContext } from './context'
 import {
   IProjectInformationData,
   IProjectInformationProps,
   IProjectInformationState
 } from './types'
-import { ProjectInformationParentProject } from './ProjectInformationParentProject'
-import { IProjectInformationContext } from './context'
 
 /**
- * Transform properties to model `ProjectPropertyModel`
+ * Transform properties to model `ProjectInformationField`
  *
  * @param data Data
  * @param props Component properties for `ProjectInformation`
@@ -46,7 +46,7 @@ const transformProperties = (
 
   const properties = fieldNames.map((fn) => {
     const [field] = data.fields.filter((fld) => fld.InternalName === fn)
-    return new ProjectPropertyModel(field, data.fieldValuesText[fn])
+    return new ProjectInformationField(field, null).setValue(data.fieldValuesText[fn])
   })
   return properties
 }

@@ -60,6 +60,8 @@ export function useEditPropertiesPanelModel() {
         return users as unknown as T
       }
       case 'multichoice': {
+        // eslint-disable-next-line no-console
+        console.log(value)
         return typeof value === 'string'
           ? (value.split(';') as unknown as T)
           : (value as unknown as T)
