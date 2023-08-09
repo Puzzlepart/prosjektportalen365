@@ -182,10 +182,11 @@ export class ProjectDataService {
       const [fieldValuesText, fieldValues, welcomePageUrl] = await Promise.all([
         ctx.item.fieldValuesAsText(),
         ctx.item
-          .select
-          ('*',
-            ...userFields.map((fld) => `${fld.InternalName}/Id`),
-            ...userFields.map((fld) => `${fld.InternalName}/EMail`)
+          .select(
+            '*',
+            ...userFields.map(({ InternalName }) => `${InternalName}/Id`),
+            ...userFields.map(({ InternalName }) => `${InternalName}/Title`),
+            ...userFields.map(({ InternalName }) => `${InternalName}/EMail`)
           )
           .expand(...userFields.map((fld) => fld.InternalName))(),
         this.getWelcomePage()
@@ -201,8 +202,8 @@ export class ProjectDataService {
 
       const modifiedSourceUrl = !sourceUrl.includes(welcomePageUrl)
         ? sourceUrl
-          .replace('#syncproperties=1', `/${welcomePageUrl}#syncproperties=1`)
-          .replace('//SitePages', '/SitePages')
+            .replace('#syncproperties=1', `/${welcomePageUrl}#syncproperties=1`)
+            .replace('//SitePages', '/SitePages')
         : sourceUrl
       propertiesData.editFormUrl = makeUrlAbsolute(
         `${ctx.defaultEditFormUrl}?ID=${ctx.itemId}&Source=${encodeURIComponent(modifiedSourceUrl)}`
@@ -286,15 +287,14 @@ export class ProjectDataService {
 
   /**
    * Update properties for the project using the local property list.
-   * 
+   *
    * @param properties Properties to update
    */
   public async updateProperties(properties: { [key: string]: string }): Promise<void> {
     try {
       const propertyItemContext = await this._getPropertyItemContext()
       if (propertyItemContext) await propertyItemContext.item.update(properties)
-    }
-    catch (error) {
+    } catch (error) {
       throw error
     }
   }
@@ -345,8 +345,8 @@ export class ProjectDataService {
       const items = await this.web.lists
         .getByTitle(listName)
         .items.select('ID', 'Title', 'GtComment', 'GtChecklistStatus', 'GtProjectPhase')<
-          Record<string, any>[]
-        >()
+        Record<string, any>[]
+      >()
       const checklistItems = items.map((item) => new ChecklistItemModel(item))
       const checklistData = checklistItems
         .filter((item) => item.termGuid)

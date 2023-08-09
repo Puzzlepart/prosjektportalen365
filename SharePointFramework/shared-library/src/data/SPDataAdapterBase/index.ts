@@ -159,7 +159,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                       ).length > 0
                     )
                       userPermissions.push(...role.permissions)
-                  } catch {}
+                  } catch { }
                 }
                 break
             }
@@ -194,8 +194,6 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
       PrincipalSource: 15,
       PrincipalType: 1
     })
-    // eslint-disable-next-line no-console
-    console.log(selectedItems)
     const items = profiles.map((profile) => ({
       text: profile.DisplayText,
       secondaryText: profile.EntityData.Email,
@@ -204,7 +202,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
       imageUrl: `/_layouts/15/userphoto.aspx?AccountName=${profile.EntityData.Email}&size=L`,
       id: profile.Key
     }))
-    return items
+    return items.filter(({ secondaryText }) => !_.findWhere(selectedItems, { secondaryText }))
   }
 
   /**
