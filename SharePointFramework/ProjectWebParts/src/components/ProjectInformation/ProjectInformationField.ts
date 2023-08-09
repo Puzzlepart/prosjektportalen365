@@ -1,7 +1,6 @@
 import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import { IDropdownOption } from '@fluentui/react'
 
-
 export class ProjectInformationField {
   public id: string
   public internalName: string

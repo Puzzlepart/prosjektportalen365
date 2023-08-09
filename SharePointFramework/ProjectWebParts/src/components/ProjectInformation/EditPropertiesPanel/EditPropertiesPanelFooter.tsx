@@ -17,7 +17,7 @@ export const EditPropertiesPanelFooter: FC<{
         styles={{ root: { marginLeft: 8 } }}
         onClick={() => {
           model.reset()
-          context.setState({ displayEditPropertiesPanel: false  })
+          context.setState({ displayEditPropertiesPanel: false })
         }}
       />
     </div>

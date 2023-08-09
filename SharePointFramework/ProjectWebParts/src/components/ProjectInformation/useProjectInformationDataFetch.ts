@@ -14,7 +14,8 @@ import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
 import {
   IProjectInformationData,
   IProjectInformationProps,
-  IProjectInformationState} from './types'
+  IProjectInformationState
+} from './types'
 import { ProjectInformationParentProject } from './ProjectInformationParentProject'
 import { IProjectInformationContext } from './context'
 
@@ -192,9 +193,7 @@ const fetchData: DataFetchFunction<
  *
  * @param context Context for `ProjectInformation`
  */
-export const useProjectInformationDataFetch = (
-  context: IProjectInformationContext
-) => {
+export const useProjectInformationDataFetch = (context: IProjectInformationContext) => {
   useEffect(() => {
     fetchData(context.props)
       .then((data) => context.setState({ ...data, isDataLoaded: true }))

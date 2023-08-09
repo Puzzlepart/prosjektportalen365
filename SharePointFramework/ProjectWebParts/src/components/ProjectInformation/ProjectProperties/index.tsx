@@ -16,7 +16,7 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
 
   switch (context.props.displayMode) {
     case DisplayMode.Edit: {
-      <div className={styles.projectProperties}>
+      ;<div className={styles.projectProperties}>
         <Pivot>
           <PivotItem headerText={context.props.title}>
             <div className={styles.pivotItem}>
