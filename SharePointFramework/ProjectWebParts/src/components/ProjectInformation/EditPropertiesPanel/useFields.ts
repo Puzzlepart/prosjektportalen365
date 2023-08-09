@@ -7,7 +7,7 @@ import { useProjectInformationContext } from '../context'
  *
  * @returns Fields to be used in the `EditPropertiesPanel`.
  */
-export function useEditPropertiesPanelFields() {
+export function useFields() {
   const context = useProjectInformationContext()
   return useMemo<ProjectInformationField[]>(
     () =>

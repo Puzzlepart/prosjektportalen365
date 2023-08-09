@@ -2,11 +2,11 @@ import { DefaultButton, PrimaryButton } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import { useProjectInformationContext } from '../context'
-import { useEditPropertiesPanelModel } from './useEditPropertiesPanelModel'
+import { useModel } from './useModel'
 
 export const EditPropertiesPanelFooter: FC<{
   onSave: () => Promise<void>
-  model: ReturnType<typeof useEditPropertiesPanelModel>
+  model: ReturnType<typeof useModel>
 }> = ({ onSave, model }) => {
   const context = useProjectInformationContext()
   return (

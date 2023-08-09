@@ -1,7 +1,7 @@
-import { useEditPropertiesPanelModel } from './useEditPropertiesPanelModel'
-import { useEditPropertiesPanelFields } from './useEditPropertiesPanelFields'
-import { useEditPropertiesPanelFieldElements } from './useEditPropertiesPanelFieldElements'
-import { useEditPropertiesPanelSubmit } from './useEditPropertiesPanelSubmit'
+import { useModel } from './useModel'
+import { useFields } from './useFields'
+import { useFieldElements } from './useFieldElements'
+import { useSubmit } from './useSubmit'
 
 /**
  * Hook for `EditPropertiesPanel` component
@@ -9,10 +9,10 @@ import { useEditPropertiesPanelSubmit } from './useEditPropertiesPanelSubmit'
  * @returns `fields` and `getFieldElement` properties
  */
 export function useEditPropertiesPanel() {
-  const fields = useEditPropertiesPanelFields()
-  const model = useEditPropertiesPanelModel()
-  const getFieldElement = useEditPropertiesPanelFieldElements(model)
-  const { onSave } = useEditPropertiesPanelSubmit(model)
+  const fields = useFields()
+  const model = useModel()
+  const getFieldElement = useFieldElements(model)
+  const { onSave } = useSubmit(model)
 
   return { fields, getFieldElement, model, onSave } as const
 }

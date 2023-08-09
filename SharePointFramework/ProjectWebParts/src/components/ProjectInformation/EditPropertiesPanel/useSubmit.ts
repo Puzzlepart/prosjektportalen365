@@ -1,9 +1,9 @@
 import SPDataAdapter from '../../../data'
 import { useProjectInformationContext } from '../context'
-import { useEditPropertiesPanelModel } from './useEditPropertiesPanelModel'
+import { useModel } from './useModel'
 
-export function useEditPropertiesPanelSubmit(
-  model: ReturnType<typeof useEditPropertiesPanelModel>
+export function useSubmit(
+  model: ReturnType<typeof useModel>
 ) {
   const context = useProjectInformationContext()
   const onSave = async () => {

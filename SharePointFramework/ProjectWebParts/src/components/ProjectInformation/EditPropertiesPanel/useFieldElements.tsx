@@ -11,7 +11,7 @@ import {
 import React from 'react'
 import SPDataAdapter from '../../../data'
 import { ProjectInformationField } from '../ProjectInformationField'
-import { useEditPropertiesPanelModel } from './useEditPropertiesPanelModel'
+import { useModel } from './useModel'
 import { FieldDescription } from 'pp365-shared-library/lib/components'
 
 /**
@@ -30,8 +30,8 @@ import { FieldDescription } from 'pp365-shared-library/lib/components'
  *
  * @param model Model returned from `useEditPropertiesPanelModel` hook
  */
-export function useEditPropertiesPanelFieldElements(
-  model: ReturnType<typeof useEditPropertiesPanelModel>
+export function useFieldElements(
+  model: ReturnType<typeof useModel>
 ) {
   const fieldElements: Record<string, (field: ProjectInformationField) => JSX.Element> = {
     Text: (field) => (

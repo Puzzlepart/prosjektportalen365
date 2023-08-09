@@ -10,7 +10,7 @@ import { useProjectInformationContext } from '../context'
  * the fields in the `EditPropertiesPanel`, aswell as to transform the values to the correct type
  * for the `property` object that can be sent as a request body to the API.
  */
-export function useEditPropertiesPanelModel() {
+export function useModel() {
   const context = useProjectInformationContext()
   const [model, setModel] = useState(new Map<string, any>())
   const [properties, setProperties] = useState({})
