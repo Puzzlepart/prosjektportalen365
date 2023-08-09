@@ -27,6 +27,21 @@ export class ProjectInformationParentProject {
   }
 }
 
+export interface IProjectInformationField {
+  Id: string
+  InternalName: string
+  Title: string
+  Description: string
+  TypeAsString: string
+  SchemaXml: string
+  TextField: string
+  Choices: string[]
+  Hidden: boolean
+  ShowInEditForm: boolean
+  ShowInNewForm: boolean
+  ShowInDisplayForm: boolean
+}
+
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   /**
    * Page property is used to determine which properties to display
@@ -175,7 +190,7 @@ export interface IProjectInformationUrlHash {
 
 export interface IProjectInformationData
   extends ProjectDataService.IGetPropertiesData,
-    Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {
+  Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {
   /**
    * Column configuration
    */
@@ -189,5 +204,5 @@ export interface IProjectInformationData
   /**
    * Array of fields from the entity
    */
-  fields?: IEntityField[]
+  fields?: any[]
 }

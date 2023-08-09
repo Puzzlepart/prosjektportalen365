@@ -123,11 +123,11 @@ export class ProjectDataService {
 
   /**
    * Mapping fields to include `ShowInEditForm`, `ShowInNewForm` and `ShowInDisplayForm`.
-   * 
+   *
    * @param fields Fields to map
    */
   private _mapFields(fields: any[]): any {
-    return fields.map(fld => ({
+    return fields.map((fld) => ({
       ...fld,
       ShowInEditForm: fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') === -1,
       ShowInNewForm: fld.SchemaXml.indexOf('ShowInNewForm="FALSE"') === -1,
@@ -172,6 +172,7 @@ export class ProjectDataService {
             'TypeAsString',
             'SchemaXml',
             'TextField',
+            'Choices',
             'Hidden'
           )
           // eslint-disable-next-line quotes
