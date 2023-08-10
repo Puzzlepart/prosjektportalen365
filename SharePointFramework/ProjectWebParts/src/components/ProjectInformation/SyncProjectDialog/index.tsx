@@ -13,6 +13,7 @@ import strings from 'ProjectWebPartsStrings'
 import React, { FC, useEffect, useState } from 'react'
 import SPDataAdapter from '../../../data'
 import { useProjectInformationContext } from '../context'
+import { CLOSE_PANEL, OPEN_DIALOG } from '../reducer'
 import { usePropertiesSync } from '../usePropertiesSync'
 
 export const SyncProjectDialog: FC = () => {
@@ -30,9 +31,9 @@ export const SyncProjectDialog: FC = () => {
 
   return (
     <Dialog
-      hidden={!context.state.displaySyncProjectDialog}
+      hidden={context.state.activeDialog !== 'SyncProjectDialog'}
       minWidth={400}
-      onDismiss={() => context.setState({ displaySyncProjectDialog: false })}
+      onDismiss={() => context.dispatch(CLOSE_PANEL())}
       dialogContentProps={{
         type: DialogType.largeHeader,
         title: strings.SyncProjectModalTitle,
@@ -55,7 +56,7 @@ export const SyncProjectDialog: FC = () => {
         <DialogFooter>
           <DefaultButton
             text={strings.CancelText}
-            onClick={() => context.setState({ displaySyncProjectDialog: false })}
+            onClick={() => context.dispatch(CLOSE_PANEL())}
             disabled={isSyncing}
           />
           <PrimaryButton
@@ -71,7 +72,7 @@ export const SyncProjectDialog: FC = () => {
         <DialogFooter>
           <PrimaryButton
             text={strings.CloseText}
-            onClick={() => context.setState({ displaySyncProjectDialog: false })}
+            onClick={() => context.dispatch(CLOSE_PANEL())}
             disabled={isSyncing}
           />
         </DialogFooter>
@@ -162,7 +163,7 @@ export const SyncProjectDialog: FC = () => {
           await updateIdeaProcessingItem(projectDataId).then(() => {
             setSyncing(false)
             setHasSynced(true)
-            context.setState({ displaySyncProjectDialog: false })
+            context.dispatch(OPEN_DIALOG('SyncProjectDialog'))
             onSyncProperties()
           })
         })

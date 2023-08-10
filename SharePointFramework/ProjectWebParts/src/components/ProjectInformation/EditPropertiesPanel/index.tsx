@@ -5,6 +5,7 @@ import { useProjectInformationContext } from '../context'
 import { EditPropertiesPanelFooter } from './EditPropertiesPanelFooter'
 import { IEditPropertiesPanel } from './types'
 import { useEditPropertiesPanel } from './useEditPropertiesPanel'
+import { CLOSE_PANEL } from '../reducer'
 
 export const EditPropertiesPanel: FC<IEditPropertiesPanel> = (props) => {
   const context = useProjectInformationContext()
@@ -14,8 +15,8 @@ export const EditPropertiesPanel: FC<IEditPropertiesPanel> = (props) => {
   return (
     <Panel
       {...props}
-      isOpen={context.state.displayEditPropertiesPanel}
-      onDismiss={() => context.setState({ displayEditPropertiesPanel: false })}
+      isOpen={context.state.activePanel === 'EditPropertiesPanel'}
+      onDismiss={() => context.dispatch(CLOSE_PANEL())}
       onRenderFooterContent={() => <EditPropertiesPanelFooter onSave={onSave} model={model} />}
     >
       {fields.map((field, key) => {

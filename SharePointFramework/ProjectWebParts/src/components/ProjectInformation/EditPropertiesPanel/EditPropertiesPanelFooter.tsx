@@ -3,6 +3,7 @@ import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import { useProjectInformationContext } from '../context'
 import { useModel } from './useModel'
+import { CLOSE_PANEL } from '../reducer'
 
 export const EditPropertiesPanelFooter: FC<{
   onSave: () => Promise<void>
@@ -17,7 +18,7 @@ export const EditPropertiesPanelFooter: FC<{
         styles={{ root: { marginLeft: 8 } }}
         onClick={() => {
           model.reset()
-          context.setState({ displayEditPropertiesPanel: false })
+          context.dispatch(CLOSE_PANEL())
         }}
       />
     </div>

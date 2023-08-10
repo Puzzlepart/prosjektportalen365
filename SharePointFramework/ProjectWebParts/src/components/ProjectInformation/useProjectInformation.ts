@@ -1,13 +1,12 @@
-import { format, MessageBarType } from '@fluentui/react'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
 import strings from 'ProjectWebPartsStrings'
 import { useMemo } from 'react'
 import { ProjectInformation } from '.'
 import SPDataAdapter from '../../data'
 import { IProjectInformationContext } from './context'
+import { useProjectInformationReducer } from './reducer'
 import { IProjectInformationProps } from './types'
 import { useProjectInformationDataFetch } from './useProjectInformationDataFetch'
-import { useProjectInformationState } from './useProjectInformationState'
 
 /**
  * Component logic hook for `ProjectInformation`. If the SPDataAdapter is configured, it will
@@ -19,35 +18,9 @@ import { useProjectInformationState } from './useProjectInformationState'
  * @returns generated context value
  */
 export const useProjectInformation = (props: IProjectInformationProps) => {
-  const { state, setState } = useProjectInformationState()
+  const { state, dispatch } = useProjectInformationReducer()
 
-  /**
-   * Add message
-   *
-   * @param text Message text
-   * @param type Message bar type
-   * @param durationSec Duration in seconds
-   */
-  const addMessage = (text: string, type: MessageBarType, durationSec: number = 5) => {
-    return new Promise<void>((resolve) => {
-      setState({
-        message: {
-          text: format(text, durationSec.toString()),
-          type,
-          onDismiss: () => setState({ message: null })
-        }
-      })
-      window.setTimeout(() => {
-        setState({ message: null })
-        resolve()
-      }, durationSec * 1000)
-    })
-  }
-
-  const context = useMemo<IProjectInformationContext>(
-    () => ({ props, state, setState, addMessage }),
-    [state]
-  )
+  const context = useMemo<IProjectInformationContext>(() => ({ props, state, dispatch }), [state])
 
   if (SPDataAdapter.isConfigured) {
     ListLogger.init(

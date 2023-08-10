@@ -1,12 +1,11 @@
-import { MessageBarType } from '@fluentui/react'
+import { AnyAction } from '@reduxjs/toolkit'
 import { createContext, useContext } from 'react'
 import { IProjectInformationProps, IProjectInformationState } from './types'
 
 export interface IProjectInformationContext {
   props: IProjectInformationProps
   state: IProjectInformationState
-  setState: (newState: Partial<IProjectInformationState>) => void
-  addMessage: (text: string, type: MessageBarType, durationSec?: number) => Promise<void>
+  dispatch: React.Dispatch<AnyAction>
 }
 
 const ProjectInformationContext = createContext<IProjectInformationContext>(null)

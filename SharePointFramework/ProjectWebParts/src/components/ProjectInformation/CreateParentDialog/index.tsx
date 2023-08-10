@@ -11,6 +11,7 @@ import { IMenuNode } from '@pnp/sp/navigation'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC, useState } from 'react'
 import { useProjectInformationContext } from '../context'
+import { CLOSE_PANEL } from '../reducer'
 import { ProjectSetupCustomAction } from './ProjectSetupCustomAction'
 
 export const CreateParentDialog: FC = () => {
@@ -48,8 +49,8 @@ export const CreateParentDialog: FC = () => {
 
   return (
     <Dialog
-      hidden={!context.state.displayCreateParentDialog}
-      onDismiss={() => context.setState({ displayCreateParentDialog: false })}
+      hidden={context.state.activeDialog !== 'CreateParentDialog'}
+      onDismiss={() => context.dispatch(CLOSE_PANEL())}
       dialogContentProps={{
         type: DialogType.largeHeader,
         title: strings.CreateParentModalTitle,
@@ -60,7 +61,7 @@ export const CreateParentDialog: FC = () => {
         <DialogFooter>
           <DefaultButton
             text={strings.CancelText}
-            onClick={() => context.setState({ displayCreateParentDialog: false })}
+            onClick={() => context.dispatch(CLOSE_PANEL())}
           />
           <PrimaryButton
             text={strings.RedoText}

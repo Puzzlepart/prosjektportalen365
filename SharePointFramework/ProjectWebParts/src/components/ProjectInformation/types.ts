@@ -90,6 +90,9 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   statusReportShowOnlyIcons?: boolean
 }
 
+export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
+export type ProjectInformationDialogType = 'CreateParentDialog' | 'SyncProjectDialog'
+
 export interface IProjectInformationState
   extends IBaseWebPartComponentState<IProjectInformationData> {
   /**
@@ -123,24 +126,14 @@ export interface IProjectInformationState
   isParentProject?: boolean
 
   /**
-   *  Display `<CreateParentDialog />`
+   * The current active panel
    */
-  displayCreateParentDialog?: boolean
+  activePanel?: ProjectInformationPanelType
 
   /**
-   * Display `<SyncProjectDialog />`
+   * The current active dialog
    */
-  displaySyncProjectDialog?: boolean
-
-  /**
-   * Show project properties panel
-   */
-  displayAllPropertiesPanel?: boolean
-
-  /**
-   * Show edit properties panel
-   */
-  displayEditPropertiesPanel?: boolean
+  activeDialog?: ProjectInformationDialogType
 
   /**
    * Current user has edit permission (edc568a8-9cfc-4547-9af2-d9d3aeb5aa2a)

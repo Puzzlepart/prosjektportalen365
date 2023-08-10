@@ -1,10 +1,11 @@
-import { IProgressIndicatorProps, MessageBarType } from '@fluentui/react'
+import { IProgressIndicatorProps } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { sleep } from 'pp365-shared-library/lib/util'
 import { ProjectInformation } from '.'
 import SPDataAdapter from '../../data'
 import { IProjectInformationContext } from './context'
+import { SET_PROGRESS } from './reducer'
 
 interface IUsePropertiesSyncParams {
   /**
@@ -71,14 +72,14 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
   return async (params: IUsePropertiesSyncParams = {}): Promise<void> => {
     if (context.props.skipSyncToHub) return
     if (!params.skipProgress) {
-      context.setState({
-        progress: { title: strings.SyncProjectPropertiesProgressLabel, progress: {} }
-      })
+      context.dispatch(
+        SET_PROGRESS({ title: strings.SyncProjectPropertiesProgressLabel, progress: {} })
+      )
     }
     const progressFunc = (progress: IProgressIndicatorProps) =>
-      context.setState({
-        progress: { title: strings.SyncProjectPropertiesProgressLabel, progress }
-      })
+      context.dispatch(
+        SET_PROGRESS({ title: strings.SyncProjectPropertiesProgressLabel, progress })
+      )
     try {
       if (!params.skipProgress) {
         progressFunc({
@@ -100,11 +101,11 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
         component: ProjectInformation.displayName
       })
       if (!params.skipProgress) {
-        context.addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning)
+        //context.addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning)
       }
     } finally {
       if (!params.skipProgress) {
-        context.setState({ progress: null })
+        context.dispatch(SET_PROGRESS())
       }
     }
   }

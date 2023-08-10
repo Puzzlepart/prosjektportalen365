@@ -2,6 +2,7 @@ import { DisplayMode } from '@microsoft/sp-core-library'
 import strings from 'ProjectWebPartsStrings'
 import { useProjectInformationContext } from '../context'
 import { ActionType } from './types'
+import { OPEN_DIALOG, OPEN_PANEL } from '../reducer'
 
 /**
  * Logic hook for `<Actions />` component.
@@ -12,7 +13,7 @@ export const useActions = () => {
   const showAllProjectInformationAction: ActionType = [
     strings.ShowAllProjectInformationText,
     () => {
-      context.setState({ displayAllPropertiesPanel: true })
+      context.dispatch(OPEN_PANEL('AllPropertiesPanel'))
     },
     'EntryView',
     false
@@ -27,7 +28,7 @@ export const useActions = () => {
   const editProjectInformationAction: ActionType = [
     strings.EditProjectInformationText,
     () => {
-      context.setState({ displayEditPropertiesPanel: true })
+      context.dispatch(OPEN_PANEL('EditPropertiesPanel'))
     },
     'Edit',
     false,
@@ -52,7 +53,7 @@ export const useActions = () => {
   const transformToParentProject: ActionType = [
     strings.CreateParentProjectLabel,
     () => {
-      context.setState({ displayCreateParentDialog: true })
+      context.dispatch(OPEN_DIALOG('CreateParentDialog'))
     },
     'Org',
     false,
@@ -61,7 +62,7 @@ export const useActions = () => {
   const syncProjectPropertiesAction: ActionType = [
     strings.SyncProjectPropertiesText,
     () => {
-      context.setState({ displaySyncProjectDialog: true })
+      context.dispatch(OPEN_DIALOG('SyncProjectDialog'))
     },
     'Sync',
     false,

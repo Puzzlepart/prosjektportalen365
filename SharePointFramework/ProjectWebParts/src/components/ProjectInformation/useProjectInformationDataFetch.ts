@@ -1,21 +1,26 @@
+import { MessageBarType } from '@fluentui/react'
 import { LogLevel } from '@pnp/logging'
 import strings from 'ProjectWebPartsStrings'
 import { ProjectAdminPermission } from 'pp365-shared-library/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
-import { ProjectColumnConfig, SectionModel, StatusReport } from 'pp365-shared-library/lib/models'
-import { CustomError } from 'pp365-shared-library/lib/models'
+import {
+  CustomError,
+  ProjectColumnConfig,
+  SectionModel,
+  StatusReport
+} from 'pp365-shared-library/lib/models'
 import { useEffect } from 'react'
 import { ProjectInformation } from '.'
 import SPDataAdapter from '../../data'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { ProjectInformationParentProject } from './ProjectInformationParentProject'
 import { IProjectInformationContext } from './context'
+import { FETCH_DATA_ERROR, INIT_DATA } from './reducer'
 import { IProjectInformationData, IProjectInformationState } from './types'
 import { usePropertiesTransform } from './usePropertiesTransform'
-import { MessageBarType } from '@fluentui/react'
 
 /**
- * Checks if project data is synced
+ * Checks if project data is synced.
  *
  * @param context Context for `ProjectInformation`
  */
@@ -161,12 +166,10 @@ export const useProjectInformationDataFetch = (context: IProjectInformationConte
   useEffect(() => {
     fetchData(context)
       .then(transformProperties)
-      .then((data) => context.setState({ ...data, isDataLoaded: true }))
+      .then((state) => context.dispatch(INIT_DATA({ state })))
       .catch((e) => {
-        context.setState({
-          isDataLoaded: true,
-          error: CustomError.createError(e, MessageBarType.severeWarning)
-        })
+        const error = CustomError.createError(e, MessageBarType.severeWarning)
+        context.dispatch(FETCH_DATA_ERROR({ error }))
       })
   }, [context.state.propertiesLastUpdated])
 }
