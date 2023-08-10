@@ -1,4 +1,10 @@
+import { MessageBarType } from "@fluentui/react"
+
+import { MessageBarType } from "@fluentui/react"
+
 declare interface IProjectWebPartsStrings {
+  UpdatingProjectPropertiesErrorText: string
+  SynchronizingProjectPropertiesToPortfolioSiteErrorText: string
   UpdatingProjectPropertiesStatusText: string
   SynchronizingProjectPropertiesToPortfolioSiteStatusText: string
   UrlFieldUrlPlaceholder: string
