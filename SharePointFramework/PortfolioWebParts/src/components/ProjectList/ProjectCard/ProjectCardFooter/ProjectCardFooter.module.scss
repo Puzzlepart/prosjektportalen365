@@ -5,6 +5,10 @@
   .persona {
     display: flex;
     gap: 4px;
+
+    .avatar:hover {
+      filter: brightness(0.9);
+    }
   }
 
   .action {

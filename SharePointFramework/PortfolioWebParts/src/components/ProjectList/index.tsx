@@ -172,7 +172,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         siteId={state.showProjectInfo?.siteId}
         webUrl={state.showProjectInfo?.url}
         webPartContext={props.webPartContext}
-        page='Portfolio'
+        page={'Portfolio'}
         hidden={!state.showProjectInfo}
         hideAllActions={true}
       />

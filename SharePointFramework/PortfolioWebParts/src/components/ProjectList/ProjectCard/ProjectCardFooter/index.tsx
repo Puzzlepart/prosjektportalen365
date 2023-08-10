@@ -73,7 +73,7 @@ export const ProjectCardFooter: FC = () => {
             relationship={'description'}
             withArrow
           >
-            <Avatar {...owner} />
+            <Avatar className={styles.avatar} {...owner} />
           </Tooltip>
         </div>
         <div hidden={!context.showProjectManager}>
@@ -86,7 +86,7 @@ export const ProjectCardFooter: FC = () => {
             relationship={'description'}
             withArrow
           >
-            <Avatar {...manager} />
+            <Avatar className={styles.avatar} {...manager} />
           </Tooltip>
         </div>
       </div>

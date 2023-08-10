@@ -1,17 +1,22 @@
 .preview {
   background-color: var(--colorNeutralBackground3);
 
+  div {
+    width: 216px;
+  }
+
   .header {
     position: absolute;
-    bottom: -4px !important;
+    padding: 0 12px;
+    padding-bottom: 12px;
+    z-index: 1;
+    width: 216px !important;
+    height: 1.5em !important;
+    bottom: 0;
 
     .link {
       text-decoration: none !important;
       color: inherit !important;
-
-      .projectTitle {
-        width: 216px !important;
-      }
 
       .projectTitle:hover {
         filter: brightness(1.2);
@@ -21,14 +26,18 @@
 
   .dynamicHeader {
     position: absolute;
-    bottom: -4px !important;
+    padding: 0 12px;
+    padding-bottom: 12px;
+    z-index: 1;
+    width: 216px !important;
+    height: 1.5em !important;
+    bottom: 0;
 
     .link {
       text-decoration: none !important;
       color: inherit !important;
 
       .projectTitle {
-        width: 216px !important;
         filter: brightness(1.2);
       }
 
@@ -36,16 +45,6 @@
         filter: brightness(1.4);
       }
     }
-  }
-
-  .logoBadge {
-    padding: 6px;
-    border-radius: 2px;
-    background-color: #fff;
-    width: fit-content;
-    box-shadow:
-      0px 1px 2px rgba(0, 0, 0, 0.14),
-      0px 0px 2px rgba(0, 0, 0, 0.12);
   }
 
   .logo {
@@ -58,8 +57,6 @@
       height: 100%;
       overflow: hidden;
       display: inline-block;
-      color: inherit !important;
-      text-decoration: none !important;
 
       .projectAvatar {
         width: 100%;
@@ -81,9 +78,7 @@
       img {
         width: 100%;
         height: 100%;
-        display: block;
         object-fit: cover;
-        border-radius: 2px;
         transition: transform 0.5s;
       }
 

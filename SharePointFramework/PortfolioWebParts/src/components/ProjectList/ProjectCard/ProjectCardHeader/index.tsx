@@ -20,39 +20,35 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
     <>
       <CardPreview
         className={styles.preview}
-        logo={
-          showCustomImage && (
-            <CardHeader
-              className={useDynamicColors ? styles.dynamicHeader : styles.header}
-              style={{ color: useDynamicColors && colors && colors[1] }}
-              header={
-                <Link href={project.url} target={'_blank'} className={styles.link}>
-                  <Text
-                    className={styles.projectTitle}
-                    title={project.title}
-                    weight={'semibold'}
-                    wrap={false}
-                    size={400}
-                    truncate
-                    block
-                  >
-                    {project.title}
-                  </Text>
-                </Link>
-              }
-            />
-          )
-        }
       >
+        {showCustomImage && (
+          <div
+            className={useDynamicColors ? styles.dynamicHeader : styles.header}
+            style={{ color: useDynamicColors && colors && colors[1] }}>
+            <Link href={project.url} target={'_blank'} className={styles.link}>
+              <Text
+                className={styles.projectTitle}
+                title={project.title}
+                weight={'semibold'}
+                wrap={false}
+                size={400}
+                truncate
+                block
+              >
+                {project.title}
+              </Text>
+            </Link>
+          </div>
+        )}
         <div className={styles.logo} hidden={!showProjectLogo}>
           <Link
             href={project.url}
             target={'_blank'}
             className={styles.link}
             style={{
-              background: `linear-gradient(to right, ${colors && colors[0]}, ${
-                colors && colors[0]
-              })`
+              background: `linear-gradient(to right,
+                ${colors && colors[0]},
+                ${colors && colors[0]})`
             }}
           >
             <Avatar
