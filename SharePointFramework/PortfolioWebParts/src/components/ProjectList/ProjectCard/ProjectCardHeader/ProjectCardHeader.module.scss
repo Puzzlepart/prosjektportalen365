@@ -1,6 +1,43 @@
 .preview {
   background-color: var(--colorNeutralBackground3);
 
+  .header {
+    position: absolute;
+    bottom: -4px !important;
+
+    .link {
+      text-decoration: none !important;
+      color: inherit !important;
+
+      .projectTitle {
+        width: 216px !important;
+      }
+
+      .projectTitle:hover {
+        filter: brightness(1.2);
+      }
+    }
+  }
+
+  .dynamicHeader {
+    position: absolute;
+    bottom: -4px !important;
+
+    .link {
+      text-decoration: none !important;
+      color: inherit !important;
+
+      .projectTitle {
+        width: 216px !important;
+        filter: brightness(1.2);
+      }
+
+      .projectTitle:hover {
+        filter: brightness(1.4);
+      }
+    }
+  }
+
   .logoBadge {
     padding: 6px;
     border-radius: 2px;
@@ -17,32 +54,43 @@
     background-color: rgb(248, 248, 248);
 
     .link {
-      text-decoration: none !important;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: inline-block;
       color: inherit !important;
+      text-decoration: none !important;
+
+      .projectAvatar {
+        width: 100%;
+        height: 100%;
+        transition: transform 0.5s;
+        font-size: 22px;
+        border-radius: 0;
+
+        span {
+          padding: 12px;
+        }
+      }
+
+      .projectAvatar:hover {
+        transform: scale(1.1);
+        transform-origin: 50% 50%;
+      }
 
       img {
         width: 100%;
         height: 100%;
+        display: block;
         object-fit: cover;
         border-radius: 2px;
+        transition: transform 0.5s;
       }
 
       img:hover {
-        filter: contrast(120%);
+        transform: scale(1.1);
+        transform-origin: 50% 50%;
       }
     }
-  }
-}
-
-.link {
-  text-decoration: none !important;
-  color: inherit !important;
-
-  .projectTitle {
-    width: 216px !important;
-  }
-
-  .projectTitle:hover {
-    color: var(--colorNeutralForeground3Hover)
   }
 }

@@ -7,8 +7,25 @@
     gap: 4px;
   }
 
+  .action {
+    background-color: var(--colorNeutralBackground3);
+  }
+
+  .action:hover {
+    background-color: var(--colorNeutralBackground3Hover);
+  }
+
   .templateTag {
     margin-left: 60px;
-    cursor: pointer;
+    cursor: default !important;
+    background-color: var(--colorNeutralBackground3);
+
+    button {
+      cursor: default !important;
+    }
+  }
+
+  .templateTag:hover {
+    background-color: var(--colorNeutralBackground3Hover);
   }
 }

@@ -17,7 +17,8 @@ export function useProjectCardContent() {
           key: area + idx,
           value: area,
           primaryText: area,
-          children: area
+          children: area,
+          type: 'Tjenesteområde'
         }
       }),
     type:
@@ -27,11 +28,12 @@ export function useProjectCardContent() {
           key: type + idx,
           value: type,
           primaryText: type,
-          children: type
+          children: type,
+          type: 'Prosjekttype'
         }
       }),
     template: context.project.template,
     isProgram: context.project.isProgram,
-    isParent: context.project.isParent,
+    isParent: context.project.isParent
   } as const
 }

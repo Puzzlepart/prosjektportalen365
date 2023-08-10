@@ -3,9 +3,7 @@ import styles from './ProjectCardContent.module.scss'
 import { useProjectCardContent } from './useProjectCardContent'
 import _ from 'underscore'
 import { InteractionTag, InteractionTagProps, TagGroup } from '@fluentui/react-tags-preview'
-import {
-  GlobeLocationFilled, TagMultipleFilled
-} from '@fluentui/react-icons'
+import { GlobeLocationFilled, TagMultipleFilled } from '@fluentui/react-icons'
 import {
   Menu,
   MenuItem,
@@ -35,21 +33,17 @@ export const ProjectCardContent: FC = () => {
 
     return (
       <MenuItem key={tag.value} className={styles.menuItem}>
-        <InteractionTag
-          appearance={'brand'}
-          size={'small'}
-          {...tag}
-        />
+        <InteractionTag className={styles.tag} appearance={'brand'} size={'small'} {...tag} />
       </MenuItem>
     )
   }
 
   const OverflowMenu = (props: {
     tags: {
-      key: string;
-      value: string;
-      primaryText: string;
-      children: string;
+      key: string
+      value: string
+      primaryText: string
+      children: string
     }[]
   }) => {
     const { tags } = props
@@ -65,15 +59,14 @@ export const ProjectCardContent: FC = () => {
           <InteractionTag
             ref={ref}
             aria-label={`${overflowCount} more tags`}
+            title={`${overflowCount} more tags`}
             appearance={'brand'}
           >{`+${overflowCount}`}</InteractionTag>
         </MenuTrigger>
         <MenuPopover>
-          <MenuList>
+          <MenuList hasCheckmarks={false}>
             {!_.isEmpty(tags) &&
-              tags.slice(-overflowCount).map((tag) =>
-                <OverflowMenuItem key={tag.key} tag={tag} />
-              )}
+              tags.slice(-overflowCount).map((tag) => <OverflowMenuItem key={tag.key} tag={tag} />)}
           </MenuList>
         </MenuPopover>
       </Menu>
@@ -82,48 +75,48 @@ export const ProjectCardContent: FC = () => {
 
   return (
     <div className={styles.content}>
-      {!_.isEmpty(serviceArea) && <Overflow minimumVisible={1} padding={12}>
-        <TagGroup className={styles.tagGroup} size={'small'}>
-          {!_.isEmpty(serviceArea) &&
-            serviceArea.map((area, idx) => (
-              <OverflowItem key={area.key} id={area.key}>
-                {idx === 0 ? (
+      {!_.isEmpty(serviceArea) && (
+        <Overflow minimumVisible={1} padding={12}>
+          <TagGroup className={styles.tagGroup} size={'small'}>
+            {!_.isEmpty(serviceArea) &&
+              serviceArea.map((area) => (
+                <OverflowItem key={area.key} id={area.key}>
                   <InteractionTag
                     key={area.value}
+                    className={styles.tag}
                     appearance={'brand'}
-                    icon={idx === 0 && <GlobeLocationFilled />}
+                    icon={<GlobeLocationFilled />}
                     size={'small'}
+                    title={`${area.type}: ${area.value}`}
                     {...area}
                   />
-                ) : (
-                  <InteractionTag key={area.value} appearance={'brand'} size={'small'} {...area} />
-                )}
-              </OverflowItem>
-            ))}
-          <OverflowMenu tags={serviceArea} />
-        </TagGroup>
-      </Overflow>}
-      {!_.isEmpty(type) && <Overflow minimumVisible={1} padding={12}>
-        <TagGroup className={styles.tagGroup} size={'small'}>
-          {!_.isEmpty(type) &&
-            type.map((type, idx) => (
-              <OverflowItem key={type.key} id={type.key}>
-                {idx === 0 ? (
+                </OverflowItem>
+              ))}
+            <OverflowMenu tags={serviceArea} />
+          </TagGroup>
+        </Overflow>
+      )}
+      {!_.isEmpty(type) && (
+        <Overflow minimumVisible={1} padding={12}>
+          <TagGroup className={styles.tagGroup} size={'small'}>
+            {!_.isEmpty(type) &&
+              type.map((type) => (
+                <OverflowItem key={type.key} id={type.key}>
                   <InteractionTag
                     key={type.value}
+                    className={styles.tag}
                     appearance={'brand'}
-                    icon={idx === 0 && <TagMultipleFilled />}
+                    icon={<TagMultipleFilled />}
                     size={'small'}
+                    title={`${type.type}: ${type.value}`}
                     {...type}
                   />
-                ) : (
-                  <InteractionTag key={type.value} appearance={'brand'} size={'small'} {...type} />
-                )}
-              </OverflowItem>
-            ))}
-          <OverflowMenu tags={type} />
-        </TagGroup>
-      </Overflow>}
+                </OverflowItem>
+              ))}
+            <OverflowMenu tags={type} />
+          </TagGroup>
+        </Overflow>
+      )}
     </div>
   )
 }

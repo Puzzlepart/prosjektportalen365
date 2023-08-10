@@ -94,6 +94,8 @@ export interface IProjectListProps extends IBaseComponentProps {
    * Default render mode
    */
   defaultRenderMode?: ProjectListRenderMode
+
+  useDynamicColors?: boolean
 }
 
 export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {

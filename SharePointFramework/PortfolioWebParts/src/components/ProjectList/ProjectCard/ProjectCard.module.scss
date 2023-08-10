@@ -1,19 +1,34 @@
 @import "~@fluentui/react/dist/sass/References.scss";
 
 .root {
-  object-fit: cover;
-  padding: 0;
   width: 240px;
-  box-sizing: border-box;
 
   .shimmerGroup > div {
     display: block;
   }
 
   .card {
-    max-width: 100%;
     height: fit-content;
-    min-height: 312px;
+    min-height: 274px;
+
+    .phaseBadge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--colorNeutralBackgroundAlpha);
+      box-shadow: var(--shadow4);
+      width: 20px;
+      height: 20px;
+      padding: 4px;
+      margin: 6px;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .phaseBadge:hover {
+      background-color: var(--colorSubtleBackgroundLightAlphaHover);
+    }
   }
 
   .card:hover {

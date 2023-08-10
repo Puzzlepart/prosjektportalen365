@@ -4,7 +4,10 @@ import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import { ButtonProps } from '@fluentui/react-components'
 
 export interface IProjectCardContext
-  extends Pick<IProjectListProps, 'showProjectLogo' | 'showProjectOwner' | 'showProjectManager'> {
+  extends Pick<
+    IProjectListProps,
+    'showProjectLogo' | 'showProjectOwner' | 'showProjectManager' | 'useDynamicColors'
+  > {
   /**
    * Project model
    */

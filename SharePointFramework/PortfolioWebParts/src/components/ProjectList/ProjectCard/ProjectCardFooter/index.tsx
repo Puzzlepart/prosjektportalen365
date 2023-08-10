@@ -4,40 +4,56 @@ import styles from './ProjectCardFooter.module.scss'
 import { Avatar, Button, CardFooter, Tooltip } from '@fluentui/react-components'
 import { useProjectCardFooter } from './useProjectCardFooter'
 import strings from 'PortfolioWebPartsStrings'
-import { BoxFilled, BoxMultipleFilled, BoxToolboxFilled, BuildingFactoryFilled, BuildingFilled, CubeFilled, PanelRightContractFilled } from '@fluentui/react-icons'
+import {
+  BoxFilled,
+  BoxMultipleFilled,
+  BoxMultipleRegular,
+  BoxRegular,
+  BoxToolboxFilled,
+  BoxToolboxRegular,
+  BuildingFactoryFilled,
+  BuildingFactoryRegular,
+  BuildingFilled,
+  BuildingRegular,
+  CubeFilled,
+  CubeRegular,
+  PanelRightContractFilled,
+  PanelRightContractRegular,
+  bundleIcon
+} from '@fluentui/react-icons'
 
 export const ProjectCardFooter: FC = () => {
   const context = useContext(ProjectCardContext)
   const { owner, manager } = useProjectCardFooter()
+  const PanelRight = bundleIcon(PanelRightContractFilled, PanelRightContractRegular)
 
-  let templateIcon = BoxFilled
+  let templateIcon = bundleIcon(BoxFilled, BoxRegular)
   let templateText = context.project.template
 
   switch (context.project.template) {
     case 'Byggprosjekt':
-      templateIcon = BuildingFilled
+      templateIcon = bundleIcon(BuildingFilled, BuildingRegular)
       templateText = 'Bygg'
       break
     case 'Anleggsprosjekt':
-      templateIcon = BuildingFactoryFilled
+      templateIcon = bundleIcon(BuildingFactoryFilled, BuildingFactoryRegular)
       templateText = 'Anlegg'
       break
     case 'Programmal':
-      templateIcon = BoxMultipleFilled
+      templateIcon = bundleIcon(BoxMultipleFilled, BoxMultipleRegular)
       templateText = 'Program'
       break
     case 'Standardmal':
       if (context.project.isParent) {
-        templateIcon = BoxMultipleFilled
+        templateIcon = bundleIcon(BoxMultipleFilled, BoxMultipleRegular)
         templateText = 'Overordnet prosjekt'
-      }
-      else {
-        templateIcon = CubeFilled
+      } else {
+        templateIcon = bundleIcon(CubeFilled, CubeRegular)
         templateText = 'Prosjekt'
       }
       break
     default:
-      templateIcon = BoxToolboxFilled
+      templateIcon = bundleIcon(BoxToolboxFilled, BoxToolboxRegular)
       templateText = 'Egendefinert'
       break
   }
@@ -46,7 +62,7 @@ export const ProjectCardFooter: FC = () => {
 
   const Persona = () => {
     return (
-      <div className={styles.persona} >
+      <div className={styles.persona}>
         <div hidden={!context.showProjectOwner}>
           <Tooltip
             content={
@@ -73,7 +89,7 @@ export const ProjectCardFooter: FC = () => {
             <Avatar {...manager} />
           </Tooltip>
         </div>
-      </div >
+      </div>
     )
   }
 
@@ -81,7 +97,21 @@ export const ProjectCardFooter: FC = () => {
     <CardFooter
       className={styles.footer}
       action={context.actions.map((action) => {
-        return <Button key={action.id} icon={<PanelRightContractFilled />} {...action} />
+        return (
+          <Tooltip
+            key={action.id}
+            content={<>Åpne prosjektinformasjonspanel</>}
+            relationship={'description'}
+            withArrow
+          >
+            <Button
+              className={styles.action}
+              appearance={'subtle'}
+              icon={<PanelRight />}
+              {...action}
+            />
+          </Tooltip>
+        )
       })}
     >
       <Persona />
@@ -94,9 +124,13 @@ export const ProjectCardFooter: FC = () => {
         relationship={'description'}
         withArrow
       >
-        <Button className={styles.templateTag} icon={<Icon />} title={context.project.template} />
+        <Button
+          className={styles.templateTag}
+          appearance={'subtle'}
+          icon={<Icon />}
+          title={context.project.template}
+        />
       </Tooltip>
     </CardFooter>
   )
-
 }
