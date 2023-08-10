@@ -1,5 +1,5 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
-import { CustomError } from 'pp365-shared-library/lib/models'
+import { CustomError, SPField } from 'pp365-shared-library/lib/models'
 import { useMemo, useReducer } from 'react'
 import { IProgressDialogProps } from './ProgressDialog/types'
 import {
@@ -7,6 +7,7 @@ import {
   ProjectInformationDialogType,
   ProjectInformationPanelType
 } from './types'
+import _ from 'lodash'
 
 const initialState: IProjectInformationState = {
   isDataLoaded: false,
@@ -23,7 +24,9 @@ export const OPEN_PANEL = createAction<ProjectInformationPanelType>('OPEN_PANEL'
 export const CLOSE_PANEL = createAction('CLOSE_PANEL')
 export const OPEN_DIALOG = createAction<ProjectInformationDialogType>('OPEN_DIALOG')
 export const CLOSE_DIALOG = createAction('CLOSE_DIALOG')
-export const PROPERTIES_UPDATED = createAction('PROPERTIES_UPDATED')
+export const PROPERTIES_UPDATED = createAction<{ refetch: boolean; newFields?: SPField[] }>(
+  'PROPERTIES_UPDATED'
+)
 
 /**
  * Create project information reducer.
@@ -59,8 +62,18 @@ const createProjectInformationReducer = () =>
       .addCase(CLOSE_DIALOG, (state) => {
         state.activeDialog = null
       })
-      .addCase(PROPERTIES_UPDATED, (state) => {
-        state.propertiesLastUpdated = new Date()
+      .addCase(PROPERTIES_UPDATED, (state, action) => {
+        if (action.payload.refetch) {
+          state.propertiesLastUpdated = new Date()
+        }
+        if (_.isArray(action.payload?.newFields)) {
+          state.data.fields = [
+            ...state.data.fields,
+            ...action.payload.newFields.filter(
+              (f) => !state.data.fields.find(({ InternalName }) => InternalName === f.InternalName)
+            )
+          ]
+        }
       })
   )
 
