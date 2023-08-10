@@ -184,10 +184,14 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
 export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
 export type ProjectInformationDialogType = 'CreateParentDialog' | 'SyncProjectDialog'
 
+export interface IProjectInformationUserMessage extends IUserMessageProps {
+  panel?: ProjectInformationPanelType
+}
+
 export interface IProjectInformationState
   extends IBaseWebPartComponentState<IProjectInformationData> {
   /**
-   * Properties
+   * Properties to display
    */
   properties?: ProjectInformationField[]
 
@@ -204,7 +208,7 @@ export interface IProjectInformationState
   /**
    * Message to show to the user
    */
-  message?: IUserMessageProps
+  message?: IProjectInformationUserMessage
 
   /**
    * Confirm action props

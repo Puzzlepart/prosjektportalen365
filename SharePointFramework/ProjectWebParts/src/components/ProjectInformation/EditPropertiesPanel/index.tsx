@@ -2,10 +2,10 @@ import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import { BasePanel } from '../BasePanel'
 import { EditPropertiesPanelFooter } from './EditPropertiesPanelFooter'
-import { IEditPropertiesPanel } from './types'
+import { IEditPropertiesPanelProps } from './types'
 import { useEditPropertiesPanel } from './useEditPropertiesPanel'
 
-export const EditPropertiesPanel: FC<IEditPropertiesPanel> = (props) => {
+export const EditPropertiesPanel: FC<IEditPropertiesPanelProps> = (props) => {
   const { fields, getFieldElement, model, onSave } = useEditPropertiesPanel()
   return (
     <BasePanel

@@ -3,11 +3,12 @@ import strings from 'ProjectWebPartsStrings'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { sleep } from 'pp365-shared-library/lib/util'
 import SPDataAdapter from '../../data'
-import { IProjectInformationContext } from './context'
+import { IProjectInformationContext, useProjectInformationContext } from './context'
 import { ProjectInformation } from './index'
 import { PROPERTIES_UPDATED, SET_PROGRESS } from './reducer'
 import { useEffect } from 'react'
 import _ from 'lodash'
+import { SPField } from 'pp365-shared-library/lib/models'
 
 interface IUsePropertiesSyncParams {
   /**
@@ -25,32 +26,34 @@ interface IUsePropertiesSyncParams {
    */
   reload?: boolean
 }
+/**
+ * Sync fields to the project properties list.
+ *
+ * @param context Context for `ProjectInformation` component
+ *
+ * @returns `true` if the project properties list is created, otherwise `false`.
+ */
+const syncList = async (context: IProjectInformationContext) => {
+  return await SPDataAdapter.portal.syncList({
+    url: context.props.webUrl,
+    listName: strings.ProjectPropertiesListName,
+    contentTypeId:
+      context.state.data.templateParameters.ProjectContentTypeId ??
+      '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+    properties: { Title: context.props.webTitle }
+  })
+}
 
 /**
  * Hook for syncing project properties to the hub site.
  *
  * @param context Context for `ProjectInformation` component
  *
- * @returns Callback function for syncing project properties to the hub site, and fields
- * from hub site to the project properties list.
+ * @returns Returns the following functions:
+ * - `syncPropertyItemToHub`: Sync project properties to the hub site.
+ * - `onSyncProperties`: Callback function for syncing project properties to the hub site, and fields
  */
 export function usePropertiesSync(context: IProjectInformationContext = null) {
-  /**
-   * Sync fields to the project properties list.
-   *
-   * @returns `true` if the project properties list is created, otherwise `false`.
-   */
-  const syncList = async () => {
-    return await SPDataAdapter.portal.syncList({
-      url: context.props.webUrl,
-      listName: strings.ProjectPropertiesListName,
-      contentTypeId:
-        context.state.data.templateParameters.ProjectContentTypeId ??
-        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
-      properties: { Title: context.props.webTitle }
-    })
-  }
-
   /**
    * Sync properties to the hub site.
    *
@@ -95,7 +98,10 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
         description: `${strings.PleaseWaitText}...`
       })
       let created = false
-      if (params.syncList) created = (await syncList()).list.created
+      if (params.syncList) {
+        const { list } = await syncList(context)
+        created = list.created
+      }
       if (!created && params.syncPropertyItemToHub) await syncPropertyItemToHub(progressFunc)
       SPDataAdapter.clearCache()
       await sleep(5)
@@ -112,31 +118,33 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
     }
   }
 
-  /**
-   * Hook for syncing project properties to the hub site, and fields
-   * from hub site to the project properties list.
-   *
-   * @param condition Condition to trigger sync
-   */
-  const useSyncList = (condition: boolean) => {
-    useEffect(() => {
-      if (!condition) return
-      syncList().then(({ fieldsAdded }) => {
-        if (!_.isEmpty(fieldsAdded)) {
-          context.dispatch(
-            PROPERTIES_UPDATED({
-              refetch: false,
-              newFields: fieldsAdded
-            })
-          )
-        }
-      })
-    }, [condition])
-  }
-
   return {
-    useSyncList,
     syncPropertyItemToHub,
     onSyncProperties
   }
+}
+
+type UseSyncListParams = {
+  condition: boolean
+  refetch?: boolean
+  onCompleted?: (fieldsAdded: SPField[]) => void
+}
+
+/**
+ * Hook for syncing project properties to the hub site, and fields
+ * from hub site to the project properties list.
+ *
+ * @param params Parameters
+ */
+export const useSyncList = (params: UseSyncListParams) => {
+  const context = useProjectInformationContext()
+  useEffect(() => {
+    if (!params.condition) return
+    syncList(context).then(({ fieldsAdded }) => {
+      if (!_.isEmpty(fieldsAdded)) {
+        context.dispatch(PROPERTIES_UPDATED({ refetch: params.refetch }))
+        if (params.onCompleted) params.onCompleted(fieldsAdded)
+      }
+    })
+  }, [params.condition])
 }

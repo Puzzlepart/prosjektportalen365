@@ -1,5 +1,5 @@
 import { useProjectInformationContext } from '../context'
-import { usePropertiesSync } from '../usePropertiesSync'
+import { useSyncList } from '../usePropertiesSync'
 import { useFieldElements } from './useFieldElements'
 import { useFields } from './useFields'
 import { useModel } from './useModel'
@@ -22,8 +22,11 @@ export function useEditPropertiesPanel() {
   const model = useModel()
   const getFieldElement = useFieldElements(model)
   const onSave = useSubmit(model)
-  const { useSyncList } = usePropertiesSync(context)
-  useSyncList(context.state.activePanel === 'EditPropertiesPanel')
+
+  useSyncList({
+    condition: context.state.activePanel === 'EditPropertiesPanel',
+    refetch: true
+  })
 
   return { fields, getFieldElement, model, onSave } as const
 }

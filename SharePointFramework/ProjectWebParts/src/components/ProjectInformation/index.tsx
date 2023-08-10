@@ -42,8 +42,12 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
               customElementsGroup={<CustomShimmerElementsGroup />}
             >
               <ProjectProperties />
-              {!props.hideAllActions && context.state.message && (
-                <UserMessage className={styles.userMessage} {...context.state.message} />
+              {context.state.message && (
+                <UserMessage
+                  hidden={props.hideAllActions}
+                  className={styles.userMessage}
+                  {...context.state.message}
+                />
               )}
               <Actions />
               <ParentProjectsList />
