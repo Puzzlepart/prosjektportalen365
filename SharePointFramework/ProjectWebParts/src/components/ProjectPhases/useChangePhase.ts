@@ -35,16 +35,9 @@ export function useChangePhase(delayBeforeReload: number = 1000) {
       sessionStorage.clear()
       context.dispatch(SET_PHASE({ phase: context.state.confirmPhase }))
       if (context.props.syncPropertiesAfterPhaseChange) {
-        const currentUrlIsPageRelative =
-          document.location.pathname.indexOf(context.state.data.welcomePage) > -1
-        const welcomePage = !currentUrlIsPageRelative
-          ? `${document.location.pathname}/${context.state.data.welcomePage}`
-          : document.location.pathname
+        // TODO: Sync phase to hub site item
         setTimeout(() => {
-          window.location.assign(
-            `${document.location.protocol}//${document.location.hostname}${welcomePage}#syncproperties=1`
-          )
-          if (currentUrlIsPageRelative) window.location.reload()
+          window.location.reload()
         }, delayBeforeReload)
       }
     } catch (error) {

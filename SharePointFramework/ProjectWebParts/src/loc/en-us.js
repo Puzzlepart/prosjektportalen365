@@ -148,7 +148,7 @@ define([], function () {
     SyncProjectPropertiesText: 'Sync projectdata',
     SyncProjectPropertiesValuesProgressDescription: 'Please wait...',
     SyncProjectPropertiesValuesProgressLabel: 'Syncing properties',
-    SyncPropertiesAfterPhaseChangeFieldLabel: 'Sync propertis after phase change',
+    SyncPropertiesAfterPhaseChangeFieldLabel: 'Sync properties after phase change',
     TagFieldLabel: 'Etikett',
     TasksLinkText: 'Go To Tasks',
     TimelineConfigurationListName: 'Tidslinjekonfigurasjon',

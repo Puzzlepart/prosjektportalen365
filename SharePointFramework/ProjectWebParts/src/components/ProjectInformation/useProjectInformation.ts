@@ -1,25 +1,22 @@
 import { format, MessageBarType } from '@fluentui/react'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
-import { parseUrlHash } from 'pp365-shared-library/lib/util'
 import strings from 'ProjectWebPartsStrings'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { ProjectInformation } from '.'
 import SPDataAdapter from '../../data'
-import { IProjectInformationProps, IProjectInformationUrlHash } from './types'
+import { IProjectInformationContext } from './context'
+import { IProjectInformationProps } from './types'
 import { useProjectInformationDataFetch } from './useProjectInformationDataFetch'
 import { useProjectInformationState } from './useProjectInformationState'
-import { usePropertiesSync } from './usePropertiesSync'
-import { IProjectInformationContext } from './context'
 
 /**
  * Component logic hook for `ProjectInformation`. If the SPDataAdapter is configured, it will
  * initialize the `ListLogger` with the `LogListName` from the `strings` resource file. It handles
- * fetching the project data and setting the state. It also provides callback functions `addMessage`
- * and `onSyncProperties`, aswell as handling hash changes.
+ * fetching the project data and setting the state.
  *
  * @param props Props
  *
- * @returns `state`, `setState`, `onSyncProperties`
+ * @returns generated context value
  */
 export const useProjectInformation = (props: IProjectInformationProps) => {
   const { state, setState } = useProjectInformationState()
@@ -51,7 +48,6 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     () => ({ props, state, setState, addMessage }),
     [state]
   )
-  const onSyncProperties = usePropertiesSync(context)
 
   if (SPDataAdapter.isConfigured) {
     ListLogger.init(
@@ -62,13 +58,6 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
   }
 
   useProjectInformationDataFetch(context)
-
-  useEffect(() => {
-    if (state?.data?.fieldValues) {
-      const urlHash = parseUrlHash<IProjectInformationUrlHash>(true)
-      if (urlHash.syncproperties === '1') onSyncProperties(urlHash.force === '1')
-    }
-  }, [state?.data?.fieldValues])
 
   return { context } as const
 }

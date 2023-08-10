@@ -1,11 +1,32 @@
 import { IProgressIndicatorProps, MessageBarType } from '@fluentui/react'
-import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'ProjectWebPartsStrings'
-import SPDataAdapter from '../../data'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { sleep } from 'pp365-shared-library/lib/util'
 import { ProjectInformation } from '.'
+import SPDataAdapter from '../../data'
 import { IProjectInformationContext } from './context'
+
+interface IUsePropertiesSyncParams {
+  /**
+   * Sync fields to the project properties list.
+   */
+  syncList?: boolean
+
+  /**
+   * Sync project properties to the hub site.
+   */
+  syncPropertyItemToHub?: boolean
+
+  /**
+   * Reload page after sync.
+   */
+  reload?: boolean
+
+  /**
+   * Skip progress indicator.
+   */
+  skipProgress?: boolean
+}
 
 /**
  * Hook for syncing project properties to the hub site.
@@ -15,43 +36,62 @@ import { IProjectInformationContext } from './context'
  * @returns Callback function for syncing project properties
  */
 export function usePropertiesSync(context: IProjectInformationContext = null) {
-  return async (force: boolean = false): Promise<void> => {
-    if (!stringIsNullOrEmpty(context.state.data.propertiesListId)) {
-      const lastUpdated = await SPDataAdapter.project.getPropertiesLastUpdated(context.state.data)
-      if (lastUpdated > 60 && !force) return
-    }
+  const syncList = async () => {
+    const { created } = await SPDataAdapter.portal.syncList(
+      context.props.webUrl,
+      strings.ProjectPropertiesListName,
+      context.state.data.templateParameters.ProjectContentTypeId ??
+        '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
+      { Title: context.props.webTitle }
+    )
+    return created
+  }
+
+  const syncPropertyItemToHub = async (
+    progressFunc: (progress: IProgressIndicatorProps) => void
+  ) => {
+    await SPDataAdapter.syncPropertyItemToHub(
+      context.state.data.fieldValues,
+      { ...context.state.data.fieldValuesText, Title: context.props.webTitle },
+      context.state.data.templateParameters,
+      progressFunc
+    )
+  }
+
+  /**
+   * Callback function for syncing project properties to the hub site, and fields
+   * from hub site to the project properties list.
+   *
+   * The following parameters can be used to control the sync process:
+   * - `syncList`: Sync fields to the project properties list.
+   * - `syncPropertyItemToHub`: Sync project properties to the hub site.
+   * - `reload`: Reload page after sync.
+   * - `skipProgress`: Skip progress indicator.
+   */
+  return async (params: IUsePropertiesSyncParams = {}): Promise<void> => {
     if (context.props.skipSyncToHub) return
-    context.setState({
-      progress: { title: strings.SyncProjectPropertiesProgressLabel, progress: {} }
-    })
+    if (!params.skipProgress) {
+      context.setState({
+        progress: { title: strings.SyncProjectPropertiesProgressLabel, progress: {} }
+      })
+    }
     const progressFunc = (progress: IProgressIndicatorProps) =>
       context.setState({
         progress: { title: strings.SyncProjectPropertiesProgressLabel, progress }
       })
     try {
-      progressFunc({
-        label: strings.SyncProjectPropertiesListProgressDescription,
-        description: `${strings.PleaseWaitText}...`
-      })
-      const { created } = await SPDataAdapter.portal.syncList(
-        context.props.webUrl,
-        strings.ProjectPropertiesListName,
-        context.state.data.templateParameters.ProjectContentTypeId ??
-          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
-        { Title: context.props.webTitle }
-      )
-      if (!created) {
-        await SPDataAdapter.syncPropertyItemToHub(
-          context.state.data.fieldValues,
-          { ...context.state.data.fieldValuesText, Title: context.props.webTitle },
-          context.state.data.templateParameters,
-          progressFunc
-        )
+      if (!params.skipProgress) {
+        progressFunc({
+          label: strings.SyncProjectPropertiesListProgressDescription,
+          description: `${strings.PleaseWaitText}...`
+        })
       }
+      let created = false
+      if (params.syncList) created = await syncList()
+      if (!created && params.syncPropertyItemToHub) await syncPropertyItemToHub(progressFunc)
       SPDataAdapter.clearCache()
       await sleep(5)
-      document.location.href =
-        sessionStorage.DEBUG || DEBUG ? document.location.href.split('#')[0] : context.props.webUrl
+      if (params.reload) window.location.reload()
     } catch (error) {
       ListLogger.log({
         message: error.message,
@@ -59,9 +99,13 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
         functionName: 'onSyncProperties',
         component: ProjectInformation.displayName
       })
-      context.addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning)
+      if (!params.skipProgress) {
+        context.addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning)
+      }
     } finally {
-      context.setState({ progress: null })
+      if (!params.skipProgress) {
+        context.setState({ progress: null })
+      }
     }
   }
 }

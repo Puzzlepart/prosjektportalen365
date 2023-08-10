@@ -30,9 +30,7 @@ import { FieldDescription } from 'pp365-shared-library/lib/components'
  *
  * @param model Model returned from `useEditPropertiesPanelModel` hook
  */
-export function useFieldElements(
-  model: ReturnType<typeof useModel>
-) {
+export function useFieldElements(model: ReturnType<typeof useModel>) {
   const fieldElements: Record<string, (field: ProjectInformationField) => JSX.Element> = {
     Text: (field) => (
       <TextField

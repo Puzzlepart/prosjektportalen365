@@ -163,7 +163,7 @@ export const SyncProjectDialog: FC = () => {
             setSyncing(false)
             setHasSynced(true)
             context.setState({ displaySyncProjectDialog: false })
-            onSyncProperties(true)
+            onSyncProperties()
           })
         })
     } catch (error) {

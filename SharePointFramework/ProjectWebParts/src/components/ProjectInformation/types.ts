@@ -158,11 +158,6 @@ export interface IProjectInformationState
   propertiesLastUpdated?: Date
 }
 
-export interface IProjectInformationUrlHash {
-  syncproperties: string
-  force: string
-}
-
 export interface IProjectInformationData
   extends ProjectDataService.IGetPropertiesData,
     Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {

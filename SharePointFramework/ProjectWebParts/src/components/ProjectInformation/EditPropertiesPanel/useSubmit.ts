@@ -2,9 +2,7 @@ import SPDataAdapter from '../../../data'
 import { useProjectInformationContext } from '../context'
 import { useModel } from './useModel'
 
-export function useSubmit(
-  model: ReturnType<typeof useModel>
-) {
+export function useSubmit(model: ReturnType<typeof useModel>) {
   const context = useProjectInformationContext()
   const onSave = async () => {
     await SPDataAdapter.project.updateProjectProperties(model.properties)

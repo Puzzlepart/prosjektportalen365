@@ -9,6 +9,7 @@ import { useEditPropertiesPanel } from './useEditPropertiesPanel'
 export const EditPropertiesPanel: FC<IEditPropertiesPanel> = (props) => {
   const context = useProjectInformationContext()
   const { fields, getFieldElement, model, onSave } = useEditPropertiesPanel()
+  //const onSyncProperties = usePropertiesSync(context)
 
   return (
     <Panel
