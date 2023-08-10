@@ -236,23 +236,17 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
             }
             break
           case 'DateTime':
-            {
-              properties[fld.InternalName] = fldValue ? new Date(fldValue) : null
-            }
+            properties[fld.InternalName] = fldValue ? new Date(fldValue) : null
             break
           case 'Number':
           case 'Currency': {
             properties[fld.InternalName] = fldValue ? parseFloat(fldValue) : null
           }
           case 'URL':
-            {
-              properties[fld.InternalName] = fldValue ?? null
-            }
+            properties[fld.InternalName] = fldValue ?? null
             break
           case 'Boolean':
-            {
-              properties[fld.InternalName] = fldValue ?? null
-            }
+            properties[fld.InternalName] = fldValue ?? null
             break
           case 'MultiChoice':
             {
@@ -264,9 +258,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
             }
             break
           default:
-            {
-              properties[fld.InternalName] = fldValueTxt ?? null
-            }
+            properties[fld.InternalName] = fldValueTxt ?? null
             break
         }
       }

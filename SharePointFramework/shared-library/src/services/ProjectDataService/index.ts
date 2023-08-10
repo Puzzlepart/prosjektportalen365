@@ -176,8 +176,7 @@ export class ProjectDataService {
           'TermSetId'
         )
         // eslint-disable-next-line quotes
-        .filter("substringof('Gt', InternalName)")
-        .using(DefaultCaching)()
+        .filter("substringof('Gt', InternalName)")()
       const userFields = fields.filter((fld) => fld.TypeAsString.indexOf('User') === 0)
       const [fieldValuesText, fieldValues, welcomePageUrl] = await Promise.all([
         ctx.item.fieldValuesAsText(),

@@ -5,7 +5,9 @@ import { sleep } from 'pp365-shared-library/lib/util'
 import SPDataAdapter from '../../data'
 import { IProjectInformationContext } from './context'
 import { ProjectInformation } from './index'
-import { SET_PROGRESS } from './reducer'
+import { PROPERTIES_UPDATED, SET_PROGRESS } from './reducer'
+import { useEffect } from 'react'
+import _ from 'lodash'
 
 interface IUsePropertiesSyncParams {
   /**
@@ -105,14 +107,35 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
         functionName: 'onSyncProperties',
         component: ProjectInformation.displayName
       })
-      //context.addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning)
     } finally {
       context.dispatch(SET_PROGRESS(null))
     }
   }
 
+  /**
+   * Hook for syncing project properties to the hub site, and fields
+   * from hub site to the project properties list.
+   *
+   * @param condition Condition to trigger sync
+   */
+  const useSyncList = (condition: boolean) => {
+    useEffect(() => {
+      if (!condition) return
+      syncList().then(({ fieldsAdded }) => {
+        if (!_.isEmpty(fieldsAdded)) {
+          context.dispatch(
+            PROPERTIES_UPDATED({
+              refetch: false,
+              newFields: fieldsAdded
+            })
+          )
+        }
+      })
+    }, [condition])
+  }
+
   return {
-    syncList,
+    useSyncList,
     syncPropertyItemToHub,
     onSyncProperties
   }

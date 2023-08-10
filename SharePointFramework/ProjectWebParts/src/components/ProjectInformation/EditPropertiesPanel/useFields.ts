@@ -9,15 +9,19 @@ import { useProjectInformationContext } from '../context'
  */
 export function useFields() {
   const context = useProjectInformationContext()
+  const { fields, columns } = context.state.data
   return useMemo<ProjectInformationField[]>(
     () =>
-      context.state.data.fields
-        .map((f) => {
-          const col = context.state.data.columns.find((col) => col.internalName === f.InternalName)
-          return new ProjectInformationField(f, col)
-        })
+      fields
+        .map(
+          (f) =>
+            new ProjectInformationField(
+              f,
+              columns.find(({ internalName }) => internalName === f.InternalName)
+            )
+        )
         .filter(Boolean)
         .filter((f) => f.showInEditForm),
-    [context.state.data]
+    [fields, columns]
   )
 }

@@ -1,37 +1,29 @@
-import { useModel } from './useModel'
-import { useFields } from './useFields'
-import { useFieldElements } from './useFieldElements'
-import { useSubmit } from './useSubmit'
 import { useProjectInformationContext } from '../context'
 import { usePropertiesSync } from '../usePropertiesSync'
-import { useEffect } from 'react'
-import _ from 'lodash'
-import { PROPERTIES_UPDATED } from '../reducer'
+import { useFieldElements } from './useFieldElements'
+import { useFields } from './useFields'
+import { useModel } from './useModel'
+import { useSubmit } from './useSubmit'
 
 /**
  * Hook for `EditPropertiesPanel` component. Generates fields and field elements
  * using hooks and provides them to the component. Also handles submitting the
  * form and syncing the property list fields.
  *
- * @returns `fields` and `getFieldElement` properties
+ * @returns The following properties:
+ * - `fields` - the fields to render
+ * - `getFieldElement` - a function that returns the field element for a given field
+ * - `model` - the model for the form
+ * - `onSave` - the submit handler for the form
  */
 export function useEditPropertiesPanel() {
   const context = useProjectInformationContext()
   const fields = useFields()
   const model = useModel()
   const getFieldElement = useFieldElements(model)
-  const { onSave } = useSubmit(model)
-  const { syncList } = usePropertiesSync(context)
-  const isOpen = context.state.activePanel === 'EditPropertiesPanel'
+  const onSave = useSubmit(model)
+  const { useSyncList } = usePropertiesSync(context)
+  useSyncList(context.state.activePanel === 'EditPropertiesPanel')
 
-  useEffect(() => {
-    if (!isOpen) return
-    syncList().then(({ fieldsAdded }) => {
-      if (!_.isEmpty(fieldsAdded)) {
-        context.dispatch(PROPERTIES_UPDATED({ refetch: false, newFields: fieldsAdded }))
-      }
-    })
-  }, [isOpen])
-
-  return { fields, getFieldElement, model, onSave, isOpen } as const
+  return { fields, getFieldElement, model, onSave } as const
 }
