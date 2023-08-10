@@ -10,19 +10,21 @@ import styles from './EditPropertiesPanelFooter.module.scss'
  * and a `<ClosePanelButton />` for closing the panel. Also shows a spinner when submitting.
  */
 export const EditPropertiesPanelFooter: FC<IEditPropertiesPanelFooterProps> = (props) => {
+  const isSaving = props.submit.saveStatus !== undefined
   return (
     <div className={styles.root}>
       <div className={styles.container}>
         <PrimaryButton
           text={strings.SaveText}
           onClick={props.submit.onSave}
-          disabled={!props.model.isChanged} />
+          disabled={!props.model.isChanged || isSaving} />
         <ClosePanelButton
           onClick={() => {
             props.model.reset()
           }}
+          disabled={isSaving}
         />
-        {props.submit.saveStatus && (
+        {isSaving && (
           <Spinner label={props.submit.saveStatus} />
         )}
       </div>
