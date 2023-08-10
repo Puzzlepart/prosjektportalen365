@@ -25,14 +25,11 @@ export function useModel() {
    * @param field Field to get value for
    * @param type Type of field to get value for (for parsing the value to the correct type)
    */
-  function get<T>(
-    field: ProjectInformationField,
-    type: ValueType = null
-  ): T {
+  function get<T>(field: ProjectInformationField, type: ValueType = null, fallbackValue: T = null): T {
     const { fieldValues, fieldValuesText } = context.state.data
     const value = (model.get(field.internalName) as string) ?? fieldValuesText[field.internalName]
     const isValueString = typeof value === 'string'
-    if (!value) return null
+    if (!value) return fallbackValue as unknown as T
     if (!isValueString) return value as unknown as T
     const valueMap: Record<ValueType, () => T> = {
       url: () => {
@@ -78,10 +75,13 @@ export function useModel() {
         return [field.internalName, value]
       }
       case 'URL': {
-        return [field.internalName, {
-          Description: value.description,
-          Url: value.url
-        }]
+        return [
+          field.internalName,
+          {
+            Description: value.description,
+            Url: value.url
+          }
+        ]
       }
       case 'TaxonomyFieldTypeMulti':
       case 'TaxonomyFieldType': {
