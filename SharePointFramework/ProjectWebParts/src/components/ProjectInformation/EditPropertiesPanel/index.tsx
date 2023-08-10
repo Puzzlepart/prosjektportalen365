@@ -2,20 +2,19 @@ import { Panel, PanelType } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import { useProjectInformationContext } from '../context'
+import { CLOSE_PANEL } from '../reducer'
 import { EditPropertiesPanelFooter } from './EditPropertiesPanelFooter'
 import { IEditPropertiesPanel } from './types'
 import { useEditPropertiesPanel } from './useEditPropertiesPanel'
-import { CLOSE_PANEL } from '../reducer'
 
 export const EditPropertiesPanel: FC<IEditPropertiesPanel> = (props) => {
   const context = useProjectInformationContext()
-  const { fields, getFieldElement, model, onSave } = useEditPropertiesPanel()
-  //const onSyncProperties = usePropertiesSync(context)
+  const { fields, getFieldElement, model, onSave, isOpen } = useEditPropertiesPanel()
 
   return (
     <Panel
       {...props}
-      isOpen={context.state.activePanel === 'EditPropertiesPanel'}
+      isOpen={isOpen}
       onDismiss={() => context.dispatch(CLOSE_PANEL())}
       onRenderFooterContent={() => <EditPropertiesPanelFooter onSave={onSave} model={model} />}
     >

@@ -1,12 +1,12 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import { CustomError } from 'pp365-shared-library/lib/models'
 import { useMemo, useReducer } from 'react'
+import { IProgressDialogProps } from './ProgressDialog/types'
 import {
   IProjectInformationState,
   ProjectInformationDialogType,
   ProjectInformationPanelType
 } from './types'
-import { IProgressDialogProps } from './ProgressDialog/types'
 
 const initialState: IProjectInformationState = {
   isDataLoaded: false,
@@ -25,6 +25,9 @@ export const OPEN_DIALOG = createAction<ProjectInformationDialogType>('OPEN_DIAL
 export const CLOSE_DIALOG = createAction('CLOSE_DIALOG')
 export const PROPERTIES_UPDATED = createAction('PROPERTIES_UPDATED')
 
+/**
+ * Create project information reducer.
+ */
 const createProjectInformationReducer = () =>
   createReducer(initialState, (builder) =>
     builder
@@ -42,7 +45,7 @@ const createProjectInformationReducer = () =>
         state.isDataLoaded = true
       })
       .addCase(SET_PROGRESS, (state, action) => {
-        ;(state.progress as IProgressDialogProps) = action.payload
+        state.progress = action.payload as any
       })
       .addCase(OPEN_PANEL, (state, action) => {
         state.activePanel = action.payload

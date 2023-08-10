@@ -1,4 +1,4 @@
-import { IEntityField } from 'sp-entityportal-service'
+import { IFieldInfo } from '@pnp/sp/fields'
 
 export interface IGetPropertiesData {
   /**
@@ -24,7 +24,7 @@ export interface IGetPropertiesData {
   /**
    * Entity fields
    */
-  fields?: IEntityField[]
+  fields?: IFieldInfo[]
 
   /**
    * Properties list id

@@ -51,3 +51,10 @@ export type GetStatusReportsOptions = {
   publishedString?: string
   useCaching?: boolean
 }
+
+export type SyncListOptions = {
+  url: string
+  listName: string
+  contentTypeId: string
+  properties?: Record<string, string>
+}

@@ -165,7 +165,7 @@ export interface IProjectInformationData
   parentProjects?: ProjectInformationParentProject[]
 
   /**
-   * Array of fields from the entity
+   * Property fields
    */
   fields?: any[]
 }

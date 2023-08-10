@@ -22,11 +22,6 @@ interface IUsePropertiesSyncParams {
    * Reload page after sync.
    */
   reload?: boolean
-
-  /**
-   * Skip progress indicator.
-   */
-  skipProgress?: boolean
 }
 
 /**
@@ -34,18 +29,24 @@ interface IUsePropertiesSyncParams {
  *
  * @param context Context for `ProjectInformation` component
  *
- * @returns Callback function for syncing project properties
+ * @returns Callback function for syncing project properties to the hub site, and fields
+ * from hub site to the project properties list.
  */
 export function usePropertiesSync(context: IProjectInformationContext = null) {
+  /**
+   * Sync fields to the project properties list.
+   *
+   * @returns `true` if the project properties list is created, otherwise `false`.
+   */
   const syncList = async () => {
-    const { created } = await SPDataAdapter.portal.syncList(
-      context.props.webUrl,
-      strings.ProjectPropertiesListName,
-      context.state.data.templateParameters.ProjectContentTypeId ??
+    return await SPDataAdapter.portal.syncList({
+      url: context.props.webUrl,
+      listName: strings.ProjectPropertiesListName,
+      contentTypeId:
+        context.state.data.templateParameters.ProjectContentTypeId ??
         '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
-      { Title: context.props.webTitle }
-    )
-    return created
+      properties: { Title: context.props.webTitle }
+    })
   }
 
   const syncPropertyItemToHub = async (
@@ -69,26 +70,22 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
    * - `reload`: Reload page after sync.
    * - `skipProgress`: Skip progress indicator.
    */
-  return async (params: IUsePropertiesSyncParams = {}): Promise<void> => {
+  const onSyncProperties = async (params: IUsePropertiesSyncParams = {}): Promise<void> => {
     if (context.props.skipSyncToHub) return
-    if (!params.skipProgress) {
-      context.dispatch(
-        SET_PROGRESS({ title: strings.SyncProjectPropertiesProgressLabel, progress: {} })
-      )
-    }
+    context.dispatch(
+      SET_PROGRESS({ title: strings.SyncProjectPropertiesProgressLabel, progress: {} })
+    )
     const progressFunc = (progress: IProgressIndicatorProps) =>
       context.dispatch(
         SET_PROGRESS({ title: strings.SyncProjectPropertiesProgressLabel, progress })
       )
     try {
-      if (!params.skipProgress) {
-        progressFunc({
-          label: strings.SyncProjectPropertiesListProgressDescription,
-          description: `${strings.PleaseWaitText}...`
-        })
-      }
+      progressFunc({
+        label: strings.SyncProjectPropertiesListProgressDescription,
+        description: `${strings.PleaseWaitText}...`
+      })
       let created = false
-      if (params.syncList) created = await syncList()
+      if (params.syncList) created = (await syncList()).list.created
       if (!created && params.syncPropertyItemToHub) await syncPropertyItemToHub(progressFunc)
       SPDataAdapter.clearCache()
       await sleep(5)
@@ -100,13 +97,15 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
         functionName: 'onSyncProperties',
         component: ProjectInformation.displayName
       })
-      if (!params.skipProgress) {
-        //context.addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning)
-      }
+      //context.addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning)
     } finally {
-      if (!params.skipProgress) {
-        context.dispatch(SET_PROGRESS())
-      }
+      context.dispatch(SET_PROGRESS(null))
     }
+  }
+
+  return {
+    syncList,
+    syncPropertyItemToHub,
+    onSyncProperties
   }
 }

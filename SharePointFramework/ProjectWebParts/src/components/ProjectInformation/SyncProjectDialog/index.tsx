@@ -18,7 +18,7 @@ import { usePropertiesSync } from '../usePropertiesSync'
 
 export const SyncProjectDialog: FC = () => {
   const context = useProjectInformationContext()
-  const onSyncProperties = usePropertiesSync(context)
+  const { onSyncProperties } = usePropertiesSync(context)
   const [isLoading, setLoading] = useState(true)
   const [isSyncing, setSyncing] = useState(false)
   const [hasSynced, setHasSynced] = useState(false)

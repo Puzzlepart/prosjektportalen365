@@ -30,7 +30,8 @@ import {
   GetStatusReportsOptions,
   IPortalDataServiceConfiguration,
   PortalDataServiceDefaultConfiguration,
-  PortalDataServiceList
+  PortalDataServiceList,
+  SyncListOptions as SyncListParams
 } from './types'
 
 export class PortalDataService {
@@ -341,30 +342,25 @@ export class PortalDataService {
    *
    * Skips fields that has `ShowInEditForm` set to `FALSE`
    *
-   * @param url Url
-   * @param listName List name for the project properties list
-   * @param contentTypeId Content type id for project properties
-   * @param properties Create a new item in the list with specified properties if the list was created
+   * @param params Sync list parameters
    */
   public async syncList(
-    url: string,
-    listName: string,
-    contentTypeId: string,
-    properties?: Record<string, string>
-  ): Promise<IListEnsureResult> {
-    const web = spfi(url).using(AssignFrom(this._sp.web)).web
-    const { jsomContext } = await initJsom(url, { loadTaxonomy: true })
+    params: SyncListParams
+  ): Promise<{ list: IListEnsureResult; fieldsAdded: string[] }> {
+    const fieldsAdded: string[] = []
+    const web = spfi(params.url).using(AssignFrom(this._sp.web)).web
+    const { jsomContext } = await initJsom(params.url, { loadTaxonomy: true })
     const [hubContentType, targetSiteFields, ensureList] = await Promise.all([
-      this._getHubContentType(contentTypeId),
+      this._getHubContentType(params.contentTypeId),
       this._getSiteFields(web),
-      web.lists.ensure(listName, '', 100, false, {
+      web.lists.ensure(params.listName, '', 100, false, {
         Hidden: true,
         EnableAttachments: false,
         EnableVersioning: true
       })
     ])
-    const listFields = await this.getListFields(listName, undefined, web)
-    const spList = jsomContext.web.get_lists().getByTitle(listName)
+    const listFields = await this.getListFields(params.listName, undefined, web)
+    const spList = jsomContext.web.get_lists().getByTitle(params.listName)
     for (const field of hubContentType.Fields) {
       const [[listField], [siteField]] = [
         listFields.filter((fld) => fld.InternalName === field.InternalName),
@@ -376,7 +372,7 @@ export class PortalDataService {
       ]
       if (listField) {
         Logger.log({
-          message: `(PortalDataService) (syncList) Field [${field.InternalName}] already exists on list [${listName}].`,
+          message: `(PortalDataService) (syncList) Field [${field.InternalName}] already exists on list [${params.listName}].`,
           level: LogLevel.Info
         })
         continue
@@ -384,7 +380,7 @@ export class PortalDataService {
       try {
         const [fieldLink] = hubContentType.FieldLinks.filter((fl) => fl.Name === field.InternalName)
         Logger.log({
-          message: `(PortalDataService) (syncList) Adding field [${field.InternalName}] to list [${listName}].`,
+          message: `(PortalDataService) (syncList) Adding field [${field.InternalName}] to list [${params.listName}].`,
           level: LogLevel.Info,
           data: { fieldLink, siteField: !!siteField }
         })
@@ -397,6 +393,7 @@ export class PortalDataService {
             newField.set_required(true)
             newField.updateAndPushChanges(true)
           }
+          fieldsAdded.push(siteField.InternalName)
         } else {
           const fieldToCreate = spList
             .get_fields()
@@ -410,13 +407,14 @@ export class PortalDataService {
           }
           fieldToCreate.set_title(field.Title)
           fieldToCreate.updateAndPushChanges(true)
+          fieldsAdded.push(field.InternalName)
         }
         await executeQuery(jsomContext)
       } catch (error) {}
     }
     try {
       Logger.log({
-        message: `(PortalDataService) (syncList) Attempting to add field [TemplateParameters] to list ${listName}.`,
+        message: `(PortalDataService) (syncList) Attempting to add field [TemplateParameters] to list ${params.listName}.`,
         level: LogLevel.Info
       })
       const templateParametersField = spList
@@ -429,10 +427,10 @@ export class PortalDataService {
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
     } catch {}
-    if (ensureList.created && properties) {
-      ensureList.list.items.add(properties)
+    if (ensureList.created && params.properties) {
+      ensureList.list.items.add(params.properties)
     }
-    return ensureList
+    return { list: ensureList, fieldsAdded }
   }
 
   /**
