@@ -3,7 +3,7 @@ import { find } from '@microsoft/sp-lodash-subset'
 import { AssignFrom, dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
 import { Logger, LogLevel } from '@pnp/logging'
 import { IFolder } from '@pnp/sp/folders'
-import { ICamlQuery, IList, IListEnsureResult } from '@pnp/sp/lists'
+import { ICamlQuery, IList } from '@pnp/sp/lists'
 import '@pnp/sp/presets/all'
 import { IItemUpdateResultData, spfi, SPFI } from '@pnp/sp/presets/all'
 import { PermissionKind } from '@pnp/sp/security'
@@ -31,7 +31,8 @@ import {
   IPortalDataServiceConfiguration,
   PortalDataServiceDefaultConfiguration,
   PortalDataServiceList,
-  SyncListOptions as SyncListParams
+  SyncListOptions as SyncListParams,
+  SyncListReturnType
 } from './types'
 
 export class PortalDataService {
@@ -344,10 +345,8 @@ export class PortalDataService {
    *
    * @param params Sync list parameters
    */
-  public async syncList(
-    params: SyncListParams
-  ): Promise<{ list: IListEnsureResult; fieldsAdded: string[] }> {
-    const fieldsAdded: string[] = []
+  public async syncList(params: SyncListParams): Promise<SyncListReturnType> {
+    const fieldsAdded: SPField[] = []
     const web = spfi(params.url).using(AssignFrom(this._sp.web)).web
     const { jsomContext } = await initJsom(params.url, { loadTaxonomy: true })
     const [hubContentType, targetSiteFields, ensureList] = await Promise.all([
@@ -393,7 +392,7 @@ export class PortalDataService {
             newField.set_required(true)
             newField.updateAndPushChanges(true)
           }
-          fieldsAdded.push(siteField.InternalName)
+          fieldsAdded.push(siteField)
         } else {
           const fieldToCreate = spList
             .get_fields()
@@ -407,7 +406,7 @@ export class PortalDataService {
           }
           fieldToCreate.set_title(field.Title)
           fieldToCreate.updateAndPushChanges(true)
-          fieldsAdded.push(field.InternalName)
+          fieldsAdded.push(field)
         }
         await executeQuery(jsomContext)
       } catch (error) {}

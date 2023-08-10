@@ -1,3 +1,5 @@
+import { IListEnsureResult } from '@pnp/sp/lists'
+import { SPField } from '../../models'
 import { SPFxContext } from '../../types'
 
 export type PortalDataServiceList =
@@ -57,4 +59,9 @@ export type SyncListOptions = {
   listName: string
   contentTypeId: string
   properties?: Record<string, string>
+}
+
+export type SyncListReturnType = {
+  list: IListEnsureResult
+  fieldsAdded: SPField[]
 }

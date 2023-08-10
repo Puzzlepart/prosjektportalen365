@@ -248,9 +248,9 @@ export class ProjectDataService {
         fieldValues: entity.fieldValues,
         fieldValuesText: entity.fieldValues,
         fields: entity.fields,
-        ...entity.urls,
         propertiesListId: null,
-        templateParameters: {}
+        templateParameters: {},
+        ...entity.urls
       } as IGetPropertiesData
     }
   }

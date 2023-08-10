@@ -1,4 +1,4 @@
-import { IFieldInfo } from '@pnp/sp/fields'
+import { SPField } from '../../models'
 
 export interface IGetPropertiesData {
   /**
@@ -22,12 +22,12 @@ export interface IGetPropertiesData {
   fieldValuesText?: Record<string, string>
 
   /**
-   * Entity fields
+   * Fields for the list
    */
-  fields?: IFieldInfo[]
+  fields?: SPField[]
 
   /**
-   * Properties list id
+   * Properties list ID
    */
   propertiesListId?: string
 
