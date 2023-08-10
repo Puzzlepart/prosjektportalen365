@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    UpdatingProjectPropertiesStatusText: 'Lagrer prosjektegenskaper...',
+    SynchronizingProjectPropertiesToPortfolioSiteStatusText: 'Synkroniserer prosjektegenskaper til porteføljeområdet...',
     UrlFieldUrlPlaceholder: 'Angi en nettadresse',
     UrlFieldDescriptionPlaceholder: 'Alternativ tekst',
     UnknownConfigurationName: 'Konfigurasjon uten navn',

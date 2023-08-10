@@ -4,19 +4,28 @@ import { BasePanel } from '../BasePanel'
 import { EditPropertiesPanelFooter } from './EditPropertiesPanelFooter'
 import { IEditPropertiesPanelProps } from './types'
 import { useEditPropertiesPanel } from './useEditPropertiesPanel'
+import styles from './EditPropertiesPanel.module.scss'
 
 export const EditPropertiesPanel: FC<IEditPropertiesPanelProps> = (props) => {
-  const { fields, getFieldElement, model, onSave } = useEditPropertiesPanel()
+  const { fields, getFieldElement, model, submit } = useEditPropertiesPanel()
   return (
     <BasePanel
       {...props}
-      onRenderFooterContent={() => <EditPropertiesPanelFooter onSave={onSave} model={model} />}
-    >
-      {fields.map((field, key) => {
-        const fieldElement = getFieldElement(field)
-        return fieldElement && <div key={key}>{fieldElement}</div>
-      })}
-    </BasePanel>
+      className={styles.root}
+      styles={{
+        main: {
+          overflow: 'hidden'
+        }
+      }}
+      onRenderFooterContent={() => <EditPropertiesPanelFooter submit={submit} model={model} />}
+      onRenderBody={() => (
+        <div className={styles.body}>
+          {fields.map((field, key) => {
+            const fieldElement = getFieldElement(field)
+            return fieldElement && <div key={key}>{fieldElement}</div>
+          })}
+        </div>
+      )} />
   )
 }
 

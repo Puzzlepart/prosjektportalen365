@@ -6,9 +6,12 @@ import { ProjectProperties } from '../ProjectProperties'
 
 export const AllPropertiesPanel: FC<IBasePanelProps> = (props) => {
   return (
-    <BasePanel {...props} onRenderFooterContent={() => <ClosePanelButton noMargin />}>
-      <ProjectProperties displayAllProperties />
-    </BasePanel>
+    <BasePanel
+      {...props}
+      onRenderFooterContent={() => <ClosePanelButton noMargin />}
+      onRenderBody={() => (
+        <ProjectProperties displayAllProperties />
+      )} />
   )
 }
 

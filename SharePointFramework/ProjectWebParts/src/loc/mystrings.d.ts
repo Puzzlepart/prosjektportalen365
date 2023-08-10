@@ -1,4 +1,6 @@
 declare interface IProjectWebPartsStrings {
+  UpdatingProjectPropertiesStatusText: string
+  SynchronizingProjectPropertiesToPortfolioSiteStatusText: string
   UrlFieldUrlPlaceholder: string
   UrlFieldDescriptionPlaceholder: string
   UnknownConfigurationName: any
@@ -9,7 +11,7 @@ declare interface IProjectWebPartsStrings {
   UseDynamicConfigurationOffText: string
   UseDynamicConfigurationOnText: string
   ManualConfigurationPathLabel: string
-  UseDynamicConfigurationLabel: string 
+  UseDynamicConfigurationLabel: string
   PublishReportSpinnerText: string
   PublishStatusReportSectionDataWarning: string
   AdminPageLinkLabel: string

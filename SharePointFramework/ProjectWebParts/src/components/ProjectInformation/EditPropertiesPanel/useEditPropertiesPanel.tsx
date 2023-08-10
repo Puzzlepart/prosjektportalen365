@@ -21,12 +21,12 @@ export function useEditPropertiesPanel() {
   const fields = useFields()
   const model = useModel()
   const getFieldElement = useFieldElements(model)
-  const onSave = useSubmit(model)
+  const submit = useSubmit(model)
 
   useSyncList({
     condition: context.state.activePanel === 'EditPropertiesPanel',
     refetch: true
   })
 
-  return { fields, getFieldElement, model, onSave } as const
+  return { fields, getFieldElement, model, submit } as const
 }
