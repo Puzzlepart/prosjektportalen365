@@ -14,7 +14,7 @@ import { useSubmit } from './useSubmit'
  * - `fields` - the fields to render
  * - `getFieldElement` - a function that returns the field element for a given field
  * - `model` - the model for the form
- * - `onSave` - the submit handler for the form
+ * - `submit` - the submit functions and its state
  */
 export function useEditPropertiesPanel() {
   const context = useProjectInformationContext()

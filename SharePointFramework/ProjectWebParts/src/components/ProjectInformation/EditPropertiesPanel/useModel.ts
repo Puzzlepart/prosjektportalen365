@@ -25,7 +25,11 @@ export function useModel() {
    * @param field Field to get value for
    * @param type Type of field to get value for (for parsing the value to the correct type)
    */
-  function get<T>(field: ProjectInformationField, type: ValueType = null, fallbackValue: T = null): T {
+  function get<T>(
+    field: ProjectInformationField,
+    type: ValueType = null,
+    fallbackValue: T = null
+  ): T {
     const { fieldValues, fieldValuesText } = context.state.data
     const value = (model.get(field.internalName) as string) ?? fieldValuesText[field.internalName]
     const isValueString = typeof value === 'string'

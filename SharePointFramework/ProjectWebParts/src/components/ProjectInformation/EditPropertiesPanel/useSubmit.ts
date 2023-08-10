@@ -29,7 +29,7 @@ export function useSubmit(model: ReturnType<typeof useModel>) {
     localStorage.clear()
     context.dispatch(CLOSE_PANEL())
     context.dispatch(PROPERTIES_UPDATED({ refetch: true }))
-  setSaveStatus(null)
+    setSaveStatus(null)
   }
 
   return { onSave, saveStatus }

@@ -9,6 +9,7 @@ export const ClosePanelButton: FC<IClosePanelButtonProps> = (props) => {
   const context = useProjectInformationContext()
   return (
     <DefaultButton
+      {...props}
       text={strings.CancelText}
       styles={{ root: { marginLeft: props.noMargin ? 0 : 8 } }}
       onClick={(e) => {

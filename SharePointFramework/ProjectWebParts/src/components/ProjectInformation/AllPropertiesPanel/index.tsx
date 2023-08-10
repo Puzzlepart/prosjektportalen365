@@ -9,9 +9,8 @@ export const AllPropertiesPanel: FC<IBasePanelProps> = (props) => {
     <BasePanel
       {...props}
       onRenderFooterContent={() => <ClosePanelButton noMargin />}
-      onRenderBody={() => (
-        <ProjectProperties displayAllProperties />
-      )} />
+      onRenderBody={() => <ProjectProperties displayAllProperties />}
+    />
   )
 }
 

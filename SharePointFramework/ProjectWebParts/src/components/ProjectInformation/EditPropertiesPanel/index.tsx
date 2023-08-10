@@ -25,7 +25,8 @@ export const EditPropertiesPanel: FC<IEditPropertiesPanelProps> = (props) => {
             return fieldElement && <div key={key}>{fieldElement}</div>
           })}
         </div>
-      )} />
+      )}
+    />
   )
 }
 
