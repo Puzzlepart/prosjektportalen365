@@ -12,10 +12,10 @@ export class CustomError extends Error {
    * also be specified as the third parameter.
    *
    * @param error Error object
-   * @param type Type of error (MessageBarType)
-   * @param message Custom message for the error
+   * @param type Type of error (`MessageBarType` from `@fluentui/react`)
+   * @param message Custom message for the error (optional)
    */
-  public static createError(error: Error, type: MessageBarType, message: string): CustomError {
+  public static createError(error: Error, type: MessageBarType, message: string = ''): CustomError {
     return new CustomError(error, type, message)
   }
 }
