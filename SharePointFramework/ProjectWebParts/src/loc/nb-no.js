@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    UrlFieldUrlPlaceholder: 'Angi en nettadresse',
+    UrlFieldDescriptionPlaceholder: 'Alternativ tekst',
     UnknownConfigurationName: 'Konfigurasjon uten navn',
     ManualConfigurationNotFoundOrInvalid: 'Manuell konfigurasjon for Risikomatrise ikke funnet eller har ugyldig format.',
     RiskMatrixManualConfigurationPathDefaltValue: 'standard-konfigurasjon.json',

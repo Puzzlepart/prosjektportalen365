@@ -1,4 +1,6 @@
 declare interface IProjectWebPartsStrings {
+  UrlFieldUrlPlaceholder: string
+  UrlFieldDescriptionPlaceholder: string
   UnknownConfigurationName: any
   SiteAssetsConfigurationFolder: string
   RiskMatrixConfigurationFolder: string

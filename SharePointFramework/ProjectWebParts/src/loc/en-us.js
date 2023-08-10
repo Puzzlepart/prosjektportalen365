@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    UrlFieldUrlPlaceholder: 'Enter URL',
+    UrlFieldDescriptionPlaceholder: 'Alternative text',
     AdminPageLinkLabel: 'Path to Admin page',
     AdvancedGroupName: 'Advanced',
     BarLabel: 'Bar',

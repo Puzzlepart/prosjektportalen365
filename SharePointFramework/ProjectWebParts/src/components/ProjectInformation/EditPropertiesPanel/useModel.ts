@@ -15,6 +15,8 @@ export function useModel() {
   const [model, setModel] = useState(new Map<string, any>())
   const [properties, setProperties] = useState({})
 
+  type ValueType = 'url' | 'tags' | 'date' | 'users' | 'multichoice'
+
   /**
    * Get value for field.
    *
@@ -25,21 +27,22 @@ export function useModel() {
    */
   function get<T>(
     field: ProjectInformationField,
-    type: 'tags' | 'date' | 'users' | 'multichoice' = null
+    type: ValueType = null
   ): T {
     const { fieldValues, fieldValuesText } = context.state.data
     const value = (model.get(field.internalName) as string) ?? fieldValuesText[field.internalName]
     const isValueString = typeof value === 'string'
     if (!value) return null
     if (!isValueString) return value as unknown as T
-    switch (type) {
-      case 'tags':
-        return value.split(';').map((v) => ({ key: v, name: v })) as unknown as T
-      case 'date':
-        return new Date(fieldValues[field.internalName]) as unknown as T
-      case 'multichoice':
-        return value.split(', ') as unknown as T
-      case 'users': {
+    const valueMap: Record<ValueType, () => T> = {
+      url: () => {
+        const [url, description] = value.split(', ')
+        return { url, description } as unknown as T
+      },
+      tags: () => value.split(';').map((v) => ({ key: v, name: v })) as unknown as T,
+      date: () => new Date(fieldValues[field.internalName]) as unknown as T,
+      multichoice: () => value.split(', ') as unknown as T,
+      users: () => {
         const fieldValue = fieldValues[field.internalName]
         const users = (
           (_.isArray(fieldValue) ? fieldValue : [fieldValue]) as Array<{
@@ -55,10 +58,9 @@ export function useModel() {
         }))
         return users as unknown as T
       }
-      default: {
-        return value as unknown as T
-      }
     }
+    if (valueMap[type]) return valueMap[type]()
+    else return value as unknown as T
   }
 
   /**
@@ -72,6 +74,15 @@ export function useModel() {
   const transformValue = async (value: any, field: ProjectInformationField) => {
     const propertiesList = context.props.sp.web.lists.getById(context.state.data.propertiesListId)
     switch (field.type) {
+      case 'Boolean': {
+        return [field.internalName, value]
+      }
+      case 'URL': {
+        return [field.internalName, {
+          Description: value.description,
+          Url: value.url
+        }]
+      }
       case 'TaxonomyFieldTypeMulti':
       case 'TaxonomyFieldType': {
         const textField = await propertiesList.fields

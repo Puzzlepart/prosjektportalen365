@@ -6,18 +6,22 @@ import {
   Label,
   NormalPeoplePicker,
   TagPicker,
-  TextField
+  TextField,
+  Toggle
 } from '@fluentui/react'
+import { FieldDescription } from 'pp365-shared-library/lib/components'
 import React from 'react'
 import SPDataAdapter from '../../../data'
 import { ProjectInformationField } from '../types'
 import { useModel } from './useModel'
-import { FieldDescription } from 'pp365-shared-library/lib/components'
+import strings from 'ProjectWebPartsStrings'
 
 /**
  * Hook for field elements of `EditPropertiesPanel` component. This hook is used to render field elements
  * based on field type. Supported field types are:
  *
+ * - `Boolean`
+ * - `URL`
  * - `Text`
  * - `Note`
  * - `DateTime`
@@ -32,6 +36,39 @@ import { FieldDescription } from 'pp365-shared-library/lib/components'
  */
 export function useFieldElements(model: ReturnType<typeof useModel>) {
   const fieldElements: Record<string, (field: ProjectInformationField) => JSX.Element> = {
+    Boolean: (field) => (
+      <>
+        <Toggle
+          label={field.displayName}
+          checked={model.get<boolean>(field)}
+          onChange={(_, checked) => model.set(field, checked)}
+        />
+        <FieldDescription description={field.description} />
+      </>
+    ),
+    URL: (field) => {
+      const value = model.get<{
+        url: string
+        description: string
+      }>(field, 'url') ?? { url: '', description: '' }
+      return (
+        <>
+          <Label>{field.displayName}</Label>
+          <TextField
+            placeholder={strings.UrlFieldUrlPlaceholder}
+            defaultValue={value.url}
+            onChange={(_, url) => model.set(field, { url, description: value.description })}
+          />
+          <TextField
+            placeholder={strings.UrlFieldDescriptionPlaceholder}
+            defaultValue={value.description}
+            onChange={(_, description) => model.set(field, { url: value.url, description })}
+            styles={{ root: { marginTop: 6 } }}
+          />
+          <FieldDescription description={field.description} />
+        </>
+      )
+    },
     Text: (field) => (
       <TextField
         label={field.displayName}

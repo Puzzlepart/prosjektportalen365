@@ -48,7 +48,7 @@ export const ProjectProperty: FC<IProjectPropertyProps> = ({ model, style }) => 
           </div>
         )
       }
-      case 'Url': {
+      case 'URL': {
         const [url, description] = model.getValue<string[]>(', ')
         return (
           <div>

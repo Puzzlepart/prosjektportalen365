@@ -260,7 +260,8 @@ export interface IProjectInformationData
   parentProjects?: ProjectInformationParentProject[]
 
   /**
-   * Property fields
+   * All list fields with `Gt` prefix from the project
+   * properties list.
    */
   fields?: SPField[]
 }
