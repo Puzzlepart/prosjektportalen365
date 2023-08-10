@@ -1,7 +1,6 @@
 import _ from 'underscore'
-import { ProjectInformationField } from './ProjectInformationField'
 import { IProjectInformationContext } from './context'
-import { IProjectInformationState } from './types'
+import { IProjectInformationState, ProjectInformationField } from './types'
 
 /**
  * Hook for transforming the properties to `ProjectInformationField` objects.

@@ -2,9 +2,9 @@ import { IProgressIndicatorProps } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { sleep } from 'pp365-shared-library/lib/util'
-import { ProjectInformation } from '.'
 import SPDataAdapter from '../../data'
 import { IProjectInformationContext } from './context'
+import { ProjectInformation } from './index'
 import { SET_PROGRESS } from './reducer'
 
 interface IUsePropertiesSyncParams {

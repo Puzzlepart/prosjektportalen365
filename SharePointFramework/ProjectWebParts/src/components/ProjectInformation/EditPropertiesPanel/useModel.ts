@@ -2,7 +2,7 @@ import { IPersonaSharedProps, ITag } from '@fluentui/react'
 import _ from 'lodash'
 import { DefaultCaching } from 'pp365-shared-library/lib/data'
 import { useState } from 'react'
-import { ProjectInformationField } from '../ProjectInformationField'
+import { ProjectInformationField } from '../types'
 import { useProjectInformationContext } from '../context'
 
 /**

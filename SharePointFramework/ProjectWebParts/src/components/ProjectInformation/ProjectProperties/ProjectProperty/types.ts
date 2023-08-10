@@ -1,4 +1,4 @@
-import { ProjectInformationField } from '../../ProjectInformationField'
+import { ProjectInformationField } from '../../types'
 
 export interface IProjectPropertyProps extends React.HTMLAttributes<HTMLElement> {
   /**

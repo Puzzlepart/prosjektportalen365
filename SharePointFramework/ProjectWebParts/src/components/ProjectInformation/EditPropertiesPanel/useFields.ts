@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { ProjectInformationField } from '../ProjectInformationField'
+import { ProjectInformationField } from '../types'
 import { useProjectInformationContext } from '../context'
 
 /**

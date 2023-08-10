@@ -10,13 +10,16 @@ import {
   StatusReport
 } from 'pp365-shared-library/lib/models'
 import { useEffect } from 'react'
-import { ProjectInformation } from '.'
 import SPDataAdapter from '../../data'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
-import { ProjectInformationParentProject } from './ProjectInformationParentProject'
 import { IProjectInformationContext } from './context'
+import { ProjectInformation } from './index'
 import { FETCH_DATA_ERROR, INIT_DATA } from './reducer'
-import { IProjectInformationData, IProjectInformationState } from './types'
+import {
+  IProjectInformationData,
+  IProjectInformationState,
+  ProjectInformationParentProject
+} from './types'
 import { usePropertiesTransform } from './usePropertiesTransform'
 
 /**

@@ -13,8 +13,8 @@ import strings from 'ProjectWebPartsStrings'
 import React, { FC, useEffect, useState } from 'react'
 import SPDataAdapter from '../../../data'
 import { useProjectInformationContext } from '../context'
-import { CLOSE_PANEL, OPEN_DIALOG } from '../reducer'
 import { usePropertiesSync } from '../usePropertiesSync'
+import { CLOSE_PANEL, OPEN_DIALOG } from '../reducer'
 
 export const SyncProjectDialog: FC = () => {
   const context = useProjectInformationContext()
