@@ -1,34 +1,26 @@
-import { Panel, PanelType } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
-import { useProjectInformationContext } from '../context'
-import { CLOSE_PANEL } from '../reducer'
+import { BasePanel } from '../BasePanel'
 import { EditPropertiesPanelFooter } from './EditPropertiesPanelFooter'
 import { IEditPropertiesPanel } from './types'
 import { useEditPropertiesPanel } from './useEditPropertiesPanel'
 
 export const EditPropertiesPanel: FC<IEditPropertiesPanel> = (props) => {
-  const context = useProjectInformationContext()
-  const { fields, getFieldElement, model, onSave, isOpen } = useEditPropertiesPanel()
-
+  const { fields, getFieldElement, model, onSave } = useEditPropertiesPanel()
   return (
-    <Panel
+    <BasePanel
       {...props}
-      isOpen={isOpen}
-      onDismiss={() => context.dispatch(CLOSE_PANEL())}
       onRenderFooterContent={() => <EditPropertiesPanelFooter onSave={onSave} model={model} />}
     >
       {fields.map((field, key) => {
         const fieldElement = getFieldElement(field)
         return fieldElement && <div key={key}>{fieldElement}</div>
       })}
-    </Panel>
+    </BasePanel>
   )
 }
 
 EditPropertiesPanel.defaultProps = {
-  type: PanelType.medium,
-  headerText: strings.EditProjectInformationText,
-  isLightDismiss: true,
-  closeButtonAriaLabel: strings.CloseText
+  $type: 'EditPropertiesPanel',
+  headerText: strings.EditProjectInformationText
 }

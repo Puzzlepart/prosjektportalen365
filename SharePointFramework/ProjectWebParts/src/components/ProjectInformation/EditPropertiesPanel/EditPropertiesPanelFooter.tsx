@@ -1,24 +1,19 @@
-import { DefaultButton, PrimaryButton } from '@fluentui/react'
+import { PrimaryButton } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
-import { useProjectInformationContext } from '../context'
+import { ClosePanelButton } from '../BasePanel'
 import { useModel } from './useModel'
-import { CLOSE_PANEL } from '../reducer'
 
 export const EditPropertiesPanelFooter: FC<{
   onSave: () => Promise<void>
   model: ReturnType<typeof useModel>
 }> = ({ onSave, model }) => {
-  const context = useProjectInformationContext()
   return (
     <div>
       <PrimaryButton text={strings.SaveText} onClick={onSave} disabled={!model.isChanged} />
-      <DefaultButton
-        text={strings.CancelText}
-        styles={{ root: { marginLeft: 8 } }}
+      <ClosePanelButton
         onClick={() => {
           model.reset()
-          context.dispatch(CLOSE_PANEL())
         }}
       />
     </div>

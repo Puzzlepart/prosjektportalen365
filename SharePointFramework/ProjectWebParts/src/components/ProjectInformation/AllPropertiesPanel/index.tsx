@@ -1,13 +1,18 @@
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
-import { BasePanel } from '../BasePanel'
+import { BasePanel, ClosePanelButton } from '../BasePanel'
 import { IBasePanelProps } from '../BasePanel/types'
 import { ProjectProperties } from '../ProjectProperties'
 
-export const AllPropertiesPanel: FC<IBasePanelProps> = () => {
+export const AllPropertiesPanel: FC<IBasePanelProps> = (props) => {
   return (
-    <BasePanel $type='AllPropertiesPanel' headerText={strings.ProjectPropertiesListName}>
+    <BasePanel {...props} onRenderFooterContent={() => <ClosePanelButton noMargin />}>
       <ProjectProperties displayAllProperties />
     </BasePanel>
   )
+}
+
+AllPropertiesPanel.defaultProps = {
+  $type: 'AllPropertiesPanel',
+  headerText: strings.ProjectPropertiesListName
 }

@@ -23,3 +23,5 @@ BasePanel.defaultProps = {
   isLightDismiss: true,
   closeButtonAriaLabel: strings.CloseText
 }
+
+export * from './ClosePanelButton'
