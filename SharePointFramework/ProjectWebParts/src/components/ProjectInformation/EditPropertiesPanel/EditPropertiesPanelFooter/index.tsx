@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { ClosePanelButton } from '../../BasePanel'
 import { IEditPropertiesPanelFooterProps } from './types'
 import styles from './EditPropertiesPanelFooter.module.scss'
+import { UserMessage } from 'pp365-shared-library/lib/components'
 
 /**
  * Renders the footer for the `EditPropertiesPanel` with a `<PrimaryButton />` for saving the changes,
@@ -16,11 +17,16 @@ export const EditPropertiesPanelFooter: FC<IEditPropertiesPanelFooterProps> = (p
   const isSaving = !!props.submit.saveStatus
   return (
     <div className={styles.root}>
+      {props.submit.error && (
+        <div className={styles.errorContainer}>
+          <UserMessage text={props.submit.error.customMessage} type={props.submit.error.type} />
+        </div>
+      )}
       <div className={styles.container}>
         <PrimaryButton
           text={strings.SaveText}
           onClick={props.submit.onSave}
-          disabled={!props.model.isChanged || isSaving}
+          disabled={!props.model.isChanged || isSaving || !!props.submit.error}
         />
         <ClosePanelButton
           onClick={() => {
@@ -28,9 +34,11 @@ export const EditPropertiesPanelFooter: FC<IEditPropertiesPanelFooterProps> = (p
           }}
           disabled={isSaving}
         />
-        <div className={styles.saveStatusSpinner}>
-          {isSaving && <Spinner {...props.spinner} label={props.submit.saveStatus} />}
-        </div>
+        {isSaving && (
+          <div className={styles.saveStatusSpinner}>
+            <Spinner {...props.spinner} label={props.submit.saveStatus} />
+          </div>
+        )}
       </div>
     </div>
   )

@@ -8,7 +8,7 @@ export class CustomError extends Error {
   }
 
   /**
-   * Creates a `CustomError` object from an `Error` object. A custom message can 
+   * Creates a `CustomError` object from an `Error` object. A custom message can
    * also be specified as the third parameter.
    *
    * @param error Error object

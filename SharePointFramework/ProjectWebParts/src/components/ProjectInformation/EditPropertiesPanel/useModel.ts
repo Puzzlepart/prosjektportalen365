@@ -1,9 +1,8 @@
 import { IPersonaSharedProps, ITag } from '@fluentui/react'
-import _ from 'lodash'
 import { DefaultCaching } from 'pp365-shared-library/lib/data'
 import { useState } from 'react'
-import { ProjectInformationField } from '../types'
 import { useProjectInformationContext } from '../context'
+import { ProjectInformationField } from '../types'
 
 /**
  * Hook for the `EditPropertiesPanel` model. This hook is used to get and set the values for
@@ -15,19 +14,14 @@ export function useModel() {
   const [model, setModel] = useState(new Map<string, any>())
   const [properties, setProperties] = useState({})
 
-  type ValueType = 'url' | 'tags' | 'date' | 'users' | 'multichoice'
-
   /**
    * Get value for field.
    *
-   * Supports getting values for fields of type `tags`, `date`, `users` and `multichoice`.
-   *
    * @param field Field to get value for
-   * @param type Type of field to get value for (for parsing the value to the correct type)
+   * @param fallbackValue Value to return if the field has no value
    */
   function get<T>(
     field: ProjectInformationField,
-    type: ValueType = null,
     fallbackValue: T = null
   ): T {
     const { fieldValues, fieldValuesText } = context.state.data
@@ -35,18 +29,19 @@ export function useModel() {
     const isValueString = typeof value === 'string'
     if (!value) return fallbackValue as unknown as T
     if (!isValueString) return value as unknown as T
-    const valueMap: Record<ValueType, () => T> = {
-      url: () => {
+    const valueMap: Record<string, () => T> = {
+      URL: () => {
         const [url, description] = value.split(', ')
         return { url, description } as unknown as T
       },
-      tags: () => value.split(';').map((v) => ({ key: v, name: v })) as unknown as T,
-      date: () => new Date(fieldValues[field.internalName]) as unknown as T,
-      multichoice: () => value.split(', ') as unknown as T,
-      users: () => {
+      TaxonomyFieldType: () => value.split(';').map((v) => ({ key: v, name: v })) as unknown as T,
+      TaxonomyFieldTypeMulti: () => value.split(';').map((v) => ({ key: v, name: v })) as unknown as T,
+      DateTime: () => new Date(fieldValues[field.internalName]) as unknown as T,
+      MultiChoice: () => value.split(', ') as unknown as T,
+      User: () => {
         const fieldValue = fieldValues[field.internalName]
         const users = (
-          (_.isArray(fieldValue) ? fieldValue : [fieldValue]) as Array<{
+          [fieldValue] as Array<{
             Id: number
             Title: string
             EMail: string
@@ -58,9 +53,24 @@ export function useModel() {
           imageUrl: `/_layouts/15/userphoto.aspx?size=L&username=${v.EMail}`
         }))
         return users as unknown as T
+      },
+      UserMulti: () => {
+        const fieldValue = fieldValues[field.internalName]
+        const users = (fieldValue as Array<{
+          Id: number
+          Title: string
+          EMail: string
+        }>
+        ).map<IPersonaSharedProps>((v) => ({
+          key: v.Id,
+          text: v.Title,
+          secondaryText: v.EMail,
+          imageUrl: `/_layouts/15/userphoto.aspx?size=L&username=${v.EMail}`
+        }))
+        return users as unknown as T
       }
     }
-    if (valueMap[type]) return valueMap[type]()
+    if (valueMap[field.type]) return valueMap[field.type]()
     else return value as unknown as T
   }
 

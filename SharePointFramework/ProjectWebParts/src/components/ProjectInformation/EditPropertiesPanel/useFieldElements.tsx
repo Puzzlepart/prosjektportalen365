@@ -50,7 +50,7 @@ export function useFieldElements(model: ReturnType<typeof useModel>) {
       const value = model.get<{
         url: string
         description: string
-      }>(field, 'url', { url: '', description: '' })
+      }>(field,  { url: '', description: '' })
       return (
         <>
           <Label>{field.displayName}</Label>
@@ -90,7 +90,7 @@ export function useFieldElements(model: ReturnType<typeof useModel>) {
       <>
         <DatePicker
           label={field.displayName}
-          value={model.get(field, 'date')}
+          value={model.get(field)}
           onSelectDate={(date) => model.set(field, date)}
         />
         <FieldDescription description={field.description} />
@@ -113,9 +113,9 @@ export function useFieldElements(model: ReturnType<typeof useModel>) {
           label={field.displayName}
           options={field.choices}
           multiSelect
-          selectedKeys={model.get<string[]>(field, 'multichoice')}
+          selectedKeys={model.get<string[]>(field)}
           onChange={(_, option) => {
-            const selectedKeys = model.get<string[]>(field, 'multichoice')
+            const selectedKeys = model.get<string[]>(field)
             if (option.selected) {
               model.set<string[]>(field, [...selectedKeys, option.key as string])
             } else {
@@ -139,7 +139,7 @@ export function useFieldElements(model: ReturnType<typeof useModel>) {
               selectedItems
             )) as IPersonaProps[]
           }
-          defaultSelectedItems={model.get<IPersonaProps[]>(field, 'users')}
+          defaultSelectedItems={model.get<IPersonaProps[]>(field)}
           itemLimit={1}
           onChange={(items) => model.set(field, items)}
         />
@@ -156,7 +156,7 @@ export function useFieldElements(model: ReturnType<typeof useModel>) {
               selectedItems
             )) as IPersonaProps[]
           }
-          defaultSelectedItems={model.get<IPersonaProps[]>(field, 'users')}
+          defaultSelectedItems={model.get<IPersonaProps[]>(field)}
           itemLimit={20}
           onChange={(items) => model.set(field, items)}
         />
@@ -170,7 +170,7 @@ export function useFieldElements(model: ReturnType<typeof useModel>) {
           onResolveSuggestions={async (filter, selectedItems) =>
             await SPDataAdapter.getTerms(field.getProperty('TermSetId'), filter, selectedItems)
           }
-          defaultSelectedItems={model.get<ITag[]>(field, 'tags')}
+          defaultSelectedItems={model.get<ITag[]>(field)}
           itemLimit={1}
           onChange={(items) => model.set(field, items)}
         />
@@ -184,7 +184,7 @@ export function useFieldElements(model: ReturnType<typeof useModel>) {
           onResolveSuggestions={async (filter, selectedItems) =>
             await SPDataAdapter.getTerms(field.getProperty('TermSetId'), filter, selectedItems)
           }
-          defaultSelectedItems={model.get<ITag[]>(field, 'tags')}
+          defaultSelectedItems={model.get<ITag[]>(field)}
           itemLimit={20}
           onChange={(items) => model.set(field, items)}
         />

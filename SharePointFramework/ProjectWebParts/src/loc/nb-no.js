@@ -1,7 +1,7 @@
 define([], function () {
   return {
-    UpdatingProjectPropertiesErrorText: 'Det oppstod en feil under lagring av prosjektegenskaper.',
-  SynchronizingProjectPropertiesToPortfolioSiteErrorText: 'Det oppstod en feil under synkronisering av prosjektegenskaper til porteføljeområdet.',
+    UpdatingProjectPropertiesErrorText: 'Det oppstod en feil under lagring av prosjektegenskaper. Vennligst prøv igjen senere.',
+    SynchronizingProjectPropertiesToPortfolioSiteErrorText: 'Det oppstod en feil under synkronisering av prosjektegenskaper til porteføljeområdet. Vennligst prøv igjen senere.',
     UpdatingProjectPropertiesStatusText: 'Lagrer prosjektegenskaper...',
     SynchronizingProjectPropertiesToPortfolioSiteStatusText: 'Synkroniserer prosjektegenskaper til porteføljeområdet...',
     UrlFieldUrlPlaceholder: 'Angi en nettadresse',
