@@ -431,7 +431,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             ? this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File'])
             : Promise.resolve([]),
           this._portal.getItems(
-            strings.Lists_ProjectTemplateFiles_Title,
+            strings.ProjectTemplateFilesListName,
             ProjectTemplateFile,
             {
               ViewXml: '<View></View>'
