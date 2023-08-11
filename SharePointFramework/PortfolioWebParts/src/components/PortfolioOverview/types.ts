@@ -240,15 +240,3 @@ export interface IPortfolioOverviewState
    */
   managedProperties?: string[]
 }
-
-export interface IPortfolioOverviewHashStateState {
-  /**
-   * viewId found in hash (document.location.hash)
-   */
-  viewId?: string
-
-  /**
-   * groupBy found in hash (document.location.hash)
-   */
-  groupBy?: string
-}

@@ -6,18 +6,18 @@ import { parseUrlHash } from 'pp365-shared-library/lib/util/parseUrlHash'
 import { useEffect } from 'react'
 import { IPortfolioOverviewContext } from './context'
 import { DATA_FETCHED, DATA_FETCH_ERROR, STARTING_DATA_FETCH } from './reducer'
-import { IPortfolioOverviewHashStateState, PortfolioOverviewErrorMessage } from './types'
+import { PortfolioOverviewErrorMessage } from './types'
 import { usePersistedColumns } from './usePersistedColumns'
 
 /**
  * Get current view from state - otherwise fallback to URL parameter or default view.
  *
- * @param hashState Hash state
+ * @param hashState Hash state map
  * @param context `PortfolioOverview` context - needs to be passed as a prop to the function
  * as it is not available yet using `useContext` in the function.
  */
 function getCurrentView(
-  hashState: IPortfolioOverviewHashStateState,
+  hashState: Map<string, string | number>,
   context: IPortfolioOverviewContext
 ): PortfolioOverviewView {
   if (context.state.currentView) return context.state.currentView
@@ -30,8 +30,8 @@ function getCurrentView(
     if (!currentView) {
       throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
     }
-  } else if (hashState.viewId) {
-    currentView = _.find(views, (v) => v.id.toString() === hashState.viewId)
+  } else if (hashState.has('viewId')) {
+    currentView = _.find(views, (v) => v.id === hashState.get('viewId'))
     if (!currentView) {
       throw new PortfolioOverviewErrorMessage(strings.ViewNotFoundMessage, MessageBarType.error)
     }
@@ -67,22 +67,22 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
       try {
         context.dispatch(STARTING_DATA_FETCH())
         const { configuration, pageContext, isParentProject } = context.props
-        const hashState = parseUrlHash<IPortfolioOverviewHashStateState>()
+        const hashState = parseUrlHash()
         currentView = getCurrentView(hashState, context)
         const { items, managedProperties } = isParentProject
           ? await context.props.dataAdapter.fetchDataForViewBatch(
-              currentView,
-              configuration,
-              pageContext.legacyPageContext.hubSiteId
-            )
+            currentView,
+            configuration,
+            pageContext.legacyPageContext.hubSiteId
+          )
           : await context.props.dataAdapter.fetchDataForView(
-              currentView,
-              configuration,
-              pageContext.legacyPageContext.hubSiteId
-            )
+            currentView,
+            configuration,
+            pageContext.legacyPageContext.hubSiteId
+          )
         let groupBy = currentView.groupBy
-        if (hashState.groupBy && !groupBy) {
-          groupBy = _.find(configuration.columns, (fc) => fc.fieldName === hashState.groupBy)
+        if (hashState.has('groupBy') && !groupBy) {
+          groupBy = _.find(configuration.columns, (fc) => fc.fieldName === hashState.get('groupBy'))
         }
         set(currentView.columns)
         context.dispatch(
