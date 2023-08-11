@@ -83,9 +83,9 @@ const fetchProjectStatusReportData: DataFetchFunction<
 
 /**
  * Fetch data for `ProjectInformation` component. This function is used in
- * `useProjectInformationDataFetch` hook. Data are fetched using the following 
+ * `useProjectInformationDataFetch` hook. Data are fetched using the following
  * functions:
- * 
+ *
  * - `SPDataAdapter.portal.getProjectColumns` - fetches project columns
  * - `SPDataAdapter.project.getPropertiesData` - fetches project properties data
  * - `SPDataAdapter.portal.getParentProjects` - fetches parent projects (only on frontpage)
@@ -118,9 +118,9 @@ const fetchData: DataFetchFunction<
         SPDataAdapter.project.getPropertiesData(),
         isFrontpage
           ? SPDataAdapter.portal.getParentProjects(
-            context.props.webPartContext?.pageContext?.web?.absoluteUrl,
-            ProjectInformationParentProject
-          )
+              context.props.webPartContext?.pageContext?.web?.absoluteUrl,
+              ProjectInformationParentProject
+            )
           : Promise.resolve([]),
         fetchProjectStatusReportData(context)
       ])
@@ -141,7 +141,7 @@ const fetchData: DataFetchFunction<
         field,
         columns.find(({ internalName }) => internalName === field.InternalName),
         _.isEmpty(columns)
-      ).setValue(propertiesData.fieldValuesText[field.InternalName])
+      ).setValue(propertiesData)
     )
     if (isFrontpage) {
       data.userHasEditPermission = await SPDataAdapter.checkProjectAdminPermissions(
