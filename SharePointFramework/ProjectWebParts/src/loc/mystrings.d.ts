@@ -1,4 +1,5 @@
 declare interface IProjectWebPartsStrings {
+  SaveText: string
   ErrorBoundaryFallbackDescription: string
   ErrorBoundaryFallbackText: string
   UpdatingProjectPropertiesErrorText: string
@@ -160,6 +161,7 @@ declare interface IProjectWebPartsStrings {
   SaveColorConfigurationText: string
   SettingsGroupName: string
   ShowAllProjectInformationText: string
+  ShowFieldExternalUsersOffText: string
   ShowFieldExternalUsersOnText: string
   ShowFilterButtonLabel: string
   ShowInfoMessageLabel: string
