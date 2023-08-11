@@ -89,7 +89,7 @@ const fetchProjectStatusReportData: DataFetchFunction<
  * functions:
  *
  * - `SPDataAdapter.portal.getProjectColumns` - fetches project columns
- * - `SPDataAdapter.project.getPropertiesData` - fetches project properties data
+ * - `SPDataAdapter.project.getProjectInformationData` - fetches project properties data
  * - `SPDataAdapter.portal.getParentProjects` - fetches parent projects (only on frontpage)
  * - `fetchProjectStatusReportData` - fetches project status reports, sections and column config
  *
@@ -117,7 +117,7 @@ const fetchData: DataFetchFunction<
     const [columns, propertiesData, parentProjects, [reports, sections, columnConfig]] =
       await Promise.all([
         SPDataAdapter.portal.getProjectColumns(),
-        SPDataAdapter.project.getPropertiesData(),
+        SPDataAdapter.project.getProjectInformationData(),
         isFrontpage
           ? SPDataAdapter.portal.getParentProjects(
               context.props.webPartContext?.pageContext?.web?.absoluteUrl,

@@ -1,5 +1,5 @@
 import { stringIsNullOrEmpty } from '@pnp/core'
-import { IGetPropertiesData } from '../services'
+import { IProjectInformationData } from '../services/ProjectDataService/types'
 import { ProjectInformationField } from './ProjectInformationField'
 
 export class ProjectInformationFieldValue {
@@ -10,7 +10,7 @@ export class ProjectInformationFieldValue {
 
   /**
    * The text value of the field, from the current value
-   * in the edit form, or from `FieldValuesText` in 
+   * in the edit form, or from `FieldValuesText` in
    * `IGetPropertiesData`
    */
   public value: string
@@ -30,14 +30,18 @@ export class ProjectInformationFieldValue {
   /**
    * Parses the field value from `IGetPropertiesData`, and
    * returns a new `ProjectInformationFieldValue` instance.
-   * 
-   * @param propertiesData Properties data from `ProjectDataService.getProperties`
+   *
+   * @param data Properties data from `ProjectDataService.getProjectInformationData`
    * @param field Field instance
    * @param currentValue Current value for the field if it's being edited
    */
-  public static parse(propertiesData: IGetPropertiesData, field: ProjectInformationField, currentValue = null) {
-    const textValue = currentValue ?? propertiesData.fieldValuesText[field.internalName]
-    const value = propertiesData.fieldValues[field.internalName]
+  public static parse(
+    data: IProjectInformationData,
+    field: ProjectInformationField,
+    currentValue = null
+  ) {
+    const textValue = currentValue ?? data.fieldValuesText[field.internalName]
+    const value = data.fieldValues[field.internalName]
     return new ProjectInformationFieldValue(textValue, value)
   }
 }

@@ -4,16 +4,18 @@ import { ConsoleListener, Logger } from '@pnp/logging'
 import '@pnp/sp/presets/all'
 import { IFieldInfo, IWeb, SPFI, spfi } from '@pnp/sp/presets/all'
 import { DefaultCaching, createSpfiInstance } from '../../data'
-import { ISPList } from '../../interfaces/ISPList'
 import { ChecklistItemModel, ProjectPhaseChecklistData, ProjectPhaseModel } from '../../models'
-import { makeUrlAbsolute } from '../../util/makeUrlAbsolute'
 import { tryParseJson } from '../../util/tryParseJson'
-import { IProjectInformationData, IProjectDataServiceParams, ILocalProjectInformationItemContext } from './types'
+import {
+  ILocalProjectInformationItemContext,
+  IProjectDataServiceParams,
+  IProjectInformationData
+} from './types'
 
 export class ProjectDataService {
   private _storage: IPnPClientStore
   private _storageKeys: Record<string, string> = {
-    _getPropertyItemContext: '{0}_propertyitemcontext'
+    _getLocalProjectInformationItemContext: '{0}_propertyitemcontext'
   }
   private _sp: SPFI
   public web: IWeb
@@ -61,26 +63,26 @@ export class ProjectDataService {
    */
   private async _getLocalProjectInformationItemContext(): Promise<ILocalProjectInformationItemContext> {
     const context: Partial<ILocalProjectInformationItemContext> = await this._storage.getOrPut(
-      this.getStorageKey('_getPropertyItemContext'),
+      this.getStorageKey('_getLocalProjectInformationItemContext'),
       async () => {
         try {
           this._logInfo(
             `Checking if list ${this._params.propertiesListName} exists in web.`,
-            '_getPropertyItemContext'
+            '_getLocalProjectInformationItemContext'
           )
           const [list] = await this.web.lists
             .filter(`Title eq '${this._params.propertiesListName}'`)
-            .select('Id', 'DefaultEditFormUrl')<ISPList[]>()
+            .select('Id')()
           if (!list) {
             this._logInfo(
               `List ${this._params.propertiesListName} does not exist in web.`,
-              '_getPropertyItemContext'
+              '_getLocalProjectInformationItemContext'
             )
             return null
           }
           this._logInfo(
             `Checking if there's a entry in list ${this._params.propertiesListName}.`,
-            '_getPropertyItemContext'
+            '_getLocalProjectInformationItemContext'
           )
           const [item] = await this.web.lists.getById(list.Id).items.select('Id').top(1)<
             { Id: number }[]
@@ -88,18 +90,17 @@ export class ProjectDataService {
           if (!item) {
             this._logInfo(
               `No entry found in list ${this._params.propertiesListName}.`,
-              '_getPropertyItemContext'
+              '_getLocalProjectInformationItemContext'
             )
             return null
           }
           this._logInfo(
             `Entry with ID ${item.Id} found in list ${this._params.propertiesListName}.`,
-            '_getPropertyItemContext'
+            '_getLocalProjectInformationItemContext'
           )
           return {
             itemId: item.Id,
-            listId: list.Id,
-            defaultEditFormUrl: list.DefaultEditFormUrl
+            listId: list.Id
           }
         } catch (error) {
           return null
@@ -139,7 +140,6 @@ export class ProjectDataService {
    * - `fieldValuesText`: Field values in text format
    * - `fieldValues`: Field values in object format
    * - `fields`: All fields in the list
-   * - `editFormUrl`: Edit form URL including generated source URL
    * - `versionHistoryUrl`: Version history URL
    * - `propertiesListId`: List ID of the properties list
    *
@@ -148,12 +148,8 @@ export class ProjectDataService {
    * @remarks The queries `ctx.item.fieldValuesAsText()` and `ctx.item()` needs to be run
    * separately, as expanding `ctx.item()` with `FieldValuesAsText` will result in
    * corrupt data.
-   *
-   * @param sourceUrl Source url to append to edit form url
    */
-  private async _getLocalProjectInformationItem(
-    sourceUrl: string = document.location.href
-  ): Promise<IProjectInformationData> {
+  private async _getLocalProjectInformationItem(): Promise<IProjectInformationData> {
     try {
       const ctx = await this._getLocalProjectInformationItemContext()
       if (!ctx) return null
@@ -173,7 +169,7 @@ export class ProjectDataService {
         // eslint-disable-next-line quotes
         .filter("substringof('Gt', InternalName)")()
       const userFields = fields.filter((fld) => fld.TypeAsString.indexOf('User') === 0)
-      const [fieldValuesText, fieldValues, welcomePageUrl] = await Promise.all([
+      const [fieldValuesText, fieldValues] = await Promise.all([
         ctx.item.fieldValuesAsText(),
         ctx.item
           .select(
@@ -182,8 +178,7 @@ export class ProjectDataService {
             ...userFields.map(({ InternalName }) => `${InternalName}/Title`),
             ...userFields.map(({ InternalName }) => `${InternalName}/EMail`)
           )
-          .expand(...userFields.map((fld) => fld.InternalName))(),
-        this.getWelcomePage()
+          .expand(...userFields.map((fld) => fld.InternalName))()
       ])
 
       const propertiesData: IProjectInformationData = {
@@ -193,15 +188,6 @@ export class ProjectDataService {
         versionHistoryUrl: '{0}/_layouts/15/versions.aspx?list={1}&ID={2}',
         propertiesListId: ctx.listId
       }
-
-      const modifiedSourceUrl = !sourceUrl.includes(welcomePageUrl)
-        ? sourceUrl
-            .replace('#syncproperties=1', `/${welcomePageUrl}#syncproperties=1`)
-            .replace('//SitePages', '/SitePages')
-        : sourceUrl
-      propertiesData.editFormUrl = makeUrlAbsolute(
-        `${ctx.defaultEditFormUrl}?ID=${ctx.itemId}&Source=${encodeURIComponent(modifiedSourceUrl)}`
-      )
       propertiesData.versionHistoryUrl = format(
         propertiesData.versionHistoryUrl,
         this._params.webUrl,
@@ -215,18 +201,25 @@ export class ProjectDataService {
   }
 
   /**
-   * Get properties data for the site/web.
+   * Get project information data from the local project information item, with fallback
+   * to the item in the portal site.
+   *
+   * Returns the following properties:
+   * - `fieldValuesText`: Field values in text format
+   * - `fieldValues`: Field values in object format
+   * - `fields`: All fields in the list
+   * - `versionHistoryUrl`: Version history URL
+   * - `propertiesListId`: List ID of the properties list
+   * - `templateParameters`: Template parameters
    */
   public async getProjectInformationData(): Promise<IProjectInformationData> {
-    const propertyItem = await this._getLocalProjectInformationItem(
-      `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
-    )
-    if (propertyItem) {
-      const templateParameters = tryParseJson(propertyItem.fieldValuesText.TemplateParameters, {})
+    const item = await this._getLocalProjectInformationItem()
+    if (item) {
+      const templateParameters = tryParseJson(item.fieldValuesText.TemplateParameters, {})
       this._logInfo('Local property item found.', 'getPropertiesData')
       return {
-        ...propertyItem,
-        propertiesListId: propertyItem.propertiesListId,
+        ...item,
+        propertiesListId: item.propertiesListId,
         templateParameters
       } as IProjectInformationData
     } else {
@@ -405,4 +398,4 @@ export class ProjectDataService {
   }
 }
 
-export { IProjectInformationData as IGetPropertiesData }
+export * from './types'

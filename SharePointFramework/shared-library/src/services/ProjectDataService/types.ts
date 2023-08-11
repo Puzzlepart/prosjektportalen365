@@ -10,11 +10,6 @@ import { SPFxContext } from '../../types'
  */
 export interface IProjectInformationData {
   /**
-   * EditForm url
-   */
-  editFormUrl?: string
-
-  /**
    * Version history url
    */
   versionHistoryUrl?: string
@@ -49,10 +44,24 @@ export interface IProjectInformationData {
  * Local project information item context.
  */
 export interface ILocalProjectInformationItemContext {
+  /**
+   * Item ID
+   */
   itemId?: number
+
+  /**
+   * List ID in GUID format
+   */
   listId?: string
-  defaultEditFormUrl?: string
+
+  /**
+   * List instance from `@pnp/sp/lists`
+   */
   list?: IList
+
+  /**
+   * Item instance from `@pnp/sp/items`
+   */
   item?: IItem
 }
 
@@ -87,4 +96,3 @@ export interface IProjectDataServiceParams {
    */
   logLevel?: LogLevel
 }
-

@@ -10,8 +10,7 @@ import { ProjectAdminRoleType } from '../../models'
 import { PortalDataService } from '../../services/PortalDataService'
 import { SPFxContext } from '../../types'
 import { createSpfiInstance } from '../createSpfiInstance'
-import { ISPDataAdapterBaseConfiguration } from './ISPDataAdapterBaseConfiguration'
-import { ProjectAdminPermission } from './ProjectAdminPermission'
+import { ISPDataAdapterBaseConfiguration, ProjectAdminPermission } from './types'
 
 export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   /**
@@ -265,4 +264,4 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   }
 }
 
-export { ISPDataAdapterBaseConfiguration }
+export * from './types'

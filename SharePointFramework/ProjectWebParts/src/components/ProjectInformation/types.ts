@@ -1,11 +1,14 @@
 /* eslint-disable max-classes-per-file */
 import {
+  IUserMessageProps,
   IBaseWebPartComponentProps,
-  IBaseWebPartComponentState
-} from 'pp365-shared-library/lib/components/BaseWebPartComponent/types'
-import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage'
-import { ProjectColumn, ProjectInformationField, ProjectInformationParentProject, SPField } from 'pp365-shared-library/lib/models'
-import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDataService'
+  IBaseWebPartComponentState,
+  ProjectColumn,
+  ProjectInformationField,
+  ProjectInformationParentProject,
+  SPField,
+  IProjectInformationData
+} from 'pp365-shared-library/lib'
 import { IProjectStatusData } from '../ProjectStatus'
 import { ActionType } from './Actions/types'
 import { IProgressDialogProps } from './ProgressDialog/types'
@@ -157,8 +160,8 @@ export interface IProjectInformationState
 }
 
 export interface IProjectInformationData
-  extends ProjectDataService.IGetPropertiesData,
-  Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {
+  extends IProjectInformationData,
+    Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {
   /**
    * Column configuration
    */
