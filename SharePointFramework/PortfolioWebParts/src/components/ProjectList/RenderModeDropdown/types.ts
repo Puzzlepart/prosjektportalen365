@@ -1,22 +1,20 @@
-import { IDropdownOption, IDropdownProps, IIconProps } from '@fluentui/react'
+import { GridFilled, TextBulletListSquareFilled } from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectListRenderMode } from '../types'
 
-export const TILE_OPTION = {
-  key: 'tiles',
+export const tileOption = {
+  value: 'tiles',
   text: strings.RenderModeTilesText,
-  data: { iconProps: { iconName: 'Tiles' } }
-} as RenderModeDropdownOption
+  icon: GridFilled
+}
 
-export const LIST_OPTION = {
-  key: 'list',
+export const listOption = {
+  value: 'list',
   text: strings.RenderModeListText,
-  data: { iconProps: { iconName: 'PageList' } }
-} as RenderModeDropdownOption
+  icon: TextBulletListSquareFilled
+}
 
-export type RenderModeDropdownOption = IDropdownOption<{ iconProps: IIconProps }>
-
-export interface IRenderModeDropdownProps extends Omit<IDropdownProps, 'options' | 'onChange'> {
+export interface IRenderModeDropdownProps {
   renderAs: ProjectListRenderMode
   onChange: (renderMode: ProjectListRenderMode) => void
 }

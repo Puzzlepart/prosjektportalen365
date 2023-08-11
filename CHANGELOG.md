@@ -1,9 +1,13 @@
 Formatet er basert på [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
+Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
 ## 1.9.0 - TBA
+
+I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Prosjektportalen, flere av komponentene er blitt oppdatert og fått nytt utseende og tilpasningsmuligheter. Sjekk ut [release notes](./releasenotes/1.9.0.md) for oversikt. Noen av de mest omfattende er:
+
+- #### Prosjektutlisting (forsiden av Prosjektportalen)
 
 ### Ny funksjonalitet
 

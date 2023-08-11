@@ -1,36 +1,44 @@
-@import '~@fluentui/react/dist/sass/References.scss';
-.root {
-    @include ms-Grid;
-    .container {
-        @include ms-Grid-row;
+@import "~@fluentui/react/dist/sass/References.scss";
 
-        .searchBox {
-            @include ms-Grid-col;
-            @include ms-sm8;
-            @include ms-font-m;
-            margin-top: 8px;
-        }
+.projectList {
+  .tabs {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 15px 0px;
+    row-gap: 20px;
+    flex-direction: row;
+  }
 
-        .projectDisplaySelect {
-            @include ms-Grid-col;
-            @include ms-sm12;
-            @include ms-font-m;
-            margin-top: -7px;
-        }
+  .commandBar {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
 
-        .emptyMessage {
-            @include ms-Grid-col;
-            @include ms-sm12;
-            margin: 15px 0 0 0;
-        }
+    .search {
+      width: 100%;
+      max-width: 820px;
 
-        .projects {
-            @include ms-Grid-col;
-            @include ms-sm12;
-            margin: 10px 0 0 0;
-            display: flex;
-            flex-wrap: wrap;
-            flex-direction: row;
-        }
+      .searchBox {
+        box-shadow: var(--shadow2);
+        width: inherit;
+        max-width: inherit;
+      }
     }
+  }
+
+  .emptyMessage {
+    flex-direction: column;
+    margin: 30px 0 0 0;
+  }
+
+  .projects {
+    flex-direction: column;
+    margin: 10px 0 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 12px;
+  }
 }

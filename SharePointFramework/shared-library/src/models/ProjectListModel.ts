@@ -1,4 +1,4 @@
-import { IPersonaSharedProps } from '@fluentui/react'
+import { AvatarProps } from '@fluentui/react-components'
 
 export class ProjectListModel {
   /**
@@ -21,6 +21,7 @@ export class ProjectListModel {
    *
    * Can be one of the following:
    * - `Aktiv`
+   * - `Avventer`
    * - `Avsluttet`
    */
   public lifecycleStatus?: string
@@ -53,12 +54,12 @@ export class ProjectListModel {
   /**
    * The project manager properties.
    */
-  public manager?: IPersonaSharedProps
+  public manager?: AvatarProps
 
   /**
    * The project owner properties.
    */
-  public owner?: IPersonaSharedProps
+  public owner?: AvatarProps
 
   /**
    * The project logo URL.
@@ -77,6 +78,9 @@ export class ProjectListModel {
    */
   public hasUserAccess?: boolean
 
+  /**
+   * Project data
+   */
   public data?: any[]
 
   /**
@@ -88,6 +92,11 @@ export class ProjectListModel {
    * The project is a program project.
    */
   public isProgram?: boolean
+
+  /**
+   * Template used for provisioning the project
+   */
+  public template?: string
 
   /**
    * Creates a new instance of ProjectListModel
@@ -107,5 +116,6 @@ export class ProjectListModel {
     this.endDate = item.GtEndDate
     this.isParent = item.GtIsParentProject
     this.isProgram = item.GtIsProgram
+    this.template = item.GtProjectTemplate
   }
 }

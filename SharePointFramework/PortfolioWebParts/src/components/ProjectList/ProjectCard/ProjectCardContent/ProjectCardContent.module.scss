@@ -1,20 +1,40 @@
-@import '~@fluentui/react/dist/sass/References.scss';
+@import "~@fluentui/react/dist/sass/References.scss";
 
-.root {
-  .phase {
-    color: rgb(51, 51, 51);
-    font-weight: 100;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-align: center;
-    border-top: 1px solid #dedede;
-    border-bottom: 1px solid #dedede;
-    padding: 7px 7px 7px 7px;
-    margin: 7px 0 7px 0;
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  overflow: hidden;
+
+  .menuItem {
+    cursor: default !important;
+    padding: var(--spacingVerticalSNudge) var(--spacingHorizontalXS);
   }
 
-  .personaContainer {
-    margin: 12px 0 12px 0;
-    padding: 0 15px 0 15px;
+  div > .menuItem {
+    cursor: default !important;
+  }
+
+  .serviceArea {
+    height: 24px;
+    .tagGroup {
+      display: flex;
+    }
+  }
+
+  .type {
+    height: 24px;
+    .tagGroup {
+      display: flex;
+    }
+  }
+}
+
+.tag {
+  cursor: default !important;
+
+  button {
+    cursor: default !important;
   }
 }

@@ -1,24 +1,28 @@
-import { IButtonProps } from '@fluentui/react/lib/Button'
 import { createContext } from 'react'
 import { IProjectListProps } from '../types'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
+import { ButtonProps } from '@fluentui/react-components'
 
 export interface IProjectCardContext
-  extends Pick<IProjectListProps, 'showProjectLogo' | 'showProjectOwner' | 'showProjectManager'> {
+  extends Pick<
+    IProjectListProps,
+    | 'showProjectLogo'
+    | 'showProjectOwner'
+    | 'showProjectManager'
+    | 'showProjectServiceArea'
+    | 'showProjectType'
+    | 'showProjectPhase'
+    | 'useDynamicColors'
+  > {
   /**
    * Project model
    */
   project?: ProjectListModel
 
   /**
-   * Should the title be truncated
-   */
-  shouldTruncateTitle?: boolean
-
-  /**
    * Actions to display in the footer of the card
    */
-  actions?: IButtonProps[]
+  actions?: ButtonProps[]
 
   /**
    * Controls when the shimmer is swapped with actual data through an animated transition

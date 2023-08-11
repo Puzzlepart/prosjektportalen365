@@ -1,51 +1,67 @@
 import strings from 'PortfolioWebPartsStrings'
-import { IProjectListView } from './types'
+import { IProjectListVertical } from './types'
+import {
+  CubeFilled,
+  BoxMultipleFilled,
+  BoxMultipleRegular,
+  CubeRegular,
+  LockOpenFilled,
+  LockOpenRegular,
+  PersonCircleFilled,
+  PersonCircleRegular,
+  bundleIcon
+} from '@fluentui/react-icons'
 
 /**
- * View configurations for `ProjectList`.
+ * Vertical configurations for `ProjectList`.
  *
- * The following views are available:
+ * The following verticals are available:
  * - `projects_access`: Projects the current user has access to
  * - `my_projects`: Projects the current user is a member of
- * - `all_projects`: All projects
+ * - `all_projects`: All projects (not available for users with guest access)
  * - `parent_projects`: Parent projects (only available for Portfolio Managers and users with access to the project)
  * - `program_projects`: Program projects (only available for Portfolio Managers and users with access to the project)
  */
-export const ProjectListViews: IProjectListView[] = [
+export const ProjectListVerticals: IProjectListVertical[] = [
   {
-    itemKey: 'projects_access',
-    headerText: strings.ProjectsAccessHeaderText,
-    itemIcon: 'ViewList',
+    key: 'projects_access',
+    value: 'projects_access',
+    text: strings.ProjectsAccessHeaderText,
+    icon: bundleIcon(LockOpenFilled, LockOpenRegular),
     searchBoxPlaceholder: strings.ProjectsAccessSearchBoxPlaceholderText,
     filter: (project) => project.hasUserAccess
   },
   {
-    itemKey: 'my_projects',
-    headerText: strings.MyProjectsHeaderText,
-    itemIcon: 'FabricUserFolder',
+    key: 'my_projects',
+    value: 'my_projects',
+    text: strings.MyProjectsHeaderText,
+    icon: bundleIcon(PersonCircleFilled, PersonCircleRegular),
     searchBoxPlaceholder: strings.MyProjectsSearchBoxPlaceholderText,
     filter: (project) => project.isUserMember
   },
   {
-    itemKey: 'all_projects',
-    headerText: strings.AllProjectsHeaderText,
-    itemIcon: 'AllApps',
+    key: 'all_projects',
+    value: 'all_projects',
+    text: strings.AllProjectsHeaderText,
+    icon: bundleIcon(CubeFilled, CubeRegular),
     searchBoxPlaceholder: strings.AllProjectsSearchBoxPlaceholderText,
     filter: (_, state) => state.isUserInPortfolioManagerGroup,
     isHidden: (state) => !state.isUserInPortfolioManagerGroup
   },
   {
-    itemKey: 'parent_projects',
-    headerText: strings.ParentProjectsHeaderText,
-    itemIcon: 'ProductVariant',
+    key: 'parent_projects',
+    value: 'parent_projects',
+    text: strings.ParentProjectsHeaderText,
+    icon: bundleIcon(BoxMultipleFilled, BoxMultipleRegular),
     searchBoxPlaceholder: strings.ParentProjectsSearchBoxPlaceholderText,
     filter: (project, state) =>
       project.isParent && (state.isUserInPortfolioManagerGroup || project.hasUserAccess)
   },
   {
-    itemKey: 'program_projects',
-    headerText: strings.ProgramProjectsHeaderText,
-    itemIcon: 'ProductList',
+    key: 'program_projects',
+    value: 'program_projects',
+    text: strings.ProgramProjectsHeaderText,
+    icon: bundleIcon(BoxMultipleFilled, BoxMultipleRegular),
     searchBoxPlaceholder: strings.ProgramSearchBoxPlaceholderText,
     filter: (project, state) =>
       project.isProgram && (state.isUserInPortfolioManagerGroup || project.hasUserAccess)

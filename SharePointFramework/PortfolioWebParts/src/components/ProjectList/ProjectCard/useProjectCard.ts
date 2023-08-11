@@ -1,8 +1,8 @@
-import { IDocumentCardProps } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import { useContext, useState } from 'react'
 import { ProjectCardContext } from './context'
 import styles from './ProjectCard.module.scss'
+import { CardProps } from '@fluentui/react-components'
 
 /**
  * Component logic hook for `ProjectCard`
@@ -10,7 +10,7 @@ import styles from './ProjectCard.module.scss'
 export function useProjectCard() {
   const context = useContext(ProjectCardContext)
   const [isImageLoaded, setIsImageLoaded] = useState(!context.project.logo)
-  const documentCardProps: IDocumentCardProps = {
+  const documentCardProps: Omit<CardProps, 'onClickHref'> & { onClickHref: string } = {
     title: '',
     onClickHref: context.project.url,
     className: styles.root,
