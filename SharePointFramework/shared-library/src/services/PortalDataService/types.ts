@@ -54,7 +54,7 @@ export type GetStatusReportsOptions = {
   useCaching?: boolean
 }
 
-export type SyncListOptions = {
+export type SyncListParams = {
   url: string
   listName: string
   contentTypeId: string

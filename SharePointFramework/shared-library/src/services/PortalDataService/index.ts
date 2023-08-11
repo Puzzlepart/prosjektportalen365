@@ -31,7 +31,7 @@ import {
   IPortalDataServiceConfiguration,
   PortalDataServiceDefaultConfiguration,
   PortalDataServiceList,
-  SyncListOptions as SyncListParams,
+  SyncListParams,
   SyncListReturnType
 } from './types'
 
