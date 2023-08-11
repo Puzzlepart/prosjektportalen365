@@ -7,14 +7,14 @@ declare interface IPortfolioWebPartsStrings {
   BarLabel: string
   BooleanNo: string
   BooleanYes: string
+  CancelButtonLabel: string
   ChartConfigurationListNameLabel: string
   ChartErrorText: string
-  CancelButtonLabel: string
   ColumnConfigListNameLabel: string
   ColumnPersistRenderGloballyFieldDescription: string
   ColumnPersistRenderGloballyFieldLabel: string
   ColumnRenderDataTypePropertiesHeaderText: string
-  ColumnRenderDescription: ReactNode
+  ColumnRenderDescription: string
   ColumnRenderLabel: string
   ColumnRenderOptionBoolean: string
   ColumnRenderOptionBooleanFalse: string
@@ -35,6 +35,7 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionNote: string
   ColumnRenderOptionNumber: string
   ColumnRenderOptionPercentage: string
+  ColumnRenderOptionProjectInformationModal: string
   ColumnRenderOptionTags: string
   ColumnRenderOptionTagsValueSeparatorDescription: string
   ColumnRenderOptionTagsValueSeparatorLabel: string
@@ -47,7 +48,7 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionUrlOpenInNewTabLabel: string
   ColumnRenderOptionUser: string
   ColumnSettingsDisabledTooltip: string
-  ColumnSettingsLabel: any
+  ColumnSettingsLabel: string
   ColumnsListNameLabel: string
   ColumnVisibilityDescription: string
   ColumnVisibilityLabel: string
@@ -75,6 +76,8 @@ declare interface IPortfolioWebPartsStrings {
   DataSourceLabel: string
   DataSourceLevelDescription: string
   DataSourceLevelLabel: string
+  DataSourceLevelPortfolio: string
+  DataSourceLevelProject: string
   DataSourceListName: string
   DataSourceNotFound: string
   DefaultDataSourceViewLabel: string
@@ -86,9 +89,10 @@ declare interface IPortfolioWebPartsStrings {
   DisplayNameDescription: string
   DisplayNameLabel: string
   EditColumnHeaderText: string
-  EditColumnLabel: any
+  EditColumnLabel: string
   EditViewColumnsPanelHeaderText: string
   EditViewColumnsPanelHelpText: string
+  EditViewHeaderText: string
   FiltersString: string
   FilterText: string
   GeneralGroupName: string
@@ -117,6 +121,7 @@ declare interface IPortfolioWebPartsStrings {
   MeasurementValueLabel: string
   MinWidthDescription: string
   MinWidthLabel: string
+  ModalColumnEmptyListText: string
   MoveLeftLabel: string
   MoveRightLabel: string
   MyProjectsHeaderText: string

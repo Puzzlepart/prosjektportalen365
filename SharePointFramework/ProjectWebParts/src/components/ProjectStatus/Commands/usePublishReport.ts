@@ -21,7 +21,7 @@ export function usePublishReport() {
   const captureReportSnapshot = useCaptureReportSnapshot()
   return async (): Promise<void> => {
     const portalDataService = await new PortalDataService().configure({
-      pageContext: context.props.pageContext
+      spfxContext: context.props.webPartContext
     })
     if (!context.state.isPublishing) {
       try {

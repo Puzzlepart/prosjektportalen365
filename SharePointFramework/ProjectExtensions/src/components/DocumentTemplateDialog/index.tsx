@@ -7,7 +7,6 @@ import {
   PrimaryButton,
   Selection
 } from '@fluentui/react'
-import { FileAddResult } from '@pnp/sp'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { useReducer } from 'react'
 import { isEmpty } from 'underscore'
@@ -30,6 +29,7 @@ import reducer, {
 import { SelectScreen } from './SelectScreen'
 import { TargetFolderScreen } from './TargetFolderScreen'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogProps } from './types'
+import { IFileAddResult } from '@pnp/sp/files'
 
 export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   const [state, dispatch] = useReducer(reducer, initState())
@@ -44,8 +44,8 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
    */
   async function onStartCopy(templates: TemplateItem[]): Promise<void> {
     dispatch(START_COPY())
-    const folder = SPDataAdapter.sp.web.getFolderByServerRelativeUrl(state.targetFolder)
-    const filesAdded: FileAddResult[] = []
+    const folder = SPDataAdapter.sp.web.getFolderByServerRelativePath(state.targetFolder)
+    const filesAdded: IFileAddResult[] = []
 
     for (let i = 0; i < templates.length; i++) {
       const template = templates[i]

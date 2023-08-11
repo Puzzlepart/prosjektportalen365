@@ -75,6 +75,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
                         label={col.name}
                         checked={col.data.isSelected}
                         onChange={(_event, checked) => onChange(col, checked)}
+                        disabled={col.data.isLocked}
                       />
                       <div className={styles.columnItemActions}>
                         <ActionButton

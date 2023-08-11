@@ -26,6 +26,10 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
+      - name: Set sha_short
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ vars.NODE_VERSION }}
@@ -38,6 +42,8 @@ jobs:
         with:
           name: release-package-test
           path: release
+    outputs:
+      sha_short: ${{ steps.vars.outputs.sha_short }}
 
   upgrade_channel_test:
     needs: [build_release_package_test]

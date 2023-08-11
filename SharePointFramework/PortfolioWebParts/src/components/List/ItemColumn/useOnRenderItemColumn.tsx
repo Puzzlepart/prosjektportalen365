@@ -1,8 +1,7 @@
 import { IColumn } from '@fluentui/react'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import { ProjectColumnConfigDictionaryItem, getObjectValue as get } from 'pp365-shared-library'
 import React, { ReactNode, createElement, useMemo } from 'react'
-import { IListProps } from '../types'
 import { ConfigColumn } from './ConfigColumn'
 import { TitleColumn } from './TitleColumn'
 import { ColumnRenderComponentRegistry, useColumnRenderComponentRegistry } from './registry'
@@ -16,13 +15,8 @@ import { IRenderItemColumnProps } from './types'
  *
  * @param item Item to render the value for
  * @param column Column to render the value for
- * @param props Props for the component `<List />`
  */
-function renderItemColumn(
-  item: Record<string, any>,
-  column: IColumn,
-  props: IListProps
-): ReactNode {
+function renderItemColumn(item: Record<string, any>, column: IColumn): ReactNode {
   if (!column.fieldName) return null
   if (column.onRender) return column.onRender(item, undefined, column)
   if (!stringIsNullOrEmpty(column['fieldNameDisplay'])) {
@@ -35,13 +29,7 @@ function renderItemColumn(
   }
 
   if (column.fieldName === 'Title' && column['dataType'] === 'text') {
-    return (
-      <TitleColumn
-        item={item}
-        renderProjectInformationPanel={props.renderTitleProjectInformationPanel}
-        webPartContext={props.webPartContext}
-      />
-    )
+    return <TitleColumn item={item} />
   }
 
   const columnRenderProps: IRenderItemColumnProps = {
@@ -72,10 +60,10 @@ function renderItemColumn(
  * column render options for data types that doesn't have a custom
  * render component.
  */
-export const useOnRenderItemColumn = (props: IListProps) => {
+export const useOnRenderItemColumn = () => {
   useColumnRenderComponentRegistry()
   return useMemo(
-    () => (item?: any, _index?: number, column?: IColumn) => renderItemColumn(item, column, props),
-    [props]
+    () => (item?: any, _index?: number, column?: IColumn) => renderItemColumn(item, column),
+    []
   )
 }

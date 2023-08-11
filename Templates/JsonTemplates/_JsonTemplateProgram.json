@@ -500,11 +500,31 @@
             "Title": "{{ClientSidePages_Home_Title}}",
             "PageLayoutType": "Home",
             "CommentsDisabled": true,
+            "VerticalSection": [
+                {
+                    "Id": "{{ControlId_ProjectInformationWebPart}}",
+                    "Properties": {
+                        "title": "Programinformasjon",
+                        "statusReportsCount": 0,
+                        "statusReportsHeader": "Prosjektstatus",
+                        "filterField": "GtShowFieldFrontpage",
+                        "adminPageLink": "Admin.aspx"
+                    }
+                },
+                {
+                    "Id": "a5df8fdf-b508-4b66-98a6-d83bc2597f63",
+                    "Properties": {
+                        "title": "Programnyheter",
+                        "showChrome": true,
+                        "compactMode": true
+                    }
+                }
+            ],
             "Sections": [
                 {
                     "Columns": [
                         {
-                            "Factor": 8,
+                            "Factor": 12,
                             "Controls": [
                                 {
                                     "Id": "{{ControlId_ProjectPhasesWebPart}}",
@@ -522,29 +542,6 @@
                                         "showPerPage": 5,
                                         "title": "Møter og hendelser",
                                         "timeSpanLimitInMonth": 6
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "Factor": 4,
-                            "Controls": [
-                                {
-                                    "Id": "{{ControlId_ProjectInformationWebPart}}",
-                                    "Properties": {
-                                        "title": "Programinformasjon",
-                                        "statusReportsCount": 0,
-                                        "statusReportsHeader": "Prosjektstatus",
-                                        "filterField": "GtShowFieldFrontpage",
-                                        "adminPageLink": "Admin.aspx"
-                                    }
-                                },
-                                {
-                                    "Id": "a5df8fdf-b508-4b66-98a6-d83bc2597f63",
-                                    "Properties": {
-                                        "title": "Programnyheter",
-                                        "showChrome": true,
-                                        "compactMode": true
                                     }
                                 }
                             ]
@@ -765,7 +762,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "{{ControlId_ProjectTimelineWebPart}}",
+                                    "Id": "{{ControlId_ProgramTimelineWebPart}}",
                                     "Properties": {
                                         "listName": "Tidslinjeinnhold",
                                         "showTimeline": true,

@@ -1,11 +1,13 @@
 import { IColumn } from '@fluentui/react'
-import { CamlQuery, Web } from '@pnp/sp'
 import _ from 'lodash'
 import { SPField } from 'pp365-shared-library/lib/models'
 import { useContext } from 'react'
 import { ProjectStatusContext } from '../../context'
 import { SectionContext } from '../context'
 import { IListSectionData } from './types'
+import { ICamlQuery } from '@pnp/sp/lists'
+import { spfi } from '@pnp/sp'
+import { AssignFrom } from '@pnp/core'
 
 const COLUMN_MAX_WIDTH: Record<string, number> = { Text: 250, Note: 250, Choice: 150, Number: 100 }
 
@@ -20,7 +22,8 @@ export function useFetchListData() {
   const context = useContext(ProjectStatusContext)
   const { section } = useContext(SectionContext)
   return async (): Promise<IListSectionData> => {
-    const list = new Web(context.props.webUrl).lists.getByTitle(section.listTitle)
+    const web = spfi(context.props.webUrl).using(AssignFrom(context.props.sp.web)).web
+    const list = web.lists.getByTitle(section.listTitle)
     try {
       let view: UseFetchListDataView = {
         ListViewXml: `<View><Query>${section.viewQuery}</Query><RowLimit>${section.rowLimit}</RowLimit></View>`,
@@ -31,16 +34,15 @@ export function useFetchListData() {
           view = await list.views
             .getByTitle(section.viewName)
             .select('ListViewXml', 'ViewFields')
-            .expand('ViewFields')
-            .get<UseFetchListDataView>()
+            .expand('ViewFields')()
         } catch {}
       }
-      const camlQuery: CamlQuery = {
+      const camlQuery: ICamlQuery = {
         ViewXml: view.ListViewXml.replace(/<ViewFields>[\w\W]*<\/ViewFields>/gm, '')
       }
       const [items, fields] = await Promise.all([
         list.getItemsByCAMLQuery(camlQuery, 'FieldValuesAsText', 'ContentType') as Promise<any[]>,
-        list.fields.select('Title', 'InternalName', 'TypeAsString').get<SPField[]>()
+        list.fields.select('Title', 'InternalName', 'TypeAsString')<SPField[]>()
       ])
       if (_.isEmpty(items)) return null
       const itemValues = items.map((i) => ({ ...i.FieldValuesAsText, ContentType: i?.ContentType }))

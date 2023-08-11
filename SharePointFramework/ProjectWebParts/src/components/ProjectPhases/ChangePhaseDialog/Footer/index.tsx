@@ -1,15 +1,17 @@
-import { DialogFooter, PrimaryButton, DefaultButton } from '@fluentui/react'
-import { ProjectPhasesContext } from '../../../ProjectPhases/context'
-import { DISMISS_CHANGE_PHASE_DIALOG } from '../../..//ProjectPhases/reducer'
+import { DefaultButton, DialogFooter, PrimaryButton } from '@fluentui/react'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
+import { DISMISS_CHANGE_PHASE_DIALOG } from '../../..//ProjectPhases/reducer'
+import { ProjectPhasesContext } from '../../../ProjectPhases/context'
+import { useChangePhase } from '../../useChangePhase'
+import { View } from '../Views'
 import { ChangePhaseDialogContext } from '../context'
 import { SET_VIEW } from '../reducer'
-import { View } from '../Views'
 
 export const Footer: FC = () => {
   const context = useContext(ProjectPhasesContext)
   const { state, dispatch } = useContext(ChangePhaseDialogContext)
+  const onChangePhase = useChangePhase()
   const actions = []
 
   // eslint-disable-next-line default-case
@@ -28,7 +30,7 @@ export const Footer: FC = () => {
           text: strings.Yes,
           onClick: async () => {
             dispatch(SET_VIEW({ view: View.ChangingPhase }))
-            await context.onChangePhase()
+            await onChangePhase()
             context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())
           }
         })

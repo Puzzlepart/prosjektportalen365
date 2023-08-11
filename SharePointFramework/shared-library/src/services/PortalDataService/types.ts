@@ -1,4 +1,4 @@
-import { PageContext } from '@microsoft/sp-page-context'
+import { SPFxContext } from '../../types'
 
 export type PortalDataServiceList =
   | 'STATUS_SECTIONS'
@@ -11,7 +11,7 @@ export type PortalDataServiceList =
   | 'PROJECT_STATUS_ATTACHMENTS'
 
 export interface IPortalDataServiceConfiguration extends Object {
-  pageContext?: PageContext
+  spfxContext?: SPFxContext
   listNames?: {
     STATUS_SECTIONS: string
     PROJECT_COLUMNS: string

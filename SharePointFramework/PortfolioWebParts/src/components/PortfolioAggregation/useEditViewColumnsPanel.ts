@@ -31,14 +31,19 @@ export function useEditViewColumnsPanel(
       })
   }
 
-  return useMemo(
+  return useMemo<IEditViewColumnsPanelProps>(
     () => ({
       isOpen: context.state.isEditViewColumnsPanelOpen,
       columns: context.state.allColumnsForCategory,
       onSave: onSaveViewColumns,
       onDismiss,
-      sortMode: 'selectedOnTop'
+      sortMode: 'selectedOnTop',
+      customColumnOrder: context.state.columns.map((c) => c.id)
     }),
-    [context.state]
+    [
+      context.state.isEditViewColumnsPanelOpen,
+      context.state.columns,
+      context.state.allColumnsForCategory
+    ]
   )
 }

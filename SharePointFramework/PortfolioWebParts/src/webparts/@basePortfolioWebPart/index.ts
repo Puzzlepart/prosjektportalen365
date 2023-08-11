@@ -1,17 +1,17 @@
 import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
-import '@pnp/polyfill-ie11'
-import { sp } from '@pnp/sp'
+import { SPFI } from '@pnp/sp/presets/all'
 import { IBaseComponentProps } from 'components/types'
-import assign from 'object-assign'
-import React, { ComponentClass, createElement, FC } from 'react'
-import * as ReactDom from 'react-dom'
+import { createSpfiInstance } from 'pp365-shared-library'
+import { ComponentClass, createElement, FC, ReactElement } from 'react'
+import { render } from 'react-dom'
 import { DataAdapter } from '../../data'
 
 export abstract class BasePortfolioWebPart<
   T extends IBaseComponentProps
 > extends BaseClientSideWebPart<T> {
+  public sp: SPFI
   public dataAdapter: DataAdapter
   private _pageTitle: string
 
@@ -26,48 +26,57 @@ export abstract class BasePortfolioWebPart<
    * - `pageContext` (from `this.context.pageContext`)
    * - `dataAdapter` (configured in `onInit`)
    * - `displayMode` (from `this.displayMode`)
+   * - `sp` (from `this.sp`)
    *
    * @param component Component to render
    * @param props Props
    */
   public renderComponent<T = any>(component: ComponentClass<T> | FC<T>, props?: T): void {
-    const combinedProps = assign({ title: this._pageTitle }, this.properties, props, {
+    const combinedProps: T = {
+      title: this._pageTitle,
+      ...this.properties,
+      ...props,
       webPartContext: this.context,
       pageContext: this.context.pageContext,
       dataAdapter: this.dataAdapter,
-      displayMode: this.displayMode
-    })
-    const element: React.ReactElement<T> = createElement(component, combinedProps)
-    ReactDom.render(element, this.domElement)
+      displayMode: this.displayMode,
+      sp: this.sp
+    }
+    const element: ReactElement<T> = createElement(component, combinedProps)
+    render(element, this.domElement)
   }
 
   /**
-   * Setup
+   * Setup the web part initializing the SPFI instance and the data adapter,
+   * aswell as the logger.
    */
   private async _setup() {
-    sp.setup({ spfxContext: this.context })
-    Logger.subscribe(new ConsoleListener())
+    this.sp = createSpfiInstance(this.context)
+    Logger.subscribe(ConsoleListener())
     Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
+    const sitePagesLibrary = this.sp.web.lists.getById(this.context.pageContext.list.id.toString())
     try {
       this._pageTitle = (
-        await sp.web.lists
-          .getById(this.context.pageContext.list.id.toString())
-          .items.getById(this.context.pageContext.listItem.id)
-          .select('Title')
-          .get<{ Title: string }>()
+        await sitePagesLibrary.items.getById(this.context.pageContext.listItem.id).select('Title')<{
+          Title: string
+        }>()
       ).Title
     } catch (error) {}
   }
 
   public async onInit(): Promise<void> {
-    this.dataAdapter = await new DataAdapter(
-      this.context.pageContext,
-      this.context.msGraphClientFactory
-    ).configure()
-    this.context.statusRenderer.clearLoadingIndicator(this.domElement)
     await this._setup()
+    this.dataAdapter = await new DataAdapter(this.context, this.sp).configure()
+    this.context.statusRenderer.clearLoadingIndicator(this.domElement)
   }
 
+  /**
+   * Get the property pane configuration. This method is overridden by
+   * the web part class extending this class. If not overridden, it will
+   * return an empty configuration with no pages.
+   *
+   * @returns Empty property pane configuration
+   */
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return { pages: [] }
   }

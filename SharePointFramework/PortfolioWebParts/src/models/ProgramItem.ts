@@ -1,4 +1,4 @@
-import { Web } from '@pnp/sp'
+import { IWeb } from '@pnp/sp/webs'
 import { tryParseJson } from 'pp365-shared-library'
 
 interface IProgramSPItem {
@@ -14,7 +14,7 @@ export class ProgramItem {
   public url: string
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  constructor(private _item: IProgramSPItem, _web?: Web) {
+  constructor(private _item: IProgramSPItem, _web?: IWeb) {
     this.id = _item.GtSiteId
     this.name = _item.Title
     this.url = _item.GtSiteUrl

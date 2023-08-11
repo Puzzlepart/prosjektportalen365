@@ -13,15 +13,15 @@ import _ from 'lodash'
  */
 function sortColumns({ columns, customColumnOrder, sortMode }: IEditViewColumnsPanelProps) {
   return [...columns].sort((a, b) => {
-    const customColumnOrderIndexA = customColumnOrder.indexOf(a['id'])
+    const columnOrderA = customColumnOrder.indexOf(a['id'])
     const customColumnOrderIndexB = customColumnOrder.indexOf(b['id'])
     if (a.data.isSelected && !b.data.isSelected) {
       return -1
     } else if (!a.data.isSelected && b.data.isSelected) {
       return 1
-    } else if (customColumnOrderIndexA !== -1 && customColumnOrderIndexB !== -1) {
-      return customColumnOrderIndexA - customColumnOrderIndexB || a['sortOrder'] - b['sortOrder']
-    } else if (customColumnOrderIndexA !== -1) {
+    } else if (columnOrderA !== -1 && customColumnOrderIndexB !== -1) {
+      return columnOrderA - customColumnOrderIndexB || a['sortOrder'] - b['sortOrder']
+    } else if (columnOrderA !== -1) {
       return -1
     } else if (customColumnOrderIndexB !== -1) {
       return 1

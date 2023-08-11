@@ -9,7 +9,7 @@ import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls'
 import { IProjectListProps, ProjectList } from 'components/ProjectList'
 import { ProjectListViews } from 'components/ProjectList/ProjectListViews'
 import * as strings from 'PortfolioWebPartsStrings'
-import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
+import { BasePortfolioWebPart } from '../@basePortfolioWebPart'
 
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
   public render(): void {

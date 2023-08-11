@@ -1,6 +1,6 @@
 import { LogLevel } from '@pnp/logging'
-import { ITaxonomySession } from '@pnp/sp-taxonomy'
 import { SpEntityPortalService } from 'sp-entityportal-service'
+import { SPFxContext } from '../../types'
 
 export interface IProjectDataServiceParams {
   /**
@@ -24,9 +24,9 @@ export interface IProjectDataServiceParams {
   propertiesListName: string
 
   /**
-   * Taxonomy session
+   * SPFx context
    */
-  taxonomy?: ITaxonomySession
+  spfxContext: SPFxContext
 
   /**
    * Log level

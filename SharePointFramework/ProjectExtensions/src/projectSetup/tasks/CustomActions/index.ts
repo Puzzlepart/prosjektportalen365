@@ -44,7 +44,7 @@ export class CustomActions extends BaseTask {
       }
       await this.params.web.userCustomActions.getById(templateSelectorCustomAction.Id).update({
         ClientSideComponentProperties: JSON.stringify(templateSelectorCustomActionProperties)
-      })
+      } as any)
     }
   }
 }

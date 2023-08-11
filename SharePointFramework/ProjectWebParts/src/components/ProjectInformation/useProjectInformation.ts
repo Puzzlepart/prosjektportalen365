@@ -1,14 +1,15 @@
-import { format, IProgressIndicatorProps, MessageBarType } from '@fluentui/react'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { format, MessageBarType } from '@fluentui/react'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
-import { parseUrlHash, sleep } from 'pp365-shared-library/lib/util'
+import { parseUrlHash } from 'pp365-shared-library/lib/util'
 import strings from 'ProjectWebPartsStrings'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { ProjectInformation } from '.'
 import SPDataAdapter from '../../data'
 import { IProjectInformationProps, IProjectInformationUrlHash } from './types'
 import { useProjectInformationDataFetch } from './useProjectInformationDataFetch'
 import { useProjectInformationState } from './useProjectInformationState'
+import { usePropertiesSync } from './usePropertiesSync'
+import { IProjectInformationContext } from './context'
 
 /**
  * Component logic hook for `ProjectInformation`. If the SPDataAdapter is configured, it will
@@ -22,14 +23,6 @@ import { useProjectInformationState } from './useProjectInformationState'
  */
 export const useProjectInformation = (props: IProjectInformationProps) => {
   const { state, setState } = useProjectInformationState()
-
-  if (SPDataAdapter.isConfigured) {
-    ListLogger.init(
-      SPDataAdapter.portal.web.lists.getByTitle(strings.LogListName),
-      props.webUrl,
-      ProjectInformation.displayName
-    )
-  }
 
   /**
    * Add message
@@ -54,55 +47,18 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     })
   }
 
-  /**
-   * On sync properties
-   *
-   * @param force Force start sync
-   */
-  const onSyncProperties = async (force: boolean = false): Promise<void> => {
-    if (!stringIsNullOrEmpty(state.data.propertiesListId)) {
-      const lastUpdated = await SPDataAdapter.project.getPropertiesLastUpdated(state.data)
-      if (lastUpdated > 60 && !force) return
-    }
-    if (props.skipSyncToHub) return
-    setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress: {} } })
-    const progressFunc = (progress: IProgressIndicatorProps) =>
-      setState({ progress: { title: strings.SyncProjectPropertiesProgressLabel, progress } })
-    try {
-      progressFunc({
-        label: strings.SyncProjectPropertiesListProgressDescription,
-        description: `${strings.PleaseWaitText}...`
-      })
-      const { created } = await SPDataAdapter.portal.syncList(
-        props.webUrl,
-        strings.ProjectPropertiesListName,
-        state.data.templateParameters.ProjectContentTypeId ??
-          '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
-        { Title: props.webTitle }
-      )
-      if (!created) {
-        await SPDataAdapter.syncPropertyItemToHub(
-          state.data.fieldValues,
-          { ...state.data.fieldValuesText, Title: props.webTitle },
-          state.data.templateParameters,
-          progressFunc
-        )
-      }
-      SPDataAdapter.clearCache()
-      await sleep(5)
-      document.location.href =
-        sessionStorage.DEBUG || DEBUG ? document.location.href.split('#')[0] : props.webUrl
-    } catch (error) {
-      ListLogger.log({
-        message: error.message,
-        level: 'Error',
-        functionName: 'onSyncProperties',
-        component: ProjectInformation.displayName
-      })
-      addMessage(strings.SyncProjectPropertiesErrorText, MessageBarType.severeWarning)
-    } finally {
-      setState({ progress: null })
-    }
+  const context = useMemo<IProjectInformationContext>(
+    () => ({ props, state, setState, addMessage }),
+    [state]
+  )
+  const onSyncProperties = usePropertiesSync(context)
+
+  if (SPDataAdapter.isConfigured) {
+    ListLogger.init(
+      SPDataAdapter.portal.web.lists.getByTitle(strings.LogListName),
+      props.webUrl,
+      ProjectInformation.displayName
+    )
   }
 
   useProjectInformationDataFetch(props, setState)
@@ -114,10 +70,5 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
     }
   }, [state?.data?.fieldValues])
 
-  return {
-    state,
-    setState,
-    addMessage,
-    onSyncProperties
-  } as const
+  return { context } as const
 }

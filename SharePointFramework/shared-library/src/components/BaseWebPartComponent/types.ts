@@ -1,6 +1,7 @@
 import { IShimmerProps } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { SPFI } from '@pnp/sp'
 
 export interface IBaseWebPartComponentProps extends React.DOMAttributes<HTMLDivElement> {
   /**
@@ -37,6 +38,11 @@ export interface IBaseWebPartComponentProps extends React.DOMAttributes<HTMLDivE
    * SPFx web part context
    */
   webPartContext?: WebPartContext
+
+  /**
+   * Configured SPFI instance
+   */
+  sp?: SPFI
 }
 
 export interface IBaseWebPartComponentState<T> extends Pick<IShimmerProps, 'isDataLoaded'> {

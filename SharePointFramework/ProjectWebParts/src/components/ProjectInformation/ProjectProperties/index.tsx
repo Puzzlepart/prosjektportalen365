@@ -1,6 +1,6 @@
 import { Pivot, PivotItem, MessageBarType } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'

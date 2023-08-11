@@ -11,7 +11,7 @@ import {
   IPortfolioAggregationProps,
   PortfolioAggregation
 } from 'pp365-portfoliowebparts/lib/components/PortfolioAggregation'
-import { BaseProgramWebPart } from 'webparts/baseProgramWebPart'
+import { BaseProgramWebPart } from '../baseProgramWebPart'
 import { IProgramAggregationWebPartProps } from './types'
 
 export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgramAggregationWebPartProps> {

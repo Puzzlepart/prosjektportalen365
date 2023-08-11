@@ -11,3 +11,4 @@ export type ColumnDataType =
   | 'modal'
   | 'filename'
   | 'list'
+  | 'projectinformationmodal'

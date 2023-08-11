@@ -1,5 +1,6 @@
-import { TypedHash } from '@pnp/common'
+import { ITermInfo } from '@pnp/sp/taxonomy'
 import { ChecklistItemModel } from './ChecklistItemModel'
+import _ from 'underscore'
 
 export type ProjectPhaseChecklistData = {
   stats?: Record<string, number>
@@ -7,32 +8,48 @@ export type ProjectPhaseChecklistData = {
 }
 
 /**
- * Model for projet phase
+ * Model for project phase
  */
 export class ProjectPhaseModel {
   public id: string
   public checklistData: ProjectPhaseChecklistData
 
   /**
-   * Constructor
+   * Constructor for `ProjectPhaseModel`
    *
-   * @param name Term name
-   * @param termId Term ID
-   * @param checklistData Checklist data
-   * @param properties Properties
+   * @param term Term info
+   * @param _termSetId Term set ID
+   * @param checklistData Checklist data for the phase term
    */
   constructor(
-    public name: string,
-    termId: string,
-    checklistData: ProjectPhaseChecklistData,
-    public properties: TypedHash<any>
+    public term: ITermInfo,
+    private _termSetId: string,
+    checklistData: ProjectPhaseChecklistData
   ) {
-    this.id = termId.substring(6, 42)
-    this.checklistData = checklistData || { stats: {}, items: [] }
+    this.id = term.id
+    this.checklistData = checklistData ?? { stats: {}, items: [] }
+  }
+
+  public get name(): string {
+    const localizedLabel = _.find(this.term.labels, (l) => l.languageTag === 'nb-NO')
+    return localizedLabel?.name ?? this.term.labels[0].name
   }
 
   /**
-   * Phase letter
+   * Get phase term properties from the `localProperties` property using
+   * the term set ID.
+   */
+  public get properties(): Record<string, string> {
+    const { properties } = _.find(this.term.localProperties, (p) => p.setId === this._termSetId)
+    if (!properties) return {}
+    return properties.reduce((acc, p) => {
+      acc[p.key] = p.value
+      return acc
+    }, {})
+  }
+
+  /**
+   * Phase letter is the first letter of the phase name in uppercase.
    */
   public get letter() {
     if (this.properties.PhaseLetter) return this.properties.PhaseLetter
@@ -42,17 +59,17 @@ export class ProjectPhaseModel {
   /**
    * Phase sub text
    *
-   * Uses local custom property PhaseSubText from the term with
-   * fallback to PhasePurpose to support potential legacy use.
+   * Uses local custom property `PhaseSubText` from the term with
+   * fallback to `PhasePurpose` to support potential legacy use.
    */
   public get subText() {
     return this.properties.PhaseSubText || this.properties.PhasePurpose
   }
 
   /**
-   * Is visible
+   * Is visible on frontpage.
    *
-   * Uses local custom property ShowOnFrontpage
+   * Uses local custom property `ShowOnFrontpage`
    */
   public get isVisible(): boolean {
     try {
@@ -63,14 +80,16 @@ export class ProjectPhaseModel {
   }
 
   /**
-   * Returns a string representation of the phase model
+   * Returns a string representation of the phase model that can
+   * be used to update the term field using the `TextField` connected
+   * to the field.
    */
   public toString() {
     return `-1;#${this.name}|${this.id}`
   }
 
   /**
-   * Get filtered phase checklist view url
+   * Get filtered phase checklist view url for the phase.
    *
    * @param baseUrl base URL
    */

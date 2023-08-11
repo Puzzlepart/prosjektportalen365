@@ -1,5 +1,5 @@
 import { Icon } from '@fluentui/react/lib/Icon'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useState } from 'react'
 import styles from './CheckListItem.module.scss'

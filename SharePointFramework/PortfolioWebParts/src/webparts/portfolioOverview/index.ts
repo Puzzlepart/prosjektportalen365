@@ -6,7 +6,7 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import * as strings from 'PortfolioWebPartsStrings'
-import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
+import { BasePortfolioWebPart } from '../@basePortfolioWebPart'
 import {
   IPortfolioOverviewConfiguration,
   IPortfolioOverviewProps,

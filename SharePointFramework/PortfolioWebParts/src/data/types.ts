@@ -1,8 +1,11 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { ItemUpdateResult, SearchResult, SortDirection } from '@pnp/sp'
+import { IItemUpdateResult } from '@pnp/sp/items'
+import { ISiteUserInfo } from '@pnp/sp/presets/all'
+import { ISearchResult, SortDirection } from '@pnp/sp/search'
 import {
   DataSource,
   DataSourceService,
+  IGraphGroup,
   PortalDataService,
   PortfolioOverviewView,
   ProjectContentColumn,
@@ -10,12 +13,13 @@ import {
   SPDataSourceItem,
   SPProjectColumnItem,
   SPProjectContentColumnItem,
+  SPProjectItem,
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-shared-library'
 import { IPortfolioAggregationConfiguration, IPortfolioOverviewConfiguration } from '../components'
 
-export interface IFetchDataForViewItemResult extends SearchResult {
+export interface IFetchDataForViewItemResult extends ISearchResult {
   SiteId: string
   [key: string]: any
 }
@@ -23,6 +27,17 @@ export interface IFetchDataForViewItemResult extends SearchResult {
 export type IPortfolioViewData = {
   items: IFetchDataForViewItemResult[]
   managedProperties?: string[]
+}
+
+/**
+ * Project data fetched in `fetchEnrichedProjects` method, and
+ * used as parameter in the `_combineResultData` method.
+ */
+export interface IProjectsData {
+  items: SPProjectItem[]
+  sites: ISearchResult[]
+  memberOfGroups: IGraphGroup[]
+  users: ISiteUserInfo[]
 }
 
 export interface IPortfolioWebPartsDataAdapter {
@@ -92,10 +107,7 @@ export interface IPortfolioWebPartsDataAdapter {
   /**
    * Get aggregated list config for the given category.
    *
-   * Returns `views`, `viewsUrls`, `columnUrls` and `level`. For now
-   * we only support two levels: `Portefølje` and `Prosjekt`. We need
-   * to also support `Program` and `Oveordnet` in the future (as part
-   * of issue #1097).
+   * Returns `views`, `viewsUrls`, `columnUrls` and `level`.
    *
    * @param category Category for data source
    * @param level Level for data source
@@ -209,11 +221,10 @@ export interface IPortfolioWebPartsDataAdapter {
   /**
    * Fetching enriched projects by combining list items from projects list,
    * Graph Groups and site users. The result are cached in `localStorage`
-   * for 30 minutes.
-   *
-   * @param filter Filter for project items (defaults to 'GtProjectLifecycleStatus ne 'Avsluttet')
+   * for 30 minutes. Projects with lifecycle stage `Avsluttet` are excluded, and
+   * the projects are sorted by Title ascending.
    */
-  fetchEnrichedProjects?(filter?: string): Promise<ProjectListModel[]>
+  fetchEnrichedProjects?(): Promise<ProjectListModel[]>
 
   /**
    * Fetch projects from the projects list. If a data source is specified,
@@ -279,8 +290,12 @@ export interface IPortfolioWebPartsDataAdapter {
    * If the `dataSourceCategory` is null or empty, an empty array is returned.
    *
    * @param category Category for data source
+   * @param level Level for data source
    */
-  fetchProjectContentColumns?(dataSourceCategory: string): Promise<ProjectContentColumn[]>
+  fetchProjectContentColumns?(
+    dataSourceCategory: string,
+    level?: string
+  ): Promise<ProjectContentColumn[]>
 
   /**
    * Update project content column with new values for properties `GtColMinWidth` and `GtColMaxWidth`,
@@ -323,5 +338,5 @@ export interface IPortfolioWebPartsDataAdapter {
     properties: SPDataSourceItem,
     dataSourceTitle: string,
     shouldReplace?: boolean
-  ): Promise<ItemUpdateResult>
+  ): Promise<IItemUpdateResult>
 }

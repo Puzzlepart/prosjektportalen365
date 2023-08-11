@@ -15,7 +15,7 @@ import '@pnp/sp/site-groups/web'
 import '@pnp/sp/clientside-pages/web'
 import { ClientsideText } from '@pnp/sp/clientside-pages'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
-import { isUserAuthorized } from 'helpers/isUserAuthorized'
+import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
 import { IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 

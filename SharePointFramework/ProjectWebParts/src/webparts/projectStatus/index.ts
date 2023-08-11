@@ -9,9 +9,8 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import '@pnp/polyfill-ie11'
 import * as strings from 'ProjectWebPartsStrings'
-import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
+import { BaseProjectWebPart } from '../@baseProjectWebPart'
 import {
   OPPORTUNITY_DEFAULT_MATRIX_CONSEQUENCE_HEADERS,
   OPPORTUNITY_DEFAULT_MATRIX_PROBABILITY_HEADERS

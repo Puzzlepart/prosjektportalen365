@@ -1,4 +1,4 @@
-import { dateAdd, PnPClientStorage } from '@pnp/common'
+import { dateAdd, PnPClientStorage } from '@pnp/core'
 import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import { IPortfolioOverviewProps } from './types'
 import _ from 'underscore'
@@ -13,7 +13,7 @@ import _ from 'underscore'
  * @param defaultValue Default value for columns if no persisted value is found
  * @param properties Properties to persist (default: `['fieldName', 'key', 'name', 'minWidth', 'sortOrder']`)
  *
- * @returns `[columns, set]` tuple where `columns` is the persisted columns and `set` is a function
+ * @returns `[columns, set]` tuple where `columns` is the persisted columns and `set` is a function to set the persisted columns
  */
 export function usePersistedColumns(
   props: IPortfolioOverviewProps,

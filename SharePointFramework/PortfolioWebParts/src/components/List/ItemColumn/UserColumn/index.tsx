@@ -1,8 +1,8 @@
 import { Persona, PersonaPresence, PersonaSize } from '@fluentui/react/lib/Persona'
 import strings from 'PortfolioWebPartsStrings'
 import React from 'react'
-import { SearchValueType } from 'types'
 import { ColumnRenderComponent } from '../types'
+import { SearchValueType } from 'pp365-shared-library'
 
 export const UserColumn: ColumnRenderComponent = ({ columnValue, column }) => {
   const isMultiUser = columnValue?.indexOf(';') !== -1

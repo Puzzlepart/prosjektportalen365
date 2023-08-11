@@ -37,16 +37,18 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
       )
     ])
 
-    const phaseSitePages = props.useDynamicHomepage ? await getPhaseSitePages(phases) : []
+    const phaseSitePages = props.useDynamicHomepage
+      ? await getPhaseSitePages({ phases, sp: props.sp })
+      : []
     const [currentPhase] = phases.filter((p) => p.name === currentPhaseName)
     return {
       currentPhase,
       phases,
-      phaseTextField: phaseFieldCtx.phaseTextField,
+      phaseTextField: phaseFieldCtx.textField,
       phaseSitePages,
       welcomePage,
       userHasChangePhasePermission
-    }
+    } as IProjectPhasesData
   } catch (error) {
     ListLogger.log({
       message: error.message,

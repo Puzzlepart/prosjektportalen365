@@ -1,5 +1,5 @@
 import { format } from '@fluentui/react'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import { ProjectColumn, SPProjectColumnItem } from 'pp365-shared-library'

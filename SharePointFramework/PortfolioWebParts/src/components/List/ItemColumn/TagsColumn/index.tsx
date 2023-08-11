@@ -1,6 +1,6 @@
 // Import necessary modules
 import { TextField } from '@fluentui/react'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'PortfolioWebPartsStrings'
 import React from 'react'
 import { ColumnDataTypePropertyField } from '../ColumnDataTypeField'

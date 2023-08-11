@@ -1,6 +1,7 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { PageContext } from '@microsoft/sp-page-context'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { SPFI } from '@pnp/sp'
 import { IPortfolioWebPartsDataAdapter } from 'data/types'
 
 export interface IBaseComponentProps {
@@ -29,4 +30,9 @@ export interface IBaseComponentProps {
    * Display mode of the component.
    */
   displayMode?: DisplayMode
+
+  /**
+   * SPFI instance.
+   */
+  sp?: SPFI
 }

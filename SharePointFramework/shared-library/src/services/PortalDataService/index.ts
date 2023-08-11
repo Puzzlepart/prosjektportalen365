@@ -1,20 +1,16 @@
 /* eslint-disable no-console */
 import { find } from '@microsoft/sp-lodash-subset'
-import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/common'
+import { AssignFrom, dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
 import { Logger, LogLevel } from '@pnp/logging'
-import {
-  CamlQuery,
-  Folder,
-  ItemUpdateResultData,
-  List,
-  ListEnsureResult,
-  PermissionKind,
-  sp,
-  Web
-} from '@pnp/sp'
+import { IFolder } from '@pnp/sp/folders'
+import { ICamlQuery, IList, IListEnsureResult } from '@pnp/sp/lists'
+import '@pnp/sp/presets/all'
+import { IItemUpdateResultData, spfi, SPFI } from '@pnp/sp/presets/all'
+import { PermissionKind } from '@pnp/sp/security'
+import { IWeb } from '@pnp/sp/webs'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
-import { getClassProperties, makeUrlAbsolute, transformFieldXml } from '../../util'
-import { IHubSite, ISPContentType } from '../../interfaces'
+import { createSpfiInstance, DefaultCaching } from '../../data'
+import { ISPContentType } from '../../interfaces'
 import {
   PortfolioOverviewView,
   ProjectAdminRole,
@@ -29,6 +25,7 @@ import {
   StatusReport,
   StatusReportAttachment
 } from '../../models'
+import { getClassProperties, makeUrlAbsolute, transformFieldXml } from '../../util'
 import {
   GetStatusReportsOptions,
   IPortalDataServiceConfiguration,
@@ -39,7 +36,9 @@ import {
 export class PortalDataService {
   private _configuration: IPortalDataServiceConfiguration
   private _isConfigured: boolean = false
-  public web: Web
+  private _sp: SPFI
+  private _spPortal: SPFI
+  public web: IWeb
   public url: string
 
   /**
@@ -51,32 +50,33 @@ export class PortalDataService {
     configuration: IPortalDataServiceConfiguration
   ): Promise<PortalDataService> {
     this._configuration = { ...PortalDataServiceDefaultConfiguration, ...configuration }
-    const hubSite = await this.getHubSite()
-    this.web = hubSite.web
-    this.url = hubSite.url
+    this._sp = createSpfiInstance(this._configuration.spfxContext)
+    await this.initPortalSite()
     this._isConfigured = true
     return this
   }
 
   /**
-   * Returns `true` if the PortalDataService is configured, `false` otherwise.
+   * Returns `true` if the `PortalDataService` is configured, `false` otherwise.
    */
   public get isConfigured(): boolean {
     return this._isConfigured
   }
 
   /**
-   * Get hub site cached for a year to minimize calls to the API.
+   * Initialize portal site setting `url`, `_spPortal` and `web` properties. Caches the result in local storage
+   * to avoid unnecessary requests.
    *
-   * @param expire Expire
+   * @param expire Expire (defaults to 1 year)
    */
-  private async getHubSite(expire: Date = dateAdd(new Date(), 'year', 1)): Promise<IHubSite> {
+  private async initPortalSite(expire: Date = dateAdd(new Date(), 'year', 1)): Promise<void> {
     try {
-      const hubSiteId = this._configuration.pageContext.legacyPageContext.hubSiteId || ''
+      const hubSiteId =
+        this._configuration.spfxContext.pageContext.legacyPageContext.hubSiteId || ''
       try {
         const { SiteUrl } = await (
           await fetch(
-            `${this._configuration.pageContext.web.absoluteUrl}/_api/HubSites/GetById('${hubSiteId}')`,
+            `${this._configuration.spfxContext.pageContext.web.absoluteUrl}/_api/HubSites/GetById('${hubSiteId}')`,
             {
               method: 'GET',
               headers: {
@@ -86,12 +86,12 @@ export class PortalDataService {
             }
           )
         ).json()
-        return { url: SiteUrl, web: new Web(SiteUrl) }
+        this.url = SiteUrl
       } catch (error) {
-        const SiteUrl = await new PnPClientStorage().local.getOrPut(
+        this.url = await new PnPClientStorage().local.getOrPut(
           `hubsite_${hubSiteId.replace(/-/g, '')}_url`,
           async () => {
-            const { PrimarySearchResults } = await sp.search({
+            const { PrimarySearchResults } = await this._sp.search({
               Querytext: `SiteId:${hubSiteId} contentclass:STS_Site`,
               SelectProperties: ['Path']
             })
@@ -99,11 +99,12 @@ export class PortalDataService {
           },
           expire
         )
-        return { url: SiteUrl, web: new Web(SiteUrl) }
       }
     } catch (err) {
       throw err
     }
+    this._spPortal = spfi(this.url).using(AssignFrom(this._sp.web))
+    this.web = this._spPortal.web
   }
 
   /**
@@ -117,7 +118,7 @@ export class PortalDataService {
    */
   public async getParentProjects<T>(
     webUrl: string,
-    constructor: new (item: any, web: Web) => T
+    constructor: new (item: any, web: IWeb) => T
   ): Promise<T[]> {
     try {
       const projectItems = await this.getItems(
@@ -153,7 +154,7 @@ export class PortalDataService {
    *
    * @param constructor Constructor / model class
    */
-  public async getPrograms<T>(constructor: new (item: any, web: Web) => T): Promise<T[]> {
+  public async getPrograms<T>(constructor: new (item: any, web: IWeb) => T): Promise<T[]> {
     try {
       const items = await this.getItems(
         this._configuration.listNames.PROJECTS,
@@ -186,9 +187,9 @@ export class PortalDataService {
    */
   public async getProjectColumns(): Promise<ProjectColumn[]> {
     try {
-      const spItems = await this._getList('PROJECT_COLUMNS')
-        .items.select(...getClassProperties(SPProjectColumnItem))
-        .get<SPProjectColumnItem[]>()
+      const spItems = await this._getList('PROJECT_COLUMNS').items.select(
+        ...getClassProperties(SPProjectColumnItem)
+      )<SPProjectColumnItem[]>()
       return spItems.map((item) => new ProjectColumn(item))
     } catch (error) {
       return []
@@ -200,7 +201,7 @@ export class PortalDataService {
    */
   public async getProjectStatusSections(): Promise<SectionModel[]> {
     try {
-      const items = await this._getList('STATUS_SECTIONS').items.usingCaching().get()
+      const items = await this._getList('STATUS_SECTIONS').items.using(DefaultCaching)()
       return items.map((item) => new SectionModel(item))
     } catch (error) {
       return []
@@ -212,14 +213,14 @@ export class PortalDataService {
    *
    * @param report Status report
    */
-  private async ensureAttachmentsFolder(report: StatusReport): Promise<Folder> {
+  private async ensureAttachmentsFolder(report: StatusReport): Promise<IFolder> {
     const folderName = report.id.toString()
     const list = this._getList('PROJECT_STATUS_ATTACHMENTS')
     try {
-      await list.rootFolder.folders.getByName(folderName).get()
-      return list.rootFolder.folders.getByName(folderName)
+      await list.rootFolder.folders.getByUrl(folderName)()
+      return list.rootFolder.folders.getByUrl(folderName)
     } catch (error) {
-      const { folder } = await list.rootFolder.folders.add(folderName)
+      const { folder } = await list.rootFolder.folders.addUsingPath(folderName)
       return folder
     }
   }
@@ -251,7 +252,9 @@ export class PortalDataService {
       await Promise.all([
         projectStatusList.items.getById(report.id).update(properties),
         ...attachments.map((att) =>
-          attachmentsFolder.files.add(att.url, att.content, att.shouldOverWrite)
+          attachmentsFolder.files.addUsingPath(att.url, att.content, {
+            Overwrite: att.shouldOverWrite
+          })
         )
       ])
       return new StatusReport({ ...report.item, ...properties }, publishedString)
@@ -282,8 +285,7 @@ export class PortalDataService {
         'GtPortfolioColumn/GtInternalName',
         'GtPortfolioColumnTooltip/GtManagedProperty'
       )
-      .usingCaching()
-      .get<SPProjectColumnConfigItem[]>()
+      .using(DefaultCaching)<SPProjectColumnConfigItem[]>()
     return spItems.map((item) => new ProjectColumnConfig(item))
   }
 
@@ -291,12 +293,12 @@ export class PortalDataService {
    * Get portfolio overview views. Returns all shared views and personal views.
    */
   public async getPortfolioOverviewViews(): Promise<PortfolioOverviewView[]> {
-    const filter = `GtPortfolioIsPersonalView eq 0 or (GtPortfolioIsPersonalView eq 1 and Author/EMail eq '${this._configuration.pageContext.user.email}')`
+    const email = this._configuration.spfxContext.pageContext.user.email
+    const filter = `GtPortfolioIsPersonalView eq 0 or (GtPortfolioIsPersonalView eq 1 and Author/EMail eq '${email}')`
     const spItems = await this._getList('PORTFOLIO_VIEWS')
       .items.select(...getClassProperties(SPPortfolioOverviewViewItem))
       .filter(filter)
-      .orderBy('GtSortOrder', true)
-      .get<SPPortfolioOverviewViewItem[]>()
+      .orderBy('GtSortOrder', true)<SPPortfolioOverviewViewItem[]>()
     return spItems.map((item) => new PortfolioOverviewView(item))
   }
 
@@ -310,8 +312,10 @@ export class PortalDataService {
   ): Promise<{ defaultNewFormUrl: string; defaultEditFormUrl: string }> {
     const urls = await this._getList(list)
       .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
-      .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')
-      .get<{ DefaultNewFormUrl: string; DefaultEditFormUrl: string }>()
+      .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')<{
+      DefaultNewFormUrl: string
+      DefaultEditFormUrl: string
+    }>()
     return {
       defaultNewFormUrl: makeUrlAbsolute(urls.DefaultNewFormUrl),
       defaultEditFormUrl: makeUrlAbsolute(urls.DefaultEditFormUrl)
@@ -333,12 +337,12 @@ export class PortalDataService {
   }
 
   /**
-   * Sync list from hub to the specified URL
+   * Sync list with project properties from hub site.
    *
    * Skips fields that has `ShowInEditForm` set to `FALSE`
    *
    * @param url Url
-   * @param listName List name
+   * @param listName List name for the project properties list
    * @param contentTypeId Content type id for project properties
    * @param properties Create a new item in the list with specified properties if the list was created
    */
@@ -347,19 +351,19 @@ export class PortalDataService {
     listName: string,
     contentTypeId: string,
     properties?: Record<string, string>
-  ): Promise<ListEnsureResult> {
-    const targetWeb = new Web(url)
+  ): Promise<IListEnsureResult> {
+    const web = spfi(url).using(AssignFrom(this._sp.web)).web
     const { jsomContext } = await initJsom(url, { loadTaxonomy: true })
     const [hubContentType, targetSiteFields, ensureList] = await Promise.all([
       this._getHubContentType(contentTypeId),
-      this._getSiteFields(targetWeb),
-      targetWeb.lists.ensure(listName, '', 100, false, {
+      this._getSiteFields(web),
+      web.lists.ensure(listName, '', 100, false, {
         Hidden: true,
         EnableAttachments: false,
         EnableVersioning: true
       })
     ])
-    const listFields = await this.getListFields(listName, undefined, targetWeb)
+    const listFields = await this.getListFields(listName, undefined, web)
     const spList = jsomContext.web.get_lists().getByTitle(listName)
     for (const field of hubContentType.Fields) {
       const [[listField], [siteField]] = [
@@ -449,8 +453,7 @@ export class PortalDataService {
         'FieldLinks/Name',
         'FieldLinks/Required'
       )
-      .expand('Fields', 'FieldLinks')
-      .get<ISPContentType>()
+      .expand('Fields', 'FieldLinks')<ISPContentType>()
     return contentType
   }
 
@@ -459,8 +462,8 @@ export class PortalDataService {
    *
    * @param web Web
    */
-  private async _getSiteFields(web: Web): Promise<SPField[]> {
-    const siteFields = await web.fields.select(...getClassProperties(SPField)).get<SPField[]>()
+  private async _getSiteFields(web: IWeb): Promise<SPField[]> {
+    const siteFields = await web.fields.select(...getClassProperties(SPField))<SPField[]>()
     return siteFields
   }
 
@@ -472,37 +475,34 @@ export class PortalDataService {
    */
   public async getFiles<T>(
     listName: string,
-    constructor: new (file: any, web: Web) => T
+    constructor: new (file: any, web: IWeb) => T
   ): Promise<T[]> {
-    const files = await this.web.lists.getByTitle(listName).rootFolder.files.usingCaching().get()
-    return files.map((file) => new constructor(file, this.web))
+    const files = await this.web.lists.getByTitle(listName).rootFolder.files.using(DefaultCaching)()
+    return files.map((file) => new constructor(file, this._spPortal.web))
   }
 
   /**
-   * Get items
+   * Get items and maps them to the specified constructor.
    *
    * @param listName List name
-   * @param constructor Constructor
-   * @param query Query
-   * @param expands Expands
+   * @param constructor Constructor function
+   * @param query Caml query if `getItemsByCAMLQuery` should be used
+   * @param expands Expands for `getItemsByCAMLQuery`
    */
   public async getItems<T>(
     listName: string,
-    constructor: new (item: any, web: Web) => T,
-    query?: CamlQuery,
+    constructor: new (item: any, web: IWeb, sp?: SPFI) => T,
+    query?: ICamlQuery,
     expands?: string[]
   ): Promise<T[]> {
     try {
       const list = this.web.lists.getByTitle(listName)
       let items: any[]
-      if (query) {
-        items = await list.usingCaching().getItemsByCAMLQuery(query, ...(expands ?? []))
-      } else {
-        items = await list.usingCaching().items.usingCaching().get()
-      }
-      return items.map((item) => new constructor(item, this.web))
+      if (query) items = await list.getItemsByCAMLQuery(query, ...(expands ?? []))
+      else items = await list.items.using(DefaultCaching)()
+      return items.map((item) => new constructor(item, this.web, this._sp))
     } catch (error) {
-      throw error
+      throw new Error(`Error getting items from list ${listName}: ${error.message}`)
     }
   }
 
@@ -518,7 +518,7 @@ export class PortalDataService {
   ): Promise<StatusReport> {
     const list = this._getList('PROJECT_STATUS')
     if (contentTypeId) {
-      const contentTypes = await list.contentTypes.get()
+      const contentTypes = await list.contentTypes()
       const ct = find(contentTypes, (ct) => ct.StringId.indexOf(contentTypeId) === 0)
       if (ct) properties.ContentTypeId = ct.StringId
     }
@@ -551,7 +551,7 @@ export class PortalDataService {
    * @param itemId Item ID
    * @param properties Properties
    */
-  public async updateItemInList<T = ItemUpdateResultData>(
+  public async updateItemInList<T = IItemUpdateResultData>(
     list: PortalDataServiceList,
     itemId: number,
     properties: Record<string, any>
@@ -583,7 +583,7 @@ export class PortalDataService {
    * Get status reports using caching by default. Can be turned off by setting
    * `useCaching` to `false`.
    *
-   * @param options Options
+   * @param options Options for getting status reports
    */
   public async getStatusReports({
     filter = '',
@@ -592,9 +592,10 @@ export class PortalDataService {
     publishedString,
     useCaching = true
   }: GetStatusReportsOptions): Promise<StatusReport[]> {
-    if (!this._configuration.pageContext) throw 'Property {pageContext} is not the configuration.'
+    if (!this._configuration.spfxContext.pageContext)
+      throw 'Property {pageContext} is not the configuration.'
     if (stringIsNullOrEmpty(filter))
-      filter = `GtSiteId eq '${this._configuration.pageContext.site.id.toString()}'`
+      filter = `GtSiteId eq '${this._configuration.spfxContext.pageContext.site.id.toString()}'`
     try {
       const list = this._getList('PROJECT_STATUS')
       let items = list.items
@@ -603,8 +604,8 @@ export class PortalDataService {
         .orderBy('Id', false)
       if (top) items = items.top(top)
       if (select) items = items.select(...select)
-      if (useCaching) items = items.usingCaching()
-      const reports = (await items.get()).map((i) => new StatusReport(i, publishedString))
+      if (useCaching) items = items.using(DefaultCaching)
+      const reports = (await items()).map((i) => new StatusReport(i, publishedString))
       return reports
     } catch (error) {
       throw error
@@ -620,7 +621,7 @@ export class PortalDataService {
    */
   public async getStatusReportAttachments(report: StatusReport): Promise<StatusReport> {
     const attachmentsFolder = await this.ensureAttachmentsFolder(report)
-    const attachmentFiles = await attachmentsFolder.files.usingCaching().get()
+    const attachmentFiles = await attachmentsFolder.files.using(DefaultCaching)()
     const attachmentFilesContent = await Promise.all(
       attachmentFiles.map(async ({ Name: name, ServerRelativeUrl: url }) => {
         const attachment: StatusReportAttachment = {
@@ -628,7 +629,7 @@ export class PortalDataService {
           url
         }
         if (url.indexOf('.txt') !== -1 || url.indexOf('.json') !== -1) {
-          attachment.content = await this.web.getFileByServerRelativeUrl(url).getText()
+          attachment.content = await this.web.getFileByServerRelativePath(url).getText()
         }
         return attachment
       })
@@ -638,14 +639,14 @@ export class PortalDataService {
 
   /**
    * Get status report list props
+   *
+   * TODO: Use caching with @pnp/sp v3
    */
   public getStatusReportListProps(): Promise<{ DefaultEditFormUrl: string }> {
     try {
       return this._getList('PROJECT_STATUS')
         .select('DefaultEditFormUrl')
-        .expand('DefaultEditFormUrl')
-        .usingCaching()
-        .get<{ DefaultEditFormUrl: string }>()
+        .expand('DefaultEditFormUrl')<{ DefaultEditFormUrl: string }>()
     } catch (error) {
       throw error
     }
@@ -661,7 +662,7 @@ export class PortalDataService {
   public getListFields(
     list: PortalDataServiceList | string,
     filter?: string,
-    web: Web = this.web
+    web: IWeb = this.web
   ): Promise<SPField[]> {
     let fields = web.lists
       .getByTitle(this._configuration.listNames[list] || list)
@@ -669,7 +670,7 @@ export class PortalDataService {
     if (filter) {
       fields = fields.filter(filter)
     }
-    return fields.get<SPField[]>()
+    return fields<SPField[]>()
   }
 
   /**
@@ -687,8 +688,7 @@ export class PortalDataService {
         'GtProjectFieldName',
         'GtProjectAdminPermissions/GtProjectAdminPermissionId'
       )
-      .expand('GtProjectAdminPermissions')
-      .get<SPProjectAdminRoleItem[]>()
+      .expand('GtProjectAdminPermissions')<SPProjectAdminRoleItem[]>()
     return spItems.map((item) => new ProjectAdminRole(item))
   }
 
@@ -697,7 +697,7 @@ export class PortalDataService {
    *
    * @param list List to get items from
    */
-  private _getList(list: PortalDataServiceList): List {
+  private _getList(list: PortalDataServiceList): IList {
     return this.web.lists.getByTitle(this._configuration.listNames[list])
   }
 }

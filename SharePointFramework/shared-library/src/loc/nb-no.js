@@ -26,6 +26,6 @@ define([], function () {
     SubPhaseLabel: 'Delfase',
     TagFieldLabel: 'Etikett',
     TriangleLabel: 'Trekant',
-    TypeLabel: 'Type',
+    TypeLabel: 'Type'
   }
 })

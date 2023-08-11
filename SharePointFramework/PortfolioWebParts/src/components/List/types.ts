@@ -49,7 +49,7 @@ export interface IListProps<T extends IColumn = IColumn>
   readonly scrollablePane?: IScrollablePaneProps
 
   /**
-   * Search box props
+   * Properties for the search box to be rendered in the list header.
    */
   searchBox?: ISearchBoxProps
 

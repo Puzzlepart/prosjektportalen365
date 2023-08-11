@@ -17,11 +17,11 @@ import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
 
 export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
-  const { state, setState, onSyncProperties } = useProjectInformation(props)
-  if (state.hidden) return null
+  const { context } = useProjectInformation(props)
+  if (context.state.hidden) return null
 
   return (
-    <ProjectInformationContext.Provider value={{ props, state, setState, onSyncProperties }}>
+    <ProjectInformationContext.Provider value={context}>
       <div className={styles.root}>
         <div className={styles.container}>
           <div className={styles.header}>
@@ -29,25 +29,25 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
               {props.title}
             </span>
           </div>
-          {state.error ? (
+          {context.state.error ? (
             <UserMessage
               className={styles.userMessage}
-              type={state.error.type}
-              text={state.error.message}
+              type={context.state.error.type}
+              text={context.state.error.message}
             />
           ) : (
             <Shimmer
-              isDataLoaded={state.isDataLoaded}
+              isDataLoaded={context.state.isDataLoaded}
               customElementsGroup={<CustomShimmerElementsGroup />}
             >
-              <ProjectProperties properties={state.properties} />
-              {!props.hideAllActions && state.message && (
-                <UserMessage className={styles.userMessage} {...state.message} />
+              <ProjectProperties properties={context.state.properties} />
+              {!props.hideAllActions && context.state.message && (
+                <UserMessage className={styles.userMessage} {...context.state.message} />
               )}
               <Actions />
               <ParentProjectsList />
               <ProjectStatusReport />
-              <ProgressDialog {...state.progress} />
+              <ProgressDialog {...context.state.progress} />
               <AllPropertiesPanel />
               <CreateParentDialog />
               {props.page === 'Frontpage' && props.useIdeaProcessing && <SyncProjectDialog />}
@@ -55,7 +55,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
           )}
         </div>
       </div>
-      {state.confirmActionProps && <ConfirmDialog {...state.confirmActionProps} />}
+      {context.state.confirmActionProps && <ConfirmDialog {...context.state.confirmActionProps} />}
     </ProjectInformationContext.Provider>
   )
 }

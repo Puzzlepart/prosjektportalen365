@@ -1,5 +1,4 @@
 import { format } from '@fluentui/react/lib/Utilities'
-import { sp } from '@pnp/sp'
 import sortArray from 'array-sort'
 import { IAllocationSearchResult } from 'interfaces'
 import _ from 'lodash'
@@ -117,11 +116,11 @@ function transformItems(
  * @returns Timeline data
  */
 async function fetchData(props: IResourceAllocationProps): Promise<ITimelineData> {
-  const dataSource = await new DataSourceService(sp.web).getByName(props.dataSource)
+  const dataSource = await new DataSourceService(props.sp.web).getByName(props.dataSource)
   if (!dataSource) throw format(strings.DataSourceNotFound, props.dataSource)
   try {
     const results = (
-      await sp.search({
+      await props.sp.search({
         QueryTemplate: dataSource.searchQuery,
         Querytext: '*',
         RowLimit: 500,
