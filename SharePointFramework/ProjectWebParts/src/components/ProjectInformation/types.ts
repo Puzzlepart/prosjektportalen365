@@ -16,8 +16,19 @@ import { IProgressDialogProps } from './ProgressDialog/types'
 import { createProjectInformationFieldValueMap } from './createProjectInformationFieldValueMap'
 
 export type ProjectInformationFieldValue = {
+  /**
+   * `true` if the value is set
+   */
   isSet?: boolean
-  text: string
+
+  /**
+   * The value of the field
+   */
+  value: any
+
+  /**
+   * The complex value of the field
+   */
   $: any
 }
 
@@ -31,7 +42,9 @@ export class ProjectInformationField {
   public displayName: string
   public description: string
   public type: string
-  private _value: ProjectInformationFieldValue
+  private _fieldValue: ProjectInformationFieldValue
+  private _fieldValueMap: ReturnType<typeof createProjectInformationFieldValueMap>
+
   /**
    * Constructs a new `ProjectInformationField` instance.
    *
@@ -49,6 +62,7 @@ export class ProjectInformationField {
     this.displayName = column?.name ?? _field.Title
     this.description = _field.Description
     this.type = _field.TypeAsString
+    this._fieldValueMap = createProjectInformationFieldValueMap()
   }
 
   /**
@@ -59,33 +73,40 @@ export class ProjectInformationField {
    * - `$` - the value for the field
    *
    * @param propertiesData Properties data from `ProjectDataService.getProperties`
+   * @param currentValue Optional current value for the field if it's being edited
    *
    * @returns the field instance
    */
-  public setValue(propertiesData: IGetPropertiesData): ProjectInformationField {
-    const textValue = propertiesData.fieldValuesText[this.internalName]
+  public setValue(
+    propertiesData: IGetPropertiesData,
+    currentValue: string = null
+  ): ProjectInformationField {
+    const textValue = currentValue ?? propertiesData.fieldValuesText[this.internalName]
     const value = propertiesData.fieldValues[this.internalName]
-    this._value = {
+    this._fieldValue = {
       isSet: textValue !== undefined && textValue !== null && textValue !== '',
-      text: textValue,
+      value: textValue,
       $: value
     }
     return this
   }
 
   /**
-   * Get value for the field.
-   *
-   * @param value Optional value to use instead of the internal value
+   * Get value for the field. Uses `createProjectInformationFieldValueMap` to
+   * create a Map of field types and functions to get the value for the field.
+   * If the field type is not found in the map the `text` property is used.
    */
-  public getValue<T>(value = this._value): T {
-    const valueMap = createProjectInformationFieldValueMap<T>()
-    const fieldValue = valueMap.has(this.type) ? valueMap.get(this.type)(value) : value.text
+  public getParsedValue<T>(): T {
+    const fieldValue = this._fieldValueMap.has(this.type)
+      ? this._fieldValueMap.get(this.type)(this._fieldValue)
+      : this._fieldValue.value
     return fieldValue as unknown as T
   }
 
   /**
    * Get a property for the field by property name.
+   *
+   * E.g. `getPropery('ShowInEditForm')` or `getProperty('ShowInDisplayFom')`
    *
    * @param propertyName Property name
    */
@@ -127,7 +148,7 @@ export class ProjectInformationField {
    * Returns `true` if the value for the field is empty.
    */
   public get isEmpty(): boolean {
-    return !this._value?.isSet
+    return !this._fieldValue?.isSet
   }
 }
 

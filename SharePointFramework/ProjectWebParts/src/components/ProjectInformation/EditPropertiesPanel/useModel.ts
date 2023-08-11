@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { DefaultCaching } from 'pp365-shared-library/lib/data'
 import { useState } from 'react'
 import { useProjectInformationContext } from '../context'
-import { ProjectInformationField, ProjectInformationFieldValue } from '../types'
+import { ProjectInformationField } from '../types'
 
 /**
  * Hook for the `EditPropertiesPanel` model. This hook is used to get and set the values for
@@ -22,17 +22,11 @@ export function useModel() {
    * @param fallbackValue Value to return if the field has no value
    */
   function get<T>(field: ProjectInformationField, fallbackValue: T = null): T {
-    const { fieldValues, fieldValuesText } = context.state.data
-    const textValue =
-      (model.get(field.internalName) as string) ?? fieldValuesText[field.internalName]
-    const value: ProjectInformationFieldValue = {
-      isSet: textValue !== undefined && textValue !== null && textValue !== '',
-      text: textValue,
-      $: fieldValues[field.internalName]
+    const $field = field.setValue(context.state.data, model.get(field.internalName))
+    if ($field.isEmpty) {
+      return fallbackValue as unknown as T
     }
-    if (!value || typeof value.text !== 'string')
-      return (value.text ?? fallbackValue) as unknown as T
-    return field.getValue(value) as unknown as T
+    return field.getParsedValue<any>()
   }
 
   /**
