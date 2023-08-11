@@ -1,9 +1,11 @@
 import { IDropdownOption } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
+import _ from 'lodash'
 import { IProjectInformationData } from '../services/ProjectDataService/types'
 import { createFieldValueMap } from '../util'
 import { ProjectColumn } from './ProjectColumn'
 import { ProjectInformationFieldValue } from './ProjectInformationFieldValue'
+import { SPField } from './SPField'
 
 /**
  * Project information field model. Used both for display
@@ -15,27 +17,34 @@ export class ProjectInformationField {
   public displayName: string
   public description: string
   public type: string
+  public column: ProjectColumn
+  private _isExternal: boolean
   private _fieldValue: ProjectInformationFieldValue
   private _fieldValueMap: ReturnType<typeof createFieldValueMap>
 
   /**
    * Constructs a new `ProjectInformationField` instance.
    *
-   * @param _field Field data
-   * @param column Column data
-   * @param _isExternal The current user is external with no access to portfolio level
+   * @param _field Field information
    */
-  constructor(
-    private _field: Record<string, any>,
-    public column: ProjectColumn,
-    private _isExternal: boolean
-  ) {
+  constructor(private _field: SPField) {
     this.id = _field.Id
     this.internalName = _field.InternalName
-    this.displayName = column?.name ?? _field.Title
+    this.displayName = _field.Title
     this.description = _field.Description
     this.type = _field.TypeAsString
     this._fieldValueMap = createFieldValueMap()
+  }
+
+  /**
+   * Initializes the field with the columns from `ProjectDataService`.
+   * 
+   * @param columns Columns from `ProjectDataService`
+   */
+  public init(columns: ProjectColumn[]) {
+    this.column = columns.find((c) => c.internalName === this.internalName)
+    this._isExternal = _.isEmpty(columns)
+    return this
   }
 
   /**
@@ -126,6 +135,6 @@ export class ProjectInformationField {
    * @returns a clone of the field
    */
   public clone() {
-    return new ProjectInformationField(this._field, this.column, this._isExternal)
+    return new ProjectInformationField(this._field).init([this.column].filter(Boolean))
   }
 }

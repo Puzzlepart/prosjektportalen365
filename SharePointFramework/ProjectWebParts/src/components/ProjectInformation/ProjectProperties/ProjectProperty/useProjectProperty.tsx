@@ -54,11 +54,11 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       ['TaxonomyFieldType', ([tag]: ITag[]) => <div>{tag.name}</div>],
       [
         'URL',
-        ([url, description]) => {
+        ({ url, description }) => {
           return (
             <div>
               <Link href={url} target='_blank'>
-                {description}
+                {description ?? url}
               </Link>
             </div>
           )
@@ -82,10 +82,12 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       ]
     ])
 
+    const value = props.model.getParsedValue()
+
     if (renderMap.has(props.model.type)) {
-      return renderMap.get(props.model.type)(props.model.getParsedValue())
+      return renderMap.get(props.model.type)(value)
     } else {
-      return <div>{props.model.getParsedValue<string>()}</div>
+      return <div>{value}</div>
     }
   }
   return { renderValueForField }

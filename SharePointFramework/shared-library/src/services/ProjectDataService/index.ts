@@ -2,9 +2,10 @@ import { format } from '@fluentui/react'
 import { AssignFrom, IPnPClientStore, PnPClientStorage, dateAdd } from '@pnp/core'
 import { ConsoleListener, Logger } from '@pnp/logging'
 import '@pnp/sp/presets/all'
-import { IFieldInfo, IWeb, SPFI, spfi } from '@pnp/sp/presets/all'
+import { IWeb, SPFI, spfi } from '@pnp/sp/presets/all'
 import { DefaultCaching, createSpfiInstance } from '../../data'
-import { ChecklistItemModel, ProjectPhaseChecklistData, ProjectPhaseModel } from '../../models'
+import { ChecklistItemModel, ProjectPhaseChecklistData, ProjectPhaseModel, SPField } from '../../models'
+import { getClassProperties } from '../../util'
 import { tryParseJson } from '../../util/tryParseJson'
 import {
   ILocalProjectInformationItemContext,
@@ -123,8 +124,8 @@ export class ProjectDataService {
    *
    * @param fields Fields to map
    */
-  private _mapFields(fields: IFieldInfo[]): any {
-    return fields.map((fld) => ({
+  private _mapFields(fields: SPField[]): SPField[] {
+    return fields.map<SPField>((fld) => ({
       ...fld,
       ShowInEditForm: fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') === -1,
       ShowInNewForm: fld.SchemaXml.indexOf('ShowInNewForm="FALSE"') === -1,
@@ -154,20 +155,9 @@ export class ProjectDataService {
       const ctx = await this._getLocalProjectInformationItemContext()
       if (!ctx) return null
       const fields = await ctx.list.fields
-        .select(
-          'Id',
-          'InternalName',
-          'Title',
-          'Description',
-          'TypeAsString',
-          'SchemaXml',
-          'TextField',
-          'Choices',
-          'Hidden',
-          'TermSetId'
-        )
+        .select(...getClassProperties(SPField))
         // eslint-disable-next-line quotes
-        .filter("substringof('Gt', InternalName)")()
+        .filter("substringof('Gt', InternalName)")<SPField[]>()
       const userFields = fields.filter((fld) => fld.TypeAsString.indexOf('User') === 0)
       const [fieldValuesText, fieldValues] = await Promise.all([
         ctx.item.fieldValuesAsText(),
@@ -335,8 +325,8 @@ export class ProjectDataService {
       const items = await this.web.lists
         .getByTitle(listName)
         .items.select('ID', 'Title', 'GtComment', 'GtChecklistStatus', 'GtProjectPhase')<
-        Record<string, any>[]
-      >()
+          Record<string, any>[]
+        >()
       const checklistItems = items.map((item) => new ChecklistItemModel(item))
       const checklistData = checklistItems
         .filter((item) => item.termGuid)

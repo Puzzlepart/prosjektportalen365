@@ -1,7 +1,6 @@
 import { MessageBarType } from '@fluentui/react'
 import { LogLevel } from '@pnp/logging'
 import strings from 'ProjectWebPartsStrings'
-import _ from 'lodash'
 import {
   CustomError,
   ListLogger,
@@ -120,9 +119,9 @@ const fetchData: DataFetchFunction<
         SPDataAdapter.project.getProjectInformationData(),
         isFrontpage
           ? SPDataAdapter.portal.getParentProjects(
-              context.props.webPartContext?.pageContext?.web?.absoluteUrl,
-              ProjectInformationParentProject
-            )
+            context.props.webPartContext?.pageContext?.web?.absoluteUrl,
+            ProjectInformationParentProject
+          )
           : Promise.resolve([]),
         fetchProjectStatusReportData(context)
       ])
@@ -140,13 +139,10 @@ const fetchData: DataFetchFunction<
     }
     data.properties = projectInformationData.fields
       .map((field) =>
-        new ProjectInformationField(
-          field,
-          columns.find(({ internalName }) => internalName === field.InternalName),
-          _.isEmpty(columns)
-        ).setValue(projectInformationData)
+        new ProjectInformationField(field)
+          .init(columns)
+          .setValue(projectInformationData)
       )
-      .sort((a, b) => a.column?.sortOrder - b.column?.sortOrder)
     if (isFrontpage) {
       data.userHasEditPermission = await SPDataAdapter.checkProjectAdminPermissions(
         ProjectAdminPermission.EditProjectProperties,
