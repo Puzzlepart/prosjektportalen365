@@ -84,6 +84,7 @@ declare interface IPortfolioWebPartsStrings {
   DataSourceNotFound: string
   DefaultDataSourceViewLabel: string
   DefaultRenderModeLabel: string
+  DefaultVerticalLabel: string
   DefaultViewDescription: string
   DefaultViewLabel: string
   DefaultViewSetWarningMessage: string
@@ -105,7 +106,7 @@ declare interface IPortfolioWebPartsStrings {
   FilterText: string
   GeneralGroupName: string
   GroupByColumnLabel: string
-  HideViewsLabel: string
+  HideVerticalsLabel: string
   IconNameDescription: string
   IconNameLabel: string
   IncludeViewNameInExcelExportFilenameLabel: string
@@ -208,6 +209,7 @@ declare interface IPortfolioWebPartsStrings {
   ShowProjectLogoFieldLabel: string
   ShowProjectManagerFieldLabel: string
   ShowProjectOwnerFieldLabel: string
+  ShowRenderModeSelectorLabel: string
   ShowSearchBoxLabel: string
   ShowViewSelectorLabel: string
   SiteTitleLabel: string
