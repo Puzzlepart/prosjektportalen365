@@ -1,5 +1,5 @@
 import { IConfigurationFile } from 'types'
-import { IBaseWebPartComponentProps } from 'pp365-shared-library/src/components/BaseWebPartComponent/types'
+import { IBaseWebPartComponentProps } from 'pp365-shared-library/lib/components/BaseWebPartComponent/types'
 import { IRiskMatrixProps } from '../../components/RiskMatrix'
 import { UncertaintyElementModel } from 'models'
 

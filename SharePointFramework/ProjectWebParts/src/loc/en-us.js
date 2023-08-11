@@ -1,5 +1,10 @@
 define([], function () {
   return {
+    SaveText: 'Save',
+    UpdatingProjectPropertiesStatusText: 'Updating project properties ...',
+    SynchronizingProjectPropertiesToPortfolioSiteStatusText: 'Synchronizing project properties to portfolio site ...',
+    UrlFieldUrlPlaceholder: 'Enter URL',
+    UrlFieldDescriptionPlaceholder: 'Alternative text',
     AdminPageLinkLabel: 'Path to Admin page',
     AdvancedGroupName: 'Advanced',
     BarLabel: 'Bar',

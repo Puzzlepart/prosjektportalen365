@@ -57,8 +57,8 @@
     "@pnp/core": "3.17.0",
     "@pnp/queryable": "3.17.0",
     "sp-entityportal-service": "2.3.0",
-    "@fluentui/react-components": "~9.27.2",
-    "@fluentui/react-icons": "~2.0.209"
+    "@fluentui/react-components": "9.27.2",
+    "@fluentui/react-icons": "2.0.209"
   },
   "resolutions": {
     "@types/react": "16.8.8"

@@ -7,14 +7,15 @@ import {
   Spinner,
   SpinnerSize
 } from '@fluentui/react'
-import strings from 'ProjectWebPartsStrings'
-import React, { FC, useContext, useState } from 'react'
-import { ProjectInformationContext } from '../context'
-import { ProjectSetupCustomAction } from './ProjectSetupCustomAction'
 import { IMenuNode } from '@pnp/sp/navigation'
+import strings from 'ProjectWebPartsStrings'
+import React, { FC, useState } from 'react'
+import { useProjectInformationContext } from '../context'
+import { CLOSE_PANEL } from '../reducer'
+import { ProjectSetupCustomAction } from './ProjectSetupCustomAction'
 
 export const CreateParentDialog: FC = () => {
-  const context = useContext(ProjectInformationContext)
+  const context = useProjectInformationContext()
   const [isLoading, setLoading] = useState(false)
 
   async function applyCustomAction() {
@@ -48,8 +49,8 @@ export const CreateParentDialog: FC = () => {
 
   return (
     <Dialog
-      hidden={!context.state.displayCreateParentDialog}
-      onDismiss={() => context.setState({ displayCreateParentDialog: false })}
+      hidden={context.state.activeDialog !== 'CreateParentDialog'}
+      onDismiss={() => context.dispatch(CLOSE_PANEL())}
       dialogContentProps={{
         type: DialogType.largeHeader,
         title: strings.CreateParentModalTitle,
@@ -60,7 +61,7 @@ export const CreateParentDialog: FC = () => {
         <DialogFooter>
           <DefaultButton
             text={strings.CancelText}
-            onClick={() => context.setState({ displayCreateParentDialog: false })}
+            onClick={() => context.dispatch(CLOSE_PANEL())}
           />
           <PrimaryButton
             text={strings.RedoText}

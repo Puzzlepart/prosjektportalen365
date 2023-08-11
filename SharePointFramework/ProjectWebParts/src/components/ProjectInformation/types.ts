@@ -1,37 +1,26 @@
+/* eslint-disable max-classes-per-file */
 import {
   IBaseWebPartComponentProps,
-  IBaseWebPartComponentState
-} from 'pp365-shared-library/src/components/BaseWebPartComponent'
-import { ProjectColumn } from 'pp365-shared-library/lib/models'
-import { IProgressDialogProps } from './ProgressDialog/types'
-import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage'
-import { IEntityField } from 'sp-entityportal-service'
+  IBaseWebPartComponentState,
+  IUserMessageProps,
+  ProjectColumn,
+  ProjectInformationField,
+  ProjectInformationParentProject
+} from 'pp365-shared-library/lib'
 import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDataService'
-import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
-import { ActionType } from './Actions/types'
 import { IProjectStatusData } from '../ProjectStatus'
-import { IWeb } from '@pnp/sp/webs'
+import { ActionType } from './Actions/types'
+import { IProgressDialogProps } from './ProgressDialog/types'
 
-export class ProjectInformationParentProject {
-  public title: string
-  public url: string
-  public childProjects: any[]
-  public iconName: 'ProductVariant' | 'ProductList'
-
-  constructor(spItem: Record<string, any>, public web: IWeb) {
-    this.title = spItem.Title
-    this.url = spItem.GtSiteUrl
-    this.childProjects = (JSON.parse(spItem.GtChildProjects ?? []) as any[]).map((i) => i.SPWebURL)
-    if (spItem.GtIsParentProject) this.iconName = 'ProductVariant'
-    else if (spItem.GtIsProgram) this.iconName = 'ProductList'
-  }
-}
+export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
+export type ProjectInformationDialogType = 'CreateParentDialog' | 'SyncProjectDialog'
+export type ProjectInformationPage = 'Frontpage' | 'ProjectStatus' | 'Portfolio'
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   /**
    * Page property is used to determine which properties to display
    */
-  page: 'Frontpage' | 'ProjectStatus' | 'Portfolio'
+  page: ProjectInformationPage
 
   /**
    * Hide all actions for the web part
@@ -108,19 +97,17 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
 export interface IProjectInformationState
   extends IBaseWebPartComponentState<IProjectInformationData> {
   /**
-   * Properties
+   * Properties to display sorted by `column.sortOrder`. The properties
+   * must be sent through a visibility check to determine if they should
+   * be displayed or not. All properties will be displayed in the
+   * `AllPropertiesPanel`.
    */
-  properties?: ProjectPropertyModel[]
+  properties?: ProjectInformationField[]
 
   /**
-   * All properties (used for the properties panel)
+   * Properties for the `ProgressDialog` component
    */
-  allProperties?: ProjectPropertyModel[]
-
-  /**
-   * Progress dialog props
-   */
-  progress?: IProgressDialogProps
+  progressDialog?: IProgressDialogProps
 
   /**
    * Message to show to the user
@@ -138,22 +125,25 @@ export interface IProjectInformationState
   isParentProject?: boolean
 
   /**
-   *  Display `<CreateParentDialog />`
+   * The current active panel.
+   *
+   * Can be one of the following:
+   * - `EditPropertiesPanel`
+   * - `AllPropertiesPanel`
    */
-  displayCreateParentDialog?: boolean
+  activePanel?: ProjectInformationPanelType
 
   /**
-   * Display `<SyncProjectDialog />`
+   * The current active dialog.
+   *
+   * Can be one of the following:
+   * - `CreateParentDialog`
+   * - `SyncProjectDialog`
    */
-  displaySyncProjectDialog?: boolean
+  activeDialog?: ProjectInformationDialogType
 
   /**
-   * Show project properties panel
-   */
-  showAllPropertiesPanel?: boolean
-
-  /**
-   * Current user has edit permission (edc568a8-9cfc-4547-9af2-d9d3aeb5aa2a)
+   * Current user has edit permission (`edc568a8-9cfc-4547-9af2-d9d3aeb5aa2a`)
    */
   userHasEditPermission?: boolean
 
@@ -161,15 +151,15 @@ export interface IProjectInformationState
    * Is project data synced
    */
   isProjectDataSynced?: boolean
-}
 
-export interface IProjectInformationUrlHash {
-  syncproperties: string
-  force: string
+  /**
+   * Properties last updated date/time
+   */
+  propertiesLastUpdated?: Date
 }
 
 export interface IProjectInformationData
-  extends ProjectDataService.IGetPropertiesData,
+  extends ProjectDataService.IProjectInformationData,
     Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {
   /**
    * Column configuration
@@ -180,9 +170,4 @@ export interface IProjectInformationData
    * Parent projects
    */
   parentProjects?: ProjectInformationParentProject[]
-
-  /**
-   * Array of fields from the entity
-   */
-  fields?: IEntityField[]
 }

@@ -1,8 +1,6 @@
-import { ProjectPropertyModel } from './ProjectProperty'
-
 export interface IProjectPropertiesProps {
   /**
-   * Properties
+   * Display all properties regardless of configuration
    */
-  properties?: ProjectPropertyModel[]
+  displayAllProperties?: boolean
 }

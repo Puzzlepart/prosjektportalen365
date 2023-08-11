@@ -1,70 +1,41 @@
 import { MessageBarType } from '@fluentui/react'
 import { LogLevel } from '@pnp/logging'
 import strings from 'ProjectWebPartsStrings'
-import _ from 'lodash'
-import { ProjectAdminPermission } from 'pp365-shared-library/lib/data/SPDataAdapterBase/ProjectAdminPermission'
-import { ListLogger } from 'pp365-shared-library/lib/logging'
-import { ProjectColumnConfig, SectionModel, StatusReport } from 'pp365-shared-library/lib/models'
+import {
+  CustomError,
+  ListLogger,
+  ProjectAdminPermission,
+  ProjectColumnConfig,
+  ProjectInformationField,
+  ProjectInformationParentProject,
+  SectionModel,
+  StatusReport
+} from 'pp365-shared-library/lib'
 import { useEffect } from 'react'
-import { isEmpty } from 'underscore'
-import { ProjectInformation } from '.'
 import SPDataAdapter from '../../data'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
-import { ProjectPropertyModel } from './ProjectProperties/ProjectProperty'
-import {
-  IProjectInformationData,
-  IProjectInformationProps,
-  IProjectInformationState,
-  ProjectInformationParentProject
-} from './types'
+import { IProjectInformationContext } from './context'
+import { ProjectInformation } from './index'
+import { FETCH_DATA_ERROR, INIT_DATA } from './reducer'
+import { IProjectInformationState } from './types'
 
 /**
- * Transform properties to model `ProjectPropertyModel`
+ * Checks if project data is synced.
  *
- * @param data Data
- * @param props Component properties for `ProjectInformation`
- * @param useVisibleFilter Use visible filter
+ * @param context Context for `ProjectInformation`
  */
-const transformProperties = (
-  data: IProjectInformationData,
-  props: IProjectInformationProps,
-  useVisibleFilter: boolean = true
-) => {
-  const fieldNames: string[] = Object.keys(data.fieldValuesText).filter((fieldName) => {
-    const [field] = data.fields.filter((fld) => fld.InternalName === fieldName)
-    if (!field) return false
-    if (
-      isEmpty(data.columns) &&
-      ((props.showFieldExternal || {})[fieldName] || props.skipSyncToHub)
-    ) {
-      return true
-    }
-    const [column] = data.columns.filter((c) => c.internalName === fieldName)
-    return column ? (useVisibleFilter ? column.isVisible(props.page) : true) : false
-  })
-
-  const properties = fieldNames.map((fn) => {
-    const [field] = data.fields.filter((fld) => fld.InternalName === fn)
-    return new ProjectPropertyModel(field, data.fieldValuesText[fn])
-  })
-  return properties
-}
-
-/**
- * Checks if project data is synced
- */
-const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolean> = async (
-  props
+const checkProjectDataSynced: DataFetchFunction<IProjectInformationContext, boolean> = async (
+  context
 ) => {
   try {
     let isSynced = false
     const projectDataList = SPDataAdapter.portal.web.lists.getByTitle(strings.IdeaProjectDataTitle)
     const [projectDataItem] = await projectDataList.items
-      .filter(`GtSiteUrl eq '${props.webPartContext.pageContext.web.absoluteUrl}'`)
+      .filter(`GtSiteUrl eq '${context.props.webPartContext.pageContext.web.absoluteUrl}'`)
       .select('Id')()
 
     const [ideaConfig] = (await SPDataAdapter.getIdeaConfiguration()).filter(
-      (item) => item.title === props.ideaConfiguration
+      (item) => item.title === context.props.ideaConfiguration
     )
 
     const ideaProcessingList = SPDataAdapter.portal.web.lists.getByTitle(ideaConfig.processingList)
@@ -86,19 +57,19 @@ const checkProjectDataSynced: DataFetchFunction<IProjectInformationProps, boolea
  * Catches errors and returns empty arrays to support e.g. the case where the user does not have
  * access to the hub site.
  *
- * @param props Component properties for `ProjectInformation`
+ * @param context Context for `ProjectInformation`
  */
-const fetchProjectStatusReports: DataFetchFunction<
-  IProjectInformationProps,
+const fetchProjectStatusReportData: DataFetchFunction<
+  IProjectInformationContext,
   [StatusReport[], SectionModel[], ProjectColumnConfig[]]
-> = async (props) => {
-  if (props.hideStatusReport) {
+> = async (context) => {
+  if (context.props.hideStatusReport) {
     return [[], [], []]
   }
   try {
     const [reports, sections, columnConfig] = await Promise.all([
       SPDataAdapter.portal.getStatusReports({
-        filter: `(GtSiteId eq '${props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
+        filter: `(GtSiteId eq '${context.props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
         publishedString: strings.GtModerationStatus_Choice_Published,
         top: 1
       }),
@@ -113,65 +84,77 @@ const fetchProjectStatusReports: DataFetchFunction<
 
 /**
  * Fetch data for `ProjectInformation` component. This function is used in
- * `useProjectInformationDataFetch` hook.
+ * `useProjectInformationDataFetch` hook. Data are fetched using the following
+ * functions:
  *
- * @remarks Ensures that `SPDataAdapter` is configured
- * before fetching data. Normally the `SPDataAdapter` is not configured
- * if the component is used in a web part in a different SharePoint Framework solution
- * like `PortfolioWebParts`.
+ * - `SPDataAdapter.portal.getProjectColumns` - fetches project columns
+ * - `SPDataAdapter.project.getProjectInformationData` - fetches project properties data
+ * - `SPDataAdapter.portal.getParentProjects` - fetches parent projects (only on frontpage)
+ * - `fetchProjectStatusReportData` - fetches project status reports, sections and column config
+ *
+ * @remarks Ensures that `SPDataAdapter` is configured before fetching data.
+ * Normally the `SPDataAdapter` is not configured  if the component is used in
+ * a web part in a different SharePoint Framework solution like for instance
+ * `PortfolioWebParts`.
+ *
+ * @param context Context for `ProjectInformation`
+ * @param transformProperties Function for transforming the properties
  */
 const fetchData: DataFetchFunction<
-  IProjectInformationProps,
+  IProjectInformationContext,
   Partial<IProjectInformationState>
-> = async (props) => {
+> = async (context) => {
   try {
     if (!SPDataAdapter.isConfigured) {
-      await SPDataAdapter.configure(props.webPartContext, {
-        siteId: props.siteId,
-        webUrl: props.webUrl,
+      await SPDataAdapter.configure(context.props.webPartContext, {
+        siteId: context.props.siteId,
+        webUrl: context.props.webUrl,
         logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }
-    const [columns, propertiesData, parentProjects, [reports, sections, columnConfig]] =
+    const isFrontpage = context.props.page === 'Frontpage'
+    const [columns, projectInformationData, [reports, sections, columnConfig], parentProjects] =
       await Promise.all([
         SPDataAdapter.portal.getProjectColumns(),
-        SPDataAdapter.project.getPropertiesData(),
-        props.page === 'Frontpage'
+        SPDataAdapter.project.getProjectInformationData(),
+        fetchProjectStatusReportData(context),
+        isFrontpage
           ? SPDataAdapter.portal.getParentProjects(
-              props.webPartContext?.pageContext?.web?.absoluteUrl,
+              context.props.webPartContext?.pageContext?.web?.absoluteUrl,
               ProjectInformationParentProject
             )
-          : Promise.resolve([]),
-        fetchProjectStatusReports(props)
+          : Promise.resolve([])
       ])
-    const data: IProjectInformationData = {
-      columns,
-      parentProjects,
-      reports,
-      sections,
-      columnConfig,
-      ...propertiesData
+    const data: Partial<IProjectInformationState> = {
+      data: {
+        columns,
+        parentProjects,
+        reports,
+        sections,
+        columnConfig,
+        ...projectInformationData
+      },
+      userHasEditPermission: false,
+      isProjectDataSynced: false
     }
-    const properties = transformProperties(data, props)
-    const allProperties = transformProperties(data, props, false)
-    let userHasEditPermission = false
-    let isProjectDataSynced = false
-    if (props.page === 'Frontpage') {
-      userHasEditPermission = await SPDataAdapter.checkProjectAdminPermissions(
-        ProjectAdminPermission.EditProjectProperties,
-        data.fieldValues
+    data.properties = projectInformationData.fields
+      .map((field) =>
+        new ProjectInformationField(field).init(columns).setValue(projectInformationData)
       )
-      isProjectDataSynced = props.useIdeaProcessing && (await checkProjectDataSynced(props))
+      .sort((a, b) => {
+        if (!a.column) return 1
+        if (!b.column) return -1
+        return a.column.sortOrder - b.column.sortOrder
+      })
+    if (isFrontpage) {
+      data.userHasEditPermission = await SPDataAdapter.checkProjectAdminPermissions(
+        ProjectAdminPermission.EditProjectProperties,
+        projectInformationData.fieldValues
+      )
+      data.isProjectDataSynced =
+        context.props.useIdeaProcessing && (await checkProjectDataSynced(context))
     }
-    const isParentProject = data.fieldValues?.GtIsParentProject || data.fieldValues?.GtIsProgram
-    return {
-      data,
-      isParentProject,
-      properties,
-      allProperties,
-      userHasEditPermission,
-      isProjectDataSynced
-    }
+    return data
   } catch (error) {
     ListLogger.log({
       message: error.message,
@@ -185,23 +168,18 @@ const fetchData: DataFetchFunction<
 
 /**
  * Fetch hook for ProjectInformation. Fetches data for `ProjectInformation` component
- * using `fetchData` function together with React `useEffect` hook.
+ * using `fetchData` function together with React `useEffect` hook. The data is re-fetched
+ * when `context.state.propertiesLastUpdated` changes.
  *
- * @param props Component properties for `ProjectInformation`
- * @param setState Set state function for `ProjectInformation`
+ * @param context Context for `ProjectInformation`
  */
-export const useProjectInformationDataFetch = (
-  props: IProjectInformationProps,
-  setState: (newState: Partial<IProjectInformationState>) => void
-) => {
+export const useProjectInformationDataFetch = (context: IProjectInformationContext) => {
   useEffect(() => {
-    fetchData(props)
-      .then((data) => setState({ ...data, isDataLoaded: true }))
-      .catch((error) =>
-        setState({
-          isDataLoaded: true,
-          error: { ..._.pick(error, 'message', 'stack'), type: MessageBarType.severeWarning }
-        })
-      )
-  }, [])
+    fetchData(context)
+      .then((state) => context.dispatch(INIT_DATA({ state })))
+      .catch((e) => {
+        const error = CustomError.createError(e, MessageBarType.severeWarning)
+        context.dispatch(FETCH_DATA_ERROR({ error }))
+      })
+  }, [context.state.propertiesLastUpdated])
 }

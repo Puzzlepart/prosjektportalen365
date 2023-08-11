@@ -1,4 +1,24 @@
 declare interface IProjectWebPartsStrings {
+  SaveText: string
+  ErrorBoundaryFallbackDescription: string
+  ErrorBoundaryFallbackText: string
+  UpdatingProjectPropertiesErrorText: string
+  SynchronizingProjectPropertiesToPortfolioSiteErrorText: string
+  UpdatingProjectPropertiesStatusText: string
+  SynchronizingProjectPropertiesToPortfolioSiteStatusText: string
+  UrlFieldUrlPlaceholder: string
+  UrlFieldDescriptionPlaceholder: string
+  UnknownConfigurationName: any
+  SiteAssetsConfigurationFolder: string
+  RiskMatrixConfigurationFolder: string
+  ManualConfigurationNotFoundOrInvalid: string
+  RiskMatrixManualConfigurationPathDefaltValue: string
+  UseDynamicConfigurationOffText: string
+  UseDynamicConfigurationOnText: string
+  ManualConfigurationPathLabel: string
+  UseDynamicConfigurationLabel: string
+  PublishReportSpinnerText: string
+  PublishStatusReportSectionDataWarning: string
   AdminPageLinkLabel: string
   AdvancedGroupName: string
   BarLabel: string
@@ -141,7 +161,10 @@ declare interface IProjectWebPartsStrings {
   SaveColorConfigurationText: string
   SettingsGroupName: string
   ShowAllProjectInformationText: string
-  ShowFieldExternalUsers: string
+  ShowFieldExternalUsersOffText: string
+  ShowFieldExternalUsersOnText: string
+  ShowFilterButtonLabel: string
+  ShowInfoMessageLabel: string
   ShowProjectDeliveriesLabel: string
   ShowSubTextFieldLabel: string
   ShowTimelineLabel: string

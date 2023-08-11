@@ -10,7 +10,7 @@ import { PropertyFieldToggleWithCallout } from '@pnp/spfx-property-controls/lib/
 import { IProjectInformationProps, ProjectInformation } from 'components/ProjectInformation'
 import * as strings from 'ProjectWebPartsStrings'
 import React from 'react'
-import { BaseProjectWebPart } from '../@baseProjectWebPart'
+import { BaseProjectWebPart } from '../baseProjectWebPart'
 
 export default class ProjectInformationWebPart extends BaseProjectWebPart<IProjectInformationProps> {
   public async onInit() {

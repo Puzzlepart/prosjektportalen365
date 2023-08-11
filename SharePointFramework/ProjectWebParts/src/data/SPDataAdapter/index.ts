@@ -8,7 +8,7 @@ import { IEntityField } from 'sp-entityportal-service/types'
 import { IConfigurationFile } from 'types'
 import _ from 'underscore'
 import { IdeaConfigurationModel, SPIdeaConfigurationItem } from '../../models'
-import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
+import { ISPDataAdapterConfiguration } from './types'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
@@ -77,14 +77,14 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * map the properties item fields to the hub fields. `updateEntityItem` from `sp-entityportal-service`
    * is used to update the hub entity item. If any errors occur, the original error is passed to the caller.
    *
-   * @param fieldValues Field values for the properties item
    * @param fieldValuesText Field values in text format for the properties item
+   * @param fieldValues Field values for the properties item
    * @param templateParameters Template parameters
    * @param progressFunc Progress function
    */
   public async syncPropertyItemToHub(
-    fieldValues: Record<string, any>,
     fieldValuesText: Record<string, string>,
+    fieldValues: Record<string, any>,
     templateParameters: Record<string, any>,
     progressFunc: (props: IProgressIndicatorProps) => void
   ): Promise<void> {
@@ -154,7 +154,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
             {
               if (syncToProject && fldValueTxt !== '') {
                 const term = { ...fldValue, WssId: -1, Label: fldValueTxt }
-                properties[fld.InternalName] = term || null
+                properties[fld.InternalName] = term ?? null
               } else {
                 let [textField] = fields.filter((f) => f.InternalName === `${fld.InternalName}Text`)
                 if (textField)
@@ -180,7 +180,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
                 // terms.forEach(term => {
                 //   termsString += `-1;#${term.Label}|${term.TermGuid};#`;
                 // })
-                // properties[fld.InternalName] = termsString || null
+                // properties[fld.InternalName] = termsString ?? null
               } else {
                 let [textField] = fields.filter((f) => f.InternalName === `${fld.InternalName}Text`)
                 if (textField)
@@ -236,23 +236,17 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
             }
             break
           case 'DateTime':
-            {
-              properties[fld.InternalName] = fldValue ? new Date(fldValue) : null
-            }
+            properties[fld.InternalName] = fldValue ? new Date(fldValue) : null
             break
           case 'Number':
           case 'Currency': {
             properties[fld.InternalName] = fldValue ? parseFloat(fldValue) : null
           }
           case 'URL':
-            {
-              properties[fld.InternalName] = fldValue || null
-            }
+            properties[fld.InternalName] = fldValue ?? null
             break
           case 'Boolean':
-            {
-              properties[fld.InternalName] = fldValue || null
-            }
+            properties[fld.InternalName] = fldValue ?? null
             break
           case 'MultiChoice':
             {
@@ -264,9 +258,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
             }
             break
           default:
-            {
-              properties[fld.InternalName] = fldValueTxt || null
-            }
+            properties[fld.InternalName] = fldValueTxt ?? null
             break
         }
       }

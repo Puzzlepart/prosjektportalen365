@@ -23,6 +23,7 @@ I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Pr
 - Støtte egenskaper for visningstyper i Porteføljeoversikt og Porteføleinnholdseaggregering [#1204](https://github.com/Puzzlepart/prosjektportalen365/issues/1204)
 - Støtte for kolonneredigering for Porteføljeoversikt med bruk av drag and drop for å endre rekkefølge på feltene [#1206](https://github.com/Puzzlepart/prosjektportalen365/issues/1206)
 - Opprett og rediger eksisterende visninger direkte i Porteføljeaggregering [#1210](https://github.com/Puzzlepart/prosjektportalen365/issues/1210)
+- Rediger egenskaper for prosjektet i et panel som åpner seg på siden [#1227](https://github.com/Puzzlepart/prosjektportalen365/issues/1227)
 
 ### Forbedringer
 

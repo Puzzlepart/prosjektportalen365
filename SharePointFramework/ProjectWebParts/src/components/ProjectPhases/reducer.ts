@@ -1,7 +1,6 @@
 import { MessageBarType } from '@fluentui/react'
 import { createAction, createReducer } from '@reduxjs/toolkit'
-import _ from 'lodash'
-import { ProjectPhaseModel } from 'pp365-shared-library/lib/models'
+import { CustomError, ProjectPhaseModel } from 'pp365-shared-library/lib/models'
 import { IProjectPhaseCalloutProps } from './ProjectPhase/ProjectPhaseCallout'
 import { IProjectPhasesData, IProjectPhasesState } from './types'
 
@@ -28,10 +27,7 @@ export default createReducer(initialState, {
       state.phase = payload.data?.currentPhase
       state.isDataLoaded = true
     }
-    state.error = payload.error && {
-      ..._.pick(payload.error, 'message', 'stack'),
-      type: MessageBarType.severeWarning
-    }
+    state.error = payload.error && CustomError.createError(payload.error, MessageBarType.error)
   },
 
   [DISMISS_ERROR_MESSAGE.type]: (state) => {
@@ -66,9 +62,6 @@ export default createReducer(initialState, {
 
   [CHANGE_PHASE_ERROR.type]: (state, { payload }: ReturnType<typeof CHANGE_PHASE_ERROR>) => {
     state.isChangingPhase = false
-    state.error = payload.error && {
-      ..._.pick(payload.error, 'message', 'stack'),
-      type: MessageBarType.severeWarning
-    }
+    state.error = payload.error && CustomError.createError(payload.error, MessageBarType.error)
   }
 })

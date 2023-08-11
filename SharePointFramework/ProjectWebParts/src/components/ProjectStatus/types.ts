@@ -1,18 +1,18 @@
 import { PageContext } from '@microsoft/sp-page-context'
-import { IOpportunityMatrixProps } from '../OpportunityMatrix'
-import { IRiskMatrixProps } from '../RiskMatrix'
 import {
+  IProjectInformationData,
   ProjectColumnConfig,
   SectionModel,
   SPField,
   StatusReport
-} from 'pp365-shared-library/lib/models'
-import { IGetPropertiesData } from 'pp365-shared-library/lib/services'
+} from 'pp365-shared-library/lib'
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState
-} from 'pp365-shared-library/src/components/BaseWebPartComponent'
+} from 'pp365-shared-library/lib/components/BaseWebPartComponent'
 import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage/types'
+import { IOpportunityMatrixProps } from '../OpportunityMatrix'
+import { IRiskMatrixProps } from '../RiskMatrix'
 
 export interface IProjectStatusProps extends IBaseWebPartComponentProps {
   riskMatrix?: IRiskMatrixProps
@@ -47,7 +47,7 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   /**
    * Hash state from URL
    */
-  hashState?: IProjectStatusHashState
+  hashState?: Map<string, string | number>
 
   /**
    * Is the report being published?
@@ -75,18 +75,11 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   userMessage?: Pick<IUserMessageProps, 'text' | 'type'>
 }
 
-export interface IProjectStatusHashState {
-  /**
-   * Selected report
-   */
-  selectedReport?: string
-}
-
 export interface IProjectStatusData {
   /**
    * Entity item
    */
-  properties?: IGetPropertiesData
+  properties?: IProjectInformationData
 
   /**
    * Status report fields

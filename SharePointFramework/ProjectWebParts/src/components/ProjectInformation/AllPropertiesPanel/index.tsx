@@ -1,21 +1,20 @@
-import { Panel, PanelType } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
-import React, { FC, useContext } from 'react'
-import { ProjectInformationContext } from '../context'
+import React, { FC } from 'react'
+import { BasePanel, ClosePanelButton } from '../BasePanel'
+import { IBasePanelProps } from '../BasePanel/types'
 import { ProjectProperties } from '../ProjectProperties'
 
-export const AllPropertiesPanel: FC = () => {
-  const context = useContext(ProjectInformationContext)
+export const AllPropertiesPanel: FC<IBasePanelProps> = (props) => {
   return (
-    <Panel
-      type={PanelType.medium}
-      headerText={strings.ProjectPropertiesListName}
-      isOpen={context.state.showAllPropertiesPanel}
-      onDismiss={() => context.setState({ showAllPropertiesPanel: false })}
-      isLightDismiss
-      closeButtonAriaLabel={strings.CloseText}
-    >
-      <ProjectProperties properties={context.state.allProperties} />
-    </Panel>
+    <BasePanel
+      {...props}
+      onRenderFooterContent={() => <ClosePanelButton noMargin />}
+      onRenderBody={() => <ProjectProperties displayAllProperties />}
+    />
   )
+}
+
+AllPropertiesPanel.defaultProps = {
+  $type: 'AllPropertiesPanel',
+  headerText: strings.ProjectPropertiesListName
 }

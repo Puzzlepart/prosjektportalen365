@@ -3,7 +3,7 @@ import { find } from '@microsoft/sp-lodash-subset'
 import { AssignFrom, dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
 import { Logger, LogLevel } from '@pnp/logging'
 import { IFolder } from '@pnp/sp/folders'
-import { ICamlQuery, IList, IListEnsureResult } from '@pnp/sp/lists'
+import { ICamlQuery, IList } from '@pnp/sp/lists'
 import '@pnp/sp/presets/all'
 import { IItemUpdateResultData, spfi, SPFI } from '@pnp/sp/presets/all'
 import { PermissionKind } from '@pnp/sp/security'
@@ -30,7 +30,9 @@ import {
   GetStatusReportsOptions,
   IPortalDataServiceConfiguration,
   PortalDataServiceDefaultConfiguration,
-  PortalDataServiceList
+  PortalDataServiceList,
+  SyncListParams,
+  SyncListReturnType
 } from './types'
 
 export class PortalDataService {
@@ -197,7 +199,7 @@ export class PortalDataService {
   }
 
   /**
-   * Get project status sections using caching.
+   * Get project status sections using `DefaultCaching`.
    */
   public async getProjectStatusSections(): Promise<SectionModel[]> {
     try {
@@ -273,7 +275,7 @@ export class PortalDataService {
   }
 
   /**
-   * Get project column configuration using caching.
+   * Get project column configuration using `DefaultCaching`.
    */
   public async getProjectColumnConfig(): Promise<ProjectColumnConfig[]> {
     const spItems = await this._getList('PROJECT_COLUMN_CONFIGURATION')
@@ -341,30 +343,23 @@ export class PortalDataService {
    *
    * Skips fields that has `ShowInEditForm` set to `FALSE`
    *
-   * @param url Url
-   * @param listName List name for the project properties list
-   * @param contentTypeId Content type id for project properties
-   * @param properties Create a new item in the list with specified properties if the list was created
+   * @param params Sync list parameters
    */
-  public async syncList(
-    url: string,
-    listName: string,
-    contentTypeId: string,
-    properties?: Record<string, string>
-  ): Promise<IListEnsureResult> {
-    const web = spfi(url).using(AssignFrom(this._sp.web)).web
-    const { jsomContext } = await initJsom(url, { loadTaxonomy: true })
+  public async syncList(params: SyncListParams): Promise<SyncListReturnType> {
+    const fieldsAdded: SPField[] = []
+    const web = spfi(params.url).using(AssignFrom(this._sp.web)).web
+    const { jsomContext } = await initJsom(params.url, { loadTaxonomy: true })
     const [hubContentType, targetSiteFields, ensureList] = await Promise.all([
-      this._getHubContentType(contentTypeId),
+      this._getHubContentType(params.contentTypeId),
       this._getSiteFields(web),
-      web.lists.ensure(listName, '', 100, false, {
+      web.lists.ensure(params.listName, '', 100, false, {
         Hidden: true,
         EnableAttachments: false,
         EnableVersioning: true
       })
     ])
-    const listFields = await this.getListFields(listName, undefined, web)
-    const spList = jsomContext.web.get_lists().getByTitle(listName)
+    const listFields = await this.getListFields(params.listName, undefined, web)
+    const spList = jsomContext.web.get_lists().getByTitle(params.listName)
     for (const field of hubContentType.Fields) {
       const [[listField], [siteField]] = [
         listFields.filter((fld) => fld.InternalName === field.InternalName),
@@ -376,7 +371,7 @@ export class PortalDataService {
       ]
       if (listField) {
         Logger.log({
-          message: `(PortalDataService) (syncList) Field [${field.InternalName}] already exists on list [${listName}].`,
+          message: `(PortalDataService) (syncList) Field [${field.InternalName}] already exists on list [${params.listName}].`,
           level: LogLevel.Info
         })
         continue
@@ -384,9 +379,8 @@ export class PortalDataService {
       try {
         const [fieldLink] = hubContentType.FieldLinks.filter((fl) => fl.Name === field.InternalName)
         Logger.log({
-          message: `(PortalDataService) (syncList) Adding field [${field.InternalName}] to list [${listName}].`,
-          level: LogLevel.Info,
-          data: { fieldLink, siteField: !!siteField }
+          message: `(PortalDataService) (syncList) Adding field [${field.InternalName}] to list [${params.listName}].`,
+          level: LogLevel.Info
         })
         if (siteField) {
           const fldToAdd = jsomContext.web
@@ -397,6 +391,7 @@ export class PortalDataService {
             newField.set_required(true)
             newField.updateAndPushChanges(true)
           }
+          fieldsAdded.push(siteField)
         } else {
           const fieldToCreate = spList
             .get_fields()
@@ -410,15 +405,12 @@ export class PortalDataService {
           }
           fieldToCreate.set_title(field.Title)
           fieldToCreate.updateAndPushChanges(true)
+          fieldsAdded.push(field)
         }
         await executeQuery(jsomContext)
       } catch (error) {}
     }
     try {
-      Logger.log({
-        message: `(PortalDataService) (syncList) Attempting to add field [TemplateParameters] to list ${listName}.`,
-        level: LogLevel.Info
-      })
       const templateParametersField = spList
         .get_fields()
         .addFieldAsXml(
@@ -429,14 +421,14 @@ export class PortalDataService {
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
     } catch {}
-    if (ensureList.created && properties) {
-      ensureList.list.items.add(properties)
+    if (ensureList.created && params.properties) {
+      ensureList.list.items.add(params.properties)
     }
-    return ensureList
+    return { list: ensureList, fieldsAdded }
   }
 
   /**
-   * Get hub content type
+   * Get content type by ID from hub site.
    *
    * @param contentTypeId Content type ID
    */
@@ -468,7 +460,7 @@ export class PortalDataService {
   }
 
   /**
-   * Get files
+   * Get files using `DefaultCaching` and maps them to the specified constructor.
    *
    * @param listName List name
    * @param constructor Constructor

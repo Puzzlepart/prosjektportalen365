@@ -2,26 +2,35 @@ import { Shimmer } from '@fluentui/react/lib/Shimmer'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
 import React, { FC } from 'react'
-import { ProgressDialog } from './ProgressDialog'
 import { Actions } from './Actions'
 import { AllPropertiesPanel } from './AllPropertiesPanel'
-import { ProjectInformationContext } from './context'
 import { CreateParentDialog } from './CreateParentDialog'
 import { CustomShimmerElementsGroup } from './CustomShimmerElementsGroup'
+import { EditPropertiesPanel } from './EditPropertiesPanel'
 import { ParentProjectsList } from './ParentProjectsList'
+import { ProgressDialog } from './ProgressDialog'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
 import { ProjectStatusReport } from './ProjectStatusReport'
 import { SyncProjectDialog } from './SyncProjectDialog'
+import { ProjectInformationContextProvider } from './context'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
 
+/**
+ * Display project information. A number of actions are available to the user,
+ * depending on the access level of the current user.
+ *
+ * - Show all project information/properties in a panel (`AllPropertiesPanel`)
+ * - Edit project information/properties in a panel (`EditPropertiesPanel`)
+ * - Promote to parent project (`CreateParentDialog`)
+ */
 export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
   const { context } = useProjectInformation(props)
   if (context.state.hidden) return null
 
   return (
-    <ProjectInformationContext.Provider value={context}>
+    <ProjectInformationContextProvider value={context}>
       <div className={styles.root}>
         <div className={styles.container}>
           <div className={styles.header}>
@@ -40,23 +49,28 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
               isDataLoaded={context.state.isDataLoaded}
               customElementsGroup={<CustomShimmerElementsGroup />}
             >
-              <ProjectProperties properties={context.state.properties} />
-              {!props.hideAllActions && context.state.message && (
-                <UserMessage className={styles.userMessage} {...context.state.message} />
+              <ProjectProperties />
+              {context.state.message && (
+                <UserMessage
+                  hidden={props.hideAllActions}
+                  className={styles.userMessage}
+                  {...context.state.message}
+                />
               )}
               <Actions />
               <ParentProjectsList />
               <ProjectStatusReport />
-              <ProgressDialog {...context.state.progress} />
+              <ProgressDialog />
               <AllPropertiesPanel />
+              <EditPropertiesPanel />
               <CreateParentDialog />
-              {props.page === 'Frontpage' && props.useIdeaProcessing && <SyncProjectDialog />}
+              <SyncProjectDialog />
             </Shimmer>
           )}
         </div>
       </div>
       {context.state.confirmActionProps && <ConfirmDialog {...context.state.confirmActionProps} />}
-    </ProjectInformationContext.Provider>
+    </ProjectInformationContextProvider>
   )
 }
 
@@ -65,12 +79,7 @@ ProjectInformation.defaultProps = {
   page: 'Frontpage',
   customActions: [],
   hideActions: [],
-  hideAllActions: false,
-  useFramelessButtons: false,
-  hideStatusReport: false,
-  hideParentProjects: false,
-  statusReportShowOnlyIcons: true,
-  useIdeaProcessing: false
+  showFieldExternal: {}
 }
 
 export * from '../ProjectInformationPanel'

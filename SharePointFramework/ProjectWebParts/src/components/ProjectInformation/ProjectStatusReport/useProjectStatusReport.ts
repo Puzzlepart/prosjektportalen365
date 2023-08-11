@@ -1,11 +1,10 @@
-import { IProjectStatusContext } from '../../ProjectStatus/context'
 import strings from 'ProjectWebPartsStrings'
-import { useContext } from 'react'
 import _ from 'underscore'
-import { ProjectInformationContext } from '../context'
+import { IProjectStatusContext } from '../../ProjectStatus/context'
+import { useProjectInformationContext } from '../context'
 
 export function useProjectStatusReport() {
-  const context = useContext(ProjectInformationContext)
+  const context = useProjectInformationContext()
   const selectedReport = _.first(context.state.data.reports)
   if (!selectedReport || context.props.hideStatusReport) return null
   const projectStatusContext: IProjectStatusContext = {

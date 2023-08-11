@@ -1,19 +1,19 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import strings from 'ProjectWebPartsStrings'
-import { useContext } from 'react'
-import { ProjectInformationContext } from '../context'
+import { useProjectInformationContext } from '../context'
 import { ActionType } from './types'
+import { OPEN_DIALOG, OPEN_PANEL } from '../reducer'
 
 /**
  * Logic hook for `<Actions />` component.
  */
 export const useActions = () => {
-  const context = useContext(ProjectInformationContext)
+  const context = useProjectInformationContext()
   if (context.props.hideAllActions || context.props.displayMode === DisplayMode.Edit) return []
   const showAllProjectInformationAction: ActionType = [
     strings.ShowAllProjectInformationText,
     () => {
-      context.setState({ showAllPropertiesPanel: true })
+      context.dispatch(OPEN_PANEL('AllPropertiesPanel'))
     },
     'EntryView',
     false
@@ -27,7 +27,9 @@ export const useActions = () => {
   ]
   const editProjectInformationAction: ActionType = [
     strings.EditProjectInformationText,
-    context.state.data?.editFormUrl,
+    () => {
+      context.dispatch(OPEN_PANEL('EditPropertiesPanel'))
+    },
     'Edit',
     false,
     !context.state.userHasEditPermission
@@ -51,7 +53,7 @@ export const useActions = () => {
   const transformToParentProject: ActionType = [
     strings.CreateParentProjectLabel,
     () => {
-      context.setState({ displayCreateParentDialog: true })
+      context.dispatch(OPEN_DIALOG('CreateParentDialog'))
     },
     'Org',
     false,
@@ -60,7 +62,7 @@ export const useActions = () => {
   const syncProjectPropertiesAction: ActionType = [
     strings.SyncProjectPropertiesText,
     () => {
-      context.setState({ displaySyncProjectDialog: true })
+      context.dispatch(OPEN_DIALOG('SyncProjectDialog'))
     },
     'Sync',
     false,

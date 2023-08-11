@@ -241,14 +241,14 @@ export const createPortfolioAggregationReducer = (
       persistSelectedColumnsInWebPartProperties(props, current(state).columns)
     },
     [SET_CURRENT_VIEW.type]: (state) => {
-      const hashState = parseUrlHash<IPortfolioAggregationHashState>()
+      const hashState = parseUrlHash()
       const viewIdUrlParam = new URLSearchParams(document.location.href).get('viewId')
       let currentView: DataSource = null
 
       if (viewIdUrlParam) {
         currentView = _.find(state.views, (v) => v.id.toString() === viewIdUrlParam)
-      } else if (hashState.viewId) {
-        currentView = _.find(state.views, (v) => v.id.toString() === hashState.viewId)
+      } else if (hashState.has('viewId')) {
+        currentView = _.find(state.views, (v) => v.id === hashState.get('viewId'))
       } else if (props.dataSource || props.defaultViewId) {
         currentView = _.find(
           state.views,
