@@ -1,6 +1,6 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-  "id": "29759c81-896f-4128-818c-e2fc60ff0087",
+  "id": "2ef269b2-6370-4841-8b35-2185b7ccb22a",
   "alias": "ResourceAllocationWebPart",
   "componentType": "WebPart",
   "version": "1.9.0",
