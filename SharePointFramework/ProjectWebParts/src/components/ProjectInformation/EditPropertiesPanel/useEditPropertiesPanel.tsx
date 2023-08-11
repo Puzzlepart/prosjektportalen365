@@ -2,7 +2,7 @@ import { useProjectInformationContext } from '../context'
 import { useSyncList } from '../usePropertiesSync'
 import { IEditPropertiesPanelProps } from './types'
 import { useFieldElements } from './useFieldElements'
-import { useFields } from './useFields'
+import { useEditableFields } from './useEditableFields'
 import { useModel } from './useModel'
 import { useSubmit } from './useSubmit'
 
@@ -19,7 +19,7 @@ import { useSubmit } from './useSubmit'
  */
 export function useEditPropertiesPanel(props: IEditPropertiesPanelProps) {
   const context = useProjectInformationContext()
-  const fields = useFields(context.props, props.hiddenFields)
+  const fields = useEditableFields(props.hiddenFields)
   const model = useModel()
   const getFieldElement = useFieldElements(model)
   const submit = useSubmit(model)

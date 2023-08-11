@@ -1,5 +1,6 @@
 import {
   DatePicker,
+  DayOfWeek,
   Dropdown,
   IPersonaProps,
   ITag,
@@ -92,6 +93,8 @@ export function useFieldElements(model: UseModelReturnType) {
           label={field.displayName}
           value={model.get(field)}
           onSelectDate={(date) => model.set(field, date)}
+          formatDate={(date) => date.toLocaleDateString()}
+          firstDayOfWeek={DayOfWeek.Monday}
         />
         <FieldDescription description={field.description} />
       </>
