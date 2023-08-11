@@ -15,7 +15,7 @@ import {
 export class ProjectDataService {
   private _storage: IPnPClientStore
   private _storageKeys: Record<string, string> = {
-    _getLocalProjectInformationItemContext: '{0}_propertyitemcontext'
+    _getLocalProjectInformationItemContext: '{0}_local_project_information_item_context'
   }
   private _sp: SPFI
   public web: IWeb

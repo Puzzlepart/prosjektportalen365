@@ -1,12 +1,13 @@
 import { IColumn } from '@fluentui/react'
 import {
   IBaseWebPartComponentProps,
-  IBaseWebPartComponentState
-} from 'pp365-shared-library/lib/components/BaseWebPartComponent/types'
-import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
-import { ITimelineItem } from 'pp365-shared-library/lib/interfaces/ITimelineItem'
-import { ProjectColumn, SPField, TimelineConfigurationModel } from 'pp365-shared-library/lib/models'
-import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDataService'
+  IBaseWebPartComponentState,
+  IFilterProps,
+  ITimelineItem,
+  ProjectColumn,
+  TimelineConfigurationModel,
+  IProjectInformationData
+} from 'pp365-shared-library/lib'
 
 export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   listName?: string
@@ -91,14 +92,9 @@ export interface ITimelineGroups {
   typeGroups: ITimelineGroup[]
 }
 
-export interface IProjectTimelineData extends ProjectDataService.IGetPropertiesData {
+export interface IProjectTimelineData extends IProjectInformationData {
   /**
    * Column configuration
    */
   columns?: ProjectColumn[]
-
-  /**
-   * Array of fields from the entity
-   */
-  fields?: SPField[]
 }

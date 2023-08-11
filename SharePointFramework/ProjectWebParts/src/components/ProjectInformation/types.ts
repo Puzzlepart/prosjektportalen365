@@ -1,17 +1,19 @@
 /* eslint-disable max-classes-per-file */
 import {
-  IUserMessageProps,
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState,
+  IUserMessageProps,
   ProjectColumn,
   ProjectInformationField,
-  ProjectInformationParentProject,
-  SPField,
-  IProjectInformationData
+  ProjectInformationParentProject
 } from 'pp365-shared-library/lib'
+import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDataService'
 import { IProjectStatusData } from '../ProjectStatus'
 import { ActionType } from './Actions/types'
 import { IProgressDialogProps } from './ProgressDialog/types'
+
+export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
+export type ProjectInformationDialogType = 'CreateParentDialog' | 'SyncProjectDialog'
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   /**
@@ -91,13 +93,6 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   statusReportShowOnlyIcons?: boolean
 }
 
-export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
-export type ProjectInformationDialogType = 'CreateParentDialog' | 'SyncProjectDialog'
-
-export interface IProjectInformationUserMessage extends IUserMessageProps {
-  panel?: ProjectInformationPanelType
-}
-
 export interface IProjectInformationState
   extends IBaseWebPartComponentState<IProjectInformationData> {
   /**
@@ -113,7 +108,7 @@ export interface IProjectInformationState
   /**
    * Message to show to the user
    */
-  message?: IProjectInformationUserMessage
+  message?: IUserMessageProps
 
   /**
    * Confirm action props
@@ -144,7 +139,7 @@ export interface IProjectInformationState
   activeDialog?: ProjectInformationDialogType
 
   /**
-   * Current user has edit permission (edc568a8-9cfc-4547-9af2-d9d3aeb5aa2a)
+   * Current user has edit permission (`edc568a8-9cfc-4547-9af2-d9d3aeb5aa2a`)
    */
   userHasEditPermission?: boolean
 
@@ -160,7 +155,7 @@ export interface IProjectInformationState
 }
 
 export interface IProjectInformationData
-  extends IProjectInformationData,
+  extends ProjectDataService.IProjectInformationData,
     Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {
   /**
    * Column configuration
@@ -171,10 +166,4 @@ export interface IProjectInformationData
    * Parent projects
    */
   parentProjects?: ProjectInformationParentProject[]
-
-  /**
-   * All list fields with `Gt` prefix from the project
-   * properties list.
-   */
-  fields?: SPField[]
 }

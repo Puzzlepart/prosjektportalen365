@@ -2,12 +2,12 @@ import { PageContext } from '@microsoft/sp-page-context'
 import { IOpportunityMatrixProps } from '../OpportunityMatrix'
 import { IRiskMatrixProps } from '../RiskMatrix'
 import {
+  IProjectInformationData,
   ProjectColumnConfig,
   SectionModel,
   SPField,
   StatusReport
-} from 'pp365-shared-library/lib/models'
-import { IGetPropertiesData } from 'pp365-shared-library/lib/services'
+} from 'pp365-shared-library/lib'
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState
@@ -86,7 +86,7 @@ export interface IProjectStatusData {
   /**
    * Entity item
    */
-  properties?: IGetPropertiesData
+  properties?: IProjectInformationData
 
   /**
    * Status report fields

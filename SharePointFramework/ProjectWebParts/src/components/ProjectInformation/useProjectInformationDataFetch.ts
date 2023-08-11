@@ -114,7 +114,7 @@ const fetchData: DataFetchFunction<
       })
     }
     const isFrontpage = context.props.page === 'Frontpage'
-    const [columns, propertiesData, parentProjects, [reports, sections, columnConfig]] =
+    const [columns, projectInformationData, parentProjects, [reports, sections, columnConfig]] =
       await Promise.all([
         SPDataAdapter.portal.getProjectColumns(),
         SPDataAdapter.project.getProjectInformationData(),
@@ -133,22 +133,22 @@ const fetchData: DataFetchFunction<
         reports,
         sections,
         columnConfig,
-        ...propertiesData
+        ...projectInformationData
       },
       userHasEditPermission: false,
       isProjectDataSynced: false
     }
-    data.properties = propertiesData.fields.map((field) =>
+    data.properties = projectInformationData.fields.map((field) =>
       new ProjectInformationField(
         field,
         columns.find(({ internalName }) => internalName === field.InternalName),
         _.isEmpty(columns)
-      ).setValue(propertiesData)
+      ).setValue(projectInformationData)
     )
     if (isFrontpage) {
       data.userHasEditPermission = await SPDataAdapter.checkProjectAdminPermissions(
         ProjectAdminPermission.EditProjectProperties,
-        propertiesData.fieldValues
+        projectInformationData.fieldValues
       )
       data.isProjectDataSynced =
         context.props.useIdeaProcessing && (await checkProjectDataSynced(context))
