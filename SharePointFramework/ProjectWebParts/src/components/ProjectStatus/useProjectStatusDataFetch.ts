@@ -1,15 +1,13 @@
 import { LogLevel } from '@pnp/logging'
 import { AnyAction } from '@reduxjs/toolkit'
-import { ProjectAdminPermission } from 'pp365-shared-library/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import strings from 'ProjectWebPartsStrings'
+import _ from 'lodash'
+import { StatusReport, ProjectAdminPermission, getUrlParam, parseUrlHash } from 'pp365-shared-library/lib'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { INIT_DATA } from './reducer'
-import { IProjectStatusData, IProjectStatusHashState, IProjectStatusProps } from './types'
-import _ from 'lodash'
-import { parseUrlHash, getUrlParam } from 'pp365-shared-library/lib/util'
-import { StatusReport } from 'pp365-shared-library/lib/models'
+import { IProjectStatusData, IProjectStatusProps } from './types'
 
 export type FetchDataResult = {
   data: IProjectStatusData
@@ -54,13 +52,13 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
     let sortedReports = reports.sort((a, b) => b.created.getTime() - a.created.getTime())
     const sortedSections = sections.sort((a, b) => (a.sortOrder < b.sortOrder ? -1 : 1))
     let [initialSelectedReport] = sortedReports
-    const hashState = parseUrlHash<IProjectStatusHashState>()
+    const hashState = parseUrlHash()
     const selectedReportUrlParam = getUrlParam('selectedReport')
     const sourceUrl = decodeURIComponent(getUrlParam('Source') ?? '')
-    if (hashState.selectedReport) {
+    if (hashState.has('selectedReport')) {
       initialSelectedReport = _.find(
         sortedReports,
-        (report) => report.id === parseInt(hashState.selectedReport, 10)
+        (report) => report.id === hashState.get('selectedReport') as number
       )
     } else if (selectedReportUrlParam) {
       initialSelectedReport = _.find(

@@ -52,7 +52,7 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
         </div>
       )
     }
-    case DisplayMode.Read: {
+    default: {
       if (isEmpty(properties)) {
         return <UserMessage text={strings.NoPropertiesMessage} />
       }

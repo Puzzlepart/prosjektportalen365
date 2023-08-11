@@ -2,16 +2,16 @@ import { MessageBarType } from '@fluentui/react'
 import { LogLevel } from '@pnp/logging'
 import strings from 'ProjectWebPartsStrings'
 import _ from 'lodash'
-import { ProjectAdminPermission } from 'pp365-shared-library/lib/data/SPDataAdapterBase/ProjectAdminPermission'
-import { ListLogger } from 'pp365-shared-library/lib/logging'
 import {
   CustomError,
+  ListLogger,
+  ProjectAdminPermission,
   ProjectColumnConfig,
   ProjectInformationField,
   ProjectInformationParentProject,
   SectionModel,
   StatusReport
-} from 'pp365-shared-library/lib/models'
+} from 'pp365-shared-library/lib'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
 import { DataFetchFunction } from '../../types/DataFetchFunction'

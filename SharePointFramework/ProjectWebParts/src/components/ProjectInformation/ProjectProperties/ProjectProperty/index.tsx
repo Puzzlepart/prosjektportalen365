@@ -5,6 +5,7 @@ import styles from './ProjectProperty.module.scss'
 import { ProjectPropertyEdit } from './ProjectPropertyEdit'
 import { IProjectPropertyProps } from './types'
 import { useProjectProperty } from './useProjectProperty'
+import { Label } from '@fluentui/react'
 
 export const ProjectProperty: FC<IProjectPropertyProps> = (props) => {
   const context = useProjectInformationContext()
@@ -16,7 +17,7 @@ export const ProjectProperty: FC<IProjectPropertyProps> = (props) => {
     default: {
       return (
         <div className={styles.root} style={props.style}>
-          <div className={styles.label}>{props.model.displayName}</div>
+          <Label>{props.model.displayName}</Label>
           {renderValueForField()}
         </div>
       )

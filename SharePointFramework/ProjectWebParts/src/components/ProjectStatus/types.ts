@@ -1,6 +1,4 @@
 import { PageContext } from '@microsoft/sp-page-context'
-import { IOpportunityMatrixProps } from '../OpportunityMatrix'
-import { IRiskMatrixProps } from '../RiskMatrix'
 import {
   IProjectInformationData,
   ProjectColumnConfig,
@@ -13,6 +11,8 @@ import {
   IBaseWebPartComponentState
 } from 'pp365-shared-library/lib/components/BaseWebPartComponent'
 import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage/types'
+import { IOpportunityMatrixProps } from '../OpportunityMatrix'
+import { IRiskMatrixProps } from '../RiskMatrix'
 
 export interface IProjectStatusProps extends IBaseWebPartComponentProps {
   riskMatrix?: IRiskMatrixProps
@@ -47,7 +47,7 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   /**
    * Hash state from URL
    */
-  hashState?: IProjectStatusHashState
+  hashState?: Map<string, string  | number>
 
   /**
    * Is the report being published?
@@ -73,13 +73,6 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
    * User message to display in the UI
    */
   userMessage?: Pick<IUserMessageProps, 'text' | 'type'>
-}
-
-export interface IProjectStatusHashState {
-  /**
-   * Selected report
-   */
-  selectedReport?: string
 }
 
 export interface IProjectStatusData {
