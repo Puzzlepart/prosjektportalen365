@@ -839,7 +839,7 @@
     <value>Column(Z)</value>
   </data>
   <data name="SiteFields_GtPiShowLegend_DisplayName" xml:space="preserve">
-    <value>Show legend</value>  //------eller label?
+    <value>Show legend/label</value>
   </data>
   <data name="SiteFields_GtPiStacking_DisplayName" xml:space="preserve">
     <value>Stacking</value>
@@ -938,7 +938,7 @@
     <value>Description</value>
   </data>
   <data name="SiteFields_GtActionDescription_Description" xml:space="preserve">
-    <value>Describe the action</value>  //----------------------------Sjekk denne
+    <value>Describe the action</value>
   </data>
   <data name="SiteFields_GtActionResponsible_DisplayName" xml:space="preserve">
     <value>Action Responsible</value>
@@ -998,7 +998,7 @@
     <value>Default for category</value>
   </data>
   <data name="SiteFields_GtDataSourceDefault_Description" xml:space="preserve">
-    <value>Specify the default value for the category</value> //--------------Sjekk denne
+    <value>Specify the default value for the category</value>
   </data>
   <data name="SiteFields_GtDataSourceDeprecated_DisplayName" xml:space="preserve">
     <value>Deprecated</value>
@@ -1016,7 +1016,7 @@
     <value>Data source level</value>
   </data>
   <data name="SiteFields_GtDataSourceLevel_Description" xml:space="preserve">
-    <value>Specify the level of the data source</value> //--------------Sjekk denne
+    <value>Specify the level of the data source</value>
   </data>
   <data name="SiteFields_GtDeliveryAcceptanceCriteria_DisplayName" xml:space="preserve">
     <value>Acceptance criteria</value>
@@ -1118,13 +1118,13 @@
     <value>Key</value>
   </data>
   <data name="SiteFields_GtKey_Description" xml:space="preserve">
-    <value>Specify the unique identifier or key</value>   //------------sjekk denne
+    <value>Specify the unique identifier or the key</value>
   </data>
   <data name="SiteFields_GtLogFunctionName_DisplayName" xml:space="preserve">
     <value>Function Name</value>
   </data>
   <data name="SiteFields_GtLogFunctionName_Description" xml:space="preserve">
-    <value>Name of the function generating the log element</value>  //------------sjekk denne
+    <value>Name of the function generating the log element</value> 
   </data>
   <data name="SiteFields_GtLogLevel_DisplayName" xml:space="preserve">
     <value>Log Level</value>
@@ -1148,7 +1148,7 @@
     <value>Web URL</value>
   </data>
   <data name="SiteFields_GtLogWebUrl_Description" xml:space="preserve">
-    <value>URL of the webpage where the log was generated</value>   //------------sjekk denne
+    <value>URL of the site where the log was generated</value>
   </data>
   <data name="SiteFields_GtMeasurementComment_DisplayName" xml:space="preserve">
     <value>Measurement comment</value>
@@ -1217,7 +1217,7 @@
     <value>Provide a comprehensive description of the log element</value>
   </data>
   <data name="SiteFields_GtProjectLogExperience_DisplayName" xml:space="preserve">
-    <value>To Experience Log</value> //-------------"to" eller "for" her?
+    <value>Display in Experiencelog</value>
   </data>
   <data name="SiteFields_GtProjectLogExperience_Description" xml:space="preserve">
     <value>Select 'Yes' if the log element should be displayed in the experience log at the portfolio level (makes the log element visible to everyone with access to the project portal and the project)</value>
@@ -1334,7 +1334,7 @@
     <value>Arena/Meeting Place/Network</value>
   </data>
   <data name="SiteFields_GtStakeholderContext_Description" xml:space="preserve">
-    <value>Where do you meet this stakeholder group?</value>  //---------Sjekk denne
+    <value>Where do you find this stakeholder group?</value>
   </data>
   <data name="SiteFields_GtStakeholderGroup_DisplayName" xml:space="preserve">
     <value>Stakeholder Group</value>
@@ -1376,7 +1376,7 @@
     <value>Value</value>
   </data>
   <data name="SiteFields_GtValue_Description" xml:space="preserve">
-    <value>Enter value</value> //-----------------Sjekk denne
+    <value>Enter value for the field</value>
   </data>
   <data name="SiteFields_GtAllocationStatus_Description" xml:space="preserve">
     <value>Indicate the status of the allocation (update as necessary/change)</value>
@@ -1478,28 +1478,28 @@
     <value>If the benefits are to be realized in different parts of the organization (or in several businesses), it is recommended to appoint a benefit owner in the different parts of the line organization (or the businesses) that own different parts of the planned benefits. Benefit owners then have a distributed responsibility for their part of the benefits, and play an important role as the benefit responsible's extended arm and local supporter.</value>
   </data>
   <data name="SiteFields_GtSecViewFields_Description" xml:space="preserve">
-      <value>Provide information about what data fields that are to be displayed.</value> //----------Sjekk denne
+      <value>Fields that are to be displayed in the security view.</value>
   </data>
   <data name="SiteFields_GtSecIcon_Description" xml:space="preserve">
     <value>Name of icon from UI Fabric. See https://uifabricicons.azurewebsites.net/.</value>
   </data>
   <data name="SiteFields_GtSecShowInNavbar_Description" xml:space="preserve">
-      <value>Should this section be displayed in the navigation bar?</value> //-----------Sjekk denne
+      <value>Should this section be displayed in the navigation bar?</value>
   </data>
   <data name="SiteFields_GtSecViewQuery_Description" xml:space="preserve">
-    <value>The query that will be used to view the data in this section.</value> //-----------Sjekk denne
+    <value>The query that will be used to view the data in this section.</value>
   </data>
   <data name="SiteFields_GtSecFieldName_Description" xml:space="preserve">
-    <value>The name of the field within this section.</value>  //-----------Sjekk denne
+    <value>The name of the field within this section.</value>
   </data>
   <data name="SiteFields_GtSecShowInStatusSection_Description" xml:space="preserve">
-    <value>Defines whether or not the field should be displayed in the status section.</value> //-----------Sjekk denne
+    <value>Defines whether or not the field should be displayed in the status section.</value>
   </data>
   <data name="SiteFields_GtSecRowLimit_Description" xml:space="preserve">
     <value>Define the limit for the number of rows to be displayed.</value>
   </data>
   <data name="SiteFields_GtSecShowAsSection_Description" xml:space="preserve">
-    <value>Indicates whether to display this as a separate section.</value>  //-----------Sjekk denne
+    <value>Indicates whether to display this as a section.</value>
   </data>
   <data name="SiteFields_GtSecSource_Description" xml:space="preserve">
     <value>If the section should link to another page or a document.</value>
@@ -1508,13 +1508,13 @@
     <value>Indicates whether to display the risk matrix in this section.</value>
   </data>
   <data name="SiteFields_GtSecList_Description" xml:space="preserve">
-    <value>Define the list from which the data will be fetched for this section.</value>//-----------Sjekk denne
+    <value>Define the list from which the data will be fetched for this section.</value>
   </data>
   <data name="SiteFields_GtPortfolioFabricIcon_Description" xml:space="preserve">
     <value>Name of the icon from UI Fabric. See https://uifabricicons.azurewebsites.net/.</value>
   </data>
   <data name="SiteFields_GtPortfolioColumn_Description" xml:space="preserve">
-    <value>Define the column to be displayed in the portfolio overview.</value>//-----------Sjekk denne
+    <value>Define the column to be displayed in the portfolio overview.</value>
   </data>
   <data name="SiteFields_GtPortfolioColumns_Description" xml:space="preserve">
     <value>Define the columns to be displayed in the portfolio overview.</value>
@@ -1538,7 +1538,7 @@
     <value>Internal field name for this column.</value>
   </data>
   <data name="SiteFields_GtSearchQuery_Description" xml:space="preserve">
-    <value>The search query used for retrieving data. DepartmentId refers to the Project Portal hub site and should not be changed.</value>//-----------sjekk denne
+    <value>The search query used for retrieving data. DepartmentId refers to the Project Portal hub site and should not be changed.</value>
   </data>
   <data name="SiteFields_GtPortfolioRefiners_Description" xml:space="preserve">
     <value>Define the refiners for the portfolio view.</value>
@@ -1559,7 +1559,7 @@
     <value>If the item is hidden, it cannot be selected by users in the new project area setup dialog.</value>
   </data>
   <data name="SiteFields_GtLccDestinationList_Description" xml:space="preserve">
-    <value>Specify the destination list for the LCC.</value>//-------sjekk denne
+    <value>Specify the destination list for the list content.</value>
   </data>
   <data name="SiteFields_GtLccFields_Description" xml:space="preserve">
     <value>Fields to be copied</value>
@@ -1584,7 +1584,7 @@
   </data>
   <data name="SiteFields_GtFieldDataTypeProperties_Description" xml:space="preserve">
     <value></value>
-    <value>Properties of datatypes related to the field.</value>//------sjekk denne
+    <value>Properties of datatypes related to the field.</value>
   </data>
   <data name="SiteFields_GtResourceRole_Description" xml:space="preserve">
     <value>Select the role the person will have in the project</value>
@@ -1602,7 +1602,7 @@
     <value>Enter (expected) allocation rate, given in figures indicating percentage</value>
   </data>
   <data name="SiteFields_GtDescription_Description" xml:space="preserve">
-    <value>A description for this specific field or column</value>//--------------Sjekk denne
+    <value>A description for this element</value>
   </data>
   <data name="SiteFields_GtGroupId_Description" xml:space="preserve">
     <value>Identifier for this group.</value>
@@ -2103,7 +2103,7 @@
     <value>Status SHA</value>
   </data>
   <data name="SiteFields_GtBAProjectSHA_Description" xml:space="preserve">
-    <value>Have there been any events related to SHA (Safety, Health, Working Environment) in the last period?</value> //-------SHA på engelsk?
+    <value>Have there been any events related to SHA (Sikkerhet, helse, arbeidsmiljø) in the last period?</value>
   </data>
   <data name="SiteFields_GtBAProjectSHAComment_DisplayName" xml:space="preserve">
     <value>Comment, SHA</value>
@@ -2163,7 +2163,7 @@
     <value>URL</value>
   </data>
   <data name="SiteFields_GtURL_Description" xml:space="preserve">
-    <value>URL where the help content should be displayed. For example, SitePages/Home.aspx if you want the content to be displayed on the front page of the project.</value>//--------skal SitePages/Home.aspx oversettes?
+    <value>URL where the help content should be displayed. For example, SitePages/Home.aspx if you want the content to be displayed on the front page of the project.</value>
   </data>
   <data name="ProjectPhases_GoToChecklist2" xml:space="preserve">
     <value>Go to &lt;a href="{0" target="_blank"&gt;fasesjekklisten&lt;/a&gt; (opens in a new tab)</value>

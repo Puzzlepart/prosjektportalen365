@@ -28,7 +28,6 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Forbedret kolonneredigering for Porteføleinnholdseaggregering med bruk av drag and drop for å endre rekkefølge på feltene [#1205](https://github.com/Puzzlepart/prosjektportalen365/issues/1205)
 - Forbedringer av Modal for å vise målinger for måleindikatorer [#1208](https://github.com/Puzzlepart/prosjektportalen365/issues/1208)
 - Støtte for å søke i forvaltede egenskaper når man legger til en ny kolonne i Porteføljeoversikten [#1203](https://github.com/Puzzlepart/prosjektportalen365/issues/1203)
-- Lagt inn engelske loc og Resources filer der det manglet og oppdatert dem som lå der fra før samt noe rettskriving i de norske. [#315] (https://github.com/Puzzlepart/prosjektportalen365/issues/315)
 
 ### Feilrettinger
 

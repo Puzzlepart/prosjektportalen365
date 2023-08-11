@@ -1133,7 +1133,7 @@
     <value>Godkjenningsmetode</value>
   </data>
   <data name="SiteFields_GtDeliveryAcceptanceMethod_Description" xml:space="preserve">
-    <value>Metoden som brukes for å godkjenne leveransen.</value>
+    <value>Hvordan blir godkjenningen av leveransen bekreftet? Eksempelvis ved testing, brukerundersøkelse, demonstrasjon, muntlig eller skriftlig avtale/overlering.</value>
   </data>
   <data name="SiteFields_GtDeliveryAcceptanceResponsible_DisplayName" xml:space="preserve">
     <value>Godkjenningsansvar</value>
@@ -1414,6 +1414,12 @@
   <data name="SiteFields_GtRiskProbability_Description" xml:space="preserve">
     <value>Oppgi sannsynligheten (0-5) for at usikkerheten inntreffer</value>
   </data>
+  <data name="SiteFields_GtRiskProbabilityPostAction_DisplayName" xml:space="preserve">
+    <value>S etter tiltak</value>
+  </data>
+  <data name="SiteFields_GtRiskProbabilityPostAction_Description" xml:space="preserve">
+    <value>Oppgi sannsynligheten (0-5) for at usikkerheten inntreffer etter at tiltak er iverksatt.</value>
+  </data>
   <data name="SiteFields_GtRiskProximity_DisplayName" xml:space="preserve">
     <value>Nærhet</value>
   </data>
@@ -1667,10 +1673,10 @@
     <value>Raffineringskriterier som kan brukes til å filtrere visningen i prosjektinnholdsoversikten.</value>
   </data>
   <data name="SiteFields_GtPortfolioGroupBy_Description" xml:space="preserve">
-    <value>Angir hvilken kolonne som skal grupperes i porteføljeoversikten.</value> //--------------TROR IKKE DENNE TRAFF HELT
+    <value>Angi hvilken kolonne som det skal grupperes på i porteføljeoversikten.</value>
   </data>
   <data name="SiteFields_GtProjectContentGroupBy_Description" xml:space="preserve">
-    <value>Angir hvilken kolonne som skal grupperes i prosjektinnholdsoversikten.</value> //--------------TROR IKKE DENNE TRAFF HELT
+    <value>Angi hvilken kolonne som det skal grupperes på.</value>
   </data>
   <data name="SiteFields_GtLccDefault_Description" xml:space="preserve">
     <value>Velges som standard</value>
@@ -1721,7 +1727,7 @@
     <value>Oppgi (forventet) allokeringsgrad, oppgis i tall som indikerer prosent</value>
   </data>
   <data name="SiteFields_GtDescription_Description" xml:space="preserve">
-    <value>Beskrivelse av elementet, prosjektet eller ressursen.</value>  //----------Hva er det snakk om her? prosjekt, element, område..
+    <value>Beskrivelse av elementet.</value>
   </data>
   <data name="SiteFields_GtGroupId_Description" xml:space="preserve">
     <value>ID til gruppen elementet er en del av.</value>
@@ -1736,7 +1742,7 @@
     <value>Automatisk oppdatering av data</value>
   </data>
   <data name="SiteFields_GtPiAutomaticRefreshInterval_Description" xml:space="preserve">
-    <value>Intervallet for automatisk oppdatering av data.</value>  //----------Hvilken enhet skal oppgis her?
+    <value>Intervallet for automatisk oppdatering av data.</value>
   </data>
   <data name="SiteFields_GtPiCategoryField_Description" xml:space="preserve">
     <value>Kolonne for kategorisering. Velges fra listen Prosjektkolonner.</value>
@@ -1751,7 +1757,7 @@
     <value>Type diagram</value>
   </data>
   <data name="SiteFields_GtPiExpandProperty_Description" xml:space="preserve">
-    <value>Om feltet er et brukerfelt (e.l.) må du velge en egenskap ? ekspandere</value>//---------Regner med det skal være en å her.
+    <value>Om feltet er et brukerfelt (e.l.) må du velge en egenskap å ekspandere</value>
   </data>
   <data name="SiteFields_GtPiFields_Description" xml:space="preserve">
     <value>Hvilke felter skal inkluderes i diagrammet/datakilden. Velges fra listen Prosjektkolonner.</value>
@@ -1766,10 +1772,10 @@
     <value>Hvilken kolonne skal brukes for Z. Velges fra listen Prosjektkolonner.</value>
   </data>
   <data name="SiteFields_GtPiShowLegend_Description" xml:space="preserve">
-    <value>Angir om et tegnforklaring (legend) skal vises for diagrammet.</value>  //-------------Sjekk denne
+    <value>Angir om et tegnforklaring (legend) skal vises for diagrammet.</value>
   </data>
   <data name="SiteFields_GtPiStacking_Description" xml:space="preserve">
-    <value>Angir om dataene i diagrammet skal stables.</value>  //-------Sjekk denne
+    <value>Angir om dataene i diagrammet skal stables.</value>
   </data>
   <data name="SiteFields_GtPiSubTitle_Description" xml:space="preserve">
     <value>Undertekst for diagrammet.</value>
@@ -1778,7 +1784,7 @@
     <value>Rekkefølge for verdiene (f.eks. Konsept,Planlegge,Gjennomføre,Avslutte,Realisere)</value>
   </data>
   <data name="SiteFields_GtPiValueSuffix_Description" xml:space="preserve">
-    <value>Tegn eller streng som skal legges til etter hver verdi i diagrammet.</value>  //-------Sjekk denne
+    <value>Tegn eller streng som skal legges til etter hver verdi i diagrammet.</value>
   </data>
   <data name="SiteFields_GtPiWidthLg_Description" xml:space="preserve">
     <value>Bredde (1-12) for 640px til 1023px</value>
@@ -1817,10 +1823,10 @@
     <value>Hva er de forventede totalkostnadene for prosjektet?</value>
   </data>
   <data name="SiteFields_GtSiteId_Description" xml:space="preserve">
-    <value>Id for området</value>  //--------------Riktig ordbruk?
+    <value>Id for området</value>
   </data>
   <data name="SiteFields_GtSiteUrl_Description" xml:space="preserve">
-    <value>URL for området</value>  //--------------Riktig ordbruk?
+    <value>URL for området</value>
   </data>
   <data name="SiteFields_GtColMinWidth_Description" xml:space="preserve">
     <value>Minimum bredde for denne kolonnen i piksler. Brukes blant annet i Porteføljeoversikten og aggregerte visninger.</value>
