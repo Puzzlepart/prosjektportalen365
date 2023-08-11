@@ -8,6 +8,8 @@ define([], function () {
     BarLabel: 'Bar',
     BooleanNo: 'No',
     BooleanYes: 'Yes',
+    BooleanOff: 'Off',
+    BooleanOn: 'On',
     CancelButtonLabel: 'Cancel',
     ChartConfigurationListNameLabel: 'Graph configuration',
     ChartErrorText: 'The graph is invalidly configured.',
