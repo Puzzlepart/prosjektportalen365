@@ -93,10 +93,17 @@ declare interface IPortfolioWebPartsStrings {
   EditViewColumnsPanelHeaderText: string
   EditViewColumnsPanelHelpText: string
   EditViewHeaderText: string
+  EditViewText: string
+  EmptyMessageDescription: string
+  EmptyMessageLabel: string
+  EndDateLabel: string
+  ErrorText: string
+  ExcelExportButtonLabel: string
   FiltersString: string
   FilterText: string
   GeneralGroupName: string
   GroupByColumnLabel: string
+  HideViewsLabel: string
   IconNameDescription: string
   IconNameLabel: string
   IncludeViewNameInExcelExportFilenameLabel: string
