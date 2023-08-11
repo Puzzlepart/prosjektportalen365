@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { IDropdownOption } from '@fluentui/react'
+import { DisplayMode } from '@microsoft/sp-core-library'
 import { IWeb } from '@pnp/sp/webs'
 import {
   IBaseWebPartComponentProps,
@@ -8,10 +9,17 @@ import {
 import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage'
 import { ProjectColumn, SPField } from 'pp365-shared-library/lib/models'
 import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDataService'
+import { IGetPropertiesData } from 'pp365-shared-library/lib/services/ProjectDataService'
 import { IProjectStatusData } from '../ProjectStatus'
 import { ActionType } from './Actions/types'
 import { IProgressDialogProps } from './ProgressDialog/types'
-import { DisplayMode } from '@microsoft/sp-core-library'
+import { createProjectInformationFieldValueMap } from './createProjectInformationFieldValueMap'
+
+export type ProjectInformationFieldValue = {
+  isSet?: boolean
+  text: string
+  $: any
+}
 
 /**
  * Project information field model. Used both for display
@@ -23,15 +31,13 @@ export class ProjectInformationField {
   public displayName: string
   public description: string
   public type: string
-  private _value: any
-
+  private _value: ProjectInformationFieldValue
   /**
-   * Constructs a new `ProjectInformationField` object from
-   * a field from the entity and a column configuration.
+   * Constructs a new `ProjectInformationField` instance.
    *
-   * @param _field Field from the entity
-   * @param column Column configuration
-   * @param _isExternal `true` if the current user is external with no access to portfolio level
+   * @param _field Field data
+   * @param column Column data
+   * @param _isExternal The current user is external with no access to portfolio level
    */
   constructor(
     private _field: Record<string, any>,
@@ -46,24 +52,36 @@ export class ProjectInformationField {
   }
 
   /**
-   * Sets the value for the field.
+   * Sets the value for the field. Sets the value object that consists of
+   * the following properties:
+   * - `isSet` - `true` if the value is set
+   * - `text` - the text value for the field
+   * - `$` - the value for the field
    *
-   * @param value Value to set
+   * @param propertiesData Properties data from `ProjectDataService.getProperties`
    *
    * @returns the field instance
    */
-  public setValue(value: any): ProjectInformationField {
-    this._value = value
+  public setValue(propertiesData: IGetPropertiesData): ProjectInformationField {
+    const textValue = propertiesData.fieldValuesText[this.internalName]
+    const value = propertiesData.fieldValues[this.internalName]
+    this._value = {
+      isSet: textValue !== undefined && textValue !== null && textValue !== '',
+      text: textValue,
+      $: value
+    }
     return this
   }
 
   /**
-   * Get value for the field. Optionally split by characters.
+   * Get value for the field.
    *
-   * @param splitBy Characters to split by (optional)
+   * @param value Optional value to use instead of the internal value
    */
-  public getValue<T>(splitBy?: string): T {
-    return splitBy ? this._value?.split(splitBy) : this._value
+  public getValue<T>(value = this._value): T {
+    const valueMap = createProjectInformationFieldValueMap<T>()
+    const fieldValue = valueMap.has(this.type) ? valueMap.get(this.type)(value) : value.text
+    return fieldValue as unknown as T
   }
 
   /**
@@ -109,7 +127,7 @@ export class ProjectInformationField {
    * Returns `true` if the value for the field is empty.
    */
   public get isEmpty(): boolean {
-    return this._value === null || this._value === undefined || this._value === ''
+    return !this._value?.isSet
   }
 }
 
@@ -225,7 +243,7 @@ export interface IProjectInformationState
   properties?: ProjectInformationField[]
 
   /**
-   * Progress dialog props
+   * Properties for the `ProgressDialog` component
    */
   progress?: IProgressDialogProps
 
@@ -245,12 +263,20 @@ export interface IProjectInformationState
   isParentProject?: boolean
 
   /**
-   * The current active panel
+   * The current active panel.
+   *
+   * Can be one of the following:
+   * - `EditPropertiesPanel`
+   * - `AllPropertiesPanel`
    */
   activePanel?: ProjectInformationPanelType
 
   /**
-   * The current active dialog
+   * The current active dialog.
+   *
+   * Can be one of the following:
+   * - `CreateParentDialog`
+   * - `SyncProjectDialog`
    */
   activeDialog?: ProjectInformationDialogType
 

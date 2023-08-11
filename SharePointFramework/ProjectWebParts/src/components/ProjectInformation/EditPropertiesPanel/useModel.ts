@@ -1,9 +1,9 @@
-import { IPersonaProps, IPersonaSharedProps, ITag } from '@fluentui/react'
+import { IPersonaProps, ITag } from '@fluentui/react'
+import _ from 'lodash'
 import { DefaultCaching } from 'pp365-shared-library/lib/data'
 import { useState } from 'react'
 import { useProjectInformationContext } from '../context'
-import { ProjectInformationField } from '../types'
-import _ from 'lodash'
+import { ProjectInformationField, ProjectInformationFieldValue } from '../types'
 
 /**
  * Hook for the `EditPropertiesPanel` model. This hook is used to get and set the values for
@@ -23,55 +23,16 @@ export function useModel() {
    */
   function get<T>(field: ProjectInformationField, fallbackValue: T = null): T {
     const { fieldValues, fieldValuesText } = context.state.data
-    const value = (model.get(field.internalName) as string) ?? fieldValuesText[field.internalName]
-    const isValueString = typeof value === 'string'
-    if (!value) return fallbackValue as unknown as T
-    if (!isValueString) return value as unknown as T
-    const valueMap: Record<string, () => T> = {
-      URL: () => {
-        const [url, description] = value.split(', ')
-        return { url, description } as unknown as T
-      },
-      TaxonomyFieldType: () => value.split(';').map((v) => ({ key: v, name: v })) as unknown as T,
-      TaxonomyFieldTypeMulti: () =>
-        value.split(';').map((v) => ({ key: v, name: v })) as unknown as T,
-      DateTime: () => new Date(fieldValues[field.internalName]) as unknown as T,
-      MultiChoice: () => value.split(', ') as unknown as T,
-      User: () => {
-        const fieldValue = fieldValues[field.internalName]
-        const users = (
-          [fieldValue] as Array<{
-            Id: number
-            Title: string
-            EMail: string
-          }>
-        ).map<IPersonaSharedProps>((v) => ({
-          key: v.Id,
-          text: v.Title,
-          secondaryText: v.EMail,
-          imageUrl: `/_layouts/15/userphoto.aspx?size=L&username=${v.EMail}`
-        }))
-        return users as unknown as T
-      },
-      UserMulti: () => {
-        const fieldValue = fieldValues[field.internalName]
-        const users = (
-          fieldValue as Array<{
-            Id: number
-            Title: string
-            EMail: string
-          }>
-        ).map<IPersonaSharedProps>((v) => ({
-          key: v.Id,
-          text: v.Title,
-          secondaryText: v.EMail,
-          imageUrl: `/_layouts/15/userphoto.aspx?size=L&username=${v.EMail}`
-        }))
-        return users as unknown as T
-      }
+    const textValue =
+      (model.get(field.internalName) as string) ?? fieldValuesText[field.internalName]
+    const value: ProjectInformationFieldValue = {
+      isSet: textValue !== undefined && textValue !== null && textValue !== '',
+      text: textValue,
+      $: fieldValues[field.internalName]
     }
-    if (valueMap[field.type]) return valueMap[field.type]()
-    else return value as unknown as T
+    if (!value || typeof value.text !== 'string')
+      return (value.text ?? fallbackValue) as unknown as T
+    return field.getValue(value) as unknown as T
   }
 
   /**
