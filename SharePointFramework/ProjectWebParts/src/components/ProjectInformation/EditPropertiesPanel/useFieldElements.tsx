@@ -9,12 +9,12 @@ import {
   TextField,
   Toggle
 } from '@fluentui/react'
+import strings from 'ProjectWebPartsStrings'
 import { FieldDescription } from 'pp365-shared-library/lib/components'
+import { ProjectInformationField } from 'pp365-shared-library/lib/models'
 import React from 'react'
 import SPDataAdapter from '../../../data'
-import { ProjectInformationField } from '../types'
 import { useModel } from './useModel'
-import strings from 'ProjectWebPartsStrings'
 
 /**
  * Hook for field elements of `EditPropertiesPanel` component. This hook is used to render field elements

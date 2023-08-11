@@ -2,15 +2,13 @@ import { format } from '@fluentui/react'
 import { AssignFrom, IPnPClientStore, PnPClientStorage, dateAdd } from '@pnp/core'
 import { ConsoleListener, Logger } from '@pnp/logging'
 import '@pnp/sp/presets/all'
-import { IWeb, SPFI, spfi } from '@pnp/sp/presets/all'
+import { IFieldInfo, IWeb, SPFI, spfi } from '@pnp/sp/presets/all'
 import { DefaultCaching, createSpfiInstance } from '../../data'
 import { ISPList } from '../../interfaces/ISPList'
 import { ChecklistItemModel, ProjectPhaseChecklistData, ProjectPhaseModel } from '../../models'
 import { makeUrlAbsolute } from '../../util/makeUrlAbsolute'
 import { tryParseJson } from '../../util/tryParseJson'
-import { IGetPropertiesData } from './IGetPropertiesData'
-import { IProjectDataServiceParams } from './IProjectDataServiceParams'
-import { IPropertyItemContext } from './IPropertyItemContext'
+import { IProjectInformationData, IProjectDataServiceParams, ILocalProjectInformationItemContext } from './types'
 
 export class ProjectDataService {
   private _storage: IPnPClientStore
@@ -59,15 +57,10 @@ export class ProjectDataService {
   }
 
   /**
-   * Get property item context from site. Stores the context in session storage
-   * for 15 minutes.
-   *
-   * @param expire Date of expire for cache
+   * Get local project information item context and cache it for 15 minutes.
    */
-  private async _getPropertyItemContext(
-    expire: Date = dateAdd(new Date(), 'minute', 15)
-  ): Promise<IPropertyItemContext> {
-    const context: Partial<IPropertyItemContext> = await this._storage.getOrPut(
+  private async _getLocalProjectInformationItemContext(): Promise<ILocalProjectInformationItemContext> {
+    const context: Partial<ILocalProjectInformationItemContext> = await this._storage.getOrPut(
       this.getStorageKey('_getPropertyItemContext'),
       async () => {
         try {
@@ -112,7 +105,7 @@ export class ProjectDataService {
           return null
         }
       },
-      expire
+      dateAdd(new Date(), 'minute', 15)
     )
     const list = this.web.lists.getById(context.listId)
     const item = list.items.getById(context.itemId)
@@ -120,15 +113,16 @@ export class ProjectDataService {
       ...context,
       list,
       item
-    } as IPropertyItemContext
+    } as ILocalProjectInformationItemContext
   }
 
   /**
-   * Mapping fields to include `ShowInEditForm`, `ShowInNewForm` and `ShowInDisplayForm`.
+   * Mapping fields to include `ShowInEditForm`, `ShowInNewForm` and `ShowInDisplayForm`
+   * which is only present in `SchemaXml`, not as separate properties.
    *
    * @param fields Fields to map
    */
-  private _mapFields(fields: any[]): any {
+  private _mapFields(fields: IFieldInfo[]): any {
     return fields.map((fld) => ({
       ...fld,
       ShowInEditForm: fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') === -1,
@@ -138,7 +132,8 @@ export class ProjectDataService {
   }
 
   /**
-   * Get project properties for the site/web.
+   * Get project information from the local project information item
+   * in the properties list.
    *
    * Returns the following properties:
    * - `fieldValuesText`: Field values in text format
@@ -156,11 +151,11 @@ export class ProjectDataService {
    *
    * @param sourceUrl Source url to append to edit form url
    */
-  private async _getPropertyItem(
+  private async _getLocalProjectInformationItem(
     sourceUrl: string = document.location.href
-  ): Promise<IGetPropertiesData> {
+  ): Promise<IProjectInformationData> {
     try {
-      const ctx = await this._getPropertyItemContext()
+      const ctx = await this._getLocalProjectInformationItemContext()
       if (!ctx) return null
       const fields = await ctx.list.fields
         .select(
@@ -191,7 +186,7 @@ export class ProjectDataService {
         this.getWelcomePage()
       ])
 
-      const propertiesData: IGetPropertiesData = {
+      const propertiesData: IProjectInformationData = {
         fieldValuesText,
         fieldValues,
         fields: this._mapFields(fields),
@@ -222,8 +217,8 @@ export class ProjectDataService {
   /**
    * Get properties data for the site/web.
    */
-  public async getPropertiesData(): Promise<IGetPropertiesData> {
-    const propertyItem = await this._getPropertyItem(
+  public async getProjectInformationData(): Promise<IProjectInformationData> {
+    const propertyItem = await this._getLocalProjectInformationItem(
       `${document.location.protocol}//${document.location.hostname}${document.location.pathname}#syncproperties=1`
     )
     if (propertyItem) {
@@ -233,7 +228,7 @@ export class ProjectDataService {
         ...propertyItem,
         propertiesListId: propertyItem.propertiesListId,
         templateParameters
-      } as IGetPropertiesData
+      } as IProjectInformationData
     } else {
       this._logInfo(
         'Local property item not found. Retrieving data from portal site.',
@@ -250,7 +245,7 @@ export class ProjectDataService {
         propertiesListId: null,
         templateParameters: {},
         ...entity.urls
-      } as IGetPropertiesData
+      } as IProjectInformationData
     }
   }
 
@@ -259,7 +254,7 @@ export class ProjectDataService {
    *
    * @param data Data from `getPropertiesData`
    */
-  public async getPropertiesLastUpdated(data: IGetPropertiesData): Promise<number> {
+  public async getPropertiesLastUpdated(data: IProjectInformationData): Promise<number> {
     const { Modified } = await this.web.lists
       .getById(data.propertiesListId)
       .items.getById(data.fieldValues.Id)
@@ -277,7 +272,7 @@ export class ProjectDataService {
   public async updateProjectPhase(phase: ProjectPhaseModel, phaseTextField: string): Promise<void> {
     const properties = { [phaseTextField]: phase.toString() }
     try {
-      const propertyItemContext = await this._getPropertyItemContext()
+      const propertyItemContext = await this._getLocalProjectInformationItemContext()
       if (propertyItemContext) await propertyItemContext.item.update(properties)
       await this._params.entityService.updateEntityItem(this._params.siteId, properties)
     } catch (error) {
@@ -292,9 +287,7 @@ export class ProjectDataService {
    */
   public async updateProjectProperties(properties: { [key: string]: string }): Promise<void> {
     try {
-      const propertyItemContext = await this._getPropertyItemContext()
-      // eslint-disable-next-line no-console
-      console.log(propertyItemContext, properties)
+      const propertyItemContext = await this._getLocalProjectInformationItemContext()
       if (propertyItemContext) {
         const updateResult = await propertyItemContext.item.update(properties)
         // eslint-disable-next-line no-console
@@ -329,7 +322,7 @@ export class ProjectDataService {
    */
   public async getCurrentPhaseName(phaseField: string): Promise<string> {
     try {
-      const propertiesData = await this.getPropertiesData()
+      const propertiesData = await this.getProjectInformationData()
       return propertiesData.fieldValuesText[phaseField]
     } catch (error) {
       throw new Error()
@@ -412,4 +405,4 @@ export class ProjectDataService {
   }
 }
 
-export { IGetPropertiesData }
+export { IProjectInformationData as IGetPropertiesData }

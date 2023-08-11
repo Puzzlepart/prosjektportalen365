@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { DefaultCaching } from 'pp365-shared-library/lib/data'
 import { useState } from 'react'
 import { useProjectInformationContext } from '../context'
-import { ProjectInformationField } from '../types'
+import { ProjectInformationField } from 'pp365-shared-library/lib/models'
 
 /**
  * Hook for the `EditPropertiesPanel` model. This hook is used to get and set the values for

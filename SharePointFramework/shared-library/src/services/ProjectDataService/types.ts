@@ -1,0 +1,90 @@
+import { LogLevel } from '@pnp/logging'
+import { IItem } from '@pnp/sp/items'
+import { IList } from '@pnp/sp/lists'
+import { SpEntityPortalService } from 'sp-entityportal-service'
+import { SPField } from '../../models'
+import { SPFxContext } from '../../types'
+
+/**
+ * Project information data.
+ */
+export interface IProjectInformationData {
+  /**
+   * EditForm url
+   */
+  editFormUrl?: string
+
+  /**
+   * Version history url
+   */
+  versionHistoryUrl?: string
+
+  /**
+   * Field values - all fields in complex format
+   */
+  fieldValues?: Record<string, any>
+
+  /**
+   * Field values as text - all field values in string format
+   */
+  fieldValuesText?: Record<string, string>
+
+  /**
+   * Fields for the list
+   */
+  fields?: SPField[]
+
+  /**
+   * Properties list ID
+   */
+  propertiesListId?: string
+
+  /**
+   * Template parameters
+   */
+  templateParameters?: Record<string, any>
+}
+
+/**
+ * Local project information item context.
+ */
+export interface ILocalProjectInformationItemContext {
+  itemId?: number
+  listId?: string
+  defaultEditFormUrl?: string
+  list?: IList
+  item?: IItem
+}
+
+export interface IProjectDataServiceParams {
+  /**
+   * Web URL
+   */
+  webUrl: string
+
+  /**
+   * Site ID
+   */
+  siteId: string
+
+  /**
+   * Entity service
+   */
+  entityService: SpEntityPortalService
+
+  /**
+   * List name for project properties
+   */
+  propertiesListName: string
+
+  /**
+   * SPFx context
+   */
+  spfxContext: SPFxContext
+
+  /**
+   * Log level
+   */
+  logLevel?: LogLevel
+}
+

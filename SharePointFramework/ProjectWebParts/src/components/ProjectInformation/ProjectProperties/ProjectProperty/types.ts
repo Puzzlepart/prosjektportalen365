@@ -1,4 +1,4 @@
-import { ProjectInformationField } from '../../types'
+import { ProjectInformationField } from 'pp365-shared-library/lib/models'
 
 export interface IProjectPropertyProps extends React.HTMLAttributes<HTMLElement> {
   /**

@@ -4,7 +4,7 @@ import {
   IBaseWebPartComponentState
 } from 'pp365-shared-library/lib/components/BaseWebPartComponent/types'
 import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage'
-import { ProjectColumn, SPField } from 'pp365-shared-library/lib/models'
+import { ProjectColumn, ProjectInformationField, ProjectInformationParentProject, SPField } from 'pp365-shared-library/lib/models'
 import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDataService'
 import { IProjectStatusData } from '../ProjectStatus'
 import { ActionType } from './Actions/types'

@@ -7,6 +7,8 @@ import { ListLogger } from 'pp365-shared-library/lib/logging'
 import {
   CustomError,
   ProjectColumnConfig,
+  ProjectInformationField,
+  ProjectInformationParentProject,
   SectionModel,
   StatusReport
 } from 'pp365-shared-library/lib/models'
@@ -14,9 +16,9 @@ import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { IProjectInformationContext } from './context'
-import { ProjectInformation, ProjectInformationField } from './index'
+import { ProjectInformation } from './index'
 import { FETCH_DATA_ERROR, INIT_DATA } from './reducer'
-import { IProjectInformationState, ProjectInformationParentProject } from './types'
+import { IProjectInformationState } from './types'
 
 /**
  * Checks if project data is synced.
