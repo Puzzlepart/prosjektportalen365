@@ -1,301 +1,234 @@
 declare interface IPortfolioWebPartsStrings {
-  ColumnRenderOptionProjectInformationModal: string
-  SortOrderDescription: string
-  NewViewHeaderText: string
-  EditViewHeaderText: string
-  DataSourceLevelDescription: string
-  PortfolioAggregationViewSearchQueryDescription: string
-  ModalColumnEmptyListText: string
-  ColumnRenderOptionModalInfoTextTemplateDescription: string
-  ColumnRenderOptionModalShowInfoTextLabel: string
-  ColumnRenderOptionModalInfoTextTemplateLabel: string
-  ShowAllMeasurementsInfoTextFormat: string
-  ListViewGroupName: string
-  ListLayoutModeJustifiedLabel: string
-  ColumnPersistRenderGloballyFieldDescription: string
-  ColumnRenderOptionTrendShowTrendIconLabel: string
-  ColumnRenderOptionModalLinkTextLabel: string
-  ConfirmDeleteProjectContentColumnTitle: string
-  ConfirmDeleteProjectContentColumnSubText: string
-  ColumnRenderOptionTagsValueSeparatorLabel: string
-  ColumnRenderOptionTagsValueSeparatorDescription: string
-  ColumnRenderOptionDateIncludeTimeLabel: string
-  ColumnRenderOptionUrlDescriptionDescription: string
-  ColumnRenderOptionUrlDescriptionLabel: string
-  ColumnRenderOptionUrlOpenInNewTabLabel: string
-  ColumnRenderOptionUrl: string
-  ColumnRenderOptionCurrencyMinimumFractionDigitsLabel: string
-  ColumnRenderOptionCurrencyMaximumFractionDigitsLabel: string
-  ColumnRenderOptionCurrencyFallbackValueLabel: string
-  ColumnRenderOptionCurrencyPrefixLabel: string
-  ColumnRenderOptionCurrency: string
-  ColumnRenderOptionBooleanTrue: string
-  ColumnRenderOptionBooleanFalse: string
-  ColumnRenderDataTypePropertiesHeaderText: string
-  ColumnRenderOptionBoolean: string
-  CustomSortsText: string
-  PortfolioOverviewColumnRenderDescription: string
-  SearchPropertyFoundMessage: string
-  SearchPropertyPlaceholder: string
-  IncludeViewNameInExcelExportFilenameLabel: string
-  DefaultViewSetWarningMessage: string
-  PortfolioViewSearchQueryDescription: string
-  SearchQueryLabel: string
-  SearchQueryDescription: string
-  IconNameLabel: string
-  IconNameDescription: string
-  DefaultViewDescription: string
-  PersonalViewDescription: string
-  PersonalViewLabel: string
-  PortfolioOverviewShowEditViewColumnsPanelHelpText: string
-  RevertCustomOrderButtonTooltip: string
-  RevertCustomOrderButtonText: string
-  ConfirmDeleteProjectColumnTitle: string
-  ConfirmDeleteProjectColumnSubText: string
-  ConfirmDeleteResponseConfirm: string
-  ConfirmDeleteResponseAbort: string
-  AddToCurrentViewLabel: string
-  PortfolioViewsListName: string
-  ProjectColumnsListName: string
-  ShowFieldProjectStatusLabel: string
-  ShowFieldFrontpageLabel: string
-  ShowFieldPortfolioLabel: string
-  ColumnVisibilityLabel: string
-  ColumnVisibilityDescription: string
-  IsGroupableDescription: string
-  IsRefinableDescription: string
-  IsRefinableLabel: string
   AddColumnLabel: string
-  MinWidthDescription: string
-  MaxWidthDescription: string
-  ColumnSettingsDisabledTooltip: string
-  ColumnSettingsLabel: any
-  UseChangesButtonText: string
-  EditViewColumnsPanelHeaderText: string
-  SearchBoxPlaceholderTextDescription: string
-  DataSourceLevelLabel: string
-  ShowProgramViewsLabel: string
-  SelectProgramText: string
-  ProgramsHeaderText: string
-  PortfolioOverviewDataFetchErrorView: string
-  PortfolioOverviewDataFetchError: string
-  ListViewText: string
-  CompactViewText: string
-  PersonalViewsHeaderText: string
-  DefaultRenderModeLabel: string
-  ColumnRenderDescription: ReactNode
-  DisplayNameDescription: string
-  HideVerticalsLabel: string
-  ProjectsAccessSearchBoxPlaceholderText: string
-  ProjectsAccessHeaderText: string
-  ProjectListLoadingText: string
-  EditColumnHeaderText: string
-  PortfolioAggregationNotConfiguredMessage: string
-  DataSourceCategoryDescription: string
-  DataSourceDescription: string
-  ColumnRenderOptionTags: string
-  ColumnRenderOptionList: string
-  ColumnRenderOptionNumber: string
-  ColumnRenderOptionText: string
-  ColumnRenderOptionNote: string
-  ColumnRenderOptionDate: string
-  ColumnRenderOptionDateTime: string
-  ColumnRenderOptionUser: string
-  ColumnRenderOptionPercentage: string
-  ColumnRenderOptionTrend: string
-  ColumnRenderOptionTaxonomy: string
-  ColumnRenderOptionModal: string
-  ColumnRenderOptionFilename: string
-  ColumnPersistRenderGloballyFieldLabel: string
-  DataSourceGroupName: string
-  CommandBarGroupName: string
-  SearchBoxGroupName: string
-  DeleteButtonLabel: string
-  RemoveButtonLabel: string
-  ColumnRenderLabel: string
-  EditColumnLabel: any
-  MoveRightLabel: string
-  MoveLeftLabel: string
-  IsGroupableLabel: string
-  NewColumnHeaderText: string
-  ToggleColumnFormPanelLabel: string
-  SearchPropertyLabel: string
-  SearchPropertyDescription: string
-  InternalNameLabel: string
-  InternalNameDescription: string
-  DisplayNameLabel: string
-  MinWidthLabel: string
-  MaxWidthLabel: string
-  IsMultilineLabel: string
-  IsResizableLabel: string
-  SaveButtonLabel: string
-  CloseButtonLabel: string
-  GroupByLabel: string
-  GroupByColumnLabel: string
-  FilterBy: string
-  DataSourceCategoryLabel: string
-  DataSourceLabel: string
-  SelectedColumnsLabel: string
-  SortDescLabel: string
-  SortAscLabel: string
-  ColumSettingsLabel: string
-  AdvancedGroupName: string
-  ActorsLabel: string
-  BasicGroupName: string
-  BenefitResponsibleLabel: string
-  BenefitOwnerLabel: string
-  BenefitTitleLabel: string
+  AllocationPercetageLabel: string
+  AllocationStatusLabel: string
+  AllProjectsHeaderText: string
+  AllProjectsSearchBoxPlaceholderText: string
+  BarLabel: string
+  BooleanNo: string
+  BooleanYes: string
+  BooleanOff: string
+  BooleanOn: string
+  CancelButtonLabel: string
   ChartConfigurationListNameLabel: string
   ChartErrorText: string
   ColumnConfigListNameLabel: string
+  ColumnPersistRenderGloballyFieldDescription: string
+  ColumnPersistRenderGloballyFieldLabel: string
+  ColumnRenderDataTypePropertiesHeaderText: string
+  ColumnRenderDescription: string
+  ColumnRenderLabel: string
+  ColumnRenderOptionBoolean: string
+  ColumnRenderOptionBooleanFalse: string
+  ColumnRenderOptionBooleanTrue: string
+  ColumnRenderOptionCurrency: string
+  ColumnRenderOptionCurrencyFallbackValueLabel: string
+  ColumnRenderOptionCurrencyMaximumFractionDigitsLabel: string
+  ColumnRenderOptionCurrencyMinimumFractionDigitsLabel: string
+  ColumnRenderOptionCurrencyPrefixLabel: string
+  ColumnRenderOptionDate: string
+  ColumnRenderOptionDateIncludeTimeLabel: string
+  ColumnRenderOptionFilename: string
+  ColumnRenderOptionModal: string
+  ColumnRenderOptionModalInfoTextTemplateDescription: string
+  ColumnRenderOptionModalInfoTextTemplateLabel: string
+  ColumnRenderOptionModalLinkTextLabel: string
+  ColumnRenderOptionModalShowInfoTextLabel: string
+  ColumnRenderOptionNote: string
+  ColumnRenderOptionNumber: string
+  ColumnRenderOptionPercentage: string
+  ColumnRenderOptionProjectInformationModal: string
+  ColumnRenderOptionTags: string
+  ColumnRenderOptionTagsValueSeparatorDescription: string
+  ColumnRenderOptionTagsValueSeparatorLabel: string
+  ColumnRenderOptionText: string
+  ColumnRenderOptionTrend: string
+  ColumnRenderOptionTrendShowTrendIconLabel: string
+  ColumnRenderOptionUrl: string
+  ColumnRenderOptionUrlDescriptionDescription: string
+  ColumnRenderOptionUrlDescriptionLabel: string
+  ColumnRenderOptionUrlOpenInNewTabLabel: string
+  ColumnRenderOptionUser: string
+  ColumnSettingsDisabledTooltip: string
+  ColumnSettingsLabel: string
   ColumnsListNameLabel: string
-  LoadingTextLabel: string
-  EmptyMessageLabel: string
-  RowLimitLabel: string
-  LoadingTextDescription: string
-  EmptyMessageDescription: string
+  ColumnVisibilityDescription: string
+  ColumnVisibilityLabel: string
+  ColumSettingsLabel: string
   CommandBarGroupName: string
+  CommentLabel: string
+  CompactViewText: string
+  ConfigItemTitleFieldDescription: string
+  ConfigItemTitleFieldLabel: string
   ConfigurationGroupName: string
-  ConsequenceLabel: string
-  ConsequencePostActionLabel: string
+  ConfirmDeleteProjectColumnSubText: string
+  ConfirmDeleteProjectColumnTitle: string
+  ConfirmDeleteProjectContentColumnSubText: string
+  ConfirmDeleteProjectContentColumnTitle: string
+  ConfirmDeleteResponseAbort: string
+  ConfirmDeleteResponseConfirm: string
   CreatedText: string
-  DataSourceError: string
+  CustomSortsText: string
+  DataSourceCategoryDescription: string
   DataSourceCategoryError: string
+  DataSourceCategoryLabel: string
+  DataSourceError: string
+  DataSourceGroupName: string
+  DataSourceItemNotFound: string
+  DataSourceLabel: string
+  DataSourceLevelDescription: string
+  DataSourceLevelLabel: string
+  DataSourceLevelPortfolio: string
+  DataSourceLevelProject: string
+  DataSourceListName: string
   DataSourceNotFound: string
-  DefaultVerticalLabel: string
-  DefaultViewLabel: string
   DefaultDataSourceViewLabel: string
-  DeliveryDescriptionLabel: string
-  DeliveryEndTimeLabel: string
-  DeliveryStartTimeLabel: string
-  DeliveryStatusCommentLabel: string
-  DeliveryStatusLabel: string
-  DescriptionFieldLabel: string
-  TagFieldLabel: string
-  CategoryFieldLabel: string
-  DesiredValueLabel: string
+  DefaultRenderModeLabel: string
+  DefaultVerticalLabel: string
+  DefaultViewDescription: string
+  DefaultViewLabel: string
+  DefaultViewSetWarningMessage: string
+  DeleteButtonLabel: string
+  DisplayNameDescription: string
+  DisplayNameLabel: string
+  EditColumnHeaderText: string
+  EditColumnLabel: string
+  EditViewColumnsPanelHeaderText: string
+  EditViewColumnsPanelHelpText: string
+  EditViewHeaderText: string
   EditViewText: string
+  EmptyMessageDescription: string
+  EmptyMessageLabel: string
+  EndDateLabel: string
   ErrorText: string
   ExcelExportButtonLabel: string
-  ExcelExportFileNamePrefix: string
-  FetchDataErrorMessage: string
-  FieldSelectorEmptyMessage: string
-  FieldSelectorName: string
   FiltersString: string
   FilterText: string
   GeneralGroupName: string
-  GetConfigErrorMessage: string
-  IndicatorLabel: string
-  LastMeasurementLabel: string
+  GroupByColumnLabel: string
+  HideVerticalsLabel: string
+  IconNameDescription: string
+  IconNameLabel: string
+  IncludeViewNameInExcelExportFilenameLabel: string
+  InternalNameDescription: string
+  InternalNameLabel: string
+  IsGroupableDescription: string
+  IsGroupableLabel: string
+  IsRefinableDescription: string
+  IsRefinableLabel: string
+  IsResizableLabel: string
+  ListLayoutModeJustifiedLabel: string
+  ListViewGroupName: string
+  ListViewText: string
   LoadingText: string
-  LogDescriptionLabel: string
-  MeasuremenentIdicatorLabel: string
+  LoadingTextDescription: string
+  LoadingTextLabel: string
+  MaxWidthDescription: string
+  MaxWidthLabel: string
   MeasurementAchievementLabel: string
   MeasurementCommentLabel: string
   MeasurementDateLabel: string
   MeasurementValueLabel: string
-  MissingProperties: string
+  MinWidthDescription: string
+  MinWidthLabel: string
+  ModalColumnEmptyListText: string
+  MoveLeftLabel: string
+  MoveRightLabel: string
+  MyProjectsHeaderText: string
+  MyProjectsSearchBoxPlaceholderText: string
+  NameLabel: string
+  NewColumnHeaderText: string
+  NewLabel: string
+  NewViewHeaderText: string
   NewViewText: string
+  NoAccessMessage: string
   NoDefaultViewMessage: string
-  NoGroupingText: string
   NoProjectData: string
-  NoProperties: string
-  ProjectListEmptyText: string
+  NoProjectsFound: string
   NotSet: string
+  ParentProjectsHeaderText: string
+  ParentProjectsSearchBoxPlaceholderText: string
+  PersonalViewDescription: string
+  PersonalViewLabel: string
+  PersonalViewsHeaderText: string
   PhaseLabel: string
-  ProbabilityLabel: string
-  ProbabilityPostActionLabel: string
+  PortfolioAggregationNotConfiguredMessage: string
+  PortfolioAggregationViewSearchQueryDescription: string
+  PortfolioManagerGroupName: string
+  PortfolioOverviewColumnRenderDescription: string
+  PortfolioOverviewDataFetchError: string
+  PortfolioOverviewDataFetchErrorView: string
+  PortfolioOverviewShowEditViewColumnsPanelHelpText: string
+  PortfolioViewSearchQueryDescription: string
+  PortfolioViewsListName: string
+  ProgramProjectsHeaderText: string
+  ProgramSearchBoxPlaceholderText: string
+  ProgramsHeaderText: string
+  ProjectColumnsListName: string
+  ProjectContentColumnItemNotFound: string
+  ProjectContentColumnsListName: string
+  ProjectDeliveriesGroupName: string
   ProjectInformationGroupName: string
-  StatusReportsCountLabel: string
-  ProjectLinkText: string
+  ProjectLabel: string
+  ProjectListEmptyText: string
   ProjectManager: string
   ProjectOwner: string
-  ProjectStatusLinkText: string
-  PropertyPaneDescription: string
-  RecommendationLabel: string
-  ResourceAllocationInfoText: string
-  ResourceAllocationErrorTransformGroupText: string
-  ResourceLabel: string
-  ResponsibleLabel: string
-  RoleLabel: string
-  AllocationPercetageLabel: string
-  AllocationStatusLabel: string
-  CommentLabel: string
-  MyProjectsSearchBoxPlaceholderText: string
-  AllProjectsSearchBoxPlaceholderText: string
-  ParentProjectsSearchBoxPlaceholderText: string
-  ProgramSearchBoxPlaceholderText: string
-  SearchBoxPlaceholderText: string
-  SearchBoxPlaceholderFallbackText: string
-  SearchBoxPlaceholderTextLabel: string
-  ShowAllMeasurementsLinkText: string
+  ProjectsAccessHeaderText: string
+  ProjectsAccessSearchBoxPlaceholderText: string
+  ProjectsListName: string
   RenderModeListText: string
   RenderModeTilesText: string
+  ResourceAllocationInfoText: string
+  ResourceLabel: string
+  RevertCustomOrderButtonText: string
+  RevertCustomOrderButtonTooltip: string
+  RoleLabel: string
+  RowLimitLabel: string
+  SaveButtonLabel: string
+  SearchBoxGroupName: string
+  SearchBoxPlaceholderFallbackText: string
+  SearchBoxPlaceholderText: string
+  SearchBoxPlaceholderTextDescription: string
+  SearchBoxPlaceholderTextLabel: string
+  SearchPropertyDescription: string
+  SearchPropertyFoundMessage: string
+  SearchPropertyLabel: string
+  SearchPropertyPlaceholder: string
+  SearchQueryLabel: string
+  SelectProgramText: string
+  ShowAllMeasurementsLinkText: string
   ShowCommandBarLabel: string
   ShowExcelExportButtonLabel: string
+  ShowFieldFrontpageLabel: string
+  ShowFieldPortfolioLabel: string
+  ShowFieldProjectStatusLabel: string
   ShowFiltersLabel: string
   ShowGroupByLabel: string
+  ShowHideColumnsLabel: string
+  ShowProgramViewsLabel: string
   ShowProjectLogoFieldLabel: string
   ShowProjectManagerFieldLabel: string
   ShowProjectOwnerFieldLabel: string
-  ShowSearchBoxLabel: string
   ShowRenderModeSelectorLabel: string
+  ShowSearchBoxLabel: string
   ShowViewSelectorLabel: string
   SiteTitleLabel: string
+  SortAscLabel: string
   SortByFieldLabel: string
-  StartValueLabel: string
+  SortDescLabel: string
+  SortOrderDescription: string
+  SortOrderLabel: string
+  StartDateLabel: string
+  StatusReportsCountLabel: string
   TileViewGroupName: string
+  TimelineConfigurationListName: string
+  TimelineContentListName: string
   TitleLabel: string
-  UnitLabel: string
-  TypeLabel: string
+  ToggleColumnFormPanelLabel: string
+  ToggleEditViewColumnsLabel: string
+  UseChangesButtonText: string
   ViewNotFoundMessage: string
   ViewsListNameLabel: string
-  ProjectsListName: string
-  TimelineContentListName: string
-  TimelineConfigurationListName: string
-  DataSourceListName: string
-  ProjectContentColumnsListName: string
-  PortfolioManagerGroupName: string
-  ProjectTimelineItemInfo: string
-  LastPublishedStatusreport: string
-  DiamondLabel: string
-  BarLabel: string
-  TriangleLabel: string
-  MilestoneLabel: string
-  ProjectLabel: string
-  SubPhaseLabel: string
-  ProjectDeliveryLabel: string
-  CurrentPhaseLabel: string
-  MilestoneDateLabel: string
-  NameLabel: string
-  StartDateLabel: string
-  EndDateLabel: string
-  BudgetTotalLabel: string
-  CostsTotalLabel: string
-  NoProjectsFound: string
-  NewLabel: string
-  DisplayAllProjects: string
-  MyProjectsHeaderText: string
-  AllProjectsHeaderText: string
-  ProgramProjectsHeaderText: string
-  ParentProjectsHeaderText: string
-  NoAccessMessage: string
-  BooleanYes: string
-  BooleanNo: string
-  BooleanOn: string
-  BooleanOff: string
-  ProjectDeliveriesGroupName: string
-  ShowProjectDeliveriesLabel: string
-  ConfigItemTitleFieldLabel: string
-  ConfigItemTitleFieldDescription: string
-  SortOrderLabel: string
-  DataSourceItemNotFound: string
-  ProjectContentColumnItemNotFound: string
-  ToggleEditViewColumnsLabel: string
-  ShowHideColumnsLabel: string
-  EditViewColumnsPanelHelpText: string
-  DataSourceLevelPortfolio: string
-  DataSourceLevelProject: string
 }
 
 declare module 'PortfolioWebPartsStrings' {

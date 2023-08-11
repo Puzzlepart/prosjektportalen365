@@ -19,7 +19,7 @@ export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
     <div className={styles.root}>
       <PrimaryButton text={strings.SaveButtonLabel} onClick={onSave} disabled={isSaveDisabled} />
       <DefaultButton
-        text={strings.CloseButtonLabel}
+        text={strings.CancelButtonLabel}
         style={{ marginLeft: 4 }}
         onClick={() => {
           context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
