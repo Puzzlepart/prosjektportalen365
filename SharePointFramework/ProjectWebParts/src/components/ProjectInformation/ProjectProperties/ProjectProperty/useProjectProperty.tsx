@@ -68,12 +68,17 @@ export function useProjectProperty(props: IProjectPropertyProps) {
         'Note',
         (textValue: string) => (
           <div
-            className={styles.value}
             dangerouslySetInnerHTML={{
               __html: textValue.replace(/\n/g, '<br />')
             }}
           ></div>
         )
+      ],
+      [
+        'DateTime',
+        (date: Date) => {
+          return <div>{date.toLocaleDateString()}</div>
+        }
       ]
     ])
 

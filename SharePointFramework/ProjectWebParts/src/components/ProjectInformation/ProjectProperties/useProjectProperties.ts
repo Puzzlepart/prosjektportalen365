@@ -1,6 +1,7 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { useProjectInformationContext } from '../context'
 import { IProjectPropertiesProps } from './types'
+import { useMemo } from 'react'
 
 /**
  * Hook for getting the project properties based on `displayAllProperties`
@@ -10,11 +11,15 @@ import { IProjectPropertiesProps } from './types'
  */
 export function useProjectProperties(props: IProjectPropertiesProps) {
   const context = useProjectInformationContext()
-  const properties = context.state.properties
-    .filter((p) => !!p.column)
-    .filter((p) => {
-      if (props.displayAllProperties) return true
-      return p.isVisible(DisplayMode.Read, context.props)
-    })
-  return properties.filter((p) => !p.isEmpty)
+  return useMemo(
+    () =>
+      context.state.properties
+        .filter((p) => !!p.column)
+        .filter((p) => {
+          if (props.displayAllProperties) return true
+          return p.isVisible(DisplayMode.Read, context.props)
+        })
+        .filter((p) => !p.isEmpty),
+    [context.state.properties, props.displayAllProperties]
+  )
 }

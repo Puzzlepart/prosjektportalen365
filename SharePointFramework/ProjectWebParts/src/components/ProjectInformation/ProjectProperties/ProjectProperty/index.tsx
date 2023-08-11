@@ -18,7 +18,7 @@ export const ProjectProperty: FC<IProjectPropertyProps> = (props) => {
       return (
         <div className={styles.root} style={props.style}>
           <Label>{props.model.displayName}</Label>
-          {renderValueForField()}
+          <div>{renderValueForField()}</div>
         </div>
       )
     }

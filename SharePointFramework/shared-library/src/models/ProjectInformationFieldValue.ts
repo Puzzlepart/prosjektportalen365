@@ -11,13 +11,13 @@ export class ProjectInformationFieldValue {
   /**
    * The text value of the field, from the current value
    * in the edit form, or from `FieldValuesText` in
-   * `IGetPropertiesData`
+   * `IProjectInformationData`
    */
   public value: string
 
   /**
    * The complex value of the field from `FieldValues` in
-   * `IGetPropertiesData`
+   * `IProjectInformationData`
    */
   public $: any
 

@@ -1,9 +1,8 @@
 import { IPersonaProps, ITag } from '@fluentui/react'
 import _ from 'lodash'
-import { DefaultCaching } from 'pp365-shared-library/lib/data'
+import { DefaultCaching, ProjectInformationField } from 'pp365-shared-library/lib'
 import { useState } from 'react'
 import { useProjectInformationContext } from '../context'
-import { ProjectInformationField } from 'pp365-shared-library/lib/models'
 
 /**
  * Hook for the `EditPropertiesPanel` model. This hook is used to get and set the values for
@@ -23,7 +22,7 @@ export function useModel() {
    */
   function get<T>(field: ProjectInformationField, fallbackValue: T = null): T {
     const currentValue = model.get(field.internalName)
-    const $field = field.setValue(context.state.data, currentValue)
+    const $field = field.clone().setValue(context.state.data, currentValue)
     if ($field.isEmpty || !!currentValue) {
       return currentValue ?? (fallbackValue as unknown as T)
     }
@@ -40,51 +39,71 @@ export function useModel() {
    */
   const transformValue = async (value: any, field: ProjectInformationField) => {
     const propertiesList = context.props.sp.web.lists.getById(context.state.data.propertiesListId)
-    switch (field.type) {
-      case 'Boolean': {
-        return [field.internalName, value]
-      }
-      case 'URL': {
-        return [
-          field.internalName,
+    const valueMap = new Map<string, () => Promise<any[]> | any[]>([
+      [
+        'URL',
+        () => [
           {
             Description: value.description,
             Url: value.url
           }
         ]
-      }
-      case 'TaxonomyFieldTypeMulti':
-      case 'TaxonomyFieldType': {
-        const textField = await propertiesList.fields
-          .getById(field.getProperty('TextField'))
-          .select('InternalName')
-          .using(DefaultCaching)()
-        return [
-          textField.InternalName,
-          (value as ITag[]).map((v) => `-1;#${v.name}|${v.key}`).join(';#')
-        ]
-      }
-      case 'User': {
-        const email = value[0].secondaryText
-        let val = null
-        if (email) val = (await context.props.sp.web.ensureUser(email)).data.Id
-        return [`${field.internalName}Id`, val]
-      }
-      case 'UserMulti': {
-        const values = await Promise.all(
-          value.map(
-            async (v: IPersonaProps) =>
-              (
-                await context.props.sp.web.ensureUser(v.secondaryText)
-              ).data.Id
+      ],
+      [
+        'TaxonomyFieldTypeMulti',
+        async () => {
+          const textField = await propertiesList.fields
+            .getById(field.getProperty('TextField'))
+            .select('InternalName')
+            .using(DefaultCaching)()
+          return [
+            (value as ITag[]).map((v) => `-1;#${v.name}|${v.key}`).join(';#'),
+            textField.InternalName
+          ]
+        }
+      ],
+      [
+        'TaxonomyFieldType',
+        async () => {
+          const textField = await propertiesList.fields
+            .getById(field.getProperty('TextField'))
+            .select('InternalName')
+            .using(DefaultCaching)()
+          return [
+            (value as ITag[]).map((v) => `-1;#${v.name}|${v.key}`).join(';#'),
+            textField.InternalName
+          ]
+        }
+      ],
+      [
+        'User',
+        async () => {
+          const email = value[0].secondaryText
+          let val = null
+          if (email) val = (await context.props.sp.web.ensureUser(email)).data.Id
+          return [val, `${field.internalName}Id`]
+        }
+      ],
+      [
+        'UserMulti',
+        async () => {
+          const values = await Promise.all(
+            value.map(
+              async (v: IPersonaProps) =>
+                (
+                  await context.props.sp.web.ensureUser(v.secondaryText)
+                ).data.Id
+            )
           )
-        )
-        return [`${field.internalName}Id`, _.flatten(values)]
-      }
-      default: {
-        return [field.internalName, value]
-      }
+          return [_.flatten(values), `${field.internalName}Id`]
+        }
+      ]
+    ])
+    if (valueMap.has(field.type)) {
+      const [transformedValue, internalName] = await valueMap.get(field.type)()
+      return [internalName ?? field.internalName, transformedValue]
     }
+    return [field.internalName, value]
   }
 
   /**
@@ -115,3 +134,5 @@ export function useModel() {
 
   return { model, set, get, properties, isChanged, reset }
 }
+
+export type UseModelReturnType = ReturnType<typeof useModel>

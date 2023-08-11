@@ -14,7 +14,7 @@ import * as getValue from 'get-value'
 import * as strings from 'ProjectWebPartsStrings'
 import ReactDom from 'react-dom'
 import { UncertaintyElementModel } from '../../models'
-import { BaseProjectWebPart } from '../@baseProjectWebPart'
+import { BaseProjectWebPart } from '../baseProjectWebPart'
 import { IOpportunityMatrixWebPartProps } from './types'
 
 export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpportunityMatrixWebPartProps> {

@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    ErrorBoundaryFallbackText: 'Det oppstod en feil under lasting av {0}.',
+    ErrorBoundaryFallbackDescription: 'Feildetaljer:',
     UpdatingProjectPropertiesErrorText: 'Det oppstod en feil under lagring av prosjektegenskaper. Vennligst prøv igjen senere.',
     SynchronizingProjectPropertiesToPortfolioSiteErrorText: 'Det oppstod en feil under synkronisering av prosjektegenskaper til porteføljeområdet. Vennligst prøv igjen senere.',
     UpdatingProjectPropertiesStatusText: 'Lagrer prosjektegenskaper...',
@@ -177,7 +179,8 @@ define([], function () {
     SaveText: 'Lagre',
     SettingsGroupName: 'Innstillinger',
     ShowAllProjectInformationText: 'Vis all prosjektinformasjon',
-    ShowFieldExternalUsers: 'Synlig for eksterne brukere',
+    ShowFieldExternalUsersOnText: 'Synlig for eksterne brukere',
+    ShowFieldExternalUsersOffText: 'Ikke synlig for eksterne brukere',
     ShowFilterButtonLabel: 'Vis filterknapp',
     ShowInfoMessageLabel: 'Vis infomelding',
     ShowProjectDeliveriesLabel: 'Vis prosjektleveranser',

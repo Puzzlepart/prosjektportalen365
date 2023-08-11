@@ -14,7 +14,7 @@ import { FieldDescription } from 'pp365-shared-library/lib/components'
 import { ProjectInformationField } from 'pp365-shared-library/lib/models'
 import React from 'react'
 import SPDataAdapter from '../../../data'
-import { useModel } from './useModel'
+import { UseModelReturnType } from './useModel'
 
 /**
  * Hook for field elements of `EditPropertiesPanel` component. This hook is used to render field elements
@@ -34,7 +34,7 @@ import { useModel } from './useModel'
  *
  * @param model Model returned from `useEditPropertiesPanelModel` hook
  */
-export function useFieldElements(model: ReturnType<typeof useModel>) {
+export function useFieldElements(model: UseModelReturnType) {
   const fieldElements: Record<string, (field: ProjectInformationField) => JSX.Element> = {
     Boolean: (field) => (
       <>

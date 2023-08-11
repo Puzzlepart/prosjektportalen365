@@ -282,9 +282,7 @@ export class ProjectDataService {
     try {
       const propertyItemContext = await this._getLocalProjectInformationItemContext()
       if (propertyItemContext) {
-        const updateResult = await propertyItemContext.item.update(properties)
-        // eslint-disable-next-line no-console
-        console.log(updateResult)
+        await propertyItemContext.item.update(properties)
       }
     } catch (error) {
       throw error

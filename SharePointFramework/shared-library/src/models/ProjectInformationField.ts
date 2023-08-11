@@ -1,9 +1,9 @@
 import { IDropdownOption } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
+import { IProjectInformationData } from '../services/ProjectDataService/types'
+import { createFieldValueMap } from '../util'
 import { ProjectColumn } from './ProjectColumn'
 import { ProjectInformationFieldValue } from './ProjectInformationFieldValue'
-import { createProjectInformationFieldValueMap } from '../util/createProjectInformationFieldValueMap'
-import { IProjectInformationData } from '../services/ProjectDataService/types'
 
 /**
  * Project information field model. Used both for display
@@ -16,7 +16,7 @@ export class ProjectInformationField {
   public description: string
   public type: string
   private _fieldValue: ProjectInformationFieldValue
-  private _fieldValueMap: ReturnType<typeof createProjectInformationFieldValueMap>
+  private _fieldValueMap: ReturnType<typeof createFieldValueMap>
 
   /**
    * Constructs a new `ProjectInformationField` instance.
@@ -35,7 +35,7 @@ export class ProjectInformationField {
     this.displayName = column?.name ?? _field.Title
     this.description = _field.Description
     this.type = _field.TypeAsString
-    this._fieldValueMap = createProjectInformationFieldValueMap()
+    this._fieldValueMap = createFieldValueMap()
   }
 
   /**
@@ -118,5 +118,14 @@ export class ProjectInformationField {
    */
   public get isEmpty(): boolean {
     return !this._fieldValue?.isSet
+  }
+
+  /**
+   * Clones the field returning a new instance of the field.
+   *
+   * @returns a clone of the field
+   */
+  public clone() {
+    return new ProjectInformationField(this._field, this.column, this._isExternal)
   }
 }

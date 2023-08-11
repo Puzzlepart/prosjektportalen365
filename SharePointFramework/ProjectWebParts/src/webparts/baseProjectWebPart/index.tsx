@@ -51,9 +51,16 @@ export abstract class BaseProjectWebPart<
    * @param props Props (`P`) (default: `{}`)
    */
   public renderComponent<P>(component: FC<P>, props: Partial<P> = {}): void {
-    const element = createElement(component, this.createPropsForComponent(props))
+    const combinedProps = this.createPropsForComponent(props)
+    const element = createElement(component, combinedProps)
     render(
-      <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>{element}</ErrorBoundary>,
+      <ErrorBoundary
+        fallbackRender={({ error }) => (
+          <ErrorBoundaryFallback title={combinedProps['title']} error={error} />
+        )}
+      >
+        {element}
+      </ErrorBoundary>,
       this.domElement
     )
   }

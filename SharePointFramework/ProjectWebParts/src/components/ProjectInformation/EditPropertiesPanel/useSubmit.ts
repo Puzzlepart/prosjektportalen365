@@ -6,7 +6,7 @@ import SPDataAdapter from '../../../data'
 import { useProjectInformationContext } from '../context'
 import { CLOSE_PANEL, PROPERTIES_UPDATED } from '../reducer'
 import { usePropertiesSync } from '../usePropertiesSync'
-import { useModel } from './useModel'
+import { UseModelReturnType } from './useModel'
 
 /**
  * Hook for submitting the properties to the project and syncing to the hub. Returns
@@ -14,7 +14,7 @@ import { useModel } from './useModel'
  *
  * @param model Model returned from `useModel`
  */
-export function useSubmit(model: ReturnType<typeof useModel>) {
+export function useSubmit(model: UseModelReturnType) {
   const context = useProjectInformationContext()
   const { syncPropertyItemToHub } = usePropertiesSync(context)
   const [saveStatus, setSaveStatus] = useState(null)
@@ -64,3 +64,5 @@ export function useSubmit(model: ReturnType<typeof useModel>) {
 
   return { onSave, saveStatus, error }
 }
+
+export type UseSubmitReturnType = ReturnType<typeof useSubmit>

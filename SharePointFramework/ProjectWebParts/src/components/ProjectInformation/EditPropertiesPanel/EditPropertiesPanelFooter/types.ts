@@ -1,17 +1,17 @@
 import { ISpinnerProps } from '@fluentui/react'
-import { useModel } from '../useModel'
-import { useSubmit } from '../useSubmit'
+import { UseModelReturnType } from '../useModel'
+import { UseSubmitReturnType } from '../useSubmit'
 
 export interface IEditPropertiesPanelFooterProps {
   /**
    * Submit functions and state.
    */
-  submit: ReturnType<typeof useSubmit>
+  submit: UseSubmitReturnType
 
   /**
    * Model functions and state.
    */
-  model: ReturnType<typeof useModel>
+  model: UseModelReturnType
 
   /**
    * Spinner props.

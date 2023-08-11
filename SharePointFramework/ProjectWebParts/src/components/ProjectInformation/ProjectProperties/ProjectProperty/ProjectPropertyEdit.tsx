@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { useProjectInformationContext } from '../../context'
 import styles from './ProjectProperty.module.scss'
 import { IProjectPropertyProps } from './types'
+import { Label } from '@fluentui/react'
 
 export const ProjectPropertyEdit: FC<IProjectPropertyProps> = (props) => {
   const context = useProjectInformationContext()
@@ -12,10 +13,11 @@ export const ProjectPropertyEdit: FC<IProjectPropertyProps> = (props) => {
     : false
   return (
     <div className={styles.root} title={props.model.description} style={props.style}>
-      <div className={styles.label}>{props.model.displayName}</div>
-      <div className={styles.value}>
+      <Label>{props.model.displayName}</Label>
+      <div>
         <Toggle
-          label={strings.ShowFieldExternalUsers}
+          offText={strings.ShowFieldExternalUsersOffText}
+          onText={strings.ShowFieldExternalUsersOnText}
           inlineLabel={true}
           defaultChecked={defaultChecked}
           onChange={(_event, checked) =>

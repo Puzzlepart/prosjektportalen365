@@ -2,7 +2,12 @@ import { LogLevel } from '@pnp/logging'
 import { AnyAction } from '@reduxjs/toolkit'
 import strings from 'ProjectWebPartsStrings'
 import _ from 'lodash'
-import { StatusReport, ProjectAdminPermission, getUrlParam, parseUrlHash } from 'pp365-shared-library/lib'
+import {
+  StatusReport,
+  ProjectAdminPermission,
+  getUrlParam,
+  parseUrlHash
+} from 'pp365-shared-library/lib'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
@@ -58,7 +63,7 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
     if (hashState.has('selectedReport')) {
       initialSelectedReport = _.find(
         sortedReports,
-        (report) => report.id === hashState.get('selectedReport') as number
+        (report) => report.id === (hashState.get('selectedReport') as number)
       )
     } else if (selectedReportUrlParam) {
       initialSelectedReport = _.find(

@@ -1,4 +1,6 @@
 declare interface IProjectWebPartsStrings {
+  ErrorBoundaryFallbackDescription: string
+  ErrorBoundaryFallbackText: string
   UpdatingProjectPropertiesErrorText: string
   SynchronizingProjectPropertiesToPortfolioSiteErrorText: string
   UpdatingProjectPropertiesStatusText: string
@@ -174,7 +176,8 @@ declare interface IProjectWebPartsStrings {
   SaveText: string
   SettingsGroupName: string
   ShowAllProjectInformationText: string
-  ShowFieldExternalUsers: string
+  ShowFieldExternalUsersOffText: string
+  ShowFieldExternalUsersOnText: string
   ShowFilterButtonLabel: string
   ShowInfoMessageLabel: string
   ShowProjectDeliveriesLabel: string

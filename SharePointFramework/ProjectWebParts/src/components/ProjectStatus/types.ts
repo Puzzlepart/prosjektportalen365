@@ -47,7 +47,7 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   /**
    * Hash state from URL
    */
-  hashState?: Map<string, string  | number>
+  hashState?: Map<string, string | number>
 
   /**
    * Is the report being published?

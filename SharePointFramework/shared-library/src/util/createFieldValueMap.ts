@@ -7,7 +7,7 @@ import { getUserPhoto } from './getUserPhoto'
  * Create a field value map that can be used to parse the field value
  * from the SharePoint REST API.
  */
-export const createProjectInformationFieldValueMap = (): Map<
+export const createFieldValueMap = (): Map<
   string,
   (value: ProjectInformationFieldValue) => any
 > => {
@@ -19,17 +19,14 @@ export const createProjectInformationFieldValueMap = (): Map<
         return { url, description }
       }
     ],
-    [
-      'TaxonomyFieldType',
-      ({ value }) => {
-        return value.split(';').map((v) => ({ key: v, name: v }))
-      }
-    ],
+    ['TaxonomyFieldType', ({ value }) => value.split(';').map((v) => ({ key: v, name: v }))],
     [
       'TaxonomyFieldTypeMulti',
-      ({ value }) => {
-        return value.split(';').map((v) => ({ key: v, name: v }))
-      }
+      ({ $ }) =>
+        ($ as Array<{ TermGuid: string; Label: string }>).map((term) => ({
+          key: term.TermGuid,
+          name: term.Label
+        }))
     ],
     ['DateTime', ({ $ }) => new Date($)],
     ['MultiChoice', ({ value }) => value.split(', ')],
