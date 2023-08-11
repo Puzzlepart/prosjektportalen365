@@ -24,21 +24,7 @@
       "screenshotPaths": [],
       "videoUrl": "",
       "categories": []
-    },
-    "features": [
-      {
-        "title": "Application Extension - Deployment of custom action",
-        "description": "Deploys a custom action with ClientSideComponentId association",
-        "id": "22c0b578-0432-4967-a4dd-1b35d329d760",
-        "version": "1.6.2",
-        "assets": {
-          "elementManifests": [
-            "elements.xml",
-            "ClientSideInstance.xml"
-          ]
-        }
-      }
-    ]
+    }
   },
   "paths": {
     "zippedPackage": "solution/pp-portfolio-extensions.sppkg"
