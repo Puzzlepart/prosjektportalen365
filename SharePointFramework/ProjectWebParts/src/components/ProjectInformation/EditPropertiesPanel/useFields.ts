@@ -1,27 +1,18 @@
 import { useMemo } from 'react'
-import { ProjectInformationField } from '../types'
 import { useProjectInformationContext } from '../context'
+import { DisplayMode } from '@microsoft/sp-core-library'
 
 /**
  * Hook for the `EditPropertiesPanel` fields.
+ * 
+ * @param hiddenFields Fields to be hidden in the `EditPropertiesPanel`.
  *
  * @returns Fields to be used in the `EditPropertiesPanel`.
  */
-export function useFields() {
+export function useFields(hiddenFields: string[]) {
   const context = useProjectInformationContext()
-  const { fields, columns } = context.state.data
-  return useMemo<ProjectInformationField[]>(
-    () =>
-      fields
-        .map(
-          (f) =>
-            new ProjectInformationField(
-              f,
-              columns.find(({ internalName }) => internalName === f.InternalName)
-            )
-        )
-        .filter(Boolean)
-        .filter((f) => f.showInEditForm),
-    [fields, columns]
+  return useMemo(
+    () => context.state.properties.filter((p) => p.isVisible(DisplayMode.Edit) && !hiddenFields.includes(p.internalName)),
+    [context.state.properties]
   )
 }

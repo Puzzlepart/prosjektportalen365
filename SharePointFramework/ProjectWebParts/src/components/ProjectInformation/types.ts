@@ -11,6 +11,7 @@ import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDa
 import { IProjectStatusData } from '../ProjectStatus'
 import { ActionType } from './Actions/types'
 import { IProgressDialogProps } from './ProgressDialog/types'
+import { DisplayMode } from '@microsoft/sp-core-library'
 
 /**
  * Project information field model. Used both for display
@@ -77,11 +78,19 @@ export class ProjectInformationField {
   }
 
   /**
-   * Returns `true` if the field should be visible in edit form.
-   * `ShowInEditForm` must be `true` and `Hidden` must be `false`.
+   * Returns `true` if the field should be visible in the
+   * specified display mode. When checking for `DisplayMode.Read``
+   * the page property is used to determine which properties to display.
+   * 
+   * @param displayMode Display mode
+   * @param page Current page
    */
-  public get showInEditForm(): boolean {
-    return this._field.ShowInEditForm && !this._field.Hidden
+  public isVisible(displayMode: DisplayMode, page?: 'Frontpage' | 'ProjectStatus' | 'Portfolio'): boolean {
+    switch (displayMode) {
+      case DisplayMode.Edit: return this._field.ShowInEditForm && !this._field.Hidden
+      case DisplayMode.Read: return this.column.isVisible(page)
+    }
+
   }
 
   /**
@@ -251,7 +260,7 @@ export interface IProjectInformationState
 
 export interface IProjectInformationData
   extends ProjectDataService.IGetPropertiesData,
-    Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {
+  Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {
   /**
    * Column configuration
    */
