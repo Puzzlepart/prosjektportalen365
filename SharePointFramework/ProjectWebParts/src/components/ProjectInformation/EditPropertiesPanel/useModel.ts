@@ -1,8 +1,9 @@
-import { IPersonaSharedProps, ITag } from '@fluentui/react'
+import { IPersonaProps, IPersonaSharedProps, ITag } from '@fluentui/react'
 import { DefaultCaching } from 'pp365-shared-library/lib/data'
 import { useState } from 'react'
 import { useProjectInformationContext } from '../context'
 import { ProjectInformationField } from '../types'
+import _ from 'lodash'
 
 /**
  * Hook for the `EditPropertiesPanel` model. This hook is used to get and set the values for
@@ -20,10 +21,7 @@ export function useModel() {
    * @param field Field to get value for
    * @param fallbackValue Value to return if the field has no value
    */
-  function get<T>(
-    field: ProjectInformationField,
-    fallbackValue: T = null
-  ): T {
+  function get<T>(field: ProjectInformationField, fallbackValue: T = null): T {
     const { fieldValues, fieldValuesText } = context.state.data
     const value = (model.get(field.internalName) as string) ?? fieldValuesText[field.internalName]
     const isValueString = typeof value === 'string'
@@ -35,7 +33,8 @@ export function useModel() {
         return { url, description } as unknown as T
       },
       TaxonomyFieldType: () => value.split(';').map((v) => ({ key: v, name: v })) as unknown as T,
-      TaxonomyFieldTypeMulti: () => value.split(';').map((v) => ({ key: v, name: v })) as unknown as T,
+      TaxonomyFieldTypeMulti: () =>
+        value.split(';').map((v) => ({ key: v, name: v })) as unknown as T,
       DateTime: () => new Date(fieldValues[field.internalName]) as unknown as T,
       MultiChoice: () => value.split(', ') as unknown as T,
       User: () => {
@@ -56,11 +55,12 @@ export function useModel() {
       },
       UserMulti: () => {
         const fieldValue = fieldValues[field.internalName]
-        const users = (fieldValue as Array<{
-          Id: number
-          Title: string
-          EMail: string
-        }>
+        const users = (
+          fieldValue as Array<{
+            Id: number
+            Title: string
+            EMail: string
+          }>
         ).map<IPersonaSharedProps>((v) => ({
           key: v.Id,
           text: v.Title,
@@ -109,10 +109,21 @@ export function useModel() {
         ]
       }
       case 'User': {
-        return [field.internalName, value]
+        const email = value[0].secondaryText
+        let val = null
+        if (email) val = (await context.props.sp.web.ensureUser(email)).data.Id
+        return [`${field.internalName}Id`, val]
       }
       case 'UserMulti': {
-        return [field.internalName, value]
+        const values = await Promise.all(
+          value.map(
+            async (v: IPersonaProps) =>
+              (
+                await context.props.sp.web.ensureUser(v.secondaryText)
+              ).data.Id
+          )
+        )
+        return [`${field.internalName}Id`, _.flatten(values)]
       }
       default: {
         return [field.internalName, value]

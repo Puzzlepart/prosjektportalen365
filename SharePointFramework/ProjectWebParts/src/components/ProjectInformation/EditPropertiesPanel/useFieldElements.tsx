@@ -50,7 +50,7 @@ export function useFieldElements(model: ReturnType<typeof useModel>) {
       const value = model.get<{
         url: string
         description: string
-      }>(field,  { url: '', description: '' })
+      }>(field, { url: '', description: '' })
       return (
         <>
           <Label>{field.displayName}</Label>
