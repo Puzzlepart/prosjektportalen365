@@ -534,8 +534,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         const model = new ProjectListModel(group?.displayName ?? item.Title, item)
         model.isUserMember = !!group
         model.hasUserAccess = _.any(sites, (site) => site['SiteId'] === item.GtSiteId)
-        if (manager) model.manager = { text: manager.Title, imageUrl: getUserPhoto(manager.Email) }
-        if (owner) model.owner = { text: owner.Title, imageUrl: getUserPhoto(owner.Email) }
+        if (manager)
+          model.manager = { name: manager.Title, image: { src: getUserPhoto(manager.Email) } }
+        if (owner) model.owner = { name: owner.Title, image: { src: getUserPhoto(owner.Email) } }
         return model
       })
       .filter(Boolean)

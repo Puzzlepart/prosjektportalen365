@@ -20,18 +20,22 @@
         "default": "Prosjektutlisting"
       },
       "description": {
-        "default": "Viser prosjekter under porteføljen"
+        "default": "Viser prosjekter under nåværende portefølje"
       },
       "officeFabricIconFontName": "ViewListGroup",
       "properties": {
-        "sortBy": "Title",
-        "defaultRenderMode": "tiles",
+        "showProjectLogo": true,
         "showProjectOwner": true,
         "showProjectManager": true,
-        "defaultView": "my_projects",
-        "hideViews": [
-          "projects_access"
-        ]
+        "showProjectServiceArea": true,
+        "showProjectType": true,
+        "showProjectPhase": true,
+        "sortBy": "Title",
+        "showSearchBox": true,
+        "showRenderModeSelector": true,
+        "defaultRenderMode": "tiles",
+        "defaultVertical": "my_projects",
+        "hideVerticals": []
       }
     }
   ]

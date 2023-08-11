@@ -1,23 +1,23 @@
+import React, { FC } from 'react'
+import { IColumn, SelectionMode, ShimmeredDetailsList } from '@fluentui/react'
 import {
-  IColumn,
-  MessageBar,
-  MessageBarType,
-  Pivot,
-  PivotItem,
-  SearchBox,
-  SelectionMode,
-  ShimmeredDetailsList
-} from '@fluentui/react'
+  FluentProvider,
+  SelectTabData,
+  Tab,
+  TabList,
+  webLightTheme
+} from '@fluentui/react-components'
+import { Alert } from '@fluentui/react-components/unstable'
+import { SearchBox } from '@fluentui/react-search-preview'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import { getObjectValue } from 'pp365-shared-library/lib/util/getObjectValue'
-import React, { FC } from 'react'
 import { find, isEmpty } from 'underscore'
 import { ProjectCard } from './ProjectCard'
 import { ProjectCardContext } from './ProjectCard/context'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
-import { ProjectListViews } from './ProjectListViews'
+import { ProjectListVerticals } from './ProjectListVerticals'
 import { RenderModeDropdown } from './RenderModeDropdown'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
@@ -28,7 +28,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     state,
     setState,
     projects,
-    views,
+    verticals,
     getCardActions,
     onListSort,
     onSearch,
@@ -97,86 +97,106 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
 
   if (state.projects.length === 0) {
     return (
-      <div className={styles.root}>
-        <MessageBar messageBarType={MessageBarType.info}>{strings.NoProjectsFound}</MessageBar>
-      </div>
+      <FluentProvider theme={webLightTheme}>
+        <section className={styles.projectList}>
+          <Alert intent={'info'}>{strings.NoProjectsFound}</Alert>
+        </section>
+      </FluentProvider>
     )
   }
 
   if (state.error) {
     return (
-      <div className={styles.root}>
-        <MessageBar messageBarType={MessageBarType.error}>{strings.ErrorText}</MessageBar>
-      </div>
+      <FluentProvider theme={webLightTheme}>
+        <section className={styles.projectList}>
+          <Alert intent={'error'}>{strings.ErrorText}</Alert>
+        </section>
+      </FluentProvider>
     )
   }
 
   return (
-    <div className={styles.root}>
-      <div className={styles.container}>
-        <div className={styles.projectDisplaySelect}>
-          <Pivot
-            onLinkClick={({ props }) =>
-              setState({ selectedView: find(views, (v) => v.itemKey === props.itemKey) })
+    <FluentProvider theme={webLightTheme}>
+      <section className={styles.projectList}>
+        <div className={styles.tabs}>
+          <TabList
+            onTabSelect={(_, data: SelectTabData) =>
+              setState({ selectedVertical: find(verticals, (v) => v.key === data.value) })
             }
-            selectedKey={state.selectedView.itemKey}
+            selectedValue={state.selectedVertical.key}
           >
             {state.isDataLoaded &&
-              views
-                .filter((view) => !view.isHidden || !view.isHidden(state))
-                .map((view) => (
-                  <PivotItem
-                    key={view.itemKey}
-                    itemKey={view.itemKey}
-                    headerText={view.headerText}
-                    itemIcon={view.itemIcon}
-                    headerButtonProps={
-                      view.getHeaderButtonProps && view.getHeaderButtonProps(state)
-                    }
-                  >
-                    <div className={styles.searchBox} hidden={!props.showSearchBox}>
-                      <SearchBox
-                        disabled={!state.isDataLoaded || isEmpty(state.projects)}
-                        value={state.searchTerm}
-                        placeholder={searchBoxPlaceholder}
-                        onChange={onSearch}
-                      />
-                    </div>
-                    <RenderModeDropdown
-                      hidden={!props.showViewSelector}
-                      renderAs={state.renderMode}
-                      onChange={(renderAs) => setState({ renderMode: renderAs })}
-                    />
-                    {state.isDataLoaded && isEmpty(projects) && (
-                      <div className={styles.emptyMessage}>
-                        <MessageBar>{strings.ProjectListEmptyText}</MessageBar>
-                      </div>
-                    )}
-                    <div className={styles.projects}>{renderProjects(projects)}</div>
-                  </PivotItem>
-                ))}
-          </Pivot>
+              verticals
+                .filter((vertical) => !vertical.isHidden || !vertical.isHidden(state))
+                .map((vertical) => {
+                  const Icon = vertical.icon
+                  return (
+                    <Tab key={vertical.key} value={vertical.value} icon={<Icon />}>
+                      {vertical.text}
+                    </Tab>
+                  )
+                })}
+          </TabList>
         </div>
-      </div>
+        <div
+          className={styles.commandBar}
+          hidden={!props.showSearchBox && !props.showRenderModeSelector}
+        >
+          <div className={styles.search} hidden={!props.showSearchBox}>
+            <SearchBox
+              className={styles.searchBox}
+              disabled={!state.isDataLoaded || isEmpty(state.projects)}
+              value={state.searchTerm}
+              placeholder={searchBoxPlaceholder}
+              aria-label={searchBoxPlaceholder}
+              size={'large'}
+              onChange={onSearch}
+              appearance={'filled-lighter'}
+            />
+          </div>
+          <div hidden={!props.showRenderModeSelector}>
+            <RenderModeDropdown
+              renderAs={state.renderMode}
+              onOptionSelect={(renderAs) => setState({ renderMode: renderAs })}
+            />
+          </div>
+        </div>
+        {state.isDataLoaded && isEmpty(projects) && (
+          <div className={styles.emptyMessage}>
+            <Alert intent={'info'}>{strings.ProjectListEmptyText}</Alert>
+          </div>
+        )}
+        <div className={styles.projects}>{renderProjects(projects)}</div>
+      </section>
       <ProjectInformationPanel
         key={state.showProjectInfo?.siteId}
         title={state.showProjectInfo?.title}
         siteId={state.showProjectInfo?.siteId}
         webUrl={state.showProjectInfo?.url}
         webPartContext={props.webPartContext}
-        page='Portfolio'
+        page={'Portfolio'}
         hidden={!state.showProjectInfo}
         hideAllActions={true}
       />
-    </div>
+    </FluentProvider>
   )
 }
 
 ProjectList.defaultProps = {
   columns: PROJECTLIST_COLUMNS,
   sortBy: 'Title',
-  views: ProjectListViews,
-  hideViews: []
+  showSearchBox: true,
+  showRenderModeSelector: true,
+  defaultRenderMode: 'tiles',
+  defaultVertical: 'my_projects',
+  verticals: ProjectListVerticals,
+  hideVerticals: [],
+  showProjectLogo: true,
+  showProjectOwner: true,
+  showProjectManager: true,
+  showProjectServiceArea: true,
+  showProjectType: true,
+  showProjectPhase: true
 }
 
 export * from './types'

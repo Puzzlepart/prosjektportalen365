@@ -1,9 +1,21 @@
-import { IButtonProps, IPivotItemProps, IShimmerProps } from '@fluentui/react'
+import { IShimmerProps } from '@fluentui/react'
 import { IColumn } from '@fluentui/react/lib/DetailsList'
 import { IBaseComponentProps } from '../types'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
+import { TabProps } from '@fluentui/react-components'
+import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
 
-export interface IProjectListView extends IPivotItemProps {
+export interface IProjectListVertical extends Omit<TabProps, 'icon'> {
+  /**
+   * Text to display for the tab
+   */
+  text?: string
+
+  /**
+   * Icon to display for the tab
+   */
+  icon?: FluentIcon
+
   /**
    * Placeholder text for search box.
    */
@@ -18,18 +30,7 @@ export interface IProjectListView extends IPivotItemProps {
   filter?: (project: ProjectListModel, state: IProjectListState) => boolean
 
   /**
-   * Function to get header button props. If not provided, the default button props are used.
-   *
-   * @param state State of the component
-   */
-  getHeaderButtonProps?: (state: IProjectListState) =>
-    | IButtonProps
-    | {
-        [key: string]: string | number | boolean
-      }
-
-  /**
-   * Function to determine if the view should be hidden. If not provided, the view is not hidden.
+   * Function to determine if the vertical should be hidden. If not provided, the vertical is not hidden.
    *
    * @param state State of the component
    */
@@ -45,14 +46,14 @@ export interface IProjectListProps extends IBaseComponentProps {
   sortBy?: string
 
   /**
-   *Show search box
+   * Show search box
    */
   showSearchBox?: boolean
 
   /**
-   * Show view selector
+   * Show render mode selector
    */
-  showViewSelector?: boolean
+  showRenderModeSelector?: boolean
 
   /**
    * Show Project Logo on the project card
@@ -70,29 +71,46 @@ export interface IProjectListProps extends IBaseComponentProps {
   showProjectManager?: boolean
 
   /**
+   * Show service area on the project card
+   */
+  showProjectServiceArea?: boolean
+
+  /**
+   * Show Project type on the project card
+   */
+  showProjectType?: boolean
+
+  /**
+   * Show Project phase on the project card
+   */
+  showProjectPhase?: boolean
+
+  /**
    * Columns
    */
   columns?: IColumn[]
 
   /**
-   * Default view
+   * Default vertical
    */
-  defaultView?: string
+  defaultVertical?: string
 
   /**
-   * Array of views to hide
+   * Array of verticals to hide
    */
-  hideViews?: string[]
+  hideVerticals?: string[]
 
   /**
-   * Views to show using Pivot component
+   * Vertical to show in the Tab component
    */
-  views?: IProjectListView[]
+  verticals?: IProjectListVertical[]
 
   /**
    * Default render mode
    */
   defaultRenderMode?: ProjectListRenderMode
+
+  useDynamicColors?: boolean
 }
 
 export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
@@ -120,10 +138,11 @@ export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
    * How the projects should be rendered. `tiles` or `list`
    */
   renderMode?: ProjectListRenderMode
+
   /**
-   * Current selected view
+   * Current selected vertical
    */
-  selectedView?: IProjectListView
+  selectedVertical?: IProjectListVertical
 
   /**
    * Is the current user in the PortfolioManagerGroup?

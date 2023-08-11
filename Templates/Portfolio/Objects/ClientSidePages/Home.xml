@@ -1,6 +1,6 @@
 <pnp:ClientSidePage PageName="{resource:ClientSidePages_Home_PageName}" PromoteAsNewsArticle="false" Overwrite="false" Layout="Home" EnableComments="false" Title="{resource:ClientSidePages_Home_Title}" xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:Sections>
-        <pnp:Section Order="1" Type="TwoColumnLeft">
+        <pnp:Section Order="1" Type="OneColumnVerticalSection">
             <pnp:Controls>
                 <pnp:CanvasControl Order="1" Column="1" WebPartType="Custom" JsonControlData="{&quot;properties&quot;:{&quot;phaseTermSetId&quot;:&quot;abcfc9d9-a263-4abb-8234-be973c46258a&quot;,&quot;sortBy&quot;:&quot;title&quot;,&quot;showProjectLogo&quot;:true,&quot;showProjectOwner&quot;:true,&quot;showProjectManager&quot;:true,&quot;showSearchBox&quot;:true,&quot;showViewSelector&quot;:true,&quot;defaultView&quot;:&quot;my_projects&quot;,&quot;hideViews&quot;:[&quot;projects_access&quot;]}}" ControlId="54fbeb7d-e463-4dcc-8873-50a3ab2f0f68" />
                 <pnp:CanvasControl Order="1" Column="2" WebPartType="Custom" JsonControlData="{&quot;properties&quot;:{&quot;title&quot;:&quot;Siste prosjekter&quot;,&quot;loadingText&quot;:&quot;Laster siste prosjekter...&quot;,&quot;emptyMessage&quot;:&quot;Fant ingen nye prosjekter.&quot;,&quot;rowLimit&quot;:5}}" ControlId="941fd73c-b957-41c3-8d4f-082268407f10" />
