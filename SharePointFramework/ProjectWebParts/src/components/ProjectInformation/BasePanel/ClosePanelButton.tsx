@@ -13,7 +13,7 @@ export const ClosePanelButton: FC<IClosePanelButtonProps> = (props) => {
       text={strings.CancelText}
       styles={{ root: { marginLeft: props.noMargin ? 0 : 8 } }}
       onClick={(e) => {
-        props.onClick(e)
+        props.onClick && props.onClick(e)
         context.dispatch(CLOSE_PANEL())
       }}
     />

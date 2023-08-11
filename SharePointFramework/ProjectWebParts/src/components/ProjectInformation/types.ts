@@ -12,6 +12,10 @@ import { IProjectStatusData } from '../ProjectStatus'
 import { ActionType } from './Actions/types'
 import { IProgressDialogProps } from './ProgressDialog/types'
 
+/**
+ * Project information field model. Used both for display
+ * and edit of project information.
+ */
 export class ProjectInformationField {
   public id: string
   public internalName: string
@@ -27,7 +31,7 @@ export class ProjectInformationField {
    * @param _field Field from the entity
    * @param column Column configuration
    */
-  constructor(private _field: Record<string, any>, column: ProjectColumn) {
+  constructor(private _field: Record<string, any>, public column: ProjectColumn) {
     this.id = _field.Id
     this.internalName = _field.InternalName
     this.displayName = column?.name ?? _field.Title
@@ -88,6 +92,10 @@ export class ProjectInformationField {
   }
 }
 
+/**
+ * Project information parent project model. Used to display
+ * parent projects in the component.
+ */
 export class ProjectInformationParentProject {
   public title: string
   public url: string
@@ -194,11 +202,6 @@ export interface IProjectInformationState
    * Properties to display
    */
   properties?: ProjectInformationField[]
-
-  /**
-   * All properties (used for the properties panel)
-   */
-  allProperties?: ProjectInformationField[]
 
   /**
    * Progress dialog props

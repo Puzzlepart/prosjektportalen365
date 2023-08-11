@@ -49,7 +49,7 @@ export interface IBaseWebPartComponentProps extends DOMAttributes<HTMLDivElement
 
 export interface IBaseWebPartComponentState<T> extends Pick<IShimmerProps, 'isDataLoaded'> {
   /**
-   * Data
+   * Data for the component
    */
   data?: T
 

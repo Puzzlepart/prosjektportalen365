@@ -10,6 +10,7 @@ import {
 
 const initialState: IProjectInformationState = {
   isDataLoaded: false,
+  properties: [],
   data: { sections: [], fields: [] }
 }
 
@@ -34,7 +35,6 @@ const createProjectInformationReducer = () =>
       .addCase(INIT_DATA, (state, action) => {
         state.data = action.payload.state.data
         state.properties = action.payload.state.properties
-        state.allProperties = action.payload.state.allProperties
         state.isProjectDataSynced = action.payload.state.isProjectDataSynced
         state.isParentProject = action.payload.state.isParentProject
         state.userHasEditPermission = action.payload.state.userHasEditPermission

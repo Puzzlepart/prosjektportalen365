@@ -11,6 +11,14 @@ export const BasePanel: FC<IBasePanelProps> = (props) => {
     <Panel
       {...props}
       isOpen={context.state.activePanel === props.$type}
+      onRenderBody={() => {
+        if (!props.onRenderBody) return null
+        return (
+          <div style={{ padding: '20px 24px', boxSizing: 'border-box' }}>
+            {props.onRenderBody()}
+          </div>
+        )
+      }}
       onDismiss={() => context.dispatch(CLOSE_PANEL())}
     >
       {props.children}

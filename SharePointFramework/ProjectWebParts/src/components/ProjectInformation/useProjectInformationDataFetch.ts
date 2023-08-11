@@ -13,14 +13,13 @@ import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { IProjectInformationContext } from './context'
-import { ProjectInformation } from './index'
+import { ProjectInformation, ProjectInformationField } from './index'
 import { FETCH_DATA_ERROR, INIT_DATA } from './reducer'
 import {
   IProjectInformationData,
   IProjectInformationState,
   ProjectInformationParentProject
 } from './types'
-import { usePropertiesTransform } from './usePropertiesTransform'
 
 /**
  * Checks if project data is synced.
@@ -130,6 +129,12 @@ const fetchData: DataFetchFunction<
       columnConfig,
       ...propertiesData
     }
+    const properties = propertiesData.fields.map((field) =>
+      new ProjectInformationField(
+        field,
+        columns.find(({ internalName }) => internalName === field.InternalName)
+      ).setValue(propertiesData.fieldValuesText[field.InternalName])
+    )
     let userHasEditPermission = false
     let isProjectDataSynced = false
     if (isFrontpage) {
@@ -142,6 +147,7 @@ const fetchData: DataFetchFunction<
     }
     return {
       data,
+      properties,
       isParentProject: data.fieldValues?.GtIsParentProject || data.fieldValues?.GtIsProgram,
       userHasEditPermission,
       isProjectDataSynced
@@ -165,10 +171,8 @@ const fetchData: DataFetchFunction<
  * @param context Context for `ProjectInformation`
  */
 export const useProjectInformationDataFetch = (context: IProjectInformationContext) => {
-  const transformProperties = usePropertiesTransform(context)
   useEffect(() => {
     fetchData(context)
-      .then(transformProperties)
       .then((state) => context.dispatch(INIT_DATA({ state })))
       .catch((e) => {
         const error = CustomError.createError(e, MessageBarType.severeWarning)

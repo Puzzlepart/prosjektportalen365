@@ -380,7 +380,7 @@ export class PortalDataService {
         const [fieldLink] = hubContentType.FieldLinks.filter((fl) => fl.Name === field.InternalName)
         Logger.log({
           message: `(PortalDataService) (syncList) Adding field [${field.InternalName}] to list [${params.listName}].`,
-          level: LogLevel.Info,
+          level: LogLevel.Info
         })
         if (siteField) {
           const fldToAdd = jsomContext.web

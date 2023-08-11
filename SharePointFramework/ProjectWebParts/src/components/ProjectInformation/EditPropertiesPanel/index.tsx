@@ -19,12 +19,12 @@ export const EditPropertiesPanel: FC<IEditPropertiesPanelProps> = (props) => {
       }}
       onRenderFooterContent={() => <EditPropertiesPanelFooter submit={submit} model={model} />}
       onRenderBody={() => (
-        <div className={styles.body}>
+        <>
           {fields.map((field, key) => {
             const fieldElement = getFieldElement(field)
             return fieldElement && <div key={key}>{fieldElement}</div>
           })}
-        </div>
+        </>
       )}
     />
   )

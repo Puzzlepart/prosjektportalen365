@@ -1,7 +1,7 @@
+import { useMemo } from 'react'
 import { useProjectInformationContext } from '../context'
 import { useSyncList } from '../usePropertiesSync'
 import { useFieldElements } from './useFieldElements'
-import { useFields } from './useFields'
 import { useModel } from './useModel'
 import { useSubmit } from './useSubmit'
 
@@ -18,7 +18,10 @@ import { useSubmit } from './useSubmit'
  */
 export function useEditPropertiesPanel() {
   const context = useProjectInformationContext()
-  const fields = useFields()
+  const fields = useMemo(
+    () => context.state.properties.filter((p) => p.showInEditForm),
+    [context.state.properties]
+  )
   const model = useModel()
   const getFieldElement = useFieldElements(model)
   const submit = useSubmit(model)

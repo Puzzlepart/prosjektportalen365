@@ -19,7 +19,6 @@ import { useProjectInformationDataFetch } from './useProjectInformationDataFetch
  */
 export const useProjectInformation = (props: IProjectInformationProps) => {
   const { state, dispatch } = useProjectInformationReducer()
-
   const context = useMemo<IProjectInformationContext>(() => ({ props, state, dispatch }), [state])
 
   if (SPDataAdapter.isConfigured) {

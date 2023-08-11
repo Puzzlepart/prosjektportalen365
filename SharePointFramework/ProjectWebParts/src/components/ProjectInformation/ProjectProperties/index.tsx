@@ -9,12 +9,11 @@ import { useProjectInformationContext } from '../context'
 import styles from './ProjectProperties.module.scss'
 import { ProjectProperty } from './ProjectProperty'
 import { IProjectPropertiesProps } from './types'
+import { useProjectProperties } from './useProjectProperties'
 
-export const ProjectProperties: FC<IProjectPropertiesProps> = ({ displayAllProperties }) => {
+export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
   const context = useProjectInformationContext()
-  const properties =
-    (displayAllProperties ? context.state.allProperties : context.state.properties) ?? []
-  const nonEmptyProperties = properties.filter((p) => !p.isEmpty)
+  const properties = useProjectProperties(props)
 
   switch (context.props.displayMode) {
     case DisplayMode.Edit: {
@@ -23,7 +22,7 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = ({ displayAllPrope
           <Pivot>
             <PivotItem headerText={context.props.title}>
               <div className={styles.pivotItem}>
-                {nonEmptyProperties.map((model, idx) => (
+                {properties.map((model, idx) => (
                   <ProjectProperty key={idx} model={model} />
                 ))}
               </div>
@@ -54,12 +53,12 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = ({ displayAllPrope
       )
     }
     case DisplayMode.Read: {
-      if (isEmpty(nonEmptyProperties)) {
+      if (isEmpty(properties)) {
         return <UserMessage text={strings.NoPropertiesMessage} />
       }
       return (
         <div className={styles.projectProperties}>
-          {nonEmptyProperties.map((model, idx) => (
+          {properties.map((model, idx) => (
             <ProjectProperty key={idx} model={model} />
           ))}
         </div>
