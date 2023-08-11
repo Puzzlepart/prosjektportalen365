@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    SaveText: 'Save',
     UpdatingProjectPropertiesStatusText: 'Updating project properties ...',
     SynchronizingProjectPropertiesToPortfolioSiteStatusText: 'Synchronizing project properties to portfolio site ...',
     UrlFieldUrlPlaceholder: 'Enter URL',

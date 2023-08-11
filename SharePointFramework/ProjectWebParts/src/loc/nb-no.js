@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    SaveText: 'Lagre',
     ErrorBoundaryFallbackText: 'Det oppstod en feil under lasting av {0}.',
     ErrorBoundaryFallbackDescription: 'Feildetaljer:',
     UpdatingProjectPropertiesErrorText: 'Det oppstod en feil under lagring av prosjektegenskaper. Vennligst prøv igjen senere.',
