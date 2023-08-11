@@ -48,7 +48,9 @@ export class SetupProjectInformation extends BaseTask {
         strings.SyncLocalProjectPropertiesListText,
         'AlignCenter'
       )
-      const { list: { list } } = await this.params.portal.syncList({
+      const {
+        list: { list }
+      } = await this.params.portal.syncList({
         url: this.params.webAbsoluteUrl,
         listName: strings.ProjectPropertiesListName,
         contentTypeId: this.params.templateSchema.Parameters.ProjectContentTypeId
