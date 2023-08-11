@@ -138,13 +138,15 @@ const fetchData: DataFetchFunction<
       userHasEditPermission: false,
       isProjectDataSynced: false
     }
-    data.properties = projectInformationData.fields.map((field) =>
-      new ProjectInformationField(
-        field,
-        columns.find(({ internalName }) => internalName === field.InternalName),
-        _.isEmpty(columns)
-      ).setValue(projectInformationData)
-    )
+    data.properties = projectInformationData.fields
+      .map((field) =>
+        new ProjectInformationField(
+          field,
+          columns.find(({ internalName }) => internalName === field.InternalName),
+          _.isEmpty(columns)
+        ).setValue(projectInformationData)
+      )
+      .sort((a, b) => a.column?.sortOrder - b.column?.sortOrder)
     if (isFrontpage) {
       data.userHasEditPermission = await SPDataAdapter.checkProjectAdminPermissions(
         ProjectAdminPermission.EditProjectProperties,

@@ -13,11 +13,9 @@ export function useEditableFields(hiddenFields: string[] = []) {
   const context = useProjectInformationContext()
   return useMemo(
     () =>
-      context.state.properties
-        .filter(
-          (p) => p.isVisible(DisplayMode.Edit) && !hiddenFields.includes(p.internalName)
-        )
-        .sort((a, b) => a.column?.sortOrder - b.column?.sortOrder),
+      context.state.properties.filter(
+        (p) => p.isVisible(DisplayMode.Edit) && !hiddenFields.includes(p.internalName)
+      ),
     [context.state.properties]
   )
 }

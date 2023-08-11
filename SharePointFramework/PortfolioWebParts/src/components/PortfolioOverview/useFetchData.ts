@@ -71,15 +71,15 @@ export const useFetchData = (context: IPortfolioOverviewContext) => {
         currentView = getCurrentView(hashState, context)
         const { items, managedProperties } = isParentProject
           ? await context.props.dataAdapter.fetchDataForViewBatch(
-            currentView,
-            configuration,
-            pageContext.legacyPageContext.hubSiteId
-          )
+              currentView,
+              configuration,
+              pageContext.legacyPageContext.hubSiteId
+            )
           : await context.props.dataAdapter.fetchDataForView(
-            currentView,
-            configuration,
-            pageContext.legacyPageContext.hubSiteId
-          )
+              currentView,
+              configuration,
+              pageContext.legacyPageContext.hubSiteId
+            )
         let groupBy = currentView.groupBy
         if (hashState.has('groupBy') && !groupBy) {
           groupBy = _.find(configuration.columns, (fc) => fc.fieldName === hashState.get('groupBy'))
