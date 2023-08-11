@@ -6,7 +6,13 @@ import { ButtonProps } from '@fluentui/react-components'
 export interface IProjectCardContext
   extends Pick<
     IProjectListProps,
-    'showProjectLogo' | 'showProjectOwner' | 'showProjectManager' | 'useDynamicColors'
+    | 'showProjectLogo'
+    | 'showProjectOwner'
+    | 'showProjectManager'
+    | 'showProjectServiceArea'
+    | 'showProjectType'
+    | 'showProjectPhase'
+    | 'useDynamicColors'
   > {
   /**
    * Project model

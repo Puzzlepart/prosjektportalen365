@@ -142,22 +142,24 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
           className={styles.commandBar}
           hidden={!props.showSearchBox && !props.showRenderModeSelector}
         >
-          <SearchBox
-            className={styles.searchBox}
-            disabled={!state.isDataLoaded || isEmpty(state.projects)}
-            value={state.searchTerm}
-            placeholder={searchBoxPlaceholder}
-            aria-label={searchBoxPlaceholder}
-            size={'large'}
-            onChange={onSearch}
-            appearance={'filled-lighter'}
-            hidden={!props.showSearchBox}
-          />
-          <RenderModeDropdown
-            hidden={!props.showRenderModeSelector}
-            renderAs={state.renderMode}
-            onOptionSelect={(renderAs) => setState({ renderMode: renderAs })}
-          />
+          <div className={styles.search} hidden={!props.showSearchBox}>
+            <SearchBox
+              className={styles.searchBox}
+              disabled={!state.isDataLoaded || isEmpty(state.projects)}
+              value={state.searchTerm}
+              placeholder={searchBoxPlaceholder}
+              aria-label={searchBoxPlaceholder}
+              size={'large'}
+              onChange={onSearch}
+              appearance={'filled-lighter'}
+            />
+          </div>
+          <div hidden={!props.showRenderModeSelector}>
+            <RenderModeDropdown
+              renderAs={state.renderMode}
+              onOptionSelect={(renderAs) => setState({ renderMode: renderAs })}
+            />
+          </div>
         </div>
         {state.isDataLoaded && isEmpty(projects) && (
           <div className={styles.emptyMessage}>
@@ -188,7 +190,13 @@ ProjectList.defaultProps = {
   defaultRenderMode: 'tiles',
   defaultVertical: 'my_projects',
   verticals: ProjectListVerticals,
-  hideVerticals: []
+  hideVerticals: [],
+  showProjectLogo: true,
+  showProjectOwner: true,
+  showProjectManager: true,
+  showProjectServiceArea: true,
+  showProjectType: true,
+  showProjectPhase: true
 }
 
 export * from './types'

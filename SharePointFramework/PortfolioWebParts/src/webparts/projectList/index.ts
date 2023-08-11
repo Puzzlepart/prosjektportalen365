@@ -117,6 +117,9 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
             {
               groupName: strings.TileViewGroupName,
               groupFields: [
+                PropertyPaneToggle('showProjectLogo', {
+                  label: strings.ShowProjectLogoFieldLabel
+                }),
                 PropertyFieldToggleWithCallout('useDynamicColors', {
                   calloutTrigger: CalloutTriggers.Hover,
                   key: 'useDynamicColorsFieldId',
@@ -124,21 +127,28 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   calloutContent: React.createElement(
                     'p',
                     {},
-                    'Her kan du velge om kortvisningen skal ta i bruk dynamiske farger for titteldelen, dette kan medføre lengre innlastningstid og anbefales for mindre porteføljer.'
+                    'Her kan du velge om kortvisningen skal ta i bruk dynamiske farger for logodelen, dette kan medføre lengre innlastningstid og anbefales for mindre porteføljer (krever at "Vis logo" er på).'
                   ),
                   onText: strings.BooleanOn,
                   offText: strings.BooleanOff,
                   calloutWidth: 430,
-                  checked: this.properties.useDynamicColors
-                }),
-                PropertyPaneToggle('showProjectLogo', {
-                  label: strings.ShowProjectLogoFieldLabel
+                  checked: this.properties.useDynamicColors,
+                  disabled: !this.properties.showProjectLogo
                 }),
                 PropertyPaneToggle('showProjectOwner', {
                   label: strings.ShowProjectOwnerFieldLabel
                 }),
                 PropertyPaneToggle('showProjectManager', {
                   label: strings.ShowProjectManagerFieldLabel
+                }),
+                PropertyPaneToggle('showProjectServiceArea', {
+                  label: 'Vis tjenesteområder'
+                }),
+                PropertyPaneToggle('showProjectType', {
+                  label: 'Vis prosjekttype'
+                }),
+                PropertyPaneToggle('showProjectPhase', {
+                  label: 'Vis prosjektfase'
                 })
               ]
             }

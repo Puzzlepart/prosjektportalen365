@@ -16,10 +16,15 @@
     flex-direction: row;
     gap: 15px;
 
-    .searchBox {
+    .search {
       width: 100%;
-      box-shadow: var(--shadow2);
       max-width: 820px;
+
+      .searchBox {
+        box-shadow: var(--shadow2);
+        width: inherit;
+        max-width: inherit;
+      }
     }
   }
 
