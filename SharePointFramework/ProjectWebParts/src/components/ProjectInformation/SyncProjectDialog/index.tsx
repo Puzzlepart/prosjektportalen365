@@ -13,8 +13,8 @@ import strings from 'ProjectWebPartsStrings'
 import React, { FC, useEffect, useState } from 'react'
 import SPDataAdapter from '../../../data'
 import { useProjectInformationContext } from '../context'
+import { CLOSE_DIALOG, OPEN_DIALOG } from '../reducer'
 import { usePropertiesSync } from '../usePropertiesSync'
-import { CLOSE_PANEL, OPEN_DIALOG } from '../reducer'
 
 export const SyncProjectDialog: FC = () => {
   const context = useProjectInformationContext()
@@ -37,7 +37,7 @@ export const SyncProjectDialog: FC = () => {
     <Dialog
       hidden={context.state.activeDialog !== 'SyncProjectDialog'}
       minWidth={400}
-      onDismiss={() => context.dispatch(CLOSE_PANEL())}
+      onDismiss={() => context.dispatch(CLOSE_DIALOG())}
       dialogContentProps={{
         type: DialogType.largeHeader,
         title: strings.SyncProjectModalTitle,
@@ -60,7 +60,7 @@ export const SyncProjectDialog: FC = () => {
         <DialogFooter>
           <DefaultButton
             text={strings.CancelText}
-            onClick={() => context.dispatch(CLOSE_PANEL())}
+            onClick={() => context.dispatch(CLOSE_DIALOG())}
             disabled={isSyncing}
           />
           <PrimaryButton
@@ -76,7 +76,7 @@ export const SyncProjectDialog: FC = () => {
         <DialogFooter>
           <PrimaryButton
             text={strings.CloseText}
-            onClick={() => context.dispatch(CLOSE_PANEL())}
+            onClick={() => context.dispatch(CLOSE_DIALOG())}
             disabled={isSyncing}
           />
         </DialogFooter>
