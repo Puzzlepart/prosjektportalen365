@@ -4,7 +4,12 @@ import { ConsoleListener, Logger } from '@pnp/logging'
 import '@pnp/sp/presets/all'
 import { IWeb, SPFI, spfi } from '@pnp/sp/presets/all'
 import { DefaultCaching, createSpfiInstance } from '../../data'
-import { ChecklistItemModel, ProjectPhaseChecklistData, ProjectPhaseModel, SPField } from '../../models'
+import {
+  ChecklistItemModel,
+  ProjectPhaseChecklistData,
+  ProjectPhaseModel,
+  SPField
+} from '../../models'
 import { getClassProperties } from '../../util'
 import { tryParseJson } from '../../util/tryParseJson'
 import {
@@ -325,8 +330,8 @@ export class ProjectDataService {
       const items = await this.web.lists
         .getByTitle(listName)
         .items.select('ID', 'Title', 'GtComment', 'GtChecklistStatus', 'GtProjectPhase')<
-          Record<string, any>[]
-        >()
+        Record<string, any>[]
+      >()
       const checklistItems = items.map((item) => new ChecklistItemModel(item))
       const checklistData = checklistItems
         .filter((item) => item.termGuid)

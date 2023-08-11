@@ -25,6 +25,10 @@ export const SyncProjectDialog: FC = () => {
   const [projectData, setProjectData] = useState({})
   const [projectDataId, setProjectDataId] = useState(0)
 
+  if (context.props.page !== 'Frontpage' || !context.props.useIdeaProcessing) {
+    return null
+  }
+
   useEffect(() => {
     getProjectData()
   }, [])

@@ -1,6 +1,6 @@
 /**
- * SPField class. 
- * 
+ * SPField class.
+ *
  * Initialized properties will be used to decide what
  * properties to fetch for the field.
  */

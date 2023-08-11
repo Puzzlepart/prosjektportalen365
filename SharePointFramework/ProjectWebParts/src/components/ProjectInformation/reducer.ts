@@ -45,7 +45,7 @@ const createProjectInformationReducer = () =>
         state.isDataLoaded = true
       })
       .addCase(SET_PROGRESS, (state, action) => {
-        state.progress = action.payload as any
+        state.progressDialog = action.payload as any
       })
       .addCase(OPEN_PANEL, (state, action) => {
         state.activePanel = action.payload

@@ -38,7 +38,7 @@ export class ProjectInformationField {
 
   /**
    * Initializes the field with the columns from `ProjectDataService`.
-   * 
+   *
    * @param columns Columns from `ProjectDataService`
    */
   public init(columns: ProjectColumn[]) {

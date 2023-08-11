@@ -97,14 +97,17 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
 export interface IProjectInformationState
   extends IBaseWebPartComponentState<IProjectInformationData> {
   /**
-   * Properties to display
+   * Properties to display sorted by `column.sortOrder`. The properties
+   * must be sent through a visibility check to determine if they should
+   * be displayed or not. All properties will be displayed in the
+   * `AllPropertiesPanel`.
    */
   properties?: ProjectInformationField[]
 
   /**
    * Properties for the `ProgressDialog` component
    */
-  progress?: IProgressDialogProps
+  progressDialog?: IProgressDialogProps
 
   /**
    * Message to show to the user

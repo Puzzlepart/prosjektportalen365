@@ -14,9 +14,17 @@ import { ProjectProperties } from './ProjectProperties'
 import { ProjectStatusReport } from './ProjectStatusReport'
 import { SyncProjectDialog } from './SyncProjectDialog'
 import { ProjectInformationContextProvider } from './context'
-import { useProjectInformation } from './useProjectInformation'
 import { IProjectInformationProps } from './types'
+import { useProjectInformation } from './useProjectInformation'
 
+/**
+ * Display project information. A number of actions are available to the user,
+ * depending on the access level of the current user.
+ *
+ * - Show all project information/properties in a panel (`AllPropertiesPanel`)
+ * - Edit project information/properties in a panel (`EditPropertiesPanel`)
+ * - Promote to parent project (`CreateParentDialog`)
+ */
 export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
   const { context } = useProjectInformation(props)
   if (context.state.hidden) return null
@@ -52,11 +60,11 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
               <Actions />
               <ParentProjectsList />
               <ProjectStatusReport />
-              <ProgressDialog {...context.state.progress} />
+              <ProgressDialog />
               <AllPropertiesPanel />
               <EditPropertiesPanel />
               <CreateParentDialog />
-              {props.page === 'Frontpage' && props.useIdeaProcessing && <SyncProjectDialog />}
+              <SyncProjectDialog />
             </Shimmer>
           )}
         </div>

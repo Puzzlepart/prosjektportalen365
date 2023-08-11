@@ -113,17 +113,17 @@ const fetchData: DataFetchFunction<
       })
     }
     const isFrontpage = context.props.page === 'Frontpage'
-    const [columns, projectInformationData, parentProjects, [reports, sections, columnConfig]] =
+    const [columns, projectInformationData, [reports, sections, columnConfig], parentProjects] =
       await Promise.all([
         SPDataAdapter.portal.getProjectColumns(),
         SPDataAdapter.project.getProjectInformationData(),
+        fetchProjectStatusReportData(context),
         isFrontpage
           ? SPDataAdapter.portal.getParentProjects(
-            context.props.webPartContext?.pageContext?.web?.absoluteUrl,
-            ProjectInformationParentProject
-          )
-          : Promise.resolve([]),
-        fetchProjectStatusReportData(context)
+              context.props.webPartContext?.pageContext?.web?.absoluteUrl,
+              ProjectInformationParentProject
+            )
+          : Promise.resolve([])
       ])
     const data: Partial<IProjectInformationState> = {
       data: {
@@ -139,10 +139,13 @@ const fetchData: DataFetchFunction<
     }
     data.properties = projectInformationData.fields
       .map((field) =>
-        new ProjectInformationField(field)
-          .init(columns)
-          .setValue(projectInformationData)
+        new ProjectInformationField(field).init(columns).setValue(projectInformationData)
       )
+      .sort((a, b) => {
+        if (!a.column) return 1
+        if (!b.column) return -1
+        return a.column.sortOrder - b.column.sortOrder
+      })
     if (isFrontpage) {
       data.userHasEditPermission = await SPDataAdapter.checkProjectAdminPermissions(
         ProjectAdminPermission.EditProjectProperties,
