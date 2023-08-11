@@ -39,8 +39,8 @@
     "@reduxjs/toolkit": "~1.9.5",
     "@pnp/core": "3.17.0",
     "@pnp/queryable": "3.17.0",
-    "@fluentui/react-components": "~9.27.2",
-    "@fluentui/react-icons": "~2.0.209"
+    "@fluentui/react-components": "9.27.2",
+    "@fluentui/react-icons": "2.0.209"
   },
   "devDependencies": {
     "@microsoft/rush-stack-compiler-4.5": "0.2.2",
