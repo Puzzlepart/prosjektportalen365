@@ -518,7 +518,7 @@
     <value>Prosjektidé</value>
   </data>
   <data name="ContentTypes_ProjectIdea_Description" xml:space="preserve">
-    <valueContent type for project ideas (Idea registration)</value>
+    <value>Content type for project ideas (Idea registration)</value>
   </data>
   <data name="ContentTypes_IdeaProcessing_Name" xml:space="preserve">
     <value>Idébehandling</value>
