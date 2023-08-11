@@ -1,7 +1,7 @@
 /* eslint-disable prefer-spread */
 import { useState } from 'react'
 import _ from 'underscore'
-import { ProjectListViews } from './ProjectListViews'
+import { ProjectListVerticals } from './ProjectListVerticals'
 import { IProjectListProps, IProjectListState } from './types'
 
 /**
@@ -10,14 +10,15 @@ import { IProjectListProps, IProjectListState } from './types'
  * @param props Props
  */
 export function useProjectListState(props: IProjectListProps) {
-  const defaultSelectedView =
-    _.find(props.views, (view) => view.itemKey === props.defaultView) ?? _.first(ProjectListViews)
+  const defaultSelectedVertical =
+    _.find(props.verticals, (vertical) => vertical.key === props.defaultVertical) ??
+    _.first(ProjectListVerticals)
   const mockProjects = Array.apply(null, Array(Math.floor(Math.random() * 10) + 10)).map(() => 0)
   const defaultSort = { fieldName: props.sortBy, isSortedDescending: true }
   const [state, $setState] = useState<IProjectListState>({
     searchTerm: '',
     renderMode: props.defaultRenderMode ?? 'tiles',
-    selectedView: defaultSelectedView,
+    selectedVertical: defaultSelectedVertical,
     projects: mockProjects,
     sort: defaultSort
   })

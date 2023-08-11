@@ -7,6 +7,8 @@ declare interface IPortfolioWebPartsStrings {
   BarLabel: string
   BooleanNo: string
   BooleanYes: string
+  BooleanOff: string
+  BooleanOn: string
   CancelButtonLabel: string
   ChartConfigurationListNameLabel: string
   ChartErrorText: string
