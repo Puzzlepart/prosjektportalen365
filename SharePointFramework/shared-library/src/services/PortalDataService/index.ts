@@ -199,7 +199,7 @@ export class PortalDataService {
   }
 
   /**
-   * Get project status sections using caching.
+   * Get project status sections using `DefaultCaching`.
    */
   public async getProjectStatusSections(): Promise<SectionModel[]> {
     try {
@@ -275,7 +275,7 @@ export class PortalDataService {
   }
 
   /**
-   * Get project column configuration using caching.
+   * Get project column configuration using `DefaultCaching`.
    */
   public async getProjectColumnConfig(): Promise<ProjectColumnConfig[]> {
     const spItems = await this._getList('PROJECT_COLUMN_CONFIGURATION')
@@ -460,7 +460,7 @@ export class PortalDataService {
   }
 
   /**
-   * Get files
+   * Get files using `DefaultCaching` and maps them to the specified constructor.
    *
    * @param listName List name
    * @param constructor Constructor

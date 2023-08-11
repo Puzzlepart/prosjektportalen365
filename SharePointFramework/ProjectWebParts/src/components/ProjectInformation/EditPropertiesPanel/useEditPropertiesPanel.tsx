@@ -19,7 +19,7 @@ import { useSubmit } from './useSubmit'
  */
 export function useEditPropertiesPanel(props: IEditPropertiesPanelProps) {
   const context = useProjectInformationContext()
-  const fields = useFields(props.hiddenFields)
+  const fields = useFields(context.props, props.hiddenFields)
   const model = useModel()
   const getFieldElement = useFieldElements(model)
   const submit = useSubmit(model)

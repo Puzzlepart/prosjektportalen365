@@ -14,7 +14,7 @@ export function useProjectProperties(props: IProjectPropertiesProps) {
     .filter((p) => !!p.column)
     .filter((p) => {
       if (props.displayAllProperties) return true
-      return p.isVisible(DisplayMode.Read, context.props.page)
+      return p.isVisible(DisplayMode.Read, context.props)
     })
   return properties.filter((p) => !p.isEmpty)
 }

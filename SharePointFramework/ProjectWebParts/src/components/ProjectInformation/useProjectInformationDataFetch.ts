@@ -1,6 +1,7 @@
 import { MessageBarType } from '@fluentui/react'
 import { LogLevel } from '@pnp/logging'
 import strings from 'ProjectWebPartsStrings'
+import _ from 'lodash'
 import { ProjectAdminPermission } from 'pp365-shared-library/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import { ListLogger } from 'pp365-shared-library/lib/logging'
 import {
@@ -15,11 +16,7 @@ import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { IProjectInformationContext } from './context'
 import { ProjectInformation, ProjectInformationField } from './index'
 import { FETCH_DATA_ERROR, INIT_DATA } from './reducer'
-import {
-  IProjectInformationData,
-  IProjectInformationState,
-  ProjectInformationParentProject
-} from './types'
+import { IProjectInformationState, ProjectInformationParentProject } from './types'
 
 /**
  * Checks if project data is synced.
@@ -61,7 +58,7 @@ const checkProjectDataSynced: DataFetchFunction<IProjectInformationContext, bool
  *
  * @param context Context for `ProjectInformation`
  */
-const fetchProjectStatusReports: DataFetchFunction<
+const fetchProjectStatusReportData: DataFetchFunction<
   IProjectInformationContext,
   [StatusReport[], SectionModel[], ProjectColumnConfig[]]
 > = async (context) => {
@@ -86,7 +83,13 @@ const fetchProjectStatusReports: DataFetchFunction<
 
 /**
  * Fetch data for `ProjectInformation` component. This function is used in
- * `useProjectInformationDataFetch` hook.
+ * `useProjectInformationDataFetch` hook. Data are fetched using the following 
+ * functions:
+ * 
+ * - `SPDataAdapter.portal.getProjectColumns` - fetches project columns
+ * - `SPDataAdapter.project.getPropertiesData` - fetches project properties data
+ * - `SPDataAdapter.portal.getParentProjects` - fetches parent projects (only on frontpage)
+ * - `fetchProjectStatusReportData` - fetches project status reports, sections and column config
  *
  * @remarks Ensures that `SPDataAdapter` is configured before fetching data.
  * Normally the `SPDataAdapter` is not configured  if the component is used in
@@ -115,43 +118,40 @@ const fetchData: DataFetchFunction<
         SPDataAdapter.project.getPropertiesData(),
         isFrontpage
           ? SPDataAdapter.portal.getParentProjects(
-              context.props.webPartContext?.pageContext?.web?.absoluteUrl,
-              ProjectInformationParentProject
-            )
+            context.props.webPartContext?.pageContext?.web?.absoluteUrl,
+            ProjectInformationParentProject
+          )
           : Promise.resolve([]),
-        fetchProjectStatusReports(context)
+        fetchProjectStatusReportData(context)
       ])
-    const data: IProjectInformationData = {
-      columns,
-      parentProjects,
-      reports,
-      sections,
-      columnConfig,
-      ...propertiesData
+    const data: Partial<IProjectInformationState> = {
+      data: {
+        columns,
+        parentProjects,
+        reports,
+        sections,
+        columnConfig,
+        ...propertiesData
+      },
+      userHasEditPermission: false,
+      isProjectDataSynced: false
     }
-    const properties = propertiesData.fields.map((field) =>
+    data.properties = propertiesData.fields.map((field) =>
       new ProjectInformationField(
         field,
-        columns.find(({ internalName }) => internalName === field.InternalName)
+        columns.find(({ internalName }) => internalName === field.InternalName),
+        _.isEmpty(columns)
       ).setValue(propertiesData.fieldValuesText[field.InternalName])
     )
-    let userHasEditPermission = false
-    let isProjectDataSynced = false
     if (isFrontpage) {
-      userHasEditPermission = await SPDataAdapter.checkProjectAdminPermissions(
+      data.userHasEditPermission = await SPDataAdapter.checkProjectAdminPermissions(
         ProjectAdminPermission.EditProjectProperties,
-        data.fieldValues
+        propertiesData.fieldValues
       )
-      isProjectDataSynced =
+      data.isProjectDataSynced =
         context.props.useIdeaProcessing && (await checkProjectDataSynced(context))
     }
-    return {
-      data,
-      properties,
-      isParentProject: data.fieldValues?.GtIsParentProject || data.fieldValues?.GtIsProgram,
-      userHasEditPermission,
-      isProjectDataSynced
-    }
+    return data
   } catch (error) {
     ListLogger.log({
       message: error.message,

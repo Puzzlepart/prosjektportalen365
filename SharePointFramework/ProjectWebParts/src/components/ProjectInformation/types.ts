@@ -31,8 +31,13 @@ export class ProjectInformationField {
    *
    * @param _field Field from the entity
    * @param column Column configuration
+   * @param _isExternal `true` if the current user is external with no access to portfolio level
    */
-  constructor(private _field: Record<string, any>, public column: ProjectColumn) {
+  constructor(
+    private _field: Record<string, any>,
+    public column: ProjectColumn,
+    private _isExternal: boolean
+  ) {
     this.id = _field.Id
     this.internalName = _field.InternalName
     this.displayName = column?.name ?? _field.Title
@@ -80,17 +85,24 @@ export class ProjectInformationField {
   /**
    * Returns `true` if the field should be visible in the
    * specified display mode. When checking for `DisplayMode.Read``
-   * the page property is used to determine which properties to display.
-   * 
+   * the `props.page` property is used to determine which properties to display.
+   *
+   * Also handles using `showFieldExternal` property to determine if
+   * the field should be visible for external users with no access to
+   * portfolio level.
+   *
    * @param displayMode Display mode
-   * @param page Current page
+   * @param props Props for the `ProjectInformation` component
    */
-  public isVisible(displayMode: DisplayMode, page?: 'Frontpage' | 'ProjectStatus' | 'Portfolio'): boolean {
+  public isVisible(displayMode: DisplayMode, props?: IProjectInformationProps): boolean {
     switch (displayMode) {
-      case DisplayMode.Edit: return this._field.ShowInEditForm && !this._field.Hidden
-      case DisplayMode.Read: return this.column.isVisible(page)
+      case DisplayMode.Edit:
+        return this._field.ShowInEditForm && !this._field.Hidden
+      case DisplayMode.Read: {
+        if (this._isExternal) return props.showFieldExternal[this.internalName]
+        return this.column.isVisible(props.page)
+      }
     }
-
   }
 
   /**
@@ -260,7 +272,7 @@ export interface IProjectInformationState
 
 export interface IProjectInformationData
   extends ProjectDataService.IGetPropertiesData,
-  Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {
+    Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {
   /**
    * Column configuration
    */
