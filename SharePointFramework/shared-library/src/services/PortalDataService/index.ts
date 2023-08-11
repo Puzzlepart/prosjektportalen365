@@ -381,7 +381,6 @@ export class PortalDataService {
         Logger.log({
           message: `(PortalDataService) (syncList) Adding field [${field.InternalName}] to list [${params.listName}].`,
           level: LogLevel.Info,
-          data: { fieldLink, siteField: !!siteField }
         })
         if (siteField) {
           const fldToAdd = jsomContext.web
@@ -412,10 +411,6 @@ export class PortalDataService {
       } catch (error) {}
     }
     try {
-      Logger.log({
-        message: `(PortalDataService) (syncList) Attempting to add field [TemplateParameters] to list ${params.listName}.`,
-        level: LogLevel.Info
-      })
       const templateParametersField = spList
         .get_fields()
         .addFieldAsXml(
@@ -433,7 +428,7 @@ export class PortalDataService {
   }
 
   /**
-   * Get hub content type
+   * Get content type by ID from hub site.
    *
    * @param contentTypeId Content type ID
    */
