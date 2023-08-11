@@ -1,4 +1,4 @@
-import { ProjectAdminPermission } from 'pp365-shared-library/lib/data/SPDataAdapterBase/ProjectAdminPermission'
+import { ProjectAdminPermission } from 'pp365-shared-library/lib'
 import { useEffect, useReducer } from 'react'
 import reducer, { DATA_LOADED, SET_SELECTED_TO_DELETE, initialState } from './reducer'
 import { IProgramAdministrationProps } from './types'
@@ -14,7 +14,7 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
   })
 
   useEffect(() => {
-    props.dataAdapter.project.getPropertiesData().then((properties) => {
+    props.dataAdapter.project.getProjectInformationData().then((properties) => {
       Promise.all([
         props.dataAdapter.fetchChildProjects(),
         props.dataAdapter.checkProjectAdminPermissions(
