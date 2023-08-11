@@ -1,7 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import { IDropdownOption } from '@fluentui/react'
-import { DisplayMode } from '@microsoft/sp-core-library'
-import { IWeb } from '@pnp/sp/webs'
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState
@@ -9,167 +6,9 @@ import {
 import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage'
 import { ProjectColumn, SPField } from 'pp365-shared-library/lib/models'
 import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDataService'
-import { IGetPropertiesData } from 'pp365-shared-library/lib/services/ProjectDataService'
 import { IProjectStatusData } from '../ProjectStatus'
 import { ActionType } from './Actions/types'
 import { IProgressDialogProps } from './ProgressDialog/types'
-import { createProjectInformationFieldValueMap } from './createProjectInformationFieldValueMap'
-
-export type ProjectInformationFieldValue = {
-  /**
-   * `true` if the value is set
-   */
-  isSet?: boolean
-
-  /**
-   * The value of the field
-   */
-  value: any
-
-  /**
-   * The complex value of the field
-   */
-  $: any
-}
-
-/**
- * Project information field model. Used both for display
- * and edit of project information.
- */
-export class ProjectInformationField {
-  public id: string
-  public internalName: string
-  public displayName: string
-  public description: string
-  public type: string
-  private _fieldValue: ProjectInformationFieldValue
-  private _fieldValueMap: ReturnType<typeof createProjectInformationFieldValueMap>
-
-  /**
-   * Constructs a new `ProjectInformationField` instance.
-   *
-   * @param _field Field data
-   * @param column Column data
-   * @param _isExternal The current user is external with no access to portfolio level
-   */
-  constructor(
-    private _field: Record<string, any>,
-    public column: ProjectColumn,
-    private _isExternal: boolean
-  ) {
-    this.id = _field.Id
-    this.internalName = _field.InternalName
-    this.displayName = column?.name ?? _field.Title
-    this.description = _field.Description
-    this.type = _field.TypeAsString
-    this._fieldValueMap = createProjectInformationFieldValueMap()
-  }
-
-  /**
-   * Sets the value for the field. Sets the value object that consists of
-   * the following properties:
-   * - `isSet` - `true` if the value is set
-   * - `text` - the text value for the field
-   * - `$` - the value for the field
-   *
-   * @param propertiesData Properties data from `ProjectDataService.getProperties`
-   * @param currentValue Optional current value for the field if it's being edited
-   *
-   * @returns the field instance
-   */
-  public setValue(
-    propertiesData: IGetPropertiesData,
-    currentValue: string = null
-  ): ProjectInformationField {
-    const textValue = currentValue ?? propertiesData.fieldValuesText[this.internalName]
-    const value = propertiesData.fieldValues[this.internalName]
-    this._fieldValue = {
-      isSet: textValue !== undefined && textValue !== null && textValue !== '',
-      value: textValue,
-      $: value
-    }
-    return this
-  }
-
-  /**
-   * Get value for the field. Uses `createProjectInformationFieldValueMap` to
-   * create a Map of field types and functions to get the value for the field.
-   * If the field type is not found in the map the `text` property is used.
-   */
-  public getParsedValue<T>(): T {
-    const fieldValue = this._fieldValueMap.has(this.type)
-      ? this._fieldValueMap.get(this.type)(this._fieldValue)
-      : this._fieldValue.value
-    return fieldValue as unknown as T
-  }
-
-  /**
-   * Get a property for the field by property name.
-   *
-   * E.g. `getPropery('ShowInEditForm')` or `getProperty('ShowInDisplayFom')`
-   *
-   * @param propertyName Property name
-   */
-  public getProperty(propertyName: string): string {
-    return this._field[propertyName]
-  }
-
-  /**
-   * Get choices for a choice field as `IDropdownOption[]`.
-   */
-  public get choices(): IDropdownOption[] {
-    return (this._field.Choices as string[]).map((c) => ({ key: c, text: c }))
-  }
-
-  /**
-   * Returns `true` if the field should be visible in the
-   * specified display mode. When checking for `DisplayMode.Read``
-   * the `props.page` property is used to determine which properties to display.
-   *
-   * Also handles using `showFieldExternal` property to determine if
-   * the field should be visible for external users with no access to
-   * portfolio level.
-   *
-   * @param displayMode Display mode
-   * @param props Props for the `ProjectInformation` component
-   */
-  public isVisible(displayMode: DisplayMode, props?: IProjectInformationProps): boolean {
-    switch (displayMode) {
-      case DisplayMode.Edit:
-        return this._field.ShowInEditForm && !this._field.Hidden
-      case DisplayMode.Read: {
-        if (this._isExternal) return props.showFieldExternal[this.internalName]
-        return this.column.isVisible(props.page)
-      }
-    }
-  }
-
-  /**
-   * Returns `true` if the value for the field is empty.
-   */
-  public get isEmpty(): boolean {
-    return !this._fieldValue?.isSet
-  }
-}
-
-/**
- * Project information parent project model. Used to display
- * parent projects in the component.
- */
-export class ProjectInformationParentProject {
-  public title: string
-  public url: string
-  public childProjects: any[]
-  public iconName: 'ProductVariant' | 'ProductList'
-
-  constructor(spItem: Record<string, any>, public web: IWeb) {
-    this.title = spItem.Title
-    this.url = spItem.GtSiteUrl
-    this.childProjects = (JSON.parse(spItem.GtChildProjects ?? []) as any[]).map((i) => i.SPWebURL)
-    if (spItem.GtIsParentProject) this.iconName = 'ProductVariant'
-    else if (spItem.GtIsProgram) this.iconName = 'ProductList'
-  }
-}
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   /**
@@ -319,7 +158,7 @@ export interface IProjectInformationState
 
 export interface IProjectInformationData
   extends ProjectDataService.IGetPropertiesData,
-    Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {
+  Pick<IProjectStatusData, 'reports' | 'sections' | 'columnConfig'> {
   /**
    * Column configuration
    */

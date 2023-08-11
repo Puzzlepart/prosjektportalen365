@@ -22,9 +22,10 @@ export function useModel() {
    * @param fallbackValue Value to return if the field has no value
    */
   function get<T>(field: ProjectInformationField, fallbackValue: T = null): T {
-    const $field = field.setValue(context.state.data, model.get(field.internalName))
-    if ($field.isEmpty) {
-      return fallbackValue as unknown as T
+    const currentValue = model.get(field.internalName)
+    const $field = field.setValue(context.state.data, currentValue)
+    if ($field.isEmpty || !!currentValue) {
+      return currentValue ?? (fallbackValue as unknown as T)
     }
     return field.getParsedValue<any>()
   }
