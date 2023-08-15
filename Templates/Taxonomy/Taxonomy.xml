@@ -8,25 +8,16 @@
                     <pnp:TermSets>
                         <pnp:TermSet Name="Fase" ID="abcfc9d9-a263-4abb-8234-be973c46258a" Description=" ">
                             <pnp:Terms>
-                                <pnp:Term Name="Ingen fase" ID="6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32" CustomSortOrder="1" SourceTermId="6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32">
+                                <pnp:Term Name="Idé" ID="6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32" CustomSortOrder="1" SourceTermId="6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32">
                                     <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="No phase" IsDefaultForLanguage="true" />
+                                        <pnp:Label Language="1033" Value="Idea" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="false" />
                                         <pnp:Property Key="PhaseSubText" Value="" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
-                                <pnp:Term Name="Flere faser" ID="777cc6ac-4639-4633-85b9-f1ef61197c4d" CustomSortOrder="2" SourceTermId="777cc6ac-4639-4633-85b9-f1ef61197c4d">
-                                    <pnp:Labels>
-                                        <pnp:Label Language="1033" Value="Several phases" IsDefaultForLanguage="true" />
-                                    </pnp:Labels>
-                                    <pnp:LocalCustomProperties>
-                                        <pnp:Property Key="ShowOnFrontpage" Value="false" />
-                                        <pnp:Property Key="PhaseSubText" Value="" />
-                                    </pnp:LocalCustomProperties>
-                                </pnp:Term>
-                                <pnp:Term Name="Konsept" ID="99e85650-33de-4af4-b8db-edffbc8a310b" CustomSortOrder="3" SourceTermId="99e85650-33de-4af4-b8db-edffbc8a310b">
+                                <pnp:Term Name="Konsept" ID="99e85650-33de-4af4-b8db-edffbc8a310b" CustomSortOrder="2" SourceTermId="99e85650-33de-4af4-b8db-edffbc8a310b">
                                     <pnp:Labels>
                                         <pnp:Label Language="1033" Value="Starting up" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
@@ -36,7 +27,7 @@
                                         <pnp:Property Key="PhaseSubText" Value="" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
-                                <pnp:Term Name="Planlegge" ID="cda4f1e1-3488-4e57-8a04-6973df239689" CustomSortOrder="4" SourceTermId="cda4f1e1-3488-4e57-8a04-6973df239689">
+                                <pnp:Term Name="Planlegge" ID="cda4f1e1-3488-4e57-8a04-6973df239689" CustomSortOrder="3" SourceTermId="cda4f1e1-3488-4e57-8a04-6973df239689">
                                     <pnp:Labels>
                                         <pnp:Label Language="1033" Value="Initiating" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
@@ -46,7 +37,7 @@
                                         <pnp:Property Key="PhaseSubText" Value="" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
-                                <pnp:Term Name="Gjennomføre" ID="99d7765a-c786-4792-a1a1-866ef0f982b9" CustomSortOrder="5" SourceTermId="99d7765a-c786-4792-a1a1-866ef0f982b9">
+                                <pnp:Term Name="Gjennomføre" ID="99d7765a-c786-4792-a1a1-866ef0f982b9" CustomSortOrder="4" SourceTermId="99d7765a-c786-4792-a1a1-866ef0f982b9">
                                     <pnp:Labels>
                                         <pnp:Label Language="1033" Value="Directing" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
@@ -56,7 +47,7 @@
                                         <pnp:Property Key="PhaseSubText" Value="" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
-                                <pnp:Term Name="Avslutte" ID="30e03c52-8c3e-4cfe-9b18-ca71593ce130" CustomSortOrder="6" SourceTermId="30e03c52-8c3e-4cfe-9b18-ca71593ce130">
+                                <pnp:Term Name="Avslutte" ID="30e03c52-8c3e-4cfe-9b18-ca71593ce130" CustomSortOrder="5" SourceTermId="30e03c52-8c3e-4cfe-9b18-ca71593ce130">
                                     <pnp:Labels>
                                         <pnp:Label Language="1033" Value="Closing" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
@@ -66,13 +57,22 @@
                                         <pnp:Property Key="PhaseSubText" Value="" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
-                                <pnp:Term Name="Realisere" ID="b7ba84f0-70b9-45c4-8c50-8f73bf15bbec" CustomSortOrder="7" SourceTermId="b7ba84f0-70b9-45c4-8c50-8f73bf15bbec">
+                                <pnp:Term Name="Realisere" ID="b7ba84f0-70b9-45c4-8c50-8f73bf15bbec" CustomSortOrder="6" SourceTermId="b7ba84f0-70b9-45c4-8c50-8f73bf15bbec">
                                     <pnp:Labels>
                                         <pnp:Label Language="1033" Value="Benefits realization" IsDefaultForLanguage="true" />
                                     </pnp:Labels>
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Portfolio" />
+                                        <pnp:Property Key="PhaseSubText" Value="" />
+                                    </pnp:LocalCustomProperties>
+                                </pnp:Term>
+                                <pnp:Term Name="Flere faser" ID="777cc6ac-4639-4633-85b9-f1ef61197c4d" CustomSortOrder="7" SourceTermId="777cc6ac-4639-4633-85b9-f1ef61197c4d">
+                                    <pnp:Labels>
+                                        <pnp:Label Language="1033" Value="Several phases" IsDefaultForLanguage="true" />
+                                    </pnp:Labels>
+                                    <pnp:LocalCustomProperties>
+                                        <pnp:Property Key="ShowOnFrontpage" Value="false" />
                                         <pnp:Property Key="PhaseSubText" Value="" />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
