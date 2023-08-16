@@ -30,7 +30,7 @@ export const PROPERTIES_UPDATED = createAction<{ refetch: boolean }>('PROPERTIES
 
 /**
  * Create properties from the state.
- * 
+ *
  * @param state State of the `ProjectInformation` component.
  */
 function createProperties(state: IProjectInformationState) {
