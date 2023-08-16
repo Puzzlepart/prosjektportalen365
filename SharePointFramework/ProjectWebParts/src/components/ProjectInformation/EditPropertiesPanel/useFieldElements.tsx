@@ -173,6 +173,9 @@ export function useFieldElements(model: UseModelReturnType) {
           onResolveSuggestions={async (filter, selectedItems) =>
             await SPDataAdapter.getTerms(field.getProperty('TermSetId'), filter, selectedItems)
           }
+          onEmptyResolveSuggestions={async (selectedItems) =>
+            await SPDataAdapter.getTerms(field.getProperty('TermSetId'), '', selectedItems)
+          }
           defaultSelectedItems={model.get<ITag[]>(field)}
           itemLimit={1}
           onChange={(items) => model.set(field, items)}
@@ -186,6 +189,9 @@ export function useFieldElements(model: UseModelReturnType) {
         <TagPicker
           onResolveSuggestions={async (filter, selectedItems) =>
             await SPDataAdapter.getTerms(field.getProperty('TermSetId'), filter, selectedItems)
+          }
+          onEmptyResolveSuggestions={async (selectedItems) =>
+            await SPDataAdapter.getTerms(field.getProperty('TermSetId'), '', selectedItems)
           }
           defaultSelectedItems={model.get<ITag[]>(field)}
           itemLimit={20}
