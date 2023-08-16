@@ -1,11 +1,11 @@
 import { IDropdownOption } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
-import _ from 'lodash'
 import { IProjectInformationData } from '../services/ProjectDataService/types'
-import { createFieldValueMap } from '../util'
-import { ProjectColumn } from './ProjectColumn'
+import { createFieldValueMap, getObjectValue as get } from '../util'
+import { ProjectColumn, ProjectColumnFieldOverride } from './ProjectColumn'
 import { ProjectInformationFieldValue } from './ProjectInformationFieldValue'
 import { SPField } from './SPField'
+import _ from 'lodash'
 
 /**
  * Project information field model. Used both for display
@@ -136,5 +136,22 @@ export class ProjectInformationField {
    */
   public clone() {
     return new ProjectInformationField(this._field).init([this.column].filter(Boolean))
+  }
+
+  /**
+   * Enable configuration for the field. The configuration
+   * is stored in the `data.fieldOverrides` property on the column,
+   * and can override `displayName` and `description`.
+   * 
+   * @param name Configuration name
+   * @param currentLocale Current locale
+   */
+  public useConfiguration(name: string, currentLocale: string) {
+    const config = get<ProjectColumnFieldOverride>(this.column, `data.fieldOverrides.${name}.${currentLocale}`, null)
+    if (config) {
+      this.displayName = config.displayName ?? this.displayName
+      this.description = config.description ?? this.description
+    }
+    return this
   }
 }

@@ -8,6 +8,7 @@ import {
   ProjectInformationDialogType,
   ProjectInformationPanelType
 } from './types'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
 
 const initialState: IProjectInformationState = {
   isDataLoaded: false,
@@ -29,13 +30,18 @@ export const CLOSE_DIALOG = createAction('CLOSE_DIALOG')
 export const PROPERTIES_UPDATED = createAction<{ refetch: boolean }>('PROPERTIES_UPDATED')
 
 /**
- * Create properties from the state.
+ * Create properties from the `state`. Also `webPartContext` is needed to get the current locale.
  *
  * @param state State of the `ProjectInformation` component.
+ * @param webPartContext SPFx web part context
  */
-function createProperties(state: IProjectInformationState) {
+function createProperties(state: IProjectInformationState, webPartContext: WebPartContext) {
+  const currentLocale = webPartContext.pageContext.cultureInfo.currentUICultureName.toLowerCase()
+  // eslint-disable-next-line no-console
+  console.log('createProperties', currentLocale)
   return state.data.fields
     .map((field) =>
+      // .useConfiguration('program', currentLocale)
       new ProjectInformationField(field).init(state.data.columns).setValue(state.data)
     )
     .sort((a, b) => {
@@ -47,8 +53,10 @@ function createProperties(state: IProjectInformationState) {
 
 /**
  * Create project information reducer.
+ * 
+ * @param webPartContext SPFx web part context
  */
-const createProjectInformationReducer = () =>
+const createProjectInformationReducer = (webPartContext: WebPartContext) =>
   createReducer(initialState, (builder) =>
     builder
       .addCase(INIT_DATA, (state, action) => {
@@ -57,7 +65,7 @@ const createProjectInformationReducer = () =>
         state.isProjectDataSynced = action.payload.state.isProjectDataSynced
         state.isParentProject = action.payload.state.isParentProject
         state.userHasEditPermission = action.payload.state.userHasEditPermission
-        state.properties = createProperties(state as IProjectInformationState)
+        state.properties = createProperties(state as IProjectInformationState, webPartContext)
         state.isDataLoaded = true
       })
       .addCase(UPDATE_DATA, (state, action) => {
@@ -65,7 +73,7 @@ const createProjectInformationReducer = () =>
           ...(state.data ?? {}),
           ...action.payload.data
         }
-        state.properties = createProperties(state as IProjectInformationState)
+        state.properties = createProperties(state as IProjectInformationState, webPartContext)
       })
       .addCase(FETCH_DATA_ERROR, (state, action) => {
         state.error = action.payload.error
@@ -97,9 +105,11 @@ const createProjectInformationReducer = () =>
  * Hook to use project information reducer. This hook is used to
  * manage project information state using `useReducer` hook from
  * `react`.
+ * 
+ * @param webPartContext SPFx web part context
  */
-export const useProjectInformationReducer = () => {
-  const reducer = useMemo(() => createProjectInformationReducer(), [])
+export const useProjectInformationReducer = (webPartContext: WebPartContext) => {
+  const reducer = useMemo(() => createProjectInformationReducer(webPartContext), [])
   const [state, dispatch] = useReducer(reducer, initialState)
   return {
     state,
