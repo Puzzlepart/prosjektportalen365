@@ -1,10 +1,11 @@
 import { MessageBarType } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
+import { IProjectInformationData } from 'pp365-shared-library'
 import { CustomError } from 'pp365-shared-library/lib/models'
 import { useState } from 'react'
 import SPDataAdapter from '../../../data'
 import { useProjectInformationContext } from '../context'
-import { CLOSE_PANEL, PROPERTIES_UPDATED } from '../reducer'
+import { CLOSE_PANEL, UPDATE_DATA } from '../reducer'
 import { usePropertiesSync } from '../usePropertiesSync'
 import { UseModelReturnType } from './useModel'
 
@@ -25,10 +26,11 @@ export function useSubmit(model: UseModelReturnType) {
    * clear the local storage and close the panel.
    */
   const onSave = async () => {
+    let data: IProjectInformationData = null
     setError(null)
     setSaveStatus(strings.UpdatingProjectPropertiesStatusText)
     try {
-      await SPDataAdapter.project.updateProjectProperties(model.properties)
+      data = await SPDataAdapter.project.updateProjectProperties(model.properties, true)
     } catch (e) {
       setError(
         CustomError.createError(e, MessageBarType.error, strings.UpdatingProjectPropertiesErrorText)
@@ -41,7 +43,7 @@ export function useSubmit(model: UseModelReturnType) {
     }
     setSaveStatus(strings.SynchronizingProjectPropertiesToPortfolioSiteStatusText)
     try {
-      await syncPropertyItemToHub(() => null, model.properties)
+      await syncPropertyItemToHub(data)
     } catch (e) {
       setError(
         CustomError.createError(
@@ -57,8 +59,8 @@ export function useSubmit(model: UseModelReturnType) {
       return
     }
     localStorage.clear()
+    context.dispatch(UPDATE_DATA({ data }))
     context.dispatch(CLOSE_PANEL())
-    context.dispatch(PROPERTIES_UPDATED({ refetch: true }))
     setSaveStatus(null)
   }
 
