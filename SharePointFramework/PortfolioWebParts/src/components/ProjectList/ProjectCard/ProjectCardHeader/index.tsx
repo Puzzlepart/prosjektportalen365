@@ -78,7 +78,9 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
                 onLoad={(image) => {
                   props.onImageLoad
                   setShowCustomImage(
-                    (image.target as HTMLImageElement).naturalHeight !== 648 ? true : false
+                    (image.target as HTMLImageElement).naturalHeight !== 648
+                      ? (image.target as HTMLImageElement).naturalHeight !== 96 ? true : false
+                      : false
                   )
                 }}
               />
