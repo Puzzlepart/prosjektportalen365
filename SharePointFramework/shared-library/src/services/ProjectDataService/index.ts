@@ -155,14 +155,15 @@ export class ProjectDataService {
    * separately, as expanding `ctx.item()` with `FieldValuesAsText` will result in
    * corrupt data.
    */
-  private async _getLocalProjectInformationItem(): Promise<IProjectInformationData> {
+  private async _getLocalProjectInformationItem(
+    fieldsFilter = 'substringof(\'Gt\', InternalName)'
+  ): Promise<IProjectInformationData> {
     try {
       const ctx = await this._getLocalProjectInformationItemContext()
       if (!ctx) return null
       const fields = await ctx.list.fields
         .select(...getClassProperties(SPField))
-        // eslint-disable-next-line quotes
-        .filter("substringof('Gt', InternalName)")<SPField[]>()
+        .filter(fieldsFilter)<SPField[]>()
       const userFields = fields.filter((fld) => fld.TypeAsString.indexOf('User') === 0)
       const [fieldValuesText, fieldValues] = await Promise.all([
         ctx.item.fieldValuesAsText(),
@@ -269,16 +270,25 @@ export class ProjectDataService {
   }
 
   /**
-   * Update properties for the project using the local property list.
+   * Update properties for the project using the local property list. If `returnData` is true,
+   * the updated data from `this.getProjectInformationData` will be returned.
    *
    * @param properties Properties to update
+   * @param returnData Return data after update
    */
-  public async updateProjectProperties(properties: { [key: string]: string }): Promise<void> {
+  public async updateProjectProperties(
+    properties: { [key: string]: string },
+    returnData = false
+  ): Promise<IProjectInformationData | null> {
     try {
       const propertyItemContext = await this._getLocalProjectInformationItemContext()
       if (propertyItemContext) {
         await propertyItemContext.item.update(properties)
       }
+      if (returnData) {
+        return await this.getProjectInformationData()
+      }
+      return null
     } catch (error) {
       throw error
     }
