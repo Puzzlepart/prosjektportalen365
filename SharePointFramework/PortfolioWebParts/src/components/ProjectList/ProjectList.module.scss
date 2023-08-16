@@ -14,17 +14,22 @@
   .commandBar {
     display: flex;
     flex-direction: row;
+    max-width: 996px;
     gap: 15px;
 
     .search {
       width: 100%;
-      max-width: 820px;
+      max-width: 100%;
 
       .searchBox {
         box-shadow: var(--shadow2);
         width: inherit;
         max-width: inherit;
       }
+    }
+
+    .sortBy {
+      box-shadow: var(--shadow2);
     }
   }
 

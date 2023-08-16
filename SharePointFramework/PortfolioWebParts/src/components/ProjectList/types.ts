@@ -56,6 +56,11 @@ export interface IProjectListProps extends IBaseComponentProps {
   showRenderModeSelector?: boolean
 
   /**
+   * Show sort by button
+   */
+  showSortBy?: boolean
+
+  /**
    * Show Project Logo on the project card
    */
   showProjectLogo?: boolean

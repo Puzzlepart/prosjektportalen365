@@ -1,10 +1,12 @@
 import React, { FC } from 'react'
 import { IColumn, SelectionMode, ShimmeredDetailsList } from '@fluentui/react'
 import {
+  Button,
   FluentProvider,
   SelectTabData,
   Tab,
   TabList,
+  Tooltip,
   webLightTheme
 } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
@@ -22,6 +24,7 @@ import { RenderModeDropdown } from './RenderModeDropdown'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
+import { TextSortAscendingRegular, TextSortDescendingRegular } from '@fluentui/react-icons'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const {
@@ -43,6 +46,14 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   function renderProjects(projects: ProjectListModel[]) {
     switch (state.renderMode) {
       case 'tiles': {
+        props.columns.map((col) => {
+          col.isSorted = col.key === state.sort?.fieldName
+          if (col.isSorted) {
+            col.isSortedDescending = state.sort?.isSortedDescending
+          }
+          return col
+        })
+
         return projects.map((project, idx) => (
           <ProjectCardContext.Provider
             key={idx}
@@ -160,6 +171,36 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
               onOptionSelect={(renderAs) => setState({ renderMode: renderAs })}
             />
           </div>
+          <div hidden={!props.showSortBy}>
+            <Tooltip
+              content={
+                <>
+                  Sorter flisene etter <strong>{props.sortBy}</strong>
+                </>
+              }
+              relationship={'description'}
+              withArrow
+            >
+              <Button
+                className={styles.sortBy}
+                appearance={'transparent'}
+                onClick={() =>
+                  onListSort(
+                    null,
+                    props.columns.find((c) => c.fieldName === 'title')
+                  )
+                }
+                size={'large'}
+                icon={
+                  state.sort?.isSortedDescending ? (
+                    <TextSortAscendingRegular />
+                  ) : (
+                    <TextSortDescendingRegular />
+                  )
+                }
+              />
+            </Tooltip>
+          </div>
         </div>
         {state.isDataLoaded && isEmpty(projects) && (
           <div className={styles.emptyMessage}>
@@ -187,6 +228,7 @@ ProjectList.defaultProps = {
   sortBy: 'Title',
   showSearchBox: true,
   showRenderModeSelector: true,
+  showSortBy: true,
   defaultRenderMode: 'tiles',
   defaultVertical: 'my_projects',
   verticals: ProjectListVerticals,
