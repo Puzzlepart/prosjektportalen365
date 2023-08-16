@@ -1,5 +1,6 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
-import { CustomError } from 'pp365-shared-library/lib/models'
+import { IProjectInformationData } from 'pp365-shared-library'
+import { CustomError, ProjectInformationField } from 'pp365-shared-library/lib/models'
 import { useMemo, useReducer } from 'react'
 import { IProgressDialogProps } from './ProgressDialog/types'
 import {
@@ -18,6 +19,7 @@ export const INIT_DATA = createAction<{
   state: Partial<IProjectInformationState>
   error?: CustomError
 }>('INIT_DATA')
+export const UPDATE_DATA = createAction<{ data: IProjectInformationData }>('UPDATE_DATA')
 export const FETCH_DATA_ERROR = createAction<{ error: CustomError }>('FETCH_DATA_ERROR')
 export const SET_PROGRESS = createAction<IProgressDialogProps>('SET_PROGRESS')
 export const OPEN_PANEL = createAction<ProjectInformationPanelType>('OPEN_PANEL')
@@ -25,6 +27,23 @@ export const CLOSE_PANEL = createAction('CLOSE_PANEL')
 export const OPEN_DIALOG = createAction<ProjectInformationDialogType>('OPEN_DIALOG')
 export const CLOSE_DIALOG = createAction('CLOSE_DIALOG')
 export const PROPERTIES_UPDATED = createAction<{ refetch: boolean }>('PROPERTIES_UPDATED')
+
+/**
+ * Create properties from the state.
+ *
+ * @param state State of the `ProjectInformation` component.
+ */
+function createProperties(state: IProjectInformationState) {
+  return state.data.fields
+    .map((field) =>
+      new ProjectInformationField(field).init(state.data.columns).setValue(state.data)
+    )
+    .sort((a, b) => {
+      if (!a.column) return 1
+      if (!b.column) return -1
+      return a.column.sortOrder - b.column.sortOrder
+    })
+}
 
 /**
  * Create project information reducer.
@@ -38,7 +57,15 @@ const createProjectInformationReducer = () =>
         state.isProjectDataSynced = action.payload.state.isProjectDataSynced
         state.isParentProject = action.payload.state.isParentProject
         state.userHasEditPermission = action.payload.state.userHasEditPermission
+        state.properties = createProperties(state as IProjectInformationState)
         state.isDataLoaded = true
+      })
+      .addCase(UPDATE_DATA, (state, action) => {
+        state.data = {
+          ...(state.data ?? {}),
+          ...action.payload.data
+        }
+        state.properties = createProperties(state as IProjectInformationState)
       })
       .addCase(FETCH_DATA_ERROR, (state, action) => {
         state.error = action.payload.error

@@ -57,16 +57,16 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
   /**
    * Sync properties to the hub site.
    *
+   * @param data Project properties data.
    * @param progressFunc Progress callback function.
-   * @param properties Properties to sync to the hub site (default: `context.state.data.fieldValuesText`)
    */
   const syncPropertyItemToHub = async (
-    progressFunc: (progress: IProgressIndicatorProps) => void,
-    properties = context.state.data.fieldValuesText
+    data = context.state.data,
+    progressFunc: (progress: IProgressIndicatorProps) => void = () => null
   ) => {
-    const { fieldValues, fieldValuesText, templateParameters } = context.state.data
+    const { fieldValues, fieldValuesText, templateParameters } = data
     await SPDataAdapter.syncPropertyItemToHub(
-      { ...fieldValuesText, ...properties, Title: context.props.webTitle },
+      { ...fieldValuesText, Title: context.props.webTitle },
       fieldValues,
       templateParameters,
       progressFunc
@@ -102,7 +102,8 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
         const { list } = await syncList(context)
         created = list.created
       }
-      if (!created && params.syncPropertyItemToHub) await syncPropertyItemToHub(progressFunc)
+      if (!created && params.syncPropertyItemToHub)
+        await syncPropertyItemToHub(undefined, progressFunc)
       SPDataAdapter.clearCache()
       await sleep(5)
       if (params.reload) window.location.reload()

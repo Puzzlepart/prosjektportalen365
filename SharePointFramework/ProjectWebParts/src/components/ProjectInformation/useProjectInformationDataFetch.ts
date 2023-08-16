@@ -6,7 +6,6 @@ import {
   ListLogger,
   ProjectAdminPermission,
   ProjectColumnConfig,
-  ProjectInformationField,
   ProjectInformationParentProject,
   SectionModel,
   StatusReport
@@ -137,15 +136,6 @@ const fetchData: DataFetchFunction<
       userHasEditPermission: false,
       isProjectDataSynced: false
     }
-    data.properties = projectInformationData.fields
-      .map((field) =>
-        new ProjectInformationField(field).init(columns).setValue(projectInformationData)
-      )
-      .sort((a, b) => {
-        if (!a.column) return 1
-        if (!b.column) return -1
-        return a.column.sortOrder - b.column.sortOrder
-      })
     if (isFrontpage) {
       data.userHasEditPermission = await SPDataAdapter.checkProjectAdminPermissions(
         ProjectAdminPermission.EditProjectProperties,
