@@ -1,14 +1,18 @@
 import React, { FC, useEffect, useState } from 'react'
 import { Dropdown, Option } from '@fluentui/react-components'
 import { IRenderModeDropdownProps } from './IRenderModeDropdownProps'
-import { listOption, tileOption } from './types'
+import { listOption, tileOption, compactListOption } from './types'
 import { ProjectListRenderMode } from '../types'
 import styles from './RenderModeDropdown.module.scss'
 
 export const RenderModeDropdown: FC<IRenderModeDropdownProps> = (props) => {
-  const options = [tileOption, listOption]
+  const options = [tileOption, listOption, compactListOption]
   const [selectedOption, setSelectedOption] = useState<any>(
-    props.renderAs === 'tiles' ? tileOption : listOption
+    props.renderAs === 'tiles'
+      ? tileOption
+      : props.renderAs === 'list'
+      ? listOption
+      : compactListOption
   )
 
   useEffect(

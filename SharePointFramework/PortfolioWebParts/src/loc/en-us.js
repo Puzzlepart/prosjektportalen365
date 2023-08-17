@@ -177,6 +177,7 @@ define([], function () {
     ProjectsAccessHeaderText: 'Access to',
     ProjectsAccessSearchBoxPlaceholderText: 'Search {0} projects you have access to...',
     ProjectsListName: 'Prosjekter',
+    RenderModeCompactListText: 'Compact list',
     RenderModeListText: 'List',
     RenderModeTilesText: 'Tiles',
     ResourceAllocationInfoText: 'Resource allocations or absences that apply across projects are entered into the <A HREF="../Lists/Ressursallokering/AllItems.aspx?Source={0}">resource allocation hub list</A>. These entries will be shown in blue and red (absence) color in the table below. Project allocations are shown in green. The color strength of the allocation is based on the allocation percentage.',

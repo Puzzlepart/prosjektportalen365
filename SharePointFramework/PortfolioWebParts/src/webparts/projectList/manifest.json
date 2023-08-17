@@ -33,6 +33,7 @@
         "sortBy": "Title",
         "showSearchBox": true,
         "showRenderModeSelector": true,
+        "showSortBy": true,
         "defaultRenderMode": "tiles",
         "defaultVertical": "my_projects",
         "hideVerticals": []

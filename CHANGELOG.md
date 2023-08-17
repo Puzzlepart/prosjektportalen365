@@ -8,6 +8,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Prosjektportalen, flere av komponentene er blitt oppdatert og fått nytt utseende og tilpasningsmuligheter. Sjekk ut [release notes](./releasenotes/1.9.0.md) for oversikt. Noen av de mest omfattende er:
 
 - #### Prosjektutlisting (forsiden av Prosjektportalen)
+  - Flis og listevisning
 
 ### Ny funksjonalitet
 
