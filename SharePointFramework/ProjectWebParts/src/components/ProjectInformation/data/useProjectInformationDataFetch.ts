@@ -5,81 +5,17 @@ import {
   CustomError,
   ListLogger,
   ProjectAdminPermission,
-  ProjectColumnConfig,
-  ProjectInformationParentProject,
-  SectionModel,
-  StatusReport
-} from 'pp365-shared-library/lib'
+  ProjectInformationParentProject
+} from 'pp365-shared-library'
 import { useEffect } from 'react'
-import SPDataAdapter from '../../data'
-import { DataFetchFunction } from '../../types/DataFetchFunction'
-import { IProjectInformationContext } from './context'
-import { ProjectInformation } from './index'
-import { FETCH_DATA_ERROR, INIT_DATA } from './reducer'
-import { IProjectInformationState } from './types'
-
-/**
- * Checks if project data is synced.
- *
- * @param context Context for `ProjectInformation`
- */
-const checkProjectDataSynced: DataFetchFunction<IProjectInformationContext, boolean> = async (
-  context
-) => {
-  try {
-    let isSynced = false
-    const projectDataList = SPDataAdapter.portal.web.lists.getByTitle(strings.IdeaProjectDataTitle)
-    const [projectDataItem] = await projectDataList.items
-      .filter(`GtSiteUrl eq '${context.props.webPartContext.pageContext.web.absoluteUrl}'`)
-      .select('Id')()
-
-    const [ideaConfig] = (await SPDataAdapter.getIdeaConfiguration()).filter(
-      (item) => item.title === context.props.ideaConfiguration
-    )
-
-    const ideaProcessingList = SPDataAdapter.portal.web.lists.getByTitle(ideaConfig.processingList)
-
-    const [ideaProcessingItem] = await ideaProcessingList.items
-      .filter(`GtIdeaProjectDataId eq '${projectDataItem.Id}'`)
-      .select('Id, GtIdeaDecision')()
-    if (ideaProcessingItem.GtIdeaDecision === 'Godkjent og synkronisert') {
-      isSynced = true
-    }
-    return isSynced
-  } catch (error) {
-    return true
-  }
-}
-
-/**
- * Fetch project status reports (top: 1), sections and column config  if `props.hideStatusReport` is false.
- * Catches errors and returns empty arrays to support e.g. the case where the user does not have
- * access to the hub site.
- *
- * @param context Context for `ProjectInformation`
- */
-const fetchProjectStatusReportData: DataFetchFunction<
-  IProjectInformationContext,
-  [StatusReport[], SectionModel[], ProjectColumnConfig[]]
-> = async (context) => {
-  if (context.props.hideStatusReport) {
-    return [[], [], []]
-  }
-  try {
-    const [reports, sections, columnConfig] = await Promise.all([
-      SPDataAdapter.portal.getStatusReports({
-        filter: `(GtSiteId eq '${context.props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
-        publishedString: strings.GtModerationStatus_Choice_Published,
-        top: 1
-      }),
-      SPDataAdapter.portal.getProjectStatusSections(),
-      SPDataAdapter.portal.getProjectColumnConfig()
-    ])
-    return [reports, sections, columnConfig]
-  } catch (error) {
-    return [[], [], []]
-  }
-}
+import SPDataAdapter from '../../../data'
+import { DataFetchFunction } from '../../../types/DataFetchFunction'
+import { IProjectInformationContext } from '../context'
+import { ProjectInformation } from '../index'
+import { FETCH_DATA_ERROR, INIT_DATA } from '../reducer'
+import { IProjectInformationState } from '../types'
+import { checkProjectDataSynced } from './checkProjectDataSynced'
+import { fetchProjectStatusReportData } from './fetchProjectStatusReportData'
 
 /**
  * Fetch data for `ProjectInformation` component. This function is used in
@@ -136,6 +72,12 @@ const fetchData: DataFetchFunction<
       userHasEditPermission: false,
       isProjectDataSynced: false
     }
+    const templateName = projectInformationData.fieldValues.get('GtProjectTemplate')
+    // eslint-disable-next-line no-console
+    console.log(templateName)
+    const template = await SPDataAdapter.portal.getProjectTemplate('Programmal')
+    // eslint-disable-next-line no-console
+    console.log(template)
     if (isFrontpage) {
       data.userHasEditPermission = await SPDataAdapter.checkProjectAdminPermissions(
         ProjectAdminPermission.EditProjectProperties,

@@ -6,7 +6,7 @@ import SPDataAdapter from '../../data'
 import { IProjectInformationContext } from './context'
 import { useProjectInformationReducer } from './reducer'
 import { IProjectInformationProps } from './types'
-import { useProjectInformationDataFetch } from './useProjectInformationDataFetch'
+import { useProjectInformationDataFetch } from './data'
 
 /**
  * Component logic hook for `ProjectInformation`.
@@ -33,5 +33,5 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
 
   useProjectInformationDataFetch(context)
 
-  return { context } as const
+  return context
 }
