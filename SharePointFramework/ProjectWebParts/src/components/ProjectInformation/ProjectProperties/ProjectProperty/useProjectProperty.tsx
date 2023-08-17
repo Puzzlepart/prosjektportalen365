@@ -8,7 +8,7 @@ import { IProjectPropertyProps } from './types'
  * Component logic hook for the `ProjectProperty` component.
  *
  * @param props Props for the `ProjectProperty` component
- * 
+ *
  * @returns a render function `renderValueForField` for the `ProjectProperty` component,
  * aswell as the `displayMode` for the `ProjectProperty` component.
  */
