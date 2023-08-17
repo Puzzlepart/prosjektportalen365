@@ -99,13 +99,13 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
       })
       let created = false
       if (params.syncList) {
-        const { list } = await syncList(context)
+        const list = await syncList(context)
         created = list.created
       }
       if (!created && params.syncPropertyItemToHub)
         await syncPropertyItemToHub(undefined, progressFunc)
       SPDataAdapter.clearCache()
-      await sleep(5)
+      await sleep(3)
       if (params.reload) window.location.reload()
     } catch (error) {
       ListLogger.log({
