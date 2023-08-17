@@ -32,7 +32,7 @@ import {
   PortalDataServiceDefaultConfiguration,
   PortalDataServiceList,
   SyncListParams,
-  SyncListReturnType
+  ISyncListReturnType
 } from './types'
 
 export class PortalDataService {
@@ -345,7 +345,7 @@ export class PortalDataService {
    *
    * @param params Sync list parameters
    */
-  public async syncList(params: SyncListParams): Promise<SyncListReturnType> {
+  public async syncList(params: SyncListParams): Promise<ISyncListReturnType> {
     const fieldsAdded: SPField[] = []
     const web = spfi(params.url).using(AssignFrom(this._sp.web)).web
     const { jsomContext } = await initJsom(params.url, { loadTaxonomy: true })
@@ -424,7 +424,7 @@ export class PortalDataService {
     if (ensureList.created && params.properties) {
       ensureList.list.items.add(params.properties)
     }
-    return { list: ensureList, fieldsAdded }
+    return { ...ensureList, fieldsAdded }
   }
 
   /**

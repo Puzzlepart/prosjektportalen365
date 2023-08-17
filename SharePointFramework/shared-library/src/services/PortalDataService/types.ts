@@ -61,7 +61,6 @@ export type SyncListParams = {
   properties?: Record<string, string>
 }
 
-export type SyncListReturnType = {
-  list: IListEnsureResult
+export interface ISyncListReturnType extends IListEnsureResult {
   fieldsAdded: SPField[]
 }
