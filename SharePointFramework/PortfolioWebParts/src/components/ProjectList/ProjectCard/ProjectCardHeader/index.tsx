@@ -82,8 +82,7 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
                       ? (image.target as HTMLImageElement).naturalHeight !== 96
                         ? true
                         : false
-                      : false
-                  )
+
                 }}
               />
             </Link>
