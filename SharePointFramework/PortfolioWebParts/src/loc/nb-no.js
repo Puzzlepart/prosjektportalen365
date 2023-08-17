@@ -177,6 +177,7 @@ define([], function () {
     ProjectsAccessHeaderText: 'Tilgang til',
     ProjectsAccessSearchBoxPlaceholderText: 'Søk i {0} prosjekter du har tilgang til...',
     ProjectsListName: 'Prosjekter',
+    RenderModeCompactListText: 'Kompakt liste',
     RenderModeListText: 'Liste',
     RenderModeTilesText: 'Fliser',
     ResourceAllocationInfoText: 'Ressursallokering eller fravær som gjelder på tvers av prosjekter legges inn i den<A HREF="../Lists/Ressursallokering/AllItems.aspx?Source={0}">sentrale ressursallokeringslisten</A>. Disse oppføringene vil vises med blå og rød (fravær) farge i tabellen under. Prosjektallokeringer vises med grønn farge. Fargestyrken til allokeringen baserer seg på allokeringsprosenten.',

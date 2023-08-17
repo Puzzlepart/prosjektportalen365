@@ -1,5 +1,4 @@
 import { IShimmerProps } from '@fluentui/react'
-import { IColumn } from '@fluentui/react/lib/DetailsList'
 import { IBaseComponentProps } from '../types'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import { TabProps } from '@fluentui/react-components'
@@ -37,7 +36,7 @@ export interface IProjectListVertical extends Omit<TabProps, 'icon'> {
   isHidden?: (state: IProjectListState) => boolean
 }
 
-export type ProjectListRenderMode = 'tiles' | 'list'
+export type ProjectListRenderMode = 'tiles' | 'list' | 'compactList'
 
 export interface IProjectListProps extends IBaseComponentProps {
   /**
@@ -93,7 +92,7 @@ export interface IProjectListProps extends IBaseComponentProps {
   /**
    * Columns
    */
-  columns?: IColumn[]
+  columns?: any[]
 
   /**
    * Default vertical

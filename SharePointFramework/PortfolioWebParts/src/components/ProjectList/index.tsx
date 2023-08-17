@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import { IColumn, SelectionMode, ShimmeredDetailsList } from '@fluentui/react'
 import {
   Button,
   FluentProvider,
@@ -13,10 +12,10 @@ import { Alert } from '@fluentui/react-components/unstable'
 import { SearchBox } from '@fluentui/react-search-preview'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
-import { getObjectValue } from 'pp365-shared-library/lib/util/getObjectValue'
 import { find, isEmpty } from 'underscore'
 import { ProjectCard } from './ProjectCard'
 import { ProjectCardContext } from './ProjectCard/context'
+import { List } from './List'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
 import { ProjectListVerticals } from './ProjectListVerticals'
@@ -25,6 +24,7 @@ import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import { TextSortAscendingRegular, TextSortDescendingRegular } from '@fluentui/react-icons'
+import { ListContext } from './List/context'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const {
@@ -68,7 +68,10 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
           </ProjectCardContext.Provider>
         ))
       }
-      case 'list': {
+      case 'list':
+      case 'compactList': {
+        const size = state.renderMode === 'list' ? 'medium' : 'extra-small'
+
         const columns = props.columns.map((col) => {
           col.isSorted = col.key === state.sort?.fieldName
           if (col.isSorted) {
@@ -77,33 +80,19 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
           return col
         })
         return (
-          <ShimmeredDetailsList
-            enableShimmer={!state.isDataLoaded}
-            items={projects}
-            columns={columns}
-            onRenderItemColumn={onRenderItemColumn}
-            onColumnHeaderClick={onListSort}
-            selectionMode={SelectionMode.none}
-          />
+          <ListContext.Provider
+            value={{
+              ...props,
+              projects,
+              columns,
+              size
+            }}
+          >
+            <List />
+          </ListContext.Provider>
         )
       }
     }
-  }
-
-  /**
-   * On render item column
-   *
-   * @param project - Project
-   * @param _index - Index
-   * @param column - Column
-   */
-  function onRenderItemColumn(project: ProjectListModel, _index: number, column: IColumn) {
-    const colValue = getObjectValue(project, column.fieldName, null)
-    if (column.fieldName === 'title') {
-      if (project.isUserMember) return <a href={project.url}>{colValue}</a>
-      return <>{colValue}</>
-    }
-    return colValue
   }
 
   if (state.projects.length === 0) {
@@ -171,7 +160,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
               onOptionSelect={(renderAs) => setState({ renderMode: renderAs })}
             />
           </div>
-          <div hidden={!props.showSortBy}>
+          <div hidden={!props.showSortBy || state.renderMode !== 'tiles'}>
             <Tooltip
               content={
                 <>

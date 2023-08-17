@@ -91,12 +91,16 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   label: strings.DefaultRenderModeLabel,
                   options: [
                     {
+                      key: 'tiles',
+                      text: strings.RenderModeTilesText
+                    },
+                    {
                       key: 'list',
                       text: strings.RenderModeListText
                     },
                     {
-                      key: 'tiles',
-                      text: strings.RenderModeTilesText
+                      key: 'compactList',
+                      text: strings.RenderModeCompactListText
                     }
                   ],
                   selectedKey: this.properties.defaultRenderMode,

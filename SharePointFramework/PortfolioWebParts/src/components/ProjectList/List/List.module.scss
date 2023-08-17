@@ -1,0 +1,45 @@
+@import "~@fluentui/react/dist/sass/References.scss";
+
+a {
+  color: var(--colorBrandForegroundLink);
+  outline: none;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--colorBrandForegroundLinkHover);
+  text-decoration: underline;
+}
+
+.list {
+  width: 996px;
+
+  div:first-child {
+    max-width: inherit;
+  }
+
+  .logo {
+    width: 48px;
+    height: 48px;
+
+    .projectAvatar {
+      height: 80%;
+      width: 80%;
+      object-fit: cover;
+      border-radius: var(--borderRadiusMedium);
+      margin: 5px;
+    }
+
+    img {
+      height: 80%;
+      width: 80%;
+      object-fit: cover;
+      border-radius: var(--borderRadiusMedium);
+      margin: 5px;
+    }
+  }
+
+  .avatar:hover {
+    filter: brightness(0.9);
+  }
+}
