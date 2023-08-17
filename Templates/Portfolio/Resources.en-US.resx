@@ -2591,4 +2591,10 @@
   <data name="SiteFields_GtFieldLocked_Description" xml:space="preserve">
     <value>Kolonnen er låst og kan ikke redigeres eller velges bort.</value>
   </data>
+  <data name="SiteFields_GtFieldOverrides_DisplayName" xml:space="preserve">
+    <value>Tilpassede feltinnstillinger</value>
+  </data>
+  <data name="SiteFields_GtFieldOverrides_Description" xml:space="preserve">
+    <value>Tilpassede feltinnstillinger i JSON-format. Objektformat med konfigurasjonsnavnet først, deretter ett objekt med lokalene som nøkkel og feltinnstillingene (f.eks. displayName eller description) som verdi.</value>
+  </data>
 </root>
