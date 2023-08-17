@@ -688,14 +688,19 @@ export class PortalDataService {
    * Get project template by name. Using `DefaultCaching` by default.
    *
    * @param templateName Template name
+   * @param cache Cache configuration to use (default: `DefaultCaching`)
    */
-  public async getProjectTemplate(templateName: string): Promise<ProjectTemplate> {
+  public async getProjectTemplate(
+    templateName: string,
+    cache = DefaultCaching
+  ): Promise<ProjectTemplate> {
     try {
+      if (stringIsNullOrEmpty(templateName)) return null
       const [spItem] = await this._getList('PROJECT_TEMPLATE_CONFIGURATION')
         .items.select('*', 'FieldValuesAsText')
         .expand('FieldValuesAsText')
         .filter(`Title eq '${templateName}'`)
-        .using(DefaultCaching)<IProjectTemplateSPItem[]>()
+        .using(cache)<IProjectTemplateSPItem[]>()
       if (!spItem) return null
       return new ProjectTemplate(spItem)
     } catch (error) {

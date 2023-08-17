@@ -60,6 +60,8 @@ const fetchData: DataFetchFunction<
             )
           : Promise.resolve([])
       ])
+    const templateName = projectInformationData.fieldValues.get('GtProjectTemplate')
+    const template = await SPDataAdapter.portal.getProjectTemplate(templateName)
     const data: Partial<IProjectInformationState> = {
       data: {
         columns,
@@ -67,17 +69,12 @@ const fetchData: DataFetchFunction<
         reports,
         sections,
         columnConfig,
+        template,
         ...projectInformationData
       },
       userHasEditPermission: false,
       isProjectDataSynced: false
     }
-    const templateName = projectInformationData.fieldValues.get('GtProjectTemplate')
-    // eslint-disable-next-line no-console
-    console.log(templateName)
-    const template = await SPDataAdapter.portal.getProjectTemplate('Programmal')
-    // eslint-disable-next-line no-console
-    console.log(template)
     if (isFrontpage) {
       data.userHasEditPermission = await SPDataAdapter.checkProjectAdminPermissions(
         ProjectAdminPermission.EditProjectProperties,

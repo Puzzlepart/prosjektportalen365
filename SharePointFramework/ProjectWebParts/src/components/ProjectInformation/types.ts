@@ -5,8 +5,9 @@ import {
   IUserMessageProps,
   ProjectColumn,
   ProjectInformationField,
-  ProjectInformationParentProject
-} from 'pp365-shared-library/lib'
+  ProjectInformationParentProject,
+  ProjectTemplate
+} from 'pp365-shared-library'
 import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDataService'
 import { IProjectStatusData } from '../ProjectStatus'
 import { ActionType } from './Actions/types'
@@ -170,4 +171,9 @@ export interface IProjectInformationData
    * Parent projects
    */
   parentProjects?: ProjectInformationParentProject[]
+
+  /**
+   * The template used for the project
+   */
+  template?: ProjectTemplate
 }

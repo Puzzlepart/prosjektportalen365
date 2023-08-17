@@ -1,9 +1,9 @@
 import { IDropdownOption } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import _ from 'lodash'
-import { createFieldValueMap } from '../util'
+import { createFieldValueMap, getObjectValue as get } from '../util'
 import { ItemFieldValues } from './ItemFieldValues'
-import { ProjectColumn } from './ProjectColumn'
+import { ProjectColumn, ProjectColumnFieldOverride } from './ProjectColumn'
 import { ProjectInformationFieldValue } from './ProjectInformationFieldValue'
 import { SPField } from './SPField'
 
@@ -21,6 +21,8 @@ export class ProjectInformationField {
   private _isExternal: boolean
   private _fieldValue: ProjectInformationFieldValue
   private _fieldValueMap: ReturnType<typeof createFieldValueMap>
+  private _currentLocale: string
+  private _configurationName: string
 
   /**
    * Constructs a new `ProjectInformationField` instance.
@@ -46,9 +48,29 @@ export class ProjectInformationField {
   public init(columns: ProjectColumn[], currentLocale?: string, configurationName?: string) {
     this.column = columns.find((c) => c.internalName === this.internalName)
     this._isExternal = _.isEmpty(columns)
-    // eslint-disable-next-line no-console
-    console.log(currentLocale, configurationName)
+    this._initConfiguration(currentLocale, configurationName)
     return this
+  }
+
+  /**
+   * Initializes the configuration for the field. If a entry is found for the `configurationName`
+   * in `column.data.fieldOverrides` the configuration is set for the field.
+   *
+   * @param currentLocale Current locale (e.g. `nb-no` for Norwegian)
+   * @param configurationName Configuration name (e.g. `Program`)
+   */
+  private _initConfiguration(currentLocale: string, configurationName: string) {
+    this._currentLocale = currentLocale
+    this._configurationName = configurationName
+    if (this._configurationName && this.column) {
+      const configuration = get<ProjectColumnFieldOverride>(
+        this.column,
+        `data.fieldOverrides.${this._configurationName}.${this._currentLocale}`,
+        null
+      )
+      this.displayName = configuration?.displayName ?? this.displayName
+      this.description = configuration?.description ?? this.description
+    }
   }
 
   /**
@@ -139,6 +161,10 @@ export class ProjectInformationField {
    * @returns a clone of the field
    */
   public clone() {
-    return new ProjectInformationField(this._field).init([this.column].filter(Boolean))
+    return new ProjectInformationField(this._field).init(
+      [this.column].filter(Boolean),
+      this._currentLocale,
+      this._configurationName
+    )
   }
 }
