@@ -9,13 +9,14 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
   const { project, useDynamicColors, showProjectLogo, showProjectPhase } =
     useContext(ProjectCardContext)
   const [showCustomImage, setShowCustomImage] = React.useState(true)
-  let colors = { colors: ['black', 'black'] }
 
-  if (useDynamicColors && showProjectLogo)
-    colors = useImageColor(
-      project.logo ?? `${project.url}/_api/siteiconmanager/getsitelogo?type='1'`,
-      { cors: true, colors: 2, windowSize: 5 }
-    ).colors
+  const imageColorData = useImageColor(
+    project.logo ?? `${project.url}/_api/siteiconmanager/getsitelogo?type='1'`,
+    { cors: true, colors: 2, windowSize: 5 }
+  )
+
+  const colors =
+    useDynamicColors && showProjectLogo ? imageColorData.colors : ['transparent', 'transparent']
 
   return (
     <>
