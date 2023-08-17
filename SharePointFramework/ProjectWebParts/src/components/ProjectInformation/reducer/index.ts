@@ -1,6 +1,5 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { createReducer } from '@reduxjs/toolkit'
-import { ProjectInformationField } from 'pp365-shared-library/lib/models'
 import { useMemo, useReducer } from 'react'
 import { IProjectInformationState } from '../types'
 import {
@@ -14,6 +13,7 @@ import {
   SET_PROGRESS,
   UPDATE_DATA
 } from './actions'
+import { createProperties } from './createProperties'
 
 /**
  * Initial state for the `ProjectInformation` component.
@@ -29,27 +29,6 @@ const initialState: IProjectInformationState = {
   isDataLoaded: false,
   properties: [],
   data: { sections: [], fields: [] }
-}
-
-/**
- * Create properties from the `state`. Also `webPartContext` is needed to get the current locale.
- *
- * @param state State of the `ProjectInformation` component.
- * @param webPartContext SPFx web part context
- */
-function createProperties(state: IProjectInformationState, webPartContext: WebPartContext) {
-  const currentLocale = webPartContext.pageContext.cultureInfo.currentUICultureName.toLowerCase()
-  return state.data.fields
-    .map((field) =>
-      new ProjectInformationField(field)
-        .init(state.data.columns, currentLocale, '')
-        .setValue(state.data.fieldValues)
-    )
-    .sort((a, b) => {
-      if (!a.column) return 1
-      if (!b.column) return -1
-      return a.column.sortOrder - b.column.sortOrder
-    })
 }
 
 /**
