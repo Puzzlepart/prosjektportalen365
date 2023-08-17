@@ -1,33 +1,25 @@
-import { createAction, createReducer } from '@reduxjs/toolkit'
-import { IProjectInformationData } from 'pp365-shared-library'
-import { CustomError, ProjectInformationField } from 'pp365-shared-library/lib/models'
-import { useMemo, useReducer } from 'react'
-import { IProgressDialogProps } from './ProgressDialog/types'
-import {
-  IProjectInformationState,
-  ProjectInformationDialogType,
-  ProjectInformationPanelType
-} from './types'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { createReducer } from '@reduxjs/toolkit'
+import { ProjectInformationField } from 'pp365-shared-library/lib/models'
+import { useMemo, useReducer } from 'react'
+import { IProjectInformationState } from '../types'
+import { CLOSE_DIALOG, CLOSE_PANEL, FETCH_DATA_ERROR, INIT_DATA, OPEN_DIALOG, OPEN_PANEL, PROPERTIES_UPDATED, SET_PROGRESS, UPDATE_DATA } from './actions'
 
+/**
+ * Initial state for the `ProjectInformation` component.
+ * 
+ * - `isDataLoaded` is `false` by default, and it will be set to 
+ * `true` when the data is loaded.
+ * - `properties` is an empty array by default, and it will be 
+ * set to the project properties when the data is loaded.
+ * - `data` consists of an empty array of sections and fields by default, 
+ * and it will be set to the project data when the data is loaded.
+ */
 const initialState: IProjectInformationState = {
   isDataLoaded: false,
   properties: [],
   data: { sections: [], fields: [] }
 }
-
-export const INIT_DATA = createAction<{
-  state: Partial<IProjectInformationState>
-  error?: CustomError
-}>('INIT_DATA')
-export const UPDATE_DATA = createAction<{ data: IProjectInformationData }>('UPDATE_DATA')
-export const FETCH_DATA_ERROR = createAction<{ error: CustomError }>('FETCH_DATA_ERROR')
-export const SET_PROGRESS = createAction<IProgressDialogProps>('SET_PROGRESS')
-export const OPEN_PANEL = createAction<ProjectInformationPanelType>('OPEN_PANEL')
-export const CLOSE_PANEL = createAction('CLOSE_PANEL')
-export const OPEN_DIALOG = createAction<ProjectInformationDialogType>('OPEN_DIALOG')
-export const CLOSE_DIALOG = createAction('CLOSE_DIALOG')
-export const PROPERTIES_UPDATED = createAction<{ refetch: boolean }>('PROPERTIES_UPDATED')
 
 /**
  * Create properties from the `state`. Also `webPartContext` is needed to get the current locale.
@@ -37,12 +29,9 @@ export const PROPERTIES_UPDATED = createAction<{ refetch: boolean }>('PROPERTIES
  */
 function createProperties(state: IProjectInformationState, webPartContext: WebPartContext) {
   const currentLocale = webPartContext.pageContext.cultureInfo.currentUICultureName.toLowerCase()
-  // eslint-disable-next-line no-console
-  console.log('createProperties', currentLocale)
   return state.data.fields
     .map((field) =>
-      // .useConfiguration('program', currentLocale)
-      new ProjectInformationField(field).init(state.data.columns).setValue(state.data)
+      new ProjectInformationField(field).init(state.data.columns, currentLocale, '').setValue(state.data)
     )
     .sort((a, b) => {
       if (!a.column) return 1
@@ -114,5 +103,7 @@ export const useProjectInformationReducer = (webPartContext: WebPartContext) => 
   return {
     state,
     dispatch
-  } as const
+  }
 }
+
+export * from './actions'
