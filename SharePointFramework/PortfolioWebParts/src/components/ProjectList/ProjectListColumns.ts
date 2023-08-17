@@ -1,29 +1,47 @@
 import * as strings from 'PortfolioWebPartsStrings'
-import { IColumn } from '@fluentui/react/lib/DetailsList'
 
-export const PROJECTLIST_COLUMNS: IColumn[] = [
+export const PROJECTLIST_COLUMNS: any[] = [
+  {
+    key: 'logo',
+    fieldName: 'logo',
+    name: '',
+    iconName: 'PictureCenter',
+    isIconOnly: true,
+    minWidth: 64,
+    idealWidth: 64
+  },
   {
     key: 'title',
     fieldName: 'title',
     name: strings.TitleLabel,
-    minWidth: 150
+    minWidth: 120,
+    idealWidth: 240
   },
   {
     key: 'phase',
     fieldName: 'phase',
     name: strings.PhaseLabel,
-    minWidth: 100
+    minWidth: 100,
+    idealWidth: 120
   },
   {
-    key: 'owner.text',
-    fieldName: 'owner.text',
+    key: 'owner',
+    fieldName: 'owner',
     name: strings.ProjectOwner,
-    minWidth: 100
+    minWidth: 120,
+    idealWidth: 180
   },
   {
-    key: 'manager.text',
-    fieldName: 'manager.text',
+    key: 'manager',
+    fieldName: 'manager',
     name: strings.ProjectManager,
-    minWidth: 100
+    minWidth: 120,
+    idealWidth: 180
+  },
+  {
+    key: 'actions',
+    fieldName: 'action',
+    minWidth: 40,
+    idealWidth: 40
   }
 ]

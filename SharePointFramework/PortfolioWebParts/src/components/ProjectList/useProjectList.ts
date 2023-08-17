@@ -26,12 +26,15 @@ export const useProjectList = (props: IProjectListProps) => {
    * @param column - Column
    */
   function onListSort(_evt: React.MouseEvent<any>, column: IColumn): void {
-    let isSortedDescending = column.isSortedDescending
-    if (column.isSorted) {
-      isSortedDescending = !isSortedDescending
+    if (column.key !== 'logo') {
+      let isSortedDescending = column.isSortedDescending
+      if (column.isSorted) {
+        isSortedDescending = !isSortedDescending
+      }
+      const newSort = { fieldName: column.fieldName, isSortedDescending }
+      setState({ sort: newSort })
     }
-    const newSort = { fieldName: column.fieldName, isSortedDescending }
-    setState({ sort: newSort })
+    return
   }
 
   /**

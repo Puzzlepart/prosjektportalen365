@@ -72,18 +72,36 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   calloutWidth: 430,
                   checked: this.properties.showRenderModeSelector
                 }),
+                PropertyFieldToggleWithCallout('showSortBy', {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'showSortByFieldId',
+                  label: 'Vis sorteringsknapp',
+                  calloutContent: React.createElement(
+                    'p',
+                    {},
+                    'Her kan du velge om sorteringsknappen skal vises eller ikke.'
+                  ),
+                  onText: strings.BooleanOn,
+                  offText: strings.BooleanOff,
+                  calloutWidth: 430,
+                  checked: this.properties.showSortBy
+                }),
                 PropertyFieldDropdownWithCallout('defaultRenderMode', {
                   calloutTrigger: CalloutTriggers.Hover,
                   key: 'defaultVerticalFieldId',
                   label: strings.DefaultRenderModeLabel,
                   options: [
                     {
+                      key: 'tiles',
+                      text: strings.RenderModeTilesText
+                    },
+                    {
                       key: 'list',
                       text: strings.RenderModeListText
                     },
                     {
-                      key: 'tiles',
-                      text: strings.RenderModeTilesText
+                      key: 'compactList',
+                      text: strings.RenderModeCompactListText
                     }
                   ],
                   selectedKey: this.properties.defaultRenderMode,
