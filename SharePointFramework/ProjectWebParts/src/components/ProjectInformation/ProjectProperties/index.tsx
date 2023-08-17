@@ -23,7 +23,7 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
             <PivotItem headerText={context.props.title}>
               <div className={styles.pivotItem}>
                 {properties.map((model, idx) => (
-                  <ProjectProperty key={idx} model={model} />
+                  <ProjectProperty key={idx} model={model} displayMode={DisplayMode.Read} />
                 ))}
               </div>
             </PivotItem>
