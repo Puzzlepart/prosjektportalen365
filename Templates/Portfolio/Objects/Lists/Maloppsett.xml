@@ -60,6 +60,7 @@
     <Field Type="Text" DisplayName="Malbibliotek" Description="Velg malbibliotek som skal brukes som kilde for maler som kan hentes inn til dokumentbibliotekene i prosjektet." MaxLength="255" ID="{02e86b34-2916-4010-afac-cf33eff03d54}" SourceID="{{listid:Maloppsett}}" StaticName="GtDocumentTemplateLibrary" Name="GtDocumentTemplateLibrary">
       <Default>Malbibliotek</Default>
     </Field>
+    <Field Type="Text" DisplayName="Feltkonfigurasjon" ID="{b97638c9-7116-4dbc-b0cc-850291e89008}" SourceID="{{listid:Maloppsett}}" StaticName="FieldConfigurationName" Name="FieldConfigurationName" />
   </pnp:Fields>
   <pnp:FieldRefs>
     <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" DisplayName="{resource:Lists_GtDescription_DisplayName}" />
