@@ -3,9 +3,9 @@ import { IProjectInformationData } from 'pp365-shared-library'
 import { CustomError } from 'pp365-shared-library/lib/models'
 import { IProgressDialogProps } from '../ProgressDialog/types'
 import {
-    IProjectInformationState,
-    ProjectInformationDialogType,
-    ProjectInformationPanelType
+  IProjectInformationState,
+  ProjectInformationDialogType,
+  ProjectInformationPanelType
 } from '../types'
 
 export const INIT_DATA = createAction<{

@@ -9,10 +9,10 @@ import { IProjectInformationProps } from './types'
 import { useProjectInformationDataFetch } from './useProjectInformationDataFetch'
 
 /**
- * Component logic hook for `ProjectInformation`. 
- * 
- * If the `SPDataAdapter` is configured, it will initialize the `ListLogger` with the `LogListName` 
- * from the `strings` resource file. It handles fetching the project data and setting the `state` 
+ * Component logic hook for `ProjectInformation`.
+ *
+ * If the `SPDataAdapter` is configured, it will initialize the `ListLogger` with the `LogListName`
+ * from the `strings` resource file. It handles fetching the project data and setting the `state`
  * using hooks `useProjectInformationDataFetch` and `useProjectInformationReducer`.
  *
  * @param props Props

@@ -15,6 +15,7 @@ import SPDataAdapter from '../../../data'
 import { useProjectInformationContext } from '../context'
 import { CLOSE_DIALOG, OPEN_DIALOG } from '../reducer'
 import { usePropertiesSync } from '../usePropertiesSync'
+import { ItemFieldValues } from 'pp365-shared-library'
 
 export const SyncProjectDialog: FC = () => {
   const context = useProjectInformationContext()
@@ -118,16 +119,16 @@ export const SyncProjectDialog: FC = () => {
 
       if (projectDataItem) {
         const item = projectDataList.items.getById(projectDataItem.Id)
-
         const [fieldValuesText, fieldValues] = await Promise.all([item.fieldValuesAsText(), item()])
-
         const itemProperties = await SPDataAdapter.getMappedProjectProperties(
-          fieldValues,
-          { ...fieldValuesText, Title: context.props.webTitle },
+          new ItemFieldValues(fieldValues, fieldValuesText),
           context.state.data.templateParameters,
           true
         )
-        setProjectData(itemProperties)
+        setProjectData({
+          ...itemProperties,
+          Title: context.props.webTitle
+        })
         setProjectDataId(projectDataItem.Id)
       }
 

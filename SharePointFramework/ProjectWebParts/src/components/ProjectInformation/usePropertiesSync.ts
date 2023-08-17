@@ -64,9 +64,9 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
     data = context.state.data,
     progressFunc: (progress: IProgressIndicatorProps) => void = () => null
   ) => {
-    const { fieldValues, fieldValuesText, templateParameters } = data
+    const { fieldValues, templateParameters } = data
     await SPDataAdapter.syncPropertyItemToHub(
-      { ...fieldValuesText, Title: context.props.webTitle },
+      context.props.webTitle,
       fieldValues,
       templateParameters,
       progressFunc

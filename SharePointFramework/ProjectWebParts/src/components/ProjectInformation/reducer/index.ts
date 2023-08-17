@@ -3,16 +3,26 @@ import { createReducer } from '@reduxjs/toolkit'
 import { ProjectInformationField } from 'pp365-shared-library/lib/models'
 import { useMemo, useReducer } from 'react'
 import { IProjectInformationState } from '../types'
-import { CLOSE_DIALOG, CLOSE_PANEL, FETCH_DATA_ERROR, INIT_DATA, OPEN_DIALOG, OPEN_PANEL, PROPERTIES_UPDATED, SET_PROGRESS, UPDATE_DATA } from './actions'
+import {
+  CLOSE_DIALOG,
+  CLOSE_PANEL,
+  FETCH_DATA_ERROR,
+  INIT_DATA,
+  OPEN_DIALOG,
+  OPEN_PANEL,
+  PROPERTIES_UPDATED,
+  SET_PROGRESS,
+  UPDATE_DATA
+} from './actions'
 
 /**
  * Initial state for the `ProjectInformation` component.
- * 
- * - `isDataLoaded` is `false` by default, and it will be set to 
+ *
+ * - `isDataLoaded` is `false` by default, and it will be set to
  * `true` when the data is loaded.
- * - `properties` is an empty array by default, and it will be 
+ * - `properties` is an empty array by default, and it will be
  * set to the project properties when the data is loaded.
- * - `data` consists of an empty array of sections and fields by default, 
+ * - `data` consists of an empty array of sections and fields by default,
  * and it will be set to the project data when the data is loaded.
  */
 const initialState: IProjectInformationState = {
@@ -31,7 +41,9 @@ function createProperties(state: IProjectInformationState, webPartContext: WebPa
   const currentLocale = webPartContext.pageContext.cultureInfo.currentUICultureName.toLowerCase()
   return state.data.fields
     .map((field) =>
-      new ProjectInformationField(field).init(state.data.columns, currentLocale, '').setValue(state.data)
+      new ProjectInformationField(field)
+        .init(state.data.columns, currentLocale, '')
+        .setValue(state.data)
     )
     .sort((a, b) => {
       if (!a.column) return 1
@@ -42,7 +54,7 @@ function createProperties(state: IProjectInformationState, webPartContext: WebPa
 
 /**
  * Create project information reducer.
- * 
+ *
  * @param webPartContext SPFx web part context
  */
 const createProjectInformationReducer = (webPartContext: WebPartContext) =>
@@ -94,7 +106,7 @@ const createProjectInformationReducer = (webPartContext: WebPartContext) =>
  * Hook to use project information reducer. This hook is used to
  * manage project information state using `useReducer` hook from
  * `react`.
- * 
+ *
  * @param webPartContext SPFx web part context
  */
 export const useProjectInformationReducer = (webPartContext: WebPartContext) => {
