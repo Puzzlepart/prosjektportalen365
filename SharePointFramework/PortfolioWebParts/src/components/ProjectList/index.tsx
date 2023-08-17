@@ -1,20 +1,21 @@
 import React, { FC } from 'react'
-import { IColumn, SelectionMode, ShimmeredDetailsList } from '@fluentui/react'
 import {
+  Button,
   FluentProvider,
   SelectTabData,
   Tab,
   TabList,
+  Tooltip,
   webLightTheme
 } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
 import { SearchBox } from '@fluentui/react-search-preview'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
-import { getObjectValue } from 'pp365-shared-library/lib/util/getObjectValue'
 import { find, isEmpty } from 'underscore'
 import { ProjectCard } from './ProjectCard'
 import { ProjectCardContext } from './ProjectCard/context'
+import { List } from './List'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
 import { ProjectListVerticals } from './ProjectListVerticals'
@@ -22,6 +23,8 @@ import { RenderModeDropdown } from './RenderModeDropdown'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
+import { TextSortAscendingRegular, TextSortDescendingRegular } from '@fluentui/react-icons'
+import { ListContext } from './List/context'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const {
@@ -43,6 +46,14 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   function renderProjects(projects: ProjectListModel[]) {
     switch (state.renderMode) {
       case 'tiles': {
+        props.columns.map((col) => {
+          col.isSorted = col.key === state.sort?.fieldName
+          if (col.isSorted) {
+            col.isSortedDescending = state.sort?.isSortedDescending
+          }
+          return col
+        })
+
         return projects.map((project, idx) => (
           <ProjectCardContext.Provider
             key={idx}
@@ -57,7 +68,10 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
           </ProjectCardContext.Provider>
         ))
       }
-      case 'list': {
+      case 'list':
+      case 'compactList': {
+        const size = state.renderMode === 'list' ? 'medium' : 'extra-small'
+
         const columns = props.columns.map((col) => {
           col.isSorted = col.key === state.sort?.fieldName
           if (col.isSorted) {
@@ -66,33 +80,19 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
           return col
         })
         return (
-          <ShimmeredDetailsList
-            enableShimmer={!state.isDataLoaded}
-            items={projects}
-            columns={columns}
-            onRenderItemColumn={onRenderItemColumn}
-            onColumnHeaderClick={onListSort}
-            selectionMode={SelectionMode.none}
-          />
+          <ListContext.Provider
+            value={{
+              ...props,
+              projects,
+              columns,
+              size
+            }}
+          >
+            <List />
+          </ListContext.Provider>
         )
       }
     }
-  }
-
-  /**
-   * On render item column
-   *
-   * @param project - Project
-   * @param _index - Index
-   * @param column - Column
-   */
-  function onRenderItemColumn(project: ProjectListModel, _index: number, column: IColumn) {
-    const colValue = getObjectValue(project, column.fieldName, null)
-    if (column.fieldName === 'title') {
-      if (project.isUserMember) return <a href={project.url}>{colValue}</a>
-      return <>{colValue}</>
-    }
-    return colValue
   }
 
   if (state.projects.length === 0) {
@@ -160,6 +160,36 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
               onOptionSelect={(renderAs) => setState({ renderMode: renderAs })}
             />
           </div>
+          <div hidden={!props.showSortBy || state.renderMode !== 'tiles'}>
+            <Tooltip
+              content={
+                <>
+                  Sorter flisene etter <strong>{props.sortBy}</strong>
+                </>
+              }
+              relationship={'description'}
+              withArrow
+            >
+              <Button
+                className={styles.sortBy}
+                appearance={'transparent'}
+                onClick={() =>
+                  onListSort(
+                    null,
+                    props.columns.find((c) => c.fieldName === 'title')
+                  )
+                }
+                size={'large'}
+                icon={
+                  state.sort?.isSortedDescending ? (
+                    <TextSortAscendingRegular />
+                  ) : (
+                    <TextSortDescendingRegular />
+                  )
+                }
+              />
+            </Tooltip>
+          </div>
         </div>
         {state.isDataLoaded && isEmpty(projects) && (
           <div className={styles.emptyMessage}>
@@ -187,6 +217,7 @@ ProjectList.defaultProps = {
   sortBy: 'Title',
   showSearchBox: true,
   showRenderModeSelector: true,
+  showSortBy: true,
   defaultRenderMode: 'tiles',
   defaultVertical: 'my_projects',
   verticals: ProjectListVerticals,

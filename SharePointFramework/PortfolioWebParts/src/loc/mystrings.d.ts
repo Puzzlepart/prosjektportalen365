@@ -176,6 +176,7 @@ declare interface IPortfolioWebPartsStrings {
   ProjectsAccessHeaderText: string
   ProjectsAccessSearchBoxPlaceholderText: string
   ProjectsListName: string
+  RenderModeCompactListText: string
   RenderModeListText: string
   RenderModeTilesText: string
   ResourceAllocationInfoText: string
