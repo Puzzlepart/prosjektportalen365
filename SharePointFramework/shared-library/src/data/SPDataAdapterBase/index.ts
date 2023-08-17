@@ -19,12 +19,12 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   public settings: T
 
   /**
-   * Portal data service instance
+   * An instance of `PortalDataService`
    */
   public portal: PortalDataService
 
   /**
-   * Entity service instance
+   * An instance of `SpEntityPortalService`
    */
   public entityService: SpEntityPortalService
 
