@@ -1,9 +1,5 @@
 import strings from 'ProjectWebPartsStrings'
-import {
-    ProjectColumnConfig,
-    SectionModel,
-    StatusReport
-} from 'pp365-shared-library/lib'
+import { ProjectColumnConfig, SectionModel, StatusReport } from 'pp365-shared-library/lib'
 import SPDataAdapter from '../../../data'
 import { DataFetchFunction } from '../../../types/DataFetchFunction'
 import { IProjectInformationContext } from '../context'

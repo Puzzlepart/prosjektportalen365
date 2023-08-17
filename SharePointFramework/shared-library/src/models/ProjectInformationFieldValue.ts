@@ -1,5 +1,5 @@
 import { stringIsNullOrEmpty } from '@pnp/core'
-import { IProjectInformationData } from '../services/ProjectDataService/types'
+import { ItemFieldValue, ItemFieldValues } from './ItemFieldValues'
 import { ProjectInformationField } from './ProjectInformationField'
 
 export class ProjectInformationFieldValue {
@@ -28,19 +28,21 @@ export class ProjectInformationFieldValue {
   }
 
   /**
-   * Parses the field value from `IGetPropertiesData`, and
+   * Parses the field value from `fieldValues`, and
    * returns a new `ProjectInformationFieldValue` instance.
    *
-   * @param data Properties data from `ProjectDataService.getProjectInformationData`
+   * @param fieldValues Field values from `IProjectInformationData`
    * @param field Field instance
    * @param currentValue Current value for the field if it's being edited
    */
   public static parse(
-    data: IProjectInformationData,
+    fieldValues: ItemFieldValues,
     field: ProjectInformationField,
     currentValue = null
   ) {
-    const value = data.fieldValues.get(field.internalName, { asObject: true })
-    return new ProjectInformationFieldValue(currentValue ?? value.valueAsText, value.value)
+    const { value, valueAsText } = fieldValues.get<ItemFieldValue>(field.internalName, {
+      asObject: true
+    })
+    return new ProjectInformationFieldValue(currentValue ?? valueAsText, value)
   }
 }

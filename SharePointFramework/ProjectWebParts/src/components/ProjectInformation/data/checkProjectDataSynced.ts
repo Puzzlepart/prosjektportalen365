@@ -8,9 +8,10 @@ import { IProjectInformationContext } from '../context'
  *
  * @param context Context for `ProjectInformation`
  */
-export const checkProjectDataSynced: DataFetchFunction<IProjectInformationContext, boolean> = async (
-  context
-) => {
+export const checkProjectDataSynced: DataFetchFunction<
+  IProjectInformationContext,
+  boolean
+> = async (context) => {
   try {
     let isSynced = false
     const projectDataList = SPDataAdapter.portal.web.lists.getByTitle(strings.IdeaProjectDataTitle)

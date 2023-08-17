@@ -14,6 +14,7 @@ export interface IProjectTemplateSPItem {
   IsAutoConfigurable?: boolean
   IconName?: string
   ListContentConfigLookupId?: number[]
+  FieldConfigurationName?: string
   File?: { UniqueId: string; Name: string; Title: string; ServerRelativeUrl: string }
   FieldValuesAsText?: Record<string, string>
   GtProjectTemplateId?: number
@@ -45,6 +46,7 @@ export class ProjectTemplate extends UserSelectableObject {
   public isForced: boolean = false
   public isLocked: boolean = false
   public templateLibraryUrl: string
+  public fieldConfiguration: string
   private _autoConfigurable: boolean = false
   private _projectContentType: string
   private _projectStatusContentType: string
@@ -71,6 +73,7 @@ export class ProjectTemplate extends UserSelectableObject {
     this.iconProps = { iconName: spItem.IconName }
     this.isDefaultExtensionsLocked = spItem?.IsDefaultExtensionsLocked
     this.isDefaultContentConfigLocked = spItem?.IsDefaultListContentLocked
+    this.fieldConfiguration = spItem?.FieldConfigurationName
     this.projectTemplateId = spItem.GtProjectTemplateId
     this.contentConfig = isArray(spItem.ListContentConfigLookupId)
       ? spItem.ListContentConfigLookupId

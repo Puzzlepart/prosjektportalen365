@@ -9,6 +9,11 @@ type GetFieldValueOptions<T = any> = {
   defaultValue?: T
 }
 
+type ItemFieldValuesData = {
+  fieldValues: Record<string, any>
+  fieldValuesAsText: Record<string, string>
+}
+
 export class ItemFieldValues {
   protected _values: Map<string, ItemFieldValue>
 
@@ -49,9 +54,23 @@ export class ItemFieldValues {
    */
   public get<T = any>(fieldName: string, options: GetFieldValueOptions<T> = {}): T {
     const { asText = false, asObject = false, defaultValue = null } = options
-    if (!this._values.has(fieldName)) return defaultValue
+    if (!this._values.has(fieldName)) {
+      if (asObject) return {} as unknown as T
+      return defaultValue
+    }
     if (asObject) return this._values.get(fieldName) as unknown as T
     if (asText) return this._values.get(fieldName).valueAsText as unknown as T
     return this._values.get(fieldName).value as unknown as T
+  }
+
+  /**
+   * Create an instance of `ItemFieldValues`.
+   *
+   * @param data Data to create the instance from (`fieldValues`, `fieldValuesAsText`)
+   *
+   * @returns an instance of `ItemFieldValues`
+   */
+  public static create(data: ItemFieldValuesData) {
+    return new ItemFieldValues(data.fieldValues, data.fieldValuesAsText)
   }
 }

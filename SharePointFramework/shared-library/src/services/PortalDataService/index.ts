@@ -11,6 +11,7 @@ import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
 import { createSpfiInstance, DefaultCaching } from '../../data'
 import { ISPContentType } from '../../interfaces'
 import {
+  IProjectTemplateSPItem,
   PortfolioOverviewView,
   ProjectAdminRole,
   ProjectColumn,
@@ -684,16 +685,22 @@ export class PortalDataService {
   }
 
   /**
-   * Get project template by name.
+   * Get project template by name. Using `DefaultCaching` by default.
    *
    * @param templateName Template name
    */
   public async getProjectTemplate(templateName: string): Promise<ProjectTemplate> {
-    const [item] = await this._getList('PROJECT_TEMPLATE_CONFIGURATION').items.filter(
-      `Title eq '${templateName}'`
-    )()
-    if (!item) return null
-    return new ProjectTemplate(item)
+    try {
+      const [spItem] = await this._getList('PROJECT_TEMPLATE_CONFIGURATION')
+        .items.select('*', 'FieldValuesAsText')
+        .expand('FieldValuesAsText')
+        .filter(`Title eq '${templateName}'`)
+        .using(DefaultCaching)<IProjectTemplateSPItem[]>()
+      if (!spItem) return null
+      return new ProjectTemplate(spItem)
+    } catch (error) {
+      return null
+    }
   }
 
   /**

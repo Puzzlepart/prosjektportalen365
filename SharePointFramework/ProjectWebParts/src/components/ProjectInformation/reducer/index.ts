@@ -43,7 +43,7 @@ function createProperties(state: IProjectInformationState, webPartContext: WebPa
     .map((field) =>
       new ProjectInformationField(field)
         .init(state.data.columns, currentLocale, '')
-        .setValue(state.data)
+        .setValue(state.data.fieldValues)
     )
     .sort((a, b) => {
       if (!a.column) return 1

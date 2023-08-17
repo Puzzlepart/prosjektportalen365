@@ -1,8 +1,8 @@
 import { IDropdownOption } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import _ from 'lodash'
-import { IProjectInformationData } from '../services/ProjectDataService/types'
 import { createFieldValueMap } from '../util'
+import { ItemFieldValues } from './ItemFieldValues'
 import { ProjectColumn } from './ProjectColumn'
 import { ProjectInformationFieldValue } from './ProjectInformationFieldValue'
 import { SPField } from './SPField'
@@ -58,16 +58,16 @@ export class ProjectInformationField {
    * - `value` - the text value for the field
    * - `$` - the value for the field
    *
-   * @param data Properties data from `ProjectDataService.getProjectInformationData`
+   * @param fieldValues Field values from `IProjectInformationData`
    * @param currentValue Optional current value for the field if it's being edited
    *
-   * @returns the field instance
+   * @returns the current field instance
    */
   public setValue(
-    data: IProjectInformationData,
+    fieldValues: ItemFieldValues,
     currentValue: string = null
   ): ProjectInformationField {
-    this._fieldValue = ProjectInformationFieldValue.parse(data, this, currentValue)
+    this._fieldValue = ProjectInformationFieldValue.parse(fieldValues, this, currentValue)
     return this
   }
 
@@ -77,10 +77,10 @@ export class ProjectInformationField {
    * If the field type is not found in the map the `text` property is used.
    */
   public getParsedValue<T>(): T {
-    const fieldValue = this._fieldValueMap.has(this.type)
-      ? this._fieldValueMap.get(this.type)(this._fieldValue)
-      : this._fieldValue.value
-    return fieldValue as unknown as T
+    if (this._fieldValueMap.has(this.type)) {
+      return this._fieldValueMap.get(this.type)(this._fieldValue) as unknown as T
+    }
+    return this._fieldValue.value as unknown as T
   }
 
   /**

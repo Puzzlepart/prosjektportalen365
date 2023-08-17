@@ -1,9 +1,10 @@
+/* eslint-disable quotes */
 import { format } from '@fluentui/react'
 import { AssignFrom, IPnPClientStore, PnPClientStorage, dateAdd } from '@pnp/core'
 import { ConsoleListener, Logger } from '@pnp/logging'
 import '@pnp/sp/presets/all'
 import { IWeb, SPFI, spfi } from '@pnp/sp/presets/all'
-import { DefaultCaching, createSpfiInstance } from '../../data'
+import { DefaultCaching, createSpfiInstance, getItemFieldValues } from '../../data'
 import {
   ChecklistItemModel,
   ItemFieldValues,
@@ -165,21 +166,12 @@ export class ProjectDataService {
       const fields = await ctx.list.fields
         .select(...getClassProperties(SPField))
         .filter(fieldsFilter)<SPField[]>()
-      const userFields = fields.filter((fld) => fld.TypeAsString.indexOf('User') === 0)
-      const [fieldValuesText, fieldValues] = await Promise.all([
-        ctx.item.fieldValuesAsText(),
-        ctx.item
-          .select(
-            '*',
-            ...userFields.map(({ InternalName }) => `${InternalName}/Id`),
-            ...userFields.map(({ InternalName }) => `${InternalName}/Title`),
-            ...userFields.map(({ InternalName }) => `${InternalName}/EMail`)
-          )
-          .expand(...userFields.map((fld) => fld.InternalName))()
-      ])
-
+      const userFields = fields
+        .filter((fld) => fld.TypeAsString.indexOf('User') === 0)
+        .map((fld) => fld.InternalName)
+      const fieldValues = await getItemFieldValues(ctx.item, userFields)
       const propertiesData: IProjectInformationData = {
-        fieldValues: new ItemFieldValues(fieldValues, fieldValuesText),
+        fieldValues,
         fields: this._mapFields(fields),
         versionHistoryUrl: '{0}/_layouts/15/versions.aspx?list={1}&ID={2}',
         propertiesListId: ctx.listId

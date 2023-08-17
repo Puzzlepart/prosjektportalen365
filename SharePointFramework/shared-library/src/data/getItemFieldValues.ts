@@ -11,8 +11,8 @@ import { ItemFieldValues } from '../models'
  * @returns an instance of `ItemFieldValues`
  */
 export async function getItemFieldValues(item: IItem, userFields: string[] = []) {
-  const [fieldValuesText, fieldValues] = await Promise.all([
-    item.fieldValuesAsText(),
+  const [fieldValuesAsText, fieldValues] = await Promise.all([
+    item.fieldValuesAsText<Record<string, string>>(),
     item
       .select(
         '*',
@@ -20,7 +20,7 @@ export async function getItemFieldValues(item: IItem, userFields: string[] = [])
         ...userFields.map((fieldName) => `${fieldName}/Title`),
         ...userFields.map((fieldName) => `${fieldName}/EMail`)
       )
-      .expand(...userFields)()
+      .expand(...userFields)<Record<string, any>>()
   ])
-  return ItemFieldValues.create(fieldValues, fieldValuesText)
+  return ItemFieldValues.create({ fieldValues, fieldValuesAsText })
 }
