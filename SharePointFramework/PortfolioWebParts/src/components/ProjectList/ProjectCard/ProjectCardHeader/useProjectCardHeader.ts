@@ -22,7 +22,11 @@ export function useProjectCardHeader() {
       position: context.showProjectLogo ? 'absolute' : 'relative',
       padding: context.showProjectLogo ? '0 12px' : '12px',
       paddingBottom: context.showProjectLogo ? '12px' : '16px',
-      width: context.showProjectLogo ? '216px' : context.shouldDisplay('ProjectPhase') ? '178px' : '216px'
+      width: context.showProjectLogo
+        ? '216px'
+        : context.shouldDisplay('ProjectPhase')
+        ? '178px'
+        : '216px'
     }
   }
 

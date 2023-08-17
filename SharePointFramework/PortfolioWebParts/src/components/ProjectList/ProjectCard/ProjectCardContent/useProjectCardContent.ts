@@ -31,6 +31,6 @@ export function useProjectCardContent() {
           children: type,
           type: 'Prosjekttype'
         }
-      }),
+      })
   } as const
 }

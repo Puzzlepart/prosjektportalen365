@@ -3,8 +3,7 @@ import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import { createContext } from 'react'
 import { IProjectListProps } from '../types'
 
-export interface IProjectCardContext
-  extends IProjectListProps {
+export interface IProjectCardContext extends IProjectListProps {
   /**
    * Project model
    */
@@ -20,11 +19,10 @@ export interface IProjectCardContext
    */
   isDataLoaded?: boolean
 
-
   /**
    * Checks if the metadata with the given key should be displayed
    */
-  shouldDisplay?: (key: string)=> boolean
+  shouldDisplay?: (key: string) => boolean
 }
 
 export const ProjectCardContext = createContext<IProjectCardContext>(null)

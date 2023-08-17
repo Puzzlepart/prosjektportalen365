@@ -113,7 +113,7 @@ export const useProjectList = (props: IProjectListProps) => {
 
   /**
    * Create card context for the provided project.
-   * 
+   *
    * @param project Project to create context for
    */
   function createCardContext(project: ProjectListModel): IProjectCardContext {

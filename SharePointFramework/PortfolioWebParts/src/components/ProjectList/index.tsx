@@ -44,10 +44,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     switch (state.renderMode) {
       case 'tiles': {
         return projects.map((project, idx) => (
-          <ProjectCardContext.Provider
-            key={idx}
-            value={createCardContext(project)}
-          >
+          <ProjectCardContext.Provider key={idx} value={createCardContext(project)}>
             <ProjectCard />
           </ProjectCardContext.Provider>
         ))

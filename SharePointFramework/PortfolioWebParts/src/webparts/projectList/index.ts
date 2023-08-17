@@ -150,7 +150,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                     },
                     {
                       key: 'ProjectServiceArea',
-                      text:strings.ProjectServiceArea
+                      text: strings.ProjectServiceArea
                     },
                     {
                       key: 'ProjectType',

@@ -13,7 +13,7 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
     <>
       <CardPreview className={styles.preview}>
         {showCustomImage && (
-          <div {...headerProps} >
+          <div {...headerProps}>
             <Link href={context.project.url} target={'_blank'} className={styles.link}>
               <Text
                 className={styles.projectTitle}
@@ -52,7 +52,10 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
                 initials={context.project.title}
               />
               <img
-                src={context.project.logo ?? `${context.project.url}/_api/siteiconmanager/getsitelogo?type='1'`}
+                src={
+                  context.project.logo ??
+                  `${context.project.url}/_api/siteiconmanager/getsitelogo?type='1'`
+                }
                 style={{
                   WebkitMask: 'linear-gradient(white 50%, transparent)',
                   display: !showCustomImage ? 'none' : 'block'
@@ -62,7 +65,9 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
                   props.onImageLoad
                   setShowCustomImage(
                     (image.target as HTMLImageElement).naturalHeight !== 648
-                      ? (image.target as HTMLImageElement).naturalHeight !== 96 ? true : false
+                      ? (image.target as HTMLImageElement).naturalHeight !== 96
+                        ? true
+                        : false
                       : false
                   )
                 }}
