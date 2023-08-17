@@ -9,13 +9,13 @@ import {
   SpinnerSize
 } from '@fluentui/react'
 import { Logger, LogLevel } from '@pnp/logging'
+import { getItemFieldValues } from 'pp365-shared-library'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC, useEffect, useState } from 'react'
 import SPDataAdapter from '../../../data'
 import { useProjectInformationContext } from '../context'
 import { CLOSE_DIALOG, OPEN_DIALOG } from '../reducer'
 import { usePropertiesSync } from '../usePropertiesSync'
-import { ItemFieldValues } from 'pp365-shared-library'
 
 export const SyncProjectDialog: FC = () => {
   const context = useProjectInformationContext()
@@ -119,9 +119,9 @@ export const SyncProjectDialog: FC = () => {
 
       if (projectDataItem) {
         const item = projectDataList.items.getById(projectDataItem.Id)
-        const [fieldValuesText, fieldValues] = await Promise.all([item.fieldValuesAsText(), item()])
+        const fieldValues = await getItemFieldValues(item)
         const itemProperties = await SPDataAdapter.getMappedProjectProperties(
-          new ItemFieldValues(fieldValues, fieldValuesText),
+          fieldValues,
           context.state.data.templateParameters,
           true
         )
