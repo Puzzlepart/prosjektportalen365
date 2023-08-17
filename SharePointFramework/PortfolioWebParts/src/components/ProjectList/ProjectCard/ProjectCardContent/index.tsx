@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useContext } from 'react'
 import styles from './ProjectCardContent.module.scss'
 import { useProjectCardContent } from './useProjectCardContent'
 import _ from 'underscore'
@@ -15,9 +15,11 @@ import {
   useIsOverflowItemVisible,
   useOverflowMenu
 } from '@fluentui/react-components'
+import { ProjectCardContext } from '../context'
 
 export const ProjectCardContent: FC = () => {
-  const { serviceArea, type, showProjectServiceArea, showProjectType } = useProjectCardContent()
+  const context = useContext(ProjectCardContext)
+  const { serviceArea, type } = useProjectCardContent()
 
   type OverflowMenuItemProps = {
     tag: InteractionTagProps
@@ -75,7 +77,7 @@ export const ProjectCardContent: FC = () => {
 
   return (
     <div className={styles.content}>
-      <div className={styles.serviceArea} hidden={!showProjectServiceArea}>
+      <div className={styles.serviceArea} hidden={!context.shouldDisplay('ProjectServiceArea')}>
         {!_.isEmpty(serviceArea) && (
           <Overflow minimumVisible={1} padding={12}>
             <TagGroup className={styles.tagGroup} size={'small'}>
@@ -98,7 +100,7 @@ export const ProjectCardContent: FC = () => {
           </Overflow>
         )}
       </div>
-      <div className={styles.type} hidden={!showProjectType}>
+      <div className={styles.type} hidden={!context.shouldDisplay('ProjectType')}>
         {!_.isEmpty(type) && (
           <Overflow minimumVisible={1} padding={12}>
             <TagGroup className={styles.tagGroup} size={'small'}>

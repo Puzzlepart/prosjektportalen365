@@ -2,7 +2,6 @@ import React, { HTMLProps, useContext } from 'react'
 import useImageColor from 'use-image-color'
 import { ProjectCardContext } from '../context'
 import styles from './ProjectCardHeader.module.scss'
-import _ from 'underscore'
 
 export function useProjectCardHeader() {
   const context = useContext(ProjectCardContext)
@@ -23,7 +22,7 @@ export function useProjectCardHeader() {
       position: context.showProjectLogo ? 'absolute' : 'relative',
       padding: context.showProjectLogo ? '0 12px' : '12px',
       paddingBottom: context.showProjectLogo ? '12px' : '16px',
-      width: context.showProjectLogo ? '216px' : _.contains(context.projectMetadata, 'ProjectPhase') ? '178px' : '216px'
+      width: context.showProjectLogo ? '216px' : context.shouldDisplay('ProjectPhase') ? '178px' : '216px'
     }
   }
 

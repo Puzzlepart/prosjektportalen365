@@ -1,13 +1,14 @@
 /* eslint-disable prefer-spread */
 import { format, IColumn } from '@fluentui/react'
+import { ButtonProps } from '@fluentui/react-components'
+import { SearchBoxProps } from '@fluentui/react-search-preview'
+import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import { sortAlphabetically } from 'pp365-shared-library/lib/util/sortAlphabetically'
 import _ from 'underscore'
+import { IProjectCardContext } from './ProjectCard/context'
 import { IProjectListProps } from './types'
 import { useProjectListDataFetch } from './useProjectListDataFetch'
 import { useProjectListState } from './useProjectListState'
-import { ProjectListModel } from 'pp365-shared-library/lib/models'
-import { SearchBoxProps } from '@fluentui/react-search-preview'
-import { ButtonProps } from '@fluentui/react-components'
 
 /**
  * Component logic hook for `ProjectList`. This hook is responsible for
@@ -110,17 +111,33 @@ export const useProjectList = (props: IProjectListProps) => {
 
   useProjectListDataFetch(props, verticals, setState)
 
+  /**
+   * Create card context for the provided project.
+   * 
+   * @param project Project to create context for
+   */
+  function createCardContext(project: ProjectListModel): IProjectCardContext {
+    const shouldDisplay = (key: string) => _.contains(props.projectMetadata, key)
+    return {
+      ...props,
+      project,
+      actions: getCardActions(project),
+      isDataLoaded: state.isDataLoaded,
+      shouldDisplay
+    }
+  }
+
   return {
     state,
     setState,
     projects,
     verticals,
-    getCardActions,
     searchBoxPlaceholder:
       !state.isDataLoaded || _.isEmpty(state.projects)
         ? ''
         : format(state.selectedVertical.searchBoxPlaceholder, projects.length),
     onListSort,
-    onSearch
-  } as const
+    onSearch,
+    createCardContext
+  }
 }

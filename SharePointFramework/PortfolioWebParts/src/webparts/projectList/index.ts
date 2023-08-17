@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
@@ -135,20 +136,32 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   checked: this.properties.useDynamicColors,
                   disabled: !this.properties.showProjectLogo
                 }),
-                PropertyPaneToggle('showProjectOwner', {
-                  label: strings.ShowProjectOwnerFieldLabel
-                }),
-                PropertyPaneToggle('showProjectManager', {
-                  label: strings.ShowProjectManagerFieldLabel
-                }),
-                PropertyPaneToggle('showProjectServiceArea', {
-                  label: 'Vis tjenesteområder'
-                }),
-                PropertyPaneToggle('showProjectType', {
-                  label: 'Vis prosjekttype'
-                }),
-                PropertyPaneToggle('showProjectPhase', {
-                  label: 'Vis prosjektfase'
+                PropertyFieldMultiSelect('projectMetadata', {
+                  key: 'projectMetadata',
+                  label: strings.ProjectMetadataFieldLabel,
+                  options: [
+                    {
+                      key: 'ProjectOwner',
+                      text: strings.ProjectOwner
+                    },
+                    {
+                      key: 'ProjectManager',
+                      text: strings.ProjectManager
+                    },
+                    {
+                      key: 'ProjectServiceArea',
+                      text:strings.ProjectServiceArea
+                    },
+                    {
+                      key: 'ProjectType',
+                      text: strings.ProjectType
+                    },
+                    {
+                      key: 'ProjectPhase',
+                      text: strings.PhaseLabel
+                    }
+                  ],
+                  selectedKeys: this.properties.projectMetadata ?? []
                 })
               ]
             }

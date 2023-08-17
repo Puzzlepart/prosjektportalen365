@@ -63,7 +63,7 @@ export const ProjectCardFooter: FC = () => {
   const Persona = () => {
     return (
       <div className={styles.persona}>
-        <div hidden={!context.showProjectOwner}>
+        <div hidden={!context.shouldDisplay('ProjectOwner')}>
           <Tooltip
             content={
               <>
@@ -76,7 +76,7 @@ export const ProjectCardFooter: FC = () => {
             <Avatar className={styles.avatar} {...owner} />
           </Tooltip>
         </div>
-        <div hidden={!context.showProjectManager}>
+        <div hidden={!context.shouldDisplay('ProjectManager')}>
           <Tooltip
             content={
               <>

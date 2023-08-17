@@ -208,8 +208,6 @@ define([], function () {
     ShowHideColumnsLabel: 'Show/hide columns',
     ShowProgramViewsLabel: 'Show program views',
     ShowProjectLogoFieldLabel: 'Show logo',
-    ShowProjectManagerFieldLabel: 'Show project manager',
-    ShowProjectOwnerFieldLabel: 'Show project owner',
     ShowRenderModeSelectorLabel: 'Show view selector',
     ShowSearchBoxLabel: 'Show search box',
     ShowViewSelectorLabel: 'Show view selector',

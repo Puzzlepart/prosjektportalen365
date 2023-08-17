@@ -29,10 +29,10 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     setState,
     projects,
     verticals,
-    getCardActions,
     onListSort,
     onSearch,
-    searchBoxPlaceholder
+    searchBoxPlaceholder,
+    createCardContext
   } = useProjectList(props)
 
   /**
@@ -46,12 +46,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         return projects.map((project, idx) => (
           <ProjectCardContext.Provider
             key={idx}
-            value={{
-              ...props,
-              project,
-              actions: getCardActions(project),
-              isDataLoaded: state.isDataLoaded
-            }}
+            value={createCardContext(project)}
           >
             <ProjectCard />
           </ProjectCardContext.Provider>
@@ -192,11 +187,13 @@ ProjectList.defaultProps = {
   verticals: ProjectListVerticals,
   hideVerticals: [],
   showProjectLogo: true,
-  showProjectOwner: true,
-  showProjectManager: true,
-  showProjectServiceArea: true,
-  showProjectType: true,
-  showProjectPhase: true
+  projectMetadata: [
+    'ProjectOwner',
+    'ProjectManager',
+    'ProjectServiceArea',
+    'ProjectType',
+    'ProjectPhase'
+  ]
 }
 
 export * from './types'
