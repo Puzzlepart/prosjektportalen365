@@ -3,7 +3,6 @@ import { IProjectSetupData } from 'projectSetup'
 import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { SPField } from 'pp365-shared-library/lib/models/SPField'
-import { IPlannerTaskSPItem, ContentConfig, ContentConfigType } from '../../../models'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
 import {
@@ -20,6 +19,8 @@ import '@pnp/sp/lists'
 import '@pnp/sp/items'
 import '@pnp/sp/batching'
 import { createBatch } from '@pnp/sp/batching'
+import { ContentConfig, ContentConfigType } from 'pp365-shared-library'
+import { IPlannerTaskSPItem } from './types'
 
 export class CopyListData extends BaseTask {
   constructor(data: IProjectSetupData) {

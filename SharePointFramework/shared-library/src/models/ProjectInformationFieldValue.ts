@@ -40,8 +40,7 @@ export class ProjectInformationFieldValue {
     field: ProjectInformationField,
     currentValue = null
   ) {
-    const textValue = currentValue ?? data.fieldValuesText[field.internalName]
-    const value = data.fieldValues[field.internalName]
-    return new ProjectInformationFieldValue(textValue, value)
+    const value = data.fieldValues.get(field.internalName, { asObject: true })
+    return new ProjectInformationFieldValue(currentValue ?? value.valueAsText, value.value)
   }
 }

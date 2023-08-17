@@ -2,7 +2,7 @@ import { LogLevel } from '@pnp/logging'
 import { IItem } from '@pnp/sp/items'
 import { IList } from '@pnp/sp/lists'
 import { SpEntityPortalService } from 'sp-entityportal-service'
-import { SPField } from '../../models'
+import { ItemFieldValues, SPField } from '../../models'
 import { SPFxContext } from '../../types'
 
 /**
@@ -15,14 +15,9 @@ export interface IProjectInformationData {
   versionHistoryUrl?: string
 
   /**
-   * Field values - all fields in complex format
+   * Field values for the list item
    */
-  fieldValues?: Record<string, any>
-
-  /**
-   * Field values as text - all field values in string format
-   */
-  fieldValuesText?: Record<string, string>
+  fieldValues?: ItemFieldValues
 
   /**
    * Fields for the list

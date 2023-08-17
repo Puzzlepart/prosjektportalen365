@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { find } from '@microsoft/sp-lodash-subset'
 import { AssignFrom, dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
 import { Logger, LogLevel } from '@pnp/logging'
@@ -16,6 +15,7 @@ import {
   ProjectAdminRole,
   ProjectColumn,
   ProjectColumnConfig,
+  ProjectTemplate,
   SectionModel,
   SPField,
   SPPortfolioOverviewViewItem,
@@ -29,10 +29,10 @@ import { getClassProperties, makeUrlAbsolute, transformFieldXml } from '../../ut
 import {
   GetStatusReportsOptions,
   IPortalDataServiceConfiguration,
+  ISyncListReturnType,
   PortalDataServiceDefaultConfiguration,
   PortalDataServiceList,
-  SyncListParams,
-  ISyncListReturnType
+  SyncListParams
 } from './types'
 
 export class PortalDataService {
@@ -669,8 +669,7 @@ export class PortalDataService {
    * Get project admin roles
    */
   public async getProjectAdminRoles(): Promise<ProjectAdminRole[]> {
-    const spItems = await this.web.lists
-      .getByTitle(this._configuration.listNames.PROJECT_ADMIN_ROLES)
+    const spItems = await this._getList('PROJECT_ADMIN_ROLES')
       .items.select(
         'ContentTypeId',
         'Id',
@@ -682,6 +681,19 @@ export class PortalDataService {
       )
       .expand('GtProjectAdminPermissions')<SPProjectAdminRoleItem[]>()
     return spItems.map((item) => new ProjectAdminRole(item))
+  }
+
+  /**
+   * Get project template by name.
+   *
+   * @param templateName Template name
+   */
+  public async getProjectTemplate(templateName: string): Promise<ProjectTemplate> {
+    const [item] = await this._getList('PROJECT_TEMPLATE_CONFIGURATION').items.filter(
+      `Title eq '${templateName}'`
+    )()
+    if (!item) return null
+    return new ProjectTemplate(item)
   }
 
   /**

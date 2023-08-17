@@ -9,9 +9,15 @@ import { format, getId } from '@uifabric/utilities'
 import * as strings from 'ProjectExtensionsStrings'
 import { SPDataAdapter } from 'data'
 import { default as MSGraphHelper } from 'msgraph-helper'
-import { createSpfiInstance } from 'pp365-shared-library/lib/data/createSpfiInstance'
-import { ListLogger } from 'pp365-shared-library/lib/logging'
-import { PortalDataService } from 'pp365-shared-library/lib/services'
+import {
+  ContentConfig,
+  ListLogger,
+  PortalDataService,
+  ProjectExtension,
+  ProjectTemplate,
+  ProjectTemplateFile,
+  createSpfiInstance
+} from 'pp365-shared-library'
 import { createElement } from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import { find, uniq } from 'underscore'
@@ -24,7 +30,6 @@ import {
   ProgressDialog,
   TemplateSelectDialog
 } from '../components'
-import { ContentConfig, ProjectExtension, ProjectTemplate, ProjectTemplateFile } from '../models'
 import { ProjectSetupError } from './ProjectSetupError'
 import { deleteCustomizer } from './deleteCustomizer'
 import * as Tasks from './tasks'

@@ -1,5 +1,5 @@
 import { IDetailsRowProps } from '@fluentui/react'
-import { ContentConfig } from 'models'
+import { ContentConfig } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
 import React, { useContext } from 'react'
 import { MandatoryCheck } from '../MandatoryCheck'

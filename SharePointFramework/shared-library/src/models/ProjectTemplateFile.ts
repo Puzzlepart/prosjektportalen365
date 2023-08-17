@@ -1,4 +1,4 @@
-import { IProjectTemplateSPItem } from 'models'
+import { IProjectTemplateSPItem } from './ProjectTemplate'
 
 /**
  * @model ProjectTemplateFile

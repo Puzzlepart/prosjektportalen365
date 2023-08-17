@@ -1,9 +1,9 @@
 import { IDetailsRowProps } from '@fluentui/react'
-import { ProjectExtension } from 'models'
 import strings from 'ProjectExtensionsStrings'
 import React, { useContext } from 'react'
 import { MandatoryCheck } from '../MandatoryCheck'
 import { TemplateSelectDialogContext } from '../context'
+import { ProjectExtension } from 'pp365-shared-library'
 
 /**
  * Row renderer hook for `ExtensionsSection`. Returns an instance of

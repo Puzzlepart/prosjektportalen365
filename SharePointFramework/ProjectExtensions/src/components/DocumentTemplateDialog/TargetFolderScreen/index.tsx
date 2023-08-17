@@ -10,7 +10,7 @@ import {
 } from '@fluentui/react'
 import { InfoMessage } from 'components/InfoMessage'
 import { SPDataAdapter } from 'data'
-import { SPFolder } from 'models'
+import { SPFolder } from 'pp365-shared-library'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { FC, useContext, useEffect, useState } from 'react'
 import { TemplateSelectorContext } from '../../../templateSelector/context'

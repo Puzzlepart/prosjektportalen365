@@ -83,7 +83,9 @@ export class SetupProjectInformation extends BaseTask {
    *
    * @param params Params
    */
-  private _createPropertiesItem(params: IBaseTaskParams): Record<string, string | boolean | number> {
+  private _createPropertiesItem(
+    params: IBaseTaskParams
+  ): Record<string, string | boolean | number> {
     return {
       Title: params.context.pageContext.web.title,
       GtIsProgram: this.data.selectedTemplate.isProgram,

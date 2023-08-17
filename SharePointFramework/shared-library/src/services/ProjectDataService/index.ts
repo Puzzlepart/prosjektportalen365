@@ -6,6 +6,7 @@ import { IWeb, SPFI, spfi } from '@pnp/sp/presets/all'
 import { DefaultCaching, createSpfiInstance } from '../../data'
 import {
   ChecklistItemModel,
+  ItemFieldValues,
   ProjectPhaseChecklistData,
   ProjectPhaseModel,
   SPField
@@ -156,7 +157,7 @@ export class ProjectDataService {
    * corrupt data.
    */
   private async _getLocalProjectInformationItem(
-    fieldsFilter = 'substringof(\'Gt\', InternalName)'
+    fieldsFilter = "substringof('Gt', InternalName)"
   ): Promise<IProjectInformationData> {
     try {
       const ctx = await this._getLocalProjectInformationItemContext()
@@ -178,8 +179,7 @@ export class ProjectDataService {
       ])
 
       const propertiesData: IProjectInformationData = {
-        fieldValuesText,
-        fieldValues,
+        fieldValues: new ItemFieldValues(fieldValues, fieldValuesText),
         fields: this._mapFields(fields),
         versionHistoryUrl: '{0}/_layouts/15/versions.aspx?list={1}&ID={2}',
         propertiesListId: ctx.listId
@@ -209,15 +209,19 @@ export class ProjectDataService {
    * - `templateParameters`: Template parameters
    */
   public async getProjectInformationData(): Promise<IProjectInformationData> {
+    let data: IProjectInformationData = null
     const item = await this._getLocalProjectInformationItem()
     if (item) {
-      const templateParameters = tryParseJson(item.fieldValuesText.TemplateParameters, {})
+      const templateParameters = tryParseJson(
+        item.fieldValues.get('TemplateParameters', { asText: true }),
+        {}
+      )
       this._logInfo('Local property item found.', 'getPropertiesData')
-      return {
+      data = {
         ...item,
         propertiesListId: item.propertiesListId,
         templateParameters
-      } as IProjectInformationData
+      }
     } else {
       this._logInfo(
         'Local property item not found. Retrieving data from portal site.',
@@ -227,15 +231,15 @@ export class ProjectDataService {
         this._params.siteId,
         this._params.webUrl
       )
-      return {
-        fieldValues: entity.fieldValues,
-        fieldValuesText: entity.fieldValues,
-        fields: entity.fields,
+      data = {
+        fieldValues: new ItemFieldValues(entity.fieldValues, {}),
+        fields: entity.fields as any[],
         propertiesListId: null,
         templateParameters: {},
         ...entity.urls
-      } as IProjectInformationData
+      }
     }
+    return data
   }
 
   /**
@@ -246,7 +250,7 @@ export class ProjectDataService {
   public async getPropertiesLastUpdated(data: IProjectInformationData): Promise<number> {
     const { Modified } = await this.web.lists
       .getById(data.propertiesListId)
-      .items.getById(data.fieldValues.Id)
+      .items.getById(data.fieldValues.get('Id'))
       .select('Modified')<{ Modified: string }>()
     return (new Date().getTime() - new Date(Modified).getTime()) / 1000
   }
@@ -319,7 +323,7 @@ export class ProjectDataService {
   public async getCurrentPhaseName(phaseField: string): Promise<string> {
     try {
       const propertiesData = await this.getProjectInformationData()
-      return propertiesData.fieldValuesText[phaseField]
+      return propertiesData.fieldValues.get(phaseField, { asText: true })
     } catch (error) {
       throw new Error()
     }
