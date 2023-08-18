@@ -15,16 +15,19 @@ export interface ILatestProjectsProps extends IBaseComponentProps {
    * Number of items to show
    */
   rowLimit: number
-}
-
-export interface ILatestProjectsState {
-  /**
-   * Whether the component is loading
-   */
-  loading: boolean
 
   /**
-   * Projects
+   * Min number of items to show
    */
-  projects: any[]
+  minRowLimit?: number
+
+  /**
+   * Max number of items to show
+   */
+  maxRowLimit: number
+
+  /**
+   * Open project sites in a new tab
+   */
+  openInNewTab: boolean
 }

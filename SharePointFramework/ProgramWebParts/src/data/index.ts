@@ -478,10 +478,11 @@ export class SPDataAdapter
 
   public async fetchProjectSites(
     rowLimit: number,
-    sortProperty: string,
+    sortProperty: 'Created' | 'Title',
     sortDirection: SortDirection
   ): Promise<ISearchResult[]> {
-    const response = await this.sp.search({
+    const hubSiteId = this.spfxContext.pageContext.legacyPageContext.hubSiteId
+    const { PrimarySearchResults } = await this.sp.search({
       Querytext: `DepartmentId:{${this.spfxContext.pageContext.legacyPageContext.hubSiteId}} contentclass:STS_Site`,
       TrimDuplicates: false,
       RowLimit: rowLimit,
@@ -502,9 +503,7 @@ export class SPDataAdapter
         }
       ]
     })
-    return response.PrimarySearchResults.filter(
-      (site) => this.spfxContext.pageContext.legacyPageContext.hubSiteId !== site['SiteId']
-    )
+    return PrimarySearchResults.filter((site) => hubSiteId !== site['SiteId'])
   }
 
   /**

@@ -1,7 +1,8 @@
 import {
   IPropertyPaneConfiguration,
   PropertyPaneSlider,
-  PropertyPaneTextField
+  PropertyPaneTextField,
+  PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { ILatestProjectsProps, LatestProjects } from 'components/LatestProjects'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -34,9 +35,12 @@ export default class LatestProjectsWebPart extends BasePortfolioWebPart<ILatestP
                 }),
                 PropertyPaneSlider('rowLimit', {
                   label: strings.RowLimitLabel,
-                  min: 5,
-                  max: 15,
+                  min: LatestProjects.defaultProps.minRowLimit,
+                  max: LatestProjects.defaultProps.maxRowLimit,
                   step: 1
+                }),
+                PropertyPaneToggle('openInNewTab', {
+                  label: strings.OpenInNewTabLabel
                 })
               ]
             }

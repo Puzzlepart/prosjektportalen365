@@ -487,11 +487,11 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
   public async fetchProjectSites(
     rowLimit: number,
-    sortProperty: string,
+    sortProperty: 'Created' | 'Title',
     sortDirection: SortDirection
   ): Promise<ISearchResult[]> {
     const hubSiteId = this._spfxContext.pageContext.legacyPageContext.hubSiteId
-    const response = await this._sp.search({
+    const { PrimarySearchResults } = await this._sp.search({
       Querytext: `DepartmentId:{${hubSiteId}} contentclass:STS_Site`,
       TrimDuplicates: false,
       RowLimit: rowLimit,
@@ -512,7 +512,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         }
       ]
     })
-    return response.PrimarySearchResults.filter((site) => hubSiteId !== site['SiteId'])
+    return PrimarySearchResults.filter((site) => hubSiteId !== site['SiteId'])
   }
 
   /**

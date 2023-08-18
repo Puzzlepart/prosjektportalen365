@@ -248,9 +248,9 @@ export interface IPortfolioWebPartsDataAdapter {
    */
   fetchProjectSites(
     rowLimit: number,
-    sortProperty: string,
+    sortProperty: 'Created' | 'Title',
     sortDirection: SortDirection
-  ): Promise<any>
+  ): Promise<ISearchResult[]>
 
   /**
    * Fetch items with data source name. If the data source is a benefit overview,

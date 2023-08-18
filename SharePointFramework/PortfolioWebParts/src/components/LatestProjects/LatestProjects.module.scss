@@ -1,14 +1,8 @@
-@import '~@fluentui/react/dist/sass/References.scss';
-
 .root {
-  .title {
-    @include ms-font-xl;
-    color: "[theme: themePrimary, default: #0078d4]";
-    cursor: pointer;
-  }  
   .container {
     padding: 5px;
     margin: 3px 0 0 0;
+
     .projectItem {
       padding: 15px 2px;
       border-bottom: 1px solid rgb(234, 234, 234);
@@ -18,33 +12,11 @@
         box-sizing: border-box;
         overflow: hidden;
         position: relative;
-
-        .created {
-          color: "[theme: themeTertiary, default: #444444]";
-          font-size: 12px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          width: 100%;
-          line-height: 1.4;
-          text-decoration: none;
-          word-break: break-word;
-          margin: 0 0 2px 0;
-          font-weight: 600;
-        }
-
-        a {
-          color: rgb(51, 51, 51);
-          font-size: 15px;
-          font-weight: 600;
-          display: inline-block;
-          width: 100%;
-          text-decoration: none;
-          word-break: break-word;
-          padding: 0 0 4px 0;
-          margin: 3px 0 0 0;
-        }
       }
+    }
+
+    .actions {
+      margin: 15px 0 0 0;
     }
   }
 }

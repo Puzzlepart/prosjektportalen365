@@ -1,4 +1,7 @@
 declare interface IPortfolioWebPartsStrings {
+  ViewLessText: string
+  ViewMoreText: string
+  OpenInNewTabLabel: string
   ErrorBoundaryFallbackText: string
   ErrorBoundaryFallbackDescription: string
   ProjectServiceArea: string

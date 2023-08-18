@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    ViewLessText: 'Vis færre',
+    ViewMoreText: 'Vis flere',
+    OpenInNewTabLabel: 'Åpne prosjektområder i ny fane',
     ErrorBoundaryFallbackText: 'Det oppstod en feil under lasting av {0}.',
     ErrorBoundaryFallbackDescription: 'Feildetaljer:',
     ProjectServiceArea: 'Tjenesteområder',
