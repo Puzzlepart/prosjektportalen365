@@ -17,11 +17,34 @@ export enum ProjectAdminRoleType {
 }
 
 export class ProjectAdminRole {
+  /**
+   * The unique identifier of the role (GUID)
+   */
   public id: number
+
+  /**
+   * The title of the role.
+   */
   public title: string
+
+  /**
+   * The name of the SharePoint group.
+   */
   public groupName: string
+
+  /**
+   * The level of the group. Can be 'Prosjekt' or 'Portefølje'.
+   */
   public groupLevel: string
+
+  /**
+   * The name of the field on the project that contains the user id.
+   */
   public projectFieldName: string
+
+  /**
+   * The permissions the role has.
+   */
   public permissions: string[] = []
 
   /**

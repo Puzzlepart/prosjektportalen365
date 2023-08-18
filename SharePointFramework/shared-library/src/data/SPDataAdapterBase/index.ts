@@ -152,9 +152,11 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
             switch (role.type) {
               case ProjectAdminRoleType.SiteAdmin:
                 {
-                  const currentUserHasManageWebPermisson =
-                    await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
-                  if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
+                  try {
+                    const currentUserHasManageWebPermisson =
+                      await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
+                    if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
+                  } catch { }
                 }
                 break
               case ProjectAdminRoleType.ProjectProperty:
@@ -189,12 +191,12 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                       ).length > 0
                     )
                       userPermissions.push(...role.permissions)
-                  } catch {}
+                  } catch { }
                 }
                 break
             }
           }
-          return _.unique(userPermissions, (p) => p)
+          return _.unique(userPermissions, Boolean)
         },
         storageExpire
       )
