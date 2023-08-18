@@ -156,7 +156,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                     const currentUserHasManageWebPermisson =
                       await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
                     if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
-                  } catch { }
+                  } catch {}
                 }
                 break
               case ProjectAdminRoleType.ProjectProperty:
@@ -191,7 +191,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                       ).length > 0
                     )
                       userPermissions.push(...role.permissions)
-                  } catch { }
+                  } catch {}
                 }
                 break
             }

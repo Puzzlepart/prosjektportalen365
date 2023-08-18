@@ -125,25 +125,30 @@ export class ProjectInformationField {
 
   /**
    * Returns `true` if the field should be visible in the
-   * specified display mode. When checking for `DisplayMode.Read``
+   * specified display mode. When checking for `DisplayMode.Read`
    * the `props.page` property is used to determine which properties to display.
    *
    * Also handles using `showFieldExternal` property to determine if
    * the field should be visible for external users with no access to
    * portfolio level.
    *
-   * @param displayMode Display mode
-   * @param props Props - need to pass `props.page` when checking for `DisplayMode.Read`,
-   * and `props.showFieldExternal` when checking for external users that have no access to
-   * portfolio level.
+   * @param displayMode Display mode to check for
+   * @param page Page name to check for
+   * @param showFieldExternal Object with field internal name as key and boolean as value
    */
-  public isVisible(displayMode: DisplayMode, props?: any): boolean {
+  public isVisible(
+    displayMode: DisplayMode,
+    page?: 'Frontpage' | 'ProjectStatus' | 'Portfolio',
+    showFieldExternal?: Record<string, boolean>
+  ): boolean {
     switch (displayMode) {
       case DisplayMode.Edit:
         return this._field.ShowInEditForm && !this._field.Hidden
       case DisplayMode.Read: {
-        if (this._isExternal) return props.showFieldExternal[this.internalName]
-        return this.column.isVisible(props.page)
+        // eslint-disable-next-line no-console
+        console.log('page', page, 'showFieldExternal', showFieldExternal)
+        if (this._isExternal) return showFieldExternal[this.internalName]
+        return this.column.isVisible(page)
       }
     }
   }

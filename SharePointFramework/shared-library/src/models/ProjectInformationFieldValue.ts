@@ -4,7 +4,8 @@ import { ProjectInformationField } from './ProjectInformationField'
 
 export class ProjectInformationFieldValue {
   /**
-   * `true` if the value is set
+   * `true` if the value is set. Checks text value with
+   * `stringIsNullOrEmpty`.
    */
   public isSet?: boolean
 
