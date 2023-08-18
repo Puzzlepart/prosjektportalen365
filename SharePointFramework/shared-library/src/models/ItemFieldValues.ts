@@ -68,39 +68,39 @@ export class ItemFieldValues {
   /**
    * Get field value in the specified format.
    *
-   * @param value Field value
+   * @param fieldValue Field value
    * @param format Format to return the value in
    * @param defaultValue Default value to return if the field value is not set
    */
   private _getValueInFormat<T = any>(
-    { value, valueAsText }: ItemFieldValue,
+    fieldValue: ItemFieldValue,
     format: FieldValueFormat,
     defaultValue: T = null
   ): T {
+    if (!fieldValue.value) return defaultValue
     switch (format) {
       case 'text':
-        return (valueAsText ?? defaultValue) as unknown as T
+        return fieldValue.valueAsText as unknown as T
       case 'object':
-        return (value ?? defaultValue) as unknown as T
+        return fieldValue as unknown as T
       case 'term_text': {
-        if (!value) return defaultValue
-        if (_.isArray(value)) {
-          return value
+        if (_.isArray(fieldValue.value)) {
+          return fieldValue.value
             .map(({ TermGuid, Label, WssId = -1 }) => `${WssId};#${Label}|${TermGuid}`)
             .join(';#') as unknown as T
         } else {
-          const { TermGuid, Label, WssId = -1 } = value
+          const { TermGuid, Label, WssId = -1 } = fieldValue.value
           return `${WssId};#${Label}|${TermGuid}` as unknown as T
         }
       }
       case 'user_id': {
-        return (value ?? defaultValue) as unknown as T
+        return fieldValue.value as unknown as T
       }
       case 'date': {
-        return value ? (new Date(value) as unknown as T) : defaultValue
+        return new Date(fieldValue.value) as unknown as T
       }
       case 'number': {
-        return value ? (parseFloat(value) as unknown as T) : defaultValue
+        return parseFloat(fieldValue.value) as unknown as T
       }
     }
   }

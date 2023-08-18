@@ -355,7 +355,10 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
       const properties: Record<string, any> = {}
       for (let i = 0; i < fieldsToSync.length; i++) {
         const field = fieldsToSync[i]
-        const fieldValue = fieldValues.get<ItemFieldValue>(field.InternalName, { format: 'object' })
+        const fieldValue = fieldValues.get<ItemFieldValue>(field.InternalName, {
+          format: 'object',
+          defaultValue: {}
+        })
         switch (field.TypeAsString) {
           case 'TaxonomyFieldType':
           case 'TaxonomyFieldTypeMulti':
