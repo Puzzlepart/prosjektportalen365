@@ -6,11 +6,12 @@ import '@pnp/sp/presets/all'
 import { IWeb, PermissionKind } from '@pnp/sp/presets/all'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import _ from 'underscore'
-import { ProjectAdminRoleType } from '../../models'
+import { ItemFieldValue, ItemFieldValues, ProjectAdminRoleType, SPField } from '../../models'
 import { PortalDataService } from '../../services/PortalDataService'
 import { SPFxContext } from '../../types'
 import { createSpfiInstance } from '../createSpfiInstance'
-import { ISPDataAdapterBaseConfiguration, ProjectAdminPermission } from './types'
+import { GetMappedProjectPropertiesOptions, ISPDataAdapterBaseConfiguration, ProjectAdminPermission } from './types'
+import { DefaultCaching } from '../cache'
 
 export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   /**
@@ -156,7 +157,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                     const currentUserHasManageWebPermisson =
                       await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
                     if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
-                  } catch {}
+                  } catch { }
                 }
                 break
               case ProjectAdminRoleType.ProjectProperty:
@@ -191,7 +192,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                       ).length > 0
                     )
                       userPermissions.push(...role.permissions)
-                  } catch {}
+                  } catch { }
                 }
                 break
             }
@@ -263,6 +264,173 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
     return tags
       .filter((tag) => tag.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1)
       .filter((tag) => !selectedItems.find((item) => item.name === tag.name))
+  }
+
+  /**
+   * Filters a list of fields to include only those with the `Gt` prefix,
+   * those in a custom group, or those specified in the forcedFields array.
+   *
+   * @param fields Fields
+   * @param customSiteFieldsGroupName Custom site fields group name
+   * @param forcedFields Array of field names to include regardless of the `ShowInEditForm` attribute value
+   *
+   * @returns Fields to sync
+   */
+  private _getFieldsToSync(
+    fields: SPField[],
+    customSiteFieldsGroupName: string,
+    forcedFields: string[]
+  ): SPField[] {
+    const fieldsToSync = [
+      {
+        InternalName: 'Title',
+        TypeAsString: 'Text'
+      } as SPField,
+      {
+        InternalName: 'GtChildProjects',
+        TypeAsString: 'Note'
+      } as SPField,
+      ...fields.filter(({ SchemaXml, InternalName, Group }) => {
+        const hideFromEditForm = SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1
+        const gtPrefix = InternalName.indexOf('Gt') === 0
+        const inCustomGroup = Group === customSiteFieldsGroupName
+        if (
+          (!gtPrefix && !inCustomGroup && !forcedFields.includes(InternalName)) ||
+          hideFromEditForm
+        )
+          return false
+        return true
+      })
+    ]
+    return fieldsToSync
+  }
+
+  /**
+   * Get mapped project properties from `fieldValues` and `fieldValuesText`, optionally using
+   * `templateParameters` to determine which fields to include.
+   *
+   * @param fieldValues - Field values for the properties item
+   * @param templateParameters - Template parameters
+   * @param options Options like `wrapMultiValuesInResultsArray`, `targetListName` and `useSharePointTaxonomyHiddenFields`
+   * @param web The `Web` to map the properties for
+   */
+  public async getMappedProjectProperties(
+    fieldValues: ItemFieldValues,
+    templateParameters: Record<string, any> = { CustomSiteFields: '' },
+    options: GetMappedProjectPropertiesOptions = {},
+    web = this.sp.web,
+  ): Promise<Record<string, any>> {
+    try {
+      const [fields, siteUsers, targetListFields] = await Promise.all([
+        templateParameters?.ProjectContentTypeId
+          ? this.entityService
+            .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
+            .getEntityFields() as Promise<SPField[]>
+          : this.entityService.getEntityFields() as Promise<SPField[]>,
+        web.siteUsers.select('Id', 'Email', 'LoginName', 'Title').using(DefaultCaching)(),
+        options?.targetListName ? this.sp.web.lists.getByTitle(options?.targetListName).fields<SPField[]>() : Promise.resolve<SPField[]>([])
+      ])
+      const fieldsToSync = this._getFieldsToSync(fields, templateParameters?.CustomSiteFields, [
+        'GtIsParentProject',
+        'GtIsProgram',
+        'GtCurrentVersion'
+      ])
+      const properties: Record<string, any> = {}
+      for (let i = 0; i < fieldsToSync.length; i++) {
+        const field = fieldsToSync[i]
+        const fieldValue = fieldValues.get<ItemFieldValue>(field.InternalName, { asObject: true })
+        switch (field.TypeAsString) {
+          case 'TaxonomyFieldType':
+            {
+              if (options.useSharePointTaxonomyHiddenFields) {
+                const textField = targetListFields.find(f => f.Id === field.TextField)
+                if (!textField) continue
+                properties[textField.InternalName] = fieldValues.get<string>(
+                  field.InternalName,
+                  { format: 'term_text' }
+                )
+              } else {
+                const [textField] = fields.filter(
+                  (f) => f.InternalName === `${field.InternalName}Text`
+                )
+                if (!textField) continue
+                properties[textField.InternalName] = fieldValue.valueAsText
+              }
+            }
+            break
+          case 'TaxonomyFieldTypeMulti':
+            {
+              if (options.useSharePointTaxonomyHiddenFields) {
+                const textField = targetListFields.find(f => f.Id === field.TextField)
+                if (!textField) continue
+                properties[textField.InternalName] = fieldValues.get<string>(
+                  field.InternalName,
+                  { format: 'term_text' }
+                )
+              } else {
+                const [textField] = fields.filter(
+                  (f) => f.InternalName === `${field.InternalName}Text`
+                )
+                if (!textField) continue
+                properties[textField.InternalName] = fieldValue.valueAsText
+              }
+            }
+            break
+          case 'User':
+            {
+              const [_user] = siteUsers.filter(
+                (u) => u.Id === fieldValues[`${field.InternalName}Id`]
+              )
+              const user = _user ? await this.entityService.web.ensureUser(_user.LoginName) : null
+              properties[`${field.InternalName}Id`] = user ? user.data.Id : null
+            }
+            break
+          case 'UserMulti':
+            {
+              const userIds = fieldValues[`${field.InternalName}Id`] || []
+              const users = siteUsers.filter((u) => userIds.indexOf(u.Id) !== -1)
+              const ensured = (
+                await Promise.all(
+                  users.map(({ LoginName }) => this.entityService.web.ensureUser(LoginName))
+                )
+              ).map(({ data }) => data.Id)
+              properties[`${field.InternalName}Id`] = options.wrapMultiValuesInResultsArray
+                ? { results: ensured }
+                : ensured
+            }
+            break
+          case 'DateTime':
+            properties[field.InternalName] = fieldValue.value ? new Date(fieldValue.value) : null
+            break
+          case 'Number':
+          case 'Currency': {
+            properties[field.InternalName] = fieldValue.value ? parseFloat(fieldValue.value) : null
+          }
+          case 'URL':
+            properties[field.InternalName] = fieldValue.value ?? null
+            break
+          case 'Boolean':
+            properties[field.InternalName] = fieldValue.value ?? null
+            break
+          case 'MultiChoice':
+            {
+              if (fieldValue.value) {
+                properties[field.InternalName] = options.wrapMultiValuesInResultsArray
+                  ? { results: fieldValue.value }
+                  : fieldValue.value
+              }
+            }
+            break
+          default:
+            properties[field.InternalName] = fieldValue.valueAsText ?? null
+            break
+        }
+      }
+
+      return properties
+    } catch (error) {
+      throw error
+    }
   }
 }
 

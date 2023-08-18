@@ -1,12 +1,17 @@
+import _ from 'lodash'
+
 export type ItemFieldValue = {
   value: any
   valueAsText: string
 }
 
+type FieldValueFormat = 'object' | 'text' | 'term_text'
+
 type GetFieldValueOptions<T = any> = {
   asText?: boolean
   asObject?: boolean
   defaultValue?: T
+  format?: FieldValueFormat
 }
 
 type ItemFieldValuesData = {
@@ -47,20 +52,44 @@ export class ItemFieldValues {
   }
 
   /**
+   * Get field value in the specified format.
+   * 
+   * @param value Value
+   * @param valueAstext Value as text
+   * @param format Format to return the value in
+   */
+  private _getValueInFormat<T = any>(value: any, valueAstext: string, format: FieldValueFormat): T {
+    switch (format) {
+      case 'text': return valueAstext as unknown as T
+      case 'object': return value as unknown as T
+      case 'term_text': {
+        if (_.isArray(value)) {
+          return value.map(({ TermGuid, Label, WssId = -1 }) => `${WssId};#${Label}|${TermGuid}`).join(';#') as unknown as T
+        } else {
+          const { TermGuid, Label, WssId = -1 } = value
+          return `${WssId};#${Label}|${TermGuid}` as unknown as T
+        }
+      }
+    }
+  }
+
+  /**
    * Get field value for the given field name. Optionally return as text.
    *
    * @param fieldName Field name
    * @param options Options (`asText`, `asObject`, `defaultValue`)
    */
   public get<T = any>(fieldName: string, options: GetFieldValueOptions<T> = {}): T {
-    const { asText = false, asObject = false, defaultValue = null } = options
+    const { asText = false, asObject = false, defaultValue = null, format = null } = options
     if (!this._values.has(fieldName)) {
       if (asObject) return {} as unknown as T
       return defaultValue
     }
+    const { value, valueAsText } = this._values.get(fieldName)
     if (asObject) return this._values.get(fieldName) as unknown as T
-    if (asText) return this._values.get(fieldName).valueAsText as unknown as T
-    return this._values.get(fieldName).value as unknown as T
+    if (format) return this._getValueInFormat(value, valueAsText, format)
+    if (asText) return valueAsText as unknown as T
+    return value as unknown as T
   }
 
   /**

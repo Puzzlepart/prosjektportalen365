@@ -2,6 +2,7 @@ import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
+import { SPDataAdapter } from '../../../data'
 
 export class SetupProjectInformation extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -44,7 +45,6 @@ export class SetupProjectInformation extends BaseTask {
    */
   private async _syncPropertiesList() {
     try {
-      // TODO: stuff
       this.onProgress(
         strings.SetupProjectInformationText,
         strings.SyncLocalProjectPropertiesListText,
@@ -61,6 +61,7 @@ export class SetupProjectInformation extends BaseTask {
         'AlignCenter'
       )
       const properties: Record<string, any> = {
+        ...(await this._getIdeaDataProperties()),
         ...this._createPropertiesItem(this.params),
         TemplateParameters: JSON.stringify(this.params.templateSchema.Parameters)
       }
@@ -71,6 +72,20 @@ export class SetupProjectInformation extends BaseTask {
     } catch (error) {
       throw error
     }
+  }
+
+  /**
+   * Get mapped idea data properties for the current project.
+   * 
+   * @returns The mapped idea data properties
+   */
+  private async _getIdeaDataProperties(): Promise<Record<string, any>> {
+    if (!this.data.ideaData) return {}
+    return await SPDataAdapter.getMappedProjectProperties(this.data.ideaData, undefined, {
+      wrapMultiValuesInResultsArray: false,
+      useSharePointTaxonomyHiddenFields: true,
+      targetListName: strings.ProjectPropertiesListName
+    })
   }
 
   /**
@@ -113,7 +128,7 @@ export class SetupProjectInformation extends BaseTask {
       )
       if (entity) return
       const properties: Record<string, string | boolean | number> = {
-        ...this._createPropertiesItem(this.params),
+        ...await this._createPropertiesItem(this.params),
         GtSiteId: this.params.context.pageContext.site.id.toString()
       }
       if (this.params.templateSchema.Parameters.ProjectContentTypeId) {
