@@ -77,13 +77,14 @@ export class ItemFieldValues {
     format: FieldValueFormat,
     defaultValue: T = null
   ): T {
-    const { value, valueAsText } = this._values.get(fieldName)
     switch (format) {
       case 'text':
-        return valueAsText as unknown as T
+        return (this._values.get(fieldName).valueAsText ?? defaultValue) as unknown as T
       case 'object':
-        return this._values.get(fieldName) as unknown as T
+        return (this._values.get(fieldName) ?? defaultValue) as unknown as T
       case 'term_text': {
+        const { value } = this._values.get(fieldName)
+        if (!value) return defaultValue
         if (_.isArray(value)) {
           return value
             .map(({ TermGuid, Label, WssId = -1 }) => `${WssId};#${Label}|${TermGuid}`)
@@ -94,21 +95,14 @@ export class ItemFieldValues {
         }
       }
       case 'user_id': {
-        const test = this._values.get(`${fieldName}Id`)
-        // eslint-disable-next-line no-console
-        console.log(test)
-        // eslint-disable-next-line no-console
-        // console.log(this._values.get(`${fieldName}Id`))
-        // if (!userIdValue) return defaultValue
-        // // eslint-disable-next-line no-console
-        // console.log('userIdValue', userIdValue)
-        return defaultValue
+        return (this._values.get(`${fieldName}Id`)?.value ?? defaultValue) as unknown as T
       }
     }
   }
 
   /**
-   * Get field value for the given field name. Optionally return as text.
+   * Get field value for the given field name. Optionally return in the
+   * specified format.
    *
    * @param fieldName Field name
    * @param options Options (`format`, `defaultValue`)
