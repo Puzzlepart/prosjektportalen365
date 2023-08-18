@@ -6,14 +6,16 @@ import styles from './ProjectCardHeader.module.scss'
 export function useProjectCardHeader() {
   const context = useContext(ProjectCardContext)
   const [showCustomImage, setShowCustomImage] = React.useState(true)
-  let colors = { colors: ['black', 'black'] }
 
-  if (context.useDynamicColors && context.showProjectLogo) {
-    colors = useImageColor(
-      context.project.logo ?? `${context.project.url}/_api/siteiconmanager/getsitelogo?type='1'`,
-      { cors: true, colors: 2, windowSize: 5 }
-    ).colors
-  }
+  const imageColorData = useImageColor(
+    context.project.logo ?? `${context.project.url}/_api/siteiconmanager/getsitelogo?type='1'`,
+    { cors: true, colors: 2, windowSize: 5 }
+  )
+
+  const colors =
+    context.useDynamicColors && context.showProjectLogo
+      ? imageColorData.colors
+      : ['transparent', 'transparent']
 
   const headerProps: HTMLProps<HTMLDivElement> = {
     className: context.useDynamicColors ? styles.dynamicHeader : styles.header,
