@@ -61,12 +61,6 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
           >
             <ContentConfigSection style={{ height: 400 }} />
           </PivotItem>
-          <PivotItem
-            headerText={strings.ProjectIdeasSectionHeaderText}
-            itemIcon='Lightbulb'
-          >
-
-          </PivotItem>
         </Pivot>
         <DialogFooter>
           {props.tasks && (

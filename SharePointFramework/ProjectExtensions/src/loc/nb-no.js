@@ -1,6 +1,5 @@
 define([], function () {
     return {
-        ProjectIdeasSectionHeaderText: 'Prosjektidèer',
         ApplyExtensionHooks: 'Kjører hooks definert i prosjekttillegg',
         ApplyExtensionText: 'Legger på prosjekttilegg {0}',
         ApplyingExtensionsText: 'Legger på prosjekttilegg',
