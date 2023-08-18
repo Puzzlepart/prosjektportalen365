@@ -145,10 +145,8 @@ export class ProjectInformationField {
       case DisplayMode.Edit:
         return this._field.ShowInEditForm && !this._field.Hidden
       case DisplayMode.Read: {
-        // eslint-disable-next-line no-console
-        console.log('page', page, 'showFieldExternal', showFieldExternal)
         if (this._isExternal) return showFieldExternal[this.internalName]
-        return this.column.isVisible(page)
+        return this.column ? this.column.isVisible(page) : false
       }
     }
   }
