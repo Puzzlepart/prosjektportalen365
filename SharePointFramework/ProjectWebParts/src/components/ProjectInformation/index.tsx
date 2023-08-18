@@ -12,7 +12,6 @@ import { ProgressDialog } from './ProgressDialog'
 import styles from './ProjectInformation.module.scss'
 import { ProjectProperties } from './ProjectProperties'
 import { ProjectStatusReport } from './ProjectStatusReport'
-import { SyncProjectDialog } from './SyncProjectDialog'
 import { ProjectInformationContextProvider } from './context'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
@@ -64,7 +63,6 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
               <AllPropertiesPanel />
               <EditPropertiesPanel />
               <CreateParentDialog />
-              <SyncProjectDialog />
             </Shimmer>
           )}
         </div>

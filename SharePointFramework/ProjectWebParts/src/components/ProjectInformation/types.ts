@@ -14,7 +14,7 @@ import { ActionType } from './Actions/types'
 import { IProgressDialogProps } from './ProgressDialog/types'
 
 export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
-export type ProjectInformationDialogType = 'CreateParentDialog' | 'SyncProjectDialog'
+export type ProjectInformationDialogType = 'CreateParentDialog'
 export type ProjectInformationPage = 'Frontpage' | 'ProjectStatus' | 'Portfolio'
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
@@ -128,7 +128,6 @@ export interface IProjectInformationState
    *
    * Can be one of the following:
    * - `CreateParentDialog`
-   * - `SyncProjectDialog`
    */
   activeDialog?: ProjectInformationDialogType
 
