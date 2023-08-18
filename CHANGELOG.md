@@ -35,6 +35,7 @@ I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Pr
 - Forbedringer av Modal for å vise målinger for måleindikatorer [#1208](https://github.com/Puzzlepart/prosjektportalen365/issues/1208)
 - Støtte for å søke i forvaltede egenskaper når man legger til en ny kolonne i Porteføljeoversikten [#1203](https://github.com/Puzzlepart/prosjektportalen365/issues/1203)
 - Prosjektinformasjon og prosjektnyheter vises nå i en vertikal seksjon på forsiden for å utnytte plassen bedre [#731](https://github.com/Puzzlepart/prosjektportalen365/issues/731)
+- Støtte for egne visningsnavn og beskrivelser for prosjektegenskaper-felter for f.eks. Program [#1225](https://github.com/Puzzlepart/prosjektportalen365/issues/1225)
 
 ### Feilrettinger
 
