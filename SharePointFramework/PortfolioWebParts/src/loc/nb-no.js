@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    ProjectServiceArea: 'Tjenesteområder',
+    ProjectType: 'Prosjekttype',
+    ProjectMetadataFieldLabel: 'Prosjektmetadata',
     AddColumnLabel: 'Legg til en kolonne',
     AllocationPercetageLabel: 'Allokeringsprosent',
     AllocationStatusLabel: 'Allokeringsstatus',
@@ -209,8 +212,6 @@ define([], function () {
     ShowHideColumnsLabel: 'Vis/skjul kolonner',
     ShowProgramViewsLabel: 'Vis programvisninger',
     ShowProjectLogoFieldLabel: 'Vis logo',
-    ShowProjectManagerFieldLabel: 'Vis Prosjektleder',
-    ShowProjectOwnerFieldLabel: 'Vis Prosjekteier',
     ShowRenderModeSelectorLabel: 'Vis visningsvelger',
     ShowSearchBoxLabel: 'Vis søkeboks',
     ShowViewSelectorLabel: 'Vis visningsvelger',

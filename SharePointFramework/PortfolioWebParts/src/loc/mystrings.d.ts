@@ -1,4 +1,7 @@
 declare interface IPortfolioWebPartsStrings {
+  ProjectServiceArea: string
+  ProjectType: string
+  ProjectMetadataFieldLabel: string
   AddColumnLabel: string
   AllocationPercetageLabel: string
   AllocationStatusLabel: string
@@ -208,8 +211,6 @@ declare interface IPortfolioWebPartsStrings {
   ShowHideColumnsLabel: string
   ShowProgramViewsLabel: string
   ShowProjectLogoFieldLabel: string
-  ShowProjectManagerFieldLabel: string
-  ShowProjectOwnerFieldLabel: string
   ShowRenderModeSelectorLabel: string
   ShowSearchBoxLabel: string
   ShowViewSelectorLabel: string

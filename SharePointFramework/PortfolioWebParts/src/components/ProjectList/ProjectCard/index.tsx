@@ -1,15 +1,14 @@
 import { Shimmer, ShimmerElementsGroup, ShimmerElementType } from '@fluentui/react'
-import { Tooltip } from '@fluentui/react-components'
-import { Card } from '@fluentui/react-components'
-import React, { FC, useContext } from 'react'
-import styles from './ProjectCard.module.scss'
-import { ProjectCardFooter } from './ProjectCardFooter'
-import { useProjectCard } from './useProjectCard'
-import { ProjectCardContent } from './ProjectCardContent'
-import { ProjectCardHeader } from './ProjectCardHeader'
-import { ProjectCardContext } from './context'
-import strings from 'PortfolioWebPartsStrings'
+import { Card, Tooltip } from '@fluentui/react-components'
 import { DismissCircle20Regular } from '@fluentui/react-icons'
+import strings from 'PortfolioWebPartsStrings'
+import React, { FC, useContext } from 'react'
+import { ProjectCardContext } from './context'
+import styles from './ProjectCard.module.scss'
+import { ProjectCardContent } from './ProjectCardContent'
+import { ProjectCardFooter } from './ProjectCardFooter'
+import { ProjectCardHeader } from './ProjectCardHeader'
+import { useProjectCard } from './useProjectCard'
 
 export const ProjectCard: FC = (props) => {
   const context = useContext(ProjectCardContext)
@@ -32,7 +31,7 @@ export const ProjectCard: FC = (props) => {
         className={styles.card}
         {...props}
         floatingAction={
-          context.showProjectPhase && (
+          context.shouldDisplay('ProjectPhase') && (
             <Tooltip
               content={
                 <>
