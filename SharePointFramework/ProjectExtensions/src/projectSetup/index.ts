@@ -20,7 +20,7 @@ import {
 } from 'pp365-shared-library'
 import { createElement } from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
-import { find, uniq } from 'underscore'
+import _ from 'underscore'
 import {
   ErrorDialog,
   IErrorDialogProps,
@@ -171,7 +171,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    */
   private async recreateNavMenu() {
     const oldNodes: IMenuNode[] = await JSON.parse(localStorage.getItem('pp_navigationNodes'))
-    const navigationNodes = uniq([...oldNodes])
+    const navigationNodes = _.uniq([...oldNodes])
     for await (const node of navigationNodes) {
       if (node.Title === strings.RecycleBinText) {
         continue
@@ -196,7 +196,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    * @param data - Project setup data
    */
   private _checkAutoTemplate({ templates }: IProjectSetupData): ITemplateSelectDialogState {
-    const autoTemplate = find(
+    const autoTemplate = _.find(
       templates,
       ({ text, autoConfigure }) => text === this.properties.forceTemplate || autoConfigure
     )
