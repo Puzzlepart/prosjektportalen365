@@ -44,6 +44,7 @@ export class SetupProjectInformation extends BaseTask {
    */
   private async _syncPropertiesList() {
     try {
+      // TODO: stuff
       this.onProgress(
         strings.SetupProjectInformationText,
         strings.SyncLocalProjectPropertiesListText,
