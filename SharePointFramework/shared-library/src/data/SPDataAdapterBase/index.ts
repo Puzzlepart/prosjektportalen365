@@ -19,12 +19,12 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   public settings: T
 
   /**
-   * Portal data service instance
+   * An instance of `PortalDataService`
    */
   public portal: PortalDataService
 
   /**
-   * Entity service instance
+   * An instance of `SpEntityPortalService`
    */
   public entityService: SpEntityPortalService
 
@@ -152,9 +152,11 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
             switch (role.type) {
               case ProjectAdminRoleType.SiteAdmin:
                 {
-                  const currentUserHasManageWebPermisson =
-                    await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
-                  if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
+                  try {
+                    const currentUserHasManageWebPermisson =
+                      await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
+                    if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
+                  } catch {}
                 }
                 break
               case ProjectAdminRoleType.ProjectProperty:
@@ -194,7 +196,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                 break
             }
           }
-          return _.unique(userPermissions, (p) => p)
+          return _.unique(userPermissions, Boolean)
         },
         storageExpire
       )

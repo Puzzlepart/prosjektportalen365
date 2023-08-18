@@ -1,4 +1,5 @@
-import { TemplateItem, SPFolder } from 'models'
+import { TemplateItem } from 'models'
+import { SPFolder } from 'pp365-shared-library'
 import { createContext } from 'react'
 
 export interface ITemplateSelectorContext {

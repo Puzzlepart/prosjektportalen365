@@ -14,6 +14,7 @@ export interface IProjectTemplateSPItem {
   IsAutoConfigurable?: boolean
   IconName?: string
   ListContentConfigLookupId?: number[]
+  FieldConfigurationName?: string
   File?: { UniqueId: string; Name: string; Title: string; ServerRelativeUrl: string }
   FieldValuesAsText?: Record<string, string>
   GtProjectTemplateId?: number
@@ -45,6 +46,7 @@ export class ProjectTemplate extends UserSelectableObject {
   public isForced: boolean = false
   public isLocked: boolean = false
   public templateLibraryUrl: string
+  public fieldConfiguration: string
   private _autoConfigurable: boolean = false
   private _projectContentType: string
   private _projectStatusContentType: string
@@ -56,9 +58,10 @@ export class ProjectTemplate extends UserSelectableObject {
    * Constructs a new `ProjectTemplate` instance
    *
    * @param spItem SharePoint list item
-   * @param web The `Web` instance (from `@pnp/sp`) to use when loading the template
+   * @param web The `Web` instance (from `@pnp/sp`) to use when loading the template schema.
+   * Does not need to be specified if the schema doesn't need to be loaded.
    */
-  constructor(spItem: IProjectTemplateSPItem, public web: IWeb) {
+  constructor(spItem: IProjectTemplateSPItem, public web?: IWeb) {
     super(
       spItem.Id,
       spItem.FieldValuesAsText.Title,
@@ -70,6 +73,7 @@ export class ProjectTemplate extends UserSelectableObject {
     this.iconProps = { iconName: spItem.IconName }
     this.isDefaultExtensionsLocked = spItem?.IsDefaultExtensionsLocked
     this.isDefaultContentConfigLocked = spItem?.IsDefaultListContentLocked
+    this.fieldConfiguration = spItem?.FieldConfigurationName
     this.projectTemplateId = spItem.GtProjectTemplateId
     this.contentConfig = isArray(spItem.ListContentConfigLookupId)
       ? spItem.ListContentConfigLookupId

@@ -19,6 +19,7 @@ export class SPProjectColumnItem {
   public GtFieldDataType?: string = ''
   public GtFieldCustomSort?: string = ''
   public GtFieldDataTypeProperties?: string = ''
+  public GtFieldOverrides?: string = ''
   public GtColMinWidth?: number = 0
   public GtIsRefinable?: boolean = false
   public GtIsGroupable?: boolean = false
@@ -30,6 +31,11 @@ export type ProjectColumnCustomSort = {
   iconName?: string
 }
 
+export type ProjectColumnFieldOverride = {
+  displayName?: string
+  description?: string
+}
+
 export type ProjectColumnData = {
   isGroupable?: boolean
   visibility?: string[]
@@ -39,6 +45,7 @@ export type ProjectColumnData = {
   searchType?: SearchValueType
   config?: ProjectColumnConfigDictionary
   customSorts?: ProjectColumnCustomSort[]
+  fieldOverrides?: Record<string, Record<string, ProjectColumnFieldOverride>>
 }
 
 export class ProjectColumn implements IProjectColumn {
@@ -82,7 +89,8 @@ export class ProjectColumn implements IProjectColumn {
       dataTypeProperties: tryParseJson(item?.GtFieldDataTypeProperties, {}),
       searchType: this._getSearchType(),
       customSorts: this._getCustomSorts(item?.GtFieldCustomSort),
-      config: {}
+      config: {},
+      fieldOverrides: tryParseJson(item?.GtFieldOverrides, {})
     }
   }
 

@@ -1,5 +1,6 @@
 import { IPersonaProps, ITag, Link, Persona, PersonaSize } from '@fluentui/react'
 import React from 'react'
+import { useProjectInformationContext } from '../../context'
 import styles from './ProjectProperty.module.scss'
 import { IProjectPropertyProps } from './types'
 
@@ -7,8 +8,13 @@ import { IProjectPropertyProps } from './types'
  * Component logic hook for the `ProjectProperty` component.
  *
  * @param props Props for the `ProjectProperty` component
+ *
+ * @returns a render function `renderValueForField` for the `ProjectProperty` component,
+ * aswell as the `displayMode` for the `ProjectProperty` component.
  */
 export function useProjectProperty(props: IProjectPropertyProps) {
+  const context = useProjectInformationContext()
+
   /**
    * Renders the value for the field based on the field type.
    *
@@ -90,5 +96,8 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       return <div>{value}</div>
     }
   }
-  return { renderValueForField }
+
+  const displayMode = props.displayMode ?? context.props.displayMode
+
+  return { displayMode, renderValueForField }
 }

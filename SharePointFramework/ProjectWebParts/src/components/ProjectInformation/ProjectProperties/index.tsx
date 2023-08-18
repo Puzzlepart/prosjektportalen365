@@ -18,12 +18,12 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
   switch (context.props.displayMode) {
     case DisplayMode.Edit: {
       return (
-        <div className={styles.projectProperties}>
+        <div className={styles.root}>
           <Pivot>
             <PivotItem headerText={context.props.title}>
               <div className={styles.pivotItem}>
                 {properties.map((model, idx) => (
-                  <ProjectProperty key={idx} model={model} />
+                  <ProjectProperty key={idx} model={model} displayMode={DisplayMode.Read} />
                 ))}
               </div>
             </PivotItem>
@@ -57,7 +57,7 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
         return <UserMessage text={strings.NoPropertiesMessage} />
       }
       return (
-        <div className={styles.projectProperties}>
+        <div className={styles.root}>
           {properties.map((model, idx) => (
             <ProjectProperty key={idx} model={model} />
           ))}

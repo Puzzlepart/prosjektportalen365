@@ -40,6 +40,7 @@ export class SetupProjectInformation extends BaseTask {
    * - `IsParentProject`: `true` if the current project is a parent project, `false` otherwise
    * - `GtInstalledVersion`: The installed version
    * - `GtCurrentVersion`: The current version (same as installed version initially)
+   * - `GtProjectTemplate`: The selected project template name
    */
   private async _syncPropertiesList() {
     try {
@@ -48,9 +49,7 @@ export class SetupProjectInformation extends BaseTask {
         strings.SyncLocalProjectPropertiesListText,
         'AlignCenter'
       )
-      const {
-        list: { list }
-      } = await this.params.portal.syncList({
+      const { list } = await this.params.portal.syncList({
         url: this.params.webAbsoluteUrl,
         listName: strings.ProjectPropertiesListName,
         contentTypeId: this.params.templateSchema.Parameters.ProjectContentTypeId
@@ -61,11 +60,11 @@ export class SetupProjectInformation extends BaseTask {
         'AlignCenter'
       )
       const properties: Record<string, any> = {
-        ...this._createPropertyItem(this.params),
+        ...this._createPropertiesItem(this.params),
         TemplateParameters: JSON.stringify(this.params.templateSchema.Parameters)
       }
-      const propertyItem = list.items.getById(1)
       const propertyItems = await list.items()
+      const propertyItem = list.items.getById(1)
       if (propertyItems.length > 0) await propertyItem.update(properties)
       else await list.items.add(properties)
     } catch (error) {
@@ -80,16 +79,20 @@ export class SetupProjectInformation extends BaseTask {
    * - `IsParentProject`: `true` if the current project is a parent project, `false` otherwise
    * - `GtInstalledVersion`: The installed version
    * - `GtCurrentVersion`: The current version (same as installed version initially)
+   * - `GtProjectTemplate`: The selected project template name
    *
    * @param params Params
    */
-  private _createPropertyItem(params: IBaseTaskParams): Record<string, string | boolean | number> {
+  private _createPropertiesItem(
+    params: IBaseTaskParams
+  ): Record<string, string | boolean | number> {
     return {
       Title: params.context.pageContext.web.title,
       GtIsProgram: this.data.selectedTemplate.isProgram,
       GtIsParentProject: this.data.selectedTemplate.isParentProject,
       GtInstalledVersion: params.templateSchema.Version,
-      GtCurrentVersion: params.templateSchema.Version
+      GtCurrentVersion: params.templateSchema.Version,
+      GtProjectTemplate: this.data.selectedTemplate.text
     }
   }
 
@@ -97,10 +100,10 @@ export class SetupProjectInformation extends BaseTask {
    * Add entry to hub project list
    *
    * Stores the project with
-   * * Title
-   * * GtSiteId
-   * * GtProjectTemplate
-   * * ContentTypeId (if custom content type is specified in template parameters)
+   * * `Title`: The current web title
+   * * `GtSiteId`: The current site ID
+   * * `GtProjectTemplate`: The selected project template name
+   * * `ContentTypeId` (if custom content type is specified in template parameters)
    */
   private async _addEntryToHub() {
     try {
@@ -109,9 +112,8 @@ export class SetupProjectInformation extends BaseTask {
       )
       if (entity) return
       const properties: Record<string, string | boolean | number> = {
-        ...this._createPropertyItem(this.params),
-        GtSiteId: this.params.context.pageContext.site.id.toString(),
-        GtProjectTemplate: this.data.selectedTemplate.text
+        ...this._createPropertiesItem(this.params),
+        GtSiteId: this.params.context.pageContext.site.id.toString()
       }
       if (this.params.templateSchema.Parameters.ProjectContentTypeId) {
         properties.ContentTypeId = this.params.templateSchema.Parameters.ProjectContentTypeId

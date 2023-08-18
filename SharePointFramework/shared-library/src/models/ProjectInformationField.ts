@@ -1,9 +1,9 @@
 import { IDropdownOption } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import _ from 'lodash'
-import { IProjectInformationData } from '../services/ProjectDataService/types'
-import { createFieldValueMap } from '../util'
-import { ProjectColumn } from './ProjectColumn'
+import { createFieldValueMap, getObjectValue as get } from '../util'
+import { ItemFieldValues } from './ItemFieldValues'
+import { ProjectColumn, ProjectColumnFieldOverride } from './ProjectColumn'
 import { ProjectInformationFieldValue } from './ProjectInformationFieldValue'
 import { SPField } from './SPField'
 
@@ -21,6 +21,8 @@ export class ProjectInformationField {
   private _isExternal: boolean
   private _fieldValue: ProjectInformationFieldValue
   private _fieldValueMap: ReturnType<typeof createFieldValueMap>
+  private _currentLocale: string
+  private _configurationName: string
 
   /**
    * Constructs a new `ProjectInformationField` instance.
@@ -40,11 +42,35 @@ export class ProjectInformationField {
    * Initializes the field with the columns from `ProjectDataService`.
    *
    * @param columns Columns from `ProjectDataService`
+   * @param currentLocale Current locale
+   * @param configurationName Configuration name
    */
-  public init(columns: ProjectColumn[]) {
+  public init(columns: ProjectColumn[], currentLocale?: string, configurationName?: string) {
     this.column = columns.find((c) => c.internalName === this.internalName)
     this._isExternal = _.isEmpty(columns)
+    this._initConfiguration(currentLocale, configurationName)
     return this
+  }
+
+  /**
+   * Initializes the configuration for the field. If a entry is found for the `configurationName`
+   * in `column.data.fieldOverrides` the configuration is set for the field.
+   *
+   * @param currentLocale Current locale (e.g. `nb-no` for Norwegian)
+   * @param configurationName Configuration name (e.g. `Program`)
+   */
+  private _initConfiguration(currentLocale: string, configurationName: string) {
+    this._currentLocale = currentLocale
+    this._configurationName = configurationName
+    if (this._configurationName && this.column) {
+      const configuration = get<ProjectColumnFieldOverride>(
+        this.column,
+        `data.fieldOverrides.${this._configurationName}.${this._currentLocale}`,
+        null
+      )
+      this.displayName = configuration?.displayName ?? this.displayName
+      this.description = configuration?.description ?? this.description
+    }
   }
 
   /**
@@ -54,16 +80,16 @@ export class ProjectInformationField {
    * - `value` - the text value for the field
    * - `$` - the value for the field
    *
-   * @param data Properties data from `ProjectDataService.getProjectInformationData`
+   * @param fieldValues Field values from `IProjectInformationData`
    * @param currentValue Optional current value for the field if it's being edited
    *
-   * @returns the field instance
+   * @returns the current field instance
    */
   public setValue(
-    data: IProjectInformationData,
+    fieldValues: ItemFieldValues,
     currentValue: string = null
   ): ProjectInformationField {
-    this._fieldValue = ProjectInformationFieldValue.parse(data, this, currentValue)
+    this._fieldValue = ProjectInformationFieldValue.parse(fieldValues, this, currentValue)
     return this
   }
 
@@ -73,10 +99,10 @@ export class ProjectInformationField {
    * If the field type is not found in the map the `text` property is used.
    */
   public getParsedValue<T>(): T {
-    const fieldValue = this._fieldValueMap.has(this.type)
-      ? this._fieldValueMap.get(this.type)(this._fieldValue)
-      : this._fieldValue.value
-    return fieldValue as unknown as T
+    if (this._fieldValueMap.has(this.type)) {
+      return this._fieldValueMap.get(this.type)(this._fieldValue) as unknown as T
+    }
+    return this._fieldValue.value as unknown as T
   }
 
   /**
@@ -99,25 +125,30 @@ export class ProjectInformationField {
 
   /**
    * Returns `true` if the field should be visible in the
-   * specified display mode. When checking for `DisplayMode.Read``
+   * specified display mode. When checking for `DisplayMode.Read`
    * the `props.page` property is used to determine which properties to display.
    *
    * Also handles using `showFieldExternal` property to determine if
    * the field should be visible for external users with no access to
    * portfolio level.
    *
-   * @param displayMode Display mode
-   * @param props Props - need to pass `props.page` when checking for `DisplayMode.Read`,
-   * and `props.showFieldExternal` when checking for external users that have no access to
-   * portfolio level.
+   * @param displayMode Display mode to check for
+   * @param page Page name to check for
+   * @param showFieldExternal Object with field internal name as key and boolean as value
    */
-  public isVisible(displayMode: DisplayMode, props?: any): boolean {
+  public isVisible(
+    displayMode: DisplayMode,
+    page?: 'Frontpage' | 'ProjectStatus' | 'Portfolio',
+    showFieldExternal?: Record<string, boolean>
+  ): boolean {
     switch (displayMode) {
       case DisplayMode.Edit:
         return this._field.ShowInEditForm && !this._field.Hidden
       case DisplayMode.Read: {
-        if (this._isExternal) return props.showFieldExternal[this.internalName]
-        return this.column.isVisible(props.page)
+        // eslint-disable-next-line no-console
+        console.log('page', page, 'showFieldExternal', showFieldExternal)
+        if (this._isExternal) return showFieldExternal[this.internalName]
+        return this.column.isVisible(page)
       }
     }
   }
@@ -135,6 +166,10 @@ export class ProjectInformationField {
    * @returns a clone of the field
    */
   public clone() {
-    return new ProjectInformationField(this._field).init([this.column].filter(Boolean))
+    return new ProjectInformationField(this._field).init(
+      [this.column].filter(Boolean),
+      this._currentLocale,
+      this._configurationName
+    )
   }
 }

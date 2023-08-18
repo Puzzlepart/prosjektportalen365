@@ -22,7 +22,7 @@ export function useModel() {
    */
   function get<T>(field: ProjectInformationField, fallbackValue: T = null): T {
     const currentValue = model.get(field.internalName)
-    const $field = field.clone().setValue(context.state.data, currentValue)
+    const $field = field.clone().setValue(context.state.data.fieldValues, currentValue)
     if ($field.isEmpty || !!currentValue) {
       return currentValue ?? (fallbackValue as unknown as T)
     }

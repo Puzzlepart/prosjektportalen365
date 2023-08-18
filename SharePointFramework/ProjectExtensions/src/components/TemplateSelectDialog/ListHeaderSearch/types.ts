@@ -1,5 +1,5 @@
 import { IDetailsHeaderProps, ISearchBoxProps, SelectAllVisibility } from '@fluentui/react'
-import { UserSelectableObject } from '../../../models/UserSelectableObject'
+import { UserSelectableObject } from 'pp365-shared-library'
 
 export interface IListHeaderSearchProps {
   /**

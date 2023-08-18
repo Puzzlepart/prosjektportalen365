@@ -1,10 +1,10 @@
 import { stringIsNullOrEmpty } from '@pnp/core'
-import { IListProperties } from './IListProperties'
+import { SPFI } from '@pnp/sp'
+import { IList } from '@pnp/sp/lists'
+import { IWeb } from '@pnp/sp/webs'
+import { IListProperties } from '../interfaces/IListProperties'
 import { ProjectTemplate } from './ProjectTemplate'
 import { UserSelectableObject } from './UserSelectableObject'
-import { IWeb } from '@pnp/sp/webs'
-import { IList } from '@pnp/sp/lists'
-import { SPFI } from '@pnp/sp'
 
 export interface IContentConfigSPItem {
   ContentTypeId: string

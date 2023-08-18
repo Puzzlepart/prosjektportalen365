@@ -26,7 +26,7 @@ import { useProjectInformation } from './useProjectInformation'
  * - Promote to parent project (`CreateParentDialog`)
  */
 export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
-  const { context } = useProjectInformation(props)
+  const context = useProjectInformation(props)
   if (context.state.hidden) return null
 
   return (

@@ -9,6 +9,7 @@ import { IConfigurationFile } from 'types'
 import _ from 'underscore'
 import { IdeaConfigurationModel, SPIdeaConfigurationItem } from '../../models'
 import { ISPDataAdapterConfiguration } from './types'
+import { ItemFieldValues, ItemFieldValue } from 'pp365-shared-library'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
@@ -77,14 +78,14 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * map the properties item fields to the hub fields. `updateEntityItem` from `sp-entityportal-service`
    * is used to update the hub entity item. If any errors occur, the original error is passed to the caller.
    *
-   * @param fieldValuesText Field values in text format for the properties item
+   * @param title Title of the project
    * @param fieldValues Field values for the properties item
    * @param templateParameters Template parameters
    * @param progressFunc Progress function
    */
   public async syncPropertyItemToHub(
-    fieldValuesText: Record<string, string>,
-    fieldValues: Record<string, any>,
+    title: string,
+    fieldValues: ItemFieldValues,
     templateParameters: Record<string, any>,
     progressFunc: (props: IProgressIndicatorProps) => void
   ): Promise<void> {
@@ -93,12 +94,11 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         label: strings.SyncProjectPropertiesValuesProgressLabel,
         description: strings.SyncProjectPropertiesValuesProgressDescription
       })
-      const properties = await this.getMappedProjectProperties(
-        fieldValues,
-        fieldValuesText,
-        templateParameters
-      )
-      await this.entityService.updateEntityItem(this.settings.siteId, properties)
+      const properties = await this.getMappedProjectProperties(fieldValues, templateParameters)
+      await this.entityService.updateEntityItem(this.settings.siteId, {
+        ...properties,
+        Title: title
+      })
       Logger.log({
         message: `(${this._name}) (syncPropertyItemToHub) Successfully synced item to hub entity.`,
         data: { properties },
@@ -114,23 +114,17 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * `templateParameters` to determine which fields to include.
    *
    * @param fieldValues - Field values for the properties item
-   * @param fieldValuesText - Field values in text format for the properties item
    * @param templateParameters - Template parameters
    * @param syncToProject - Whether to sync to the project
    * @param wrapMultiValuesInResultsArray - Whether to wrap multi-values in results array (default: false)
    */
   public async getMappedProjectProperties(
-    fieldValues: Record<string, any>,
-    fieldValuesText: Record<string, string>,
+    fieldValues: ItemFieldValues,
     templateParameters: Record<string, any>,
     syncToProject: boolean = false,
     wrapMultiValuesInResultsArray: boolean = false
-  ): Promise<any> {
+  ): Promise<Record<string, any>> {
     try {
-      fieldValuesText = Object.keys(fieldValuesText).reduce(
-        (obj, key) => ({ ...obj, [key.replace(/_x005f_/gm, '_')]: fieldValuesText[key] }),
-        {}
-      )
       const [fields, siteUsers] = await Promise.all([
         templateParameters?.ProjectContentTypeId
           ? this.entityService
@@ -146,30 +140,33 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       ])
       const properties: Record<string, any> = {}
       for (let i = 0; i < fieldsToSync.length; i++) {
-        const fld = fieldsToSync[i]
-        const fldValue = fieldValues[fld.InternalName]
-        const fldValueTxt = fieldValuesText[fld.InternalName]
-        switch (fld.TypeAsString) {
+        const field = fieldsToSync[i]
+        const fieldValue = fieldValues.get<ItemFieldValue>(field.InternalName, { asObject: true })
+        switch (field.TypeAsString) {
           case 'TaxonomyFieldType':
             {
-              if (syncToProject && fldValueTxt !== '') {
-                const term = { ...fldValue, WssId: -1, Label: fldValueTxt }
-                properties[fld.InternalName] = term ?? null
+              if (syncToProject && fieldValue.valueAsText !== '') {
+                const term = { ...fieldValue.value, WssId: -1, Label: fieldValue.valueAsText }
+                properties[field.InternalName] = term ?? null
               } else {
-                let [textField] = fields.filter((f) => f.InternalName === `${fld.InternalName}Text`)
-                if (textField)
-                  properties[textField.InternalName] = fieldValuesText[fld.InternalName]
+                let [textField] = fields.filter(
+                  (f) => f.InternalName === `${field.InternalName}Text`
+                )
+                if (textField) properties[textField.InternalName] = fieldValue.valueAsText
                 else {
-                  textField = _.find(fields, (f) => f.Id === fld.TextField)
+                  textField = _.find(fields, (f) => f.Id === field.TextField)
                   if (!textField) continue
-                  properties[textField.InternalName] = fieldValuesText[textField.InternalName]
+                  properties[textField.InternalName] = fieldValues.get<string>(
+                    textField.InternalName,
+                    { asText: true }
+                  )
                 }
               }
             }
             break
           case 'TaxonomyFieldTypeMulti':
             {
-              if (syncToProject && fldValueTxt !== '') {
+              if (syncToProject && fieldValue.valueAsText !== '') {
                 // TODO: Fix this and make it work
                 // const terms = fldValue.map((t) => ({
                 //   ...t,
@@ -182,13 +179,17 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
                 // })
                 // properties[fld.InternalName] = termsString ?? null
               } else {
-                let [textField] = fields.filter((f) => f.InternalName === `${fld.InternalName}Text`)
-                if (textField)
-                  properties[textField.InternalName] = fieldValuesText[fld.InternalName]
+                let [textField] = fields.filter(
+                  (f) => f.InternalName === `${field.InternalName}Text`
+                )
+                if (textField) properties[textField.InternalName] = fieldValue.valueAsText
                 else {
-                  textField = _.find(fields, (f) => f.Id === fld.TextField)
+                  textField = _.find(fields, (f) => f.Id === field.TextField)
                   if (!textField) continue
-                  properties[textField.InternalName] = fieldValuesText[textField.InternalName]
+                  properties[textField.InternalName] = fieldValues.get<string>(
+                    textField.InternalName,
+                    { asText: true }
+                  )
                 }
               }
             }
@@ -196,69 +197,67 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
           case 'User':
             {
               if (syncToProject) {
-                const [_user] = siteUsers.filter(
-                  (u) => u.Title === fieldValuesText[fld.InternalName]
-                )
+                const [_user] = siteUsers.filter((u) => u.Title === fieldValue.valueAsText)
                 const user = _user ? await this.sp.web.ensureUser(_user.LoginName) : null
-                properties[`${fld.InternalName}Id`] = user ? user.data.Id : null
+                properties[`${field.InternalName}Id`] = user ? user.data.Id : null
               } else {
                 const [_user] = siteUsers.filter(
-                  (u) => u.Id === fieldValues[`${fld.InternalName}Id`]
+                  (u) => u.Id === fieldValues[`${field.InternalName}Id`]
                 )
                 const user = _user ? await this.entityService.web.ensureUser(_user.LoginName) : null
-                properties[`${fld.InternalName}Id`] = user ? user.data.Id : null
+                properties[`${field.InternalName}Id`] = user ? user.data.Id : null
               }
             }
             break
           case 'UserMulti':
             {
               if (syncToProject) {
-                const userIds = fieldValuesText[fld.InternalName] || []
+                const userIds = fieldValue.valueAsText || []
                 const users = siteUsers.filter((u) => userIds.indexOf(u.Title) !== -1)
                 const ensured = await Promise.all(
                   users.map(({ LoginName }) => this.sp.web.ensureUser(LoginName))
                 )
-                properties[`${fld.InternalName}Id`] = {
+                properties[`${field.InternalName}Id`] = {
                   results: ensured.map(({ data }) => data.Id)
                 }
               } else {
-                const userIds = fieldValues[`${fld.InternalName}Id`] || []
+                const userIds = fieldValues[`${field.InternalName}Id`] || []
                 const users = siteUsers.filter((u) => userIds.indexOf(u.Id) !== -1)
                 const ensured = (
                   await Promise.all(
                     users.map(({ LoginName }) => this.entityService.web.ensureUser(LoginName))
                   )
                 ).map(({ data }) => data.Id)
-                properties[`${fld.InternalName}Id`] = wrapMultiValuesInResultsArray
+                properties[`${field.InternalName}Id`] = wrapMultiValuesInResultsArray
                   ? { results: ensured }
                   : ensured
               }
             }
             break
           case 'DateTime':
-            properties[fld.InternalName] = fldValue ? new Date(fldValue) : null
+            properties[field.InternalName] = fieldValue.value ? new Date(fieldValue.value) : null
             break
           case 'Number':
           case 'Currency': {
-            properties[fld.InternalName] = fldValue ? parseFloat(fldValue) : null
+            properties[field.InternalName] = fieldValue.value ? parseFloat(fieldValue.value) : null
           }
           case 'URL':
-            properties[fld.InternalName] = fldValue ?? null
+            properties[field.InternalName] = fieldValue.value ?? null
             break
           case 'Boolean':
-            properties[fld.InternalName] = fldValue ?? null
+            properties[field.InternalName] = fieldValue.value ?? null
             break
           case 'MultiChoice':
             {
-              if (fldValue) {
-                properties[fld.InternalName] = wrapMultiValuesInResultsArray
-                  ? { results: fldValue }
-                  : fldValue
+              if (fieldValue.value) {
+                properties[field.InternalName] = wrapMultiValuesInResultsArray
+                  ? { results: fieldValue.value }
+                  : fieldValue.value
               }
             }
             break
           default:
-            properties[fld.InternalName] = fldValueTxt ?? null
+            properties[field.InternalName] = fieldValue.valueAsText ?? null
             break
         }
       }

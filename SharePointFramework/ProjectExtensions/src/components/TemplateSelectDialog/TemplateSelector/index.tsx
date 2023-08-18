@@ -1,5 +1,5 @@
 import { ISearchBoxProps, SearchBox } from '@fluentui/react'
-import { ProjectTemplate } from 'models'
+import { ProjectTemplate } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
 import React, { useContext, useState } from 'react'
 import Autocomplete from 'react-autocomplete'

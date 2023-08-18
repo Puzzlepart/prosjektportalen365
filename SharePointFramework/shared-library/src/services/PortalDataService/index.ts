@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { find } from '@microsoft/sp-lodash-subset'
 import { AssignFrom, dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
 import { Logger, LogLevel } from '@pnp/logging'
@@ -12,10 +11,12 @@ import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
 import { createSpfiInstance, DefaultCaching } from '../../data'
 import { ISPContentType } from '../../interfaces'
 import {
+  IProjectTemplateSPItem,
   PortfolioOverviewView,
   ProjectAdminRole,
   ProjectColumn,
   ProjectColumnConfig,
+  ProjectTemplate,
   SectionModel,
   SPField,
   SPPortfolioOverviewViewItem,
@@ -29,10 +30,10 @@ import { getClassProperties, makeUrlAbsolute, transformFieldXml } from '../../ut
 import {
   GetStatusReportsOptions,
   IPortalDataServiceConfiguration,
+  ISyncListReturnType,
   PortalDataServiceDefaultConfiguration,
   PortalDataServiceList,
-  SyncListParams,
-  SyncListReturnType
+  SyncListParams
 } from './types'
 
 export class PortalDataService {
@@ -345,7 +346,7 @@ export class PortalDataService {
    *
    * @param params Sync list parameters
    */
-  public async syncList(params: SyncListParams): Promise<SyncListReturnType> {
+  public async syncList(params: SyncListParams): Promise<ISyncListReturnType> {
     const fieldsAdded: SPField[] = []
     const web = spfi(params.url).using(AssignFrom(this._sp.web)).web
     const { jsomContext } = await initJsom(params.url, { loadTaxonomy: true })
@@ -424,7 +425,7 @@ export class PortalDataService {
     if (ensureList.created && params.properties) {
       ensureList.list.items.add(params.properties)
     }
-    return { list: ensureList, fieldsAdded }
+    return { ...ensureList, fieldsAdded }
   }
 
   /**
@@ -669,8 +670,7 @@ export class PortalDataService {
    * Get project admin roles
    */
   public async getProjectAdminRoles(): Promise<ProjectAdminRole[]> {
-    const spItems = await this.web.lists
-      .getByTitle(this._configuration.listNames.PROJECT_ADMIN_ROLES)
+    const spItems = await this._getList('PROJECT_ADMIN_ROLES')
       .items.select(
         'ContentTypeId',
         'Id',
@@ -682,6 +682,30 @@ export class PortalDataService {
       )
       .expand('GtProjectAdminPermissions')<SPProjectAdminRoleItem[]>()
     return spItems.map((item) => new ProjectAdminRole(item))
+  }
+
+  /**
+   * Get project template by name. Using `DefaultCaching` by default.
+   *
+   * @param templateName Template name
+   * @param cache Cache configuration to use (default: `DefaultCaching`)
+   */
+  public async getProjectTemplate(
+    templateName: string,
+    cache = DefaultCaching
+  ): Promise<ProjectTemplate> {
+    try {
+      if (stringIsNullOrEmpty(templateName)) return null
+      const [spItem] = await this._getList('PROJECT_TEMPLATE_CONFIGURATION')
+        .items.select('*', 'FieldValuesAsText')
+        .expand('FieldValuesAsText')
+        .filter(`Title eq '${templateName}'`)
+        .using(cache)<IProjectTemplateSPItem[]>()
+      if (!spItem) return null
+      return new ProjectTemplate(spItem)
+    } catch (error) {
+      return null
+    }
   }
 
   /**

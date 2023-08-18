@@ -64,9 +64,9 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
     data = context.state.data,
     progressFunc: (progress: IProgressIndicatorProps) => void = () => null
   ) => {
-    const { fieldValues, fieldValuesText, templateParameters } = data
+    const { fieldValues, templateParameters } = data
     await SPDataAdapter.syncPropertyItemToHub(
-      { ...fieldValuesText, Title: context.props.webTitle },
+      context.props.webTitle,
       fieldValues,
       templateParameters,
       progressFunc
@@ -99,13 +99,13 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
       })
       let created = false
       if (params.syncList) {
-        const { list } = await syncList(context)
+        const list = await syncList(context)
         created = list.created
       }
       if (!created && params.syncPropertyItemToHub)
         await syncPropertyItemToHub(undefined, progressFunc)
       SPDataAdapter.clearCache()
-      await sleep(5)
+      await sleep(3)
       if (params.reload) window.location.reload()
     } catch (error) {
       ListLogger.log({

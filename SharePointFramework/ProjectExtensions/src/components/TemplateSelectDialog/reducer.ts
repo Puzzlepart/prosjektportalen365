@@ -1,5 +1,5 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
-import { ContentConfig, ProjectExtension, ProjectTemplate } from 'models'
+import { ContentConfig, ProjectExtension, ProjectTemplate } from 'pp365-shared-library'
 import { first, uniq } from 'underscore'
 import { IProjectSetupData } from '../../projectSetup/types'
 import { ITemplateSelectDialogState } from './types'

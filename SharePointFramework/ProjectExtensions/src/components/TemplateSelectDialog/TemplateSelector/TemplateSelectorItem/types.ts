@@ -1,4 +1,4 @@
-import { ProjectTemplate } from 'models'
+import { ProjectTemplate } from 'pp365-shared-library'
 
 export interface ITemplateSelectorItemProps {
   template: ProjectTemplate

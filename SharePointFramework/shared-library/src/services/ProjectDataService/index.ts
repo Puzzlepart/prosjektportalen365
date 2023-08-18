@@ -1,11 +1,13 @@
+/* eslint-disable quotes */
 import { format } from '@fluentui/react'
 import { AssignFrom, IPnPClientStore, PnPClientStorage, dateAdd } from '@pnp/core'
 import { ConsoleListener, Logger } from '@pnp/logging'
 import '@pnp/sp/presets/all'
 import { IWeb, SPFI, spfi } from '@pnp/sp/presets/all'
-import { DefaultCaching, createSpfiInstance } from '../../data'
+import { DefaultCaching, createSpfiInstance, getItemFieldValues } from '../../data'
 import {
   ChecklistItemModel,
+  ItemFieldValues,
   ProjectPhaseChecklistData,
   ProjectPhaseModel,
   SPField
@@ -164,21 +166,11 @@ export class ProjectDataService {
       const fields = await ctx.list.fields
         .select(...getClassProperties(SPField))
         .filter(fieldsFilter)<SPField[]>()
-      const userFields = fields.filter((fld) => fld.TypeAsString.indexOf('User') === 0)
-      const [fieldValuesText, fieldValues] = await Promise.all([
-        ctx.item.fieldValuesAsText(),
-        ctx.item
-          .select(
-            '*',
-            ...userFields.map(({ InternalName }) => `${InternalName}/Id`),
-            ...userFields.map(({ InternalName }) => `${InternalName}/Title`),
-            ...userFields.map(({ InternalName }) => `${InternalName}/EMail`)
-          )
-          .expand(...userFields.map((fld) => fld.InternalName))()
-      ])
-
+      const userFields = fields
+        .filter((fld) => fld.TypeAsString.indexOf('User') === 0)
+        .map((fld) => fld.InternalName)
+      const fieldValues = await getItemFieldValues(ctx.item, userFields)
       const propertiesData: IProjectInformationData = {
-        fieldValuesText,
         fieldValues,
         fields: this._mapFields(fields),
         versionHistoryUrl: '{0}/_layouts/15/versions.aspx?list={1}&ID={2}',
@@ -209,15 +201,19 @@ export class ProjectDataService {
    * - `templateParameters`: Template parameters
    */
   public async getProjectInformationData(): Promise<IProjectInformationData> {
+    let data: IProjectInformationData = null
     const item = await this._getLocalProjectInformationItem()
     if (item) {
-      const templateParameters = tryParseJson(item.fieldValuesText.TemplateParameters, {})
+      const templateParameters = tryParseJson(
+        item.fieldValues.get('TemplateParameters', { asText: true }),
+        {}
+      )
       this._logInfo('Local property item found.', 'getPropertiesData')
-      return {
+      data = {
         ...item,
         propertiesListId: item.propertiesListId,
         templateParameters
-      } as IProjectInformationData
+      }
     } else {
       this._logInfo(
         'Local property item not found. Retrieving data from portal site.',
@@ -227,15 +223,15 @@ export class ProjectDataService {
         this._params.siteId,
         this._params.webUrl
       )
-      return {
-        fieldValues: entity.fieldValues,
-        fieldValuesText: entity.fieldValues,
-        fields: entity.fields,
+      data = {
+        fieldValues: new ItemFieldValues(entity.fieldValues, {}),
+        fields: entity.fields as any[],
         propertiesListId: null,
         templateParameters: {},
         ...entity.urls
-      } as IProjectInformationData
+      }
     }
+    return data
   }
 
   /**
@@ -246,7 +242,7 @@ export class ProjectDataService {
   public async getPropertiesLastUpdated(data: IProjectInformationData): Promise<number> {
     const { Modified } = await this.web.lists
       .getById(data.propertiesListId)
-      .items.getById(data.fieldValues.Id)
+      .items.getById(data.fieldValues.get('Id'))
       .select('Modified')<{ Modified: string }>()
     return (new Date().getTime() - new Date(Modified).getTime()) / 1000
   }
@@ -319,7 +315,7 @@ export class ProjectDataService {
   public async getCurrentPhaseName(phaseField: string): Promise<string> {
     try {
       const propertiesData = await this.getProjectInformationData()
-      return propertiesData.fieldValuesText[phaseField]
+      return propertiesData.fieldValues.get(phaseField, { asText: true })
     } catch (error) {
       throw new Error()
     }
