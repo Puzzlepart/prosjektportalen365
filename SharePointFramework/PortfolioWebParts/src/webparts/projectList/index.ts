@@ -14,7 +14,7 @@ import {
 import { IProjectListProps, ProjectList } from 'components/ProjectList'
 import { ProjectListVerticals } from 'components/ProjectList/ProjectListVerticals'
 import * as strings from 'PortfolioWebPartsStrings'
-import { BasePortfolioWebPart } from '../@basePortfolioWebPart'
+import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import React from 'react'
 
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {

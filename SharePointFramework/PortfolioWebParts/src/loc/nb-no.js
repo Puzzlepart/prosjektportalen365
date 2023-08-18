@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    ErrorBoundaryFallbackText: 'Det oppstod en feil under lasting av {0}.',
+    ErrorBoundaryFallbackDescription: 'Feildetaljer:',
     ProjectServiceArea: 'Tjenesteområder',
     ProjectType: 'Prosjekttype',
     ProjectMetadataFieldLabel: 'Prosjektmetadata',

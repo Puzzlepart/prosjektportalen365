@@ -1,4 +1,6 @@
 declare interface IPortfolioWebPartsStrings {
+  ErrorBoundaryFallbackText: string
+  ErrorBoundaryFallbackDescription: string
   ProjectServiceArea: string
   ProjectType: string
   ProjectMetadataFieldLabel: string

@@ -2,7 +2,7 @@ import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp
 import { PortfolioInsights, IPortfolioInsightsProps } from 'components/PortfolioInsights'
 import '@fluentui/react/dist/css/fabric.min.css'
 import * as strings from 'PortfolioWebPartsStrings'
-import { BasePortfolioWebPart } from '../@basePortfolioWebPart'
+import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 
 export default class PortfolioInsightsWebPart extends BasePortfolioWebPart<IPortfolioInsightsProps> {
   public render(): void {

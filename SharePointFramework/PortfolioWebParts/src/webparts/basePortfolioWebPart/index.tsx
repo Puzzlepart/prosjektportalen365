@@ -1,12 +1,17 @@
+import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
 import { SPFI } from '@pnp/sp/presets/all'
 import { IBaseComponentProps } from 'components/types'
 import { createSpfiInstance } from 'pp365-shared-library'
-import { ComponentClass, createElement, FC, ReactElement } from 'react'
+import React, { ComponentClass, createElement, FC } from 'react'
 import { render } from 'react-dom'
+import { ErrorBoundary } from 'react-error-boundary'
 import { DataAdapter } from '../../data'
+import { ErrorBoundaryFallback } from './ErrorBoundary'
+
+type ComponentType<P> = FC<P> | ComponentClass<P>
 
 export abstract class BasePortfolioWebPart<
   T extends IBaseComponentProps
@@ -16,6 +21,26 @@ export abstract class BasePortfolioWebPart<
   private _pageTitle: string
 
   public abstract render(): void
+
+  /**
+   * Create props for component with default properties and the `props` parameter. Also
+   * includes `webPartContext` and `pageContext` from `this.context`, aswell as properties
+   * from `pageContext.web`, `pageContext.site` and `pageContext.legacyPageContext`.
+   *
+   * @param props Partial props of `P` to override the default properties
+   */
+  protected createPropsForComponent<P>(props: Partial<P>): P {
+    return {
+      title: this._pageTitle,
+      ...this.properties,
+      ...props,
+      webPartContext: this.context,
+      pageContext: this.context.pageContext,
+      dataAdapter: this.dataAdapter,
+      displayMode: this.displayMode,
+      sp: this.sp
+    } as unknown as P
+  }
 
   /**
    * Render component specified in `component` parameter, with the props
@@ -29,21 +54,21 @@ export abstract class BasePortfolioWebPart<
    * - `sp` (from `this.sp`)
    *
    * @param component Component to render
-   * @param props Props
+   * @param props Props to pass to the component
    */
-  public renderComponent<T = any>(component: ComponentClass<T> | FC<T>, props?: T): void {
-    const combinedProps: T = {
-      title: this._pageTitle,
-      ...this.properties,
-      ...props,
-      webPartContext: this.context,
-      pageContext: this.context.pageContext,
-      dataAdapter: this.dataAdapter,
-      displayMode: this.displayMode,
-      sp: this.sp
-    }
-    const element: ReactElement<T> = createElement(component, combinedProps)
-    render(element, this.domElement)
+  public renderComponent<P = any>(component: ComponentType<P>, props?: Partial<P>): void {
+    const combinedProps = this.createPropsForComponent(props)
+    const element = createElement(component, combinedProps)
+    render(
+      <ErrorBoundary
+        fallbackRender={({ error }) => (
+          <ErrorBoundaryFallback title={combinedProps['title']} error={error} />
+        )}
+      >
+        <FluentProvider theme={webLightTheme}>{element}</FluentProvider>
+      </ErrorBoundary>,
+      this.domElement
+    )
   }
 
   /**

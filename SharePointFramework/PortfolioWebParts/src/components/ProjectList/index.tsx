@@ -99,11 +99,9 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
 
   if (state.error) {
     return (
-      <FluentProvider theme={webLightTheme}>
-        <section className={styles.projectList}>
-          <Alert intent={'error'}>{strings.ErrorText}</Alert>
-        </section>
-      </FluentProvider>
+      <section className={styles.projectList}>
+        <Alert intent={'error'}>{strings.ErrorText}</Alert>
+      </section>
     )
   }
 
