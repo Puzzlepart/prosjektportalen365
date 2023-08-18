@@ -316,9 +316,9 @@ export class PortalDataService {
     const urls = await this._getList(list)
       .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
       .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')<{
-        DefaultNewFormUrl: string
-        DefaultEditFormUrl: string
-      }>()
+      DefaultNewFormUrl: string
+      DefaultEditFormUrl: string
+    }>()
     return {
       defaultNewFormUrl: makeUrlAbsolute(urls.DefaultNewFormUrl),
       defaultEditFormUrl: makeUrlAbsolute(urls.DefaultEditFormUrl)
@@ -409,7 +409,7 @@ export class PortalDataService {
           fieldsAdded.push(field)
         }
         await executeQuery(jsomContext)
-      } catch (error) { }
+      } catch (error) {}
     }
     try {
       const templateParametersField = spList
@@ -421,7 +421,7 @@ export class PortalDataService {
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch { }
+    } catch {}
     if (ensureList.created && params.properties) {
       ensureList.list.items.add(params.properties)
     }
@@ -716,10 +716,7 @@ export class PortalDataService {
     try {
       const url = this._configuration.spfxContext.pageContext.site.absoluteUrl
       const list = this._getList('IDEA_PROJECT_DATA')
-      const [spItem] = await list
-        .items
-        .select('Id')
-        .filter(`GtSiteUrl eq '${url}'`)()
+      const [spItem] = await list.items.select('Id').filter(`GtSiteUrl eq '${url}'`)()
       if (!spItem) return null
       const item = list.items.getById(spItem.Id)
       const fieldValues = await getItemFieldValues(item)

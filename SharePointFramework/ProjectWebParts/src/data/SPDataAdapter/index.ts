@@ -53,7 +53,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         label: strings.SyncProjectPropertiesValuesProgressLabel,
         description: strings.SyncProjectPropertiesValuesProgressDescription
       })
-      const properties = await this.getMappedProjectProperties(fieldValues, templateParameters)
+      const properties = await this.getMappedProjectProperties(fieldValues, {
+        customSiteFieldsGroup: templateParameters.CustomSiteFields,
+        projectContentTypeId: templateParameters.ProjectContentTypeId,
+      })
       await this.entityService.updateEntityItem(this.settings.siteId, {
         ...properties,
         Title: title

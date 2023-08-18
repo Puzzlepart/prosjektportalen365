@@ -29,6 +29,11 @@ export enum ProjectAdminPermission {
   ChildProjectsAdmin = '2281c92a-f5ff-4d99-8814-e7b2f33d1ac9'
 }
 
+export enum ProjectPropertiesMapType {
+  FromPortfolioToProject,
+  FromProjectToPortfolio
+}
+
 export type GetMappedProjectPropertiesOptions = {
   /**
    * Wrap multi values in results array.
@@ -37,8 +42,8 @@ export type GetMappedProjectPropertiesOptions = {
 
   /**
    * Use SharePoint taxonomy hidden fields to set the value for taxonomy fields.
-   * Default is using the custom text fields. 
-   * 
+   * Default is using the custom text fields.
+   *
    * @note `targetListName` must be set for this to work.
    */
   useSharePointTaxonomyHiddenFields?: boolean
@@ -47,4 +52,20 @@ export type GetMappedProjectPropertiesOptions = {
    * Target list name to map the project properties for.
    */
   targetListName?: string
+
+  /**
+   * Map type decides what will be the source and destination webs for the mapping.
+   */
+  mapType?: ProjectPropertiesMapType
+
+  /**
+   * Project content type ID if different from the default.
+   */
+  projectContentTypeId?: string
+
+  /**
+   * Custom site fields group name to get fields from in addition to fields
+   * with prefix `Gt`.
+   */
+  customSiteFieldsGroup?: string
 }

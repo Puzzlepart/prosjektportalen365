@@ -10,7 +10,7 @@ export type ProjectSetupDialogSectionComponent = FC<ITemplateSelectDialogSection
 
 export interface IProjectSetupDialogProps extends IBaseDialogProps {
   /**
-   * Data
+   * Data for the project setup
    */
   data: IProjectSetupData
 
@@ -20,7 +20,7 @@ export interface IProjectSetupDialogProps extends IBaseDialogProps {
   onSubmit: (data: IProjectSetupDialogState) => void
 
   /**
-   * Tasks
+   * Tasks to execute
    */
   tasks?: string[]
 }

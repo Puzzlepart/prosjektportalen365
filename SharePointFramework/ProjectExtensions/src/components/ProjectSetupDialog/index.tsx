@@ -3,6 +3,7 @@ import {
   DialogFooter,
   format,
   MessageBar,
+  MessageBarType,
   Pivot,
   PivotItem,
   PrimaryButton
@@ -62,18 +63,33 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
             <ContentConfigSection style={{ height: 400 }} />
           </PivotItem>
         </Pivot>
+        <div className={styles.projectIdeaMessage} hidden={!props.data.ideaData}>
+          <MessageBar
+            messageBarIconProps={{ iconName: 'Lightbulb' }}
+            messageBarType={MessageBarType.success}
+          >
+            Det ble funnet en prosjektìde for dette prosjektet. Prosjektdataene for denne idèen blir
+            brukt til å fylle ut prosjektinformasjon.
+          </MessageBar>
+        </div>
         <DialogFooter>
           {props.tasks && (
             <MessageBar>
               {format(strings.ConfiguredSpecifiedTaskMessage, props.tasks.join(', '))}
             </MessageBar>
           )}
-          <PrimaryButton
-            disabled={!state.selectedTemplate}
-            text={strings.TemplateSelectDialogSubmitButtonText}
-            onClick={onSubmit}
-          />
-          <DefaultButton text={strings.CloseModalText} onClick={props.onDismiss} />
+          <section className={styles.actions}>
+            <PrimaryButton
+              disabled={!state.selectedTemplate}
+              text={strings.TemplateSelectDialogSubmitButtonText}
+              onClick={onSubmit}
+            />
+            <DefaultButton
+              text={strings.CloseModalText}
+              onClick={props.onDismiss}
+              styles={{ root: { marginLeft: 4 } }}
+            />
+          </section>
         </DialogFooter>
       </BaseDialog>
     </ProjectSetupDialogContext.Provider>

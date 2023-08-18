@@ -1,16 +1,30 @@
 import _ from 'lodash'
 
 export type ItemFieldValue = {
+  /**
+   * The value of the field.
+   */
   value: any
+
+  /**
+   * The value of the field as text.
+   */
   valueAsText: string
 }
 
-type FieldValueFormat = 'object' | 'text' | 'term_text'
+type FieldValueFormat = 'object' | 'text' | 'term_text' | 'user_id'
 
 type GetFieldValueOptions<T = any> = {
-  asText?: boolean
-  asObject?: boolean
+  /**
+   * Default value to return if the field value is not set.
+   */
   defaultValue?: T
+
+  /**
+   * Format to return the value in. If `object` is used the
+   * type `ItemFieldValue` is returned and can be used as
+   * generic type `T`.
+   */
   format?: FieldValueFormat
 }
 
@@ -53,22 +67,42 @@ export class ItemFieldValues {
 
   /**
    * Get field value in the specified format.
-   * 
-   * @param value Value
-   * @param valueAstext Value as text
+   *
+   * @param fieldName Field name
    * @param format Format to return the value in
+   * @param defaultValue Default value to return if the field value is not set
    */
-  private _getValueInFormat<T = any>(value: any, valueAstext: string, format: FieldValueFormat): T {
+  private _getValueInFormat<T = any>(
+    fieldName: string,
+    format: FieldValueFormat,
+    defaultValue: T = null
+  ): T {
+    const { value, valueAsText } = this._values.get(fieldName)
     switch (format) {
-      case 'text': return valueAstext as unknown as T
-      case 'object': return value as unknown as T
+      case 'text':
+        return valueAsText as unknown as T
+      case 'object':
+        return this._values.get(fieldName) as unknown as T
       case 'term_text': {
         if (_.isArray(value)) {
-          return value.map(({ TermGuid, Label, WssId = -1 }) => `${WssId};#${Label}|${TermGuid}`).join(';#') as unknown as T
+          return value
+            .map(({ TermGuid, Label, WssId = -1 }) => `${WssId};#${Label}|${TermGuid}`)
+            .join(';#') as unknown as T
         } else {
           const { TermGuid, Label, WssId = -1 } = value
           return `${WssId};#${Label}|${TermGuid}` as unknown as T
         }
+      }
+      case 'user_id': {
+        const test = this._values.get(`${fieldName}Id`)
+        // eslint-disable-next-line no-console
+        console.log(test)
+        // eslint-disable-next-line no-console
+        // console.log(this._values.get(`${fieldName}Id`))
+        // if (!userIdValue) return defaultValue
+        // // eslint-disable-next-line no-console
+        // console.log('userIdValue', userIdValue)
+        return defaultValue
       }
     }
   }
@@ -77,19 +111,16 @@ export class ItemFieldValues {
    * Get field value for the given field name. Optionally return as text.
    *
    * @param fieldName Field name
-   * @param options Options (`asText`, `asObject`, `defaultValue`)
+   * @param options Options (`format`, `defaultValue`)
    */
   public get<T = any>(fieldName: string, options: GetFieldValueOptions<T> = {}): T {
-    const { asText = false, asObject = false, defaultValue = null, format = null } = options
-    if (!this._values.has(fieldName)) {
-      if (asObject) return {} as unknown as T
+    const { defaultValue = null, format = null } = options
+    if (!this._values.has(fieldName) && !this._values.has(`${fieldName}Id`)) {
+      if (format === 'object') return (defaultValue ?? {}) as unknown as T
       return defaultValue
     }
-    const { value, valueAsText } = this._values.get(fieldName)
-    if (asObject) return this._values.get(fieldName) as unknown as T
-    if (format) return this._getValueInFormat(value, valueAsText, format)
-    if (asText) return valueAsText as unknown as T
-    return value as unknown as T
+    if (format) return this._getValueInFormat(fieldName, format, options.defaultValue)
+    return this._values.get(fieldName) as unknown as T
   }
 
   /**

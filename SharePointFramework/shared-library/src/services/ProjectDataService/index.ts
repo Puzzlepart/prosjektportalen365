@@ -205,7 +205,7 @@ export class ProjectDataService {
     const item = await this._getLocalProjectInformationItem()
     if (item) {
       const templateParameters = tryParseJson(
-        item.fieldValues.get('TemplateParameters', { asText: true }),
+        item.fieldValues.get('TemplateParameters', { format: 'text' }),
         {}
       )
       this._logInfo('Local property item found.', 'getPropertiesData')
@@ -315,7 +315,7 @@ export class ProjectDataService {
   public async getCurrentPhaseName(phaseField: string): Promise<string> {
     try {
       const propertiesData = await this.getProjectInformationData()
-      return propertiesData.fieldValues.get(phaseField, { asText: true })
+      return propertiesData.fieldValues.get(phaseField, { format: 'text' })
     } catch (error) {
       throw new Error()
     }

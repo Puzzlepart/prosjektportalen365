@@ -105,7 +105,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         properties: this.properties
       })
     } catch (error) {
-      this._renderErrorDialog({ error })
+      this._renderErrorDialog({ error, showStackAsSubText: true })
     }
   }
 

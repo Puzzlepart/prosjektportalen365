@@ -10,7 +10,12 @@ import { ItemFieldValue, ItemFieldValues, ProjectAdminRoleType, SPField } from '
 import { PortalDataService } from '../../services/PortalDataService'
 import { SPFxContext } from '../../types'
 import { createSpfiInstance } from '../createSpfiInstance'
-import { GetMappedProjectPropertiesOptions, ISPDataAdapterBaseConfiguration, ProjectAdminPermission } from './types'
+import {
+  ProjectPropertiesMapType,
+  GetMappedProjectPropertiesOptions,
+  ISPDataAdapterBaseConfiguration,
+  ProjectAdminPermission
+} from './types'
 import { DefaultCaching } from '../cache'
 
 export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
@@ -157,7 +162,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                     const currentUserHasManageWebPermisson =
                       await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
                     if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
-                  } catch { }
+                  } catch {}
                 }
                 break
               case ProjectAdminRoleType.ProjectProperty:
@@ -192,7 +197,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                       ).length > 0
                     )
                       userPermissions.push(...role.permissions)
-                  } catch { }
+                  } catch {}
                 }
                 break
             }
@@ -306,31 +311,43 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   }
 
   /**
-   * Get mapped project properties from `fieldValues` and `fieldValuesText`, optionally using
-   * `templateParameters` to determine which fields to include.
+   * Get mapped project properties from `fieldValues` and `fieldValuesText`.
+   *
+   * Site users needs to be fetched from the source web, so that they can be ensured for the destination web.
    *
    * @param fieldValues - Field values for the properties item
-   * @param templateParameters - Template parameters
-   * @param options Options like `wrapMultiValuesInResultsArray`, `targetListName` and `useSharePointTaxonomyHiddenFields`
-   * @param web The `Web` to map the properties for
+   * @param options Options for the mapping process (default `{}`
+   *
+   * @returns Mapped project properties for the destination web (default `{}`)
    */
   public async getMappedProjectProperties(
     fieldValues: ItemFieldValues,
-    templateParameters: Record<string, any> = { CustomSiteFields: '' },
-    options: GetMappedProjectPropertiesOptions = {},
-    web = this.sp.web,
+    options: GetMappedProjectPropertiesOptions = {}
   ): Promise<Record<string, any>> {
+    let sourceWeb: IWeb = this.sp.web
+    let destinationWeb: IWeb = this.portal.web
+
+    // If the map type is from project to portfolio, we need to switch the source and destination web.
+    if (options.mapType === ProjectPropertiesMapType.FromPortfolioToProject) {
+      sourceWeb = this.portal.web
+      destinationWeb = this.sp.web
+    }
+
     try {
       const [fields, siteUsers, targetListFields] = await Promise.all([
-        templateParameters?.ProjectContentTypeId
-          ? this.entityService
-            .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
-            .getEntityFields() as Promise<SPField[]>
-          : this.entityService.getEntityFields() as Promise<SPField[]>,
-        web.siteUsers.select('Id', 'Email', 'LoginName', 'Title').using(DefaultCaching)(),
-        options?.targetListName ? this.sp.web.lists.getByTitle(options?.targetListName).fields<SPField[]>() : Promise.resolve<SPField[]>([])
+        options.projectContentTypeId
+          ? (this.entityService
+              .usingParams({ contentTypeId: options.projectContentTypeId })
+              .getEntityFields() as Promise<SPField[]>)
+          : (this.entityService.getEntityFields() as Promise<SPField[]>),
+        (sourceWeb as IWeb).siteUsers
+          .select('Id', 'Email', 'LoginName', 'Title')
+          .using(DefaultCaching)(),
+        options?.targetListName
+          ? destinationWeb.lists.getByTitle(options?.targetListName).fields<SPField[]>()
+          : Promise.resolve<SPField[]>([])
       ])
-      const fieldsToSync = this._getFieldsToSync(fields, templateParameters?.CustomSiteFields, [
+      const fieldsToSync = this._getFieldsToSync(fields, options.customSiteFieldsGroup, [
         'GtIsParentProject',
         'GtIsProgram',
         'GtCurrentVersion'
@@ -338,35 +355,17 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
       const properties: Record<string, any> = {}
       for (let i = 0; i < fieldsToSync.length; i++) {
         const field = fieldsToSync[i]
-        const fieldValue = fieldValues.get<ItemFieldValue>(field.InternalName, { asObject: true })
+        const fieldValue = fieldValues.get<ItemFieldValue>(field.InternalName, { format: 'object' })
         switch (field.TypeAsString) {
           case 'TaxonomyFieldType':
-            {
-              if (options.useSharePointTaxonomyHiddenFields) {
-                const textField = targetListFields.find(f => f.Id === field.TextField)
-                if (!textField) continue
-                properties[textField.InternalName] = fieldValues.get<string>(
-                  field.InternalName,
-                  { format: 'term_text' }
-                )
-              } else {
-                const [textField] = fields.filter(
-                  (f) => f.InternalName === `${field.InternalName}Text`
-                )
-                if (!textField) continue
-                properties[textField.InternalName] = fieldValue.valueAsText
-              }
-            }
-            break
           case 'TaxonomyFieldTypeMulti':
             {
               if (options.useSharePointTaxonomyHiddenFields) {
-                const textField = targetListFields.find(f => f.Id === field.TextField)
+                const textField = targetListFields.find((f) => f.Id === field.TextField)
                 if (!textField) continue
-                properties[textField.InternalName] = fieldValues.get<string>(
-                  field.InternalName,
-                  { format: 'term_text' }
-                )
+                properties[textField.InternalName] = fieldValues.get<string>(field.InternalName, {
+                  format: 'term_text'
+                })
               } else {
                 const [textField] = fields.filter(
                   (f) => f.InternalName === `${field.InternalName}Text`
@@ -378,25 +377,31 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
             break
           case 'User':
             {
-              const [_user] = siteUsers.filter(
-                (u) => u.Id === fieldValues[`${field.InternalName}Id`]
-              )
-              const user = _user ? await this.entityService.web.ensureUser(_user.LoginName) : null
-              properties[`${field.InternalName}Id`] = user ? user.data.Id : null
+              const sourceUserId = fieldValues.get<number>(field.InternalName, {
+                format: 'user_id'
+              })
+              const user = siteUsers.find((u) => u.Id === sourceUserId)
+              if (!user) continue
+              const destinationUserId =
+                (await destinationWeb.ensureUser(user.LoginName))?.data?.Id ?? null
+              properties[`${field.InternalName}Id`] = destinationUserId
             }
             break
           case 'UserMulti':
             {
-              const userIds = fieldValues[`${field.InternalName}Id`] || []
-              const users = siteUsers.filter((u) => userIds.indexOf(u.Id) !== -1)
-              const ensured = (
+              const sourceUserIds = fieldValues.get<number[]>(field.InternalName, {
+                format: 'user_id',
+                defaultValue: []
+              })
+              const users = siteUsers.filter(({ Id }) => sourceUserIds.indexOf(Id) !== -1)
+              const destinationUserIds = (
                 await Promise.all(
-                  users.map(({ LoginName }) => this.entityService.web.ensureUser(LoginName))
+                  users.map(({ LoginName }) => destinationWeb.ensureUser(LoginName))
                 )
               ).map(({ data }) => data.Id)
               properties[`${field.InternalName}Id`] = options.wrapMultiValuesInResultsArray
-                ? { results: ensured }
-                : ensured
+                ? { results: destinationUserIds }
+                : destinationUserIds
             }
             break
           case 'DateTime':

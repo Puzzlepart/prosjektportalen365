@@ -1,10 +1,14 @@
+import { stringIsNullOrEmpty } from '@pnp/core'
 import * as strings from 'ProjectExtensionsStrings'
+import { ProjectPropertiesMapType } from 'pp365-shared-library'
 import { IProjectSetupData } from 'projectSetup'
+import { SPDataAdapter } from '../../../data'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
-import { SPDataAdapter } from '../../../data'
 
 export class SetupProjectInformation extends BaseTask {
+  private _templateParameters: Record<string, any>
+
   constructor(data: IProjectSetupData) {
     super('SetupProjectInformation', data)
   }
@@ -21,6 +25,7 @@ export class SetupProjectInformation extends BaseTask {
   ): Promise<IBaseTaskParams> {
     super.initExecute(params, onProgress)
     try {
+      this._templateParameters = params.templateSchema.Parameters
       await this._syncPropertiesList()
       await this._addEntryToHub()
       return params
@@ -53,18 +58,18 @@ export class SetupProjectInformation extends BaseTask {
       const { list } = await this.params.portal.syncList({
         url: this.params.webAbsoluteUrl,
         listName: strings.ProjectPropertiesListName,
-        contentTypeId: this.params.templateSchema.Parameters.ProjectContentTypeId
+        contentTypeId: this._templateParameters.ProjectContentTypeId
       })
       this.onProgress(
         strings.SetupProjectInformationText,
         strings.CreatingLocalProjectPropertiesListItemText,
         'AlignCenter'
       )
-      const properties: Record<string, any> = {
-        ...(await this._getIdeaDataProperties()),
-        ...this._createPropertiesItem(this.params),
-        TemplateParameters: JSON.stringify(this.params.templateSchema.Parameters)
-      }
+      const ideaDataProperties = await this._getIdeaDataProperties()
+      const properties = this._createPropertiesItem(this.params, {
+        ...ideaDataProperties,
+        TemplateParameters: JSON.stringify(this._templateParameters)
+      })
       const propertyItems = await list.items()
       const propertyItem = list.items.getById(1)
       if (propertyItems.length > 0) await propertyItem.update(properties)
@@ -76,15 +81,18 @@ export class SetupProjectInformation extends BaseTask {
 
   /**
    * Get mapped idea data properties for the current project.
-   * 
+   *
    * @returns The mapped idea data properties
    */
   private async _getIdeaDataProperties(): Promise<Record<string, any>> {
     if (!this.data.ideaData) return {}
-    return await SPDataAdapter.getMappedProjectProperties(this.data.ideaData, undefined, {
+    return await SPDataAdapter.getMappedProjectProperties(this.data.ideaData, {
       wrapMultiValuesInResultsArray: false,
       useSharePointTaxonomyHiddenFields: true,
-      targetListName: strings.ProjectPropertiesListName
+      targetListName: strings.ProjectPropertiesListName,
+      mapType: ProjectPropertiesMapType.FromPortfolioToProject,
+      projectContentTypeId: this._templateParameters.ProjectContentTypeId,
+      customSiteFieldsGroup: this._templateParameters.CustomSiteFields
     })
   }
 
@@ -98,9 +106,11 @@ export class SetupProjectInformation extends BaseTask {
    * - `GtProjectTemplate`: The selected project template name
    *
    * @param params Params
+   * @param additionalProperties Additional properties
    */
   private _createPropertiesItem(
-    params: IBaseTaskParams
+    params: IBaseTaskParams,
+    additionalProperties: Record<string, string | boolean | number> = {}
   ): Record<string, string | boolean | number> {
     return {
       Title: params.context.pageContext.web.title,
@@ -108,7 +118,8 @@ export class SetupProjectInformation extends BaseTask {
       GtIsParentProject: this.data.selectedTemplate.isParentProject,
       GtInstalledVersion: params.templateSchema.Version,
       GtCurrentVersion: params.templateSchema.Version,
-      GtProjectTemplate: this.data.selectedTemplate.text
+      GtProjectTemplate: this.data.selectedTemplate.text,
+      ...additionalProperties
     }
   }
 
@@ -123,22 +134,22 @@ export class SetupProjectInformation extends BaseTask {
    */
   private async _addEntryToHub() {
     try {
+      const { pageContext } = this.params.context
       const entity = await this.params.entityService.getEntityItem(
-        this.params.context.pageContext.legacyPageContext.groupId
+        pageContext.legacyPageContext.groupId
       )
       if (entity) return
-      const properties: Record<string, string | boolean | number> = {
-        ...await this._createPropertiesItem(this.params),
-        GtSiteId: this.params.context.pageContext.site.id.toString()
+      const siteId = pageContext.site.id.toString()
+      const groupId = pageContext.legacyPageContext.groupId
+      const webUrl = pageContext.web.absoluteUrl
+      const contentTypeId = this._templateParameters.ProjectContentTypeId
+      const properties = this._createPropertiesItem(this.params, {
+        GtSiteId: siteId
+      })
+      if (!stringIsNullOrEmpty(contentTypeId)) {
+        properties.ContentTypeId = contentTypeId
       }
-      if (this.params.templateSchema.Parameters.ProjectContentTypeId) {
-        properties.ContentTypeId = this.params.templateSchema.Parameters.ProjectContentTypeId
-      }
-      await this.params.entityService.createNewEntity(
-        this.params.context.pageContext.legacyPageContext.groupId,
-        this.params.context.pageContext.web.absoluteUrl,
-        properties
-      )
+      await this.params.entityService.createNewEntity(groupId, webUrl, properties)
     } catch (error) {
       throw error
     }

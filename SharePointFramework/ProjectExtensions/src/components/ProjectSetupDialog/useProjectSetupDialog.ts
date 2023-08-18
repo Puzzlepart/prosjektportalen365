@@ -5,7 +5,7 @@ import _ from 'underscore'
 
 /**
  * Component logic for the `ProjectSetupDialog` component.
- * 
+ *
  * @param props Props for the `ProjectSetupDialog` component.
  */
 export function useProjectSetupDialog(props: IProjectSetupDialogProps) {
