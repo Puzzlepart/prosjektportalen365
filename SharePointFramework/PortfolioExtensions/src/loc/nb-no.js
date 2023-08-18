@@ -38,7 +38,7 @@ define([], function () {
     LinksListText: 'Nyttige lenker',
     RejectChoice: 'Avvis',
     SeeAllInstallationsLinkText: 'Se alle installasjoner',
-    SetRecommendationDefaultDescription: 'Dersom ideen blir godkjent, vil det bli opprettet en detaljert idé-side for ideen og et element i <a href="../Idebehandling/AllItems.aspx" target="_blank">Idébehandlingslisten</a>.;Dersom ideen blir godkjent, vil det være mulig å opprette prosjektdata som kan bli brukt for provisjonering av området.;Tilknytt prosjektdata til ideen for å synkronisere data til et prosjekt senere.',
+    SetRecommendationDefaultDescription: 'Dersom ideen blir godkjent, vil det bli opprettet en detaljert idé-side for ideen og et element i <a href="../Idebehandling/AllItems.aspx" target="_blank">Idébehandlingslisten</a>.;Dersom ideen blir godkjent, vil det være mulig å opprette prosjektdata som kan bli brukt for provisjonering av området.;Tilknytt prosjektdata til ideen for å synkronisere data til et prosjekt senere. Når prosjektdata er opprettet, er det viktig å fylle ut ønsket metadata, deretter legge inn url for prosjektet, dette gjør at metadata synkroniseres til prosjektet ved provisjonering. Url til prosjektet kan enten fylles inn manuelt etter at et prosjekt har fått URL eller via en bestillingsløsning.',
     SetRecommendationSubtitle: 'Velg anbefaling for: {0}. \n\n{1}',
     SetRecommendationTitle: 'Sett anbefaling',
     SiteSettingsLinkText: 'Områdeinnstillinger',

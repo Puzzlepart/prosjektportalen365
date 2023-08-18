@@ -2,8 +2,9 @@
   xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
   <pnp:FieldRefs>
     <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
-    <pnp:FieldRef ID="f63038bc-55f4-4637-9709-bd10d8175f7c" Name="GtRegistratedIdea" Required="true" UpdateChildren="true" />
     <pnp:FieldRef ID="724036b3-ff76-40d7-a7df-9613e6f4e8fa" Name="GtIdeaUrl" Required="true" UpdateChildren="true" />
+    <pnp:FieldRef ID="f63038bc-55f4-4637-9709-bd10d8175f7c" Name="GtRegistratedIdea" Required="true" UpdateChildren="true" />
+    <pnp:FieldRef ID="8ac3248f-1b9c-4270-adeb-097ac9d02874" Name="GtIdeaProjectData" UpdateChildren="true" />
     <pnp:FieldRef ID="acf4112b-cf26-4797-831e-a0b7d40975ab" Name="GtIdeaReporter" UpdateChildren="true" />
     <pnp:FieldRef ID="67eba603-1c39-49ae-a91a-29664f0824c8" Name="GtIdeaOwner" UpdateChildren="true" />
     <pnp:FieldRef ID="a7e1a8b5-8c93-410f-a84d-45772f37293e" Name="GtIdeaSolutionDescription" UpdateChildren="true" />
@@ -29,6 +30,5 @@
     <pnp:FieldRef ID="9b7cf4f7-641d-4a7f-be6a-245237dce476" Name="GtIdeaManualComment" UpdateChildren="true" />
     <pnp:FieldRef ID="ce451f2c-a098-48ba-a8a5-d1d4ffc225d6" Name="GtIdeaScore" UpdateChildren="true" />
     <pnp:FieldRef ID="8fef6c38-28e1-497a-97d7-72e1a854fae1" Name="GtIdeaPriority" UpdateChildren="true" />
-    <pnp:FieldRef ID="8ac3248f-1b9c-4270-adeb-097ac9d02874" Name="GtIdeaProjectData" UpdateChildren="true" />
   </pnp:FieldRefs>
 </pnp:ContentType>

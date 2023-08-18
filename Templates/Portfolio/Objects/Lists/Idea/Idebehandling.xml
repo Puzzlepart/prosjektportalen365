@@ -14,6 +14,7 @@
                 <FieldRef Name="LinkTitle" />
                 <FieldRef Name="GtIdeaUrl" />
                 <FieldRef Name="GtRegistratedIdea" />
+                <FieldRef Name="GtIdeaProjectData"/>
                 <FieldRef Name="GtIdeaReporter" />
                 <FieldRef Name="GtIdeaOwner"/>
                 <FieldRef Name="GtIdeaSolutionDescription" />
@@ -25,7 +26,6 @@
                 <FieldRef Name="GtIdeaOtherComments" />
                 <FieldRef Name="GtIdeaDecisionComment" />
                 <FieldRef Name="GtIdeaDecision" />
-                <FieldRef Name="GtIdeaProjectData"/>
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
             <Aggregations Value="Off" />
