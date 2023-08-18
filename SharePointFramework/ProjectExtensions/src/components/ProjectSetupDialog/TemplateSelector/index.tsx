@@ -6,11 +6,11 @@ import Autocomplete from 'react-autocomplete'
 import { TemplateSelectDialogContext } from '../context'
 import { ON_TEMPLATE_CHANGED } from '../reducer'
 import { TemplateConfigMessage } from '../TemplateConfigMessage'
-import { TemplateSelectDialogSectionComponent } from '../types'
+import { ProjectSetupDialogSectionComponent } from '../types'
 import styles from './TemplateSelector.module.scss'
 import { TemplateSelectorItem } from './TemplateSelectorItem'
 
-export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
+export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
   const context = useContext(TemplateSelectDialogContext)
   const [searchValue, setSearchValue] = useState(context.state.selectedTemplate?.text)
 

@@ -1,9 +1,14 @@
 import { useEffect, useReducer } from 'react'
 import createReducer, { INIT, initialState } from './reducer'
-import { ITemplateSelectDialogProps } from './types'
+import { IProjectSetupDialogProps } from './types'
 import _ from 'underscore'
 
-export function useTemplateSelectDialog(props: ITemplateSelectDialogProps) {
+/**
+ * Component logic for the `ProjectSetupDialog` component.
+ * 
+ * @param props Props for the `ProjectSetupDialog` component.
+ */
+export function useProjectSetupDialog(props: IProjectSetupDialogProps) {
   const [state, dispatch] = useReducer(createReducer(props.data), initialState)
 
   useEffect(() => {
@@ -29,5 +34,5 @@ export function useTemplateSelectDialog(props: ITemplateSelectDialogProps) {
   const isConfigDisabled = (type: 'extensions' | 'contentConfig') =>
     _.isEmpty(props.data[type]) || !state.selectedTemplate || state?.selectedTemplate?.isForced
 
-  return { state, dispatch, onSubmit, isConfigDisabled } as const
+  return { state, dispatch, onSubmit, isConfigDisabled }
 }

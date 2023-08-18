@@ -15,11 +15,11 @@ import { TemplateSelectDialogContext } from './context'
 import { ExtensionsSection } from './ExtensionsSection'
 import styles from './TemplateSelectDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
-import { ITemplateSelectDialogProps } from './types'
-import { useTemplateSelectDialog } from './useTemplateSelectDialog'
+import { IProjectSetupDialogProps } from './types'
+import { useProjectSetupDialog } from './useProjectSetupDialog'
 
-export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
-  const { state, dispatch, onSubmit, isConfigDisabled } = useTemplateSelectDialog(props)
+export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
+  const { state, dispatch, onSubmit, isConfigDisabled } = useProjectSetupDialog(props)
 
   return (
     <TemplateSelectDialogContext.Provider value={{ props, state, dispatch }}>

@@ -1,10 +1,10 @@
 import { AnyAction } from '@reduxjs/toolkit'
 import { createContext } from 'react'
-import { ITemplateSelectDialogProps, ITemplateSelectDialogState } from './types'
+import { IProjectSetupDialogProps, IProjectSetupDialogState } from './types'
 
 export interface ITemplateSelectDialogContext {
-  props: ITemplateSelectDialogProps
-  state: ITemplateSelectDialogState
+  props: IProjectSetupDialogProps
+  state: IProjectSetupDialogState
   dispatch: React.Dispatch<AnyAction>
 }
 

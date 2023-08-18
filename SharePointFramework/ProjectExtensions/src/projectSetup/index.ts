@@ -25,10 +25,10 @@ import {
   ErrorDialog,
   IErrorDialogProps,
   IProgressDialogProps,
-  ITemplateSelectDialogProps,
-  ITemplateSelectDialogState,
+  IProjectSetupDialogProps,
+  IProjectSetupDialogState,
   ProgressDialog,
-  TemplateSelectDialog
+  ProjectSetupDialog
 } from '../components'
 import { ProjectSetupError } from './ProjectSetupError'
 import { deleteCustomizer } from './deleteCustomizer'
@@ -195,7 +195,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    *
    * @param data - Project setup data
    */
-  private _checkAutoTemplate({ templates }: IProjectSetupData): ITemplateSelectDialogState {
+  private _checkAutoTemplate({ templates }: IProjectSetupData): IProjectSetupDialogState {
     const autoTemplate = _.find(
       templates,
       ({ text, autoConfigure }) => text === this.properties.forceTemplate || autoConfigure
@@ -213,7 +213,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    *
    * @param data - Data
    */
-  private _getSetupInfo(data: IProjectSetupData): Promise<ITemplateSelectDialogState> {
+  private _getSetupInfo(data: IProjectSetupData): Promise<IProjectSetupDialogState> {
     return new Promise((resolve, reject) => {
       const placeholder = this._getPlaceholder('TemplateSelectDialog')
       const autoTemplate = this._checkAutoTemplate(data)
@@ -221,11 +221,11 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         this._unmount(placeholder)
         resolve(autoTemplate)
       } else {
-        const element = createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
+        const element = createElement<IProjectSetupDialogProps>(ProjectSetupDialog, {
           data,
           version: this.version,
           tasks: this.properties.tasks,
-          onSubmit: (state: ITemplateSelectDialogState) => {
+          onSubmit: (state: IProjectSetupDialogState) => {
             this._unmount(placeholder)
             resolve(state)
           },

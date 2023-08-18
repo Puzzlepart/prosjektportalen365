@@ -1,14 +1,14 @@
-import { IProjectSetupData } from 'projectSetup/types'
 import { ContentConfig, ProjectExtension, ProjectTemplate } from 'pp365-shared-library'
+import { IProjectSetupData } from 'projectSetup/types'
+import { FC, HTMLProps } from 'react'
 import { IBaseDialogProps } from '../@BaseDialog/types'
-import React from 'react'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface ITemplateSelectDialogSectionProps extends React.HTMLProps<HTMLDivElement> {}
+interface ITemplateSelectDialogSectionProps extends HTMLProps<HTMLDivElement> {}
 
-export type TemplateSelectDialogSectionComponent = React.FC<ITemplateSelectDialogSectionProps>
+export type ProjectSetupDialogSectionComponent = FC<ITemplateSelectDialogSectionProps>
 
-export interface ITemplateSelectDialogProps extends IBaseDialogProps {
+export interface IProjectSetupDialogProps extends IBaseDialogProps {
   /**
    * Data
    */
@@ -17,7 +17,7 @@ export interface ITemplateSelectDialogProps extends IBaseDialogProps {
   /**
    * On submit callback
    */
-  onSubmit: (data: ITemplateSelectDialogState) => void
+  onSubmit: (data: IProjectSetupDialogState) => void
 
   /**
    * Tasks
@@ -25,7 +25,7 @@ export interface ITemplateSelectDialogProps extends IBaseDialogProps {
   tasks?: string[]
 }
 
-export interface ITemplateSelectDialogState {
+export interface IProjectSetupDialogState {
   /**
    * Currently selected project templates
    */

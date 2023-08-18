@@ -1,5 +1,5 @@
 import { IDialogContentProps } from '@fluentui/react'
-import { ITemplateSelectDialogState } from 'components/TemplateSelectDialog'
+import { IProjectSetupDialogState } from 'components/ProjectSetupDialog'
 import { ProjectTemplate, ProjectExtension, ContentConfig } from 'pp365-shared-library'
 
 export interface IProjectSetupProperties {
@@ -51,7 +51,7 @@ export interface IProjectSetupProperties {
   progressDialogContentProps?: IDialogContentProps
 }
 
-export interface IProjectSetupData extends ITemplateSelectDialogState {
+export interface IProjectSetupData extends IProjectSetupDialogState {
   /**
    * Templates
    */
