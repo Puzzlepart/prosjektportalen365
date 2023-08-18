@@ -55,7 +55,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       })
       const properties = await this.getMappedProjectProperties(fieldValues, {
         customSiteFieldsGroup: templateParameters.CustomSiteFields,
-        projectContentTypeId: templateParameters.ProjectContentTypeId,
+        projectContentTypeId: templateParameters.ProjectContentTypeId
       })
       await this.entityService.updateEntityItem(this.settings.siteId, {
         ...properties,
