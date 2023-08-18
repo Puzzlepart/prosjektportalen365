@@ -405,11 +405,17 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
             }
             break
           case 'DateTime':
-            properties[field.InternalName] = fieldValue.value ? new Date(fieldValue.value) : null
+            properties[field.InternalName] = fieldValues.get<Date>(field.InternalName, {
+              format: 'date',
+              defaultValue: null
+            })
             break
           case 'Number':
           case 'Currency': {
-            properties[field.InternalName] = fieldValue.value ? parseFloat(fieldValue.value) : null
+            properties[field.InternalName] = fieldValues.get<number>(field.InternalName, {
+              format: 'number',
+              defaultValue: null
+            })
           }
           case 'URL':
             properties[field.InternalName] = fieldValue.value ?? null

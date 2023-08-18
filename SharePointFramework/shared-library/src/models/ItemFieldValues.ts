@@ -4,15 +4,15 @@ export type ItemFieldValue = {
   /**
    * The value of the field.
    */
-  value: any
+  value?: any
 
   /**
    * The value of the field as text.
    */
-  valueAsText: string
+  valueAsText?: string
 }
 
-type FieldValueFormat = 'object' | 'text' | 'term_text' | 'user_id'
+type FieldValueFormat = 'object' | 'text' | 'term_text' | 'user_id' | 'date' | 'number'
 
 type GetFieldValueOptions<T = any> = {
   /**
@@ -68,22 +68,21 @@ export class ItemFieldValues {
   /**
    * Get field value in the specified format.
    *
-   * @param fieldName Field name
+   * @param value Field value
    * @param format Format to return the value in
    * @param defaultValue Default value to return if the field value is not set
    */
   private _getValueInFormat<T = any>(
-    fieldName: string,
+    { value, valueAsText }: ItemFieldValue,
     format: FieldValueFormat,
     defaultValue: T = null
   ): T {
     switch (format) {
       case 'text':
-        return (this._values.get(fieldName).valueAsText ?? defaultValue) as unknown as T
+        return (valueAsText ?? defaultValue) as unknown as T
       case 'object':
-        return (this._values.get(fieldName) ?? defaultValue) as unknown as T
+        return (value ?? defaultValue) as unknown as T
       case 'term_text': {
-        const { value } = this._values.get(fieldName)
         if (!value) return defaultValue
         if (_.isArray(value)) {
           return value
@@ -95,7 +94,13 @@ export class ItemFieldValues {
         }
       }
       case 'user_id': {
-        return (this._values.get(`${fieldName}Id`)?.value ?? defaultValue) as unknown as T
+        return (value ?? defaultValue) as unknown as T
+      }
+      case 'date': {
+        return value ? (new Date(value) as unknown as T) : defaultValue
+      }
+      case 'number': {
+        return value ? (parseFloat(value) as unknown as T) : defaultValue
       }
     }
   }
@@ -113,8 +118,9 @@ export class ItemFieldValues {
       if (format === 'object') return (defaultValue ?? {}) as unknown as T
       return defaultValue
     }
-    if (format) return this._getValueInFormat(fieldName, format, options.defaultValue)
-    return this._values.get(fieldName) as unknown as T
+    const value = this._values.get(fieldName) ?? this._values.get(`${fieldName}Id`) ?? {}
+    if (format) return this._getValueInFormat(value, format, options.defaultValue)
+    return value as unknown as T
   }
 
   /**
