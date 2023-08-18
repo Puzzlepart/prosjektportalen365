@@ -31,11 +31,6 @@ export function useProjectCardContent() {
           children: type,
           type: 'Prosjekttype'
         }
-      }),
-    template: context.project.template,
-    isProgram: context.project.isProgram,
-    isParent: context.project.isParent,
-    showProjectServiceArea: context.showProjectServiceArea,
-    showProjectType: context.showProjectType
+      })
   } as const
 }

@@ -65,29 +65,9 @@ export interface IProjectListProps extends IBaseComponentProps {
   showProjectLogo?: boolean
 
   /**
-   * Show Project Owner on the project card
+   * Project metadata to show on the project card
    */
-  showProjectOwner?: boolean
-
-  /**
-   * Show Project Manager on the project card
-   */
-  showProjectManager?: boolean
-
-  /**
-   * Show service area on the project card
-   */
-  showProjectServiceArea?: boolean
-
-  /**
-   * Show Project type on the project card
-   */
-  showProjectType?: boolean
-
-  /**
-   * Show Project phase on the project card
-   */
-  showProjectPhase?: boolean
+  projectMetadata?: string[]
 
   /**
    * Columns
@@ -114,6 +94,9 @@ export interface IProjectListProps extends IBaseComponentProps {
    */
   defaultRenderMode?: ProjectListRenderMode
 
+  /**
+   * Use dynamic colors for the project card
+   */
   useDynamicColors?: boolean
 }
 
