@@ -14,11 +14,11 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
       <CardPreview className={styles.preview}>
         {showCustomImage && (
           <div {...headerProps}>
-            <Link href={context.project.url} target={'_blank'} className={styles.link}>
+            <Link href={context.project.url} target='_blank' className={styles.link}>
               <Text
                 className={styles.projectTitle}
                 title={context.project.title}
-                weight={'semibold'}
+                weight='semibold'
                 wrap={false}
                 size={400}
                 truncate
@@ -33,7 +33,7 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
           <div className={styles.logo}>
             <Link
               href={context.project.url}
-              target={'_blank'}
+              target='_blank'
               className={styles.link}
               style={{
                 background: `linear-gradient(to right,
@@ -45,8 +45,8 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
                 className={styles.projectAvatar}
                 aria-label={`Logo for project: ${context.project.title}'`}
                 title={`Logo for project: ${context.project.title}'`}
-                color={'colorful'}
-                shape={'square'}
+                color='colorful'
+                shape='square'
                 style={{ display: showCustomImage ? 'none' : 'block' }}
                 name={context.project.title?.slice(-2).toUpperCase()}
                 initials={context.project.title}
