@@ -1,16 +1,16 @@
 import { IDetailsRowProps } from '@fluentui/react'
-import { ContentConfig } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
-import React, { useContext } from 'react'
+import { ContentConfig } from 'pp365-shared-library'
+import React from 'react'
 import { MandatoryCheck } from '../MandatoryCheck'
-import { TemplateSelectDialogContext } from '../context'
+import { useProjectSetupDialogContext } from '../context'
 
 /**
  * Row renderer hook for `ContentConfigSection`. Returns an instance of
  * `onRenderRow` that is used by `DetailsList` to render rows.
  */
 export function useRowRenderer({ selectedKeys, searchTerm }) {
-  const context = useContext(TemplateSelectDialogContext)
+  const context = useProjectSetupDialogContext()
   return (
     detailsRowProps: IDetailsRowProps,
     defaultRender: (props?: IDetailsRowProps) => JSX.Element

@@ -1,6 +1,6 @@
 import { IDialogContentProps } from '@fluentui/react'
 import { IProjectSetupDialogState } from 'components/ProjectSetupDialog'
-import { ProjectTemplate, ProjectExtension, ContentConfig } from 'pp365-shared-library'
+import { ProjectTemplate, ProjectExtension, ContentConfig, ItemFieldValues } from 'pp365-shared-library'
 
 export interface IProjectSetupProperties {
   /**
@@ -71,6 +71,11 @@ export interface IProjectSetupData extends IProjectSetupDialogState {
    * Custom actions for the web
    */
   customActions?: any[]
+
+  /**
+   * Idea project data
+   */
+  ideaData?: ItemFieldValues
 }
 
 export enum ProjectSetupValidation {

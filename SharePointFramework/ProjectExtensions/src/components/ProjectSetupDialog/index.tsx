@@ -11,7 +11,7 @@ import * as strings from 'ProjectExtensionsStrings'
 import React, { FC } from 'react'
 import { BaseDialog } from '../@BaseDialog'
 import { ContentConfigSection } from './ContentConfigSection'
-import { TemplateSelectDialogContext } from './context'
+import { ProjectSetupDialogContext } from './context'
 import { ExtensionsSection } from './ExtensionsSection'
 import styles from './TemplateSelectDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
@@ -22,7 +22,7 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
   const { state, dispatch, onSubmit, isConfigDisabled } = useProjectSetupDialog(props)
 
   return (
-    <TemplateSelectDialogContext.Provider value={{ props, state, dispatch }}>
+    <ProjectSetupDialogContext.Provider value={{ props, state, dispatch }}>
       <BaseDialog
         version={props.version}
         dialogContentProps={{
@@ -76,7 +76,7 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
           <DefaultButton text={strings.CloseModalText} onClick={props.onDismiss} />
         </DialogFooter>
       </BaseDialog>
-    </TemplateSelectDialogContext.Provider>
+    </ProjectSetupDialogContext.Provider>
   )
 }
 

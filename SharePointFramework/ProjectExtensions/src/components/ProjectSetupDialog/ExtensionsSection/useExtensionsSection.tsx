@@ -1,5 +1,4 @@
-import { useContext } from 'react'
-import { TemplateSelectDialogContext } from '../context'
+import { useProjectSetupDialogContext } from '../context'
 import { ON_EXTENSIONS_CHANGED } from '../reducer'
 import { useSelectionList } from '../useSelectionList'
 import { useColumns } from './useColumns'
@@ -9,7 +8,7 @@ import { useRowRenderer } from './useRowRenderer'
  * Component logic hook for `ExtensionsSection`
  */
 export function useExtensionsSection() {
-  const context = useContext(TemplateSelectDialogContext)
+  const context = useProjectSetupDialogContext()
   const selectedKeys = context.state.selectedExtensions.map((lc) => lc.key)
   const { selection, onSearch, searchTerm } = useSelectionList(selectedKeys, (selection) => {
     context.dispatch(ON_EXTENSIONS_CHANGED(selection))

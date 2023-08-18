@@ -418,23 +418,19 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         spfxContext: this.context
       })
 
-      const [_templates, extensions, contentConfig, templateFiles, customActions] =
+      const [_templates, extensions, contentConfig, templateFiles, customActions, ideaData] =
         await Promise.all([
           this._getTemplates(),
-          this.properties.extensionsLibrary
-            ? this._portal.getItems(
-                this.properties.extensionsLibrary,
-                ProjectExtension,
-                {
-                  ViewXml:
-                    '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-                },
-                ['File', 'FieldValuesAsText']
-              )
-            : Promise.resolve([]),
-          this.properties.contentConfigList
-            ? this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File'])
-            : Promise.resolve([]),
+          this._portal.getItems(
+            this.properties.extensionsLibrary,
+            ProjectExtension,
+            {
+              ViewXml:
+                '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+            },
+            ['File', 'FieldValuesAsText']
+          ),
+          this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File']),
           this._portal.getItems(
             strings.ProjectTemplateFilesListName,
             ProjectTemplateFile,
@@ -443,9 +439,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             },
             ['File']
           ),
-          this.sp.web.userCustomActions()
+          this.sp.web.userCustomActions(),
+          this._portal.getIdeaData()
         ])
-
       const templates = _templates.map((tmpl) => {
         const [tmplFile] = templateFiles.filter((file) => file.id === tmpl.projectTemplateId)
         tmpl.projectTemplateUrl = tmplFile?.serverRelativeUrl
@@ -456,7 +452,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         extensions,
         contentConfig,
         templates,
-        customActions
+        customActions,
+        ideaData
       } as IProjectSetupData
     } catch (error) {
       throw new ProjectSetupError(

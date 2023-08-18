@@ -1,16 +1,16 @@
 import { IDetailsRowProps } from '@fluentui/react'
 import strings from 'ProjectExtensionsStrings'
-import React, { useContext } from 'react'
-import { MandatoryCheck } from '../MandatoryCheck'
-import { TemplateSelectDialogContext } from '../context'
 import { ProjectExtension } from 'pp365-shared-library'
+import React from 'react'
+import { MandatoryCheck } from '../MandatoryCheck'
+import { useProjectSetupDialogContext } from '../context'
 
 /**
  * Row renderer hook for `ExtensionsSection`. Returns an instance of
  * `onRenderRow` that is used by `DetailsList` to render rows.
  */
 export function useRowRenderer({ selectedKeys, searchTerm }) {
-  const context = useContext(TemplateSelectDialogContext)
+  const context = useProjectSetupDialogContext()
   return (
     detailsRowProps: IDetailsRowProps,
     defaultRender: (props?: IDetailsRowProps) => JSX.Element
