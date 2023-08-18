@@ -64,17 +64,6 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   customActions?: ActionType[]
 
   /**
-   * Use idea processing for syncronization of project properties.
-   * Will show button to sync project properties if turned on.
-   */
-  useIdeaProcessing?: boolean
-
-  /**
-   * Which configuration to use for idea processing syncronization
-   */
-  ideaConfiguration?: string
-
-  /**
    * Hide parent projects section
    */
   hideParentProjects?: boolean
@@ -147,11 +136,6 @@ export interface IProjectInformationState
    * Current user has edit permission (`edc568a8-9cfc-4547-9af2-d9d3aeb5aa2a`)
    */
   userHasEditPermission?: boolean
-
-  /**
-   * Is project data synced
-   */
-  isProjectDataSynced?: boolean
 
   /**
    * Properties last updated date/time

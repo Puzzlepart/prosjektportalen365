@@ -77,9 +77,6 @@ declare interface IProjectWebPartsStrings {
   HookAuthFieldLabel: string
   HookUrlFieldDescription: string
   HookUrlFieldLabel: string
-  IdeaConfigurationDescription: string
-  IdeaConfigurationTitle: string
-  IdeaProjectDataTitle: string
   ListNameFieldLabel: string
   ListSectionDataErrorMessage: string
   LoadingText: string
@@ -180,12 +177,9 @@ declare interface IProjectWebPartsStrings {
   StatusReportTruncateCommentsLabel: string
   StatusStillOpen: string
   SubTextTruncateLengthFieldLabel: string
-  SyncProjectModalSubText: string
-  SyncProjectModalTitle: string
   SyncProjectPropertiesErrorText: string
   SyncProjectPropertiesListProgressDescription: string
   SyncProjectPropertiesProgressLabel: string
-  SyncProjectPropertiesText: string
   SyncProjectPropertiesValuesProgressDescription: string
   SyncProjectPropertiesValuesProgressLabel: string
   SyncPropertiesAfterPhaseChangeFieldLabel: string
@@ -205,8 +199,6 @@ declare interface IProjectWebPartsStrings {
   UseDynamicHomepageCalloutText: string
   UseDynamicHomepageFieldLabel: string
   UseFramelessButtonsLabel: string
-  UseIdeaProcessingCalloutText: string
-  UseIdeaProcessingFieldLabel: string
   UsePhaseHooksCalloutText: string
   UsePhaseHooksFieldLabel: string
   ViewsGroupName: string

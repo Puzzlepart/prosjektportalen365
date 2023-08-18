@@ -7,7 +7,6 @@ import { SPFxContext } from 'pp365-shared-library/lib/types'
 import { IEntityField } from 'sp-entityportal-service/types'
 import { IConfigurationFile } from 'types'
 import _ from 'underscore'
-import { IdeaConfigurationModel, SPIdeaConfigurationItem } from '../../models'
 import { ISPDataAdapterConfiguration } from './types'
 import { ItemFieldValues, ItemFieldValue } from 'pp365-shared-library'
 
@@ -299,18 +298,6 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    */
   public clearCache() {
     this.project.clearCache()
-  }
-
-  /**
-   * Get the idea configuration from the IdeaConfiguration list
-   */
-  public getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
-    const ideaConfig = await this.portal.web.lists
-      .getByTitle(strings.IdeaConfigurationTitle)
-      .select(...new SPIdeaConfigurationItem().fields)
-      .items()
-
-    return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
   }
 
   /**
