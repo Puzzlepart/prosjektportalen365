@@ -12,6 +12,7 @@ import { createSpfiInstance, DefaultCaching, getItemFieldValues } from '../../da
 import { ISPContentType } from '../../interfaces'
 import {
   IProjectTemplateSPItem,
+  ItemFieldValues,
   PortfolioOverviewView,
   ProjectAdminRole,
   ProjectColumn,
@@ -710,7 +711,7 @@ export class PortalDataService {
   }
 
   /**
-   * Get idea data for the current site URL.
+   * Get idea data for the current site URL as an `ItemFieldValues` object.
    */
   public async getIdeaData() {
     try {
@@ -723,6 +724,34 @@ export class PortalDataService {
       return fieldValues
     } catch (error) {
       return null
+    }
+  }
+
+  /**
+   * Update idea data for the current site URL. Updates the element in the idea
+   * process list with a new idea decision. Normally it's set to approved and
+   * synced when idea project data is synced to the project.
+   *
+   * @param fieldValues Item field values
+   * @param ideaDecision New idea decision
+   */
+  public async updateIdeaData(
+    fieldValues: ItemFieldValues,
+    ideaDecision: string
+  ): Promise<boolean> {
+    try {
+      const list = this._getList('IDEA_PROCESSING')
+      const [spItem] = await list.items
+        .filter(`GtIdeaProjectDataId eq '${fieldValues.id}'`)
+        .top(1)
+        .select('Id')()
+      if (!spItem) return false
+      const item = list.items.getById(spItem.Id)
+      await item.update({
+        GtIdeaDecision: ideaDecision
+      })
+    } catch (error) {
+      return false
     }
   }
 
