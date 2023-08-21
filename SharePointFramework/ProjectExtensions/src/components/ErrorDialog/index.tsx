@@ -18,7 +18,8 @@ export const ErrorDialog: FC<IErrorDialogProps> = ({
   version,
   messageType = MessageBarType.error,
   onDismiss,
-  onSetupClick
+  onSetupClick,
+  showStackAsSubText = false
 }) => {
   const onRenderFooter = () => {
     if (error.name === 'AlreadySetup') {
@@ -39,11 +40,14 @@ export const ErrorDialog: FC<IErrorDialogProps> = ({
   return (
     <BaseDialog
       version={version}
-      dialogContentProps={{ title: error.message }}
+      dialogContentProps={{
+        title: error.message,
+        subText: showStackAsSubText ? error.stack : undefined
+      }}
       modalProps={{ containerClassName: styles.root, isBlocking: false, isDarkOverlay: true }}
       onDismiss={onDismiss}
     >
-      <div style={{ marginTop: 15 }}>
+      <div style={{ marginTop: 15 }} hidden={showStackAsSubText}>
         <MessageBar messageBarType={messageType} className={styles.errorMessage}>
           <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]}>
             {error.stack}

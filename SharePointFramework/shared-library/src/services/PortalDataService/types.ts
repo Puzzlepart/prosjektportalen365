@@ -13,6 +13,8 @@ export type PortalDataServiceList =
   | 'PROJECT_STATUS_ATTACHMENTS'
   | 'PROJECT_ADMIN_ROLES'
   | 'PROJECT_TEMPLATE_CONFIGURATION'
+  | 'IDEA_PROJECT_DATA'
+  | 'IDEA_PROCESSING'
 
 export interface IPortalDataServiceConfiguration extends Object {
   spfxContext?: SPFxContext
@@ -28,6 +30,8 @@ export interface IPortalDataServiceConfiguration extends Object {
     DATA_SOURCES: string
     PROJECT_ADMIN_ROLES: string
     PROJECT_TEMPLATE_CONFIGURATION: string
+    IDEA_PROJECT_DATA: string
+    IDEA_PROCESSING: string
   }
   templateParametersFieldXml?: string
 }
@@ -44,7 +48,9 @@ export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceCo
     PROJECT_CONTENT_COLUMNS: 'Prosjektinnholdskolonner',
     DATA_SOURCES: 'Datakilder',
     PROJECT_ADMIN_ROLES: 'Prosjektadministrasjonsroller',
-    PROJECT_TEMPLATE_CONFIGURATION: 'Maloppsett'
+    PROJECT_TEMPLATE_CONFIGURATION: 'Maloppsett',
+    IDEA_PROJECT_DATA: 'Prosjektdata',
+    IDEA_PROCESSING: 'Idébehandling'
   },
   templateParametersFieldXml:
     '<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" Hidden="TRUE" />'

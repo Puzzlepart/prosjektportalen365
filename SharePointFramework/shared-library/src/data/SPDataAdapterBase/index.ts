@@ -6,11 +6,17 @@ import '@pnp/sp/presets/all'
 import { IWeb, PermissionKind } from '@pnp/sp/presets/all'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import _ from 'underscore'
-import { ProjectAdminRoleType } from '../../models'
+import { ItemFieldValue, ItemFieldValues, ProjectAdminRoleType, SPField } from '../../models'
 import { PortalDataService } from '../../services/PortalDataService'
 import { SPFxContext } from '../../types'
 import { createSpfiInstance } from '../createSpfiInstance'
-import { ISPDataAdapterBaseConfiguration, ProjectAdminPermission } from './types'
+import {
+  ProjectPropertiesMapType,
+  GetMappedProjectPropertiesOptions,
+  ISPDataAdapterBaseConfiguration,
+  ProjectAdminPermission
+} from './types'
+import { DefaultCaching } from '../cache'
 
 export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   /**
@@ -263,6 +269,196 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
     return tags
       .filter((tag) => tag.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1)
       .filter((tag) => !selectedItems.find((item) => item.name === tag.name))
+  }
+
+  /**
+   * Filters a list of fields to include only those with the `Gt` prefix,
+   * those in a custom group, or those specified in the forcedFields array.
+   *
+   * @param fields Fields
+   * @param customSiteFieldsGroupName Custom site fields group name
+   * @param forcedFields Array of field names to include regardless of the `ShowInEditForm` attribute value
+   *
+   * @returns Fields to sync
+   */
+  private _getFieldsToSync(
+    fields: SPField[],
+    customSiteFieldsGroupName: string,
+    forcedFields: string[]
+  ): SPField[] {
+    const fieldsToSync = [
+      {
+        InternalName: 'Title',
+        TypeAsString: 'Text'
+      } as SPField,
+      {
+        InternalName: 'GtChildProjects',
+        TypeAsString: 'Note'
+      } as SPField,
+      ...fields.filter(({ SchemaXml, InternalName, Group }) => {
+        const hideFromEditForm = SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1
+        const gtPrefix = InternalName.indexOf('Gt') === 0
+        const inCustomGroup = Group === customSiteFieldsGroupName
+        if (
+          (!gtPrefix && !inCustomGroup && !forcedFields.includes(InternalName)) ||
+          hideFromEditForm
+        )
+          return false
+        return true
+      })
+    ]
+    return fieldsToSync
+  }
+
+  /**
+   * Get mapped project properties from `fieldValues` and `fieldValuesText`.
+   *
+   * Site users needs to be fetched from the source web, so that they can be ensured for the destination web.
+   *
+   * @param fieldValues - Field values for the properties item
+   * @param options Options for the mapping process (default `{}`
+   *
+   * @returns Mapped project properties for the destination web (default `{}`)
+   */
+  public async getMappedProjectProperties(
+    fieldValues: ItemFieldValues,
+    options: GetMappedProjectPropertiesOptions = {}
+  ): Promise<Record<string, any>> {
+    let sourceWeb: IWeb = this.sp.web
+    let destinationWeb: IWeb = this.portal.web
+    switch (options.mapType) {
+      case ProjectPropertiesMapType.FromPortfolioToProject:
+        {
+          sourceWeb = this.portal.web
+          destinationWeb = this.sp.web
+        }
+        break
+      case ProjectPropertiesMapType.FromPortfolioToPortfolio:
+        {
+          sourceWeb = this.portal.web
+          destinationWeb = this.portal.web
+        }
+        break
+    }
+
+    try {
+      const [fields, siteUsers, targetListFields] = await Promise.all([
+        options.projectContentTypeId
+          ? (this.entityService
+              .usingParams({ contentTypeId: options.projectContentTypeId })
+              .getEntityFields() as Promise<SPField[]>)
+          : (this.entityService.getEntityFields() as Promise<SPField[]>),
+        sourceWeb.siteUsers.select('Id', 'Email', 'LoginName', 'Title').using(DefaultCaching)(),
+        options.targetListName
+          ? destinationWeb.lists.getByTitle(options?.targetListName).fields.using(DefaultCaching)<
+              SPField[]
+            >()
+          : Promise.resolve<SPField[]>([])
+      ])
+      const fieldsToSync = this._getFieldsToSync(fields, options.customSiteFieldsGroup, [
+        'GtIsParentProject',
+        'GtIsProgram',
+        'GtCurrentVersion'
+      ])
+      return await fieldsToSync.reduce(async ($properties, field) => {
+        const properties = await $properties
+        const fieldValue = fieldValues.get<ItemFieldValue>(field.InternalName, {
+          format: 'object',
+          defaultValue: {}
+        })
+        switch (field.TypeAsString) {
+          case 'TaxonomyFieldType':
+          case 'TaxonomyFieldTypeMulti':
+            {
+              if (options.useSharePointTaxonomyHiddenFields) {
+                const textField = targetListFields.find((f) => f.Id === field.TextField)
+                if (!textField) return properties
+                properties[textField.InternalName] = fieldValues.get<string>(field.InternalName, {
+                  format: 'term_text'
+                })
+              } else {
+                const [textField] = fields.filter(
+                  (f) => f.InternalName === `${field.InternalName}Text`
+                )
+                if (!textField) return properties
+                properties[textField.InternalName] = fieldValue.valueAsText
+              }
+            }
+            break
+          case 'User':
+            {
+              const sourceUserId = fieldValues.get<number>(field.InternalName, {
+                format: 'user_id'
+              })
+              if (sourceWeb.toUrl() === destinationWeb.toUrl()) {
+                properties[`${field.InternalName}Id`] = sourceUserId
+                return properties
+              }
+              const user = siteUsers.find((u) => u.Id === sourceUserId)
+              if (!user) return properties
+              const destinationUserId =
+                (await destinationWeb.ensureUser(user.LoginName))?.data?.Id ?? null
+              properties[`${field.InternalName}Id`] = destinationUserId
+            }
+            break
+          case 'UserMulti':
+            {
+              const sourceUserIds = fieldValues.get<number[]>(field.InternalName, {
+                format: 'user_id',
+                defaultValue: []
+              })
+              if (sourceWeb.toUrl() === destinationWeb.toUrl()) {
+                properties[`${field.InternalName}Id`] = sourceUserIds
+                return properties
+              }
+              const users = siteUsers.filter(({ Id }) => sourceUserIds.indexOf(Id) !== -1)
+              const destinationUserIds = (
+                await Promise.all(
+                  users.map(({ LoginName }) => destinationWeb.ensureUser(LoginName))
+                )
+              ).map(({ data }) => data.Id)
+              properties[`${field.InternalName}Id`] = options.wrapMultiValuesInResultsArray
+                ? { results: destinationUserIds }
+                : destinationUserIds
+            }
+            break
+          case 'DateTime':
+            properties[field.InternalName] = fieldValues.get<Date>(field.InternalName, {
+              format: 'date',
+              defaultValue: null
+            })
+            break
+          case 'Number':
+          case 'Currency': {
+            properties[field.InternalName] = fieldValues.get<number>(field.InternalName, {
+              format: 'number',
+              defaultValue: null
+            })
+          }
+          case 'URL':
+            properties[field.InternalName] = fieldValue.value ?? null
+            break
+          case 'Boolean':
+            properties[field.InternalName] = fieldValue.value ?? null
+            break
+          case 'MultiChoice':
+            {
+              if (fieldValue.value) {
+                properties[field.InternalName] = options.wrapMultiValuesInResultsArray
+                  ? { results: fieldValue.value }
+                  : fieldValue.value
+              }
+            }
+            break
+          default:
+            properties[field.InternalName] = fieldValue.valueAsText ?? null
+            break
+        }
+        return properties
+      }, Promise.resolve({}))
+    } catch (error) {
+      throw error
+    }
   }
 }
 

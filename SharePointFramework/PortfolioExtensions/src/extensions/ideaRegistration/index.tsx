@@ -32,6 +32,7 @@ enum RecommendationType {
 export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any> {
   private _userAuthorized: boolean
   private _openCmd: Command
+  private _openLinkCmd: Command
   private _sp: SPFI
   private _ideaConfig: IdeaConfigurationModel
 
@@ -45,6 +46,10 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
     this._sp = spfi().using(SPFx(this.context))
     this._openCmd = this.tryGetCommand('OPEN_IDEA_REGISTRATION_DIALOG')
     this._openCmd.visible = false
+    this._openLinkCmd = this.tryGetCommand('IDEA_PROCESSING_LINK')
+    this._openLinkCmd.visible = this.context.pageContext.list.title.includes('registrering')
+      ? true
+      : false
     this._userAuthorized = await isUserAuthorized(
       this._sp,
       strings.IdeaProcessorsSiteGroup,
@@ -82,6 +87,17 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
           Logger.log({ message: 'Rejected', level: LogLevel.Info })
         }
         break
+      case this._openLinkCmd.id:
+        const listName = this.context.pageContext.list.title
+        const [ideaConfig] = (await this._getIdeaConfiguration()).filter(
+          (item) => item.registrationList === listName
+        )
+        this._ideaConfig = ideaConfig
+
+        const baseUrl = this.context.pageContext.web.absoluteUrl
+        const processingList = this._ideaConfig.processingList.replace('é', 'e')
+        const ideaProcessingUrl = baseUrl.concat(`/Lists/${processingList}`)
+        window.open(ideaProcessingUrl, '_blank')
       default:
         throw new Error('Unknown command, unable to execute')
     }

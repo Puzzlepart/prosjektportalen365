@@ -14,7 +14,6 @@ import { IProjectInformationContext } from '../context'
 import { ProjectInformation } from '../index'
 import { FETCH_DATA_ERROR, INIT_DATA } from '../reducer'
 import { IProjectInformationState } from '../types'
-import { checkProjectDataSynced } from './checkProjectDataSynced'
 import { fetchProjectStatusReportData } from './fetchProjectStatusReportData'
 
 /**
@@ -72,16 +71,13 @@ const fetchData: DataFetchFunction<
         template,
         ...projectInformationData
       },
-      userHasEditPermission: false,
-      isProjectDataSynced: false
+      userHasEditPermission: false
     }
     if (isFrontpage) {
       data.userHasEditPermission = await SPDataAdapter.checkProjectAdminPermissions(
         ProjectAdminPermission.EditProjectProperties,
         projectInformationData.fieldValues
       )
-      data.isProjectDataSynced =
-        context.props.useIdeaProcessing && (await checkProjectDataSynced(context))
     }
     return data
   } catch (error) {

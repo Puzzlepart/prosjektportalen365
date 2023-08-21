@@ -1,15 +1,13 @@
 import { IProgressIndicatorProps } from '@fluentui/react/lib/ProgressIndicator'
 import { LogLevel, Logger } from '@pnp/logging'
 import * as strings from 'ProjectWebPartsStrings'
+import { ItemFieldValues } from 'pp365-shared-library'
 import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library/lib/data'
 import { ProjectDataService } from 'pp365-shared-library/lib/services'
 import { SPFxContext } from 'pp365-shared-library/lib/types'
-import { IEntityField } from 'sp-entityportal-service/types'
 import { IConfigurationFile } from 'types'
 import _ from 'underscore'
-import { IdeaConfigurationModel, SPIdeaConfigurationItem } from '../../models'
 import { ISPDataAdapterConfiguration } from './types'
-import { ItemFieldValues, ItemFieldValue } from 'pp365-shared-library'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public project: ProjectDataService
@@ -35,45 +33,6 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Filters a list of fields to include only those with the `Gt` prefix,
-   * those in a custom group, or those specified in the forcedFields array.
-   *
-   * @param fields Fields
-   * @param customGroupName Custom group name
-   * @param forcedFields Array of field names to include regardless of the `ShowInEditForm` attribute value
-   *
-   * @returns Fields to sync
-   */
-  private _getFieldsToSync(
-    fields: IEntityField[],
-    customGroupName: string,
-    forcedFields: string[]
-  ) {
-    const fieldsToSync = [
-      {
-        InternalName: 'Title',
-        TypeAsString: 'Text'
-      },
-      {
-        InternalName: 'GtChildProjects',
-        TypeAsString: 'Note'
-      },
-      ...fields.filter(({ SchemaXml, InternalName, Group }) => {
-        const hideFromEditForm = SchemaXml.indexOf('ShowInEditForm="FALSE"') !== -1
-        const gtPrefix = InternalName.indexOf('Gt') === 0
-        const inCustomGroup = Group === customGroupName
-        if (
-          (!gtPrefix && !inCustomGroup && !forcedFields.includes(InternalName)) ||
-          hideFromEditForm
-        )
-          return false
-        return true
-      })
-    ]
-    return fieldsToSync
-  }
-
-  /**
    * Sync property item from site to associated hub. `this.getMappedProjectProperties` is used to
    * map the properties item fields to the hub fields. `updateEntityItem` from `sp-entityportal-service`
    * is used to update the hub entity item. If any errors occur, the original error is passed to the caller.
@@ -94,7 +53,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         label: strings.SyncProjectPropertiesValuesProgressLabel,
         description: strings.SyncProjectPropertiesValuesProgressDescription
       })
-      const properties = await this.getMappedProjectProperties(fieldValues, templateParameters)
+      const properties = await this.getMappedProjectProperties(fieldValues, {
+        customSiteFieldsGroup: templateParameters.CustomSiteFields,
+        projectContentTypeId: templateParameters.ProjectContentTypeId
+      })
       await this.entityService.updateEntityItem(this.settings.siteId, {
         ...properties,
         Title: title
@@ -104,165 +66,6 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         data: { properties },
         level: LogLevel.Info
       })
-    } catch (error) {
-      throw error
-    }
-  }
-
-  /**
-   * Get mapped project properties from `fieldValues` and `fieldValuesText`, using
-   * `templateParameters` to determine which fields to include.
-   *
-   * @param fieldValues - Field values for the properties item
-   * @param templateParameters - Template parameters
-   * @param syncToProject - Whether to sync to the project
-   * @param wrapMultiValuesInResultsArray - Whether to wrap multi-values in results array (default: false)
-   */
-  public async getMappedProjectProperties(
-    fieldValues: ItemFieldValues,
-    templateParameters: Record<string, any>,
-    syncToProject: boolean = false,
-    wrapMultiValuesInResultsArray: boolean = false
-  ): Promise<Record<string, any>> {
-    try {
-      const [fields, siteUsers] = await Promise.all([
-        templateParameters?.ProjectContentTypeId
-          ? this.entityService
-              .usingParams({ contentTypeId: templateParameters.ProjectContentTypeId })
-              .getEntityFields()
-          : this.entityService.getEntityFields(),
-        this.sp.web.siteUsers.select('Id', 'Email', 'LoginName', 'Title')()
-      ])
-      const fieldsToSync = this._getFieldsToSync(fields, templateParameters?.CustomSiteFields, [
-        'GtIsParentProject',
-        'GtIsProgram',
-        'GtCurrentVersion'
-      ])
-      const properties: Record<string, any> = {}
-      for (let i = 0; i < fieldsToSync.length; i++) {
-        const field = fieldsToSync[i]
-        const fieldValue = fieldValues.get<ItemFieldValue>(field.InternalName, { asObject: true })
-        switch (field.TypeAsString) {
-          case 'TaxonomyFieldType':
-            {
-              if (syncToProject && fieldValue.valueAsText !== '') {
-                const term = { ...fieldValue.value, WssId: -1, Label: fieldValue.valueAsText }
-                properties[field.InternalName] = term ?? null
-              } else {
-                let [textField] = fields.filter(
-                  (f) => f.InternalName === `${field.InternalName}Text`
-                )
-                if (textField) properties[textField.InternalName] = fieldValue.valueAsText
-                else {
-                  textField = _.find(fields, (f) => f.Id === field.TextField)
-                  if (!textField) continue
-                  properties[textField.InternalName] = fieldValues.get<string>(
-                    textField.InternalName,
-                    { asText: true }
-                  )
-                }
-              }
-            }
-            break
-          case 'TaxonomyFieldTypeMulti':
-            {
-              if (syncToProject && fieldValue.valueAsText !== '') {
-                // TODO: Fix this and make it work
-                // const terms = fldValue.map((t) => ({
-                //   ...t,
-                //   WssId: -1,
-                //   Label: t.Label
-                // }))
-                // let termsString: string = '';
-                // terms.forEach(term => {
-                //   termsString += `-1;#${term.Label}|${term.TermGuid};#`;
-                // })
-                // properties[fld.InternalName] = termsString ?? null
-              } else {
-                let [textField] = fields.filter(
-                  (f) => f.InternalName === `${field.InternalName}Text`
-                )
-                if (textField) properties[textField.InternalName] = fieldValue.valueAsText
-                else {
-                  textField = _.find(fields, (f) => f.Id === field.TextField)
-                  if (!textField) continue
-                  properties[textField.InternalName] = fieldValues.get<string>(
-                    textField.InternalName,
-                    { asText: true }
-                  )
-                }
-              }
-            }
-            break
-          case 'User':
-            {
-              if (syncToProject) {
-                const [_user] = siteUsers.filter((u) => u.Title === fieldValue.valueAsText)
-                const user = _user ? await this.sp.web.ensureUser(_user.LoginName) : null
-                properties[`${field.InternalName}Id`] = user ? user.data.Id : null
-              } else {
-                const [_user] = siteUsers.filter(
-                  (u) => u.Id === fieldValues[`${field.InternalName}Id`]
-                )
-                const user = _user ? await this.entityService.web.ensureUser(_user.LoginName) : null
-                properties[`${field.InternalName}Id`] = user ? user.data.Id : null
-              }
-            }
-            break
-          case 'UserMulti':
-            {
-              if (syncToProject) {
-                const userIds = fieldValue.valueAsText || []
-                const users = siteUsers.filter((u) => userIds.indexOf(u.Title) !== -1)
-                const ensured = await Promise.all(
-                  users.map(({ LoginName }) => this.sp.web.ensureUser(LoginName))
-                )
-                properties[`${field.InternalName}Id`] = {
-                  results: ensured.map(({ data }) => data.Id)
-                }
-              } else {
-                const userIds = fieldValues[`${field.InternalName}Id`] || []
-                const users = siteUsers.filter((u) => userIds.indexOf(u.Id) !== -1)
-                const ensured = (
-                  await Promise.all(
-                    users.map(({ LoginName }) => this.entityService.web.ensureUser(LoginName))
-                  )
-                ).map(({ data }) => data.Id)
-                properties[`${field.InternalName}Id`] = wrapMultiValuesInResultsArray
-                  ? { results: ensured }
-                  : ensured
-              }
-            }
-            break
-          case 'DateTime':
-            properties[field.InternalName] = fieldValue.value ? new Date(fieldValue.value) : null
-            break
-          case 'Number':
-          case 'Currency': {
-            properties[field.InternalName] = fieldValue.value ? parseFloat(fieldValue.value) : null
-          }
-          case 'URL':
-            properties[field.InternalName] = fieldValue.value ?? null
-            break
-          case 'Boolean':
-            properties[field.InternalName] = fieldValue.value ?? null
-            break
-          case 'MultiChoice':
-            {
-              if (fieldValue.value) {
-                properties[field.InternalName] = wrapMultiValuesInResultsArray
-                  ? { results: fieldValue.value }
-                  : fieldValue.value
-              }
-            }
-            break
-          default:
-            properties[field.InternalName] = fieldValue.valueAsText ?? null
-            break
-        }
-      }
-
-      return properties
     } catch (error) {
       throw error
     }
@@ -299,18 +102,6 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    */
   public clearCache() {
     this.project.clearCache()
-  }
-
-  /**
-   * Get the idea configuration from the IdeaConfiguration list
-   */
-  public getIdeaConfiguration = async (): Promise<IdeaConfigurationModel[]> => {
-    const ideaConfig = await this.portal.web.lists
-      .getByTitle(strings.IdeaConfigurationTitle)
-      .select(...new SPIdeaConfigurationItem().fields)
-      .items()
-
-    return ideaConfig.map((item) => new IdeaConfigurationModel(item)).filter(Boolean)
   }
 
   /**

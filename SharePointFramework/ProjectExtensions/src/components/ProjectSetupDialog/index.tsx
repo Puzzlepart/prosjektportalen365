@@ -3,6 +3,7 @@ import {
   DialogFooter,
   format,
   MessageBar,
+  MessageBarType,
   Pivot,
   PivotItem,
   PrimaryButton
@@ -11,18 +12,18 @@ import * as strings from 'ProjectExtensionsStrings'
 import React, { FC } from 'react'
 import { BaseDialog } from '../@BaseDialog'
 import { ContentConfigSection } from './ContentConfigSection'
-import { TemplateSelectDialogContext } from './context'
+import { ProjectSetupDialogContext } from './context'
 import { ExtensionsSection } from './ExtensionsSection'
 import styles from './TemplateSelectDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
-import { ITemplateSelectDialogProps } from './types'
-import { useTemplateSelectDialog } from './useTemplateSelectDialog'
+import { IProjectSetupDialogProps } from './types'
+import { useProjectSetupDialog } from './useProjectSetupDialog'
 
-export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
-  const { state, dispatch, onSubmit, isConfigDisabled } = useTemplateSelectDialog(props)
+export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
+  const { state, dispatch, onSubmit, isConfigDisabled } = useProjectSetupDialog(props)
 
   return (
-    <TemplateSelectDialogContext.Provider value={{ props, state, dispatch }}>
+    <ProjectSetupDialogContext.Provider value={{ props, state, dispatch }}>
       <BaseDialog
         version={props.version}
         dialogContentProps={{
@@ -62,21 +63,35 @@ export const TemplateSelectDialog: FC<ITemplateSelectDialogProps> = (props) => {
             <ContentConfigSection style={{ height: 400 }} />
           </PivotItem>
         </Pivot>
+        <div className={styles.projectIdeaMessage} hidden={!props.data.ideaData}>
+          <MessageBar
+            messageBarIconProps={{ iconName: 'Lightbulb' }}
+            messageBarType={MessageBarType.success}
+          >
+            {strings.ProjectIdeaFoundText}
+          </MessageBar>
+        </div>
         <DialogFooter>
           {props.tasks && (
             <MessageBar>
               {format(strings.ConfiguredSpecifiedTaskMessage, props.tasks.join(', '))}
             </MessageBar>
           )}
-          <PrimaryButton
-            disabled={!state.selectedTemplate}
-            text={strings.TemplateSelectDialogSubmitButtonText}
-            onClick={onSubmit}
-          />
-          <DefaultButton text={strings.CloseModalText} onClick={props.onDismiss} />
+          <section className={styles.actions}>
+            <PrimaryButton
+              disabled={!state.selectedTemplate}
+              text={strings.TemplateSelectDialogSubmitButtonText}
+              onClick={onSubmit}
+            />
+            <DefaultButton
+              text={strings.CloseModalText}
+              onClick={props.onDismiss}
+              styles={{ root: { marginLeft: 4 } }}
+            />
+          </section>
         </DialogFooter>
       </BaseDialog>
-    </TemplateSelectDialogContext.Provider>
+    </ProjectSetupDialogContext.Provider>
   )
 }
 

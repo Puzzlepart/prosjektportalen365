@@ -20,15 +20,15 @@ import {
 } from 'pp365-shared-library'
 import { createElement } from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
-import { find, uniq } from 'underscore'
+import _ from 'underscore'
 import {
   ErrorDialog,
   IErrorDialogProps,
   IProgressDialogProps,
-  ITemplateSelectDialogProps,
-  ITemplateSelectDialogState,
+  IProjectSetupDialogProps,
+  IProjectSetupDialogState,
   ProgressDialog,
-  TemplateSelectDialog
+  ProjectSetupDialog
 } from '../components'
 import { ProjectSetupError } from './ProjectSetupError'
 import { deleteCustomizer } from './deleteCustomizer'
@@ -105,7 +105,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         properties: this.properties
       })
     } catch (error) {
-      this._renderErrorDialog({ error })
+      this._renderErrorDialog({ error, showStackAsSubText: true })
     }
   }
 
@@ -171,7 +171,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    */
   private async recreateNavMenu() {
     const oldNodes: IMenuNode[] = await JSON.parse(localStorage.getItem('pp_navigationNodes'))
-    const navigationNodes = uniq([...oldNodes])
+    const navigationNodes = _.uniq([...oldNodes])
     for await (const node of navigationNodes) {
       if (node.Title === strings.RecycleBinText) {
         continue
@@ -195,8 +195,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    *
    * @param data - Project setup data
    */
-  private _checkAutoTemplate({ templates }: IProjectSetupData): ITemplateSelectDialogState {
-    const autoTemplate = find(
+  private _checkAutoTemplate({ templates }: IProjectSetupData): IProjectSetupDialogState {
+    const autoTemplate = _.find(
       templates,
       ({ text, autoConfigure }) => text === this.properties.forceTemplate || autoConfigure
     )
@@ -213,7 +213,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    *
    * @param data - Data
    */
-  private _getSetupInfo(data: IProjectSetupData): Promise<ITemplateSelectDialogState> {
+  private _getSetupInfo(data: IProjectSetupData): Promise<IProjectSetupDialogState> {
     return new Promise((resolve, reject) => {
       const placeholder = this._getPlaceholder('TemplateSelectDialog')
       const autoTemplate = this._checkAutoTemplate(data)
@@ -221,11 +221,11 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         this._unmount(placeholder)
         resolve(autoTemplate)
       } else {
-        const element = createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
+        const element = createElement<IProjectSetupDialogProps>(ProjectSetupDialog, {
           data,
           version: this.version,
           tasks: this.properties.tasks,
-          onSubmit: (state: ITemplateSelectDialogState) => {
+          onSubmit: (state: IProjectSetupDialogState) => {
             this._unmount(placeholder)
             resolve(state)
           },
@@ -418,23 +418,19 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         spfxContext: this.context
       })
 
-      const [_templates, extensions, contentConfig, templateFiles, customActions] =
+      const [_templates, extensions, contentConfig, templateFiles, customActions, ideaData] =
         await Promise.all([
           this._getTemplates(),
-          this.properties.extensionsLibrary
-            ? this._portal.getItems(
-                this.properties.extensionsLibrary,
-                ProjectExtension,
-                {
-                  ViewXml:
-                    '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-                },
-                ['File', 'FieldValuesAsText']
-              )
-            : Promise.resolve([]),
-          this.properties.contentConfigList
-            ? this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File'])
-            : Promise.resolve([]),
+          this._portal.getItems(
+            this.properties.extensionsLibrary,
+            ProjectExtension,
+            {
+              ViewXml:
+                '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+            },
+            ['File', 'FieldValuesAsText']
+          ),
+          this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File']),
           this._portal.getItems(
             strings.ProjectTemplateFilesListName,
             ProjectTemplateFile,
@@ -443,9 +439,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             },
             ['File']
           ),
-          this.sp.web.userCustomActions()
+          this.sp.web.userCustomActions(),
+          this._portal.getIdeaData()
         ])
-
       const templates = _templates.map((tmpl) => {
         const [tmplFile] = templateFiles.filter((file) => file.id === tmpl.projectTemplateId)
         tmpl.projectTemplateUrl = tmplFile?.serverRelativeUrl
@@ -456,7 +452,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         extensions,
         contentConfig,
         templates,
-        customActions
+        customActions,
+        ideaData
       } as IProjectSetupData
     } catch (error) {
       throw new ProjectSetupError(

@@ -14,7 +14,7 @@ import { ActionType } from './Actions/types'
 import { IProgressDialogProps } from './ProgressDialog/types'
 
 export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
-export type ProjectInformationDialogType = 'CreateParentDialog' | 'SyncProjectDialog'
+export type ProjectInformationDialogType = 'CreateParentDialog'
 export type ProjectInformationPage = 'Frontpage' | 'ProjectStatus' | 'Portfolio'
 
 export interface IProjectInformationProps extends IBaseWebPartComponentProps {
@@ -62,17 +62,6 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    * Custom actions/button to add
    */
   customActions?: ActionType[]
-
-  /**
-   * Use idea processing for syncronization of project properties.
-   * Will show button to sync project properties if turned on.
-   */
-  useIdeaProcessing?: boolean
-
-  /**
-   * Which configuration to use for idea processing syncronization
-   */
-  ideaConfiguration?: string
 
   /**
    * Hide parent projects section
@@ -139,7 +128,6 @@ export interface IProjectInformationState
    *
    * Can be one of the following:
    * - `CreateParentDialog`
-   * - `SyncProjectDialog`
    */
   activeDialog?: ProjectInformationDialogType
 
@@ -147,11 +135,6 @@ export interface IProjectInformationState
    * Current user has edit permission (`edc568a8-9cfc-4547-9af2-d9d3aeb5aa2a`)
    */
   userHasEditPermission?: boolean
-
-  /**
-   * Is project data synced
-   */
-  isProjectDataSynced?: boolean
 
   /**
    * Properties last updated date/time

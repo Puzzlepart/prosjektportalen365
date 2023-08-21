@@ -1,9 +1,21 @@
+import { stringIsNullOrEmpty } from '@pnp/core'
 import * as strings from 'ProjectExtensionsStrings'
+import { ProjectPropertiesMapType } from 'pp365-shared-library'
 import { IProjectSetupData } from 'projectSetup'
+import { SPDataAdapter } from '../../../data'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import { OnProgressCallbackFunction } from '../types'
 
+/**
+ * Setup project information task handles the following tasks:
+ * * Sync local properties list on the current project site. If the list does not exist, it will be created
+ * using `portal.syncList`. If the list exists, it will be updated with the current project information and
+ * the template parameters.
+ * * Add entry to hub project list
+ */
 export class SetupProjectInformation extends BaseTask {
+  private _templateParameters: Record<string, any>
+
   constructor(data: IProjectSetupData) {
     super('SetupProjectInformation', data)
   }
@@ -20,8 +32,15 @@ export class SetupProjectInformation extends BaseTask {
   ): Promise<IBaseTaskParams> {
     super.initExecute(params, onProgress)
     try {
+      this._templateParameters = params.templateSchema.Parameters
       await this._syncPropertiesList()
       await this._addEntryToHub()
+      if (this.data.ideaData) {
+        await SPDataAdapter.portal.updateIdeaData(
+          this.data.ideaData,
+          strings.IdeaDecisionStatusApprovedAndSynced
+        )
+      }
       return params
     } catch (error) {
       throw new BaseTaskError(this.taskName, strings.SetupProjectInformationErrorMessage, error)
@@ -41,6 +60,10 @@ export class SetupProjectInformation extends BaseTask {
    * - `GtInstalledVersion`: The installed version
    * - `GtCurrentVersion`: The current version (same as installed version initially)
    * - `GtProjectTemplate`: The selected project template name
+   *
+   * Also properties from the idea data are mapped to the property item. The mapping is done using the
+   * `SPDataAdapter.getMappedProjectProperties` method with the mapping type
+   * `ProjectPropertiesMapType.FromPortfolioToProject`.
    */
   private async _syncPropertiesList() {
     try {
@@ -52,17 +75,18 @@ export class SetupProjectInformation extends BaseTask {
       const { list } = await this.params.portal.syncList({
         url: this.params.webAbsoluteUrl,
         listName: strings.ProjectPropertiesListName,
-        contentTypeId: this.params.templateSchema.Parameters.ProjectContentTypeId
+        contentTypeId: this._templateParameters.ProjectContentTypeId
       })
       this.onProgress(
         strings.SetupProjectInformationText,
         strings.CreatingLocalProjectPropertiesListItemText,
         'AlignCenter'
       )
-      const properties: Record<string, any> = {
-        ...this._createPropertiesItem(this.params),
-        TemplateParameters: JSON.stringify(this.params.templateSchema.Parameters)
-      }
+      const ideaDataProperties = await this._getIdeaDataProperties()
+      const properties = this._createPropertiesItem(this.params, {
+        ...ideaDataProperties,
+        TemplateParameters: JSON.stringify(this._templateParameters)
+      })
       const propertyItems = await list.items()
       const propertyItem = list.items.getById(1)
       if (propertyItems.length > 0) await propertyItem.update(properties)
@@ -70,6 +94,30 @@ export class SetupProjectInformation extends BaseTask {
     } catch (error) {
       throw error
     }
+  }
+
+  /**
+   * Get mapped idea data properties for the current project.
+   *
+   * @param mapType The map type (default: `ProjectPropertiesMapType.FromPortfolioToProject`)
+   * @param useSharePointTaxonomyHiddenFields If `true`, the SharePoint taxonomy hidden fields will be used (default: `true`)
+   *
+   * @returns The mapped idea data properties
+   */
+  private async _getIdeaDataProperties(
+    mapType = ProjectPropertiesMapType.FromPortfolioToProject,
+    useSharePointTaxonomyHiddenFields = true
+  ): Promise<Record<string, any>> {
+    if (!this.data.ideaData) return {}
+    return await SPDataAdapter.getMappedProjectProperties(this.data.ideaData, {
+      useSharePointTaxonomyHiddenFields,
+      targetListName:
+        mapType === ProjectPropertiesMapType.FromPortfolioToProject &&
+        strings.ProjectPropertiesListName,
+      mapType,
+      projectContentTypeId: this._templateParameters.ProjectContentTypeId,
+      customSiteFieldsGroup: this._templateParameters.CustomSiteFields
+    })
   }
 
   /**
@@ -82,9 +130,11 @@ export class SetupProjectInformation extends BaseTask {
    * - `GtProjectTemplate`: The selected project template name
    *
    * @param params Params
+   * @param additionalProperties Additional properties
    */
   private _createPropertiesItem(
-    params: IBaseTaskParams
+    params: IBaseTaskParams,
+    additionalProperties: Record<string, string | boolean | number> = {}
   ): Record<string, string | boolean | number> {
     return {
       Title: params.context.pageContext.web.title,
@@ -92,7 +142,8 @@ export class SetupProjectInformation extends BaseTask {
       GtIsParentProject: this.data.selectedTemplate.isParentProject,
       GtInstalledVersion: params.templateSchema.Version,
       GtCurrentVersion: params.templateSchema.Version,
-      GtProjectTemplate: this.data.selectedTemplate.text
+      GtProjectTemplate: this.data.selectedTemplate.text,
+      ...additionalProperties
     }
   }
 
@@ -104,25 +155,32 @@ export class SetupProjectInformation extends BaseTask {
    * * `GtSiteId`: The current site ID
    * * `GtProjectTemplate`: The selected project template name
    * * `ContentTypeId` (if custom content type is specified in template parameters)
+   *
+   * Also properties from the idea data are mapped to the property item. The mapping is done using the
+   * `SPDataAdapter.getMappedProjectProperties` method with the mapping type
+   * `ProjectPropertiesMapType.FromPortfolioToPortfolio`.
    */
   private async _addEntryToHub() {
     try {
-      const entity = await this.params.entityService.getEntityItem(
-        this.params.context.pageContext.legacyPageContext.groupId
-      )
+      const { pageContext } = this.params.context
+      const groupId = pageContext.legacyPageContext.groupId
+      const entity = await this.params.entityService.getEntityItem(groupId)
       if (entity) return
-      const properties: Record<string, string | boolean | number> = {
-        ...this._createPropertiesItem(this.params),
-        GtSiteId: this.params.context.pageContext.site.id.toString()
-      }
-      if (this.params.templateSchema.Parameters.ProjectContentTypeId) {
-        properties.ContentTypeId = this.params.templateSchema.Parameters.ProjectContentTypeId
-      }
-      await this.params.entityService.createNewEntity(
-        this.params.context.pageContext.legacyPageContext.groupId,
-        this.params.context.pageContext.web.absoluteUrl,
-        properties
+      const siteId = pageContext.site.id.toString()
+      const webUrl = pageContext.web.absoluteUrl
+      const contentTypeId = this._templateParameters.ProjectContentTypeId
+      const ideaDataProperties = await this._getIdeaDataProperties(
+        ProjectPropertiesMapType.FromPortfolioToPortfolio,
+        false
       )
+      const properties = this._createPropertiesItem(this.params, {
+        GtSiteId: siteId,
+        ...ideaDataProperties
+      })
+      if (!stringIsNullOrEmpty(contentTypeId)) {
+        properties.ContentTypeId = contentTypeId
+      }
+      await this.params.entityService.createNewEntity(groupId, webUrl, properties)
     } catch (error) {
       throw error
     }

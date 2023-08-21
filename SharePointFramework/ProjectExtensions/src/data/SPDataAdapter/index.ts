@@ -31,7 +31,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   }
 
   /**
-   * Checks if the filename is valid
+   * Checks if the filename `name` is valid for the specified folder `folderServerRelativeUrl`.
    *
    * @param folderServerRelativeUrl Folder server relative URL
    * @param name File name

@@ -1,17 +1,17 @@
 import { ISearchBoxProps, SearchBox } from '@fluentui/react'
-import { ProjectTemplate } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
-import React, { useContext, useState } from 'react'
+import { ProjectTemplate } from 'pp365-shared-library'
+import React, { useState } from 'react'
 import Autocomplete from 'react-autocomplete'
-import { TemplateSelectDialogContext } from '../context'
-import { ON_TEMPLATE_CHANGED } from '../reducer'
 import { TemplateConfigMessage } from '../TemplateConfigMessage'
-import { TemplateSelectDialogSectionComponent } from '../types'
+import { useProjectSetupDialogContext } from '../context'
+import { ON_TEMPLATE_CHANGED } from '../reducer'
+import { ProjectSetupDialogSectionComponent } from '../types'
 import styles from './TemplateSelector.module.scss'
 import { TemplateSelectorItem } from './TemplateSelectorItem'
 
-export const TemplateSelector: TemplateSelectDialogSectionComponent = () => {
-  const context = useContext(TemplateSelectDialogContext)
+export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
+  const context = useProjectSetupDialogContext()
   const [searchValue, setSearchValue] = useState(context.state.selectedTemplate?.text)
 
   return (

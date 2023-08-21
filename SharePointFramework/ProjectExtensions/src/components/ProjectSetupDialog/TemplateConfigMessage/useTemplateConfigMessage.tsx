@@ -1,8 +1,7 @@
 import { format } from '@fluentui/react'
 import strings from 'ProjectExtensionsStrings'
-import { useContext } from 'react'
 import { isEmpty } from 'underscore'
-import { TemplateSelectDialogContext } from '../context'
+import { useProjectSetupDialogContext } from '../context'
 import { ITemplateConfigMessageProps } from './types'
 
 /**
@@ -11,7 +10,7 @@ import { ITemplateConfigMessageProps } from './types'
  * @returns `hidden` and `text`
  */
 export function useTemplateConfigMessage({ section }: ITemplateConfigMessageProps) {
-  const context = useContext(TemplateSelectDialogContext)
+  const context = useProjectSetupDialogContext()
   const templateHasExtensions = !isEmpty(context.state.selectedTemplate?.extensions)
   const templateHasContentConfig = !isEmpty(context.state.selectedTemplate?.contentConfig)
   const hidden = !(

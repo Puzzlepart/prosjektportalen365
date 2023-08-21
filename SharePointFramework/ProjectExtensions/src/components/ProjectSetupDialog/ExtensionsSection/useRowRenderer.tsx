@@ -1,34 +1,34 @@
 import { IDetailsRowProps } from '@fluentui/react'
-import { ContentConfig } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
-import React, { useContext } from 'react'
+import { ProjectExtension } from 'pp365-shared-library'
+import React from 'react'
 import { MandatoryCheck } from '../MandatoryCheck'
-import { TemplateSelectDialogContext } from '../context'
+import { useProjectSetupDialogContext } from '../context'
 
 /**
- * Row renderer hook for `ContentConfigSection`. Returns an instance of
+ * Row renderer hook for `ExtensionsSection`. Returns an instance of
  * `onRenderRow` that is used by `DetailsList` to render rows.
  */
 export function useRowRenderer({ selectedKeys, searchTerm }) {
-  const context = useContext(TemplateSelectDialogContext)
+  const context = useProjectSetupDialogContext()
   return (
     detailsRowProps: IDetailsRowProps,
     defaultRender: (props?: IDetailsRowProps) => JSX.Element
   ) => {
-    const contentConfig = detailsRowProps.item as ContentConfig
-    const isMandatory = contentConfig.isMandatoryForTemplate(context.state.selectedTemplate)
+    const ext = detailsRowProps.item as ProjectExtension
+    const isMandatory = ext.isMandatoryForTemplate(context.state.selectedTemplate)
     detailsRowProps.disabled = isMandatory
     if (isMandatory) {
       detailsRowProps.onRenderCheck = (props) => (
-        <MandatoryCheck {...props} tooltip={{ text: strings.ContentConfigLockedTooltipText }} />
+        <MandatoryCheck {...props} tooltip={{ text: strings.ExtensionLockedTooltipText }} />
       )
       detailsRowProps.styles = {
         root: { background: 'rgb(237, 235, 233)', color: 'rgb(50, 49, 48)' }
       }
     }
     const shouldRenderRow =
-      contentConfig.text.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
-      selectedKeys.includes(contentConfig.key)
+      ext.text.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
+      selectedKeys.includes(ext.key)
     return shouldRenderRow ? defaultRender(detailsRowProps) : null
   }
 }

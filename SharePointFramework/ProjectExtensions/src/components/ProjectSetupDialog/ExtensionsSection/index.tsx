@@ -6,11 +6,11 @@ import {
   StickyPositionType
 } from '@fluentui/react'
 import strings from 'ProjectExtensionsStrings'
-import React, { useContext } from 'react'
+import React from 'react'
 import { ListHeaderSearch } from '../ListHeaderSearch'
 import { TemplateConfigMessage } from '../TemplateConfigMessage'
-import { TemplateSelectDialogContext } from '../context'
-import { TemplateSelectDialogSectionComponent } from '../types'
+import { useProjectSetupDialogContext } from '../context'
+import { ProjectSetupDialogSectionComponent } from '../types'
 import styles from './ExtensionsSection.module.scss'
 import { useExtensionsSection } from './useExtensionsSection'
 
@@ -19,8 +19,8 @@ import { useExtensionsSection } from './useExtensionsSection'
  *
  * @param props Props
  */
-export const ExtensionsSection: TemplateSelectDialogSectionComponent = (props) => {
-  const context = useContext(TemplateSelectDialogContext)
+export const ExtensionsSection: ProjectSetupDialogSectionComponent = (props) => {
+  const context = useProjectSetupDialogContext()
   const { selection, items, columns, onSearch, onRenderRow } = useExtensionsSection()
 
   return (

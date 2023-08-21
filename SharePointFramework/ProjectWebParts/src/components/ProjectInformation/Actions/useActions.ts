@@ -59,25 +59,13 @@ export const useActions = () => {
     false,
     !context.state.userHasEditPermission
   ]
-  const syncProjectPropertiesAction: ActionType = [
-    strings.SyncProjectPropertiesText,
-    () => {
-      context.dispatch(OPEN_DIALOG('SyncProjectDialog'))
-    },
-    'Sync',
-    false,
-    !context.props.useIdeaProcessing ||
-      context.state.isProjectDataSynced ||
-      !context.state.userHasEditPermission
-  ]
   const actionsMap: Record<string, ActionType> = {
     showAllProjectInformationAction,
     viewVersionHistoryAction,
     editProjectInformationAction,
     editSiteInformationAction,
     administerChildrenAction: context.state.isParentProject ? administerChildrenAction : null,
-    transformToParentProject: !context.state.isParentProject ? transformToParentProject : null,
-    syncProjectPropertiesAction
+    transformToParentProject: !context.state.isParentProject ? transformToParentProject : null
   }
   const actions = Object.keys(actionsMap)
     .map((action) => {

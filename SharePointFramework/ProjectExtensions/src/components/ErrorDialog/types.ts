@@ -16,4 +16,9 @@ export interface IErrorDialogProps extends IBaseDialogProps {
    * On setup click
    */
   onSetupClick?(): void
+
+  /**
+   * Show stack as sub text in the dialog
+   */
+  showStackAsSubText?: boolean
 }

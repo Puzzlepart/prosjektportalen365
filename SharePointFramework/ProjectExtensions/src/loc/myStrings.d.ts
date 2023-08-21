@@ -43,6 +43,7 @@ declare interface IProjectExtensionsStrings {
   GetMoreText: string
   GetSetupDataErrorMessage: string
   GetSetupDataErrorStack: string
+  IdeaDecisionStatusApprovedAndSynced: string
   InvalidLanguageErrorMessage: string
   InvalidLanguageErrorStack: string
   IsHubSiteErrorMessage: string
@@ -75,6 +76,7 @@ declare interface IProjectExtensionsStrings {
   ProgressDialogTitle: string
   ProjectAlreadySetupMessage: string
   ProjectAlreadySetupStack: string
+  ProjectIdeaFoundText: string
   ProjectPropertiesListName: string
   ProjectProvisioningStartLogText: string
   ProjectProvisioningSuccessLogText: string

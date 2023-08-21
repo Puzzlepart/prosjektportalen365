@@ -8,10 +8,11 @@ import { IItemUpdateResultData, spfi, SPFI } from '@pnp/sp/presets/all'
 import { PermissionKind } from '@pnp/sp/security'
 import { IWeb } from '@pnp/sp/webs'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
-import { createSpfiInstance, DefaultCaching } from '../../data'
+import { createSpfiInstance, DefaultCaching, getItemFieldValues } from '../../data'
 import { ISPContentType } from '../../interfaces'
 import {
   IProjectTemplateSPItem,
+  ItemFieldValues,
   PortfolioOverviewView,
   ProjectAdminRole,
   ProjectColumn,
@@ -489,6 +490,7 @@ export class PortalDataService {
     expands?: string[]
   ): Promise<T[]> {
     try {
+      if (stringIsNullOrEmpty(listName)) return []
       const list = this.web.lists.getByTitle(listName)
       let items: any[]
       if (query) items = await list.getItemsByCAMLQuery(query, ...(expands ?? []))
@@ -705,6 +707,51 @@ export class PortalDataService {
       return new ProjectTemplate(spItem)
     } catch (error) {
       return null
+    }
+  }
+
+  /**
+   * Get idea data for the current site URL as an `ItemFieldValues` object.
+   */
+  public async getIdeaData() {
+    try {
+      const url = this._configuration.spfxContext.pageContext.site.absoluteUrl
+      const list = this._getList('IDEA_PROJECT_DATA')
+      const [spItem] = await list.items.select('Id').filter(`GtSiteUrl eq '${url}'`)()
+      if (!spItem) return null
+      const item = list.items.getById(spItem.Id)
+      const fieldValues = await getItemFieldValues(item)
+      return fieldValues
+    } catch (error) {
+      return null
+    }
+  }
+
+  /**
+   * Update idea data for the current site URL. Updates the element in the idea
+   * process list with a new idea decision. Normally it's set to approved and
+   * synced when idea project data is synced to the project.
+   *
+   * @param fieldValues Item field values
+   * @param ideaDecision New idea decision
+   */
+  public async updateIdeaData(
+    fieldValues: ItemFieldValues,
+    ideaDecision: string
+  ): Promise<boolean> {
+    try {
+      const list = this._getList('IDEA_PROCESSING')
+      const [spItem] = await list.items
+        .filter(`GtIdeaProjectDataId eq '${fieldValues.id}'`)
+        .top(1)
+        .select('Id')()
+      if (!spItem) return false
+      const item = list.items.getById(spItem.Id)
+      await item.update({
+        GtIdeaDecision: ideaDecision
+      })
+    } catch (error) {
+      return false
     }
   }
 
