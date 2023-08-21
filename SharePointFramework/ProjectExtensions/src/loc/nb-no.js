@@ -1,7 +1,5 @@
 define([], function () {
     return {
-        ProjectIdeaFoundText: 'Det ble funnet en prosjektìde for dette prosjektet. Prosjektdataene for denne idèen blir brukt til å fylle ut prosjektinformasjon.',
-        IdeaDecisionStatusApprovedAndSynced: 'Godkjent og synkronisert',
         ApplyExtensionHooks: 'Kjører hooks definert i prosjekttillegg',
         ApplyExtensionText: 'Legger på prosjekttilegg {0}',
         ApplyingExtensionsText: 'Legger på prosjekttilegg',
@@ -46,6 +44,7 @@ define([], function () {
         GetMoreText: 'Hent flere',
         GetSetupDataErrorMessage: 'Det skjedde en feil',
         GetSetupDataErrorStack: 'Det skjedde en feil under uthenting av data fra hubområdet. Dersom Prosjektportalen nylig er installert, kan det være grunnen. Prøv igjen litt senere.',
+        IdeaDecisionStatusApprovedAndSynced: 'Godkjent og synkronisert',
         InvalidLanguageErrorMessage: 'Ugyldig språk for området',
         InvalidLanguageErrorStack: 'Språket som er satt for området støttes ikke. Området må være opprettet med norsk språk.',
         IsHubSiteErrorMessage: 'Kan ikke legge prosjektmalen på et hubområde',
@@ -78,6 +77,7 @@ define([], function () {
         ProgressDialogTitle: 'Setter opp prosjektområdet',
         ProjectAlreadySetupMessage: 'Prosjektet er allerede satt opp',
         ProjectAlreadySetupStack: 'Det ser ut til at prosjektet allerede er satt opp. Vil du legge på mal (ikke anbefalt) eller hoppe over oppsett?',
+        ProjectIdeaFoundText: 'Det ble funnet en prosjektìde for dette prosjektet. Prosjektdataene for denne idèen blir brukt til å fylle ut prosjektinformasjon.',
         ProjectPropertiesListName: 'Prosjektegenskaper',
         ProjectProvisioningStartLogText: 'Starter provisjonering av prosjektet {0}.',
         ProjectProvisioningSuccessLogText: 'Prosjektet {0} ble provisjonert uten feil.',
