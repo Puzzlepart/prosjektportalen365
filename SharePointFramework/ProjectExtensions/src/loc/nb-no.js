@@ -1,5 +1,6 @@
 define([], function () {
     return {
+        IdeaDecisionStatusApprovedAndSynced: 'Godkjent og synkronisert',
         ApplyExtensionHooks: 'Kjører hooks definert i prosjekttillegg',
         ApplyExtensionText: 'Legger på prosjekttilegg {0}',
         ApplyingExtensionsText: 'Legger på prosjekttilegg',
