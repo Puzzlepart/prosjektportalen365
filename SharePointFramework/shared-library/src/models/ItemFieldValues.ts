@@ -43,6 +43,10 @@ export class ItemFieldValues {
     this._setValues()
   }
 
+  public get id(): number {
+    return this._values.get('Id').value
+  }
+
   /**
    * Check if the given key should be omitted from the field values.
    *
