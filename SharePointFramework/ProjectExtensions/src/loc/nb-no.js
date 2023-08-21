@@ -77,7 +77,7 @@ define([], function () {
         ProgressDialogTitle: 'Setter opp prosjektområdet',
         ProjectAlreadySetupMessage: 'Prosjektet er allerede satt opp',
         ProjectAlreadySetupStack: 'Det ser ut til at prosjektet allerede er satt opp. Vil du legge på mal (ikke anbefalt) eller hoppe over oppsett?',
-        ProjectIdeaFoundText: 'Det ble funnet en prosjektìde for dette prosjektet. Prosjektdataene for denne idèen blir brukt til å fylle ut prosjektinformasjon.',
+        ProjectIdeaFoundText: 'Det ble funnet en prosjektidé for dette prosjektet. Prosjektdataene for denne idéen blir brukt til å fylle ut prosjektinformasjon.',
         ProjectPropertiesListName: 'Prosjektegenskaper',
         ProjectProvisioningStartLogText: 'Starter provisjonering av prosjektet {0}.',
         ProjectProvisioningSuccessLogText: 'Prosjektet {0} ble provisjonert uten feil.',
