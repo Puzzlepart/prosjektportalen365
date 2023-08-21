@@ -42,7 +42,8 @@ export class ProjectInformationFieldValue {
     currentValue = null
   ) {
     const { value, valueAsText } = fieldValues.get<ItemFieldValue>(field.internalName, {
-      format: 'object'
+      format: 'object',
+      defaultValue: {}
     })
     return new ProjectInformationFieldValue(currentValue ?? valueAsText, value)
   }
