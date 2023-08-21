@@ -1,12 +1,5 @@
-import { MessageBar } from '@fluentui/react'
-import { Button, Caption2, Link, Spinner, Text } from '@fluentui/react-components'
-import {
-  Next24Filled,
-  Next24Regular,
-  Previous24Filled,
-  Previous24Regular,
-  bundleIcon
-} from '@fluentui/react-icons'
+import { Link, MessageBar } from '@fluentui/react'
+import { Caption2, Spinner, Text } from '@fluentui/react-components'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { SortDirection } from '@pnp/sp/search'
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle'
@@ -15,9 +8,6 @@ import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 import React, { useEffect, useState } from 'react'
 import styles from './LatestProjects.module.scss'
 import { ILatestProjectsProps } from './types'
-
-const ViewLessIcon = bundleIcon(Previous24Filled, Previous24Regular)
-const ViewMoreIcon = bundleIcon(Next24Filled, Next24Regular)
 
 export const LatestProjects: React.FC<ILatestProjectsProps> = (props) => {
   const [projects, setProjects] = useState([])
@@ -52,14 +42,14 @@ export const LatestProjects: React.FC<ILatestProjectsProps> = (props) => {
               {strings.CreatedText} {created}
             </Caption2>
             <div>
-              <Text as='h2'>
-                <Link
-                  href={site.Url}
-                  target={props.openInNewTab ? '_blank' : '_self'}
-                  appearance='subtle'
-                >
-                  {site.Title}
-                </Link>
+              <Text
+                as='h2'
+                onClick={() => {
+                  window.open(site.Path, props.openInNewTab ? '_blank' : '_self')
+                }}
+                style={{ cursor: 'pointer' }}
+              >
+                {site.Title}
               </Text>
             </div>
           </div>
@@ -78,14 +68,9 @@ export const LatestProjects: React.FC<ILatestProjectsProps> = (props) => {
           <>
             {renderProjectList()}
             <div className={styles.actions} hidden={projects.length <= props.rowLimit}>
-              <Button
-                icon={viewAll ? <ViewLessIcon /> : <ViewMoreIcon />}
-                onClick={() => setViewAll(!viewAll)}
-                size='small'
-                appearance='subtle'
-              >
+              <Link onClick={() => setViewAll(!viewAll)} appearance='subtle'>
                 {viewAll ? strings.ViewLessText : strings.ViewMoreText}
-              </Button>
+              </Link>
             </div>
           </>
         )}
