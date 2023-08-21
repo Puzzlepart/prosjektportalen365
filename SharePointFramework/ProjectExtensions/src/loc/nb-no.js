@@ -1,5 +1,6 @@
 define([], function () {
     return {
+        ProjectIdeaFoundText: 'Det ble funnet en prosjektìde for dette prosjektet. Prosjektdataene for denne idèen blir brukt til å fylle ut prosjektinformasjon.',
         IdeaDecisionStatusApprovedAndSynced: 'Godkjent og synkronisert',
         ApplyExtensionHooks: 'Kjører hooks definert i prosjekttillegg',
         ApplyExtensionText: 'Legger på prosjekttilegg {0}',

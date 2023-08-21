@@ -68,8 +68,7 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
             messageBarIconProps={{ iconName: 'Lightbulb' }}
             messageBarType={MessageBarType.success}
           >
-            Det ble funnet en prosjektìde for dette prosjektet. Prosjektdataene for denne idèen blir
-            brukt til å fylle ut prosjektinformasjon.
+            {strings.ProjectIdeaFoundText}
           </MessageBar>
         </div>
         <DialogFooter>

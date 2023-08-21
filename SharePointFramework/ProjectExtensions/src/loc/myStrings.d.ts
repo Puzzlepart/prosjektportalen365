@@ -1,4 +1,5 @@
 declare interface IProjectExtensionsStrings {
+  ProjectIdeaFoundText: string
   IdeaDecisionStatusApprovedAndSynced: string
   ApplyExtensionHooks: string
   ApplyExtensionText: string
