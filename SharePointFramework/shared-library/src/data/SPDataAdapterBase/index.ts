@@ -326,11 +326,19 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   ): Promise<Record<string, any>> {
     let sourceWeb: IWeb = this.sp.web
     let destinationWeb: IWeb = this.portal.web
-
-    // If the map type is from project to portfolio, we need to switch the source and destination web.
-    if (options.mapType === ProjectPropertiesMapType.FromPortfolioToProject) {
-      sourceWeb = this.portal.web
-      destinationWeb = this.sp.web
+    switch (options.mapType) {
+      case ProjectPropertiesMapType.FromPortfolioToProject:
+        {
+          sourceWeb = this.portal.web
+          destinationWeb = this.sp.web
+        }
+        break
+      case ProjectPropertiesMapType.FromPortfolioToPortfolio:
+        {
+          sourceWeb = this.portal.web
+          destinationWeb = this.portal.web
+        }
+        break
     }
 
     try {
@@ -340,11 +348,11 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
               .usingParams({ contentTypeId: options.projectContentTypeId })
               .getEntityFields() as Promise<SPField[]>)
           : (this.entityService.getEntityFields() as Promise<SPField[]>),
-        (sourceWeb as IWeb).siteUsers
-          .select('Id', 'Email', 'LoginName', 'Title')
-          .using(DefaultCaching)(),
-        options?.targetListName
-          ? destinationWeb.lists.getByTitle(options?.targetListName).fields<SPField[]>()
+        sourceWeb.siteUsers.select('Id', 'Email', 'LoginName', 'Title').using(DefaultCaching)(),
+        options.targetListName
+          ? destinationWeb.lists.getByTitle(options?.targetListName).fields.using(DefaultCaching)<
+              SPField[]
+            >()
           : Promise.resolve<SPField[]>([])
       ])
       const fieldsToSync = this._getFieldsToSync(fields, options.customSiteFieldsGroup, [
@@ -352,9 +360,8 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
         'GtIsProgram',
         'GtCurrentVersion'
       ])
-      const properties: Record<string, any> = {}
-      for (let i = 0; i < fieldsToSync.length; i++) {
-        const field = fieldsToSync[i]
+     return  await fieldsToSync.reduce(async ($properties, field) => {
+        const properties = await $properties
         const fieldValue = fieldValues.get<ItemFieldValue>(field.InternalName, {
           format: 'object',
           defaultValue: {}
@@ -365,7 +372,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
             {
               if (options.useSharePointTaxonomyHiddenFields) {
                 const textField = targetListFields.find((f) => f.Id === field.TextField)
-                if (!textField) continue
+                if (!textField) return properties
                 properties[textField.InternalName] = fieldValues.get<string>(field.InternalName, {
                   format: 'term_text'
                 })
@@ -373,7 +380,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                 const [textField] = fields.filter(
                   (f) => f.InternalName === `${field.InternalName}Text`
                 )
-                if (!textField) continue
+                if (!textField) return properties
                 properties[textField.InternalName] = fieldValue.valueAsText
               }
             }
@@ -383,8 +390,12 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
               const sourceUserId = fieldValues.get<number>(field.InternalName, {
                 format: 'user_id'
               })
+              if (sourceWeb.toUrl() === destinationWeb.toUrl()) {
+                properties[`${field.InternalName}Id`] = sourceUserId
+                return properties
+              }
               const user = siteUsers.find((u) => u.Id === sourceUserId)
-              if (!user) continue
+              if (!user) return properties
               const destinationUserId =
                 (await destinationWeb.ensureUser(user.LoginName))?.data?.Id ?? null
               properties[`${field.InternalName}Id`] = destinationUserId
@@ -396,6 +407,10 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                 format: 'user_id',
                 defaultValue: []
               })
+              if (sourceWeb.toUrl() === destinationWeb.toUrl()) {
+                properties[`${field.InternalName}Id`] = sourceUserIds
+                return properties
+              }
               const users = siteUsers.filter(({ Id }) => sourceUserIds.indexOf(Id) !== -1)
               const destinationUserIds = (
                 await Promise.all(
@@ -439,9 +454,8 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
             properties[field.InternalName] = fieldValue.valueAsText ?? null
             break
         }
-      }
-
-      return properties
+        return properties
+      }, Promise.resolve({}))
     } catch (error) {
       throw error
     }

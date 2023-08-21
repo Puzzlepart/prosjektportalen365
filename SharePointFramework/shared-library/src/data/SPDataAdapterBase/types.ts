@@ -31,7 +31,8 @@ export enum ProjectAdminPermission {
 
 export enum ProjectPropertiesMapType {
   FromPortfolioToProject,
-  FromProjectToPortfolio
+  FromProjectToPortfolio,
+  FromPortfolioToPortfolio
 }
 
 export type GetMappedProjectPropertiesOptions = {
