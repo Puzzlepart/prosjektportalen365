@@ -360,7 +360,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
         'GtIsProgram',
         'GtCurrentVersion'
       ])
-     return  await fieldsToSync.reduce(async ($properties, field) => {
+      return await fieldsToSync.reduce(async ($properties, field) => {
         const properties = await $properties
         const fieldValue = fieldValues.get<ItemFieldValue>(field.InternalName, {
           format: 'object',
