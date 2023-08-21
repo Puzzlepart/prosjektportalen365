@@ -387,7 +387,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
             break
           case 'User':
             {
-              const sourceUserId = fieldValues.get<number>(field.InternalName, {
+              const sourceUserId = fieldValues.get<number>(`${field.InternalName}Id`, {
                 format: 'user_id'
               })
               if (sourceWeb.toUrl() === destinationWeb.toUrl()) {
@@ -403,7 +403,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
             break
           case 'UserMulti':
             {
-              const sourceUserIds = fieldValues.get<number[]>(field.InternalName, {
+              const sourceUserIds = fieldValues.get<number[]>(`${field.InternalName}Id`, {
                 format: 'user_id',
                 defaultValue: []
               })

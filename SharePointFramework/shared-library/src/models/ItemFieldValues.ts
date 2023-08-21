@@ -118,12 +118,12 @@ export class ItemFieldValues {
    */
   public get<T = any>(fieldName: string, options: GetFieldValueOptions<T> = {}): T {
     const { defaultValue = null, format = null } = options
-    if (!this._values.has(fieldName) && !this._values.has(`${fieldName}Id`)) {
+    if (!this._values.has(fieldName)) {
       if (format === 'object') return (defaultValue ?? {}) as unknown as T
       return defaultValue
     }
-    const value = this._values.get(fieldName) ?? this._values.get(`${fieldName}Id`) ?? {}
-    if (format) return this._getValueInFormat(value, format, options.defaultValue)
+    const value =  this._values.get(fieldName) ?? {}
+    if (format) return this._getValueInFormat<T>(value, format, options.defaultValue)
     return value as unknown as T
   }
 
