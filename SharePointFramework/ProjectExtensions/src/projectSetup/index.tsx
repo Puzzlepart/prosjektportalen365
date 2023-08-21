@@ -34,6 +34,8 @@ import { ProjectSetupError } from './ProjectSetupError'
 import { deleteCustomizer } from './deleteCustomizer'
 import * as Tasks from './tasks'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
+import { FluentProvider, webLightTheme } from '@fluentui/react-components'
+import React from 'react'
 
 Logger.subscribe(ConsoleListener())
 Logger.activeLogLevel = sessionStorage.DEBUG === '1' || DEBUG ? LogLevel.Info : LogLevel.Warning
@@ -240,7 +242,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             )
           }
         })
-        render(element, placeholder)
+        this._render(element, placeholder)
       }
     })
   }
@@ -257,7 +259,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       ...props,
       version: this.version
     })
-    render(element, placeholder)
+    this._render(element, placeholder)
   }
 
   /**
@@ -292,7 +294,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         this._unmount(placeholder)
       }
     })
-    render(element, placeholder)
+    this._render(element, placeholder)
   }
 
   /**
@@ -530,6 +532,20 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    */
   private get version() {
     return DEBUG ? 'Serving on localhost' : `v${this.manifest.version}`
+  }
+
+  /**
+   * Renders the `element` wrapped in `FluentProvider` it the provided `placeholder`.
+   * 
+   * @param element Element to render
+   * @param placeholder Placeholder to render element in
+   */
+  private _render(element: React.FunctionComponentElement<any>, placeholder: HTMLElement) {
+    render((
+      <FluentProvider theme={webLightTheme}>
+        {element}
+      </FluentProvider>
+    ), placeholder)
   }
 }
 

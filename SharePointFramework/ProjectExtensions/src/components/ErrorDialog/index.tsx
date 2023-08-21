@@ -1,17 +1,16 @@
+import {
+  DefaultButton,
+  MessageBar,
+  MessageBarType,
+  PrimaryButton
+} from '@fluentui/react'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { FC } from 'react'
-import { BaseDialog } from '../@BaseDialog'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
+import { BaseDialog } from '../@BaseDialog'
 import styles from './ErrorDialog.module.scss'
 import { IErrorDialogProps } from './types'
-import {
-  MessageBarType,
-  DefaultButton,
-  PrimaryButton,
-  MessageBar,
-  DialogFooter
-} from '@fluentui/react'
 
 export const ErrorDialog: FC<IErrorDialogProps> = ({
   error,
@@ -38,15 +37,9 @@ export const ErrorDialog: FC<IErrorDialogProps> = ({
   }
 
   return (
-    <BaseDialog
-      version={version}
-      dialogContentProps={{
-        title: error.message,
-        subText: showStackAsSubText ? error.stack : undefined
-      }}
-      modalProps={{ containerClassName: styles.root, isBlocking: false, isDarkOverlay: true }}
-      onDismiss={onDismiss}
-    >
+    <BaseDialog 
+    version={version}
+    content={(
       <div style={{ marginTop: 15 }} hidden={showStackAsSubText}>
         <MessageBar messageBarType={messageType} className={styles.errorMessage}>
           <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]}>
@@ -54,8 +47,9 @@ export const ErrorDialog: FC<IErrorDialogProps> = ({
           </ReactMarkdown>
         </MessageBar>
       </div>
-      <DialogFooter>{onRenderFooter()}</DialogFooter>
-    </BaseDialog>
+    )}  
+    actions={onRenderFooter()}
+    />
   )
 }
 

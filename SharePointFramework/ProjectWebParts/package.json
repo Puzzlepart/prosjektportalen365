@@ -58,7 +58,7 @@
     "@pnp/core": "3.17.0",
     "@pnp/queryable": "3.17.0",
     "react-error-boundary": "~4.0.10",
-    "@fluentui/react-components": "9.27.2",
+    "@fluentui/react-components": "~9.29.3",
     "@fluentui/react-icons": "2.0.209"
   },
   "devDependencies": {
