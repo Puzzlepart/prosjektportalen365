@@ -1,4 +1,3 @@
-import React, { FC } from 'react'
 import {
   Button,
   FluentProvider,
@@ -9,22 +8,23 @@ import {
   webLightTheme
 } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
+import { TextSortAscendingRegular, TextSortDescendingRegular } from '@fluentui/react-icons'
 import { SearchBox } from '@fluentui/react-search-preview'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
+import { ProjectListModel } from 'pp365-shared-library/lib/models'
+import React, { FC } from 'react'
 import { find, isEmpty } from 'underscore'
+import { List } from './List'
+import { ListContext } from './List/context'
 import { ProjectCard } from './ProjectCard'
 import { ProjectCardContext } from './ProjectCard/context'
-import { List } from './List'
 import styles from './ProjectList.module.scss'
 import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
 import { ProjectListVerticals } from './ProjectListVerticals'
 import { RenderModeDropdown } from './RenderModeDropdown'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
-import { ProjectListModel } from 'pp365-shared-library/lib/models'
-import { TextSortAscendingRegular, TextSortDescendingRegular } from '@fluentui/react-icons'
-import { ListContext } from './List/context'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const {
@@ -90,7 +90,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   if (state.projects.length === 0) {
     return (
       <FluentProvider theme={webLightTheme}>
-        <section className={styles.projectList}>
+        <section className={styles.root}>
           <Alert intent={'info'}>{strings.NoProjectsFound}</Alert>
         </section>
       </FluentProvider>
@@ -99,15 +99,15 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
 
   if (state.error) {
     return (
-      <section className={styles.projectList}>
+      <section className={styles.root}>
         <Alert intent={'error'}>{strings.ErrorText}</Alert>
       </section>
     )
   }
 
   return (
-    <FluentProvider theme={webLightTheme}>
-      <section className={styles.projectList}>
+    <>
+      <div className={styles.root}>
         <div className={styles.tabs}>
           <TabList
             onTabSelect={(_, data: SelectTabData) =>
@@ -187,7 +187,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
           </div>
         )}
         <div className={styles.projects}>{renderProjects(projects)}</div>
-      </section>
+      </div>
       <ProjectInformationPanel
         key={state.showProjectInfo?.siteId}
         title={state.showProjectInfo?.title}
@@ -198,7 +198,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         hidden={!state.showProjectInfo}
         hideAllActions={true}
       />
-    </FluentProvider>
+    </>
   )
 }
 
