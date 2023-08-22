@@ -106,88 +106,86 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   }
 
   return (
-    <>
-      <div className={styles.root}>
-        <div className={styles.tabs}>
-          <TabList
-            onTabSelect={(_, data: SelectTabData) =>
-              setState({ selectedVertical: find(verticals, (v) => v.key === data.value) })
-            }
-            selectedValue={state.selectedVertical.key}
-          >
-            {state.isDataLoaded &&
-              verticals
-                .filter((vertical) => !vertical.isHidden || !vertical.isHidden(state))
-                .map((vertical) => {
-                  const Icon = vertical.icon
-                  return (
-                    <Tab key={vertical.key} value={vertical.value} icon={<Icon />}>
-                      {vertical.text}
-                    </Tab>
-                  )
-                })}
-          </TabList>
-        </div>
-        <div
-          className={styles.commandBar}
-          hidden={!props.showSearchBox && !props.showRenderModeSelector}
+    <FluentProvider className={styles.root} theme={webLightTheme}>
+      <div className={styles.tabs}>
+        <TabList
+          onTabSelect={(_, data: SelectTabData) =>
+            setState({ selectedVertical: find(verticals, (v) => v.key === data.value) })
+          }
+          selectedValue={state.selectedVertical.key}
         >
-          <div className={styles.search} hidden={!props.showSearchBox}>
-            <SearchBox
-              className={styles.searchBox}
-              disabled={!state.isDataLoaded || isEmpty(state.projects)}
-              value={state.searchTerm}
-              placeholder={searchBoxPlaceholder}
-              aria-label={searchBoxPlaceholder}
-              size={'large'}
-              onChange={onSearch}
-              appearance={'filled-lighter'}
-            />
-          </div>
-          <div hidden={!props.showRenderModeSelector}>
-            <RenderModeDropdown
-              renderAs={state.renderMode}
-              onOptionSelect={(renderAs) => setState({ renderMode: renderAs })}
-            />
-          </div>
-          <div hidden={!props.showSortBy || state.renderMode !== 'tiles'}>
-            <Tooltip
-              content={
-                <>
-                  Sorter flisene etter <strong>{props.sortBy}</strong>
-                </>
-              }
-              relationship={'description'}
-              withArrow
-            >
-              <Button
-                className={styles.sortBy}
-                appearance={'transparent'}
-                onClick={() =>
-                  onListSort(
-                    null,
-                    props.columns.find((c) => c.fieldName === 'title')
-                  )
-                }
-                size={'large'}
-                icon={
-                  state.sort?.isSortedDescending ? (
-                    <TextSortAscendingRegular />
-                  ) : (
-                    <TextSortDescendingRegular />
-                  )
-                }
-              />
-            </Tooltip>
-          </div>
-        </div>
-        {state.isDataLoaded && isEmpty(projects) && (
-          <div className={styles.emptyMessage}>
-            <Alert intent={'info'}>{strings.ProjectListEmptyText}</Alert>
-          </div>
-        )}
-        <div className={styles.projects}>{renderProjects(projects)}</div>
+          {state.isDataLoaded &&
+            verticals
+              .filter((vertical) => !vertical.isHidden || !vertical.isHidden(state))
+              .map((vertical) => {
+                const Icon = vertical.icon
+                return (
+                  <Tab key={vertical.key} value={vertical.value} icon={<Icon />}>
+                    {vertical.text}
+                  </Tab>
+                )
+              })}
+        </TabList>
       </div>
+      <div
+        className={styles.commandBar}
+        hidden={!props.showSearchBox && !props.showRenderModeSelector}
+      >
+        <div className={styles.search} hidden={!props.showSearchBox}>
+          <SearchBox
+            className={styles.searchBox}
+            disabled={!state.isDataLoaded || isEmpty(state.projects)}
+            value={state.searchTerm}
+            placeholder={searchBoxPlaceholder}
+            aria-label={searchBoxPlaceholder}
+            size={'large'}
+            onChange={onSearch}
+            appearance={'filled-lighter'}
+          />
+        </div>
+        <div hidden={!props.showRenderModeSelector}>
+          <RenderModeDropdown
+            renderAs={state.renderMode}
+            onOptionSelect={(renderAs) => setState({ renderMode: renderAs })}
+          />
+        </div>
+        <div hidden={!props.showSortBy || state.renderMode !== 'tiles'}>
+          <Tooltip
+            content={
+              <>
+                Sorter flisene etter <strong>{props.sortBy}</strong>
+              </>
+            }
+            relationship={'description'}
+            withArrow
+          >
+            <Button
+              className={styles.sortBy}
+              appearance={'transparent'}
+              onClick={() =>
+                onListSort(
+                  null,
+                  props.columns.find((c) => c.fieldName === 'title')
+                )
+              }
+              size={'large'}
+              icon={
+                state.sort?.isSortedDescending ? (
+                  <TextSortAscendingRegular />
+                ) : (
+                  <TextSortDescendingRegular />
+                )
+              }
+            />
+          </Tooltip>
+        </div>
+      </div>
+      {state.isDataLoaded && isEmpty(projects) && (
+        <div className={styles.emptyMessage}>
+          <Alert intent={'info'}>{strings.ProjectListEmptyText}</Alert>
+        </div>
+      )}
+      <div className={styles.projects}>{renderProjects(projects)}</div>
       <ProjectInformationPanel
         key={state.showProjectInfo?.siteId}
         title={state.showProjectInfo?.title}
@@ -198,7 +196,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         hidden={!state.showProjectInfo}
         hideAllActions={true}
       />
-    </>
+    </FluentProvider>
   )
 }
 

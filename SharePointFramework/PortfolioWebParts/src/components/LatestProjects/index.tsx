@@ -1,5 +1,5 @@
 import { Link, MessageBar } from '@fluentui/react'
-import { Caption2, Spinner, Text } from '@fluentui/react-components'
+import { Caption2, FluentProvider, Spinner, Text, webLightTheme } from '@fluentui/react-components'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { SortDirection } from '@pnp/sp/search'
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle'
@@ -59,7 +59,7 @@ export const LatestProjects: React.FC<ILatestProjectsProps> = (props) => {
   }
 
   return (
-    <div className={styles.root}>
+    <FluentProvider className={styles.root} theme={webLightTheme}>
       <WebPartTitle displayMode={DisplayMode.Read} title={props.title} updateProperty={undefined} />
       <div className={styles.container}>
         {loading ? (
@@ -75,7 +75,7 @@ export const LatestProjects: React.FC<ILatestProjectsProps> = (props) => {
           </>
         )}
       </div>
-    </div>
+    </FluentProvider>
   )
 }
 

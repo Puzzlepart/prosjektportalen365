@@ -1,11 +1,10 @@
-import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
-import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
+import { ConsoleListener, LogLevel, Logger } from '@pnp/logging'
 import { SPFI } from '@pnp/sp/presets/all'
 import { IBaseComponentProps } from 'components/types'
 import { createSpfiInstance } from 'pp365-shared-library'
-import React, { ComponentClass, createElement, FC } from 'react'
+import React, { ComponentClass, FC, createElement } from 'react'
 import { render } from 'react-dom'
 import { ErrorBoundary } from 'react-error-boundary'
 import { DataAdapter } from '../../data'
@@ -65,7 +64,7 @@ export abstract class BasePortfolioWebPart<
           <ErrorBoundaryFallback title={combinedProps['title']} error={error} />
         )}
       >
-        <FluentProvider theme={webLightTheme}>{element}</FluentProvider>
+        {element}
       </ErrorBoundary>,
       this.domElement
     )
