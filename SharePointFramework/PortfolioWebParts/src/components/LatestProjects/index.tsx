@@ -110,7 +110,7 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
 }
 
 LatestProjects.defaultProps = {
-  showProjectLogo: true,
+  showProjectLogo: false,
   rowLimit: 5,
   minRowLimit: 3,
   maxRowLimit: 10
