@@ -71,6 +71,7 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        transform: translate3d(0, 0, 1px);
         transition: transform 0.5s;
       }
 
