@@ -2,7 +2,6 @@ import { Link, FluentProvider, webLightTheme, Caption1, Button } from '@fluentui
 import { ChevronDownFilled, ChevronUpFilled } from '@fluentui/react-icons'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 import { ProjectLogo, WebPartTitle } from 'pp365-shared-library/lib/components'
-import {} from 'pp365-shared-library/lib/components'
 import { Alert } from '@fluentui/react-components/unstable'
 import React, { FC, useEffect, useState } from 'react'
 import styles from './LatestProjects.module.scss'
@@ -39,9 +38,7 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
       const created = formatDate(site.Created, true)
       return (
         <div key={idx} className={styles.projectItem}>
-          <div hidden={!props.showProjectLogo}>
-            <ProjectLogo title={site.Title} url={site.Path} />
-          </div>
+          <ProjectLogo title={site.Title} url={site.Path} hidden={!props.showProjectLogo} />
           <div className={styles.projectInformation}>
             <div>
               <Link href={site.Path} target='_blank' title={site.Title}>

@@ -13,4 +13,9 @@ export interface IProjectLogoProps {
    *
    */
   url: string
+
+  /**
+   * Hide content
+   */
+  hidden?: boolean
 }

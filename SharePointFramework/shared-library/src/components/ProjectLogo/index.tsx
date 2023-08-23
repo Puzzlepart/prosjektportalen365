@@ -10,10 +10,10 @@ import { Avatar } from '@fluentui/react-components'
  */
 export const ProjectLogo: FC<IProjectLogoProps> = (props: IProjectLogoProps) => {
   const [showCustomImage, setShowCustomImage] = useState(true)
-  const { title, url } = props
+  const { title, url, hidden } = props
 
   return (
-    <div className={styles.projectLogo}>
+    <div className={styles.projectLogo} hidden={hidden}>
       <Avatar
         className={styles.projectAvatar}
         aria-label={`Logo for prosjekt: ${title}'`}
