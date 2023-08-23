@@ -24,7 +24,8 @@
       },
       "officeFabricIconFontName": "BuildQueueNew",
       "properties": {
-        "title": "Siste prosjekter"
+        "title": "Siste prosjekter",
+        "showProjectLogo": true
       }
     }
   ]

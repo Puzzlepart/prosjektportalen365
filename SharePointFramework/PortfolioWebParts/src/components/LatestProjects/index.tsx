@@ -1,4 +1,11 @@
-import { Link, FluentProvider, webLightTheme, Caption1, Button, Avatar } from '@fluentui/react-components'
+import {
+  Link,
+  FluentProvider,
+  webLightTheme,
+  Caption1,
+  Button,
+  Avatar
+} from '@fluentui/react-components'
 import { ChevronDownFilled, ChevronUpFilled } from '@fluentui/react-icons'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 import { WebPartTitle } from 'pp365-shared-library/lib/components'
@@ -39,10 +46,7 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
       const created = formatDate(site.Created, true)
       return (
         <div key={idx} className={styles.projectItem}>
-          <div
-            className={styles.logo}
-            hidden={!props.showProjectLogo}
-          >
+          <div className={styles.logo} hidden={!props.showProjectLogo}>
             <Avatar
               className={styles.projectAvatar}
               aria-label={`Logo for prosjekt: ${site.Title}'`}

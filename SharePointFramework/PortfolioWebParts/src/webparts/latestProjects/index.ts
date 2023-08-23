@@ -1,4 +1,8 @@
-import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneToggle } from '@microsoft/sp-property-pane'
+import {
+  IPropertyPaneConfiguration,
+  PropertyPaneSlider,
+  PropertyPaneToggle
+} from '@microsoft/sp-property-pane'
 import { ILatestProjectsProps, LatestProjects } from 'components/LatestProjects'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
