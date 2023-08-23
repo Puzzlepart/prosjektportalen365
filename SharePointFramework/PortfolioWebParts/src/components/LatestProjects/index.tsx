@@ -1,14 +1,8 @@
-import {
-  Link,
-  FluentProvider,
-  webLightTheme,
-  Caption1,
-  Button,
-  Avatar
-} from '@fluentui/react-components'
+import { Link, FluentProvider, webLightTheme, Caption1, Button } from '@fluentui/react-components'
 import { ChevronDownFilled, ChevronUpFilled } from '@fluentui/react-icons'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
-import { WebPartTitle } from 'pp365-shared-library/lib/components'
+import { ProjectLogo, WebPartTitle } from 'pp365-shared-library/lib/components'
+import {} from 'pp365-shared-library/lib/components'
 import { Alert } from '@fluentui/react-components/unstable'
 import React, { FC, useEffect, useState } from 'react'
 import styles from './LatestProjects.module.scss'
@@ -17,7 +11,6 @@ import strings from 'PortfolioWebPartsStrings'
 import { ILatestProjectsProps } from './types'
 
 export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
-  const [showCustomImage, setShowCustomImage] = useState(true)
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
   const [viewAll, setViewAll] = useState(false)
@@ -46,34 +39,8 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
       const created = formatDate(site.Created, true)
       return (
         <div key={idx} className={styles.projectItem}>
-          <div className={styles.logo} hidden={!props.showProjectLogo}>
-            <Avatar
-              className={styles.projectAvatar}
-              aria-label={`Logo for prosjekt: ${site.Title}'`}
-              title={`Logo for prosjekt: ${site.Title}'`}
-              color={'colorful'}
-              shape={'square'}
-              style={{ display: showCustomImage ? 'none' : 'block' }}
-              name={site.Title?.slice(-2).toUpperCase()}
-              initials={site.Title?.slice(0, 2).toUpperCase()}
-            />
-            <img
-              src={`${site.Path}/_api/siteiconmanager/getsitelogo?type='1'`}
-              style={{
-                display: !showCustomImage ? 'none' : 'block'
-              }}
-              title={`Logo for prosjekt: ${site.Title}'`}
-              alt={`Logo for prosjekt: ${site.Title}'`}
-              onLoad={(image) => {
-                setShowCustomImage(
-                  (image.target as HTMLImageElement).naturalHeight !== 648
-                    ? (image.target as HTMLImageElement).naturalHeight !== 96
-                      ? true
-                      : false
-                    : false
-                )
-              }}
-            />
+          <div hidden={!props.showProjectLogo}>
+            <ProjectLogo title={site.Title} url={site.Path} />
           </div>
           <div className={styles.projectInformation}>
             <div>

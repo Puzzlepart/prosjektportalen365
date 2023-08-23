@@ -22,32 +22,6 @@ a:hover {
       overflow: hidden;
       position: relative;
 
-      .logo {
-        width: 48px;
-        height: 48px;
-
-        .projectAvatar {
-          height: 80%;
-          width: 80%;
-          object-fit: cover;
-          border-radius: var(--borderRadiusMedium);
-          margin: 5px;
-        }
-
-        img {
-          height: 80%;
-          width: 80%;
-          object-fit: cover;
-          transform: translate3d(0, 0, 1px);
-          border-radius: var(--borderRadiusMedium);
-          margin: 5px;
-        }
-      }
-
-      .avatar:hover {
-        filter: brightness(0.9);
-      }
-
       .projectInformation {
         padding-left: 12px;
       }
