@@ -1,13 +1,13 @@
-import { Link, MessageBar } from '@fluentui/react'
-import { Caption2, FluentProvider, Spinner, Text, webLightTheme } from '@fluentui/react-components'
-import { DisplayMode } from '@microsoft/sp-core-library'
+import { Link, FluentProvider, webLightTheme, Caption1, Button } from '@fluentui/react-components'
+import { Alert } from '@fluentui/react-components/unstable'
 import { SortDirection } from '@pnp/sp/search'
-import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle'
 import strings from 'PortfolioWebPartsStrings'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
+import { WebPartTitle } from 'pp365-shared-library/lib/components'
 import React, { useEffect, useState } from 'react'
 import styles from './LatestProjects.module.scss'
 import { ILatestProjectsProps } from './types'
+import { ChevronDownFilled, ChevronUpFilled } from '@fluentui/react-icons'
 
 export const LatestProjects: React.FC<ILatestProjectsProps> = (props) => {
   const [projects, setProjects] = useState([])
@@ -30,28 +30,21 @@ export const LatestProjects: React.FC<ILatestProjectsProps> = (props) => {
   /**
    * Render project list
    */
-  function renderProjectList() {
-    if (projects.length === 0) return <MessageBar>{props.emptyMessage}</MessageBar>
+  function renderLatestProjects() {
+    if (!loading && projects.length === 0)
+      return <Alert intent='info'>{strings.NoProjectsFound}</Alert>
     const viewCount = viewAll ? projects.length : props.rowLimit
     return [...projects].slice(0, viewCount).map((site, idx) => {
       const created = formatDate(site.Created, true)
       return (
         <div key={idx} className={styles.projectItem}>
           <div className={styles.itemContainer}>
-            <Caption2>
-              {strings.CreatedText} {created}
-            </Caption2>
             <div>
-              <Text
-                as='h2'
-                onClick={() => {
-                  window.open(site.Path, props.openInNewTab ? '_blank' : '_self')
-                }}
-                style={{ cursor: 'pointer' }}
-              >
+              <Link href={site.Path} target='_blank' title={site.Title}>
                 {site.Title}
-              </Text>
+              </Link>
             </div>
+            <Caption1 title={`${strings.CreatedText} ${created}`}>{created}</Caption1>
           </div>
         </div>
       )
@@ -60,28 +53,29 @@ export const LatestProjects: React.FC<ILatestProjectsProps> = (props) => {
 
   return (
     <FluentProvider className={styles.root} theme={webLightTheme}>
-      <WebPartTitle displayMode={DisplayMode.Read} title={props.title} updateProperty={undefined} />
+      <WebPartTitle text={props.title} />
       <div className={styles.container}>
-        {loading ? (
-          <Spinner size='extra-tiny' label={props.loadingText} />
-        ) : (
-          <>
-            {renderProjectList()}
-            <div className={styles.actions} hidden={projects.length <= props.rowLimit}>
-              <Link onClick={() => setViewAll(!viewAll)} appearance='subtle'>
-                {viewAll ? strings.ViewLessText : strings.ViewMoreText}
-              </Link>
-            </div>
-          </>
-        )}
+        {renderLatestProjects()}
+        <div hidden={projects.length <= props.rowLimit}>
+          <Button
+            appearance='subtle'
+            size='small'
+            icon={viewAll ? <ChevronUpFilled /> : <ChevronDownFilled />}
+            title={viewAll ? strings.ViewLessText : strings.ViewMoreText}
+            onClick={() => setViewAll(!viewAll)}
+          >
+            {viewAll ? strings.ViewLessText : strings.ViewMoreText}
+          </Button>
+        </div>
       </div>
     </FluentProvider>
   )
 }
 
 LatestProjects.defaultProps = {
-  minRowLimit: 5,
-  maxRowLimit: 15
+  rowLimit: 5,
+  minRowLimit: 3,
+  maxRowLimit: 10
 }
 
 export * from './types'

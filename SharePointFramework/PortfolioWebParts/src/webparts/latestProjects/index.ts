@@ -1,9 +1,4 @@
-import {
-  IPropertyPaneConfiguration,
-  PropertyPaneSlider,
-  PropertyPaneTextField,
-  PropertyPaneToggle
-} from '@microsoft/sp-property-pane'
+import { IPropertyPaneConfiguration, PropertyPaneSlider } from '@microsoft/sp-property-pane'
 import { ILatestProjectsProps, LatestProjects } from 'components/LatestProjects'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
@@ -25,22 +20,11 @@ export default class LatestProjectsWebPart extends BasePortfolioWebPart<ILatestP
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneTextField('loadingText', {
-                  label: strings.LoadingTextLabel,
-                  description: strings.LoadingTextDescription
-                }),
-                PropertyPaneTextField('emptyMessage', {
-                  label: strings.EmptyMessageLabel,
-                  description: strings.EmptyMessageDescription
-                }),
                 PropertyPaneSlider('rowLimit', {
                   label: strings.RowLimitLabel,
                   min: LatestProjects.defaultProps.minRowLimit,
                   max: LatestProjects.defaultProps.maxRowLimit,
                   step: 1
-                }),
-                PropertyPaneToggle('openInNewTab', {
-                  label: strings.OpenInNewTabLabel
                 })
               ]
             }

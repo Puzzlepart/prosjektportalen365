@@ -1,11 +1,18 @@
+a {
+  color: var(--colorBrandForegroundLink);
+  outline: none;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--colorBrandForegroundLinkHover);
+  text-decoration: underline;
+}
+
 .root {
   .container {
-    padding: 5px;
-    margin: 3px 0 0 0;
-
     .projectItem {
-      padding: 15px 2px;
-      border-bottom: 1px solid rgb(234, 234, 234);
+      padding: 12px 0;
       .itemContainer {
         height: 100%;
         -webkit-box-sizing: border-box;
@@ -13,10 +20,6 @@
         overflow: hidden;
         position: relative;
       }
-    }
-
-    .actions {
-      margin: 15px 0 0 0;
     }
   }
 }

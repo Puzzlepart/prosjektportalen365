@@ -2,32 +2,17 @@ import { IBaseComponentProps } from '../types'
 
 export interface ILatestProjectsProps extends IBaseComponentProps {
   /**
-   * Loading text
-   */
-  loadingText: string
-
-  /**
-   * Empty message
-   */
-  emptyMessage: string
-
-  /**
-   * Number of items to show
+   * Number of projects to show
    */
   rowLimit: number
 
   /**
-   * Min number of items to show
+   * Min number of projects to show
    */
   minRowLimit?: number
 
   /**
-   * Max number of items to show
+   * Max number of projects to show
    */
   maxRowLimit: number
-
-  /**
-   * Open project sites in a new tab
-   */
-  openInNewTab: boolean
 }

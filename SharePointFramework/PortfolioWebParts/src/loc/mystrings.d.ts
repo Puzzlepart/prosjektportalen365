@@ -106,7 +106,6 @@ declare interface IPortfolioWebPartsStrings {
   EditViewHeaderText: string
   EditViewText: string
   EmptyMessageDescription: string
-  EmptyMessageLabel: string
   EndDateLabel: string
   ErrorText: string
   ExcelExportButtonLabel: string
@@ -129,8 +128,6 @@ declare interface IPortfolioWebPartsStrings {
   ListViewGroupName: string
   ListViewText: string
   LoadingText: string
-  LoadingTextDescription: string
-  LoadingTextLabel: string
   MaxWidthDescription: string
   MaxWidthLabel: string
   MeasurementAchievementLabel: string
