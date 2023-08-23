@@ -1,15 +1,16 @@
-import { Link, FluentProvider, webLightTheme, Caption1, Button } from '@fluentui/react-components'
-import { Alert } from '@fluentui/react-components/unstable'
-import { SortDirection } from '@pnp/sp/search'
-import strings from 'PortfolioWebPartsStrings'
+import { Link, FluentProvider, webLightTheme, Caption1, Button, Avatar } from '@fluentui/react-components'
+import { ChevronDownFilled, ChevronUpFilled } from '@fluentui/react-icons'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 import { WebPartTitle } from 'pp365-shared-library/lib/components'
-import React, { useEffect, useState } from 'react'
+import { Alert } from '@fluentui/react-components/unstable'
+import React, { FC, useEffect, useState } from 'react'
 import styles from './LatestProjects.module.scss'
+import { SortDirection } from '@pnp/sp/search'
+import strings from 'PortfolioWebPartsStrings'
 import { ILatestProjectsProps } from './types'
-import { ChevronDownFilled, ChevronUpFilled } from '@fluentui/react-icons'
 
-export const LatestProjects: React.FC<ILatestProjectsProps> = (props) => {
+export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
+  const [showCustomImage, setShowCustomImage] = useState(true)
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
   const [viewAll, setViewAll] = useState(false)
@@ -38,7 +39,39 @@ export const LatestProjects: React.FC<ILatestProjectsProps> = (props) => {
       const created = formatDate(site.Created, true)
       return (
         <div key={idx} className={styles.projectItem}>
-          <div className={styles.itemContainer}>
+          <div
+            className={styles.logo}
+            hidden={!props.showProjectLogo}
+          >
+            <Avatar
+              className={styles.projectAvatar}
+              aria-label={`Logo for prosjekt: ${site.Title}'`}
+              title={`Logo for prosjekt: ${site.Title}'`}
+              color={'colorful'}
+              shape={'square'}
+              style={{ display: showCustomImage ? 'none' : 'block' }}
+              name={site.Title?.slice(-2).toUpperCase()}
+              initials={site.Title?.slice(0, 2).toUpperCase()}
+            />
+            <img
+              src={`${site.Path}/_api/siteiconmanager/getsitelogo?type='1'`}
+              style={{
+                display: !showCustomImage ? 'none' : 'block'
+              }}
+              title={`Logo for prosjekt: ${site.Title}'`}
+              alt={`Logo for prosjekt: ${site.Title}'`}
+              onLoad={(image) => {
+                setShowCustomImage(
+                  (image.target as HTMLImageElement).naturalHeight !== 648
+                    ? (image.target as HTMLImageElement).naturalHeight !== 96
+                      ? true
+                      : false
+                    : false
+                )
+              }}
+            />
+          </div>
+          <div className={styles.projectInformation}>
             <div>
               <Link href={site.Path} target='_blank' title={site.Title}>
                 {site.Title}
@@ -73,6 +106,7 @@ export const LatestProjects: React.FC<ILatestProjectsProps> = (props) => {
 }
 
 LatestProjects.defaultProps = {
+  showProjectLogo: true,
   rowLimit: 5,
   minRowLimit: 3,
   maxRowLimit: 10

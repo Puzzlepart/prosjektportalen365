@@ -1,4 +1,4 @@
-import { IPropertyPaneConfiguration, PropertyPaneSlider } from '@microsoft/sp-property-pane'
+import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneToggle } from '@microsoft/sp-property-pane'
 import { ILatestProjectsProps, LatestProjects } from 'components/LatestProjects'
 import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
@@ -20,6 +20,9 @@ export default class LatestProjectsWebPart extends BasePortfolioWebPart<ILatestP
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
+                PropertyPaneToggle('showProjectLogo', {
+                  label: strings.ShowProjectLogoFieldLabel
+                }),
                 PropertyPaneSlider('rowLimit', {
                   label: strings.RowLimitLabel,
                   min: LatestProjects.defaultProps.minRowLimit,

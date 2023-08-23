@@ -12,14 +12,50 @@ a:hover {
 .root {
   .container {
     .projectItem {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
       padding: 12px 0;
-      .itemContainer {
-        height: 100%;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-        overflow: hidden;
-        position: relative;
+      height: 100%;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      overflow: hidden;
+      position: relative;
+
+      .logo {
+        width: 48px;
+        height: 48px;
+
+        .projectAvatar {
+          height: 80%;
+          width: 80%;
+          object-fit: cover;
+          border-radius: var(--borderRadiusMedium);
+          margin: 5px;
+        }
+
+        img {
+          height: 80%;
+          width: 80%;
+          object-fit: cover;
+          transform: translate3d(0, 0, 1px);
+          border-radius: var(--borderRadiusMedium);
+          margin: 5px;
+        }
       }
+
+      .avatar:hover {
+        filter: brightness(0.9);
+      }
+
+      .projectInformation {
+        padding-left: 12px;
+      }
+    }
+
+    .projectItem:hover {
+      background-color: var(--colorNeutralBackground1Hover);
+      border-radius: var(--borderRadiusMedium);
     }
   }
 }
