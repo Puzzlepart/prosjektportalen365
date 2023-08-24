@@ -3,28 +3,30 @@ import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import React, { FC } from 'react'
 import { ITitleColumnProps } from './types'
+import styles from './TitleColumn.module.scss'
 
 export const TitleColumn: FC<ITitleColumnProps> = ({ item, props }) => {
+  const link = (
+    <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
+      {item.Title}
+    </Link>
+  )
+
+
   let content = (
-    <span>
+    <div className={styles.root}>
       <span>{item.Title}</span>
       <TooltipHost content={strings.NoProjectData}>
         <Icon
           iconName='Hide'
-          style={{
-            color: '666666',
-            marginLeft: 4,
-            position: 'relative',
-            top: '2px',
-            fontSize: '1.1em'
-          }}
+          className={styles.icon}
         />
       </TooltipHost>
-    </span>
+    </div>
   )
   if (item.Path && !props.isParentProject) {
     content = (
-      <div>
+      <div className={styles.root}>
         <ProjectInformationPanel
           key={item.SiteId}
           title={item.Title}
@@ -36,28 +38,19 @@ export const TitleColumn: FC<ITitleColumnProps> = ({ item, props }) => {
           onRenderToggleElement={(onToggle) => (
             <Icon
               iconName='Info'
-              style={{
-                color: '666666',
-                marginLeft: 4,
-                position: 'relative',
-                top: '2px',
-                fontSize: '1.1em',
-                cursor: 'pointer'
-              }}
+              className={`${styles.icon} ${styles.toggle}`}
               onClick={onToggle}
             />
           )}>
-          <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
-            {item.Title}
-          </Link>
+          {link}
         </ProjectInformationPanel>
       </div>
     )
   } else if (item.Path && props.isParentProject) {
     content = (
-      <Link href={item.Path} rel='noopener noreferrer' target='_blank'>
-        {item.Title}
-      </Link>
+      <div className={styles.root}>
+        {link}
+      </div>
     )
   }
   return content
