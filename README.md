@@ -8,7 +8,7 @@
 <br />
 
 
-[![version](https://img.shields.io/badge/version-1.8.3-green.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.8.4-green.svg)](https://semver.org)
 
 <details>
 <summary>📖 Innholdsfortegnelse</summary>
