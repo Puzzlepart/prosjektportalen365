@@ -78,7 +78,7 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
   childSiteIds?: string[]
 
   /**
-   * isParentProject
+   * Is parent project
    */
   isParentProject?: boolean
 }
