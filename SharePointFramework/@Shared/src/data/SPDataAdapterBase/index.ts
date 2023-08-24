@@ -84,7 +84,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
    */
   private async getCurrentUser() {
     try {
-      const currentUser = await sp.web.currentUser.get();
+      const currentUser = await sp.web.currentUser.get()
       return currentUser
     } catch {
       return null
