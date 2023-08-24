@@ -122,7 +122,7 @@ export class ItemFieldValues {
       if (format === 'object') return (defaultValue ?? {}) as unknown as T
       return defaultValue
     }
-    const value =  this._values.get(fieldName) ?? {}
+    const value = this._values.get(fieldName) ?? {}
     if (format) return this._getValueInFormat<T>(value, format, options.defaultValue)
     return value as unknown as T
   }

@@ -75,7 +75,7 @@ declare interface IPortfolioWebPartsStrings {
   ConfirmDeleteProjectContentColumnTitle: string
   ConfirmDeleteResponseAbort: string
   ConfirmDeleteResponseConfirm: string
-  CreatedText: string
+  CreatedTooltipText: string
   CustomSortsText: string
   DataSourceCategoryDescription: string
   DataSourceCategoryError: string
@@ -106,7 +106,6 @@ declare interface IPortfolioWebPartsStrings {
   EditViewHeaderText: string
   EditViewText: string
   EmptyMessageDescription: string
-  EmptyMessageLabel: string
   EndDateLabel: string
   ErrorText: string
   ExcelExportButtonLabel: string
@@ -129,8 +128,6 @@ declare interface IPortfolioWebPartsStrings {
   ListViewGroupName: string
   ListViewText: string
   LoadingText: string
-  LoadingTextDescription: string
-  LoadingTextLabel: string
   MaxWidthDescription: string
   MaxWidthLabel: string
   MeasurementAchievementLabel: string
@@ -152,7 +149,7 @@ declare interface IPortfolioWebPartsStrings {
   NoAccessMessage: string
   NoDefaultViewMessage: string
   NoProjectData: string
-  NoProjectsFound: string
+  NoProjectsFoundMessage: string
   NotSet: string
   ParentProjectsHeaderText: string
   ParentProjectsSearchBoxPlaceholderText: string

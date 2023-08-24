@@ -34,6 +34,7 @@ a:hover {
       height: 80%;
       width: 80%;
       object-fit: cover;
+      transform: translate3d(0, 0, 1px);
       border-radius: var(--borderRadiusMedium);
       margin: 5px;
     }

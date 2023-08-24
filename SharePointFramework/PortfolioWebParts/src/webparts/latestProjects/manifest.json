@@ -1,6 +1,6 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-  "id": "941fd73c-b957-41c3-8d4f-082268407f10",
+  "id": "3d374373-9fd8-4ba5-8a03-524651cac3e8",
   "alias": "LatestProjectsWebPart",
   "componentType": "WebPart",
   "version": "1.9.0",
@@ -24,7 +24,8 @@
       },
       "officeFabricIconFontName": "BuildQueueNew",
       "properties": {
-        "title": "Siste prosjekter"
+        "title": "Siste prosjekter",
+        "showProjectLogo": false
       }
     }
   ]
