@@ -1,5 +1,9 @@
 .root {
   .container {
+    .emptyMessage {
+      margin: 15px 0 0 0;
+    }
+
     .projectItem {
       display: flex;
       flex-direction: row;
@@ -11,14 +15,22 @@
       overflow: hidden;
       position: relative;
 
-      .projectInformation {
-        padding-left: 12px;
+      &.withLogo {
+        .container {
+          padding-left: 12px;
+        }
       }
-    }
 
-    .projectItem:hover {
-      background-color: var(--colorNeutralBackground1Hover);
-      border-radius: var(--borderRadiusMedium);
+      .container {
+        .title {
+          margin: 0;
+        }
+      }
+
+      &:hover {
+        background-color: var(--colorNeutralBackground1Hover);
+        border-radius: var(--borderRadiusMedium);
+      }
     }
   }
 }

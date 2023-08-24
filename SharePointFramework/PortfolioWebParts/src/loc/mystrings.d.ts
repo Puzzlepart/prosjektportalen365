@@ -75,7 +75,7 @@ declare interface IPortfolioWebPartsStrings {
   ConfirmDeleteProjectContentColumnTitle: string
   ConfirmDeleteResponseAbort: string
   ConfirmDeleteResponseConfirm: string
-  CreatedText: string
+  CreatedTooltipText: string
   CustomSortsText: string
   DataSourceCategoryDescription: string
   DataSourceCategoryError: string
@@ -149,7 +149,7 @@ declare interface IPortfolioWebPartsStrings {
   NoAccessMessage: string
   NoDefaultViewMessage: string
   NoProjectData: string
-  NoProjectsFound: string
+  NoProjectsFoundMessage: string
   NotSet: string
   ParentProjectsHeaderText: string
   ParentProjectsSearchBoxPlaceholderText: string

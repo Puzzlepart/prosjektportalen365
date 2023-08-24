@@ -91,7 +91,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     return (
       <FluentProvider theme={webLightTheme}>
         <section className={styles.root}>
-          <Alert intent={'info'}>{strings.NoProjectsFound}</Alert>
+          <Alert intent={'info'}>{strings.NoProjectsFoundMessage}</Alert>
         </section>
       </FluentProvider>
     )

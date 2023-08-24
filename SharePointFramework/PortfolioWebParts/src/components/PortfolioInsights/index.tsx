@@ -83,7 +83,9 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
     if (this.state.chartData.isEmpty()) {
       return (
         <div className={styles.inner}>
-          <MessageBar messageBarType={MessageBarType.info}>{strings.NoProjectsFound}</MessageBar>
+          <MessageBar messageBarType={MessageBarType.info}>
+            {strings.NoProjectsFoundMessage}
+          </MessageBar>
         </div>
       )
     }
