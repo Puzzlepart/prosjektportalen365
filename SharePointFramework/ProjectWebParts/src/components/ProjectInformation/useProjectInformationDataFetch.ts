@@ -123,13 +123,6 @@ const fetchData: DataFetchFunction<
   Partial<IProjectInformationState>
 > = async (props) => {
   try {
-    if (!SPDataAdapter.isConfigured) {
-      await SPDataAdapter.configure(props.webPartContext, {
-        siteId: props.siteId,
-        webUrl: props.webUrl,
-        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-      })
-    }
     const [
       columns,
       propertiesData,
@@ -140,9 +133,9 @@ const fetchData: DataFetchFunction<
       SPDataAdapter.project.getPropertiesData(),
       props.page === 'Frontpage'
         ? SPDataAdapter.portal.getParentProjects(
-            props.webPartContext?.pageContext?.web?.absoluteUrl,
-            ProjectInformationParentProject
-          )
+          props.webPartContext?.pageContext?.web?.absoluteUrl,
+          ProjectInformationParentProject
+        )
         : Promise.resolve([]),
       fetchProjectStatusReports(props)
     ])
@@ -197,13 +190,31 @@ export const useProjectInformationDataFetch = (
   setState: (newState: Partial<IProjectInformationState>) => void
 ) => {
   useEffect(() => {
-    fetchData(props)
-      .then((data) => setState({ ...data, isDataLoaded: true }))
-      .catch((error) =>
-        setState({
-          isDataLoaded: true,
-          error: { ..._.pick(error, 'message', 'stack'), type: MessageBarType.severeWarning }
+    /**
+     * Configures the SPDataAdapter with the provided site ID, web URL, and log level.
+     * 
+     * @returns A Promise that resolves when the configuration is complete.
+     */
+    const configureDataAdapter = async () => {
+      if (props.siteId && props.webUrl) {
+        await SPDataAdapter.configure(props.webPartContext, {
+          siteId: props.siteId,
+          webUrl: props.webUrl,
+          logLevel: (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning
         })
-      )
-  }, [])
+      }
+    }
+
+    configureDataAdapter()
+      .then(() => {
+        fetchData(props)
+          .then((data) => setState({ ...data, isDataLoaded: true }))
+          .catch((error) =>
+            setState({
+              isDataLoaded: true,
+              error: { ..._.pick(error, 'message', 'stack'), type: MessageBarType.severeWarning }
+            })
+          )
+      })
+  }, [props.webUrl])
 }

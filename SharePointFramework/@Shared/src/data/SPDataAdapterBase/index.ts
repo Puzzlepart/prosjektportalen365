@@ -1,6 +1,5 @@
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
 import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
-import { SPUser } from '@microsoft/sp-page-context'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { dateAdd, PnPClientStorage, PnPClientStore } from '@pnp/common'
 import '@pnp/polyfill-ie11'
@@ -83,9 +82,9 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
    *
    * @param user User
    */
-  private async getCurrentUser(user: SPUser) {
+  private async getCurrentUser() {
     try {
-      const { data: currentUser } = await sp.web.ensureUser(user.loginName ?? user.email)
+      const currentUser = await sp.web.currentUser.get()
       return currentUser
     } catch {
       return null
@@ -121,7 +120,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
             )
             if (currentUserHasManageWebPermisson) return true
           }
-          const currentUser = await this.getCurrentUser(pageContext.user)
+          const currentUser = await this.getCurrentUser()
           const projectAdminRoles = (await this.portal.getProjectAdminRoles()).filter(
             (role) => rolesToCheck.indexOf(role.title) !== -1
           )
@@ -164,7 +163,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                       (
                         await web.siteGroups
                           .getByName(role.groupName)
-                          .users.filter(`Email eq '${currentUser.Email}'`)
+                          .users.filter(`LoginName eq '${encodeURIComponent(currentUser.LoginName)}'`)
                           .get()
                       ).length > 0
                     )

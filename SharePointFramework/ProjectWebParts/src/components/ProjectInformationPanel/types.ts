@@ -7,7 +7,7 @@ export interface IProjectInformationPanelProps
   /**
    * On render function for the element that should toggle the panel visibility
    */
-  onRenderToggleElement?: (onToggle: () => void) => JSX.Element
+  onRenderToggleElement?: (onToggle: React.MouseEventHandler<HTMLElement>) => JSX.Element
 
   /**
    * Props for the `<Panel />`
