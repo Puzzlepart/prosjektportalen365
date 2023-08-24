@@ -163,7 +163,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                       (
                         await web.siteGroups
                           .getByName(role.groupName)
-                          .users.filter(`Email eq '${currentUser.Email}'`)
+                          .users.filter(`LoginName eq '${encodeURIComponent(currentUser.LoginName)}'`)
                           .get()
                       ).length > 0
                     )
