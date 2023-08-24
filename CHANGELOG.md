@@ -8,6 +8,7 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 
 ### Feilrettinger
 - Rettet et problem hvor noen gjestebrukere ikke fikk opp prosjektadministrasjonsmuligheter [#1245](https://github.com/Puzzlepart/prosjektportalen365/issues/1245)
+- Rettet et problkem hvor visningspanelet for prosjekter viser feil informasjon på porteføljeoversikten [#1247](https://github.com/Puzzlepart/prosjektportalen365/issues/1247)
 
 ## 1.8.3 - 23.06.23
 
