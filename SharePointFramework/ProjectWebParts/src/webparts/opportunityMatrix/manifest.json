@@ -3,7 +3,7 @@
   "id": "aff0baa2-9ab4-4c13-a062-d5fa5028121c",
   "alias": "OpportunityMatrixWebPart",
   "componentType": "WebPart",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": true,
