@@ -196,7 +196,7 @@ export const useProjectInformationDataFetch = (
      * @returns A Promise that resolves when the configuration is complete.
      */
     const configureDataAdapter = async () => {
-      if (props.siteId && props.webUrl) {
+      if (props.siteId && props.webUrl && props.webPartContext) {
         await SPDataAdapter.configure(props.webPartContext, {
           siteId: props.siteId,
           webUrl: props.webUrl,
