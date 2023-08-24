@@ -3,7 +3,13 @@ og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detaljert 'endringslogg' for siste hovedversjon.
 
-## 1.8.3 - TBA
+
+## 1.8.4 - 25.08.23
+
+### Feilrettinger
+- Rettet et problem hvor noen gjestebrukere ikke fikk opp prosjektadministrasjonsmuligheter [#1245](https://github.com/Puzzlepart/prosjektportalen365/issues/1245)
+
+## 1.8.3 - 23.06.23
 
 ### Forbedringer
 - Søk i aggregerte oversikter søker nå også på prosjektnavn [#1123](https://github.com/Puzzlepart/prosjektportalen365/issues/1123)
