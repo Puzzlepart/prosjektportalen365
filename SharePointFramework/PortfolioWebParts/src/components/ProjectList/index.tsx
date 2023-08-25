@@ -216,6 +216,28 @@ ProjectList.defaultProps = {
     'ProjectServiceArea',
     'ProjectType',
     'ProjectPhase'
+  ],
+  quickLaunchMenu: [
+    {
+      order: 10,
+      text: 'Prosjektstatus',
+      relativeUrl: '/SitePages/Prosjektstatus.aspx'
+    },
+    {
+      order: 20,
+      text: 'Dokumentbibliotek',
+      relativeUrl: '/Delte%20dokumenter'
+    },
+    {
+      order: 30,
+      text: 'Fasesjekkliste',
+      relativeUrl: '/Lists/Fasesjekkliste'
+    },
+    {
+      order: 40,
+      text: 'Oppgaver',
+      relativeUrl: '/SitePages/Oppgaver.aspx'
+    }
   ]
 }
 

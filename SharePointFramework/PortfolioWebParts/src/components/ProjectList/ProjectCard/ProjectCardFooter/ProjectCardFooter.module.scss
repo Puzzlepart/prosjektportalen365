@@ -20,9 +20,14 @@
     background-color: var(--colorNeutralBackground3Hover);
   }
 
-  .templateTag {
+  .buttons {
+    display: flex;
+    gap: 12px;
     position: absolute;
     right: 56px;
+  }
+
+  .templateTag {
     cursor: default !important;
     background-color: var(--colorNeutralBackground3);
 

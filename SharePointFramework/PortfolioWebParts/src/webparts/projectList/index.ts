@@ -11,6 +11,10 @@ import {
   PropertyFieldMultiSelect,
   PropertyFieldToggleWithCallout
 } from '@pnp/spfx-property-controls'
+import {
+  PropertyFieldCollectionData,
+  CustomCollectionFieldType
+} from '@pnp/spfx-property-controls/lib/PropertyFieldCollectionData'
 import { IProjectListProps, ProjectList } from 'components/ProjectList'
 import { ProjectListVerticals } from 'components/ProjectList/ProjectListVerticals'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -31,6 +35,8 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
       key: vertical.key,
       text: vertical.text
     }))
+
+    const quickLaunchMenu = { ...ProjectList.defaultProps.quickLaunchMenu, ...this.properties.quickLaunchMenu }
 
     return {
       pages: [
@@ -122,7 +128,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   calloutContent: React.createElement(
                     'p',
                     {},
-                    "Her kan du velge hvilken vertikal som skal være standard. Merk! dersom vertikalen 'Alle prosjekter' er valgt som standard og brukere ikke har tilgang til 'Alle prosjekter' vertikalen, vil standard bli 'Mine prosjekter'."
+                    'Her kan du velge hvilken vertikal som skal være standard. Merk! dersom vertikalen "Alle prosjekter" er valgt som standard og brukere ikke har tilgang til "Alle prosjekter" vertikalen, vil standard bli "Mine prosjekter".'
                   )
                 }),
                 PropertyFieldMultiSelect('hideVerticals', {
@@ -155,7 +161,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   disabled: !this.properties.showProjectLogo
                 }),
                 PropertyFieldMultiSelect('projectMetadata', {
-                  key: 'projectMetadata',
+                  key: 'projectMetadataFieldId',
                   label: strings.ProjectMetadataFieldLabel,
                   options: [
                     {
@@ -180,6 +186,33 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                     }
                   ],
                   selectedKeys: this.properties.projectMetadata ?? []
+                }),
+                PropertyFieldCollectionData('quickLaunchMenu', {
+                  key: 'quickLaunchFieldId',
+                  label: strings.ProjectListQuickLaunch,
+                  panelHeader: strings.ProjectListQuickLaunch,
+                  manageBtnLabel: strings.EditProjectListQuickLaunch,
+                  value: quickLaunchMenu,
+                  fields: [
+                    {
+                      id: 'order',
+                      title: 'Rekkefølge',
+                      type: CustomCollectionFieldType.number,
+                      required: true
+                    },
+                    {
+                      id: 'text',
+                      title: 'Tekst',
+                      type: CustomCollectionFieldType.string,
+                      required: true
+                    },
+                    {
+                      id: 'relativeUrl',
+                      title: 'Relativ url',
+                      type: CustomCollectionFieldType.string,
+                      required: true
+                    }
+                  ]
                 })
               ]
             }

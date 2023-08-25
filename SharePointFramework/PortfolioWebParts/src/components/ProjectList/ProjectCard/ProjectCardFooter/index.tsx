@@ -21,6 +21,7 @@ import {
   PanelRightContractRegular,
   bundleIcon
 } from '@fluentui/react-icons'
+import { ProjectMenu } from 'components/ProjectList/ProjectMenu'
 
 export const ProjectCardFooter: FC = () => {
   const context = useContext(ProjectCardContext)
@@ -115,22 +116,25 @@ export const ProjectCardFooter: FC = () => {
       })}
     >
       <Persona />
-      <Tooltip
-        content={
-          <>
-            <strong>{templateText}</strong> ({context.project.template})
-          </>
-        }
-        relationship='description'
-        withArrow
-      >
-        <Button
-          className={styles.templateTag}
-          appearance='subtle'
-          icon={<Icon />}
-          title={context.project.template}
-        />
-      </Tooltip>
+      <div className={styles.buttons}>
+        <Tooltip
+          content={
+            <>
+              <strong>{templateText}</strong> ({context.project.template})
+            </>
+          }
+          relationship='description'
+          withArrow
+        >
+          <Button
+            className={styles.templateTag}
+            appearance='subtle'
+            icon={<Icon />}
+            title={context.project.template}
+          />
+        </Tooltip>
+        <ProjectMenu project={context.project} context={context} appearance='subtle' />
+      </div>
     </CardFooter>
   )
 }

@@ -9,7 +9,8 @@ declare interface IPortfolioWebPartsStrings {
   ErrorBoundaryFallbackDescription: string
   ProjectServiceArea: string
   ProjectType: string
-  ProjectListQuicklaunch: string
+  ProjectListQuickLaunch: string
+  EditProjectListQuickLaunch: string
   ProjectMetadataFieldLabel: string
   AddColumnLabel: string
   AllocationPercetageLabel: string

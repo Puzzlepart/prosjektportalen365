@@ -9,24 +9,16 @@ import {
   DataGridCell,
   TableColumnDefinition,
   TableCellLayout,
-  Avatar,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  MenuPopover,
-  MenuTrigger,
-  Tooltip,
-  Link
+  Avatar
 } from '@fluentui/react-components'
 import { useContext } from 'react'
 import { ListContext } from './context'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import styles from './List.module.scss'
-import { CalendarMonthRegular } from '@fluentui/react-icons'
 import { ProjectLogo } from 'pp365-shared-library/lib/components'
 import { useList } from './useList'
 import strings from 'PortfolioWebPartsStrings'
+import { ProjectMenu } from '../ProjectMenu'
 
 export const List = () => {
   const context = useContext(ListContext)
@@ -114,32 +106,11 @@ export const List = () => {
           },
           renderCell: (item) => {
             return (
-              <Menu>
-                <MenuTrigger disableButtonEnhancement>
-                  <Tooltip content={strings.ProjectListQuicklaunch} relationship='label'>
-                    <MenuButton
-                      icon={<CalendarMonthRegular />}
-                      size={context.size !== 'medium' ? 'small' : 'medium'}
-                    />
-                  </Tooltip>
-                </MenuTrigger>
-                <MenuPopover>
-                  <MenuList>
-                    <MenuItem>
-                      <Link href={`${item.url}/SitePages/Prosjektstatus.aspx`}>Prosjektstatus</Link>
-                    </MenuItem>
-                    <MenuItem>
-                      <Link href={`${item.url}/Delte%20dokumenter`}>Dokumentbibliotek</Link>
-                    </MenuItem>
-                    <MenuItem>
-                      <Link href={`${item.url}/Lists/Fasesjekkliste`}>Fasesjekkliste</Link>
-                    </MenuItem>
-                    <MenuItem>
-                      <Link href={`${item.url}/SitePages/Oppgaver.aspx`}>Oppgaver</Link>
-                    </MenuItem>
-                  </MenuList>
-                </MenuPopover>
-              </Menu>
+              <ProjectMenu
+                project={item}
+                context={context}
+                size={context.size !== 'medium' ? 'small' : 'medium'}
+              />
             )
           }
         }
