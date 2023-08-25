@@ -123,3 +123,12 @@ export interface IProjectStatusData {
    */
   userHasAdminPermission?: boolean
 }
+
+/**
+ * Represents the result of a data fetch operation.
+ */
+export type FetchDataResult = {
+  data: IProjectStatusData
+  initialSelectedReport: StatusReport
+  sourceUrl: string
+}

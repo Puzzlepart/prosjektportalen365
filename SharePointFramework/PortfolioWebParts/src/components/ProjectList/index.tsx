@@ -187,7 +187,11 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
       )}
       <div className={styles.projects}>{renderProjects(projects)}</div>
       <ProjectInformationPanel
-        {...SiteContext.create(props.spfxContext, state.showProjectInfo?.siteId, state.showProjectInfo?.url)}
+        {...SiteContext.create(
+          props.spfxContext,
+          state.showProjectInfo?.siteId,
+          state.showProjectInfo?.url
+        )}
         title={state.showProjectInfo?.title}
         page={'Portfolio'}
         hidden={!state.showProjectInfo}

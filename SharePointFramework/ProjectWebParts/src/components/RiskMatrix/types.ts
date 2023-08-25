@@ -6,8 +6,8 @@ import { IDynamicMatrixProps } from '../DynamicMatrix'
 
 export interface IRiskMatrixProps
   extends Omit<HTMLProps<HTMLDivElement>, 'size'>,
-  IBaseWebPartComponentProps,
-  Pick<IDynamicMatrixProps, 'size' | 'colorScaleConfig' | 'calloutTemplate'> {
+    IBaseWebPartComponentProps,
+    Pick<IDynamicMatrixProps, 'size' | 'colorScaleConfig' | 'calloutTemplate'> {
   /**
    * Whether the matrix should be rendered in dynamic mode
    */

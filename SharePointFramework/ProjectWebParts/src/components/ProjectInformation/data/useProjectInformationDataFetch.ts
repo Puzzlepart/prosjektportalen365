@@ -47,9 +47,9 @@ const fetchData: DataFetchFunction<
         fetchProjectStatusReportData(context),
         isFrontpage
           ? SPDataAdapter.portal.getParentProjects(
-            context.props.webAbsoluteUrl,
-            ProjectInformationParentProject
-          )
+              context.props.webAbsoluteUrl,
+              ProjectInformationParentProject
+            )
           : Promise.resolve([])
       ])
     const templateName = projectInformationData.fieldValues.get('GtProjectTemplate')
@@ -96,7 +96,7 @@ export const useProjectInformationDataFetch = (context: IProjectInformationConte
     SPDataAdapter.configure(context.props.spfxContext, {
       siteId: context.props.siteId,
       webUrl: context.props.webAbsoluteUrl,
-      logLevel: (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning
+      logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     }).then(() => {
       fetchData(context)
         .then((state) => context.dispatch(INIT_DATA({ state })))
