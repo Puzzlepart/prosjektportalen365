@@ -1,25 +1,23 @@
 .projectLogo {
-  width: 48px;
-  height: 48px;
-
   .projectAvatar {
-    height: 80%;
-    width: 80%;
     object-fit: cover;
-    border-radius: var(--borderRadiusMedium);
-    margin: 5px;
-  }
+    transition: transform 0.5s;
 
-  .projectAvatar:hover {
-    filter: brightness(0.9);
+    span {
+      padding: 12px;
+    }
   }
 
   img {
-    height: 80%;
-    width: 80%;
     object-fit: cover;
+    transition: transform 0.5s;
     transform: translate3d(0, 0, 1px);
-    border-radius: var(--borderRadiusMedium);
-    margin: 5px;
+  }
+}
+
+.hover {
+  &:hover {
+    transform: scale(1.1);
+    transform-origin: 50% 50%;
   }
 }
