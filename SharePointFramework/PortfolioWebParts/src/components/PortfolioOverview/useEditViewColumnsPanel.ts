@@ -7,7 +7,7 @@ import { IPortfolioOverviewContext } from './context'
 import { TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from './reducer'
 
 /**
- * Creates props for `EditViewColumnsPanel` component based on the context.
+ * Creates props for `EditViewColumnsPanel` component based on the context (`IPortfolioOverviewContext`)
  *
  * @param context Context for `PortfolioOverview` component
  */
@@ -36,9 +36,7 @@ export function useEditViewColumnsPanel(
    */
   const onSaveViewColumns = async (columns: ProjectColumn[], columnIds: number[]) => {
     const properties: Record<string, any> = {
-      GtPortfolioColumnsId: {
-        results: columnIds
-      },
+      GtPortfolioColumnsId: columnIds,
       GtPortfolioColumnOrder: JSON.stringify(columnIds)
     }
 
