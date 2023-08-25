@@ -9,6 +9,7 @@ import SPDataAdapter from '../../data'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorBoundaryFallback } from './ErrorBoundary'
 import React from 'react'
+import { SiteContext } from 'pp365-shared-library'
 
 Logger.subscribe(ConsoleListener())
 Logger.activeLogLevel = sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
@@ -20,26 +21,18 @@ export abstract class BaseProjectWebPart<
   public abstract render(): void
 
   /**
-   * Create props for component with default properties and the `props` parameter. Also
-   * includes `webPartContext` and `pageContext` from `this.context`, aswell as properties
-   * from `pageContext.web`, `pageContext.site` and `pageContext.legacyPageContext`.
+   * Create props for component with default properties and the `props` parameter.
    *
    * @param props Partial props of `P` to override the default properties
    */
   protected createPropsForComponent<P>(props: Partial<P>): P {
-    const { pageContext } = this.context
     return {
       ...this.properties,
       ...props,
-      webPartContext: this.context,
       title: this.properties.title ?? this.title,
-      pageContext,
-      siteId: pageContext.site.id.toString(),
-      webUrl: pageContext.web.absoluteUrl,
-      webTitle: pageContext.web.title,
-      isSiteAdmin: pageContext.legacyPageContext.isSiteAdmin,
       displayMode: this.displayMode,
-      sp: this.sp
+      sp: this.sp,
+      ...SiteContext.create(this.context)
     } as unknown as P
   }
 

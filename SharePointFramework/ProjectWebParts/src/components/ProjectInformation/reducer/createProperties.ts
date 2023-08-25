@@ -1,4 +1,4 @@
-import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { SPFxContext } from 'pp365-shared-library'
 import { ProjectInformationField } from 'pp365-shared-library/lib/models'
 import { IProjectInformationState } from '../types'
 
@@ -8,10 +8,10 @@ import { IProjectInformationState } from '../types'
  * for the `ProjectInformationField` objects.
  *
  * @param state State of the `ProjectInformation` component.
- * @param webPartContext SPFx web part context
+ * @param spfxContext SPFx context
  */
-export function createProperties(state: IProjectInformationState, webPartContext: WebPartContext) {
-  const currentLocale = webPartContext.pageContext.cultureInfo.currentUICultureName.toLowerCase()
+export function createProperties(state: IProjectInformationState, spfxContext: SPFxContext) {
+  const currentLocale = spfxContext.pageContext.cultureInfo.currentUICultureName.toLowerCase()
   return state.data.fields
     .map((field) =>
       new ProjectInformationField(field)

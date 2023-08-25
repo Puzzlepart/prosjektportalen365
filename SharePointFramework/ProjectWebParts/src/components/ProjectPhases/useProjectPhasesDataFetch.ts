@@ -41,9 +41,9 @@ export const getPhaseSitePages: DataFetchFunction<
 const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = async (props) => {
   try {
     if (!SPDataAdapter.isConfigured) {
-      SPDataAdapter.configure(props.webPartContext, {
+      SPDataAdapter.configure(props.spfxContext, {
         siteId: props.siteId,
-        webUrl: props.webUrl,
+        webUrl: props.webAbsoluteUrl,
         logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }

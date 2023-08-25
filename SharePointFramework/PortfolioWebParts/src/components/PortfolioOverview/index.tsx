@@ -9,6 +9,7 @@ import { ViewFormPanel } from './ViewFormPanel'
 import { PortfolioOverviewContext } from './context'
 import { IPortfolioOverviewProps } from './types'
 import { usePortfolioOverview } from './usePortfolioOverview'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
 
 /**
  * Component for displaying a portfolio overview - an overview of all projects in a portfolio.
@@ -36,7 +37,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
             compact={context.state.isCompact}
             isListLayoutModeJustified={props.isListLayoutModeJustified}
             renderTitleProjectInformationPanel={true}
-            webPartContext={props.webPartContext}
+            webPartContext={props.spfxContext as WebPartContext}
             layerHostId={context.layerHostId}
             error={context.state.error}
           />

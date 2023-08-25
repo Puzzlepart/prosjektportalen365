@@ -35,7 +35,7 @@ interface IUsePropertiesSyncParams {
  */
 const syncList = async (context: IProjectInformationContext) => {
   return await SPDataAdapter.portal.syncList({
-    url: context.props.webUrl,
+    url: context.props.webAbsoluteUrl,
     listName: strings.ProjectPropertiesListName,
     contentTypeId:
       context.state.data.templateParameters.ProjectContentTypeId ??

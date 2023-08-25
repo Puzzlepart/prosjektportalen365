@@ -18,7 +18,7 @@ export function useRedirectNewStatusReport() {
   const getEditFormUrl = useEditFormUrl()
   return async () => {
     const portalDataService = await new PortalDataService().configure({
-      spfxContext: context.props.webPartContext
+      spfxContext: context.props.spfxContext
     })
     const [lastReport] = context.state.data.reports
     let properties: Record<string, string | number | boolean> = {}

@@ -20,13 +20,13 @@ import { useProjectInformationDataFetch } from './data'
  * @returns generated context value
  */
 export const useProjectInformation = (props: IProjectInformationProps) => {
-  const { state, dispatch } = useProjectInformationReducer(props.webPartContext)
+  const { state, dispatch } = useProjectInformationReducer(props.spfxContext)
   const context = useMemo<IProjectInformationContext>(() => ({ props, state, dispatch }), [state])
 
   if (SPDataAdapter.isConfigured) {
     ListLogger.init(
       SPDataAdapter.portal.web.lists.getByTitle(strings.LogListName),
-      props.webUrl,
+      props.webAbsoluteUrl,
       ProjectInformation.displayName
     )
   }
