@@ -12,10 +12,15 @@ import { useProjectLogo } from './useProjectLogo'
  * @category ProjectLogo
  */
 export const ProjectLogo: FC<IProjectLogoProps> = (props: IProjectLogoProps) => {
-  const { useCustomImage, setShowCustomImage, showCustomImage, conditionalStyling } = useProjectLogo(props)
+  const { shouldUseCustomImage, setShowCustomImage, showCustomImage, conditionalStyling } =
+    useProjectLogo(props)
 
   return (
-    <div className={styles.projectLogo} style={{ width: props.size, height: props.size }} hidden={props.hidden}>
+    <div
+      className={styles.projectLogo}
+      style={{ width: props.size, height: props.size }}
+      hidden={props.hidden}
+    >
       <Avatar
         className={`${styles.projectAvatar} ${props.type === 'card' ? styles.hover : ''}`}
         aria-label={format(strings.Aria.ProjectTitle, props.title)}
@@ -40,8 +45,10 @@ export const ProjectLogo: FC<IProjectLogoProps> = (props: IProjectLogoProps) => 
         title={format(strings.Aria.ProjectTitle, props.title)}
         alt={format(strings.Aria.ProjectTitle, props.title)}
         onLoad={(image) => {
-          setShowCustomImage(useCustomImage(image)),
-            props.onImageLoad(useCustomImage(image))
+          setShowCustomImage(shouldUseCustomImage(image))
+          if (props.onImageLoad) {
+            props.onImageLoad(shouldUseCustomImage(image))
+          }
         }}
       />
     </div>

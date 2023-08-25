@@ -10,16 +10,15 @@ import { IProjectLogoProps } from './types'
  */
 export function useProjectLogo(props: IProjectLogoProps) {
   const [showCustomImage, setShowCustomImage] = useState(true)
-  
+
   /**
    * Checks if the image is a custom image.
    *
    * @param image - The image to check.
    *
    * @returns A boolean indicating if the image is a custom image.
-   *
    */
-  const useCustomImage = (image: React.SyntheticEvent<HTMLImageElement, Event>) => {
+  const shouldUseCustomImage = (image: React.SyntheticEvent<HTMLImageElement, Event>) => {
     return (image.target as HTMLImageElement).naturalHeight !== 648
       ? (image.target as HTMLImageElement).naturalHeight !== 96
         ? true
@@ -36,7 +35,7 @@ export function useProjectLogo(props: IProjectLogoProps) {
   }
 
   return {
-    useCustomImage,
+    shouldUseCustomImage,
     showCustomImage,
     setShowCustomImage,
     conditionalStyling

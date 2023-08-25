@@ -15,20 +15,17 @@ export interface IProjectLogoProps {
   url: string
 
   /**
-   * Size of the projectLogo
-   *
+   * Size of the project logo
    */
   size?: string
 
   /**
    * Size of the projectLogo
-   *
    */
   type?: 'card' | 'list'
 
   /**
-   * On image load callback with boolean indicating if custom image is used
-   *
+   * On image load callback with boolean indicating if custom image is used.
    */
   onImageLoad?: (showCustomImage?: boolean) => void
 
