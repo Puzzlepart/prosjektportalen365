@@ -1,10 +1,10 @@
-import React, { FC, useState } from 'react'
-import { IProjectLogoProps } from './types'
-import styles from './ProjectLogo.module.scss'
-import { Avatar } from '@fluentui/react-components'
 import { format } from '@fluentui/react'
-import { useProjectLogo } from './useProjectLogo'
+import { Avatar } from '@fluentui/react-components'
 import strings from 'SharedLibraryStrings'
+import React, { FC } from 'react'
+import styles from './ProjectLogo.module.scss'
+import { IProjectLogoProps } from './types'
+import { useProjectLogo } from './useProjectLogo'
 
 /**
  * A component that renders an avatar or a logo for a project. The avatar is rendered if the project does not have a custom logo.
@@ -12,43 +12,33 @@ import strings from 'SharedLibraryStrings'
  * @category ProjectLogo
  */
 export const ProjectLogo: FC<IProjectLogoProps> = (props: IProjectLogoProps) => {
-  const [showCustomImage, setShowCustomImage] = useState(true)
-  const { title, url, size = '100%', type, hidden = false } = props
-  const { useCustomImage } = useProjectLogo()
-
-  const conditionalStyling = {
-    fontSize: type === 'card' ? '22px' : '14px',
-    height: type === 'card' ? '100%' : '80%',
-    width: type === 'card' ? '100%' : '80%',
-    borderRadius: type === 'card' ? 0 : 'var(--borderRadiusMedium)',
-    margin: type === 'card' ? 0 : '5px'
-  }
+  const { useCustomImage, setShowCustomImage, showCustomImage, conditionalStyling } = useProjectLogo(props)
 
   return (
-    <div className={styles.projectLogo} style={{ width: size, height: size }} hidden={hidden}>
+    <div className={styles.projectLogo} style={{ width: props.size, height: props.size }} hidden={props.hidden}>
       <Avatar
-        className={`${styles.projectAvatar} ${type === 'card' ? styles.hover : ''}`}
-        aria-label={format(strings.Aria.ProjectTitle, title)}
-        title={format(strings.Aria.ProjectTitle, title)}
+        className={`${styles.projectAvatar} ${props.type === 'card' ? styles.hover : ''}`}
+        aria-label={format(strings.Aria.ProjectTitle, props.title)}
+        title={format(strings.Aria.ProjectTitle, props.title)}
         color='colorful'
         shape='square'
         style={{
           display: showCustomImage ? 'none' : 'block',
           ...conditionalStyling
         }}
-        name={title?.slice(-2).toUpperCase()}
-        initials={type === 'card' ? title : title?.slice(0, 2).toUpperCase()}
+        name={props.title?.slice(-2).toUpperCase()}
+        initials={props.type === 'card' ? props.title : props.title?.slice(0, 2).toUpperCase()}
       />
       <img
-        className={type === 'card' ? styles.hover : ''}
-        src={`${url}/_api/siteiconmanager/getsitelogo?type='1'`}
+        className={props.type === 'card' ? styles.hover : ''}
+        src={`${props.url}/_api/siteiconmanager/getsitelogo?type='1'`}
         style={{
-          WebkitMask: type === 'card' ? 'linear-gradient(white 50%, transparent)' : 'none',
+          WebkitMask: props.type === 'card' ? 'linear-gradient(white 50%, transparent)' : 'none',
           display: !showCustomImage ? 'none' : 'block',
           ...conditionalStyling
         }}
-        title={format(strings.Aria.ProjectTitle, title)}
-        alt={format(strings.Aria.ProjectTitle, title)}
+        title={format(strings.Aria.ProjectTitle, props.title)}
+        alt={format(strings.Aria.ProjectTitle, props.title)}
         onLoad={(image) => {
           setShowCustomImage(useCustomImage(image)),
             props.onImageLoad(useCustomImage(image))
@@ -56,4 +46,8 @@ export const ProjectLogo: FC<IProjectLogoProps> = (props: IProjectLogoProps) => 
       />
     </div>
   )
+}
+
+ProjectLogo.defaultProps = {
+  size: '100%'
 }
