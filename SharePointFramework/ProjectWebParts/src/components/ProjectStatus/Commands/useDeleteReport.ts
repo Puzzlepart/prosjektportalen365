@@ -13,7 +13,7 @@ export function useDeleteReport() {
   const context = useContext(ProjectStatusContext)
   return async () => {
     const portalDataService = await new PortalDataService().configure({
-      spfxContext: context.props.webPartContext
+      spfxContext: context.props.spfxContext
     })
     try {
       await portalDataService.deleteStatusReport(context.state.selectedReport.id)

@@ -1,11 +1,12 @@
-import { PageContext } from '@microsoft/sp-page-context'
 import strings from 'ProjectWebPartsStrings'
+import { IBaseWebPartComponentProps } from 'pp365-shared-library'
 import { HTMLProps } from 'react'
 import { UncertaintyElementModel } from '../../models'
 import { IDynamicMatrixProps } from '../DynamicMatrix'
 
 export interface IRiskMatrixProps
   extends Omit<HTMLProps<HTMLDivElement>, 'size'>,
+    IBaseWebPartComponentProps,
     Pick<IDynamicMatrixProps, 'size' | 'colorScaleConfig' | 'calloutTemplate'> {
   /**
    * Whether the matrix should be rendered in dynamic mode
@@ -26,11 +27,6 @@ export interface IRiskMatrixProps
    * Whether the matrix should be full width
    */
   fullWidth?: boolean
-
-  /**
-   * SPFx page context
-   */
-  pageContext?: PageContext
 
   /**
    * Overridden header labels for probability and consequence

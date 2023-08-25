@@ -12,7 +12,7 @@ import { TextSortAscendingRegular, TextSortDescendingRegular } from '@fluentui/r
 import { SearchBox } from '@fluentui/react-search-preview'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
-import { ProjectListModel } from 'pp365-shared-library/lib/models'
+import { ProjectListModel, SiteContext } from 'pp365-shared-library/lib/models'
 import React, { FC } from 'react'
 import { find, isEmpty } from 'underscore'
 import { List } from './List'
@@ -187,11 +187,12 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
       )}
       <div className={styles.projects}>{renderProjects(projects)}</div>
       <ProjectInformationPanel
-        key={state.showProjectInfo?.siteId}
+        {...SiteContext.create(
+          props.spfxContext,
+          state.showProjectInfo?.siteId,
+          state.showProjectInfo?.url
+        )}
         title={state.showProjectInfo?.title}
-        siteId={state.showProjectInfo?.siteId}
-        webUrl={state.showProjectInfo?.url}
-        webPartContext={props.webPartContext}
         page={'Portfolio'}
         hidden={!state.showProjectInfo}
         hideAllActions={true}

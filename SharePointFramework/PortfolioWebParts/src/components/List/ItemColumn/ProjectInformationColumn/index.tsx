@@ -1,24 +1,27 @@
-import strings from 'PortfolioWebPartsStrings'
-import React, { useContext } from 'react'
-import { ColumnRenderComponent } from '../types'
 import { Icon, Link } from '@fluentui/react'
+import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformation'
+import { SiteContext } from 'pp365-shared-library'
+import React, { useContext } from 'react'
 import { ListContext } from '../../context'
+import { ColumnRenderComponent } from '../types'
 import { IProjectInformationColumnProps } from './types'
 
 export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformationColumnProps> = (
   props
 ) => {
   const context = useContext(ListContext)
+  const siteContext = SiteContext.create(
+    context.props.webPartContext,
+    props.item.SiteId,
+    props.item.Path
+  )
   return (
     <ProjectInformationPanel
-      key={props.item.SiteId}
+      {...siteContext}
       title={props.columnValue}
-      siteId={props.item.SiteId}
-      webUrl={props.item.Path}
       page={props.page}
       hideAllActions={true}
-      webPartContext={context.props.webPartContext}
       onRenderToggleElement={(onToggle) => (
         <Icon iconName={props.iconName} style={props.iconStyles} onClick={onToggle} />
       )}

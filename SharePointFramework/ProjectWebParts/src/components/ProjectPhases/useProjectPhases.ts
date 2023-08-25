@@ -17,7 +17,7 @@ export function useProjectPhases(props: IProjectPhasesProps) {
 
   ListLogger.init(
     SPDataAdapter.portal.web.lists.getByTitle(strings.LogListName),
-    props.webPartContext.pageContext.web.absoluteUrl,
+    props.webAbsoluteUrl,
     ProjectPhases.displayName
   )
 

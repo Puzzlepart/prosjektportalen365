@@ -1,13 +1,14 @@
 import { LogLevel } from '@pnp/logging'
+import { SiteContext } from '../../models'
 
-export interface ISPDataAdapterBaseConfiguration {
+export interface ISPDataAdapterBaseConfiguration extends SiteContext {
   /**
    * Web URL
    */
   webUrl: string
 
   /**
-   * Site ID
+   * Site ID (GUID)
    */
   siteId: string
 

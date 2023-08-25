@@ -22,7 +22,7 @@ export function useFetchListData() {
   const context = useContext(ProjectStatusContext)
   const { section } = useContext(SectionContext)
   return async (): Promise<IListSectionData> => {
-    const web = spfi(context.props.webUrl).using(AssignFrom(context.props.sp.web)).web
+    const web = spfi(context.props.webAbsoluteUrl).using(AssignFrom(context.props.sp.web)).web
     const list = web.lists.getByTitle(section.listTitle)
     try {
       let view: UseFetchListDataView = {

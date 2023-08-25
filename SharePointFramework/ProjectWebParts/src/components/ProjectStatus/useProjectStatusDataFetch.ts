@@ -2,23 +2,12 @@ import { LogLevel } from '@pnp/logging'
 import { AnyAction } from '@reduxjs/toolkit'
 import strings from 'ProjectWebPartsStrings'
 import _ from 'lodash'
-import {
-  StatusReport,
-  ProjectAdminPermission,
-  getUrlParam,
-  parseUrlHash
-} from 'pp365-shared-library/lib'
+import { ProjectAdminPermission, getUrlParam, parseUrlHash } from 'pp365-shared-library/lib'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { INIT_DATA } from './reducer'
-import { IProjectStatusData, IProjectStatusProps } from './types'
-
-export type FetchDataResult = {
-  data: IProjectStatusData
-  initialSelectedReport: StatusReport
-  sourceUrl: string
-}
+import { FetchDataResult, IProjectStatusProps } from './types'
 
 /**
  * Fetch data for `ProjectStatus`. Feetches project properties, status report list properties,
@@ -28,9 +17,9 @@ export type FetchDataResult = {
 const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async (props) => {
   try {
     if (!SPDataAdapter.isConfigured) {
-      SPDataAdapter.configure(props.webPartContext, {
+      SPDataAdapter.configure(props.spfxContext, {
         siteId: props.siteId,
-        webUrl: props.webUrl,
+        webUrl: props.webAbsoluteUrl,
         logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }

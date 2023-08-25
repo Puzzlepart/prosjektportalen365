@@ -14,7 +14,7 @@ export function useChangeWelcomePage() {
     try {
       const phaseSitePage = _.find(state.data.phaseSitePages, (p) => p.title === state.phase.name)
       if (phaseSitePage?.fileLeafRef) {
-        const spfxJsomContext = await initSpfxJsom(props.webPartContext.pageContext.web.absoluteUrl)
+        const spfxJsomContext = await initSpfxJsom(props.webAbsoluteUrl)
         spfxJsomContext.jsomContext.web['get_rootFolder']()['set_welcomePage'](
           `SitePages/${phaseSitePage.fileLeafRef}`
         )

@@ -1,4 +1,3 @@
-import { PageContext } from '@microsoft/sp-page-context'
 import {
   IProjectInformationData,
   ProjectColumnConfig,
@@ -14,11 +13,24 @@ import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessa
 import { IOpportunityMatrixProps } from '../OpportunityMatrix'
 import { IRiskMatrixProps } from '../RiskMatrix'
 
+/**
+ * Props for the ProjectStatus component.
+ */
 export interface IProjectStatusProps extends IBaseWebPartComponentProps {
+  /**
+   * Props for the RiskMatrix component.
+   */
   riskMatrix?: IRiskMatrixProps
+
+  /**
+   * Props for the OpportunityMatrix component.
+   */
   opportunityMatrix?: IOpportunityMatrixProps
+
+  /**
+   * The width of the field.
+   */
   fieldWidth?: number
-  pageContext?: PageContext
 
   /**
    * File name for the persisted section data attachment stored in a separate
@@ -110,4 +122,13 @@ export interface IProjectStatusData {
    * Current user has admin permissions
    */
   userHasAdminPermission?: boolean
+}
+
+/**
+ * Represents the result of a data fetch operation.
+ */
+export type FetchDataResult = {
+  data: IProjectStatusData
+  initialSelectedReport: StatusReport
+  sourceUrl: string
 }

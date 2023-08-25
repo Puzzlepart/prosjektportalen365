@@ -4,8 +4,7 @@ import _ from 'lodash'
 import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage/types'
 import { SectionModel, StatusReport } from 'pp365-shared-library/lib/models'
 import { getUrlParam } from 'pp365-shared-library/lib/util'
-import { IProjectStatusState } from './types'
-import { FetchDataResult } from './useProjectStatusDataFetch'
+import { FetchDataResult, IProjectStatusState } from './types'
 
 /**
  * `INIT_DATA`: Dispatched by `useProjectStatusDataFetch` when data is loaded
@@ -59,6 +58,9 @@ export const PERSIST_SECTION_DATA = createAction<{ section: SectionModel; data: 
  */
 export const CLEAR_USER_MESSAGE = createAction('CLEAR_USER_MESSAGE')
 
+/**
+ * The initial state for the project status reducer.
+ */
 export const initialState: IProjectStatusState = {
   isDataLoaded: false,
   selectedReport: new StatusReport({}),
@@ -70,6 +72,14 @@ export const initialState: IProjectStatusState = {
   persistedSectionData: {}
 }
 
+/**
+ * Creates a reducer for the project status component.
+ *
+ * @param state - The current state of the project status.
+ * @param action - The action to be performed on the project status.
+ *
+ * @returns The new state of the project status.
+ */
 const createProjectStatusReducer = createReducer(initialState, {
   [INIT_DATA.type]: (state: IProjectStatusState, { payload }: ReturnType<typeof INIT_DATA>) => {
     state.sourceUrl = payload.sourceUrl
