@@ -22,7 +22,7 @@ export const ProjectLogo: FC<IProjectLogoProps> = (props: IProjectLogoProps) => 
       hidden={props.hidden}
     >
       <Avatar
-        className={`${styles.projectAvatar} ${props.type === 'card' ? styles.hover : ''}`}
+        className={`${styles.projectAvatar} ${props.renderMode === 'card' ? styles.hover : ''}`}
         aria-label={format(strings.Aria.ProjectTitle, props.title)}
         title={format(strings.Aria.ProjectTitle, props.title)}
         color='colorful'
@@ -32,13 +32,13 @@ export const ProjectLogo: FC<IProjectLogoProps> = (props: IProjectLogoProps) => 
           ...conditionalStyling
         }}
         name={props.title?.slice(-2).toUpperCase()}
-        initials={props.type === 'card' ? props.title : props.title?.slice(0, 2).toUpperCase()}
+        initials={props.renderMode === 'card' ? props.title : props.title?.slice(0, 2).toUpperCase()}
       />
       <img
-        className={props.type === 'card' ? styles.hover : ''}
+        className={props.renderMode === 'card' ? styles.hover : ''}
         src={`${props.url}/_api/siteiconmanager/getsitelogo?type='1'`}
         style={{
-          WebkitMask: props.type === 'card' ? 'linear-gradient(white 50%, transparent)' : 'none',
+          WebkitMask: props.renderMode === 'card' ? 'linear-gradient(white 50%, transparent)' : 'none',
           display: !showCustomImage ? 'none' : 'block',
           ...conditionalStyling
         }}

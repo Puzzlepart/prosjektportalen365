@@ -20,9 +20,9 @@ export interface IProjectLogoProps {
   size?: string
 
   /**
-   * Size of the projectLogo
+   * Render mode of the project logo (card or list)
    */
-  type?: 'card' | 'list'
+  renderMode?: 'card' | 'list'
 
   /**
    * On image load callback with boolean indicating if custom image is used.

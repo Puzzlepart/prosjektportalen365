@@ -42,7 +42,7 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
           <ProjectLogo
             title={site.Title}
             url={site.Path}
-            type='list'
+            renderMode='list'
             size='48px'
             hidden={!props.showProjectLogo}
           />

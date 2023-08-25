@@ -6,7 +6,7 @@ import { IProjectLogoProps } from './types'
  *
  * @param props - The props for the ProjectLogo component.
  *
- * @returns An object containing the conditional styling based on project logo type.
+ * @returns An object containing the conditional styling based on project logo render mode.
  */
 export function useProjectLogo(props: IProjectLogoProps) {
   const [showCustomImage, setShowCustomImage] = useState(true)
@@ -27,11 +27,11 @@ export function useProjectLogo(props: IProjectLogoProps) {
   }
 
   const conditionalStyling = {
-    fontSize: props.type === 'card' ? '22px' : '14px',
-    height: props.type === 'card' ? '100%' : '80%',
-    width: props.type === 'card' ? '100%' : '80%',
-    borderRadius: props.type === 'card' ? 0 : 'var(--borderRadiusMedium)',
-    margin: props.type === 'card' ? 0 : '5px'
+    fontSize: props.renderMode === 'card' ? '22px' : '14px',
+    height: props.renderMode === 'card' ? '100%' : '80%',
+    width: props.renderMode === 'card' ? '100%' : '80%',
+    borderRadius: props.renderMode === 'card' ? 0 : 'var(--borderRadiusMedium)',
+    margin: props.renderMode === 'card' ? 0 : '5px'
   }
 
   return {

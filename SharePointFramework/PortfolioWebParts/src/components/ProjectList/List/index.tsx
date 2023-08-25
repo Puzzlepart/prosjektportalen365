@@ -46,7 +46,7 @@ export const List = () => {
               <ProjectLogo
                 title={item.title}
                 url={item.url}
-                type='list'
+                renderMode='list'
                 size={context.size !== 'medium' ? '32px' : '48px'}
               />
             )

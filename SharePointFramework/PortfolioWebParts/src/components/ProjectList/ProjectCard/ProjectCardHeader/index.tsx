@@ -55,7 +55,7 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
               <ProjectLogo
                 title={context.project.title}
                 url={context.project.url}
-                type='card'
+                renderMode='card'
                 onImageLoad={(value) => {
                   props.onImageLoad
                   customImageCallback(value)
