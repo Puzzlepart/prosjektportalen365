@@ -74,7 +74,7 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
       ...context,
       items,
       groups
-    },
+    } as IPortfolioOverviewContext,
     selection,
     onColumnContextMenu,
     editViewColumnsPanelProps,
