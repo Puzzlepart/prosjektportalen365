@@ -1,4 +1,7 @@
 declare interface IPortfolioWebPartsStrings {
+  Aria: {
+    MenuOverflowCount: string
+  },
   ViewLessText: string
   ViewMoreText: string
   OpenInNewTabLabel: string
@@ -6,6 +9,7 @@ declare interface IPortfolioWebPartsStrings {
   ErrorBoundaryFallbackDescription: string
   ProjectServiceArea: string
   ProjectType: string
+  ProjectListQuicklaunch: string
   ProjectMetadataFieldLabel: string
   AddColumnLabel: string
   AllocationPercetageLabel: string
@@ -81,7 +85,9 @@ declare interface IPortfolioWebPartsStrings {
   DataSourceCategoryError: string
   DataSourceCategoryLabel: string
   DataSourceError: string
+  ProjectInformationPanelButton: string
   DataSourceGroupName: string
+  RenderModeLabel: string
   DataSourceItemNotFound: string
   DataSourceLabel: string
   DataSourceLevelDescription: string
@@ -219,6 +225,7 @@ declare interface IPortfolioWebPartsStrings {
   SiteTitleLabel: string
   SortAscLabel: string
   SortByFieldLabel: string
+  SortCardsByLabel: string
   SortDescLabel: string
   SortOrderDescription: string
   SortOrderLabel: string

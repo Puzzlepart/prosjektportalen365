@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    Aria: {
+      MenuOverflowCount: '{0} flere elementer',
+    },
     ViewLessText: 'Vis færre',
     ViewMoreText: 'Vis flere',
     OpenInNewTabLabel: 'Åpne prosjektområder i ny fane',
@@ -7,6 +10,7 @@ define([], function () {
     ErrorBoundaryFallbackDescription: 'Feildetaljer:',
     ProjectServiceArea: 'Tjenesteområder',
     ProjectType: 'Prosjekttype',
+    ProjectListQuicklaunch: 'Hurtigmeny for prosjekt',
     ProjectMetadataFieldLabel: 'Prosjektmetadata',
     AddColumnLabel: 'Legg til en kolonne',
     AllocationPercetageLabel: 'Allokeringsprosent',
@@ -175,6 +179,7 @@ define([], function () {
     ProjectContentColumnsListName: 'Prosjektinnholdskolonner',
     ProjectDeliveriesGroupName: 'Prosjektleveranser (beta)',
     ProjectInformationGroupName: 'Instillinger for Prosjektinformasjonspanel',
+    ProjectInformationPanelButton: 'Åpne prosjektinformasjonspanel',
     ProjectLabel: 'Prosjekt',
     ProjectListEmptyText: 'Søket ga ingen resultater',
     ProjectManager: 'Prosjektleder',
@@ -185,6 +190,7 @@ define([], function () {
     RenderModeCompactListText: 'Kompakt liste',
     RenderModeListText: 'Liste',
     RenderModeTilesText: 'Fliser',
+    RenderModeLabel: 'Visningsmodus',
     ResourceAllocationInfoText: 'Ressursallokering eller fravær som gjelder på tvers av prosjekter legges inn i den<A HREF="../Lists/Ressursallokering/AllItems.aspx?Source={0}">sentrale ressursallokeringslisten</A>. Disse oppføringene vil vises med blå og rød (fravær) farge i tabellen under. Prosjektallokeringer vises med grønn farge. Fargestyrken til allokeringen baserer seg på allokeringsprosenten.',
     ResourceLabel: 'Ressurs',
     RevertCustomOrderButtonText: 'Tilbakestill rekkefølge',
@@ -220,6 +226,7 @@ define([], function () {
     SiteTitleLabel: 'Prosjekt',
     SortAscLabel: 'Å til A',
     SortByFieldLabel: 'Sorteringsegenskap',
+    SortCardsByLabel: 'Sorter flisene etter: <strong>{0}</strong>',
     SortDescLabel: 'A til Å',
     SortOrderDescription: 'Sorteringsrekkefølgen bestemmer hvilken rekkefølge visningene vises i. Lavest verdi vises først.',
     SortOrderLabel: 'Sorteringsrekkefølge',

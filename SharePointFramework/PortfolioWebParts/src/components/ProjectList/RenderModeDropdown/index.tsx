@@ -4,6 +4,7 @@ import { IRenderModeDropdownProps } from './IRenderModeDropdownProps'
 import { listOption, tileOption, compactListOption } from './types'
 import { ProjectListRenderMode } from '../types'
 import styles from './RenderModeDropdown.module.scss'
+import strings from 'PortfolioWebPartsStrings'
 
 export const RenderModeDropdown: FC<IRenderModeDropdownProps> = (props) => {
   const options = [tileOption, listOption, compactListOption]
@@ -23,9 +24,10 @@ export const RenderModeDropdown: FC<IRenderModeDropdownProps> = (props) => {
   return (
     <Dropdown
       className={styles.renderModeDropdown}
-      appearance={'filled-lighter'}
-      aria-aria-label={'Render mode dropdown'}
-      size={'large'}
+      appearance='filled-lighter'
+      aria-label={strings.RenderModeLabel}
+      title={strings.RenderModeLabel}
+      size='large'
       defaultValue={selectedOption.text}
       defaultSelectedOptions={[selectedOption.value]}
       onOptionSelect={(_, option) =>
@@ -37,7 +39,7 @@ export const RenderModeDropdown: FC<IRenderModeDropdownProps> = (props) => {
         return (
           <Option key={option.value} text={option.text} value={option.value}>
             <Icon />
-            <span>{option.text}</span>
+            <span title={option.text}>{option.text}</span>
           </Option>
         )
       })}

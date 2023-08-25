@@ -1,8 +1,4 @@
-import {
-  GridFilled,
-  TextBulletListSquareFilled,
-  TextBulletListLtrRegular
-} from '@fluentui/react-icons'
+import { GridFilled, TextBulletListLtrRegular, AppsListRegular } from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectListRenderMode } from '../types'
 
@@ -15,7 +11,7 @@ export const tileOption = {
 export const listOption = {
   value: 'list',
   text: strings.RenderModeListText,
-  icon: TextBulletListSquareFilled
+  icon: AppsListRegular
 }
 
 export const compactListOption = {

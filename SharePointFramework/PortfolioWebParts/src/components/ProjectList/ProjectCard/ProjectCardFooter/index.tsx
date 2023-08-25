@@ -70,7 +70,7 @@ export const ProjectCardFooter: FC = () => {
                 <strong>{owner.role}</strong>: {owner.name || strings.NotSet}
               </>
             }
-            relationship={'description'}
+            relationship='description'
             withArrow
           >
             <Avatar className={styles.avatar} {...owner} />
@@ -83,7 +83,7 @@ export const ProjectCardFooter: FC = () => {
                 <strong>{manager.role}</strong>: {manager.name || strings.NotSet}
               </>
             }
-            relationship={'description'}
+            relationship='description'
             withArrow
           >
             <Avatar className={styles.avatar} {...manager} />
@@ -100,13 +100,13 @@ export const ProjectCardFooter: FC = () => {
         return (
           <Tooltip
             key={action.id}
-            content={<>Åpne prosjektinformasjonspanel</>}
-            relationship={'description'}
+            content={<>{strings.ProjectInformationPanelButton}</>}
+            relationship='description'
             withArrow
           >
             <Button
               className={styles.action}
-              appearance={'subtle'}
+              appearance='subtle'
               icon={<PanelRight />}
               {...action}
             />
@@ -121,12 +121,12 @@ export const ProjectCardFooter: FC = () => {
             <strong>{templateText}</strong> ({context.project.template})
           </>
         }
-        relationship={'description'}
+        relationship='description'
         withArrow
       >
         <Button
           className={styles.templateTag}
-          appearance={'subtle'}
+          appearance='subtle'
           icon={<Icon />}
           title={context.project.template}
         />

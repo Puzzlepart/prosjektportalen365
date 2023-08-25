@@ -25,6 +25,7 @@ import { ProjectListVerticals } from './ProjectListVerticals'
 import { RenderModeDropdown } from './RenderModeDropdown'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
+import { format } from '@fluentui/react'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const {
@@ -91,7 +92,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     return (
       <FluentProvider theme={webLightTheme}>
         <section className={styles.root}>
-          <Alert intent={'info'}>{strings.NoProjectsFoundMessage}</Alert>
+          <Alert intent='info'>{strings.NoProjectsFoundMessage}</Alert>
         </section>
       </FluentProvider>
     )
@@ -100,7 +101,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   if (state.error) {
     return (
       <section className={styles.root}>
-        <Alert intent={'error'}>{strings.ErrorText}</Alert>
+        <Alert intent='error'>{strings.ErrorText}</Alert>
       </section>
     )
   }
@@ -138,9 +139,10 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             value={state.searchTerm}
             placeholder={searchBoxPlaceholder}
             aria-label={searchBoxPlaceholder}
-            size={'large'}
+            title={searchBoxPlaceholder}
+            size='large'
             onChange={onSearch}
-            appearance={'filled-lighter'}
+            appearance='filled-lighter'
           />
         </div>
         <div hidden={!props.showRenderModeSelector}>
@@ -151,24 +153,20 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         </div>
         <div hidden={!props.showSortBy || state.renderMode !== 'tiles'}>
           <Tooltip
-            content={
-              <>
-                Sorter flisene etter <strong>{props.sortBy}</strong>
-              </>
-            }
-            relationship={'description'}
+            content={format(strings.SortCardsByLabel, props.sortBy)}
+            relationship='description'
             withArrow
           >
             <Button
               className={styles.sortBy}
-              appearance={'transparent'}
+              appearance='transparent'
               onClick={() =>
                 onListSort(
                   null,
                   props.columns.find((c) => c.fieldName === 'title')
                 )
               }
-              size={'large'}
+              size='large'
               icon={
                 state.sort?.isSortedDescending ? (
                   <TextSortAscendingRegular />
@@ -182,7 +180,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
       </div>
       {state.isDataLoaded && isEmpty(projects) && (
         <div className={styles.emptyMessage}>
-          <Alert intent={'info'}>{strings.ProjectListEmptyText}</Alert>
+          <Alert intent='info'>{strings.ProjectListEmptyText}</Alert>
         </div>
       )}
       <div className={styles.projects}>{renderProjects(projects)}</div>
@@ -193,7 +191,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
           state.showProjectInfo?.url
         )}
         title={state.showProjectInfo?.title}
-        page={'Portfolio'}
+        page='Portfolio'
         hidden={!state.showProjectInfo}
         hideAllActions={true}
       />

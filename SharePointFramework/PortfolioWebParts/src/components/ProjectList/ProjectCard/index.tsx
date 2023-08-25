@@ -38,7 +38,7 @@ export const ProjectCard: FC = (props) => {
                   {strings.PhaseLabel}: <strong>{phase}</strong>
                 </>
               }
-              relationship={'description'}
+              relationship='description'
               withArrow
             >
               <div className={styles.phaseBadge} title={phase}>

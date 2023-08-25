@@ -25,10 +25,12 @@ import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import styles from './List.module.scss'
 import { CalendarMonthRegular } from '@fluentui/react-icons'
 import { ProjectLogo } from 'pp365-shared-library/lib/components'
+import { useList } from './useList'
+import strings from 'PortfolioWebPartsStrings'
 
 export const List = () => {
   const context = useContext(ListContext)
-  const refMap = React.useRef<Record<string, HTMLElement | null>>({})
+  const { refMap, columnSizingOptions } = useList()
 
   const columns: TableColumnDefinition<ProjectListModel>[] = context.columns.map((col) => {
     switch (col.fieldName) {
@@ -64,7 +66,10 @@ export const List = () => {
           },
           renderCell: (item) => {
             return (
-              <TableCellLayout truncate>
+              <TableCellLayout
+                truncate
+                title={`${col.name}: ${item[col.fieldName]?.name || strings.NotSet}`}
+              >
                 <Avatar
                   className={styles.avatar}
                   size={context.size !== 'medium' ? 24 : 32}
@@ -86,9 +91,9 @@ export const List = () => {
           },
           renderCell: (item) => {
             return (
-              <TableCellLayout truncate>
+              <TableCellLayout truncate title={item[col.fieldName]}>
                 {item.hasUserAccess ? (
-                  <a href={item.url} target={'_blank'} rel='noreferrer'>
+                  <a href={item.url} target='_blank' rel='noreferrer'>
                     {item[col.fieldName]}
                   </a>
                 ) : (
@@ -111,7 +116,7 @@ export const List = () => {
             return (
               <Menu>
                 <MenuTrigger disableButtonEnhancement>
-                  <Tooltip content={'Hurtigmeny for prosjekt'} relationship={'label'}>
+                  <Tooltip content={strings.ProjectListQuicklaunch} relationship='label'>
                     <MenuButton
                       icon={<CalendarMonthRegular />}
                       size={context.size !== 'medium' ? 'small' : 'medium'}
@@ -148,23 +153,15 @@ export const List = () => {
             return col.name
           },
           renderCell: (item) => {
-            return <TableCellLayout truncate>{item[col.fieldName] || ''}</TableCellLayout>
+            return (
+              <TableCellLayout truncate title={item[col.fieldName]}>
+                {item[col.fieldName] || ''}
+              </TableCellLayout>
+            )
           }
         }
     }
   })
-
-  const columnSizingOptions = context.columns.reduce(
-    (options, col) => (
-      (options[col.fieldName] = {
-        minWidth: col.minWidth,
-        defaultWidth: 120,
-        idealWidth: col.idealWidth
-      }),
-      options
-    ),
-    {}
-  )
 
   const defaultSortState = React.useMemo<Parameters<NonNullable<DataGridProps['onSortChange']>>[1]>(
     () => ({ sortColumn: 'title', sortDirection: 'ascending' }),
