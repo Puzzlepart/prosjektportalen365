@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    Aria: {
+      ProjectTitle: 'Logo for prosjekt: {0}'
+    },
     BarLabel: 'Bar',
     BudgetTotalLabel: 'Totalbudsjett',
     CategoryFieldLabel: 'Kategori',
