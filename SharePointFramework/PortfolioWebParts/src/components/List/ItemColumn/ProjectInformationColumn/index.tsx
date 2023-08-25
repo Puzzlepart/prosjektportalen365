@@ -5,42 +5,40 @@ import { Icon, Link } from '@fluentui/react'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformation'
 import { ListContext } from '../../context'
 import { IProjectInformationColumnProps } from './types'
+import styles from './ProjectInformationColumn.module.scss'
 
 export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformationColumnProps> = (
   props
 ) => {
   const context = useContext(ListContext)
   return (
-    <ProjectInformationPanel
-      key={props.item.SiteId}
-      title={props.columnValue}
-      siteId={props.item.SiteId}
-      webUrl={props.item.Path}
-      page={props.page}
-      hideAllActions={true}
-      webPartContext={context.props.webPartContext}
-      onRenderToggleElement={(onToggle) => (
-        <Icon iconName={props.iconName} style={props.iconStyles} onClick={onToggle} />
-      )}
-    >
-      <Link href={props.item.SPWebURL} rel='noopener noreferrer' target='_blank'>
-        {props.columnValue}
-      </Link>
-    </ProjectInformationPanel>
+    <div className={styles.root}>
+      <ProjectInformationPanel
+        title={props.columnValue}
+        page={props.page}
+        hideAllActions={true}
+        dataAdapterParams={{
+          spfxContext: context.props.webPartContext,
+          configuration: {
+            siteId: props.item.SiteId,
+            webUrl: props.item.Path,
+          }
+        }}
+        onRenderToggleElement={(onToggle) => (
+          <Icon iconName={props.iconName} className={styles.icon} onClick={onToggle} />
+        )}
+      >
+        <Link href={props.item.SPWebURL} rel='noopener noreferrer' target='_blank'>
+          {props.columnValue}
+        </Link>
+      </ProjectInformationPanel>
+    </div>
   )
 }
 
 ProjectInformationColumn.defaultProps = {
   page: 'Portfolio',
-  iconName: 'Info',
-  iconStyles: {
-    color: '666666',
-    marginLeft: 4,
-    position: 'relative',
-    top: '2px',
-    fontSize: '1.1em',
-    cursor: 'pointer'
-  }
+  iconName: 'Info'
 }
 ProjectInformationColumn.key = 'projectinformationmodal'
 ProjectInformationColumn.id = 'projectinformationmodal'

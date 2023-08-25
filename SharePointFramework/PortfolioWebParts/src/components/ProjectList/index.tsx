@@ -187,12 +187,16 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
       )}
       <div className={styles.projects}>{renderProjects(projects)}</div>
       <ProjectInformationPanel
-        key={state.showProjectInfo?.siteId}
         title={state.showProjectInfo?.title}
-        siteId={state.showProjectInfo?.siteId}
-        webUrl={state.showProjectInfo?.url}
+        dataAdapterParams={{
+          spfxContext: props.webPartContext,
+          configuration: {
+            siteId: state.showProjectInfo?.siteId,
+            webUrl: state.showProjectInfo?.url
+          }
+        }}
         webPartContext={props.webPartContext}
-        page={'Portfolio'}
+        page='Portfolio'
         hidden={!state.showProjectInfo}
         hideAllActions={true}
       />
