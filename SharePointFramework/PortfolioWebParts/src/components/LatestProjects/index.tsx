@@ -39,7 +39,13 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
       const created = formatDate(site.Created, true)
       return (
         <div key={idx} className={className}>
-          <ProjectLogo title={site.Title} url={site.Path} hidden={!props.showProjectLogo} />
+          <ProjectLogo
+            title={site.Title}
+            url={site.Path}
+            type='list'
+            size='48px'
+            hidden={!props.showProjectLogo}
+          />
           <div className={styles.container}>
             <div className={styles.title}>
               <Link href={site.Path} target='_blank' title={site.Title}>

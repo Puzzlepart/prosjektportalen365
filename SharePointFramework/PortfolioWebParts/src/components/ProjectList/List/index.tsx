@@ -24,6 +24,7 @@ import { ListContext } from './context'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import styles from './List.module.scss'
 import { CalendarMonthRegular } from '@fluentui/react-icons'
+import { ProjectLogo } from 'pp365-shared-library/lib/components'
 
 export const List = () => {
   const context = useContext(ListContext)
@@ -41,40 +42,13 @@ export const List = () => {
             return
           },
           renderCell: (item) => {
-            const [showCustomImage, setShowCustomImage] = React.useState(true)
-
             return (
-              <div
-                className={styles.logo}
-                style={{ height: context.size !== 'medium' ? '32px' : '48px' }}
-              >
-                <Avatar
-                  className={styles.projectAvatar}
-                  aria-label={`Logo for project: ${item.title}'`}
-                  title={`Logo for project: ${item.title}'`}
-                  color={'colorful'}
-                  shape={'square'}
-                  style={{ display: showCustomImage ? 'none' : 'block' }}
-                  name={item.title?.slice(-2).toUpperCase()}
-                  initials={item.title?.slice(0, 2).toUpperCase()}
-                />
-                <img
-                  src={item.logo ?? `${item.url}/_api/siteiconmanager/getsitelogo?type='1'`}
-                  style={{
-                    display: !showCustomImage ? 'none' : 'block'
-                  }}
-                  alt={`Logo for project: ${item.title}'`}
-                  onLoad={(image) => {
-                    setShowCustomImage(
-                      (image.target as HTMLImageElement).naturalHeight !== 648
-                        ? (image.target as HTMLImageElement).naturalHeight !== 96
-                          ? true
-                          : false
-                        : false
-                    )
-                  }}
-                />
-              </div>
+              <ProjectLogo
+                title={item.title}
+                url={item.url}
+                type='list'
+                size={context.size !== 'medium' ? '32px' : '48px'}
+              />
             )
           }
         }

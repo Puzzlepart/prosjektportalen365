@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 declare interface ISharedLibraryStrings {
+  Aria: {
+    ProjectTitle: string
+  }
   BarLabel: string
   BudgetTotalLabel: string
   CategoryFieldLabel: string
