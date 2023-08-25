@@ -28,9 +28,8 @@ export type FetchDataResult = {
 const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async (props) => {
   try {
     if (!SPDataAdapter.isConfigured) {
-      SPDataAdapter.configure(props.webPartContext, {
-        siteId: props.siteId,
-        webUrl: props.webUrl,
+      SPDataAdapter.configure(props.spfxContext, {
+       ..._.pick(props, 'siteId', 'webA'
         logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }

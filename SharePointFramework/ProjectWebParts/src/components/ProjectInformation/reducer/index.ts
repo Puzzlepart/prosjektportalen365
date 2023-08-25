@@ -1,5 +1,5 @@
-import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { createReducer } from '@reduxjs/toolkit'
+import { SPFxContext } from 'pp365-shared-library'
 import { useMemo, useReducer } from 'react'
 import { IProjectInformationState } from '../types'
 import {
@@ -34,9 +34,9 @@ const initialState: IProjectInformationState = {
 /**
  * Create project information reducer.
  *
- * @param webPartContext SPFx web part context
+ * @param spfxContext SPFx context
  */
-const createProjectInformationReducer = (webPartContext: WebPartContext) =>
+const createProjectInformationReducer = (spfxContext: SPFxContext) =>
   createReducer(initialState, (builder) =>
     builder
       .addCase(INIT_DATA, (state, action) => {
@@ -44,7 +44,7 @@ const createProjectInformationReducer = (webPartContext: WebPartContext) =>
         state.properties = action.payload.state.properties
         state.isParentProject = action.payload.state.isParentProject
         state.userHasEditPermission = action.payload.state.userHasEditPermission
-        state.properties = createProperties(state as IProjectInformationState, webPartContext)
+        state.properties = createProperties(state as IProjectInformationState, spfxContext)
         state.isDataLoaded = true
       })
       .addCase(UPDATE_DATA, (state, action) => {
@@ -52,7 +52,7 @@ const createProjectInformationReducer = (webPartContext: WebPartContext) =>
           ...(state.data ?? {}),
           ...action.payload.data
         }
-        state.properties = createProperties(state as IProjectInformationState, webPartContext)
+        state.properties = createProperties(state as IProjectInformationState, spfxContext)
       })
       .addCase(FETCH_DATA_ERROR, (state, action) => {
         state.error = action.payload.error
@@ -85,10 +85,10 @@ const createProjectInformationReducer = (webPartContext: WebPartContext) =>
  * manage project information state using `useReducer` hook from
  * `react`.
  *
- * @param webPartContext SPFx web part context
+ * @param spfxContext SPFx context
  */
-export const useProjectInformationReducer = (webPartContext: WebPartContext) => {
-  const reducer = useMemo(() => createProjectInformationReducer(webPartContext), [])
+export const useProjectInformationReducer = (spfxContext: SPFxContext) => {
+  const reducer = useMemo(() => createProjectInformationReducer(spfxContext), [])
   const [state, dispatch] = useReducer(reducer, initialState)
   return {
     state,

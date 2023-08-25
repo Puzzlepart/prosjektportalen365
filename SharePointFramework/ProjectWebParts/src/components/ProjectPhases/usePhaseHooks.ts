@@ -8,11 +8,12 @@ export function usePhaseHooks() {
   const context = useContext(ProjectPhasesContext)
   const run = async (
     headers = { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' }
+  // eslint-disable-next-line require-await
   ) => {
     try {
       const body: Record<string, string> = {
         apiKey: context.props.hookAuth,
-        webUrl: context.props.webPartContext.pageContext.web.absoluteUrl
+        webUrl: context.props.webAbsoluteUrl
       }
 
       const postRequest = {

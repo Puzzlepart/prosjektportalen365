@@ -13,6 +13,7 @@ import { PortfolioAggregationContext } from './context'
 import { ON_FILTER_CHANGE, SET_ALL_COLLAPSED, SET_COLLAPSED, TOGGLE_FILTER_PANEL } from './reducer'
 import { IPortfolioAggregationProps } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
   const { context, searchBox, editViewColumnsPanelProps, onColumnContextMenu } =
@@ -42,7 +43,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
                 onToggleCollapse: (group) => context.dispatch(SET_COLLAPSED({ group }))
               }
             }}
-            webPartContext={props.webPartContext}
+            webPartContext={props.spfxContext as WebPartContext}
             layerHostId={context.layerHostId}
             error={context.state.error}
           />

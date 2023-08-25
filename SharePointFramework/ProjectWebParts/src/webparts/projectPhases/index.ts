@@ -25,7 +25,7 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
   }
 
   public render(): void {
-    this.renderComponent(ProjectPhases, { webPartContext: this.context })
+    this.renderComponent(ProjectPhases)
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {

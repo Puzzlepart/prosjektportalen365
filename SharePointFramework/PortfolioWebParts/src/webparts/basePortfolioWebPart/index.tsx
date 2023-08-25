@@ -3,7 +3,7 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { ConsoleListener, LogLevel, Logger } from '@pnp/logging'
 import { SPFI } from '@pnp/sp/presets/all'
 import { IBaseComponentProps } from 'components/types'
-import { createSpfiInstance } from 'pp365-shared-library'
+import { SiteContext, createSpfiInstance } from 'pp365-shared-library'
 import React, { ComponentClass, FC, createElement } from 'react'
 import { render } from 'react-dom'
 import { ErrorBoundary } from 'react-error-boundary'
@@ -22,9 +22,7 @@ export abstract class BasePortfolioWebPart<
   public abstract render(): void
 
   /**
-   * Create props for component with default properties and the `props` parameter. Also
-   * includes `webPartContext` and `pageContext` from `this.context`, aswell as properties
-   * from `pageContext.web`, `pageContext.site` and `pageContext.legacyPageContext`.
+   * Create props for component with default properties and the `props` parameter.
    *
    * @param props Partial props of `P` to override the default properties
    */
@@ -33,11 +31,10 @@ export abstract class BasePortfolioWebPart<
       title: this._pageTitle,
       ...this.properties,
       ...props,
-      webPartContext: this.context,
-      pageContext: this.context.pageContext,
       dataAdapter: this.dataAdapter,
       displayMode: this.displayMode,
-      sp: this.sp
+      sp: this.sp,
+      ...SiteContext.create(this.context)
     } as unknown as P
   }
 
