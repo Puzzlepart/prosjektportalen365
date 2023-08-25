@@ -39,13 +39,6 @@ const fetchData: DataFetchFunction<
   Partial<IProjectInformationState>
 > = async (context) => {
   try {
-    if (!SPDataAdapter.isConfigured) {
-      await SPDataAdapter.configure(context.props.webPartContext, {
-        siteId: context.props.siteId,
-        webUrl: context.props.webUrl,
-        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-      })
-    }
     const isFrontpage = context.props.page === 'Frontpage'
     const [columns, projectInformationData, [reports, sections, columnConfig], parentProjects] =
       await Promise.all([
@@ -54,9 +47,9 @@ const fetchData: DataFetchFunction<
         fetchProjectStatusReportData(context),
         isFrontpage
           ? SPDataAdapter.portal.getParentProjects(
-              context.props.webPartContext?.pageContext?.web?.absoluteUrl,
-              ProjectInformationParentProject
-            )
+            context.props.webPartContext?.pageContext?.web?.absoluteUrl,
+            ProjectInformationParentProject
+          )
           : Promise.resolve([])
       ])
     const templateName = projectInformationData.fieldValues.get('GtProjectTemplate')
@@ -91,6 +84,24 @@ const fetchData: DataFetchFunction<
   }
 }
 
+
+/**
+* Configures the SPDataAdapter with the provided `props.dataAdapterParams`.
+* 
+* @param context Context for `ProjectInformation`
+* 
+* @returns A Promise that resolves when the configuration is complete.
+*/
+const configureDataAdapter = async (context: IProjectInformationContext) => {
+  if (context.props.dataAdapterParams) {
+    const { spfxContext, configuration } = context.props.dataAdapterParams
+    await SPDataAdapter.configure(spfxContext, {
+      ...configuration,
+      logLevel: (sessionStorage.DEBUG || DEBUG) ? LogLevel.Info : LogLevel.Warning
+    })
+  }
+}
+
 /**
  * Fetch hook for ProjectInformation. Fetches data for `ProjectInformation` component
  * using `fetchData` function together with React `useEffect` hook. The data is re-fetched
@@ -100,11 +111,14 @@ const fetchData: DataFetchFunction<
  */
 export const useProjectInformationDataFetch = (context: IProjectInformationContext) => {
   useEffect(() => {
-    fetchData(context)
-      .then((state) => context.dispatch(INIT_DATA({ state })))
-      .catch((e) => {
-        const error = CustomError.createError(e, MessageBarType.severeWarning)
-        context.dispatch(FETCH_DATA_ERROR({ error }))
+    configureDataAdapter(context)
+      .then(() => {
+        fetchData(context)
+          .then((state) => context.dispatch(INIT_DATA({ state })))
+          .catch((e) => {
+            const error = CustomError.createError(e, MessageBarType.severeWarning)
+            context.dispatch(FETCH_DATA_ERROR({ error }))
+          })
       })
-  }, [context.state.propertiesLastUpdated])
+  }, [context.state.propertiesLastUpdated, context.props.dataAdapterParams?.configuration?.siteId])
 }

@@ -46,8 +46,6 @@ export const SummarySection: FC<ISummarySectionProps> = (props) => {
         {props.showProjectInformation && (
           <div className={styles.projectInformation}>
             <ProjectInformation
-              siteId={context.props.siteId}
-              webUrl={context.props.webUrl}
               page='ProjectStatus'
               hideAllActions={true}
               hideStatusReport={true}

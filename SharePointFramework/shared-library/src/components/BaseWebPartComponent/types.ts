@@ -4,27 +4,13 @@ import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { SPFI } from '@pnp/sp'
 import { CustomError } from '../../models'
 import { DOMAttributes } from 'react'
+import { PageContext } from '@microsoft/sp-page-context'
 
 export interface IBaseWebPartComponentProps extends DOMAttributes<HTMLDivElement> {
   /**
    * Title of the web part
    */
   title?: string
-
-  /**
-   * ID of the site
-   */
-  siteId?: string
-
-  /**
-   * URL for the web
-   */
-  webUrl?: string
-
-  /**
-   * Title for the web
-   */
-  webTitle?: string
 
   /**
    * Is the current user site admin
@@ -40,6 +26,11 @@ export interface IBaseWebPartComponentProps extends DOMAttributes<HTMLDivElement
    * SPFx web part context
    */
   webPartContext?: WebPartContext
+
+  /**
+   * SPFx page context
+   */
+  pageContext?: PageContext
 
   /**
    * Configured SPFI instance

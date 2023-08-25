@@ -21,21 +21,21 @@ export async function fetchProjectData(
     const projectData = await SPDataAdapter.portal.web.lists
       .getByTitle(strings.ProjectsListName)
       .items.select('Id', 'GtStartDate', 'GtEndDate')
-      .filter(`GtSiteId eq '${props.siteId}'`)
+      .filter(`GtSiteId eq '${props.pageContext.site.id.toString()}'`)
       .getAll()
 
     const config = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
     return new TimelineContentModel(
-      props.siteId,
-      props.webTitle,
-      props.webTitle,
+      props.pageContext.site.id.toString(),
+      props.pageContext.web.title,
+      props.pageContext.web.title,
       strings.ProjectLabel,
       first(projectData)?.GtStartDate,
       first(projectData)?.GtEndDate
     ).usingConfig(config)
   } catch (error) {
     throw new Error(
-      format(strings.ProjectTimelineErrorFetchText, props.siteId, props.webTitle, error)
+      format(strings.ProjectTimelineErrorFetchText,props.pageContext.site.id.toString(), props.pageContext.web.title, error)
     )
   }
 }

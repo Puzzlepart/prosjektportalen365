@@ -92,7 +92,7 @@ export function useTimelineList() {
     const [project] = await SPDataAdapter.portal.web.lists
       .getByTitle(strings.ProjectsListName)
       .items.select('Id')
-      .filter(`GtSiteId eq ${context.props.siteId}`)()
+      .filter(`GtSiteId eq ${context.props.pageContext.site.id.toString()}`)()
 
     const properties: Record<string, any> = {
       Title: 'Nytt element på tidslinjen',

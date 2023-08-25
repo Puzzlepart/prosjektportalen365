@@ -34,9 +34,6 @@ export abstract class BaseProjectWebPart<
       webPartContext: this.context,
       title: this.properties.title ?? this.title,
       pageContext,
-      siteId: pageContext.site.id.toString(),
-      webUrl: pageContext.web.absoluteUrl,
-      webTitle: pageContext.web.title,
       isSiteAdmin: pageContext.legacyPageContext.isSiteAdmin,
       displayMode: this.displayMode,
       sp: this.sp

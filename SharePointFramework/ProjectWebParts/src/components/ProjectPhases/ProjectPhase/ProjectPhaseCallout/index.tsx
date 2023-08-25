@@ -45,7 +45,7 @@ export const ProjectPhaseCallout: FC<IProjectPhaseCalloutProps> = (props) => {
               {!isEmpty(phase.checklistData.items) && (
                 <ActionButton
                   href={phase.getFilteredPhaseChecklistViewUrl(
-                    `${context.props.webUrl}/${strings.PhaseChecklistViewUrl}`
+                    `${context.props.pageContext.web.absoluteUrl}/${strings.PhaseChecklistViewUrl}`
                   )}
                   text={strings.PhaseChecklistLinkText}
                   iconProps={{ iconName: 'CheckList' }}

@@ -2,11 +2,13 @@
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState,
+  ISPDataAdapterBaseConfiguration,
   IUserMessageProps,
   ProjectColumn,
   ProjectInformationField,
   ProjectInformationParentProject,
-  ProjectTemplate
+  ProjectTemplate,
+  SPFxContext
 } from 'pp365-shared-library'
 import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDataService'
 import { IProjectStatusData } from '../ProjectStatus'
@@ -82,6 +84,18 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    * Show only icons for latest status report
    */
   statusReportShowOnlyIcons?: boolean
+
+  /**
+   * If the DataAdapter is not configured by a web part in `ProjectWebParts`,
+   * the `ProjectInformation` component will configure it with the following
+   * parameters - `spfxContext` and `configuration`. This is typically used
+   * when the component is used in a web part in a different SharePoint
+   * Framework solution, like for instance `PortfolioWebParts`.
+   */
+  dataAdapterParams?: {
+    spfxContext: SPFxContext
+    configuration: ISPDataAdapterBaseConfiguration
+  }
 }
 
 export interface IProjectInformationState

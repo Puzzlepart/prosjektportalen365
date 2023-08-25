@@ -42,8 +42,8 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
   try {
     if (!SPDataAdapter.isConfigured) {
       SPDataAdapter.configure(props.webPartContext, {
-        siteId: props.siteId,
-        webUrl: props.webUrl,
+        siteId: props.pageContext.site.id.toString(),
+        webUrl: props.pageContext.web.absoluteUrl,
         logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }

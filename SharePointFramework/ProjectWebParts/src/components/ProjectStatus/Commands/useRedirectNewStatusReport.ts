@@ -35,8 +35,8 @@ export function useRedirectNewStatusReport() {
           return obj
         }, {})
     }
-    properties.Title = format(strings.NewStatusReportTitle, context.props.webTitle)
-    properties.GtSiteId = context.props.siteId
+    properties.Title = format(strings.NewStatusReportTitle, context.props.pageContext.web.title)
+    properties.GtSiteId = context.props.pageContext.site.id.toString()
     properties.GtModerationStatus = strings.GtModerationStatus_Choice_Draft
     const report = await portalDataService.addStatusReport(
       properties,

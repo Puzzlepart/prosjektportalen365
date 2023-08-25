@@ -35,12 +35,12 @@ interface IUsePropertiesSyncParams {
  */
 const syncList = async (context: IProjectInformationContext) => {
   return await SPDataAdapter.portal.syncList({
-    url: context.props.webUrl,
+    url: context.props.pageContext.web.absoluteUrl,
     listName: strings.ProjectPropertiesListName,
     contentTypeId:
       context.state.data.templateParameters.ProjectContentTypeId ??
       '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
-    properties: { Title: context.props.webTitle }
+    properties: { Title: context.props.pageContext.web.title }
   })
 }
 
@@ -66,7 +66,7 @@ export function usePropertiesSync(context: IProjectInformationContext = null) {
   ) => {
     const { fieldValues, templateParameters } = data
     await SPDataAdapter.syncPropertyItemToHub(
-      context.props.webTitle,
+      context.props.pageContext.web.title,
       fieldValues,
       templateParameters,
       progressFunc

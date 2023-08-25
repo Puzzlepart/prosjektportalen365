@@ -28,8 +28,8 @@ export async function fetchTimelineData(
       .map((item) => {
         const config = _.find(timelineConfig, (col) => col.title === props.configItemTitle)
         return new TimelineContentModel(
-          props.siteId,
-          props.webTitle,
+          props.pageContext.site.id.toString(),
+          props.pageContext.web.title,
           item.Title,
           config?.title ?? props.configItemTitle,
           item.GtDeliveryStartTime,
@@ -70,7 +70,7 @@ export async function fetchTimelineData(
     ])
 
     let timelineListItems = timelineContentItems.filter(
-      (item) => item.GtSiteIdLookup.Title === props.webTitle
+      (item) => item.GtSiteIdLookup.Title === props.pageContext.web.title
     )
 
     const columns = timelineColumns

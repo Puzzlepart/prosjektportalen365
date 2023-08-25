@@ -1,10 +1,9 @@
-import { LogLevel } from '@pnp/logging'
 import { AnyAction } from '@reduxjs/toolkit'
 import strings from 'ProjectWebPartsStrings'
 import _ from 'lodash'
 import {
-  StatusReport,
   ProjectAdminPermission,
+  StatusReport,
   getUrlParam,
   parseUrlHash
 } from 'pp365-shared-library/lib'
@@ -25,15 +24,8 @@ export type FetchDataResult = {
  * status reports, project status sections, project column config, and project status list fields.
  * If the selected report is published, the attachments for the report are also fetched.
  */
-const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async (props) => {
+const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async () => {
   try {
-    if (!SPDataAdapter.isConfigured) {
-      SPDataAdapter.configure(props.webPartContext, {
-        siteId: props.siteId,
-        webUrl: props.webUrl,
-        logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
-      })
-    }
     const [properties, reportList, reports, sections, columnConfig, reportFields] =
       await Promise.all([
         SPDataAdapter.project.getProjectInformationData(),
