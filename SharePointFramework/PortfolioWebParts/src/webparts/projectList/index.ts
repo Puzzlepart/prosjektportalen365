@@ -152,11 +152,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   calloutTrigger: CalloutTriggers.Hover,
                   key: 'useDynamicColorsFieldId',
                   label: strings.UseDynamicColorsLabel,
-                  calloutContent: React.createElement(
-                    'p',
-                    {},
-                    strings.UseDynamicColorsDescription
-                  ),
+                  calloutContent: React.createElement('p', {}, strings.UseDynamicColorsDescription),
                   onText: strings.BooleanOn,
                   offText: strings.BooleanOff,
                   calloutWidth: 430,

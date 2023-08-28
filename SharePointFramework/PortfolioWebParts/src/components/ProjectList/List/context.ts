@@ -1,20 +1,20 @@
+import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import { createContext } from 'react'
 import { IProjectListProps } from '../types'
-import { ProjectListModel } from 'pp365-shared-library/lib/models'
-import { TableColumnDefinition } from '@fluentui/react-components'
 
+/**
+ * Interface representing the context for the Project List component.
+ */
 export interface IListContext extends IProjectListProps {
   /**
-   * Projects
+   * Projects to be rendered in the list.
    */
   projects?: ProjectListModel[]
 
   /**
-   * Size that determines the list appearance
+   * Size that determines the list appearance.
    */
   size?: 'extra-small' | 'small' | 'medium'
-
-  columns?: TableColumnDefinition<ProjectListModel>[]
 }
 
 export const ListContext = createContext<IListContext>(null)
