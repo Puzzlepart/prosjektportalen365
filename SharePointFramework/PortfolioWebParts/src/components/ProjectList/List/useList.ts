@@ -14,7 +14,7 @@ export function useList() {
   const columnSizingOptions = columns.reduce(
     (options, col) => (
       (options[col.columnId] = {
-        defaultWidth: 120
+        defaultWidth: col.defaultWidth,
       }),
       options
     ),

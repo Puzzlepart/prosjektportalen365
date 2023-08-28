@@ -14,6 +14,7 @@ export const useColumns = (): IListColumn[] => {
   return [
     {
       columnId: 'logo',
+      defaultWidth: 64,
       compare: () => {
         return null
       },
@@ -29,11 +30,11 @@ export const useColumns = (): IListColumn[] => {
             size={context.size !== 'medium' ? '32px' : '48px'}
           />
         )
-      },
-      defaultWidth: 200
+      }
     },
     {
       columnId: 'title',
+      defaultWidth: 240,
       compare: (a, b) => {
         return (a.title ?? '').localeCompare(b.title ?? '')
       },
@@ -56,6 +57,7 @@ export const useColumns = (): IListColumn[] => {
     },
     {
       columnId: 'phase',
+      defaultWidth: 120,
       compare: (a, b) => {
         return (a.phase || '').localeCompare(b.phase || '')
       },
@@ -72,6 +74,7 @@ export const useColumns = (): IListColumn[] => {
     },
     {
       columnId: 'owner',
+      defaultWidth: 180,
       compare: (a, b) => {
         return a.owner?.name?.localeCompare(b.owner?.name || '')
       },
@@ -91,6 +94,7 @@ export const useColumns = (): IListColumn[] => {
     },
     {
       columnId: 'manager',
+      defaultWidth: 180,
       compare: (a, b) => {
         return a.manager?.name?.localeCompare(b.manager?.name || '')
       },
@@ -111,11 +115,12 @@ export const useColumns = (): IListColumn[] => {
     },
     {
       columnId: 'actions',
+      defaultWidth: 40,
       compare: () => {
         return -1
       },
       renderHeaderCell: () => {
-        return ''
+        return null
       },
       renderCell: (item) => {
         return (
