@@ -5,7 +5,11 @@ import React, { useContext } from 'react'
 import { ProjectMenu } from '../ProjectMenu'
 import { ListContext } from './context'
 
-export const useColumns = (): TableColumnDefinition<ProjectListModel>[] => {
+export interface IListColumn extends TableColumnDefinition<ProjectListModel> {
+  defaultWidth?: number
+}
+
+export const useColumns = (): IListColumn[] => {
   const context = useContext(ListContext)
   return [
     {
@@ -25,7 +29,8 @@ export const useColumns = (): TableColumnDefinition<ProjectListModel>[] => {
             size={context.size !== 'medium' ? '32px' : '48px'}
           />
         )
-      }
+      },
+      defaultWidth: 200
     },
     {
       columnId: 'title',
@@ -107,7 +112,7 @@ export const useColumns = (): TableColumnDefinition<ProjectListModel>[] => {
     {
       columnId: 'actions',
       compare: () => {
-        return
+        return -1
       },
       renderHeaderCell: () => {
         return ''
