@@ -1,6 +1,5 @@
 import { SortDirection } from '@fluentui/react-components'
-import React, { useContext } from 'react'
-import { ListContext } from './context'
+import React from 'react'
 import { useColumns } from './useColumns'
 
 /**
@@ -9,10 +8,10 @@ import { useColumns } from './useColumns'
  * @returns An object containing the necessary data for rendering a list of projects.
  */
 export function useList() {
-  const context = useContext(ListContext)
   const refMap = React.useRef<Record<string, HTMLElement | null>>({})
+  const columns = useColumns()
 
-  const columnSizingOptions = context.columns.reduce(
+  const columnSizingOptions = columns.reduce(
     (options, col) => (
       (options[col.columnId] = {
         defaultWidth: 120
@@ -21,8 +20,6 @@ export function useList() {
     ),
     {}
   )
-
-  const columns = useColumns()
 
   const defaultSortState = { sortColumn: 'title', sortDirection: 'ascending' as SortDirection }
 

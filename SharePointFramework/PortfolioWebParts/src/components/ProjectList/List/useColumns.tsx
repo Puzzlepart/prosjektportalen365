@@ -28,6 +28,44 @@ export const useColumns = (): TableColumnDefinition<ProjectListModel>[] => {
       }
     },
     {
+      columnId: 'title',
+      compare: (a, b) => {
+        return (a.title ?? '').localeCompare(b.title ?? '')
+      },
+      renderHeaderCell: () => {
+        return strings.TitleLabel
+      },
+      renderCell: (item) => {
+        return (
+          <TableCellLayout truncate title={item.title}>
+            {item.hasUserAccess ? (
+              <a href={item.url} target='_blank' rel='noreferrer'>
+                {item.title}
+              </a>
+            ) : (
+              <>{item.title}</>
+            )}
+          </TableCellLayout>
+        )
+      }
+    },
+    {
+      columnId: 'phase',
+      compare: (a, b) => {
+        return (a.phase || '').localeCompare(b.phase || '')
+      },
+      renderHeaderCell: () => {
+        return strings.PhaseLabel
+      },
+      renderCell: (item) => {
+        return (
+          <TableCellLayout truncate title={item.phase}>
+            {item.phase || ''}
+          </TableCellLayout>
+        )
+      }
+    },
+    {
       columnId: 'owner',
       compare: (a, b) => {
         return a.owner?.name?.localeCompare(b.owner?.name || '')
@@ -39,7 +77,7 @@ export const useColumns = (): TableColumnDefinition<ProjectListModel>[] => {
         return (
           <TableCellLayout
             truncate
-            title={`${strings.ProjectOwner}: ${item.owner.name ?? strings.NotSet}`}
+            title={`${strings.ProjectOwner}: ${item.owner?.name ?? strings.NotSet}`}
           >
             <Avatar size={context.size !== 'medium' ? 24 : 32} {...item.owner} /> {item.owner?.name}
           </TableCellLayout>
@@ -58,32 +96,10 @@ export const useColumns = (): TableColumnDefinition<ProjectListModel>[] => {
         return (
           <TableCellLayout
             truncate
-            title={`${strings.ProjectManager}: ${item.manager.name ?? strings.NotSet}`}
+            title={`${strings.ProjectManager}: ${item.manager?.name ?? strings.NotSet}`}
           >
             <Avatar size={context.size !== 'medium' ? 24 : 32} {...item.manager} />{' '}
             {item.manager?.name}
-          </TableCellLayout>
-        )
-      }
-    },
-    {
-      columnId: 'title',
-      compare: (a, b) => {
-        return (a.title ?? '').localeCompare(b.title ?? '')
-      },
-      renderHeaderCell: () => {
-        return strings.TitleLabel
-      },
-      renderCell: (item) => {
-        return (
-          <TableCellLayout truncate title={item.title}>
-            {item.hasUserAccess ? (
-              <a href={item.url} target='_blank' rel='noreferrer'>
-                {item.title}
-              </a>
-            ) : (
-              <>{item.title}</>
-            )}
           </TableCellLayout>
         )
       }
