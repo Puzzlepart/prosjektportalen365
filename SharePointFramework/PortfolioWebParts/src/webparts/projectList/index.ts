@@ -36,7 +36,10 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
       text: vertical.text
     }))
 
-    const quickLaunchMenu = { ...ProjectList.defaultProps.quickLaunchMenu, ...this.properties.quickLaunchMenu }
+    const quickLaunchMenu = {
+      ...ProjectList.defaultProps.quickLaunchMenu,
+      ...this.properties.quickLaunchMenu
+    }
 
     return {
       pages: [

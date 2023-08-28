@@ -87,11 +87,6 @@ export interface IProjectListProps extends IBaseComponentProps {
   projectMetadata?: string[]
 
   /**
-   * Columns
-   */
-  columns?: any[]
-
-  /**
    * Default vertical
    */
   defaultVertical?: string

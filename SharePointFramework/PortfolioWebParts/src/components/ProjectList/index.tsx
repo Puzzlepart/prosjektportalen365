@@ -20,7 +20,6 @@ import { ListContext } from './List/context'
 import { ProjectCard } from './ProjectCard'
 import { ProjectCardContext } from './ProjectCard/context'
 import styles from './ProjectList.module.scss'
-import { PROJECTLIST_COLUMNS } from './ProjectListColumns'
 import { ProjectListVerticals } from './ProjectListVerticals'
 import { RenderModeDropdown } from './RenderModeDropdown'
 import { IProjectListProps } from './types'
@@ -33,7 +32,6 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     setState,
     projects,
     verticals,
-    onListSort,
     onSearch,
     searchBoxPlaceholder,
     createCardContext
@@ -47,14 +45,6 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   function renderProjects(projects: ProjectListModel[]) {
     switch (state.renderMode) {
       case 'tiles': {
-        props.columns.map((col) => {
-          col.isSorted = col.key === state.sort?.fieldName
-          if (col.isSorted) {
-            col.isSortedDescending = state.sort?.isSortedDescending
-          }
-          return col
-        })
-
         return projects.map((project, idx) => (
           <ProjectCardContext.Provider key={idx} value={createCardContext(project)}>
             <ProjectCard />
@@ -64,20 +54,11 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
       case 'list':
       case 'compactList': {
         const size = state.renderMode === 'list' ? 'medium' : 'extra-small'
-
-        const columns = props.columns.map((col) => {
-          col.isSorted = col.key === state.sort?.fieldName
-          if (col.isSorted) {
-            col.isSortedDescending = state.sort?.isSortedDescending
-          }
-          return col
-        })
         return (
           <ListContext.Provider
             value={{
               ...props,
               projects,
-              columns,
               size
             }}
           >
@@ -160,12 +141,6 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             <Button
               className={styles.sortBy}
               appearance='transparent'
-              onClick={() =>
-                onListSort(
-                  null,
-                  props.columns.find((c) => c.fieldName === 'title')
-                )
-              }
               size='large'
               icon={
                 state.sort?.isSortedDescending ? (
@@ -200,7 +175,6 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
 }
 
 ProjectList.defaultProps = {
-  columns: PROJECTLIST_COLUMNS,
   sortBy: 'Title',
   showSearchBox: true,
   showRenderModeSelector: true,
