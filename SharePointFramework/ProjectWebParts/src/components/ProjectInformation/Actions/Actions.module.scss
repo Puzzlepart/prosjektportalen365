@@ -1,16 +1,17 @@
 .root {
   margin: 25px 0 0 0;
 
-  .btn {
+  .buttonContainer {
     width: 320px;
-  }
+    margin: 6px 0 0 0;
 
-  > div {
-    margin: 5px 0 0 0;
-  }
+    .button {
+      width: 100%;
+      justify-content: flex-start;
 
-  [class*="ms-Button-label"] {
-    float: left;
-    margin-left: 20px;
+      .label {
+        margin: 0;
+      }
+    }
   }
 }

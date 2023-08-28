@@ -1,8 +1,9 @@
-import { IPersonaProps, ITag, Link, Persona, PersonaSize } from '@fluentui/react'
+import { IPersonaProps, ITag, Link } from '@fluentui/react'
 import React from 'react'
 import { useProjectInformationContext } from '../../context'
 import styles from './ProjectProperty.module.scss'
 import { IProjectPropertyProps } from './types'
+import { Persona } from '@fluentui/react-components'
 
 /**
  * Component logic hook for the `ProjectProperty` component.
@@ -25,7 +26,17 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       [
         'User',
         ([user]: IPersonaProps[]) => {
-          return <Persona {...user} size={PersonaSize.size24} styles={{ root: { marginTop: 6 } }} />
+          return (
+            <Persona
+              {...user}
+              name={user.text}
+              size='medium'
+              avatar={{
+                image: {
+                  src: user.imageUrl
+                },
+              }}
+              style={{ marginTop: 6 }} />)
         }
       ],
       [
@@ -37,8 +48,14 @@ export function useProjectProperty(props: IProjectPropertyProps) {
                 <Persona
                   key={key}
                   {...user}
-                  size={PersonaSize.size24}
-                  styles={{ root: { marginTop: 6 } }}
+                  name={user.text}
+                  size='small'
+                  avatar={{
+                    image: {
+                      src: user.imageUrl
+                    },
+                  }}
+                  style={{ marginTop: 6 }}
                 />
               ))}
             </div>

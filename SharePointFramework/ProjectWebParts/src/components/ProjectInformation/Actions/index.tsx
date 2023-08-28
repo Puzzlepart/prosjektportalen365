@@ -18,9 +18,14 @@ export const Actions: FC = () => {
           }
         }
         return (
-          <div key={idx} hidden={hidden}>
-            <Button className={styles.btn} icon={<Icon />} onClick={onClick} disabled={disabled}>
-              {text}
+          <div key={idx} className={styles.buttonContainer} hidden={hidden}>
+            <Button
+              className={styles.button}
+              icon={<Icon />}
+              iconPosition='before'
+              onClick={onClick}
+              disabled={disabled}>
+              <span className={styles.label}>{text}</span>
             </Button>
           </div>
         )
