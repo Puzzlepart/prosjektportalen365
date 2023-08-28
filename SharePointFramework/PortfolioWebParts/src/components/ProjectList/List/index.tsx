@@ -32,9 +32,7 @@ export const List = () => {
         <DataGridHeader>
           <DataGridRow>
             {({ renderHeaderCell }) => (
-              <DataGridHeaderCell>
-                {renderHeaderCell()}
-              </DataGridHeaderCell>
+              <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
             )}
           </DataGridRow>
         </DataGridHeader>
