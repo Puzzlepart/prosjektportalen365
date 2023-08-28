@@ -1,4 +1,4 @@
-import { SortDirection } from '@fluentui/react-components'
+import { SortDirection, TableColumnSizingOptions } from '@fluentui/react-components'
 import { useColumns } from './useColumns'
 
 /**
@@ -9,14 +9,14 @@ import { useColumns } from './useColumns'
 export function useList() {
   const columns = useColumns()
 
-  const columnSizingOptions = columns.reduce(
-    (options, col) => (
-      (options[col.columnId] = {
+  const columnSizingOptions: TableColumnSizingOptions = columns.reduce(
+    (options, col) => ({
+      ...options,
+      [col.columnId]: {
         defaultWidth: col.defaultWidth,
         minWidth: col.minWidth
-      }),
-      options
-    ),
+      }
+    }),
     {}
   )
 
