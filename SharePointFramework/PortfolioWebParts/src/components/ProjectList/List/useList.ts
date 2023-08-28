@@ -5,7 +5,7 @@ import { useColumns } from './useColumns'
 
 /**
  * A hook that provides the necessary data for rendering a list of projects.
- * 
+ *
  * @returns An object containing the necessary data for rendering a list of projects.
  */
 export function useList() {
@@ -15,7 +15,7 @@ export function useList() {
   const columnSizingOptions = context.columns.reduce(
     (options, col) => (
       (options[col.columnId] = {
-        defaultWidth: 120,
+        defaultWidth: 120
       }),
       options
     ),

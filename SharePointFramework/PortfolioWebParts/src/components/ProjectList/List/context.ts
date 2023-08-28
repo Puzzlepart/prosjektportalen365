@@ -14,7 +14,7 @@ export interface IListContext extends IProjectListProps {
    */
   size?: 'extra-small' | 'small' | 'medium'
 
-  columns?:TableColumnDefinition<ProjectListModel>[]
+  columns?: TableColumnDefinition<ProjectListModel>[]
 }
 
 export const ListContext = createContext<IListContext>(null)

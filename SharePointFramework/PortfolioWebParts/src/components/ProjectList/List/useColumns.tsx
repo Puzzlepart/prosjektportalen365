@@ -41,11 +41,7 @@ export const useColumns = (): TableColumnDefinition<ProjectListModel>[] => {
             truncate
             title={`${strings.ProjectOwner}: ${item.owner.name ?? strings.NotSet}`}
           >
-            <Avatar
-              size={context.size !== 'medium' ? 24 : 32}
-              {...item.owner}
-            />{' '}
-            {item.owner?.name}
+            <Avatar size={context.size !== 'medium' ? 24 : 32} {...item.owner} /> {item.owner?.name}
           </TableCellLayout>
         )
       }
@@ -64,10 +60,7 @@ export const useColumns = (): TableColumnDefinition<ProjectListModel>[] => {
             truncate
             title={`${strings.ProjectManager}: ${item.manager.name ?? strings.NotSet}`}
           >
-            <Avatar
-              size={context.size !== 'medium' ? 24 : 32}
-              {...item.manager}
-            />{' '}
+            <Avatar size={context.size !== 'medium' ? 24 : 32} {...item.manager} />{' '}
             {item.manager?.name}
           </TableCellLayout>
         )
