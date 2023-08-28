@@ -141,6 +141,14 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             <Button
               className={styles.sortBy}
               appearance='transparent'
+              onClick={() =>
+                setState({
+                  sort: {
+                    fieldName: state.sort?.fieldName || props.sortBy,
+                    isSortedDescending: !state.sort?.isSortedDescending
+                  }
+                })
+              }
               size='large'
               icon={
                 state.sort?.isSortedDescending ? (
