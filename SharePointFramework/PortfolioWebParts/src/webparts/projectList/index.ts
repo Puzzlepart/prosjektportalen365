@@ -50,18 +50,14 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
               groupFields: [
                 PropertyPaneTextField('sortBy', {
                   label: strings.SortByFieldLabel,
-                  description: 'Internt feltnavn som brukes til sortinerg av prosjektene',
+                  description: strings.SortByFieldDescription,
                   disabled: true
                 }),
                 PropertyFieldToggleWithCallout('showSearchBox', {
                   calloutTrigger: CalloutTriggers.Hover,
                   key: 'showSearchBoxFieldId',
                   label: strings.ShowSearchBoxLabel,
-                  calloutContent: React.createElement(
-                    'p',
-                    {},
-                    'Her kan du velge om søkeboksen skal vises eller ikke.'
-                  ),
+                  calloutContent: React.createElement('p', {}, strings.ShowSearchBoxDescription),
                   onText: strings.BooleanOn,
                   offText: strings.BooleanOff,
                   calloutWidth: 430,
@@ -74,7 +70,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   calloutContent: React.createElement(
                     'p',
                     {},
-                    'Her kan du velge om visningsvelgeren skal vises eller ikke.'
+                    strings.ShowRenderModeSelectorDescription
                   ),
                   onText: strings.BooleanOn,
                   offText: strings.BooleanOff,
@@ -84,12 +80,8 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                 PropertyFieldToggleWithCallout('showSortBy', {
                   calloutTrigger: CalloutTriggers.Hover,
                   key: 'showSortByFieldId',
-                  label: 'Vis sorteringsknapp',
-                  calloutContent: React.createElement(
-                    'p',
-                    {},
-                    'Her kan du velge om sorteringsknappen skal vises eller ikke.'
-                  ),
+                  label: strings.ShowSortByLabel,
+                  calloutContent: React.createElement('p', {}, strings.ShowSortByDescription),
                   onText: strings.BooleanOn,
                   offText: strings.BooleanOff,
                   calloutWidth: 430,
@@ -115,11 +107,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   ],
                   selectedKey: this.properties.defaultRenderMode,
                   calloutWidth: 430,
-                  calloutContent: React.createElement(
-                    'p',
-                    {},
-                    'Her kan du velge hvilken visning som skal være standard.'
-                  )
+                  calloutContent: React.createElement('p', {}, strings.DefaultRenderModeDescription)
                 }),
                 PropertyFieldDropdownWithCallout('defaultVertical', {
                   calloutTrigger: CalloutTriggers.Hover,
@@ -128,11 +116,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   options: verticalOptions,
                   selectedKey: this.properties.defaultVertical,
                   calloutWidth: 430,
-                  calloutContent: React.createElement(
-                    'p',
-                    {},
-                    'Her kan du velge hvilken vertikal som skal være standard. Merk! dersom vertikalen "Alle prosjekter" er valgt som standard og brukere ikke har tilgang til "Alle prosjekter" vertikalen, vil standard bli "Mine prosjekter".'
-                  )
+                  calloutContent: React.createElement('p', {}, strings.DefaultVerticalDescription)
                 }),
                 PropertyFieldMultiSelect('hideVerticals', {
                   key: 'hideVerticalsFieldId',
@@ -207,7 +191,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                     },
                     {
                       id: 'relativeUrl',
-                      title: 'Relativ url',
+                      title: strings.RelativeUrl,
                       type: CustomCollectionFieldType.string,
                       required: true
                     }

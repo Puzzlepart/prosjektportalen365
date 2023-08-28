@@ -87,7 +87,9 @@ declare interface IPortfolioWebPartsStrings {
   DataSourceNotFound: string
   DefaultDataSourceViewLabel: string
   DefaultRenderModeLabel: string
+  DefaultRenderModeDescription: string
   DefaultVerticalLabel: string
+  DefaultVerticalDescription: string
   DefaultViewDescription: string
   DefaultViewLabel: string
   DefaultViewSetWarningMessage: string
@@ -220,11 +222,16 @@ declare interface IPortfolioWebPartsStrings {
   ShowProgramViewsLabel: string
   ShowProjectLogoFieldLabel: string
   ShowRenderModeSelectorLabel: string
+  ShowRenderModeSelectorDescription: string
   ShowSearchBoxLabel: string
+  ShowSearchBoxDescription: string
+  ShowSortByLabel: string
+  ShowSortByDescription: string
   ShowViewSelectorLabel: string
   SiteTitleLabel: string
   SortAscLabel: string
   SortByFieldLabel: string
+  SortByFieldDescription: string
   SortCardsByLabel: string
   SortDescLabel: string
   SortOrderDescription: string
