@@ -185,6 +185,7 @@ declare interface IPortfolioWebPartsStrings {
   ProjectServiceArea: string
   ProjectsListName: string
   ProjectType: string
+  RelativeUrl: string,
   RenderModeCompactListText: string
   RenderModeLabel: string
   RenderModeListText: string
@@ -237,6 +238,8 @@ declare interface IPortfolioWebPartsStrings {
   ToggleColumnFormPanelLabel: string
   ToggleEditViewColumnsLabel: string
   UseChangesButtonText: string
+  UseDynamicColorsLabel: string
+  UseDynamicColorsDescription: string
   ViewLessText: string
   ViewMoreText: string
   ViewNotFoundMessage: string

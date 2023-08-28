@@ -151,11 +151,11 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                 PropertyFieldToggleWithCallout('useDynamicColors', {
                   calloutTrigger: CalloutTriggers.Hover,
                   key: 'useDynamicColorsFieldId',
-                  label: 'Bruk dynamiske farger',
+                  label: strings.UseDynamicColorsLabel,
                   calloutContent: React.createElement(
                     'p',
                     {},
-                    'Her kan du velge om kortvisningen skal ta i bruk dynamiske farger for logodelen, dette kan medføre lengre innlastningstid og anbefales for mindre porteføljer (krever at "Vis logo" er på).'
+                    strings.UseDynamicColorsDescription
                   ),
                   onText: strings.BooleanOn,
                   offText: strings.BooleanOff,
@@ -199,13 +199,13 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   fields: [
                     {
                       id: 'order',
-                      title: 'Rekkefølge',
+                      title: strings.SortOrderLabel,
                       type: CustomCollectionFieldType.number,
                       required: true
                     },
                     {
                       id: 'text',
-                      title: 'Tekst',
+                      title: strings.ColumnRenderOptionText,
                       type: CustomCollectionFieldType.string,
                       required: true
                     },
