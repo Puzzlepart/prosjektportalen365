@@ -45,7 +45,7 @@ export const ColumnFormPanel: FC = () => {
         <TextField
           label={strings.SortOrderLabel}
           description={strings.SortOrderLabel}
-          type={'number'}
+          type='number'
           value={column.get('sortOrder')}
           disabled={isEditing}
           onChange={(_, value) => setColumn('sortOrder', parseInt(value))}
