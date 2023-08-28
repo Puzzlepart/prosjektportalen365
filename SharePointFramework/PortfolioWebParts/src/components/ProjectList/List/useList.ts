@@ -15,6 +15,7 @@ export function useList() {
     (options, col) => (
       (options[col.columnId] = {
         defaultWidth: col.defaultWidth,
+        minWidth: col.minWidth
       }),
       options
     ),

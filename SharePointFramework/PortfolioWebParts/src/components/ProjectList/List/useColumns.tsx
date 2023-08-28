@@ -6,6 +6,7 @@ import { ProjectMenu } from '../ProjectMenu'
 import { ListContext } from './context'
 
 export interface IListColumn extends TableColumnDefinition<ProjectListModel> {
+  minWidth?: number
   defaultWidth?: number
 }
 
@@ -14,7 +15,8 @@ export const useColumns = (): IListColumn[] => {
   return [
     {
       columnId: 'logo',
-      defaultWidth: 64,
+      defaultWidth: 48,
+      minWidth: 48,
       compare: () => {
         return null
       },
@@ -34,7 +36,7 @@ export const useColumns = (): IListColumn[] => {
     },
     {
       columnId: 'title',
-      defaultWidth: 240,
+      defaultWidth: 280,
       compare: (a, b) => {
         return (a.title ?? '').localeCompare(b.title ?? '')
       },
@@ -116,6 +118,7 @@ export const useColumns = (): IListColumn[] => {
     {
       columnId: 'actions',
       defaultWidth: 40,
+      minWidth: 40,
       compare: () => {
         return -1
       },
