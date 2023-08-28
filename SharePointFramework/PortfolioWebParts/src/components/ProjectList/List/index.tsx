@@ -15,7 +15,7 @@ import { useList } from './useList'
 
 export const List = () => {
   const context = useContext(ListContext)
-  const { refMap, columnSizingOptions, columns, defaultSortState } = useList()
+  const { columnSizingOptions, columns, defaultSortState } = useList()
 
   return (
     <div className={styles.list}>
@@ -31,8 +31,8 @@ export const List = () => {
       >
         <DataGridHeader>
           <DataGridRow>
-            {({ renderHeaderCell, columnId }) => (
-              <DataGridHeaderCell ref={(el) => (refMap.current[columnId] = el)}>
+            {({ renderHeaderCell }) => (
+              <DataGridHeaderCell>
                 {renderHeaderCell()}
               </DataGridHeaderCell>
             )}
