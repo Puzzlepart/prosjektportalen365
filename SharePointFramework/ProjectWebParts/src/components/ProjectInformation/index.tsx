@@ -1,3 +1,4 @@
+import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 import { Shimmer } from '@fluentui/react/lib/Shimmer'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
@@ -15,6 +16,7 @@ import { ProjectStatusReport } from './ProjectStatusReport'
 import { ProjectInformationContextProvider } from './context'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
+import { WebPartTitle } from 'pp365-shared-library'
 
 /**
  * Display project information. A number of actions are available to the user,
@@ -30,13 +32,9 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
 
   return (
     <ProjectInformationContextProvider value={context}>
-      <div className={styles.root}>
+      <FluentProvider theme={webLightTheme} className={styles.root}>
         <div className={styles.container}>
-          <div className={styles.header}>
-            <span role='heading' aria-level={2}>
-              {props.title}
-            </span>
-          </div>
+          <WebPartTitle text={props.title} />
           {context.state.error ? (
             <UserMessage
               className={styles.userMessage}
@@ -66,7 +64,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
             </Shimmer>
           )}
         </div>
-      </div>
+      </FluentProvider>
       {context.state.confirmActionProps && <ConfirmDialog {...context.state.confirmActionProps} />}
     </ProjectInformationContextProvider>
   )
