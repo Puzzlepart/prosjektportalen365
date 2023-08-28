@@ -36,6 +36,23 @@ export interface IProjectListVertical extends Omit<TabProps, 'icon'> {
   isHidden?: (state: IProjectListState) => boolean
 }
 
+export interface IQuickLaunch {
+  /**
+   * Order of the menu item
+   */
+  order?: number
+
+  /**
+   * Title for the menu item
+   */
+  text?: string
+
+  /**
+   * relative url to navigate to
+   */
+  relativeUrl?: string
+}
+
 export type ProjectListRenderMode = 'tiles' | 'list' | 'compactList'
 
 export interface IProjectListProps extends IBaseComponentProps {
@@ -70,11 +87,6 @@ export interface IProjectListProps extends IBaseComponentProps {
   projectMetadata?: string[]
 
   /**
-   * Columns
-   */
-  columns?: any[]
-
-  /**
    * Default vertical
    */
   defaultVertical?: string
@@ -98,6 +110,11 @@ export interface IProjectListProps extends IBaseComponentProps {
    * Use dynamic colors for the project card
    */
   useDynamicColors?: boolean
+
+  /**
+   * Quick launch menu (List experience only)
+   */
+  quickLaunchMenu?: IQuickLaunch[]
 }
 
 export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {

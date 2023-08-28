@@ -1,175 +1,21 @@
-import * as React from 'react'
 import {
-  DataGridBody,
-  DataGridRow,
   DataGrid,
-  DataGridProps,
+  DataGridBody,
+  DataGridCell,
   DataGridHeader,
   DataGridHeaderCell,
-  DataGridCell,
-  TableColumnDefinition,
-  TableCellLayout,
-  Avatar,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  MenuPopover,
-  MenuTrigger,
-  Tooltip,
-  Link
+  DataGridRow
 } from '@fluentui/react-components'
-import { useContext } from 'react'
-import { ListContext } from './context'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
+import * as React from 'react'
+import { useContext } from 'react'
 import styles from './List.module.scss'
-import { CalendarMonthRegular } from '@fluentui/react-icons'
-import { ProjectLogo } from 'pp365-shared-library/lib/components'
+import { ListContext } from './context'
+import { useList } from './useList'
 
 export const List = () => {
   const context = useContext(ListContext)
-  const refMap = React.useRef<Record<string, HTMLElement | null>>({})
-
-  const columns: TableColumnDefinition<ProjectListModel>[] = context.columns.map((col) => {
-    switch (col.fieldName) {
-      case 'logo':
-        return {
-          columnId: col.fieldName,
-          compare: () => {
-            return
-          },
-          renderHeaderCell: () => {
-            return
-          },
-          renderCell: (item) => {
-            return (
-              <ProjectLogo
-                title={item.title}
-                url={item.url}
-                renderMode='list'
-                size={context.size !== 'medium' ? '32px' : '48px'}
-              />
-            )
-          }
-        }
-      case 'owner':
-      case 'manager':
-        return {
-          columnId: col.fieldName,
-          compare: (a, b) => {
-            return (a[col.fieldName]?.name || '').localeCompare(b[col.fieldName]?.name || '')
-          },
-          renderHeaderCell: () => {
-            return col.name
-          },
-          renderCell: (item) => {
-            return (
-              <TableCellLayout truncate>
-                <Avatar
-                  className={styles.avatar}
-                  size={context.size !== 'medium' ? 24 : 32}
-                  {...item[col.fieldName]}
-                />{' '}
-                {item[col.fieldName]?.name}
-              </TableCellLayout>
-            )
-          }
-        }
-      case 'title':
-        return {
-          columnId: col.fieldName,
-          compare: (a, b) => {
-            return (a[col.fieldName] || '').localeCompare(b[col.fieldName] || '')
-          },
-          renderHeaderCell: () => {
-            return col.name
-          },
-          renderCell: (item) => {
-            return (
-              <TableCellLayout truncate>
-                {item.hasUserAccess ? (
-                  <a href={item.url} target={'_blank'} rel='noreferrer'>
-                    {item[col.fieldName]}
-                  </a>
-                ) : (
-                  <>{item[col.fieldName]}</>
-                )}
-              </TableCellLayout>
-            )
-          }
-        }
-      case 'action':
-        return {
-          columnId: 'actions',
-          compare: () => {
-            return
-          },
-          renderHeaderCell: () => {
-            return ''
-          },
-          renderCell: (item) => {
-            return (
-              <Menu>
-                <MenuTrigger disableButtonEnhancement>
-                  <Tooltip content={'Hurtigmeny for prosjekt'} relationship={'label'}>
-                    <MenuButton
-                      icon={<CalendarMonthRegular />}
-                      size={context.size !== 'medium' ? 'small' : 'medium'}
-                    />
-                  </Tooltip>
-                </MenuTrigger>
-                <MenuPopover>
-                  <MenuList>
-                    <MenuItem>
-                      <Link href={`${item.url}/SitePages/Prosjektstatus.aspx`}>Prosjektstatus</Link>
-                    </MenuItem>
-                    <MenuItem>
-                      <Link href={`${item.url}/Delte%20dokumenter`}>Dokumentbibliotek</Link>
-                    </MenuItem>
-                    <MenuItem>
-                      <Link href={`${item.url}/Lists/Fasesjekkliste`}>Fasesjekkliste</Link>
-                    </MenuItem>
-                    <MenuItem>
-                      <Link href={`${item.url}/SitePages/Oppgaver.aspx`}>Oppgaver</Link>
-                    </MenuItem>
-                  </MenuList>
-                </MenuPopover>
-              </Menu>
-            )
-          }
-        }
-      default:
-        return {
-          columnId: col.fieldName,
-          compare: (a, b) => {
-            return (a[col.fieldName] || '').localeCompare(b[col.fieldName] || '')
-          },
-          renderHeaderCell: () => {
-            return col.name
-          },
-          renderCell: (item) => {
-            return <TableCellLayout truncate>{item[col.fieldName] || ''}</TableCellLayout>
-          }
-        }
-    }
-  })
-
-  const columnSizingOptions = context.columns.reduce(
-    (options, col) => (
-      (options[col.fieldName] = {
-        minWidth: col.minWidth,
-        defaultWidth: 120,
-        idealWidth: col.idealWidth
-      }),
-      options
-    ),
-    {}
-  )
-
-  const defaultSortState = React.useMemo<Parameters<NonNullable<DataGridProps['onSortChange']>>[1]>(
-    () => ({ sortColumn: 'title', sortDirection: 'ascending' }),
-    []
-  )
+  const { columnSizingOptions, columns, defaultSortState } = useList()
 
   return (
     <div className={styles.list}>
@@ -185,10 +31,8 @@ export const List = () => {
       >
         <DataGridHeader>
           <DataGridRow>
-            {({ renderHeaderCell, columnId }) => (
-              <DataGridHeaderCell ref={(el) => (refMap.current[columnId] = el)}>
-                {renderHeaderCell()}
-              </DataGridHeaderCell>
+            {({ renderHeaderCell }) => (
+              <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
             )}
           </DataGridRow>
         </DataGridHeader>

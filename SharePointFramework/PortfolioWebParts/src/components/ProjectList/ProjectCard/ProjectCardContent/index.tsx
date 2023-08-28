@@ -16,6 +16,8 @@ import {
   useOverflowMenu
 } from '@fluentui/react-components'
 import { ProjectCardContext } from '../context'
+import strings from 'PortfolioWebPartsStrings'
+import { format } from '@fluentui/react'
 
 export const ProjectCardContent: FC = () => {
   const context = useContext(ProjectCardContext)
@@ -35,7 +37,13 @@ export const ProjectCardContent: FC = () => {
 
     return (
       <MenuItem key={tag.value} className={styles.menuItem}>
-        <InteractionTag className={styles.tag} appearance={'brand'} size={'small'} {...tag} />
+        <InteractionTag
+          className={styles.tag}
+          title={tag.value}
+          appearance='brand'
+          size='small'
+          {...tag}
+        />
       </MenuItem>
     )
   }
@@ -60,9 +68,9 @@ export const ProjectCardContent: FC = () => {
         <MenuTrigger disableButtonEnhancement>
           <InteractionTag
             ref={ref}
-            aria-label={`${overflowCount} more tags`}
-            title={`${overflowCount} more tags`}
-            appearance={'brand'}
+            aria-label={format(strings.Aria.MenuOverflowCount, overflowCount)}
+            title={format(strings.Aria.MenuOverflowCount, overflowCount)}
+            appearance='brand'
           >{`+${overflowCount}`}</InteractionTag>
         </MenuTrigger>
         <MenuPopover>
@@ -80,16 +88,16 @@ export const ProjectCardContent: FC = () => {
       <div className={styles.serviceArea} hidden={!context.shouldDisplay('ProjectServiceArea')}>
         {!_.isEmpty(serviceArea) && (
           <Overflow minimumVisible={1} padding={12}>
-            <TagGroup className={styles.tagGroup} size={'small'}>
+            <TagGroup className={styles.tagGroup} size='small'>
               {!_.isEmpty(serviceArea) &&
                 serviceArea.map((area) => (
                   <OverflowItem key={area.key} id={area.key}>
                     <InteractionTag
                       key={area.value}
                       className={styles.tag}
-                      appearance={'brand'}
+                      appearance='brand'
                       icon={<GlobeLocationFilled />}
-                      size={'small'}
+                      size='small'
                       title={`${area.type}: ${area.value}`}
                       {...area}
                     />
@@ -103,16 +111,16 @@ export const ProjectCardContent: FC = () => {
       <div className={styles.type} hidden={!context.shouldDisplay('ProjectType')}>
         {!_.isEmpty(type) && (
           <Overflow minimumVisible={1} padding={12}>
-            <TagGroup className={styles.tagGroup} size={'small'}>
+            <TagGroup className={styles.tagGroup} size='small'>
               {!_.isEmpty(type) &&
                 type.map((type) => (
                   <OverflowItem key={type.key} id={type.key}>
                     <InteractionTag
                       key={type.value}
                       className={styles.tag}
-                      appearance={'brand'}
+                      appearance='brand'
                       icon={<TagMultipleFilled />}
-                      size={'small'}
+                      size='small'
                       title={`${type.type}: ${type.value}`}
                       {...type}
                     />

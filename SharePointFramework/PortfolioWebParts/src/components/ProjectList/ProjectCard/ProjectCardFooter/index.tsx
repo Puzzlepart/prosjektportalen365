@@ -21,6 +21,7 @@ import {
   PanelRightContractRegular,
   bundleIcon
 } from '@fluentui/react-icons'
+import { ProjectMenu } from 'components/ProjectList/ProjectMenu'
 
 export const ProjectCardFooter: FC = () => {
   const context = useContext(ProjectCardContext)
@@ -70,7 +71,7 @@ export const ProjectCardFooter: FC = () => {
                 <strong>{owner.role}</strong>: {owner.name || strings.NotSet}
               </>
             }
-            relationship={'description'}
+            relationship='description'
             withArrow
           >
             <Avatar className={styles.avatar} {...owner} />
@@ -83,7 +84,7 @@ export const ProjectCardFooter: FC = () => {
                 <strong>{manager.role}</strong>: {manager.name || strings.NotSet}
               </>
             }
-            relationship={'description'}
+            relationship='description'
             withArrow
           >
             <Avatar className={styles.avatar} {...manager} />
@@ -100,13 +101,13 @@ export const ProjectCardFooter: FC = () => {
         return (
           <Tooltip
             key={action.id}
-            content={<>Åpne prosjektinformasjonspanel</>}
-            relationship={'description'}
+            content={<>{strings.ProjectInformationPanelButton}</>}
+            relationship='description'
             withArrow
           >
             <Button
               className={styles.action}
-              appearance={'subtle'}
+              appearance='subtle'
               icon={<PanelRight />}
               {...action}
             />
@@ -115,22 +116,25 @@ export const ProjectCardFooter: FC = () => {
       })}
     >
       <Persona />
-      <Tooltip
-        content={
-          <>
-            <strong>{templateText}</strong> ({context.project.template})
-          </>
-        }
-        relationship={'description'}
-        withArrow
-      >
-        <Button
-          className={styles.templateTag}
-          appearance={'subtle'}
-          icon={<Icon />}
-          title={context.project.template}
-        />
-      </Tooltip>
+      <div className={styles.buttons}>
+        <Tooltip
+          content={
+            <>
+              <strong>{templateText}</strong> ({context.project.template})
+            </>
+          }
+          relationship='description'
+          withArrow
+        >
+          <Button
+            className={styles.templateTag}
+            appearance='subtle'
+            icon={<Icon />}
+            title={context.project.template}
+          />
+        </Tooltip>
+        <ProjectMenu project={context.project} context={context} appearance='subtle' />
+      </div>
     </CardFooter>
   )
 }

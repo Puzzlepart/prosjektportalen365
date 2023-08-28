@@ -1,12 +1,7 @@
 declare interface IPortfolioWebPartsStrings {
-  ViewLessText: string
-  ViewMoreText: string
-  OpenInNewTabLabel: string
-  ErrorBoundaryFallbackText: string
-  ErrorBoundaryFallbackDescription: string
-  ProjectServiceArea: string
-  ProjectType: string
-  ProjectMetadataFieldLabel: string
+  Aria: {
+    MenuOverflowCount: string
+  },
   AddColumnLabel: string
   AllocationPercetageLabel: string
   AllocationStatusLabel: string
@@ -14,9 +9,9 @@ declare interface IPortfolioWebPartsStrings {
   AllProjectsSearchBoxPlaceholderText: string
   BarLabel: string
   BooleanNo: string
-  BooleanYes: string
   BooleanOff: string
   BooleanOn: string
+  BooleanYes: string
   CancelButtonLabel: string
   ChartConfigurationListNameLabel: string
   ChartErrorText: string
@@ -92,7 +87,9 @@ declare interface IPortfolioWebPartsStrings {
   DataSourceNotFound: string
   DefaultDataSourceViewLabel: string
   DefaultRenderModeLabel: string
+  DefaultRenderModeDescription: string
   DefaultVerticalLabel: string
+  DefaultVerticalDescription: string
   DefaultViewDescription: string
   DefaultViewLabel: string
   DefaultViewSetWarningMessage: string
@@ -101,12 +98,15 @@ declare interface IPortfolioWebPartsStrings {
   DisplayNameLabel: string
   EditColumnHeaderText: string
   EditColumnLabel: string
+  EditProjectListQuickLaunch: string
   EditViewColumnsPanelHeaderText: string
   EditViewColumnsPanelHelpText: string
   EditViewHeaderText: string
   EditViewText: string
   EmptyMessageDescription: string
   EndDateLabel: string
+  ErrorBoundaryFallbackDescription: string
+  ErrorBoundaryFallbackText: string
   ErrorText: string
   ExcelExportButtonLabel: string
   FiltersString: string
@@ -151,6 +151,7 @@ declare interface IPortfolioWebPartsStrings {
   NoProjectData: string
   NoProjectsFoundMessage: string
   NotSet: string
+  OpenInNewTabLabel: string
   ParentProjectsHeaderText: string
   ParentProjectsSearchBoxPlaceholderText: string
   PersonalViewDescription: string
@@ -174,14 +175,21 @@ declare interface IPortfolioWebPartsStrings {
   ProjectContentColumnsListName: string
   ProjectDeliveriesGroupName: string
   ProjectInformationGroupName: string
+  ProjectInformationPanelButton: string
   ProjectLabel: string
   ProjectListEmptyText: string
+  ProjectListQuickLaunch: string
   ProjectManager: string
+  ProjectMetadataFieldLabel: string
   ProjectOwner: string
   ProjectsAccessHeaderText: string
   ProjectsAccessSearchBoxPlaceholderText: string
+  ProjectServiceArea: string
   ProjectsListName: string
+  ProjectType: string
+  RelativeUrl: string,
   RenderModeCompactListText: string
+  RenderModeLabel: string
   RenderModeListText: string
   RenderModeTilesText: string
   ResourceAllocationInfoText: string
@@ -214,11 +222,17 @@ declare interface IPortfolioWebPartsStrings {
   ShowProgramViewsLabel: string
   ShowProjectLogoFieldLabel: string
   ShowRenderModeSelectorLabel: string
+  ShowRenderModeSelectorDescription: string
   ShowSearchBoxLabel: string
+  ShowSearchBoxDescription: string
+  ShowSortByLabel: string
+  ShowSortByDescription: string
   ShowViewSelectorLabel: string
   SiteTitleLabel: string
   SortAscLabel: string
   SortByFieldLabel: string
+  SortByFieldDescription: string
+  SortCardsByLabel: string
   SortDescLabel: string
   SortOrderDescription: string
   SortOrderLabel: string
@@ -231,6 +245,10 @@ declare interface IPortfolioWebPartsStrings {
   ToggleColumnFormPanelLabel: string
   ToggleEditViewColumnsLabel: string
   UseChangesButtonText: string
+  UseDynamicColorsLabel: string
+  UseDynamicColorsDescription: string
+  ViewLessText: string
+  ViewMoreText: string
   ViewNotFoundMessage: string
   ViewsListNameLabel: string
 }

@@ -9,6 +9,7 @@ import { IProjectCardContext } from './ProjectCard/context'
 import { IProjectListProps } from './types'
 import { useProjectListDataFetch } from './useProjectListDataFetch'
 import { useProjectListState } from './useProjectListState'
+import strings from 'PortfolioWebPartsStrings'
 
 /**
  * Component logic hook for `ProjectList`. This hook is responsible for
@@ -47,7 +48,7 @@ export const useProjectList = (props: IProjectListProps) => {
       {
         id: 'showProjectInfo',
         onClick: (event: React.MouseEvent<any>) => onExecuteCardAction(event, project),
-        title: 'Show project info'
+        title: strings.ProjectInformationPanelButton
       }
     ]
   }

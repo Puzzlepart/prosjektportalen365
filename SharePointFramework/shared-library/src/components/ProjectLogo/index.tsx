@@ -32,13 +32,16 @@ export const ProjectLogo: FC<IProjectLogoProps> = (props: IProjectLogoProps) => 
           ...conditionalStyling
         }}
         name={props.title?.slice(-2).toUpperCase()}
-        initials={props.renderMode === 'card' ? props.title : props.title?.slice(0, 2).toUpperCase()}
+        initials={
+          props.renderMode === 'card' ? props.title : props.title?.slice(0, 2).toUpperCase()
+        }
       />
       <img
         className={props.renderMode === 'card' ? styles.hover : ''}
         src={`${props.url}/_api/siteiconmanager/getsitelogo?type='1'`}
         style={{
-          WebkitMask: props.renderMode === 'card' ? 'linear-gradient(white 50%, transparent)' : 'none',
+          WebkitMask:
+            props.renderMode === 'card' ? 'linear-gradient(white 50%, transparent)' : 'none',
           display: !showCustomImage ? 'none' : 'block',
           ...conditionalStyling
         }}

@@ -11,6 +11,10 @@ import {
   PropertyFieldMultiSelect,
   PropertyFieldToggleWithCallout
 } from '@pnp/spfx-property-controls'
+import {
+  PropertyFieldCollectionData,
+  CustomCollectionFieldType
+} from '@pnp/spfx-property-controls/lib/PropertyFieldCollectionData'
 import { IProjectListProps, ProjectList } from 'components/ProjectList'
 import { ProjectListVerticals } from 'components/ProjectList/ProjectListVerticals'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -32,6 +36,11 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
       text: vertical.text
     }))
 
+    const quickLaunchMenu = {
+      ...ProjectList.defaultProps.quickLaunchMenu,
+      ...this.properties.quickLaunchMenu
+    }
+
     return {
       pages: [
         {
@@ -41,18 +50,14 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
               groupFields: [
                 PropertyPaneTextField('sortBy', {
                   label: strings.SortByFieldLabel,
-                  description: 'Internt feltnavn som brukes til sortinerg av prosjektene',
+                  description: strings.SortByFieldDescription,
                   disabled: true
                 }),
                 PropertyFieldToggleWithCallout('showSearchBox', {
                   calloutTrigger: CalloutTriggers.Hover,
                   key: 'showSearchBoxFieldId',
                   label: strings.ShowSearchBoxLabel,
-                  calloutContent: React.createElement(
-                    'p',
-                    {},
-                    'Her kan du velge om søkeboksen skal vises eller ikke.'
-                  ),
+                  calloutContent: React.createElement('p', {}, strings.ShowSearchBoxDescription),
                   onText: strings.BooleanOn,
                   offText: strings.BooleanOff,
                   calloutWidth: 430,
@@ -65,7 +70,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   calloutContent: React.createElement(
                     'p',
                     {},
-                    'Her kan du velge om visningsvelgeren skal vises eller ikke.'
+                    strings.ShowRenderModeSelectorDescription
                   ),
                   onText: strings.BooleanOn,
                   offText: strings.BooleanOff,
@@ -75,12 +80,8 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                 PropertyFieldToggleWithCallout('showSortBy', {
                   calloutTrigger: CalloutTriggers.Hover,
                   key: 'showSortByFieldId',
-                  label: 'Vis sorteringsknapp',
-                  calloutContent: React.createElement(
-                    'p',
-                    {},
-                    'Her kan du velge om sorteringsknappen skal vises eller ikke.'
-                  ),
+                  label: strings.ShowSortByLabel,
+                  calloutContent: React.createElement('p', {}, strings.ShowSortByDescription),
                   onText: strings.BooleanOn,
                   offText: strings.BooleanOff,
                   calloutWidth: 430,
@@ -106,11 +107,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   ],
                   selectedKey: this.properties.defaultRenderMode,
                   calloutWidth: 430,
-                  calloutContent: React.createElement(
-                    'p',
-                    {},
-                    'Her kan du velge hvilken visning som skal være standard.'
-                  )
+                  calloutContent: React.createElement('p', {}, strings.DefaultRenderModeDescription)
                 }),
                 PropertyFieldDropdownWithCallout('defaultVertical', {
                   calloutTrigger: CalloutTriggers.Hover,
@@ -119,11 +116,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   options: verticalOptions,
                   selectedKey: this.properties.defaultVertical,
                   calloutWidth: 430,
-                  calloutContent: React.createElement(
-                    'p',
-                    {},
-                    "Her kan du velge hvilken vertikal som skal være standard. Merk! dersom vertikalen 'Alle prosjekter' er valgt som standard og brukere ikke har tilgang til 'Alle prosjekter' vertikalen, vil standard bli 'Mine prosjekter'."
-                  )
+                  calloutContent: React.createElement('p', {}, strings.DefaultVerticalDescription)
                 }),
                 PropertyFieldMultiSelect('hideVerticals', {
                   key: 'hideVerticalsFieldId',
@@ -142,12 +135,8 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                 PropertyFieldToggleWithCallout('useDynamicColors', {
                   calloutTrigger: CalloutTriggers.Hover,
                   key: 'useDynamicColorsFieldId',
-                  label: 'Bruk dynamiske farger',
-                  calloutContent: React.createElement(
-                    'p',
-                    {},
-                    'Her kan du velge om kortvisningen skal ta i bruk dynamiske farger for logodelen, dette kan medføre lengre innlastningstid og anbefales for mindre porteføljer (krever at "Vis logo" er på).'
-                  ),
+                  label: strings.UseDynamicColorsLabel,
+                  calloutContent: React.createElement('p', {}, strings.UseDynamicColorsDescription),
                   onText: strings.BooleanOn,
                   offText: strings.BooleanOff,
                   calloutWidth: 430,
@@ -155,7 +144,7 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   disabled: !this.properties.showProjectLogo
                 }),
                 PropertyFieldMultiSelect('projectMetadata', {
-                  key: 'projectMetadata',
+                  key: 'projectMetadataFieldId',
                   label: strings.ProjectMetadataFieldLabel,
                   options: [
                     {
@@ -180,6 +169,33 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                     }
                   ],
                   selectedKeys: this.properties.projectMetadata ?? []
+                }),
+                PropertyFieldCollectionData('quickLaunchMenu', {
+                  key: 'quickLaunchFieldId',
+                  label: strings.ProjectListQuickLaunch,
+                  panelHeader: strings.ProjectListQuickLaunch,
+                  manageBtnLabel: strings.EditProjectListQuickLaunch,
+                  value: quickLaunchMenu,
+                  fields: [
+                    {
+                      id: 'order',
+                      title: strings.SortOrderLabel,
+                      type: CustomCollectionFieldType.number,
+                      required: true
+                    },
+                    {
+                      id: 'text',
+                      title: strings.ColumnRenderOptionText,
+                      type: CustomCollectionFieldType.string,
+                      required: true
+                    },
+                    {
+                      id: 'relativeUrl',
+                      title: strings.RelativeUrl,
+                      type: CustomCollectionFieldType.string,
+                      required: true
+                    }
+                  ]
                 })
               ]
             }
