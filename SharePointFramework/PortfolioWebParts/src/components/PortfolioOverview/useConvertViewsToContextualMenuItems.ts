@@ -1,12 +1,17 @@
 import { IContextualMenuItem } from '@fluentui/react'
 import { PortfolioOverviewView } from 'pp365-shared-library/lib/models/PortfolioOverviewView'
-import { useContext } from 'react'
-import { PortfolioOverviewContext } from './context'
+import { IPortfolioOverviewContext } from './context'
 import { CHANGE_VIEW } from './reducer'
 
-export function useConvertViewsToContextualMenuItems() {
-  const context = useContext(PortfolioOverviewContext)
-
+/**
+ * Returns a function that converts a collection of `PortfolioOverviewView` objects to
+ * a collection of `IContextualMenuItem` objects.
+ *
+ * @param context The context object containing the props and state for the PortfolioOverview component
+ * 
+ * @returns A function that accepts a filter function and returns an array of `IContextualMenuItem` objects
+ */
+export function useConvertViewsToContextualMenuItems(context: IPortfolioOverviewContext) {
   /**
    * Converts a collection of `PortfolioOverviewView` objects to
    * a collection of `IContextualMenuItem` objects.

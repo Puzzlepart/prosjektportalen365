@@ -16,9 +16,9 @@ import { usePortfolioOverviewFilters } from './usePortfolioOverviewFilters'
  * @returns An object containing the command bar properties and filters.
  */
 export function useCommandBar(context: IPortfolioOverviewContext) {
-  const filters = usePortfolioOverviewFilters()
-  const convertViewsToContextualMenuItems = useConvertViewsToContextualMenuItems()
-  const { exportToExcelContextualMenuItem } = useExcelExport()
+  const filters = usePortfolioOverviewFilters(context)
+  const convertViewsToContextualMenuItems = useConvertViewsToContextualMenuItems(context)
+  const { exportToExcelContextualMenuItem } = useExcelExport(context)
 
   const sharedViews = convertViewsToContextualMenuItems((v) => !v.isPersonal)
   const personalViews = convertViewsToContextualMenuItems((v) => v.isPersonal)

@@ -1,13 +1,18 @@
-import _ from 'underscore'
-import * as uniq from 'array-unique'
-import { stringIsNullOrEmpty } from '@pnp/core'
-import { useContext } from 'react'
-import { PortfolioOverviewContext } from './context'
 import { get } from '@microsoft/sp-lodash-subset'
+import { stringIsNullOrEmpty } from '@pnp/core'
+import * as uniq from 'array-unique'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
+import _ from 'underscore'
+import { IPortfolioOverviewContext } from './context'
 
-export function usePortfolioOverviewFilters() {
-  const context = useContext(PortfolioOverviewContext)
+/**
+ * Returns an array of filters for the portfolio overview based on the current view and items.
+ * 
+ * @param context - The context object containing the current view and items.
+ * 
+ * @returns An array of filters, each containing a column and an array of filter items.
+ */
+export function usePortfolioOverviewFilters(context: IPortfolioOverviewContext) {
   if (!context.state.currentView) return []
   const selectedFilters = context.props.configuration.refiners.filter(
     (ref) => context.state.currentView.refiners.indexOf(ref) !== -1
