@@ -1,28 +1,30 @@
-import strings from 'PortfolioWebPartsStrings'
-import { ProjectContentColumn } from 'pp365-shared-library'
-import { FilterPanel } from 'pp365-shared-library/lib/components/FilterPanel'
+// import strings from 'PortfolioWebPartsStrings'
+// import { ProjectContentColumn } from 'pp365-shared-library'
+// import { FilterPanel } from 'pp365-shared-library/lib/components/FilterPanel'
 import React, { FC } from 'react'
-import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
-import { List } from '../List'
-import { ColumnContextMenu } from './ColumnContextMenu'
-import { ColumnFormPanel } from './ColumnFormPanel'
-import { Commands } from './Commands'
+// import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
+// import { List } from '../List'
+// import { ColumnContextMenu } from './ColumnContextMenu'
+// import { ColumnFormPanel } from './ColumnFormPanel'
+// import { Commands } from './Commands'
 import styles from './PortfolioAggregation.module.scss'
-import { ViewFormPanel } from './ViewFormPanel'
+// import { ViewFormPanel } from './ViewFormPanel'
 import { PortfolioAggregationContext } from './context'
-import { ON_FILTER_CHANGE, SET_ALL_COLLAPSED, SET_COLLAPSED, TOGGLE_FILTER_PANEL } from './reducer'
+// import { ON_FILTER_CHANGE, SET_ALL_COLLAPSED, SET_COLLAPSED, TOGGLE_FILTER_PANEL } from './reducer'
 import { IPortfolioAggregationProps } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
-import { WebPartContext } from '@microsoft/sp-webpart-base'
+// import { WebPartContext } from '@microsoft/sp-webpart-base'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
-  const { context, searchBox, editViewColumnsPanelProps, onColumnContextMenu } =
+  // const { context, searchBox, editViewColumnsPanelProps, onColumnContextMenu } =
+  //   usePortfolioAggregation(props)
+    const { context} =
     usePortfolioAggregation(props)
 
   return (
     <div className={styles.root}>
       <PortfolioAggregationContext.Provider value={context}>
-        <Commands />
+        {/* <Commands />
         <div className={styles.container}>
           <List
             key={context.state.currentView?.id}
@@ -62,7 +64,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
           onFilterChange={(column: ProjectContentColumn, selectedItems) => {
             context.dispatch(ON_FILTER_CHANGE({ column, selectedItems }))
           }}
-        />
+        /> */}
       </PortfolioAggregationContext.Provider>
     </div>
   )
