@@ -1,4 +1,5 @@
 import { Shimmer } from '@fluentui/react/lib/Shimmer'
+import { WebPartTitle } from 'pp365-shared-library'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
 import React, { FC } from 'react'
@@ -32,11 +33,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
     <ProjectInformationContextProvider value={context}>
       <div className={styles.root}>
         <div className={styles.container}>
-          <div className={styles.header}>
-            <span role='heading' aria-level={2}>
-              {props.title}
-            </span>
-          </div>
+          <WebPartTitle title={props.title} />
           {context.state.error ? (
             <UserMessage
               className={styles.userMessage}

@@ -1,14 +1,6 @@
 .root {
   .container {
     margin: 0;
-
-    .header {
-      font-size: 24px;
-      font-weight: 100;
-      margin-bottom: 11px;
-      color: #323130;
-    }
-
     .shimmer {
       padding: 5px;
     }
@@ -18,16 +10,6 @@
 .confirmDialog {
   max-width: 450px;
   width: 450px;
-}
-
-.btn {
-  width: 320px;
-  margin: 5px 0 0;
-
-  [class*="ms-Button-label"] {
-    float: left;
-    margin-left: 20px;
-  }
 }
 
 .userMessage {
