@@ -1,20 +1,27 @@
 import React, { FC } from 'react'
 import { IWebPartTitleProps } from './types'
 import styles from './WebPartTitle.module.scss'
+import { Tooltip } from './Tooltip'
 
 /**
- * A component that renders a webpart title properly according to the Fluent UI design guidelines.
- * Customizable with the following properties:
- * - title: the title to display
+ * Renders a web part title with an optional tooltip.
+ *
+ * @param props - The component props.
+ * @param props.title - The title to display.
+ * @param props.tooltip - The tooltip to display when hovering over the title.
+ *
+ * @returns The rendered component.
  */
 export const WebPartTitle: FC<IWebPartTitleProps> = (props) => {
   return (
-    <div className={styles.header} title={props.title}>
-      <h2 className={styles.heading}>
-        <span role='heading' aria-level={2} className={styles.title}>
-          {props.title}
-        </span>
-      </h2>
+    <div className={styles.root} title={props.title}>
+      <Tooltip {...props.tooltip}>
+        <h2 className={styles.heading}>
+          <span role='heading' aria-level={2} className={styles.title}>
+            {props.title}
+          </span>
+        </h2>
+      </Tooltip>
     </div>
   )
 }

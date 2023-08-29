@@ -61,7 +61,7 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
 
   return (
     <FluentProvider className={styles.root} theme={webLightTheme}>
-      <WebPartTitle text={props.title} />
+      <WebPartTitle title={props.title} />
       <div className={styles.container}>
         {renderLatestProjects()}
         <div hidden={projects.length <= props.rowLimit}>

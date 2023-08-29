@@ -1,14 +1,14 @@
 import { MessageBar, SelectionMode, ShimmeredDetailsList } from '@fluentui/react'
 import { isEmpty } from '@microsoft/sp-lodash-subset'
 import * as strings from 'ProgramWebPartsStrings'
+import { WebPartTitle } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { AddProjectDialog } from './AddProjectDialog'
-import { columns } from './columns'
 import { Commands } from './Commands'
-import { ProgramAdministrationContext } from './context'
 import { ListHeaderSearch } from './ListHeaderSearch'
 import styles from './ProgramAdministration.module.scss'
-import { TooltipHeader } from './TooltipHeader'
+import { columns } from './columns'
+import { ProgramAdministrationContext } from './context'
 import { IProgramAdministrationProps } from './types'
 import { useProgramAdministration } from './useProgramAdministration'
 
@@ -30,7 +30,13 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
     <ProgramAdministrationContext.Provider value={{ props, state, dispatch }}>
       <Commands />
       <div className={styles.root}>
-        <TooltipHeader />
+        <WebPartTitle
+          title={props.title}
+          tooltip={{
+            text: strings.ProgramAdministrationInfoMessage,
+            iconProps: { iconName: 'Info' }
+          }}
+        />
         <div>
           {!isEmpty(state.childProjects) || state.loading.root ? (
             <ShimmeredDetailsList
