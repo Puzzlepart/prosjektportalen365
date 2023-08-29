@@ -3,7 +3,7 @@ import { useOnRenderItemColumn } from './ItemColumn'
 import { useOnRenderDetailsHeader } from './ListHeader'
 import { IListProps } from './types'
 import { useAddColumn } from './useAddColumn'
-import { DetailsListLayoutMode } from '@fluentui/react'
+import { DetailsListLayoutMode, IColumn, Target } from '@fluentui/react'
 
 /**
  * Custom hook that returns the properties needed for rendering a list.
@@ -25,10 +25,18 @@ export function useList(props: IListProps<any>) {
   const layoutMode = props.isListLayoutModeJustified
     ? DetailsListLayoutMode.justified
     : DetailsListLayoutMode.fixedColumns
+  const onColumnHeaderClick = (ev: React.MouseEvent<HTMLElement>, column: IColumn) => {
+    props.onColumnContextMenu({ column, target: ev.target as Target })
+  }
+  const onColumnHeaderContextMenu = (column: IColumn, ev: React.MouseEvent<HTMLElement>) => {
+    props.onColumnContextMenu({ column, target: ev.target as Target })
+  }
   return {
     ...props,
     onRenderItemColumn,
     onRenderDetailsHeader,
+    onColumnHeaderClick,
+    onColumnHeaderContextMenu,
     columns,
     layoutMode
   } as IListProps<any>

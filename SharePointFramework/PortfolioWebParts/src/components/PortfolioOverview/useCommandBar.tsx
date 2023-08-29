@@ -1,34 +1,24 @@
 import { ContextualMenuItemType, ICommandBarProps, IContextualMenuItem } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
-import { PortfolioOverviewView } from 'pp365-shared-library/lib/models/PortfolioOverviewView'
-import { useContext } from 'react'
-import { PortfolioOverviewContext } from '../context'
-import {
-  CHANGE_VIEW,
-  TOGGLE_COMPACT,
-  TOGGLE_FILTER_PANEL,
-  TOGGLE_VIEW_FORM_PANEL
-} from '../reducer'
-import { usePortfolioOverviewFilters } from '../usePortfolioOverviewFilters'
+import { PortfolioOverviewView } from 'pp365-shared-library'
+import { IPortfolioOverviewContext } from './context'
+import { CHANGE_VIEW, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL, TOGGLE_VIEW_FORM_PANEL } from './reducer'
 import { useConvertViewsToContextualMenuItems } from './useConvertViewsToContextualMenuItems'
 import { useExcelExport } from './useExcelExport'
+import { usePortfolioOverviewFilters } from './usePortfolioOverviewFilters'
 
 /**
- * Component logic hook for the PortfolioOverviewCommands component. Handles the logic for
- * the command bar and the filter panel.
+ * A custom hook that returns the command bar properties and filters for the Portfolio Overview component.
  *
- * Renders the following context menu items for the command bar:
- * - `EXCEL_EXPORT`: Excel export button
- * - `NEW_VIEW`: New view button
- * - `VIEW_OPTIONS`: View options button
- * - `FILTERS`: Filters button
+ * @param context - The Portfolio Overview context object.
+ *
+ * @returns An object containing the command bar properties and filters.
  */
-export function useCommands() {
-  const context = useContext(PortfolioOverviewContext)
-  const filters = usePortfolioOverviewFilters()
-  const convertViewsToContextualMenuItems = useConvertViewsToContextualMenuItems()
-  const { exportToExcelContextualMenuItem } = useExcelExport()
+export function useCommandBar(context: IPortfolioOverviewContext) {
+  const filters = usePortfolioOverviewFilters(context)
+  const convertViewsToContextualMenuItems = useConvertViewsToContextualMenuItems(context)
+  const { exportToExcelContextualMenuItem } = useExcelExport(context)
 
   const sharedViews = convertViewsToContextualMenuItems((v) => !v.isPersonal)
   const personalViews = convertViewsToContextualMenuItems((v) => v.isPersonal)

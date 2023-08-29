@@ -1,11 +1,13 @@
 import {
   IColumn,
+  ICommandBarProps,
   IScrollablePaneProps,
-  ISearchBoxProps,
   IShimmeredDetailsListProps,
   Target
 } from '@fluentui/react'
+import { SearchBoxProps } from '@fluentui/react-search-preview'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { IFilterPanelProps } from 'pp365-shared-library'
 
 export type OnColumnContextMenu = {
   column: any
@@ -51,7 +53,7 @@ export interface IListProps<T extends IColumn = IColumn>
   /**
    * Properties for the search box to be rendered in the list header.
    */
-  searchBox?: ISearchBoxProps
+  searchBox?: SearchBoxProps
 
   /**
    * Render list in justified layout mode. Manages which columns are visible, tries
@@ -75,4 +77,14 @@ export interface IListProps<T extends IColumn = IColumn>
    * Error to render in the list if the data fetch or something else fails.
    */
   error?: Error
+
+  /**
+   * Command bar props.
+   */
+  commandBarProps?: ICommandBarProps
+
+  /**
+   * Filter panel props.
+   */
+  filterPanelProps?: IFilterPanelProps
 }

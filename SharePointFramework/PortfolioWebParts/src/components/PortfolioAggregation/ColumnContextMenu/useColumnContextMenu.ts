@@ -1,10 +1,9 @@
 import { ContextualMenuItemType, IContextualMenuItem, format } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import * as strings from 'PortfolioWebPartsStrings'
-import { useContext } from 'react'
 import { indexOf } from 'underscore'
 import { useAddColumn } from '../../List'
-import { PortfolioAggregationContext } from '../context'
+import { usePortfolioAggregationContext } from '../context'
 import {
   MOVE_COLUMN,
   SET_GROUP_BY,
@@ -17,7 +16,7 @@ import {
  * Component logic hook for `ColumnContextMenu`. Handles state and dispatches actions to the reducer.
  **/
 export function useColumnContextMenu() {
-  const context = useContext(PortfolioAggregationContext)
+  const context = usePortfolioAggregationContext()
   if (!context.state.columnContextMenu) return {}
   const { column, target } = context.state.columnContextMenu
   const columnIndex = indexOf(

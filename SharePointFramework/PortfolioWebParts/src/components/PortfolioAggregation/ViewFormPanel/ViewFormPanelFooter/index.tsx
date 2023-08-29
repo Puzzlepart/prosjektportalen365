@@ -1,8 +1,8 @@
 import { DefaultButton, PrimaryButton } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import React, { FC } from 'react'
+import { usePortfolioAggregationContext } from '../../context'
 import { SET_VIEW_FORM_PANEL } from '../../reducer'
-import { usePortfolioAggregationContext } from '../../usePortfolioAggregationContext'
 import styles from './ViewFormPanelFooter.module.scss'
 import { IViewFormPanelFooterProps } from './types'
 

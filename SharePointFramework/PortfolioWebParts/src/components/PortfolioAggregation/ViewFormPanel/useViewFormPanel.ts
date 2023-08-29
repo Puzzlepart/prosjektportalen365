@@ -1,6 +1,5 @@
 import { DataSource, SPDataSourceItem } from 'pp365-shared-library'
-import { useContext } from 'react'
-import { PortfolioAggregationContext } from '../context'
+import { usePortfolioAggregationContext } from '../context'
 import { SET_VIEW_FORM_PANEL } from '../reducer'
 import { useEditableView } from './useEditableView'
 
@@ -10,7 +9,7 @@ import { useEditableView } from './useEditableView'
  * @returns An object containing functions and state variables for the `ViewFormPanel` component.
  */
 export function useViewFormPanel() {
-  const context = useContext(PortfolioAggregationContext)
+  const context = usePortfolioAggregationContext()
   const { view, setView, isEditing } = useEditableView()
 
   /**

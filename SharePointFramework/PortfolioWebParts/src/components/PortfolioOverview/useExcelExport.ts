@@ -2,12 +2,18 @@ import { IContextualMenuItem } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import { ExcelExportService } from 'pp365-shared-library/lib/services'
-import { useCallback, useContext } from 'react'
-import { PortfolioOverviewContext } from '../context'
-import { EXCEL_EXPORT_ERROR, EXCEL_EXPORT_SUCCESS, START_EXCEL_EXPORT } from '../reducer'
+import { useCallback } from 'react'
+import { IPortfolioOverviewContext } from './context'
+import { EXCEL_EXPORT_ERROR, EXCEL_EXPORT_SUCCESS, START_EXCEL_EXPORT } from './reducer'
 
-export function useExcelExport() {
-  const context = useContext(PortfolioOverviewContext)
+/**
+ * Hook that provides functionality for exporting data to Excel.
+ * 
+ * @param context - The context object that contains the state and dispatch functions.
+ * 
+ * @returns An object containing a contextual menu item for Excel export.
+ */
+export function useExcelExport(context: IPortfolioOverviewContext) {
 
   /**
    * Callback function for Excel export. Handles the export to Excel with state updates and

@@ -1,14 +1,14 @@
 import { Panel, TextField } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import { FormFieldContainer } from 'pp365-shared-library'
-import React, { FC, useContext } from 'react'
+import React, { FC } from 'react'
+import { usePortfolioAggregationContext } from '../context'
 import styles from './ViewFormPanel.module.scss'
 import { ViewFormPanelFooter } from './ViewFormPanelFooter'
 import { useViewFormPanel } from './useViewFormPanel'
-import { PortfolioAggregationContext } from '../context'
 
 export const ViewFormPanel: FC = () => {
-  const context = useContext(PortfolioAggregationContext)
+  const context = usePortfolioAggregationContext()
   const { view, setView, isEditing, onDismiss, onSave } = useViewFormPanel()
   return (
     <Panel

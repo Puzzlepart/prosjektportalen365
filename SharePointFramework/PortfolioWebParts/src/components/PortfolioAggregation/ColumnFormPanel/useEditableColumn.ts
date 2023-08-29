@@ -1,6 +1,6 @@
 import { ProjectContentColumn } from 'pp365-shared-library'
-import { useContext, useEffect, useState } from 'react'
-import { PortfolioAggregationContext } from '../context'
+import { useEffect, useState } from 'react'
+import { usePortfolioAggregationContext } from '../context'
 
 /**
  * Intial column with default values.
@@ -32,7 +32,7 @@ const convertToMap = (column: ProjectContentColumn) => {
 }
 
 export function useEditableColumn() {
-  const context = useContext(PortfolioAggregationContext)
+  const context = usePortfolioAggregationContext()
   const [column, $setColumn] = useState<Map<string, any>>(initialColumn)
   const isEditing = !!context.state.columnForm.column
 

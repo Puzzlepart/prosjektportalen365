@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react'
-import { PortfolioAggregationContext } from '../context'
+import { useEffect, useState } from 'react'
+import { usePortfolioAggregationContext } from '../context'
 
 /**
  * Hook that provides an editable view object and a function to update it.
@@ -7,7 +7,7 @@ import { PortfolioAggregationContext } from '../context'
  * @returns An object containing the view, a function to update the view, and a boolean indicating whether the view is being edited.
  */
 export function useEditableView() {
-  const context = useContext(PortfolioAggregationContext)
+  const context = usePortfolioAggregationContext()
   const [view, $setView] = useState(
     new Map([
       ['title', ''],
