@@ -23,7 +23,7 @@ const ListHeader: FC<IListHeaderProps> = (props) => {
     >
       <FluentProvider className={styles.root} theme={webLightTheme}>
         <div className={styles.header}>
-          <WebPartTitle text={props.title} />
+          <WebPartTitle title={props.title} />
         </div>
 
         {hasError && (
