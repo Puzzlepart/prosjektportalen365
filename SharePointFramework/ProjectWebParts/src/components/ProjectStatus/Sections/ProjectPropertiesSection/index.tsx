@@ -1,6 +1,6 @@
 import { stringIsNullOrEmpty } from '@pnp/core'
-import { ProjectStatusContext } from '../../../ProjectStatus/context'
 import React, { FC, useContext } from 'react'
+import { useProjectStatusContext } from '../../../ProjectStatus/context'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection'
 import { SectionContext } from '../context'
@@ -9,7 +9,7 @@ import { StatusSectionField } from './StatusSectionField'
 import { useProjectPropertiesSection } from './useProjectPropertiesSection'
 
 export const ProjectPropertiesSection: FC = () => {
-  const context = useContext(ProjectStatusContext)
+  const context = useProjectStatusContext()
   const { section } = useContext(SectionContext)
   const { fieldValues, fields } = useProjectPropertiesSection()
 

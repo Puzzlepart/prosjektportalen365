@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
 import { useContext, useEffect, useState } from 'react'
 import { UncertaintyElementModel } from '../../../../models'
-import { ProjectStatusContext } from '../../context'
+import { useProjectStatusContext } from '../../context'
 import { PERSIST_SECTION_DATA } from '../../reducer'
 import { useFetchListData } from '../ListSection/useFetchListData'
 import { SectionContext } from '../context'
@@ -16,7 +16,7 @@ import { IUncertaintySectionData, IUncertaintySectionState } from './types'
  * the `shouldRenderContent` flag.
  */
 export function useUncertaintySection() {
-  const context = useContext(ProjectStatusContext)
+  const context = useProjectStatusContext()
   const { selectedReport } = context.state
   const { section } = useContext(SectionContext)
   const [state, setState] = useState<IUncertaintySectionState>({ isDataLoaded: false, data: {} })

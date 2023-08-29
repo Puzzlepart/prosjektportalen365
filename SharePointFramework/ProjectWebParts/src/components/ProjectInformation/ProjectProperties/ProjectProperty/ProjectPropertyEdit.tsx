@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 import { useProjectInformationContext } from '../../context'
 import styles from './ProjectProperty.module.scss'
 import { IProjectPropertyProps } from './types'
-import { Label } from '@fluentui/react'
+import { Text } from '@fluentui/react-components'
 
 export const ProjectPropertyEdit: FC<IProjectPropertyProps> = (props) => {
   const context = useProjectInformationContext()
@@ -13,7 +13,9 @@ export const ProjectPropertyEdit: FC<IProjectPropertyProps> = (props) => {
     : false
   return (
     <div className={styles.root} title={props.model.description} style={props.style}>
-      <Label>{props.model.displayName}</Label>
+      <Text weight='semibold' block>
+        {props.model.displayName}
+      </Text>
       <div>
         <Toggle
           offText={strings.ShowFieldExternalUsersOffText}

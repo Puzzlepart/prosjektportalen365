@@ -1,8 +1,7 @@
 import { format } from '@fluentui/react'
-import { PortalDataService } from 'pp365-shared-library/lib/services'
 import strings from 'ProjectWebPartsStrings'
-import { useContext } from 'react'
-import { ProjectStatusContext } from '../context'
+import { PortalDataService } from 'pp365-shared-library/lib/services'
+import { useProjectStatusContext } from '../context'
 import { useEditFormUrl } from './useEditFormUrl'
 
 /**
@@ -14,7 +13,7 @@ import { useEditFormUrl } from './useEditFormUrl'
  * @returns A function callback
  */
 export function useRedirectNewStatusReport() {
-  const context = useContext(ProjectStatusContext)
+  const context = useProjectStatusContext()
   const getEditFormUrl = useEditFormUrl()
   return async () => {
     const portalDataService = await new PortalDataService().configure({

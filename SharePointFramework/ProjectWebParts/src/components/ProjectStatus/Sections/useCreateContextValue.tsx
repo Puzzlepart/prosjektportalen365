@@ -1,6 +1,5 @@
 import { SectionModel } from 'pp365-shared-library/lib/models'
-import { useContext } from 'react'
-import { ProjectStatusContext } from '../context'
+import { useProjectStatusContext } from '../context'
 import { ISectionContext } from './context'
 
 /**
@@ -12,7 +11,7 @@ import { ISectionContext } from './context'
  * @returns A callback function
  */
 export function useCreateContextValue({ iconSize = 30 }) {
-  const context = useContext(ProjectStatusContext)
+  const context = useProjectStatusContext()
   return (section: SectionModel) => {
     let { value, comment } = context.state.selectedReport?.getStatusValue(section.fieldName) ?? {}
     const [columnConfig] = context.state.data.columnConfig.filter(

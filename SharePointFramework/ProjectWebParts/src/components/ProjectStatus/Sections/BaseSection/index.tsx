@@ -1,12 +1,12 @@
 import { Shimmer } from '@fluentui/react'
-import { ProjectStatusContext } from '../../../ProjectStatus/context'
 import { conditionalClassName } from 'pp365-shared-library/lib/util'
-import React, { FC, useContext } from 'react'
+import React, { FC } from 'react'
+import { useProjectStatusContext } from '../../../ProjectStatus/context'
 import styles from './BaseSection.module.scss'
 import { IBaseSectionProps } from './types'
 
 export const BaseSection: FC<IBaseSectionProps> = (props) => {
-  const context = useContext(ProjectStatusContext)
+  const context = useProjectStatusContext()
   return (
     <div
       className={conditionalClassName([

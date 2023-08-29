@@ -1,3 +1,4 @@
+import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 import { Shimmer } from '@fluentui/react/lib/Shimmer'
 import { WebPartTitle } from 'pp365-shared-library'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
@@ -31,7 +32,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
 
   return (
     <ProjectInformationContextProvider value={context}>
-      <div className={styles.root}>
+      <FluentProvider theme={webLightTheme} className={styles.root}>
         <div className={styles.container}>
           <WebPartTitle title={props.title} />
           {context.state.error ? (
@@ -63,7 +64,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
             </Shimmer>
           )}
         </div>
-      </div>
+      </FluentProvider>
       {context.state.confirmActionProps && <ConfirmDialog {...context.state.confirmActionProps} />}
     </ProjectInformationContextProvider>
   )

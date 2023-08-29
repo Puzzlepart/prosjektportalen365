@@ -1,8 +1,7 @@
-import { ProjectStatusContext } from '../../../ProjectStatus/context'
-import { useContext } from 'react'
+import { useProjectStatusContext } from '../../../ProjectStatus/context'
 
 export function useProjectPropertiesSection() {
-  const context = useContext(ProjectStatusContext)
+  const context = useProjectStatusContext()
   return {
     fieldValues: {
       ...context.state.data.properties.fieldValues,

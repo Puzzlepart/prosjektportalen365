@@ -1,8 +1,21 @@
+import {
+  BoxEdit24Filled,
+  BoxEdit24Regular,
+  ContentView24Filled,
+  ContentView24Regular,
+  History24Filled,
+  History24Regular,
+  Info24Filled,
+  Info24Regular,
+  Organization24Filled,
+  Organization24Regular,
+  bundleIcon
+} from '@fluentui/react-icons'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import strings from 'ProjectWebPartsStrings'
 import { useProjectInformationContext } from '../context'
-import { ActionType } from './types'
 import { OPEN_DIALOG, OPEN_PANEL } from '../reducer'
+import { ActionType } from './types'
 
 /**
  * Logic hook for `<Actions />` component.
@@ -15,13 +28,13 @@ export const useActions = () => {
     () => {
       context.dispatch(OPEN_PANEL('AllPropertiesPanel'))
     },
-    'EntryView',
+    bundleIcon(ContentView24Filled, ContentView24Regular),
     false
   ]
   const viewVersionHistoryAction: ActionType = [
     strings.ViewVersionHistoryText,
     context.state.data?.versionHistoryUrl,
-    'History',
+    bundleIcon(History24Filled, History24Regular),
     false,
     !context.state.userHasEditPermission
   ]
@@ -30,14 +43,14 @@ export const useActions = () => {
     () => {
       context.dispatch(OPEN_PANEL('EditPropertiesPanel'))
     },
-    'Edit',
+    bundleIcon(BoxEdit24Filled, BoxEdit24Regular),
     false,
     !context.state.userHasEditPermission
   ]
   const editSiteInformationAction: ActionType = [
     strings.EditSiteInformationText,
     window['_spLaunchSiteSettings'],
-    'Info',
+    bundleIcon(Info24Filled, Info24Regular),
     false,
     !window['_spLaunchSiteSettings'] || !context.state.userHasEditPermission
   ]
@@ -46,7 +59,7 @@ export const useActions = () => {
     () => {
       window.location.href = `${context.props.webServerRelativeUrl}/SitePages/${context.props.adminPageLink}`
     },
-    'Org',
+    bundleIcon(Organization24Filled, Organization24Regular),
     false,
     !context.state.userHasEditPermission
   ]
@@ -55,7 +68,7 @@ export const useActions = () => {
     () => {
       context.dispatch(OPEN_DIALOG('CreateParentDialog'))
     },
-    'Org',
+    bundleIcon(Organization24Filled, Organization24Regular),
     false,
     !context.state.userHasEditPermission
   ]

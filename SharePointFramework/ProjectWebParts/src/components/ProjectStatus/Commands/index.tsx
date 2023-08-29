@@ -1,10 +1,10 @@
 import { CommandBar, Shimmer } from '@fluentui/react'
-import React, { FC, useContext } from 'react'
-import { ProjectStatusContext } from '../context'
+import React, { FC } from 'react'
+import { useProjectStatusContext } from '../context'
 import { useCommands } from './useCommands'
 
 export const Commands: FC = () => {
-  const context = useContext(ProjectStatusContext)
+  const context = useProjectStatusContext()
   const { props } = useCommands()
   return (
     <Shimmer isDataLoaded={context.state.isDataLoaded}>

@@ -1,8 +1,8 @@
 import { getId, IContextualMenuItem, Spinner, SpinnerSize } from '@fluentui/react'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 import strings from 'ProjectWebPartsStrings'
-import React, { useContext } from 'react'
-import { ProjectStatusContext } from '../context'
+import React from 'react'
+import { useProjectStatusContext } from '../context'
 import { REPORT_PUBLISHING } from '../reducer'
 import { useDeleteReport } from './useDeleteReport'
 import { useEditFormUrl } from './useEditFormUrl'
@@ -25,7 +25,7 @@ import { useReportOptions } from './useReportOptions'
  * - `STATUS_ICON`: Renders an icon to indicate the status of the selected report. This command is disabled and only for display purposes.
  */
 export function useCommands() {
-  const context = useContext(ProjectStatusContext)
+  const context = useProjectStatusContext()
   const redirectNewStatusReport = useRedirectNewStatusReport()
   const deleteReport = useDeleteReport()
   const publishReport = usePublishReport()
