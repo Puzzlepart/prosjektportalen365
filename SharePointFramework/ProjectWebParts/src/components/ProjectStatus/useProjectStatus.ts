@@ -1,5 +1,4 @@
 /* eslint-disable prefer-spread */
-import moment from 'moment'
 import { useReducer } from 'react'
 import { IProjectStatusContext } from './context'
 import reducer, { initialState } from './reducer'
@@ -16,13 +15,5 @@ export function useProjectStatus(props: IProjectStatusProps) {
 
   const context: IProjectStatusContext = { props, state, dispatch }
 
-  const formattedDate = state.selectedReport
-    ? moment(state.selectedReport.publishedDate ?? state.selectedReport.created).format(
-        'DD.MM.YYYY'
-      )
-    : null
-
-  const title = [props.title, formattedDate].join(' ')
-
-  return { context, title }
+  return { context }
 }

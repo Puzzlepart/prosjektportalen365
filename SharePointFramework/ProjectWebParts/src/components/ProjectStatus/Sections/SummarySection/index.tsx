@@ -1,8 +1,8 @@
 import { conditionalClassName as className } from 'pp365-shared-library/lib/util'
-import React, { FC, useContext } from 'react'
+import React, { FC } from 'react'
 import { pick } from 'underscore'
 import { ProjectInformation } from '../../../ProjectInformation'
-import { ProjectStatusContext } from '../../../ProjectStatus/context'
+import { useProjectStatusContext } from '../../../ProjectStatus/context'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection'
 import { SectionContext } from '../context'
@@ -11,7 +11,7 @@ import styles from './SummarySection.module.scss'
 import { ISummarySectionProps } from './types'
 
 export const SummarySection: FC<ISummarySectionProps> = (props) => {
-  const context = useContext(ProjectStatusContext)
+  const context = useProjectStatusContext()
   const createContextValue = useCreateContextValue({})
 
   /**

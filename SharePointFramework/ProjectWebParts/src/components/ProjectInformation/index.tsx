@@ -17,7 +17,6 @@ import { ProjectStatusReport } from './ProjectStatusReport'
 import { ProjectInformationContextProvider } from './context'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
-import { WebPartTitle } from 'pp365-shared-library'
 
 /**
  * Display project information. A number of actions are available to the user,

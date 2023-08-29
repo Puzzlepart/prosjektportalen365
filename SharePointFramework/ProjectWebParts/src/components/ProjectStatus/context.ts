@@ -1,6 +1,6 @@
 /* eslint-disable prefer-spread */
 import { AnyAction } from '@reduxjs/toolkit'
-import { createContext } from 'react'
+import { createContext, useContext } from 'react'
 import { IProjectStatusProps, IProjectStatusState } from './types'
 
 export interface IProjectStatusContext {
@@ -10,3 +10,5 @@ export interface IProjectStatusContext {
 }
 
 export const ProjectStatusContext = createContext<IProjectStatusContext>(null)
+
+export const useProjectStatusContext = () => useContext(ProjectStatusContext)

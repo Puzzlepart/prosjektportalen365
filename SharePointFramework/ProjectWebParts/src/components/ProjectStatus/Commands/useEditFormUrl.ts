@@ -1,6 +1,5 @@
 import { StatusReport } from 'pp365-shared-library/lib/models'
-import { useContext } from 'react'
-import { ProjectStatusContext } from '../context'
+import { useProjectStatusContext } from '../context'
 
 /**
  * Returns a function that returns the edit form URL for a report.
@@ -8,7 +7,7 @@ import { ProjectStatusContext } from '../context'
  * @returns A function callback
  */
 export function useEditFormUrl() {
-  const context = useContext(ProjectStatusContext)
+  const context = useProjectStatusContext()
   return (report: StatusReport) => {
     return [
       `${window.location.protocol}//${window.location.hostname}`,
