@@ -1,10 +1,9 @@
 /**
- * @category WebPartTitle
+ * Props for the WebPartTitle component.
  */
 export interface IWebPartTitleProps {
   /**
-   * Text to show as the title
-   *
+   * The title to display in the component.
    */
-  text?: string
+  title?: string
 }

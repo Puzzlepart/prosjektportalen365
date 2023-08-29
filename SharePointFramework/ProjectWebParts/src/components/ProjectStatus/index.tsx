@@ -1,22 +1,22 @@
+import { WebPartTitle } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { Commands } from './Commands'
-import { ProjectStatusContext } from './context'
-import { useProjectStatus } from './useProjectStatus'
-import { Header } from './Header'
 import styles from './ProjectStatus.module.scss'
 import { Sections } from './Sections'
-import { IProjectStatusProps } from './types'
 import { UserMessages } from './UserMessages'
+import { ProjectStatusContext } from './context'
+import { IProjectStatusProps } from './types'
+import { useProjectStatus } from './useProjectStatus'
 
 export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
-  const ctx = useProjectStatus(props)
+  const {context, title} = useProjectStatus(props)
   return (
-    <ProjectStatusContext.Provider {...ctx}>
+    <ProjectStatusContext.Provider value={context}>
       <div className={styles.root}>
         <Commands />
         <div className={styles.container}>
           <UserMessages />
-          <Header />
+          <WebPartTitle title={title} />
           <Sections />
         </div>
       </div>
@@ -29,6 +29,6 @@ ProjectStatus.defaultProps = {
   snapshotAttachmentFileName: 'Snapshot.png'
 }
 
-export * from './types'
-export * from './context'
 export * from './Sections'
+export * from './context'
+export * from './types'
