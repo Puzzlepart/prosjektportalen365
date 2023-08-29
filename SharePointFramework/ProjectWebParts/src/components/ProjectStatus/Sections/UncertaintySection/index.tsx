@@ -5,19 +5,19 @@ import {
   Shimmer,
   ShimmeredDetailsList
 } from '@fluentui/react'
-import { OpportunityMatrix } from '../../../OpportunityMatrix'
-import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FC, useContext } from 'react'
+import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
+import React, { FC } from 'react'
+import { OpportunityMatrix } from '../../../OpportunityMatrix'
 import { RiskMatrix } from '../../../RiskMatrix'
-import { ProjectStatusContext } from '../../context'
 import { StatusElement } from '../../StatusElement'
+import { useProjectStatusContext } from '../../context'
 import { BaseSection } from '../BaseSection'
 import styles from './UncertaintySection.module.scss'
 import { useUncertaintySection } from './useUncertaintySection'
 
 export const UncertaintySection: FC = () => {
-  const context = useContext(ProjectStatusContext)
+  const context = useProjectStatusContext()
   const { state, matrixElements, items, columns, shouldRenderContent } = useUncertaintySection()
 
   /**

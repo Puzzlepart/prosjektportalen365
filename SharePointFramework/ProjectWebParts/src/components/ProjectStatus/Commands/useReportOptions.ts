@@ -1,8 +1,7 @@
 import { IContextualMenuItem } from '@fluentui/react'
-import SPDataAdapter from '../../../data'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
-import { useContext } from 'react'
-import { ProjectStatusContext } from '../context'
+import SPDataAdapter from '../../../data'
+import { useProjectStatusContext } from '../context'
 import { SELECT_REPORT } from '../reducer'
 
 /**
@@ -12,7 +11,7 @@ import { SELECT_REPORT } from '../reducer'
  * determined here based on the `published` property of the report.
  */
 export function useReportOptions() {
-  const context = useContext(ProjectStatusContext)
+  const context = useProjectStatusContext()
   const reportOptions: IContextualMenuItem[] = context.state.data.reports.map((report) => {
     const isCurrent = report.id === context.state.selectedReport?.id
     return {

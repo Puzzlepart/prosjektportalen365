@@ -1,6 +1,5 @@
 import { PortalDataService } from 'pp365-shared-library/lib/services'
-import { useContext } from 'react'
-import { ProjectStatusContext } from '../context'
+import { useProjectStatusContext } from '../context'
 import { REPORT_DELETED, REPORT_DELETE_ERROR } from '../reducer'
 
 /**
@@ -10,7 +9,7 @@ import { REPORT_DELETED, REPORT_DELETE_ERROR } from '../reducer'
  * @returns A function callback
  */
 export function useDeleteReport() {
-  const context = useContext(ProjectStatusContext)
+  const context = useProjectStatusContext()
   return async () => {
     const portalDataService = await new PortalDataService().configure({
       spfxContext: context.props.spfxContext

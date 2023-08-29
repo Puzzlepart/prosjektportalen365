@@ -1,13 +1,13 @@
 import { IColumn } from '@fluentui/react'
+import { AssignFrom } from '@pnp/core'
+import { spfi } from '@pnp/sp'
+import { ICamlQuery } from '@pnp/sp/lists'
 import _ from 'lodash'
 import { SPField } from 'pp365-shared-library/lib/models'
 import { useContext } from 'react'
-import { ProjectStatusContext } from '../../context'
+import { useProjectStatusContext } from '../../context'
 import { SectionContext } from '../context'
 import { IListSectionData } from './types'
-import { ICamlQuery } from '@pnp/sp/lists'
-import { spfi } from '@pnp/sp'
-import { AssignFrom } from '@pnp/core'
 
 const COLUMN_MAX_WIDTH: Record<string, number> = { Text: 250, Note: 250, Choice: 150, Number: 100 }
 
@@ -19,7 +19,7 @@ type UseFetchListDataView = { ListViewXml: string; ViewFields: { Items: string[]
  * @returns A function used to fetch data for `ListSection` and `UncertaintySection`.
  */
 export function useFetchListData() {
-  const context = useContext(ProjectStatusContext)
+  const context = useProjectStatusContext()
   const { section } = useContext(SectionContext)
   return async (): Promise<IListSectionData> => {
     const web = spfi(context.props.webAbsoluteUrl).using(AssignFrom(context.props.sp.web)).web
