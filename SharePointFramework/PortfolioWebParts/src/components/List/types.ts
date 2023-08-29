@@ -1,6 +1,7 @@
-import { IColumn, IScrollablePaneProps, IShimmeredDetailsListProps, Target } from '@fluentui/react'
+import { IColumn, ICommandBarProps, IScrollablePaneProps, IShimmeredDetailsListProps, Target } from '@fluentui/react'
 import { SearchBoxProps } from '@fluentui/react-search-preview'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { IFilterPanelProps } from 'pp365-shared-library'
 
 export type OnColumnContextMenu = {
   column: any
@@ -70,4 +71,14 @@ export interface IListProps<T extends IColumn = IColumn>
    * Error to render in the list if the data fetch or something else fails.
    */
   error?: Error
+
+  /**
+   * Command bar props. 
+   */
+  commandBarProps?: ICommandBarProps
+
+  /**
+   * Filter panel props. 
+   */
+  filterPanelProps?: IFilterPanelProps
 }

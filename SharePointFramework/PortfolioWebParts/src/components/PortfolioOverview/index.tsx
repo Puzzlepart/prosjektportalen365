@@ -14,7 +14,7 @@ import { usePortfolioOverview } from './usePortfolioOverview'
  * Component for displaying a portfolio overview - an overview of all projects in a portfolio.
  */
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
-  const { context, selection, onColumnContextMenu, editViewColumnsPanelProps, searchBoxProps } =
+  const { context, selection, onColumnContextMenu, editViewColumnsPanelProps, searchBoxProps, commandBarProps,filterPanelProps } =
     usePortfolioOverview(props)
 
   return (
@@ -37,6 +37,8 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
             renderTitleProjectInformationPanel={true}
             webPartContext={props.spfxContext as WebPartContext}
             layerHostId={context.layerHostId}
+            commandBarProps={commandBarProps}
+            filterPanelProps={filterPanelProps}
             error={context.state.error}
           />
         </div>

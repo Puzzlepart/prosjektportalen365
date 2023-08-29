@@ -1,8 +1,8 @@
 import { IContextualMenuItem } from '@fluentui/react'
 import { PortfolioOverviewView } from 'pp365-shared-library/lib/models/PortfolioOverviewView'
 import { useContext } from 'react'
-import { PortfolioOverviewContext } from '../../PortfolioOverview/context'
-import { CHANGE_VIEW } from '../../PortfolioOverview/reducer'
+import { PortfolioOverviewContext } from './context'
+import { CHANGE_VIEW } from './reducer'
 
 export function useConvertViewsToContextualMenuItems() {
   const context = useContext(PortfolioOverviewContext)
