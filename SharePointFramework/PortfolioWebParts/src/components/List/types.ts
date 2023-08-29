@@ -3,7 +3,7 @@ import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
 import { SearchBoxProps } from '@fluentui/react-search-preview'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { IFilterPanelProps } from 'pp365-shared-library'
-import { MouseEventHandler } from 'react'
+import { CSSProperties, MouseEventHandler } from 'react'
 
 export type OnColumnContextMenu = {
   column: any
@@ -86,14 +86,61 @@ export interface IListProps<T extends IColumn = IColumn>
 }
 
 /**
- * Represents a menu item in a Toolbar.
+ * Represents a menu item in a list.
  */
 export interface IListMenuItem {
+  /**
+   * The text to display in the menu item.
+   */
   text?: string
+
+  /**
+   * The name of the menu item.
+   */
+  name?: string
+
+  /**
+   * The value of the menu item if it is a MenuItemCheckbox
+   */
+  value?: string
+
+  /**
+   * The icon to display in the menu item.
+   */
   icon?: FluentIcon | string
-  onClick?: MouseEventHandler<HTMLDivElement>
+
+  /**
+   * On click event handler.
+   */
+  onClick?: MouseEventHandler<any>
+
+  /**
+   * Disabled state.
+   */
   disabled?: boolean
+
+  /**
+   * Checked state.
+   */
+  checkedValues?: Record<string, string[]>
+
+  /**
+   * The type of the menu item.
+   */
   type?: 'divider' | 'header' | 'default'
+
+  /**
+   * Custom width of the menu item.
+   */
   width?: string | number
+
+  /**
+   * Custom style of the menu item.
+   */
+  style?: CSSProperties
+
+  /**
+   * Items to render in a sub menu.
+   */
   items?: IListMenuItem[]
 }

@@ -1,8 +1,7 @@
-import _ from 'lodash'
-import { ExcelExportService } from 'pp365-shared-library/lib/services'
+import { ExcelExportService } from 'pp365-shared-library'
 import { useCallback } from 'react'
-import { IPortfolioOverviewContext } from './context'
-import { EXCEL_EXPORT_ERROR, EXCEL_EXPORT_SUCCESS, START_EXCEL_EXPORT } from './reducer'
+import { IPortfolioOverviewContext } from '../context'
+import { EXCEL_EXPORT_ERROR, EXCEL_EXPORT_SUCCESS, START_EXCEL_EXPORT } from '../reducer'
 
 /**
  * Hook that provides functionality for exporting data to Excel.
@@ -19,15 +18,17 @@ export function useExcelExport(context: IPortfolioOverviewContext) {
   const exportToExcel = useCallback(() => {
     context.dispatch(START_EXCEL_EXPORT())
     try {
+      const { selectedItems, columns, currentView } = context.state
+      const { includeViewNameInExcelExportFilename } = context.props
       const items =
-        _.isArray(context.state.selectedItems) && context.state.selectedItems.length > 0
-          ? context.state.selectedItems
-          : context.items
+        selectedItems?.length > 0
+          ? selectedItems
+          : context.state.items
       let fileNamePart: string
-      if (context.props.includeViewNameInExcelExportFilename) {
-        fileNamePart = context.state.currentView?.title.replace(/[^a-z0-9]/gi, '-')
+      if (includeViewNameInExcelExportFilename) {
+        fileNamePart = currentView?.title.replace(/[^a-z0-9]/gi, '-')
       }
-      ExcelExportService.export(items, context.state.columns, fileNamePart)
+      ExcelExportService.export(items, columns, fileNamePart)
       context.dispatch(EXCEL_EXPORT_SUCCESS())
     } catch (error) {
       context.dispatch(EXCEL_EXPORT_ERROR(error))
