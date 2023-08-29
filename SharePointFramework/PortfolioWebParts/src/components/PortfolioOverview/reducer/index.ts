@@ -24,8 +24,8 @@ import {
   TOGGLE_COLUMN_FORM_PANEL,
   TOGGLE_COMPACT,
   TOGGLE_FILTER_PANEL,
-  TOGGLE_EDIT_VIEW_COLUMNS_PANEL,
-  TOGGLE_VIEW_FORM_PANEL
+  SET_EDIT_VIEW_COLUMNS_PANEL,
+  SET_VIEW_FORM_PANEL
 } from './actions'
 import { ProjectColumn } from 'pp365-shared-library'
 
@@ -170,7 +170,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.columns = state.columns.filter((c) => c.id !== payload.columnId)
         state.columnForm = { isOpen: false }
       })
-      .addCase(TOGGLE_EDIT_VIEW_COLUMNS_PANEL, (state, { payload }) => {
+      .addCase(SET_EDIT_VIEW_COLUMNS_PANEL, (state, { payload }) => {
         state.isEditViewColumnsPanelOpen = payload.isOpen
         if (payload.columns) {
           state.currentView.columns = payload.columns
@@ -180,7 +180,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
           state.columns = payload.columns
         }
       })
-      .addCase(TOGGLE_VIEW_FORM_PANEL, (state, { payload }) => {
+      .addCase(SET_VIEW_FORM_PANEL, (state, { payload }) => {
         state.viewForm = payload
       })
   })

@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { SPPortfolioOverviewViewItem } from 'pp365-shared-library'
-import { TOGGLE_VIEW_FORM_PANEL } from '../reducer'
+import { SET_VIEW_FORM_PANEL } from '../reducer'
 import { usePortfolioOverviewContext } from '../usePortfolioOverviewContext'
 import { useEditableView } from './useEditableView'
 
@@ -15,7 +15,7 @@ export function useViewFormPanel() {
    * Dismisses the form panel by dispatching the `TOGGLE_VIEW_FORM_PANEL` action.
    */
   const onDismiss = () => {
-    context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: false }))
+    context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: false }))
   }
 
   /**
@@ -59,7 +59,7 @@ export function useViewFormPanel() {
       }
       await context.props.dataAdapter.portalDataService.addItemToList('PORTFOLIO_VIEWS', properties)
     }
-    context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: false }))
+    context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: false }))
   }
 
   /**

@@ -105,7 +105,10 @@ export interface IListMenuItem {
   value?: string
 
   /**
-   * The icon to display in the menu item.
+   * The icon to display in the menu item. Could either be a
+   * `FluentIcon` or a string representing the icon name. Then
+   * the `<Icon />` component from `@fluentui/react`
+   * will be used.
    */
   icon?: FluentIcon | string
 

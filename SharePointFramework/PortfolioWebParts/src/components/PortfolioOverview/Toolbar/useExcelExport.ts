@@ -20,10 +20,7 @@ export function useExcelExport(context: IPortfolioOverviewContext) {
     try {
       const { selectedItems, columns, currentView } = context.state
       const { includeViewNameInExcelExportFilename } = context.props
-      const items =
-        selectedItems?.length > 0
-          ? selectedItems
-          : context.state.items
+      const items = selectedItems?.length > 0 ? selectedItems : context.state.items
       let fileNamePart: string
       if (includeViewNameInExcelExportFilename) {
         fileNamePart = currentView?.title.replace(/[^a-z0-9]/gi, '-')

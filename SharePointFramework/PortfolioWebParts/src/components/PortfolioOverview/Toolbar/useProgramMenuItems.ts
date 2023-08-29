@@ -1,4 +1,4 @@
-import { IListMenuItem } from 'components/List'
+import { IListMenuItem } from '../../List'
 import { IPortfolioOverviewContext } from '../context'
 import { CHANGE_VIEW } from '../reducer'
 import { PortfolioOverviewView } from 'pp365-shared-library'

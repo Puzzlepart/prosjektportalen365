@@ -1,7 +1,5 @@
 import {
   AppsListRegular,
-  ArrowExportUp24Filled,
-  ArrowExportUp24Regular,
   ContentView24Filled,
   ContentView24Regular,
   Filter24Filled,
@@ -9,18 +7,21 @@ import {
   TextBulletListLtrRegular,
   bundleIcon
 } from '@fluentui/react-icons'
-import { IListMenuItem } from 'components/List'
-import { IPortfolioOverviewContext } from '../context'
-import { TOGGLE_COMPACT, TOGGLE_FILTER_PANEL, TOGGLE_VIEW_FORM_PANEL } from '../reducer'
-import { useExcelExport } from './useExcelExport'
 import strings from 'PortfolioWebPartsStrings'
+import { useMemo } from 'react'
 import _ from 'underscore'
-import { useViewsMenuItems } from './useViewsMenuItems'
-import { useProgramMenuItems } from './useProgramMenuItems'
+import { IListMenuItem } from '../../List'
+import { IPortfolioOverviewContext } from '../context'
+import { TOGGLE_COMPACT, TOGGLE_FILTER_PANEL, SET_VIEW_FORM_PANEL } from '../reducer'
 import { useCheckedValues } from './useCheckedValues'
+import { useExcelExport } from './useExcelExport'
+import { useProgramMenuItems } from './useProgramMenuItems'
+import { useViewsMenuItems } from './useViewsMenuItems'
 
+/**
+ * Object containing icons used in the toolbar.
+ */
 const Icons = {
-  ArrowExportUp: bundleIcon(ArrowExportUp24Filled, ArrowExportUp24Regular),
   ContentView: bundleIcon(ContentView24Filled, ContentView24Regular),
   Filter: bundleIcon(Filter24Filled, Filter24Regular)
 }
@@ -37,15 +38,14 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
     !context.props.isParentProject && context.props.configuration.userCanAddViews
 
   const { exportToExcel } = useExcelExport(context)
-
   const sharedViews = useViewsMenuItems(context, (view) => !view.isPersonal)
   const personalViews = useViewsMenuItems(context, (view) => view.isPersonal)
   const programViews = useProgramMenuItems(context)
   const checkedValues = useCheckedValues(context)
 
-  const menuItems = [
+  const menuItems = useMemo<IListMenuItem[]>(() => ([
     {
-      icon: Icons.ArrowExportUp,
+      icon: 'ExcelLogoInverse',
       onClick: () => {
         exportToExcel()
       }
@@ -108,7 +108,7 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
           ({
             text: strings.NewViewText,
             onClick: () => {
-              context.dispatch(TOGGLE_VIEW_FORM_PANEL({ isOpen: true }))
+              context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
             }
           } as IListMenuItem),
         userCanManageViews &&
@@ -117,7 +117,7 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
             disabled: context.state.currentView?.isProgramView,
             onClick: () => {
               context.dispatch(
-                TOGGLE_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
+                SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
               )
             }
           } as IListMenuItem)
@@ -129,7 +129,8 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
         context.dispatch(TOGGLE_FILTER_PANEL())
       }
     } as IListMenuItem
-  ].filter(Boolean) as IListMenuItem[]
+  ].filter(Boolean)
+  ), [context.state, context.props])
 
   return menuItems
 }

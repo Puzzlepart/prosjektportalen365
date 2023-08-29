@@ -18,7 +18,7 @@ import { useDefaultColumns } from './useDefaultColumns'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 import { usePortfolioAggregationDataFetch } from './usePortfolioAggregationDataFetch'
 import { usePortfolioAggregationFilteredItems } from './usePortfolioAggregationFilteredItems'
-import { useCommandBar } from './useCommandBar'
+import { useToolbarItems } from './Toolbar/useToolbarItems'
 
 /**
  * Component logic hook for the Portfolio Aggregation component. This
@@ -63,7 +63,7 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
     () => ({
       isOpen: context.state.isFilterPanelOpen,
       layerHostId: context.layerHostId,
-      onDismiss: () => context.dispatch(TOGGLE_FILTER_PANEL({ isOpen: false })),
+      onDismiss: () => context.dispatch(TOGGLE_FILTER_PANEL()),
       filters: context.state.filters,
       onFilterChange: (column: ProjectContentColumn, selectedItems) => {
         context.dispatch(ON_FILTER_CHANGE({ column, selectedItems }))
@@ -72,14 +72,14 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
     [context.state.isFilterPanelOpen, context.layerHostId, context.state.filters]
   )
 
-  const commandBarProps = useCommandBar(context)
+  const menuItems = useToolbarItems(context)
 
   return {
     context,
     editViewColumnsPanelProps,
     onColumnContextMenu,
     searchBox,
-    commandBarProps,
+    menuItems,
     filterPanelProps
   } as const
 }
