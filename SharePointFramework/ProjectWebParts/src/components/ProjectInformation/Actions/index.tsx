@@ -24,7 +24,8 @@ export const Actions: FC = () => {
               icon={<Icon />}
               iconPosition='before'
               onClick={onClick}
-              disabled={disabled}>
+              disabled={disabled}
+            >
               <span className={styles.label}>{text}</span>
             </Button>
           </div>

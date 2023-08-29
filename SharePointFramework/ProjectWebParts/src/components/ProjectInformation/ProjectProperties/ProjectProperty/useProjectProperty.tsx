@@ -34,9 +34,11 @@ export function useProjectProperty(props: IProjectPropertyProps) {
               avatar={{
                 image: {
                   src: user.imageUrl
-                },
+                }
               }}
-              style={{ marginTop: 6 }} />)
+              style={{ marginTop: 6 }}
+            />
+          )
         }
       ],
       [
@@ -53,7 +55,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
                   avatar={{
                     image: {
                       src: user.imageUrl
-                    },
+                    }
                   }}
                   style={{ marginTop: 6 }}
                 />

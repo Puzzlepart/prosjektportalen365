@@ -32,4 +32,4 @@ ProjectStatus.defaultProps = {
 export * from './Sections'
 export * from './context'
 export * from './types'
-
+export * from './Header'

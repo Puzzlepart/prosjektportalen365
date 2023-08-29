@@ -3,8 +3,6 @@ import React, { FC } from 'react'
 import { useHeader } from './useHeader'
 
 export const Header: FC = () => {
-    const { title } = useHeader()
-    return (
-        <WebPartTitle title={title} />
-    )
+  const { title } = useHeader()
+  return <WebPartTitle title={title} />
 }
