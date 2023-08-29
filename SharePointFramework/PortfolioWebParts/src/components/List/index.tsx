@@ -5,13 +5,12 @@ import {
   ScrollablePane,
   ScrollbarVisibility,
   SelectionMode,
-  ShimmeredDetailsList,
-  Target
+  ShimmeredDetailsList
 } from '@fluentui/react'
 import React, { FC } from 'react'
+import { ListContext } from './context'
 import { IListProps } from './types'
 import { useList } from './useList'
-import { ListContext } from './context'
 
 /**
  * List component using `ShimmeredDetailsList` from `@fluentui/react`.
@@ -24,15 +23,7 @@ export const List: FC<IListProps<any>> = (props) => {
     <ListContext.Provider value={{ props: listProps }}>
       <ScrollablePane {...props.scrollablePane}>
         <MarqueeSelection selection={props.selection}>
-          <ShimmeredDetailsList
-            {...listProps}
-            onColumnHeaderClick={(event, column) =>
-              props.onColumnContextMenu({ column, target: event.target as Target })
-            }
-            onColumnHeaderContextMenu={(column, event) =>
-              props.onColumnContextMenu({ column, target: event.target as Target })
-            }
-          />
+          <ShimmeredDetailsList      {...listProps} />
         </MarqueeSelection>
         {props.layerHostId && <LayerHost id={props.layerHostId} />}
       </ScrollablePane>
@@ -53,3 +44,4 @@ List.defaultProps = {
 export * from './ItemColumn'
 export * from './types'
 export * from './useAddColumn'
+
