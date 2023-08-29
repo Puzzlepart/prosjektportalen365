@@ -16,11 +16,12 @@ import createReducer, {
   getInitialState
 } from './reducer'
 import { IPortfolioOverviewProps } from './types'
-import { useCommandBar } from './useCommandBar'
+import { useToolbarItems } from './useToolbarItems'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 import { useFetchData } from './useFetchData'
 import { useFilteredData } from './useFilteredData'
 import { usePersistedColumns } from './usePersistedColumns'
+import { usePortfolioOverviewFilters } from './usePortfolioOverviewFilters'
 
 /**
  * Component logic hook for `PortfolioOverview` component.
@@ -75,7 +76,8 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
     hidden: !props.showSearchBox
   }
 
-  const { commandBarProps, filters } = useCommandBar(context)
+  const filters = usePortfolioOverviewFilters(context)
+  const menuItems = useToolbarItems(context)
 
   const filterPanelProps: IFilterPanelProps = useMemo(
     () => ({
@@ -100,7 +102,7 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
     onColumnContextMenu,
     editViewColumnsPanelProps,
     searchBoxProps,
-    commandBarProps,
+    menuItems,
     filterPanelProps
   } as const
 }

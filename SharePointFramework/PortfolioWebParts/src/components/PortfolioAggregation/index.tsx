@@ -12,14 +12,8 @@ import { IPortfolioAggregationProps } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
-  const {
-    context,
-    searchBox,
-    editViewColumnsPanelProps,
-    onColumnContextMenu,
-    commandBarProps,
-    filterPanelProps
-  } = usePortfolioAggregation(props)
+  const { context, searchBox, editViewColumnsPanelProps, onColumnContextMenu, filterPanelProps } =
+    usePortfolioAggregation(props)
 
   return (
     <div className={styles.root}>
@@ -46,7 +40,6 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             }}
             webPartContext={props.spfxContext as WebPartContext}
             layerHostId={context.layerHostId}
-            commandBarProps={commandBarProps}
             filterPanelProps={filterPanelProps}
             error={context.state.error}
           />

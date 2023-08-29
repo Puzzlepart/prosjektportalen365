@@ -20,7 +20,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
     onColumnContextMenu,
     editViewColumnsPanelProps,
     searchBoxProps,
-    commandBarProps,
+    menuItems,
     filterPanelProps
   } = usePortfolioOverview(props)
 
@@ -44,7 +44,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
             renderTitleProjectInformationPanel={true}
             webPartContext={props.spfxContext as WebPartContext}
             layerHostId={context.layerHostId}
-            commandBarProps={commandBarProps}
+            menuItems={menuItems}
             filterPanelProps={filterPanelProps}
             error={context.state.error}
           />

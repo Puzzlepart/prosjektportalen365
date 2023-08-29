@@ -5,7 +5,7 @@ import styles from './ListHeader.module.scss'
 import { IListHeaderProps } from './types'
 import strings from 'PortfolioWebPartsStrings'
 import { WebPartTitle } from 'pp365-shared-library'
-import { Commands } from '../Commands'
+import { ListToolbar } from '../ListToolbar'
 import { SearchBox } from '@fluentui/react-search-preview'
 import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
@@ -38,7 +38,6 @@ const ListHeader: FC<IListHeaderProps> = (props) => {
           >
             <SearchBox
               className={styles.searchBox}
-              // disabled={!state.isDataLoaded || isEmpty(state.projects)}
               placeholder={strings.SearchBoxPlaceholderFallbackText}
               aria-label={strings.SearchBoxPlaceholderFallbackText}
               title={strings.SearchBoxPlaceholderFallbackText}
@@ -47,7 +46,7 @@ const ListHeader: FC<IListHeaderProps> = (props) => {
               {...props.searchBox}
             />
           </div>
-          <Commands />
+          <ListToolbar />
         </div>
         {props.defaultRender && (
           <div className={styles.headerColumns} hidden={hasError}>
