@@ -1,15 +1,15 @@
 import { Panel, TextField, Toggle } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ColumnSearchPropertyField, FormFieldContainer } from 'pp365-shared-library'
-import React, { FC, useContext } from 'react'
+import React, { FC } from 'react'
 import { ColumnDataTypeField } from '../../List/ItemColumn/ColumnDataTypeField'
-import { PortfolioAggregationContext } from '../context'
+import { usePortfolioAggregationContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
 import { useColumnFormPanel } from './useColumnFormPanel'
 
 export const ColumnFormPanel: FC = () => {
-  const context = useContext(PortfolioAggregationContext)
+  const context = usePortfolioAggregationContext()
   const {
     onSave,
     isSaveDisabled,

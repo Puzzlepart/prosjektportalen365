@@ -4,8 +4,8 @@ import {
   SPDataSourceItem,
   SPProjectContentColumnItem
 } from 'pp365-shared-library'
-import { useContext, useState } from 'react'
-import { PortfolioAggregationContext } from '../context'
+import { useState } from 'react'
+import { usePortfolioAggregationContext } from '../context'
 import { ADD_COLUMN, DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import { useEditableColumn } from './useEditableColumn'
 
@@ -14,7 +14,7 @@ import { useEditableColumn } from './useEditableColumn'
  * Also provides methods for saving and deleting columns.
  */
 export function useColumnFormPanel() {
-  const context = useContext(PortfolioAggregationContext)
+  const context = usePortfolioAggregationContext()
   const { column, setColumn, setColumnData, isEditing } = useEditableColumn()
   const [persistRenderGlobally, setPersistRenderGlobally] = useState(false)
 

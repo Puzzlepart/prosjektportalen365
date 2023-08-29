@@ -9,7 +9,7 @@ import { useExcelExport } from './useExcelExport'
 import { usePortfolioOverviewFilters } from './usePortfolioOverviewFilters'
 
 /**
- * A custom hook that returns the command bar properties and filters for the Portfolio Overview web part.
+ * A custom hook that returns the command bar properties and filters for the Portfolio Overview component.
  *
  * @param context - The Portfolio Overview context object.
  *
