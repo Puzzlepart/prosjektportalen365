@@ -1,4 +1,4 @@
-import { Avatar, TableCellLayout, TableColumnDefinition } from '@fluentui/react-components'
+import { Avatar, Link, TableCellLayout, TableColumnDefinition } from '@fluentui/react-components'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectListModel, ProjectLogo } from 'pp365-shared-library'
 import React, { useContext } from 'react'
@@ -47,9 +47,9 @@ export const useColumns = (): IListColumn[] => {
         return (
           <TableCellLayout truncate title={item.title}>
             {item.hasUserAccess ? (
-              <a href={item.url} target='_blank' rel='noreferrer'>
+              <Link href={item.url} target='_blank' title={item.title}>
                 {item.title}
-              </a>
+              </Link>
             ) : (
               <>{item.title}</>
             )}
