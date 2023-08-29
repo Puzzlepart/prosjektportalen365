@@ -46,12 +46,7 @@ List.defaultProps = {
   selectionMode: SelectionMode.multiple,
   constrainMode: ConstrainMode.unconstrained,
   scrollablePane: {
-    scrollbarVisibility: ScrollbarVisibility.auto,
-    styles: {
-      root: {
-        top: 75
-      }
-    }
+    scrollbarVisibility: ScrollbarVisibility.auto
   }
 }
 

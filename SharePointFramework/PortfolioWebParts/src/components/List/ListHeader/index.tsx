@@ -1,17 +1,14 @@
-import {
-  IDetailsHeaderProps,
-  IRenderFunction,
-  MessageBarType,
-  Sticky,
-  StickyPositionType
-} from '@fluentui/react'
-import { SearchBox } from '@fluentui/react/lib/SearchBox'
+import { IDetailsHeaderProps, IRenderFunction, Sticky, StickyPositionType } from '@fluentui/react'
 import React, { FC, useMemo } from 'react'
 import { IListProps } from '../types'
 import styles from './ListHeader.module.scss'
 import { IListHeaderProps } from './types'
 import strings from 'PortfolioWebPartsStrings'
-import { UserMessage, WebPartTitle } from 'pp365-shared-library'
+import { WebPartTitle } from 'pp365-shared-library'
+import { Commands } from '../Commands'
+import { SearchBox } from '@fluentui/react-search-preview'
+import { FluentProvider, webLightTheme } from '@fluentui/react-components'
+import { Alert } from '@fluentui/react-components/unstable'
 
 /**
  * Component for displaying a Sticky list header.
@@ -24,25 +21,40 @@ const ListHeader: FC<IListHeaderProps> = (props) => {
       stickyPosition={StickyPositionType.Header}
       isScrollSynced={true}
     >
-      <div className={styles.root}>
-        <WebPartTitle text={props.title} />
+      <FluentProvider className={styles.root} theme={webLightTheme}>
+        <div className={styles.header}>
+          <WebPartTitle text={props.title} />
+        </div>
+
         {hasError && (
           <div className={styles.errorContainer}>
-            <UserMessage type={MessageBarType.error} text={props.error.message} />
+            <Alert intent='error'>{props.error.message}</Alert>
           </div>
         )}
-        <div
-          className={styles.searchBoxContainer}
-          hidden={!props.searchBox || props?.searchBox?.hidden || hasError}
-        >
-          <SearchBox placeholder={strings.SearchBoxPlaceholderFallbackText} {...props.searchBox} />
+        <div className={styles.commandBar}>
+          <div
+            className={styles.search}
+            hidden={!props.searchBox || props?.searchBox?.hidden || hasError}
+          >
+            <SearchBox
+              className={styles.searchBox}
+              // disabled={!state.isDataLoaded || isEmpty(state.projects)}
+              placeholder={strings.SearchBoxPlaceholderFallbackText}
+              aria-label={strings.SearchBoxPlaceholderFallbackText}
+              title={strings.SearchBoxPlaceholderFallbackText}
+              size='large'
+              appearance='filled-lighter'
+              {...props.searchBox}
+            />
+          </div>
+          <Commands />
         </div>
         {props.defaultRender && (
           <div className={styles.headerColumns} hidden={hasError}>
             {props.defaultRender(props.headerProps)}
           </div>
         )}
-      </div>
+      </FluentProvider>
     </Sticky>
   )
 }

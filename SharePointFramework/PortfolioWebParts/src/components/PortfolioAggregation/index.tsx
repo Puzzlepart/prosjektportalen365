@@ -18,8 +18,7 @@ import { usePortfolioAggregation } from './usePortfolioAggregation'
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
   // const { context, searchBox, editViewColumnsPanelProps, onColumnContextMenu } =
   //   usePortfolioAggregation(props)
-    const { context} =
-    usePortfolioAggregation(props)
+  const { context } = usePortfolioAggregation(props)
 
   return (
     <div className={styles.root}>

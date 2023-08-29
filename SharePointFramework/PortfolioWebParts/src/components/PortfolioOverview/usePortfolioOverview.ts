@@ -1,4 +1,4 @@
-import { ISearchBoxProps, Selection, format } from '@fluentui/react'
+import { Selection, format } from '@fluentui/react'
 import { useId } from '@fluentui/react-hooks'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { useMemo, useReducer } from 'react'
@@ -16,6 +16,7 @@ import { useFilteredData } from './useFilteredData'
 import { usePersistedColumns } from './usePersistedColumns'
 import strings from 'PortfolioWebPartsStrings'
 import { OnColumnContextMenu } from '../List'
+import { SearchBoxProps } from '@fluentui/react-search-preview'
 
 /**
  * Component logic hook for `PortfolioOverview` component.
@@ -60,12 +61,14 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
 
   const editViewColumnsPanelProps = useEditViewColumnsPanel(context)
 
-  const searchBoxProps: ISearchBoxProps = {
+  const searchBoxProps: SearchBoxProps = {
     placeholder: !!context.state.currentView
       ? format(strings.SearchBoxPlaceholderText, context.state.currentView.title.toLowerCase())
       : strings.SearchBoxPlaceholderFallbackText,
-    onChange: (_, searchTerm) => context.dispatch(EXECUTE_SEARCH(searchTerm)),
-    onClear: () => context.dispatch(EXECUTE_SEARCH('')),
+    onChange: (_, data) => {
+      context.dispatch(EXECUTE_SEARCH(data?.value))
+    },
+    // onClear: () => context.dispatch(EXECUTE_SEARCH('')),
     hidden: !props.showSearchBox
   }
 

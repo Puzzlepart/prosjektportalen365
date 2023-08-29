@@ -1,27 +1,40 @@
 .sticky {
-    margin: 0;
+  margin: 0;
 }
 
 .root {
-    .header {
-        padding: 0 32px 20px 32px;
+  .header {
+    padding: 20px 32px;
+  }
 
-        .title {
-            font-size: 28px;
-            font-weight: 100;
-            margin: 0;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
+  .commandBar {
+    display: flex;
+    flex-direction: row;
+    max-width: 100%;
+    gap: 15px;
+
+    .search {
+      width: 100%;
+      max-width: 100%;
+      padding-left: 32px;
+
+      .searchBox {
+        box-shadow: var(--shadow2);
+        width: inherit;
+        max-width: inherit;
+      }
     }
-    .errorContainer {
-        padding: 23px 32px 23px 32px;
-    }
-    .searchBoxContainer {
-        padding: 23px 32px 23px 32px;
-    }
-    .headerColumns {
-        position: inherit;
-    }
+  }
+
+  .filter {
+    box-shadow: var(--shadow2);
+  }
+
+  .headerColumns {
+    position: inherit;
+  }
+
+  .errorContainer {
+    padding: 23px 32px 23px 32px;
+  }
 }
