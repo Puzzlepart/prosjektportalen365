@@ -2,15 +2,20 @@ import { ContextualMenuItemType, ICommandBarProps, IContextualMenuItem } from '@
 import * as strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import { PortfolioOverviewView } from 'pp365-shared-library'
-import { useContext } from 'react'
-import { PortfolioOverviewContext } from './context'
+import { IPortfolioOverviewContext } from './context'
 import { CHANGE_VIEW, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL, TOGGLE_VIEW_FORM_PANEL } from './reducer'
 import { useConvertViewsToContextualMenuItems } from './useConvertViewsToContextualMenuItems'
 import { useExcelExport } from './useExcelExport'
 import { usePortfolioOverviewFilters } from './usePortfolioOverviewFilters'
 
-export function useCommandBar() {
-  const context = useContext(PortfolioOverviewContext)
+/**
+ * A custom hook that returns the command bar properties and filters for the Portfolio Overview web part.
+ *
+ * @param context - The Portfolio Overview context object.
+ *
+ * @returns An object containing the command bar properties and filters.
+ */
+export function useCommandBar(context: IPortfolioOverviewContext) {
   const filters = usePortfolioOverviewFilters()
   const convertViewsToContextualMenuItems = useConvertViewsToContextualMenuItems()
   const { exportToExcelContextualMenuItem } = useExcelExport()
@@ -84,22 +89,22 @@ export function useCommandBar() {
       subMenuProps: {
         items: context.props.configuration.programs.map(
           (p) =>
-          ({
-            key: p.id,
-            text: p.name,
-            canCheck: true,
-            checked: context.state.currentView?.id === p.id,
-            onClick: () => {
-              const defaultView = context.props.configuration.views.find((v) => v.isDefaultView)
-              if (!defaultView) return
-              const view = new PortfolioOverviewView().configureFrom(defaultView).set({
-                id: p.id,
-                title: p.name
-              })
-              view.searchQueries = p.buildQueries(defaultView.searchQuery)
-              context.dispatch(CHANGE_VIEW(view))
-            }
-          } as IContextualMenuItem)
+            ({
+              key: p.id,
+              text: p.name,
+              canCheck: true,
+              checked: context.state.currentView?.id === p.id,
+              onClick: () => {
+                const defaultView = context.props.configuration.views.find((v) => v.isDefaultView)
+                if (!defaultView) return
+                const view = new PortfolioOverviewView().configureFrom(defaultView).set({
+                  id: p.id,
+                  title: p.name
+                })
+                view.searchQueries = p.buildQueries(defaultView.searchQuery)
+                context.dispatch(CHANGE_VIEW(view))
+              }
+            } as IContextualMenuItem)
         )
       }
     }

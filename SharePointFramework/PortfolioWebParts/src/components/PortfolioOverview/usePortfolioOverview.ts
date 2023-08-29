@@ -72,21 +72,23 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
     onChange: (_, data) => {
       context.dispatch(EXECUTE_SEARCH(data?.value))
     },
-    // onClear: () => context.dispatch(EXECUTE_SEARCH('')),
     hidden: !props.showSearchBox
   }
 
-  const { commandBarProps, filters } = useCommandBar()
+  const { commandBarProps, filters } = useCommandBar(context)
 
-  const filterPanelProps: IFilterPanelProps = useMemo(() => ({
-    isOpen: context.state.isFilterPanelOpen,
-    layerHostId: context.layerHostId,
-    onDismiss:() => context.dispatch(TOGGLE_FILTER_PANEL()),
-    filters: filters,
-    onFilterChange: (column: ProjectColumn, selectedItems: IFilterItemProps[]) => {
-      context.dispatch(ON_FILTER_CHANGED({ column, selectedItems }))
-    }
-  }), [context.state.isFilterPanelOpen, context.layerHostId, filters])
+  const filterPanelProps: IFilterPanelProps = useMemo(
+    () => ({
+      isOpen: context.state.isFilterPanelOpen,
+      layerHostId: context.layerHostId,
+      onDismiss: () => context.dispatch(TOGGLE_FILTER_PANEL()),
+      filters: filters,
+      onFilterChange: (column: ProjectColumn, selectedItems: IFilterItemProps[]) => {
+        context.dispatch(ON_FILTER_CHANGED({ column, selectedItems }))
+      }
+    }),
+    [context.state.isFilterPanelOpen, context.layerHostId, filters]
+  )
 
   return {
     context: {

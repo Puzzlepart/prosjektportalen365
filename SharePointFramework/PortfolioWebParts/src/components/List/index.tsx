@@ -23,7 +23,7 @@ export const List: FC<IListProps<any>> = (props) => {
     <ListContext.Provider value={{ props: listProps }}>
       <ScrollablePane {...props.scrollablePane}>
         <MarqueeSelection selection={props.selection}>
-          <ShimmeredDetailsList      {...listProps} />
+          <ShimmeredDetailsList {...listProps} />
         </MarqueeSelection>
         {props.layerHostId && <LayerHost id={props.layerHostId} />}
       </ScrollablePane>
@@ -44,4 +44,3 @@ List.defaultProps = {
 export * from './ItemColumn'
 export * from './types'
 export * from './useAddColumn'
-

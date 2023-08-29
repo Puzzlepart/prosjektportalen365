@@ -1,29 +1,29 @@
-// import strings from 'PortfolioWebPartsStrings'
-// import { ProjectContentColumn } from 'pp365-shared-library'
-// import { FilterPanel } from 'pp365-shared-library/lib/components/FilterPanel'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
 import React, { FC } from 'react'
-// import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
-// import { List } from '../List'
-// import { ColumnContextMenu } from './ColumnContextMenu'
-// import { ColumnFormPanel } from './ColumnFormPanel'
-// import { Commands } from './Commands'
+import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
+import { List } from '../List'
+import { ColumnContextMenu } from './ColumnContextMenu'
+import { ColumnFormPanel } from './ColumnFormPanel'
 import styles from './PortfolioAggregation.module.scss'
-// import { ViewFormPanel } from './ViewFormPanel'
+import { ViewFormPanel } from './ViewFormPanel'
 import { PortfolioAggregationContext } from './context'
-// import { ON_FILTER_CHANGE, SET_ALL_COLLAPSED, SET_COLLAPSED, TOGGLE_FILTER_PANEL } from './reducer'
+import { SET_ALL_COLLAPSED, SET_COLLAPSED } from './reducer'
 import { IPortfolioAggregationProps } from './types'
 import { usePortfolioAggregation } from './usePortfolioAggregation'
-// import { WebPartContext } from '@microsoft/sp-webpart-base'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
-  // const { context, searchBox, editViewColumnsPanelProps, onColumnContextMenu } =
-  //   usePortfolioAggregation(props)
-  const { context } = usePortfolioAggregation(props)
+  const {
+    context,
+    searchBox,
+    editViewColumnsPanelProps,
+    onColumnContextMenu,
+    commandBarProps,
+    filterPanelProps
+  } = usePortfolioAggregation(props)
 
   return (
     <div className={styles.root}>
       <PortfolioAggregationContext.Provider value={context}>
-        {/* <Commands />
         <div className={styles.container}>
           <List
             key={context.state.currentView?.id}
@@ -46,6 +46,8 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             }}
             webPartContext={props.spfxContext as WebPartContext}
             layerHostId={context.layerHostId}
+            commandBarProps={commandBarProps}
+            filterPanelProps={filterPanelProps}
             error={context.state.error}
           />
         </div>
@@ -53,17 +55,6 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
         <ColumnFormPanel />
         <EditViewColumnsPanel {...editViewColumnsPanelProps} />
         <ViewFormPanel />
-        <FilterPanel
-          isOpen={context.state.isFilterPanelOpen}
-          layerHostId={context.layerHostId}
-          headerText={strings.FiltersString}
-          onDismiss={() => context.dispatch(TOGGLE_FILTER_PANEL({ isOpen: false }))}
-          isLightDismiss={true}
-          filters={context.state.filters}
-          onFilterChange={(column: ProjectContentColumn, selectedItems) => {
-            context.dispatch(ON_FILTER_CHANGE({ column, selectedItems }))
-          }}
-        /> */}
       </PortfolioAggregationContext.Provider>
     </div>
   )

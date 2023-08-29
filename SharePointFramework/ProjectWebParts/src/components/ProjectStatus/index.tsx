@@ -9,7 +9,7 @@ import { IProjectStatusProps } from './types'
 import { useProjectStatus } from './useProjectStatus'
 
 export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
-  const {context, title} = useProjectStatus(props)
+  const { context, title } = useProjectStatus(props)
   return (
     <ProjectStatusContext.Provider value={context}>
       <div className={styles.root}>

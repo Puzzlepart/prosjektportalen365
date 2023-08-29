@@ -1,4 +1,10 @@
-import { IColumn, ICommandBarProps, IScrollablePaneProps, IShimmeredDetailsListProps, Target } from '@fluentui/react'
+import {
+  IColumn,
+  ICommandBarProps,
+  IScrollablePaneProps,
+  IShimmeredDetailsListProps,
+  Target
+} from '@fluentui/react'
 import { SearchBoxProps } from '@fluentui/react-search-preview'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { IFilterPanelProps } from 'pp365-shared-library'
@@ -73,12 +79,12 @@ export interface IListProps<T extends IColumn = IColumn>
   error?: Error
 
   /**
-   * Command bar props. 
+   * Command bar props.
    */
   commandBarProps?: ICommandBarProps
 
   /**
-   * Filter panel props. 
+   * Filter panel props.
    */
   filterPanelProps?: IFilterPanelProps
 }

@@ -14,8 +14,15 @@ import { usePortfolioOverview } from './usePortfolioOverview'
  * Component for displaying a portfolio overview - an overview of all projects in a portfolio.
  */
 export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
-  const { context, selection, onColumnContextMenu, editViewColumnsPanelProps, searchBoxProps, commandBarProps,filterPanelProps } =
-    usePortfolioOverview(props)
+  const {
+    context,
+    selection,
+    onColumnContextMenu,
+    editViewColumnsPanelProps,
+    searchBoxProps,
+    commandBarProps,
+    filterPanelProps
+  } = usePortfolioOverview(props)
 
   return (
     <div className={styles.root}>
