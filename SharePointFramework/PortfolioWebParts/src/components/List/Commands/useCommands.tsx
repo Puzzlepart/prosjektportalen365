@@ -3,14 +3,14 @@ import * as strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import { PortfolioOverviewView } from 'pp365-shared-library/lib/models/PortfolioOverviewView'
 import { useContext } from 'react'
-import { PortfolioOverviewContext } from '../context'
+import { PortfolioOverviewContext } from '../../PortfolioOverview/context'
 import {
   CHANGE_VIEW,
   TOGGLE_COMPACT,
   TOGGLE_FILTER_PANEL,
   TOGGLE_VIEW_FORM_PANEL
-} from '../reducer'
-import { usePortfolioOverviewFilters } from '../usePortfolioOverviewFilters'
+} from '../../PortfolioOverview/reducer'
+import { usePortfolioOverviewFilters } from '../../PortfolioOverview/usePortfolioOverviewFilters'
 import { useConvertViewsToContextualMenuItems } from './useConvertViewsToContextualMenuItems'
 import { useExcelExport } from './useExcelExport'
 

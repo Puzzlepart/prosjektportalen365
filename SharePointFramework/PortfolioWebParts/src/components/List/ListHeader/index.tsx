@@ -11,7 +11,7 @@ import { IListProps } from '../types'
 import styles from './ListHeader.module.scss'
 import { IListHeaderProps } from './types'
 import strings from 'PortfolioWebPartsStrings'
-import { UserMessage } from 'pp365-shared-library'
+import { UserMessage, WebPartTitle } from 'pp365-shared-library'
 
 /**
  * Component for displaying a Sticky list header.
@@ -25,9 +25,7 @@ const ListHeader: FC<IListHeaderProps> = (props) => {
       isScrollSynced={true}
     >
       <div className={styles.root}>
-        <div className={styles.header}>
-          <div className={styles.title}>{props.title}</div>
-        </div>
+        <WebPartTitle text={props.title} />
         {hasError && (
           <div className={styles.errorContainer}>
             <UserMessage type={MessageBarType.error} text={props.error.message} />

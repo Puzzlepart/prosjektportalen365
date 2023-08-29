@@ -3,8 +3,8 @@ import * as strings from 'PortfolioWebPartsStrings'
 import { FilterPanel, IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { ProjectColumn } from 'pp365-shared-library/lib/models'
 import React, { FC, useContext } from 'react'
-import { PortfolioOverviewContext } from '../context'
-import { ON_FILTER_CHANGED, TOGGLE_FILTER_PANEL } from '../reducer'
+import { PortfolioOverviewContext } from '../../PortfolioOverview/context'
+import { ON_FILTER_CHANGED, TOGGLE_FILTER_PANEL } from '../../PortfolioOverview/reducer'
 import { useCommands } from './useCommands'
 
 /**
