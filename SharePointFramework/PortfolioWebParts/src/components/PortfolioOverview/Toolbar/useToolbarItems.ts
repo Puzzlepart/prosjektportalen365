@@ -47,8 +47,7 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
   const checkedValues = useMemo(
     () => ({
       views: [context.state.currentView?.id.toString()],
-      renderMode: context.state.isCompact ? ['compactList'] : ['list'],
-      programs: [context.state.currentView?.id.toString()]
+      renderMode: context.state.isCompact ? ['compactList'] : ['list']
     }),
     [context.state.currentView?.id, context.state.isCompact]
   )
@@ -61,7 +60,7 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
         }),
         new ListMenuItem(context.state.currentView?.title)
           .setIcon(Icons.ContentView)
-          .setWidth(220)
+          .setWidth(300)
           .setItems(
             [
               new ListMenuItem(strings.ListViewText)

@@ -4,9 +4,10 @@ import {
   MenuItemCheckbox,
   MenuList,
   MenuPopover,
+  MenuProps,
   MenuTrigger
 } from '@fluentui/react-components'
-import React from 'react'
+import React, { useState } from 'react'
 import { createStyle } from './createStyle'
 import { createIcon } from './createIcon'
 import { ListMenuItem } from './types'
@@ -19,10 +20,11 @@ import { renderToolbarButton } from './renderToolbarButton'
  * Otherwise, it will render a regular `MenuItem`.
  *
  * @param item - The `IListMenuItem` to render.
+ * @param closeMenu - A function that closes the menu.
  *
  * @returns The rendered `MenuItem`, `MenuItemCheckbox`, or `Menu` (if `item` has `items`).
  */
-export function renderMenuItem(item: ListMenuItem) {
+export function renderMenuItem(item: ListMenuItem, closeMenu?: () => void) {
   if (item.value) {
     return (
       <MenuItemCheckbox
@@ -32,7 +34,10 @@ export function renderMenuItem(item: ListMenuItem) {
         icon={createIcon(item)}
         style={createStyle(item)}
         disabled={item.disabled}
-        onClick={item.onClick}
+        onClick={(e) => {
+          item.onClick(e)
+          closeMenu && closeMenu()
+        }}
       />
     )
   }
@@ -43,7 +48,10 @@ export function renderMenuItem(item: ListMenuItem) {
       icon={createIcon(item)}
       style={createStyle(item)}
       disabled={item.disabled}
-      onClick={item.onClick}
+      onClick={(e) => {
+        item.onClick(e)
+        closeMenu && closeMenu()
+      }}
     />
   )
 }
@@ -59,16 +67,22 @@ export function renderMenu(item: ListMenuItem) {
   const { items } = item
   const hasCheckmarks = items.some((i) => i.value)
   const hasIcons = items.some((i) => i.icon)
+  const [open, setOpen] = useState(false)
+  const onOpenChange: MenuProps['onOpenChange'] = (_, data) => {
+    setOpen(data.open)
+  }
   return (
-    <Menu>
-      <MenuTrigger>{renderToolbarButton(item)}</MenuTrigger>
+    <Menu open={open} onOpenChange={onOpenChange}>
+      <MenuTrigger disableButtonEnhancement>
+        {renderToolbarButton(item, { justifyContent: 'left' })}
+      </MenuTrigger>
       <MenuPopover>
         <MenuList
           hasCheckmarks={hasCheckmarks}
           hasIcons={hasIcons}
           checkedValues={item.checkedValues}
         >
-          {items.map((menuItem) => renderMenuItem(menuItem))}
+          {items.map((menuItem) => renderMenuItem(menuItem, () => setOpen(false)))}
         </MenuList>
       </MenuPopover>
     </Menu>

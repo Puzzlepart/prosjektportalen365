@@ -187,6 +187,17 @@ export class ListMenuItem {
   }
 }
 
+/**
+ * A divider menu item for the list toolbar.
+ */
 export const ListMenuItemDivider = new ListMenuItem().setType('divider')
 
-export const ListMenuItemHeader = (text: string) => new ListMenuItem(text).setType('header')
+/**
+ * Creates a new ListMenuItem with the specified text as a header and sets its style to have a font size of 10.
+ *
+ * @param text The text to display in the header.
+ *
+ * @returns A new ListMenuItem with the specified text as a header and a font size of 10.
+ */
+export const ListMenuItemHeader = (text: string) =>
+  new ListMenuItem(text).setType('header')

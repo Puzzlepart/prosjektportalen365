@@ -14,12 +14,8 @@ export function useProgramMenuItems(context: IPortfolioOverviewContext) {
   if (!context.props.configuration.programs) return []
   return context.props.configuration.programs.map<ListMenuItem>((p) =>
     new ListMenuItem(p.name)
-      .makeCheckable({
-        name: 'programs',
-        value: p.id
-      })
       .setStyle({
-        padding: 15
+        padding: '8px 12px'
       })
       .setOnClick(() => {
         const defaultView = context.props.configuration.views.find((v) => v.isDefaultView)
