@@ -85,15 +85,18 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
               ListMenuItemDivider,
               ...sharedViews,
               ListMenuItemDivider,
-              !_.isEmpty(personalViews) && ListMenuItemHeader(strings.PersonalViewsHeaderText),
+              ListMenuItemHeader(strings.PersonalViewsHeaderText).makeConditional(
+                !_.isEmpty(personalViews)
+              ),
               ...personalViews,
               ListMenuItemDivider,
-              ...(_.isEmpty(programViews)
-                ? []
-                : [
-                    ListMenuItemHeader(strings.ProgramsHeaderText),
-                    new ListMenuItem(strings.SelectProgramText).setItems(programViews)
-                  ]),
+              ListMenuItemHeader(strings.ProgramsHeaderText).makeConditional(
+                !_.isEmpty(programViews)
+              ),
+              new ListMenuItem(strings.SelectProgramText)
+                .setItems(programViews)
+                .makeConditional(!_.isEmpty(programViews)),
+              ListMenuItemDivider.makeConditional(!_.isEmpty(programViews)),
               userCanManageViews &&
                 new ListMenuItem(strings.NewViewText).setOnClick(() => {
                   context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))

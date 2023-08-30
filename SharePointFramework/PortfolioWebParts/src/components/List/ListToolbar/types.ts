@@ -2,7 +2,7 @@ import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
 import { CSSProperties, MouseEventHandler } from 'react'
 
 /**
- * Represents a menu item in the ListToolbar component. Supports
+ * Represents a menu item in the `ListMenuItem` component. Supports
  * the Fluent API pattern using e.g. `new ListMenuItem().setIcon(...)`,
  * `new ListMenuItem().setOnClick(...)`, etc.
  */
@@ -75,11 +75,11 @@ export class ListMenuItem {
   }
 
   /**
-   * Sets the icon for the ListToolbar.
+   * Sets the icon for the `ListMenuItem`.
    *
    * @param icon The FluentIcon or string representing the icon to set.
    *
-   * @returns The updated ListToolbar instance.
+   * @returns The updated `ListMenuItem` instance.
    */
   public setIcon(icon: ListMenuItem['icon']) {
     this.icon = icon
@@ -87,11 +87,11 @@ export class ListMenuItem {
   }
 
   /**
-   * Sets the on click event handler for the ListToolbar.
+   * Sets the on click event handler for the `ListMenuItem`.
    *
    * @param onClick The on click event handler to set.
    *
-   * @returns The updated ListToolbar instance.
+   * @returns The updated `ListMenuItem` instance.
    */
   public setOnClick(onClick: ListMenuItem['onClick']) {
     this.onClick = onClick
@@ -99,11 +99,11 @@ export class ListMenuItem {
   }
 
   /**
-   * Sets the disabled state for the ListToolbar.
+   * Sets the disabled state for the `ListMenuItem`.
    *
    * @param disabled The disabled state to set.
    *
-   * @returns The updated ListToolbar instance.
+   * @returns The updated `ListMenuItem` instance.
    */
   public setDisabled(disabled: ListMenuItem['disabled']) {
     this.disabled = disabled
@@ -111,11 +111,11 @@ export class ListMenuItem {
   }
 
   /**
-   * Sets the type for the ListToolbar.
+   * Sets the type for the `ListMenuItem`.
    *
    * @param type The type to set.
    *
-   * @returns The updated ListToolbar instance.
+   * @returns The updated `ListMenuItem` instance.
    */
   public setType(type: ListMenuItem['type']) {
     this.type = type
@@ -128,7 +128,7 @@ export class ListMenuItem {
    * @param name The name of the checkable item.
    * @param value The value of the checkable item.
    *
-   * @returns The updated ListToolbar instance.
+   * @returns The updated `ListMenuItem` instance.
    */
   public makeCheckable({ name, value }: Pick<ListMenuItem, 'name' | 'value'>) {
     this.name = name
@@ -149,11 +149,11 @@ export class ListMenuItem {
   }
 
   /**
-   * Sets the width for the ListToolbar.
+   * Sets the width for the `ListMenuItem`.
    *
    * @param width The width to set.
    *
-   * @returns The updated ListToolbar instance.
+   * @returns The updated `ListMenuItem` instance.
    */
   public setWidth(width: ListMenuItem['width']) {
     this.width = width
@@ -161,16 +161,28 @@ export class ListMenuItem {
   }
 
   /**
-   * Sets the items and checked values of the ListToolbar.
+   * Sets the items and checked values of the `ListMenuItem`.
    *
    * @param items The new items to set.
    * @param checkedValues The new checked values to set.
    *
-   * @returns The updated ListToolbar instance.
+   * @returns The updated `ListMenuItem` instance.
    */
   public setItems(items: ListMenuItem['items'], checkedValues?: ListMenuItem['checkedValues']) {
     this.items = items
     if (checkedValues) this.checkedValues = checkedValues
+    return this
+  }
+
+  /**
+   * Sets the condition for the `ListMenuItem`.
+   * If the condition is false, the `ListMenuItem` will not be rendered.
+   * If the condition is true, the `ListMenuItem` will be rendered.
+   *
+   * @param condition The condition to set.
+   */
+  public makeConditional(condition: boolean) {
+    if (!condition) return null
     return this
   }
 }
