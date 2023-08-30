@@ -1,7 +1,7 @@
-import { ListMenuItem } from 'components/List'
+import { PortfolioOverviewView } from 'pp365-shared-library'
+import { ListMenuItem } from '../../List'
 import { IPortfolioOverviewContext } from '../context'
 import { CHANGE_VIEW } from '../reducer'
-import { PortfolioOverviewView } from 'pp365-shared-library'
 
 /**
  * Returns an array of menu items for the views menu based on the provided filter function.
