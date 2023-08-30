@@ -41,6 +41,35 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
           </>
         )
       }
+      case strings.ResourceLabel: {
+        return (
+          <>
+            <p hidden={!props.timelineItem.item.data.projectUrl}>
+              <b>{strings.ProjectLabel}:</b>{' '}
+              <a href={props.timelineItem.item.data.projectUrl}>
+                <span>{props.timelineItem.item.data.project}</span>
+              </a>
+            </p>
+            <p hidden={!data.allocation}>
+              <b>{strings.AllocationPercetageLabel}:</b> <span>{data.allocation}%</span>
+            </p>
+            <p hidden={!data.status}>
+              <b>{strings.AllocationStatusLabel}:</b> <span>{data.status}</span>
+            </p>
+            <p hidden={!data.comment}>
+              <b>{strings.CommentLabel}:</b> <span>{data.comment}</span>
+            </p>
+            <p>
+              <b>{strings.StartDateLabel}:</b>{' '}
+              <span>{formatDate(props.timelineItem.item.start_time.toString())}</span>
+            </p>
+            <p>
+              <b>{strings.EndDateLabel}:</b>{' '}
+              <span>{formatDate(props.timelineItem.item.end_time.toString())}</span>
+            </p>
+          </>
+        )
+      }
       case strings.ProjectLabel: {
         return (
           <>

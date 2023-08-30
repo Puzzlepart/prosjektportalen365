@@ -39,26 +39,26 @@
   }
 }
 
-div[class*="react-calendar-timeline rct-header-root"]{
+div[class="rct-header-root"]{
   background: #f4f4f4 !important;
 }
 
-div[class*="react-calendar-timeline rct-sidebar"] {
+div[class="rct-sidebar"] {
   width: fit-content !important;
   max-width: 320px !important;
   min-width: 0px !important;
 }
 
-div[class*="react-calendar-timeline rct-dateHeader-primary"] {
-  color: #444;
-  border: none;
+div[class="rct-dateHeader-primary"] {
+  color: #444 !important;
+  border: none !important;
 }
 
-div[class*="rct-calendar-header"] {
-  border: none;
+div[class="rct-calendar-header"] {
+  border: none !important;
 }
 
-div[class*="react-calendar-timeline rct-dateHeader"] {
-  font-size: 10px;
-  border: none;
+div[class*="rct-dateHeader"] {
+  font-size: 10px !important;
+  border: none !important;
 }

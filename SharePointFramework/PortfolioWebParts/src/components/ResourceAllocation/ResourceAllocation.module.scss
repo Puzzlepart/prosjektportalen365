@@ -4,37 +4,6 @@
   margin: 15px 0 50px 0;
   .container {
     margin: 0px auto;
-    .commandBar {
-      margin: 0px auto;
-    }
-    .header {
-      padding: 23px 32px 20px 32px;
 
-      .title {
-        font-size: 28px;
-        font-weight: 100;
-        margin: 0;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
-    }
-    .infoText {
-      padding: 23px 32px 23px 32px;
-    }
-    .timeline {
-      margin: 0px auto;
-      padding: 0 32px 0 32px;
-      font-size: 12px !important;
-
-      .timelineItem {
-        cursor: pointer !important;
-        .itemContent {
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          width: 100%;
-        }
-      }
-    }
   }
 }

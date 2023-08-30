@@ -1,7 +1,6 @@
 import { IShimmerProps } from '@fluentui/react'
 import * as moment from 'moment'
 import { IBaseComponentProps } from '../types'
-import { IDetailsCalloutItem } from './DetailsCallout/types'
 import { ITimelineData } from 'pp365-shared-library/lib/interfaces'
 
 export interface IResourceAllocationProps extends IBaseComponentProps {
@@ -56,9 +55,4 @@ export interface IResourceAllocationState extends Pick<IShimmerProps, 'isDataLoa
    * Error
    */
   error?: string
-
-  /**
-   * Item to show show details for
-   */
-  showDetails?: IDetailsCalloutItem
 }

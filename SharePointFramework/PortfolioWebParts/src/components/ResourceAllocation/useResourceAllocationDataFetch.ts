@@ -93,14 +93,17 @@ function transformItems(
         title,
         start_time,
         end_time: end_time,
-        allocation,
         itemProps: { style },
         role: res.RefinableString72,
         resource: res.RefinableString71,
         props: res,
         data: {
+          allocation,
+          status: res.GtAllocationStatusOWSCHCS,
+          comment: res.GtAllocationCommentOWSMTXT,
           project: res.SiteTitle,
-          projectUrl: res.SiteName
+          projectUrl: res.SiteName,
+          type: strings.ResourceLabel,
         }
       } as ITimelineItem
     })

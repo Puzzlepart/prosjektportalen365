@@ -3,8 +3,6 @@ declare interface IPortfolioWebPartsStrings {
     MenuOverflowCount: string
   },
   AddColumnLabel: string
-  AllocationPercetageLabel: string
-  AllocationStatusLabel: string
   AllProjectsHeaderText: string
   AllProjectsSearchBoxPlaceholderText: string
   BarLabel: string
@@ -59,7 +57,6 @@ declare interface IPortfolioWebPartsStrings {
   ColumnVisibilityLabel: string
   ColumSettingsLabel: string
   CommandBarGroupName: string
-  CommentLabel: string
   CompactViewText: string
   ConfigItemTitleFieldDescription: string
   ConfigItemTitleFieldLabel: string

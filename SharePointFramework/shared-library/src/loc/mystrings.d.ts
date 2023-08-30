@@ -3,10 +3,13 @@ declare interface ISharedLibraryStrings {
   Aria: {
     ProjectTitle: string
   }
+  AllocationPercetageLabel: string
+  AllocationStatusLabel: string
   BarLabel: string
   BudgetTotalLabel: string
   CategoryFieldLabel: string
   ColumnRenderOptionDate: string
+  CommentLabel: string
   CostsTotalLabel: string
   CurrentPhaseLabel: string
   DescriptionFieldLabel: string
@@ -24,6 +27,7 @@ declare interface ISharedLibraryStrings {
   ProjectTimelineErrorTransformItemText: string
   ProjectTimelineInfoText: string
   ProjectTimelineItemInfo: string
+  ResourceLabel: string
   SiteTitleLabel: string
   StartDateLabel: string
   SubPhaseLabel: string
