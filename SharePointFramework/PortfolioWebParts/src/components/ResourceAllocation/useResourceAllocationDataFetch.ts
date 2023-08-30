@@ -73,7 +73,7 @@ function transformItems(
       const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number
       const itemOpacity = allocation < 30 ? 0.3 : allocation / 100
       const itemColor = allocation < 40 ? '#000' : '#fff'
-      const backgroundColor = isAbsence ? props.itemAbsenceBgColor : props.itemBgColor
+      const backgroundColor = isAbsence ? props.itemAbsenceColor : props.itemColor
       const style: React.CSSProperties = {
         color: itemColor,
         border: 'none',
@@ -94,16 +94,16 @@ function transformItems(
         start_time,
         end_time: end_time,
         itemProps: { style },
-        role: res.RefinableString72,
-        resource: res.RefinableString71,
         props: res,
         data: {
-          allocation,
-          status: res.GtAllocationStatusOWSCHCS,
-          comment: res.GtAllocationCommentOWSMTXT,
           project: res.SiteTitle,
           projectUrl: res.SiteName,
           type: strings.ResourceLabel,
+          allocation,
+          role: res.RefinableString72,
+          resource: res.RefinableString71,
+          status: res.GtAllocationStatusOWSCHCS,
+          comment: res.GtAllocationCommentOWSMTXT
         }
       } as ITimelineItem
     })

@@ -28,6 +28,7 @@ define([], function () {
     ProjectTimelineInfoText: 'Her listes alle prosjektene med start- og sluttdato. Prosjekttidslinjen støtter også faser, delfaser og milepæler, dette opprettes i den<A HREF="../Lists/Tidslinjeinnhold/AllItems.aspx?Source={0}">sentrale tidslinjeinnhold listen</A>. For å zoome inn/ut i tidslinje: ALT+Musehjul.',
     ProjectTimelineItemInfo: '{0} - prosjektets tidsforløp',
     ResourceLabel: 'Ressurs',
+    RoleLabel: 'Rolle',
     SiteTitleLabel: 'Prosjekt',
     StartDateLabel: 'Startdato',
     SubPhaseLabel: 'Delfase',

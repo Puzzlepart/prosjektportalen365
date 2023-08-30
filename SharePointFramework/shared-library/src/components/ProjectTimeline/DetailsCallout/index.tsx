@@ -50,6 +50,12 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
                 <span>{props.timelineItem.item.data.project}</span>
               </a>
             </p>
+            <p hidden={!data.resource}>
+              <b>{strings.ResourceLabel}:</b> <span>{data.resource}</span>
+            </p>
+            <p hidden={!data.role}>
+              <b>{strings.RoleLabel}:</b> <span>{data.role}</span>
+            </p>
             <p hidden={!data.allocation}>
               <b>{strings.AllocationPercetageLabel}:</b> <span>{data.allocation}%</span>
             </p>

@@ -36,9 +36,9 @@ export function useResourceAllocation(props: IResourceAllocationProps) {
   })
 
   const filters = [
-    { fieldName: 'project', name: strings.SiteTitleLabel },
-    { fieldName: 'resource', name: strings.ResourceLabel },
-    { fieldName: 'role', name: strings.RoleLabel }
+    { fieldName: 'data.project', name: strings.SiteTitleLabel },
+    { fieldName: 'data.resource', name: strings.ResourceLabel },
+    { fieldName: 'data.role', name: strings.RoleLabel }
   ].map((col) => ({
     column: { key: col.fieldName, minWidth: 0, ...col },
     items: state.data.items

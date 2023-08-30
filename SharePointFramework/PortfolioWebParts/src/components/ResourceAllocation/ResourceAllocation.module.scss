@@ -1,9 +1,7 @@
-@import '~@fluentui/react/dist/sass/References.scss';
+@import "~@fluentui/react/dist/sass/References.scss";
 
 .root {
-  margin: 15px 0 50px 0;
-  .container {
-    margin: 0px auto;
-
+  .errorContainer {
+    padding: 32px;
   }
 }

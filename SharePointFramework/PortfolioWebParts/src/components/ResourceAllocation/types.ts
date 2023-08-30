@@ -12,22 +12,12 @@ export interface IResourceAllocationProps extends IBaseComponentProps {
   /**
    * Background color for item
    */
-  itemBgColor?: string
+  itemColor?: string
 
   /**
    * Background color for absence items
    */
-  itemAbsenceBgColor?: string
-
-  /**
-   * Default time start
-   */
-  defaultTimeStart?: [number, moment.unitOfTime.DurationConstructor]
-
-  /**
-   * Default time end
-   */
-  defaultTimeEnd?: [number, moment.unitOfTime.DurationConstructor]
+  itemAbsenceColor?: string
 
   /**
    * Select properties
