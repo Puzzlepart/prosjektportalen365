@@ -21,9 +21,6 @@ export function useViewsMenuItems(
         name: 'views',
         value: v.id.toString()
       })
-      .setStyle({
-        padding: 15
-      })
       .setOnClick(() => {
         context.dispatch(CHANGE_VIEW(v))
       })

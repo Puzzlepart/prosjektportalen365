@@ -10,8 +10,6 @@ import { renderToolbarButton } from './renderToolbarButton'
  * @returns The rendered toolbar item.
  */
 export function renderToolbarItem(item: ListMenuItem) {
-  if (item.items) {
-    return renderMenu(item)
-  }
-  return renderToolbarButton(item)
+  if (item.items) return renderMenu(item)
+  else return renderToolbarButton(item)
 }

@@ -9,7 +9,7 @@ export const ListToolbar: FC = () => {
   const context = useListContext()
   return (
     <div>
-      <Toolbar aria-label='Default'>{context.props.menuItems.map(renderToolbarItem)}</Toolbar>
+      <Toolbar>{context.props.menuItems.map(renderToolbarItem)}</Toolbar>
       <FilterPanel
         {...context.props.filterPanelProps}
         headerText={strings.FiltersString}
