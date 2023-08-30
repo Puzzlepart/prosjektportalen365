@@ -19,7 +19,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
     selection,
     onColumnContextMenu,
     editViewColumnsPanelProps,
-    searchBoxProps,
+    searchBox,
     menuItems,
     filterPanelProps
   } = usePortfolioOverview(props)
@@ -34,7 +34,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
             items={context.items}
             columns={context.state.columns}
             groups={context.groups}
-            searchBox={searchBoxProps}
+            searchBox={searchBox}
             isAddColumnEnabled={!props.isParentProject}
             selection={selection}
             setKey='multiple'

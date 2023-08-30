@@ -74,7 +74,11 @@ export function renderMenu(item: ListMenuItem) {
   return (
     <Menu open={open} onOpenChange={onOpenChange}>
       <MenuTrigger disableButtonEnhancement>
-        {renderToolbarButton(item, { justifyContent: 'left' })}
+        {renderToolbarButton(
+          item,
+          { justifyContent: 'left' },
+          { textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'inherit' }
+        )}
       </MenuTrigger>
       <MenuPopover>
         <MenuList

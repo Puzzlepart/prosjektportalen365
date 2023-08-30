@@ -66,9 +66,9 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
 
   const editViewColumnsPanelProps = useEditViewColumnsPanel(context)
 
-  const searchBoxProps: SearchBoxProps = {
+  const searchBox: SearchBoxProps = {
     placeholder: !!context.state.currentView
-      ? format(strings.SearchBoxPlaceholderText, context.state.currentView.title.toLowerCase())
+      ? format(strings.SearchBoxPlaceholderText, context.state.currentView.title)
       : strings.SearchBoxPlaceholderFallbackText,
     onChange: (_, data) => {
       context.dispatch(EXECUTE_SEARCH(data?.value))
@@ -101,7 +101,7 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
     selection,
     onColumnContextMenu,
     editViewColumnsPanelProps,
-    searchBoxProps,
+    searchBox,
     menuItems,
     filterPanelProps
   } as const

@@ -199,5 +199,4 @@ export const ListMenuItemDivider = new ListMenuItem().setType('divider')
  *
  * @returns A new ListMenuItem with the specified text as a header and a font size of 10.
  */
-export const ListMenuItemHeader = (text: string) =>
-  new ListMenuItem(text).setType('header')
+export const ListMenuItemHeader = (text: string) => new ListMenuItem(text).setType('header')
