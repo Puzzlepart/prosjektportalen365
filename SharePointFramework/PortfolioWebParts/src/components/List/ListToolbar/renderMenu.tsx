@@ -9,7 +9,7 @@ import {
 import React from 'react'
 import { createStyle } from './createStyle'
 import { createIcon } from './createIcon'
-import { IListMenuItem } from '../types'
+import { ListMenuItem } from './types'
 import { renderToolbarButton } from './renderToolbarButton'
 
 /**
@@ -22,7 +22,7 @@ import { renderToolbarButton } from './renderToolbarButton'
  *
  * @returns The rendered `MenuItem`, `MenuItemCheckbox`, or `Menu` (if `item` has `items`).
  */
-export function renderMenuItem(item: IListMenuItem) {
+export function renderMenuItem(item: ListMenuItem) {
   if (item.value) {
     return (
       <MenuItemCheckbox
@@ -55,7 +55,7 @@ export function renderMenuItem(item: IListMenuItem) {
  *
  * @returns The rendered menu.
  */
-export function renderMenu(item: IListMenuItem) {
+export function renderMenu(item: ListMenuItem) {
   const { items } = item
   const hasCheckmarks = items.some((i) => i.value)
   const hasIcons = items.some((i) => i.icon)

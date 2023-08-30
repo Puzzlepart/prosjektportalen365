@@ -2,7 +2,7 @@ import { ToolbarButton } from '@fluentui/react-components'
 import React from 'react'
 import { createStyle } from './createStyle'
 import { createIcon } from './createIcon'
-import { IListMenuItem } from '../types'
+import { ListMenuItem } from './types'
 
 /**
  * Renders a toolbar button based on the provided list menu item.
@@ -11,7 +11,7 @@ import { IListMenuItem } from '../types'
  *
  * @returns The rendered toolbar button component.
  */
-export function renderToolbarButton(item: IListMenuItem) {
+export function renderToolbarButton(item: ListMenuItem) {
   return (
     <ToolbarButton
       icon={createIcon(item)}

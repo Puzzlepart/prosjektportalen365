@@ -1,5 +1,5 @@
 import React from 'react'
-import { IListMenuItem } from '../types'
+import { ListMenuItem } from './types'
 import { Icon } from '@fluentui/react'
 
 /**
@@ -9,7 +9,7 @@ import { Icon } from '@fluentui/react'
  *
  * @returns The icon component.
  */
-export function createIcon(item: IListMenuItem) {
+export function createIcon(item: ListMenuItem) {
   let IconElement = () => null
   if (typeof item.icon === 'string') {
     return <Icon iconName={item.icon} />

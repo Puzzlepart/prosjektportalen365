@@ -10,7 +10,7 @@ import {
 import * as strings from 'PortfolioWebPartsStrings'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { useMemo } from 'react'
-import { IListMenuItem } from '../../List'
+import { ListMenuItem, ListMenuItemDivider } from '../../List'
 import { IPortfolioAggregationContext } from '../context'
 import {
   SET_DATA_SOURCE,
@@ -27,6 +27,13 @@ const Icons = {
   Filter: bundleIcon(Filter24Filled, Filter24Regular)
 }
 
+/**
+ * Returns an array of toolbar items for the PortfolioAggregation component.
+ *
+ * @param context - The IPortfolioAggregationContext object containing the current state and props of the component.
+ *
+ * @returns An array of IListMenuItem objects representing the toolbar items.
+ */
 export function useToolbarItems(context: IPortfolioAggregationContext) {
   const checkedValues = useMemo(
     () => ({
@@ -36,90 +43,78 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
     [context.state.currentView?.id, context.state.isCompact]
   )
 
-  const views = context.state.views.map<IListMenuItem>((d) => ({
-    text: d.title,
-    name: 'views',
-    value: d.id.toString(),
-    icon: d.iconName,
-    onClick: () => {
-      context.dispatch(SET_DATA_SOURCE({ dataSource: d }))
-    }
-  }))
+  const views = context.state.views.map<ListMenuItem>((dataSource) =>
+    new ListMenuItem(dataSource.title)
+      .setIcon(dataSource.iconName)
+      .makeCheckable({
+        name: 'views',
+        value: dataSource.id.toString()
+      })
+      .setOnClick(() => {
+        context.dispatch(SET_DATA_SOURCE({ dataSource }))
+      })
+  )
 
-  const menuItems = useMemo<IListMenuItem[]>(
+  const menuItems = useMemo<ListMenuItem[]>(
     () =>
       [
         context.props.showExcelExportButton &&
-          ({
-            icon: 'ExcelLogoInverse',
-            onClick: () => {
-              ExcelExportService.configure({ name: context.props.title })
-              ExcelExportService.export(context.state.items, [
-                {
-                  key: 'SiteTitle',
-                  fieldName: 'SiteTitle',
-                  name: strings.SiteTitleLabel,
-                  minWidth: null
-                },
-                ...(context.state.columns as any[])
-              ])
-            }
-          } as IListMenuItem),
-        {
-          icon: Icons.ContentView,
-          text: context.state.currentView?.title,
-          width: 220,
-          checkedValues,
-          items: [
+        new ListMenuItem().setIcon('ExcelLogoInverse').setOnClick(() => {
+          ExcelExportService.configure({ name: context.props.title })
+          ExcelExportService.export(context.state.items, [
             {
-              text: strings.ListViewText,
-              icon: AppsListRegular,
-              name: 'renderMode',
-              value: 'list',
-              onClick: () => {
-                context.dispatch(TOGGLE_COMPACT())
-              }
-            } as IListMenuItem,
-            {
-              text: strings.CompactViewText,
-              icon: TextBulletListLtrRegular,
-              name: 'renderMode',
-              value: 'compactList',
-              onClick: () => {
-                context.dispatch(TOGGLE_COMPACT())
-              }
-            } as IListMenuItem,
-            {
-              type: 'divider'
-            } as IListMenuItem,
-            ...views,
-            {
-              type: 'divider'
-            } as IListMenuItem,
-            {
-              text: strings.NewViewText,
-              disabled: context.props.isParentProject,
-              onClick: () => {
-                context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
-              }
-            } as IListMenuItem,
-            {
-              text: strings.EditViewText,
-              disabled: context.props.isParentProject,
-              onClick: () => {
-                context.dispatch(
-                  SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
-                )
-              }
-            } as IListMenuItem
-          ]
-        } as IListMenuItem,
-        {
-          icon: Icons.Filter,
-          onClick: () => {
-            context.dispatch(TOGGLE_FILTER_PANEL())
-          }
-        } as IListMenuItem
+              key: 'SiteTitle',
+              fieldName: 'SiteTitle',
+              name: strings.SiteTitleLabel,
+              minWidth: null
+            },
+            ...(context.state.columns as any[])
+          ])
+        }).setStyle({ color: '#008000' }),
+        new ListMenuItem(context.state.currentView?.title)
+          .setIcon(Icons.ContentView)
+          .setWidth(220)
+          .setItems(
+            [
+              new ListMenuItem(strings.ListViewText)
+                .setIcon(AppsListRegular)
+                .makeCheckable({
+                  name: 'renderMode',
+                  value: 'list'
+                })
+                .setOnClick(() => {
+                  context.dispatch(TOGGLE_COMPACT())
+                }),
+              new ListMenuItem(strings.CompactViewText)
+                .setIcon(TextBulletListLtrRegular)
+                .makeCheckable({
+                  name: 'renderMode',
+                  value: 'compactList'
+                })
+                .setOnClick(() => {
+                  context.dispatch(TOGGLE_COMPACT())
+                }),
+              ListMenuItemDivider,
+              ...views,
+              ListMenuItemDivider,
+              new ListMenuItem(strings.NewViewText)
+                .setDisabled(context.props.isParentProject)
+                .setOnClick(() => {
+                  context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
+                }),
+              new ListMenuItem(strings.EditViewText)
+                .setDisabled(context.props.isParentProject)
+                .setOnClick(() => {
+                  context.dispatch(
+                    SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
+                  )
+                })
+            ],
+            checkedValues
+          ),
+        new ListMenuItem().setIcon(Icons.Filter).setOnClick(() => {
+          context.dispatch(TOGGLE_FILTER_PANEL())
+        })
       ].filter(Boolean),
     [context.state, context.props]
   )

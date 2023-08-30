@@ -1,4 +1,4 @@
-import { IListMenuItem } from '../types'
+import { ListMenuItem } from './types'
 import { renderMenu } from './renderMenu'
 import { renderToolbarButton } from './renderToolbarButton'
 
@@ -9,7 +9,7 @@ import { renderToolbarButton } from './renderToolbarButton'
  *
  * @returns The rendered toolbar item.
  */
-export function renderToolbarItem(item: IListMenuItem) {
+export function renderToolbarItem(item: ListMenuItem) {
   if (item.items) {
     return renderMenu(item)
   }

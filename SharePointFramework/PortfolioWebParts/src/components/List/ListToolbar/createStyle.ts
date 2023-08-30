@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react'
-import { IListMenuItem } from '../types'
+import { ListMenuItem } from './types'
 
 /**
  * Creates a `CSSProperties` object based on the provided `IListMenuItem`.
@@ -8,7 +8,7 @@ import { IListMenuItem } from '../types'
  *
  * @returns A `CSSProperties` object.
  */
-export function createStyle(item: IListMenuItem) {
+export function createStyle(item: ListMenuItem) {
   const style: CSSProperties = {
     ...(item.style ?? {})
   }
