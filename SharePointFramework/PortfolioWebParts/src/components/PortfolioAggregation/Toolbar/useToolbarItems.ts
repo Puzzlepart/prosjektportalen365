@@ -59,18 +59,21 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
     () =>
       [
         context.props.showExcelExportButton &&
-        new ListMenuItem().setIcon('ExcelLogoInverse').setOnClick(() => {
-          ExcelExportService.configure({ name: context.props.title })
-          ExcelExportService.export(context.state.items, [
-            {
-              key: 'SiteTitle',
-              fieldName: 'SiteTitle',
-              name: strings.SiteTitleLabel,
-              minWidth: null
-            },
-            ...(context.state.columns as any[])
-          ])
-        }).setStyle({ color: '#008000' }),
+          new ListMenuItem()
+            .setIcon('ExcelLogoInverse')
+            .setOnClick(() => {
+              ExcelExportService.configure({ name: context.props.title })
+              ExcelExportService.export(context.state.items, [
+                {
+                  key: 'SiteTitle',
+                  fieldName: 'SiteTitle',
+                  name: strings.SiteTitleLabel,
+                  minWidth: null
+                },
+                ...(context.state.columns as any[])
+              ])
+            })
+            .setStyle({ color: '#008000' }),
         new ListMenuItem(context.state.currentView?.title)
           .setIcon(Icons.ContentView)
           .setWidth(220)
