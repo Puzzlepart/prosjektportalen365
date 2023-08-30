@@ -32,12 +32,12 @@ export const TOGGLE_EDIT_VIEW_COLUMNS_PANEL = createAction<{
 /**
  * `TOGGLE_FILTER_PANEL`: Toggling the filter panel.
  */
-export const TOGGLE_FILTER_PANEL = createAction<{ isOpen: boolean }>('TOGGLE_FILTER_PANEL')
+export const TOGGLE_FILTER_PANEL = createAction('TOGGLE_FILTER_PANEL')
 
 /**
  * `TOGGLE_COMPACT`: Toggling the compact mode.
  */
-export const TOGGLE_COMPACT = createAction<{ isCompact: boolean }>('TOGGLE_COMPACT')
+export const TOGGLE_COMPACT = createAction<boolean>('TOGGLE_COMPACT')
 
 /**
  * `ADD_COLUMN`: Add column.
@@ -62,7 +62,7 @@ export const TOGGLE_COLUMN_CONTEXT_MENU = createAction<OnColumnContextMenu>(
 )
 
 /**
- * `SET_GROUP_BY`: Set group by.
+ * `SET_GROUP_BY`: Set group by.R
  */
 export const SET_GROUP_BY = createAction<{ column: ProjectContentColumn }>('SET_GROUP_BY')
 

@@ -17,7 +17,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
     searchBox,
     editViewColumnsPanelProps,
     onColumnContextMenu,
-    commandBarProps,
+    menuItems,
     filterPanelProps
   } = usePortfolioAggregation(props)
 
@@ -46,7 +46,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             }}
             webPartContext={props.spfxContext as WebPartContext}
             layerHostId={context.layerHostId}
-            commandBarProps={commandBarProps}
+            menuItems={menuItems}
             filterPanelProps={filterPanelProps}
             error={context.state.error}
           />

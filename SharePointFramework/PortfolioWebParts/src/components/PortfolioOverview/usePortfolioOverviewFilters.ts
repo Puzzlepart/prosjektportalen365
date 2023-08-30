@@ -7,9 +7,9 @@ import { IPortfolioOverviewContext } from './context'
 
 /**
  * Returns an array of filters for the portfolio overview based on the current view and items.
- * 
+ *
  * @param context - The context object containing the current view and items.
- * 
+ *
  * @returns An array of filters, each containing a column and an array of filter items.
  */
 export function usePortfolioOverviewFilters(context: IPortfolioOverviewContext) {

@@ -1,13 +1,8 @@
-import {
-  IColumn,
-  ICommandBarProps,
-  IScrollablePaneProps,
-  IShimmeredDetailsListProps,
-  Target
-} from '@fluentui/react'
+import { IColumn, IScrollablePaneProps, IShimmeredDetailsListProps, Target } from '@fluentui/react'
 import { SearchBoxProps } from '@fluentui/react-search-preview'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { IFilterPanelProps } from 'pp365-shared-library'
+import { ListMenuItem } from './ListToolbar'
 
 export type OnColumnContextMenu = {
   column: any
@@ -79,9 +74,9 @@ export interface IListProps<T extends IColumn = IColumn>
   error?: Error
 
   /**
-   * Command bar props.
+   * Menu items to render in the Toolbar.
    */
-  commandBarProps?: ICommandBarProps
+  menuItems?: ListMenuItem[]
 
   /**
    * Filter panel props.

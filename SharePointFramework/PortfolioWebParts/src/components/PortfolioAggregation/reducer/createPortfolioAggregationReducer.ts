@@ -117,11 +117,11 @@ export const createPortfolioAggregationReducer = (
     ) => {
       state.isEditViewColumnsPanelOpen = payload.isOpen
     },
-    [TOGGLE_FILTER_PANEL.type]: (state, { payload }: ReturnType<typeof TOGGLE_FILTER_PANEL>) => {
-      state.isFilterPanelOpen = payload.isOpen
+    [TOGGLE_FILTER_PANEL.type]: (state) => {
+      state.isFilterPanelOpen = !state.isFilterPanelOpen
     },
-    [TOGGLE_COMPACT.type]: (state, { payload }: ReturnType<typeof TOGGLE_COMPACT>) => {
-      state.isCompact = payload.isCompact
+    [TOGGLE_COMPACT.type]: (state) => {
+      state.isCompact = !state.isCompact
     },
     [ADD_COLUMN.type]: (state, { payload }: ReturnType<typeof ADD_COLUMN>) => {
       const isEdit = !!state.columnForm?.column

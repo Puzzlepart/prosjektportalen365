@@ -8,7 +8,7 @@ import { CHANGE_VIEW } from './reducer'
  * a collection of `IContextualMenuItem` objects.
  *
  * @param context The context object containing the props and state for the PortfolioOverview component
- * 
+ *
  * @returns A function that accepts a filter function and returns an array of `IContextualMenuItem` objects
  */
 export function useConvertViewsToContextualMenuItems(context: IPortfolioOverviewContext) {

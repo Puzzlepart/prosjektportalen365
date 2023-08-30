@@ -16,11 +16,12 @@ import createReducer, {
   getInitialState
 } from './reducer'
 import { IPortfolioOverviewProps } from './types'
-import { useCommandBar } from './useCommandBar'
+import { useToolbarItems } from './Toolbar/useToolbarItems'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 import { useFetchData } from './useFetchData'
 import { useFilteredData } from './useFilteredData'
 import { usePersistedColumns } from './usePersistedColumns'
+import { usePortfolioOverviewFilters } from './usePortfolioOverviewFilters'
 
 /**
  * Component logic hook for `PortfolioOverview` component.
@@ -65,9 +66,9 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
 
   const editViewColumnsPanelProps = useEditViewColumnsPanel(context)
 
-  const searchBoxProps: SearchBoxProps = {
+  const searchBox: SearchBoxProps = {
     placeholder: !!context.state.currentView
-      ? format(strings.SearchBoxPlaceholderText, context.state.currentView.title.toLowerCase())
+      ? format(strings.SearchBoxPlaceholderText, context.state.currentView.title)
       : strings.SearchBoxPlaceholderFallbackText,
     onChange: (_, data) => {
       context.dispatch(EXECUTE_SEARCH(data?.value))
@@ -75,7 +76,8 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
     hidden: !props.showSearchBox
   }
 
-  const { commandBarProps, filters } = useCommandBar(context)
+  const filters = usePortfolioOverviewFilters(context)
+  const menuItems = useToolbarItems(context)
 
   const filterPanelProps: IFilterPanelProps = useMemo(
     () => ({
@@ -99,8 +101,8 @@ export function usePortfolioOverview(props: IPortfolioOverviewProps) {
     selection,
     onColumnContextMenu,
     editViewColumnsPanelProps,
-    searchBoxProps,
-    commandBarProps,
+    searchBox,
+    menuItems,
     filterPanelProps
   } as const
 }

@@ -13,7 +13,7 @@ import {
   SET_GROUP_BY,
   SET_SORT,
   TOGGLE_COLUMN_FORM_PANEL,
-  TOGGLE_EDIT_VIEW_COLUMNS_PANEL
+  SET_EDIT_VIEW_COLUMNS_PANEL
 } from '../reducer'
 import { useAddColumn } from '../../List'
 
@@ -46,7 +46,7 @@ export function useColumnContextMenu(): IContextualMenuProps {
   if (isAddColumn(column)) {
     columnContextMenu.items = createContextualMenuItems(
       () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true })),
-      () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: true })),
+      () => context.dispatch(SET_EDIT_VIEW_COLUMNS_PANEL({ isOpen: true })),
       context.state.currentView?.isProgramView,
       context.state.currentView?.isProgramView
     )

@@ -17,7 +17,7 @@ export const PortfolioAggregationContext = createContext<IPortfolioAggregationCo
 
 /**
  * A hook that returns the current value of the PortfolioAggregationContext.
- * 
+ *
  * @returns The current value of the PortfolioAggregationContext.
  */
 export const usePortfolioAggregationContext = () => useContext(PortfolioAggregationContext)

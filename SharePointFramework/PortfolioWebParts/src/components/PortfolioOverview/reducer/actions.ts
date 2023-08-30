@@ -119,18 +119,18 @@ export const COLUMN_FORM_PANEL_ON_SAVED = createAction<{
 export const COLUMN_DELETED = createAction<{ columnId: any }>('COLUMN_DELETED')
 
 /**
- * `TOGGLE_EDIT_VIEW_COLUMNS_PANEL`: Toggling the show/hide column panel.
+ * `SET_EDIT_VIEW_COLUMNS_PANEL`: Set edit view columns panel.
  */
-export const TOGGLE_EDIT_VIEW_COLUMNS_PANEL = createAction<{
+export const SET_EDIT_VIEW_COLUMNS_PANEL = createAction<{
   isOpen: boolean
   columns?: ProjectColumn[]
   revertColumnOrder?: boolean
 }>('TOGGLE_EDIT_VIEW_COLUMNS_PANEL')
 
 /**
- * `TOGGLE_VIEW_FORM_PANEL`: Toggling the view form panel.
+ * `SET_VIEW_FORM_PANEL`: Set view form panel.
  */
-export const TOGGLE_VIEW_FORM_PANEL = createAction<{
+export const SET_VIEW_FORM_PANEL = createAction<{
   isOpen: boolean
   view?: PortfolioOverviewView
 }>('TOGGLE_VIEW_FORM_PANEL')

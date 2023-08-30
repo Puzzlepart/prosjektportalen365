@@ -34,6 +34,7 @@ export const List: FC<IListProps<any>> = (props) => {
 List.defaultProps = {
   items: [],
   columns: [],
+  menuItems: [],
   selectionMode: SelectionMode.multiple,
   constrainMode: ConstrainMode.unconstrained,
   scrollablePane: {
@@ -42,5 +43,6 @@ List.defaultProps = {
 }
 
 export * from './ItemColumn'
+export * from './ListToolbar'
 export * from './types'
 export * from './useAddColumn'
