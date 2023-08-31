@@ -10,22 +10,21 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
   return (
     <div className={styles.root}>
       <div className={styles.container}>
-        {!state.isDataLoaded ? null : state.error ?
-          (
-            <Alert intent='error'>{state.error.message}</Alert>
-          ) : (
-            <>
-              <Timeline
-                title={props.title}
-                groups={state.filteredData.groups}
-                items={state.filteredData.items}
-                filters={state.filters}
-                onFilterChange={onFilterChange}
-                infoText={props.infoText}
-                showInfoText={props.showInfoText}
-              />
-            </>
-          )}
+        {!state.isDataLoaded ? null : state.error ? (
+          <Alert intent='error'>{state.error.message}</Alert>
+        ) : (
+          <>
+            <Timeline
+              title={props.title}
+              groups={state.filteredData.groups}
+              items={state.filteredData.items}
+              filters={state.filters}
+              onFilterChange={onFilterChange}
+              infoText={props.infoText}
+              showInfoText={props.showInfoText}
+            />
+          </>
+        )}
       </div>
     </div>
   )

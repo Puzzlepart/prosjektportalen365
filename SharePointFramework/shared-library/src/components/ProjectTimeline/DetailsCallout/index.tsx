@@ -33,12 +33,10 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
               <b>{data.type}:</b> <span>{item.title}</span>
             </p>
             <p>
-              <b>{strings.StartDateLabel}:</b>{' '}
-              <span>{formatDate(item.start_time.toString())}</span>
+              <b>{strings.StartDateLabel}:</b> <span>{formatDate(item.start_time.toString())}</span>
             </p>
             <p>
-              <b>{strings.EndDateLabel}:</b>{' '}
-              <span>{formatDate(item.end_time.toString())}</span>
+              <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.end_time.toString())}</span>
             </p>
           </>
         )
@@ -68,12 +66,10 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
               <b>{strings.CommentLabel}:</b> <span>{data.comment}</span>
             </p>
             <p>
-              <b>{strings.StartDateLabel}:</b>{' '}
-              <span>{formatDate(item.start_time.toString())}</span>
+              <b>{strings.StartDateLabel}:</b> <span>{formatDate(item.start_time.toString())}</span>
             </p>
             <p>
-              <b>{strings.EndDateLabel}:</b>{' '}
-              <span>{formatDate(item.end_time.toString())}</span>
+              <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.end_time.toString())}</span>
             </p>
           </>
         )
@@ -88,7 +84,11 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
               </Link>
             </p>
             <p hidden={!data.budgetTotal || !data.costsTotal}>
-              <Link href={`${data.projectUrl}/SitePages/Prosjektstatus.aspx`} target='_blank' title={strings.LastPublishedStatusreport}>
+              <Link
+                href={`${data.projectUrl}/SitePages/Prosjektstatus.aspx`}
+                target='_blank'
+                title={strings.LastPublishedStatusreport}
+              >
                 {strings.LastPublishedStatusreport}
               </Link>
             </p>
@@ -96,12 +96,10 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
               <b>{strings.CurrentPhaseLabel}:</b> <span>{data.phase}</span>
             </p>
             <p>
-              <b>{strings.StartDateLabel}:</b>{' '}
-              <span>{formatDate(item.start_time.toString())}</span>
+              <b>{strings.StartDateLabel}:</b> <span>{formatDate(item.start_time.toString())}</span>
             </p>
             <p>
-              <b>{strings.EndDateLabel}:</b>{' '}
-              <span>{formatDate(item.end_time.toString())}</span>
+              <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.end_time.toString())}</span>
             </p>
           </>
         )
@@ -117,12 +115,10 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
               <span>{formatDate(item.end_time.toString())}</span>
             </p>
             <p hidden={data.elementType === strings.TriangleLabel}>
-              <b>{strings.StartDateLabel}:</b>{' '}
-              <span>{formatDate(item.start_time.toString())}</span>
+              <b>{strings.StartDateLabel}:</b> <span>{formatDate(item.start_time.toString())}</span>
             </p>
             <p hidden={data.elementType === strings.TriangleLabel}>
-              <b>{strings.EndDateLabel}:</b>{' '}
-              <span>{formatDate(item.end_time.toString())}</span>
+              <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.end_time.toString())}</span>
             </p>
           </>
         )
@@ -156,7 +152,6 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
       setInitialFocus={true}
     >
       <FluentProvider theme={webLightTheme}>
-
         <div className={styles.calloutHeader}>
           <div
             hidden={!data.tag}

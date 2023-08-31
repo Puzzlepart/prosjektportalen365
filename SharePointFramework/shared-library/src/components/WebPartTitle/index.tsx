@@ -22,7 +22,7 @@ export const WebPartTitle: FC<IWebPartTitleProps> = (props) => {
           {props.title}
         </span>
       </h2>
-      {props.description &&
+      {props.description && (
         <div className={styles.infoLabel} title={format(strings.Aria.InfoLabelTitle, props.title)}>
           <InfoLabel
             size='large'
@@ -36,7 +36,7 @@ export const WebPartTitle: FC<IWebPartTitleProps> = (props) => {
             }
           />
         </div>
-      }
+      )}
     </div>
   )
 }
