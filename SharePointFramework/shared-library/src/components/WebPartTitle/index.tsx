@@ -10,7 +10,7 @@ import { format } from '@fluentui/react'
  *
  * @param props - The component props.
  * @param props.title - The title to display.
- * @param props.description - The tooltip to display when hovering over the title.
+ * @param props.description - The description to display when clicking the InfoLabel.
  *
  * @returns The rendered component.
  */
