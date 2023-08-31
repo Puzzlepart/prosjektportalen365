@@ -25,17 +25,23 @@
       .itemContent {
         text-overflow: ellipsis;
         white-space: nowrap;
+        overflow: hidden;
         width: 100%;
+        padding: 0 8px;
       }
     }
 
     .timelineItem:hover {
       filter: brightness(1.2);
+      box-shadow: var(--shadow2);
     }
   }
 }
 
 div[class="rct-header-root"] {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   background: #f4f4f4 !important;
 }
 
