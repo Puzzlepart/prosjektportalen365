@@ -195,7 +195,7 @@ define([], function () {
     RenderModeLabel: 'Visningsmodus',
     RenderModeListText: 'Liste',
     RenderModeTilesText: 'Fliser',
-    ResourceAllocationInfoText: 'Ressursallokering eller fravær som gjelder på tvers av prosjekter legges inn i den<A HREF="../Lists/Ressursallokering/AllItems.aspx?Source={0}">sentrale ressursallokeringslisten</A>. Disse oppføringene vil vises med blå og rød (fravær) farge i tabellen under. Prosjektallokeringer vises med grønn farge. Fargestyrken til allokeringen baserer seg på allokeringsprosenten.',
+    ResourceAllocationInfoText: 'Ressursallokering eller fravær som gjelder på tvers av prosjekter legges inn i den <A HREF="../Lists/Ressursallokering/AllItems.aspx?Source={0}">sentrale ressursallokeringslisten</A>. Disse oppføringene vil vises med blå og rød (fravær) farge i tabellen under. Prosjektallokeringer vises med grønn farge. Fargestyrken til allokeringen baserer seg på allokeringsprosenten.',
     ResourceAllocationGroupName: 'Ressursallokering',
     ResourceLabel: 'Ressurs',
     RevertCustomOrderButtonText: 'Tilbakestill rekkefølge',

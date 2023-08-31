@@ -75,7 +75,7 @@ export const useProjectList = (props: IProjectListProps) => {
    *
    * @param projects - Projects
    */
-  function filterProjets(projects: ProjectListModel[]) {
+  function filterProjects(projects: ProjectListModel[]) {
     return projects
       .filter((project) => state.selectedVertical.filter(project, state))
       .filter((project) =>
@@ -108,7 +108,7 @@ export const useProjectList = (props: IProjectListProps) => {
     setState({ searchTerm: data?.value })
   }
 
-  const projects = state.isDataLoaded ? filterProjets(state.projects) : state.projects
+  const projects = state.isDataLoaded ? filterProjects(state.projects) : state.projects
   const verticals = props.verticals.filter(
     (vertical) => !props.hideVerticals.includes(vertical.key.toString())
   )
