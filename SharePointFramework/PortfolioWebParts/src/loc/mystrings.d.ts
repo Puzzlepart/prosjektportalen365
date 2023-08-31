@@ -85,6 +85,10 @@ declare interface IPortfolioWebPartsStrings {
   DefaultDataSourceViewLabel: string
   DefaultRenderModeLabel: string
   DefaultRenderModeDescription: string
+  DefaultTimeframeEndLabel: string
+  DefaultTimeframeEndValue: string
+  DefaultTimeframeStartLabel: string
+  DefaultTimeframeStartValue: string
   DefaultVerticalLabel: string
   DefaultVerticalDescription: string
   DefaultViewDescription: string
@@ -190,6 +194,7 @@ declare interface IPortfolioWebPartsStrings {
   RenderModeListText: string
   RenderModeTilesText: string
   ResourceAllocationInfoText: string
+  ResourceAllocationGroupName: string
   ResourceLabel: string
   RevertCustomOrderButtonText: string
   RevertCustomOrderButtonTooltip: string

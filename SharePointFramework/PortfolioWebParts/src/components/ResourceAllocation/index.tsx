@@ -8,7 +8,7 @@ import { useResourceAllocation } from './useResourceAllocation'
 import { Timeline } from 'pp365-shared-library/lib/components'
 
 export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
-  const { state, filters, onFilterChange, items, groups } =
+  const { state, filters, onFilterChange, items, groups, defaultTimeframe } =
     useResourceAllocation(props)
 
   if (!state.isDataLoaded) return null
@@ -17,7 +17,7 @@ export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
     return (
       <FluentProvider className={styles.root} theme={webLightTheme}>
         <div className={styles.errorContainer}>
-          <Alert intent='error' >{state.error}</Alert>
+          <Alert intent='error'>{state.error}</Alert>
         </div>
       </FluentProvider>
     )
@@ -28,6 +28,7 @@ export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
       <Timeline
         title={props.title}
         infoText={strings.ResourceAllocationInfoText}
+        defaultTimeframe={defaultTimeframe}
         groups={groups}
         items={items}
         filters={filters}
@@ -38,6 +39,8 @@ export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
 }
 
 ResourceAllocation.defaultProps = {
+  defaultTimeframeStart: '4,months',
+  defaultTimeframeEnd: '4,months',
   itemColor: '51,153,51',
   itemAbsenceColor: '26,111,179',
   selectProperties: [
