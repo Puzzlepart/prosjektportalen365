@@ -19,12 +19,18 @@
 
     .timelineItem {
       cursor: pointer !important;
+      border-radius: var(--borderRadiusSmall);
       min-width: 28px;
+
       .itemContent {
         text-overflow: ellipsis;
         white-space: nowrap;
         width: 100%;
       }
+    }
+
+    .timelineItem:hover {
+      filter: brightness(1.2);
     }
   }
 }
