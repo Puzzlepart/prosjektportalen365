@@ -17,7 +17,7 @@
     padding: 0 32px 0 32px;
     font-size: 12px !important;
 
-    .timelineItem {
+    .timelineItem, .timelineItemMilestone {
       cursor: pointer !important;
       border-radius: var(--borderRadiusSmall);
       min-width: 28px;
@@ -34,6 +34,10 @@
     .timelineItem:hover {
       filter: brightness(1.2);
       box-shadow: var(--shadow2);
+    }
+
+    .timelineItemMilestone:hover {
+      filter: brightness(1.2);
     }
   }
 }
