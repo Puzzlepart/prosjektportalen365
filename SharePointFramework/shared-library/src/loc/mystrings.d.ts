@@ -2,6 +2,7 @@
 declare interface ISharedLibraryStrings {
   Aria: {
     ProjectTitle: string
+    InfoLabelTitle: string
   }
   AllocationPercetageLabel: string
   AllocationStatusLabel: string

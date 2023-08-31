@@ -1,7 +1,8 @@
 define([], function () {
   return {
     Aria: {
-      ProjectTitle: 'Logo for prosjekt: {0}'
+      ProjectTitle: 'Logo for prosjekt: {0}',
+      InfoLabelTitle : 'Informasjon om {0}'
     },
     AllocationPercetageLabel: 'Allokeringsprosent',
     AllocationStatusLabel: 'Allokeringsstatus',

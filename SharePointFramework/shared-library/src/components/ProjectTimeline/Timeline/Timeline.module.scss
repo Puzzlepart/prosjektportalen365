@@ -1,25 +1,15 @@
-@import '~@fluentui/react/dist/sass/References.scss';
+@import "~@fluentui/react/dist/sass/References.scss";
 
 .root {
-  .commandBar {
-    margin: 0px auto;
-  }
-
   .header {
-    padding: 23px 32px 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 32px 32px 20px 32px;
 
-    .title {
-      font-size: 28px;
-      font-weight: 100;
+    .commandBar {
       margin: 0;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
     }
-  }
-
-  .infoText {
-    padding: 0 32px 23px 32px;
   }
 
   .timeline {
@@ -39,7 +29,7 @@
   }
 }
 
-div[class="rct-header-root"]{
+div[class="rct-header-root"] {
   background: #f4f4f4 !important;
 }
 
