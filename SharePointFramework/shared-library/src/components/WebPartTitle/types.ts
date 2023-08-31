@@ -1,4 +1,4 @@
-import { ITooltipProps } from './Tooltip'
+import { IInfoTooltipProps } from './InfoTooltip'
 
 /**
  * Props for the WebPartTitle component.
@@ -10,7 +10,7 @@ export interface IWebPartTitleProps {
   title?: string
 
   /**
-   * Props for the tooltip to display when hovering over the component.
+   * Props for the informational tooltip to display when hovering over the component.
    */
-  tooltip?: ITooltipProps
+  tooltip?: IInfoTooltipProps
 }

@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { IWebPartTitleProps } from './types'
 import styles from './WebPartTitle.module.scss'
-import { Tooltip } from './Tooltip'
+import { InfoTooltip } from './InfoTooltip'
 
 /**
  * Renders a web part title with an optional tooltip.
@@ -15,13 +15,13 @@ import { Tooltip } from './Tooltip'
 export const WebPartTitle: FC<IWebPartTitleProps> = (props) => {
   return (
     <div className={styles.root} title={props.title}>
-      <Tooltip {...props.tooltip}>
+      <InfoTooltip {...props.tooltip}>
         <h2 className={styles.heading}>
           <span role='heading' aria-level={2} className={styles.title}>
             {props.title}
           </span>
         </h2>
-      </Tooltip>
+      </InfoTooltip>
     </div>
   )
 }
