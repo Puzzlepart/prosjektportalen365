@@ -19,6 +19,8 @@ export interface ITimelineItemData {
   role?: string
   resource?: string
   allocation?: number
+  comment?: string
+  status?: string
 }
 
 export interface ITimelineItem {

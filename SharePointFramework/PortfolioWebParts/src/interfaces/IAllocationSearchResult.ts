@@ -7,5 +7,7 @@ export interface IAllocationSearchResult extends ISearchResult {
   GtResourceAbsenceOWSCHCS: string
   GtStartDateOWSDATE: string
   GtEndDateOWSDATE: string
+  GtAllocationStatusOWSCHCS: string
+  GtAllocationCommentOWSMTXT: string
   SiteTitle: string
 }

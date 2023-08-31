@@ -32,10 +32,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
       <div className={styles.root}>
         <WebPartTitle
           title={props.title}
-          tooltip={{
-            text: strings.ProgramAdministrationInfoMessage,
-            iconProps: { iconName: 'Info' }
-          }}
+          description={strings.ProgramAdministrationInfoMessage}
         />
         <div>
           {!isEmpty(state.childProjects) || state.loading.root ? (

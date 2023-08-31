@@ -1,4 +1,5 @@
-import { format, MessageBar } from '@fluentui/react'
+import { format } from '@fluentui/react'
+import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 import { ITimelineItem } from '../../../interfaces/ITimelineItem'
 import moment from 'moment'
 import * as strings from 'SharedLibraryStrings'
@@ -11,6 +12,7 @@ import { DetailsCallout } from '../DetailsCallout'
 import styles from './Timeline.module.scss'
 import { ITimelineProps } from './types'
 import { useTimeline } from './useTimeline'
+import { WebPartTitle } from '../../WebPartTitle'
 
 export const Timeline: FC<ITimelineProps> = (props) => {
   const {
@@ -26,33 +28,26 @@ export const Timeline: FC<ITimelineProps> = (props) => {
   } = useTimeline(props)
 
   return (
-    <div className={styles.root}>
-      <div className={styles.commandBar}>
-        <div>
-          <Commands
-            setShowFilterPanel={setShowFilterPanel}
-            onGroupByChange={props.onGroupByChange}
-            isGroupByEnabled={props.isGroupByEnabled}
-            defaultGroupBy={props.defaultGroupBy}
-          />
-        </div>
-      </div>
+    <FluentProvider className={styles.root} theme={webLightTheme}>
       {props.title && (
         <div className={styles.header}>
-          <div className={styles.title}>{props.title}</div>
+          <WebPartTitle
+            title={props.title}
+            description={format(props.infoText, encodeURIComponent(window.location.href))}
+          />
+          <div className={styles.commandBar}>
+            <div>
+              <Commands
+                setShowFilterPanel={setShowFilterPanel}
+                onGroupByChange={props.onGroupByChange}
+                isGroupByEnabled={props.isGroupByEnabled}
+                defaultGroupBy={props.defaultGroupBy}
+              />
+            </div>
+          </div>
         </div>
       )}
-      {props.showInfoText && props.infoText && (
-        <div className={styles.infoText}>
-          <MessageBar>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: format(props.infoText, encodeURIComponent(window.location.href))
-              }}
-            ></div>
-          </MessageBar>
-        </div>
-      )}
+
       <div className={styles.timeline}>
         <ReactTimeline<ITimelineItem>
           defaultTimeStart={defaultTimeStart}
@@ -82,7 +77,7 @@ export const Timeline: FC<ITimelineProps> = (props) => {
       {showDetails && (
         <DetailsCallout timelineItem={showDetails} onDismiss={() => setShowDetails(null)} />
       )}
-    </div>
+    </FluentProvider>
   )
 }
 

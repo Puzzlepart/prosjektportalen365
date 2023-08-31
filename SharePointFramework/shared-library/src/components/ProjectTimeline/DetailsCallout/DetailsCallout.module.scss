@@ -2,13 +2,16 @@
 
 .detailsCallout {
   border-style: none !important;
+  border-radius: 4px !important;
   padding: 28px;
   max-width: 500px;
+
   .calloutHeader {
     display: flex;
     flex-flow: row nowrap;
     justify-content: flex-end;
     align-items: flex-end;
+
     .tag {
       font-size: 14px;
       padding: 1px 7px;

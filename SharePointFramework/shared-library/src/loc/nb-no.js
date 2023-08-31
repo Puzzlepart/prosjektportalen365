@@ -1,12 +1,16 @@
 define([], function () {
   return {
     Aria: {
-      ProjectTitle: 'Logo for prosjekt: {0}'
+      ProjectTitle: 'Logo for prosjekt: {0}',
+      InfoLabelTitle : 'Informasjon om {0}'
     },
+    AllocationPercetageLabel: 'Allokeringsprosent',
+    AllocationStatusLabel: 'Allokeringsstatus',
     BarLabel: 'Bar',
     BudgetTotalLabel: 'Totalbudsjett',
     CategoryFieldLabel: 'Kategori',
     ColumnRenderOptionDate: 'Dato',
+    CommentLabel: 'Kommentar',
     CostsTotalLabel: 'Totalkostnader',
     CurrentPhaseLabel: 'Gjeldende fase',
     DescriptionFieldLabel: 'Beskrivelse',
@@ -22,8 +26,10 @@ define([], function () {
     PhaseLabel: 'Fase',
     ProjectLabel: 'Prosjekt',
     ProjectTimelineErrorTransformItemText: 'Feil ved knytning av elementer til tidslinje.<br><br>Dette kan være grunnet problem med et element i "Prosjekter" listen (duplikat, slettet prosjekt), eller at et tidslinjeelement ikke har gyldig tilknytning. <br><br>- SiteId: {0} <br> - Tittel: {1} <br> - Type: {2} <br><br>Feilmelding: {3}',
-    ProjectTimelineInfoText: 'Her listes alle prosjektene med start- og sluttdato. Prosjekttidslinjen støtter også faser, delfaser og milepæler, dette opprettes i den<A HREF="../Lists/Tidslinjeinnhold/AllItems.aspx?Source={0}">sentrale tidslinjeinnhold listen</A>. For å zoome inn/ut i tidslinje: ALT+Musehjul.',
+    ProjectTimelineInfoText: 'Her listes alle prosjektene med start- og sluttdato. Prosjekttidslinjen støtter også faser, delfaser og milepæler, dette opprettes i den <A HREF="../Lists/Tidslinjeinnhold/AllItems.aspx?Source={0}">sentrale tidslinjeinnhold listen</A>. For å zoome inn/ut i tidslinje: ALT+Musehjul.',
     ProjectTimelineItemInfo: '{0} - prosjektets tidsforløp',
+    ResourceLabel: 'Ressurs',
+    RoleLabel: 'Rolle',
     SiteTitleLabel: 'Prosjekt',
     StartDateLabel: 'Startdato',
     SubPhaseLabel: 'Delfase',

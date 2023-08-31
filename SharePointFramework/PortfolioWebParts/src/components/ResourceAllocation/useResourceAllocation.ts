@@ -1,4 +1,4 @@
-import { ContextualMenuItemType, getId, IColumn, ICommandBarProps } from '@fluentui/react'
+import { IColumn } from '@fluentui/react'
 import { get } from '@microsoft/sp-lodash-subset'
 import moment from 'moment'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -7,38 +7,27 @@ import { IResourceAllocationProps, IResourceAllocationState } from './types'
 import { useFilteredData } from './useFilteredData'
 import { useResourceAllocationDataFetch } from './useResourceAllocationDataFetch'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
+import { TimelineTimeframe } from 'pp365-shared-library/lib/components'
 
 /**
- * Component logic hook for `<ResourceAllocation />`. Handles
+ * Component logic hook for `ResourceAllocation`. Handles
  * state, command bar, filters and data fetching using the
  * `useResourceAllocationDataFetch` and `useFilteredData` hooks.
  *
- * @param props Props for the `<ResourceAllocation />` component
- * @returns
+ * @param props Props for the `ResourceAllocation` component
+ *
+ * @returns `state`, `setState`, `filters`, `onFilterChange`, `items`, `groups` and `defaultTimeframe`
  */
-export function useResourceAllocation(props: IResourceAllocationProps) {
-  moment.locale('nb')
+export const useResourceAllocation = (props: IResourceAllocationProps) => {
   const [state, setState] = useState<IResourceAllocationState>({
     activeFilters: {},
     data: { items: [], groups: [] }
   })
-  const commandBar: ICommandBarProps = { items: [], farItems: [] }
-  commandBar.farItems.push({
-    key: getId('Filter'),
-    name: strings.FilterText,
-    iconProps: { iconName: 'Filter' },
-    itemType: ContextualMenuItemType.Header,
-    iconOnly: true,
-    onClick: (ev) => {
-      ev.preventDefault()
-      setState({ ...state, showFilterPanel: true })
-    }
-  })
 
   const filters = [
-    { fieldName: 'project', name: strings.SiteTitleLabel },
-    { fieldName: 'resource', name: strings.ResourceLabel },
-    { fieldName: 'role', name: strings.RoleLabel }
+    { fieldName: 'data.project', name: strings.SiteTitleLabel },
+    { fieldName: 'data.resource', name: strings.ResourceLabel },
+    { fieldName: 'data.role', name: strings.RoleLabel }
   ].map((col) => ({
     column: { key: col.fieldName, minWidth: 0, ...col },
     items: state.data.items
@@ -58,7 +47,7 @@ export function useResourceAllocation(props: IResourceAllocationProps) {
    * @param column Column
    * @param selectedItems Selected items
    */
-  function onFilterChange(column: IColumn, selectedItems: IFilterItemProps[]) {
+  const onFilterChange = (column: IColumn, selectedItems: IFilterItemProps[]) => {
     const { activeFilters } = { ...state } as IResourceAllocationState
     if (selectedItems.length > 0) {
       activeFilters[column.fieldName] = selectedItems.map((i) => i.value)
@@ -74,5 +63,20 @@ export function useResourceAllocation(props: IResourceAllocationProps) {
     setState({ ...state, data, isDataLoaded: true })
   })
 
-  return { state, setState, commandBar, filters, onFilterChange, items, groups } as const
+  const [sAmount, sDuration] = props.defaultTimeframeStart.split(',')
+  const [eAmount, eDuration] = props.defaultTimeframeEnd.split(',')
+  const defaultTimeframe: TimelineTimeframe = [
+    [-parseInt(sAmount), sDuration as moment.unitOfTime.DurationConstructor],
+    [parseInt(eAmount), eDuration as moment.unitOfTime.DurationConstructor]
+  ]
+
+  return {
+    state,
+    setState,
+    filters,
+    onFilterChange,
+    items,
+    groups,
+    defaultTimeframe
+  } as const
 }
