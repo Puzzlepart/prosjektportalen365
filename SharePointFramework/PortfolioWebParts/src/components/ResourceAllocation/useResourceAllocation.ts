@@ -1,4 +1,4 @@
-import { ContextualMenuItemType, getId, IColumn, ICommandBarProps } from '@fluentui/react'
+import { IColumn } from '@fluentui/react'
 import { get } from '@microsoft/sp-lodash-subset'
 import moment from 'moment'
 import * as strings from 'PortfolioWebPartsStrings'
