@@ -1,5 +1,7 @@
 import {
   Menu,
+  MenuDivider,
+  MenuGroupHeader,
   MenuItem,
   MenuItemCheckbox,
   MenuList,
@@ -11,7 +13,7 @@ import React, { useState } from 'react'
 import { createStyle } from './createStyle'
 import { createIcon } from './createIcon'
 import { ListMenuItem } from './types'
-import { renderToolbarButton } from './renderToolbarButton'
+import { renderMenuButton } from './renderMenuButton'
 
 /**
  * Renders a menu item based on the provided `IListMenuItem`.
@@ -25,6 +27,9 @@ import { renderToolbarButton } from './renderToolbarButton'
  * @returns The rendered `MenuItem`, `MenuItemCheckbox`, or `Menu` (if `item` has `items`).
  */
 export function renderMenuItem(item: ListMenuItem, closeMenu?: () => void) {
+  if (item.type === 'divider') return <MenuDivider />
+  if (item.type === 'header') return <MenuGroupHeader>{item.text}</MenuGroupHeader>
+
   if (item.value) {
     return (
       <MenuItemCheckbox
@@ -71,12 +76,13 @@ export function renderMenu(item: ListMenuItem) {
   const onOpenChange: MenuProps['onOpenChange'] = (_, data) => {
     setOpen(data.open)
   }
+
   return (
-    <Menu open={open} onOpenChange={onOpenChange}>
+    <Menu open={open} onOpenChange={onOpenChange} closeOnScroll>
       <MenuTrigger disableButtonEnhancement>
-        {renderToolbarButton(
+        {renderMenuButton(
           item,
-          { justifyContent: 'left' },
+          { justifyContent: 'left', fontWeight: 'var(--fontWeightRegular)', padding: '0 6px', minHeight: 32 },
           { textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'inherit' }
         )}
       </MenuTrigger>

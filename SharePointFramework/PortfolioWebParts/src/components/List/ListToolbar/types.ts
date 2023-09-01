@@ -23,6 +23,11 @@ export class ListMenuItem {
   value?: string
 
   /**
+   * The text to in the tooltip for the menu item.
+   */
+  description?: string
+
+  /**
    * The icon to display in the menu item. Could either be a
    * `FluentIcon` or a string representing the icon name. Then
    * the `<Icon />` component from `@fluentui/react`
@@ -70,8 +75,9 @@ export class ListMenuItem {
    *
    * @param text The text to display in the menu item (optional).
    */
-  constructor(text?: string) {
+  constructor(text?: string, description?: string) {
     this.text = text
+    this.description = description
   }
 
   /**
@@ -193,10 +199,10 @@ export class ListMenuItem {
 export const ListMenuItemDivider = new ListMenuItem().setType('divider')
 
 /**
- * Creates a new ListMenuItem with the specified text as a header and sets its style to have a font size of 10.
+ * Creates a new ListMenuItem with the specified text as a header and sets its style to have a font size of 12.
  *
  * @param text The text to display in the header.
  *
- * @returns A new ListMenuItem with the specified text as a header and a font size of 10.
+ * @returns A new ListMenuItem with the specified text as a header and a font size of 12.
  */
 export const ListMenuItemHeader = (text: string) => new ListMenuItem(text).setType('header')

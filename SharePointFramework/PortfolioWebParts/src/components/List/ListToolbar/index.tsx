@@ -4,12 +4,13 @@ import { FilterPanel } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { useListContext } from '../context'
 import { renderToolbarItem } from './renderToolbarItem'
+import styles from './ListToolbar.module.scss'
 
 export const ListToolbar: FC = () => {
   const context = useListContext()
   return (
     <div>
-      <Toolbar>{context.props.menuItems.map(renderToolbarItem)}</Toolbar>
+      <Toolbar className={styles.toolbar}>{context.props.menuItems.map(renderToolbarItem)}</Toolbar>
       <FilterPanel
         {...context.props.filterPanelProps}
         headerText={strings.FiltersString}
