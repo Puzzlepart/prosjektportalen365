@@ -2,8 +2,10 @@ import {
   AppsListRegular,
   ContentView24Filled,
   ContentView24Regular,
-  Filter24Filled,
-  Filter24Regular,
+  EditFilled,
+  EditRegular,
+  FormNewFilled,
+  FormNewRegular,
   TextBulletListLtrRegular,
   bundleIcon
 } from '@fluentui/react-icons'
@@ -24,7 +26,8 @@ import {
  */
 const Icons = {
   ContentView: bundleIcon(ContentView24Filled, ContentView24Regular),
-  Filter: bundleIcon(Filter24Filled, Filter24Regular)
+  FormNew: bundleIcon(FormNewFilled, FormNewRegular),
+  Edit: bundleIcon(EditFilled, EditRegular)
 }
 
 /**
@@ -59,7 +62,7 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
     () =>
       [
         context.props.showExcelExportButton &&
-          new ListMenuItem()
+        new ListMenuItem(null, strings.ExcelExportButtonLabel)
             .setIcon('ExcelLogoInverse')
             .setOnClick(() => {
               ExcelExportService.configure({ name: context.props.title })
@@ -73,10 +76,11 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
                 ...(context.state.columns as any[])
               ])
             })
-            .setStyle({ color: '#008000' }),
-        new ListMenuItem(context.state.currentView?.title)
+          .setStyle({ color: '#10793F' }),
+        new ListMenuItem(context.state.currentView?.title, strings.PortfolioViewsListName)
           .setIcon(Icons.ContentView)
-          .setWidth(220)
+          .setWidth('fit-content')
+          .setStyle({ minWidth: '145px' })
           .setItems(
             [
               new ListMenuItem(strings.ListViewText)
@@ -101,11 +105,13 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
               ...views,
               ListMenuItemDivider,
               new ListMenuItem(strings.NewViewText)
+                .setIcon(Icons.FormNew)
                 .setDisabled(context.props.isParentProject)
                 .setOnClick(() => {
                   context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
                 }),
               new ListMenuItem(strings.EditViewText)
+                .setIcon(Icons.Edit)
                 .setDisabled(context.props.isParentProject)
                 .setOnClick(() => {
                   context.dispatch(
@@ -115,7 +121,7 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
             ],
             checkedValues
           ),
-        new ListMenuItem().setIcon(Icons.Filter).setOnClick(() => {
+        new ListMenuItem(null, strings.FilterText).setIcon('Filter').setOnClick(() => {
           context.dispatch(TOGGLE_FILTER_PANEL())
         })
       ].filter(Boolean),
