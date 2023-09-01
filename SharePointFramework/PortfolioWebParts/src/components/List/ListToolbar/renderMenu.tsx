@@ -82,7 +82,12 @@ export function renderMenu(item: ListMenuItem) {
       <MenuTrigger disableButtonEnhancement>
         {renderMenuButton(
           item,
-          { justifyContent: 'left', fontWeight: 'var(--fontWeightRegular)', padding: '0 6px', minHeight: 32 },
+          {
+            justifyContent: 'left',
+            fontWeight: 'var(--fontWeightRegular)',
+            padding: '0 6px',
+            minHeight: 32
+          },
           { textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'inherit' }
         )}
       </MenuTrigger>

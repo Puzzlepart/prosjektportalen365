@@ -1,8 +1,6 @@
 import {
   AppsListFilled,
   AppsListRegular,
-  BoxMultipleFilled,
-  BoxMultipleRegular,
   ChevronLeftFilled,
   ChevronLeftRegular,
   ContentView24Filled,
