@@ -16,7 +16,7 @@ import createReducer, {
   getInitialState
 } from './reducer'
 import { IPortfolioOverviewProps } from './types'
-import { useToolbarItems } from './Toolbar/useToolbarItems'
+import { useToolbarItems } from './ToolbarItems/useToolbarItems'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 import { useFetchData } from './useFetchData'
 import { useFilteredData } from './useFilteredData'

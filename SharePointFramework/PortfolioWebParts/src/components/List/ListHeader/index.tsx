@@ -5,10 +5,10 @@ import styles from './ListHeader.module.scss'
 import { IListHeaderProps } from './types'
 import strings from 'PortfolioWebPartsStrings'
 import { WebPartTitle } from 'pp365-shared-library'
-import { ListToolbar } from '../ListToolbar'
 import { SearchBox } from '@fluentui/react-search-preview'
 import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
+import { Toolbar } from '../../Toolbar'
 
 /**
  * Component for displaying a Sticky list header.
@@ -46,7 +46,7 @@ const ListHeader: FC<IListHeaderProps> = (props) => {
               {...props.searchBox}
             />
           </div>
-          <ListToolbar />
+          <Toolbar menuItems={props.menuItems} filterPanelProps={props.filterPanelProps} />
         </div>
         {props.defaultRender && (
           <div className={styles.headerColumns} hidden={hasError}>
