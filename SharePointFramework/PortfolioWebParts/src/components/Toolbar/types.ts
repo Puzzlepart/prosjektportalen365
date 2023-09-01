@@ -1,17 +1,11 @@
 import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
-import { IFilterPanelProps } from 'pp365-shared-library'
 import { CSSProperties, MouseEventHandler } from 'react'
 
 export interface IToolbarProps {
   /**
    * Menu items to render in the Toolbar.
    */
-  menuItems?: ListMenuItem[]
-
-  /**
-   * Filter panel props.
-   */
-  filterPanelProps?: IFilterPanelProps
+  context: any
 
 }
 

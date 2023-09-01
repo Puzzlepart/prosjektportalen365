@@ -1,5 +1,5 @@
 import { IDetailsHeaderProps, IRenderFunction, Sticky, StickyPositionType } from '@fluentui/react'
-import React, { FC, useMemo } from 'react'
+import React, { FC, useContext, useMemo } from 'react'
 import { IListProps } from '../types'
 import styles from './ListHeader.module.scss'
 import { IListHeaderProps } from './types'
@@ -9,11 +9,14 @@ import { SearchBox } from '@fluentui/react-search-preview'
 import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
 import { Toolbar } from '../../Toolbar'
+import { ListContext } from '../context'
 
 /**
  * Component for displaying a Sticky list header.
  */
 const ListHeader: FC<IListHeaderProps> = (props) => {
+  const context = useContext(ListContext)
+
   const hasError = !!props.error
   return (
     <Sticky
@@ -46,7 +49,7 @@ const ListHeader: FC<IListHeaderProps> = (props) => {
               {...props.searchBox}
             />
           </div>
-          <Toolbar menuItems={props.menuItems} filterPanelProps={props.filterPanelProps} />
+          <Toolbar context={context.props} />
         </div>
         {props.defaultRender && (
           <div className={styles.headerColumns} hidden={hasError}>
