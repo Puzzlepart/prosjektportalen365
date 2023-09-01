@@ -17,6 +17,7 @@ export function useViewsMenuItems(
 ) {
   return context.props.configuration.views.filter(filterFunc).map<ListMenuItem>((v) =>
     new ListMenuItem(v.title)
+      .setIcon(v.iconName)
       .makeCheckable({
         name: 'views',
         value: v.id.toString()

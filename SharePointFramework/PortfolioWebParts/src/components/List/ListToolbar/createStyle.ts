@@ -18,26 +18,5 @@ export function createStyle(item: ListMenuItem, additionalStyle?: CSSProperties)
     style.width = item.width
     style.minWidth = item.width
   }
-  switch (item.type) {
-    /**
-     * The `ListMenuItem` is a header and should be bold and 12px.
-     */
-    case 'header':
-      {
-        style.fontWeight = 'bold'
-        style.fontSize = 12
-      }
-      break
-    /**
-     * The `ListMenuItem` is a divider and should have a border top and a height of 1px.
-     */
-    case 'divider':
-      {
-        style.borderTop = '1px solid #eaeaea'
-        style.height = '1px'
-        style.minHeight = '1px'
-      }
-      break
-  }
   return style
 }
