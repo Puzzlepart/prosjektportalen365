@@ -5,7 +5,6 @@ import { IProjectPhaseCalloutProps } from './ProjectPhase/ProjectPhaseCallout'
 import { IProjectPhasesData, IProjectPhasesState } from './types'
 
 export const INIT_DATA = createAction<{ data: IProjectPhasesData; error?: Error }>('INIT_DATA')
-export const DISMISS_ERROR_MESSAGE = createAction('DISMISS_ERROR_MESSAGE')
 export const OPEN_CALLOUT = createAction<IProjectPhaseCalloutProps>('OPEN_CALLOUT')
 export const CHANGE_PHASE = createAction('CHANGE_PHASE')
 export const DISMISS_CALLOUT = createAction('DISMISS_CALLOUT')
@@ -28,10 +27,6 @@ export default createReducer(initialState, {
       state.isDataLoaded = true
     }
     state.error = payload.error && CustomError.createError(payload.error, MessageBarType.error)
-  },
-
-  [DISMISS_ERROR_MESSAGE.type]: (state) => {
-    state.error = null
   },
 
   [OPEN_CALLOUT.type]: (state, { payload }) => {
