@@ -43,21 +43,18 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
         <WebPartTitle title={props.title} />
         <div className={styles.container}>
           {context.state.error && (
-            <Alert className={styles.errorContainer} intent='error'>
+            <Alert className={styles.alertContainer} intent='error'>
               {context.state.error.message}
             </Alert>
           )}
           <ProjectProperties />
           <>
             {context.state.alert && (
-              <Alert
-                className={styles.errorContainer}
-                hidden={props.hideAllActions}
-                intent='info'
-              >
+              <Alert className={styles.alertContainer} hidden={props.hideAllActions} intent='info'>
                 {context.state.error.message}
               </Alert>
-            )}</>
+            )}
+          </>
           <Actions />
           <ParentProjectsList />
           <ProjectStatusReport />
@@ -79,7 +76,7 @@ ProjectInformation.defaultProps = {
   hideActions: [],
   showFieldExternal: {},
   hideStatusReport: false,
-  statusReportShowOnlyIcons: true,
+  statusReportShowOnlyIcons: true
 }
 
 export * from '../ProjectInformationPanel'
