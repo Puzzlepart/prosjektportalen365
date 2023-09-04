@@ -121,7 +121,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
     if (renderMap.has(props.model.type)) {
       return renderMap.get(props.model.type)(value)
     } else {
-      return <div>{value}</div>
+      return <div title={value.toString()}>{value}</div>
     }
   }
 
