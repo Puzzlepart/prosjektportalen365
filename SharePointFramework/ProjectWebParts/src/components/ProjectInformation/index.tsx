@@ -40,15 +40,13 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
   return (
     <ProjectInformationContextProvider value={context}>
       <FluentProvider theme={webLightTheme} className={styles.root}>
+        <WebPartTitle title={props.title} />
         <div className={styles.container}>
-          <WebPartTitle title={props.title} />
-
           {context.state.error && (
             <Alert className={styles.errorContainer} intent='error'>
               {context.state.error.message}
             </Alert>
           )}
-
           <ProjectProperties />
           <>
             {context.state.alert && (

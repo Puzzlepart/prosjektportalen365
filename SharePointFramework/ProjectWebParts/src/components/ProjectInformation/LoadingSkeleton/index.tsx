@@ -13,7 +13,7 @@ export const LoadingSkeleton: FC = (props: Partial<SkeletonProps>) => {
   return (
     <div className={styles.root}>
       <Skeleton className={styles.skeleton} {...props} >
-        <SkeletonItem size={32} style={{ width: '60%' }} />
+        <SkeletonItem size={32} style={{ width: '60%', marginBottom: '15px' }} />
         <div className={styles.propertiesRow}>
           {Array.from({ length: 8 }).map(() => (
             <div className={styles.propertyFieldRow}>

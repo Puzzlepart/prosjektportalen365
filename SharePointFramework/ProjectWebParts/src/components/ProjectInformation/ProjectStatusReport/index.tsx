@@ -8,7 +8,7 @@ export const ProjectStatusReport: FC = () => {
   const projectStatusContext = useProjectStatusReport()
   if (!projectStatusContext) return null
   return (
-    <>
+    <div>
       <ProjectStatusContext.Provider value={projectStatusContext}>
         <Header />
         <SummarySection
@@ -20,6 +20,6 @@ export const ProjectStatusReport: FC = () => {
           truncateComment={context.props.statusReportTruncateComments}
         />
       </ProjectStatusContext.Provider>
-    </>
+    </div>
   )
 }
