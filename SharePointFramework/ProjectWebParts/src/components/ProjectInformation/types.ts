@@ -2,7 +2,6 @@
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState,
-  IUserMessageProps,
   ProjectColumn,
   ProjectInformationField,
   ProjectInformationParentProject,
@@ -12,6 +11,7 @@ import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDa
 import { IProjectStatusData } from '../ProjectStatus'
 import { ActionType } from './Actions/types'
 import { IProgressDialogProps } from './ProgressDialog/types'
+import { AlertProps } from '@fluentui/react-components/dist/unstable'
 
 export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
 export type ProjectInformationDialogType = 'CreateParentDialog'
@@ -100,9 +100,9 @@ export interface IProjectInformationState
   progressDialog?: IProgressDialogProps
 
   /**
-   * Message to show to the user
+   * Alert to show to the user
    */
-  message?: IUserMessageProps
+  alert?: AlertProps
 
   /**
    * Confirm action props

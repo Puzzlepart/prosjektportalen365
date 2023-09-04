@@ -1,13 +1,10 @@
 import { FluentProvider, webLightTheme } from '@fluentui/react-components'
-import { Shimmer } from '@fluentui/react/lib/Shimmer'
 import { WebPartTitle } from 'pp365-shared-library'
-import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
 import React, { FC } from 'react'
 import { Actions } from './Actions'
 import { AllPropertiesPanel } from './AllPropertiesPanel'
 import { CreateParentDialog } from './CreateParentDialog'
-import { CustomShimmerElementsGroup } from './CustomShimmerElementsGroup'
 import { EditPropertiesPanel } from './EditPropertiesPanel'
 import { ParentProjectsList } from './ParentProjectsList'
 import { ProgressDialog } from './ProgressDialog'
@@ -17,6 +14,8 @@ import { ProjectStatusReport } from './ProjectStatusReport'
 import { ProjectInformationContextProvider } from './context'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
+import { Alert } from '@fluentui/react-components/unstable'
+import { LoadingSkeleton } from './LoadingSkeleton'
 
 /**
  * Display project information. A number of actions are available to the user,
@@ -30,39 +29,44 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
   const context = useProjectInformation(props)
   if (context.state.hidden) return null
 
+  if (!context.state.isDataLoaded) {
+    return (
+      <FluentProvider theme={webLightTheme} className={styles.root}>
+        <LoadingSkeleton />
+      </FluentProvider>
+    )
+  }
+
   return (
     <ProjectInformationContextProvider value={context}>
       <FluentProvider theme={webLightTheme} className={styles.root}>
         <div className={styles.container}>
           <WebPartTitle title={props.title} />
-          {context.state.error ? (
-            <UserMessage
-              className={styles.userMessage}
-              type={context.state.error.type}
-              text={context.state.error.message}
-            />
-          ) : (
-            <Shimmer
-              isDataLoaded={context.state.isDataLoaded}
-              customElementsGroup={<CustomShimmerElementsGroup />}
-            >
-              <ProjectProperties />
-              {context.state.message && (
-                <UserMessage
-                  hidden={props.hideAllActions}
-                  className={styles.userMessage}
-                  {...context.state.message}
-                />
-              )}
-              <Actions />
-              <ParentProjectsList />
-              <ProjectStatusReport />
-              <ProgressDialog />
-              <AllPropertiesPanel />
-              <EditPropertiesPanel />
-              <CreateParentDialog />
-            </Shimmer>
+
+          {context.state.error && (
+            <Alert className={styles.errorContainer} intent='error'>
+              {context.state.error.message}
+            </Alert>
           )}
+
+          <ProjectProperties />
+          <>
+            {context.state.alert && (
+              <Alert
+                className={styles.errorContainer}
+                hidden={props.hideAllActions}
+                intent='info'
+              >
+                {context.state.error.message}
+              </Alert>
+            )}</>
+          <Actions />
+          <ParentProjectsList />
+          <ProjectStatusReport />
+          <ProgressDialog />
+          <AllPropertiesPanel />
+          <EditPropertiesPanel />
+          <CreateParentDialog />
         </div>
       </FluentProvider>
       {context.state.confirmActionProps && <ConfirmDialog {...context.state.confirmActionProps} />}
@@ -75,7 +79,9 @@ ProjectInformation.defaultProps = {
   page: 'Frontpage',
   customActions: [],
   hideActions: [],
-  showFieldExternal: {}
+  showFieldExternal: {},
+  hideStatusReport: false,
+  statusReportShowOnlyIcons: true,
 }
 
 export * from '../ProjectInformationPanel'

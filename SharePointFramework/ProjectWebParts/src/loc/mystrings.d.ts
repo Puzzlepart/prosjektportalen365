@@ -134,6 +134,7 @@ declare interface IProjectWebPartsStrings {
   ProjectDeliveriesGroupName: string
   ProjectInformationDataFetchErrorText: string
   ProjectInformationStatusReportHeaderText: string
+  ProjectInformationStatusReportHeaderDescription: string
   ProjectLabel: string
   ProjectPhasesChangePhaseError: string
   ProjectPhasesFetchDataError: string
