@@ -34,11 +34,6 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
   hideActions?: string[]
 
   /**
-   * Use frameless buttons (`ActionButton`)
-   */
-  useFramelessButtons?: boolean
-
-  /**
    * On field external changed
    */
   onFieldExternalChanged?: (fieldName: string, checked: boolean) => void

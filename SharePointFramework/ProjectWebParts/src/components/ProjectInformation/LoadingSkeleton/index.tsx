@@ -12,26 +12,26 @@ export const LoadingSkeleton: FC = (props: Partial<SkeletonProps>) => {
 
   return (
     <div className={styles.root}>
-      <Skeleton className={styles.skeleton} {...props} >
+      <Skeleton className={styles.skeleton} {...props}>
         <SkeletonItem size={32} style={{ width: '60%', marginBottom: '15px' }} />
         <div className={styles.propertiesRow}>
-          {Array.from({ length: 8 }).map(() => (
-            <div className={styles.propertyFieldRow}>
+          {Array.from({ length: 8 }).map((_, idx) => (
+            <div key={idx} className={styles.propertyFieldRow}>
               <SkeletonItem size={20} style={{ width: randomPercentage(true) }} />
               <SkeletonItem size={16} style={{ width: randomPercentage() }} />
             </div>
           ))}
         </div>
         <div className={styles.actionRow}>
-          {Array.from({ length: 5 }).map(() => (
-            <SkeletonItem size={24} />
+          {Array.from({ length: 5 }).map((_, idx) => (
+            <SkeletonItem key={idx} size={24} />
           ))}
         </div>
         <div className={styles.statusRow}>
           <SkeletonItem size={32} style={{ width: '50%' }} />
           <div className={styles.iconRow}>
-            {Array.from({ length: 6 }).map(() => (
-              <SkeletonItem shape='square' size={28} />
+            {Array.from({ length: 6 }).map((_, idx) => (
+              <SkeletonItem key={idx} shape='square' size={28} />
             ))}
           </div>
         </div>

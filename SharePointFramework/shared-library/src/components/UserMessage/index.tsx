@@ -1,4 +1,5 @@
-import { MessageBar } from '@fluentui/react'
+import { FluentProvider, webLightTheme } from '@fluentui/react-components'
+import { Alert } from '@fluentui/react-components/unstable'
 import React, { FC } from 'react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
@@ -12,21 +13,21 @@ import styles from './UserMessage.module.scss'
  * @category UserMessage
  */
 export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => {
-  const messageBarProps = useUserMessage(props)
+  const alertProps = useUserMessage(props)
   return (
-    <div
+    <FluentProvider
+      theme={webLightTheme}
       id={props.id}
       className={[props.className, styles.root].filter(Boolean).join(' ')}
       style={props.containerStyle}
       hidden={props.hidden}
       onClick={props.onClick}
     >
-      <MessageBar
-        {...messageBarProps}
-        isMultiline={props.isMultiline}
-        messageBarType={props.type}
-        onDismiss={props.onDismiss}
-        actions={props.actions}
+      <Alert
+        {...alertProps}
+        className={styles.alert}
+        intent={props.intent}
+        action={props.action}
       >
         {props.text && (
           <ReactMarkdown linkTarget={props.linkTarget} rehypePlugins={[rehypeRaw]}>
@@ -34,17 +35,14 @@ export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => 
           </ReactMarkdown>
         )}
         {props.children && props.children}
-      </MessageBar>
-    </div>
+      </Alert>
+    </FluentProvider>
   )
 }
 
 UserMessage.defaultProps = {
   linkTarget: '_blank',
-  styles: {
-    root: {}
-  }
+  style: {}
 }
 
 export * from './types'
-export * from './useMessage'
