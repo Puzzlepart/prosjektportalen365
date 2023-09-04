@@ -8,7 +8,7 @@ import { WebPartTitle } from 'pp365-shared-library'
 import { SearchBox } from '@fluentui/react-search-preview'
 import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
-import { Toolbar } from '../../Toolbar'
+import { Toolbar } from 'pp365-shared-library'
 import { ListContext } from '../context'
 
 /**
@@ -49,7 +49,7 @@ const ListHeader: FC<IListHeaderProps> = (props) => {
               {...props.searchBox}
             />
           </div>
-          <Toolbar context={context.props} />
+          <Toolbar items={context.props.menuItems} filterPanel={context.props.filterPanelProps} />
         </div>
         {props.defaultRender && (
           <div className={styles.headerColumns} hidden={hasError}>

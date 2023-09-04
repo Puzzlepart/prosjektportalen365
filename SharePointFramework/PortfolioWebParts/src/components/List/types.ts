@@ -2,7 +2,7 @@ import { IColumn, IScrollablePaneProps, IShimmeredDetailsListProps, Target } fro
 import { SearchBoxProps } from '@fluentui/react-search-preview'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { IFilterPanelProps } from 'pp365-shared-library'
-import { ListMenuItem } from '../Toolbar'
+import { ListMenuItem } from 'pp365-shared-library'
 
 export type OnColumnContextMenu = {
   column: any

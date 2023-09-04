@@ -43,6 +43,5 @@ List.defaultProps = {
 }
 
 export * from './ItemColumn'
-export * from '../Toolbar'
 export * from './types'
 export * from './useAddColumn'

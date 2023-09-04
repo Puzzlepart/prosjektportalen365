@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    FiltersString: 'Filtre',
     Aria: {
       ProjectTitle: 'Logo for prosjekt: {0}',
       InfoLabelTitle : 'Informasjon om {0}'

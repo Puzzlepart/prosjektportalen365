@@ -10,9 +10,9 @@ import {
   bundleIcon
 } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
+import { ListMenuItem, ListMenuItemDivider } from 'pp365-shared-library'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { useMemo } from 'react'
-import { ListMenuItem, ListMenuItemDivider } from '../../List'
 import { IPortfolioAggregationContext } from '../context'
 import {
   SET_DATA_SOURCE,
@@ -62,7 +62,7 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
     () =>
       [
         context.props.showExcelExportButton &&
-        new ListMenuItem(null, strings.ExcelExportButtonLabel)
+          new ListMenuItem(null, strings.ExcelExportButtonLabel)
             .setIcon('ExcelLogoInverse')
             .setOnClick(() => {
               ExcelExportService.configure({ name: context.props.title })
@@ -76,7 +76,7 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
                 ...(context.state.columns as any[])
               ])
             })
-          .setStyle({ color: '#10793F' }),
+            .setStyle({ color: '#10793F' }),
         new ListMenuItem(context.state.currentView?.title, strings.PortfolioViewsListName)
           .setIcon(Icons.ContentView)
           .setWidth('fit-content')

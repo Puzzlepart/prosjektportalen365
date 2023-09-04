@@ -1,12 +1,21 @@
 import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
 import { CSSProperties, MouseEventHandler } from 'react'
+import { IFilterPanelProps } from '../FilterPanel'
 
+/**
+ * Props for the Toolbar component.
+ */
 export interface IToolbarProps {
   /**
-   * Menu items to render in the Toolbar.
+   * An array of ListMenuItem objects to be displayed in the toolbar.
    */
-  context: any
+  items?: ListMenuItem[]
 
+  /**
+   * Props for the FilterPanel component. If specfied, the FilterPanel
+   * will be rendered in the toolbar.
+   */
+  filterPanel?: IFilterPanelProps
 }
 
 /**
