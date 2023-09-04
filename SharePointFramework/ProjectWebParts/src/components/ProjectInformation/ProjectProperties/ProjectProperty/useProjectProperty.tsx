@@ -29,8 +29,9 @@ export function useProjectProperty(props: IProjectPropertyProps) {
           return (
             <Persona
               {...user}
+              title={user.text}
               name={user.text}
-              size='medium'
+              size='small'
               avatar={{
                 image: {
                   src: user.imageUrl
@@ -50,6 +51,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
                 <Persona
                   key={key}
                   {...user}
+                  title={user.text}
                   name={user.text}
                   size='small'
                   avatar={{
@@ -76,13 +78,19 @@ export function useProjectProperty(props: IProjectPropertyProps) {
           </div>
         )
       ],
-      ['TaxonomyFieldType', ([tag]: ITag[]) => <div>{tag.name}</div>],
+      ['TaxonomyFieldType', ([tag]: ITag[]) => (
+        <div className={styles.labels}>
+          <div title={tag.name} className={styles.termLabel}>
+            {tag.name}
+          </div>
+        </div>)
+      ],
       [
         'URL',
         ({ url, description }) => {
           return (
             <div>
-              <Link href={url} target='_blank'>
+              <Link href={url} target='_blank' title={description}>
                 {description ?? url}
               </Link>
             </div>
@@ -93,6 +101,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
         'Note',
         (textValue: string) => (
           <div
+            title={textValue.replace(/\n/g, '')}
             dangerouslySetInnerHTML={{
               __html: textValue.replace(/\n/g, '<br />')
             }}
@@ -102,7 +111,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       [
         'DateTime',
         (date: Date) => {
-          return <div>{date.toLocaleDateString()}</div>
+          return <div title={date.toLocaleDateString()}>{date.toLocaleDateString()}</div>
         }
       ]
     ])

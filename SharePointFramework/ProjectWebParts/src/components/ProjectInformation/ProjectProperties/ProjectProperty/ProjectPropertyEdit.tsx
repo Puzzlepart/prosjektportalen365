@@ -13,7 +13,7 @@ export const ProjectPropertyEdit: FC<IProjectPropertyProps> = (props) => {
     : false
   return (
     <div className={styles.root} title={props.model.description} style={props.style}>
-      <Text weight='semibold' block>
+      <Text weight='semibold' block truncate>
         {props.model.displayName}
       </Text>
       <div>

@@ -15,10 +15,10 @@ export const ProjectProperty: FC<IProjectPropertyProps> = (props) => {
     default: {
       return (
         <div className={styles.root} style={props.style}>
-          <Text weight='semibold' block>
+          <Text weight='semibold' block truncate>
             {props.model.displayName}
           </Text>
-          <Text>{renderValueForField()}</Text>
+          <Text color='var(--colorNeutralForeground2)'>{renderValueForField()}</Text>
         </div>
       )
     }
