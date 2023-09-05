@@ -62,7 +62,7 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
     () =>
       [
         context.props.showExcelExportButton &&
-        new ListMenuItem(null, strings.ExcelExportButtonLabel)
+          new ListMenuItem(null, strings.ExcelExportButtonLabel)
             .setIcon('ExcelLogoInverse')
             .setOnClick(() => {
               ExcelExportService.configure({ name: context.props.title })
@@ -76,7 +76,7 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
                 ...(context.state.columns as any[])
               ])
             })
-          .setStyle({ color: '#10793F' }),
+            .setStyle({ color: '#10793F' }),
         new ListMenuItem(context.state.currentView?.title, strings.PortfolioViewsListName)
           .setIcon(Icons.ContentView)
           .setWidth('fit-content')

@@ -1,4 +1,4 @@
-import { MessageBarType, Panel, Slider, TextField, Toggle } from '@fluentui/react'
+import { Panel, Slider, TextField, Toggle } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import { FormFieldContainer, UserMessage } from 'pp365-shared-library'
 import React, { FC, useContext } from 'react'
