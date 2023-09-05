@@ -96,17 +96,21 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       [
         'TaxonomyFieldTypeMulti',
         (tags: ITag[]) => (
-          <OverflowTagMenu
-            text={props.model.displayName}
-            tags={tags.map((tag) => tag && tag.name)}
-            icon={icon}
-          />
+          <div style={{ marginTop: 6 }}>
+            <OverflowTagMenu
+              text={props.model.displayName}
+              tags={tags.map((tag) => tag && tag.name)}
+              icon={icon}
+            />
+          </div>
         )
       ],
       [
         'TaxonomyFieldType',
         ([tag]: ITag[]) => (
-          <OverflowTagMenu text={props.model.displayName} tags={[tag.name]} icon={icon} />
+          <div style={{ marginTop: 6 }}>
+            <OverflowTagMenu text={props.model.displayName} tags={[tag.name]} icon={icon} />
+          </div>
         )
       ],
       [
