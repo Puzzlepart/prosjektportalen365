@@ -9,14 +9,14 @@ export function useOverflowTagMenu(props: IOverflowTagMenuProps) {
     tags:
       !_.isEmpty(props.tags) &&
       props.tags.map((tag, idx) => {
-          return {
-            key: tag + idx,
-            value: tag,
-            primaryText: tag,
-            children: tag,
-            type: props.text
-          }
-        }),
+        return {
+          key: tag + idx,
+          value: tag,
+          primaryText: tag,
+          children: tag,
+          type: props.text
+        }
+      }),
     icon: props.icon
   } as const
 }
