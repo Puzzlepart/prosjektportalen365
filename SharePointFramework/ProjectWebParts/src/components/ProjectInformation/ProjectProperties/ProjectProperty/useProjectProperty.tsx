@@ -1,9 +1,11 @@
 import { IPersonaProps, ITag, Link } from '@fluentui/react'
 import React from 'react'
 import { useProjectInformationContext } from '../../context'
-import styles from './ProjectProperty.module.scss'
 import { IProjectPropertyProps } from './types'
 import { Persona } from '@fluentui/react-components'
+import { OverflowTagMenu } from 'pp365-shared-library'
+import { ChevronCircleRightFilled, EarthFilled, GlobeLocationFilled, TagFilled, TagMultipleFilled } from '@fluentui/react-icons'
+
 
 /**
  * Component logic hook for the `ProjectProperty` component.
@@ -22,6 +24,26 @@ export function useProjectProperty(props: IProjectPropertyProps) {
    * @returns JSX.Element
    */
   const renderValueForField = () => {
+    let icon = TagMultipleFilled
+
+    switch (props.model.internalName) {
+      case 'GtProjectServiceArea':
+        icon = GlobeLocationFilled
+        break
+      case 'GtProjectType':
+        icon = TagMultipleFilled
+        break
+      case 'GtUNSustDevGoals':
+        icon = EarthFilled
+        break
+      case 'GtProjectPhase':
+        icon = ChevronCircleRightFilled
+        break
+      default:
+        icon = TagFilled
+        break
+    }
+
     const renderMap = new Map<string, (value: any) => JSX.Element>([
       [
         'User',
@@ -69,21 +91,20 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       [
         'TaxonomyFieldTypeMulti',
         (tags: ITag[]) => (
-          <div className={styles.labels}>
-            {tags.map((tag, key) => (
-              <div key={key} title={tag.name} className={styles.termLabel}>
-                {tag.name}
-              </div>
-            ))}
-          </div>
+          <OverflowTagMenu
+            text={props.model.displayName}
+            tags={tags.map((tag) => tag && tag.name)}
+            icon={icon}
+          />
         )
       ],
       ['TaxonomyFieldType', ([tag]: ITag[]) => (
-        <div className={styles.labels}>
-          <div title={tag.name} className={styles.termLabel}>
-            {tag.name}
-          </div>
-        </div>)
+        <OverflowTagMenu
+          text={props.model.displayName}
+          tags={[tag.name]}
+          icon={icon}
+        />
+      )
       ],
       [
         'URL',
