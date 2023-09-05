@@ -119,6 +119,7 @@ declare interface IProjectWebPartsStrings {
   OpportunityMatrixGroupName: string
   OverrideHeadersLabel: string
   ParentProjectsGroupName: string
+  ParentProjectsHeaderDescription: string
   ParentProjectsHeaderText: string
   PhaseChecklistLinkText: string
   PhaseChecklistName: string

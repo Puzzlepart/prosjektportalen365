@@ -12,8 +12,8 @@ import { Toast, ToastTitle, useId, useToastController } from '@fluentui/react-co
 
 export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
   const { rootRef, context } = useProjectPhases(props)
-  const toasterId = useId("toaster");
-  const { dispatchToast } = useToastController(toasterId);
+  const toasterId = useId('toaster')
+  const { dispatchToast } = useToastController(toasterId)
 
   return (
     <div className={styles.root} ref={rootRef}>
@@ -34,14 +34,13 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
             <ChangePhaseDialog />
           </Shimmer>
         </ProjectPhasesContext.Provider>
-        {context.state.error && (
+        {context.state.error &&
           dispatchToast(
             <Toast>
               <ToastTitle>{context.state.error.message}</ToastTitle>
             </Toast>,
             { intent: 'error' }
-          )
-        )}
+          )}
       </div>
     </div>
   )

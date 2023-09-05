@@ -4,8 +4,13 @@ import { useProjectInformationContext } from '../../context'
 import { IProjectPropertyProps } from './types'
 import { Persona } from '@fluentui/react-components'
 import { OverflowTagMenu } from 'pp365-shared-library'
-import { ChevronCircleRightFilled, EarthFilled, GlobeLocationFilled, TagFilled, TagMultipleFilled } from '@fluentui/react-icons'
-
+import {
+  ChevronCircleRightFilled,
+  EarthFilled,
+  GlobeLocationFilled,
+  TagFilled,
+  TagMultipleFilled
+} from '@fluentui/react-icons'
 
 /**
  * Component logic hook for the `ProjectProperty` component.
@@ -98,13 +103,11 @@ export function useProjectProperty(props: IProjectPropertyProps) {
           />
         )
       ],
-      ['TaxonomyFieldType', ([tag]: ITag[]) => (
-        <OverflowTagMenu
-          text={props.model.displayName}
-          tags={[tag.name]}
-          icon={icon}
-        />
-      )
+      [
+        'TaxonomyFieldType',
+        ([tag]: ITag[]) => (
+          <OverflowTagMenu text={props.model.displayName} tags={[tag.name]} icon={icon} />
+        )
       ],
       [
         'URL',
