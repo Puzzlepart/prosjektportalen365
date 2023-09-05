@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import styles from './OverflowTagMenu.module.scss'
 import { useOverflowTagMenu } from './useOverflowTagMenu'
 import _ from 'underscore'
-import { InteractionTag, InteractionTagPrimary, TagGroup } from '@fluentui/react-tags-preview'
+import { InteractionTag, InteractionTagPrimary, Tag, TagGroup } from '@fluentui/react-tags-preview'
 import {
   FluentProvider,
   Menu,
@@ -32,15 +32,9 @@ export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
 
     return (
       <MenuItem key={tag.value} className={styles.menuItem}>
-        <InteractionTag
-          className={styles.tag}
-          title={tag.value}
-          appearance='brand'
-          size='small'
-          {...tag}
-        >
-          <InteractionTagPrimary primaryText={tag.value} />
-        </InteractionTag>
+        <Tag className={styles.tag} title={tag.value} appearance='brand' size='small'>
+          {tag.value}
+        </Tag>
       </MenuItem>
     )
   }
@@ -72,10 +66,12 @@ export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
               <InteractionTagPrimary primaryText={`+${overflowCount}`} />
             </InteractionTag>
           </MenuTrigger>
-          <MenuPopover>
+          <MenuPopover style={{ maxWidth: 600 }}>
             <MenuList hasCheckmarks={false}>
               {!_.isEmpty(tags) &&
-                tags.slice(-overflowCount).map((tag) => <OverflowMenuItem key={tag.key} tag={tag} />)}
+                tags
+                  .slice(-overflowCount)
+                  .map((tag) => <OverflowMenuItem key={tag.key} tag={tag} />)}
             </MenuList>
           </MenuPopover>
         </Menu>
@@ -99,7 +95,7 @@ export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
                     title={`${tag.type}: ${tag.value}`}
                     {...tag}
                   >
-                    <InteractionTagPrimary primaryText={tag.value} icon={<Icon />} />
+                    <InteractionTagPrimary primaryText={tag.value} icon={props.icon && <Icon />} />
                   </InteractionTag>
                 </OverflowItem>
               ))}
