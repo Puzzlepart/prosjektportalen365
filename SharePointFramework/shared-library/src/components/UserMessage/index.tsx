@@ -23,12 +23,7 @@ export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => 
       hidden={props.hidden}
       onClick={props.onClick}
     >
-      <Alert
-        {...alertProps}
-        className={styles.alert}
-        intent={props.intent}
-        action={props.action}
-      >
+      <Alert {...alertProps} className={styles.alert} intent={props.intent} action={props.action}>
         {props.text && (
           <ReactMarkdown linkTarget={props.linkTarget} rehypePlugins={[rehypeRaw]}>
             {props.text}

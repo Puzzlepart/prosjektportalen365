@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 declare interface ISharedLibraryStrings {
   Aria: {
-    ProjectTitle: string
     InfoLabelTitle: string
+    MenuOverflowCount: string
+    ProjectTitle: string
   }
   AllocationPercetageLabel: string
   AllocationStatusLabel: string

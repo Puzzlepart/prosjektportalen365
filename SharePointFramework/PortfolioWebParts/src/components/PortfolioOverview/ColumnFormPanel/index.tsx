@@ -73,7 +73,7 @@ export const ColumnFormPanel: FC = () => {
       >
         {columnMessages.get('fieldName') && (
           <UserMessage
-            styles={{ root: { margin: '8px 0' } }}
+            style={{ margin: '8px 0' }}
             text={columnMessages.get('fieldName')}
           />
         )}
