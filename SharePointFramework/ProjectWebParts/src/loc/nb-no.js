@@ -123,7 +123,7 @@ define([], function () {
     OpportunityMatrixGroupName: 'Mulighetsmatrise',
     OverrideHeadersLabel: 'Overstyr overskrifter for {0}x{0}',
     ParentProjectsGroupName: 'Overordnede prosjekter',
-    ParentProjectsHeaderDescription: 'Her listes alle program og overordnede prosjekter som dette prosjektet tilhører.',
+    ParentProjectsHeaderDescription: 'Her listes alle program/overordnede prosjekter som dette prosjektet tilhører.',
     ParentProjectsHeaderText: 'Overordnede prosjekter',
     PhaseChecklistLinkText: 'Gå til fasesjekklisten',
     PhaseChecklistName: 'Fasesjekkliste',
