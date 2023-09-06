@@ -1,6 +1,5 @@
 import {
   DetailsListLayoutMode,
-  MessageBarType,
   SelectionMode,
   Shimmer,
   ShimmeredDetailsList
@@ -21,7 +20,7 @@ export const ListSection: FC = () => {
    */
   function renderList() {
     if (state.error)
-      return <UserMessage text={strings.ListSectionDataErrorMessage} type={MessageBarType.error} />
+      return <UserMessage text={strings.ListSectionDataErrorMessage} intent='error' />
     return (
       <Shimmer isDataLoaded={state.isDataLoaded}>
         <div className={styles.list}>

@@ -84,7 +84,7 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   /**
    * User message to display in the UI
    */
-  userMessage?: Pick<IUserMessageProps, 'text' | 'type'>
+  userMessage?: Pick<IUserMessageProps, 'text' | 'intent'>
 }
 
 export interface IProjectStatusData {

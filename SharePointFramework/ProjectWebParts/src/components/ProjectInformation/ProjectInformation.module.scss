@@ -1,18 +1,14 @@
 .root {
   .container {
-    margin: 0;
-    .shimmer {
-      padding: 5px;
-    }
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    gap: 15px;
   }
 }
 
-.confirmDialog {
-  max-width: 450px;
-  width: 450px;
-}
-
-.userMessage {
+.alertContainer {
   p {
     margin: 0;
     padding: 0;

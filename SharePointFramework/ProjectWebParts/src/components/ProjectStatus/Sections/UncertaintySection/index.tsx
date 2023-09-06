@@ -1,6 +1,5 @@
 import {
   DetailsListLayoutMode,
-  MessageBarType,
   SelectionMode,
   Shimmer,
   ShimmeredDetailsList
@@ -26,7 +25,7 @@ export const UncertaintySection: FC = () => {
    */
   function renderContent() {
     if (state.error)
-      return <UserMessage text={strings.ListSectionDataErrorMessage} type={MessageBarType.error} />
+      return <UserMessage text={strings.ListSectionDataErrorMessage} intent='error' />
 
     let matrix = null
     switch (state.data.contentTypeIndex) {

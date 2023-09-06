@@ -1,4 +1,4 @@
-import { format, MessageBarType } from '@fluentui/react'
+import { format } from '@fluentui/react'
 import { ProjectPhasesContext } from '../../../ProjectPhases/context'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
@@ -18,7 +18,7 @@ export const DynamicHomepageContent: FC = () => {
             ? format(strings.PhaseSitePageFoundDescription, phaseSitePage?.fileLeafRef)
             : format(strings.PhaseSitePageNotFoundDescription, context.state.confirmPhase.name)
         }
-        type={phaseSitePage ? MessageBarType.info : MessageBarType.warning}
+        intent={phaseSitePage ? 'info' : 'warning'}
       />
     </div>
   )

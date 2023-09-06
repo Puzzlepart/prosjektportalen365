@@ -2,8 +2,9 @@ define([], function () {
   return {
     FiltersString: 'Filtre',
     Aria: {
-      ProjectTitle: 'Logo for prosjekt: {0}',
-      InfoLabelTitle : 'Informasjon om {0}'
+      InfoLabelTitle: 'Informasjon om {0}',
+      MenuOverflowCount: '{0} flere elementer',
+      ProjectTitle: 'Logo for prosjekt: {0}'
     },
     AllocationPercetageLabel: 'Allokeringsprosent',
     AllocationStatusLabel: 'Allokeringsstatus',

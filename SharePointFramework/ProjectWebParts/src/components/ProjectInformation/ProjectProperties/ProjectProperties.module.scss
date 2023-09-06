@@ -1,9 +1,13 @@
 .root {
-  margin: 10px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+
   .tabContainer {
     margin: 10px 0 0 0;
 
-    .userMessage {
+    .alertContainer {
       margin: 0 0 25px 0;
 
       p {

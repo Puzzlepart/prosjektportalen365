@@ -2,8 +2,9 @@
 declare interface ISharedLibraryStrings {
   FiltersString: string
   Aria: {
-    ProjectTitle: string
     InfoLabelTitle: string
+    MenuOverflowCount: string
+    ProjectTitle: string
   }
   AllocationPercetageLabel: string
   AllocationStatusLabel: string

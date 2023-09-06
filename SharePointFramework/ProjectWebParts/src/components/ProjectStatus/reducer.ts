@@ -21,14 +21,14 @@ export const REPORT_PUBLISHING = createAction('REPORT_PUBLISHING')
  */
 export const REPORT_PUBLISHED = createAction<{
   updatedReport: StatusReport
-  message: Pick<IUserMessageProps, 'text' | 'type'>
+  message: Pick<IUserMessageProps, 'text' | 'intent'>
 }>('REPORT_PUBLISHED')
 
 /**
  * `REPORT_PUBLISH_ERROR`: Dispatched by `usePublishReport` when a report fails to publish.
  */
 export const REPORT_PUBLISH_ERROR = createAction<{
-  message: Pick<IUserMessageProps, 'text' | 'type'>
+  message: Pick<IUserMessageProps, 'text' | 'intent'>
 }>('REPORT_PUBLISH_ERROR')
 
 /**

@@ -54,7 +54,7 @@ class DialogPrompt extends React.Component<IDialogContentProps, IDialogContentSt
             this.props.ideaTitle,
             this.props.dialogDescription
           )}
-          type={MessageBarType.info}
+          intent='info'
         />
         <Dropdown
           label={strings.ActionLabel}

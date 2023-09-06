@@ -1,6 +1,11 @@
-import { MessageBarType } from '@fluentui/react'
 import { Tab, TabList } from '@fluentui/react-components'
-import { Filter24Filled, Filter24Regular, bundleIcon } from '@fluentui/react-icons'
+import {
+  FilterFilled,
+  FilterRegular,
+  ListFilled,
+  ListRegular,
+  bundleIcon
+} from '@fluentui/react-icons'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import * as strings from 'ProjectWebPartsStrings'
@@ -12,7 +17,9 @@ import styles from './ProjectProperties.module.scss'
 import { ProjectProperty } from './ProjectProperty'
 import { IProjectPropertiesProps } from './types'
 import { useProjectProperties } from './useProjectProperties'
-const FilterIcon = bundleIcon(Filter24Filled, Filter24Regular)
+import { Alert } from '@fluentui/react-components/unstable'
+const Filter = bundleIcon(FilterFilled, FilterRegular)
+const List = bundleIcon(ListFilled, ListRegular)
 
 export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
   const context = useProjectInformationContext()
@@ -24,9 +31,11 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
       return (
         <div className={styles.root}>
           <TabList onTabSelect={(_, data) => setSelectedTab(data.value as any)}>
-            <Tab value='view'>{context.props.title}</Tab>
+            <Tab value='view' icon={<List />}>
+              {context.props.title}
+            </Tab>
             {context.props.isSiteAdmin && (
-              <Tab value='config' icon={<FilterIcon />}>
+              <Tab value='config' icon={<Filter />}>
                 {strings.ExternalUsersConfigText}
               </Tab>
             )}
@@ -42,14 +51,14 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
             {selectedTab === 'config' && (
               <>
                 <UserMessage
-                  className={styles.userMessage}
+                  className={styles.alertContainer}
                   text={strings.ExternalUsersConfigInfoText}
+                  intent='info'
                 />
                 <UserMessage
-                  hidden={!stringIsNullOrEmpty(context.state.data.propertiesListId)}
-                  className={styles.userMessage}
+                  className={styles.alertContainer}
                   text={strings.NoLocalPropertiesListWarningText}
-                  type={MessageBarType.warning}
+                  intent='warning'
                 />
                 <div hidden={stringIsNullOrEmpty(context.state.data.propertiesListId)}>
                   {context.state.properties.map((model, idx) => (
@@ -64,7 +73,7 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
     }
     default: {
       if (isEmpty(properties)) {
-        return <UserMessage text={strings.NoPropertiesMessage} />
+        return <Alert intent='info'>{strings.NoPropertiesMessage}</Alert>
       }
       return (
         <div className={styles.root}>

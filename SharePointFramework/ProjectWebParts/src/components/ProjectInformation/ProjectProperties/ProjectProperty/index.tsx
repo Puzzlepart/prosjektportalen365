@@ -1,7 +1,6 @@
 import { Text } from '@fluentui/react-components'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import React, { FC } from 'react'
-import styles from './ProjectProperty.module.scss'
 import { ProjectPropertyEdit } from './ProjectPropertyEdit'
 import { IProjectPropertyProps } from './types'
 import { useProjectProperty } from './useProjectProperty'
@@ -14,11 +13,11 @@ export const ProjectProperty: FC<IProjectPropertyProps> = (props) => {
     }
     default: {
       return (
-        <div className={styles.root} style={props.style}>
-          <Text weight='semibold' block>
+        <div style={props.style}>
+          <Text title={props.model.displayName} weight='semibold' size={200} block truncate>
             {props.model.displayName}
           </Text>
-          <Text>{renderValueForField()}</Text>
+          <Text color='var(--colorNeutralForeground2)'>{renderValueForField()}</Text>
         </div>
       )
     }
