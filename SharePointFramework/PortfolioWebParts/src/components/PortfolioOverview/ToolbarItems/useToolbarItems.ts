@@ -14,9 +14,9 @@ import {
   bundleIcon
 } from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
+import { ListMenuItem, ListMenuItemDivider, ListMenuItemHeader } from 'pp365-shared-library'
 import { useMemo } from 'react'
 import _ from 'underscore'
-import { ListMenuItem, ListMenuItemDivider, ListMenuItemHeader } from '../../List'
 import { IPortfolioOverviewContext } from '../context'
 import { SET_VIEW_FORM_PANEL, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL } from '../reducer'
 import { useExcelExport } from './useExcelExport'

@@ -10,9 +10,9 @@ import {
   bundleIcon
 } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
+import { ListMenuItem, ListMenuItemDivider } from 'pp365-shared-library'
 import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { useMemo } from 'react'
-import { ListMenuItem, ListMenuItemDivider } from '../../List'
 import { IPortfolioAggregationContext } from '../context'
 import {
   SET_DATA_SOURCE,

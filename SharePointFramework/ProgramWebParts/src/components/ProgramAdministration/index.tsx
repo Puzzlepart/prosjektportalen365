@@ -30,10 +30,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
     <ProgramAdministrationContext.Provider value={{ props, state, dispatch }}>
       <Commands />
       <div className={styles.root}>
-        <WebPartTitle
-          title={props.title}
-          description={strings.ProgramAdministrationInfoMessage}
-        />
+        <WebPartTitle title={props.title} description={strings.ProgramAdministrationInfoMessage} />
         <div>
           {!isEmpty(state.childProjects) || state.loading.root ? (
             <ShimmeredDetailsList

@@ -18,7 +18,7 @@ import { useDefaultColumns } from './useDefaultColumns'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 import { usePortfolioAggregationDataFetch } from './usePortfolioAggregationDataFetch'
 import { usePortfolioAggregationFilteredItems } from './usePortfolioAggregationFilteredItems'
-import { useToolbarItems } from './Toolbar/useToolbarItems'
+import { useToolbarItems } from './ToolbarItems/useToolbarItems'
 
 /**
  * Component logic hook for the Portfolio Aggregation component. This

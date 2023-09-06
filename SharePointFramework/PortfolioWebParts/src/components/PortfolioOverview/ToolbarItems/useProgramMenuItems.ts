@@ -1,8 +1,7 @@
-import { bundleIcon, BoxMultipleFilled, BoxMultipleRegular } from '@fluentui/react-icons'
-import { ListMenuItem } from '../../List'
+import { BoxMultipleFilled, BoxMultipleRegular, bundleIcon } from '@fluentui/react-icons'
+import { ListMenuItem, PortfolioOverviewView } from 'pp365-shared-library'
 import { IPortfolioOverviewContext } from '../context'
 import { CHANGE_VIEW } from '../reducer'
-import { PortfolioOverviewView } from 'pp365-shared-library'
 
 const Icons = {
   BoxMultiple: bundleIcon(BoxMultipleFilled, BoxMultipleRegular)

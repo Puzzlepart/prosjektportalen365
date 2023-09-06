@@ -5,6 +5,7 @@
 
   button {
     height: 40px;
+    width: -moz-fit-content;
     width: fit-content;
     min-width: 40px;
     padding: 5px var(--spacingHorizontalM) !important;

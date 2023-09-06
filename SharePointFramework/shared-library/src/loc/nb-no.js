@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    FiltersString: 'Filtre',
     Aria: {
       InfoLabelTitle: 'Informasjon om {0}',
       MenuOverflowCount: '{0} flere elementer',
