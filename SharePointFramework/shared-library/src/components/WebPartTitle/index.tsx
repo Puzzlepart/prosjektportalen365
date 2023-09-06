@@ -4,6 +4,7 @@ import { IWebPartTitleProps } from './types'
 import styles from './WebPartTitle.module.scss'
 import strings from 'SharedLibraryStrings'
 import { format } from '@fluentui/react'
+import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 
 /**
  * Renders a web part title with an optional tooltip.
@@ -16,7 +17,7 @@ import { format } from '@fluentui/react'
  */
 export const WebPartTitle: FC<IWebPartTitleProps> = (props) => {
   return (
-    <div className={styles.root}>
+    <FluentProvider className={styles.root} theme={webLightTheme}>
       <h2 className={styles.heading} title={props.title}>
         <span role='heading' aria-level={2} className={styles.title}>
           {props.title}
@@ -37,6 +38,6 @@ export const WebPartTitle: FC<IWebPartTitleProps> = (props) => {
           />
         </div>
       )}
-    </div>
+    </FluentProvider>
   )
 }

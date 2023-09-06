@@ -73,10 +73,6 @@ export default class ProjectInformationWebPart extends BaseProjectWebPart<IProje
                   ],
                   selectedKeys: this.properties.hideActions ?? []
                 }),
-                !this.properties.hideAllActions &&
-                  PropertyPaneToggle('useFramelessButtons', {
-                    label: strings.UseFramelessButtonsLabel
-                  }),
                 PropertyPaneTextField('adminPageLink', {
                   label: strings.AdminPageLinkLabel
                 })

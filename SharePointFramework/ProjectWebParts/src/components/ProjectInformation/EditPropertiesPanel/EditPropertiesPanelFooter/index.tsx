@@ -19,7 +19,7 @@ export const EditPropertiesPanelFooter: FC<IEditPropertiesPanelFooterProps> = (p
     <div className={styles.root}>
       {props.submit.error && (
         <div className={styles.errorContainer}>
-          <UserMessage text={props.submit.error.customMessage} type={props.submit.error.type} />
+          <UserMessage text={props.submit.error.customMessage} intent='error' />
         </div>
       )}
       <div className={styles.container}>

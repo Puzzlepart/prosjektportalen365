@@ -55,7 +55,7 @@ I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Pr
 - Fiks for synkronisering dersom prosjekt mangler i den sentrale prosjekter-listen [#1121](https://github.com/Puzzlepart/prosjektportalen365/issues/1121)
 
 ### Feilrettinger
-- Rettet et problem hvor låst mal hindret mulighet for å gjøre et prosjekt om til overordnet område [#1134](https://github.com/Puzzlepart/prosjektportalen365/issues/1134)
+- Rettet et problem hvor låst mal hindret mulighet for å gjøre et prosjekt om til overordnet prosjekt [#1134](https://github.com/Puzzlepart/prosjektportalen365/issues/1134)
 - Fikset et problem hvor 'Hooks' ikke ble kjørt på slutten av provisjoneringen av et prosjekt [#1127](https://github.com/Puzzlepart/prosjektportalen365/issues/1127)
 - Fikset et problem hvor prosjekttidslinje på prosjektnivå ikke returnerte tidslinje-elementer for prosjektet [#1172](https://github.com/Puzzlepart/prosjektportalen365/pull/1172)
 - Rettet en feil hvor Excel eksporten gir feilmelding når datofelt mangler data. [#1180](https://github.com/Puzzlepart/prosjektportalen365/issues/1180)

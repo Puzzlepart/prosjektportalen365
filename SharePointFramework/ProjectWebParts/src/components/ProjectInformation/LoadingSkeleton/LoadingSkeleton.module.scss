@@ -1,0 +1,38 @@
+.root {
+  .skeleton {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+
+    .propertiesRow {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      .propertyFieldRow {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+    }
+
+    .actionRow {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .statusRow {
+      .iconRow {
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: nowrap;
+        flex-direction: row;
+        align-items: center;
+        padding-top: 15px;
+      }
+    }
+  }
+}

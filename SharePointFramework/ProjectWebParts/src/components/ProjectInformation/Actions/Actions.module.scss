@@ -1,17 +1,14 @@
 .root {
-  margin: 25px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 
-  .buttonContainer {
-    width: 320px;
-    margin: 6px 0 0 0;
+  .button {
+    justify-content: flex-start;
 
-    .button {
-      width: 100%;
-      justify-content: flex-start;
-
-      .label {
-        margin: 0;
-      }
+    .label {
+      font-weight: var(--fontWeightRegular);
+      margin: 0;
     }
   }
 }

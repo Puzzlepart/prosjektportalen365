@@ -44,7 +44,7 @@ class IdeaDialog extends React.Component<IDialogContentProps> {
               : this.props.dialogDescription,
             encodeURIComponent(window.location.href)
           )}
-          type={this.props.isBlocked ? MessageBarType.warning : MessageBarType.info}
+          intent={this.props.isBlocked ? 'warning' : 'info'}
         />
         <DialogFooter>
           <DefaultButton

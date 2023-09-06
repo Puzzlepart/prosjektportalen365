@@ -11,6 +11,11 @@ export interface IBaseWebPartComponentProps extends DOMAttributes<HTMLDivElement
   title?: string
 
   /**
+   * Description of the web part
+   */
+  description?: string
+
+  /**
    * Display mode
    */
   displayMode?: DisplayMode
