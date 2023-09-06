@@ -10,7 +10,7 @@ import strings from 'SharedLibraryStrings'
  * Renders a `Toolbar` component from `@fluentui/react-components` with
  * the specified `items`. Conditionally renders a `FilterPanel` component
  * with the specified `filterPanel` props.
- * 
+ *
  * @param props Component properties
  */
 export const Toolbar: FC<IToolbarProps> = (props) => {
