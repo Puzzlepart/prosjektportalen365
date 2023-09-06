@@ -1,4 +1,4 @@
-import { Toolbar as FluentToolbar } from '@fluentui/react-components'
+import { FluentProvider, Toolbar as FluentToolbar, webLightTheme } from '@fluentui/react-components'
 import { FilterPanel } from '../FilterPanel'
 import React, { FC } from 'react'
 import { renderToolbarItem } from './renderToolbarItem'
@@ -15,7 +15,7 @@ import strings from 'SharedLibraryStrings'
  */
 export const Toolbar: FC<IToolbarProps> = (props) => {
   return (
-    <div>
+    <FluentProvider theme={webLightTheme}>
       <FluentToolbar className={styles.toolbar}>{props.items.map(renderToolbarItem)}</FluentToolbar>
       {props.filterPanel && (
         <FilterPanel
@@ -24,7 +24,7 @@ export const Toolbar: FC<IToolbarProps> = (props) => {
           isLightDismiss={true}
         />
       )}
-    </div>
+    </FluentProvider>
   )
 }
 
