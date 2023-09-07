@@ -1,4 +1,4 @@
-import { FluentProvider, webLightTheme } from '@fluentui/react-components'
+import { FluentProvider, useId, webLightTheme } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
 import React, { FC } from 'react'
 import ReactMarkdown from 'react-markdown'
@@ -13,11 +13,13 @@ import styles from './UserMessage.module.scss'
  * @category UserMessage
  */
 export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => {
+  const fluentProviderId = useId('fluent-provider')
+
   const alertProps = useUserMessage(props)
   return (
     <FluentProvider
+      id={fluentProviderId}
       theme={webLightTheme}
-      id={props.id}
       className={[props.className, styles.root].filter(Boolean).join(' ')}
       style={props.containerStyle}
       hidden={props.hidden}

@@ -1,5 +1,5 @@
 import { format } from '@fluentui/react'
-import { FluentProvider, webLightTheme } from '@fluentui/react-components'
+import { FluentProvider, useId, webLightTheme } from '@fluentui/react-components'
 import { ITimelineItem } from '../../../interfaces/ITimelineItem'
 import moment from 'moment'
 import * as strings from 'SharedLibraryStrings'
@@ -15,6 +15,7 @@ import { useTimeline } from './useTimeline'
 import { WebPartTitle } from '../../WebPartTitle'
 
 export const Timeline: FC<ITimelineProps> = (props) => {
+  const fluentProviderId = useId('fluent-provider')
   const {
     defaultTimeStart,
     defaultTimeEnd,
@@ -28,7 +29,7 @@ export const Timeline: FC<ITimelineProps> = (props) => {
   } = useTimeline(props)
 
   return (
-    <FluentProvider className={styles.root} theme={webLightTheme}>
+    <FluentProvider id={fluentProviderId} className={styles.root} theme={webLightTheme}>
       {props.title && (
         <div className={styles.header}>
           <WebPartTitle
