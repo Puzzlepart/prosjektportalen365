@@ -195,16 +195,20 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    *
    * @param data - Project setup data
    */
-  private _checkAutoTemplate({ templates }: IProjectSetupData): IProjectSetupDialogState {
+  private _checkAutoTemplate(data: IProjectSetupData): IProjectSetupDialogState {
     const autoTemplate = _.find(
-      templates,
+      data.templates,
       ({ text, autoConfigure }) => text === this.properties.forceTemplate || autoConfigure
     )
     if (!autoTemplate) return null
     return {
       selectedTemplate: autoTemplate,
-      selectedExtensions: [],
-      selectedContentConfig: []
+      selectedExtensions: data.extensions.filter((ext) =>
+        autoTemplate.extensions.includes(ext.id)
+      ),
+      selectedContentConfig: data.contentConfig.filter((content) =>
+        autoTemplate.contentConfig.includes(content.id)
+      ),
     }
   }
 

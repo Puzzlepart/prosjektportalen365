@@ -1,5 +1,4 @@
-import { PortfolioOverviewView } from 'pp365-shared-library'
-import { ListMenuItem } from '../../List'
+import { ListMenuItem, PortfolioOverviewView } from 'pp365-shared-library'
 import { IPortfolioOverviewContext } from '../context'
 import { CHANGE_VIEW } from '../reducer'
 
@@ -17,6 +16,7 @@ export function useViewsMenuItems(
 ) {
   return context.props.configuration.views.filter(filterFunc).map<ListMenuItem>((v) =>
     new ListMenuItem(v.title)
+      .setIcon(v.iconName)
       .makeCheckable({
         name: 'views',
         value: v.id.toString()

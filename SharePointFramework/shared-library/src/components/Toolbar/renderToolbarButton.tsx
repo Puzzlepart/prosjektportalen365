@@ -1,4 +1,4 @@
-import { ToolbarButton } from '@fluentui/react-components'
+import { ToolbarButton, Tooltip } from '@fluentui/react-components'
 import React, { CSSProperties } from 'react'
 import { createStyle } from './createStyle'
 import { createIcon } from './createIcon'
@@ -19,14 +19,20 @@ export function renderToolbarButton(
   labelStyle: CSSProperties = {}
 ) {
   return (
-    <ToolbarButton
-      icon={createIcon(item)}
-      title={item.text}
-      style={createStyle(item, buttonStyle)}
-      onClick={item.onClick}
-      disabled={item.disabled}
+    <Tooltip
+      content={item.description}
+      relationship={item.text ? 'description' : 'label'}
+      withArrow
     >
-      <span style={labelStyle}>{item.text}</span>
-    </ToolbarButton>
+      <ToolbarButton
+        icon={createIcon(item)}
+        title={item.text}
+        style={createStyle(item, buttonStyle)}
+        onClick={item.onClick}
+        disabled={item.disabled}
+      >
+        {item.text && <span style={labelStyle}>{item.text}</span>}
+      </ToolbarButton>
+    </Tooltip>
   )
 }

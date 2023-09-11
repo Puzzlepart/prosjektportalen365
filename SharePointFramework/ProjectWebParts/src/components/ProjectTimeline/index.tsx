@@ -1,4 +1,4 @@
-import { format, MessageBarType, Spinner } from '@fluentui/react'
+import { format, Spinner } from '@fluentui/react'
 import { Timeline, UserMessage } from 'pp365-shared-library/lib/components'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
@@ -23,7 +23,7 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
               </div>
             </div>
           ) : state.error ? (
-            <UserMessage type={MessageBarType.severeWarning} text={state.error.message} />
+            <UserMessage intent='warning' text={state.error.message} />
           ) : (
             <div>
               {props.showTimeline && (

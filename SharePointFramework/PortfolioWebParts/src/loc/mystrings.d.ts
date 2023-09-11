@@ -3,8 +3,6 @@ declare interface IPortfolioWebPartsStrings {
     MenuOverflowCount: string
   },
   AddColumnLabel: string
-  AllocationPercetageLabel: string
-  AllocationStatusLabel: string
   AllProjectsHeaderText: string
   AllProjectsSearchBoxPlaceholderText: string
   BarLabel: string
@@ -59,7 +57,6 @@ declare interface IPortfolioWebPartsStrings {
   ColumnVisibilityLabel: string
   ColumSettingsLabel: string
   CommandBarGroupName: string
-  CommentLabel: string
   CompactViewText: string
   ConfigItemTitleFieldDescription: string
   ConfigItemTitleFieldLabel: string
@@ -88,6 +85,10 @@ declare interface IPortfolioWebPartsStrings {
   DefaultDataSourceViewLabel: string
   DefaultRenderModeLabel: string
   DefaultRenderModeDescription: string
+  DefaultTimeframeEndLabel: string
+  DefaultTimeframeEndValue: string
+  DefaultTimeframeStartLabel: string
+  DefaultTimeframeStartValue: string
   DefaultVerticalLabel: string
   DefaultVerticalDescription: string
   DefaultViewDescription: string
@@ -193,6 +194,7 @@ declare interface IPortfolioWebPartsStrings {
   RenderModeListText: string
   RenderModeTilesText: string
   ResourceAllocationInfoText: string
+  ResourceAllocationGroupName: string
   ResourceLabel: string
   RevertCustomOrderButtonText: string
   RevertCustomOrderButtonTooltip: string

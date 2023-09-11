@@ -1,40 +1,7 @@
-@import "~@fluentui/react/dist/sass/References.scss";
-
 .content {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 12px;
   overflow: hidden;
-
-  .menuItem {
-    cursor: default !important;
-    padding: var(--spacingVerticalSNudge) var(--spacingHorizontalXS);
-  }
-
-  div > .menuItem {
-    cursor: default !important;
-  }
-
-  .serviceArea {
-    height: 24px;
-    .tagGroup {
-      display: flex;
-    }
-  }
-
-  .type {
-    height: 24px;
-    .tagGroup {
-      display: flex;
-    }
-  }
-}
-
-.tag {
-  cursor: default !important;
-
-  button {
-    cursor: default !important;
-  }
 }

@@ -13,7 +13,7 @@ export const ProjectSetupCustomAction: Record<string, any> = {
     },
     forceTemplate: 'Overordnet mal',
     progressDialogContentProps: {
-      title: 'Setter opp overordnet område'
+      title: 'Setter opp overordnet prosjekt'
     }
   })
 }

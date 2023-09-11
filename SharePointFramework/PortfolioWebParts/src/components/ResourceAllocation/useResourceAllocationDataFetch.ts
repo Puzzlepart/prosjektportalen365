@@ -23,7 +23,7 @@ import {
  *
  * @returns Timeline groups
  */
-function transformGroups(searchResults: IAllocationSearchResult[]): ITimelineGroup[] {
+const transformGroups = (searchResults: IAllocationSearchResult[]): ITimelineGroup[] => {
   const groupNames = _.uniq(
     searchResults
       .map(
@@ -51,11 +51,11 @@ function transformGroups(searchResults: IAllocationSearchResult[]): ITimelineGro
  *
  * @returns Timeline items
  */
-function transformItems(
+const transformItems = (
   searchResults: IAllocationSearchResult[],
   groups: ITimelineGroup[],
   props: IResourceAllocationProps
-): ITimelineItem[] {
+): ITimelineItem[] => {
   const items = searchResults
     .map<ITimelineItem>((res, id) => {
       const group =
@@ -73,7 +73,7 @@ function transformItems(
       const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number
       const itemOpacity = allocation < 30 ? 0.3 : allocation / 100
       const itemColor = allocation < 40 ? '#000' : '#fff'
-      const backgroundColor = isAbsence ? props.itemAbsenceBgColor : props.itemBgColor
+      const backgroundColor = isAbsence ? props.itemAbsenceColor : props.itemColor
       const style: React.CSSProperties = {
         color: itemColor,
         border: 'none',
@@ -93,14 +93,17 @@ function transformItems(
         title,
         start_time,
         end_time: end_time,
-        allocation,
         itemProps: { style },
-        role: res.RefinableString72,
-        resource: res.RefinableString71,
         props: res,
         data: {
           project: res.SiteTitle,
-          projectUrl: res.SiteName
+          projectUrl: res.SiteName,
+          type: strings.ResourceLabel,
+          allocation,
+          role: res.RefinableString72,
+          resource: res.RefinableString71,
+          status: res.GtAllocationStatusOWSCHCS,
+          comment: res.GtAllocationCommentOWSMTXT
         }
       } as ITimelineItem
     })
@@ -115,7 +118,7 @@ function transformItems(
  *
  * @returns Timeline data
  */
-async function fetchData(props: IResourceAllocationProps): Promise<ITimelineData> {
+const fetchData = async (props: IResourceAllocationProps): Promise<ITimelineData> => {
   const dataSource = await new DataSourceService(props.sp.web).getByName(props.dataSource)
   if (!dataSource) throw format(strings.DataSourceNotFound, props.dataSource)
   try {

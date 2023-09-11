@@ -4,9 +4,11 @@ import { formatDate, tryParseCurrency } from '../../../util'
 import styles from './DetailsCallout.module.scss'
 import React, { FC } from 'react'
 import { IDetailsCalloutProps } from './types'
+import { FluentProvider, Link, webLightTheme } from '@fluentui/react-components'
 
 export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
   const { data } = props.timelineItem.item
+  const { item } = props.timelineItem
 
   const calloutContent = (): JSX.Element => {
     switch (data.type) {
@@ -14,11 +16,11 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
         return (
           <>
             <p hidden={!data.type}>
-              <b>{data.type}:</b> <span>{props.timelineItem.item.title}</span>
+              <b>{data.type}:</b> <span>{item.title}</span>
             </p>
             <p>
               <b>{strings.MilestoneDateLabel}:</b>{' '}
-              <span>{formatDate(props.timelineItem.item.end_time.toString())}</span>
+              <span>{formatDate(item.end_time.toString())}</span>
             </p>
           </>
         )
@@ -28,15 +30,46 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
         return (
           <>
             <p hidden={!data.type}>
-              <b>{data.type}:</b> <span>{props.timelineItem.item.title}</span>
+              <b>{data.type}:</b> <span>{item.title}</span>
             </p>
             <p>
-              <b>{strings.StartDateLabel}:</b>{' '}
-              <span>{formatDate(props.timelineItem.item.start_time.toString())}</span>
+              <b>{strings.StartDateLabel}:</b> <span>{formatDate(item.start_time.toString())}</span>
             </p>
             <p>
-              <b>{strings.EndDateLabel}:</b>{' '}
-              <span>{formatDate(props.timelineItem.item.end_time.toString())}</span>
+              <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.end_time.toString())}</span>
+            </p>
+          </>
+        )
+      }
+      case strings.ResourceLabel: {
+        return (
+          <>
+            <p hidden={!data.projectUrl}>
+              <b>{strings.ProjectLabel}:</b>{' '}
+              <Link href={data.projectUrl} target='_blank' title={data.project}>
+                {data.project}
+              </Link>
+            </p>
+            <p hidden={!data.resource}>
+              <b>{strings.ResourceLabel}:</b> <span>{data.resource}</span>
+            </p>
+            <p hidden={!data.role}>
+              <b>{strings.RoleLabel}:</b> <span>{data.role}</span>
+            </p>
+            <p hidden={!data.allocation}>
+              <b>{strings.AllocationPercetageLabel}:</b> <span>{data.allocation}%</span>
+            </p>
+            <p hidden={!data.status}>
+              <b>{strings.AllocationStatusLabel}:</b> <span>{data.status}</span>
+            </p>
+            <p hidden={!data.comment}>
+              <b>{strings.CommentLabel}:</b> <span>{data.comment}</span>
+            </p>
+            <p>
+              <b>{strings.StartDateLabel}:</b> <span>{formatDate(item.start_time.toString())}</span>
+            </p>
+            <p>
+              <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.end_time.toString())}</span>
             </p>
           </>
         )
@@ -44,31 +77,29 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
       case strings.ProjectLabel: {
         return (
           <>
-            <p hidden={!props.timelineItem.item.data.projectUrl}>
+            <p hidden={!data.projectUrl}>
               <b>{strings.ProjectLabel}:</b>{' '}
-              <a href={props.timelineItem.item.data.projectUrl}>
-                <span>{props.timelineItem.item.data.project}</span>
-              </a>
+              <Link href={data.projectUrl} target='_blank' title={data.project}>
+                {data.project}
+              </Link>
             </p>
             <p hidden={!data.budgetTotal || !data.costsTotal}>
-              <a
+              <Link
+                href={`${data.projectUrl}/SitePages/Prosjektstatus.aspx`}
                 target='_blank'
-                rel='noreferrer'
-                href={`${props.timelineItem.item.data.projectUrl}/SitePages/Prosjektstatus.aspx`}
+                title={strings.LastPublishedStatusreport}
               >
-                <span>{strings.LastPublishedStatusreport}</span>
-              </a>
+                {strings.LastPublishedStatusreport}
+              </Link>
             </p>
             <p hidden={!data.phase}>
               <b>{strings.CurrentPhaseLabel}:</b> <span>{data.phase}</span>
             </p>
             <p>
-              <b>{strings.StartDateLabel}:</b>{' '}
-              <span>{formatDate(props.timelineItem.item.start_time.toString())}</span>
+              <b>{strings.StartDateLabel}:</b> <span>{formatDate(item.start_time.toString())}</span>
             </p>
             <p>
-              <b>{strings.EndDateLabel}:</b>{' '}
-              <span>{formatDate(props.timelineItem.item.end_time.toString())}</span>
+              <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.end_time.toString())}</span>
             </p>
           </>
         )
@@ -77,19 +108,17 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
         return (
           <>
             <p>
-              <b>{strings.NameLabel}:</b> <span>{props.timelineItem.item.title}</span>
+              <b>{strings.NameLabel}:</b> <span>{item.title}</span>
             </p>
             <p hidden={data.elementType !== strings.TriangleLabel}>
               <b>{strings.ColumnRenderOptionDate}:</b>{' '}
-              <span>{formatDate(props.timelineItem.item.end_time.toString())}</span>
+              <span>{formatDate(item.end_time.toString())}</span>
             </p>
             <p hidden={data.elementType === strings.TriangleLabel}>
-              <b>{strings.StartDateLabel}:</b>{' '}
-              <span>{formatDate(props.timelineItem.item.start_time.toString())}</span>
+              <b>{strings.StartDateLabel}:</b> <span>{formatDate(item.start_time.toString())}</span>
             </p>
             <p hidden={data.elementType === strings.TriangleLabel}>
-              <b>{strings.EndDateLabel}:</b>{' '}
-              <span>{formatDate(props.timelineItem.item.end_time.toString())}</span>
+              <b>{strings.EndDateLabel}:</b> <span>{formatDate(item.end_time.toString())}</span>
             </p>
           </>
         )
@@ -122,31 +151,33 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
       onDismiss={props.onDismiss}
       setInitialFocus={true}
     >
-      <div className={styles.calloutHeader}>
-        <div
-          hidden={!data.tag}
-          title={strings.TagFieldLabel}
-          className={styles.tag}
-          style={{
-            backgroundColor: data.bgColorHex
-          }}
-        >
-          {data.tag}
+      <FluentProvider theme={webLightTheme}>
+        <div className={styles.calloutHeader}>
+          <div
+            hidden={!data.tag}
+            title={strings.TagFieldLabel}
+            className={styles.tag}
+            style={{
+              backgroundColor: data.bgColorHex
+            }}
+          >
+            {data.tag}
+          </div>
         </div>
-      </div>
-      {calloutContent()}
-      <p hidden={!data.budgetTotal}>
-        <b>{strings.BudgetTotalLabel}:</b> <span>{tryParseCurrency(data.budgetTotal)}</span>
-      </p>
-      <p hidden={!data.costsTotal}>
-        <b>{strings.CostsTotalLabel}:</b> <span>{tryParseCurrency(data.costsTotal)}</span>
-      </p>
-      <p hidden={!data.description}>
-        <b>{strings.DescriptionFieldLabel}:</b> <span>{data.description}</span>
-      </p>
-      <p hidden={!data.type}>
-        <b>{strings.TypeLabel}:</b> <span>{data.type}</span>
-      </p>
+        {calloutContent()}
+        <p hidden={!data.budgetTotal}>
+          <b>{strings.BudgetTotalLabel}:</b> <span>{tryParseCurrency(data.budgetTotal)}</span>
+        </p>
+        <p hidden={!data.costsTotal}>
+          <b>{strings.CostsTotalLabel}:</b> <span>{tryParseCurrency(data.costsTotal)}</span>
+        </p>
+        <p hidden={!data.description}>
+          <b>{strings.DescriptionFieldLabel}:</b> <span>{data.description}</span>
+        </p>
+        <p hidden={!data.type}>
+          <b>{strings.TypeLabel}:</b> <span>{data.type}</span>
+        </p>
+      </FluentProvider>
     </Callout>
   )
 }

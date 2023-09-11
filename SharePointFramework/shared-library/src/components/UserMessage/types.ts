@@ -1,9 +1,9 @@
-import { IMessageBarProps, MessageBarType } from '@fluentui/react'
+import { AlertProps } from '@fluentui/react-components/dist/unstable'
 
 /**
  * @category UserMessage
  */
-export interface IUserMessageProps extends Omit<IMessageBarProps, 'messageBarType'> {
+export interface IUserMessageProps extends AlertProps {
   /**
    * Text to show in the message
    *
@@ -15,16 +15,6 @@ export interface IUserMessageProps extends Omit<IMessageBarProps, 'messageBarTyp
    * On click handler for the message
    */
   onClick?: (event: React.MouseEvent<any>) => void
-
-  /**
-   * On dismiss handler for the message
-   */
-  onDismiss?: () => void
-
-  /**
-   * Type (info, warning, error, etc...)
-   */
-  type?: MessageBarType
 
   /**
    * Container style

@@ -1,12 +1,18 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 declare interface ISharedLibraryStrings {
+  FiltersString: string
   Aria: {
+    InfoLabelTitle: string
+    MenuOverflowCount: string
     ProjectTitle: string
   }
+  AllocationPercetageLabel: string
+  AllocationStatusLabel: string
   BarLabel: string
   BudgetTotalLabel: string
   CategoryFieldLabel: string
   ColumnRenderOptionDate: string
+  CommentLabel: string
   CostsTotalLabel: string
   CurrentPhaseLabel: string
   DescriptionFieldLabel: string
@@ -24,6 +30,8 @@ declare interface ISharedLibraryStrings {
   ProjectTimelineErrorTransformItemText: string
   ProjectTimelineInfoText: string
   ProjectTimelineItemInfo: string
+  ResourceLabel: string
+  RoleLabel: string
   SiteTitleLabel: string
   StartDateLabel: string
   SubPhaseLabel: string

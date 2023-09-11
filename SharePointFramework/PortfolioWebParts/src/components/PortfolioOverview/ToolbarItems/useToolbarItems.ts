@@ -1,18 +1,22 @@
 import {
   AppsListFilled,
   AppsListRegular,
+  ChevronLeftFilled,
+  ChevronLeftRegular,
   ContentView24Filled,
   ContentView24Regular,
-  Filter24Filled,
-  Filter24Regular,
+  EditFilled,
+  EditRegular,
+  FormNewFilled,
+  FormNewRegular,
   TextBulletListLtrFilled,
   TextBulletListLtrRegular,
   bundleIcon
 } from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
+import { ListMenuItem, ListMenuItemDivider, ListMenuItemHeader } from 'pp365-shared-library'
 import { useMemo } from 'react'
 import _ from 'underscore'
-import { ListMenuItem, ListMenuItemDivider, ListMenuItemHeader } from '../../List'
 import { IPortfolioOverviewContext } from '../context'
 import { SET_VIEW_FORM_PANEL, TOGGLE_COMPACT, TOGGLE_FILTER_PANEL } from '../reducer'
 import { useExcelExport } from './useExcelExport'
@@ -24,9 +28,11 @@ import { useViewsMenuItems } from './useViewsMenuItems'
  */
 const Icons = {
   ContentView: bundleIcon(ContentView24Filled, ContentView24Regular),
-  Filter: bundleIcon(Filter24Filled, Filter24Regular),
   AppsList: bundleIcon(AppsListFilled, AppsListRegular),
-  TextBulletList: bundleIcon(TextBulletListLtrFilled, TextBulletListLtrRegular)
+  TextBulletList: bundleIcon(TextBulletListLtrFilled, TextBulletListLtrRegular),
+  ChevronLeft: bundleIcon(ChevronLeftFilled, ChevronLeftRegular),
+  FormNew: bundleIcon(FormNewFilled, FormNewRegular),
+  Edit: bundleIcon(EditFilled, EditRegular)
 }
 
 /**
@@ -55,12 +61,16 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
   const menuItems = useMemo<ListMenuItem[]>(
     () =>
       [
-        new ListMenuItem().setIcon('ExcelLogoInverse').setOnClick(exportToExcel).setStyle({
-          color: '#008000'
-        }),
-        new ListMenuItem(context.state.currentView?.title)
+        new ListMenuItem(null, strings.ExcelExportButtonLabel)
+          .setIcon('ExcelLogoInverse')
+          .setOnClick(exportToExcel)
+          .setStyle({
+            color: '#10793F'
+          }),
+        new ListMenuItem(context.state.currentView?.title, strings.PortfolioViewsListName)
           .setIcon(Icons.ContentView)
-          .setWidth(300)
+          .setWidth('fit-content')
+          .setStyle({ minWidth: '145px' })
           .setItems(
             [
               new ListMenuItem(strings.ListViewText)
@@ -94,14 +104,15 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
               ),
               new ListMenuItem(strings.SelectProgramText)
                 .setItems(programViews)
+                .setIcon(Icons.ChevronLeft)
                 .makeConditional(!_.isEmpty(programViews)),
               ListMenuItemDivider.makeConditional(!_.isEmpty(programViews)),
               userCanManageViews &&
-                new ListMenuItem(strings.NewViewText).setOnClick(() => {
+                new ListMenuItem(strings.NewViewText).setIcon(Icons.FormNew).setOnClick(() => {
                   context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
                 }),
               userCanManageViews &&
-                new ListMenuItem(strings.EditViewText).setOnClick(() => {
+                new ListMenuItem(strings.EditViewText).setIcon(Icons.Edit).setOnClick(() => {
                   context.dispatch(
                     SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
                   )
@@ -109,7 +120,7 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
             ],
             checkedValues
           ),
-        new ListMenuItem().setIcon(Icons.Filter).setOnClick(() => {
+        new ListMenuItem(null, strings.FilterText).setIcon('Filter').setOnClick(() => {
           context.dispatch(TOGGLE_FILTER_PANEL())
         })
       ].filter(Boolean),

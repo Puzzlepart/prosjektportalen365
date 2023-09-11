@@ -1,6 +1,11 @@
 .root {
-  p {
-    margin: 0;
-    padding: 0;
+  .alert {
+    padding:15px;
+
+    p {
+      margin: 0;
+      padding: 0;
+    }
   }
+
 }

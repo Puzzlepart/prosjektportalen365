@@ -1,4 +1,3 @@
-import { MessageBarType } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import moment from 'moment'
 import { PortalDataService } from 'pp365-shared-library/lib/services'
@@ -44,7 +43,7 @@ export function usePublishReport() {
         context.dispatch(REPORT_PUBLISHED({ updatedReport, message: null }))
       } catch (error) {
         context.dispatch(
-          REPORT_PUBLISH_ERROR({ message: { text: error.message, type: MessageBarType.error } })
+          REPORT_PUBLISH_ERROR({ message: { text: error.message, intent: 'error' } })
         )
       } finally {
         window.setTimeout(() => {

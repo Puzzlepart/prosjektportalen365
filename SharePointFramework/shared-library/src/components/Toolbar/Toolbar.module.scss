@@ -1,0 +1,18 @@
+.toolbar {
+  gap: 15px;
+  height: 40px;
+  padding: 0 !important;
+
+  button {
+    height: 40px;
+    width: -moz-fit-content;
+    width: fit-content;
+    min-width: 40px;
+    padding: 5px var(--spacingHorizontalM) !important;
+    box-shadow: var(--shadow2);
+  }
+
+  button:hover {
+    background-color: transparent;
+  }
+}

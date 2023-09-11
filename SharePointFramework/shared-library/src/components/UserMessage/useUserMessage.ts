@@ -1,13 +1,11 @@
-import { IMessageBarStyleProps, IMessageBarStyles, IStyleFunctionOrObject } from '@fluentui/react'
 import { IUserMessageProps } from './types'
+import { CSSProperties } from 'react'
 
-export function useUserMessage(props: IUserMessageProps): { styles: Partial<IMessageBarStyles> } {
-  const styles: IStyleFunctionOrObject<IMessageBarStyleProps, IMessageBarStyles> = {
-    root: props.styles ? props.styles['root'] : {}
-  }
+export function useUserMessage(props: IUserMessageProps): { styles: CSSProperties } {
+  let styles: CSSProperties = {}
 
   if (props.fixedCenter) {
-    styles.root = {
+    styles = {
       ...(styles['root'] as any),
       display: 'flex',
       alignItems: 'center',
@@ -17,7 +15,7 @@ export function useUserMessage(props: IUserMessageProps): { styles: Partial<IMes
   }
 
   if (props.isCompact) {
-    styles.text = {
+    styles = {
       marginTop: '3px',
       marginBottom: '0px'
     }

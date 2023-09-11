@@ -1,9 +1,16 @@
 import { IPersonaProps, ITag, Link } from '@fluentui/react'
 import React from 'react'
 import { useProjectInformationContext } from '../../context'
-import styles from './ProjectProperty.module.scss'
 import { IProjectPropertyProps } from './types'
 import { Persona } from '@fluentui/react-components'
+import { OverflowTagMenu } from 'pp365-shared-library'
+import {
+  ChevronCircleRightFilled,
+  EarthFilled,
+  GlobeLocationFilled,
+  TagFilled,
+  TagMultipleFilled
+} from '@fluentui/react-icons'
 
 /**
  * Component logic hook for the `ProjectProperty` component.
@@ -22,6 +29,26 @@ export function useProjectProperty(props: IProjectPropertyProps) {
    * @returns JSX.Element
    */
   const renderValueForField = () => {
+    let icon = TagMultipleFilled
+
+    switch (props.model.internalName) {
+      case 'GtProjectServiceArea':
+        icon = GlobeLocationFilled
+        break
+      case 'GtProjectType':
+        icon = TagMultipleFilled
+        break
+      case 'GtUNSustDevGoals':
+        icon = EarthFilled
+        break
+      case 'GtProjectPhase':
+        icon = ChevronCircleRightFilled
+        break
+      default:
+        icon = TagFilled
+        break
+    }
+
     const renderMap = new Map<string, (value: any) => JSX.Element>([
       [
         'User',
@@ -29,8 +56,9 @@ export function useProjectProperty(props: IProjectPropertyProps) {
           return (
             <Persona
               {...user}
+              title={user.text}
               name={user.text}
-              size='medium'
+              size='small'
               avatar={{
                 image: {
                   src: user.imageUrl
@@ -50,6 +78,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
                 <Persona
                   key={key}
                   {...user}
+                  title={user.text}
                   name={user.text}
                   size='small'
                   avatar={{
@@ -67,22 +96,29 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       [
         'TaxonomyFieldTypeMulti',
         (tags: ITag[]) => (
-          <div className={styles.labels}>
-            {tags.map((tag, key) => (
-              <div key={key} title={tag.name} className={styles.termLabel}>
-                {tag.name}
-              </div>
-            ))}
+          <div style={{ marginTop: 6 }}>
+            <OverflowTagMenu
+              text={props.model.displayName}
+              tags={tags.map((tag) => tag && tag.name)}
+              icon={icon}
+            />
           </div>
         )
       ],
-      ['TaxonomyFieldType', ([tag]: ITag[]) => <div>{tag.name}</div>],
+      [
+        'TaxonomyFieldType',
+        ([tag]: ITag[]) => (
+          <div style={{ marginTop: 6 }}>
+            <OverflowTagMenu text={props.model.displayName} tags={[tag.name]} icon={icon} />
+          </div>
+        )
+      ],
       [
         'URL',
         ({ url, description }) => {
           return (
             <div>
-              <Link href={url} target='_blank'>
+              <Link href={url} target='_blank' title={description}>
                 {description ?? url}
               </Link>
             </div>
@@ -93,6 +129,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
         'Note',
         (textValue: string) => (
           <div
+            title={textValue.replace(/\n/g, '')}
             dangerouslySetInnerHTML={{
               __html: textValue.replace(/\n/g, '<br />')
             }}
@@ -102,7 +139,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
       [
         'DateTime',
         (date: Date) => {
-          return <div>{date.toLocaleDateString()}</div>
+          return <div title={date.toLocaleDateString()}>{date.toLocaleDateString()}</div>
         }
       ]
     ])
@@ -112,7 +149,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
     if (renderMap.has(props.model.type)) {
       return renderMap.get(props.model.type)(value)
     } else {
-      return <div>{value}</div>
+      return <div title={value.toString()}>{value}</div>
     }
   }
 
