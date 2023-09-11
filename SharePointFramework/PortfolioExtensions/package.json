@@ -13,8 +13,8 @@
     "serve": "concurrently \"gulp serve-deprecated --locale=nb-no --nobrowser\"",
     "build": "gulp bundle --ship && gulp package-solution --ship",
     "postversion": "tsc && npm publish",
-    "lint": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
-    "prettier": "prettier '**/*.ts*' --write --loglevel silent",
+    "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier",
+    "prettier": "prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml",
     "prewatch": "node ../.tasks/pre-watch.js",
     "postwatch": "node ../.tasks/post-watch.js"
   },

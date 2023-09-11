@@ -7,8 +7,8 @@
   "scripts": {
     "build": "gulp bundle --ship && gulp package-solution --ship",
     "postversion": "tsc && npm publish",
-    "lint": "eslint --ext .ts,.tsx ./src --color --fix && npm run prettier",
-    "prettier": "prettier '**/*.ts*' --write --loglevel silent"
+    "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ../.eslintrc.yaml && npm run prettier",
+    "prettier": "prettier '**/*.ts*' --write --loglevel silent --config ../.prettierrc.yaml"
   },
   "dependencies": {
     "@microsoft/sp-application-base": "1.17.4",
