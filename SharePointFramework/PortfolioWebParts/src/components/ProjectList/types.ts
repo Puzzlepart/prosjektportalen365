@@ -36,6 +36,23 @@ export interface IProjectListVertical extends Omit<TabProps, 'icon'> {
   isHidden?: (state: IProjectListState) => boolean
 }
 
+export interface IRenderMode {
+  /**
+   * Value of the render mode
+   */
+  value?: string
+
+  /**
+   * Text to display for the render mode
+   */
+  text?: string
+
+  /**
+   * Icon to display for therender mode
+   */
+  icon?: FluentIcon
+}
+
 export interface IQuickLaunch {
   /**
    * Order of the menu item
@@ -142,6 +159,11 @@ export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
    * How the projects should be rendered. `tiles` or `list`
    */
   renderMode?: ProjectListRenderMode
+
+  /**
+   * Current selected render mode
+   */
+  selectedRenderMode?: IRenderMode
 
   /**
    * Current selected vertical

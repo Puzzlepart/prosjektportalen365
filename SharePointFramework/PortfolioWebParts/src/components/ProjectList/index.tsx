@@ -1,14 +1,11 @@
 import {
-  Button,
   FluentProvider,
   SelectTabData,
   Tab,
   TabList,
-  Tooltip,
   webLightTheme
 } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
-import { TextSortAscendingRegular, TextSortDescendingRegular } from '@fluentui/react-icons'
 import { SearchBox } from '@fluentui/react-search-preview'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
@@ -21,10 +18,9 @@ import { ProjectCard } from './ProjectCard'
 import { ProjectCardContext } from './ProjectCard/context'
 import styles from './ProjectList.module.scss'
 import { ProjectListVerticals } from './ProjectListVerticals'
-import { RenderModeDropdown } from './RenderModeDropdown'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
-import { format } from '@fluentui/react'
+import { Toolbar } from 'pp365-shared-library'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const {
@@ -34,7 +30,8 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     verticals,
     onSearch,
     searchBoxPlaceholder,
-    createCardContext
+    createCardContext,
+    menuItems
   } = useProjectList(props)
 
   /**
@@ -126,39 +123,8 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             appearance='filled-lighter'
           />
         </div>
-        <div hidden={!props.showRenderModeSelector}>
-          <RenderModeDropdown
-            renderAs={state.renderMode}
-            onOptionSelect={(renderAs) => setState({ renderMode: renderAs })}
-          />
-        </div>
-        <div hidden={!props.showSortBy || state.renderMode !== 'tiles'}>
-          <Tooltip
-            content={format(strings.SortCardsByLabel, props.sortBy)}
-            relationship='description'
-            withArrow
-          >
-            <Button
-              className={styles.sortBy}
-              appearance='transparent'
-              onClick={() =>
-                setState({
-                  sort: {
-                    fieldName: state.sort?.fieldName || props.sortBy,
-                    isSortedDescending: !state.sort?.isSortedDescending
-                  }
-                })
-              }
-              size='large'
-              icon={
-                state.sort?.isSortedDescending ? (
-                  <TextSortAscendingRegular />
-                ) : (
-                  <TextSortDescendingRegular />
-                )
-              }
-            />
-          </Tooltip>
+        <div hidden={!props.showRenderModeSelector && !props.showSortBy}>
+          <Toolbar items={menuItems} />
         </div>
       </div>
       {state.isDataLoaded && isEmpty(projects) && (

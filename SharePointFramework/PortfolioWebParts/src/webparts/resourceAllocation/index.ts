@@ -14,7 +14,7 @@ export default class ResourceAllocationWebPart extends BasePortfolioWebPart<IRes
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    const propertesWithDefaults = { ...ResourceAllocation.defaultProps, ...this.properties }
+    const propertiesWithDefaults = { ...ResourceAllocation.defaultProps, ...this.properties }
     return {
       pages: [
         {
@@ -24,7 +24,7 @@ export default class ResourceAllocationWebPart extends BasePortfolioWebPart<IRes
               groupFields: [
                 PropertyPaneDropdown('defaultTimeframeStart', {
                   label: strings.DefaultTimeframeStartLabel,
-                  selectedKey: propertesWithDefaults.defaultTimeframeStart,
+                  selectedKey: propertiesWithDefaults.defaultTimeframeStart,
                   options: [
                     [2, 'months'],
                     [4, 'months'],
@@ -39,7 +39,7 @@ export default class ResourceAllocationWebPart extends BasePortfolioWebPart<IRes
                 }),
                 PropertyPaneDropdown('defaultTimeframeEnd', {
                   label: strings.DefaultTimeframeEndLabel,
-                  selectedKey: propertesWithDefaults.defaultTimeframeEnd,
+                  selectedKey: propertiesWithDefaults.defaultTimeframeEnd,
                   options: [
                     [2, 'months'],
                     [4, 'months'],

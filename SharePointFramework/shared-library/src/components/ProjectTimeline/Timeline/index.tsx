@@ -1,5 +1,5 @@
 import { format } from '@fluentui/react'
-import { FluentProvider, webLightTheme } from '@fluentui/react-components'
+import { FluentProvider, useId, webLightTheme } from '@fluentui/react-components'
 import { ITimelineItem } from '../../../interfaces/ITimelineItem'
 import moment from 'moment'
 import * as strings from 'SharedLibraryStrings'
@@ -7,28 +7,30 @@ import React, { FC } from 'react'
 import ReactTimeline, { TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
 import { FilterPanel } from '../../FilterPanel'
-import { Commands } from '../Commands'
 import { DetailsCallout } from '../DetailsCallout'
 import styles from './Timeline.module.scss'
 import { ITimelineProps } from './types'
 import { useTimeline } from './useTimeline'
 import { WebPartTitle } from '../../WebPartTitle'
+import { Toolbar } from '../../Toolbar'
 
 export const Timeline: FC<ITimelineProps> = (props) => {
+  const fluentProviderId = useId('fluent-provider')
   const {
     defaultTimeStart,
     defaultTimeEnd,
     sidebarWidth,
     showFilterPanel,
-    setShowFilterPanel,
     showDetails,
+    menuItems,
+    setShowFilterPanel,
     setShowDetails,
     itemRenderer,
     groupRenderer
   } = useTimeline(props)
 
   return (
-    <FluentProvider className={styles.root} theme={webLightTheme}>
+    <FluentProvider id={fluentProviderId} className={styles.root} theme={webLightTheme}>
       {props.title && (
         <div className={styles.header}>
           <WebPartTitle
@@ -37,12 +39,7 @@ export const Timeline: FC<ITimelineProps> = (props) => {
           />
           <div className={styles.commandBar}>
             <div>
-              <Commands
-                setShowFilterPanel={setShowFilterPanel}
-                onGroupByChange={props.onGroupByChange}
-                isGroupByEnabled={props.isGroupByEnabled}
-                defaultGroupBy={props.defaultGroupBy}
-              />
+              <Toolbar items={menuItems} />
             </div>
           </div>
         </div>
@@ -86,8 +83,7 @@ Timeline.defaultProps = {
     [-1, 'months'],
     [1, 'years']
   ],
-  infoText: strings.ProjectTimelineInfoText,
-  showInfoText: true
+  infoText: strings.ProjectTimelineInfoText
 }
 
 export * from './types'

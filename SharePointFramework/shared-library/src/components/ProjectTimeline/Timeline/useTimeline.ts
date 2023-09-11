@@ -5,6 +5,7 @@ import { ITimelineItem, TimelineGroupType } from '../../../interfaces'
 import { ITimelineProps } from './types'
 import { useGroupRenderer } from './useGroupRenderer'
 import { useItemRenderer } from './useItemRenderer'
+import { useToolbarItems } from './ToolbarItems/useToolbarItems'
 
 export function useTimeline(props: ITimelineProps) {
   const [showDetails, setShowDetails] = useState<{
@@ -13,6 +14,7 @@ export function useTimeline(props: ITimelineProps) {
   }>(null)
 
   const [showFilterPanel, setShowFilterPanel] = useState(false)
+  const [selectedGroupBy, setSelectedGroupBy] = useState<string>(props.defaultGroupBy)
 
   /**
    * On item click
@@ -42,13 +44,16 @@ export function useTimeline(props: ITimelineProps) {
   const itemRenderer = useItemRenderer(onItemClick)
   const groupRenderer = useGroupRenderer()
 
+  const menuItems = useToolbarItems(setShowFilterPanel, selectedGroupBy, setSelectedGroupBy, props)
+
   return {
     defaultTimeStart,
     defaultTimeEnd,
     sidebarWidth,
     showFilterPanel,
-    setShowFilterPanel,
     showDetails,
+    menuItems,
+    setShowFilterPanel,
     setShowDetails,
     onItemClick,
     itemRenderer,

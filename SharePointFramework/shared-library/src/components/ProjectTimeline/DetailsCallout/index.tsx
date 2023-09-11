@@ -4,9 +4,10 @@ import { formatDate, tryParseCurrency } from '../../../util'
 import styles from './DetailsCallout.module.scss'
 import React, { FC } from 'react'
 import { IDetailsCalloutProps } from './types'
-import { FluentProvider, Link, webLightTheme } from '@fluentui/react-components'
+import { FluentProvider, Link, useId, webLightTheme } from '@fluentui/react-components'
 
 export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
+  const fluentProviderId = useId('fluent-provider')
   const { data } = props.timelineItem.item
   const { item } = props.timelineItem
 
@@ -151,7 +152,7 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
       onDismiss={props.onDismiss}
       setInitialFocus={true}
     >
-      <FluentProvider theme={webLightTheme}>
+      <FluentProvider id={fluentProviderId} theme={webLightTheme}>
         <div className={styles.calloutHeader}>
           <div
             hidden={!data.tag}

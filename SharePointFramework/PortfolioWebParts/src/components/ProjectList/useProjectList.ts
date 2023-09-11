@@ -10,6 +10,7 @@ import { IProjectListProps } from './types'
 import { useProjectListDataFetch } from './useProjectListDataFetch'
 import { useProjectListState } from './useProjectListState'
 import strings from 'PortfolioWebPartsStrings'
+import { useToolbarItems } from './ToolbarItems/useToolbarItems'
 
 /**
  * Component logic hook for `ProjectList`. This hook is responsible for
@@ -131,9 +132,12 @@ export const useProjectList = (props: IProjectListProps) => {
     }
   }
 
+  const menuItems = useToolbarItems(state, setState, props)
+
   return {
     state,
     setState,
+    menuItems,
     projects,
     verticals,
     searchBoxPlaceholder:

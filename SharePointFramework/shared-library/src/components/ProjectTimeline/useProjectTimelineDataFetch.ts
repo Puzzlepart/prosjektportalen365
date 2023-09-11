@@ -25,7 +25,8 @@ const createProjectGroups = (projects: ProjectListModel[]): ITimelineGroup[] => 
     const project = projects.find((project) => project.title === title)
     return {
       title: project.title,
-      siteId: project.siteId
+      siteId: project.siteId,
+      path: project.url
     }
   })
 
@@ -34,7 +35,8 @@ const createProjectGroups = (projects: ProjectListModel[]): ITimelineGroup[] => 
       id,
       title: project.title,
       type: TimelineGroupType.Project,
-      siteId: project.siteId
+      siteId: project.siteId,
+      path: project.path
     }
   })
 

@@ -12,6 +12,7 @@ import {
   MenuTrigger,
   Overflow,
   OverflowItem,
+  useId,
   useIsOverflowItemVisible,
   useOverflowMenu,
   webLightTheme
@@ -47,6 +48,7 @@ export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
       children: string
     }[]
   }) => {
+    const fluentProviderId = useId('fluent-provider')
     const { tags } = props
     const { isOverflowing, overflowCount } = useOverflowMenu<HTMLButtonElement>()
 
@@ -55,7 +57,7 @@ export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
     }
 
     return (
-      <FluentProvider theme={webLightTheme}>
+      <FluentProvider id={fluentProviderId} theme={webLightTheme}>
         <Menu closeOnScroll>
           <MenuTrigger disableButtonEnhancement>
             <InteractionTag
