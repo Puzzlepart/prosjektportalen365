@@ -7,12 +7,12 @@ import React, { FC } from 'react'
 import ReactTimeline, { TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
 import { FilterPanel } from '../../FilterPanel'
-import { Commands } from '../Commands'
 import { DetailsCallout } from '../DetailsCallout'
 import styles from './Timeline.module.scss'
 import { ITimelineProps } from './types'
 import { useTimeline } from './useTimeline'
 import { WebPartTitle } from '../../WebPartTitle'
+import { Toolbar } from '../../Toolbar'
 
 export const Timeline: FC<ITimelineProps> = (props) => {
   const fluentProviderId = useId('fluent-provider')
@@ -21,8 +21,9 @@ export const Timeline: FC<ITimelineProps> = (props) => {
     defaultTimeEnd,
     sidebarWidth,
     showFilterPanel,
-    setShowFilterPanel,
     showDetails,
+    menuItems,
+    setShowFilterPanel,
     setShowDetails,
     itemRenderer,
     groupRenderer
@@ -38,12 +39,7 @@ export const Timeline: FC<ITimelineProps> = (props) => {
           />
           <div className={styles.commandBar}>
             <div>
-              <Commands
-                setShowFilterPanel={setShowFilterPanel}
-                onGroupByChange={props.onGroupByChange}
-                isGroupByEnabled={props.isGroupByEnabled}
-                defaultGroupBy={props.defaultGroupBy}
-              />
+              <Toolbar items={menuItems} />
             </div>
           </div>
         </div>
@@ -87,8 +83,7 @@ Timeline.defaultProps = {
     [-1, 'months'],
     [1, 'years']
   ],
-  infoText: strings.ProjectTimelineInfoText,
-  showInfoText: true
+  infoText: strings.ProjectTimelineInfoText
 }
 
 export * from './types'

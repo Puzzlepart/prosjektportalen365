@@ -2,15 +2,13 @@ import { ITimelineItem, ITimelineGroup } from '../../../interfaces'
 import moment from 'moment'
 import { IColumn } from '@fluentui/react'
 import { IFilterItemProps, IFilterProps } from '../../FilterPanel'
-import { ICommandsProps } from '../Commands/types'
 
 export type TimelineTimeframe = [
   [number, moment.unitOfTime.DurationConstructor],
   [number, moment.unitOfTime.DurationConstructor]
 ]
 
-export interface ITimelineProps
-  extends Pick<ICommandsProps, 'onGroupByChange' | 'isGroupByEnabled' | 'defaultGroupBy'> {
+export interface ITimelineProps {
   /**
    * Timeline default timeframe
    */
@@ -40,6 +38,23 @@ export interface ITimelineProps
   onFilterChange: (column: IColumn, selectedItems: IFilterItemProps[]) => void
 
   /**
+   * On Group change
+   *
+   * @param groupBy Group by
+   */
+  onGroupByChange?: (groupBy: string) => void
+
+  /**
+   * Is group by enabled
+   */
+  isGroupByEnabled?: boolean
+
+  /**
+   * Default group by
+   */
+  defaultGroupBy?: string
+
+  /**
    * Title of the timeline
    */
   title?: string
@@ -53,9 +68,4 @@ export interface ITimelineProps
    * Information text
    */
   infoText?: string
-
-  /**
-   * Show information text above the timeline (defaults to `true`)
-   */
-  showInfoText?: boolean
 }
