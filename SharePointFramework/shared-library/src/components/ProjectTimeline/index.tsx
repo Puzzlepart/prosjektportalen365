@@ -21,17 +21,12 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
               filters={state.filters}
               onFilterChange={onFilterChange}
               infoText={props.infoText}
-              showInfoText={props.showInfoText}
             />
           </>
         )}
       </div>
     </div>
   )
-}
-
-ProjectTimeline.defaultProps = {
-  showInfoText: true
 }
 
 export * from './Timeline'

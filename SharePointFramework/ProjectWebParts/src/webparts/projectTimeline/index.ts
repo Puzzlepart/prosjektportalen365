@@ -20,7 +20,7 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    const propertesWithDefaults = { ...ProjectTimeline.defaultProps, ...this.properties }
+    const propertiesWithDefaults = { ...ProjectTimeline.defaultProps, ...this.properties }
     return {
       pages: [
         {
@@ -38,7 +38,7 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                 this.properties.showTimeline &&
                   PropertyPaneDropdown('defaultTimeframeStart', {
                     label: strings.DefaultTimeframeStartLabel,
-                    selectedKey: propertesWithDefaults.defaultTimeframeStart,
+                    selectedKey: propertiesWithDefaults.defaultTimeframeStart,
                     options: [
                       [2, 'months'],
                       [4, 'months'],
@@ -54,7 +54,7 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                 this.properties.showTimeline &&
                   PropertyPaneDropdown('defaultTimeframeEnd', {
                     label: strings.DefaultTimeframeEndLabel,
-                    selectedKey: propertesWithDefaults.defaultTimeframeEnd,
+                    selectedKey: propertiesWithDefaults.defaultTimeframeEnd,
                     options: [
                       [2, 'months'],
                       [4, 'months'],
@@ -70,7 +70,7 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                 this.properties.showTimeline &&
                   PropertyPaneDropdown('defaultGroupBy', {
                     label: strings.DefaultGroupByLabel,
-                    selectedKey: propertesWithDefaults.defaultGroupBy,
+                    selectedKey: propertiesWithDefaults.defaultGroupBy,
                     options: [
                       {
                         key: strings.ProjectLabel,
@@ -89,7 +89,7 @@ export default class ProjectTimelineWebPart extends BaseProjectWebPart<IProjectT
                 PropertyPaneToggle('showTimelineList', {
                   label: strings.ShowTimelineListLabel
                 }),
-                propertesWithDefaults.showTimelineList &&
+                propertiesWithDefaults.showTimelineList &&
                   PropertyPaneToggle('showTimelineListCommands', {
                     label: strings.ShowTimelineListCommandsLabel
                   })

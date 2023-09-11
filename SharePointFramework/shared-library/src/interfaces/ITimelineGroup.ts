@@ -15,6 +15,7 @@ export interface ITimelineGroup {
   type?: TimelineGroupType
   resourceType?: TimelineResourceType
   siteId?: string
+  path?: string
 }
 
 export interface ITimelineGroups {
