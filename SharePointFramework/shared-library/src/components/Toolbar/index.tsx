@@ -22,8 +22,13 @@ export const Toolbar: FC<IToolbarProps> = (props) => {
   const fluentProviderId = useId('fluent-provider')
 
   return (
-    <FluentProvider id={fluentProviderId} theme={webLightTheme}>
+    <FluentProvider id={fluentProviderId} theme={webLightTheme} className={styles.root}>
       <FluentToolbar className={styles.toolbar}>{props.items.map(renderToolbarItem)}</FluentToolbar>
+      {props.farItems && (
+        <FluentToolbar className={styles.toolbar}>
+          {props.farItems.map(renderToolbarItem)}
+        </FluentToolbar>
+      )}
       {props.filterPanel && (
         <FilterPanel
           {...props.filterPanel}
@@ -36,7 +41,8 @@ export const Toolbar: FC<IToolbarProps> = (props) => {
 }
 
 Toolbar.defaultProps = {
-  items: []
+  items: [],
+  farItems: []
 }
 
 export * from './types'

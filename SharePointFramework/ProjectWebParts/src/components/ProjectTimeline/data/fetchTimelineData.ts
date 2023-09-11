@@ -1,4 +1,3 @@
-import { IColumn } from '@fluentui/react'
 import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
 import { TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-library/lib/models'
@@ -75,14 +74,13 @@ export async function fetchTimelineData(
 
     const columns = timelineColumns
       .filter((column) => column.InternalName !== 'GtSiteIdLookup')
-      .map<IColumn>((column) => ({
+      .map<any>((column) => ({
         key: column.InternalName,
         name: column.Title,
         fieldName: column.InternalName,
         data: { type: column.TypeAsString },
         minWidth: 150,
-        maxWidth: 200,
-        isResizable: true
+        maxWidth: 200
       }))
 
     timelineListItems = timelineListItems.map((item) => ({

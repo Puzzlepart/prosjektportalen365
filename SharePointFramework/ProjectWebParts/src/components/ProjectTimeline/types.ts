@@ -1,4 +1,3 @@
-import { IColumn } from '@fluentui/react'
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState,
@@ -70,8 +69,8 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<ITimel
 export interface ITimelineData {
   items: ITimelineItem[]
   groups: ITimelineGroup[]
-  listItems?: Record<string, any>[]
-  listColumns?: IColumn[]
+  listItems?: any[]
+  listColumns?: any[]
 }
 
 export enum TimelineGroupType {

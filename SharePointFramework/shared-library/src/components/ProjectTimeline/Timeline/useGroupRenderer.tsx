@@ -12,14 +12,15 @@ export function useGroupRenderer() {
 
     return (
       <div>
-        {group.type === TimelineGroupType.Project
-          ? <Link href={group.path} target='_blank' title={group.title}>
+        {group.type === TimelineGroupType.Project ? (
+          <Link href={group.path} target='_blank' title={group.title}>
             {group.title}
           </Link>
-          : <span title={group.title} style={style}>
+        ) : (
+          <span title={group.title} style={style}>
             {group.title}
           </span>
-        }
+        )}
       </div>
     )
   }

@@ -12,6 +12,11 @@ export interface IToolbarProps {
   items?: ListMenuItem[]
 
   /**
+   * An array of ListMenuItem objects to be displayed in the toolbar (far right side).
+   */
+  farItems?: ListMenuItem[]
+
+  /**
    * Props for the FilterPanel component. If specfied, the FilterPanel
    * will be rendered in the toolbar.
    */
