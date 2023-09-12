@@ -115,7 +115,7 @@ export async function fetchTimelineData(
       ].join('')
     }))
 
-    timelineContentItems = timelineContentItems
+    timelineContentItems = timelineListItems
       .filter((item) => item.GtSiteIdLookup !== null)
       .map((item) => {
         const type = item.GtTimelineTypeLookup?.Title
