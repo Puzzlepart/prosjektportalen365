@@ -12,7 +12,7 @@ export function useGroupRenderer() {
     const style: React.CSSProperties = { display: 'block', width: '100%' }
 
     return (
-      <div>
+      <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
         {group.type === TimelineGroupType.Project ? (
           <Tooltip content={strings.TimelineGroupDescription} relationship='description' withArrow>
             <Link
