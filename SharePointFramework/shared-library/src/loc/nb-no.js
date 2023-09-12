@@ -1,6 +1,5 @@
 define([], function () {
   return {
-    FiltersString: 'Filtre',
     Aria: {
       InfoLabelTitle: 'Informasjon om {0}',
       MenuOverflowCount: '{0} flere elementer',
@@ -18,6 +17,7 @@ define([], function () {
     DescriptionFieldLabel: 'Beskrivelse',
     DiamondLabel: 'Diamant',
     EndDateLabel: 'Sluttdato',
+    FiltersString: 'Filtre',
     FilterText: 'Filtrer',
     GroupByLabel: 'Grupper etter',
     LastPublishedStatusreport: 'Gå til siste statusrapport',
@@ -36,7 +36,8 @@ define([], function () {
     StartDateLabel: 'Startdato',
     SubPhaseLabel: 'Delfase',
     TagFieldLabel: 'Etikett',
+    TimelineGroupDescription: 'Gå til tidslinje for prosjektet',
     TriangleLabel: 'Trekant',
-    TypeLabel: 'Type'
+    TypeLabel: 'Type',
   }
 })

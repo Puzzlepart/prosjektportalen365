@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 declare interface ISharedLibraryStrings {
-  FiltersString: string
   Aria: {
     InfoLabelTitle: string
     MenuOverflowCount: string
@@ -18,6 +17,7 @@ declare interface ISharedLibraryStrings {
   DescriptionFieldLabel: string
   DiamondLabel: string
   EndDateLabel: string
+  FiltersString: string
   FilterText: string
   GroupByLabel: string
   LastPublishedStatusreport: string
@@ -36,7 +36,8 @@ declare interface ISharedLibraryStrings {
   StartDateLabel: string
   SubPhaseLabel: string
   TagFieldLabel: string
-  TriangleLabel: any
+  TimelineGroupDescription: string
+  TriangleLabel: string
   TypeLabel: string
 }
 
