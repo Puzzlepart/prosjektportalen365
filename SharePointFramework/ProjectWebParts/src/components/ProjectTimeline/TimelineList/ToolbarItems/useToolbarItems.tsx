@@ -116,7 +116,7 @@ export function useToolbarItems(
           .setIcon(Icons.Edit)
           .setDisabled(selectedItems.length !== 1)
           .setOnClick(() => {
-            window.open(selectedItems[0]?.EditFormUrl, '_blank')
+            window.open(selectedItems[0]?.EditFormUrl, '_self')
           })
       ].filter(Boolean),
     [props, selectedItems]
