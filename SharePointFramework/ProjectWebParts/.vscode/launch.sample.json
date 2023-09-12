@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Hosted workbench",
+      "name": "Debug",
       "type": "chrome",
       "request": "launch",
       "url": "https://[tenant].sharepoint.com/sites/[site]/_layouts/15/workbench.aspx",
@@ -19,7 +19,7 @@
       ]
     },
     {
-      "name": "Hosted workbench (incognito)",
+      "name": "Debug in incognito mode",
       "type": "chrome",
       "request": "launch",
       "url": "https://[tenant].sharepoint.com/sites/[site]/_layouts/15/workbench.aspx",
