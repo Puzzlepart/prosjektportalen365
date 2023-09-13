@@ -1,4 +1,4 @@
-@import '~@fluentui/react/dist/sass/References.scss';
+@import "~@fluentui/react/dist/sass/References.scss";
 
 .root {
   .header {
@@ -17,7 +17,8 @@
     padding: 0 32px 0 32px;
     font-size: 12px !important;
 
-    .timelineItem, .timelineItemMilestone {
+    .timelineItem,
+    .timelineItemMilestone {
       cursor: pointer !important;
       border-radius: var(--borderRadiusSmall);
       min-width: 28px;

@@ -1,8 +1,4 @@
-@import '~@fluentui/react/dist/sass/References.scss';
-
-.commandBar {
-  margin: 0px auto;
-}
+@import "~@fluentui/react/dist/sass/References.scss";
 
 .timelineList {
   padding: 32px;
@@ -11,5 +7,11 @@
     .headerColumns {
       position: inherit;
     }
+  }
+
+  .commandBar {
+    height: 42px;
+    margin: 0px auto;
+    padding-bottom: 16px
   }
 }
