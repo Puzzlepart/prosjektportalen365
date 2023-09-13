@@ -28,7 +28,6 @@ const ListHeader: FC<IListHeaderProps> = (props) => {
         <div className={styles.header}>
           <WebPartTitle title={props.title} />
         </div>
-
         {hasError && (
           <div className={styles.errorContainer}>
             <Alert intent='error'>{props.error.message}</Alert>

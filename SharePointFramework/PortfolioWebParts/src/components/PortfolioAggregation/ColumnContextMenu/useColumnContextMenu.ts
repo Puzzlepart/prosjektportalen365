@@ -24,7 +24,6 @@ export function useColumnContextMenu() {
     column.fieldName
   )
   const isColumnEditable =
-    context.props.displayMode === DisplayMode.Edit &&
     columnIndex !== -1 &&
     !context.props.lockedColumns
 
@@ -36,8 +35,8 @@ export function useColumnContextMenu() {
       items: createContextualMenuItems(
         () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true })),
         () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: true })),
-        context.props.displayMode !== DisplayMode.Edit || context.props.lockedColumns,
-        context.props.displayMode !== DisplayMode.Edit || context.props.lockedColumns
+        context.props.lockedColumns,
+        context.props.lockedColumns
       )
     }
   } else {

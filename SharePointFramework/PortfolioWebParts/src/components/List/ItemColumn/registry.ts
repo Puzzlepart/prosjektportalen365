@@ -254,7 +254,7 @@ export function useColumnRenderComponentRegistry() {
       'number',
       'Number',
       strings.ColumnRenderOptionNumber,
-      'NumberedList'
+      'NumberField'
     )
     ColumnRenderComponentRegistry.registerColumnRenderOption(
       'percentage',

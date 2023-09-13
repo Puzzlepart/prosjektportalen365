@@ -1,8 +1,8 @@
-import { Persona, PersonaPresence, PersonaSize } from '@fluentui/react/lib/Persona'
+import { Persona } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
 import React from 'react'
 import { ColumnRenderComponent } from '../types'
-import { SearchValueType } from 'pp365-shared-library'
+import { SearchValueType, getUserPhoto } from 'pp365-shared-library'
 
 export const UserColumn: ColumnRenderComponent = ({ columnValue, column }) => {
   const isMultiUser = columnValue?.indexOf(';') !== -1
@@ -12,10 +12,10 @@ export const UserColumn: ColumnRenderComponent = ({ columnValue, column }) => {
         {columnValue?.split(';').map((value, key) => (
           <span key={key}>
             <Persona
-              styles={{ root: { marginTop: 4 } }}
-              text={value}
-              size={PersonaSize.size24}
-              presence={PersonaPresence.none}
+              title={value}
+              name={value}
+              avatar={{ color: 'colorful' }}
+              size='small'
             />
           </span>
         ))}
@@ -30,21 +30,27 @@ export const UserColumn: ColumnRenderComponent = ({ columnValue, column }) => {
     return (
       <span>
         <Persona
-          text={text}
-          onRenderPrimaryText={(props) => (
-            <div>
-              <a href={`mailto:${email}`}>{props.text}</a>
-            </div>
-          )}
-          size={PersonaSize.size24}
-          presence={PersonaPresence.none}
+          title={`${text} - ${email}`}
+          name={text}
+          size='small'
+          avatar={{
+            color: 'colorful',
+            image: {
+              src: getUserPhoto(email)
+            }
+          }}
         />
       </span>
     )
   }
   return (
     <span>
-      <Persona text={columnValue} size={PersonaSize.size24} presence={PersonaPresence.none} />
+      <Persona
+        title={columnValue}
+        name={columnValue}
+        size='small'
+        avatar={{ color: 'colorful' }}
+      />
     </span>
   )
 }
