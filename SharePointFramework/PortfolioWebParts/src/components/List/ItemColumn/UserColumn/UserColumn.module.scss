@@ -5,7 +5,6 @@
 }
 
 .truncatedText {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  overflow: hidden !important;
+  white-space: nowrap !important;
 }

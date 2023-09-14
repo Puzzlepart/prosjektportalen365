@@ -1,4 +1,4 @@
-import { Avatar, Persona, Text, Tooltip } from '@fluentui/react-components'
+import { Avatar, Text, Tooltip } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
 import React from 'react'
 import { ColumnRenderComponent } from '../types'
@@ -43,7 +43,7 @@ export const UserColumn: ColumnRenderComponent = ({ columnValue, column }) => {
           color='colorful'
           style={{ marginRight: 4 }}
         />
-        <Text className={styles.truncatedText}>
+        <Text className={styles.truncatedText} size={200} truncate>
           {text}
         </Text>
       </span>
@@ -58,7 +58,7 @@ export const UserColumn: ColumnRenderComponent = ({ columnValue, column }) => {
         color='colorful'
         style={{ marginRight: 4 }}
       />
-      <Text className={styles.truncatedText}>
+      <Text className={styles.truncatedText} size={200} truncate>
         {columnValue}
       </Text>
     </span>
