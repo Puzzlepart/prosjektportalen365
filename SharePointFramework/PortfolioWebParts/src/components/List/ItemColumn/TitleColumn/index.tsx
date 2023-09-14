@@ -4,7 +4,7 @@ import { SiteContext } from 'pp365-shared-library'
 import React, { FC, useContext } from 'react'
 import { ListContext } from '../../context'
 import { ITitleColumnProps } from './types'
-import { Button, Link, Tooltip } from '@fluentui/react-components'
+import { Text, Button, Link, Tooltip } from '@fluentui/react-components'
 import {
   bundleIcon,
   EyeOffFilled,
@@ -27,7 +27,7 @@ export const TitleColumn: FC<ITitleColumnProps> = (props) => {
   if (!props.item.Path) {
     return (
       <span>
-        <span>{props.item.Title}</span>
+        <Text size={200}>{props.item.Title}</Text>
         <Tooltip content={strings.NoProjectData} relationship='label' withArrow>
           <Button
             style={{ cursor: 'default' }}

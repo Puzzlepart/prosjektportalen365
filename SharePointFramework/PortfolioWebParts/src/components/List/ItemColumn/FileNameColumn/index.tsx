@@ -1,9 +1,10 @@
-import { Icon, Link } from '@fluentui/react'
+import { Icon } from '@fluentui/react'
 import { getFileTypeIconProps } from '@fluentui/react-file-type-icons'
 import strings from 'PortfolioWebPartsStrings'
 import React from 'react'
 import { ColumnRenderComponent } from '../types'
 import { IFileNameColumnProps } from './types'
+import { Link } from '@fluentui/react-components'
 
 export const FileNameColumn: ColumnRenderComponent<IFileNameColumnProps> = (props) => (
   <span>
