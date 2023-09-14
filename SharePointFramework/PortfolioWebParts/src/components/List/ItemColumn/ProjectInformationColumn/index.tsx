@@ -1,4 +1,3 @@
-import { Icon, Link } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformation'
 import { SiteContext } from 'pp365-shared-library'
@@ -6,6 +5,19 @@ import React, { useContext } from 'react'
 import { ListContext } from '../../context'
 import { ColumnRenderComponent } from '../types'
 import { IProjectInformationColumnProps } from './types'
+import {
+  bundleIcon,
+  PanelRightContractFilled,
+  PanelRightContractRegular
+} from '@fluentui/react-icons'
+import { Button, Link, Tooltip } from '@fluentui/react-components'
+
+/**
+ * Object containing icons used in the component.
+ */
+const Icons = {
+  PanelRight: bundleIcon(PanelRightContractFilled, PanelRightContractRegular)
+}
 
 export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformationColumnProps> = (
   props
@@ -23,10 +35,21 @@ export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformation
       page={props.page}
       hideAllActions={true}
       onRenderToggleElement={(onToggle) => (
-        <Icon iconName={props.iconName} style={props.iconStyles} onClick={onToggle} />
+        <Tooltip
+          content={<>{strings.ProjectInformationPanelButton}</>}
+          relationship='description'
+          withArrow
+        >
+          <Button
+            appearance='transparent'
+            size='small'
+            icon={<Icons.PanelRight />}
+            onClick={onToggle}
+          />
+        </Tooltip>
       )}
     >
-      <Link href={props.item.SPWebURL} rel='noopener noreferrer' target='_blank'>
+      <Link href={props.item.Path} rel='noopener noreferrer' target='_blank'>
         {props.columnValue}
       </Link>
     </ProjectInformationPanel>
@@ -34,16 +57,7 @@ export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformation
 }
 
 ProjectInformationColumn.defaultProps = {
-  page: 'Portfolio',
-  iconName: 'Info',
-  iconStyles: {
-    color: '666666',
-    marginLeft: 4,
-    position: 'relative',
-    top: '2px',
-    fontSize: '1.1em',
-    cursor: 'pointer'
-  }
+  page: 'Portfolio'
 }
 ProjectInformationColumn.key = 'projectinformationmodal'
 ProjectInformationColumn.id = 'projectinformationmodal'
