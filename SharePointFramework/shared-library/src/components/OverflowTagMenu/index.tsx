@@ -57,7 +57,7 @@ export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
     }
 
     return (
-      <FluentProvider id={fluentProviderId} theme={webLightTheme}>
+      <FluentProvider id={fluentProviderId} theme={webLightTheme} style={{ backgroundColor: 'transparent' }}>
         <Menu closeOnScroll>
           <MenuTrigger disableButtonEnhancement>
             <InteractionTag
