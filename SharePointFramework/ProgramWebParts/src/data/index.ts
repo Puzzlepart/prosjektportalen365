@@ -837,14 +837,44 @@ export class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterBaseConfigura
               TrimDuplicates: false
             })
           ])
-        return items
+        let allItems = items
+        if (items.length >= 500) {
+          const [{ PrimarySearchResults: items2 }] =
+            await Promise.all([
+              sp.search({
+                Querytext: `DepartmentId:{${HubSiteId}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
+                RowLimit: 500,
+                StartRow: 501,
+                ClientType: 'ContentSearchRegular',
+                SelectProperties: ['GtSiteIdOWSTEXT', 'Title'],
+                TrimDuplicates: false
+              })
+            ])
+          allItems = [...items, ...items2]
+        }
+        let allSites = sts_sites
+        if (sts_sites.length >= 500) {
+          const [{ PrimarySearchResults: sts_sites2 }] =
+            await Promise.all([
+              sp.search({
+                Querytext: `DepartmentId:{${HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
+                RowLimit: 500,
+                StartRow: 501,
+                ClientType: 'ContentSearchRegular',
+                SelectProperties: ['SPWebURL', 'Title', 'SiteId'],
+                TrimDuplicates: false
+              }),
+            ])
+          allSites = [...sts_sites, ...sts_sites2]
+        }
+        return allItems
           .filter(
             (item) =>
               item['GtSiteIdOWSTEXT'] &&
               item['GtSiteIdOWSTEXT'] !== '00000000-0000-0000-0000-000000000000'
           )
           .map<IProgramAdministrationProject>((item) => {
-            const site = sts_sites.find((site) => site['SiteId'] === item['GtSiteIdOWSTEXT'])
+            const site = allSites.find((site) => site['SiteId'] === item['GtSiteIdOWSTEXT'])
             return {
               SiteId: item['GtSiteIdOWSTEXT'],
               Title: site?.Title ?? item['Title'],
