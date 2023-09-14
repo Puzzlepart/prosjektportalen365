@@ -7,7 +7,7 @@ import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataT
 import { DateColumn } from './DateColumn'
 import { FileNameColumn } from './FileNameColumn'
 import { ListColumn } from './ListColumn'
-import { ModalColumn } from './ModalColumn'
+import { DialogColumn } from './DialogColumn'
 import { TagsColumn } from './TagsColumn'
 import { TrendColumn } from './TrendColumn'
 import { UrlColumn } from './UrlColumn'
@@ -231,7 +231,7 @@ export function useColumnRenderComponentRegistry() {
       DateColumn,
       FileNameColumn,
       ListColumn,
-      ModalColumn,
+      DialogColumn,
       TagsColumn,
       TrendColumn,
       UrlColumn,

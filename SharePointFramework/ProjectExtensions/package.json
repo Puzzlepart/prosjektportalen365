@@ -46,8 +46,10 @@
     "valid-filename": "3.1.0",
     "@pnp/core": "3.17.0",
     "@pnp/queryable": "3.17.0",
-    "@fluentui/react-components": "9.27.2",
-    "@fluentui/react-icons": "2.0.209"
+    "@fluentui/react-components": "9.31.0",
+    "@fluentui/react-icons": "2.0.215",
+    "@fluentui/react-search-preview": "0.1.16",
+    "@fluentui/react-tags-preview": "0.2.9"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",
