@@ -1,8 +1,8 @@
-import { Icon, TooltipHost } from '@fluentui/react'
+import { Icon } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import React, { FC } from 'react'
 import { IConfigColumnProps } from './types'
-import styles from './ConfigColumn.module.scss'
+import { Tooltip } from '@fluentui/react-components'
 
 export const ConfigColumn: FC<IConfigColumnProps> = (props) => {
   const element = (
@@ -16,12 +16,9 @@ export const ConfigColumn: FC<IConfigColumnProps> = (props) => {
 
   if (!stringIsNullOrEmpty(tooltipValue)) {
     return (
-      <TooltipHost
-        content={<div className={styles.tooltipContent}>{tooltipValue}</div>}
-        calloutProps={props.calloutProps}
-      >
+      <Tooltip content={tooltipValue} relationship='label' withArrow>
         {element}
-      </TooltipHost>
+      </Tooltip>
     )
   } else {
     return element
@@ -29,6 +26,5 @@ export const ConfigColumn: FC<IConfigColumnProps> = (props) => {
 }
 
 ConfigColumn.defaultProps = {
-  tooltipColumnPropertyName: null,
-  calloutProps: { gapSpace: 0 }
+  tooltipColumnPropertyName: null
 }
