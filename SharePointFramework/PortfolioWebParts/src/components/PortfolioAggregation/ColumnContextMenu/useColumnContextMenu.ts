@@ -1,5 +1,4 @@
 import { ContextualMenuItemType, IContextualMenuItem, format } from '@fluentui/react'
-import { DisplayMode } from '@microsoft/sp-core-library'
 import * as strings from 'PortfolioWebPartsStrings'
 import { indexOf } from 'underscore'
 import { useAddColumn } from '../../List'
@@ -23,9 +22,7 @@ export function useColumnContextMenu() {
     context.state.columns.map((c) => c.fieldName),
     column.fieldName
   )
-  const isColumnEditable =
-    columnIndex !== -1 &&
-    !context.props.lockedColumns
+  const isColumnEditable = columnIndex !== -1 && !context.props.lockedColumns
 
   const { isAddColumn, createContextualMenuItems } = useAddColumn(true)
 

@@ -1,8 +1,9 @@
-import { Persona } from '@fluentui/react-components'
+import { Avatar, Persona, Text, Tooltip } from '@fluentui/react-components'
 import strings from 'PortfolioWebPartsStrings'
 import React from 'react'
 import { ColumnRenderComponent } from '../types'
 import { SearchValueType, getUserPhoto } from 'pp365-shared-library'
+import styles from './UserColumn.module.scss'
 
 export const UserColumn: ColumnRenderComponent = ({ columnValue, column }) => {
   const isMultiUser = columnValue?.indexOf(';') !== -1
@@ -11,12 +12,15 @@ export const UserColumn: ColumnRenderComponent = ({ columnValue, column }) => {
       <span>
         {columnValue?.split(';').map((value, key) => (
           <span key={key}>
-            <Persona
-              title={value}
-              name={value}
-              avatar={{ color: 'colorful' }}
-              size='small'
-            />
+            <Tooltip content={value} relationship='label' withArrow>
+              <Avatar
+                title={value}
+                name={value}
+                size={28}
+                color='colorful'
+                style={{ marginRight: 4 }}
+              />
+            </Tooltip>
           </span>
         ))}
       </span>
@@ -28,29 +32,35 @@ export const UserColumn: ColumnRenderComponent = ({ columnValue, column }) => {
   ) {
     const [email, text] = columnValue.split(' | ')
     return (
-      <span>
-        <Persona
-          title={`${text} - ${email}`}
+      <span className={styles.avatar}>
+        <Avatar
+          title={text}
           name={text}
-          size='small'
-          avatar={{
-            color: 'colorful',
-            image: {
-              src: getUserPhoto(email)
-            }
+          image={{
+            src: getUserPhoto(email)
           }}
+          size={28}
+          color='colorful'
+          style={{ marginRight: 4 }}
         />
+        <Text className={styles.truncatedText}>
+          {text}
+        </Text>
       </span>
     )
   }
   return (
-    <span>
-      <Persona
+    <span className={styles.avatar}>
+      <Avatar
         title={columnValue}
         name={columnValue}
-        size='small'
-        avatar={{ color: 'colorful' }}
+        size={28}
+        color='colorful'
+        style={{ marginRight: 4 }}
       />
+      <Text className={styles.truncatedText}>
+        {columnValue}
+      </Text>
     </span>
   )
 }

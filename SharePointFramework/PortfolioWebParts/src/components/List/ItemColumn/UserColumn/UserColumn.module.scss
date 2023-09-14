@@ -1,0 +1,11 @@
+.avatar {
+  display: flex;
+  gap: 8;
+  align-items: center;
+}
+
+.truncatedText {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
