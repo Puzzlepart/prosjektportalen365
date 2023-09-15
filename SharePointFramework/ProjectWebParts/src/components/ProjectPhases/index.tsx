@@ -8,7 +8,7 @@ import styles from './ProjectPhases.module.scss'
 import { getShimmerElements } from './shimmer'
 import { IProjectPhasesProps } from './types'
 import { useProjectPhases } from './useProjectPhases'
-import { Toast, ToastTitle, useId, useToastController } from '@fluentui/react-components'
+import { FluentProvider, Toast, ToastTitle, useId, useToastController, webLightTheme } from '@fluentui/react-components'
 
 export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
   const { rootRef, context } = useProjectPhases(props)
@@ -16,7 +16,7 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
   const { dispatchToast } = useToastController(toasterId)
 
   return (
-    <div className={styles.root} ref={rootRef}>
+    <FluentProvider theme={webLightTheme} className={styles.root} ref={rootRef}>
       <div className={styles.container}>
         <ProjectPhasesContext.Provider value={context}>
           <Shimmer
@@ -42,7 +42,7 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
             { intent: 'error' }
           )}
       </div>
-    </div>
+    </FluentProvider>
   )
 }
 ProjectPhases.displayName = 'Project Phases'

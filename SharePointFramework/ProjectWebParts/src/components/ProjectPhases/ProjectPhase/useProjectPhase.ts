@@ -14,20 +14,22 @@ export function useProjectPhase(props: IProjectPhaseProps) {
   const classNames = [styles.projectPhase]
   const isCurrentPhase = props.phase.id === context.state.phase?.id
 
+  if (context.props.useStartArrow) classNames.push(styles.useStartArrow)
+  if (context.props.useEndArrow) classNames.push(styles.useEndArrow)
   if (isCurrentPhase) classNames.push(styles.isCurrentPhase)
   if (props.phase.properties.PhaseLevel) {
     const className = props.phase.properties.PhaseLevel.toLowerCase()
     classNames.push(styles[className])
   }
-  const subTextProps: HTMLProps<HTMLDivElement> = {
-    hidden: !context.props.showSubText,
-    className: styles.phaseSubText,
-    title: props.phase.subText,
-    dangerouslySetInnerHTML: {
-      __html: truncateString(props.phase.subText ?? '', context.props.subTextTruncateLength ?? 50)
-    }
-  }
+  // const subTextProps: HTMLProps<HTMLDivElement> = {
+  //   hidden: !context.props.showSubText,
+  //   className: styles.phaseSubText,
+  //   title: props.phase.subText,
+  //   dangerouslySetInnerHTML: {
+  //     __html: truncateString(props.phase.subText ?? '', context.props.subTextTruncateLength ?? 50)
+  //   }
+  // }
   const onClick = () =>
     context.dispatch(OPEN_CALLOUT({ phase: props.phase, target: targetRef.current }))
-  return { targetRef, onClick, className: classNames.join(' '), subTextProps } as const
+  return { targetRef, onClick, className: classNames.join(' ') } as const
 }

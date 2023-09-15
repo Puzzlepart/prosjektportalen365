@@ -33,6 +33,16 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   syncPropertiesAfterPhaseChange: boolean
 
   /**
+   * Use start arrow
+   */
+  useStartArrow: boolean
+
+  /**
+   * Use end arrow
+   */
+  useEndArrow: boolean
+
+  /**
    * Use dynamic homepage when switching phases
    */
   useDynamicHomepage: boolean
