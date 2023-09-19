@@ -2,12 +2,13 @@
 import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import { useEffect } from 'react'
-import { BooleanColumn } from './BooleanColumn'
 import { GetDataTypeProperties, IColumnDataTypeFieldOption } from './ColumnDataTypeField'
+import { BooleanColumn } from './BooleanColumn'
+import { CurrencyColumn } from './CurrencyColumn'
 import { DateColumn } from './DateColumn'
+import { DialogColumn } from './DialogColumn'
 import { FileNameColumn } from './FileNameColumn'
 import { ListColumn } from './ListColumn'
-import { ModalColumn } from './ModalColumn'
 import { TagsColumn } from './TagsColumn'
 import { TrendColumn } from './TrendColumn'
 import { UrlColumn } from './UrlColumn'
@@ -230,8 +231,9 @@ export function useColumnRenderComponentRegistry() {
       BooleanColumn,
       DateColumn,
       FileNameColumn,
+      CurrencyColumn,
       ListColumn,
-      ModalColumn,
+      DialogColumn,
       TagsColumn,
       TrendColumn,
       UrlColumn,
@@ -254,7 +256,7 @@ export function useColumnRenderComponentRegistry() {
       'number',
       'Number',
       strings.ColumnRenderOptionNumber,
-      'NumberedList'
+      'NumberField'
     )
     ColumnRenderComponentRegistry.registerColumnRenderOption(
       'percentage',

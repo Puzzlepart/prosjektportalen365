@@ -30,11 +30,11 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionDate: string
   ColumnRenderOptionDateIncludeTimeLabel: string
   ColumnRenderOptionFilename: string
-  ColumnRenderOptionModal: string
-  ColumnRenderOptionModalInfoTextTemplateDescription: string
-  ColumnRenderOptionModalInfoTextTemplateLabel: string
-  ColumnRenderOptionModalLinkTextLabel: string
-  ColumnRenderOptionModalShowInfoTextLabel: string
+  ColumnRenderOptionDialog: string
+  ColumnRenderOptionDialogInfoTextTemplateDescription: string
+  ColumnRenderOptionDialogInfoTextTemplateLabel: string
+  ColumnRenderOptionDialogLinkTextLabel: string
+  ColumnRenderOptionDialogShowInfoTextLabel: string
   ColumnRenderOptionNote: string
   ColumnRenderOptionNumber: string
   ColumnRenderOptionPercentage: string

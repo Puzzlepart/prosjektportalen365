@@ -1,26 +1,50 @@
-// Import necessary modules
 import { TextField } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'PortfolioWebPartsStrings'
 import React from 'react'
 import { ColumnDataTypePropertyField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
-import { Tag } from './Tag'
-import styles from './TagsColumn.module.scss'
 import { ITagsColumnProps } from './types'
+import {
+  ChevronCircleRightFilled,
+  EarthFilled,
+  GlobeLocationFilled,
+  TagFilled,
+  TagMultipleFilled
+} from '@fluentui/react-icons'
+import { OverflowTagMenu } from 'pp365-shared-library'
+import styles from './TagsColumn.module.scss'
 
 export const TagsColumn: ColumnRenderComponent<ITagsColumnProps> = (props) => {
   if (!props.columnValue) return null
+
+  let icon = TagMultipleFilled
+
+  switch (props.column['internalName']) {
+    case 'GtProjectServiceArea':
+      icon = GlobeLocationFilled
+      break
+    case 'GtProjectType':
+      icon = TagMultipleFilled
+      break
+    case 'GtUNSustDevGoals':
+      icon = EarthFilled
+      break
+    case 'GtProjectPhase':
+      icon = ChevronCircleRightFilled
+      break
+    default:
+      icon = TagFilled
+      break
+  }
 
   const tags: string[] = props.columnValue
     .split(props.valueSeparator)
     .filter((t) => !stringIsNullOrEmpty(t))
 
   return (
-    <div className={styles.root} style={props.style}>
-      {tags.map((text, idx) => (
-        <Tag key={idx} text={text} />
-      ))}
+    <div className={styles.root}>
+      <OverflowTagMenu tags={tags.map((tag) => tag && tag)} icon={icon} />
     </div>
   )
 }

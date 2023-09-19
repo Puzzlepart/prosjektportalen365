@@ -4,6 +4,7 @@ import React from 'react'
 import { ColumnDataTypePropertyField, IColumnDataTypePropertyField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
 import { IBooleanColumnProps } from './types'
+import { Text } from '@fluentui/react-components'
 
 /**
  * Renders a boolean column that displays a custom string value for true and false values.
@@ -17,7 +18,7 @@ import { IBooleanColumnProps } from './types'
  */
 export const BooleanColumn: ColumnRenderComponent<IBooleanColumnProps> = (props) => {
   const displayValue = parseInt(props.columnValue) === 1 ? props.valueIfTrue : props.valueIfFalse
-  return <span>{displayValue}</span>
+  return <Text size={200}>{displayValue}</Text>
 }
 
 BooleanColumn.defaultProps = {

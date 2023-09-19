@@ -1,0 +1,17 @@
+.root {
+  max-height: 600px;
+
+  .title {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .infoText {
+    margin: 20px 0;
+  }
+
+  .emptyListText {
+    margin: 10px 0;
+  }
+}

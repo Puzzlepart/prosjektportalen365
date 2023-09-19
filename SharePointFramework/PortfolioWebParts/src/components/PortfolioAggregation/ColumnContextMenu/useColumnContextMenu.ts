@@ -1,5 +1,4 @@
 import { ContextualMenuItemType, IContextualMenuItem, format } from '@fluentui/react'
-import { DisplayMode } from '@microsoft/sp-core-library'
 import * as strings from 'PortfolioWebPartsStrings'
 import { indexOf } from 'underscore'
 import { useAddColumn } from '../../List'
@@ -23,10 +22,7 @@ export function useColumnContextMenu() {
     context.state.columns.map((c) => c.fieldName),
     column.fieldName
   )
-  const isColumnEditable =
-    context.props.displayMode === DisplayMode.Edit &&
-    columnIndex !== -1 &&
-    !context.props.lockedColumns
+  const isColumnEditable = columnIndex !== -1 && !context.props.lockedColumns
 
   const { isAddColumn, createContextualMenuItems } = useAddColumn(true)
 
@@ -36,8 +32,8 @@ export function useColumnContextMenu() {
       items: createContextualMenuItems(
         () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true })),
         () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: true })),
-        context.props.displayMode !== DisplayMode.Edit || context.props.lockedColumns,
-        context.props.displayMode !== DisplayMode.Edit || context.props.lockedColumns
+        context.props.lockedColumns,
+        context.props.lockedColumns
       )
     }
   } else {

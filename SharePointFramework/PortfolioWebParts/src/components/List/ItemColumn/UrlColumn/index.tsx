@@ -1,11 +1,12 @@
 /* eslint-disable prefer-const */
-import { Link, TextField, Toggle } from '@fluentui/react'
+import { TextField, Toggle } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'PortfolioWebPartsStrings'
 import React from 'react'
 import { ColumnDataTypePropertyField } from '../ColumnDataTypeField'
 import { ColumnRenderComponent } from '../types'
 import { IUrlColumnProps } from './types'
+import { Link } from '@fluentui/react-components'
 
 export const UrlColumn: ColumnRenderComponent<IUrlColumnProps> = (props) => {
   let [url, description] = props.columnValue.split(', ').filter((v) => !stringIsNullOrEmpty(v))
