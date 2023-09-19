@@ -1,24 +1,33 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import styles from './ProjectPhase.module.scss'
 import { IProjectPhaseProps } from './types'
 import { useProjectPhase } from './useProjectPhase'
+import { Popover, PopoverProps, PopoverSurface, PopoverTrigger } from '@fluentui/react-components'
+import { ProjectPhaseCallout } from './ProjectPhaseCallout'
 
 export const ProjectPhase: FC<IProjectPhaseProps> = (props) => {
-  const { targetRef, onClick, className } = useProjectPhase(props)
+  const { targetRef, handleOpenChange, open, className, subTextProps, context } = useProjectPhase(props)
 
   return (
-    <li className={className}>
-      <span>{props.phase.name}</span>
-        {/* <div className={styles.phaseIcon}>
+    <Popover withArrow positioning='below' open={open} onOpenChange={handleOpenChange}>
+      <PopoverTrigger disableButtonEnhancement>
+        <li className={className} ref={targetRef}>
+          <span>{props.phase.name}</span>
+          {/* <div {...subTextProps}></div> */}
+          {/* <div className={styles.phaseIcon}>
           <span className={styles.phaseLetter} ref={targetRef} onClick={onClick}>
-            {props.phase.letter}2
+            {props.phase.letter}
           </span>
-          <span className={styles.phaseText} onClick={onClick}>
-            {props.phase.name}
-          </span>
+
           <div {...subTextProps}></div>
         </div> */}
-    </li>
+        </li>
+    </PopoverTrigger>
+      <PopoverSurface>
+        <ProjectPhaseCallout {...(context.state.callout || {})} />
+    </PopoverSurface>
+  </Popover>
+
   )
 }
 

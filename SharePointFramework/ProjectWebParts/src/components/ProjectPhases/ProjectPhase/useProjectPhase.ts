@@ -1,18 +1,20 @@
 import { truncateString } from 'pp365-shared-library/lib/util/truncateString'
-import { HTMLProps, useContext, useRef } from 'react'
+import { HTMLProps, useContext, useEffect, useRef, useState } from 'react'
 import { ProjectPhasesContext } from '../context'
 import { OPEN_CALLOUT } from '../reducer'
 import styles from './ProjectPhase.module.scss'
 import { IProjectPhaseProps } from './types'
+import { PopoverProps } from '@fluentui/react-components'
 
 /**
  * Component logic hook for `ProjectPhase`.
  */
 export function useProjectPhase(props: IProjectPhaseProps) {
   const context = useContext(ProjectPhasesContext)
-  const targetRef = useRef<HTMLSpanElement>()
+  const targetRef = useRef<HTMLLIElement>()
   const classNames = [styles.projectPhase]
   const isCurrentPhase = props.phase.id === context.state.phase?.id
+  const [open, setOpen] = useState(false);
 
   if (context.props.useStartArrow) classNames.push(styles.useStartArrow)
   if (context.props.useEndArrow) classNames.push(styles.useEndArrow)
@@ -21,15 +23,25 @@ export function useProjectPhase(props: IProjectPhaseProps) {
     const className = props.phase.properties.PhaseLevel.toLowerCase()
     classNames.push(styles[className])
   }
-  // const subTextProps: HTMLProps<HTMLDivElement> = {
-  //   hidden: !context.props.showSubText,
-  //   className: styles.phaseSubText,
-  //   title: props.phase.subText,
-  //   dangerouslySetInnerHTML: {
-  //     __html: truncateString(props.phase.subText ?? '', context.props.subTextTruncateLength ?? 50)
-  //   }
-  // }
-  const onClick = () =>
+  const subTextProps: HTMLProps<HTMLDivElement> = {
+    hidden: !context.props.showSubText,
+    className: styles.phaseSubText,
+    title: props.phase.subText,
+    dangerouslySetInnerHTML: {
+      __html: truncateString(props.phase.subText ?? '', context.props.subTextTruncateLength ?? 50)
+    }
+  }
+
+  const handleOpenChange: PopoverProps["onOpenChange"] = (e, data) => {
+    setOpen(data.open || false);
     context.dispatch(OPEN_CALLOUT({ phase: props.phase, target: targetRef.current }))
-  return { targetRef, onClick, className: classNames.join(' ') } as const
+  }
+
+  useEffect(() => {
+    if (context.state.callout === null) {
+      setOpen(false);
+    }
+  }, [context.state.callout]);
+
+  return { targetRef, handleOpenChange, open, className: classNames.join(' '), subTextProps, context } as const
 }

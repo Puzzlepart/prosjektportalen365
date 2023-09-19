@@ -50,6 +50,12 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
                   showValue: true,
                   disabled: !this.properties.showSubText
                 }),
+                PropertyPaneToggle('useStartArrow', {
+                  label: 'Bruk startpil'
+                }),
+                PropertyPaneToggle('useEndArrow', {
+                  label: 'Bruk sluttpil'
+                }),
                 PropertyPaneDropdown('phaseField', {
                   label: strings.PhaseFieldFieldLabel,
                   options: this._fields.map((f) => ({

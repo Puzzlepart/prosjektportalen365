@@ -13,10 +13,12 @@ import { FluentProvider, Toast, ToastTitle, useId, useToastController, webLightT
 export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
   const { rootRef, context } = useProjectPhases(props)
   const toasterId = useId('toaster')
+  const fluentProviderId = useId('fluent-provider')
+
   const { dispatchToast } = useToastController(toasterId)
 
   return (
-    <FluentProvider theme={webLightTheme} className={styles.root} ref={rootRef}>
+    <FluentProvider id={fluentProviderId} theme={webLightTheme} className={styles.root} ref={rootRef}>
       <div className={styles.container}>
         <ProjectPhasesContext.Provider value={context}>
           <Shimmer
@@ -30,7 +32,6 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
                   <ProjectPhase key={idx} phase={phase} />
                 ))}
             </ul>
-            <ProjectPhaseCallout {...(context.state.callout || {})} />
             <ChangePhaseDialog />
           </Shimmer>
         </ProjectPhasesContext.Provider>

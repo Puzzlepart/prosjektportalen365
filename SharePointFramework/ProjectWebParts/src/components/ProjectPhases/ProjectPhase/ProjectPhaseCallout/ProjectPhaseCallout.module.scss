@@ -1,38 +1,36 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
 .root {
-  .container {
-    padding: 20px;
+  padding: 20px;
 
-    .header {
-      margin: 0 0 5px 0;
-      .title {
-        font-size: 18px;
+  .header {
+    margin: 0 0 5px 0;
+    .title {
+      font-size: 18px;
+    }
+  }
+
+  .body {
+    .subText {
+      max-width: 250px;
+      font-size: 14px;
+    }
+    .stats {
+      margin: 0 0 15px 0;
+      font-size: 12px;
+
+      > div {
+        margin: 4px 0 0 0;
       }
     }
-
-    .body {
-      .subText {
-        max-width: 250px;
-        font-size: 14px;
-      }
-      .stats {
-        margin: 0 0 15px 0;
+    .actions {
+      button,
+      a {
+        display: block;
+        height: 20px;
+        margin: 6px 0 0 0;
+        padding: 0;
         font-size: 12px;
-
-        > div {
-          margin: 4px 0 0 0;
-        }
-      }
-      .actions {
-        button,
-        a {
-          display: block;
-          height: 20px;
-          margin: 6px 0 0 0;
-          padding: 0;
-          font-size: 12px;
-        }
       }
     }
   }

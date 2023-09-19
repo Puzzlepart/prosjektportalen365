@@ -135,6 +135,11 @@ $chevron-width: 0.25em;
     position: relative;
     vertical-align: middle;
   }
+
+  .phaseSubText {
+    line-height: 1em;
+    font-size: 12px;
+  }
 }
 
 .projectPhase:hover {
