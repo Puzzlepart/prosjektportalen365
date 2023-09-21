@@ -84,8 +84,6 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     )
   }
 
-  console.log(state.showProjectInfo, !state.showProjectInfo)
-
   return (
     <FluentProvider className={styles.root} theme={webLightTheme}>
       <div className={styles.tabs}>

@@ -7,6 +7,7 @@ import { IWeb, SPFI, spfi } from '@pnp/sp/presets/all'
 import { DefaultCaching, createSpfiInstance, getItemFieldValues } from '../../data'
 import {
   ChecklistItemModel,
+  ChecklistSPItem,
   ItemFieldValues,
   ProjectPhaseChecklistData,
   ProjectPhaseModel,
@@ -42,6 +43,36 @@ export class ProjectDataService {
     }
     this._sp = createSpfiInstance(this._params.spfxContext)
     this.web = spfi(_params.webUrl).using(AssignFrom(this._sp.web)).web
+  }
+
+  /**
+   * Retrieves items from a SharePoint list.
+   *
+   * @param listName - The name of the SharePoint list.
+   * @param constructor - Optional constructor function for creating instances of a custom class.
+   * @param mapConstructor - Optional constructor function for mapping the retrieved items to a custom class.
+   * @param filterFunc - Optional filter function for filtering the retrieved items with properties that
+   * cannot be filtered with the SharePoint REST API.
+   * @param top - Optional maximum number of items to retrieve.
+   *
+   * @returns A Promise that resolves to an array of items from the SharePoint list.
+   */
+  public async getItems<T = any, M = T>(
+    listName: string,
+    constructor?: new () => T,
+    mapConstructor?: new (item: T) => M,
+    filterFunc?: (value: M) => boolean,
+    top = 500
+  ): Promise<M[]> {
+    let itemsRef = this.web.lists.getByTitle(listName).items.top(top)
+    if (constructor) {
+      itemsRef = itemsRef.select(...getClassProperties(constructor))
+    }
+    const items = await itemsRef<T[]>()
+    if (!mapConstructor) return items as unknown as M[]
+    let mappedItems = items.map((item) => new mapConstructor(item))
+    if (filterFunc) mappedItems = mappedItems.filter(filterFunc)
+    return mappedItems
   }
 
   /**
@@ -322,7 +353,9 @@ export class ProjectDataService {
   }
 
   /**
-   * Get checklist data from the specified list as an object.
+   * Get checklist data from the specified list as an object. Returns an object
+   * with term GUID as the key, and the items for the term GUID and the stats
+   * for the different statuses as the value.
    *
    * @param listName List name
    *
@@ -333,24 +366,26 @@ export class ProjectDataService {
     listName: string
   ): Promise<Record<string, ProjectPhaseChecklistData>> {
     try {
-      const items = await this.web.lists
-        .getByTitle(listName)
-        .items.select('ID', 'Title', 'GtComment', 'GtChecklistStatus', 'GtProjectPhase')<
-        Record<string, any>[]
-      >()
-      const checklistItems = items.map((item) => new ChecklistItemModel(item))
-      const checklistData = checklistItems
-        .filter((item) => item.termGuid)
-        .reduce((obj, item) => {
-          obj[item.termGuid] = obj[item.termGuid] ? obj[item.termGuid] : {}
-          obj[item.termGuid].stats = obj[item.termGuid].stats || {}
-          obj[item.termGuid].items = obj[item.termGuid].items || []
-          obj[item.termGuid].items.push(item)
-          obj[item.termGuid].stats[item.status] = obj[item.termGuid].stats[item.status]
-            ? obj[item.termGuid].stats[item.status] + 1
-            : 1
-          return obj
-        }, {})
+      const checklistItems = await this.getItems<ChecklistSPItem, ChecklistItemModel>(
+        listName,
+        ChecklistSPItem,
+        ChecklistItemModel,
+        (item) => !!item.termGuid
+      )
+      const checklistData = checklistItems.reduce((obj, item) => {
+        const { termGuid, status } = item
+        obj[termGuid] = obj[termGuid]
+          ? obj[termGuid]
+          : {
+              stats: {},
+              items: []
+            }
+        obj[termGuid].items.push(item)
+        obj[termGuid].stats[status] = obj[termGuid].stats[status]
+          ? obj[termGuid].stats[status] + 1
+          : 1
+        return obj
+      }, {})
       return checklistData
     } catch (e) {
       return {}

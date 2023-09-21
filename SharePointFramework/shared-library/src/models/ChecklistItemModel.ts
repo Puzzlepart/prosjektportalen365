@@ -1,3 +1,13 @@
+export class ChecklistSPItem {
+  public ID: number = 0
+  public Title: string = ''
+  public GtComment: string = ''
+  public GtChecklistStatus: string = ''
+  public GtProjectPhase: {
+    TermGuid?: string
+  } = {}
+}
+
 export class ChecklistItemModel {
   public id: number
   public title: string
@@ -10,11 +20,11 @@ export class ChecklistItemModel {
    *
    * @param item Checklist SP item
    */
-  constructor(item: Record<string, any>) {
-    this.id = item.Id
+  constructor(item: ChecklistSPItem) {
+    this.id = item.ID
     this.title = item.Title
     this.comment = item.GtComment
     this.status = item.GtChecklistStatus
-    this.termGuid = item.GtProjectPhase && `/Guid(${item.GtProjectPhase.TermGuid})/`
+    this.termGuid = item.GtProjectPhase?.TermGuid
   }
 }
