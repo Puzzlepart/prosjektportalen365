@@ -203,12 +203,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     if (!autoTemplate) return null
     return {
       selectedTemplate: autoTemplate,
-      selectedExtensions: data.extensions.filter((ext) =>
-        autoTemplate.extensions.includes(ext.id)
-      ),
+      selectedExtensions: data.extensions.filter((ext) => autoTemplate.extensions.includes(ext.id)),
       selectedContentConfig: data.contentConfig.filter((content) =>
         autoTemplate.contentConfig.includes(content.id)
-      ),
+      )
     }
   }
 

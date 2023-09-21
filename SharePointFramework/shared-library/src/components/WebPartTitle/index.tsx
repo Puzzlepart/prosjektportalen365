@@ -20,7 +20,7 @@ export const WebPartTitle: FC<IWebPartTitleProps> = (props) => {
 
   return (
     <FluentProvider id={fluentProviderId} className={styles.root} theme={webLightTheme}>
-      <h2 className={styles.heading} title={props.title}>
+      <h2 className={styles.heading} title={props.title} hidden={!props.title}>
         <span role='heading' aria-level={2} className={styles.title}>
           {props.title}
         </span>

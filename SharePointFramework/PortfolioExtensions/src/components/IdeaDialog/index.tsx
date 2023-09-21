@@ -7,7 +7,6 @@ import {
   DialogType,
   PrimaryButton,
   DefaultButton,
-  MessageBarType,
   format
 } from '@fluentui/react'
 import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog'

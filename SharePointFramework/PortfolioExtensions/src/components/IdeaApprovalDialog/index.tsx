@@ -11,8 +11,7 @@ import {
   Dropdown,
   IDropdownOption,
   TextField,
-  format,
-  MessageBarType
+  format
 } from '@fluentui/react'
 import strings from 'PortfolioExtensionsStrings'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'

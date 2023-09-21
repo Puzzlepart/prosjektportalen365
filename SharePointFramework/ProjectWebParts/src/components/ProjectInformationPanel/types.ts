@@ -13,6 +13,8 @@ export interface IProjectInformationPanelProps
 
   /**
    * Props for the `Panel` component. See: `IPanelProps`
+   *
+   * It could be a good idea to specify the `headerText` and `onDismiss` props.
    */
   panelProps?: IPanelProps
 }

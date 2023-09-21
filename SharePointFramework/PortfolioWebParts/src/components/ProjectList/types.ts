@@ -151,7 +151,10 @@ export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
   error?: any
 
   /**
-   * Show project info
+   * The current project to show project information for using the
+   * `ProjectInformationPanel` from `pp365-projectwebparts`. If not provided,
+   * the panel is not shown. This is set to `null` or `undefined` to hide
+   * the panel.
    */
   showProjectInfo?: ProjectListModel
 

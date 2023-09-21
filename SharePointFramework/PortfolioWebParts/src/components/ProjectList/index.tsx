@@ -35,7 +35,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   } = useProjectList(props)
 
   /**
-   * Render projects
+   * Render projects based on `state.renderMode`.
    *
    * @param projects - Projects to render
    */
@@ -83,6 +83,8 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
       </section>
     )
   }
+
+  console.log(state.showProjectInfo, !state.showProjectInfo)
 
   return (
     <FluentProvider className={styles.root} theme={webLightTheme}>
@@ -139,10 +141,15 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
           state.showProjectInfo?.siteId,
           state.showProjectInfo?.url
         )}
-        title={state.showProjectInfo?.title}
         page='Portfolio'
         hidden={!state.showProjectInfo}
         hideAllActions={true}
+        panelProps={{
+          headerText: state.showProjectInfo?.title,
+          onDismiss: () => {
+            setState({ showProjectInfo: null })
+          }
+        }}
       />
     </FluentProvider>
   )

@@ -1,4 +1,4 @@
-import { FluentProvider, webLightTheme } from '@fluentui/react-components'
+import { FluentProvider, mergeClasses, webLightTheme } from '@fluentui/react-components'
 import { WebPartTitle } from 'pp365-shared-library'
 import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
 import React, { FC } from 'react'
@@ -39,7 +39,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
 
   return (
     <ProjectInformationContextProvider value={context}>
-      <FluentProvider theme={webLightTheme} className={styles.root}>
+      <FluentProvider theme={webLightTheme} className={mergeClasses(styles.root, props.className)}>
         <WebPartTitle title={props.title} />
         <div className={styles.container}>
           {context.state.error && (

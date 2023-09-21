@@ -77,6 +77,11 @@ export interface IProjectInformationProps extends IBaseWebPartComponentProps {
    * Show only icons for latest status report
    */
   statusReportShowOnlyIcons?: boolean
+
+  /**
+   * Additional class name for the component (in addition to `styles.root`)
+   */
+  className?: string
 }
 
 export interface IProjectInformationState
