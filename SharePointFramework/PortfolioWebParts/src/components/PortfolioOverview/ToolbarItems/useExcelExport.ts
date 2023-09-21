@@ -1,7 +1,7 @@
-import { ExcelExportService } from 'pp365-shared-library'
 import { useCallback } from 'react'
 import { IPortfolioOverviewContext } from '../context'
 import { EXCEL_EXPORT_ERROR, EXCEL_EXPORT_SUCCESS, START_EXCEL_EXPORT } from '../reducer'
+import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 
 /**
  * Hook that provides functionality for exporting data to Excel.
@@ -18,6 +18,9 @@ export function useExcelExport(context: IPortfolioOverviewContext) {
   const exportToExcel = useCallback(() => {
     context.dispatch(START_EXCEL_EXPORT())
     try {
+      if (!ExcelExportService.isConfigured) {
+        context.dispatch(EXCEL_EXPORT_ERROR(new Error('ExcelExportService is not configured')))
+      }
       const { selectedItems, columns, currentView } = context.state
       const { includeViewNameInExcelExportFilename } = context.props
       const items = selectedItems?.length > 0 ? selectedItems : context.state.items
@@ -28,6 +31,7 @@ export function useExcelExport(context: IPortfolioOverviewContext) {
       ExcelExportService.export(items, columns, fileNamePart)
       context.dispatch(EXCEL_EXPORT_SUCCESS())
     } catch (error) {
+      console.error(error)
       context.dispatch(EXCEL_EXPORT_ERROR(error))
     }
   }, [context.state])

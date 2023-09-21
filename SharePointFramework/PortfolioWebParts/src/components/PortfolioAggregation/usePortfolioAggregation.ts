@@ -1,4 +1,4 @@
-import { format } from '@fluentui/react'
+import { Selection,format } from '@fluentui/react'
 import { SearchBoxProps } from '@fluentui/react-search-preview'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'PortfolioWebPartsStrings'
@@ -8,6 +8,7 @@ import { OnColumnContextMenu } from '../List'
 import {
   EXECUTE_SEARCH,
   ON_FILTER_CHANGE,
+  SELECTION_CHANGED,
   SET_CURRENT_VIEW,
   TOGGLE_COLUMN_CONTEXT_MENU,
   TOGGLE_FILTER_PANEL,
@@ -35,6 +36,13 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
       context.dispatch(SET_CURRENT_VIEW)
     }
   }, [props.dataSourceCategory, props.defaultViewId])
+
+
+  const onSelectionChanged = () => {
+   context.dispatch(SELECTION_CHANGED(selection))
+  }
+
+  const selection = new Selection({ onSelectionChanged })
 
   usePortfolioAggregationDataFetch(context, [context.state.currentView])
 
@@ -80,6 +88,7 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
     onColumnContextMenu,
     searchBox,
     menuItems,
-    filterPanelProps
-  } as const
+    filterPanelProps,
+    selection
+  }
 }

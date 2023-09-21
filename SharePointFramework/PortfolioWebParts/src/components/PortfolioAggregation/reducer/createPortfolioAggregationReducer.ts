@@ -38,7 +38,8 @@ import {
   TOGGLE_COMPACT,
   TOGGLE_EDIT_VIEW_COLUMNS_PANEL,
   TOGGLE_FILTER_PANEL,
-  SET_VIEW_FORM_PANEL
+  SET_VIEW_FORM_PANEL,
+  SELECTION_CHANGED
 } from './actions'
 import { persistSelectedColumnsInWebPartProperties } from './persistSelectedColumnsInWebPartProperties'
 
@@ -375,5 +376,8 @@ export const createPortfolioAggregationReducer = (
           state.viewForm = _.omit(payload, 'submitAction')
         }
       }
-    }
+    },
+[SELECTION_CHANGED.type]: (state, { payload }: ReturnType<typeof SELECTION_CHANGED>) => {
+  state.selectedItems = payload.getSelection()
+}
   })

@@ -9,9 +9,16 @@ import { getDateValue, getObjectValue as get } from '../../util'
 
 class ExcelExportService {
   public configuration: IExcelExportServiceConfiguration
+  public isConfigured = false
 
+  /**
+   * Configures the `ExcelExportService` with the provided configuration options.
+   * 
+   * @param configuration - The configuration options to apply.
+   */
   public configure(configuration: IExcelExportServiceConfiguration) {
     this.configuration = { ...ExcelExportServiceDefaultConfiguration, ...configuration }
+    this.isConfigured = true
   }
 
   /**

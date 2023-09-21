@@ -18,7 +18,8 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
     editViewColumnsPanelProps,
     onColumnContextMenu,
     menuItems,
-    filterPanelProps
+    filterPanelProps,
+    selection
   } = usePortfolioAggregation(props)
 
   return (
@@ -32,6 +33,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             items={context.items}
             columns={context.columns}
             groups={context.state.groups}
+            selection={selection}
             searchBox={searchBox}
             onColumnContextMenu={onColumnContextMenu}
             isAddColumnEnabled={!props.lockedColumns && !props.isParentProject}

@@ -14,6 +14,61 @@ export class PortfolioAggregationErrorMessage extends Error {
   }
 }
 
+/**
+ * Represents the configuration for the Portfolio Aggregation web part.
+ */
+export interface IPortfolioAggregationConfiguration {
+  /**
+   * URLs for the default new and edit forms for the views.
+   */
+  viewsUrls: {
+    /**
+     * URL for the default new form for the views.
+     */
+    defaultNewFormUrl: string
+
+    /**
+     * URL for the default edit form for the views.
+     */
+    defaultEditFormUrl: string
+  }
+
+  /**
+   * URLs for the default new and edit forms for the columns.
+   */
+  columnUrls: {
+    /**
+     * URL for the default new form for the columns.
+     */
+    defaultNewFormUrl: string
+
+    /**
+     * URL for the default edit form for the columns.
+     */
+    defaultEditFormUrl: string
+  }
+
+  /**
+   * An array of ProjectContentColumn objects representing the columns to display in the web part.
+   */
+  columns?: ProjectContentColumn[]
+
+  /**
+   * An array of DataSource objects representing the views to display in the web part.
+   */
+  views?: DataSource[]
+
+  /**
+   * The level of the data to display in the web part.
+   */
+  level?: string
+
+  /**
+   * An array of strings representing the levels of data to display in the web part.
+   */
+  levels?: string[]
+}
+
 export interface IPortfolioAggregationConfiguration {
   viewsUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
   columnUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
@@ -25,7 +80,7 @@ export interface IPortfolioAggregationConfiguration {
 
 export interface IPortfolioAggregationProps<T = any>
   extends IBaseComponentProps,
-    Pick<IListProps, 'isListLayoutModeJustified'> {
+  Pick<IListProps, 'isListLayoutModeJustified'> {
   /**
    * Configuration (columns and views etc)
    */
@@ -133,6 +188,11 @@ export interface IPortfolioAggregationState
    * Items to show in the list
    */
   items?: any[]
+
+  /**
+   * Selected items in the list
+   */
+  selectedItems?: any[]
 
   /**
    * All columns available for the data source category. Property `data.isSelected` is

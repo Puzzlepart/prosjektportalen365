@@ -1,4 +1,4 @@
-import { IGroup } from '@fluentui/react'
+import { Selection, IGroup, IObjectWithKey } from '@fluentui/react'
 import { createAction } from '@reduxjs/toolkit'
 import { ProjectContentColumn } from 'pp365-shared-library'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
@@ -141,3 +141,8 @@ export const SET_VIEW_FORM_PANEL = createAction<{
   view?: DataSource
   submitAction?: 'add' | 'edit'
 }>('SET_VIEW_FORM_PANEL')
+
+/**
+ * `SELECTION_CHANGED`: Action dispatched when user changes the selection in the list
+ */
+export const SELECTION_CHANGED = createAction<Selection<IObjectWithKey>>('SELECTION_CHANGED')

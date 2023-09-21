@@ -11,7 +11,6 @@ import {
 } from '@fluentui/react-icons'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ListMenuItem, ListMenuItemDivider } from 'pp365-shared-library'
-import ExcelExportService from 'pp365-shared-library/lib/services/ExcelExportService'
 import { useMemo } from 'react'
 import { IPortfolioAggregationContext } from '../context'
 import {
@@ -20,6 +19,7 @@ import {
   TOGGLE_COMPACT,
   TOGGLE_FILTER_PANEL
 } from '../reducer'
+import { useExcelExport } from './useExcelExport'
 
 /**
  * Object containing icons used in the toolbar.
@@ -45,6 +45,7 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
     }),
     [context.state.currentView?.id, context.state.isCompact]
   )
+  const { exportToExcel } = useExcelExport(context)
 
   const views = context.state.views.map<ListMenuItem>((dataSource) =>
     new ListMenuItem(dataSource.title)
@@ -64,18 +65,7 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
         context.props.showExcelExportButton &&
           new ListMenuItem(null, strings.ExcelExportButtonLabel)
             .setIcon('ExcelLogoInverse')
-            .setOnClick(() => {
-              ExcelExportService.configure({ name: context.props.title })
-              ExcelExportService.export(context.state.items, [
-                {
-                  key: 'SiteTitle',
-                  fieldName: 'SiteTitle',
-                  name: strings.SiteTitleLabel,
-                  minWidth: null
-                },
-                ...(context.state.columns as any[])
-              ])
-            })
+            .setOnClick(exportToExcel)
             .setStyle({ color: '#10793F' }),
         new ListMenuItem(context.state.currentView?.title, strings.PortfolioViewsListName)
           .setIcon(Icons.ContentView)

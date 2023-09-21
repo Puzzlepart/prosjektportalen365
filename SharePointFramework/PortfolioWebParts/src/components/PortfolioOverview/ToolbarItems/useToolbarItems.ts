@@ -38,9 +38,9 @@ const Icons = {
 /**
  * Returns an array of menu items for the toolbar in the PortfolioOverview component.
  *
- * @param context - The IPortfolioOverviewContext object containing the necessary data for generating the toolbar items.
+ * @param context - The `IPortfolioOverviewContext` object containing the necessary data for generating the toolbar items.
  *
- * @returns An array of IListMenuItem objects representing the toolbar items.
+ * @returns An array of `IListMenuItem` objects representing the toolbar items.
  */
 export function useToolbarItems(context: IPortfolioOverviewContext) {
   const userCanManageViews =
