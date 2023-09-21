@@ -57,6 +57,13 @@ export class ProjectPhaseModel {
   }
 
   /**
+   * Type of phase (Phase or BP)
+   */
+  public get type() {
+    return this.properties.PhaseType
+  }
+
+  /**
    * Phase sub text
    *
    * Uses local custom property `PhaseSubText` from the term with

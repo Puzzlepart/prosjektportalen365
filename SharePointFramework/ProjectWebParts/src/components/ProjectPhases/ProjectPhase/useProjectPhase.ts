@@ -14,7 +14,8 @@ export function useProjectPhase(props: IProjectPhaseProps) {
   const targetRef = useRef<HTMLLIElement>()
   const classNames = [styles.projectPhase]
   const isCurrentPhase = props.phase.id === context.state.phase?.id
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
+  const phasesLength = context.state.data.phases.filter((phase) => phase.properties.ShowOnFrontpage === 'true').length
 
   if (context.props.useStartArrow) classNames.push(styles.useStartArrow)
   if (context.props.useEndArrow) classNames.push(styles.useEndArrow)
@@ -32,16 +33,24 @@ export function useProjectPhase(props: IProjectPhaseProps) {
     }
   }
 
-  const handleOpenChange: PopoverProps["onOpenChange"] = (e, data) => {
-    setOpen(data.open || false);
+  const handleOpenChange: PopoverProps['onOpenChange'] = (e, data) => {
+    setOpen(data.open || false)
     context.dispatch(OPEN_CALLOUT({ phase: props.phase, target: targetRef.current }))
   }
 
   useEffect(() => {
     if (context.state.callout === null) {
-      setOpen(false);
+      setOpen(false)
     }
-  }, [context.state.callout]);
+  }, [context.state.callout])
 
-  return { targetRef, handleOpenChange, open, className: classNames.join(' '), subTextProps, context } as const
+  return {
+    targetRef,
+    handleOpenChange,
+    open,
+    className: classNames.join(' '),
+    subTextProps,
+    context,
+    phasesLength
+  } as const
 }

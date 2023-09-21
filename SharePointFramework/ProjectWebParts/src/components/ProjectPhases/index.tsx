@@ -3,12 +3,18 @@ import React, { FC } from 'react'
 import { ChangePhaseDialog } from './ChangePhaseDialog'
 import { ProjectPhasesContext } from './context'
 import { ProjectPhase } from './ProjectPhase'
-import { ProjectPhaseCallout } from './ProjectPhase/ProjectPhaseCallout'
 import styles from './ProjectPhases.module.scss'
 import { getShimmerElements } from './shimmer'
 import { IProjectPhasesProps } from './types'
 import { useProjectPhases } from './useProjectPhases'
-import { FluentProvider, Toast, ToastTitle, useId, useToastController, webLightTheme } from '@fluentui/react-components'
+import {
+  FluentProvider,
+  Toast,
+  ToastTitle,
+  useId,
+  useToastController,
+  webLightTheme
+} from '@fluentui/react-components'
 
 export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
   const { rootRef, context } = useProjectPhases(props)
@@ -18,7 +24,12 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
   const { dispatchToast } = useToastController(toasterId)
 
   return (
-    <FluentProvider id={fluentProviderId} theme={webLightTheme} className={styles.root} ref={rootRef}>
+    <FluentProvider
+      id={fluentProviderId}
+      theme={webLightTheme}
+      className={styles.root}
+      ref={rootRef}
+    >
       <div className={styles.container}>
         <ProjectPhasesContext.Provider value={context}>
           <Shimmer
@@ -49,7 +60,8 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
 ProjectPhases.displayName = 'Project Phases'
 ProjectPhases.defaultProps = {
   syncPropertiesAfterPhaseChange: true,
-  commentMinLength: 4
+  commentMinLength: 4,
+  subTextTruncateLength: 50
 }
 
 export * from './types'

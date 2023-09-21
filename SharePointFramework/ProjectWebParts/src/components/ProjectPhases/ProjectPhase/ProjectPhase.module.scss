@@ -2,41 +2,51 @@ $project-color: #89ce87;
 $project-current-color: #54b054;
 $project-current-color-hover: #397e39;
 
-$portfolio-color: #a2cfeb;
-$portfolio-current-color: #64b3db;
-$portfolio-current-color-hover: #5691af;
+$portfolio-color: #8abdde;
+$portfolio-current-color: #64addb;
+$portfolio-current-color-hover: #5688af;
 
 $arrow-font-size: 4rem;
 $arrow-height: 1em;
-$chevron-height: 0.5em;
+$chevron-height: 0.75em;
 $chevron-width: 0.25em;
+$project-phase-padding: 0.25em;
 
 .projectPhase {
   margin: 0;
-  padding: 0;
   position: relative;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-height: $arrow-height;
+  height: 1em;
+  max-height: 1em;
   background: $project-color;
   font-size: $arrow-font-size;
   line-height: $arrow-height;
   margin-right: $chevron-width;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
   filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.15));
 
   &:after,
   &:before {
     position: absolute;
+    z-index: -1;
     content: "";
     border: solid transparent;
     border-width: $chevron-height $chevron-width;
-    transition: all 0.3s ease-in-out;
   }
+
   &:after {
     border-top-color: $project-color;
     border-bottom-color: $project-color;
     left: -$chevron-width;
   }
+
   &:before {
     border-right: 0;
     border-left-color: $project-color;
@@ -123,15 +133,14 @@ $chevron-width: 0.25em;
 
 .projectPhase {
   font-weight: 400;
-  padding: 0 $chevron-width;
+  padding: $chevron-width;
   text-align: center;
   color: white;
 
   span {
     cursor: pointer;
     font-size: 0.25em;
-    bottom: $chevron-height + 0.1em;
-    line-height: $chevron-height;
+    line-height: 1em;
     position: relative;
     vertical-align: middle;
   }
@@ -139,6 +148,7 @@ $chevron-width: 0.25em;
   .phaseSubText {
     line-height: 1em;
     font-size: 12px;
+    font-weight: 400;
   }
 }
 
