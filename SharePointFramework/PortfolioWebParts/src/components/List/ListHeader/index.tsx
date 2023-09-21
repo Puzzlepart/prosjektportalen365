@@ -45,6 +45,7 @@ const ListHeader: FC<IListHeaderProps> = (props) => {
               title={strings.SearchBoxPlaceholderFallbackText}
               size='large'
               appearance='filled-lighter'
+              contentAfter={null}
               {...props.searchBox}
             />
           </div>

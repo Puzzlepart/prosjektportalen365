@@ -55,8 +55,7 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
         ? props.searchBoxPlaceholderText
         : context.state.currentView &&
           format(strings.SearchBoxPlaceholderText, context.state.currentView?.title?.toLowerCase()),
-      onChange: (_, data) => context.dispatch(EXECUTE_SEARCH(data?.value)),
-      onClear: () => context.dispatch(EXECUTE_SEARCH(''))
+      onChange: (_, data) => context.dispatch(EXECUTE_SEARCH(data?.value))
     }),
     [context.state.currentView, props.searchBoxPlaceholderText]
   )
