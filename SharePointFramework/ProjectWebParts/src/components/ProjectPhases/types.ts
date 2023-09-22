@@ -3,7 +3,7 @@ import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState
 } from 'pp365-shared-library/lib/components/BaseWebPartComponent'
-import { IProjectPhaseCalloutProps } from './ProjectPhase/ProjectPhaseCallout'
+import { IProjectPhasePopoverProps } from './ProjectPhase/ProjectPhasePopover'
 
 export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   /**
@@ -31,6 +31,16 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
    * after phase change.
    */
   syncPropertiesAfterPhaseChange: boolean
+
+  /**
+   * Use start arrow
+   */
+  useStartArrow: boolean
+
+  /**
+   * Use end arrow
+   */
+  useEndArrow: boolean
 
   /**
    * Use dynamic homepage when switching phases
@@ -78,9 +88,9 @@ export interface IProjectPhasesState extends IBaseWebPartComponentState<IProject
   isChangingPhase?: boolean
 
   /**
-   * Callout props
+   * Popover props
    */
-  callout?: IProjectPhaseCalloutProps
+  popover?: IProjectPhasePopoverProps
 }
 
 export type ChecklistData = Record<string, ProjectPhaseChecklistData>

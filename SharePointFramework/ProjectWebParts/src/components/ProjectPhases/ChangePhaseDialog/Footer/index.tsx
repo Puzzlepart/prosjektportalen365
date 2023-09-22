@@ -48,13 +48,13 @@ export const Footer: FC = () => {
 
   return (
     <DialogFooter>
+      <DefaultButton
+        text={strings.CancelText}
+        onClick={() => context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())}
+      />
       {actions.map((buttonProps, index) => (
         <PrimaryButton key={index} {...buttonProps} />
       ))}
-      <DefaultButton
-        text={strings.CloseText}
-        onClick={() => context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())}
-      />
     </DialogFooter>
   )
 }

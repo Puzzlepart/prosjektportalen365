@@ -1,130 +1,205 @@
+$project-color: #89ce87;
+$project-current-color: #54b054;
+$project-current-color-hover: #397e39;
+
+$portfolio-color: #8abdde;
+$portfolio-current-color: #64addb;
+$portfolio-current-color-hover: #5688af;
+
+$arrow-font-size: 4rem;
+$arrow-height: 1em;
+$chevron-height: 0.75em;
+$chevron-width: 0.25em;
+$project-phase-padding: 0.25em;
+
 .projectPhase {
-  width: auto;
-  -ms-flex: 1;
-  -moz-flex: 1;
-  -webkit-box-flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
   flex: 1;
-  display: block;
   position: relative;
   margin: 0;
-  text-decoration: none;
+  min-height: $arrow-height;
+  height: 1em;
+  max-height: 1em;
+  background: $project-color;
+  font-size: $arrow-font-size;
+  line-height: $arrow-height;
+  margin-right: $chevron-width;
+  cursor: pointer;
+  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.15));
 
-  &.isCurrentPhase .container .phaseLetter {
-    color: #fff;
-    background-color: #393;
+  &:after,
+  &:before {
+    position: absolute;
+    z-index: -1;
+    content: "";
+    border: solid transparent;
+    border-width: $chevron-height $chevron-width;
+  }
+
+  &:after {
+    border-top-color: $project-color;
+    border-bottom-color: $project-color;
+    left: -$chevron-width;
+  }
+
+  &:before {
+    border-right: 0;
+    border-left-color: $project-color;
+    right: -$chevron-width;
+  }
+
+  &.isCurrentPhase {
+    background: $project-current-color;
+    font-weight: 600;
+
+    &:after {
+      border-top-color: $project-current-color;
+      border-bottom-color: $project-current-color;
+    }
+    &:before {
+      border-left-color: $project-current-color;
+    }
+
+    span {
+      font-size: 18px;
+    }
   }
 
   &.portfolio {
-    &.isCurrentPhase .container .phaseLetter {
-      color: #fff;
-      background-color: #0072c6;
-    }
+    background: $portfolio-color;
 
-    .container .phaseIcon {
-      &:before,
-      &:after {
-        visibility: hidden;
-      }
-    }
-
-    .container .phaseText {
-      color: #0072c6;
-    }
-
-    .container .phaseLetter {
-      color: #0072c6;
-      border: 1px solid #0072c6;
-
-      &:hover {
-        color: #fff;
-        background-color: #0072c6;
-      }
-    }
-  }
-
-  &:before,
-  &:after {
-    display: block;
-    position: absolute;
-    top: 35px;
-    width: 100%;
-    height: 1px;
-    content: '';
-    background-color: #0072c6;
-    z-index: 2;
-    left: 0;
-  }
-
-  .container {
-    position: relative;
-    width: 100%;
-    height: auto;
-    float: none;
-  }
-
-  .phaseIcon {
-    position: relative;
-    width: 100%;
-    height: auto;
-    float: none;
-
-    &:before,
     &:after {
-      display: block;
-      position: absolute;
-      top: 31px;
-      width: 100%;
-      height: 1px;
-      content: '';
-      background-color: #393;
-      z-index: 2;
-      left: 0;
+      border-top-color: $portfolio-color;
+      border-bottom-color: $portfolio-color;
+    }
+    &:before {
+      border-left-color: $portfolio-color;
+    }
+
+    &.isCurrentPhase {
+      background: $portfolio-current-color;
+
+      &:after {
+        border-top-color: $portfolio-current-color;
+        border-bottom-color: $portfolio-current-color;
+      }
+      &:before {
+        border-left-color: $portfolio-current-color;
+      }
     }
   }
 
-  .phaseLetter {
-    border-radius: 50%;
+  &.useStartArrow {
+    &:first-child {
+      &:after {
+        border-left-color: $portfolio-color;
+        border-top-left-radius: var(--borderRadiusMedium);
+        border-bottom-left-radius: var(--borderRadiusMedium);
+      }
+
+      &.isCurrentPhase {
+        &:after {
+          border-left-color: $portfolio-current-color;
+        }
+      }
+    }
+
+    &:first-child:hover {
+      &:after {
+        border-left-color: $portfolio-current-color;
+      }
+
+      &.isCurrentPhase {
+        &:after {
+          border-left-color: $portfolio-current-color-hover;
+        }
+      }
+    }
+  }
+
+  &.useEndArrow {
+    &:last-child {
+      border-top-right-radius: var(--borderRadiusMedium);
+      border-bottom-right-radius: var(--borderRadiusMedium);
+
+      &:before {
+        border: none;
+      }
+    }
+  }
+}
+
+.projectPhase {
+  font-weight: 400;
+  padding: $chevron-width;
+  text-align: center;
+  color: white;
+
+  span {
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1em;
     position: relative;
-    width: 40px;
-    height: 40px;
-    background-color: #fff;
-    display: block;
-    margin: 10px 10px 0 0;
-    float: left;
-    text-align: center;
-    z-index: 9;
-    line-height: 38px;
-    font-size: 19px;
-    color: #393;
-    border: 1px solid #393;
+    vertical-align: middle;
+  }
 
-    &:hover {
-      color: #fff;
-      background-color: #393;
+  .subText {
+    line-height: 1em;
+    font-size: 12px;
+    font-weight: inherit;
+  }
+}
+
+.projectPhase:hover {
+  background: $project-current-color;
+  filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.2));
+
+  &:after {
+    border-top-color: $project-current-color;
+    border-bottom-color: $project-current-color;
+  }
+  &:before {
+    border-left-color: $project-current-color;
+  }
+
+  &.isCurrentPhase {
+    background: $project-current-color-hover;
+
+    &:after {
+      border-top-color: $project-current-color-hover;
+      border-bottom-color: $project-current-color-hover;
+    }
+    &:before {
+      border-left-color: $project-current-color-hover;
     }
   }
 
-  .phaseText {
-    color: #393;
-    max-width: 120px;
-    white-space: nowrap;
-    overflow: hidden;
-    -o-text-overflow: ellipsis;
-    text-overflow: ellipsis;
-    width: 68%;
-    text-align: left;
-    float: left;
-    font-size: 14px;
-    padding: 4px 0 0 0;
-    margin: 4px 0 4px 0;
-  }
+  &.portfolio {
+    background: $portfolio-current-color;
 
-  .phaseSubText {
-    width: 68%;
-    padding: 10px 0 0 0;
-    font-size: 11px;
-    text-align: left;
-    float: left;
-    color: #333;
+    &:after {
+      border-top-color: $portfolio-current-color;
+      border-bottom-color: $portfolio-current-color;
+    }
+    &:before {
+      border-left-color: $portfolio-current-color;
+    }
+
+    &.isCurrentPhase {
+      background: $portfolio-current-color-hover;
+
+      &:after {
+        border-top-color: $portfolio-current-color-hover;
+        border-bottom-color: $portfolio-current-color-hover;
+      }
+      &:before {
+        border-left-color: $portfolio-current-color-hover;
+      }
+    }
   }
 }

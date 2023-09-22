@@ -44,11 +44,17 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
                 }),
                 PropertyPaneSlider('subTextTruncateLength', {
                   label: strings.SubTextTruncateLengthFieldLabel,
-                  min: 20,
-                  max: 100,
+                  min: 10,
+                  max: 50,
                   step: 2,
                   showValue: true,
                   disabled: !this.properties.showSubText
+                }),
+                PropertyPaneToggle('useStartArrow', {
+                  label: strings.PhaseUseStartArrowLabel
+                }),
+                PropertyPaneToggle('useEndArrow', {
+                  label: strings.PhaseUseEndArrowLabel
                 }),
                 PropertyPaneDropdown('phaseField', {
                   label: strings.PhaseFieldFieldLabel,

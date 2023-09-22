@@ -1,0 +1,23 @@
+@import "~@fluentui/react/dist/sass/References.scss";
+
+.root {
+  padding: 8px;
+
+  .title {
+    margin-top: 0;
+    font-weight: 600;
+  }
+
+  .body {
+    max-width: 250px;
+
+    .subText {
+     font-weight: 600;
+    }
+
+    .label {
+      font-weight: var(--fontWeightRegular);
+      margin: 0;
+    }
+  }
+}

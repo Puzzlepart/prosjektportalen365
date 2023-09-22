@@ -1,25 +1,36 @@
 import React, { FC } from 'react'
-import styles from './ProjectPhase.module.scss'
 import { IProjectPhaseProps } from './types'
 import { useProjectPhase } from './useProjectPhase'
+import { Popover, PopoverSurface, PopoverTrigger } from '@fluentui/react-components'
+import { ProjectPhasePopover } from './ProjectPhasePopover'
 
 export const ProjectPhase: FC<IProjectPhaseProps> = (props) => {
-  const { targetRef, onClick, className, subTextProps } = useProjectPhase(props)
+  const { targetRef, handleOpenChange, open, className, subTextProps, context, phasesLength } =
+    useProjectPhase(props)
+
+  const altPadding = {
+    paddingRight: '.125em',
+    paddingLeft: '.125em'
+  }
 
   return (
-    <li className={className}>
-      <a href='#' className={styles.container}>
-        <div className={styles.phaseIcon}>
-          <span className={styles.phaseLetter} ref={targetRef} onClick={onClick}>
-            {props.phase.letter}
-          </span>
-          <span className={styles.phaseText} onClick={onClick}>
-            {props.phase.name}
-          </span>
-          <div {...subTextProps}></div>
-        </div>
-      </a>
-    </li>
+    <>
+      <Popover withArrow positioning='below' open={open} onOpenChange={handleOpenChange}>
+        <PopoverTrigger disableButtonEnhancement>
+          <li
+            className={className}
+            style={phasesLength > 6 ? { ...altPadding } : {}}
+            ref={targetRef}
+          >
+            <span title={props.phase.name}>{props.phase.name}</span>
+            <div {...subTextProps}></div>
+          </li>
+        </PopoverTrigger>
+        <PopoverSurface>
+          <ProjectPhasePopover {...(context.state.popover || {})} />
+        </PopoverSurface>
+      </Popover>
+    </>
   )
 }
 

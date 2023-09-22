@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    Aria: {
+      CurrentPhaseText: 'Dette er den gjeldende fasen. Det er derfor ikke mulig å endre til denne fasen.',
+    },
     SaveText: 'Lagre',
     ErrorBoundaryFallbackText: 'Det oppstod en feil under lasting av {0}.',
     ErrorBoundaryFallbackDescription: 'Feildetaljer:',
@@ -130,6 +133,8 @@ define([], function () {
     PhaseChecklistViewUrl: 'Lists/Fasesjekkliste/AllItems.aspx',
     PhaseFieldFieldLabel: 'Fasefelt',
     PhaseLabel: 'Fase',
+    PhaseUseStartArrowLabel: 'Bruk startpil',
+    PhaseUseEndArrowLabel: 'Bruk avsluttende pil',
     PhaseSitePageFoundDescription: 'Å endre til denne fasen vil også endre forsiden til prosjektet.<br /><br />Side _{0}_ for fase funnet. Denne siden vil bli brukt som forside for prosjektet. Trykk **Ja** for å fortsette.',
     PhaseSitePageNotFoundDescription: 'Dynamisk forside er aktivert.<br /><br />Side _{0}_ for fase ble ikke funnet, vennligst opprett. Ved trykk på **Ja** vil ikke forside endres.',
     PleaseWaitText: 'Vennligst vent',
