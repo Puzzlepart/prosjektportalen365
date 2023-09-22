@@ -34,6 +34,7 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Portfolio" />
                                         <pnp:Property Key="PhaseSubText" Value="Avklare behov og velge konsept" />
+                                        <pnp:Property Key="PhaseDescription" Value="Konseptfasen sikrer at et eventuelt prosjekt vil være riktig bruk av virksomhetens ressurser for å tilfredsstille et definert behov. Dette gjøres ved å utrede alternative konsepter og velge det beste." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Planlegge" ID="cda4f1e1-3488-4e57-8a04-6973df239689" CustomSortOrder="4" SourceTermId="cda4f1e1-3488-4e57-8a04-6973df239689">
@@ -44,6 +45,7 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
                                         <pnp:Property Key="PhaseSubText" Value="Planlegge overordnet styring" />
+                                        <pnp:Property Key="PhaseDescription" Value="Planleggingsfasen sikrer at virksomheten har en god forståelse for arbeidet som kreves for å gjennomføre prosjektet, før virksomhetsledelsen forplikter seg til en betydelig investering." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Gjennomføre" ID="99d7765a-c786-4792-a1a1-866ef0f982b9" CustomSortOrder="5" SourceTermId="99d7765a-c786-4792-a1a1-866ef0f982b9">
@@ -54,6 +56,7 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
                                         <pnp:Property Key="PhaseSubText" Value="Gjennomføre leveranser og planlegge delfaser" />
+                                        <pnp:Property Key="PhaseDescription" Value="I gjennomføringsfasen leverer dere prosjektets produkter ved å gjennomføre delfaser i henhold til de planer og strategier som fremgår av styringsdokumentet." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Avslutte" ID="30e03c52-8c3e-4cfe-9b18-ca71593ce130" CustomSortOrder="6" SourceTermId="30e03c52-8c3e-4cfe-9b18-ca71593ce130">
@@ -64,6 +67,7 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
                                         <pnp:Property Key="PhaseSubText" Value="Evaluere og avslutte prosjektet" />
+                                        <pnp:Property Key="PhaseDescription" Value="Avslutningsfasen sikrer en strukturert og formell avslutning av prosjektet, og en god overlevering til linjen." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Realisere" ID="b7ba84f0-70b9-45c4-8c50-8f73bf15bbec" CustomSortOrder="7" SourceTermId="b7ba84f0-70b9-45c4-8c50-8f73bf15bbec">
@@ -74,6 +78,7 @@
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Portfolio" />
                                         <pnp:Property Key="PhaseSubText" Value="Realisere mål og gevinster" />
+                                        <pnp:Property Key="PhaseDescription" Value="Her følger virksomheten opp sin videre realisering av gevinster, og vurderer oppnåelse av effektmål." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                             </pnp:Terms>

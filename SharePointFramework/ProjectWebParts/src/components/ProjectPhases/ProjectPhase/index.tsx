@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { IProjectPhaseProps } from './types'
 import { useProjectPhase } from './useProjectPhase'
 import { Popover, PopoverSurface, PopoverTrigger } from '@fluentui/react-components'
-import { ProjectPhaseCallout } from './ProjectPhaseCallout'
+import { ProjectPhasePopover } from './ProjectPhasePopover'
 
 export const ProjectPhase: FC<IProjectPhaseProps> = (props) => {
   const { targetRef, handleOpenChange, open, className, subTextProps, context, phasesLength } =
@@ -17,13 +17,17 @@ export const ProjectPhase: FC<IProjectPhaseProps> = (props) => {
     <>
       <Popover withArrow positioning='below' open={open} onOpenChange={handleOpenChange}>
         <PopoverTrigger disableButtonEnhancement>
-          <li className={className} style={phasesLength > 6 ? { ...altPadding } : {}} ref={targetRef}>
-            <span>{props.phase.name}</span>
+          <li
+            className={className}
+            style={phasesLength > 6 ? { ...altPadding } : {}}
+            ref={targetRef}
+          >
+            <span title={props.phase.name}>{props.phase.name}</span>
             <div {...subTextProps}></div>
           </li>
         </PopoverTrigger>
         <PopoverSurface>
-          <ProjectPhaseCallout {...(context.state.callout || {})} />
+          <ProjectPhasePopover {...(context.state.popover || {})} />
         </PopoverSurface>
       </Popover>
     </>

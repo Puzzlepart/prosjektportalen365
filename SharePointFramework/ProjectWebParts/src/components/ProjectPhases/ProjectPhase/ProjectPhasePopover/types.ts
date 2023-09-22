@@ -1,7 +1,7 @@
 import { PopoverProps } from '@fluentui/react-components'
 import { ProjectPhaseModel } from 'pp365-shared-library/lib/models'
 
-export interface IProjectPhaseCalloutProps extends Omit<PopoverProps, 'children'> {
+export interface IProjectPhasePopoverProps extends Omit<PopoverProps, 'children'> {
   /**
    * Phase
    */

@@ -1,4 +1,7 @@
 declare interface IProjectWebPartsStrings {
+  Aria: {
+    CurrentPhaseText: string
+  }
   SaveText: string
   ErrorBoundaryFallbackDescription: string
   ErrorBoundaryFallbackText: string

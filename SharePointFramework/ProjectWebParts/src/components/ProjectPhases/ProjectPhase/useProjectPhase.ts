@@ -1,7 +1,7 @@
 import { truncateString } from 'pp365-shared-library/lib/util/truncateString'
 import { HTMLProps, useContext, useEffect, useRef, useState } from 'react'
 import { ProjectPhasesContext } from '../context'
-import { OPEN_CALLOUT } from '../reducer'
+import { OPEN_POPOVER } from '../reducer'
 import styles from './ProjectPhase.module.scss'
 import { IProjectPhaseProps } from './types'
 import { PopoverProps } from '@fluentui/react-components'
@@ -15,7 +15,9 @@ export function useProjectPhase(props: IProjectPhaseProps) {
   const classNames = [styles.projectPhase]
   const isCurrentPhase = props.phase.id === context.state.phase?.id
   const [open, setOpen] = useState(false)
-  const phasesLength = context.state.data.phases.filter((phase) => phase.properties.ShowOnFrontpage === 'true').length
+  const phasesLength = context.state.data.phases.filter(
+    (phase) => phase.properties.ShowOnFrontpage === 'true'
+  ).length
 
   if (context.props.useStartArrow) classNames.push(styles.useStartArrow)
   if (context.props.useEndArrow) classNames.push(styles.useEndArrow)
@@ -26,7 +28,7 @@ export function useProjectPhase(props: IProjectPhaseProps) {
   }
   const subTextProps: HTMLProps<HTMLDivElement> = {
     hidden: !context.props.showSubText,
-    className: styles.phaseSubText,
+    className: styles.subText,
     title: props.phase.subText,
     dangerouslySetInnerHTML: {
       __html: truncateString(props.phase.subText ?? '', context.props.subTextTruncateLength ?? 50)
@@ -35,14 +37,14 @@ export function useProjectPhase(props: IProjectPhaseProps) {
 
   const handleOpenChange: PopoverProps['onOpenChange'] = (e, data) => {
     setOpen(data.open || false)
-    context.dispatch(OPEN_CALLOUT({ phase: props.phase, target: targetRef.current }))
+    context.dispatch(OPEN_POPOVER({ phase: props.phase, target: targetRef.current }))
   }
 
   useEffect(() => {
-    if (context.state.callout === null) {
+    if (context.state.popover === null) {
       setOpen(false)
     }
-  }, [context.state.callout])
+  }, [context.state.popover])
 
   return {
     targetRef,

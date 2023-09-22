@@ -13,8 +13,6 @@ $chevron-width: 0.25em;
 $project-phase-padding: 0.25em;
 
 .projectPhase {
-  margin: 0;
-  position: relative;
   display: flex;
   flex-direction: column;
   align-content: center;
@@ -22,6 +20,8 @@ $project-phase-padding: 0.25em;
   align-items: center;
   gap: 8px;
   flex: 1;
+  position: relative;
+  margin: 0;
   min-height: $arrow-height;
   height: 1em;
   max-height: 1em;
@@ -64,6 +64,10 @@ $project-phase-padding: 0.25em;
     &:before {
       border-left-color: $project-current-color;
     }
+
+    span {
+      font-size: 18px;
+    }
   }
 
   &.portfolio {
@@ -79,7 +83,6 @@ $project-phase-padding: 0.25em;
 
     &.isCurrentPhase {
       background: $portfolio-current-color;
-      font-weight: 600;
 
       &:after {
         border-top-color: $portfolio-current-color;
@@ -139,13 +142,13 @@ $project-phase-padding: 0.25em;
 
   span {
     cursor: pointer;
-    font-size: 0.25em;
+    font-size: 16px;
     line-height: 1em;
     position: relative;
     vertical-align: middle;
   }
 
-  .phaseSubText {
+  .subText {
     line-height: 1em;
     font-size: 12px;
     font-weight: inherit;

@@ -1,13 +1,13 @@
 import { MessageBarType } from '@fluentui/react'
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import { CustomError, ProjectPhaseModel } from 'pp365-shared-library/lib/models'
-import { IProjectPhaseCalloutProps } from './ProjectPhase/ProjectPhaseCallout'
+import { IProjectPhasePopoverProps } from './ProjectPhase/ProjectPhasePopover'
 import { IProjectPhasesData, IProjectPhasesState } from './types'
 
 export const INIT_DATA = createAction<{ data: IProjectPhasesData; error?: Error }>('INIT_DATA')
-export const OPEN_CALLOUT = createAction<IProjectPhaseCalloutProps>('OPEN_CALLOUT')
+export const OPEN_POPOVER = createAction<IProjectPhasePopoverProps>('OPEN_POPOVER')
 export const CHANGE_PHASE = createAction('CHANGE_PHASE')
-export const DISMISS_CALLOUT = createAction('DISMISS_CALLOUT')
+export const DISMISS_POPOVER = createAction('DISMISS_POPOVER')
 export const DISMISS_CHANGE_PHASE_DIALOG = createAction('DISMISS_CHANGE_PHASE_DIALOG')
 export const INIT_CHANGE_PHASE = createAction('INIT_CHANGE_PHASE')
 export const CHANGE_PHASE_ERROR = createAction<{ error: Error }>('CHANGE_PHASE_ERROR')
@@ -29,12 +29,12 @@ export default createReducer(initialState, {
     state.error = payload.error && CustomError.createError(payload.error, MessageBarType.error)
   },
 
-  [OPEN_CALLOUT.type]: (state, { payload }) => {
-    state.callout = payload
+  [OPEN_POPOVER.type]: (state, { payload }) => {
+    state.popover = payload
   },
 
-  [DISMISS_CALLOUT.type]: (state) => {
-    state.callout = null
+  [DISMISS_POPOVER.type]: (state) => {
+    state.popover = null
   },
 
   [DISMISS_CHANGE_PHASE_DIALOG.type]: (state) => {
@@ -46,8 +46,8 @@ export default createReducer(initialState, {
   },
 
   [CHANGE_PHASE.type]: (state) => {
-    state.confirmPhase = state.callout.phase
-    state.callout = null
+    state.confirmPhase = state.popover.phase
+    state.popover = null
   },
 
   [SET_PHASE.type]: (state, { payload }: ReturnType<typeof SET_PHASE>) => {

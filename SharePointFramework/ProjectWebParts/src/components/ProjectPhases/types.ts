@@ -3,7 +3,7 @@ import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState
 } from 'pp365-shared-library/lib/components/BaseWebPartComponent'
-import { IProjectPhaseCalloutProps } from './ProjectPhase/ProjectPhaseCallout'
+import { IProjectPhasePopoverProps } from './ProjectPhase/ProjectPhasePopover'
 
 export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   /**
@@ -88,9 +88,9 @@ export interface IProjectPhasesState extends IBaseWebPartComponentState<IProject
   isChangingPhase?: boolean
 
   /**
-   * Callout props
+   * Popover props
    */
-  callout?: IProjectPhaseCalloutProps
+  popover?: IProjectPhasePopoverProps
 }
 
 export type ChecklistData = Record<string, ProjectPhaseChecklistData>

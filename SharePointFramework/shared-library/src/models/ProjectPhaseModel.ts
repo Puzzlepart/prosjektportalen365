@@ -30,6 +30,9 @@ export class ProjectPhaseModel {
     this.checklistData = checklistData ?? { stats: {}, items: [] }
   }
 
+  /**
+   * Phase name
+   */
   public get name(): string {
     const localizedLabel = _.find(this.term.labels, (l) => l.languageTag === 'nb-NO')
     return localizedLabel?.name ?? this.term.labels[0].name
@@ -57,13 +60,6 @@ export class ProjectPhaseModel {
   }
 
   /**
-   * Type of phase (Phase or BP)
-   */
-  public get type() {
-    return this.properties.PhaseType
-  }
-
-  /**
    * Phase sub text
    *
    * Uses local custom property `PhaseSubText` from the term with
@@ -71,6 +67,13 @@ export class ProjectPhaseModel {
    */
   public get subText() {
     return this.properties.PhaseSubText || this.properties.PhasePurpose
+  }
+
+  /**
+   * Phase description (shown in the popover when clicking a phase)
+   */
+  public get description() {
+    return this.properties.PhaseDescription
   }
 
   /**
