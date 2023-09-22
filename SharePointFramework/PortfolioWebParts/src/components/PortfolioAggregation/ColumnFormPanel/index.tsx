@@ -100,13 +100,6 @@ export const ColumnFormPanel: FC = () => {
       </FormFieldContainer>
       <FormFieldContainer>
         <Toggle
-          label={strings.IsResizableLabel}
-          checked={column.get('isResizable')}
-          onChange={(_, checked) => setColumn('isResizable', checked)}
-        />
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <Toggle
           label={strings.IsGroupableLabel}
           checked={column.get('data').isGroupable}
           onChange={(_, checked) => setColumnData('isGroupable', checked)}

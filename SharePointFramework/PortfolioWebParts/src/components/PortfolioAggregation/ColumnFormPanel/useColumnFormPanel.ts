@@ -34,22 +34,18 @@ export function useColumnFormPanel() {
     if (colummData.dataTypeProperties) {
       columnItem.GtFieldDataTypeProperties = JSON.stringify(colummData.dataTypeProperties, null, 2)
     }
-    if (isEditing) {
-      await Promise.resolve(
-        context.props.dataAdapter
+    try {
+      if (isEditing) {
+        await context.props.dataAdapter
           .updateProjectContentColumn(columnItem, persistRenderGlobally)
           .then(() => {
             const editedColumn = new ProjectContentColumn(columnItem)
             context.dispatch(
-              ADD_COLUMN({
-                column: editedColumn
-              })
+              ADD_COLUMN(editedColumn)
             )
           })
-      )
-    } else {
-      await Promise.resolve(
-        context.props.dataAdapter.portalDataService
+      } else {
+        await context.props.dataAdapter.portalDataService
           .addItemToList('PROJECT_CONTENT_COLUMNS', _.omit(columnItem, ['Id']))
           .then((properties) => {
             const newColumn = new ProjectContentColumn(properties)
@@ -60,13 +56,13 @@ export function useColumnFormPanel() {
               .updateDataSourceItem(updateItem, context.state.currentView?.title)
               .then(() => {
                 context.dispatch(
-                  ADD_COLUMN({
-                    column: newColumn
-                  })
+                  ADD_COLUMN(newColumn)
                 )
               })
           })
-      )
+      }
+    } catch (error) {
+      console.error(error)
     }
   }
 

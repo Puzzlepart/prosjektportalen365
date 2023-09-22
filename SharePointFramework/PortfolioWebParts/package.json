@@ -28,6 +28,7 @@
     "@microsoft/sp-page-context": "1.17.4",
     "@microsoft/sp-property-pane": "1.17.4",
     "@microsoft/sp-webpart-base": "1.17.4",
+    "@microsoft/sp-http": "1.17.4",
     "@pnp/logging": "3.17.0",
     "@pnp/sp": "3.17.0",
     "@pnp/sp-taxonomy": "1.3.8",

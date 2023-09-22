@@ -15,6 +15,8 @@ import {
 import _ from 'lodash'
 import React from 'react'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
+import { ISPHttpClientOptions, SPHttpClient } from '@microsoft/sp-http'
+import { DisplayMode } from '@microsoft/sp-core-library'
 
 export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IPortfolioAggregationProps> {
   private _configuration: IPortfolioAggregationConfiguration
@@ -39,9 +41,34 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
    * @param key Key
    * @param value Value
    */
-  private _onUpdateProperty(key: string, value: any) {
+  private async _onUpdateProperty(key: string, value: any) {
     this.properties[key] = value
-    this.context.propertyPane.refresh()
+    switch (this.displayMode) {
+      case DisplayMode.Edit: {
+        this.context.propertyPane.refresh()
+      }
+      break
+      case DisplayMode.Read: {
+        const options: ISPHttpClientOptions = {
+          body: JSON.stringify({
+            includeInNavigation:      false,
+            pageId:  this.context.pageContext.listItem.id,
+            title: this.properties.title,
+            webPartDataAsJson: JSON.stringify({
+              id: this.context.manifest.id,
+              instanceId: this.context.instanceId,
+              title: this.properties.title,
+              properties: this.properties
+            })
+          })
+        }
+        await this.context.spHttpClient.post(
+          `${this.context.pageContext.web.absoluteUrl}/_api/SitePages/Pages/UpdateAppPage`,
+          SPHttpClient.configurations.v1,
+          options
+        )
+      }
+    }
   }
 
   public async onInit(): Promise<void> {

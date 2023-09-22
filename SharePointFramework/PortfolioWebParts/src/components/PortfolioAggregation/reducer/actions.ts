@@ -42,7 +42,7 @@ export const TOGGLE_COMPACT = createAction<boolean>('TOGGLE_COMPACT')
 /**
  * `ADD_COLUMN`: Add column.
  */
-export const ADD_COLUMN = createAction<{ column: ProjectContentColumn }>('ADD_COLUMN')
+export const ADD_COLUMN = createAction<ProjectContentColumn>('ADD_COLUMN')
 
 /**
  * `DELETE_COLUMN`: Delete column.

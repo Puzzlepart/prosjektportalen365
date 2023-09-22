@@ -5,10 +5,10 @@ import * as strings from 'PortfolioWebPartsStrings'
 import sortArray from 'array-sort'
 import _ from 'lodash'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
-import { arrayMove } from 'pp365-shared-library/lib/util/arrayMove'
-import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
 import { parseUrlHash, setUrlHash } from 'pp365-shared-library/lib/util'
+import { arrayMove } from 'pp365-shared-library/lib/util/arrayMove'
+import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
 import {
   IPortfolioAggregationHashState,
   IPortfolioAggregationProps,
@@ -17,7 +17,6 @@ import {
 } from '../types'
 import {
   ADD_COLUMN,
-  TOGGLE_COLUMN_CONTEXT_MENU,
   DATA_FETCHED,
   DATA_FETCH_ERROR,
   DELETE_COLUMN,
@@ -25,6 +24,7 @@ import {
   GET_FILTERS,
   MOVE_COLUMN,
   ON_FILTER_CHANGE,
+  SELECTION_CHANGED,
   SET_ALL_COLLAPSED,
   SET_COLLAPSED,
   SET_COLUMNS,
@@ -32,14 +32,14 @@ import {
   SET_DATA_SOURCE,
   SET_GROUP_BY,
   SET_SORT,
+  SET_VIEW_FORM_PANEL,
   SHOW_HIDE_COLUMNS,
   START_FETCH,
+  TOGGLE_COLUMN_CONTEXT_MENU,
   TOGGLE_COLUMN_FORM_PANEL,
   TOGGLE_COMPACT,
   TOGGLE_EDIT_VIEW_COLUMNS_PANEL,
-  TOGGLE_FILTER_PANEL,
-  SET_VIEW_FORM_PANEL,
-  SELECTION_CHANGED
+  TOGGLE_FILTER_PANEL
 } from './actions'
 import { persistSelectedColumnsInWebPartProperties } from './persistSelectedColumnsInWebPartProperties'
 
@@ -62,7 +62,7 @@ export const createPortfolioAggregationReducer = (
         })
         if (payload.projects) {
           items = items.filter((item) =>
-            _.some(payload.projects, (project) => project.GtSiteId === item.SiteId)
+            _.some(payload.projects, ({ GtSiteId }) => GtSiteId === item.SiteId)
           )
         }
         state.items = items
@@ -73,7 +73,7 @@ export const createPortfolioAggregationReducer = (
         state.columns = []
         return
       }
-      const selectedColumns = !_.isEmpty(props.columns)
+      let selectedColumns = !_.isEmpty(props.columns)
         ? props.columns
         : payload.dataSource.columns ?? []
       const allColumnsForCategory = payload.columns.map((c) =>
@@ -81,27 +81,17 @@ export const createPortfolioAggregationReducer = (
           isSelected: _.some(selectedColumns, ({ key }) => key === c.key) || c.data.isLocked
         })
       )
-      const selectedColumnsMerged = selectedColumns
+      selectedColumns = selectedColumns
         .map((c) => {
           const col = _.find(allColumnsForCategory, ({ key }) => key === c.key)
-          return (
-            col &&
-            col.setData({
-              ...c.data,
-              dataTypeProperties: {
-                ...col.data.dataTypeProperties,
-                ...c.data.dataTypeProperties
-              },
-              renderAs: c.data.renderAs ?? col.dataType ?? 'text'
-            })
-          )
+          return col ? col.merge(c) : null
         })
         .filter(Boolean)
       const availableColumns = payload.columns.filter(
-        (c) => !_.some(selectedColumnsMerged, ({ key }) => key === c.key)
+        (c) => !_.some(selectedColumns, ({ key }) => key === c.key)
       )
-      state.columns = !_.isEmpty(selectedColumnsMerged)
-        ? [...selectedColumnsMerged, ...availableColumns]
+      state.columns = !_.isEmpty(selectedColumns)
+        ? [...selectedColumns, ...availableColumns]
         : sortArray(allColumnsForCategory, 'sortOrder')
       state.allColumnsForCategory = allColumnsForCategory
       state.loading = false
@@ -126,7 +116,7 @@ export const createPortfolioAggregationReducer = (
     },
     [ADD_COLUMN.type]: (state, { payload }: ReturnType<typeof ADD_COLUMN>) => {
       const isEdit = !!state.columnForm?.column
-      const column = payload.column.setData({ isSelected: true })
+      const column = payload.setData({ isSelected: true })
       let columns = [...state.columns]
       let allColumnsForCategory = [...state.allColumnsForCategory]
       if (isEdit) {
@@ -160,9 +150,9 @@ export const createPortfolioAggregationReducer = (
     ) => {
       state.columnContextMenu = payload
         ? {
-            column: payload.column,
-            target: payload.target as any
-          }
+          column: payload.column,
+          target: payload.target as any
+        }
         : null
     },
     [SET_ALL_COLLAPSED.type]: (state, { payload }: ReturnType<typeof SET_ALL_COLLAPSED>) => {
@@ -377,7 +367,7 @@ export const createPortfolioAggregationReducer = (
         }
       }
     },
-[SELECTION_CHANGED.type]: (state, { payload }: ReturnType<typeof SELECTION_CHANGED>) => {
-  state.selectedItems = payload.getSelection()
-}
+    [SELECTION_CHANGED.type]: (state, { payload }: ReturnType<typeof SELECTION_CHANGED>) => {
+      state.selectedItems = payload.getSelection()
+    }
   })

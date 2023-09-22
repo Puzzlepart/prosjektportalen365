@@ -21,7 +21,6 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
     filterPanelProps,
     selection
   } = usePortfolioAggregation(props)
-
   return (
     <div className={styles.root}>
       <PortfolioAggregationContext.Provider value={context}>

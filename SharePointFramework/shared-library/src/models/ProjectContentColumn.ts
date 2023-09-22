@@ -83,4 +83,26 @@ export class ProjectContentColumn implements IProjectContentColumn {
     }
     return this
   }
+
+  /**
+   * Merges the properties of the given `ProjectContentColumn` into this instance.
+   * If a property is not defined in the given column, the current value of the property is retained.
+   * 
+   * @param column The `ProjectContentColumn` to merge into this instance.
+   * 
+   * @returns This instance with the merged properties.
+   */
+  public merge(column: ProjectContentColumn): ProjectContentColumn {
+    this.name = column.name ?? this.name
+    this.minWidth = column.minWidth ?? this.minWidth
+    this.maxWidth = column.maxWidth ?? this.maxWidth
+    return this.setData({
+      ...column.data,
+      dataTypeProperties: {
+        ...this.data.dataTypeProperties,
+        ...column.data.dataTypeProperties
+      },
+      renderAs: column.data.renderAs ?? this.dataType ?? 'text'
+    })
+  }
 }

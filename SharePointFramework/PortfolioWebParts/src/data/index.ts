@@ -788,7 +788,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   public async updateProjectContentColumn(
     columnItem: SPProjectContentColumnItem,
     persistRenderAs = false
-  ): Promise<any> {
+  ): Promise<IItemUpdateResult> {
     try {
       const list = this._sp.web.lists.getByTitle(strings.ProjectContentColumnsListName)
       const properties: SPProjectContentColumnItem = _.pick(
@@ -800,7 +800,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           persistRenderAs && 'GtFieldDataType'
         ].filter(Boolean)
       )
-      return await list.items.getById(columnItem.Id).update(properties)
+      const update = await list.items.getById(columnItem.Id).update(properties)
+      return update
     } catch (error) {
       throw new Error(error)
     }
