@@ -131,6 +131,8 @@ declare interface IProjectWebPartsStrings {
   PhaseLabel: string
   PhaseSitePageFoundDescription: string
   PhaseSitePageNotFoundDescription: string
+  PhaseUseStartArrowLabel: string
+  PhaseUseEndArrowLabel: string
   PleaseWaitText: string
   ProbabilityFieldNameFieldLabel: string
   ProbabilityHeaderFieldLabel: string
