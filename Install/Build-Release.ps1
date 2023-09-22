@@ -51,6 +51,18 @@ function EndAction() {
 }
 
 <#
+Runs a rush command. Uses common/scripts/install-run-rush.js if running in CI mode.
+#>
+function RunRushCommand() {
+    if ($CI.IsPresent) {
+        node ../common/scripts/install-run-rush.js $args >$null 2>&1
+    }
+    else {
+        rush $args >$null 2>&1
+    }
+}
+
+<#
 Checks if parameter $CHANNEL_CONFIG_PATH is set and if so, loads the channel config,
 stores it as JSON in the root of the project and sets the $CHANNEL_CONFIG variable
 #>
@@ -83,6 +95,7 @@ $global:StopWatch_Action = $null
 #region Paths
 $START_PATH = Get-Location
 $ROOT_PATH = "$PSScriptRoot/.."
+$RUSH_FOLDER
 $SHAREPOINT_FRAMEWORK_BASEPATH = "$ROOT_PATH/SharePointFramework"
 $PNP_TEMPLATES_BASEPATH = "$ROOT_PATH/Templates"
 $SITE_SCRIPTS_BASEPATH = "$ROOT_PATH/SiteScripts/Src"
@@ -109,14 +122,13 @@ if ($CI.IsPresent) {
     Write-Host "[Running in CI mode]" -ForegroundColor Yellow
     StartAction("Updating npm packages using rush")
     npm ci >$null
-    npm i @microsoft/rush
-    rush update >$null 2>&1
+    RunRushCommand "update"
     npm run generate-channel-replace-map >$null 2>&1
     EndAction
 }
 else {
     StartAction("Updating npm packages using rush")
-    rush update >$null 2>&1
+    RunRushCommand "update"
     npm run generate-channel-replace-map >$null 2>&1
     EndAction
 }
@@ -196,7 +208,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
         }
     }
     Set-Location $SHAREPOINT_FRAMEWORK_BASEPATH
-    rush build >$null 2>&1
+    RunRushCommand "build"
     Get-ChildItem "*/sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
     if ($USE_CHANNEL_CONFIG) {
         foreach ($Solution in $Solutions) {
