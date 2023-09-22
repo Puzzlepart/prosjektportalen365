@@ -23,17 +23,18 @@ export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformation
   props
 ) => {
   const context = useContext(ListContext)
-  const siteContext = SiteContext.create(
-    context.props.webPartContext,
-    props.item.SiteId,
-    props.item.Path
-  )
   return (
     <ProjectInformationPanel
-      {...siteContext}
-      title={props.columnValue}
+      {...SiteContext.create(
+        context.props.webPartContext,
+        props.item.SiteId,
+        props.item.SPWebURL
+      )}
       page={props.page}
       hideAllActions={true}
+      panelProps={{
+        headerText: props.columnValue
+      }}
       onRenderToggleElement={(onToggle) => (
         <Tooltip
           content={<>{strings.ProjectInformationPanelButton}</>}
