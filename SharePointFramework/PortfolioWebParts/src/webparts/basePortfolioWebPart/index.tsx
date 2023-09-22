@@ -9,6 +9,7 @@ import { render } from 'react-dom'
 import { ErrorBoundary } from 'react-error-boundary'
 import { DataAdapter } from '../../data'
 import { ErrorBoundaryFallback } from './ErrorBoundary'
+import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 
 type ComponentType<P> = FC<P> | ComponentClass<P>
 
@@ -61,7 +62,7 @@ export abstract class BasePortfolioWebPart<
           <ErrorBoundaryFallback title={combinedProps['title']} error={error} />
         )}
       >
-        {element}
+        <FluentProvider theme={webLightTheme}>{element}</FluentProvider>
       </ErrorBoundary>,
       this.domElement
     )

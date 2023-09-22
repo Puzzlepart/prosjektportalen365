@@ -49,3 +49,4 @@ List.defaultProps = {
 export * from './ItemColumn'
 export * from './types'
 export * from './useAddColumn'
+export * from './ColumnContextMenu/renderMenuItem'

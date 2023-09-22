@@ -1,18 +1,26 @@
-import { ContextualMenu } from '@fluentui/react'
+import { Menu, MenuList, MenuPopover } from '@fluentui/react-components'
 import React, { FC } from 'react'
-import { usePortfolioAggregationContext } from '../context'
-import { TOGGLE_COLUMN_CONTEXT_MENU } from '../reducer'
 import { useColumnContextMenu } from './useColumnContextMenu'
+import { renderMenuItem } from 'components/List'
 
 export const ColumnContextMenu: FC = () => {
-  const context = usePortfolioAggregationContext()
-  const { target, items } = useColumnContextMenu()
-  if (!context.state.columnContextMenu) return null
+  const { target, items, open, onOpenChange, checkedValues, onCheckedValueChange } = useColumnContextMenu()
   return (
-    <ContextualMenu
-      target={target}
-      items={items}
-      onDismiss={() => context.dispatch(TOGGLE_COLUMN_CONTEXT_MENU(null))}
-    />
+    <Menu
+      open={open}
+      persistOnItemClick={false}
+      onOpenChange={onOpenChange}
+      positioning={{ target }}
+      onCheckedValueChange={onCheckedValueChange}
+      checkedValues={checkedValues}
+    >
+      <MenuPopover>
+        <MenuList>
+          {
+            items.map((item) => renderMenuItem(item))
+          }
+        </MenuList>
+      </MenuPopover>
+    </Menu>
   )
 }

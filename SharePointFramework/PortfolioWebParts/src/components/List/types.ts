@@ -1,4 +1,4 @@
-import { IColumn, IScrollablePaneProps, IShimmeredDetailsListProps, Target } from '@fluentui/react'
+import { IColumn, IScrollablePaneProps, IShimmeredDetailsListProps } from '@fluentui/react'
 import { SearchBoxProps } from '@fluentui/react-search-preview'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { IFilterPanelProps } from 'pp365-shared-library'
@@ -6,7 +6,7 @@ import { ListMenuItem } from 'pp365-shared-library'
 
 export type OnColumnContextMenu = {
   column: any
-  target: Target
+  target: any
 }
 
 export interface IListProps<T extends IColumn = IColumn>

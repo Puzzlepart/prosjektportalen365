@@ -32,6 +32,9 @@
     ],
     "baseUrl": "src",
     "paths": {
+      "icons": [
+        "icons"
+      ],
       "components": [
         "components"
       ],

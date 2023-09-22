@@ -1,5 +1,4 @@
 import { IColumn } from '@fluentui/react'
-import { useMemo } from 'react'
 import { OnDragEndResponder } from 'react-beautiful-dnd'
 import { IEditViewColumnsPanelProps } from './types'
 import { useSelectableColumns } from './useSelectableColumns'

@@ -46,15 +46,15 @@ export function useAddColumn(
   ): IContextualMenuItem[] => [
     {
       key: 'TOGGLE_COLUMN_FORM_PANEL',
-      name: strings.ToggleColumnFormPanelLabel,
-      iconProps: { iconName: 'CalculatorAddition' },
+      text: strings.ToggleColumnFormPanelLabel,
+      iconProps: { iconName: 'Add' },
       onClick: onToggleColumnFormPanel,
       disabled: isToggleColumnFormPanelDisabled || !permissionCheck
     },
     {
       key: 'TOGGLE_EDIT_VIEW_COLUMNS_PANEL',
-      name: strings.ToggleEditViewColumnsLabel,
-      iconProps: { iconName: 'Settings' },
+      text: strings.ToggleEditViewColumnsLabel,
+      iconProps: { iconName: 'Eye' },
       onClick: onToggleEditViewColumnsPanel,
       disabled: isToggleEditViewColumnsPanelDisabled || !permissionCheck
     }
@@ -74,5 +74,5 @@ export function useAddColumn(
     addColumn,
     isAddColumn,
     createContextualMenuItems
-  } as const
+  }
 }
