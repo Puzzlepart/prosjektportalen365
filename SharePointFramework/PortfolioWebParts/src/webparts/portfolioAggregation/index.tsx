@@ -36,7 +36,9 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
   }
 
   /**
-   * On update property
+   * On update property. For `DisplayMode.Edit` it refreshes the property pane,
+   * for `DisplayMode.Read` it updates the page using the `_api/SitePages/Pages/UpdateAppPage`
+   * endpoint.
    *
    * @param key Key
    * @param value Value

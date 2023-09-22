@@ -380,7 +380,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         .filter((p) => p)
 
       return { reports, configElement }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -887,23 +887,15 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ): Promise<IItemUpdateResult> {
     try {
       const list = this._sp.web.lists.getByTitle(strings.DataSourceListName)
-      const items = await list.items()
-      const item = items.find((i) => i.Title === dataSourceTitle)
-
+      const [item] = await list.items.filter(`Title eq '${dataSourceTitle}'`)()
       if (!item) {
         throw new Error(format(strings.DataSourceItemNotFound, dataSourceTitle))
       }
-
       if (item.GtProjectContentColumnsId && !shouldReplace) {
-        properties.GtProjectContentColumnsId = {
-          results: [...item.GtProjectContentColumnsId, properties.GtProjectContentColumnsId]
-        }
-
+        properties.GtProjectContentColumnsId = [...item.GtProjectContentColumnsId, properties.GtProjectContentColumnsId]
         return await list.items.getById(item.Id).update(properties)
       } else {
-        properties.GtProjectContentColumnsId = {
-          results: properties.GtProjectContentColumnsId as number[]
-        }
+        properties.GtProjectContentColumnsId = properties.GtProjectContentColumnsId as number[]
         return await list.items.getById(item.Id).update(properties)
       }
     } catch (error) {

@@ -13,14 +13,8 @@ import _ from 'lodash'
  * @returns An object containing the necessary functions and state for the component.
  */
 export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
-  const { initialSelectedColumns, selectableColumns, selectedColumns, selectColumn, moveColumn } =
+  const { selectableColumns, selectedColumns, selectColumn, moveColumn } =
     useSelectableColumns(props)
-  const isChanged = useMemo(
-    () =>
-      selectedColumns.map((c) => c.fieldName).join(',') !==
-      initialSelectedColumns.map((c) => c.fieldName).join(','),
-    [selectedColumns, initialSelectedColumns]
-  )
 
   /**
    * On save event handler.
@@ -59,12 +53,11 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
     selectableColumns,
     onChange,
     onSave,
-    isChanged,
     moveColumn: (column: IColumn, moveIndex: number) => {
       const columnIndex = selectedColumns.findIndex((c) => c.fieldName === column.fieldName)
       if (columnIndex > -1) {
         moveColumn(columnIndex, columnIndex + moveIndex)
       }
     }
-  } as const
+  }
 }

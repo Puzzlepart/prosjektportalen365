@@ -9,8 +9,8 @@ import {
   NotDraggingStyle
 } from 'react-beautiful-dnd'
 import styles from './EditViewColumnsPanel.module.scss'
-import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 import { IEditViewColumnsPanelProps } from './types'
+import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
 
 const getItemStyle = (_isDragging: boolean, draggableStyle: DraggingStyle | NotDraggingStyle) => ({
   userSelect: 'none',
@@ -18,7 +18,7 @@ const getItemStyle = (_isDragging: boolean, draggableStyle: DraggingStyle | NotD
 })
 
 export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
-  const { onDragEnd, selectableColumns, onChange, onSave, moveColumn, isChanged } =
+  const { onDragEnd, selectableColumns, onChange, onSave, moveColumn } =
     useEditViewColumnsPanel(props)
 
   return (
@@ -31,7 +31,6 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
             text={strings.UseChangesButtonText}
             iconProps={{ iconName: 'CheckMark' }}
             onClick={onSave}
-            disabled={!isChanged}
           />
           {props.revertOrder && (
             <ActionButton
