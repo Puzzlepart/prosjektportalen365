@@ -153,7 +153,7 @@ export interface IPortfolioOverviewState
   /**
    * Is changing view
    */
-  isChangingView?: PortfolioOverviewView
+  isChangingView?: boolean
 
   /**
    * Selected items in the list

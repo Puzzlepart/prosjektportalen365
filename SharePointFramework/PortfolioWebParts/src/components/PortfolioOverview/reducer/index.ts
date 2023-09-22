@@ -70,6 +70,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.managedProperties = payload.managedProperties ?? []
         state.loading = false
         state.error = null
+        state.isChangingView = false
       })
       .addCase(DATA_FETCH_ERROR, (state, { payload }) => {
         state.loading = false
@@ -105,6 +106,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.isCompact = !state.isCompact
       })
       .addCase(CHANGE_VIEW, (state, { payload }) => {
+        state.isChangingView = !!payload
         state.currentView = payload
         state.columns = payload.columns
       })

@@ -30,7 +30,7 @@ export const PortfolioOverview: FC<IPortfolioOverviewProps> = (props) => {
         <div className={styles.container}>
           <List
             title={props.title}
-            enableShimmer={context.state.loading || !!context.state.isChangingView}
+            enableShimmer={context.state.loading || context.state.isChangingView}
             items={context.items}
             columns={context.state.columns}
             groups={context.groups}

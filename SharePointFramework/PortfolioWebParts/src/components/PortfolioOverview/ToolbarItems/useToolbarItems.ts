@@ -71,6 +71,7 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
           .setIcon(Icons.ContentView)
           .setWidth('fit-content')
           .setStyle({ minWidth: '145px' })
+          .setDisabled(context.state.isChangingView)
           .setItems(
             [
               new ListMenuItem(strings.ListViewText)
@@ -108,15 +109,15 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
                 .makeConditional(!_.isEmpty(programViews)),
               ListMenuItemDivider.makeConditional(!_.isEmpty(programViews)),
               userCanManageViews &&
-                new ListMenuItem(strings.NewViewText).setIcon(Icons.FormNew).setOnClick(() => {
-                  context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
-                }),
+              new ListMenuItem(strings.NewViewText).setIcon(Icons.FormNew).setOnClick(() => {
+                context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
+              }),
               userCanManageViews &&
-                new ListMenuItem(strings.EditViewText).setIcon(Icons.Edit).setOnClick(() => {
-                  context.dispatch(
-                    SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
-                  )
-                })
+              new ListMenuItem(strings.EditViewText).setIcon(Icons.Edit).setOnClick(() => {
+                context.dispatch(
+                  SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
+                )
+              })
             ],
             checkedValues
           ),
