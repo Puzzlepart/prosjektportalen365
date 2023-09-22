@@ -13,7 +13,7 @@ class ExcelExportService {
 
   /**
    * Configures the `ExcelExportService` with the provided configuration options.
-   * 
+   *
    * @param configuration - The configuration options to apply.
    */
   public configure(configuration: IExcelExportServiceConfiguration) {

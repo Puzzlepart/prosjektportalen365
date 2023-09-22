@@ -40,9 +40,7 @@ export function useColumnFormPanel() {
           .updateProjectContentColumn(columnItem, persistRenderGlobally)
           .then(() => {
             const editedColumn = new ProjectContentColumn(columnItem)
-            context.dispatch(
-              ADD_COLUMN(editedColumn)
-            )
+            context.dispatch(ADD_COLUMN(editedColumn))
           })
       } else {
         await context.props.dataAdapter.portalDataService
@@ -55,15 +53,11 @@ export function useColumnFormPanel() {
             context.props.dataAdapter
               .updateDataSourceItem(updateItem, context.state.currentView?.title)
               .then(() => {
-                context.dispatch(
-                  ADD_COLUMN(newColumn)
-                )
+                context.dispatch(ADD_COLUMN(newColumn))
               })
           })
       }
-    } catch (error) {
-      console.error(error)
-    }
+    } catch (error) {}
   }
 
   const onDeleteColumn = async () => {

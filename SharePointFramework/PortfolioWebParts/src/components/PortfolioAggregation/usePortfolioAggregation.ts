@@ -1,4 +1,4 @@
-import { Selection,format } from '@fluentui/react'
+import { Selection, format } from '@fluentui/react'
 import { SearchBoxProps } from '@fluentui/react-search-preview'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'PortfolioWebPartsStrings'
@@ -37,9 +37,8 @@ export const usePortfolioAggregation = (props: IPortfolioAggregationProps) => {
     }
   }, [props.dataSourceCategory, props.defaultViewId])
 
-
   const onSelectionChanged = () => {
-   context.dispatch(SELECTION_CHANGED(selection))
+    context.dispatch(SELECTION_CHANGED(selection))
   }
 
   const selection = new Selection({ onSelectionChanged })

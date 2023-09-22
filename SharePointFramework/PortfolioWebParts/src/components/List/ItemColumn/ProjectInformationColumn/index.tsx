@@ -25,11 +25,7 @@ export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformation
   const context = useContext(ListContext)
   return (
     <ProjectInformationPanel
-      {...SiteContext.create(
-        context.props.webPartContext,
-        props.item.SiteId,
-        props.item.SPWebURL
-      )}
+      {...SiteContext.create(context.props.webPartContext, props.item.SiteId, props.item.SPWebURL)}
       page={props.page}
       hideAllActions={true}
       panelProps={{

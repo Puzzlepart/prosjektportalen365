@@ -44,15 +44,16 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
   private async _onUpdateProperty(key: string, value: any) {
     this.properties[key] = value
     switch (this.displayMode) {
-      case DisplayMode.Edit: {
-        this.context.propertyPane.refresh()
-      }
-      break
+      case DisplayMode.Edit:
+        {
+          this.context.propertyPane.refresh()
+        }
+        break
       case DisplayMode.Read: {
         const options: ISPHttpClientOptions = {
           body: JSON.stringify({
-            includeInNavigation:      false,
-            pageId:  this.context.pageContext.listItem.id,
+            includeInNavigation: false,
+            pageId: this.context.pageContext.listItem.id,
             title: this.properties.title,
             webPartDataAsJson: JSON.stringify({
               id: this.context.manifest.id,

@@ -24,9 +24,7 @@ export function useExcelExport(context: IPortfolioAggregationContext) {
       const { selectedItems, columns } = context.state
       const items = selectedItems?.length > 0 ? selectedItems : context.state.items
       ExcelExportService.export(items, columns)
-    } catch (error) {
-      console.error(error)
-    }
+    } catch (error) {}
   }, [context.state])
 
   return { exportToExcel }

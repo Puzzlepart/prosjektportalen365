@@ -31,7 +31,6 @@ export function useExcelExport(context: IPortfolioOverviewContext) {
       ExcelExportService.export(items, columns, fileNamePart)
       context.dispatch(EXCEL_EXPORT_SUCCESS())
     } catch (error) {
-      console.error(error)
       context.dispatch(EXCEL_EXPORT_ERROR(error))
     }
   }, [context.state])
