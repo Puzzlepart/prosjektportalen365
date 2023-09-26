@@ -248,7 +248,7 @@
     <value>Et kortfattet navn for å beskrive tidslinje elementet</value>
   </data>
   <data name="Lists_TimelineContent_Field_GtBudgetTotal_DisplayName" xml:space="preserve">
-    <value>Hva er totalbudsjettet?</value>
+    <value>Totalbudsjett</value>
   </data>
   <data name="Lists_TimelineContent_Field_GtBudgetTotal_Description" xml:space="preserve">
     <value>Budsjett for fasen/elementet (dersom aktuelt)</value>
