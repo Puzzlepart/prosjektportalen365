@@ -92,7 +92,8 @@
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Program" />
-                                        <pnp:Property Key="PhaseSubText" Value="" />
+                                        <pnp:Property Key="PhaseSubText" Value="Identifisere behov og muligheter" />
+                                        <pnp:Property Key="PhaseDescription" Value="Identifisere organisatoriske behov og muligheter som kan kreve et program for effektiv løsning." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Definere" ID="50c203e7-f912-4454-afda-d8c373e7f96a" CustomSortOrder="2" SourceTermId="50c203e7-f912-4454-afda-d8c373e7f96a">
@@ -102,7 +103,8 @@
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Program" />
-                                        <pnp:Property Key="PhaseSubText" Value="" />
+                                        <pnp:Property Key="PhaseSubText" Value="Klargjøre mål og omfang" />
+                                        <pnp:Property Key="PhaseDescription" Value="Presisere programmets mål, omfang og nødvendige ressurser for å sikre målrettet suksess." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Gjennomføre" ID="c245386f-6906-410d-ada5-27c64710df90" CustomSortOrder="3" SourceTermId="c245386f-6906-410d-ada5-27c64710df90">
@@ -112,7 +114,8 @@
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Program" />
-                                        <pnp:Property Key="PhaseSubText" Value="" />
+                                        <pnp:Property Key="PhaseSubText" Value="Implementere og følge opp aktiviteter" />
+                                        <pnp:Property Key="PhaseDescription" Value="Aktivt utføre programplaner og overvåke fremdrift for å oppnå ønskede resultater." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                                 <pnp:Term Name="Avslutte" ID="5a42cd6a-0fba-46d3-aada-5caaa551915e" CustomSortOrder="4" SourceTermId="5a42cd6a-0fba-46d3-aada-5caaa551915e">
@@ -122,7 +125,8 @@
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Program" />
-                                        <pnp:Property Key="PhaseSubText" Value="" />
+                                        <pnp:Property Key="PhaseSubText" Value="Evaluere og formell avslutning" />
+                                        <pnp:Property Key="PhaseDescription" Value="Systematisk vurdere programmets suksess og sørge for en strukturert avslutning, inkludert nødvendig ressursallokering." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
                             </pnp:Terms>
