@@ -70,7 +70,7 @@ export function useColumnContextMenu() {
             value: 'desc'
           },
           text: strings.SortDescLabel,
-          iconProps: { iconName: 'TextSortDescending' },
+        iconProps: { iconName: 'TextSortAscending' },
           canCheck: true,
           checked: column.isSorted && column.isSortedDescending,
           onClick: () => context.dispatch(SET_SORT({ column, sortDesencing: true }))
@@ -82,7 +82,7 @@ export function useColumnContextMenu() {
             value: 'asc'
           },
           text: strings.SortAscLabel,
-          iconProps: { iconName: 'TextSortAscending' },
+          iconProps: { iconName: 'TextSortDescending' },
           canCheck: true,
           checked: column.isSorted && !column.isSortedDescending,
           onClick: () => context.dispatch(SET_SORT({ column, sortDesencing: false }))
