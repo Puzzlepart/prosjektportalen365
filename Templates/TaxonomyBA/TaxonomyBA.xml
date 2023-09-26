@@ -139,7 +139,7 @@
                                     <pnp:LocalCustomProperties>
                                         <pnp:Property Key="ShowOnFrontpage" Value="true" />
                                         <pnp:Property Key="PhaseLevel" Value="Project" />
-                                        <pnp:Property Key="PhaseSubText" Value="Test og formell avslutning av byggeprosjektet" />
+                                        <pnp:Property Key="PhaseSubText" Value="Test og formell avslutning av prosjektet" />
                                         <pnp:Property Key="PhaseDescription" Value="Her gjennomføres nødvendige tester og inspeksjoner før prosjektet formelt avsluttes og overleveres til den ansvarlige parten." />
                                     </pnp:LocalCustomProperties>
                                 </pnp:Term>
