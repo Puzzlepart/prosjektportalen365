@@ -21,6 +21,10 @@
       cursor: pointer;
     }
   }
+
+  .infoLabel > span > div {
+    z-index: 9;
+  }
 }
 
 div > .infoLabelContent {
