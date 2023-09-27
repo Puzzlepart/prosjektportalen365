@@ -46,7 +46,7 @@ export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformation
         </Tooltip>
       )}
     >
-      <Link href={props.item.Path} rel='noopener noreferrer' target='_blank'>
+      <Link href={props.item.SPWebURL} rel='noopener noreferrer' target='_blank'>
         {props.columnValue}
       </Link>
     </ProjectInformationPanel>
