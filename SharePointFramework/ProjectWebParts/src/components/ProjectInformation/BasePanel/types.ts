@@ -1,4 +1,4 @@
-import { IButtonProps, IPanelProps } from '@fluentui/react'
+import { IPanelProps } from '@fluentui/react'
 import { ProjectInformationPanelType } from '../types'
 
 export interface IBasePanelProps extends IPanelProps {
@@ -7,8 +7,4 @@ export interface IBasePanelProps extends IPanelProps {
    * panel should be open or not.
    */
   $type?: ProjectInformationPanelType
-}
-
-export interface IClosePanelButtonProps extends IButtonProps {
-  noMargin?: boolean
 }

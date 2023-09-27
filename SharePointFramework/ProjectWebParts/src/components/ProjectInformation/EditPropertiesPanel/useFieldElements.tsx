@@ -16,6 +16,10 @@ import { ProjectInformationField } from 'pp365-shared-library/lib/models'
 import React from 'react'
 import SPDataAdapter from '../../../data'
 import { UseModelReturnType } from './useModel'
+import { Field, Input, Text, Textarea } from '@fluentui/react-components'
+import { AnimalCatRegular, TextAlignLeftRegular, TextNumberFormatRegular } from '@fluentui/react-icons'
+import styles from './EditPropertiesPanel.module.scss'
+import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
 
 /**
  * Hook for field elements of `EditPropertiesPanel` component. This hook is used to render field elements
@@ -36,6 +40,14 @@ import { UseModelReturnType } from './useModel'
  * @param model Model returned from `useEditPropertiesPanelModel` hook
  */
 export function useFieldElements(model: UseModelReturnType) {
+  const iconLabel = (Icon: FluentIcon, displayName: string) => {
+    return (
+      <div className={styles.iconLabel}>
+        <Icon /><Text size={200} weight='semibold'>{displayName}</Text>
+      </div>
+    )
+  }
+
   const fieldElements: Record<string, (field: ProjectInformationField) => JSX.Element> = {
     Boolean: (field) => (
       <>
@@ -71,21 +83,26 @@ export function useFieldElements(model: UseModelReturnType) {
       )
     },
     Text: (field) => (
-      <TextField
-        label={field.displayName}
-        description={field.description}
-        defaultValue={model.get<string>(field)}
-        onChange={(_, value) => model.set(field, value)}
-      />
+      <Field
+        label={{ children: () => iconLabel(TextNumberFormatRegular, field.displayName) }}
+        hint={field.description}
+      >
+        <Input
+          defaultValue={model.get<string>(field)}
+          onChange={(_, value) => model.set(field, value)}
+        />
+      </Field>
     ),
     Note: (field) => (
-      <TextField
-        label={field.displayName}
-        description={field.description}
-        multiline
-        defaultValue={model.get<string>(field)}
-        onChange={(_, value) => model.set(field, value)}
-      />
+      <Field
+        label={{ children: () => iconLabel(TextAlignLeftRegular, field.displayName) }}
+        hint={field.description}
+      >
+        <Textarea
+          defaultValue={model.get<string>(field)}
+          onChange={(_, value) => model.set(field, value)}
+        />
+      </Field>
     ),
     DateTime: (field) => (
       <>

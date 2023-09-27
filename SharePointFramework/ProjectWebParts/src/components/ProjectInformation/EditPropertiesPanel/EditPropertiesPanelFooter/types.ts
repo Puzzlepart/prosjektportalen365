@@ -1,6 +1,6 @@
-import { ISpinnerProps } from '@fluentui/react'
 import { UseModelReturnType } from '../useModel'
 import { UseSubmitReturnType } from '../useSubmit'
+import { SpinnerProps } from '@fluentui/react-components'
 
 export interface IEditPropertiesPanelFooterProps {
   /**
@@ -16,5 +16,5 @@ export interface IEditPropertiesPanelFooterProps {
   /**
    * Spinner props.
    */
-  spinner?: ISpinnerProps
+  spinner?: SpinnerProps
 }

@@ -1,21 +1,20 @@
-import { DefaultButton } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import { useProjectInformationContext } from '../context'
 import { CLOSE_PANEL } from '../reducer'
-import { IClosePanelButtonProps } from './types'
+import { Button, ButtonProps } from '@fluentui/react-components'
 
-export const ClosePanelButton: FC<IClosePanelButtonProps> = (props) => {
+export const ClosePanelButton: FC<ButtonProps> = (props) => {
   const context = useProjectInformationContext()
   return (
-    <DefaultButton
+    <Button
       {...props}
-      text={strings.CancelText}
-      styles={{ root: { marginLeft: props.noMargin ? 0 : 8 } }}
       onClick={(e) => {
         props.onClick && props.onClick(e)
         context.dispatch(CLOSE_PANEL())
       }}
-    />
+    >
+      {strings.CancelText}
+    </Button>
   )
 }

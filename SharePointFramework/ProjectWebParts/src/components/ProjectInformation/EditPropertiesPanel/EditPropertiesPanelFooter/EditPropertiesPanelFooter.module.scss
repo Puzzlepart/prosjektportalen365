@@ -1,9 +1,11 @@
 .root {
   margin: 0;
+  padding: 12px 0;
 
   .container {
     display: flex;
     flex-direction: row;
+    gap: 12px;
   }
 
   .saveStatusSpinner {

@@ -5,6 +5,7 @@ import { useProjectInformationContext } from '../context'
 import { CLOSE_PANEL } from '../reducer'
 import { IBasePanelProps } from './types'
 import { FluentProvider, useId, webLightTheme } from '@fluentui/react-components'
+import styles from './BasePanel.module.scss'
 
 export const BasePanel: FC<IBasePanelProps> = (props) => {
   const fluentProviderId = useId('fluent-provider')
@@ -20,7 +21,7 @@ export const BasePanel: FC<IBasePanelProps> = (props) => {
           <FluentProvider
             id={fluentProviderId}
             theme={webLightTheme}
-            style={{ padding: '20px 24px', boxSizing: 'border-box' }}
+            className={styles.root}
           >
             {props.onRenderBody()}
           </FluentProvider>
