@@ -1,15 +1,13 @@
 import { IDetailsHeaderProps, IRenderFunction, Sticky, StickyPositionType } from '@fluentui/react'
+import { Alert } from '@fluentui/react-components/unstable'
+import { SearchBox } from '@fluentui/react-search-preview'
+import strings from 'PortfolioWebPartsStrings'
+import { Themed, Toolbar, WebPartTitle } from 'pp365-shared-library'
 import React, { FC, useContext, useMemo } from 'react'
+import { ListContext } from '../context'
 import { IListProps } from '../types'
 import styles from './ListHeader.module.scss'
 import { IListHeaderProps } from './types'
-import strings from 'PortfolioWebPartsStrings'
-import { WebPartTitle } from 'pp365-shared-library'
-import { SearchBox } from '@fluentui/react-search-preview'
-import { FluentProvider, webLightTheme } from '@fluentui/react-components'
-import { Alert } from '@fluentui/react-components/unstable'
-import { Toolbar } from 'pp365-shared-library'
-import { ListContext } from '../context'
 
 /**
  * Component for displaying a Sticky list header.
@@ -24,7 +22,7 @@ const ListHeader: FC<IListHeaderProps> = (props) => {
       stickyPosition={StickyPositionType.Header}
       isScrollSynced={true}
     >
-      <FluentProvider className={styles.root} theme={webLightTheme}>
+      <Themed className={styles.root}>
         <div className={styles.header}>
           <WebPartTitle title={props.title} />
         </div>
@@ -56,7 +54,7 @@ const ListHeader: FC<IListHeaderProps> = (props) => {
             {props.defaultRender(props.headerProps)}
           </div>
         )}
-      </FluentProvider>
+      </Themed>
     </Sticky>
   )
 }

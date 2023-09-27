@@ -1,9 +1,9 @@
 import { format } from '@fluentui/react'
-import { Button, Caption1, FluentProvider, Link, webLightTheme } from '@fluentui/react-components'
+import { Button, Caption1, Link } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
 import { ChevronDownFilled, ChevronUpFilled } from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
-import { ProjectLogo, WebPartTitle } from 'pp365-shared-library/lib/components'
+import { ProjectLogo, Themed, WebPartTitle } from 'pp365-shared-library/lib/components'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 import React, { FC } from 'react'
 import styles from './LatestProjects.module.scss'
@@ -60,7 +60,7 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
   }
 
   return (
-    <FluentProvider className={styles.root} theme={webLightTheme}>
+    <Themed className={styles.root}>
       <WebPartTitle title={props.title} />
       <div className={styles.container}>
         {renderLatestProjects()}
@@ -76,7 +76,7 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
           </Button>
         </div>
       </div>
-    </FluentProvider>
+    </Themed>
   )
 }
 

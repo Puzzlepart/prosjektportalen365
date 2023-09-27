@@ -1,14 +1,13 @@
 import {
-  FluentProvider,
   SelectTabData,
   Tab,
-  TabList,
-  webLightTheme
+  TabList
 } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
 import { SearchBox } from '@fluentui/react-search-preview'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
+import { Themed, Toolbar } from 'pp365-shared-library'
 import { ProjectListModel, SiteContext } from 'pp365-shared-library/lib/models'
 import React, { FC } from 'react'
 import { find, isEmpty } from 'underscore'
@@ -20,7 +19,6 @@ import styles from './ProjectList.module.scss'
 import { ProjectListVerticals } from './ProjectListVerticals'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
-import { Toolbar } from 'pp365-shared-library'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const {
@@ -68,11 +66,11 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
 
   if (state.projects.length === 0) {
     return (
-      <FluentProvider theme={webLightTheme}>
+      <Themed>
         <section className={styles.root}>
           <Alert intent='info'>{strings.NoProjectsFoundMessage}</Alert>
         </section>
-      </FluentProvider>
+      </Themed>
     )
   }
 
@@ -85,7 +83,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   }
 
   return (
-    <FluentProvider className={styles.root} theme={webLightTheme}>
+    <Themed className={styles.root}>
       <div className={styles.tabs}>
         <TabList
           onTabSelect={(_, data: SelectTabData) =>
@@ -149,7 +147,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
           }
         }}
       />
-    </FluentProvider>
+    </Themed>
   )
 }
 

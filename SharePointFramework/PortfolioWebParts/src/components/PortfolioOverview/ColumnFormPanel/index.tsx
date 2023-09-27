@@ -1,17 +1,15 @@
 import { Panel, TextField, Toggle } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
+import { ColumnSearchPropertyField, FormFieldContainer, Themed, UserMessage } from 'pp365-shared-library'
 import React, { FC, useContext } from 'react'
+import { ColumnDataTypeField } from '../../List/ItemColumn/ColumnDataTypeField'
 import { PortfolioOverviewContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
+import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
 import { ColumnVisibilityField } from './ColumnVisibilityField'
 import { useColumnFormPanel } from './useColumnFormPanel'
-import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
-import { ColumnSearchPropertyField, FormFieldContainer, UserMessage } from 'pp365-shared-library'
-import { ColumnDataTypeField } from '../../List/ItemColumn/ColumnDataTypeField'
-import { FluentProvider, useId, webLightTheme } from '@fluentui/react-components'
 
 export const ColumnFormPanel: FC = () => {
-  const fluentProviderId = useId('fluent-provider')
   const context = useContext(PortfolioOverviewContext)
   const {
     onSave,
@@ -43,7 +41,7 @@ export const ColumnFormPanel: FC = () => {
       isLightDismiss={true}
       className={styles.root}
     >
-      <FluentProvider id={fluentProviderId} theme={webLightTheme}>
+      <Themed>
         <FormFieldContainer>
           <TextField
             label={strings.SortOrderLabel}
@@ -122,7 +120,7 @@ export const ColumnFormPanel: FC = () => {
             onChange={(_, checked) => setColumnData('isGroupable', checked)}
           />
         </FormFieldContainer>
-      </FluentProvider>
+      </Themed>
     </Panel>
   )
 }
