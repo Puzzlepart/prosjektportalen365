@@ -1,32 +1,28 @@
 import { Shimmer } from '@fluentui/react'
-import React, { FC } from 'react'
-import { ChangePhaseDialog } from './ChangePhaseDialog'
-import { ProjectPhasesContext } from './context'
-import { ProjectPhase } from './ProjectPhase'
-import styles from './ProjectPhases.module.scss'
-import { getShimmerElements } from './shimmer'
-import { IProjectPhasesProps } from './types'
-import { useProjectPhases } from './useProjectPhases'
 import {
-  FluentProvider,
   Toast,
   ToastTitle,
   useId,
-  useToastController,
-  webLightTheme
+  useToastController
 } from '@fluentui/react-components'
+import { ThemedComponent } from 'pp365-shared-library'
+import React, { FC } from 'react'
+import { ChangePhaseDialog } from './ChangePhaseDialog'
+import { ProjectPhase } from './ProjectPhase'
+import styles from './ProjectPhases.module.scss'
+import { ProjectPhasesContext } from './context'
+import { getShimmerElements } from './shimmer'
+import { IProjectPhasesProps } from './types'
+import { useProjectPhases } from './useProjectPhases'
 
 export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
   const { rootRef, context } = useProjectPhases(props)
   const toasterId = useId('toaster')
-  const fluentProviderId = useId('fluent-provider')
 
   const { dispatchToast } = useToastController(toasterId)
 
   return (
-    <FluentProvider
-      id={fluentProviderId}
-      theme={webLightTheme}
+    <ThemedComponent
       className={styles.root}
       ref={rootRef}
     >
@@ -54,7 +50,7 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
             { intent: 'error' }
           )}
       </div>
-    </FluentProvider>
+    </ThemedComponent>
   )
 }
 ProjectPhases.displayName = 'Project Phases'

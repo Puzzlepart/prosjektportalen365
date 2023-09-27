@@ -1,11 +1,13 @@
-import { FluentProvider, mergeClasses, webLightTheme } from '@fluentui/react-components'
-import { WebPartTitle } from 'pp365-shared-library'
+import { mergeClasses } from '@fluentui/react-components'
+import { Alert } from '@fluentui/react-components/unstable'
+import { ThemedComponent } from 'pp365-shared-library'
 import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
 import React, { FC } from 'react'
 import { Actions } from './Actions'
 import { AllPropertiesPanel } from './AllPropertiesPanel'
 import { CreateParentDialog } from './CreateParentDialog'
 import { EditPropertiesPanel } from './EditPropertiesPanel'
+import { LoadingSkeleton } from './LoadingSkeleton'
 import { ParentProjectsList } from './ParentProjectsList'
 import { ProgressDialog } from './ProgressDialog'
 import styles from './ProjectInformation.module.scss'
@@ -14,8 +16,6 @@ import { ProjectStatusReport } from './ProjectStatusReport'
 import { ProjectInformationContextProvider } from './context'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
-import { Alert } from '@fluentui/react-components/unstable'
-import { LoadingSkeleton } from './LoadingSkeleton'
 
 /**
  * Display project information. A number of actions are available to the user,
@@ -31,16 +31,17 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
 
   if (!context.state.isDataLoaded) {
     return (
-      <FluentProvider theme={webLightTheme} className={styles.root}>
+      <ThemedComponent className={styles.root} title={props.title}>
         <LoadingSkeleton />
-      </FluentProvider>
+      </ThemedComponent>
     )
   }
 
   return (
     <ProjectInformationContextProvider value={context}>
-      <FluentProvider theme={webLightTheme} className={mergeClasses(styles.root, props.className)}>
-        <WebPartTitle title={props.title} />
+      <ThemedComponent
+        className={mergeClasses(styles.root, props.className)}
+        title={props.title}>
         <div className={styles.container}>
           {context.state.error && (
             <Alert className={styles.alertContainer} intent='error'>
@@ -63,8 +64,8 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
           <EditPropertiesPanel />
           <CreateParentDialog />
         </div>
-      </FluentProvider>
-      {context.state.confirmActionProps && <ConfirmDialog {...context.state.confirmActionProps} />}
+        {context.state.confirmActionProps && <ConfirmDialog {...context.state.confirmActionProps} />}
+      </ThemedComponent>
     </ProjectInformationContextProvider>
   )
 }
@@ -81,3 +82,4 @@ ProjectInformation.defaultProps = {
 
 export * from '../ProjectInformationPanel'
 export * from './types'
+

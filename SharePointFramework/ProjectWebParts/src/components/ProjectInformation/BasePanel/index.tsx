@@ -4,10 +4,8 @@ import React, { FC } from 'react'
 import { useProjectInformationContext } from '../context'
 import { CLOSE_PANEL } from '../reducer'
 import { IBasePanelProps } from './types'
-import { FluentProvider, useId, webLightTheme } from '@fluentui/react-components'
 
 export const BasePanel: FC<IBasePanelProps> = (props) => {
-  const fluentProviderId = useId('fluent-provider')
   const context = useProjectInformationContext()
 
   return (
@@ -17,13 +15,9 @@ export const BasePanel: FC<IBasePanelProps> = (props) => {
       onRenderBody={() => {
         if (!props.onRenderBody) return null
         return (
-          <FluentProvider
-            id={fluentProviderId}
-            theme={webLightTheme}
-            style={{ padding: '20px 24px', boxSizing: 'border-box' }}
-          >
+          <div style={{ padding: '20px 24px', boxSizing: 'border-box' }}>
             {props.onRenderBody()}
-          </FluentProvider>
+          </div>
         )
       }}
       onDismiss={() => context.dispatch(CLOSE_PANEL())}
