@@ -1,20 +1,22 @@
-import { IPersonaProps, ITag, Label, NormalPeoplePicker, TagPicker, Toggle } from '@fluentui/react'
+import { IPersonaProps, ITag, NormalPeoplePicker, TagPicker } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
-import { FieldDescription } from 'pp365-shared-library/lib/components'
 import { ProjectInformationField } from 'pp365-shared-library/lib/models'
 import React from 'react'
 import SPDataAdapter from '../../../data'
 import { UseModelReturnType } from './useModel'
 import _ from 'lodash'
-import { Option, Field, Input, Text, Textarea, Combobox } from '@fluentui/react-components'
+import { Option, Field, Input, Text, Textarea, Combobox, Switch } from '@fluentui/react-components'
 import {
+  AppsListFilled,
+  AppsListRegular,
   CalendarRegular,
   LinkMultipleRegular,
   MultiselectLtrRegular,
   PeopleRegular,
   PersonRegular,
   TextAlignLeftRegular,
-  TextNumberFormatRegular
+  TextNumberFormatRegular,
+  ToggleLeftRegular
 } from '@fluentui/react-icons'
 import styles from './EditPropertiesPanel.module.scss'
 import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
@@ -51,14 +53,15 @@ export function useFieldElements(model: UseModelReturnType) {
 
   const fieldElements: Record<string, (field: ProjectInformationField) => JSX.Element> = {
     Boolean: (field) => (
-      <>
-        <Toggle
-          label={field.displayName}
+      <Field
+        label={{ children: () => iconLabel(ToggleLeftRegular, field.displayName) }}
+        hint={field.description}
+      >
+        <Switch
           checked={model.get<boolean>(field)}
-          onChange={(_, checked) => model.set(field, checked)}
+          onChange={(_, data) => model.set(field, data.checked)}
         />
-        <FieldDescription description={field.description} />
-      </>
+      </Field>
     ),
     URL: (field) => {
       const value = model.get<{
@@ -206,9 +209,12 @@ export function useFieldElements(model: UseModelReturnType) {
       </Field>
     ),
     TaxonomyFieldType: (field) => (
-      <>
-        <Label>{field.displayName}</Label>
+      <Field
+        label={{ children: () => iconLabel(AppsListRegular, field.displayName) }}
+        hint={field.description}
+      >
         <TagPicker
+          styles={{ text: styles.field }}
           onResolveSuggestions={async (filter, selectedItems) =>
             await SPDataAdapter.getTerms(field.getProperty('TermSetId'), filter, selectedItems)
           }
@@ -219,13 +225,15 @@ export function useFieldElements(model: UseModelReturnType) {
           itemLimit={1}
           onChange={(items) => model.set(field, items)}
         />
-        <FieldDescription description={field.description} />
-      </>
+      </Field>
     ),
     TaxonomyFieldTypeMulti: (field) => (
-      <>
-        <Label>{field.displayName}</Label>
+      <Field
+        label={{ children: () => iconLabel(AppsListFilled, field.displayName) }}
+        hint={field.description}
+      >
         <TagPicker
+          styles={{ text: styles.field }}
           onResolveSuggestions={async (filter, selectedItems) =>
             await SPDataAdapter.getTerms(field.getProperty('TermSetId'), filter, selectedItems)
           }
@@ -236,8 +244,7 @@ export function useFieldElements(model: UseModelReturnType) {
           itemLimit={20}
           onChange={(items) => model.set(field, items)}
         />
-        <FieldDescription description={field.description} />
-      </>
+      </Field>
     )
   }
 
