@@ -25,6 +25,14 @@
           "manifest": "./src/templateSelector/manifest.json"
         }
       ]
+    },
+    "risk-action-field-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/riskAction/index.js",
+          "manifest": "./src/riskAction/manifest.json"
+        }
+      ]
     }
   },
   "externals": {},

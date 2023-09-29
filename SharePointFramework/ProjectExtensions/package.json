@@ -28,6 +28,7 @@
     "@microsoft/sp-page-context": "1.17.4",
     "@pnp/logging": "3.17.0",
     "@pnp/sp": "3.17.0",
+    "@pnp/graph": "3.17.0",
     "@reduxjs/toolkit": "1.5.0",
     "@uifabric/file-type-icons": "7.6.27",
     "@uifabric/utilities": "6.45.1",
@@ -49,7 +50,8 @@
     "@fluentui/react-components": "9.31.0",
     "@fluentui/react-icons": "2.0.215",
     "@fluentui/react-search-preview": "0.1.16",
-    "@fluentui/react-tags-preview": "0.2.9"
+    "@fluentui/react-tags-preview": "0.2.9",
+    "@microsoft/microsoft-graph-types": "~2.38.0"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",
