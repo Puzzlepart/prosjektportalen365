@@ -41,15 +41,15 @@ export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<IRisk
     }
 
     const riskAction: ReactElement<IRiskActionProps> = createElement(RiskAction, {
-      ...this.properties,
-      itemContext: currentItemContext
+      ...this.properties
     })
 
     const element = createElement(
       RiskActionFieldCustomizerContext.Provider,
       {
         value: {
-          dataAdapter: this.dataAdapter
+          dataAdapter: this.dataAdapter,
+          itemContext: currentItemContext
         }
       },
       riskAction

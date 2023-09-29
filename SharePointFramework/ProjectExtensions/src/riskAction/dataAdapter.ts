@@ -5,9 +5,9 @@ import { GraphFI, SPFx as graphSPFx, graphfi } from '@pnp/graph'
 import '@pnp/graph/presets/all'
 import { SPFx as spSPFx, spfi } from '@pnp/sp'
 import '@pnp/sp/presets/all'
-import { IRiskActionProps } from './components/RiskAction/types'
 import { IList } from '@pnp/sp/presets/all'
 import { SPDataAdapterBase } from 'pp365-shared-library'
+import { IRiskActionFieldCustomizerContext } from './context'
 
 export class DataAdapter extends SPDataAdapterBase<any> {
   private readonly graph: GraphFI
@@ -46,15 +46,15 @@ export class DataAdapter extends SPDataAdapterBase<any> {
    * Adds a task to the current group's plan.
    *
    * @param model Model for the task (Map<string, any>)
-   * @param props Props for the `RiskAction` component
+   * @param context Context for the `RiskAction` component
    */
   public async addTask(
     model: Map<string, any>,
-    props: IRiskActionProps
+    context: IRiskActionFieldCustomizerContext
   ): Promise<PlannerTask> {
     try {
       let assignments = null
-      if(model.get('responsible')) {
+      if (model.get('responsible')) {
         const responsible = await this.getUserId(model.get('responsible'))
         assignments = {
           [responsible]: {
@@ -63,18 +63,18 @@ export class DataAdapter extends SPDataAdapterBase<any> {
           }
         }
       }
-      console.log(assignments)
       const group = this.graph.groups.getById(this.context.pageContext.legacyPageContext.groupId)
       const [plan] = await group.plans()
-      const { task, data } = await this.graph.planner.tasks.add(plan.id, model.get('title'), assignments)
+      const { task, data } = await this.graph.planner.tasks.add(plan.id, model.get('title'))
+      if (assignments) await task.update({ assignments }, data['@odata.etag'])
       const details = await task.details<any>()
       await task.details.update(
         {
           description: model.get('description') ?? '',
           references: {
-            [this.encodeUrl(props.itemContext.url)]: {
+            [this.encodeUrl(context.itemContext.url)]: {
               '@odata.type': 'microsoft.graph.plannerExternalReference',
-              alias: props.itemContext.title
+              alias: context.itemContext.title
             }
           }
         },
@@ -90,16 +90,16 @@ export class DataAdapter extends SPDataAdapterBase<any> {
    * Update the current item with the new task's ID and title.
    *
    * @param newTask The new task created in Planner
-   * @param props Props for the `RiskAction` component
+   * @param context Context for the `RiskAction` component
    */
-  public async updateItem(newTask: PlannerTask, props: IRiskActionProps): Promise<void> {
+  public async updateItem(newTask: PlannerTask,context: IRiskActionFieldCustomizerContext): Promise<void> {
     const hiddenFieldValueParts = [
-      ...(props.itemContext.hiddenFieldValue ?? '').split('|').filter(Boolean),
+      ...(context.itemContext.hiddenFieldValue ?? '').split('|').filter(Boolean),
       `${newTask.id},${newTask.title}`
     ]
     const newHiddenFieldValue = hiddenFieldValueParts.join('|')
     const newFieldValue = hiddenFieldValueParts.map((part) => part.split(',')[1]).join(', ')
-    const listItem = this.list.items.getById(props.itemContext.id)
+    const listItem = this.list.items.getById(context.itemContext.id)
     await listItem.update({
       GtRiskAction: newFieldValue,
       [this.hiddenFieldName]: newHiddenFieldValue

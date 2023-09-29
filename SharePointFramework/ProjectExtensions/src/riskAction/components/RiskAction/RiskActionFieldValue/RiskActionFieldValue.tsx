@@ -1,8 +1,9 @@
 import { Caption1, Link } from '@fluentui/react-components'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import React, { FC } from 'react'
-import { IRiskActionProps } from '../types'
+import { useRiskActionFieldCustomizerContext } from '../../../context'
 import styles from './RiskActionFieldValue.module.scss'
+import strings from 'ProjectExtensionsStrings'
 
 /**
  * Creates a link to a planner task in the Office tasks app.
@@ -24,11 +25,12 @@ function createPlannerTaskLink(id: string, type = 'TaskLink', channel = 'Link') 
  *
  * @returns The rendered component.
  */
-export const RiskActionFieldValue: FC<IRiskActionProps> = ({ itemContext }) => {
+export const RiskActionFieldValue: FC = () => {
+  const { itemContext } = useRiskActionFieldCustomizerContext()
   let fieldValue = null
   if (stringIsNullOrEmpty(itemContext.hiddenFieldValue)) {
     if (stringIsNullOrEmpty(itemContext.fieldValue))
-      fieldValue = <Caption1>Det er ikke registrert noen tiltak for denne usikkerheten.</Caption1>
+      fieldValue = <Caption1>{strings.RiskActionFieldValueNoTasks}</Caption1>
     else fieldValue = itemContext.fieldValue
   } else {
     fieldValue = (

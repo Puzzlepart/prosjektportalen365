@@ -1,79 +1,66 @@
-import { Panel } from '@fluentui/react'
+import { IPanelProps, Panel, format } from '@fluentui/react'
 import {
-  Button,
   Field,
   FluentProvider,
   Input,
-  Link,
   Textarea,
-  Tooltip,
   webLightTheme
 } from '@fluentui/react-components'
+import strings from 'ProjectExtensionsStrings'
 import React, { FC } from 'react'
-import { IRiskActionProps } from '../types'
-import { useNewRiskActionPanel } from './useNewRiskActionPanel'
-import { ResponsibleField } from './ResponsibleField'
+import { useRiskActionFieldCustomizerContext } from '../../../../context'
 import { Footer } from './Footer'
 import styles from './NewRiskActionPanel.module.scss'
+import { ResponsibleField } from './ResponsibleField'
+import { useNewRiskActionPanel } from './useNewRiskActionPanel'
 
-/**
- * A dialog component for adding a new risk action.
- */
-export const NewRiskActionPanel: FC<IRiskActionProps> = (props) => {
-  const {
-    model,
-    setModel,
-    onSave,
-    isSaving,
-    openPanel,
-    closePanel,
-    isPanelOpen,
-    fluentProviderId,
-    tooltipContent
-  } = useNewRiskActionPanel(props)
+
+export const NewRiskActionPanel: FC<IPanelProps> = (props) => {
+  const context = useRiskActionFieldCustomizerContext()
+    const {
+        model,
+        setModel,
+        onSave,
+        isSaving,
+        fluentProviderId
+    } = useNewRiskActionPanel()
   return (
-    <>
-      <Tooltip content={tooltipContent} relationship='description'>
-        <Link appearance='default' onClick={openPanel}>
-          Legg til nytt tiltak 3
-        </Link>
-      </Tooltip>
       <Panel
-        isOpen={isPanelOpen}
-        onDismiss={closePanel}
+        {...props}
         isLightDismiss={true}
-        headerText={`Legg til nytt tiltak for ${props.itemContext.title}`}
+        headerText={format(strings.NewRiskActionPanelTitle, context.itemContext.title)}
         onRenderFooterContent={() => (
           <Footer
             onSave={onSave}
-            closePanel={closePanel}
+            closePanel={props.onDismiss}
             isSaveDisabled={!model.get('title') || isSaving} />
         )}
-      >
+        >
         <FluentProvider
           id={fluentProviderId}
-          className={styles.content}
+          className={styles.newRiskActionPanel}
           theme={webLightTheme}
           style={{ background: 'transparent' }}
         >
-          <Field label='Tittel' required={true}>
+          <Field label={strings.TitleLabel} required={true}>
             <Input type='text' onChange={(_ev, { value }) => setModel('title', value)} />
           </Field>
-          <Field label='Beskrivelse'>
+          <Field label={strings.DescriptionLabel}>
             <Textarea
               onChange={(_ev, { value }) => setModel('description', value)}
               rows={6}
             />
           </Field>
-          <Field label='Startdato'>
+          <Field label={strings.StartDateLabel}>
             <Input type='date' onChange={(_ev, { value }) => setModel('startDate', value)} />
           </Field>
-          <Field label='Forfallsdato'>
+          <Field label={strings.DueDateLabel}>
             <Input type='date' onChange={(_ev, { value }) => setModel('dueDate', value)} />
           </Field>
           <ResponsibleField onChange={(value) => setModel('responsible', value)} />
         </FluentProvider>
       </Panel>
-    </>
   )
 }
+
+NewRiskActionPanel.displayName = 'NewRiskActionPanel'

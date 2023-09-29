@@ -1,7 +1,8 @@
 import { Combobox, Field, Option, Persona } from '@fluentui/react-components'
 import React, { FC, useContext, useEffect, useState } from 'react'
-import { RiskActionFieldCustomizerContext } from '../../../../context'
+import { RiskActionFieldCustomizerContext } from '../../../../../context'
 import { IResponsibleFieldProps } from './types'
+import strings from 'ProjectExtensionsStrings'
 
 export const ResponsibleField: FC<IResponsibleFieldProps> = (props) => {
     const context = useContext(RiskActionFieldCustomizerContext)
@@ -15,7 +16,7 @@ export const ResponsibleField: FC<IResponsibleFieldProps> = (props) => {
     }, [value])
 
     return (
-        <Field label='Ansvarlig'>
+        <Field label={strings.ResponsibleFieldLabel}>
             <Combobox
                 onOptionSelect={(_e, data) => {
                     props.onChange(data.optionValue)
@@ -38,7 +39,7 @@ export const ResponsibleField: FC<IResponsibleFieldProps> = (props) => {
                 ))}
                 {matchingUsers.length === 0 ? (
                     <Option key='no-results' text=''>
-                        Ingen brukere funnet.
+                        {strings.ResponsibleFieldNoResults}
                     </Option>
                 ) : null}
             </Combobox>

@@ -1,4 +1,14 @@
 declare interface IProjectExtensionsStrings {
+  RiskActionFieldValueNoTasks: string
+  NewRiskActionPanelUpdateTaskStatus: string
+  NewRiskActionPanelInfoText: string
+  NewRiskActionPanelInfoTextNoPlanner: string
+  StartDateLabel: string
+  DueDateLabel: string
+  NewRiskActionPanelTitle: string
+  NewRiskActionPanelAddNewRiskAction: string 
+  ResponsibleFieldNoResults: string
+  ResponsibleFieldLabel: string
   ApplyExtensionHooks: string
   ApplyExtensionText: string
   ApplyingExtensionsText: string

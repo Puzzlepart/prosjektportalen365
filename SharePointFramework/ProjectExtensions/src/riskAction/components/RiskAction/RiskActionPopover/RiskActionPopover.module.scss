@@ -1,0 +1,22 @@
+.newRiskActionPanel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .links {
+        display: flex;
+        flex-direction: row;
+        gap: 4px;
+        
+        button {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

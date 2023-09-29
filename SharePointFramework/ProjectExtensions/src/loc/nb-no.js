@@ -1,5 +1,15 @@
 define([], function () {
     return {
+        RiskActionFieldValueNoTasks: 'Det er ikke registrert noen tiltak for denne usikkerheten.',
+        NewRiskActionPanelUpdateTaskStatus: 'Oppdater',
+        NewRiskActionPanelInfoText: 'Legg til nytt tiltak som oppgave i Planner, eller oppdater eksisterende oppgaver.',
+        NewRiskActionPanelInfoTextNoPlanner: 'Legg til nytt tiltak som oppgave i Planner, eller oppdater eksisterende oppgaver. Om du allerede har fyllt ut tiltak manuelt, vil disse bli erstattet med tiltakene som lagres i Planner.',
+        StartDateLabel: 'Startdato',
+        DueDateLabel: 'Forfallsdato',
+        NewRiskActionPanelTitle: 'Legg til nytt tiltak for {0}',
+        NewRiskActionPanelAddNewRiskAction: 'Legg til nytt tiltak',
+        ResponsibleFieldNoResults: 'Fant ingen brukere',
+        ResponsibleFieldLabel: 'Ansvarlig',
         ApplyExtensionHooks: 'Kjører hooks definert i prosjekttillegg',
         ApplyExtensionText: 'Legger på prosjekttilegg {0}',
         ApplyingExtensionsText: 'Legger på prosjekttilegg',
