@@ -15,6 +15,7 @@ import {
   TaskListLtrFilled,
   TaskListLtrRegular
 } from '@fluentui/react-icons'
+import { ThemedComponent } from 'pp365-shared-library'
 
 const Icons = {
   TaskList: bundleIcon(TaskListLtrFilled, TaskListLtrRegular),
@@ -27,7 +28,7 @@ export const ProjectPhasePopover: FC<IProjectPhasePopoverProps> = (props) => {
   const { phase } = props
   const stats = Object.keys(phase.checklistData.stats)
   return (
-    <div className={styles.root}>
+    <ThemedComponent className={styles.root}>
       <h2 className={styles.title}>{phase.name}</h2>
       <div className={styles.body}>
         <h4 className={styles.subText}>{phase.subText}</h4>
@@ -78,7 +79,7 @@ export const ProjectPhasePopover: FC<IProjectPhasePopoverProps> = (props) => {
           </div>
         </div>
       </div>
-    </div>
+    </ThemedComponent>
   )
 }
 

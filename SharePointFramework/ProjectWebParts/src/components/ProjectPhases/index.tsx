@@ -22,12 +22,12 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
   const { dispatchToast } = useToastController(toasterId)
 
   return (
-    <ThemedComponent
-      className={styles.root}
-      ref={rootRef}
-    >
-      <div className={styles.container}>
-        <ProjectPhasesContext.Provider value={context}>
+    <ProjectPhasesContext.Provider value={context}>
+      <ThemedComponent
+        className={styles.root}
+        ref={rootRef}
+      >
+        <div className={styles.container}>
           <Shimmer
             isDataLoaded={context.state.isDataLoaded || !!context.state.error}
             shimmerElements={getShimmerElements(rootRef.current?.clientWidth)}
@@ -41,16 +41,16 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
             </ul>
             <ChangePhaseDialog />
           </Shimmer>
-        </ProjectPhasesContext.Provider>
-        {context.state.error &&
-          dispatchToast(
-            <Toast>
-              <ToastTitle>{context.state.error.message}</ToastTitle>
-            </Toast>,
-            { intent: 'error' }
-          )}
-      </div>
-    </ThemedComponent>
+          {context.state.error &&
+            dispatchToast(
+              <Toast>
+                <ToastTitle>{context.state.error.message}</ToastTitle>
+              </Toast>,
+              { intent: 'error' }
+            )}
+        </div>
+      </ThemedComponent>
+    </ProjectPhasesContext.Provider>
   )
 }
 ProjectPhases.displayName = 'Project Phases'
