@@ -11,6 +11,8 @@ import {
   CalendarRegular,
   LinkMultipleRegular,
   MultiselectLtrRegular,
+  PeopleRegular,
+  PersonRegular,
   TextAlignLeftRegular,
   TextNumberFormatRegular
 } from '@fluentui/react-icons'
@@ -166,9 +168,12 @@ export function useFieldElements(model: UseModelReturnType) {
       </Field>
     ),
     User: (field) => (
-      <>
-        <Label>{field.displayName}</Label>
+      <Field
+        label={{ children: () => iconLabel(PersonRegular, field.displayName) }}
+        hint={field.description}
+      >
         <NormalPeoplePicker
+          styles={{ text: styles.field }}
           onResolveSuggestions={async (filter, selectedItems) =>
             (await SPDataAdapter.clientPeoplePickerSearchUser(
               filter,
@@ -179,13 +184,15 @@ export function useFieldElements(model: UseModelReturnType) {
           itemLimit={1}
           onChange={(items) => model.set(field, items)}
         />
-        <FieldDescription description={field.description} />
-      </>
+      </Field>
     ),
     UserMulti: (field) => (
-      <>
-        <Label>{field.displayName}</Label>
+      <Field
+        label={{ children: () => iconLabel(PeopleRegular, field.displayName) }}
+        hint={field.description}
+      >
         <NormalPeoplePicker
+          styles={{ text: styles.field }}
           onResolveSuggestions={async (filter, selectedItems) =>
             (await SPDataAdapter.clientPeoplePickerSearchUser(
               filter,
@@ -196,8 +203,7 @@ export function useFieldElements(model: UseModelReturnType) {
           itemLimit={20}
           onChange={(items) => model.set(field, items)}
         />
-        <FieldDescription description={field.description} />
-      </>
+      </Field>
     ),
     TaxonomyFieldType: (field) => (
       <>
