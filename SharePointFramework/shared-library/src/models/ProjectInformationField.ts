@@ -1,4 +1,3 @@
-import { IDropdownOption } from '@fluentui/react'
 import { DisplayMode } from '@microsoft/sp-core-library'
 import _ from 'lodash'
 import { createFieldValueMap, getObjectValue as get } from '../util'
@@ -117,10 +116,10 @@ export class ProjectInformationField {
   }
 
   /**
-   * Get choices for a choice field as `IDropdownOption[]`.
+   * Get choices for a choice field as `string[]`.
    */
-  public get choices(): IDropdownOption[] {
-    return (this._field.Choices as string[]).map((c) => ({ key: c, text: c }))
+  public get choices(): string[] {
+    return this._field.Choices
   }
 
   /**

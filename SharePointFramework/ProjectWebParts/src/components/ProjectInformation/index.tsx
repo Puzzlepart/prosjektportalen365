@@ -1,4 +1,4 @@
-import { FluentProvider, mergeClasses, useId, webLightTheme } from '@fluentui/react-components'
+import { FluentProvider, mergeClasses, webLightTheme } from '@fluentui/react-components'
 import { WebPartTitle } from 'pp365-shared-library'
 import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
 import React, { FC } from 'react'
@@ -26,7 +26,6 @@ import { LoadingSkeleton } from './LoadingSkeleton'
  * - Promote to parent project (`CreateParentDialog`)
  */
 export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
-  const fluentProviderId = useId('fluent-provider')
   const context = useProjectInformation(props)
   if (context.state.hidden) return null
 
@@ -40,11 +39,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
 
   return (
     <ProjectInformationContextProvider value={context}>
-      <FluentProvider
-        id={fluentProviderId}
-        theme={webLightTheme}
-        className={mergeClasses(styles.root, props.className)}
-      >
+      <FluentProvider theme={webLightTheme} className={mergeClasses(styles.root, props.className)}>
         <WebPartTitle title={props.title} />
         <div className={styles.container}>
           {context.state.error && (

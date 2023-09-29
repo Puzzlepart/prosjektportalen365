@@ -1,26 +1,22 @@
-import {
-  DatePicker,
-  DayOfWeek,
-  Dropdown,
-  IPersonaProps,
-  ITag,
-  Label,
-  NormalPeoplePicker,
-  TagPicker,
-  TextField,
-  Toggle
-} from '@fluentui/react'
+import { IPersonaProps, ITag, Label, NormalPeoplePicker, TagPicker, Toggle } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import { FieldDescription } from 'pp365-shared-library/lib/components'
 import { ProjectInformationField } from 'pp365-shared-library/lib/models'
 import React from 'react'
 import SPDataAdapter from '../../../data'
 import { UseModelReturnType } from './useModel'
-import { Field, Input, Text, Textarea } from '@fluentui/react-components'
-import { AnimalCatRegular, TextAlignLeftRegular, TextNumberFormatRegular } from '@fluentui/react-icons'
+import _ from 'lodash'
+import { Option, Field, Input, Text, Textarea, Combobox } from '@fluentui/react-components'
+import {
+  CalendarRegular,
+  LinkMultipleRegular,
+  MultiselectLtrRegular,
+  TextAlignLeftRegular,
+  TextNumberFormatRegular
+} from '@fluentui/react-icons'
 import styles from './EditPropertiesPanel.module.scss'
 import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
-
+import { DatePicker, DayOfWeek } from '@fluentui/react-datepicker-compat'
 /**
  * Hook for field elements of `EditPropertiesPanel` component. This hook is used to render field elements
  * based on field type. Supported field types are:
@@ -43,7 +39,10 @@ export function useFieldElements(model: UseModelReturnType) {
   const iconLabel = (Icon: FluentIcon, displayName: string) => {
     return (
       <div className={styles.iconLabel}>
-        <Icon /><Text size={200} weight='semibold'>{displayName}</Text>
+        <Icon />
+        <Text size={200} weight='semibold'>
+          {displayName}
+        </Text>
       </div>
     )
   }
@@ -65,21 +64,24 @@ export function useFieldElements(model: UseModelReturnType) {
         description: string
       }>(field, { url: '', description: '' })
       return (
-        <>
-          <Label>{field.displayName}</Label>
-          <TextField
-            placeholder={strings.UrlFieldUrlPlaceholder}
+        <Field
+          label={{ children: () => iconLabel(LinkMultipleRegular, field.displayName) }}
+          hint={field.description}
+        >
+          <Input
             defaultValue={value.url}
-            onChange={(_, url) => model.set(field, { url, description: value.description })}
+            onChange={(_, data) =>
+              model.set(field, { url: data.value, description: value.description })
+            }
+            placeholder={strings.Placeholder.UrlField}
           />
-          <TextField
-            placeholder={strings.UrlFieldDescriptionPlaceholder}
+          <Input
             defaultValue={value.description}
-            onChange={(_, description) => model.set(field, { url: value.url, description })}
-            styles={{ root: { marginTop: 6 } }}
+            onChange={(_, data) => model.set(field, { url: value.url, description: data.value })}
+            placeholder={strings.Placeholder.UrlFieldAlternative}
+            style={{ marginTop: 6 }}
           />
-          <FieldDescription description={field.description} />
-        </>
+        </Field>
       )
     },
     Text: (field) => (
@@ -89,7 +91,8 @@ export function useFieldElements(model: UseModelReturnType) {
       >
         <Input
           defaultValue={model.get<string>(field)}
-          onChange={(_, value) => model.set(field, value)}
+          onChange={(_, data) => model.set(field, data.value)}
+          placeholder={strings.Placeholder.TextField}
         />
       </Field>
     ),
@@ -100,54 +103,67 @@ export function useFieldElements(model: UseModelReturnType) {
       >
         <Textarea
           defaultValue={model.get<string>(field)}
-          onChange={(_, value) => model.set(field, value)}
+          onChange={(_, data) => model.set(field, data.value)}
+          placeholder={strings.Placeholder.TextField}
         />
       </Field>
     ),
     DateTime: (field) => (
-      <>
+      <Field
+        label={{ children: () => iconLabel(CalendarRegular, field.displayName) }}
+        hint={field.description}
+      >
         <DatePicker
-          label={field.displayName}
           value={model.get(field)}
           onSelectDate={(date) => model.set(field, date)}
           formatDate={(date) => date.toLocaleDateString()}
+          placeholder={strings.Placeholder.DatePicker}
           firstDayOfWeek={DayOfWeek.Monday}
+          showWeekNumbers
+          allowTextInput
         />
-        <FieldDescription description={field.description} />
-      </>
+      </Field>
     ),
     Choice: (field) => (
-      <>
-        <Dropdown
-          label={field.displayName}
-          options={field.choices}
-          defaultSelectedKey={model.get<string>(field)}
-          onChange={(_, option) => model.set(field, option.key)}
-        />
-        <FieldDescription description={field.description} />
-      </>
+      <Field
+        label={{ children: () => iconLabel(MultiselectLtrRegular, field.displayName) }}
+        hint={field.description}
+      >
+        <Combobox
+          value={model.get<string>(field)}
+          defaultSelectedOptions={[model.get<string>(field)]}
+          placeholder={strings.Placeholder.ChoiceField}
+          onOptionSelect={(_, data) => model.set(field, data.optionValue)}
+        >
+          {field.choices.map((choice) => (
+            <Option key={choice}>{choice}</Option>
+          ))}
+        </Combobox>
+      </Field>
     ),
     MultiChoice: (field) => (
-      <>
-        <Dropdown
-          label={field.displayName}
-          options={field.choices}
-          multiSelect
-          selectedKeys={model.get<string[]>(field)}
-          onChange={(_, option) => {
-            const selectedKeys = model.get<string[]>(field)
-            if (option.selected) {
-              model.set<string[]>(field, [...selectedKeys, option.key as string])
+      <Field
+        label={{ children: () => iconLabel(MultiselectLtrRegular, field.displayName) }}
+        hint={field.description}
+      >
+        <Combobox
+          value={model.get<string[]>(field) ? model.get<string[]>(field).join(', ') : ''}
+          defaultSelectedOptions={model.get<string[]>(field) ? model.get<string[]>(field) : []}
+          multiselect
+          placeholder={strings.Placeholder.MultiChoiceField}
+          onOptionSelect={(e, data) => {
+            if (!_.isEmpty(data.selectedOptions)) {
+              model.set<string[]>(field, data.selectedOptions)
             } else {
-              model.set<string[]>(
-                field,
-                selectedKeys.filter((key) => key !== option.key)
-              )
+              model.set<string[]>(field, [''])
             }
           }}
-        />
-        <FieldDescription description={field.description} />
-      </>
+        >
+          {field.choices.map((choice) => (
+            <Option key={choice}>{choice}</Option>
+          ))}
+        </Combobox>
+      </Field>
     ),
     User: (field) => (
       <>
