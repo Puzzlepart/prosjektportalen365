@@ -1,9 +1,10 @@
-import { Caption1, Link } from '@fluentui/react-components'
+import { Link, mergeClasses } from '@fluentui/react-components'
+import { Alert } from '@fluentui/react-components/unstable'
 import { stringIsNullOrEmpty } from '@pnp/core'
-import React, { FC } from 'react'
+import strings from 'ProjectExtensionsStrings'
+import React, { FC, ReactElement } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../context'
 import styles from './RiskActionFieldValue.module.scss'
-import strings from 'ProjectExtensionsStrings'
 
 /**
  * Creates a link to a planner task in the Office tasks app.
@@ -27,28 +28,36 @@ function createPlannerTaskLink(id: string, type = 'TaskLink', channel = 'Link') 
  */
 export const RiskActionFieldValue: FC = () => {
   const { itemContext } = useRiskActionFieldCustomizerContext()
-  let fieldValue = null
-  if (stringIsNullOrEmpty(itemContext.hiddenFieldValue)) {
+  let element: ReactElement = null
+  const hiddenFieldValue = itemContext.hiddenFieldValue
+  if (stringIsNullOrEmpty(hiddenFieldValue?.data)) {
     if (stringIsNullOrEmpty(itemContext.fieldValue))
-      fieldValue = <Caption1>{strings.RiskActionFieldValueNoTasks}</Caption1>
-    else fieldValue = itemContext.fieldValue
+      element = <Alert className={styles.alert}>{strings.RiskActionFieldValueNoTasks}</Alert>
+    else element = <span>{itemContext.fieldValue}</span>
   } else {
-    fieldValue = (
+    element = (
       <ul className={styles.linkList}>
-        {itemContext.hiddenFieldValue
-          .split('|')
-          .map((item) => item.split(','))
-          .map(([id, title], index) => {
-            return (
-              <li key={index}>
-                <Link href={createPlannerTaskLink(id)} target='_blank' appearance='subtle'>
-                  {title}
-                </Link>
-              </li>
-            )
-          })}
+        {hiddenFieldValue.tasks.map((task, index) => {
+          return (
+            <li key={index}>
+              <Link
+                href={createPlannerTaskLink(task.id)}
+                target='_blank'
+                appearance='subtle'
+                className={mergeClasses(
+                  styles.taskLink,
+                  task.percentComplete === '100' && styles.isCompleted
+                )}
+              >
+                {task.title}
+              </Link>
+            </li>
+          )
+        })}
       </ul>
     )
   }
-  return <div className={styles.root}>{fieldValue}</div>
+  return <div className={styles.riskActionFieldValue}>{element}</div>
 }
+
+RiskActionFieldValue.displayName = 'RiskActionFieldValue'

@@ -16,18 +16,18 @@ import {
 import { RiskActionFieldCustomizerContext } from './context'
 
 export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<IRiskActionFieldCustomizerProperties> {
-  dataAdapter: DataAdapter
-  hiddenFieldValues: Map<string, any>
+  protected _dataAdapter: DataAdapter
+  protected _hiddenFieldValues: Map<string, any>
 
   public async onInit(): Promise<void> {
     await super.onInit()
-    this.dataAdapter = new DataAdapter(this.context)
-    await this.dataAdapter.ensureHiddenField()
-    this.hiddenFieldValues = await this.dataAdapter.getHiddenFieldValues()
+    this._dataAdapter = new DataAdapter(this.context)
+    await this._dataAdapter.ensureHiddenFields()
+    this._hiddenFieldValues = await this._dataAdapter.getHiddenFieldValues()
   }
 
   public onRenderCell(event: IFieldCustomizerCellEventParameters): void {
-    const hiddenFieldValue = this.hiddenFieldValues.get(
+    const hiddenFieldValue = this._hiddenFieldValues.get(
       event.listItem.getValueByName('ID').toString()
     )
     const currentItemContext: IRiskActionFieldCustomizerItemContext = {
@@ -48,7 +48,7 @@ export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<IRisk
       RiskActionFieldCustomizerContext.Provider,
       {
         value: {
-          dataAdapter: this.dataAdapter,
+          dataAdapter: this._dataAdapter,
           itemContext: currentItemContext
         }
       },

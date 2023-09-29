@@ -2,8 +2,8 @@ define([], function () {
     return {
         RiskActionFieldValueNoTasks: 'Det er ikke registrert noen tiltak for denne usikkerheten.',
         NewRiskActionPanelUpdateTaskStatus: 'Oppdater',
-        NewRiskActionPanelInfoText: 'Legg til nytt tiltak som oppgave i Planner, eller oppdater eksisterende oppgaver.',
-        NewRiskActionPanelInfoTextNoPlanner: 'Legg til nytt tiltak som oppgave i Planner, eller oppdater eksisterende oppgaver. Om du allerede har fyllt ut tiltak manuelt, vil disse bli erstattet med tiltakene som lagres i Planner.',
+        RiskActionPopoverInfoText: 'Legg til nytt tiltak som oppgave i Planner, eller oppdater eksisterende oppgaver.',
+        RiskActionPopoverInfoTextNoPlanner: 'Legg til nytt tiltak som oppgave i Planner, eller oppdater eksisterende oppgaver. Om du allerede har fyllt ut tiltak manuelt, vil disse bli erstattet med tiltakene som lagres i Planner.',
         StartDateLabel: 'Startdato',
         DueDateLabel: 'Forfallsdato',
         NewRiskActionPanelTitle: 'Legg til nytt tiltak for {0}',

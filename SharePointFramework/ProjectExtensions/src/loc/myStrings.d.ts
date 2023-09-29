@@ -1,8 +1,8 @@
 declare interface IProjectExtensionsStrings {
   RiskActionFieldValueNoTasks: string
   NewRiskActionPanelUpdateTaskStatus: string
-  NewRiskActionPanelInfoText: string
-  NewRiskActionPanelInfoTextNoPlanner: string
+  RiskActionPopoverInfoText: string
+  RiskActionPopoverInfoTextNoPlanner: string
   StartDateLabel: string
   DueDateLabel: string
   NewRiskActionPanelTitle: string

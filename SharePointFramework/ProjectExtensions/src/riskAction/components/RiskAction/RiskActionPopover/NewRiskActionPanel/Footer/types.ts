@@ -1,5 +1,5 @@
 export interface IFooterProps {
-    onSave: () => void
-    closePanel: () => void
-    isSaveDisabled: boolean
+  onSave: () => void
+  closePanel: () => void
+  isSaveDisabled: boolean
 }

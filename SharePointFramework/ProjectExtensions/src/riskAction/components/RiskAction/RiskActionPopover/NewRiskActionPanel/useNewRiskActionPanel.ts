@@ -1,6 +1,4 @@
 import { useId } from '@fluentui/react-components'
-import { stringIsNullOrEmpty } from '@pnp/core/util'
-import strings from 'ProjectExtensionsStrings'
 import { useCallback, useState } from 'react'
 import { useBoolean } from 'usehooks-ts'
 import { useRiskActionFieldCustomizerContext } from '../../../../context'
@@ -16,14 +14,22 @@ export function useNewRiskActionPanel() {
   const [isSaving, setIsSaving] = useState(false)
   const [model, $setModel] = useState(new Map<string, any>())
 
-  const setModel = useCallback((key: string, value: any) => {
-    $setModel((_model) => {
-      const newModel = new Map(_model)
-      newModel.set(key, value)
-      return newModel
-    })
-  }, [context.itemContext, model])
-
+  /**
+   * Sets a new value for a given key in the model state.
+   *
+   * @param key - The key to update in the model state.
+   * @param value - The new value to set for the given key.
+   */
+  const setModel = useCallback(
+    (key: string, value: any) => {
+      $setModel((_model) => {
+        const newModel = new Map(_model)
+        newModel.set(key, value)
+        return newModel
+      })
+    },
+    [context.itemContext, model]
+  )
 
   /**
    * Saves the new risk action to the data adapter and updates the item.
@@ -33,20 +39,10 @@ export function useNewRiskActionPanel() {
   const onSave = useCallback(async (): Promise<void> => {
     setIsSaving(true)
     const task = await context.dataAdapter.addTask(model, context)
-    console.log(task)
     await context.dataAdapter.updateItem(task, context)
     panelState.setFalse()
     setIsSaving(false)
   }, [context.itemContext, model])
-
-  const updateTasks = () => {
-  }
-
-  let infoText = strings.NewRiskActionPanelInfoText
-
-  if (stringIsNullOrEmpty(context.itemContext.hiddenFieldValue)) {
-    infoText = strings.NewRiskActionPanelInfoTextNoPlanner
-  }
 
   const fluentProviderId = useId('risk-action-panel-fluent-provider')
 

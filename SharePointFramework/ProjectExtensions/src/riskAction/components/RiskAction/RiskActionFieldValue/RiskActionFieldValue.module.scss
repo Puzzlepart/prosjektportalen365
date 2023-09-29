@@ -1,9 +1,23 @@
-.root {
+.riskActionFieldValue {
   word-wrap: break-word;
+
+  .alert {
+    padding: 8px;
+    white-space: pre-wrap;
+    font-size: 10px;
+  }
 
   .linkList {
     padding: 0;
     margin: 0;
     list-style-type: none;
+
+    .taskLink {
+      padding: 0;
+
+      &.isCompleted {
+        text-decoration: line-through;
+      }
+    }
   }
 }

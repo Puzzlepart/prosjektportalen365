@@ -1,18 +1,22 @@
 import {
   Button,
-  Caption1,
-  Caption2Strong,
   Popover,
   PopoverSurface,
-  PopoverTrigger
+  PopoverTrigger,
+  mergeClasses
 } from '@fluentui/react-components'
+import { Alert } from '@fluentui/react-components/unstable'
+import { AddFilled, AddRegular, ArrowSyncFilled, ArrowSyncRegular, bundleIcon } from '@fluentui/react-icons'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC, HTMLProps } from 'react'
-import { useRiskActionFieldCustomizerContext } from '../../../context'
 import { NewRiskActionPanel } from './NewRiskActionPanel'
 import styles from './RiskActionPopover.module.scss'
 import { useRiskActionPopover } from './useRiskActionPopover'
 
+const Icons = {
+  Add: bundleIcon(AddRegular, AddFilled),
+  ArrowSync: bundleIcon(ArrowSyncRegular, ArrowSyncFilled)
+}
 
 export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
   const {
@@ -20,26 +24,27 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
     isPanelOpen,
     openPanel,
     closePanel,
-    infoText
+    infoText,
+    isPopoverOpen,
+    onPopoverOpenChange,
+    lastUpdated
   } = useRiskActionPopover()
   return (
     <>
-      <Popover>
+      <Popover withArrow open={isPopoverOpen} onOpenChange={onPopoverOpenChange}>
         <PopoverTrigger disableButtonEnhancement>
           <div>{props.children}</div>
         </PopoverTrigger>
-        <PopoverSurface>
-          <div className={styles.newRiskActionPanel}>
-            <Caption1 block>{infoText} </Caption1>
-            <Caption2Strong block>Oppgavene ble sist oppdatert 1. januar 2021 kl 12:33.</Caption2Strong>
-            <div className={styles.links}>
-              <Button appearance='transparent' onClick={openPanel}>
-                {strings.NewRiskActionPanelAddNewRiskAction}
-              </Button>
-              <Button appearance='transparent' onClick={updateTasks}>
-                {strings.NewRiskActionPanelUpdateTaskStatus}
-              </Button>
-            </div>
+        <PopoverSurface className={styles.riskActionPopover}>
+          <Alert intent='info' className={mergeClasses(styles.alert, styles.infoText)}>{infoText}</Alert>
+          {lastUpdated && <Alert className={mergeClasses(styles.alert, styles.lastUpdated)}><p>Oppgavene ble sist synkronisert fra Planner {lastUpdated}.</p></Alert>}
+          <div className={styles.actions}>
+            <Button appearance='transparent' icon={Icons.Add({})} size='small' onClick={openPanel}>
+              {strings.NewRiskActionPanelAddNewRiskAction}
+            </Button>
+            <Button appearance='transparent' icon={Icons.ArrowSync({})} size='small' onClick={updateTasks}>
+              {strings.NewRiskActionPanelUpdateTaskStatus}
+            </Button>
           </div>
         </PopoverSurface>
       </Popover>

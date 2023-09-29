@@ -1,3 +1,3 @@
 export interface IResponsibleFieldProps {
-    onChange?: (value: string) => void
+  onChange?: (value: string) => void
 }

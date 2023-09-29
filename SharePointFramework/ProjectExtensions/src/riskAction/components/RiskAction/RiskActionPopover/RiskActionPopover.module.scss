@@ -1,22 +1,30 @@
-.newRiskActionPanel {
+.riskActionPopover {
+    max-width: 300px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
 
-    .links {
+    .alert {
+        white-space: pre-wrap;
+    }
+
+    .infoText {
+        padding: 8px;
+        font-size: 10px;
+    }
+
+    .lastUpdated {
+        font-size: 10px;
+    }
+
+    .actions {
         display: flex;
         flex-direction: row;
-        gap: 4px;
-        
+        gap: 6px;
+
         button {
             padding-left: 0;
             padding-right: 0;
         }
     }
-}
-
-.content {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
 }

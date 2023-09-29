@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { useId } from '@fluentui/react-components'
 import { stringIsNullOrEmpty } from '@pnp/core'
-import { useCallback, useContext, useState } from 'react'
+import { useContext } from 'react'
 import { useBoolean } from 'usehooks-ts'
-import { IRiskActionProps } from '../types'
 import { RiskActionFieldCustomizerContext } from '../../../context'
 import strings from 'ProjectExtensionsStrings'
+import { PopoverProps } from '@fluentui/react-components'
 
 /**
  * Custom hook for the `RiskActionPopover` component.
@@ -15,20 +14,39 @@ import strings from 'ProjectExtensionsStrings'
 export function useRiskActionPopover() {
   const context = useContext(RiskActionFieldCustomizerContext)
   const panelState = useBoolean(false)
+  const popoverState = useBoolean(false)
+
+  const onPopoverOpenChange: PopoverProps['onOpenChange'] = (_ev, { open }) => {
+    popoverState.setValue(open)
+  }
+
+  const openPanel = () => {
+    popoverState.setFalse()
+    panelState.setTrue()
+  }
 
   const updateTasks = () => {
+    context.dataAdapter.syncTasks(context)
+    popoverState.setFalse()
   }
 
-  let infoText = strings.NewRiskActionPanelInfoText
-  if (stringIsNullOrEmpty(context.itemContext.hiddenFieldValue)) {
-    infoText = strings.NewRiskActionPanelInfoTextNoPlanner
+  let infoText = strings.RiskActionPopoverInfoText
+  if (stringIsNullOrEmpty(context.itemContext.hiddenFieldValue?.data)) {
+    infoText = strings.RiskActionPopoverInfoTextNoPlanner
   }
+
+  const lastUpdated =
+    context.itemContext.hiddenFieldValue?.updated &&
+    new Date(context.itemContext.hiddenFieldValue.updated).toLocaleString()
 
   return {
     updateTasks,
-    openPanel: panelState.setTrue,
+    openPanel,
     closePanel: panelState.setFalse,
     isPanelOpen: panelState.value,
-    infoText
+    infoText,
+    isPopoverOpen: popoverState.value,
+    onPopoverOpenChange,
+    lastUpdated
   }
 }

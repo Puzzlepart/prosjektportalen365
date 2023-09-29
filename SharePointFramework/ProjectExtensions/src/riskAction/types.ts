@@ -32,5 +32,17 @@ export interface IRiskActionFieldCustomizerItemContext {
   /**
    * The hidden value of the field associated with the risk action item.
    */
-  hiddenFieldValue: string
+  hiddenFieldValue: RiskActionHiddenFieldValues
+}
+
+export type RiskActionPlannerTaskReference = {
+  id: string
+  title: string
+  percentComplete: string | number
+}
+
+export type RiskActionHiddenFieldValues = {
+  data: string
+  tasks: RiskActionPlannerTaskReference[]
+  updated: any
 }

@@ -17,4 +17,5 @@ export interface IRiskActionFieldCustomizerContext {
 export const RiskActionFieldCustomizerContext =
   createContext<IRiskActionFieldCustomizerContext>(null)
 
-export const useRiskActionFieldCustomizerContext = () => useContext(RiskActionFieldCustomizerContext)
+export const useRiskActionFieldCustomizerContext = () =>
+  useContext(RiskActionFieldCustomizerContext)

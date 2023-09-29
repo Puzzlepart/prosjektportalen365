@@ -1,6 +1,4 @@
-import {
-  IRiskActionFieldCustomizerProperties
-} from '../../types'
+import { IRiskActionFieldCustomizerProperties } from '../../types'
 
 /**
  * Properties for the RiskAction field customizer component.
