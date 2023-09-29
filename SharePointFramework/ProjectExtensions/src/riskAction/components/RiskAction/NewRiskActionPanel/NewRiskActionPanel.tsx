@@ -12,8 +12,9 @@ import {
 import React, { FC } from 'react'
 import { IRiskActionProps } from '../types'
 import { useNewRiskActionPanel } from './useNewRiskActionPanel'
-import { ResposibleField } from './ResposibleField'
+import { ResponsibleField } from './ResponsibleField'
 import { Footer } from './Footer'
+import styles from './NewRiskActionPanel.module.scss'
 
 /**
  * A dialog component for adding a new risk action.
@@ -21,7 +22,7 @@ import { Footer } from './Footer'
 export const NewRiskActionPanel: FC<IRiskActionProps> = (props) => {
   const {
     model,
-   setModel,
+    setModel,
     onSave,
     isSaving,
     openPanel,
@@ -51,6 +52,7 @@ export const NewRiskActionPanel: FC<IRiskActionProps> = (props) => {
       >
         <FluentProvider
           id={fluentProviderId}
+          className={styles.content}
           theme={webLightTheme}
           style={{ background: 'transparent' }}
         >
@@ -69,7 +71,7 @@ export const NewRiskActionPanel: FC<IRiskActionProps> = (props) => {
           <Field label='Forfallsdato'>
             <Input type='date' onChange={(_ev, { value }) => setModel('dueDate', value)} />
           </Field>
-          <ResposibleField />
+          <ResponsibleField onChange={(value) => setModel('responsible', value)} />
         </FluentProvider>
       </Panel>
     </>

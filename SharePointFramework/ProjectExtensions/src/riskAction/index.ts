@@ -9,7 +9,11 @@ import { render, unmountComponentAtNode } from 'react-dom'
 import { RiskAction } from './components/RiskAction'
 import { IRiskActionProps } from './components/RiskAction/types'
 import { DataAdapter } from './dataAdapter'
-import { IRiskActionFieldCustomizerItemContext, IRiskActionFieldCustomizerProperties } from './types'
+import {
+  IRiskActionFieldCustomizerItemContext,
+  IRiskActionFieldCustomizerProperties
+} from './types'
+import { RiskActionFieldCustomizerContext } from './context'
 
 export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<IRiskActionFieldCustomizerProperties> {
   dataAdapter: DataAdapter
@@ -29,18 +33,29 @@ export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<IRisk
     const currentItemContext: IRiskActionFieldCustomizerItemContext = {
       id: event.listItem.getValueByName('ID'),
       title: event.listItem.getValueByName('Title'),
-      url: `${window.location.protocol}//${window.location.host}${this.context.pageContext.list.serverRelativeUrl
-        }/DispForm.aspx?ID=${event.listItem.getValueByName('ID')}`,
+      url: `${window.location.protocol}//${window.location.host}${
+        this.context.pageContext.list.serverRelativeUrl
+      }/DispForm.aspx?ID=${event.listItem.getValueByName('ID')}`,
       fieldValue: event.fieldValue,
-      hiddenFieldValue,
+      hiddenFieldValue
     }
 
     const riskAction: ReactElement<IRiskActionProps> = createElement(RiskAction, {
       ...this.properties,
-      itemContext: currentItemContext,
-      dataAdapter: this.dataAdapter,
+      itemContext: currentItemContext
     })
-    render(riskAction, event.domElement)
+
+    const element = createElement(
+      RiskActionFieldCustomizerContext.Provider,
+      {
+        value: {
+          dataAdapter: this.dataAdapter
+        }
+      },
+      riskAction
+    )
+
+    render(element, event.domElement)
   }
 
   public onDisposeCell(event: IFieldCustomizerCellEventParameters): void {

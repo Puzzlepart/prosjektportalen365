@@ -32,11 +32,12 @@ export function useNewRiskActionPanel(props: IRiskActionProps) {
    */
   const onSave = useCallback(async () => {
     setIsSaving(true)
-    const task = await context.dataAdapter.addTask('title', 'description', props)
+    const task = await context.dataAdapter.addTask(model, props)
+    console.log(task)
     await context.dataAdapter.updateItem(task, props)
     panelState.setFalse()
     setIsSaving(false)
-  }, [props.itemContext])
+  }, [props.itemContext, model])
 
   let tooltipContent = 'Legg til nytt tiltak som oppgave i Planner.'
 
@@ -46,8 +47,6 @@ export function useNewRiskActionPanel(props: IRiskActionProps) {
   }
 
   const fluentProviderId = useId('risk-action-panel-fluent-provider')
-
-  console.log(model)
 
   return {
     model,

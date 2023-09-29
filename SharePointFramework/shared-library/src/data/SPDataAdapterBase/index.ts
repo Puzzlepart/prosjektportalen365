@@ -102,7 +102,9 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
       identityFieldName: 'GtSiteId',
       urlFieldName: 'GtSiteUrl'
     })
-    this._initStorage()
+    if (this.settings.siteId) {
+      this._initStorage()
+    }
     this.isConfigured = true
   }
 
@@ -162,7 +164,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                     const currentUserHasManageWebPermisson =
                       await this.sp.web.currentUserHasPermissions(PermissionKind.ManageWeb)
                     if (currentUserHasManageWebPermisson) userPermissions.push(...role.permissions)
-                  } catch {}
+                  } catch { }
                 }
                 break
               case ProjectAdminRoleType.ProjectProperty:
@@ -197,7 +199,7 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
                       ).length > 0
                     )
                       userPermissions.push(...role.permissions)
-                  } catch {}
+                  } catch { }
                 }
                 break
             }
@@ -345,14 +347,14 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
       const [fields, siteUsers, targetListFields] = await Promise.all([
         options.projectContentTypeId
           ? (this.entityService
-              .usingParams({ contentTypeId: options.projectContentTypeId })
-              .getEntityFields() as Promise<SPField[]>)
+            .usingParams({ contentTypeId: options.projectContentTypeId })
+            .getEntityFields() as Promise<SPField[]>)
           : (this.entityService.getEntityFields() as Promise<SPField[]>),
         sourceWeb.siteUsers.select('Id', 'Email', 'LoginName', 'Title').using(DefaultCaching)(),
         options.targetListName
           ? destinationWeb.lists.getByTitle(options?.targetListName).fields.using(DefaultCaching)<
-              SPField[]
-            >()
+            SPField[]
+          >()
           : Promise.resolve<SPField[]>([])
       ])
       const fieldsToSync = this._getFieldsToSync(fields, options.customSiteFieldsGroup, [

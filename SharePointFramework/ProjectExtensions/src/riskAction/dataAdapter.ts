@@ -3,25 +3,24 @@ import { PlannerTask } from '@microsoft/microsoft-graph-types'
 import { FieldCustomizerContext } from '@microsoft/sp-listview-extensibility'
 import { GraphFI, SPFx as graphSPFx, graphfi } from '@pnp/graph'
 import '@pnp/graph/presets/all'
-import { SPFI, SPFx as spSPFx, spfi } from '@pnp/sp'
+import { SPFx as spSPFx, spfi } from '@pnp/sp'
 import '@pnp/sp/presets/all'
 import { IRiskActionProps } from './components/RiskAction/types'
 import { IList } from '@pnp/sp/presets/all'
+import { SPDataAdapterBase } from 'pp365-shared-library'
 
-export class DataAdapter {
+export class DataAdapter extends SPDataAdapterBase<any> {
   private readonly graph: GraphFI
-  private readonly sp: SPFI
   private readonly list: IList
   private readonly hiddenFieldName: string
 
-  constructor(
-    private readonly context: FieldCustomizerContext
-  ) { 
-
+  constructor(private readonly context: FieldCustomizerContext) {
+    super()
     this.graph = graphfi().using(graphSPFx(this.context))
     this.sp = spfi().using(spSPFx(this.context))
-    this.list =  this.sp.web.lists.getById(this.context.pageContext.list.id.toString())
+    this.list = this.sp.web.lists.getById(this.context.pageContext.list.id.toString())
     this.hiddenFieldName = 'RiskActionData'
+    this.configure(context, {})
   }
 
   /**
@@ -34,25 +33,44 @@ export class DataAdapter {
   }
 
   /**
+   * Gets the ID of the user with the provided `mail`.
+   * 
+   * @param mail Mail of the user to get the ID for
+   */
+  private async getUserId(mail: string): Promise<any> {
+    const [user] = await this.graph.users.filter(`mail eq '${mail}'`)()
+    return user?.id
+  }
+
+  /**
    * Adds a task to the current group's plan.
    *
-   * @param title Title of the task
-   * @param description Description of the task
-   * @param props props for the `RiskAction` component
+   * @param model Model for the task (Map<string, any>)
+   * @param props Props for the `RiskAction` component
    */
   public async addTask(
-    title: string,
-    description: string,
+    model: Map<string, any>,
     props: IRiskActionProps
   ): Promise<PlannerTask> {
     try {
+      let assignments = null
+      if(model.get('responsible')) {
+        const responsible = await this.getUserId(model.get('responsible'))
+        assignments = {
+          [responsible]: {
+            '@odata.type': 'microsoft.graph.plannerAssignment',
+            orderHint: ' !'
+          }
+        }
+      }
+      console.log(assignments)
       const group = this.graph.groups.getById(this.context.pageContext.legacyPageContext.groupId)
       const [plan] = await group.plans()
-      const { task, data } = await this.graph.planner.tasks.add(plan.id, title, null)
+      const { task, data } = await this.graph.planner.tasks.add(plan.id, model.get('title'), assignments)
       const details = await task.details<any>()
       await task.details.update(
         {
-          description,
+          description: model.get('description') ?? '',
           references: {
             [this.encodeUrl(props.itemContext.url)]: {
               '@odata.type': 'microsoft.graph.plannerExternalReference',
@@ -74,10 +92,7 @@ export class DataAdapter {
    * @param newTask The new task created in Planner
    * @param props Props for the `RiskAction` component
    */
-  public async updateItem(
-    newTask: PlannerTask,
-    props: IRiskActionProps
-  ): Promise<void> {
+  public async updateItem(newTask: PlannerTask, props: IRiskActionProps): Promise<void> {
     const hiddenFieldValueParts = [
       ...(props.itemContext.hiddenFieldValue ?? '').split('|').filter(Boolean),
       `${newTask.id},${newTask.title}`
@@ -95,7 +110,8 @@ export class DataAdapter {
    * Ensures the hidden field exists on the current list.
    */
   public async ensureHiddenField(): Promise<void> {
-    if ((await this.list.fields.filter(`InternalName eq '${this.hiddenFieldName}'`)()).length === 1) return
+    if ((await this.list.fields.filter(`InternalName eq '${this.hiddenFieldName}'`)()).length === 1)
+      return
     await this.list.fields.addMultilineText(this.hiddenFieldName, {
       Hidden: true,
       Indexed: false
