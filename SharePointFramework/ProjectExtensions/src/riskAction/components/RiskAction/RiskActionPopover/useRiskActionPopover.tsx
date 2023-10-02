@@ -8,8 +8,6 @@ import { useRiskActionContext } from '../context'
 
 /**
  * Custom hook for the `RiskActionPopover` component.
- *
- * @returns An object containing the title, description, onSave function, and tooltipContent for the component.
  */
 export function useRiskActionPopover() {
   const context = useRiskActionFieldCustomizerContext()
@@ -26,6 +24,10 @@ export function useRiskActionPopover() {
     panelState.setTrue()
   }
 
+  /**
+   * Updates the tasks in the item context by syncing with the data adapter, sets the updated item context,
+   * and closes the popover.
+   */
   const updateTasks = async () => {
     const updatedItemContext = await context.dataAdapter.syncTasks(itemContext)
     popoverState.setFalse()
@@ -33,7 +35,7 @@ export function useRiskActionPopover() {
   }
 
   let infoText = strings.RiskActionPopoverInfoText
-  if (stringIsNullOrEmpty(context.itemContext.hiddenFieldValue?.data)) {
+  if (stringIsNullOrEmpty(itemContext.hiddenFieldValue?.data) && !stringIsNullOrEmpty(itemContext.fieldValue)) {
     infoText = strings.RiskActionPopoverInfoTextNoPlanner
   }
 

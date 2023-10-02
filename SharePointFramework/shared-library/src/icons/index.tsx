@@ -28,7 +28,9 @@ import {
   ArrowSort24Regular,
   ArrowSort24Filled,
   ArrowSyncRegular,
-  ArrowSyncFilled
+  ArrowSyncFilled,
+  ConvertRangeRegular,
+  ConvertRangeFilled
 } from '@fluentui/react-icons'
 import React, { CSSProperties } from 'react'
 
@@ -36,6 +38,10 @@ import React, { CSSProperties } from 'react'
  * An object containing the available Fluent icons and their corresponding regular and filled versions.
  */
 const iconCatalog = {
+  ConvertRange: {
+    regular: ConvertRangeRegular,
+    filled: ConvertRangeFilled
+  },
   ArrowSync: {
     regular: ArrowSyncRegular,
     filled: ArrowSyncFilled

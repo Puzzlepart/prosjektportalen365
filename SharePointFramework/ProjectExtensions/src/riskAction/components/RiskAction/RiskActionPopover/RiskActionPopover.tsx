@@ -13,6 +13,8 @@ import { NewRiskActionPanel } from './NewRiskActionPanel'
 import styles from './RiskActionPopover.module.scss'
 import { useRiskActionPopover } from './useRiskActionPopover'
 import { getFluentIcon } from 'pp365-shared-library'
+import { MigrateRiskActionsDialog } from './MigrateRiskActionsDialog'
+import { stringIsNullOrEmpty } from '@pnp/core'
 
 export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
   const {
@@ -28,7 +30,13 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
   } = useRiskActionPopover()
   return (
     <>
-      <Popover withArrow open={isPopoverOpen} onOpenChange={onPopoverOpenChange}>
+      <Popover
+        withArrow
+        closeOnIframeFocus
+        closeOnScroll
+        open={isPopoverOpen}
+        onOpenChange={onPopoverOpenChange}
+      >
         <PopoverTrigger disableButtonEnhancement>
           <div>{props.children}</div>
         </PopoverTrigger>
@@ -54,7 +62,7 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
             >
               {strings.NewRiskActionPanelAddNewRiskAction}
             </Button>
-            {itemContext.hiddenFieldValue?.data && (
+            {itemContext.hiddenFieldValue?.data ? (
               <Button
                 appearance='transparent'
                 icon={getFluentIcon('ArrowSync', { color: 'green' })}
@@ -63,6 +71,17 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
               >
                 {strings.NewRiskActionPanelUpdateTaskStatus}
               </Button>
+            ) : (
+              <MigrateRiskActionsDialog>
+                <Button
+                  appearance='transparent'
+                  icon={getFluentIcon('ConvertRange')}
+                  size='small'
+                  disabled={stringIsNullOrEmpty(itemContext.fieldValue)}
+                >
+                  {strings.NewRiskActionPanelMigrateRiskActions}
+                </Button>
+              </MigrateRiskActionsDialog>
             )}
           </div>
         </PopoverSurface>

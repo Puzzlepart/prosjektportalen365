@@ -23,7 +23,7 @@ export class RiskActionItemContext {
   /**
    * The value of the field associated with the risk action item.
    */
-  public fieldValue: IFieldCustomizerCellEventParameters['fieldValue']
+  public fieldValue: string
 
   /**
    * The hidden value of the field associated with the risk action item.
@@ -71,7 +71,7 @@ export class RiskActionPlannerTaskReference {
         .map((part: string) => part.split(','))
         .map<RiskActionPlannerTaskReference>(([id, title, isCompleted]) => ({
           id,
-          title,
+          title: decodeURIComponent(title),
           isCompleted
         })) ?? []
     )
@@ -85,7 +85,9 @@ export class RiskActionPlannerTaskReference {
    * @returns A string representation of the array of `RiskActionPlannerTaskReference` objects.
    */
   public static toString(value: RiskActionPlannerTaskReference[]): string {
-    return value.map((task) => `${task.id},${task.title},${task.isCompleted}`).join('|')
+    return value
+      .map((task) => `${task.id},${encodeURIComponent(task.title)},${task.isCompleted}`)
+      .join('|')
   }
 }
 

@@ -767,6 +767,7 @@ export class PortalDataService {
       const settingsList = this._getList('GLOBAL_SETTINGS')
       const spItems = await settingsList.items
         .select('Id', 'GtSettingsKey', 'GtSettingsValue')
+        .filter('GtSettingsEnabled eq 1')
         .using(
           Caching({
             store: 'local'

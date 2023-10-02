@@ -1,6 +1,13 @@
 declare interface IProjectExtensionsStrings {
+  MigrateRiskActionsDialogSeparatorOptionLinebreak: string
+  MigrateRiskActionsDialogSeparatorOptionComma: string
+  MigrateRiskActionsDialogSeparatorLabel: string
+  MigrateRiskActionsDialogProgressText: string
+  MigrateRiskActionsDialogCancel: string
+  NewRiskActionPanelMigrateRiskActions: string
+  MigrateRiskActionsDialogCreatePlannerTasks: string
+  MigrateRiskActionsDialogInfoText: string
   RiskActionPopoverLastUpdated: string
-  RiskActionFieldValueNoTasks: string
   NewRiskActionPanelUpdateTaskStatus: string
   RiskActionPopoverInfoText: string
   RiskActionPopoverInfoTextNoPlanner: string

@@ -1,5 +1,4 @@
 import { Alert } from '@fluentui/react-components/unstable'
-import strings from 'ProjectExtensionsStrings'
 import React, { FC, ReactElement } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../context'
 import { PlannerTaskLink } from './PlannerTaskLink'
@@ -31,7 +30,11 @@ export const RiskActionFieldValue: FC = () => {
     if (isFieldValueSet) {
       element = <div style={{ whiteSpace: 'pre-wrap' }}>{context.itemContext.fieldValue}</div>
     } else {
-      element = <Alert className={styles.alert}>{strings.RiskActionFieldValueNoTasks}</Alert>
+      element = (
+        <Alert className={styles.alert}>
+          {context.dataAdapter.globalSettings.get('RiskActionPlannerNoActionsText')}
+        </Alert>
+      )
     }
   }
   return <div className={styles.riskActionFieldValue}>{element}</div>

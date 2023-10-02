@@ -12,6 +12,7 @@ import {
   RiskActionHiddenFieldValues,
   RiskActionPlannerTaskReference
 } from './types'
+import _ from 'underscore'
 
 export class DataAdapter extends SPDataAdapterBase {
   private readonly graph: GraphFI
@@ -77,6 +78,23 @@ export class DataAdapter extends SPDataAdapterBase {
   }
 
   /**
+   * Adds multiple tasks to the specified Risk Action item context.
+   *
+   * @param tasks An array of strings representing the titles of the tasks to add.
+   * @param itemContext The Risk Action item context to add the tasks to.
+   *
+   * @returns A Promise that resolves with an array of the newly added tasks.
+   */
+  public async addTasks(tasks: string[], itemContext: RiskActionItemContext) {
+    const newTasks = _.flatten(
+      await Promise.all(
+        tasks.map(async (title) => this.addTask(new Map([['title', title]]), itemContext))
+      )
+    )
+    return newTasks
+  }
+
+  /**
    * Adds a task to the current group's plan.
    *
    * @param model Model for the task (Map<string, any>)
@@ -106,7 +124,17 @@ export class DataAdapter extends SPDataAdapterBase {
         bucketId
       )
       let eTag = data['@odata.etag']
-      if (assignments) await task.update({ assignments }, eTag)
+      const taskUpdate = {
+        assignments,
+        startDateTime: model.get('startDate') ?? null,
+        dueDateTime: model.get('dueDate') ?? null
+      }
+      Object.keys(taskUpdate).forEach((key) => {
+        if (taskUpdate[key] === null) delete taskUpdate[key]
+      })
+      if (Object.keys(taskUpdate).length > 0) {
+        await task.update(taskUpdate, eTag)
+      }
       const details = await task.details<any>()
       eTag = details['@odata.etag']
       await task.details.update(
@@ -173,20 +201,20 @@ export class DataAdapter extends SPDataAdapterBase {
   /**
    * Update the current item with the new task's ID and title.
    *
-   * @param newTask The new task created in Planner
+   * @param newTasks The new tasks to add to the current item
    * @param itemContext The item context for the current risk action item
    */
   public async updateItem(
-    newTask: PlannerTask,
+    newTasks: PlannerTask[],
     itemContext: RiskActionItemContext
   ): Promise<RiskActionItemContext> {
     const tasks = [
       ...(itemContext.hiddenFieldValue.tasks ?? []),
-      {
+      ...newTasks.map<RiskActionPlannerTaskReference>((newTask) => ({
         id: newTask.id,
         title: newTask.title,
-        isCompleted: newTask.percentComplete === 100 ? '1' : '0'
-      }
+        isCompleted: '0'
+      }))
     ]
     const hiddenFieldValue = RiskActionPlannerTaskReference.toString(tasks)
     const fieldValue = tasks.map((task) => task.title).join('\n')

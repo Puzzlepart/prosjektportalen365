@@ -50,7 +50,7 @@ export function useNewRiskActionPanel(props: IPanelProps) {
     const createMultiple = model.get('createMultiple') as boolean
     setIsSaving(true)
     const task = await context.dataAdapter.addTask(model, itemContext)
-    const updatedItemContext = await context.dataAdapter.updateItem(task, itemContext)
+    const updatedItemContext = await context.dataAdapter.updateItem([task], itemContext)
     setItemContext(updatedItemContext)
     setIsSaving(false)
     if (!createMultiple) {

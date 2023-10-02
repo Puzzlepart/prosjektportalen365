@@ -1,7 +1,14 @@
 define([], function () {
     return {
+        MigrateRiskActionsDialogSeparatorOptionLinebreak: 'Linjeskift',
+        MigrateRiskActionsDialogSeparatorOptionComma: 'Komma',
+        MigrateRiskActionsDialogSeparatorLabel: 'Hvordan er tiltakene adskilt?',
+        MigrateRiskActionsDialogProgressText: 'Oppretter tiltakene i Planner...',
+        MigrateRiskActionsDialogCancel: 'Lukk',
+        NewRiskActionPanelMigrateRiskActions: 'Bruk Planner',
+        MigrateRiskActionsDialogCreatePlannerTasks: 'Opprett tiltakene i Planner',
+        MigrateRiskActionsDialogInfoText: 'Du kan velge å bruke Planner for å håndtere tiltakene for denne risikoen, men du kan også fortsette med den tidligere måten å håndtere tiltakene på.',
         RiskActionPopoverLastUpdated: 'Oppgavene ble sist synkronisert fra Planner {0}.',
-        RiskActionFieldValueNoTasks: 'Det er ikke registrert noen tiltak for denne usikkerheten.',
         NewRiskActionPanelUpdateTaskStatus: 'Oppdater',
         RiskActionPopoverInfoText: 'Legg til nytt tiltak som oppgave i Planner, eller oppdater eksisterende oppgaver.',
         RiskActionPopoverInfoTextNoPlanner: 'Legg til nytt tiltak som oppgave i Planner, eller oppdater eksisterende oppgaver. Om du allerede har fyllt ut tiltak manuelt, vil disse bli erstattet med tiltakene som lagres i Planner.',
