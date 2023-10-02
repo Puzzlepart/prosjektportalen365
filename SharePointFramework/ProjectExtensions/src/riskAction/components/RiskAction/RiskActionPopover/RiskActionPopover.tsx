@@ -1,3 +1,4 @@
+import { format } from '@fluentui/react'
 import {
   Button,
   Popover,
@@ -6,24 +7,12 @@ import {
   mergeClasses
 } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
-import {
-  AddFilled,
-  AddRegular,
-  ArrowSyncFilled,
-  ArrowSyncRegular,
-  bundleIcon
-} from '@fluentui/react-icons'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC, HTMLProps } from 'react'
 import { NewRiskActionPanel } from './NewRiskActionPanel'
 import styles from './RiskActionPopover.module.scss'
 import { useRiskActionPopover } from './useRiskActionPopover'
-import { format } from '@fluentui/react'
-
-const Icons = {
-  Add: bundleIcon(AddRegular, AddFilled),
-  ArrowSync: bundleIcon(ArrowSyncRegular, ArrowSyncFilled)
-}
+import { getFluentIcon } from 'pp365-shared-library'
 
 export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
   const {
@@ -34,7 +23,8 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
     infoText,
     isPopoverOpen,
     onPopoverOpenChange,
-    lastUpdated
+    lastUpdated,
+    itemContext
   } = useRiskActionPopover()
   return (
     <>
@@ -43,26 +33,37 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
           <div>{props.children}</div>
         </PopoverTrigger>
         <PopoverSurface className={styles.riskActionPopover}>
+          <div className={styles.title}>{itemContext.title}</div>
           <Alert intent='info' className={mergeClasses(styles.alert, styles.infoText)}>
             {infoText}
           </Alert>
           {lastUpdated && (
-            <Alert className={mergeClasses(styles.alert, styles.lastUpdated)}>
+            <Alert
+              className={mergeClasses(styles.alert, styles.lastUpdated)}
+              icon={getFluentIcon('ArrowSync', { color: 'green' })}
+            >
               {format(strings.RiskActionPopoverLastUpdated, lastUpdated)}
             </Alert>
           )}
           <div className={styles.actions}>
-            <Button appearance='transparent' icon={Icons.Add({})} size='small' onClick={openPanel}>
-              {strings.NewRiskActionPanelAddNewRiskAction}
-            </Button>
             <Button
               appearance='transparent'
-              icon={Icons.ArrowSync({})}
+              icon={getFluentIcon('Add')}
               size='small'
-              onClick={updateTasks}
+              onClick={openPanel}
             >
-              {strings.NewRiskActionPanelUpdateTaskStatus}
+              {strings.NewRiskActionPanelAddNewRiskAction}
             </Button>
+            {itemContext.hiddenFieldValue?.data && (
+              <Button
+                appearance='transparent'
+                icon={getFluentIcon('ArrowSync', { color: 'green' })}
+                size='small'
+                onClick={updateTasks}
+              >
+                {strings.NewRiskActionPanelUpdateTaskStatus}
+              </Button>
+            )}
           </div>
         </PopoverSurface>
       </Popover>

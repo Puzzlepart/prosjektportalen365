@@ -13,7 +13,7 @@ import {
   RiskActionPlannerTaskReference
 } from './types'
 
-export class DataAdapter extends SPDataAdapterBase<any> {
+export class DataAdapter extends SPDataAdapterBase {
   private readonly graph: GraphFI
   private readonly list: IList
   private readonly hiddenDataFieldName: string
@@ -59,6 +59,24 @@ export class DataAdapter extends SPDataAdapterBase<any> {
   }
 
   /**
+   * Ensures that a bucket with the specified name exists in the specified plan.
+   * If the bucket already exists, returns its ID. Otherwise, creates a new bucket and returns its ID.
+   *
+   * @param planId The ID of the plan to add the bucket to.
+   *
+   * @returns The ID of the bucket.
+   */
+  private async _ensureBucket(planId: string): Promise<string> {
+    const bucketName = this.globalSettings.get('RiskActionPlannerBucketName')
+    const [bucket] = await this.graph.planner.plans
+      .getById(planId)
+      .buckets.filter(`name eq '${bucketName}'`)()
+    if (bucket) return bucket.id
+    const bucketAddResult = await this.graph.planner.buckets.add(bucketName, planId, ' !')
+    return bucketAddResult.data.id
+  }
+
+  /**
    * Adds a task to the current group's plan.
    *
    * @param model Model for the task (Map<string, any>)
@@ -80,7 +98,13 @@ export class DataAdapter extends SPDataAdapterBase<any> {
         }
       }
       const defaultPlan = await this._getDefaultGroupPlan()
-      const { task, data } = await this.graph.planner.tasks.add(defaultPlan.id, model.get('title'))
+      const bucketId = await this._ensureBucket(defaultPlan.id)
+      const { task, data } = await this.graph.planner.tasks.add(
+        defaultPlan.id,
+        model.get('title'),
+        null,
+        bucketId
+      )
       let eTag = data['@odata.etag']
       if (assignments) await task.update({ assignments }, eTag)
       const details = await task.details<any>()
@@ -112,12 +136,13 @@ export class DataAdapter extends SPDataAdapterBase<any> {
    */
   public async syncTasks(itemContext: RiskActionItemContext): Promise<RiskActionItemContext> {
     const defaultPlan = await this._getDefaultGroupPlan()
+    const bucketId = await this._ensureBucket(defaultPlan.id)
     const tasks = await this.graph.planner.tasks
-      .filter(`planId eq '${defaultPlan.id}'`)
+      .filter(`planId eq '${defaultPlan.id}' and bucketId eq '${bucketId}'`)
       .select('id', 'title', 'percentComplete')()
     const updatedTasks = itemContext.hiddenFieldValue.tasks
       .map<RiskActionPlannerTaskReference>((task) => {
-        const updatedTask = tasks.find((t) => t.id === task.id)
+        const updatedTask = tasks.find(({ id }) => id === task.id)
         if (!updatedTask) return null
         return {
           ...task,

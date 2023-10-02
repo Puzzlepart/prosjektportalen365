@@ -23,6 +23,7 @@ export const NewRiskActionPanel: FC<IPanelProps> = (props) => {
       {...props}
       isLightDismiss={true}
       headerText={format(strings.NewRiskActionPanelTitle, context.itemContext.title)}
+      isFooterAtBottom={true}
       onRenderFooterContent={() => (
         <Footer
           onSave={onSave}

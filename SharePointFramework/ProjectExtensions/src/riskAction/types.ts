@@ -30,7 +30,11 @@ export class RiskActionItemContext {
    */
   public hiddenFieldValue: RiskActionHiddenFieldValues
 
-  private constructor(event: IFieldCustomizerCellEventParameters, pageContext: PageContext, hiddenFieldValues: Map<string, any>) {
+  private constructor(
+    event: IFieldCustomizerCellEventParameters,
+    pageContext: PageContext,
+    hiddenFieldValues: Map<string, any>
+  ) {
     this.id = event.listItem.getValueByName('ID')
     this.title = event.listItem.getValueByName('Title').toString()
     this.url = `${window.location.protocol}//${window.location.host}${pageContext.list.serverRelativeUrl}/DispForm.aspx?ID=${this.id}`
@@ -38,7 +42,11 @@ export class RiskActionItemContext {
     this.hiddenFieldValue = hiddenFieldValues.get(this.id.toString())
   }
 
-  public static create(event: IFieldCustomizerCellEventParameters, pageContext: PageContext, hiddenFieldValues: Map<string, any>): RiskActionItemContext {
+  public static create(
+    event: IFieldCustomizerCellEventParameters,
+    pageContext: PageContext,
+    hiddenFieldValues: Map<string, any>
+  ): RiskActionItemContext {
     return new RiskActionItemContext(event, pageContext, hiddenFieldValues)
   }
 }
@@ -57,7 +65,7 @@ export class RiskActionPlannerTaskReference {
    */
   public static fromString(value: string): RiskActionPlannerTaskReference[] {
     return (
-      value 
+      value
         .split('|')
         .filter(Boolean)
         .map((part: string) => part.split(','))

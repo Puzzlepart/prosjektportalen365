@@ -49,6 +49,7 @@ export function useRiskActionPopover() {
     infoText,
     isPopoverOpen: popoverState.value,
     onPopoverOpenChange,
-    lastUpdated
+    lastUpdated,
+    itemContext
   }
 }
