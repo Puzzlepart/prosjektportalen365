@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react'
 import { DataAdapter } from './dataAdapter'
-import { IRiskActionFieldCustomizerItemContext } from './types'
+import { IRiskActionItemContext } from './types'
 
 export interface IRiskActionFieldCustomizerContext {
   /**
@@ -9,9 +9,9 @@ export interface IRiskActionFieldCustomizerContext {
   dataAdapter: DataAdapter
 
   /**
-   * The value of the field.
+   * The context for the risk action item.
    */
-  itemContext: IRiskActionFieldCustomizerItemContext
+  itemContext: IRiskActionItemContext
 }
 
 export const RiskActionFieldCustomizerContext =

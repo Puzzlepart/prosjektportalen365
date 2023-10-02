@@ -1,5 +1,6 @@
 define([], function () {
     return {
+        RiskActionPopoverLastUpdated: 'Oppgavene ble sist synkronisert fra Planner {0}.',
         RiskActionFieldValueNoTasks: 'Det er ikke registrert noen tiltak for denne usikkerheten.',
         NewRiskActionPanelUpdateTaskStatus: 'Oppdater',
         RiskActionPopoverInfoText: 'Legg til nytt tiltak som oppgave i Planner, eller oppdater eksisterende oppgaver.',

@@ -1,16 +1,19 @@
 import { useId } from '@fluentui/react-components'
 import { useCallback, useState } from 'react'
-import { useBoolean } from 'usehooks-ts'
 import { useRiskActionFieldCustomizerContext } from '../../../../context'
+import { useRiskActionContext } from '../../context'
+import { IPanelProps } from '@fluentui/react'
 
 /**
  * A custom React hook that provides state and functions for the NewRiskActionPanel component.
  *
+ * @param props - The props for the NewRiskActionPanel component.
+ *
  * @returns An object containing the model, setModel function, onSave function, isSaving boolean, and fluentProviderId string.
  */
-export function useNewRiskActionPanel() {
+export function useNewRiskActionPanel(props: IPanelProps) {
   const context = useRiskActionFieldCustomizerContext()
-  const panelState = useBoolean(false)
+  const { itemContext, setItemContext } = useRiskActionContext()
   const [isSaving, setIsSaving] = useState(false)
   const [model, $setModel] = useState(new Map<string, any>())
 
@@ -31,18 +34,30 @@ export function useNewRiskActionPanel() {
     [context.itemContext, model]
   )
 
+  const resetModel = useCallback(() => {
+    $setModel(new Map<string, any>())
+  }, [])
+
   /**
-   * Saves the new risk action to the data adapter and updates the item.
+   * Saves the new risk action to the data adapter and updates the item. If the
+   * `createMultiple` property is set to `true`, the panel will remain open. Otherwise,
+   * the panel will close after the save operation is complete and the model
+   * will be reset.
    *
    * @returns A Promise that resolves when the save operation is complete.
    */
   const onSave = useCallback(async (): Promise<void> => {
+    const createMultiple = model.get('createMultiple') as boolean
     setIsSaving(true)
-    const task = await context.dataAdapter.addTask(model, context)
-    await context.dataAdapter.updateItem(task, context)
-    panelState.setFalse()
+    const task = await context.dataAdapter.addTask(model, itemContext)
+    const updatedItemContext = await context.dataAdapter.updateItem(task, itemContext)
+    setItemContext(updatedItemContext)
     setIsSaving(false)
-  }, [context.itemContext, model])
+    if (!createMultiple) {
+      resetModel()
+      props.onDismiss()
+    }
+  }, [itemContext, model])
 
   const fluentProviderId = useId('risk-action-panel-fluent-provider')
 

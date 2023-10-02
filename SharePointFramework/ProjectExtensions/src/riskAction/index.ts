@@ -4,45 +4,49 @@ import {
   BaseFieldCustomizer,
   IFieldCustomizerCellEventParameters
 } from '@microsoft/sp-listview-extensibility'
-import { ReactElement, createElement } from 'react'
+import { createElement } from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import { RiskAction } from './components/RiskAction'
-import { IRiskActionProps } from './components/RiskAction/types'
-import { DataAdapter } from './dataAdapter'
-import {
-  IRiskActionFieldCustomizerItemContext,
-  IRiskActionFieldCustomizerProperties
-} from './types'
 import { RiskActionFieldCustomizerContext } from './context'
+import { DataAdapter } from './dataAdapter'
+import { IRiskActionItemContext } from './types'
 
-export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<IRiskActionFieldCustomizerProperties> {
+export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<{}> {
   protected _dataAdapter: DataAdapter
-  protected _hiddenFieldValues: Map<string, any>
+  protected _hiddenFieldValues: Map<string, any> = new Map<string, any>()
 
   public async onInit(): Promise<void> {
     await super.onInit()
     this._dataAdapter = new DataAdapter(this.context)
-    await this._dataAdapter.ensureHiddenFields()
-    this._hiddenFieldValues = await this._dataAdapter.getHiddenFieldValues()
+    await this._dataAdapter.configure(this.context, {})
+    const globalSettings = await this._dataAdapter.portal.getGlobalSettings()
+    if (globalSettings.get('RiskActionPlanner') === '1') {
+      await this._dataAdapter.ensureHiddenFields()
+      this._hiddenFieldValues = await this._dataAdapter.getHiddenFieldValues()
+    }
   }
 
+  /**
+   * Renders the custom field cell for a risk action item.
+   *
+   * @param event - The event parameters for rendering the cell.
+   *
+   * @returns void
+   */
   public onRenderCell(event: IFieldCustomizerCellEventParameters): void {
-    const hiddenFieldValue = this._hiddenFieldValues.get(
-      event.listItem.getValueByName('ID').toString()
-    )
-    const currentItemContext: IRiskActionFieldCustomizerItemContext = {
-      id: event.listItem.getValueByName('ID'),
+    if (!this._hiddenFieldValues) return
+    const itemId = event.listItem.getValueByName('ID').toString()
+    const hiddenFieldValue = this._hiddenFieldValues.get(itemId)
+    const currentItemContext: IRiskActionItemContext = {
+      ...event,
+      id: itemId,
       title: event.listItem.getValueByName('Title'),
-      url: `${window.location.protocol}//${window.location.host}${
-        this.context.pageContext.list.serverRelativeUrl
-      }/DispForm.aspx?ID=${event.listItem.getValueByName('ID')}`,
-      fieldValue: event.fieldValue,
+      url: `${window.location.protocol}//${window.location.host}${this.context.pageContext.list.serverRelativeUrl
+        }/DispForm.aspx?ID=${itemId}`,
       hiddenFieldValue
     }
 
-    const riskAction: ReactElement<IRiskActionProps> = createElement(RiskAction, {
-      ...this.properties
-    })
+    const riskAction = createElement(RiskAction)
 
     const element = createElement(
       RiskActionFieldCustomizerContext.Provider,

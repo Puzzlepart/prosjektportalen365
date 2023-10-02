@@ -1,5 +1,12 @@
 import { IPanelProps, Panel, format } from '@fluentui/react'
-import { Field, FluentProvider, Input, Textarea, webLightTheme } from '@fluentui/react-components'
+import {
+  Field,
+  FluentProvider,
+  Input,
+  Switch,
+  Textarea,
+  webLightTheme
+} from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../../context'
@@ -10,7 +17,7 @@ import { useNewRiskActionPanel } from './useNewRiskActionPanel'
 
 export const NewRiskActionPanel: FC<IPanelProps> = (props) => {
   const context = useRiskActionFieldCustomizerContext()
-  const { model, setModel, onSave, isSaving, fluentProviderId } = useNewRiskActionPanel()
+  const { model, setModel, onSave, isSaving, fluentProviderId } = useNewRiskActionPanel(props)
   return (
     <Panel
       {...props}
@@ -43,6 +50,12 @@ export const NewRiskActionPanel: FC<IPanelProps> = (props) => {
           <Input type='date' onChange={(_ev, { value }) => setModel('dueDate', value)} />
         </Field>
         <ResponsibleField onChange={(value) => setModel('responsible', value)} />
+        <Field label='Opprett flere'>
+          <Switch
+            checked={model.get('createMultiple')}
+            onChange={(_ev, { checked }) => setModel('createMultiple', checked)}
+          />
+        </Field>
       </FluentProvider>
     </Panel>
   )

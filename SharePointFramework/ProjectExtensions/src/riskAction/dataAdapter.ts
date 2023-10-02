@@ -7,8 +7,11 @@ import { SPFx as spSPFx, spfi } from '@pnp/sp'
 import '@pnp/sp/presets/all'
 import { IList } from '@pnp/sp/presets/all'
 import { SPDataAdapterBase } from 'pp365-shared-library'
-import { IRiskActionFieldCustomizerContext } from './context'
-import { RiskActionHiddenFieldValues, RiskActionPlannerTaskReference } from './types'
+import {
+  IRiskActionItemContext,
+  RiskActionHiddenFieldValues,
+  RiskActionPlannerTaskReference
+} from './types'
 
 export class DataAdapter extends SPDataAdapterBase<any> {
   private readonly graph: GraphFI
@@ -16,14 +19,13 @@ export class DataAdapter extends SPDataAdapterBase<any> {
   private readonly hiddenDataFieldName: string
   private readonly hiddenUpdateFieldName: string
 
-  constructor(private readonly context: FieldCustomizerContext) {
+  constructor(private readonly _context: FieldCustomizerContext) {
     super()
-    this.graph = graphfi().using(graphSPFx(this.context))
-    this.sp = spfi().using(spSPFx(this.context))
-    this.list = this.sp.web.lists.getById(this.context.pageContext.list.id.toString())
+    this.graph = graphfi().using(graphSPFx(this._context))
+    this.sp = spfi().using(spSPFx(this._context))
+    this.list = this.sp.web.lists.getById(this._context.pageContext.list.id.toString())
     this.hiddenDataFieldName = 'RiskActionData'
     this.hiddenUpdateFieldName = 'RiskActionUpdated'
-    this.configure(context, {})
   }
 
   /**
@@ -51,7 +53,7 @@ export class DataAdapter extends SPDataAdapterBase<any> {
    * @returns A Promise that resolves to the default plan for the current group.
    */
   private async _getDefaultGroupPlan() {
-    const group = this.graph.groups.getById(this.context.pageContext.legacyPageContext.groupId)
+    const group = this.graph.groups.getById(this._context.pageContext.legacyPageContext.groupId)
     const [plan] = await group.plans()
     return plan
   }
@@ -60,11 +62,11 @@ export class DataAdapter extends SPDataAdapterBase<any> {
    * Adds a task to the current group's plan.
    *
    * @param model Model for the task (Map<string, any>)
-   * @param context Context for the `RiskAction` component
+   * @param itemContext Item context for the current risk action item
    */
   public async addTask(
     model: Map<string, any>,
-    context: IRiskActionFieldCustomizerContext
+    itemContext: IRiskActionItemContext
   ): Promise<PlannerTask> {
     try {
       let assignments = null
@@ -87,9 +89,9 @@ export class DataAdapter extends SPDataAdapterBase<any> {
         {
           description: model.get('description') ?? '',
           references: {
-            [this.encodeUrl(context.itemContext.url)]: {
+            [this.encodeUrl(itemContext.url)]: {
               '@odata.type': 'microsoft.graph.plannerExternalReference',
-              alias: context.itemContext.title
+              alias: itemContext.title
             }
           }
         },
@@ -104,55 +106,79 @@ export class DataAdapter extends SPDataAdapterBase<any> {
   /**
    * Synchronizes the tasks associated with a risk action item with the corresponding tasks in Planner.
    *
-   * @param context - The context object for the field customizer.
+   * @param itemContext - The item context for the current risk action item.
    *
    * @returns A Promise that resolves when the synchronization is complete.
    */
-  public async syncTasks(context: IRiskActionFieldCustomizerContext): Promise<void> {
+  public async syncTasks(itemContext: IRiskActionItemContext): Promise<IRiskActionItemContext> {
     const defaultPlan = await this._getDefaultGroupPlan()
     const tasks = await this.graph.planner.tasks
       .filter(`planId eq '${defaultPlan.id}'`)
       .select('id', 'title', 'percentComplete')()
-    const updatedTasks = context.itemContext.hiddenFieldValue.tasks
+    const updatedTasks = itemContext.hiddenFieldValue.tasks
       .map<RiskActionPlannerTaskReference>((task) => {
         const updatedTask = tasks.find((t) => t.id === task.id)
         if (!updatedTask) return null
         return {
           ...task,
           title: updatedTask.title,
-          percentComplete: updatedTask.percentComplete
+          isCompleted: updatedTask.percentComplete === 100 ? '1' : '0'
         }
       })
       .filter(Boolean)
-    const listItem = this.list.items.getById(context.itemContext.id)
-    listItem.update({
-      GtRiskAction: updatedTasks.map((task) => task.title).join(', '),
-      [this.hiddenDataFieldName]: this._convertFromPlannerTaskReferenceToString(updatedTasks),
+    const listItem = this.list.items.getById(itemContext.id)
+    const fieldValue = updatedTasks.map((task) => task.title).join('\n')
+    const hiddenFieldValueData = RiskActionPlannerTaskReference.toString(updatedTasks)
+    await listItem.update({
+      GtRiskAction: fieldValue,
+      [this.hiddenDataFieldName]: hiddenFieldValueData,
       [this.hiddenUpdateFieldName]: new Date()
     })
+    return {
+      ...itemContext,
+      fieldValue,
+      hiddenFieldValue: {
+        data: hiddenFieldValueData,
+        tasks: updatedTasks,
+        updated: new Date()
+      }
+    }
   }
 
   /**
    * Update the current item with the new task's ID and title.
    *
    * @param newTask The new task created in Planner
-   * @param context Context for the `RiskAction` component
+   * @param itemContext The item context for the current risk action item
    */
   public async updateItem(
     newTask: PlannerTask,
-    context: IRiskActionFieldCustomizerContext
-  ): Promise<void> {
-    const hiddenFieldValueParts = [
-      ...(context.itemContext.hiddenFieldValue?.data ?? '').split('|').filter(Boolean),
-      `${newTask.id},${newTask.title}}`
+    itemContext: IRiskActionItemContext
+  ): Promise<IRiskActionItemContext> {
+    const tasks = [
+      ...(itemContext.hiddenFieldValue.tasks ?? []),
+      {
+        id: newTask.id,
+        title: newTask.title,
+        isCompleted: newTask.percentComplete === 100 ? '1' : '0'
+      }
     ]
-    const newHiddenFieldValue = hiddenFieldValueParts.join('|')
-    const newFieldValue = hiddenFieldValueParts.map((part) => part.split(',')[1]).join(', ')
-    const listItem = this.list.items.getById(context.itemContext.id)
+    const hiddenFieldValue = RiskActionPlannerTaskReference.toString(tasks)
+    const fieldValue = tasks.map((task) => task.title).join('\n')
+    const listItem = this.list.items.getById(itemContext.id)
     await listItem.update({
-      GtRiskAction: newFieldValue,
-      [this.hiddenDataFieldName]: newHiddenFieldValue
+      GtRiskAction: fieldValue,
+      [this.hiddenDataFieldName]: hiddenFieldValue
     })
+    return {
+      ...itemContext,
+      fieldValue,
+      hiddenFieldValue: {
+        ...itemContext.hiddenFieldValue,
+        data: hiddenFieldValue,
+        tasks
+      }
+    }
   }
 
   /**
@@ -181,40 +207,6 @@ export class DataAdapter extends SPDataAdapterBase<any> {
   }
 
   /**
-   * Converts a string representation of planner task references to an array of `RiskActionPlannerTaskReference` objects.
-   *
-   * @param data - The string representation of planner task references.
-   *
-   * @returns An array of `RiskActionPlannerTaskReference` objects.
-   */
-  private _convertFromStringToPlannerTaskReference(data: string): RiskActionPlannerTaskReference[] {
-    return (
-      data
-        .split('|')
-        .filter(Boolean)
-        .map((part: string) => part.split(','))
-        .map<RiskActionPlannerTaskReference>(([id, title, percentComplete]) => ({
-          id,
-          title,
-          percentComplete
-        })) ?? []
-    )
-  }
-
-  /**
-   * Converts an array of `RiskActionPlannerTaskReference` objects to a string representation.
-   *
-   * @param tasks An array of `RiskActionPlannerTaskReference` objects.
-   *
-   * @returns A string representation of the tasks, where each task is represented as "id,title,status" and separated by a pipe character.
-   */
-  private _convertFromPlannerTaskReferenceToString(
-    tasks: RiskActionPlannerTaskReference[]
-  ): string {
-    return tasks.map((task) => `${task.id},${task.title},${task.percentComplete}`).join('|')
-  }
-
-  /**
    * Gets the hidden field values for the current list.
    */
   public async getHiddenFieldValues(): Promise<Map<string, RiskActionHiddenFieldValues>> {
@@ -226,7 +218,7 @@ export class DataAdapter extends SPDataAdapterBase<any> {
       )()
       return hiddenFieldValues.reduce((acc, item) => {
         const data = item[this.hiddenDataFieldName] ?? ''
-        const tasks = this._convertFromStringToPlannerTaskReference(data)
+        const tasks = RiskActionPlannerTaskReference.fromString(data)
         acc.set(item.Id.toString(), {
           data,
           tasks,

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { stringIsNullOrEmpty } from '@pnp/core'
-import { useContext } from 'react'
-import { useBoolean } from 'usehooks-ts'
-import { RiskActionFieldCustomizerContext } from '../../../context'
-import strings from 'ProjectExtensionsStrings'
 import { PopoverProps } from '@fluentui/react-components'
+import { stringIsNullOrEmpty } from '@pnp/core'
+import strings from 'ProjectExtensionsStrings'
+import { useBoolean } from 'usehooks-ts'
+import { useRiskActionFieldCustomizerContext } from '../../../context'
+import { useRiskActionContext } from '../context'
 
 /**
  * Custom hook for the `RiskActionPopover` component.
@@ -12,7 +12,8 @@ import { PopoverProps } from '@fluentui/react-components'
  * @returns An object containing the title, description, onSave function, and tooltipContent for the component.
  */
 export function useRiskActionPopover() {
-  const context = useContext(RiskActionFieldCustomizerContext)
+  const context = useRiskActionFieldCustomizerContext()
+  const { itemContext, setItemContext } = useRiskActionContext()
   const panelState = useBoolean(false)
   const popoverState = useBoolean(false)
 
@@ -25,9 +26,10 @@ export function useRiskActionPopover() {
     panelState.setTrue()
   }
 
-  const updateTasks = () => {
-    context.dataAdapter.syncTasks(context)
+  const updateTasks = async () => {
+    const updatedItemContext = await context.dataAdapter.syncTasks(itemContext)
     popoverState.setFalse()
+    setItemContext(updatedItemContext)
   }
 
   let infoText = strings.RiskActionPopoverInfoText
@@ -36,8 +38,8 @@ export function useRiskActionPopover() {
   }
 
   const lastUpdated =
-    context.itemContext.hiddenFieldValue?.updated &&
-    new Date(context.itemContext.hiddenFieldValue.updated).toLocaleString()
+    itemContext.hiddenFieldValue?.updated &&
+    new Date(itemContext.hiddenFieldValue.updated).toLocaleString()
 
   return {
     updateTasks,

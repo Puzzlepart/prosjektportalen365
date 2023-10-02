@@ -1,5 +1,5 @@
 .riskActionPopover {
-    max-width: 300px;
+    max-width: 340px;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -10,11 +10,11 @@
 
     .infoText {
         padding: 8px;
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .lastUpdated {
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .actions {

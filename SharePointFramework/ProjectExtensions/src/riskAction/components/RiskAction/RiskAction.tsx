@@ -1,12 +1,13 @@
-import { FluentProvider, useId, webLightTheme } from '@fluentui/react-components'
+import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 import React, { FC } from 'react'
 import styles from './RiskAction.module.scss'
 import { RiskActionFieldValue } from './RiskActionFieldValue'
 import { RiskActionPopover } from './RiskActionPopover'
-import { IRiskActionProps } from './types'
+import { RiskActionContext } from './context'
+import { useRiskAction } from './useRiskAction'
 
-export const RiskAction: FC<IRiskActionProps> = (props) => {
-  const fluentProviderId = useId('risk-action-fluent-provider')
+export const RiskAction: FC = () => {
+  const { fluentProviderId, context } = useRiskAction()
   return (
     <FluentProvider
       id={fluentProviderId}
@@ -14,9 +15,11 @@ export const RiskAction: FC<IRiskActionProps> = (props) => {
       className={styles.root}
       style={{ background: 'transparent' }}
     >
-      <RiskActionPopover>
-        <RiskActionFieldValue {...props} />
-      </RiskActionPopover>
+      <RiskActionContext.Provider value={context}>
+        <RiskActionPopover>
+          <RiskActionFieldValue />
+        </RiskActionPopover>
+      </RiskActionContext.Provider>
     </FluentProvider>
   )
 }
