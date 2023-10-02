@@ -21,6 +21,7 @@ import {
 import styles from './EditPropertiesPanel.module.scss'
 import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
 import { DatePicker, DayOfWeek } from '@fluentui/react-datepicker-compat'
+
 /**
  * Hook for field elements of `EditPropertiesPanel` component. This hook is used to render field elements
  * based on field type. Supported field types are:
@@ -119,6 +120,7 @@ export function useFieldElements(model: UseModelReturnType) {
         hint={field.description}
       >
         <DatePicker
+          // TODO: Fix FluentProvider bug with DatePicker
           value={model.get(field)}
           onSelectDate={(date) => model.set(field, date)}
           formatDate={(date) => date.toLocaleDateString()}
