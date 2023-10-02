@@ -8,7 +8,7 @@ import {
   MenuPopover,
   MenuTrigger
 } from '@fluentui/react-components'
-import { FluentIconName, getFluentIcon } from 'icons'
+import { FluentIconName, getFluentIcon } from 'pp365-shared-library/lib/icons'
 import React from 'react'
 
 /**

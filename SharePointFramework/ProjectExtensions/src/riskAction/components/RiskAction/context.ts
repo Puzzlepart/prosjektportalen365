@@ -1,9 +1,9 @@
 import React, { Dispatch, createContext, useContext } from 'react'
-import { IRiskActionItemContext } from '../../types'
+import { RiskActionItemContext } from '../../types'
 
 interface IRiskActionContext {
-  itemContext: IRiskActionItemContext
-  setItemContext: Dispatch<React.SetStateAction<IRiskActionItemContext>>
+  itemContext: RiskActionItemContext
+  setItemContext: Dispatch<React.SetStateAction<RiskActionItemContext>>
 }
 
 export const RiskActionContext = createContext<IRiskActionContext>(null)

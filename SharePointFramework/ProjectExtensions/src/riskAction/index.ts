@@ -9,7 +9,7 @@ import { render, unmountComponentAtNode } from 'react-dom'
 import { RiskAction } from './components/RiskAction'
 import { RiskActionFieldCustomizerContext } from './context'
 import { DataAdapter } from './dataAdapter'
-import { IRiskActionItemContext } from './types'
+import { RiskActionItemContext } from './types'
 
 export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<null> {
   protected _dataAdapter: DataAdapter
@@ -34,19 +34,8 @@ export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<null>
    * @returns void
    */
   public onRenderCell(event: IFieldCustomizerCellEventParameters): void {
-    if (!this._hiddenFieldValues) return
-    const itemId = event.listItem.getValueByName('ID').toString()
-    const hiddenFieldValue = this._hiddenFieldValues.get(itemId)
-    const currentItemContext: IRiskActionItemContext = {
-      ...event,
-      id: itemId,
-      title: event.listItem.getValueByName('Title'),
-      url: `${window.location.protocol}//${window.location.host}${this.context.pageContext.list.serverRelativeUrl}/DispForm.aspx?ID=${itemId}`,
-      hiddenFieldValue
-    }
-
+    const currentItemContext = RiskActionItemContext.create(event, this.context.pageContext, this._hiddenFieldValues)
     const riskAction = createElement(RiskAction)
-
     const element = createElement(
       RiskActionFieldCustomizerContext.Provider,
       {
@@ -57,7 +46,6 @@ export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<null>
       },
       riskAction
     )
-
     render(element, event.domElement)
   }
 

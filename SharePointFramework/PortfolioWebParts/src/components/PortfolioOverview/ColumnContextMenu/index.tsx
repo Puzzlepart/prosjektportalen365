@@ -1,7 +1,7 @@
 import { Menu, MenuList, MenuPopover } from '@fluentui/react-components'
-import { renderMenuItem } from 'components/List/ColumnContextMenu/renderMenuItem'
 import React, { FC } from 'react'
 import { useColumnContextMenu } from './useColumnContextMenu'
+import { renderMenuItem } from '../../../components/List'
 
 export const ColumnContextMenu: FC = () => {
   const { target, items, open, onOpenChange, checkedValues, onCheckedValueChange } =

@@ -1,28 +1,46 @@
 import { IFieldCustomizerCellEventParameters } from '@microsoft/sp-listview-extensibility'
+import { PageContext } from '@microsoft/sp-page-context'
 
 /**
  * Represents the context object passed to the field customizer for a risk action item.
  */
-export interface IRiskActionItemContext extends IFieldCustomizerCellEventParameters {
+export class RiskActionItemContext {
   /**
    * The ID of the risk action item.
    */
-  id: number
+  public id: number
 
   /**
    * The title of the risk action item.
    */
-  title: string
+  public title: string
 
   /**
    * The URL of the risk action item.
    */
-  url: string
+  public url: string
+
+  /**
+   * The value of the field associated with the risk action item.
+   */
+  public fieldValue: IFieldCustomizerCellEventParameters['fieldValue']
 
   /**
    * The hidden value of the field associated with the risk action item.
    */
-  hiddenFieldValue: RiskActionHiddenFieldValues
+  public hiddenFieldValue: RiskActionHiddenFieldValues
+
+  private constructor(event: IFieldCustomizerCellEventParameters, pageContext: PageContext, hiddenFieldValues: Map<string, any>) {
+    this.id = event.listItem.getValueByName('ID')
+    this.title = event.listItem.getValueByName('Title').toString()
+    this.url = `${window.location.protocol}//${window.location.host}${pageContext.list.serverRelativeUrl}/DispForm.aspx?ID=${this.id}`
+    this.fieldValue = event.fieldValue
+    this.hiddenFieldValue = hiddenFieldValues.get(this.id.toString())
+  }
+
+  public static create(event: IFieldCustomizerCellEventParameters, pageContext: PageContext, hiddenFieldValues: Map<string, any>): RiskActionItemContext {
+    return new RiskActionItemContext(event, pageContext, hiddenFieldValues)
+  }
 }
 
 export class RiskActionPlannerTaskReference {
@@ -39,7 +57,7 @@ export class RiskActionPlannerTaskReference {
    */
   public static fromString(value: string): RiskActionPlannerTaskReference[] {
     return (
-      value
+      value 
         .split('|')
         .filter(Boolean)
         .map((part: string) => part.split(','))

@@ -29,7 +29,7 @@ export const RiskActionFieldValue: FC = () => {
     )
   } else {
     if (isFieldValueSet) {
-      element = <span>{context.itemContext.fieldValue}</span>
+      element = <div style={{ whiteSpace: 'pre-wrap' }}>{context.itemContext.fieldValue}</div>
     } else {
       element = <Alert className={styles.alert}>{strings.RiskActionFieldValueNoTasks}</Alert>
     }

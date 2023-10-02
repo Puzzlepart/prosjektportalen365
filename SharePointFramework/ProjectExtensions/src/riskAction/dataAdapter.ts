@@ -8,7 +8,7 @@ import '@pnp/sp/presets/all'
 import { IList } from '@pnp/sp/presets/all'
 import { SPDataAdapterBase } from 'pp365-shared-library'
 import {
-  IRiskActionItemContext,
+  RiskActionItemContext,
   RiskActionHiddenFieldValues,
   RiskActionPlannerTaskReference
 } from './types'
@@ -66,7 +66,7 @@ export class DataAdapter extends SPDataAdapterBase<any> {
    */
   public async addTask(
     model: Map<string, any>,
-    itemContext: IRiskActionItemContext
+    itemContext: RiskActionItemContext
   ): Promise<PlannerTask> {
     try {
       let assignments = null
@@ -110,7 +110,7 @@ export class DataAdapter extends SPDataAdapterBase<any> {
    *
    * @returns A Promise that resolves when the synchronization is complete.
    */
-  public async syncTasks(itemContext: IRiskActionItemContext): Promise<IRiskActionItemContext> {
+  public async syncTasks(itemContext: RiskActionItemContext): Promise<RiskActionItemContext> {
     const defaultPlan = await this._getDefaultGroupPlan()
     const tasks = await this.graph.planner.tasks
       .filter(`planId eq '${defaultPlan.id}'`)
@@ -153,8 +153,8 @@ export class DataAdapter extends SPDataAdapterBase<any> {
    */
   public async updateItem(
     newTask: PlannerTask,
-    itemContext: IRiskActionItemContext
-  ): Promise<IRiskActionItemContext> {
+    itemContext: RiskActionItemContext
+  ): Promise<RiskActionItemContext> {
     const tasks = [
       ...(itemContext.hiddenFieldValue.tasks ?? []),
       {
