@@ -1495,6 +1495,15 @@
   <data name="SiteFields_GtValue_DisplayName" xml:space="preserve">
     <value>Value</value>
   </data>
+  <data name="SiteFields_GtSettingsEnabled_DisplayName" xml:space="preserve">
+    <value>Aktivert</value>
+  </data>
+  <data name="SiteFields_GtSettingsKey_DisplayName" xml:space="preserve">
+    <value>Nøkkel</value>
+  </data>
+  <data name="SiteFields_GtSettingsValue_DisplayName" xml:space="preserve">
+    <value>Verdi</value>
+  </data>
   <data name="SiteFields_GtValue_Description" xml:space="preserve">
     <value>Oppgi verdien for feltet</value>
   </data>

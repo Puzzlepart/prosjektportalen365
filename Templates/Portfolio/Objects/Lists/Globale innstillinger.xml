@@ -1,0 +1,24 @@
+<pnp:ListInstance Title="Globale innstillinger" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Globale innstillinger" EnableVersioning="true" Hidden="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" EnableFolderCreation="false"
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+    <pnp:Views>
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Globale innstillinger/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+            <Query />
+            <ViewFields>
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtSettingsKey" />
+                <FieldRef Name="GtSettingsValue" />
+                <FieldRef Name="GtSettingsEnabled" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">30</RowLimit>
+            <JSLink>clienttemplates.js</JSLink>
+        </View>
+    </pnp:Views>
+    <pnp:FieldRefs>
+        <pnp:FieldRef ID="a53cbdcc-210a-45d1-8fb2-c31498328f33" Name="GtSettingsKey" DisplayName="{resource:SiteFields_GtSettingsKey_DisplayName}" />
+        <pnp:FieldRef ID="b658a702-fd9d-4f75-b8f1-fe7fbdb91af4" Name="GtSettingsValue" DisplayName="{resource:SiteFields_GtSettingsValue_DisplayName}" />
+        <pnp:FieldRef ID="46bf2f85-9030-459e-b0bf-fee3f9389101" Name="GtSettingsEnabled" DisplayName="{resource:SiteFields_GtSettingsEnabled_DisplayName}" />
+    </pnp:FieldRefs>
+    <pnp:Webhooks>
+        <pnp:Webhook ServerNotificationUrl="https://northeurope1-0.pushnp.svc.ms/notifications?token=5507e3fc-9a4e-4217-b7be-b4e034d94ec6" ExpiresInDays="1" />
+    </pnp:Webhooks>
+</pnp:ListInstance>
