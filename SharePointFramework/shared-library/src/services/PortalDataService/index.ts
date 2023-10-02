@@ -318,9 +318,9 @@ export class PortalDataService {
     const urls = await this._getList(list)
       .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
       .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')<{
-        DefaultNewFormUrl: string
-        DefaultEditFormUrl: string
-      }>()
+      DefaultNewFormUrl: string
+      DefaultEditFormUrl: string
+    }>()
     return {
       defaultNewFormUrl: makeUrlAbsolute(urls.DefaultNewFormUrl),
       defaultEditFormUrl: makeUrlAbsolute(urls.DefaultEditFormUrl)
@@ -411,7 +411,7 @@ export class PortalDataService {
           fieldsAdded.push(field)
         }
         await executeQuery(jsomContext)
-      } catch (error) { }
+      } catch (error) {}
     }
     try {
       const templateParametersField = spList
@@ -423,7 +423,7 @@ export class PortalDataService {
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch { }
+    } catch {}
     if (ensureList.created && params.properties) {
       ensureList.list.items.add(params.properties)
     }
@@ -765,11 +765,13 @@ export class PortalDataService {
     const intialMap = new Map<string, string>()
     try {
       const settingsList = this._getList('GLOBAL_SETTINGS')
-      const spItems = await settingsList.items.select('Id', 'GtSettingsKey', 'GtSettingsValue').using(
-        Caching({
-          store: 'local'
-        })
-      )()
+      const spItems = await settingsList.items
+        .select('Id', 'GtSettingsKey', 'GtSettingsValue')
+        .using(
+          Caching({
+            store: 'local'
+          })
+        )()
       return spItems.reduce((acc, cur) => {
         acc.set(cur.GtSettingsKey, cur.GtSettingsValue)
         return acc

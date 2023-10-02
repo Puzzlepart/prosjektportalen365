@@ -11,7 +11,7 @@ import { RiskActionFieldCustomizerContext } from './context'
 import { DataAdapter } from './dataAdapter'
 import { IRiskActionItemContext } from './types'
 
-export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<{}> {
+export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<null> {
   protected _dataAdapter: DataAdapter
   protected _hiddenFieldValues: Map<string, any> = new Map<string, any>()
 
@@ -41,8 +41,7 @@ export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<{}> {
       ...event,
       id: itemId,
       title: event.listItem.getValueByName('Title'),
-      url: `${window.location.protocol}//${window.location.host}${this.context.pageContext.list.serverRelativeUrl
-        }/DispForm.aspx?ID=${itemId}`,
+      url: `${window.location.protocol}//${window.location.host}${this.context.pageContext.list.serverRelativeUrl}/DispForm.aspx?ID=${itemId}`,
       hiddenFieldValue
     }
 

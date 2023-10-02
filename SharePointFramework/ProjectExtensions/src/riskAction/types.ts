@@ -1,4 +1,4 @@
-import { IFieldCustomizerCellEventParameters } from "@microsoft/sp-listview-extensibility"
+import { IFieldCustomizerCellEventParameters } from '@microsoft/sp-listview-extensibility'
 
 /**
  * Represents the context object passed to the field customizer for a risk action item.

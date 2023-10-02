@@ -18,6 +18,20 @@
         <pnp:FieldRef ID="b658a702-fd9d-4f75-b8f1-fe7fbdb91af4" Name="GtSettingsValue" DisplayName="{resource:SiteFields_GtSettingsValue_DisplayName}" />
         <pnp:FieldRef ID="46bf2f85-9030-459e-b0bf-fee3f9389101" Name="GtSettingsEnabled" DisplayName="{resource:SiteFields_GtSettingsEnabled_DisplayName}" />
     </pnp:FieldRefs>
+    <pnp:DataRows UpdateBehavior="Skip" KeyColumn="GtSettingsKey">
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Bruk Planner for å håndtere tiltak i Usikkerhetslisten</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerEnabled</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Navn på mappen i Planner for tiltak for Usikkerhetslisten</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerBucketName</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsValue">Tiltak</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+        </pnp:DataRow>
+    </pnp:DataRows>
     <pnp:Webhooks>
         <pnp:Webhook ServerNotificationUrl="https://northeurope1-0.pushnp.svc.ms/notifications?token=5507e3fc-9a4e-4217-b7be-b4e034d94ec6" ExpiresInDays="1" />
     </pnp:Webhooks>

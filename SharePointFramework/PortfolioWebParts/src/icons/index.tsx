@@ -103,12 +103,7 @@ export type FluentIconName = keyof typeof iconCatalog
  *
  * @returns The specified Fluent icon.
  */
-export function getFluentIcon(
-  name: FluentIconName,
-  bundle = true,
-  color?: string,
-  size?: number
-) {
+export function getFluentIcon(name: FluentIconName, bundle = true, color?: string, size?: number) {
   if (!iconCatalog[name]) return null
   const icon = iconCatalog[name]
   const Icon = bundle ? bundleIcon(icon.filled, icon.regular) : icon.regular
@@ -145,11 +140,7 @@ export function getFluentIcons() {
  *
  * @returns A Fluent UI icon component or a default icon component if the requested icon is not found.
  */
-export function getFluentIconWithFallback(
-  name: string,
-  bundleWithFilled = true,
-  color?: string
-) {
+export function getFluentIconWithFallback(name: string, bundleWithFilled = true, color?: string) {
   if (iconCatalog[name]) {
     return getFluentIcon(name as FluentIconName, bundleWithFilled, color)
   }
