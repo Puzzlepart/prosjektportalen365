@@ -43,7 +43,8 @@
     "@fluentui/react-icons": "2.0.215",
     "sp-js-provisioning": "~1.2.1",
     "@fluentui/react-tags-preview": "0.2.9",
-    "@fluentui/react-search-preview": "0.1.16"
+    "@fluentui/react-search-preview": "0.1.16",
+    "@fluentui/react-portal-compat": "~9.0.95"
   },
   "devDependencies": {
     "@microsoft/rush-stack-compiler-4.5": "0.2.2",
