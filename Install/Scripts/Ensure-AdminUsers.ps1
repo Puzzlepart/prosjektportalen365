@@ -3,23 +3,20 @@ param (
     [Parameter( Mandatory = $true, Position = 0 )]
     [string]
     $PortfolioUrl,
-    [Parameter( Mandatory = $true, Position = 1 )]
-    [string]
-    $TenantAdminUrl,
-    [Parameter( Mandatory = $true, Position = 2 )]
-    [string]
-    $CurrentUser,
-    [Parameter( Mandatory = $false, Position = 3 )]
+    [Parameter( Mandatory = $false, Position = 1 )]
     [switch]
     $GrantPermissions,
+    [Parameter( Mandatory = $false, Position = 2 )]
     [switch]
     $GrantPermissionsAndDelete
 )
 
 $PortfolioAdminGroupName = "Porteføljeadministratorer"
+$PortfolioUri = [System.Uri]$PortfolioUrl
+$TenantAdminUrl = (@($PortfolioUri.Scheme, "://", $PortfolioUri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
 
 function GetPortfolioadminUsers($HubUrl){
-    Write-Host "Looking for portfolio admin users in: $HubUrl" -ForegroundColor Green
+    Write-Host "Looking for portfolio admin users in: $HubUrl (using TenantAdminUrl: $TenantAdminUrl)" -ForegroundColor Green
     Connect-PnPOnline -Url $HubUrl -TenantAdminUrl $TenantAdminUrl -Interactive
     
     ## Getting security group (Porteføljeadministratorer) and returning its members
@@ -37,16 +34,19 @@ function GetPortfolioadminUsers($HubUrl){
     exit 1
 }
 function GrantPermissions ($Url, $Members) {
-    Write-Host "Granting owner permissions to site collection $Url" -ForegroundColor Green
-    Set-PnPTenantSite -Url $Url -Owners $CurrentUser
+    $CurrentUser = Get-PnPProperty -Property CurrentUser -ClientObject (Get-PnPContext).Web
+    Write-Host "Granting owner permissions to site collection $Url for current user $($CurrentUser.Email)" -ForegroundColor Green
+    Set-PnPTenantSite -Url $Url -Owners $CurrentUser.Email
     Connect-PnPOnline -Url $Url -TenantAdminUrl $TenantAdminUrl -Interactive
     
     ## Adding security group (if not created)
-    $Group = Get-PnPSiteGroup -Site $Url -Group $PortfolioAdminGroupName
+    $Group = Get-PnPSiteGroup -Site $Url -Group $PortfolioAdminGroupName -ErrorAction SilentlyContinue
+    #$Group | format-list *
     if($null -eq $Group){
         Write-Host "`tCreating access group: $PortfolioAdminGroupName" -ForegroundColor Green
         New-PnPSiteGroup -Site $Url -Name $PortfolioAdminGroupName -PermissionLevels "Full Control"
     }else{
+        Set-PnPSiteGroup -Site $Url -Identity $PortfolioAdminGroupName -PermissionLevelsToAdd "Full Control" | Out-Null
         Write-Host "`tAccess group $PortfolioAdminGroupName already exists"
     }
     ## Adding security group members
@@ -83,12 +83,11 @@ if ($GrantPermissions) {
 } elseif($GrantPermissionsAndDelete) {
     $Children | ForEach-Object {
         $ChildSiteUrl = $_
-        $ChildSiteUrl
         Connect-PnPOnline -Url $ChildSiteUrl -TenantAdminUrl $TenantAdminUrl -Interactive;
         $Group = Get-PnPSiteGroup -Group $PortfolioAdminGroupName
         if($Group -and $Group.Count -gt 0){
             $Members = Get-PnPGroupMember -Group $PortfolioAdminGroupName
-            Write-Host "`tFound $($Members.Count) members in $ChildSiteUrl" 
+            Write-Host "Removing $($Members.Count) $PortfolioAdminGroupName members in $ChildSiteUrl" -ForegroundColor Green 
             foreach($Member in $Members){
                 Write-Host "`tRemoving $($Member.Title) in $ChildSiteUrl" -ForegroundColor Green
                 Remove-PnPGroupMember -LoginName $($Member.LoginName) -Group $PortfolioAdminGroupName
