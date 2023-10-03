@@ -36,7 +36,6 @@ import {
   PortalDataServiceList,
   SyncListParams
 } from './types'
-import { Caching } from '@pnp/queryable'
 
 export class PortalDataService {
   private _configuration: IPortalDataServiceConfiguration
