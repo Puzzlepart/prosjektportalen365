@@ -179,22 +179,13 @@ export class DataAdapter extends SPDataAdapterBase {
       })
       .filter(Boolean)
     const listItem = this.list.items.getById(itemContext.id)
-    const fieldValue = updatedTasks.map((task) => task.title).join('\n')
-    const hiddenFieldValueData = RiskActionPlannerTaskReference.toString(updatedTasks)
+    const updatedItemContext = itemContext.update(updatedTasks)
     await listItem.update({
-      GtRiskAction: fieldValue,
-      [this.hiddenDataFieldName]: hiddenFieldValueData,
+      GtRiskAction: updatedItemContext.fieldValue,
+      [this.hiddenDataFieldName]: updatedItemContext.hiddenFieldValue.data,
       [this.hiddenUpdateFieldName]: new Date()
     })
-    return {
-      ...itemContext,
-      fieldValue,
-      hiddenFieldValue: {
-        data: hiddenFieldValueData,
-        tasks: updatedTasks,
-        updated: new Date()
-      }
-    }
+    return updatedItemContext
   }
 
   /**
@@ -215,22 +206,13 @@ export class DataAdapter extends SPDataAdapterBase {
         isCompleted: '0'
       }))
     ]
-    const hiddenFieldValue = RiskActionPlannerTaskReference.toString(tasks)
-    const fieldValue = tasks.map((task) => task.title).join('\n')
     const listItem = this.list.items.getById(itemContext.id)
+    const updatedItemContext = itemContext.update(tasks)
     await listItem.update({
-      GtRiskAction: fieldValue,
-      [this.hiddenDataFieldName]: hiddenFieldValue
+      GtRiskAction: updatedItemContext.fieldValue,
+      [this.hiddenDataFieldName]: updatedItemContext.hiddenFieldValue.data,
     })
-    return {
-      ...itemContext,
-      fieldValue,
-      hiddenFieldValue: {
-        ...itemContext.hiddenFieldValue,
-        data: hiddenFieldValue,
-        tasks
-      }
-    }
+    return updatedItemContext
   }
 
   /**
@@ -259,7 +241,9 @@ export class DataAdapter extends SPDataAdapterBase {
   }
 
   /**
-   * Gets the hidden field values for the current list.
+   * Gets the hidden field values for the current list as a Map in the format
+   * `Map<string, RiskActionHiddenFieldValues>` where the key is the ID of the list item
+   * and the value is the hidden field values for that item.
    */
   public async getHiddenFieldValues(): Promise<Map<string, RiskActionHiddenFieldValues>> {
     try {

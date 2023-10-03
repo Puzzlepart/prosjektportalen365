@@ -2,7 +2,11 @@
     xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:Views>
         <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="Alle elementer" Url="{site}/Lists/Globale innstillinger/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
-            <Query />
+            <Query>
+                <GroupBy Collapse="TRUE" GroupLimit="30">
+                    <FieldRef Name="GtSettingsCategory" />
+                </GroupBy>
+            </Query>
             <ViewFields>
                 <FieldRef Name="LinkTitle" />
                 <FieldRef Name="GtSettingsKey" />
@@ -19,31 +23,57 @@
         <pnp:FieldRef ID="a53cbdcc-210a-45d1-8fb2-c31498328f33" Name="GtSettingsKey" DisplayName="{resource:SiteFields_GtSettingsKey_DisplayName}" />
         <pnp:FieldRef ID="b658a702-fd9d-4f75-b8f1-fe7fbdb91af4" Name="GtSettingsValue" DisplayName="{resource:SiteFields_GtSettingsValue_DisplayName}" />
         <pnp:FieldRef ID="46bf2f85-9030-459e-b0bf-fee3f9389101" Name="GtSettingsEnabled" DisplayName="{resource:SiteFields_GtSettingsEnabled_DisplayName}" />
+        <pnp:FieldRef ID="206c2e34-865f-4c7c-ac8a-acab573aee88" Name="GtSettingsCategory" DisplayName="{resource:SiteFields_GtSettingsCategory_DisplayName}" />
+        <pnp:FieldRef ID="efb20164-49b3-4b61-b251-04eb7c2a4df9" Name="GtSettingsId" DisplayName="{resource:SiteFields_GtSettingsId_DisplayName}" />
     </pnp:FieldRefs>
-    <pnp:DataRows UpdateBehavior="Skip" KeyColumn="GtSettingsKey">
+    <pnp:DataRows UpdateBehavior="Skip" KeyColumn="GtSettingsId">
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSettingsId">{e77e3aa3-a6b9-4a7e-8b94-6cb889124b82}</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Bruk Planner for å håndtere tiltak i Usikkerhetslisten</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerEnabled</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsCategory">Usikkerhetstiltak i Planner</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSettingsId">{bbc4d267-e6c6-4496-9323-f87832106ff7}</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Navn på mappen i Planner for tiltak for Usikkerhetslisten</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerBucketName</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsValue">Tiltak</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsCategory">Usikkerhetstiltak i Planner</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSettingsId">{3078a897-4508-4242-80ab-da757db11289}</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Tekst som skal vises om det ikke er noen tiltak registrert</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerNoActionsText</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsValue">Det er ikke registrert noen tiltak for denne usikkerheten</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsCategory">Usikkerhetstiltak i Planner</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSettingsId">{8e998a8d-6e90-4ab2-be82-a64050e6fdda}</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Vis siste synkroniseringstidspunkt for Planner-oppgavene</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerShowLastSyncTime</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsCategory">Usikkerhetstiltak i Planner</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSettingsId">{7aa15d27-4c34-4fdb-a6dc-818fbc6e0f0a}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Vis tiltakene i en liste horisontalt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerHorizontalLayout</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsValue">0</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsCategory">Usikkerhetstiltak i Planner</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSettingsId">{2261c914-7cef-4fa0-94c6-2fdee064840e}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Avstand mellom tiltakene i listen</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerGap</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsValue">2px</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsCategory">Usikkerhetstiltak i Planner</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
     <pnp:Webhooks>

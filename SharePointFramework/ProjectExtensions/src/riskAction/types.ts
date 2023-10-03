@@ -42,6 +42,32 @@ export class RiskActionItemContext {
     this.hiddenFieldValue = hiddenFieldValues.get(this.id.toString())
   }
 
+  /**
+   * Updates the current RiskActionItemContext with the provided tasks.
+   * 
+   * @param tasks An array of RiskActionPlannerTaskReference objects to update the context with.
+   * 
+   * @returns The updated RiskActionItemContext object.
+   */
+  public update(tasks: RiskActionPlannerTaskReference[]): RiskActionItemContext {
+    this.fieldValue = tasks.map((task) => task.title).join('\n')
+    this.hiddenFieldValue = {
+      ...this.hiddenFieldValue,
+      data: RiskActionPlannerTaskReference.toString(tasks),
+      tasks
+    }
+    return this
+  }
+
+  /**
+   * Creates a new instance of the RiskActionItemContext class.
+   * 
+   * @param event - The field customizer cell event parameters.
+   * @param pageContext - The SharePoint page context.
+   * @param hiddenFieldValues - The hidden field values.
+   * 
+   * @returns A new instance of the RiskActionItemContext class.
+   */
   public static create(
     event: IFieldCustomizerCellEventParameters,
     pageContext: PageContext,
@@ -94,5 +120,5 @@ export class RiskActionPlannerTaskReference {
 export type RiskActionHiddenFieldValues = {
   data: string
   tasks: RiskActionPlannerTaskReference[]
-  updated: any
+  updated: Date | string
 }

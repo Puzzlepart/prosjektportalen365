@@ -1504,6 +1504,12 @@
   <data name="SiteFields_GtSettingsValue_DisplayName" xml:space="preserve">
     <value>Verdi</value>
   </data>
+  <data name="SiteFields_GtSettingsCategory_DisplayName" xml:space="preserve">
+    <value>Kategori</value>
+  </data>
+  <data name="SiteFields_GtSettingsId_DisplayName" xml:space="preserve">
+    <value>Unik ID for innstilling (intern)</value>
+  </data>
   <data name="SiteFields_GtValue_Description" xml:space="preserve">
     <value>Oppgi verdien for feltet</value>
   </data>

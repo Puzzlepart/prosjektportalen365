@@ -1,9 +1,9 @@
 import { Link, Tooltip, mergeClasses } from '@fluentui/react-components'
 import React, { FC } from 'react'
-import { RiskActionPlannerTaskReference } from '../../../../types'
 import styles from './PlannerTaskLink.module.scss'
 import { getFluentIcon } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
+import { IPlannerTaskLinkProps } from './types'
 
 /**
  * Creates a link to a planner task in the Office tasks app.
@@ -18,7 +18,7 @@ function createPlannerTaskLink(id: string, type = 'TaskLink', channel = 'Link') 
   return `https://tasks.office.com/puzzlepart.onmicrosoft.com/home/task/${id}?type=${type}&channel=${channel}`
 }
 
-export const PlannerTaskLink: FC<{ task: RiskActionPlannerTaskReference }> = ({ task }) => (
+export const PlannerTaskLink: FC<IPlannerTaskLinkProps> = ({ task }) => (
   <div className={styles.plannerTaskLink}>
     <Link href={createPlannerTaskLink(task.id)} target='_blank' appearance='subtle'>
       <Tooltip
