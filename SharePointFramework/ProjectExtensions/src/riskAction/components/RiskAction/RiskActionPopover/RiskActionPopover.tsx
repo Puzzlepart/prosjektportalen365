@@ -26,7 +26,8 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
     isPopoverOpen,
     onPopoverOpenChange,
     lastUpdated,
-    itemContext
+    itemContext,
+    showLastSyncTime
   } = useRiskActionPopover()
   return (
     <>
@@ -45,14 +46,14 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
           <Alert intent='info' className={mergeClasses(styles.alert, styles.infoText)}>
             {infoText}
           </Alert>
-          {lastUpdated && (
+          <div hidden={!lastUpdated || !showLastSyncTime}>
             <Alert
               className={mergeClasses(styles.alert, styles.lastUpdated)}
               icon={getFluentIcon('ArrowSync', { color: 'green' })}
             >
               {format(strings.RiskActionPopoverLastUpdated, lastUpdated)}
             </Alert>
-          )}
+          </div>
           <div className={styles.actions}>
             <Button
               appearance='transparent'

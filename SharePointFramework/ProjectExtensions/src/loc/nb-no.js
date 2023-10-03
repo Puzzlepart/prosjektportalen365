@@ -1,5 +1,6 @@
 define([], function () {
     return {
+        RiskActionPlannerTaskLinkTooltipCompletedText: 'Oppgaven er fullført',
         MigrateRiskActionsDialogSeparatorOptionLinebreak: 'Linjeskift',
         MigrateRiskActionsDialogSeparatorOptionComma: 'Komma',
         MigrateRiskActionsDialogSeparatorLabel: 'Hvordan er tiltakene adskilt?',

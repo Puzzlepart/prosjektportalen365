@@ -17,16 +17,14 @@ import _ from 'underscore'
 export class DataAdapter extends SPDataAdapterBase {
   private readonly graph: GraphFI
   private readonly list: IList
-  private readonly hiddenDataFieldName: string
-  private readonly hiddenUpdateFieldName: string
+  private readonly hiddenDataFieldName = 'RiskActionData'
+  private readonly hiddenUpdateFieldName = 'RiskActionUpdated'
 
   constructor(private readonly _context: FieldCustomizerContext) {
     super()
     this.graph = graphfi().using(graphSPFx(this._context))
     this.sp = spfi().using(spSPFx(this._context))
     this.list = this.sp.web.lists.getById(this._context.pageContext.list.id.toString())
-    this.hiddenDataFieldName = 'RiskActionData'
-    this.hiddenUpdateFieldName = 'RiskActionUpdated'
   }
 
   /**

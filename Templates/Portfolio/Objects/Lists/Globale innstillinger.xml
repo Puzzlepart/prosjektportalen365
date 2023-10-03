@@ -39,6 +39,12 @@
             <pnp:DataValue FieldName="GtSettingsValue">Det er ikke registrert noen tiltak for denne usikkerheten</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
         </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Vis siste synkroniseringstidspunkt for Planner-oppgavene</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsKey">RiskActionPlannerShowLastSyncTime</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsValue">1</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+        </pnp:DataRow>
     </pnp:DataRows>
     <pnp:Webhooks>
         <pnp:Webhook ServerNotificationUrl="https://northeurope1-0.pushnp.svc.ms/notifications?token=5507e3fc-9a4e-4217-b7be-b4e034d94ec6" ExpiresInDays="1" />

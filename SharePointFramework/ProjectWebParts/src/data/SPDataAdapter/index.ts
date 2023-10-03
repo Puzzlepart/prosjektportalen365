@@ -29,7 +29,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       spfxContext,
       entityService: this.entityService,
       propertiesListName: strings.ProjectPropertiesListName
-     } as IProjectDataServiceParams)
+    } as IProjectDataServiceParams)
   }
 
   /**

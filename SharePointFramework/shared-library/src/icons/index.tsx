@@ -30,7 +30,9 @@ import {
   ArrowSyncRegular,
   ArrowSyncFilled,
   ConvertRangeRegular,
-  ConvertRangeFilled
+  ConvertRangeFilled,
+  CheckmarkRegular,
+  CheckmarkFilled
 } from '@fluentui/react-icons'
 import React, { CSSProperties } from 'react'
 
@@ -38,6 +40,10 @@ import React, { CSSProperties } from 'react'
  * An object containing the available Fluent icons and their corresponding regular and filled versions.
  */
 const iconCatalog = {
+  Checkmark: {
+    regular: CheckmarkRegular,
+    filled: CheckmarkFilled
+  },
   ConvertRange: {
     regular: ConvertRangeRegular,
     filled: ConvertRangeFilled

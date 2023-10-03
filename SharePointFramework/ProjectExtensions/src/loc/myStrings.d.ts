@@ -1,4 +1,5 @@
 declare interface IProjectExtensionsStrings {
+  RiskActionPlannerTaskLinkTooltipCompletedText: string
   MigrateRiskActionsDialogSeparatorOptionLinebreak: string
   MigrateRiskActionsDialogSeparatorOptionComma: string
   MigrateRiskActionsDialogSeparatorLabel: string

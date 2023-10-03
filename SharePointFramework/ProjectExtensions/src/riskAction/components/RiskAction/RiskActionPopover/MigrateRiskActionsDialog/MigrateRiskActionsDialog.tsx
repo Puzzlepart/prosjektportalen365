@@ -19,7 +19,7 @@ export const MigrateRiskActionsDialog: FC = (props) => {
     useMigrateRiskActionsDialog()
   return (
     <Dialog open={open} onOpenChange={(_, { open }) => setOpen(open)}>
-      <DialogTrigger>{props.children as ReactElement}</DialogTrigger>
+      <DialogTrigger disableButtonEnhancement>{props.children as ReactElement}</DialogTrigger>
       <DialogSurface>
         <div className={styles.migrateRiskActionsDialog}>
           <div className={styles.title}>{itemContext.title}</div>

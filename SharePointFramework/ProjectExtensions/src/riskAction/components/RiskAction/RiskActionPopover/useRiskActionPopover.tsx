@@ -35,7 +35,10 @@ export function useRiskActionPopover() {
   }
 
   let infoText = strings.RiskActionPopoverInfoText
-  if (stringIsNullOrEmpty(itemContext.hiddenFieldValue?.data) && !stringIsNullOrEmpty(itemContext.fieldValue)) {
+  if (
+    stringIsNullOrEmpty(itemContext.hiddenFieldValue?.data) &&
+    !stringIsNullOrEmpty(itemContext.fieldValue)
+  ) {
     infoText = strings.RiskActionPopoverInfoTextNoPlanner
   }
 
@@ -52,6 +55,7 @@ export function useRiskActionPopover() {
     isPopoverOpen: popoverState.value,
     onPopoverOpenChange,
     lastUpdated,
-    itemContext
+    itemContext,
+    showLastSyncTime: context.dataAdapter.globalSettings.get('RiskActionPlannerShowLastSyncTime') === '1'
   }
 }
