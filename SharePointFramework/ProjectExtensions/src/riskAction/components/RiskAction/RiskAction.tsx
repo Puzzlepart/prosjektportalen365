@@ -7,7 +7,7 @@ import { RiskActionContext } from './context'
 import { useRiskAction } from './useRiskAction'
 
 export const RiskAction: FC = () => {
-  const { fluentProviderId, context } = useRiskAction()
+  const { fluentProviderId, contextValue } = useRiskAction()
   return (
     <FluentProvider
       id={fluentProviderId}
@@ -15,7 +15,7 @@ export const RiskAction: FC = () => {
       className={styles.root}
       style={{ background: 'transparent' }}
     >
-      <RiskActionContext.Provider value={context}>
+      <RiskActionContext.Provider value={contextValue}>
         <RiskActionPopover>
           <RiskActionFieldValue />
         </RiskActionPopover>

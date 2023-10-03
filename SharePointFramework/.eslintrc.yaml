@@ -27,7 +27,7 @@ rules:
   "no-console": 2
   "default-case": 0
   "eqeqeq": 1
-  "max-classes-per-file": 1
+  "max-classes-per-file": 0
   "jsx-quotes":
     - "error"
     - "prefer-single"

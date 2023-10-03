@@ -28,15 +28,6 @@ export class DataAdapter extends SPDataAdapterBase {
   }
 
   /**
-   * Encodes the provided `url` to be used as a reference in a Planner task.
-   *
-   * @param url URL to encode
-   */
-  private _encodeUrl(url: string): string {
-    return url.split('%').join('%25').split('.').join('%2E').split(':').join('%3A')
-  }
-
-  /**
    * Gets the ID of the user with the provided `mail`.
    *
    * @param mail Mail of the user to get the ID for
@@ -138,12 +129,7 @@ export class DataAdapter extends SPDataAdapterBase {
       await task.details.update(
         {
           description: model.get('description') ?? '',
-          references: {
-            [this._encodeUrl(itemContext.url)]: {
-              '@odata.type': 'microsoft.graph.plannerExternalReference',
-              alias: itemContext.title
-            }
-          }
+          references: itemContext.references
         },
         eTag
       )

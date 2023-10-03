@@ -1,3 +1,4 @@
+import { PlannerExternalReferences } from '@microsoft/microsoft-graph-types'
 import { IFieldCustomizerCellEventParameters } from '@microsoft/sp-listview-extensibility'
 import { PageContext } from '@microsoft/sp-page-context'
 
@@ -16,11 +17,6 @@ export class RiskActionItemContext {
   public title: string
 
   /**
-   * The URL of the risk action item.
-   */
-  public url: string
-
-  /**
    * The value of the field associated with the risk action item.
    */
   public fieldValue: string
@@ -30,16 +26,37 @@ export class RiskActionItemContext {
    */
   public hiddenFieldValue: RiskActionHiddenFieldValues
 
+  /**
+   * Represents a RiskAction object.
+   *
+   * @constructor
+   *
+   * @param _event - The `IFieldCustomizerCellEventParameters` object
+   * @param _pageContext - The `PageContext` object
+   * @param hiddenFieldValues - The Map object containing hidden field values.
+   */
   private constructor(
-    event: IFieldCustomizerCellEventParameters,
-    pageContext: PageContext,
-    hiddenFieldValues: Map<string, any>
+    private _event: IFieldCustomizerCellEventParameters,
+    private _pageContext: PageContext,
+    hiddenFieldValues: Map<string, any> = new Map<string, any>()
   ) {
-    this.id = event.listItem.getValueByName('ID')
-    this.title = event.listItem.getValueByName('Title').toString()
-    this.url = `${window.location.protocol}//${window.location.host}${pageContext.list.serverRelativeUrl}/DispForm.aspx?ID=${this.id}`
-    this.fieldValue = event.fieldValue
+    this.id = _event.listItem.getValueByName('ID')
+    this.title = _event.listItem.getValueByName('Title').toString()
+    this.fieldValue = _event.fieldValue
     this.hiddenFieldValue = hiddenFieldValues.get(this.id.toString())
+  }
+
+  /**
+   * The reference to the risk action item used for the Planner tasks.
+   */
+  public get references(): PlannerExternalReferences {
+    const url = `${window.location.protocol}//${window.location.host}${this._pageContext?.list?.serverRelativeUrl}/DispForm.aspx?ID=${this.id}`
+    return {
+      [this._encodeUrl(url)]: {
+        '@odata.type': 'microsoft.graph.plannerExternalReference',
+        alias: this.title
+      }
+    }
   }
 
   /**
@@ -50,13 +67,23 @@ export class RiskActionItemContext {
    * @returns The updated RiskActionItemContext object.
    */
   public update(tasks: RiskActionPlannerTaskReference[]): RiskActionItemContext {
-    this.fieldValue = tasks.map((task) => task.title).join('\n')
-    this.hiddenFieldValue = {
+    const newContext = new RiskActionItemContext(this._event, this._pageContext)
+    newContext.fieldValue = tasks.map((task) => task.title).join('\n')
+    newContext.hiddenFieldValue = {
       ...this.hiddenFieldValue,
       data: RiskActionPlannerTaskReference.toString(tasks),
       tasks
     }
-    return this
+    return newContext
+  }
+
+  /**
+   * Encodes the provided `url` to be used as a reference in a Planner task.
+   *
+   * @param url URL to encode
+   */
+  private _encodeUrl(url: string): string {
+    return url.split('%').join('%25').split('.').join('%2E').split(':').join('%3A')
   }
 
   /**
