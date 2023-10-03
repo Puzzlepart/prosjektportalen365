@@ -16,7 +16,7 @@ $PortfolioUri = [System.Uri]$PortfolioUrl
 $TenantAdminUrl = (@($PortfolioUri.Scheme, "://", $PortfolioUri.Authority) -join "").Replace(".sharepoint.com", "-admin.sharepoint.com")
 
 function GetPortfolioadminUsers($HubUrl){
-    Write-Host "Looking for portfolio admin users in: $HubUrl (using TenantAdminUrl: $TenantAdminUrl)" -ForegroundColor Green
+    Write-Host "Looking for portfolio admin users in: $HubUrl (using TenantAdminUrl: $TenantAdminUrl)" -ForegroundColor DarkGreen
     Connect-PnPOnline -Url $HubUrl -TenantAdminUrl $TenantAdminUrl -Interactive
     
     ## Getting security group (Porteføljeadministratorer) and returning its members
@@ -25,7 +25,7 @@ function GetPortfolioadminUsers($HubUrl){
         $Members = Get-PnPGroupMember -Group $PortfolioAdminGroupName
         Write-Host "`tFound $($Members.Count) members in $PortfolioAdminGroupName" 
         foreach($Member in $Members){
-            Write-Host "`t`t$($Members.Title)" 
+            Write-Host "`t`t$($Member.Title)" 
         }
         return $Members
     }else{
@@ -35,16 +35,15 @@ function GetPortfolioadminUsers($HubUrl){
 }
 function GrantPermissions ($Url, $Members) {
     $CurrentUser = Get-PnPProperty -Property CurrentUser -ClientObject (Get-PnPContext).Web
-    Write-Host "Granting owner permissions to site collection $Url for current user $($CurrentUser.Email)" -ForegroundColor Green
+    Write-Host "Granting owner permissions to site collection $Url for current user $($CurrentUser.Email)" -ForegroundColor DarkGreen
     Set-PnPTenantSite -Url $Url -Owners $CurrentUser.Email
     Connect-PnPOnline -Url $Url -TenantAdminUrl $TenantAdminUrl -Interactive
     
     ## Adding security group (if not created)
     $Group = Get-PnPSiteGroup -Site $Url -Group $PortfolioAdminGroupName -ErrorAction SilentlyContinue
-    #$Group | format-list *
     if($null -eq $Group){
-        Write-Host "`tCreating access group: $PortfolioAdminGroupName" -ForegroundColor Green
         New-PnPSiteGroup -Site $Url -Name $PortfolioAdminGroupName -PermissionLevels "Full Control"
+        Write-Host "`tCreated access group: $PortfolioAdminGroupName" -ForegroundColor Green
     }else{
         Set-PnPSiteGroup -Site $Url -Identity $PortfolioAdminGroupName -PermissionLevelsToAdd "Full Control" | Out-Null
         Write-Host "`tAccess group $PortfolioAdminGroupName already exists"
@@ -55,8 +54,8 @@ function GrantPermissions ($Url, $Members) {
         $MemberName = $Member.Title
         $Member = Get-PnPGroupMember -Group $PortfolioAdminGroupName -User $MemberLoginName
         if($null -eq $Member){
-            Write-Host "`tAdding member ($MemberName) with email: $MemberLoginName" -ForegroundColor Green
             Add-PnPGroupMember -LoginName $MemberLoginName -Group $PortfolioAdminGroupName
+            Write-Host "`tAdded member ($MemberName) with email: $MemberLoginName" -ForegroundColor Green
         }else{
             Write-Host "`tMember ($MemberName) with email: $MemberLoginName already exists"
         }
@@ -77,6 +76,12 @@ Connect-PnPOnline -TenantAdminUrl $TenantAdminUrl -Url $PortfolioUrl -Interactiv
 $Children = Get-PnPHubSiteChild
 $PortfolioadminUsers = GetPortfolioadminUsers -HubUrl $PortfolioUrl
 
+if($PortfolioadminUsers.Count -eq 0){
+    Write-Host "`tNo users added to $PortfolioAdminGroupName on hub site $PortfolioUrl. Exiting script."
+    Write-Host "[x] Done" -ForegroundColor Green
+    exit 1
+}
+
 if ($GrantPermissions) {    
     $Children | ForEach-Object { GrantPermissions -Url $_ -Members $PortfolioadminUsers}
     Write-Host "[x] Done" -ForegroundColor Green
@@ -87,10 +92,10 @@ if ($GrantPermissions) {
         $Group = Get-PnPSiteGroup -Group $PortfolioAdminGroupName
         if($Group -and $Group.Count -gt 0){
             $Members = Get-PnPGroupMember -Group $PortfolioAdminGroupName
-            Write-Host "Removing $($Members.Count) $PortfolioAdminGroupName members in $ChildSiteUrl" -ForegroundColor Green 
+            Write-Host "Removing $($Members.Count) $PortfolioAdminGroupName members in $ChildSiteUrl" -ForegroundColor DarkGreen 
             foreach($Member in $Members){
-                Write-Host "`tRemoving $($Member.Title) in $ChildSiteUrl" -ForegroundColor Green
                 Remove-PnPGroupMember -LoginName $($Member.LoginName) -Group $PortfolioAdminGroupName
+                Write-Host "`tRemoved $($Member.Title) in $ChildSiteUrl" -ForegroundColor Green
             }
         }
     }
