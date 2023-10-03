@@ -7,18 +7,21 @@ import {
   mergeClasses
 } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'ProjectExtensionsStrings'
+import { getFluentIcon } from 'pp365-shared-library'
 import React, { FC, HTMLProps } from 'react'
+import { MigrateRiskActionsDialog } from './MigrateRiskActionsDialog'
 import { NewRiskActionPanel } from './NewRiskActionPanel'
 import styles from './RiskActionPopover.module.scss'
 import { useRiskActionPopover } from './useRiskActionPopover'
-import { getFluentIcon } from 'pp365-shared-library'
-import { MigrateRiskActionsDialog } from './MigrateRiskActionsDialog'
-import { stringIsNullOrEmpty } from '@pnp/core'
 
+/**
+ * Risk action popover. This popover is used to handle actions for risk actions.
+ */
 export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
   const {
-    updateTasks,
+    syncTasks,
     isPanelOpen,
     openPanel,
     closePanel,
@@ -42,7 +45,9 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
           <div>{props.children}</div>
         </PopoverTrigger>
         <PopoverSurface className={styles.riskActionPopover}>
-          <div className={styles.title}>{itemContext.title}</div>
+          <div className={styles.title}>
+            {format(strings.RiskActionPopoverTitle, itemContext.title)}
+          </div>
           <Alert intent='info' className={mergeClasses(styles.alert, styles.infoText)}>
             {infoText}
           </Alert>
@@ -55,24 +60,27 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
             </Alert>
           </div>
           <div className={styles.actions}>
-            <Button
-              appearance='transparent'
-              icon={getFluentIcon('Add')}
-              size='small'
-              onClick={openPanel}
-            >
-              {strings.NewRiskActionPanelAddNewRiskAction}
-            </Button>
-            {itemContext.hiddenFieldValue?.data ? (
+            <div hidden={stringIsNullOrEmpty(itemContext.hiddenFieldValue?.data)}>
+              <Button
+                appearance='transparent'
+                icon={getFluentIcon('Add')}
+                size='small'
+                onClick={openPanel}
+              >
+                {strings.NewRiskActionPanelAddNewRiskAction}
+              </Button>
+            </div>
+            <div hidden={stringIsNullOrEmpty(itemContext.hiddenFieldValue?.data)}>
               <Button
                 appearance='transparent'
                 icon={getFluentIcon('ArrowSync', { color: 'green' })}
                 size='small'
-                onClick={updateTasks}
+                onClick={syncTasks}
               >
                 {strings.NewRiskActionPanelUpdateTaskStatus}
               </Button>
-            ) : (
+            </div>
+            <div hidden={!stringIsNullOrEmpty(itemContext.hiddenFieldValue?.data)}>
               <MigrateRiskActionsDialog>
                 <Button
                   appearance='transparent'
@@ -83,7 +91,7 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
                   {strings.NewRiskActionPanelMigrateRiskActions}
                 </Button>
               </MigrateRiskActionsDialog>
-            )}
+            </div>
           </div>
         </PopoverSurface>
       </Popover>

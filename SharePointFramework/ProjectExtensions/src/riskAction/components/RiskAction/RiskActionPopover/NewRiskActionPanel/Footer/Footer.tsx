@@ -22,4 +22,4 @@ export const Footer: FC<IFooterProps> = (props) => {
   )
 }
 
-Footer.displayName = 'RiskActionFooter'
+Footer.displayName = 'NewRiskActionPanelFooter'

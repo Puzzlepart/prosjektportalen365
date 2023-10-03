@@ -1,8 +1,9 @@
-import { Combobox, Field, Option, Persona } from '@fluentui/react-components'
+import { Combobox, Option, Persona } from '@fluentui/react-components'
 import React, { FC, useContext, useEffect, useState } from 'react'
 import { RiskActionFieldCustomizerContext } from '../../../../../context'
 import { IResponsibleFieldProps } from './types'
 import strings from 'ProjectExtensionsStrings'
+import { FieldContainer } from 'pp365-shared-library'
 
 export const ResponsibleField: FC<IResponsibleFieldProps> = (props) => {
   const context = useContext(RiskActionFieldCustomizerContext)
@@ -16,7 +17,7 @@ export const ResponsibleField: FC<IResponsibleFieldProps> = (props) => {
   }, [value])
 
   return (
-    <Field label={strings.ResponsibleFieldLabel}>
+    <FieldContainer label={strings.ResponsibleFieldLabel} iconName='Person'>
       <Combobox
         onOptionSelect={(_e, data) => {
           props.onChange(data.optionValue)
@@ -43,7 +44,7 @@ export const ResponsibleField: FC<IResponsibleFieldProps> = (props) => {
           </Option>
         ) : null}
       </Combobox>
-    </Field>
+    </FieldContainer>
   )
 }
 

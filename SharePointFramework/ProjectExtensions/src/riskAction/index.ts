@@ -19,6 +19,14 @@ export default class RiskActionFieldCustomizer extends BaseFieldCustomizer<null>
     await super.onInit()
     this._dataAdapter = new DataAdapter(this.context)
     await this._dataAdapter.configure(this.context, { loadGlobalSettings: true })
+    await this._initializePlannerContext()
+  }
+
+  /**
+   * Initializes the planner context if `RiskActionPlannerEnabled` is set to 1 in global settings
+   * list. Ensures hidden fields and retrieves their values using the data adapter.
+   */
+  protected async _initializePlannerContext(): Promise<void> {
     if (this._dataAdapter.globalSettings.get('RiskActionPlannerEnabled') === '1') {
       await this._dataAdapter.ensureHiddenFields()
       this._hiddenFieldValues = await this._dataAdapter.getHiddenFieldValues()

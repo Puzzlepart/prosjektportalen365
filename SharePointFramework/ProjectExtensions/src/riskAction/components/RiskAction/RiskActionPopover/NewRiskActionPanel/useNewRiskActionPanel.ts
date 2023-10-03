@@ -34,6 +34,9 @@ export function useNewRiskActionPanel(props: IPanelProps) {
     [context.itemContext, model]
   )
 
+  /**
+   * Resets the model by setting it to a new empty Map.
+   */
   const resetModel = useCallback(() => {
     $setModel(new Map<string, any>())
   }, [])

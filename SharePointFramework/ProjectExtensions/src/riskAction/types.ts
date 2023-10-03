@@ -26,7 +26,7 @@ export class RiskActionItemContext {
   public fieldValue: string
 
   /**
-   * The hidden value of the field associated with the risk action item.
+   * The hidden values of the field associated with the risk action item.
    */
   public hiddenFieldValue: RiskActionHiddenFieldValues
 

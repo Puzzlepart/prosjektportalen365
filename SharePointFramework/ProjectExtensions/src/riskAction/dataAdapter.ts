@@ -32,7 +32,7 @@ export class DataAdapter extends SPDataAdapterBase {
    *
    * @param url URL to encode
    */
-  private encodeUrl(url: string): string {
+  private _encodeUrl(url: string): string {
     return url.split('%').join('%25').split('.').join('%2E').split(':').join('%3A')
   }
 
@@ -41,7 +41,7 @@ export class DataAdapter extends SPDataAdapterBase {
    *
    * @param mail Mail of the user to get the ID for
    */
-  private async getUserId(mail: string): Promise<any> {
+  private async _getUserId(mail: string): Promise<any> {
     const [user] = await this.graph.users.filter(`mail eq '${mail}'`)()
     return user?.id
   }
@@ -105,7 +105,7 @@ export class DataAdapter extends SPDataAdapterBase {
     try {
       let assignments = null
       if (model.get('responsible')) {
-        const responsible = await this.getUserId(model.get('responsible'))
+        const responsible = await this._getUserId(model.get('responsible'))
         assignments = {
           [responsible]: {
             '@odata.type': 'microsoft.graph.plannerAssignment',
@@ -139,7 +139,7 @@ export class DataAdapter extends SPDataAdapterBase {
         {
           description: model.get('description') ?? '',
           references: {
-            [this.encodeUrl(itemContext.url)]: {
+            [this._encodeUrl(itemContext.url)]: {
               '@odata.type': 'microsoft.graph.plannerExternalReference',
               alias: itemContext.title
             }
@@ -164,6 +164,7 @@ export class DataAdapter extends SPDataAdapterBase {
     const defaultPlan = await this._getDefaultGroupPlan()
     const bucketId = await this._ensureBucket(defaultPlan.id)
     const tasks = await this.graph.planner.tasks
+      .top(999)
       .filter(`planId eq '${defaultPlan.id}' and bucketId eq '${bucketId}'`)
       .select('id', 'title', 'percentComplete')()
     const updatedTasks = itemContext.hiddenFieldValue.tasks

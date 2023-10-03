@@ -25,10 +25,10 @@ export function useRiskActionPopover() {
   }
 
   /**
-   * Updates the tasks in the item context by syncing with the data adapter, sets the updated item context,
+   * Syncs the tasks in the item context by syncing with the data adapter, sets the updated item context,
    * and closes the popover.
    */
-  const updateTasks = async () => {
+  const syncTasks = async () => {
     const updatedItemContext = await context.dataAdapter.syncTasks(itemContext)
     popoverState.setFalse()
     setItemContext(updatedItemContext)
@@ -47,7 +47,7 @@ export function useRiskActionPopover() {
     new Date(itemContext.hiddenFieldValue.updated).toLocaleString()
 
   return {
-    updateTasks,
+    syncTasks,
     openPanel,
     closePanel: panelState.setFalse,
     isPanelOpen: panelState.value,
@@ -56,6 +56,7 @@ export function useRiskActionPopover() {
     onPopoverOpenChange,
     lastUpdated,
     itemContext,
-    showLastSyncTime: context.dataAdapter.globalSettings.get('RiskActionPlannerShowLastSyncTime') === '1'
+    showLastSyncTime:
+      context.dataAdapter.globalSettings.get('RiskActionPlannerShowLastSyncTime') === '1'
   }
 }

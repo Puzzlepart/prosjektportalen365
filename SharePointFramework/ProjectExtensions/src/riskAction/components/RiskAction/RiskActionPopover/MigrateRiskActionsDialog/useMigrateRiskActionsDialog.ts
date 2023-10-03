@@ -1,5 +1,4 @@
 import strings from 'ProjectExtensionsStrings'
-import { sleep } from 'pp365-shared-library'
 import { useState } from 'react'
 import { useBoolean } from 'usehooks-ts'
 import { useRiskActionFieldCustomizerContext } from '../../../../context'
@@ -25,7 +24,6 @@ export function useMigrateRiskActionsDialog() {
    */
   const onMigrate = async () => {
     setIsMigrating(true)
-    await sleep(7)
     const newTasks = await dataAdapter.addTasks(tasks, itemContext)
     const updatedItemContext = await dataAdapter.updateItem(newTasks, itemContext)
     setItemContext(updatedItemContext)
@@ -39,8 +37,8 @@ export function useMigrateRiskActionsDialog() {
     onMigrate,
     open: dialogState.value,
     setOpen: dialogState.setValue,
-    onCloseDialog: dialogState.setFalse,
     isMigrating,
+    separator,
     setSeparator
   }
 }

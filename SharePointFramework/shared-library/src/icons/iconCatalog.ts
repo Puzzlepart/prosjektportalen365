@@ -42,13 +42,19 @@ import {
   CalendarRegular,
   CalendarFilled,
   ToggleLeftRegular,
-  ToggleLeftFilled
+  ToggleLeftFilled,
+  DismissRegular,
+  DismissFilled
 } from '@fluentui/react-icons'
 
 /**
  * An object containing the available Fluent icons and their corresponding regular and filled versions.
  */
 export const iconCatalog = {
+  Dismiss: {
+    regular: DismissRegular,
+    filled: DismissFilled
+  },
   ToggleLeft: {
     regular: ToggleLeftRegular,
     filled: ToggleLeftFilled

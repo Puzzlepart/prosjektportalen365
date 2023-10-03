@@ -1,12 +1,5 @@
 import { IPanelProps, Panel, format } from '@fluentui/react'
-import {
-  Field,
-  FluentProvider,
-  Input,
-  Switch,
-  Textarea,
-  webLightTheme
-} from '@fluentui/react-components'
+import { FluentProvider, Input, Switch, Textarea, webLightTheme } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../../context'
@@ -14,6 +7,7 @@ import { Footer } from './Footer'
 import styles from './NewRiskActionPanel.module.scss'
 import { ResponsibleField } from './ResponsibleField'
 import { useNewRiskActionPanel } from './useNewRiskActionPanel'
+import { FieldContainer } from 'pp365-shared-library'
 
 export const NewRiskActionPanel: FC<IPanelProps> = (props) => {
   const context = useRiskActionFieldCustomizerContext()
@@ -38,25 +32,29 @@ export const NewRiskActionPanel: FC<IPanelProps> = (props) => {
         theme={webLightTheme}
         style={{ background: 'transparent' }}
       >
-        <Field label={strings.TitleLabel} required={true}>
+        <FieldContainer label={strings.TitleLabel} required={true} iconName='TextNumberFormat'>
           <Input type='text' onChange={(_ev, { value }) => setModel('title', value)} />
-        </Field>
-        <Field label={strings.DescriptionLabel}>
+        </FieldContainer>
+        <FieldContainer label={strings.DescriptionLabel} iconName='TextAlignLeft'>
           <Textarea onChange={(_ev, { value }) => setModel('description', value)} rows={6} />
-        </Field>
-        <Field label={strings.StartDateLabel}>
+        </FieldContainer>
+        <FieldContainer label={strings.StartDateLabel} iconName='Calendar'>
           <Input type='date' onChange={(_ev, { value }) => setModel('startDate', value)} />
-        </Field>
-        <Field label={strings.DueDateLabel}>
+        </FieldContainer>
+        <FieldContainer label={strings.DueDateLabel} iconName='Calendar'>
           <Input type='date' onChange={(_ev, { value }) => setModel('dueDate', value)} />
-        </Field>
+        </FieldContainer>
         <ResponsibleField onChange={(value) => setModel('responsible', value)} />
-        <Field label='Opprett flere'>
+        <FieldContainer
+          label={strings.CreateMultipleLabel}
+          description={strings.CreateMultipleDescription}
+          iconName='ToggleLeft'
+        >
           <Switch
             checked={model.get('createMultiple')}
             onChange={(_ev, { checked }) => setModel('createMultiple', checked)}
           />
-        </Field>
+        </FieldContainer>
       </FluentProvider>
     </Panel>
   )
