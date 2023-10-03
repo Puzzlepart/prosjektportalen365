@@ -44,13 +44,31 @@ import {
   ToggleLeftRegular,
   ToggleLeftFilled,
   DismissRegular,
-  DismissFilled
+  DismissFilled,
+  LinkMultipleRegular,
+  LinkMultipleFilled,
+  MultiselectLtrRegular,
+  MultiselectLtrFilled,
+  PeopleRegular,
+  PeopleFilled
 } from '@fluentui/react-icons'
 
 /**
  * An object containing the available Fluent icons and their corresponding regular and filled versions.
  */
 export const iconCatalog = {
+  People: {
+    regular: PeopleRegular,
+    filled: PeopleFilled
+  },
+  MultiselectLtr: {
+    regular: MultiselectLtrRegular,
+    filled: MultiselectLtrFilled
+  },
+  LinkMultiple: {
+    regular: LinkMultipleRegular,
+    filled: LinkMultipleFilled
+  },
   Dismiss: {
     regular: DismissRegular,
     filled: DismissFilled

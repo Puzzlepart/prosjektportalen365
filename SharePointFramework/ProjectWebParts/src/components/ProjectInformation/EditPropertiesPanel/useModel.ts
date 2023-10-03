@@ -78,9 +78,10 @@ export function useModel() {
       [
         'User',
         async () => {
-          const email = value[0].secondaryText
+          const email = value[0]?.secondaryText
           let val = null
           if (email) val = (await context.props.sp.web.ensureUser(email)).data.Id
+          // TODO: Fix when removing a user from the field, should sync the value correctly
           return [val, `${field.internalName}Id`]
         }
       ],

@@ -1,20 +1,13 @@
-import {
-  DatePicker,
-  DayOfWeek,
-  Dropdown,
-  IPersonaProps,
-  ITag,
-  Label,
-  NormalPeoplePicker,
-  TagPicker,
-  TextField,
-  Toggle
-} from '@fluentui/react'
+import { IPersonaProps, ITag, NormalPeoplePicker, TagPicker } from '@fluentui/react'
+import { Combobox, Input, Option, Switch, Textarea } from '@fluentui/react-components'
+import { DatePicker, DayOfWeek } from '@fluentui/react-datepicker-compat'
 import strings from 'ProjectWebPartsStrings'
-import { FieldDescription } from 'pp365-shared-library/lib/components'
+import _ from 'lodash'
+import { FieldContainer } from 'pp365-shared-library'
 import { ProjectInformationField } from 'pp365-shared-library/lib/models'
 import React from 'react'
 import SPDataAdapter from '../../../data'
+import styles from './EditPropertiesPanel.module.scss'
 import { UseModelReturnType } from './useModel'
 
 /**
@@ -38,14 +31,16 @@ import { UseModelReturnType } from './useModel'
 export function useFieldElements(model: UseModelReturnType) {
   const fieldElements: Record<string, (field: ProjectInformationField) => JSX.Element> = {
     Boolean: (field) => (
-      <>
-        <Toggle
-          label={field.displayName}
+      <FieldContainer
+        iconName='ToggleLeft'
+        label={field.displayName}
+        description={field.description}
+      >
+        <Switch
           checked={model.get<boolean>(field)}
-          onChange={(_, checked) => model.set(field, checked)}
+          onChange={(_, data) => model.set(field, data.checked)}
         />
-        <FieldDescription description={field.description} />
-      </>
+      </FieldContainer>
     ),
     URL: (field) => {
       const value = model.get<{
@@ -53,89 +48,114 @@ export function useFieldElements(model: UseModelReturnType) {
         description: string
       }>(field, { url: '', description: '' })
       return (
-        <>
-          <Label>{field.displayName}</Label>
-          <TextField
-            placeholder={strings.UrlFieldUrlPlaceholder}
+        <FieldContainer
+          iconName='LinkMultiple'
+          label={field.displayName}
+          description={field.description}
+        >
+          <Input
             defaultValue={value.url}
-            onChange={(_, url) => model.set(field, { url, description: value.description })}
+            onChange={(_, data) =>
+              model.set(field, { url: data.value, description: value.description })
+            }
+            placeholder={strings.Placeholder.UrlField}
           />
-          <TextField
-            placeholder={strings.UrlFieldDescriptionPlaceholder}
+          <Input
             defaultValue={value.description}
-            onChange={(_, description) => model.set(field, { url: value.url, description })}
-            styles={{ root: { marginTop: 6 } }}
+            onChange={(_, data) => model.set(field, { url: value.url, description: data.value })}
+            placeholder={strings.Placeholder.UrlFieldAlternative}
+            style={{ marginTop: 6 }}
           />
-          <FieldDescription description={field.description} />
-        </>
+        </FieldContainer>
       )
     },
     Text: (field) => (
-      <TextField
+      <FieldContainer
+        iconName='TextNumberFormat'
         label={field.displayName}
         description={field.description}
-        defaultValue={model.get<string>(field)}
-        onChange={(_, value) => model.set(field, value)}
-      />
+      >
+        <Input
+          defaultValue={model.get<string>(field)}
+          onChange={(_, data) => model.set(field, data.value)}
+          placeholder={strings.Placeholder.TextField}
+        />
+      </FieldContainer>
     ),
     Note: (field) => (
-      <TextField
+      <FieldContainer
+        iconName='TextAlignLeft'
         label={field.displayName}
         description={field.description}
-        multiline
-        defaultValue={model.get<string>(field)}
-        onChange={(_, value) => model.set(field, value)}
-      />
+      >
+        <Textarea
+          defaultValue={model.get<string>(field)}
+          onChange={(_, data) => model.set(field, data.value)}
+          placeholder={strings.Placeholder.TextField}
+        />
+      </FieldContainer>
     ),
     DateTime: (field) => (
-      <>
+      <FieldContainer iconName='Calendar' label={field.displayName} description={field.description}>
         <DatePicker
-          label={field.displayName}
+          // TODO: Fix FluentProvider bug with DatePicker
           value={model.get(field)}
           onSelectDate={(date) => model.set(field, date)}
           formatDate={(date) => date.toLocaleDateString()}
+          placeholder={strings.Placeholder.DatePicker}
           firstDayOfWeek={DayOfWeek.Monday}
+          showWeekNumbers
+          allowTextInput
         />
-        <FieldDescription description={field.description} />
-      </>
+      </FieldContainer>
     ),
     Choice: (field) => (
-      <>
-        <Dropdown
-          label={field.displayName}
-          options={field.choices}
-          defaultSelectedKey={model.get<string>(field)}
-          onChange={(_, option) => model.set(field, option.key)}
-        />
-        <FieldDescription description={field.description} />
-      </>
+      <FieldContainer
+        iconName='MultiselectLtr'
+        label={field.displayName}
+        description={field.description}
+      >
+        <Combobox
+          value={model.get<string>(field)}
+          defaultSelectedOptions={[model.get<string>(field)]}
+          placeholder={strings.Placeholder.ChoiceField}
+          onOptionSelect={(_, data) => model.set(field, data.optionValue)}
+        >
+          {field.choices.map((choice) => (
+            <Option key={choice}>{choice}</Option>
+          ))}
+        </Combobox>
+      </FieldContainer>
     ),
     MultiChoice: (field) => (
-      <>
-        <Dropdown
-          label={field.displayName}
-          options={field.choices}
-          multiSelect
-          selectedKeys={model.get<string[]>(field)}
-          onChange={(_, option) => {
-            const selectedKeys = model.get<string[]>(field)
-            if (option.selected) {
-              model.set<string[]>(field, [...selectedKeys, option.key as string])
+      <FieldContainer
+        iconName='MultiselectLtr'
+        label={field.displayName}
+        description={field.description}
+      >
+        <Combobox
+          value={model.get<string[]>(field) ? model.get<string[]>(field).join(', ') : ''}
+          defaultSelectedOptions={model.get<string[]>(field) ? model.get<string[]>(field) : []}
+          multiselect
+          placeholder={strings.Placeholder.MultiChoiceField}
+          onOptionSelect={(e, data) => {
+            if (!_.isEmpty(data.selectedOptions)) {
+              model.set<string[]>(field, data.selectedOptions)
             } else {
-              model.set<string[]>(
-                field,
-                selectedKeys.filter((key) => key !== option.key)
-              )
+              model.set<string[]>(field, [''])
             }
           }}
-        />
-        <FieldDescription description={field.description} />
-      </>
+        >
+          {field.choices.map((choice) => (
+            <Option key={choice}>{choice}</Option>
+          ))}
+        </Combobox>
+      </FieldContainer>
     ),
     User: (field) => (
-      <>
-        <Label>{field.displayName}</Label>
+      <FieldContainer iconName='Person' label={field.displayName} description={field.description}>
         <NormalPeoplePicker
+          styles={{ text: styles.field }}
           onResolveSuggestions={async (filter, selectedItems) =>
             (await SPDataAdapter.clientPeoplePickerSearchUser(
               filter,
@@ -146,13 +166,12 @@ export function useFieldElements(model: UseModelReturnType) {
           itemLimit={1}
           onChange={(items) => model.set(field, items)}
         />
-        <FieldDescription description={field.description} />
-      </>
+      </FieldContainer>
     ),
     UserMulti: (field) => (
-      <>
-        <Label>{field.displayName}</Label>
+      <FieldContainer iconName='People' label={field.displayName} description={field.description}>
         <NormalPeoplePicker
+          styles={{ text: styles.field }}
           onResolveSuggestions={async (filter, selectedItems) =>
             (await SPDataAdapter.clientPeoplePickerSearchUser(
               filter,
@@ -163,13 +182,12 @@ export function useFieldElements(model: UseModelReturnType) {
           itemLimit={20}
           onChange={(items) => model.set(field, items)}
         />
-        <FieldDescription description={field.description} />
-      </>
+      </FieldContainer>
     ),
     TaxonomyFieldType: (field) => (
-      <>
-        <Label>{field.displayName}</Label>
+      <FieldContainer iconName='AppsList' label={field.displayName} description={field.description}>
         <TagPicker
+          styles={{ text: styles.field }}
           onResolveSuggestions={async (filter, selectedItems) =>
             await SPDataAdapter.getTerms(field.getProperty('TermSetId'), filter, selectedItems)
           }
@@ -180,13 +198,12 @@ export function useFieldElements(model: UseModelReturnType) {
           itemLimit={1}
           onChange={(items) => model.set(field, items)}
         />
-        <FieldDescription description={field.description} />
-      </>
+      </FieldContainer>
     ),
     TaxonomyFieldTypeMulti: (field) => (
-      <>
-        <Label>{field.displayName}</Label>
+      <FieldContainer iconName='AppsList' label={field.displayName} description={field.description}>
         <TagPicker
+          styles={{ text: styles.field }}
           onResolveSuggestions={async (filter, selectedItems) =>
             await SPDataAdapter.getTerms(field.getProperty('TermSetId'), filter, selectedItems)
           }
@@ -197,8 +214,7 @@ export function useFieldElements(model: UseModelReturnType) {
           itemLimit={20}
           onChange={(items) => model.set(field, items)}
         />
-        <FieldDescription description={field.description} />
-      </>
+      </FieldContainer>
     )
   }
 

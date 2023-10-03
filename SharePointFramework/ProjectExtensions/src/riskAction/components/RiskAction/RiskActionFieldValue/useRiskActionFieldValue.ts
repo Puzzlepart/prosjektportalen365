@@ -11,7 +11,8 @@ export function useRiskActionFieldValue() {
   const hiddenFieldValue = itemContext.hiddenFieldValue
   const isFieldValueSet = !stringIsNullOrEmpty(itemContext.fieldValue)
   const isHiddenFieldValueSet = !stringIsNullOrEmpty(hiddenFieldValue?.data)
-  const horizontalLayout = dataAdapter.globalSettings.get('RiskActionPlannerHorizontalLayout') === '1'
+  const horizontalLayout =
+    dataAdapter.globalSettings.get('RiskActionPlannerHorizontalLayout') === '1'
   const gap = dataAdapter.globalSettings.get('RiskActionPlannerGap') ?? '0px'
   return {
     isFieldValueSet,

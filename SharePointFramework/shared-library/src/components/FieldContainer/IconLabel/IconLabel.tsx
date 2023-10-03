@@ -8,7 +8,7 @@ export const IconLabel: FC<IFieldContainerProps> = (props) => {
   return (
     <div className={styles.iconLabel}>
       {getFluentIcon(props.iconName)}
-      <Label weight='semibold' required={props.required}>
+      <Label size='small' weight='semibold' required={props.required}>
         {props.label}
       </Label>
     </div>

@@ -23,7 +23,7 @@ import { getFluentIcon } from 'pp365-shared-library'
  * Migrate risk actions dialog. This dialog is used to migrate risk actions to planner tasks.
  */
 export const MigrateRiskActionsDialog: FC = (props) => {
-  const { tasks, itemContext, onMigrate, open, setOpen, isMigrating, separator,setSeparator } =
+  const { tasks, itemContext, onMigrate, open, setOpen, isMigrating, separator, setSeparator } =
     useMigrateRiskActionsDialog()
   return (
     <Dialog open={open} onOpenChange={(_, { open }) => setOpen(open)}>
