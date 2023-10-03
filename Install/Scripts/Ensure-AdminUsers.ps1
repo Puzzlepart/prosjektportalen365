@@ -73,7 +73,12 @@ if (-not (Get-Module | Where-Object { $_.Name -like "PnP.PowerShell" }) ) {
 }
 
 Connect-PnPOnline -TenantAdminUrl $TenantAdminUrl -Url $PortfolioUrl -Interactive
-$Children = Get-PnPHubSiteChild
+try{
+    $Children = Get-PnPHubSiteChild
+}catch{
+    Write-Host "ERROR: $($_.Exception.Message)" -ForegroundColor Red
+    exit 1
+}
 $PortfolioadminUsers = GetPortfolioadminUsers -HubUrl $PortfolioUrl
 
 if($PortfolioadminUsers.Count -eq 0){
@@ -83,7 +88,7 @@ if($PortfolioadminUsers.Count -eq 0){
 }
 
 if ($GrantPermissions) {    
-    $Children | ForEach-Object { GrantPermissions -Url $_ -Members $PortfolioadminUsers}
+    #$Children | ForEach-Object { GrantPermissions -Url $_ -Members $PortfolioadminUsers}
     Write-Host "[x] Done" -ForegroundColor Green
 } elseif($GrantPermissionsAndDelete) {
     $Children | ForEach-Object {
