@@ -22,6 +22,7 @@ import {
   DataSourceService,
   DefaultCaching,
   IGraphGroup,
+  IProjectDataServiceParams,
   ISPDataAdapterBaseConfiguration,
   PortfolioOverviewView,
   ProjectContentColumn,
@@ -70,7 +71,7 @@ export class SPDataAdapter
       spfxContext,
       entityService: this.entityService,
       propertiesListName: strings.ProjectPropertiesListName
-    })
+    } as IProjectDataServiceParams)
   }
 
   public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {

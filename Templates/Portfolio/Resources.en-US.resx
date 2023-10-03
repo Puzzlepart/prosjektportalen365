@@ -1375,6 +1375,21 @@
   <data name="SiteFields_GtValue_DisplayName" xml:space="preserve">
     <value>Value</value>
   </data>
+  <data name="SiteFields_GtSettingsEnabled_DisplayName" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="SiteFields_GtSettingsKey_DisplayName" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="SiteFields_GtSettingsValue_DisplayName" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="SiteFields_GtSettingsCategory_DisplayName" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="SiteFields_GtSettingsId_DisplayName" xml:space="preserve">
+    <value>Unique ID for the setting (internal)</value>
+  </data>
   <data name="SiteFields_GtValue_Description" xml:space="preserve">
     <value>Enter value for the field</value>
   </data>

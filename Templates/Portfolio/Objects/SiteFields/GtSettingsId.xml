@@ -1,0 +1,1 @@
+<Field Type="Text" DisplayName="{resource:SiteFields_GtSettingsId_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{efb20164-49b3-4b61-b251-04eb7c2a4df9}" StaticName="GtSettingsId" Name="GtSettingsId" ShowInEditForm="FALSE" ShowInNewForm="FALSE" ShowInDisplayForm="FALSE" />

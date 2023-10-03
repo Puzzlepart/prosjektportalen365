@@ -46,7 +46,8 @@
         "components": {
           "ProjectSetup": "ce34553d-ab47-4107-8dd1-e980d953996d",
           "ProjectUpgrade": "453a6c1e-e1d0-4b12-a3fc-690a36da1f0c",
-          "TemplateSelectorCommand": "c9080212-e63e-47cc-8278-00ad38c3f5a5"
+          "TemplateSelectorCommand": "c9080212-e63e-47cc-8278-00ad38c3f5a5",
+          "RiskActionPlanner": "2511e707-1b8a-4dc3-88d1-b7002eb3ce54"
         }
       },
       "ProjectWebParts": {

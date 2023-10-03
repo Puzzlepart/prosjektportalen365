@@ -756,6 +756,28 @@ export class PortalDataService {
   }
 
   /**
+   * Retrieves the global settings from the "GLOBAL_SETTINGS" list.
+   *
+   * @returns A Promise that resolves to a Map containing the global settings.
+   */
+  public async getGlobalSettings(): Promise<Map<string, string>> {
+    const intialMap = new Map<string, string>()
+    try {
+      const settingsList = this._getList('GLOBAL_SETTINGS')
+      const spItems = await settingsList.items
+        .select('Id', 'GtSettingsKey', 'GtSettingsValue')
+        .filter('GtSettingsEnabled eq 1')
+        .using(DefaultCaching)()
+      return spItems.reduce((acc, cur) => {
+        acc.set(cur.GtSettingsKey, cur.GtSettingsValue)
+        return acc
+      }, intialMap)
+    } catch (error) {
+      return intialMap
+    }
+  }
+
+  /**
    * Get list by `PortalDataServiceList` enum
    *
    * @param list List to get items from

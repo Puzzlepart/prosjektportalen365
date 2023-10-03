@@ -5,17 +5,22 @@ export interface ISPDataAdapterBaseConfiguration extends SiteContext {
   /**
    * Web URL
    */
-  webUrl: string
+  webUrl?: string
 
   /**
    * Site ID (GUID)
    */
-  siteId: string
+  siteId?: string
 
   /**
    * Log level
    */
   logLevel?: LogLevel
+
+  /**
+   * Load global settings
+   */
+  loadGlobalSettings?: boolean
 }
 
 /**
