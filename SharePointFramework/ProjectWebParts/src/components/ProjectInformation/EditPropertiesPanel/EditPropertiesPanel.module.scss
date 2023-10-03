@@ -1,14 +1,6 @@
 .root {
   margin: 0;
 
-  .iconLabel {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-    padding-bottom: 5px;
-  }
-
   .field {
     min-height: 32px;
     border-radius: var(--borderRadiusMedium);
