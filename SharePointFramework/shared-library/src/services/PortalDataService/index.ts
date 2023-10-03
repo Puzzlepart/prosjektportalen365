@@ -768,11 +768,7 @@ export class PortalDataService {
       const spItems = await settingsList.items
         .select('Id', 'GtSettingsKey', 'GtSettingsValue')
         .filter('GtSettingsEnabled eq 1')
-        .using(
-          Caching({
-            store: 'local'
-          })
-        )()
+        .using(DefaultCaching)()
       return spItems.reduce((acc, cur) => {
         acc.set(cur.GtSettingsKey, cur.GtSettingsValue)
         return acc

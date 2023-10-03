@@ -27,7 +27,7 @@ export const PlannerTaskLink: FC<{ task: RiskActionPlannerTaskReference }> = ({ 
             <div className={styles.title}>{task.title}</div>
             {task.isCompleted === '1' && (
               <div className={styles.completedText}>
-                {getFluentIcon('Checkmark', { color: 'green' })}
+                {getFluentIcon('CheckmarkCircle', { color: 'green' })}
                 <span>{strings.RiskActionPlannerTaskLinkTooltipCompletedText}</span>
               </div>
             )}
