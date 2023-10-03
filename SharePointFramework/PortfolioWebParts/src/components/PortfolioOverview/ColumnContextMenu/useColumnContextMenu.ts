@@ -1,8 +1,4 @@
-import {
-  ContextualMenuItemType,
-  format,
-  IContextualMenuItem
-} from '@fluentui/react'
+import { ContextualMenuItemType, format, IContextualMenuItem } from '@fluentui/react'
 import _ from 'lodash'
 import strings from 'PortfolioWebPartsStrings'
 import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
@@ -51,7 +47,6 @@ export function useColumnContextMenu() {
 
   const { column, target } = context.state.columnContextMenu
   columnContextMenu.target = target
-
 
   if (isAddColumn(column)) {
     columnContextMenu.items = createContextualMenuItems(

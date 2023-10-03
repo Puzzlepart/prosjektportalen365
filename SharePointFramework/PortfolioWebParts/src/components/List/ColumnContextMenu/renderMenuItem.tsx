@@ -1,13 +1,21 @@
 import { ContextualMenuItemType, IContextualMenuItem } from '@fluentui/react'
-import { Menu, MenuDivider, MenuItem, MenuItemCheckbox, MenuItemProps, MenuPopover, MenuTrigger } from '@fluentui/react-components'
-import { FluentIconName, getFluentIcon } from 'icons'
+import {
+  Menu,
+  MenuDivider,
+  MenuItem,
+  MenuItemCheckbox,
+  MenuItemProps,
+  MenuPopover,
+  MenuTrigger
+} from '@fluentui/react-components'
+import { FluentIconName, getFluentIcon } from 'pp365-shared-library/lib/icons'
 import React from 'react'
 
 /**
  * Renders a single menu item for the column context menu.
- * 
+ *
  * @param item The menu item to render.
- * 
+ *
  * @returns The JSX element representing the menu item.
  */
 export function renderMenuItem(item: IContextualMenuItem) {
@@ -29,7 +37,8 @@ export function renderMenuItem(item: IContextualMenuItem) {
             {...baseProps}
             key={item.key}
             name={item.data?.name}
-            value={item.data?.value}>
+            value={item.data?.value}
+          >
             {item.text}
           </MenuItemCheckbox>
         )
@@ -47,9 +56,7 @@ export function renderMenuItem(item: IContextualMenuItem) {
         )
       }
       return (
-        <MenuItem
-          {...baseProps}
-          key={item.key}>
+        <MenuItem {...baseProps} key={item.key}>
           {item.text}
         </MenuItem>
       )

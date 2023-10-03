@@ -14,10 +14,14 @@ export function useProjectStatus(props: IProjectStatusProps) {
 
   useProjectStatusDataFetch(props, dispatch)
 
-  const context: IProjectStatusContext = { props: {
+  const context: IProjectStatusContext = {
+    props: {
       title: strings.ProjectInformationStatusReportHeaderText,
       description: strings.ProjectInformationStatusReportHeaderDescription
-    }, state, dispatch }
+    },
+    state,
+    dispatch
+  }
 
   return { context }
 }

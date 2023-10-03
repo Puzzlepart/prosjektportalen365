@@ -9,16 +9,18 @@ import _ from 'underscore'
 import { ItemFieldValue, ItemFieldValues, ProjectAdminRoleType, SPField } from '../../models'
 import { PortalDataService } from '../../services/PortalDataService'
 import { SPFxContext } from '../../types'
+import { DefaultCaching } from '../cache'
 import { createSpfiInstance } from '../createSpfiInstance'
 import {
-  ProjectPropertiesMapType,
   GetMappedProjectPropertiesOptions,
   ISPDataAdapterBaseConfiguration,
-  ProjectAdminPermission
+  ProjectAdminPermission,
+  ProjectPropertiesMapType
 } from './types'
-import { DefaultCaching } from '../cache'
 
-export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
+export class SPDataAdapterBase<
+  T extends ISPDataAdapterBaseConfiguration = ISPDataAdapterBaseConfiguration
+> {
   /**
    * Settings for the data adapter
    */
@@ -62,6 +64,11 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
   }
 
   /**
+   * Global settings from the portal
+   */
+  public globalSettings: Map<string, string>
+
+  /**
    * Initialize storage
    */
   private _initStorage() {
@@ -102,7 +109,12 @@ export class SPDataAdapterBase<T extends ISPDataAdapterBaseConfiguration> {
       identityFieldName: 'GtSiteId',
       urlFieldName: 'GtSiteUrl'
     })
-    this._initStorage()
+    if (this.settings.siteId) {
+      this._initStorage()
+    }
+    if (this.settings.loadGlobalSettings) {
+      this.globalSettings = await this.portal.getGlobalSettings()
+    }
     this.isConfigured = true
   }
 

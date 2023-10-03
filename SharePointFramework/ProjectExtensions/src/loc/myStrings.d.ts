@@ -1,4 +1,26 @@
 declare interface IProjectExtensionsStrings {
+  CreateMultipleLabel: string
+  CreateMultipleDescription: string
+  RiskActionPopoverTitle: string
+  RiskActionPlannerTaskLinkTooltipCompletedText: string
+  MigrateRiskActionsDialogSeparatorOptionLinebreak: string
+  MigrateRiskActionsDialogSeparatorOptionComma: string
+  MigrateRiskActionsDialogSeparatorLabel: string
+  MigrateRiskActionsDialogProgressText: string
+  MigrateRiskActionsDialogCancel: string
+  NewRiskActionPanelMigrateRiskActions: string
+  MigrateRiskActionsDialogCreatePlannerTasks: string
+  MigrateRiskActionsDialogInfoText: string
+  RiskActionPopoverLastUpdated: string
+  NewRiskActionPanelUpdateTaskStatus: string
+  RiskActionPopoverInfoText: string
+  RiskActionPopoverInfoTextNoPlanner: string
+  StartDateLabel: string
+  DueDateLabel: string
+  NewRiskActionPanelTitle: string
+  NewRiskActionPanelAddNewRiskAction: string
+  ResponsibleFieldNoResults: string
+  ResponsibleFieldLabel: string
   ApplyExtensionHooks: string
   ApplyExtensionText: string
   ApplyingExtensionsText: string

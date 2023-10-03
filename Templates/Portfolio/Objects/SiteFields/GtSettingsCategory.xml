@@ -1,0 +1,5 @@
+<Field Type="Choice" DisplayName="{resource:SiteFields_GtSettingsCategory_DisplayName}" Format="Dropdown" FillInChoice="FALSE" Group="{resource:SiteFields_Portfolio_Group}" ID="{206c2e34-865f-4c7c-ac8a-acab573aee88}" StaticName="GtSettingsCategory" Name="GtSettingsCategory">
+    <CHOICES>
+        <CHOICE>Usikkerhetstiltak i Planner</CHOICE>
+    </CHOICES>
+</Field>

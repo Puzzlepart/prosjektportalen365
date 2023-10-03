@@ -1,0 +1,29 @@
+.migrateRiskActionsDialog {
+    .migrateRiskActionsDialogBody {
+        .migrateRiskActionsDialogTitle {
+            font-size: 18px;
+            margin: 0 0 12px 0;
+        }
+
+        .migrateRiskActionsDialogContent {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+
+            .infoText {
+                padding: 8px;
+                font-size: 12px;
+            }
+            
+            .actions {
+                display: flex;
+                gap: 6px;
+                margin: 12px 0 0 0;
+            }
+
+            .progress {
+                margin: 12px 0 0 0;
+            }
+        }
+    }
+}

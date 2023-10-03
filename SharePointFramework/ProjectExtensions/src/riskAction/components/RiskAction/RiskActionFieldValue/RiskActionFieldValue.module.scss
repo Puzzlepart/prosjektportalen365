@@ -1,0 +1,13 @@
+.riskActionFieldValue {
+  word-wrap: break-word;
+
+  .alert {
+    white-space: pre-wrap;
+    font-size: 10px;
+  }
+
+  .linkList {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
