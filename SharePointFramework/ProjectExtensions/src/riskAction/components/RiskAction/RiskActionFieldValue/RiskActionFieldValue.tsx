@@ -31,7 +31,7 @@ export const RiskActionFieldValue: FC = () => {
       element = <div style={{ whiteSpace: 'pre-wrap' }}>{context.itemContext.fieldValue}</div>
     } else {
       element = (
-        <Alert className={styles.alert}>
+        <Alert intent='info' className={styles.alert}>
           {context.dataAdapter.globalSettings.get('RiskActionPlannerNoActionsText')}
         </Alert>
       )

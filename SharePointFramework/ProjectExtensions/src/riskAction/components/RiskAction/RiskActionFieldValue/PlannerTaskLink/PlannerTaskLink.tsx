@@ -1,7 +1,7 @@
-import { Link, mergeClasses } from '@fluentui/react-components'
+import { Link, Tooltip, mergeClasses } from '@fluentui/react-components'
 import React, { FC } from 'react'
-import { RiskActionPlannerTaskReference } from '../../../types'
-import styles from './RiskActionFieldValue.module.scss'
+import { RiskActionPlannerTaskReference } from '../../../../types'
+import styles from './PlannerTaskLink.module.scss'
 
 /**
  * Creates a link to a planner task in the Office tasks app.
@@ -17,12 +17,14 @@ function createPlannerTaskLink(id: string, type = 'TaskLink', channel = 'Link') 
 }
 
 export const PlannerTaskLink: FC<{ task: RiskActionPlannerTaskReference }> = ({ task }) => (
-  <Link
-    href={createPlannerTaskLink(task.id)}
-    target='_blank'
-    appearance='subtle'
-    className={mergeClasses(styles.taskLink, task.isCompleted === '1' && styles.isCompleted)}
-  >
-    {task.title}
-  </Link>
+  <div className={mergeClasses(styles.plannerTaskLink, task.isCompleted === '1' && styles.isCompleted)}>
+    <Link
+      href={createPlannerTaskLink(task.id)}
+      target='_blank'
+      appearance='subtle'>
+      <Tooltip content={task.title} relationship='label'>
+        <div className={styles.text}>{task.title}</div>
+      </Tooltip>
+    </Link>
+  </div>
 )

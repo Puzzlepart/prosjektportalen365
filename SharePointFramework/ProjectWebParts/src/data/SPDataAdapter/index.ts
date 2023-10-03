@@ -3,7 +3,7 @@ import { LogLevel, Logger } from '@pnp/logging'
 import * as strings from 'ProjectWebPartsStrings'
 import { ItemFieldValues } from 'pp365-shared-library'
 import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library/lib/data'
-import { ProjectDataService } from 'pp365-shared-library/lib/services'
+import { IProjectDataServiceParams, ProjectDataService } from 'pp365-shared-library/lib/services'
 import { SPFxContext } from 'pp365-shared-library/lib/types'
 import { IConfigurationFile } from 'types'
 import _ from 'underscore'
@@ -29,7 +29,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       spfxContext,
       entityService: this.entityService,
       propertiesListName: strings.ProjectPropertiesListName
-    })
+     } as IProjectDataServiceParams)
   }
 
   /**

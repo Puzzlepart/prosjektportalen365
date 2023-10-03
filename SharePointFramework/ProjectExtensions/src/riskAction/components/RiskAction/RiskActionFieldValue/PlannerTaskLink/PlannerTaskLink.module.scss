@@ -1,0 +1,15 @@
+.plannerTaskLink {
+  a {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  &.isCompleted {
+    text-decoration: line-through;
+  }
+
+  .text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
