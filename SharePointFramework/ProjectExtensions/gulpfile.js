@@ -8,6 +8,7 @@ const colors = require('colors')
 
 build.addSuppression('Warning - [sass] The local CSS class \'ms-Grid\' is not camelCase and will not be type-safe.')
 build.addSuppression('Warning - [sass] The local CSS class \'-webkit-filter\' is not camelCase and will not be type-safe.')
+build.addSuppression('Warning - [package-solution] RiskActionPlanner: Admins can make this solution available to all sites in the organization, but field customizers won\'t automatically appear. SharePoint Framework field customizers must be specifically associated to fields programmatically to be visible to site users.')
 
 
 build.configureWebpack.mergeConfig({
