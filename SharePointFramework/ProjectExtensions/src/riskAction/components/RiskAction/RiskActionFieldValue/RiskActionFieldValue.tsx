@@ -14,13 +14,17 @@ import { useRiskActionFieldValue } from './useRiskActionFieldValue'
  */
 export const RiskActionFieldValue: FC = () => {
   const context = useRiskActionFieldCustomizerContext()
-  const { isFieldValueSet, isHiddenFieldValueSet, tasks, horizontalLayout, gap } = useRiskActionFieldValue()
+  const { isFieldValueSet, isHiddenFieldValueSet, tasks, horizontalLayout, gap } =
+    useRiskActionFieldValue()
   let element: ReactElement = null
   if (isHiddenFieldValueSet) {
     element = (
-      <div className={styles.linkList} style={{ flexDirection: horizontalLayout ? 'row' : 'column', gap }}>
+      <div
+        className={styles.linkList}
+        style={{ flexDirection: horizontalLayout ? 'row' : 'column', gap }}
+      >
         {tasks.map((task, index) => (
-            <PlannerTaskLink key={index} task={task} />
+          <PlannerTaskLink key={index} task={task} />
         ))}
       </div>
     )

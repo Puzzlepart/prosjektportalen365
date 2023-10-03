@@ -210,7 +210,7 @@ export class DataAdapter extends SPDataAdapterBase {
     const updatedItemContext = itemContext.update(tasks)
     await listItem.update({
       GtRiskAction: updatedItemContext.fieldValue,
-      [this.hiddenDataFieldName]: updatedItemContext.hiddenFieldValue.data,
+      [this.hiddenDataFieldName]: updatedItemContext.hiddenFieldValue.data
     })
     return updatedItemContext
   }

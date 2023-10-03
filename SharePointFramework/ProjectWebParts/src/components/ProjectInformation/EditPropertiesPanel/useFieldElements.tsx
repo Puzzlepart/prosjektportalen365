@@ -1,26 +1,14 @@
 import { IPersonaProps, ITag, NormalPeoplePicker, TagPicker } from '@fluentui/react'
+import { Combobox, Input, Option, Switch, Textarea } from '@fluentui/react-components'
+import { DatePicker, DayOfWeek } from '@fluentui/react-datepicker-compat'
 import strings from 'ProjectWebPartsStrings'
+import _ from 'lodash'
+import { FieldContainer } from 'pp365-shared-library'
 import { ProjectInformationField } from 'pp365-shared-library/lib/models'
 import React from 'react'
 import SPDataAdapter from '../../../data'
-import { UseModelReturnType } from './useModel'
-import _ from 'lodash'
-import { Option, Input, Textarea, Combobox, Switch } from '@fluentui/react-components'
-import {
-  AppsListFilled,
-  AppsListRegular,
-  CalendarRegular,
-  LinkMultipleRegular,
-  MultiselectLtrRegular,
-  PeopleRegular,
-  PersonRegular,
-  TextAlignLeftRegular,
-  TextNumberFormatRegular,
-  ToggleLeftRegular
-} from '@fluentui/react-icons'
 import styles from './EditPropertiesPanel.module.scss'
-import { DatePicker, DayOfWeek } from '@fluentui/react-datepicker-compat'
-import { IconField } from 'pp365-shared-library'
+import { UseModelReturnType } from './useModel'
 
 /**
  * Hook for field elements of `EditPropertiesPanel` component. This hook is used to render field elements
@@ -43,12 +31,16 @@ import { IconField } from 'pp365-shared-library'
 export function useFieldElements(model: UseModelReturnType) {
   const fieldElements: Record<string, (field: ProjectInformationField) => JSX.Element> = {
     Boolean: (field) => (
-      <IconField icon={ToggleLeftRegular} label={field.displayName} hint={field.description}>
+      <FieldContainer
+        iconName='ToggleLeft'
+        label={field.displayName}
+        description={field.description}
+      >
         <Switch
           checked={model.get<boolean>(field)}
           onChange={(_, data) => model.set(field, data.checked)}
         />
-      </IconField>
+      </FieldContainer>
     ),
     URL: (field) => {
       const value = model.get<{
@@ -56,7 +48,11 @@ export function useFieldElements(model: UseModelReturnType) {
         description: string
       }>(field, { url: '', description: '' })
       return (
-        <IconField icon={LinkMultipleRegular} label={field.displayName} hint={field.description}>
+        <FieldContainer
+          iconName='LinkMultiple'
+          label={field.displayName}
+          description={field.description}
+        >
           <Input
             defaultValue={value.url}
             onChange={(_, data) =>
@@ -70,29 +66,37 @@ export function useFieldElements(model: UseModelReturnType) {
             placeholder={strings.Placeholder.UrlFieldAlternative}
             style={{ marginTop: 6 }}
           />
-        </IconField>
+        </FieldContainer>
       )
     },
     Text: (field) => (
-      <IconField icon={TextNumberFormatRegular} label={field.displayName} hint={field.description}>
+      <FieldContainer
+        iconName='TextNumberFormat'
+        label={field.displayName}
+        description={field.description}
+      >
         <Input
           defaultValue={model.get<string>(field)}
           onChange={(_, data) => model.set(field, data.value)}
           placeholder={strings.Placeholder.TextField}
         />
-      </IconField>
+      </FieldContainer>
     ),
     Note: (field) => (
-      <IconField icon={TextAlignLeftRegular} label={field.displayName} hint={field.description}>
+      <FieldContainer
+        iconName='TextAlignLeft'
+        label={field.displayName}
+        description={field.description}
+      >
         <Textarea
           defaultValue={model.get<string>(field)}
           onChange={(_, data) => model.set(field, data.value)}
           placeholder={strings.Placeholder.TextField}
         />
-      </IconField>
+      </FieldContainer>
     ),
     DateTime: (field) => (
-      <IconField icon={CalendarRegular} label={field.displayName} hint={field.description}>
+      <FieldContainer iconName='Calendar' label={field.displayName} description={field.description}>
         <DatePicker
           // TODO: Fix FluentProvider bug with DatePicker
           value={model.get(field)}
@@ -103,10 +107,14 @@ export function useFieldElements(model: UseModelReturnType) {
           showWeekNumbers
           allowTextInput
         />
-      </IconField>
+      </FieldContainer>
     ),
     Choice: (field) => (
-      <IconField icon={MultiselectLtrRegular} label={field.displayName} hint={field.description}>
+      <FieldContainer
+        iconName='MultiselectLtr'
+        label={field.displayName}
+        description={field.description}
+      >
         <Combobox
           value={model.get<string>(field)}
           defaultSelectedOptions={[model.get<string>(field)]}
@@ -117,10 +125,14 @@ export function useFieldElements(model: UseModelReturnType) {
             <Option key={choice}>{choice}</Option>
           ))}
         </Combobox>
-      </IconField>
+      </FieldContainer>
     ),
     MultiChoice: (field) => (
-      <IconField icon={MultiselectLtrRegular} label={field.displayName} hint={field.description}>
+      <FieldContainer
+        iconName='MultiselectLtr'
+        label={field.displayName}
+        description={field.description}
+      >
         <Combobox
           value={model.get<string[]>(field) ? model.get<string[]>(field).join(', ') : ''}
           defaultSelectedOptions={model.get<string[]>(field) ? model.get<string[]>(field) : []}
@@ -138,10 +150,10 @@ export function useFieldElements(model: UseModelReturnType) {
             <Option key={choice}>{choice}</Option>
           ))}
         </Combobox>
-      </IconField>
+      </FieldContainer>
     ),
     User: (field) => (
-      <IconField icon={PersonRegular} label={field.displayName} hint={field.description}>
+      <FieldContainer iconName='Person' label={field.displayName} description={field.description}>
         <NormalPeoplePicker
           styles={{ text: styles.field }}
           onResolveSuggestions={async (filter, selectedItems) =>
@@ -154,10 +166,10 @@ export function useFieldElements(model: UseModelReturnType) {
           itemLimit={1}
           onChange={(items) => model.set(field, items)}
         />
-      </IconField>
+      </FieldContainer>
     ),
     UserMulti: (field) => (
-      <IconField icon={PeopleRegular} label={field.displayName} hint={field.description}>
+      <FieldContainer iconName='People' label={field.displayName} description={field.description}>
         <NormalPeoplePicker
           styles={{ text: styles.field }}
           onResolveSuggestions={async (filter, selectedItems) =>
@@ -170,10 +182,10 @@ export function useFieldElements(model: UseModelReturnType) {
           itemLimit={20}
           onChange={(items) => model.set(field, items)}
         />
-      </IconField>
+      </FieldContainer>
     ),
     TaxonomyFieldType: (field) => (
-      <IconField icon={AppsListRegular} label={field.displayName} hint={field.description}>
+      <FieldContainer iconName='AppsList' label={field.displayName} description={field.description}>
         <TagPicker
           styles={{ text: styles.field }}
           onResolveSuggestions={async (filter, selectedItems) =>
@@ -186,10 +198,10 @@ export function useFieldElements(model: UseModelReturnType) {
           itemLimit={1}
           onChange={(items) => model.set(field, items)}
         />
-      </IconField>
+      </FieldContainer>
     ),
     TaxonomyFieldTypeMulti: (field) => (
-      <IconField icon={AppsListFilled} label={field.displayName} hint={field.description}>
+      <FieldContainer iconName='AppsList' label={field.displayName} description={field.description}>
         <TagPicker
           styles={{ text: styles.field }}
           onResolveSuggestions={async (filter, selectedItems) =>
@@ -202,7 +214,7 @@ export function useFieldElements(model: UseModelReturnType) {
           itemLimit={20}
           onChange={(items) => model.set(field, items)}
         />
-      </IconField>
+      </FieldContainer>
     )
   }
 

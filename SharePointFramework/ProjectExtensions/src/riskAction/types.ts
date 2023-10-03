@@ -44,9 +44,9 @@ export class RiskActionItemContext {
 
   /**
    * Updates the current RiskActionItemContext with the provided tasks.
-   * 
+   *
    * @param tasks An array of RiskActionPlannerTaskReference objects to update the context with.
-   * 
+   *
    * @returns The updated RiskActionItemContext object.
    */
   public update(tasks: RiskActionPlannerTaskReference[]): RiskActionItemContext {
@@ -61,11 +61,11 @@ export class RiskActionItemContext {
 
   /**
    * Creates a new instance of the RiskActionItemContext class.
-   * 
+   *
    * @param event - The field customizer cell event parameters.
    * @param pageContext - The SharePoint page context.
    * @param hiddenFieldValues - The hidden field values.
-   * 
+   *
    * @returns A new instance of the RiskActionItemContext class.
    */
   public static create(
