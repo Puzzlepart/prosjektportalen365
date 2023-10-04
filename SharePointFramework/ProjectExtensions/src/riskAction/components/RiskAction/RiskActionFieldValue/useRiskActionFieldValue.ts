@@ -8,7 +8,7 @@ import { useRiskActionFieldCustomizerContext } from '../../../context'
 export function useRiskActionFieldValue() {
   const { dataAdapter } = useRiskActionFieldCustomizerContext()
   const { itemContext } = useRiskActionContext()
-  const hiddenFieldValue = itemContext.hiddenFieldValue
+  const hiddenFieldValue = itemContext.hiddenFieldValues
   const isFieldValueSet = !stringIsNullOrEmpty(itemContext.fieldValue)
   const isHiddenFieldValueSet = !stringIsNullOrEmpty(hiddenFieldValue?.data)
   const horizontalLayout =

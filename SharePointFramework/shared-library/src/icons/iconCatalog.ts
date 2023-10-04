@@ -50,13 +50,19 @@ import {
   MultiselectLtrRegular,
   MultiselectLtrFilled,
   PeopleRegular,
-  PeopleFilled
+  PeopleFilled,
+  ColumnTripleEditRegular,
+  ColumnTripleEditFilled
 } from '@fluentui/react-icons'
 
 /**
  * An object containing the available Fluent icons and their corresponding regular and filled versions.
  */
 export const iconCatalog = {
+  ColumnTripleEdit: {
+    regular: ColumnTripleEditRegular,
+    filled: ColumnTripleEditFilled
+  },
   People: {
     regular: PeopleRegular,
     filled: PeopleFilled

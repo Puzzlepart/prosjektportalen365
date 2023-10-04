@@ -43,7 +43,7 @@ export const MigrateRiskActionsDialog: FC = (props) => {
               </DialogTrigger>
             }
           >
-            {itemContext.title}
+            {format(strings.MigrateRiskActionsDialogTitle, itemContext.title)}
           </DialogTitle>
           <DialogContent className={styles.migrateRiskActionsDialogContent}>
             <Alert intent='info' className={styles.infoText}>
@@ -61,6 +61,9 @@ export const MigrateRiskActionsDialog: FC = (props) => {
                 </Option>
                 <Option value={strings.MigrateRiskActionsDialogSeparatorOptionComma}>
                   {strings.MigrateRiskActionsDialogSeparatorOptionComma}
+                </Option>
+                <Option value={strings.MigrateRiskActionsDialogSeparatorOptionCommaNoSpaces}>
+                  {strings.MigrateRiskActionsDialogSeparatorOptionCommaNoSpaces}
                 </Option>
               </Dropdown>
             </Field>

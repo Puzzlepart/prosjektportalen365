@@ -69,7 +69,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: release-package
+          name: release-package-test
           path: release
 
       - name: Run script UpgradeAllSitesToLatest.ps1 in CI mode

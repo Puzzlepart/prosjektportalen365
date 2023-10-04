@@ -19,7 +19,7 @@ export function useRiskActionPopover() {
     popoverState.setValue(open)
   }
 
-  const openPanel = () => {
+  const onOpenPanel = () => {
     popoverState.setFalse()
     panelState.setTrue()
   }
@@ -28,7 +28,7 @@ export function useRiskActionPopover() {
    * Syncs the tasks in the item context by syncing with the data adapter, sets the updated item context,
    * and closes the popover.
    */
-  const syncTasks = async () => {
+  const onSyncTasks = async () => {
     const updatedItemContext = await context.dataAdapter.syncTasks(itemContext)
     popoverState.setFalse()
     setItemContext(updatedItemContext)
@@ -36,24 +36,24 @@ export function useRiskActionPopover() {
 
   let infoText = strings.RiskActionPopoverInfoText
   if (
-    stringIsNullOrEmpty(itemContext.hiddenFieldValue?.data) &&
+    stringIsNullOrEmpty(itemContext.hiddenFieldValues?.data) &&
     !stringIsNullOrEmpty(itemContext.fieldValue)
   ) {
     infoText = strings.RiskActionPopoverInfoTextNoPlanner
   }
 
   const lastUpdated =
-    itemContext.hiddenFieldValue?.updated &&
-    new Date(itemContext.hiddenFieldValue.updated).toLocaleString()
+    itemContext.hiddenFieldValues?.updated &&
+    new Date(itemContext.hiddenFieldValues.updated).toLocaleString()
 
   return {
-    syncTasks,
-    openPanel,
-    closePanel: panelState.setFalse,
-    isPanelOpen: panelState.value,
     infoText,
     isPopoverOpen: popoverState.value,
     onPopoverOpenChange,
+    onSyncTasks,
+    onOpenPanel,
+    onClosePanel: panelState.setFalse,
+    isPanelOpen: panelState.value,
     lastUpdated,
     itemContext,
     showLastSyncTime:

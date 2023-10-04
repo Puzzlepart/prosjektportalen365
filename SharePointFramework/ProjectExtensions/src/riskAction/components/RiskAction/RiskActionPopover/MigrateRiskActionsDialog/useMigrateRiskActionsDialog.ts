@@ -16,7 +16,13 @@ export function useMigrateRiskActionsDialog() {
     strings.MigrateRiskActionsDialogSeparatorOptionLinebreak
   )
   const tasks = itemContext.fieldValue
-    .split(separator === strings.MigrateRiskActionsDialogSeparatorOptionLinebreak ? '\n' : ', ')
+    .split(
+      separator === strings.MigrateRiskActionsDialogSeparatorOptionLinebreak
+        ? '\n'
+        : separator === strings.MigrateRiskActionsDialogSeparatorOptionCommaNoSpaces
+        ? ','
+        : ', '
+    )
     .filter(Boolean)
 
   /**
