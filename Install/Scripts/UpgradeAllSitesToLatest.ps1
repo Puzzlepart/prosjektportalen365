@@ -61,7 +61,7 @@ function EnsureRiskActionPlanner() {
         $RiskActionField = Get-PnPField GtRiskAction
         if ($null -ne $RiskActionField) {
             Write-Host "Setting ClientSideComponentId to $ClientSideComponentId for GtRiskAction field"
-            Set-PnPField -Identity $RiskActionField.InternalName -Values @{ClientSideComponentId = $ClientSideComponentId }
+            Set-PnPField -Identity $RiskActionField.InternalName -Values @{ClientSideComponentId = $ClientSideComponentId } -UpdateExistingLists -ErrorAction SilentlyContinue
         }
     }
 }
