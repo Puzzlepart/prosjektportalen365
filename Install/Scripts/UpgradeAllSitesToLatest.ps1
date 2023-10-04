@@ -18,6 +18,13 @@ if ($CI_MODE) {
     Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
 }
 
+## Checks if file .current-channel-config.json exists and loads it if it does
+if (Test-Path -Path "$ScriptDir/../.current-channel-config.json") {
+    $CurrentChannelConfig = Get-Content -Path "$env:USERPROFILE\.current-channel-config.json" -Raw -ErrorAction SilentlyContinue | ConvertFrom-Json
+    $CurrentChannelConfig
+}
+
+
 function Connect-SharePoint {
     Param(
         [Parameter(Mandatory = $true)]
@@ -42,6 +49,20 @@ function Connect-SharePoint {
     Catch {
         Write-Host "[INFO] Failed to connect to [$Url]: $($_.Exception.Message)"
         throw $_.Exception.Message
+    }
+}
+
+function EnsureRiskActionPlanner() {
+    if ($global:__InstalledVersion -lt "1.9.1") {
+        [System.Guid]$ClientSideComponentId = "2511e707-1b8a-4dc3-88d1-b7002eb3ce54"
+        if ($null -ne $CurrentChannelConfig) {
+            [System.Guid]$ClientSideComponentId = $CurrentChannelConfig.spfx.solutions.ProjectExtensions.components.RiskActionPlanner
+        }
+        $RiskActionField = Get-PnPField GtRiskAction
+        if ($null -ne $RiskActionField) {
+            Write-Host "Setting ClientSideComponentId to $ClientSideComponentId for GtRiskAction field"
+            Set-PnPField -Identity $RiskActionField.InternalName -Values @{ClientSideComponentId = $ClientSideComponentId }
+        }
     }
 }
 
@@ -224,6 +245,7 @@ function UpgradeSite($Url) {
     EnsureProjectAggregrationWebPart
     EnsureHelpContentExtension
     EnsureGtTagSiteColumn
+    EnsureRiskActionPlanner
 }
 
 Write-Host "This script will update all existing sites in a Prosjektportalen installation. This requires you to have the SharePoint admin role"
