@@ -2,6 +2,8 @@ define([], function () {
   return {
     Aria: {
       MenuOverflowCount: '{0} flere elementer',
+      MoveUp: 'Flytt opp',
+      MoveDown: 'Flytt ned',
     },
     AddColumnLabel: 'Legg til en kolonne',
     AllProjectsHeaderText: 'Alle prosjekter/program',

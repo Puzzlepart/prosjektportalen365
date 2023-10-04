@@ -51,6 +51,12 @@ import {
   MultiselectLtrFilled,
   PeopleRegular,
   PeopleFilled,
+  ArrowUndoFilled,
+  ArrowUndoRegular,
+  ChevronDownFilled,
+  ChevronDownRegular,
+  ChevronUpFilled,
+  ChevronUpRegular,
   ColumnTripleEditRegular,
   ColumnTripleEditFilled
 } from '@fluentui/react-icons'
@@ -166,5 +172,17 @@ export const iconCatalog = {
   Add: {
     regular: AddRegular,
     filled: AddFilled
-  }
+  },
+  ArrowUndo: {
+    regular: ArrowUndoRegular,
+    filled: ArrowUndoFilled
+  },
+  ChevronDown: {
+    regular: ChevronDownRegular,
+    filled: ChevronDownFilled
+  },
+  ChevronUp: {
+    regular: ChevronUpRegular,
+    filled: ChevronUpFilled
+  },
 }

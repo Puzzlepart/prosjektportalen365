@@ -1,6 +1,8 @@
 declare interface IPortfolioWebPartsStrings {
   Aria: {
     MenuOverflowCount: string
+    MoveUp: string
+    MoveDown: string
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string
