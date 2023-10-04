@@ -1,4 +1,6 @@
-import { MessageBar, MessageBarType, Toggle } from '@fluentui/react'
+import { Toggle } from '@fluentui/react'
+import { FluentProvider, webLightTheme } from '@fluentui/react-components'
+import { Alert } from '@fluentui/react-components/unstable'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import { DynamicMatrix } from '../DynamicMatrix'
@@ -6,26 +8,30 @@ import { IRiskMatrixProps } from './types'
 import { useRiskMatrix } from './useRiskMatrix'
 
 export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
-  const { configuration, error, getElementsForCell, setShowPostAction } = useRiskMatrix(props)
-  if (!!error) {
-    return <MessageBar messageBarType={MessageBarType.error}>{error}</MessageBar>
-  }
+  const { configuration, error, getElementsForCell, setShowPostAction, fluentProviderId } = useRiskMatrix(props)
   return (
-    <>
-      <DynamicMatrix
-        {...props}
-        width={props.fullWidth ? '100%' : props.width}
-        configuration={configuration}
-        getElementsForCell={getElementsForCell}
-      />
-      <Toggle
-        label={strings.ToggleUncertaintyPostActionLabel}
-        onText={strings.ToggleUncertaintyPostActionOnText}
-        offText={strings.ToggleUncertaintyPostActionOffText}
-        onChange={(_event, checked) => setShowPostAction(checked)}
-        disabled={!!error}
-      />
-    </>
+    <FluentProvider id={fluentProviderId} theme={webLightTheme} style={{ background: 'transparent' }}>
+      {!!error ? (
+        <Alert intent='error'>{error}</Alert>
+      )
+        : (
+          <>
+            <DynamicMatrix
+              {...props}
+              width={props.fullWidth ? '100%' : props.width}
+              configuration={configuration}
+              getElementsForCell={getElementsForCell}
+            />
+            <Toggle
+              label={strings.ToggleUncertaintyPostActionLabel}
+              onText={strings.ToggleUncertaintyPostActionOnText}
+              offText={strings.ToggleUncertaintyPostActionOffText}
+              onChange={(_event, checked) => setShowPostAction(checked)}
+              disabled={!!error}
+            />
+          </>
+        )}
+    </FluentProvider>
   )
 }
 

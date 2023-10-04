@@ -1,6 +1,7 @@
 import moment from 'moment'
 import { useProjectStatusContext } from '../context'
 import { format } from '@fluentui/react'
+import strings from 'ProjectWebPartsStrings'
 
 /**
  * Hook that returns the header title for the project status web part.
@@ -15,8 +16,7 @@ export function useHeader() {
       ).format('DD.MM.YYYY')
     : null
 
-  const title = context.props.title
-  const description = format(context.props.description, formattedDate)
-
+  const title = strings.ProjectInformationStatusReportHeaderText
+  const description = format(strings.ProjectInformationStatusReportHeaderDescription, formattedDate)
   return { title, description }
 }

@@ -3,6 +3,7 @@ import strings from 'ProjectWebPartsStrings'
 import { PortalDataService } from 'pp365-shared-library/lib/services'
 import { useProjectStatusContext } from '../context'
 import { useEditFormUrl } from './useEditFormUrl'
+import SPDataAdapter from 'data'
 
 /**
  * Hook for redirecting to a new status report. Uses `useEditFormUrl` hook
@@ -16,9 +17,6 @@ export function useRedirectNewStatusReport() {
   const context = useProjectStatusContext()
   const getEditFormUrl = useEditFormUrl()
   return async () => {
-    const portalDataService = await new PortalDataService().configure({
-      spfxContext: context.props.spfxContext
-    })
     const [lastReport] = context.state.data.reports
     let properties: Record<string, string | number | boolean> = {}
     if (lastReport) {
@@ -37,7 +35,7 @@ export function useRedirectNewStatusReport() {
     properties.Title = format(strings.NewStatusReportTitle, context.props.webTitle)
     properties.GtSiteId = context.props.siteId
     properties.GtModerationStatus = strings.GtModerationStatus_Choice_Draft
-    const report = await portalDataService.addStatusReport(
+    const report = await SPDataAdapter.portal.addStatusReport(
       properties,
       context.state.data.properties.templateParameters?.ProjectStatusContentTypeId
     )
