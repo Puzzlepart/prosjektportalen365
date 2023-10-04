@@ -88,7 +88,7 @@ if($PortfolioadminUsers.Count -eq 0){
 }
 
 if ($GrantPermissions) {    
-    #$Children | ForEach-Object { GrantPermissions -Url $_ -Members $PortfolioadminUsers}
+    $Children | ForEach-Object { GrantPermissions -Url $_ -Members $PortfolioadminUsers}
     Write-Host "[x] Done" -ForegroundColor Green
 } elseif($GrantPermissionsAndDelete) {
     $Children | ForEach-Object {
