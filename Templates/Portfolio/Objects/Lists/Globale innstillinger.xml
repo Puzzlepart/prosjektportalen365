@@ -80,6 +80,14 @@
             <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsCategory">Usikkerhetstiltak i Planner</pnp:DataValue>
         </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSettingsId">{cc992fb7-b59a-4e19-9338-a7e75bec2fd3}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Standard konfigurasjon for Risikomatrise</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsKey">RiskMatrixDefaultConfigurationFile</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsValue">standard-konfigurasjon.json</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsCategory">Risikomatrise</pnp:DataValue>
+        </pnp:DataRow>
     </pnp:DataRows>
     <pnp:Webhooks>
         <pnp:Webhook ServerNotificationUrl="https://northeurope1-0.pushnp.svc.ms/notifications?token=5507e3fc-9a4e-4217-b7be-b4e034d94ec6" ExpiresInDays="1" />
