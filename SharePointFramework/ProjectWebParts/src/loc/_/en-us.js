@@ -143,7 +143,6 @@ define([], function () {
     RevertDefaultColorConfigurationText: 'Use default',
     RiskMatrixConfigurationFolder: 'Risk matrix',
     RiskMatrixGroupName: 'Risk Matrix',
-    RiskMatrixManualConfigurationPathDefaltValue: 'standard-konfigurasjon.json',
     SaveColorConfigurationText: 'Save',
     SettingsGroupName: 'Settings',
     ShowAllProjectInformationText: 'View all project information',

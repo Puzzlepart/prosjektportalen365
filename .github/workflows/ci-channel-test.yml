@@ -59,3 +59,18 @@ jobs:
       - name: Upgrade
         run: release/Install.ps1 -Url "${{ vars.SP_URL_TEST }}" -Upgrade -CI ${{ env.CI_CREDENTIALS }}
         shell: powershell
+
+  upgrade_all_sites_to_latest:
+    needs: [build_release_package_test, upgrade_channel_test]
+    name: Upgrade all sites to latest (test)
+    runs-on: macos-latest
+    if: "contains(github.event.head_commit.message, '[upgrade-all-sites-to-latest]')"
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: release-package-test
+          path: release
+
+      - name: Run script UpgradeAllSitesToLatest.ps1 in CI mode
+        run: release/Scripts/UpgradeAllSitesToLatest.ps1 -Url ${{ vars.SP_URL_TEST }} -CI ${{ env.CI_CREDENTIALS }}
+        shell: powershell

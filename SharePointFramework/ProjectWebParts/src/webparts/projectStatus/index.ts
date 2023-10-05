@@ -30,12 +30,10 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
 
   public async onInit() {
     await super.onInit()
-    const [riskMatrixConfigurations] = await Promise.all([
-      SPDataAdapter.getConfigurations(strings.RiskMatrixConfigurationFolder)
-    ])
+    const riskMatrixConfigurations = await SPDataAdapter.getConfigurations(strings.RiskMatrixConfigurationFolder)
     const defaultRiskMatrixConfiguration = _.find(
       riskMatrixConfigurations,
-      (config) => config.name === strings.RiskMatrixManualConfigurationPathDefaltValue
+      (config) => config.name === SPDataAdapter.globalSettings.get('RiskMatrixDefaultConfigurationFile')
     )
     this._data = {
       riskMatrixConfigurations,
@@ -107,14 +105,14 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   label: strings.MatrixFullWidthLabel
                 }),
                 !this.properties.riskMatrix?.fullWidth &&
-                  PropertyPaneSlider('riskMatrix.width', {
-                    label: strings.WidthFieldLabel,
-                    min: 400,
-                    max: 1300,
-                    value: 400,
-                    showValue: true,
-                    disabled: this.properties.riskMatrix?.fullWidth
-                  }),
+                PropertyPaneSlider('riskMatrix.width', {
+                  label: strings.WidthFieldLabel,
+                  min: 400,
+                  max: 1300,
+                  value: 400,
+                  showValue: true,
+                  disabled: this.properties.riskMatrix?.fullWidth
+                }),
                 PropertyPaneTextField('riskMatrix.calloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,
@@ -122,59 +120,15 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   rows: 8
                 }),
                 !this.properties.riskMatrix.useDynamicConfiguration &&
-                  PropertyPaneDropdown('riskMatrix.manualConfigurationPath', {
-                    label: strings.ManualConfigurationPathLabel,
-                    options: this._data.riskMatrixConfigurations.map(
-                      ({ url: key, title: text }) => ({ key, text })
-                    ),
-                    selectedKey:
-                      this.properties.riskMatrix?.manualConfigurationPath ??
-                      this._data.defaultRiskMatrixConfiguration?.url
-                  }),
-                PropertyPaneToggle('riskMatrix.useDynamicConfiguration', {
-                  label: strings.UseDynamicConfigurationLabel,
-                  offText: strings.UseDynamicConfigurationOffText,
-                  onText: strings.UseDynamicConfigurationOnText
-                }),
-                this.properties.riskMatrix.useDynamicConfiguration &&
-                  PropertyPaneDropdown('riskMatrix.size', {
-                    label: strings.MatrixSizeLabel,
-                    options: [
-                      {
-                        key: '4',
-                        text: '4x4'
-                      },
-                      {
-                        key: '5',
-                        text: '5x5'
-                      },
-                      {
-                        key: '6',
-                        text: '6x6'
-                      }
-                    ],
-                    selectedKey: this.properties.riskMatrix?.size ?? '5'
-                  }),
-                this.properties.riskMatrix.useDynamicConfiguration &&
-                  PropertyFieldColorConfiguration('riskMatrix.colorScaleConfig', {
-                    key: 'riskMatrixColorScaleConfig',
-                    label: strings.MatrixColorScaleConfigLabel,
-                    defaultValue: [
-                      { p: 10, r: 44, g: 186, b: 0 },
-                      { p: 30, r: 163, g: 255, b: 0 },
-                      { p: 50, r: 255, g: 244, b: 0 },
-                      { p: 70, r: 255, g: 167, b: 0 },
-                      { p: 90, r: 255, g: 0, b: 0 }
-                    ],
-                    value: this.properties.riskMatrix?.colorScaleConfig
-                  }),
-                ...(this.properties.riskMatrix.useDynamicConfiguration
-                  ? this.getMatrixHeaderLabelPropertyFields(
-                      'riskMatrix',
-                      RISK_MATRIX_DEFAULT_PROBABILITY_HEADERS,
-                      RISK_MATRIX_DEFAULT_CONSEQUENCE_HEADERS
-                    )
-                  : [])
+                PropertyPaneDropdown('riskMatrix.manualConfigurationPath', {
+                  label: strings.ManualConfigurationPathLabel,
+                  options: this._data.riskMatrixConfigurations.map(
+                    ({ url: key, title: text }) => ({ key, text })
+                  ),
+                  selectedKey:
+                    this.properties.riskMatrix?.manualConfigurationPath ??
+                    this._data.defaultRiskMatrixConfiguration?.url
+                })
               ].filter(Boolean)
             },
             {
