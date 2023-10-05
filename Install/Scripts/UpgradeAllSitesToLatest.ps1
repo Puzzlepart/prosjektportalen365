@@ -10,6 +10,7 @@ $CI_MODE = (-not ([string]::IsNullOrEmpty($CI)))
 
 $global:__InstalledVersion = $null
 $global:__PnPConnection = $null
+$global:__CurrentChannelConfig = $null
 
 $ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
 
@@ -20,7 +21,7 @@ if ($CI_MODE) {
 
 ## Checks if file .current-channel-config.json exists and loads it if it does
 if (Test-Path -Path "$ScriptDir/../.current-channel-config.json") {
-    $CurrentChannelConfig = Get-Content -Path "$env:USERPROFILE\.current-channel-config.json" -Raw -ErrorAction SilentlyContinue | ConvertFrom-Json
+    $global:__CurrentChannelConfig = Get-Content -Path "$env:USERPROFILE\.current-channel-config.json" -Raw -ErrorAction SilentlyContinue | ConvertFrom-Json
     Write-Host "[INFO] Loaded channel config from file .current-channel-config.json"
 }
 
@@ -55,8 +56,8 @@ function Connect-SharePoint {
 function EnsureRiskActionPlanner() {
     if ($global:__InstalledVersion -lt "1.9.1") {
         [System.Guid]$ClientSideComponentId = "2511e707-1b8a-4dc3-88d1-b7002eb3ce54"
-        if ($null -ne $CurrentChannelConfig) {
-            [System.Guid]$ClientSideComponentId = $CurrentChannelConfig.spfx.solutions.ProjectExtensions.components.RiskActionPlanner
+        if ($null -ne $global:__CurrentChannelConfig) {
+            $ClientSideComponentId = $global:__CurrentChannelConfig.spfx.solutions.ProjectExtensions.components.RiskActionPlanner
         }
         $RiskActionField = Get-PnPField GtRiskAction
         if ($null -ne $RiskActionField) {
