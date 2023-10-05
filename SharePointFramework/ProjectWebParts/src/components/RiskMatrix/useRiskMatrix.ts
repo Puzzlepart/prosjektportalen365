@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { IMatrixCell } from '../DynamicMatrix'
 import { IRiskMatrixProps } from './types'
 import { useRiskMatrixConfiguration } from './useRiskMatrixConfiguration'
+import { useId } from '@fluentui/react-components'
 
 /**
  * Component logic hook for `RiskMatrix`
@@ -18,11 +19,11 @@ export function useRiskMatrix(props: IRiskMatrixProps) {
       .filter((item) => cell.y === item.probability && cell.x === item.consequence)
       .map(
         (item) =>
-          ({
-            model: item,
-            style: { opacity: showPostAction ? 0 : 1 },
-            title: item.tooltip
-          } as IMatrixElementProps)
+        ({
+          model: item,
+          style: { opacity: showPostAction ? 0 : 1 },
+          title: item.tooltip
+        } as IMatrixElementProps)
       )
     const postActionElements = props.items
       .filter(
@@ -30,14 +31,16 @@ export function useRiskMatrix(props: IRiskMatrixProps) {
       )
       .map(
         (item) =>
-          ({
-            model: item,
-            style: { opacity: showPostAction ? 1 : 0 },
-            title: item.tooltip
-          } as IMatrixElementProps)
+        ({
+          model: item,
+          style: { opacity: showPostAction ? 1 : 0 },
+          title: item.tooltip
+        } as IMatrixElementProps)
       )
     return [...elements, ...postActionElements]
   }
 
-  return { configuration, error, getElementsForCell, setShowPostAction } as const
+  const fluentProviderId = useId('risk-matrix-fluent-provider-')
+
+  return { configuration, error, getElementsForCell, setShowPostAction, fluentProviderId }
 }

@@ -9,7 +9,6 @@ import styles from './BasePanel.module.scss'
 
 export const BasePanel: FC<IBasePanelProps> = (props) => {
   const context = useProjectInformationContext()
-
   return (
     <Panel
       {...props}

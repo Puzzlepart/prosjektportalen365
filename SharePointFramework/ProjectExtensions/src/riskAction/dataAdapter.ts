@@ -153,7 +153,7 @@ export class DataAdapter extends SPDataAdapterBase {
       .top(999)
       .filter(`planId eq '${defaultPlan.id}' and bucketId eq '${bucketId}'`)
       .select('id', 'title', 'percentComplete')()
-    const updatedTasks = itemContext.hiddenFieldValue.tasks
+    const updatedTasks = itemContext.hiddenFieldValues.tasks
       .map<RiskActionPlannerTaskReference>((task) => {
         const updatedTask = tasks.find(({ id }) => id === task.id)
         if (!updatedTask) return null
@@ -168,7 +168,7 @@ export class DataAdapter extends SPDataAdapterBase {
     const updatedItemContext = itemContext.update(updatedTasks)
     await listItem.update({
       GtRiskAction: updatedItemContext.fieldValue,
-      [this.hiddenDataFieldName]: updatedItemContext.hiddenFieldValue.data,
+      [this.hiddenDataFieldName]: updatedItemContext.hiddenFieldValues.data,
       [this.hiddenUpdateFieldName]: new Date()
     })
     return updatedItemContext
@@ -185,7 +185,7 @@ export class DataAdapter extends SPDataAdapterBase {
     itemContext: RiskActionItemContext
   ): Promise<RiskActionItemContext> {
     const tasks = [
-      ...(itemContext.hiddenFieldValue.tasks ?? []),
+      ...(itemContext.hiddenFieldValues.tasks ?? []),
       ...newTasks.map<RiskActionPlannerTaskReference>((newTask) => ({
         id: newTask.id,
         title: newTask.title,
@@ -196,7 +196,7 @@ export class DataAdapter extends SPDataAdapterBase {
     const updatedItemContext = itemContext.update(tasks)
     await listItem.update({
       GtRiskAction: updatedItemContext.fieldValue,
-      [this.hiddenDataFieldName]: updatedItemContext.hiddenFieldValue.data
+      [this.hiddenDataFieldName]: updatedItemContext.hiddenFieldValues.data
     })
     return updatedItemContext
   }

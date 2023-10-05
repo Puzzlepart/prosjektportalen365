@@ -24,7 +24,7 @@ export class RiskActionItemContext {
   /**
    * The hidden values of the field associated with the risk action item.
    */
-  public hiddenFieldValue: RiskActionHiddenFieldValues
+  public hiddenFieldValues: RiskActionHiddenFieldValues
 
   /**
    * Represents a RiskAction object.
@@ -43,7 +43,7 @@ export class RiskActionItemContext {
     this.id = _event.listItem.getValueByName('ID')
     this.title = _event.listItem.getValueByName('Title').toString()
     this.fieldValue = _event.fieldValue
-    this.hiddenFieldValue = hiddenFieldValues.get(this.id.toString())
+    this.hiddenFieldValues = hiddenFieldValues.get(this.id.toString())
   }
 
   /**
@@ -69,8 +69,8 @@ export class RiskActionItemContext {
   public update(tasks: RiskActionPlannerTaskReference[]): RiskActionItemContext {
     const newContext = new RiskActionItemContext(this._event, this._pageContext)
     newContext.fieldValue = tasks.map((task) => task.title).join('\n')
-    newContext.hiddenFieldValue = {
-      ...this.hiddenFieldValue,
+    newContext.hiddenFieldValues = {
+      ...this.hiddenFieldValues,
       data: RiskActionPlannerTaskReference.toString(tasks),
       tasks
     }

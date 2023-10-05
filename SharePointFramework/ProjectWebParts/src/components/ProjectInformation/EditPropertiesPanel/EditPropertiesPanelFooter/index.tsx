@@ -4,7 +4,7 @@ import { ClosePanelButton } from '../../BasePanel'
 import { IEditPropertiesPanelFooterProps } from './types'
 import styles from './EditPropertiesPanelFooter.module.scss'
 import { UserMessage } from 'pp365-shared-library/lib/components'
-import { Button, FluentProvider, Spinner, useId, webLightTheme } from '@fluentui/react-components'
+import { Button, Field, FluentProvider, ProgressBar, Spinner, useId, webLightTheme } from '@fluentui/react-components'
 
 /**
  * Renders the footer for the `EditPropertiesPanel` with a `<PrimaryButton />` for saving the changes,
@@ -25,32 +25,29 @@ export const EditPropertiesPanelFooter: FC<IEditPropertiesPanelFooterProps> = (p
         </div>
       )}
       <div className={styles.container}>
-        <Button
-          appearance='primary'
-          onClick={props.submit.onSave}
-          disabled={!props.model.isChanged || isSaving || !!props.submit.error}
-        >
-          {strings.SaveText}
-        </Button>
-        <ClosePanelButton
-          onClick={() => {
-            props.model.reset()
-          }}
-          disabled={isSaving}
-        />
-        {isSaving && (
-          <div className={styles.saveStatusSpinner}>
-            <Spinner {...props.spinner} label={props.submit.saveStatus} />
-          </div>
+        {isSaving ? (
+          <Field validationMessage={props.submit.saveStatus} validationState='none'>
+            <ProgressBar />
+          </Field>
+        ) : (
+          <>
+            <Button
+              appearance='primary'
+              onClick={props.submit.onSave}
+              disabled={!props.model.isChanged || !!props.submit.error}
+            >
+              {strings.SaveText}
+            </Button>
+            <ClosePanelButton
+              onClick={() => {
+                props.model.reset()
+              }}
+            />
+          </>
         )}
       </div>
     </FluentProvider>
   )
 }
 
-EditPropertiesPanelFooter.defaultProps = {
-  spinner: {
-    labelPosition: 'after',
-    size: 'medium'
-  }
-}
+EditPropertiesPanelFooter.displayName = 'EditPropertiesPanelFooter'

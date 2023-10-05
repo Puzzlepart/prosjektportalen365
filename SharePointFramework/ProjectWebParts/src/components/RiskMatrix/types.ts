@@ -9,7 +9,7 @@ export interface IRiskMatrixProps
     IBaseWebPartComponentProps,
     Pick<IDynamicMatrixProps, 'size' | 'colorScaleConfig' | 'calloutTemplate'> {
   /**
-   * Whether the matrix should be rendered in dynamic mode
+   * Whether the matrix should be rendered in dynamic mode (deprecated)
    */
   useDynamicConfiguration?: boolean
 

@@ -12,9 +12,4 @@ export interface IEditPropertiesPanelFooterProps {
    * Model functions and state.
    */
   model: UseModelReturnType
-
-  /**
-   * Spinner props.
-   */
-  spinner?: SpinnerProps
 }

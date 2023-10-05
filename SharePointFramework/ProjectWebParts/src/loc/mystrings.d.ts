@@ -23,8 +23,7 @@ declare interface IProjectWebPartsStrings {
   UnknownConfigurationName: any
   SiteAssetsConfigurationFolder: string
   RiskMatrixConfigurationFolder: string
-  ManualConfigurationNotFoundOrInvalid: string
-  RiskMatrixManualConfigurationPathDefaltValue: string
+  ManualConfigurationNotFoundOrInvalid: stringg
   UseDynamicConfigurationOffText: string
   UseDynamicConfigurationOnText: string
   ManualConfigurationPathLabel: string
@@ -170,7 +169,6 @@ declare interface IProjectWebPartsStrings {
   RevertDefaultColorConfigurationText: string
   RiskMatrixConfigurationFolder: string
   RiskMatrixGroupName: string
-  RiskMatrixManualConfigurationPathDefaltValue: string
   SaveColorConfigurationText: string
   SettingsGroupName: string
   ShowAllProjectInformationText: string

@@ -1,11 +1,5 @@
 import { format } from '@fluentui/react'
-import {
-  Button,
-  Popover,
-  PopoverSurface,
-  PopoverTrigger,
-  mergeClasses
-} from '@fluentui/react-components'
+import { Button, Popover, PopoverSurface, mergeClasses } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'ProjectExtensionsStrings'
@@ -17,17 +11,19 @@ import styles from './RiskActionPopover.module.scss'
 import { useRiskActionPopover } from './useRiskActionPopover'
 
 /**
- * Risk action popover. This popover is used to handle actions for risk actions.
+ * Risk action popover. This popover is used to handle actions for risk actions. Children
+ * are rendered inside the popover, so the `PopoverTrigger` component can be used anywhere
+ * within the children component(s).
  */
 export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
   const {
-    syncTasks,
-    isPanelOpen,
-    openPanel,
-    closePanel,
     infoText,
     isPopoverOpen,
     onPopoverOpenChange,
+    onSyncTasks,
+    onOpenPanel,
+    onClosePanel,
+    isPanelOpen,
     lastUpdated,
     itemContext,
     showLastSyncTime
@@ -41,9 +37,7 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
         open={isPopoverOpen}
         onOpenChange={onPopoverOpenChange}
       >
-        <PopoverTrigger disableButtonEnhancement>
-          <div>{props.children}</div>
-        </PopoverTrigger>
+        <div>{props.children}</div>
         <PopoverSurface className={styles.riskActionPopover}>
           <div className={styles.title}>
             {format(strings.RiskActionPopoverTitle, itemContext.title)}
@@ -60,27 +54,27 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
             </Alert>
           </div>
           <div className={styles.actions}>
-            <div hidden={stringIsNullOrEmpty(itemContext.hiddenFieldValue?.data)}>
+            <div hidden={stringIsNullOrEmpty(itemContext.hiddenFieldValues?.data)}>
               <Button
                 appearance='transparent'
                 icon={getFluentIcon('Add')}
                 size='small'
-                onClick={openPanel}
+                onClick={onOpenPanel}
               >
                 {strings.NewRiskActionPanelAddNewRiskAction}
               </Button>
             </div>
-            <div hidden={stringIsNullOrEmpty(itemContext.hiddenFieldValue?.data)}>
+            <div hidden={stringIsNullOrEmpty(itemContext.hiddenFieldValues?.data)}>
               <Button
                 appearance='transparent'
                 icon={getFluentIcon('ArrowSync', { color: 'green' })}
                 size='small'
-                onClick={syncTasks}
+                onClick={onSyncTasks}
               >
                 {strings.NewRiskActionPanelUpdateTaskStatus}
               </Button>
             </div>
-            <div hidden={!stringIsNullOrEmpty(itemContext.hiddenFieldValue?.data)}>
+            <div hidden={!stringIsNullOrEmpty(itemContext.hiddenFieldValues?.data)}>
               <MigrateRiskActionsDialog>
                 <Button
                   appearance='transparent'
@@ -95,7 +89,7 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
           </div>
         </PopoverSurface>
       </Popover>
-      <NewRiskActionPanel isOpen={isPanelOpen} onDismiss={closePanel} />
+      <NewRiskActionPanel isOpen={isPanelOpen} onDismiss={onClosePanel} />
     </>
   )
 }

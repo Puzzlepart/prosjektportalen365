@@ -32,6 +32,7 @@ export const EditPropertiesPanel: FC<IEditPropertiesPanelProps> = (props) => {
   )
 }
 
+EditPropertiesPanel.displayName = 'EditPropertiesPanel'
 EditPropertiesPanel.defaultProps = {
   $type: 'EditPropertiesPanel',
   headerText: strings.EditProjectInformationText,

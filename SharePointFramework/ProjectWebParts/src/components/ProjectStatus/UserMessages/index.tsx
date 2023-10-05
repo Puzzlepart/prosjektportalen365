@@ -12,7 +12,7 @@ export const UserMessages: FC = () => {
     <Shimmer isDataLoaded={context.state.isDataLoaded}>
       <div className={styles.root}>
         {any(context.state.data.reports, (report) => !report.published) && (
-          <UserMessage text={strings.UnpublishedStatusReportInfo} />
+          <UserMessage intent='info' text={strings.UnpublishedStatusReportInfo} />
         )}
         {context.state.userMessage && <UserMessage {...context.state.userMessage} />}
       </div>
