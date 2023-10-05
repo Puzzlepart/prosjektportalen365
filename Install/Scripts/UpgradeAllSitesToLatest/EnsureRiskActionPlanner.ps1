@@ -1,4 +1,4 @@
-$TargetVersion = "1.9.1"
+$TargetVersion = "1.9.0"
 
 if ($global:__InstalledVersion -lt $TargetVersion) {
     [System.Guid]$ClientSideComponentId = "2511e707-1b8a-4dc3-88d1-b7002eb3ce54"
