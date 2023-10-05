@@ -1,4 +1,4 @@
-import { IPanelProps, Panel, PanelType } from '@fluentui/react'
+import { Panel, PanelType } from '@fluentui/react'
 import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 import React, { FC } from 'react'
 import styles from './BasePanel.module.scss'
