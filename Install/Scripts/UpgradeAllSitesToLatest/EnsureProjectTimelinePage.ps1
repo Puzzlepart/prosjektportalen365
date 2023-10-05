@@ -1,4 +1,5 @@
 $ExistingNodes = Get-PnPNavigationNode -Location QuickLaunch -ErrorAction SilentlyContinue
+
 if ($null -eq $ExistingNodes) {
     Write-Host "`t`tCannot connect to site. Do you have access?" -ForegroundColor Red
 }

@@ -56,13 +56,13 @@ function Connect-SharePoint {
 
 function UpgradeSite($Url) {
     Connect-SharePoint -Url $Url
-    ./UpgradeAllSitesToLatest/EnsureProjectTimelinePage.ps1
-    ./UpgradeAllSitesToLatest/EnsureResourceLoadIsSiteColumn.ps1
-    ./UpgradeAllSitesToLatest/EnsureProgramAggregrationWebPart.ps1
-    ./UpgradeAllSitesToLatest/EnsureProjectAggregrationWebPart.ps1
-    ./UpgradeAllSitesToLatest/EnsureHelpContentExtension.ps1
-    ./UpgradeAllSitesToLatest/EnsureGtTagSiteColumn.ps1
-    ./UpgradeAllSitesToLatest/EnsureRiskActionPlanner.ps1
+    ./$ScriptDir/UpgradeAllSitesToLatest/EnsureProjectTimelinePage.ps1
+    ./$ScriptDir/UpgradeAllSitesToLatest/EnsureResourceLoadIsSiteColumn.ps1
+    ./$ScriptDir/UpgradeAllSitesToLatest/EnsureProgramAggregrationWebPart.ps1
+    ./$ScriptDir/UpgradeAllSitesToLatest/EnsureProjectAggregrationWebPart.ps1
+    ./$ScriptDir/UpgradeAllSitesToLatest/EnsureHelpContentExtension.ps1
+    ./$ScriptDir/UpgradeAllSitesToLatest/EnsureGtTagSiteColumn.ps1
+    ./$ScriptDir/UpgradeAllSitesToLatest/EnsureRiskActionPlanner.ps1
 }
 
 Write-Host "This script will update all existing sites in a Prosjektportalen installation. This requires you to have the SharePoint admin role"
