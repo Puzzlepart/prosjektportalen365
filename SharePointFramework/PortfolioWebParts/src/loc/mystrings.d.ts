@@ -5,15 +5,8 @@ declare interface IPortfolioWebPartsStrings {
     MoveDown: string
   },
   Placeholder: {
-    DatePicker: string
     TextField: string
-    UrlField: string
-    UrlFieldAlternative: string
-    TaxonomyPicker: string
-    PeoplePicker: string
-    NumberField: string
-    ChoiceField: string
-    MultiChoiceField: string
+    Icon: string
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string

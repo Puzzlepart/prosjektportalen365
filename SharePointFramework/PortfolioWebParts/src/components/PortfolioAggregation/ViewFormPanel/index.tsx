@@ -1,11 +1,12 @@
-import { Panel, TextField } from '@fluentui/react'
+import { Panel } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import { FormFieldContainer } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { usePortfolioAggregationContext } from '../context'
 import styles from './ViewFormPanel.module.scss'
 import { ViewFormPanelFooter } from './ViewFormPanelFooter'
 import { useViewFormPanel } from './useViewFormPanel'
+import { FieldContainer } from 'pp365-shared-library'
+import { Input, Textarea } from '@fluentui/react-components'
 
 export const ViewFormPanel: FC = () => {
   const context = usePortfolioAggregationContext()
@@ -20,50 +21,57 @@ export const ViewFormPanel: FC = () => {
       isLightDismiss={true}
       className={styles.root}
     >
-      <FormFieldContainer>
-        <TextField
-          label={strings.TitleLabel}
-          required={true}
+      <FieldContainer
+        iconName='NumberSymbolSquare'
+        label={strings.TitleLabel}
+        description={strings.TitleLabel}
+        required={true}
+      >
+        <Input
           value={view.get('title')}
-          onChange={(_, value) => setView('title', value)}
+          onChange={(_, data) => setView('title', data.value)}
+          placeholder={strings.Placeholder.TextField}
         />
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <TextField
-          label={strings.SearchQueryLabel}
-          description={strings.PortfolioAggregationViewSearchQueryDescription}
-          required={true}
-          multiline={true}
+      </FieldContainer>
+      <FieldContainer
+        iconName='TextAlignLeft'
+        label={strings.SearchQueryLabel}
+        description={strings.PortfolioAggregationViewSearchQueryDescription}
+        required={true}
+      >
+        <Textarea
+          defaultValue={view.get('searchQuery')}
+          onChange={(_, data) => setView('searchQuery', data.value)}
           rows={12}
-          value={view.get('searchQuery')}
-          onChange={(_, value) => setView('searchQuery', value)}
+          placeholder={strings.Placeholder.TextField}
         />
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <TextField
-          label={strings.IconNameLabel}
-          description={strings.IconNameDescription}
+      </FieldContainer>
+      <FieldContainer
+        iconName='Icons'
+        label={strings.IconNameLabel}
+        description={strings.IconNameDescription}
+        required={true}
+      >
+        <Input
           value={view.get('iconName')}
-          onChange={(_, value) => setView('iconName', value)}
-          iconProps={{ iconName: view.get('iconName') }}
+          onChange={(_, data) => setView('iconName', data.value)}
+          placeholder={strings.Placeholder.Icon}
         />
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <TextField
-          label={strings.DataSourceCategoryLabel}
-          description={strings.DataSourceCategoryDescription}
-          disabled={true}
-          value={context.props.dataSourceCategory}
-        />
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <TextField
-          label={strings.DataSourceLevelLabel}
-          description={strings.DataSourceLevelDescription}
-          disabled={true}
-          value={context.props.configuration?.level}
-        />
-      </FormFieldContainer>
+      </FieldContainer>
+      <FieldContainer
+        iconName='GroupList'
+        label={strings.DataSourceCategoryLabel}
+        description={strings.DataSourceCategoryDescription}
+      >
+        <Input value={context.props.dataSourceCategory} disabled={true} />
+      </FieldContainer>
+      <FieldContainer
+        iconName='GroupList'
+        label={strings.DataSourceLevelLabel}
+        description={strings.DataSourceLevelDescription}
+      >
+        <Input value={context.props.configuration?.level} disabled={true} />
+      </FieldContainer>
     </Panel>
   )
 }

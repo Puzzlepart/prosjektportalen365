@@ -1,12 +1,13 @@
-import { Panel, TextField, Toggle } from '@fluentui/react'
+import { Panel } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import { ColumnSearchPropertyField, FormFieldContainer } from 'pp365-shared-library'
+import { ColumnSearchPropertyField, FieldContainer } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { ColumnDataTypeField } from '../../List/ItemColumn/ColumnDataTypeField'
 import { usePortfolioAggregationContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
 import { useColumnFormPanel } from './useColumnFormPanel'
+import { Input, Switch } from '@fluentui/react-components'
 
 export const ColumnFormPanel: FC = () => {
   const context = usePortfolioAggregationContext()
@@ -41,71 +42,97 @@ export const ColumnFormPanel: FC = () => {
       isLightDismiss={true}
       className={styles.root}
     >
-      <FormFieldContainer>
-        <TextField
-          label={strings.SortOrderLabel}
-          description={strings.SortOrderLabel}
+      <FieldContainer
+        iconName='NumberSymbolSquare'
+        label={strings.SortOrderLabel}
+        description={strings.SortOrderLabel}
+      >
+        <Input
+          value={column.get('sortOrder')?.toString()}
           type='number'
-          value={column.get('sortOrder')}
+          defaultValue='100'
+          min={40}
+          max={400}
+          step={2}
           disabled={isEditing}
-          onChange={(_, value) => setColumn('sortOrder', parseInt(value))}
+          onChange={(_, data) => setColumn('sortOrder', parseInt(data.value))}
+          placeholder={strings.Placeholder.TextField}
         />
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <TextField
-          label={strings.InternalNameLabel}
-          description={strings.InternalNameDescription}
-          required={true}
+      </FieldContainer>
+      <FieldContainer
+        iconName='TextNumberFormat'
+        label={strings.InternalNameLabel}
+        description={strings.InternalNameDescription}
+        required={true}
+      >
+        <Input
           value={column.get('internalName')}
           disabled={isEditing}
-          onChange={(_, value) => setColumn('internalName', value)}
+          onChange={(_, data) => setColumn('internalName', data.value)}
+          placeholder={strings.Placeholder.TextField}
         />
-      </FormFieldContainer>
-      <ColumnSearchPropertyField
+      </FieldContainer>
+      <FieldContainer
+        iconName='DatabaseSearch'
         label={strings.SearchPropertyLabel}
         description={strings.SearchPropertyDescription}
         required={true}
-        value={column.get('fieldName')}
-        onChange={(value) => setColumn('fieldName', value)}
-        disabled={isEditing}
-      />
-      <FormFieldContainer>
-        <TextField
-          label={strings.DisplayNameLabel}
-          description={strings.DisplayNameDescription}
+      >
+        <ColumnSearchPropertyField
+          label={strings.SearchPropertyLabel}
+          description={strings.SearchPropertyDescription}
           required={true}
+          value={column.get('fieldName')}
+          onChange={(value) => setColumn('fieldName', value)}
+          disabled={isEditing}
+        />
+      </FieldContainer>
+      <FieldContainer
+        iconName='TextNumberFormat'
+        label={strings.DisplayNameLabel}
+        description={strings.DisplayNameDescription}
+        required={true}
+      >
+        <Input
           value={column.get('name')}
-          onChange={(_, value) => setColumn('name', value)}
+          onChange={(_, data) => setColumn('name', data.value)}
+          placeholder={strings.Placeholder.TextField}
         />
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <TextField
-          label={strings.MinWidthLabel}
-          description={strings.MinWidthDescription}
-          type='number'
+      </FieldContainer>
+      <FieldContainer
+        iconName='NumberSymbolSquare'
+        label={strings.MinWidthLabel}
+        description={strings.MinWidthDescription}
+      >
+        <Input
           value={column.get('minWidth')?.toString()}
-          onChange={(_, value) => setColumn('minWidth', parseInt(value))}
-          max={column.get('maxWidth')}
-        />
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <TextField
-          label={strings.MaxWidthLabel}
-          description={strings.MaxWidthDescription}
           type='number'
+          defaultValue='80'
+          min={40}
+          max={column.get('maxWidth') ?? 400}
+          step={2}
+          onChange={(_, data) => setColumn('minWidth', parseInt(data.value))}
+          placeholder={strings.Placeholder.TextField}
+        />
+      </FieldContainer>
+      <FieldContainer
+        iconName='NumberSymbolSquare'
+        label={strings.MaxWidthLabel}
+        description={strings.MaxWidthDescription}
+      >
+        <Input
           value={column.get('maxWidth')?.toString()}
-          onChange={(_, value) => setColumn('maxWidth', parseInt(value))}
-          min={column.get('minWidth') ?? 0}
+          type='number'
+          defaultValue='120'
+          min={column.get('minWidth') ?? 40}
+          max={400}
+          step={2}
+          onChange={(_, data) => setColumn('maxWidth', parseInt(data.value))}
+          placeholder={strings.Placeholder.TextField}
         />
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <Toggle
-          label={strings.IsGroupableLabel}
-          checked={column.get('data').isGroupable}
-          onChange={(_, checked) => setColumnData('isGroupable', checked)}
-        />
-      </FormFieldContainer>
+      </FieldContainer>
       <ColumnDataTypeField
+        label={strings.ColumnRenderLabel}
         description={strings.ColumnRenderDescription}
         defaultSelectedKey={column.get('dataType')}
         onChange={(renderAs) => setColumnData('renderAs', renderAs)}
@@ -115,10 +142,20 @@ export const ColumnFormPanel: FC = () => {
         }
         persistRenderGloballyField={{
           defaultChecked: persistRenderGlobally || !isEditing,
-          onChange: (_, checked) => setPersistRenderGlobally(checked),
+          onChange: (_, data) => setPersistRenderGlobally(!!data.checked),
           disabled: !isEditing || column.get('fieldName') === 'Title'
         }}
       />
+      <FieldContainer
+        iconName='GroupList'
+        label={strings.IsGroupableLabel}
+        description={strings.IsGroupableDescription}
+      >
+        <Switch
+          defaultChecked={column.get('data').isGroupable}
+          onChange={(_, data) => setColumn('isGroupable', data.checked)}
+        />
+      </FieldContainer>
     </Panel>
   )
 }

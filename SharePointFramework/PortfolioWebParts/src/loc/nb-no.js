@@ -6,15 +6,8 @@ define([], function () {
       MoveDown: 'Flytt ned',
     },
     Placeholder: {
-      DatePicker: 'Angi en dato',
       TextField: 'Angi verdi her',
-      UrlField: 'Angi en nettadresse',
-      UrlFieldAlternative: 'Alternativ tekst',
-      TaxonomyPicker: 'Skriv inn termen som skal merkes',
-      PeoplePicker: 'Angi et navn eller en e-postadresse',
-      NumberField: 'Skriv inn et tall',
-      ChoiceField: 'Velg et alternativ',
-      MultiChoiceField: 'Velg ett eller flere alternativer',
+      Icon: 'Angi et ikon'
     },
     AddColumnLabel: 'Legg til en kolonne',
     AllProjectsHeaderText: 'Alle prosjekter/program',

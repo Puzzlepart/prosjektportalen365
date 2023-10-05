@@ -61,6 +61,12 @@ import {
   NumberSymbolSquareFilled,
   DatabaseSearchRegular,
   DatabaseSearchFilled,
+  FilterFilled,
+  FilterRegular,
+  IconsFilled,
+  IconsRegular,
+  PeopleCommunityFilled,
+  PeopleCommunityRegular,
   ColumnTripleEditRegular,
   ColumnTripleEditFilled
 } from '@fluentui/react-icons'
@@ -196,5 +202,17 @@ export const iconCatalog = {
   DatabaseSearch: {
     regular: DatabaseSearchRegular,
     filled: DatabaseSearchFilled
+  },
+  Filter: {
+    regular: FilterRegular,
+    filled: FilterFilled
+  },
+  Icons: {
+    regular: IconsRegular,
+    filled: IconsFilled
+  },
+  PeopleCommunity: {
+    regular: PeopleCommunityRegular,
+    filled: PeopleCommunityFilled
   }
 }

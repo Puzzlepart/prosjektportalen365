@@ -1,11 +1,12 @@
-import { Panel, Slider, TextField, Toggle } from '@fluentui/react'
+import { Panel } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import { FormFieldContainer, UserMessage } from 'pp365-shared-library'
+import { FieldContainer, UserMessage } from 'pp365-shared-library'
 import React, { FC, useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import styles from './ViewFormPanel.module.scss'
 import { ViewFormPanelFooter } from './ViewFormPanelFooter'
 import { useViewFormPanel } from './useViewFormPanel'
+import { Input, Switch, Textarea } from '@fluentui/react-components'
 
 export const ViewFormPanel: FC = () => {
   const context = useContext(PortfolioOverviewContext)
@@ -20,71 +21,86 @@ export const ViewFormPanel: FC = () => {
       isLightDismiss={true}
       className={styles.root}
     >
-      <FormFieldContainer description={strings.SortOrderDescription}>
-        <Slider
-          label={strings.SortOrderLabel}
-          defaultValue={view.get('sortOrder')}
-          onChanged={(_, value) => setView('sortOrder', value)}
-          showValue={true}
+      <FieldContainer
+        iconName='NumberSymbolSquare'
+        label={strings.SortOrderLabel}
+        description={strings.SortOrderLabel}
+      >
+        <Input
+          type='number'
+          defaultValue={view.get('sortOrder')?.toString()}
           min={10}
-          max={100}
+          max={900}
           step={1}
           disabled={view.get('isDefaultView')}
+          onChange={(_, data) => setView('sortOrder', parseInt(data.value))}
+          placeholder={strings.Placeholder.TextField}
         />
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <TextField
-          label={strings.TitleLabel}
-          required={true}
+      </FieldContainer>
+      <FieldContainer
+        iconName='NumberSymbolSquare'
+        label={strings.TitleLabel}
+        description={strings.TitleLabel}
+        required={true}
+      >
+        <Input
           value={view.get('title')}
-          onChange={(_, value) => setView('title', value)}
+          onChange={(_, data) => setView('title', data.value)}
+          placeholder={strings.Placeholder.TextField}
         />
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <TextField
-          label={strings.SearchQueryLabel}
-          description={strings.PortfolioViewSearchQueryDescription}
-          required={true}
-          multiline={true}
-          rows={12}
+      </FieldContainer>
+      <FieldContainer
+        iconName='TextAlignLeft'
+        label={strings.SearchQueryLabel}
+        description={strings.PortfolioViewSearchQueryDescription}
+        required={true}
+      >
+        <Textarea
           defaultValue={view.get('searchQuery')}
+          rows={12}
+          placeholder={strings.Placeholder.TextField}
           onBlur={(event) => setView('searchQuery', event.target.value)}
         />
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <TextField
-          label={strings.IconNameLabel}
-          description={strings.IconNameDescription}
-          required={true}
+      </FieldContainer>
+      <FieldContainer
+        iconName='Icons'
+        label={strings.IconNameLabel}
+        description={strings.IconNameDescription}
+        required={true}
+      >
+        <Input
           value={view.get('iconName')}
-          onChange={(_, value) => setView('iconName', value)}
-          iconProps={{ iconName: view.get('iconName') }}
+          onChange={(_, data) => setView('iconName', data.value)}
+          placeholder={strings.Placeholder.Icon}
         />
-      </FormFieldContainer>
-      <FormFieldContainer
+      </FieldContainer>
+      <FieldContainer
+        iconName='PeopleCommunity'
+        label={strings.DefaultViewLabel}
         description={strings.DefaultViewDescription}
         hidden={view.get('isPersonalView')}
       >
-        <Toggle
-          label={strings.DefaultViewLabel}
-          checked={view.get('isDefaultView')}
-          onChange={(_, checked) => setView('isDefaultView', checked)}
+        <Switch
+          defaultChecked={view.get('isDefaultView')}
+          onChange={(_, data) => setView('isDefaultView', data.checked)}
           disabled={isDefaultViewSet}
         />
         {isDefaultViewSet && (
           <UserMessage text={strings.DefaultViewSetWarningMessage} intent='warning' />
         )}
-      </FormFieldContainer>
-      <FormFieldContainer
+      </FieldContainer>
+      <FieldContainer
+        iconName='Person'
+        label={strings.PersonalViewLabel}
         description={strings.PersonalViewDescription}
         hidden={view.get('isDefaultView')}
       >
-        <Toggle
-          label={strings.PersonalViewLabel}
-          checked={view.get('isPersonalView')}
-          onChange={(_, checked) => setView('isPersonalView', checked)}
+        <Switch
+          defaultChecked={view.get('isPersonalView')}
+          onChange={(_, data) => setView('isPersonalView', data.checked)}
+          disabled={isDefaultViewSet}
         />
-      </FormFieldContainer>
+      </FieldContainer>
     </Panel>
   )
 }

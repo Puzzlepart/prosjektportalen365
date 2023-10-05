@@ -1,16 +1,8 @@
-import {
-  ICheckboxProps,
-  IDropdownProps,
-  IIconProps,
-  ISelectableOption,
-  ITextFieldProps,
-  IToggleProps
-} from '@fluentui/react'
+import { IDropdownProps, IIconProps, ISelectableOption } from '@fluentui/react'
+import { CheckboxProps, InputProps, SwitchProps } from '@fluentui/react-components'
 import { FunctionComponent } from 'react'
 
-export interface IColumnDataTypePropertyFieldProps<
-  T = ITextFieldProps | ICheckboxProps | IToggleProps
-> {
+export interface IColumnDataTypePropertyFieldProps<T = InputProps | CheckboxProps | SwitchProps> {
   /**
    * A function component with the props specified by `T`.
    */
@@ -64,6 +56,7 @@ type IColumnDataTypeFieldOptionData = {
 export type IColumnDataTypeFieldOption = ISelectableOption<IColumnDataTypeFieldOptionData>
 
 export interface IColumnDataTypeFieldProps extends Pick<IDropdownProps, 'defaultSelectedKey'> {
+  label: string
   description: string
 
   /**
@@ -88,5 +81,5 @@ export interface IColumnDataTypeFieldProps extends Pick<IDropdownProps, 'default
   /**
    * Checkbox field for persisting render globally
    */
-  persistRenderGloballyField?: ICheckboxProps
+  persistRenderGloballyField?: CheckboxProps
 }
