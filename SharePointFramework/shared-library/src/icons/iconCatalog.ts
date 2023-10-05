@@ -57,6 +57,10 @@ import {
   ChevronDownRegular,
   ChevronUpFilled,
   ChevronUpRegular,
+  NumberSymbolSquareRegular,
+  NumberSymbolSquareFilled,
+  DatabaseSearchRegular,
+  DatabaseSearchFilled,
   ColumnTripleEditRegular,
   ColumnTripleEditFilled
 } from '@fluentui/react-icons'
@@ -185,4 +189,12 @@ export const iconCatalog = {
     regular: ChevronUpRegular,
     filled: ChevronUpFilled
   },
+  NumberSymbolSquare: {
+    regular: NumberSymbolSquareRegular,
+    filled: NumberSymbolSquareFilled
+  },
+  DatabaseSearch: {
+    regular: DatabaseSearchRegular,
+    filled: DatabaseSearchFilled
+  }
 }

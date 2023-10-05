@@ -4,6 +4,7 @@ import _ from 'underscore'
 import { IAutocompleteProps } from '.'
 import { SuggestionItem } from './SuggestionItem'
 import { useAutocomplete } from './useAutocomplete'
+import styles from './Autocomplete.module.scss'
 
 /**
  * Autocomplete component using `<SearchBox />`, `<Callout />`,
@@ -31,6 +32,7 @@ export const Autocomplete: FC<IAutocompleteProps> = (props) => {
       )}
       <div ref={ref}>
         <SearchBox
+          styles={{ root: styles.searchBox }}
           componentRef={searchBoxRef}
           key={state.selectedItem?.key}
           defaultValue={state.value}
