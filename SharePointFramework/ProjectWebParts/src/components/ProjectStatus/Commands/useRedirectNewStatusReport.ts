@@ -1,9 +1,8 @@
 import { format } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
-import { PortalDataService } from 'pp365-shared-library/lib/services'
+import SPDataAdapter from '../../../data'
 import { useProjectStatusContext } from '../context'
 import { useEditFormUrl } from './useEditFormUrl'
-import SPDataAdapter from 'data'
 
 /**
  * Hook for redirecting to a new status report. Uses `useEditFormUrl` hook
