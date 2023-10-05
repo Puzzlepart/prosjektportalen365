@@ -21,7 +21,7 @@ if ($CI_MODE) {
 ## Checks if file .current-channel-config.json exists and loads it if it does
 if (Test-Path -Path "$ScriptDir/../.current-channel-config.json") {
     $CurrentChannelConfig = Get-Content -Path "$env:USERPROFILE\.current-channel-config.json" -Raw -ErrorAction SilentlyContinue | ConvertFrom-Json
-    $CurrentChannelConfig
+    Write-Host "[INFO] Loaded channel config from file .current-channel-config.json"
 }
 
 
@@ -60,7 +60,7 @@ function EnsureRiskActionPlanner() {
         }
         $RiskActionField = Get-PnPField GtRiskAction
         if ($null -ne $RiskActionField) {
-            Write-Host "Setting ClientSideComponentId to $ClientSideComponentId for GtRiskAction field"
+            Write-Host "`t`tSetting ClientSideComponentId to $ClientSideComponentId for GtRiskAction field"
             Set-PnPField -Identity $RiskActionField.InternalName -Values @{ClientSideComponentId = $ClientSideComponentId } -UpdateExistingLists -ErrorAction SilentlyContinue
         }
     }

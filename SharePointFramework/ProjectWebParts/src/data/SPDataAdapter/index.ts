@@ -6,7 +6,6 @@ import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library/lib/data
 import { IProjectDataServiceParams, ProjectDataService } from 'pp365-shared-library/lib/services'
 import { SPFxContext } from 'pp365-shared-library/lib/types'
 import { IConfigurationFile } from 'types'
-import _ from 'underscore'
 import { ISPDataAdapterConfiguration } from './types'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
@@ -82,10 +81,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       .getByInternalNameOrTitle(fieldName)
       .select('InternalName', 'TermSetId', 'TextField')
       .using(DefaultCaching)<{
-      InternalName: string
-      TermSetId: string
-      TextField: string
-    }>()
+        InternalName: string
+        TermSetId: string
+        TextField: string
+      }>()
     const textField = await this.sp.web.fields
       .getById(field.TextField)
       .select('InternalName')
@@ -115,8 +114,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       const { ServerRelativeUrl } = await this.portal.web.rootFolder
         .select('ServerRelativeUrl')
         .using(DefaultCaching)<{
-        ServerRelativeUrl: string
-      }>()
+          ServerRelativeUrl: string
+        }>()
       const folderRelativeUrl = `${ServerRelativeUrl}/${strings.SiteAssetsConfigurationFolder}/${folderPath}`
       const folder = this.portal.web.getFolderByServerRelativePath(folderRelativeUrl)
       const files = await folder.files
@@ -125,9 +124,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         .using(DefaultCaching)()
       return files.map((file) => ({
         name: file.Name,
-        title:
-          _.get(file, 'ListItemAllFields.Title') ??
-          `${strings.UnknownConfigurationName} (${file.Name})`,
+        title: file['ListItemAllFields']['Title'] ?? `${strings.UnknownConfigurationName} (${file.Name})`,
         url: file.ServerRelativeUrl
       }))
     } catch {
