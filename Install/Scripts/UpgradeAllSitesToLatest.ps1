@@ -15,13 +15,13 @@ $global:__CurrentChannelConfig = $null
 $ScriptDir = (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
 
 if ($CI_MODE) {
-    Write-Host "[Running in CI mode. Installing module PnP.PowerShell.]" -ForegroundColor Yellow
+    Write-Host "[INFO] Running in CI mode. Installing module PnP.PowerShell." -ForegroundColor Yellow
     Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser -ErrorAction Stop
 }
 
 ## Checks if file .current-channel-config.json exists and loads it if it does
 if (Test-Path -Path "$ScriptDir/../.current-channel-config.json") {
-    $global:__CurrentChannelConfig = Get-Content -Path "$env:USERPROFILE\.current-channel-config.json" -Raw -ErrorAction SilentlyContinue | ConvertFrom-Json
+    $global:__CurrentChannelConfig = Get-Content -Path "$ScriptDir/../.current-channel-config.json" -Raw -ErrorAction SilentlyContinue | ConvertFrom-Json
     Write-Host "[INFO] Loaded channel config from file .current-channel-config.json"
 }
 
@@ -53,200 +53,16 @@ function Connect-SharePoint {
     }
 }
 
-function EnsureRiskActionPlanner() {
-    if ($global:__InstalledVersion -lt "1.9.1") {
-        [System.Guid]$ClientSideComponentId = "2511e707-1b8a-4dc3-88d1-b7002eb3ce54"
-        if ($null -ne $global:__CurrentChannelConfig) {
-            $ClientSideComponentId = $global:__CurrentChannelConfig.spfx.solutions.ProjectExtensions.components.RiskActionPlanner
-        }
-        $RiskActionField = Get-PnPField GtRiskAction
-        if ($null -ne $RiskActionField) {
-            Write-Host "`t`tSetting ClientSideComponentId to $ClientSideComponentId for GtRiskAction field"
-            Set-PnPField -Identity $RiskActionField.InternalName -Values @{ClientSideComponentId = $ClientSideComponentId } -UpdateExistingLists -ErrorAction SilentlyContinue
-        }
-    }
-}
-
-function EnsureProjectTimelinePage() {
-    $ExistingNodes = Get-PnPNavigationNode -Location QuickLaunch -ErrorAction SilentlyContinue
-    if ($null -eq $ExistingNodes) {
-        Write-Host "`t`tCannot connect to site. Do you have access?" -ForegroundColor Red
-    }
-    else {
-        $ExistingNode = $ExistingNodes | Where-Object { $_.Title -eq "Prosjekttidslinje" -or $_.Title -eq "Programtidslinje" } -ErrorAction SilentlyContinue
-        if ($null -eq $ExistingNode) {
-            Write-Host "`t`tAdding project timeline to site"
-            Write-Host "`t`t`tAdding project timeline page"
-            Add-PnPPage -Name "Prosjekttidslinje.aspx" -PromoteAs None -LayoutType SingleWebPartAppPage -CommentsEnabled:$false -Publish >$null 2>&1
-            Write-Host "`t`t`tAdding project timeline app"
-            Add-PnPPageWebPart -Page "Prosjekttidslinje" -Component "Prosjekttidslinje" -WebPartProperties '{"listName":"Tidslinjeinnhold","showTimeline":true,"showTimelineListCommands":true,"showTimelineList":true,"showProjectDeliveries":false,"projectDeliveriesListName":"Prosjektleveranser","configItemTitle":"Prosjektleveranse"}' >$null 2>&1
-            Set-PnPClientSidePage -Identity "Prosjekttidslinje" -LayoutType SingleWebPartAppPage -HeaderType None -Publish >$null 2>&1
-            Write-Host "`t`t`tAdding project timeline navigation item"
-            Add-PnPNavigationNode -Location QuickLaunch -Title "Prosjekttidslinje" -Url "SitePages/Prosjekttidslinje.aspx" >$null 2>&1
-        }
-        else {        
-            Write-Host "`t`tThe site already has the project timeline page" -ForegroundColor Green
-        }
-
-    }
-}
-
-function EnsureResourceLoadIsSiteColumn() {
-    if ($global:__InstalledVersion -lt "1.7.2") {
-        $ResourceAllocation = Get-PnPList -Identity "Ressursallokering" -ErrorAction SilentlyContinue
-        if ($null -ne $ResourceAllocation) {
-            $ResourceLoadSiteColumn = Get-PnPField -Identity "GtResourceLoad"
-            $ResourceLoadListColumn = Get-PnPField -Identity "GtResourceLoad" -List $ResourceAllocation
-            if ($null -ne $ResourceLoadSiteColumn) {
-                Write-Host "`t`tReplacing GtResourceLoad field"
-                $PreviousValues = Get-PnPListItem -List $ResourceAllocation -Fields "ID", "GtResourceLoad" | ForEach-Object {
-                    @{Id = $_.Id; GtResourceLoad = $_.FieldValues["GtResourceLoad"] }
-                }
-                
-                if ($PreviousValues.length -gt 0) {
-                    Write-Host "`t`t`t" (ConvertTo-Json $PreviousValues -Compress)
-                }
-    
-                $ResourceAllocationContentType = Get-PnPContentType -Identity "Ressursallokering" -List "Ressursallokering" -ErrorAction SilentlyContinue
-                if ($null -ne $ResourceAllocationContentType) {
-                    Write-Host "`t`t`tRemoving old field"
-                    Remove-PnPField -Identity $ResourceLoadListColumn -List $ResourceAllocation -Force >$null 2>&1
-
-                    
-                    Write-Host "`t`t`tAdding the site field"
-                    $FieldLink = New-Object Microsoft.SharePoint.Client.FieldLinkCreationInformation
-                    $FieldLink.Field = $ResourceLoadSiteColumn
-                    $ResourceAllocationContentType.FieldLinks.Add($FieldLink) >$null 2>&1
-                    $ResourceAllocationContentType.Update($false)
-                    $ResourceAllocationContentType.Context.ExecuteQuery()
-
-                    Write-Host "`t`t`tAdding the site field to default view"
-                    $DefaultView = Get-PnPView -List $ResourceAllocation -Identity "Alle elementer" -ErrorAction SilentlyContinue
-                    if ($null -ne $DefaultView) {
-                        $DefaultView.ViewFields.Add("GtResourceLoad")
-                        $DefaultView.Update()
-                        $DefaultView.Context.ExecuteQuery()
-                    }
-                    
-                    
-                    if ($PreviousValues.length -gt 0) {
-                        Write-Host "`t`t`tRestoring previous values"
-                        $PreviousValues | ForEach-Object {
-                            $ResourceLoad = $_.GtResourceLoad
-
-                            if ($ResourceLoad -gt 2 ) {
-                                # Assuming that noone had more than 200% previously
-                                $ResourceLoad = ($ResourceLoad / 100) # Convert to percentage if it wasn't previously
-                            }
-                            Set-PnPListItem -List $ResourceAllocation -Identity $_.Id -Values @{"GtResourceLoad" = $ResourceLoad } -UpdateType SystemUpdate >$null 2>&1
-                        }
-                    }
-
-                    Write-Host "`t`t`tField swap completed" -ForegroundColor Green
-                }
-            }
-            else {
-                Write-Host "`t`tThe site already has the correct GtResourceLoad field" -ForegroundColor Green
-            }
-        }
-    }
-}
-
-function EnsureProgramAggregrationWebPart() {
-    $BaseDir = "$ScriptDir/EnsureProgramAggregrationWebPart"
-    $Pages = Get-Content "$BaseDir/$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
-    foreach ($Page in $Pages.PSObject.Properties.GetEnumerator()) {
-        $DeprecatedComponent = Get-PnPPageComponent -Page "$($Page.Name).aspx" -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $Page.Value } | Select-Object -First 1
-        if ($null -ne $DeprecatedComponent) {
-            Write-Host "`t`tReplacing deprecated component $($Page.Value) for $($Page.Name).aspx"
-            $JsonControlData = Get-Content "$BaseDir/JsonControlData_$($Page.Name).json" -Raw -Encoding UTF8
-            $Title = $JsonControlData | ConvertFrom-Json | Select-Object -ExpandProperty title
-            Invoke-PnPSiteTemplate -Path "$BaseDir/Template_ProgramAggregationWebPart.xml" -Parameters @{"JsonControlData" = $JsonControlData; "PageName" = "$($Page.Name).aspx"; "Title" = $Title }
-        }
-    }
-}
-
-<#
-.SYNOPSIS
-Ensures the project aggregation web parts are correct.
-
-.DESCRIPTION
-Ensures the project aggregation web parts are correct by replacing the deprecated web parts with the new ones, 
-and ensuring correct web part properties.
-
-Reading the configuration file EnsureProjectAggregrationWebPart/$.json, the function will loop through the pages
-and replace the deprecated web parts with the new ones. The function will also ensure that the web part properties
-are correct by reading the configuration file EnsureProjectAggregrationWebPart/JsonControlData_$($Page.Name).json.
-#>
-function EnsureProjectAggregrationWebPart() {
-    if ($global:__InstalledVersion -lt "1.8.2") {
-        $BaseDir = "$ScriptDir/EnsureProjectAggregrationWebPart"
-        $Pages = Get-Content "$BaseDir/$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
-        foreach ($Page in $Pages) {
-            $PageName = "$($Page.Name).aspx"
-            $DeprecatedComponent = Get-PnPPageComponent -Page $PageName -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $Page.ControlId } | Select-Object -First 1
-            if ($null -ne $DeprecatedComponent) {
-                Write-Host "`t`tReplacing deprecated component $($Page.ControlId) for $($PageName)"
-                $JsonControlData = Get-Content "$BaseDir/JsonControlData_$($Page.Name).json" -Raw -Encoding UTF8
-                $Title = $JsonControlData | ConvertFrom-Json | Select-Object -ExpandProperty title
-                Invoke-PnPSiteTemplate -Path "$BaseDir/Template_ProjectAggregationWebPart.xml" -Parameters @{"JsonControlData" = $JsonControlData; "PageName" = $PageName; "Title" = $Title }
-            }
-        }
-    }
-}
-
-<#
-.SYNOPSIS
-Ensure help content extension is added to the site.
-#>
-function EnsureHelpContentExtension() {
-    $ClientSideComponentId = "28987406-2a67-48a8-9297-fd2833bf0a09"
-    if ($null -eq (Get-PnPCustomAction | Where-Object { $_.ClientSideComponentId -eq $ClientSideComponentId })) {
-        Write-Host "`t`tAdding help content extension to site"
-        Add-PnPCustomAction -Title "Hjelpeinnhold" -Name "Hjelpeinnhold" -Location "ClientSideExtension.ApplicationCustomizer" -ClientSideComponentId $ClientSideComponentId -ClientSideComponentProperties "{`"listName`":`"Hjelpeinnhold`",`"linkText`":`"Hjelp tilgjengelig`"}"  >$null 2>&1
-    }
-    else {
-        Write-Host "`t`tThe site already has the help content extension" -ForegroundColor Green
-    }
-}
-
-<#
-.SYNOPSIS
-Ensure the GtTag site column is added to the Prosjektleveranser list on the site.
-#>
-function EnsureGtTagSiteColumn() {
-    if ($global:__InstalledVersion -lt "1.8.0") {
-        $ProjectDeliveries = Get-PnPList -Identity "Prosjektleveranser" -ErrorAction SilentlyContinue
-        if ($null -ne $ProjectDeliveries) {
-            $GtTagSiteColumn = Get-PnPField -Identity "GtTag" -ErrorAction SilentlyContinue
-            if ($null -eq $GtTagSiteColumn) {
-                Write-Host "`t`t`tAdding GtTag field"
-                $SiteColumnXml = '<Field ID="{4d342fb6-a0e0-4064-b794-c1d36c922997}" DisplayName="Etikett" Name="GtTag" Type="Choice" Group="Kolonner for Prosjektportalen (Prosjekt)" Description="Hvilken etikett ønsker du å sette på tidslinje elementet" Format="RadioButtons" FillInChoice="FALSE" StaticName="GtTag"><Default></Default><CHOICES><CHOICE>Overordnet</CHOICE><CHOICE>Underordnet</CHOICE><CHOICE>Test</CHOICE></CHOICES></Field>'
-                $SiteColumn = Add-PnPFieldFromXml -FieldXml $SiteColumnXml
-                $SiteColumn = Get-PnPField -Identity $SiteColumn.Id
-    
-                $ProjectDeliveriesContentType = Get-PnPContentType -Identity "Prosjektleveranse" -List "Prosjektleveranser" -ErrorAction SilentlyContinue
-                if ($null -ne $ProjectDeliveriesContentType) {
-                    Write-Host "`t`t`tAdding GtTag field to contenttype"
-                    Add-PnPFieldToContentType -Field "GtTag" -ContentType "Prosjektleveranse" -Hidden -ErrorAction SilentlyContinue
-                }
-            }
-            else {
-                Write-Host "`t`tThe site already has the GtTag field" -ForegroundColor Green
-            }
-        }
-    }
-}
 
 function UpgradeSite($Url) {
     Connect-SharePoint -Url $Url
-    EnsureProjectTimelinePage
-    EnsureResourceLoadIsSiteColumn
-    EnsureProgramAggregrationWebPart
-    EnsureProjectAggregrationWebPart
-    EnsureHelpContentExtension
-    EnsureGtTagSiteColumn
-    EnsureRiskActionPlanner
+    ./UpgradeAllSitesToLatest/EnsureProjectTimelinePage.ps1
+    ./UpgradeAllSitesToLatest/EnsureResourceLoadIsSiteColumn.ps1
+    ./UpgradeAllSitesToLatest/EnsureProgramAggregrationWebPart.ps1
+    ./UpgradeAllSitesToLatest/EnsureProjectAggregrationWebPart.ps1
+    ./UpgradeAllSitesToLatest/EnsureHelpContentExtension.ps1
+    ./UpgradeAllSitesToLatest/EnsureGtTagSiteColumn.ps1
+    ./UpgradeAllSitesToLatest/EnsureRiskActionPlanner.ps1
 }
 
 Write-Host "This script will update all existing sites in a Prosjektportalen installation. This requires you to have the SharePoint admin role"
