@@ -61,7 +61,9 @@ export function useSubmit(model: UseModelReturnType) {
     localStorage.clear()
     context.dispatch(UPDATE_DATA({ data }))
     context.dispatch(CLOSE_PANEL())
-    setSaveStatus(null)
+    setTimeout(() => {
+      setSaveStatus(null)
+    }, 500)
   }
 
   return { onSave, saveStatus, error }
