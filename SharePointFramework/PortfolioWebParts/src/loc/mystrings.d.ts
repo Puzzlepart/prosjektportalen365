@@ -104,6 +104,7 @@ declare interface IPortfolioWebPartsStrings {
   DefaultViewSetWarningMessage: string
   DeleteButtonLabel: string
   DisplayNameDescription: string
+  DisplayNamePortfolioOverviewDescription: string
   DisplayNameLabel: string
   EditColumnHeaderText: string
   EditColumnLabel: string

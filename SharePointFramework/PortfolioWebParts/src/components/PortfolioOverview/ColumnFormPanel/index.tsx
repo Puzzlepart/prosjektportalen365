@@ -107,7 +107,7 @@ export const ColumnFormPanel: FC = () => {
         <FieldContainer
           iconName='TextNumberFormat'
           label={strings.DisplayNameLabel}
-          description={strings.DisplayNameDescription}
+          description={strings.DisplayNamePortfolioOverviewDescription}
           required={true}
         >
           <Input
