@@ -1,6 +1,7 @@
+import { ICustomEditPanelProps } from '../types'
 import { UseModelReturnType } from '../useModel'
 
-export interface ICustomEditPanelFooterProps {
+export interface ICustomEditPanelFooterProps extends ICustomEditPanelProps {
   /**
    * Model functions and state.
    */

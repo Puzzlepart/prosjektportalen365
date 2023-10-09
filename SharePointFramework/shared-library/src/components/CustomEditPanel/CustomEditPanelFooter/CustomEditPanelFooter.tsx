@@ -1,7 +1,9 @@
 import { Button, Field, FluentProvider, ProgressBar, useId, webLightTheme } from '@fluentui/react-components'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import styles from './CustomEditPanelFooter.module.scss'
 import { ICustomEditPanelFooterProps } from './types'
+import strings from 'SharedLibraryStrings'
+import { UserMessage } from '../../UserMessage'
 
 /**
  * Renders the footer for the `CustomEditPanel` with a `<PrimaryButton />` for saving the changes,
@@ -12,36 +14,41 @@ import { ICustomEditPanelFooterProps } from './types'
  */
 export const CustomEditPanelFooter: FC<ICustomEditPanelFooterProps> = (props) => {
   const fluentProviderId = useId('fluent-provider')
-  const isSaving = false
+  const [isSaving, setIsSaving] = useState(false)
+
+  const handleOnSubmit = async () => {
+    setIsSaving(true)
+    await props.submit.onSubmit(props.model.model)
+    setIsSaving(false)
+  }
 
   return (
     <FluentProvider id={fluentProviderId} theme={webLightTheme} className={styles.root}>
-      {/* {props.submit.error && (
+      {props.submit.error && (
         <div className={styles.errorContainer}>
-          <UserMessage text={props.submit.error.customMessage} intent='error' />
+          <UserMessage text={props.submit.error} intent='error' />
         </div>
-      )} */}
+      )}
       <div className={styles.container}>
         {isSaving ? (
           <Field
-            // validationMessage={props.submit.saveStatus} 
+            validationMessage={props.submit.saveProgressText}
             validationState='none'>
             <ProgressBar />
           </Field>
         ) : (
           <>
             <Button
-              appearance='primary'
-            // onClick={props.submit.onSave}
-            // disabled={!props.model.isChanged || !!props.submit.error}
-            >
-              strings.SaveText
+              onClick={handleOnSubmit}
+              disabled={isSaving || props.submit.disabled}
+              appearance='primary'>
+              {props.submit.text ?? strings.SaveText}
             </Button>
-            {/* <ClosePanelButton
-              onClick={() => {
-                props.model.reset()
-              }}
-            /> */}
+            <Button
+              appearance='secondary'
+              onClick={props.onDismiss}>
+              {strings.CloseText}
+            </Button>
           </>
         )}
       </div>

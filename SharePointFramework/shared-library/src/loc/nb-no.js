@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    SaveText: 'Lagre',
+    CloseText: 'Lukk',
     Aria: {
       InfoLabelTitle: 'Informasjon om {0}',
       MenuOverflowCount: '{0} flere elementer',
