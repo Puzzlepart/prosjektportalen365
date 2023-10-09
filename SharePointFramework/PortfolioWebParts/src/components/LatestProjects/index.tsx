@@ -81,7 +81,7 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
 }
 
 LatestProjects.defaultProps = {
-  showProjectLogo: false,
+  showProjectLogo: true,
   rowLimit: 5,
   minRowLimit: 3,
   maxRowLimit: 10

@@ -26,10 +26,12 @@
     bottom: 0;
 
     .link {
+      transition: all 0.3;
       text-decoration: none !important;
       color: inherit !important;
 
       .projectTitle {
+        transition: all 0.5s;
         filter: brightness(1.2);
       }
 
