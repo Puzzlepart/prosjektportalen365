@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 declare interface ISharedLibraryStrings {
+  SaveText: string
+  CloseText: string
   Aria: {
     InfoLabelTitle: string
     MenuOverflowCount: string

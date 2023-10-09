@@ -1,18 +1,20 @@
 import { IPersonaProps, ITag } from '@fluentui/react'
 import _ from 'lodash'
-import { DefaultCaching, ProjectInformationField } from 'pp365-shared-library/lib'
 import { useState } from 'react'
-import { useProjectInformationContext } from '../context'
+import { ProjectInformationField } from '../../models'
+import { DefaultCaching } from '../../data/cache'
+import { ICustomEditPanelProps } from './types'
 
 /**
- * Hook for the `EditPropertiesPanel` model. This hook is used to get and set the values for
- * the fields in the `EditPropertiesPanel`, aswell as to transform the values to the correct type
+ * Hook for the `CustomEditPanel` model. This hook is used to get and set the values for
+ * the fields in the `CustomEditPanel`, aswell as to transform the values to the correct type
  * for the `property` object that can be sent as a request body to the API.
+ * 
+ * @param props - The `CustomEditPanel` props.
  */
-export function useModel() {
-  const context = useProjectInformationContext()
+export function useModel(props: ICustomEditPanelProps) {
   const [model, setModel] = useState(new Map<string, any>())
-  const [properties, setProperties] = useState({})
+  const [properties, setProperties] = useState<Record<string, any>>({})
 
   /**
    * Get value for field.
@@ -22,7 +24,7 @@ export function useModel() {
    */
   function get<T>(field: ProjectInformationField, fallbackValue: T = null): T {
     const currentValue = model.get(field.internalName)
-    const $field = field.clone().setValue(context.state.data.fieldValues, currentValue)
+    const $field = field.clone().setValue(props.fieldValues, currentValue)
     if ($field.isEmpty || !!currentValue) {
       return currentValue ?? (fallbackValue as unknown as T)
     }
@@ -38,7 +40,7 @@ export function useModel() {
    * @returns The transformed value and the internal name of the field (might be different from the field's internal name)
    */
   const transformValue = async (value: any, field: ProjectInformationField) => {
-    const propertiesList = context.props.sp.web.lists.getById(context.state.data.propertiesListId)
+    const targetList = props.dataAdapter.sp.web.lists.getById(props.targetistId)
     const valueMap = new Map<string, () => Promise<any[]> | any[]>([
       [
         'URL',
@@ -52,7 +54,7 @@ export function useModel() {
       [
         'TaxonomyFieldTypeMulti',
         async () => {
-          const textField = await propertiesList.fields
+          const textField = await targetList.fields
             .getById(field.getProperty('TextField'))
             .select('InternalName')
             .using(DefaultCaching)()
@@ -65,7 +67,7 @@ export function useModel() {
       [
         'TaxonomyFieldType',
         async () => {
-          const textField = await propertiesList.fields
+          const textField = await targetList.fields
             .getById(field.getProperty('TextField'))
             .select('InternalName')
             .using(DefaultCaching)()
@@ -80,7 +82,7 @@ export function useModel() {
         async () => {
           const email = value[0]?.secondaryText
           let val = null
-          if (email) val = (await context.props.sp.web.ensureUser(email)).data.Id
+          if (email) val = (await props.dataAdapter.sp.web.ensureUser(email)).data.Id
           // TODO: Fix when removing a user from the field, should sync the value correctly
           return [val, `${field.internalName}Id`]
         }
@@ -92,7 +94,7 @@ export function useModel() {
             value.map(
               async (v: IPersonaProps) =>
                 (
-                  await context.props.sp.web.ensureUser(v.secondaryText)
+                  await props.dataAdapter.sp.web.ensureUser(v.secondaryText)
                 ).data.Id
             )
           )

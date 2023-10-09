@@ -1,7 +1,6 @@
 import strings from 'ProjectWebPartsStrings'
+import { BasePanel, IBasePanelProps } from 'pp365-shared-library'
 import React, { FC } from 'react'
-import { BasePanel } from '../BasePanel'
-import { IBasePanelProps } from '../BasePanel/types'
 import { ProjectProperties } from '../ProjectProperties'
 
 export const AllPropertiesPanel: FC<IBasePanelProps> = (props) => {

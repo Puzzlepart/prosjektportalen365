@@ -1,17 +1,16 @@
 import { IPersonaProps, ITag, NormalPeoplePicker, TagPicker } from '@fluentui/react'
 import { Combobox, Input, Option, Switch, Textarea } from '@fluentui/react-components'
 import { DatePicker, DayOfWeek } from '@fluentui/react-datepicker-compat'
-import strings from 'ProjectWebPartsStrings'
 import _ from 'lodash'
-import { FieldContainer } from 'pp365-shared-library'
-import { ProjectInformationField } from 'pp365-shared-library/lib/models'
 import React from 'react'
-import SPDataAdapter from '../../../data'
-import styles from './EditPropertiesPanel.module.scss'
+import { ProjectInformationField } from '../../models'
+import { FieldContainer } from '../FieldContainer'
+import styles from './CustomEditPanel.module.scss'
+import { ICustomEditPanelProps } from './types'
 import { UseModelReturnType } from './useModel'
 
 /**
- * Hook for field elements of `EditPropertiesPanel` component. This hook is used to render field elements
+ * Hook for field elements of `CustomEditPanel` component. This hook is used to render field elements
  * based on field type. Supported field types are:
  *
  * - `Boolean`
@@ -26,9 +25,10 @@ import { UseModelReturnType } from './useModel'
  * - `TaxonomyFieldType`
  * - `TaxonomyFieldTypeMulti`
  *
- * @param model Model returned from `useEditPropertiesPanelModel` hook
+ * @param model Model returned from `useCustomEditPanelModel` hook
+ * @param props Props passed to `CustomEditPanel` component
  */
-export function useFieldElements(model: UseModelReturnType) {
+export function useFieldElements(model: UseModelReturnType, props: ICustomEditPanelProps) {
   const fieldElements: Record<string, (field: ProjectInformationField) => JSX.Element> = {
     Boolean: (field) => (
       <FieldContainer
@@ -58,12 +58,12 @@ export function useFieldElements(model: UseModelReturnType) {
             onChange={(_, data) =>
               model.set(field, { url: data.value, description: value.description })
             }
-            placeholder={strings.Placeholder.UrlField}
+            placeholder={'strings.Placeholder.UrlField'}
           />
           <Input
             defaultValue={value.description}
             onChange={(_, data) => model.set(field, { url: value.url, description: data.value })}
-            placeholder={strings.Placeholder.UrlFieldAlternative}
+            placeholder={'strings.Placeholder.UrlFieldAlternative'}
             style={{ marginTop: 6 }}
           />
         </FieldContainer>
@@ -78,7 +78,7 @@ export function useFieldElements(model: UseModelReturnType) {
         <Input
           defaultValue={model.get<string>(field)}
           onChange={(_, data) => model.set(field, data.value)}
-          placeholder={strings.Placeholder.TextField}
+          placeholder={'strings.Placeholder.TextField'}
         />
       </FieldContainer>
     ),
@@ -91,7 +91,7 @@ export function useFieldElements(model: UseModelReturnType) {
         <Textarea
           defaultValue={model.get<string>(field)}
           onChange={(_, data) => model.set(field, data.value)}
-          placeholder={strings.Placeholder.TextField}
+          placeholder={'strings.Placeholder.TextField'}
         />
       </FieldContainer>
     ),
@@ -102,7 +102,7 @@ export function useFieldElements(model: UseModelReturnType) {
           value={model.get(field)}
           onSelectDate={(date) => model.set(field, date)}
           formatDate={(date) => date.toLocaleDateString()}
-          placeholder={strings.Placeholder.DatePicker}
+          placeholder={'strings.Placeholder.DatePicker'}
           firstDayOfWeek={DayOfWeek.Monday}
           showWeekNumbers
           allowTextInput
@@ -118,7 +118,7 @@ export function useFieldElements(model: UseModelReturnType) {
         <Combobox
           value={model.get<string>(field)}
           defaultSelectedOptions={[model.get<string>(field)]}
-          placeholder={strings.Placeholder.ChoiceField}
+          placeholder={'strings.Placeholder.ChoiceField'}
           onOptionSelect={(_, data) => model.set(field, data.optionValue)}
         >
           {field.choices.map((choice) => (
@@ -137,7 +137,7 @@ export function useFieldElements(model: UseModelReturnType) {
           value={model.get<string[]>(field) ? model.get<string[]>(field).join(', ') : ''}
           defaultSelectedOptions={model.get<string[]>(field) ? model.get<string[]>(field) : []}
           multiselect
-          placeholder={strings.Placeholder.MultiChoiceField}
+          placeholder={'strings.Placeholder.MultiChoiceField'}
           onOptionSelect={(e, data) => {
             if (!_.isEmpty(data.selectedOptions)) {
               model.set<string[]>(field, data.selectedOptions)
@@ -157,7 +157,7 @@ export function useFieldElements(model: UseModelReturnType) {
         <NormalPeoplePicker
           styles={{ text: styles.field }}
           onResolveSuggestions={async (filter, selectedItems) =>
-            (await SPDataAdapter.clientPeoplePickerSearchUser(
+            (await props.dataAdapter.clientPeoplePickerSearchUser(
               filter,
               selectedItems
             )) as IPersonaProps[]
@@ -173,7 +173,7 @@ export function useFieldElements(model: UseModelReturnType) {
         <NormalPeoplePicker
           styles={{ text: styles.field }}
           onResolveSuggestions={async (filter, selectedItems) =>
-            (await SPDataAdapter.clientPeoplePickerSearchUser(
+            (await props.dataAdapter.clientPeoplePickerSearchUser(
               filter,
               selectedItems
             )) as IPersonaProps[]
@@ -189,10 +189,10 @@ export function useFieldElements(model: UseModelReturnType) {
         <TagPicker
           styles={{ text: styles.field }}
           onResolveSuggestions={async (filter, selectedItems) =>
-            await SPDataAdapter.getTerms(field.getProperty('TermSetId'), filter, selectedItems)
+            await props.dataAdapter.getTerms(field.getProperty('TermSetId'), filter, selectedItems)
           }
           onEmptyResolveSuggestions={async (selectedItems) =>
-            await SPDataAdapter.getTerms(field.getProperty('TermSetId'), '', selectedItems)
+            await props.dataAdapter.getTerms(field.getProperty('TermSetId'), '', selectedItems)
           }
           defaultSelectedItems={model.get<ITag[]>(field)}
           itemLimit={1}
@@ -205,10 +205,10 @@ export function useFieldElements(model: UseModelReturnType) {
         <TagPicker
           styles={{ text: styles.field }}
           onResolveSuggestions={async (filter, selectedItems) =>
-            await SPDataAdapter.getTerms(field.getProperty('TermSetId'), filter, selectedItems)
+            await props.dataAdapter.getTerms(field.getProperty('TermSetId'), filter, selectedItems)
           }
           onEmptyResolveSuggestions={async (selectedItems) =>
-            await SPDataAdapter.getTerms(field.getProperty('TermSetId'), '', selectedItems)
+            await props.dataAdapter.getTerms(field.getProperty('TermSetId'), '', selectedItems)
           }
           defaultSelectedItems={model.get<ITag[]>(field)}
           itemLimit={20}

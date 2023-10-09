@@ -309,9 +309,10 @@ export class ProjectDataService {
   ): Promise<IProjectInformationData | null> {
     try {
       const propertyItemContext = await this._getLocalProjectInformationItemContext()
-      if (propertyItemContext) {
-        await propertyItemContext.item.update(properties)
-      }
+      console.log(propertyItemContext)
+      if (!propertyItemContext) throw new Error('Local property item not found.')
+      console.log(`Updating properties ${JSON.stringify(properties)}`)
+      await propertyItemContext.item.update(properties)
       if (returnData) {
         return await this.getProjectInformationData()
       }
@@ -377,9 +378,9 @@ export class ProjectDataService {
         obj[termGuid] = obj[termGuid]
           ? obj[termGuid]
           : {
-              stats: {},
-              items: []
-            }
+            stats: {},
+            items: []
+          }
         obj[termGuid].items.push(item)
         obj[termGuid].stats[status] = obj[termGuid].stats[status]
           ? obj[termGuid].stats[status] + 1
