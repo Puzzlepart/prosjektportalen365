@@ -16,9 +16,13 @@ export const CustomEditPanelFooter: FC<ICustomEditPanelFooterProps> = (props) =>
   const fluentProviderId = useId('fluent-provider')
   const [isSaving, setIsSaving] = useState(false)
 
+  /**
+   * Handles the form submission by calling the `onSubmit` function passed in through props
+   * and updating the `isSaving` state accordingly.
+   */
   const handleOnSubmit = async () => {
     setIsSaving(true)
-    await props.submit.onSubmit(props.model.model)
+    await props.submit.onSubmit(props.model.properties)
     setIsSaving(false)
   }
 

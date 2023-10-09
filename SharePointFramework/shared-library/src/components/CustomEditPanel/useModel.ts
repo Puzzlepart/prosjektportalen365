@@ -14,7 +14,7 @@ import { ICustomEditPanelProps } from './types'
  */
 export function useModel(props: ICustomEditPanelProps) {
   const [model, setModel] = useState(new Map<string, any>())
-  const [properties, setProperties] = useState({})
+  const [properties, setProperties] = useState<Record<string, any>>({})
 
   /**
    * Get value for field.
