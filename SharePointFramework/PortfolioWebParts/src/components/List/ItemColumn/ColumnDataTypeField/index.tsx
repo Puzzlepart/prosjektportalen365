@@ -6,7 +6,8 @@ import { IColumnDataTypeFieldProps } from './types'
 import { useDataTypeDropdown } from './useDataTypeDropdown'
 import { useDataTypeProperties } from './useDataTypeProperties'
 import { FieldContainer } from 'pp365-shared-library'
-import { Checkbox } from '@fluentui/react-components'
+import { Switch } from '@fluentui/react-components'
+import styles from './ColumnRenderField.module.scss'
 
 /**
  * Renders a dropdown field for selecting a column data type, along with additional fields
@@ -25,33 +26,31 @@ export const ColumnDataTypeField: FC<IColumnDataTypeFieldProps> = (props) => {
   const dataTypeFields = useDataTypeProperties(props, dataTypeDropdown)
 
   return (
-    <div>
-      <FieldContainer iconName='AppsList' label={props.label} description={props.description}>
+    <div className={styles.root}>
+      <FieldContainer
+        className={styles.root}
+        iconName='AppsList'
+        label={props.label}
+        description={props.description}
+      >
+        {/* TODO: Use new Dropdown/ComboBox from Fluent UI 9 */}
         <Dropdown {...dataTypeDropdown} />
         {props.children}
+        <DataTypeFields {...dataTypeFields} />
       </FieldContainer>
-      <DataTypeFields {...dataTypeFields} />
       {props.persistRenderGloballyField && (
         <FieldContainer
           iconName='AppsList'
           label={strings.ColumnPersistRenderGloballyFieldLabel}
           description={strings.ColumnPersistRenderGloballyFieldDescription}
         >
-          <Checkbox
+          <Switch
             {...props.persistRenderGloballyField}
             disabled={
               props.persistRenderGloballyField.disabled ||
               dataTypeDropdown?.selectedOption?.disabled
             }
           />
-          {/* <Checkbox
-            {...props.persistRenderGloballyField}
-            disabled={
-              props.persistRenderGloballyField.disabled ||
-              dataTypeDropdown?.selectedOption?.disabled
-            }
-            styles={{ root: { margin: '10px 0 15px 0' } }}
-          /> */}
         </FieldContainer>
       )}
     </div>

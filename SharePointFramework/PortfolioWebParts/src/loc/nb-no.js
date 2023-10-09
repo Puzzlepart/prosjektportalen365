@@ -7,7 +7,9 @@ define([], function () {
     },
     Placeholder: {
       TextField: 'Angi verdi her',
-      Icon: 'Angi et ikon'
+      Icon: 'Angi et ikon',
+      ChoiceField: 'Velg et alternativ',
+      MultiChoiceField: 'Velg ett eller flere alternativer',
     },
     AddColumnLabel: 'Legg til en kolonne',
     AllProjectsHeaderText: 'Alle prosjekter/program',

@@ -6,7 +6,9 @@ declare interface IPortfolioWebPartsStrings {
   },
   Placeholder: {
     TextField: string
-    Icon: string
+    Icon: string,
+    ChoiceField: string,
+    MultiChoiceField: string,
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string

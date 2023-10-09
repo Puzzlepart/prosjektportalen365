@@ -1,5 +1,4 @@
 import { IDropdownProps, IRenderFunction, Icon } from '@fluentui/react'
-import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { ColumnRenderComponentRegistry } from '../registry'
@@ -32,7 +31,7 @@ export function useDataTypeDropdown(props: IColumnDataTypeFieldProps) {
    * @param option Option to render
    */
   const onRenderOption: IRenderFunction<IColumnDataTypeFieldOption> = (option) => (
-    <div>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
       {option.data?.iconProps && (
         <Icon {...option.data.iconProps} styles={{ root: { marginRight: 6 } }} />
       )}
@@ -46,7 +45,6 @@ export function useDataTypeDropdown(props: IColumnDataTypeFieldProps) {
 
   return {
     selectedOption,
-    label: strings.ColumnRenderLabel,
     options: ColumnRenderComponentRegistry.getOptions(),
     selectedKey: selectedOption?.key,
     onChange: (_event, option) => setSelectedOption(option),

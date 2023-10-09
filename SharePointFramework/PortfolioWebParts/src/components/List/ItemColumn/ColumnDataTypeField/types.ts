@@ -1,8 +1,8 @@
 import { IDropdownProps, IIconProps, ISelectableOption } from '@fluentui/react'
-import { CheckboxProps, InputProps, SwitchProps } from '@fluentui/react-components'
+import { InputProps, SwitchProps } from '@fluentui/react-components'
 import { FunctionComponent } from 'react'
 
-export interface IColumnDataTypePropertyFieldProps<T = InputProps | CheckboxProps | SwitchProps> {
+export interface IColumnDataTypePropertyFieldProps<T = InputProps | SwitchProps> {
   /**
    * A function component with the props specified by `T`.
    */
@@ -81,5 +81,5 @@ export interface IColumnDataTypeFieldProps extends Pick<IDropdownProps, 'default
   /**
    * Checkbox field for persisting render globally
    */
-  persistRenderGloballyField?: CheckboxProps
+  persistRenderGloballyField?: SwitchProps
 }
