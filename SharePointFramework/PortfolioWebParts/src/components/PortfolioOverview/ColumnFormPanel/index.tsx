@@ -148,7 +148,6 @@ export const ColumnFormPanel: FC = () => {
           description={strings.ColumnVisibilityDescription}
         >
           <Combobox
-            value={column.get('data')?.visibility ? column.get('data')?.visibility.join(', ') : ''}
             defaultSelectedOptions={
               column.get('data')?.visibility ? column.get('data')?.visibility : []
             }
