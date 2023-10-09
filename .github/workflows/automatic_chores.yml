@@ -3,7 +3,7 @@ name: Automatic chores
 on:
   push:
     branches:
-      - dev
+      - releases/1.9
     paths:
       - SharePointFramework/**
 
