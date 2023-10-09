@@ -1,16 +1,16 @@
 import { Button, Field, FluentProvider, ProgressBar, useId, webLightTheme } from '@fluentui/react-components'
 import React, { FC } from 'react'
-import styles from './EditPropertiesPanelFooter.module.scss'
-import { IEditPropertiesPanelFooterProps } from './types'
+import styles from './CustomEditPanelFooter.module.scss'
+import { ICustomEditPanelFooterProps } from './types'
 
 /**
- * Renders the footer for the `EditPropertiesPanel` with a `<PrimaryButton />` for saving the changes,
+ * Renders the footer for the `CustomEditPanel` with a `<PrimaryButton />` for saving the changes,
  * and a `<ClosePanelButton />` for closing the panel. Also shows a spinner when submitting with a `label`
  * based on the `saveStatus` property from `props.submit`.
  *
  * @param props The component props.
  */
-export const EditPropertiesPanelFooter: FC<IEditPropertiesPanelFooterProps> = (props) => {
+export const CustomEditPanelFooter: FC<ICustomEditPanelFooterProps> = (props) => {
   const fluentProviderId = useId('fluent-provider')
   const isSaving = false
 
@@ -49,4 +49,4 @@ export const EditPropertiesPanelFooter: FC<IEditPropertiesPanelFooterProps> = (p
   )
 }
 
-EditPropertiesPanelFooter.displayName = 'EditPropertiesPanelFooter'
+CustomEditPanelFooter.displayName = 'CustomEditPanelFooter'

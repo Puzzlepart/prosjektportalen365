@@ -5,12 +5,12 @@ import _ from 'lodash'
 import React from 'react'
 import { ProjectInformationField } from '../../models'
 import { FieldContainer } from '../FieldContainer'
-import styles from './EditPropertiesPanel.module.scss'
-import { IEditPropertiesPanelProps } from './types'
+import styles from './CustomEditPanel.module.scss'
+import { ICustomEditPanelProps } from './types'
 import { UseModelReturnType } from './useModel'
 
 /**
- * Hook for field elements of `EditPropertiesPanel` component. This hook is used to render field elements
+ * Hook for field elements of `CustomEditPanel` component. This hook is used to render field elements
  * based on field type. Supported field types are:
  *
  * - `Boolean`
@@ -25,10 +25,10 @@ import { UseModelReturnType } from './useModel'
  * - `TaxonomyFieldType`
  * - `TaxonomyFieldTypeMulti`
  *
- * @param model Model returned from `useEditPropertiesPanelModel` hook
- * @param props Props passed to `EditPropertiesPanel` component
+ * @param model Model returned from `useCustomEditPanelModel` hook
+ * @param props Props passed to `CustomEditPanel` component
  */
-export function useFieldElements(model: UseModelReturnType, props: IEditPropertiesPanelProps) {
+export function useFieldElements(model: UseModelReturnType, props: ICustomEditPanelProps) {
   const fieldElements: Record<string, (field: ProjectInformationField) => JSX.Element> = {
     Boolean: (field) => (
       <FieldContainer

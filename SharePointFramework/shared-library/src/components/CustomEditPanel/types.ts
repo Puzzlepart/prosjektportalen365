@@ -2,7 +2,7 @@ import { IPanelProps } from '@fluentui/react'
 import { ItemFieldValues, ProjectInformationField } from '../../models'
 import { SPDataAdapterBase } from '../../data'
 
-export interface IEditPropertiesPanelProps extends IPanelProps {
+export interface ICustomEditPanelProps extends IPanelProps {
   /**
    * The fields to edit in the panel.
    */
@@ -11,7 +11,7 @@ export interface IEditPropertiesPanelProps extends IPanelProps {
   /**
    * Field values for the list item
    */
-  fieldValues?: ItemFieldValues
+  fieldValues: ItemFieldValues
 
   /**
    * The data adapter to use for fetching terms and users for

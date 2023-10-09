@@ -1,6 +1,6 @@
 import { UseModelReturnType } from '../useModel'
 
-export interface IEditPropertiesPanelFooterProps {
+export interface ICustomEditPanelFooterProps {
   /**
    * Model functions and state.
    */

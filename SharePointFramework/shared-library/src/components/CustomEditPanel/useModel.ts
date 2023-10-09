@@ -3,16 +3,16 @@ import _ from 'lodash'
 import { useState } from 'react'
 import { ProjectInformationField } from '../../models'
 import { DefaultCaching } from '../../data/cache'
-import { IEditPropertiesPanelProps } from './types'
+import { ICustomEditPanelProps } from './types'
 
 /**
- * Hook for the `EditPropertiesPanel` model. This hook is used to get and set the values for
- * the fields in the `EditPropertiesPanel`, aswell as to transform the values to the correct type
+ * Hook for the `CustomEditPanel` model. This hook is used to get and set the values for
+ * the fields in the `CustomEditPanel`, aswell as to transform the values to the correct type
  * for the `property` object that can be sent as a request body to the API.
  * 
- * @param props - The `EditPropertiesPanel` props.
+ * @param props - The `CustomEditPanel` props.
  */
-export function useModel(props: IEditPropertiesPanelProps) {
+export function useModel(props: ICustomEditPanelProps) {
   const [model, setModel] = useState(new Map<string, any>())
   const [properties, setProperties] = useState({})
 

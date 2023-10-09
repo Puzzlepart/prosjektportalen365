@@ -1,23 +1,23 @@
 import React, { FC } from 'react'
 import { BasePanel } from '../BasePanel'
 import { DebugModel } from './DebugModel'
-import styles from './EditPropertiesPanel.module.scss'
-import { EditPropertiesPanelFooter } from './EditPropertiesPanelFooter'
-import { IEditPropertiesPanelProps } from './types'
-import { useEditPropertiesPanel } from './useEditPropertiesPanel'
+import styles from './CustomEditPanel.module.scss'
+import { CustomEditPanelFooter } from './CustomEditPanelFooter'
+import { ICustomEditPanelProps } from './types'
+import { useCustomEditPanel } from './useCustomEditPanel'
 
-export const EditPropertiesPanel: FC<IEditPropertiesPanelProps> = (props) => {
-  const { fields, getFieldElement, model } = useEditPropertiesPanel(props)
+export const CustomEditPanel: FC<ICustomEditPanelProps> = (props) => {
+  const { fields, getFieldElement, model } = useCustomEditPanel(props)
   return (
     <BasePanel
       {...props}
-      className={styles.root}
+      className={styles.customEditPanel}
       styles={{
         main: {
           overflow: 'hidden'
         }
       }}
-      onRenderFooterContent={() => <EditPropertiesPanelFooter  model={model} />}
+      onRenderFooterContent={() => <CustomEditPanelFooter  model={model} />}
       onRenderBody={() => (
         <>
           <DebugModel model={model} />
@@ -31,8 +31,8 @@ export const EditPropertiesPanel: FC<IEditPropertiesPanelProps> = (props) => {
   )
 }
 
-EditPropertiesPanel.displayName = 'EditPropertiesPanel'
-EditPropertiesPanel.defaultProps = {
+CustomEditPanel.displayName = 'CustomEditPanel'
+CustomEditPanel.defaultProps = {
   headerText: 'strings.EditProjectInformationText',
   hiddenFields: ['GtProjectPhase']
 }

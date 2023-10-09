@@ -1,15 +1,15 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { useMemo } from 'react'
-import { IEditPropertiesPanelProps } from './types'
+import { ICustomEditPanelProps } from './types'
 
 /**
- * Hook for the `EditPropertiesPanel` fields.
+ * Hook for the `CustomEditPanel` fields.
  *
- * @param props - The `EditPropertiesPanel` props.
+ * @param props - The `CustomEditPanel` props.
  *
- * @returns Fields to be used in the `EditPropertiesPanel`.
+ * @returns Fields to be used in the `CustomEditPanel`.
  */
-export function useEditableFields(props: IEditPropertiesPanelProps) {
+export function useEditableFields(props: ICustomEditPanelProps) {
   return useMemo(
     () =>
       props.fields.filter(
