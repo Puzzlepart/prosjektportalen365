@@ -24,7 +24,7 @@ export const ViewFormPanel: FC = () => {
     >
       <FluentProvider id={fluentProviderId} theme={webLightTheme} className={styles.content}>
         <FieldContainer
-          iconName='NumberSymbolSquare'
+          iconName='TextNumberFormat'
           label={strings.TitleLabel}
           description={strings.TitleLabel}
           required={true}

@@ -47,7 +47,7 @@ export const ViewFormPanel: FC = () => {
           />
         </FieldContainer>
         <FieldContainer
-          iconName='NumberSymbolSquare'
+          iconName='TextNumberFormat'
           label={strings.TitleLabel}
           description={strings.TitleLabel}
           required={true}
