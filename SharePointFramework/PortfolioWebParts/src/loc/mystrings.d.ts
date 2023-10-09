@@ -1,6 +1,14 @@
 declare interface IPortfolioWebPartsStrings {
   Aria: {
     MenuOverflowCount: string
+    MoveUp: string
+    MoveDown: string
+  },
+  Placeholder: {
+    TextField: string
+    Icon: string,
+    ChoiceField: string,
+    MultiChoiceField: string,
   },
   AddColumnLabel: string
   AllProjectsHeaderText: string
@@ -96,6 +104,7 @@ declare interface IPortfolioWebPartsStrings {
   DefaultViewSetWarningMessage: string
   DeleteButtonLabel: string
   DisplayNameDescription: string
+  DisplayNamePortfolioOverviewDescription: string
   DisplayNameLabel: string
   EditColumnHeaderText: string
   EditColumnLabel: string

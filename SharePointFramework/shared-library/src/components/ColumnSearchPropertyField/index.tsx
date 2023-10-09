@@ -1,20 +1,18 @@
-import { TextField } from '@fluentui/react'
 import _ from 'lodash'
 import React, { FC } from 'react'
 import { IColumnSearchPropertyFieldProps } from './types'
-import { FormFieldContainer } from '../FormFieldContainer'
 import { Autocomplete } from '../Autocomplete'
+import { Input } from '@fluentui/react-components'
 
 export const ColumnSearchPropertyField: FC<IColumnSearchPropertyFieldProps> = (props) => {
   return (
-    <FormFieldContainer description={props.description}>
+    <>
       {_.isEmpty(props.managedProperties) ? (
-        <TextField
-          label={props.label}
-          required={true}
+        <Input
           value={props.value}
           disabled={props.disabled}
-          onChange={(_, value) => props.onChange(value)}
+          onChange={(_, data) => props.onChange(data.value)}
+          placeholder={props.placeholder}
         />
       ) : (
         <Autocomplete
@@ -30,7 +28,7 @@ export const ColumnSearchPropertyField: FC<IColumnSearchPropertyFieldProps> = (p
         />
       )}
       {props.children}
-    </FormFieldContainer>
+    </>
   )
 }
 

@@ -1,11 +1,11 @@
 import React, { FC, useContext } from 'react'
 import styles from './ColumnFormPanelFooter.module.scss'
-import { PrimaryButton, DefaultButton } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { TOGGLE_COLUMN_FORM_PANEL } from '../../reducer'
 import { PortfolioOverviewContext } from '../../context'
 import { IColumnFormPanelFooterProps } from './types'
 import { useConfirmationDialog } from 'pzl-react-reusable-components/lib/ConfirmDialog'
+import { Button, FluentProvider, useId, webLightTheme } from '@fluentui/react-components'
 
 export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
   onSave,
@@ -13,22 +13,23 @@ export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
   isSaveDisabled,
   isEditing
 }) => {
+  const fluentProviderId = useId('fluent-provider')
   const context = useContext(PortfolioOverviewContext)
   const [confirmDeleteDialog, getConfirmDeleteResponse] = useConfirmationDialog()
   return (
-    <div className={styles.root}>
-      <PrimaryButton text={strings.SaveButtonLabel} onClick={onSave} disabled={isSaveDisabled} />
-      <DefaultButton
-        text={strings.CancelButtonLabel}
-        style={{ marginLeft: 4 }}
+    <FluentProvider id={fluentProviderId} theme={webLightTheme} className={styles.root}>
+      <Button onClick={onSave} disabled={isSaveDisabled} appearance='primary'>
+        {strings.SaveButtonLabel}
+      </Button>
+      <Button
         onClick={() => {
           context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
         }}
-      />
+      >
+        {strings.CancelButtonLabel}
+      </Button>
       {isEditing && (
-        <DefaultButton
-          text={strings.DeleteButtonLabel}
-          style={{ marginLeft: 4 }}
+        <Button
           onClick={async () => {
             const response = await getConfirmDeleteResponse({
               title: strings.ConfirmDeleteProjectColumnTitle,
@@ -40,9 +41,11 @@ export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
             })
             if (response) onDeleteColumn()
           }}
-        />
+        >
+          {strings.DeleteButtonLabel}
+        </Button>
       )}
       {confirmDeleteDialog}
-    </div>
+    </FluentProvider>
   )
 }

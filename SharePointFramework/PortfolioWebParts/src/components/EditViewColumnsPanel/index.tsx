@@ -1,4 +1,4 @@
-import { ActionButton, Checkbox, Panel, PanelType } from '@fluentui/react'
+import { Panel, PanelType } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
 import React, { FC } from 'react'
 import {
@@ -11,6 +11,8 @@ import {
 import styles from './EditViewColumnsPanel.module.scss'
 import { IEditViewColumnsPanelProps } from './types'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
+import { Button, Checkbox, FluentProvider, webLightTheme } from '@fluentui/react-components'
+import { WebPartTitle, getFluentIcon } from 'pp365-shared-library'
 
 const getItemStyle = (_isDragging: boolean, draggableStyle: DraggingStyle | NotDraggingStyle) => ({
   userSelect: 'none',
@@ -26,80 +28,88 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
       isOpen={props.isOpen}
       type={PanelType.medium}
       onRenderHeader={() => (
-        <div className={styles.panelActions}>
-          <ActionButton
-            text={strings.UseChangesButtonText}
-            iconProps={{ iconName: 'CheckMark' }}
-            onClick={onSave}
-          />
-          {props.revertOrder && (
-            <ActionButton
-              text={strings.RevertCustomOrderButtonText}
-              title={strings.RevertCustomOrderButtonTooltip}
-              iconProps={{ iconName: 'Undo' }}
-              styles={{ root: { marginLeft: 3 } }}
-              disabled={props.revertOrder.disabled}
-              onClick={() => {
-                props.revertOrder.onClick(selectableColumns)
-              }}
-            />
-          )}
-        </div>
+        <FluentProvider id='header' theme={webLightTheme}>
+          <div className={styles.panelActions}>
+            <Button
+              appearance='subtle'
+              size='medium'
+              icon={getFluentIcon('Checkmark')}
+              title={strings.UseChangesButtonText}
+              onClick={onSave}
+            >
+              {strings.UseChangesButtonText}
+            </Button>
+            {props.revertOrder && (
+              <Button
+                appearance='subtle'
+                size='medium'
+                icon={getFluentIcon('ArrowUndo')}
+                title={strings.RevertCustomOrderButtonTooltip}
+                disabled={props.revertOrder.disabled}
+                onClick={() => {
+                  props.revertOrder.onClick(selectableColumns)
+                }}
+              >
+                {strings.RevertCustomOrderButtonText}
+              </Button>
+            )}
+          </div>
+        </FluentProvider>
       )}
       onDismiss={props.onDismiss}
       isLightDismiss={true}
       className={styles.root}
     >
-      <div className={styles.header}>
-        <span className={styles.title}>{props.title}</span>
-        <p className={styles.helpText}>{props.helpText}</p>
-      </div>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId='droppable'>
-          {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              {selectableColumns.map((col, idx) => (
-                <Draggable key={col.name} draggableId={col.name} index={idx}>
-                  {(provided, snapshot) => (
-                    <div
-                      className={styles.columnItem}
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      style={
-                        getItemStyle(snapshot.isDragging, provided.draggableProps.style) as any
-                      }
-                    >
-                      <Checkbox
-                        label={col.name}
-                        checked={col.data.isSelected}
-                        onChange={(_event, checked) => onChange(col, checked)}
-                        disabled={col.data.isLocked}
-                      />
-                      <div className={styles.columnItemActions}>
-                        <ActionButton
-                          iconProps={{ iconName: 'ChevronUp', styles: { root: { fontSize: 20 } } }}
-                          className={styles.columnItemButton}
-                          onClick={() => moveColumn(col, -1)}
+      <FluentProvider id='body' theme={webLightTheme}>
+        <WebPartTitle title={props.title} description={props.helpText} />
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId='droppable'>
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {selectableColumns.map((col, idx) => (
+                  <Draggable key={col.name} draggableId={col.name} index={idx}>
+                    {(provided, snapshot) => (
+                      <div
+                        className={styles.columnItem}
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={
+                          getItemStyle(snapshot.isDragging, provided.draggableProps.style) as any
+                        }
+                      >
+                        <Checkbox
+                          label={col.name}
+                          checked={col.data.isSelected}
+                          onChange={(_event, data) => onChange(col, !!data.checked)}
+                          disabled={col.data.isLocked}
                         />
-                        <ActionButton
-                          iconProps={{
-                            iconName: 'ChevronDown',
-                            styles: { root: { fontSize: 20 } }
-                          }}
-                          className={styles.columnItemButton}
-                          onClick={() => moveColumn(col, 1)}
-                        />
+                        <div className={styles.columnItemActions}>
+                          <Button
+                            appearance='transparent'
+                            size='medium'
+                            icon={getFluentIcon('ChevronUp')}
+                            title={strings.Aria.MoveUp}
+                            onClick={() => moveColumn(col, -1)}
+                          />
+                          <Button
+                            appearance='transparent'
+                            size='medium'
+                            icon={getFluentIcon('ChevronDown')}
+                            title={strings.Aria.MoveDown}
+                            onClick={() => moveColumn(col, 1)}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </FluentProvider>
     </Panel>
   )
 }

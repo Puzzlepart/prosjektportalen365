@@ -1,11 +1,13 @@
-import { Checkbox, Dropdown } from '@fluentui/react'
+import { Dropdown } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
-import { FormFieldContainer } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { DataTypeFields } from './DataTypeFields'
 import { IColumnDataTypeFieldProps } from './types'
 import { useDataTypeDropdown } from './useDataTypeDropdown'
 import { useDataTypeProperties } from './useDataTypeProperties'
+import { FieldContainer } from 'pp365-shared-library'
+import { Switch } from '@fluentui/react-components'
+import styles from './ColumnRenderField.module.scss'
 
 /**
  * Renders a dropdown field for selecting a column data type, along with additional fields
@@ -24,24 +26,32 @@ export const ColumnDataTypeField: FC<IColumnDataTypeFieldProps> = (props) => {
   const dataTypeFields = useDataTypeProperties(props, dataTypeDropdown)
 
   return (
-    <div>
-      <FormFieldContainer description={props.description}>
+    <div className={styles.root}>
+      <FieldContainer
+        className={styles.root}
+        iconName='AppsList'
+        label={props.label}
+        description={props.description}
+      >
+        {/* TODO: Use new Combobox from Fluent UI 9 */}
         <Dropdown {...dataTypeDropdown} />
         {props.children}
-      </FormFieldContainer>
-      <DataTypeFields {...dataTypeFields} />
+        <DataTypeFields {...dataTypeFields} />
+      </FieldContainer>
       {props.persistRenderGloballyField && (
-        <FormFieldContainer description={strings.ColumnPersistRenderGloballyFieldDescription}>
-          <Checkbox
+        <FieldContainer
+          iconName='AppsList'
+          label={strings.ColumnPersistRenderGloballyFieldLabel}
+          description={strings.ColumnPersistRenderGloballyFieldDescription}
+        >
+          <Switch
             {...props.persistRenderGloballyField}
             disabled={
               props.persistRenderGloballyField.disabled ||
               dataTypeDropdown?.selectedOption?.disabled
             }
-            label={strings.ColumnPersistRenderGloballyFieldLabel}
-            styles={{ root: { margin: '10px 0 15px 0' } }}
           />
-        </FormFieldContainer>
+        </FieldContainer>
       )}
     </div>
   )

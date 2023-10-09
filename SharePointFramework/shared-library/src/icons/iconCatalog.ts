@@ -51,6 +51,22 @@ import {
   MultiselectLtrFilled,
   PeopleRegular,
   PeopleFilled,
+  ArrowUndoFilled,
+  ArrowUndoRegular,
+  ChevronDownFilled,
+  ChevronDownRegular,
+  ChevronUpFilled,
+  ChevronUpRegular,
+  NumberSymbolSquareRegular,
+  NumberSymbolSquareFilled,
+  DatabaseSearchRegular,
+  DatabaseSearchFilled,
+  FilterFilled,
+  FilterRegular,
+  IconsFilled,
+  IconsRegular,
+  PeopleCommunityFilled,
+  PeopleCommunityRegular,
   ColumnTripleEditRegular,
   ColumnTripleEditFilled
 } from '@fluentui/react-icons'
@@ -166,5 +182,37 @@ export const iconCatalog = {
   Add: {
     regular: AddRegular,
     filled: AddFilled
+  },
+  ArrowUndo: {
+    regular: ArrowUndoRegular,
+    filled: ArrowUndoFilled
+  },
+  ChevronDown: {
+    regular: ChevronDownRegular,
+    filled: ChevronDownFilled
+  },
+  ChevronUp: {
+    regular: ChevronUpRegular,
+    filled: ChevronUpFilled
+  },
+  NumberSymbolSquare: {
+    regular: NumberSymbolSquareRegular,
+    filled: NumberSymbolSquareFilled
+  },
+  DatabaseSearch: {
+    regular: DatabaseSearchRegular,
+    filled: DatabaseSearchFilled
+  },
+  Filter: {
+    regular: FilterRegular,
+    filled: FilterFilled
+  },
+  Icons: {
+    regular: IconsRegular,
+    filled: IconsFilled
+  },
+  PeopleCommunity: {
+    regular: PeopleCommunityRegular,
+    filled: PeopleCommunityFilled
   }
 }

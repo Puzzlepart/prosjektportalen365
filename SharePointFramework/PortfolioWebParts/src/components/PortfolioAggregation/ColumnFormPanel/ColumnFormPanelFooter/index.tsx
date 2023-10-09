@@ -1,4 +1,3 @@
-import { DefaultButton, PrimaryButton } from '@fluentui/react'
 import strings from 'PortfolioWebPartsStrings'
 import { useConfirmationDialog } from 'pzl-react-reusable-components/lib/ConfirmDialog'
 import React, { FC } from 'react'
@@ -6,28 +5,26 @@ import { usePortfolioAggregationContext } from '../../context'
 import { TOGGLE_COLUMN_FORM_PANEL } from '../../reducer'
 import styles from './ColumnFormPanelFooter.module.scss'
 import { ColumnFormPanelFooterProps } from './types'
+import { Button, FluentProvider, useId, webLightTheme } from '@fluentui/react-components'
 
 export const ColumnFormPanelFooter: FC<ColumnFormPanelFooterProps> = (props) => {
+  const fluentProviderId = useId('fluent-provider')
   const context = usePortfolioAggregationContext()
   const [confirmDeleteDialog, getConfirmDeleteResponse] = useConfirmationDialog()
   return (
-    <div className={styles.root}>
-      <PrimaryButton
-        text={strings.SaveButtonLabel}
-        onClick={props.onSave}
-        disabled={props.isSaveDisabled}
-      />
-      <DefaultButton
-        text={strings.CancelButtonLabel}
-        style={{ marginLeft: 4 }}
+    <FluentProvider id={fluentProviderId} theme={webLightTheme} className={styles.root}>
+      <Button onClick={props.onSave} disabled={props.isSaveDisabled} appearance='primary'>
+        {strings.SaveButtonLabel}
+      </Button>
+      <Button
         onClick={() => {
           context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
         }}
-      />
+      >
+        {strings.CancelButtonLabel}
+      </Button>
       {props.isEditing && (
-        <DefaultButton
-          text={strings.DeleteButtonLabel}
-          style={{ marginLeft: 4 }}
+        <Button
           onClick={async () => {
             const response = await getConfirmDeleteResponse({
               title: strings.ConfirmDeleteProjectContentColumnTitle,
@@ -40,9 +37,11 @@ export const ColumnFormPanelFooter: FC<ColumnFormPanelFooterProps> = (props) => 
             if (response) props.onDeleteColumn()
           }}
           disabled={props.isDeleteDisabled}
-        />
+        >
+          {strings.DeleteButtonLabel}
+        </Button>
       )}
       {confirmDeleteDialog}
-    </div>
+    </FluentProvider>
   )
 }

@@ -2,6 +2,14 @@ define([], function () {
   return {
     Aria: {
       MenuOverflowCount: '{0} flere elementer',
+      MoveUp: 'Flytt opp',
+      MoveDown: 'Flytt ned',
+    },
+    Placeholder: {
+      TextField: 'Angi verdi her',
+      Icon: 'Angi et ikon',
+      ChoiceField: 'Velg et alternativ',
+      MultiChoiceField: 'Velg ett eller flere alternativer',
     },
     AddColumnLabel: 'Legg til en kolonne',
     AllProjectsHeaderText: 'Alle prosjekter/program',
@@ -98,6 +106,7 @@ define([], function () {
     DefaultViewSetWarningMessage: 'Det er allerede en visning som er satt som standard. Du må først endre denne visningen før du kan sette en ny som standard. Personlige visninger kan ikke settes som standard.',
     DeleteButtonLabel: 'Slett',
     DisplayNameDescription: 'Visningsnavn for denne kolonnen, kun for denne webdelen. Om du ønsker å endre visningsnavnet for alle webdeler, må du endre det i listen Prosjektinnholdskolonner.',
+    DisplayNamePortfolioOverviewDescription: 'Visningsnavn for denne kolonnen.',
     DisplayNameLabel: 'Visningsnavn',
     EditColumnHeaderText: 'Rediger kolonne',
     EditColumnLabel: 'Rediger',
