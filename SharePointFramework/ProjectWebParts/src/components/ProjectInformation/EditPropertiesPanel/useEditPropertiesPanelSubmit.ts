@@ -1,5 +1,5 @@
 import strings from 'ProjectWebPartsStrings'
-import SPDataAdapter from 'data'
+import SPDataAdapter from '../../../data'
 import { IProjectInformationData } from 'pp365-shared-library'
 import { ICustomEditPanelSubmitProps } from 'pp365-shared-library/lib/components/CustomEditPanel/types'
 import { useCallback, useState } from 'react'
