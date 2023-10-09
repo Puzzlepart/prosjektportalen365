@@ -169,28 +169,26 @@ export const ColumnFormPanel: FC = () => {
             ))}
           </Combobox>
         </FieldContainer>
-        <div className={styles.groupedFields}>
-          <FieldContainer
-            iconName='Filter'
-            label={strings.IsRefinableLabel}
-            description={strings.IsRefinableDescription}
-          >
-            <Switch
-              defaultChecked={column.get('isRefinable')}
-              onChange={(_, data) => setColumn('isRefinable', data.checked)}
-            />
-          </FieldContainer>
-          <FieldContainer
-            iconName='GroupList'
-            label={strings.IsGroupableLabel}
-            description={strings.IsGroupableDescription}
-          >
-            <Switch
-              defaultChecked={column.get('data').isGroupable}
-              onChange={(_, data) => setColumn('isGroupable', data.checked)}
-            />
-          </FieldContainer>
-        </div>
+        <FieldContainer
+          iconName='Filter'
+          label={strings.IsRefinableLabel}
+          description={strings.IsRefinableDescription}
+        >
+          <Switch
+            defaultChecked={column.get('isRefinable')}
+            onChange={(_, data) => setColumn('isRefinable', data.checked)}
+          />
+        </FieldContainer>
+        <FieldContainer
+          iconName='GroupList'
+          label={strings.IsGroupableLabel}
+          description={strings.IsGroupableDescription}
+        >
+          <Switch
+            defaultChecked={column.get('data').isGroupable}
+            onChange={(_, data) => setColumn('isGroupable', data.checked)}
+          />
+        </FieldContainer>
       </FluentProvider>
     </Panel>
   )

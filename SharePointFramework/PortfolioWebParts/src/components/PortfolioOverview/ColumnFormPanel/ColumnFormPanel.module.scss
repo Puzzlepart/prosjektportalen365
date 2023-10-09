@@ -6,12 +6,6 @@
     flex-direction: column;
     gap: 16px;
 
-    .groupedFields {
-      display: flex;
-      flex-direction: row;
-      gap: 6px;
-    }
-
     .field {
       min-height: 32px;
       border-radius: var(--borderRadiusMedium);
