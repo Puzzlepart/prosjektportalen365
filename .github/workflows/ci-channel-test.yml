@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - releases/1.9
-      - feat/share-edit-properties-panel
     paths:
       - "SharePointFramework/**"
       - "Install/**"
