@@ -19,11 +19,11 @@ export function useRiskMatrix(props: IRiskMatrixProps) {
       .filter((item) => cell.y === item.probability && cell.x === item.consequence)
       .map(
         (item) =>
-        ({
-          model: item,
-          style: { opacity: showPostAction ? 0 : 1 },
-          title: item.tooltip
-        } as IMatrixElementProps)
+          ({
+            model: item,
+            style: { opacity: showPostAction ? 0 : 1 },
+            title: item.tooltip
+          } as IMatrixElementProps)
       )
     const postActionElements = props.items
       .filter(
@@ -31,11 +31,11 @@ export function useRiskMatrix(props: IRiskMatrixProps) {
       )
       .map(
         (item) =>
-        ({
-          model: item,
-          style: { opacity: showPostAction ? 1 : 0 },
-          title: item.tooltip
-        } as IMatrixElementProps)
+          ({
+            model: item,
+            style: { opacity: showPostAction ? 1 : 0 },
+            title: item.tooltip
+          } as IMatrixElementProps)
       )
     return [...elements, ...postActionElements]
   }

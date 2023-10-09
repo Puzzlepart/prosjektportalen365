@@ -8,14 +8,14 @@ import { UncertaintyElementModel } from 'models'
  * Extends IBaseWebPartComponentProps and IRiskMatrixProps interfaces.
  */
 export interface IRiskMatrixWebPartProps extends IBaseWebPartComponentProps, IRiskMatrixProps {
-  /** 
-   * The name of the SharePoint list to retrieve data from. 
-  */
+  /**
+   * The name of the SharePoint list to retrieve data from.
+   */
   listName?: string
 
-  /** 
+  /**
    * The CAML query to filter items in the SharePoint list.
-  */
+   */
   viewXml?: string
 
   /**

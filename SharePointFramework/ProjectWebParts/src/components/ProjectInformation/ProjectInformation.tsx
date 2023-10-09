@@ -26,55 +26,55 @@ import { useProjectInformation } from './useProjectInformation'
  * - Promote to parent project (`CreateParentDialog`)
  */
 export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
-    const context = useProjectInformation(props)
-    if (context.state.hidden) return null
+  const context = useProjectInformation(props)
+  if (context.state.hidden) return null
 
-    if (!context.state.isDataLoaded) {
-        return (
-            <FluentProvider theme={webLightTheme} className={styles.root}>
-                <LoadingSkeleton />
-            </FluentProvider>
-        )
-    }
-
+  if (!context.state.isDataLoaded) {
     return (
-        <ProjectInformationContextProvider value={context}>
-            <FluentProvider theme={webLightTheme} className={mergeClasses(styles.root, props.className)}>
-                <WebPartTitle title={props.title} />
-                <div className={styles.container}>
-                    {context.state.error && (
-                        <Alert className={styles.alertContainer} intent='error'>
-                            {context.state.error.message}
-                        </Alert>
-                    )}
-                    <ProjectProperties />
-                    <>
-                        {context.state.alert && (
-                            <Alert className={styles.alertContainer} hidden={props.hideAllActions} intent='info'>
-                                {context.state.error.message}
-                            </Alert>
-                        )}
-                    </>
-                    <Actions />
-                    <ParentProjectsList />
-                    <ProjectStatusReport />
-                    <ProgressDialog />
-                    <AllPropertiesPanel />
-                    <EditPropertiesPanel />
-                    <CreateParentDialog />
-                </div>
-            </FluentProvider>
-            {context.state.confirmActionProps && <ConfirmDialog {...context.state.confirmActionProps} />}
-        </ProjectInformationContextProvider>
+      <FluentProvider theme={webLightTheme} className={styles.root}>
+        <LoadingSkeleton />
+      </FluentProvider>
     )
+  }
+
+  return (
+    <ProjectInformationContextProvider value={context}>
+      <FluentProvider theme={webLightTheme} className={mergeClasses(styles.root, props.className)}>
+        <WebPartTitle title={props.title} />
+        <div className={styles.container}>
+          {context.state.error && (
+            <Alert className={styles.alertContainer} intent='error'>
+              {context.state.error.message}
+            </Alert>
+          )}
+          <ProjectProperties />
+          <>
+            {context.state.alert && (
+              <Alert className={styles.alertContainer} hidden={props.hideAllActions} intent='info'>
+                {context.state.error.message}
+              </Alert>
+            )}
+          </>
+          <Actions />
+          <ParentProjectsList />
+          <ProjectStatusReport />
+          <ProgressDialog />
+          <AllPropertiesPanel />
+          <EditPropertiesPanel />
+          <CreateParentDialog />
+        </div>
+      </FluentProvider>
+      {context.state.confirmActionProps && <ConfirmDialog {...context.state.confirmActionProps} />}
+    </ProjectInformationContextProvider>
+  )
 }
 
 ProjectInformation.displayName = 'Project Information'
 ProjectInformation.defaultProps = {
-    page: 'Frontpage',
-    customActions: [],
-    hideActions: [],
-    showFieldExternal: {},
-    hideStatusReport: false,
-    statusReportShowOnlyIcons: true
+  page: 'Frontpage',
+  customActions: [],
+  hideActions: [],
+  showFieldExternal: {},
+  hideStatusReport: false,
+  statusReportShowOnlyIcons: true
 }

@@ -32,10 +32,7 @@ export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (props) => {
           ))}
         </div>
         <PopoverTrigger disableButtonEnhancement>
-          <Button
-            {...props.adminButton}
-            className={styles.adminButton}
-          >
+          <Button {...props.adminButton} className={styles.adminButton}>
             {strings.RiskActionFieldValueAdminButtonText}
           </Button>
         </PopoverTrigger>
@@ -65,6 +62,6 @@ RiskActionFieldValue.displayName = 'RiskActionFieldValue'
 RiskActionFieldValue.defaultProps = {
   adminButton: {
     appearance: 'transparent',
-    size: 'small',
+    size: 'small'
   }
 }

@@ -8,29 +8,33 @@ import { IRiskMatrixProps } from './types'
 import { useRiskMatrix } from './useRiskMatrix'
 
 export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
-  const { configuration, error, getElementsForCell, setShowPostAction, fluentProviderId } = useRiskMatrix(props)
+  const { configuration, error, getElementsForCell, setShowPostAction, fluentProviderId } =
+    useRiskMatrix(props)
   return (
-    <FluentProvider id={fluentProviderId} theme={webLightTheme} style={{ background: 'transparent' }}>
+    <FluentProvider
+      id={fluentProviderId}
+      theme={webLightTheme}
+      style={{ background: 'transparent' }}
+    >
       {!!error ? (
         <Alert intent='error'>{error}</Alert>
-      )
-        : (
-          <>
-            <DynamicMatrix
-              {...props}
-              width={props.fullWidth ? '100%' : props.width}
-              configuration={configuration}
-              getElementsForCell={getElementsForCell}
-            />
-            <Toggle
-              label={strings.ToggleUncertaintyPostActionLabel}
-              onText={strings.ToggleUncertaintyPostActionOnText}
-              offText={strings.ToggleUncertaintyPostActionOffText}
-              onChange={(_event, checked) => setShowPostAction(checked)}
-              disabled={!!error}
-            />
-          </>
-        )}
+      ) : (
+        <>
+          <DynamicMatrix
+            {...props}
+            width={props.fullWidth ? '100%' : props.width}
+            configuration={configuration}
+            getElementsForCell={getElementsForCell}
+          />
+          <Toggle
+            label={strings.ToggleUncertaintyPostActionLabel}
+            onText={strings.ToggleUncertaintyPostActionOnText}
+            offText={strings.ToggleUncertaintyPostActionOffText}
+            onChange={(_event, checked) => setShowPostAction(checked)}
+            disabled={!!error}
+          />
+        </>
+      )}
     </FluentProvider>
   )
 }

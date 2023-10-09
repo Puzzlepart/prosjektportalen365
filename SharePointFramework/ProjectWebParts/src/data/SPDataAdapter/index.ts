@@ -81,10 +81,10 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       .getByInternalNameOrTitle(fieldName)
       .select('InternalName', 'TermSetId', 'TextField')
       .using(DefaultCaching)<{
-        InternalName: string
-        TermSetId: string
-        TextField: string
-      }>()
+      InternalName: string
+      TermSetId: string
+      TextField: string
+    }>()
     const textField = await this.sp.web.fields
       .getById(field.TextField)
       .select('InternalName')
@@ -114,8 +114,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
       const { ServerRelativeUrl } = await this.portal.web.rootFolder
         .select('ServerRelativeUrl')
         .using(DefaultCaching)<{
-          ServerRelativeUrl: string
-        }>()
+        ServerRelativeUrl: string
+      }>()
       const folderRelativeUrl = `${ServerRelativeUrl}/${strings.SiteAssetsConfigurationFolder}/${folderPath}`
       const folder = this.portal.web.getFolderByServerRelativePath(folderRelativeUrl)
       const files = await folder.files
@@ -124,7 +124,9 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
         .using(DefaultCaching)()
       return files.map((file) => ({
         name: file.Name,
-        title: file['ListItemAllFields']['Title'] ?? `${strings.UnknownConfigurationName} (${file.Name})`,
+        title:
+          file['ListItemAllFields']['Title'] ??
+          `${strings.UnknownConfigurationName} (${file.Name})`,
         url: file.ServerRelativeUrl
       }))
     } catch {

@@ -1,4 +1,11 @@
-import { Button, Field, FluentProvider, ProgressBar, useId, webLightTheme } from '@fluentui/react-components'
+import {
+  Button,
+  Field,
+  FluentProvider,
+  ProgressBar,
+  useId,
+  webLightTheme
+} from '@fluentui/react-components'
 import React, { FC, useState } from 'react'
 import styles from './CustomEditPanelFooter.module.scss'
 import { ICustomEditPanelFooterProps } from './types'
@@ -35,9 +42,7 @@ export const CustomEditPanelFooter: FC<ICustomEditPanelFooterProps> = (props) =>
       )}
       <div className={styles.container}>
         {isSaving ? (
-          <Field
-            validationMessage={props.submit.saveProgressText}
-            validationState='none'>
+          <Field validationMessage={props.submit.saveProgressText} validationState='none'>
             <ProgressBar />
           </Field>
         ) : (
@@ -45,12 +50,11 @@ export const CustomEditPanelFooter: FC<ICustomEditPanelFooterProps> = (props) =>
             <Button
               onClick={handleOnSubmit}
               disabled={isSaving || props.submit.disabled}
-              appearance='primary'>
+              appearance='primary'
+            >
               {props.submit.text ?? strings.SaveText}
             </Button>
-            <Button
-              appearance='secondary'
-              onClick={props.onDismiss}>
+            <Button appearance='secondary' onClick={props.onDismiss}>
               {strings.CloseText}
             </Button>
           </>

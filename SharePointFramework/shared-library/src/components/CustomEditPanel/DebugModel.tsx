@@ -8,12 +8,14 @@ export const DebugModel: FC<{ model: UseModelReturnType }> = (props) => {
   useDebugValue(props.model.properties)
   return (
     <div>
-      <pre style={{
-        whiteSpace: 'pre-wrap',
-        wordWrap: 'break-word',
-        background: 'rgba(0,0,0,0.1)',
-        padding: 10,
-      }}>
+      <pre
+        style={{
+          whiteSpace: 'pre-wrap',
+          wordWrap: 'break-word',
+          background: 'rgba(0,0,0,0.1)',
+          padding: 10
+        }}
+      >
         {JSON.stringify(props.model.properties, null, 2)}
       </pre>
     </div>

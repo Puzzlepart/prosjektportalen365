@@ -5,13 +5,12 @@ import { ButtonProps } from '@fluentui/react-components'
 import { UseModelReturnType } from './useModel'
 
 export interface ICustomEditPanelSubmitProps extends Pick<ButtonProps, 'disabled'> {
-
   /**
    * Callback function to execute when the submit button is clicked.
-   * 
+   *
    * @param properties The properties to submit.
    */
-  onSubmit: (properties: UseModelReturnType['properties']) =>Promise<void>
+  onSubmit: (properties: UseModelReturnType['properties']) => Promise<void>
 
   /**
    * Text to display in the submit button (optional)
@@ -48,7 +47,7 @@ export interface ICustomEditPanelProps extends IPanelProps {
   dataAdapter: SPDataAdapterBase
 
   /**
-   * The fiels to be hidden in the panel. 
+   * The fiels to be hidden in the panel.
    */
   hiddenFields?: string[]
 

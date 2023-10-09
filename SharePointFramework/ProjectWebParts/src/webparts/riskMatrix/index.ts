@@ -9,7 +9,6 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import * as strings from 'ProjectWebPartsStrings'
-import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
 import { IRiskMatrixProps, RiskMatrix } from 'components/RiskMatrix'
 import ReactDom from 'react-dom'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
@@ -31,7 +30,8 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
       ])
       const defaultConfiguration = _.find(
         configurations,
-        (config) => config.name === SPDataAdapter.globalSettings.get('RiskMatrixDefaultConfigurationFile')
+        (config) =>
+          config.name === SPDataAdapter.globalSettings.get('RiskMatrixDefaultConfigurationFile')
       )
       this._data = { items, configurations, defaultConfiguration }
     } catch (error) {
@@ -170,14 +170,14 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                   label: strings.MatrixFullWidthLabel
                 }),
                 !this.properties.fullWidth &&
-                PropertyPaneSlider('width', {
-                  label: strings.WidthFieldLabel,
-                  min: 400,
-                  max: 1000,
-                  value: 400,
-                  showValue: true,
-                  disabled: this.properties.fullWidth
-                }),
+                  PropertyPaneSlider('width', {
+                    label: strings.WidthFieldLabel,
+                    min: 400,
+                    max: 1000,
+                    value: 400,
+                    showValue: true,
+                    disabled: this.properties.fullWidth
+                  }),
                 PropertyPaneTextField('calloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,
@@ -185,16 +185,16 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                   rows: 8
                 }),
                 !this.properties.useDynamicConfiguration &&
-                PropertyPaneDropdown('manualConfigurationPath', {
-                  label: strings.ManualConfigurationPathLabel,
-                  options: this._data.configurations.map(({ url: key, title: text }) => ({
-                    key,
-                    text
-                  })),
-                  selectedKey:
-                    this.properties?.manualConfigurationPath ??
-                    this._data.defaultConfiguration?.url
-                })
+                  PropertyPaneDropdown('manualConfigurationPath', {
+                    label: strings.ManualConfigurationPathLabel,
+                    options: this._data.configurations.map(({ url: key, title: text }) => ({
+                      key,
+                      text
+                    })),
+                    selectedKey:
+                      this.properties?.manualConfigurationPath ??
+                      this._data.defaultConfiguration?.url
+                  })
               ].filter(Boolean)
             }
           ]

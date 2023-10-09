@@ -17,10 +17,7 @@ import {
 } from '../../components/OpportunityMatrix/types'
 import { IProjectStatusProps, ProjectStatus } from '../../components/ProjectStatus'
 import PropertyFieldColorConfiguration from '../../components/PropertyFieldColorConfiguration'
-import {
-  RISK_MATRIX_DEFAULT_CONSEQUENCE_HEADERS,
-  RISK_MATRIX_DEFAULT_PROBABILITY_HEADERS
-} from '../../components/RiskMatrix'
+
 import SPDataAdapter from '../../data'
 import { IProjectStatusWebPartData } from './types'
 import _ from 'lodash'
@@ -30,10 +27,13 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
 
   public async onInit() {
     await super.onInit()
-    const riskMatrixConfigurations = await SPDataAdapter.getConfigurations(strings.RiskMatrixConfigurationFolder)
+    const riskMatrixConfigurations = await SPDataAdapter.getConfigurations(
+      strings.RiskMatrixConfigurationFolder
+    )
     const defaultRiskMatrixConfiguration = _.find(
       riskMatrixConfigurations,
-      (config) => config.name === SPDataAdapter.globalSettings.get('RiskMatrixDefaultConfigurationFile')
+      (config) =>
+        config.name === SPDataAdapter.globalSettings.get('RiskMatrixDefaultConfigurationFile')
     )
     this._data = {
       riskMatrixConfigurations,
@@ -105,14 +105,14 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   label: strings.MatrixFullWidthLabel
                 }),
                 !this.properties.riskMatrix?.fullWidth &&
-                PropertyPaneSlider('riskMatrix.width', {
-                  label: strings.WidthFieldLabel,
-                  min: 400,
-                  max: 1300,
-                  value: 400,
-                  showValue: true,
-                  disabled: this.properties.riskMatrix?.fullWidth
-                }),
+                  PropertyPaneSlider('riskMatrix.width', {
+                    label: strings.WidthFieldLabel,
+                    min: 400,
+                    max: 1300,
+                    value: 400,
+                    showValue: true,
+                    disabled: this.properties.riskMatrix?.fullWidth
+                  }),
                 PropertyPaneTextField('riskMatrix.calloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,
@@ -120,15 +120,15 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   rows: 8
                 }),
                 !this.properties.riskMatrix.useDynamicConfiguration &&
-                PropertyPaneDropdown('riskMatrix.manualConfigurationPath', {
-                  label: strings.ManualConfigurationPathLabel,
-                  options: this._data.riskMatrixConfigurations.map(
-                    ({ url: key, title: text }) => ({ key, text })
-                  ),
-                  selectedKey:
-                    this.properties.riskMatrix?.manualConfigurationPath ??
-                    this._data.defaultRiskMatrixConfiguration?.url
-                })
+                  PropertyPaneDropdown('riskMatrix.manualConfigurationPath', {
+                    label: strings.ManualConfigurationPathLabel,
+                    options: this._data.riskMatrixConfigurations.map(
+                      ({ url: key, title: text }) => ({ key, text })
+                    ),
+                    selectedKey:
+                      this.properties.riskMatrix?.manualConfigurationPath ??
+                      this._data.defaultRiskMatrixConfiguration?.url
+                  })
               ].filter(Boolean)
             },
             {

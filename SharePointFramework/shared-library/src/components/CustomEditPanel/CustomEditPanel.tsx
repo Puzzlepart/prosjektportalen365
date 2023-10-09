@@ -40,8 +40,8 @@ CustomEditPanel.defaultProps = {
   hiddenFields: [],
   fields: [],
   submit: {
-    onSubmit: async () => { 
+    onSubmit: async () => {
       // Default empty submit handler.
-    },
+    }
   }
 }
