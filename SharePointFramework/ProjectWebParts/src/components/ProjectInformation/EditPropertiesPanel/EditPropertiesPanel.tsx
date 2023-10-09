@@ -1,4 +1,4 @@
-import SPDataAdapter from 'data'
+import SPDataAdapter from '../../../data'
 import { CustomEditPanel } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { useProjectInformationContext } from '../context'
