@@ -14,14 +14,14 @@ import { UserMessage } from '../../UserMessage'
 
 /**
  * Renders the footer for the `CustomEditPanel` with a `<PrimaryButton />` for saving the changes,
- * and a `<ClosePanelButton />` for closing the panel. Also shows a spinner when submitting with a `label`
- * based on the `saveStatus` property from `props.submit`.
+ * and a `<ClosePanelButton />` for closing the panel. Also shows a `<ProgressBar />` when submitting 
+ * with text based on the `saveProgressText` property from `props.submit`.
  *
  * @param props The component props.
  */
 export const CustomEditPanelFooter: FC<ICustomEditPanelFooterProps> = (props) => {
   const fluentProviderId = useId('fluent-provider')
-  const [isSaving, setIsSaving] = useState(false)
+  const [isSaving, setIsSaving] = useState(false);
 
   /**
    * Handles the form submission by calling the `onSubmit` function passed in through props
