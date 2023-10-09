@@ -22,12 +22,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ vars.NODE_VERSION }}
- 
-      - run: |
-          npm ci --no-audit --no-fund --loglevel=error --include=dev
 
       - name: Rush Update
-        run: node common/scripts/install-run-rush.js update
+        run: node common/scripts/install-run-rush.js install
 
       - name: Rush Lint
         run: node common/scripts/install-run-rush.js lint
