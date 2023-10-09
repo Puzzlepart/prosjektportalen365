@@ -107,7 +107,6 @@ export const ViewFormPanel: FC = () => {
           <Switch
             defaultChecked={view.get('isPersonalView')}
             onChange={(_, data) => setView('isPersonalView', data.checked)}
-            disabled={isDefaultViewSet}
           />
         </FieldContainer>
       </FluentProvider>
