@@ -33,7 +33,7 @@ export const ColumnDataTypeField: FC<IColumnDataTypeFieldProps> = (props) => {
         label={props.label}
         description={props.description}
       >
-        {/* TODO: Use new Dropdown/ComboBox from Fluent UI 9 */}
+        {/* TODO: Use new Combobox from Fluent UI 9 */}
         <Dropdown {...dataTypeDropdown} />
         {props.children}
         <DataTypeFields {...dataTypeFields} />
