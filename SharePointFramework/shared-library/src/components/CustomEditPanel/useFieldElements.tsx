@@ -8,6 +8,7 @@ import { FieldContainer } from '../FieldContainer'
 import styles from './CustomEditPanel.module.scss'
 import { ICustomEditPanelProps } from './types'
 import { UseModelReturnType } from './useModel'
+import strings from 'SharedLibraryStrings'
 
 /**
  * Hook for field elements of `CustomEditPanel` component. This hook is used to render field elements
@@ -58,12 +59,12 @@ export function useFieldElements(model: UseModelReturnType, props: ICustomEditPa
             onChange={(_, data) =>
               model.set(field, { url: data.value, description: value.description })
             }
-            placeholder={'strings.Placeholder.UrlField'}
+            placeholder={strings.Placeholder.UrlField}
           />
           <Input
             defaultValue={value.description}
             onChange={(_, data) => model.set(field, { url: value.url, description: data.value })}
-            placeholder={'strings.Placeholder.UrlFieldAlternative'}
+            placeholder={strings.Placeholder.UrlFieldAlternative}
             style={{ marginTop: 6 }}
           />
         </FieldContainer>
@@ -78,7 +79,7 @@ export function useFieldElements(model: UseModelReturnType, props: ICustomEditPa
         <Input
           defaultValue={model.get<string>(field)}
           onChange={(_, data) => model.set(field, data.value)}
-          placeholder={'strings.Placeholder.TextField'}
+          placeholder={strings.Placeholder.TextField}
         />
       </FieldContainer>
     ),
@@ -91,7 +92,7 @@ export function useFieldElements(model: UseModelReturnType, props: ICustomEditPa
         <Textarea
           defaultValue={model.get<string>(field)}
           onChange={(_, data) => model.set(field, data.value)}
-          placeholder={'strings.Placeholder.TextField'}
+          placeholder={strings.Placeholder.TextField}
         />
       </FieldContainer>
     ),
@@ -102,7 +103,7 @@ export function useFieldElements(model: UseModelReturnType, props: ICustomEditPa
           value={model.get(field)}
           onSelectDate={(date) => model.set(field, date)}
           formatDate={(date) => date.toLocaleDateString()}
-          placeholder={'strings.Placeholder.DatePicker'}
+          placeholder={strings.Placeholder.DatePicker}
           firstDayOfWeek={DayOfWeek.Monday}
           showWeekNumbers
           allowTextInput
@@ -118,7 +119,7 @@ export function useFieldElements(model: UseModelReturnType, props: ICustomEditPa
         <Combobox
           value={model.get<string>(field)}
           defaultSelectedOptions={[model.get<string>(field)]}
-          placeholder={'strings.Placeholder.ChoiceField'}
+          placeholder={strings.Placeholder.ChoiceField}
           onOptionSelect={(_, data) => model.set(field, data.optionValue)}
         >
           {field.choices.map((choice) => (
@@ -137,7 +138,7 @@ export function useFieldElements(model: UseModelReturnType, props: ICustomEditPa
           value={model.get<string[]>(field) ? model.get<string[]>(field).join(', ') : ''}
           defaultSelectedOptions={model.get<string[]>(field) ? model.get<string[]>(field) : []}
           multiselect
-          placeholder={'strings.Placeholder.MultiChoiceField'}
+          placeholder={strings.Placeholder.MultiChoiceField}
           onOptionSelect={(e, data) => {
             if (!_.isEmpty(data.selectedOptions)) {
               model.set<string[]>(field, data.selectedOptions)
