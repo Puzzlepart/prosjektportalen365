@@ -22,7 +22,7 @@ export class SPField {
 
   /**
    * Constructs a new `SPField` instance.
-   * 
+   *
    * @param field The field to initialize the instance with (optional).
    */
   constructor(field?: SPField) {

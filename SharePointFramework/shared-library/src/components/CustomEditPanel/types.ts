@@ -8,9 +8,9 @@ export interface ICustomEditPanelSubmitProps extends Pick<ButtonProps, 'disabled
   /**
    * Callback function to execute when the submit button is clicked.
    *
-   * @param properties The properties to submit.
+   * @param model The model to submit.
    */
-  onSubmit: (properties: UseModelReturnType['properties']) => Promise<void>
+  onSubmit: (model: UseModelReturnType) => Promise<void>
 
   /**
    * Text to display in the submit button (optional)

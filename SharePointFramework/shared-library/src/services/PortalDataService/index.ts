@@ -656,7 +656,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     if (filter) {
       fields = fields.filter(filter)
     }
-    const listFields =await fields()
+    const listFields = await fields()
     return this._mapFields(listFields)
   }
 

@@ -17,6 +17,5 @@ export function useCustomEditPanel(props: ICustomEditPanelProps) {
   const fields = useEditableFields(props)
   const model = useModel(props)
   const getFieldElement = useFieldElements(model, props)
-
   return { fields, getFieldElement, model }
 }

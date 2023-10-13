@@ -29,7 +29,7 @@ export const CustomEditPanelFooter: FC<ICustomEditPanelFooterProps> = (props) =>
    */
   const handleOnSubmit = async () => {
     setIsSaving(true)
-    await props.submit.onSubmit(props.model.properties)
+    await props.submit.onSubmit(props.model)
     setIsSaving(false)
   }
 

@@ -5,7 +5,6 @@ import { ItemFieldValues } from './ItemFieldValues'
 import { ProjectColumn, ProjectColumnFieldOverride } from './ProjectColumn'
 import { ProjectInformationFieldValue } from './ProjectInformationFieldValue'
 import { SPField } from './SPField'
-import { IEntityField } from 'sp-entityportal-service'
 
 /**
  * Project information field model. Used both for display
@@ -192,7 +191,6 @@ export class ProjectInformationField extends SPField {
     page?: 'Frontpage' | 'ProjectStatus' | 'Portfolio',
     showFieldExternal?: Record<string, boolean>
   ): boolean {
-    console.log(this.displayName, this._field.ShowInEditForm, this._field.Hidden)
     switch (displayMode) {
       case DisplayMode.Edit:
         return this._field.ShowInEditForm && !this._field.Hidden && !this.isReadOnly
