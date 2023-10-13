@@ -11,7 +11,7 @@ import { IEntityField } from 'sp-entityportal-service'
  * Project information field model. Used both for display
  * and edit of project information.
  */
-export class ProjectInformationField {
+export class ProjectInformationField extends SPField {
   /**
    * The ID of the field.
    */
@@ -78,7 +78,8 @@ export class ProjectInformationField {
    *
    * @param _field Field information
    */
-  constructor(private _field: SPField | IEntityField) {
+  constructor(private _field: SPField) {
+    super(_field)
     this.id = _field.Id
     this.internalName = _field.InternalName
     this.displayName = _field.Title
@@ -170,7 +171,7 @@ export class ProjectInformationField {
    * Get choices for a choice field as `string[]`.
    */
   public get choices(): string[] {
-    return this._field['Choices'] ?? []
+    return this._field.Choices ?? []
   }
 
   /**
@@ -191,9 +192,10 @@ export class ProjectInformationField {
     page?: 'Frontpage' | 'ProjectStatus' | 'Portfolio',
     showFieldExternal?: Record<string, boolean>
   ): boolean {
+    console.log(this.displayName, this._field.ShowInEditForm, this._field.Hidden)
     switch (displayMode) {
       case DisplayMode.Edit:
-        return this._field['ShowInEditForm'] && !this._field['Hidden']
+        return this._field.ShowInEditForm && !this._field.Hidden && !this.isReadOnly
       case DisplayMode.Read: {
         if (this._isExternal) return showFieldExternal[this.internalName]
         return this.column ? this.column.isVisible(page) : false
