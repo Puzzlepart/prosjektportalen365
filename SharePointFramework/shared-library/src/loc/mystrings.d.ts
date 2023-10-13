@@ -7,6 +7,17 @@ declare interface ISharedLibraryStrings {
     MenuOverflowCount: string
     ProjectTitle: string
   }
+  Placeholder: {
+    DatePicker: string
+    TextField: string
+    UrlField: string
+    UrlFieldAlternative: string
+    TaxonomyPicker: string
+    PeoplePicker: string
+    NumberField: string
+    ChoiceField: string
+    MultiChoiceField: string
+  },
   AllocationPercetageLabel: string
   AllocationStatusLabel: string
   BarLabel: string

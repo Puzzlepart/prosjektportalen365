@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    EditStatusPanelnText: 'Rediger prosjektstatus',
     Aria: {
       CurrentPhaseText: 'Dette er den gjeldende fasen. Det er derfor ikke mulig å endre til denne fasen.',
     },

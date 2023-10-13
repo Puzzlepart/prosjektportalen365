@@ -1,18 +1,8 @@
 declare interface IProjectWebPartsStrings {
+  EditStatusPanelnText: string
   Aria: {
     CurrentPhaseText: string
   }
-  Placeholder: {
-    DatePicker: string
-    TextField: string
-    UrlField: string
-    UrlFieldAlternative: string
-    TaxonomyPicker: string
-    PeoplePicker: string
-    NumberField: string
-    ChoiceField: string
-    MultiChoiceField: string
-  },
   SaveText: string
   ErrorBoundaryFallbackDescription: string
   ErrorBoundaryFallbackText: string
