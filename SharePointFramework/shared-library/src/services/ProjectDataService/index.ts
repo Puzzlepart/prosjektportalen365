@@ -20,13 +20,29 @@ import {
   IProjectDataServiceParams,
   IProjectInformationData
 } from './types'
+import { DataService } from '../DataService'
 
-export class ProjectDataService {
+export class ProjectDataService extends DataService<IProjectDataServiceParams> {
+  /**
+   * Storage instance
+   */
   private _storage: IPnPClientStore
+
+  /**
+   * Storage keys for the different functions
+   */
   private _storageKeys: Record<string, string> = {
     _getLocalProjectInformationItemContext: '{0}_local_project_information_item_context'
   }
+
+  /**
+   * Instance of `SPFI` from `@pnp/sp/presets/all`
+   */
   private _sp: SPFI
+
+  /**
+   * Instance of the current web from `@pnp/sp/presets/all`
+   */
   public web: IWeb
 
   /**
@@ -36,6 +52,7 @@ export class ProjectDataService {
    * @param _params - Parameters
    */
   constructor(private _params: IProjectDataServiceParams) {
+    super(true)
     this._initStorage()
     if (_params.logLevel) {
       Logger.subscribe(ConsoleListener())
@@ -154,21 +171,6 @@ export class ProjectDataService {
       list,
       item
     } as ILocalProjectInformationItemContext
-  }
-
-  /**
-   * Mapping fields to include `ShowInEditForm`, `ShowInNewForm` and `ShowInDisplayForm`
-   * which is only present in `SchemaXml`, not as separate properties.
-   *
-   * @param fields Fields to map
-   */
-  private _mapFields(fields: SPField[]): SPField[] {
-    return fields.map<SPField>((fld) => ({
-      ...fld,
-      ShowInEditForm: fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') === -1,
-      ShowInNewForm: fld.SchemaXml.indexOf('ShowInNewForm="FALSE"') === -1,
-      ShowInDisplayForm: fld.SchemaXml.indexOf('ShowInDisplayForm="FALSE"') === -1
-    }))
   }
 
   /**

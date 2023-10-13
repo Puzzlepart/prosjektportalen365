@@ -36,10 +36,9 @@ import {
   PortalDataServiceList,
   SyncListParams
 } from './types'
+import { DataService } from '../DataService'
 
-export class PortalDataService {
-  private _configuration: IPortalDataServiceConfiguration
-  private _isConfigured: boolean = false
+export class PortalDataService extends DataService<IPortalDataServiceConfiguration> {
   private _sp: SPFI
   private _spPortal: SPFI
   public web: IWeb
@@ -53,18 +52,10 @@ export class PortalDataService {
   public async configure(
     configuration: IPortalDataServiceConfiguration
   ): Promise<PortalDataService> {
-    this._configuration = { ...PortalDataServiceDefaultConfiguration, ...configuration }
+    super.onConfigureStart({ ...PortalDataServiceDefaultConfiguration, ...configuration })
     this._sp = createSpfiInstance(this._configuration.spfxContext)
     await this.initPortalSite()
-    this._isConfigured = true
-    return this
-  }
-
-  /**
-   * Returns `true` if the `PortalDataService` is configured, `false` otherwise.
-   */
-  public get isConfigured(): boolean {
-    return this._isConfigured
+    return super.onConfigured()
   }
 
   /**
@@ -654,7 +645,7 @@ export class PortalDataService {
    * @param filter Filter
    * @param web Web
    */
-  public getListFields(
+  public async getListFields(
     list: PortalDataServiceList | string,
     filter?: string,
     web: IWeb = this.web
@@ -665,7 +656,8 @@ export class PortalDataService {
     if (filter) {
       fields = fields.filter(filter)
     }
-    return fields<SPField[]>()
+    const listFields =await fields()
+    return this._mapFields(listFields)
   }
 
   /**
