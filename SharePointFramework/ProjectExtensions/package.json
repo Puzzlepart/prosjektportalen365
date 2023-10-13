@@ -53,7 +53,7 @@
     "@fluentui/react-tags-preview": "0.2.9",
     "@microsoft/microsoft-graph-types": "~2.38.0",
     "usehooks-ts": "~2.9.1",
-    "@fluentui/react-portal-compat": "~9.0.95"
+    "@fluentui/react-portal-compat": "~9.0.100"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",
