@@ -8,31 +8,31 @@ import { ProjectStatusContext } from './context'
 import { IProjectStatusProps } from './types'
 import { useProjectStatus } from './useProjectStatus'
 import { EditStatusPanel } from './EditStatusPanel'
+import { FluentProvider, webLightTheme } from '@fluentui/react-components'
+
 
 export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
-  const { context } = useProjectStatus(props)
+  const { fluentProviderId, context } = useProjectStatus(props)
   return (
     <ProjectStatusContext.Provider value={context}>
-      <div className={styles.root}>
-        <Commands />
-        <div className={styles.container}>
-          <UserMessages />
-          <Header />
-          <Sections />
+      <FluentProvider id={fluentProviderId} theme={webLightTheme}>
+        <div className={styles.root}>
+          <Commands />
+          <div className={styles.container}>
+            <UserMessages />
+            <Header />
+            <Sections />
+          </div>
         </div>
-      </div>
-      <EditStatusPanel />
+        <EditStatusPanel />
+      </FluentProvider>
     </ProjectStatusContext.Provider>
   )
 }
 
+ProjectStatus.displayName = 'ProjectStatus'
 ProjectStatus.defaultProps = {
   persistSectionDataAttachmentFileName: 'PersistedSectionDataJson.json',
   snapshotAttachmentFileName: 'Snapshot.png',
   description: ''
 }
-
-export * from './Sections'
-export * from './context'
-export * from './types'
-export * from './Header'

@@ -15,19 +15,20 @@ export function useRedirectNewStatusReport() {
   const context = useProjectStatusContext()
   return async () => {
     const [lastReport] = context.state.data.reports
-    let properties: Record<string, string | number | boolean> = {}
+    const properties: Record<string, string | number | boolean> = {}
     if (lastReport) {
-      properties = context.state.data.reportFields
-        .filter(
-          (field) =>
-            !field.isReadOnly &&
-            !['GtSectionDataJson'].includes(field.internalName)
-        )
-        .reduce((obj, field) => {
-          const fieldValue = lastReport.values[field.internalName]
-          if (fieldValue) obj[field.internalName] = fieldValue
-          return obj
-        }, {})
+      // TODO: Handle lastReport
+      // properties = context.state.data.reportFields
+      //   .filter(
+      //     (field) =>
+      //       !field.isReadOnly &&
+      //       !['GtSectionDataJson'].includes(field.internalName)
+      //   )
+      //   .reduce((obj, field) => {
+      //     const fieldValue = lastReport.values[field.internalName]
+      //     if (fieldValue) obj[field.internalName] = fieldValue
+      //     return obj
+      //   }, {})
     }
     properties.Title = format(strings.NewStatusReportTitle, context.props.webTitle)
     properties.GtSiteId = context.props.siteId

@@ -1,7 +1,7 @@
-import { IPanelProps } from '@fluentui/react'
 import { ButtonProps } from '@fluentui/react-components'
 import { SPDataAdapterBase } from '../../data'
 import { ItemFieldValues, ProjectInformationField } from '../../models'
+import { IBasePanelProps } from '../BasePanel'
 import { UseModelReturnType } from './useModel'
 
 export interface ICustomEditPanelSubmitProps extends Pick<ButtonProps, 'disabled'> {
@@ -29,7 +29,7 @@ export interface ICustomEditPanelSubmitProps extends Pick<ButtonProps, 'disabled
   error?: string
 }
 
-export interface ICustomEditPanelProps extends IPanelProps {
+export interface ICustomEditPanelProps extends IBasePanelProps {
   /**
    * The fields to edit in the panel.
    */

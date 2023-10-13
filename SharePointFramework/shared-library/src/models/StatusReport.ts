@@ -119,8 +119,12 @@ export class StatusReport {
   public getStatusValue(fieldName: string) {
     const commentFieldName = `${fieldName}Comment`
     return {
-      value: this.fieldValues ? this.fieldValues.get(fieldName, { defaultValue: '', format: 'text' }) : '',
-      comment: this.fieldValues ? this.fieldValues.get(commentFieldName, { defaultValue: '', format: 'text' }) : ''
+      value: this.fieldValues
+        ? this.fieldValues.get(fieldName, { defaultValue: '', format: 'text' })
+        : '',
+      comment: this.fieldValues
+        ? this.fieldValues.get(commentFieldName, { defaultValue: '', format: 'text' })
+        : ''
     }
   }
 

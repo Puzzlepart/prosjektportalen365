@@ -34,7 +34,11 @@ export const CustomEditPanelFooter: FC<ICustomEditPanelFooterProps> = (props) =>
   }
 
   return (
-    <FluentProvider id={fluentProviderId} theme={webLightTheme} className={styles.root}>
+    <FluentProvider
+      id={fluentProviderId}
+      theme={webLightTheme}
+      className={styles.customEditPanelFooter}
+    >
       {props.submit.error && (
         <div className={styles.errorContainer}>
           <UserMessage text={props.submit.error} intent='error' />

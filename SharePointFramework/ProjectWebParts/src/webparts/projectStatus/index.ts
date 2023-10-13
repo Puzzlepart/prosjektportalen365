@@ -15,7 +15,8 @@ import {
   OPPORTUNITY_DEFAULT_MATRIX_CONSEQUENCE_HEADERS,
   OPPORTUNITY_DEFAULT_MATRIX_PROBABILITY_HEADERS
 } from '../../components/OpportunityMatrix/types'
-import { IProjectStatusProps, ProjectStatus } from '../../components/ProjectStatus'
+import { IProjectStatusProps } from '../../components/ProjectStatus'
+import { ProjectStatus } from 'components/ProjectStatus/ProjectStatus'
 import PropertyFieldColorConfiguration from '../../components/PropertyFieldColorConfiguration'
 
 import SPDataAdapter from '../../data'

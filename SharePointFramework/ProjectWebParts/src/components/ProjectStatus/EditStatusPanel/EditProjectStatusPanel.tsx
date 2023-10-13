@@ -12,6 +12,7 @@ import { useEditStatusPanel } from './useEditStatusPanel'
 export const EditStatusPanel: FC = () => {
   const { isOpen, onDismiss, fields, fieldValues, submit } = useEditStatusPanel()
   if (!fieldValues.id) return null
+  
   return (
     <CustomEditPanel
       isOpen={isOpen}

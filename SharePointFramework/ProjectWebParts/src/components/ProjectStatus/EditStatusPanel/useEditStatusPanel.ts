@@ -12,8 +12,8 @@ export function useEditStatusPanel() {
   const submit = useEditStatusPanelSubmit()
   const isOpen = context.state.activePanel === 'EditStatusPanel'
   const onDismiss = () => context.dispatch(CLOSE_PANEL())
-  const fields = context.state.data?.reportFields ?? []
-  const fieldValues = context.state.data?.properties?.fieldValues ?? new ItemFieldValues()
-  console.log(fieldValues)
+  const fieldValues = context.state.selectedReport?.fieldValues ?? new ItemFieldValues()
+  const fields = (context.state.data?.reportFields ?? []).map((field) => field.setValue(fieldValues))
+  console.log(fieldValues, fields)
   return { isOpen, onDismiss, fieldValues,fields, submit }
 }
