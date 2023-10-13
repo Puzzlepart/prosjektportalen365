@@ -2,7 +2,6 @@ import { format } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import SPDataAdapter from '../../../data'
 import { useProjectStatusContext } from '../context'
-import { useEditFormUrl } from './useEditFormUrl'
 
 /**
  * Hook for redirecting to a new status report. Uses `useEditFormUrl` hook
@@ -14,7 +13,6 @@ import { useEditFormUrl } from './useEditFormUrl'
  */
 export function useRedirectNewStatusReport() {
   const context = useProjectStatusContext()
-  const getEditFormUrl = useEditFormUrl()
   return async () => {
     const [lastReport] = context.state.data.reports
     let properties: Record<string, string | number | boolean> = {}
@@ -22,12 +20,12 @@ export function useRedirectNewStatusReport() {
       properties = context.state.data.reportFields
         .filter(
           (field) =>
-            field.SchemaXml.indexOf('ReadOnly="TRUE"') === -1 &&
-            !['GtSectionDataJson'].includes(field.InternalName)
+            !field.isReadOnly &&
+            !['GtSectionDataJson'].includes(field.internalName)
         )
         .reduce((obj, field) => {
-          const fieldValue = lastReport.values[field.InternalName]
-          if (fieldValue) obj[field.InternalName] = fieldValue
+          const fieldValue = lastReport.values[field.internalName]
+          if (fieldValue) obj[field.internalName] = fieldValue
           return obj
         }, {})
     }
@@ -39,6 +37,5 @@ export function useRedirectNewStatusReport() {
       context.state.data.properties.templateParameters?.ProjectStatusContentTypeId
     )
     document.location.hash = ''
-    document.location.href = getEditFormUrl(report)
   }
 }

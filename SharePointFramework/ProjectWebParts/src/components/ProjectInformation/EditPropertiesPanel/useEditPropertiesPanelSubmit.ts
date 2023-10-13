@@ -31,7 +31,7 @@ export function useEditPropertiesPanelSubmit(): ICustomEditPanelSubmitProps {
    * @returns void
    */
   const onSubmit = useCallback<ICustomEditPanelSubmitProps['onSubmit']>(
-    async (properties) => {
+    async ({ properties }) => {
       let data: IProjectInformationData = null
       setState({
         error: null,

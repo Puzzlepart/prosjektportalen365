@@ -3,9 +3,8 @@ import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 import strings from 'ProjectWebPartsStrings'
 import React from 'react'
 import { useProjectStatusContext } from '../context'
-import { REPORT_PUBLISHING } from '../reducer'
+import { OPEN_PANEL, REPORT_PUBLISHING } from '../reducer'
 import { useDeleteReport } from './useDeleteReport'
-import { useEditFormUrl } from './useEditFormUrl'
 import { usePublishReport } from './usePublishReport'
 import { useRedirectNewStatusReport } from './useRedirectNewStatusReport'
 import { useReportOptions } from './useReportOptions'
@@ -30,7 +29,6 @@ export function useCommands() {
   const deleteReport = useDeleteReport()
   const publishReport = usePublishReport()
   const reportOptions = useReportOptions()
-  const getEditFormUrl = useEditFormUrl()
   const items: IContextualMenuItem[] = [
     context.state.userHasAdminPermission && {
       key: 'NEW_STATUS_REPORT',
@@ -54,8 +52,9 @@ export function useCommands() {
         key: 'EDIT_REPORT',
         name: strings.EditReportButtonText,
         iconProps: { iconName: 'Edit' },
-        href: getEditFormUrl(context.state.selectedReport),
-        disabled: context.state.selectedReport?.published || context.state.isPublishing
+        onClick: () => {
+          context.dispatch(OPEN_PANEL('EditStatusPanel'))
+        }
       },
     context.state.selectedReport &&
       context.state.userHasAdminPermission &&

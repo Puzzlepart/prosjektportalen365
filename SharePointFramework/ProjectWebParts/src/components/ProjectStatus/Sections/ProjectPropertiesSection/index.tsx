@@ -19,12 +19,12 @@ export const ProjectPropertiesSection: FC = () => {
   function renderFields() {
     if (section.viewFields) {
       return section.viewFields.map((fieldName) => {
-        const [fld] = fields.filter((f) => [f.InternalName, f.Title].indexOf(fieldName) !== -1)
-        if (fld && !stringIsNullOrEmpty(fieldValues[fieldName])) {
+        const [field] = fields.filter(({ InternalName, Title }) => [InternalName, Title].indexOf(fieldName) !== -1)
+        if (field && !stringIsNullOrEmpty(fieldValues[fieldName])) {
           return (
             <StatusSectionField
               key={fieldName}
-              label={fld.Title}
+              label={field.Title}
               value={fieldValues[fieldName]}
               width={context.props.fieldWidth}
             />

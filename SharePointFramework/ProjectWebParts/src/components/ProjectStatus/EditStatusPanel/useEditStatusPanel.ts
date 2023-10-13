@@ -1,18 +1,18 @@
-import { ItemFieldValues } from 'pp365-shared-library';
-import { useProjectStatusContext } from '../context';
-import { CLOSE_PANEL } from '../reducer';
-import { useEditStatusPanelSubmit } from './useEditStatusPanelSubmit';
+import { ItemFieldValues } from 'pp365-shared-library'
+import { useProjectStatusContext } from '../context'
+import { CLOSE_PANEL } from '../reducer'
+import { useEditStatusPanelSubmit } from './useEditStatusPanelSubmit'
 
 /**
  * Component logic hook for `EditStatusPanel` that provides the
  * `isOpen`, `onDismiss`, `fields`, `fieldValues` and `submit` properties.
  */
 export function useEditStatusPanel() {
-  const context = useProjectStatusContext();
-  const submit = useEditStatusPanelSubmit();
-  const isOpen = context.state.activePanel === 'EditStatusPanel';
-  const onDismiss = () => context.dispatch(CLOSE_PANEL());
-  const fields = context.state.data?.reportFields ?? [];
+  const context = useProjectStatusContext()
+  const submit = useEditStatusPanelSubmit()
+  const isOpen = context.state.activePanel === 'EditStatusPanel'
+  const onDismiss = () => context.dispatch(CLOSE_PANEL())
+  const fields = context.state.data?.reportFields ?? []
   const fieldValues = new ItemFieldValues()
-  return { isOpen, onDismiss, fieldValues,fields, submit };
+  return { isOpen, onDismiss, fieldValues,fields, submit }
 }

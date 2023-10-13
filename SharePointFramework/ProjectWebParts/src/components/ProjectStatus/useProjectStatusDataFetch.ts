@@ -2,12 +2,27 @@ import { LogLevel } from '@pnp/logging'
 import { AnyAction } from '@reduxjs/toolkit'
 import strings from 'ProjectWebPartsStrings'
 import _ from 'lodash'
-import { ProjectAdminPermission, getUrlParam, parseUrlHash } from 'pp365-shared-library/lib'
+import { ProjectAdminPermission, ProjectInformationField, getUrlParam, parseUrlHash } from 'pp365-shared-library/lib'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { INIT_DATA } from './reducer'
 import { FetchDataResult, IProjectStatusProps } from './types'
+
+/**
+ * Get report fields for `ProjectStatus`. Fetches the list fields for the
+ * `PROJECT_STATUS` list, and filters out hidden fields. Creates a new
+ * `ProjectInformationField` for each field.
+ */
+async function getReportFields() {
+  const fields = await SPDataAdapter.portal.getListFields(
+    'PROJECT_STATUS',
+    // eslint-disable-next-line quotes
+    "Hidden eq false and Group ne 'Hidden'"
+  )
+  const reportFields = fields.map((field) => new ProjectInformationField(field))
+  return reportFields
+}
 
 /**
  * Fetch data for `ProjectStatus`. Feetches project properties, status report list properties,
@@ -33,11 +48,7 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
         }),
         SPDataAdapter.portal.getProjectStatusSections(),
         SPDataAdapter.portal.getProjectColumnConfig(),
-        SPDataAdapter.portal.getListFields(
-          'PROJECT_STATUS',
-          // eslint-disable-next-line quotes
-          "Hidden eq false and Group ne 'Hidden'"
-        )
+        getReportFields()
       ])
     const userHasAdminPermission = await SPDataAdapter.checkProjectAdminPermissions(
       ProjectAdminPermission.ProjectStatusAdmin,
