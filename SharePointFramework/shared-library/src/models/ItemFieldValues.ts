@@ -144,6 +144,7 @@ export class ItemFieldValues {
    */
   public update(properties: Record<string, any>) {
     this._fieldValues = { ...this._fieldValues, ...properties }
+    this._fieldValuesAsText = { ...this._fieldValuesAsText, ...properties }
     this._setValues()
   }
 

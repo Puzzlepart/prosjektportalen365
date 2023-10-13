@@ -36,7 +36,7 @@ export const CustomEditPanel: FC<ICustomEditPanelProps> = (props) => {
 
 CustomEditPanel.displayName = 'CustomEditPanel'
 CustomEditPanel.defaultProps = {
-  isOpen: true,
+  isOpen: false,
   hiddenFields: [],
   fields: [],
   submit: {

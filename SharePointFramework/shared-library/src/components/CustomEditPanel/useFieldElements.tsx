@@ -107,6 +107,7 @@ export function useFieldElements(model: UseModelReturnType, props: ICustomEditPa
           firstDayOfWeek={DayOfWeek.Monday}
           showWeekNumbers
           allowTextInput
+          showMonthPickerAsOverlay={false}
         />
       </FieldContainer>
     ),

@@ -1,20 +1,20 @@
 import React, { FC } from 'react'
 import { Commands } from './Commands'
-import { Header } from './Header'
+import { EditStatusPanel } from './EditStatusPanel'
+import { Header } from './Header/Header'
 import styles from './ProjectStatus.module.scss'
-import { Sections } from './Sections'
+import { Sections } from './Sections/Sections'
 import { UserMessages } from './UserMessages'
 import { ProjectStatusContext } from './context'
 import { IProjectStatusProps } from './types'
 import { useProjectStatus } from './useProjectStatus'
-import { EditStatusPanel } from './EditStatusPanel'
-import { FluentProvider, webLightTheme } from '@fluentui/react-components'
+import { Fluent } from 'pp365-shared-library'
 
 export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
-  const { fluentProviderId, context } = useProjectStatus(props)
+  const { context } = useProjectStatus(props)
   return (
     <ProjectStatusContext.Provider value={context}>
-      <FluentProvider id={fluentProviderId} theme={webLightTheme}>
+      <Fluent>
         <div className={styles.root}>
           <Commands />
           <div className={styles.container}>
@@ -24,7 +24,7 @@ export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
           </div>
         </div>
         <EditStatusPanel />
-      </FluentProvider>
+      </Fluent>
     </ProjectStatusContext.Provider>
   )
 }

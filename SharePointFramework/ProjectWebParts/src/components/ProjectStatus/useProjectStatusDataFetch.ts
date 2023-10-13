@@ -13,24 +13,16 @@ import SPDataAdapter from '../../data'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { INIT_DATA } from './reducer'
 import { FetchDataResult, IProjectStatusProps } from './types'
-import { stringIsNullOrEmpty } from '@pnp/core'
 
 /**
- * Get report fields for `ProjectStatus`. If content type ID is not provided,
- * the fields for the `ProjectStatus` list are fetched. Otherwise, the fields
- * for the content type are fetched.
+ * Get report fields for Project Status. If content type ID is not provided,
+ * the ID "0x010022252E35737A413FB56A1BA53862F6D5" is used, which is the ID
+ * for the default content type for Project Status.
  *
- * @param contentTypeId Content type ID for `ProjectStatus`
- * @param filter Filter for list fields
+ * @param contentTypeId Content type ID for Project Status
  */
-async function getReportFields(contentTypeId: string) {
-  let fields = []
-  console.log('getReportFields.contentTypeId', contentTypeId)
-  if (stringIsNullOrEmpty(contentTypeId)) {
-    fields = await SPDataAdapter.portal.getListFields('PROJECT_STATUS')
-  } else {
-    fields = await SPDataAdapter.portal.getContentTypeFields(contentTypeId)
-  }
+async function getReportFields(contentTypeId = '0x010022252E35737A413FB56A1BA53862F6D5') {
+  const fields = await SPDataAdapter.portal.getContentTypeFields(contentTypeId)
   const reportFields = fields.map((field) => new ProjectInformationField(field))
   return reportFields
 }
