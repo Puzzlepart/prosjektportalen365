@@ -43,8 +43,18 @@ export class ItemFieldValues {
     this._setValues()
   }
 
+  /**
+   * Get the item ID.
+   */
   public get id(): number {
-    return this._values.get('Id').value
+    return this._values?.get('Id')?.value ?? null
+  }
+
+  /**
+   * Get field value keys.
+   */
+  public get keys() {
+    return Array.from(this._values.keys())
   }
 
   /**
@@ -57,7 +67,7 @@ export class ItemFieldValues {
   }
 
   /**
-   * Set internal _values property based on field values and field values as text.
+   * Set internal `_values` property based on field values and field values as text.
    */
   protected _setValues() {
     this._values = Object.keys(this._fieldValues).reduce((map, key) => {
@@ -125,6 +135,16 @@ export class ItemFieldValues {
     const value = this._values.get(fieldName) ?? {}
     if (format) return this._getValueInFormat<T>(value, format, options.defaultValue)
     return value as unknown as T
+  }
+
+  /**
+   * Updates the field values of the item with the provided properties.
+   *
+   * @param properties - The properties to update the field values with.
+   */
+  public update(properties: Record<string, any>) {
+    this._fieldValues = { ...this._fieldValues, ...properties }
+    this._setValues()
   }
 
   /**

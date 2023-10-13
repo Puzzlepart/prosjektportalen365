@@ -252,7 +252,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           })
         )
       ])
-      return new StatusReport({ ...report.item, ...properties }, publishedString)
+      return report.setValues(properties)
     } catch (error) {
       throw error
     }
@@ -591,7 +591,14 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       if (top) items = items.top(top)
       if (select) items = items.select(...select)
       if (useCaching) items = items.using(DefaultCaching)
-      const reports = (await items()).map((i) => new StatusReport(i, publishedString))
+      const reportItems = await items()
+      const reports = reportItems.map((i) => {
+        const itemFieldValues = ItemFieldValues.create({
+          fieldValues: i,
+          fieldValuesAsText: i.FieldValuesAsText
+        })
+        return new StatusReport(itemFieldValues, publishedString)
+      })
       return reports
     } catch (error) {
       throw error

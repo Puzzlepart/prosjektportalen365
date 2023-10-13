@@ -11,8 +11,9 @@ export function useEditStatusPanelSubmit(): ICustomEditPanelSubmitProps {
 
   return {
     ...state,
-    onSubmit: async (properties) => {
+    onSubmit: async ({ properties }) => {
       // TODO: Implement submit logic
+      console.log(properties)
     }
   }
 }

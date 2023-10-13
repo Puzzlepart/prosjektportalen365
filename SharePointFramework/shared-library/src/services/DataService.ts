@@ -2,10 +2,10 @@ import { SPField } from '../models'
 
 export class DataService<T> {
   protected _configuration: T
-  protected _isConfigured: boolean = false
+  public isConfigured: boolean = false
 
   constructor(isConfigured: boolean = false) {
-    this._isConfigured = isConfigured
+    this.isConfigured = isConfigured
   }
 
   /**
@@ -23,7 +23,7 @@ export class DataService<T> {
    * @returns The DataService instance.
    */
   protected onConfigured() {
-    this._isConfigured = true
+    this.isConfigured = true
     return this
   }
 

@@ -6,10 +6,12 @@ import { useEditStatusPanel } from './useEditStatusPanel'
 
 /**
  * Edit properties panel uses `CustomEditPanel` to render an edit
- * panel for the project information component.
+ * panel for the project information component. If the field values
+ * are not set, the panel will render `null`.
  */
 export const EditStatusPanel: FC = () => {
   const { isOpen, onDismiss, fields, fieldValues, submit } = useEditStatusPanel()
+  if (!fieldValues.id) return null
   return (
     <CustomEditPanel
       isOpen={isOpen}

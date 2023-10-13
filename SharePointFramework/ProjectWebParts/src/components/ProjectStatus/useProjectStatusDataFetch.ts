@@ -13,12 +13,14 @@ import { FetchDataResult, IProjectStatusProps } from './types'
  * Get report fields for `ProjectStatus`. Fetches the list fields for the
  * `PROJECT_STATUS` list, and filters out hidden fields. Creates a new
  * `ProjectInformationField` for each field.
+ * 
+ * @param filter Filter for list fields
  */
-async function getReportFields() {
+// eslint-disable-next-line quotes
+async function getReportFields(filter = "Hidden eq false and Group ne 'Hidden'") {
   const fields = await SPDataAdapter.portal.getListFields(
     'PROJECT_STATUS',
-    // eslint-disable-next-line quotes
-    "Hidden eq false and Group ne 'Hidden'"
+    filter
   )
   const reportFields = fields.map((field) => new ProjectInformationField(field))
   return reportFields

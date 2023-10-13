@@ -13,7 +13,7 @@ import { ISectionContext } from './context'
 export function useCreateContextValue({ iconSize = 30 }) {
   const context = useProjectStatusContext()
   return (section: SectionModel) => {
-    let { value, comment } = context.state.selectedReport?.getStatusValue(section.fieldName) ?? {}
+    let { value, comment } = context.state.selectedReport.getStatusValue(section.fieldName)
     const [columnConfig] = context.state.data.columnConfig.filter(
       (c) => c.columnFieldName === section.fieldName && c.value === value
     )
