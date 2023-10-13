@@ -10,7 +10,6 @@ import { useProjectStatus } from './useProjectStatus'
 import { EditStatusPanel } from './EditStatusPanel'
 import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 
-
 export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
   const { fluentProviderId, context } = useProjectStatus(props)
   return (

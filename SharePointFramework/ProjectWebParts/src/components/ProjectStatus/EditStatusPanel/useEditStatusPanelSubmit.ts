@@ -2,9 +2,7 @@ import { ICustomEditPanelSubmitProps } from 'pp365-shared-library'
 import { useState } from 'react'
 
 export function useEditStatusPanelSubmit(): ICustomEditPanelSubmitProps {
-  const [state, setState] = useState<
-    Pick<ICustomEditPanelSubmitProps, 'error' | 'saveProgressText'>
-  >({
+  const [state] = useState<Pick<ICustomEditPanelSubmitProps, 'error' | 'saveProgressText'>>({
     error: null,
     saveProgressText: null
   })
@@ -13,7 +11,6 @@ export function useEditStatusPanelSubmit(): ICustomEditPanelSubmitProps {
     ...state,
     onSubmit: async ({ properties }) => {
       // TODO: Implement submit logic
-      console.log(properties)
     }
   }
 }

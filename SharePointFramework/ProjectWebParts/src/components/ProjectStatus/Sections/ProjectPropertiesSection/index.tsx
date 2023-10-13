@@ -19,7 +19,9 @@ export const ProjectPropertiesSection: FC = () => {
   function renderFields() {
     if (section.viewFields) {
       return section.viewFields.map((fieldName) => {
-        const [field] = fields.filter(({ InternalName, Title }) => [InternalName, Title].indexOf(fieldName) !== -1)
+        const [field] = fields.filter(
+          ({ InternalName, Title }) => [InternalName, Title].indexOf(fieldName) !== -1
+        )
         if (field && !stringIsNullOrEmpty(fieldValues[fieldName])) {
           return (
             <StatusSectionField

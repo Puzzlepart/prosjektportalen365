@@ -35,5 +35,5 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
   useProjectInformationDataFetch(context)
   const fluentProviderId = useId('fluent-provider')
 
-  return {fluentProviderId, context}
+  return { fluentProviderId, context }
 }
