@@ -1,7 +1,7 @@
 import { IPanelProps } from '@fluentui/react'
-import { ItemFieldValues, ProjectInformationField } from '../../models'
-import { SPDataAdapterBase } from '../../data'
 import { ButtonProps } from '@fluentui/react-components'
+import { SPDataAdapterBase } from '../../data'
+import { ItemFieldValues, ProjectInformationField } from '../../models'
 import { UseModelReturnType } from './useModel'
 
 export interface ICustomEditPanelSubmitProps extends Pick<ButtonProps, 'disabled'> {

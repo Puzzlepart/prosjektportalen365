@@ -37,8 +37,8 @@ export class ItemFieldValues {
   protected _values: Map<string, ItemFieldValue>
 
   constructor(
-    private _fieldValues: Record<string, any>,
-    private _fieldValuesAsText: Record<string, string>
+    private _fieldValues: Record<string, any> = {},
+    private _fieldValuesAsText: Record<string, string> = {}
   ) {
     this._setValues()
   }

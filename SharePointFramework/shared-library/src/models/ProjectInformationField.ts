@@ -5,35 +5,86 @@ import { ItemFieldValues } from './ItemFieldValues'
 import { ProjectColumn, ProjectColumnFieldOverride } from './ProjectColumn'
 import { ProjectInformationFieldValue } from './ProjectInformationFieldValue'
 import { SPField } from './SPField'
+import { IEntityField } from 'sp-entityportal-service'
 
 /**
  * Project information field model. Used both for display
  * and edit of project information.
  */
 export class ProjectInformationField {
+  /**
+   * The ID of the field.
+   */
   public id: string
+
+  /**
+   * The internal name of the field.
+   */
   public internalName: string
+
+  /**
+   * The display name of the field.
+   */
   public displayName: string
+
+  /**
+   * The description of the field.
+   */
   public description: string
+
+  /**
+   * The type of the field.
+   */
   public type: string
+
+  /**
+   * The column of the field.
+   */
   public column: ProjectColumn
+
+  /**
+   * Whether the field is read-only.
+   */
+  public isReadOnly: boolean
+
+  /**
+   * Whether the field is external.
+   */
   private _isExternal: boolean
+
+  /**
+   * The value of the field.
+   */
   private _fieldValue: ProjectInformationFieldValue
+
+  /**
+   * The map of field values.
+   */
   private _fieldValueMap: ReturnType<typeof createFieldValueMap>
+
+  /**
+   * The current locale.
+   */
   private _currentLocale: string
+
+  /**
+   * The configuration name.
+   */
   private _configurationName: string
 
   /**
-   * Constructs a new `ProjectInformationField` instance.
+   * Constructs a new `ProjectInformationField` instance from either
+   * a `SPField` or `IEntityField`.
    *
    * @param _field Field information
    */
-  constructor(private _field: SPField) {
+  constructor(private _field: SPField | IEntityField) {
     this.id = _field.Id
     this.internalName = _field.InternalName
     this.displayName = _field.Title
     this.description = _field.Description
     this.type = _field.TypeAsString
+    this.isReadOnly = _field.SchemaXml ? _field.SchemaXml.indexOf('ReadOnly="TRUE"') !== -1 : false
     this._fieldValueMap = createFieldValueMap()
   }
 
@@ -119,7 +170,7 @@ export class ProjectInformationField {
    * Get choices for a choice field as `string[]`.
    */
   public get choices(): string[] {
-    return this._field.Choices
+    return this._field['Choices'] ?? []
   }
 
   /**
@@ -142,7 +193,7 @@ export class ProjectInformationField {
   ): boolean {
     switch (displayMode) {
       case DisplayMode.Edit:
-        return this._field.ShowInEditForm && !this._field.Hidden
+        return this._field['ShowInEditForm'] && !this._field['Hidden']
       case DisplayMode.Read: {
         if (this._isExternal) return showFieldExternal[this.internalName]
         return this.column ? this.column.isVisible(page) : false
