@@ -1,7 +1,7 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
 import { PageContext } from '@microsoft/sp-page-context'
 import { SPFI } from '@pnp/sp'
-import { SPDataAdapter } from 'data'
+import { SPDataAdapter } from 'data/SPDataAdapter'
 
 export interface IBaseProgramWebPartProps {
   title?: string

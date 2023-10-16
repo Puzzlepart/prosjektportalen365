@@ -1,6 +1,6 @@
 import { MessageBarType } from '@fluentui/react'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { SPDataAdapter } from 'data'
+import { SPDataAdapter } from 'data/SPDataAdapter'
 
 export interface IProgramAdministrationProject {
   SiteId: string
