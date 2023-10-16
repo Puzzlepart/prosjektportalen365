@@ -37,6 +37,7 @@
   },
   "externals": {},
   "localizedResources": {
-    "ProjectExtensionsStrings": "lib/loc/{locale}.js"
+    "ProjectExtensionsStrings": "lib/loc/{locale}.js",
+    "SharedLibraryStrings": "node_modules/pp365-shared-library/lib/loc/{locale}.js"
   }
 }
