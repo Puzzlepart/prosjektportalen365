@@ -1,4 +1,4 @@
-import { getId, IContextualMenuItem } from '@fluentui/react'
+import { getId, ICommandBarProps, IContextualMenuItem } from '@fluentui/react'
 import { Spinner } from '@fluentui/react-components'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 import strings from 'ProjectWebPartsStrings'
@@ -123,5 +123,5 @@ export function useCommands() {
       disabled: true
     }
   ].filter(Boolean)
-  return { props: { items, farItems } } as const
+  return { items, farItems } as ICommandBarProps
 }

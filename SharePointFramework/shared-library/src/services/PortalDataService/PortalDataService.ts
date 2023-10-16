@@ -599,7 +599,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     filter = '',
     top,
     select,
-    publishedString,
     useCaching = true
   }: GetStatusReportsOptions): Promise<StatusReport[]> {
     if (!this._configuration.spfxContext.pageContext)
@@ -621,7 +620,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           fieldValues: i,
           fieldValuesAsText: i.FieldValuesAsText
         })
-        return new StatusReport(itemFieldValues, publishedString)
+        return new StatusReport(itemFieldValues)
       })
       return reports
     } catch (error) {
