@@ -84,11 +84,9 @@ export const useProjectList = (props: IProjectListProps) => {
           let value
           if (Array.isArray(project[key]) && project[key].length > 0) {
             value = project[key]?.join(', ')
-          }
-          else if (typeof project[key] === 'object' && project[key] !== null) {
+          } else if (typeof project[key] === 'object' && project[key] !== null) {
             value = Object.values(project[key])?.join(', ')
-          }
-          else {
+          } else {
             value = project[key]
           }
 
