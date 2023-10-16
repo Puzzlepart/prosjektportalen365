@@ -81,7 +81,17 @@ export const useProjectList = (props: IProjectListProps) => {
       .filter((project) => state.selectedVertical.filter(project, state))
       .filter((project) =>
         _.any(Object.keys(project), (key) => {
-          const value = project[key]
+          let value
+          if (Array.isArray(project[key]) && project[key].length > 0) {
+            value = project[key]?.join(', ')
+          }
+          else if (typeof project[key] === 'object' && project[key] !== null) {
+            value = Object.values(project[key])?.join(', ')
+          }
+          else {
+            value = project[key]
+          }
+
           return (
             value &&
             typeof value === 'string' &&
