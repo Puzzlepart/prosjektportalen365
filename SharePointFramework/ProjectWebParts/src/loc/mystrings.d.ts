@@ -1,5 +1,6 @@
 declare interface IProjectWebPartsStrings {
-  EditStatusPanelnText: string
+  NewStatusPanelTitle: string
+  EditStatusPanelText: string
   Aria: {
     CurrentPhaseText: string
   }

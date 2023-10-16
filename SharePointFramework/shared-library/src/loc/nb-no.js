@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    GtModerationStatus_Choice_Draft: 'Kladd',
+    GtModerationStatus_Choice_Published: 'Publisert',
     SaveText: 'Lagre',
     CloseText: 'Lukk',
     Aria: {

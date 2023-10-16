@@ -44,10 +44,7 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
     const [properties, reportList, reports, sections, columnConfig] = await Promise.all([
       SPDataAdapter.project.getProjectInformationData(),
       SPDataAdapter.portal.getStatusReportListProps(),
-      SPDataAdapter.portal.getStatusReports({
-        useCaching: false,
-        publishedString: strings.GtModerationStatus_Choice_Published
-      }),
+      SPDataAdapter.portal.getStatusReports({ useCaching: false }),
       SPDataAdapter.portal.getProjectStatusSections(),
       SPDataAdapter.portal.getProjectColumnConfig()
     ])

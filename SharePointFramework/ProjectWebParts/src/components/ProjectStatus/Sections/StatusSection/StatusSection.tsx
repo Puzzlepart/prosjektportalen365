@@ -1,12 +1,11 @@
-import React, { FC, useContext } from 'react';
-import { StatusElement } from '../../StatusElement';
-import { BaseSection } from '../BaseSection/BaseSection';
-import { SectionContext } from '../context';
-
+import React, { FC, useContext } from 'react'
+import { StatusElement } from '../../StatusElement'
+import { BaseSection } from '../BaseSection/BaseSection'
+import { SectionContext } from '../context'
 
 export const StatusSection: FC = () => {
-  const { headerProps } = useContext(SectionContext);
-  if (!headerProps.value) return null;
+  const { headerProps } = useContext(SectionContext)
+  if (!headerProps.value) return null
   return (
     <BaseSection>
       <div className='ms-Grid-row'>
@@ -15,5 +14,5 @@ export const StatusSection: FC = () => {
         </div>
       </div>
     </BaseSection>
-  );
-};
+  )
+}

@@ -87,9 +87,9 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   userMessage?: Pick<IUserMessageProps, 'text' | 'intent'>
 
   /**
-   * The active panel key
+   * The active panel name and optional title
    */
-  activePanel?: string
+  activePanel?: { name: string, headerText?: string }
 }
 
 export interface IProjectStatusData {

@@ -1,3 +1,4 @@
+import strings from 'SharedLibraryStrings'
 import { ItemFieldValues } from './ItemFieldValues'
 
 export type StatusReportAttachment = {
@@ -22,11 +23,9 @@ export class StatusReport {
    * Creates a new instance of `StatusReport` from a item field values object.
    *
    * @param fieldValues - SP item field values
-   * @param _publishedString Published string
    */
   constructor(
-    public fieldValues: ItemFieldValues = new ItemFieldValues(),
-    private _publishedString?: string
+    public fieldValues: ItemFieldValues = new ItemFieldValues()
   ) {
     this.id = fieldValues.id
     this.created = fieldValues.get('Created', { format: 'date' })
@@ -105,10 +104,11 @@ export class StatusReport {
   }
 
   /**
-   * Report published
+   * Returns `true` if the report is published. The moderation status must 
+   * be `GtModerationStatus_Choice_Published` from the `SharedLibraryStrings`
    */
   public get published(): boolean {
-    return this.moderationStatus === this._publishedString
+    return this.moderationStatus === strings.GtModerationStatus_Choice_Published
   }
 
   /**

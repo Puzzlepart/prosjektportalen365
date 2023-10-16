@@ -10,13 +10,13 @@ import { useEditStatusPanel } from './useEditStatusPanel'
  * are not set, the panel will render `null`.
  */
 export const EditStatusPanel: FC = () => {
-  const { isOpen, onDismiss, fields, fieldValues, submit } = useEditStatusPanel()
+  const { headerText, isOpen, onDismiss, fields, fieldValues, submit } = useEditStatusPanel()
   if (!fieldValues.id) return null
 
   return (
     <CustomEditPanel
       isOpen={isOpen}
-      headerText={strings.EditStatusPanelnText}
+      headerText={headerText}
       fieldValues={fieldValues}
       fields={fields}
       dataAdapter={SPDataAdapter}

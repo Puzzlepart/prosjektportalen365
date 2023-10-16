@@ -23,7 +23,7 @@ export const CustomEditPanel: FC<ICustomEditPanelProps> = (props) => {
       onRenderFooterContent={() => <CustomEditPanelFooter {...props} model={model} />}
       onRenderBody={() => (
         <div className={styles.body}>
-          <DebugModel model={model} />
+          {props.debug && <DebugModel model={model} />}
           {fields.map((field, key) => {
             const fieldElement = getFieldElement(field)
             return fieldElement && <div key={key}>{fieldElement}</div>

@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 declare interface ISharedLibraryStrings {
+  GtModerationStatus_Choice_Draft: string
+  GtModerationStatus_Choice_Published: string
   SaveText: string
   CloseText: string
   Aria: {

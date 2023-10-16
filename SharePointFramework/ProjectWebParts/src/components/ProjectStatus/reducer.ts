@@ -61,7 +61,7 @@ export const CLEAR_USER_MESSAGE = createAction('CLEAR_USER_MESSAGE')
 /**
  * `OPEN_PANEL`: Dispatched anywhere to open the panel. The payload is the panel key.
  */
-export const OPEN_PANEL = createAction<string>('OPEN_PANEL')
+export const OPEN_PANEL = createAction<IProjectStatusState['activePanel']>('OPEN_PANEL')
 
 /**
  * `CLOSE_PANEL`: Dispatched anywhere to close the panel. No payload needed for this action
@@ -77,7 +77,8 @@ export const initialState: IProjectStatusState = {
   data: {
     reports: [],
     sections: Array.apply(null, Array(6)).map(() => new SectionModel({ ContentTypeId: '' })),
-    columnConfig: []
+    columnConfig: [],
+    reportFields: [],
   },
   persistedSectionData: {}
 }

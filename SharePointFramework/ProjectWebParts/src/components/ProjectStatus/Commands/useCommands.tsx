@@ -24,53 +24,55 @@ import { useReportOptions } from './useReportOptions'
  * - `STATUS_ICON`: Renders an icon to indicate the status of the selected report. This command is disabled and only for display purposes.
  */
 export function useCommands() {
-  const context = useProjectStatusContext()
+  const {state,dispatch} = useProjectStatusContext()
   const createNewStatusReport = useCreateNewStatusReport()
   const deleteReport = useDeleteReport()
   const publishReport = usePublishReport()
   const reportOptions = useReportOptions()
+  console.log(state.selectedReport, state.selectedReport.published)
   const items: IContextualMenuItem[] = [
-    context.state.userHasAdminPermission && {
+    state.userHasAdminPermission && {
       key: 'NEW_STATUS_REPORT',
       name: strings.NewStatusReportModalHeaderText,
       iconProps: { iconName: 'NewFolder' },
-      disabled: context.state.data.reports.some(({ published }) => !published),
+      disabled: state.data.reports.some((report) => !report.published) || !state.selectedReport?.published || state.isPublishing,
       onClick: () => {
         createNewStatusReport()
       }
     },
-    context.state.selectedReport &&
-    context.state.userHasAdminPermission && {
+    state.selectedReport &&
+    state.userHasAdminPermission && {
       key: 'DELETE_REPORT',
       name: strings.DeleteReportButtonText,
       iconProps: { iconName: 'Delete' },
-      disabled: context.state.selectedReport?.published || context.state.isPublishing,
+      disabled: state.selectedReport?.published || state.isPublishing,
       onClick: () => {
         deleteReport()
       }
     },
-    context.state.selectedReport &&
-    context.state.userHasAdminPermission && {
+    state.selectedReport &&
+    state.userHasAdminPermission && {
       key: 'EDIT_REPORT',
       name: strings.EditReportButtonText,
       iconProps: { iconName: 'Edit' },
+      disabled: state.selectedReport?.published || state.isPublishing,
       onClick: () => {
-        context.dispatch(OPEN_PANEL('EditStatusPanel'))
+        dispatch(OPEN_PANEL({ name: 'EditStatusPanel' }))
       }
     },
-    context.state.selectedReport &&
-    context.state.userHasAdminPermission &&
-    !context.state.isPublishing && {
+    state.selectedReport &&
+    state.userHasAdminPermission &&
+    !state.isPublishing && {
       key: 'PUBLISH_REPORT',
       name: strings.PublishReportButtonText,
       iconProps: { iconName: 'PublishContent' },
-      disabled: context.state.selectedReport?.published,
+      disabled: state.selectedReport?.published,
       onClick: () => {
-        context.dispatch(REPORT_PUBLISHING())
+        dispatch(REPORT_PUBLISHING())
         publishReport()
       }
     },
-    context.state.isPublishing && {
+    state.isPublishing && {
       key: 'IS_PUBLISHING',
       onRender: () => (
         <Spinner
@@ -82,40 +84,40 @@ export function useCommands() {
     }
   ].filter(Boolean)
   const farItems: IContextualMenuItem[] = [
-    context.state.sourceUrl && {
+    state.sourceUrl && {
       key: 'NAVIGATE_TO_SOURCE_URL',
       name: strings.NavigateToSourceUrlText,
       iconProps: { iconName: 'NavigateBack' },
-      href: context.state.sourceUrl
+      href: state.sourceUrl
     },
-    context.state.selectedReport && {
+    state.selectedReport && {
       key: 'GET_SNAPSHOT',
       name: strings.GetSnapshotButtonText,
       iconProps: { iconName: 'Photo2' },
-      disabled: !context.state.selectedReport?.snapshotUrl || context.state.isPublishing,
+      disabled: !state.selectedReport?.snapshotUrl || state.isPublishing,
       onClick: () => {
-        window.open(context.state.selectedReport?.snapshotUrl)
+        window.open(state.selectedReport?.snapshotUrl)
       }
     },
-    context.state.data.reports.length > 0 && {
+    state.data.reports.length > 0 && {
       key: 'REPORT_DROPDOWN',
-      name: context.state.selectedReport
-        ? formatDate(context.state.selectedReport.created, true)
+      name: state.selectedReport
+        ? formatDate(state.selectedReport.created, true)
         : '',
       iconProps: { iconName: 'FullHistory' },
       subMenuProps: { items: reportOptions },
-      disabled: context.state.data.reports.length < 2
+      disabled: state.data.reports.length < 2
     },
-    context.state.selectedReport && {
+    state.selectedReport && {
       id: getId('StatusIcon'),
       key: 'STATUS_ICON',
-      name: context.state.selectedReport?.published
+      name: state.selectedReport?.published
         ? strings.PublishedStatusReport
         : strings.NotPublishedStatusReport,
       iconProps: {
-        iconName: context.state.selectedReport?.published ? 'BoxCheckmarkSolid' : 'CheckboxFill',
+        iconName: state.selectedReport?.published ? 'BoxCheckmarkSolid' : 'CheckboxFill',
         style: {
-          color: context.state.selectedReport?.published ? '#2DA748' : '#D2D2D2'
+          color: state.selectedReport?.published ? '#2DA748' : '#D2D2D2'
         }
       },
       disabled: true

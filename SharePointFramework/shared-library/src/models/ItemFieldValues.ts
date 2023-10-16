@@ -68,12 +68,13 @@ export class ItemFieldValues {
 
   /**
    * Set internal `_values` property based on field values and field values as text.
+   * If no text value is set, the raw value is used instead.
    */
   protected _setValues() {
     this._values = Object.keys(this._fieldValues).reduce((map, key) => {
       if (this._shouldOmitKey(key)) return map
       const value = this._fieldValues[key]
-      const valueAsText = this._fieldValuesAsText[key]
+      const valueAsText = this._fieldValuesAsText[key] ?? value
       map.set(key, { value, valueAsText })
       return new Map(map)
     }, new Map<string, ItemFieldValue>())

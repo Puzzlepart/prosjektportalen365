@@ -3,22 +3,21 @@ import {
   SelectionMode,
   Shimmer,
   ShimmeredDetailsList
-} from '@fluentui/react';
-import * as strings from 'ProjectWebPartsStrings';
-import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage';
-import React, { FC } from 'react';
-import { OpportunityMatrix } from '../../../OpportunityMatrix';
-import { RiskMatrix } from '../../../RiskMatrix';
-import { StatusElement } from '../../StatusElement';
-import { useProjectStatusContext } from '../../context';
-import { BaseSection } from '../BaseSection/BaseSection';
-import styles from './UncertaintySection.module.scss';
-import { useUncertaintySection } from './useUncertaintySection';
-
+} from '@fluentui/react'
+import * as strings from 'ProjectWebPartsStrings'
+import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
+import React, { FC } from 'react'
+import { OpportunityMatrix } from '../../../OpportunityMatrix'
+import { RiskMatrix } from '../../../RiskMatrix'
+import { StatusElement } from '../../StatusElement'
+import { useProjectStatusContext } from '../../context'
+import { BaseSection } from '../BaseSection/BaseSection'
+import styles from './UncertaintySection.module.scss'
+import { useUncertaintySection } from './useUncertaintySection'
 
 export const UncertaintySection: FC = () => {
-  const context = useProjectStatusContext();
-  const { state, matrixElements, items, columns, shouldRenderContent } = useUncertaintySection();
+  const context = useProjectStatusContext()
+  const { state, matrixElements, items, columns, shouldRenderContent } = useUncertaintySection()
 
   /**
    * Render content for the Uncertainty section. Handles potential errors and renders OpportunityMatrix
@@ -26,9 +25,9 @@ export const UncertaintySection: FC = () => {
    */
   function renderContent() {
     if (state.error)
-      return <UserMessage text={strings.ListSectionDataErrorMessage} intent='error' />;
+      return <UserMessage text={strings.ListSectionDataErrorMessage} intent='error' />
 
-    let matrix = null;
+    let matrix = null
     switch (state.data.contentTypeIndex) {
       case 1:
         {
@@ -36,15 +35,16 @@ export const UncertaintySection: FC = () => {
             <RiskMatrix
               {...context.props.riskMatrix}
               pageContext={context.props.pageContext}
-              items={matrixElements} />
-          );
+              items={matrixElements}
+            />
+          )
         }
-        break;
+        break
       case 2:
         {
-          matrix = <OpportunityMatrix {...context.props.opportunityMatrix} items={matrixElements} />;
+          matrix = <OpportunityMatrix {...context.props.opportunityMatrix} items={matrixElements} />
         }
-        break;
+        break
     }
     return (
       <Shimmer isDataLoaded={state.isDataLoaded}>
@@ -56,10 +56,11 @@ export const UncertaintySection: FC = () => {
             items={items}
             columns={columns}
             selectionMode={SelectionMode.none}
-            layoutMode={DetailsListLayoutMode.justified} />
+            layoutMode={DetailsListLayoutMode.justified}
+          />
         </div>
       </Shimmer>
-    );
+    )
   }
 
   return (
@@ -71,5 +72,5 @@ export const UncertaintySection: FC = () => {
         {shouldRenderContent && renderContent()}
       </div>
     </BaseSection>
-  );
-};
+  )
+}

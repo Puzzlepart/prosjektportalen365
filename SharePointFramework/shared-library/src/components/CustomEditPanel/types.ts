@@ -61,4 +61,9 @@ export interface ICustomEditPanelProps extends IBasePanelProps {
    * The submit button props.
    */
   submit?: ICustomEditPanelSubmitProps
+
+  /**
+   * Render the panel in debug mode.
+   */
+  debug?: boolean
 }

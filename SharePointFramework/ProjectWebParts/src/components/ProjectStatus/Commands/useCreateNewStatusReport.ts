@@ -12,10 +12,15 @@ import { OPEN_PANEL, SELECT_REPORT } from '../reducer'
 export function useCreateNewStatusReport() {
   const { state, dispatch, props } = useProjectStatusContext()
   const [lastReport] = state.data.reports
+
+  /**
+   * Get the report fields that are not read-only and not the
+   * `GtSectionDataJson` or `GtLastReportDate` fields.
+   */
   const reportFields = state.data.reportFields.filter(
     (field) =>
       !field.isReadOnly &&
-      !['GtSectionDataJson'].includes(field.internalName)
+      !['GtSectionDataJson', 'GtLastReportDate'].includes(field.internalName)
   )
 
   /**
@@ -40,7 +45,7 @@ export function useCreateNewStatusReport() {
       state.data.properties.templateParameters?.ProjectStatusContentTypeId
     )
     dispatch(SELECT_REPORT({ report }))
-    dispatch(OPEN_PANEL())
+    dispatch(OPEN_PANEL({ name: 'EditStatusPanel', headerText: strings.NewStatusPanelTitle }))
   }
 
   return createNewStatusReport

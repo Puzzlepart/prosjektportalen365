@@ -240,19 +240,21 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     const projectStatusList = this._getList('PROJECT_STATUS')
     try {
       const attachmentsFolder = await this.ensureAttachmentsFolder(report)
-      const properties: Record<string, string> = {
-        GtModerationStatus: publishedString,
-        GtLastReportDate: reportDate
-      }
       await Promise.all([
-        projectStatusList.items.getById(report.id).update(properties),
-        ...attachments.map((att) =>
-          attachmentsFolder.files.addUsingPath(att.url, att.content, {
-            Overwrite: att.shouldOverWrite
+        projectStatusList.items.getById(report.id).update({
+          GtModerationStatus: publishedString,
+          GtLastReportDate: new Date()
+        }),
+        ...attachments.map(({ url, content }) =>
+          attachmentsFolder.files.addUsingPath(url, content, {
+            Overwrite: true
           })
         )
       ])
-      return report.setValues(properties)
+      return report.setValues({
+        GtModerationStatus: publishedString,
+        GtLastReportDate: reportDate
+      })
     } catch (error) {
       throw error
     }
@@ -515,9 +517,10 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
-   * Add status report with the specified `properties` and `contentTypeId`
+   * Add status report with the specified `properties` and `contentTypeId`. A new 
+   * `StatusReport` instance is returned.
    *
-   * @param properties Properties
+   * @param properties Properties to add for the new item
    * @param contentTypeId Content type ID
    */
   public async addStatusReport(
@@ -530,8 +533,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       const ct = find(contentTypes, (ct) => ct.StringId.indexOf(contentTypeId) === 0)
       if (ct) properties.ContentTypeId = ct.StringId
     }
-    const itemAddResult = await list.items.add(properties)
-    return new StatusReport(itemAddResult.data)
+    const itemData = await this.addItemToList<Record<string, any>>('PROJECT_STATUS', properties)
+    return new StatusReport(new ItemFieldValues(itemData))
   }
 
   /**
