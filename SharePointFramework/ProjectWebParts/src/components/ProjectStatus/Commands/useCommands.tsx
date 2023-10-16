@@ -35,42 +35,45 @@ export function useCommands() {
       key: 'NEW_STATUS_REPORT',
       name: strings.NewStatusReportModalHeaderText,
       iconProps: { iconName: 'NewFolder' },
-      disabled: state.data.reports.some((report) => !report.published) || !state.selectedReport?.published || state.isPublishing,
+      disabled:
+        state.data.reports.some((report) => !report.published) ||
+        !state.selectedReport?.published ||
+        state.isPublishing,
       onClick: () => {
         createNewStatusReport()
       }
     },
     state.selectedReport &&
-    state.userHasAdminPermission && {
-      key: 'DELETE_REPORT',
-      name: strings.DeleteReportButtonText,
-      iconProps: { iconName: 'Delete' },
-      disabled: state.selectedReport?.published || state.isPublishing,
-      onClick: () => {
-        deleteReport()
-      }
-    },
+      state.userHasAdminPermission && {
+        key: 'DELETE_REPORT',
+        name: strings.DeleteReportButtonText,
+        iconProps: { iconName: 'Delete' },
+        disabled: state.selectedReport?.published || state.isPublishing,
+        onClick: () => {
+          deleteReport()
+        }
+      },
     state.selectedReport &&
-    state.userHasAdminPermission && {
-      key: 'EDIT_REPORT',
-      name: strings.EditReportButtonText,
-      iconProps: { iconName: 'Edit' },
-      disabled: state.selectedReport?.published || state.isPublishing,
-      onClick: () => {
-        dispatch(OPEN_PANEL({ name: 'EditStatusPanel' }))
-      }
-    },
+      state.userHasAdminPermission && {
+        key: 'EDIT_REPORT',
+        name: strings.EditReportButtonText,
+        iconProps: { iconName: 'Edit' },
+        disabled: state.selectedReport?.published || state.isPublishing,
+        onClick: () => {
+          dispatch(OPEN_PANEL({ name: 'EditStatusPanel' }))
+        }
+      },
     state.selectedReport &&
-    state.userHasAdminPermission &&
-    !state.isPublishing && {
-      key: 'PUBLISH_REPORT',
-      name: strings.PublishReportButtonText,
-      iconProps: { iconName: 'PublishContent' },
-      disabled: state.selectedReport?.published,
-      onClick: () => {
-        publishReport()
-      }
-    },
+      state.userHasAdminPermission &&
+      !state.isPublishing && {
+        key: 'PUBLISH_REPORT',
+        name: strings.PublishReportButtonText,
+        iconProps: { iconName: 'PublishContent' },
+        disabled: state.selectedReport?.published,
+        onClick: () => {
+          publishReport()
+        }
+      },
     state.isPublishing && {
       key: 'IS_PUBLISHING',
       onRender: () => (
@@ -100,9 +103,7 @@ export function useCommands() {
     },
     state.data.reports.length > 0 && {
       key: 'REPORT_DROPDOWN',
-      name: state.selectedReport
-        ? formatDate(state.selectedReport.created, true)
-        : '',
+      name: state.selectedReport ? formatDate(state.selectedReport.created, true) : '',
       iconProps: { iconName: 'FullHistory' },
       subMenuProps: { items: reportOptions },
       disabled: state.data.reports.length < 2
