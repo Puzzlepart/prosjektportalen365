@@ -40,5 +40,5 @@ export const useAddProjectDialog = () => {
     ...selectionList,
     availableProjects,
     onRenderRow
-  } as const
+  }
 }

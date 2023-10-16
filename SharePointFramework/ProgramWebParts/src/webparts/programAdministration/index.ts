@@ -1,5 +1,5 @@
 import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane'
-import { ProgramAdministration } from 'components/ProgramAdministration'
+import { ProgramAdministration } from 'components/ProgramAdministration/ProgramAdministration'
 import { IProgramAdministrationProps } from 'components/ProgramAdministration/types'
 import { unmountComponentAtNode } from 'react-dom'
 import { BaseProgramWebPart } from '../baseProgramWebPart'

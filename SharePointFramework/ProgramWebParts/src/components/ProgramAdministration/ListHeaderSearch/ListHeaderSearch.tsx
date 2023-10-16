@@ -15,13 +15,6 @@ import styles from './ListHeaderSearch.module.scss'
 import { IListHeaderSearchProps } from './types'
 import _ from 'underscore'
 
-/**
- * List header for `<DetailsList />` with a optional `<CommandBar />` with a
- * `<SearchBox />` and a `<TooltipHost />` showing the selected items and
- * the count of selected items.
- *
- * @param props Props
- */
 export const ListHeaderSearch: FC<IListHeaderSearchProps> = (props) => {
   return (
     <Sticky stickyPosition={StickyPositionType.Header}>
@@ -89,6 +82,7 @@ export const ListHeaderSearch: FC<IListHeaderSearchProps> = (props) => {
   )
 }
 
+ListHeaderSearch.displayName = 'ListHeaderSearch'
 ListHeaderSearch.defaultProps = {
   search: {
     hidden: true,
