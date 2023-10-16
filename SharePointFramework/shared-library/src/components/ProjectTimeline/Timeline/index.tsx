@@ -7,7 +7,7 @@ import React, { FC } from 'react'
 import ReactTimeline, { TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
 import { FilterPanel } from '../../FilterPanel'
-import { DetailsCallout } from '../DetailsCallout'
+import { DetailsPopover } from '../DetailsPopover'
 import styles from './Timeline.module.scss'
 import { ITimelineProps } from './types'
 import { useTimeline } from './useTimeline'
@@ -72,7 +72,7 @@ export const Timeline: FC<ITimelineProps> = (props) => {
         onDismiss={() => setShowFilterPanel(false)}
       />
       {showDetails && (
-        <DetailsCallout timelineItem={showDetails} onDismiss={() => setShowDetails(null)} />
+        <DetailsPopover timelineItem={showDetails} onDismiss={() => setShowDetails(null)} />
       )}
     </FluentProvider>
   )

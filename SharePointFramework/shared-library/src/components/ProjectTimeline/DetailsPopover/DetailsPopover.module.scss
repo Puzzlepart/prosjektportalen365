@@ -1,11 +1,6 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
-.detailsCallout {
-  border-style: none !important;
-  border-radius: 4px !important;
-  padding: 28px;
-  max-width: 500px;
-
+.detailsPopover {
   .calloutHeader {
     display: flex;
     flex-flow: row nowrap;

@@ -1,17 +1,15 @@
-import { Callout } from '@fluentui/react/lib/Callout'
+import { Link, Popover, PopoverSurface } from '@fluentui/react-components'
 import * as strings from 'SharedLibraryStrings'
-import { formatDate, tryParseCurrency } from '../../../util'
-import styles from './DetailsCallout.module.scss'
 import React, { FC } from 'react'
-import { IDetailsCalloutProps } from './types'
-import { FluentProvider, Link, useId, webLightTheme } from '@fluentui/react-components'
+import { formatDate, tryParseCurrency } from '../../../util'
+import styles from './DetailsPopover.module.scss'
+import { IDetailsPopoverProps } from './types'
 
-export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
-  const fluentProviderId = useId('fluent-provider')
+export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
   const { data } = props.timelineItem.item
   const { item } = props.timelineItem
 
-  const calloutContent = (): JSX.Element => {
+  const popoverContent = (): JSX.Element => {
     switch (data.type) {
       case strings.MilestoneLabel: {
         return (
@@ -127,32 +125,17 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
     }
   }
 
-  const boundRect = document.getElementsByClassName('rct-scroll')[0].getBoundingClientRect()
-  const bounds = {
-    top: boundRect.top,
-    left: boundRect.left,
-    right: boundRect.right,
-    bottom: boundRect.bottom + 450,
-    width: boundRect.width,
-    height: boundRect.height + 450
-  }
-
   return (
-    <Callout
-      className={styles.detailsCallout}
-      styles={{
-        beak: { backgroundColor: data.bgColorHex },
-        beakCurtain: {
-          borderTop: `8px solid ${data.bgColorHex}`,
-          borderRadius: '4px'
+    <Popover
+      open={props.open}
+      onOpenChange={(_, data) => {
+        if (!data.open) {
+          props.onDismiss()
         }
       }}
-      target={props.timelineItem.element}
-      bounds={bounds}
-      onDismiss={props.onDismiss}
-      setInitialFocus={true}
+      positioning={{ target: props.timelineItem?.element }}
     >
-      <FluentProvider id={fluentProviderId} theme={webLightTheme}>
+      <PopoverSurface className={styles.detailsPopover}>
         <div className={styles.calloutHeader}>
           <div
             hidden={!data.tag}
@@ -165,7 +148,7 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
             {data.tag}
           </div>
         </div>
-        {calloutContent()}
+        {popoverContent()}
         <p hidden={!data.budgetTotal}>
           <b>{strings.BudgetTotalLabel}:</b> <span>{tryParseCurrency(data.budgetTotal)}</span>
         </p>
@@ -178,7 +161,12 @@ export const DetailsCallout: FC<IDetailsCalloutProps> = (props) => {
         <p hidden={!data.type}>
           <b>{strings.TypeLabel}:</b> <span>{data.type}</span>
         </p>
-      </FluentProvider>
-    </Callout>
+      </PopoverSurface>
+    </Popover>
   )
+}
+
+DetailsPopover.displayName = 'DetailsPopover'
+DetailsPopover.defaultProps = {
+  open: true
 }
