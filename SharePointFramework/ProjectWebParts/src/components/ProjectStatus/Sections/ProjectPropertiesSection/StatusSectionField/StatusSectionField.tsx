@@ -13,6 +13,7 @@ export const StatusSectionField: FC<IStatusSectionFieldProps> = (props) => {
   )
 }
 
+StatusSectionField.displayName = 'StatusSectionField'
 StatusSectionField.defaultProps = {
   width: 250
 }

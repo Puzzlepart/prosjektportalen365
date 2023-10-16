@@ -11,21 +11,17 @@ import { useSections } from './useSections'
 export const Sections: FC = () => {
   const context = useProjectStatusContext()
   const createContextValue = useCreateContextValue({ iconSize: 50 })
-  const { sections } = useSections()
+  const sections = useSections()
 
   if (!context.state.selectedReport) return <UserMessage text={strings.NoStatusReportsMessage} />
 
   return (
     <div className={styles.root} id='pp-statussection'>
-      {sections.map((sec, idx) => {
-        return (
-          <SectionContext.Provider key={idx} value={createContextValue(sec)}>
-            {SectionMap[sec.type] ?? null}
-          </SectionContext.Provider>
-        )
-      })}
+      {sections.map((sec, idx) => (
+        <SectionContext.Provider key={idx} value={createContextValue(sec)}>
+          {SectionMap[sec.type] ?? null}
+        </SectionContext.Provider>
+      ))}
     </div>
   )
 }
-
-export * from './SectionMap'

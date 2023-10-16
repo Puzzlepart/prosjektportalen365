@@ -22,5 +22,3 @@ export const BaseSection: FC<IBaseSectionProps> = (props) => {
     </div>
   )
 }
-
-export * from './types'

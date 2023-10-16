@@ -29,12 +29,16 @@ export const CustomEditPanelFooter: FC<ICustomEditPanelFooterProps> = (props) =>
    */
   const handleOnSubmit = async () => {
     setIsSaving(true)
-    await props.submit.onSubmit(props.model.properties)
+    await props.submit.onSubmit(props.model)
     setIsSaving(false)
   }
 
   return (
-    <FluentProvider id={fluentProviderId} theme={webLightTheme} className={styles.root}>
+    <FluentProvider
+      id={fluentProviderId}
+      theme={webLightTheme}
+      className={styles.customEditPanelFooter}
+    >
       {props.submit.error && (
         <div className={styles.errorContainer}>
           <UserMessage text={props.submit.error} intent='error' />

@@ -1,10 +1,10 @@
 import {
   IProjectInformationData,
   ProjectColumnConfig,
+  ProjectInformationField,
   SectionModel,
-  SPField,
   StatusReport
-} from 'pp365-shared-library/lib'
+} from 'pp365-shared-library'
 import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState
@@ -85,6 +85,11 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
    * User message to display in the UI
    */
   userMessage?: Pick<IUserMessageProps, 'text' | 'intent'>
+
+  /**
+   * The active panel name and optional title
+   */
+  activePanel?: { name: string; headerText?: string }
 }
 
 export interface IProjectStatusData {
@@ -96,7 +101,7 @@ export interface IProjectStatusData {
   /**
    * Status report fields
    */
-  reportFields?: SPField[]
+  reportFields?: ProjectInformationField[]
 
   /**
    * Default edit form URL for status reports

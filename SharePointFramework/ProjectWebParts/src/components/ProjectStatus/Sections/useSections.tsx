@@ -7,14 +7,9 @@ import { useProjectStatusContext } from '../context'
  */
 export function useSections() {
   const context = useProjectStatusContext()
-  let sections = context.state.data.sections
-  if (context.state.isDataLoaded) {
-    sections = sections
-      .filter(
-        (sec) =>
-          !stringIsNullOrEmpty(context.state.selectedReport?.getStatusValue(sec.fieldName)?.value)
-      )
-      .filter((sec) => sec.showAsSection || sec.type === SectionType.SummarySection)
-  }
-  return { sections } as const
+  const { data, isDataLoaded, selectedReport } = context.state
+  if (!isDataLoaded) return data.sections
+  return data.sections
+    .filter((sec) => !stringIsNullOrEmpty(selectedReport?.getStatusValue(sec.fieldName)?.value))
+    .filter((sec) => sec.showAsSection || sec.type === SectionType.SummarySection)
 }

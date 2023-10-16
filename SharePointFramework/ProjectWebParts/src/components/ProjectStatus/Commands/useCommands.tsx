@@ -1,13 +1,13 @@
-import { getId, IContextualMenuItem, Spinner, SpinnerSize } from '@fluentui/react'
+import { getId, ICommandBarProps, IContextualMenuItem } from '@fluentui/react'
+import { Spinner } from '@fluentui/react-components'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 import strings from 'ProjectWebPartsStrings'
 import React from 'react'
 import { useProjectStatusContext } from '../context'
-import { REPORT_PUBLISHING } from '../reducer'
+import { OPEN_PANEL } from '../reducer'
+import { useCreateNewStatusReport } from './useCreateNewStatusReport'
 import { useDeleteReport } from './useDeleteReport'
-import { useEditFormUrl } from './useEditFormUrl'
 import { usePublishReport } from './usePublishReport'
-import { useRedirectNewStatusReport } from './useRedirectNewStatusReport'
 import { useReportOptions } from './useReportOptions'
 
 /**
@@ -25,100 +25,103 @@ import { useReportOptions } from './useReportOptions'
  * - `STATUS_ICON`: Renders an icon to indicate the status of the selected report. This command is disabled and only for display purposes.
  */
 export function useCommands() {
-  const context = useProjectStatusContext()
-  const redirectNewStatusReport = useRedirectNewStatusReport()
+  const { state, dispatch } = useProjectStatusContext()
+  const createNewStatusReport = useCreateNewStatusReport()
   const deleteReport = useDeleteReport()
   const publishReport = usePublishReport()
   const reportOptions = useReportOptions()
-  const getEditFormUrl = useEditFormUrl()
   const items: IContextualMenuItem[] = [
-    context.state.userHasAdminPermission && {
+    state.userHasAdminPermission && {
       key: 'NEW_STATUS_REPORT',
       name: strings.NewStatusReportModalHeaderText,
       iconProps: { iconName: 'NewFolder' },
-      disabled: context.state.data.reports.filter((report) => !report.published).length !== 0,
-      onClick: redirectNewStatusReport
+      disabled:
+        state.data.reports.some((report) => !report.published) ||
+        !state.selectedReport?.published ||
+        state.isPublishing,
+      onClick: () => {
+        createNewStatusReport()
+      }
     },
-    context.state.selectedReport &&
-      context.state.userHasAdminPermission && {
+    state.selectedReport &&
+      state.userHasAdminPermission && {
         key: 'DELETE_REPORT',
         name: strings.DeleteReportButtonText,
         iconProps: { iconName: 'Delete' },
-        disabled: context.state.selectedReport?.published || context.state.isPublishing,
+        disabled: state.selectedReport?.published || state.isPublishing,
         onClick: () => {
           deleteReport()
         }
       },
-    context.state.selectedReport &&
-      context.state.userHasAdminPermission && {
+    state.selectedReport &&
+      state.userHasAdminPermission && {
         key: 'EDIT_REPORT',
         name: strings.EditReportButtonText,
         iconProps: { iconName: 'Edit' },
-        href: getEditFormUrl(context.state.selectedReport),
-        disabled: context.state.selectedReport?.published || context.state.isPublishing
+        disabled: state.selectedReport?.published || state.isPublishing,
+        onClick: () => {
+          dispatch(OPEN_PANEL({ name: 'EditStatusPanel' }))
+        }
       },
-    context.state.selectedReport &&
-      context.state.userHasAdminPermission &&
-      !context.state.isPublishing && {
+    state.selectedReport &&
+      state.userHasAdminPermission &&
+      !state.isPublishing && {
         key: 'PUBLISH_REPORT',
         name: strings.PublishReportButtonText,
         iconProps: { iconName: 'PublishContent' },
-        disabled: context.state.selectedReport?.published,
+        disabled: state.selectedReport?.published,
         onClick: () => {
-          context.dispatch(REPORT_PUBLISHING())
           publishReport()
         }
       },
-    context.state.isPublishing && {
+    state.isPublishing && {
       key: 'IS_PUBLISHING',
       onRender: () => (
         <Spinner
           label={strings.PublishReportSpinnerText}
-          size={SpinnerSize.small}
-          labelPosition='right'
+          size='extra-small'
+          labelPosition='after'
         />
       )
     }
   ].filter(Boolean)
   const farItems: IContextualMenuItem[] = [
-    context.state.sourceUrl && {
+    state.sourceUrl && {
       key: 'NAVIGATE_TO_SOURCE_URL',
       name: strings.NavigateToSourceUrlText,
       iconProps: { iconName: 'NavigateBack' },
-      href: context.state.sourceUrl
+      href: state.sourceUrl
     },
-    context.state.selectedReport && {
+    state.selectedReport && {
       key: 'GET_SNAPSHOT',
       name: strings.GetSnapshotButtonText,
       iconProps: { iconName: 'Photo2' },
-      disabled: !context.state.selectedReport?.snapshotUrl || context.state.isPublishing,
+      disabled: !state.selectedReport?.snapshotUrl || state.isPublishing,
       onClick: () => {
-        window.open(context.state.selectedReport?.snapshotUrl)
+        window.open(state.selectedReport?.snapshotUrl)
       }
     },
-    context.state.data.reports.length > 0 && {
+    state.data.reports.length > 0 && {
       key: 'REPORT_DROPDOWN',
-      name: context.state.selectedReport
-        ? formatDate(context.state.selectedReport.created, true)
-        : '',
+      name: state.selectedReport ? formatDate(state.selectedReport.created, true) : '',
       iconProps: { iconName: 'FullHistory' },
       subMenuProps: { items: reportOptions },
-      disabled: context.state.data.reports.length < 2
+      disabled: state.data.reports.length < 2
     },
-    context.state.selectedReport && {
+    state.selectedReport && {
       id: getId('StatusIcon'),
       key: 'STATUS_ICON',
-      name: context.state.selectedReport?.published
+      name: state.selectedReport?.published
         ? strings.PublishedStatusReport
         : strings.NotPublishedStatusReport,
       iconProps: {
-        iconName: context.state.selectedReport?.published ? 'BoxCheckmarkSolid' : 'CheckboxFill',
+        iconName: state.selectedReport?.published ? 'BoxCheckmarkSolid' : 'CheckboxFill',
         style: {
-          color: context.state.selectedReport?.published ? '#2DA748' : '#D2D2D2'
+          color: state.selectedReport?.published ? '#2DA748' : '#D2D2D2'
         }
       },
       disabled: true
     }
   ].filter(Boolean)
-  return { props: { items, farItems } } as const
+  return { items, farItems } as ICommandBarProps
 }

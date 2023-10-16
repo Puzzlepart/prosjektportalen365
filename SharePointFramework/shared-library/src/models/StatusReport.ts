@@ -1,3 +1,6 @@
+import strings from 'SharedLibraryStrings'
+import { ItemFieldValues } from './ItemFieldValues'
+
 export type StatusReportAttachment = {
   name?: string
   url: string
@@ -17,16 +20,15 @@ export class StatusReport {
   private _attachments: StatusReportAttachment[] = []
 
   /**
-   * Creates a new instance of StatusReport
+   * Creates a new instance of `StatusReport` from a item field values object.
    *
-   * @param item - SP item
-   * @param _publishedString Published string
+   * @param fieldValues - SP item field values
    */
-  constructor(public item: Record<string, any>, private _publishedString?: string) {
-    this.id = item.Id
-    this.created = new Date(item.Created)
-    this.modified = new Date(item.Modified)
-    this.publishedDate = item.GtLastReportDate ? new Date(item.GtLastReportDate) : null
+  constructor(public fieldValues: ItemFieldValues = new ItemFieldValues()) {
+    this.id = fieldValues.id
+    this.created = fieldValues.get('Created', { format: 'date' })
+    this.modified = new Date(fieldValues.get('Modified', { format: 'date' }))
+    this.publishedDate = fieldValues.get('GtLastReportDate', { format: 'date' })
   }
 
   /**
@@ -78,62 +80,59 @@ export class StatusReport {
   }
 
   /**
-   * Get status values from item
+   * Get status values from item. All fields with a field name starting with `Gt` and ending with `Status`
    */
   public get statusValues(): Record<string, string> {
-    return Object.keys(this.item)
-      .filter((fieldName) => fieldName.indexOf('Status') !== -1 && fieldName.indexOf('Gt') === 0)
-      .reduce((obj, fieldName) => {
-        obj[fieldName] = this.item[fieldName]
-        return obj
-      }, {})
-  }
-
-  /**
-   * Budget numbers
-   */
-  public get budgetNumbers(): Record<string, number> {
-    return {
-      GtBudgetTotal: this.item.GtBudgetTotal || 0,
-      GtCostsTotal: this.item.GtCostsTotal || 0,
-      GtProjectForecast: this.item.GtProjectForecast || 0
-    }
-  }
-
-  /**
-   * Field values
-   */
-  public get values(): Record<string, any> {
-    return this.item
-  }
-
-  /**
-   * Field values
-   */
-  public get fieldValues(): Record<string, string> {
-    return this.item.FieldValuesAsText || this.item
+    return this.fieldValues.keys
+      .filter((fieldName) => /^Gt.*Status/.test(fieldName))
+      .reduce(
+        (obj, fieldName) => ({
+          ...obj,
+          [fieldName]: this.fieldValues.get(fieldName, { format: 'text' })
+        }),
+        {}
+      )
   }
 
   /**
    * Moderation status
    */
   public get moderationStatus(): string {
-    return this.item.GtModerationStatus
+    return this.fieldValues.get('GtModerationStatus', { format: 'text' })
   }
 
   /**
-   * Report published
+   * Returns `true` if the report is published. The moderation status must
+   * be `GtModerationStatus_Choice_Published` from the `SharedLibraryStrings`
    */
   public get published(): boolean {
-    return this.moderationStatus === this._publishedString
+    return this.moderationStatus === strings.GtModerationStatus_Choice_Published
   }
 
   /**
-   * Get status values from item
+   * Get status values from item. If the values are not defined, an empty string is returned.
    *
    * @param fieldName - Field name
    */
-  public getStatusValue(fieldName: string): { value: string; comment: string } {
-    return { value: this.item[fieldName], comment: this.item[`${fieldName}Comment`] }
+  public getStatusValue(fieldName: string) {
+    const commentFieldName = `${fieldName}Comment`
+    return {
+      value: this.fieldValues
+        ? this.fieldValues.get(fieldName, { defaultValue: '', format: 'text' })
+        : '',
+      comment: this.fieldValues
+        ? this.fieldValues.get(commentFieldName, { defaultValue: '', format: 'text' })
+        : ''
+    }
+  }
+
+  /**
+   * Updates the field values of the current `StatusReport` instance with the specified properties.
+   *
+   * @param properties - An object containing key-value pairs representing the field names and values to update.
+   */
+  public setValues(properties: Record<string, string>) {
+    this.fieldValues.update(properties)
+    return this
   }
 }

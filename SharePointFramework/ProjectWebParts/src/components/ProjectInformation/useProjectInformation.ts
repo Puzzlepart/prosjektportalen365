@@ -1,12 +1,13 @@
-import { ListLogger } from 'pp365-shared-library/lib/logging'
+import { useId } from '@fluentui/react-components'
 import strings from 'ProjectWebPartsStrings'
+import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { useMemo } from 'react'
 import { ProjectInformation } from '.'
 import SPDataAdapter from '../../data'
 import { IProjectInformationContext } from './context'
+import { useProjectInformationDataFetch } from './data'
 import { useProjectInformationReducer } from './reducer'
 import { IProjectInformationProps } from './types'
-import { useProjectInformationDataFetch } from './data'
 
 /**
  * Component logic hook for `ProjectInformation`.
@@ -32,6 +33,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
   }
 
   useProjectInformationDataFetch(context)
+  const fluentProviderId = useId('fluent-provider')
 
-  return context
+  return { fluentProviderId, context }
 }

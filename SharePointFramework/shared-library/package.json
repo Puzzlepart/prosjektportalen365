@@ -44,7 +44,7 @@
     "sp-js-provisioning": "~1.2.1",
     "@fluentui/react-tags-preview": "0.2.9",
     "@fluentui/react-search-preview": "0.1.16",
-    "@fluentui/react-portal-compat": "~9.0.95",
+    "@fluentui/react-portal-compat": "~9.0.100",
     "@fluentui/react-datepicker-compat": "~0.3.18"
   },
   "devDependencies": {

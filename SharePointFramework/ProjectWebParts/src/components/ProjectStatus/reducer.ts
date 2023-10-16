@@ -59,15 +59,26 @@ export const PERSIST_SECTION_DATA = createAction<{ section: SectionModel; data: 
 export const CLEAR_USER_MESSAGE = createAction('CLEAR_USER_MESSAGE')
 
 /**
+ * `OPEN_PANEL`: Dispatched anywhere to open the panel. The payload is the panel key.
+ */
+export const OPEN_PANEL = createAction<IProjectStatusState['activePanel']>('OPEN_PANEL')
+
+/**
+ * `CLOSE_PANEL`: Dispatched anywhere to close the panel. No payload needed for this action
+ * as there's only one panel active at a time.
+ */
+export const CLOSE_PANEL = createAction('CLOSE_PANEL')
+
+/**
  * The initial state for the project status reducer.
  */
 export const initialState: IProjectStatusState = {
-  isDataLoaded: false,
-  selectedReport: new StatusReport({}),
+  selectedReport: new StatusReport(),
   data: {
     reports: [],
     sections: Array.apply(null, Array(6)).map(() => new SectionModel({ ContentTypeId: '' })),
-    columnConfig: []
+    columnConfig: [],
+    reportFields: []
   },
   persistedSectionData: {}
 }
@@ -145,6 +156,12 @@ const createProjectStatusReducer = createReducer(initialState, {
   },
   [CLEAR_USER_MESSAGE.type]: (state: IProjectStatusState) => {
     state.userMessage = null
+  },
+  [OPEN_PANEL.type]: (state: IProjectStatusState, { payload }: ReturnType<typeof OPEN_PANEL>) => {
+    state.activePanel = payload
+  },
+  [CLOSE_PANEL.type]: (state: IProjectStatusState) => {
+    state.activePanel = null
   }
 })
 

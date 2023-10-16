@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 declare interface ISharedLibraryStrings {
+  GtModerationStatus_Choice_Draft: string
+  GtModerationStatus_Choice_Published: string
   SaveText: string
   CloseText: string
   Aria: {
@@ -7,6 +9,17 @@ declare interface ISharedLibraryStrings {
     MenuOverflowCount: string
     ProjectTitle: string
   }
+  Placeholder: {
+    DatePicker: string
+    TextField: string
+    UrlField: string
+    UrlFieldAlternative: string
+    TaxonomyPicker: string
+    PeoplePicker: string
+    NumberField: string
+    ChoiceField: string
+    MultiChoiceField: string
+  },
   AllocationPercetageLabel: string
   AllocationStatusLabel: string
   BarLabel: string

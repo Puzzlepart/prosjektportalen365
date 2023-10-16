@@ -2,10 +2,10 @@ import { stringIsNullOrEmpty } from '@pnp/core'
 import React, { FC, useContext } from 'react'
 import { useProjectStatusContext } from '../../../ProjectStatus/context'
 import { StatusElement } from '../../StatusElement'
-import { BaseSection } from '../BaseSection'
+import { BaseSection } from '../BaseSection/BaseSection'
 import { SectionContext } from '../context'
 import styles from './ProjectPropertiesSection.module.scss'
-import { StatusSectionField } from './StatusSectionField'
+import { StatusSectionField } from './StatusSectionField/StatusSectionField'
 import { useProjectPropertiesSection } from './useProjectPropertiesSection'
 
 export const ProjectPropertiesSection: FC = () => {
@@ -19,12 +19,14 @@ export const ProjectPropertiesSection: FC = () => {
   function renderFields() {
     if (section.viewFields) {
       return section.viewFields.map((fieldName) => {
-        const [fld] = fields.filter((f) => [f.InternalName, f.Title].indexOf(fieldName) !== -1)
-        if (fld && !stringIsNullOrEmpty(fieldValues[fieldName])) {
+        const [field] = fields.filter(
+          ({ InternalName, Title }) => [InternalName, Title].indexOf(fieldName) !== -1
+        )
+        if (field && !stringIsNullOrEmpty(fieldValues[fieldName])) {
           return (
             <StatusSectionField
               key={fieldName}
-              label={fld.Title}
+              label={field.Title}
               value={fieldValues[fieldName]}
               width={context.props.fieldWidth}
             />

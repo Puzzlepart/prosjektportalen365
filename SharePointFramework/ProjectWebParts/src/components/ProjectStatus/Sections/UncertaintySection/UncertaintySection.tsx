@@ -11,7 +11,7 @@ import { OpportunityMatrix } from '../../../OpportunityMatrix'
 import { RiskMatrix } from '../../../RiskMatrix'
 import { StatusElement } from '../../StatusElement'
 import { useProjectStatusContext } from '../../context'
-import { BaseSection } from '../BaseSection'
+import { BaseSection } from '../BaseSection/BaseSection'
 import styles from './UncertaintySection.module.scss'
 import { useUncertaintySection } from './useUncertaintySection'
 

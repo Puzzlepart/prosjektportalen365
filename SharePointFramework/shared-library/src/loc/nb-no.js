@@ -1,11 +1,25 @@
 define([], function () {
   return {
+    GtModerationStatus_Choice_Draft: 'Kladd',
+    GtModerationStatus_Choice_Published: 'Publisert',
     SaveText: 'Lagre',
     CloseText: 'Lukk',
     Aria: {
       InfoLabelTitle: 'Informasjon om {0}',
       MenuOverflowCount: '{0} flere elementer',
       ProjectTitle: 'Logo for prosjekt: {0}'
+    },
+
+    Placeholder: {
+      DatePicker: 'Angi en dato',
+      TextField: 'Angi verdi her',
+      UrlField: 'Angi en nettadresse',
+      UrlFieldAlternative: 'Alternativ tekst',
+      TaxonomyPicker: 'Skriv inn termen som skal merkes',
+      PeoplePicker: 'Angi et navn eller en e-postadresse',
+      NumberField: 'Skriv inn et tall',
+      ChoiceField: 'Velg et alternativ',
+      MultiChoiceField: 'Velg ett eller flere alternativer',
     },
     AllocationPercetageLabel: 'Allokeringsprosent',
     AllocationStatusLabel: 'Allokeringsstatus',

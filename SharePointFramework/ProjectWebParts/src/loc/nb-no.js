@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    NewStatusPanelTitle: 'Ny statusrapport',
+    EditStatusPanelText: 'Rediger statusrapport',
     Aria: {
       CurrentPhaseText: 'Dette er den gjeldende fasen. Det er derfor ikke mulig å endre til denne fasen.',
     },

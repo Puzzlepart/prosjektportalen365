@@ -1,16 +1,16 @@
-import { IPanelProps } from '@fluentui/react'
-import { ItemFieldValues, ProjectInformationField } from '../../models'
-import { SPDataAdapterBase } from '../../data'
 import { ButtonProps } from '@fluentui/react-components'
+import { SPDataAdapterBase } from '../../data'
+import { ItemFieldValues, ProjectInformationField } from '../../models'
+import { IBasePanelProps } from '../BasePanel'
 import { UseModelReturnType } from './useModel'
 
 export interface ICustomEditPanelSubmitProps extends Pick<ButtonProps, 'disabled'> {
   /**
    * Callback function to execute when the submit button is clicked.
    *
-   * @param properties The properties to submit.
+   * @param model The model to submit.
    */
-  onSubmit: (properties: UseModelReturnType['properties']) => Promise<void>
+  onSubmit: (model: UseModelReturnType) => Promise<void>
 
   /**
    * Text to display in the submit button (optional)
@@ -29,7 +29,7 @@ export interface ICustomEditPanelSubmitProps extends Pick<ButtonProps, 'disabled
   error?: string
 }
 
-export interface ICustomEditPanelProps extends IPanelProps {
+export interface ICustomEditPanelProps extends IBasePanelProps {
   /**
    * The fields to edit in the panel.
    */
@@ -61,4 +61,9 @@ export interface ICustomEditPanelProps extends IPanelProps {
    * The submit button props.
    */
   submit?: ICustomEditPanelSubmitProps
+
+  /**
+   * Render the panel in debug mode.
+   */
+  debug?: boolean
 }

@@ -37,14 +37,24 @@ export class ItemFieldValues {
   protected _values: Map<string, ItemFieldValue>
 
   constructor(
-    private _fieldValues: Record<string, any>,
-    private _fieldValuesAsText: Record<string, string>
+    private _fieldValues: Record<string, any> = {},
+    private _fieldValuesAsText: Record<string, string> = {}
   ) {
     this._setValues()
   }
 
+  /**
+   * Get the item ID.
+   */
   public get id(): number {
-    return this._values.get('Id').value
+    return this._values?.get('Id')?.value ?? null
+  }
+
+  /**
+   * Get field value keys.
+   */
+  public get keys() {
+    return Array.from(this._values.keys())
   }
 
   /**
@@ -57,13 +67,14 @@ export class ItemFieldValues {
   }
 
   /**
-   * Set internal _values property based on field values and field values as text.
+   * Set internal `_values` property based on field values and field values as text.
+   * If no text value is set, the raw value is used instead.
    */
   protected _setValues() {
     this._values = Object.keys(this._fieldValues).reduce((map, key) => {
       if (this._shouldOmitKey(key)) return map
       const value = this._fieldValues[key]
-      const valueAsText = this._fieldValuesAsText[key]
+      const valueAsText = this._fieldValuesAsText[key] ?? value
       map.set(key, { value, valueAsText })
       return new Map(map)
     }, new Map<string, ItemFieldValue>())
@@ -125,6 +136,17 @@ export class ItemFieldValues {
     const value = this._values.get(fieldName) ?? {}
     if (format) return this._getValueInFormat<T>(value, format, options.defaultValue)
     return value as unknown as T
+  }
+
+  /**
+   * Updates the field values of the item with the provided properties.
+   *
+   * @param properties - The properties to update the field values with.
+   */
+  public update(properties: Record<string, any>) {
+    this._fieldValues = { ...this._fieldValues, ...properties }
+    this._fieldValuesAsText = { ...this._fieldValuesAsText, ...properties }
+    this._setValues()
   }
 
   /**

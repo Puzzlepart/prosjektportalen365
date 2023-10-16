@@ -8,7 +8,7 @@ import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import { StatusElement } from '../../StatusElement'
-import { BaseSection } from '../BaseSection/index'
+import { BaseSection } from '../BaseSection/BaseSection'
 import styles from './ListSection.module.scss'
 import { useListSection } from './useListSection'
 
@@ -48,5 +48,3 @@ export const ListSection: FC = () => {
     </BaseSection>
   )
 }
-
-export * from './types'

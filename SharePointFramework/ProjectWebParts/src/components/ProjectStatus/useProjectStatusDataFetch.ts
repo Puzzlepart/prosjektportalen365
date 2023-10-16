@@ -2,12 +2,30 @@ import { LogLevel } from '@pnp/logging'
 import { AnyAction } from '@reduxjs/toolkit'
 import strings from 'ProjectWebPartsStrings'
 import _ from 'lodash'
-import { ProjectAdminPermission, getUrlParam, parseUrlHash } from 'pp365-shared-library/lib'
+import {
+  ProjectAdminPermission,
+  ProjectInformationField,
+  getUrlParam,
+  parseUrlHash
+} from 'pp365-shared-library/lib'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { INIT_DATA } from './reducer'
 import { FetchDataResult, IProjectStatusProps } from './types'
+
+/**
+ * Get report fields for Project Status. If content type ID is not provided,
+ * the ID "0x010022252E35737A413FB56A1BA53862F6D5" is used, which is the ID
+ * for the default content type for Project Status.
+ *
+ * @param contentTypeId Content type ID for Project Status
+ */
+async function getReportFields(contentTypeId = '0x010022252E35737A413FB56A1BA53862F6D5') {
+  const fields = await SPDataAdapter.portal.getContentTypeFields(contentTypeId)
+  const reportFields = fields.map((field) => new ProjectInformationField(field))
+  return reportFields
+}
 
 /**
  * Fetch data for `ProjectStatus`. Feetches project properties, status report list properties,
@@ -23,22 +41,16 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
         logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }
-    const [properties, reportList, reports, sections, columnConfig, reportFields] =
-      await Promise.all([
-        SPDataAdapter.project.getProjectInformationData(),
-        SPDataAdapter.portal.getStatusReportListProps(),
-        SPDataAdapter.portal.getStatusReports({
-          useCaching: false,
-          publishedString: strings.GtModerationStatus_Choice_Published
-        }),
-        SPDataAdapter.portal.getProjectStatusSections(),
-        SPDataAdapter.portal.getProjectColumnConfig(),
-        SPDataAdapter.portal.getListFields(
-          'PROJECT_STATUS',
-          // eslint-disable-next-line quotes
-          "Hidden eq false and Group ne 'Hidden'"
-        )
-      ])
+    const [properties, reportList, reports, sections, columnConfig] = await Promise.all([
+      SPDataAdapter.project.getProjectInformationData(),
+      SPDataAdapter.portal.getStatusReportListProps(),
+      SPDataAdapter.portal.getStatusReports({ useCaching: false }),
+      SPDataAdapter.portal.getProjectStatusSections(),
+      SPDataAdapter.portal.getProjectColumnConfig()
+    ])
+    const reportFields = await getReportFields(
+      properties.templateParameters?.ProjectStatusContentTypeId
+    )
     const userHasAdminPermission = await SPDataAdapter.checkProjectAdminPermissions(
       ProjectAdminPermission.ProjectStatusAdmin,
       properties.fieldValues

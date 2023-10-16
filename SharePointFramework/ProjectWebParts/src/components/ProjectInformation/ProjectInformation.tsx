@@ -26,12 +26,17 @@ import { useProjectInformation } from './useProjectInformation'
  * - Promote to parent project (`CreateParentDialog`)
  */
 export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
-  const context = useProjectInformation(props)
+  const { fluentProviderId, context } = useProjectInformation(props)
   if (context.state.hidden) return null
 
   if (!context.state.isDataLoaded) {
     return (
-      <FluentProvider theme={webLightTheme} className={styles.root}>
+      <FluentProvider
+        id={fluentProviderId}
+        theme={webLightTheme}
+        className={styles.root}
+        style={{ background: 'transparent' }}
+      >
         <LoadingSkeleton />
       </FluentProvider>
     )
@@ -39,7 +44,12 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
 
   return (
     <ProjectInformationContextProvider value={context}>
-      <FluentProvider theme={webLightTheme} className={mergeClasses(styles.root, props.className)}>
+      <FluentProvider
+        id={fluentProviderId}
+        theme={webLightTheme}
+        className={mergeClasses(styles.root, props.className)}
+        style={{ background: 'transparent' }}
+      >
         <WebPartTitle title={props.title} />
         <div className={styles.container}>
           {context.state.error && (

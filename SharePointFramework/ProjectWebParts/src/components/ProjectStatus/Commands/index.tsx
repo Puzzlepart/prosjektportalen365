@@ -5,10 +5,10 @@ import { useCommands } from './useCommands'
 
 export const Commands: FC = () => {
   const context = useProjectStatusContext()
-  const { props } = useCommands()
+  const commandBarProps = useCommands()
   return (
     <Shimmer isDataLoaded={context.state.isDataLoaded}>
-      <CommandBar {...props} />
+      <CommandBar {...commandBarProps} />
     </Shimmer>
   )
 }
