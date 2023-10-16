@@ -26,6 +26,7 @@ I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Pr
 - Opprett og rediger eksisterende visninger direkte i Porteføljeaggregering [#1210](https://github.com/Puzzlepart/prosjektportalen365/issues/1210)
 - Rediger egenskaper for prosjektet i et panel som åpner seg på siden [#1227](https://github.com/Puzzlepart/prosjektportalen365/issues/1227)
 - Støtte for å håndtere tiltak for usikkerheter i Planner [#1273](https://github.com/Puzzlepart/prosjektportalen365/issues/1273)
+- Støtte for å søke etter prosjekteiere, prosjektledere, prosjekttype og tjenesteområder fra porteføljeforsiden [#1281](https://github.com/Puzzlepart/prosjektportalen365/issues/1281)
 
 ### Forbedringer
 
