@@ -24,9 +24,7 @@ export class StatusReport {
    *
    * @param fieldValues - SP item field values
    */
-  constructor(
-    public fieldValues: ItemFieldValues = new ItemFieldValues()
-  ) {
+  constructor(public fieldValues: ItemFieldValues = new ItemFieldValues()) {
     this.id = fieldValues.id
     this.created = fieldValues.get('Created', { format: 'date' })
     this.modified = new Date(fieldValues.get('Modified', { format: 'date' }))
@@ -104,7 +102,7 @@ export class StatusReport {
   }
 
   /**
-   * Returns `true` if the report is published. The moderation status must 
+   * Returns `true` if the report is published. The moderation status must
    * be `GtModerationStatus_Choice_Published` from the `SharedLibraryStrings`
    */
   public get published(): boolean {

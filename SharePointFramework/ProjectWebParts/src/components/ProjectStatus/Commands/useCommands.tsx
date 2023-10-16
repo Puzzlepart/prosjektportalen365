@@ -1,12 +1,13 @@
-import { getId, IContextualMenuItem, Spinner, SpinnerSize } from '@fluentui/react'
+import { getId, IContextualMenuItem } from '@fluentui/react'
+import { Spinner } from '@fluentui/react-components'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 import strings from 'ProjectWebPartsStrings'
 import React from 'react'
 import { useProjectStatusContext } from '../context'
-import { OPEN_PANEL, REPORT_PUBLISHING } from '../reducer'
+import { OPEN_PANEL } from '../reducer'
+import { useCreateNewStatusReport } from './useCreateNewStatusReport'
 import { useDeleteReport } from './useDeleteReport'
 import { usePublishReport } from './usePublishReport'
-import { useCreateNewStatusReport } from './useCreateNewStatusReport'
 import { useReportOptions } from './useReportOptions'
 
 /**
@@ -24,12 +25,11 @@ import { useReportOptions } from './useReportOptions'
  * - `STATUS_ICON`: Renders an icon to indicate the status of the selected report. This command is disabled and only for display purposes.
  */
 export function useCommands() {
-  const {state,dispatch} = useProjectStatusContext()
+  const { state, dispatch } = useProjectStatusContext()
   const createNewStatusReport = useCreateNewStatusReport()
   const deleteReport = useDeleteReport()
   const publishReport = usePublishReport()
   const reportOptions = useReportOptions()
-  console.log(state.selectedReport, state.selectedReport.published)
   const items: IContextualMenuItem[] = [
     state.userHasAdminPermission && {
       key: 'NEW_STATUS_REPORT',
@@ -68,7 +68,6 @@ export function useCommands() {
       iconProps: { iconName: 'PublishContent' },
       disabled: state.selectedReport?.published,
       onClick: () => {
-        dispatch(REPORT_PUBLISHING())
         publishReport()
       }
     },
@@ -77,8 +76,8 @@ export function useCommands() {
       onRender: () => (
         <Spinner
           label={strings.PublishReportSpinnerText}
-          size={SpinnerSize.small}
-          labelPosition='right'
+          size='extra-small'
+          labelPosition='after'
         />
       )
     }

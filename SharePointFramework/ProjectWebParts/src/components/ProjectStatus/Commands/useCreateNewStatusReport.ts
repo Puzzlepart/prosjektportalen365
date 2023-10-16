@@ -7,7 +7,7 @@ import { OPEN_PANEL, SELECT_REPORT } from '../reducer'
 
 /**
  * Hook for creating new status reports. Returns a callback function
- * for creating a new status report. 
+ * for creating a new status report.
  */
 export function useCreateNewStatusReport() {
   const { state, dispatch, props } = useProjectStatusContext()
@@ -19,8 +19,7 @@ export function useCreateNewStatusReport() {
    */
   const reportFields = state.data.reportFields.filter(
     (field) =>
-      !field.isReadOnly &&
-      !['GtSectionDataJson', 'GtLastReportDate'].includes(field.internalName)
+      !field.isReadOnly && !['GtSectionDataJson', 'GtLastReportDate'].includes(field.internalName)
   )
 
   /**
@@ -31,7 +30,7 @@ export function useCreateNewStatusReport() {
     let properties: Record<string, any> = {
       Title: format(strings.NewStatusReportTitle, props.webTitle),
       GtSiteId: props.siteId,
-      GtModerationStatus: strings.GtModerationStatus_Choice_Draft,
+      GtModerationStatus: strings.GtModerationStatus_Choice_Draft
     }
     if (lastReport?.fieldValues) {
       properties = reportFields.reduce((obj, field) => {

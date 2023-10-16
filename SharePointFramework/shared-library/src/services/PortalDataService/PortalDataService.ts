@@ -274,8 +274,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   ): Promise<StatusReport> {
     const projectStatusList = this._getList('PROJECT_STATUS')
     try {
-      const update = await projectStatusList.items.getById(report.id).update(properties)
-      console.log(update)
+      await projectStatusList.items.getById(report.id).update(properties)
       return report.setValues(properties)
     } catch (error) {
       throw error
@@ -332,9 +331,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     const urls = await this._getList(list)
       .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
       .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')<{
-        DefaultNewFormUrl: string
-        DefaultEditFormUrl: string
-      }>()
+      DefaultNewFormUrl: string
+      DefaultEditFormUrl: string
+    }>()
     return {
       defaultNewFormUrl: makeUrlAbsolute(urls.DefaultNewFormUrl),
       defaultEditFormUrl: makeUrlAbsolute(urls.DefaultEditFormUrl)
@@ -425,7 +424,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           fieldsAdded.push(field)
         }
         await executeQuery(jsomContext)
-      } catch (error) { }
+      } catch (error) {}
     }
     try {
       const templateParametersField = spList
@@ -437,7 +436,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch { }
+    } catch {}
     if (ensureList.created && params.properties) {
       ensureList.list.items.add(params.properties)
     }
@@ -517,7 +516,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
-   * Add status report with the specified `properties` and `contentTypeId`. A new 
+   * Add status report with the specified `properties` and `contentTypeId`. A new
    * `StatusReport` instance is returned.
    *
    * @param properties Properties to add for the new item

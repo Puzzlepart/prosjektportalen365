@@ -4,7 +4,7 @@ import { IProjectStatusContext } from '../../ProjectStatus/context'
 import { useProjectInformationContext } from '../context'
 
 /**
- * Returns a project status context object based on the currently 
+ * Returns a project status context object based on the currently
  * selected report in the project information context.
  */
 export function useProjectStatusReport() {

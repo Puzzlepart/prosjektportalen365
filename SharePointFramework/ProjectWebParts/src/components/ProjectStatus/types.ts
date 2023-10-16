@@ -89,7 +89,7 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   /**
    * The active panel name and optional title
    */
-  activePanel?: { name: string, headerText?: string }
+  activePanel?: { name: string; headerText?: string }
 }
 
 export interface IProjectStatusData {

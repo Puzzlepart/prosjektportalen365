@@ -189,7 +189,7 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
    * corrupt data.
    */
   private async _getLocalProjectInformationItem(
-    fieldsFilter = 'substringof(\'Gt\', InternalName)'
+    fieldsFilter = "substringof('Gt', InternalName)"
   ): Promise<IProjectInformationData> {
     try {
       const ctx = await this._getLocalProjectInformationItemContext()

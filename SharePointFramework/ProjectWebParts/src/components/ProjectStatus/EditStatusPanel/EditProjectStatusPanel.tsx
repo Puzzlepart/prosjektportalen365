@@ -1,4 +1,3 @@
-import strings from 'ProjectWebPartsStrings'
 import { CustomEditPanel } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import SPDataAdapter from '../../../data'

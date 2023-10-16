@@ -19,5 +19,12 @@ export function useEditStatusPanel() {
     field.setValue(fieldValues)
   )
   const submit = useEditStatusPanelSubmit()
-  return { headerText: activePanel?.headerText ?? strings.EditStatusPanelText, isOpen, onDismiss, fieldValues, fields, submit }
+  return {
+    headerText: activePanel?.headerText ?? strings.EditStatusPanelText,
+    isOpen,
+    onDismiss,
+    fieldValues,
+    fields,
+    submit
+  }
 }

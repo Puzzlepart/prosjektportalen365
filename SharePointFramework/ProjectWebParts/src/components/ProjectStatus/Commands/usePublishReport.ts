@@ -2,7 +2,7 @@ import strings from 'ProjectWebPartsStrings'
 import moment from 'moment'
 import { PortalDataService } from 'pp365-shared-library/lib/services'
 import { useProjectStatusContext } from '../context'
-import { CLEAR_USER_MESSAGE, REPORT_PUBLISHED, REPORT_PUBLISH_ERROR } from '../reducer'
+import { CLEAR_USER_MESSAGE, REPORT_PUBLISHED, REPORT_PUBLISHING, REPORT_PUBLISH_ERROR } from '../reducer'
 import { useCaptureReportSnapshot } from './useCaptureReportSnapshot'
 
 /**
@@ -23,6 +23,7 @@ export function usePublishReport() {
     })
     if (!context.state.isPublishing) {
       try {
+        context.dispatch(REPORT_PUBLISHING())
         const snapshot = await captureReportSnapshot()
         const attachments = [
           {

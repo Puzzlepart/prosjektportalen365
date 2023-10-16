@@ -78,7 +78,7 @@ export const initialState: IProjectStatusState = {
     reports: [],
     sections: Array.apply(null, Array(6)).map(() => new SectionModel({ ContentTypeId: '' })),
     columnConfig: [],
-    reportFields: [],
+    reportFields: []
   },
   persistedSectionData: {}
 }
