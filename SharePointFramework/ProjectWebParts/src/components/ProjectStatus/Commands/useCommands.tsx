@@ -6,7 +6,7 @@ import { useProjectStatusContext } from '../context'
 import { OPEN_PANEL, REPORT_PUBLISHING } from '../reducer'
 import { useDeleteReport } from './useDeleteReport'
 import { usePublishReport } from './usePublishReport'
-import { useRedirectNewStatusReport } from './useRedirectNewStatusReport'
+import { useCreateNewStatusReport } from './useCreateNewStatusReport'
 import { useReportOptions } from './useReportOptions'
 
 /**
@@ -25,7 +25,7 @@ import { useReportOptions } from './useReportOptions'
  */
 export function useCommands() {
   const context = useProjectStatusContext()
-  const redirectNewStatusReport = useRedirectNewStatusReport()
+  const createNewStatusReport = useCreateNewStatusReport()
   const deleteReport = useDeleteReport()
   const publishReport = usePublishReport()
   const reportOptions = useReportOptions()
@@ -34,40 +34,42 @@ export function useCommands() {
       key: 'NEW_STATUS_REPORT',
       name: strings.NewStatusReportModalHeaderText,
       iconProps: { iconName: 'NewFolder' },
-      disabled: context.state.data.reports.filter((report) => !report.published).length !== 0,
-      onClick: redirectNewStatusReport
+      disabled: context.state.data.reports.some(({ published }) => !published),
+      onClick: () => {
+        createNewStatusReport()
+      }
     },
     context.state.selectedReport &&
-      context.state.userHasAdminPermission && {
-        key: 'DELETE_REPORT',
-        name: strings.DeleteReportButtonText,
-        iconProps: { iconName: 'Delete' },
-        disabled: context.state.selectedReport?.published || context.state.isPublishing,
-        onClick: () => {
-          deleteReport()
-        }
-      },
+    context.state.userHasAdminPermission && {
+      key: 'DELETE_REPORT',
+      name: strings.DeleteReportButtonText,
+      iconProps: { iconName: 'Delete' },
+      disabled: context.state.selectedReport?.published || context.state.isPublishing,
+      onClick: () => {
+        deleteReport()
+      }
+    },
     context.state.selectedReport &&
-      context.state.userHasAdminPermission && {
-        key: 'EDIT_REPORT',
-        name: strings.EditReportButtonText,
-        iconProps: { iconName: 'Edit' },
-        onClick: () => {
-          context.dispatch(OPEN_PANEL('EditStatusPanel'))
-        }
-      },
+    context.state.userHasAdminPermission && {
+      key: 'EDIT_REPORT',
+      name: strings.EditReportButtonText,
+      iconProps: { iconName: 'Edit' },
+      onClick: () => {
+        context.dispatch(OPEN_PANEL('EditStatusPanel'))
+      }
+    },
     context.state.selectedReport &&
-      context.state.userHasAdminPermission &&
-      !context.state.isPublishing && {
-        key: 'PUBLISH_REPORT',
-        name: strings.PublishReportButtonText,
-        iconProps: { iconName: 'PublishContent' },
-        disabled: context.state.selectedReport?.published,
-        onClick: () => {
-          context.dispatch(REPORT_PUBLISHING())
-          publishReport()
-        }
-      },
+    context.state.userHasAdminPermission &&
+    !context.state.isPublishing && {
+      key: 'PUBLISH_REPORT',
+      name: strings.PublishReportButtonText,
+      iconProps: { iconName: 'PublishContent' },
+      disabled: context.state.selectedReport?.published,
+      onClick: () => {
+        context.dispatch(REPORT_PUBLISHING())
+        publishReport()
+      }
+    },
     context.state.isPublishing && {
       key: 'IS_PUBLISHING',
       onRender: () => (
