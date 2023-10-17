@@ -16,7 +16,6 @@ import * as strings from 'PortfolioWebPartsStrings'
 import {
   DataSource,
   DataSourceService,
-  DefaultCaching,
   getUserPhoto,
   IGraphGroup,
   PortalDataService,
@@ -771,8 +770,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
         strings.ProjectContentColumnsListName
       )
       const columnItems = await projectContentColumnsList.items
-        .select(...Object.keys(new SPProjectContentColumnItem()))
-        .using(DefaultCaching)<SPProjectContentColumnItem[]>()
+        .select(...Object.keys(new SPProjectContentColumnItem()))()
       const filteredColumnItems = columnItems.filter(
         (col) =>
           col.GtDataSourceCategory === dataSourceCategory ||
@@ -800,8 +798,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           persistRenderAs && 'GtFieldDataType'
         ].filter(Boolean)
       )
-      const update = await list.items.getById(columnItem.Id).update(properties)
-      return update
+      return list.items.getById(columnItem.Id).update(properties)
     } catch (error) {
       throw new Error(error)
     }
