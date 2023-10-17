@@ -769,8 +769,9 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const projectContentColumnsList = this.portalDataService.web.lists.getByTitle(
         strings.ProjectContentColumnsListName
       )
-      const columnItems = await projectContentColumnsList.items
-        .select(...Object.keys(new SPProjectContentColumnItem()))()
+      const columnItems = await projectContentColumnsList.items.select(
+        ...Object.keys(new SPProjectContentColumnItem())
+      )()
       const filteredColumnItems = columnItems.filter(
         (col) =>
           col.GtDataSourceCategory === dataSourceCategory ||
