@@ -41,7 +41,7 @@ export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
 
 RiskMatrix.defaultProps = {
   items: [],
-  width: 400,
+  fullWidth: true,
   calloutTemplate: `
   <h3>{Title}</h3>\n
   <p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n
