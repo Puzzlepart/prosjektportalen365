@@ -870,9 +870,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       const portfolioViewsList = this._sp.web.lists.getByTitle(strings.PortfolioViewsListName)
       const column = await projectColumnsList.items.add(_.omit(properties, ['Id']))
       portfolioViewsList.items.getById(view.id as any).update({
-        GtPortfolioColumnsId: {
-          results: [...view.columns.map((c) => c.id), column.data.Id]
-        }
+        GtPortfolioColumnsId: [...view.columns.map((c) => c.id), column.data.Id]
       })
       return true
     } catch (error) {
