@@ -1,6 +1,6 @@
-import { FluentProvider, mergeClasses, webLightTheme } from '@fluentui/react-components'
+import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
-import { WebPartTitle } from 'pp365-shared-library'
+import { Fluent, WebPartTitle } from 'pp365-shared-library'
 import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
 import React, { FC } from 'react'
 import { Actions } from './Actions'
@@ -44,12 +44,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
 
   return (
     <ProjectInformationContextProvider value={context}>
-      <FluentProvider
-        id={fluentProviderId}
-        theme={webLightTheme}
-        className={mergeClasses(styles.root, props.className)}
-        style={{ background: 'transparent' }}
-      >
+      <Fluent transparent>
         <WebPartTitle title={props.title} />
         <div className={styles.container}>
           {context.state.error && (
@@ -73,7 +68,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
           <EditPropertiesPanel />
           <CreateParentDialog />
         </div>
-      </FluentProvider>
+      </Fluent>
       {context.state.confirmActionProps && <ConfirmDialog {...context.state.confirmActionProps} />}
     </ProjectInformationContextProvider>
   )

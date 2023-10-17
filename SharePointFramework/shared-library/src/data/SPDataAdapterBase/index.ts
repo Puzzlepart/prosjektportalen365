@@ -399,28 +399,33 @@ export class SPDataAdapterBase<
             break
           case 'User':
             {
-              const sourceUserId = fieldValues.get<number>(`${field.InternalName}Id`, {
+              const userFieldName = `${field.InternalName}Id`
+              const sourceUserId = fieldValues.get<number>(userFieldName, {
                 format: 'user_id'
               })
               if (sourceWeb.toUrl() === destinationWeb.toUrl()) {
-                properties[`${field.InternalName}Id`] = sourceUserId
+                properties[userFieldName] = sourceUserId
                 return properties
               }
               const user = siteUsers.find((u) => u.Id === sourceUserId)
-              if (!user) return properties
+              if (!user) {
+                properties[userFieldName] = null
+                return properties
+              }
               const destinationUserId =
                 (await destinationWeb.ensureUser(user.LoginName))?.data?.Id ?? null
-              properties[`${field.InternalName}Id`] = destinationUserId
+              properties[userFieldName] = destinationUserId
             }
             break
           case 'UserMulti':
             {
-              const sourceUserIds = fieldValues.get<number[]>(`${field.InternalName}Id`, {
+              const userFieldName = `${field.InternalName}Id`
+              const sourceUserIds = fieldValues.get<number[]>(userFieldName, {
                 format: 'user_id',
                 defaultValue: []
               })
               if (sourceWeb.toUrl() === destinationWeb.toUrl()) {
-                properties[`${field.InternalName}Id`] = sourceUserIds
+                properties[userFieldName] = sourceUserIds
                 return properties
               }
               const users = siteUsers.filter(({ Id }) => sourceUserIds.indexOf(Id) !== -1)
@@ -429,7 +434,7 @@ export class SPDataAdapterBase<
                   users.map(({ LoginName }) => destinationWeb.ensureUser(LoginName))
                 )
               ).map(({ data }) => data.Id)
-              properties[`${field.InternalName}Id`] = options.wrapMultiValuesInResultsArray
+              properties[userFieldName] = options.wrapMultiValuesInResultsArray
                 ? { results: destinationUserIds }
                 : destinationUserIds
             }
