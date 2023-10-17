@@ -198,6 +198,20 @@
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status tilskudd</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumn">41</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnValue">Ingen hendelser siste måned</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status tilskudd</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumn">41</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnValue">Hendelse registrert siste måned</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnColor">#e9b359</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Status SHA (Ingen)</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumn">43</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Ingen hendelser siste måned</pnp:DataValue>
