@@ -29,8 +29,8 @@ import {
   ArrowSyncFilled,
   ConvertRangeRegular,
   ConvertRangeFilled,
-  CheckmarkRegular,
-  CheckmarkFilled,
+  CheckmarkSquareRegular,
+  CheckmarkSquareFilled,
   CheckmarkCircleRegular,
   CheckmarkCircleFilled,
   PersonRegular,
@@ -120,8 +120,8 @@ export const iconCatalog = {
     filled: CheckmarkCircleFilled
   },
   Checkmark: {
-    regular: CheckmarkRegular,
-    filled: CheckmarkFilled
+    regular: CheckmarkSquareRegular,
+    filled: CheckmarkSquareFilled
   },
   ConvertRange: {
     regular: ConvertRangeRegular,
