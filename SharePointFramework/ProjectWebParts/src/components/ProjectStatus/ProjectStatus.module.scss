@@ -1,8 +1,18 @@
-@import '~@fluentui/react/dist/sass/References.scss';
+@import "~@fluentui/react/dist/sass/References.scss";
 
 .root {
   padding: 0 32px;
   margin: 0;
+
+  .sticky {
+    margin: 0;
+    padding-top: 32px;
+
+    .header,
+    .commandBar {
+      display: none;
+    }
+  }
 
   .header {
     display: flex;
@@ -25,7 +35,13 @@
   .commandBar {
     height: 42px;
     margin: 0px auto;
-    padding-bottom: 16px
+    padding-bottom: 16px;
+  }
+
+  .sectionTabs {
+    display: flex;
+    flex-direction: row;
+    height: 42px;
   }
 
   .container {

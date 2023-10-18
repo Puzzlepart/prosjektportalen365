@@ -10,6 +10,7 @@ import { useProjectStatus } from './useProjectStatus'
 import { Fluent } from 'pp365-shared-library'
 import { PublishedStatus } from './PublishedStatus'
 import { UserMessages } from './UserMessages'
+import { SectionTabs } from './SectionTabs'
 
 export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
   const { context } = useProjectStatus(props)
@@ -22,12 +23,7 @@ export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
             <PublishedStatus />
           </div>
           <Commands />
-          {/* <TabList {...props}>
-            <Tab value="tab1">First Tab</Tab>
-            <Tab value="tab2">Second Tab</Tab>
-            <Tab value="tab3">Third Tab</Tab>
-            <Tab value="tab4">Fourth Tab</Tab>
-          </TabList> */}
+          <SectionTabs />
           <UserMessages />
           <div className={styles.container}>
             <Sections />

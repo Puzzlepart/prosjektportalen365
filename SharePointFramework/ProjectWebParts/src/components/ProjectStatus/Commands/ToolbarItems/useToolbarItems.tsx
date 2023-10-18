@@ -71,7 +71,7 @@ export function useToolbarItems() {
               !state.userHasAdminPermission
           )
           .setIcon(Icons.QuizNew)
-          .setOnClick((_) => {
+          .setOnClick(() => {
             createNewStatusReport()
           }),
         state.selectedReport &&
@@ -87,7 +87,7 @@ export function useToolbarItems() {
               state.selectedReport?.published || state.isPublishing || !state.userHasAdminPermission
             )
             .setIcon(Icons.Edit)
-            .setOnClick((_) => {
+            .setOnClick(() => {
               dispatch(OPEN_PANEL({ name: 'EditStatusPanel' }))
             }),
         state.selectedReport &&
@@ -103,7 +103,7 @@ export function useToolbarItems() {
               state.selectedReport?.published || state.isPublishing || !state.userHasAdminPermission
             )
             .setIcon(Icons.CloudArrowUp)
-            .setOnClick((_) => {
+            .setOnClick(() => {
               publishReport()
             })
       ].filter(Boolean),
