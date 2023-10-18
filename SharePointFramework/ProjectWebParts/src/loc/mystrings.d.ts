@@ -19,7 +19,7 @@ declare interface IProjectWebPartsStrings {
   UseDynamicConfigurationOnText: string
   ManualConfigurationPathLabel: string
   UseDynamicConfigurationLabel: string
-  PublishReportSpinnerText: string
+  PublishingReportLabel: string
   PublishStatusReportSectionDataWarning: string
   AdminPageLinkLabel: string
   AdvancedGroupName: string
@@ -58,17 +58,22 @@ declare interface IProjectWebPartsStrings {
   DefaultTimeframeStartLabel: string
   DefaultTimeframeStartValue: string
   DeleteItemLabel: string
-  DeleteReportButtonText: string
+  DeleteReportButtonLabel: string
+  DeleteReportButtonDescription: string
+  DeleteReportButtonDescriptionNoPermission: string
   DiamondLabel: string
   DocumentsListName: string
   EditItemLabel: string
   EditProjectInformationText: string
-  EditReportButtonText: string
+  EditReportButtonLabel: string
+  EditReportButtonDescription: string
+  EditReportButtonDescriptionNoPermission: string
   EditSiteInformationText: string
   ExternalUsersConfigInfoText: string
   ExternalUsersConfigText: string
   GeneralGroupName: string
-  GetSnapshotButtonText: string
+  GetSnapshotButtonLabel: string
+  GetSnapshotButtonDescription: string
   GtModerationStatus_Choice_Draft: string
   GtModerationStatus_Choice_Published: string
   HideActionsLabel: string
@@ -111,7 +116,9 @@ declare interface IProjectWebPartsStrings {
   MoveOn: string
   NavigateToSourceUrlText: string
   NewItemLabel: string
-  NewStatusReportModalHeaderText: string
+  NewStatusReportLabel: string
+  NewStatusReportDescription: string
+  NewStatusReportDescriptionNoPermission: string
   NewStatusReportTitle: string
   No: string
   NoLocalPropertiesListWarningText: string
@@ -154,8 +161,10 @@ declare interface IProjectWebPartsStrings {
   ProjectTimelineItemInfo: string
   ProjectTimelineListInfoText: string
   PublishedStatusReport: string
-  PublishReportButtonText: string
-  PublishReportSpinnerText: string
+  PublishReportButtonLabel: string
+  PublishReportButtonDescription: string
+  PublishReportButtonDescriptionNoPermission: string
+  PublishingReportLabel: string
   RedoText: string
   RevertDefaultColorConfigurationText: string
   RiskMatrixConfigurationFolder: string
@@ -198,6 +207,8 @@ declare interface IProjectWebPartsStrings {
   TypeLabel: string
   UnknownConfigurationName: any
   UnpublishedStatusReportInfo: string
+  PublishedStatusReportInfo: string
+  AlreadyPublishedReportInfo: string
   UseDynamicConfigurationLabel: string
   UseDynamicConfigurationOffText: string
   UseDynamicConfigurationOnText: string

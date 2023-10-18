@@ -1,12 +1,39 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
 .root {
-  @include ms-Grid;
-  padding: 0;
+  padding: 0 32px;
   margin: 0;
-  
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .publishedStatus {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 4px;
+
+      .publishedStatusIcon {
+        margin-top: 7px;
+        color: #2da748;
+      }
+    }
+  }
+
+  .commandBar {
+    height: 42px;
+    margin: 0px auto;
+    padding-bottom: 16px
+  }
+
   .container {
-    padding: 10px 32px;
-    @include ms-Grid-row;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
   }
 }
