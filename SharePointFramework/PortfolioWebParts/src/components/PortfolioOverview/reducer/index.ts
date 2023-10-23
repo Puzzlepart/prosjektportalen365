@@ -1,5 +1,5 @@
 import { format, MessageBarType } from '@fluentui/react'
-import { createReducer } from '@reduxjs/toolkit'
+import { createReducer, current } from '@reduxjs/toolkit'
 import sortArray from 'array-sort'
 import strings from 'PortfolioWebPartsStrings'
 import _ from 'underscore'
@@ -144,11 +144,11 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.sortBy = _.pick(payload, ['column', 'customSort'])
         state.columns = state.columns.map((col) => {
           col.isSorted = col.key === payload.column.key
-          if (col.isSorted) {
-            col.isSortedDescending = isSortedDescending
-          }
+          col.isSortedDescending = col.isSorted ? isSortedDescending : false
+          console.log(col.isSorted, col.isSortedDescending, col.key, payload.column.key)
           return col
         })
+        console.log(current(state).columns)
       })
       .addCase(SELECTION_CHANGED, (state, { payload }) => {
         state.selectedItems = payload.getSelection()
