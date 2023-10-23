@@ -1,11 +1,11 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
-import { ProjectInformationField } from 'pp365-shared-library/lib/models'
+import { EditableSPField } from 'pp365-shared-library'
 
 export interface IProjectPropertyProps extends React.HTMLAttributes<HTMLElement> {
   /**
    * Project property model
    */
-  model: ProjectInformationField
+  model: EditableSPField
 
   /**
    * Display mode if not inherited from parent

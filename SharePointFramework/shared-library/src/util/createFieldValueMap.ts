@@ -1,6 +1,6 @@
 import { IPersonaProps } from '@fluentui/react'
 import { ISPFieldUser } from '../interfaces'
-import { ProjectInformationFieldValue } from '../models/ProjectInformationFieldValue'
+import { EditableSPFieldValue } from '../models/EditableSPFieldValue'
 import { getUserPhoto } from './getUserPhoto'
 
 /**
@@ -9,9 +9,9 @@ import { getUserPhoto } from './getUserPhoto'
  */
 export const createFieldValueMap = (): Map<
   string,
-  (value: ProjectInformationFieldValue) => any
+  (value: EditableSPFieldValue) => any
 > => {
-  return new Map<string, (value: ProjectInformationFieldValue) => any>([
+  return new Map<string, (value: EditableSPFieldValue) => any>([
     [
       'URL',
       ({ value }) => {

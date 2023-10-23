@@ -1,7 +1,7 @@
 import {
+  EditableSPField,
   IProjectInformationData,
   ProjectColumnConfig,
-  ProjectInformationField,
   SectionModel,
   StatusReport
 } from 'pp365-shared-library'
@@ -101,7 +101,7 @@ export interface IProjectStatusData {
   /**
    * Status report fields
    */
-  reportFields?: ProjectInformationField[]
+  reportFields?: EditableSPField[]
 
   /**
    * Default edit form URL for status reports

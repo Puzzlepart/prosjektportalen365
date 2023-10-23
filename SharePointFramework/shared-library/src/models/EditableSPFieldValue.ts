@@ -1,8 +1,8 @@
 import { stringIsNullOrEmpty } from '@pnp/core'
 import { ItemFieldValue, ItemFieldValues } from './ItemFieldValues'
-import { ProjectInformationField } from './ProjectInformationField'
+import { EditableSPField } from './EditableSPField'
 
-export class ProjectInformationFieldValue {
+export class EditableSPFieldValue {
   /**
    * `true` if the value is set. Checks text value with
    * `stringIsNullOrEmpty`.
@@ -30,7 +30,7 @@ export class ProjectInformationFieldValue {
 
   /**
    * Parses the field value from `fieldValues`, and
-   * returns a new `ProjectInformationFieldValue` instance.
+   * returns a new `EditableSPFieldValue` instance.
    *
    * @param fieldValues Field values from `IProjectInformationData`
    * @param field Field instance
@@ -38,13 +38,13 @@ export class ProjectInformationFieldValue {
    */
   public static parse(
     fieldValues: ItemFieldValues,
-    field: ProjectInformationField,
+    field: EditableSPField,
     currentValue = null
   ) {
     const { value, valueAsText } = fieldValues.get<ItemFieldValue>(field.internalName, {
       format: 'object',
       defaultValue: {}
     })
-    return new ProjectInformationFieldValue(currentValue ?? valueAsText, value)
+    return new EditableSPFieldValue(currentValue ?? valueAsText, value)
   }
 }
