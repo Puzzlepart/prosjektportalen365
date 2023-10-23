@@ -212,14 +212,14 @@ export const createPortfolioAggregationReducer = (
         state.groupBy = null
         state.groups = null
       }
-      state.items = sortArray([...state.items], [payload.column.fieldName], { reverse: !isSortedDescending })
+      state.items = sortArray([...state.items], [payload.column.fieldName], {
+        reverse: !isSortedDescending
+      })
       state.columns = [...state.columns].map((col) => {
         col.isSorted = col.key === payload.column.key
-        console.log(col.isSorted, col.key, payload.column.key)
         col.isSortedDescending = col.isSorted ? isSortedDescending : false
         return col
       })
-      console.log(current(state).columns)
     },
     [MOVE_COLUMN.type]: (state, { payload }: ReturnType<typeof MOVE_COLUMN>) => {
       const index = _.indexOf(

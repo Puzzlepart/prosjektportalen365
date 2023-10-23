@@ -1,19 +1,19 @@
-import { Sticky, StickyPositionType } from '@fluentui/react';
-import React, { FC, useContext } from 'react';
-import styles from './ListHeader.module.scss';
-import { IListHeaderProps } from './types';
-import strings from 'PortfolioWebPartsStrings';
-import { WebPartTitle } from 'pp365-shared-library';
-import { SearchBox } from '@fluentui/react-search-preview';
-import { FluentProvider, webLightTheme } from '@fluentui/react-components';
-import { Alert } from '@fluentui/react-components/unstable';
-import { Toolbar } from 'pp365-shared-library';
-import { ListContext } from '../context';
+import { Sticky, StickyPositionType } from '@fluentui/react'
+import React, { FC, useContext } from 'react'
+import styles from './ListHeader.module.scss'
+import { IListHeaderProps } from './types'
+import strings from 'PortfolioWebPartsStrings'
+import { WebPartTitle } from 'pp365-shared-library'
+import { SearchBox } from '@fluentui/react-search-preview'
+import { FluentProvider, webLightTheme } from '@fluentui/react-components'
+import { Alert } from '@fluentui/react-components/unstable'
+import { Toolbar } from 'pp365-shared-library'
+import { ListContext } from '../context'
 
 export const ListHeader: FC<IListHeaderProps> = (props) => {
-  const context = useContext(ListContext);
+  const context = useContext(ListContext)
 
-  const hasError = !!props.error;
+  const hasError = !!props.error
   return (
     <Sticky
       stickyClassName={styles.sticky}
@@ -42,7 +42,8 @@ export const ListHeader: FC<IListHeaderProps> = (props) => {
               size='large'
               appearance='filled-lighter'
               contentAfter={null}
-              {...props.searchBox} />
+              {...props.searchBox}
+            />
           </div>
           <Toolbar items={context.props.menuItems} filterPanel={context.props.filterPanelProps} />
         </div>
@@ -53,5 +54,5 @@ export const ListHeader: FC<IListHeaderProps> = (props) => {
         )}
       </FluentProvider>
     </Sticky>
-  );
-};
+  )
+}

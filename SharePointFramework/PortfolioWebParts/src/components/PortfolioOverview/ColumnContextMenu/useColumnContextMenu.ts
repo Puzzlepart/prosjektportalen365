@@ -41,7 +41,7 @@ export function useColumnContextMenu() {
     onCheckedValueChange,
     checkedValues,
     target: null,
-    items: [],
+    items: []
   }
   if (!context.state.columnContextMenu) return columnContextMenu
 
