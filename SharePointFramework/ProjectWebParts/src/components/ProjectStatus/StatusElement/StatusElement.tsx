@@ -14,8 +14,7 @@ export const StatusElement: FC<IStatusElementProps> = (props) => {
     <ConditionalWrapper
       condition={useWrapper}
       wrapper={(children: ReactNode) => (
-        <TooltipHost
-          className={styles.tooltipHost}
+        <TooltipHost // TODO: Use new Tooltip component here
           content={
             <div className={styles.tooltipContent}>
               <StatusElement />

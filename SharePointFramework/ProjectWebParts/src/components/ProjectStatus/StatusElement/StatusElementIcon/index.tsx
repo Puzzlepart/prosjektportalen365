@@ -9,6 +9,7 @@ export const StatusElementIcon: FC<IStatusElementIconProps> = (props) => {
     <Icon
       iconName={headerProps.iconName}
       style={{
+        cursor: 'default',
         fontSize: props.iconSize,
         color: headerProps.iconColor
       }}

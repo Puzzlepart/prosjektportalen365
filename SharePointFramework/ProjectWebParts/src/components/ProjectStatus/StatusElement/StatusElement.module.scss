@@ -34,10 +34,7 @@
   }
 }
 
-.tooltipHost {
-  cursor: pointer;
-  .tooltipContent {
-    padding: 0 20px 20px 20px;
-    min-width: 300px;
-  }
+.tooltipContent {
+  padding: 16px;
+  min-width: 300px;
 }
