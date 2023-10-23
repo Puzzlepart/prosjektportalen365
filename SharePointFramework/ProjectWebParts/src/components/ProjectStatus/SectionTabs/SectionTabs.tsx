@@ -7,10 +7,7 @@ import { useSections } from '../Sections/useSections'
 export const SectionTabs: FC = () => {
   const sections = useSections()
   return (
-    <Sticky
-      stickyClassName={styles.sticky}
-      stickyPosition={StickyPositionType.Header}
-    >
+    <Sticky stickyClassName={styles.sticky} stickyPosition={StickyPositionType.Header}>
       <TabList
         className={styles.sectionTabs}
         defaultSelectedValue={1}

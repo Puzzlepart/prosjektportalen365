@@ -53,16 +53,14 @@ export const SummarySection: FC<ISummarySectionProps> = (props) => {
             />
           </div>
         )}
-        <div className={className([
-          styles.statusElements,
-          !props.showProjectInformation && styles.fullWidth
-        ])}>
+        <div
+          className={className([
+            styles.statusElements,
+            !props.showProjectInformation && styles.fullWidth
+          ])}
+        >
           <div className={styles.container} dir='ltr'>
-            <div className={className([
-              styles.row,
-              props.iconsOnly ? styles.iconsOnly : ''
-            ])}
-            >
+            <div className={className([styles.row, props.iconsOnly ? styles.iconsOnly : ''])}>
               {renderStatusElements()}
             </div>
           </div>
