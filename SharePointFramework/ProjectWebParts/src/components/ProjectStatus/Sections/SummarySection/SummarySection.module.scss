@@ -1,23 +1,36 @@
-@import '~@fluentui/react/dist/sass/References.scss';
+@import "~@fluentui/react/dist/sass/References.scss";
 
-.root {
+.summarySection {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  height: fit-content;
+
   .projectInformation {
-    @include ms-Grid-col;
-    @include ms-sm12;
-    @include ms-xl6;
+    max-width: 520px;
   }
 
   .statusElements {
     @include ms-Grid-col;
     @include ms-sm12;
-    @include ms-xl6;
+    @include ms-xl8;
+
 
     .container {
       @include ms-Grid;
+
       .row {
         @include ms-Grid-row;
+
+        &.iconsOnly {
+          display: flex;
+          justify-content: space-around;
+        }
+
         .statusElement {
           @include ms-Grid-col;
+          margin: 20px 0 0 0;
+          padding: 0 16px;
 
           &.halfWidth {
             @include ms-sm6;
@@ -25,6 +38,7 @@
 
           &.iconsOnly {
             margin: 10px 0 0 0;
+            padding: 0 8px;
           }
         }
       }

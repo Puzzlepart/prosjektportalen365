@@ -1,16 +1,20 @@
 @import "~@fluentui/react/dist/sass/References.scss";
 
-.root {
-  @include ms-Grid;
-  margin: 20px 0 0 0;
+.element {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 
-  .container {
-    @include ms-Grid-row;
+  .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
 
     .content {
-      @include ms-Grid-col;
-      @include ms-sm12;
-      @include ms-md10;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
 
       .label {
         font-size: 16px;
@@ -22,11 +26,11 @@
         font-weight: 600;
         margin-bottom: 5px;
       }
-
-      .comment {
-        font-size: 12px;
-      }
     }
+  }
+
+  .comment {
+    font-size: 12px;
   }
 }
 

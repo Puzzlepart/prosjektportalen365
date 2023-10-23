@@ -127,7 +127,7 @@ export function useToolbarItems() {
             .setOnClick(() => {
               window.open(state.selectedReport?.snapshotUrl, '_self')
             }),
-        new ListMenuItem(state.selectedReport ? formatDate(state.selectedReport.created, true) : '')
+        new ListMenuItem(state.selectedReport ? formatDate(state.selectedReport.created) : '')
           .setIcon(Icons.History)
           .setWidth('fit-content')
           .setStyle({ minWidth: '145px' })

@@ -8,11 +8,11 @@ import { SectionContext } from '../context'
 
 export const BaseSection: FC<IBaseSectionProps> = (props) => {
   const context = useProjectStatusContext()
-  const { section } = useContext(SectionContext)
+  const { section } = useContext(SectionContext) || {}
 
   return (
     <div
-      id={`seksjon${section.id}`}
+      id={`seksjon${section?.id}`}
       className={conditionalClassName([
         styles.baseSection,
         props.transparent && styles.transparent,
