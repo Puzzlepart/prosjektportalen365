@@ -134,10 +134,7 @@ export class EditableSPField extends SPField {
    *
    * @returns the current field instance
    */
-  public setValue(
-    fieldValues: ItemFieldValues,
-    currentValue: string = null
-  ): EditableSPField {
+  public setValue(fieldValues: ItemFieldValues, currentValue: string = null): EditableSPField {
     this._fieldValue = EditableSPFieldValue.parse(fieldValues, this, currentValue)
     return this
   }

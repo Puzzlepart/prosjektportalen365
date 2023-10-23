@@ -7,10 +7,7 @@ import { getUserPhoto } from './getUserPhoto'
  * Create a field value map that can be used to parse the field value
  * from the SharePoint REST API.
  */
-export const createFieldValueMap = (): Map<
-  string,
-  (value: EditableSPFieldValue) => any
-> => {
+export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue) => any> => {
   return new Map<string, (value: EditableSPFieldValue) => any>([
     [
       'URL',

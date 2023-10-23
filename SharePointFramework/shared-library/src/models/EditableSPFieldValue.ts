@@ -36,11 +36,7 @@ export class EditableSPFieldValue {
    * @param field Field instance
    * @param currentValue Current value for the field if it's being edited
    */
-  public static parse(
-    fieldValues: ItemFieldValues,
-    field: EditableSPField,
-    currentValue = null
-  ) {
+  public static parse(fieldValues: ItemFieldValues, field: EditableSPField, currentValue = null) {
     const { value, valueAsText } = fieldValues.get<ItemFieldValue>(field.internalName, {
       format: 'object',
       defaultValue: {}
