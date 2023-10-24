@@ -1,7 +1,6 @@
 @import "~@fluentui/react/dist/sass/References.scss";
 
 .root {
-  padding: 0 32px;
   margin: 0;
 
   .sticky {
@@ -18,6 +17,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    padding: 0 32px;
 
     .publishedStatus {
       display: flex;
@@ -35,13 +35,14 @@
   .commandBar {
     height: 42px;
     margin: 0px auto;
-    padding-bottom: 16px;
+    padding: 0 32px 16px 32px;
   }
 
   .sectionTabs {
     display: flex;
     flex-direction: row;
     height: 42px;
+    padding: 0 32px;
   }
 
   .container {
@@ -50,6 +51,5 @@
     height: 100%;
     width: 100%;
     margin: 0;
-    padding: 0;
   }
 }
