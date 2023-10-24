@@ -47,12 +47,20 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
           )}
         </div>
       </div>
-      <CustomEditPanel
-        {...state.panel}
-        fields={state.data?.fields}
-        fieldValues={new ItemFieldValues()}
-        dataAdapter={SPDataAdapter}
-      />
+      {state.panel && (
+        <CustomEditPanel
+          isOpen={true}
+          fields={state.data?.fields}
+          fieldValues={new ItemFieldValues()}
+          dataAdapter={SPDataAdapter}
+          onDismiss={() => {
+            setState({
+              panel: null
+            })
+          }}
+          {...state.panel}
+        />
+      )}
     </ProjectTimelineContext.Provider>
   )
 }

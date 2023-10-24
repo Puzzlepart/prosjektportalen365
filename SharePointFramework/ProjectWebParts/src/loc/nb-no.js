@@ -1,5 +1,7 @@
 define([], function () {
   return {
+    EditTimelineContentText: 'Rediger tidslinjeelement',
+    NewTimelineContentText: 'Nytt tidslinjeelement',
     NewStatusPanelTitle: 'Ny statusrapport',
     EditStatusPanelText: 'Rediger statusrapport',
     Aria: {

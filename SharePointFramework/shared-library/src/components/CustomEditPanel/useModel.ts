@@ -28,7 +28,7 @@ export function useModel(props: ICustomEditPanelProps) {
     if ($field.isEmpty || !!currentValue) {
       return currentValue ?? (fallbackValue as unknown as T)
     }
-    return field.getParsedValue<any>()
+    return $field.getParsedValue<any>()
   }
 
   /**

@@ -69,9 +69,7 @@ export function useToolbarItems(selectedItems: any[]) {
           .setOnClick(() => {
             context.setState({
               panel: {
-                ...context.state.panel,
-                isOpen: true,
-                headerText: strings.NewItemLabel,
+                headerText: strings.NewTimelineContentText,
                 submit: {
                   onSubmit: async ({ properties }) => {
                     await SPDataAdapter.portal.addItemToList('TIMELINE_CONTENT', {
@@ -80,8 +78,7 @@ export function useToolbarItems(selectedItems: any[]) {
                     })
                     dismissPanel()
                   }
-                },
-                onDismiss: dismissPanel
+                }
               }
             })
           }),
@@ -92,9 +89,7 @@ export function useToolbarItems(selectedItems: any[]) {
             const fieldValues = new ItemFieldValues(_.first(selectedItems))
             context.setState({
               panel: {
-                ...context.state.panel,
-                isOpen: true,
-                headerText: strings.EditItemLabel,
+                headerText: strings.EditTimelineContentText,
                 fieldValues,
                 submit: {
                   onSubmit: async ({ properties }) => {
@@ -105,12 +100,11 @@ export function useToolbarItems(selectedItems: any[]) {
                     )
                     dismissPanel()
                   }
-                },
-                onDismiss: dismissPanel
+                }
               }
             })
           })
-      ].filter(Boolean),
+      ],
     [context.props, selectedItems]
   )
 
