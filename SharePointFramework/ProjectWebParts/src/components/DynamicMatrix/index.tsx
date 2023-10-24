@@ -7,7 +7,7 @@ import { IDynamicMatrixProps } from './types'
 
 export const DynamicMatrix: FC<IDynamicMatrixProps> = (props) => (
   <DynamicMatrixContext.Provider value={{ props }}>
-    <div className={styles.root} style={{ width: props.width, minHeight: 300 }}>
+    <div className={styles.dynamicMatrix} style={{ width: props.width }}>
       {props.configuration.map((row, rowIndex) => {
         const cells = row.map((cell, cellIndex) => {
           const elements = props.getElementsForCell(cell)

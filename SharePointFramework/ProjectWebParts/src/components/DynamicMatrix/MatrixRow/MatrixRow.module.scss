@@ -1,12 +1,12 @@
 .root {
-  min-height: 50px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: stretch;
+  min-height: 50px;
 
-  >div {
+  > div {
     flex: 1;
   }
 }

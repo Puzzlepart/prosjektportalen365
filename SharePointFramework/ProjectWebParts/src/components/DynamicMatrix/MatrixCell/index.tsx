@@ -6,8 +6,8 @@ import { useMatrixCell } from './useMatrixCell'
 export const MatrixCell: FC<IMatrixCellProps> = (props) => {
   const { backgroundColor } = useMatrixCell(props.cell)
   return (
-    <div className={styles.root} style={{ backgroundColor, ...props.style }}>
-      <div className={styles.container}>
+    <div className={styles.matrixCell} style={{ backgroundColor, ...props.style }}>
+      <div className={styles.cell}>
         <span>{props.children}</span>
       </div>
     </div>
