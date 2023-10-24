@@ -120,6 +120,9 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             title={searchBoxPlaceholder}
             size='large'
             onChange={onSearch}
+            contentAfter={{
+              onClick: () => setState({ searchTerm: '' })
+            }}
             appearance='filled-lighter'
           />
         </div>
