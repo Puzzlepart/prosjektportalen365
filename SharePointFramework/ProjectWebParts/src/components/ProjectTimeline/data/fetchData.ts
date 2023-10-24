@@ -18,7 +18,7 @@ export async function fetchData(
 ): Promise<Partial<IProjectTimelineState>> {
   try {
     const timelineConfig = await fetchTimelineConfiguration()
-    const [timelineData, project] = await Promise.all([
+    const [timelineData, { project, projectId }] = await Promise.all([
       fetchTimelineData(props, timelineConfig),
       fetchProjectData(props, timelineConfig)
     ])
@@ -34,9 +34,11 @@ export async function fetchData(
     return {
       data: {
         items,
+        projectId,
         groups: selectedGroups,
         listItems: timelineData?.timelineListItems ?? [],
-        listColumns: timelineData?.columns ?? []
+        listColumns: timelineData?.columns ?? [],
+        fields: timelineData?.timelineContentEditableFields ?? []
       },
       timelineConfig,
       groups
