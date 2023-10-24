@@ -8,7 +8,7 @@ export const UserMessages: FC = () => {
   const context = useProjectStatusContext()
   return (
     <Shimmer isDataLoaded={context.state.isDataLoaded}>
-      <div className={styles.root}>
+      <div className={styles.userMessages}>
         {context.state.userMessage && <UserMessage {...context.state.userMessage} />}
       </div>
     </Shimmer>

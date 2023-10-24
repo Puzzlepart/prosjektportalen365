@@ -3,7 +3,7 @@ import { ConditionalWrapper } from 'pp365-shared-library/lib/components'
 import React, { FC, ReactNode, useContext } from 'react'
 import { SectionContext } from '../Sections/context'
 import styles from './StatusElement.module.scss'
-import { StatusElementIcon } from './StatusElementIcon'
+import { StatusElementIcon } from './StatusElementIcon/StatusElementIcon'
 import { IStatusElementProps } from './types'
 import { useStatusElement } from './useStatusElement'
 

@@ -17,7 +17,7 @@ export function renderToolbarButton(
   item: ListMenuItem,
   buttonStyle: CSSProperties = {
     fontWeight: 'var(--fontWeightRegular)'
-},
+  },
   labelStyle: CSSProperties = {}
 ) {
   return (

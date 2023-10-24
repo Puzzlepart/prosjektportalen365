@@ -9,7 +9,7 @@ import { IProjectStatusProps } from './types'
 import { useProjectStatus } from './useProjectStatus'
 import { Fluent } from 'pp365-shared-library'
 import { PublishedStatus } from './PublishedStatus'
-import { UserMessages } from './UserMessages'
+import { UserMessages } from './UserMessages/UserMessages'
 import { SectionTabs } from './SectionTabs'
 
 export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
