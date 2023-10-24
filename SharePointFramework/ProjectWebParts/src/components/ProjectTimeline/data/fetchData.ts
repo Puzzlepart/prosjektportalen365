@@ -40,7 +40,7 @@ export async function fetchData(
       },
       timelineConfig,
       groups
-    } as const
+    }
   } catch (error) {
     return { error }
   }

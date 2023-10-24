@@ -59,6 +59,8 @@ export async function fetchTimelineData(
       .select(...getClassProperties(SPField))
       .top(500)<SPField[]>()
 
+      console.log(defaultColumns)
+
     const userFields = defaultColumns
       .filter((fld) => fld.TypeAsString.indexOf('User') === 0)
       .map((fld) => fld.InternalName)
