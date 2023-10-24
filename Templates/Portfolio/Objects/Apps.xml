@@ -1,5 +1,5 @@
 <pnp:ApplicationLifecycleManagement xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
   <pnp:Apps>
-    <pnp:App AppId="{apppackageid:pp-portfolio-extensions}" Action="Install" SyncMode="Synchronously" />
+    <pnp:App AppId="{apppackageid:Prosjektportalen 365 - Portfolio Extensions}" Action="Install" SyncMode="Synchronously" />
   </pnp:Apps>
 </pnp:ApplicationLifecycleManagement>

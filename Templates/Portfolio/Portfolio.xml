@@ -17,7 +17,7 @@
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ClientSidePages/@.xml" />
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/CustomActions.xml" />
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/WebSettings.xml" />
-            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Apps.xml" />
+            <!-- <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Apps.xml" /> -->
         </pnp:ProvisioningTemplate>
     </pnp:Templates>
 </pnp:Provisioning>
