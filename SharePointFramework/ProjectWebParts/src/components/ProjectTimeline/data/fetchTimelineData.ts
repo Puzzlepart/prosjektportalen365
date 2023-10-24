@@ -1,14 +1,14 @@
 import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
 import {
-  SPField,
+  EditableSPField,
   TimelineConfigurationModel,
   TimelineContentModel
 } from 'pp365-shared-library/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { IProjectTimelineProps } from '../types'
 import '@pnp/sp/items/get-all'
-import { getClassProperties } from 'pp365-shared-library'
+import { IColumn } from '@fluentui/react'
 
 /**
  * Fetch timeline items and columns.
@@ -48,18 +48,19 @@ export async function fetchTimelineData(
       })
       .filter(Boolean)
 
-    let defaultViewColumns = (
+    const defaultViewColumns = (
       await timelineContentList.defaultView.fields.select('Items').top(500)()
     )['Items'] as string[]
 
-    const filterString = defaultViewColumns.map((col) => `(InternalName eq '${col}')`).join(' or ')
+    const timelineContentFields = await SPDataAdapter.portal.getListFields('TIMELINE_CONTENT')
+    const timelineContentEditableFields = timelineContentFields.map(
+      (fld) => new EditableSPField(fld)
+    )
+    const defaultViewFields = timelineContentFields.filter(
+      (fld) => defaultViewColumns.indexOf(fld.InternalName) > -1
+    )
 
-    const timelineContentFields = await timelineContentList.fields
-      .filter(filterString)
-      .select(...getClassProperties(SPField))
-      .top(500)<SPField[]>()
-
-    const userFields = timelineContentFields
+    const userFields = defaultViewFields
       .filter((fld) => fld.TypeAsString.indexOf('User') === 0)
       .map((fld) => fld.InternalName)
 
@@ -79,13 +80,13 @@ export async function fetchTimelineData(
       .expand('GtSiteIdLookup', 'GtTimelineTypeLookup', ...userFields)
       .getAll()
 
-    let timelineListItems = timelineContentItems.filter(
+    const timelineListItems = timelineContentItems.filter(
       (item) => item.GtSiteIdLookup.Title === props.webTitle
     )
 
-    const columns = timelineContentFields
+    const columns = defaultViewFields
       .filter((column) => column.InternalName !== 'GtSiteIdLookup')
-      .map<any>((column) => ({
+      .map<IColumn>((column) => ({
         key: column.InternalName,
         name: column.Title,
         fieldName: column.InternalName,
@@ -116,7 +117,13 @@ export async function fetchTimelineData(
 
     timelineContentItems = [...timelineContentItems, ...projectDeliveries]
 
-    return { timelineContentItems, timelineListItems, columns, timelineConfig } as const
+    return {
+      timelineContentItems,
+      timelineListItems,
+      timelineContentEditableFields,
+      columns,
+      timelineConfig
+    }
   } catch (error) {
     throw error
   }
