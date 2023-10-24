@@ -5,7 +5,7 @@
     "id": "a3bf3315-0710-41f9-8836-2b61396d032f",
     "version": "1.9.0.0",
     "includeClientSideAssets": true,
-    "skipFeatureDeployment": true,
+    "skipFeatureDeployment": false,
     "isDomainIsolated": false,
     "developer": {
       "name": "Puzzlepart AS",
