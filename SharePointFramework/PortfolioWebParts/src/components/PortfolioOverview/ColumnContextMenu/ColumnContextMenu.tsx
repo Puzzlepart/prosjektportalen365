@@ -9,14 +9,13 @@ export const ColumnContextMenu: FC = () => {
   return (
     <Menu
       open={open}
-      persistOnItemClick={false}
       onOpenChange={onOpenChange}
       positioning={{ target }}
       onCheckedValueChange={onCheckedValueChange}
       checkedValues={checkedValues}
     >
       <MenuPopover>
-        <MenuList>{items.map((item) => renderMenuItem(item))}</MenuList>
+        <MenuList>{items.map((item) => renderMenuItem(item, onOpenChange))}</MenuList>
       </MenuPopover>
     </Menu>
   )

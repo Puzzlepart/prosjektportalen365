@@ -9,9 +9,9 @@ import * as strings from 'PortfolioWebPartsStrings'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 import {
   IPortfolioOverviewConfiguration,
-  IPortfolioOverviewProps,
-  PortfolioOverview
+  IPortfolioOverviewProps
 } from '../../components/PortfolioOverview'
+import { PortfolioOverview } from 'components/PortfolioOverview/PortfolioOverview'
 
 export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPortfolioOverviewProps> {
   private _configuration: IPortfolioOverviewConfiguration

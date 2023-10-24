@@ -1,6 +1,5 @@
-import { IDetailsHeaderProps, IRenderFunction, Sticky, StickyPositionType } from '@fluentui/react'
-import React, { FC, useContext, useMemo } from 'react'
-import { IListProps } from '../types'
+import { Sticky, StickyPositionType } from '@fluentui/react'
+import React, { FC, useContext } from 'react'
 import styles from './ListHeader.module.scss'
 import { IListHeaderProps } from './types'
 import strings from 'PortfolioWebPartsStrings'
@@ -11,10 +10,7 @@ import { Alert } from '@fluentui/react-components/unstable'
 import { Toolbar } from 'pp365-shared-library'
 import { ListContext } from '../context'
 
-/**
- * Component for displaying a Sticky list header.
- */
-const ListHeader: FC<IListHeaderProps> = (props) => {
+export const ListHeader: FC<IListHeaderProps> = (props) => {
   const context = useContext(ListContext)
 
   const hasError = !!props.error
@@ -60,10 +56,3 @@ const ListHeader: FC<IListHeaderProps> = (props) => {
     </Sticky>
   )
 }
-
-export const useOnRenderDetailsHeader = (props: IListProps): IRenderFunction<IDetailsHeaderProps> =>
-  useMemo(
-    () => (headerProps, defaultRender) =>
-      <ListHeader {...props} headerProps={headerProps} defaultRender={defaultRender} />,
-    [props]
-  )

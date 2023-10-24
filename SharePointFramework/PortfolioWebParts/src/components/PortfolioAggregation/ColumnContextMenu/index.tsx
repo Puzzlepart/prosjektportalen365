@@ -16,7 +16,7 @@ export const ColumnContextMenu: FC = () => {
       checkedValues={checkedValues}
     >
       <MenuPopover>
-        <MenuList>{items.map((item) => renderMenuItem(item))}</MenuList>
+        <MenuList>{items.map((item) => renderMenuItem(item, onOpenChange))}</MenuList>
       </MenuPopover>
     </Menu>
   )

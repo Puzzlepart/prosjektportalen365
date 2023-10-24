@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useOnRenderItemColumn } from './ItemColumn'
-import { useOnRenderDetailsHeader } from './ListHeader'
+import { useOnRenderDetailsHeader } from './ListHeader/useOnRenderDetailsHeader'
 import { IListProps } from './types'
 import { useAddColumn } from './useAddColumn'
 import { DetailsListLayoutMode, IColumn, Target } from '@fluentui/react'
