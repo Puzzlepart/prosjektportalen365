@@ -54,47 +54,36 @@ export async function fetchTimelineData(
 
     const filterString = defaultViewColumns.map((col) => `(InternalName eq '${col}')`).join(' or ')
 
-    const defaultColumns = await timelineContentList.fields
+    const timelineContentFields = await timelineContentList.fields
       .filter(filterString)
       .select(...getClassProperties(SPField))
       .top(500)<SPField[]>()
 
-      console.log(defaultColumns)
-
-    const userFields = defaultColumns
+    const userFields = timelineContentFields
       .filter((fld) => fld.TypeAsString.indexOf('User') === 0)
       .map((fld) => fld.InternalName)
 
-    //remove user fields from default view columns
-    defaultViewColumns = defaultViewColumns.filter((col) => userFields.indexOf(col) === -1)
-
     // eslint-disable-next-line prefer-const
-    let [timelineContentItems, timelineColumns] = await Promise.all([
-      timelineContentList.items
-        .select(
-          'Id',
-          'GtTimelineTypeLookup/Title',
-          'GtSiteIdLookupId',
-          'GtSiteIdLookup/Title',
-          'GtSiteIdLookup/GtSiteId',
-          ...defaultViewColumns,
-          ...userFields.map((fieldName) => `${fieldName}/Id`),
-          ...userFields.map((fieldName) => `${fieldName}/Title`),
-          ...userFields.map((fieldName) => `${fieldName}/EMail`)
-        )
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup', ...userFields)
-        .getAll(),
-      timelineContentList.fields
-        .filter(filterString)
-        .select('InternalName', 'Title', 'TypeAsString')
-        .top(500)()
-    ])
+    let timelineContentItems = await timelineContentList.items
+      .select(
+        'Id',
+        'GtTimelineTypeLookup/Title',
+        'GtSiteIdLookupId',
+        'GtSiteIdLookup/Title',
+        'GtSiteIdLookup/GtSiteId',
+        ...defaultViewColumns.filter((col) => userFields.indexOf(col) === -1),
+        ...userFields.map((fieldName) => `${fieldName}/Id`),
+        ...userFields.map((fieldName) => `${fieldName}/Title`),
+        ...userFields.map((fieldName) => `${fieldName}/EMail`)
+      )
+      .expand('GtSiteIdLookup', 'GtTimelineTypeLookup', ...userFields)
+      .getAll()
 
     let timelineListItems = timelineContentItems.filter(
       (item) => item.GtSiteIdLookup.Title === props.webTitle
     )
 
-    const columns = timelineColumns
+    const columns = timelineContentFields
       .filter((column) => column.InternalName !== 'GtSiteIdLookup')
       .map<any>((column) => ({
         key: column.InternalName,
@@ -104,18 +93,6 @@ export async function fetchTimelineData(
         minWidth: 100,
         maxWidth: 200
       }))
-
-    timelineListItems = timelineListItems.map((item) => ({
-      ...item,
-      EditFormUrl: [
-        `${SPDataAdapter.portal.url}`,
-        `/Lists/${strings.TimelineContentListName}/EditForm.aspx`,
-        '?ID=',
-        item.Id,
-        '&Source=',
-        encodeURIComponent(window.location.href)
-      ].join('')
-    }))
 
     timelineContentItems = timelineListItems
       .filter((item) => item.GtSiteIdLookup !== null)
@@ -135,7 +112,7 @@ export async function fetchTimelineData(
           item.GtCostsTotal
         ).usingConfig(config)
       })
-      .filter((t) => t)
+      .filter(Boolean)
 
     timelineContentItems = [...timelineContentItems, ...projectDeliveries]
 
