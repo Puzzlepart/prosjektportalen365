@@ -8,11 +8,7 @@ export const StatusSection: FC = () => {
   if (!headerProps.value) return null
   return (
     <BaseSection>
-      <div className='ms-Grid-row'>
-        <div className='ms-Grid-col ms-sm12'>
-          <StatusElement />
-        </div>
-      </div>
+      <StatusElement />
     </BaseSection>
   )
 }

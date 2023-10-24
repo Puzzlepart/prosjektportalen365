@@ -41,9 +41,7 @@ export const ProjectPropertiesSection: FC = () => {
   return (
     <BaseSection>
       <div className={styles.root}>
-        <div className={styles.container}>
-          <StatusElement />
-        </div>
+        <StatusElement />
         <div className={styles.fields}>{renderFields()}</div>
       </div>
     </BaseSection>

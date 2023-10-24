@@ -1,12 +1,13 @@
-import { Toggle } from '@fluentui/react'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import { DynamicMatrix } from '../DynamicMatrix'
 import { IOpportunityMatrixProps } from './types'
 import { useOpportunityMatrix } from './useOpportunityMatrix'
+import { Field, Switch } from '@fluentui/react-components'
 
 export const OpportunityMatrix: FC<IOpportunityMatrixProps> = (props) => {
-  const { configuration, getElementsForCell, setShowPostAction } = useOpportunityMatrix(props)
+  const { configuration, getElementsForCell, setShowPostAction, showPostAction } =
+    useOpportunityMatrix(props)
   return (
     <>
       <DynamicMatrix
@@ -15,12 +16,16 @@ export const OpportunityMatrix: FC<IOpportunityMatrixProps> = (props) => {
         configuration={configuration}
         getElementsForCell={getElementsForCell}
       />
-      <Toggle
-        label={strings.ToggleUncertaintyPostActionLabel}
-        onText={strings.ToggleUncertaintyPostActionOnText}
-        offText={strings.ToggleUncertaintyPostActionOffText}
-        onChange={(_event, checked) => setShowPostAction(checked)}
-      />
+      <Field label={strings.ToggleUncertaintyPostActionLabel}>
+        <Switch
+          label={
+            showPostAction
+              ? strings.ToggleUncertaintyPostActionOnText
+              : strings.ToggleUncertaintyPostActionOffText
+          }
+          onChange={(_event, data) => setShowPostAction(data.checked)}
+        />
+      </Field>
     </>
   )
 }

@@ -8,6 +8,7 @@ export const SectionTabs: FC = () => {
   const sections = useSections()
   return (
     <Sticky stickyClassName={styles.sticky} stickyPosition={StickyPositionType.Header}>
+      {/* TODO: Make this actually sticky when scrolling... */}
       <TabList
         className={styles.sectionTabs}
         defaultSelectedValue={1}
@@ -20,7 +21,7 @@ export const SectionTabs: FC = () => {
       >
         {sections.map((section) => {
           return (
-            <Tab key={section.id} value={section.id}>
+            <Tab key={section.id} value={section.id} title={section.name}>
               {section.name}
             </Tab>
           )

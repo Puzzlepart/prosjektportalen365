@@ -9,7 +9,6 @@ import * as strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import { StatusElement } from '../../StatusElement'
 import { BaseSection } from '../BaseSection/BaseSection'
-import styles from './ListSection.module.scss'
 import { useListSection } from './useListSection'
 
 export const ListSection: FC = () => {
@@ -23,28 +22,21 @@ export const ListSection: FC = () => {
       return <UserMessage text={strings.ListSectionDataErrorMessage} intent='error' />
     return (
       <Shimmer isDataLoaded={state.isDataLoaded}>
-        <div className={styles.list}>
-          <ShimmeredDetailsList
-            styles={{ root: { borderRadius: 10 } }}
-            enableShimmer={!state.isDataLoaded}
-            items={items}
-            columns={columns}
-            selectionMode={SelectionMode.none}
-            layoutMode={DetailsListLayoutMode.justified}
-          />
-        </div>
+        <ShimmeredDetailsList
+          enableShimmer={!state.isDataLoaded}
+          items={items}
+          columns={columns}
+          selectionMode={SelectionMode.none}
+          layoutMode={DetailsListLayoutMode.justified}
+        />
       </Shimmer>
     )
   }
 
   return (
     <BaseSection>
-      <div className='ms-Grid-row'>
-        <div className='ms-Grid-col ms-sm12'>
-          <StatusElement />
-        </div>
-        {shouldRenderList && renderList()}
-      </div>
+      <StatusElement />
+      {shouldRenderList && renderList()}
     </BaseSection>
   )
 }

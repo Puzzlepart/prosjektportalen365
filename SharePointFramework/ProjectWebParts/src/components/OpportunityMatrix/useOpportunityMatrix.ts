@@ -45,5 +45,5 @@ export function useOpportunityMatrix(props: IOpportunityMatrixProps) {
     return [...elements, ...postActionElements]
   }
 
-  return { configuration, getElementsForCell, setShowPostAction } as const
+  return { configuration, getElementsForCell, setShowPostAction, showPostAction } as const
 }

@@ -1,5 +1,4 @@
-import { Toggle } from '@fluentui/react'
-import { FluentProvider, webLightTheme } from '@fluentui/react-components'
+import { Field, FluentProvider, Switch, webLightTheme } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
@@ -8,8 +7,14 @@ import { IRiskMatrixProps } from './types'
 import { useRiskMatrix } from './useRiskMatrix'
 
 export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
-  const { configuration, error, getElementsForCell, setShowPostAction, fluentProviderId } =
-    useRiskMatrix(props)
+  const {
+    configuration,
+    error,
+    getElementsForCell,
+    setShowPostAction,
+    showPostAction,
+    fluentProviderId
+  } = useRiskMatrix(props)
   return (
     <FluentProvider
       id={fluentProviderId}
@@ -26,13 +31,17 @@ export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
             configuration={configuration}
             getElementsForCell={getElementsForCell}
           />
-          <Toggle
-            label={strings.ToggleUncertaintyPostActionLabel}
-            onText={strings.ToggleUncertaintyPostActionOnText}
-            offText={strings.ToggleUncertaintyPostActionOffText}
-            onChange={(_event, checked) => setShowPostAction(checked)}
-            disabled={!!error}
-          />
+          <Field label={strings.ToggleUncertaintyPostActionLabel}>
+            <Switch
+              label={
+                showPostAction
+                  ? strings.ToggleUncertaintyPostActionOnText
+                  : strings.ToggleUncertaintyPostActionOffText
+              }
+              onChange={(_event, data) => setShowPostAction(data.checked)}
+              disabled={!!error}
+            />
+          </Field>
         </>
       )}
     </FluentProvider>
