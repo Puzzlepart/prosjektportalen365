@@ -3,11 +3,11 @@ import { AnyAction } from '@reduxjs/toolkit'
 import strings from 'ProjectWebPartsStrings'
 import _ from 'lodash'
 import {
+  EditableSPField,
   ProjectAdminPermission,
-  ProjectInformationField,
   getUrlParam,
   parseUrlHash
-} from 'pp365-shared-library/lib'
+} from 'pp365-shared-library'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
@@ -23,7 +23,7 @@ import { FetchDataResult, IProjectStatusProps } from './types'
  */
 async function getReportFields(contentTypeId = '0x010022252E35737A413FB56A1BA53862F6D5') {
   const fields = await SPDataAdapter.portal.getContentTypeFields(contentTypeId)
-  const reportFields = fields.map((field) => new ProjectInformationField(field))
+  const reportFields = fields.map((field) => new EditableSPField(field))
   return reportFields
 }
 

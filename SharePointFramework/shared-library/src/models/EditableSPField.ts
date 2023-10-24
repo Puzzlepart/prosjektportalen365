@@ -3,14 +3,13 @@ import _ from 'lodash'
 import { createFieldValueMap, getObjectValue as get } from '../util'
 import { ItemFieldValues } from './ItemFieldValues'
 import { ProjectColumn, ProjectColumnFieldOverride } from './ProjectColumn'
-import { ProjectInformationFieldValue } from './ProjectInformationFieldValue'
+import { EditableSPFieldValue } from './EditableSPFieldValue'
 import { SPField } from './SPField'
 
 /**
- * Project information field model. Used both for display
- * and edit of project information.
+ * An editable field for the `CustomEditPanel`.
  */
-export class ProjectInformationField extends SPField {
+export class EditableSPField extends SPField {
   /**
    * The ID of the field.
    */
@@ -54,7 +53,7 @@ export class ProjectInformationField extends SPField {
   /**
    * The value of the field.
    */
-  private _fieldValue: ProjectInformationFieldValue
+  private _fieldValue: EditableSPFieldValue
 
   /**
    * The map of field values.
@@ -72,7 +71,7 @@ export class ProjectInformationField extends SPField {
   private _configurationName: string
 
   /**
-   * Constructs a new `ProjectInformationField` instance from either
+   * Constructs a new `EditableSPField` instance from either
    * a `SPField` or `IEntityField`.
    *
    * @param _field Field information
@@ -135,18 +134,13 @@ export class ProjectInformationField extends SPField {
    *
    * @returns the current field instance
    */
-  public setValue(
-    fieldValues: ItemFieldValues,
-    currentValue: string = null
-  ): ProjectInformationField {
-    this._fieldValue = ProjectInformationFieldValue.parse(fieldValues, this, currentValue)
+  public setValue(fieldValues: ItemFieldValues, currentValue: string = null): EditableSPField {
+    this._fieldValue = EditableSPFieldValue.parse(fieldValues, this, currentValue)
     return this
   }
 
   /**
-   * Get value for the field. Uses `createProjectInformationFieldValueMap` to
-   * create a Map of field types and functions to get the value for the field.
-   * If the field type is not found in the map the `text` property is used.
+   * Get value for the field.
    */
   public getParsedValue<T>(): T {
     if (this._fieldValueMap.has(this.type)) {
@@ -214,7 +208,7 @@ export class ProjectInformationField extends SPField {
    * @returns a clone of the field
    */
   public clone() {
-    return new ProjectInformationField(this._field).init(
+    return new EditableSPField(this._field).init(
       [this.column].filter(Boolean),
       this._currentLocale,
       this._configurationName

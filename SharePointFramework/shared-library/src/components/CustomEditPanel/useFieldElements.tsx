@@ -3,7 +3,7 @@ import { Combobox, Input, Option, Switch, Textarea } from '@fluentui/react-compo
 import { DatePicker, DayOfWeek } from '@fluentui/react-datepicker-compat'
 import _ from 'lodash'
 import React from 'react'
-import { ProjectInformationField } from '../../models'
+import { EditableSPField } from '../../models'
 import { FieldContainer } from '../FieldContainer'
 import styles from './CustomEditPanel.module.scss'
 import { ICustomEditPanelProps } from './types'
@@ -30,7 +30,7 @@ import strings from 'SharedLibraryStrings'
  * @param props Props passed to `CustomEditPanel` component
  */
 export function useFieldElements(model: UseModelReturnType, props: ICustomEditPanelProps) {
-  const fieldElements: Record<string, (field: ProjectInformationField) => JSX.Element> = {
+  const fieldElements: Record<string, (field: EditableSPField) => JSX.Element> = {
     Boolean: (field) => (
       <FieldContainer
         iconName='ToggleLeft'
@@ -225,7 +225,7 @@ export function useFieldElements(model: UseModelReturnType, props: ICustomEditPa
    *
    * @param field Field to get element for
    */
-  const getFieldElement = (field: ProjectInformationField) => {
+  const getFieldElement = (field: EditableSPField) => {
     return fieldElements[field.type] && fieldElements[field.type](field)
   }
 

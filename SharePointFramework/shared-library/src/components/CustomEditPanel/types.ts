@@ -1,6 +1,6 @@
 import { ButtonProps } from '@fluentui/react-components'
 import { SPDataAdapterBase } from '../../data'
-import { ItemFieldValues, ProjectInformationField } from '../../models'
+import { ItemFieldValues, EditableSPField } from '../../models'
 import { IBasePanelProps } from '../BasePanel'
 import { UseModelReturnType } from './useModel'
 
@@ -33,7 +33,7 @@ export interface ICustomEditPanelProps extends IBasePanelProps {
   /**
    * The fields to edit in the panel.
    */
-  fields: ProjectInformationField[]
+  fields: EditableSPField[]
 
   /**
    * Field values for the list item

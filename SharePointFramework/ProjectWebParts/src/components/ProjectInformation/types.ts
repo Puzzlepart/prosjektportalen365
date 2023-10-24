@@ -3,7 +3,7 @@ import {
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState,
   ProjectColumn,
-  ProjectInformationField,
+  EditableSPField,
   ProjectInformationParentProject,
   ProjectTemplate
 } from 'pp365-shared-library'
@@ -92,7 +92,7 @@ export interface IProjectInformationState
    * be displayed or not. All properties will be displayed in the
    * `AllPropertiesPanel`.
    */
-  properties?: ProjectInformationField[]
+  properties?: EditableSPField[]
 
   /**
    * Properties for the `ProgressDialog` component

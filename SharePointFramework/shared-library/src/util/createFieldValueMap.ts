@@ -1,17 +1,14 @@
 import { IPersonaProps } from '@fluentui/react'
 import { ISPFieldUser } from '../interfaces'
-import { ProjectInformationFieldValue } from '../models/ProjectInformationFieldValue'
+import { EditableSPFieldValue } from '../models/EditableSPFieldValue'
 import { getUserPhoto } from './getUserPhoto'
 
 /**
  * Create a field value map that can be used to parse the field value
  * from the SharePoint REST API.
  */
-export const createFieldValueMap = (): Map<
-  string,
-  (value: ProjectInformationFieldValue) => any
-> => {
-  return new Map<string, (value: ProjectInformationFieldValue) => any>([
+export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue) => any> => {
+  return new Map<string, (value: EditableSPFieldValue) => any>([
     [
       'URL',
       ({ value }) => {

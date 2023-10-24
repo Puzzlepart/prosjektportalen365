@@ -1,7 +1,7 @@
 import { IPersonaProps, ITag } from '@fluentui/react'
 import _ from 'lodash'
 import { useState } from 'react'
-import { ProjectInformationField } from '../../models'
+import { EditableSPField } from '../../models'
 import { DefaultCaching } from '../../data/cache'
 import { ICustomEditPanelProps } from './types'
 
@@ -22,7 +22,7 @@ export function useModel(props: ICustomEditPanelProps) {
    * @param field Field to get value for
    * @param fallbackValue Value to return if the field has no value
    */
-  function get<T>(field: ProjectInformationField, fallbackValue: T = null): T {
+  function get<T>(field: EditableSPField, fallbackValue: T = null): T {
     const currentValue = model.get(field.internalName)
     const $field = field.clone().setValue(props.fieldValues, currentValue)
     if ($field.isEmpty || !!currentValue) {
@@ -39,7 +39,7 @@ export function useModel(props: ICustomEditPanelProps) {
    *
    * @returns The transformed value and the internal name of the field (might be different from the field's internal name)
    */
-  const transformValue = async (value: any, field: ProjectInformationField) => {
+  const transformValue = async (value: any, field: EditableSPField) => {
     const targetList = props.dataAdapter.sp.web.lists.getById(props.targetistId)
     const valueMap = new Map<string, () => Promise<any[]> | any[]>([
       [
@@ -115,7 +115,7 @@ export function useModel(props: ICustomEditPanelProps) {
    * @param field Field to set value for
    * @param value Value to set (will be transformed to the correct type for the field)
    */
-  const set = async <T>(field: ProjectInformationField, value: T) => {
+  const set = async <T>(field: EditableSPField, value: T) => {
     const [internalName, transformedValue] = await transformValue(value, field)
     model.set(field.internalName, value)
     setModel(new Map(model))
