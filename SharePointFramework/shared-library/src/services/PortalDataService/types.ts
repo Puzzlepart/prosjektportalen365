@@ -16,6 +16,7 @@ export type PortalDataServiceList =
   | 'IDEA_PROJECT_DATA'
   | 'IDEA_PROCESSING'
   | 'GLOBAL_SETTINGS'
+  | 'TIMELINE_CONTENT'
 
 export interface IPortalDataServiceConfiguration extends Object {
   spfxContext?: SPFxContext
@@ -34,6 +35,7 @@ export interface IPortalDataServiceConfiguration extends Object {
     IDEA_PROJECT_DATA: string
     IDEA_PROCESSING: string
     GLOBAL_SETTINGS: string
+    TIMELINE_CONTENT: string
   }
   templateParametersFieldXml?: string
 }
@@ -53,7 +55,8 @@ export const PortalDataServiceDefaultConfiguration: Partial<IPortalDataServiceCo
     PROJECT_TEMPLATE_CONFIGURATION: 'Maloppsett',
     IDEA_PROJECT_DATA: 'Prosjektdata',
     IDEA_PROCESSING: 'Idébehandling',
-    GLOBAL_SETTINGS: 'Globale innstillinger'
+    GLOBAL_SETTINGS: 'Globale innstillinger',
+    TIMELINE_CONTENT: 'Tidslinjeinnhold'
   },
   templateParametersFieldXml:
     '<Field Type="Note" DisplayName="TemplateParameters" ID="{b8854944-7141-471f-b8df-53d93a4395ba}" StaticName="TemplateParameters" Name="TemplateParameters" UnlimitedLengthInDocumentLibrary="TRUE" Hidden="TRUE" />'
