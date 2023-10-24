@@ -1,10 +1,4 @@
-import { useState } from 'react'
-import {
-  IProjectTimelineProps,
-  IProjectTimelineState,
-  ITimelineData,
-  ITimelineGroup
-} from './types'
+import { IProjectTimelineProps, ITimelineData, ITimelineGroup } from './types'
 import { useProjectTimelineDataFetch } from './data/useProjectTimelineDataFetch'
 import sortArray from 'array-sort'
 import { get } from '@microsoft/sp-lodash-subset'
@@ -18,6 +12,7 @@ import {
 import strings from 'ProjectWebPartsStrings'
 import moment from 'moment'
 import { ITimelineItem } from 'pp365-shared-library/lib/interfaces'
+import { useProjectTimelineState } from './useProjectTimelineState'
 
 /**
  * Component logic hook for `ProjectTimeline`
@@ -27,15 +22,7 @@ import { ITimelineItem } from 'pp365-shared-library/lib/interfaces'
  * @returns `state`, `setState`, `onFilterChange`
  */
 export const useProjectTimeline = (props: IProjectTimelineProps) => {
-  const [state, $setState] = useState<IProjectTimelineState>({
-    isDataLoaded: false,
-    activeFilters: {},
-    refetch: new Date().getTime()
-  })
-
-  const setState = (newState: Partial<IProjectTimelineState>) => {
-    $setState((_state) => ({ ..._state, ...newState }))
-  }
+  const { state, setState } = useProjectTimelineState()
 
   /**
    * Get filtered data
@@ -187,5 +174,5 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     onFilterChange,
     onGroupByChange,
     defaultTimeframe
-  } as const
+  }
 }
