@@ -5,15 +5,14 @@ import {
   DialogFooter,
   DialogContent,
   DialogType,
-  PrimaryButton,
-  DefaultButton,
   format
 } from '@fluentui/react'
 import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import strings from 'PortfolioExtensionsStrings'
+import { Button } from '@fluentui/react-components'
 
-interface IDialogContentProps {
+interface IIdeaDialogContentProps {
   close: () => void
   submit: () => void
   ideaTitle?: string
@@ -21,8 +20,8 @@ interface IDialogContentProps {
   isBlocked?: boolean
 }
 
-class IdeaDialog extends React.Component<IDialogContentProps> {
-  constructor(props: IDialogContentProps | Readonly<IDialogContentProps>) {
+class IdeaDialog extends React.Component<IIdeaDialogContentProps> {
+  constructor(props: IIdeaDialogContentProps | Readonly<IIdeaDialogContentProps>) {
     super(props)
   }
 
@@ -46,17 +45,20 @@ class IdeaDialog extends React.Component<IDialogContentProps> {
           intent={this.props.isBlocked ? 'warning' : 'info'}
         />
         <DialogFooter>
-          <DefaultButton
-            text={strings.CancelLabel}
+          <Button
             title={strings.CancelLabel}
             onClick={this.props.close}
-          />
-          <PrimaryButton
-            text={strings.CreateLabel}
+          >
+          {strings.CancelLabel}
+        </Button>
+        <Button
+          appearance='primary'
             title={strings.CreateLabel}
             onClick={this.props.submit}
             disabled={this.props.isBlocked}
-          />
+          >
+          {strings.CreateLabel}
+          </Button>
         </DialogFooter>
       </DialogContent>
     )
