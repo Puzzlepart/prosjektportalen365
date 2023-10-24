@@ -73,7 +73,7 @@ export function useProjectProperty(props: IProjectPropertyProps) {
         'UserMulti',
         (users: IPersonaProps[]) => {
           return (
-            <div>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
               {users.map((user, key) => (
                 <Persona
                   key={key}

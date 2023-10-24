@@ -4,11 +4,13 @@ import { EditStatusPanel } from './EditStatusPanel'
 import { Header } from './Header/Header'
 import styles from './ProjectStatus.module.scss'
 import { Sections } from './Sections/Sections'
-import { UserMessages } from './UserMessages'
 import { ProjectStatusContext } from './context'
 import { IProjectStatusProps } from './types'
 import { useProjectStatus } from './useProjectStatus'
 import { Fluent } from 'pp365-shared-library'
+import { PublishedStatus } from './PublishedStatus'
+import { UserMessages } from './UserMessages/UserMessages'
+import { SectionTabs } from './SectionTabs'
 
 export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
   const { context } = useProjectStatus(props)
@@ -16,10 +18,14 @@ export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
     <ProjectStatusContext.Provider value={context}>
       <Fluent>
         <div className={styles.root}>
-          <Commands />
-          <div className={styles.container}>
-            <UserMessages />
+          <div className={styles.header}>
             <Header />
+            <PublishedStatus />
+          </div>
+          <Commands />
+          <SectionTabs />
+          <UserMessages />
+          <div className={styles.container}>
             <Sections />
           </div>
         </div>

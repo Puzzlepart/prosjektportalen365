@@ -11,10 +11,11 @@ export function useCaptureReportSnapshot() {
   return async (): Promise<Blob> => {
     try {
       const statusReportHtml = document.getElementById('pp-statussection')
-      const date = moment().format('YYYY-MM-DD HH:mm')
+      const date = moment().format('DD.MM.YYYY HH:mm')
       const dateStamp = document.createElement('p')
       dateStamp.textContent = `${date}`
       dateStamp.style.textAlign = 'right'
+      dateStamp.style.fontWeight = '600'
       statusReportHtml.appendChild(dateStamp)
       statusReportHtml.style.backgroundColor = '#FFFFFF'
       const content = await domToImage.toBlob(statusReportHtml)
