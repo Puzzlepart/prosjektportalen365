@@ -62,49 +62,48 @@ export function useToolbarItems(selectedItems: any[]) {
   }
 
   const menuItems = useMemo<ListMenuItem[]>(
-    () =>
-      [
-        new ListMenuItem(strings.NewItemLabel, strings.NewItemLabel)
-          .setIcon(Icons.Add)
-          .setOnClick(() => {
-            context.setState({
-              panel: {
-                headerText: strings.NewTimelineContentText,
-                submit: {
-                  onSubmit: async ({ properties }) => {
-                    await SPDataAdapter.portal.addItemToList('TIMELINE_CONTENT', {
-                      ...properties,
-                      GtSiteIdLookupId: context.state.data.projectId
-                    })
-                    dismissPanel()
-                  }
+    () => [
+      new ListMenuItem(strings.NewItemLabel, strings.NewItemLabel)
+        .setIcon(Icons.Add)
+        .setOnClick(() => {
+          context.setState({
+            panel: {
+              headerText: strings.NewTimelineContentText,
+              submit: {
+                onSubmit: async ({ properties }) => {
+                  await SPDataAdapter.portal.addItemToList('TIMELINE_CONTENT', {
+                    ...properties,
+                    GtSiteIdLookupId: context.state.data.projectId
+                  })
+                  dismissPanel()
                 }
               }
-            })
-          }),
-        new ListMenuItem(strings.EditItemLabel, strings.EditItemLabel)
-          .setIcon(Icons.Edit)
-          .setDisabled(selectedItems.length !== 1)
-          .setOnClick(() => {
-            const fieldValues = new ItemFieldValues(_.first(selectedItems))
-            context.setState({
-              panel: {
-                headerText: strings.EditTimelineContentText,
-                fieldValues,
-                submit: {
-                  onSubmit: async ({ properties }) => {
-                    await SPDataAdapter.portal.updateItemInList(
-                      'TIMELINE_CONTENT',
-                      fieldValues.id,
-                      properties
-                    )
-                    dismissPanel()
-                  }
-                }
-              }
-            })
+            }
           })
-      ],
+        }),
+      new ListMenuItem(strings.EditItemLabel, strings.EditItemLabel)
+        .setIcon(Icons.Edit)
+        .setDisabled(selectedItems.length !== 1)
+        .setOnClick(() => {
+          const fieldValues = new ItemFieldValues(_.first(selectedItems))
+          context.setState({
+            panel: {
+              headerText: strings.EditTimelineContentText,
+              fieldValues,
+              submit: {
+                onSubmit: async ({ properties }) => {
+                  await SPDataAdapter.portal.updateItemInList(
+                    'TIMELINE_CONTENT',
+                    fieldValues.id,
+                    properties
+                  )
+                  dismissPanel()
+                }
+              }
+            }
+          })
+        })
+    ],
     [context.props, selectedItems]
   )
 
