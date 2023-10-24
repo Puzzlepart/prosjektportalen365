@@ -23,7 +23,15 @@ export const MatrixElement: FC<IMatrixElementProps> = (props) => {
         )
       }
     >
-      <CounterBadge className={styles.matrixElement} appearance='filled' color='informative' count={props.model.id} title={props.title} style={props.style} hidden={props.hidden} />
+      <CounterBadge
+        className={styles.matrixElement}
+        appearance='filled'
+        color='informative'
+        count={props.model.id}
+        title={props.title}
+        style={props.style}
+        hidden={props.hidden}
+      />
     </Tooltip>
   )
 }
