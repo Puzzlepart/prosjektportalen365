@@ -6,30 +6,32 @@ import {
   DialogFooter,
   DialogContent,
   DialogType,
-  PrimaryButton,
-  DefaultButton,
-  Dropdown,
-  IDropdownOption,
-  TextField,
   format
 } from '@fluentui/react'
 import strings from 'PortfolioExtensionsStrings'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
+import {
+  Button,
+  Field,
+  Textarea,
+  Option,
+  Dropdown
+} from '@fluentui/react-components'
 
-interface IDialogContentProps {
+interface IIdeaApprovalDialogContentProps {
   close: () => void
   submit: (choice: string, comment: string) => void
   ideaTitle?: string
   dialogDescription?: string
 }
 
-interface IDialogContentState {
+interface IIdeaApprovalDialogContentState {
   choice: string
   comment: string
 }
 
-class DialogPrompt extends React.Component<IDialogContentProps, IDialogContentState> {
-  constructor(props: IDialogContentProps | Readonly<IDialogContentProps>) {
+class IdeaApprovalDialog extends React.Component<IIdeaApprovalDialogContentProps, IIdeaApprovalDialogContentState> {
+  constructor(props: IIdeaApprovalDialogContentProps | Readonly<IIdeaApprovalDialogContentProps>) {
     super(props)
 
     this.state = {
@@ -55,53 +57,49 @@ class DialogPrompt extends React.Component<IDialogContentProps, IDialogContentSt
           )}
           intent='info'
         />
-        <Dropdown
-          label={strings.ActionLabel}
-          placeholder={strings.ActionLabelPlaceholder}
-          options={[
-            { key: 'approve', text: strings.ApproveChoice },
-            { key: 'consideration', text: strings.ConsiderationChoice },
-            { key: 'reject', text: strings.RejectChoice }
-          ]}
-          onChange={this._onChoiceChange}
-        />
-
-        <TextField
-          placeholder={strings.CommentLabel}
-          label={strings.CommentLabelPlaceholder}
-          multiline
-          rows={3}
-          onChange={this._onCommentChange}
-        />
-
+        <Field label={strings.ActionLabel}>
+          <Dropdown
+            onOptionSelect={(_, data) => this.setState({ choice: data.optionText })}
+            placeholder={strings.ActionLabelPlaceholder}
+          >
+            <Option value={strings.ApproveChoice}>
+              {strings.ApproveChoice}
+            </Option>
+            <Option value={strings.ConsiderationChoice}>
+              {strings.ConsiderationChoice}
+            </Option>
+            <Option value={strings.RejectChoice}>
+              {strings.RejectChoice}
+            </Option>
+          </Dropdown>
+        </Field>
+        <Field label={strings.CommentLabel}>
+          <Textarea
+            rows={3}
+            placeholder={strings.CommentLabelPlaceholder}
+            onChange={(_, { value }) => this.setState({ comment: value })}
+          />
+        </Field>
         <DialogFooter>
-          <DefaultButton
-            text={strings.CancelLabel}
+          <Button
             title={strings.CancelLabel}
             onClick={this.props.close}
-          />
-          <PrimaryButton
-            text={strings.SubmitLabel}
+          >
+            {strings.CancelLabel}
+          </Button>
+          <Button
+            appearance='primary'
             title={strings.SubmitLabel}
             onClick={() => {
               this.props.submit(this.state.choice, this.state.comment)
             }}
             disabled={this.state.comment.length > 0 && this.state.choice.length > 0 ? false : true}
-          />
+          >
+            {strings.SubmitLabel}
+          </Button>
         </DialogFooter>
       </DialogContent>
     )
-  }
-
-  private _onChoiceChange = (_: React.FormEvent<HTMLDivElement>, choice: IDropdownOption) => {
-    this.setState({ choice: choice.text })
-  }
-
-  private _onCommentChange = (
-    _: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-    comment: string
-  ) => {
-    this.setState({ comment: comment })
   }
 }
 
@@ -114,7 +112,7 @@ export default class RecommendationDialog extends BaseDialog {
 
   public render(): void {
     ReactDOM.render(
-      <DialogPrompt
+      <IdeaApprovalDialog
         close={this.close}
         submit={this._submit}
         ideaTitle={this.ideaTitle}

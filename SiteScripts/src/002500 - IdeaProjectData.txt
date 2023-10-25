@@ -1,0 +1,17 @@
+﻿{
+    "bindata": {},
+    "actions": [
+        {
+            "verb": "associateExtension",
+            "title": "IdeaProjectData",
+            "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+            "clientSideComponentId": "69a7f6eb-e7ce-40eb-81e1-6f172a802619",
+            "clientSideComponentProperties": "{}",
+            "registrationId": "100",
+            "registrationType": "List",
+            "scope": "Web"
+        }
+    ],
+    "$schema": "schema.json",
+    "version": 1
+}

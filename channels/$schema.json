@@ -39,21 +39,21 @@
                                         "Footer": {
                                             "$ref": "#/definitions/guid"
                                         },
-                                        "IdeaProcessingCommand": {
+                                        "IdeaProcessing": {
                                             "$ref": "#/definitions/guid"
                                         },
-                                        "IdeaProjectDataCommand": {
+                                        "IdeaProjectData": {
                                             "$ref": "#/definitions/guid"
                                         },
-                                        "IdeaRegistrationCommand": {
+                                        "IdeaRegistration": {
                                             "$ref": "#/definitions/guid"
                                         }
                                     },
                                     "required": [
                                         "Footer",
-                                        "IdeaProcessingCommand",
-                                        "IdeaProjectDataCommand",
-                                        "IdeaRegistrationCommand"
+                                        "IdeaProcessing",
+                                        "IdeaProjectData",
+                                        "IdeaRegistration"
                                     ]
                                 }
                             },

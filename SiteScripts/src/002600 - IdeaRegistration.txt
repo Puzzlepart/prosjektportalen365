@@ -1,0 +1,17 @@
+﻿{
+    "bindata": {},
+    "actions": [
+        {
+            "verb": "associateExtension",
+            "title": "IdeaRegistration",
+            "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+            "clientSideComponentId": "5d26712e-bdad-4ebf-b33f-9c759042bef6",
+            "clientSideComponentProperties": "{}",
+            "registrationId": "100",
+            "registrationType": "List",
+            "scope": "Web"
+        }
+    ],
+    "$schema": "schema.json",
+    "version": 1
+}

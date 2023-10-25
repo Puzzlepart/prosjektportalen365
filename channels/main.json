@@ -9,9 +9,9 @@
         "zippedPackage": "solution/pp-portfolio-extensions.sppkg",
         "components": {
           "Footer": "84f27cec-ffde-4e00-a4cf-25c69f691054",
-          "IdeaProcessingCommand": "5af28222-4bf8-419c-9533-5a31967b9f20",
-          "IdeaProjectDataCommand": "b13831c6-c4f8-4bbc-9da3-bd5f960f7e2b",
-          "IdeaRegistrationCommand": "c93a4a2a-f5f0-41ee-9ab6-04ad85004d20"
+          "IdeaProcessing": "b28cba0d-922c-44e0-A035-e4ea57d80e6d",
+          "IdeaProjectData": "69a7f6eb-e7ce-40eb-81e1-6f172a802619",
+          "IdeaRegistration": "5d26712e-bdad-4ebf-b33f-9c759042bef6"
         }
       },
       "PortfolioWebParts": {
