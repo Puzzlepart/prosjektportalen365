@@ -1,6 +1,7 @@
+import { useFieldElements } from './FieldElements/useFieldElements'
+import { ICustomEditPanelContext } from './context'
 import { ICustomEditPanelProps } from './types'
 import { useEditableFields } from './useEditableFields'
-import { useFieldElements } from './useFieldElements'
 import { useModel } from './useModel'
 
 /**
@@ -16,6 +17,6 @@ import { useModel } from './useModel'
 export function useCustomEditPanel(props: ICustomEditPanelProps) {
   const fields = useEditableFields(props)
   const model = useModel(props)
-  const getFieldElement = useFieldElements(model, props)
-  return { fields, getFieldElement, model }
+  const getFieldElement = useFieldElements()
+  return { fields, getFieldElement, model, props } as ICustomEditPanelContext
 }

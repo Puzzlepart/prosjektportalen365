@@ -6,11 +6,11 @@ import {
   useId,
   webLightTheme
 } from '@fluentui/react-components'
-import React, { FC, useState } from 'react'
-import styles from './CustomEditPanelFooter.module.scss'
-import { ICustomEditPanelFooterProps } from './types'
 import strings from 'SharedLibraryStrings'
+import React, { FC, useState } from 'react'
 import { UserMessage } from '../../UserMessage'
+import { useCustomEditPanelContext } from '../context'
+import styles from './CustomEditPanelFooter.module.scss'
 
 /**
  * Renders the footer for the `CustomEditPanel` with a `<PrimaryButton />` for saving the changes,
@@ -19,7 +19,8 @@ import { UserMessage } from '../../UserMessage'
  *
  * @param props The component props.
  */
-export const CustomEditPanelFooter: FC<ICustomEditPanelFooterProps> = (props) => {
+export const CustomEditPanelFooter: FC = () => {
+  const context = useCustomEditPanelContext()
   const fluentProviderId = useId('fluent-provider')
   const [isSaving, setIsSaving] = useState(false)
 
@@ -29,7 +30,7 @@ export const CustomEditPanelFooter: FC<ICustomEditPanelFooterProps> = (props) =>
    */
   const handleOnSubmit = async () => {
     setIsSaving(true)
-    await props.submit.onSubmit(props.model)
+    await context.props.submit.onSubmit(context.model)
     setIsSaving(false)
   }
 
@@ -39,26 +40,26 @@ export const CustomEditPanelFooter: FC<ICustomEditPanelFooterProps> = (props) =>
       theme={webLightTheme}
       className={styles.customEditPanelFooter}
     >
-      {props.submit.error && (
+      {context.props.submit.error && (
         <div className={styles.errorContainer}>
-          <UserMessage text={props.submit.error} intent='error' />
+          <UserMessage text={context.props.submit.error} intent='error' />
         </div>
       )}
       <div className={styles.container}>
         {isSaving ? (
-          <Field validationMessage={props.submit.saveProgressText} validationState='none'>
+          <Field validationMessage={context.props.submit.saveProgressText} validationState='none'>
             <ProgressBar />
           </Field>
         ) : (
           <>
             <Button
               onClick={handleOnSubmit}
-              disabled={isSaving || props.submit.disabled}
+              disabled={isSaving || context.props.submit.disabled}
               appearance='primary'
             >
-              {props.submit.text ?? strings.SaveText}
+              {context.props.submit.text ?? strings.SaveText}
             </Button>
-            <Button appearance='secondary' onClick={props.onDismiss}>
+            <Button appearance='secondary' onClick={context.props.onDismiss}>
               {strings.CloseText}
             </Button>
           </>

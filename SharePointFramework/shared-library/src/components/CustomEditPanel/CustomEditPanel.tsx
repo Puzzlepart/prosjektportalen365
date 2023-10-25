@@ -5,32 +5,35 @@ import { CustomEditPanelFooter } from './CustomEditPanelFooter'
 import { ICustomEditPanelProps } from './types'
 import { useCustomEditPanel } from './useCustomEditPanel'
 import { DebugModel } from './DebugModel'
+import { CustomEditPanelContext } from './context'
 
 /**
  * Custom edit panel for editing a model based on a SharePoint list item.
  */
 export const CustomEditPanel: FC<ICustomEditPanelProps> = (props) => {
-  const { fields, getFieldElement, model } = useCustomEditPanel(props)
+  const context = useCustomEditPanel(props)
   return (
-    <BasePanel
-      {...props}
-      className={styles.customEditPanel}
-      styles={{
-        main: {
-          overflow: 'hidden'
-        }
-      }}
-      onRenderFooterContent={() => <CustomEditPanelFooter {...props} model={model} />}
-      onRenderBody={() => (
-        <div className={styles.body}>
-          {props.debug && <DebugModel model={model} />}
-          {fields.map((field, key) => {
-            const fieldElement = getFieldElement(field)
-            return fieldElement && <div key={key}>{fieldElement}</div>
-          })}
-        </div>
-      )}
-    />
+    <CustomEditPanelContext.Provider value={context}>
+      <BasePanel
+        {...props}
+        className={styles.customEditPanel}
+        styles={{
+          main: {
+            overflow: 'hidden'
+          }
+        }}
+        onRenderFooterContent={() => <CustomEditPanelFooter />}
+        onRenderBody={() => (
+          <div className={styles.body}>
+            {props.debug && <DebugModel />}
+            {context.fields.map((field, key) => {
+              const fieldElement = context.getFieldElement(field)
+              return fieldElement && <div key={key}>{fieldElement}</div>
+            })}
+          </div>
+        )}
+      />
+    </CustomEditPanelContext.Provider>
   )
 }
 

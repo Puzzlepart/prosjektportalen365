@@ -1,10 +1,11 @@
 import React, { FC } from 'react'
-import { UseModelReturnType } from './useModel'
+import { useCustomEditPanelContext } from './context'
 
 /**
  * Shows `model.properties` in a `pre` tag.
  */
-export const DebugModel: FC<{ model: UseModelReturnType }> = (props) => {
+export const DebugModel: FC = () => {
+  const context = useCustomEditPanelContext()
   return (
     <div>
       <pre
@@ -15,7 +16,7 @@ export const DebugModel: FC<{ model: UseModelReturnType }> = (props) => {
           padding: 10
         }}
       >
-        {JSON.stringify(props.model.properties, null, 2)}
+        {JSON.stringify(context.model.properties, null, 2)}
       </pre>
     </div>
   )
