@@ -1,8 +1,8 @@
 import { Dropdown, Option, OptionProps } from '@fluentui/react-components'
 import React, { useEffect, useState } from 'react'
-import { FieldContainer } from '../../FieldContainer'
+import { FieldContainer } from '../../../FieldContainer'
 import { FieldElementComponent } from './types'
-import { useCustomEditPanelContext } from '../context'
+import { useCustomEditPanelContext } from '../../context'
 
 export const Lookup: FieldElementComponent = ({ field }) => {
     const context = useCustomEditPanelContext()

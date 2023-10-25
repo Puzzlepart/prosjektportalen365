@@ -1,4 +1,4 @@
-import { useFieldElements } from './FieldElements/useFieldElements'
+import { useFieldElements } from './CustomEditPanelBody/FieldElements/useFieldElements'
 import { ICustomEditPanelContext } from './context'
 import { ICustomEditPanelProps } from './types'
 import { useEditableFields } from './useEditableFields'

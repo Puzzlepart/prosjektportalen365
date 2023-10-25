@@ -1,8 +1,8 @@
 import { Input } from '@fluentui/react-components'
 import strings from 'SharedLibraryStrings'
 import React from 'react'
-import { FieldContainer } from '../../FieldContainer'
-import { useCustomEditPanelContext } from '../context'
+import { FieldContainer } from '../../../FieldContainer'
+import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
 
 export const URL: FieldElementComponent = ({ field }) => {

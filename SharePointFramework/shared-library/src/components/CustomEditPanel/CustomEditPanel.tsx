@@ -1,11 +1,11 @@
 import React, { FC } from 'react'
 import { BasePanel } from '../BasePanel'
 import styles from './CustomEditPanel.module.scss'
+import { CustomEditPanelBody } from './CustomEditPanelBody/CustomEditPanelBody'
 import { CustomEditPanelFooter } from './CustomEditPanelFooter'
+import { CustomEditPanelContext } from './context'
 import { ICustomEditPanelProps } from './types'
 import { useCustomEditPanel } from './useCustomEditPanel'
-import { DebugModel } from './DebugModel'
-import { CustomEditPanelContext } from './context'
 
 /**
  * Custom edit panel for editing a model based on a SharePoint list item.
@@ -23,15 +23,7 @@ export const CustomEditPanel: FC<ICustomEditPanelProps> = (props) => {
           }
         }}
         onRenderFooterContent={() => <CustomEditPanelFooter />}
-        onRenderBody={() => (
-          <div className={styles.body}>
-            {props.debug && <DebugModel />}
-            {context.fields.map((field, key) => {
-              const fieldElement = context.getFieldElement(field)
-              return fieldElement && <div key={key}>{fieldElement}</div>
-            })}
-          </div>
-        )}
+        onRenderBody={() => <CustomEditPanelBody />}
       />
     </CustomEditPanelContext.Provider>
   )

@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { useCustomEditPanelContext } from './context'
+import { useCustomEditPanelContext } from '../context'
 
 /**
  * Shows `model.properties` in a `pre` tag.

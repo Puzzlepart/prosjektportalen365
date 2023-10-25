@@ -2,8 +2,8 @@ import { Combobox, Option } from '@fluentui/react-components'
 import strings from 'SharedLibraryStrings'
 import React from 'react'
 import _ from 'underscore'
-import { FieldContainer } from '../../FieldContainer'
-import { useCustomEditPanelContext } from '../context'
+import { FieldContainer } from '../../../FieldContainer'
+import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
 
 export const MultiChoice: FieldElementComponent = ({ field }) => {

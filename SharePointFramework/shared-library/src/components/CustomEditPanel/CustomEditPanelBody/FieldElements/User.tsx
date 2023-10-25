@@ -1,14 +1,14 @@
 import { IPersonaProps, NormalPeoplePicker } from '@fluentui/react'
 import React from 'react'
-import { FieldContainer } from '../../FieldContainer'
-import styles from '../CustomEditPanel.module.scss'
-import { useCustomEditPanelContext } from '../context'
+import { FieldContainer } from '../../../FieldContainer'
+import { useCustomEditPanelContext } from '../../context'
+import styles from '../CustomEditPanelBody.module.scss'
 import { FieldElementComponent } from './types'
 
-export const UserMulti: FieldElementComponent = ({ field }) => {
+export const User: FieldElementComponent = ({ field }) => {
     const context = useCustomEditPanelContext()
     return (
-        <FieldContainer iconName='People' label={field.displayName} description={field.description}>
+        <FieldContainer iconName='Person' label={field.displayName} description={field.description}>
             <NormalPeoplePicker
                 styles={{ text: styles.field }}
                 onResolveSuggestions={async (filter, selectedItems) =>
@@ -18,7 +18,7 @@ export const UserMulti: FieldElementComponent = ({ field }) => {
                     )) as IPersonaProps[]
                 }
                 defaultSelectedItems={context.model.get<IPersonaProps[]>(field)}
-                itemLimit={20}
+                itemLimit={1}
                 onChange={(items) => context.model.set(field, items)}
             />
         </FieldContainer>
