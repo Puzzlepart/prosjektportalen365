@@ -42,14 +42,14 @@ export const SummarySection: FC<ISummarySectionProps> = (props) => {
 
   return (
     <BaseSection {...props}>
-      <div className={styles.root}>
+      <div className={styles.summarySection}>
         {props.showProjectInformation && (
           <div className={styles.projectInformation}>
             <ProjectInformation
               {...pick(context.props, 'siteId', 'webAbsoluteUrl', 'spfxContext')}
               page='ProjectStatus'
-              hideAllActions={true}
-              hideStatusReport={true}
+              hideAllActions
+              hideStatusReport
             />
           </div>
         )}
@@ -60,7 +60,9 @@ export const SummarySection: FC<ISummarySectionProps> = (props) => {
           ])}
         >
           <div className={styles.container} dir='ltr'>
-            <div className={styles.row}>{renderStatusElements()}</div>
+            <div className={className([styles.row, props.iconsOnly ? styles.iconsOnly : ''])}>
+              {renderStatusElements()}
+            </div>
           </div>
         </div>
       </div>

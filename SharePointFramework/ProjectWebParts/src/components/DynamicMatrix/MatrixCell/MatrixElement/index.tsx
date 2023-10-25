@@ -1,18 +1,19 @@
-import { TooltipHost } from '@fluentui/react'
 import { replaceTokens } from 'pp365-shared-library/lib/util'
 import React, { FC, useContext } from 'react'
 import { DynamicMatrixContext } from '../../context'
-import styles from './MatrixElement.module.scss'
 import { IMatrixElementProps } from './types'
+import { CounterBadge, Tooltip } from '@fluentui/react-components'
+import styles from './MatrixElement.module.scss'
 
 export const MatrixElement: FC<IMatrixElementProps> = (props) => {
   const context = useContext(DynamicMatrixContext)
   return (
-    <TooltipHost
-      calloutProps={{ gapSpace: 10 }}
+    <Tooltip
+      withArrow
+      relationship='description'
       content={
         context.props?.calloutTemplate && (
-          <div className={styles.tooltip}>
+          <div>
             <span
               dangerouslySetInnerHTML={{
                 __html: replaceTokens(context.props?.calloutTemplate, props.model.item)
@@ -22,9 +23,15 @@ export const MatrixElement: FC<IMatrixElementProps> = (props) => {
         )
       }
     >
-      <div className={styles.root} title={props.title} style={props.style} hidden={props.hidden}>
-        {props.model.id}
-      </div>
-    </TooltipHost>
+      <CounterBadge
+        className={styles.matrixElement}
+        appearance='filled'
+        color='informative'
+        count={props.model.id}
+        title={props.title}
+        style={props.style}
+        hidden={props.hidden}
+      />
+    </Tooltip>
   )
 }

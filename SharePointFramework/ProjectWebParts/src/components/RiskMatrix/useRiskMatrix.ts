@@ -42,5 +42,12 @@ export function useRiskMatrix(props: IRiskMatrixProps) {
 
   const fluentProviderId = useId('risk-matrix-fluent-provider-')
 
-  return { configuration, error, getElementsForCell, setShowPostAction, fluentProviderId }
+  return {
+    configuration,
+    error,
+    getElementsForCell,
+    setShowPostAction,
+    showPostAction,
+    fluentProviderId
+  }
 }

@@ -1,8 +1,12 @@
-.root {
-  border-right: 1px solid #99a8ad;
-  border-bottom: 1px solid #99a8ad;
-  
-  .container {
+.matrixCell {
+  border-right: 1px solid var(--colorNeutralBackground2);
+  border-bottom: 1px solid var(--colorNeutralBackground2);
+
+  &:hover {
+    filter: brightness(1.1);
+  }
+
+  .cell {
     padding: 10px;
     box-sizing: border-box;
   }

@@ -15,7 +15,9 @@ import { ListMenuItem } from './types'
  */
 export function renderToolbarButton(
   item: ListMenuItem,
-  buttonStyle: CSSProperties = {},
+  buttonStyle: CSSProperties = {
+    fontWeight: 'var(--fontWeightRegular)'
+  },
   labelStyle: CSSProperties = {}
 ) {
   return (

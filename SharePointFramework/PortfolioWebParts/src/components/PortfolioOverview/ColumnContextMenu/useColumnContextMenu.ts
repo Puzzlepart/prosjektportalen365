@@ -73,7 +73,7 @@ export function useColumnContextMenu() {
       {
         key: 'SORT_DESC',
         data: {
-          name: 'sort',
+          name: `${column.key}_sort`,
           value: 'desc'
         },
         text: strings.SortDescLabel,
@@ -85,7 +85,7 @@ export function useColumnContextMenu() {
       {
         key: 'SORT_ASC',
         data: {
-          name: 'sort',
+          name: `${column.key}_sort`,
           value: 'asc'
         },
         text: strings.SortAscLabel,

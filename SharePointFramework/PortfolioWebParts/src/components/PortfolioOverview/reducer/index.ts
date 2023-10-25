@@ -2,9 +2,9 @@ import { format, MessageBarType } from '@fluentui/react'
 import { createReducer } from '@reduxjs/toolkit'
 import sortArray from 'array-sort'
 import strings from 'PortfolioWebPartsStrings'
+import { ProjectColumn } from 'pp365-shared-library'
 import _ from 'underscore'
 import { IPortfolioOverviewState } from '../types'
-import { IPortfolioOverviewReducerParams } from './types'
 import {
   CHANGE_VIEW,
   COLUMN_DELETED,
@@ -16,18 +16,18 @@ import {
   EXECUTE_SEARCH,
   ON_FILTER_CHANGED,
   SELECTION_CHANGED,
+  SET_EDIT_VIEW_COLUMNS_PANEL,
   SET_GROUP_BY,
   SET_SORT,
+  SET_VIEW_FORM_PANEL,
   START_EXCEL_EXPORT,
   STARTING_DATA_FETCH,
   TOGGLE_COLUMN_CONTEXT_MENU,
   TOGGLE_COLUMN_FORM_PANEL,
   TOGGLE_COMPACT,
-  TOGGLE_FILTER_PANEL,
-  SET_EDIT_VIEW_COLUMNS_PANEL,
-  SET_VIEW_FORM_PANEL
+  TOGGLE_FILTER_PANEL
 } from './actions'
-import { ProjectColumn } from 'pp365-shared-library'
+import { IPortfolioOverviewReducerParams } from './types'
 
 /**
  * Get initial state for `<PortfolioOverview />` based on `params` provided.
@@ -144,9 +144,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.sortBy = _.pick(payload, ['column', 'customSort'])
         state.columns = state.columns.map((col) => {
           col.isSorted = col.key === payload.column.key
-          if (col.isSorted) {
-            col.isSortedDescending = isSortedDescending
-          }
+          col.isSortedDescending = col.isSorted ? isSortedDescending : false
           return col
         })
       })

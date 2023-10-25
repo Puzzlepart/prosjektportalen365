@@ -79,7 +79,7 @@ export const SET_ALL_COLLAPSED = createAction<{ isAllCollapsed: boolean }>('SET_
 /**
  * `SET_SORT`: Set sort.
  */
-export const SET_SORT = createAction<{ column: ProjectContentColumn; sortDesencing: boolean }>(
+export const SET_SORT = createAction<{ column: ProjectContentColumn; isSortedDescending: boolean }>(
   'SET_SORT'
 )
 

@@ -1,12 +1,7 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
 .root {
-  @include ms-Grid;
-  padding: 0;
-  margin: 0;
-  .container {
-    @include ms-Grid-row;
-  }
+
   .fields {
     margin: 25px 0 0 0;
     display: -webkit-box;

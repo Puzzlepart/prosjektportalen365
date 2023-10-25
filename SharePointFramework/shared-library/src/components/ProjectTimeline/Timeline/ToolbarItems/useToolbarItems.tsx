@@ -22,9 +22,12 @@ const Icons = {
 }
 
 /**
- * Returns an array of menu items for the toolbar in the PortfolioOverview component.
+ * Returns an array of menu items for the toolbar in the Timeline component.
  *
- * @param context - The IPortfolioOverviewContext object containing the necessary data for generating the toolbar items.
+ * @param props - The ITimelineProps object containing the necessary data for generating the toolbar items.
+ * @param selectedGroupBy - The currently selected group by value.
+ * @param setSelectedGroupBy - The function to set the currently selected group by value.
+ * @param setShowFilterPanel - The function to set the visibility of the filter panel.
  *
  * @returns An array of IListMenuItem objects representing the toolbar items.
  */

@@ -12,7 +12,6 @@ import { RiskMatrix } from '../../../RiskMatrix'
 import { StatusElement } from '../../StatusElement'
 import { useProjectStatusContext } from '../../context'
 import { BaseSection } from '../BaseSection/BaseSection'
-import styles from './UncertaintySection.module.scss'
 import { useUncertaintySection } from './useUncertaintySection'
 
 export const UncertaintySection: FC = () => {
@@ -48,29 +47,23 @@ export const UncertaintySection: FC = () => {
     }
     return (
       <Shimmer isDataLoaded={state.isDataLoaded}>
-        <div className={styles.matrixContainer}>{matrix}</div>
-        <div className={styles.listContainer}>
-          <ShimmeredDetailsList
-            styles={{ root: { borderRadius: 10 } }}
-            enableShimmer={!state.isDataLoaded}
-            items={items}
-            columns={columns}
-            selectionMode={SelectionMode.none}
-            layoutMode={DetailsListLayoutMode.justified}
-          />
-        </div>
+        {matrix}
+        <ShimmeredDetailsList
+          styles={{ root: { borderRadius: 10 } }}
+          enableShimmer={!state.isDataLoaded}
+          items={items}
+          columns={columns}
+          selectionMode={SelectionMode.none}
+          layoutMode={DetailsListLayoutMode.justified}
+        />
       </Shimmer>
     )
   }
 
   return (
     <BaseSection>
-      <div className='ms-Grid-row'>
-        <div className='ms-Grid-col ms-sm12'>
-          <StatusElement />
-        </div>
-        {shouldRenderContent && renderContent()}
-      </div>
+      <StatusElement />
+      {shouldRenderContent && renderContent()}
     </BaseSection>
   )
 }

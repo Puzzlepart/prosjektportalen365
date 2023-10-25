@@ -6,6 +6,7 @@ import {
   MenuItemCheckbox,
   MenuItemProps,
   MenuPopover,
+  MenuProps,
   MenuTrigger
 } from '@fluentui/react-components'
 import { FluentIconName, getFluentIcon } from 'pp365-shared-library/lib/icons'
@@ -15,10 +16,11 @@ import React from 'react'
  * Renders a single menu item for the column context menu.
  *
  * @param item The menu item to render.
+ * @param onOpenChange A callback for when the open state of the menu changes.
  *
  * @returns The JSX element representing the menu item.
  */
-export function renderMenuItem(item: IContextualMenuItem) {
+export function renderMenuItem(item: IContextualMenuItem, onOpenChange: MenuProps['onOpenChange']) {
   switch (item.itemType) {
     case ContextualMenuItemType.Divider:
       return <MenuDivider />
@@ -26,7 +28,12 @@ export function renderMenuItem(item: IContextualMenuItem) {
       const baseProps: MenuItemProps = {
         title: item.title,
         disabled: item.disabled,
-        onClick: item.onClick
+        onClick: () => {
+          if (item.onClick) {
+            item.onClick(null, item)
+          }
+          onOpenChange(null, { open: false } as any)
+        }
       }
       if (item.iconProps?.iconName) {
         baseProps.icon = getFluentIcon(item.iconProps.iconName as FluentIconName)
@@ -50,7 +57,7 @@ export function renderMenuItem(item: IContextualMenuItem) {
               <MenuItem {...baseProps}>{item.text}</MenuItem>
             </MenuTrigger>
             <MenuPopover>
-              {item.subMenuProps?.items.map((item) => renderMenuItem(item))}
+              {item.subMenuProps?.items.map((item) => renderMenuItem(item, onOpenChange))}
             </MenuPopover>
           </Menu>
         )

@@ -577,7 +577,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 41 -->
             <pnp:DataValue FieldName="GtSortOrder">410</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Tilskudd</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Status tilskudd</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectSupport</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectSupportOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -603,7 +603,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 43 -->
             <pnp:DataValue FieldName="GtSortOrder">430</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">SHA</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Status SHA</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectSHA</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectSHAOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -629,7 +629,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 45 -->
             <pnp:DataValue FieldName="GtSortOrder">450</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Miljø</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Status miljø</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectEnv</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectEnvOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -668,7 +668,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 48 -->
             <pnp:DataValue FieldName="GtSortOrder">480</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Kommentar, status plan- og byggesak</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Kommentar, plan- og byggesak</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectStatusCaseComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectStatusCaseCommentOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
