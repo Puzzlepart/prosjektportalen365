@@ -346,18 +346,18 @@ if (-not $SkipDefaultSiteDesignAssociation.IsPresent) {
 #endregion
 
 #region Running pre-install upgrade steps
-if ($Upgrade.IsPresent) {
-    Write-Host "[INFO] Running pre-install upgrade steps"
-    try {
-        Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
-        ."$PSScriptRoot/Scripts/PreInstallUpgrade.ps1"
-        Disconnect-PnPOnline
-    }
-    catch {
-        Write-Host "[ERROR] Failed to run pre-install upgrade steps: $($_.Exception.Message)" -ForegroundColor Red
-        exit 0
-    }
-}
+# if ($Upgrade.IsPresent) {
+#     Write-Host "[INFO] Running pre-install upgrade steps"
+#     try {
+#         Connect-SharePoint -Url $Uri.AbsoluteUri -ErrorAction Stop
+#         ."$PSScriptRoot/Scripts/PreInstallUpgrade.ps1"
+#         Disconnect-PnPOnline
+#     }
+#     catch {
+#         Write-Host "[ERROR] Failed to run pre-install upgrade steps: $($_.Exception.Message)" -ForegroundColor Red
+#         exit 0
+#     }
+# }
 #endregion
 
 #region Install app packages
