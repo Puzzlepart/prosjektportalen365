@@ -3,6 +3,7 @@ import { SPDataAdapterBase } from '../../data'
 import { ItemFieldValues, EditableSPField } from '../../models'
 import { IBasePanelProps } from '../BasePanel'
 import { UseModelReturnType } from './useModel'
+import { IWeb } from '@pnp/sp/webs'
 
 export interface ICustomEditPanelSubmitProps extends Pick<ButtonProps, 'disabled'> {
   /**
@@ -50,6 +51,11 @@ export interface ICustomEditPanelProps extends IBasePanelProps {
    * The fiels to be hidden in the panel.
    */
   hiddenFields?: string[]
+
+  /**
+   * The web to use for fetching users, terms and list items.
+   */
+  targetWeb?: IWeb
 
   /**
    * Target list ID used to transform property valus

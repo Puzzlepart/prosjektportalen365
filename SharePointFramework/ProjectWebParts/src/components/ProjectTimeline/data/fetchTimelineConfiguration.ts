@@ -5,6 +5,11 @@ import {
 } from 'pp365-shared-library/lib/models'
 import strings from 'ProjectWebPartsStrings'
 
+/**
+ * Fetches the timeline configuration from the SharePoint list.
+ *
+ * @returns A Promise that resolves to an array of `TimelineConfigurationModel` objects.
+ */
 export async function fetchTimelineConfiguration() {
   return (
     await SPDataAdapter.portal.web.lists

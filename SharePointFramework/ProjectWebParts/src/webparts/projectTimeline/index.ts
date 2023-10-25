@@ -4,7 +4,8 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { IProjectTimelineProps, ProjectTimeline } from 'components/ProjectTimeline'
+import { IProjectTimelineProps } from 'components/ProjectTimeline'
+import { ProjectTimeline } from 'components/ProjectTimeline/ProjectTimeline'
 import '@fluentui/react/dist/css/fabric.min.css'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
 import * as strings from 'ProjectWebPartsStrings'

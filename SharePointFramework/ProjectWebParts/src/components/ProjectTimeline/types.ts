@@ -1,12 +1,15 @@
+import { IColumn } from '@fluentui/react'
 import {
+  EditableSPField,
   IBaseWebPartComponentProps,
   IBaseWebPartComponentState,
+  ICustomEditPanelProps,
   IFilterProps,
+  IProjectInformationData,
   ITimelineItem,
   ProjectColumn,
-  TimelineConfigurationModel,
-  IProjectInformationData
-} from 'pp365-shared-library/lib'
+  TimelineConfigurationModel
+} from 'pp365-shared-library'
 
 export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   listName?: string
@@ -64,13 +67,43 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<ITimel
    * `useProjectTimelineDataFetch`.
    */
   refetch?: number
+
+  /**
+   * Panel for editing or creating new timeline content
+   */
+  panel?: Partial<ICustomEditPanelProps>
 }
 
 export interface ITimelineData {
+  /**
+   * Items for timeline content
+   */
   items: ITimelineItem[]
+
+  /**
+   * Groups for timeline content
+   */
   groups: ITimelineGroup[]
-  listItems?: any[]
-  listColumns?: any[]
+
+  /**
+   * List items for timeline content
+   */
+  listItems?: Record<string, any>[]
+
+  /**
+   * Columns for timeline content
+   */
+  listColumns?: IColumn[]
+
+  /**
+   * Editable fields for timeline content
+   */
+  fields?: EditableSPField[]
+
+  /**
+   * The current project ID in the Projects list
+   */
+  projectId?: number
 }
 
 export enum TimelineGroupType {

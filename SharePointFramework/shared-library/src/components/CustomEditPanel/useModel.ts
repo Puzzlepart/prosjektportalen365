@@ -28,7 +28,7 @@ export function useModel(props: ICustomEditPanelProps) {
     if ($field.isEmpty || !!currentValue) {
       return currentValue ?? (fallbackValue as unknown as T)
     }
-    return field.getParsedValue<any>()
+    return $field.getParsedValue<any>()
   }
 
   /**
@@ -99,6 +99,12 @@ export function useModel(props: ICustomEditPanelProps) {
             )
           )
           return [_.flatten(values), `${field.internalName}Id`]
+        }
+      ],
+      [
+        'Lookup',
+        async () => {
+          return [value, `${field.internalName}Id`]
         }
       ]
     ])

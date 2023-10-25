@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
+import { SPBaseItem } from './SPBaseItem'
 
-export class SPTimelineConfigurationItem {
-  public Title: string = ''
+export class SPTimelineConfigurationItem extends SPBaseItem {
   public GtSortOrder: number = 99
   public GtHexColor: string = null
   public GtHexColorText: string = null
@@ -10,10 +10,6 @@ export class SPTimelineConfigurationItem {
   public GtShowElementPortfolio: boolean = false
   public GtShowElementProgram: boolean = false
   public GtTimelineFilter: boolean = false
-
-  public get fields(): string[] {
-    return Object.keys(this)
-  }
 }
 
 export class TimelineConfigurationModel {

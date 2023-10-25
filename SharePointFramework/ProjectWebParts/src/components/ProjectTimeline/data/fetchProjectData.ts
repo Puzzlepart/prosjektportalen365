@@ -3,7 +3,6 @@ import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
 import { TimelineConfigurationModel, TimelineContentModel } from 'pp365-shared-library/lib/models'
 import strings from 'ProjectWebPartsStrings'
-import { first } from 'underscore'
 import { IProjectTimelineProps } from '../types'
 import '@pnp/sp/items/get-all'
 
@@ -16,23 +15,24 @@ import '@pnp/sp/items/get-all'
 export async function fetchProjectData(
   props: IProjectTimelineProps,
   timelineConfig: TimelineConfigurationModel[]
-): Promise<TimelineContentModel> {
+) {
   try {
-    const projectData = await SPDataAdapter.portal.web.lists
+    const [projectData] = await SPDataAdapter.portal.web.lists
       .getByTitle(strings.ProjectsListName)
       .items.select('Id', 'GtStartDate', 'GtEndDate')
       .filter(`GtSiteId eq '${props.siteId}'`)
       .getAll()
 
     const config = _.find(timelineConfig, (col) => col.title === strings.ProjectLabel)
-    return new TimelineContentModel(
+    const project = new TimelineContentModel(
       props.siteId,
       props.webTitle,
       props.webTitle,
       strings.ProjectLabel,
-      first(projectData)?.GtStartDate,
-      first(projectData)?.GtEndDate
+      projectData?.GtStartDate,
+      projectData?.GtEndDate
     ).usingConfig(config)
+    return { project, projectId: projectData.Id }
   } catch (error) {
     throw new Error(
       format(strings.ProjectTimelineErrorFetchText, props.siteId, props.webTitle, error)

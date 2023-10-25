@@ -68,13 +68,19 @@ import {
   PeopleCommunityFilled,
   PeopleCommunityRegular,
   ColumnTripleEditRegular,
-  ColumnTripleEditFilled
+  ColumnTripleEditFilled,
+  LinkRegular,
+  LinkFilled
 } from '@fluentui/react-icons'
 
 /**
  * An object containing the available Fluent icons and their corresponding regular and filled versions.
  */
 export const iconCatalog = {
+  Link: {
+    regular: LinkRegular,
+    filled: LinkFilled
+  },
   ColumnTripleEdit: {
     regular: ColumnTripleEditRegular,
     filled: ColumnTripleEditFilled

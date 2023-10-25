@@ -1,4 +1,6 @@
 declare interface IProjectWebPartsStrings {
+  EditTimelineContentText: string
+  NewTimelineContentText: string
   NewStatusPanelTitle: string
   EditStatusPanelText: string
   Aria: {
