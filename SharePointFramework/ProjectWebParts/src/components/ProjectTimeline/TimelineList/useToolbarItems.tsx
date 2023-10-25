@@ -1,16 +1,7 @@
-import {
-  AddFilled,
-  AddRegular,
-  DeleteFilled,
-  DeleteRegular,
-  EditFilled,
-  EditRegular,
-  bundleIcon
-} from '@fluentui/react-icons'
 import strings from 'ProjectWebPartsStrings'
 import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
-import { ItemFieldValues, ListMenuItem, getFluentIcon } from 'pp365-shared-library'
+import { ItemFieldValues, ListMenuItem } from 'pp365-shared-library'
 import { useContext, useMemo } from 'react'
 import { ProjectTimelineContext } from '../context'
 
@@ -56,24 +47,22 @@ export function useToolbarItems(selectedItems: any[]) {
 
   const menuItems = useMemo<ListMenuItem[]>(
     () => [
-      new ListMenuItem(strings.NewItemLabel, strings.NewItemLabel)
-        .setIcon('Add')
-        .setOnClick(() => {
-          context.setState({
-            panel: {
-              headerText: strings.NewTimelineContentText,
-              submit: {
-                onSubmit: async ({ properties }) => {
-                  await SPDataAdapter.portal.addItemToList('TIMELINE_CONTENT', {
-                    ...properties,
-                    GtSiteIdLookupId: context.state.data.projectId
-                  })
-                  dismissPanel()
-                }
+      new ListMenuItem(strings.NewItemLabel, strings.NewItemLabel).setIcon('Add').setOnClick(() => {
+        context.setState({
+          panel: {
+            headerText: strings.NewTimelineContentText,
+            submit: {
+              onSubmit: async ({ properties }) => {
+                await SPDataAdapter.portal.addItemToList('TIMELINE_CONTENT', {
+                  ...properties,
+                  GtSiteIdLookupId: context.state.data.projectId
+                })
+                dismissPanel()
               }
             }
-          })
-        }),
+          }
+        })
+      }),
       new ListMenuItem(strings.EditItemLabel, strings.EditItemLabel)
         .setIcon('Edit')
         .setDisabled(selectedItems.length !== 1)
