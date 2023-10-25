@@ -10,18 +10,9 @@ import {
 import strings from 'ProjectWebPartsStrings'
 import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
-import { ItemFieldValues, ListMenuItem } from 'pp365-shared-library'
+import { ItemFieldValues, ListMenuItem, getFluentIcon } from 'pp365-shared-library'
 import { useContext, useMemo } from 'react'
 import { ProjectTimelineContext } from '../context'
-
-/**
- * Object containing icons used in the toolbar.
- */
-const Icons = {
-  Add: bundleIcon(AddFilled, AddRegular),
-  Edit: bundleIcon(EditFilled, EditRegular),
-  Delete: bundleIcon(DeleteFilled, DeleteRegular)
-}
 
 /**
  * Returns an array of menu items for the toolbar in the PortfolioOverview component.
@@ -51,10 +42,12 @@ export function useToolbarItems(selectedItems: any[]) {
   }
 
   /**
-   * Dismisses the panel by updating the state in the context.
+   * Dismisses the panel by updating the state in the context,
+   * and updates the `refetch` property to force a refetch of the data.
    */
   const dismissPanel = () => {
     context.setState({
+      refetch: new Date().getTime(),
       panel: {
         isOpen: false
       }
@@ -64,7 +57,7 @@ export function useToolbarItems(selectedItems: any[]) {
   const menuItems = useMemo<ListMenuItem[]>(
     () => [
       new ListMenuItem(strings.NewItemLabel, strings.NewItemLabel)
-        .setIcon(Icons.Add)
+        .setIcon('Add')
         .setOnClick(() => {
           context.setState({
             panel: {
@@ -82,7 +75,7 @@ export function useToolbarItems(selectedItems: any[]) {
           })
         }),
       new ListMenuItem(strings.EditItemLabel, strings.EditItemLabel)
-        .setIcon(Icons.Edit)
+        .setIcon('Edit')
         .setDisabled(selectedItems.length !== 1)
         .setOnClick(() => {
           const fieldValues = new ItemFieldValues(_.first(selectedItems))
@@ -111,7 +104,7 @@ export function useToolbarItems(selectedItems: any[]) {
     () =>
       [
         new ListMenuItem(strings.DeleteItemLabel, strings.DeleteItemLabel)
-          .setIcon(Icons.Delete)
+          .setIcon('Delete')
           .setDisabled(selectedItems.length === 0)
           .setOnClick(() => {
             deleteTimelineItem(selectedItems)
