@@ -6,18 +6,18 @@ import { useCustomEditPanelContext } from '../../context'
 import { FieldElementComponent } from './types'
 
 export const Text: FieldElementComponent = ({ field }) => {
-    const context = useCustomEditPanelContext()
-    return (
-        <FieldContainer
-            iconName='TextNumberFormat'
-            label={field.displayName}
-            description={field.description}
-        >
-            <Input
-                defaultValue={context.model.get<string>(field)}
-                onChange={(_, data) => context.model.set(field, data.value)}
-                placeholder={strings.Placeholder.TextField}
-            />
-        </FieldContainer>
-    )
+  const context = useCustomEditPanelContext()
+  return (
+    <FieldContainer
+      iconName='TextNumberFormat'
+      label={field.displayName}
+      description={field.description}
+    >
+      <Input
+        defaultValue={context.model.get<string>(field)}
+        onChange={(_, data) => context.model.set(field, data.value)}
+        placeholder={strings.Placeholder.TextField}
+      />
+    </FieldContainer>
+  )
 }

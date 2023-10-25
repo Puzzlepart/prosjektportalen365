@@ -1,7 +1,5 @@
 import React from 'react'
 import { EditableSPField } from '../../../../models'
-import { ICustomEditPanelProps } from '../../types'
-import { UseModelReturnType } from '../../useModel'
 import { Boolean } from './Boolean'
 import { Choice } from './Choice'
 import { DateTime } from './DateTime'
@@ -44,7 +42,7 @@ export function useFieldElements() {
     UserMulti: (field) => <UserMulti field={field} />,
     TaxonomyFieldType: (field) => <TaxonomyFieldType field={field} />,
     TaxonomyFieldTypeMulti: (field) => <TaxonomyFieldTypeMulti field={field} />,
-    Lookup: (field) => <Lookup field={field} />,
+    Lookup: (field) => <Lookup field={field} />
   }
 
   /**
@@ -52,9 +50,7 @@ export function useFieldElements() {
    *
    * @param field Field to get element for
    */
-  const getFieldElement = (field: EditableSPField) => {
+  return (field: EditableSPField) => {
     return fieldElements[field.type] && fieldElements[field.type](field)
   }
-
-  return getFieldElement
 }
