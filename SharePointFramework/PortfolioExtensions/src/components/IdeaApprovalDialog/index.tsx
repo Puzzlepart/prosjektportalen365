@@ -2,21 +2,10 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog'
-import {
-  DialogFooter,
-  DialogContent,
-  DialogType,
-  format
-} from '@fluentui/react'
+import { DialogFooter, DialogContent, DialogType, format } from '@fluentui/react'
 import strings from 'PortfolioExtensionsStrings'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
-import {
-  Button,
-  Field,
-  Textarea,
-  Option,
-  Dropdown
-} from '@fluentui/react-components'
+import { Button, Field, Textarea, Option, Dropdown } from '@fluentui/react-components'
 
 interface IIdeaApprovalDialogContentProps {
   close: () => void
@@ -30,7 +19,10 @@ interface IIdeaApprovalDialogContentState {
   comment: string
 }
 
-class IdeaApprovalDialog extends React.Component<IIdeaApprovalDialogContentProps, IIdeaApprovalDialogContentState> {
+class IdeaApprovalDialog extends React.Component<
+  IIdeaApprovalDialogContentProps,
+  IIdeaApprovalDialogContentState
+> {
   constructor(props: IIdeaApprovalDialogContentProps | Readonly<IIdeaApprovalDialogContentProps>) {
     super(props)
 
@@ -62,15 +54,9 @@ class IdeaApprovalDialog extends React.Component<IIdeaApprovalDialogContentProps
             onOptionSelect={(_, data) => this.setState({ choice: data.optionText })}
             placeholder={strings.ActionLabelPlaceholder}
           >
-            <Option value={strings.ApproveChoice}>
-              {strings.ApproveChoice}
-            </Option>
-            <Option value={strings.ConsiderationChoice}>
-              {strings.ConsiderationChoice}
-            </Option>
-            <Option value={strings.RejectChoice}>
-              {strings.RejectChoice}
-            </Option>
+            <Option value={strings.ApproveChoice}>{strings.ApproveChoice}</Option>
+            <Option value={strings.ConsiderationChoice}>{strings.ConsiderationChoice}</Option>
+            <Option value={strings.RejectChoice}>{strings.RejectChoice}</Option>
           </Dropdown>
         </Field>
         <Field label={strings.CommentLabel}>
@@ -81,10 +67,7 @@ class IdeaApprovalDialog extends React.Component<IIdeaApprovalDialogContentProps
           />
         </Field>
         <DialogFooter>
-          <Button
-            title={strings.CancelLabel}
-            onClick={this.props.close}
-          >
+          <Button title={strings.CancelLabel} onClick={this.props.close}>
             {strings.CancelLabel}
           </Button>
           <Button

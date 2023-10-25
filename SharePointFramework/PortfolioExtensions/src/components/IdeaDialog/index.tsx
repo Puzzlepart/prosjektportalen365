@@ -1,12 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import {
-  DialogFooter,
-  DialogContent,
-  DialogType,
-  format
-} from '@fluentui/react'
+import { DialogFooter, DialogContent, DialogType, format } from '@fluentui/react'
 import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import strings from 'PortfolioExtensionsStrings'
@@ -45,19 +40,16 @@ class IdeaDialog extends React.Component<IIdeaDialogContentProps> {
           intent={this.props.isBlocked ? 'warning' : 'info'}
         />
         <DialogFooter>
+          <Button title={strings.CancelLabel} onClick={this.props.close}>
+            {strings.CancelLabel}
+          </Button>
           <Button
-            title={strings.CancelLabel}
-            onClick={this.props.close}
-          >
-          {strings.CancelLabel}
-        </Button>
-        <Button
-          appearance='primary'
+            appearance='primary'
             title={strings.CreateLabel}
             onClick={this.props.submit}
             disabled={this.props.isBlocked}
           >
-          {strings.CreateLabel}
+            {strings.CreateLabel}
           </Button>
         </DialogFooter>
       </DialogContent>
