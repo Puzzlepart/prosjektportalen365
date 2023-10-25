@@ -1,36 +1,35 @@
 import { OptionProps } from '@fluentui/react-components'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { EditableSPField } from '../../../../../models'
 import { useCustomEditPanelContext } from '../../../context'
+import { get } from 'lodash'
 
 export function useLookup(field: EditableSPField) {
   const context = useCustomEditPanelContext()
   const [options, setOptions] = useState<OptionProps[]>([])
-  const [defaultValue, setDefaultValue] = useState<string>()
   useEffect(() => {
     context.props.targetWeb.lists
       .getById(field.LookupList)
       .items.select('Id', field.LookupField)
       .getAll()
       .then((items) => {
-        const _options = items.map((item) => ({
-          key: item.Id,
-          value: item.Id,
-          text: item[field.LookupField]
-        }))
-        setOptions(_options)
-        const selectedOption = _options.find(
-          (option) => option.text === context.model.get(field, {})[field.LookupField]
-        )?.value
-        console.log(
-          _options,
-          selectedOption,
-          context.model.get(field, {}),
-          context.model.get(field, {})[field.LookupField]
+        setOptions(
+          items.map((item) => ({
+            key: item.Id,
+            value: item.Id,
+            text: item[field.LookupField]
+          }))
         )
-        setDefaultValue(selectedOption)
       })
   }, [])
 
-  return { options, defaultValue }
+  const value = useMemo(() => {
+    const selectedOption = options.find((option) => {
+      const fieldValue = context.model.get(field)
+      return option.text === get(fieldValue, [field.LookupField]) || option.value === fieldValue
+    })
+    return selectedOption ?? { text: null, value: null }
+  }, [options, context.model.get(field)])
+
+  return { options, value }
 }

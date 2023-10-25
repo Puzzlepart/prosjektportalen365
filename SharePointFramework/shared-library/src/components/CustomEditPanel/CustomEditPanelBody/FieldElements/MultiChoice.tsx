@@ -23,7 +23,7 @@ export const MultiChoice: FieldElementComponent = ({ field }) => {
         }
         multiselect
         placeholder={strings.Placeholder.MultiChoiceField}
-        onOptionSelect={(e, data) => {
+        onOptionSelect={(_e, data) => {
           if (!_.isEmpty(data.selectedOptions)) {
             context.model.set<string[]>(field, data.selectedOptions)
           } else {

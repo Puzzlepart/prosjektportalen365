@@ -100,6 +100,12 @@ export function useModel(props: ICustomEditPanelProps) {
           )
           return [_.flatten(values), `${field.internalName}Id`]
         }
+      ],
+      [
+        'Lookup',
+        async () => {
+          return [value, `${field.internalName}Id`]
+        }
       ]
     ])
     if (valueMap.has(field.type)) {
