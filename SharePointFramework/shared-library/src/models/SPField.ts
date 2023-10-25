@@ -16,6 +16,9 @@ export class SPField {
   public Hidden?: boolean = false
   public Choices?: string[] = []
   public TermSetId?: string = '00000000-0000-0000-0000-000000000000'
+  public LookupList?: string = ''
+  public LookupField?: string = ''
+  public LookupWebId?: string = '00000000-0000-0000-0000-000000000000'
   public ShowInEditForm?: boolean
   public ShowInNewForm?: boolean
   public ShowInDisplayForm?: boolean
