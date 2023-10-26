@@ -70,13 +70,19 @@ import {
   ColumnTripleEditRegular,
   ColumnTripleEditFilled,
   LinkRegular,
-  LinkFilled
+  LinkFilled,
+  MoneyRegular,
+  MoneyFilled,
 } from '@fluentui/react-icons'
 
 /**
  * An object containing the available Fluent icons and their corresponding regular and filled versions.
  */
 export const iconCatalog = {
+  Money: {
+    regular: MoneyRegular,
+    filled: MoneyFilled
+  },
   Link: {
     regular: LinkRegular,
     filled: LinkFilled

@@ -12,6 +12,7 @@ import { Text } from './Text'
 import { URL } from './URL'
 import { User } from './User'
 import { UserMulti } from './UserMulti'
+import { Currency } from './Currency'
 
 /**
  * Hook for field elements of `CustomEditPanel` component. This hook is used to render field elements
@@ -28,6 +29,8 @@ import { UserMulti } from './UserMulti'
  * - `UserMulti`
  * - `TaxonomyFieldType`
  * - `TaxonomyFieldTypeMulti`
+ * - `Lookup`
+ * - `Currency`
  */
 export function useFieldElements() {
   const fieldElements: Record<string, (field: EditableSPField) => JSX.Element> = {
@@ -42,7 +45,8 @@ export function useFieldElements() {
     UserMulti: (field) => <UserMulti field={field} />,
     TaxonomyFieldType: (field) => <TaxonomyFieldType field={field} />,
     TaxonomyFieldTypeMulti: (field) => <TaxonomyFieldTypeMulti field={field} />,
-    Lookup: (field) => <Lookup field={field} />
+    Lookup: (field) => <Lookup field={field} />,
+    Currency: (field) => <Currency field={field} />
   }
 
   /**
