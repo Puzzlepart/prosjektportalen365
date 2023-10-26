@@ -11,7 +11,7 @@ export const BasePanel: FC<IBasePanelProps> = (props) => {
       onRenderBody={() => {
         if (!props.onRenderBody) return null
         return (
-          <FluentProvider theme={webLightTheme} className={styles.root}>
+          <FluentProvider theme={webLightTheme} className={styles.root} applyStylesToPortals={false}>
             {props.onRenderBody()}
           </FluentProvider>
         )

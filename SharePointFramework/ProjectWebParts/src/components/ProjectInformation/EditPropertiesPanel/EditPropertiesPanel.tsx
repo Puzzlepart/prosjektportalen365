@@ -15,7 +15,6 @@ export const EditPropertiesPanel: FC = () => {
   const submit = useEditPropertiesPanelSubmit()
   return (
     <CustomEditPanel
-      debug={true}
       isOpen={context.state.activePanel === 'EditPropertiesPanel'}
       headerText={strings.EditProjectInformationText}
       fieldValues={context.state.data.fieldValues}
