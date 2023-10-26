@@ -72,7 +72,7 @@ import {
   LinkRegular,
   LinkFilled,
   MoneyRegular,
-  MoneyFilled,
+  MoneyFilled
 } from '@fluentui/react-icons'
 
 /**

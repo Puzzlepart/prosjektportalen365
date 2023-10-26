@@ -8,11 +8,7 @@ import { FieldElementComponent } from './types'
 export const Currency: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   return (
-    <FieldContainer
-      iconName='Money'
-      label={field.displayName}
-      description={field.description}
-    >
+    <FieldContainer iconName='Money' label={field.displayName} description={field.description}>
       <Input
         type='number'
         defaultValue={context.model.get<string>(field)}
