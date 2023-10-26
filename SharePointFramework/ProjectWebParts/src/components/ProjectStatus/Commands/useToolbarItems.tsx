@@ -1,46 +1,14 @@
-import { useMemo } from 'react'
-import { ListMenuItem } from 'pp365-shared-library'
 import strings from 'ProjectWebPartsStrings'
-import {
-  bundleIcon,
-  EditFilled,
-  EditRegular,
-  DeleteFilled,
-  DeleteRegular,
-  QuizNewFilled,
-  QuizNewRegular,
-  CloudArrowUpFilled,
-  CloudArrowUpRegular,
-  ArrowLeftFilled,
-  ArrowLeftRegular,
-  HistoryFilled,
-  HistoryRegular,
-  ImageFilled,
-  ImageRegular,
-  CheckmarkSquareFilled
-} from '@fluentui/react-icons'
-import { any } from 'underscore'
-import { OPEN_PANEL, SELECT_REPORT } from '../../reducer'
-import { useProjectStatusContext } from '../../context'
-import { useCreateNewStatusReport } from '../useCreateNewStatusReport'
-import { useDeleteReport } from '../useDeleteReport'
-import { usePublishReport } from '../usePublishReport'
+import { ListMenuItem } from 'pp365-shared-library'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
-import SPDataAdapter from '../../../../data'
-
-/**
- * Object containing icons used in the toolbar.
- */
-const Icons = {
-  QuizNew: bundleIcon(QuizNewFilled, QuizNewRegular),
-  Edit: bundleIcon(EditFilled, EditRegular),
-  Delete: bundleIcon(DeleteFilled, DeleteRegular),
-  CloudArrowUp: bundleIcon(CloudArrowUpFilled, CloudArrowUpRegular),
-  ArrowLeft: bundleIcon(ArrowLeftFilled, ArrowLeftRegular),
-  Image: bundleIcon(ImageFilled, ImageRegular),
-  History: bundleIcon(HistoryFilled, HistoryRegular),
-  CheckmarkSquare: CheckmarkSquareFilled
-}
+import { useMemo } from 'react'
+import { any } from 'underscore'
+import SPDataAdapter from '../../../data'
+import { useProjectStatusContext } from '../context'
+import { OPEN_PANEL, SELECT_REPORT } from '../reducer'
+import { useCreateNewStatusReport } from './useCreateNewStatusReport'
+import { useDeleteReport } from './useDeleteReport'
+import { usePublishReport } from './usePublishReport'
 
 /**
  * Returns an array of menu items for the toolbar in the ProjectStatus component.
@@ -70,7 +38,7 @@ export function useToolbarItems() {
               state.isPublishing ||
               !state.userHasAdminPermission
           )
-          .setIcon(Icons.QuizNew)
+          .setIcon('QuizNew')
           .setOnClick(() => {
             createNewStatusReport()
           }),
@@ -86,7 +54,7 @@ export function useToolbarItems() {
             .setDisabled(
               state.selectedReport?.published || state.isPublishing || !state.userHasAdminPermission
             )
-            .setIcon(Icons.Edit)
+            .setIcon('Edit')
             .setOnClick(() => {
               dispatch(OPEN_PANEL({ name: 'EditStatusPanel' }))
             }),
@@ -102,7 +70,7 @@ export function useToolbarItems() {
             .setDisabled(
               state.selectedReport?.published || state.isPublishing || !state.userHasAdminPermission
             )
-            .setIcon(Icons.CloudArrowUp)
+            .setIcon('CloudArrowUp')
             .setOnClick(() => {
               publishReport()
             })
@@ -115,37 +83,37 @@ export function useToolbarItems() {
       [
         state.sourceUrl &&
           new ListMenuItem(strings.NavigateToSourceUrlText, strings.NavigateToSourceUrlText)
-            .setIcon(Icons.ArrowLeft)
+            .setIcon('ArrowLeft')
             .setOnClick(() => {
               window.open(state.sourceUrl, '_self')
             }),
         state.selectedReport &&
           new ListMenuItem(strings.GetSnapshotButtonLabel, strings.GetSnapshotButtonDescription)
             .setDisabled(!state.selectedReport?.snapshotUrl || state.isPublishing)
-            .setIcon(Icons.Image)
+            .setIcon('Image')
             .setWidth('fit-content')
             .setOnClick(() => {
               window.open(state.selectedReport?.snapshotUrl, '_self')
             }),
         new ListMenuItem(state.selectedReport ? formatDate(state.selectedReport.created) : '')
-          .setIcon(Icons.History)
+          .setIcon('History')
           .setWidth('fit-content')
           .setStyle({ minWidth: '145px' })
           .setDisabled(state.data.reports.length < 2)
           .setItems(
             state.data.reports.map((report) =>
               new ListMenuItem(formatDate(report.created, true), null)
-                .setIcon(report.published ? Icons.CheckmarkSquare : '')
+                .setIcon(report.published ? 'CheckmarkSquare' : '')
                 .makeCheckable({
                   name: 'report',
                   value: formatDate(report.created, true)
                 })
                 .setOnClick(() => {
-                  ;(async () => {
-                    const reportWithAttachments =
-                      await SPDataAdapter.portal.getStatusReportAttachments(report)
-                    dispatch(SELECT_REPORT({ report: reportWithAttachments }))
-                  })()
+                  SPDataAdapter.portal
+                    .getStatusReportAttachments(report)
+                    .then((reportWithAttachments) => {
+                      dispatch(SELECT_REPORT({ report: reportWithAttachments }))
+                    })
                 })
             ),
             { report: [formatDate(state.selectedReport.created, true)] }
@@ -162,7 +130,7 @@ export function useToolbarItems() {
             .setDisabled(
               state.selectedReport?.published || state.isPublishing || !state.userHasAdminPermission
             )
-            .setIcon(Icons.Delete)
+            .setIcon('Delete')
             .setOnClick(() => {
               deleteReport()
             })

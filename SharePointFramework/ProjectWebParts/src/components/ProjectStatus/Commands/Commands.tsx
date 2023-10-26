@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { useProjectStatusContext } from '../context'
 import { Toolbar } from 'pp365-shared-library'
-import { useToolbarItems } from './ToolbarItems/useToolbarItems'
+import { useToolbarItems } from './useToolbarItems'
 import styles from '../ProjectStatus.module.scss'
 import { Shimmer } from '@fluentui/react/lib/Shimmer'
 

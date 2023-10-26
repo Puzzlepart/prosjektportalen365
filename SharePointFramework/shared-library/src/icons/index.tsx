@@ -61,4 +61,15 @@ export function getFluentIconWithFallback(name: string, bundleWithFilled = true,
   return <Icon iconName={name} style={{ color }} />
 }
 
+/**
+ * Checks if an icon with the given name is available in the icon catalog.
+ *
+ * @param name - The name of the icon to check.
+ *
+ * @returns True if the icon is available, false otherwise.
+ */
+export function isIconAvailable(name: string) {
+  return !!iconCatalog[name]
+}
+
 export * from './types'

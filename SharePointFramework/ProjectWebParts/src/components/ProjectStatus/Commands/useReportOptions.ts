@@ -18,13 +18,9 @@ export function useReportOptions() {
       key: report.id.toString(),
       name: formatDate(report.created, true),
       onClick: () => {
-        // eslint-disable-next-line @typescript-eslint/no-extra-semi
-        ;(async () => {
-          const reportWithAttachments = await SPDataAdapter.portal.getStatusReportAttachments(
-            report
-          )
+        SPDataAdapter.portal.getStatusReportAttachments(report).then((reportWithAttachments) => {
           context.dispatch(SELECT_REPORT({ report: reportWithAttachments }))
-        })()
+        })
       },
       canCheck: true,
       iconProps: {

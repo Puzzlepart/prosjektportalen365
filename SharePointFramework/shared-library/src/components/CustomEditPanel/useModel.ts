@@ -83,7 +83,6 @@ export function useModel(props: ICustomEditPanelProps) {
           const email = value[0]?.secondaryText
           let val = null
           if (email) val = (await props.dataAdapter.sp.web.ensureUser(email)).data.Id
-          // TODO: Fix when removing a user from the field, should sync the value correctly
           return [val, `${field.internalName}Id`]
         }
       ],
@@ -103,7 +102,7 @@ export function useModel(props: ICustomEditPanelProps) {
       ],
       [
         'Lookup',
-        async () => {
+        () => {
           return [value, `${field.internalName}Id`]
         }
       ]

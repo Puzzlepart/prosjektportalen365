@@ -47,7 +47,7 @@ export class StatusReport {
    */
   public get persistedSectionData(): Record<string, any> {
     const persistedSectionData = this._attachments.find(
-      (a) => a.name.toLowerCase() === 'persistedsectiondata.json'
+      (a) => a.name?.toLowerCase() === 'persistedsectiondata.json'
     )
     try {
       if (persistedSectionData) {
@@ -63,7 +63,7 @@ export class StatusReport {
    * Get snapshot url for the report.
    */
   public get snapshotUrl(): string {
-    const snapshot = this._attachments.find((a) => a.name.toLowerCase() === 'snapshot.png')
+    const snapshot = this._attachments.find((a) => a.name?.toLowerCase() === 'snapshot.png')
     if (snapshot) return snapshot.url
     return null
   }

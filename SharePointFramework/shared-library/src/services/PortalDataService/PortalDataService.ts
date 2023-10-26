@@ -240,7 +240,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     const projectStatusList = this._getList('PROJECT_STATUS')
     try {
       const attachmentsFolder = await this.ensureAttachmentsFolder(report)
-      await Promise.all([
+      const [, ...attachmentResults] = await Promise.all([
         projectStatusList.items.getById(report.id).update({
           GtModerationStatus: publishedString,
           GtLastReportDate: new Date()
@@ -251,7 +251,11 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           })
         )
       ])
-      return report.setValues({
+      attachments = attachmentResults.map(({ data }) => ({
+        name: data.Name,
+        url: data.ServerRelativeUrl
+      }))
+      return report.initAttachments(attachments).setValues({
         GtModerationStatus: publishedString,
         GtLastReportDate: reportDate
       })

@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Commands } from './Commands'
+import { Commands } from './Commands/Commands'
 import { EditStatusPanel } from './EditStatusPanel'
 import { Header } from './Header/Header'
 import styles from './ProjectStatus.module.scss'

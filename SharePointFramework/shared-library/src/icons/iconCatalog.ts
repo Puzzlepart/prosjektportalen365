@@ -72,13 +72,47 @@ import {
   LinkRegular,
   LinkFilled,
   MoneyRegular,
-  MoneyFilled
+  MoneyFilled,
+  DeleteFilled,
+  DeleteRegular,
+  QuizNewFilled,
+  QuizNewRegular,
+  CloudArrowUpFilled,
+  CloudArrowUpRegular,
+  HistoryFilled,
+  HistoryRegular,
+  ImageFilled,
+  ImageRegular
 } from '@fluentui/react-icons'
 
 /**
  * An object containing the available Fluent icons and their corresponding regular and filled versions.
  */
 export const iconCatalog = {
+  Image: {
+    regular: ImageRegular,
+    filled: ImageFilled
+  },
+  History: {
+    regular: HistoryRegular,
+    filled: HistoryFilled
+  },
+  CloudArrowUp: {
+    regular: CloudArrowUpRegular,
+    filled: CloudArrowUpFilled
+  },
+  QuizNew: {
+    regular: QuizNewRegular,
+    filled: QuizNewFilled
+  },
+  Delete: {
+    regular: DeleteRegular,
+    filled: DeleteFilled
+  },
+  Edit: {
+    regular: EditRegular,
+    filled: EditFilled
+  },
   Money: {
     regular: MoneyRegular,
     filled: MoneyFilled
