@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 import styles from './OverflowTagMenu.module.scss'
 import { useOverflowTagMenu } from './useOverflowTagMenu'
 import _ from 'underscore'
-import { InteractionTag, InteractionTagPrimary, Tag, TagGroup } from '@fluentui/react-tags-preview'
 import {
   FluentProvider,
   Menu,
@@ -15,6 +14,10 @@ import {
   useId,
   useIsOverflowItemVisible,
   useOverflowMenu,
+  InteractionTag,
+  InteractionTagPrimary,
+  Tag,
+  TagGroup,
   webLightTheme
 } from '@fluentui/react-components'
 import { format } from '@fluentui/react'

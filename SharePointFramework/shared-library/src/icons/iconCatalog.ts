@@ -15,6 +15,8 @@ import {
   GroupListFilled,
   TableCellEditRegular,
   TableCellEditFilled,
+  EditRegular,
+  EditFilled,
   ArrowLeftRegular,
   ArrowLeftFilled,
   ArrowRightRegular,

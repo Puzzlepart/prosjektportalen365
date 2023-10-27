@@ -1,5 +1,5 @@
+import { InteractionTagProps } from '@fluentui/react-components'
 import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
-import { InteractionTagProps } from '@fluentui/react-tags-preview'
 
 export type OverflowMenuItemProps = {
   tag: InteractionTagProps
