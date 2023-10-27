@@ -13,6 +13,7 @@ export const DynamicHomepageContent: FC = () => {
   return (
     <div className={styles.root}>
       <UserMessage
+        title={strings.PhaseSitePageTitle}
         text={
           phaseSitePage
             ? format(strings.PhaseSitePageFoundDescription, phaseSitePage?.fileLeafRef)
