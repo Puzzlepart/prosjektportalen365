@@ -39,6 +39,7 @@ define([], function () {
     CalloutTemplateFieldLabel: 'Mal for callout',
     CancelText: 'Avbryt',
     CategoryFieldLabel: 'Kategori',
+    ChangePhaseDialogTitle: 'Endre til {0} fasen',
     ChangePhaseText: 'Endre til denne fasen',
     ChangingPhaseDescription: 'Endrer fase til {0}',
     ChecklistCommentDescription: 'Kommentar er obligatorisk om sjekkpunktet skal markeres som "Ikke relevant" eller "Fortsatt åpen".',
@@ -240,6 +241,7 @@ define([], function () {
     ViewXmlFieldLabel: 'Vis XML spørring',
     WebPartNoAccessMessage: 'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.',
     WidthFieldLabel: 'Bredde (piksler)',
-    Yes: 'Ja'
+    Yes: 'Ja',
+    PhaseCheckListItem: 'Sjekkpunkt {0}',
   }
 })

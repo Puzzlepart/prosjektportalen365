@@ -48,7 +48,7 @@ export const ChangePhaseDialog: FC = () => {
       <Dialog open>
         <DialogSurface>
           <DialogBody className={styles.changePhaseDialog}>
-            <DialogTitle>{strings.ChangePhaseText}</DialogTitle>
+            <DialogTitle>{format(strings.ChangePhaseDialogTitle, context.state.confirmPhase.name)}</DialogTitle>
             <DialogContent className={styles.dialogContent}>
               {state.view === View.Confirm &&
                 format(strings.ConfirmChangePhase, context.state.confirmPhase.name)}

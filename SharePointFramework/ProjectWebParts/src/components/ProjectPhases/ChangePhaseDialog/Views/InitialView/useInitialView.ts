@@ -8,6 +8,7 @@ import { useActions } from './useActions'
 export function useInitialView() {
   const { state } = useContext(ChangePhaseDialogContext)
   const checklistItem = state.checklistItems[state.currentIdx]
+  const checklistItems = state.checklistItems
   const { nextChecklistItem } = useContext(ChangePhaseDialogContext)
   const [comment, setComment] = useState(checklistItem.comment || '')
 
@@ -26,5 +27,5 @@ export function useInitialView() {
 
   const actions = useActions(comment, onNextChecklistItem)
 
-  return { checklistItem, setComment, comment, actions } as const
+  return { checklistItem, checklistItems, setComment, comment, actions } as const
 }

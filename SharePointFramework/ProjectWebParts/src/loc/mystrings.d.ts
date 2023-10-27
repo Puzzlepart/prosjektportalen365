@@ -29,6 +29,7 @@ declare interface IProjectWebPartsStrings {
   CalloutTemplateFieldLabel: string
   CancelText: string
   CategoryFieldLabel: string
+  ChangePhaseDialogTitle: string
   ChangePhaseText: string
   ChangingPhaseDescription: string
   ChecklistCommentDescription: string
@@ -226,6 +227,7 @@ declare interface IProjectWebPartsStrings {
   WebPartNoAccessMessage: string
   WidthFieldLabel: string
   Yes: string
+  PhaseCheckListItem: string
 }
 
 declare module 'ProjectWebPartsStrings' {
