@@ -1,9 +1,9 @@
-import { TextField } from '@fluentui/react/lib/TextField'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import styles from './InitialView.module.scss'
-import { StatusOptions } from './StatusOptions'
 import { useInitialView } from './useInitialView'
+import { Field, Textarea } from '@fluentui/react-components'
+import { StatusActions } from './StatusActions'
 
 export const InitialView: FC = () => {
   const { checklistItem, setComment, comment, actions } = useInitialView()
@@ -11,19 +11,18 @@ export const InitialView: FC = () => {
 
   return (
     <div className={styles.root}>
-      <div className={styles.header}>
-        {checklistItem.id}. {checklistItem.title}
-      </div>
-      <TextField
-        className={styles.commentField}
-        onChange={(_, newValue: string) => setComment(newValue)}
-        placeholder={strings.ChecklistCommentPlaceholder}
-        description={strings.ChecklistCommentDescription}
-        multiline
-        value={comment}
-        resizable={false}
-      />
-      <StatusOptions actions={actions} />
+      <Field
+        label={`${checklistItem.id}. ${checklistItem.title}`}
+        hint={strings.ChecklistCommentDescription}
+      >
+        <Textarea
+          rows={4}
+          value={comment}
+          placeholder={strings.ChecklistCommentPlaceholder}
+          onChange={(_, data) => setComment(data.value)}
+        />
+      </Field>
+      <StatusActions actions={actions} />
     </div>
   )
 }

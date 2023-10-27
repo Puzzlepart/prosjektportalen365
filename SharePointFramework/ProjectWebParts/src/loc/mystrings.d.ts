@@ -137,6 +137,7 @@ declare interface IProjectWebPartsStrings {
   PhaseChecklistViewUrl: string
   PhaseFieldFieldLabel: string
   PhaseLabel: string
+  PhaseSitePageTitle: string
   PhaseSitePageFoundDescription: string
   PhaseSitePageNotFoundDescription: string
   PhaseUseStartArrowLabel: string

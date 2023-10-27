@@ -1,7 +1,6 @@
-.root {
-    .list {
-        list-style-type: none;
-        margin: 0 0 20px 0;
-        padding: 0;
-    }
+.summaryView {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-bottom: 12px;
 }

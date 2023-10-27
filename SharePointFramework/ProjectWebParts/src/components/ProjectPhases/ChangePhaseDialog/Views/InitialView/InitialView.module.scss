@@ -1,14 +1,5 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
 .root {
-  .header {
-    @include ms-fontSize-14;
-  }
-  .commentField {
-    margin: 10px 0 0 0;
-
-    textarea {
-      height: 100px;
-    }
-  }
+ margin: 0;
 }
