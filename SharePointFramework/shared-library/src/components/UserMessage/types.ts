@@ -1,9 +1,14 @@
-import { AlertProps } from '@fluentui/react-components/dist/unstable'
+import { MessageBarProps } from '@fluentui/react-components'
 
 /**
  * @category UserMessage
  */
-export interface IUserMessageProps extends AlertProps {
+export interface IUserMessageProps extends MessageBarProps {
+  /**
+   * Title to show in the message, should be a descriptive title of the message
+   */
+  title?: string
+
   /**
    * Text to show in the message
    *
