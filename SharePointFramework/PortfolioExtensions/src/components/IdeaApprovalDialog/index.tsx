@@ -1,89 +1,80 @@
-/* eslint-disable max-classes-per-file */
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog'
-import { DialogFooter, DialogContent, DialogType, format } from '@fluentui/react'
 import strings from 'PortfolioExtensionsStrings'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
-import { Button, Field, Textarea, Option, Dropdown } from '@fluentui/react-components'
+import {
+  Button,
+  Field,
+  Textarea,
+  Option,
+  Combobox,
+  FluentProvider,
+  webLightTheme,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogTitle
+} from '@fluentui/react-components'
+import { IIdeaApprovalDialogProps } from './types'
+import { FC, useContext } from 'react'
+import { IDeaApprovalDialogContext } from './context'
+import { useIdeaApprovalDialogState } from './useIdeaApprovalDialogState'
+import { format } from '@fluentui/react'
+import styles from './IdeaApprovalDialog.module.scss'
 
-interface IIdeaApprovalDialogContentProps {
-  close: () => void
-  submit: (choice: string, comment: string) => void
-  ideaTitle?: string
-  dialogDescription?: string
-}
+export const IdeaApprovalDialog: FC<IIdeaApprovalDialogProps> = (props) => {
+  const context = useContext(IDeaApprovalDialogContext)
+  const { state, setState } = useIdeaApprovalDialogState()
 
-interface IIdeaApprovalDialogContentState {
-  choice: string
-  comment: string
-}
-
-class IdeaApprovalDialog extends React.Component<
-  IIdeaApprovalDialogContentProps,
-  IIdeaApprovalDialogContentState
-> {
-  constructor(props: IIdeaApprovalDialogContentProps | Readonly<IIdeaApprovalDialogContentProps>) {
-    super(props)
-
-    this.state = {
-      choice: '',
-      comment: ''
-    }
-  }
-
-  public render(): JSX.Element {
-    return (
-      <DialogContent
-        title={strings.SetRecommendationTitle}
-        type={DialogType.largeHeader}
-        onDismiss={this.props.close}
-        showCloseButton={true}
-        styles={{ content: { maxWidth: '420px' } }}
-      >
-        <UserMessage
-          text={format(
-            strings.SetRecommendationSubtitle,
-            this.props.ideaTitle,
-            this.props.dialogDescription
-          )}
-          intent='info'
-        />
-        <Field label={strings.ActionLabel}>
-          <Dropdown
-            onOptionSelect={(_, data) => this.setState({ choice: data.optionText })}
-            placeholder={strings.ActionLabelPlaceholder}
-          >
-            <Option value={strings.ApproveChoice}>{strings.ApproveChoice}</Option>
-            <Option value={strings.ConsiderationChoice}>{strings.ConsiderationChoice}</Option>
-            <Option value={strings.RejectChoice}>{strings.RejectChoice}</Option>
-          </Dropdown>
-        </Field>
-        <Field label={strings.CommentLabel}>
-          <Textarea
-            rows={3}
-            placeholder={strings.CommentLabelPlaceholder}
-            onChange={(_, { value }) => this.setState({ comment: value })}
-          />
-        </Field>
-        <DialogFooter>
-          <Button title={strings.CancelLabel} onClick={this.props.close}>
-            {strings.CancelLabel}
-          </Button>
-          <Button
-            appearance='primary'
-            title={strings.SubmitLabel}
-            onClick={() => {
-              this.props.submit(this.state.choice, this.state.comment)
-            }}
-            disabled={this.state.comment.length > 0 && this.state.choice.length > 0 ? false : true}
-          >
-            {strings.SubmitLabel}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    )
-  }
+  return (
+    <IDeaApprovalDialogContext.Provider value={context}>
+      <FluentProvider theme={webLightTheme}>
+        <DialogBody className={styles.ideaApprovalDialog}>
+          <DialogTitle>{strings.SetRecommendationTitle}</DialogTitle>
+          <DialogContent className={styles.content}>
+            <UserMessage
+              title={format(strings.SetRecommendationSubtitle, props.ideaTitle)}
+              text={props.dialogDescription}
+              intent='info'
+            />
+            <Field label={strings.ActionLabel}>
+              <Combobox
+                onOptionSelect={(_, data) => setState({ choice: data.optionText })}
+                placeholder={strings.ActionLabelPlaceholder}
+              >
+                <Option value={strings.ApproveChoice}>{strings.ApproveChoice}</Option>
+                <Option value={strings.ConsiderationChoice}>{strings.ConsiderationChoice}</Option>
+                <Option value={strings.RejectChoice}>{strings.RejectChoice}</Option>
+              </Combobox>
+            </Field>
+            <Field label={strings.CommentLabel}>
+              <Textarea
+                rows={3}
+                placeholder={strings.CommentLabelPlaceholder}
+                onChange={(_, { value }) => setState({ comment: value })}
+              />
+            </Field>
+          </DialogContent>
+          <DialogActions>
+            <Button title={strings.CancelLabel} onClick={props.close}>
+              {strings.CancelLabel}
+            </Button>
+            <Button
+              appearance='primary'
+              title={strings.SubmitLabel}
+              onClick={() => {
+                props.submit(state.choice, state.comment)
+              }}
+              disabled={state.comment.length > 0 && state.choice.length > 0 ? false : true}
+            >
+              {strings.SubmitLabel}
+            </Button>
+          </DialogActions>
+        </DialogBody>
+      </FluentProvider>
+    </IDeaApprovalDialogContext.Provider>
+  )
 }
 
 export default class RecommendationDialog extends BaseDialog {

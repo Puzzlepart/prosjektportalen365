@@ -15,7 +15,9 @@ declare interface IPortfolioExtensionsStrings {
   IdeaAlreadyApproved: string
   IdeaConfigurationTitle: string
   IdeaProcessorsSiteGroup: string
+  IdeaProjectDataDialogBlockedTitle: string
   IdeaProjectDataDialogBlockedText: string
+  IdeaProjectDataDialogInfoTitle: string
   IdeaProjectDataDialogTitle: string
   IdeaProjectDataTitle: string
   InstallationLogListName: string

@@ -1,60 +1,63 @@
-/* eslint-disable max-classes-per-file */
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { DialogFooter, DialogContent, DialogType, format } from '@fluentui/react'
+import { format } from '@fluentui/react'
 import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import strings from 'PortfolioExtensionsStrings'
-import { Button } from '@fluentui/react-components'
+import {
+  Button,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogTitle
+} from '@fluentui/react-components'
+import { IIdeaDialogProps } from './types'
+import { FC, useContext } from 'react'
+import { IDeaDialogContext } from './context'
+import { Fluent } from 'pp365-shared-library'
+import styles from './IdeaDialog.module.scss'
 
-interface IIdeaDialogContentProps {
-  close: () => void
-  submit: () => void
-  ideaTitle?: string
-  dialogDescription?: string
-  isBlocked?: boolean
-}
+export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
+  const context = useContext(IDeaDialogContext)
 
-class IdeaDialog extends React.Component<IIdeaDialogContentProps> {
-  constructor(props: IIdeaDialogContentProps | Readonly<IIdeaDialogContentProps>) {
-    super(props)
-  }
-
-  public render(): JSX.Element {
-    return (
-      <DialogContent
-        title={strings.IdeaProjectDataDialogTitle}
-        onDismiss={this.props.close}
-        type={DialogType.largeHeader}
-        showCloseButton={true}
-        styles={{ content: { maxWidth: '420px' } }}
-        closeButtonAriaLabel={strings.CloseLabel}
-      >
-        <UserMessage
-          text={format(
-            this.props.isBlocked
-              ? strings.IdeaProjectDataDialogBlockedText
-              : this.props.dialogDescription,
-            encodeURIComponent(window.location.href)
-          )}
-          intent={this.props.isBlocked ? 'warning' : 'info'}
-        />
-        <DialogFooter>
-          <Button title={strings.CancelLabel} onClick={this.props.close}>
-            {strings.CancelLabel}
-          </Button>
-          <Button
-            appearance='primary'
-            title={strings.CreateLabel}
-            onClick={this.props.submit}
-            disabled={this.props.isBlocked}
-          >
-            {strings.CreateLabel}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    )
-  }
+  return (
+    <IDeaDialogContext.Provider value={context}>
+      <Fluent>
+        <DialogBody className={styles.ideaDialog}>
+          <DialogTitle>{strings.IdeaProjectDataDialogTitle}</DialogTitle>
+          <DialogContent>
+            <UserMessage
+              title={
+                props.isBlocked
+                  ? strings.IdeaProjectDataDialogBlockedTitle
+                  : strings.IdeaProjectDataDialogInfoTitle
+              }
+              text={format(
+                props.isBlocked
+                  ? strings.IdeaProjectDataDialogBlockedText
+                  : props.dialogDescription,
+                encodeURIComponent(window.location.href)
+              )}
+              intent={props.isBlocked ? 'warning' : 'info'}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button title={strings.CancelLabel} onClick={props.close}>
+              {strings.CancelLabel}
+            </Button>
+            <Button
+              appearance='primary'
+              title={strings.CreateLabel}
+              onClick={props.submit}
+              disabled={props.isBlocked}
+            >
+              {strings.CreateLabel}
+            </Button>
+          </DialogActions>
+        </DialogBody>
+      </Fluent>
+    </IDeaDialogContext.Provider>
+  )
 }
 
 export default class ProjectDataDialog extends BaseDialog {
