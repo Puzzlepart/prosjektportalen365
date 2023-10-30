@@ -30,6 +30,7 @@ declare interface IProjectWebPartsStrings {
   CancelText: string
   CategoryFieldLabel: string
   ChangePhaseDialogTitle: string
+  ChangePhaseDialogSubtitle: string
   ChangePhaseText: string
   ChangingPhaseDescription: string
   ChecklistCommentDescription: string

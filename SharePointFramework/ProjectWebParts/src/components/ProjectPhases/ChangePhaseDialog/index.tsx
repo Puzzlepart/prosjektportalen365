@@ -13,7 +13,8 @@ import {
   DialogBody,
   DialogContent,
   DialogSurface,
-  DialogTitle
+  DialogTitle,
+  Label
 } from '@fluentui/react-components'
 import { format } from '@fluentui/react'
 import styles from './ChangePhaseDialog.module.scss'
@@ -48,8 +49,17 @@ export const ChangePhaseDialog: FC = () => {
       <Dialog open>
         <DialogSurface>
           <DialogBody className={styles.changePhaseDialog}>
-            <DialogTitle>{format(strings.ChangePhaseDialogTitle, context.state.confirmPhase.name)}</DialogTitle>
+            <DialogTitle>
+              {format(strings.ChangePhaseDialogTitle, context.state.confirmPhase.name)}
+            </DialogTitle>
             <DialogContent className={styles.dialogContent}>
+              <Label weight='semibold'>
+                {format(
+                  strings.ChangePhaseDialogSubtitle,
+                  context.state.phase.name,
+                  context.state.confirmPhase.name
+                )}
+              </Label>
               {state.view === View.Confirm &&
                 format(strings.ConfirmChangePhase, context.state.confirmPhase.name)}
               {state.view === View.Confirm && context.props.useDynamicHomepage && (

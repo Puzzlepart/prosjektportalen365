@@ -14,7 +14,12 @@ export const InitialView: FC = () => {
     <div className={styles.root}>
       <TabList className={styles.tabList} selectedValue={checklistItem.id}>
         {checklistItems.map((item) => (
-          <Tab className={styles.tabItem} key={item.id} title={format(strings.PhaseCheckListItem, item.id)} value={item.id}>
+          <Tab
+            className={styles.tabItem}
+            key={item.id}
+            title={format(strings.PhaseCheckListItem, item.id)}
+            value={item.id}
+          >
             {item.id}
           </Tab>
         ))}
