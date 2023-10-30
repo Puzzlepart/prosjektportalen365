@@ -88,7 +88,7 @@ import {
   CircleFilled,
   CircleRegular,
   DismissCircleRegular,
-  DismissCircleFilled,
+  DismissCircleFilled
 } from '@fluentui/react-icons'
 
 /**
