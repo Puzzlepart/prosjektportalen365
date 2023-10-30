@@ -39,6 +39,8 @@ define([], function () {
     CalloutTemplateFieldLabel: 'Mal for callout',
     CancelText: 'Avbryt',
     CategoryFieldLabel: 'Kategori',
+    ChangePhaseDialogTitle: 'Endre til {0} fasen',
+    ChangePhaseDialogSubtitle: 'Dette vil medføre endring fra {0} til {1} fasen',
     ChangePhaseText: 'Endre til denne fasen',
     ChangingPhaseDescription: 'Endrer fase til {0}',
     ChecklistCommentDescription: 'Kommentar er obligatorisk om sjekkpunktet skal markeres som "Ikke relevant" eller "Fortsatt åpen".',
@@ -154,8 +156,9 @@ define([], function () {
     PhaseLabel: 'Fase',
     PhaseUseStartArrowLabel: 'Bruk startpil',
     PhaseUseEndArrowLabel: 'Bruk avsluttende pil',
+    PhaseSitePageTitle: 'Dynamisk forside er aktivert',
     PhaseSitePageFoundDescription: 'Å endre til denne fasen vil også endre forsiden til prosjektet.<br /><br />Side _{0}_ for fase funnet. Denne siden vil bli brukt som forside for prosjektet. Trykk **Ja** for å fortsette.',
-    PhaseSitePageNotFoundDescription: 'Dynamisk forside er aktivert.<br /><br />Side _{0}_ for fase ble ikke funnet, vennligst opprett. Ved trykk på **Ja** vil ikke forside endres.',
+    PhaseSitePageNotFoundDescription: 'Side _{0}_ for fase ble ikke funnet, vennligst opprett. Ved trykk på **Ja** vil ikke forside endres, men fasen vil bli endret.',
     PleaseWaitText: 'Vennligst vent',
     ProbabilityFieldNameFieldLabel: 'Feltnavn - Sannsynlighet',
     ProbabilityHeaderFieldLabel: 'Sannsynlighet {0}',
@@ -239,6 +242,7 @@ define([], function () {
     ViewXmlFieldLabel: 'Vis XML spørring',
     WebPartNoAccessMessage: 'Du har ikke tilgang til å se denne webdelen.<br/><br/>Du må enten ha tilgang til porteføljeområdet, eller så må prosjektet være fristilt fra porteføljeområdet.',
     WidthFieldLabel: 'Bredde (piksler)',
-    Yes: 'Ja'
+    Yes: 'Ja',
+    PhaseCheckListItem: 'Sjekkpunkt {0}',
   }
 })

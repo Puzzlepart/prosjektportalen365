@@ -1,5 +1,10 @@
-.root {
+.changePhaseDialog {
   width: 550px;
   max-width: 550px;
-  font-weight: 300;
+
+  .dialogContent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 }

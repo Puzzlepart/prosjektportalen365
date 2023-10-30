@@ -94,7 +94,11 @@ import {
   QuestionCircleFilled,
   QuestionCircleRegular,
   ArrowDownloadRegular,
-  ArrowDownloadFilled
+  ArrowDownloadFilled,
+  CircleFilled,
+  CircleRegular,
+  DismissCircleRegular,
+  DismissCircleFilled
 } from '@fluentui/react-icons'
 
 /**
@@ -292,5 +296,13 @@ export const iconCatalog = {
   ArrowDownload: {
     regular: ArrowDownloadRegular,
     filled: ArrowDownloadFilled
+  },
+  Circle: {
+    regular: CircleRegular,
+    filled: CircleFilled
+  },
+  DismissCircle: {
+    regular: DismissCircleRegular,
+    filled: DismissCircleFilled
   }
 }

@@ -1,14 +1,18 @@
-import { format, ProgressIndicator } from '@fluentui/react'
+import { format } from '@fluentui/react'
 import { ProjectPhasesContext } from '../../../../ProjectPhases/context'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
+import { Field, ProgressBar } from '@fluentui/react-components'
 
 export const ChangingPhaseView: FC = () => {
   const context = useContext(ProjectPhasesContext)
   return (
-    <ProgressIndicator
+    <Field
       label={strings.PleaseWaitText}
-      description={format(strings.ChangingPhaseDescription, context.state.confirmPhase.name)}
-    />
+      hint={format(strings.ChangingPhaseDescription, context.state.confirmPhase.name)}
+      validationState='none'
+    >
+      <ProgressBar />
+    </Field>
   )
 }
