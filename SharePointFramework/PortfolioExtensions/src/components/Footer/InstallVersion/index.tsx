@@ -1,23 +1,16 @@
-import { ActionButton, TooltipHost } from '@fluentui/react'
 import React, { FC, useContext } from 'react'
 import { FooterContext } from '../context'
-import styles from './InstallVersion.module.scss'
 import { InstallVersionTooltipContent } from './InstallVersionTooltipContent'
+import { Button, Tooltip } from '@fluentui/react-components'
+import { getFluentIcon } from 'pp365-shared-library'
 
 export const InstallVersion: FC = () => {
   const context = useContext(FooterContext)
   return (
-    <TooltipHost
-      hostClassName={styles.root}
-      calloutProps={{ gapSpace: 0, calloutMaxWidth: 450 }}
-      hidden={false}
-      content={<InstallVersionTooltipContent />}
-    >
-      <ActionButton
-        text={context.installedVersion}
-        iconProps={{ iconName: 'ProductList' }}
-        styles={{ root: { fontSize: 12, height: 25 }, icon: { fontSize: 12 } }}
-      />
-    </TooltipHost>
+    <Tooltip relationship='description' withArrow content={<InstallVersionTooltipContent />}>
+      <Button size='small' appearance='subtle' icon={getFluentIcon('BoxToolbox')}>
+        {context.installedVersion}
+      </Button>
+    </Tooltip>
   )
 }

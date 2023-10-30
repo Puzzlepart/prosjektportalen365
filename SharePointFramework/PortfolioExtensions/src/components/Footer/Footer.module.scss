@@ -1,24 +1,17 @@
-.root {
-    padding: 25px;
-    height: 25px;
+.footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     box-sizing: border-box;
+    min-height: 65px;
+    padding: 25px;
+    background-color: var(--colorNeutralBackground1);
+    border-top: 1px solid var(--colorNeutralBackground3);
 
-    .content {
-        .left {
-            float: left;
-
-            .configurationLink, .siteSettingsLink {
-                font-size: 12px;
-                margin: 0 8px 0 0;
-            }
-        }
-        .right {
-            float: right;
-
-            .installVersion {
-                font-size: 12px;
-                cursor: help;
-            }
-        }
-    }
+  .left, .right {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+  }
 }
