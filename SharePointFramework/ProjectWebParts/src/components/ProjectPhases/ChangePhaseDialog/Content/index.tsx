@@ -9,7 +9,7 @@ const VIEW_MAP: Record<View, JSX.Element> = {
   [View.Confirm]: null
 }
 
-export const Body: FC = () => {
+export const Content: FC = () => {
   const { state } = useContext(ChangePhaseDialogContext)
   return VIEW_MAP[state.view] ?? null
 }

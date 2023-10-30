@@ -1,14 +1,14 @@
-import { DefaultButton, DialogFooter, PrimaryButton } from '@fluentui/react'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext } from 'react'
-import { DISMISS_CHANGE_PHASE_DIALOG } from '../../..//ProjectPhases/reducer'
-import { ProjectPhasesContext } from '../../../ProjectPhases/context'
+import { DISMISS_CHANGE_PHASE_DIALOG } from '../../reducer'
+import { ProjectPhasesContext } from '../../context'
 import { useChangePhase } from '../../useChangePhase'
 import { View } from '../Views'
 import { ChangePhaseDialogContext } from '../context'
 import { SET_VIEW } from '../reducer'
+import { Button, DialogActions } from '@fluentui/react-components'
 
-export const Footer: FC = () => {
+export const Actions: FC = () => {
   const context = useContext(ProjectPhasesContext)
   const { state, dispatch } = useContext(ChangePhaseDialogContext)
   const onChangePhase = useChangePhase()
@@ -47,14 +47,18 @@ export const Footer: FC = () => {
   }
 
   return (
-    <DialogFooter>
-      <DefaultButton
-        text={strings.CancelText}
+    <DialogActions>
+      <Button
+        title={strings.CancelText}
         onClick={() => context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())}
-      />
+      >
+        {strings.CancelText}
+      </Button>
       {actions.map((buttonProps, index) => (
-        <PrimaryButton key={index} {...buttonProps} />
+        <Button appearance='primary' key={index} {...buttonProps}>
+          {buttonProps.text}
+        </Button>
       ))}
-    </DialogFooter>
+    </DialogActions>
   )
 }

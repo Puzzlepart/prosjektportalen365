@@ -10,9 +10,3 @@ export const STATUS_COLORS = {
   [strings.StatusClosed]: '#107c10',
   [strings.StatusNotRelevant]: '#e81123'
 }
-
-export const STATUS_ICONS = {
-  [strings.StatusOpen]: 'CircleRing',
-  [strings.StatusClosed]: 'Completed',
-  [strings.StatusNotRelevant]: 'Blocked'
-}

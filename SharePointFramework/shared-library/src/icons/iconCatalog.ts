@@ -84,7 +84,11 @@ import {
   HistoryFilled,
   HistoryRegular,
   ImageFilled,
-  ImageRegular
+  ImageRegular,
+  CircleFilled,
+  CircleRegular,
+  DismissCircleRegular,
+  DismissCircleFilled,
 } from '@fluentui/react-icons'
 
 /**
@@ -262,5 +266,13 @@ export const iconCatalog = {
   PeopleCommunity: {
     regular: PeopleCommunityRegular,
     filled: PeopleCommunityFilled
+  },
+  Circle: {
+    regular: CircleRegular,
+    filled: CircleFilled
+  },
+  DismissCircle: {
+    regular: DismissCircleRegular,
+    filled: DismissCircleFilled
   }
 }

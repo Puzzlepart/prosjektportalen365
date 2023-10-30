@@ -1,5 +1,5 @@
-import { IButtonProps } from '@fluentui/react/lib/Button'
 import { ProjectPhasesContext } from 'components/ProjectPhases/context'
+import { getFluentIcon } from 'pp365-shared-library'
 import * as strings from 'ProjectWebPartsStrings'
 import { useContext } from 'react'
 
@@ -12,7 +12,7 @@ import { useContext } from 'react'
 export function useActions(comment: string, onNextChecklistItem: (statusValue: string) => void) {
   const context = useContext(ProjectPhasesContext)
   const isCommentValid = comment?.length >= context.props.commentMinLength
-  const actions: IButtonProps[] = [
+  const actions = [
     {
       text: strings.StatusNotRelevant,
       disabled: !isCommentValid,
@@ -20,7 +20,7 @@ export function useActions(comment: string, onNextChecklistItem: (statusValue: s
         ? strings.CheckpointNotRelevantTooltip
         : strings.CheckpointNotRelevantTooltipCommentEmpty,
       onClick: () => onNextChecklistItem(strings.StatusNotRelevant),
-      iconProps: { iconName: 'Blocked' }
+      icon: getFluentIcon('DismissCircle')
     },
     {
       text: strings.StatusStillOpen,
@@ -29,13 +29,13 @@ export function useActions(comment: string, onNextChecklistItem: (statusValue: s
         ? strings.CheckpointStillOpenTooltip
         : strings.CheckpointStillOpenTooltipCommentEmpty,
       onClick: () => onNextChecklistItem(strings.StatusOpen),
-      iconProps: { iconName: 'CircleRing' }
+      icon: getFluentIcon('Circle')
     },
     {
       text: strings.StatusClosed,
       title: strings.CheckpointDoneTooltip,
       onClick: () => onNextChecklistItem(strings.StatusClosed),
-      iconProps: { iconName: 'CheckMark' }
+      icon: getFluentIcon('CheckmarkCircle')
     }
   ]
   return actions

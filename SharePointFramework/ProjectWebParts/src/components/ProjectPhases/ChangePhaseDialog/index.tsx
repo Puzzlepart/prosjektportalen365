@@ -1,16 +1,23 @@
-import { Dialog, DialogType, format } from '@fluentui/react'
 import SPDataAdapter from '../../../data'
 import * as strings from 'ProjectWebPartsStrings'
 import React, { FC, useContext, useEffect, useReducer } from 'react'
 import { ProjectPhasesContext } from '../context'
-import { DISMISS_CHANGE_PHASE_DIALOG } from '../reducer'
-import { Body } from './Body'
-import styles from './ChangePhaseDialog.module.scss'
+import { Content } from './Content'
 import { ChangePhaseDialogContext } from './context'
 import { DynamicHomepageContent } from './DynamicHomepageContent'
-import { Footer } from './Footer'
+import { Actions } from './Actions'
 import reducer, { CHECKLIST_ITEM_UPDATED, INIT } from './reducer'
 import { View } from './Views'
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTitle,
+  Label
+} from '@fluentui/react-components'
+import { format } from '@fluentui/react'
+import styles from './ChangePhaseDialog.module.scss'
 
 export const ChangePhaseDialog: FC = () => {
   const context = useContext(ProjectPhasesContext)
@@ -39,23 +46,30 @@ export const ChangePhaseDialog: FC = () => {
 
   return (
     <ChangePhaseDialogContext.Provider value={{ state, dispatch, nextChecklistItem }}>
-      <Dialog
-        isOpen={true}
-        containerClassName={styles.root}
-        title={strings.ChangePhaseText}
-        subText={
-          state.view === View.Confirm &&
-          format(strings.ConfirmChangePhase, context.state.confirmPhase.name)
-        }
-        dialogContentProps={{ type: DialogType.largeHeader }}
-        modalProps={{ isDarkOverlay: true, isBlocking: false }}
-        onDismiss={() => context.dispatch(DISMISS_CHANGE_PHASE_DIALOG())}
-      >
-        {state.view === View.Confirm && context.props.useDynamicHomepage && (
-          <DynamicHomepageContent />
-        )}
-        <Body />
-        <Footer />
+      <Dialog open>
+        <DialogSurface>
+          <DialogBody className={styles.changePhaseDialog}>
+            <DialogTitle>
+              {format(strings.ChangePhaseDialogTitle, context.state.confirmPhase.name)}
+            </DialogTitle>
+            <DialogContent className={styles.dialogContent}>
+              <Label weight='semibold'>
+                {format(
+                  strings.ChangePhaseDialogSubtitle,
+                  context.state.phase.name,
+                  context.state.confirmPhase.name
+                )}
+              </Label>
+              {state.view === View.Confirm &&
+                format(strings.ConfirmChangePhase, context.state.confirmPhase.name)}
+              {state.view === View.Confirm && context.props.useDynamicHomepage && (
+                <DynamicHomepageContent />
+              )}
+              <Content />
+            </DialogContent>
+            <Actions />
+          </DialogBody>
+        </DialogSurface>
       </Dialog>
     </ChangePhaseDialogContext.Provider>
   )
