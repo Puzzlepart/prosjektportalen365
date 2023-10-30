@@ -33,6 +33,7 @@ declare interface IPortfolioExtensionsStrings {
   InstallStartTimeLabel: string
   InstallVersionLabel: string
   LastInstallHeaderText: string
+  LastInstallDescription: string
   LatestGitHubReleaseDownloadButtonText: string
   LatestGitHubReleaseIsNewerText: any
   LatestGitHubReleaseIsOlderText: any

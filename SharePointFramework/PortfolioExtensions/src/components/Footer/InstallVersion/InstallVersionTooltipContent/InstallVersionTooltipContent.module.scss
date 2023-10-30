@@ -1,12 +1,33 @@
-.root {
-    padding: 10px;
-    width: 450px;
-    box-sizing: border-box;
+.lastInstall {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: fit-content;
+  box-sizing: border-box;
 
-    .footer {
-        margin: 20px 0 0 0;
-        .seeAllInstallationsLink {
-            color: inherit;
-        }
+  .content {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+  }
+
+  .divider {
+    padding: 12px 0;
+  }
+
+  .footer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .button {
+      justify-content: flex-start;
+      width: fit-content;
+
+      .label {
+        font-weight: var(--fontWeightRegular);
+        margin: 0;
+      }
     }
+  }
 }

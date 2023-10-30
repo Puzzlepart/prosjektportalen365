@@ -44,7 +44,7 @@ export const PromotedLinks: FC = () => {
         <MenuList>
           {context.props.links.map((link, idx) => (
             <MenuItem
-              style={{ maxWidth: 'fit-content' }}
+              style={{ maxWidth: 'fit-content', minWidth: '100%' }}
               key={idx}
               onClick={() => window.open(link.Url, '_blank')}
             >

@@ -92,7 +92,9 @@ import {
   BoxToolboxFilled,
   BoxToolboxRegular,
   QuestionCircleFilled,
-  QuestionCircleRegular
+  QuestionCircleRegular,
+  ArrowDownloadRegular,
+  ArrowDownloadFilled
 } from '@fluentui/react-icons'
 
 /**
@@ -286,5 +288,9 @@ export const iconCatalog = {
   QuestionCircle: {
     regular: QuestionCircleRegular,
     filled: QuestionCircleFilled
+  },
+  ArrowDownload: {
+    regular: ArrowDownloadRegular,
+    filled: ArrowDownloadFilled
   }
 }
