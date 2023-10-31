@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 import styles from './InitialView.module.scss'
 import { useInitialView } from './useInitialView'
 import { Field, Label, Tab, TabList, Textarea } from '@fluentui/react-components'
-import { StatusActions } from './StatusActions'
+import { StatusActions } from './StatusActions/StatusActions'
 import { format } from '@fluentui/react'
 
 export const InitialView: FC = () => {

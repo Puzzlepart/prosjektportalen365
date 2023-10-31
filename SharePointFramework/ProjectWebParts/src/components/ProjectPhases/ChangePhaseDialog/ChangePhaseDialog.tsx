@@ -1,13 +1,4 @@
-import SPDataAdapter from '../../../data'
-import * as strings from 'ProjectWebPartsStrings'
-import React, { FC, useContext, useEffect, useReducer } from 'react'
-import { ProjectPhasesContext } from '../context'
-import { Content } from './Content'
-import { ChangePhaseDialogContext } from './context'
-import { DynamicHomepageContent } from './DynamicHomepageContent'
-import { Actions } from './Actions'
-import reducer, { CHECKLIST_ITEM_UPDATED, INIT } from './reducer'
-import { View } from './Views'
+import { format } from '@fluentui/react'
 import {
   Dialog,
   DialogBody,
@@ -16,33 +7,21 @@ import {
   DialogTitle,
   Label
 } from '@fluentui/react-components'
-import { format } from '@fluentui/react'
+import * as strings from 'ProjectWebPartsStrings'
+import React, { FC, useContext } from 'react'
+import { ProjectPhasesContext } from '../context'
+import { Actions } from './Actions/Actions'
 import styles from './ChangePhaseDialog.module.scss'
+import { Content } from './Content/Content'
+import { DynamicHomepageContent } from './DynamicHomepageContent/DynamicHomepageContent'
+import { View } from './Views'
+import { ChangePhaseDialogContext } from './context'
+import { useChangePhaseDialog } from './useChangePhaseDialog'
 
 export const ChangePhaseDialog: FC = () => {
   const context = useContext(ProjectPhasesContext)
+  const { state, dispatch, nextChecklistItem } = useChangePhaseDialog()
   if (!context.state.confirmPhase) return null
-  const [state, dispatch] = useReducer(reducer, {})
-
-  useEffect(() => dispatch(INIT({ context })), [])
-
-  /**
-   * Next checklist item
-   *
-   * Updates the current checklist item, and dispatches CHECKLIST_ITEM_UPDATED
-   * with the properties
-   *
-   * @param properties Properties
-   */
-  const nextChecklistItem = async (properties: Partial<Record<string, any>>) => {
-    const currentItem = [...state.checklistItems][state.currentIdx]
-    await SPDataAdapter.project.updateChecklistItem(
-      strings.PhaseChecklistName,
-      currentItem.id,
-      properties
-    )
-    dispatch(CHECKLIST_ITEM_UPDATED({ properties }))
-  }
 
   return (
     <ChangePhaseDialogContext.Provider value={{ state, dispatch, nextChecklistItem }}>
@@ -74,5 +53,3 @@ export const ChangePhaseDialog: FC = () => {
     </ChangePhaseDialogContext.Provider>
   )
 }
-
-export * from './types'
