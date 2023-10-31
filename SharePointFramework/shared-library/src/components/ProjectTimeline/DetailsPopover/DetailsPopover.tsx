@@ -127,13 +127,17 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
 
   return (
     <Popover
+      withArrow
       open={props.open}
       onOpenChange={(_, data) => {
         if (!data.open) {
           props.onDismiss()
         }
       }}
-      positioning={{ target: props.timelineItem?.element }}
+      positioning={{
+        target: props.timelineItem?.element,
+        overflowBoundary: document.getElementsByClassName('rct-scroll')[0] as HTMLElement,
+      }}
     >
       <PopoverSurface className={styles.detailsPopover}>
         <div className={styles.calloutHeader}>
