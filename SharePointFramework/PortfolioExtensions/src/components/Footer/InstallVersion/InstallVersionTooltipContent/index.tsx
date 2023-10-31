@@ -1,4 +1,3 @@
-import { format } from '@fluentui/react'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useContext } from 'react'
 import { FooterContext } from '../../context'
