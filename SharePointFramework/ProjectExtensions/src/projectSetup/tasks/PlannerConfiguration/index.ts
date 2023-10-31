@@ -66,7 +66,7 @@ export class PlannerConfiguration extends BaseTask {
   ): Promise<IPlannerPlan> {
     try {
       let plan: IPlannerPlan = {
-        title: [pageContext.web.title, this.planTitle].filter(Boolean).join(' - '),
+        title: [this.planTitle, pageContext.web.title].filter(Boolean).join(' - '),
         owner: pageContext.legacyPageContext.groupId
       }
       this.logInformation(`Creating plan ${plan.title}`)
