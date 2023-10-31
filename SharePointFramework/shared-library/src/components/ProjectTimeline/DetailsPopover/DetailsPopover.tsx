@@ -136,7 +136,7 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
       }}
       positioning={{
         target: props.timelineItem?.element,
-        overflowBoundary: document.getElementsByClassName('rct-scroll')[0] as HTMLElement,
+        overflowBoundary: document.getElementsByClassName('rct-scroll')[0] as HTMLElement
       }}
     >
       <PopoverSurface className={styles.detailsPopover}>
