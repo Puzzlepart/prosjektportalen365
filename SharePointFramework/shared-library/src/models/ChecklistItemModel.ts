@@ -29,9 +29,9 @@ export class ChecklistItemModel {
   }
 
   /**
-   * Updates the properties of the current `ChecklistItemModel` instance 
+   * Updates the properties of the current `ChecklistItemModel` instance
    * and returns a new instance with the updated properties.
-   * 
+   *
    * @param properties The properties to update.
    */
   public update(properties: Partial<ChecklistItemModel>) {
