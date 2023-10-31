@@ -1,29 +1,58 @@
-import { ActionButton, Link, TooltipHost } from '@fluentui/react'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useContext } from 'react'
 import { FooterContext } from '../context'
-import styles from './PromotedLinks.module.scss'
+import {
+  Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  MenuPopover,
+  MenuTrigger,
+  Tooltip
+} from '@fluentui/react-components'
+import { getFluentIcon } from 'pp365-shared-library'
 
 export const PromotedLinks: FC = () => {
   const context = useContext(FooterContext)
   return (
-    <TooltipHost
-      hostClassName={styles.tooltipHost}
-      content={
-        <div className={styles.tooltipContent}>
+    <Menu>
+      <MenuTrigger disableButtonEnhancement>
+        <Tooltip
+          relationship='description'
+          withArrow
+          content={
+            <>
+              {strings.LinksListDescription}
+              <Link
+                href={`${context.props.portalUrl}/Lists/Lenker/AllItems.aspx`}
+                target='_blank'
+                title={strings.LinksListName}
+              >
+                {strings.LinksListName}
+              </Link>
+            </>
+          }
+        >
+          <MenuButton size='small' appearance='subtle' icon={getFluentIcon('Link')}>
+            {strings.LinksListLabel}
+          </MenuButton>
+        </Tooltip>
+      </MenuTrigger>
+
+      <MenuPopover style={{ minWidth: 'fit-content' }}>
+        <MenuList>
           {context.props.links.map((link, idx) => (
-            <div key={idx}>
-              <Link href={link.Url}>{link.Description}</Link>
-            </div>
+            <MenuItem
+              style={{ maxWidth: 'fit-content', minWidth: '100%' }}
+              key={idx}
+              onClick={() => window.open(link.Url, '_blank')}
+            >
+              {link.Description}
+            </MenuItem>
           ))}
-        </div>
-      }
-    >
-      <ActionButton
-        text={strings.LinksListText}
-        iconProps={{ iconName: 'Link' }}
-        styles={{ root: { fontSize: 12, height: 25 }, icon: { fontSize: 12 } }}
-      />
-    </TooltipHost>
+        </MenuList>
+      </MenuPopover>
+    </Menu>
   )
 }

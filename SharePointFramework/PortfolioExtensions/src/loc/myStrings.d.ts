@@ -7,10 +7,14 @@ declare interface IPortfolioExtensionsStrings {
   CloseLabel: string
   CommentLabel: string
   CommentLabelPlaceholder: string
-  ConfigurationLinkText: string
+  ConfigurationDescription: string
+  ConfigurationLabel: string
   ConsiderationChoice: string
   CreateLabel: string
-  HelpContentLinkText: string
+  HelpContentAvailableDescription: string
+  HelpContentAvailableLabel: string
+  HelpContentUnavailableDescription: string
+  HelpContentUnavailableLabel: string
   HelpContentListName: string
   IdeaAlreadyApproved: string
   IdeaConfigurationTitle: string
@@ -22,13 +26,10 @@ declare interface IPortfolioExtensionsStrings {
   IdeaProjectDataTitle: string
   InstallationLogListName: string
   InstallChannelLabel: string
-  InstallCommandLabel: string
-  InstallDurationLabel: string
-  InstallDurationValueTemplate: string
-  InstallEndTimeLabel: string
-  InstallStartTimeLabel: string
+  InstalledDateLabel: string
   InstallVersionLabel: string
   LastInstallHeaderText: string
+  LastInstallDescription: string
   LatestGitHubReleaseDownloadButtonText: string
   LatestGitHubReleaseIsNewerText: any
   LatestGitHubReleaseIsOlderText: any
@@ -36,13 +37,15 @@ declare interface IPortfolioExtensionsStrings {
   LatestGitHubReleaseLabel: string
   LatestGitHubReleaseLinkTitle: string
   LinksListName: string
-  LinksListText: ReactNode
+  LinksListDescription: string
+  LinksListLabel: string
   RejectChoice: string
   SeeAllInstallationsLinkText: string
   SetRecommendationDefaultDescription: string
   SetRecommendationSubtitle: string
   SetRecommendationTitle: string
-  SiteSettingsLinkText: ReactNode
+  SiteSettingsDescription: string
+  SiteSettingsLabel: string
   SubmitLabel: string
 }
 

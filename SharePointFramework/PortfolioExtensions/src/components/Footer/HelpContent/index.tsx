@@ -1,22 +1,37 @@
-import { ActionButton } from '@fluentui/react'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC, useContext, useState } from 'react'
 import { HelpContentModal } from './HelpContentModal'
 import { FooterContext } from '../context'
+import { Button, Tooltip } from '@fluentui/react-components'
+import { getFluentIcon } from 'pp365-shared-library'
 
 export const HelpContent: FC = () => {
   const context = useContext(FooterContext)
   const [showModal, setShowModal] = useState(false)
-  const isHidden = context.props.helpContent.length === 0
+  const isUnavailable = context.props.helpContent.length === 0
+
   return (
-    <div style={{ display: isHidden ? 'none' : 'inline-block' }}>
-      <ActionButton
-        text={strings.HelpContentLinkText}
-        iconProps={{ iconName: 'Help' }}
-        styles={{ root: { fontSize: 12, height: 25 }, icon: { fontSize: 12 } }}
-        onClick={() => setShowModal(true)}
-      />
+    <>
+      <Tooltip
+        relationship='description'
+        withArrow
+        content={
+          isUnavailable
+            ? strings.HelpContentUnavailableDescription
+            : strings.HelpContentAvailableDescription
+        }
+      >
+        <Button
+          size='small'
+          appearance='subtle'
+          onClick={() => setShowModal(true)}
+          disabled={isUnavailable}
+          icon={getFluentIcon('QuestionCircle')}
+        >
+          {isUnavailable ? strings.HelpContentUnavailableLabel : strings.HelpContentAvailableLabel}
+        </Button>
+      </Tooltip>
       <HelpContentModal isOpen={showModal} onDismiss={() => setShowModal(false)} />
-    </div>
+    </>
   )
 }

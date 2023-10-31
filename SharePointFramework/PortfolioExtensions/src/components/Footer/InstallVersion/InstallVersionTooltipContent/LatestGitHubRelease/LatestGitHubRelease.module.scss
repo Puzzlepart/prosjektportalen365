@@ -1,16 +1,37 @@
-.root {
-    margin: 15px 0 0 0;
+.latestRelease {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 
-    .label {
-        font-weight: 600;
-    }
-    
-    .latestGitHubReleaseLink {
+  .content {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+
+    .version {
+      display: flex;
+      gap: 4px;
+
+      .latestGitHubReleaseLink {
         color: inherit;
-    }
+      }
 
-    .versionComparisonIcon {
+      .versionComparisonIcon {
         margin: 0 3px;
         vertical-align: middle;
+        cursor: default;
+      }
+
     }
+  }
+
+  .button {
+    justify-content: flex-start;
+    width: fit-content;
+
+    .label {
+      font-weight: var(--fontWeightRegular);
+      margin: 0;
+    }
+  }
 }

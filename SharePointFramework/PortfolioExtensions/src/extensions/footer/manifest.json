@@ -1,6 +1,6 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-extension-manifest.schema.json",
-  "id": "84f27cec-ffde-4e00-a4cf-25c69f691054",
+  "id": "65d27710-49a9-4492-a4ec-3ac4f1e798d2",
   "alias": "Footer",
   "componentType": "Extension",
   "extensionType": "ApplicationCustomizer",

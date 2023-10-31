@@ -85,6 +85,16 @@ import {
   HistoryRegular,
   ImageFilled,
   ImageRegular,
+  SettingsFilled,
+  SettingsRegular,
+  ContentSettingsFilled,
+  ContentSettingsRegular,
+  BoxToolboxFilled,
+  BoxToolboxRegular,
+  QuestionCircleFilled,
+  QuestionCircleRegular,
+  ArrowDownloadRegular,
+  ArrowDownloadFilled,
   CircleFilled,
   CircleRegular,
   DismissCircleRegular,
@@ -266,6 +276,26 @@ export const iconCatalog = {
   PeopleCommunity: {
     regular: PeopleCommunityRegular,
     filled: PeopleCommunityFilled
+  },
+  Settings: {
+    regular: SettingsRegular,
+    filled: SettingsFilled
+  },
+  ContentSettings: {
+    regular: ContentSettingsRegular,
+    filled: ContentSettingsFilled
+  },
+  BoxToolbox: {
+    regular: BoxToolboxRegular,
+    filled: BoxToolboxFilled
+  },
+  QuestionCircle: {
+    regular: QuestionCircleRegular,
+    filled: QuestionCircleFilled
+  },
+  ArrowDownload: {
+    regular: ArrowDownloadRegular,
+    filled: ArrowDownloadFilled
   },
   Circle: {
     regular: CircleRegular,

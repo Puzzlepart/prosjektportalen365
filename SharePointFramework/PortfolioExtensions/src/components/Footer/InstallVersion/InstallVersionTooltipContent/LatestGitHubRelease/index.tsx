@@ -1,9 +1,11 @@
-import { ActionButton, Icon, Link } from '@fluentui/react'
+import { Icon } from '@fluentui/react'
 import strings from 'PortfolioExtensionsStrings'
 import React, { FC } from 'react'
 import { ILatestGitHubReleaseProps } from './types'
 import styles from './LatestGitHubRelease.module.scss'
 import { useLatestGitHubRelease } from './useLatestGitHubRelease'
+import { Button, Label, Link, Tooltip } from '@fluentui/react-components'
+import { getFluentIcon } from 'pp365-shared-library'
 
 /**
  * Component for displaying the latest GitHub release and a
@@ -14,30 +16,37 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
     useLatestGitHubRelease(props)
 
   return (
-    <div className={styles.root}>
-      <div>
-        <span className={styles.label}>{strings.LatestGitHubReleaseLabel}</span>
-        <span
-          className={styles.latestGitHubReleaseLink}
-          title={strings.LatestGitHubReleaseLinkTitle}
-        >
-          <Link href={latestGitHubRelease.html_url} target='_blank' rel='noopener noreferrer'>
-            {latestGitHubVersion.toString()}
-          </Link>
+    <div className={styles.latestRelease}>
+      <div className={styles.content}>
+        <span>
+          <Label weight='semibold'>{strings.LatestGitHubReleaseLabel}</Label>:
         </span>
-        <span className={styles.versionComparisonIcon}>
-          <Icon {...versionComparisonIconProps} />
-        </span>
+        <div className={styles.version}>
+          <span
+            className={styles.latestGitHubReleaseLink}
+            title={strings.LatestGitHubReleaseLinkTitle}
+          >
+            <Link href={latestGitHubRelease.html_url} target='_blank' rel='noopener noreferrer'>
+              <b>{latestGitHubVersion.toString()}</b>
+            </Link>
+          </span>
+          <Tooltip relationship='description' withArrow content={versionComparisonIconProps.title}>
+            <span className={styles.versionComparisonIcon}>
+              <Icon {...versionComparisonIconProps} />
+            </span>
+          </Tooltip>
+        </div>
       </div>
       <div hidden={!latestGitHubVersion.greaterThan(installedVersion)}>
-        <ActionButton
-          text={strings.LatestGitHubReleaseDownloadButtonText}
-          iconProps={{ iconName: 'Download', styles: { root: { fontSize: 12 } } }}
-          styles={{ root: { fontSize: 12 } }}
-          href={latestGitHubRelease.assets[0].browser_download_url}
-          target='_blank'
-          rel='noopener noreferrer'
-        />
+        <Button
+          className={styles.button}
+          size='medium'
+          appearance='primary'
+          onClick={() => window.open(latestGitHubRelease.assets[0].browser_download_url, '_blank')}
+          icon={getFluentIcon('ArrowDownload')}
+        >
+          <span className={styles.label}>{strings.LatestGitHubReleaseDownloadButtonText}</span>
+        </Button>
       </div>
     </div>
   )
