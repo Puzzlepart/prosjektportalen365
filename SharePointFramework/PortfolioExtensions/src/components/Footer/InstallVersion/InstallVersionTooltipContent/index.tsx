@@ -23,33 +23,15 @@ export const InstallVersionTooltipContent: FC = () => {
       />
       <div className={styles.content}>
         <span>
-          <Label weight='semibold'>{strings.InstallStartTimeLabel}</Label>:
+          <Label weight='semibold'>{strings.InstalledDateLabel}</Label>:
         </span>
-        {formatDate(latestEntry.installStartTime, true)}
-      </div>
-      <div className={styles.content}>
-        <span>
-          <Label weight='semibold'>{strings.InstallEndTimeLabel}</Label>:
-        </span>
-        {formatDate(latestEntry.installEndTime, true)}
-      </div>
-      <div className={styles.content}>
-        <span>
-          <Label weight='semibold'>{strings.InstallDurationLabel}</Label>:
-        </span>
-        {format(strings.InstallDurationValueTemplate, latestEntry.installDuration)}
+        {formatDate(latestEntry.installedDate)}
       </div>
       <div className={styles.content}>
         <span>
           <Label weight='semibold'>{strings.InstallVersionLabel}</Label>:
         </span>
         {latestEntry.fullInstallVersion}
-      </div>
-      <div className={styles.content}>
-        <span>
-          <Label weight='semibold'>{strings.InstallCommandLabel}</Label>:
-        </span>
-        {latestEntry.installCommand}
       </div>
       {latestEntry.installChannel && (
         <div className={styles.content}>

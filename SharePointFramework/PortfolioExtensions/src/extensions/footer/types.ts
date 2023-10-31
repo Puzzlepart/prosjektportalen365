@@ -8,24 +8,9 @@ export interface IFooterApplicationCustomizerProperties {
 
 export class InstallationEntry {
   /**
-   * Install command
+   * Install date
    */
-  public installCommand: string
-
-  /**
-   * Install start time
-   */
-  public installStartTime: Date
-
-  /**
-   * Install end time
-   */
-  public installEndTime: Date
-
-  /**
-   * Install duration in minutes
-   */
-  public installDuration: number
+  public installedDate: Date
 
   /**
    * Full install version including git hash (format: `v1.2.3-abcdef`)
@@ -48,11 +33,7 @@ export class InstallationEntry {
    * @param entryItem Item from the installation entry
    */
   constructor(entryItem: Record<string, any>) {
-    this.installCommand = entryItem.InstallCommand
-    this.installStartTime = new Date(entryItem.InstallStartTime)
-    this.installEndTime = new Date(entryItem.InstallEndTime)
-    const installDurationMs = this.installEndTime.getTime() - this.installStartTime.getTime()
-    this.installDuration = Math.round(((installDurationMs % 86400000) % 3600000) / 60000)
+    this.installedDate = new Date(entryItem.InstallEndTime)
     this.fullInstallVersion = entryItem.InstallVersion
     this.installVersion = Version.tryParse(
       this.fullInstallVersion.substring(0, this.fullInstallVersion.lastIndexOf('.'))

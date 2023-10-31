@@ -26,11 +26,7 @@ declare interface IPortfolioExtensionsStrings {
   IdeaProjectDataTitle: string
   InstallationLogListName: string
   InstallChannelLabel: string
-  InstallCommandLabel: string
-  InstallDurationLabel: string
-  InstallDurationValueTemplate: string
-  InstallEndTimeLabel: string
-  InstallStartTimeLabel: string
+  InstalledDateLabel: string
   InstallVersionLabel: string
   LastInstallHeaderText: string
   LastInstallDescription: string
