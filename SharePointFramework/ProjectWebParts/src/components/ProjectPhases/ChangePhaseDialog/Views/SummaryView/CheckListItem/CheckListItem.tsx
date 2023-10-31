@@ -1,23 +1,13 @@
-import { stringIsNullOrEmpty } from '@pnp/core'
 import * as strings from 'ProjectWebPartsStrings'
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import styles from './CheckListItem.module.scss'
-import IChecklistItemProps, { STATUS_COLORS } from './types'
+import IChecklistItemProps from './types'
 import { getFluentIcon } from 'pp365-shared-library'
 import { Button, Text } from '@fluentui/react-components'
+import { useCheckListItem } from './useCheckListItem'
 
 export const CheckListItem: FC<IChecklistItemProps> = ({ item }) => {
-  const [commentHidden, setCommentHidden] = useState(true)
-  const hasComment = !stringIsNullOrEmpty(item.comment)
-
-  const statusIcon = getFluentIcon(
-    item.status === strings.StatusOpen
-      ? 'Circle'
-      : item.status === strings.StatusClosed
-      ? 'CheckmarkCircle'
-      : 'DismissCircle',
-    { color: STATUS_COLORS[item.status], size: 24 }
-  )
+  const { commentHidden, setCommentHidden, hasComment, statusIcon } = useCheckListItem(item)
 
   return (
     <div

@@ -1,6 +1,6 @@
 import { Shimmer } from '@fluentui/react'
 import React, { FC } from 'react'
-import { ChangePhaseDialog } from './ChangePhaseDialog'
+import { ChangePhaseDialog } from './ChangePhaseDialog/ChangePhaseDialog'
 import { ProjectPhasesContext } from './context'
 import { ProjectPhase } from './ProjectPhase'
 import styles from './ProjectPhases.module.scss'
