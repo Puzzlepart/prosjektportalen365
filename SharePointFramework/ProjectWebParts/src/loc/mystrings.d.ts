@@ -127,6 +127,7 @@ declare interface IProjectWebPartsStrings {
   No: string
   NoLocalPropertiesListWarningText: string
   NoPropertiesMessage: string
+  NoReportsFoundMessage: string
   NoStatusReportsMessage: string
   NotPublishedStatusReport: string
   OpportunityMatrixGroupName: string

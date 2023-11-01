@@ -142,6 +142,7 @@ define([], function () {
     No: 'Nei',
     NoLocalPropertiesListWarningText: 'Du må synkronisere prosjektegenskapene før du kan konfigurere felter/kolonner som skal vises for eksterne brukere/gjester.<br /><br />Dette gjøres ved å klikke på knappen \'Synkroniser prosjektegenskaper\'.',
     NoPropertiesMessage: 'Finner ingen informasjon om prosjektet.',
+    NoReportsFoundMessage: 'Ingen rapporter funnet',
     NoStatusReportsMessage: 'Det er ennå ikke rapportert status for prosjektet. Hvis du er eier av området, kan du rapportere status ved å klikke på _Ny statusrapport_ i menyen over.',
     NotPublishedStatusReport: 'Ikke publisert',
     OpportunityMatrixGroupName: 'Mulighetsmatrise',

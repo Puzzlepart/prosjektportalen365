@@ -95,7 +95,7 @@ export function useToolbarItems() {
             .setOnClick(() => {
               window.open(state.selectedReport?.snapshotUrl, '_self')
             }),
-        new ListMenuItem(state.selectedReport ? formatDate(state.selectedReport.created) : '')
+        new ListMenuItem(state.selectedReport ? formatDate(state.selectedReport.created) : strings.NoReportsFoundMessage)
           .setIcon('History')
           .setWidth('fit-content')
           .setStyle({ minWidth: '145px' })
@@ -116,7 +116,7 @@ export function useToolbarItems() {
                     })
                 })
             ),
-            { report: [formatDate(state.selectedReport.created, true)] }
+            { report: [formatDate(state.selectedReport?.created, true)] }
           ),
         state.selectedReport &&
           new ListMenuItem(
