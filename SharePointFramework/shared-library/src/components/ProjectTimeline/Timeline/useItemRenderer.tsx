@@ -21,7 +21,8 @@ export function useItemRenderer(
       width: '22px',
       height: '24px',
       backgroundColor: calProps.item.data.bgColorHex || '#ffc800',
-      marginTop: '-2px'
+      marginTop: '-2px',
+      marginLeft: '3px',
     }
 
     const triangleStyle = {
@@ -30,8 +31,9 @@ export function useItemRenderer(
       height: '0',
       borderLeft: '11px solid transparent',
       borderRight: '11px solid transparent',
-      borderBottom: `22px solid ${calProps.item.data.bgColorHex || 'lightblue'}`,
-      marginTop: '-3px'
+      borderBottom: `19px solid ${calProps.item.data.bgColorHex || 'lightblue'}`,
+      marginLeft: '3px',
+      padding: 0
     }
 
     switch (calProps.item.data.elementType) {

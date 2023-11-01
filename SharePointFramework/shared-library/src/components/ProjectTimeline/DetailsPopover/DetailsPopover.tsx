@@ -134,6 +134,8 @@ export const DetailsPopover: FC<IDetailsPopoverProps> = (props) => {
           props.onDismiss()
         }
       }}
+      trapFocus
+      closeOnScroll
       positioning={{
         target: props.timelineItem?.element,
         overflowBoundary: document.getElementsByClassName('rct-scroll')[0] as HTMLElement
