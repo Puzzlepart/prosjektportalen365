@@ -30,7 +30,7 @@ export const Footer: FC<IFooterProps> = (props) => {
             </section>
           </div>
         </FluentProvider>
-      </IdPrefixProvider >
+      </IdPrefixProvider>
     </FooterContext.Provider>
   )
 }
