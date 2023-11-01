@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { InfoLabel } from '@fluentui/react-components/unstable'
+import { InfoLabel } from '@fluentui/react-components'
 import { IWebPartTitleProps } from './types'
 import styles from './WebPartTitle.module.scss'
 import strings from 'SharedLibraryStrings'
