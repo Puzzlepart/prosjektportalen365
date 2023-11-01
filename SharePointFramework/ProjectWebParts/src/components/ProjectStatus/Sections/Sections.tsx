@@ -15,13 +15,15 @@ export const Sections: FC = () => {
 
   return (
     <div className={styles.root} id='pp-statussection'>
-      {!context.state.selectedReport
-        ? <UserMessage text={strings.NoStatusReportsMessage} />
-        : sections.map((sec, idx) => (
+      {!context.state.selectedReport ? (
+        <UserMessage text={strings.NoStatusReportsMessage} />
+      ) : (
+        sections.map((sec, idx) => (
           <SectionContext.Provider key={idx} value={createContextValue(sec)}>
             {SectionMap[sec.type] ?? null}
           </SectionContext.Provider>
-        ))}
+        ))
+      )}
     </div>
   )
 }
