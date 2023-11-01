@@ -22,7 +22,7 @@ export function useItemRenderer(
       height: '24px',
       backgroundColor: calProps.item.data.bgColorHex || '#ffc800',
       marginTop: '-2px',
-      marginLeft: '3px',
+      marginLeft: '3px'
     }
 
     const triangleStyle = {

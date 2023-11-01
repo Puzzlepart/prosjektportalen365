@@ -1,19 +1,28 @@
-import { FluentProvider, useId, webLightTheme } from '@fluentui/react-components'
+import { FluentProvider, IdPrefixProvider, useId, webLightTheme } from '@fluentui/react-components'
 import { PortalCompatProvider } from '@fluentui/react-portal-compat'
 import React, { FC, useMemo } from 'react'
 import { IFluentProps } from './types'
 
-export const Fluent: FC<IFluentProps> = ({ children, transparent }) => {
-  const fluentProviderId = useId('fluent-provider')
+export const Fluent: FC<IFluentProps> = ({
+  className,
+  style,
+  children,
+  transparent,
+  applyStylesToPortals
+}) => {
+  const fluentId = useId('fluent')
   return useMemo(
     () => (
-      <FluentProvider
-        id={fluentProviderId}
-        theme={webLightTheme}
-        style={transparent && { background: 'transparent' }}
-      >
-        <PortalCompatProvider>{children}</PortalCompatProvider>
-      </FluentProvider>
+      <IdPrefixProvider value={fluentId}>
+        <FluentProvider
+          theme={webLightTheme}
+          className={className}
+          style={{ backgroundColor: transparent && 'transparent', ...style }}
+          applyStylesToPortals={applyStylesToPortals}
+        >
+          <PortalCompatProvider>{children}</PortalCompatProvider>
+        </FluentProvider>
+      </IdPrefixProvider>
     ),
     []
   )
