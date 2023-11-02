@@ -1,11 +1,10 @@
 import { FluentProvider, webLightTheme } from '@fluentui/react-components'
-import { Alert } from '@fluentui/react-components/unstable'
 import React, { FC } from 'react'
 import styles from './ResourceAllocation.module.scss'
 import * as strings from 'PortfolioWebPartsStrings'
 import { IResourceAllocationProps } from './types'
 import { useResourceAllocation } from './useResourceAllocation'
-import { Timeline } from 'pp365-shared-library/lib/components'
+import { Timeline, UserMessage } from 'pp365-shared-library'
 
 export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
   const { state, filters, onFilterChange, items, groups, defaultTimeframe } =
@@ -17,7 +16,7 @@ export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
     return (
       <FluentProvider className={styles.root} theme={webLightTheme}>
         <div className={styles.errorContainer}>
-          <Alert intent='error'>{state.error}</Alert>
+          <UserMessage title={strings.ErrorTitle} text={state.error} intent='error' />
         </div>
       </FluentProvider>
     )

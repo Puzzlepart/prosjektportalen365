@@ -1,5 +1,4 @@
 import { ChartData, ChartDataItem } from 'models'
-import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar'
 import { PortfolioOverviewView } from 'pp365-shared-library/lib/models'
 import React, { Component } from 'react'
 import Chart from './Chart'
@@ -7,6 +6,7 @@ import { Commands } from './Commands'
 import styles from './PortfolioInsights.module.scss'
 import { IPortfolioInsightsProps, IPortfolioInsightsState } from './types'
 import * as strings from 'PortfolioWebPartsStrings'
+import { UserMessage } from 'pp365-shared-library'
 
 /**
  * @component PortfolioInsights
@@ -76,16 +76,21 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
     if (this.state.error) {
       return (
         <div className={styles.inner}>
-          <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
+          <UserMessage
+            title={strings.ErrorFetchingProjectsTitle}
+            text={this.state.error}
+            intent='error'
+          />
         </div>
       )
     }
     if (this.state.chartData.isEmpty()) {
       return (
         <div className={styles.inner}>
-          <MessageBar messageBarType={MessageBarType.info}>
-            {strings.NoProjectsFoundMessage}
-          </MessageBar>
+          <UserMessage
+            title={strings.NoProjectsFoundTitle}
+            text={strings.NoProjectsFoundDescription}
+          />
         </div>
       )
     }

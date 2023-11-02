@@ -5,7 +5,6 @@ import {
   TabList,
   webLightTheme
 } from '@fluentui/react-components'
-import { Alert } from '@fluentui/react-components/unstable'
 import { SearchBox } from '@fluentui/react-search-preview'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
@@ -20,7 +19,7 @@ import styles from './ProjectList.module.scss'
 import { ProjectListVerticals } from './ProjectListVerticals'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
-import { Toolbar } from 'pp365-shared-library'
+import { Toolbar, UserMessage } from 'pp365-shared-library'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const {
@@ -70,7 +69,10 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     return (
       <FluentProvider theme={webLightTheme}>
         <section className={styles.root}>
-          <Alert intent='info'>{strings.NoProjectsFoundMessage}</Alert>
+          <UserMessage
+            title={strings.NoProjectsFoundTitle}
+            text={strings.NoProjectsFoundDescription}
+          />
         </section>
       </FluentProvider>
     )
@@ -79,7 +81,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   if (state.error) {
     return (
       <section className={styles.root}>
-        <Alert intent='error'>{strings.ErrorText}</Alert>
+        <UserMessage title={strings.ErrorFetchingProjectsTitle} text={state.error} intent='error' />
       </section>
     )
   }
@@ -132,7 +134,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
       </div>
       {state.isDataLoaded && isEmpty(projects) && (
         <div className={styles.emptyMessage}>
-          <Alert intent='info'>{strings.ProjectListEmptyText}</Alert>
+          <UserMessage title={strings.NoProjectsFoundTitle} text={strings.ProjectListEmptyText} />
         </div>
       )}
       <div className={styles.projects}>{renderProjects(projects)}</div>

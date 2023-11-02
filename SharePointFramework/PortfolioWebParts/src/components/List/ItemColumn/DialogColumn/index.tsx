@@ -22,8 +22,8 @@ import {
   Link,
   Text
 } from '@fluentui/react-components'
-import { Alert } from '@fluentui/react-components/unstable'
 import { stringIsNullOrEmpty } from '@pnp/core'
+import { UserMessage } from 'pp365-shared-library'
 
 /**
  * A column render component that displays a link in the cell. When the link is clicked, a dialog is displayed
@@ -82,9 +82,10 @@ export const DialogColumn: ColumnRenderComponent<IDialogColumnProps> = (props) =
                 </DataGridBody>
               </DataGrid>
             ) : (
-              <Alert intent='info' className={styles.emptyListText}>
-                {strings.ModalColumnEmptyListText}
-              </Alert>
+              <UserMessage
+                title={strings.ModalColumnEmptyListTitle}
+                text={strings.ModalColumnEmptyListDescription}
+              />
             )}
           </DialogContent>
         </DialogBody>
