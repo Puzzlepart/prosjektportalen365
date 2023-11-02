@@ -19,9 +19,11 @@ declare interface IProgramWebPartsStrings {
   DataSourceNotFound: string
   DefaultDataSourceViewLabel: string
   DefaultViewLabel: string
+  ErrorTitle: string
   GeneralGroupName: string
   PortfolioManagerGroupName: string
   ProgramAdministrationAddChildsButtonText: string
+  ProgramAdministrationEmptyTitle: string
   ProgramAdministrationEmptyMessage: string
   ProgramAdministrationHeader: string
   ProgramAdministrationInfoMessage: string
