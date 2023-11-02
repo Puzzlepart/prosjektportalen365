@@ -13,7 +13,12 @@ export const FieldContainer: FC<IFieldContainerProps> = (props) => {
   }
   return (
     <div className={styles.fieldContainer} hidden={props.hidden}>
-      <Field className={styles.field} label={label} required={props.required} hint={props.description ?? props.hint}>
+      <Field
+        className={styles.field}
+        label={label}
+        required={props.required}
+        hint={props.description ?? props.hint}
+      >
         {props.children}
       </Field>
     </div>

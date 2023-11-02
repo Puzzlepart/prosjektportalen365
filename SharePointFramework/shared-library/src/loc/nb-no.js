@@ -33,6 +33,7 @@ define([], function () {
     DescriptionFieldLabel: 'Beskrivelse',
     DiamondLabel: 'Diamant',
     EndDateLabel: 'Sluttdato',
+    ErrorTitle: 'Det har oppstått en feil',
     FiltersString: 'Filtre',
     FilterText: 'Filtrer',
     GroupByLabel: 'Grupper etter',
