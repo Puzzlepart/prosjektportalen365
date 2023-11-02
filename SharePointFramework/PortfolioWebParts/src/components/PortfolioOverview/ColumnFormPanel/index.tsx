@@ -100,7 +100,10 @@ export const ColumnFormPanel: FC = () => {
             managedProperties={context.state.managedProperties}
           />
           {columnMessages.get('fieldName') && (
-            <UserMessage style={{ margin: '8px 0' }} text={columnMessages.get('fieldName')} />
+            <UserMessage
+              title={strings.SearchPropertyFoundTitle}
+              text={columnMessages.get('fieldName')}
+            />
           )}
         </FieldContainer>
         <FieldContainer

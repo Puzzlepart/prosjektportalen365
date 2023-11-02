@@ -217,6 +217,7 @@ declare interface IPortfolioWebPartsStrings {
   SearchBoxPlaceholderTextLabel: string
   SearchPropertyDescription: string
   SearchPropertyFoundMessage: string
+  SearchPropertyFoundTitle: string
   SearchPropertyLabel: string
   SearchPropertyPlaceholder: string
   SearchQueryLabel: string

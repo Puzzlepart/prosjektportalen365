@@ -219,6 +219,7 @@ define([], function () {
     SearchBoxPlaceholderTextLabel: 'Søkebokstekst',
     SearchPropertyDescription: 'Navnet på den forvaltede egenskapen for denne kolonnen.',
     SearchPropertyFoundMessage: 'Fant en forvaltet egenskap `{0}` som matcher det interne feltnavnet `{1}`.',
+    SearchPropertyFoundTitle: 'Forvaltet egenskap funnet',
     SearchPropertyLabel: 'Søkeegenskap',
     SearchPropertyPlaceholder: 'Søk i forvaltede egenskaper...',
     SearchQueryLabel: 'Søkespørring',
