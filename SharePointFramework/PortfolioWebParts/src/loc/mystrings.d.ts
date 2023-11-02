@@ -148,7 +148,7 @@ declare interface IPortfolioWebPartsStrings {
   MinWidthDescription: string
   MinWidthLabel: string
   ModalColumnEmptyListTitle: string
-  ModalColumnEmptyListDescription: string
+  ModalColumnEmptyListMessage: string
   MoveLeftLabel: string
   MoveRightLabel: string
   MyProjectsHeaderText: string
@@ -162,7 +162,7 @@ declare interface IPortfolioWebPartsStrings {
   NoDefaultViewMessage: string
   NoProjectData: string
   NoProjectsFoundTitle: string
-  NoProjectsFoundDescription: string
+  NoProjectsFoundMessage: string
   NotSet: string
   OpenInNewTabLabel: string
   ParentProjectsHeaderText: string
@@ -190,7 +190,7 @@ declare interface IPortfolioWebPartsStrings {
   ProjectInformationGroupName: string
   ProjectInformationPanelButton: string
   ProjectLabel: string
-  ProjectListEmptyText: string
+  ProjectListEmptyMessage: string
   ProjectListQuickLaunch: string
   ProjectManager: string
   ProjectMetadataFieldLabel: string

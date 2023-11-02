@@ -5,11 +5,11 @@ import { useTemplateConfigMessage } from './useTemplateConfigMessage'
 import { UserMessage } from 'pp365-shared-library'
 
 export const TemplateConfigMessage: FC<ITemplateConfigMessageProps> = (props) => {
-  const { hidden, text } = useTemplateConfigMessage(props)
+  const { hidden, message } = useTemplateConfigMessage(props)
 
   return (
     <div className={styles.root} hidden={hidden}>
-      <UserMessage text={text} />
+      <UserMessage message={message} />
     </div>
   )
 }

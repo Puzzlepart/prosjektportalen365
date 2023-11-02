@@ -20,7 +20,7 @@ declare interface IPortfolioExtensionsStrings {
   IdeaConfigurationTitle: string
   IdeaProcessorsSiteGroup: string
   IdeaProjectDataDialogBlockedTitle: string
-  IdeaProjectDataDialogBlockedText: string
+  IdeaProjectDataDialogBlockedMessage: string
   IdeaProjectDataDialogInfoTitle: string
   IdeaProjectDataDialogTitle: string
   IdeaProjectDataTitle: string

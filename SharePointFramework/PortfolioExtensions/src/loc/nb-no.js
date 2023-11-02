@@ -21,7 +21,7 @@ define([], function () {
     IdeaConfigurationTitle: 'Idékonfigurasjon',
     IdeaProcessorsSiteGroup: 'Idebehandlere',
     IdeaProjectDataDialogBlockedTitle: 'Prosjektdata element funnet',
-    IdeaProjectDataDialogBlockedText: 'Det er allerede opprettet og tilknyttet prosjektdata for denne ideen.',
+    IdeaProjectDataDialogBlockedMessage: 'Det er allerede opprettet og tilknyttet prosjektdata for denne ideen.',
     IdeaProjectDataDialogInfoTitle: 'Tilknytning av prosjektdata',
     IdeaProjectDataDialogTitle: 'Opprett prosjektdata for ideen',
     IdeaProjectDataTitle: 'Prosjektdata',

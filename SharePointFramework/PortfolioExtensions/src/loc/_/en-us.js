@@ -16,7 +16,7 @@ define([], function () {
     IdeaAlreadyApproved: 'This idea has already been approved',
     IdeaConfigurationTitle: 'Idékonfigurasjon',
     IdeaProcessorsSiteGroup: 'Idebehandlere',
-    IdeaProjectDataDialogBlockedText: 'Project data for this idea has already been created and associated.',
+    IdeaProjectDataDialogBlockedMessage: 'Project data for this idea has already been created and associated.',
     IdeaProjectDataDialogTitle: 'Create project data for the idea',
     IdeaProjectDataTitle: 'Prosjektdata',
     InstallationLogListName: 'Installasjonslogg',

@@ -98,7 +98,7 @@ export function useToolbarItems() {
         new ListMenuItem(
           state.selectedReport
             ? formatDate(state.selectedReport.created)
-            : strings.NoReportsFoundMessage
+            : strings.NoReportsFoundTitle
         )
           .setIcon('History')
           .setWidth('fit-content')

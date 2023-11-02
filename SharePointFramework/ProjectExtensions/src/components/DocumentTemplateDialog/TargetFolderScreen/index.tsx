@@ -40,7 +40,7 @@ export const TargetFolderScreen: FC = () => {
     <div className={styles.root}>
       <UserMessage
         title={strings.DocumentTemplateDialogScreenTargetFolderInfoTitle}
-        text={strings.DocumentTemplateDialogScreenTargetFolderInfoText}
+        message={strings.DocumentTemplateDialogScreenTargetFolderInfoMessage}
       />
       <FolderNavigation
         items={

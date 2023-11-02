@@ -16,7 +16,7 @@ export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
     return (
       <FluentProvider className={styles.root} theme={webLightTheme}>
         <div className={styles.errorContainer}>
-          <UserMessage title={strings.ErrorTitle} text={state.error} intent='error' />
+          <UserMessage title={strings.ErrorTitle} message={state.error} intent='error' />
         </div>
       </FluentProvider>
     )

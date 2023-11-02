@@ -41,7 +41,7 @@ export default class Chart extends Component<IChartProps, IChartState> {
           <div className='ms-Grid' dir='ltr'>
             <div className='ms-Grid-row'>
               <div className='ms-Grid-col ms-sm12'>
-                <UserMessage title={strings.ErrorTitle} text={error} intent='error' />
+                <UserMessage title={strings.ErrorTitle} message={error} intent='error' />
               </div>
             </div>
           </div>

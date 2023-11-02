@@ -34,9 +34,9 @@ export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => 
       <MessageBar {...messageProps} className={styles.message} intent={props.intent}>
         <MessageBarBody>
           {props.title && <MessageBarTitle>{props.title}</MessageBarTitle>}
-          {props.text && (
+          {props.message && (
             <ReactMarkdown linkTarget={props.linkTarget} rehypePlugins={[rehypeRaw]}>
-              {props.text}
+              {props.message}
             </ReactMarkdown>
           )}
           {props.children && props.children}

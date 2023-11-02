@@ -20,7 +20,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
       <>
         <div className={styles.root}>
           <h2>{strings.ProgramAdministrationHeader}</h2>
-          <UserMessage title={strings.ErrorTitle} text={state.error} intent='error' />
+          <UserMessage title={strings.ErrorTitle} message={state.error} intent='error' />
         </div>
       </>
     )
@@ -59,7 +59,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
           ) : (
             <UserMessage
               title={strings.ProgramAdministrationEmptyTitle}
-              text={strings.ProgramAdministrationEmptyMessage}
+              message={strings.ProgramAdministrationEmptyMessage}
             />
           )}
         </div>

@@ -84,7 +84,7 @@ export const DialogColumn: ColumnRenderComponent<IDialogColumnProps> = (props) =
             ) : (
               <UserMessage
                 title={strings.ModalColumnEmptyListTitle}
-                text={strings.ModalColumnEmptyListDescription}
+                message={strings.ModalColumnEmptyListMessage}
               />
             )}
           </DialogContent>

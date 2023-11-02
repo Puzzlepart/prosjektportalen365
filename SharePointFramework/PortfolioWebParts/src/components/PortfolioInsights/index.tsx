@@ -78,7 +78,7 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
         <div className={styles.inner}>
           <UserMessage
             title={strings.ErrorFetchingProjectsTitle}
-            text={this.state.error}
+            message={this.state.error}
             intent='error'
           />
         </div>
@@ -89,7 +89,7 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
         <div className={styles.inner}>
           <UserMessage
             title={strings.NoProjectsFoundTitle}
-            text={strings.NoProjectsFoundDescription}
+            message={strings.NoProjectsFoundMessage}
           />
         </div>
       )

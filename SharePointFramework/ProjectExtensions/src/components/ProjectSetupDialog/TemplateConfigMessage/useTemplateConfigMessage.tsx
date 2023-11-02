@@ -18,8 +18,8 @@ export function useTemplateConfigMessage({ section }: ITemplateConfigMessageProp
     (section === 'ContentConfigSection' && templateHasContentConfig) ||
     (section === 'TemplateSelector' && (templateHasExtensions || templateHasContentConfig))
   )
-  const text = format(
-    strings.TemplateConfigText,
+  const message = format(
+    strings.TemplateConfigMessage,
     context.state.selectedTemplate?.text,
     [
       templateHasExtensions && strings.ExtensionsSectionHeaderText,
@@ -29,5 +29,5 @@ export function useTemplateConfigMessage({ section }: ITemplateConfigMessageProp
       .join(' og ')
       .toLowerCase()
   )
-  return { hidden, text } as const
+  return { hidden, message } as const
 }

@@ -59,7 +59,7 @@ export default class IdeaProcessCommand extends BaseListViewCommandSet<any> {
         const row = event.selectedRows[0]
 
         dialog.ideaTitle = row.getValueByName('Title')
-        dialog.dialogDescription =
+        dialog.dialogMessage =
           this._ideaConfig.description[1] ||
           strings.SetRecommendationDefaultDescription.split(';')[1]
         dialog.show().then(() => {

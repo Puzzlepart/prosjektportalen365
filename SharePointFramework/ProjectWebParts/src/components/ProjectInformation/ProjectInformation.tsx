@@ -50,7 +50,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
           {context.state.error && (
             <UserMessage
               title={strings.ErrorTitle}
-              text={context.state.error.message}
+              message={context.state.error.message}
               intent='error'
             />
           )}

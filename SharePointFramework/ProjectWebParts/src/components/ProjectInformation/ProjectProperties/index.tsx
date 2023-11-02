@@ -51,11 +51,11 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
               <>
                 <UserMessage
                   title={strings.ExternalUsersConfigInfoTitle}
-                  text={strings.ExternalUsersConfigInfoText}
+                  message={strings.ExternalUsersConfigInfoMessage}
                 />
                 <UserMessage
                   title={strings.NoPropertiesTitle}
-                  text={strings.NoLocalPropertiesListWarningText}
+                  message={strings.NoLocalPropertiesListWarningMessage}
                   intent='warning'
                 />
                 <div hidden={stringIsNullOrEmpty(context.state.data.propertiesListId)}>
@@ -71,7 +71,9 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
     }
     default: {
       if (isEmpty(properties)) {
-        return <UserMessage title={strings.NoPropertiesTitle} text={strings.NoPropertiesMessage} />
+        return (
+          <UserMessage title={strings.NoPropertiesTitle} message={strings.NoPropertiesMessage} />
+        )
       }
       return (
         <div className={styles.root}>

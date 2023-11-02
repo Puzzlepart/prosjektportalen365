@@ -58,11 +58,11 @@ declare interface IProjectExtensionsStrings {
   CustomActionsText: string
   DescriptionLabel: string
   DocumentTemplateDialogScreenEditCopyInfoTitle: string
-  DocumentTemplateDialogScreenEditCopyInfoText: string
+  DocumentTemplateDialogScreenEditCopyInfoMessage: string
   DocumentTemplateDialogScreenSelectInfoTitle: string
-  DocumentTemplateDialogScreenSelectInfoText: string
+  DocumentTemplateDialogScreenSelectInfoMessage: string
   DocumentTemplateDialogScreenTargetFolderInfoTitle: string
-  DocumentTemplateDialogScreenTargetFolderInfoText: string
+  DocumentTemplateDialogScreenTargetFolderInfoMessage: string
   ExtensionLockedTooltipText: string
   ExtensionsSectionHeaderText: string
   ExtensionsSectionSearchPlaceholder: string
@@ -106,7 +106,7 @@ declare interface IProjectExtensionsStrings {
   ProjectAlreadySetupMessage: string
   ProjectAlreadySetupStack: string
   ProjectIdeaFoundTitle: string
-  ProjectIdeaFoundText: string
+  ProjectIdeaFoundMessage: string
   ProjectPropertiesListName: string
   ProjectProvisioningStartLogText: string
   ProjectProvisioningSuccessLogText: string
@@ -124,9 +124,9 @@ declare interface IProjectExtensionsStrings {
   SitePermissionsSubText: string
   SitePermissionsText: string
   SummaryTitle: string
-  SummaryText: string
+  SummaryMessage: string
   SyncLocalProjectPropertiesListText: string
-  TemplateConfigText: string
+  TemplateConfigMessage: string
   TemplateLibrarySelectModalTitle: string
   TemplateSelectDialogInfoText: string
   TemplateSelectDialogSubmitButtonText: string

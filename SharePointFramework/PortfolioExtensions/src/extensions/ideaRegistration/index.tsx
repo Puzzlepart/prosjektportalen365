@@ -67,7 +67,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
         const row = event.selectedRows[0]
 
         dialog.ideaTitle = row.getValueByName('Title')
-        dialog.dialogDescription =
+        dialog.dialogMessage =
           this._ideaConfig.description[0] ||
           strings.SetRecommendationDefaultDescription.split(';')[0]
         await dialog.show()
@@ -305,7 +305,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
       )
       .addControl(
         new ClientsideText(`
-          <h3>Mulige gevinster</h3> 
+          <h3>Mulige gevinster</h3>
           ${row.getValueByName('GtIdeaPossibleGains')}
           `)
       )

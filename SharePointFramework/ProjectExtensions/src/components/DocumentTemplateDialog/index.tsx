@@ -79,7 +79,7 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
         [DocumentTemplateDialogScreen.Summary]: (
           <UserMessage
             title={strings.SummaryTitle}
-            text={format(strings.SummaryText, state.uploaded.length)}
+            message={format(strings.SummaryMessage, state.uploaded.length)}
             intent='success'
           />
         )

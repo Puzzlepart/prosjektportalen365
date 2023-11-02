@@ -71,7 +71,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         <section className={styles.root}>
           <UserMessage
             title={strings.NoProjectsFoundTitle}
-            text={strings.NoProjectsFoundDescription}
+            message={strings.NoProjectsFoundMessage}
           />
         </section>
       </FluentProvider>
@@ -81,7 +81,11 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   if (state.error) {
     return (
       <section className={styles.root}>
-        <UserMessage title={strings.ErrorFetchingProjectsTitle} text={state.error} intent='error' />
+        <UserMessage
+          title={strings.ErrorFetchingProjectsTitle}
+          message={state.error}
+          intent='error'
+        />
       </section>
     )
   }
@@ -134,7 +138,10 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
       </div>
       {state.isDataLoaded && isEmpty(projects) && (
         <div className={styles.emptyMessage}>
-          <UserMessage title={strings.NoProjectsFoundTitle} text={strings.ProjectListEmptyText} />
+          <UserMessage
+            title={strings.NoProjectsFoundTitle}
+            message={strings.ProjectListEmptyMessage}
+          />
         </div>
       )}
       <div className={styles.projects}>{renderProjects(projects)}</div>

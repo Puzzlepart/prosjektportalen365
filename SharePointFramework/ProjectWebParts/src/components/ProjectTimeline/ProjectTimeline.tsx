@@ -25,7 +25,11 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
               </div>
             </div>
           ) : state.error ? (
-            <UserMessage intent='warning' text={state.error.message} />
+            <UserMessage
+              title={strings.ErrorTitle}
+              message={state.error.message}
+              intent='warning'
+            />
           ) : (
             <div>
               {props.showTimeline && (

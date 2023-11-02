@@ -25,7 +25,7 @@ export const ListHeader: FC<IListHeaderProps> = (props) => {
         </div>
         {hasError && (
           <div className={styles.errorContainer}>
-            <UserMessage title={strings.ErrorTitle} text={props.error.message} intent='error' />
+            <UserMessage title={strings.ErrorTitle} message={props.error.message} intent='error' />
           </div>
         )}
         <div className={styles.commandBar}>
