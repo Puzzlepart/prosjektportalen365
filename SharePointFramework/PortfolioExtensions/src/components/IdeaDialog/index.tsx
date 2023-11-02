@@ -32,10 +32,8 @@ export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
                   ? strings.IdeaProjectDataDialogBlockedTitle
                   : strings.IdeaProjectDataDialogInfoTitle
               }
-              text={format(
-                props.isBlocked
-                  ? strings.IdeaProjectDataDialogBlockedText
-                  : props.dialogDescription,
+              message={format(
+                props.isBlocked ? strings.IdeaProjectDataDialogBlockedMessage : props.dialogMessage,
                 encodeURIComponent(window.location.href)
               )}
               intent={props.isBlocked ? 'warning' : 'info'}
@@ -62,7 +60,7 @@ export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
 
 export default class ProjectDataDialog extends BaseDialog {
   public ideaTitle: string
-  public dialogDescription: string
+  public dialogMessage: string
   public isBlocked: boolean
 
   public render(): void {
@@ -71,7 +69,7 @@ export default class ProjectDataDialog extends BaseDialog {
         close={this.close}
         submit={this.submit}
         ideaTitle={this.ideaTitle}
-        dialogDescription={this.dialogDescription}
+        dialogMessage={this.dialogMessage}
         isBlocked={this.isBlocked}
       />,
       this.domElement

@@ -42,7 +42,7 @@ export const CustomEditPanelFooter: FC = () => {
     >
       {context.props.submit.error && (
         <div className={styles.errorContainer}>
-          <UserMessage text={context.props.submit.error} intent='error' />
+          <UserMessage message={context.props.submit.error} intent='error' />
         </div>
       )}
       <div className={styles.container}>

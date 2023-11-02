@@ -5,16 +5,16 @@ import { MessageBarProps } from '@fluentui/react-components'
  */
 export interface IUserMessageProps extends MessageBarProps {
   /**
-   * Title to show in the message, should be a descriptive title of the message
+   * Title to show in the component, should be a descriptive title of the message
    */
   title?: string
 
   /**
-   * Text to show in the message
+   * Message to show in the component
    *
    * NOTE: Supports markdown and HTML
    */
-  text?: string
+  message?: string
 
   /**
    * On click handler for the message

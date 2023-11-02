@@ -24,7 +24,7 @@ export interface ICustomEditPanelSubmitProps extends Pick<ButtonProps, 'disabled
   saveProgressText?: string
 
   /**
-   * Error text to display in a `<UserMessage />` component if
+   * Error message to display in a `<UserMessage />` component if
    * the submit fails (optional)
    */
   error?: string

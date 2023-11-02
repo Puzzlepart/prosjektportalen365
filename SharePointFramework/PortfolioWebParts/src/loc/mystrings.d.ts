@@ -117,8 +117,9 @@ declare interface IPortfolioWebPartsStrings {
   EndDateLabel: string
   ErrorBoundaryFallbackDescription: string
   ErrorBoundaryFallbackText: string
-  ErrorText: string
   ExcelExportButtonLabel: string
+  ErrorFetchingProjectsTitle: string
+  ErrorTitle: string
   FiltersString: string
   FilterText: string
   GeneralGroupName: string
@@ -146,7 +147,8 @@ declare interface IPortfolioWebPartsStrings {
   MeasurementValueLabel: string
   MinWidthDescription: string
   MinWidthLabel: string
-  ModalColumnEmptyListText: string
+  ModalColumnEmptyListTitle: string
+  ModalColumnEmptyListMessage: string
   MoveLeftLabel: string
   MoveRightLabel: string
   MyProjectsHeaderText: string
@@ -159,6 +161,7 @@ declare interface IPortfolioWebPartsStrings {
   NoAccessMessage: string
   NoDefaultViewMessage: string
   NoProjectData: string
+  NoProjectsFoundTitle: string
   NoProjectsFoundMessage: string
   NotSet: string
   OpenInNewTabLabel: string
@@ -187,7 +190,7 @@ declare interface IPortfolioWebPartsStrings {
   ProjectInformationGroupName: string
   ProjectInformationPanelButton: string
   ProjectLabel: string
-  ProjectListEmptyText: string
+  ProjectListEmptyMessage: string
   ProjectListQuickLaunch: string
   ProjectManager: string
   ProjectMetadataFieldLabel: string
@@ -217,6 +220,7 @@ declare interface IPortfolioWebPartsStrings {
   SearchBoxPlaceholderTextLabel: string
   SearchPropertyDescription: string
   SearchPropertyFoundMessage: string
+  SearchPropertyFoundTitle: string
   SearchPropertyLabel: string
   SearchPropertyPlaceholder: string
   SearchQueryLabel: string

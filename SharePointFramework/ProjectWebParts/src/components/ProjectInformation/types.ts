@@ -5,13 +5,13 @@ import {
   ProjectColumn,
   EditableSPField,
   ProjectInformationParentProject,
-  ProjectTemplate
+  ProjectTemplate,
+  IUserMessageProps
 } from 'pp365-shared-library'
 import * as ProjectDataService from 'pp365-shared-library/lib/services/ProjectDataService'
 import { IProjectStatusData } from '../ProjectStatus'
 import { ActionType } from './Actions/types'
 import { IProgressDialogProps } from './ProgressDialog/types'
-import { AlertProps } from '@fluentui/react-components/dist/unstable'
 
 export type ProjectInformationPanelType = 'EditPropertiesPanel' | 'AllPropertiesPanel'
 export type ProjectInformationDialogType = 'CreateParentDialog'
@@ -100,9 +100,9 @@ export interface IProjectInformationState
   progressDialog?: IProgressDialogProps
 
   /**
-   * Alert to show to the user
+   * Message to show to the user
    */
-  alert?: AlertProps
+  message?: IUserMessageProps
 
   /**
    * Confirm action props

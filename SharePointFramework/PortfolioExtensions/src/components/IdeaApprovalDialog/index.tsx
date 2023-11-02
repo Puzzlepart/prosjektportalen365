@@ -35,7 +35,7 @@ export const IdeaApprovalDialog: FC<IIdeaApprovalDialogProps> = (props) => {
           <DialogContent className={styles.content}>
             <UserMessage
               title={format(strings.SetRecommendationSubtitle, props.ideaTitle)}
-              text={props.dialogDescription}
+              message={props.dialogMessage}
               intent='info'
             />
             <Field label={strings.ActionLabel}>
@@ -81,7 +81,7 @@ export default class RecommendationDialog extends BaseDialog {
   public message: string
   public selectedChoice: string
   public ideaTitle: string
-  public dialogDescription: string
+  public dialogMessage: string
   public comment: string
 
   public render(): void {
@@ -90,7 +90,7 @@ export default class RecommendationDialog extends BaseDialog {
         close={this.close}
         submit={this._submit}
         ideaTitle={this.ideaTitle}
-        dialogDescription={this.dialogDescription}
+        dialogMessage={this.dialogMessage}
       />,
       this.domElement
     )

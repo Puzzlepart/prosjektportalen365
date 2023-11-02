@@ -281,7 +281,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         }
         this._unmount(placeholder)
       },
-      messageType: props.error['messageType'],
+      intent: props.error['messageType'],
       onSetupClick: () => {
         this._initializeSetup({
           sp: this.sp,

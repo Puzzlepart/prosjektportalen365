@@ -2,6 +2,6 @@ export interface IIdeaDialogProps {
   close: () => void
   submit: () => void
   ideaTitle?: string
-  dialogDescription?: string
+  dialogMessage?: string
   isBlocked?: boolean
 }

@@ -3,7 +3,8 @@ import styles from './ProjectTimeline.module.scss'
 import { Timeline } from './Timeline'
 import { IProjectTimelineProps } from './types'
 import { useProjectTimeline } from './useProjectTimeline'
-import { Alert } from '@fluentui/react-components/unstable'
+import { UserMessage } from '../UserMessage'
+import strings from 'SharedLibraryStrings'
 
 export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
   const { state, onFilterChange } = useProjectTimeline(props)
@@ -11,7 +12,7 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
     <div className={styles.root}>
       <div className={styles.container}>
         {!state.isDataLoaded ? null : state.error ? (
-          <Alert intent='error'>{state.error.message}</Alert>
+          <UserMessage title={strings.ErrorTitle} message={state.error.message} intent='error' />
         ) : (
           <>
             <Timeline

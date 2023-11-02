@@ -19,7 +19,13 @@ export const ListSection: FC = () => {
    */
   function renderList() {
     if (state.error)
-      return <UserMessage text={strings.ListSectionDataErrorMessage} intent='error' />
+      return (
+        <UserMessage
+          title={strings.ErrorTitle}
+          message={strings.ListSectionDataErrorMessage}
+          intent='error'
+        />
+      )
     return (
       <Shimmer isDataLoaded={state.isDataLoaded}>
         <ShimmeredDetailsList

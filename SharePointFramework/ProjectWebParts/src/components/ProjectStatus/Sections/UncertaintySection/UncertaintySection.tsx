@@ -24,7 +24,13 @@ export const UncertaintySection: FC = () => {
    */
   function renderContent() {
     if (state.error)
-      return <UserMessage text={strings.ListSectionDataErrorMessage} intent='error' />
+      return (
+        <UserMessage
+          title={strings.ErrorTitle}
+          message={strings.ListSectionDataErrorMessage}
+          intent='error'
+        />
+      )
 
     let matrix = null
     switch (state.data.contentTypeIndex) {

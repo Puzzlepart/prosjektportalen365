@@ -95,7 +95,11 @@ export const ViewFormPanel: FC = () => {
             disabled={isDefaultViewSet}
           />
           {isDefaultViewSet && (
-            <UserMessage text={strings.DefaultViewSetWarningMessage} intent='warning' />
+            <UserMessage
+              title={strings.DefaultViewLabel}
+              message={strings.DefaultViewSetWarningMessage}
+              intent='warning'
+            />
           )}
         </FieldContainer>
         <FieldContainer

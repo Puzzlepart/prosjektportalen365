@@ -2,8 +2,6 @@ import {
   DefaultButton,
   DialogFooter,
   format,
-  MessageBar,
-  MessageBarType,
   Pivot,
   PivotItem,
   PrimaryButton
@@ -18,6 +16,7 @@ import styles from './TemplateSelectDialog.module.scss'
 import { TemplateSelector } from './TemplateSelector'
 import { IProjectSetupDialogProps } from './types'
 import { useProjectSetupDialog } from './useProjectSetupDialog'
+import { UserMessage } from 'pp365-shared-library'
 
 export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
   const { state, dispatch, onSubmit, isConfigDisabled } = useProjectSetupDialog(props)
@@ -64,18 +63,18 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
           </PivotItem>
         </Pivot>
         <div className={styles.projectIdeaMessage} hidden={!props.data.ideaData}>
-          <MessageBar
-            messageBarIconProps={{ iconName: 'Lightbulb' }}
-            messageBarType={MessageBarType.success}
-          >
-            {strings.ProjectIdeaFoundText}
-          </MessageBar>
+          <UserMessage
+            title={strings.ProjectIdeaFoundTitle}
+            message={strings.ProjectIdeaFoundMessage}
+            intent='success'
+          />
         </div>
         <DialogFooter>
           {props.tasks && (
-            <MessageBar>
-              {format(strings.ConfiguredSpecifiedTaskMessage, props.tasks.join(', '))}
-            </MessageBar>
+            <UserMessage
+              title={strings.ConfiguredSpecifiedTaskTitle}
+              message={format(strings.ConfiguredSpecifiedTaskMessage, props.tasks.join(', '))}
+            />
           )}
           <section className={styles.actions}>
             <PrimaryButton

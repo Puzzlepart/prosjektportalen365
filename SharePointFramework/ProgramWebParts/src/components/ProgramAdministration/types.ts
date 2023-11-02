@@ -1,4 +1,3 @@
-import { MessageBarType } from '@fluentui/react'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { SPDataAdapter } from 'data/SPDataAdapter'
 
@@ -57,8 +56,5 @@ export interface IProgramAdministrationState {
   /**
    * Error message
    */
-  error: {
-    text: string
-    messageBarType: MessageBarType
-  }
+  error: string
 }

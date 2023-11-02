@@ -17,7 +17,6 @@ import styles from './ProjectProperties.module.scss'
 import { ProjectProperty } from './ProjectProperty'
 import { IProjectPropertiesProps } from './types'
 import { useProjectProperties } from './useProjectProperties'
-import { Alert } from '@fluentui/react-components/unstable'
 const Filter = bundleIcon(FilterFilled, FilterRegular)
 const List = bundleIcon(ListFilled, ListRegular)
 
@@ -51,13 +50,12 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
             {selectedTab === 'config' && (
               <>
                 <UserMessage
-                  className={styles.alertContainer}
-                  text={strings.ExternalUsersConfigInfoText}
-                  intent='info'
+                  title={strings.ExternalUsersConfigInfoTitle}
+                  message={strings.ExternalUsersConfigInfoMessage}
                 />
                 <UserMessage
-                  className={styles.alertContainer}
-                  text={strings.NoLocalPropertiesListWarningText}
+                  title={strings.NoPropertiesTitle}
+                  message={strings.NoLocalPropertiesListWarningMessage}
                   intent='warning'
                 />
                 <div hidden={stringIsNullOrEmpty(context.state.data.propertiesListId)}>
@@ -73,7 +71,9 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
     }
     default: {
       if (isEmpty(properties)) {
-        return <Alert intent='info'>{strings.NoPropertiesMessage}</Alert>
+        return (
+          <UserMessage title={strings.NoPropertiesTitle} message={strings.NoPropertiesMessage} />
+        )
       }
       return (
         <div className={styles.root}>

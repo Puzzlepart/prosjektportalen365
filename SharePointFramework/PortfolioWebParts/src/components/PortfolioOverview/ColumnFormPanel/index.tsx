@@ -98,11 +98,13 @@ export const ColumnFormPanel: FC = () => {
             onChange={(value) => setColumn('fieldName', value)}
             disabled={isEditing}
             managedProperties={context.state.managedProperties}
-          >
-            {columnMessages.get('fieldName') && (
-              <UserMessage style={{ margin: '8px 0' }} text={columnMessages.get('fieldName')} />
-            )}
-          </ColumnSearchPropertyField>
+          />
+          {columnMessages.get('fieldName') && (
+            <UserMessage
+              title={strings.SearchPropertyFoundTitle}
+              message={columnMessages.get('fieldName')}
+            />
+          )}
         </FieldContainer>
         <FieldContainer
           iconName='TextNumberFormat'

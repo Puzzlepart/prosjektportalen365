@@ -32,6 +32,7 @@ declare interface ISharedLibraryStrings {
   DescriptionFieldLabel: string
   DiamondLabel: string
   EndDateLabel: string
+  ErrorTitle: string
   FiltersString: string
   FilterText: string
   GroupByLabel: string

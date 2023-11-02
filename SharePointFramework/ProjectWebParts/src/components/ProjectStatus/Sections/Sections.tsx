@@ -16,7 +16,7 @@ export const Sections: FC = () => {
   return (
     <div className={styles.root} id='pp-statussection'>
       {!context.state.selectedReport ? (
-        <UserMessage text={strings.NoStatusReportsMessage} />
+        <UserMessage title={strings.NoReportsFoundTitle} message={strings.NoStatusReportsMessage} />
       ) : (
         sections.map((sec, idx) => (
           <SectionContext.Provider key={idx} value={createContextValue(sec)}>

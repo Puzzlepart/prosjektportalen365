@@ -1,10 +1,10 @@
-import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar'
 import * as strings from 'PortfolioWebPartsStrings'
 import { getBreakpoint } from 'pp365-shared-library/lib/util/getBreakpoint'
 import React, { Component } from 'react'
 import * as ReactHighcharts from 'react-highcharts'
 import { IChartProps } from './IChartProps'
 import { IChartState } from './IChartState'
+import { UserMessage } from 'pp365-shared-library'
 
 export default class Chart extends Component<IChartProps, IChartState> {
   public static defaultProps: Partial<IChartProps> = {}
@@ -41,7 +41,7 @@ export default class Chart extends Component<IChartProps, IChartState> {
           <div className='ms-Grid' dir='ltr'>
             <div className='ms-Grid-row'>
               <div className='ms-Grid-col ms-sm12'>
-                <MessageBar messageBarType={MessageBarType.error}>{error}</MessageBar>
+                <UserMessage title={strings.ErrorTitle} message={error} intent='error' />
               </div>
             </div>
           </div>

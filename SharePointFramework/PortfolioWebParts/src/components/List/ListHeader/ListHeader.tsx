@@ -3,10 +3,9 @@ import React, { FC, useContext } from 'react'
 import styles from './ListHeader.module.scss'
 import { IListHeaderProps } from './types'
 import strings from 'PortfolioWebPartsStrings'
-import { WebPartTitle } from 'pp365-shared-library'
+import { UserMessage, WebPartTitle } from 'pp365-shared-library'
 import { SearchBox } from '@fluentui/react-search-preview'
 import { FluentProvider, webLightTheme } from '@fluentui/react-components'
-import { Alert } from '@fluentui/react-components/unstable'
 import { Toolbar } from 'pp365-shared-library'
 import { ListContext } from '../context'
 
@@ -26,7 +25,7 @@ export const ListHeader: FC<IListHeaderProps> = (props) => {
         </div>
         {hasError && (
           <div className={styles.errorContainer}>
-            <Alert intent='error'>{props.error.message}</Alert>
+            <UserMessage title={strings.ErrorTitle} message={props.error.message} intent='error' />
           </div>
         )}
         <div className={styles.commandBar}>

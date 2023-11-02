@@ -1,7 +1,7 @@
-import { MessageBar, SelectionMode, ShimmeredDetailsList } from '@fluentui/react'
+import { SelectionMode, ShimmeredDetailsList } from '@fluentui/react'
 import { isEmpty } from '@microsoft/sp-lodash-subset'
 import * as strings from 'ProgramWebPartsStrings'
-import { WebPartTitle } from 'pp365-shared-library'
+import { UserMessage, WebPartTitle } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { AddProjectDialog } from './AddProjectDialog/AddProjectDialog'
 import { Commands } from './Commands/Commands'
@@ -20,7 +20,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
       <>
         <div className={styles.root}>
           <h2>{strings.ProgramAdministrationHeader}</h2>
-          <MessageBar messageBarType={state.error.messageBarType}>{state.error.text}</MessageBar>
+          <UserMessage title={strings.ErrorTitle} message={state.error} intent='error' />
         </div>
       </>
     )
@@ -57,7 +57,10 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
               )}
             />
           ) : (
-            <MessageBar>{strings.ProgramAdministrationEmptyMessage}</MessageBar>
+            <UserMessage
+              title={strings.ProgramAdministrationEmptyTitle}
+              message={strings.ProgramAdministrationEmptyMessage}
+            />
           )}
         </div>
         {state.displayAddProjectDialog && <AddProjectDialog />}

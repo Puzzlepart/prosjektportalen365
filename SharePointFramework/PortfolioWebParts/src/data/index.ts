@@ -799,7 +799,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           persistRenderAs && 'GtFieldDataType'
         ].filter(Boolean)
       )
-      return list.items.getById(columnItem.Id).update(properties)
+      return await list.items.getById(columnItem.Id).update(properties)
     } catch (error) {
       throw new Error(error)
     }

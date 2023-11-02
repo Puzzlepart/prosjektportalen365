@@ -56,7 +56,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
         const row = event.selectedRows[0]
 
         dialog.ideaTitle = row.getValueByName('Title')
-        dialog.dialogDescription =
+        dialog.dialogMessage =
           this._ideaConfig.description[2] ||
           strings.SetRecommendationDefaultDescription.split(';')[2]
         dialog.isBlocked = !!row.getValueByName('GtIdeaProjectData')

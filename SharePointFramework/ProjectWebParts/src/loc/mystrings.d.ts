@@ -73,7 +73,9 @@ declare interface IProjectWebPartsStrings {
   EditReportButtonDescription: string
   EditReportButtonDescriptionNoPermission: string
   EditSiteInformationText: string
-  ExternalUsersConfigInfoText: string
+  ErrorTitle: string
+  ExternalUsersConfigInfoTitle: string
+  ExternalUsersConfigInfoMessage: string
   ExternalUsersConfigText: string
   GeneralGroupName: string
   GetSnapshotButtonLabel: string
@@ -125,9 +127,10 @@ declare interface IProjectWebPartsStrings {
   NewStatusReportDescriptionNoPermission: string
   NewStatusReportTitle: string
   No: string
-  NoLocalPropertiesListWarningText: string
+  NoLocalPropertiesListWarningMessage: string
+  NoPropertiesTitle: string
   NoPropertiesMessage: string
-  NoReportsFoundMessage: string
+  NoReportsFoundTitle: string
   NoStatusReportsMessage: string
   NotPublishedStatusReport: string
   OpportunityMatrixGroupName: string
@@ -141,8 +144,8 @@ declare interface IProjectWebPartsStrings {
   PhaseFieldFieldLabel: string
   PhaseLabel: string
   PhaseSitePageTitle: string
-  PhaseSitePageFoundDescription: string
-  PhaseSitePageNotFoundDescription: string
+  PhaseSitePageFoundMessage: string
+  PhaseSitePageNotFoundMessage: string
   PhaseUseStartArrowLabel: string
   PhaseUseEndArrowLabel: string
   PleaseWaitText: string
