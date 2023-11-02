@@ -49,7 +49,7 @@ export function usePublishReport() {
         context.dispatch(REPORT_PUBLISHED({ updatedReport, message: null }))
       } catch (error) {
         context.dispatch(
-          REPORT_PUBLISH_ERROR({ message: { text: error.message, intent: 'error' } })
+          REPORT_PUBLISH_ERROR({ message: { message: error.message, intent: 'error' } })
         )
       } finally {
         window.setTimeout(() => {
