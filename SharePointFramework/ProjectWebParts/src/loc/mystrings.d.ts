@@ -73,6 +73,8 @@ declare interface IProjectWebPartsStrings {
   EditReportButtonDescription: string
   EditReportButtonDescriptionNoPermission: string
   EditSiteInformationText: string
+  ErrorTitle: string
+  ExternalUsersConfigInfoTitle: string
   ExternalUsersConfigInfoText: string
   ExternalUsersConfigText: string
   GeneralGroupName: string
@@ -126,6 +128,7 @@ declare interface IProjectWebPartsStrings {
   NewStatusReportTitle: string
   No: string
   NoLocalPropertiesListWarningText: string
+  NoPropertiesTitle: string
   NoPropertiesMessage: string
   NoReportsFoundMessage: string
   NoStatusReportsMessage: string

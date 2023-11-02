@@ -1,10 +1,10 @@
 import { Field, FluentProvider, Switch, webLightTheme } from '@fluentui/react-components'
-import { Alert } from '@fluentui/react-components/unstable'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import { DynamicMatrix } from '../DynamicMatrix'
 import { IRiskMatrixProps } from './types'
 import { useRiskMatrix } from './useRiskMatrix'
+import { UserMessage } from 'pp365-shared-library'
 
 export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
   const {
@@ -22,7 +22,7 @@ export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
       style={{ background: 'transparent' }}
     >
       {!!error ? (
-        <Alert intent='error'>{error}</Alert>
+        <UserMessage title={strings.ErrorTitle} text={error} intent='error' />
       ) : (
         <>
           <DynamicMatrix

@@ -1,6 +1,5 @@
 import { FluentProvider, webLightTheme } from '@fluentui/react-components'
-import { Alert } from '@fluentui/react-components/unstable'
-import { Fluent, WebPartTitle } from 'pp365-shared-library'
+import { Fluent, UserMessage, WebPartTitle } from 'pp365-shared-library'
 import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
 import React, { FC } from 'react'
 import { Actions } from './Actions'
@@ -16,6 +15,7 @@ import { ProjectStatusReport } from './ProjectStatusReport'
 import { ProjectInformationContextProvider } from './context'
 import { IProjectInformationProps } from './types'
 import { useProjectInformation } from './useProjectInformation'
+import strings from 'ProjectWebPartsStrings'
 
 /**
  * Display project information. A number of actions are available to the user,
@@ -48,18 +48,13 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
         <WebPartTitle title={props.title} />
         <div className={styles.container}>
           {context.state.error && (
-            <Alert className={styles.alertContainer} intent='error'>
-              {context.state.error.message}
-            </Alert>
+            <UserMessage
+              title={strings.ErrorTitle}
+              text={context.state.error.message}
+              intent='error'
+            />
           )}
           <ProjectProperties />
-          <>
-            {context.state.alert && (
-              <Alert className={styles.alertContainer} hidden={props.hideAllActions} intent='info'>
-                {context.state.error.message}
-              </Alert>
-            )}
-          </>
           <Actions />
           <ParentProjectsList />
           <ProjectStatusReport />
