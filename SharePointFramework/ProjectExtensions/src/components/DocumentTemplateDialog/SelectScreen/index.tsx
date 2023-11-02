@@ -12,10 +12,10 @@ import * as strings from 'ProjectExtensionsStrings'
 import React, { useContext, useMemo, useState } from 'react'
 import { TemplateSelectorContext } from '../../../templateSelector/context'
 import { isEmpty } from 'underscore'
-import { InfoMessage } from '../../InfoMessage'
 import { FolderNavigation } from '../FolderNavigation'
 import columns from './columns'
 import { ISelectScreenProps } from './types'
+import { UserMessage } from 'pp365-shared-library'
 
 export const SelectScreen = (props: ISelectScreenProps) => {
   const context = useContext(TemplateSelectorContext)
@@ -32,7 +32,8 @@ export const SelectScreen = (props: ISelectScreenProps) => {
   )
   return (
     <>
-      <InfoMessage
+      <UserMessage
+        title={strings.DocumentTemplateDialogScreenSelectInfoTitle}
         text={format(
           strings.DocumentTemplateDialogScreenSelectInfoText,
           context.templateLibrary.url,

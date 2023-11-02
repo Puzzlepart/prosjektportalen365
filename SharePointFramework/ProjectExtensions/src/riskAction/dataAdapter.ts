@@ -77,7 +77,7 @@ export class DataAdapter extends SPDataAdapterBase {
   public async addTasks(tasks: string[], itemContext: RiskActionItemContext) {
     const newTasks = _.flatten(
       await Promise.all(
-        tasks.map(async (title) => this.addTask(new Map([['title', title]]), itemContext))
+        tasks.map(async (title) => await this.addTask(new Map([['title', title]]), itemContext))
       )
     )
     return newTasks

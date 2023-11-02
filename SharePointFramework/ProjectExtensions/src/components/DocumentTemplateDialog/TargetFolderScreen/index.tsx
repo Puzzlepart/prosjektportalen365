@@ -8,9 +8,8 @@ import {
   PrimaryButton,
   SelectionMode
 } from '@fluentui/react'
-import { InfoMessage } from 'components/InfoMessage'
 import { SPDataAdapter } from 'data'
-import { SPFolder } from 'pp365-shared-library'
+import { SPFolder, UserMessage } from 'pp365-shared-library'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { FC, useContext, useEffect, useState } from 'react'
 import { TemplateSelectorContext } from '../../../templateSelector/context'
@@ -39,7 +38,10 @@ export const TargetFolderScreen: FC = () => {
 
   return (
     <div className={styles.root}>
-      <InfoMessage text={strings.DocumentTemplateDialogScreenTargetFolderInfoText} />
+      <UserMessage
+        title={strings.DocumentTemplateDialogScreenTargetFolderInfoTitle}
+        text={strings.DocumentTemplateDialogScreenTargetFolderInfoText}
+      />
       <FolderNavigation
         items={
           context.libraries.length > 1 && [

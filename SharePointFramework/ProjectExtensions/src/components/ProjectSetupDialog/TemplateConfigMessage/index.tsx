@@ -1,18 +1,15 @@
-import { MessageBar } from '@fluentui/react'
 import React, { FC } from 'react'
-import ReactMarkdown from 'react-markdown'
 import styles from './TemplateConfigMessage.module.scss'
 import { ITemplateConfigMessageProps } from './types'
 import { useTemplateConfigMessage } from './useTemplateConfigMessage'
+import { UserMessage } from 'pp365-shared-library'
 
 export const TemplateConfigMessage: FC<ITemplateConfigMessageProps> = (props) => {
   const { hidden, text } = useTemplateConfigMessage(props)
 
   return (
     <div className={styles.root} hidden={hidden}>
-      <MessageBar>
-        <ReactMarkdown>{text}</ReactMarkdown>
-      </MessageBar>
+      <UserMessage text={text} />
     </div>
   )
 }

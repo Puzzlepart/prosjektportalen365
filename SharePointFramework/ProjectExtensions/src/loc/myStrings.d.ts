@@ -41,6 +41,7 @@ declare interface IProjectExtensionsStrings {
   CloseModalText: string
   CmdSelectionCountText: string
   CmdSelectionCountTooltipText: string
+  ConfiguredSpecifiedTaskTitle: string
   ConfiguredSpecifiedTaskMessage: string
   ContentConfigLockedTooltipText: string
   ContentConfigSectionHeaderText: string
@@ -56,8 +57,11 @@ declare interface IProjectExtensionsStrings {
   CustomActionsSubText: string
   CustomActionsText: string
   DescriptionLabel: string
+  DocumentTemplateDialogScreenEditCopyInfoTitle: string
   DocumentTemplateDialogScreenEditCopyInfoText: string
+  DocumentTemplateDialogScreenSelectInfoTitle: string
   DocumentTemplateDialogScreenSelectInfoText: string
+  DocumentTemplateDialogScreenTargetFolderInfoTitle: string
   DocumentTemplateDialogScreenTargetFolderInfoText: string
   ExtensionLockedTooltipText: string
   ExtensionsSectionHeaderText: string
@@ -101,6 +105,7 @@ declare interface IProjectExtensionsStrings {
   ProgressDialogTitle: string
   ProjectAlreadySetupMessage: string
   ProjectAlreadySetupStack: string
+  ProjectIdeaFoundTitle: string
   ProjectIdeaFoundText: string
   ProjectPropertiesListName: string
   ProjectProvisioningStartLogText: string
@@ -118,6 +123,7 @@ declare interface IProjectExtensionsStrings {
   SetupProjectInformationText: string
   SitePermissionsSubText: string
   SitePermissionsText: string
+  SummaryTitle: string
   SummaryText: string
   SyncLocalProjectPropertiesListText: string
   TemplateConfigText: string

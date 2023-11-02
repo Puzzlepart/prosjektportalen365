@@ -2,13 +2,13 @@ import { DefaultButton, DialogFooter, PrimaryButton } from '@fluentui/react'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { FC, useContext, useState } from 'react'
-import { InfoMessage } from '../../InfoMessage'
 import { DocumentTemplateDialogContext } from '../context'
 import { SET_SCREEN } from '../reducer'
 import { DocumentTemplateDialogScreen } from '../types'
 import { DocumentTemplateItem } from './DocumentTemplateItem'
 import styles from './EditCopyScreen.module.scss'
 import { IEditCopyScreenProps } from './types'
+import { UserMessage } from 'pp365-shared-library'
 
 export const EditCopyScreen: FC<IEditCopyScreenProps> = ({ onStartCopy }) => {
   const { state, dispatch } = useContext(DocumentTemplateDialogContext)
@@ -42,7 +42,10 @@ export const EditCopyScreen: FC<IEditCopyScreenProps> = ({ onStartCopy }) => {
 
   return (
     <div className={styles.root}>
-      <InfoMessage text={strings.DocumentTemplateDialogScreenEditCopyInfoText} />
+      <UserMessage
+        title={strings.DocumentTemplateDialogScreenEditCopyInfoTitle}
+        text={strings.DocumentTemplateDialogScreenEditCopyInfoText}
+      />
       {state.selected.map((item, idx) => (
         <DocumentTemplateItem key={idx} item={item} onInputChanged={onInputChanged} />
       ))}
