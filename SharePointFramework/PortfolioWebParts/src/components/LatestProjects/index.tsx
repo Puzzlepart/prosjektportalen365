@@ -28,10 +28,7 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
   function renderLatestProjects(): JSX.Element[] | JSX.Element {
     if (!loading && projects.length === 0) {
       return (
-        <UserMessage
-          title={strings.NoProjectsFoundTitle}
-          text={strings.NoProjectsFoundMessage}
-        />
+        <UserMessage title={strings.NoProjectsFoundTitle} text={strings.NoProjectsFoundMessage} />
       )
     }
     const viewCount = viewAll ? projects.length : props.rowLimit

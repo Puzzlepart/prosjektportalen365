@@ -87,10 +87,7 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
     if (this.state.chartData.isEmpty()) {
       return (
         <div className={styles.inner}>
-          <UserMessage
-            title={strings.NoProjectsFoundTitle}
-            text={strings.NoProjectsFoundMessage}
-          />
+          <UserMessage title={strings.NoProjectsFoundTitle} text={strings.NoProjectsFoundMessage} />
         </div>
       )
     }

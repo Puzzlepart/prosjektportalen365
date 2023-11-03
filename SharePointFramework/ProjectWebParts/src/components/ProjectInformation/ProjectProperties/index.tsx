@@ -71,9 +71,7 @@ export const ProjectProperties: FC<IProjectPropertiesProps> = (props) => {
     }
     default: {
       if (isEmpty(properties)) {
-        return (
-          <UserMessage title={strings.NoPropertiesTitle} text={strings.NoPropertiesMessage} />
-        )
+        return <UserMessage title={strings.NoPropertiesTitle} text={strings.NoPropertiesMessage} />
       }
       return (
         <div className={styles.root}>

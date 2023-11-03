@@ -69,10 +69,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     return (
       <FluentProvider theme={webLightTheme}>
         <section className={styles.root}>
-          <UserMessage
-            title={strings.NoProjectsFoundTitle}
-            text={strings.NoProjectsFoundMessage}
-          />
+          <UserMessage title={strings.NoProjectsFoundTitle} text={strings.NoProjectsFoundMessage} />
         </section>
       </FluentProvider>
     )
@@ -81,11 +78,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   if (state.error) {
     return (
       <section className={styles.root}>
-        <UserMessage
-          title={strings.ErrorFetchingProjectsTitle}
-          text={state.error}
-          intent='error'
-        />
+        <UserMessage title={strings.ErrorFetchingProjectsTitle} text={state.error} intent='error' />
       </section>
     )
   }
