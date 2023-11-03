@@ -12,23 +12,35 @@ import { ProgramAdministrationContext } from '../context'
 import styles from './ProjectList.module.scss'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
+import { Commands } from '../Commands'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const context = useContext(ProgramAdministrationContext)
-  const { items, columns, onSearch } = useProjectList(props)
+  const { items, columns, columnSizingOptions, defaultSortState, onSearch } = useProjectList(props)
   return (
     <div className={styles.projectList}>
-      <SearchBox
-        {...props.search}
-        className={styles.searchBox}
-        onChange={onSearch}
-        contentAfter={{ onClick: () => onSearch(null, { value: '' }) }}
-      />
+      <div className={styles.header}>
+        <div className={styles.search}>
+          <SearchBox
+            {...props.search}
+            className={styles.searchBox}
+            appearance='filled-lighter'
+            size='large'
+            onChange={onSearch}
+            contentAfter={{ onClick: () => onSearch(null, { value: '' }) }}
+          />
+        </div>
+        <div className={styles.commands}>
+          <Commands />
+        </div>
+      </div>
       <DataGrid
         items={items}
         columns={columns}
         sortable
+        defaultSortState={defaultSortState}
         resizableColumns
+        columnSizingOptions={columnSizingOptions}
         containerWidthOffset={0}
         selectionMode={context.state.userHasManagePermission ? 'multiselect' : undefined}
         onSelectionChange={props.onSelectionChange}

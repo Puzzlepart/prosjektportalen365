@@ -4,7 +4,6 @@ import { ListMenuItem, Toolbar } from 'pp365-shared-library'
 import React, { FC, useContext } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import { CHILD_PROJECTS_REMOVED, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
-import styles from './Commands.module.scss'
 
 export const Commands: FC = () => {
   const context = useContext(ProgramAdministrationContext)
@@ -13,7 +12,10 @@ export const Commands: FC = () => {
     new ListMenuItem(strings.ProgramAdministrationAddChildsButtonText)
       .setDisabled(!context.state.userHasManagePermission)
       .setIcon('Add')
-      .setOnClick(() => context.dispatch(TOGGLE_ADD_PROJECT_DIALOG())),
+      .setOnClick(() => context.dispatch(TOGGLE_ADD_PROJECT_DIALOG()))
+  ]
+
+  const farItems = [
     new ListMenuItem(strings.ProgramRemoveChildsButtonText)
       .setIcon('Delete')
       .setDisabled(
@@ -29,9 +31,5 @@ export const Commands: FC = () => {
       })
   ]
 
-  return (
-    <div className={styles.commands}>
-      <Toolbar items={items} />
-    </div>
-  )
+  return <Toolbar items={items} farItems={farItems} />
 }

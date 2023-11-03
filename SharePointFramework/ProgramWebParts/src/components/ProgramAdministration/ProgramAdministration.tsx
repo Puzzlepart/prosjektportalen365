@@ -28,28 +28,25 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
   return (
     <FluentProvider theme={webLightTheme}>
       <ProgramAdministrationContext.Provider value={context}>
-        <Commands />
         <div className={styles.programAdministration}>
           <WebPartTitle
             title={props.title}
             description={strings.ProgramAdministrationInfoMessage}
           />
-          <div>
-            {!isEmpty(context.state.childProjects) || context.state.loading ? (
-              <ProjectList
-                items={childProjects}
-                onSelectionChange={onSelectionChange}
-                search={{
-                  placeholder: strings.ProgramAdministrationSearchBoxPlaceholder
-                }}
-              />
-            ) : (
-              <UserMessage
-                title={strings.ProgramAdministrationEmptyTitle}
-                text={strings.ProgramAdministrationEmptyMessage}
-              />
-            )}
-          </div>
+          {!isEmpty(context.state.childProjects) || context.state.loading ? (
+            <ProjectList
+              items={childProjects}
+              onSelectionChange={onSelectionChange}
+              search={{
+                placeholder: strings.ProgramAdministrationSearchBoxPlaceholder
+              }}
+            />
+          ) : (
+            <UserMessage
+              title={strings.ProgramAdministrationEmptyTitle}
+              text={strings.ProgramAdministrationEmptyMessage}
+            />
+          )}
           {context.state.addProjectDialog && <AddProjectDialog />}
         </div>
       </ProgramAdministrationContext.Provider>
