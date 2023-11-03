@@ -25,7 +25,7 @@
             <CustomFormatter />
         </View>
     </pnp:Views>
-    <pnp:DataRows UpdateBehavior="Skip" KeyColumn="Title">
+    <pnp:DataRows UpdateBehavior="Overwrite" KeyColumn="Title">
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Porteføljenivå Brukermanual</pnp:DataValue>
@@ -105,7 +105,7 @@
             <pnp:DataValue FieldName="GtURL">SitePages/Prosjekttidslinje.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL"></pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.85%20Prosjekttidslinje.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
@@ -267,7 +267,7 @@
             <pnp:DataValue FieldName="GtURL">SitePages/Prosjekttidslinje.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL"></pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/Prosjekttidslinje.md</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
