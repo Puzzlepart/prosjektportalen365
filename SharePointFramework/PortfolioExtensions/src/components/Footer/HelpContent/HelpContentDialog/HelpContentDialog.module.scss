@@ -6,6 +6,9 @@
   }
 
   .content {
+    overflow: auto;
+    height: calc(100vh - 236px);
+
     .contentItem {
       margin: 25px;
     }

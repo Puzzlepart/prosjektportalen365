@@ -1,4 +1,3 @@
-import { Pivot, PivotItem } from '@fluentui/react'
 import React, { FC, ReactElement, useContext } from 'react'
 import styles from './HelpContentDialog.module.scss'
 import { FooterContext } from 'components/Footer/context'
@@ -11,6 +10,11 @@ import {
   DialogTrigger,
   FluentProvider,
   IdPrefixProvider,
+  SelectTabData,
+  SelectTabEvent,
+  Tab,
+  TabList,
+  TabValue,
   useId,
   webLightTheme
 } from '@fluentui/react-components'
@@ -19,6 +23,13 @@ import { Content } from './Content'
 export const HelpContentDialog: FC<Omit<DialogProps, 'children'>> = (props) => {
   const fluentProviderId = useId('fp-helpDialog')
   const context = useContext(FooterContext)
+  const [selectedValue, setSelectedValue] = React.useState<TabValue>(
+    context.props.helpContent[0].title
+  )
+
+  const onTabSelect = (_: SelectTabEvent, data: SelectTabData) => {
+    setSelectedValue(data.value)
+  }
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
@@ -28,16 +39,16 @@ export const HelpContentDialog: FC<Omit<DialogProps, 'children'>> = (props) => {
           <DialogSurface>
             <DialogBody>
               <DialogContent className={styles.content}>
-                <Pivot>
+                <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
                   {context.props.helpContent.map((content, index) => (
-                    <PivotItem key={index} headerText={content.title} style={{
-                      overflow: 'auto',
-                      height: 'calc(100vh - 285px)'
-                    }}>
-                      <Content content={content} />
-                    </PivotItem>
+                    <Tab key={index} value={content.title}>
+                      {content.title}
+                    </Tab>
                   ))}
-                </Pivot>
+                </TabList>
+                {context.props.helpContent.map(
+                  (content) => selectedValue === content.title && <Content content={content} />
+                )}
               </DialogContent>
             </DialogBody>
           </DialogSurface>
