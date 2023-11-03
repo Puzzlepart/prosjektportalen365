@@ -1,24 +1,20 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
-.root {
+.addProjectDialog {
   width: 950px;
   max-width: 950px;
   box-sizing: border-box;
   position: relative;
 
-  .dialogContent {
-    height: 650px;
+  .content {
+    height: 550px;
     margin: 20px 0 0 0;
     box-sizing: border-box;
-
-    .searchBox {
-      width: 625px;
-      margin: 10px 0 0 0;
-      box-sizing: border-box;
-    }
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
-  div[class*="ms-List-cell"] {
-    min-height: 0px;
+  .actions {
+    padding: 20px 0 0 0;
   }
 }

@@ -2,13 +2,12 @@ import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { LogLevel } from '@pnp/logging'
 import { SPFI } from '@pnp/sp'
+import { SPDataAdapter } from 'data/SPDataAdapter'
 import { createSpfiInstance } from 'pp365-shared-library'
 import { IHubSite } from 'pp365-shared-library/lib/interfaces'
 import { ComponentClass, FC, ReactElement, createElement } from 'react'
 import { render } from 'react-dom'
-import { SPDataAdapter } from 'data/SPDataAdapter'
 import { IBaseProgramWebPartProps } from './types'
-import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 
 export abstract class BaseProgramWebPart<
   T extends IBaseProgramWebPartProps
@@ -58,8 +57,7 @@ export abstract class BaseProgramWebPart<
       }
     }
     const element: ReactElement<T> = createElement(component, combinedProps)
-    const fluentProvider = createElement(FluentProvider, { theme: webLightTheme }, element)
-    render(fluentProvider, this.domElement)
+    render(element, this.domElement)
   }
 
   public async onInit(): Promise<void> {

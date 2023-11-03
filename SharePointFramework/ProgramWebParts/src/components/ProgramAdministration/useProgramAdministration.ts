@@ -1,7 +1,8 @@
 import { ProjectAdminPermission } from 'pp365-shared-library/lib'
 import { useEffect, useMemo, useReducer } from 'react'
-import reducer, { DATA_LOADED, initialState } from './reducer'
+import reducer, { DATA_LOADED, SET_SELECTED_TO_DELETE, initialState } from './reducer'
 import { IProgramAdministrationProps } from './types'
+import { DataGridProps } from '@fluentui/react-components'
 
 export const useProgramAdministration = (props: IProgramAdministrationProps) => {
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -15,12 +16,19 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
           properties.fieldValues
         )
       ]).then(([childProjects, userHasManagePermission]) => {
-        dispatch(DATA_LOADED({ data: { childProjects, userHasManagePermission }, scope: 'root' }))
+        dispatch(DATA_LOADED({ data: { childProjects, userHasManagePermission }, scope: 'ProgramAdministration' }))
       })
     })
   }, [])
 
   const context = useMemo(() => ({ props, state, dispatch }), [props, state])
 
-  return { context }
+  /**
+   * Callback function for handling selection change in the `ProjectList` component.
+   */
+  const onSelectionChange = (_: any, { selectedItems }) => {
+    dispatch(SET_SELECTED_TO_DELETE(Array.from(selectedItems)))
+  }
+
+  return { context, onSelectionChange }
 }

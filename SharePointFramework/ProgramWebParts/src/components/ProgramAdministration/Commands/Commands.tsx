@@ -17,11 +17,14 @@ export const Commands: FC = () => {
     new ListMenuItem(strings.ProgramRemoveChildsButtonText)
       .setIcon('Delete')
       .setDisabled(
-        _.isEmpty(context.state.selectedProjectsToDelete) || !context.state.userHasManagePermission
+        _.isEmpty(context.state.selectedProjects) || !context.state.userHasManagePermission
       )
       .setOnClick(() => {
+        const projects = context.state.childProjects.filter(({SiteId}) =>
+          context.state.selectedProjects.includes(SiteId)
+        )
         context.props.dataAdapter
-          .removeChildProjects( context.state.selectedProjectsToDelete)
+          .removeChildProjects(projects)
           .then((childProjects) => {
             context.dispatch(CHILD_PROJECTS_REMOVED({ childProjects }))
           })
