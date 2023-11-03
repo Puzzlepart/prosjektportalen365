@@ -1,17 +1,17 @@
 .helpContentDialog {
-  & > div[role=dialog] {
+  & > div[role="dialog"] {
     max-width: 1000px;
+    width: calc(100vw - 180px);
+    height: calc(100vh - 180px);
   }
 
-  .body {
-    .content {
-      .contentItem {
-        margin: 10px 0 0 0;
-      }
+  .content {
+    .contentItem {
+      margin: 25px;
+    }
 
-      img {
-        max-width: 100%;
-      }
+    img {
+      max-width: 100%;
     }
   }
 }
