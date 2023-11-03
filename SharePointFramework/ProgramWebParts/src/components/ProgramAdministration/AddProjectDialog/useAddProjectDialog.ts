@@ -29,7 +29,7 @@ export const useAddProjectDialog = () => {
    * `<AddProjectDialog />` component.
    */
   const onAddChildProjects = async () => {
-    const projects = availableProjects.filter(({SiteId}) =>
+    const projects = availableProjects.filter(({ SiteId }) =>
       context.state.addProjectDialog?.selectedProjects.includes(SiteId)
     )
     await context.props.dataAdapter.addChildProjects(projects)

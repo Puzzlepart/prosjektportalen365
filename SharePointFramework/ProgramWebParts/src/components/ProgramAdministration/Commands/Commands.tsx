@@ -20,14 +20,12 @@ export const Commands: FC = () => {
         _.isEmpty(context.state.selectedProjects) || !context.state.userHasManagePermission
       )
       .setOnClick(() => {
-        const projects = context.state.childProjects.filter(({SiteId}) =>
+        const projects = context.state.childProjects.filter(({ SiteId }) =>
           context.state.selectedProjects.includes(SiteId)
         )
-        context.props.dataAdapter
-          .removeChildProjects(projects)
-          .then((childProjects) => {
-            context.dispatch(CHILD_PROJECTS_REMOVED({ childProjects }))
-          })
+        context.props.dataAdapter.removeChildProjects(projects).then((childProjects) => {
+          context.dispatch(CHILD_PROJECTS_REMOVED({ childProjects }))
+        })
       })
   ]
 

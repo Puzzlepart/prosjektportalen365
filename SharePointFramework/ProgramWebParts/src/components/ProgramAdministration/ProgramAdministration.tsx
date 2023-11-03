@@ -12,7 +12,7 @@ import { IProgramAdministrationProps } from './types'
 import { useProgramAdministration } from './useProgramAdministration'
 
 export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) => {
-  const { context, onSelectionChange } = useProgramAdministration(props)
+  const { context, childProjects, onSelectionChange } = useProgramAdministration(props)
 
   if (context.state.error) {
     return (
@@ -30,13 +30,18 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
       <ProgramAdministrationContext.Provider value={context}>
         <Commands />
         <div className={styles.programAdministration}>
-          <WebPartTitle title={props.title} description={strings.ProgramAdministrationInfoMessage} />
+          <WebPartTitle
+            title={props.title}
+            description={strings.ProgramAdministrationInfoMessage}
+          />
           <div>
             {!isEmpty(context.state.childProjects) || context.state.loading ? (
               <ProjectList
-                items={context.state.childProjects}
+                items={childProjects}
                 onSelectionChange={onSelectionChange}
-                searchPlaceholder={strings.ProgramAdministrationSearchBoxPlaceholder}
+                search={{
+                  placeholder: strings.ProgramAdministrationSearchBoxPlaceholder
+                }}
               />
             ) : (
               <UserMessage

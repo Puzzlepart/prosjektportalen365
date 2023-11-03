@@ -1,6 +1,4 @@
-import { TableRowId } from '@fluentui/react-components'
 import { createAction, createReducer } from '@reduxjs/toolkit'
-import { enableMapSet } from 'immer'
 import { IProgramAdministrationProject, IProgramAdministrationState } from './types'
 
 export const DATA_LOADED = createAction<{
@@ -8,16 +6,17 @@ export const DATA_LOADED = createAction<{
   scope: string
 }>('DATA_LOADED')
 export const TOGGLE_ADD_PROJECT_DIALOG = createAction('TOGGLE_ADD_PROJECT_DIALOG')
-export const ADD_CHILD_PROJECTS = createAction<IProgramAdministrationProject[]>('ADD_CHILD_PROJECTS')
+export const ADD_CHILD_PROJECTS =
+  createAction<IProgramAdministrationProject[]>('ADD_CHILD_PROJECTS')
 export const CHILD_PROJECTS_REMOVED = createAction<{ childProjects: Record<string, string>[] }>(
   'CHILD_PROJECTS_REMOVED'
 )
-export const SET_SELECTED_TO_ADD = createAction<IProgramAdministrationState['addProjectDialog']['selectedProjects']>(
-  'SET_SELECTED_TO_ADD'
-)
-export const SET_SELECTED_TO_DELETE = createAction<IProgramAdministrationState['selectedProjects']>(
-  'SET_SELECTED_TO_DELETE'
-)
+export const SET_SELECTED_TO_ADD =
+  createAction<IProgramAdministrationState['addProjectDialog']['selectedProjects']>(
+    'SET_SELECTED_TO_ADD'
+  )
+export const SET_SELECTED_TO_DELETE =
+  createAction<IProgramAdministrationState['selectedProjects']>('SET_SELECTED_TO_DELETE')
 
 /**
  * Initial state for the `ProgramAdministration` reducer.
@@ -61,7 +60,7 @@ export default createReducer(initialState, {
       : state.availableProjects
     state.userHasManagePermission =
       payload.data.userHasManagePermission ?? state.userHasManagePermission
-    if(payload.scope === 'AddProjectDialog') {
+    if (payload.scope === 'AddProjectDialog') {
       state.addProjectDialog = {
         ...state.addProjectDialog,
         loading: false
@@ -78,7 +77,10 @@ export default createReducer(initialState, {
     }
     state.selectedProjects = []
   },
-  [ADD_CHILD_PROJECTS.type]: (state: IProgramAdministrationState, { payload }: ReturnType<typeof ADD_CHILD_PROJECTS>) => {
+  [ADD_CHILD_PROJECTS.type]: (
+    state: IProgramAdministrationState,
+    { payload }: ReturnType<typeof ADD_CHILD_PROJECTS>
+  ) => {
     state.childProjects = [...state.childProjects, ...payload]
     state.selectedProjects = []
     state.addProjectDialog = {
