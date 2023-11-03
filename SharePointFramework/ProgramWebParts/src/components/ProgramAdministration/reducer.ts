@@ -1,5 +1,6 @@
-import { createAction, createReducer } from '@reduxjs/toolkit'
+import { createAction, createReducer, current } from '@reduxjs/toolkit'
 import { IProgramAdministrationState } from './types'
+import { TableRowId } from '@fluentui/react-components'
 
 export const DATA_LOADED = createAction<{
   data: Partial<IProgramAdministrationState>
@@ -10,13 +11,16 @@ export const ADD_CHILD_PROJECTS = createAction('ADD_CHILD_PROJECTS')
 export const CHILD_PROJECTS_REMOVED = createAction<{ childProjects: Record<string, string>[] }>(
   'CHILD_PROJECTS_REMOVED'
 )
-export const SET_SELECTED_TO_ADD = createAction<{ selected: Record<string, string>[] }>(
+export const SET_SELECTED_TO_ADD = createAction<Set<TableRowId>>(
   'SET_SELECTED_TO_ADD'
 )
-export const SET_SELECTED_TO_DELETE = createAction<{ selected: Record<string, string>[] }>(
+export const SET_SELECTED_TO_DELETE = createAction<Set<TableRowId>>(
   'SET_SELECTED_TO_DELETE'
 )
 
+/**
+ * Initial state for the `ProgramAdministration` reducer.
+ */
 export const initialState: IProgramAdministrationState = {
   loading: {
     root: true,
@@ -80,12 +84,16 @@ export default createReducer(initialState, {
     state: IProgramAdministrationState,
     { payload }: ReturnType<typeof SET_SELECTED_TO_ADD>
   ) => {
-    state.selectedProjectsToAdd = payload.selected
+    state.selectedProjectsToAdd = current(state).availableProjects.filter((_, index) =>
+      payload.has(index)
+    )
   },
   [SET_SELECTED_TO_DELETE.type]: (
     state: IProgramAdministrationState,
     { payload }: ReturnType<typeof SET_SELECTED_TO_DELETE>
   ) => {
-    state.selectedProjectsToDelete = payload.selected
+    state.selectedProjectsToDelete = current(state).childProjects.filter((_, index) =>
+      payload.has(index)
+    )
   }
 })

@@ -8,6 +8,7 @@ import { ComponentClass, FC, ReactElement, createElement } from 'react'
 import { render } from 'react-dom'
 import { SPDataAdapter } from 'data/SPDataAdapter'
 import { IBaseProgramWebPartProps } from './types'
+import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 
 export abstract class BaseProgramWebPart<
   T extends IBaseProgramWebPartProps
@@ -57,7 +58,8 @@ export abstract class BaseProgramWebPart<
       }
     }
     const element: ReactElement<T> = createElement(component, combinedProps)
-    render(element, this.domElement)
+    const fluentProvider = createElement(FluentProvider, { theme: webLightTheme }, element)
+    render(fluentProvider, this.domElement)
   }
 
   public async onInit(): Promise<void> {

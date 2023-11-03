@@ -5,92 +5,47 @@ import React, { FC } from 'react'
 import { AddProjectDialog } from './AddProjectDialog/AddProjectDialog'
 import { Commands } from './Commands/Commands'
 import styles from './ProgramAdministration.module.scss'
+import { ProjectList } from './ProjectList'
 import { ProgramAdministrationContext } from './context'
+import { SET_SELECTED_TO_DELETE } from './reducer'
 import { IProgramAdministrationProps } from './types'
 import { useProgramAdministration } from './useProgramAdministration'
-import {
-  DataGrid,
-  DataGridBody,
-  DataGridCell,
-  DataGridHeader,
-  DataGridHeaderCell,
-  DataGridRow
-} from '@fluentui/react-components'
 
 export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) => {
-  const { state, dispatch, columns } = useProgramAdministration(props)
+  const { context } = useProgramAdministration(props)
 
-  if (state.error) {
+  if (context.state.error) {
     return (
       <>
-        <div className={styles.root}>
+        <div className={styles.programAdministration}>
           <h2>{strings.ProgramAdministrationHeader}</h2>
-          <UserMessage title={strings.ErrorTitle} message={state.error} intent='error' />
+          <UserMessage title={strings.ErrorTitle} text={context.state.error} intent='error' />
         </div>
       </>
     )
   }
 
   return (
-    <ProgramAdministrationContext.Provider value={{ props, state, dispatch }}>
+    <ProgramAdministrationContext.Provider value={context}>
       <Commands />
-      <div className={styles.root}>
+      <div className={styles.programAdministration}>
         <WebPartTitle title={props.title} description={strings.ProgramAdministrationInfoMessage} />
         <div>
-          {!isEmpty(state.childProjects) || state.loading.root ? (
-            <DataGrid
-              items={state.childProjects}
-              columns={columns}
-              sortable
-              resizableColumns
-              containerWidthOffset={0}
-            >
-              <DataGridHeader>
-                <DataGridRow>
-                  {({ renderHeaderCell }) => (
-                    <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-                  )}
-                </DataGridRow>
-              </DataGridHeader>
-              <DataGridBody<Record<string, any>>>
-                {({ item, rowId }) => (
-                  <DataGridRow<Record<string, any>> key={rowId}>
-                    {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
-                  </DataGridRow>
-                )}
-              </DataGridBody>
-            </DataGrid>
-            // <ShimmeredDetailsList
-            //   setKey='ProgramAdministration'
-            //   enableShimmer={state.loading.root}
-            //   items={state.childProjects}
-            //   columns={columns({ renderAsLink: true })}
-            //   selection={selection}
-            //   selectionMode={
-            //     state.userHasManagePermission ? SelectionMode.multiple : SelectionMode.none
-            //   }
-            //   selectionPreservedOnEmptyClick={true}
-            //   onRenderRow={onRenderRow}
-            //   onRenderDetailsHeader={(detailsHeaderProps, defaultRender) => (
-            //     <ListHeaderSearch
-            //       selectedItems={state.selectedProjectsToDelete}
-            //       detailsHeaderProps={detailsHeaderProps}
-            //       defaultRender={defaultRender}
-            //       search={{
-            //         placeholder: strings.ProgramAdministrationSearchBoxPlaceholder,
-            //         onSearch
-            //       }}
-            //     />
-            //   )}
-            // />
+          {!isEmpty(context.state.childProjects) || context.state.loading.root ? (
+            <ProjectList
+              items={context.state.childProjects}
+              onSelectionChange={(_, data) => {
+                context.dispatch(SET_SELECTED_TO_DELETE(data.selectedItems))
+              }}
+            />
           ) : (
             <UserMessage
               title={strings.ProgramAdministrationEmptyTitle}
-              message={strings.ProgramAdministrationEmptyMessage}
+              text={strings.ProgramAdministrationEmptyMessage}
             />
           )}
         </div>
-        {state.displayAddProjectDialog && <AddProjectDialog />}
+        {context.state.displayAddProjectDialog && <AddProjectDialog />}
       </div>
     </ProgramAdministrationContext.Provider>
   )

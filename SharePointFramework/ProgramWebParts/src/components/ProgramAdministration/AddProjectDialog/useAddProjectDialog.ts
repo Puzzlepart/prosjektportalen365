@@ -1,16 +1,9 @@
 import { useContext, useEffect } from 'react'
 import { ProgramAdministrationContext } from '../context'
-import { DATA_LOADED, SET_SELECTED_TO_ADD } from '../reducer'
-import { useRowRenderer } from '../useRowRenderer'
-import { useSelectionList } from '../useSelectionList'
+import { DATA_LOADED } from '../reducer'
 
 export const useAddProjectDialog = () => {
   const context = useContext(ProgramAdministrationContext)
-  const selectedKeys = context.state.selectedProjectsToAdd.map((p) => p.key)
-
-  const selectionList = useSelectionList(selectedKeys, (selected) => {
-    context.dispatch(SET_SELECTED_TO_ADD({ selected }))
-  })
 
   useEffect(() => {
     context.props.dataAdapter
@@ -31,14 +24,7 @@ export const useAddProjectDialog = () => {
       project.SiteId !== context.props.context.pageContext.site.id.toString()
   )
 
-  const onRenderRow = useRowRenderer({
-    selectedKeys,
-    searchTerm: selectionList.searchTerm
-  })
-
   return {
-    ...selectionList,
-    availableProjects,
-    onRenderRow
+    availableProjects
   }
 }

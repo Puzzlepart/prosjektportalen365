@@ -916,7 +916,7 @@ export class SPDataAdapter
   public async removeChildProjects(
     projectToRemove: Array<Record<string, string>>
   ): Promise<Array<Record<string, string>>> {
-    const [{ GtChildProjects }] = await this._propertyItem.select('GtChildProjects')()
+    const { GtChildProjects } = await this._propertyItem.select('GtChildProjects')()
     const projects: Array<Record<string, string>> = JSON.parse(GtChildProjects)
     const updatedProjects = projects.filter(
       (p) => !projectToRemove.some((el) => el.SiteId === p.SiteId)
