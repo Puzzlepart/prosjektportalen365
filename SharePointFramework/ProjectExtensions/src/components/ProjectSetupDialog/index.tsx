@@ -65,7 +65,7 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
         <div className={styles.projectIdeaMessage} hidden={!props.data.ideaData}>
           <UserMessage
             title={strings.ProjectIdeaFoundTitle}
-            message={strings.ProjectIdeaFoundMessage}
+            text={strings.ProjectIdeaFoundMessage}
             intent='success'
           />
         </div>
@@ -73,7 +73,7 @@ export const ProjectSetupDialog: FC<IProjectSetupDialogProps> = (props) => {
           {props.tasks && (
             <UserMessage
               title={strings.ConfiguredSpecifiedTaskTitle}
-              message={format(strings.ConfiguredSpecifiedTaskMessage, props.tasks.join(', '))}
+              text={format(strings.ConfiguredSpecifiedTaskMessage, props.tasks.join(', '))}
             />
           )}
           <section className={styles.actions}>

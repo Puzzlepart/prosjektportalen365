@@ -10,11 +10,11 @@ export interface IUserMessageProps extends MessageBarProps {
   title?: string
 
   /**
-   * Message to show in the component
+   * Text to show in the component
    *
    * NOTE: Supports markdown and HTML
    */
-  message?: string
+  text?: string
 
   /**
    * On click handler for the message

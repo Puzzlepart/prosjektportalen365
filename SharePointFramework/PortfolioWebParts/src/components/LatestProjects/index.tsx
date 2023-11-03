@@ -30,7 +30,7 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
       return (
         <UserMessage
           title={strings.NoProjectsFoundTitle}
-          message={strings.NoProjectsFoundMessage}
+          text={strings.NoProjectsFoundMessage}
         />
       )
     }

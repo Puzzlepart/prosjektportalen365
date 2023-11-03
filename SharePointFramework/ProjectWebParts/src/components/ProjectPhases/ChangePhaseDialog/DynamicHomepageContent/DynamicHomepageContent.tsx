@@ -12,7 +12,7 @@ export const DynamicHomepageContent: FC = () => {
   return (
     <UserMessage
       title={strings.PhaseSitePageTitle}
-      message={
+      text={
         phaseSitePage
           ? format(strings.PhaseSitePageFoundMessage, phaseSitePage?.fileLeafRef)
           : format(strings.PhaseSitePageNotFoundMessage, context.state.confirmPhase.name)

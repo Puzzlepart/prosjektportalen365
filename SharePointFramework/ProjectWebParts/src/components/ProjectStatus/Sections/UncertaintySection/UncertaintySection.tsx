@@ -27,7 +27,7 @@ export const UncertaintySection: FC = () => {
       return (
         <UserMessage
           title={strings.ErrorTitle}
-          message={strings.ListSectionDataErrorMessage}
+          text={strings.ListSectionDataErrorMessage}
           intent='error'
         />
       )

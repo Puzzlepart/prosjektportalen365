@@ -29,5 +29,5 @@ export function useTemplateConfigMessage({ section }: ITemplateConfigMessageProp
       .join(' og ')
       .toLowerCase()
   )
-  return { hidden, message } as const
+  return { hidden, message }
 }
