@@ -4,23 +4,17 @@ import {
   DialogFooter,
   DialogType,
   PrimaryButton,
-  SelectionMode,
-  ShimmeredDetailsList,
   ScrollablePane
 } from '@fluentui/react'
-import _ from 'lodash'
 import * as strings from 'ProgramWebPartsStrings'
+import _ from 'lodash'
 import React, { FC, useContext } from 'react'
-import { columns } from '../columns'
 import { ProgramAdministrationContext } from '../context'
-import { ListHeaderSearch } from '../ListHeaderSearch/ListHeaderSearch'
 import { ADD_CHILD_PROJECTS, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
 import styles from './AddProjectDialog.module.scss'
-import { useAddProjectDialog } from './useAddProjectDialog'
 
 export const AddProjectDialog: FC = () => {
   const context = useContext(ProgramAdministrationContext)
-  const { selection, availableProjects, onSearch, onRenderRow } = useAddProjectDialog()
 
   return (
     <Dialog
@@ -34,7 +28,7 @@ export const AddProjectDialog: FC = () => {
     >
       <div className={styles.dialogContent}>
         <ScrollablePane>
-          <ShimmeredDetailsList
+          {/* <ShimmeredDetailsList
             setKey='AddProjectDialog'
             items={availableProjects}
             columns={columns({ renderAsLink: false })}
@@ -54,7 +48,7 @@ export const AddProjectDialog: FC = () => {
                 }}
               />
             )}
-          />
+          /> */}
         </ScrollablePane>
       </div>
       <DialogFooter>

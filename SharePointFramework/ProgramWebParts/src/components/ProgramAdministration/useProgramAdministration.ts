@@ -4,14 +4,11 @@ import reducer, { DATA_LOADED, SET_SELECTED_TO_DELETE, initialState } from './re
 import { IProgramAdministrationProps } from './types'
 import { useRowRenderer } from './useRowRenderer'
 import { useSelectionList } from './useSelectionList'
+import { useColumns } from './useColumns'
 
 export const useProgramAdministration = (props: IProgramAdministrationProps) => {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const selectedKeys = state.selectedProjectsToDelete.map((p) => p.key)
-
-  const { selection, onSearch, searchTerm } = useSelectionList(selectedKeys, (selected) => {
-    dispatch(SET_SELECTED_TO_DELETE({ selected }))
-  })
+  // const selectedKeys = state.selectedProjectsToDelete.map((p) => p.key)
 
   useEffect(() => {
     props.dataAdapter.project.getProjectInformationData().then((properties) => {
@@ -27,10 +24,7 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
     })
   }, [])
 
-  const onRenderRow = useRowRenderer({
-    selectedKeys,
-    searchTerm
-  })
+  const columns = useColumns()
 
-  return { state, dispatch, selection, onSearch, searchTerm, onRenderRow } as const
+  return { state, dispatch, columns } as const
 }

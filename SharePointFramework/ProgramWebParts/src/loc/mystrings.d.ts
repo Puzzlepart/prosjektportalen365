@@ -1,4 +1,5 @@
 declare interface IProgramWebPartsStrings {
+  TitleLabel: string
   Add: string
   AddProjectDialogSearchBoxPlaceholder: string
   BarLabel: string
