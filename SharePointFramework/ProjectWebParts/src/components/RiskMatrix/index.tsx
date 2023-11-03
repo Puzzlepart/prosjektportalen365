@@ -22,7 +22,7 @@ export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
       style={{ background: 'transparent' }}
     >
       {!!error ? (
-        <UserMessage title={strings.ErrorTitle} message={error} intent='error' />
+        <UserMessage title={strings.ErrorTitle} text={error} intent='error' />
       ) : (
         <>
           <DynamicMatrix

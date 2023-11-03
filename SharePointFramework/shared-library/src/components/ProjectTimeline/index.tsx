@@ -12,7 +12,7 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
     <div className={styles.root}>
       <div className={styles.container}>
         {!state.isDataLoaded ? null : state.error ? (
-          <UserMessage title={strings.ErrorTitle} message={state.error.message} intent='error' />
+          <UserMessage title={strings.ErrorTitle} text={state.error.message} intent='error' />
         ) : (
           <>
             <Timeline

@@ -34,7 +34,7 @@ export const SelectScreen = (props: ISelectScreenProps) => {
     <>
       <UserMessage
         title={strings.DocumentTemplateDialogScreenSelectInfoTitle}
-        message={format(
+        text={format(
           strings.DocumentTemplateDialogScreenSelectInfoMessage,
           context.templateLibrary.url,
           context.templateLibrary.title

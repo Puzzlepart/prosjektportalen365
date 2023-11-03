@@ -35,7 +35,7 @@ export const IdeaApprovalDialog: FC<IIdeaApprovalDialogProps> = (props) => {
           <DialogContent className={styles.content}>
             <UserMessage
               title={format(strings.SetRecommendationSubtitle, props.ideaTitle)}
-              message={props.dialogMessage}
+              text={props.dialogMessage}
               intent='info'
             />
             <Field label={strings.ActionLabel}>

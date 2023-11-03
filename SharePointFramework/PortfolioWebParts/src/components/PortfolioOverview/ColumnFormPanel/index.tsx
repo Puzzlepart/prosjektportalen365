@@ -102,7 +102,7 @@ export const ColumnFormPanel: FC = () => {
           {columnMessages.get('fieldName') && (
             <UserMessage
               title={strings.SearchPropertyFoundTitle}
-              message={columnMessages.get('fieldName')}
+              text={columnMessages.get('fieldName')}
             />
           )}
         </FieldContainer>

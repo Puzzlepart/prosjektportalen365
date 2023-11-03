@@ -32,7 +32,7 @@ export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
                   ? strings.IdeaProjectDataDialogBlockedTitle
                   : strings.IdeaProjectDataDialogInfoTitle
               }
-              message={format(
+              text={format(
                 props.isBlocked ? strings.IdeaProjectDataDialogBlockedMessage : props.dialogMessage,
                 encodeURIComponent(window.location.href)
               )}

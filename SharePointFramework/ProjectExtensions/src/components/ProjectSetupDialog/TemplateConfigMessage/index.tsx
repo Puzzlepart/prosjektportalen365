@@ -9,7 +9,7 @@ export const TemplateConfigMessage: FC<ITemplateConfigMessageProps> = (props) =>
 
   return (
     <div className={styles.root} hidden={hidden}>
-      <UserMessage message={message} />
+      <UserMessage text={message} />
     </div>
   )
 }

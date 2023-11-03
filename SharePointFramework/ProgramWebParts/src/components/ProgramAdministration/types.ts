@@ -1,7 +1,8 @@
+import { TableRowId } from '@fluentui/react-components'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { SPDataAdapter } from 'data/SPDataAdapter'
 
-export interface IProgramAdministrationProject {
+export interface IProgramAdministrationProject extends Record<string, any> {
   SiteId: string
   Title: string
   SPWebURL: string
@@ -16,12 +17,9 @@ export interface IProgramAdministrationProps {
 
 export interface IProgramAdministrationState {
   /**
-   * Loading state for scopes `root` and `AddProjectDialog`
+   * Loading state
    */
-  loading: {
-    root: boolean
-    AddProjectDialog: boolean
-  }
+  loading: boolean
 
   /**
    * Child projects
@@ -29,9 +27,24 @@ export interface IProgramAdministrationState {
   childProjects: Record<string, any>[]
 
   /**
-   * True if `<AddProjectDialog />` should be displayed to the user
+   * Properties for the add project dialog
    */
-  displayAddProjectDialog?: boolean
+  addProjectDialog?: {
+    /**
+     * Dialog open state
+     */
+    open: boolean
+
+    /**
+     * Loading state
+     */
+    loading: boolean
+
+    /**
+     * Projects selected by user to add
+     */
+    selectedProjects: TableRowId[]
+  }
 
   /**
    * Projects available to add to parent project
@@ -39,14 +52,9 @@ export interface IProgramAdministrationState {
   availableProjects: IProgramAdministrationProject[]
 
   /**
-   * Projects selected by user to add
-   */
-  selectedProjectsToAdd: Record<string, any>[]
-
-  /**
    * Projects selected by user for deletion
    */
-  selectedProjectsToDelete: Record<string, any>[]
+  selectedProjects: TableRowId[]
 
   /**
    * User has manage permission, meaning `ChildProjectsAdmin`

@@ -41,7 +41,7 @@ export const ErrorDialog: FC<IErrorDialogProps> = ({
       onDismiss={onDismiss}
     >
       <div style={{ marginTop: 15 }} hidden={showStackAsSubText}>
-        <UserMessage message={error.stack} intent={intent} />
+        <UserMessage text={error.stack} intent={intent} />
       </div>
       <DialogFooter>{onRenderFooter()}</DialogFooter>
     </BaseDialog>

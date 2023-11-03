@@ -2,11 +2,11 @@ import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { LogLevel } from '@pnp/logging'
 import { SPFI } from '@pnp/sp'
+import { SPDataAdapter } from 'data/SPDataAdapter'
 import { createSpfiInstance } from 'pp365-shared-library'
 import { IHubSite } from 'pp365-shared-library/lib/interfaces'
 import { ComponentClass, FC, ReactElement, createElement } from 'react'
 import { render } from 'react-dom'
-import { SPDataAdapter } from 'data/SPDataAdapter'
 import { IBaseProgramWebPartProps } from './types'
 
 export abstract class BaseProgramWebPart<

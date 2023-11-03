@@ -1,5 +1,6 @@
 define([], function () {
   return {
+    TitleLabel: 'Tittel',
     Add: 'Legg til',
     AddProjectDialogSearchBoxPlaceholder: 'Søk i prosjekter...',
     BarLabel: 'Bar',
