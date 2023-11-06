@@ -13,6 +13,9 @@ import styles from './ProjectList.module.scss'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
 import { Commands } from '../Commands'
+import { isEmpty } from '@microsoft/sp-lodash-subset'
+import { UserMessage } from 'pp365-shared-library'
+import strings from 'ProgramWebPartsStrings'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const context = useContext(ProgramAdministrationContext)
@@ -28,6 +31,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             appearance='filled-lighter'
             size='large'
             onChange={onSearch}
+            disabled={context.state.loading}
             contentAfter={{ onClick: () => onSearch(null, { value: '' }) }}
           />
         </div>
@@ -35,33 +39,40 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
           <Commands />
         </div>
       </div>
-      <DataGrid
-        items={items}
-        columns={columns}
-        sortable
-        defaultSortState={defaultSortState}
-        resizableColumns
-        columnSizingOptions={columnSizingOptions}
-        containerWidthOffset={0}
-        selectionMode={context.state.userHasManagePermission ? 'multiselect' : undefined}
-        onSelectionChange={props.onSelectionChange}
-        getRowId={({ SiteId }) => SiteId}
-      >
-        <DataGridHeader>
-          <DataGridRow>
-            {({ renderHeaderCell }) => (
-              <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-            )}
-          </DataGridRow>
-        </DataGridHeader>
-        <DataGridBody<Record<string, any>>>
-          {({ item, rowId }) => (
-            <DataGridRow<Record<string, any>> key={rowId}>
-              {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
+      {!isEmpty(context.state.childProjects) || context.state.loading ? (
+        <DataGrid
+          items={items}
+          columns={columns}
+          sortable
+          defaultSortState={defaultSortState}
+          resizableColumns
+          columnSizingOptions={columnSizingOptions}
+          containerWidthOffset={0}
+          selectionMode={context.state.userHasManagePermission ? 'multiselect' : undefined}
+          onSelectionChange={props.onSelectionChange}
+          getRowId={({ SiteId }) => SiteId}
+        >
+          <DataGridHeader>
+            <DataGridRow>
+              {({ renderHeaderCell }) => (
+                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+              )}
             </DataGridRow>
-          )}
-        </DataGridBody>
-      </DataGrid>
+          </DataGridHeader>
+          <DataGridBody<Record<string, any>>>
+            {({ item, rowId }) => (
+              <DataGridRow<Record<string, any>> key={rowId}>
+                {({ renderCell }) => <DataGridCell>{renderCell(item)}</DataGridCell>}
+              </DataGridRow>
+            )}
+          </DataGridBody>
+        </DataGrid>
+      ) : (
+        <UserMessage
+          title={strings.ProgramAdministrationEmptyTitle}
+          text={strings.ProgramAdministrationEmptyMessage}
+        />
+      )}
     </div>
   )
 }
