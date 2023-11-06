@@ -4,6 +4,8 @@ declare interface IProgramWebPartsStrings {
   AddProjectDialogSearchBoxPlaceholder: string
   BarLabel: string
   Cancel: string
+  ChildrenRemoveToastTitle: string
+  ChildrenRemoveToastMessage: string
   CmdSelectionCountText: string
   CmdSelectionCountTooltipText: string
   CommandBarGroupName: string
@@ -23,13 +25,16 @@ declare interface IProgramWebPartsStrings {
   ErrorTitle: string
   GeneralGroupName: string
   PortfolioManagerGroupName: string
-  ProgramAdministrationAddChildsButtonText: string
+  ProgramAdministrationAddChildsButtonLabel: string
+  ProgramAdministrationAddChildsButtonDescription: string
   ProgramAdministrationEmptyTitle: string
   ProgramAdministrationEmptyMessage: string
   ProgramAdministrationHeader: string
   ProgramAdministrationInfoMessage: string
   ProgramAdministrationSearchBoxPlaceholder: string
-  ProgramRemoveChildsButtonText: string
+  ProgramRemoveChildsButtonLabel: string
+  ProgramRemoveChildsButtonDescription: string
+  ProgramRemoveChildsDeletingLabel: string
   ProgramTimelineInfoText: string
   ProjectContentColumnsListName: string
   ProjectDeliveriesGroupName: string

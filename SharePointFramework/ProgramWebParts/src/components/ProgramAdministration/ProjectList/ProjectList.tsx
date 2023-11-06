@@ -17,6 +17,7 @@ import { Commands } from '../Commands'
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const context = useContext(ProgramAdministrationContext)
   const { items, columns, columnSizingOptions, defaultSortState, onSearch } = useProjectList(props)
+
   return (
     <div className={styles.projectList}>
       <div className={styles.header}>

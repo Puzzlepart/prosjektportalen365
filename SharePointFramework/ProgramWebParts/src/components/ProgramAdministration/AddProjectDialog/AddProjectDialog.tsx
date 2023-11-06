@@ -30,7 +30,7 @@ export const AddProjectDialog: FC = () => {
     >
       <DialogSurface className={styles.addProjectDialog}>
         <DialogTitle>
-          <h2>{strings.ProgramAdministrationAddChildsButtonText}</h2>
+          <h2>{strings.ProgramAdministrationAddChildsButtonLabel}</h2>
         </DialogTitle>
         <DialogContent className={styles.content}>
           <ProjectList

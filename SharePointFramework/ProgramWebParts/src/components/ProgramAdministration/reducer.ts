@@ -8,9 +8,10 @@ export const DATA_LOADED = createAction<{
 export const TOGGLE_ADD_PROJECT_DIALOG = createAction('TOGGLE_ADD_PROJECT_DIALOG')
 export const ADD_CHILD_PROJECTS =
   createAction<IProgramAdministrationProject[]>('ADD_CHILD_PROJECTS')
-export const CHILD_PROJECTS_REMOVED = createAction<{ childProjects: Record<string, string>[] }>(
-  'CHILD_PROJECTS_REMOVED'
+export const REMOVE_CHILD_PROJECTS = createAction<{ childProjects: Record<string, string>[] }>(
+  'REMOVE_CHILD_PROJECTS'
 )
+export const SET_IS_DELETING = createAction<boolean>('SET_IS_DELETING')
 export const SET_SELECTED_TO_ADD =
   createAction<IProgramAdministrationState['addProjectDialog']['selectedProjects']>(
     'SET_SELECTED_TO_ADD'
@@ -31,6 +32,7 @@ export const initialState: IProgramAdministrationState = {
   childProjects: [],
   availableProjects: [],
   selectedProjects: [],
+  isDeleting: false,
   error: null
 }
 
@@ -89,12 +91,13 @@ export default createReducer(initialState, {
       selectedProjects: []
     }
   },
-  [CHILD_PROJECTS_REMOVED.type]: (
+  [REMOVE_CHILD_PROJECTS.type]: (
     state: IProgramAdministrationState,
-    { payload }: ReturnType<typeof CHILD_PROJECTS_REMOVED>
+    { payload }: ReturnType<typeof REMOVE_CHILD_PROJECTS>
   ) => {
     state.childProjects = payload.childProjects
     state.selectedProjects = []
+    state.isDeleting = false
   },
   [SET_SELECTED_TO_ADD.type]: (
     state: IProgramAdministrationState,
@@ -110,5 +113,11 @@ export default createReducer(initialState, {
     { payload }: ReturnType<typeof SET_SELECTED_TO_DELETE>
   ) => {
     state.selectedProjects = payload
+  },
+  [SET_IS_DELETING.type]: (
+    state: IProgramAdministrationState,
+    { payload }: ReturnType<typeof SET_IS_DELETING>
+  ) => {
+    state.isDeleting = payload
   }
 })
