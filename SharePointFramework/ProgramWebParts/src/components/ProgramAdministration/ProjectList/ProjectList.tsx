@@ -31,7 +31,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             contentAfter={{ onClick: () => onSearch(null, { value: '' }) }}
           />
         </div>
-        <div className={styles.commands}>
+        <div className={styles.commands} hidden={props.hideCommands}>
           <Commands />
         </div>
       </div>

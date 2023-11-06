@@ -12,7 +12,7 @@ export function useProjectList(props: IProjectListProps) {
     [props.items, searchTerm]
   )
 
-  const columns = useColumns()
+  const columns = useColumns(props.renderLinks)
 
   const columnSizingOptions: TableColumnSizingOptions = columns.reduce(
     (options, col) => ({

@@ -1,10 +1,11 @@
-@import '~@fluentui/react/dist/sass/References.scss';
+@import "~@fluentui/react/dist/sass/References.scss";
 
 .addProjectDialog {
-  width: 950px;
-  max-width: 950px;
-  box-sizing: border-box;
-  position: relative;
+  & > div[role="dialog"] {
+    max-width: 700px;
+    width: calc(100vw - 180px);
+    height: calc(100vh - 180px);
+  }
 
   .content {
     height: 550px;
@@ -15,6 +16,8 @@
   }
 
   .actions {
+    display: flex;
+    justify-content: flex-end;
     padding: 20px 0 0 0;
   }
 }

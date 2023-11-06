@@ -8,7 +8,7 @@ export interface IListColumn extends TableColumnDefinition<Record<string, any>> 
   defaultWidth?: number
 }
 
-export const useColumns = (): IListColumn[] => {
+export const useColumns = (renderLinks: boolean): IListColumn[] => {
   return [
     {
       columnId: 'logo',
@@ -35,9 +35,13 @@ export const useColumns = (): IListColumn[] => {
       renderCell: (item) => {
         return (
           <TableCellLayout truncate title={item.title}>
-            <Link href={item.SPWebURL} target='_blank' title={item.Title}>
-              {item.Title}
-            </Link>
+            {renderLinks ? (
+              <Link href={item.SPWebURL} target='_blank' title={item.Title}>
+                {item.Title}
+              </Link>
+            ) : (
+              item.Title
+            )}
           </TableCellLayout>
         )
       }
