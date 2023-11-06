@@ -1,7 +1,10 @@
+import { dateAdd, getHashCode } from '@pnp/core'
+import { Caching } from '@pnp/queryable'
 import { useEffect, useState } from 'react'
-import { DynamicMatrixConfiguration, generateMatrixConfiguration } from '../DynamicMatrix'
-import { getMatrixHeaders } from './getMatrixHeaders'
+import SPDataAdapter from '../../data'
+import { DynamicMatrixConfiguration } from '../DynamicMatrix'
 import { IOpportunityMatrixProps } from './types'
+import strings from 'ProjectWebPartsStrings'
 
 /**
  * Configuration hook for `OpportunityMatrix`. Generates the matrix configuration based on the
@@ -11,13 +14,36 @@ import { IOpportunityMatrixProps } from './types'
  */
 export function useOpportunityMatrixConfiguration(props: IOpportunityMatrixProps) {
   const [configuration, setConfiguration] = useState<DynamicMatrixConfiguration>([])
+  const [error, setError] = useState<string>()
 
+  // Fetch manual configuration if `pageContext` is set.
   useEffect(() => {
-    if (props.size) {
-      const matrixHeaders = getMatrixHeaders(props)
-      setConfiguration(generateMatrixConfiguration(parseInt(props.size, 10), matrixHeaders))
+    if (props.pageContext) {
+      fetchJsonConfiguration()
     }
-  }, [props])
+  }, [props.pageContext])
 
-  return configuration
+  /**
+   * Fetches the manual configuration from the specified URL.
+   * If the manual configuration is not found or invalid, an error message will be set.
+   */
+  async function fetchJsonConfiguration() {
+    try {
+      const manualConfiguration = await SPDataAdapter.portal.web
+        .getFileByServerRelativePath(props.manualConfigurationPath)
+        .using(
+          Caching({
+            store: 'local',
+            keyFactory: (url) => getHashCode(url.toLowerCase()).toString(),
+            expireFunc: () => dateAdd(new Date(), 'minute', 60)
+          })
+        )
+        .getJSON()
+      setConfiguration(manualConfiguration)
+    } catch {
+      setError(strings.ManualConfigurationNotFoundOrInvalid)
+    }
+  }
+
+  return { configuration, error }
 }

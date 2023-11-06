@@ -23,6 +23,11 @@ export interface IDynamicMatrixProps {
   size?: DynamicMatrixSize
 
   /**
+   * Whether the matrix should be full width
+   */
+  fullWidth?: boolean
+
+  /**
    * Width can be either `string` or `number`.
    *
    * For example `100` or `50%`.
@@ -38,4 +43,9 @@ export interface IDynamicMatrixProps {
    * Function that should return the elements for the specified cell.
    */
   getElementsForCell: (cell: IMatrixCell) => IMatrixElementProps[]
+
+  /**
+   * Manual configuration URL. File must be a JSON file stored in SharePoint.
+   */
+  manualConfigurationPath?: string
 }

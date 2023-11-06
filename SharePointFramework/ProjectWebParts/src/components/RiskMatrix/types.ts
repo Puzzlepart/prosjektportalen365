@@ -6,23 +6,12 @@ import { IDynamicMatrixProps } from '../DynamicMatrix'
 
 export interface IRiskMatrixProps
   extends Omit<HTMLProps<HTMLDivElement>, 'size'>,
-    IBaseWebPartComponentProps,
-    Pick<IDynamicMatrixProps, 'calloutTemplate'> {
-
-  /**
-   * Manual configuration URL. File must be a JSON file stored in SharePoint.
-   */
-  manualConfigurationPath?: string
-
+  IBaseWebPartComponentProps,
+  Pick<IDynamicMatrixProps, 'fullWidth' | 'manualConfigurationPath' | 'calloutTemplate'> {
   /**
    * The items to render in the matrix
    */
   items?: UncertaintyElementModel[]
-
-  /**
-   * Whether the matrix should be full width
-   */
-  fullWidth?: boolean
 }
 
 /**
