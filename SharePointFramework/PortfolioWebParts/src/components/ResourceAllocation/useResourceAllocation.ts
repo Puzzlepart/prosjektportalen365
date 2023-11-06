@@ -6,8 +6,7 @@ import { useState } from 'react'
 import { IResourceAllocationProps, IResourceAllocationState } from './types'
 import { useFilteredData } from './useFilteredData'
 import { useResourceAllocationDataFetch } from './useResourceAllocationDataFetch'
-import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
-import { TimelineTimeframe } from 'pp365-shared-library/lib/components'
+import { IFilterItemProps, TimelineTimeframe } from 'pp365-shared-library'
 
 /**
  * Component logic hook for `ResourceAllocation`. Handles
@@ -78,5 +77,5 @@ export const useResourceAllocation = (props: IResourceAllocationProps) => {
     items,
     groups,
     defaultTimeframe
-  } as const
+  }
 }

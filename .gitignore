@@ -24,4 +24,4 @@ common/temp
 **/*.build.log
 **/package-lock.json
 .vscode/launch.json*
-SharePointFramework/ProgramWebParts/.vscode/chrome-debug-user-data
+SharePointFramework/**/.vscode/chrome-debug-user-data
