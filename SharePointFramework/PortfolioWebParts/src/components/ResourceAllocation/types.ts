@@ -1,4 +1,3 @@
-import { IShimmerProps } from '@fluentui/react'
 import { IBaseComponentProps } from '../types'
 import { ITimelineData } from 'pp365-shared-library/lib/interfaces'
 
@@ -34,7 +33,7 @@ export interface IResourceAllocationProps extends IBaseComponentProps {
   defaultTimeframeEnd?: string
 }
 
-export interface IResourceAllocationState extends Pick<IShimmerProps, 'isDataLoaded'> {
+export interface IResourceAllocationState {
   /**
    * Active filters
    */
@@ -49,4 +48,9 @@ export interface IResourceAllocationState extends Pick<IShimmerProps, 'isDataLoa
    * Error
    */
   error?: string
+
+  /**
+   * Loading
+   */
+  loading?: boolean
 }
