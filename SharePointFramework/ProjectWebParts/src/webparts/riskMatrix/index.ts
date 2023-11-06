@@ -8,7 +8,7 @@ import {
 } from '@microsoft/sp-property-pane'
 import * as strings from 'ProjectWebPartsStrings'
 import { IRiskMatrixProps } from 'components/RiskMatrix'
-import { RiskMatrix } from 'components/RiskMatrix/RiskMatrix'
+import { RiskMatrix } from 'components/RiskMatrix'
 import _ from 'lodash'
 import ReactDom from 'react-dom'
 import SPDataAdapter from '../../data'

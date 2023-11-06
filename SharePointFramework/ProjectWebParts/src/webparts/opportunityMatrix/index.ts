@@ -6,7 +6,7 @@ import {
 } from '@microsoft/sp-property-pane'
 import * as strings from 'ProjectWebPartsStrings'
 import { IOpportunityMatrixProps } from 'components/OpportunityMatrix'
-import { OpportunityMatrix } from 'components/OpportunityMatrix/OpportunityMatrix'
+import { OpportunityMatrix } from 'components/OpportunityMatrix'
 import * as getValue from 'get-value'
 import ReactDom from 'react-dom'
 import { UncertaintyElementModel } from '../../models'
