@@ -9,7 +9,7 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
   useEffect(() => {
     props.dataAdapter.project.getProjectInformationData().then((properties) => {
       Promise.all([
-        props.dataAdapter.fetchChildProjects(properties.fieldValues.id),
+        props.dataAdapter.fetchChildProjects(),
         props.dataAdapter.checkProjectAdminPermissions(
           ProjectAdminPermission.ChildProjectsAdmin,
           properties.fieldValues

@@ -51,12 +51,10 @@ import { IItem } from '@pnp/sp/items'
 
 export class SPDataAdapter
   extends SPDataAdapterBase<ISPDataAdapterBaseConfiguration>
-  implements IPortfolioWebPartsDataAdapter
-{
+  implements IPortfolioWebPartsDataAdapter {
   public project: ProjectDataService
   public dataSourceService: DataSourceService
   public childProjects: Array<Record<string, string>>
-  private _propertyItemId: number
   private _propertyList: IList
   private _propertyItem: IItem
 
@@ -385,7 +383,7 @@ export class SPDataAdapter
             (child) =>
               child?.SiteId === item?.GtSiteIdLookup?.GtSiteId ||
               item?.GtSiteIdLookup?.GtSiteId ===
-                this?.spfxContext?.pageContext?.site?.id?.toString()
+              this?.spfxContext?.pageContext?.site?.id?.toString()
           )
         ) {
           if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
@@ -680,20 +678,15 @@ export class SPDataAdapter
     siteIdManagedProperty: string = 'SiteId'
   ) {
     const siteId = this.spfxContext.pageContext.site.id.toString()
-    const programFilter = this.childProjects && this.aggregatedQueryBuilder(siteIdManagedProperty)
-    if (includeSelf) programFilter.unshift(`${siteIdManagedProperty}:${siteId}`)
-    const promises = []
-    programFilter.forEach((element) => {
-      promises.push(
-        this.sp.search({
-          QueryTemplate: `${element} ${queryTemplate}`,
-          Querytext: '*',
-          RowLimit: 500,
-          TrimDuplicates: false,
-          SelectProperties: [...selectProperties, 'Path', 'Title', 'SiteTitle', 'SPWebURL']
-        })
-      )
-    })
+    const queries = this.childProjects && this.aggregatedQueryBuilder(siteIdManagedProperty)
+    if (includeSelf) queries.unshift(`${siteIdManagedProperty}:${siteId}`)
+    const promises = queries.map((q) => this.sp.search({
+      QueryTemplate: `${q} ${queryTemplate}`,
+      Querytext: '*',
+      RowLimit: 500,
+      TrimDuplicates: false,
+      SelectProperties: [...selectProperties, 'Path', 'Title', 'SiteTitle', 'SPWebURL']
+    }))
     const responses = await Promise.all(promises)
     return flatten(responses.map((r) => r.PrimarySearchResults))
   }
@@ -774,7 +767,7 @@ export class SPDataAdapter
       const list = this.portal.web.lists.getByTitle(strings.ProjectsListName)
       const [item] = await list.items.filter(`GtSiteId eq '${siteId}'`)()
       await list.items.getById(item.ID).update(properties)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -793,7 +786,7 @@ export class SPDataAdapter
       } catch {
         return []
       }
-    } catch (error) {
+    } catch {
       return []
     }
   }
@@ -804,8 +797,9 @@ export class SPDataAdapter
    */
   public async initChildProjects(): Promise<void> {
     try {
+      this._propertyItem = this._propertyList.items.getById(1)
       this.childProjects = await this.getChildProjects()
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -880,12 +874,9 @@ export class SPDataAdapter
    * Fetches current child projects. Fetches all available projects and filters out the ones that are not
    * in the child projects project property `GtChildProjects`. Also initializes the `propertyItem` property
    * of the class, so that it can be used in other methods.
-   *
-   * @param propertyItemId Property item ID
    */
-  public async fetchChildProjects(propertyItemId: number): Promise<any[]> {
-    this._propertyItemId = propertyItemId
-    this._propertyItem = this._propertyList.items.getById(this._propertyItemId)
+  public async fetchChildProjects(): Promise<any[]> {
+    this._propertyItem = this._propertyList.items.getById(1)
     const [availableProjects, childProjects] = await Promise.all([
       this.getHubSiteProjects(),
       this.getChildProjects()

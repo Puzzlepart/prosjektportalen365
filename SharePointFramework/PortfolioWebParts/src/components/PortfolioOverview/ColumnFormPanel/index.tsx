@@ -34,7 +34,6 @@ export const ColumnFormPanel: FC = () => {
     findMatchingSearchProperty,
     columnMessages
   } = useColumnFormPanel()
-
   return (
     <Panel
       isOpen={context.state.columnForm.isOpen}

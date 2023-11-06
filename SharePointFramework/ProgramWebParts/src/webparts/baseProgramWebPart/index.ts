@@ -69,7 +69,7 @@ export abstract class BaseProgramWebPart<
       webUrl: this.context.pageContext.web.absoluteUrl,
       logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
     })
-    this._dataAdapter.initChildProjects()
+    await this._dataAdapter.initChildProjects()
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {

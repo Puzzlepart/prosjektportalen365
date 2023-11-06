@@ -1,4 +1,10 @@
 declare interface IProgramWebPartsStrings {
+  Placeholder: {
+    TextField: string
+    Icon: string
+    ChoiceField: string
+    MultiChoiceField: string
+  }
   TitleLabel: string
   Add: string
   AddProjectDialogSearchBoxPlaceholder: string
@@ -53,6 +59,8 @@ declare interface IProgramWebPartsStrings {
   ShowViewSelectorLabel: string
   TimelineConfigurationListName: string
   TimelineContentListName: string
+  GroupByColumnLabel: string
+  CompactViewText: string
 }
 
 declare module 'ProgramWebPartsStrings' {

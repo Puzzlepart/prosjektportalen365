@@ -1,5 +1,11 @@
 define([], function () {
   return {
+    Placeholder: {
+      TextField: 'Angi verdi her',
+      Icon: 'Angi et ikon',
+      ChoiceField: 'Velg et alternativ',
+      MultiChoiceField: 'Velg ett eller flere alternativer',
+    },
     TitleLabel: 'Tittel',
     Add: 'Legg til',
     AddProjectDialogSearchBoxPlaceholder: 'Søk i prosjekter...',
@@ -55,5 +61,7 @@ define([], function () {
     ShowViewSelectorLabel: 'Vis visningsvelger',
     TimelineConfigurationListName: 'Tidslinjekonfigurasjon',
     TimelineContentListName: 'Tidslinjeinnhold',
+    GroupByColumnLabel: 'Grupper etter {0}',
+    CompactViewText: 'Kompakt liste'
   }
 })

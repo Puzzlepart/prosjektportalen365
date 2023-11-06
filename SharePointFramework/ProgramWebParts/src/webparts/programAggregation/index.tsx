@@ -21,7 +21,8 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
     this.renderComponent<IPortfolioAggregationProps>(PortfolioAggregation, {
       onUpdateProperty: this._onUpdateProperty.bind(this),
       configuration: this._configuration,
-      isParentProject: true
+      isParentProject: true,
+      spfxContext: this.context,
     })
   }
 
