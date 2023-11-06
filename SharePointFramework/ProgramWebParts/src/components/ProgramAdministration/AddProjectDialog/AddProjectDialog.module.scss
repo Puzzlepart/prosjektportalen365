@@ -2,20 +2,21 @@
 
 .addProjectDialog {
   & > div[role="dialog"] {
+    display: flex;
+    flex-direction: column;
     max-width: 700px;
     width: calc(100vw - 180px);
     height: calc(100vh - 180px);
   }
 
-  .content {
-    height: 865px;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
+    .content {
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
 
-  .actions {
-    display: flex;
-    justify-content: flex-end;
-    padding: 20px 0 0 0;
-  }
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      padding: 20px 0 0 0;
+    }
 }

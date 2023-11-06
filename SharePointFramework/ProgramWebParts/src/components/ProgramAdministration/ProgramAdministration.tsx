@@ -24,6 +24,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
           <ProjectList
             items={childProjects}
             onSelectionChange={onSelectionChange}
+            renderLinks
             search={{
               placeholder: strings.ProgramAdministrationSearchBoxPlaceholder
             }}
