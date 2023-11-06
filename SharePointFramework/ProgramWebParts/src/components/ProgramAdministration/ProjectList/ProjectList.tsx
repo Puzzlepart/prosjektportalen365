@@ -31,7 +31,6 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             appearance='filled-lighter'
             size='large'
             onChange={onSearch}
-            disabled={context.state.loading}
             contentAfter={{ onClick: () => onSearch(null, { value: '' }) }}
           />
         </div>
@@ -39,7 +38,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
           <Commands />
         </div>
       </div>
-      {!isEmpty(context.state.childProjects) || context.state.loading ? (
+      {!isEmpty(context.state.childProjects) || context.state.loading || props.hideCommands ? (
         <DataGrid
           items={items}
           columns={columns}

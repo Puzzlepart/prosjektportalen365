@@ -1,6 +1,6 @@
 import { FluentProvider, webLightTheme } from '@fluentui/react-components'
 import * as strings from 'ProgramWebPartsStrings'
-import { UserMessage, WebPartTitle } from 'pp365-shared-library'
+import { LoadingSkeleton, UserMessage, WebPartTitle } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { AddProjectDialog } from './AddProjectDialog/AddProjectDialog'
 import styles from './ProgramAdministration.module.scss'
@@ -18,6 +18,8 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
         <WebPartTitle title={props.title} description={strings.ProgramAdministrationInfoMessage} />
         {context.state.error ? (
           <UserMessage title={strings.ErrorTitle} text={context.state.error} intent='error' />
+        ) : context.state.loading ? (
+          <LoadingSkeleton />
         ) : (
           <ProjectList
             items={childProjects}
