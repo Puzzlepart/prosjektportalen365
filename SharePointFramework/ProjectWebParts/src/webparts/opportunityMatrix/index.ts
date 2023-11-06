@@ -5,22 +5,32 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import * as strings from 'ProjectWebPartsStrings'
-import { IOpportunityMatrixProps } from 'components/OpportunityMatrix'
-import { OpportunityMatrix } from 'components/OpportunityMatrix'
+import { IOpportunityMatrixProps, OpportunityMatrix } from 'components/OpportunityMatrix'
 import * as getValue from 'get-value'
+import _ from 'lodash'
 import ReactDom from 'react-dom'
+import SPDataAdapter from '../../data'
 import { UncertaintyElementModel } from '../../models'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
-import { IOpportunityMatrixWebPartProps } from './types'
+import { IOpportunityMatrixWebPartData, IOpportunityMatrixWebPartProps } from './types'
 
 export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpportunityMatrixWebPartProps> {
-  private _items: UncertaintyElementModel[] = []
+  private _data: IOpportunityMatrixWebPartData = {}
   private _error: Error
 
   public async onInit() {
     await super.onInit()
     try {
-      this._items = await this._getItems()
+      const [items, configurations] = await Promise.all([
+        this._getItems(),
+        SPDataAdapter.getConfigurations(strings.RiskMatrixConfigurationFolder)
+      ])
+      const defaultConfiguration = _.find(
+        configurations,
+        (config) =>
+          config.name === SPDataAdapter.globalSettings.get('RiskMatrixDefaultConfigurationFile')
+      )
+      this._data = { items, configurations, defaultConfiguration }
     } catch (error) {
       this._error = error
     }
@@ -30,10 +40,13 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
     if (this._error) {
       this.renderError(this._error)
     } else {
+      const { items, defaultConfiguration } = this._data
       this.renderComponent<IOpportunityMatrixProps>(OpportunityMatrix, {
         ...this.properties,
         width: this.properties.fullWidth ? '100%' : this.properties.width,
-        items: this._items
+        items: items,
+        manualConfigurationPath:
+          this.properties.manualConfigurationPath ?? defaultConfiguration?.url
       })
     }
   }
@@ -99,13 +112,13 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
                 PropertyPaneToggle('fullWidth', {
                   label: strings.MatrixFullWidthLabel
                 }),
+                !this.properties.fullWidth &&
                 PropertyPaneSlider('width', {
                   label: strings.WidthFieldLabel,
                   min: 400,
                   max: 1000,
                   value: 400,
-                  showValue: true,
-                  disabled: this.properties.fullWidth
+                  showValue: true
                 }),
                 PropertyPaneTextField('calloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
@@ -113,7 +126,7 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
                   resizable: true,
                   rows: 8
                 })
-              ]
+              ].filter(Boolean)
             }
           ]
         }

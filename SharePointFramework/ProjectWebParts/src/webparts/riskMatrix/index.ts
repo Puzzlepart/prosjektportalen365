@@ -125,8 +125,7 @@ export default class RiskMatrixWebPart extends BaseProjectWebPart<IRiskMatrixWeb
                   min: 400,
                   max: 1000,
                   value: 400,
-                  showValue: true,
-                  disabled: this.properties.fullWidth
+                  showValue: true
                 }),
                 PropertyPaneTextField('calloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
