@@ -1,0 +1,20 @@
+.helpContentDialog {
+  & > div[role="dialog"] {
+    max-width: 1000px;
+    width: calc(100vw - 180px);
+    height: calc(100vh - 180px);
+  }
+
+  .content {
+    overflow: auto;
+    height: calc(100vh - 236px);
+
+    .contentItem {
+      margin: 25px;
+    }
+
+    img {
+      max-width: 100%;
+    }
+  }
+}
