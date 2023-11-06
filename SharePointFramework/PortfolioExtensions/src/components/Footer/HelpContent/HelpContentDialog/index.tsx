@@ -24,7 +24,7 @@ export const HelpContentDialog: FC<Omit<DialogProps, 'children'>> = (props) => {
   const fluentProviderId = useId('fp-helpDialog')
   const context = useContext(FooterContext)
   const [selectedValue, setSelectedValue] = React.useState<TabValue>(
-    context.props.helpContent[0].title
+    context.props.helpContent[0]?.title
   )
 
   const onTabSelect = (_: SelectTabEvent, data: SelectTabData) => {
