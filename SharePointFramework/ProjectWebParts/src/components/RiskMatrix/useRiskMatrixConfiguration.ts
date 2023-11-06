@@ -3,8 +3,7 @@ import { Caching } from '@pnp/queryable'
 import strings from 'ProjectWebPartsStrings'
 import { useEffect, useState } from 'react'
 import SPDataAdapter from '../../data'
-import { DynamicMatrixConfiguration, generateMatrixConfiguration } from '../DynamicMatrix'
-import { getMatrixHeaders } from './getMatrixHeaders'
+import { DynamicMatrixConfiguration } from '../DynamicMatrix'
 import { IRiskMatrixProps } from './types'
 
 /**
@@ -18,12 +17,12 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
   const [configuration, setConfiguration] = useState<DynamicMatrixConfiguration>([])
   const [error, setError] = useState<string>()
 
-  // Fetch manual configuration if `pageContext` is set and `useDynamicConfiguration` is not set
+  // Fetch manual configuration if `pageContext` is set.
   useEffect(() => {
-    if (props.pageContext && !props.useDynamicConfiguration) {
+    if (props.pageContext) {
       fetchJsonConfiguration()
     }
-  }, [props.useDynamicConfiguration])
+  }, [props.pageContext])
 
   /**
    * Fetches the manual configuration from the specified URL.
@@ -46,15 +45,6 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
       setError(strings.ManualConfigurationNotFoundOrInvalid)
     }
   }
-
-  // Generate dynamic configuration if `size` and `useDynamicConfiguration` is set
-  useEffect(() => {
-    if (props.size && props.useDynamicConfiguration) {
-      setConfiguration(
-        generateMatrixConfiguration(parseInt(props.size, 10), getMatrixHeaders(props))
-      )
-    }
-  }, [props.useDynamicConfiguration, props.size])
 
   return { configuration, error }
 }

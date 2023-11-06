@@ -12,7 +12,7 @@ import { useOpportunityMatrixConfiguration } from './useOpportunityMatrixConfigu
  */
 export function useOpportunityMatrix(props: IOpportunityMatrixProps) {
   const [showPostAction, setShowPostAction] = useState(false)
-  const configuration = useOpportunityMatrixConfiguration(props)
+  const { configuration, error } = useOpportunityMatrixConfiguration(props)
 
   /**
    * Get the matrix elements for a given cell.
@@ -45,5 +45,5 @@ export function useOpportunityMatrix(props: IOpportunityMatrixProps) {
     return [...elements, ...postActionElements]
   }
 
-  return { configuration, getElementsForCell, setShowPostAction, showPostAction } as const
+  return { configuration, error, getElementsForCell, setShowPostAction, showPostAction }
 }

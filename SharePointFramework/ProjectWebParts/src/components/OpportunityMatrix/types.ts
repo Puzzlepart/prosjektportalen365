@@ -3,34 +3,16 @@ import strings from 'ProjectWebPartsStrings'
 import { HTMLProps } from 'react'
 import { UncertaintyElementModel } from '../../models'
 import { IDynamicMatrixProps } from '../DynamicMatrix'
+import { IBaseWebPartComponentProps } from 'pp365-shared-library'
 
 export interface IOpportunityMatrixProps
   extends Omit<HTMLProps<HTMLDivElement>, 'size'>,
-    Pick<IDynamicMatrixProps, 'size' | 'colorScaleConfig' | 'calloutTemplate'> {
+  IBaseWebPartComponentProps,
+  Pick<IDynamicMatrixProps, 'fullWidth' | 'manualConfigurationPath' | 'calloutTemplate'> {
   /**
    * The items to render in the matrix
    */
   items?: UncertaintyElementModel[]
-
-  /**
-   * Whether the matrix should be full width
-   */
-  fullWidth?: boolean
-
-  /**
-   * SPFx page context
-   */
-  pageContext?: PageContext
-
-  /**
-   * Overridden header labels for probability and consequence
-   */
-  overrideHeaderLabels?: Record<string, boolean>
-
-  /**
-   * Header labels for probability and consequence
-   */
-  headerLabels?: Record<string, string[]>
 }
 
 /**

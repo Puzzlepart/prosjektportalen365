@@ -6,7 +6,7 @@ import {
 } from '@fluentui/react'
 import * as strings from 'ProjectWebPartsStrings'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
-import React, { FC } from 'react'
+import React, { FC, ReactElement } from 'react'
 import { OpportunityMatrix } from '../../../OpportunityMatrix'
 import { RiskMatrix } from '../../../RiskMatrix'
 import { StatusElement } from '../../StatusElement'
@@ -32,7 +32,7 @@ export const UncertaintySection: FC = () => {
         />
       )
 
-    let matrix = null
+    let matrix: ReactElement   = null
     switch (state.data.contentTypeIndex) {
       case 1:
         {

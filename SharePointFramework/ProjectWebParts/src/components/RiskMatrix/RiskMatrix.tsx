@@ -6,14 +6,10 @@ import { IRiskMatrixProps } from './types'
 import { useRiskMatrix } from './useRiskMatrix'
 import { UserMessage } from 'pp365-shared-library'
 
+
 export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
   const {
-    configuration,
-    error,
-    getElementsForCell,
-    setShowPostAction,
-    showPostAction,
-    fluentProviderId
+    configuration, error, getElementsForCell, setShowPostAction, showPostAction, fluentProviderId
   } = useRiskMatrix(props)
   return (
     <FluentProvider
@@ -29,18 +25,14 @@ export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
             {...props}
             width={props.fullWidth ? '100%' : props.width}
             configuration={configuration}
-            getElementsForCell={getElementsForCell}
-          />
+            getElementsForCell={getElementsForCell} />
           <Field label={strings.ToggleUncertaintyPostActionLabel}>
             <Switch
-              label={
-                showPostAction
-                  ? strings.ToggleUncertaintyPostActionOnText
-                  : strings.ToggleUncertaintyPostActionOffText
-              }
+              label={showPostAction
+                ? strings.ToggleUncertaintyPostActionOnText
+                : strings.ToggleUncertaintyPostActionOffText}
               onChange={(_event, data) => setShowPostAction(data.checked)}
-              disabled={!!error}
-            />
+              disabled={!!error} />
           </Field>
         </>
       )}
@@ -48,6 +40,7 @@ export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
   )
 }
 
+RiskMatrix.displayName = 'RiskMatrix'
 RiskMatrix.defaultProps = {
   items: [],
   fullWidth: true,
@@ -55,15 +48,5 @@ RiskMatrix.defaultProps = {
   <h3>{Title}</h3>\n
   <p><strong>Usikkerhetstrategi: </strong>{GtRiskStrategy}</p>\n
   <p><strong>Nærhet: </strong>{GtRiskProximity}</p>\n
-  <p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>`,
-  size: '5',
-  colorScaleConfig: [
-    { p: 10, r: 44, g: 186, b: 0 },
-    { p: 30, r: 163, g: 255, b: 0 },
-    { p: 50, r: 255, g: 244, b: 0 },
-    { p: 70, r: 255, g: 167, b: 0 },
-    { p: 90, r: 255, g: 0, b: 0 }
-  ]
+  <p><strong>Status usikkerhet: </strong>{GtRiskStatus}</p>`
 }
-
-export * from './types'

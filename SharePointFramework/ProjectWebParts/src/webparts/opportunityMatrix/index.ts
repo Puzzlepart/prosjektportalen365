@@ -1,30 +1,36 @@
-import { format } from '@fluentui/react'
-import { get } from '@microsoft/sp-lodash-subset'
 import {
   IPropertyPaneConfiguration,
-  IPropertyPaneField,
-  PropertyPaneDropdown,
   PropertyPaneSlider,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { IOpportunityMatrixProps, OpportunityMatrix } from 'components/OpportunityMatrix'
-import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
-import * as getValue from 'get-value'
 import * as strings from 'ProjectWebPartsStrings'
+import { IOpportunityMatrixProps, OpportunityMatrix } from 'components/OpportunityMatrix'
+import * as getValue from 'get-value'
+import _ from 'lodash'
 import ReactDom from 'react-dom'
+import SPDataAdapter from '../../data'
 import { UncertaintyElementModel } from '../../models'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
-import { IOpportunityMatrixWebPartProps } from './types'
+import { IOpportunityMatrixWebPartData, IOpportunityMatrixWebPartProps } from './types'
 
 export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpportunityMatrixWebPartProps> {
-  private _items: UncertaintyElementModel[] = []
+  private _data: IOpportunityMatrixWebPartData = {}
   private _error: Error
 
   public async onInit() {
     await super.onInit()
     try {
-      this._items = await this._getItems()
+      const [items, configurations] = await Promise.all([
+        this._getItems(),
+        SPDataAdapter.getConfigurations(strings.RiskMatrixConfigurationFolder)
+      ])
+      const defaultConfiguration = _.find(
+        configurations,
+        (config) =>
+          config.name === SPDataAdapter.globalSettings.get('RiskMatrixDefaultConfigurationFile')
+      )
+      this._data = { items, configurations, defaultConfiguration }
     } catch (error) {
       this._error = error
     }
@@ -34,10 +40,13 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
     if (this._error) {
       this.renderError(this._error)
     } else {
+      const { items, defaultConfiguration } = this._data
       this.renderComponent<IOpportunityMatrixProps>(OpportunityMatrix, {
         ...this.properties,
         width: this.properties.fullWidth ? '100%' : this.properties.width,
-        items: this._items
+        items: items,
+        manualConfigurationPath:
+          this.properties.manualConfigurationPath ?? defaultConfiguration?.url
       })
     }
   }
@@ -66,38 +75,6 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
 
   protected onDispose(): void {
     ReactDom.unmountComponentAtNode(this.domElement)
-  }
-
-  protected get headerLabelFields(): IPropertyPaneField<any>[] {
-    const size = parseInt(this.properties.size ?? '5', 10)
-    const overrideHeaderLabels = PropertyPaneToggle(`overrideHeaderLabels.${size}`, {
-      label: format(strings.OverrideHeadersLabel, size)
-    })
-    if (!get(this.properties, `overrideHeaderLabels.${size}`, false)) {
-      return [overrideHeaderLabels]
-    }
-    const headerLabelFields: IPropertyPaneField<any>[] = []
-    const probabilityHeaders: string[] = ['', '', '', '', '', '']
-    const consequenceHeaders: string[] = ['', '', '', '', '', '']
-    for (let i = 0; i < size; i++) {
-      const probabilityHeaderFieldName = `headerLabels.${size}.p${i}`
-      headerLabelFields.push(
-        PropertyPaneTextField(probabilityHeaderFieldName, {
-          label: format(strings.ProbabilityHeaderFieldLabel, i + 1),
-          placeholder: probabilityHeaders[i]
-        })
-      )
-    }
-    for (let i = 0; i < size; i++) {
-      const consequenceHeaderFieldName = `headerLabels.${size}.c${i}`
-      headerLabelFields.push(
-        PropertyPaneTextField(consequenceHeaderFieldName, {
-          label: format(strings.ConsequenceHeaderFieldLabel, i + 1),
-          placeholder: consequenceHeaders[i]
-        })
-      )
-    }
-    return [overrideHeaderLabels, ...headerLabelFields]
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -135,77 +112,21 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
                 PropertyPaneToggle('fullWidth', {
                   label: strings.MatrixFullWidthLabel
                 }),
+                !this.properties.fullWidth &&
                 PropertyPaneSlider('width', {
                   label: strings.WidthFieldLabel,
                   min: 400,
                   max: 1000,
                   value: 400,
-                  showValue: true,
-                  disabled: this.properties.fullWidth
+                  showValue: true
                 }),
                 PropertyPaneTextField('calloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,
                   resizable: true,
                   rows: 8
-                }),
-                PropertyPaneDropdown('size', {
-                  label: strings.MatrixSizeLabel,
-                  options: [
-                    {
-                      key: '4',
-                      text: '4x4'
-                    },
-                    {
-                      key: '5',
-                      text: '5x5'
-                    },
-                    {
-                      key: '6',
-                      text: '6x6'
-                    }
-                  ],
-                  selectedKey: this.properties.size ?? '5'
-                }),
-                PropertyFieldColorConfiguration('colorScaleConfig', {
-                  key: 'colorScaleConfig',
-                  label: strings.MatrixColorScaleConfigLabel,
-                  defaultValue: [
-                    {
-                      p: 10,
-                      r: 255,
-                      g: 167,
-                      b: 0
-                    },
-                    {
-                      p: 30,
-                      r: 255,
-                      g: 214,
-                      b: 10
-                    },
-                    {
-                      p: 50,
-                      r: 255,
-                      g: 244,
-                      b: 0
-                    },
-                    {
-                      p: 70,
-                      r: 163,
-                      g: 255,
-                      b: 0
-                    },
-                    {
-                      p: 90,
-                      r: 44,
-                      g: 186,
-                      b: 0
-                    }
-                  ],
-                  value: this.properties.colorScaleConfig
-                }),
-                ...this.headerLabelFields
-              ]
+                })
+              ].filter(Boolean)
             }
           ]
         }

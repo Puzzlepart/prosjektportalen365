@@ -142,6 +142,7 @@ define([], function () {
     RedoText: 'Change',
     RevertDefaultColorConfigurationText: 'Use default',
     RiskMatrixConfigurationFolder: 'Risk matrix',
+    OpportunityMatrixConfigurationFolder: 'Opportunity matrix',
     RiskMatrixGroupName: 'Risk Matrix',
     SaveColorConfigurationText: 'Save',
     SettingsGroupName: 'Settings',
