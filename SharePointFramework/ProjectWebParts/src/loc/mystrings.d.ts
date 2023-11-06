@@ -1,4 +1,5 @@
 declare interface IProjectWebPartsStrings {
+  OpportunityMatrixConfigurationFolder: string
   EditTimelineContentText: string
   NewTimelineContentText: string
   NewStatusPanelTitle: string

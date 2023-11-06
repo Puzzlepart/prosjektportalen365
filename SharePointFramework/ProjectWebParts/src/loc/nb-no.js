@@ -192,6 +192,7 @@ define([], function () {
     RedoText: 'Gjør om',
     RevertDefaultColorConfigurationText: 'Bruk standard',
     RiskMatrixConfigurationFolder: 'Risikomatrise',
+    OpportunityMatrixConfigurationFolder: 'Mulighetsmatrise',
     RiskMatrixGroupName: 'Risikomatrise',
     SaveColorConfigurationText: 'Lagre',
     SettingsGroupName: 'Innstillinger',

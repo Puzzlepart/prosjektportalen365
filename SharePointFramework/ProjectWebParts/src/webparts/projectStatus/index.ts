@@ -19,17 +19,29 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
 
   public async onInit() {
     await super.onInit()
-    const riskMatrixConfigurations = await SPDataAdapter.getConfigurations(
+    const [riskMatrixConfigurations,opportunityMatrixConfigurations] = await Promise.all([
+      SPDataAdapter.getConfigurations(
       strings.RiskMatrixConfigurationFolder
-    )
+      ),
+      SPDataAdapter.getConfigurations(
+        strings.OpportunityMatrixConfigurationFolder
+      )
+    ])
     const defaultRiskMatrixConfiguration = _.find(
       riskMatrixConfigurations,
       (config) =>
         config.name === SPDataAdapter.globalSettings.get('RiskMatrixDefaultConfigurationFile')
     )
+    const defaultOpportunityMatrixConfiguration = _.find(
+      opportunityMatrixConfigurations,
+      (config) =>
+        config.name === SPDataAdapter.globalSettings.get('OpportunityMatrixDefaultConfigurationFile')
+    )
     this._data = {
       riskMatrixConfigurations,
-      defaultRiskMatrixConfiguration
+      defaultRiskMatrixConfiguration,
+      opportunityMatrixConfigurations,
+      defaultOpportunityMatrixConfiguration
     }
   }
 
@@ -87,7 +99,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                 PropertyPaneToggle('opportunityMatrix.fullWidth', {
                   label: strings.MatrixFullWidthLabel
                 }),
-                PropertyPaneSlider('opportunityMatrix.width', {
+                !this.properties.opportunityMatrix?.fullWidth && PropertyPaneSlider('opportunityMatrix.width', {
                   label: strings.WidthFieldLabel,
                   min: 400,
                   max: 1300,
@@ -100,8 +112,17 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   multiline: true,
                   resizable: true,
                   rows: 8
+                }),
+                PropertyPaneDropdown('opportunityMatrix.manualConfigurationPath', {
+                  label: strings.ManualConfigurationPathLabel,
+                  options: this._data.opportunityMatrixConfigurations.map(
+                    ({ url: key, title: text }) => ({ key, text })
+                  ),
+                  selectedKey:
+                    this.properties.opportunityMatrix?.manualConfigurationPath ??
+                    this._data.defaultOpportunityMatrixConfiguration?.url
                 })
-              ]
+              ].filter(Boolean)
             },
             {
               groupName: strings.ProjectStatusProjectPropertiesGroupName,
