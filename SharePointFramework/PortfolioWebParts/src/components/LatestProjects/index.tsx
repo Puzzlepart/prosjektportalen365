@@ -2,7 +2,12 @@ import { format } from '@fluentui/react'
 import { Button, Caption1, FluentProvider, Link, webLightTheme } from '@fluentui/react-components'
 import { ChevronDownFilled, ChevronUpFilled } from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
-import { LoadingSkeleton, ProjectLogo, UserMessage, WebPartTitle } from 'pp365-shared-library/lib/components'
+import {
+  LoadingSkeleton,
+  ProjectLogo,
+  UserMessage,
+  WebPartTitle
+} from 'pp365-shared-library/lib/components'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 import React, { FC } from 'react'
 import styles from './LatestProjects.module.scss'
