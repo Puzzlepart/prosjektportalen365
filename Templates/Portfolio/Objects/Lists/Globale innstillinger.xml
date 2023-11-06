@@ -88,6 +88,14 @@
             <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtSettingsCategory">Risikomatrise</pnp:DataValue>
         </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="GtSettingsId">{eb334b01-bf84-435f-a74d-de48bed6affe}</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Standard konfigurasjon for Mulighetsmatrise</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsKey">OpportunityMatrixDefaultConfigurationFile</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsValue">standard-konfigurasjon.json</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsEnabled">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSettingsCategory">Mulighetsmatrise</pnp:DataValue>
+        </pnp:DataRow>
     </pnp:DataRows>
     <pnp:Webhooks>
         <pnp:Webhook ServerNotificationUrl="https://northeurope1-0.pushnp.svc.ms/notifications?token=5507e3fc-9a4e-4217-b7be-b4e034d94ec6" ExpiresInDays="1" />

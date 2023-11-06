@@ -83,6 +83,11 @@
                         <pnp:Property Key="Title" Value="Standard 5x5 matrise" />
                     </pnp:Properties>
                 </pnp:File>
+                <pnp:File Src="SiteAssets/Konfigurasjon/Mulighetsmatrise/standard-konfigurasjon.json" Folder="SiteAssets/Konfigurasjon/Mulighetsmatrise" Level="Published" Overwrite="true">
+                    <pnp:Properties>
+                        <pnp:Property Key="Title" Value="Standard 5x5 matrise" />
+                    </pnp:Properties>
+                </pnp:File>
             </pnp:Files>
             <pnp:Lists>
                 <pnp:ListInstance Title="Fasesjekkliste" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Fasesjekkliste" EnableVersioning="true" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false">
