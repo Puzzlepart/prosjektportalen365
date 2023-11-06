@@ -47,7 +47,6 @@ export const UncertaintySection: FC = () => {
         break
       case 2:
         {
-          console.log(context.props.opportunityMatrix, matrixElements)
           matrix = <OpportunityMatrix {...context.props.opportunityMatrix} items={matrixElements} />
         }
         break

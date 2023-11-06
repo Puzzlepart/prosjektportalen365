@@ -43,7 +43,5 @@ export function useOpportunityMatrixConfiguration(props: IOpportunityMatrixProps
     }
   }
 
-  console.log('useOpportunityMatrixConfiguration', { configuration, error })
-
   return { configuration, error }
 }
