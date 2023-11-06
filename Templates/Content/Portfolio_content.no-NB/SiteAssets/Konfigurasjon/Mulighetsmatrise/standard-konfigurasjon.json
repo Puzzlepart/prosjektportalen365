@@ -33,19 +33,19 @@
             "cellType": 1,
             "x": 1,
             "y": 5,
-            "backgroundColor": "#FFB54C"
+            "backgroundColor": "#F8D66D"
         },
         {
             "cellType": 1,
             "x": 2,
             "y": 5,
-            "backgroundColor": "#FFB54C"
+            "backgroundColor": "#C4E5C6"
         },
         {
             "cellType": 1,
             "x": 3,
             "y": 5,
-            "backgroundColor": "#FF6961"
+            "backgroundColor": "#A0DAA1"
         },
         {
             "cellType": 1,
@@ -75,19 +75,19 @@
             "cellType": 1,
             "x": 2,
             "y": 4,
-            "backgroundColor": "#FFB54C"
+            "backgroundColor": "#F8D66D"
         },
         {
             "cellType": 1,
             "x": 3,
             "y": 4,
-            "backgroundColor": "#FFB54C"
+            "backgroundColor": "#C4E5C6"
         },
         {
             "cellType": 1,
             "x": 4,
             "y": 4,
-            "backgroundColor": "#FF6961"
+            "backgroundColor": "#A0DAA1"
         },
         {
             "cellType": 1,
@@ -105,7 +105,7 @@
             "cellType": 1,
             "x": 1,
             "y": 3,
-            "backgroundColor": "#7ABD7E"
+            "backgroundColor": "#F8D66D"
         },
         {
             "cellType": 1,
@@ -117,19 +117,19 @@
             "cellType": 1,
             "x": 3,
             "y": 3,
-            "backgroundColor": "#FFB54C"
+            "backgroundColor": "#F8D66D"
         },
         {
             "cellType": 1,
             "x": 4,
             "y": 3,
-            "backgroundColor": "#FF6961"
+            "backgroundColor": "#C4E5C6"
         },
         {
             "cellType": 1,
             "x": 5,
             "y": 3,
-            "backgroundColor": "#FF6961"
+            "backgroundColor": "#A0DAA1"
         }
     ],
     [
@@ -141,13 +141,13 @@
             "cellType": 1,
             "x": 1,
             "y": 2,
-            "backgroundColor": "#7ABD7E"
+            "backgroundColor": "#F8D66D"
         },
         {
             "cellType": 1,
             "x": 2,
             "y": 2,
-            "backgroundColor": "#7ABD7E"
+            "backgroundColor": "#F8D66D"
         },
         {
             "cellType": 1,
@@ -159,13 +159,13 @@
             "cellType": 1,
             "x": 4,
             "y": 2,
-            "backgroundColor": "#FFB54C"
+            "backgroundColor": "#F8D66D"
         },
         {
             "cellType": 1,
             "x": 5,
             "y": 2,
-            "backgroundColor": "#FF6961"
+            "backgroundColor": "#C4E5C6"
         }
     ],
     [
@@ -177,13 +177,13 @@
             "cellType": 1,
             "x": 1,
             "y": 1,
-            "backgroundColor": "#7ABD7E"
+            "backgroundColor": "#F8D66D"
         },
         {
             "cellType": 1,
             "x": 2,
             "y": 1,
-            "backgroundColor": "#7ABD7E"
+            "backgroundColor": "#F8D66D"
         },
         {
             "cellType": 1,
@@ -195,13 +195,13 @@
             "cellType": 1,
             "x": 4,
             "y": 1,
-            "backgroundColor": "#FFB54C"
+            "backgroundColor": "#F8D66D"
         },
         {
             "cellType": 1,
             "x": 5,
             "y": 1,
-            "backgroundColor": "#FFB54C"
+            "backgroundColor": "#F8D66D"
         }
     ]
 ]
