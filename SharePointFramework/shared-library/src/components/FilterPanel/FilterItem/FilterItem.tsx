@@ -1,9 +1,7 @@
-
 import React, { FC } from 'react'
 import styles from './FilterItem.module.scss'
 import { IFilterItemProps } from './types'
 import { Checkbox } from '@fluentui/react-components'
-
 
 export const FilterItem: FC<IFilterItemProps> = (props) => {
   return (

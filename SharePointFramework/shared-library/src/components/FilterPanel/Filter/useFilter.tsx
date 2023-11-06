@@ -4,7 +4,10 @@ import { IFilterItemProps } from '../FilterItem/types'
 import { IFilterProps, IFilterState } from './types'
 
 export function useFilter(props: IFilterProps) {
-  const [state, setState] = useState<IFilterState>({ isCollapsed: props.defaultCollapsed, items: props.items })
+  const [state, setState] = useState<IFilterState>({
+    isCollapsed: props.defaultCollapsed,
+    items: props.items
+  })
 
   /**
    * On change filter item
@@ -13,17 +16,15 @@ export function useFilter(props: IFilterProps) {
    * @param checked Item checked
    */
   const onChange = (item: IFilterItemProps, checked: boolean) => {
-    setState(
-      (prevState) => {
-        const items = prevState.items.map((i) => {
-          if (i.value === item.value) {
-            return { ...i, selected: checked }
-          }
-          return i
-        })
-        return { ...prevState, items }
-      }
-    )
+    setState((prevState) => {
+      const items = prevState.items.map((i) => {
+        if (i.value === item.value) {
+          return { ...i, selected: checked }
+        }
+        return i
+      })
+      return { ...prevState, items }
+    })
     const selectedItems = state.items.filter(({ selected }) => selected)
     props.onFilterChange(props.column, selectedItems)
   }
@@ -43,7 +44,8 @@ export function useFilter(props: IFilterProps) {
       <FilterItem
         key={idx}
         {...props}
-        onChange={(_event, { checked }) => onChange(props, checked as boolean)} />
+        onChange={(_event, { checked }) => onChange(props, checked as boolean)}
+      />
     ))
   }
 
