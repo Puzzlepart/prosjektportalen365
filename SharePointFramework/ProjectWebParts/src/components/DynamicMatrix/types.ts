@@ -38,9 +38,4 @@ export interface IDynamicMatrixProps {
    * Function that should return the elements for the specified cell.
    */
   getElementsForCell: (cell: IMatrixCell) => IMatrixElementProps[]
-
-  /**
-   * Color scale configuration contains color configurations for the matrix.
-   */
-  colorScaleConfig?: DynamicMatrixColorScaleConfig
 }

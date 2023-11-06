@@ -7,11 +7,7 @@ import { IDynamicMatrixProps } from '../DynamicMatrix'
 export interface IRiskMatrixProps
   extends Omit<HTMLProps<HTMLDivElement>, 'size'>,
     IBaseWebPartComponentProps,
-    Pick<IDynamicMatrixProps, 'size' | 'colorScaleConfig' | 'calloutTemplate'> {
-  /**
-   * Whether the matrix should be rendered in dynamic mode (deprecated)
-   */
-  useDynamicConfiguration?: boolean
+    Pick<IDynamicMatrixProps, 'calloutTemplate'> {
 
   /**
    * Manual configuration URL. File must be a JSON file stored in SharePoint.
@@ -27,16 +23,6 @@ export interface IRiskMatrixProps
    * Whether the matrix should be full width
    */
   fullWidth?: boolean
-
-  /**
-   * Overridden header labels for probability and consequence
-   */
-  overrideHeaderLabels?: Record<string, boolean>
-
-  /**
-   * Header labels for probability and consequence
-   */
-  headerLabels?: Record<string, string[]>
 }
 
 /**

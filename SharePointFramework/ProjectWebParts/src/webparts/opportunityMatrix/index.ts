@@ -1,17 +1,13 @@
-import { format } from '@fluentui/react'
-import { get } from '@microsoft/sp-lodash-subset'
 import {
   IPropertyPaneConfiguration,
-  IPropertyPaneField,
-  PropertyPaneDropdown,
   PropertyPaneSlider,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { IOpportunityMatrixProps, OpportunityMatrix } from 'components/OpportunityMatrix'
-import PropertyFieldColorConfiguration from 'components/PropertyFieldColorConfiguration'
-import * as getValue from 'get-value'
 import * as strings from 'ProjectWebPartsStrings'
+import { IOpportunityMatrixProps } from 'components/OpportunityMatrix'
+import { OpportunityMatrix } from 'components/OpportunityMatrix/OpportunityMatrix'
+import * as getValue from 'get-value'
 import ReactDom from 'react-dom'
 import { UncertaintyElementModel } from '../../models'
 import { BaseProjectWebPart } from '../baseProjectWebPart'
@@ -68,38 +64,6 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
     ReactDom.unmountComponentAtNode(this.domElement)
   }
 
-  protected get headerLabelFields(): IPropertyPaneField<any>[] {
-    const size = parseInt(this.properties.size ?? '5', 10)
-    const overrideHeaderLabels = PropertyPaneToggle(`overrideHeaderLabels.${size}`, {
-      label: format(strings.OverrideHeadersLabel, size)
-    })
-    if (!get(this.properties, `overrideHeaderLabels.${size}`, false)) {
-      return [overrideHeaderLabels]
-    }
-    const headerLabelFields: IPropertyPaneField<any>[] = []
-    const probabilityHeaders: string[] = ['', '', '', '', '', '']
-    const consequenceHeaders: string[] = ['', '', '', '', '', '']
-    for (let i = 0; i < size; i++) {
-      const probabilityHeaderFieldName = `headerLabels.${size}.p${i}`
-      headerLabelFields.push(
-        PropertyPaneTextField(probabilityHeaderFieldName, {
-          label: format(strings.ProbabilityHeaderFieldLabel, i + 1),
-          placeholder: probabilityHeaders[i]
-        })
-      )
-    }
-    for (let i = 0; i < size; i++) {
-      const consequenceHeaderFieldName = `headerLabels.${size}.c${i}`
-      headerLabelFields.push(
-        PropertyPaneTextField(consequenceHeaderFieldName, {
-          label: format(strings.ConsequenceHeaderFieldLabel, i + 1),
-          placeholder: consequenceHeaders[i]
-        })
-      )
-    }
-    return [overrideHeaderLabels, ...headerLabelFields]
-  }
-
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
@@ -148,63 +112,7 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
                   multiline: true,
                   resizable: true,
                   rows: 8
-                }),
-                PropertyPaneDropdown('size', {
-                  label: strings.MatrixSizeLabel,
-                  options: [
-                    {
-                      key: '4',
-                      text: '4x4'
-                    },
-                    {
-                      key: '5',
-                      text: '5x5'
-                    },
-                    {
-                      key: '6',
-                      text: '6x6'
-                    }
-                  ],
-                  selectedKey: this.properties.size ?? '5'
-                }),
-                PropertyFieldColorConfiguration('colorScaleConfig', {
-                  key: 'colorScaleConfig',
-                  label: strings.MatrixColorScaleConfigLabel,
-                  defaultValue: [
-                    {
-                      p: 10,
-                      r: 255,
-                      g: 167,
-                      b: 0
-                    },
-                    {
-                      p: 30,
-                      r: 255,
-                      g: 214,
-                      b: 10
-                    },
-                    {
-                      p: 50,
-                      r: 255,
-                      g: 244,
-                      b: 0
-                    },
-                    {
-                      p: 70,
-                      r: 163,
-                      g: 255,
-                      b: 0
-                    },
-                    {
-                      p: 90,
-                      r: 44,
-                      g: 186,
-                      b: 0
-                    }
-                  ],
-                  value: this.properties.colorScaleConfig
-                }),
-                ...this.headerLabelFields
+                })
               ]
             }
           ]
