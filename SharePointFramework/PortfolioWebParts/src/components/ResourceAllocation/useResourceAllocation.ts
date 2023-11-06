@@ -20,6 +20,7 @@ import { IFilterItemProps, TimelineTimeframe } from 'pp365-shared-library'
 export const useResourceAllocation = (props: IResourceAllocationProps) => {
   const [state, setState] = useState<IResourceAllocationState>({
     activeFilters: {},
+    loading: true,
     data: { items: [], groups: [] }
   })
 
@@ -59,7 +60,7 @@ export const useResourceAllocation = (props: IResourceAllocationProps) => {
   const { items, groups } = useFilteredData(state)
 
   useResourceAllocationDataFetch(props, (data) => {
-    setState({ ...state, data, isDataLoaded: true })
+    setState({ ...state, data, loading: false })
   })
 
   const [sAmount, sDuration] = props.defaultTimeframeStart.split(',')

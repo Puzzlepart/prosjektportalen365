@@ -5,13 +5,16 @@ import { IProjectTimelineProps } from './types'
 import { useProjectTimeline } from './useProjectTimeline'
 import { UserMessage } from '../UserMessage'
 import strings from 'SharedLibraryStrings'
+import { LoadingSkeleton } from '../LoadingSkeleton'
 
 export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
   const { state, onFilterChange } = useProjectTimeline(props)
   return (
     <div className={styles.root}>
       <div className={styles.container}>
-        {!state.isDataLoaded ? null : state.error ? (
+        {state.loading ? (
+          <LoadingSkeleton />
+        ) : state.error ? (
           <UserMessage title={strings.ErrorTitle} text={state.error.message} intent='error' />
         ) : (
           <>

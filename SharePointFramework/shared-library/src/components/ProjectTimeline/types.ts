@@ -1,4 +1,3 @@
-import { IShimmerProps } from '@fluentui/react'
 import * as moment from 'moment'
 import { IFilterProps } from '../../components/FilterPanel/Filter/types'
 import { ITimelineData, ITimelineItem } from '../../interfaces'
@@ -40,7 +39,7 @@ export interface IProjectTimelineProps
   configItemTitle?: string
 }
 
-export interface IProjectTimelineState extends Pick<IShimmerProps, 'isDataLoaded'> {
+export interface IProjectTimelineState {
   /**
    * Filters
    */
@@ -75,6 +74,11 @@ export interface IProjectTimelineState extends Pick<IShimmerProps, 'isDataLoaded
    * Error
    */
   error?: Error
+
+  /**
+   * Loading
+   */
+  loading?: boolean
 
   /**
    * Item to show details for

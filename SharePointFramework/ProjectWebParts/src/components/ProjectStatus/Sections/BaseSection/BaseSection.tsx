@@ -1,10 +1,10 @@
-import { Shimmer } from '@fluentui/react'
 import { conditionalClassName } from 'pp365-shared-library/lib/util'
 import React, { FC, useContext } from 'react'
 import { useProjectStatusContext } from '../../../ProjectStatus/context'
 import styles from './BaseSection.module.scss'
 import { IBaseSectionProps } from './types'
 import { SectionContext } from '../context'
+import { LoadingSkeleton } from 'pp365-shared-library'
 
 export const BaseSection: FC<IBaseSectionProps> = (props) => {
   const context = useProjectStatusContext()
@@ -21,7 +21,7 @@ export const BaseSection: FC<IBaseSectionProps> = (props) => {
       ])}
     >
       <div className={styles.container}>
-        <Shimmer isDataLoaded={context.state.isDataLoaded}>{props.children}</Shimmer>
+        {context.state.isDataLoaded ? props.children : <LoadingSkeleton />}
       </div>
     </div>
   )

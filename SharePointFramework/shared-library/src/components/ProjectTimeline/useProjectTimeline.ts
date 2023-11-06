@@ -19,7 +19,7 @@ import { useProjectTimelineDataFetch } from './useProjectTimelineDataFetch'
  */
 export const useProjectTimeline = (props: IProjectTimelineProps) => {
   const [state, $setState] = useState<IProjectTimelineState>({
-    isDataLoaded: false,
+    loading: true,
     activeFilters: {}
   })
 
@@ -124,11 +124,11 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
   }
 
   useProjectTimelineDataFetch(props, ($) => {
-    if ($.error) setState({ error: $.error, isDataLoaded: true })
+    if ($.error) setState({ error: $.error, loading: false })
     else {
       const filters = getFilters($.timelineConfig, $.data)
       const filteredData = getFilteredData($.data)
-      setState({ ...$, filteredData, filters, isDataLoaded: true })
+      setState({ ...$, filteredData, filters, loading: false })
     }
   })
 
