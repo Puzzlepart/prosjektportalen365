@@ -1,7 +1,8 @@
-import { Panel, PanelType } from '@fluentui/react'
-import React, { FC } from 'react'
-import { Filter } from './Filter'
-import { IFilterPanelProps } from './types'
+import { Panel, PanelType } from '@fluentui/react';
+import React, { FC } from 'react';
+import { Filter } from './Filter/Filter';
+import { IFilterPanelProps } from './types';
+
 
 export const FilterPanel: FC<IFilterPanelProps> = (props) => {
   return (
@@ -14,9 +15,5 @@ export const FilterPanel: FC<IFilterPanelProps> = (props) => {
           ))}
       </div>
     </Panel>
-  )
-}
-
-export * from './Filter/types'
-export * from './FilterItem/types'
-export * from './types'
+  );
+};
