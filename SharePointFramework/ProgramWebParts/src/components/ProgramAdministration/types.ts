@@ -62,6 +62,11 @@ export interface IProgramAdministrationState {
   userHasManagePermission?: boolean
 
   /**
+   * Indicates whether the component is deleting projects
+   */
+  isDeleting: boolean
+
+  /**
    * Error message
    */
   error: string

@@ -1,7 +1,27 @@
 .projectList {
-    .searchBox {
-        margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: hidden;
+
+  .header {
+    padding: 2px;
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+
+    .search {
+      min-width: 420px;
+
+      .searchBox {
+        box-shadow: var(--shadow2);
         width: 100%;
-        max-width: 100%;
+      }
     }
+
+    .commands {
+      width: 100%;
+      gap: 16px;
+    }
+  }
 }

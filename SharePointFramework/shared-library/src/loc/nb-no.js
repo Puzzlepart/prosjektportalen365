@@ -9,7 +9,6 @@ define([], function () {
       MenuOverflowCount: '{0} flere elementer',
       ProjectTitle: 'Logo for prosjekt: {0}'
     },
-
     Placeholder: {
       DatePicker: 'Angi en dato',
       TextField: 'Angi verdi her',
