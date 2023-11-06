@@ -1,4 +1,3 @@
-import { PageContext } from '@microsoft/sp-page-context'
 import strings from 'ProjectWebPartsStrings'
 import { HTMLProps } from 'react'
 import { UncertaintyElementModel } from '../../models'
@@ -7,8 +6,8 @@ import { IBaseWebPartComponentProps } from 'pp365-shared-library'
 
 export interface IOpportunityMatrixProps
   extends Omit<HTMLProps<HTMLDivElement>, 'size'>,
-  IBaseWebPartComponentProps,
-  Pick<IDynamicMatrixProps, 'fullWidth' | 'manualConfigurationPath' | 'calloutTemplate'> {
+    IBaseWebPartComponentProps,
+    Pick<IDynamicMatrixProps, 'fullWidth' | 'manualConfigurationPath' | 'calloutTemplate'> {
   /**
    * The items to render in the matrix
    */

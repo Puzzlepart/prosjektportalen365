@@ -19,13 +19,9 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
 
   public async onInit() {
     await super.onInit()
-    const [riskMatrixConfigurations,opportunityMatrixConfigurations] = await Promise.all([
-      SPDataAdapter.getConfigurations(
-      strings.RiskMatrixConfigurationFolder
-      ),
-      SPDataAdapter.getConfigurations(
-        strings.OpportunityMatrixConfigurationFolder
-      )
+    const [riskMatrixConfigurations, opportunityMatrixConfigurations] = await Promise.all([
+      SPDataAdapter.getConfigurations(strings.RiskMatrixConfigurationFolder),
+      SPDataAdapter.getConfigurations(strings.OpportunityMatrixConfigurationFolder)
     ])
     const defaultRiskMatrixConfiguration = _.find(
       riskMatrixConfigurations,
@@ -35,7 +31,8 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
     const defaultOpportunityMatrixConfiguration = _.find(
       opportunityMatrixConfigurations,
       (config) =>
-        config.name === SPDataAdapter.globalSettings.get('OpportunityMatrixDefaultConfigurationFile')
+        config.name ===
+        SPDataAdapter.globalSettings.get('OpportunityMatrixDefaultConfigurationFile')
     )
     this._data = {
       riskMatrixConfigurations,
@@ -61,7 +58,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
       }
     })
   }
-  
+
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
@@ -74,14 +71,14 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                   label: strings.MatrixFullWidthLabel
                 }),
                 !this.properties.riskMatrix?.fullWidth &&
-                PropertyPaneSlider('riskMatrix.width', {
-                  label: strings.WidthFieldLabel,
-                  min: 400,
-                  max: 1300,
-                  value: 400,
-                  showValue: true,
-                  disabled: this.properties.riskMatrix?.fullWidth
-                }),
+                  PropertyPaneSlider('riskMatrix.width', {
+                    label: strings.WidthFieldLabel,
+                    min: 400,
+                    max: 1300,
+                    value: 400,
+                    showValue: true,
+                    disabled: this.properties.riskMatrix?.fullWidth
+                  }),
                 PropertyPaneTextField('riskMatrix.calloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,
@@ -90,9 +87,10 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                 }),
                 PropertyPaneDropdown('riskMatrix.manualConfigurationPath', {
                   label: strings.ManualConfigurationPathLabel,
-                  options: this._data.riskMatrixConfigurations.map(
-                    ({ url: key, title: text }) => ({ key, text })
-                  ),
+                  options: this._data.riskMatrixConfigurations.map(({ url: key, title: text }) => ({
+                    key,
+                    text
+                  })),
                   selectedKey:
                     this.properties.riskMatrix?.manualConfigurationPath ??
                     this._data.defaultRiskMatrixConfiguration?.url
@@ -105,14 +103,15 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                 PropertyPaneToggle('opportunityMatrix.fullWidth', {
                   label: strings.MatrixFullWidthLabel
                 }),
-                !this.properties.opportunityMatrix?.fullWidth && PropertyPaneSlider('opportunityMatrix.width', {
-                  label: strings.WidthFieldLabel,
-                  min: 400,
-                  max: 1300,
-                  value: 400,
-                  showValue: true,
-                  disabled: this.properties.opportunityMatrix?.fullWidth
-                }),
+                !this.properties.opportunityMatrix?.fullWidth &&
+                  PropertyPaneSlider('opportunityMatrix.width', {
+                    label: strings.WidthFieldLabel,
+                    min: 400,
+                    max: 1300,
+                    value: 400,
+                    showValue: true,
+                    disabled: this.properties.opportunityMatrix?.fullWidth
+                  }),
                 PropertyPaneTextField('opportunityMatrix.calloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,

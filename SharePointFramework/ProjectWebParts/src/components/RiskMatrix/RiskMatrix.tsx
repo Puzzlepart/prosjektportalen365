@@ -6,10 +6,14 @@ import { IRiskMatrixProps } from './types'
 import { useRiskMatrix } from './useRiskMatrix'
 import { UserMessage } from 'pp365-shared-library'
 
-
 export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
   const {
-    configuration, error, getElementsForCell, setShowPostAction, showPostAction, fluentProviderId
+    configuration,
+    error,
+    getElementsForCell,
+    setShowPostAction,
+    showPostAction,
+    fluentProviderId
   } = useRiskMatrix(props)
   return (
     <FluentProvider
@@ -25,14 +29,18 @@ export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
             {...props}
             width={props.fullWidth ? '100%' : props.width}
             configuration={configuration}
-            getElementsForCell={getElementsForCell} />
+            getElementsForCell={getElementsForCell}
+          />
           <Field label={strings.ToggleUncertaintyPostActionLabel}>
             <Switch
-              label={showPostAction
-                ? strings.ToggleUncertaintyPostActionOnText
-                : strings.ToggleUncertaintyPostActionOffText}
+              label={
+                showPostAction
+                  ? strings.ToggleUncertaintyPostActionOnText
+                  : strings.ToggleUncertaintyPostActionOffText
+              }
               onChange={(_event, data) => setShowPostAction(data.checked)}
-              disabled={!!error} />
+              disabled={!!error}
+            />
           </Field>
         </>
       )}

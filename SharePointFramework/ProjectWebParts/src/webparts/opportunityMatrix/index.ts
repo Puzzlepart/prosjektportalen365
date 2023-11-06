@@ -113,13 +113,13 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
                   label: strings.MatrixFullWidthLabel
                 }),
                 !this.properties.fullWidth &&
-                PropertyPaneSlider('width', {
-                  label: strings.WidthFieldLabel,
-                  min: 400,
-                  max: 1000,
-                  value: 400,
-                  showValue: true
-                }),
+                  PropertyPaneSlider('width', {
+                    label: strings.WidthFieldLabel,
+                    min: 400,
+                    max: 1000,
+                    value: 400,
+                    showValue: true
+                  }),
                 PropertyPaneTextField('calloutTemplate', {
                   label: strings.CalloutTemplateFieldLabel,
                   multiline: true,

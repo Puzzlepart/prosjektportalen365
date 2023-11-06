@@ -32,7 +32,7 @@ export const UncertaintySection: FC = () => {
         />
       )
 
-    let matrix: ReactElement   = null
+    let matrix: ReactElement = null
     switch (state.data.contentTypeIndex) {
       case 1:
         {

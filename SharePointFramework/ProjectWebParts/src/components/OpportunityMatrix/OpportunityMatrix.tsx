@@ -6,20 +6,25 @@ import { IOpportunityMatrixProps } from './types'
 import { useOpportunityMatrix } from './useOpportunityMatrix'
 
 export const OpportunityMatrix: FC<IOpportunityMatrixProps> = (props) => {
-  const { configuration, getElementsForCell, setShowPostAction, showPostAction } = useOpportunityMatrix(props)
+  const { configuration, getElementsForCell, setShowPostAction, showPostAction } =
+    useOpportunityMatrix(props)
   return (
     <>
       <DynamicMatrix
         {...props}
         width={props.fullWidth ? '100%' : props.width}
         configuration={configuration}
-        getElementsForCell={getElementsForCell} />
+        getElementsForCell={getElementsForCell}
+      />
       <Field label={strings.ToggleUncertaintyPostActionLabel}>
         <Switch
-          label={showPostAction
-            ? strings.ToggleUncertaintyPostActionOnText
-            : strings.ToggleUncertaintyPostActionOffText}
-          onChange={(_event, data) => setShowPostAction(data.checked)} />
+          label={
+            showPostAction
+              ? strings.ToggleUncertaintyPostActionOnText
+              : strings.ToggleUncertaintyPostActionOffText
+          }
+          onChange={(_event, data) => setShowPostAction(data.checked)}
+        />
       </Field>
     </>
   )
