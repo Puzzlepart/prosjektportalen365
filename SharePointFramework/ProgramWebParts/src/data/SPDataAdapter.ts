@@ -51,7 +51,8 @@ import { IItem } from '@pnp/sp/items'
 
 export class SPDataAdapter
   extends SPDataAdapterBase<ISPDataAdapterBaseConfiguration>
-  implements IPortfolioWebPartsDataAdapter {
+  implements IPortfolioWebPartsDataAdapter
+{
   public project: ProjectDataService
   public dataSourceService: DataSourceService
   public childProjects: Array<Record<string, string>>
@@ -383,7 +384,7 @@ export class SPDataAdapter
             (child) =>
               child?.SiteId === item?.GtSiteIdLookup?.GtSiteId ||
               item?.GtSiteIdLookup?.GtSiteId ===
-              this?.spfxContext?.pageContext?.site?.id?.toString()
+                this?.spfxContext?.pageContext?.site?.id?.toString()
           )
         ) {
           if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
@@ -680,13 +681,15 @@ export class SPDataAdapter
     const siteId = this.spfxContext.pageContext.site.id.toString()
     const queries = this.childProjects && this.aggregatedQueryBuilder(siteIdManagedProperty)
     if (includeSelf) queries.unshift(`${siteIdManagedProperty}:${siteId}`)
-    const promises = queries.map((q) => this.sp.search({
-      QueryTemplate: `${q} ${queryTemplate}`,
-      Querytext: '*',
-      RowLimit: 500,
-      TrimDuplicates: false,
-      SelectProperties: [...selectProperties, 'Path', 'Title', 'SiteTitle', 'SPWebURL']
-    }))
+    const promises = queries.map((q) =>
+      this.sp.search({
+        QueryTemplate: `${q} ${queryTemplate}`,
+        Querytext: '*',
+        RowLimit: 500,
+        TrimDuplicates: false,
+        SelectProperties: [...selectProperties, 'Path', 'Title', 'SiteTitle', 'SPWebURL']
+      })
+    )
     const responses = await Promise.all(promises)
     return flatten(responses.map((r) => r.PrimarySearchResults))
   }
@@ -767,7 +770,7 @@ export class SPDataAdapter
       const list = this.portal.web.lists.getByTitle(strings.ProjectsListName)
       const [item] = await list.items.filter(`GtSiteId eq '${siteId}'`)()
       await list.items.getById(item.ID).update(properties)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
@@ -799,7 +802,7 @@ export class SPDataAdapter
     try {
       this._propertyItem = this._propertyList.items.getById(1)
       this.childProjects = await this.getChildProjects()
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**

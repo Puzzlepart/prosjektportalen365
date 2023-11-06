@@ -22,7 +22,7 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
       onUpdateProperty: this._onUpdateProperty.bind(this),
       configuration: this._configuration,
       isParentProject: true,
-      spfxContext: this.context,
+      spfxContext: this.context
     })
   }
 
