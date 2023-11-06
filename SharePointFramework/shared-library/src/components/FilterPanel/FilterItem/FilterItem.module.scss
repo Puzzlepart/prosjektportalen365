@@ -1,6 +1,6 @@
 .filterItem {
   border-radius: var(--borderRadiusMedium);
-  color: var(--colorNeutralForeground1);
+  color: var(--colorNeutralForeground1) !important;
 
   &:hover {
     background-color: var(--colorSubtleBackgroundHover);

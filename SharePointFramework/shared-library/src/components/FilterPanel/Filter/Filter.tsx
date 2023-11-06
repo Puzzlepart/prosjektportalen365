@@ -13,8 +13,8 @@ export const Filter: FC<IFilterProps> = (props) => {
         <span>{props.column.name}</span>
         {state.isCollapsed ? <ChevronUp16Filled /> : <ChevronDown16Filled />}
       </div>
-      <div hidden={state.isCollapsed}>
-        <div className={styles.sectionContent}>{renderItems()}</div>
+      <div className={styles.sectionContent} hidden={state.isCollapsed}>
+        {renderItems()}
       </div>
     </div>
   )
