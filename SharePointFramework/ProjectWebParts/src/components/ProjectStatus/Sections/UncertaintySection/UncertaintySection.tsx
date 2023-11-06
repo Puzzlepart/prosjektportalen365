@@ -6,9 +6,9 @@ import {
 } from '@fluentui/react'
 import * as strings from 'ProjectWebPartsStrings'
 import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
-import React, { FC } from 'react'
-import { OpportunityMatrix } from 'components/OpportunityMatrix'
-import { RiskMatrix } from 'components/RiskMatrix'
+import React, { FC, ReactElement } from 'react'
+import { OpportunityMatrix } from '../../../OpportunityMatrix'
+import { RiskMatrix } from '../../../RiskMatrix'
 import { StatusElement } from '../../StatusElement'
 import { useProjectStatusContext } from '../../context'
 import { BaseSection } from '../BaseSection/BaseSection'
@@ -32,7 +32,7 @@ export const UncertaintySection: FC = () => {
         />
       )
 
-    let matrix = null
+    let matrix: ReactElement   = null
     switch (state.data.contentTypeIndex) {
       case 1:
         {
@@ -47,6 +47,7 @@ export const UncertaintySection: FC = () => {
         break
       case 2:
         {
+          console.log(context.props.opportunityMatrix, matrixElements)
           matrix = <OpportunityMatrix {...context.props.opportunityMatrix} items={matrixElements} />
         }
         break

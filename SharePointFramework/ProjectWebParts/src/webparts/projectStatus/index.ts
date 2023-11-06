@@ -52,6 +52,12 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
         manualConfigurationPath:
           this.properties.riskMatrix.manualConfigurationPath ??
           this._data.defaultRiskMatrixConfiguration?.url
+      },
+      opportunityMatrix: {
+        ...this.properties.opportunityMatrix,
+        manualConfigurationPath:
+          this.properties.opportunityMatrix.manualConfigurationPath ??
+          this._data.defaultOpportunityMatrixConfiguration?.url
       }
     })
   }

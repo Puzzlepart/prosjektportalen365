@@ -1,9 +1,9 @@
+import { Field, Switch } from '@fluentui/react-components'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
-import { DynamicMatrix } from 'components/DynamicMatrix/DynamicMatrix'
+import { DynamicMatrix } from '../DynamicMatrix'
 import { IOpportunityMatrixProps } from './types'
 import { useOpportunityMatrix } from './useOpportunityMatrix'
-import { Field, Switch } from '@fluentui/react-components'
 
 export const OpportunityMatrix: FC<IOpportunityMatrixProps> = (props) => {
   const { configuration, getElementsForCell, setShowPostAction, showPostAction } = useOpportunityMatrix(props)

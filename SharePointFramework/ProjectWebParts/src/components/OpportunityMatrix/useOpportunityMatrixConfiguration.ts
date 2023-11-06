@@ -18,10 +18,8 @@ export function useOpportunityMatrixConfiguration(props: IOpportunityMatrixProps
 
   // Fetch manual configuration if `pageContext` is set.
   useEffect(() => {
-    if (props.pageContext) {
-      fetchJsonConfiguration()
-    }
-  }, [props.pageContext])
+    fetchJsonConfiguration()
+  }, [props.manualConfigurationPath])
 
   /**
    * Fetches the manual configuration from the specified URL.
@@ -44,6 +42,8 @@ export function useOpportunityMatrixConfiguration(props: IOpportunityMatrixProps
       setError(strings.ManualConfigurationNotFoundOrInvalid)
     }
   }
+
+  console.log('useOpportunityMatrixConfiguration', { configuration, error })
 
   return { configuration, error }
 }
