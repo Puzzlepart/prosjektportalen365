@@ -1,4 +1,8 @@
 .filterItem {
-    padding: 8px 0;
-    font-size: 14px;
+  border-radius: var(--borderRadiusMedium);
+  color: var(--colorNeutralForeground1) !important;
+
+  &:hover {
+    background-color: var(--colorSubtleBackgroundHover);
+  }
 }

@@ -1,26 +1,19 @@
 .filter {
-    margin: 20px 0 0 0;     
-    .filterSectionHeader {
-        position: relative;
-        color: #666666;
-        height: 20px;
-        padding: 6px 0;
-        cursor: pointer;
+  .sectionHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    cursor: pointer;
+    border-radius: var(--borderRadiusMedium);
+    padding: 6px;
+    color: var(--colorNeutralForeground3);
 
-        .titleText {
-            font-size: 14px;
-            font-weight: 400;
-        }
-        .titleIcon {            
-            font-size: 14px;
-            position: absolute;
-            right: 0;
-        }
+    &:hover {
+      background-color: var(--colorSubtleBackgroundHover);
     }
-    .filterSectionContent {
-        font-size: 12px;
-        list-style-type: none;
-        margin: 4px 0 0 0;
-        padding: 0;
-    }
+  }
+  .sectionContent {
+    display: flex;
+    flex-direction: column;
+  }
 }
