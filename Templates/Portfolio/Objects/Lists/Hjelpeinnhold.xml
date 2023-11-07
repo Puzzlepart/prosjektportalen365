@@ -13,6 +13,7 @@
             </Query>
             <ViewFields>
                 <FieldRef Name="GtSortOrder" />
+                <FieldRef Name="GtHelpContentLevel" />
                 <FieldRef Name="LinkTitle" />
                 <FieldRef Name="GtIconName" />
                 <FieldRef Name="GtURL" />

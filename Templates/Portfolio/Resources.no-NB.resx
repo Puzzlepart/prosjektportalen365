@@ -1117,6 +1117,12 @@
   <data name="SiteFields_GtDataSourceLevel_Description" xml:space="preserve">
     <value></value>
   </data>
+  <data name="SiteFields_GtHelpContentLevel_DisplayName" xml:space="preserve">
+    <value>Nivå</value>
+  </data>
+  <data name="SiteFields_GtHelpContentLevel_Description" xml:space="preserve">
+    <value>Nivå for hjelpeinnholdet. Brukes for å bestemme i hvilke typer prosjektområder innholdet skal vises.</value>
+  </data>
   <data name="SiteFields_GtDeliveryAcceptanceCriteria_DisplayName" xml:space="preserve">
     <value>Akseptansekriterier</value>
   </data>

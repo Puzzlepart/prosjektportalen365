@@ -9,5 +9,6 @@
         <pnp:FieldRef ID="5c03fa13-308b-4de2-a233-dd713ff473ce" Name="GtResourceLinkIcon" UpdateChildren="true" />
         <pnp:FieldRef ID="0aedaa7c-93fd-4a28-abf8-cd406a4a082c" Name="GtTextContent" UpdateChildren="true" />
         <pnp:FieldRef ID="cbdc0bb4-9274-4fdb-92a9-bc3ed8ed2fe6" Name="GtExternalURL" UpdateChildren="true" />
+        <pnp:FieldRef ID="ff82c788-696e-4da3-8d69-4cad62c706bf" Name="GtHelpContentLevel" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>
