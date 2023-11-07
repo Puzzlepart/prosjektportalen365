@@ -16,16 +16,15 @@ export function useFilter(props: IFilterProps) {
    * @param checked Item checked
    */
   const onChange = (item: IFilterItemProps, checked: boolean) => {
-    setState((prevState) => {
-      const items = prevState.items.map((i) => {
-        if (i.value === item.value) {
-          return { ...i, selected: checked }
-        }
-        return i
-      })
-      return { ...prevState, items }
+    const items = state.items.map((i) => {
+      if (i.value === item.value) {
+        return { ...i, selected: checked }
+      }
+      return i
     })
-    const selectedItems = state.items.filter(({ selected }) => selected)
+
+    setState((prevState) => ({ ...prevState, items }))
+    const selectedItems = items.filter(({ selected }) => selected)
     props.onFilterChange(props.column, selectedItems)
   }
 
