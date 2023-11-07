@@ -2,7 +2,6 @@ import strings from 'ProjectWebPartsStrings'
 import { ListMenuItem } from 'pp365-shared-library'
 import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 import { useMemo } from 'react'
-import { any } from 'underscore'
 import SPDataAdapter from '../../../data'
 import { useProjectStatusContext } from '../context'
 import { OPEN_PANEL, SELECT_REPORT } from '../reducer'
@@ -35,46 +34,46 @@ export function useToolbarItems() {
         )
           .setDisabled(
             hasUnpublishedReports ||
-            (state.selectedReport && !state.selectedReport?.published) ||
-            state.isPublishing ||
-            !state.userHasAdminPermission
+              (state.selectedReport && !state.selectedReport?.published) ||
+              state.isPublishing ||
+              !state.userHasAdminPermission
           )
           .setIcon('QuizNew')
           .setOnClick(() => {
             createNewStatusReport()
           }),
         state.selectedReport &&
-        new ListMenuItem(
-          strings.EditReportButtonLabel,
-          !state.selectedReport?.published
-            ? state.userHasAdminPermission
-              ? strings.EditReportButtonDescription
-              : strings.EditReportButtonDescriptionNoPermission
-            : strings.PublishedStatusReportInfo
-        )
-          .setDisabled(
-            state.selectedReport?.published || state.isPublishing || !state.userHasAdminPermission
+          new ListMenuItem(
+            strings.EditReportButtonLabel,
+            !state.selectedReport?.published
+              ? state.userHasAdminPermission
+                ? strings.EditReportButtonDescription
+                : strings.EditReportButtonDescriptionNoPermission
+              : strings.PublishedStatusReportInfo
           )
-          .setIcon('Edit')
-          .setOnClick(() => {
-            dispatch(OPEN_PANEL({ name: 'EditStatusPanel' }))
-          }),
+            .setDisabled(
+              state.selectedReport?.published || state.isPublishing || !state.userHasAdminPermission
+            )
+            .setIcon('Edit')
+            .setOnClick(() => {
+              dispatch(OPEN_PANEL({ name: 'EditStatusPanel' }))
+            }),
         state.selectedReport &&
-        new ListMenuItem(
-          state.isPublishing ? strings.PublishingReportLabel : strings.PublishReportButtonLabel,
-          !state.selectedReport?.published
-            ? state.userHasAdminPermission
-              ? strings.PublishReportButtonDescription
-              : strings.PublishReportButtonDescriptionNoPermission
-            : strings.AlreadyPublishedReportInfo
-        )
-          .setDisabled(
-            state.selectedReport?.published || state.isPublishing || !state.userHasAdminPermission
+          new ListMenuItem(
+            state.isPublishing ? strings.PublishingReportLabel : strings.PublishReportButtonLabel,
+            !state.selectedReport?.published
+              ? state.userHasAdminPermission
+                ? strings.PublishReportButtonDescription
+                : strings.PublishReportButtonDescriptionNoPermission
+              : strings.AlreadyPublishedReportInfo
           )
-          .setIcon('CloudArrowUp')
-          .setOnClick(() => {
-            publishReport()
-          })
+            .setDisabled(
+              state.selectedReport?.published || state.isPublishing || !state.userHasAdminPermission
+            )
+            .setIcon('CloudArrowUp')
+            .setOnClick(() => {
+              publishReport()
+            })
       ].filter(Boolean),
     [state]
   )
@@ -83,19 +82,19 @@ export function useToolbarItems() {
     () =>
       [
         state.sourceUrl &&
-        new ListMenuItem(strings.NavigateToSourceUrlText, strings.NavigateToSourceUrlText)
-          .setIcon('ArrowLeft')
-          .setOnClick(() => {
-            window.open(state.sourceUrl, '_self')
-          }),
+          new ListMenuItem(strings.NavigateToSourceUrlText, strings.NavigateToSourceUrlText)
+            .setIcon('ArrowLeft')
+            .setOnClick(() => {
+              window.open(state.sourceUrl, '_self')
+            }),
         state.selectedReport &&
-        new ListMenuItem(strings.GetSnapshotButtonLabel, strings.GetSnapshotButtonDescription)
-          .setDisabled(!state.selectedReport?.snapshotUrl || state.isPublishing)
-          .setIcon('Image')
-          .setWidth('fit-content')
-          .setOnClick(() => {
-            window.open(state.selectedReport?.snapshotUrl, '_self')
-          }),
+          new ListMenuItem(strings.GetSnapshotButtonLabel, strings.GetSnapshotButtonDescription)
+            .setDisabled(!state.selectedReport?.snapshotUrl || state.isPublishing)
+            .setIcon('Image')
+            .setWidth('fit-content')
+            .setOnClick(() => {
+              window.open(state.selectedReport?.snapshotUrl, '_self')
+            }),
         new ListMenuItem(
           state.selectedReport
             ? formatDate(state.selectedReport.created)
@@ -124,21 +123,21 @@ export function useToolbarItems() {
             { report: [formatDate(state.selectedReport?.created, true)] }
           ),
         state.selectedReport &&
-        new ListMenuItem(
-          strings.DeleteReportButtonLabel,
-          !state.selectedReport?.published
-            ? state.userHasAdminPermission
-              ? strings.DeleteReportButtonDescription
-              : strings.DeleteReportButtonDescriptionNoPermission
-            : strings.PublishedStatusReportInfo
-        )
-          .setDisabled(
-            state.selectedReport?.published || state.isPublishing || !state.userHasAdminPermission
+          new ListMenuItem(
+            strings.DeleteReportButtonLabel,
+            !state.selectedReport?.published
+              ? state.userHasAdminPermission
+                ? strings.DeleteReportButtonDescription
+                : strings.DeleteReportButtonDescriptionNoPermission
+              : strings.PublishedStatusReportInfo
           )
-          .setIcon('Delete')
-          .setOnClick(() => {
-            deleteReport()
-          })
+            .setDisabled(
+              state.selectedReport?.published || state.isPublishing || !state.userHasAdminPermission
+            )
+            .setIcon('Delete')
+            .setOnClick(() => {
+              deleteReport()
+            })
       ].filter(Boolean),
     [state]
   )
