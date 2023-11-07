@@ -73,7 +73,6 @@ export const CLOSE_PANEL = createAction('CLOSE_PANEL')
  * The initial state for the project status reducer.
  */
 export const initialState: IProjectStatusState = {
-  selectedReport: new StatusReport(),
   data: {
     reports: [],
     sections: Array.apply(null, Array(6)).map(() => new SectionModel({ ContentTypeId: '' })),
