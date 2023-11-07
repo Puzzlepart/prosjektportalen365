@@ -1,22 +1,22 @@
-import { Icon } from '@fluentui/react/lib/Icon'
 import React, { FC } from 'react'
 import styles from './Filter.module.scss'
 import { IFilterProps } from './types'
 import { useFilter } from './useFilter'
+import { getFluentIcon } from '../../../icons'
 
 export const Filter: FC<IFilterProps> = (props) => {
   const { state, onToggleSectionContent, renderItems } = useFilter(props)
 
   return (
     <div className={styles.filter}>
-      <div className={styles.filterSectionHeader} onClick={onToggleSectionContent}>
-        <span className={styles.titleText}>{props.column.name}</span>
-        <span className={styles.titleIcon}>
-          <Icon iconName={state.isCollapsed ? 'ChevronUp' : 'ChevronDown'} />
-        </span>
+      <div className={styles.sectionHeader} onClick={onToggleSectionContent}>
+        <span>{props.column.name}</span>
+        {state.isCollapsed
+          ? getFluentIcon('ChevronUp', { size: 16 })
+          : getFluentIcon('ChevronDown', { size: 16 })}
       </div>
       <div hidden={state.isCollapsed}>
-        <ul className={styles.filterSectionContent}>{renderItems()}</ul>
+        <div className={styles.sectionContent}>{renderItems()}</div>
       </div>
     </div>
   )
