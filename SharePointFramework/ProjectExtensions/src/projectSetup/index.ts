@@ -530,7 +530,6 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     } catch {
       return false
     }
-    
   }
 
   /**
