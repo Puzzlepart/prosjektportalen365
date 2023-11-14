@@ -519,12 +519,17 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Check if the project is previously set up.
+   * Check if the project is previously set up. We fetch the `WelcomePage` property
+   * from the root folder of the web. If it is set to `SitePages/ProjectHome.aspx`,
+   * we assume that the project is set up.
    */
   private async _isProjectSetup() {
-    const { WelcomePage } = await this.sp.web.rootFolder.select('WelcomePage')()
-    if (WelcomePage === 'SitePages/Home.aspx') return false
-    return true
+    try {
+      const { WelcomePage } = await this.sp.web.rootFolder.select('WelcomePage')()
+      return (WelcomePage === 'SitePages/ProjectHome.aspx')
+    } catch {
+      return false
+    }
   }
 
   /**
