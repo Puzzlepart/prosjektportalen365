@@ -526,7 +526,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   private async _isProjectSetup() {
     try {
       const { WelcomePage } = await this.sp.web.rootFolder.select('WelcomePage')()
-      return (WelcomePage === 'SitePages/ProjectHome.aspx')
+      return WelcomePage === 'SitePages/ProjectHome.aspx'
     } catch {
       return false
     }
