@@ -1,7 +1,7 @@
 ﻿<Field Description="{resource:SiteFields_GtStatusOpportunities_Description}" DisplayName="{resource:SiteFields_GtStatusOpportunities_DisplayName}" Format="RadioButtons" Group="{resource:SiteFields_Portfolio_Group}" ID="{09e5a74f-7ec9-467e-9474-f6870c933143}" Name="GtStatusOpportunities" StaticName="GtStatusOpportunities" Type="Choice">
     <CHOICES>
         <CHOICE>{resource:Choice_GtStatusOpportunities_High}</CHOICE>
-        <CHOICE>{resource:Choice_GtStatusOpportunities_Low}</CHOICE>
         <CHOICE>{resource:Choice_GtStatusOpportunities_Medium}</CHOICE>
+        <CHOICE>{resource:Choice_GtStatusOpportunities_Low}</CHOICE>
     </CHOICES>
 </Field>
