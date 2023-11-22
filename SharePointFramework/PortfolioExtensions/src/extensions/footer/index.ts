@@ -81,7 +81,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
 
   /**
    * Fetch help content from the specified list filtered on level.
-   * 
+   *
    * The content is stored in `sessionStorage` for 4 hours.
    *
    * @param listName Name of the list

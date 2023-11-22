@@ -93,7 +93,7 @@ export interface IProjectDetails {
   title: string
 
   /**
-   * Is this project a parent project? Property `GtIsParentProject` 
+   * Is this project a parent project? Property `GtIsParentProject`
    * or `GtIsProgram` is set to `true` on the project item.
    */
   isParentProject: boolean
