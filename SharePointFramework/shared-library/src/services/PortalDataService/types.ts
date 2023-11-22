@@ -3,6 +3,7 @@ import { SPField } from '../../models'
 import { SPFxContext } from '../../types'
 
 export type PortalDataServiceList =
+  | 'PROJECTS'
   | 'STATUS_SECTIONS'
   | 'PROJECT_COLUMNS'
   | 'PROJECT_COLUMN_CONFIGURATION'
@@ -78,4 +79,22 @@ export type SyncListParams = {
 
 export interface ISyncListReturnType extends IListEnsureResult {
   fieldsAdded: SPField[]
+}
+
+export interface IProjectDetails {
+  /**
+   * The item ID of the project.
+   */
+  id: number
+
+  /**
+   * The title of the project.
+   */
+  title: string
+
+  /**
+   * Is this project a parent project? Property `GtIsParentProject` 
+   * or `GtIsProgram` is set to `true` on the project item.
+   */
+  isParentProject: boolean
 }

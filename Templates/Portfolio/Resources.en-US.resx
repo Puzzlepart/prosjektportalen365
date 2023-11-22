@@ -1018,6 +1018,12 @@
   <data name="SiteFields_GtDataSourceLevel_Description" xml:space="preserve">
     <value>Specify the level of the data source</value>
   </data>
+  <data name="SiteFields_GtHelpContentLevel_DisplayName" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="SiteFields_GtHelpContentLevel_Description" xml:space="preserve">
+    <value>Level for the help content. Used to determine which help content is displayed on the page.</value>
+  </data>
   <data name="SiteFields_GtDeliveryAcceptanceCriteria_DisplayName" xml:space="preserve">
     <value>Acceptance criteria</value>
   </data>
