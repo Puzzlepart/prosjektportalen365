@@ -190,7 +190,8 @@ export class ListMenuItem {
   }
 
   /**
-   * Sets the items and checked values of the `ListMenuItem`.
+   * Sets the items and checked values of the `ListMenuItem`. Removes
+   * any falsy items from the items array before setting it.
    *
    * @param items The new items to set.
    * @param checkedValues The new checked values to set.
@@ -198,7 +199,7 @@ export class ListMenuItem {
    * @returns The updated `ListMenuItem` instance.
    */
   public setItems(items: ListMenuItem['items'], checkedValues?: ListMenuItem['checkedValues']) {
-    this.items = items
+    this.items = items.filter(Boolean)
     if (checkedValues) this.checkedValues = checkedValues
     return this
   }
