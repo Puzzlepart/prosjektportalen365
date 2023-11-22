@@ -80,7 +80,9 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   }
 
   /**
-   * Fetch help content from the specified list. The content is stored in `sessionStorage` for 4 hours.
+   * Fetch help content from the specified list filtered on level.
+   * 
+   * The content is stored in `sessionStorage` for 4 hours.
    *
    * @param listName Name of the list
    */
@@ -89,9 +91,26 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       return await new PnPClientStorage().session.getOrPut(
         `pp365_help_content_${window.location.pathname}`,
         async () => {
+          const project = await this._portal.getProjectDetails()
+          const level = project
+            ? project.isParentProject
+              ? 'Overordnet/Program'
+              : 'Prosjekt'
+            : 'Portefølje'
           let items = await this._portal.getItems(listName, HelpContentModel, {
-            ViewXml:
-              '<View><Query><OrderBy><FieldRef Name="GtSortOrder" /></OrderBy></Query></View>'
+            ViewXml: `<View>
+            <Query>
+                <Where>
+                    <Eq>
+                        <FieldRef Name="GtHelpContentLevel" />
+                        <Value Type="MultiChoice">${level}</Value>
+                    </Eq>
+                </Where>
+                <OrderBy>
+                    <FieldRef Name="GtSortOrder" />
+                </OrderBy>
+            </Query>
+        </View>`
           })
           items = items.filter((i) => i.matchPattern(window.location.pathname)).splice(0, 3)
           for (let i = 0; i < items.length; i++) {
