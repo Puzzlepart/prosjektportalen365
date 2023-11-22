@@ -6,7 +6,7 @@ dependencies:
   '@fluentui/react-hooks': 8.6.27_4865287ef69aa4f3fc3f709d3560286e
   '@fluentui/react-icons': 2.0.221_react@17.0.1
   '@fluentui/react-portal-compat': 9.0.100_8ca477999175eec102b7d286b06e7401
-  '@fluentui/react-search-preview': 0.1.16_9c907a7ccd27a2e2d0ee9de5366482d1
+  '@fluentui/react-search-preview': 0.1.28_9c907a7ccd27a2e2d0ee9de5366482d1
   '@microsoft/decorators': 1.17.4
   '@microsoft/eslint-config-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
   '@microsoft/eslint-plugin-spfx': 1.17.4_eslint@8.25.0+typescript@4.5.5
@@ -1457,28 +1457,6 @@ packages:
       react-dom: '>=16.14.0 <19.0.0'
     resolution:
       integrity: sha512-0xbNpPP9HljG7XpFkN8n+rOuUwHvIM/hPBJJvUF464U+HIGX2XbsoSuJ1K7CD96Jbwd2S5NFvgg2/7TSH9s9gg==
-  /@fluentui/react-field/9.1.32_9c907a7ccd27a2e2d0ee9de5366482d1:
-    dependencies:
-      '@fluentui/react-context-selector': 9.1.36_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@fluentui/react-icons': 2.0.218_react@17.0.1
-      '@fluentui/react-jsx-runtime': 9.0.12_4865287ef69aa4f3fc3f709d3560286e
-      '@fluentui/react-label': 9.1.40_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@fluentui/react-theme': 9.1.14
-      '@fluentui/react-utilities': 9.13.5_4865287ef69aa4f3fc3f709d3560286e
-      '@griffel/react': 1.5.15_react@17.0.1
-      '@swc/helpers': 0.5.2
-      '@types/react': 17.0.45
-      '@types/react-dom': 17.0.17
-      react: 17.0.1
-      react-dom: 17.0.1_react@17.0.1
-    dev: false
-    peerDependencies:
-      '@types/react': '>=16.14.0 <19.0.0'
-      '@types/react-dom': '>=16.14.0 <19.0.0'
-      react: '>=16.14.0 <19.0.0'
-      react-dom: '>=16.14.0 <19.0.0'
-    resolution:
-      integrity: sha512-35VJCueXE8lr1/yNpMIwT97Jvo8c72tJZaN87HLrBXpkC8zm2hb1SpeV59raUHBGw7AdLUBLkrqYSrNN5uTUEg==
   /@fluentui/react-field/9.1.34_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
       '@fluentui/react-context-selector': 9.1.38_9c907a7ccd27a2e2d0ee9de5366482d1
@@ -1798,27 +1776,6 @@ packages:
       react-dom: '>=16.8.0 <19.0.0'
     resolution:
       integrity: sha512-vp/XvPB0SbYkGjQnuygsGhGq4ccVbeo3ZRw1OfB9+o7uVDL3Z30Y+SSRkvIcu9e+2lGVU7dn+xk4KRE3un1JPw==
-  /@fluentui/react-input/9.4.42_9c907a7ccd27a2e2d0ee9de5366482d1:
-    dependencies:
-      '@fluentui/react-field': 9.1.32_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@fluentui/react-jsx-runtime': 9.0.12_4865287ef69aa4f3fc3f709d3560286e
-      '@fluentui/react-shared-contexts': 9.9.2_4865287ef69aa4f3fc3f709d3560286e
-      '@fluentui/react-theme': 9.1.14
-      '@fluentui/react-utilities': 9.13.5_4865287ef69aa4f3fc3f709d3560286e
-      '@griffel/react': 1.5.15_react@17.0.1
-      '@swc/helpers': 0.5.2
-      '@types/react': 17.0.45
-      '@types/react-dom': 17.0.17
-      react: 17.0.1
-      react-dom: 17.0.1_react@17.0.1
-    dev: false
-    peerDependencies:
-      '@types/react': '>=16.14.0 <19.0.0'
-      '@types/react-dom': '>=16.14.0 <19.0.0'
-      react: '>=16.14.0 <19.0.0'
-      react-dom: '>=16.14.0 <19.0.0'
-    resolution:
-      integrity: sha512-Kv7F+6k3vIQ2p/lozkD8TN+sBXdhUag/biRGaGJVo5SYYAAfij4ajcBU0G4cZRNBRLeoMgzsQQLZXuZrrZuPsQ==
   /@fluentui/react-input/9.4.44_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
       '@fluentui/react-field': 9.1.34_9c907a7ccd27a2e2d0ee9de5366482d1
@@ -1898,26 +1855,6 @@ packages:
       react: '>=16.14.0 <19.0.0'
     resolution:
       integrity: sha512-uGuVSWwnNa6LrsPmTcqrF5xkjfc4RffUERART2Z4ojfn1wq7rhLOdWmCcEBnbYl1AhPvD1ohOLc8EqDrlrYPHw==
-  /@fluentui/react-label/9.1.40_9c907a7ccd27a2e2d0ee9de5366482d1:
-    dependencies:
-      '@fluentui/react-jsx-runtime': 9.0.12_4865287ef69aa4f3fc3f709d3560286e
-      '@fluentui/react-shared-contexts': 9.9.2_4865287ef69aa4f3fc3f709d3560286e
-      '@fluentui/react-theme': 9.1.14
-      '@fluentui/react-utilities': 9.13.5_4865287ef69aa4f3fc3f709d3560286e
-      '@griffel/react': 1.5.15_react@17.0.1
-      '@swc/helpers': 0.5.2
-      '@types/react': 17.0.45
-      '@types/react-dom': 17.0.17
-      react: 17.0.1
-      react-dom: 17.0.1_react@17.0.1
-    dev: false
-    peerDependencies:
-      '@types/react': '>=16.14.0 <19.0.0'
-      '@types/react-dom': '>=16.14.0 <19.0.0'
-      react: '>=16.14.0 <19.0.0'
-      react-dom: '>=16.14.0 <19.0.0'
-    resolution:
-      integrity: sha512-LNfc/rniXb7SlQR4ryctLO2bX8vG8wkv/q/P0DNXJpsBXlYURW+YVKiM5sSWamIF/Jn1zxsnhyuxBd5hN2TO4g==
   /@fluentui/react-label/9.1.42_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
       '@fluentui/react-jsx-runtime': 9.0.14_4865287ef69aa4f3fc3f709d3560286e
@@ -2479,27 +2416,6 @@ packages:
       scheduler: ^0.19.0 || ^0.20.0
     resolution:
       integrity: sha512-2bYPNk0JsutYIm1TyLN3YPxyF1soKWEVXTx6rA8iEjbQdRJSd0u1MyGNUFtkryuqxYlA0p6L7dX65RREOxu2pA==
-  /@fluentui/react-search-preview/0.1.16_9c907a7ccd27a2e2d0ee9de5366482d1:
-    dependencies:
-      '@fluentui/react-icons': 2.0.215_react@17.0.1
-      '@fluentui/react-input': 9.4.42_9c907a7ccd27a2e2d0ee9de5366482d1
-      '@fluentui/react-jsx-runtime': 9.0.12_4865287ef69aa4f3fc3f709d3560286e
-      '@fluentui/react-theme': 9.1.14
-      '@fluentui/react-utilities': 9.13.5_4865287ef69aa4f3fc3f709d3560286e
-      '@griffel/react': 1.5.15_react@17.0.1
-      '@swc/helpers': 0.5.2
-      '@types/react': 17.0.45
-      '@types/react-dom': 17.0.17
-      react: 17.0.1
-      react-dom: 17.0.1_react@17.0.1
-    dev: false
-    peerDependencies:
-      '@types/react': '>=16.14.0 <19.0.0'
-      '@types/react-dom': '>=16.14.0 <19.0.0'
-      react: '>=16.14.0 <19.0.0'
-      react-dom: '>=16.14.0 <19.0.0'
-    resolution:
-      integrity: sha512-2QqQnBdM8ukBqGicaxRg6Rb24pba2fMFH/ixcE4ISX22xFiGT8p2RTMD6L2zCsRvFlCVJg9bv0IC2WPGZeq1OA==
   /@fluentui/react-search-preview/0.1.28_9c907a7ccd27a2e2d0ee9de5366482d1:
     dependencies:
       '@fluentui/react-icons': 2.0.221_react@17.0.1
@@ -23688,7 +23604,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-portfoliowebparts'
     resolution:
-      integrity: sha512-EqLK05RQJOqDBaJIlyre3C12PIR+s9QNzOhwdHteYjOxRUplxf+4fRd1t01DFdwriyJyZv34T5OngXEV/wvieQ==
+      integrity: sha512-rlx3uRwQlIbQYKjZdDMbSyHLVms9L+1vp1VgZISUTbjG7Qdg2mLFVnE2SquYSBZ7TQ8bOjWW/SHP5P3iINDrpg==
       tarball: file:projects/pp365-portfoliowebparts.tgz
     version: 0.0.0
   file:projects/pp365-programwebparts.tgz:
@@ -23765,7 +23681,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-programwebparts'
     resolution:
-      integrity: sha512-2vNLcN2e+mbBaZZyE9m6oMLZIOdCVFmUUyXwFVdHqAvt8RLhIjPaakIMkDcB11wCIQ6o/o3dQgyPci6QbcxQHg==
+      integrity: sha512-Gp0I3NYr7MjhCG5eCEleW9JfeVnqxqszvjBWqHRx6ioxB12qXC4bdeJsh3FNf2LNeuQ0wxAxofvxGw/PGUQCSg==
       tarball: file:projects/pp365-programwebparts.tgz
     version: 0.0.0
   file:projects/pp365-projectextensions.tgz:
@@ -23819,6 +23735,7 @@ packages:
       find: 0.3.0
       gulp: 4.0.2
       livereload: 0.9.3
+      lodash: 4.17.21
       msgraph-helper: 0.8.3_9c907a7ccd27a2e2d0ee9de5366482d1
       prettier: 2.7.1
       react: 17.0.1
@@ -23838,7 +23755,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectextensions'
     resolution:
-      integrity: sha512-aOR1zClBqL3Q3r/tK4dqVdlH9wJRRA2vOP8m2PsgNxd0dWiPWMrMhLFPAOk8CPn6Ay8g5QRU4KO6Mb/77AWiAg==
+      integrity: sha512-0ajuRvkVoAEqvgwPUbysijUwMuJbT4Sp4SOlrZX2K5WfVHVhmbLnBcS80zS8LjH7V9cAO3HMnoZ4GFLpfZkDcQ==
       tarball: file:projects/pp365-projectextensions.tgz
     version: 0.0.0
   file:projects/pp365-projectwebparts.tgz:
@@ -23923,7 +23840,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectwebparts'
     resolution:
-      integrity: sha512-af+A27ymmNd6xh5kC+ASdFLDknBLuvmwLZKeGzh6jpHuZYyKf/k22JeHgXtTE4SDRwxT68RKvnaVnzH/hF7tkQ==
+      integrity: sha512-S185nzuCTDYsUPQTDOOWtPwfW8D8JXPpQ0eMakVoYspQID2OPfQ+V4T3/yPGjqCj8Vw99gCPwbu12Qu4zeAQ4g==
       tarball: file:projects/pp365-projectwebparts.tgz
     version: 0.0.0
   file:projects/pp365-shared-library.tgz_interactjs@1.6.2:
@@ -24046,7 +23963,7 @@ specifiers:
   '@fluentui/react-hooks': 8.6.27
   '@fluentui/react-icons': 2.0.221
   '@fluentui/react-portal-compat': ~9.0.100
-  '@fluentui/react-search-preview': 0.1.16
+  '@fluentui/react-search-preview': 0.1.28
   '@microsoft/decorators': 1.17.4
   '@microsoft/eslint-config-spfx': 1.17.4
   '@microsoft/eslint-plugin-spfx': 1.17.4

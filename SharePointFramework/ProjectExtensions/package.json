@@ -52,7 +52,8 @@
     "@fluentui/react-search-preview": "0.1.28",
     "@microsoft/microsoft-graph-types": "~2.38.0",
     "usehooks-ts": "~2.9.1",
-    "@fluentui/react-portal-compat": "~9.0.100"
+    "@fluentui/react-portal-compat": "~9.0.100",
+    "lodash": "~4.17.21"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",
