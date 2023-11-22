@@ -1,6 +1,6 @@
 import { useId } from '@fluentui/react-components'
 import { useMemo, useState } from 'react'
-import { useRiskActionFieldCustomizerContext } from '../../context'
+import { useRiskActionFieldCustomizerContext } from '../../riskAction/context'
 
 export function useRiskAction() {
   const fluentProviderId = useId('risk-action-fluent-provider')

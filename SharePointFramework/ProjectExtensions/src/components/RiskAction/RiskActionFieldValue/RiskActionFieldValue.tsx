@@ -2,11 +2,11 @@ import { Button, PopoverTrigger } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC, ReactElement } from 'react'
-import { useRiskActionFieldCustomizerContext } from '../../../context'
+import { useRiskActionFieldCustomizerContext } from '../../../riskAction/context'
 import { PlannerTaskLink } from './PlannerTaskLink'
 import styles from './RiskActionFieldValue.module.scss'
-import { useRiskActionFieldValue } from './useRiskActionFieldValue'
 import { IRiskActionFieldValueProps } from './types'
+import { useRiskActionFieldValue } from './useRiskActionFieldValue'
 
 /**
  * Renders the field value for a risk action.

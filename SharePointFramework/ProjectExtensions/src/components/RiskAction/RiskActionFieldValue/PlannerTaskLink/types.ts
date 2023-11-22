@@ -1,4 +1,5 @@
-import { RiskActionPlannerTaskReference } from '../../../../types'
+import { RiskActionPlannerTaskReference } from "../../../../riskAction/types";
+
 
 export interface IPlannerTaskLinkProps {
   task: RiskActionPlannerTaskReference
