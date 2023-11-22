@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PlannerTask } from '@microsoft/microsoft-graph-types'
 import { FieldCustomizerContext } from '@microsoft/sp-listview-extensibility'
-import { GraphFI, SPFx as graphSPFx, graphfi, } from '@pnp/graph'
+import { GraphFI, SPFx as graphSPFx, graphfi } from '@pnp/graph'
 import '@pnp/graph/presets/all'
 import { SPFx as spSPFx, spfi } from '@pnp/sp'
 import '@pnp/sp/presets/all'
 import { IList } from '@pnp/sp/presets/all'
-import { SPDataAdapterBase } from 'pp365-shared-library'
+import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library'
 import {
   RiskActionItemContext,
   RiskActionHiddenFieldValues,
@@ -14,6 +14,7 @@ import {
   RiskActionPlannerTask
 } from './types'
 import _ from 'underscore'
+import { Caching } from '@pnp/queryable'
 
 export class DataAdapter extends SPDataAdapterBase {
   private readonly graph: GraphFI
@@ -39,14 +40,18 @@ export class DataAdapter extends SPDataAdapterBase {
   }
 
   /**
-   * Retrieves user information based on the provided user ID.
-   * 
+   * Retrieves `displayName` and `mail` for the user with the provided `userId`. The result
+   * is cached for 60 minutes in the local storage.
+   *
    * @param userId The ID of the user.
-   * 
+   *
    * @returns A Promise that resolves to the user information.
    */
-  private async _getUserInfo(userId: string): Promise<any> {
-    return await this.graph.users.getById(userId)()
+  private async _getUserInfo(userId: string): Promise<{ displayName: string; mail: string }> {
+    return await this.graph.users
+      .getById(userId)
+      .select('displayName', 'mail')
+      .using(DefaultCaching)()
   }
 
   /**
@@ -186,12 +191,22 @@ export class DataAdapter extends SPDataAdapterBase {
   }
 
   /**
-   * Retrieves a task by its ID.
-   * 
+   * Retrieves a task by its ID cached for 60 seconds in session storage
+   * with key `risk-action-get-task-${taskId}`.
+   *
    * @param taskId The ID of the task to retrieve.
    */
   public async getTask(taskId: string): Promise<any> {
-    const task = await this.graph.planner.tasks.getById(taskId).expand('details')()
+    const task = await this.graph.planner.tasks
+      .getById(taskId)
+      .expand('details')
+      .using(
+        Caching({
+          expireFunc: () => new Date(Date.now() + 60000),
+          keyFactory: () => `risk-action-get-task-${taskId}`,
+          store: 'session'
+        })
+      )()
     return RiskActionPlannerTask.parse(task, this._getUserInfo.bind(this))
   }
 

@@ -4,7 +4,7 @@ import { useRiskActionFieldCustomizerContext } from '../../riskAction/context'
 
 /**
  * Custom hook for managing risk action functionality.
- * 
+ *
  * @returns An object containing the fluentProviderId and contextValue.
  */
 export function useRiskAction() {

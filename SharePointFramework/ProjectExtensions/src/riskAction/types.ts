@@ -3,6 +3,7 @@ import { IFieldCustomizerCellEventParameters } from '@microsoft/sp-listview-exte
 import { PageContext } from '@microsoft/sp-page-context'
 import strings from 'ProjectExtensionsStrings'
 import _ from 'lodash'
+import { DataAdapter } from './dataAdapter'
 
 /**
  * Represents the context object passed to the field customizer for a risk action item.
@@ -237,29 +238,26 @@ export class RiskActionPlannerTask {
   public description: string
   public startDateTime: Date
   public dueDateTime: Date
-  public checklist: Record<string, boolean>
-  public assignees: any[] = []
+  public assignees: { displayName: string; mail: string }[] = []
   public progress: string
 
-
   /**
-   * Parses a value (the value returned from the Graph API) and 
+   * Parses a value (the value returned from the Graph API) and
    * returns a `RiskActionPlannerTask` object.
-   * 
+   *
    * @param value The value to parse.
    * @param getUserInfo The function to call to get user info for the assignees.
    */
-  public static async parse(value: any, getUserInfo: (userId: string) => Promise<any>): Promise<RiskActionPlannerTask> {
-    console.log('RiskActionPlannerTask.parse', value)
+  public static async parse(
+    value: any,
+    getUserInfo: DataAdapter['_getUserInfo']
+  ): Promise<RiskActionPlannerTask> {
     const task = new RiskActionPlannerTask()
     task.description = _.get(value, 'details.description', '').trim()
-    task.startDateTime = _.get(value, 'startDateTime') ? new Date(_.get(value, 'startDateTime')) : null
+    task.startDateTime = _.get(value, 'startDateTime')
+      ? new Date(_.get(value, 'startDateTime'))
+      : null
     task.dueDateTime = _.get(value, 'dueDateTime') ? new Date(_.get(value, 'dueDateTime')) : null
-    const checklist = _.get(value, 'details.checklist', {})
-    task.checklist = Object.keys(checklist).reduce((acc, key) => {
-      acc[checklist[key].title] = checklist[key].isChecked
-      return acc
-    }, {})
     const assignments = Object.keys(_.get(value, 'assignments', {}))
     for (let i = 0; i < assignments.length; i++) {
       const assignee = assignments[i]

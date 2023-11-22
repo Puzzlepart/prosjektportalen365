@@ -1,4 +1,11 @@
-import { Button, Popover, PopoverSurface, PopoverTrigger, mergeClasses, Persona } from '@fluentui/react-components'
+import {
+  Button,
+  Popover,
+  PopoverSurface,
+  PopoverTrigger,
+  mergeClasses,
+  Persona
+} from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
 import { getFluentIcon } from 'pp365-shared-library'
 import React, { FC } from 'react'
@@ -7,26 +14,18 @@ import { IPlannerTaskItemProps } from './types'
 import { usePlannerTaskItem } from './usePlannerTaskItem'
 import { PlannerTaskItemProperty } from './PlannerTaskItemProperty'
 
-/**
- * Creates a link to a planner task in the Office tasks app.
- *
- * @param id - The ID of the task.
- * @param type - The type of the task link. Default value is 'TaskLink'.
- * @param channel - The channel of the task link. Default value is 'Link'.
- *
- * @returns The link to the planner task.
- */
-function createPlannerTaskLink(id: string, type = 'TaskLink', channel = 'Link') {
-  return `https://tasks.office.com/puzzlepart.onmicrosoft.com/home/task/${id}?type=${type}&channel=${channel}`
-}
-
 export const PlannerTaskItem: FC<IPlannerTaskItemProps> = (props) => {
-  const { onOpenChange, task } = usePlannerTaskItem(props)
+  const { onOpenChange, task, taskLink } = usePlannerTaskItem(props)
   return (
     <div className={styles.plannerTaskItem}>
       <Popover onOpenChange={onOpenChange}>
         <PopoverTrigger>
-          <div className={mergeClasses(styles.text, props.task.isCompleted === '1' && styles.isCompleted)}>
+          <div
+            className={mergeClasses(
+              styles.text,
+              props.task.isCompleted === '1' && styles.isCompleted
+            )}
+          >
             {props.task.title}
           </div>
         </PopoverTrigger>
@@ -36,21 +35,21 @@ export const PlannerTaskItem: FC<IPlannerTaskItemProps> = (props) => {
             <PlannerTaskItemProperty value={task?.description} />
             <PlannerTaskItemProperty
               label='Startdato'
-              value={task?.startDateTime?.toLocaleDateString()} />
+              value={task?.startDateTime?.toLocaleDateString()}
+            />
             <PlannerTaskItemProperty
               label='Forfallsdato'
-              value={task?.dueDateTime?.toLocaleDateString()} />
-            <PlannerTaskItemProperty
-              label='Fremdrift'
-              value={task?.progress} />
+              value={task?.dueDateTime?.toLocaleDateString()}
+            />
+            <PlannerTaskItemProperty label='Fremdrift' value={task?.progress} />
             <PlannerTaskItemProperty label='Tilordnet til'>
               {task?.assignees.map((assignee) => (
-                <div>
+                <div key={assignee.displayName}>
                   <Persona
                     name={assignee.displayName}
                     avatar={{
                       image: {
-                        src: `/_layouts/15/userphoto.aspx?size=S&username=${assignee.mail}`,
+                        src: `/_layouts/15/userphoto.aspx?size=S&username=${assignee.mail}`
                       }
                     }}
                   />
@@ -64,9 +63,10 @@ export const PlannerTaskItem: FC<IPlannerTaskItemProps> = (props) => {
               </div>
             )}
             <Button
-              onClick={() => window.open(createPlannerTaskLink(props.task.id), '_blank')}
+              onClick={() => window.open(taskLink, '_blank')}
               appearance='subtle'
-              icon={getFluentIcon('ClipboardTask')}>
+              icon={getFluentIcon('ClipboardTask')}
+            >
               {strings.RiskActionPlannerTaskPreviewPlannerLinkText}
             </Button>
           </div>
