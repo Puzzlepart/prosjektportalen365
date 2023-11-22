@@ -113,7 +113,9 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
                   context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
                 }),
               userCanManageViews &&
-                new ListMenuItem(strings.EditViewText).setIcon(Icons.Edit).setOnClick(() => {
+                new ListMenuItem(strings.EditViewText)
+                .setIcon(Icons.Edit)
+                .setOnClick(() => {
                   context.dispatch(
                     SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
                   )

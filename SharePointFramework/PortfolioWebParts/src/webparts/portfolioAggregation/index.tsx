@@ -1,4 +1,6 @@
 import { IMessageBarProps, MessageBar } from '@fluentui/react/lib/MessageBar'
+import { DisplayMode } from '@microsoft/sp-core-library'
+import { ISPHttpClientOptions, SPHttpClient } from '@microsoft/sp-http'
 import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
@@ -7,16 +9,10 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import * as strings from 'PortfolioWebPartsStrings'
-import {
-  IPortfolioAggregationConfiguration,
-  IPortfolioAggregationProps,
-  PortfolioAggregation
-} from 'components/PortfolioAggregation'
 import _ from 'lodash'
 import React from 'react'
+import { IPortfolioAggregationConfiguration, IPortfolioAggregationProps, PortfolioAggregation } from '../../components/PortfolioAggregation'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
-import { ISPHttpClientOptions, SPHttpClient } from '@microsoft/sp-http'
-import { DisplayMode } from '@microsoft/sp-core-library'
 
 export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IPortfolioAggregationProps> {
   private _configuration: IPortfolioAggregationConfiguration
