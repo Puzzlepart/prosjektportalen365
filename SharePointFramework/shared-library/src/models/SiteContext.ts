@@ -18,12 +18,12 @@ export class SiteContext {
    * @param spfxContext SPFx context
    */
   constructor(public spfxContext?: SPFxContext) {
-    this.pageContext = spfxContext.pageContext
-    this.webAbsoluteUrl = this.pageContext.web.absoluteUrl
-    this.webServerRelativeUrl = this.pageContext.web.serverRelativeUrl
-    this.webTitle = this.pageContext.web.title
-    this.siteId = this.pageContext.site.id.toString()
-    this.isSiteAdmin = this.pageContext.legacyPageContext.isSiteAdmin
+    this.pageContext = spfxContext?.pageContext
+    this.webAbsoluteUrl = this.pageContext?.web.absoluteUrl
+    this.webServerRelativeUrl = this.pageContext?.web.serverRelativeUrl
+    this.webTitle = this.pageContext?.web.title
+    this.siteId = this.pageContext?.site.id.toString()
+    this.isSiteAdmin = this.pageContext?.legacyPageContext.isSiteAdmin
   }
 
   /**
