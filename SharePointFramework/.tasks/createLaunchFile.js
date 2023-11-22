@@ -1,8 +1,6 @@
 require('dotenv').config()
 const fs = require('fs')
-const colors = require('colors/safe')
 const path = require('path')
-const { log } = require('./util')
 
 const launchSampleSrc = path.join(process.cwd(), '.vscode/launch.sample.json')
 const launchSrc = path.join(process.cwd(), '.vscode/launch.json')
@@ -21,14 +19,15 @@ const baseConfiguration = {
         "webpack:///../../../../../src/*": "${webRoot}/src/*"
     },
     "runtimeArgs": [
-        "--remote-debugging-port=9222"
+        "--remote-debugging-port=9222",
+        "--user-data-dir=${workspaceFolder}/.vscode/chrome-debug-user-data"
     ]
 }
 
 function getLaunchConfigurations() {
     const configurations = []
     process.env.LAUNCH_CONFIGURATIONS.split(';').forEach(configuration => {
-        const [name, url] = configuration.split('=')
+        const [name, url] = configuration.split(',')
         if (!name || !url || url.indexOf('https://') !== 0) return
         configurations.push(Object.assign({}, baseConfiguration, { name, url }))
     })
