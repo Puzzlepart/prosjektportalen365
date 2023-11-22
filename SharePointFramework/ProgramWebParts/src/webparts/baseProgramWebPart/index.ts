@@ -34,10 +34,21 @@ export abstract class BaseProgramWebPart<
    */
   public siteIds: string[]
 
+  /**
+   * Abstract method to render the web part.É
+   */
   public abstract render(): void
 
   /**
    * Renders a React component with the combined properties of the web part and the provided props.
+   * 
+   * Includes `this.properties`, the provided `props`, and the following additional props:
+   * - `sp`: The SPFI instance.
+   * - `spfxContext`: The SPFx context.
+   * - `pageContext`: The SPFx page context.
+   * - `dataAdapter`: The SPDataAdapter instance.
+   * - `displayMode`: The current display mode.
+   * - `title`: The web part title.
    *
    * @param component The React component to render.
    * @param props Optional props to merge with the web part properties.
@@ -48,13 +59,12 @@ export abstract class BaseProgramWebPart<
     const combinedProps = {
       ...this.properties,
       ...props,
-      ...{
-        sp: this._sp,
-        pageContext: this.context.pageContext,
-        dataAdapter: this._dataAdapter,
-        displayMode: this.displayMode,
-        title: this.properties.title
-      }
+      sp: this._sp,
+      spfxContext: this.context,
+      pageContext: this.context.pageContext,
+      dataAdapter: this._dataAdapter,
+      displayMode: this.displayMode,
+      title: this.properties.title
     }
     const element: ReactElement<T> = createElement(component, combinedProps)
     render(element, this.domElement)
