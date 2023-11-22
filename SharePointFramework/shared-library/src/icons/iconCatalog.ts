@@ -1,4 +1,6 @@
 import {
+  ClipboardTaskRegular,
+  ClipboardTaskFilled,
   AppsListFilled,
   AppsListRegular,
   GridFilled,
@@ -105,6 +107,10 @@ import {
  * An object containing the available Fluent icons and their corresponding regular and filled versions.
  */
 export const iconCatalog = {
+  ClipboardTask: {
+    regular: ClipboardTaskRegular,
+    filled: ClipboardTaskFilled
+  },
   Image: {
     regular: ImageRegular,
     filled: ImageFilled
