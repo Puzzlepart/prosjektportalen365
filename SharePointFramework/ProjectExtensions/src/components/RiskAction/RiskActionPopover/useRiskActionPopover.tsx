@@ -3,7 +3,7 @@ import { PopoverProps } from '@fluentui/react-components'
 import { stringIsNullOrEmpty } from '@pnp/core'
 import strings from 'ProjectExtensionsStrings'
 import { useBoolean } from 'usehooks-ts'
-import { useRiskActionFieldCustomizerContext } from '../../../context'
+import { useRiskActionFieldCustomizerContext } from '../../../riskAction/context'
 import { useRiskActionContext } from '../context'
 
 /**

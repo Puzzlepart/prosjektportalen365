@@ -2,12 +2,12 @@ import { IPanelProps, Panel, format } from '@fluentui/react'
 import { FluentProvider, Input, Switch, Textarea, webLightTheme } from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC } from 'react'
-import { useRiskActionFieldCustomizerContext } from '../../../../context'
 import { Footer } from './Footer'
 import styles from './NewRiskActionPanel.module.scss'
 import { ResponsibleField } from './ResponsibleField'
 import { useNewRiskActionPanel } from './useNewRiskActionPanel'
 import { FieldContainer } from 'pp365-shared-library'
+import { useRiskActionFieldCustomizerContext } from '../../../../riskAction/context'
 
 export const NewRiskActionPanel: FC<IPanelProps> = (props) => {
   const context = useRiskActionFieldCustomizerContext()

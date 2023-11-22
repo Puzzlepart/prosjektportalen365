@@ -1,8 +1,8 @@
+import { IPanelProps } from '@fluentui/react'
 import { useId } from '@fluentui/react-components'
 import { useCallback, useState } from 'react'
-import { useRiskActionFieldCustomizerContext } from '../../../../context'
+import { useRiskActionFieldCustomizerContext } from '../../../../riskAction/context'
 import { useRiskActionContext } from '../../context'
-import { IPanelProps } from '@fluentui/react'
 
 /**
  * A custom React hook that provides state and functions for the NewRiskActionPanel component.

@@ -1,11 +1,15 @@
 define([], function () {
   return {
+    PlannerTaskNotStarted: 'Ikke startet',
+    PlannerTaskInProgress: 'Påbegynt',
+    PlannerTaskCompleted: 'Fullført',
+    RiskActionPlannerTaskPreviewPlannerLinkText: 'Gå til oppgaven i Planner',
     MigrateRiskActionsDialogTitle: 'Migrering av tiltak for {0}',
     RiskActionFieldValueAdminButtonText: "Administrer tiltak",
     CreateMultipleLabel: 'Opprett flere',
     CreateMultipleDescription: 'Huk av for å unngå at panelet lukkes etter opprettelse av tiltaket.',
     RiskActionPopoverTitle: 'Tiltak for {0}',
-    RiskActionPlannerTaskLinkTooltipCompletedText: 'Oppgaven er fullført',
+    RiskActionPlannerTaskPreviewCompletedText: 'Oppgaven er fullført',
     MigrateRiskActionsDialogSeparatorOptionLinebreak: 'Linjeskift',
     MigrateRiskActionsDialogSeparatorOptionComma: 'Komma',
     MigrateRiskActionsDialogSeparatorOptionCommaNoSpaces: 'Komma (ingen mellomrom)',

@@ -1,5 +1,5 @@
 import React, { Dispatch, createContext, useContext } from 'react'
-import { RiskActionItemContext } from '../../types'
+import { RiskActionItemContext } from '../../riskAction/types'
 
 /**
  * Represents the context for a Risk Action item.

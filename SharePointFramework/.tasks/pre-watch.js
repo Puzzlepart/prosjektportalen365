@@ -26,4 +26,5 @@ if (process.env.SERVE_CHANNEL && process.env.SERVE_CHANNEL !== 'main') {
 
 require('./createServeConfig')
 require('./createEnviromentFile')
+require('./createLaunchFile')
 require('./setBundleConfig')

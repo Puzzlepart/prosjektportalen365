@@ -1,6 +1,6 @@
 import { stringIsNullOrEmpty } from '@pnp/core'
 import { useRiskActionContext } from '../context'
-import { useRiskActionFieldCustomizerContext } from '../../../context'
+import { useRiskActionFieldCustomizerContext } from '../../../riskAction/context'
 
 /**
  * Custom hook that returns the field value and hidden field value for a risk action item.
