@@ -33,7 +33,8 @@ import {
   ISyncListReturnType,
   PortalDataServiceDefaultConfiguration,
   PortalDataServiceList,
-  SyncListParams
+  SyncListParams,
+  IProjectDetails
 } from './types'
 import { DataService } from '../DataService'
 import '@pnp/sp/presets/all'
@@ -335,9 +336,9 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     const urls = await this._getList(list)
       .select('DefaultNewFormUrl', 'DefaultEditFormUrl')
       .expand('DefaultNewFormUrl', 'DefaultEditFormUrl')<{
-      DefaultNewFormUrl: string
-      DefaultEditFormUrl: string
-    }>()
+        DefaultNewFormUrl: string
+        DefaultEditFormUrl: string
+      }>()
     return {
       defaultNewFormUrl: makeUrlAbsolute(urls.DefaultNewFormUrl),
       defaultEditFormUrl: makeUrlAbsolute(urls.DefaultEditFormUrl)
@@ -428,7 +429,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           fieldsAdded.push(field)
         }
         await executeQuery(jsomContext)
-      } catch (error) {}
+      } catch (error) { }
     }
     try {
       const templateParametersField = spList
@@ -440,7 +441,7 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         )
       templateParametersField.updateAndPushChanges(true)
       await executeQuery(jsomContext)
-    } catch {}
+    } catch { }
     if (ensureList.created && params.properties) {
       ensureList.list.items.add(params.properties)
     }
@@ -822,6 +823,22 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     } catch (error) {
       return intialMap
     }
+  }
+
+  /**
+   * Get project details for the current site ID. Returns the id, title and
+   * whether or not the project is a parent project. If no project is found
+   * `null` is returned.
+   */
+  public async getProjectDetails(): Promise<IProjectDetails> {
+    const siteId = this._configuration.spfxContext.pageContext.site.id
+    const [project] = await this._getList('PROJECTS').items.filter(`GtSiteId eq '${siteId}'`)()
+    if(!project) return null
+    return {
+      id: project.Id,
+      title: project.Title,
+      isParentProject: project.GtIsParentProject || project.GtIsProgram,
+    } as IProjectDetails
   }
 
   /**
