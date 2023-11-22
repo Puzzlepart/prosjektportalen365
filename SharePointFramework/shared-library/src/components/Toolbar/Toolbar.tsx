@@ -3,13 +3,13 @@ import {
   Toolbar as FluentToolbar,
   useId,
   webLightTheme
-} from '@fluentui/react-components';
-import { FilterPanel } from '../FilterPanel';
-import React, { FC } from 'react';
-import { renderToolbarItem } from './renderToolbarItem';
-import styles from './Toolbar.module.scss';
-import { IToolbarProps } from './types';
-import strings from 'SharedLibraryStrings';
+} from '@fluentui/react-components'
+import { FilterPanel } from '../FilterPanel'
+import React, { FC } from 'react'
+import { renderToolbarItem } from './renderToolbarItem'
+import styles from './Toolbar.module.scss'
+import { IToolbarProps } from './types'
+import strings from 'SharedLibraryStrings'
 
 export const Toolbar: FC<IToolbarProps> = (props) => {
   const fluentProviderId = useId('fluent-provider')
@@ -25,13 +25,14 @@ export const Toolbar: FC<IToolbarProps> = (props) => {
         <FilterPanel
           {...props.filterPanel}
           headerText={strings.FiltersString}
-          isLightDismiss={true} />
+          isLightDismiss={true}
+        />
       )}
     </FluentProvider>
-  );
-};
+  )
+}
 
-Toolbar.displayName = 'Toolbar';
+Toolbar.displayName = 'Toolbar'
 Toolbar.defaultProps = {
   items: [],
   farItems: []

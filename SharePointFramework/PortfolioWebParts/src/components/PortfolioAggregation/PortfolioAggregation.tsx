@@ -1,20 +1,26 @@
-import { WebPartContext } from '@microsoft/sp-webpart-base';
-import React, { FC } from 'react';
-import { EditViewColumnsPanel } from '../EditViewColumnsPanel';
-import { List } from '../List';
-import { ColumnContextMenu } from './ColumnContextMenu';
-import { ColumnFormPanel } from './ColumnFormPanel';
-import styles from './PortfolioAggregation.module.scss';
-import { ViewFormPanel } from './ViewFormPanel';
-import { PortfolioAggregationContext } from './context';
-import { SET_ALL_COLLAPSED, SET_COLLAPSED } from './reducer';
-import { IPortfolioAggregationProps } from './types';
-import { usePortfolioAggregation } from './usePortfolioAggregation';
+import { WebPartContext } from '@microsoft/sp-webpart-base'
+import React, { FC } from 'react'
+import { EditViewColumnsPanel } from '../EditViewColumnsPanel'
+import { List } from '../List'
+import { ColumnContextMenu } from './ColumnContextMenu'
+import { ColumnFormPanel } from './ColumnFormPanel'
+import styles from './PortfolioAggregation.module.scss'
+import { ViewFormPanel } from './ViewFormPanel'
+import { PortfolioAggregationContext } from './context'
+import { SET_ALL_COLLAPSED, SET_COLLAPSED } from './reducer'
+import { IPortfolioAggregationProps } from './types'
+import { usePortfolioAggregation } from './usePortfolioAggregation'
 
 export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
   const {
-    context, searchBox, editViewColumnsPanelProps, onColumnContextMenu, menuItems, filterPanelProps, selection
-  } = usePortfolioAggregation(props);
+    context,
+    searchBox,
+    editViewColumnsPanelProps,
+    onColumnContextMenu,
+    menuItems,
+    filterPanelProps,
+    selection
+  } = usePortfolioAggregation(props)
   return (
     <div className={styles.root}>
       <PortfolioAggregationContext.Provider value={context}>
@@ -33,7 +39,8 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             compact={context.state.isCompact}
             isListLayoutModeJustified={props.isListLayoutModeJustified}
             groupProps={{
-              onToggleCollapseAll: (isAllCollapsed) => context.dispatch(SET_ALL_COLLAPSED({ isAllCollapsed })),
+              onToggleCollapseAll: (isAllCollapsed) =>
+                context.dispatch(SET_ALL_COLLAPSED({ isAllCollapsed })),
               headerProps: {
                 onToggleCollapse: (group) => context.dispatch(SET_COLLAPSED({ group }))
               }
@@ -42,7 +49,8 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             layerHostId={context.layerHostId}
             menuItems={menuItems}
             filterPanelProps={filterPanelProps}
-            error={context.state.error} />
+            error={context.state.error}
+          />
         </div>
         <ColumnContextMenu />
         <ColumnFormPanel />
@@ -50,7 +58,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
         <ViewFormPanel />
       </PortfolioAggregationContext.Provider>
     </div>
-  );
+  )
 }
 
 PortfolioAggregation.defaultProps = {

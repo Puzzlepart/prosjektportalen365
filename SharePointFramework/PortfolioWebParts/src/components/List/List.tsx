@@ -2,16 +2,19 @@ import {
   ConstrainMode,
   LayerHost,
   MarqueeSelection,
-  ScrollablePane, ScrollbarVisibility, SelectionMode, ShimmeredDetailsList
-} from '@fluentui/react';
-import { FluentProvider, webLightTheme } from '@fluentui/react-components';
-import React, { FC } from 'react';
-import { ListContext } from './context';
-import { IListProps } from './types';
+  ScrollablePane,
+  ScrollbarVisibility,
+  SelectionMode,
+  ShimmeredDetailsList
+} from '@fluentui/react'
+import { FluentProvider, webLightTheme } from '@fluentui/react-components'
+import React, { FC } from 'react'
+import { ListContext } from './context'
+import { IListProps } from './types'
 import { useList } from './useList'
 
 export const List: FC<IListProps<any>> = (props) => {
-  const listProps = useList(props);
+  const listProps = useList(props)
   return (
     <FluentProvider theme={webLightTheme}>
       <ListContext.Provider value={{ props: listProps }}>
@@ -23,8 +26,8 @@ export const List: FC<IListProps<any>> = (props) => {
         </ScrollablePane>
       </ListContext.Provider>
     </FluentProvider>
-  );
-};
+  )
+}
 
 List.defaultProps = {
   items: [],

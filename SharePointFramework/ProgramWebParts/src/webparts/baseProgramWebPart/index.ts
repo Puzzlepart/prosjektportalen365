@@ -41,7 +41,7 @@ export abstract class BaseProgramWebPart<
 
   /**
    * Renders a React component with the combined properties of the web part and the provided props.
-   * 
+   *
    * Includes `this.properties`, the provided `props`, and the following additional props:
    * - `sp`: The SPFI instance.
    * - `spfxContext`: The SPFx context.

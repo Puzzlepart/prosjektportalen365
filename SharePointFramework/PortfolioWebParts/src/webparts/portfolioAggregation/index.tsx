@@ -11,7 +11,11 @@ import {
 import * as strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import React from 'react'
-import { IPortfolioAggregationConfiguration, IPortfolioAggregationProps, PortfolioAggregation } from '../../components/PortfolioAggregation'
+import {
+  IPortfolioAggregationConfiguration,
+  IPortfolioAggregationProps,
+  PortfolioAggregation
+} from '../../components/PortfolioAggregation'
 import { BasePortfolioWebPart } from '../basePortfolioWebPart'
 
 export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IPortfolioAggregationProps> {
