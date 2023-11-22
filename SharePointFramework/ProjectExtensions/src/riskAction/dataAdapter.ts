@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PlannerTask } from '@microsoft/microsoft-graph-types'
 import { FieldCustomizerContext } from '@microsoft/sp-listview-extensibility'
-import { GraphFI, SPFx as graphSPFx, graphfi } from '@pnp/graph'
+import { GraphFI, SPFx as graphSPFx, graphfi, } from '@pnp/graph'
 import '@pnp/graph/presets/all'
 import { SPFx as spSPFx, spfi } from '@pnp/sp'
 import '@pnp/sp/presets/all'
@@ -10,7 +10,8 @@ import { SPDataAdapterBase } from 'pp365-shared-library'
 import {
   RiskActionItemContext,
   RiskActionHiddenFieldValues,
-  RiskActionPlannerTaskReference
+  RiskActionPlannerTaskReference,
+  RiskActionPlannerTask
 } from './types'
 import _ from 'underscore'
 
@@ -38,6 +39,17 @@ export class DataAdapter extends SPDataAdapterBase {
   }
 
   /**
+   * Retrieves user information based on the provided user ID.
+   * 
+   * @param userId The ID of the user.
+   * 
+   * @returns A Promise that resolves to the user information.
+   */
+  private async _getUserInfo(userId: string): Promise<any> {
+    return await this.graph.users.getById(userId)()
+  }
+
+  /**
    * Gets the default plan for the current group.
    *
    * @returns A Promise that resolves to the default plan for the current group.
@@ -58,9 +70,8 @@ export class DataAdapter extends SPDataAdapterBase {
    */
   private async _ensureBucket(planId: string): Promise<string> {
     const bucketName = this.globalSettings.get('RiskActionPlannerBucketName')
-    const [bucket] = await this.graph.planner.plans
-      .getById(planId)
-      .buckets.filter(`name eq '${bucketName}'`)()
+    const buckets = await this.graph.planner.plans.getById(planId).buckets()
+    const bucket = buckets.find(({ name }) => name === bucketName)
     if (bucket) return bucket.id
     const bucketAddResult = await this.graph.planner.buckets.add(bucketName, planId, ' !')
     return bucketAddResult.data.id
@@ -172,6 +183,16 @@ export class DataAdapter extends SPDataAdapterBase {
       [this.hiddenUpdateFieldName]: new Date()
     })
     return updatedItemContext
+  }
+
+  /**
+   * Retrieves a task by its ID.
+   * 
+   * @param taskId The ID of the task to retrieve.
+   */
+  public async getTask(taskId: string): Promise<any> {
+    const task = await this.graph.planner.tasks.getById(taskId).expand('details')()
+    return RiskActionPlannerTask.parse(task, this._getUserInfo.bind(this))
   }
 
   /**

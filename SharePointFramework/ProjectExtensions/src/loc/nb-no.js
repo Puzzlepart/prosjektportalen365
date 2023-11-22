@@ -1,5 +1,8 @@
 define([], function () {
   return {
+    PlannerTaskNotStarted: 'Ikke startet',
+    PlannerTaskInProgress: 'Påbegynt',
+    PlannerTaskCompleted: 'Fullført',
     RiskActionPlannerTaskPreviewPlannerLinkText: 'Gå til oppgaven i Planner',
     MigrateRiskActionsDialogTitle: 'Migrering av tiltak for {0}',
     RiskActionFieldValueAdminButtonText: "Administrer tiltak",

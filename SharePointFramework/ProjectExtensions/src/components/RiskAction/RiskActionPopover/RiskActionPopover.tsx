@@ -54,7 +54,7 @@ export const RiskActionPopover: FC<HTMLProps<any>> = (props) => {
             </Alert>
           </div>
           <div className={styles.actions}>
-            <div hidden={stringIsNullOrEmpty(itemContext.hiddenFieldValues?.data)}>
+            <div>
               <Button
                 appearance='transparent'
                 icon={getFluentIcon('Add')}

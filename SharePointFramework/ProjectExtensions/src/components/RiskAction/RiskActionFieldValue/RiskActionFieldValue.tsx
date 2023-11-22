@@ -3,7 +3,7 @@ import { Alert } from '@fluentui/react-components/unstable'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC, ReactElement } from 'react'
 import { useRiskActionFieldCustomizerContext } from '../../../riskAction/context'
-import { PlannerTaskLink } from './PlannerTaskLink'
+import { PlannerTaskItem } from './PlannerTaskItem'
 import styles from './RiskActionFieldValue.module.scss'
 import { IRiskActionFieldValueProps } from './types'
 import { useRiskActionFieldValue } from './useRiskActionFieldValue'
@@ -28,7 +28,7 @@ export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (props) => {
           style={{ flexDirection: horizontalLayout ? 'row' : 'column', gap }}
         >
           {tasks.map((task, index) => (
-            <PlannerTaskLink key={index} task={task} />
+            <PlannerTaskItem key={index} task={task} />
           ))}
         </div>
         <PopoverTrigger disableButtonEnhancement>
