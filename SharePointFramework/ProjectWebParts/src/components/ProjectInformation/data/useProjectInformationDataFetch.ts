@@ -47,12 +47,14 @@ const fetchData: DataFetchFunction<
         fetchProjectStatusReportData(context),
         isFrontpage
           ? SPDataAdapter.portal.getParentProjects(
-            context.props.webAbsoluteUrl,
-            ProjectInformationParentProject
-          )
+              context.props.webAbsoluteUrl,
+              ProjectInformationParentProject
+            )
           : Promise.resolve([])
       ])
-    const templateName = projectInformationData.fieldValues.get('GtProjectTemplate', { format: 'text' })
+    const templateName = projectInformationData.fieldValues.get('GtProjectTemplate', {
+      format: 'text'
+    })
     const template = await SPDataAdapter.portal.getProjectTemplate(templateName)
     const data: Partial<IProjectInformationState> = {
       data: {
