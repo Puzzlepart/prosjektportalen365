@@ -28,7 +28,7 @@
             <JSLink>hierarchytaskslist.js</JSLink>
         </View>
     </pnp:Views>
-    <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Skip">
+    <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Overwrite">
         <pnp:DataRow>            <!-- ID: 1 -->
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Tittel</pnp:DataValue>
