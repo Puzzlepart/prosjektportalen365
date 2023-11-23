@@ -1,4 +1,4 @@
-import { createReducer } from '@reduxjs/toolkit'
+import { createReducer, current } from '@reduxjs/toolkit'
 import { SPFxContext } from 'pp365-shared-library'
 import { useMemo, useReducer } from 'react'
 import { IProjectInformationState } from '../types'
@@ -44,7 +44,7 @@ const createProjectInformationReducer = (spfxContext: SPFxContext) =>
         state.properties = action.payload.state.properties
         state.isParentProject = action.payload.state.isParentProject
         state.userHasEditPermission = action.payload.state.userHasEditPermission
-        state.properties = createProperties(state as IProjectInformationState, spfxContext)
+        state.properties = createProperties(current(state) as IProjectInformationState, spfxContext)
         state.isDataLoaded = true
       })
       .addCase(UPDATE_DATA, (state, action) => {
