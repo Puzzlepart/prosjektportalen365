@@ -2,11 +2,11 @@ import { Button, PopoverTrigger } from '@fluentui/react-components'
 import { Alert } from '@fluentui/react-components/unstable'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC, ReactElement } from 'react'
-import { useRiskActionFieldCustomizerContext } from '../../../context'
-import { PlannerTaskLink } from './PlannerTaskLink'
+import { useRiskActionFieldCustomizerContext } from '../../../riskAction/context'
+import { PlannerTaskItem } from './PlannerTaskItem'
 import styles from './RiskActionFieldValue.module.scss'
-import { useRiskActionFieldValue } from './useRiskActionFieldValue'
 import { IRiskActionFieldValueProps } from './types'
+import { useRiskActionFieldValue } from './useRiskActionFieldValue'
 
 /**
  * Renders the field value for a risk action.
@@ -28,7 +28,7 @@ export const RiskActionFieldValue: FC<IRiskActionFieldValueProps> = (props) => {
           style={{ flexDirection: horizontalLayout ? 'row' : 'column', gap }}
         >
           {tasks.map((task, index) => (
-            <PlannerTaskLink key={index} task={task} />
+            <PlannerTaskItem key={index} task={task} />
           ))}
         </div>
         <PopoverTrigger disableButtonEnhancement>

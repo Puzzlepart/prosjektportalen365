@@ -1,12 +1,12 @@
 import { Combobox, Option, Persona } from '@fluentui/react-components'
-import React, { FC, useContext, useEffect, useState } from 'react'
-import { RiskActionFieldCustomizerContext } from '../../../../../context'
-import { IResponsibleFieldProps } from './types'
 import strings from 'ProjectExtensionsStrings'
 import { FieldContainer } from 'pp365-shared-library'
+import React, { FC, useEffect, useState } from 'react'
+import { useRiskActionFieldCustomizerContext } from '../../../../../riskAction/context'
+import { IResponsibleFieldProps } from './types'
 
 export const ResponsibleField: FC<IResponsibleFieldProps> = (props) => {
-  const context = useContext(RiskActionFieldCustomizerContext)
+  const context = useRiskActionFieldCustomizerContext()
   const [value, setValue] = useState('')
   const [matchingUsers, setMatchingUsers] = useState([])
 

@@ -1,10 +1,14 @@
 declare interface IProjectExtensionsStrings {
+  PlannerTaskNotStarted: string
+  PlannerTaskInProgress: string
+  PlannerTaskCompleted: string
+  RiskActionPlannerTaskPreviewPlannerLinkText: string
   MigrateRiskActionsDialogTitle: string
   RiskActionFieldValueAdminButtonText: string
   CreateMultipleLabel: string
   CreateMultipleDescription: string
   RiskActionPopoverTitle: string
-  RiskActionPlannerTaskLinkTooltipCompletedText: string
+  RiskActionPlannerTaskPreviewCompletedText: string
   MigrateRiskActionsDialogSeparatorOptionLinebreak: string
   MigrateRiskActionsDialogSeparatorOptionComma: string
   MigrateRiskActionsDialogSeparatorOptionCommaNoSpaces: string

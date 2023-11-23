@@ -6,13 +6,15 @@ import '@pnp/graph/presets/all'
 import { SPFx as spSPFx, spfi } from '@pnp/sp'
 import '@pnp/sp/presets/all'
 import { IList } from '@pnp/sp/presets/all'
-import { SPDataAdapterBase } from 'pp365-shared-library'
+import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library'
 import {
   RiskActionItemContext,
   RiskActionHiddenFieldValues,
-  RiskActionPlannerTaskReference
+  RiskActionPlannerTaskReference,
+  RiskActionPlannerTask
 } from './types'
 import _ from 'underscore'
+import { Caching } from '@pnp/queryable'
 
 export class DataAdapter extends SPDataAdapterBase {
   private readonly graph: GraphFI
@@ -38,6 +40,21 @@ export class DataAdapter extends SPDataAdapterBase {
   }
 
   /**
+   * Retrieves `displayName` and `mail` for the user with the provided `userId`. The result
+   * is cached for 60 minutes in the local storage.
+   *
+   * @param userId The ID of the user.
+   *
+   * @returns A Promise that resolves to the user information.
+   */
+  private async _getUserInfo(userId: string): Promise<{ displayName: string; mail: string }> {
+    return await this.graph.users
+      .getById(userId)
+      .select('displayName', 'mail')
+      .using(DefaultCaching)()
+  }
+
+  /**
    * Gets the default plan for the current group.
    *
    * @returns A Promise that resolves to the default plan for the current group.
@@ -58,9 +75,8 @@ export class DataAdapter extends SPDataAdapterBase {
    */
   private async _ensureBucket(planId: string): Promise<string> {
     const bucketName = this.globalSettings.get('RiskActionPlannerBucketName')
-    const [bucket] = await this.graph.planner.plans
-      .getById(planId)
-      .buckets.filter(`name eq '${bucketName}'`)()
+    const buckets = await this.graph.planner.plans.getById(planId).buckets()
+    const bucket = buckets.find(({ name }) => name === bucketName)
     if (bucket) return bucket.id
     const bucketAddResult = await this.graph.planner.buckets.add(bucketName, planId, ' !')
     return bucketAddResult.data.id
@@ -172,6 +188,26 @@ export class DataAdapter extends SPDataAdapterBase {
       [this.hiddenUpdateFieldName]: new Date()
     })
     return updatedItemContext
+  }
+
+  /**
+   * Retrieves a task by its ID cached for 60 seconds in session storage
+   * with key `risk-action-get-task-${taskId}`.
+   *
+   * @param taskId The ID of the task to retrieve.
+   */
+  public async getTask(taskId: string): Promise<any> {
+    const task = await this.graph.planner.tasks
+      .getById(taskId)
+      .expand('details')
+      .using(
+        Caching({
+          expireFunc: () => new Date(Date.now() + 60000),
+          keyFactory: () => `risk-action-get-task-${taskId}`,
+          store: 'session'
+        })
+      )()
+    return RiskActionPlannerTask.parse(task, this._getUserInfo.bind(this))
   }
 
   /**
