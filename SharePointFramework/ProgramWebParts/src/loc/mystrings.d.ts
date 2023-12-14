@@ -29,6 +29,8 @@ declare interface IProgramWebPartsStrings {
   DefaultDataSourceViewLabel: string
   DefaultViewLabel: string
   ErrorTitle: string
+  ExcelExportButtonLabel: string
+  FilterText: string
   GeneralGroupName: string
   PortfolioManagerGroupName: string
   ProgramAdministrationAddChildsButtonLabel: string

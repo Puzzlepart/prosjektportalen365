@@ -30,6 +30,8 @@ define([], function () {
     DefaultDataSourceViewLabel: 'Standardvisning (datakilde)',
     DefaultViewLabel: 'Standardvisning',
     ErrorTitle: 'Det har oppstått en feil',
+    ExcelExportButtonLabel: 'Eksporter til Excel',
+    FilterText: 'Filtrer',
     GeneralGroupName: 'Generelt',
     ListViewText: 'Liste',
     PortfolioManagerGroupName: 'Porteføljeinnsyn',
