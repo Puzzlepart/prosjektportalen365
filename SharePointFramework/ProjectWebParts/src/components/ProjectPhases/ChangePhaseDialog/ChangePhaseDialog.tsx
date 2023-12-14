@@ -34,7 +34,7 @@ export const ChangePhaseDialog: FC = () => {
             <DialogContent className={styles.dialogContent}>
               <Label weight='semibold'>
                 {context.state.phase
-                    ? format(
+                  ? format(
                       strings.ChangePhaseDialogSubtitle,
                       context.state.phase?.name,
                       context.state.confirmPhase.name
