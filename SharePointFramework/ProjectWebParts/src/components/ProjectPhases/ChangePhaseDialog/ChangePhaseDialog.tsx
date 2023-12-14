@@ -33,11 +33,13 @@ export const ChangePhaseDialog: FC = () => {
             </DialogTitle>
             <DialogContent className={styles.dialogContent}>
               <Label weight='semibold'>
-                {format(
-                  strings.ChangePhaseDialogSubtitle,
-                  context.state.phase.name,
-                  context.state.confirmPhase.name
-                )}
+                {context.state.phase
+                    ? format(
+                      strings.ChangePhaseDialogSubtitle,
+                      context.state.phase?.name,
+                      context.state.confirmPhase.name
+                    )
+                  : format(strings.ChangeFirstPhaseDialogSubtitle, context.state.confirmPhase.name)}
               </Label>
               {state.view === View.Confirm &&
                 format(strings.ConfirmChangePhase, context.state.confirmPhase.name)}

@@ -41,6 +41,7 @@ define([], function () {
     CategoryFieldLabel: 'Kategori',
     ChangePhaseDialogTitle: 'Endre til {0} fasen',
     ChangePhaseDialogSubtitle: 'Dette vil medføre endring fra {0} til {1} fasen',
+    ChangeFirstPhaseDialogSubtitle: 'Dette vil medføre at prosjektet settes til {0} fasen',
     ChangePhaseText: 'Endre til denne fasen',
     ChangingPhaseDescription: 'Endrer fase til {0}',
     ChecklistCommentDescription: 'Kommentar er obligatorisk om sjekkpunktet skal markeres som "Ikke relevant" eller "Fortsatt åpen".',
