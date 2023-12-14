@@ -14,13 +14,13 @@ const brandVariants: BrandVariants = {
   70: pSBC(-0.2, primaryColor),
   80: pSBC(-0.1, primaryColor),
   90: primaryColor,
-  100: pSBC(0.05, primaryColor),
-  110: pSBC(0.1, primaryColor),
-  120: pSBC(0.15, primaryColor),
-  130: pSBC(0.2, primaryColor),
-  140: pSBC(0.25, primaryColor),
-  150: pSBC(0.3, primaryColor),
-  160: pSBC(0.35, primaryColor)
+  100: pSBC(0.2, primaryColor),
+  110: pSBC(0.3, primaryColor),
+  120: pSBC(0.4, primaryColor),
+  130: pSBC(0.5, primaryColor),
+  140: pSBC(0.6, primaryColor),
+  150: pSBC(0.7, primaryColor),
+  160: pSBC(0.8, primaryColor)
 }
 
 export const customLightTheme = createLightTheme(brandVariants)
