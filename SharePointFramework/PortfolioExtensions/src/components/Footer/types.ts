@@ -20,7 +20,7 @@ export interface IFooterProps {
   /**
    * Links to display in the footer
    */
-  links: { Url: string; Description: string }[]
+  links: { Url: string; Description: string; Level?: string }[]
 
   /**
    * Page context object

@@ -10,7 +10,7 @@ export const HelpContent: FC = () => {
   const isUnavailable = context.props.helpContent.length === 0
 
   return (
-    <>
+    <HelpContentDialog>
       <Tooltip
         relationship='description'
         withArrow
@@ -20,19 +20,15 @@ export const HelpContent: FC = () => {
             : strings.HelpContentAvailableDescription
         }
       >
-        <HelpContentDialog>
-          <Button
-            size='small'
-            appearance='subtle'
-            disabled={isUnavailable}
-            icon={getFluentIcon('QuestionCircle')}
-          >
-            {isUnavailable
-              ? strings.HelpContentUnavailableLabel
-              : strings.HelpContentAvailableLabel}
-          </Button>
-        </HelpContentDialog>
+        <Button
+          size='small'
+          appearance='subtle'
+          disabled={isUnavailable}
+          icon={getFluentIcon('QuestionCircle')}
+        >
+          {isUnavailable ? strings.HelpContentUnavailableLabel : strings.HelpContentAvailableLabel}
+        </Button>
       </Tooltip>
-    </>
+    </HelpContentDialog>
   )
 }

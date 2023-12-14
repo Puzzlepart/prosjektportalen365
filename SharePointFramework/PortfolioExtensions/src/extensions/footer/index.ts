@@ -24,7 +24,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private _bottomPlaceholder: PlaceholderContent
   private _installEntries: InstallationEntry[]
   private _gitHubReleases: IGitHubRelease[]
-  private _links: { Url: string; Description: string }[]
+  private _links: { Url: string; Description: string; Level?: string }[]
   private _helpContent: HelpContentModel[]
   private _portal: PortalDataService
 
@@ -130,11 +130,17 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   /**
    * Fetch the links from the `strings.LinksListName` (Lenker) list on the hub site.
    */
-  private async _fetchLinks(): Promise<{ Url: string; Description: string }[]> {
+  private async _fetchLinks(): Promise<{ Url: string; Description: string; Level?: string }[]> {
     try {
       const linksList = this._portal.web.lists.getByTitle(strings.LinksListName)
       const linksItems = await linksList.items()
-      return linksItems.map((item) => item.GtLinkUrl)
+      return linksItems.map((item) => {
+        return {
+          Url: item.GtLinkUrl.Url,
+          Description: item.GtLinkUrl.Description,
+          Level: item.Level
+        }
+      })
     } catch (error) {
       return []
     }

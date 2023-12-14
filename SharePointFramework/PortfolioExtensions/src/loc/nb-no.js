@@ -2,6 +2,7 @@ define([], function () {
   return {
     ActionLabel: 'Handling',
     ActionLabelPlaceholder: 'Vennligst velg en handling...',
+    AdministratorLabel: 'Administrator',
     ApproveChoice: 'Godkjenn',
     ApprovedSyncText: 'Godkjent og synkronisert',
     CancelLabel: 'Avbryt',

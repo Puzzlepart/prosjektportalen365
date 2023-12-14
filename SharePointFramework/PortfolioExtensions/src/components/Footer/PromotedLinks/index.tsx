@@ -41,15 +41,20 @@ export const PromotedLinks: FC = () => {
       </MenuTrigger>
       <MenuPopover style={{ minWidth: 'fit-content' }}>
         <MenuList>
-          {context.props.links.map((link, idx) => (
-            <MenuItem
-              style={{ maxWidth: 'fit-content', minWidth: '100%' }}
-              key={idx}
-              onClick={() => window.open(link.Url, '_blank')}
-            >
-              {link.Description}
-            </MenuItem>
-          ))}
+          {context.props.links
+            .filter((link) => {
+              if (context.props.pageContext.legacyPageContext.isSiteAdmin) return true
+              else return link.Level !== strings.AdministratorLabel
+            })
+            .map((link, idx) => (
+              <MenuItem
+                style={{ maxWidth: 'fit-content', minWidth: '100%' }}
+                key={idx}
+                onClick={() => window.open(link.Url, '_blank')}
+              >
+                {link.Description}
+              </MenuItem>
+            ))}
         </MenuList>
       </MenuPopover>
     </Menu>

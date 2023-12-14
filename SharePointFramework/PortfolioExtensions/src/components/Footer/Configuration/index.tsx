@@ -6,6 +6,7 @@ import { getFluentIcon } from 'pp365-shared-library'
 
 export const Configuration: FC = () => {
   const context = useContext(FooterContext)
+
   return (
     <Tooltip relationship='description' withArrow content={strings.ConfigurationDescription}>
       <Button

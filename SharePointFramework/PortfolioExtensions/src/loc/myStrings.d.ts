@@ -1,6 +1,7 @@
 declare interface IPortfolioExtensionsStrings {
   ActionLabel: string
   ActionLabelPlaceholder: string
+  AdministratorLabel: string
   ApproveChoice: string
   ApprovedSyncText: string
   CancelLabel: string
