@@ -5,16 +5,14 @@ import { PortfolioOverviewContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
 import { useColumnFormPanel } from './useColumnFormPanel'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
-import { ColumnSearchPropertyField, FieldContainer, UserMessage, customLightTheme } from 'pp365-shared-library'
-import { ColumnDataTypeField } from '../../List/ItemColumn/ColumnDataTypeField'
 import {
-  Combobox,
-  Option,
-  FluentProvider,
-  Input,
-  Switch,
-  useId
-} from '@fluentui/react-components'
+  ColumnSearchPropertyField,
+  FieldContainer,
+  UserMessage,
+  customLightTheme
+} from 'pp365-shared-library'
+import { ColumnDataTypeField } from '../../List/ItemColumn/ColumnDataTypeField'
+import { Combobox, Option, FluentProvider, Input, Switch, useId } from '@fluentui/react-components'
 import _ from 'lodash'
 import { visibilityOptions } from './types'
 

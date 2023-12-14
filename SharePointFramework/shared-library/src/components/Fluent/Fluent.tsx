@@ -1,18 +1,9 @@
-import {
-  FluentProvider,
-  IdPrefixProvider,
-  useId
-} from '@fluentui/react-components'
+import { FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
 import React, { FC, useMemo } from 'react'
 import { IFluentProps } from './types'
 import { customLightTheme } from '../../util'
 
-export const Fluent: FC<IFluentProps> = ({
-  className,
-  style,
-  children,
-  transparent
-}) => {
+export const Fluent: FC<IFluentProps> = ({ className, style, children, transparent }) => {
   const fluentId = useId('fluent')
   return useMemo(
     () => (

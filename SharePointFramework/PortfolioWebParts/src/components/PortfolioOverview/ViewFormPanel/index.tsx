@@ -6,13 +6,7 @@ import { PortfolioOverviewContext } from '../context'
 import styles from './ViewFormPanel.module.scss'
 import { ViewFormPanelFooter } from './ViewFormPanelFooter'
 import { useViewFormPanel } from './useViewFormPanel'
-import {
-  FluentProvider,
-  Input,
-  Switch,
-  Textarea,
-  useId
-} from '@fluentui/react-components'
+import { FluentProvider, Input, Switch, Textarea, useId } from '@fluentui/react-components'
 
 export const ViewFormPanel: FC = () => {
   const fluentProviderId = useId('fluent-provider')

@@ -1,10 +1,4 @@
-import {
-  Button,
-  Field,
-  FluentProvider,
-  ProgressBar,
-  useId
-} from '@fluentui/react-components'
+import { Button, Field, FluentProvider, ProgressBar, useId } from '@fluentui/react-components'
 import strings from 'SharedLibraryStrings'
 import React, { FC, useState } from 'react'
 import { UserMessage } from '../../UserMessage'

@@ -1,9 +1,4 @@
-import {
-  FluentProvider,
-  SelectTabData,
-  Tab,
-  TabList
-} from '@fluentui/react-components'
+import { FluentProvider, SelectTabData, Tab, TabList } from '@fluentui/react-components'
 import { SearchBox } from '@fluentui/react-search-preview'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'

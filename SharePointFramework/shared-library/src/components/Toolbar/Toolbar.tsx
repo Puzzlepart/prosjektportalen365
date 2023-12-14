@@ -1,8 +1,4 @@
-import {
-  FluentProvider,
-  Toolbar as FluentToolbar,
-  useId
-} from '@fluentui/react-components'
+import { FluentProvider, Toolbar as FluentToolbar, useId } from '@fluentui/react-components'
 import { FilterPanel } from '../FilterPanel'
 import React, { FC } from 'react'
 import { renderToolbarItem } from './renderToolbarItem'
