@@ -1,1 +1,1 @@
-<Field Type="URL" DisplayName="{resource:SiteFields_GtLinkUrl_DisplayName}" Description="{resource:SiteFields_GtLinkUrl_Description}" Group="{resource:SiteFields_Portfolio_Group}" ID="{7a92bc25-dfdf-4ec7-b15e-89e74aec1c5d}" Format="Hyperlink" Name="GtLinkLevel" StaticName="GtLinkLevel" />
+<Field Type="URL" DisplayName="{resource:SiteFields_GtLinkUrl_DisplayName}" Description="{resource:SiteFields_GtLinkUrl_Description}" Group="{resource:SiteFields_Portfolio_Group}" ID="{7a92bc25-dfdf-4ec7-b15e-89e74aec1c5d}" Format="Hyperlink" Name="GtLinkUrl" StaticName="GtLinkUrl" />
