@@ -1,0 +1,8 @@
+<pnp:ContentType ID="0x010096AD901B60764A228D634B2B2B1ED5D6" Name="{resource:ContentTypes_Links_Name}" Description="{resource:ContentTypes_Links_Description}" Group="{resource:ContentTypes_Group}" UpdateChildren="true"
+  xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+  <pnp:FieldRefs>
+    <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Hidden="true" UpdateChildren="true"/>
+    <pnp:FieldRef ID="d3f20cf8-b01e-4ecd-b2c3-56d9983793af" Name="GtLinkLevel" UpdateChildren="true" />
+    <pnp:FieldRef ID="7a92bc25-dfdf-4ec7-b15e-89e74aec1c5d" Name="GtLinkUrl" UpdateChildren="true" />
+  </pnp:FieldRefs>
+</pnp:ContentType>

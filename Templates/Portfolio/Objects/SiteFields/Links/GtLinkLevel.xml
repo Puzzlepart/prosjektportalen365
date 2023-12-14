@@ -1,0 +1,6 @@
+<Field Type="Choice" DisplayName="{resource:SiteFields_GtLinkLevel_DisplayName}" Description="{resource:SiteFields_GtLinkLevel_Description}" Group="{resource:SiteFields_Portfolio_Group}" ID="{d3f20cf8-b01e-4ecd-b2c3-56d9983793af}" StaticName="GtLinkLevel" Name="GtLinkLevel">
+  <CHOICES>
+    <CHOICE>Admininstrator</CHOICE>
+    <CHOICE>Medlem</CHOICE>
+  </CHOICES>
+</Field>

@@ -41,4 +41,5 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Prosjektadministrasjonstilganger.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Hjelpeinnhold.xml" />
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Globale innstillinger.xml" />
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Lenker.xml" />
 </pnp:Lists>

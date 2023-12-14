@@ -118,6 +118,12 @@
   <data name="Lists_ListContent_Url" xml:space="preserve">
     <value>Lists/Listeinnhold</value>
   </data>
+  <data name="Lists_Links_Title" xml:space="preserve">
+    <value>Lenker</value>
+  </data>
+  <data name="Lists_Links_Url" xml:space="preserve">
+    <value>Lists/Lenker</value>
+  </data>
   <data name="Lists_Log_Title" xml:space="preserve">
     <value>Logg</value>
   </data>
@@ -372,6 +378,12 @@
   </data>
   <data name="ContentTypes_ConfigurationElement_Description" xml:space="preserve">
     <value>Element of configuration within the project</value>
+  </data>
+  <data name="ContentTypes_Links_Name" xml:space="preserve">
+    <value>Lenker</value>
+  </data>
+  <data name="ContentTypes_Links_Description" xml:space="preserve">
+    <value>Links element</value>
   </data>
   <data name="ContentTypes_ListContent_Name" xml:space="preserve">
     <value>Listeinnhold</value>
@@ -1125,6 +1137,18 @@
   </data>
   <data name="SiteFields_GtKey_Description" xml:space="preserve">
     <value>Specify the unique identifier or the key</value>
+  </data>
+  <data name="SiteFields_GtLinkLevel_DisplayName" xml:space="preserve">
+    <value>Link level</value>
+  </data>
+  <data name="SiteFields_GtLinkLevel_Description" xml:space="preserve">
+    <value>Level of the link (permissions)</value>
+  </data>
+  <data name="SiteFields_GtLinkUrl_DisplayName" xml:space="preserve">
+    <value>Link URL</value>
+  </data>
+  <data name="SiteFields_GtLinkUrl_Description" xml:space="preserve">
+    <value>URL for the link</value>
   </data>
   <data name="SiteFields_GtLogFunctionName_DisplayName" xml:space="preserve">
     <value>Function Name</value>

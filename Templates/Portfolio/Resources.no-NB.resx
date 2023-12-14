@@ -118,6 +118,12 @@
   <data name="Lists_ListContent_Url" xml:space="preserve">
     <value>Lists/Listeinnhold</value>
   </data>
+  <data name="Lists_Links_Title" xml:space="preserve">
+    <value>Lenker</value>
+  </data>
+  <data name="Lists_Links_Url" xml:space="preserve">
+    <value>Lists/Lenker</value>
+  </data>
   <data name="Lists_Log_Title" xml:space="preserve">
     <value>Logg</value>
   </data>
@@ -420,6 +426,12 @@
   </data>
   <data name="ContentTypes_ConfigurationElement_Description" xml:space="preserve">
     <value></value>
+  </data>
+  <data name="ContentTypes_Links_Name" xml:space="preserve">
+    <value>Lenker</value>
+  </data>
+  <data name="ContentTypes_Links_Description" xml:space="preserve">
+    <value>Lenker element</value>
   </data>
   <data name="ContentTypes_ListContent_Name" xml:space="preserve">
     <value>Listeinnhold</value>
@@ -1230,6 +1242,18 @@
   </data>
   <data name="SiteFields_GtKey_Description" xml:space="preserve">
     <value>Dette feltet oppbevarer en nøkkelverdi, hvis det er nødvendig for organisasjonens bruk av denne ressursen.</value>
+  </data>
+  <data name="SiteFields_GtLinkLevel_DisplayName" xml:space="preserve">
+    <value>Lenke nivå</value>
+  </data>
+  <data name="SiteFields_GtLinkLevel_Description" xml:space="preserve">
+    <value>Nivå for lenke (tilganger)</value>
+  </data>
+  <data name="SiteFields_GtLinkUrl_DisplayName" xml:space="preserve">
+    <value>Lenke URL</value>
+  </data>
+  <data name="SiteFields_GtLinkUrl_Description" xml:space="preserve">
+    <value>URL til lenken</value>
   </data>
   <data name="SiteFields_GtLogContext_DisplayName" xml:space="preserve">
     <value>Context</value>

@@ -39,7 +39,6 @@ export const PromotedLinks: FC = () => {
           </MenuButton>
         </Tooltip>
       </MenuTrigger>
-
       <MenuPopover style={{ minWidth: 'fit-content' }}>
         <MenuList>
           {context.props.links.map((link, idx) => (
