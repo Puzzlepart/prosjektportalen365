@@ -1,6 +1,6 @@
 import { Panel } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import { FieldContainer, UserMessage } from 'pp365-shared-library'
+import { FieldContainer, UserMessage, customLightTheme } from 'pp365-shared-library'
 import React, { FC, useContext } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import styles from './ViewFormPanel.module.scss'
@@ -11,8 +11,7 @@ import {
   Input,
   Switch,
   Textarea,
-  useId,
-  webLightTheme
+  useId
 } from '@fluentui/react-components'
 
 export const ViewFormPanel: FC = () => {
@@ -29,7 +28,7 @@ export const ViewFormPanel: FC = () => {
       isLightDismiss={true}
       className={styles.root}
     >
-      <FluentProvider id={fluentProviderId} theme={webLightTheme} className={styles.content}>
+      <FluentProvider id={fluentProviderId} theme={customLightTheme} className={styles.content}>
         <FieldContainer
           iconName='NumberSymbolSquare'
           label={strings.SortOrderLabel}

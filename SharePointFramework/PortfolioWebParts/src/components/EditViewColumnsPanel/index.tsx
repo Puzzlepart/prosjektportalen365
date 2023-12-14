@@ -11,8 +11,8 @@ import {
 import styles from './EditViewColumnsPanel.module.scss'
 import { IEditViewColumnsPanelProps } from './types'
 import { useEditViewColumnsPanel } from './useEditViewColumnsPanel'
-import { Button, Checkbox, FluentProvider, webLightTheme } from '@fluentui/react-components'
-import { WebPartTitle, getFluentIcon } from 'pp365-shared-library'
+import { Button, Checkbox, FluentProvider } from '@fluentui/react-components'
+import { WebPartTitle, getFluentIcon, customLightTheme } from 'pp365-shared-library'
 
 const getItemStyle = (_isDragging: boolean, draggableStyle: DraggingStyle | NotDraggingStyle) => ({
   userSelect: 'none',
@@ -28,7 +28,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
       isOpen={props.isOpen}
       type={PanelType.medium}
       onRenderHeader={() => (
-        <FluentProvider id='header' theme={webLightTheme}>
+        <FluentProvider id='header' theme={customLightTheme}>
           <div className={styles.panelActions}>
             <Button
               appearance='subtle'
@@ -60,7 +60,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
       isLightDismiss={true}
       className={styles.root}
     >
-      <FluentProvider id='body' theme={webLightTheme}>
+      <FluentProvider id='body' theme={customLightTheme}>
         <WebPartTitle title={props.title} description={props.helpText} />
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId='droppable'>

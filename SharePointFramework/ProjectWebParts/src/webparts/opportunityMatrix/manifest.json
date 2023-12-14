@@ -1,6 +1,6 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-  "id": "aff0baa2-9ab4-4c13-a062-d5fa5028121c",
+  "id": "2301e02b-877c-427b-ace7-6ffb959b7326",
   "alias": "OpportunityMatrixWebPart",
   "componentType": "WebPart",
   "version": "1.9.0",

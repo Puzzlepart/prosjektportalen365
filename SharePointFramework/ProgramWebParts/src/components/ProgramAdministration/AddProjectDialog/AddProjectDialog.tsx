@@ -7,8 +7,7 @@ import {
   DialogTitle,
   FluentProvider,
   IdPrefixProvider,
-  useId,
-  webLightTheme
+  useId
 } from '@fluentui/react-components'
 import * as strings from 'ProgramWebPartsStrings'
 import _ from 'lodash'
@@ -18,6 +17,7 @@ import { ProgramAdministrationContext } from '../context'
 import { SET_SELECTED_TO_ADD, TOGGLE_ADD_PROJECT_DIALOG } from '../reducer'
 import styles from './AddProjectDialog.module.scss'
 import { useAddProjectDialog } from './useAddProjectDialog'
+import { customLightTheme } from 'pp365-shared-library'
 
 export const AddProjectDialog: FC = () => {
   const context = useContext(ProgramAdministrationContext)
@@ -26,7 +26,7 @@ export const AddProjectDialog: FC = () => {
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
-      <FluentProvider theme={webLightTheme} className={styles.addProjectDialog}>
+      <FluentProvider theme={customLightTheme} className={styles.addProjectDialog}>
         <Dialog
           open={context.state.addProjectDialog?.open}
           onOpenChange={(_, data) => {

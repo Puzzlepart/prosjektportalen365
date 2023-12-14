@@ -57,9 +57,9 @@
     "@pnp/core": "3.17.0",
     "@pnp/queryable": "3.17.0",
     "sp-entityportal-service": "2.3.0",
-    "@fluentui/react-components": "9.36.0",
-    "@fluentui/react-icons": "2.0.221",
-    "@fluentui/react-search-preview": "0.1.28",
+    "@fluentui/react-components": "~9.42.0",
+    "@fluentui/react-icons": "~2.0.224",
+    "@fluentui/react-search-preview": "~0.1.33",
     "use-image-color": "~0.0.9",
     "react-error-boundary": "~4.0.11"
   },

@@ -1,13 +1,13 @@
 import { Panel } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import { ColumnSearchPropertyField, FieldContainer } from 'pp365-shared-library'
+import { ColumnSearchPropertyField, FieldContainer, customLightTheme } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { ColumnDataTypeField } from '../../List/ItemColumn/ColumnDataTypeField'
 import { usePortfolioAggregationContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
 import { useColumnFormPanel } from './useColumnFormPanel'
-import { FluentProvider, Input, Switch, useId, webLightTheme } from '@fluentui/react-components'
+import { FluentProvider, Input, Switch, useId } from '@fluentui/react-components'
 
 export const ColumnFormPanel: FC = () => {
   const fluentProviderId = useId('fluent-provider')
@@ -43,7 +43,7 @@ export const ColumnFormPanel: FC = () => {
       isLightDismiss={true}
       className={styles.root}
     >
-      <FluentProvider id={fluentProviderId} theme={webLightTheme} className={styles.content}>
+      <FluentProvider id={fluentProviderId} theme={customLightTheme} className={styles.content}>
         <FieldContainer
           iconName='NumberSymbolSquare'
           label={strings.SortOrderLabel}

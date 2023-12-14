@@ -1,7 +1,8 @@
-import { Button, FluentProvider, useId, webLightTheme } from '@fluentui/react-components'
+import { Button, FluentProvider, useId } from '@fluentui/react-components'
 import React, { FC } from 'react'
 import { IFooterProps } from './types'
 import styles from './Footer.module.scss'
+import { customLightTheme } from 'pp365-shared-library'
 
 export const Footer: FC<IFooterProps> = (props) => {
   const fluentProviderId = useId(Footer.displayName)
@@ -9,7 +10,7 @@ export const Footer: FC<IFooterProps> = (props) => {
     <FluentProvider
       id={fluentProviderId}
       className={styles.footer}
-      theme={webLightTheme}
+      theme={customLightTheme}
       style={{ background: 'transparent' }}
     >
       <Button appearance='primary' onClick={props.onSave} disabled={props.isSaveDisabled}>

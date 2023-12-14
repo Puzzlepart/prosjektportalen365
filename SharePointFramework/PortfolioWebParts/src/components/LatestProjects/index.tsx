@@ -1,14 +1,15 @@
 import { format } from '@fluentui/react'
-import { Button, Caption1, FluentProvider, Link, webLightTheme } from '@fluentui/react-components'
+import { Button, Caption1, FluentProvider, Link } from '@fluentui/react-components'
 import { ChevronDownFilled, ChevronUpFilled } from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
 import {
   LoadingSkeleton,
   ProjectLogo,
   UserMessage,
-  WebPartTitle
-} from 'pp365-shared-library/lib/components'
-import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
+  WebPartTitle,
+  formatDate,
+  customLightTheme
+} from 'pp365-shared-library'
 import React, { FC } from 'react'
 import styles from './LatestProjects.module.scss'
 import { ILatestProjectsProps } from './types'
@@ -62,7 +63,7 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
   }
 
   return (
-    <FluentProvider className={styles.root} theme={webLightTheme}>
+    <FluentProvider className={styles.root} theme={customLightTheme}>
       <WebPartTitle title={props.title} />
       <div className={styles.container}>
         {loading ? <LoadingSkeleton /> : renderLatestProjects()}

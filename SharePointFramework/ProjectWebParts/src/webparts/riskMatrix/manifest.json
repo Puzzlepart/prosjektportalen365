@@ -1,12 +1,12 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-  "id": "e536ae15-0748-4d96-b160-3abb30f1b71e",
+  "id": "b1500cba-4eef-437e-92db-7728dcd9502c",
   "alias": "RiskMatrixWebPart",
   "componentType": "WebPart",
   "version": "1.9.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
-  "hiddenFromToolbox": false,
+  "hiddenFromToolbox": true,
   "supportedHosts": [
     "SharePointWebPart"
   ],

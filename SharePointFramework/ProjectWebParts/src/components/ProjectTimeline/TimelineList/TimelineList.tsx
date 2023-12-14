@@ -5,15 +5,14 @@ import {
   DataGridHeader,
   DataGridHeaderCell,
   DataGridRow,
-  FluentProvider,
-  webLightTheme
+  FluentProvider
 } from '@fluentui/react-components'
 import * as React from 'react'
 import { FC, useContext } from 'react'
 import styles from './TimelineList.module.scss'
 import { useTimelineList } from './useTimelineList'
 import { ProjectTimelineContext } from '../context'
-import { Toolbar } from 'pp365-shared-library'
+import { Toolbar, customLightTheme } from 'pp365-shared-library'
 
 export const TimelineList: FC = () => {
   const context = useContext(ProjectTimelineContext)
@@ -21,7 +20,7 @@ export const TimelineList: FC = () => {
     useTimelineList()
 
   return (
-    <FluentProvider theme={webLightTheme} className={styles.timelineList}>
+    <FluentProvider theme={customLightTheme} className={styles.timelineList}>
       {context.props.showTimelineListCommands && (
         <div className={styles.commandBar}>
           <div>

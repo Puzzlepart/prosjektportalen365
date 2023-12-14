@@ -4,13 +4,14 @@ import { usePortfolioAggregationContext } from '../../context'
 import { SET_VIEW_FORM_PANEL } from '../../reducer'
 import styles from './ViewFormPanelFooter.module.scss'
 import { IViewFormPanelFooterProps } from './types'
-import { Button, FluentProvider, useId, webLightTheme } from '@fluentui/react-components'
+import { Button, FluentProvider, useId } from '@fluentui/react-components'
+import { customLightTheme } from 'pp365-shared-library'
 
 export const ViewFormPanelFooter: FC<IViewFormPanelFooterProps> = ({ onSave }) => {
   const fluentProviderId = useId('fluent-provider')
   const context = usePortfolioAggregationContext()
   return (
-    <FluentProvider id={fluentProviderId} theme={webLightTheme} className={styles.root}>
+    <FluentProvider id={fluentProviderId} theme={customLightTheme} className={styles.root}>
       <Button onClick={onSave} disabled={!onSave} appearance='primary'>
         {strings.SaveButtonLabel}
       </Button>

@@ -5,8 +5,8 @@ import { IListHeaderProps } from './types'
 import strings from 'PortfolioWebPartsStrings'
 import { UserMessage, WebPartTitle } from 'pp365-shared-library'
 import { SearchBox } from '@fluentui/react-search-preview'
-import { FluentProvider, webLightTheme } from '@fluentui/react-components'
-import { Toolbar } from 'pp365-shared-library'
+import { FluentProvider } from '@fluentui/react-components'
+import { customLightTheme, Toolbar } from 'pp365-shared-library'
 import { ListContext } from '../context'
 
 export const ListHeader: FC<IListHeaderProps> = (props) => {
@@ -19,7 +19,7 @@ export const ListHeader: FC<IListHeaderProps> = (props) => {
       stickyPosition={StickyPositionType.Header}
       isScrollSynced={true}
     >
-      <FluentProvider className={styles.root} theme={webLightTheme}>
+      <FluentProvider className={styles.root} theme={customLightTheme}>
         <div className={styles.header}>
           <WebPartTitle title={props.title} />
         </div>

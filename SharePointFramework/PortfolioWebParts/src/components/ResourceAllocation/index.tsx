@@ -1,10 +1,10 @@
-import { FluentProvider, webLightTheme } from '@fluentui/react-components'
+import { FluentProvider } from '@fluentui/react-components'
 import React, { FC } from 'react'
 import styles from './ResourceAllocation.module.scss'
 import * as strings from 'PortfolioWebPartsStrings'
 import { IResourceAllocationProps } from './types'
 import { useResourceAllocation } from './useResourceAllocation'
-import { LoadingSkeleton, Timeline, UserMessage } from 'pp365-shared-library'
+import { LoadingSkeleton, Timeline, UserMessage, customLightTheme } from 'pp365-shared-library'
 
 export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
   const { state, filters, onFilterChange, items, groups, defaultTimeframe } =
@@ -12,7 +12,7 @@ export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
 
   if (state.error) {
     return (
-      <FluentProvider className={styles.root} theme={webLightTheme}>
+      <FluentProvider className={styles.root} theme={customLightTheme}>
         <div className={styles.errorContainer}>
           <UserMessage title={strings.ErrorTitle} text={state.error} intent='error' />
         </div>
@@ -21,7 +21,7 @@ export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
   }
 
   return (
-    <FluentProvider className={styles.root} theme={webLightTheme}>
+    <FluentProvider className={styles.root} theme={customLightTheme}>
       {state.loading ? (
         <LoadingSkeleton />
       ) : (

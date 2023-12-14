@@ -15,10 +15,10 @@ import {
   Tab,
   TabList,
   TabValue,
-  useId,
-  webLightTheme
+  useId
 } from '@fluentui/react-components'
 import { Content } from './Content'
+import { customLightTheme } from 'pp365-shared-library'
 
 export const HelpContentDialog: FC<Omit<DialogProps, 'children'>> = (props) => {
   const fluentProviderId = useId('fp-helpDialog')
@@ -33,7 +33,7 @@ export const HelpContentDialog: FC<Omit<DialogProps, 'children'>> = (props) => {
 
   return (
     <IdPrefixProvider value={fluentProviderId}>
-      <FluentProvider theme={webLightTheme} className={styles.helpContentDialog}>
+      <FluentProvider theme={customLightTheme} className={styles.helpContentDialog}>
         <Dialog open={props.open}>
           <DialogTrigger disableButtonEnhancement>{props.children as ReactElement}</DialogTrigger>
           <DialogSurface>

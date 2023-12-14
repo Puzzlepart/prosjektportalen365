@@ -10,10 +10,9 @@ import {
   Toast,
   ToastTitle,
   useId,
-  useToastController,
-  webLightTheme
+  useToastController
 } from '@fluentui/react-components'
-import { LoadingSkeleton } from 'pp365-shared-library'
+import { LoadingSkeleton, customLightTheme } from 'pp365-shared-library'
 
 export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
   const { rootRef, context } = useProjectPhases(props)
@@ -25,7 +24,7 @@ export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
   return (
     <FluentProvider
       id={fluentProviderId}
-      theme={webLightTheme}
+      theme={customLightTheme}
       className={styles.root}
       ref={rootRef}
     >

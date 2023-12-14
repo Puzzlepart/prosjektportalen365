@@ -3,8 +3,7 @@ import {
   MessageBar,
   MessageBarBody,
   MessageBarTitle,
-  useId,
-  webLightTheme
+  useId
 } from '@fluentui/react-components'
 import React, { FC } from 'react'
 import ReactMarkdown from 'react-markdown'
@@ -12,6 +11,7 @@ import rehypeRaw from 'rehype-raw'
 import { IUserMessageProps } from './types'
 import { useUserMessage } from './useUserMessage'
 import styles from './UserMessage.module.scss'
+import { customLightTheme } from '../../util'
 
 /**
  * A component that supports a MessageBar with markdown using react-markdown
@@ -25,7 +25,7 @@ export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => 
   return (
     <FluentProvider
       id={fluentProviderId}
-      theme={webLightTheme}
+      theme={customLightTheme}
       className={[props.className, styles.root].filter(Boolean).join(' ')}
       style={props.containerStyle}
       hidden={props.hidden}

@@ -17,12 +17,12 @@ import {
   InteractionTag,
   InteractionTagPrimary,
   Tag,
-  TagGroup,
-  webLightTheme
+  TagGroup
 } from '@fluentui/react-components'
 import { format } from '@fluentui/react'
 import { IOverflowTagMenuProps, OverflowMenuItemProps } from './types'
 import strings from 'SharedLibraryStrings'
+import { customLightTheme } from '../../util'
 
 export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
   const { tags, icon } = useOverflowTagMenu(props)
@@ -62,7 +62,7 @@ export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
     return (
       <FluentProvider
         id={fluentProviderId}
-        theme={webLightTheme}
+        theme={customLightTheme}
         style={{ backgroundColor: 'transparent' }}
       >
         <Menu closeOnScroll>

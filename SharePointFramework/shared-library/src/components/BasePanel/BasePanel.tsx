@@ -1,8 +1,9 @@
 import { Panel, PanelType } from '@fluentui/react'
-import { FluentProvider, webLightTheme } from '@fluentui/react-components'
+import { FluentProvider } from '@fluentui/react-components'
 import React, { FC } from 'react'
 import styles from './BasePanel.module.scss'
 import { IBasePanelProps } from './types'
+import { customLightTheme } from '../../util'
 
 export const BasePanel: FC<IBasePanelProps> = (props) => {
   return (
@@ -12,7 +13,7 @@ export const BasePanel: FC<IBasePanelProps> = (props) => {
         if (!props.onRenderBody) return null
         return (
           <FluentProvider
-            theme={webLightTheme}
+            theme={customLightTheme}
             className={styles.root}
             applyStylesToPortals={false}
           >

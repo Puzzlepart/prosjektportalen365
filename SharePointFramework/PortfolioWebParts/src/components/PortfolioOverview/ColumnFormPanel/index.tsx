@@ -5,7 +5,7 @@ import { PortfolioOverviewContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
 import { useColumnFormPanel } from './useColumnFormPanel'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
-import { ColumnSearchPropertyField, FieldContainer, UserMessage } from 'pp365-shared-library'
+import { ColumnSearchPropertyField, FieldContainer, UserMessage, customLightTheme } from 'pp365-shared-library'
 import { ColumnDataTypeField } from '../../List/ItemColumn/ColumnDataTypeField'
 import {
   Combobox,
@@ -13,8 +13,7 @@ import {
   FluentProvider,
   Input,
   Switch,
-  useId,
-  webLightTheme
+  useId
 } from '@fluentui/react-components'
 import _ from 'lodash'
 import { visibilityOptions } from './types'
@@ -52,7 +51,7 @@ export const ColumnFormPanel: FC = () => {
       className={styles.root}
       styles={{ commands: { paddingBottom: 12 } }}
     >
-      <FluentProvider id={fluentProviderId} theme={webLightTheme} className={styles.content}>
+      <FluentProvider id={fluentProviderId} theme={customLightTheme} className={styles.content}>
         <FieldContainer
           iconName='NumberSymbolSquare'
           label={strings.SortOrderLabel}

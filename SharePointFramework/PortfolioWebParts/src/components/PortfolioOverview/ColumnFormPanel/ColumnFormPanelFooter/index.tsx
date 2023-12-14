@@ -5,7 +5,8 @@ import { TOGGLE_COLUMN_FORM_PANEL } from '../../reducer'
 import { PortfolioOverviewContext } from '../../context'
 import { IColumnFormPanelFooterProps } from './types'
 import { useConfirmationDialog } from 'pzl-react-reusable-components/lib/ConfirmDialog'
-import { Button, FluentProvider, useId, webLightTheme } from '@fluentui/react-components'
+import { Button, FluentProvider, useId } from '@fluentui/react-components'
+import { customLightTheme } from 'pp365-shared-library'
 
 export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
   onSave,
@@ -17,7 +18,7 @@ export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
   const context = useContext(PortfolioOverviewContext)
   const [confirmDeleteDialog, getConfirmDeleteResponse] = useConfirmationDialog()
   return (
-    <FluentProvider id={fluentProviderId} theme={webLightTheme} className={styles.root}>
+    <FluentProvider id={fluentProviderId} theme={customLightTheme} className={styles.root}>
       <Button onClick={onSave} disabled={isSaveDisabled} appearance='primary'>
         {strings.SaveButtonLabel}
       </Button>

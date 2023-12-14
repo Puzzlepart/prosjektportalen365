@@ -2,13 +2,12 @@ import {
   FluentProvider,
   SelectTabData,
   Tab,
-  TabList,
-  webLightTheme
+  TabList
 } from '@fluentui/react-components'
 import { SearchBox } from '@fluentui/react-search-preview'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
-import { ProjectListModel, SiteContext } from 'pp365-shared-library/lib/models'
+import { ProjectListModel, SiteContext, customLightTheme } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import { find, isEmpty } from 'underscore'
 import { List } from './List'
@@ -67,7 +66,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
 
   if (state.projects.length === 0) {
     return (
-      <FluentProvider theme={webLightTheme}>
+      <FluentProvider theme={customLightTheme}>
         <section className={styles.root}>
           <UserMessage title={strings.NoProjectsFoundTitle} text={strings.NoProjectsFoundMessage} />
         </section>
@@ -84,7 +83,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   }
 
   return (
-    <FluentProvider className={styles.root} theme={webLightTheme}>
+    <FluentProvider className={styles.root} theme={customLightTheme}>
       <div className={styles.tabs}>
         <TabList
           onTabSelect={(_, data: SelectTabData) =>

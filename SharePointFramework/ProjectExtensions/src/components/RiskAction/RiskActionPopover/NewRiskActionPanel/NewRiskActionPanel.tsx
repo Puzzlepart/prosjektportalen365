@@ -1,5 +1,6 @@
 import { IPanelProps, Panel, format } from '@fluentui/react'
-import { FluentProvider, Input, Switch, Textarea, webLightTheme } from '@fluentui/react-components'
+import { FluentProvider, Input, Switch, Textarea } from '@fluentui/react-components'
+import { customLightTheme } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
 import React, { FC } from 'react'
 import { Footer } from './Footer'
@@ -29,7 +30,7 @@ export const NewRiskActionPanel: FC<IPanelProps> = (props) => {
       <FluentProvider
         id={fluentProviderId}
         className={styles.newRiskActionPanel}
-        theme={webLightTheme}
+        theme={customLightTheme}
         style={{ background: 'transparent' }}
       >
         <FieldContainer label={strings.TitleLabel} required={true} iconName='TextNumberFormat'>

@@ -3,14 +3,14 @@ import {
   Field,
   FluentProvider,
   ProgressBar,
-  useId,
-  webLightTheme
+  useId
 } from '@fluentui/react-components'
 import strings from 'SharedLibraryStrings'
 import React, { FC, useState } from 'react'
 import { UserMessage } from '../../UserMessage'
 import { useCustomEditPanelContext } from '../context'
 import styles from './CustomEditPanelFooter.module.scss'
+import { customLightTheme } from '../../../util'
 
 /**
  * Renders the footer for the `CustomEditPanel` with a `<PrimaryButton />` for saving the changes,
@@ -37,7 +37,7 @@ export const CustomEditPanelFooter: FC = () => {
   return (
     <FluentProvider
       id={fluentProviderId}
-      theme={webLightTheme}
+      theme={customLightTheme}
       className={styles.customEditPanelFooter}
     >
       {context.props.submit.error && (

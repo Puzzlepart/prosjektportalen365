@@ -5,14 +5,15 @@ import { usePortfolioAggregationContext } from '../../context'
 import { TOGGLE_COLUMN_FORM_PANEL } from '../../reducer'
 import styles from './ColumnFormPanelFooter.module.scss'
 import { ColumnFormPanelFooterProps } from './types'
-import { Button, FluentProvider, useId, webLightTheme } from '@fluentui/react-components'
+import { Button, FluentProvider, useId } from '@fluentui/react-components'
+import { customLightTheme } from 'pp365-shared-library'
 
 export const ColumnFormPanelFooter: FC<ColumnFormPanelFooterProps> = (props) => {
   const fluentProviderId = useId('fluent-provider')
   const context = usePortfolioAggregationContext()
   const [confirmDeleteDialog, getConfirmDeleteResponse] = useConfirmationDialog()
   return (
-    <FluentProvider id={fluentProviderId} theme={webLightTheme} className={styles.root}>
+    <FluentProvider id={fluentProviderId} theme={customLightTheme} className={styles.root}>
       <Button onClick={props.onSave} disabled={props.isSaveDisabled} appearance='primary'>
         {strings.SaveButtonLabel}
       </Button>

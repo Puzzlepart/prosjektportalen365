@@ -1,5 +1,5 @@
-import { FluentProvider, webLightTheme } from '@fluentui/react-components'
-import { Fluent, UserMessage, WebPartTitle } from 'pp365-shared-library'
+import { FluentProvider } from '@fluentui/react-components'
+import { Fluent, UserMessage, WebPartTitle, customLightTheme } from 'pp365-shared-library'
 import { ConfirmDialog } from 'pzl-spfx-components/lib/components/ConfirmDialog'
 import React, { FC } from 'react'
 import { Actions } from './Actions'
@@ -33,7 +33,7 @@ export const ProjectInformation: FC<IProjectInformationProps> = (props) => {
     return (
       <FluentProvider
         id={fluentProviderId}
-        theme={webLightTheme}
+        theme={customLightTheme}
         className={styles.root}
         style={{ background: 'transparent' }}
       >

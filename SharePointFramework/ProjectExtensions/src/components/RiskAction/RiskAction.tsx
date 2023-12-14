@@ -1,4 +1,5 @@
-import { FluentProvider, webLightTheme } from '@fluentui/react-components'
+import { FluentProvider } from '@fluentui/react-components'
+import { customLightTheme } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import styles from './RiskAction.module.scss'
 import { RiskActionFieldValue } from './RiskActionFieldValue'
@@ -11,7 +12,7 @@ export const RiskAction: FC = () => {
   return (
     <FluentProvider
       id={fluentProviderId}
-      theme={webLightTheme}
+      theme={customLightTheme}
       className={styles.root}
       style={{ background: 'transparent' }}
     >

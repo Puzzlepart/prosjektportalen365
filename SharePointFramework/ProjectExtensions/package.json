@@ -47,12 +47,11 @@
     "valid-filename": "3.1.0",
     "@pnp/core": "3.17.0",
     "@pnp/queryable": "3.17.0",
-    "@fluentui/react-components": "9.36.0",
-    "@fluentui/react-icons": "2.0.221",
-    "@fluentui/react-search-preview": "0.1.28",
+    "@fluentui/react-components": "~9.42.0",
+    "@fluentui/react-icons": "~2.0.224",
+    "@fluentui/react-search-preview": "~0.1.33",
     "@microsoft/microsoft-graph-types": "~2.38.0",
     "usehooks-ts": "~2.9.1",
-    "@fluentui/react-portal-compat": "~9.0.100",
     "lodash": "~4.17.21"
   },
   "devDependencies": {

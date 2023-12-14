@@ -3,13 +3,13 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { ConsoleListener, LogLevel, Logger } from '@pnp/logging'
 import { SPFI } from '@pnp/sp/presets/all'
 import { IBaseComponentProps } from 'components/types'
-import { SiteContext, createSpfiInstance } from 'pp365-shared-library'
+import { SiteContext, createSpfiInstance, customLightTheme } from 'pp365-shared-library'
 import React, { ComponentClass, FC, createElement } from 'react'
 import { render } from 'react-dom'
 import { ErrorBoundary } from 'react-error-boundary'
 import { DataAdapter } from '../../data'
 import { ErrorBoundaryFallback } from './ErrorBoundary'
-import { FluentProvider, webLightTheme } from '@fluentui/react-components'
+import { FluentProvider } from '@fluentui/react-components'
 
 type ComponentType<P> = FC<P> | ComponentClass<P>
 
@@ -62,7 +62,7 @@ export abstract class BasePortfolioWebPart<
           <ErrorBoundaryFallback title={combinedProps['title']} error={error} />
         )}
       >
-        <FluentProvider theme={webLightTheme}>{element}</FluentProvider>
+        <FluentProvider theme={customLightTheme}>{element}</FluentProvider>
       </ErrorBoundary>,
       this.domElement
     )

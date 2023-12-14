@@ -5,8 +5,8 @@ import { usePortfolioAggregationContext } from '../context'
 import styles from './ViewFormPanel.module.scss'
 import { ViewFormPanelFooter } from './ViewFormPanelFooter'
 import { useViewFormPanel } from './useViewFormPanel'
-import { FieldContainer } from 'pp365-shared-library'
-import { FluentProvider, Input, Textarea, useId, webLightTheme } from '@fluentui/react-components'
+import { FieldContainer, customLightTheme } from 'pp365-shared-library'
+import { FluentProvider, Input, Textarea, useId } from '@fluentui/react-components'
 
 export const ViewFormPanel: FC = () => {
   const fluentProviderId = useId('fluent-provider')
@@ -22,7 +22,7 @@ export const ViewFormPanel: FC = () => {
       isLightDismiss={true}
       className={styles.root}
     >
-      <FluentProvider id={fluentProviderId} theme={webLightTheme} className={styles.content}>
+      <FluentProvider id={fluentProviderId} theme={customLightTheme} className={styles.content}>
         <FieldContainer
           iconName='TextNumberFormat'
           label={strings.TitleLabel}

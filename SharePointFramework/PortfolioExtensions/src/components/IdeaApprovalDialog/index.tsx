@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog'
 import strings from 'PortfolioExtensionsStrings'
-import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
+import { UserMessage, customLightTheme } from 'pp365-shared-library'
 import {
   Button,
   Field,
@@ -10,7 +10,6 @@ import {
   Option,
   Combobox,
   FluentProvider,
-  webLightTheme,
   DialogActions,
   DialogBody,
   DialogContent,
@@ -29,7 +28,7 @@ export const IdeaApprovalDialog: FC<IIdeaApprovalDialogProps> = (props) => {
 
   return (
     <IDeaApprovalDialogContext.Provider value={context}>
-      <FluentProvider theme={webLightTheme}>
+      <FluentProvider theme={customLightTheme}>
         <DialogBody className={styles.ideaApprovalDialog}>
           <DialogTitle>{strings.SetRecommendationTitle}</DialogTitle>
           <DialogContent className={styles.content}>
