@@ -4,4 +4,5 @@ export interface IIdeaDialogProps {
   ideaTitle?: string
   dialogMessage?: string
   isBlocked?: boolean
+  isApproved?: boolean
 }

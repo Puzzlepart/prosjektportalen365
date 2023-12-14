@@ -9,12 +9,13 @@ import {
   DialogActions,
   DialogBody,
   DialogContent,
-  DialogTitle
+  DialogTitle,
+  FluentProvider
 } from '@fluentui/react-components'
 import { IIdeaDialogProps } from './types'
 import { FC, useContext } from 'react'
 import { IDeaDialogContext } from './context'
-import { Fluent } from 'pp365-shared-library'
+import { customLightTheme } from 'pp365-shared-library'
 import styles from './IdeaDialog.module.scss'
 
 export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
@@ -22,7 +23,7 @@ export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
 
   return (
     <IDeaDialogContext.Provider value={context}>
-      <Fluent>
+      <FluentProvider theme={customLightTheme}>
         <DialogBody className={styles.ideaDialog}>
           <DialogTitle>{strings.IdeaProjectDataDialogTitle}</DialogTitle>
           <DialogContent>
@@ -33,10 +34,14 @@ export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
                   : strings.IdeaProjectDataDialogInfoTitle
               }
               text={format(
-                props.isBlocked ? strings.IdeaProjectDataDialogBlockedMessage : props.dialogMessage,
+                props.isBlocked
+                  ? strings.IdeaProjectDataDialogBlockedMessage
+                  : props.isApproved
+                  ? props.dialogMessage
+                  : strings.IdeaProjectDataDialogNotApprovedMessage,
                 encodeURIComponent(window.location.href)
               )}
-              intent={props.isBlocked ? 'warning' : 'info'}
+              intent={props.isBlocked || !props.isApproved ? 'warning' : 'info'}
             />
           </DialogContent>
           <DialogActions>
@@ -47,13 +52,13 @@ export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
               appearance='primary'
               title={strings.CreateLabel}
               onClick={props.submit}
-              disabled={props.isBlocked}
+              disabled={props.isBlocked || !props.isApproved}
             >
               {strings.CreateLabel}
             </Button>
           </DialogActions>
         </DialogBody>
-      </Fluent>
+      </FluentProvider>
     </IDeaDialogContext.Provider>
   )
 }
@@ -62,6 +67,7 @@ export default class ProjectDataDialog extends BaseDialog {
   public ideaTitle: string
   public dialogMessage: string
   public isBlocked: boolean
+  public isApproved: boolean
 
   public render(): void {
     ReactDOM.render(
@@ -71,6 +77,7 @@ export default class ProjectDataDialog extends BaseDialog {
         ideaTitle={this.ideaTitle}
         dialogMessage={this.dialogMessage}
         isBlocked={this.isBlocked}
+        isApproved={this.isApproved}
       />,
       this.domElement
     )

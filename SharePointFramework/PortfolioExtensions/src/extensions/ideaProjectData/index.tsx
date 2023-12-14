@@ -16,6 +16,13 @@ import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
 import { IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
 
+enum RecommendationType {
+  ApprovedSync = 'Godkjent og synkronisert',
+  Approved = 'Godkjent for konseptutredning',
+  Consideration = 'Under vurdering',
+  Rejected = 'Avvist'
+}
+
 export interface IIdeaProjectDataCommandProperties {
   ideaId: number
 }
@@ -59,6 +66,9 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
         dialog.dialogMessage =
           this._ideaConfig.description[2] ||
           strings.SetRecommendationDefaultDescription.split(';')[2]
+        dialog.isApproved =
+          row.getValueByName('GtIdeaDecision') === RecommendationType.Approved ||
+          row.getValueByName('GtIdeaDecision') === RecommendationType.ApprovedSync
         dialog.isBlocked = !!row.getValueByName('GtIdeaProjectData')
         dialog.show()
         dialog.submit = this._onSubmit.bind(this, row)

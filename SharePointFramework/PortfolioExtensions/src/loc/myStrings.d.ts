@@ -21,6 +21,7 @@ declare interface IPortfolioExtensionsStrings {
   IdeaProcessorsSiteGroup: string
   IdeaProjectDataDialogBlockedTitle: string
   IdeaProjectDataDialogBlockedMessage: string
+  IdeaProjectDataDialogNotApprovedMessage: string
   IdeaProjectDataDialogInfoTitle: string
   IdeaProjectDataDialogTitle: string
   IdeaProjectDataTitle: string

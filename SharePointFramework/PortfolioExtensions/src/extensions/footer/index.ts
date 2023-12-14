@@ -134,7 +134,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     try {
       const linksList = this._portal.web.lists.getByTitle(strings.LinksListName)
       const linksItems = await linksList.items()
-      return linksItems.map((item) => item.GtLinksUrl)
+      return linksItems.map((item) => item.GtLinkUrl)
     } catch (error) {
       return []
     }
