@@ -13,5 +13,6 @@ export function useFooter(props: IFooterProps) {
   if (latestEntry.installChannel) {
     installedVersion += ` (${latestEntry.installChannel})`
   }
+
   return { latestEntry, installedVersion } as const
 }

@@ -128,13 +128,13 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   }
 
   /**
-   * Fetch the links from the `strings.LinksListName` list on the hub site.
+   * Fetch the links from the `strings.LinksListName` (Lenker) list on the hub site.
    */
   private async _fetchLinks(): Promise<{ Url: string; Description: string }[]> {
     try {
       const linksList = this._portal.web.lists.getByTitle(strings.LinksListName)
       const linksItems = await linksList.items()
-      return linksItems.map((item) => item.URL)
+      return linksItems.map((item) => item.GtLinksUrl)
     } catch (error) {
       return []
     }
