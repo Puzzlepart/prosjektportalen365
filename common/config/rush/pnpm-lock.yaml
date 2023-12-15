@@ -52,6 +52,7 @@ dependencies:
   '@types/react-beautiful-dnd': 13.1.5
   '@types/react-calendar-timeline': 0.26.0
   '@types/react-dom': 17.0.17
+  '@types/shade-blend-color': 1.0.3
   '@types/sharepoint': 2016.1.10
   '@types/underscore': 1.11.9
   '@types/xmldom': 0.1.32
@@ -96,6 +97,7 @@ dependencies:
   replace: 1.2.2
   resx-json-typescript-converter: 1.0.3
   shade-blend-color: 1.0.0
+  smoothscroll-polyfill: 0.4.4
   sp-entityportal-service: 2.3.0
   spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
   tslib: 2.3.1
@@ -7148,6 +7150,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-eSt1ONJ4doMdJgXVyvwDZpmPKp7+P8plhkh6yvvd5KnRWPFTY1YqL9NP5kVit5GHqkLCdTj89nS06ETEj6YTKw==
+  /@types/smoothscroll-polyfill/0.3.3:
+    dev: false
+    resolution:
+      integrity: sha512-VBcuyevh5N80XlrUz8a2GWgP9MnIVctdUgxWj8YdD+tN2OMptZTEUKYo8wXly8MR91HisJ9CaX8utF9zbMU8yA==
   /@types/sockjs/0.3.34:
     dependencies:
       '@types/node': 20.8.2
@@ -20569,6 +20575,10 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
+  /smoothscroll-polyfill/0.4.4:
+    dev: false
+    resolution:
+      integrity: sha512-TK5ZA9U5RqCwMpfoMq/l1mrH0JAR7y7KRvOBx0n2869aLxch+gT9GhN3yUfjiw+d/DiF1mKo14+hd62JyMmoBg==
   /snapdragon-node/2.1.1:
     dependencies:
       define-property: 1.0.0
@@ -23687,6 +23697,7 @@ packages:
       '@types/lodash': 4.14.199
       '@types/react': 17.0.45
       '@types/react-dom': 17.0.17
+      '@types/smoothscroll-polyfill': 0.3.3
       '@types/underscore': 1.11.9
       '@types/webpack-env': 1.18.0
       '@typescript-eslint/eslint-plugin': 5.40.0_8aa46ed5a6d8d59b0c62bf61e7e2510c
@@ -23722,6 +23733,7 @@ packages:
       react-markdown: 8.0.7_4865287ef69aa4f3fc3f709d3560286e
       react-scroll: 1.7.11_react-dom@17.0.1+react@17.0.1
       rehype-raw: 6.1.1
+      smoothscroll-polyfill: 0.4.4
       sp-entityportal-service: 2.3.0
       spfx-jsom: 0.6.6_5bb3879ba087c0ef402ac2f0f80f9922
       tslib: 2.3.1
@@ -23732,7 +23744,7 @@ packages:
     dev: false
     name: '@rush-temp/pp365-projectwebparts'
     resolution:
-      integrity: sha512-Pf2j+iG/5lU8+3W3QnGaqwoH2ETFmxElmMaRnqqINqpLPqct9xzaageTCDOBPPfn4n0G4NZ91Q4rLP/woEnaOQ==
+      integrity: sha512-yNAyBsjQLaFEvHa23O0S0qnXcfLvbJ097DKmI9I5F1NmIkQAQd+cEBYaFDiiivfPeNlPrLR6KOTqlWJCbAvqeg==
       tarball: file:projects/pp365-projectwebparts.tgz
     version: 0.0.0
   file:projects/pp365-shared-library.tgz_interactjs@1.6.2:
@@ -23903,6 +23915,7 @@ specifiers:
   '@types/react-beautiful-dnd': ~13.1.4
   '@types/react-calendar-timeline': 0.26.0
   '@types/react-dom': 17.0.17
+  '@types/shade-blend-color': ~1.0.3
   '@types/sharepoint': 2016.1.10
   '@types/underscore': ~1.11.5
   '@types/xmldom': ^0.1.29
@@ -23947,6 +23960,7 @@ specifiers:
   replace: 1.2.2
   resx-json-typescript-converter: ^1.0.1
   shade-blend-color: ~1.0.0
+  smoothscroll-polyfill: ~0.4.4
   sp-entityportal-service: 2.3.0
   spfx-jsom: 0.6.6
   tslib: 2.3.1

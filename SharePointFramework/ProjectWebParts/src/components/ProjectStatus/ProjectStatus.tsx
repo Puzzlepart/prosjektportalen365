@@ -11,23 +11,27 @@ import { Fluent } from 'pp365-shared-library'
 import { PublishedStatus } from './PublishedStatus'
 import { UserMessages } from './UserMessages/UserMessages'
 import { SectionTabs } from './SectionTabs'
+import { ScrollablePane } from '@fluentui/react'
 
 export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
   const { context } = useProjectStatus(props)
+
   return (
     <ProjectStatusContext.Provider value={context}>
       <Fluent>
         <div className={styles.root}>
-          <div className={styles.header}>
-            <Header />
-            <PublishedStatus />
-          </div>
-          <Commands />
-          <SectionTabs />
-          <UserMessages />
-          <div className={styles.container}>
-            <Sections />
-          </div>
+          <ScrollablePane>
+            <div className={styles.header}>
+              <Header />
+              <PublishedStatus />
+            </div>
+            <Commands />
+            <SectionTabs />
+            <UserMessages />
+            <div className={styles.container}>
+              <Sections />
+            </div>
+          </ScrollablePane>
         </div>
         <EditStatusPanel />
       </Fluent>

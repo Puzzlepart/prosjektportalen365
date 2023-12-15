@@ -62,7 +62,8 @@
     "@fluentui/react-icons": "~2.0.224",
     "@fluentui/react-search-preview": "~0.1.33",
     "usehooks-ts": "~2.9.1",
-    "@fluentui/react-datepicker-compat": "~0.4.7"
+    "@fluentui/react-datepicker-compat": "~0.4.7",
+    "smoothscroll-polyfill": "~0.4.4"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.17.4",
@@ -95,6 +96,7 @@
     "prettier": "2.7.1",
     "typescript": "4.5.5",
     "webpack": "5.74.0",
-    "@types/lodash": "~4.14.195"
+    "@types/lodash": "~4.14.195",
+    "@types/smoothscroll-polyfill": "~0.3.3"
   }
 }
