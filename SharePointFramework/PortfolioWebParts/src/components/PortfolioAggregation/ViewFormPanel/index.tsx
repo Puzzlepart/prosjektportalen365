@@ -6,10 +6,16 @@ import styles from './ViewFormPanel.module.scss'
 import { ViewFormPanelFooter } from './ViewFormPanelFooter'
 import { useViewFormPanel } from './useViewFormPanel'
 import { FieldContainer, customLightTheme } from 'pp365-shared-library'
-import { FluentProvider, Input, Textarea, useId } from '@fluentui/react-components'
+import {
+  FluentProvider,
+  IdPrefixProvider,
+  Input,
+  Textarea,
+  useId
+} from '@fluentui/react-components'
 
 export const ViewFormPanel: FC = () => {
-  const fluentProviderId = useId('fluent-provider')
+  const fluentProviderId = useId('fp-view-form-panel')
   const context = usePortfolioAggregationContext()
   const { view, setView, isEditing, onDismiss, onSave } = useViewFormPanel()
   return (
@@ -22,59 +28,61 @@ export const ViewFormPanel: FC = () => {
       isLightDismiss={true}
       className={styles.root}
     >
-      <FluentProvider id={fluentProviderId} theme={customLightTheme} className={styles.content}>
-        <FieldContainer
-          iconName='TextNumberFormat'
-          label={strings.TitleLabel}
-          description={strings.TitleLabel}
-          required={true}
-        >
-          <Input
-            value={view.get('title')}
-            onChange={(_, data) => setView('title', data.value)}
-            placeholder={strings.Placeholder.TextField}
-          />
-        </FieldContainer>
-        <FieldContainer
-          iconName='TextAlignLeft'
-          label={strings.SearchQueryLabel}
-          description={strings.PortfolioAggregationViewSearchQueryDescription}
-          required={true}
-        >
-          <Textarea
-            defaultValue={view.get('searchQuery')}
-            onChange={(_, data) => setView('searchQuery', data.value)}
-            rows={12}
-            placeholder={strings.Placeholder.TextField}
-          />
-        </FieldContainer>
-        <FieldContainer
-          iconName='Icons'
-          label={strings.IconNameLabel}
-          description={strings.IconNameDescription}
-          required={true}
-        >
-          <Input
-            value={view.get('iconName')}
-            onChange={(_, data) => setView('iconName', data.value)}
-            placeholder={strings.Placeholder.Icon}
-          />
-        </FieldContainer>
-        <FieldContainer
-          iconName='GroupList'
-          label={strings.DataSourceCategoryLabel}
-          description={strings.DataSourceCategoryDescription}
-        >
-          <Input value={context.props.dataSourceCategory} disabled={true} />
-        </FieldContainer>
-        <FieldContainer
-          iconName='GroupList'
-          label={strings.DataSourceLevelLabel}
-          description={strings.DataSourceLevelDescription}
-        >
-          <Input value={context.props.configuration?.level} disabled={true} />
-        </FieldContainer>
-      </FluentProvider>
+      <IdPrefixProvider value={fluentProviderId}>
+        <FluentProvider theme={customLightTheme} className={styles.content}>
+          <FieldContainer
+            iconName='TextNumberFormat'
+            label={strings.TitleLabel}
+            description={strings.TitleLabel}
+            required={true}
+          >
+            <Input
+              value={view.get('title')}
+              onChange={(_, data) => setView('title', data.value)}
+              placeholder={strings.Placeholder.TextField}
+            />
+          </FieldContainer>
+          <FieldContainer
+            iconName='TextAlignLeft'
+            label={strings.SearchQueryLabel}
+            description={strings.PortfolioAggregationViewSearchQueryDescription}
+            required={true}
+          >
+            <Textarea
+              defaultValue={view.get('searchQuery')}
+              onChange={(_, data) => setView('searchQuery', data.value)}
+              rows={12}
+              placeholder={strings.Placeholder.TextField}
+            />
+          </FieldContainer>
+          <FieldContainer
+            iconName='Icons'
+            label={strings.IconNameLabel}
+            description={strings.IconNameDescription}
+            required={true}
+          >
+            <Input
+              value={view.get('iconName')}
+              onChange={(_, data) => setView('iconName', data.value)}
+              placeholder={strings.Placeholder.Icon}
+            />
+          </FieldContainer>
+          <FieldContainer
+            iconName='GroupList'
+            label={strings.DataSourceCategoryLabel}
+            description={strings.DataSourceCategoryDescription}
+          >
+            <Input value={context.props.dataSourceCategory} disabled={true} />
+          </FieldContainer>
+          <FieldContainer
+            iconName='GroupList'
+            label={strings.DataSourceLevelLabel}
+            description={strings.DataSourceLevelDescription}
+          >
+            <Input value={context.props.configuration?.level} disabled={true} />
+          </FieldContainer>
+        </FluentProvider>
+      </IdPrefixProvider>
     </Panel>
   )
 }

@@ -5,7 +5,7 @@ import { TOGGLE_COLUMN_FORM_PANEL } from '../../reducer'
 import { PortfolioOverviewContext } from '../../context'
 import { IColumnFormPanelFooterProps } from './types'
 import { useConfirmationDialog } from 'pzl-react-reusable-components/lib/ConfirmDialog'
-import { Button, FluentProvider, useId } from '@fluentui/react-components'
+import { Button, FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
 import { customLightTheme } from 'pp365-shared-library'
 
 export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
@@ -14,39 +14,41 @@ export const ColumnFormPanelFooter: FC<IColumnFormPanelFooterProps> = ({
   isSaveDisabled,
   isEditing
 }) => {
-  const fluentProviderId = useId('fluent-provider')
+  const fluentProviderId = useId('fp-column-form-panel-footer')
   const context = useContext(PortfolioOverviewContext)
   const [confirmDeleteDialog, getConfirmDeleteResponse] = useConfirmationDialog()
   return (
-    <FluentProvider id={fluentProviderId} theme={customLightTheme} className={styles.root}>
-      <Button onClick={onSave} disabled={isSaveDisabled} appearance='primary'>
-        {strings.SaveButtonLabel}
-      </Button>
-      <Button
-        onClick={() => {
-          context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
-        }}
-      >
-        {strings.CancelButtonLabel}
-      </Button>
-      {isEditing && (
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider theme={customLightTheme} className={styles.root}>
+        <Button onClick={onSave} disabled={isSaveDisabled} appearance='primary'>
+          {strings.SaveButtonLabel}
+        </Button>
         <Button
-          onClick={async () => {
-            const response = await getConfirmDeleteResponse({
-              title: strings.ConfirmDeleteProjectColumnTitle,
-              subText: strings.ConfirmDeleteProjectColumnSubText,
-              responses: [
-                [strings.ConfirmDeleteResponseConfirm, true, true],
-                [strings.ConfirmDeleteResponseAbort, false, false]
-              ]
-            })
-            if (response) onDeleteColumn()
+          onClick={() => {
+            context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
           }}
         >
-          {strings.DeleteButtonLabel}
+          {strings.CancelButtonLabel}
         </Button>
-      )}
-      {confirmDeleteDialog}
-    </FluentProvider>
+        {isEditing && (
+          <Button
+            onClick={async () => {
+              const response = await getConfirmDeleteResponse({
+                title: strings.ConfirmDeleteProjectColumnTitle,
+                subText: strings.ConfirmDeleteProjectColumnSubText,
+                responses: [
+                  [strings.ConfirmDeleteResponseConfirm, true, true],
+                  [strings.ConfirmDeleteResponseAbort, false, false]
+                ]
+              })
+              if (response) onDeleteColumn()
+            }}
+          >
+            {strings.DeleteButtonLabel}
+          </Button>
+        )}
+        {confirmDeleteDialog}
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }
