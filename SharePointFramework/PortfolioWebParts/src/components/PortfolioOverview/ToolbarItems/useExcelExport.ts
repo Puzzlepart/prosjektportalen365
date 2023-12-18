@@ -23,7 +23,20 @@ export function useExcelExport(context: IPortfolioOverviewContext) {
       }
       const { selectedItems, columns, currentView } = context.state
       const { includeViewNameInExcelExportFilename } = context.props
-      const items = selectedItems?.length > 0 ? selectedItems : context.state.items
+      const items =
+        selectedItems?.length > 0
+          ? selectedItems
+          : context.state.items.filter((item) => {
+              if (Object.keys(context.state.activeFilters).length === 0) {
+                return true
+              }
+              return Object.keys(context.state.activeFilters).every((key) => {
+                const filterValues = context.state.activeFilters[key]
+                return filterValues.some((filterValue) => {
+                  return item[key] === filterValue || item[key]?.includes(filterValue)
+                })
+              })
+            })
       let fileNamePart: string
       if (includeViewNameInExcelExportFilename) {
         fileNamePart = currentView?.title.replace(/[^a-z0-9]/gi, '-')
