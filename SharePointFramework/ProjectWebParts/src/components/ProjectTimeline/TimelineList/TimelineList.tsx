@@ -37,6 +37,7 @@ export const TimelineList: FC = () => {
         resizableColumns
         columnSizingOptions={columnSizingOptions}
         containerWidthOffset={0}
+        selectedItems={context.state.selectedItems}
         onSelectionChange={onSelection}
         subtleSelection
       >

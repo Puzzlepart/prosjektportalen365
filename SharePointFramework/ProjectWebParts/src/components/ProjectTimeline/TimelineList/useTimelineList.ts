@@ -1,5 +1,5 @@
 import { SortDirection, TableColumnSizingOptions } from '@fluentui/react-components'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { ProjectTimelineContext } from '../context'
 import { useColumns } from './useColumns'
 import { useToolbarItems } from './useToolbarItems'
@@ -7,15 +7,11 @@ import { useToolbarItems } from './useToolbarItems'
 export function useTimelineList() {
   const context = useContext(ProjectTimelineContext)
   const columns = useColumns()
-  const [selectedItems, setSelectedItems] = useState<any[]>([])
-  const { menuItems, farMenuItems } = useToolbarItems(selectedItems)
+  const { menuItems, farMenuItems } = useToolbarItems()
 
   const onSelection = (_: any, data: any) => {
-    const selectedItemId = Array.from(data.selectedItems)
-    const selectedItems = selectedItemId.map((id) =>
-      context.state.data.listItems.find((_, idx) => idx === id)
-    )
-    setSelectedItems(selectedItems)
+    const selectedItemIds = Array.from(data.selectedItems)
+    context.setState({ selectedItems: selectedItemIds })
   }
 
   const columnSizingOptions: TableColumnSizingOptions = columns.reduce(

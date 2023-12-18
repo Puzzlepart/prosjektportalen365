@@ -21,6 +21,7 @@ export function useProjectTimelineState() {
   const [state, $setState] = useState<IProjectTimelineState>({
     isDataLoaded: false,
     activeFilters: {},
+    selectedItems: [],
     refetch: new Date().getTime()
   })
 

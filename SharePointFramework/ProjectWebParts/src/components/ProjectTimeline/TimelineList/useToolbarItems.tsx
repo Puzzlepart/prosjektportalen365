@@ -8,11 +8,9 @@ import { ProjectTimelineContext } from '../context'
 /**
  * Returns an array of menu items for the toolbar in the PortfolioOverview component.
  *
- * @param selectedItems An array of selected items.
- *
  * @returns An array of IListMenuItem objects representing the toolbar items.
  */
-export function useToolbarItems(selectedItems: any[]) {
+export function useToolbarItems() {
   const context = useContext(ProjectTimelineContext)
 
   /**
@@ -20,14 +18,19 @@ export function useToolbarItems(selectedItems: any[]) {
    *
    * @param item Item
    */
-  const deleteTimelineItem = async (items: any) => {
+  const deleteTimelineItem = async () => {
     const list = SPDataAdapter.portal.web.lists.getByTitle(strings.TimelineContentListName)
 
-    await items.forEach(async (item: any) => {
+    const selectedItems = context.state.selectedItems.map((id) =>
+      context.state.data.listItems.find((_, idx) => idx === id)
+    )
+
+    await selectedItems.forEach(async (item: any) => {
       await list.items.getById(item.Id).delete()
     })
 
     context.setState({
+      selectedItems: [],
       refetch: new Date().getTime()
     })
   }
@@ -65,9 +68,9 @@ export function useToolbarItems(selectedItems: any[]) {
       }),
       new ListMenuItem(strings.EditItemLabel, strings.EditItemLabel)
         .setIcon('Edit')
-        .setDisabled(selectedItems.length !== 1)
+        .setDisabled(context.state.selectedItems.length !== 1)
         .setOnClick(() => {
-          const fieldValues = new ItemFieldValues(_.first(selectedItems))
+          const fieldValues = new ItemFieldValues(_.first(context.state.selectedItems))
           context.setState({
             panel: {
               headerText: strings.EditTimelineContentText,
@@ -86,7 +89,7 @@ export function useToolbarItems(selectedItems: any[]) {
           })
         })
     ],
-    [context.props, selectedItems]
+    [context.props, context.state.selectedItems]
   )
 
   const farMenuItems = useMemo<ListMenuItem[]>(
@@ -94,12 +97,12 @@ export function useToolbarItems(selectedItems: any[]) {
       [
         new ListMenuItem(strings.DeleteItemLabel, strings.DeleteItemLabel)
           .setIcon('Delete')
-          .setDisabled(selectedItems.length === 0)
+          .setDisabled(context.state.selectedItems.length === 0)
           .setOnClick(() => {
-            deleteTimelineItem(selectedItems)
+            deleteTimelineItem()
           })
       ].filter(Boolean),
-    [context.props, selectedItems]
+    [context.props, context.state.selectedItems]
   )
 
   return { menuItems, farMenuItems }

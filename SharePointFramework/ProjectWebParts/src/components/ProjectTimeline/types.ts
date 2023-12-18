@@ -63,6 +63,11 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<ITimel
   showDetails?: { item: ITimelineItem; element: HTMLElement }
 
   /**
+   * Selected items
+   */
+  selectedItems?: any[]
+
+  /**
    * Timestamp for refetch. Changing this state variable refetches the data in
    * `useProjectTimelineDataFetch`.
    */
