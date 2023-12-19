@@ -3,7 +3,12 @@ import { flatten } from '@microsoft/sp-lodash-subset'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { PnPClientStorage, dateAdd, stringIsNullOrEmpty } from '@pnp/core'
 import '@pnp/sp/items/get-all'
-import { ISearchResult, QueryPropertyValueType, SortDirection } from '@pnp/sp/search'
+import {
+  ISearchResult,
+  QueryPropertyValueType,
+  SearchQueryInit,
+  SortDirection
+} from '@pnp/sp/search'
 import * as strings from 'ProgramWebPartsStrings'
 import * as cleanDeep from 'clean-deep'
 import { IProgramAdministrationProject } from 'components/ProgramAdministration/types'
@@ -816,25 +821,42 @@ export class SPDataAdapter
     return new PnPClientStorage().local.getOrPut(
       `HubSiteProjects_${HubSiteId}`,
       async () => {
-        const [{ PrimarySearchResults: sts_sites }, { PrimarySearchResults: items }] =
-          await Promise.all([
-            this.sp.search({
-              Querytext: `DepartmentId:{${HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
-              RowLimit: 500,
-              StartRow: 0,
-              ClientType: 'ContentSearchRegular',
-              SelectProperties: ['SPWebURL', 'Title', 'SiteId'],
-              TrimDuplicates: false
-            }),
-            this.sp.search({
-              Querytext: `DepartmentId:{${HubSiteId}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
-              RowLimit: 500,
-              StartRow: 0,
-              ClientType: 'ContentSearchRegular',
-              SelectProperties: ['GtSiteIdOWSTEXT', 'Title'],
-              TrimDuplicates: false
-            })
-          ])
+        const sitesQuery: SearchQueryInit = {
+          Querytext: `DepartmentId:{${HubSiteId}} contentclass:STS_Site NOT WebTemplate:TEAMCHANNEL`,
+          RowLimit: 500,
+          StartRow: 0,
+          ClientType: 'ContentSearchRegular',
+          SelectProperties: ['SPWebURL', 'Title', 'SiteId'],
+          TrimDuplicates: false
+        }
+
+        const siteQueryResults = await this.sp.search(sitesQuery)
+        const siteResults = [...siteQueryResults.PrimarySearchResults]
+
+        while (siteResults.length < siteQueryResults.TotalRows) {
+          const response = await this.sp.search({ ...sitesQuery, StartRow: siteResults.length })
+          siteResults.push(...response.PrimarySearchResults)
+        }
+
+        const itemsQuery: SearchQueryInit = {
+          Querytext: `DepartmentId:{${HubSiteId}} ContentTypeId:0x0100805E9E4FEAAB4F0EABAB2600D30DB70C*`,
+          RowLimit: 500,
+          StartRow: 0,
+          ClientType: 'ContentSearchRegular',
+          SelectProperties: ['GtSiteIdOWSTEXT', 'Title'],
+          TrimDuplicates: false
+        }
+
+        const itemQueryResults = await this.sp.search(itemsQuery)
+        const itemResults = [...itemQueryResults.PrimarySearchResults]
+
+        while (itemResults.length < itemQueryResults.TotalRows) {
+          const response = await this.sp.search({ ...itemsQuery, StartRow: itemResults.length })
+          itemResults.push(...response.PrimarySearchResults)
+        }
+
+        const [sts_sites, items] = await Promise.all([siteResults, itemResults])
+
         return items
           .filter(
             (item) =>
