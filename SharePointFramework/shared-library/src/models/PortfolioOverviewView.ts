@@ -221,7 +221,7 @@ export class PortfolioOverviewView {
    * Configure the view from another view (copies the columns, refiners,
    * groupBy, scope and searchQuery properties).
    *
-   * @param view View to configure from≤
+   * @param view View to configure from
    */
   public configureFrom(view: PortfolioOverviewView): PortfolioOverviewView {
     this.columns = view.columns

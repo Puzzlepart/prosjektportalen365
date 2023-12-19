@@ -40,7 +40,7 @@ export function useViewFormPanel() {
       GtPortfolioFabricIcon: view.get('iconName')
     }
     if (isEditing) {
-      context.props.dataAdapter.portalDataService.updateItemInList(
+      await context.props.dataAdapter.portalDataService.updateItemInList(
         'PORTFOLIO_VIEWS',
         currentView.id as number,
         properties
@@ -48,12 +48,8 @@ export function useViewFormPanel() {
     } else {
       properties = {
         ...properties,
-        GtPortfolioColumnsId: {
-          results: currentView.columnIds
-        },
-        GtPortfolioRefinersId: {
-          results: currentView.refinerIds
-        },
+        GtPortfolioColumnsId: currentView.columnIds,
+        GtPortfolioRefinersId: currentView.refinerIds,
         GtPortfolioGroupById: currentView.groupById,
         GtPortfolioColumnOrder: JSON.stringify(currentView.columnOrder)
       }

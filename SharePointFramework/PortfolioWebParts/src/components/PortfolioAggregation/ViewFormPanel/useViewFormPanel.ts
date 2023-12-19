@@ -30,43 +30,50 @@ export function useViewFormPanel() {
       GtSearchQuery: view.get('searchQuery'),
       GtIconName: view.get('iconName')
     }
-    if (isEditing) {
-      await context.props.dataAdapter.portalDataService.updateItemInList(
-        'DATA_SOURCES',
-        currentView.id as number,
-        properties
-      )
-      context.dispatch(
-        SET_VIEW_FORM_PANEL({
-          isOpen: false,
-          submitAction: 'edit',
-          view: currentView.update(properties)
-        })
-      )
-    } else {
-      properties = {
-        ...properties,
-        GtProjectContentColumnsId: {
-          results: currentView.columnIds
-        },
-        GtProjectContentRefinersId: {
-          results: currentView.refinerIds
-        },
-        GtProjectContentGroupById: currentView.groupById,
-        GtDataSourceCategory: context.props.dataSourceCategory,
-        GtDataSourceLevel: {
-          results: [context.props.configuration?.level].filter(Boolean)
+    try {
+      if (isEditing) {
+        await context.props.dataAdapter.portalDataService.updateItemInList(
+          'DATA_SOURCES',
+          currentView.id as number,
+          properties
+        )
+        context.dispatch(
+          SET_VIEW_FORM_PANEL({
+            isOpen: false,
+            submitAction: 'edit',
+            view: currentView.update(properties)
+          })
+        )
+      } else {
+        properties = {
+          ...properties,
+          GtProjectContentColumnsId: currentView.columnIds,
+          GtProjectContentRefinersId: currentView.refinerIds,
+          GtProjectContentGroupById: currentView.groupById,
+          GtDataSourceCategory: context.props.dataSourceCategory,
+          GtDataSourceLevel: [context.props.configuration?.level]
         }
+        const newView = await context.props.dataAdapter.portalDataService.addItemToList(
+          'DATA_SOURCES',
+          properties
+        )
+
+        context.dispatch(
+          SET_VIEW_FORM_PANEL({
+            isOpen: false,
+            submitAction: 'add',
+            view: new DataSource(
+              {
+                ...properties,
+                Id: newView.Id
+              },
+              currentView.columns
+            )
+          })
+        )
       }
-      await context.props.dataAdapter.portalDataService.addItemToList('DATA_SOURCES', properties)
-      const newView = new DataSource(properties, currentView.columns)
-      context.dispatch(
-        SET_VIEW_FORM_PANEL({
-          isOpen: false,
-          submitAction: 'add',
-          view: newView
-        })
-      )
+    } catch (error) {
+      throw new Error(error)
     }
   }
 
