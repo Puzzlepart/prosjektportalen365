@@ -123,7 +123,7 @@
             "cellType": 1,
             "x": 4,
             "y": 3,
-            "backgroundColor": "#FF6961"
+            "backgroundColor": "#FFB54C"
         },
         {
             "cellType": 1,
@@ -165,7 +165,7 @@
             "cellType": 1,
             "x": 5,
             "y": 2,
-            "backgroundColor": "#FF6961"
+            "backgroundColor": "#FFB54C"
         }
     ],
     [
@@ -189,13 +189,13 @@
             "cellType": 1,
             "x": 3,
             "y": 1,
-            "backgroundColor": "#F8D66D"
+            "backgroundColor": "#7ABD7E"
         },
         {
             "cellType": 1,
             "x": 4,
             "y": 1,
-            "backgroundColor": "#FFB54C"
+            "backgroundColor": "#F8D66D"
         },
         {
             "cellType": 1,
