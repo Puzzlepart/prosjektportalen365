@@ -46,6 +46,14 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     this._gitHubReleases = gitHubReleases
     this._helpContent = helpContent
     this._links = links
+    this.context.application.navigatedEvent.add(this, this._handleNavigatedEvent)
+    return Promise.resolve()
+  }
+
+  private async _handleNavigatedEvent(): Promise<void> {
+    const helpContent = await this._fetchHelpContent(strings.HelpContentListName)
+    this._helpContent = helpContent
+
     this._renderFooter(PlaceholderName.Bottom, {
       installEntries: this._installEntries,
       gitHubReleases: this._gitHubReleases,
@@ -175,6 +183,11 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     }
     const footerElement: HTMLDivElement = document.createElement('div')
     render(createElement(Footer, footerProps), footerElement)
+
+    if (this._bottomPlaceholder.domElement.hasChildNodes()) {
+      this._bottomPlaceholder.domElement.removeChild(this._bottomPlaceholder.domElement.firstChild)
+    }
+
     this._bottomPlaceholder.domElement.append(footerElement)
   }
 
