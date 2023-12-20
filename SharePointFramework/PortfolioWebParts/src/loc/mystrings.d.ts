@@ -37,12 +37,12 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionCurrencyPrefixLabel: string
   ColumnRenderOptionDate: string
   ColumnRenderOptionDateIncludeTimeLabel: string
-  ColumnRenderOptionFilename: string
   ColumnRenderOptionDialog: string
   ColumnRenderOptionDialogInfoTextTemplateDescription: string
   ColumnRenderOptionDialogInfoTextTemplateLabel: string
   ColumnRenderOptionDialogLinkTextLabel: string
   ColumnRenderOptionDialogShowInfoTextLabel: string
+  ColumnRenderOptionFilename: string
   ColumnRenderOptionNote: string
   ColumnRenderOptionNumber: string
   ColumnRenderOptionPercentage: string
@@ -63,7 +63,6 @@ declare interface IPortfolioWebPartsStrings {
   ColumnsListNameLabel: string
   ColumnVisibilityDescription: string
   ColumnVisibilityLabel: string
-  ColumSettingsLabel: string
   CommandBarGroupName: string
   CompactViewText: string
   ConfigItemTitleFieldDescription: string
@@ -91,21 +90,21 @@ declare interface IPortfolioWebPartsStrings {
   DataSourceListName: string
   DataSourceNotFound: string
   DefaultDataSourceViewLabel: string
-  DefaultRenderModeLabel: string
   DefaultRenderModeDescription: string
+  DefaultRenderModeLabel: string
   DefaultTimeframeEndLabel: string
   DefaultTimeframeEndValue: string
   DefaultTimeframeStartLabel: string
   DefaultTimeframeStartValue: string
-  DefaultVerticalLabel: string
   DefaultVerticalDescription: string
+  DefaultVerticalLabel: string
   DefaultViewDescription: string
   DefaultViewLabel: string
   DefaultViewSetWarningMessage: string
   DeleteButtonLabel: string
   DisplayNameDescription: string
-  DisplayNamePortfolioOverviewDescription: string
   DisplayNameLabel: string
+  DisplayNamePortfolioOverviewDescription: string
   EditColumnHeaderText: string
   EditColumnLabel: string
   EditProjectListQuickLaunch: string
@@ -117,9 +116,9 @@ declare interface IPortfolioWebPartsStrings {
   EndDateLabel: string
   ErrorBoundaryFallbackDescription: string
   ErrorBoundaryFallbackText: string
-  ExcelExportButtonLabel: string
   ErrorFetchingProjectsTitle: string
   ErrorTitle: string
+  ExcelExportButtonLabel: string
   FiltersString: string
   FilterText: string
   GeneralGroupName: string
@@ -147,8 +146,8 @@ declare interface IPortfolioWebPartsStrings {
   MeasurementValueLabel: string
   MinWidthDescription: string
   MinWidthLabel: string
-  ModalColumnEmptyListTitle: string
   ModalColumnEmptyListMessage: string
+  ModalColumnEmptyListTitle: string
   MoveLeftLabel: string
   MoveRightLabel: string
   MyProjectsHeaderText: string
@@ -161,8 +160,8 @@ declare interface IPortfolioWebPartsStrings {
   NoAccessMessage: string
   NoDefaultViewMessage: string
   NoProjectData: string
-  NoProjectsFoundTitle: string
   NoProjectsFoundMessage: string
+  NoProjectsFoundTitle: string
   NotSet: string
   OpenInNewTabLabel: string
   ParentProjectsHeaderText: string
@@ -205,8 +204,8 @@ declare interface IPortfolioWebPartsStrings {
   RenderModeLabel: string
   RenderModeListText: string
   RenderModeTilesText: string
-  ResourceAllocationInfoText: string
   ResourceAllocationGroupName: string
+  ResourceAllocationInfoText: string
   ResourceLabel: string
   RevertCustomOrderButtonText: string
   RevertCustomOrderButtonTooltip: string
@@ -236,17 +235,17 @@ declare interface IPortfolioWebPartsStrings {
   ShowHideColumnsLabel: string
   ShowProgramViewsLabel: string
   ShowProjectLogoFieldLabel: string
-  ShowRenderModeSelectorLabel: string
   ShowRenderModeSelectorDescription: string
-  ShowSearchBoxLabel: string
+  ShowRenderModeSelectorLabel: string
   ShowSearchBoxDescription: string
-  ShowSortByLabel: string
+  ShowSearchBoxLabel: string
   ShowSortByDescription: string
+  ShowSortByLabel: string
   ShowViewSelectorLabel: string
   SiteTitleLabel: string
   SortAscLabel: string
-  SortByFieldLabel: string
   SortByFieldDescription: string
+  SortByFieldLabel: string
   SortCardsByLabel: string
   SortDescLabel: string
   SortOrderDescription: string
@@ -260,8 +259,8 @@ declare interface IPortfolioWebPartsStrings {
   ToggleColumnFormPanelLabel: string
   ToggleEditViewColumnsLabel: string
   UseChangesButtonText: string
-  UseDynamicColorsLabel: string
   UseDynamicColorsDescription: string
+  UseDynamicColorsLabel: string
   ViewLessText: string
   ViewMoreText: string
   ViewNotFoundMessage: string

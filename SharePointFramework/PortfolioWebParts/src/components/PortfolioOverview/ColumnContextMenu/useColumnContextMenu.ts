@@ -122,7 +122,7 @@ export function useColumnContextMenu() {
       },
       {
         key: 'COLUMN_SETTINGS',
-        text: strings.ColumSettingsLabel,
+        text: strings.ColumnSettingsLabel,
         disabled: context.props.isParentProject,
         iconProps: { iconName: 'TableSettings' },
         subMenuProps: {

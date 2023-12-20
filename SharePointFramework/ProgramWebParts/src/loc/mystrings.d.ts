@@ -5,18 +5,21 @@ declare interface IProgramWebPartsStrings {
     ChoiceField: string
     MultiChoiceField: string
   }
-  TitleLabel: string
   Add: string
+  AddColumnLabel: string
   AddProjectDialogSearchBoxPlaceholder: string
   BarLabel: string
   Cancel: string
-  ChildrenRemoveToastTitle: string
   ChildrenRemoveToastMessage: string
+  ChildrenRemoveToastTitle: string
   CmdSelectionCountText: string
   CmdSelectionCountTooltipText: string
+  ColumnSettingsLabel: string
   CommandBarGroupName: string
+  CompactViewText: string
   ConfigItemTitleFieldDescription: string
   ConfigItemTitleFieldLabel: string
+  CustomSortsText: string
   DataSourceCategoryDescription: string
   DataSourceCategoryError: string
   DataSourceCategoryLabel: string
@@ -28,20 +31,25 @@ declare interface IProgramWebPartsStrings {
   DataSourceNotFound: string
   DefaultDataSourceViewLabel: string
   DefaultViewLabel: string
+  EditColumnLabel: string
+  EditViewText: string
   ErrorTitle: string
   ExcelExportButtonLabel: string
   FilterText: string
   GeneralGroupName: string
+  GroupByColumnLabel: string
+  NewViewText: string
+  PersonalViewsHeaderText: string
   PortfolioManagerGroupName: string
-  ProgramAdministrationAddChildsButtonLabel: string
   ProgramAdministrationAddChildsButtonDescription: string
-  ProgramAdministrationEmptyTitle: string
+  ProgramAdministrationAddChildsButtonLabel: string
   ProgramAdministrationEmptyMessage: string
+  ProgramAdministrationEmptyTitle: string
   ProgramAdministrationHeader: string
   ProgramAdministrationInfoMessage: string
   ProgramAdministrationSearchBoxPlaceholder: string
-  ProgramRemoveChildsButtonLabel: string
   ProgramRemoveChildsButtonDescription: string
+  ProgramRemoveChildsButtonLabel: string
   ProgramRemoveChildsDeletingLabel: string
   ProgramTimelineInfoText: string
   ProjectContentColumnsListName: string
@@ -59,10 +67,11 @@ declare interface IProgramWebPartsStrings {
   ShowGroupByLabel: string
   ShowSearchBoxLabel: string
   ShowViewSelectorLabel: string
+  SortAscLabel: string
+  SortDescLabel: string
   TimelineConfigurationListName: string
   TimelineContentListName: string
-  GroupByColumnLabel: string
-  CompactViewText: string
+  TitleLabel: string
 }
 
 declare module 'ProgramWebPartsStrings' {

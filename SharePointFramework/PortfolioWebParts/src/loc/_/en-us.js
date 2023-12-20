@@ -55,7 +55,6 @@ define([], function () {
     ColumnsListNameLabel: 'Columns',
     ColumnVisibilityDescription: 'Specify where the column should appear. Project frontpage, the project status page, the portfolio overview or everywhere.',
     ColumnVisibilityLabel: 'Column visibility',
-    ColumSettingsLabel: 'Column settings',
     CommandBarGroupName: 'Commandline',
     CommentLabel: 'Comment',
     CompactViewText: 'Compact list',
