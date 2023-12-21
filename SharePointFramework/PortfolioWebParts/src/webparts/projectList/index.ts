@@ -63,20 +63,6 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                   calloutWidth: 430,
                   checked: this.properties.showSearchBox
                 }),
-                PropertyFieldToggleWithCallout('showRenderModeSelector', {
-                  calloutTrigger: CalloutTriggers.Hover,
-                  key: 'showRenderModeSelectorFieldId',
-                  label: strings.ShowRenderModeSelectorLabel,
-                  calloutContent: React.createElement(
-                    'p',
-                    {},
-                    strings.ShowRenderModeSelectorDescription
-                  ),
-                  onText: strings.BooleanOn,
-                  offText: strings.BooleanOff,
-                  calloutWidth: 430,
-                  checked: this.properties.showRenderModeSelector
-                }),
                 PropertyFieldToggleWithCallout('showSortBy', {
                   calloutTrigger: CalloutTriggers.Hover,
                   key: 'showSortByFieldId',

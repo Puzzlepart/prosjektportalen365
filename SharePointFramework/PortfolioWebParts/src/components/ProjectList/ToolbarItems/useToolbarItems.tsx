@@ -70,42 +70,41 @@ export function useToolbarItems(
   const menuItems = useMemo<ListMenuItem[]>(
     () =>
       [
-        props.showRenderModeSelector &&
-          new ListMenuItem(state.selectedRenderMode?.text, null)
-            .setIcon(state.selectedRenderMode?.icon)
-            .setWidth('fit-content')
-            .setStyle({ minWidth: '145px' })
-            .setItems(
-              renderModes.map((renderMode) =>
-                new ListMenuItem(renderMode.text, null)
-                  .setIcon(renderMode.icon)
-                  .makeCheckable({
-                    name: 'renderMode',
-                    value: renderMode.value
+        new ListMenuItem(state.selectedRenderMode?.text, null)
+          .setIcon(state.selectedRenderMode?.icon)
+          .setWidth('fit-content')
+          .setStyle({ minWidth: '145px' })
+          .setItems(
+            renderModes.map((renderMode) =>
+              new ListMenuItem(renderMode.text, null)
+                .setIcon(renderMode.icon)
+                .makeCheckable({
+                  name: 'renderMode',
+                  value: renderMode.value
+                })
+                .setOnClick(() => {
+                  setState({
+                    renderMode: renderMode.value as ProjectListRenderMode,
+                    selectedRenderMode: renderMode
                   })
-                  .setOnClick(() => {
-                    setState({
-                      renderMode: renderMode.value as ProjectListRenderMode,
-                      selectedRenderMode: renderMode
-                    })
-                  })
-              ),
-              { renderMode: [state.renderMode] }
+                })
             ),
+            { renderMode: [state.renderMode] }
+          ),
         props.showSortBy &&
-          state.renderMode === 'tiles' &&
-          new ListMenuItem(null, format(strings.SortCardsByLabel, props.sortBy))
-            .setIcon(
-              state.sort?.isSortedDescending ? Icons.TextSortAscending : Icons.TextSortDescending
-            )
-            .setOnClick(() => {
-              setState({
-                sort: {
-                  fieldName: state.sort?.fieldName || props.sortBy,
-                  isSortedDescending: !state.sort?.isSortedDescending
-                }
-              })
+        state.renderMode === 'tiles' &&
+        new ListMenuItem(null, format(strings.SortCardsByLabel, props.sortBy))
+          .setIcon(
+            state.sort?.isSortedDescending ? Icons.TextSortAscending : Icons.TextSortDescending
+          )
+          .setOnClick(() => {
+            setState({
+              sort: {
+                fieldName: state.sort?.fieldName || props.sortBy,
+                isSortedDescending: !state.sort?.isSortedDescending
+              }
             })
+          })
       ].filter(Boolean),
     [state, props]
   )

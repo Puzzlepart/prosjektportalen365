@@ -235,8 +235,6 @@ declare interface IPortfolioWebPartsStrings {
   ShowHideColumnsLabel: string
   ShowProgramViewsLabel: string
   ShowProjectLogoFieldLabel: string
-  ShowRenderModeSelectorDescription: string
-  ShowRenderModeSelectorLabel: string
   ShowSearchBoxDescription: string
   ShowSearchBoxLabel: string
   ShowSortByDescription: string

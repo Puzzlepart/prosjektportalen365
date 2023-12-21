@@ -237,8 +237,6 @@ define([], function () {
     ShowHideColumnsLabel: 'Vis/skjul kolonner',
     ShowProgramViewsLabel: 'Vis programvisninger',
     ShowProjectLogoFieldLabel: 'Vis logo',
-    ShowRenderModeSelectorDescription: 'Her kan du velge om visningsvelgeren skal vises eller ikke.',
-    ShowRenderModeSelectorLabel: 'Vis visningsvelger',
     ShowSearchBoxDescription: 'Her kan du velge om søkeboksen skal vises eller ikke.',
     ShowSearchBoxLabel: 'Vis søkeboks',
     ShowSortByDescription: 'Her kan du velge om sorteringsknappen skal vises eller ikke.',

@@ -207,7 +207,6 @@ define([], function () {
     ShowHideColumnsLabel: 'Show/hide columns',
     ShowProgramViewsLabel: 'Show program views',
     ShowProjectLogoFieldLabel: 'Show logo',
-    ShowRenderModeSelectorLabel: 'Show view selector',
     ShowSearchBoxLabel: 'Show search box',
     ShowViewSelectorLabel: 'Show view selector',
     SiteTitleLabel: 'Project',

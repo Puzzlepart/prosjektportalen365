@@ -101,7 +101,6 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
       </div>
       <div
         className={styles.commandBar}
-        hidden={!props.showSearchBox && !props.showRenderModeSelector}
       >
         <div className={styles.search} hidden={!props.showSearchBox}>
           <SearchBox
@@ -119,9 +118,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             appearance='filled-lighter'
           />
         </div>
-        <div hidden={!props.showRenderModeSelector && !props.showSortBy}>
-          <Toolbar items={menuItems} />
-        </div>
+        <Toolbar items={menuItems} />
       </div>
       {state.isDataLoaded && isEmpty(projects) && (
         <div className={styles.emptyMessage}>
@@ -155,7 +152,6 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
 ProjectList.defaultProps = {
   sortBy: 'Title',
   showSearchBox: true,
-  showRenderModeSelector: true,
   showSortBy: true,
   defaultRenderMode: 'tiles',
   defaultVertical: 'my_projects',

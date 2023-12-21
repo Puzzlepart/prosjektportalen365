@@ -84,11 +84,6 @@ export interface IProjectListProps extends IBaseComponentProps {
   showSearchBox?: boolean
 
   /**
-   * Show render mode selector
-   */
-  showRenderModeSelector?: boolean
-
-  /**
    * Show sort by button
    */
   showSortBy?: boolean
