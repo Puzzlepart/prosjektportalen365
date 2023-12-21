@@ -762,13 +762,12 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "{{ControlId_ProgramTimelineWebPart}}",
+                                    "Id": "{{ControlId_ProjectTimelineWebPart}}",
                                     "Properties": {
                                         "listName": "Tidslinjeinnhold",
                                         "showTimeline": true,
                                         "showTimelineListCommands": true,
                                         "showTimelineList": true,
-                                        "infoText": "Her listes listeelementene for programmet. Her kan du redigere og legge til nye elementer. Dette vil synkroniseres til listen på hubområdet. For å zoome inn/ut i tidslinje: ALT+Musehjul",
                                         "showProjectDeliveries": false,
                                         "projectDeliveriesListName": "Prosjektleveranser",
                                         "configItemTitle": "Prosjektleveranse"
