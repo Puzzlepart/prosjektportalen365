@@ -1,6 +1,6 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-extension-manifest.schema.json",
-  "id": "2511e707-1b8a-4dc3-88d1-b7002eb3ce54",
+  "id": "1dd9fdb3-df0f-4248-a869-ca6f512e3d0f",
   "alias": "RiskActionPlanner",
   "componentType": "Extension",
   "extensionType": "FieldCustomizer",
