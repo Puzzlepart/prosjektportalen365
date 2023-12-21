@@ -62,7 +62,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       // eslint-disable-next-line default-case
       switch (this._validation) {
         case ProjectSetupValidation.InvalidWebLanguage: {
-          await deleteCustomizer(this, false)
+          await deleteCustomizer(this)
           throw new ProjectSetupError(
             'InvalidWebLanguage',
             strings.InvalidLanguageErrorMessage,
@@ -70,7 +70,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           )
         }
         case ProjectSetupValidation.IsHubSite: {
-          await deleteCustomizer(this, false)
+          await deleteCustomizer(this)
           throw new ProjectSetupError(
             'IsHubSite',
             strings.IsHubSiteErrorMessage,
@@ -160,7 +160,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         await this._ensureParentProjectPatch()
       }
 
-      await deleteCustomizer(this, !this.properties.skipReload)
+      await deleteCustomizer(this)
+      if(!this.properties.skipReload) {
+        window.location.href = this.context.pageContext.web.absoluteUrl
+      }
     } catch (error) {
       this._renderErrorDialog({ error })
     }
@@ -277,7 +280,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       version: this.version,
       onDismiss: async () => {
         if (this._isSetup) {
-          await deleteCustomizer(this, false)
+          await deleteCustomizer(this)
         }
         this._unmount(placeholder)
       },

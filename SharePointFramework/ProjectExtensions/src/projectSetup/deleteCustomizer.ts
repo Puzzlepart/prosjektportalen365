@@ -6,11 +6,9 @@ import ProjectSetup from 'projectSetup'
  * Delete customizer for the specified project setup instance.
  *
  * @param instance Project setup instance
- * @param reloadAfterRemoval Reload page after the customizer has been removed from the web
  */
 export async function deleteCustomizer(
-  instance: ProjectSetup,
-  reloadAfterRemoval: boolean
+  instance: ProjectSetup
 ): Promise<void> {
   const web = instance.sp.web as IWeb
   const customActions = await web.userCustomActions<
@@ -26,8 +24,5 @@ export async function deleteCustomizer(
       await web.userCustomActions.getById(customAction.Id).delete()
       break
     }
-  }
-  if (reloadAfterRemoval) {
-    window.location.href = window.location.href
   }
 }
