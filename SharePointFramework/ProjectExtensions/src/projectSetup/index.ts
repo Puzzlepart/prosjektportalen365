@@ -161,7 +161,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       }
 
       await deleteCustomizer(this)
-      if(!this.properties.skipReload) {
+      if (!this.properties.skipReload) {
         window.location.href = this.context.pageContext.web.absoluteUrl
       }
     } catch (error) {

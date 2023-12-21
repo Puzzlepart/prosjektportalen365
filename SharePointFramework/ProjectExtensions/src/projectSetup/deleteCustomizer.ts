@@ -7,9 +7,7 @@ import ProjectSetup from 'projectSetup'
  *
  * @param instance Project setup instance
  */
-export async function deleteCustomizer(
-  instance: ProjectSetup
-): Promise<void> {
+export async function deleteCustomizer(instance: ProjectSetup): Promise<void> {
   const web = instance.sp.web as IWeb
   const customActions = await web.userCustomActions<
     { Id: string; ClientSideComponentId: string }[]
