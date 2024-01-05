@@ -146,7 +146,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
         return {
           Url: item.GtLinkUrl.Url,
           Description: item.GtLinkUrl.Description,
-          Level: item.Level
+          Level: item.GtLinkLevel
         }
       })
     } catch (error) {
