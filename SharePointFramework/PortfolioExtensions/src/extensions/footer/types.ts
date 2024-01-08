@@ -38,6 +38,7 @@ export class InstallationEntry {
     this.installVersion = Version.tryParse(
       this.fullInstallVersion.substring(0, this.fullInstallVersion.lastIndexOf('.'))
     )
+    this.installChannel = entryItem.InstallChannel
   }
 }
 
