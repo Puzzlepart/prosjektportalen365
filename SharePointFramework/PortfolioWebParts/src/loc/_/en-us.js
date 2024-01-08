@@ -38,7 +38,7 @@ define([], function () {
     ColumnRenderOptionNote: 'Note',
     ColumnRenderOptionNumber: 'Number',
     ColumnRenderOptionPercentage: 'Percentage',
-    ColumnRenderOptionProjectInformationModal: 'Projectinformation',
+    ColumnRenderOptionProjectInfo: 'Projectinformation',
     ColumnRenderOptionTags: 'Labels',
     ColumnRenderOptionTagsValueSeparatorDescription: 'Enter a character to be used to separate values in the label field. Default is semicolon.',
     ColumnRenderOptionTagsValueSeparatorLabel: 'Separator for values',

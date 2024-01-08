@@ -34,7 +34,7 @@ List.defaultProps = {
   items: [],
   columns: [],
   menuItems: [],
-  isListLayoutModeJustified: true,
+  isListLayoutModeJustified: false,
   selectionMode: SelectionMode.multiple,
   constrainMode: ConstrainMode.unconstrained,
   scrollablePane: {

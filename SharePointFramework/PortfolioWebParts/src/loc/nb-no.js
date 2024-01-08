@@ -47,7 +47,7 @@ define([], function () {
     ColumnRenderOptionNote: 'Notat',
     ColumnRenderOptionNumber: 'Tall',
     ColumnRenderOptionPercentage: 'Prosent',
-    ColumnRenderOptionProjectInformationModal: 'Prosjektinformasjon',
+    ColumnRenderOptionProjectInfo: 'Prosjektinformasjon',
     ColumnRenderOptionTags: 'Etiketter',
     ColumnRenderOptionTagsValueSeparatorDescription: 'Angi et tegn som skal brukes for å skille verdier i etikettfeltet. Standard er semikolon.',
     ColumnRenderOptionTagsValueSeparatorLabel: 'Separator for verdier',

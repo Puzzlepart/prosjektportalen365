@@ -46,7 +46,7 @@ declare interface IPortfolioWebPartsStrings {
   ColumnRenderOptionNote: string
   ColumnRenderOptionNumber: string
   ColumnRenderOptionPercentage: string
-  ColumnRenderOptionProjectInformationModal: string
+  ColumnRenderOptionProjectInfo: string
   ColumnRenderOptionTags: string
   ColumnRenderOptionTagsValueSeparatorDescription: string
   ColumnRenderOptionTagsValueSeparatorLabel: string

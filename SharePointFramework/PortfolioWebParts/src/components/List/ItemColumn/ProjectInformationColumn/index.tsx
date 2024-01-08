@@ -56,7 +56,7 @@ export const ProjectInformationColumn: ColumnRenderComponent<IProjectInformation
 ProjectInformationColumn.defaultProps = {
   page: 'Portfolio'
 }
-ProjectInformationColumn.key = 'projectinformationmodal'
-ProjectInformationColumn.id = 'projectinformationmodal'
-ProjectInformationColumn.displayName = strings.ColumnRenderOptionProjectInformationModal
+ProjectInformationColumn.key = 'projectinfo'
+ProjectInformationColumn.id = 'projectinfo'
+ProjectInformationColumn.displayName = strings.ColumnRenderOptionProjectInfo
 ProjectInformationColumn.iconName = 'Info'
