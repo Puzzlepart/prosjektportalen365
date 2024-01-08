@@ -38,6 +38,7 @@ declare interface IProgramWebPartsStrings {
   FilterText: string
   GeneralGroupName: string
   GroupByColumnLabel: string
+  ListViewText: string
   NewViewText: string
   PersonalViewsHeaderText: string
   PortfolioManagerGroupName: string

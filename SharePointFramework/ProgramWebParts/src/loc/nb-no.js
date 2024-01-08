@@ -39,6 +39,7 @@ define([], function () {
     FilterText: 'Filtrer',
     GeneralGroupName: 'Generelt',
     GroupByColumnLabel: 'Grupper etter {0}',
+    ListViewText: 'Liste',
     NewViewText: 'Opprett ny visning',
     PersonalViewsHeaderText: 'Personlige visninger',
     PortfolioManagerGroupName: 'Porteføljeinnsyn',
