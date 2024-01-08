@@ -19,16 +19,19 @@
       <JSLink>clienttemplates.js</JSLink>
     </View>
   </pnp:Views>
-  <pnp:DataRows KeyColumn="GtLinkUrl" UpdateBehavior="Skip">
+  <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
     <pnp:DataRow>
+      <pnp:DataValue FieldName="Title">Prosjektportalen brukermanual</pnp:DataValue>
       <pnp:DataValue FieldName="GtLinkUrl">https://puzzlepart.github.io/prosjektportalen-manual,Prosjektportalen brukermanual</pnp:DataValue>
       <pnp:DataValue FieldName="GtLinkLevel">Medlem</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
+      <pnp:DataValue FieldName="Title">Prosjektveiviseren</pnp:DataValue>
       <pnp:DataValue FieldName="GtLinkUrl">https://prosjektveiviseren.digdir.no,Prosjektveiviseren</pnp:DataValue>
       <pnp:DataValue FieldName="GtLinkLevel">Medlem</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
+      <pnp:DataValue FieldName="Title">Prosjekt og Porteføljeverktøy: Kurs fra KS i Prosjektportalen</pnp:DataValue>
       <pnp:DataValue FieldName="GtLinkUrl">https://www.kslaring.no/local/course_page/home_page.php?id=189&amp;start=0,Prosjekt og Porteføljeverktøy: Kurs fra KS i Prosjektportalen</pnp:DataValue>
       <pnp:DataValue FieldName="GtLinkLevel">Medlem</pnp:DataValue>
     </pnp:DataRow>
