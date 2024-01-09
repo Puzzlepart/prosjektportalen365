@@ -299,7 +299,7 @@ export interface IPortfolioWebPartsDataAdapter {
 
   /**
    * Update project content column with new values for properties `GtColMinWidth` and `GtColMaxWidth`,
-   * aswell as the `GtFieldDataType` property if parameter `persistRenderAs` is true.
+   * as well as the `GtFieldDataType` property if parameter `persistRenderAs` is true.
    *
    * @param column Project content column
    * @param persistRenderAs Persist render as property

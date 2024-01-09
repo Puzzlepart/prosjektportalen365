@@ -7,7 +7,7 @@ import { ICustomEditPanelProps } from './types'
 
 /**
  * Hook for the `CustomEditPanel` model. This hook is used to get and set the values for
- * the fields in the `CustomEditPanel`, aswell as to transform the values to the correct type
+ * the fields in the `CustomEditPanel`, as well as to transform the values to the correct type
  * for the `property` object that can be sent as a request body to the API.
  *
  * @param props - The `CustomEditPanel` props.

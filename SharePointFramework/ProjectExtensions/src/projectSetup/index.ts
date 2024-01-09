@@ -251,7 +251,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Render `ProgressDialog` passing the `props` aswell
+   * Render `ProgressDialog` passing the `props` as well
    * as the current version of the extension (`this.version`)
    *
    * @param props - Props

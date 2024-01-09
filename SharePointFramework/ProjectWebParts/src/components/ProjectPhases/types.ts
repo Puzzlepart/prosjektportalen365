@@ -49,7 +49,7 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
 
   /**
    * Use and run hooks when switching phases. Needs to specify `hookUrl` and `hookAuth`
-   * aswell as setting this to `true` to use this functionality.
+   * as well as setting this to `true` to use this functionality.
    */
   usePhaseHooks: boolean
 

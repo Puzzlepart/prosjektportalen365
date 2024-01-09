@@ -72,7 +72,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
 
   /**
    * Fetch term field context. Fetches the `InternalName` and `TermSetId` for the field,
-   * aswell as the `InternalName` for the text field.
+   * as well as the `InternalName` for the text field.
    *
    * @param fieldName Field name for phase
    */

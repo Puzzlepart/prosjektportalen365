@@ -45,7 +45,7 @@ export class ProjectDataService extends DataService<IProjectDataServiceParams> {
 
   /**
    * Creates a new instance of `ProjectDataService`. Initialize the storage and logger,
-   * aswell as configuring the SPFx context and setting the web from `params.webUrl`.
+   * as well as configuring the SPFx context and setting the web from `params.webUrl`.
    *
    * @param _params - Parameters
    */

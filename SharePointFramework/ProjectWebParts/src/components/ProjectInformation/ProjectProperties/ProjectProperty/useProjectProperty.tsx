@@ -18,7 +18,7 @@ import {
  * @param props Props for the `ProjectProperty` component
  *
  * @returns a render function `renderValueForField` for the `ProjectProperty` component,
- * aswell as the `displayMode` for the `ProjectProperty` component.
+ * as well as the `displayMode` for the `ProjectProperty` component.
  */
 export function useProjectProperty(props: IProjectPropertyProps) {
   const context = useProjectInformationContext()

@@ -70,7 +70,7 @@ export abstract class BasePortfolioWebPart<
 
   /**
    * Setup the web part initializing the SPFI instance and the data adapter,
-   * aswell as the logger.
+   * as well as the logger.
    */
   private async _setup() {
     this.sp = createSpfiInstance(this.context)

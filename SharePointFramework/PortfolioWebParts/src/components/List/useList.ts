@@ -11,7 +11,7 @@ import { DetailsListLayoutMode, IColumn, Target } from '@fluentui/react'
  * @param props - The props for the list.
  *
  * @returns An object containing the properties needed for rendering a list, returns
- * the provided props aswell as the `onRenderItemColumn`, `onRenderDetailsHeader`,
+ * the provided props as well as the `onRenderItemColumn`, `onRenderDetailsHeader`,
  *  `columns` and `layoutMode` properties that is calculated based on the provided props.
  */
 export function useList(props: IListProps<any>) {
