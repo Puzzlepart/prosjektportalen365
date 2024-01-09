@@ -161,6 +161,7 @@ ProjectList.defaultProps = {
   defaultVertical: 'my_projects',
   verticals: ProjectListVerticals,
   hideVerticals: [],
+  useDynamicColors: true,
   showProjectLogo: true,
   projectMetadata: [
     'ProjectOwner',
