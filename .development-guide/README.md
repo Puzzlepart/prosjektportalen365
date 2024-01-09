@@ -1,45 +1,45 @@
 <!-- ⚠️ This README has been generated from the file(s) ".development-guide/.README" ⚠️--><p align="center">
-  <img src="../assets/PP365 Piktogram Flat DIGITAL.png" alt="Logo" width="119" height="119" />
+  <img src="../assets/pp365_logo.png" alt="Logo" width="119" height="119" />
 </p> <p align="center">
   <b>Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.</b></br>
-  <sub>Development guide<sub>
+  <sub>Utviklerguide<sub>
 </p>
 
 <br />
 
 
 <details>
-<summary>📖 Table of Contents</summary>
+<summary>📖 Innholdsfortegnelse</summary>
 <br />
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#table-of-contents)
 
 ## ➤ Table of Contents
 
-* [➤ Site Design / Site Scripts](#-site-design--site-scripts)
-* [➤ JS Provisioning Template](#-js-provisioning-template)
-* [➤ Templates](#-templates)
-	* [JSON provisioning template](#json-provisioning-template)
-		* [Building JSON templates](#building-json-templates)
-	* [PnP templates](#pnp-templates)
-		* [Portfolio](#portfolio)
-		* [Content templates](#content-templates)
-* [➤ NPM](#-npm)
-* [➤ Building a new release](#-building-a-new-release)
-* [➤ Building only PnP templates](#-building-only-pnp-templates)
-* [➤ Continuous integration](#-continuous-integration)
-	* [CI (releases/*)](#ci-releases)
-	* [Build and install (dev)](#build-and-install-dev)
-	* [CI (channels/test)](#ci-channelstest)
-	* [Build release (main)](#build-release-main)
-* [➤ Creating a new release](#-creating-a-new-release)
-	* [Patch-release](#patch-release)
-	* [Minor-release](#minor-release)
-* [➤ Versioning](#-versioning)
-* [➤ Installation channels](#-installation-channels)
-	* [Generating a new channel configuration](#generating-a-new-channel-configuration)
-	* [Building a new release for a channel](#building-a-new-release-for-a-channel)
-* [➤ README generation](#-readme-generation)
+	* [➤ Site Design / Site Scripts](#-site-design--site-scripts)
+	* [➤ JS Provisjoneringsmal](#-js-provisjoneringsmal)
+	* [➤ Maler](#-maler)
+		* [JSON-provisjonmal](#json-provisjonmal)
+			* [Bygging av JSON-maler](#bygging-av-json-maler)
+		* [PnP-maler](#pnp-maler)
+			* [Portefølje](#porteflje)
+			* [Innholdsmaler](#innholdsmaler)
+	* [➤ NPM](#-npm)
+	* [➤ Bygge en ny utgivelse](#-bygge-en-ny-utgivelse)
+* [➤ For å kun bygge PnP-maler, bruk parameteren -SkipBuildSharePointFramework](#-for--kun-bygge-pnp-maler-bruk-parameteren--skipbuildsharepointframework)
+	* [➤ Continuous Integration](#-continuous-integration)
+		* [CI (releases/*)](#ci-releases)
+		* [Bygg og installer (dev)](#bygg-og-installer-dev)
+		* [CI (channels/test)](#ci-channelstest)
+		* [Bygg utgivelse (main)](#bygg-utgivelse-main)
+	* [➤ Opprettelse av en ny versjon](#-opprettelse-av-en-ny-versjon)
+		* [Patch-utgivelse](#patch-utgivelse)
+		* [Minor-utgivelse](#minor-utgivelse)
+	* [➤ Versjonering](#-versjonering)
+	* [➤ Installasjonskanaler](#-installasjonskanaler)
+		* [Generere en ny kanalkonfigurasjon](#generere-en-ny-kanalkonfigurasjon)
+		* [Bygge en ny versjon for en kanal](#bygge-en-ny-versjon-for-en-kanal)
+	* [➤ README generering](#-readme-generering)
 </details>
 
 
@@ -47,20 +47,21 @@
 
 ## ➤ Site Design / Site Scripts
 
-Everything related to the site design and the corresponding site scripts reside in the folder **SiteScripts**. 
+Alt som er relatert til `site design` og tilhørende `site scripts` befinner seg i mappen **SiteScripts**.
 
-The source files are found in the **src** folder.
+Kildefilene finnes i mappen **src**.
 
 
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#js-provisioning-template)
 
-## ➤ JS Provisioning Template
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#js-provisjoneringsmal)
 
-Not everything we want to do is available with site designs, so we're also using [sp-js-provisioning](https://github.com/Puzzlepart/sp-js-provisioning). Please note that we're using the Puzzlepart fork from **pnp**.
+## ➤ JS Provisjoneringsmal
 
-With our PnP content templates (see **3.2.2**) we're provisioning a default template. The default templates for our supported languages are built from the source file [_JsonTemplate.json](../Templates/_JsonTemplate.json).
+Ikke alt vi ønsker å gjøre er tilgjengelig med `site design`, så vi bruker også [sp-js-provisioning](https://github.com/Puzzlepart/sp-js-provisioning). Vær oppmerksom på at vi bruker `Puzzlepart-branch` fra **pnp**.
 
-Please note the **Parameters** object.
+Med våre PnP-innholdsmaler (se **3.2.2**) setter vi opp en standardmal. Standardmalene for våre støttede språk er bygget fra kildefilen [_JsonTemplate.json](../Templates/_JsonTemplate.json).
+
+Vennligst merk **Parameters**-objektet.
 
 ```json
 {
@@ -72,19 +73,19 @@ Please note the **Parameters** object.
 }
 ```
 
-| Parameter                  | Description                                                                           |
-| -------------------------- | ------------------------------------------------------------------------------------- |
-| ProvisionSiteFields        | The site fields in this group will be copied to the project site during provisioning. |
-| ProjectContentTypeId       | Content type ID for the Project properties content type                               |
-| ProjectStatusContentTypeId | Content type ID for the Project status content type                                   |
+| Parameter                  | Beskrivelse                                                                                 |
+| -------------------------- | ------------------------------------------------------------------------------------------- |
+| ProvisionSiteFields        | Feltene på nettstedet i denne gruppen vil bli kopiert til prosjektnettstedet under oppsett. |
+| ProjectContentTypeId       | Innholdstype-ID for egenskapsinnholdstypen for prosjektet                                   |
+| ProjectStatusContentTypeId | Innholdstype-ID for innholdstypen for prosjektstatus                                        |
 
-In addition to the parameters specified in [Standardmal.txt](../Templates/Portfolio/Prosjektmaler/Standardmal.txt), there's also the following parameters:
+I tillegg til parameterne som er spesifisert i [Standardmal.txt](../Templates/Portfolio/Prosjektmaler/Standardmal.txt), er det også følgende parametere:
 
-| Parameter  | Description                                                                           |
-| ---------- | ------------------------------------------------------------------------------------- |
-| TermSetIds | An map of term set fields and term set id. Used to override the default term set ids. |
+| Parameter  | Beskrivelse                                                                               |
+| ---------- | ----------------------------------------------------------------------------------------- |
+| TermSetIds | Et kart over termsettfelt og termsett-ID. Brukes til å overstyre standard termsett-ID-er. |
 
-Say you'd like to use the term set with ID **54da9f47-c64e-4a26-80f3-4d3c3fa1b7b2** for project phase. The internal field name for project phase is **GtProjectPhase**. With the default template, the **Parameters** object would look like this:
+Si at du vil bruke termsettet med ID-en **54da9f47-c64e-4a26-80f3-4d3c3fa1b7b2** for prosjektfase. Det interne feltnavnet for prosjektfasen er **GtProjectPhase**. Med standardmalen ville **Parameters**-objektet se slik ut:
 
 ```json
 {
@@ -101,33 +102,32 @@ Say you'd like to use the term set with ID **54da9f47-c64e-4a26-80f3-4d3c3fa1b7b
 
 
 
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#maler)
 
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#templates)
+## ➤ Maler
 
-## ➤ Templates
+### JSON-provisjonmal
 
-### JSON provisioning template
+På rotnivået i mappen **Maler** finner du følgende filer:
 
-At the root level of the **Templates** folder, the following files are found:
+| Fil/Mappe                       | Beskrivelse                                                                                  |
+| ------------------------------- | -------------------------------------------------------------------------------------------- |
+| `Clean-Resx.ps1`                | Skript for å fjerne ubrukte **.resx**-ressurser                                              |
+| `Find-FieldUsage.ps1`           | Skript for å finne bruk av felt                                                              |
+| `Get-ComponentProperties.ps1`   | Skript for å hente komponentegenskaper fra `<pnp:ClientSidePage>`-instanser                  |
+| `Encode-JSON.ps1`               | Skript for å ta innholdet av en JSON-fil, kode og minimere det, og lagre det i en `.txt`-fil |
+| `Search-Resx.ps1`               | Skript for å søke etter ubrukte **.resx**-ressurser                                          |
+| `tasks/generateResxJson.js`     | Node-skript for å generere en JSON-representasjon av **.resx**-filene                        |
+| `tasks/generateJsonTemplate.js` | Node-skript for å generere JSON-maler for hver språk                                         |
+| `_JsonTemplate.json`            | JSON-prosjektmal                                                                             |
 
-| File/Folder                     | Description                                                                                   |
-| ------------------------------- | --------------------------------------------------------------------------------------------- |
-| `Clean-Resx.ps1`                | Script to remove unused **.resx** resources                                                   |
-| `Find-FieldUsage.ps1`           | Script to find field usage                                                                    |
-| `Get-ComponentProperties.ps1`   | Script to get component properties from `<pnp:ClientSidePage>` instances                      |
-| `Encode-JSON.ps1`               | Script to take the content of a JSON file, encode and minfiy at, and store it in a `.txt`file |
-| `Search-Resx.ps1`               | Script to search for unused **.resx** resources                                               |
-| `tasks/generateResxJson.js`     | Node script to generate a JSON representation of the **.resx** files                          |
-| `tasks/generateJsonTemplate.js` | Node script to generate JSON templates for each language                                      |
-| `_JsonTemplate.json`            | JSON project template                                                                         |
+#### Bygging av JSON-maler
 
-#### Building JSON templates
+Ved endringer i JSON-malen kan npm-oppgaven `watch` brukes. Den overvåker `_JsonTemplate.json` og bygger lokalversjon av dette til den tilsvarende innholdsmalen.
 
-When doing changes to the JSON template the npm task `watch` can be used. This watches `_JsonTemplate.json` and builds localized version of this to the corresponding Content template.
+Ressurser fra **.resx**-filene i mappen "Portfolio" kan brukes i malen ved å bruke `{{tokens}}`.
 
-Resources from the **.resx** files in the folder Portfolio can be used in the template using `{{tokens}}`.
-
-**Example:**
+**Eksempel:**
 
 ```json
 {
@@ -138,34 +138,34 @@ Resources from the **.resx** files in the folder Portfolio can be used in the te
 }
 ```
 
-### PnP templates
+### PnP-maler
 
-In addition we have two PnP provisioning templates. 
+I tillegg har vi to PnP-provisjonsmaler.
 
-| Template                            | Description      |
-| ----------------------------------- | ---------------- |
-| [Portfolio](../Templates/Portfolio) | Portfolio assets |
-| [Taxonomy](../Templates/Taxonomy)   | Taxonomy         |
+| Mal                                 | Beskrivelse         |
+| ----------------------------------- | ------------------- |
+| [Portfolio](../Templates/Portfolio) | Porteføljeelementer |
+| [Taxonomy](../Templates/Taxonomy)   | Taksonomi           |
 
-#### Portfolio
+#### Portefølje
 
-| File/Folder        | Description                                                    |
-| ------------------ | -------------------------------------------------------------- |
-| Objects            | PnP assets. See https://github.com/pnp/PnP-Provisioning-Schema |
-| SiteAssets         | Files to be uploaded to SiteAssets                             |
-| Portfolio.xml      | Main template file                                             |
-| `Resources.*.resx` | Resource files                                                 |
+| Fil/Mappe          | Beskrivelse                                                      |
+| ------------------ | ---------------------------------------------------------------- |
+| Objects            | PnP-elementer. Se https://github.com/pnp/PnP-Provisioning-Schema |
+| SiteAssets         | Filer som skal lastes opp til SiteAssets                         |
+| Portfolio.xml      | Hovedmal-fil                                                     |
+| `Resources.*.resx` | Ressursfiler                                                     |
 
-#### Content templates
+#### Innholdsmaler
 
-Content templates are found in the **Content** folder. The name of the template follows the following pattern:
+Innholdsmaler finnes i mappen **Innhold**. Navnet på malen følger følgende mønster:
 
 `Portfolio_content.{language_code}.xml`
 `Portfolio_content_BA.{language_code}.xml`
 
-`language_code` can be for example **no-NB** or **en-US**.
+`language_code` kan for eksempel være **no-NB** eller **en-US**.
 
-The templates contains the JSON template(s), planner tasks and phase checklist items.
+Malene inneholder JSON-mal(er), oppgaver for planleggeren og elementer for sjekkliste for faser.
 
 
 
@@ -173,175 +173,171 @@ The templates contains the JSON template(s), planner tasks and phase checklist i
 
 ## ➤ NPM
 
-The SharePoint Framework solutions are published to `npm` independently.
+SharePoint Framework-løsninger publiseres uavhengig til `npm`.
 
-- [@Shared](https://www.npmjs.com/package/pp365-shared)
+- [PortfolioWebParts](https://www.npmjs.com/package/pp365-portfoliowebparts)
+- [PortfolioExtensions](https://www.npmjs.com/package/pp365-portfolioextensions)
+- [ProgramWebParts](https://www.npmjs.com/package/pp365-programwebparts)
 - [ProjectWebParts](https://www.npmjs.com/package/pp365-projectwebparts)
 - [ProjectExtensions](https://www.npmjs.com/package/pp365-projectextensions)
-- [PortfolioWebParts](https://www.npmjs.com/package/pp365-portfoliowebparts)
-- [ProgramWebParts](https://www.npmjs.com/package/pp365-programwebparts)
-- [PortfolioExtensions](https://www.npmjs.com/package/pp365-portfolioextensions)
+- [shared-library](https://www.npmjs.com/package/pp365-shared-library)
 
 
 
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#building-a-new-release)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#bygge-en-ny-utgivelse)
 
-## ➤ Building a new release
+## ➤ Bygge en ny utgivelse
 
-To build a new release make sure your on the `main` branch and in sync with **origin**.
+For å lage en ny Prosjektportalen utgivelse, forsikre deg om at du er på `main` branch og synkronisert med **origin**.
 
-Run the PowerShell script `Build-Release.ps1` located in the `Install` directory:
+Kjør PowerShell-skriptet `Build-Release.ps1` som ligger i `Install`-mappen:
 
 ```powershell
 ./Install/Build-Release.ps1
+
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#for--kun-bygge-pnp-maler-bruk-parameteren--skipbuildsharepointframework)
+
+# ➤ For å kun bygge PnP-maler, bruk parameteren -SkipBuildSharePointFramework
 ```
 
-The installation package should be found in the release folder.
-
-
-
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#building-only-pnp-templates)
-
-## ➤ Building only PnP templates
-
-To only build PnP templates make sure your on the `main` branch and in sync with **origin**.
-
-Run the PowerShell script `Build-Release.ps1` located in the `Install` directory:
-
-```powershell
-./Install/Build-Release.ps1 -SkipBuildSharePointFramework
-```
-
-The PnP templates should be found in the release folder.
+Installasjonspakken skal finnes i utgivelsesmappen.
 
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#continuous-integration)
 
-## ➤ Continuous integration
+## ➤ Continuous Integration
 
-We have set up continuous integration using GitHub actions.
+Vi har satt opp continous integration (CI) ved hjelp av GitHub-handlinger.
 
 ### CI (releases/*)
+
 [![CI (releases)](https://github.com/Puzzlepart/prosjektportalen365/actions/workflows/ci-releases.yml/badge.svg?branch=releases/1.9)](https://github.com/Puzzlepart/prosjektportalen365/actions/workflows/ci-releases.yml)
 
-Keywords can be used in the commit message to avoid (or force) the CI running some of the jobs.
+Nøkkelord kan brukes i commit-meldingen for å unngå (eller tvinge) at CI kjører noen av jobbene.
 
-- `[skip-ci]` to avoid the _Build release package_ job starting. This will result in no jobs starting as the _Upgrade_ and _Install_ jobs are dependent on the job _Build release package_
-- `[skip-upgrade]` to avoid the _Uprade_ job starting. This will also skip the _Install_ job as it's dependent on _Upgrade_
-- `[skip-install]` to avoid the _Install_ job starting. 
-- `[upgrade-all-sites-to-latest]` to run script `UpgradeAllSitesToLatest.ps1` in CI mode
+- `[skip-ci]` for å unngå at jobben "Bygg utgivelsespakke" starter. Dette vil resultere i at ingen jobber starter, da jobbene "Oppgrader" og "Installer" er avhengige av jobben "Bygg utgivelsespakke".
+- `[skip-upgrade]` for å unngå at jobben "Oppgrader" starter. Dette vil også hoppe over jobben "Installer" da den er avhengig av "Oppgrader".
+- `[skip-install]` for å unngå at jobben "Installer" starter.
+- `[upgrade-all-sites-to-latest]` for å kjøre skriptet `UpgradeAllSitesToLatest.ps1` i CI-modus.
 
-### Build and install (dev)
+### Bygg og installer (dev)
 
-[ci-releases](../.github/workflows/ci-releases.yml) builds a new release on _push_ to **releases/***.
+[ci-releases](../.github/workflows/ci-releases.yml) bygger en ny utgivelse ved _push_ til **releases/***.
 
-It runs [Build-Release.ps1](../Install/Build-Release.ps1) with `-CI` param, then runs [Install.ps1](../Install/Install.ps1) (also with `-CI` param, this time with a encoded string consisting of the username and password, stored in a GitHub secret). The URL to install to is stored in the GitHub secret `CI_DEV_TARGET_URL`.
+Den kjører [Build-Release.ps1](../Install/Build-Release.ps1) med parameteren `-CI`, deretter kjører den [Install.ps1](../Install/Install.ps1) (også med `-CI` parameter, denne gangen med en kryptert streng som består av brukernavnet og passordet, lagret i en GitHub secret). URL-en å installere til er lagret i GitHub secret `CI_DEV_TARGET_URL`.
 
-With the current approach, with no cache (as it runs `npm ci`), a full run takes about 25-35 minutes.
+Med gjeldende tilnærming, uten hurtigbuffer (da den kjører `npm ci`), tar en full kjøring omtrent 25-35 minutter.
 
-![image-20201121133532960](assets/image-20201121133532960.png)
+![image](assets/ci.png)
 
 ### CI (channels/test)
-Keyword `[channels/test]` needs to be used in the commit message for this CI to run.
 
-It will build a package for channel [test](../channels/test.json) and deploy it to the URL specified in `SP_URL_TEST`.
+Nøkkelordet `[channels/test]` må brukes i commit-meldingen for at denne CI-en skal kjøre.
 
-### Build release (main)
+Den vil bygge en pakke for kanalen [test](../channels/test.json) og distribuere den til URL-en som er spesifisert i `SP_URL_TEST`.
 
-[build-release](../.github/workflows/build-release.yml) builds a new release package on **push** to **main**.
+### Bygg utgivelse (main)
 
-
-
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#creating-a-new-release)
-
-## ➤ Creating a new release
-
-For creating a new release, we have two options: Minor and patch. New minor version should be created when there is new functionality of interest to users, while patch versions can be created often with bug fixes, adjustments and minimal functional improvements.
-
-Increasing the version number is done by npm scripts. This is done on the dev-branch when the functionality currently in dev is deemed ready for release.
+[build-release](../.github/workflows/build-release.yml) bygger en ny utgivelsespakke ved **push** til **main**.
 
 
-### Patch-release
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#opprettelse-av-en-ny-versjon)
+
+## ➤ Opprettelse av en ny versjon
+
+For å opprette en ny versjon har vi to alternativer: `Minor` og `Patch`. En ny minor-versjon bør opprettes når det er ny funksjonalitet av interesse for brukerne, mens patch-versjoner kan opprettes ofte med feilrettinger, justeringer og minimale funksjonelle forbedringer.
+
+Økningen av versjonsnummeret gjøres ved hjelp av npm-skript. Dette gjøres på `releases/*` branch når funksjonaliteten som for øyeblikket er under utvikling, anses som klar for utgivelse.
+
+### Patch-utgivelse
+
 ```powershell
 npm version patch
 git push --tags
 ```
 
-### Minor-release
+### Minor-utgivelse
+
 ```powershell
 npm version minor
 git push --tags
 ```
 
-Then create a Pull Request to merge `dev` into `main`. The output from GitHub Actions will include a release package that can be shared as a release on GitHub. No manual build required.
+Opprett deretter en PR for å merge `releases/*` inn i `main`. Resultatet fra GitHub Actions vil inkludere en utgivelsespakke som kan deles som en utgivelse på GitHub. Ingen manuell bygging er nødvendig.
 
 
 
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#versioning)
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#versjonering)
 
-## ➤ Versioning
+## ➤ Versjonering
 
-After updating the version using `npm version patch` or `npm version minor` the task `tasks/automatic-versioning.js` are run. This synchronizes versions across the solution.
+Etter oppdatering av versjonen ved bruk av `npm version patch` eller `npm version minor`, kjøres oppgaven `tasks/automatic-versioning.js`. Dette synkroniserer versjonene på tvers av løsningen.
 
-This `automatic-versioning.js` task can also be run as a **npm script** outside the `postversion` event.
+Denne oppgaven, `automatic-versioning.js`, kan også kjøres som en **npm-skript** utenfor hendelsen `postversion`.
 
 ```powershell
 npm run sync-version
 ```
 
-After the `sync-version` script has been run, it is important to publish the SharePointFramework packages (@Shared, PortfolioWebParts, etc...) to npm.
+Etter at skriptet `sync-version` har blitt kjørt, er det viktig å publisere SharePointFramework-pakkene (@Shared, PortfolioWebParts, osv...) til npm.
 
-This is done for each package by running the following script:
+Dette gjøres for hver pakke ved å kjøre følgende skript:
 
 ```powershell
 npm install; npm run build; npm publish;
 ```
 
-If you have to update and use a package under development add a temp tag:
+Hvis du må oppdatere og bruke en pakke under utvikling, legg til en midlertidig tag:
 
 ```powershell
 npm install; npm run build; npm publish --tag temp;
 ```
 
-N.B.: To be able to publish you must sign in with an account that has access to the packages at [npmjs](https://www.npmjs.com)
+Obs.: For å kunne publisere må du logge inn med en konto som har tilgang til pakkene på [npmjs](https://www.npmjs.com).
 
 
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#installasjonskanaler)
 
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#installation-channels)
+## ➤ Installasjonskanaler
 
-## ➤ Installation channels
+For å støtte installasjon av flere forekomster av _Prosjektportalen 365_ i en leietaker, støtter vi **installasjonskanaler**.
 
-To support installing several instances of _Prosjektportalen 365_ in a tenant, we support **installation channels**.
+### Generere en ny kanalkonfigurasjon
 
-### Generating a new channel configuration
-To generate a new channel configuration, use the `npm` script `generate-channel-config`.
+For å generere en ny kanalkonfigurasjon, bruk `npm`-skriptet `generate-channel-config`.
 
-To generate a new channel configuration for `test`:
+For å generere en ny kanalkonfigurasjon for `test`:
 
 ```javascript
 npm run-script generate-channel-config test
 ```
 
-To update an existing channel configuration, add the flag `/update`:
+For å oppdatere en eksisterende kanalkonfigurasjon, legg til flagget `/update`:
 
 ```javascript
 npm run-script generate-channel-config test /update
 ```
 
-### Building a new release for a channel
-To build a new release for a channel, add the `-Channel` flag when running the release-script.
+### Bygge en ny versjon for en kanal
 
-**Example (buiding for test channel):**
+For å bygge en ny versjon for en kanal, legg til flagget `-Channel` når du kjører utgivelsesskriptet.
+
+**Eksempel (bygger for testkanal):**
+
 ```powershell
 Install/Build-Release.ps1 -Channel test
 ```
 
 
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#readme-generation)
 
-## ➤ README generation
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#readme-generering)
 
-READMEs are automatically generated using [@appnest/readme](https://github.com/andreasbm/readme). The main README is generated from [.README](../.README) while this README is generated from [.README](.README). The generation is configured with the `blueprint.json` files.
+## ➤ README generering
 
-For the main [README.md)[../README.md] generation, the different parts are included from the [readme](../readme) folder at root level.
+README er automatisk generert ved hjelp av [@appnest/readme](https://github.com/andreasbm/readme). Hoved README er generert fra [.README](../.README) mens denne er generert fra [.README](.README). Generering konfigureres med `blueprint.json` filene.
+
+For hoved [.README](../.README) generering er de forskjellige delene inkludert fra [readme](../readme) mappen på rot nivå.
+

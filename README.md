@@ -1,5 +1,5 @@
 <!-- ⚠️ This README has been generated from the file(s) ".README" ⚠️--><p align="center">
-  <img src="assets/PP365 Piktogram Flat DIGITAL.png" alt="Logo" width="119" height="119" />
+  <img src="assets/pp365_logo.png" alt="Logo" width="119" height="119" />
 </p> <p align="center">
   <b>Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.</b></br>
   <sub>Prosjektportalen for Microsoft 365 er bygget av Puzzlepart AS og distribuert som åpen kildekode. Løsningen inneholder Microsoft 365 og SharePoint-tilpasninger som til sammen utgjør et prosjektstyringsverktøy.<sub>
