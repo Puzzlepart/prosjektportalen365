@@ -42,7 +42,6 @@ I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Pr
 ### Feilrettinger
 
 - Fikset et problem hvor 'Alle prosjekter' ikke kunne settes som standard vertikal [#1163](https://github.com/Puzzlepart/prosjektportalen365/issues/1163)
-- Fikset sortering for valuta i Porteføljeoversikt [#1113](https://github.com/Puzzlepart/prosjektportalen365/issues/1113)
 
 ---
 
