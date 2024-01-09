@@ -1,29 +1,27 @@
 [[template:logo]] [[template:description]]
 
 <details>
-<summary>📖 Table of Contents</summary>
+<summary>📖 Innholdsfortegnelse</summary>
 <br />
 [[ template:toc ]]
 </details>
 
-[[load:.development-guide/Site_Design_Site_Scripts.md]]
+[[load:.development-guide/1-Site_Design_Site_Scripts.md]]
 
-[[load:.development-guide/JS_Provisioning_Template.md]]
+[[load:.development-guide/2-JS_Provisioning_Template.md]]
 
-[[load:.development-guide/Templates.md]]
+[[load:.development-guide/3-Templates.md]]
 
-[[load:.development-guide/NPM.md]]
+[[load:.development-guide/4-NPM.md]]
 
-[[load:.development-guide/Building_a_new_release.md]]
+[[load:.development-guide/5-Building_New_Release.md]]
 
-[[load:.development-guide/Building_only_PnP_templates.md]]
+[[load:.development-guide/6-Continuous_Integration.md]]
 
-[[load:.development-guide/Continuous_integration.md]]
+[[load:.development-guide/7-Creating_New_Release.md]]
 
-[[load:.development-guide/Creating_a_new_release.md]]
+[[load:.development-guide/8-Versioning.md]]
 
-[[load:.development-guide/Versioning.md]]
+[[load:.development-guide/9-Channels.md]]
 
-[[load:.development-guide/Installation_channels.md]]
-
-[[load:.development-guide/README_generation.md]]
+[[load:.development-guide/10-README_Generation.md]]

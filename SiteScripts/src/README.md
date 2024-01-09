@@ -1,6 +1,6 @@
-## Tvinge "SiteDesign" på eksisterende prosjekt(er) som er konfigurert
+# Tvinge Site Design på eksisterende prosjekt(er) som er konfigurert
 
-For å tvinge `Prosjektområde` "SiteDesign" til et eksisterende område (for feilsøkingsformål)
+For å tvinge `Prosjektområde` Site Design til et eksisterende område (for feilsøkingsformål)
 
 Eksempel:
 
