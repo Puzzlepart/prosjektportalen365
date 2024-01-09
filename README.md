@@ -21,8 +21,8 @@
 * [➤ Hva er Prosjektportalen for Microsoft 365?](#-hva-er-prosjektportalen-for-microsoft-365)
 * [➤ Installering og oppgradering](#-installering-og-oppgradering)
 * [➤ Kontakt](#-kontakt)
-* [➤ Nettleserstøtte](#-nettlesersttte)
-* [➤ Contributors](#-contributors)
+* [➤ Nettleserstøtte](#-nettleserstøtte)
+* [➤ Bidragsytere](#-bidragsytere)
 * [➤ Utvikling](#-utvikling)
 </details>
 
@@ -83,7 +83,7 @@ Vi gjør vårt beste for å støtte alle nettlesere, men følger retningslinjer 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#contributors)
 
-## ➤ Contributors
+## ➤ Bidragsytere
 	
 
 | [Tarjei Ormestøyl](undefined)                    | [Ole Martin Pettersen](undefined)                | [Remi Blom-Ohlsen](undefined)                    |
