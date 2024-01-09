@@ -35,3 +35,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
     </FluentProvider>
   )
 }
+
+ProgramAdministration.defaultProps = {
+  title: strings.ProgramAdministrationHeader
+}
