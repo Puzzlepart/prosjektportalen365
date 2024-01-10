@@ -4,7 +4,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 
 ## 1.9.0 - TBA
 
-I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Prosjektportalen, flere av komponentene er blitt oppdatert og fått nytt utseende og tilpasningsmuligheter. Sjekk ut [release notes](./releasenotes/1.9.0.md) for oversikt. Noen av de mest omfattende er:
+I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Prosjektportalen, flere av komponentene er blitt helrenovert og fått nytt utseende og tilpasningsmuligheter. Sjekk ut [release notes](./releasenotes/1.9.0.md) for oversikt. Noen av de mest omfattende er:
 
 - **Prosjektutlisting (forsiden av Prosjektportalen)**
   - Ny og interaktiv kortvisning med dynamiske farger og ny kommandolinje som er fullstendig tilpasningsvennlig [#1231](https://github.com/Puzzlepart/prosjektportalen365/pull/1231)
@@ -46,7 +46,7 @@ I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Pr
 - Nytt panel for redigering og opprettelse av prosjektstatusrapporter [#1282](https://github.com/Puzzlepart/prosjektportalen365/pull/1282)
 - Nytt panel for redigering og opprettelse av tidslinjeelementer [#1288](https://github.com/Puzzlepart/prosjektportalen365/pull/1288)
 - Ny og interaktiv kortvisning med dynamiske farger og ny kommandolinje som er fullstendig tilpasningsvennlig [#1231](https://github.com/Puzzlepart/prosjektportalen365/pull/1231)
-- Ny listevisning med bedre sortering og metadata visning [#1236](https://github.com/Puzzlepart/prosjektportalen365/pull/1236)
+- Ny listevisning av prosjekter med bedre sortering og metadata visning [#1236](https://github.com/Puzzlepart/prosjektportalen365/pull/1236)
 - Tilpasningsvennlig hurtigmeny for å komme fortere til sider eller lister på prosjektet [#1236](https://github.com/Puzzlepart/prosjektportalen365/pull/1236)
 
 ### Forbedringer
