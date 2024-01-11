@@ -3,7 +3,7 @@
 | Navn                          | Løsning/Pakke       | Beskrivelse                                                 | Id                                   |
 | ----------------------------- | ------------------- | ----------------------------------------------------------- | ------------------------------------ |
 | Footer                        | PortfolioExtensions | Footer utvidelse (legger seg i bunnen)                      | 84f27cec-ffde-4e00-a4cf-25c69f691054 |
-| IdeaProcessing                | PortfolioExtensions | Liste utvidelse for Idébehandling                           | b28cba0d-922c-44e0-A035-e4ea57d80e6d |
+| IdeaProcessing                | PortfolioExtensions | Liste utvidelse for Idébehandling                           | b28cba0d-922c-44e0-a035-e4ea57d80e6d |
 | IdeaProjectData               | PortfolioExtensions | Liste utvidelse for Idé - Prosjektdata                      | 69a7f6eb-e7ce-40eb-81e1-6f172a802619 |
 | IdeaRegistration              | PortfolioExtensions | Liste utvidelse for Idéregistrering                         | 5d26712e-bdad-4ebf-b33f-9c759042bef6 |
 | LatestProjectsWebPart         | PortfolioWebParts   | Siste prosjekter                                            | 941fd73c-b957-41c3-8d4f-082268407f10 |

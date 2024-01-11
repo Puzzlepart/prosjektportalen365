@@ -9,7 +9,7 @@
         "zippedPackage": "solution/pp-portfolio-extensions.sppkg",
         "components": {
           "Footer": "84f27cec-ffde-4e00-a4cf-25c69f691054",
-          "IdeaProcessing": "b28cba0d-922c-44e0-A035-e4ea57d80e6d",
+          "IdeaProcessing": "b28cba0d-922c-44e0-a035-e4ea57d80e6d",
           "IdeaProjectData": "69a7f6eb-e7ce-40eb-81e1-6f172a802619",
           "IdeaRegistration": "5d26712e-bdad-4ebf-b33f-9c759042bef6"
         }

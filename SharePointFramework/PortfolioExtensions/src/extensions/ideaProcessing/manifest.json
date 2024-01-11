@@ -1,6 +1,6 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/command-set-extension-manifest.schema.json",
-  "id": "b28cba0d-922c-44e0-A035-e4ea57d80e6d",
+  "id": "b28cba0d-922c-44e0-a035-e4ea57d80e6d",
   "alias": "IdeaProcessing",
   "componentType": "Extension",
   "extensionType": "ListViewCommandSet",

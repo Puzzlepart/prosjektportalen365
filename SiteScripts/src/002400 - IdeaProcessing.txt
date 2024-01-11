@@ -5,7 +5,7 @@
             "verb": "associateExtension",
             "title": "IdeaProcessing",
             "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
-            "clientSideComponentId": "b28cba0d-922c-44e0-A035-e4ea57d80e6d",
+            "clientSideComponentId": "b28cba0d-922c-44e0-a035-e4ea57d80e6d",
             "clientSideComponentProperties": "{}",
             "registrationId": "100",
             "registrationType": "List",

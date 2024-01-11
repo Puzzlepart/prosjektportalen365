@@ -15,7 +15,7 @@
     "ideaProcessing": {
       "pageUrl": "https://puzzlepart.sharepoint.com/sites/pp365/Lists/Idebehandling/AllItems.aspx",
       "customActions": {
-        "b28cba0d-922c-44e0-A035-e4ea57d80e6d": {
+        "b28cba0d-922c-44e0-a035-e4ea57d80e6d": {
           "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
           "properties": {}
         }
