@@ -22,7 +22,7 @@ if ($CI_MODE) {
 ## Checks if file .current-channel-config.json exists and loads it if it does
 if (Test-Path -Path "$ScriptDir/../.current-channel-config.json") {
     $global:__CurrentChannelConfig = Get-Content -Path "$ScriptDir/../.current-channel-config.json" -Raw -ErrorAction SilentlyContinue | ConvertFrom-Json
-    Write-Host "[INFO] Loaded channel config from file .current-channel-config.json"
+    Write-Host "[INFO] Loaded channel config from file .current-channel-config.json, will use channel $($global:__CurrentChannelConfig.Channel) when upgrading all sites to latest" -ForegroundColor Yellow
 }
 
 
