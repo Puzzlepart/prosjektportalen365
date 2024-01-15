@@ -57,6 +57,7 @@ define([], function () {
     ProjectContentColumnsListName: 'Prosjektinnholdskolonner',
     ProjectDeliveriesGroupName: 'Prosjektleveranser (beta)',
     ProjectLabel: 'Prosjekt',
+    ProjectPropertiesHeader: 'Prosjektinformasjon',
     ProjectPropertiesListName: 'Prosjektegenskaper',
     ProjectsListName: 'Prosjekter',
     SearchBoxGroupName: 'Søkeboks',

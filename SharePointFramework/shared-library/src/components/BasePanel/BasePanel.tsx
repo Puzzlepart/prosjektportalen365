@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import styles from './BasePanel.module.scss'
 import { IBasePanelProps } from './types'
 import { customLightTheme } from '../../util'
+import strings from 'SharedLibraryStrings'
 
 export const BasePanel: FC<IBasePanelProps> = (props) => {
   return (
@@ -30,5 +31,5 @@ export const BasePanel: FC<IBasePanelProps> = (props) => {
 BasePanel.defaultProps = {
   type: PanelType.medium,
   isLightDismiss: true,
-  closeButtonAriaLabel: 'strings.CloseText'
+  closeButtonAriaLabel: strings.CloseText
 }

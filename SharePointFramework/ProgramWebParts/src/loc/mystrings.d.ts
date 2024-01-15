@@ -56,6 +56,7 @@ declare interface IProgramWebPartsStrings {
   ProjectContentColumnsListName: string
   ProjectDeliveriesGroupName: string
   ProjectLabel: string
+  ProjectPropertiesHeader: string
   ProjectPropertiesListName: string
   ProjectsListName: string
   SearchBoxGroupName: string

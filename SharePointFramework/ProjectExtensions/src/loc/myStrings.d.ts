@@ -111,6 +111,7 @@ declare interface IProjectExtensionsStrings {
   ProjectAlreadySetupStack: string
   ProjectIdeaFoundTitle: string
   ProjectIdeaFoundMessage: string
+  ProjectPropertiesHeader: string
   ProjectPropertiesListName: string
   ProjectProvisioningStartLogText: string
   ProjectProvisioningSuccessLogText: string
