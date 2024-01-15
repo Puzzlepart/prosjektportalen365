@@ -1,8 +1,9 @@
 $TargetVersion = "1.8.2"
 
 if ($global:__InstalledVersion -lt $TargetVersion) {
-    $BaseDir = "$ScriptDir/EnsureProjectAggregrationWebPart"
+    $BaseDir = "$ScriptDir/UpgradeAllSitesToLatest/EnsureProjectAggregrationWebPart"
     $Pages = Get-Content "$BaseDir/$.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+    
     foreach ($Page in $Pages) {
         $PageName = "$($Page.Name).aspx"
         $DeprecatedComponent = Get-PnPPageComponent -Page $PageName -ErrorAction SilentlyContinue | Where-Object { $_.WebPartId -eq $Page.ControlId } | Select-Object -First 1
