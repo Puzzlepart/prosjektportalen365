@@ -3,6 +3,7 @@
     "dataSource": "Gevinstoversikt (Prosjektnivå)",
     "searchBoxPlaceholderText": "Søk i gevinster...",
     "lockedColumns": true,
+    "isParentProject": true,
     "columns": [
         {
             "key": "Title",
