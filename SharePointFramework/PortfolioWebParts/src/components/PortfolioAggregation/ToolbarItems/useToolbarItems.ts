@@ -96,13 +96,11 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
               ListMenuItemDivider,
               new ListMenuItem(strings.NewViewText)
                 .setIcon(Icons.FormNew)
-                .setDisabled(context.props.isParentProject)
                 .setOnClick(() => {
                   context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
                 }),
               new ListMenuItem(strings.EditViewText)
                 .setIcon(Icons.Edit)
-                .setDisabled(context.props.isParentProject)
                 .setOnClick(() => {
                   context.dispatch(
                     SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })

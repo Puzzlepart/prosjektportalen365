@@ -35,7 +35,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
             selection={selection}
             searchBox={searchBox}
             onColumnContextMenu={onColumnContextMenu}
-            isAddColumnEnabled={!props.lockedColumns && !props.isParentProject}
+            isAddColumnEnabled={!props.lockedColumns}
             compact={context.state.isCompact}
             isListLayoutModeJustified={props.isListLayoutModeJustified}
             groupProps={{

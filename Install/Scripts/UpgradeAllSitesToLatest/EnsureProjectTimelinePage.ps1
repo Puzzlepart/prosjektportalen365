@@ -18,7 +18,7 @@ if ($global:__InstalledVersion -lt $TargetVersion) {
             Write-Host "`t`t`tAdding project timeline navigation item"
             Add-PnPNavigationNode -Location QuickLaunch -Title "Prosjekttidslinje" -Url "SitePages/Prosjekttidslinje.aspx" >$null 2>&1
         }
-        else {        
+        else {
             Write-Host "`t`tThe site already has the project timeline page" -ForegroundColor Green
         }
     }

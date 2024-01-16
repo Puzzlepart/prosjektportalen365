@@ -43,8 +43,7 @@ const Icons = {
  * @returns An array of `IListMenuItem` objects representing the toolbar items.
  */
 export function useToolbarItems(context: IPortfolioOverviewContext) {
-  const userCanManageViews =
-    !context.props.isParentProject && context.props.configuration.userCanAddViews
+  const userCanManageViews = context.props.configuration.userCanAddViews
 
   const { exportToExcel } = useExcelExport(context)
   const sharedViews = useViewsMenuItems(context, (view) => !view.isPersonal)

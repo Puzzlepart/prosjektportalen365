@@ -104,7 +104,7 @@ export function useColumnContextMenu() {
       {
         key: 'COLUMN_SETTINGS',
         text: strings.ColumnSettingsLabel,
-        disabled: !isColumnEditable || context.props.isParentProject,
+        disabled: !isColumnEditable,
         title: !isColumnEditable && strings.ColumnSettingsDisabledTooltip,
         iconProps: { iconName: 'TableSettings' },
         subMenuProps: {
