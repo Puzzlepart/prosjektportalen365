@@ -5,20 +5,73 @@ declare interface IProgramWebPartsStrings {
     ChoiceField: string
     MultiChoiceField: string
   }
+
   Add: string
+  AddColumnLabel: string
   AddColumnLabel: string
   AddProjectDialogSearchBoxPlaceholder: string
   BarLabel: string
+  BooleanNo: string
+  BooleanOff: string
+  BooleanOn: string
+  BooleanYes: string
   Cancel: string
+  CancelButtonLabel: string
   ChildrenRemoveToastMessage: string
   ChildrenRemoveToastTitle: string
   CmdSelectionCountText: string
   CmdSelectionCountTooltipText: string
+  ColumnPersistRenderGloballyFieldDescription: string
+  ColumnPersistRenderGloballyFieldLabel: string
+  ColumnRenderDataTypePropertiesHeaderText: string
+  ColumnRenderDescription: string
+  ColumnRenderLabel: string
+  ColumnRenderOptionBoolean: string
+  ColumnRenderOptionBooleanFalse: string
+  ColumnRenderOptionBooleanTrue: string
+  ColumnRenderOptionCurrency: string
+  ColumnRenderOptionCurrencyFallbackValueLabel: string
+  ColumnRenderOptionCurrencyMaximumFractionDigitsLabel: string
+  ColumnRenderOptionCurrencyMinimumFractionDigitsLabel: string
+  ColumnRenderOptionCurrencyPrefixLabel: string
+  ColumnRenderOptionDate: string
+  ColumnRenderOptionDateIncludeTimeLabel: string
+  ColumnRenderOptionDialog: string
+  ColumnRenderOptionDialogInfoTextTemplateDescription: string
+  ColumnRenderOptionDialogInfoTextTemplateLabel: string
+  ColumnRenderOptionDialogLinkTextLabel: string
+  ColumnRenderOptionDialogShowInfoTextLabel: string
+  ColumnRenderOptionFilename: string
+  ColumnRenderOptionNote: string
+  ColumnRenderOptionNumber: string
+  ColumnRenderOptionPercentage: string
+  ColumnRenderOptionProjectInfo: string
+  ColumnRenderOptionTags: string
+  ColumnRenderOptionTagsValueSeparatorDescription: string
+  ColumnRenderOptionTagsValueSeparatorLabel: string
+  ColumnRenderOptionText: string
+  ColumnRenderOptionTrend: string
+  ColumnRenderOptionTrendShowTrendIconLabel: string
+  ColumnRenderOptionUrl: string
+  ColumnRenderOptionUrlDescriptionDescription: string
+  ColumnRenderOptionUrlDescriptionLabel: string
+  ColumnRenderOptionUrlOpenInNewTabLabel: string
+  ColumnRenderOptionUser: string
+  ColumnSettingsDisabledTooltip: string
   ColumnSettingsLabel: string
+  ColumnsListNameLabel: string
+  ColumnVisibilityDescription: string
+  ColumnVisibilityLabel: string
   CommandBarGroupName: string
   CompactViewText: string
   ConfigItemTitleFieldDescription: string
   ConfigItemTitleFieldLabel: string
+  ConfirmDeleteProjectColumnSubText: string
+  ConfirmDeleteProjectColumnTitle: string
+  ConfirmDeleteProjectContentColumnSubText: string
+  ConfirmDeleteProjectContentColumnTitle: string
+  ConfirmDeleteResponseAbort: string
+  ConfirmDeleteResponseConfirm: string
   CustomSortsText: string
   DataSourceCategoryDescription: string
   DataSourceCategoryError: string
@@ -38,9 +91,14 @@ declare interface IProgramWebPartsStrings {
   FilterText: string
   GeneralGroupName: string
   GroupByColumnLabel: string
+  IconNameDescription: string
+  IconNameLabel: string
   ListViewText: string
+  MoveLeftLabel: string
+  MoveRightLabel: string
   NewViewText: string
   PersonalViewsHeaderText: string
+  PortfolioAggregationViewSearchQueryDescription: string
   PortfolioManagerGroupName: string
   ProgramAdministrationAddChildsButtonDescription: string
   ProgramAdministrationAddChildsButtonLabel: string
@@ -59,14 +117,17 @@ declare interface IProgramWebPartsStrings {
   ProjectPropertiesHeader: string
   ProjectPropertiesListName: string
   ProjectsListName: string
+  SaveButtonLabel: string
   SearchBoxGroupName: string
   SearchBoxPlaceholderText: string
   SearchBoxPlaceholderTextDescription: string
   SearchBoxPlaceholderTextLabel: string
+  SearchQueryLabel: string
   ShowCommandBarLabel: string
   ShowExcelExportButtonLabel: string
   ShowFiltersLabel: string
   ShowGroupByLabel: string
+  ShowHideColumnsLabel: string
   ShowSearchBoxLabel: string
   ShowViewSelectorLabel: string
   SortAscLabel: string
@@ -74,6 +135,8 @@ declare interface IProgramWebPartsStrings {
   TimelineConfigurationListName: string
   TimelineContentListName: string
   TitleLabel: string
+  ToggleColumnFormPanelLabel: string
+  ToggleEditViewColumnsLabel: string
 }
 
 declare module 'ProgramWebPartsStrings' {
