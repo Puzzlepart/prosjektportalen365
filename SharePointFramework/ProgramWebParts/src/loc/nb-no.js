@@ -89,6 +89,7 @@ define([], function () {
     DataSourceNotFound: 'Finner ingen datakilde med navn **{0}**.',
     DefaultDataSourceViewLabel: 'Standardvisning (datakilde)',
     DefaultViewLabel: 'Standardvisning',
+    DeleteButtonLabel: 'Slett',
     DisplayNameDescription: 'Visningsnavn for denne kolonnen, kun for denne webdelen. Om du ønsker å endre visningsnavnet for alle webdeler, må du endre det i listen Prosjektinnholdskolonner.',
     DisplayNameLabel: 'Visningsnavn',
     DisplayNamePortfolioOverviewDescription: 'Visningsnavn for denne kolonnen.',

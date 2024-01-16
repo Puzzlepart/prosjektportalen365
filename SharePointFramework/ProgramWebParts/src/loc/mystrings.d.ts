@@ -88,6 +88,7 @@ declare interface IProgramWebPartsStrings {
   DataSourceNotFound: string
   DefaultDataSourceViewLabel: string
   DefaultViewLabel: string
+  DeleteButtonLabel: string
   DisplayNameDescription: string
   DisplayNameLabel: string
   DisplayNamePortfolioOverviewDescription: string
