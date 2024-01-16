@@ -1,4 +1,4 @@
-$TargetVersion = "1.8.2"
+$TargetVersion = "1.9.0"
 
 if ($global:__InstalledVersion -lt $TargetVersion) {
     $BaseDir = "$ScriptDir/UpgradeAllSitesToLatest/EnsureProjectAggregrationWebPart"
