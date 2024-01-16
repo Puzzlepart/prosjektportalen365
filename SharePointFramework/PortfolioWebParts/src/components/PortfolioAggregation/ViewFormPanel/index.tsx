@@ -33,7 +33,7 @@ export const ViewFormPanel: FC = () => {
           <FieldContainer
             iconName='TextNumberFormat'
             label={strings.TitleLabel}
-            description={strings.TitleLabel}
+            description={strings.TitleDescription}
             required={true}
           >
             <Input

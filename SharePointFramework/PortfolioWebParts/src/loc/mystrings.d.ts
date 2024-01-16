@@ -256,6 +256,7 @@ declare interface IPortfolioWebPartsStrings {
   TimelineConfigurationListName: string
   TimelineContentListName: string
   TitleLabel: string
+  TitleDescription: string
   ToggleColumnFormPanelLabel: string
   ToggleEditViewColumnsLabel: string
   UseChangesButtonText: string

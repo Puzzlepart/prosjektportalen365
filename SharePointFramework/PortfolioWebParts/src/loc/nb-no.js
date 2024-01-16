@@ -258,6 +258,7 @@ define([], function () {
     TimelineConfigurationListName: 'Tidslinjekonfigurasjon',
     TimelineContentListName: 'Tidslinjeinnhold',
     TitleLabel: 'Tittel',
+    TitleDescription: 'Tittel for visningen.',
     ToggleColumnFormPanelLabel: 'Legg til kolonne',
     ToggleEditViewColumnsLabel: 'Vis eller skjul kolonner',
     UseChangesButtonText: 'Bruk',

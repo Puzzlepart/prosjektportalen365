@@ -62,7 +62,7 @@ export const ColumnFormPanel: FC = () => {
           <FieldContainer
             iconName='NumberSymbolSquare'
             label={strings.SortOrderLabel}
-            description={strings.SortOrderLabel}
+            description={strings.SortOrderDescription}
           >
             <Input
               value={column.get('sortOrder')?.toString()}

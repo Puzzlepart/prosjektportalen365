@@ -5,7 +5,6 @@ declare interface IProgramWebPartsStrings {
     ChoiceField: string
     MultiChoiceField: string
   }
-
   Add: string
   AddColumnLabel: string
   AddColumnLabel: string
@@ -84,6 +83,9 @@ declare interface IProgramWebPartsStrings {
   DataSourceNotFound: string
   DefaultDataSourceViewLabel: string
   DefaultViewLabel: string
+  DisplayNameDescription: string
+  DisplayNameLabel: string
+  DisplayNamePortfolioOverviewDescription: string
   EditColumnLabel: string
   EditViewText: string
   ErrorTitle: string
@@ -93,9 +95,18 @@ declare interface IProgramWebPartsStrings {
   GroupByColumnLabel: string
   IconNameDescription: string
   IconNameLabel: string
+  InternalNameDescription: string
+  InternalNameLabel: string
+  IsGroupableDescription: string
+  IsGroupableLabel: string
   ListViewText: string
+  MaxWidthDescription: string
+  MaxWidthLabel: string
+  MinWidthDescription: string
+  MinWidthLabel: string
   MoveLeftLabel: string
   MoveRightLabel: string
+  NewColumnHeaderText: string
   NewViewText: string
   PersonalViewsHeaderText: string
   PortfolioAggregationViewSearchQueryDescription: string
@@ -122,6 +133,11 @@ declare interface IProgramWebPartsStrings {
   SearchBoxPlaceholderText: string
   SearchBoxPlaceholderTextDescription: string
   SearchBoxPlaceholderTextLabel: string
+  SearchPropertyDescription: string
+  SearchPropertyFoundMessage: string
+  SearchPropertyFoundTitle: string
+  SearchPropertyLabel: string
+  SearchPropertyPlaceholder: string
   SearchQueryLabel: string
   ShowCommandBarLabel: string
   ShowExcelExportButtonLabel: string
@@ -132,6 +148,8 @@ declare interface IProgramWebPartsStrings {
   ShowViewSelectorLabel: string
   SortAscLabel: string
   SortDescLabel: string
+  SortOrderDescription: string
+  SortOrderLabel: string
   TimelineConfigurationListName: string
   TimelineContentListName: string
   TitleLabel: string
