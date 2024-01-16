@@ -1,5 +1,10 @@
 define([], function () {
   return {
+    Aria: {
+      MenuOverflowCount: '{0} flere elementer',
+      MoveUp: 'Flytt opp',
+      MoveDown: 'Flytt ned',
+    },
     Placeholder: {
       TextField: 'Angi verdi her',
       Icon: 'Angi et ikon',
@@ -88,6 +93,9 @@ define([], function () {
     DisplayNameLabel: 'Visningsnavn',
     DisplayNamePortfolioOverviewDescription: 'Visningsnavn for denne kolonnen.',
     EditColumnLabel: 'Rediger',
+    EditViewColumnsPanelHeaderText: 'Rediger visningskolonner',
+    EditViewColumnsPanelHelpText: 'Velg kolonnene som skal vises for nåværende visning. Hvis du vil endre rekkefølgen, kan du dra og slippe eller bruke opp- og ned-pilen ved siden av hver kolonne.',
+    EditViewHeaderText: 'Rediger visning',
     EditViewText: 'Rediger gjeldende visning',
     ErrorTitle: 'Det har oppstått en feil',
     ExcelExportButtonLabel: 'Eksporter til Excel',
@@ -108,6 +116,7 @@ define([], function () {
     MoveLeftLabel: 'Flytt til venstre',
     MoveRightLabel: 'Flytt til høyre',
     NewColumnHeaderText: 'Ny kolonne',
+    NewViewHeaderText: 'Opprett visning',
     NewViewText: 'Opprett ny visning',
     PersonalViewsHeaderText: 'Personlige visninger',
     PortfolioAggregationViewSearchQueryDescription: 'Søkespørringen for å hente data. DepartmentId refererer til Prosjektportalen-huben og bør ikke endres. ContentTypeId refererer til innholdstypen til dataelementet du vil hente. Gå til Datakilder-listen for å se eksempler.',
@@ -157,5 +166,7 @@ define([], function () {
     TitleLabel: 'Tittel',
     ToggleColumnFormPanelLabel: 'Legg til kolonne',
     ToggleEditViewColumnsLabel: 'Vis eller skjul kolonner',
+    UseChangesButtonText: 'Bruk',
+    ViewNotFoundMessage: 'Finner ikke angitt visning.',
   }
 })

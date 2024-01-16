@@ -1,4 +1,9 @@
 declare interface IProgramWebPartsStrings {
+  Aria: {
+    MenuOverflowCount: string
+    MoveUp: string
+    MoveDown: string
+  },
   Placeholder: {
     TextField: string
     Icon: string
@@ -87,6 +92,9 @@ declare interface IProgramWebPartsStrings {
   DisplayNameLabel: string
   DisplayNamePortfolioOverviewDescription: string
   EditColumnLabel: string
+  EditViewColumnsPanelHeaderText: string
+  EditViewColumnsPanelHelpText: string
+  EditViewHeaderText: string
   EditViewText: string
   ErrorTitle: string
   ExcelExportButtonLabel: string
@@ -107,6 +115,7 @@ declare interface IProgramWebPartsStrings {
   MoveLeftLabel: string
   MoveRightLabel: string
   NewColumnHeaderText: string
+  NewViewHeaderText: string
   NewViewText: string
   PersonalViewsHeaderText: string
   PortfolioAggregationViewSearchQueryDescription: string
@@ -155,6 +164,8 @@ declare interface IProgramWebPartsStrings {
   TitleLabel: string
   ToggleColumnFormPanelLabel: string
   ToggleEditViewColumnsLabel: string
+  UseChangesButtonText: string
+  ViewNotFoundMessage: string
 }
 
 declare module 'ProgramWebPartsStrings' {
