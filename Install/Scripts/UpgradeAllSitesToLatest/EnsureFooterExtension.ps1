@@ -6,7 +6,4 @@ if ($global:__InstalledVersion -lt $TargetVersion) {
     Write-Host "`t`tAdding footer extension to site"
     Add-PnPCustomAction -Title "Footer" -Name "Footer" -Location "ClientSideExtension.ApplicationCustomizer" -ClientSideComponentId $ClientSideComponentId -ClientSideComponentProperties "{`"listName`":`"Hjelpeinnhold`",`"linkText`":`"Hjelp tilgjengelig`"}"  >$null 2>&1
   }
-  else {
-    Write-Host "`t`tThe site already has the footer extension" -ForegroundColor Green
-  }
 }
