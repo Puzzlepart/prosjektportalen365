@@ -157,6 +157,16 @@
             <pnp:DataValue FieldName="GtDataSourceLevel">Overordnet/Program</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
+            <pnp:DataValue FieldName="GtDataSourceId">dc3a4676-a38a-4fa7-a2b3-790f89046b52</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Alle mulighetselementerfor underområder</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89702* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="Ikke lenger aktuell"</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10,45</pnp:DataValue>
+            <pnp:DataValue FieldName="GtProjectContentRefiners">45,46,47,35</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIconName">BranchCommit</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Overordnet/Program</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">efd72d49-736d-47a1-923e-46a133efa299</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Alle gevinstelementer for underområder</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">(ContentTypeID:0x010039EAFDC2A1624C1BA1A444FC8FE85DEC* OR ContentTypeID:0x01004F466123309D46BAB9D5C6DE89A6CF67* OR ContentTypeID:0x010073043EFE3E814A2BBEF96B8457623F95*) DepartmentId:{{sitecollectionid}}</pnp:DataValue>
