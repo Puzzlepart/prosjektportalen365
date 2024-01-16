@@ -135,7 +135,7 @@
             <pnp:DataValue FieldName="GtURL">SitePages/ProjectHome.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.2%20Prosjektegenskaper%20og%20fasesetting.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.2%20Prosjektinformasjon%20og%20fasesetting.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
