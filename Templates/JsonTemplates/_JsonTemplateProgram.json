@@ -657,8 +657,9 @@
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
                                         "title": "Gevinster for underområder",
-                                        "dataSource": "Alle gevinstelementer",
+                                        "dataSource": "Alle gevinstelementer for underområder",
                                         "dataSourceCategory": "Gevinstoversikt",
+                                        "dataSourceLevel": "Overordnet/Program",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -794,8 +795,9 @@
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
                                         "title": "Leveranser for underområder",
-                                        "dataSource": "Alle prosjektleveranser",
+                                        "dataSource": "Alle leveranser for underområder",
                                         "dataSourceCategory": "Leveranseoversikt",
+                                        "dataSourceLevel": "Overordnet/Program",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true
@@ -822,8 +824,9 @@
                                     "Id": "{{ControlId_ProgramAggregationWebPart}}",
                                     "Properties": {
                                         "title": "Usikkerheter for underområder",
-                                        "dataSource": "Alle risikoelementer",
+                                        "dataSource": "Alle risikoelementer for underområder",
                                         "dataSourceCategory": "Usikkerhetsoversikt",
+                                        "dataSourceLevel": "Overordnet/Program",
                                         "showCommandBar": true,
                                         "showViewSelector": true,
                                         "showSearchBox": true

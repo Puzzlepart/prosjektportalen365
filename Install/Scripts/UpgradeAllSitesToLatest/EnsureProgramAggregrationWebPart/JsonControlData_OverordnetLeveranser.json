@@ -1,8 +1,8 @@
 {
-    "title": "Prosjektleveranser for underområder",
-    "dataSource": "Alle prosjektleveranser for underområder",
-    "dataSourceCategory": "Gevinstoversikt",
-    "dataSourceLevel": "Prosjekt",
+    "title": "Leveranser for underområder",
+    "dataSource": "Alle leveranser for underområder",
+    "dataSourceCategory": "Leveranseoversikt",
+    "dataSourceLevel": "Overordnet/Program",
     "showCommandBar": true,
     "showViewSelector": true,
     "showSearchBox": true

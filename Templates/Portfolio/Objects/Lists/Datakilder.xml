@@ -138,7 +138,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">0d046ccc-e556-435f-9c56-429d7bfef1ff</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Alle prosjektleveranser for underområder</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Alle leveranser for underområder</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100D7B74DE815F946D3B0F99D19F9B36B68* DepartmentId:{{sitecollectionid}}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Leveranseoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,2,37,3,4,5,38</pnp:DataValue>
