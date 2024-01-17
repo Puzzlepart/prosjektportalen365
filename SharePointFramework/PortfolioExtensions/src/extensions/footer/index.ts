@@ -76,7 +76,9 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     orderAscending = false
   ): Promise<InstallationEntry[]> {
     try {
-      const installationLogList = this._portalDataService.web.lists.getByTitle(strings.InstallationLogListName)
+      const installationLogList = this._portalDataService.web.lists.getByTitle(
+        strings.InstallationLogListName
+      )
       const installationLogItems = await installationLogList.items.orderBy(
         orderBy,
         orderAscending

@@ -2,7 +2,6 @@ import { format } from '@fluentui/react/lib/Utilities'
 import { dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp/core'
 import {
   IItemUpdateResult,
-  IItemUpdateResultData,
   ISearchResult,
   PermissionKind,
   QueryPropertyValueType,

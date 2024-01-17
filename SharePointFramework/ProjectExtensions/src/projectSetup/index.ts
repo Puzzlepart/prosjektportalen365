@@ -435,7 +435,9 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             },
             ['File', 'FieldValuesAsText']
           ),
-          this._portalDataService.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File']),
+          this._portalDataService.getItems(this.properties.contentConfigList, ContentConfig, {}, [
+            'File'
+          ]),
           this._portalDataService.getItems(
             strings.ProjectTemplateFilesListName,
             ProjectTemplateFile,

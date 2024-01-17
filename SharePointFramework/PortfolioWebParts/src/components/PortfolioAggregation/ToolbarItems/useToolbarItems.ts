@@ -94,18 +94,14 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
               ListMenuItemDivider,
               ...views,
               ListMenuItemDivider,
-              new ListMenuItem(strings.NewViewText)
-                .setIcon(Icons.FormNew)
-                .setOnClick(() => {
-                  context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
-                }),
-              new ListMenuItem(strings.EditViewText)
-                .setIcon(Icons.Edit)
-                .setOnClick(() => {
-                  context.dispatch(
-                    SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
-                  )
-                })
+              new ListMenuItem(strings.NewViewText).setIcon(Icons.FormNew).setOnClick(() => {
+                context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
+              }),
+              new ListMenuItem(strings.EditViewText).setIcon(Icons.Edit).setOnClick(() => {
+                context.dispatch(
+                  SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
+                )
+              })
             ],
             checkedValues
           ),

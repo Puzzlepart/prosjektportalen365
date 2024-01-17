@@ -45,10 +45,7 @@ import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS, IProjectsData } from './types'
 import { IList } from '@pnp/sp/lists'
 import { IItem } from '@pnp/sp/items'
-import {
-  IItemUpdateResult,
-  IItemUpdateResultData
-} from '@pnp/sp/presets/all'
+import { IItemUpdateResult } from '@pnp/sp/presets/all'
 
 /**
  * `SPDataAdapter` is a class that extends the `SPDataAdapterBase` class and implements the `IPortfolioWebPartsDataAdapter` interface.
@@ -976,7 +973,9 @@ export class SPDataAdapter
     persistRenderAs = false
   ): Promise<IItemUpdateResult> {
     try {
-      const list = this.portalDataService.web.lists.getByTitle(strings.ProjectContentColumnsListName)
+      const list = this.portalDataService.web.lists.getByTitle(
+        strings.ProjectContentColumnsListName
+      )
       const properties: SPProjectContentColumnItem = _.pick(
         columnItem,
         [
@@ -994,7 +993,9 @@ export class SPDataAdapter
 
   public async deleteProjectContentColumn(column: Record<string, any>): Promise<any> {
     try {
-      const list = this.portalDataService.web.lists.getByTitle(strings.ProjectContentColumnsListName)
+      const list = this.portalDataService.web.lists.getByTitle(
+        strings.ProjectContentColumnsListName
+      )
       const items = await list.items()
       const item = items.find((i) => i.GtManagedProperty === column.fieldName)
 
