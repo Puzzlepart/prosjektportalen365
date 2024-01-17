@@ -63,7 +63,7 @@ export interface IBaseTaskParams {
   /**
    * Portal data service
    */
-  portal?: PortalDataService
+  portalDataService?: PortalDataService
 
   /**
    * Miscellaneous data

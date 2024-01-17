@@ -30,7 +30,7 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
    */
   async function fetchJsonConfiguration() {
     try {
-      const manualConfiguration = await SPDataAdapter.portal.web
+      const manualConfiguration = await SPDataAdapter.portalDataService.web
         .getFileByServerRelativePath(props.manualConfigurationPath)
         .using(
           Caching({

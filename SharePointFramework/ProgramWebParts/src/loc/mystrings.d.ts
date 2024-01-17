@@ -167,6 +167,10 @@ declare interface IProgramWebPartsStrings {
   ToggleEditViewColumnsLabel: string
   UseChangesButtonText: string
   ViewNotFoundMessage: string
+
+  DataSourceItemNotFound: string
+  DataSourceListName: string
+  ProjectContentColumnItemNotFound: string
 }
 
 declare module 'ProgramWebPartsStrings' {

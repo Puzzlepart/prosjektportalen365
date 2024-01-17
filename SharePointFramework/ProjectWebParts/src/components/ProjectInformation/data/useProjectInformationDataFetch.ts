@@ -21,9 +21,9 @@ import { fetchProjectStatusReportData } from './fetchProjectStatusReportData'
  * `useProjectInformationDataFetch` hook. Data are fetched using the following
  * functions:
  *
- * - `SPDataAdapter.portal.getProjectColumns` - fetches project columns
+ * - `SPDataAdapter.portalDataService.getProjectColumns` - fetches project columns
  * - `SPDataAdapter.project.getProjectInformationData` - fetches project properties data
- * - `SPDataAdapter.portal.getParentProjects` - fetches parent projects (only on frontpage)
+ * - `SPDataAdapter.portalDataService.getParentProjects` - fetches parent projects (only on frontpage)
  * - `fetchProjectStatusReportData` - fetches project status reports, sections and column config
  *
  * @remarks Ensures that `SPDataAdapter` is configured before fetching data.
@@ -42,11 +42,11 @@ const fetchData: DataFetchFunction<
     const isFrontpage = context.props.page === 'Frontpage'
     const [columns, projectInformationData, [reports, sections, columnConfig], parentProjects] =
       await Promise.all([
-        SPDataAdapter.portal.getProjectColumns(),
+        SPDataAdapter.portalDataService.getProjectColumns(),
         SPDataAdapter.project.getProjectInformationData(),
         fetchProjectStatusReportData(context),
         isFrontpage
-          ? SPDataAdapter.portal.getParentProjects(
+          ? SPDataAdapter.portalDataService.getParentProjects(
               context.props.webAbsoluteUrl,
               ProjectInformationParentProject
             )
@@ -55,7 +55,7 @@ const fetchData: DataFetchFunction<
     const templateName = projectInformationData.fieldValues.get('GtProjectTemplate', {
       format: 'text'
     })
-    const template = await SPDataAdapter.portal.getProjectTemplate(templateName)
+    const template = await SPDataAdapter.portalDataService.getProjectTemplate(templateName)
     const data: Partial<IProjectInformationState> = {
       data: {
         columns,

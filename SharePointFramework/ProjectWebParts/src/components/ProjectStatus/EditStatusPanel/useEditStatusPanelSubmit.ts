@@ -18,7 +18,7 @@ export function useEditStatusPanelSubmit(): ICustomEditPanelSubmitProps {
   return {
     ...state,
     onSubmit: async ({ properties }) => {
-      const updatedReport = await SPDataAdapter.portal.updateStatusReport(
+      const updatedReport = await SPDataAdapter.portalDataService.updateStatusReport(
         selectedReport,
         properties
       )

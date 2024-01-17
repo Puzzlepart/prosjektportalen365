@@ -17,7 +17,7 @@ export async function fetchProjectData(
   timelineConfig: TimelineConfigurationModel[]
 ) {
   try {
-    const [projectData] = await SPDataAdapter.portal.web.lists
+    const [projectData] = await SPDataAdapter.portalDataService.web.lists
       .getByTitle(strings.ProjectsListName)
       .items.select('Id', 'GtStartDate', 'GtEndDate')
       .filter(`GtSiteId eq '${props.siteId}'`)

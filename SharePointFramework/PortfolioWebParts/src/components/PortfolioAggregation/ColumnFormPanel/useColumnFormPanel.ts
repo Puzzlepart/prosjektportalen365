@@ -27,7 +27,7 @@ export function useColumnFormPanel() {
       GtInternalName: column.get('internalName'),
       GtManagedProperty: column.get('fieldName'),
       GtFieldDataType: colummData.renderAs ?? 'Text',
-      GtDataSourceCategory: context.props.title,
+      GtDataSourceCategory: context.props.dataSourceCategory,
       GtColMinWidth: column.get('minWidth'),
       GtColMaxWidth: column.get('maxWidth')
     }

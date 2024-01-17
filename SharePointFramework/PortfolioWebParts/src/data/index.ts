@@ -822,33 +822,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  public async addItemToList<T = any>(
-    listName: string,
-    properties: Record<string, any>
-  ): Promise<T> {
-    try {
-      const list = this._sp.web.lists.getByTitle(listName)
-      const itemAddResult = await list.items.add(properties)
-      return itemAddResult.data as T
-    } catch (error) {
-      throw new Error(error)
-    }
-  }
-
-  public async updateItemInList<T = IItemUpdateResultData>(
-    listName: string,
-    itemId: number,
-    properties: Record<string, any>
-  ): Promise<T> {
-    try {
-      const list = this._sp.web.lists.getByTitle(listName)
-      const itemUpdateResult = await list.items.getById(itemId).update(properties)
-      return itemUpdateResult.data as unknown as T
-    } catch (error) {
-      throw new Error(error)
-    }
-  }
-
   public async deleteItemFromList(listName: string, itemId: number): Promise<boolean> {
     try {
       const list = this._sp.web.lists.getByTitle(listName)

@@ -34,7 +34,7 @@ interface IUsePropertiesSyncParams {
  * @returns `true` if the project properties list is created, otherwise `false`.
  */
 const syncList = async (context: IProjectInformationContext) => {
-  return await SPDataAdapter.portal.syncList({
+  return await SPDataAdapter.portalDataService.syncList({
     url: context.props.webAbsoluteUrl,
     listName: strings.ProjectPropertiesListName,
     contentTypeId:

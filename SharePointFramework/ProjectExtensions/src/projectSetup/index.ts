@@ -43,7 +43,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    * Configured SPFI instance from `@pnp/sp`
    */
   public sp: SPFI
-  private _portal: PortalDataService
+  private _portalDataService: PortalDataService
   private _isSetup = true
   private _placeholderIds = {
     ErrorDialog: getId('errordialog'),
@@ -110,12 +110,12 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   private async _ensureParentProjectPatch(): Promise<void> {
-    const [singleItem] = await SPDataAdapter.portal.web.lists
+    const [singleItem] = await SPDataAdapter.portalDataService.web.lists
       .getByTitle(this.properties.projectsList)
       .items.filter(
         `GtSiteId eq '${this.context.pageContext.legacyPageContext.siteId.replace(/([{}])/g, '')}'`
       )()
-    await SPDataAdapter.portal.web.lists
+    await SPDataAdapter.portalDataService.web.lists
       .getByTitle(this.properties.projectsList)
       .items.getById(singleItem.Id)
       .update({ GtIsParentProject: true })
@@ -135,7 +135,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
       let data = await this._fetchData()
       ListLogger.init(
-        SPDataAdapter.portal.web.lists.getByTitle('Logg'),
+        SPDataAdapter.portalDataService.web.lists.getByTitle('Logg'),
         this.context.pageContext.web.absoluteUrl,
         'ProjectSetup'
       )
@@ -385,7 +385,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
       const [lockedTemplateName, templates] = await Promise.all([
         webAllProperties[lockedTemplateProperty],
-        this._portal.getItems(
+        this._portalDataService.getItems(
           this.properties.templatesLibrary,
           ProjectTemplate,
           {
@@ -419,14 +419,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     try {
       await MSGraphHelper.Init(this.context.msGraphClientFactory)
       const data: IProjectSetupData = {}
-      this._portal = await new PortalDataService().configure({
+      this._portalDataService = await new PortalDataService().configure({
         spfxContext: this.context
       })
 
       const [_templates, extensions, contentConfig, templateFiles, customActions, ideaData] =
         await Promise.all([
           this._getTemplates(),
-          this._portal.getItems(
+          this._portalDataService.getItems(
             this.properties.extensionsLibrary,
             ProjectExtension,
             {
@@ -435,8 +435,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             },
             ['File', 'FieldValuesAsText']
           ),
-          this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File']),
-          this._portal.getItems(
+          this._portalDataService.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File']),
+          this._portalDataService.getItems(
             strings.ProjectTemplateFilesListName,
             ProjectTemplateFile,
             {
@@ -445,7 +445,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
             ['File']
           ),
           this.sp.web.userCustomActions(),
-          this._portal.getIdeaData()
+          this._portalDataService.getIdeaData()
         ])
       const templates = _templates.map((tmpl) => {
         const [tmplFile] = templateFiles.filter((file) => file.id === tmpl.projectTemplateId)

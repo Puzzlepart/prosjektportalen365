@@ -111,13 +111,13 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    */
   public async getConfigurations(folderPath: string): Promise<IConfigurationFile[]> {
     try {
-      const { ServerRelativeUrl } = await this.portal.web.rootFolder
+      const { ServerRelativeUrl } = await this.portalDataService.web.rootFolder
         .select('ServerRelativeUrl')
         .using(DefaultCaching)<{
         ServerRelativeUrl: string
       }>()
       const folderRelativeUrl = `${ServerRelativeUrl}/${strings.SiteAssetsConfigurationFolder}/${folderPath}`
-      const folder = this.portal.web.getFolderByServerRelativePath(folderRelativeUrl)
+      const folder = this.portalDataService.web.getFolderByServerRelativePath(folderRelativeUrl)
       const files = await folder.files
         .select('Name', 'ServerRelativeUrl', 'ListItemAllFields/Title')
         .expand('ListItemAllFields')

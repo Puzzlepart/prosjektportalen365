@@ -1,6 +1,3 @@
-import { IMessageBarProps, MessageBar } from '@fluentui/react/lib/MessageBar'
-import { DisplayMode } from '@microsoft/sp-core-library'
-import { ISPHttpClientOptions, SPHttpClient } from '@microsoft/sp-http'
 import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
@@ -8,6 +5,9 @@ import {
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
+import { IMessageBarProps, MessageBar } from '@fluentui/react/lib/MessageBar'
+import { DisplayMode } from '@microsoft/sp-core-library'
+import { ISPHttpClientOptions, SPHttpClient } from '@microsoft/sp-http'
 import * as strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import React from 'react'

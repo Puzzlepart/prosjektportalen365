@@ -29,7 +29,7 @@ export class SPDataAdapterBase<
   /**
    * An instance of `PortalDataService`
    */
-  public portal: PortalDataService
+  public portalDataService: PortalDataService
 
   /**
    * An instance of `SpEntityPortalService`
@@ -99,11 +99,11 @@ export class SPDataAdapterBase<
     this.spfxContext = spfxContext
     this.settings = settings
     this.sp = createSpfiInstance(spfxContext)
-    this.portal = await new PortalDataService().configure({
+    this.portalDataService = await new PortalDataService().configure({
       spfxContext
     })
     this.entityService = new SpEntityPortalService(spfxContext, {
-      portalUrl: this.portal.url,
+      portalUrl: this.portalDataService.url,
       listName: 'Prosjekter',
       contentTypeId: '0x0100805E9E4FEAAB4F0EABAB2600D30DB70C',
       identityFieldName: 'GtSiteId',
@@ -113,7 +113,7 @@ export class SPDataAdapterBase<
       this._initStorage()
     }
     if (this.settings.loadGlobalSettings) {
-      this.globalSettings = await this.portal.getGlobalSettings()
+      this.globalSettings = await this.portalDataService.getGlobalSettings()
     }
     this.isConfigured = true
   }
@@ -162,7 +162,7 @@ export class SPDataAdapterBase<
             if (currentUserHasManageWebPermisson) return true
           }
           const currentUser = await this.getCurrentUser(pageContext.user)
-          const projectAdminRoles = (await this.portal.getProjectAdminRoles()).filter(
+          const projectAdminRoles = (await this.portalDataService.getProjectAdminRoles()).filter(
             (role) => rolesToCheck.indexOf(role.title) !== -1
           )
           for (let i = 0; i < projectAdminRoles.length; i++) {
@@ -197,7 +197,7 @@ export class SPDataAdapterBase<
                       web = this.sp.web
                       break
                     case 'Portefølje':
-                      web = this.portal.web
+                      web = this.portalDataService.web
                       break
                   }
                   try {
@@ -337,18 +337,18 @@ export class SPDataAdapterBase<
     options: GetMappedProjectPropertiesOptions = {}
   ): Promise<Record<string, any>> {
     let sourceWeb: IWeb = this.sp.web
-    let destinationWeb: IWeb = this.portal.web
+    let destinationWeb: IWeb = this.portalDataService.web
     switch (options.mapType) {
       case ProjectPropertiesMapType.FromPortfolioToProject:
         {
-          sourceWeb = this.portal.web
+          sourceWeb = this.portalDataService.web
           destinationWeb = this.sp.web
         }
         break
       case ProjectPropertiesMapType.FromPortfolioToPortfolio:
         {
-          sourceWeb = this.portal.web
-          destinationWeb = this.portal.web
+          sourceWeb = this.portalDataService.web
+          destinationWeb = this.portalDataService.web
         }
         break
     }

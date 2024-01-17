@@ -21,7 +21,7 @@ export async function fetchTimelineData(
   timelineConfig: TimelineConfigurationModel[]
 ) {
   try {
-    const timelineContentList = SPDataAdapter.portal.web.lists.getByTitle(
+    const timelineContentList = SPDataAdapter.portalDataService.web.lists.getByTitle(
       strings.TimelineContentListName
     )
 
@@ -52,7 +52,7 @@ export async function fetchTimelineData(
     const defaultViewColumns = (
       await timelineContentList.defaultView.fields.select('Items').top(500)()
     )['Items'] as string[]
-    const timelineContentFields = await SPDataAdapter.portal.getListFields('TIMELINE_CONTENT')
+    const timelineContentFields = await SPDataAdapter.portalDataService.getListFields('TIMELINE_CONTENT')
     const timelineContentEditableFields = timelineContentFields.map(
       (fld) => new EditableSPField(fld)
     )

@@ -169,5 +169,9 @@ define([], function () {
     ToggleEditViewColumnsLabel: 'Vis eller skjul kolonner',
     UseChangesButtonText: 'Bruk',
     ViewNotFoundMessage: 'Finner ikke angitt visning.',
+
+    DataSourceItemNotFound: 'Datakilde ble ikke funnet',
+    DataSourceListName: 'Datakilder',
+    ProjectContentColumnItemNotFound: 'Prosjektinnholdskolonne ble ikke funnet',
   }
 })

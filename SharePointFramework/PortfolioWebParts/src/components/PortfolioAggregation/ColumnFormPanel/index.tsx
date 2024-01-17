@@ -159,6 +159,13 @@ export const ColumnFormPanel: FC = () => {
               onChange={(_, data) => setColumn('isGroupable', data.checked)}
             />
           </FieldContainer>
+          <FieldContainer
+            iconName='GroupList'
+            label={strings.DataSourceCategoryLabel}
+            description={strings.DataSourceCategoryDescription}
+          >
+            <Input value={context.props.dataSourceCategory} disabled={true} />
+          </FieldContainer>
         </FluentProvider>
       </IdPrefixProvider>
     </Panel>

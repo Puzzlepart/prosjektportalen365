@@ -22,7 +22,7 @@ import { FetchDataResult, IProjectStatusProps } from './types'
  * @param contentTypeId Content type ID for Project Status
  */
 async function getReportFields(contentTypeId = '0x010022252E35737A413FB56A1BA53862F6D5') {
-  const fields = await SPDataAdapter.portal.getContentTypeFields(contentTypeId)
+  const fields = await SPDataAdapter.portalDataService.getContentTypeFields(contentTypeId)
   const reportFields = fields.map((field) => new EditableSPField(field))
   return reportFields
 }
@@ -43,10 +43,10 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
     }
     const [properties, reportList, reports, sections, columnConfig] = await Promise.all([
       SPDataAdapter.project.getProjectInformationData(),
-      SPDataAdapter.portal.getStatusReportListProps(),
-      SPDataAdapter.portal.getStatusReports({ useCaching: false }),
-      SPDataAdapter.portal.getProjectStatusSections(),
-      SPDataAdapter.portal.getProjectColumnConfig()
+      SPDataAdapter.portalDataService.getStatusReportListProps(),
+      SPDataAdapter.portalDataService.getStatusReports({ useCaching: false }),
+      SPDataAdapter.portalDataService.getProjectStatusSections(),
+      SPDataAdapter.portalDataService.getProjectColumnConfig()
     ])
     const reportFields = await getReportFields(
       properties.templateParameters?.ProjectStatusContentTypeId
@@ -73,7 +73,7 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
       )
     }
     if (initialSelectedReport?.published) {
-      initialSelectedReport = await SPDataAdapter.portal.getStatusReportAttachments(
+      initialSelectedReport = await SPDataAdapter.portalDataService.getStatusReportAttachments(
         initialSelectedReport
       )
       sortedReports = sortedReports.map((report) => {

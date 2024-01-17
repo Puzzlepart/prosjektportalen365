@@ -130,7 +130,7 @@ export class PlannerConfiguration extends BaseTask {
 
       if (this._labels.length > 25) {
         ListLogger.init(
-          SPDataAdapter.portal.web.lists.getByTitle('Logg'),
+          SPDataAdapter.portalDataService.web.lists.getByTitle('Logg'),
           pageContext.web.absoluteUrl,
           'PlannerConfiguration'
         )
@@ -268,7 +268,7 @@ export class PlannerConfiguration extends BaseTask {
 
     if (taskDetails.checklist.length > 20 || taskDetails.attachments.length > 10) {
       ListLogger.init(
-        SPDataAdapter.portal.web.lists.getByTitle('Logg'),
+        SPDataAdapter.portalDataService.web.lists.getByTitle('Logg'),
         pageContext.web.absoluteUrl,
         'PlannerConfiguration'
       )

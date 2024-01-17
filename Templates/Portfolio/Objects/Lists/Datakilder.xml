@@ -158,7 +158,7 @@
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">dc3a4676-a38a-4fa7-a2b3-790f89046b52</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Alle mulighetselementerfor underområder</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Alle mulighetselementer for underområder</pnp:DataValue>
             <pnp:DataValue FieldName="GtSearchQuery">ContentTypeId:0x0100A87AE71CBF2643A6BC9D0948BD2EE89702* DepartmentId:{{sitecollectionid}} -GtRiskStatusOWSCHCS="Ikke lenger aktuell"</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectContentColumns">1,6,7,8,9,10,45</pnp:DataValue>

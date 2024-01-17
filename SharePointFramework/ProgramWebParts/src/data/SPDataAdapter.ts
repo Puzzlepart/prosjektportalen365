@@ -34,6 +34,7 @@ import {
   ProjectDataService,
   ProjectListModel,
   SPDataAdapterBase,
+  SPDataSourceItem,
   SPProjectContentColumnItem,
   SPProjectItem,
   TimelineConfigurationModel,
@@ -44,6 +45,10 @@ import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS, IProjectsData } from './types'
 import { IList } from '@pnp/sp/lists'
 import { IItem } from '@pnp/sp/items'
+import {
+  IItemUpdateResult,
+  IItemUpdateResultData
+} from '@pnp/sp/presets/all'
 
 /**
  * `SPDataAdapter` is a class that extends the `SPDataAdapterBase` class and implements the `IPortfolioWebPartsDataAdapter` interface.
@@ -75,7 +80,7 @@ export class SPDataAdapter
     configuration: ISPDataAdapterBaseConfiguration
   ) {
     await super.configure(spfxContext, configuration)
-    this.dataSourceService = new DataSourceService(this.portal.web)
+    this.dataSourceService = new DataSourceService(this.portalDataService.web)
     this.project = new ProjectDataService({
       ...this.settings,
       spfxContext,
@@ -88,11 +93,11 @@ export class SPDataAdapter
   public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
     // eslint-disable-next-line prefer-const
     let [columnConfig, columns, views, viewsUrls, columnUrls] = await Promise.all([
-      this.portal.getProjectColumnConfig(),
-      this.portal.getProjectColumns(),
-      this.portal.getPortfolioOverviewViews(),
-      this.portal.getListFormUrls('PORTFOLIO_VIEWS'),
-      this.portal.getListFormUrls('PROJECT_COLUMNS')
+      this.portalDataService.getProjectColumnConfig(),
+      this.portalDataService.getProjectColumns(),
+      this.portalDataService.getPortfolioOverviewViews(),
+      this.portalDataService.getListFormUrls('PORTFOLIO_VIEWS'),
+      this.portalDataService.getListFormUrls('PROJECT_COLUMNS')
     ])
     columns = columns.map((col) => col.configure(columnConfig))
     const refiners = columns.filter((col) => col.isRefinable)
@@ -116,8 +121,8 @@ export class SPDataAdapter
       const columns = await this.fetchProjectContentColumns(category, level)
       const [views, viewsUrls, columnUrls] = await Promise.all([
         this.fetchDataSources(category, level, columns),
-        this.portal.getListFormUrls('DATA_SOURCES'),
-        this.portal.getListFormUrls('PROJECT_CONTENT_COLUMNS')
+        this.portalDataService.getListFormUrls('DATA_SOURCES'),
+        this.portalDataService.getListFormUrls('PROJECT_CONTENT_COLUMNS')
       ])
       return {
         columns,
@@ -360,7 +365,7 @@ export class SPDataAdapter
 
   public async fetchTimelineContentItems(timelineConfig: TimelineConfigurationModel[]) {
     const [timelineItems] = await Promise.all([
-      this.portal.web.lists
+      this.portalDataService.web.lists
         .getByTitle(strings.TimelineContentListName)
         .items.select(
           'Title',
@@ -417,7 +422,7 @@ export class SPDataAdapter
    * @description Used in `ProjectTimeline`
    */
   public async fetchTimelineConfiguration() {
-    const timelineConfig = await this.portal.web.lists
+    const timelineConfig = await this.portalDataService.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
       .items.select(
         'GtSortOrder',
@@ -556,7 +561,7 @@ export class SPDataAdapter
   public async fetchEnrichedProjects(): Promise<ProjectListModel[]> {
     await MSGraph.Init(this.spfxContext.msGraphClientFactory)
     const [items, memberOfGroups, users] = await Promise.all([
-      this.portal.web.lists
+      this.portalDataService.web.lists
         .getByTitle(strings.ProjectsListName)
         .items.select(...Object.keys(new SPProjectItem()))
         // eslint-disable-next-line quotes
@@ -578,6 +583,20 @@ export class SPDataAdapter
       users
     }
     const projects = this._combineResultData(result)
+    return projects
+  }
+
+  public async fetchProjects(
+    configuration?: IPortfolioAggregationConfiguration,
+    dataSource?: string
+  ): Promise<any[]> {
+    const odataQuery = (configuration?.views || []).find((v) => v.title === dataSource)?.odataQuery
+    let projects: any[]
+    if (odataQuery && !dataSource.includes('(Prosjektnivå)')) {
+      projects = await this.portalDataService.web.lists
+        .getByTitle(strings.ProjectsListName)
+        .items.filter(`${odataQuery}`)<any[]>()
+    }
     return projects
   }
 
@@ -699,14 +718,23 @@ export class SPDataAdapter
     return flatten(responses.map((r) => r.PrimarySearchResults))
   }
 
+  /**
+   * Fetch items with data source name. If the data source is a benefit overview,
+   * the items are fetched using `fetchBenefitItemsWithSource`.
+   *
+   * The properties 'FileExtension' and 'ServerRedirectedURL' is always added to the select properties.
+   *
+   * @param dataSourceName Data source name
+   * @param selectProperties Select properties
+   */
   public async fetchItemsWithSource(
-    name: string,
+    dataSourceName: string,
     selectProperties: string[],
     includeSelf: boolean = false
   ): Promise<any[]> {
     let items: any[]
-    const dataSrc = await this.dataSourceService.getByName(name)
-    if (!dataSrc) throw new Error(format(strings.DataSourceNotFound, name))
+    const dataSrc = await this.dataSourceService.getByName(dataSourceName)
+    if (!dataSrc) throw new Error(format(strings.DataSourceNotFound, dataSourceName))
     try {
       const dataSrcProperties = dataSrc.columns.map((col) => col.fieldName) || []
       if (dataSrc.category.startsWith('Gevinstoversikt')) {
@@ -723,7 +751,7 @@ export class SPDataAdapter
       }
       return items
     } catch (error) {
-      throw new Error(format(strings.DataSourceError, name))
+      throw new Error(format(strings.DataSourceError, dataSourceName))
     }
   }
 
@@ -742,7 +770,7 @@ export class SPDataAdapter
   public async fetchProjectContentColumns(dataSourceCategory: string, level?: string) {
     try {
       if (stringIsNullOrEmpty(dataSourceCategory)) return []
-      const projectContentColumnsList = this.portal.web.lists.getByTitle(
+      const projectContentColumnsList = this.portalDataService.web.lists.getByTitle(
         strings.ProjectContentColumnsListName
       )
       const columnItems = await projectContentColumnsList.items
@@ -772,7 +800,7 @@ export class SPDataAdapter
   public async updateProjectInHub(properties: Record<string, any>): Promise<void> {
     try {
       const siteId = this.spfxContext.pageContext.site.id.toString()
-      const list = this.portal.web.lists.getByTitle(strings.ProjectsListName)
+      const list = this.portalDataService.web.lists.getByTitle(strings.ProjectsListName)
       const [item] = await list.items.filter(`GtSiteId eq '${siteId}'`)()
       await list.items.getById(item.ID).update(properties)
     } catch (error) {}
@@ -941,5 +969,69 @@ export class SPDataAdapter
     await this._propertyItem.update(updateProperties)
     await this.updateProjectInHub(updateProperties)
     return updatedProjects
+  }
+
+  public async updateProjectContentColumn(
+    columnItem: SPProjectContentColumnItem,
+    persistRenderAs = false
+  ): Promise<IItemUpdateResult> {
+    try {
+      const list = this.portalDataService.web.lists.getByTitle(strings.ProjectContentColumnsListName)
+      const properties: SPProjectContentColumnItem = _.pick(
+        columnItem,
+        [
+          'GtColMinWidth',
+          'GtColMaxWidth',
+          persistRenderAs && 'GtFieldDataTypeProperties',
+          persistRenderAs && 'GtFieldDataType'
+        ].filter(Boolean)
+      )
+      return await list.items.getById(columnItem.Id).update(properties)
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  public async deleteProjectContentColumn(column: Record<string, any>): Promise<any> {
+    try {
+      const list = this.portalDataService.web.lists.getByTitle(strings.ProjectContentColumnsListName)
+      const items = await list.items()
+      const item = items.find((i) => i.GtManagedProperty === column.fieldName)
+
+      if (!item) {
+        throw new Error(format(strings.ProjectContentColumnItemNotFound, column.fieldName))
+      }
+
+      const itemDeleteResult = list.items.getById(item.Id).delete()
+      return itemDeleteResult
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  public async updateDataSourceItem(
+    properties: SPDataSourceItem,
+    dataSourceTitle: string,
+    shouldReplace: boolean = false
+  ): Promise<IItemUpdateResult> {
+    try {
+      const list = this.portalDataService.web.lists.getByTitle(strings.DataSourceListName)
+      const [item] = await list.items.filter(`Title eq '${dataSourceTitle}'`)()
+      if (!item) {
+        throw new Error(format(strings.DataSourceItemNotFound, dataSourceTitle))
+      }
+      if (item.GtProjectContentColumnsId && !shouldReplace) {
+        properties.GtProjectContentColumnsId = [
+          ...item.GtProjectContentColumnsId,
+          properties.GtProjectContentColumnsId
+        ]
+        return await list.items.getById(item.Id).update(properties)
+      } else {
+        properties.GtProjectContentColumnsId = properties.GtProjectContentColumnsId as number[]
+        return await list.items.getById(item.Id).update(properties)
+      }
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 }

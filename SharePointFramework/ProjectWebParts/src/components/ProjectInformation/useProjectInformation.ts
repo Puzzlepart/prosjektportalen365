@@ -26,7 +26,7 @@ export const useProjectInformation = (props: IProjectInformationProps) => {
 
   if (SPDataAdapter.isConfigured) {
     ListLogger.init(
-      SPDataAdapter.portal.web.lists.getByTitle(strings.LogListName),
+      SPDataAdapter.portalDataService.web.lists.getByTitle(strings.LogListName),
       props.webAbsoluteUrl,
       ProjectInformation.displayName
     )

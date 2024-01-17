@@ -26,14 +26,14 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
   private _gitHubReleases: IGitHubRelease[]
   private _links: { Url: string; Description: string; Level?: string }[]
   private _helpContent: HelpContentModel[]
-  private _portal: PortalDataService
+  private _portalDataService: PortalDataService
 
   /**
    * On init, fetch the installation logs, GitHub releases and links.
    */
   public async onInit(): Promise<void> {
     await super.onInit()
-    this._portal = await new PortalDataService().configure({
+    this._portalDataService = await new PortalDataService().configure({
       spfxContext: this.context
     })
     const [installEntries, gitHubReleases, helpContent, links] = await Promise.all([
@@ -60,7 +60,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       helpContent: this._helpContent,
       links: this._links,
       pageContext: this.context.pageContext,
-      portalUrl: this._portal.url
+      portalUrl: this._portalDataService.url
     })
   }
 
@@ -76,7 +76,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
     orderAscending = false
   ): Promise<InstallationEntry[]> {
     try {
-      const installationLogList = this._portal.web.lists.getByTitle(strings.InstallationLogListName)
+      const installationLogList = this._portalDataService.web.lists.getByTitle(strings.InstallationLogListName)
       const installationLogItems = await installationLogList.items.orderBy(
         orderBy,
         orderAscending
@@ -99,13 +99,13 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
       return await new PnPClientStorage().session.getOrPut(
         `pp365_help_content_${window.location.pathname}`,
         async () => {
-          const project = await this._portal.getProjectDetails()
+          const project = await this._portalDataService.getProjectDetails()
           const level = project
             ? project.isParentProject
               ? 'Overordnet/Program'
               : 'Prosjekt'
             : 'Portefølje'
-          let items = await this._portal.getItems(listName, HelpContentModel, {
+          let items = await this._portalDataService.getItems(listName, HelpContentModel, {
             ViewXml: `<View>
             <Query>
                 <Where>
@@ -140,7 +140,7 @@ export default class FooterApplicationCustomizer extends BaseApplicationCustomiz
    */
   private async _fetchLinks(): Promise<{ Url: string; Description: string; Level?: string }[]> {
     try {
-      const linksList = this._portal.web.lists.getByTitle(strings.LinksListName)
+      const linksList = this._portalDataService.web.lists.getByTitle(strings.LinksListName)
       const linksItems = await linksList.items()
       return linksItems.map((item) => {
         return {

@@ -36,7 +36,7 @@ export class SetupProjectInformation extends BaseTask {
       await this._syncPropertiesList()
       await this._addEntryToHub()
       if (this.data.ideaData) {
-        await SPDataAdapter.portal.updateIdeaData(
+        await SPDataAdapter.portalDataService.updateIdeaData(
           this.data.ideaData,
           strings.IdeaDecisionStatusApprovedAndSynced
         )
@@ -72,7 +72,7 @@ export class SetupProjectInformation extends BaseTask {
         strings.SyncLocalProjectPropertiesListText,
         'AlignCenter'
       )
-      const { list } = await this.params.portal.syncList({
+      const { list } = await this.params.portalDataService.syncList({
         url: this.params.webAbsoluteUrl,
         listName: strings.ProjectPropertiesListName,
         contentTypeId: this._templateParameters.ProjectContentTypeId

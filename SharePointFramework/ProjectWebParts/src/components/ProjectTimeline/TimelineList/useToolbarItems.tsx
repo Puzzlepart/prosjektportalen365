@@ -19,7 +19,7 @@ export function useToolbarItems() {
    * @param item Item
    */
   const deleteTimelineItem = async () => {
-    const list = SPDataAdapter.portal.web.lists.getByTitle(strings.TimelineContentListName)
+    const list = SPDataAdapter.portalDataService.web.lists.getByTitle(strings.TimelineContentListName)
 
     const selectedItems = context.state.selectedItems.map((id) =>
       context.state.data.listItems.find((_, idx) => idx === id)
@@ -56,7 +56,7 @@ export function useToolbarItems() {
             headerText: strings.NewTimelineContentText,
             submit: {
               onSubmit: async ({ properties }) => {
-                await SPDataAdapter.portal.addItemToList('TIMELINE_CONTENT', {
+                await SPDataAdapter.portalDataService.addItemToList('TIMELINE_CONTENT', {
                   ...properties,
                   GtSiteIdLookupId: context.state.data.projectId
                 })
@@ -77,7 +77,7 @@ export function useToolbarItems() {
               fieldValues,
               submit: {
                 onSubmit: async ({ properties }) => {
-                  await SPDataAdapter.portal.updateItemInList(
+                  await SPDataAdapter.portalDataService.updateItemInList(
                     'TIMELINE_CONTENT',
                     fieldValues.id,
                     properties

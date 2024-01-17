@@ -54,7 +54,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param viewXml View XML (CAML query)
    */
   public async getDocumentTemplates(libraryName: string, viewXml: string) {
-    return await this.portal.getItems(
+    return await this.portalDataService.getItems(
       libraryName,
       TemplateItem,
       {

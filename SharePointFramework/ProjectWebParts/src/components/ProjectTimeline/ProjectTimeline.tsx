@@ -54,7 +54,7 @@ export const ProjectTimeline: FC<IProjectTimelineProps> = (props) => {
           hiddenFields={['GtSiteIdLookup']}
           fieldValues={new ItemFieldValues()}
           dataAdapter={SPDataAdapter}
-          targetWeb={SPDataAdapter.portal.web}
+          targetWeb={SPDataAdapter.portalDataService.web}
           onDismiss={() => {
             setState({
               panel: null

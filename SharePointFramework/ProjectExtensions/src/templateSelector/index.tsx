@@ -42,7 +42,7 @@ export default class TemplateSelectorCommand extends BaseListViewCommandSet<ITem
       const templateLib = 'Malbibliotek'
       this._ctxValue.templateLibrary = {
         title: templateLib,
-        url: `${SPDataAdapter.portal.url}/${templateLib}`
+        url: `${SPDataAdapter.portalDataService.url}/${templateLib}`
       }
       this._ctxValue.templates = await SPDataAdapter.getDocumentTemplates(
         templateLib,

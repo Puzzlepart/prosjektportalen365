@@ -69,7 +69,7 @@ export class SitePermissions extends BaseTask {
    * Get configurations for the selected template from list
    */
   private async _getPermissionConfiguration(): Promise<IPermissionConfiguration[]> {
-    const list = SPDataAdapter.portal.web.lists.getByTitle(strings.PermissionConfigurationList)
+    const list = SPDataAdapter.portalDataService.web.lists.getByTitle(strings.PermissionConfigurationList)
     const query: ICamlQuery = {
       ViewXml: `<View>
     <Query>
@@ -101,7 +101,7 @@ export class SitePermissions extends BaseTask {
    */
   private async _getSiteGroups() {
     return (
-      await SPDataAdapter.portal.web.siteGroups.select('Title', 'Users').expand('Users')()
+      await SPDataAdapter.portalDataService.web.siteGroups.select('Title', 'Users').expand('Users')()
     ).reduce(
       (grps, grp) => ({
         ...grps,

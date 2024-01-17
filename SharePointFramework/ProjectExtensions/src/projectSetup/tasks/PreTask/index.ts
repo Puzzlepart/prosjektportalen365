@@ -29,12 +29,12 @@ export class PreTask extends BaseTask {
         loadTaxonomy: true
       })
       params.entityService = new SpEntityPortalService(params.context, {
-        portalUrl: SPDataAdapter.portal.url,
+        portalUrl: SPDataAdapter.portalDataService.url,
         listName: params.properties.projectsList,
         identityFieldName: 'GtGroupId',
         urlFieldName: 'GtSiteUrl'
       })
-      params.portal = await new PortalDataService().configure({
+      params.portalDataService = await new PortalDataService().configure({
         spfxContext: params.context
       })
       params.spfxJsomContext.jsomContext.web['set_isMultilingual'](false)
@@ -87,7 +87,7 @@ export class PreTask extends BaseTask {
     await Promise.all(
       contentTypes.map(async (contentTypeId) => {
         try {
-          await SPDataAdapter.portal.web.contentTypes.getById(contentTypeId)()
+          await SPDataAdapter.portalDataService.web.contentTypes.getById(contentTypeId)()
         } catch (error) {
           this.logError(`Failed to validate content type ${contentTypeId}`)
           throw new BaseTaskError(

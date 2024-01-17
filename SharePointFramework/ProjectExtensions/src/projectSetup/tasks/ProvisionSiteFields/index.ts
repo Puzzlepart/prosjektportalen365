@@ -30,7 +30,7 @@ export class ProvisionSiteFields extends BaseTask {
         const existingSiteFields = await params.web.fields.select(...Object.keys(new SPField()))<
           SPField[]
         >()
-        const siteFields = await SPDataAdapter.portal.web.fields
+        const siteFields = await SPDataAdapter.portalDataService.web.fields
           .filter(
             `Group eq '${params.templateSchema.Parameters.ProvisionSiteFields}' and TypeAsString ne 'Calculated'`
           )

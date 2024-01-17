@@ -39,7 +39,7 @@ export function useCreateNewStatusReport() {
         return obj
       }, properties)
     }
-    const report = await SPDataAdapter.portal.addStatusReport(
+    const report = await SPDataAdapter.portalDataService.addStatusReport(
       properties,
       state.data.properties.templateParameters?.ProjectStatusContentTypeId
     )

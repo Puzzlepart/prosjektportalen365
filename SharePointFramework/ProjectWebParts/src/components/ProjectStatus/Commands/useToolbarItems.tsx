@@ -113,7 +113,7 @@ export function useToolbarItems() {
                   value: formatDate(report.created, true)
                 })
                 .setOnClick(() => {
-                  SPDataAdapter.portal
+                  SPDataAdapter.portalDataService
                     .getStatusReportAttachments(report)
                     .then((reportWithAttachments) => {
                       dispatch(SELECT_REPORT({ report: reportWithAttachments }))

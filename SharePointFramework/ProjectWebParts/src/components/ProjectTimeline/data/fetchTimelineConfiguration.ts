@@ -12,7 +12,7 @@ import strings from 'ProjectWebPartsStrings'
  */
 export async function fetchTimelineConfiguration() {
   return (
-    await SPDataAdapter.portal.web.lists
+    await SPDataAdapter.portalDataService.web.lists
       .getByTitle(strings.TimelineConfigurationListName)
       .items.select(...new SPTimelineConfigurationItem().fields)
       .orderBy('GtSortOrder')()

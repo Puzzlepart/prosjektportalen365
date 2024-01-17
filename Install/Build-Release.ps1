@@ -9,6 +9,8 @@ Builds a release package for Prosjektportalen 365. The release package contains 
 Param(
     [Parameter(Mandatory = $false, HelpMessage = "Skip building of SharePoint Framework solutions")]
     [switch]$SkipBuildSharePointFramework,
+    [Parameter(Mandatory = $false, HelpMessage = "Skip building of PnP templates")]
+    [switch]$SkipBuildPnPTemplates,
     [Parameter(Mandatory = $false, HelpMessage = "Clean node_modules for all SharePoint Framework solutions")]
     [switch]$Force,
     [Parameter(Mandatory = $false)]
@@ -210,52 +212,53 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
 #endregion
 
 #region Build PnP templates
-Set-Location $PSScriptRoot
-StartAction("Building Portfolio PnP template")
-if ($USE_CHANNEL_CONFIG) {
-    npm run generate-pnp-templates >$null 2>&1
-    Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_DIST_BASEPATH/Portfolio" -Force
+if (-not $SkipBuildPnPTemplates.IsPresent) {
+    Set-Location $PSScriptRoot
+    StartAction("Building Portfolio PnP template")
+    if ($USE_CHANNEL_CONFIG) {
+        npm run generate-pnp-templates >$null 2>&1
+        Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_DIST_BASEPATH/Portfolio" -Force
+    }
+    else {
+        Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Portfolio" -Force
+    }
+    EndAction
+
+    StartAction("Building PnP content templates")
+    Set-Location $PNP_TEMPLATES_BASEPATH
+
+    if ($CI.IsPresent) {  
+        npm ci --silent --no-audit --no-fund >$null 2>&1
+    }
+    else {
+        npm install --no-progress --silent --no-audit --no-fund  >$null 2>&1
+    }
+
+    npm run generate-project-templates >$null 2>&1
+
+    Get-ChildItem "./Content" -Directory -Filter "*no-NB*" | ForEach-Object {
+        Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
+    }
+    EndAction
+
+    StartAction("Building PnP upgrade templates")
+    Set-Location $PNP_TEMPLATES_BASEPATH
+
+    Get-ChildItem "./Upgrade" -Directory | ForEach-Object {
+        Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
+    }
+    EndAction
+
+    Set-Location $PSScriptRoot
+
+    StartAction("Building Taxonomy PnP template")
+    Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Taxonomy.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Taxonomy" -Force
+    EndAction
+
+    StartAction("Building Taxonomy BA PnP template")
+    Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/TaxonomyBA.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/TaxonomyBA" -Force
+    EndAction
 }
-else {
-    Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Portfolio.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Portfolio" -Force
-}
-EndAction
-
-StartAction("Building PnP content templates")
-Set-Location $PNP_TEMPLATES_BASEPATH
-
-if ($CI.IsPresent) {  
-    npm ci --silent --no-audit --no-fund >$null 2>&1
-}
-else {
-    npm install --no-progress --silent --no-audit --no-fund  >$null 2>&1
-}
-
-npm run generate-project-templates >$null 2>&1
-
-Get-ChildItem "./Content" -Directory -Filter "*no-NB*" | ForEach-Object {
-    Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
-}
-EndAction
-
-StartAction("Building PnP upgrade templates")
-Set-Location $PNP_TEMPLATES_BASEPATH
-
-Get-ChildItem "./Upgrade" -Directory | ForEach-Object {
-    Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/$($_.BaseName).pnp" -Folder $_.FullName -Force
-}
-EndAction
-
-Set-Location $PSScriptRoot
-
-StartAction("Building Taxonomy PnP template")
-Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/Taxonomy.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/Taxonomy" -Force
-EndAction
-
-StartAction("Building Taxonomy BA PnP template")
-Convert-PnPFolderToSiteTemplate -Out "$RELEASE_PATH_TEMPLATES/TaxonomyBA.pnp" -Folder "$PNP_TEMPLATES_BASEPATH/TaxonomyBA" -Force
-EndAction
-
 #endregion
 
 #region Compressing release to a zip file
