@@ -15,23 +15,21 @@ import {
   PortfolioAggregationErrorMessage
 } from '../types'
 import {
+  COLUMN_DELETED,
   COLUMN_FORM_PANEL_ON_SAVED,
   DATA_FETCHED,
   DATA_FETCH_ERROR,
-  DELETE_COLUMN,
   EXECUTE_SEARCH,
   GET_FILTERS,
   ON_FILTER_CHANGE,
   SELECTION_CHANGED,
   SET_ALL_COLLAPSED,
   SET_COLLAPSED,
-  SET_COLUMNS,
   SET_CURRENT_VIEW,
   SET_DATA_SOURCE,
   SET_GROUP_BY,
   SET_SORT,
   SET_VIEW_FORM_PANEL,
-  SHOW_HIDE_COLUMNS,
   START_FETCH,
   TOGGLE_COLUMN_CONTEXT_MENU,
   TOGGLE_COLUMN_FORM_PANEL,
@@ -105,6 +103,11 @@ export const createPortfolioAggregationReducer = (
       { payload }: ReturnType<typeof TOGGLE_EDIT_VIEW_COLUMNS_PANEL>
     ) => {
       state.isEditViewColumnsPanelOpen = payload.isOpen
+
+      if (payload.columns) {
+        state.columns = payload.columns
+        persistSelectedColumnsInWebPartProperties(props, current(state).columns)
+      }
     },
     [TOGGLE_FILTER_PANEL.type]: (state) => {
       state.isFilterPanelOpen = !state.isFilterPanelOpen
@@ -130,14 +133,10 @@ export const createPortfolioAggregationReducer = (
       state.columnAddedOrUpdated = new Date().getTime()
       persistSelectedColumnsInWebPartProperties(props, current(state).columns)
     },
-    [DELETE_COLUMN.type]: (state) => {
+    [COLUMN_DELETED.type]: (state, { payload }) => {
+      state.columns = state.columns.filter((col) => col.id !== payload.columnId)
       state.columnForm = { isOpen: false }
       state.columnDeleted = new Date().getTime()
-      persistSelectedColumnsInWebPartProperties(props, current(state).columns)
-    },
-    [SHOW_HIDE_COLUMNS.type]: (state) => {
-      state.isEditViewColumnsPanelOpen = false
-      state.columnShowHide = new Date().getTime()
       persistSelectedColumnsInWebPartProperties(props, current(state).columns)
     },
     [TOGGLE_COLUMN_CONTEXT_MENU.type]: (
@@ -216,10 +215,6 @@ export const createPortfolioAggregationReducer = (
         col.isSortedDescending = col.isSorted ? isSortedDescending : false
         return col
       })
-    },
-    [SET_COLUMNS.type]: (state, { payload }: ReturnType<typeof SET_COLUMNS>) => {
-      state.columns = payload.columns
-      persistSelectedColumnsInWebPartProperties(props, current(state).columns)
     },
     [SET_CURRENT_VIEW.type]: (state) => {
       const hashState = parseUrlHash()

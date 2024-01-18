@@ -578,27 +578,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
-   * Delete project content column
-   *
-   * @param _list List
-   * @param column Column to delete
-   */
-  public async deleteProjectContentColumn(
-    _list: PortalDataServiceList,
-    column: Record<string, any>
-  ): Promise<any> {
-    try {
-      const list = this._getList(_list)
-      const items = await list.items()
-      const item = items.find((i) => i.GtManagedProperty === column.fieldName)
-      const itemDeleteResult = list.items.getById(item.Id).delete()
-      return itemDeleteResult
-    } catch (error) {
-      throw new Error(error)
-    }
-  }
-
-  /**
    * Update the data source item with title `dataSourceTitle` with the properties in `properties`.
    *
    * @param _list List

@@ -27,6 +27,7 @@ export const TOGGLE_COLUMN_FORM_PANEL = createAction<IColumnFormPanel>('TOGGLE_C
  */
 export const TOGGLE_EDIT_VIEW_COLUMNS_PANEL = createAction<{
   isOpen: boolean
+  columns?: ProjectContentColumn[]
 }>('TOGGLE_EDIT_VIEW_COLUMNS_PANEL')
 
 /**
@@ -48,14 +49,9 @@ export const COLUMN_FORM_PANEL_ON_SAVED = createAction<{
 }>('COLUMN_FORM_PANEL_ON_SAVED')
 
 /**
- * `DELETE_COLUMN`: Delete column.
+ * `COLUMN_DELETED`: Column deleted - updates the `columns` and `columnForm` state
  */
-export const DELETE_COLUMN = createAction('DELETE_COLUMN')
-
-/**
- * `SHOW_HIDE_COLUMNS`: Show/hide columns.
- */
-export const SHOW_HIDE_COLUMNS = createAction('SHOW_HIDE_COLUMNS')
+export const COLUMN_DELETED = createAction<{ columnId: any }>('COLUMN_DELETED')
 
 /**
  * `TOGGLE_COLUMN_CONTEXT_MENU`: Column header context menu.
@@ -85,11 +81,6 @@ export const SET_ALL_COLLAPSED = createAction<{ isAllCollapsed: boolean }>('SET_
 export const SET_SORT = createAction<{ column: ProjectContentColumn; isSortedDescending: boolean }>(
   'SET_SORT'
 )
-
-/**
- * `SET_COLUMNS`: Set columns.
- */
-export const SET_COLUMNS = createAction<{ columns: ProjectContentColumn[] }>('SET_COLUMNS')
 
 /**
  * `SET_CURRENT_VIEW`: Set current view.

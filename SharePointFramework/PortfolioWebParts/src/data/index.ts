@@ -783,16 +783,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
     }
   }
 
-  public async deleteItemFromList(listName: string, itemId: number): Promise<boolean> {
-    try {
-      const list = this._sp.web.lists.getByTitle(listName)
-      await list.items.getById(itemId).delete()
-      return true
-    } catch {
-      return false
-    }
-  }
-
   public async addColumnToPortfolioView(
     properties: SPProjectColumnItem,
     view: PortfolioOverviewView

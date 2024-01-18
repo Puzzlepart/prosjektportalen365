@@ -1,7 +1,7 @@
 import { ProjectContentColumn, SPDataSourceItem } from 'pp365-shared-library'
 import { IEditViewColumnsPanelProps } from '../EditViewColumnsPanel/types'
 import { IPortfolioAggregationContext } from './context'
-import { SET_COLUMNS, TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from './reducer'
+import { TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from './reducer'
 import { useMemo } from 'react'
 
 /**
@@ -26,7 +26,7 @@ export function useEditViewColumnsPanel(
     await context.props.dataAdapter.portalDataService
       .updateDataSourceItem('DATA_SOURCES', properties, context.state.currentView?.title, true)
       .then(() => {
-        context.dispatch(SET_COLUMNS({ columns }))
+        context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false, columns }))
         onDismiss()
       })
   }

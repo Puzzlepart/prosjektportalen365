@@ -1,7 +1,7 @@
 import { ProjectContentColumn, SPProjectContentColumnItem } from 'pp365-shared-library'
 import { useState } from 'react'
 import { usePortfolioAggregationContext } from '../context'
-import { COLUMN_FORM_PANEL_ON_SAVED, DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
+import { COLUMN_DELETED, COLUMN_FORM_PANEL_ON_SAVED, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import { useEditableColumn } from './useEditableColumn'
 
 /**
@@ -13,6 +13,16 @@ export function useColumnFormPanel() {
   const { column, setColumn, setColumnData, isEditing } = useEditableColumn()
   const [persistRenderGlobally, setPersistRenderGlobally] = useState(false)
 
+  /**
+   * Saves the column to the list. If the column is new, it will
+   * also add the column to the current data source. If the column is
+   * being edited, it will update the column in the list.
+   *
+   * If the column is being edited, it will update the column in the list
+   * using `updateProjectContentColumn` from the `dataAdapter`. If the column is new,
+   * it will add the column to the list using `addColumnToDataSource` from
+   * the `dataAdapter`.
+   */
   const onSave = async () => {
     const colummData = column.get('data') ?? {}
     const columnItem: SPProjectContentColumnItem = {
@@ -50,14 +60,28 @@ export function useColumnFormPanel() {
     } catch (error) {}
   }
 
+  /**
+   * Deletes the column from the content columns list. Deletes the column using
+   * `deleteItemFromList` from the data adapter. If the column is deleted
+   * successfully, it will dispatch the `COLUMN_DELETED` action to the reducer.
+   */
   const onDeleteColumn = async () => {
-    await context.props.dataAdapter.portalDataService
-      .deleteProjectContentColumn('PROJECT_CONTENT_COLUMNS', context.state.columnForm.column)
-      .then(() => {
-        context.dispatch(DELETE_COLUMN())
-      })
+    const isDeleted = await context.props.dataAdapter.portalDataService.deleteItemFromList(
+      'PROJECT_CONTENT_COLUMNS',
+      context.state.columnForm.column.id
+    )
+    if (isDeleted) {
+      context.dispatch(
+        COLUMN_DELETED({
+          columnId: context.state.columnForm.column.id
+        })
+      )
+    }
   }
 
+  /**
+   * Dismisses the form panel by dispatching the `TOGGLE_COLUMN_FORM_PANEL` action.
+   */
   const onDismiss = () => {
     context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
   }
