@@ -4,7 +4,6 @@ import { indexOf } from 'underscore'
 import { useAddColumn } from '../../List'
 import { usePortfolioAggregationContext } from '../context'
 import {
-  MOVE_COLUMN,
   SET_GROUP_BY,
   SET_SORT,
   TOGGLE_COLUMN_FORM_PANEL,
@@ -19,7 +18,10 @@ import { MenuProps } from '@fluentui/react-components'
 export function useColumnContextMenu() {
   const context = usePortfolioAggregationContext()
   const [open, setOpen] = useState(false)
-  const { isAddColumn, createContextualMenuItems } = useAddColumn(true)
+  const { isAddColumn, createContextualMenuItems } = useAddColumn(
+    true,
+    context.props.pageContext.legacyPageContext.isSiteAdmin
+  )
   const onOpenChange: MenuProps['onOpenChange'] = (_, data) => setOpen(data.open)
   const [checkedValues, setCheckedValues] = useState<MenuProps['checkedValues']>({})
   const onCheckedValueChange: MenuProps['onCheckedValueChange'] = (_, data) => {
@@ -113,21 +115,8 @@ export function useColumnContextMenu() {
               key: 'EDIT_COLUMN',
               text: strings.EditColumnLabel,
               onClick: () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column })),
+              disabled: !context.props.pageContext.legacyPageContext.isSiteAdmin,
               iconProps: { iconName: 'TableCellEdit' }
-            },
-            {
-              key: 'MOVE_COLUMN_LEFT',
-              text: strings.MoveLeftLabel,
-              disabled: columnIndex === 0,
-              onClick: () => context.dispatch(MOVE_COLUMN({ column, move: -1 })),
-              iconProps: { iconName: 'ArrowLeft' }
-            },
-            {
-              key: 'MOVE_COLUMN_RIGHT',
-              text: strings.MoveRightLabel,
-              disabled: columnIndex === context.state.columns.length - 1,
-              onClick: () => context.dispatch(MOVE_COLUMN({ column, move: 1 })),
-              iconProps: { iconName: 'ArrowRight' }
             },
             {
               key: 'DIVIDER_03',

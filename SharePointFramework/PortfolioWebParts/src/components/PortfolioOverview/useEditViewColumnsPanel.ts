@@ -4,7 +4,7 @@ import { ProjectColumn } from 'pp365-shared-library'
 import { useMemo } from 'react'
 import { IEditViewColumnsPanelProps } from '../EditViewColumnsPanel/types'
 import { IPortfolioOverviewContext } from './context'
-import { SET_EDIT_VIEW_COLUMNS_PANEL } from './reducer'
+import { TOGGLE_EDIT_VIEW_COLUMNS_PANEL } from './reducer'
 
 /**
  * Creates props for `EditViewColumnsPanel` component based on the context (`IPortfolioOverviewContext`)
@@ -46,7 +46,7 @@ export function useEditViewColumnsPanel(
       properties
     )
 
-    context.dispatch(SET_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false, columns }))
+    context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false, columns }))
   }
 
   /**
@@ -70,7 +70,7 @@ export function useEditViewColumnsPanel(
     )
 
     context.dispatch(
-      SET_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false, columns, revertColumnOrder: true })
+      TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false, columns, revertColumnOrder: true })
     )
   }
 
@@ -78,7 +78,7 @@ export function useEditViewColumnsPanel(
     isOpen: context.state.isEditViewColumnsPanelOpen,
     columns: columnsWithSelectedState,
     onSave: onSaveViewColumns,
-    onDismiss: () => context.dispatch(SET_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false })),
+    onDismiss: () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: false })),
     revertOrder: {
       disabled: _.isEmpty(context.state.currentView?.columnOrder),
       onClick: onRevertViewColumnOrder

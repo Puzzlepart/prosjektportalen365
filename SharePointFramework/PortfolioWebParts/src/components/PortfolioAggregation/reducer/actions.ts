@@ -40,9 +40,12 @@ export const TOGGLE_FILTER_PANEL = createAction('TOGGLE_FILTER_PANEL')
 export const TOGGLE_COMPACT = createAction<boolean>('TOGGLE_COMPACT')
 
 /**
- * `ADD_COLUMN`: Add column.
+ * `COLUMN_FORM_PANEL_ON_SAVED`: Column form panel on saved.
  */
-export const ADD_COLUMN = createAction<ProjectContentColumn>('ADD_COLUMN')
+export const COLUMN_FORM_PANEL_ON_SAVED = createAction<{
+  column: ProjectContentColumn
+  isNew: boolean
+}>('COLUMN_FORM_PANEL_ON_SAVED')
 
 /**
  * `DELETE_COLUMN`: Delete column.
@@ -81,13 +84,6 @@ export const SET_ALL_COLLAPSED = createAction<{ isAllCollapsed: boolean }>('SET_
  */
 export const SET_SORT = createAction<{ column: ProjectContentColumn; isSortedDescending: boolean }>(
   'SET_SORT'
-)
-
-/**
- * `MOVE_COLUMN`: Move column.
- */
-export const MOVE_COLUMN = createAction<{ column: ProjectContentColumn; move: number }>(
-  'MOVE_COLUMN'
 )
 
 /**

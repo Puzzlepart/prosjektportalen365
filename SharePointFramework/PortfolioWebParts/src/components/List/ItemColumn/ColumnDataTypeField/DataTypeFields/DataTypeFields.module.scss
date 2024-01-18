@@ -1,18 +1,14 @@
 .root {
-    .header {
-        margin: 0.8rem 0;
-        cursor: pointer;
-        .title {
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-    }
-    .container {
-        width: 100%;
-        margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  padding-top: 8px;
 
-        > div {
-            margin-bottom: 0.5rem;
-        }
-    }
+  .container {
+      width: 100%;
+      padding: 16px;
+
+      > div {
+          margin-bottom: 6px;
+      }
+  }
 }

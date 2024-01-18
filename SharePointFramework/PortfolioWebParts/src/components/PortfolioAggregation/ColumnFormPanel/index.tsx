@@ -146,7 +146,8 @@ export const ColumnFormPanel: FC = () => {
             persistRenderGloballyField={{
               defaultChecked: persistRenderGlobally || !isEditing,
               onChange: (_, data) => setPersistRenderGlobally(!!data.checked),
-              disabled: !isEditing || column.get('fieldName') === 'Title'
+              hidden: !isEditing,
+              disabled: column.get('fieldName') === 'Title'
             }}
           />
           <FieldContainer
@@ -161,8 +162,8 @@ export const ColumnFormPanel: FC = () => {
           </FieldContainer>
           <FieldContainer
             iconName='GroupList'
-            label={strings.DataSourceCategoryLabel}
-            description={strings.DataSourceCategoryDescription}
+            label={strings.ColumnCategoryLabel}
+            description={strings.ColumnCategoryDescription}
           >
             <Input value={context.props.dataSourceCategory} disabled={true} />
           </FieldContainer>

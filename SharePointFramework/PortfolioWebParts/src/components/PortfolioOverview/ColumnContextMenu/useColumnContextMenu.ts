@@ -8,7 +8,7 @@ import {
   SET_GROUP_BY,
   SET_SORT,
   TOGGLE_COLUMN_FORM_PANEL,
-  SET_EDIT_VIEW_COLUMNS_PANEL
+  TOGGLE_EDIT_VIEW_COLUMNS_PANEL
 } from '../reducer'
 import { useAddColumn } from '../../List'
 import { MenuProps } from '@fluentui/react-components'
@@ -43,6 +43,7 @@ export function useColumnContextMenu() {
     target: null,
     items: []
   }
+
   if (!context.state.columnContextMenu) return columnContextMenu
 
   const { column, target } = context.state.columnContextMenu
@@ -51,7 +52,7 @@ export function useColumnContextMenu() {
   if (isAddColumn(column)) {
     columnContextMenu.items = createContextualMenuItems(
       () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true })),
-      () => context.dispatch(SET_EDIT_VIEW_COLUMNS_PANEL({ isOpen: true })),
+      () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: true })),
       context.state.currentView?.isProgramView,
       context.state.currentView?.isProgramView
     )
@@ -129,9 +130,7 @@ export function useColumnContextMenu() {
             {
               key: 'EDIT_COLUMN',
               text: strings.EditColumnLabel,
-              onClick: () => {
-                context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column }))
-              },
+              onClick: () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column })),
               disabled: !context.props.pageContext.legacyPageContext.isSiteAdmin,
               iconProps: { iconName: 'TableCellEdit' }
             },
@@ -140,11 +139,15 @@ export function useColumnContextMenu() {
               itemType: ContextualMenuItemType.Divider
             },
             {
+              key: 'SHOW_HIDE_COLUMNS',
+              text: strings.ShowHideColumnsLabel,
+              onClick: () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: true })),
+              iconProps: { iconName: 'Eye' }
+            },
+            {
               key: 'ADD_COLUMN',
               text: strings.AddColumnLabel,
-              onClick: () => {
-                context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
-              },
+              onClick: () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true })),
               disabled: !context.props.pageContext.legacyPageContext.isSiteAdmin,
               iconProps: { iconName: 'Add' }
             }

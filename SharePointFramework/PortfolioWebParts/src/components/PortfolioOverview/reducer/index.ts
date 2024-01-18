@@ -16,7 +16,7 @@ import {
   EXECUTE_SEARCH,
   ON_FILTER_CHANGED,
   SELECTION_CHANGED,
-  SET_EDIT_VIEW_COLUMNS_PANEL,
+  TOGGLE_EDIT_VIEW_COLUMNS_PANEL,
   SET_GROUP_BY,
   SET_SORT,
   SET_VIEW_FORM_PANEL,
@@ -170,7 +170,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
         state.columns = state.columns.filter((c) => c.id !== payload.columnId)
         state.columnForm = { isOpen: false }
       })
-      .addCase(SET_EDIT_VIEW_COLUMNS_PANEL, (state, { payload }) => {
+      .addCase(TOGGLE_EDIT_VIEW_COLUMNS_PANEL, (state, { payload }) => {
         state.isEditViewColumnsPanelOpen = payload.isOpen
         if (payload.columns) {
           state.currentView.columns = payload.columns

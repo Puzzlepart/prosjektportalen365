@@ -38,7 +38,7 @@ export const ColumnDataTypeField: FC<IColumnDataTypeFieldProps> = (props) => {
         {props.children}
         <DataTypeFields {...dataTypeFields} />
       </FieldContainer>
-      {props.persistRenderGloballyField && (
+      {props.persistRenderGloballyField && !props.persistRenderGloballyField.hidden && (
         <FieldContainer
           iconName='AppsList'
           label={strings.ColumnPersistRenderGloballyFieldLabel}
@@ -46,10 +46,7 @@ export const ColumnDataTypeField: FC<IColumnDataTypeFieldProps> = (props) => {
         >
           <Switch
             {...props.persistRenderGloballyField}
-            disabled={
-              props.persistRenderGloballyField.disabled ||
-              dataTypeDropdown?.selectedOption?.disabled
-            }
+            disabled={dataTypeDropdown?.selectedOption?.disabled}
           />
         </FieldContainer>
       )}

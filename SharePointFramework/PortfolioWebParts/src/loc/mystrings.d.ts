@@ -21,6 +21,8 @@ declare interface IPortfolioWebPartsStrings {
   CancelButtonLabel: string
   ChartConfigurationListNameLabel: string
   ChartErrorText: string
+  ColumnCategoryDescription: string
+  ColumnCategoryLabel: string
   ColumnConfigListNameLabel: string
   ColumnPersistRenderGloballyFieldDescription: string
   ColumnPersistRenderGloballyFieldLabel: string

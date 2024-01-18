@@ -1,12 +1,7 @@
-import _ from 'lodash'
-import {
-  ProjectContentColumn,
-  SPDataSourceItem,
-  SPProjectContentColumnItem
-} from 'pp365-shared-library'
+import { ProjectContentColumn, SPProjectContentColumnItem } from 'pp365-shared-library'
 import { useState } from 'react'
 import { usePortfolioAggregationContext } from '../context'
-import { ADD_COLUMN, DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
+import { COLUMN_FORM_PANEL_ON_SAVED, DELETE_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import { useEditableColumn } from './useEditableColumn'
 
 /**
@@ -29,34 +24,29 @@ export function useColumnFormPanel() {
       GtFieldDataType: colummData.renderAs ?? 'Text',
       GtDataSourceCategory: context.props.dataSourceCategory,
       GtColMinWidth: column.get('minWidth'),
-      GtColMaxWidth: column.get('maxWidth')
+      GtColMaxWidth: column.get('maxWidth'),
+      GtIsGroupable: column.get('isGroupable')
     }
     if (colummData.dataTypeProperties) {
       columnItem.GtFieldDataTypeProperties = JSON.stringify(colummData.dataTypeProperties, null, 2)
     }
     try {
       if (isEditing) {
-        await context.props.dataAdapter.portalDataService
-          .updateProjectContentColumn('PROJECT_CONTENT_COLUMNS', columnItem, persistRenderGlobally)
-          .then(() => {
-            const editedColumn = new ProjectContentColumn(columnItem)
-            context.dispatch(ADD_COLUMN(editedColumn))
-          })
+        await context.props.dataAdapter.portalDataService.updateProjectContentColumn(
+          'PROJECT_CONTENT_COLUMNS',
+          columnItem,
+          persistRenderGlobally
+        )
       } else {
-        await context.props.dataAdapter.portalDataService
-          .addItemToList('PROJECT_CONTENT_COLUMNS', _.omit(columnItem, ['Id']))
-          .then((properties) => {
-            const newColumn = new ProjectContentColumn(properties)
-            const updateItem: SPDataSourceItem = {
-              GtProjectContentColumnsId: properties.Id
-            }
-            context.props.dataAdapter.portalDataService
-              .updateDataSourceItem('DATA_SOURCES', updateItem, context.state.currentView?.title)
-              .then(() => {
-                context.dispatch(ADD_COLUMN(newColumn))
-              })
-          })
+        await context.props.dataAdapter.addColumnToDataSource(columnItem, context.state.currentView)
       }
+
+      context.dispatch(
+        COLUMN_FORM_PANEL_ON_SAVED({
+          column: new ProjectContentColumn(columnItem),
+          isNew: !isEditing
+        })
+      )
     } catch (error) {}
   }
 

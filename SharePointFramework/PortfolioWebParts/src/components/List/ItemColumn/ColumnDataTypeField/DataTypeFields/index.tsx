@@ -1,8 +1,9 @@
-import strings from 'PortfolioWebPartsStrings'
 import _ from 'lodash'
 import React, { FC, createElement } from 'react'
 import styles from './DataTypeFields.module.scss'
 import { IDataTypeFieldsProps } from './types'
+import { getFluentIcon } from 'pp365-shared-library'
+import { Button } from '@fluentui/react-components'
 
 /**
  * Renders a list of fields based on the data type properties.
@@ -30,9 +31,21 @@ export const DataTypeFields: FC<IDataTypeFieldsProps> = (props) => {
 
   return (
     <div className={styles.root} hidden={!dataTypeProperties}>
-      <div className={styles.header} onClick={toggleIsFieldsVisible}>
-        <span className={styles.title}>{strings.ColumnRenderDataTypePropertiesHeaderText}</span>
-      </div>
+      <Button
+        appearance='subtle'
+        size='medium'
+        icon={isFieldsVisible ? getFluentIcon('ChevronUp') : getFluentIcon('ChevronDown')}
+        title={
+          isFieldsVisible
+            ? 'Skjul egenskaper for visningsmodus'
+            : 'Vis egenskaper for visningsmodus'
+        }
+        onClick={toggleIsFieldsVisible}
+      >
+        {isFieldsVisible
+          ? 'Skjul egenskaper for visningsmodus'
+          : 'Vis egenskaper for visningsmodus'}
+      </Button>
       <div className={styles.container} hidden={!isFieldsVisible}>
         {fieldElements}
       </div>

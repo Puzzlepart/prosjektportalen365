@@ -7,7 +7,6 @@ import _ from 'lodash'
 import { IFilterItemProps } from 'pp365-shared-library/lib/components/FilterPanel'
 import { DataSource } from 'pp365-shared-library/lib/models/DataSource'
 import { parseUrlHash, setUrlHash } from 'pp365-shared-library/lib/util'
-import { arrayMove } from 'pp365-shared-library/lib/util/arrayMove'
 import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
 import {
   IPortfolioAggregationHashState,
@@ -16,13 +15,12 @@ import {
   PortfolioAggregationErrorMessage
 } from '../types'
 import {
-  ADD_COLUMN,
+  COLUMN_FORM_PANEL_ON_SAVED,
   DATA_FETCHED,
   DATA_FETCH_ERROR,
   DELETE_COLUMN,
   EXECUTE_SEARCH,
   GET_FILTERS,
-  MOVE_COLUMN,
   ON_FILTER_CHANGE,
   SELECTION_CHANGED,
   SET_ALL_COLLAPSED,
@@ -114,22 +112,20 @@ export const createPortfolioAggregationReducer = (
     [TOGGLE_COMPACT.type]: (state) => {
       state.isCompact = !state.isCompact
     },
-    [ADD_COLUMN.type]: (state, { payload }: ReturnType<typeof ADD_COLUMN>) => {
-      const isEdit = !!state.columnForm?.column
-      const column = payload.setData({ isSelected: true })
-      let columns = [...state.columns]
-      let allColumnsForCategory = [...state.allColumnsForCategory]
-      if (isEdit) {
-        columns = columns.map((c) => (c.fieldName === column.fieldName ? column : c))
-        allColumnsForCategory = allColumnsForCategory.map((c) =>
-          c.fieldName === column.fieldName ? column : c
-        )
+    [COLUMN_FORM_PANEL_ON_SAVED.type]: (state, { payload }) => {
+      const column = payload.column.setData({ isSelected: true })
+
+      if (payload.isNew) {
+        state.columns = [...state.columns, payload.column]
+        state.allColumnsForCategory = [...state.allColumnsForCategory, column]
       } else {
-        columns = [...columns, column]
-        allColumnsForCategory = [...allColumnsForCategory, column]
+        state.columns = state.columns.map((col) =>
+          col.fieldName === payload.column.fieldName ? payload.column : col
+        )
+        state.allColumnsForCategory = state.allColumnsForCategory.map((col) =>
+          col.fieldName === column.fieldName ? column : col
+        )
       }
-      state.columns = columns
-      state.allColumnsForCategory = allColumnsForCategory
       state.columnForm = { isOpen: false }
       state.columnAddedOrUpdated = new Date().getTime()
       persistSelectedColumnsInWebPartProperties(props, current(state).columns)
@@ -220,14 +216,6 @@ export const createPortfolioAggregationReducer = (
         col.isSortedDescending = col.isSorted ? isSortedDescending : false
         return col
       })
-    },
-    [MOVE_COLUMN.type]: (state, { payload }: ReturnType<typeof MOVE_COLUMN>) => {
-      const index = _.indexOf(
-        state.columns.map((c) => c.fieldName),
-        payload.column.fieldName
-      )
-      state.columns = arrayMove(current(state).columns, index, index + payload.move)
-      persistSelectedColumnsInWebPartProperties(props, current(state).columns)
     },
     [SET_COLUMNS.type]: (state, { payload }: ReturnType<typeof SET_COLUMNS>) => {
       state.columns = payload.columns

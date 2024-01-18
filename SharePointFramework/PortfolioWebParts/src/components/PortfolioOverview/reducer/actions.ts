@@ -119,9 +119,9 @@ export const COLUMN_FORM_PANEL_ON_SAVED = createAction<{
 export const COLUMN_DELETED = createAction<{ columnId: any }>('COLUMN_DELETED')
 
 /**
- * `SET_EDIT_VIEW_COLUMNS_PANEL`: Set edit view columns panel.
+ * `TOGGLE_EDIT_VIEW_COLUMNS_PANEL`: Set edit view columns panel.
  */
-export const SET_EDIT_VIEW_COLUMNS_PANEL = createAction<{
+export const TOGGLE_EDIT_VIEW_COLUMNS_PANEL = createAction<{
   isOpen: boolean
   columns?: ProjectColumn[]
   revertColumnOrder?: boolean

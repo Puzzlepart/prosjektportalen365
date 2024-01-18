@@ -25,6 +25,8 @@ declare interface IProgramWebPartsStrings {
   ChildrenRemoveToastTitle: string
   CmdSelectionCountText: string
   CmdSelectionCountTooltipText: string
+  ColumnCategoryDescription: string
+  ColumnCategoryLabel: string
   ColumnPersistRenderGloballyFieldDescription: string
   ColumnPersistRenderGloballyFieldLabel: string
   ColumnRenderDataTypePropertiesHeaderText: string

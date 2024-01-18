@@ -23,6 +23,7 @@ import {
   SPContentType,
   SPFxContext,
   SPProjectColumnItem,
+  SPProjectContentColumnItem,
   SPProjectItem,
   SPTimelineConfigurationItem,
   TimelineConfigurationModel,
@@ -760,6 +761,25 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       return await this.dataSourceService.getByCategory(category, level, columns)
     } catch (error) {
       throw new Error(format(strings.DataSourceCategoryError, category))
+    }
+  }
+
+  public async addColumnToDataSource(
+    properties: SPProjectContentColumnItem,
+    dataSource: DataSource
+  ): Promise<boolean> {
+    try {
+      const projectContentColumnsList = this.portalDataService.web.lists.getByTitle(
+        strings.ProjectContentColumnsListName
+      )
+      const dataSourceList = this.portalDataService.web.lists.getByTitle(strings.DataSourceListName)
+      const column = await projectContentColumnsList.items.add(_.omit(properties, ['Id']))
+      dataSourceList.items.getById(dataSource.id as any).update({
+        GtProjectContentColumnsId: [...dataSource.columns.map((c) => c.id), column.data.Id]
+      })
+      return true
+    } catch (error) {
+      return false
     }
   }
 

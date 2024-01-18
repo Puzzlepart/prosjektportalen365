@@ -563,10 +563,12 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       const properties: SPProjectContentColumnItem = _.pick(
         columnItem,
         [
+          'Title',
           'GtColMinWidth',
           'GtColMaxWidth',
           persistRenderAs && 'GtFieldDataTypeProperties',
-          persistRenderAs && 'GtFieldDataType'
+          persistRenderAs && 'GtFieldDataType',
+          'GtIsGroupable'
         ].filter(Boolean)
       )
       return await list.items.getById(columnItem.Id).update(properties)
