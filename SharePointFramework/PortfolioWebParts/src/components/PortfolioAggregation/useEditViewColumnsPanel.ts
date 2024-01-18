@@ -23,8 +23,8 @@ export function useEditViewColumnsPanel(
     const properties: SPDataSourceItem = {
       GtProjectContentColumnsId: columns.map((c) => c.id)
     }
-    await context.props.dataAdapter
-      .updateDataSourceItem(properties, context.state.currentView?.title, true)
+    await context.props.dataAdapter.portalDataService
+      .updateDataSourceItem('DATA_SOURCES', properties, context.state.currentView?.title, true)
       .then(() => {
         context.dispatch(SET_COLUMNS({ columns }))
         onDismiss()

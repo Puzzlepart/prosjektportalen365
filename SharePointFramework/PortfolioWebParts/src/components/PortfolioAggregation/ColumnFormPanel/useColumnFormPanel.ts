@@ -36,8 +36,8 @@ export function useColumnFormPanel() {
     }
     try {
       if (isEditing) {
-        await context.props.dataAdapter
-          .updateProjectContentColumn(columnItem, persistRenderGlobally)
+        await context.props.dataAdapter.portalDataService
+          .updateProjectContentColumn('PROJECT_CONTENT_COLUMNS', columnItem, persistRenderGlobally)
           .then(() => {
             const editedColumn = new ProjectContentColumn(columnItem)
             context.dispatch(ADD_COLUMN(editedColumn))
@@ -50,8 +50,8 @@ export function useColumnFormPanel() {
             const updateItem: SPDataSourceItem = {
               GtProjectContentColumnsId: properties.Id
             }
-            context.props.dataAdapter
-              .updateDataSourceItem(updateItem, context.state.currentView?.title)
+            context.props.dataAdapter.portalDataService
+              .updateDataSourceItem('DATA_SOURCES', updateItem, context.state.currentView?.title)
               .then(() => {
                 context.dispatch(ADD_COLUMN(newColumn))
               })
@@ -61,8 +61,8 @@ export function useColumnFormPanel() {
   }
 
   const onDeleteColumn = async () => {
-    await context.props.dataAdapter
-      .deleteProjectContentColumn(context.state.columnForm.column)
+    await context.props.dataAdapter.portalDataService
+      .deleteProjectContentColumn('PROJECT_CONTENT_COLUMNS', context.state.columnForm.column)
       .then(() => {
         context.dispatch(DELETE_COLUMN())
       })

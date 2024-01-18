@@ -1,5 +1,4 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { IItemUpdateResult } from '@pnp/sp/items'
 import { ISiteUserInfo } from '@pnp/sp/presets/all'
 import { ISearchResult, SortDirection } from '@pnp/sp/search'
 import {
@@ -10,9 +9,7 @@ import {
   PortfolioOverviewView,
   ProjectContentColumn,
   ProjectListModel,
-  SPDataSourceItem,
   SPProjectColumnItem,
-  SPProjectContentColumnItem,
   SPProjectItem,
   TimelineConfigurationModel,
   TimelineContentModel
@@ -282,41 +279,6 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<any[]>
 
   /**
-   * Fetch project content columns from the project content columns SharePoint list on the hub site
-   * with the specified `dataSourceCategory` or without a category. The result is transformed into
-   * `ProjectColumn` objects. The `renderAs` property is set to the `dataType` property in lower case
-   * and with spaces replaced with underscores.
-   *
-   * If the `dataSourceCategory` is null or empty, an empty array is returned.
-   *
-   * @param category Category for data source
-   * @param level Level for data source
-   */
-  fetchProjectContentColumns?(
-    dataSourceCategory: string,
-    level?: string
-  ): Promise<ProjectContentColumn[]>
-
-  /**
-   * Update project content column with new values for properties `GtColMinWidth` and `GtColMaxWidth`,
-   * as well as the `GtFieldDataType` property if parameter `persistRenderAs` is true.
-   *
-   * @param column Project content column
-   * @param persistRenderAs Persist render as property
-   */
-  updateProjectContentColumn?(
-    columnItem: SPProjectContentColumnItem,
-    persistRenderAs?: boolean
-  ): Promise<any>
-
-  /**
-   * Delete project content column
-   *
-   * @param column Column to delete
-   */
-  deleteProjectContentColumn?(property: Record<string, any>): Promise<any>
-
-  /**
    * Adds a new column to the project columns list and adds the column to the specified view.
    *
    * @param properties Properties for the new column (`Id` will be omitted)
@@ -326,17 +288,4 @@ export interface IPortfolioWebPartsDataAdapter {
     properties: SPProjectColumnItem,
     view: PortfolioOverviewView
   ): Promise<boolean>
-
-  /**
-   * Update the data source item with title `dataSourceTitle` with the properties in `properties`.
-   *
-   * @param properties Properties
-   * @param dataSourceTitle Data source title
-   * @param shouldReplace Should replace the existing columns
-   */
-  updateDataSourceItem?(
-    properties: SPDataSourceItem,
-    dataSourceTitle: string,
-    shouldReplace?: boolean
-  ): Promise<IItemUpdateResult>
 }

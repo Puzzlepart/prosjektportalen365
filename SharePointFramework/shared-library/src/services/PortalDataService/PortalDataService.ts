@@ -3,7 +3,7 @@ import { AssignFrom, dateAdd, PnPClientStorage, stringIsNullOrEmpty } from '@pnp
 import { Logger, LogLevel } from '@pnp/logging'
 import { IFolder } from '@pnp/sp/folders'
 import { ICamlQuery, IList } from '@pnp/sp/lists'
-import { IItemUpdateResultData, spfi, SPFI } from '@pnp/sp/presets/all'
+import { IItemUpdateResult, IItemUpdateResultData, spfi, SPFI } from '@pnp/sp/presets/all'
 import { PermissionKind } from '@pnp/sp/security'
 import { IWeb } from '@pnp/sp/webs'
 import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
@@ -16,13 +16,16 @@ import {
   ProjectAdminRole,
   ProjectColumn,
   ProjectColumnConfig,
+  ProjectContentColumn,
   ProjectTemplate,
   SectionModel,
+  SPDataSourceItem,
   SPField,
   SPPortfolioOverviewViewItem,
   SPProjectAdminRoleItem,
   SPProjectColumnConfigItem,
   SPProjectColumnItem,
+  SPProjectContentColumnItem,
   StatusReport,
   StatusReportAttachment
 } from '../../models'
@@ -38,6 +41,7 @@ import {
 } from './types'
 import { DataService } from '../DataService'
 import '@pnp/sp/presets/all'
+import _ from 'underscore'
 
 export class PortalDataService extends DataService<IPortalDataServiceConfiguration> {
   private _sp: SPFI
@@ -539,6 +543,124 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     }
     const itemData = await this.addItemToList<Record<string, any>>('PROJECT_STATUS', properties)
     return new StatusReport(new ItemFieldValues(itemData))
+  }
+
+  /**
+   * Update project content column with new values for properties `GtColMinWidth` and `GtColMaxWidth`,
+   * as well as the `GtFieldDataType` property if parameter `persistRenderAs` is true.
+   *
+   * @param _list List
+   * @param column Project content column
+   * @param persistRenderAs Persist render as property
+   */
+  public async updateProjectContentColumn(
+    _list: PortalDataServiceList,
+    columnItem: SPProjectContentColumnItem,
+    persistRenderAs = false
+  ): Promise<IItemUpdateResult> {
+    try {
+      const list = this._getList(_list)
+      const properties: SPProjectContentColumnItem = _.pick(
+        columnItem,
+        [
+          'GtColMinWidth',
+          'GtColMaxWidth',
+          persistRenderAs && 'GtFieldDataTypeProperties',
+          persistRenderAs && 'GtFieldDataType'
+        ].filter(Boolean)
+      )
+      return await list.items.getById(columnItem.Id).update(properties)
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  /**
+   * Delete project content column
+   *
+   * @param _list List
+   * @param column Column to delete
+   */
+  public async deleteProjectContentColumn(
+    _list: PortalDataServiceList,
+    column: Record<string, any>
+  ): Promise<any> {
+    try {
+      const list = this._getList(_list)
+      const items = await list.items()
+      const item = items.find((i) => i.GtManagedProperty === column.fieldName)
+      const itemDeleteResult = list.items.getById(item.Id).delete()
+      return itemDeleteResult
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  /**
+   * Update the data source item with title `dataSourceTitle` with the properties in `properties`.
+   *
+   * @param _list List
+   * @param properties Properties
+   * @param dataSourceTitle Data source title
+   * @param shouldReplace Should replace the existing columns
+   */
+  public async updateDataSourceItem(
+    _list: PortalDataServiceList,
+    properties: SPDataSourceItem,
+    dataSourceTitle: string,
+    shouldReplace: boolean = false
+  ): Promise<IItemUpdateResult> {
+    try {
+      const list = this._getList(_list)
+      const [item] = await list.items.filter(`Title eq '${dataSourceTitle}'`)()
+      if (item.GtProjectContentColumnsId && !shouldReplace) {
+        properties.GtProjectContentColumnsId = [
+          ...item.GtProjectContentColumnsId,
+          properties.GtProjectContentColumnsId
+        ]
+        return await list.items.getById(item.Id).update(properties)
+      } else {
+        properties.GtProjectContentColumnsId = properties.GtProjectContentColumnsId as number[]
+        return await list.items.getById(item.Id).update(properties)
+      }
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  /**
+   * Fetch project content columns from the project content columns SharePoint list on the hub site
+   * with the specified `dataSourceCategory` or without a category. The result is transformed into
+   * `ProjectColumn` objects. The `renderAs` property is set to the `dataType` property in lower case
+   * and with spaces replaced with underscores.
+   *
+   * If the `dataSourceCategory` is null or empty, an empty array is returned.
+   *
+   * @param _list List
+   * @param category Category for data source
+   * @param level Level for data source
+   */
+  public async fetchProjectContentColumns(
+    _list: PortalDataServiceList,
+    dataSourceCategory: string,
+    level?: string
+  ) {
+    try {
+      if (stringIsNullOrEmpty(dataSourceCategory)) return []
+      const list = this._getList(_list)
+      const columnItems = await list.items.select(
+        ...Object.keys(new SPProjectContentColumnItem())
+      )()
+      const filteredColumnItems = columnItems.filter(
+        (col) =>
+          col.GtDataSourceCategory === dataSourceCategory ||
+          (!col.GtDataSourceCategory && !col.GtDataSourceLevel) ||
+          (!col.GtDataSourceCategory && _.contains(col.GtDataSourceLevel, level))
+      )
+      return filteredColumnItems.map((item) => new ProjectContentColumn(item))
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
   /**

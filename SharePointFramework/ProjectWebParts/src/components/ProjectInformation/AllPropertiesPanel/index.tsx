@@ -8,15 +8,17 @@ import { useProjectInformationContext } from '../context'
 export const AllPropertiesPanel: FC<IBasePanelProps> = (props) => {
   const context = useProjectInformationContext()
 
-  return <BasePanel
-    {...props}
-    isOpen={context.state.activePanel === 'AllPropertiesPanel'}
-    onDismiss={() => context.dispatch(CLOSE_PANEL())}
-    onRenderBody={() => <ProjectProperties displayAllProperties />}
-  />
+  return (
+    <BasePanel
+      {...props}
+      isOpen={context.state.activePanel === 'AllPropertiesPanel'}
+      onDismiss={() => context.dispatch(CLOSE_PANEL())}
+      onRenderBody={() => <ProjectProperties displayAllProperties />}
+    />
+  )
 }
 
 AllPropertiesPanel.defaultProps = {
   $type: 'AllPropertiesPanel',
-  headerText: strings.ProjectPropertiesHeader,
+  headerText: strings.ProjectPropertiesHeader
 }

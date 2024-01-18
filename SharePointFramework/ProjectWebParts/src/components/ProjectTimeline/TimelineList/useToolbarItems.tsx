@@ -19,7 +19,9 @@ export function useToolbarItems() {
    * @param item Item
    */
   const deleteTimelineItem = async () => {
-    const list = SPDataAdapter.portalDataService.web.lists.getByTitle(strings.TimelineContentListName)
+    const list = SPDataAdapter.portalDataService.web.lists.getByTitle(
+      strings.TimelineContentListName
+    )
 
     const selectedItems = context.state.selectedItems.map((id) =>
       context.state.data.listItems.find((_, idx) => idx === id)

@@ -20,8 +20,14 @@ export function useViewFormPanel() {
   }
 
   /**
-   * Saves the changes made to the view by updating the item in the `DATA_SOURCES` list or adding a new item to the list.
-   * Dismisses the form panel by dispatching the `SET_VIEW_FORM_PANEL` action.
+   * Saves the column to the list. If the column is new, it will
+   * also add the column to the current view. If the column is
+   * being edited, it will update the column in the list.
+   *
+   * If the column is being edited, it will update the column in the list
+   * using `updateItemInList` from the `dataAdapter`. If the column is new,
+   * it will add the column to the list using `addItemToList` from
+   * the `dataAdapter`.
    */
   const onSave = async () => {
     const { currentView } = context.state

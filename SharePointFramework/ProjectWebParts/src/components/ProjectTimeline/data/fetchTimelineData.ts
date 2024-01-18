@@ -52,7 +52,9 @@ export async function fetchTimelineData(
     const defaultViewColumns = (
       await timelineContentList.defaultView.fields.select('Items').top(500)()
     )['Items'] as string[]
-    const timelineContentFields = await SPDataAdapter.portalDataService.getListFields('TIMELINE_CONTENT')
+    const timelineContentFields = await SPDataAdapter.portalDataService.getListFields(
+      'TIMELINE_CONTENT'
+    )
     const timelineContentEditableFields = timelineContentFields.map(
       (fld) => new EditableSPField(fld)
     )

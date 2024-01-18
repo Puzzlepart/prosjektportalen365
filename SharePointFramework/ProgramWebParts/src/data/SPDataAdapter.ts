@@ -1,7 +1,7 @@
 import { format } from '@fluentui/react/lib/Utilities'
 import { flatten } from '@microsoft/sp-lodash-subset'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { PnPClientStorage, dateAdd, stringIsNullOrEmpty } from '@pnp/core'
+import { PnPClientStorage, dateAdd } from '@pnp/core'
 import '@pnp/sp/items/get-all'
 import {
   ISearchResult,
@@ -34,8 +34,6 @@ import {
   ProjectDataService,
   ProjectListModel,
   SPDataAdapterBase,
-  SPDataSourceItem,
-  SPProjectContentColumnItem,
   SPProjectItem,
   TimelineConfigurationModel,
   TimelineContentModel,
@@ -45,7 +43,6 @@ import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS, IProjectsData } from './types'
 import { IList } from '@pnp/sp/lists'
 import { IItem } from '@pnp/sp/items'
-import { IItemUpdateResult } from '@pnp/sp/presets/all'
 
 /**
  * `SPDataAdapter` is a class that extends the `SPDataAdapterBase` class and implements the `IPortfolioWebPartsDataAdapter` interface.
@@ -115,7 +112,11 @@ export class SPDataAdapter
     level: string = 'Overordnet/Program'
   ): Promise<IPortfolioAggregationConfiguration> {
     try {
-      const columns = await this.fetchProjectContentColumns(category, level)
+      const columns = await this.portalDataService.fetchProjectContentColumns(
+        'PROJECT_CONTENT_COLUMNS',
+        category,
+        level
+      )
       const [views, viewsUrls, columnUrls] = await Promise.all([
         this.fetchDataSources(category, level, columns),
         this.portalDataService.getListFormUrls('DATA_SOURCES'),
@@ -764,31 +765,6 @@ export class SPDataAdapter
     }
   }
 
-  public async fetchProjectContentColumns(dataSourceCategory: string, level?: string) {
-    try {
-      if (stringIsNullOrEmpty(dataSourceCategory)) return []
-      const projectContentColumnsList = this.portalDataService.web.lists.getByTitle(
-        strings.ProjectContentColumnsListName
-      )
-      const columnItems = await projectContentColumnsList.items
-        .select(...Object.keys(new SPProjectContentColumnItem()))
-        .using(DefaultCaching)<SPProjectContentColumnItem[]>()
-      const filteredColumnItems = columnItems.filter(
-        (col) =>
-          col.GtDataSourceCategory === dataSourceCategory ||
-          (!col.GtDataSourceCategory && !col.GtDataSourceLevel) ||
-          (!col.GtDataSourceCategory && _.contains(col.GtDataSourceLevel, level))
-      )
-      return filteredColumnItems.map((item) => {
-        const col = new ProjectContentColumn(item)
-        const renderAs = (col.dataType ? col.dataType.toLowerCase() : 'text').split(' ').join('_')
-        return col.setData({ renderAs })
-      })
-    } catch (error) {
-      throw new Error(format(strings.DataSourceCategoryError, dataSourceCategory))
-    }
-  }
-
   /**
    * Update project item/entity in hub site (portfolio)
    *
@@ -966,73 +942,5 @@ export class SPDataAdapter
     await this._propertyItem.update(updateProperties)
     await this.updateProjectInHub(updateProperties)
     return updatedProjects
-  }
-
-  public async updateProjectContentColumn(
-    columnItem: SPProjectContentColumnItem,
-    persistRenderAs = false
-  ): Promise<IItemUpdateResult> {
-    try {
-      const list = this.portalDataService.web.lists.getByTitle(
-        strings.ProjectContentColumnsListName
-      )
-      const properties: SPProjectContentColumnItem = _.pick(
-        columnItem,
-        [
-          'GtColMinWidth',
-          'GtColMaxWidth',
-          persistRenderAs && 'GtFieldDataTypeProperties',
-          persistRenderAs && 'GtFieldDataType'
-        ].filter(Boolean)
-      )
-      return await list.items.getById(columnItem.Id).update(properties)
-    } catch (error) {
-      throw new Error(error)
-    }
-  }
-
-  public async deleteProjectContentColumn(column: Record<string, any>): Promise<any> {
-    try {
-      const list = this.portalDataService.web.lists.getByTitle(
-        strings.ProjectContentColumnsListName
-      )
-      const items = await list.items()
-      const item = items.find((i) => i.GtManagedProperty === column.fieldName)
-
-      if (!item) {
-        throw new Error(format(strings.ProjectContentColumnItemNotFound, column.fieldName))
-      }
-
-      const itemDeleteResult = list.items.getById(item.Id).delete()
-      return itemDeleteResult
-    } catch (error) {
-      throw new Error(error)
-    }
-  }
-
-  public async updateDataSourceItem(
-    properties: SPDataSourceItem,
-    dataSourceTitle: string,
-    shouldReplace: boolean = false
-  ): Promise<IItemUpdateResult> {
-    try {
-      const list = this.portalDataService.web.lists.getByTitle(strings.DataSourceListName)
-      const [item] = await list.items.filter(`Title eq '${dataSourceTitle}'`)()
-      if (!item) {
-        throw new Error(format(strings.DataSourceItemNotFound, dataSourceTitle))
-      }
-      if (item.GtProjectContentColumnsId && !shouldReplace) {
-        properties.GtProjectContentColumnsId = [
-          ...item.GtProjectContentColumnsId,
-          properties.GtProjectContentColumnsId
-        ]
-        return await list.items.getById(item.Id).update(properties)
-      } else {
-        properties.GtProjectContentColumnsId = properties.GtProjectContentColumnsId as number[]
-        return await list.items.getById(item.Id).update(properties)
-      }
-    } catch (error) {
-      throw new Error(error)
-    }
   }
 }
