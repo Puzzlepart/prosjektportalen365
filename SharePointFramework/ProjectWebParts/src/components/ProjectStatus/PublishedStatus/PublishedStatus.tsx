@@ -8,20 +8,21 @@ import { Shimmer } from '@fluentui/react'
 
 export const PublishedStatus: FC = () => {
   const { state } = useProjectStatusContext()
+
   return (
     <Shimmer isDataLoaded={state.isDataLoaded}>
-      <div className={styles.publishedStatus}>
-        <div className={styles.publishedStatusIcon} hidden={!state.selectedReport?.published}>
-          <CheckmarkSquare24Filled />
+      {state.selectedReport?.published ? (
+        <div className={styles.publishedStatus}>
+          <div className={styles.publishedStatusIcon}>
+            <CheckmarkSquare24Filled />
+          </div>
+          <WebPartTitle title={strings.PublishedStatusReport} />
         </div>
-        <WebPartTitle
-          title={
-            state.selectedReport?.published
-              ? strings.PublishedStatusReport
-              : strings.NotPublishedStatusReport
-          }
-        />
-      </div>
+      ) : (
+        <div className={styles.publishedStatus}>
+          <WebPartTitle title={strings.NotPublishedStatusReport} />
+        </div>
+      )}
     </Shimmer>
   )
 }
