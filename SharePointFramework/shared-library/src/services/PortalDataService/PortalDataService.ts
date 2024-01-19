@@ -10,6 +10,7 @@ import initJsom, { ExecuteJsomQuery as executeQuery } from 'spfx-jsom'
 import { createSpfiInstance, DefaultCaching, getItemFieldValues } from '../../data'
 import { ISPContentType } from '../../interfaces'
 import {
+  DataSource,
   IProjectTemplateSPItem,
   ItemFieldValues,
   PortfolioOverviewView,
@@ -641,6 +642,29 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       return filteredColumnItems.map((item) => new ProjectContentColumn(item))
     } catch (error) {
       throw new Error(error)
+    }
+  }
+
+  /**
+   * Adds a new column to the project content columns list and adds the column to the specified data source.
+   *
+   * @param properties Properties for the new column (`Id` will be omitted)
+   * @param dataSource The data source to add the column to
+   */
+  public async addColumnToDataSource(
+    properties: SPProjectContentColumnItem,
+    dataSource: DataSource
+  ): Promise<boolean> {
+    try {
+      const projectContentColumnsList = this._getList('PROJECT_CONTENT_COLUMNS')
+      const dataSourceList = this._getList('DATA_SOURCES')
+      const column = await projectContentColumnsList.items.add(_.omit(properties, ['Id']))
+      dataSourceList.items.getById(dataSource.id as any).update({
+        GtProjectContentColumnsId: [...dataSource.columns.map((c) => c.id), column.data.Id]
+      })
+      return true
+    } catch (error) {
+      return false
     }
   }
 

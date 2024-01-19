@@ -280,17 +280,6 @@ export interface IPortfolioWebPartsDataAdapter {
   ): Promise<any[]>
 
   /**
-   * Adds a new column to the project content columns list and adds the column to the specified data source.
-   *
-   * @param properties Properties for the new column (`Id` will be omitted)
-   * @param dataSource The data source to add the column to
-   */
-  addColumnToDataSource?(
-    properties: SPProjectContentColumnItem,
-    dataSource: DataSource
-  ): Promise<boolean>
-
-  /**
    * Adds a new column to the project columns list and adds the column to the specified view.
    *
    * @param properties Properties for the new column (`Id` will be omitted)

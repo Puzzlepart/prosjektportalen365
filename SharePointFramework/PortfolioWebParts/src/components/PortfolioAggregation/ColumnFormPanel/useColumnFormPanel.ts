@@ -48,7 +48,7 @@ export function useColumnFormPanel() {
           persistRenderGlobally
         )
       } else {
-        await context.props.dataAdapter.addColumnToDataSource(columnItem, context.state.currentView)
+        await context.props.dataAdapter.portalDataService.addColumnToDataSource(columnItem, context.state.currentView)
       }
 
       context.dispatch(
