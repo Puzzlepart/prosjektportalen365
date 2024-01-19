@@ -43,10 +43,9 @@ export function useToolbarItems() {
    */
   const dismissPanel = () => {
     context.setState({
+      selectedItems: [],
       refetch: new Date().getTime(),
-      panel: {
-        isOpen: false
-      }
+      panel: null
     })
   }
 
@@ -72,7 +71,11 @@ export function useToolbarItems() {
         .setIcon('Edit')
         .setDisabled(context.state.selectedItems.length !== 1)
         .setOnClick(() => {
-          const fieldValues = new ItemFieldValues(_.first(context.state.selectedItems))
+          const selectedItems = context.state.selectedItems.map((id) =>
+            context.state.data.listItems.find((_, idx) => idx === id)
+          )
+
+          const fieldValues = new ItemFieldValues(_.first(selectedItems))
           context.setState({
             panel: {
               headerText: strings.EditTimelineContentText,

@@ -14,11 +14,18 @@ export function useLookup(field: EditableSPField) {
       .getAll()
       .then((items) => {
         setOptions(
-          items.map((item) => ({
-            key: item.Id,
-            value: item.Id,
-            text: item[field.LookupField]
-          }))
+          items
+            .map((item) => ({
+              key: item.Id,
+              value: item.Id,
+              text: item[field.LookupField]
+            }))
+            .filter((item) => {
+              if (field.InternalName === 'GtTimelineTypeLookup') {
+                return item.text !== 'Prosjekt' && item.text !== 'Prosjektleveranse'
+              }
+              return true
+            })
         )
       })
   }, [])

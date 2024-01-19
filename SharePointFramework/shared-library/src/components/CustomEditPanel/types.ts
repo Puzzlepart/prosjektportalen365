@@ -48,7 +48,7 @@ export interface ICustomEditPanelProps extends IBasePanelProps {
   dataAdapter: SPDataAdapterBase
 
   /**
-   * The fiels to be hidden in the panel.
+   * The fields to be hidden in the panel.
    */
   hiddenFields?: string[]
 
