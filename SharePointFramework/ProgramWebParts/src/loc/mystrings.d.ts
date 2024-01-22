@@ -110,6 +110,9 @@ declare interface IProgramWebPartsStrings {
   InternalNameLabel: string
   IsGroupableDescription: string
   IsGroupableLabel: string
+  IsRefinableDescription: string
+  IsRefinableLabel: string
+  IsResizableLabel: string
   ListViewText: string
   MaxWidthDescription: string
   MaxWidthLabel: string
@@ -153,6 +156,9 @@ declare interface IProgramWebPartsStrings {
   SearchQueryLabel: string
   ShowCommandBarLabel: string
   ShowExcelExportButtonLabel: string
+  ShowFieldFrontpageLabel: string
+  ShowFieldPortfolioLabel: string
+  ShowFieldProjectStatusLabel: string
   ShowFiltersLabel: string
   ShowGroupByLabel: string
   ShowHideColumnsLabel: string
@@ -169,7 +175,6 @@ declare interface IProgramWebPartsStrings {
   ToggleEditViewColumnsLabel: string
   UseChangesButtonText: string
   ViewNotFoundMessage: string
-
   DataSourceItemNotFound: string
   DataSourceListName: string
   ProjectContentColumnItemNotFound: string

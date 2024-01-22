@@ -763,25 +763,6 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       throw new Error(format(strings.DataSourceCategoryError, category))
     }
   }
-
-
-
-  public async addColumnToPortfolioView(
-    properties: SPProjectColumnItem,
-    view: PortfolioOverviewView
-  ): Promise<boolean> {
-    try {
-      const projectColumnsList = this._sp.web.lists.getByTitle(strings.ProjectColumnsListName)
-      const portfolioViewsList = this._sp.web.lists.getByTitle(strings.PortfolioViewsListName)
-      const column = await projectColumnsList.items.add(_.omit(properties, ['Id']))
-      portfolioViewsList.items.getById(view.id as any).update({
-        GtPortfolioColumnsId: [...view.columns.map((c) => c.id), column.data.Id]
-      })
-      return true
-    } catch (error) {
-      return false
-    }
-  }
 }
 
 export * from './types'

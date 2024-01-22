@@ -32,7 +32,7 @@ export function useColumnFormPanel() {
    * If the column is being edited, it will update the column in the list
    * using `updateItemInList` from the `dataAdapter`. If the column is new,
    * it will add the column to the list using `addColumnToPortfolioView` from
-   * the `dataAdapter`.
+   * the shared `dataAdapter`.
    */
   const onSave = async () => {
     const colummData = column.get('data') ?? {}
@@ -61,7 +61,7 @@ export function useColumnFormPanel() {
         _.omit(columnItem, ['Id', 'GtInternalName', 'GtManagedProperty'])
       )
     } else {
-      await context.props.dataAdapter.addColumnToPortfolioView(
+      await context.props.dataAdapter.portalDataService.addColumnToPortfolioView(
         columnItem,
         context.state.currentView
       )

@@ -318,6 +318,29 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   }
 
   /**
+   * Adds a new column to the project columns list and adds the column to the specified view.
+   *
+   * @param properties Properties for the new column (`Id` will be omitted)
+   * @param view The view to add the column to
+   */
+  public async addColumnToPortfolioView(
+    properties: SPProjectColumnItem,
+    view: PortfolioOverviewView
+  ): Promise<boolean> {
+    try {
+      const projectColumnsList = this._getList('PROJECT_COLUMNS')
+      const portfolioViewsList = this._getList('PORTFOLIO_VIEWS')
+      const column = await projectColumnsList.items.add(_.omit(properties, ['Id']))
+      portfolioViewsList.items.getById(view.id as any).update({
+        GtPortfolioColumnsId: [...view.columns.map((c) => c.id), column.data.Id]
+      })
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+
+  /**
    * Get portfolio overview views. Returns all shared views and personal views.
    */
   public async getPortfolioOverviewViews(): Promise<PortfolioOverviewView[]> {
