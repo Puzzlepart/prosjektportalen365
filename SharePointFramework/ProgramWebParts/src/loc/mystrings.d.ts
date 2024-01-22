@@ -89,7 +89,9 @@ declare interface IProgramWebPartsStrings {
   DataSourceLevelLabel: string
   DataSourceNotFound: string
   DefaultDataSourceViewLabel: string
+  DefaultViewDescription: string
   DefaultViewLabel: string
+  DefaultViewSetWarningMessage: string
   DeleteButtonLabel: string
   DisplayNameDescription: string
   DisplayNameLabel: string
@@ -123,9 +125,12 @@ declare interface IProgramWebPartsStrings {
   NewColumnHeaderText: string
   NewViewHeaderText: string
   NewViewText: string
+  PersonalViewDescription: string
+  PersonalViewLabel: string
   PersonalViewsHeaderText: string
   PortfolioAggregationViewSearchQueryDescription: string
   PortfolioManagerGroupName: string
+  PortfolioViewSearchQueryDescription: string
   ProgramAdministrationAddChildsButtonDescription: string
   ProgramAdministrationAddChildsButtonLabel: string
   ProgramAdministrationEmptyMessage: string

@@ -43,6 +43,7 @@ import _ from 'underscore'
 import { DEFAULT_SEARCH_SETTINGS, IProjectsData } from './types'
 import { IList } from '@pnp/sp/lists'
 import { IItem } from '@pnp/sp/items'
+import { PermissionKind } from '@pnp/sp/presets/all'
 
 /**
  * `SPDataAdapter` is a class that extends the `SPDataAdapterBase` class and implements the `IPortfolioWebPartsDataAdapter` interface.
@@ -86,12 +87,16 @@ export class SPDataAdapter
 
   public async getPortfolioConfig(): Promise<IPortfolioOverviewConfiguration> {
     // eslint-disable-next-line prefer-const
-    let [columnConfig, columns, views, viewsUrls, columnUrls] = await Promise.all([
+    let [columnConfig, columns, views, viewsUrls, columnUrls, userCanAddViews] = await Promise.all([
       this.portalDataService.getProjectColumnConfig(),
       this.portalDataService.getProjectColumns(),
       this.portalDataService.getPortfolioOverviewViews(),
       this.portalDataService.getListFormUrls('PORTFOLIO_VIEWS'),
-      this.portalDataService.getListFormUrls('PROJECT_COLUMNS')
+      this.portalDataService.getListFormUrls('PROJECT_COLUMNS'),
+      this.portalDataService.currentUserHasPermissionsToList(
+        'PORTFOLIO_VIEWS',
+        PermissionKind.AddListItems
+      )
     ])
     columns = columns.map((col) => col.configure(columnConfig))
     const refiners = columns.filter((col) => col.isRefinable)
@@ -103,7 +108,7 @@ export class SPDataAdapter
       viewsUrls,
       columnUrls,
       programs: [],
-      userCanAddViews: false
+      userCanAddViews
     } as IPortfolioOverviewConfiguration
   }
 
