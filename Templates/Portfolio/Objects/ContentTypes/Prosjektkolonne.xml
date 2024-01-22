@@ -13,6 +13,7 @@
         <pnp:FieldRef ID="68568356-6f3c-4ebe-a738-70cec5c76f46" Name="GtFieldCustomSort" UpdateChildren="true" />
         <pnp:FieldRef ID="e1c9ede0-2406-4aa3-9ba5-fff1ae93d082" Name="GtFieldOverrides" UpdateChildren="true" />
         <pnp:FieldRef ID="a156e8b6-fc02-475c-a377-47c6795fed1d" Name="GtColMinWidth" UpdateChildren="true" />
+        <pnp:FieldRef ID="27c60000-e004-4932-aeaa-6045e197ff87" Name="GtColMaxWidth" UpdateChildren="true" />
         <pnp:FieldRef ID="0956cadc-1268-4bc1-9baf-5d2e16190d06" Name="GtIsRefinable" UpdateChildren="true" />
         <pnp:FieldRef ID="b77be89a-346f-4897-b519-e55eedbc0aa9" Name="GtIsGroupable" UpdateChildren="true" />
     </pnp:FieldRefs>

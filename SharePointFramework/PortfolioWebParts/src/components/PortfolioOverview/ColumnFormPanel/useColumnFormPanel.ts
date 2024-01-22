@@ -44,10 +44,11 @@ export function useColumnFormPanel() {
       GtManagedProperty: column.get('fieldName'),
       GtFieldDataType: colummData.renderAs ?? 'Text',
       GtColMinWidth: column.get('minWidth'),
+      GtColMaxWidth: column.get('maxWidth'),
       GtShowFieldFrontpage: colummData.visibility.includes('Frontpage'),
       GtShowFieldPortfolio: colummData.visibility.includes('Portfolio'),
       GtShowFieldProjectStatus: colummData.visibility.includes('ProjectStatus'),
-      GtIsGroupable: colummData.isGroupable,
+      GtIsGroupable: column.get('isGroupable'),
       GtIsRefinable: column.get('isRefinable')
     }
     if (colummData.dataTypeProperties) {

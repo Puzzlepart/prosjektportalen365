@@ -20,6 +20,7 @@
                 <FieldRef Name="GtShowFieldPortfolio" />
                 <FieldRef Name="GtFieldDataType" />
                 <FieldRef Name="GtColMinWidth" />
+                <FieldRef Name="GtColMaxWidth" />
                 <FieldRef Name="GtIsRefinable" />
                 <FieldRef Name="GtIsGroupable" />
             </ViewFields>

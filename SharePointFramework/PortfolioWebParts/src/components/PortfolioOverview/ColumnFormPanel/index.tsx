@@ -69,10 +69,9 @@ export const ColumnFormPanel: FC = () => {
               value={column.get('sortOrder')?.toString()}
               type='number'
               defaultValue='100'
-              min={40}
-              max={400}
+              min={10}
+              max={990}
               step={2}
-              disabled={isEditing}
               onChange={(_, data) => setColumn('sortOrder', parseInt(data.value))}
               placeholder={strings.Placeholder.TextField}
             />
@@ -98,19 +97,18 @@ export const ColumnFormPanel: FC = () => {
             required={true}
           >
             <ColumnSearchPropertyField
-              styles={{ field: styles.field, root: { padding: 0 } }}
               placeholder={strings.SearchPropertyPlaceholder}
               value={column.get('fieldName')}
               onChange={(value) => setColumn('fieldName', value)}
               disabled={isEditing}
-              managedProperties={context.state.managedProperties}
+              // managedProperties={context.state.managedProperties} - AutoComplete doesn't properly when trying to create a new by just typing. Removed for now to use input instead.
             />
-            {columnMessages.get('fieldName') && (
+            {/* {columnMessages.get('fieldName') && (
               <UserMessage
                 title={strings.SearchPropertyFoundTitle}
                 text={columnMessages.get('fieldName')}
               />
-            )}
+            )} */}
           </FieldContainer>
           <FieldContainer
             iconName='TextNumberFormat'
@@ -137,6 +135,22 @@ export const ColumnFormPanel: FC = () => {
               max={400}
               step={2}
               onChange={(_, data) => setColumn('minWidth', parseInt(data.value))}
+              placeholder={strings.Placeholder.TextField}
+            />
+          </FieldContainer>
+          <FieldContainer
+            iconName='NumberSymbolSquare'
+            label={strings.MaxWidthLabel}
+            description={strings.MaxWidthDescription}
+          >
+            <Input
+              value={column.get('maxWidth')?.toString()}
+              type='number'
+              defaultValue='120'
+              min={column.get('minWidth') ?? 40}
+              max={400}
+              step={2}
+              onChange={(_, data) => setColumn('maxWidth', parseInt(data.value))}
               placeholder={strings.Placeholder.TextField}
             />
           </FieldContainer>

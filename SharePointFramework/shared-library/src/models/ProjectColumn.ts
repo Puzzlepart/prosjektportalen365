@@ -21,6 +21,7 @@ export class SPProjectColumnItem {
   public GtFieldDataTypeProperties?: string = ''
   public GtFieldOverrides?: string = ''
   public GtColMinWidth?: number = 0
+  public GtColMaxWidth?: number = 0
   public GtIsRefinable?: boolean = false
   public GtIsGroupable?: boolean = false
 }

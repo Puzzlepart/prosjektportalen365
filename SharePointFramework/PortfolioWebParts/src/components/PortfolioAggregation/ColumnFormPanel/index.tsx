@@ -82,9 +82,7 @@ export const ColumnFormPanel: FC = () => {
             required={true}
           >
             <ColumnSearchPropertyField
-              label={strings.SearchPropertyLabel}
-              description={strings.SearchPropertyDescription}
-              required={true}
+              placeholder={strings.SearchPropertyPlaceholder}
               value={column.get('fieldName')}
               onChange={(value) => setColumn('fieldName', value)}
               disabled={isEditing}
