@@ -1,4 +1,4 @@
-import { SortDirection, TableColumnSizingOptions } from '@fluentui/react-components'
+import { SortDirection, TableColumnSizingOptions, useId } from '@fluentui/react-components'
 import { useContext } from 'react'
 import { ProjectTimelineContext } from '../context'
 import { useColumns } from './useColumns'
@@ -27,12 +27,15 @@ export function useTimelineList() {
 
   const defaultSortState = { sortColumn: 'Title', sortDirection: 'ascending' as SortDirection }
 
+  const fluentProviderId = useId('fp-timeline-list')
+
   return {
     columns,
     menuItems,
     farMenuItems,
     columnSizingOptions,
     defaultSortState,
-    onSelection
+    onSelection,
+    fluentProviderId
   }
 }

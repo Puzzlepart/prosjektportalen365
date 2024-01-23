@@ -9,7 +9,6 @@ import {
   PortfolioOverviewView,
   ProjectContentColumn,
   ProjectListModel,
-  SPProjectColumnItem,
   SPProjectContentColumnItem,
   SPProjectItem,
   TimelineConfigurationModel,

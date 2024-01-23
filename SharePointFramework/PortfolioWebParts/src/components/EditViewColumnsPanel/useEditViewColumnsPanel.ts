@@ -3,6 +3,7 @@ import { OnDragEndResponder } from 'react-beautiful-dnd'
 import { IEditViewColumnsPanelProps } from './types'
 import { useSelectableColumns } from './useSelectableColumns'
 import _ from 'lodash'
+import { useId } from '@fluentui/react-components'
 
 /**
  * Hook that provides functionality for editing and selecting columns in a view.
@@ -47,6 +48,9 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
     moveColumn(result.source.index, result.destination.index)
   }
 
+  const fluentProviderHeaderId = useId('fp-edit-view-columns-panel-header')
+  const fluentProviderBodyId = useId('fp-edit-view-columns-panel-body')
+
   return {
     onDragEnd,
     selectableColumns,
@@ -57,6 +61,8 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
       if (columnIndex > -1) {
         moveColumn(columnIndex, columnIndex + moveIndex)
       }
-    }
+    },
+    fluentProviderHeaderId,
+    fluentProviderBodyId
   }
 }

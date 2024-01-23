@@ -1,4 +1,4 @@
-import { Field, FluentProvider, Switch } from '@fluentui/react-components'
+import { Field, FluentProvider, IdPrefixProvider, Switch } from '@fluentui/react-components'
 import strings from 'ProjectWebPartsStrings'
 import React, { FC } from 'react'
 import { DynamicMatrix } from '../DynamicMatrix'
@@ -16,35 +16,33 @@ export const RiskMatrix: FC<IRiskMatrixProps> = (props) => {
     fluentProviderId
   } = useRiskMatrix(props)
   return (
-    <FluentProvider
-      id={fluentProviderId}
-      theme={customLightTheme}
-      style={{ background: 'transparent' }}
-    >
-      {!!error ? (
-        <UserMessage title={strings.ErrorTitle} text={error} intent='error' />
-      ) : (
-        <>
-          <DynamicMatrix
-            {...props}
-            width={props.fullWidth ? '100%' : props.width}
-            configuration={configuration}
-            getElementsForCell={getElementsForCell}
-          />
-          <Field label={strings.ToggleUncertaintyPostActionLabel}>
-            <Switch
-              label={
-                showPostAction
-                  ? strings.ToggleUncertaintyPostActionOnText
-                  : strings.ToggleUncertaintyPostActionOffText
-              }
-              onChange={(_event, data) => setShowPostAction(data.checked)}
-              disabled={!!error}
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider theme={customLightTheme} style={{ background: 'transparent' }}>
+        {!!error ? (
+          <UserMessage title={strings.ErrorTitle} text={error} intent='error' />
+        ) : (
+          <>
+            <DynamicMatrix
+              {...props}
+              width={props.fullWidth ? '100%' : props.width}
+              configuration={configuration}
+              getElementsForCell={getElementsForCell}
             />
-          </Field>
-        </>
-      )}
-    </FluentProvider>
+            <Field label={strings.ToggleUncertaintyPostActionLabel}>
+              <Switch
+                label={
+                  showPostAction
+                    ? strings.ToggleUncertaintyPostActionOnText
+                    : strings.ToggleUncertaintyPostActionOffText
+                }
+                onChange={(_event, data) => setShowPostAction(data.checked)}
+                disabled={!!error}
+              />
+            </Field>
+          </>
+        )}
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }
 

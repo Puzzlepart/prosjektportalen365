@@ -4,7 +4,8 @@ import { IFluentProps } from './types'
 import { customLightTheme } from '../../util'
 
 export const Fluent: FC<IFluentProps> = ({ className, style, children, transparent }) => {
-  const fluentId = useId('fluent')
+  const fluentId = useId('fp-fluent')
+
   return useMemo(
     () => (
       <IdPrefixProvider value={fluentId}>

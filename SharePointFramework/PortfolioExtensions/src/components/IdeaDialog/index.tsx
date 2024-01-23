@@ -10,7 +10,9 @@ import {
   DialogBody,
   DialogContent,
   DialogTitle,
-  FluentProvider
+  FluentProvider,
+  IdPrefixProvider,
+  useId
 } from '@fluentui/react-components'
 import { IIdeaDialogProps } from './types'
 import { FC, useContext } from 'react'
@@ -19,46 +21,49 @@ import { customLightTheme } from 'pp365-shared-library'
 import styles from './IdeaDialog.module.scss'
 
 export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
+  const fluentProviderId = useId('fp-idea-dialog')
   const context = useContext(IDeaDialogContext)
 
   return (
     <IDeaDialogContext.Provider value={context}>
-      <FluentProvider theme={customLightTheme}>
-        <DialogBody className={styles.ideaDialog}>
-          <DialogTitle>{strings.IdeaProjectDataDialogTitle}</DialogTitle>
-          <DialogContent>
-            <UserMessage
-              title={
-                props.isBlocked
-                  ? strings.IdeaProjectDataDialogBlockedTitle
-                  : strings.IdeaProjectDataDialogInfoTitle
-              }
-              text={format(
-                props.isBlocked
-                  ? strings.IdeaProjectDataDialogBlockedMessage
-                  : props.isApproved
-                  ? props.dialogMessage
-                  : strings.IdeaProjectDataDialogNotApprovedMessage,
-                encodeURIComponent(window.location.href)
-              )}
-              intent={props.isBlocked || !props.isApproved ? 'warning' : 'info'}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button title={strings.CancelLabel} onClick={props.close}>
-              {strings.CancelLabel}
-            </Button>
-            <Button
-              appearance='primary'
-              title={strings.CreateLabel}
-              onClick={props.submit}
-              disabled={props.isBlocked || !props.isApproved}
-            >
-              {strings.CreateLabel}
-            </Button>
-          </DialogActions>
-        </DialogBody>
-      </FluentProvider>
+      <IdPrefixProvider value={fluentProviderId}>
+        <FluentProvider theme={customLightTheme}>
+          <DialogBody className={styles.ideaDialog}>
+            <DialogTitle>{strings.IdeaProjectDataDialogTitle}</DialogTitle>
+            <DialogContent>
+              <UserMessage
+                title={
+                  props.isBlocked
+                    ? strings.IdeaProjectDataDialogBlockedTitle
+                    : strings.IdeaProjectDataDialogInfoTitle
+                }
+                text={format(
+                  props.isBlocked
+                    ? strings.IdeaProjectDataDialogBlockedMessage
+                    : props.isApproved
+                    ? props.dialogMessage
+                    : strings.IdeaProjectDataDialogNotApprovedMessage,
+                  encodeURIComponent(window.location.href)
+                )}
+                intent={props.isBlocked || !props.isApproved ? 'warning' : 'info'}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button title={strings.CancelLabel} onClick={props.close}>
+                {strings.CancelLabel}
+              </Button>
+              <Button
+                appearance='primary'
+                title={strings.CreateLabel}
+                onClick={props.submit}
+                disabled={props.isBlocked || !props.isApproved}
+              >
+                {strings.CreateLabel}
+              </Button>
+            </DialogActions>
+          </DialogBody>
+        </FluentProvider>
+      </IdPrefixProvider>
     </IDeaDialogContext.Provider>
   )
 }

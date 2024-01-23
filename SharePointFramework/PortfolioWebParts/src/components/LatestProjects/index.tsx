@@ -1,5 +1,11 @@
 import { format } from '@fluentui/react'
-import { Button, Caption1, FluentProvider, Link } from '@fluentui/react-components'
+import {
+  Button,
+  Caption1,
+  FluentProvider,
+  IdPrefixProvider,
+  Link
+} from '@fluentui/react-components'
 import { ChevronDownFilled, ChevronUpFilled } from '@fluentui/react-icons'
 import strings from 'PortfolioWebPartsStrings'
 import {
@@ -26,7 +32,8 @@ import { useLatestProjects } from './useLatestProjects'
  * @param props.showProjectLogo - Whether to show the project logo.
  */
 export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
-  const { className, loading, projects, viewAll, toggleViewAll } = useLatestProjects(props)
+  const { className, loading, projects, viewAll, toggleViewAll, fluentProviderId } =
+    useLatestProjects(props)
 
   /**
    * Function to render the latest projects.
@@ -63,23 +70,25 @@ export const LatestProjects: FC<ILatestProjectsProps> = (props) => {
   }
 
   return (
-    <FluentProvider className={styles.root} theme={customLightTheme}>
-      <WebPartTitle title={props.title} />
-      <div className={styles.container}>
-        {loading ? <LoadingSkeleton /> : renderLatestProjects()}
-        <div hidden={projects.length <= props.rowLimit}>
-          <Button
-            appearance='subtle'
-            size='small'
-            icon={viewAll ? <ChevronUpFilled /> : <ChevronDownFilled />}
-            title={viewAll ? strings.ViewLessText : strings.ViewMoreText}
-            onClick={toggleViewAll}
-          >
-            {viewAll ? strings.ViewLessText : strings.ViewMoreText}
-          </Button>
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider className={styles.root} theme={customLightTheme}>
+        <WebPartTitle title={props.title} />
+        <div className={styles.container}>
+          {loading ? <LoadingSkeleton /> : renderLatestProjects()}
+          <div hidden={projects.length <= props.rowLimit}>
+            <Button
+              appearance='subtle'
+              size='small'
+              icon={viewAll ? <ChevronUpFilled /> : <ChevronDownFilled />}
+              title={viewAll ? strings.ViewLessText : strings.ViewMoreText}
+              onClick={toggleViewAll}
+            >
+              {viewAll ? strings.ViewLessText : strings.ViewMoreText}
+            </Button>
+          </div>
         </div>
-      </div>
-    </FluentProvider>
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }
 

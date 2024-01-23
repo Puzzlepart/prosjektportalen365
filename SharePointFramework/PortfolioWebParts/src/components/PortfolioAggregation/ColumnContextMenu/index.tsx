@@ -3,8 +3,7 @@ import {
   IdPrefixProvider,
   Menu,
   MenuList,
-  MenuPopover,
-  useId
+  MenuPopover
 } from '@fluentui/react-components'
 import React, { FC } from 'react'
 import { useColumnContextMenu } from './useColumnContextMenu'
@@ -12,9 +11,16 @@ import { renderMenuItem } from '../../../components/List'
 import { customLightTheme } from 'pp365-shared-library'
 
 export const ColumnContextMenu: FC = () => {
-  const fluentProviderId = useId('fp-column-context-menu')
-  const { target, items, open, onOpenChange, checkedValues, onCheckedValueChange } =
-    useColumnContextMenu()
+  const {
+    target,
+    items,
+    open,
+    onOpenChange,
+    checkedValues,
+    onCheckedValueChange,
+    fluentProviderId
+  } = useColumnContextMenu()
+
   return (
     <Menu
       open={open}

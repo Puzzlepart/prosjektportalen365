@@ -2,6 +2,7 @@ import { ProjectAdminPermission } from 'pp365-shared-library/lib'
 import { useEffect, useMemo, useReducer } from 'react'
 import reducer, { DATA_LOADED, SET_SELECTED_TO_DELETE, initialState } from './reducer'
 import { IProgramAdministrationProps } from './types'
+import { useId } from '@fluentui/react-components'
 
 export const useProgramAdministration = (props: IProgramAdministrationProps) => {
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -36,5 +37,7 @@ export const useProgramAdministration = (props: IProgramAdministrationProps) => 
 
   const childProjects = [...state.childProjects]
 
-  return { context, childProjects, onSelectionChange }
+  const fluentProviderId = useId('fp-program-administration')
+
+  return { context, childProjects, onSelectionChange, fluentProviderId }
 }

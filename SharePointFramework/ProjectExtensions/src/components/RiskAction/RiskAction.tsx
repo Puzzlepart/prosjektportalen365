@@ -1,4 +1,4 @@
-import { FluentProvider } from '@fluentui/react-components'
+import { FluentProvider, IdPrefixProvider } from '@fluentui/react-components'
 import { customLightTheme } from 'pp365-shared-library'
 import React, { FC } from 'react'
 import styles from './RiskAction.module.scss'
@@ -10,17 +10,18 @@ import { useRiskAction } from './useRiskAction'
 export const RiskAction: FC = () => {
   const { fluentProviderId, contextValue } = useRiskAction()
   return (
-    <FluentProvider
-      id={fluentProviderId}
-      theme={customLightTheme}
-      className={styles.root}
-      style={{ background: 'transparent' }}
-    >
-      <RiskActionContext.Provider value={contextValue}>
-        <RiskActionPopover>
-          <RiskActionFieldValue />
-        </RiskActionPopover>
-      </RiskActionContext.Provider>
-    </FluentProvider>
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider
+        theme={customLightTheme}
+        className={styles.root}
+        style={{ background: 'transparent' }}
+      >
+        <RiskActionContext.Provider value={contextValue}>
+          <RiskActionPopover>
+            <RiskActionFieldValue />
+          </RiskActionPopover>
+        </RiskActionContext.Provider>
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }

@@ -7,7 +7,7 @@ import { useId, IdPrefixProvider, FluentProvider } from '@fluentui/react-compone
 import { customLightTheme } from '../../util'
 
 export const FilterPanel: FC<IFilterPanelProps> = (props) => {
-  const fluentProviderId = useId('fp-filterPanel')
+  const fluentProviderId = useId('fp-filter-panel')
 
   return (
     <Panel {...props} type={PanelType.smallFixedFar}>

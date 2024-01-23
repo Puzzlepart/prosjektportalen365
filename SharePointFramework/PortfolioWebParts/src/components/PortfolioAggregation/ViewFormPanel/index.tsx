@@ -6,18 +6,11 @@ import styles from './ViewFormPanel.module.scss'
 import { ViewFormPanelFooter } from './ViewFormPanelFooter'
 import { useViewFormPanel } from './useViewFormPanel'
 import { FieldContainer, customLightTheme } from 'pp365-shared-library'
-import {
-  FluentProvider,
-  IdPrefixProvider,
-  Input,
-  Textarea,
-  useId
-} from '@fluentui/react-components'
+import { FluentProvider, IdPrefixProvider, Input, Textarea } from '@fluentui/react-components'
 
 export const ViewFormPanel: FC = () => {
-  const fluentProviderId = useId('fp-view-form-panel')
   const context = usePortfolioAggregationContext()
-  const { view, setView, isEditing, onDismiss, onSave } = useViewFormPanel()
+  const { view, setView, isEditing, onDismiss, onSave, fluentProviderId } = useViewFormPanel()
   return (
     <Panel
       isOpen={context.state.viewForm?.isOpen}

@@ -1,4 +1,4 @@
-import { FluentProvider } from '@fluentui/react-components'
+import { FluentProvider, IdPrefixProvider } from '@fluentui/react-components'
 import React, { FC } from 'react'
 import styles from './ResourceAllocation.module.scss'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -7,7 +7,7 @@ import { useResourceAllocation } from './useResourceAllocation'
 import { LoadingSkeleton, Timeline, UserMessage, customLightTheme } from 'pp365-shared-library'
 
 export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
-  const { state, filters, onFilterChange, items, groups, defaultTimeframe } =
+  const { state, filters, onFilterChange, items, groups, defaultTimeframe, fluentProviderId } =
     useResourceAllocation(props)
 
   if (state.error) {
@@ -21,21 +21,23 @@ export const ResourceAllocation: FC<IResourceAllocationProps> = (props) => {
   }
 
   return (
-    <FluentProvider className={styles.root} theme={customLightTheme}>
-      {state.loading ? (
-        <LoadingSkeleton />
-      ) : (
-        <Timeline
-          title={props.title}
-          infoText={strings.ResourceAllocationInfoText}
-          defaultTimeframe={defaultTimeframe}
-          groups={groups}
-          items={items}
-          filters={filters}
-          onFilterChange={onFilterChange}
-        />
-      )}
-    </FluentProvider>
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider className={styles.root} theme={customLightTheme}>
+        {state.loading ? (
+          <LoadingSkeleton />
+        ) : (
+          <Timeline
+            title={props.title}
+            infoText={strings.ResourceAllocationInfoText}
+            defaultTimeframe={defaultTimeframe}
+            groups={groups}
+            items={items}
+            filters={filters}
+            onFilterChange={onFilterChange}
+          />
+        )}
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }
 

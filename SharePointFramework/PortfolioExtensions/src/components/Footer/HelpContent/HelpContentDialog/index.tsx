@@ -21,7 +21,7 @@ import { Content } from './Content'
 import { customLightTheme } from 'pp365-shared-library'
 
 export const HelpContentDialog: FC<Omit<DialogProps, 'children'>> = (props) => {
-  const fluentProviderId = useId('fp-helpDialog')
+  const fluentProviderId = useId('fp-help-dialog')
   const context = useContext(FooterContext)
   const [selectedValue, setSelectedValue] = React.useState<TabValue>(
     context.props.helpContent[0]?.title

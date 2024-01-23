@@ -1,6 +1,7 @@
 import { useContext, useEffect } from 'react'
 import { ProgramAdministrationContext } from '../context'
 import { ADD_CHILD_PROJECTS, DATA_LOADED } from '../reducer'
+import { useId } from '@fluentui/react-components'
 
 export const useAddProjectDialog = () => {
   const context = useContext(ProgramAdministrationContext)
@@ -36,8 +37,11 @@ export const useAddProjectDialog = () => {
     context.dispatch(ADD_CHILD_PROJECTS(projects))
   }
 
+  const fluentProviderId = useId('fp-add-project-dialog')
+
   return {
     availableProjects,
-    onAddChildProjects
+    onAddChildProjects,
+    fluentProviderId
   }
 }

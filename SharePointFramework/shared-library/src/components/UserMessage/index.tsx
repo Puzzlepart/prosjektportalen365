@@ -1,5 +1,6 @@
 import {
   FluentProvider,
+  IdPrefixProvider,
   MessageBar,
   MessageBarBody,
   MessageBarTitle,
@@ -19,30 +20,31 @@ import { customLightTheme } from '../../util'
  * @category UserMessage
  */
 export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => {
-  const fluentProviderId = useId('fluent-provider')
-
+  const fluentProviderId = useId('fp-user-message')
   const messageProps = useUserMessage(props)
+
   return (
-    <FluentProvider
-      id={fluentProviderId}
-      theme={customLightTheme}
-      className={[props.className, styles.root].filter(Boolean).join(' ')}
-      style={props.containerStyle}
-      hidden={props.hidden}
-      onClick={props.onClick}
-    >
-      <MessageBar {...messageProps} className={styles.message} intent={props.intent}>
-        <MessageBarBody>
-          {props.title && <MessageBarTitle>{props.title}</MessageBarTitle>}
-          {props.text && (
-            <ReactMarkdown linkTarget={props.linkTarget} rehypePlugins={[rehypeRaw]}>
-              {props.text}
-            </ReactMarkdown>
-          )}
-          {props.children && props.children}
-        </MessageBarBody>
-      </MessageBar>
-    </FluentProvider>
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider
+        theme={customLightTheme}
+        className={[props.className, styles.root].filter(Boolean).join(' ')}
+        style={props.containerStyle}
+        hidden={props.hidden}
+        onClick={props.onClick}
+      >
+        <MessageBar {...messageProps} className={styles.message} intent={props.intent}>
+          <MessageBarBody>
+            {props.title && <MessageBarTitle>{props.title}</MessageBarTitle>}
+            {props.text && (
+              <ReactMarkdown linkTarget={props.linkTarget} rehypePlugins={[rehypeRaw]}>
+                {props.text}
+              </ReactMarkdown>
+            )}
+            {props.children && props.children}
+          </MessageBarBody>
+        </MessageBar>
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }
 

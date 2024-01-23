@@ -3,6 +3,7 @@ import { SPPortfolioOverviewViewItem } from 'pp365-shared-library'
 import { SET_VIEW_FORM_PANEL } from '../reducer'
 import { usePortfolioOverviewContext } from '../usePortfolioOverviewContext'
 import { useEditableView } from './useEditableView'
+import { useId } from '@fluentui/react-components'
 
 /**
  * Component logic hook for `ViewFormPanel`.
@@ -71,12 +72,15 @@ export function useViewFormPanel() {
     (v) => v.isDefaultView && v.id !== view.get('id')
   )
 
+  const fluentProviderId = useId('fp-view-form-panel')
+
   return {
     onSave: !isSaveDisabled ? onSave : undefined,
     isEditing,
     onDismiss,
     view,
     setView,
-    isDefaultViewSet
+    isDefaultViewSet,
+    fluentProviderId
   } as const
 }

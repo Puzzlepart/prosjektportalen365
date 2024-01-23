@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { usePortfolioAggregationContext } from '../context'
 import { COLUMN_DELETED, COLUMN_FORM_PANEL_ON_SAVED, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import { useEditableColumn } from './useEditableColumn'
+import { useId } from '@fluentui/react-components'
 
 /**
  * Component logic hook for ColumnFormPanel. Handles state and dispatches actions to the reducer.
@@ -48,7 +49,10 @@ export function useColumnFormPanel() {
           persistRenderGlobally
         )
       } else {
-        await context.props.dataAdapter.portalDataService.addColumnToDataSource(columnItem, context.state.currentView)
+        await context.props.dataAdapter.portalDataService.addColumnToDataSource(
+          columnItem,
+          context.state.currentView
+        )
       }
 
       context.dispatch(
@@ -96,6 +100,8 @@ export function useColumnFormPanel() {
    */
   const isDeleteDisabled = context.state.columnForm?.column?.fieldName === 'Title'
 
+  const fluentProviderId = useId('fp-column-form-panel')
+
   return {
     onSave,
     isSaveDisabled,
@@ -107,6 +113,7 @@ export function useColumnFormPanel() {
     setColumnData,
     persistRenderGlobally,
     setPersistRenderGlobally,
-    isEditing
+    isEditing,
+    fluentProviderId
   } as const
 }

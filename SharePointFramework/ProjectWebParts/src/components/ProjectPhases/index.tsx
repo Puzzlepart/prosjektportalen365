@@ -7,53 +7,47 @@ import { IProjectPhasesProps } from './types'
 import { useProjectPhases } from './useProjectPhases'
 import {
   FluentProvider,
+  IdPrefixProvider,
   Toast,
   ToastTitle,
-  useId,
   useToastController
 } from '@fluentui/react-components'
 import { LoadingSkeleton, customLightTheme } from 'pp365-shared-library'
 
 export const ProjectPhases: FC<IProjectPhasesProps> = (props) => {
-  const { rootRef, context } = useProjectPhases(props)
-  const toasterId = useId('toaster')
-  const fluentProviderId = useId('fluent-provider')
-
+  const { rootRef, context, fluentProviderId, toasterId } = useProjectPhases(props)
   const { dispatchToast } = useToastController(toasterId)
 
   return (
-    <FluentProvider
-      id={fluentProviderId}
-      theme={customLightTheme}
-      className={styles.root}
-      ref={rootRef}
-    >
-      <div className={styles.container}>
-        <ProjectPhasesContext.Provider value={context}>
-          {context.state.isDataLoaded || !!context.state.error ? (
-            <>
-              <ul className={styles.phaseList}>
-                {context.state.data.phases
-                  .filter((p) => p.isVisible)
-                  .map((phase, idx) => (
-                    <ProjectPhase key={idx} phase={phase} />
-                  ))}
-              </ul>
-              <ChangePhaseDialog />
-            </>
-          ) : (
-            <LoadingSkeleton />
-          )}
-        </ProjectPhasesContext.Provider>
-        {context.state.error &&
-          dispatchToast(
-            <Toast>
-              <ToastTitle>{context.state.error.message}</ToastTitle>
-            </Toast>,
-            { intent: 'error' }
-          )}
-      </div>
-    </FluentProvider>
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider theme={customLightTheme} className={styles.root} ref={rootRef}>
+        <div className={styles.container}>
+          <ProjectPhasesContext.Provider value={context}>
+            {context.state.isDataLoaded || !!context.state.error ? (
+              <>
+                <ul className={styles.phaseList}>
+                  {context.state.data.phases
+                    .filter((p) => p.isVisible)
+                    .map((phase, idx) => (
+                      <ProjectPhase key={idx} phase={phase} />
+                    ))}
+                </ul>
+                <ChangePhaseDialog />
+              </>
+            ) : (
+              <LoadingSkeleton />
+            )}
+          </ProjectPhasesContext.Provider>
+          {context.state.error &&
+            dispatchToast(
+              <Toast>
+                <ToastTitle>{context.state.error.message}</ToastTitle>
+              </Toast>,
+              { intent: 'error' }
+            )}
+        </div>
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }
 ProjectPhases.displayName = 'Project Phases'

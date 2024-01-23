@@ -62,7 +62,7 @@ export function useNewRiskActionPanel(props: IPanelProps) {
     }
   }, [itemContext, model])
 
-  const fluentProviderId = useId('risk-action-panel-fluent-provider')
+  const fluentProviderId = useId('fp-risk-action-panel')
 
   return {
     model,

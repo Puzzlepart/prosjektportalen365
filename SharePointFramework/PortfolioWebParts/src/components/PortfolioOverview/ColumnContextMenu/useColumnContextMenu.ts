@@ -11,7 +11,7 @@ import {
   TOGGLE_EDIT_VIEW_COLUMNS_PANEL
 } from '../reducer'
 import { useAddColumn } from '../../List'
-import { MenuProps } from '@fluentui/react-components'
+import { MenuProps, useId } from '@fluentui/react-components'
 
 /**
  * Hook for the column header context menu. Handles the logic for the context menu. Creates a context menu
@@ -34,6 +34,8 @@ export function useColumnContextMenu() {
     setOpen(!!context.state.columnContextMenu?.column)
   }, [context.state.columnContextMenu])
 
+  const fluentProviderId = useId('fp-column-context-menu')
+
   const columnContextMenu = {
     open,
     setOpen,
@@ -41,7 +43,8 @@ export function useColumnContextMenu() {
     onCheckedValueChange,
     checkedValues,
     target: null,
-    items: []
+    items: [],
+    fluentProviderId
   }
 
   if (!context.state.columnContextMenu) return columnContextMenu

@@ -7,6 +7,7 @@ import { IResourceAllocationProps, IResourceAllocationState } from './types'
 import { useFilteredData } from './useFilteredData'
 import { useResourceAllocationDataFetch } from './useResourceAllocationDataFetch'
 import { IFilterItemProps, TimelineTimeframe } from 'pp365-shared-library'
+import { useId } from '@fluentui/react-components'
 
 /**
  * Component logic hook for `ResourceAllocation`. Handles
@@ -70,6 +71,8 @@ export const useResourceAllocation = (props: IResourceAllocationProps) => {
     [parseInt(eAmount), eDuration as moment.unitOfTime.DurationConstructor]
   ]
 
+  const fluentProviderId = useId('fp-resource-allocation')
+
   return {
     state,
     setState,
@@ -77,6 +80,7 @@ export const useResourceAllocation = (props: IResourceAllocationProps) => {
     onFilterChange,
     items,
     groups,
-    defaultTimeframe
+    defaultTimeframe,
+    fluentProviderId
   }
 }

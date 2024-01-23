@@ -7,6 +7,7 @@ import { useContext, useState } from 'react'
 import { PortfolioOverviewContext } from '../context'
 import { COLUMN_DELETED, COLUMN_FORM_PANEL_ON_SAVED, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
 import { useEditableColumn } from './useEditableColumn'
+import { useId } from '@fluentui/react-components'
 
 /**
  * Component logic hook for `ColumnFormPanel`. Handles state and dispatches actions to the reducer.
@@ -142,6 +143,8 @@ export function useColumnFormPanel() {
     }
   }
 
+  const fluentProviderId = useId('fp-column-form-panel')
+
   return {
     onSave,
     onDismiss,
@@ -152,6 +155,7 @@ export function useColumnFormPanel() {
     isSaveDisabled,
     onDeleteColumn,
     findMatchingSearchProperty,
-    columnMessages
+    columnMessages,
+    fluentProviderId
   } as const
 }

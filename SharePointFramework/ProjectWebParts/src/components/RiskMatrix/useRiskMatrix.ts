@@ -40,7 +40,7 @@ export function useRiskMatrix(props: IRiskMatrixProps) {
     return [...elements, ...postActionElements]
   }
 
-  const fluentProviderId = useId('risk-matrix-fluent-provider-')
+  const fluentProviderId = useId('fp-risk-matrix')
 
   return {
     configuration,

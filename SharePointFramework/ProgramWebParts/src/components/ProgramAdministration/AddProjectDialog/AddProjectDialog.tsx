@@ -6,8 +6,7 @@ import {
   DialogSurface,
   DialogTitle,
   FluentProvider,
-  IdPrefixProvider,
-  useId
+  IdPrefixProvider
 } from '@fluentui/react-components'
 import * as strings from 'ProgramWebPartsStrings'
 import _ from 'lodash'
@@ -21,8 +20,7 @@ import { customLightTheme } from 'pp365-shared-library'
 
 export const AddProjectDialog: FC = () => {
   const context = useContext(ProgramAdministrationContext)
-  const { availableProjects, onAddChildProjects } = useAddProjectDialog()
-  const fluentProviderId = useId('fp-addDialog')
+  const { availableProjects, onAddChildProjects, fluentProviderId } = useAddProjectDialog()
 
   return (
     <IdPrefixProvider value={fluentProviderId}>

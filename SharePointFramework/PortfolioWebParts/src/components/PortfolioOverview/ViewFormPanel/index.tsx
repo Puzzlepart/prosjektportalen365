@@ -11,14 +11,13 @@ import {
   IdPrefixProvider,
   Input,
   Switch,
-  Textarea,
-  useId
+  Textarea
 } from '@fluentui/react-components'
 
 export const ViewFormPanel: FC = () => {
-  const fluentProviderId = useId('fp-view-form-panel')
   const context = useContext(PortfolioOverviewContext)
-  const { view, setView, isEditing, onDismiss, isDefaultViewSet, onSave } = useViewFormPanel()
+  const { view, setView, isEditing, onDismiss, isDefaultViewSet, onSave, fluentProviderId } =
+    useViewFormPanel()
   return (
     <Panel
       isOpen={context.state.viewForm.isOpen}

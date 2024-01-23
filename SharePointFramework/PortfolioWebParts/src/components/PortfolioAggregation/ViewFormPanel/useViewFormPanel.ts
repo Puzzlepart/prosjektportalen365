@@ -2,6 +2,7 @@ import { DataSource, SPDataSourceItem } from 'pp365-shared-library'
 import { usePortfolioAggregationContext } from '../context'
 import { SET_VIEW_FORM_PANEL } from '../reducer'
 import { useEditableView } from './useEditableView'
+import { useId } from '@fluentui/react-components'
 
 /**
  * Hook for managing the logic of the `ViewFormPanel` component for the `PortfolioAggregation` component.
@@ -88,11 +89,14 @@ export function useViewFormPanel() {
    */
   const isSaveDisabled = view.get('title').length < 2 || view.get('searchQuery').length < 51
 
+  const fluentProviderId = useId('fp-view-form-panel')
+
   return {
     onSave: !isSaveDisabled ? onSave : undefined,
     isEditing: false,
     onDismiss,
     view,
-    setView
+    setView,
+    fluentProviderId
   } as const
 }

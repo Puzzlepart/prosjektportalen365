@@ -5,12 +5,7 @@ import { PortfolioOverviewContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
 import { useColumnFormPanel } from './useColumnFormPanel'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
-import {
-  ColumnSearchPropertyField,
-  FieldContainer,
-  UserMessage,
-  customLightTheme
-} from 'pp365-shared-library'
+import { ColumnSearchPropertyField, FieldContainer, customLightTheme } from 'pp365-shared-library'
 import { ColumnDataTypeField } from '../../List/ItemColumn/ColumnDataTypeField'
 import {
   Combobox,
@@ -18,14 +13,12 @@ import {
   FluentProvider,
   Input,
   Switch,
-  useId,
   IdPrefixProvider
 } from '@fluentui/react-components'
 import _ from 'lodash'
 import { visibilityOptions } from './types'
 
 export const ColumnFormPanel: FC = () => {
-  const fluentProviderId = useId('fp-column-form-panel')
   const context = useContext(PortfolioOverviewContext)
   const {
     onSave,
@@ -37,7 +30,7 @@ export const ColumnFormPanel: FC = () => {
     isSaveDisabled,
     onDeleteColumn,
     findMatchingSearchProperty,
-    columnMessages
+    fluentProviderId
   } = useColumnFormPanel()
 
   return (

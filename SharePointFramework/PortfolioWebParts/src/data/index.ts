@@ -22,8 +22,6 @@ import {
   ProjectListModel,
   SPContentType,
   SPFxContext,
-  SPProjectColumnItem,
-  SPProjectContentColumnItem,
   SPProjectItem,
   SPTimelineConfigurationItem,
   TimelineConfigurationModel,

@@ -1,4 +1,11 @@
-import { Button, Field, FluentProvider, ProgressBar, useId } from '@fluentui/react-components'
+import {
+  Button,
+  Field,
+  FluentProvider,
+  IdPrefixProvider,
+  ProgressBar,
+  useId
+} from '@fluentui/react-components'
 import strings from 'SharedLibraryStrings'
 import React, { FC, useState } from 'react'
 import { UserMessage } from '../../UserMessage'
@@ -15,7 +22,7 @@ import { customLightTheme } from '../../../util'
  */
 export const CustomEditPanelFooter: FC = () => {
   const context = useCustomEditPanelContext()
-  const fluentProviderId = useId('fluent-provider')
+  const fluentProviderId = useId('fp-custom-edit-panel-footer')
   const [isSaving, setIsSaving] = useState(false)
 
   /**
@@ -29,37 +36,35 @@ export const CustomEditPanelFooter: FC = () => {
   }
 
   return (
-    <FluentProvider
-      id={fluentProviderId}
-      theme={customLightTheme}
-      className={styles.customEditPanelFooter}
-    >
-      {context.props.submit.error && (
-        <div className={styles.errorContainer}>
-          <UserMessage text={context.props.submit.error} intent='error' />
-        </div>
-      )}
-      <div className={styles.container}>
-        {isSaving ? (
-          <Field validationMessage={context.props.submit.saveProgressText} validationState='none'>
-            <ProgressBar />
-          </Field>
-        ) : (
-          <>
-            <Button
-              onClick={handleOnSubmit}
-              disabled={isSaving || context.props.submit.disabled}
-              appearance='primary'
-            >
-              {context.props.submit.text ?? strings.SaveText}
-            </Button>
-            <Button appearance='secondary' onClick={context.props.onDismiss}>
-              {strings.CloseText}
-            </Button>
-          </>
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider theme={customLightTheme} className={styles.customEditPanelFooter}>
+        {context.props.submit.error && (
+          <div className={styles.errorContainer}>
+            <UserMessage text={context.props.submit.error} intent='error' />
+          </div>
         )}
-      </div>
-    </FluentProvider>
+        <div className={styles.container}>
+          {isSaving ? (
+            <Field validationMessage={context.props.submit.saveProgressText} validationState='none'>
+              <ProgressBar />
+            </Field>
+          ) : (
+            <>
+              <Button
+                onClick={handleOnSubmit}
+                disabled={isSaving || context.props.submit.disabled}
+                appearance='primary'
+              >
+                {context.props.submit.text ?? strings.SaveText}
+              </Button>
+              <Button appearance='secondary' onClick={context.props.onDismiss}>
+                {strings.CloseText}
+              </Button>
+            </>
+          )}
+        </div>
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }
 

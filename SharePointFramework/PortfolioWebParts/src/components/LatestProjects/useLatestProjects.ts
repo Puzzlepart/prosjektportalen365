@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { SortDirection } from '@pnp/sp/search'
 import { ILatestProjectsProps, ILatestProjectsState } from './types'
 import styles from './LatestProjects.module.scss'
+import { useId } from '@fluentui/react-components'
 
 /**
  * Custom React hook for fetching and managing the latest projects.
@@ -41,9 +42,12 @@ export function useLatestProjects(props: ILatestProjectsProps) {
    */
   const className = [styles.projectItem, props.showProjectLogo ? styles.withLogo : ''].join(' ')
 
+  const fluentProviderId = useId('fp-latest-projects')
+
   return {
     ...state,
     className,
-    toggleViewAll: () => setState({ ...state, viewAll: !state.viewAll })
+    toggleViewAll: () => setState({ ...state, viewAll: !state.viewAll }),
+    fluentProviderId
   }
 }

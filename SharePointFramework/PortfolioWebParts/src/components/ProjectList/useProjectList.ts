@@ -1,6 +1,6 @@
 /* eslint-disable prefer-spread */
 import { format, IColumn } from '@fluentui/react'
-import { ButtonProps } from '@fluentui/react-components'
+import { ButtonProps, useId } from '@fluentui/react-components'
 import { SearchBoxProps } from '@fluentui/react-search-preview'
 import { ProjectListModel } from 'pp365-shared-library/lib/models'
 import { sortAlphabetically } from 'pp365-shared-library/lib/util/sortAlphabetically'
@@ -142,6 +142,8 @@ export const useProjectList = (props: IProjectListProps) => {
 
   const menuItems = useToolbarItems(state, setState, props)
 
+  const fluentProviderId = useId('fp-project-list')
+
   return {
     state,
     setState,
@@ -154,6 +156,7 @@ export const useProjectList = (props: IProjectListProps) => {
         : format(state.selectedVertical.searchBoxPlaceholder, projects.length),
     onListSort,
     onSearch,
-    createCardContext
+    createCardContext,
+    fluentProviderId
   }
 }

@@ -17,7 +17,8 @@ import {
   InteractionTag,
   InteractionTagPrimary,
   Tag,
-  TagGroup
+  TagGroup,
+  IdPrefixProvider
 } from '@fluentui/react-components'
 import { format } from '@fluentui/react'
 import { IOverflowTagMenuProps, OverflowMenuItemProps } from './types'
@@ -51,7 +52,7 @@ export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
       children: string
     }[]
   }) => {
-    const fluentProviderId = useId('fluent-provider')
+    const fluentProviderId = useId('sp-overflow-menu')
     const { tags } = props
     const { isOverflowing, overflowCount } = useOverflowMenu<HTMLButtonElement>()
 
@@ -60,31 +61,29 @@ export const OverflowTagMenu: FC<IOverflowTagMenuProps> = (props) => {
     }
 
     return (
-      <FluentProvider
-        id={fluentProviderId}
-        theme={customLightTheme}
-        style={{ backgroundColor: 'transparent' }}
-      >
-        <Menu closeOnScroll>
-          <MenuTrigger disableButtonEnhancement>
-            <InteractionTag
-              aria-label={format(strings.Aria.MenuOverflowCount, overflowCount)}
-              title={format(strings.Aria.MenuOverflowCount, overflowCount)}
-              appearance='brand'
-            >
-              <InteractionTagPrimary primaryText={`+${overflowCount}`} />
-            </InteractionTag>
-          </MenuTrigger>
-          <MenuPopover style={{ maxWidth: 600 }}>
-            <MenuList hasCheckmarks={false}>
-              {!_.isEmpty(tags) &&
-                tags
-                  .slice(-overflowCount)
-                  .map((tag) => <OverflowMenuItem key={tag.key} tag={tag} />)}
-            </MenuList>
-          </MenuPopover>
-        </Menu>
-      </FluentProvider>
+      <IdPrefixProvider value={fluentProviderId}>
+        <FluentProvider theme={customLightTheme} style={{ backgroundColor: 'transparent' }}>
+          <Menu closeOnScroll>
+            <MenuTrigger disableButtonEnhancement>
+              <InteractionTag
+                aria-label={format(strings.Aria.MenuOverflowCount, overflowCount)}
+                title={format(strings.Aria.MenuOverflowCount, overflowCount)}
+                appearance='brand'
+              >
+                <InteractionTagPrimary primaryText={`+${overflowCount}`} />
+              </InteractionTag>
+            </MenuTrigger>
+            <MenuPopover style={{ maxWidth: 600 }}>
+              <MenuList hasCheckmarks={false}>
+                {!_.isEmpty(tags) &&
+                  tags
+                    .slice(-overflowCount)
+                    .map((tag) => <OverflowMenuItem key={tag.key} tag={tag} />)}
+              </MenuList>
+            </MenuPopover>
+          </Menu>
+        </FluentProvider>
+      </IdPrefixProvider>
     )
   }
 

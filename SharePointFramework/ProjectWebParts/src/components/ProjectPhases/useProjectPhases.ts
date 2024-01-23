@@ -7,6 +7,7 @@ import { IProjectPhasesContext } from './context'
 import reducer, { initialState } from './reducer'
 import { IProjectPhasesProps } from './types'
 import { useProjectPhasesDataFetch } from './useProjectPhasesDataFetch'
+import { useId } from '@fluentui/react-components'
 
 /**
  * Component logic hook for `ProjectPhases`
@@ -29,5 +30,8 @@ export function useProjectPhases(props: IProjectPhasesProps) {
     dispatch
   }
 
-  return { rootRef, context } as const
+  const fluentProviderId = useId('fp-project-phases')
+  const toasterId = useId('toaster')
+
+  return { rootRef, context, fluentProviderId, toasterId } as const
 }

@@ -7,10 +7,9 @@ import { usePortfolioAggregationContext } from '../context'
 import styles from './ColumnFormPanel.module.scss'
 import { ColumnFormPanelFooter } from './ColumnFormPanelFooter'
 import { useColumnFormPanel } from './useColumnFormPanel'
-import { FluentProvider, IdPrefixProvider, Input, Switch, useId } from '@fluentui/react-components'
+import { FluentProvider, IdPrefixProvider, Input, Switch } from '@fluentui/react-components'
 
 export const ColumnFormPanel: FC = () => {
-  const fluentProviderId = useId('fp-column-form-panel')
   const context = usePortfolioAggregationContext()
   const {
     onSave,
@@ -23,7 +22,8 @@ export const ColumnFormPanel: FC = () => {
     setColumnData,
     persistRenderGlobally,
     setPersistRenderGlobally,
-    isEditing
+    isEditing,
+    fluentProviderId
   } = useColumnFormPanel()
 
   return (

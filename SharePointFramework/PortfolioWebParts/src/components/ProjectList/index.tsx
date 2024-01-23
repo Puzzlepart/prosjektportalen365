@@ -1,4 +1,10 @@
-import { FluentProvider, SelectTabData, Tab, TabList } from '@fluentui/react-components'
+import {
+  FluentProvider,
+  IdPrefixProvider,
+  SelectTabData,
+  Tab,
+  TabList
+} from '@fluentui/react-components'
 import { SearchBox } from '@fluentui/react-search-preview'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
@@ -24,7 +30,8 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
     onSearch,
     searchBoxPlaceholder,
     createCardContext,
-    menuItems
+    menuItems,
+    fluentProviderId
   } = useProjectList(props)
 
   /**
@@ -78,77 +85,79 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
   }
 
   return (
-    <FluentProvider className={styles.root} theme={customLightTheme}>
-      <div className={styles.tabs}>
-        <TabList
-          onTabSelect={(_, data: SelectTabData) =>
-            setState({ selectedVertical: find(verticals, (v) => v.key === data.value) })
-          }
-          selectedValue={state.selectedVertical.key}
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider className={styles.root} theme={customLightTheme}>
+        <div className={styles.tabs}>
+          <TabList
+            onTabSelect={(_, data: SelectTabData) =>
+              setState({ selectedVertical: find(verticals, (v) => v.key === data.value) })
+            }
+            selectedValue={state.selectedVertical.key}
+          >
+            {state.isDataLoaded &&
+              verticals
+                .filter((vertical) => !vertical.isHidden || !vertical.isHidden(state))
+                .map((vertical) => {
+                  const Icon = vertical.icon
+                  return (
+                    <Tab key={vertical.key} value={vertical.value} icon={<Icon />}>
+                      {vertical.text}
+                    </Tab>
+                  )
+                })}
+          </TabList>
+        </div>
+        <div
+          className={styles.commandBar}
+          hidden={!props.showSearchBox && !props.showRenderModeSelector}
         >
-          {state.isDataLoaded &&
-            verticals
-              .filter((vertical) => !vertical.isHidden || !vertical.isHidden(state))
-              .map((vertical) => {
-                const Icon = vertical.icon
-                return (
-                  <Tab key={vertical.key} value={vertical.value} icon={<Icon />}>
-                    {vertical.text}
-                  </Tab>
-                )
-              })}
-        </TabList>
-      </div>
-      <div
-        className={styles.commandBar}
-        hidden={!props.showSearchBox && !props.showRenderModeSelector}
-      >
-        <div className={styles.search} hidden={!props.showSearchBox}>
-          <SearchBox
-            className={styles.searchBox}
-            disabled={!state.isDataLoaded || isEmpty(state.projects)}
-            value={state.searchTerm}
-            placeholder={searchBoxPlaceholder}
-            aria-label={searchBoxPlaceholder}
-            title={searchBoxPlaceholder}
-            size='large'
-            onChange={onSearch}
-            contentAfter={{
-              onClick: () => setState({ searchTerm: '' })
-            }}
-            appearance='filled-lighter'
-          />
+          <div className={styles.search} hidden={!props.showSearchBox}>
+            <SearchBox
+              className={styles.searchBox}
+              disabled={!state.isDataLoaded || isEmpty(state.projects)}
+              value={state.searchTerm}
+              placeholder={searchBoxPlaceholder}
+              aria-label={searchBoxPlaceholder}
+              title={searchBoxPlaceholder}
+              size='large'
+              onChange={onSearch}
+              contentAfter={{
+                onClick: () => setState({ searchTerm: '' })
+              }}
+              appearance='filled-lighter'
+            />
+          </div>
+          <div hidden={!props.showRenderModeSelector && !props.showSortBy}>
+            <Toolbar items={menuItems} />
+          </div>
         </div>
-        <div hidden={!props.showRenderModeSelector && !props.showSortBy}>
-          <Toolbar items={menuItems} />
-        </div>
-      </div>
-      {state.isDataLoaded && isEmpty(projects) && (
-        <div className={styles.emptyMessage}>
-          <UserMessage
-            title={strings.NoProjectsFoundTitle}
-            text={strings.ProjectListEmptyMessage}
-          />
-        </div>
-      )}
-      <div className={styles.projects}>{renderProjects(projects)}</div>
-      <ProjectInformationPanel
-        {...SiteContext.create(
-          props.spfxContext,
-          state.showProjectInfo?.siteId,
-          state.showProjectInfo?.url
+        {state.isDataLoaded && isEmpty(projects) && (
+          <div className={styles.emptyMessage}>
+            <UserMessage
+              title={strings.NoProjectsFoundTitle}
+              text={strings.ProjectListEmptyMessage}
+            />
+          </div>
         )}
-        page='Portfolio'
-        hidden={!state.showProjectInfo}
-        hideAllActions={true}
-        panelProps={{
-          headerText: state.showProjectInfo?.title,
-          onDismiss: () => {
-            setState({ showProjectInfo: null })
-          }
-        }}
-      />
-    </FluentProvider>
+        <div className={styles.projects}>{renderProjects(projects)}</div>
+        <ProjectInformationPanel
+          {...SiteContext.create(
+            props.spfxContext,
+            state.showProjectInfo?.siteId,
+            state.showProjectInfo?.url
+          )}
+          page='Portfolio'
+          hidden={!state.showProjectInfo}
+          hideAllActions={true}
+          panelProps={{
+            headerText: state.showProjectInfo?.title,
+            onDismiss: () => {
+              setState({ showProjectInfo: null })
+            }
+          }}
+        />
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }
 

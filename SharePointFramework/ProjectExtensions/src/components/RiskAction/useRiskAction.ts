@@ -8,7 +8,7 @@ import { useRiskActionFieldCustomizerContext } from '../../riskAction/context'
  * @returns An object containing the fluentProviderId and contextValue.
  */
 export function useRiskAction() {
-  const fluentProviderId = useId('risk-action-fluent-provider')
+  const fluentProviderId = useId('fp-risk-action')
   const context = useRiskActionFieldCustomizerContext()
   const [itemContext, setItemContext] = useState(context.itemContext)
   const contextValue = useMemo(
