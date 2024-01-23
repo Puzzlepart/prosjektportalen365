@@ -9,7 +9,7 @@ import { render } from 'react-dom'
 import { ErrorBoundary } from 'react-error-boundary'
 import { DataAdapter } from '../../data'
 import { ErrorBoundaryFallback } from './ErrorBoundary'
-import { FluentProvider, IdPrefixProvider, useId } from '@fluentui/react-components'
+import { FluentProvider } from '@fluentui/react-components'
 
 type ComponentType<P> = FC<P> | ComponentClass<P>
 
@@ -54,7 +54,6 @@ export abstract class BasePortfolioWebPart<
    * @param props Props to pass to the component
    */
   public renderComponent<P = any>(component: ComponentType<P>, props?: Partial<P>): void {
-    const fluentProviderId = useId('fp-base-portfolio-web-part')
     const combinedProps = this.createPropsForComponent(props)
     const element = createElement(component, combinedProps)
 
@@ -64,9 +63,7 @@ export abstract class BasePortfolioWebPart<
           <ErrorBoundaryFallback title={combinedProps['title']} error={error} />
         )}
       >
-        <IdPrefixProvider value={fluentProviderId}>
-          <FluentProvider theme={customLightTheme}>{element}</FluentProvider>
-        </IdPrefixProvider>
+        <FluentProvider theme={customLightTheme}>{element}</FluentProvider>
       </ErrorBoundary>,
       this.domElement
     )
@@ -87,7 +84,7 @@ export abstract class BasePortfolioWebPart<
           Title: string
         }>()
       ).Title
-    } catch (error) {}
+    } catch (error) { }
   }
 
   public async onInit(): Promise<void> {
