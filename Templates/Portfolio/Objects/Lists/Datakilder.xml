@@ -43,7 +43,7 @@
         <pnp:FieldRef ID="e4223ef9-c549-4038-8652-9ffd71118cb2" Name="GtProjectContentGroupBy" DisplayName="{resource:SiteFields_GtProjectContentGroupBy_DisplayName}" />
         <pnp:FieldRef ID="40b5cbd9-4d0a-42eb-a790-65d83b9c7035" Name="GtODataQuery" DisplayName="{resource:SiteFields_GtODataQuery_DisplayName}" />
     </pnp:FieldRefs>
-    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
+    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtDataSourceId">fc9ff008-36cf-4531-9bce-ba545526834f</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Alle prosjektleveranser</pnp:DataValue>

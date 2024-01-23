@@ -24,7 +24,7 @@
     <pnp:Fields>
         <Field DisplayName="{resource:Lists_Idea_Configuration_Field_GtDescription_DisplayName}" Description="{resource:Lists_Idea_Configuration_Field_GtDescription_Description}" ID="{c3beecea-c0e5-4d18-9b45-3c7d7949bee4}" Name="GtDescription" StaticName="GtDescription" Type="Note" UnlimitedLengthInDocumentLibrary="TRUE" />
     </pnp:Fields>
-    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
+    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip" >
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Standard</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaProcessingList">Idébehandling</pnp:DataValue>

@@ -91,7 +91,7 @@
             </pnp:Files>
             <pnp:Lists>
                 <pnp:ListInstance Title="Fasesjekkliste" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/Fasesjekkliste" EnableVersioning="true" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false">
-                    <pnp:DataRows UpdateBehavior="Skip" KeyColumn="Title">
+                    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Er det en tydelig definert problemstilling som synliggjør behovet for nærmere utredning?</pnp:DataValue>
                             <pnp:DataValue FieldName="GtProjectPhase">Ingen fase|6edb42ac-9aaf-4f07-9cf5-5dfdf9ab0c32</pnp:DataValue>
@@ -315,7 +315,7 @@
                     </pnp:DataRows>
                 </pnp:ListInstance>
                 <pnp:ListInstance Title="Planneroppgaver" TemplateType="100" Url="Lists/Planneroppgaver" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
-                    <pnp:DataRows UpdateBehavior="Overwrite" KeyColumn="Title">
+                    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Beslutte utredning av idéen og utforme et førsteutkast til prosjektmandat</pnp:DataValue>
                             <pnp:DataValue FieldName="GtCategory">Ingen fase</pnp:DataValue>

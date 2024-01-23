@@ -78,7 +78,7 @@
             <JSLink>clienttemplates.js</JSLink>
         </View>
     </pnp:Views>
-    <pnp:DataRows UpdateBehavior="Overwrite" KeyColumn="Title">
+    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Fasesjekkpunkter</pnp:DataValue>
             <pnp:DataValue FieldName="GtDescription">Fasesjekkpunkter basert på Prosjektveiviserens beslutningspunkter</pnp:DataValue>

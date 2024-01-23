@@ -26,7 +26,7 @@
             <CustomFormatter />
         </View>
     </pnp:Views>
-    <pnp:DataRows UpdateBehavior="Overwrite" KeyColumn="Title">
+    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Porteføljenivå Brukermanual</pnp:DataValue>

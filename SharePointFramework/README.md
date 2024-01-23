@@ -20,7 +20,7 @@
 | ProjectSetup                  | ProjectExtensions   | Oppsett av prosjekt dialog                                  | ce34553d-ab47-4107-8dd1-e980d953996d |
 | ProjectUpgrade                | ProjectExtensions   | Oppgradering av prosjekt dialog                             | 453a6c1e-e1d0-4b12-a3fc-690a36da1f0c |
 | TemplateSelectorCommand       | ProjectExtensions   | Dokumentmalvelger dialog (Malbibliotek)                     | c9080212-e63e-47cc-8278-00ad38c3f5a5 |
-| RiskActionPlanner             | ProjectExtensions   | Planner tiltak                                              | 2511e707-1b8a-4dc3-88d1-b7002eb3ce54 |
+| RiskActionPlanner             | ProjectExtensions   | Planner tiltak                                              | 1dd9fdb3-df0f-4248-a869-ca6f512e3d0f |
 | OpportunityMatrixWebPart      | ProjectWebParts     | Mulighetsmatrise                                            | aff0baa2-9ab4-4c13-a062-d5fa5028121c |
 | ProjectInformationWebPart     | ProjectWebParts     | Prosjektinformasjon                                         | b8bec0be-2354-443d-a3ca-24b36e8ea7dc |
 | ProjectPhasesWebPart          | ProjectWebParts     | Fasevelger                                                  | 4449d3dc-fa58-4982-b87c-5a893114e7b7 |

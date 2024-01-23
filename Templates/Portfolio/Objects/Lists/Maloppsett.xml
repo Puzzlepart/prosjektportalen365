@@ -66,7 +66,7 @@
     <pnp:FieldRef ID="c3beecea-c0e5-4d18-9b45-3c7d7949bee4" Name="GtDescription" DisplayName="{resource:Lists_GtDescription_DisplayName}" />
     <pnp:FieldRef ID="77baede1-38df-454c-a53a-dd7904ba0046" Name="GtIsProgram" DisplayName="{resource:Lists_GtIsProgram_DisplayName}" />
   </pnp:FieldRefs>
-  <pnp:DataRows UpdateBehavior="Overwrite" KeyColumn="Title">
+  <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
     <pnp:DataRow>
       <pnp:DataValue FieldName="Title">Standardmal</pnp:DataValue>
       <pnp:DataValue FieldName="Order">100</pnp:DataValue>

@@ -63,7 +63,7 @@
             <ViewData />
         </View>
     </pnp:Views>
-    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
+    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Prosjektleder</pnp:DataValue>
             <pnp:DataValue FieldName="GtProjectFieldName">GtProjectManager</pnp:DataValue>

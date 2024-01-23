@@ -31,7 +31,7 @@
             <Default>Innstilling uten navn</Default>
         </Field>
     </pnp:Fields>
-    <pnp:DataRows UpdateBehavior="Skip" KeyColumn="GtSettingsId">
+    <pnp:DataRows KeyColumn="GtSettingsId" UpdateBehavior="Skip">
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSettingsId">{e77e3aa3-a6b9-4a7e-8b94-6cb889124b82}</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Bruk Planner for å håndtere tiltak i Usikkerhetslisten</pnp:DataValue>
