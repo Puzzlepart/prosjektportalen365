@@ -2,10 +2,20 @@
 
 Vi tar for oss pakke for pakke og går gjennom komponent for komponent. Dette issuet angår en `fresh` installasjon av Prosjektportalen 365, se [Smoke test for oppgradert her](XXX).
 
-##  📦 PortfolioExtensions $1
+## ✅ Oppsummert status for X.X.X
+
+- PortfolioExtensions $1:
+- PortfolioWebParts $2:
+- ProgramWebParts $3:
+- ProjectExtension $4:
+- ProjectWebParts $5:
+- SharePoint sider $6:
+- Annet $7:
+
+## 📦 PortfolioExtensions $1
 
 - [ ] Idea Processing $1.1
-  - [ ] Liste $1.1.1 
+  - [ ] Liste $1.1.1
     - [ ] Verifiser at 'Sett anbefaling' knapp dukker opp ved markering av listeelement $1.1.1.1
     - [ ] Verifiser at 'Opprett prosjektdata' knapp dukker opp ved markering av listeelement $1.1.1.2
     - [ ] Verifiser at du kommer til KUR siden $1.1.1.3
@@ -18,7 +28,7 @@ Vi tar for oss pakke for pakke og går gjennom komponent for komponent. Dette is
     - [ ] Verifiser at informasjon om prosjektdata funnet dukker opp i prosjektoppsett dialog $1.2.2.1
     - [ ] Verifiser at prosjektdata følger med inn i prosjektinformasjon til prosjektet etter opprettelse $1.2.2.2
 - [ ] Idea Registration $1.3
-  - [ ] Liste $1.3.1 
+  - [ ] Liste $1.3.1
     - [ ] Verifiser at 'Sett anbefaling' knapp dukker opp ved markering av listeelement $1.3.1.1
     - [ ] Verifiser at 'Gå til idébehandling' knapp dukker opp 1.3.1.2
   - [ ] Dialog $1.3.2
@@ -44,7 +54,7 @@ Vi tar for oss pakke for pakke og går gjennom komponent for komponent. Dette is
   - [ ] Verifiser at innhold som har et annet nivå enn der du står ikke vises $1.6.3
   - [ ] Verifiser at innhold som har et angitt nivå vises riktig $1.6.4
 
-##  📦 PortfolioWebParts $2
+## 📦 PortfolioWebParts $2
 
 - [ ] Latest Projects WebPart $2.1
   - [ ] Verifiser at prosjektet listes opp $2.1.1
@@ -60,7 +70,7 @@ Vi tar for oss pakke for pakke og går gjennom komponent for komponent. Dette is
     - [ ] Verifiser at eksport til excel fungerer $2.2.1.4
     - [ ] Verifiser at eksport til excel fungerer for valgte prosjekter $2.2.1.5
     - [ ] Verifiser at filterpanel fungerer som det skal $2.2.1.6
- - [ ] EditViewColumnsPanel (vis/skjul kolonner) $2.2.2
+  - [ ] EditViewColumnsPanel (vis/skjul kolonner) $2.2.2
     - [ ] Verifiser at rekkefølgen stemmer med det som vises $2.2.2.1
     - [ ] Verifiser at du kan endre på rekkefølgen på kolonner $2.2.2.2
     - [ ] Verifiser at du kan skjule/vise ulike kolonner $2.2.2.3
@@ -164,6 +174,9 @@ Vi tar for oss pakke for pakke og går gjennom komponent for komponent. Dette is
     - [ ] Verifiser at listen laster $3.3.1.1
     - [ ] Verifiser at bytting av visning fungerer $3.3.1.2
     - [ ] Verifiser at visnings-id legger seg i adressefeltet $3.3.1.3
+    - [ ] Verifiser at eksport til excel fungerer $3.3.1.4
+    - [ ] Verifiser at eksport til excel fungerer for valgte prosjekter $3.3.1.5
+    - [ ] Verifiser at filterpanel fungerer som det skal $3.3.1.6
   - [ ] EditViewColumnsPanel (vis/skjul kolonner) $3.3.2
     - [ ] Verifiser at rekkefølgen stemmer med det som vises $3.3.2.1
     - [ ] Verifiser at du kan endre på rekkefølgen på kolonner $3.3.2.2
@@ -268,7 +281,7 @@ Vi tar for oss pakke for pakke og går gjennom komponent for komponent. Dette is
     - [ ] Verifiser at rekkefølgen stemmer med det som vises $5.9.2.1
     - [ ] Verifiser at du kan endre på rekkefølgen på kolonner $5.9.2.2
     - [ ] Verifiser at du kan skjule/vise ulike kolonner $5.9.2.3
-  - [ ] ColumnFormPanel $5.9.3 
+  - [ ] ColumnFormPanel $5.9.3
     - [ ] Add $5.9.3.1
       - [ ] Verifiser at alle felter fungerer som det skal $5.9.3.1.1
       - [ ] Verifiser at ny kolonne vises riktig $5.9.3.1.2
