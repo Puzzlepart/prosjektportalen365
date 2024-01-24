@@ -84,7 +84,7 @@ export abstract class BasePortfolioWebPart<
           Title: string
         }>()
       ).Title
-    } catch (error) { }
+    } catch (error) {}
   }
 
   public async onInit(): Promise<void> {

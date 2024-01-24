@@ -61,11 +61,14 @@ export function useSelectableColumns(props: IEditViewColumnsPanelProps) {
    *
    * @param col The column to update.
    * @param isSelected The new value for the `isSelected` property.
+   * @param idx The index of the column in the `selectableColumns` state.
    */
-  function selectColumn(col: IColumn, isSelected: boolean) {
+  function selectColumn(col: IColumn, isSelected: boolean, idx: number) {
     setSelectableColumns((prev) =>
       prev.map((i) => (i.fieldName === col.fieldName ? _.set(i, 'data.isSelected', isSelected) : i))
     )
+
+    moveColumn(idx, isSelected ? selectedColumns.length : selectedColumns.length - 1)
   }
 
   /**

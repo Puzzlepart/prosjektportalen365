@@ -27,7 +27,8 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
     onSave,
     moveColumn,
     fluentProviderHeaderId,
-    fluentProviderBodyId
+    fluentProviderBodyId,
+    selectedColumns
   } = useEditViewColumnsPanel(props)
 
   return (
@@ -77,7 +78,12 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
               {(provided) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   {selectableColumns.map((col, idx) => (
-                    <Draggable key={col.name} draggableId={col.name} index={idx}>
+                    <Draggable
+                      key={col.name}
+                      draggableId={col.name}
+                      index={idx}
+                      isDragDisabled={!col.data.isSelected}
+                    >
                       {(provided, snapshot) => (
                         <div
                           className={styles.columnItem}
@@ -91,7 +97,7 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
                           <Checkbox
                             label={col.name}
                             checked={col.data.isSelected}
-                            onChange={(_event, data) => onChange(col, !!data.checked)}
+                            onChange={(_event, data) => onChange(col, !!data.checked, idx)}
                             disabled={col.data.isLocked}
                           />
                           <div className={styles.columnItemActions}>
@@ -99,14 +105,28 @@ export const EditViewColumnsPanel: FC<IEditViewColumnsPanelProps> = (props) => {
                               appearance='transparent'
                               size='medium'
                               icon={getFluentIcon('ChevronUp')}
-                              title={strings.Aria.MoveUp}
+                              title={
+                                !col.data.isSelected
+                                  ? strings.Aria.MoveDisabled
+                                  : idx === 0
+                                  ? strings.Aria.MoveUpDisabled
+                                  : strings.Aria.MoveUp
+                              }
+                              disabled={!col.data.isSelected || idx === 0}
                               onClick={() => moveColumn(col, -1)}
                             />
                             <Button
                               appearance='transparent'
                               size='medium'
                               icon={getFluentIcon('ChevronDown')}
-                              title={strings.Aria.MoveDown}
+                              title={
+                                !col.data.isSelected
+                                  ? strings.Aria.MoveDisabled
+                                  : idx === selectedColumns.length - 1
+                                  ? strings.Aria.MoveDownDisabled
+                                  : strings.Aria.MoveDown
+                              }
+                              disabled={!col.data.isSelected || idx === selectedColumns.length - 1}
                               onClick={() => moveColumn(col, 1)}
                             />
                           </div>

@@ -1,8 +1,11 @@
 declare interface IProgramWebPartsStrings {
   Aria: {
     MenuOverflowCount: string
+    MoveDisabled: string
     MoveUp: string
+    MoveUpDisabled: string
     MoveDown: string
+    MoveDownDisabled: string
   },
   Placeholder: {
     TextField: string

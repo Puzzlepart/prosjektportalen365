@@ -2,8 +2,11 @@ define([], function () {
   return {
     Aria: {
       MenuOverflowCount: '{0} flere elementer',
+      MoveDisabled: 'Kan ikke flytte skjult kolonne',
       MoveUp: 'Flytt opp',
+      MoveUpDisabled: 'Kan ikke flytte opp, øverste element',
       MoveDown: 'Flytt ned',
+      MoveDownDisabled: 'Kan ikke flytte ned, nederste element',
     },
     Placeholder: {
       TextField: 'Angi verdi her',

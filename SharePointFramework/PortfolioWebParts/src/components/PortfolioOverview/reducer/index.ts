@@ -156,9 +156,7 @@ const $createReducer = (params: IPortfolioOverviewReducerParams) =>
       })
       .addCase(COLUMN_FORM_PANEL_ON_SAVED, (state, { payload }) => {
         if (payload.isNew) {
-          state.columns = [...state.columns, payload.column].sort(
-            (a, b) => a.sortOrder - b.sortOrder
-          )
+          state.columns = [...state.columns, payload.column]
         } else {
           state.columns = state.columns.map((col) =>
             col.key === payload.column.key ? payload.column : col

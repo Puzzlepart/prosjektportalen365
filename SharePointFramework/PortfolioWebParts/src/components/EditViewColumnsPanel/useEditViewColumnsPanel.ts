@@ -32,8 +32,8 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
    * @param col Column item
    * @param isSelected Selected state
    */
-  const onChange = (col: IColumn, isSelected: boolean) => {
-    selectColumn(col, isSelected)
+  const onChange = (col: IColumn, isSelected: boolean, idx: number) => {
+    selectColumn(col, isSelected, idx)
   }
 
   /**
@@ -63,6 +63,7 @@ export function useEditViewColumnsPanel(props: IEditViewColumnsPanelProps) {
       }
     },
     fluentProviderHeaderId,
-    fluentProviderBodyId
+    fluentProviderBodyId,
+    selectedColumns
   }
 }
