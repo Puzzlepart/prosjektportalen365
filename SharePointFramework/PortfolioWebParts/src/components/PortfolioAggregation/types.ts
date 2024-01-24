@@ -180,6 +180,11 @@ export interface IPortfolioAggregationState
   isExporting?: boolean
 
   /**
+   * Is changing view
+   */
+  isChangingView?: boolean
+
+  /**
    * Views available for the data source category.
    */
   views?: DataSource[]

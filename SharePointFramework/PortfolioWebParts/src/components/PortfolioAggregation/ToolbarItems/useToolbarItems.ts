@@ -66,11 +66,13 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
           new ListMenuItem(null, strings.ExcelExportButtonLabel)
             .setIcon('ExcelLogoInverse')
             .setOnClick(exportToExcel)
+            .setDisabled(context.state.isChangingView)
             .setStyle({ color: '#10793F' }),
         new ListMenuItem(context.state.currentView?.title, strings.PortfolioViewsListName)
           .setIcon(Icons.ContentView)
           .setWidth('fit-content')
           .setStyle({ minWidth: '145px' })
+          .setDisabled(context.state.isChangingView)
           .setItems(
             [
               new ListMenuItem(strings.ListViewText)
@@ -105,9 +107,12 @@ export function useToolbarItems(context: IPortfolioAggregationContext) {
             ],
             checkedValues
           ),
-        new ListMenuItem(null, strings.FilterText).setIcon('Filter').setOnClick(() => {
-          context.dispatch(TOGGLE_FILTER_PANEL())
-        })
+        new ListMenuItem(null, strings.FilterText)
+          .setIcon('Filter')
+          .setOnClick(() => {
+            context.dispatch(TOGGLE_FILTER_PANEL())
+          })
+          .setDisabled(context.state.isChangingView)
       ].filter(Boolean),
     [context.state, context.props]
   )

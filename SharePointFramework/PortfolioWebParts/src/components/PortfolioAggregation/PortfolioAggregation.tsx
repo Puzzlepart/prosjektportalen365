@@ -21,6 +21,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
     filterPanelProps,
     selection
   } = usePortfolioAggregation(props)
+
   return (
     <div className={styles.root}>
       <PortfolioAggregationContext.Provider value={context}>
@@ -28,7 +29,7 @@ export const PortfolioAggregation: FC<IPortfolioAggregationProps> = (props) => {
           <List
             key={context.state.currentView?.id}
             title={props.title}
-            enableShimmer={context.state.loading}
+            enableShimmer={context.state.loading || context.state.isChangingView}
             items={context.items}
             columns={context.columns}
             groups={context.state.groups}

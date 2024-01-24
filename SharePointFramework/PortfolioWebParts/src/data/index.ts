@@ -746,7 +746,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
 
       return items
     } catch (error) {
-      throw new Error(format(strings.DataSourceError, dataSourceName))
+      throw new Error(`${format(strings.DataSourceError, dataSourceName)}  ${error}`)
     }
   }
 

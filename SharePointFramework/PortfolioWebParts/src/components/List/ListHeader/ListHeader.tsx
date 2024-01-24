@@ -25,29 +25,33 @@ export const ListHeader: FC<IListHeaderProps> = (props) => {
           <div className={styles.header}>
             <WebPartTitle title={props.title} />
           </div>
-          {hasError && (
+          {hasError ? (
             <div className={styles.errorContainer}>
               <UserMessage title={strings.ErrorTitle} text={props.error.message} intent='error' />
             </div>
-          )}
-          <div className={styles.commandBar}>
-            <div
-              className={styles.search}
-              hidden={!props.searchBox || props?.searchBox?.hidden || hasError}
-            >
-              <SearchBox
-                className={styles.searchBox}
-                placeholder={strings.SearchBoxPlaceholderFallbackText}
-                aria-label={strings.SearchBoxPlaceholderFallbackText}
-                title={strings.SearchBoxPlaceholderFallbackText}
-                size='large'
-                appearance='filled-lighter'
-                contentAfter={null}
-                {...props.searchBox}
+          ) : (
+            <div className={styles.commandBar}>
+              <div
+                className={styles.search}
+                hidden={!props.searchBox || props?.searchBox?.hidden || hasError}
+              >
+                <SearchBox
+                  className={styles.searchBox}
+                  placeholder={strings.SearchBoxPlaceholderFallbackText}
+                  aria-label={strings.SearchBoxPlaceholderFallbackText}
+                  title={strings.SearchBoxPlaceholderFallbackText}
+                  size='large'
+                  appearance='filled-lighter'
+                  contentAfter={null}
+                  {...props.searchBox}
+                />
+              </div>
+              <Toolbar
+                items={context.props.menuItems}
+                filterPanel={context.props.filterPanelProps}
               />
             </div>
-            <Toolbar items={context.props.menuItems} filterPanel={context.props.filterPanelProps} />
-          </div>
+          )}
           {props.defaultRender && (
             <div className={styles.headerColumns} hidden={hasError}>
               {props.defaultRender(props.headerProps)}

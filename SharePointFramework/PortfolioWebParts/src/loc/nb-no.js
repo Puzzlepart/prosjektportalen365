@@ -86,7 +86,7 @@ define([], function () {
     DataSourceCategoryDescription: 'Angi en datakildekategori for å kunne velge mellom flere datakilder i webdelen.',
     DataSourceCategoryError: 'Det skjedde en feil under uthenting av datakilder med kategori **{0}**.',
     DataSourceCategoryLabel: 'Kategori for datakilder',
-    DataSourceError: 'Det skjedde en feil under uthenting av data fra datakilde med navn **{0}**.',
+    DataSourceError: 'Det skjedde en feil under uthenting av data fra datakilde med navn **{0}**. Oppdater siden og prøv igjen.',
     DataSourceGroupName: 'Datakilder',
     DataSourceItemNotFound: 'Datakilde ble ikke funnet',
     DataSourceLabel: 'Datakilde',

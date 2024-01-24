@@ -91,6 +91,8 @@ export const createPortfolioAggregationReducer = (
         : sortArray(allColumnsForCategory, 'sortOrder')
       state.allColumnsForCategory = allColumnsForCategory
       state.loading = false
+      state.error = null
+      state.isChangingView = false
     },
     [TOGGLE_COLUMN_FORM_PANEL.type]: (
       state,
@@ -251,6 +253,7 @@ export const createPortfolioAggregationReducer = (
       state.activeFilters = {}
     },
     [SET_DATA_SOURCE.type]: (state, { payload }: ReturnType<typeof SET_DATA_SOURCE>) => {
+      state.isChangingView = !!payload
       const obj: IPortfolioAggregationHashState = {}
       if (state.currentView) obj.viewId = payload.dataSource.id.toString()
       if (state.groupBy) obj.groupBy = state.groupBy.fieldName
@@ -260,6 +263,7 @@ export const createPortfolioAggregationReducer = (
     },
     [START_FETCH.type]: (state) => {
       state.loading = true
+      state.isChangingView = true
     },
     [EXECUTE_SEARCH.type]: (state, { payload }: ReturnType<typeof EXECUTE_SEARCH>) => {
       state.searchTerm = payload
