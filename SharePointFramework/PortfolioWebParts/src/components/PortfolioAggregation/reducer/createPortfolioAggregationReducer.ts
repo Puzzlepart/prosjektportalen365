@@ -56,39 +56,52 @@ export const createPortfolioAggregationReducer = (
         items = sortArray([...items], [state.sortBy?.fieldName ?? 'SiteTitle'], {
           reverse: state.sortBy?.isSortedDescending ? state.sortBy.isSortedDescending : false
         })
+
         if (payload.projects) {
           items = items.filter((item) =>
             _.some(payload.projects, ({ GtSiteId }) => GtSiteId === item.SiteId)
           )
         }
+
         state.items = items
       }
+
       if (payload.dataSources) state.views = payload.dataSources
+
       if (!payload.columns) {
         state.allColumnsForCategory = []
         state.columns = []
         return
       }
+
       let selectedColumns = !_.isEmpty(props.columns)
         ? props.columns
         : payload.dataSource.columns ?? []
-      const allColumnsForCategory = payload.columns.map((c) =>
+
+      let allColumnsForCategory = payload.columns.map((c) =>
         c.setData({
           isSelected: _.some(selectedColumns, ({ key }) => key === c.key) || c.data.isLocked
         })
       )
+
+      if (payload.dataSource.level.includes('Prosjekt'))
+        allColumnsForCategory = allColumnsForCategory.filter((c) => c.internalName !== 'SiteTitle')
+
       selectedColumns = selectedColumns
         .map((c) => {
           const col = _.find(allColumnsForCategory, ({ key }) => key === c.key)
           return col ? col.merge(c) : null
         })
         .filter(Boolean)
+
       const availableColumns = payload.columns.filter(
         (c) => !_.some(selectedColumns, ({ key }) => key === c.key)
       )
+
       state.columns = !_.isEmpty(selectedColumns)
         ? [...selectedColumns, ...availableColumns]
         : sortArray(allColumnsForCategory, 'sortOrder')
+
       state.allColumnsForCategory = allColumnsForCategory
       state.loading = false
       state.error = null

@@ -663,9 +663,6 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
           (!col.GtDataSourceCategory && _.contains(col.GtDataSourceLevel, level))
       )
 
-      if (level === 'Prosjekt')
-        filteredColumnItems.filter((col) => col.GtInternalName !== 'SiteTitle')
-
       return filteredColumnItems.map((item) => new ProjectContentColumn(item))
     } catch (error) {
       throw new Error(error)

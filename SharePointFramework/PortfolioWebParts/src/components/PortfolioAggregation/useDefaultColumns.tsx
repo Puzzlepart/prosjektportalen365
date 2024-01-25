@@ -9,9 +9,13 @@ import { ProjectContentColumn } from 'pp365-shared-library'
  * @param context Context for the Portfolio Aggregation component
  */
 export function useDefaultColumns(context: IPortfolioAggregationContext) {
-  const selectedColumns: ProjectContentColumn[] = useMemo(
+  let selectedColumns: ProjectContentColumn[] = useMemo(
     () => _.filter([...context.state.columns], (c) => c.data?.isSelected || c.data?.isLocked),
     [context.state.columns]
   )
+
+  if (context.state.dataSourceLevel === 'Prosjekt')
+    selectedColumns = selectedColumns.filter((c) => c.internalName !== 'SiteTitle')
+
   return selectedColumns
 }
