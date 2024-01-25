@@ -293,7 +293,14 @@ export const createPortfolioAggregationReducer = (
 
         let items: IFilterItemProps[] = uniqueValues
           .filter((value: string) => !stringIsNullOrEmpty(value))
-          .map((value: string) => ({ name: value, value, selected: false }))
+          .map((value: string) => {
+            if (column.fieldName.includes('OWSUSER')) {
+              const match = value.match(/\|([^|]+)\|/)
+              value = match ? match[1].trim() : null
+            }
+
+            return { name: value, value, selected: false }
+          })
         items = items.sort((a, b) => (a.value > b.value ? 1 : -1))
         return { column, items }
       })

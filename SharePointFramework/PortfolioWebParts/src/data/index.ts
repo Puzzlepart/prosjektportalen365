@@ -164,11 +164,8 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
       level = level ?? calculatedLevel
 
       const columns: ProjectContentColumn[] = await new Promise((resolve, reject) => {
-        this.portalDataService.fetchProjectContentColumns(
-          'PROJECT_CONTENT_COLUMNS',
-          category,
-          level
-        )
+        this.portalDataService
+          .fetchProjectContentColumns('PROJECT_CONTENT_COLUMNS', category, level)
           .then(resolve)
           .catch(reject)
       })
