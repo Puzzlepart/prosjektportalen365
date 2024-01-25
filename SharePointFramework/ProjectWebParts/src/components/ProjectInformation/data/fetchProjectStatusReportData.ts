@@ -21,8 +21,7 @@ export const fetchProjectStatusReportData: DataFetchFunction<
   try {
     const [reports, sections, columnConfig] = await Promise.all([
       SPDataAdapter.portalDataService.getStatusReports({
-        filter: `(GtSiteId eq '${context.props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`,
-        top: 1
+        filter: `(GtSiteId eq '${context.props.siteId}') and GtModerationStatus eq '${strings.GtModerationStatus_Choice_Published}'`
       }),
       SPDataAdapter.portalDataService.getProjectStatusSections(),
       SPDataAdapter.portalDataService.getProjectColumnConfig()
