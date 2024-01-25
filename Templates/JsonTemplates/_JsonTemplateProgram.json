@@ -770,7 +770,7 @@
                                         "showTimelineListCommands": true,
                                         "showTimelineList": true,
                                         "showProjectDeliveries": false,
-                                        "projectDeliveriesListName": "Prosjektleveranser",
+                                        "projectDeliveriesListName": "Programleveranser",
                                         "configItemTitle": "Prosjektleveranse"
                                     }
                                 }
