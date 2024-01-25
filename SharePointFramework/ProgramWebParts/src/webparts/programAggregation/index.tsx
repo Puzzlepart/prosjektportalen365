@@ -84,7 +84,7 @@ export default class ProgramAggregationWebPart extends BaseProgramWebPart<IProgr
                   options: this._getViewOptions(),
                   selectedKey:
                     _.find(this._configuration.views, (v) => v.isDefault)?.id ||
-                    _.first(this._configuration.views).id
+                    _.first(this._configuration.views)?.id
                 })
               ]
             },
