@@ -42,7 +42,7 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
           className={styles.button}
           size='medium'
           appearance='primary'
-          onClick={() => window.open(latestGitHubRelease.assets[0].browser_download_url, '_blank')}
+          onClick={() => window.open('https://github.com/Puzzlepart/prosjektportalen365/releases', '_blank')}
           icon={getFluentIcon('ArrowDownload')}
         >
           <span className={styles.label}>{strings.LatestGitHubReleaseDownloadButtonText}</span>
@@ -57,6 +57,6 @@ LatestGitHubRelease.defaultProps = {
   latestGitHubReleaseIsNewerIconColor: 'green',
   latestGitHubReleaseIsOlderIconName: 'ChevronDown',
   latestGitHubReleaseIsOlderIconColor: 'red',
-  latestGitHubReleaseIsSameIconName: 'ChevronRight',
+  latestGitHubReleaseIsSameIconName: 'ChevronLeft',
   latestGitHubReleaseIsSameIconColor: 'black'
 }
