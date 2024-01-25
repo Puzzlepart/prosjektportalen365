@@ -35,6 +35,8 @@ define([], function () {
     ErrorTitle: 'Det har oppstått en feil',
     FiltersString: 'Filtre',
     FilterText: 'Filtrer',
+    FilterPanelEmptyTitle: 'Ingen data å filtrere på',
+    FilterPanelEmptyMessage: 'Det er ingen data å filtrere på. Det kan være at ingen filtre er definert, eller at det ikke er noe data å filtrere på.',
     GroupByLabel: 'Grupper etter',
     LastPublishedStatusreport: 'Gå til siste statusrapport',
     LoadingText: 'Laster...',

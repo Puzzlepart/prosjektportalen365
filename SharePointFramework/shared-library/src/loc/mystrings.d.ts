@@ -35,6 +35,8 @@ declare interface ISharedLibraryStrings {
   ErrorTitle: string
   FiltersString: string
   FilterText: string
+  FilterPanelEmptyTitle: string
+  FilterPanelEmptyMessage: string
   GroupByLabel: string
   LastPublishedStatusreport: string
   LoadingText: string
