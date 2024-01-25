@@ -400,7 +400,7 @@ export class SPDataAdapter
                 this?.spfxContext?.pageContext?.site?.id?.toString()
           )
         ) {
-          if (item.GtSiteIdLookup?.Title && config && config.showElementPortfolio) {
+          if (item.GtSiteIdLookup?.Title && config?.showElementProgram) {
             return new TimelineContentModel(
               item.GtSiteIdLookup?.GtSiteId,
               item.GtSiteIdLookup?.Title,
@@ -451,7 +451,7 @@ export class SPDataAdapter
       (col) => col.title === (configItemTitle || 'Prosjektleveranse')
     )
 
-    if (config && config.showElementPortfolio) {
+    if (config?.showElementProgram) {
       const projectDeliveries = await this.fetchItemsWithSource(
         dataSourceName || 'Alle prosjektleveranser',
         [
