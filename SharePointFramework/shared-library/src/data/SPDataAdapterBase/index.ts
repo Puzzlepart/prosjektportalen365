@@ -439,6 +439,7 @@ export class SPDataAdapterBase<
                 : destinationUserIds
             }
             break
+          case 'Date':
           case 'DateTime':
             properties[field.InternalName] = fieldValues.get<Date>(field.InternalName, {
               format: 'date',

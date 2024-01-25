@@ -658,7 +658,8 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       )()
       const filteredColumnItems = columnItems.filter(
         (col) =>
-          col.GtDataSourceCategory === dataSourceCategory || col.GtDataSourceCategory === null ||
+          col.GtDataSourceCategory === dataSourceCategory ||
+          col.GtDataSourceCategory === null ||
           (!col.GtDataSourceCategory && !col.GtDataSourceLevel) ||
           (!col.GtDataSourceCategory && _.contains(col.GtDataSourceLevel, level))
       )

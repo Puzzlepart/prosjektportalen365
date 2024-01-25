@@ -9,7 +9,7 @@ import { useProjectPropertiesSection } from './useProjectPropertiesSection'
 
 export const ProjectPropertiesSection: FC = () => {
   const { section } = useContext(SectionContext)
-  const { fieldValues, fields } = useProjectPropertiesSection()
+  const { fieldValues, fieldValuesAsText, fields } = useProjectPropertiesSection()
 
   /**
    * Render fields specified in model.viewFields
@@ -20,12 +20,23 @@ export const ProjectPropertiesSection: FC = () => {
         const [field] = fields.filter(
           ({ InternalName, Title }) => [InternalName, Title].indexOf(fieldName) !== -1
         )
-        if (field && !stringIsNullOrEmpty(fieldValues[fieldName])) {
+        if (field && !stringIsNullOrEmpty(fieldValuesAsText[fieldName])) {
+          if (field.TypeAsString === 'DateTime' || field.TypeAsString === 'Date') {
+            const date = new Date(fieldValues[fieldName])
+            return (
+              <StatusSectionField
+                key={fieldName}
+                label={field.Title}
+                value={date.toLocaleDateString()}
+              />
+            )
+          }
+
           return (
             <StatusSectionField
               key={fieldName}
               label={field.Title}
-              value={fieldValues[fieldName]}
+              value={fieldValuesAsText[fieldName]}
             />
           )
         }

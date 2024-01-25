@@ -25,6 +25,7 @@ export const createFieldValueMap = (): Map<string, (value: EditableSPFieldValue)
           name: term.Label
         }))
     ],
+    ['Date', ({ $ }) => new Date($)],
     ['DateTime', ({ $ }) => new Date($)],
     ['MultiChoice', ({ value }) => value.split(', ')],
     [
