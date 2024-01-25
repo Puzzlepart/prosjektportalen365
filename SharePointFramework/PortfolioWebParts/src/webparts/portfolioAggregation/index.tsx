@@ -125,13 +125,13 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
               groupName: strings.CommandBarGroupName,
               groupFields: [
                 PropertyPaneToggle('showFilters', {
-                  label: strings.ShowFiltersLabel,
+                  label: strings.ShowFiltersLabel
                 }),
                 PropertyPaneToggle('showExcelExportButton', {
-                  label: strings.ShowExcelExportButtonLabel,
+                  label: strings.ShowExcelExportButtonLabel
                 }),
                 PropertyPaneToggle('showViewSelector', {
-                  label: strings.ShowViewSelectorLabel,
+                  label: strings.ShowViewSelectorLabel
                 })
               ]
             },

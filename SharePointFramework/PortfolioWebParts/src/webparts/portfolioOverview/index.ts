@@ -2,7 +2,6 @@ import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
   PropertyPaneDropdown,
-  PropertyPaneSlider,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import * as strings from 'PortfolioWebPartsStrings'
@@ -70,32 +69,23 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
             {
               groupName: strings.CommandBarGroupName,
               groupFields: [
-                PropertyPaneToggle('showCommandBar', {
-                  label: strings.ShowCommandBarLabel
+                PropertyPaneToggle('showGroupBy', {
+                  label: strings.ShowGroupByLabel
                 }),
-                this.properties.showCommandBar &&
-                  PropertyPaneToggle('showGroupBy', {
-                    label: strings.ShowGroupByLabel
-                  }),
-                this.properties.showCommandBar &&
-                  PropertyPaneToggle('showFilters', {
-                    label: strings.ShowFiltersLabel
-                  }),
-                this.properties.showCommandBar &&
-                  PropertyPaneToggle('showExcelExportButton', {
-                    label: strings.ShowExcelExportButtonLabel
-                  }),
-                this.properties.showCommandBar &&
-                  this.properties.showExcelExportButton &&
+                PropertyPaneToggle('showFilters', {
+                  label: strings.ShowFiltersLabel
+                }),
+                PropertyPaneToggle('showExcelExportButton', {
+                  label: strings.ShowExcelExportButtonLabel
+                }),
+                this.properties.showExcelExportButton &&
                   PropertyPaneToggle('includeViewNameInExcelExportFilename', {
                     label: strings.IncludeViewNameInExcelExportFilenameLabel
                   }),
-                this.properties.showCommandBar &&
-                  PropertyPaneToggle('showViewSelector', {
-                    label: strings.ShowViewSelectorLabel
-                  }),
-                this.properties.showCommandBar &&
-                  this.properties.showViewSelector &&
+                PropertyPaneToggle('showViewSelector', {
+                  label: strings.ShowViewSelectorLabel
+                }),
+                this.properties.showViewSelector &&
                   PropertyPaneToggle('showProgramViews', {
                     label: strings.ShowProgramViewsLabel
                   })
@@ -106,17 +96,6 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPort
               groupFields: [
                 PropertyPaneToggle('isListLayoutModeJustified', {
                   label: strings.ListLayoutModeJustifiedLabel
-                })
-              ]
-            },
-            {
-              groupName: strings.ProjectInformationGroupName,
-              groupFields: [
-                PropertyPaneSlider('statusReportsCount', {
-                  label: strings.StatusReportsCountLabel,
-                  min: 0,
-                  max: 10,
-                  step: 1
                 })
               ]
             }
