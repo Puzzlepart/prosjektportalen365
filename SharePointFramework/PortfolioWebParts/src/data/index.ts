@@ -156,15 +156,23 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
   ): Promise<IPortfolioAggregationConfiguration> {
     try {
       let calculatedLevel = strings.DataSourceLevelPortfolio
+
       if (this.portalDataService.url !== this._spfxContext.pageContext.web.absoluteUrl) {
         calculatedLevel = strings.DataSourceLevelProject
       }
+
       level = level ?? calculatedLevel
-      const columns = await this.portalDataService.fetchProjectContentColumns(
-        'PROJECT_CONTENT_COLUMNS',
-        category,
-        level
-      )
+
+      const columns: ProjectContentColumn[] = await new Promise((resolve, reject) => {
+        this.portalDataService.fetchProjectContentColumns(
+          'PROJECT_CONTENT_COLUMNS',
+          category,
+          level
+        )
+          .then(resolve)
+          .catch(reject)
+      })
+
       const [views, viewsUrls, columnUrls, levels] = await Promise.all([
         this.fetchDataSources(category, level, columns),
         this.portalDataService.getListFormUrls('DATA_SOURCES'),
@@ -173,6 +181,7 @@ export class DataAdapter implements IPortfolioWebPartsDataAdapter {
           .getByInternalNameOrTitle('GtDataSourceLevel')
           .select('Choices')()
       ])
+
       return {
         columns,
         views,
