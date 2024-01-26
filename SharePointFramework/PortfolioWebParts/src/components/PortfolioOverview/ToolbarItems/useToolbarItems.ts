@@ -67,61 +67,61 @@ export function useToolbarItems(context: IPortfolioOverviewContext) {
             .setStyle({
               color: '#10793F'
             }),
-          new ListMenuItem(context.state.currentView?.title, strings.PortfolioViewsListName)
-            .setIcon(Icons.ContentView)
-            .setWidth('fit-content')
-            .setStyle({ minWidth: '145px' })
-            .setDisabled(context.state.isChangingView)
-            .setItems(
-              [
-                new ListMenuItem(strings.ListViewText)
-                  .setIcon(Icons.AppsList)
-                  .makeCheckable({
-                    name: 'renderMode',
-                    value: 'list'
-                  })
-                  .setOnClick(() => {
-                    context.dispatch(TOGGLE_COMPACT())
-                  }),
-                new ListMenuItem(strings.CompactViewText)
-                  .setIcon(Icons.TextBulletList)
-                  .makeCheckable({
-                    name: 'renderMode',
-                    value: 'compactList'
-                  })
-                  .setOnClick(() => {
-                    context.dispatch(TOGGLE_COMPACT())
-                  }),
-                ListMenuItemDivider,
-                ...sharedViews,
-                ListMenuItemDivider,
-                ListMenuItemHeader(strings.PersonalViewsHeaderText).makeConditional(
-                  !_.isEmpty(personalViews)
-                ),
-                ...personalViews,
-                ListMenuItemDivider,
-                ListMenuItemHeader(strings.ProgramsHeaderText).makeConditional(
-                  !_.isEmpty(programViews)
-                ),
-                context.props.showProgramViews &&
-                  new ListMenuItem(strings.SelectProgramText)
-                    .setItems(programViews)
-                    .setIcon(Icons.ChevronLeft)
-                    .makeConditional(!_.isEmpty(programViews)),
-                ListMenuItemDivider.makeConditional(!_.isEmpty(programViews)),
-                userCanManageViews &&
-                  new ListMenuItem(strings.NewViewText).setIcon(Icons.FormNew).setOnClick(() => {
-                    context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
-                  }),
-                userCanManageViews &&
-                  new ListMenuItem(strings.EditViewText).setIcon(Icons.Edit).setOnClick(() => {
-                    context.dispatch(
-                      SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
-                    )
-                  })
-              ],
-              checkedValues
-            ),
+        new ListMenuItem(context.state.currentView?.title, strings.PortfolioViewsListName)
+          .setIcon(Icons.ContentView)
+          .setWidth('fit-content')
+          .setStyle({ minWidth: '145px' })
+          .setDisabled(context.state.isChangingView)
+          .setItems(
+            [
+              new ListMenuItem(strings.ListViewText)
+                .setIcon(Icons.AppsList)
+                .makeCheckable({
+                  name: 'renderMode',
+                  value: 'list'
+                })
+                .setOnClick(() => {
+                  context.dispatch(TOGGLE_COMPACT())
+                }),
+              new ListMenuItem(strings.CompactViewText)
+                .setIcon(Icons.TextBulletList)
+                .makeCheckable({
+                  name: 'renderMode',
+                  value: 'compactList'
+                })
+                .setOnClick(() => {
+                  context.dispatch(TOGGLE_COMPACT())
+                }),
+              ListMenuItemDivider,
+              ...sharedViews,
+              ListMenuItemDivider,
+              ListMenuItemHeader(strings.PersonalViewsHeaderText).makeConditional(
+                !_.isEmpty(personalViews)
+              ),
+              ...personalViews,
+              ListMenuItemDivider,
+              ListMenuItemHeader(strings.ProgramsHeaderText).makeConditional(
+                !_.isEmpty(programViews)
+              ),
+              context.props.showProgramViews &&
+                new ListMenuItem(strings.SelectProgramText)
+                  .setItems(programViews)
+                  .setIcon(Icons.ChevronLeft)
+                  .makeConditional(!_.isEmpty(programViews)),
+              ListMenuItemDivider.makeConditional(!_.isEmpty(programViews)),
+              userCanManageViews &&
+                new ListMenuItem(strings.NewViewText).setIcon(Icons.FormNew).setOnClick(() => {
+                  context.dispatch(SET_VIEW_FORM_PANEL({ isOpen: true }))
+                }),
+              userCanManageViews &&
+                new ListMenuItem(strings.EditViewText).setIcon(Icons.Edit).setOnClick(() => {
+                  context.dispatch(
+                    SET_VIEW_FORM_PANEL({ isOpen: true, view: context.state.currentView })
+                  )
+                })
+            ],
+            checkedValues
+          ),
         context.props.showFilters &&
           new ListMenuItem(null, strings.FilterText).setIcon('Filter').setOnClick(() => {
             context.dispatch(TOGGLE_FILTER_PANEL())
