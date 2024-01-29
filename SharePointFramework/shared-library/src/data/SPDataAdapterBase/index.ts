@@ -142,7 +142,7 @@ export class SPDataAdapterBase<
    */
   public async checkProjectAdminPermissions(
     permission: ProjectAdminPermission,
-    properties: Record<string, any>,
+    properties: ItemFieldValues,
     expireMinutes = 10
   ) {
     try {
@@ -154,7 +154,7 @@ export class SPDataAdapterBase<
         storageKey,
         async () => {
           const userPermissions = []
-          const rolesToCheck = properties.GtProjectAdminRoles
+          const rolesToCheck = properties.get('GtProjectAdminRoles').value
           if (!_.isArray(rolesToCheck) || _.isEmpty(rolesToCheck)) {
             const currentUserHasManageWebPermisson = await this.sp.web.currentUserHasPermissions(
               PermissionKind.ManageWeb
@@ -179,7 +179,7 @@ export class SPDataAdapterBase<
                 break
               case ProjectAdminRoleType.ProjectProperty:
                 {
-                  const projectFieldValue = properties[role.projectFieldName]
+                  const projectFieldValue = properties.get(role.projectFieldName).value
                   if (
                     _.isArray(projectFieldValue) &&
                     projectFieldValue.indexOf(currentUser.Id) !== -1
@@ -214,7 +214,7 @@ export class SPDataAdapterBase<
                 break
             }
           }
-          return _.unique(userPermissions, Boolean)
+          return _.unique(userPermissions)
         },
         storageExpire
       )
