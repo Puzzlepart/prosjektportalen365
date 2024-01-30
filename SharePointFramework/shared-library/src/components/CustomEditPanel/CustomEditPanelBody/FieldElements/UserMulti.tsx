@@ -8,7 +8,7 @@ import { FieldElementComponent } from './types'
 export const UserMulti: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   return (
-    <FieldContainer iconName='People' label={field.displayName} description={field.description}>
+    <FieldContainer iconName='People' label={field.displayName} description={field.description} required={field.required}>
       <NormalPeoplePicker
         styles={{ text: styles.field }}
         onResolveSuggestions={async (filter, selectedItems) =>

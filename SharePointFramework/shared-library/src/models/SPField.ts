@@ -14,6 +14,7 @@ export class SPField {
   public TypeAsString?: string = 'Text'
   public Group?: string = ''
   public Hidden?: boolean = false
+  public Required?: boolean = false
   public Choices?: string[] = []
   public TermSetId?: string = '00000000-0000-0000-0000-000000000000'
   public LookupList?: string = ''

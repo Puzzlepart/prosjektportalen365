@@ -41,6 +41,11 @@ export class EditableSPField extends SPField {
   public column: ProjectColumn
 
   /**
+   * Whether the field is required or not.
+   */
+  public required: boolean
+
+  /**
    * Whether the field is read-only.
    */
   public isReadOnly: boolean
@@ -84,6 +89,7 @@ export class EditableSPField extends SPField {
     this.description = _field.Description
     this.type = _field.TypeAsString
     this.isReadOnly = _field.SchemaXml ? _field.SchemaXml.indexOf('ReadOnly="TRUE"') !== -1 : false
+    this.required = _field.Required
     this._fieldValueMap = createFieldValueMap()
   }
 

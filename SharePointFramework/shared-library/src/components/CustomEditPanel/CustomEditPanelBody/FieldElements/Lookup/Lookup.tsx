@@ -9,7 +9,7 @@ export const Lookup: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   const { options, value } = useLookup(field)
   return (
-    <FieldContainer iconName='Link' label={field.displayName} description={field.description}>
+    <FieldContainer iconName='Link' label={field.displayName} description={field.description} required={field.required}>
       <Combobox
         value={value?.text}
         selectedOptions={[value?.value]}

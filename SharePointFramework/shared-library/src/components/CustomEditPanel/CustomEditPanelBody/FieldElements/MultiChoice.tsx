@@ -13,6 +13,7 @@ export const MultiChoice: FieldElementComponent = ({ field }) => {
       iconName='MultiselectLtr'
       label={field.displayName}
       description={field.description}
+      required={field.required}
     >
       <Combobox
         value={

@@ -8,7 +8,7 @@ import { FieldElementComponent } from './types'
 export const TaxonomyFieldType: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   return (
-    <FieldContainer iconName='AppsList' label={field.displayName} description={field.description}>
+    <FieldContainer iconName='AppsList' label={field.displayName} description={field.description} required={field.required}>
       <TagPicker
         styles={{ text: styles.field }}
         onResolveSuggestions={async (filter, selectedItems) =>

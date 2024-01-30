@@ -16,6 +16,7 @@ export const URL: FieldElementComponent = ({ field }) => {
       iconName='LinkMultiple'
       label={field.displayName}
       description={field.description}
+      required={field.required}
     >
       <Input
         defaultValue={value.url}

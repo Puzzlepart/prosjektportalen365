@@ -10,6 +10,7 @@ export class SPProjectAdminRoleItem {
   public GtProjectFieldName?: string = ''
   public GtProjectAdminPermissions?: string = ''
 }
+
 export enum ProjectAdminRoleType {
   ProjectProperty,
   SharePointGroup,

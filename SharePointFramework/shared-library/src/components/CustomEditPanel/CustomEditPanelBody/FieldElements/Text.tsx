@@ -12,6 +12,7 @@ export const Text: FieldElementComponent = ({ field }) => {
       iconName='TextNumberFormat'
       label={field.displayName}
       description={field.description}
+      required={field.required}
     >
       <Input
         defaultValue={context.model.get<string>(field)}

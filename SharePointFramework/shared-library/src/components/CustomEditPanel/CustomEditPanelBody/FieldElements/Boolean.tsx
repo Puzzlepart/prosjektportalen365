@@ -7,7 +7,7 @@ import { FieldElementComponent } from './types'
 export const Boolean: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   return (
-    <FieldContainer iconName='ToggleLeft' label={field.displayName} description={field.description}>
+    <FieldContainer iconName='ToggleLeft' label={field.displayName} description={field.description} required={field.required}>
       <Switch
         checked={context.model.get<boolean>(field)}
         onChange={(_, data) => context.model.set(field, data.checked)}

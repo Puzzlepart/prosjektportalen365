@@ -12,6 +12,7 @@ export const Note: FieldElementComponent = ({ field }) => {
       iconName='TextAlignLeft'
       label={field.displayName}
       description={field.description}
+      required={field.required}
     >
       <Textarea
         defaultValue={context.model.get<string>(field)}

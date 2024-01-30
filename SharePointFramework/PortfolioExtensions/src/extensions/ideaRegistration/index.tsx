@@ -246,7 +246,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    */
   private async _createSitePage(row: RowAccessor) {
     const title: string = row.getValueByName('Title')
-    const page = await this._sp.web.addClientsidePage(`KUR-${title.replace(/[^a-zA-Z0-9-_]/g, '') }`, title, 'Article')
+    const page = await this._sp.web.addClientsidePage(`KUR-${title.replace(/[^a-zA-Z0-9-_]/g, '')}`, `KUR-${title.replace(/[^a-zA-Z0-9-_]/g, '')}`, 'Article')
     const reporter = row.getValueByName('GtIdeaReporter')[0] || ''
 
     page.layoutType = 'NoImage'
