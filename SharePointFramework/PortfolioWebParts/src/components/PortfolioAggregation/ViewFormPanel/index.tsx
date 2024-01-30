@@ -39,7 +39,6 @@ export const ViewFormPanel: FC = () => {
             iconName='TextAlignLeft'
             label={strings.SearchQueryLabel}
             description={strings.PortfolioAggregationViewSearchQueryDescription}
-            required={true}
           >
             <Textarea
               defaultValue={view.get('searchQuery')}
@@ -52,7 +51,6 @@ export const ViewFormPanel: FC = () => {
             iconName='Icons'
             label={strings.IconNameLabel}
             description={strings.IconNameDescription}
-            required={true}
           >
             <Input
               value={view.get('iconName')}
