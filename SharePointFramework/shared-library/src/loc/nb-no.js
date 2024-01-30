@@ -7,7 +7,9 @@ define([], function () {
     Aria: {
       InfoLabelTitle: 'Informasjon om {0}',
       MenuOverflowCount: '{0} flere elementer',
-      ProjectTitle: 'Logo for prosjekt: {0}'
+      ProjectTitle: 'Logo for prosjekt: {0}',
+      SaveTitle: 'Lagre',
+      SaveDisabledTitle: 'Det er påkrevde felter som ikke er utfylt, fyll ut disse for å lagre',
     },
     Placeholder: {
       DatePicker: 'Angi en dato',

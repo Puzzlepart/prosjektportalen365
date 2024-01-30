@@ -12,15 +12,16 @@ import { UserMessage } from '../../UserMessage'
 import { useCustomEditPanelContext } from '../context'
 import styles from './CustomEditPanelFooter.module.scss'
 import { customLightTheme } from '../../../util'
+import { ICustomEditPanelFooterProps } from './types'
 
 /**
  * Renders the footer for the `CustomEditPanel` with a `<PrimaryButton />` for saving the changes,
  * and a `<ClosePanelButton />` for closing the panel. Also shows a `<ProgressBar />` when submitting
  * with text based on the `saveProgressText` property from `props.submit`.
  *
- * @param props The component props.
+ * @param props - The props for the component.
  */
-export const CustomEditPanelFooter: FC = () => {
+export const CustomEditPanelFooter: FC<ICustomEditPanelFooterProps> = ({ isSaveDisabled }) => {
   const context = useCustomEditPanelContext()
   const fluentProviderId = useId('fp-custom-edit-panel-footer')
   const [isSaving, setIsSaving] = useState(false)
@@ -52,7 +53,8 @@ export const CustomEditPanelFooter: FC = () => {
             <>
               <Button
                 onClick={handleOnSubmit}
-                disabled={isSaving || context.props.submit.disabled}
+                disabled={isSaving || context.props.submit.disabled || isSaveDisabled}
+                title={isSaveDisabled ? strings.Aria.SaveDisabledTitle : strings.Aria.SaveTitle}
                 appearance='primary'
               >
                 {context.props.submit.text ?? strings.SaveText}

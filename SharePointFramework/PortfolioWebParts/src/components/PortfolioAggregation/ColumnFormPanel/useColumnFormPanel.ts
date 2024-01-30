@@ -93,7 +93,10 @@ export function useColumnFormPanel() {
   /**
    * Save is disabled if the column name or field name is less than 2 characters.
    */
-  const isSaveDisabled = column.get('internalName').length < 2 || column.get('fieldName').length < 2 || column.get('name').length < 2
+  const isSaveDisabled =
+    column.get('internalName').length < 2 ||
+    column.get('fieldName').length < 2 ||
+    column.get('name').length < 2
 
   /**
    * Save is disabled if the column field name is Title

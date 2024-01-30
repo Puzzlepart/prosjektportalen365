@@ -18,5 +18,14 @@ export function useCustomEditPanel(props: ICustomEditPanelProps) {
   const fields = useEditableFields(props)
   const model = useModel(props)
   const getFieldElement = useFieldElements()
-  return { fields, getFieldElement, model, props } as ICustomEditPanelContext
+
+  /**
+   * Save is disabled if required columns are missing values.
+   */
+  const isSaveDisabled = (): boolean => {
+    const requiredFields = fields.filter((field) => field.required)
+    return requiredFields.some((field) => !model.get(field))
+  }
+
+  return { fields, getFieldElement, model, isSaveDisabled, props } as ICustomEditPanelContext
 }

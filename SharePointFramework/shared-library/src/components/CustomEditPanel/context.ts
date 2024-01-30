@@ -7,6 +7,7 @@ export interface ICustomEditPanelContext {
   model: UseModelReturnType
   fields: EditableSPField[]
   getFieldElement: (field: EditableSPField) => JSX.Element
+  isSaveDisabled: () => boolean
   props: ICustomEditPanelProps
 }
 

@@ -8,6 +8,8 @@ declare interface ISharedLibraryStrings {
     InfoLabelTitle: string
     MenuOverflowCount: string
     ProjectTitle: string
+    SaveTitle: string
+    SaveDisabledTitle: string
   }
   Placeholder: {
     DatePicker: string

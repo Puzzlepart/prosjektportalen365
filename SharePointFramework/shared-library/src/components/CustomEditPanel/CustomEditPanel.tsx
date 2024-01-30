@@ -22,7 +22,9 @@ export const CustomEditPanel: FC<ICustomEditPanelProps> = (props) => {
             overflow: 'hidden'
           }
         }}
-        onRenderFooterContent={() => <CustomEditPanelFooter />}
+        onRenderFooterContent={() => (
+          <CustomEditPanelFooter isSaveDisabled={context.isSaveDisabled()} />
+        )}
         onRenderBody={() => <CustomEditPanelBody />}
       />
     </CustomEditPanelContext.Provider>

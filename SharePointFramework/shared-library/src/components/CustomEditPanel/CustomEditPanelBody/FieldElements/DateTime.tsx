@@ -9,7 +9,12 @@ import { DayOfWeek } from '@fluentui/react'
 export const DateTime: FieldElementComponent = ({ field }) => {
   const context = useCustomEditPanelContext()
   return (
-    <FieldContainer iconName='Calendar' label={field.displayName} description={field.description} required={field.required}>
+    <FieldContainer
+      iconName='Calendar'
+      label={field.displayName}
+      description={field.description}
+      required={field.required}
+    >
       <DatePicker
         value={context.model.get(field)}
         onSelectDate={(date) => context.model.set(field, date)}
