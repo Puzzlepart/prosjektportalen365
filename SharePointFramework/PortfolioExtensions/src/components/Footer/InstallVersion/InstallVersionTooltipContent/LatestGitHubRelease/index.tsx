@@ -42,7 +42,9 @@ export const LatestGitHubRelease: FC<ILatestGitHubReleaseProps> = (props) => {
           className={styles.button}
           size='medium'
           appearance='primary'
-          onClick={() => window.open('https://github.com/Puzzlepart/prosjektportalen365/releases', '_blank')}
+          onClick={() =>
+            window.open('https://github.com/Puzzlepart/prosjektportalen365/releases', '_blank')
+          }
           icon={getFluentIcon('ArrowDownload')}
         >
           <span className={styles.label}>{strings.LatestGitHubReleaseDownloadButtonText}</span>

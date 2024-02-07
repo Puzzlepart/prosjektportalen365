@@ -61,8 +61,8 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     // Ensuring valid properties for the riskMatrix and opportunityMatrix properties
-    // for backward compatibility.    
-    const riskMatrix = this.properties.riskMatrix ?? { }
+    // for backward compatibility.
+    const riskMatrix = this.properties.riskMatrix ?? {}
     const opportunityMatrix = this.properties.opportunityMatrix ?? {}
     return {
       pages: [
@@ -73,10 +73,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
               groupFields: [
                 PropertyPaneToggle('riskMatrix.fullWidth', {
                   label: strings.MatrixFullWidthLabel,
-                  checked:
-                    riskMatrix.fullWidth === undefined
-                      ? true
-                      : riskMatrix.fullWidth
+                  checked: riskMatrix.fullWidth === undefined ? true : riskMatrix.fullWidth
                 }),
                 !this.properties.riskMatrix?.fullWidth &&
                   PropertyPaneSlider('riskMatrix.width', {
@@ -111,9 +108,7 @@ export default class ProjectStatusWebPart extends BaseProjectWebPart<IProjectSta
                 PropertyPaneToggle('opportunityMatrix.fullWidth', {
                   label: strings.MatrixFullWidthLabel,
                   checked:
-                    opportunityMatrix.fullWidth === undefined
-                      ? true
-                      : opportunityMatrix.fullWidth
+                    opportunityMatrix.fullWidth === undefined ? true : opportunityMatrix.fullWidth
                 }),
                 !this.properties.opportunityMatrix?.fullWidth &&
                   PropertyPaneSlider('opportunityMatrix.width', {

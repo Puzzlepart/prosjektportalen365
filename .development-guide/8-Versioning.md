@@ -8,7 +8,7 @@ Denne oppgaven, `automatic-versioning.js`, kan også kjøres som en **npm-skript
 npm run sync-version
 ```
 
-Etter at skriptet `sync-version` har blitt kjørt, er det viktig å publisere SharePointFramework-pakkene (@Shared, PortfolioWebParts, osv...) til npm.
+Etter at skriptet `sync-version` har blitt kjørt, er det viktig å publisere SharePointFramework-pakkene (PortfolioWebParts, osv...) til npm.
 
 Dette gjøres for hver pakke ved å kjøre følgende skript:
 
