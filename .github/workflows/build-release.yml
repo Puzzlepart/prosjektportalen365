@@ -14,6 +14,10 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
+      - name: Set sha_short
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ vars.NODE_VERSION }}
@@ -26,9 +30,13 @@ jobs:
         with:
           name: release-package
           path: release
+    outputs:
+      sha_short: ${{ steps.vars.outputs.sha_short }}
+
   build_release_package_test:
     name: Build release package for test channel
     runs-on: macos-latest
+    if: "!contains(github.event.head_commit.message, '[skip-ci]')"
     steps:
       - uses: actions/checkout@v3
         with:
