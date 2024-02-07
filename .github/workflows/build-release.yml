@@ -57,7 +57,7 @@ jobs:
           node-version: ${{ vars.NODE_VERSION }}
 
       - name: Run Install/Build-Release.ps1 in CI mode for channel test
-        run: Install/Build-Release.ps1 -Channel test
+        run: Install/Build-Release.ps1 -CI -Channel test
         shell: pwsh
 
       - uses: actions/upload-artifact@v3
