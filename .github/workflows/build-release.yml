@@ -3,6 +3,11 @@ name: Build release (main)
 on:
   push:
     branches: [main]
+    paths:
+      - 'SharePointFramework/**'
+      - 'Install/**'
+      - 'Templates/**'
+      - .github/workflows/build-release.yml
 
 jobs:
   build-release:
