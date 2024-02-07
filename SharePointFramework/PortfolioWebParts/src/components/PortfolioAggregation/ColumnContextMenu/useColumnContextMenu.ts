@@ -118,7 +118,7 @@ export function useColumnContextMenu() {
               key: 'EDIT_COLUMN',
               text: strings.EditColumnLabel,
               onClick: () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column })),
-              disabled: !context.props.pageContext.legacyPageContext.isSiteAdmin,
+              disabled: true,
               iconProps: { iconName: 'TableCellEdit' }
             },
             {
@@ -135,7 +135,8 @@ export function useColumnContextMenu() {
               key: 'ADD_COLUMN',
               text: strings.AddColumnLabel,
               onClick: () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true })),
-              iconProps: { iconName: 'Add' }
+              iconProps: { iconName: 'Add' },
+              disabled: true
             }
           ]
         }
