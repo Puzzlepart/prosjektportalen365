@@ -1,0 +1,40 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug",
+      "type": "chrome",
+      "request": "launch",
+      "url": "https://[tenant].sharepoint.com/sites/[site]/_layouts/15/workbench.aspx",
+      "webRoot": "${workspaceRoot}/SharePointFramework/XXX",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:///.././src/*": "${webRoot}/src/*",
+        "webpack:///../../../src/*": "${webRoot}/src/*",
+        "webpack:///../../../../src/*": "${webRoot}/src/*",
+        "webpack:///../../../../../src/*": "${webRoot}/src/*"
+      },
+      "runtimeArgs": [
+        "--remote-debugging-port=9222"
+      ]
+    },
+    {
+      "name": "Debug in incognito mode",
+      "type": "chrome",
+      "request": "launch",
+      "url": "https://[tenant].sharepoint.com/sites/[site]/_layouts/15/workbench.aspx",
+      "webRoot": "${workspaceRoot}/SharePointFramework/XXX",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:///.././src/*": "${webRoot}/src/*",
+        "webpack:///../../../src/*": "${webRoot}/src/*",
+        "webpack:///../../../../src/*": "${webRoot}/src/*",
+        "webpack:///../../../../../src/*": "${webRoot}/src/*"
+      },
+      "runtimeArgs": [
+        "--remote-debugging-port=9222",
+        "--incognito"
+      ]
+    }
+  ]
+}

@@ -1,5 +1,5 @@
+import { MessageBarIntent } from '@fluentui/react-components'
 import { IBaseDialogProps } from '../@BaseDialog/types'
-import { MessageBarType } from '@fluentui/react/lib/MessageBar'
 
 export interface IErrorDialogProps extends IBaseDialogProps {
   /**
@@ -8,12 +8,17 @@ export interface IErrorDialogProps extends IBaseDialogProps {
   error: Error
 
   /**
-   * Message type
+   * Intent of the message
    */
-  messageType?: MessageBarType
+  intent?: MessageBarIntent
 
   /**
    * On setup click
    */
   onSetupClick?(): void
+
+  /**
+   * Show stack as sub text in the dialog
+   */
+  showStackAsSubText?: boolean
 }

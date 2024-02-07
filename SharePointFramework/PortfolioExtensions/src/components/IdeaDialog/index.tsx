@@ -1,71 +1,78 @@
-/* eslint-disable max-classes-per-file */
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import {
-  DialogFooter,
-  DialogContent,
-  DialogType,
-  PrimaryButton,
-  DefaultButton,
-  MessageBarType,
-  format
-} from '@fluentui/react'
+import { format } from '@fluentui/react'
 import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog'
-import { UserMessage } from 'pp365-shared/lib/components/UserMessage'
+import { UserMessage } from 'pp365-shared-library/lib/components/UserMessage'
 import strings from 'PortfolioExtensionsStrings'
+import {
+  Button,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogTitle,
+  FluentProvider,
+  IdPrefixProvider,
+  useId
+} from '@fluentui/react-components'
+import { IIdeaDialogProps } from './types'
+import { FC, useContext } from 'react'
+import { IDeaDialogContext } from './context'
+import { customLightTheme } from 'pp365-shared-library'
+import styles from './IdeaDialog.module.scss'
 
-interface IDialogContentProps {
-  close: () => void
-  submit: () => void
-  ideaTitle?: string
-  isBlocked?: boolean
-}
+export const IdeaDialog: FC<IIdeaDialogProps> = (props) => {
+  const fluentProviderId = useId('fp-idea-dialog')
+  const context = useContext(IDeaDialogContext)
 
-class IdeaDialog extends React.Component<IDialogContentProps> {
-  constructor(props: IDialogContentProps | Readonly<IDialogContentProps>) {
-    super(props)
-  }
-
-  public render(): JSX.Element {
-    return (
-      <DialogContent
-        title={strings.IdeaProjectDataDialogTitle}
-        subText={format(strings.IdeaProjectDataDialogSubText, this.props.ideaTitle)}
-        onDismiss={this.props.close}
-        type={DialogType.largeHeader}
-        showCloseButton={true}
-        closeButtonAriaLabel={strings.CloseLabel}
-      >
-        <UserMessage
-          text={format(
-            this.props.isBlocked
-              ? strings.IdeaProjectDataDialogBlockedText
-              : strings.IdeaProjectDataDialogInfoText,
-            encodeURIComponent(window.location.href)
-          )}
-          type={this.props.isBlocked ? MessageBarType.warning : MessageBarType.info}
-        />
-        <DialogFooter>
-          <DefaultButton
-            text={strings.CancelLabel}
-            title={strings.CancelLabel}
-            onClick={this.props.close}
-          />
-          <PrimaryButton
-            text={strings.CreateLabel}
-            title={strings.CreateLabel}
-            onClick={this.props.submit}
-            disabled={this.props.isBlocked}
-          />
-        </DialogFooter>
-      </DialogContent>
-    )
-  }
+  return (
+    <IDeaDialogContext.Provider value={context}>
+      <IdPrefixProvider value={fluentProviderId}>
+        <FluentProvider theme={customLightTheme}>
+          <DialogBody className={styles.ideaDialog}>
+            <DialogTitle>{strings.IdeaProjectDataDialogTitle}</DialogTitle>
+            <DialogContent>
+              <UserMessage
+                title={
+                  props.isBlocked
+                    ? strings.IdeaProjectDataDialogBlockedTitle
+                    : strings.IdeaProjectDataDialogInfoTitle
+                }
+                text={format(
+                  props.isBlocked
+                    ? strings.IdeaProjectDataDialogBlockedMessage
+                    : props.isApproved
+                    ? props.dialogMessage
+                    : strings.IdeaProjectDataDialogNotApprovedMessage,
+                  encodeURIComponent(window.location.href)
+                )}
+                intent={props.isBlocked || !props.isApproved ? 'warning' : 'info'}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button title={strings.CancelLabel} onClick={props.close}>
+                {strings.CancelLabel}
+              </Button>
+              <Button
+                appearance='primary'
+                title={strings.CreateLabel}
+                onClick={props.submit}
+                disabled={props.isBlocked || !props.isApproved}
+              >
+                {strings.CreateLabel}
+              </Button>
+            </DialogActions>
+          </DialogBody>
+        </FluentProvider>
+      </IdPrefixProvider>
+    </IDeaDialogContext.Provider>
+  )
 }
 
 export default class ProjectDataDialog extends BaseDialog {
   public ideaTitle: string
+  public dialogMessage: string
   public isBlocked: boolean
+  public isApproved: boolean
 
   public render(): void {
     ReactDOM.render(
@@ -73,7 +80,9 @@ export default class ProjectDataDialog extends BaseDialog {
         close={this.close}
         submit={this.submit}
         ideaTitle={this.ideaTitle}
+        dialogMessage={this.dialogMessage}
         isBlocked={this.isBlocked}
+        isApproved={this.isApproved}
       />,
       this.domElement
     )

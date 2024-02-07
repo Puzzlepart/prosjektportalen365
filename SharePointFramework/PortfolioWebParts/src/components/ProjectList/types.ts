@@ -1,9 +1,20 @@
-import { IButtonProps, IPivotItemProps, IShimmerProps } from '@fluentui/react'
-import { IColumn } from '@fluentui/react/lib/DetailsList'
-import { ProjectListModel } from 'models'
+import { IShimmerProps } from '@fluentui/react'
 import { IBaseComponentProps } from '../types'
+import { ProjectListModel } from 'pp365-shared-library/lib/models'
+import { TabProps } from '@fluentui/react-components'
+import { FluentIcon } from '@fluentui/react-icons/lib/utils/createFluentIcon'
 
-export interface IProjectListView extends IPivotItemProps {
+export interface IProjectListVertical extends Omit<TabProps, 'icon'> {
+  /**
+   * Text to display for the tab
+   */
+  text?: string
+
+  /**
+   * Icon to display for the tab
+   */
+  icon?: FluentIcon
+
   /**
    * Placeholder text for search box.
    */
@@ -18,27 +29,48 @@ export interface IProjectListView extends IPivotItemProps {
   filter?: (project: ProjectListModel, state: IProjectListState) => boolean
 
   /**
-   * Function to get header button props. If not provided, the default button props are used.
-   *
-   * @param state State of the component
-   */
-  getHeaderButtonProps?: (
-    state: IProjectListState
-  ) =>
-    | IButtonProps
-    | {
-        [key: string]: string | number | boolean
-      }
-
-  /**
-   * Function to determine if the view should be hidden. If not provided, the view is not hidden.
+   * Function to determine if the vertical should be hidden. If not provided, the vertical is not hidden.
    *
    * @param state State of the component
    */
   isHidden?: (state: IProjectListState) => boolean
 }
 
-export type ProjectListRenderMode = 'tiles' | 'list'
+export interface IRenderMode {
+  /**
+   * Value of the render mode
+   */
+  value?: string
+
+  /**
+   * Text to display for the render mode
+   */
+  text?: string
+
+  /**
+   * Icon to display for therender mode
+   */
+  icon?: FluentIcon
+}
+
+export interface IQuickLaunch {
+  /**
+   * Order of the menu item
+   */
+  order?: number
+
+  /**
+   * Title for the menu item
+   */
+  text?: string
+
+  /**
+   * relative url to navigate to
+   */
+  relativeUrl?: string
+}
+
+export type ProjectListRenderMode = 'tiles' | 'list' | 'compactList'
 
 export interface IProjectListProps extends IBaseComponentProps {
   /**
@@ -47,14 +79,19 @@ export interface IProjectListProps extends IBaseComponentProps {
   sortBy?: string
 
   /**
-   *Show search box
+   * Show search box
    */
   showSearchBox?: boolean
 
   /**
-   * Show view selector
+   * Show render mode selector
    */
-  showViewSelector?: boolean
+  showRenderModeSelector?: boolean
+
+  /**
+   * Show sort by button
+   */
+  showSortBy?: boolean
 
   /**
    * Show Project Logo on the project card
@@ -62,39 +99,39 @@ export interface IProjectListProps extends IBaseComponentProps {
   showProjectLogo?: boolean
 
   /**
-   * Show Project Owner on the project card
+   * Project metadata to show on the project card
    */
-  showProjectOwner?: boolean
+  projectMetadata?: string[]
 
   /**
-   * Show Project Manager on the project card
+   * Default vertical
    */
-  showProjectManager?: boolean
+  defaultVertical?: string
 
   /**
-   * Columns
+   * Array of verticals to hide
    */
-  columns?: IColumn[]
+  hideVerticals?: string[]
 
   /**
-   * Default view
+   * Vertical to show in the Tab component
    */
-  defaultView?: string
-
-  /**
-   * Array of views to hide
-   */
-  hideViews?: string[]
-
-  /**
-   * Views to show using Pivot component
-   */
-  views?: IProjectListView[]
+  verticals?: IProjectListVertical[]
 
   /**
    * Default render mode
    */
   defaultRenderMode?: ProjectListRenderMode
+
+  /**
+   * Use dynamic colors for the project card
+   */
+  useDynamicColors?: boolean
+
+  /**
+   * Quick launch menu (List experience only)
+   */
+  quickLaunchMenu?: IQuickLaunch[]
 }
 
 export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
@@ -114,7 +151,10 @@ export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
   error?: any
 
   /**
-   * Show project info
+   * The current project to show project information for using the
+   * `ProjectInformationPanel` from `pp365-projectwebparts`. If not provided,
+   * the panel is not shown. This is set to `null` or `undefined` to hide
+   * the panel.
    */
   showProjectInfo?: ProjectListModel
 
@@ -122,10 +162,16 @@ export interface IProjectListState extends Pick<IShimmerProps, 'isDataLoaded'> {
    * How the projects should be rendered. `tiles` or `list`
    */
   renderMode?: ProjectListRenderMode
+
   /**
-   * Current selected view
+   * Current selected render mode
    */
-  selectedView?: IProjectListView
+  selectedRenderMode?: IRenderMode
+
+  /**
+   * Current selected vertical
+   */
+  selectedVertical?: IProjectListVertical
 
   /**
    * Is the current user in the PortfolioManagerGroup?

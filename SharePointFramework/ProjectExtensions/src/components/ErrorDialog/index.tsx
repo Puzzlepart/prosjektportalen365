@@ -1,24 +1,18 @@
 import * as strings from 'ProjectExtensionsStrings'
 import React, { FC } from 'react'
 import { BaseDialog } from '../@BaseDialog'
-import ReactMarkdown from 'react-markdown'
-import rehypeRaw from 'rehype-raw'
 import styles from './ErrorDialog.module.scss'
 import { IErrorDialogProps } from './types'
-import {
-  MessageBarType,
-  DefaultButton,
-  PrimaryButton,
-  MessageBar,
-  DialogFooter
-} from '@fluentui/react'
+import { DefaultButton, PrimaryButton, DialogFooter } from '@fluentui/react'
+import { UserMessage } from 'pp365-shared-library'
 
 export const ErrorDialog: FC<IErrorDialogProps> = ({
   error,
   version,
-  messageType = MessageBarType.error,
+  intent = 'error',
   onDismiss,
-  onSetupClick
+  onSetupClick,
+  showStackAsSubText = false
 }) => {
   const onRenderFooter = () => {
     if (error.name === 'AlreadySetup') {
@@ -39,15 +33,15 @@ export const ErrorDialog: FC<IErrorDialogProps> = ({
   return (
     <BaseDialog
       version={version}
-      dialogContentProps={{ title: error.message }}
+      dialogContentProps={{
+        title: error.message,
+        subText: showStackAsSubText ? error.stack : undefined
+      }}
       modalProps={{ containerClassName: styles.root, isBlocking: false, isDarkOverlay: true }}
-      onDismiss={onDismiss}>
-      <div style={{ marginTop: 15 }}>
-        <MessageBar messageBarType={messageType} className={styles.errorMessage}>
-          <ReactMarkdown linkTarget='_blank' rehypePlugins={[rehypeRaw]}>
-            {error.stack}
-          </ReactMarkdown>
-        </MessageBar>
+      onDismiss={onDismiss}
+    >
+      <div style={{ marginTop: 15 }} hidden={showStackAsSubText}>
+        <UserMessage text={error.stack} intent={intent} />
       </div>
       <DialogFooter>{onRenderFooter()}</DialogFooter>
     </BaseDialog>

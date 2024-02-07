@@ -10,17 +10,22 @@ import { IStatusElementProps } from './types'
 export function useStatusElement(props: IStatusElementProps) {
   const { headerProps } = useContext(SectionContext)
   let comment = headerProps.comment?.replace(/\n/g, '<br />')
+
   if (comment && props.truncateComment) {
     comment =
       comment.length > props.truncateComment
         ? comment.slice(0, props.truncateComment) + '...'
         : comment
   }
+
   const commentProps = {
     className: styles.comment,
     dangerouslySetInnerHTML: {
       __html: comment
     }
   }
-  return { commentProps, iconSize: props.iconSize ?? headerProps.iconSize } as const
+
+  const useWrapper = !!props.truncateComment || props.iconsOnly
+
+  return { commentProps, iconSize: props.iconSize ?? headerProps.iconSize, useWrapper } as const
 }

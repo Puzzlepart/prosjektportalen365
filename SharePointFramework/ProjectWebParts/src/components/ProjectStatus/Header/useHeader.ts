@@ -1,19 +1,22 @@
 import moment from 'moment'
-import { useContext } from 'react'
-import { ProjectStatusContext } from '../context'
+import { useProjectStatusContext } from '../context'
+import { format } from '@fluentui/react'
+import strings from 'ProjectWebPartsStrings'
 
 /**
- * Component logic hook for the `Header` component
+ * Hook that returns the header title for the project status web part.
+ *
+ * @returns An object containing the header title.
  */
 export function useHeader() {
-  const context = useContext(ProjectStatusContext)
+  const context = useProjectStatusContext()
   const formattedDate = context.state.selectedReport
     ? moment(
         context.state.selectedReport.publishedDate ?? context.state.selectedReport.created
       ).format('DD.MM.YYYY')
     : null
-  return {
-    isDataLoaded: context.state.isDataLoaded,
-    title: [context.props.title, formattedDate].join(' ')
-  } as const
+
+  const title = strings.ProjectInformationStatusReportHeaderText
+  const description = format(strings.ProjectInformationStatusReportHeaderDescription, formattedDate)
+  return { title, description }
 }

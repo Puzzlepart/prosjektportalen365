@@ -1,0 +1,19 @@
+.filter {
+  .sectionHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    cursor: pointer;
+    border-radius: var(--borderRadiusMedium);
+    padding: 6px;
+    color: var(--colorNeutralForeground3);
+
+    &:hover {
+      background-color: var(--colorSubtleBackgroundHover);
+    }
+  }
+  .sectionContent {
+    display: flex;
+    flex-direction: column;
+  }
+}

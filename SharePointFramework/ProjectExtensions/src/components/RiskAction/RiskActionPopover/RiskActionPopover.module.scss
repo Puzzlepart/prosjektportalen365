@@ -1,0 +1,32 @@
+.riskActionPopover {
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .title {
+        font-size: 16px;
+        margin: 0 0 8px 0;
+    }
+
+    .alert {
+        white-space: pre-wrap;
+    }
+
+    .infoText, .lastUpdated {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .actions {
+        display: flex;
+        flex-direction: row;
+        gap: 6px;
+        margin: 15px 0 0 0;
+
+        button {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+}

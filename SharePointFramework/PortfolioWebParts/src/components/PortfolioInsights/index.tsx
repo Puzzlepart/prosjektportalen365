@@ -1,12 +1,12 @@
 import { ChartData, ChartDataItem } from 'models'
-import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar'
-import { PortfolioOverviewView } from 'pp365-shared/lib/models'
+import { PortfolioOverviewView } from 'pp365-shared-library/lib/models'
 import React, { Component } from 'react'
 import Chart from './Chart'
 import { Commands } from './Commands'
 import styles from './PortfolioInsights.module.scss'
 import { IPortfolioInsightsProps, IPortfolioInsightsState } from './types'
 import * as strings from 'PortfolioWebPartsStrings'
+import { UserMessage } from 'pp365-shared-library'
 
 /**
  * @component PortfolioInsights
@@ -76,14 +76,18 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
     if (this.state.error) {
       return (
         <div className={styles.inner}>
-          <MessageBar messageBarType={MessageBarType.error}>{this.state.error}</MessageBar>
+          <UserMessage
+            title={strings.ErrorFetchingProjectsTitle}
+            text={this.state.error}
+            intent='error'
+          />
         </div>
       )
     }
     if (this.state.chartData.isEmpty()) {
       return (
         <div className={styles.inner}>
-          <MessageBar messageBarType={MessageBarType.info}>{strings.NoProjectsFound}</MessageBar>
+          <UserMessage title={strings.NoProjectsFoundTitle} text={strings.NoProjectsFoundMessage} />
         </div>
       )
     }
@@ -102,7 +106,7 @@ export class PortfolioInsights extends Component<IPortfolioInsightsProps, IPortf
    * @param view View
    */
   private async _onViewChanged(view: PortfolioOverviewView) {
-    const items = await this.props.dataAdapter.fetchDataForView(
+    const { items } = await this.props.dataAdapter.fetchDataForView(
       view,
       this.state.configuration,
       this.props.pageContext.site.id.toString()

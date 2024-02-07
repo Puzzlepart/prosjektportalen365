@@ -1,9 +1,16 @@
-import { IPortfolioConfiguration } from 'interfaces'
-import { PortfolioOverviewView, ProjectColumn } from 'pp365-shared/lib/models'
-import { IFilterProps } from '../FilterPanel'
-import { IBaseComponentProps } from '../types'
+import { MessageBarType, Target } from '@fluentui/react'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { MessageBarType, IContextualMenuProps } from '@fluentui/react'
+import { ProgramItem } from 'models/ProgramItem'
+import { IFilterProps } from 'pp365-shared-library/lib/components/FilterPanel'
+import {
+  PortfolioOverviewView,
+  ProjectColumn,
+  ProjectColumnCustomSort
+} from 'pp365-shared-library/lib/models'
+import { IListProps } from '../List'
+import { IBaseComponentProps } from '../types'
+import { IColumnFormPanel } from './ColumnFormPanel/types'
+import { IViewFormPanel } from './ViewFormPanel/types'
 
 export class PortfolioOverviewErrorMessage extends Error {
   constructor(public message: string, public type: MessageBarType) {
@@ -11,26 +18,65 @@ export class PortfolioOverviewErrorMessage extends Error {
   }
 }
 
-export interface IPortfolioOverviewProps extends IBaseComponentProps {
+export interface IPortfolioOverviewConfiguration {
   /**
-   * Configuration (columns and views etc)
+   * Available columns
    */
-  configuration: IPortfolioConfiguration
+  columns: ProjectColumn[]
 
   /**
-   * List name for column config
+   * Available refiners
    */
-  columnConfigListName: string
+  refiners: ProjectColumn[]
 
   /**
-   * List name for columns
+   * Available views
    */
-  columnsListName: string
+  views: PortfolioOverviewView[]
 
   /**
-   * List name for views
+   * Available programs that can be used to generate views for the portfolio overview
    */
-  viewsListName: string
+  programs?: ProgramItem[]
+
+  /**
+   * New forms and edit forms urls for views list
+   */
+  viewsUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
+
+  /**
+   * New form and edit form urls for columns list
+   */
+  columnUrls: { defaultNewFormUrl: string; defaultEditFormUrl: string }
+
+  /**
+   * Current user can add views (has `ADD_LIST_ITEMS` permission)
+   */
+  userCanAddViews?: boolean
+}
+
+export interface IPortfolioOverviewProps
+  extends IBaseComponentProps,
+    Pick<IListProps<ProjectColumn>, 'isListLayoutModeJustified'> {
+  /**
+   * Configuration (columns and views etc).
+   */
+  configuration: IPortfolioOverviewConfiguration
+
+  /**
+   * SharePoint list name for the column configuration
+   */
+  columnConfigListName?: string
+
+  /**
+   * SharePoint list name for the column configuration
+   */
+  columnsListName?: string
+
+  /**
+   * SharePoint list name for the views configuration
+   */
+  viewsListName?: string
 
   /**
    * Number of status reports to show
@@ -41,6 +87,11 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
    * Show Excel export button
    */
   showExcelExportButton?: boolean
+
+  /**
+   * Include view name in Excel export filename
+   */
+  includeViewNameInExcelExportFilename?: boolean
 
   /**
    * Show command bar
@@ -63,27 +114,32 @@ export interface IPortfolioOverviewProps extends IBaseComponentProps {
   showFilters?: boolean
 
   /**
-   * Show view selector
+   * Show view selector where users can select view, create new views and edit views
    */
   showViewSelector?: boolean
 
   /**
-   * Default view id
+   * Show program views. A dropdown is displayed in the command bar to select
+   * a program view. The children projects of the selected program will be
+   * displayed in the list.
+   */
+  showProgramViews?: boolean
+
+  /**
+   * Default view ID (the SharePoint item ID)
    */
   defaultViewId?: string
 
   /**
-   * Child project site ids
-   */
-  childSiteIds?: string[]
-
-  /**
-   * Is parent project
+   * Is parent project. Set to `true` if the web part is used in a parent project.
+   * This will fetch the child projects and show them in the list, instead of all
+   * projects in the current hub site.
    */
   isParentProject?: boolean
 }
 
-export interface IPortfolioOverviewState {
+export interface IPortfolioOverviewState
+  extends Pick<IListProps<ProjectColumn>, 'items' | 'columns'> {
   /**
    * Whether the component is loading
    */
@@ -97,22 +153,12 @@ export interface IPortfolioOverviewState {
   /**
    * Is changing view
    */
-  isChangingView?: PortfolioOverviewView
+  isChangingView?: boolean
 
   /**
-   * Items
+   * Selected items in the list
    */
-  items?: any[]
-
-  /**
-   * Selected items
-   */
-  selectedItems?: any[]
-
-  /**
-   * Columns
-   */
-  columns?: ProjectColumn[]
+  selectedItems?: Record<string, any>[]
 
   /**
    * Search term
@@ -125,24 +171,24 @@ export interface IPortfolioOverviewState {
   filters?: IFilterProps[]
 
   /**
-   * Current view
+   * Current view selected by the user in the view selector
    */
   currentView?: PortfolioOverviewView
 
   /**
-   * Active filters
+   * Active filters for the current view
    */
-  activeFilters?: { SelectedColumns?: string[]; [key: string]: string[] }
+  activeFilters?: { [key: string]: string[] }
 
   /**
-   * Error
+   * Error if any
    */
   error?: PortfolioOverviewErrorMessage
 
   /**
-   * Show filter panel
+   * Is filter panel open
    */
-  showFilterPanel?: boolean
+  isFilterPanelOpen?: boolean
 
   /**
    * Column to group by
@@ -150,9 +196,9 @@ export interface IPortfolioOverviewState {
   groupBy?: ProjectColumn
 
   /**
-   * Column to sort by
+   * Column to sort by, and custom sort order if applicable
    */
-  sortBy?: ProjectColumn
+  sortBy?: { column: ProjectColumn; customSort?: ProjectColumnCustomSort }
 
   /**
    * List should be rendered in compact mode
@@ -165,19 +211,32 @@ export interface IPortfolioOverviewState {
   programContext?: WebPartContext
 
   /**
-   * Props for column header context menu
+   * Column context menu contains the `column` and `target` (mouse event target)
+   * that is used to show the context menu in the correct position.
    */
-  columnContextMenu?: IContextualMenuProps
-}
-
-export interface IPortfolioOverviewHashStateState {
-  /**
-   * viewId found in hash (document.location.hash)
-   */
-  viewId?: string
+  columnContextMenu?: { column: ProjectColumn; target: Target }
 
   /**
-   * groupBy found in hash (document.location.hash)
+   * Column form panel props. Consists of two properties:
+   * - `isOpen` - whether the panel is open
+   * - `column` - the column to edit (if not specified, a new column will be created)
    */
-  groupBy?: string
+  columnForm: IColumnFormPanel
+
+  /**
+   * View form panel props. Consists of two properties:
+   * - `isOpen` - whether the panel is open
+   * - `view` - the view to edit (if not specified, a new view will be created)
+   */
+  viewForm: IViewFormPanel
+
+  /**
+   * Is edit view columns panel open
+   */
+  isEditViewColumnsPanelOpen?: boolean
+
+  /**
+   * Available managed properties for the current search query
+   */
+  managedProperties?: string[]
 }

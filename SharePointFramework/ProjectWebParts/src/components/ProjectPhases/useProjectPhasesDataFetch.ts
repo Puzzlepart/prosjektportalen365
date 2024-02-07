@@ -1,14 +1,39 @@
 import { LogLevel } from '@pnp/logging'
-import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
-import { ListLogger } from 'pp365-shared/lib/logging'
-import * as strings from 'ProjectWebPartsStrings'
-import { DataFetchFunction } from '../../types/DataFetchFunction'
-import { IProjectPhasesData, IProjectPhasesProps, ProjectPhases } from '.'
-import SPDataAdapter from '../../data'
-import { getPhaseSitePages } from './getPhaseSitePages'
-import { useEffect } from 'react'
+import { SPFI } from '@pnp/sp'
 import { AnyAction } from '@reduxjs/toolkit'
+import * as strings from 'ProjectWebPartsStrings'
+import { ListLogger, ProjectAdminPermission, ProjectPhaseModel } from 'pp365-shared-library/lib/'
+import { useEffect } from 'react'
+import SPDataAdapter from '../../data'
+import { DataFetchFunction } from '../../types/DataFetchFunction'
+import { ProjectPhases } from './index'
 import { INIT_DATA } from './reducer'
+import { IPhaseSitePageModel, IProjectPhasesData, IProjectPhasesProps } from './types'
+
+/**
+ * Get phase site pages.
+ */
+export const getPhaseSitePages: DataFetchFunction<
+  { phases: ProjectPhaseModel[]; sp: SPFI },
+  IPhaseSitePageModel[]
+> = async (params) => {
+  try {
+    const pages = (
+      await params.sp.web.lists
+        .getByTitle('Områdesider')
+        .items.select('Id', 'Title', 'FileLeafRef')()
+    )
+      .filter((p) => params.phases.some((phase) => phase.name === p.Title))
+      .map<IPhaseSitePageModel>((p) => ({
+        id: p.Id,
+        title: p.Title,
+        fileLeafRef: p.FileLeafRef
+      }))
+    return pages
+  } catch (error) {
+    throw error
+  }
+}
 
 /**
  * Fetch data for `ProjectPhases`.
@@ -16,9 +41,9 @@ import { INIT_DATA } from './reducer'
 const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = async (props) => {
   try {
     if (!SPDataAdapter.isConfigured) {
-      SPDataAdapter.configure(props.webPartContext, {
+      SPDataAdapter.configure(props.spfxContext, {
         siteId: props.siteId,
-        webUrl: props.webUrl,
+        webUrl: props.webAbsoluteUrl,
         logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }
@@ -26,7 +51,7 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
       SPDataAdapter.getTermFieldContext(props.phaseField),
       SPDataAdapter.project.getChecklistData(strings.PhaseChecklistName),
       SPDataAdapter.project.getWelcomePage(),
-      SPDataAdapter.project.getPropertiesData()
+      SPDataAdapter.project.getProjectInformationData()
     ])
     const [phases, currentPhaseName, userHasChangePhasePermission] = await Promise.all([
       SPDataAdapter.project.getPhases(phaseFieldCtx.termSetId, checklistData),
@@ -37,16 +62,18 @@ const fetchData: DataFetchFunction<IProjectPhasesProps, IProjectPhasesData> = as
       )
     ])
 
-    const phaseSitePages = props.useDynamicHomepage ? await getPhaseSitePages(phases) : []
+    const phaseSitePages = props.useDynamicHomepage
+      ? await getPhaseSitePages({ phases, sp: props.sp })
+      : []
     const [currentPhase] = phases.filter((p) => p.name === currentPhaseName)
     return {
       currentPhase,
       phases,
-      phaseTextField: phaseFieldCtx.phaseTextField,
+      phaseTextField: phaseFieldCtx.textField,
       phaseSitePages,
       welcomePage,
       userHasChangePhasePermission
-    }
+    } as IProjectPhasesData
   } catch (error) {
     ListLogger.log({
       message: error.message,

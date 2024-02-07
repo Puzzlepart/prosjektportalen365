@@ -3,10 +3,10 @@
   "id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
   "alias": "PortfolioAggregationWebPart",
   "componentType": "WebPart",
-  "version": "1.8.4",
+  "version": "1.9.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
-  "hiddenFromToolbox": false,
+  "hiddenFromToolbox": true,
   "supportedHosts": [
     "SharePointWebPart"
   ],
@@ -17,7 +17,7 @@
         "default": "Other"
       },
       "title": {
-        "default": "Aggregeringswebdel"
+        "default": "Innholdsaggregeringswebdel for Portefølje"
       },
       "description": {
         "default": " "

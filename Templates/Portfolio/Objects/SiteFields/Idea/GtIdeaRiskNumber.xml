@@ -1,0 +1,6 @@
+<Field ID="{9f7444b0-2f69-4ad0-a347-2d85cedddebb}" Name="GtIdeaRiskNumber" DisplayName="{resource:SiteFields_GtIdeaRiskNumber_DisplayName}" Description="{resource:SiteFields_GtIdeaRiskNumber_Description}" Type="Calculated" Group="{resource:SiteFields_Idea_Group}" ResultType="Number" ShowInNewForm="FALSE" ShowInEditForm="FALSE" StaticName="GtIdeaRiskNumber">
+  <Formula>=IF(ISBLANK([{fieldtitle:GtIdeaRisk}]),0,LEFT([{fieldtitle:GtIdeaRisk}],1))</Formula>
+  <FieldRefs>
+    <FieldRef Name="GtIdeaRisk" ID="{cca3f2fd-5684-43e1-9fb5-acf05592b1f6}" />
+  </FieldRefs>
+</Field>

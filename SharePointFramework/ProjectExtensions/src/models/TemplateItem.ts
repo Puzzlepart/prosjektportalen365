@@ -1,8 +1,10 @@
-import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
-import { FileAddResult, Folder, Web } from '@pnp/sp'
-import { FileIconType, getFileTypeIconProps, IFileTypeIconOptions } from '@uifabric/file-type-icons'
 import { IIconProps } from '@fluentui/react/lib/Icon'
-import { formatDate } from 'pp365-shared/lib/helpers'
+import { stringIsNullOrEmpty } from '@pnp/core'
+import { IFileAddResult } from '@pnp/sp/files'
+import { IFolder } from '@pnp/sp/folders'
+import { IWeb } from '@pnp/sp/webs'
+import { FileIconType, getFileTypeIconProps, IFileTypeIconOptions } from '@uifabric/file-type-icons'
+import { formatDate } from 'pp365-shared-library/lib/util/formatDate'
 
 export interface ITemplateSPItem {
   Folder?: {
@@ -19,7 +21,7 @@ export interface ITemplateSPItem {
     ServerRelativeUrl: string
     TimeLastModified: string
   }
-  FieldValuesAsText?: TypedHash<string>
+  FieldValuesAsText?: Record<string, string>
 }
 
 /**
@@ -76,7 +78,7 @@ export class TemplateItem {
    */
   public errorMessage: string
 
-  constructor(private _item: ITemplateSPItem, public web: Web) {
+  constructor(private _item: ITemplateSPItem, public web: IWeb) {
     this.id = _item.File?.UniqueId || _item.Folder.UniqueId
     this.name = _item.File?.Name || _item.Folder?.Name
     this.title = _item.File?.Title || this.nameWithoutExtension || _item.Folder?.Name
@@ -96,9 +98,9 @@ export class TemplateItem {
    *
    * @returns {true} if the operation is successful
    */
-  public async copyTo(folder: Folder, shouldOverwrite: boolean = true): Promise<FileAddResult> {
+  public async copyTo(folder: IFolder, shouldOverwrite: boolean = true): Promise<IFileAddResult> {
     try {
-      const content = await this.web.getFileByServerRelativeUrl(this.serverRelativeUrl).getBlob()
+      const content = await this.web.getFileByServerRelativePath(this.serverRelativeUrl).getBlob()
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       const fileAddResult = await folder.files.addUsingPath(this.newName, content, {
         Overwrite: shouldOverwrite
@@ -115,7 +117,7 @@ export class TemplateItem {
    *
    * @param properties Updated properties
    */
-  public update(properties: TypedHash<string>) {
+  public update(properties: Record<string, string>) {
     Object.keys(properties).forEach((prop) => {
       if (!stringIsNullOrEmpty(properties[prop])) this[prop] = properties[prop]
     })

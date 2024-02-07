@@ -1,4 +1,4 @@
-﻿
+
 $LastInstall = Get-PnPListItem -List "Installasjonslogg" -Query "<View><Query><OrderBy><FieldRef Name='Created' Ascending='False' /></OrderBy></Query></View>" | Select-Object -First 1 -Wait
 if ($null -ne $LastInstall) {
     $PreviousVersion = $LastInstall.FieldValues["InstallVersion"]
@@ -48,9 +48,10 @@ if ($null -ne $LastInstall) {
         $TermSetA = Get-PnPTermSet -Identity "cc6cdd18-c7d5-42e1-8d19-a336dd78f3f2" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
         $TermSetB = Get-PnPTermSet -Identity "ec5ceb95-7259-4282-811f-7c57304be71e" -TermGroup "Prosjektportalen" -ErrorAction SilentlyContinue
         if ($TermSetA -or $TermSetB) {
+            Write-Host "[INFO] 'Bygg & Anlegg' addon detected. Renaming old contenttypes to avoid conflicts and confusion..." 
+
             $ProjectStatusBACT = Get-PnPContentType -Identity "Prosjektstatus (Bygg og anlegg)" -ErrorAction SilentlyContinue
             if ($ProjectStatusBACT) {
-                Write-Host "[INFO] 'Bygg & Anlegg' addon detected. Renaming 'Prosjektstatus (Bygg og anlegg)' content type to avoid conflicts and confusion..." 
                 $ProjectStatusList = Get-PnPList -Identity "Prosjektstatus" -ErrorAction SilentlyContinue
                 if ($null -ne $ProjectStatusList) {
                     $ProjectStatusListBACT = Get-PnPContentType -Identity "Prosjektstatus (Bygg og anlegg)" -List $ProjectStatusList -ErrorAction SilentlyContinue
@@ -63,7 +64,6 @@ if ($null -ne $LastInstall) {
 
             $ProjectBACT = Get-PnPContentType -Identity "Prosjekt (Bygg og anlegg)" -ErrorAction SilentlyContinue
             if ($ProjectBACT) {
-                Write-Host "[INFO] 'Bygg & Anlegg' addon detected. Renaming 'Prosjekt (Bygg og anlegg)' content type to avoid conflicts and confusion..."   
                 $ProjectList = Get-PnPList -Identity "Prosjekter" -ErrorAction SilentlyContinue
                 if ($null -ne $ProjectList) {
                     $ProjectListBACT = Get-PnPContentType -Identity "Prosjekt (Bygg og anlegg)" -List $ProjectList -ErrorAction SilentlyContinue
@@ -79,7 +79,7 @@ if ($null -ne $LastInstall) {
     }
 
     if ($PreviousVersion -lt "1.8.2") {
-        Write-Host "[INFO] Applying PnP upgrade template [1.8.1] to [$Url]"
+        Write-Host "[INFO] Applying PnP upgrade template [$TemplatesBasePath/1.8.1.pnp] to [$Url]"
         Invoke-PnPSiteTemplate -Path "$TemplatesBasePath/1.8.1.pnp" -ErrorAction Stop
         Write-Host "[SUCCESS] Successfully applied PnP template [1.8.1] to [$Url]" -ForegroundColor Green
     }

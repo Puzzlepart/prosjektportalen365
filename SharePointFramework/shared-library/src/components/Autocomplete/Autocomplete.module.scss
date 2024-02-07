@@ -1,0 +1,46 @@
+.root {
+  padding: 0;
+
+  .searchBox {
+    min-height: 32px;
+    border-radius: var(--borderRadiusMedium);
+    position: relative;
+    box-sizing: border-box;
+    padding: 0 var(--pacingHorizontalMNudge);
+    background-color: var(--colorNeutralBackground1);
+    border: 1px solid var(--colorNeutralStroke1);
+    border-bottom-color: var(--colorNeutralStrokeAccessible);
+
+    &::after {
+      box-sizing: border-box;
+      content: '';
+      position: absolute;
+      left: -1px;
+      bottom: -1px;
+      right: -1px;
+      border-bottom-left-radius: var(--borderRadiusMedium);
+      border-bottom-right-radius: var(--borderRadiusMedium);
+      border-bottom: 2px solid var(--colorCompoundBrandStroke);
+      clip-path: inset(calc(100% - 2px) 0px 0px);
+      transform: scaleX(0);
+      transition-property: transform;
+      transition-duration: var(--durationUltraFast);
+      transition-delay: var(--curveAccelerateMid);
+    }
+
+    &:focus-within::after {
+      transform: scaleX(1);
+      transition-property: transform;
+      transition-duration: var(--durationNormal);
+      transition-delay: var(curveDecelerateMid);
+    }
+
+    &:focus-within:active::after {
+      border-bottom-color: (--colorCompoundBrandStrokePressed);
+    }
+
+    &:focus-within {
+      outline: 2px solid transparent;
+    }
+  }
+}

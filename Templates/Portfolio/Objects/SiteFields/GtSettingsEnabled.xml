@@ -1,0 +1,1 @@
+<Field Type="Boolean" DisplayName="{resource:SiteFields_GtSettingsEnabled_DisplayName}" Group="{resource:SiteFields_Portfolio_Group}" ID="{46bf2f85-9030-459e-b0bf-fee3f9389101}" StaticName="GtSettingsEnabled" Name="GtSettingsEnabled" />

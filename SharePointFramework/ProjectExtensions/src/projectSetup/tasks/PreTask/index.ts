@@ -1,11 +1,10 @@
 import { IProjectSetupData } from 'projectSetup'
 import * as strings from 'ProjectExtensionsStrings'
-import { PortalDataService } from 'pp365-shared/lib/services'
+import { PortalDataService } from 'pp365-shared-library/lib/services'
 import { SpEntityPortalService } from 'sp-entityportal-service'
 import initSpfxJsom, { ExecuteJsomQuery } from 'spfx-jsom'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
 import _ from 'underscore'
-import { ITaxonomySession, Session } from '@pnp/sp-taxonomy'
 import SPDataAdapter from 'data/SPDataAdapter'
 
 export class PreTask extends BaseTask {
@@ -19,6 +18,7 @@ export class PreTask extends BaseTask {
    * @param params Task parameters
    */
   public async execute(params: IBaseTaskParams): Promise<IBaseTaskParams> {
+    super.initExecute(params)
     params.templateSchema = await this.data.selectedTemplate.getSchema()
     if (!params.properties.forceTemplate) {
       await this.validateParameters(params)
@@ -28,14 +28,14 @@ export class PreTask extends BaseTask {
       params.spfxJsomContext = await initSpfxJsom(params.context.pageContext.site.absoluteUrl, {
         loadTaxonomy: true
       })
-      params.entityService = new SpEntityPortalService({
-        portalUrl: SPDataAdapter.portal.url,
+      params.entityService = new SpEntityPortalService(params.context, {
+        portalUrl: SPDataAdapter.portalDataService.url,
         listName: params.properties.projectsList,
         identityFieldName: 'GtGroupId',
         urlFieldName: 'GtSiteUrl'
       })
-      params.portal = await new PortalDataService().configure({
-        pageContext: params.context.pageContext
+      params.portalDataService = await new PortalDataService().configure({
+        spfxContext: params.context
       })
       params.spfxJsomContext.jsomContext.web['set_isMultilingual'](false)
       params.spfxJsomContext.jsomContext.web.update()
@@ -67,12 +67,8 @@ export class PreTask extends BaseTask {
    * @param termSetIds - Term set IDs
    */
   private async validateTermSetIds(termSetIds: any) {
-    const taxonomySession: ITaxonomySession = new Session()
-    const termSet = await taxonomySession
-      .getDefaultSiteCollectionTermStore()
-      .getTermSetById(termSetIds.GtProjectPhase)
-      .get()
-    if (!termSet.Name) {
+    const termSet = await this.params.sp.termStore.sets.getById(termSetIds.GtProjectPhase)()
+    if (!termSet?.localizedNames[0]?.name) {
       this.logError(`Failed to validate term set ${termSetIds.GtProjectPhase}`)
       throw new BaseTaskError(
         this.taskName,
@@ -89,11 +85,11 @@ export class PreTask extends BaseTask {
    */
   private async validateContentTypes(contentTypes: string[]): Promise<void> {
     await Promise.all(
-      contentTypes.map(async (ct) => {
+      contentTypes.map(async (contentTypeId) => {
         try {
-          await SPDataAdapter.portal.web.contentTypes.getById(ct).get()
+          await SPDataAdapter.portalDataService.web.contentTypes.getById(contentTypeId)()
         } catch (error) {
-          this.logError(`Failed to validate content type ${ct}`)
+          this.logError(`Failed to validate content type ${contentTypeId}`)
           throw new BaseTaskError(
             this.taskName,
             strings.PreTaskContentTypeValidationErrorMessage,

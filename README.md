@@ -1,5 +1,5 @@
 <!-- ⚠️ This README has been generated from the file(s) ".README" ⚠️--><p align="center">
-  <img src="assets/PP365 Piktogram Flat DIGITAL.png" alt="Logo" width="119" height="119" />
+  <img src="assets/pp365_logo.png" alt="Logo" width="119" height="119" />
 </p> <p align="center">
   <b>Prosjektportalen et prosjektstyringsverktøy for Microsoft 365 basert på Prosjektveiviseren.</b></br>
   <sub>Prosjektportalen for Microsoft 365 er bygget av Puzzlepart AS og distribuert som åpen kildekode. Løsningen inneholder Microsoft 365 og SharePoint-tilpasninger som til sammen utgjør et prosjektstyringsverktøy.<sub>
@@ -8,7 +8,7 @@
 <br />
 
 
-[![version](https://img.shields.io/badge/version-1.8.4-green.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.9.0-green.svg)](https://semver.org)
 
 <details>
 <summary>📖 Innholdsfortegnelse</summary>
@@ -21,8 +21,8 @@
 * [➤ Hva er Prosjektportalen for Microsoft 365?](#-hva-er-prosjektportalen-for-microsoft-365)
 * [➤ Installering og oppgradering](#-installering-og-oppgradering)
 * [➤ Kontakt](#-kontakt)
-* [➤ Nettleserstøtte](#-nettlesersttte)
-* [➤ Contributors](#-contributors)
+* [➤ Nettleserstøtte](#-nettleserstøtte)
+* [➤ Bidragsytere](#-bidragsytere)
 * [➤ Utvikling](#-utvikling)
 </details>
 
@@ -83,7 +83,7 @@ Vi gjør vårt beste for å støtte alle nettlesere, men følger retningslinjer 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cut.png)](#contributors)
 
-## ➤ Contributors
+## ➤ Bidragsytere
 	
 
 | [Tarjei Ormestøyl](undefined)                    | [Ole Martin Pettersen](undefined)                | [Remi Blom-Ohlsen](undefined)                    |
@@ -100,4 +100,3 @@ I tillegg flere fra teamet bak [prosjektportalen@puzzlepart.com](mailto:prosjekt
 ## ➤ Utvikling
 
 Vennligst les [Utviklingsguiden](./.development-guide/README.md).
-

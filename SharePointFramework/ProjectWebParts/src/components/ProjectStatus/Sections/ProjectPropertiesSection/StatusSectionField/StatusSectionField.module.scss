@@ -1,15 +1,11 @@
-.root {
-  padding: 0 18px 18px 0;
-  box-sizing: border-box;
-  .container {
-    .fieldLabel {
-      font-size: 14px;
-      font-weight: 600;
-    }
-    .fieldValue {
-      margin: 10px 0 0 0;
-      font-size: 17px;
-      font-weight: 300;
-    }
+.statusSectionField {
+  .label {
+    font-size: var(--fontWeightRegular);
+    font-weight: 600;
+  }
+  .value {
+    margin-top: 8px;
+    font-size: var(--fontWeightRegular);
+    font-weight: 300;
   }
 }

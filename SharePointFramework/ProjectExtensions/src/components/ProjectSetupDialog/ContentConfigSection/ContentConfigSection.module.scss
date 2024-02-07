@@ -1,0 +1,15 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+
+.root {
+  @include ms-Grid-col;
+  @include ms-sm12;
+  padding: 10px 0 10px 0;
+
+  div[class*="ms-List-cell"] {
+    min-height: 0px;
+  }
+
+  .searchBox {
+    margin: 10px 0 0 0;
+  }
+}

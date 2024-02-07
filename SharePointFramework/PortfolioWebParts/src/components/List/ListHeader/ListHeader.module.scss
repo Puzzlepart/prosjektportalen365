@@ -1,0 +1,46 @@
+.sticky {
+  margin: 0;
+  padding-top: 32px;
+
+  .header {
+    display: none;
+  }
+}
+
+.root {
+  .header {
+    padding: 32px 32px 20px 32px;
+  }
+
+  .commandBar {
+    display: flex;
+    flex-direction: row;
+    max-width: 100%;
+    min-height: 42px;
+    padding: 0 32px;
+    gap: 15px;
+
+    .search {
+      width: 100%;
+      max-width: 100%;
+
+      .searchBox {
+        box-shadow: var(--shadow2);
+        width: inherit;
+        max-width: inherit;
+      }
+    }
+  }
+
+  .filter {
+    box-shadow: var(--shadow2);
+  }
+
+  .headerColumns {
+    position: inherit;
+  }
+
+  .errorContainer {
+    padding: 23px 32px 23px 32px;
+  }
+}

@@ -1,0 +1,33 @@
+.lastInstall {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: fit-content;
+  box-sizing: border-box;
+
+  .content {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+  }
+
+  .divider {
+    padding: 12px 0;
+  }
+
+  .footer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .button {
+      justify-content: flex-start;
+      width: fit-content;
+
+      .label {
+        font-weight: var(--fontWeightRegular);
+        margin: 0;
+      }
+    }
+  }
+}

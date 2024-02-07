@@ -1,11 +1,11 @@
-import { ITimelineData } from 'interfaces'
 import _ from 'lodash'
 import { IResourceAllocationState } from './types'
+import { ITimelineData } from 'pp365-shared-library/lib/interfaces'
 
 /**
  * Get filtered data
  */
-export function useFilteredData(state: IResourceAllocationState): ITimelineData {
+export const useFilteredData = (state: IResourceAllocationState): ITimelineData => {
   const { activeFilters, data } = { ...state } as IResourceAllocationState
   const activeFiltersKeys = Object.keys(activeFilters)
   if (!_.isEmpty(activeFiltersKeys)) {

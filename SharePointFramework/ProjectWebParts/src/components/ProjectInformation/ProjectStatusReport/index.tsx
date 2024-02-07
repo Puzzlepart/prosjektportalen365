@@ -1,17 +1,16 @@
-import React, { FC, useContext } from 'react'
-import { Header } from '../../ProjectStatus/Header'
-import { SummarySection, ProjectStatusContext } from '../../ProjectStatus'
-import styles from './ProjectStatusReport.module.scss'
+import React, { FC } from 'react'
+import { ProjectStatusContext, SummarySection, Header } from '../../ProjectStatus'
+import { useProjectInformationContext } from '../context'
 import { useProjectStatusReport } from './useProjectStatusReport'
-import { ProjectInformationContext } from '../context'
 
 export const ProjectStatusReport: FC = () => {
-  const context = useContext(ProjectInformationContext)
+  const context = useProjectInformationContext()
   const projectStatusContext = useProjectStatusReport()
-  return projectStatusContext ? (
-    <div className={styles.root}>
+  if (!projectStatusContext) return null
+  return (
+    <div>
       <ProjectStatusContext.Provider value={projectStatusContext}>
-        <Header className={styles.header} />
+        <Header />
         <SummarySection
           transparent
           noPadding
@@ -22,5 +21,5 @@ export const ProjectStatusReport: FC = () => {
         />
       </ProjectStatusContext.Provider>
     </div>
-  ) : null
+  )
 }

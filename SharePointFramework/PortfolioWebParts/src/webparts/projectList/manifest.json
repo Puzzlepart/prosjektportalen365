@@ -3,7 +3,7 @@
   "id": "54fbeb7d-e463-4dcc-8873-50a3ab2f0f68",
   "alias": "ProjectListWebPart",
   "componentType": "WebPart",
-  "version": "1.8.4",
+  "version": "1.9.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": true,
@@ -20,17 +20,46 @@
         "default": "Prosjektutlisting"
       },
       "description": {
-        "default": "Viser prosjekter under porteføljen"
+        "default": "Viser prosjekter under nåværende portefølje"
       },
       "officeFabricIconFontName": "ViewListGroup",
       "properties": {
+        "showProjectLogo": true,
+        "projectMetadata": [
+          "ProjectOwner",
+          "ProjectManager",
+          "ProjectServiceArea",
+          "ProjectType",
+          "ProjectPhase"
+        ],
         "sortBy": "Title",
+        "showSearchBox": true,
+        "showRenderModeSelector": true,
+        "showSortBy": true,
         "defaultRenderMode": "tiles",
-        "showProjectOwner": true,
-        "showProjectManager": true,
-        "defaultView": "my_projects",
-        "hideViews": [
-          "projects_access"
+        "defaultVertical": "my_projects",
+        "hideVerticals": [],
+        "quickLaunchMenu": [
+          {
+            "order": 10,
+            "text": "Prosjektstatus",
+            "relativeUrl": "/SitePages/Prosjektstatus.aspx"
+          },
+          {
+            "order": 20,
+            "text": "Dokumentbibliotek",
+            "relativeUrl": "/Delte%20dokumenter"
+          },
+          {
+            "order": 30,
+            "text": "Fasesjekkliste",
+            "relativeUrl": "/Lists/Fasesjekkliste"
+          },
+          {
+            "order": 40,
+            "text": "Oppgaver",
+            "relativeUrl": "/SitePages/Oppgaver.aspx"
+          }
         ]
       }
     }

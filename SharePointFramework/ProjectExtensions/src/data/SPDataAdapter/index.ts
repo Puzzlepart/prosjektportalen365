@@ -1,11 +1,11 @@
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base'
 import { ListViewCommandSetContext } from '@microsoft/sp-listview-extensibility'
-import { SPFolder } from 'models'
-import { TemplateItem } from 'models/TemplateItem'
-import { SPDataAdapterBase } from 'pp365-shared/lib/data'
-import { ProjectDataService } from 'pp365-shared/lib/services'
 import * as strings from 'ProjectExtensionsStrings'
-import * as validFilename from 'valid-filename'
+import { TemplateItem } from 'models/TemplateItem'
+import { SPFolder } from 'pp365-shared-library'
+import { DefaultCaching, SPDataAdapterBase } from 'pp365-shared-library/lib/data'
+import { IProjectDataServiceParams, ProjectDataService } from 'pp365-shared-library/lib/services'
+import validFilename from 'valid-filename'
 import { ISPDataAdapterConfiguration } from './ISPDataAdapterConfiguration'
 
 class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
@@ -22,18 +22,16 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
     settings: ISPDataAdapterConfiguration
   ) {
     await super.configure(spfxContext, settings)
-    this.project = new ProjectDataService(
-      {
-        ...this.settings,
-        entityService: this.entityService,
-        propertiesListName: strings.ProjectPropertiesListName
-      },
-      this.spConfiguration
-    )
+    this.project = new ProjectDataService({
+      ...this.settings,
+      spfxContext,
+      entityService: this.entityService,
+      propertiesListName: strings.ProjectPropertiesListName
+    } as IProjectDataServiceParams)
   }
 
   /**
-   * Checks if the filename is valid
+   * Checks if the filename `name` is valid for the specified folder `folderServerRelativeUrl`.
    *
    * @param folderServerRelativeUrl Folder server relative URL
    * @param name File name
@@ -41,9 +39,8 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public async isFilenameValid(folderServerRelativeUrl: string, name: string): Promise<string> {
     if (!validFilename(name)) return strings.FilenameInValidErrorText
     const [file] = await this.sp.web
-      .getFolderByServerRelativeUrl(folderServerRelativeUrl)
-      .files.filter(`Name eq '${name}'`)
-      .get()
+      .getFolderByServerRelativePath(folderServerRelativeUrl)
+      .files.filter(`Name eq '${name}'`)()
     if (file) {
       return strings.FilenameAlreadyInUseErrorText
     }
@@ -57,7 +54,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
    * @param viewXml View XML (CAML query)
    */
   public async getDocumentTemplates(libraryName: string, viewXml: string) {
-    return await this.portal.getItems(
+    return await this.portalDataService.getItems(
       libraryName,
       TemplateItem,
       {
@@ -75,8 +72,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
   public async getFolders(folderRelativeUrl: string): Promise<any[]> {
     const folders = await this.sp.web
       .getFolderByServerRelativePath(folderRelativeUrl)
-      .folders.usingCaching()
-      .get()
+      .folders.using(DefaultCaching)()
     return folders.map((f) => new SPFolder(f)).filter((f) => !f.isSystemFolder)
   }
 
@@ -96,8 +92,7 @@ class SPDataAdapter extends SPDataAdapterBase<ISPDataAdapterConfiguration> {
           "ListItemEntityTypeFullName ne 'SP.Data.FormServerTemplatesItem'"
         ].join(' and ')
       )
-      .usingCaching()
-      .get()
+      .using(DefaultCaching)()
     return libraries.map((lib) => new SPFolder(lib))
   }
 }

@@ -26,17 +26,18 @@
         }
       ]
     },
-    "help-content-application-customizer": {
+    "risk-action-field-customizer": {
       "components": [
         {
-          "entrypoint": "./lib/helpContent/index.js",
-          "manifest": "./src/helpContent/manifest.json"
+          "entrypoint": "./lib/riskAction/index.js",
+          "manifest": "./src/riskAction/manifest.json"
         }
       ]
     }
   },
   "externals": {},
   "localizedResources": {
-    "ProjectExtensionsStrings": "lib/loc/{locale}.js"
+    "ProjectExtensionsStrings": "lib/loc/{locale}.js",
+    "SharedLibraryStrings": "node_modules/pp365-shared-library/lib/loc/{locale}.js"
   }
 }

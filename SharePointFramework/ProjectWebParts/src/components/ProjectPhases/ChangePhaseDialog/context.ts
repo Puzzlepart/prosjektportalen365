@@ -4,12 +4,12 @@ import { IChangePhaseDialogState } from './types'
 
 export interface IChangePhaseDialogContext {
   /**
-   * State
+   * State of `ChangePhaseDialog`
    */
   state: IChangePhaseDialogState
 
   /**
-   * Dispatches an action for ChangePhaseDialog
+   * Dispatches an action for `ChangePhaseDialog`
    */
   dispatch: React.Dispatch<AnyAction>
 

@@ -1,11 +1,10 @@
 /* eslint-disable prefer-spread */
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import _ from 'lodash'
-import { IUserMessageProps } from 'pp365-shared/lib/components/UserMessage/types'
-import { SectionModel, StatusReport } from 'pp365-shared/lib/models'
-import { getUrlParam } from 'pp365-shared/lib/util'
-import { IProjectStatusState } from './types'
-import { FetchDataResult } from './useProjectStatusDataFetch'
+import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage/types'
+import { SectionModel, StatusReport } from 'pp365-shared-library/lib/models'
+import { getUrlParam } from 'pp365-shared-library/lib/util'
+import { FetchDataResult, IProjectStatusState } from './types'
 
 /**
  * `INIT_DATA`: Dispatched by `useProjectStatusDataFetch` when data is loaded
@@ -22,14 +21,14 @@ export const REPORT_PUBLISHING = createAction('REPORT_PUBLISHING')
  */
 export const REPORT_PUBLISHED = createAction<{
   updatedReport: StatusReport
-  message: Pick<IUserMessageProps, 'text' | 'type'>
+  message: Pick<IUserMessageProps, 'text' | 'intent'>
 }>('REPORT_PUBLISHED')
 
 /**
  * `REPORT_PUBLISH_ERROR`: Dispatched by `usePublishReport` when a report fails to publish.
  */
 export const REPORT_PUBLISH_ERROR = createAction<{
-  message: Pick<IUserMessageProps, 'text' | 'type'>
+  message: Pick<IUserMessageProps, 'text' | 'intent'>
 }>('REPORT_PUBLISH_ERROR')
 
 /**
@@ -59,17 +58,38 @@ export const PERSIST_SECTION_DATA = createAction<{ section: SectionModel; data: 
  */
 export const CLEAR_USER_MESSAGE = createAction('CLEAR_USER_MESSAGE')
 
+/**
+ * `OPEN_PANEL`: Dispatched anywhere to open the panel. The payload is the panel key.
+ */
+export const OPEN_PANEL = createAction<IProjectStatusState['activePanel']>('OPEN_PANEL')
+
+/**
+ * `CLOSE_PANEL`: Dispatched anywhere to close the panel. No payload needed for this action
+ * as there's only one panel active at a time.
+ */
+export const CLOSE_PANEL = createAction('CLOSE_PANEL')
+
+/**
+ * The initial state for the project status reducer.
+ */
 export const initialState: IProjectStatusState = {
-  isDataLoaded: false,
-  selectedReport: new StatusReport({}),
   data: {
     reports: [],
     sections: Array.apply(null, Array(6)).map(() => new SectionModel({ ContentTypeId: '' })),
-    columnConfig: []
+    columnConfig: [],
+    reportFields: []
   },
   persistedSectionData: {}
 }
 
+/**
+ * Creates a reducer for the project status component.
+ *
+ * @param state - The current state of the project status.
+ * @param action - The action to be performed on the project status.
+ *
+ * @returns The new state of the project status.
+ */
 const createProjectStatusReducer = createReducer(initialState, {
   [INIT_DATA.type]: (state: IProjectStatusState, { payload }: ReturnType<typeof INIT_DATA>) => {
     state.sourceUrl = payload.sourceUrl
@@ -135,6 +155,12 @@ const createProjectStatusReducer = createReducer(initialState, {
   },
   [CLEAR_USER_MESSAGE.type]: (state: IProjectStatusState) => {
     state.userMessage = null
+  },
+  [OPEN_PANEL.type]: (state: IProjectStatusState, { payload }: ReturnType<typeof OPEN_PANEL>) => {
+    state.activePanel = payload
+  },
+  [CLOSE_PANEL.type]: (state: IProjectStatusState) => {
+    state.activePanel = null
   }
 })
 

@@ -3,7 +3,7 @@
   "id": "e58e3d32-057a-4418-97ce-172b92482ba2",
   "alias": "PortfolioOverviewWebPart",
   "componentType": "WebPart",
-  "version": "1.8.4",
+  "version": "1.9.0",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "hiddenFromToolbox": true,

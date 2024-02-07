@@ -1,0 +1,12 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/command-line.schema.json",
+    "commands": [
+      {
+        "commandKind": "bulk",
+        "name": "lint",
+        "summary": "Runs eslint on all projects.",
+        "description": "Runs eslint on all projects in the repo. Uses the eslint configuration from the project's package.json.",
+        "enableParallelism": true
+      }
+    ]
+  }

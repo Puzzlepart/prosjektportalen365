@@ -2,29 +2,42 @@ import { IBaseComponentProps } from '../types'
 
 export interface ILatestProjectsProps extends IBaseComponentProps {
   /**
-   * Loading text
-   */
-  loadingText: string
-
-  /**
-   * Empty message
-   */
-  emptyMessage: string
-
-  /**
-   * Number of items to show
+   * Number of projects to show
    */
   rowLimit: number
+
+  /**
+   * Min number of projects to show
+   */
+  minRowLimit?: number
+
+  /**
+   * Max number of projects to show
+   */
+  maxRowLimit: number
+
+  /**
+   * Show project logo for each project
+   */
+  showProjectLogo?: boolean
 }
 
+/**
+ * Represents the state of the LatestProjects component.
+ */
 export interface ILatestProjectsState {
   /**
-   * Whether the component is loading
+   * An array of project objects.
+   */
+  projects: any[]
+
+  /**
+   * A boolean indicating whether the component is currently loading data.
    */
   loading: boolean
 
   /**
-   * Projects
+   * A boolean indicating whether to display all projects or just a subset (`props.rowLimit`)
    */
-  projects: any[]
+  viewAll: boolean
 }

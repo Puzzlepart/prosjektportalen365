@@ -14,13 +14,12 @@
     "outDir": "lib",
     "inlineSources": false,
     "strictNullChecks": false,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules/@microsoft"
     ],
     "types": [
-      "es6-promise",
       "webpack-env"
     ],
     "lib": [

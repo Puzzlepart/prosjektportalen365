@@ -13,6 +13,7 @@
             </Query>
             <ViewFields>
                 <FieldRef Name="GtSortOrder" />
+                <FieldRef Name="GtHelpContentLevel" />
                 <FieldRef Name="LinkTitle" />
                 <FieldRef Name="GtIconName" />
                 <FieldRef Name="GtURL" />
@@ -25,10 +26,11 @@
             <CustomFormatter />
         </View>
     </pnp:Views>
-    <pnp:DataRows UpdateBehavior="Skip" KeyColumn="Title">
+    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Porteføljenivå Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Portefølje</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">SitePages/Home.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -38,6 +40,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">20</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Porteføljeoversikt Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Portefølje</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">SitePages/Porteføljeoversikt.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -47,6 +50,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">30</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Porteføljeinnsikt Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Portefølje</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">SitePages/Porteføljeinnsikt.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -56,6 +60,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">40</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Gevinstoversikt Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Portefølje</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">SitePages/Gevinstoversikt.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -65,6 +70,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">50</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Erfaringslogg </pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Portefølje</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">SitePages/Erfaringslogg.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -74,6 +80,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">60</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Leveranseoversikt Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Portefølje</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">SitePages/Leveranseoversikt.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -83,6 +90,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">70</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Usikkerhetsoversikt Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Portefølje</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">SitePages/Usikkerhetsoversikt.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -92,6 +100,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Ressursallokering Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Portefølje</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">SitePages/Ressursallokering.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -101,15 +110,17 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">90</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Tidslinje Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Portefølje</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">SitePages/Prosjekttidslinje.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL"></pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/3%20Portefolje/3.85%20Prosjekttidslinje.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prosjektområdet Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">SitePages/ProjectHome.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -119,15 +130,17 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">110</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prosjektegenskaper og fasesetting Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">SitePages/ProjectHome.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.2%20Prosjektegenskaper%20og%20fasesetting.md</pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/4.2%20Prosjektinformasjon%20og%20fasesetting.md</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prosjektstatus Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">SitePages/Prosjektstatus.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -137,6 +150,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prosjektlogg Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">Lists/Prosjektlogg/AllItems.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -146,6 +160,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">140</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Interessentregister Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">Lists/Interessentregister/AllItems.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -155,6 +170,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">150</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Kommunikasjonsplan Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">Lists/Kommunikasjonsplan/AllItems.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -164,6 +180,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">160</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Usikkerhet Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">Usikkerhet/AllItems.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -173,6 +190,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">170</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Dokumenter Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">Delte%20dokumenter/Forms/AllItems.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -182,6 +200,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">180</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Oppgaver Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">SitePages/Oppgaver.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -191,6 +210,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">190</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Fasesjekkliste Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">Lists/Fasesjekkliste/AllItems.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -200,6 +220,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">200</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Endringsanalyse Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">Lists/Endringsanalyse/AllItems.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -209,6 +230,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">210</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Gevinstananlyse og gevinstrealiseringsblan Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">Lists/Gevinstanalyse%20og%20gevinstrealiseringsplan/AllItems.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -218,6 +240,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Måleindikatorer Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">Lists/Mleindikatorer/AllItems.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -227,6 +250,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">220</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Gevinstoppfølging Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">Lists/Gevinstoppflging/AllItems.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -236,6 +260,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">230</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Gevinstoversikt Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">SitePages/Gevinstoversikt.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -245,6 +270,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">240</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prosjektleveranser Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">Lists/Prosjektleveranser/AllItems.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -254,6 +280,7 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">250</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Ressursallokering (Prosjekt) Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">Lists/Ressursallokering/AllItems.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
@@ -263,11 +290,12 @@
         <pnp:DataRow>
             <pnp:DataValue FieldName="GtSortOrder">260</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prosjekttidslinje Brukermanual</pnp:DataValue>
+            <pnp:DataValue FieldName="GtHelpContentLevel">Prosjekt;#Overordnet/Program</pnp:DataValue>
             <pnp:DataValue FieldName="GtIconName" />
             <pnp:DataValue FieldName="GtURL">SitePages/Prosjekttidslinje.aspx</pnp:DataValue>
             <pnp:DataValue FieldName="GtTextContent" />
             <pnp:DataValue FieldName="GtResourceLink" />
-            <pnp:DataValue FieldName="GtExternalURL"></pnp:DataValue>
+            <pnp:DataValue FieldName="GtExternalURL">https://raw.githubusercontent.com/Puzzlepart/prosjektportalen-manual/master/Brukermanual/4%20Prosjekt/Prosjekttidslinje.md</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />

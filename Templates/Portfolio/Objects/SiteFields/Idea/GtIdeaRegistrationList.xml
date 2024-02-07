@@ -1,0 +1,1 @@
+<Field Type="Text" DisplayName="{resource:SiteFields_GtIdeaRegistrationList_DisplayName}" Description="{resource:SiteFields_GtIdeaRegistrationList_Description}" Group="{resource:SiteFields_Idea_Group}" ID="{aed8b1a9-d0cb-454d-beb8-e18ad9672afa}" StaticName="GtIdeaRegistrationList" Name="GtIdeaRegistrationList" />

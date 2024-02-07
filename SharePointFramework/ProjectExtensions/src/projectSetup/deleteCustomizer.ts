@@ -1,25 +1,20 @@
 import { Logger, LogLevel } from '@pnp/logging'
-import { Web } from '@pnp/sp'
+import { IWeb } from '@pnp/sp/webs'
+import ProjectSetup from 'projectSetup'
 
 /**
- * Delete customizer by componentId
+ * Delete customizer for the specified project setup instance.
  *
- * @param webAbsoluteUrl Web absolute URL
- * @param componentId Component ID
- * @param reload Reload page after customizer removal
+ * @param instance Project setup instance
  */
-export async function deleteCustomizer(
-  webAbsoluteUrl: string,
-  componentId: string,
-  reload: boolean
-): Promise<void> {
-  const web = new Web(webAbsoluteUrl)
-  const customActions = await web.userCustomActions.get<
+export async function deleteCustomizer(instance: ProjectSetup): Promise<void> {
+  const web = instance.sp.web as IWeb
+  const customActions = await web.userCustomActions<
     { Id: string; ClientSideComponentId: string }[]
   >()
   for (let i = 0; i < customActions.length; i++) {
     const customAction = customActions[i]
-    if (customAction.ClientSideComponentId === componentId) {
+    if (customAction.ClientSideComponentId === instance.componentId) {
       Logger.log({
         message: `(ProjectSetup) [_deleteCustomizer]: Deleting custom action ${customAction.Id}`,
         level: LogLevel.Info
@@ -27,8 +22,5 @@ export async function deleteCustomizer(
       await web.userCustomActions.getById(customAction.Id).delete()
       break
     }
-  }
-  if (reload) {
-    window.location.href = window.location.href
   }
 }

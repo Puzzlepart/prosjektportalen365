@@ -1,26 +1,29 @@
 import { Panel, PanelType } from '@fluentui/react'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect } from 'react'
+import { useBoolean } from 'usehooks-ts'
 import { ProjectInformation } from '../ProjectInformation'
 import { IProjectInformationPanelProps } from './types'
+import styles from './ProjectInformationPanel.module.scss'
 
 export const ProjectInformationPanel: FC<IProjectInformationPanelProps> = (props) => {
-  const [showPanel, setShowPanel] = useState(!props.hidden)
+  const panelState = useBoolean(!props.hidden)
 
   useEffect(() => {
-    if (!props.onRenderToggleElement) setShowPanel(!props.hidden)
+    if (!props.onRenderToggleElement) panelState.setValue(!props.hidden)
   }, [props.hidden])
 
   return (
     <>
       {props.children}
-      {props.onRenderToggleElement && props.onRenderToggleElement(() => setShowPanel(!showPanel))}
+      {props.onRenderToggleElement && props.onRenderToggleElement(panelState.toggle)}
       <Panel
-        isOpen={showPanel}
+        isOpen={panelState.value}
         type={PanelType.medium}
-        onDismiss={() => setShowPanel(false)}
         isLightDismiss={true}
-        {...props.panelProps}>
-        <ProjectInformation key={props.webUrl} {...props} />
+        onDismiss={panelState.setFalse}
+        {...props.panelProps}
+      >
+        <ProjectInformation {...props} className={styles.projectInformation} />
       </Panel>
     </>
   )

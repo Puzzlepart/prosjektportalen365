@@ -1,0 +1,84 @@
+<pnp:ListInstance Title="{resource:Lists_IdeaProcessing_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_IdeaProcessing_Url}" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false"
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+    <pnp:ContentTypeBindings>
+        <pnp:ContentTypeBinding ContentTypeID="0x01000E7513A76B934F449CDB9B25FC172F44" Default="true" />
+    </pnp:ContentTypeBindings>
+    <pnp:Views RemoveExistingViews="true">
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_IdeaProcessing_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+            <Query>
+                <OrderBy>
+                    <FieldRef Name="Modified" />
+                </OrderBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtIdeaUrl" />
+                <FieldRef Name="GtRegistratedIdea" />
+                <FieldRef Name="GtIdeaProjectData"/>
+                <FieldRef Name="GtIdeaReporter" />
+                <FieldRef Name="GtIdeaOwner"/>
+                <FieldRef Name="GtIdeaSolutionDescription" />
+                <FieldRef Name="GtIdeaExpectedGain" />
+                <FieldRef Name="GtIdeaExecutionPlanApproach" />
+                <FieldRef Name="GtIdeaExecutionResourceNeeds" />
+                <FieldRef Name="GtIdeaExecutionSuccessFactors" />
+                <FieldRef Name="GtIdeaReference" />
+                <FieldRef Name="GtIdeaOtherComments" />
+                <FieldRef Name="GtIdeaDecisionComment" />
+                <FieldRef Name="GtIdeaDecision" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">100</RowLimit>
+            <Aggregations Value="Off" />
+            <JSLink>hierarchytaskslist.js</JSLink>
+        </View>
+        <View Type="HTML" DisplayName="{resource:View_Cards_DisplayName}" Url="{site}/{resource:Lists_IdeaProcessing_Url}/{resource:View_Cards_DisplayName}.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+            <Query>
+                <GroupBy Collapse="TRUE" GroupLimit="30">
+                    <FieldRef Name="GtIdeaPriority" />
+                </GroupBy>
+                <OrderBy>
+                    <FieldRef Name="GtIdeaScore" Ascending="FALSE" />
+                </OrderBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtIdeaStrategicValue" />
+                <FieldRef Name="GtIdeaStrategicNumber" />
+                <FieldRef Name="GtIdeaQualityBenefit" />
+                <FieldRef Name="GtIdeaQualityNumber" />
+                <FieldRef Name="GtIdeaEconomicBenefit" />
+                <FieldRef Name="GtIdeaEconomicNumber" />
+                <FieldRef Name="GtIdeaOperationalNeed" />
+                <FieldRef Name="GtIdeaOperationalNumber" />
+                <FieldRef Name="GtIdeaRisk" />
+                <FieldRef Name="GtIdeaRiskNumber" />
+                <FieldRef Name="GtIdeaManualScore" />
+                <FieldRef Name="GtIdeaManualComment" />
+                <FieldRef Name="GtIdeaScore" />
+                <FieldRef Name="GtIdeaPriority" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">30</RowLimit>
+            <Aggregations Value="Off" />
+            <JSLink>clienttemplates.js</JSLink>
+            <CustomFormatter><![CDATA[{"tileProps":{"$schema":"https://developer.microsoft.com/json-schemas/sp/v2/tile-formatting.schema.json","width":250,"height":325,"hideSelection":false,"fillHorizontally":true,"groupProps":{"headerFormatter":{"elmType":"div","children":[{"elmType":"div","style":{"flex-wrap":"wrap","display":"flex","box-sizing":"border-box","padding":"4px 8px 5px 8px","border-radius":"6px","align-items":"center","white-space":"nowrap","overflow":"hidden","margin":"1px 4px 4px 1px","width":"100%"},"attributes":{"class":"=if(@group.fieldData == ' Må ha', 'sp-css-backgroundColor-successBackground50',if(@group.fieldData == ' Bør ha', 'sp-css-backgroundColor-blueBackground37',if(@group.fieldData == ' Kan ha', 'sp-css-backgroundColor-warningBackground50',if(@group.fieldData == ' Skal ikke ha', 'sp-css-backgroundColor-blockingBackground50','ms-bgColor-gray30')))"},"children":[{"elmType":"div","children":[{"elmType":"span","style":{"padding":"5px 1px 5px 5px","font-weight":"500"},"txtContent":{"operator":"+","operands":["","@group.fieldData.displayValue"]}}]},{"elmType":"div","children":[{"elmType":"div","style":{"display":"flex","flex-direction":"row","justify-content":"center"},"children":[{"elmType":"div","txtContent":"=': ' + @group.count + if(@group.count > '1', ' Prosjekter', ' Prosjekt')","style":{"font-weight":"500"}}]}]}]}]}},"formatter":{"elmType":"div","attributes":{"class":"sp-card-container"},"children":[{"elmType":"div","attributes":{"class":"ms-bgColor-white sp-css-borderColor-neutralLight sp-card-borderHighlight sp-card-subContainer"},"children":[{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer"},"children":[{"elmType":"p","attributes":{"class":"ms-fontColor-neutralSecondary sp-card-label"},"txtContent":"[!Title.DisplayName]"},{"elmType":"p","attributes":{"title":"[$Title]","class":"ms-fontColor-neutralPrimary sp-card-content sp-card-highlightedContent"},"txtContent":"=if ([$Title] == '', '–', [$Title])"}]},{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer"},"children":[{"elmType":"p","attributes":{"class":"ms-fontColor-neutralSecondary sp-card-label, ms-fontSize-14","title":"=if ([$GtIdeaStrategicValue] == '', '–', [$GtIdeaStrategicValue])"},"txtContent":"=if ([$GtIdeaStrategicValue] == '', '[!GtIdeaStrategicValue.DisplayName]', '[!GtIdeaStrategicValue.DisplayName]' + ': ' + '[$GtIdeaStrategicNumber]'"}]},{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer"},"children":[{"elmType":"p","attributes":{"class":"ms-fontColor-neutralSecondary sp-card-label, ms-fontSize-14","title":"=if ([$GtIdeaQualityBenefit] == '', '–', [$GtIdeaQualityBenefit])"},"txtContent":"=if ([$GtIdeaQualityBenefit] == '', '[!GtIdeaQualityBenefit.DisplayName]', '[!GtIdeaQualityBenefit.DisplayName]' + ': ' + '[$GtIdeaQualityNumber]'"}]},{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer"},"children":[{"elmType":"p","attributes":{"class":"ms-fontColor-neutralSecondary sp-card-label, ms-fontSize-14","title":"=if ([$GtIdeaEconomicBenefit] == '', '–', [$GtIdeaEconomicBenefit])"},"txtContent":"=if ([$GtIdeaEconomicBenefit] == '', '[!GtIdeaEconomicBenefit.DisplayName]', '[!GtIdeaEconomicBenefit.DisplayName]' + ': ' + '[$GtIdeaEconomicNumber]'"}]},{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer","title":"=if ([$GtIdeaOperationalNeed] == '', '–', [$GtIdeaOperationalNeed])"},"children":[{"elmType":"p","attributes":{"class":"ms-fontColor-neutralSecondary sp-card-label, ms-fontSize-14"},"txtContent":"=if ([$GtIdeaOperationalNeed] == '', '[!GtIdeaOperationalNeed.DisplayName]', '[!GtIdeaOperationalNeed.DisplayName]' + ': ' + '[$GtIdeaOperationalNumber]'"}]},{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer","title":"=if ([$GtIdeaRisk] == '', '–', [$GtIdeaRisk])"},"children":[{"elmType":"p","attributes":{"class":"ms-fontColor-neutralSecondary sp-card-label, ms-fontSize-14"},"txtContent":"=if ([$GtIdeaRisk] == '', '[!GtIdeaRisk.DisplayName]', '[!GtIdeaRisk.DisplayName]' + ': ' + '[$GtIdeaRiskNumber]'"}]},{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer"},"children":[{"elmType":"p","attributes":{"class":"ms-fontColor-neutralSecondary sp-card-label, ms-fontSize-14"},"txtContent":"[!GtIdeaScore.DisplayName]"},{"elmType":"p","attributes":{"title":"=if ([$GtIdeaScore.displayValue] == '', '–', [$GtIdeaScore.displayValue])","class":"ms-fontColor-neutralPrimary sp-card-content, ms-fontSize-24 "},"style":{"border-bottom":"1px solid grey ","padding-bottom":"8px"},"txtContent":"=if ([$GtIdeaScore.displayValue] == '', '–', [$GtIdeaScore.displayValue])"}]},{"elmType":"div","style":{"display":"=if([$GtIdeaManualScore.displayValue] == '0', 'none', 'flex')","flex-direction":"row","flex-wrap":"nowrap","justify content":"center"},"children":[{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer"},"children":[{"elmType":"p","attributes":{"class":"ms-fontColor-neutralSecondary sp-card-label"},"txtContent":"[!GtIdeaManualScore.DisplayName]"},{"elmType":"p","attributes":{"title":"=if ([$GtIdeaScore.displayValue] == '', '–', [$GtIdeaScore.displayValue])","class":"ms-fontColor-neutralPrimary sp-card-content "},"txtContent":"=if ([$GtIdeaManualScore.displayValue] == '', '–', [$GtIdeaManualScore.displayValue])"}]},{"elmType":"div","attributes":{"class":"sp-card-displayColumnContainer"},"children":[{"elmType":"p","attributes":{"class":"ms-fontColor-neutralSecondary sp-card-label"},"txtContent":"Kommentar til justering"},{"elmType":"p","attributes":{"class":"ms-fontColor-neutralPrimary sp-card-content "},"style":{"overflow":"visible","white-space":"pre-wrap"},"txtContent":"[$GtIdeaManualComment.displayValue]"}]}]}]}]}}}]]></CustomFormatter>
+            <ViewType2>TILES</ViewType2>
+            <ViewData />
+        </View>
+    </pnp:Views>
+    <pnp:FieldRefs>
+        <pnp:FieldRef ID="d0f5911c-85bc-4403-a9c4-9ed943298164" Name="GtIdeaStrategicValue" DisplayName="Strategisk verdi" />
+        <pnp:FieldRef ID="d8a940ba-d7ce-413a-ba26-2140f09a8c58" Name="GtIdeaStrategicNumber" DisplayName="Strategisk verdi (tall)" />
+        <pnp:FieldRef ID="76eb1411-4a09-4b0d-bfe2-6ecd7e7c1e75" Name="GtIdeaQualityBenefit" DisplayName="Kvalitativ gevinst" />
+        <pnp:FieldRef ID="201dba9f-b85e-475c-8b7c-603b2cbe886c" Name="GtIdeaQualityNumber" DisplayName="Kvalitativ gevinst (tall)" />
+        <pnp:FieldRef ID="37b7f04e-b158-49eb-96f3-637ce1292e75" Name="GtIdeaEconomicBenefit" DisplayName="Økonomisk gevinst" />
+        <pnp:FieldRef ID="d04ec769-0834-467b-84bf-bba219819ff2" Name="GtIdeaEconomicNumber" DisplayName="Økonomisk gevinst (tall)" />
+        <pnp:FieldRef ID="d3dcbabd-2df6-4338-864d-33417f8220aa" Name="GtIdeaOperationalNeed" DisplayName="Operasjonelt behov/lovpålagt" />
+        <pnp:FieldRef ID="28585ae1-e205-49a9-865e-00cb2c860fe0" Name="GtIdeaOperationalNumber" DisplayName="Operasjonelt behov/lovpålagt (tall)" />
+        <pnp:FieldRef ID="cca3f2fd-5684-43e1-9fb5-acf05592b1f6" Name="GtIdeaRisk" DisplayName="Risiko" />
+        <pnp:FieldRef ID="9f7444b0-2f69-4ad0-a347-2d85cedddebb" Name="GtIdeaRiskNumber" DisplayName="Risiko (tall)" />
+        <pnp:FieldRef ID="15915e21-3ba3-4a39-8bf3-690b1cb044b5" Name="GtIdeaManualScore" DisplayName="Justering" />
+        <pnp:FieldRef ID="9b7cf4f7-641d-4a7f-be6a-245237dce476" Name="GtIdeaManualComment" DisplayName="Kommentar til justering" />
+        <pnp:FieldRef ID="ce451f2c-a098-48ba-a8a5-d1d4ffc225d6" Name="GtIdeaScore" DisplayName="Score" />
+        <pnp:FieldRef ID="8fef6c38-28e1-497a-97d7-72e1a854fae1" Name="GtIdeaPriority" DisplayName="Prioritering" />
+    </pnp:FieldRefs>
+</pnp:ListInstance>

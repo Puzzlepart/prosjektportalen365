@@ -1,0 +1,22 @@
+.root {
+  width: 850px !important;
+  max-width: 850px !important;
+
+  .content {
+    min-height: 450px;
+  }
+
+  .actions {
+    margin: 5px 0 0 0;
+  }
+
+  .projectIdeaMessage {
+    margin: 0 0 10px 0;
+  }
+}
+
+// Hide some default SharePoint elements
+div[class*="webTemplatesGalleryFirstRunDialogModal"],
+div[class*="ms-tipsntricks-panel"] {
+  display: none !important;
+}

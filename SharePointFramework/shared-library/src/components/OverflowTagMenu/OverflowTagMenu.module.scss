@@ -1,0 +1,24 @@
+.menuItem {
+  cursor: default !important;
+  padding: var(--spacingVerticalSNudge) var(--spacingHorizontalXS);
+}
+
+div > .menuItem {
+  cursor: default !important;
+}
+
+.tags {
+  height: 24px;
+
+  .tagGroup {
+    display: flex;
+  }
+}
+
+.tag {
+  cursor: default !important;
+
+  button {
+    cursor: default !important;
+  }
+}

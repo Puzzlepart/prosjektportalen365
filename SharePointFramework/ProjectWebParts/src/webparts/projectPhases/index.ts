@@ -7,28 +7,25 @@ import {
 } from '@microsoft/sp-property-pane'
 import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
 import { PropertyFieldToggleWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldToggleWithCallout'
-import '@pnp/polyfill-ie11'
-import { sp } from '@pnp/sp'
 import React from 'react'
 import { IProjectPhasesProps, ProjectPhases } from 'components/ProjectPhases'
 import '@fluentui/react/dist/css/fabric.min.css'
 import * as strings from 'ProjectWebPartsStrings'
-import { BaseProjectWebPart } from 'webparts/@baseProjectWebPart'
+import { BaseProjectWebPart } from '../baseProjectWebPart'
 
 export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPhasesProps> {
   private _fields: { Title: string; InternalName: string }[] = []
 
   public async onInit() {
     await super.onInit()
-    this._fields = await sp.web.fields
+    this._fields = await this.sp.web.fields
       // eslint-disable-next-line quotes
       .filter("TypeAsString eq 'TaxonomyFieldType'")
-      .select('Title', 'InternalName')
-      .get()
+      .select('Title', 'InternalName')()
   }
 
   public render(): void {
-    this.renderComponent(ProjectPhases, { webPartContext: this.context })
+    this.renderComponent(ProjectPhases)
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -47,11 +44,17 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
                 }),
                 PropertyPaneSlider('subTextTruncateLength', {
                   label: strings.SubTextTruncateLengthFieldLabel,
-                  min: 20,
-                  max: 100,
+                  min: 10,
+                  max: 50,
                   step: 2,
                   showValue: true,
                   disabled: !this.properties.showSubText
+                }),
+                PropertyPaneToggle('useStartArrow', {
+                  label: strings.PhaseUseStartArrowLabel
+                }),
+                PropertyPaneToggle('useEndArrow', {
+                  label: strings.PhaseUseEndArrowLabel
                 }),
                 PropertyPaneDropdown('phaseField', {
                   label: strings.PhaseFieldFieldLabel,

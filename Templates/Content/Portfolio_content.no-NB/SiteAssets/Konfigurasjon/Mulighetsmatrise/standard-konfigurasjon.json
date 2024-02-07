@@ -1,0 +1,207 @@
+[
+    [
+        {
+            "cellType": 0
+        },
+        {
+            "cellValue": "Veldig liten",
+            "cellType": 0
+        },
+        {
+            "cellValue": "Liten",
+            "cellType": 0
+        },
+        {
+            "cellValue": "Middels",
+            "cellType": 0
+        },
+        {
+            "cellValue": "Stor",
+            "cellType": 0
+        },
+        {
+            "cellValue": "Veldig stor",
+            "cellType": 0
+        }
+    ],
+    [
+        {
+            "cellValue": "Svært høy",
+            "cellType": 0
+        },
+        {
+            "cellType": 1,
+            "x": 1,
+            "y": 5,
+            "backgroundColor": "#7ABD7E"
+        },
+        {
+            "cellType": 1,
+            "x": 2,
+            "y": 5,
+            "backgroundColor": "#7ABD7E"
+        },
+        {
+            "cellType": 1,
+            "x": 3,
+            "y": 5,
+            "backgroundColor": "#009756"
+        },
+        {
+            "cellType": 1,
+            "x": 4,
+            "y": 5,
+            "backgroundColor": "#009756"
+        },
+        {
+            "cellType": 1,
+            "x": 5,
+            "y": 5,
+            "backgroundColor": "#009756"
+        }
+    ],
+    [
+        {
+            "cellValue": "Høy",
+            "cellType": 0
+        },
+        {
+            "cellType": 1,
+            "x": 1,
+            "y": 4,
+            "backgroundColor": "#A0DAA1"
+        },
+        {
+            "cellType": 1,
+            "x": 2,
+            "y": 4,
+            "backgroundColor": "#7ABD7E"
+        },
+        {
+            "cellType": 1,
+            "x": 3,
+            "y": 4,
+            "backgroundColor": "#7ABD7E"
+        },
+        {
+            "cellType": 1,
+            "x": 4,
+            "y": 4,
+            "backgroundColor": "#009756"
+        },
+        {
+            "cellType": 1,
+            "x": 5,
+            "y": 4,
+            "backgroundColor": "#009756"
+        }
+    ],
+    [
+        {
+            "cellValue": "Middels",
+            "cellType": 0
+        },
+        {
+            "cellType": 1,
+            "x": 1,
+            "y": 3,
+            "backgroundColor": "#F8D66D"
+        },
+        {
+            "cellType": 1,
+            "x": 2,
+            "y": 3,
+            "backgroundColor": "#A0DAA1"
+        },
+        {
+            "cellType": 1,
+            "x": 3,
+            "y": 3,
+            "backgroundColor": "#7ABD7E"
+        },
+        {
+            "cellType": 1,
+            "x": 4,
+            "y": 3,
+            "backgroundColor": "#7ABD7E"
+        },
+        {
+            "cellType": 1,
+            "x": 5,
+            "y": 3,
+            "backgroundColor": "#009756"
+        }
+    ],
+    [
+        {
+            "cellValue": "Lav",
+            "cellType": 0
+        },
+        {
+            "cellType": 1,
+            "x": 1,
+            "y": 2,
+            "backgroundColor": "#F8D66D"
+        },
+        {
+            "cellType": 1,
+            "x": 2,
+            "y": 2,
+            "backgroundColor": "#F8D66D"
+        },
+        {
+            "cellType": 1,
+            "x": 3,
+            "y": 2,
+            "backgroundColor": "#A0DAA1"
+        },
+        {
+            "cellType": 1,
+            "x": 4,
+            "y": 2,
+            "backgroundColor": "#7ABD7E"
+        },
+        {
+            "cellType": 1,
+            "x": 5,
+            "y": 2,
+            "backgroundColor": "#7ABD7E"
+        }
+    ],
+    [
+        {
+            "cellValue": "Svært lav",
+            "cellType": 0
+        },
+        {
+            "cellType": 1,
+            "x": 1,
+            "y": 1,
+            "backgroundColor": "#F8D66D"
+        },
+        {
+            "cellType": 1,
+            "x": 2,
+            "y": 1,
+            "backgroundColor": "#F8D66D"
+        },
+        {
+            "cellType": 1,
+            "x": 3,
+            "y": 1,
+            "backgroundColor": "#F8D66D"
+        },
+        {
+            "cellType": 1,
+            "x": 4,
+            "y": 1,
+            "backgroundColor": "#A0DAA1"
+        },
+        {
+            "cellType": 1,
+            "x": 5,
+            "y": 1,
+            "backgroundColor": "#7ABD7E"
+        }
+    ]
+]

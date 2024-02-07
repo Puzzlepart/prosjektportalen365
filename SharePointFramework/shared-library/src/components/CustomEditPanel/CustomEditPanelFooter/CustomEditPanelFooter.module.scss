@@ -1,0 +1,14 @@
+.customEditPanelFooter {
+  margin: 0;
+  padding: 12px 0;
+
+  .container {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+  }
+  
+  .errorContainer {
+    margin: 0 0 8px 0;
+  }
+}

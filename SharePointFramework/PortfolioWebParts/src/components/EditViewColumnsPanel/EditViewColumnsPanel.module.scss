@@ -1,0 +1,51 @@
+@import "~@fluentui/react/dist/sass/References.scss";
+
+.root {
+  position: inherit;
+
+  .columnItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 20px;
+    margin: 4px 0;
+    outline: 0;
+    padding: 6px;
+
+    &:hover {
+      background-color: var(--colorBrandBackground2);
+
+      .columnItemActions {
+        display: flex;
+      }
+    }
+
+    .columnItemActions {
+      display: none;
+      flex-direction: row;
+      left: 3px;
+      position: relative;
+      width: 64px;
+
+      .columnItemButton {
+        background: 0 0;
+        border: 0;
+        cursor: pointer;
+        font-size: 17px;
+        height: 32px;
+        line-height: 32px;
+        margin: 0;
+        outline: 0;
+        padding: 0;
+        width: 32px;
+      }
+    }
+  }
+
+  .panelActions {
+    display: block;
+    position: absolute;
+    left: 20px;
+  }
+}

@@ -1,12 +1,56 @@
-.root {
+.preview {
+  background-color: var(--colorNeutralBackground3);
+
+  div {
+    width: 216px;
+  }
+
+  .header {
+    z-index: 1;
+    height: 1.5em !important;
+    bottom: 0;
+
+    .link {
+      text-decoration: none !important;
+      color: inherit !important;
+
+      .projectTitle:hover {
+        filter: brightness(1.2);
+      }
+    }
+  }
+
+  .dynamicHeader {
+    z-index: 1;
+    height: 1.5em !important;
+    bottom: 0;
+
+    .link {
+      transition: all 0.3;
+      text-decoration: none !important;
+      color: inherit !important;
+
+      .projectTitle {
+        transition: all 0.5s;
+        filter: brightness(1.2);
+      }
+
+      .projectTitle:hover {
+        filter: brightness(1.4);
+      }
+    }
+  }
+
   .logo {
     width: 100%;
-    height: 175px;
+    height: 150px !important;
     background-color: rgb(248, 248, 248);
 
-    img {
+    .link {
       width: 100%;
       height: 100%;
+      overflow: hidden;
+      display: inline-block;
     }
   }
 }

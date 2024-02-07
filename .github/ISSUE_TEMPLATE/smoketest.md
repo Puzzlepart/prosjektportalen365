@@ -1,0 +1,329 @@
+# 🧪 Smoke test for X.X
+
+Vi tar for oss pakke for pakke og går gjennom komponent for komponent. Dette issuet angår en `fresh` installasjon av Prosjektportalen 365, se [Smoke test for oppgradert her](XXX).
+
+## ✅ Oppsummert status for X.X.X
+
+- PortfolioExtensions $1:
+- PortfolioWebParts $2:
+- ProgramWebParts $3:
+- ProjectExtension $4:
+- ProjectWebParts $5:
+- SharePoint sider $6:
+- Annet $7:
+
+## 📦 PortfolioExtensions $1
+
+- [ ] Idea Processing $1.1
+  - [ ] Liste $1.1.1
+    - [ ] Verifiser at 'Sett anbefaling' knapp dukker opp ved markering av listeelement $1.1.1.1
+    - [ ] Verifiser at 'Opprett prosjektdata' knapp dukker opp ved markering av listeelement $1.1.1.2
+    - [ ] Verifiser at du kommer til KUR siden $1.1.1.3
+  - [ ] Dialog $1.1.2
+    - [ ] Verifiser at de ulike handlingene fungerer som det skal $1.1.2.1
+- [ ] Idea Projectdata $1.2
+  - [ ] Dialog $1.2.1
+    - [ ] Verifiser at prosjektdata ble opprettet $1.2.1.1
+  - [ ] Når prosjektdata er opprettet, fyll ut metadata og angi en områdeadresse til et reelt prosjekt $1.2.2
+    - [ ] Verifiser at informasjon om prosjektdata funnet dukker opp i prosjektoppsett dialog $1.2.2.1
+    - [ ] Verifiser at prosjektdata følger med inn i prosjektinformasjon til prosjektet etter opprettelse $1.2.2.2
+- [ ] Idea Registration $1.3
+  - [ ] Liste $1.3.1
+    - [ ] Verifiser at 'Sett anbefaling' knapp dukker opp ved markering av listeelement $1.3.1.1
+    - [ ] Verifiser at 'Gå til idébehandling' knapp dukker opp 1.3.1.2
+  - [ ] Dialog $1.3.2
+    - [ ] Verifiser at de ulike handlingene fungerer som det skal $1.3.2.1
+    - [ ] Verifiser at godkjenning av idé fører til opprettelse av Idébehandling element $1.3.2.2
+    - [ ] Verifiser at godkjenning av idé oppretter KUR side som lenkes til på Idébehandling elementet  $1.3.2.3
+- [ ] Idé KUR sider $1.4
+  - [ ] Verifiser at KUR siden inneholder informasjonen fra Idéregistreringen $1.4.1
+- [ ] Footer $1.5
+  - [ ] Verifiser at Områdeinnstillinger er klikkbar og at man kommer til riktig side $1.5.1
+  - [ ] Verifiser at Konfigurasjon av Prosjektportalen er klikkbar og man kommer til riktig side $1.5.2
+  - [ ] Verifiser at Nyttige lenker vises likt som med listen for lenker $1.5.3
+    - [ ] Verifiser at admin lenker kun dukker opp for administratorer $1.5.3.1
+  - [ ] Verifiser at lenken til "Lenker" er klikkbar og tar deg til listen (tooltip) $1.5.4
+  - [ ] Verifiser at versjon med innhold vises og at innhold er klikkbart $1.5.5
+  - [ ] Verifiser at Hjelp tilgjengelig vises på sider hvor det er hjelpeinnhold $1.5.6
+  - [ ] Verifiser at Hjelp utilgjengelig vises på sider hvor det ikke finnes hjelpeinnhold $1.5.7
+  - [ ] Verifiser at Konfigurasjon av Prosjektportalen ikke vises med mindre du er admin $1.5.8
+  - [ ] Verifiser at som medlem så vises footeren $1.5.9
+- [ ] Help Content $1.6
+  - [ ] Verifiser at innhold for siden du er inne på vises riktig $1.6.1
+  - [ ] Verifiser at sider med fler enn ett innhold angitt vises som faner og kan navigeres $1.6.2
+  - [ ] Verifiser at innhold som har et annet nivå enn der du står ikke vises $1.6.3
+  - [ ] Verifiser at innhold som har et angitt nivå vises riktig $1.6.4
+
+## 📦 PortfolioWebParts $2
+
+- [ ] Latest Projects WebPart $2.1
+  - [ ] Verifiser at prosjektet listes opp $2.1.1
+  - [ ] Verifiser at Prosjektlogo kan slås av/på $2.1.2
+  - [ ] Verifiser at "Vis flere" fungerer $2.1.3
+  - [ ] Verifiser at justering av antall prosjekter å vise fungerer $2.1.4
+  - [ ] Verifiser at man kan trykke inn på prosjekter fra listen $2.1.5
+- [ ] Portfolio Aggregation WebPart $2.2
+  - [ ] List $2.2.1
+    - [ ] Verifiser at listen laster $2.2.1.1
+    - [ ] Verifiser at bytting av visning fungerer $2.2.1.2
+    - [ ] Verifiser at visnings-id legger seg i adressefeltet $2.2.1.3
+    - [ ] Verifiser at eksport til excel fungerer $2.2.1.4
+    - [ ] Verifiser at eksport til excel fungerer for valgte prosjekter $2.2.1.5
+    - [ ] Verifiser at filterpanel fungerer som det skal $2.2.1.6
+  - [ ] EditViewColumnsPanel (vis/skjul kolonner) $2.2.2
+    - [ ] Verifiser at rekkefølgen stemmer med det som vises $2.2.2.1
+    - [ ] Verifiser at du kan endre på rekkefølgen på kolonner $2.2.2.2
+    - [ ] Verifiser at du kan skjule/vise ulike kolonner $2.2.2.3
+  - [ ] ColumnFormPanel $2.2.3 
+    - [ ] Add $2.2.3.1
+      - [ ] Verifiser at alle felter fungerer som det skal $2.2.3.1.1
+      - [ ] Verifiser at ny kolonne vises riktig $2.2.3.1.2
+    - [ ] Edit $2.2.3.2
+      - [ ] Verifiser at alle felter fungerer som det skal $2.2.3.2.1
+      - [ ] Verifiser at endret kolonne vises riktig $2.2.3.2.2
+  - [ ] ViewFormPanel $2.2.4
+    - [ ] Add $2.2.4.1
+      - [ ] Verifiser at alle felter fungerer som det skal $2.2.4.1.1
+      - [ ] Verifiser at ny visning vises riktig $2.2.4.1.2
+    - [ ] Edit $2.2.4.2
+      - [ ] Verifiser at alle felter fungerer som det skal $2.2.4.2.1
+      - [ ] Verifiser at endret visning vises riktig $2.2.4.2.2
+  - [ ] Gå gjennom innstillinger for webdelen og verifiser at endringer fungerer som det skal $2.2.5
+- [ ] Portfolio Overview WebPart $2.3
+  - [ ] List $2.3.1
+    - [ ] Verifiser at listen laster $2.3.1.1
+    - [ ] Verifiser at bytting av visning fungerer $2.3.1.2
+    - [ ] Verifiser at visnings-id legger seg i adressefeltet $2.3.1.3
+  - [ ] EditViewColumnsPanel (vis/skjul kolonner) $2.3.2
+    - [ ] Verifiser at rekkefølgen stemmer med det som vises $2.3.2.1
+    - [ ] Verifiser at du kan endre på rekkefølgen på kolonner $2.3.2.2
+    - [ ] Verifiser at du kan skjule/vise ulike kolonner $2.3.2.3
+  - [ ] ColumnFormPanel $2.3.3
+    - [ ] Add $2.3.3.1
+      - [ ] Verifiser at alle felter fungerer som det skal $2.3.3.1.1
+      - [ ] Verifiser at ny kolonne vises riktig $2.3.3.1.2
+    - [ ] Edit $2.3.3.2
+      - [ ] Verifiser at alle felter fungerer som det skal $2.3.3.2.1
+      - [ ] Verifiser at endret kolonne vises riktig $2.3.3.2.1
+  - [ ] ViewFormPanel $2.3.4
+    - [ ] Add $2.3.4.1
+      - [ ] Verifiser at alle felter fungerer som det skal $2.3.4.1.1
+      - [ ] Verifiser at ny visning vises riktig $2.3.4.1.2
+      - [ ] Verifiser at visningen blir angitt riktig nivå (Portefølje) $3.3.4.1.3
+    - [ ] Edit $2.3.4.2
+      - [ ] Verifiser at alle felter fungerer som det skal $2.3.4.2.1
+      - [ ] Verifiser at endret visning vises riktig $2.3.4.2.2
+  - [ ] Gå gjennom innstillinger for webdelen og verifiser at endringer fungerer som det skal $2.3.5
+- [ ] Project List WebPart $2.4
+  - [ ] Verifiser at prosjekter vises riktig $2.4.1
+  - [ ] Gå gjennom innstillinger for webdelen og verifiser at endringer fungerer som det skal $2.4.2
+- [ ] Resource Allocation WebPart $2.5
+  - [ ] Verifiser at webdelen lastes og elementer vises riktig på tidslinjen $2.5.1
+  - [ ] Gå gjennom innstillinger for webdelen og verifiser at endringer fungerer som det skal $2.5.2
+  - [ ] Timeline Popover $2.5.3
+    - [ ] Verifiser at metadata knyttet til elementet dukker opp i popover og vises riktig $2.5.3.1
+  - [ ] FilterPanel $2.5.4
+    - [ ] Verifiser at filterpanel fungerer som det skal $2.5.4.1
+- [ ] Project Timeline WebPart $2.6
+  - [ ] Verifiser at webdelen lastes og elementer vises riktig på tidslinjen $2.6.1
+  - [ ] Gå gjennom innstillinger for webdelen og verifiser at endringer fungerer som det skal $2.6.2
+  - [ ] Project Timeline Popover $2.6.3
+    - [ ] Verifiser at metadata knyttet til elementet dukker opp i popover og vises riktig $2.6.3.1
+  - [ ] FilterPanel $2.6.4
+    - [ ] Verifiser at filterpanel fungerer som det skal $2.6.4.1
+- [x] ~~Portfolio Insights WebPart~~ $2.7
+
+## 📦 ProgramWebParts $3
+
+- [ ] Program Administration Webpart $3.1
+  - [ ] Gå gjennom innstillinger for webdelen og verifiser at endringer fungerer som det skal $3.1.1
+  - [ ] Verifiser at du får lagt til ett eller flere underområder $3.1.2
+  - [ ] Verifiser at søket fungerer og treff dukker opp  $3.1.3
+  - [ ] Verifiser at søket fungerer og treff dukker opp i dialog "Legg til underområder"  $3.1.4
+  - [ ] Verifiser at du får fjernet ett eller flere underområder $3.1.5
+- [ ] Program Aggregation WebPart $3.2
+  - [ ] List $3.2.1
+    - [ ] Verifiser at listen laster $3.2.1.1
+    - [ ] Verifiser at bytting av visning fungerer $3.2.1.2
+    - [ ] Verifiser at visnings-id legger seg i adressefeltet $3.2.1.3
+    - [ ] Verifiser at eksport til excel fungerer $3.2.1.4
+    - [ ] Verifiser at eksport til excel fungerer for valgte prosjekter $3.2.1.5
+    - [ ] Verifiser at filterpanel fungerer som det skal $3.2.1.6
+  - [ ] EditViewColumnsPanel (vis/skjul kolonner) $3.2.2
+    - [ ] Verifiser at rekkefølgen stemmer med det som vises $3.2.2.1
+    - [ ] Verifiser at du kan endre på rekkefølgen på kolonner $3.2.2.2
+    - [ ] Verifiser at du kan skjule/vise ulike kolonner $3.2.2.3
+  - [ ] ColumnFormPanel $3.2.3 
+    - [ ] Add $3.2.3.1
+      - [ ] Verifiser at alle felter fungerer som det skal $3.2.3.1.1
+      - [ ] Verifiser at ny kolonne vises riktig $3.2.3.1.2
+    - [ ] Edit $3.2.3.2
+      - [ ] Verifiser at alle felter fungerer som det skal $3.2.3.2.1
+      - [ ] Verifiser at endret kolonne vises riktig $3.2.3.2.2
+  - [ ] ViewFormPanel $3.2.4
+    - [ ] Add $3.2.4.1
+      - [ ] Verifiser at alle felter fungerer som det skal $3.2.4.1.1
+      - [ ] Verifiser at ny visning vises riktig $3.2.4.1.2
+      - [ ] Verifiser at visningen blir angitt riktig nivå (Program) $3.2.4.1.3
+    - [ ] Edit $3.2.4.2
+      - [ ] Verifiser at alle felter fungerer som det skal $3.2.4.2.1
+      - [ ] Verifiser at endret visning vises riktig $3.2.4.2.2
+  - [ ] Gå gjennom innstillinger for webdelen og verifiser at endringer fungerer som det skal $3.2.5
+- [ ] Program Project Overview WebPart $3.3
+  - [ ] List $3.3.1
+    - [ ] Verifiser at listen laster $3.3.1.1
+    - [ ] Verifiser at bytting av visning fungerer $3.3.1.2
+    - [ ] Verifiser at visnings-id legger seg i adressefeltet $3.3.1.3
+    - [ ] Verifiser at eksport til excel fungerer $3.3.1.4
+    - [ ] Verifiser at eksport til excel fungerer for valgte prosjekter $3.3.1.5
+    - [ ] Verifiser at filterpanel fungerer som det skal $3.3.1.6
+  - [ ] EditViewColumnsPanel (vis/skjul kolonner) $3.3.2
+    - [ ] Verifiser at rekkefølgen stemmer med det som vises $3.3.2.1
+    - [ ] Verifiser at du kan endre på rekkefølgen på kolonner $3.3.2.2
+    - [ ] Verifiser at du kan skjule/vise ulike kolonner $3.3.2.3
+  - [ ] ColumnFormPanel $3.3.3
+    - [ ] Add $3.3.3.1
+      - [ ] Verifiser at alle felter fungerer som det skal $3.3.3.1.1
+      - [ ] Verifiser at ny kolonne vises riktig $3.3.3.1.2
+    - [ ] Edit $3.3.3.2
+      - [ ] Verifiser at alle felter fungerer som det skal $3.3.3.2.1
+      - [ ] Verifiser at endret kolonne vises riktig $3.3.3.2.1
+  - [ ] ViewFormPanel $3.3.4
+    - [ ] Add $3.3.4.1
+      - [ ] Verifiser at alle felter fungerer som det skal $3.3.4.1.1
+      - [ ] Verifiser at ny visning vises riktig $3.3.4.1.2
+      - [ ] Verifiser at visningen blir angitt riktig nivå (Program) $3.3.4.1.3
+    - [ ] Edit $3.3.4.2
+      - [ ] Verifiser at alle felter fungerer som det skal $3.3.4.2.1
+      - [ ] Verifiser at endret visning vises riktig $3.3.4.2.2
+  - [ ] Gå gjennom innstillinger for webdelen og verifiser at endringer fungerer som det skal $3.3.5
+- [ ] Program Timeline WebPart $3.4
+  - [ ] Verifiser at webdelen lastes og elementer vises riktig på tidslinjen $3.4.1
+  - [ ] Gå gjennom innstillinger for webdelen og verifiser at endringer fungerer som det skal $3.4.2
+  - [ ] Project Timeline Popover $3.4.3
+    - [ ] Verifiser at metadata knyttet til elementet dukker opp i popover og vises riktig $3.4.3.1
+  - [ ] FilterPanel $3.4.4
+    - [ ] Verifiser at filterpanel fungerer som det skal $3.4.4.1
+- [ ] Program Status WebPart $3.5
+  - [ ] Gå gjennom innstillinger for webdelen og verifiser at endringer fungerer som det skal $3.5.1
+
+## 📦 ProjectExtensions $4
+
+- [ ] Document Template dialog $4.1
+  - [ ] Verifiser at du får opprettet dokumenter fra malvelger $4.1.1
+  - [ ] Verifiser at felter og metadata følger med $4.1.2
+- [ ] ProjectSetup dialog $4.2
+  - [ ] Verifiser at prosjektoppsett dialog dukker opp $4.2.1
+  - [ ] Verifiser at alle fanene fungerer som det skal $4.2.2
+  - [ ] Verifiser at maler fungerer som tiltenkt basert på oppsett $4.2.3
+  - [ ] AutoComplete $4.2.4
+    - [ ] Verifiser at søket fungerer og elementer dukker opp som det skal $4.2.4.1
+- [ ] ProjectUpgrade dialog $4.3
+  - [ ] Verifiser at 'Gjør om til overordnet prosjekt' fungerer som det skal $4.3.1
+  - [ ] Verifiser at knappen blir skjult etter oppgradering $4.3.2
+- [ ] Risk Action $4.4
+  - [ ] Verifiser at dette fungerer som det skal... $4.4.1
+
+## 📦 ProjectWebParts $5
+
+- [ ] Project Timeline WebPart $5.1
+  - [ ] Verifiser at webdelen lastes og elementer vises riktig på tidslinjen $5.1.1
+  - [ ] Gå gjennom innstillinger for webdelen og verifiser at endringer fungerer som det skal $5.1.2
+  - [ ] Project Timeline Popover $5.1.3
+    - [ ] Verifiser at metadata knyttet til elementet dukker opp i popover og vises riktig $5.1.3.1
+  - [ ] FilterPanel $5.1.4
+    - [ ] Verifiser at filterpanel fungerer som det skal $5.1.4.1
+- [ ] Project Information WebPart $5.2
+  - [ ] Gå gjennom innstillinger for webdelen og verifiser at endringer fungerer som det skal $5.2.1
+  - [ ] Verifiser at alle knapper fungerer som det skal $5.2.2
+  - [ ] Verifiser at prosjektstatus dukker opp opp i bunnen når dette er angitt $5.2.3
+  - [ ] Verifiser at overordnede prosjekter dukker opp i bunnen når dette er angitt $5.2.4
+  - [ ] Verifiser at kolonner som skal vises vises når de har fått angitt verdier $5.2.5
+- [ ] Project Information Panel (Vis all prosjektinformasjon) $5.3
+  - [ ] Verifiser at informasjone dukker opp som det skal $5.3.1
+- [ ] Project Phases WebPart $5.4
+  - [ ] Phase change dialog $5.4.1
+    - [ ] Verifiser at fasebytting fungerer som det skal $5.4.1.1
+    - [ ] Verifiser at fasepunkt dukker opp og at handling kan utføres $5.4.1.2
+  - [ ] Gå gjennom innstillinger for webdelen og verifiser at endringer fungerer som det skal $5.4.2
+  - [ ] Verifiser at informasjon om fasen ved klikk dukker opp som det skal $5.4.3
+- [ ] Project Information Edit Panel (Rediger prosjektinformasjon) $5.5
+  - [ ] Verifiser at alle felter fungerer som det skal $5.5.1
+  - [ ] Verifiser at rekkefølgen stemmer med det som vises $5.5.2
+- [ ] Project Status WebPart $5.6
+  - [ ] Verifiser at du får opprettet statusrapport $5.6.1
+  - [ ] Verifiser at felter som dukker opp ved redigering/opprettelse er korrekt med oppsett $5.6.2
+  - [ ] Verifiser at du kan redigere statusrapport $5.6.3
+  - [ ] Verifiser at du kan åpne øyeblikksbilde $5.6.4
+  - [ ] Verifiser at du kan hente fram tidligere publiserte rapporter fra nedtrekk $5.6.5
+  - [ ] Verifiser at du kan slette "ikke publiserte" rapporter $5.6.6
+  - [ ] Verifiser at du kan hoppe mellom seksjoner fra navigasjonslinjen $5.6.7
+  - [ ] Verifiser at statusseksjoner viser data riktig $5.6.8
+  - [ ] Verifiser at du ikke kan redigere/slette publiserte rapporter $5.6.9
+  - [ ] Gå gjennom innstillinger for webdelen og verifiser at endringer fungerer som det skal $5.6.10
+- [ ] Opportunity Matrix WebPart $5.7
+  - [ ] Verifiser at usikkerhetselementer dukker opp på matrise $5.7.1
+  - [ ] Verifiser at elementene dukker opp i listen under matrisen $5.7.2
+  - [ ] Verifiser at vis før/etter tiltak fungerer $5.7.3
+- [ ] RiskMatrix WebPart $5.8
+  - [ ] Verifiser at usikkerhetselementer dukker opp på matrise $5.8.1
+  - [ ] Verifiser at elementene dukker opp i listen under matrisen $5.8.2
+  - [ ] Verifiser at vis før/etter tiltak fungerer $5.8.3
+- [ ] Project Aggregation WebPart (Gevinstoversikt) $5.9
+  - [ ] List $5.9.1
+    - [ ] Verifiser at listen laster $5.9.1.1
+    - [ ] Verifiser at bytting av visning fungerer $5.9.1.2
+    - [ ] Verifiser at visnings-id legger seg i adressefeltet $5.9.1.3
+    - [ ] Verifiser at eksport til excel fungerer $5.9.1.4
+    - [ ] Verifiser at eksport til excel fungerer for valgte prosjekter $5.9.1.5
+    - [ ] Verifiser at filterpanel fungerer som det skal $5.9.1.6
+  - [ ] EditViewColumnsPanel (vis/skjul kolonner) $5.9.2
+    - [ ] Verifiser at rekkefølgen stemmer med det som vises $5.9.2.1
+    - [ ] Verifiser at du kan endre på rekkefølgen på kolonner $5.9.2.2
+    - [ ] Verifiser at du kan skjule/vise ulike kolonner $5.9.2.3
+  - [ ] ColumnFormPanel $5.9.3
+    - [ ] Add $5.9.3.1
+      - [ ] Verifiser at alle felter fungerer som det skal $5.9.3.1.1
+      - [ ] Verifiser at ny kolonne vises riktig $5.9.3.1.2
+    - [ ] Edit $5.9.3.2
+      - [ ] Verifiser at alle felter fungerer som det skal $5.9.3.2.1
+      - [ ] Verifiser at endret kolonne vises riktig $5.9.3.2.2
+  - [ ] ViewFormPanel $5.9.4
+    - [ ] Add $5.9.4.1
+      - [ ] Verifiser at alle felter fungerer som det skal $5.9.4.1.1
+      - [ ] Verifiser at ny visning vises riktig $5.9.4.1.2
+      - [ ] Verifiser at visningen blir angitt riktig nivå (Prosjekt) $5.9.4.1.3
+    - [ ] Edit $5.9.4.2
+      - [ ] Verifiser at alle felter fungerer som det skal $5.9.4.2.1
+      - [ ] Verifiser at endret visning vises riktig $5.9.4.2.2
+  - [ ] Gå gjennom innstillinger for webdelen og verifiser at endringer fungerer som det skal $5.9.5
+- [ ] Usikkerhetstiltak $5.10
+  - [ ] Teste opprettelse av tiltak til planner $5.10.1
+  - [ ] Teste oppdatering og synkronisering av tiltak $5.10.2
+
+## 📃 SharePoint sider $6
+
+- [ ] Konfigurasjon av Prosjektportalen $6.1
+  - [ ] Verifisere at alle knapper fører til riktig side $6.1.1
+- [ ] Globale innstillinger $6.2
+  - [ ] Teste og verifisere at alle innstilliger fungerer som de skal $6.2.1
+- [ ] Tidslinjekonfigurasjon $6.3
+- [ ] Idékonfigurasjon $6.4
+- [ ] Hjelpeinnhold konfigurasjon $6.5
+- [ ] Nyttige lenker $6.6
+- [ ] Tillatelseskonfigurasjon $6.7
+- [ ] Prosjektadministrasjonsroller $6.8
+
+## 📔 Annet $7
+
+Det vil også være behov for å gå gjennom dokumentasjon og hjelpeinnhold for de ulike sidene. Pass på rettskrivninger, om det er noe som mangler eller bilder som må oppdateres.
+
+- [ ] Dokumentasjon $7.1
+  - [ ] Verifiser at GitHub dokumentasjonen samsvarer med versjon 1.9 $7.1.1
+  - [ ] Verifiser at GitHub utvikler dokumentasjon samsvarer med versjon 1.9 $7.1.2
+- [ ] Hjelpinnhold for de ulike sidene $7.2
+  - [ ] Verifiser at hjelpeinnhold vises på de sidene hvor det lagt opp til $7.2.1
+  - [ ] Verifiser at innholdet er likt med Prosjektportalen brukermanual $7.2.2
+  - [ ] Verifiser at bilder dukker opp $7.2.3
+
+⚠️ Dette issuet er en "work in progress", endringer kan forekomme.

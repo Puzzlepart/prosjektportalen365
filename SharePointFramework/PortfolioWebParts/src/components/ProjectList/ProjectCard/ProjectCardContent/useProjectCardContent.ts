@@ -1,31 +1,36 @@
-import { IPersonaSharedProps, PersonaSize } from '@fluentui/react/lib/Persona'
-import * as strings from 'PortfolioWebPartsStrings'
 import { useContext } from 'react'
 import { ProjectCardContext } from '../context'
+import _ from 'underscore'
 
 /**
  * Component logic hook for `ProjectCardContent`
  */
 export function useProjectCardContent() {
   const context = useContext(ProjectCardContext)
-  const defaultPersonaProps: IPersonaSharedProps = {
-    text: strings.NotSet,
-    size: PersonaSize.size40,
-    imageShouldFadeIn: true
-  }
-  const ownerPersonaProps: IPersonaSharedProps = {
-    ...defaultPersonaProps,
-    ...context.project.owner,
-    secondaryText: strings.ProjectOwner
-  }
-  const managerPersonaProps: IPersonaSharedProps = {
-    ...defaultPersonaProps,
-    ...context.project.manager,
-    secondaryText: strings.ProjectManager
-  }
+
   return {
     phase: context.project.phase,
-    owner: ownerPersonaProps,
-    manager: managerPersonaProps
+    serviceArea:
+      !_.isEmpty(context.project.serviceArea) &&
+      context.project.serviceArea.map((area, idx) => {
+        return {
+          key: area + idx,
+          value: area,
+          primaryText: area,
+          children: area,
+          type: 'Tjenesteområde'
+        }
+      }),
+    type:
+      !_.isEmpty(context.project.type) &&
+      context.project.type.map((type, idx) => {
+        return {
+          key: type + idx,
+          value: type,
+          primaryText: type,
+          children: type,
+          type: 'Prosjekttype'
+        }
+      })
   } as const
 }

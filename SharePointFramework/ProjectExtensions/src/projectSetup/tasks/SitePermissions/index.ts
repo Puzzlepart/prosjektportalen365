@@ -1,11 +1,12 @@
-import { CamlQuery, SiteUserProps } from '@pnp/sp'
 import SPDataAdapter from 'data/SPDataAdapter'
 import strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { isEmpty } from 'underscore'
 import { BaseTask, IBaseTaskParams } from '../@BaseTask'
-import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
+import { OnProgressCallbackFunction } from '../types'
 import { IPermissionConfiguration } from './types'
+import { ICamlQuery } from '@pnp/sp/lists'
+import { ISiteUserProps } from '@pnp/sp/site-users'
 
 /**
  * Sets up permissions for the SP web.
@@ -35,6 +36,7 @@ export class SitePermissions extends BaseTask {
         this._getRoleDefinitions(params.web),
         this._getSiteGroups()
       ])
+
       for (let i = 0; i < permConfig.length; i++) {
         const { groupName, permissionLevel } = permConfig[i]
         const users = groups[groupName] || []
@@ -59,17 +61,24 @@ export class SitePermissions extends BaseTask {
       }
       return params
     } catch (error) {
-      this.logError('Failed to set site permissions from configuration list.')
+      this.logError(`Failed to set site permissions from configuration list. ${error}`)
       return params
     }
   }
 
   /**
-   * Get configurations for the selected template from list
+   * Get configurations for the selected template from list,
+   * if no template is selected the all configurations are returned.
+   *
+   * @returns Permission configurations
+   *
    */
   private async _getPermissionConfiguration(): Promise<IPermissionConfiguration[]> {
-    const list = SPDataAdapter.portal.web.lists.getByTitle(strings.PermissionConfigurationList)
-    const query: CamlQuery = {
+    const list = SPDataAdapter.portalDataService.web.lists.getByTitle(
+      strings.PermissionConfigurationList
+    )
+
+    const query: ICamlQuery = {
       ViewXml: `<View>
     <Query>
       <Where>
@@ -86,6 +95,7 @@ export class SitePermissions extends BaseTask {
     </Query>
 </View>`
     }
+
     return (await list.getItemsByCAMLQuery(query)).map(
       (item: any) =>
         ({
@@ -100,11 +110,13 @@ export class SitePermissions extends BaseTask {
    */
   private async _getSiteGroups() {
     return (
-      await SPDataAdapter.portal.web.siteGroups.select('Title', 'Users').expand('Users').get()
+      await SPDataAdapter.portalDataService.web.siteGroups
+        .select('Title', 'Users')
+        .expand('Users')()
     ).reduce(
-      (grps, { Title, Users }) => ({
+      (grps, grp) => ({
         ...grps,
-        [Title]: Users.map((u: SiteUserProps) => u.LoginName)
+        [grp.Title]: grp['Users'] && grp['Users'].map((u: ISiteUserProps) => u.LoginName)
       }),
       {}
     )
@@ -116,7 +128,7 @@ export class SitePermissions extends BaseTask {
    * @param web Web
    */
   private async _getRoleDefinitions(web: any) {
-    return (await web.roleDefinitions.select('Name', 'Id').get()).reduce(
+    return (await web.roleDefinitions.select('Name', 'Id')()).reduce(
       (rds: { [key: string]: string }, { Name, Id }) => ({
         ...rds,
         [Name]: Id

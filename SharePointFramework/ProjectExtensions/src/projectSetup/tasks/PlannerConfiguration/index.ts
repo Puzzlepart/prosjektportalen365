@@ -1,13 +1,13 @@
 import { PageContext } from '@microsoft/sp-page-context'
-import { getGUID } from '@pnp/common'
+import { getGUID } from '@pnp/core'
 import { default as MSGraphHelper } from 'msgraph-helper'
 import { format } from '@fluentui/react/lib/Utilities'
-import { sleep } from 'pp365-shared/lib/util'
+import { sleep } from 'pp365-shared-library/lib/util'
 import * as strings from 'ProjectExtensionsStrings'
 import { IProjectSetupData } from 'projectSetup'
 import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
-import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
-import { ListLogger } from 'pp365-shared/lib/logging'
+import { OnProgressCallbackFunction } from '../types'
+import { ListLogger } from 'pp365-shared-library/lib/logging'
 import { SPDataAdapter } from 'data'
 import { IPlannerBucket, IPlannerConfiguration, IPlannerPlan, ITaskDetails } from './types'
 import _ from 'underscore'
@@ -66,7 +66,7 @@ export class PlannerConfiguration extends BaseTask {
   ): Promise<IPlannerPlan> {
     try {
       let plan: IPlannerPlan = {
-        title: [pageContext.web.title, this.planTitle].filter(Boolean).join(' - '),
+        title: [this.planTitle, pageContext.web.title].filter(Boolean).join(' - '),
         owner: pageContext.legacyPageContext.groupId
       }
       this.logInformation(`Creating plan ${plan.title}`)
@@ -130,7 +130,7 @@ export class PlannerConfiguration extends BaseTask {
 
       if (this._labels.length > 25) {
         ListLogger.init(
-          SPDataAdapter.portal.web.lists.getByTitle('Logg'),
+          SPDataAdapter.portalDataService.web.lists.getByTitle('Logg'),
           pageContext.web.absoluteUrl,
           'PlannerConfiguration'
         )
@@ -268,7 +268,7 @@ export class PlannerConfiguration extends BaseTask {
 
     if (taskDetails.checklist.length > 20 || taskDetails.attachments.length > 10) {
       ListLogger.init(
-        SPDataAdapter.portal.web.lists.getByTitle('Logg'),
+        SPDataAdapter.portalDataService.web.lists.getByTitle('Logg'),
         pageContext.web.absoluteUrl,
         'PlannerConfiguration'
       )

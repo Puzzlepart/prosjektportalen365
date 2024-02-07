@@ -26,13 +26,6 @@
         "c9080212-e63e-47cc-8278-00ad38c3f5a5": {
           "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
           "properties": {}
-        },
-        "28987406-2a67-48a8-9297-fd2833bf0a09": {
-          "location": "ClientSideExtension.ApplicationCustomizer",
-          "properties": {
-            "listName": "Hjelpeinnhold",
-            "linkText": "Hjelp tilgjengelig"
-          }
         }
       }
     }

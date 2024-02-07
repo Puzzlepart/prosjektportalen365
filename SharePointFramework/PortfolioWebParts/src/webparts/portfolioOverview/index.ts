@@ -2,38 +2,23 @@ import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
   PropertyPaneDropdown,
-  PropertyPaneSlider,
-  PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { PortfolioOverview, IPortfolioOverviewProps } from '../../components/PortfolioOverview'
-import { IPortfolioConfiguration } from '../../interfaces'
 import * as strings from 'PortfolioWebPartsStrings'
-import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
-
-export const PROPERTYPANE_CONFIGURATION_PROPS = {
-  COLUMN_CONFIG_LISTNAME: 'columnConfigListName',
-  COLUMNS_LISTNAME: 'columnsListName',
-  DEFAULT_VIEW_ID: 'defaultViewId',
-  STATUSREPORTS_COUNT: 'statusReportsCount',
-  SHOW_COMMANDBAR: 'showCommandBar',
-  SHOW_EXCELEXPORT_BUTTON: 'showExcelExportButton',
-  SHOW_FILTERS: 'showFilters',
-  SHOW_GROUPBY: 'showGroupBy',
-  SHOW_SEARCH_BOX: 'showSearchBox',
-  SHOW_VIEWSELECTOR: 'showViewSelector',
-  VIEWS_LISTNAME: 'viewsListName'
-}
-
-export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<
+import { BasePortfolioWebPart } from '../basePortfolioWebPart'
+import {
+  IPortfolioOverviewConfiguration,
   IPortfolioOverviewProps
-> {
-  private _configuration: IPortfolioConfiguration
+} from '../../components/PortfolioOverview'
+import { PortfolioOverview } from 'components/PortfolioOverview/PortfolioOverview'
+
+export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<IPortfolioOverviewProps> {
+  private _configuration: IPortfolioOverviewConfiguration
 
   public render(): void {
     this.renderComponent<IPortfolioOverviewProps>(PortfolioOverview, {
       configuration: this._configuration
-    } as IPortfolioOverviewProps)
+    })
   }
 
   public async onInit(): Promise<void> {
@@ -42,14 +27,15 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<
   }
 
   /**
-   * Get options for PropertyPaneDropdown
+   * Get dropdown options for the specified `targetProperty`. For now it only
+   * handles the `defaultViewId` property, but in the future it could be used
+   * to populate other dropdowns in the property pane.
    *
    * @param targetProperty Target property
    */
   protected _getOptions(targetProperty: string): IPropertyPaneDropdownOption[] {
-    // eslint-disable-next-line default-case
     switch (targetProperty) {
-      case PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID:
+      case 'defaultViewId':
         {
           if (this._configuration) {
             return [
@@ -71,68 +57,45 @@ export default class PortfolioOverviewWebPart extends BasePortfolioWebPart<
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_SEARCH_BOX, {
+                PropertyPaneToggle('showSearchBox', {
                   label: strings.ShowSearchBoxLabel
                 }),
-                PropertyPaneDropdown(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID, {
+                PropertyPaneDropdown('defaultViewId', {
                   label: strings.DefaultViewLabel,
-                  options: this._getOptions(PROPERTYPANE_CONFIGURATION_PROPS.DEFAULT_VIEW_ID)
+                  options: this._getOptions('defaultViewId')
                 })
               ]
             },
             {
               groupName: strings.CommandBarGroupName,
               groupFields: [
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_COMMANDBAR, {
-                  label: strings.ShowCommandBarLabel
+                PropertyPaneToggle('showGroupBy', {
+                  label: strings.ShowGroupByLabel
                 }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_GROUPBY, {
-                  label: strings.ShowGroupByLabel,
-                  disabled: !this.properties.showCommandBar
+                PropertyPaneToggle('showFilters', {
+                  label: strings.ShowFiltersLabel
                 }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_FILTERS, {
-                  label: strings.ShowFiltersLabel,
-                  disabled: !this.properties.showCommandBar
+                PropertyPaneToggle('showExcelExportButton', {
+                  label: strings.ShowExcelExportButtonLabel
                 }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_EXCELEXPORT_BUTTON, {
-                  label: strings.ShowExcelExportButtonLabel,
-                  disabled: !this.properties.showCommandBar
+                this.properties.showExcelExportButton &&
+                  PropertyPaneToggle('includeViewNameInExcelExportFilename', {
+                    label: strings.IncludeViewNameInExcelExportFilenameLabel
+                  }),
+                PropertyPaneToggle('showViewSelector', {
+                  label: strings.ShowViewSelectorLabel
                 }),
-                PropertyPaneToggle(PROPERTYPANE_CONFIGURATION_PROPS.SHOW_VIEWSELECTOR, {
-                  label: strings.ShowViewSelectorLabel,
-                  disabled: !this.properties.showCommandBar
-                })
-              ]
+                this.properties.showViewSelector &&
+                  PropertyPaneToggle('showProgramViews', {
+                    label: strings.ShowProgramViewsLabel
+                  })
+              ].filter(Boolean)
             },
             {
-              groupName: strings.ProjectInformationGroupName,
+              groupName: strings.ListViewGroupName,
               groupFields: [
-                PropertyPaneSlider(PROPERTYPANE_CONFIGURATION_PROPS.STATUSREPORTS_COUNT, {
-                  label: strings.StatusReportsCountLabel,
-                  min: 0,
-                  max: 10,
-                  step: 1
-                })
-              ]
-            }
-          ]
-        },
-        {
-          groups: [
-            {
-              groupName: strings.ConfigurationGroupName,
-              groupFields: [
-                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.COLUMN_CONFIG_LISTNAME, {
-                  label: strings.ColumnConfigListNameLabel,
-                  disabled: true
-                }),
-                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.COLUMNS_LISTNAME, {
-                  label: strings.ColumnsListNameLabel,
-                  disabled: true
-                }),
-                PropertyPaneTextField(PROPERTYPANE_CONFIGURATION_PROPS.VIEWS_LISTNAME, {
-                  label: strings.ViewsListNameLabel,
-                  disabled: true
+                PropertyPaneToggle('isListLayoutModeJustified', {
+                  label: strings.ListLayoutModeJustifiedLabel
                 })
               ]
             }

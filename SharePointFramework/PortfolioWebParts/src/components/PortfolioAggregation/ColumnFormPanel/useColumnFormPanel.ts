@@ -1,112 +1,122 @@
-import { IProjectContentColumn } from 'interfaces/IProjectContentColumn'
-import { capitalize } from 'lodash'
-import * as strings from 'PortfolioWebPartsStrings'
-import { useContext, useEffect, useState } from 'react'
-import { PortfolioAggregationContext } from '../context'
-import { ADD_COLUMN, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
-import styles from './ColumnFormPanel.module.scss'
-
-export const addColumn = () => ({
-  key: '',
-  fieldName: '',
-  name: strings.AddColumnText,
-  iconName: 'CalculatorAddition',
-  iconClassName: styles.addColumnIcon,
-  minWidth: 175
-})
-
-const initialColumn = {
-  key: null,
-  fieldName: '',
-  internalname: '',
-  name: '',
-  minWidth: 100,
-  maxWidth: 150,
-  data: {
-    renderAs: 'text'
-  }
-}
+import { ProjectContentColumn, SPProjectContentColumnItem } from 'pp365-shared-library'
+import { useState } from 'react'
+import { usePortfolioAggregationContext } from '../context'
+import { COLUMN_DELETED, COLUMN_FORM_PANEL_ON_SAVED, TOGGLE_COLUMN_FORM_PANEL } from '../reducer'
+import { useEditableColumn } from './useEditableColumn'
+import { useId } from '@fluentui/react-components'
 
 /**
  * Component logic hook for ColumnFormPanel. Handles state and dispatches actions to the reducer.
  * Also provides methods for saving and deleting columns.
  */
 export function useColumnFormPanel() {
-  const { state, props, dispatch } = useContext(PortfolioAggregationContext)
-  const [column, setColumn] = useState<IProjectContentColumn>({
-    ...initialColumn,
-    ...(state.editColumn || {})
-  })
-  const [persistRenderAs, setPersistRenderAs] = useState(false)
-  useEffect(() => {
-    if (state.editColumn) {
-      setColumn({
-        minWidth: 100,
-        maxWidth: 150,
-        data: {
-          renderAs: state.editColumn.dataType ?? 'text'
-        },
-        ...state.editColumn
-      })
-    }
-  }, [state.editColumn])
+  const context = usePortfolioAggregationContext()
+  const { column, setColumn, setColumnData, isEditing } = useEditableColumn()
+  const [persistRenderGlobally, setPersistRenderGlobally] = useState(false)
 
+  /**
+   * Saves the column to the list. If the column is new, it will
+   * also add the column to the current data source. If the column is
+   * being edited, it will update the column in the list.
+   *
+   * If the column is being edited, it will update the column in the list
+   * using `updateProjectContentColumn` from the `dataAdapter`. If the column is new,
+   * it will add the column to the list using `addColumnToDataSource` from
+   * the `dataAdapter`.
+   */
   const onSave = async () => {
-    setColumn(initialColumn)
-    if (state.editColumn)
-      await Promise.resolve(
-        props.dataAdapter
-          .updateProjectContentColumn(column, persistRenderAs)
-          .then(() => {
-            dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
-          })
-          .catch((error) => (state.error = error))
-      )
-    else {
-      const newItem: Record<string, any> = {
-        GtSortOrder: column.sortOrder || 100,
-        Title: column.name,
-        GtInternalName: column.internalName,
-        GtManagedProperty: column.fieldName,
-        GtFieldDataType: capitalize(column.data?.renderAs).split('_').join(' '),
-        GtDataSourceCategory: props.title,
-        GtColMinWidth: column.minWidth
+    const colummData = column.get('data') ?? {}
+    const columnItem: SPProjectContentColumnItem = {
+      Id: column.get('id'),
+      GtSortOrder: column.get('sortOrder'),
+      Title: column.get('name'),
+      GtInternalName: column.get('internalName'),
+      GtManagedProperty: column.get('fieldName'),
+      GtFieldDataType: colummData.renderAs ?? 'Text',
+      GtDataSourceCategory: context.props.dataSourceCategory,
+      GtColMinWidth: column.get('minWidth'),
+      GtColMaxWidth: column.get('maxWidth'),
+      GtIsGroupable: column.get('isGroupable')
+    }
+    if (colummData.dataTypeProperties) {
+      columnItem.GtFieldDataTypeProperties = JSON.stringify(colummData.dataTypeProperties, null, 2)
+    }
+    try {
+      if (isEditing) {
+        await context.props.dataAdapter.portalDataService.updateProjectContentColumn(
+          'PROJECT_CONTENT_COLUMNS',
+          columnItem,
+          persistRenderGlobally
+        )
+      } else {
+        await context.props.dataAdapter.portalDataService.addColumnToDataSource(
+          columnItem,
+          context.state.currentView
+        )
       }
 
-      await Promise.resolve(
-        props.dataAdapter
-          .addItemToList(strings.ProjectContentColumnsListName, newItem)
-          .then((result) => {
-            const updateItem = {
-              GtProjectContentColumnsId: result['Id']
-            }
+      context.dispatch(
+        COLUMN_FORM_PANEL_ON_SAVED({
+          column: new ProjectContentColumn(columnItem),
+          isNew: !isEditing
+        })
+      )
+    } catch (error) {}
+  }
 
-            props.dataAdapter
-              .updateDataSourceItem(updateItem, state.dataSource)
-              .then(() => {
-                dispatch(ADD_COLUMN({ column: { ...column, key: column.fieldName } }))
-              })
-              .catch((error) => (state.error = error))
-          })
-          .catch((error) => (state.error = error))
+  /**
+   * Deletes the column from the content columns list. Deletes the column using
+   * `deleteItemFromList` from the data adapter. If the column is deleted
+   * successfully, it will dispatch the `COLUMN_DELETED` action to the reducer.
+   */
+  const onDeleteColumn = async () => {
+    const isDeleted = await context.props.dataAdapter.portalDataService.deleteItemFromList(
+      'PROJECT_CONTENT_COLUMNS',
+      context.state.columnForm.column.id
+    )
+    if (isDeleted) {
+      context.dispatch(
+        COLUMN_DELETED({
+          columnId: context.state.columnForm.column.id
+        })
       )
     }
   }
 
+  /**
+   * Dismisses the form panel by dispatching the `TOGGLE_COLUMN_FORM_PANEL` action.
+   */
   const onDismiss = () => {
-    setColumn(initialColumn)
-    dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
+    context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: false }))
   }
 
+  /**
+   * Save is disabled if the column name or field name is less than 2 characters.
+   */
+  const isSaveDisabled =
+    column.get('internalName').length < 2 ||
+    column.get('fieldName').length < 2 ||
+    column.get('name').length < 2
+
+  /**
+   * Save is disabled if the column field name is Title
+   */
+  const isDeleteDisabled = context.state.columnForm?.column?.fieldName === 'Title'
+
+  const fluentProviderId = useId('fp-column-form-panel')
+
   return {
-    state,
-    props,
-    dispatch,
     onSave,
+    isSaveDisabled,
+    onDeleteColumn,
+    isDeleteDisabled,
     onDismiss,
     column,
     setColumn,
-    persistRenderAs,
-    setPersistRenderAs
+    setColumnData,
+    persistRenderGlobally,
+    setPersistRenderGlobally,
+    isEditing,
+    fluentProviderId
   } as const
 }

@@ -3,7 +3,7 @@
   "solution": {
     "name": "Prosjektportalen 365 - Portfolio Web Parts",
     "id": "00483367-68e2-4977-9cc3-6cf0de623daa",
-    "version": "1.8.4.0",
+    "version": "1.9.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "webApiPermissionRequests": [

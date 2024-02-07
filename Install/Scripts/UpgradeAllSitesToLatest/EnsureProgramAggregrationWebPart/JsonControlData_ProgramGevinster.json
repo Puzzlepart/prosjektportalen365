@@ -1,0 +1,9 @@
+{
+    "title": "Gevinster for underområder",
+    "dataSource": "Alle gevinstelementer for underområder",
+    "dataSourceCategory": "Gevinstoversikt",
+    "dataSourceLevel": "Overordnet/Program",
+    "showCommandBar": true,
+    "showViewSelector": true,
+    "showSearchBox": true
+}

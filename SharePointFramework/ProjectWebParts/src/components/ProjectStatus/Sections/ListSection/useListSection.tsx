@@ -1,8 +1,8 @@
 import { IColumn } from '@fluentui/react'
-import { getObjectValue as get } from 'pp365-shared/lib/helpers'
-import { useContext, useEffect, useState } from 'react'
 import _ from 'lodash'
-import { ProjectStatusContext } from '../../../ProjectStatus/context'
+import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
+import { useContext, useEffect, useState } from 'react'
+import { useProjectStatusContext } from '../../../ProjectStatus/context'
 import { PERSIST_SECTION_DATA } from '../../reducer'
 import { SectionContext } from '../context'
 import { IListSectionData, IListSectionState } from './types'
@@ -13,7 +13,7 @@ import { useFetchListData } from './useFetchListData'
  * from SharePoint, handles state and dispatches actions to the reducer.
  */
 export function useListSection() {
-  const context = useContext(ProjectStatusContext)
+  const context = useProjectStatusContext()
   const { selectedReport } = context.state
   const { section } = useContext(SectionContext)
   const [state, setState] = useState<IListSectionState<IListSectionData>>({

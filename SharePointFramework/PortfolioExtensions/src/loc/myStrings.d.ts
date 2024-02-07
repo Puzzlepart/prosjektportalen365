@@ -1,32 +1,54 @@
 declare interface IPortfolioExtensionsStrings {
-  SetRecommendationTitle: string
-  SetRecommendationSubtitle: string
-  IdeaProjectDataDialogTitle: string
-  IdeaProjectDataDialogSubText: string
-  IdeaProjectDataDialogInfoText: string
-  IdeaProjectDataDialogBlockedText: string
-  IdeaProcessorsSiteGroup: string
-  IdeaProcessingTitle: string
-  IdeaProcessingUrlTitle: string
-  IdeaRegistrationTitle: string
-  IdeaRegistrationUrlTitle: string
-  IdeaProjectDataTitle: string
-  ApproveChoice: string
-  ConsiderationChoice: string
-  RejectChoice: string
-  ApprovedSyncText: string
-  ApprovedText: string
-  ConsiderationText: string
-  RejectedText: string
-  IdeaAlreadyApproved: string
   ActionLabel: string
   ActionLabelPlaceholder: string
-  CommentLabel: string
-  CommentLabelPlaceholder: string
+  AdministratorLabel: string
+  ApproveChoice: string
+  ApprovedSyncText: string
   CancelLabel: string
   CloseLabel: string
-  SubmitLabel: string
+  CommentLabel: string
+  CommentLabelPlaceholder: string
+  ConfigurationDescription: string
+  ConfigurationLabel: string
+  ConsiderationChoice: string
   CreateLabel: string
+  HelpContentAvailableDescription: string
+  HelpContentAvailableLabel: string
+  HelpContentUnavailableDescription: string
+  HelpContentUnavailableLabel: string
+  HelpContentListName: string
+  IdeaAlreadyApproved: string
+  IdeaConfigurationTitle: string
+  IdeaProcessorsSiteGroup: string
+  IdeaProjectDataDialogBlockedTitle: string
+  IdeaProjectDataDialogBlockedMessage: string
+  IdeaProjectDataDialogNotApprovedMessage: string
+  IdeaProjectDataDialogInfoTitle: string
+  IdeaProjectDataDialogTitle: string
+  IdeaProjectDataTitle: string
+  InstallationLogListName: string
+  InstallChannelLabel: string
+  InstalledDateLabel: string
+  InstallVersionLabel: string
+  LastInstallHeaderText: string
+  LastInstallDescription: string
+  LatestGitHubReleaseDownloadButtonText: string
+  LatestGitHubReleaseIsNewerText: any
+  LatestGitHubReleaseIsOlderText: any
+  LatestGitHubReleaseIsSameText: any
+  LatestGitHubReleaseLabel: string
+  LatestGitHubReleaseLinkTitle: string
+  LinksListName: string
+  LinksListDescription: string
+  LinksListLabel: string
+  RejectChoice: string
+  SeeAllInstallationsLinkText: string
+  SetRecommendationDefaultDescription: string
+  SetRecommendationSubtitle: string
+  SetRecommendationTitle: string
+  SiteSettingsDescription: string
+  SiteSettingsLabel: string
+  SubmitLabel: string
 }
 
 declare module 'PortfolioExtensionsStrings' {

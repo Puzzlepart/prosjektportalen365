@@ -1,19 +1,42 @@
-import { ContextualMenu } from '@fluentui/react'
-import * as strings from 'PortfolioWebPartsStrings'
-import React, { FC, useContext } from 'react'
-import { PortfolioAggregationContext } from '../context'
-import { COLUMN_HEADER_CONTEXT_MENU } from '../reducer'
+import {
+  FluentProvider,
+  IdPrefixProvider,
+  Menu,
+  MenuList,
+  MenuPopover
+} from '@fluentui/react-components'
+import React, { FC } from 'react'
 import { useColumnContextMenu } from './useColumnContextMenu'
+import { renderMenuItem } from '../../../components/List'
+import { customLightTheme } from 'pp365-shared-library'
 
 export const ColumnContextMenu: FC = () => {
-  const { state, dispatch } = useContext(PortfolioAggregationContext)
-  const { target, column, addColumnItems, items } = useColumnContextMenu()
-  if (!state.columnContextMenu) return null
+  const {
+    target,
+    items,
+    open,
+    onOpenChange,
+    checkedValues,
+    onCheckedValueChange,
+    fluentProviderId
+  } = useColumnContextMenu()
+
   return (
-    <ContextualMenu
-      target={target}
-      items={column.name === strings.AddColumnText ? addColumnItems : items}
-      onDismiss={() => dispatch(COLUMN_HEADER_CONTEXT_MENU(null))}
-    />
+    <Menu
+      open={open}
+      persistOnItemClick={false}
+      onOpenChange={onOpenChange}
+      positioning={{ target }}
+      onCheckedValueChange={onCheckedValueChange}
+      checkedValues={checkedValues}
+    >
+      <IdPrefixProvider value={fluentProviderId}>
+        <FluentProvider theme={customLightTheme}>
+          <MenuPopover>
+            <MenuList>{items.map((item) => renderMenuItem(item, onOpenChange))}</MenuList>
+          </MenuPopover>
+        </FluentProvider>
+      </IdPrefixProvider>
+    </Menu>
   )
 }

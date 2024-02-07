@@ -1,21 +1,26 @@
-import { Persona } from '@fluentui/react/lib/Persona'
 import React, { FC, useContext } from 'react'
-import { ProjectCardContext } from '../context'
 import styles from './ProjectCardContent.module.scss'
-import { useProjectCardContent } from './useProjectCardContent'
+import { GlobeLocationFilled, TagMultipleFilled } from '@fluentui/react-icons'
+import { ProjectCardContext } from '../context'
+import { OverflowTagMenu } from 'pp365-shared-library'
 
 export const ProjectCardContent: FC = () => {
   const context = useContext(ProjectCardContext)
-  const { phase, owner, manager } = useProjectCardContent()
+
   return (
-    <div className={styles.root}>
-      <div className={styles.phase}>{phase}</div>
-      <div className={styles.personaContainer} hidden={!context.showProjectOwner}>
-        <Persona {...owner} />
-      </div>
-      <div className={styles.personaContainer} hidden={!context.showProjectManager}>
-        <Persona {...manager} />
-      </div>
+    <div className={styles.content}>
+      <OverflowTagMenu
+        text='Tjenesteområde'
+        tags={context.project.serviceArea}
+        icon={GlobeLocationFilled}
+        hidden={!context.shouldDisplay('ProjectServiceArea')}
+      />
+      <OverflowTagMenu
+        text='Prosjekttype'
+        tags={context.project.type}
+        icon={TagMultipleFilled}
+        hidden={!context.shouldDisplay('ProjectType')}
+      />
     </div>
   )
 }

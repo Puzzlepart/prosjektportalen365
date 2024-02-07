@@ -1,0 +1,35 @@
+.riskActionFieldValue {
+  word-wrap: break-word;
+  display: block;
+  height: 100%;
+
+  .alert {
+    white-space: pre-wrap;
+    font-size: 10px;
+  }
+
+  .fieldValue {
+    white-space: pre-wrap;
+  }
+
+  .container {
+    &:hover {
+      .adminButton {
+        opacity: 1;
+        display: block;
+      }
+    }
+
+    .linkList {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .adminButton {
+      margin: 10px 0 0 0;
+      padding: 0;
+      opacity: 0.2;
+      transition: opacity 0.8 s ease-in-out;
+    }
+  }
+}

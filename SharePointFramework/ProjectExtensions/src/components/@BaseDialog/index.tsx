@@ -23,7 +23,8 @@ export const BaseDialog: FC<IBaseDialogProps> = (props) => {
       hidden={false}
       modalProps={modalProps}
       dialogContentProps={dialogContentProps}
-      onDismiss={props.onDismiss}>
+      onDismiss={props.onDismiss}
+    >
       <span hidden={!props.version} className={styles.version}>
         {props.version}
       </span>

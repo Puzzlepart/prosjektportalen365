@@ -1,9 +1,9 @@
 import { IColumn } from '@fluentui/react'
 import _ from 'lodash'
-import { getObjectValue as get } from 'pp365-shared/lib/helpers'
+import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
 import { useContext, useEffect, useState } from 'react'
 import { UncertaintyElementModel } from '../../../../models'
-import { ProjectStatusContext } from '../../context'
+import { useProjectStatusContext } from '../../context'
 import { PERSIST_SECTION_DATA } from '../../reducer'
 import { useFetchListData } from '../ListSection/useFetchListData'
 import { SectionContext } from '../context'
@@ -12,11 +12,11 @@ import { IUncertaintySectionData, IUncertaintySectionState } from './types'
 /**
  * Component logic hook for `UncertaintySection`. Fetches list data
  * from SharePoint, handles state and dispatches actions to the reducer,
- * aswell as handling the logic for rendering the section content using
+ * as well as handling the logic for rendering the section content using
  * the `shouldRenderContent` flag.
  */
 export function useUncertaintySection() {
-  const context = useContext(ProjectStatusContext)
+  const context = useProjectStatusContext()
   const { selectedReport } = context.state
   const { section } = useContext(SectionContext)
   const [state, setState] = useState<IUncertaintySectionState>({ isDataLoaded: false, data: {} })

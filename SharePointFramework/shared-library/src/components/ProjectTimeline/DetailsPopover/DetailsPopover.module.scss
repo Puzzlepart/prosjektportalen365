@@ -1,0 +1,24 @@
+.detailsPopover {
+  .calloutHeader {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+    align-items: flex-end;
+
+    .tag {
+      font-size: 14px;
+      padding: 1px 7px;
+      height: 18px;
+      line-height: 18px;
+      min-width: 4px;
+      max-width: 250px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      color: #fff;
+      cursor: default;
+    }
+    .tag:hover {
+      border: 1px solid #00000036;
+    }
+  }
+}

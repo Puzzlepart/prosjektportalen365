@@ -1,0 +1,26 @@
+.loadingSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 32px;
+
+  .small {
+    width: 20%;
+  }
+
+  .medium {
+    width: 40%;
+  }
+
+  .large {
+    width: 60%;
+  }
+
+  .xlarge {
+    width: 80%;
+  }
+
+  .xxlarge {
+    width: 100%;
+  }
+}

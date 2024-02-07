@@ -1,10 +1,10 @@
-import { SectionType } from 'pp365-shared/lib/models'
+import { SectionType } from 'pp365-shared-library/lib/models'
 import React from 'react'
-import { ListSection } from './ListSection'
-import { ProjectPropertiesSection } from './ProjectPropertiesSection'
-import { UncertaintySection } from './UncertaintySection'
-import { StatusSection } from './StatusSection'
-import { SummarySection } from './SummarySection'
+import { ListSection } from './ListSection/ListSection'
+import { ProjectPropertiesSection } from './ProjectPropertiesSection/ProjectPropertiesSection'
+import { UncertaintySection } from './UncertaintySection/UncertaintySection'
+import { StatusSection } from './StatusSection/StatusSection'
+import { SummarySection } from './SummarySection/SummarySection'
 
 export const SectionMap = {
   [SectionType.SummarySection]: <SummarySection showProjectInformation />,

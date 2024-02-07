@@ -1,36 +1,49 @@
 import { MessageBarType } from '@fluentui/react'
 import { override } from '@microsoft/decorators'
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base'
-import { isArray, stringIsNullOrEmpty } from '@pnp/common'
-import { ConsoleListener, Logger, LogLevel } from '@pnp/logging'
-import { MenuNode, sp, Web } from '@pnp/sp'
+import { isArray, stringIsNullOrEmpty } from '@pnp/core'
+import { ConsoleListener, LogLevel, Logger } from '@pnp/logging'
+import { SPFI } from '@pnp/sp'
+import { IMenuNode } from '@pnp/sp/navigation'
 import { format, getId } from '@uifabric/utilities'
+import * as strings from 'ProjectExtensionsStrings'
 import { SPDataAdapter } from 'data'
 import { default as MSGraphHelper } from 'msgraph-helper'
-import { ListLogger } from 'pp365-shared/lib/logging'
-import { PortalDataService } from 'pp365-shared/lib/services'
-import * as strings from 'ProjectExtensionsStrings'
+import {
+  ContentConfig,
+  ListLogger,
+  PortalDataService,
+  ProjectExtension,
+  ProjectTemplate,
+  ProjectTemplateFile,
+  createSpfiInstance
+} from 'pp365-shared-library'
 import { createElement } from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
-import { find, uniq } from 'underscore'
+import _ from 'underscore'
 import {
   ErrorDialog,
   IErrorDialogProps,
   IProgressDialogProps,
-  ITemplateSelectDialogProps,
-  ITemplateSelectDialogState,
+  IProjectSetupDialogProps,
+  IProjectSetupDialogState,
   ProgressDialog,
-  TemplateSelectDialog
+  ProjectSetupDialog
 } from '../components'
-import { ContentConfig, ProjectExtension, ProjectTemplate, ProjectTemplateFile } from '../models'
-import { deleteCustomizer } from './deleteCustomizer'
 import { ProjectSetupError } from './ProjectSetupError'
-import { ProjectSetupSettings } from './ProjectSetupSettings'
+import { deleteCustomizer } from './deleteCustomizer'
 import * as Tasks from './tasks'
 import { IProjectSetupData, IProjectSetupProperties, ProjectSetupValidation } from './types'
 
+Logger.subscribe(ConsoleListener())
+Logger.activeLogLevel = sessionStorage.DEBUG === '1' || DEBUG ? LogLevel.Info : LogLevel.Warning
+
 export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetupProperties> {
-  private _portal: PortalDataService
+  /**
+   * Configured SPFI instance from `@pnp/sp`
+   */
+  public sp: SPFI
+  private _portalDataService: PortalDataService
   private _isSetup = true
   private _placeholderIds = {
     ErrorDialog: getId('errordialog'),
@@ -40,21 +53,16 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
   @override
   public async onInit(): Promise<void> {
-    sp.setup({ spfxContext: this.context })
-    Logger.subscribe(new ConsoleListener())
-    Logger.activeLogLevel = sessionStorage.DEBUG === '1' || DEBUG ? LogLevel.Info : LogLevel.Warning
-    if (
-      !this.context.pageContext.legacyPageContext.isSiteAdmin ||
-      !this.context.pageContext.legacyPageContext.groupId
-    )
-      return
+    this.sp = createSpfiInstance(this.context)
+    const { isSiteAdmin, groupId } = this.context.pageContext.legacyPageContext
+    if (!isSiteAdmin || !groupId) return
     try {
       this._isSetup = await this._isProjectSetup()
 
       // eslint-disable-next-line default-case
       switch (this._validation) {
         case ProjectSetupValidation.InvalidWebLanguage: {
-          await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
+          await deleteCustomizer(this)
           throw new ProjectSetupError(
             'InvalidWebLanguage',
             strings.InvalidLanguageErrorMessage,
@@ -62,7 +70,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
           )
         }
         case ProjectSetupValidation.IsHubSite: {
-          await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
+          await deleteCustomizer(this)
           throw new ProjectSetupError(
             'IsHubSite',
             strings.IsHubSiteErrorMessage,
@@ -89,25 +97,25 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       }
 
       this._initializeSetup({
-        web: new Web(this.context.pageContext.web.absoluteUrl) as any,
+        sp: this.sp,
+        web: this.sp.web,
         webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
         templateExcludeHandlers: ['Hooks'],
         context: this.context,
         properties: this.properties
       })
     } catch (error) {
-      this._renderErrorDialog({ error })
+      this._renderErrorDialog({ error, showStackAsSubText: true })
     }
   }
 
   private async _ensureParentProjectPatch(): Promise<void> {
-    const [singleItem] = await SPDataAdapter.portal.web.lists
+    const [singleItem] = await SPDataAdapter.portalDataService.web.lists
       .getByTitle(this.properties.projectsList)
       .items.filter(
         `GtSiteId eq '${this.context.pageContext.legacyPageContext.siteId.replace(/([{}])/g, '')}'`
-      )
-      .get()
-    await SPDataAdapter.portal.web.lists
+      )()
+    await SPDataAdapter.portalDataService.web.lists
       .getByTitle(this.properties.projectsList)
       .items.getById(singleItem.Id)
       .update({ GtIsParentProject: true })
@@ -127,11 +135,11 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
 
       let data = await this._fetchData()
       ListLogger.init(
-        SPDataAdapter.portal.web.lists.getByTitle('Logg'),
+        SPDataAdapter.portalDataService.web.lists.getByTitle('Logg'),
         this.context.pageContext.web.absoluteUrl,
         'ProjectSetup'
       )
-      const provisioningInfo = await this._getProvisioningInfo(data)
+      const provisioningInfo = await this._getSetupInfo(data)
       data = { ...data, ...provisioningInfo }
       this._renderProgressDialog({
         progressIndicator: {
@@ -141,22 +149,21 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         iconName: data.selectedTemplate?.iconProps?.iconName ?? 'Page',
         dialogContentProps: this.properties.progressDialogContentProps
       })
-      await this._startProvision(taskParams, data)
+      await this._startSetup(taskParams, data)
 
       if (!stringIsNullOrEmpty(this.properties.forceTemplate)) {
         await this.recreateNavMenu()
-        await sp.web.lists
+        await this.sp.web.lists
           .getByTitle(strings.ProjectPropertiesListName)
           .items.getById(1)
           .update({ GtIsParentProject: true, GtChildProjects: JSON.stringify([]) })
         await this._ensureParentProjectPatch()
       }
 
-      await deleteCustomizer(
-        this.context.pageContext.web.absoluteUrl,
-        this.componentId,
-        !this.properties.skipReload
-      )
+      await deleteCustomizer(this)
+      if (!this.properties.skipReload) {
+        window.location.href = this.context.pageContext.web.absoluteUrl
+      }
     } catch (error) {
       this._renderErrorDialog({ error })
     }
@@ -166,13 +173,13 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    * Adds the old custom navigation nodes to the quick launch menu
    */
   private async recreateNavMenu() {
-    const oldNodes: MenuNode[] = await JSON.parse(localStorage.getItem('pp_navigationNodes'))
-    const navigationNodes = uniq([...oldNodes])
+    const oldNodes: IMenuNode[] = await JSON.parse(localStorage.getItem('pp_navigationNodes'))
+    const navigationNodes = _.uniq([...oldNodes])
     for await (const node of navigationNodes) {
       if (node.Title === strings.RecycleBinText) {
         continue
       }
-      const addedNode = await sp.web.navigation.quicklaunch.add(node.Title, node.SimpleUrl)
+      const addedNode = await this.sp.web.navigation.quicklaunch.add(node.Title, node.SimpleUrl)
       if (node.Nodes.length > 0) {
         for await (const childNode of node.Nodes) {
           await addedNode.node.children.add(childNode.Title, childNode.SimpleUrl)
@@ -182,43 +189,48 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Checks for force template
+   * Checks for auto/force template. If found, returns the template
+   * and sets the state accordingly. If not found, returns null.
+   * The force/auto template can either be set in property
+   * `forceTemplate` or as a property on the template item itself.
    *
-   * @param data - Data
+   * To be able to use the force/auto template, the user must be a owner.
+   *
+   * @param data - Project setup data
    */
-  private _checkForceTemplate(data: IProjectSetupData): ITemplateSelectDialogState {
-    if (stringIsNullOrEmpty(this.properties.forceTemplate)) return null
-    const selectedTemplate = find(
+  private _checkAutoTemplate(data: IProjectSetupData): IProjectSetupDialogState {
+    const autoTemplate = _.find(
       data.templates,
-      (tmpl) => tmpl.text === this.properties.forceTemplate
+      ({ text, autoConfigure }) => text === this.properties.forceTemplate || autoConfigure
     )
-    if (!selectedTemplate) return null
+    if (!autoTemplate) return null
     return {
-      selectedTemplate,
-      selectedExtensions: [],
-      selectedContentConfig: [],
-      settings: new ProjectSetupSettings().useDefault()
+      selectedTemplate: autoTemplate,
+      selectedExtensions: data.extensions.filter((ext) => autoTemplate.extensions.includes(ext.id)),
+      selectedContentConfig: data.contentConfig.filter((content) =>
+        autoTemplate.contentConfig.includes(content.id)
+      )
     }
   }
 
   /**
-   * Get provisioning info from TemplateSelectDialog
+   * Get setup info from `TemplateSelectDialog`
    *
    * @param data - Data
    */
-  private _getProvisioningInfo(data: IProjectSetupData): Promise<ITemplateSelectDialogState> {
+  private _getSetupInfo(data: IProjectSetupData): Promise<IProjectSetupDialogState> {
     return new Promise((resolve, reject) => {
       const placeholder = this._getPlaceholder('TemplateSelectDialog')
-      const forceTemplate = this._checkForceTemplate(data)
-      if (forceTemplate !== null) {
+      const autoTemplate = this._checkAutoTemplate(data)
+      if (autoTemplate !== null) {
         this._unmount(placeholder)
-        resolve(forceTemplate)
+        resolve(autoTemplate)
       } else {
-        const element = createElement<ITemplateSelectDialogProps>(TemplateSelectDialog, {
+        const element = createElement<IProjectSetupDialogProps>(ProjectSetupDialog, {
           data,
           version: this.version,
           tasks: this.properties.tasks,
-          onSubmit: (state: ITemplateSelectDialogState) => {
+          onSubmit: (state: IProjectSetupDialogState) => {
             this._unmount(placeholder)
             resolve(state)
           },
@@ -239,7 +251,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Render ProgressDialog
+   * Render `ProgressDialog` passing the `props` as well
+   * as the current version of the extension (`this.version`)
    *
    * @param props - Props
    */
@@ -253,7 +266,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Render ErrorDialog
+   * Render `ErrorDialog` with a dismiss ation that removes the custom action
+   * for this extension and then unmounts the dialog.
    *
    * @param props - Props
    */
@@ -266,14 +280,15 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
       version: this.version,
       onDismiss: async () => {
         if (this._isSetup) {
-          await deleteCustomizer(this.context.pageContext.web.absoluteUrl, this.componentId, false)
+          await deleteCustomizer(this)
         }
         this._unmount(placeholder)
       },
-      messageType: props.error['messageType'],
+      intent: props.error['messageType'],
       onSetupClick: () => {
         this._initializeSetup({
-          web: new Web(this.context.pageContext.web.absoluteUrl) as any,
+          sp: this.sp,
+          web: this.sp.web,
           webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
           templateExcludeHandlers: ['Hooks'],
           context: this.context,
@@ -286,14 +301,15 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Start provision
+   * Start setup of the new project.
    *
    * Get tasks using `Tasks.getTasks` and runs through them in sequence
+   * executing the `execute` method on each task.
    *
    * @param taskParams Task params
    * @param data Data
    */
-  private async _startProvision(
+  private async _startSetup(
     taskParams: Tasks.IBaseTaskParams,
     data: IProjectSetupData
   ): Promise<void> {
@@ -358,32 +374,41 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
    *
    * @param propertyBagRegex - Regex to match property bag key for locked template
    */
-  private async _getTemplates(propertyBagRegex = /^pp_.*_template$/) {
-    const webAllProperties = (
-      await sp.web.select('Title', 'AllProperties').expand('AllProperties').get()
-    )['AllProperties']
-    const lockedTemplateProperty = Object.keys(webAllProperties).find((key) =>
-      propertyBagRegex.test(key)
-    )
-    const lockedTemplateName = webAllProperties[lockedTemplateProperty]
-    const templates = await this._portal.getItems(
-      this.properties.templatesLibrary,
-      ProjectTemplate,
-      {
-        ViewXml: '<View></View>'
-      },
-      ['FieldValuesAsText']
-    )
-    if (this.properties.forceTemplate) {
-      return templates
-    } else if (lockedTemplateName) {
-      const lockedTemplate = templates.find((t) => t.text === lockedTemplateName)
-      if (lockedTemplate) {
-        lockedTemplate.isForced = true
-        return [lockedTemplate]
+  private async _getTemplates(propertyBagRegex = /^pp_.*_template$/): Promise<ProjectTemplate[]> {
+    try {
+      const webAllProperties = (
+        await this.sp.web.select('Title', 'AllProperties').expand('AllProperties')()
+      )['AllProperties']
+      const lockedTemplateProperty = Object.keys(webAllProperties).find((key) =>
+        propertyBagRegex.test(key)
+      )
+
+      const [lockedTemplateName, templates] = await Promise.all([
+        webAllProperties[lockedTemplateProperty],
+        this._portalDataService.getItems(
+          this.properties.templatesLibrary,
+          ProjectTemplate,
+          {
+            ViewXml: '<View></View>'
+          },
+          ['FieldValuesAsText']
+        )
+      ])
+
+      if (this.properties.forceTemplate) {
+        return templates
+      } else if (lockedTemplateName) {
+        const lockedTemplate = templates.find((t) => t.text === lockedTemplateName)
+        if (lockedTemplate) {
+          lockedTemplate.isForced = true
+          lockedTemplate.isLocked = true
+          return [lockedTemplate]
+        }
       }
+      return templates
+    } catch (error) {
+      throw new Error(`Error getting templates: ${error.message}`)
     }
-    return templates
   }
 
   /**
@@ -394,36 +419,36 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     try {
       await MSGraphHelper.Init(this.context.msGraphClientFactory)
       const data: IProjectSetupData = {}
-      this._portal = await new PortalDataService().configure({
-        pageContext: this.context.pageContext as any
+      this._portalDataService = await new PortalDataService().configure({
+        spfxContext: this.context
       })
 
-      const [_templates, extensions, contentConfig, templateFiles] = await Promise.all([
-        this._getTemplates(),
-        this.properties.extensionsLibrary
-          ? this._portal.getItems(
-              this.properties.extensionsLibrary,
-              ProjectExtension,
-              {
-                ViewXml:
-                  '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
-              },
-              ['File', 'FieldValuesAsText']
-            )
-          : Promise.resolve([]),
-        this.properties.contentConfigList
-          ? this._portal.getItems(this.properties.contentConfigList, ContentConfig, {}, ['File'])
-          : Promise.resolve([]),
-        this._portal.getItems(
-          strings.Lists_ProjectTemplateFiles_Title,
-          ProjectTemplateFile,
-          {
-            ViewXml: '<View></View>'
-          },
-          ['File']
-        )
-      ])
-
+      const [_templates, extensions, contentConfig, templateFiles, customActions, ideaData] =
+        await Promise.all([
+          this._getTemplates(),
+          this._portalDataService.getItems(
+            this.properties.extensionsLibrary,
+            ProjectExtension,
+            {
+              ViewXml:
+                '<View Scope="RecursiveAll"><Query><Where><Eq><FieldRef Name="FSObjType" /><Value Type="Integer">0</Value></Eq></Where></Query></View>'
+            },
+            ['File', 'FieldValuesAsText']
+          ),
+          this._portalDataService.getItems(this.properties.contentConfigList, ContentConfig, {}, [
+            'File'
+          ]),
+          this._portalDataService.getItems(
+            strings.ProjectTemplateFilesListName,
+            ProjectTemplateFile,
+            {
+              ViewXml: '<View></View>'
+            },
+            ['File']
+          ),
+          this.sp.web.userCustomActions(),
+          this._portalDataService.getIdeaData()
+        ])
       const templates = _templates.map((tmpl) => {
         const [tmplFile] = templateFiles.filter((file) => file.id === tmpl.projectTemplateId)
         tmpl.projectTemplateUrl = tmplFile?.serverRelativeUrl
@@ -433,8 +458,10 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
         ...data,
         extensions,
         contentConfig,
-        templates
-      }
+        templates,
+        customActions,
+        ideaData
+      } as IProjectSetupData
     } catch (error) {
       throw new ProjectSetupError(
         '_fetchData',
@@ -472,7 +499,7 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Get container
+   * Get container element in `PlaceholderName.Top` placeholder
    */
   private get _container(): HTMLDivElement {
     const topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top)
@@ -497,14 +524,22 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
   }
 
   /**
-   * Check if the project is previously set up.
+   * Check if the project is previously set up. We fetch the `WelcomePage` property
+   * from the root folder of the web. If the value is not `SitePages/CollabHome.aspx`
+   * or `SitePages/Home.aspx`, we assume that the project is set up.
    */
   private async _isProjectSetup() {
-    const { WelcomePage } = await sp.web.rootFolder.select('WelcomePage').get()
-    if (WelcomePage === 'SitePages/Home.aspx') return false
-    return true
+    try {
+      const { WelcomePage } = await this.sp.web.rootFolder.select('WelcomePage')()
+      return ['SitePages/CollabHome.aspx', 'SitePages/Home.aspx'].indexOf(WelcomePage) === -1
+    } catch {
+      return false
+    }
   }
 
+  /**
+   * Returns the manifest version number, or 'Serving on localhost' if in debug mode.
+   */
   private get version() {
     return DEBUG ? 'Serving on localhost' : `v${this.manifest.version}`
   }

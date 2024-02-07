@@ -20,6 +20,7 @@
                 <FieldRef Name="GtShowFieldPortfolio" />
                 <FieldRef Name="GtFieldDataType" />
                 <FieldRef Name="GtColMinWidth" />
+                <FieldRef Name="GtColMaxWidth" />
                 <FieldRef Name="GtIsRefinable" />
                 <FieldRef Name="GtIsGroupable" />
             </ViewFields>
@@ -28,7 +29,7 @@
             <JSLink>hierarchytaskslist.js</JSLink>
         </View>
     </pnp:Views>
-    <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Skip">
+    <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Overwrite">
         <pnp:DataRow>            <!-- ID: 1 -->
             <pnp:DataValue FieldName="GtSortOrder">10</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Tittel</pnp:DataValue>
@@ -47,6 +48,13 @@
             <pnp:DataValue FieldName="Title">Prosjektnavn i økonomisystemet</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectFinanceName</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectFinanceNameOWSTEXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldOverrides">{
+            "Program": {
+                "nb-no": {
+                "displayName": "Navn i økonomisystemet",
+                "description": "Hvis relevant, legg inn tilhørende program/prosjektnavn fra økonomisystemet"
+                }
+            }}</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
@@ -60,6 +68,13 @@
             <pnp:DataValue FieldName="Title">Prosjektnummer</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectNumber</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectNumberOWSTEXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldOverrides">{
+            "Program": {
+                "nb-no": {
+                    "displayName": "Program/prosjektnummer",
+                    "description": "Hvis relevant, legg inn tilhørende program/prosjektnummer"
+                }
+            }}</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
@@ -86,6 +101,13 @@
             <pnp:DataValue FieldName="Title">Tjenesteområde</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectServiceArea</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectServiceAreaTextOWSTEXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldOverrides">{
+            "Program": {
+                "nb-no": {
+                    "displayName": "Tjenesteområde",
+                    "description": "Hva slags tjenesteområde hører programmet til?"
+                }
+            }}</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
@@ -99,6 +121,13 @@
             <pnp:DataValue FieldName="Title">Prosjekttype</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectType</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectTypeTextOWSTEXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldOverrides">{
+            "Program": {
+                "nb-no": {
+                    "displayName": "Programtype",
+                    "description": "Hva slags type program er dette?"
+                }
+            }}</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
@@ -119,12 +148,20 @@
             <pnp:DataValue FieldName="GtShowFieldPortfolio">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsRefinable">True</pnp:DataValue>
             <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldCustomSort">Logisk rekkefølge(AllApps):Konsept,Planlegge,Gjennomføre,Avslutte,Realisere</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 8 -->
             <pnp:DataValue FieldName="GtSortOrder">80</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Prosjektleder</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectManager</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">RefinableString51</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldOverrides">{
+            "Program": {
+                "nb-no": {
+                    "displayName": "Programleder",
+                    "description": "Hvem er leder for programmet?"
+                }
+            }}</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
@@ -138,6 +175,13 @@
             <pnp:DataValue FieldName="Title">Prosjekteier</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectOwner</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">RefinableString50</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldOverrides">{
+            "Program": {
+                "nb-no": {
+                    "displayName": "Programeier",
+                    "description": "Hvem er eier av programmet?"
+                }
+            }}</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
@@ -150,6 +194,13 @@
             <pnp:DataValue FieldName="Title">Gevinstansvarlig</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtGainsResponsible</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">RefinableString70</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldOverrides">{
+            "Program": {
+                "nb-no": {
+                    "displayName": "Gevinstansvarlig",
+                    "description": "Hvem er gevinstansvarlig for programmet?"
+                }
+            }}</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
@@ -189,6 +240,13 @@
             <pnp:DataValue FieldName="Title">Målsetting</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectGoals</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectGoalsOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldOverrides">{
+            "Program": {
+                "nb-no": {
+                    "displayName": "Målsetting",
+                    "description": "Hva er programmets målsetting?"
+                }
+            }}</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
@@ -423,6 +481,13 @@
             <pnp:DataValue FieldName="Title">Prosjektstøtte</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectSupport</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">RefinableString60</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldOverrides">{
+            "Program": {
+                "nb-no": {
+                    "displayName": "Støtteressurser",
+                    "description": "Hvem er støtteressurser for programmet? Dette kan være assisterende program/prosjektledere eller andre involverte."
+                }
+            }}</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">175</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">True</pnp:DataValue>
@@ -462,6 +527,13 @@
             <pnp:DataValue FieldName="Title">Prosjektstatus</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtProjectLifecycleStatus</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLifecycleStatusOWSCHCS</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldOverrides">{
+            "Program": {
+                "nb-no": {
+                    "displayName": "Programstatus",
+                    "description": "Hvilken status har programmet?"
+                }
+            }}</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
@@ -576,7 +648,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 41 -->
             <pnp:DataValue FieldName="GtSortOrder">410</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Tilskudd</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Status tilskudd</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectSupport</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectSupportOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -602,7 +674,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 43 -->
             <pnp:DataValue FieldName="GtSortOrder">430</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">SHA</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Status SHA</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectSHA</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectSHAOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -628,7 +700,7 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 45 -->
             <pnp:DataValue FieldName="GtSortOrder">450</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Miljø</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Status miljø</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectEnv</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectEnvOWSCHCS</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
@@ -667,10 +739,30 @@
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 48 -->
             <pnp:DataValue FieldName="GtSortOrder">480</pnp:DataValue>
-            <pnp:DataValue FieldName="Title">Kommentar, status plan- og byggesak</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Kommentar, plan- og byggesak</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtBAProjectStatusCaseComment</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtBAProjectStatusCaseCommentOWSMTXT</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtShowFieldPortfolio">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsRefinable">False</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">False</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 49 -->
+            <pnp:DataValue FieldName="GtSortOrder">490</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Prosjektadministrasjonsroller</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtProjectAdminRoles</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtProjectAdminRolesOWSCHCM</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldOverrides">{
+            "Program": {
+                "nb-no": {
+                    "displayName": "Administrasjonsroller",
+                    "description": "Velg hvilke roller som skal kunne administrere programmet. Dette inkluderer handlinger som å redigere egenskaper, fase og status."
+                }
+            }}</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">150</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>

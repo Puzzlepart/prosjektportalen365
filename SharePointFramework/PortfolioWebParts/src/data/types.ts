@@ -1,118 +1,291 @@
-import { TypedHash } from '@pnp/common'
-import { ItemUpdateResult, QueryPropertyValueType, SearchQuery, SortDirection } from '@pnp/sp'
-import { IPortfolioConfiguration, IAggregatedListConfiguration } from 'interfaces'
-import { ProjectListModel, TimelineConfigurationModel, TimelineContentModel } from 'models'
-import { DataSource, PortfolioOverviewView } from 'pp365-shared/lib/models'
-import { DataSourceService } from 'pp365-shared/lib/services'
-import { SearchResult } from '@pnp/sp'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { ISiteUserInfo } from '@pnp/sp/presets/all'
+import { ISearchResult, SortDirection } from '@pnp/sp/search'
+import {
+  DataSource,
+  DataSourceService,
+  IGraphGroup,
+  PortalDataService,
+  PortfolioOverviewView,
+  ProjectContentColumn,
+  ProjectListModel,
+  SPProjectContentColumnItem,
+  SPProjectItem,
+  TimelineConfigurationModel,
+  TimelineContentModel
+} from 'pp365-shared-library'
+import { IPortfolioAggregationConfiguration, IPortfolioOverviewConfiguration } from '../components'
 
-export interface IFetchDataForViewItemResult extends SearchResult {
+export interface IFetchDataForViewItemResult extends ISearchResult {
   SiteId: string
   [key: string]: any
 }
 
-export const DEFAULT_SEARCH_SETTINGS: SearchQuery = {
-  Querytext: '*',
-  RowLimit: 500,
-  TrimDuplicates: false,
-  Properties: [
-    {
-      Name: 'EnableDynamicGroups',
-      Value: {
-        BoolVal: true,
-        QueryPropertyValueTypeIndex: QueryPropertyValueType.BooleanType
-      }
-    }
-  ],
-  SortList: [{ Property: 'LastModifiedTime', Direction: SortDirection.Descending }]
+export type IPortfolioViewData = {
+  items: IFetchDataForViewItemResult[]
+  managedProperties?: string[]
 }
 
-export const CONTENT_TYPE_ID_BENEFITS = '0x01004F466123309D46BAB9D5C6DE89A6CF67'
-export const CONTENT_TYPE_ID_MEASUREMENTS = '0x010039EAFDC2A1624C1BA1A444FC8FE85DEC'
-export const CONTENT_TYPE_ID_INDICATORS = '0x010073043EFE3E814A2BBEF96B8457623F95'
-export const DEFAULT_GAINS_PROPERTIES = [
-  'Path',
-  'SPWebURL',
-  'Title',
-  'ListItemId',
-  'SiteTitle',
-  'SiteId',
-  'ContentTypeID',
-  'GtDesiredValueOWSNMBR',
-  'GtMeasureIndicatorOWSTEXT',
-  'GtMeasurementUnitOWSCHCS',
-  'GtStartValueOWSNMBR',
-  'GtMeasurementValueOWSNMBR',
-  'GtMeasurementCommentOWSMTXT',
-  'GtMeasurementDateOWSDATE',
-  'GtGainsResponsibleOWSUSER',
-  'GtGainsTurnoverOWSMTXT',
-  'GtGainsTypeOWSCHCS',
-  'GtPrereqProfitAchievementOWSMTXT',
-  'GtRealizationTimeOWSDATE',
-  'GtGainLookupId',
-  'GtMeasureIndicatorLookupId',
-  'GtGainsResponsible',
-  'GtGainsOwner'
-]
+/**
+ * Project data fetched in `fetchEnrichedProjects` method, and
+ * used as parameter in the `_combineResultData` method.
+ */
+export interface IProjectsData {
+  items: SPProjectItem[]
+  sites: ISearchResult[]
+  memberOfGroups: IGraphGroup[]
+  users: ISiteUserInfo[]
+}
 
-export interface IDataAdapter {
-  configure(): Promise<IDataAdapter>
+export interface IPortfolioWebPartsDataAdapter {
+  /**
+   * Configure data adapter - returns an configured instance of the data adapter.
+   *
+   * @param spfxContext SPFx context (optional)
+   * @param configuration Configuration for data adapter (optional)
+   */
+  configure(
+    spfxContext?: WebPartContext,
+    configuration?: any
+  ): Promise<IPortfolioWebPartsDataAdapter | void>
+
+  /**
+   * An optional instance of the portal data service.
+   */
+  portalDataService?: PortalDataService
+
+  /**
+   * An optional instance of the data source service.
+   */
   dataSourceService?: DataSourceService
-  fetchDataSources?(dataSourceCategory: string): Promise<DataSource[]>
+
+  /**
+   * Fetch data sources by category and optional level.
+   *
+   * @param category Data source category
+   * @param level Level for data source
+   * @param columns Columns available for the data source category
+   */
+  fetchDataSources?(
+    dataSourceCategory: string,
+    level?: string,
+    columns?: ProjectContentColumn[]
+  ): Promise<DataSource[]>
+
+  /**
+   * Fetch chart data for a view
+   *
+   * @param view View configuration
+   * @param configuration PortfolioOverviewConfiguration
+   * @param chartConfigurationListName List name for chart configuration
+   * @param siteId Site ID
+   */
   fetchChartData?(
-    currentView: any,
-    configuration: any,
+    currentView: PortfolioOverviewView,
+    configuration: IPortfolioOverviewConfiguration,
     chartConfigurationListName: string,
     siteId: string
   ): Promise<{ charts: any; chartData: any; contentTypes: any }>
-  getPortfolioConfig?(): Promise<IPortfolioConfiguration>
-  getAggregatedListConfig?(category: string): Promise<IAggregatedListConfiguration>
+
+  /**
+   * Get portfolio configuration from SharePoint lists.
+   *
+   * This includes:
+   * - `columns` - Project columns
+   * - `refiners` - Refinable columns
+   * - `views` - Portfolio overview views
+   * - `programs` - Programs
+   * - `viewsUrls` - Portfolio views list form URLs
+   * - `columnUrls` - Project columns list form URLs
+   * - `userCanAddViews` - User can add portfolio views
+   */
+  getPortfolioConfig?(): Promise<IPortfolioOverviewConfiguration>
+
+  /**
+   * Get aggregated list config for the given category.
+   *
+   * Returns `views`, `viewsUrls`, `columnUrls` and `level`.
+   *
+   * @param category Category for data source
+   * @param level Level for data source
+   */
+  getAggregatedListConfig?(category: string): Promise<IPortfolioAggregationConfiguration>
+
+  /**
+   * Do a dynamic amount of `sp.search` calls based on the amount of projects
+   * to avoid 4096 character limitation by SharePoint. Uses `this.aggregatedQueryBuilder`
+   * to create queries and `Promise.all` to execute them and flatten the results.
+   *
+   * @param view View configuration
+   * @param configuration PortfolioOverviewConfiguration
+   * @param siteId Site ID
+   */
   fetchDataForViewBatch?(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     hubSiteId: any
-  ): Promise<any>
+  ): Promise<IPortfolioViewData>
+
+  /**
+   * Fetch data for view. Items and managed properties are returned.
+   *
+   * @param view View configuration
+   * @param configuration PortfolioOverviewConfiguration
+   * @param siteId Site ID
+   */
   fetchDataForView?(
     view: PortfolioOverviewView,
-    configuration: IPortfolioConfiguration,
+    configuration: IPortfolioOverviewConfiguration,
     hubSiteId: any
-  ): Promise<any>
+  ): Promise<IPortfolioViewData>
+
+  /**
+   * Fetch data for regular view
+   *
+   * @param view View configuration
+   * @param configuration PortfolioOverviewConfiguration
+   * @param siteId Site ID
+   * @param siteIdProperty Site ID property
+   */
+  fetchDataForRegularView(
+    view: PortfolioOverviewView,
+    configuration: IPortfolioOverviewConfiguration,
+    siteId: string | string[],
+    siteIdProperty?: string
+  ): Promise<IPortfolioViewData>
+
+  /**
+   * Fetch data for manager view.
+   *
+   * @param view View
+   * @param configuration Configuration
+   * @param siteId Site ID
+   * @param siteIdProperty Site ID property (defaults to **GtSiteIdOWSTEXT**)
+   */
+  fetchDataForManagerView(
+    view: PortfolioOverviewView,
+    configuration: IPortfolioOverviewConfiguration,
+    siteId: string | string[],
+    siteIdProperty?: string
+  ): Promise<IPortfolioViewData>
+
+  /**
+   * Checks if the current is in the specified group.
+   *
+   * @param groupName
+   */
   isUserInGroup?(groupName: string): Promise<boolean>
+
+  /**
+   * Fetches data for the Projecttimeline project.
+   *
+   * @param timelineConfig Timeline configuration
+   */
   fetchTimelineProjectData?(
     timelineConfig: any[]
   ): Promise<{ reports: any[]; configElement: TimelineConfigurationModel }>
+
+  /**
+   *  Fetches items from timeline content list
+   *
+   * * Fetching list items
+   * * Maps the items to `TimelineContentModel`
+   *
+   * @description Used in `ProjectTimeline`
+   */
   fetchTimelineContentItems?(timelineConfig: any[]): Promise<TimelineContentModel[]>
+
+  /**
+   * Fetches configuration data for the Project Timeline and
+   * maps them to `TimelineContentModel`.
+   *
+   * @param configItemTitle Configuration item title
+   * @param dataSourceName Data source name
+   * @param timelineConfig Timeline configuration
+   */
   fetchTimelineAggregatedContent?(
     configItemTitle: string,
     dataSourceName: string,
     timelineConfig: any[]
   ): Promise<TimelineContentModel[]>
+
+  /**
+   * Fetches configuration data for the Project Timeline and
+   * maps them to `TimelineConfigurationModel`.
+   */
   fetchTimelineConfiguration?(): Promise<TimelineConfigurationModel[]>
-  fetchEnrichedProjects?(filter?: string): Promise<ProjectListModel[]>
-  fetchProjects?(configuration?: IAggregatedListConfiguration, dataSource?: string): Promise<any[]>
+
+  /**
+   * Fetching enriched projects by combining list items from projects list,
+   * Graph Groups and site users. The result are cached in `localStorage`
+   * for 30 minutes. Projects with lifecycle stage `Avsluttet` are excluded, and
+   * the projects are sorted by Title ascending.
+   */
+  fetchEnrichedProjects?(): Promise<ProjectListModel[]>
+
+  /**
+   * Fetch projects from the projects list. If a data source is specified,
+   * the projects are filtered using the `odataQuery` property from the
+   * specified view.
+   *
+   * @param configuration Configuration
+   * @param dataSource Data source
+   */
+  fetchProjects?(
+    configuration?: IPortfolioAggregationConfiguration,
+    dataSource?: string
+  ): Promise<any[]>
+
+  /**
+   * Fetch project sites using search.
+   *
+   * @param rowLimit Row limit
+   * @param sortProperty Sort property
+   * @param sortDirection Sort direction
+   */
   fetchProjectSites(
     rowLimit: number,
-    sortProperty: string,
+    sortProperty: 'Created' | 'Title',
     sortDirection: SortDirection
-  ): Promise<any>
+  ): Promise<ISearchResult[]>
+
+  /**
+   * Fetch items with data source name. If the data source is a benefit overview,
+   * the items are fetched using `fetchBenefitItemsWithSource`.
+   *
+   * The properties 'FileExtension' and 'ServerRedirectedURL' is always added to the select properties.
+   *
+   * @param dataSourceName Data source name
+   * @param selectProperties Select properties
+   */
   fetchItemsWithSource?(
     dataSourceName: string,
     selectProperties: string[],
     includeSelf?: boolean
   ): Promise<any[]>
+
+  /**
+   * Fetch benefit items with the specified `dataSource` and `selectProperties`. The result
+   * is transformed into `Benefit`, `BenefitMeasurement` and `BenefitMeasurementIndicator` objects
+   * which is the main difference from `_fetchItems`.
+   *
+   * @param dataSource Data source
+   * @param selectProperties Select properties
+   */
   fetchBenefitItemsWithSource?(
     dataSource: DataSource,
     selectProperties: string[],
     dataSourceCategory?: string
   ): Promise<any[]>
-  fetchProjectContentColumns?(dataSourceCategory: string): Promise<any[]>
-  updateProjectContentColumn?(column: Record<string, any>, persistRenderAs?: boolean): Promise<any>
-  deleteProjectContentColumn?(property: TypedHash<any>): Promise<any>
-  addItemToList?(listName: string, properties: TypedHash<any>): Promise<any[]>
-  updateDataSourceItem?(
-    properties: TypedHash<any>,
-    dataSourceTitle: string,
-    shouldReplace?: boolean
-  ): Promise<ItemUpdateResult>
+
+  /**
+   * Adds a new column to the project content columns list and adds the column to the specified data source.
+   *
+   * @param properties Properties for the new column (`Id` will be omitted)
+   * @param dataSource The data source to add the column to
+   */
+  addColumnToDataSource?(
+    properties: SPProjectContentColumnItem,
+    dataSource: DataSource
+  ): Promise<boolean>
 }

@@ -1,7 +1,7 @@
-import { IBaseComponentProps } from '../types'
 import { ChartConfiguration, ChartData } from 'models'
-import { IPortfolioConfiguration } from 'interfaces'
-import { PortfolioOverviewView } from 'pp365-shared/lib/models/PortfolioOverviewView'
+import { PortfolioOverviewView } from 'pp365-shared-library/lib/models/PortfolioOverviewView'
+import { IPortfolioOverviewConfiguration } from '../../components/PortfolioOverview'
+import { IBaseComponentProps } from '../types'
 
 export interface IPortfolioInsightsProps extends IBaseComponentProps {
   chartConfigurationListName: string
@@ -15,6 +15,6 @@ export interface IPortfolioInsightsState {
   charts?: ChartConfiguration[]
   contentTypes?: { StringId: string; Name: string; NewFormUrl: string }[]
   currentView?: PortfolioOverviewView
-  configuration?: IPortfolioConfiguration
+  configuration?: IPortfolioOverviewConfiguration
   error?: string
 }

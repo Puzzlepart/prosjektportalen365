@@ -1,22 +1,38 @@
 declare interface IProjectWebPartsStrings {
+  OpportunityMatrixConfigurationFolder: string
+  EditTimelineContentText: string
+  NewTimelineContentText: string
+  NewStatusPanelTitle: string
+  EditStatusPanelText: string
+  Aria: {
+    CurrentPhaseText: string
+  }
+  SaveText: string
+  ErrorBoundaryFallbackDescription: string
+  ErrorBoundaryFallbackText: string
+  UpdatingProjectPropertiesErrorText: string
+  SynchronizingProjectPropertiesToPortfolioSiteErrorText: string
+  UpdatingProjectPropertiesStatusText: string
+  SynchronizingProjectPropertiesToPortfolioSiteStatusText: string
   UnknownConfigurationName: any
   SiteAssetsConfigurationFolder: string
   RiskMatrixConfigurationFolder: string
-  ManualConfigurationNotFoundOrInvalid: string
-  RiskMatrixManualConfigurationPathDefaltValue: string
+  ManualConfigurationNotFoundOrInvalid: stringg
   UseDynamicConfigurationOffText: string
   UseDynamicConfigurationOnText: string
   ManualConfigurationPathLabel: string
-  UseDynamicConfigurationLabel: string 
-  PublishReportSpinnerText: string
+  UseDynamicConfigurationLabel: string
+  PublishingReportLabel: string
   PublishStatusReportSectionDataWarning: string
   AdminPageLinkLabel: string
   AdvancedGroupName: string
   BarLabel: string
-  BudgetTotalLabel: string
   CalloutTemplateFieldLabel: string
   CancelText: string
   CategoryFieldLabel: string
+  ChangePhaseDialogTitle: string
+  ChangePhaseDialogSubtitle: string
+  ChangeFirstPhaseDialogSubtitle: string
   ChangePhaseText: string
   ChangingPhaseDescription: string
   ChecklistCommentDescription: string
@@ -33,16 +49,12 @@ declare interface IProjectWebPartsStrings {
   CommentLabel: string
   ConfigItemTitleFieldLabel: string
   ConfirmChangePhase: string
-  ConfirmPhaseDialogSubText: string
-  ConfirmPhaseDialogTitle: string
   ConsequenceFieldNameFieldLabel: string
   ConsequenceHeaderFieldLabel: string
   ConsequencePostActionFieldNameFieldLabel: string
-  CostsTotalLabel: string
   CreateParentModalSubText: string
   CreateParentModalTitle: string
   CreateParentProjectLabel: string
-  CurrentPhaseLabel: string
   CurrentPhaseViewNameFieldLabel: string
   DataGroupName: string
   DefaultAdminPageLink: string
@@ -52,22 +64,24 @@ declare interface IProjectWebPartsStrings {
   DefaultTimeframeStartLabel: string
   DefaultTimeframeStartValue: string
   DeleteItemLabel: string
-  DeleteReportButtonText: string
+  DeleteReportButtonLabel: string
+  DeleteReportButtonDescription: string
+  DeleteReportButtonDescriptionNoPermission: string
   DiamondLabel: string
   DocumentsListName: string
   EditItemLabel: string
   EditProjectInformationText: string
-  EditReportButtonText: string
+  EditReportButtonLabel: string
+  EditReportButtonDescription: string
+  EditReportButtonDescriptionNoPermission: string
   EditSiteInformationText: string
-  EndDateLabel: string
-  ErrorText: string
-  ExternalUsersConfigInfoText: string
+  ErrorTitle: string
+  ExternalUsersConfigInfoTitle: string
+  ExternalUsersConfigInfoMessage: string
   ExternalUsersConfigText: string
-  FilterText: string
   GeneralGroupName: string
-  GetSnapshotButtonText: string
-  GroupLevelPortfolio: string
-  GroupLevelProject: string
+  GetSnapshotButtonLabel: string
+  GetSnapshotButtonDescription: string
   GtModerationStatus_Choice_Draft: string
   GtModerationStatus_Choice_Published: string
   HideActionsLabel: string
@@ -78,17 +92,15 @@ declare interface IProjectWebPartsStrings {
   HookAuthFieldLabel: string
   HookUrlFieldDescription: string
   HookUrlFieldLabel: string
-  IdeaProcessingTitle: string
-  IdeaProcessingUrlTitle: string
-  IdeaProjectDataTitle: string
-  LastPublishedStatusreport: string
   ListNameFieldLabel: string
   ListSectionDataErrorMessage: string
   LoadingText: string
   LogListName: string
   LookAndFeelGroupName: string
+  ManualConfigurationNotFoundOrInvalid: string
+  ManualConfigurationPathLabel: string
   MatrixColorScaleConfigLabel: string
-  MatrixFullWidthLabel: string 
+  MatrixFullWidthLabel: string
   MatrixHeader_Critical: string
   MatrixHeader_ExtremelyHigh: string
   MatrixHeader_ExtremelyLarge: string
@@ -103,49 +115,53 @@ declare interface IProjectWebPartsStrings {
   MatrixHeader_Small: string
   MatrixHeader_VeryCritical: string
   MatrixHeader_VeryHigh: string
-  MatrixHeader_VeryHigh: string
   MatrixHeader_VeryLarge: string
   MatrixHeader_VeryLow: string
   MatrixHeader_VerySmall: string
   MatrixSizeLabel: string
   MilestoneDateLabel: string
   MilestoneLabel: string
-  MissingPropertiesMessage: string
   MoveOn: string
   NavigateToSourceUrlText: string
   NewItemLabel: string
-  NewStatusReportModalHeaderText: string
+  NewStatusReportLabel: string
+  NewStatusReportDescription: string
+  NewStatusReportDescriptionNoPermission: string
   NewStatusReportTitle: string
   No: string
-  NoLocalPropertiesListWarningText: string
+  NoLocalPropertiesListWarningMessage: string
+  NoPropertiesTitle: string
   NoPropertiesMessage: string
+  NoReportsFoundTitle: string
   NoStatusReportsMessage: string
   NotPublishedStatusReport: string
   OpportunityMatrixGroupName: string
   OverrideHeadersLabel: string
-  PageReloadMessage: string
   ParentProjectsGroupName: string
+  ParentProjectsHeaderDescription: string
   ParentProjectsHeaderText: string
-  PersistedPhasePropertyBagKey: string
   PhaseChecklistLinkText: string
   PhaseChecklistName: string
   PhaseChecklistViewUrl: string
   PhaseFieldFieldLabel: string
   PhaseLabel: string
-  PhaseSitePageFoundDescription: string
-  PhaseSitePageNotFoundDescription: string
-  PickReportText: string
+  PhaseSitePageTitle: string
+  PhaseSitePageFoundMessage: string
+  PhaseSitePageNotFoundMessage: string
+  PhaseUseStartArrowLabel: string
+  PhaseUseEndArrowLabel: string
   PleaseWaitText: string
-  PortfolioManagerGroupName: string
   ProbabilityFieldNameFieldLabel: string
   ProbabilityHeaderFieldLabel: string
   ProbabilityPostActionFieldNameFieldLabel: string
   ProjectDeliveriesGroupName: string
   ProjectInformationDataFetchErrorText: string
   ProjectInformationStatusReportHeaderText: string
+  ProjectInformationStatusReportHeaderDescription: string
   ProjectLabel: string
   ProjectPhasesChangePhaseError: string
   ProjectPhasesFetchDataError: string
+  ProjectPropertiesHeader: string
   ProjectPropertiesListName: string
   ProjectsListName: string
   ProjectStatusDataErrorText: string
@@ -154,19 +170,22 @@ declare interface IProjectWebPartsStrings {
   ProjectTimelineErrorFetchText: string
   ProjectTimelineErrorTransformItemText: string
   ProjecttimelineGroupName: string
-  ProjectTimelineInfoText: string
   ProjectTimelineItemInfo: string
   ProjectTimelineListInfoText: string
   PublishedStatusReport: string
-  PublishReportButtonText: string
+  PublishReportButtonLabel: string
+  PublishReportButtonDescription: string
+  PublishReportButtonDescriptionNoPermission: string
+  PublishingReportLabel: string
   RedoText: string
   RevertDefaultColorConfigurationText: string
+  RiskMatrixConfigurationFolder: string
   RiskMatrixGroupName: string
   SaveColorConfigurationText: string
-  SaveText: string
   SettingsGroupName: string
   ShowAllProjectInformationText: string
-  ShowFieldExternalUsers: string
+  ShowFieldExternalUsersOffText: string
+  ShowFieldExternalUsersOnText: string
   ShowFilterButtonLabel: string
   ShowInfoMessageLabel: string
   ShowProjectDeliveriesLabel: string
@@ -174,28 +193,19 @@ declare interface IProjectWebPartsStrings {
   ShowTimelineLabel: string
   ShowTimelineListCommandsLabel: string
   ShowTimelineListLabel: string
-  SiteTitleLabel: string
+  SiteAssetsConfigurationFolder: string
   Skip: string
   SkipSyncToHubLabel: string
-  StartDateLabel: string
   StatusClosed: string
   StatusNotRelevant: string
   StatusOpen: string
-  StatusReportsHeaderLabel: string
   StatusReportShowOnlyIconsLabel: string
   StatusReportTruncateCommentsLabel: string
   StatusStillOpen: string
-  SubPhaseLabel: string
   SubTextTruncateLengthFieldLabel: string
-  SyncNowText: string
-  SyncProjectModalSubText: string
-  SyncProjectModalTitle: string
-  SyncProjectPropertiesDescription: string
   SyncProjectPropertiesErrorText: string
   SyncProjectPropertiesListProgressDescription: string
   SyncProjectPropertiesProgressLabel: string
-  SyncProjectPropertiesSuccessText: string
-  SyncProjectPropertiesText: string
   SyncProjectPropertiesValuesProgressDescription: string
   SyncProjectPropertiesValuesProgressLabel: string
   SyncPropertiesAfterPhaseChangeFieldLabel: string
@@ -206,26 +216,26 @@ declare interface IProjectWebPartsStrings {
   ToggleUncertaintyPostActionLabel: string
   ToggleUncertaintyPostActionOffText: string
   ToggleUncertaintyPostActionOnText: string
-  TriangleLabel: string
   TypeLabel: string
+  UnknownConfigurationName: any
   UnpublishedStatusReportInfo: string
-  UpdateViewsDocumentsFieldLabel: string
-  UpdateViewsRisksFieldLabel: string
+  PublishedStatusReportInfo: string
+  AlreadyPublishedReportInfo: string
+  UseDynamicConfigurationLabel: string
+  UseDynamicConfigurationOffText: string
+  UseDynamicConfigurationOnText: string
   UseDynamicHomepageCalloutText: string
-  UseDynamicHomepageChangePhaseDescription: string
   UseDynamicHomepageFieldLabel: string
   UseFramelessButtonsLabel: string
-  UseIdeaProcessingCalloutText: string
-  UseIdeaProcessingFieldLabel: string
   UsePhaseHooksCalloutText: string
   UsePhaseHooksFieldLabel: string
   ViewsGroupName: string
   ViewVersionHistoryText: string
   ViewXmlFieldLabel: string
   WebPartNoAccessMessage: string
-  WebPartNotConfiguredMessage: string
   WidthFieldLabel: string
   Yes: string
+  PhaseCheckListItem: string
 }
 
 declare module 'ProjectWebPartsStrings' {

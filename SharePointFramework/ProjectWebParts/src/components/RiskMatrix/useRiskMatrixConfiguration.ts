@@ -1,6 +1,9 @@
+import { dateAdd, getHashCode } from '@pnp/core'
+import { Caching } from '@pnp/queryable'
+import strings from 'ProjectWebPartsStrings'
 import { useEffect, useState } from 'react'
-import { DynamicMatrixConfiguration, generateMatrixConfiguration } from '../DynamicMatrix'
-import { getMatrixHeaders } from './getMatrixHeaders'
+import SPDataAdapter from '../../data'
+import { DynamicMatrixConfiguration } from '../DynamicMatrix'
 import { IRiskMatrixProps } from './types'
 import SPDataAdapter from '../../data'
 import strings from 'ProjectWebPartsStrings'
@@ -16,12 +19,12 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
   const [configuration, setConfiguration] = useState<DynamicMatrixConfiguration>([])
   const [error, setError] = useState<string>()
 
-  // Fetch manual configuration if `pageContext` is set and `useDynamicConfiguration` is not set
+  // Fetch manual configuration if `pageContext` is set.
   useEffect(() => {
     if (props.pageContext && !props.useDynamicConfiguration) {
       fetchJsonConfiguration()
     }
-  }, [props.useDynamicConfiguration])
+  }, [props.pageContext])
 
   /**
    * Fetches the manual configuration from the specified URL.
@@ -29,24 +32,21 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
    */
   async function fetchJsonConfiguration() {
     try {
-      const manualConfiguration = await SPDataAdapter.portal.web
-        .getFileByServerRelativeUrl(props.manualConfigurationPath)
-        .usingCaching()
+      const manualConfiguration = await SPDataAdapter.portalDataService.web
+        .getFileByServerRelativePath(props.manualConfigurationPath)
+        .using(
+          Caching({
+            store: 'local',
+            keyFactory: (url) => getHashCode(url.toLowerCase()).toString(),
+            expireFunc: () => dateAdd(new Date(), 'minute', 60)
+          })
+        )
         .getJSON()
       setConfiguration(manualConfiguration)
     } catch {
       setError(strings.ManualConfigurationNotFoundOrInvalid)
     }
   }
-
-  // Generate dynamic configuration if `size` and `useDynamicConfiguration` is set
-  useEffect(() => {
-    if (props.size && props.useDynamicConfiguration) {
-      setConfiguration(
-        generateMatrixConfiguration(parseInt(props.size, 10), getMatrixHeaders(props))
-      )
-    }
-  }, [props.useDynamicConfiguration, props.size])
 
   return { configuration, error }
 }

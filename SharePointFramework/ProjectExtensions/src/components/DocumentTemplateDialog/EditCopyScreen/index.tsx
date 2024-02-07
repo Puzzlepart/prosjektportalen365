@@ -1,14 +1,14 @@
 import { DefaultButton, DialogFooter, PrimaryButton } from '@fluentui/react'
-import { stringIsNullOrEmpty, TypedHash } from '@pnp/common'
+import { stringIsNullOrEmpty } from '@pnp/core'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { FC, useContext, useState } from 'react'
-import { InfoMessage } from '../../InfoMessage'
 import { DocumentTemplateDialogContext } from '../context'
 import { SET_SCREEN } from '../reducer'
 import { DocumentTemplateDialogScreen } from '../types'
 import { DocumentTemplateItem } from './DocumentTemplateItem'
 import styles from './EditCopyScreen.module.scss'
 import { IEditCopyScreenProps } from './types'
+import { UserMessage } from 'pp365-shared-library'
 
 export const EditCopyScreen: FC<IEditCopyScreenProps> = ({ onStartCopy }) => {
   const { state, dispatch } = useContext(DocumentTemplateDialogContext)
@@ -21,7 +21,7 @@ export const EditCopyScreen: FC<IEditCopyScreenProps> = ({ onStartCopy }) => {
    * @param properties Updated properties
    * @param errorMessage Error message
    */
-  function onInputChanged(id: string, properties: TypedHash<string>, errorMessage?: string) {
+  function onInputChanged(id: string, properties: Record<string, string>, errorMessage?: string) {
     setTemplates(
       templates.map((t) => {
         if (t.id === id) {
@@ -42,7 +42,10 @@ export const EditCopyScreen: FC<IEditCopyScreenProps> = ({ onStartCopy }) => {
 
   return (
     <div className={styles.root}>
-      <InfoMessage text={strings.DocumentTemplateDialogScreenEditCopyInfoText} />
+      <UserMessage
+        title={strings.DocumentTemplateDialogScreenEditCopyInfoTitle}
+        text={strings.DocumentTemplateDialogScreenEditCopyInfoMessage}
+      />
       {state.selected.map((item, idx) => (
         <DocumentTemplateItem key={idx} item={item} onInputChanged={onInputChanged} />
       ))}

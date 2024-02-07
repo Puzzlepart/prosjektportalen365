@@ -1,0 +1,9 @@
+{
+    "title": "Gevinstoversikt",
+    "dataSource": "Alle gevinstelementer for prosjektet",
+    "dataSourceCategory": "Gevinstoversikt",
+    "dataSourceLevel": "Prosjekt",
+    "showCommandBar": true,
+    "showViewSelector": true,
+    "showSearchBox": true
+}

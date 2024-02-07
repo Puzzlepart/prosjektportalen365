@@ -1,0 +1,23 @@
+.projectLogo {
+  .projectAvatar {
+    object-fit: cover;
+    transition: transform 0.5s;
+
+    span {
+      padding: 12px;
+    }
+  }
+
+  img {
+    object-fit: cover;
+    transition: transform 0.5s;
+    transform: translate3d(0, 0, 1px);
+  }
+}
+
+.hover {
+  &:hover {
+    transform: scale(1.1);
+    transform-origin: 50% 50%;
+  }
+}

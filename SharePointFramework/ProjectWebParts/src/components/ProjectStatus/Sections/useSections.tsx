@@ -1,21 +1,15 @@
-import { stringIsNullOrEmpty } from '@pnp/common'
-import { SectionType } from 'pp365-shared/lib/models'
-import { useContext } from 'react'
-import { ProjectStatusContext } from '../context'
+import { stringIsNullOrEmpty } from '@pnp/core'
+import { SectionType } from 'pp365-shared-library/lib/models'
+import { useProjectStatusContext } from '../context'
 
 /**
  * Component logic hook for `Sections`
  */
 export function useSections() {
-  const context = useContext(ProjectStatusContext)
-  let sections = context.state.data.sections
-  if (context.state.isDataLoaded) {
-    sections = sections
-      .filter(
-        (sec) =>
-          !stringIsNullOrEmpty(context.state.selectedReport?.getStatusValue(sec.fieldName)?.value)
-      )
-      .filter((sec) => sec.showAsSection || sec.type === SectionType.SummarySection)
-  }
-  return { sections } as const
+  const context = useProjectStatusContext()
+  const { data, isDataLoaded, selectedReport } = context.state
+  if (!isDataLoaded) return data.sections
+  return data.sections
+    .filter((sec) => !stringIsNullOrEmpty(selectedReport?.getStatusValue(sec.fieldName)?.value))
+    .filter((sec) => sec.showAsSection || sec.type === SectionType.SummarySection)
 }

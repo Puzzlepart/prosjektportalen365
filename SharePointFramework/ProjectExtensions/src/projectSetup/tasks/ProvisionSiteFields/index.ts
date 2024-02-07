@@ -1,11 +1,11 @@
-import { IProjectSetupData } from 'projectSetup'
 import { format } from '@fluentui/react/lib/Utilities'
 import * as strings from 'ProjectExtensionsStrings'
-import { transformFieldXml } from 'pp365-shared/lib/helpers'
-import { SPField } from 'pp365-shared/lib/models'
-import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
-import { OnProgressCallbackFunction } from '../OnProgressCallbackFunction'
 import SPDataAdapter from 'data/SPDataAdapter'
+import { IProjectSetupData } from 'projectSetup'
+import { BaseTask, BaseTaskError, IBaseTaskParams } from '../@BaseTask'
+import { OnProgressCallbackFunction } from '../types'
+import { SPField } from 'pp365-shared-library/lib/models/SPField'
+import { transformFieldXml } from 'pp365-shared-library/lib/util/transformFieldXml'
 
 export class ProvisionSiteFields extends BaseTask {
   constructor(data: IProjectSetupData) {
@@ -27,15 +27,14 @@ export class ProvisionSiteFields extends BaseTask {
         this.logInformation('Provisionining site fields to site', {
           parameters: params.templateSchema.Parameters
         })
-        const existingSiteFields = await params.web.fields
-          .select(...Object.keys(new SPField()))
-          .get<SPField[]>()
-        const siteFields = await SPDataAdapter.portal.web.fields
+        const existingSiteFields = await params.web.fields.select(...Object.keys(new SPField()))<
+          SPField[]
+        >()
+        const siteFields = await SPDataAdapter.portalDataService.web.fields
           .filter(
             `Group eq '${params.templateSchema.Parameters.ProvisionSiteFields}' and TypeAsString ne 'Calculated'`
           )
-          .select(...Object.keys(new SPField()))
-          .get<SPField[]>()
+          .select(...Object.keys(new SPField()))<SPField[]>()
         this.logInformation(`Retrieved ${siteFields.length} site fields from hub`)
         for (let i = 0; i < siteFields.length; i++) {
           const siteField = siteFields[i]

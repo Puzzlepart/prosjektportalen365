@@ -1,0 +1,32 @@
+.root {
+  display: flex;
+  align-items: center;
+  max-width: 450px;
+  text-overflow: ellipsis;
+
+  .heading {
+    .title {
+      font-size: 20px;
+      line-height: 24px;
+      font-family: inherit;
+      font-weight: var(--fontWeightSemibold);
+      color: var(--colorNeutralForeground1);
+    }
+  }
+
+  .infoLabel {
+    padding-top: 4px;
+
+    button {
+      cursor: pointer;
+    }
+  }
+
+  .infoLabel > span > div {
+    z-index: 9;
+  }
+}
+
+div > .infoLabelContent {
+  max-width: 640px;
+}

@@ -1,0 +1,74 @@
+@import "~@fluentui/react/dist/sass/References.scss";
+
+.root {
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 32px 32px 20px 32px;
+
+    .commandBar {
+      margin: 0;
+    }
+  }
+
+  .timeline {
+    margin: 0px auto;
+    padding: 0 32px 0 32px;
+    font-size: 12px !important;
+
+    .timelineItem,
+    .timelineItemMilestone {
+      cursor: pointer !important;
+      border-radius: var(--borderRadiusSmall);
+      min-width: 28px;
+
+      .itemContent {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 100%;
+        padding: 0 8px;
+      }
+    }
+
+    .timelineItem:hover {
+      filter: brightness(1.2);
+      box-shadow: var(--shadow2);
+    }
+
+    .timelineItemMilestone:hover {
+      filter: brightness(1.2);
+    }
+  }
+}
+
+div[class="rct-header-root"] {
+  position: sticky;
+  top: 0;
+  background: #f4f4f4 !important;
+}
+
+div[class="rct-sidebar"] {
+  width: fit-content !important;
+  max-width: 320px !important;
+  min-width: 0px !important;
+}
+
+div[class="rct-scroll"] {
+  z-index: 1 !important;
+}
+
+div[class="rct-dateHeader-primary"] {
+  color: #444 !important;
+  border: none !important;
+}
+
+div[class="rct-calendar-header"] {
+  border: none !important;
+}
+
+div[class*="rct-dateHeader"] {
+  font-size: 10px !important;
+  border: none !important;
+}

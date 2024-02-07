@@ -12,14 +12,16 @@ export const ColorConfigElement: FC<IColorConfigElementProps> = (props) => {
       ref={ref}
       className={styles.root}
       style={{ backgroundColor: rgbColorString }}
-      onClick={() => setIsEditing(true)}>
+      onClick={() => setIsEditing(true)}
+    >
       <div className={styles.container}>{props.config.p}%</div>
       {isEditing && (
         <Callout
           target={ref.current}
           gapSpace={props.gapSpace}
           preventDismissOnScroll={true}
-          onDismiss={() => setIsEditing(false)}>
+          onDismiss={() => setIsEditing(false)}
+        >
           <div className={styles.calloutContent}>
             <ColorPicker
               color={rgbColorString}

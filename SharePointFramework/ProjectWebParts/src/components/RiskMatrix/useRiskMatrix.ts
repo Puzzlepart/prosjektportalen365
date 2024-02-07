@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { IMatrixCell } from '../DynamicMatrix'
 import { IRiskMatrixProps } from './types'
 import { useRiskMatrixConfiguration } from './useRiskMatrixConfiguration'
+import { useId } from '@fluentui/react-components'
 
 /**
  * Component logic hook for `RiskMatrix`
@@ -39,5 +40,14 @@ export function useRiskMatrix(props: IRiskMatrixProps) {
     return [...elements, ...postActionElements]
   }
 
-  return { configuration, error, getElementsForCell, setShowPostAction } as const
+  const fluentProviderId = useId('fp-risk-matrix')
+
+  return {
+    configuration,
+    error,
+    getElementsForCell,
+    setShowPostAction,
+    showPostAction,
+    fluentProviderId
+  }
 }

@@ -1,0 +1,42 @@
+@import "~@fluentui/react/dist/sass/References.scss";
+
+.footer {
+  display: flex;
+
+  .persona {
+    display: flex;
+    gap: 4px;
+
+    .avatar:hover {
+      filter: brightness(0.9);
+    }
+  }
+
+  .action {
+    background-color: var(--colorNeutralBackground3);
+  }
+
+  .action:hover {
+    background-color: var(--colorNeutralBackground3Hover);
+  }
+
+  .buttons {
+    display: flex;
+    gap: 12px;
+    position: absolute;
+    right: 56px;
+  }
+
+  .templateTag {
+    cursor: default !important;
+    background-color: var(--colorNeutralBackground3);
+
+    button {
+      cursor: default !important;
+    }
+  }
+
+  .templateTag:hover {
+    background-color: var(--colorNeutralBackground3Hover);
+  }
+}

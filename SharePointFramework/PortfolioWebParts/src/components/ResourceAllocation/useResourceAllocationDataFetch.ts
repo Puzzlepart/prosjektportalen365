@@ -1,15 +1,19 @@
 import { format } from '@fluentui/react/lib/Utilities'
-import { sp } from '@pnp/sp'
 import sortArray from 'array-sort'
-import { IAllocationSearchResult, ITimelineData, TimelineResourceType } from 'interfaces'
+import { IAllocationSearchResult } from 'interfaces'
 import _ from 'lodash'
 import moment from 'moment'
 import strings from 'PortfolioWebPartsStrings'
-import { tryParsePercentage } from 'pp365-shared/lib/helpers'
-import { DataSourceService } from 'pp365-shared/lib/services'
+import { tryParsePercentage } from 'pp365-shared-library/lib/util/tryParsePercentage'
+import { DataSourceService } from 'pp365-shared-library/lib/services'
 import { useEffect } from 'react'
-import { ITimelineGroup, ITimelineItem } from '../../interfaces'
 import { IResourceAllocationProps } from './types'
+import {
+  ITimelineData,
+  ITimelineGroup,
+  ITimelineItem,
+  TimelineResourceType
+} from 'pp365-shared-library/lib/interfaces'
 
 /**
  * Creating groups based on user property (`RefinableString71`) on the search result,
@@ -19,7 +23,7 @@ import { IResourceAllocationProps } from './types'
  *
  * @returns Timeline groups
  */
-function transformGroups(searchResults: IAllocationSearchResult[]): ITimelineGroup[] {
+const transformGroups = (searchResults: IAllocationSearchResult[]): ITimelineGroup[] => {
   const groupNames = _.uniq(
     searchResults
       .map(
@@ -47,11 +51,11 @@ function transformGroups(searchResults: IAllocationSearchResult[]): ITimelineGro
  *
  * @returns Timeline items
  */
-function transformItems(
+const transformItems = (
   searchResults: IAllocationSearchResult[],
   groups: ITimelineGroup[],
   props: IResourceAllocationProps
-): ITimelineItem[] {
+): ITimelineItem[] => {
   const items = searchResults
     .map<ITimelineItem>((res, id) => {
       const group =
@@ -69,7 +73,7 @@ function transformItems(
       const allocation = tryParsePercentage(res.GtResourceLoadOWSNMBR, false, 0) as number
       const itemOpacity = allocation < 30 ? 0.3 : allocation / 100
       const itemColor = allocation < 40 ? '#000' : '#fff'
-      const backgroundColor = isAbsence ? props.itemAbsenceBgColor : props.itemBgColor
+      const backgroundColor = isAbsence ? props.itemAbsenceColor : props.itemColor
       const style: React.CSSProperties = {
         color: itemColor,
         border: 'none',
@@ -89,14 +93,17 @@ function transformItems(
         title,
         start_time,
         end_time: end_time,
-        allocation,
         itemProps: { style },
-        role: res.RefinableString72,
-        resource: res.RefinableString71,
         props: res,
         data: {
           project: res.SiteTitle,
-          projectUrl: res.SiteName
+          projectUrl: res.SiteName,
+          type: strings.ResourceLabel,
+          allocation,
+          role: res.RefinableString72,
+          resource: res.RefinableString71,
+          status: res.GtAllocationStatusOWSCHCS,
+          comment: res.GtAllocationCommentOWSMTXT
         }
       } as ITimelineItem
     })
@@ -111,12 +118,12 @@ function transformItems(
  *
  * @returns Timeline data
  */
-async function fetchData(props: IResourceAllocationProps): Promise<ITimelineData> {
-  const dataSource = await new DataSourceService(sp.web).getByName(props.dataSource)
+const fetchData = async (props: IResourceAllocationProps): Promise<ITimelineData> => {
+  const dataSource = await new DataSourceService(props.sp.web).getByName(props.dataSource)
   if (!dataSource) throw format(strings.DataSourceNotFound, props.dataSource)
   try {
     const results = (
-      await sp.search({
+      await props.sp.search({
         QueryTemplate: dataSource.searchQuery,
         Querytext: '*',
         RowLimit: 500,

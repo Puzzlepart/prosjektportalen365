@@ -1,20 +1,36 @@
 import { LogLevel } from '@pnp/logging'
 import { AnyAction } from '@reduxjs/toolkit'
-import { ProjectAdminPermission } from 'pp365-shared/lib/data/SPDataAdapterBase/ProjectAdminPermission'
 import strings from 'ProjectWebPartsStrings'
+import _ from 'lodash'
+import {
+  EditableSPField,
+  ProjectAdminPermission,
+  getUrlParam,
+  parseUrlHash
+} from 'pp365-shared-library'
 import { useEffect } from 'react'
 import SPDataAdapter from '../../data'
 import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { INIT_DATA } from './reducer'
-import { IProjectStatusData, IProjectStatusHashState, IProjectStatusProps } from './types'
-import _ from 'lodash'
-import { parseUrlHash, getUrlParam } from 'pp365-shared/lib/util'
-import { StatusReport } from 'pp365-shared/lib/models'
+import { FetchDataResult, IProjectStatusProps } from './types'
 
 export type FetchDataResult = {
   data: IProjectStatusData
   initialSelectedReport: StatusReport
   sourceUrl: string
+}
+
+/**
+ * Get report fields for Project Status. If content type ID is not provided,
+ * the ID "0x010022252E35737A413FB56A1BA53862F6D5" is used, which is the ID
+ * for the default content type for Project Status.
+ *
+ * @param contentTypeId Content type ID for Project Status
+ */
+async function getReportFields(contentTypeId = '0x010022252E35737A413FB56A1BA53862F6D5') {
+  const fields = await SPDataAdapter.portalDataService.getContentTypeFields(contentTypeId)
+  const reportFields = fields.map((field) => new EditableSPField(field))
+  return reportFields
 }
 
 /**
@@ -25,34 +41,22 @@ export type FetchDataResult = {
 const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async (props) => {
   try {
     if (!SPDataAdapter.isConfigured) {
-      SPDataAdapter.configure(props.webPartContext, {
+      SPDataAdapter.configure(props.spfxContext, {
         siteId: props.siteId,
-        webUrl: props.webUrl,
+        webUrl: props.webAbsoluteUrl,
         logLevel: sessionStorage.DEBUG || DEBUG ? LogLevel.Info : LogLevel.Warning
       })
     }
-    const [
-      properties,
-      reportList,
-      reports,
-      sections,
-      columnConfig,
-      reportFields
-    ] = await Promise.all([
-      SPDataAdapter.project.getPropertiesData(),
-      SPDataAdapter.portal.getStatusReportListProps(),
-      SPDataAdapter.portal.getStatusReports({
-        useCaching: false,
-        publishedString: strings.GtModerationStatus_Choice_Published
-      }),
-      SPDataAdapter.portal.getProjectStatusSections(),
-      SPDataAdapter.portal.getProjectColumnConfig(),
-      SPDataAdapter.portal.getListFields(
-        'PROJECT_STATUS',
-        // eslint-disable-next-line quotes
-        "Hidden eq false and Group ne 'Hidden'"
-      )
+    const [properties, reportList, reports, sections, columnConfig] = await Promise.all([
+      SPDataAdapter.project.getProjectInformationData(),
+      SPDataAdapter.portalDataService.getStatusReportListProps(),
+      SPDataAdapter.portalDataService.getStatusReports({ useCaching: false }),
+      SPDataAdapter.portalDataService.getProjectStatusSections(),
+      SPDataAdapter.portalDataService.getProjectColumnConfig()
     ])
+    const reportFields = await getReportFields(
+      properties.templateParameters?.ProjectStatusContentTypeId
+    )
     const userHasAdminPermission = await SPDataAdapter.checkProjectAdminPermissions(
       ProjectAdminPermission.ProjectStatusAdmin,
       properties.fieldValues
@@ -60,13 +64,13 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
     let sortedReports = reports.sort((a, b) => b.created.getTime() - a.created.getTime())
     const sortedSections = sections.sort((a, b) => (a.sortOrder < b.sortOrder ? -1 : 1))
     let [initialSelectedReport] = sortedReports
-    const hashState = parseUrlHash<IProjectStatusHashState>()
+    const hashState = parseUrlHash()
     const selectedReportUrlParam = getUrlParam('selectedReport')
     const sourceUrl = decodeURIComponent(getUrlParam('Source') ?? '')
-    if (hashState.selectedReport) {
+    if (hashState.has('selectedReport')) {
       initialSelectedReport = _.find(
         sortedReports,
-        (report) => report.id === parseInt(hashState.selectedReport, 10)
+        (report) => report.id === (hashState.get('selectedReport') as number)
       )
     } else if (selectedReportUrlParam) {
       initialSelectedReport = _.find(
@@ -75,7 +79,7 @@ const fetchData: DataFetchFunction<IProjectStatusProps, FetchDataResult> = async
       )
     }
     if (initialSelectedReport?.published) {
-      initialSelectedReport = await SPDataAdapter.portal.getStatusReportAttachments(
+      initialSelectedReport = await SPDataAdapter.portalDataService.getStatusReportAttachments(
         initialSelectedReport
       )
       sortedReports = sortedReports.map((report) => {

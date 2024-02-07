@@ -1,16 +1,8 @@
-@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+@import '~@fluentui/react/dist/sass/References.scss';
 
-.root {
-  height: 100vh;
-  margin: 20px;
-
-  .searchBox {
-    width: 625px;
-    margin: 10px 0 0 0;
-    box-sizing: border-box;
-  }
-
-  div[class*="ms-List-cell"] {
-    min-height: 0px;
-  }
+.programAdministration {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 25px;
 }

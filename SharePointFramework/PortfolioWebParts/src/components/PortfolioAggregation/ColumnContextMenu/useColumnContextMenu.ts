@@ -1,97 +1,147 @@
-import { ContextualMenuItemType, format, IContextualMenuItem } from '@fluentui/react'
-import { DisplayMode } from '@microsoft/sp-core-library'
+import { ContextualMenuItemType, IContextualMenuItem, format } from '@fluentui/react'
 import * as strings from 'PortfolioWebPartsStrings'
-import { useContext } from 'react'
 import { indexOf } from 'underscore'
-import { PortfolioAggregationContext } from '../context'
+import { useAddColumn } from '../../List'
+import { usePortfolioAggregationContext } from '../context'
 import {
-  MOVE_COLUMN,
   SET_GROUP_BY,
   SET_SORT,
   TOGGLE_COLUMN_FORM_PANEL,
-  TOGGLE_SHOW_HIDE_COLUMN_PANEL
+  TOGGLE_EDIT_VIEW_COLUMNS_PANEL
 } from '../reducer'
+import { useEffect, useState } from 'react'
+import { MenuProps, useId } from '@fluentui/react-components'
 
 /**
- * Component logic hook for ColumnContextMenu. Handles state and dispatches actions to the reducer.
+ * Component logic hook for `ColumnContextMenu`. Handles state and dispatches actions to the reducer.
  **/
 export function useColumnContextMenu() {
-  const { props, state, dispatch } = useContext(PortfolioAggregationContext)
-  if (!state.columnContextMenu) return {}
-  const { column, target } = state.columnContextMenu
+  const context = usePortfolioAggregationContext()
+  const [open, setOpen] = useState(false)
+  const { isAddColumn, createContextualMenuItems } = useAddColumn(
+    true,
+    context.props.pageContext.legacyPageContext.isSiteAdmin
+  )
+  const onOpenChange: MenuProps['onOpenChange'] = (_, data) => setOpen(data.open)
+  const [checkedValues, setCheckedValues] = useState<MenuProps['checkedValues']>({})
+  const onCheckedValueChange: MenuProps['onCheckedValueChange'] = (_, data) => {
+    setCheckedValues({ ...checkedValues, [data.name]: data.checkedItems })
+  }
+
+  useEffect(() => {
+    setOpen(!!context.state.columnContextMenu?.column)
+  }, [context.state.columnContextMenu])
+
+  const fluentProviderId = useId('fp-column-context-menu')
+
+  const columnContextMenu = {
+    open,
+    setOpen,
+    onOpenChange,
+    onCheckedValueChange,
+    checkedValues,
+    target: null,
+    items: [],
+    fluentProviderId
+  }
+
+  if (!context.state.columnContextMenu) return columnContextMenu
+
+  const { column, target } = context.state.columnContextMenu
+  columnContextMenu.target = target
+
   const columnIndex = indexOf(
-    state.columns.map((c) => c.fieldName),
+    context.state.columns.map((c) => c.fieldName),
     column.fieldName
   )
-  const columnEditable =
-    props.displayMode === DisplayMode.Edit && columnIndex !== -1 && !props.lockedColumns
+  const isColumnEditable = columnIndex !== -1 && !context.props.lockedColumns
 
-  const addColumnItems: IContextualMenuItem[] = [
-    {
-      key: 'AddColumn',
-      name: strings.AddColumnText,
-      disabled: props.displayMode !== DisplayMode.Edit && !props.lockedColumns,
-      onClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true }))
-    },
-    {
-      key: 'ShowHideColumns',
-      name: strings.ShowHideColumnsLabel,
-      onClick: () => dispatch(TOGGLE_SHOW_HIDE_COLUMN_PANEL({ isOpen: true }))
-    }
-  ]
-
-  const items: IContextualMenuItem[] = [
-    {
-      key: 'SortDesc',
-      name: strings.SortDescLabel,
-      canCheck: true,
-      checked: column.isSorted && column.isSortedDescending,
-      onClick: () => dispatch(SET_SORT({ column, sortDesencing: true }))
-    },
-    {
-      key: 'SortAsc',
-      name: strings.SortAscLabel,
-      canCheck: true,
-      checked: column.isSorted && !column.isSortedDescending,
-      onClick: () => dispatch(SET_SORT({ column, sortDesencing: false }))
-    },
-    {
-      key: 'Divider1',
-      itemType: ContextualMenuItemType.Divider
-    },
-    {
-      key: 'GroupBy',
-      name: format(strings.GroupByColumnLabel, column.name),
-      canCheck: true,
-      checked: state.groupBy?.fieldName === column.fieldName,
-      disabled: !column.data?.isGroupable,
-      onClick: () => dispatch(SET_GROUP_BY({ column }))
-    },
-    columnEditable && {
-      key: 'Divider2',
-      itemType: ContextualMenuItemType.Divider
-    },
-    columnEditable && {
-      key: 'MoveLeft',
-      name: strings.MoveLeftLabel,
-      iconProps: { iconName: 'ChevronLeftMed' },
-      disabled: columnIndex === 0,
-      onClick: () => dispatch(MOVE_COLUMN({ column, move: -1 }))
-    },
-    columnEditable && {
-      key: 'MoveRight',
-      name: strings.MoveRightLabel,
-      iconProps: { iconName: 'ChevronRightMed' },
-      disabled: columnIndex === state.columns.length - 1,
-      onClick: () => dispatch(MOVE_COLUMN({ column, move: 1 }))
-    },
-    columnEditable && {
-      key: 'Edit',
-      name: strings.EditColumnLabel,
-      iconProps: { iconName: 'SingleColumnEdit' },
-      onClick: () => dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column }))
-    }
-  ].filter((i) => i)
-
-  return { target, column, addColumnItems, items, dispatch } as const
+  if (isAddColumn(column)) {
+    columnContextMenu.items = createContextualMenuItems(
+      () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true })),
+      () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: true })),
+      context.props.lockedColumns,
+      context.props.lockedColumns
+    )
+  } else {
+    columnContextMenu.items = [
+      {
+        key: 'SORT_DESC',
+        data: {
+          name: 'sort',
+          value: 'desc'
+        },
+        text: strings.SortDescLabel,
+        iconProps: { iconName: 'TextSortAscending' },
+        canCheck: true,
+        checked: column.isSorted && column.isSortedDescending,
+        onClick: () => context.dispatch(SET_SORT({ column, isSortedDescending: true }))
+      },
+      {
+        key: 'SORT_ASC',
+        data: {
+          name: 'sort',
+          value: 'asc'
+        },
+        text: strings.SortAscLabel,
+        iconProps: { iconName: 'TextSortDescending' },
+        canCheck: true,
+        checked: column.isSorted && !column.isSortedDescending,
+        onClick: () => context.dispatch(SET_SORT({ column, isSortedDescending: false }))
+      },
+      {
+        key: 'DIVIDER_01',
+        itemType: ContextualMenuItemType.Divider
+      },
+      {
+        key: 'GROUP_BY',
+        text: format(strings.GroupByColumnLabel, column.name),
+        canCheck: true,
+        checked: context.state.groupBy?.fieldName === column.fieldName,
+        disabled: !column.data?.isGroupable,
+        onClick: () => context.dispatch(SET_GROUP_BY({ column })),
+        iconProps: { iconName: 'GroupList' }
+      },
+      {
+        key: 'DIVIDER_02',
+        itemType: ContextualMenuItemType.Divider
+      },
+      {
+        key: 'COLUMN_SETTINGS',
+        text: strings.ColumnSettingsLabel,
+        disabled: !isColumnEditable,
+        title: !isColumnEditable && strings.ColumnSettingsDisabledTooltip,
+        iconProps: { iconName: 'TableSettings' },
+        subMenuProps: {
+          items: [
+            {
+              key: 'EDIT_COLUMN',
+              text: strings.EditColumnLabel,
+              onClick: () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true, column })),
+              disabled: true,
+              iconProps: { iconName: 'TableCellEdit' }
+            },
+            {
+              key: 'DIVIDER_03',
+              itemType: ContextualMenuItemType.Divider
+            },
+            {
+              key: 'SHOW_HIDE_COLUMNS',
+              text: strings.ShowHideColumnsLabel,
+              onClick: () => context.dispatch(TOGGLE_EDIT_VIEW_COLUMNS_PANEL({ isOpen: true })),
+              iconProps: { iconName: 'Eye' }
+            },
+            {
+              key: 'ADD_COLUMN',
+              text: strings.AddColumnLabel,
+              onClick: () => context.dispatch(TOGGLE_COLUMN_FORM_PANEL({ isOpen: true })),
+              iconProps: { iconName: 'Add' },
+              disabled: true
+            }
+          ]
+        }
+      }
+    ].filter(Boolean) as IContextualMenuItem[]
+  }
+  return columnContextMenu
 }

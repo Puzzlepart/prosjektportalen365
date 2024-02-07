@@ -66,7 +66,7 @@
                     </pnp:Folders>
                 </pnp:ListInstance>
                 <pnp:ListInstance Title="Fasesjekkliste Anlegg" TemplateType="100" Url="Lists/Fasesjekkliste_Anlegg" Hidden="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false">
-                    <pnp:DataRows UpdateBehavior="Skip" KeyColumn="Title">
+                    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName='Title'>Er oppdragsbestilling signert og mottatt?</pnp:DataValue>
                             <pnp:DataValue FieldName='GtProjectPhase'>Initiering|dca0a226-0907-4c54-8624-6b51fcac7a92</pnp:DataValue>
@@ -295,7 +295,7 @@
                     </pnp:DataRows>
                 </pnp:ListInstance>
                 <pnp:ListInstance Title="Planneroppgaver Anlegg" TemplateType="100" Url="Lists/Planneroppgaver_Anlegg" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
-                    <pnp:DataRows UpdateBehavior="Skip" KeyColumn="Title">
+                    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
                         <pnp:DataRow >
                             <pnp:DataValue FieldName='Title'>Støtte oppdragsgiver (KTA) i å definere krav og rammer etter behov</pnp:DataValue>
                             <pnp:DataValue FieldName='GtCategory'>Initiering</pnp:DataValue>
@@ -524,7 +524,7 @@
                     </pnp:Folders>
                 </pnp:ListInstance>
                 <pnp:ListInstance Title="Fasesjekkliste Bygg" TemplateType="100" Url="Lists/Fasesjekkliste_Bygg" Hidden="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50000" DraftVersionVisibility="0" EnableFolderCreation="false" EnableAttachments="false">
-                    <pnp:DataRows UpdateBehavior="Skip" KeyColumn="Title">
+                    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName="Title">Er brukerrepresentanter konsultert/involvert?</pnp:DataValue>
                             <pnp:DataValue FieldName="GtProjectPhase">Avklare behov|35997358-534f-475b-be9f-2544a3b80c8d</pnp:DataValue>
@@ -843,7 +843,7 @@
                     </pnp:DataRows>
                 </pnp:ListInstance>
                 <pnp:ListInstance Title="Planneroppgaver Bygg" TemplateType="100" Url="Lists/Planneroppgaver_Bygg" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false" EnableVersioning="true">
-                    <pnp:DataRows UpdateBehavior="Skip" KeyColumn="Title">
+                    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
                         <pnp:DataRow>
                             <pnp:DataValue FieldName='Title'>Analysere alternative løsninger</pnp:DataValue>
                             <pnp:DataValue FieldName='GtCategory'>Avklare behov - Mulighetsstudie (F0)</pnp:DataValue>

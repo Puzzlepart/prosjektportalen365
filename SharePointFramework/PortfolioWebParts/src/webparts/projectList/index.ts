@@ -1,15 +1,25 @@
+/* eslint-disable quotes */
 import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
-  PropertyPaneDropdown,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls'
+import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader'
+import {
+  PropertyFieldDropdownWithCallout,
+  PropertyFieldMultiSelect,
+  PropertyFieldToggleWithCallout
+} from '@pnp/spfx-property-controls'
+import {
+  PropertyFieldCollectionData,
+  CustomCollectionFieldType
+} from '@pnp/spfx-property-controls/lib/PropertyFieldCollectionData'
 import { IProjectListProps, ProjectList } from 'components/ProjectList'
-import { ProjectListViews } from 'components/ProjectList/ProjectListViews'
+import { ProjectListVerticals } from 'components/ProjectList/ProjectListVerticals'
 import * as strings from 'PortfolioWebPartsStrings'
-import { BasePortfolioWebPart } from 'webparts/@basePortfolioWebPart'
+import { BasePortfolioWebPart } from '../basePortfolioWebPart'
+import React from 'react'
 
 export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectListProps> {
   public render(): void {
@@ -21,10 +31,16 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    const viewOptions = ProjectListViews.map<IPropertyPaneDropdownOption>((view) => ({
-      key: view.itemKey,
-      text: view.headerText
+    const verticalOptions = ProjectListVerticals.map<IPropertyPaneDropdownOption>((vertical) => ({
+      key: vertical.key,
+      text: vertical.text
     }))
+
+    const quickLaunchMenu = {
+      ...ProjectList.defaultProps.quickLaunchMenu,
+      ...this.properties.quickLaunchMenu
+    }
+
     return {
       pages: [
         {
@@ -34,36 +50,79 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
               groupFields: [
                 PropertyPaneTextField('sortBy', {
                   label: strings.SortByFieldLabel,
+                  description: strings.SortByFieldDescription,
                   disabled: true
                 }),
-                PropertyPaneToggle('showSearchBox', {
-                  label: strings.ShowSearchBoxLabel
+                PropertyFieldToggleWithCallout('showSearchBox', {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'showSearchBoxFieldId',
+                  label: strings.ShowSearchBoxLabel,
+                  calloutContent: React.createElement('p', {}, strings.ShowSearchBoxDescription),
+                  onText: strings.BooleanOn,
+                  offText: strings.BooleanOff,
+                  calloutWidth: 430,
+                  checked: this.properties.showSearchBox
                 }),
-                PropertyPaneToggle('showViewSelector', {
-                  label: strings.ShowViewSelectorLabel
+                PropertyFieldToggleWithCallout('showRenderModeSelector', {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'showRenderModeSelectorFieldId',
+                  label: strings.ShowRenderModeSelectorLabel,
+                  calloutContent: React.createElement(
+                    'p',
+                    {},
+                    strings.ShowRenderModeSelectorDescription
+                  ),
+                  onText: strings.BooleanOn,
+                  offText: strings.BooleanOff,
+                  calloutWidth: 430,
+                  checked: this.properties.showRenderModeSelector
                 }),
-                PropertyPaneDropdown('defaultView', {
-                  label: strings.DefaultViewLabel,
-                  options: viewOptions
+                PropertyFieldToggleWithCallout('showSortBy', {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'showSortByFieldId',
+                  label: strings.ShowSortByLabel,
+                  calloutContent: React.createElement('p', {}, strings.ShowSortByDescription),
+                  onText: strings.BooleanOn,
+                  offText: strings.BooleanOff,
+                  calloutWidth: 430,
+                  checked: this.properties.showSortBy
                 }),
-                PropertyFieldMultiSelect('hideViews', {
-                  key: 'hideViews',
-                  label: strings.HideViewsLabel,
-                  options: viewOptions,
-                  selectedKeys: this.properties.hideViews ?? []
-                }),
-                PropertyPaneDropdown('defaultRenderMode', {
+                PropertyFieldDropdownWithCallout('defaultRenderMode', {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'defaultVerticalFieldId',
                   label: strings.DefaultRenderModeLabel,
                   options: [
+                    {
+                      key: 'tiles',
+                      text: strings.RenderModeTilesText
+                    },
                     {
                       key: 'list',
                       text: strings.RenderModeListText
                     },
                     {
-                      key: 'tiles',
-                      text: strings.RenderModeTilesText
+                      key: 'compactList',
+                      text: strings.RenderModeCompactListText
                     }
-                  ]
+                  ],
+                  selectedKey: this.properties.defaultRenderMode,
+                  calloutWidth: 430,
+                  calloutContent: React.createElement('p', {}, strings.DefaultRenderModeDescription)
+                }),
+                PropertyFieldDropdownWithCallout('defaultVertical', {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'defaultVerticalFieldId',
+                  label: strings.DefaultVerticalLabel,
+                  options: verticalOptions,
+                  selectedKey: this.properties.defaultVertical,
+                  calloutWidth: 430,
+                  calloutContent: React.createElement('p', {}, strings.DefaultVerticalDescription)
+                }),
+                PropertyFieldMultiSelect('hideVerticals', {
+                  key: 'hideVerticalsFieldId',
+                  label: strings.HideVerticalsLabel,
+                  options: verticalOptions,
+                  selectedKeys: this.properties.hideVerticals ?? []
                 })
               ]
             },
@@ -73,11 +132,70 @@ export default class ProjectListWebPart extends BasePortfolioWebPart<IProjectLis
                 PropertyPaneToggle('showProjectLogo', {
                   label: strings.ShowProjectLogoFieldLabel
                 }),
-                PropertyPaneToggle('showProjectOwner', {
-                  label: strings.ShowProjectOwnerFieldLabel
+                PropertyFieldToggleWithCallout('useDynamicColors', {
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'useDynamicColorsFieldId',
+                  label: strings.UseDynamicColorsLabel,
+                  calloutContent: React.createElement('p', {}, strings.UseDynamicColorsDescription),
+                  onText: strings.BooleanOn,
+                  offText: strings.BooleanOff,
+                  calloutWidth: 430,
+                  checked: this.properties.useDynamicColors,
+                  disabled: !this.properties.showProjectLogo
                 }),
-                PropertyPaneToggle('showProjectManager', {
-                  label: strings.ShowProjectManagerFieldLabel
+                PropertyFieldMultiSelect('projectMetadata', {
+                  key: 'projectMetadataFieldId',
+                  label: strings.ProjectMetadataFieldLabel,
+                  options: [
+                    {
+                      key: 'ProjectOwner',
+                      text: strings.ProjectOwner
+                    },
+                    {
+                      key: 'ProjectManager',
+                      text: strings.ProjectManager
+                    },
+                    {
+                      key: 'ProjectServiceArea',
+                      text: strings.ProjectServiceArea
+                    },
+                    {
+                      key: 'ProjectType',
+                      text: strings.ProjectType
+                    },
+                    {
+                      key: 'ProjectPhase',
+                      text: strings.PhaseLabel
+                    }
+                  ],
+                  selectedKeys: this.properties.projectMetadata ?? []
+                }),
+                PropertyFieldCollectionData('quickLaunchMenu', {
+                  key: 'quickLaunchFieldId',
+                  label: strings.ProjectListQuickLaunch,
+                  panelHeader: strings.ProjectListQuickLaunch,
+                  manageBtnLabel: strings.EditProjectListQuickLaunch,
+                  value: quickLaunchMenu,
+                  fields: [
+                    {
+                      id: 'order',
+                      title: strings.SortOrderLabel,
+                      type: CustomCollectionFieldType.number,
+                      required: true
+                    },
+                    {
+                      id: 'text',
+                      title: strings.ColumnRenderOptionText,
+                      type: CustomCollectionFieldType.string,
+                      required: true
+                    },
+                    {
+                      id: 'relativeUrl',
+                      title: strings.RelativeUrl,
+                      type: CustomCollectionFieldType.string,
+                      required: true
+                    }
+                  ]
                 })
               ]
             }

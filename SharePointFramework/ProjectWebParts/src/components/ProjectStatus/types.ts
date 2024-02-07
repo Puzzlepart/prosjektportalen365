@@ -1,16 +1,36 @@
-import { PageContext } from '@microsoft/sp-page-context'
+import {
+  EditableSPField,
+  IProjectInformationData,
+  ProjectColumnConfig,
+  SectionModel,
+  StatusReport
+} from 'pp365-shared-library'
+import {
+  IBaseWebPartComponentProps,
+  IBaseWebPartComponentState
+} from 'pp365-shared-library/lib/components/BaseWebPartComponent'
+import { IUserMessageProps } from 'pp365-shared-library/lib/components/UserMessage/types'
 import { IOpportunityMatrixProps } from '../OpportunityMatrix'
 import { IRiskMatrixProps } from '../RiskMatrix'
-import { ProjectColumnConfig, SectionModel, SPField, StatusReport } from 'pp365-shared/lib/models'
-import { IGetPropertiesData } from 'pp365-shared/lib/services'
-import { IBaseWebPartComponentProps, IBaseWebPartComponentState } from '../BaseWebPartComponent'
-import { IUserMessageProps } from 'pp365-shared/lib/components/UserMessage/types'
 
+/**
+ * Props for the ProjectStatus component.
+ */
 export interface IProjectStatusProps extends IBaseWebPartComponentProps {
+  /**
+   * Props for the RiskMatrix component.
+   */
   riskMatrix?: IRiskMatrixProps
+
+  /**
+   * Props for the OpportunityMatrix component.
+   */
   opportunityMatrix?: IOpportunityMatrixProps
+
+  /**
+   * The width of the field.
+   */
   fieldWidth?: number
-  pageContext?: PageContext
 
   /**
    * File name for the persisted section data attachment stored in a separate
@@ -39,7 +59,7 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   /**
    * Hash state from URL
    */
-  hashState?: IProjectStatusHashState
+  hashState?: Map<string, string | number>
 
   /**
    * Is the report being published?
@@ -64,26 +84,24 @@ export interface IProjectStatusState extends IBaseWebPartComponentState<IProject
   /**
    * User message to display in the UI
    */
-  userMessage?: Pick<IUserMessageProps, 'text' | 'type'>
-}
+  userMessage?: Pick<IUserMessageProps, 'text' | 'intent'>
 
-export interface IProjectStatusHashState {
   /**
-   * Selected report
+   * The active panel name and optional title
    */
-  selectedReport?: string
+  activePanel?: { name: string; headerText?: string }
 }
 
 export interface IProjectStatusData {
   /**
    * Entity item
    */
-  properties?: IGetPropertiesData
+  properties?: IProjectInformationData
 
   /**
    * Status report fields
    */
-  reportFields?: SPField[]
+  reportFields?: EditableSPField[]
 
   /**
    * Default edit form URL for status reports
@@ -109,4 +127,13 @@ export interface IProjectStatusData {
    * Current user has admin permissions
    */
   userHasAdminPermission?: boolean
+}
+
+/**
+ * Represents the result of a data fetch operation.
+ */
+export type FetchDataResult = {
+  data: IProjectStatusData
+  initialSelectedReport: StatusReport
+  sourceUrl: string
 }

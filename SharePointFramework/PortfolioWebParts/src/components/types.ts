@@ -1,32 +1,26 @@
 import { DisplayMode } from '@microsoft/sp-core-library'
-import { PageContext } from '@microsoft/sp-page-context'
-import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { IDataAdapter } from 'data/types'
+import { SPFI } from '@pnp/sp'
+import { IPortfolioWebPartsDataAdapter } from 'data/types'
+import { SiteContext } from 'pp365-shared-library'
 
-export interface IBaseComponentProps {
+export interface IBaseComponentProps extends SiteContext {
   /**
-   * Component title.
+   * Component title. Often rendered as a header.
    */
   title?: string
 
   /**
-   * SPFx web part context
+   * An instance of a Data Adapter inheriting `IPortfolioWebPartsDataAdapter`.
    */
-  webPartContext?: WebPartContext
-
-  /**
-   * Page context. It might be neccessary to pass `this.context.pageContext as any` due to
-   * mismatch in version of `@microsoft/sp-page-context`.
-   */
-  pageContext?: PageContext
-
-  /**
-   * An instance of a Data Adapter inheriting `IDataAdapter`.
-   */
-  dataAdapter?: IDataAdapter
+  dataAdapter?: IPortfolioWebPartsDataAdapter
 
   /**
    * Display mode of the component.
    */
   displayMode?: DisplayMode
+
+  /**
+   * SPFI instance.
+   */
+  sp?: SPFI
 }

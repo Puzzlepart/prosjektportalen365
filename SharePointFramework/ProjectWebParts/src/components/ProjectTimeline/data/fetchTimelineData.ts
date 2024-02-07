@@ -1,16 +1,17 @@
-import { IColumn } from '@fluentui/react'
-import { sp } from '@pnp/sp'
 import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
 import {
+  EditableSPField,
   TimelineConfigurationModel,
   TimelineContentModel
-} from 'pp365-portfoliowebparts/lib/models'
+} from 'pp365-shared-library/lib/models'
 import strings from 'ProjectWebPartsStrings'
 import { IProjectTimelineProps } from '../types'
+import '@pnp/sp/items/get-all'
+import { IColumn } from '@fluentui/react'
 
 /**
- * Fetch timeline items and columns
+ * Fetch timeline items and columns.
  *
  * @param props Component properties for `ProjectTimeline`
  * @param timelineConfig Timeline configuration
@@ -20,13 +21,14 @@ export async function fetchTimelineData(
   timelineConfig: TimelineConfigurationModel[]
 ) {
   try {
-    const timelineContentList = SPDataAdapter.portal.web.lists.getByTitle(
+    const timelineContentList = SPDataAdapter.portalDataService.web.lists.getByTitle(
       strings.TimelineContentListName
     )
 
-    const projectDeliveries = (props.showProjectDeliveries
-      ? await sp.web.lists.getByTitle(props.projectDeliveriesListName).items.getAll()
-      : []
+    const projectDeliveries = (
+      props.showProjectDeliveries
+        ? await props.sp.web.lists.getByTitle(props.projectDeliveriesListName).items.getAll()
+        : []
     )
       .map((item) => {
         const config = _.find(timelineConfig, (col) => col.title === props.configItemTitle)
@@ -48,59 +50,54 @@ export async function fetchTimelineData(
       .filter(Boolean)
 
     const defaultViewColumns = (
-      await timelineContentList.defaultView.fields.select('Items').top(500).get()
+      await timelineContentList.defaultView.fields.select('Items').top(500)()
     )['Items'] as string[]
+    const timelineContentFields = await SPDataAdapter.portalDataService.getListFields(
+      'TIMELINE_CONTENT'
+    )
+    const timelineContentEditableFields = timelineContentFields.map(
+      (fld) => new EditableSPField(fld)
+    )
+    const defaultViewFields = timelineContentFields.filter(
+      (fld) => defaultViewColumns.indexOf(fld.InternalName) > -1
+    )
 
-    const filterString = defaultViewColumns.map((col) => `(InternalName eq '${col}')`).join(' or ')
+    const userFields = defaultViewFields
+      .filter((fld) => fld.TypeAsString.indexOf('User') === 0)
+      .map((fld) => fld.InternalName)
 
     // eslint-disable-next-line prefer-const
-    let [timelineContentItems, timelineColumns] = await Promise.all([
-      timelineContentList.items
-        .select(
-          ...defaultViewColumns,
-          'Id',
-          'GtTimelineTypeLookup/Title',
-          'GtSiteIdLookupId',
-          'GtSiteIdLookup/Title',
-          'GtSiteIdLookup/GtSiteId'
-        )
-        .expand('GtSiteIdLookup', 'GtTimelineTypeLookup')
-        .filter(`GtSiteIdLookup/GtSiteId eq '${props.siteId}'`)
-        .getAll(),
-      timelineContentList.fields
-        .filter(filterString)
-        .select('InternalName', 'Title', 'TypeAsString')
-        .top(500)
-        .get()
-    ])
+    let timelineContentItems = await timelineContentList.items
+      .select(
+        'Id',
+        'GtTimelineTypeLookup/Title',
+        'GtSiteIdLookupId',
+        'GtSiteIdLookup/Title',
+        'GtSiteIdLookup/GtSiteId',
+        ...defaultViewColumns.filter((col) => userFields.indexOf(col) === -1),
+        ...userFields.map((fieldName) => `${fieldName}/Id`),
+        ...userFields.map((fieldName) => `${fieldName}/Title`),
+        ...userFields.map((fieldName) => `${fieldName}/EMail`)
+      )
+      .expand('GtSiteIdLookup', 'GtTimelineTypeLookup', ...userFields)
+      .getAll()
 
-    let timelineListItems = timelineContentItems.filter((item) => item.GtSiteIdLookup !== null)
+    const timelineListItems = timelineContentItems.filter(
+      (item) => item.GtSiteIdLookup.Title === props.webTitle
+    )
 
-    const columns = timelineColumns
+    const columns = defaultViewFields
       .filter((column) => column.InternalName !== 'GtSiteIdLookup')
       .map<IColumn>((column) => ({
         key: column.InternalName,
         name: column.Title,
         fieldName: column.InternalName,
         data: { type: column.TypeAsString },
-        minWidth: 150,
-        maxWidth: 200,
-        isResizable: true
+        minWidth: 100,
+        maxWidth: 200
       }))
 
-    timelineListItems = timelineListItems.map((item) => ({
-      ...item,
-      EditFormUrl: [
-        `${SPDataAdapter.portal.url}`,
-        `/Lists/${strings.TimelineContentListName}/EditForm.aspx`,
-        '?ID=',
-        item.Id,
-        '&Source=',
-        encodeURIComponent(window.location.href)
-      ].join('')
-    }))
-
-    timelineContentItems = timelineContentItems
+    timelineContentItems = timelineListItems
       .filter((item) => item.GtSiteIdLookup !== null)
       .map((item) => {
         const type = item.GtTimelineTypeLookup?.Title
@@ -118,12 +115,18 @@ export async function fetchTimelineData(
           item.GtCostsTotal
         ).usingConfig(config)
       })
-      .filter((t) => t)
+      .filter(Boolean)
 
     timelineContentItems = [...timelineContentItems, ...projectDeliveries]
 
-    return { timelineContentItems, timelineListItems, columns, timelineConfig } as const
+    return {
+      timelineContentItems,
+      timelineListItems,
+      timelineContentEditableFields,
+      columns,
+      timelineConfig
+    }
   } catch (error) {
-    return error
+    throw error
   }
 }

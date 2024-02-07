@@ -1,0 +1,23 @@
+@import "~@fluentui/react/dist/sass/References.scss";
+
+.list {
+  width: 996px;
+
+  div:first-child {
+    max-width: inherit;
+  }
+
+  .logo {
+    width: 48px;
+    height: 48px;
+
+    img {
+      height: 80%;
+      width: 80%;
+      object-fit: cover;
+      transform: translate3d(0, 0, 1px);
+      border-radius: var(--borderRadiusMedium);
+      margin: 5px;
+    }
+  }
+}

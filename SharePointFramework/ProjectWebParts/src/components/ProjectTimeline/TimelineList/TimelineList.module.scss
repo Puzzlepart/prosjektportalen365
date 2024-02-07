@@ -1,15 +1,11 @@
-@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
-
-.commandBar {
-  margin: 0px auto;
-}
+@import "~@fluentui/react/dist/sass/References.scss";
 
 .timelineList {
-  margin: 25px;
+  padding: 32px;
 
-  .stickyHeader {
-    .headerColumns {
-      position: inherit;
-    }
+  .commandBar {
+    height: 42px;
+    margin: 0px auto;
+    padding-bottom: 16px
   }
 }

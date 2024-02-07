@@ -1,0 +1,59 @@
+name: Automatic chores
+
+on:
+  push:
+    branches:
+      - releases/1.9
+      - releases/1.10
+    paths:
+      - SharePointFramework/**
+      - .github/workflows/automatic_chores.yml
+
+jobs:
+  automatic_chores:
+    name: Automatic chores
+    runs-on: ubuntu-latest
+    concurrency: 
+      group: ${{ github.ref }}_automatic_chores
+    if: "!contains(github.event.head_commit.message, '[skip-ci]')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ vars.NODE_VERSION }}
+
+      - name: Rush Install
+        run: node common/scripts/install-run-rush.js install
+
+      - name: Rush Lint
+        run: node common/scripts/install-run-rush.js lint
+
+      - name: Add all changes
+        run: |
+          git add -A
+
+      - name: Get git context
+        id: git_context
+        run: |
+          status=`git status --porcelain`
+          echo "::set-output name=status::$status"
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - name: Commit files as {github-automatic-chores} (if staged changes)
+        if: ${{ steps.git_context.outputs.status != '' }}
+        run: |
+          git config --local user.email "github-automatic-chores@users.noreply.github.com"
+          git config --local user.name "github-automatic-chores"
+          git commit --no-verify -m "automatic chores: linting [skip-ci]" \
+          -m "This is a commit done by the GitHub action https://github.com/Puzzlepart/prosjektportalen365/blob/releases/1.9/.github/workflows/automatic_chores.yml."
+
+      - name: Push changes (if staged changes)
+        if: ${{ steps.git_context.outputs.status != '' }}
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.AUTOMATIC_CHORES_GH_TOKEN }}
+          branch: ${{ github.ref }}

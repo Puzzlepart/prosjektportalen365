@@ -1,19 +1,18 @@
-import { useState } from 'react'
-import {
-  IProjectTimelineProps,
-  IProjectTimelineState,
-  ITimelineData,
-  ITimelineGroup
-} from './types'
+import { IProjectTimelineProps, ITimelineData, ITimelineGroup } from './types'
 import { useProjectTimelineDataFetch } from './data/useProjectTimelineDataFetch'
 import sortArray from 'array-sort'
 import { get } from '@microsoft/sp-lodash-subset'
 import { IColumn } from '@fluentui/react/lib/DetailsList'
-import { TimelineConfigurationModel } from 'pp365-portfoliowebparts/lib/models'
-import { IFilterItemProps, IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
+import { TimelineConfigurationModel } from 'pp365-shared-library/lib/models'
+import {
+  IFilterItemProps,
+  IFilterProps,
+  TimelineTimeframe
+} from 'pp365-shared-library/lib/components'
 import strings from 'ProjectWebPartsStrings'
-import { TimelineTimeframe } from 'pp365-portfoliowebparts/lib/components/ProjectTimeline'
-import { ITimelineItem } from 'pp365-portfoliowebparts/lib/interfaces/ITimelineItem'
+import moment from 'moment'
+import { ITimelineItem } from 'pp365-shared-library/lib/interfaces'
+import { useProjectTimelineState } from './useProjectTimelineState'
 
 /**
  * Component logic hook for `ProjectTimeline`
@@ -23,15 +22,7 @@ import { ITimelineItem } from 'pp365-portfoliowebparts/lib/interfaces/ITimelineI
  * @returns `state`, `setState`, `onFilterChange`
  */
 export const useProjectTimeline = (props: IProjectTimelineProps) => {
-  const [state, $setState] = useState<IProjectTimelineState>({
-    isDataLoaded: false,
-    activeFilters: {},
-    refetch: new Date().getTime()
-  })
-
-  const setState = (newState: Partial<IProjectTimelineState>) => {
-    $setState((_state) => ({ ..._state, ...newState }))
-  }
+  const { state, setState } = useProjectTimelineState()
 
   /**
    * Get filtered data
@@ -183,5 +174,5 @@ export const useProjectTimeline = (props: IProjectTimelineProps) => {
     onFilterChange,
     onGroupByChange,
     defaultTimeframe
-  } as const
+  }
 }

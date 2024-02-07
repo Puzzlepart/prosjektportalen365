@@ -1,112 +1,149 @@
 declare interface IProjectExtensionsStrings {
-  ConfiguredSpecifiedTaskMessage: string
-  CmdSelectionCountText: string
-  ExtensionLockedTooltipText: string
-  ContentConfigLockedTooltipText: string
-  TemplateSelectorSearchClearText: string
-  TemplateSelectorSearchPlaceholder: string
-  ExtensionsSectionSearchPlaceholder: string
-  ContentConfigSectionSearchPlaceholder: string
-  PermissionConfigurationList: string
-  SitePermissionsText: string
-  SitePermissionsSubText: string
-  DocumentTemplateDialogScreenTargetFolderInfoText: string
-  Library: string
-  CopyHereText: string
-  DocumentTemplateDialogScreenEditCopyRootLevelText: string
+  PlannerTaskNotStarted: string
+  PlannerTaskInProgress: string
+  PlannerTaskCompleted: string
+  RiskActionPlannerTaskPreviewPlannerLinkText: string
+  MigrateRiskActionsDialogTitle: string
+  RiskActionFieldValueAdminButtonText: string
+  CreateMultipleLabel: string
+  CreateMultipleDescription: string
+  RiskActionPopoverTitle: string
+  RiskActionPlannerTaskPreviewCompletedText: string
+  MigrateRiskActionsDialogSeparatorOptionLinebreak: string
+  MigrateRiskActionsDialogSeparatorOptionComma: string
+  MigrateRiskActionsDialogSeparatorOptionCommaNoSpaces: string
+  MigrateRiskActionsDialogSeparatorLabel: string
+  MigrateRiskActionsDialogProgressText: string
+  MigrateRiskActionsDialogCancel: string
+  NewRiskActionPanelMigrateRiskActions: string
+  MigrateRiskActionsDialogCreatePlannerTasks: string
+  MigrateRiskActionsDialogInfoText: string
+  RiskActionPopoverLastUpdated: string
+  NewRiskActionPanelUpdateTaskStatus: string
+  RiskActionPopoverInfoText: string
+  RiskActionPopoverInfoTextNoPlanner: string
+  StartDateLabel: string
+  DueDateLabel: string
+  NewRiskActionPanelTitle: string
+  NewRiskActionPanelAddNewRiskAction: string
+  ResponsibleFieldNoResults: string
+  ResponsibleFieldLabel: string
+  ApplyExtensionHooks: string
   ApplyExtensionText: string
-  ProcessListItemText: string
-  ProcessFileText: string
-  ProcessFolderText: string
-  CreatingPlannerTaskText: string
-  ProvisionSiteFieldText: string
-  ProgressDialogSubText: string
-  ApplyTemplateText: string
   ApplyingExtensionsText: string
   ApplyTemplateClientSidePages: string
   ApplyTemplateComposedLook: string
   ApplyTemplateContentTypes: string
   ApplyTemplateErrorMessage: string
   ApplyTemplateFiles: string
+  ApplyTemplateHooks: string
   ApplyTemplateLists: string
   ApplyTemplateNavigation: string
   ApplyTemplateSiteFields: string
+  ApplyTemplateText: string
   ApplyTemplateWebSettings: string
   ApplyTemplateHooks: string
   ApplyExtensionHooks: string
   RunHooksText: string
   CloseModalText: string
+  CmdSelectionCountText: string
+  CmdSelectionCountTooltipText: string
+  ConfiguredSpecifiedTaskTitle: string
+  ConfiguredSpecifiedTaskMessage: string
+  ContentConfigLockedTooltipText: string
+  ContentConfigSectionHeaderText: string
+  ContentConfigSectionSearchPlaceholder: string
+  ContinueToProjectText: string
+  CopyFilesText: string
+  CopyHereText: string
   CopyListDataErrorMessage: string
   CopyListItemsText: string
-  CopyFilesText: string
   CopyProgressLabel: string
+  CreatingLocalProjectPropertiesListItemText: string
+  CreatingPlannerTaskText: string
+  CustomActionsSubText: string
+  CustomActionsText: string
   DescriptionLabel: string
-  EditPropertiesLinkText: string
-  ErrorDialogTitle: string
+  DocumentTemplateDialogScreenEditCopyInfoTitle: string
+  DocumentTemplateDialogScreenEditCopyInfoMessage: string
+  DocumentTemplateDialogScreenSelectInfoTitle: string
+  DocumentTemplateDialogScreenSelectInfoMessage: string
+  DocumentTemplateDialogScreenTargetFolderInfoTitle: string
+  DocumentTemplateDialogScreenTargetFolderInfoMessage: string
+  ExtensionLockedTooltipText: string
   ExtensionsSectionHeaderText: string
+  ExtensionsSectionSearchPlaceholder: string
+  FilenameAlreadyInUseErrorText: string
+  FilenameInValidErrorText: string
+  FileNameLabel: string
   GetMoreText: string
   GetSetupDataErrorMessage: string
   GetSetupDataErrorStack: string
+  IdeaDecisionStatusApprovedAndSynced: string
   InvalidLanguageErrorMessage: string
   InvalidLanguageErrorStack: string
   IsHubSiteErrorMessage: string
   IsHubSiteErrorStack: string
-  DocumentLibraryDropdownLabel: string
-  FolderDropdownLabel: string
-  ContentConfigSectionHeaderText: string
+  Library: string
+  LibraryDropdownLabel: string
   ModifiedLabel: string
   NameLabel: string
-  FileNameLabel: string
   NoHubSiteErrorMessage: string
   NoHubSiteErrorStack: string
   OnGoBackText: string
   OnStartCopyText: string
   OnSubmitSelectionText: string
+  PermissionConfigurationList: string
+  PhaseLabel: string
   PlannerConfigurationErrorMessage: string
   PlannerConfigurationText: string
-  Lists_ProjectTemplateFiles_Title: string,
-  PreTaskErrorMessage: string
+  PlannerTagsLimitLogText: string
+  PlannerTaskAttachmentLimitLogText: string
+  PlannerTaskChecklistLimitLogText: string
   PreTaskContentTypeValidationErrorMessage: string
+  PreTaskErrorMessage: string
   PreTaskTermSetIdValidationErrorMessage: string
-  TermSetDoesNotExistError: string
+  ProcessFileText: string
+  ProcessFolderText: string
+  ProcessListItemText: string
   ProgressDialogDescription: string
   ProgressDialogLabel: string
+  ProgressDialogSubText: string
   ProgressDialogTitle: string
+  ProjectAlreadySetupMessage: string
+  ProjectAlreadySetupStack: string
+  ProjectIdeaFoundTitle: string
+  ProjectIdeaFoundMessage: string
+  ProjectPropertiesHeader: string
   ProjectPropertiesListName: string
+  ProjectProvisioningStartLogText: string
+  ProjectProvisioningSuccessLogText: string
+  ProjectTemplateFilesListName: string,
   ProvisionSiteFieldsErrorMessage: string
-  SitePermissionsErrorMessage: string
   ProvisionSiteFieldsText: string
+  ProvisionSiteFieldText: string
+  ProvisionTemplateText: string
+  RecycleBinText: string
+  RunHooksText: string
   SetTaxonomyFieldsErrorMessage: string
-  SettingsSectionTitle: string
+  SetupAbortedText: string
   SetupProjectInformationErrorMessage: string
   SetupProjectInformationText: string
-  SummaryText: string
+  SitePermissionsSubText: string
+  SitePermissionsText: string
+  SummaryTitle: string
+  SummaryMessage: string
+  SyncLocalProjectPropertiesListText: string
+  TemplateConfigMessage: string
   TemplateLibrarySelectModalTitle: string
   TemplateSelectDialogInfoText: string
   TemplateSelectDialogSubmitButtonText: string
   TemplateSelectDialogTitle: string
+  TemplateSelectorSearchClearText: string
+  TemplateSelectorSearchPlaceholder: string
   TemplateSelectorTitle: string
+  TermSetDoesNotExistError: string
   TitleLabel: string
-  DocumentTemplateDialogScreenSelectInfoText: string
-  DocumentTemplateDialogScreenEditCopyInfoText: string
-  FilenameAlreadyInUseErrorText: string
-  FilenameInValidErrorText: string
-  SyncLocalProjectPropertiesListText: string
-  CreatingLocalProjectPropertiesListItemText: string
-  PhaseLabel: string
-  SetupAbortedText: string
-  UnknownErrorText: string
-  TemplateConfigText: string
-  ProjectAlreadySetupMessage: string
-  ProjectAlreadySetupStack: string
-  ProjectProvisioningSuccessLogText: string
-  ProjectProvisioningStartLogText: string
-  PlannerTaskChecklistLimitLogText: string
-  PlannerTaskAttachmentLimitLogText: string
-  PlannerTagsLimitLogText: string
-  ProvisionTemplateText: string
-  ContinueToProjectText: string
-  RecycleBinText: string
 }
 
 declare module 'ProjectExtensionsStrings' {

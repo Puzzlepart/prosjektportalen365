@@ -3,7 +3,7 @@
   "solution": {
     "name": "Prosjektportalen 365 - Portfolio Extensions",
     "id": "a3bf3315-0710-41f9-8836-2b61396d032f",
-    "version": "1.8.4.0",
+    "version": "1.9.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
@@ -24,21 +24,7 @@
       "screenshotPaths": [],
       "videoUrl": "",
       "categories": []
-    },
-    "features": [
-      {
-        "title": "Application Extension - Deployment of custom action",
-        "description": "Deploys a custom action with ClientSideComponentId association",
-        "id": "22c0b578-0432-4967-a4dd-1b35d329d760",
-        "version": "1.6.2",
-        "assets": {
-          "elementManifests": [
-            "elements.xml",
-            "ClientSideInstance.xml"
-          ]
-        }
-      }
-    ]
+    }
   },
   "paths": {
     "zippedPackage": "solution/pp-portfolio-extensions.sppkg"

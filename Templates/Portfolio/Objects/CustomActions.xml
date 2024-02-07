@@ -1,6 +1,9 @@
 <pnp:CustomActions xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:WebCustomActions>
         <pnp:CustomAction Group="Customization" Location="Microsoft.SharePoint.SiteSettings" Name="Konfigurasjon av Prosjektportalen" Title="Konfigurasjon av Prosjektportalen" Url="SitePages/Konfigurasjon.aspx" Rights="ManageWeb" Sequence="2001" />
-        <pnp:CustomAction Name="{537d3f41-eb97-4c5c-a5e7-a24e3ba25da8}" Location="ClientSideExtension.ApplicationCustomizer" Title="Hjelpeinnhold" Sequence="0" Rights="" RegistrationType="None" ClientSideComponentId="28987406-2a67-48a8-9297-fd2833bf0a09" ClientSideComponentProperties="{&quot;listName&quot;:&quot;Hjelpeinnhold&quot;,&quot;linkText&quot;:&quot;Hjelp tilgjengelig&quot;}" />
+        <pnp:CustomAction Name="{14a8f599-a359-4914-95c9-74476de792e5}" Location="ClientSideExtension.ApplicationCustomizer" Title="Footer" Sequence="0" Rights="" RegistrationType="None" ClientSideComponentId="84f27cec-ffde-4e00-a4cf-25c69f691054" ClientSideComponentProperties="{}" />
+        <pnp:CustomAction Name="{3d84a0a7-3108-49dd-9c41-365147e3da69}" Location="ClientSideExtension.ListViewCommandSet.CommandBar" Title="IdeaProcessing" RegistrationId="100" Sequence="0" Rights="" RegistrationType="List" ClientSideComponentId="b28cba0d-922c-44e0-a035-e4ea57d80e6d" ClientSideComponentProperties="{}" />
+        <pnp:CustomAction Name="{87162d9b-e927-464f-9a76-6f6fa73c3634}" Location="ClientSideExtension.ListViewCommandSet.CommandBar" Title="IdeaProjectData" RegistrationId="100" Sequence="0" Rights="" RegistrationType="List" ClientSideComponentId="69a7f6eb-e7ce-40eb-81e1-6f172a802619" ClientSideComponentProperties="{}" />
+        <pnp:CustomAction Name="{be0f2770-91b3-4056-ab7a-1431336a930a}" Location="ClientSideExtension.ListViewCommandSet.CommandBar" Title="IdeaRegistration" RegistrationId="100" Sequence="0" Rights="" RegistrationType="List" ClientSideComponentId="5d26712e-bdad-4ebf-b33f-9c759042bef6" ClientSideComponentProperties="{}" />
     </pnp:WebCustomActions>
 </pnp:CustomActions>

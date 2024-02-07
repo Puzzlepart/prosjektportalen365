@@ -1,0 +1,9 @@
+{
+    "title": "Usikkerheter for underområder",
+    "dataSource": "Alle risikoelementer for underområder",
+    "dataSourceCategory": "Usikkerhetsoversikt",
+    "dataSourceLevel": "Overordnet/Program",
+    "showCommandBar": true,
+    "showViewSelector": true,
+    "showSearchBox": true
+}

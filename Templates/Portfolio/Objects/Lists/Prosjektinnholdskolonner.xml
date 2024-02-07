@@ -18,9 +18,36 @@
                 <FieldRef Name="GtFieldDataType" />
                 <FieldRef Name="GtDataSourceCategory" />
                 <FieldRef Name="GtColMinWidth" />
+                <FieldRef Name="GtColMaxWidth" />
+                <FieldRef Name="GtIsGroupable" />
+                <FieldRef Name="GtFieldLocked" />
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
             <Aggregations Value="Off" />
+            <JSLink>clienttemplates.js</JSLink>
+        </View>
+        <View MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_GroupedByCategory_DisplayName}" Url="{site}/{resource:Lists_ProjectContentColumns_Url}/GroupedByCategory.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+            <Query>
+                <OrderBy>
+                    <FieldRef Name="GtSortOrder" />
+                </OrderBy>
+                <GroupBy>
+                    <FieldRef Name="GtDataSourceCategory" Ascending="TRUE" />
+                </GroupBy>
+            </Query>
+            <ViewFields>
+                <FieldRef Name="GtSortOrder" />
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="GtInternalName" />
+                <FieldRef Name="GtManagedProperty" />
+                <FieldRef Name="GtFieldDataType" />
+                <FieldRef Name="GtColMinWidth" />
+                <FieldRef Name="GtColMaxWidth" />
+                <FieldRef Name="GtIsGroupable" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">100</RowLimit>
+            <Aggregations Value="Off" />
+            <JSLink>clienttemplates.js</JSLink>
         </View>
     </pnp:Views>
     <pnp:DataRows KeyColumn="GtInternalName" UpdateBehavior="Overwrite">
@@ -32,6 +59,7 @@
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory"></pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">120</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldLocked">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 2 -->
             <pnp:DataValue FieldName="GtSortOrder">100</pnp:DataValue>
@@ -43,7 +71,7 @@
             <pnp:DataValue FieldName="GtColMinWidth">320</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 3 -->
-            <pnp:DataValue FieldName="GtSortOrder">110</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">120</pnp:DataValue>
             <pnp:DataValue FieldName="Title">Sluttidspunkt</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtDeliveryEndTime</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtDeliveryEndTimeOWSDATE</pnp:DataValue>
@@ -59,6 +87,7 @@
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Leveranseoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">120</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 5 -->
             <pnp:DataValue FieldName="GtSortOrder">130</pnp:DataValue>
@@ -129,8 +158,10 @@
             <pnp:DataValue FieldName="GtInternalName">GtProjectLogActors</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogActorsOWSCHCM</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataTypeProperties">{&quot;valueSeparator&quot;: &quot;;#&quot;}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Erfaringslogg</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 13 -->
             <pnp:DataValue FieldName="GtSortOrder">320</pnp:DataValue>
@@ -140,6 +171,7 @@
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Erfaringslogg</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 14 -->
             <pnp:DataValue FieldName="GtSortOrder">330</pnp:DataValue>
@@ -149,6 +181,7 @@
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Erfaringslogg</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">320</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 15 -->
             <pnp:DataValue FieldName="GtSortOrder">340</pnp:DataValue>
@@ -158,6 +191,7 @@
             <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Erfaringslogg</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">320</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 16 -->
             <pnp:DataValue FieldName="GtSortOrder">400</pnp:DataValue>
@@ -167,6 +201,7 @@
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 17 -->
             <pnp:DataValue FieldName="GtSortOrder">410</pnp:DataValue>
@@ -176,6 +211,7 @@
             <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 18 -->
             <pnp:DataValue FieldName="GtSortOrder">420</pnp:DataValue>
@@ -194,6 +230,7 @@
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 20 -->
             <pnp:DataValue FieldName="GtSortOrder">440</pnp:DataValue>
@@ -248,6 +285,7 @@
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 26 -->
             <pnp:DataValue FieldName="GtSortOrder">500</pnp:DataValue>
@@ -275,6 +313,7 @@
             <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">180</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>            <!-- ID: 29 -->
             <pnp:DataValue FieldName="GtSortOrder">530</pnp:DataValue>
@@ -300,8 +339,241 @@
             <pnp:DataValue FieldName="GtInternalName">Measurements</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">Measurements</pnp:DataValue>
             <pnp:DataValue FieldName="GtFieldDataType">Modal</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataTypeProperties">{&quot;headerTitleField&quot;:&quot;Title&quot;,&quot;headerSubTitleField&quot;:&quot;MeasurementIndicator&quot;}</pnp:DataValue>
             <pnp:DataValue FieldName="GtDataSourceCategory">Gevinstoversikt</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 32 -->
+            <pnp:DataValue FieldName="GtSortOrder">600</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Kommunikasjonskanal</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtActionChannel</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtActionChannelOWSTEXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Kommunikasjonsoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 33 -->
+            <pnp:DataValue FieldName="GtSortOrder">610</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Status</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtActionStatus</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtActionStatusOWSCHCS</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Kommunikasjonsoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 33 -->
+            <pnp:DataValue FieldName="GtSortOrder">620</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Tiltaksdato</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtActionDate</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtActionDateOWSDATE</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Kommunikasjonsoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 35 -->
+            <pnp:DataValue FieldName="GtSortOrder">630</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Tiltaksansvarlig</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtActionResponsible</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtActionResponsibleOWSUSER</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 36 -->
+            <pnp:DataValue FieldName="GtSortOrder">5</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Prosjekt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">SiteTitle</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">SiteTitle</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">ProjectInfo</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory"></pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceLevel">Portefølje;#Overordnet/Program</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">175</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">225</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldLocked">True</pnp:DataValue>
+        </pnp:DataRow>
+
+        <!-- Resterende kolonner, viktig at disse ligger her og ikke lengre oppe -->
+        <pnp:DataRow>            <!-- ID: 37 -->
+            <pnp:DataValue FieldName="GtSortOrder">110</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Starttidspunkt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtDeliveryStartTime</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtDeliveryStartTimeOWSDATE</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Leveranseoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">120</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 38 -->
+            <pnp:DataValue FieldName="GtSortOrder">135</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Godkjent dato</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtDeliveryAcceptanceDate</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtDeliveryAcceptanceDateOWSDATE</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Leveranseoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">120</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 39 -->
+            <pnp:DataValue FieldName="GtSortOrder">140</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Akseptansekriterier</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtDeliveryAcceptanceCriteria</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtDeliveryAcceptanceCriteriaOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Leveranseoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 40 -->
+            <pnp:DataValue FieldName="GtSortOrder">145</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Godkjenningsansvar</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtDeliveryAcceptanceResponsible</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">RefinableString80</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Leveranseoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 41 -->
+            <pnp:DataValue FieldName="GtSortOrder">150</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Godkjenningsmetode</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtDeliveryAcceptanceMethod</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtDeliveryAcceptanceMethodOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Leveranseoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 42 -->
+            <pnp:DataValue FieldName="GtSortOrder">155</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Kvalitetsansvar</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtDeliveryQualityResponsible</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">RefinableString81</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Leveranseoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 43 -->
+            <pnp:DataValue FieldName="GtSortOrder">160</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Kvalitetsforventninger</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtDeliveryQualityExpectations</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtDeliveryQualityExpectationsOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Leveranseoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 44 -->
+            <pnp:DataValue FieldName="GtSortOrder">165</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Kvalitetstoleranse</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtDeliveryQualityTolerance</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtDeliveryQualityToleranceOWSMTXT</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Leveranseoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 45 -->
+            <pnp:DataValue FieldName="Title">Status usikkerhet</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">250</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtRiskStatus</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtRiskStatusOWSCHCS</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 46 -->
+            <pnp:DataValue FieldName="Title">Usikkerhetstrategi</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">260</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtRiskStrategy</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtRiskStrategyOWSCHCS</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 47 -->
+            <pnp:DataValue FieldName="Title">Nærhet</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">270</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtRiskProximity</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtRiskProximityOWSCHCS</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Usikkerhetsoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 48 -->
+            <pnp:DataValue FieldName="GtSortOrder">350</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Loggelement</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtProjectLogType</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtProjectLogTypeOWSCHCS</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Erfaringslogg</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 49 -->
+            <pnp:DataValue FieldName="Title">Meldt av</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">360</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtProjectLogReporter</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">RefinableString83</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Erfaringslogg</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 50 -->
+            <pnp:DataValue FieldName="GtSortOrder">170</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Etikett</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">GtTag</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">GtTagOWSCHCS</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Tags</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory">Leveranseoversikt</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+
+        <!-- SharePoint kolonner, viktig at disse ligger her og ikke lengre oppe -->
+        <pnp:DataRow>            <!-- ID: 51 -->
+            <pnp:DataValue FieldName="GtSortOrder">900</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Opprettet</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">Created</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">Created</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory"></pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">120</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 52 -->
+            <pnp:DataValue FieldName="GtSortOrder">910</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Opprettet av</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">CreatedBy</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">CreatedBy</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory"></pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">120</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 53 -->
+            <pnp:DataValue FieldName="GtSortOrder">930</pnp:DataValue>
+            <pnp:DataValue FieldName="Title">Endret av</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">Editor</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">EditorOWSUSER</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">User</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory"></pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">120</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">200</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIsGroupable">True</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>            <!-- ID: 55 -->
+            <pnp:DataValue FieldName="Title">Endret</pnp:DataValue>
+            <pnp:DataValue FieldName="GtSortOrder">920</pnp:DataValue>
+            <pnp:DataValue FieldName="GtInternalName">Modified</pnp:DataValue>
+            <pnp:DataValue FieldName="GtManagedProperty">ModifiedOWSDATE</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Date</pnp:DataValue>
+            <pnp:DataValue FieldName="GtDataSourceCategory"></pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMinWidth">100</pnp:DataValue>
+            <pnp:DataValue FieldName="GtColMaxWidth">120</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />

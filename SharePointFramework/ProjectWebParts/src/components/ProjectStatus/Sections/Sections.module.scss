@@ -1,7 +1,8 @@
-@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+@import '~@fluentui/react/dist/sass/References.scss';
 
 .root {
-  @include ms-Grid-col;
-  @include ms-sm12;
-  padding: 0 32px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 32px;
 }

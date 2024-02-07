@@ -1,20 +1,11 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import {
-  DefaultButton,
-  DialogFooter,
-  format,
-  MessageBarType,
-  PrimaryButton,
-  Selection
-} from '@fluentui/react'
-import { FileAddResult } from '@pnp/sp'
+import { DefaultButton, DialogFooter, format, PrimaryButton, Selection } from '@fluentui/react'
 import * as strings from 'ProjectExtensionsStrings'
 import React, { useReducer } from 'react'
 import { isEmpty } from 'underscore'
 import { SPDataAdapter } from '../../data'
 import { TemplateItem } from '../../models/index'
 import { BaseDialog } from '../@BaseDialog/index'
-import { InfoMessage } from '../InfoMessage'
 import { DocumentTemplateDialogContext } from './context'
 import { CopyProgressScreen } from './CopyProgressScreen'
 import styles from './DocumentTemplateDialog.module.scss'
@@ -30,6 +21,8 @@ import reducer, {
 import { SelectScreen } from './SelectScreen'
 import { TargetFolderScreen } from './TargetFolderScreen'
 import { DocumentTemplateDialogScreen, IDocumentTemplateDialogProps } from './types'
+import { IFileAddResult } from '@pnp/sp/files'
+import { UserMessage } from 'pp365-shared-library'
 
 export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
   const [state, dispatch] = useReducer(reducer, initState())
@@ -44,8 +37,8 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
    */
   async function onStartCopy(templates: TemplateItem[]): Promise<void> {
     dispatch(START_COPY())
-    const folder = SPDataAdapter.sp.web.getFolderByServerRelativeUrl(state.targetFolder)
-    const filesAdded: FileAddResult[] = []
+    const folder = SPDataAdapter.sp.web.getFolderByServerRelativePath(state.targetFolder)
+    const filesAdded: IFileAddResult[] = []
 
     for (let i = 0; i < templates.length; i++) {
       const template = templates[i]
@@ -84,9 +77,10 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
         [DocumentTemplateDialogScreen.EditCopy]: <EditCopyScreen onStartCopy={onStartCopy} />,
         [DocumentTemplateDialogScreen.CopyProgress]: <CopyProgressScreen {...state.progress} />,
         [DocumentTemplateDialogScreen.Summary]: (
-          <InfoMessage
-            type={MessageBarType.success}
-            text={format(strings.SummaryText, state.uploaded.length)}
+          <UserMessage
+            title={strings.SummaryTitle}
+            text={format(strings.SummaryMessage, state.uploaded.length)}
+            intent='success'
           />
         )
       }[state.screen] || null
@@ -132,7 +126,8 @@ export const DocumentTemplateDialog = (props: IDocumentTemplateDialogProps) => {
           isDarkOverlay: state.locked
         }}
         onDismiss={onClose}
-        containerClassName={styles.root}>
+        containerClassName={styles.root}
+      >
         <div className={styles.container}>{onRenderContent()}</div>
         <DialogFooter>{onRenderFooter()}</DialogFooter>
       </BaseDialog>

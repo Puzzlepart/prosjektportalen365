@@ -1,14 +1,15 @@
 import { IColumn } from '@fluentui/react'
-import { IFilterProps } from 'pp365-portfoliowebparts/lib/components/FilterPanel'
-import { ITimelineItem } from 'pp365-portfoliowebparts/lib/interfaces/ITimelineItem'
-import { TimelineConfigurationModel } from 'pp365-portfoliowebparts/lib/models'
-import { ProjectColumn } from 'pp365-shared/lib/models'
-import * as ProjectDataService from 'pp365-shared/lib/services/ProjectDataService'
-import { IEntityField } from 'sp-entityportal-service'
 import {
+  EditableSPField,
   IBaseWebPartComponentProps,
-  IBaseWebPartComponentState
-} from '../BaseWebPartComponent/types'
+  IBaseWebPartComponentState,
+  ICustomEditPanelProps,
+  IFilterProps,
+  IProjectInformationData,
+  ITimelineItem,
+  ProjectColumn,
+  TimelineConfigurationModel
+} from 'pp365-shared-library'
 
 export interface IProjectTimelineProps extends IBaseWebPartComponentProps {
   listName?: string
@@ -57,27 +58,57 @@ export interface IProjectTimelineState extends IBaseWebPartComponentState<ITimel
   timelineConfig?: TimelineConfigurationModel[]
 
   /**
-   * Error
-   */
-  error?: Error
-
-  /**
    * Item to show details for
    */
   showDetails?: { item: ITimelineItem; element: HTMLElement }
+
+  /**
+   * Selected items
+   */
+  selectedItems?: any[]
 
   /**
    * Timestamp for refetch. Changing this state variable refetches the data in
    * `useProjectTimelineDataFetch`.
    */
   refetch?: number
+
+  /**
+   * Panel for editing or creating new timeline content
+   */
+  panel?: Partial<ICustomEditPanelProps>
 }
 
 export interface ITimelineData {
+  /**
+   * Items for timeline content
+   */
   items: ITimelineItem[]
+
+  /**
+   * Groups for timeline content
+   */
   groups: ITimelineGroup[]
+
+  /**
+   * List items for timeline content
+   */
   listItems?: Record<string, any>[]
+
+  /**
+   * Columns for timeline content
+   */
   listColumns?: IColumn[]
+
+  /**
+   * Editable fields for timeline content
+   */
+  fields?: EditableSPField[]
+
+  /**
+   * The current project ID in the Projects list
+   */
+  projectId?: number
 }
 
 export enum TimelineGroupType {
@@ -98,14 +129,9 @@ export interface ITimelineGroups {
   typeGroups: ITimelineGroup[]
 }
 
-export interface IProjectTimelineData extends ProjectDataService.IGetPropertiesData {
+export interface IProjectTimelineData extends IProjectInformationData {
   /**
    * Column configuration
    */
   columns?: ProjectColumn[]
-
-  /**
-   * Array of fields from the entity
-   */
-  fields?: IEntityField[]
 }

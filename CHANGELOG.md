@@ -1,41 +1,118 @@
-Formatet er basert på [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+# Endringslogg
 
-Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detaljert 'endringslogg' for siste hovedversjon.
+Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
+## 1.9.0 - TBA
+
+I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Prosjektportalen, flere av komponentene er blitt helrenovert og fått nytt utseende og tilpasningsmuligheter. Sjekk ut [release notes](./releasenotes/1.9.0.md) for oversikt. Noen av de mest omfattende er:
+
+- **Prosjektutlisting (forsiden av Prosjektportalen)**
+  - Ny og interaktiv kortvisning med dynamiske farger og ny kommandolinje som er fullstendig tilpasningsvennlig [#1231](https://github.com/Puzzlepart/prosjektportalen365/pull/1231)
+  - Ny listevisning med bedre sortering og metadata visning [#1236](https://github.com/Puzzlepart/prosjektportalen365/pull/1236)
+  - Tilpasningsvennlig hurtigmeny for å komme fortere til sider eller lister på prosjektet [#1236](https://github.com/Puzzlepart/prosjektportalen365/pull/1236), [#1253](https://github.com/Puzzlepart/prosjektportalen365/pull/1253)
+- **Porteføljeoversikt og aggregerte oversikter**
+  - Porteføljeoversikt og aggregerte oversikt webdeler har fått oppdatert utseende med mer interaktivitet [#1255](https://github.com/Puzzlepart/prosjektportalen365/pull/1255)
+  - Nye og forbedrete paneler for opprettelse og redigeringer av visninger og kolonner direkte i Porteføljeoversikten og aggregerte oversikter [#1202](https://github.com/Puzzlepart/prosjektportalen365/issues/1202), [#1203](https://github.com/Puzzlepart/prosjektportalen365/issues/1203), [#1210](https://github.com/Puzzlepart/prosjektportalen365/issues/1210), [#1199](https://github.com/Puzzlepart/prosjektportalen365/pull/1199), [#1272](https://github.com/Puzzlepart/prosjektportalen365/pull/1272)
+  - Ny kolonneredigering for visninger i porteføljeoversikt og aggregerte oversikter ved bruk av `drag and drop` for å endre rekkefølge på kolonnene, samt skjul/vis [#1206](https://github.com/Puzzlepart/prosjektportalen365/issues/1206), [#1280](https://github.com/Puzzlepart/prosjektportalen365/pull/1280)
+- **Fasevelger**
+  - Ny, responsiv og mer interaktiv fasevelger [#1270](https://github.com/Puzzlepart/prosjektportalen365/pull/1270)
+  - Ny og mer oversiktlig visning av fasesjekkpunkter og oppsummering ved endring av fase [#1289](https://github.com/Puzzlepart/prosjektportalen365/pull/1289)
+  - Betraktelig forbedring rundt synkroniseringstid av faseendring [#1232](https://github.com/Puzzlepart/prosjektportalen365/pull/1232)
+- **Prosjektstatus**
+  - Nytt og forbedret utseende for prosjektstatusrapporter med seksjonsnavigator i toppen, seksjoner og matriser er fornyet [#1286](https://github.com/Puzzlepart/prosjektportalen365/pull/1286)
+  - Nytt og forbedret panel for redigering og opprettelse av prosjektstatusrapporter [#1282](https://github.com/Puzzlepart/prosjektportalen365/pull/1282)
+- **Prosjektinformasjon**
+  - Prosjektinformasjon har fått oppdatert utseende med mer interaktivitet [#1262](https://github.com/Puzzlepart/prosjektportalen365/pull/1262)
+  - Nytt og forbedret panel for redigering av prosjektinformasjon [#1227](https://github.com/Puzzlepart/prosjektportalen365/issues/1227)
+  - Betraktelig forbedring rundt synkroniseringstid av prosjektinformasjon [#1232](https://github.com/Puzzlepart/prosjektportalen365/pull/1232)
+
+### Ny funksjonalitet
+
+- Støtte for å installere ulike kanaler for å kunne separere installasjoner i samme tenant [#1068](https://github.com/Puzzlepart/prosjektportalen365/issues/1068)
+- Rask tilgang til nyttig informasjon med Footer for Prosjektportalen [#1290](https://github.com/Puzzlepart/prosjektportalen365/pull/1290)
+- Idémodul er nå en del av standard + prosjektscoring og konfigurasjon [#1082](https://github.com/Puzzlepart/prosjektportalen365/issues/1082)
+- Tving oppsett av prosjektmal dersom mal er låst og "Konfigurer automatisk" er satt til "Ja" i Maloppsett listen [#1115](https://github.com/Puzzlepart/prosjektportalen365/issues/1115)
+- Mulighet for å angi etiketter på planneroppgaver [#1083](https://github.com/Puzzlepart/prosjektportalen365/issues/1083)
+- Mulighet for å angi sortering på planneroppgaver [#1056](https://github.com/Puzzlepart/prosjektportalen365/issues/1056)
+- Støtte for å håndtere tiltak for usikkerheter i Planner [#1273](https://github.com/Puzzlepart/prosjektportalen365/issues/1273)
+- Støtte for tooltip-kolonne i porteføljeoversikten [#1079](https://github.com/Puzzlepart/prosjektportalen365/issues/1079)
+- Visninger for programmer i Porteføljeoversikt [#933](https://github.com/Puzzlepart/prosjektportalen365/issues/933)
+- Støtte for egendefinerte rekkefølger for kolonner i porteføljeoversikten [#1114](https://github.com/Puzzlepart/prosjektportalen365/issues/1114)
+- Nye og forbedrete paneler for opprettelse og redigeringer av visninger og kolonner direkte i Porteføljeoversikten og aggregerte oversikter [#1202](https://github.com/Puzzlepart/prosjektportalen365/issues/1202), [#1203](https://github.com/Puzzlepart/prosjektportalen365/issues/1203), [#1210](https://github.com/Puzzlepart/prosjektportalen365/issues/1210), [#1199](https://github.com/Puzzlepart/prosjektportalen365/pull/1199)
+- Ny kolonneredigering for visninger i porteføljeoversikt og aggregerte oversikter ved bruk av `drag and drop` for å endre rekkefølge på kolonnene, samt skjul/vis [#1206](https://github.com/Puzzlepart/prosjektportalen365/issues/1206)
+- Ny oversikt: Kommunikasjonsplaner under Programminnhold [#965](https://github.com/Puzzlepart/prosjektportalen365/issues/965)
+- Informasjon om valgte elementer for programadministrasjon og prosjektoppsett-dialog [#1189](https://github.com/Puzzlepart/prosjektportalen365/pull/1189)
+- Nytt panel for redigering av prosjektinformasjon [#1227](https://github.com/Puzzlepart/prosjektportalen365/issues/1227)
+- Nytt panel for redigering og opprettelse av prosjektstatusrapporter [#1282](https://github.com/Puzzlepart/prosjektportalen365/pull/1282)
+- Nytt panel for redigering og opprettelse av tidslinjeelementer [#1288](https://github.com/Puzzlepart/prosjektportalen365/pull/1288)
+- Ny og interaktiv kortvisning med dynamiske farger og ny kommandolinje som er fullstendig tilpasningsvennlig [#1231](https://github.com/Puzzlepart/prosjektportalen365/pull/1231)
+- Ny listevisning av prosjekter med bedre sortering og metadata visning [#1236](https://github.com/Puzzlepart/prosjektportalen365/pull/1236)
+- Tilpasningsvennlig hurtigmeny for å komme fortere til sider eller lister på prosjektet [#1236](https://github.com/Puzzlepart/prosjektportalen365/pull/1236)
+
+### Forbedringer
+
+- Store forbedringer på rammeverk, oppgradering til siste @pnp/sp v3 som vil øke ytelsen og brukeropplevelsen [#1219](https://github.com/Puzzlepart/prosjektportalen365/pull/1219)
+- Kolonner i aggregerte oversikter kan nå gjøres grupperbare [#1020](https://github.com/Puzzlepart/prosjektportalen365/issues/1020)
+- Malbibliotek-sti kan nå konfigureres i maloppsett-lista [#1179](https://github.com/Puzzlepart/prosjektportalen365/issues/1179)
+- Prosjektinformasjon og prosjektnyheter vises nå i en vertikal seksjon på forsiden for å utnytte plassen bedre [#731](https://github.com/Puzzlepart/prosjektportalen365/issues/731)
+- Støtte for mer enn 500 restultater på oversikter i program [#1343](https://github.com/Puzzlepart/prosjektportalen365/issues/1343)
+- Søket på porteføljeforsiden inkluderer nå prosjekteiere, prosjektledere, prosjekttype og tjenesteområder [#1281](https://github.com/Puzzlepart/prosjektportalen365/issues/1281)
+- Forbedringer rundt rapportering og logging av feil/begrensninger under provisjonering av planneroppgaver [#1158](https://github.com/Puzzlepart/prosjektportalen365/pull/1158)
+- Betraktelig forbedring rundt synkronisering av prosjektinformasjon [#1232](https://github.com/Puzzlepart/prosjektportalen365/pull/1232)
+- Siste prosjekter webdel har fått nytt utseende og mer interaktiv [#1243](https://github.com/Puzzlepart/prosjektportalen365/pull/1243)
+- Porteføljeoversikt og aggregerte oversikt webdeler har fått oppdatert utseende med mer interaktivitet [#1255](https://github.com/Puzzlepart/prosjektportalen365/pull/1255)
+- Forbedret prosjekttidslinje for lettere navigasjon til prosjekters tidslinjer (fra venstre marg) [#1265](https://github.com/Puzzlepart/prosjektportalen365/pull/1265)
+- Forbedret tidslinjeliste for å lettere opprette, redigere og slette elementer [#1265](https://github.com/Puzzlepart/prosjektportalen365/pull/1265)
+- Visuelle forbedringer på kolonner og datatyper i porteføljeoversikt og aggregerte oversikter [#1268](https://github.com/Puzzlepart/prosjektportalen365/pull/1268)
+- Programadministrasjon webdel har fått nytt utseende og mer interaktiv [#1298](https://github.com/Puzzlepart/prosjektportalen365/pull/1298)
+- Alle filterpanel har fått et fornyet utseende med mer interaktivitet [#1299](https://github.com/Puzzlepart/prosjektportalen365/pull/1299)
+- Hjelpeinnhold er flyttet til footer og fått nytt visuelt utseende [#1295](https://github.com/Puzzlepart/prosjektportalen365/pull/1295)
+- Hjelpeinnhold har fått inført nivå, for å lettere skille om hjelpeinnholdet gjelder porteføljenivå eller prosjektnivå for eksempel [#1309](https://github.com/Puzzlepart/prosjektportalen365/pull/1309)
+
+### Feilrettinger
+
+- Fikset et problem hvor 'Alle prosjekter' ikke kunne settes som standard vertikal [#1163](https://github.com/Puzzlepart/prosjektportalen365/issues/1163)
+- Fikset et problem med datatype filnavn for aggregerte oversikter [#1201](https://github.com/Puzzlepart/prosjektportalen365/pull/1201)
+- Fikset et problem hvor prosjektforsiden ikke blir riktig vist etter Microsoft sin ny områdeoppretter [#1344](https://github.com/Puzzlepart/prosjektportalen365/issues/1344)
+
+---
 
 ## 1.8.4 - 25.08.23
 
 ### Feilrettinger
+
 - Rettet et problem hvor noen gjestebrukere ikke fikk opp prosjektadministrasjonsmuligheter [#1245](https://github.com/Puzzlepart/prosjektportalen365/issues/1245)
 - Rettet et problkem hvor visningspanelet for prosjekter viser feil informasjon på porteføljeoversikten [#1247](https://github.com/Puzzlepart/prosjektportalen365/issues/1247)
 
-## 1.8.3 - 23.06.23
+---
+
+## 1.8.3 - TBA
 
 ### Forbedringer
+
 - Søk i aggregerte oversikter søker nå også på prosjektnavn [#1123](https://github.com/Puzzlepart/prosjektportalen365/issues/1123)
 - Støtte for manuelle konfigurasjoner (JSON-format) i risikomatrise [#1120](https://github.com/Puzzlepart/prosjektportalen365/issues/1120)
 - Porteføljeoversikten støtter nå visning av URL-kolonner [#1130](https://github.com/Puzzlepart/prosjektportalen365/pull/1130)
 - Fiks for synkronisering dersom prosjekt mangler i den sentrale prosjekter-listen [#1121](https://github.com/Puzzlepart/prosjektportalen365/issues/1121)
 
 ### Feilrettinger
-- Rettet et problem hvor låst mal hindret mulighet for å gjøre et prosjekt om til overordnet område [#1134](https://github.com/Puzzlepart/prosjektportalen365/issues/1134)
+
+- Rettet et problem hvor låst mal hindret mulighet for å gjøre et prosjekt om til overordnet prosjekt [#1134](https://github.com/Puzzlepart/prosjektportalen365/issues/1134)
 - Fikset et problem hvor 'Hooks' ikke ble kjørt på slutten av provisjoneringen av et prosjekt [#1127](https://github.com/Puzzlepart/prosjektportalen365/issues/1127)
 - Fikset et problem hvor prosjekttidslinje på prosjektnivå ikke returnerte tidslinje-elementer for prosjektet [#1172](https://github.com/Puzzlepart/prosjektportalen365/pull/1172)
 - Rettet en feil hvor Excel eksporten gir feilmelding når datofelt mangler data. [#1180](https://github.com/Puzzlepart/prosjektportalen365/issues/1180)
 - Fikset et program hvor prosjekter ble vist selvom det ikke var tilknyttet prosjekter til et program [#1150](https://github.com/Puzzlepart/prosjektportalen365/pull/1150)
 
-## 1.8.2 - 08.06.23
+---
 
-### Ny funksjonalitet
+## 1.8.2 - 08.06.23
 
 ### Forbedringer
 
 - Lagt inn nye knapper på 'Konfigurasjon' siden for Prosjektportalen (Prosjekter, Prosjektstatus og Tidslinjeinnhold), samt skjult 'Maloppsett' og 'Tidslinjeinnhold' fra områderinnhold [#1072](https://github.com/Puzzlepart/prosjektportalen365/issues/1072)
-- Lagt inn mulighet for å angi sortering på Planner oppgaver som provisjoneres [#1056](https://github.com/Puzzlepart/prosjektportalen365/issues/1056)
 - Porteføljeoversikt: vis personlige visninger som egen "seksjon" [#1045](https://github.com/Puzzlepart/prosjektportalen365/issues/1045)
 - Endret feltet GtSearchQuery til Note for å støtte lange spørringer. NB: Vil ikke endres gjennom oppgradering. Endre manuelt felttype til "Flere linjer med tekst" ved behov. [#970](https://github.com/Puzzlepart/prosjektportalen365/issues/970)
-- Endra standardsortering av dokumentbiblioteker til å sortere på filnavn (var "Ingen" før)
+- Endret standardsortering av dokumentbiblioteker til å sortere på filnavn (var "Ingen" før)
 - Standard visningsmodus er nå lagt til som egenskap for prosjektliste-webdelen [#1053](https://github.com/Puzzlepart/prosjektportalen365/issues/1053)
 
 
@@ -51,6 +128,8 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Fiks for #1049 (feil ved publisering av statusrapporter) [#1049](https://github.com/Puzzlepart/prosjektportalen365/issues/1049)
 - Oppgraderingsoperasjonene som kjører før oppgradering varsler nå om feil, og det ble rettet feil som gjorde at oppgradering i 1.8.0 og 1.8.1 ikke fungerte fullstendig [#1094](https://github.com/Puzzlepart/prosjektportalen365/issues/1094)
 - Fikset et problem hvor "Vis i statusseksjonen" verdien ikke ble overholdt i visning av statusseksjoner
+
+---
 
 ## 1.8.1 - 31.03.2023
 
@@ -581,3 +660,7 @@ Sjekk ut [release notes](./releasenotes/1.8.0.md) for høydepunkter og mer detal
 - Fixed cache issue for ProjectInformation web part
 - Economy fields also hidden from list instance due to issue with content type updates
 - Added around in PortfolioOverview to fix issue with scroll [#116](https://github.com/Puzzlepart/prosjektportalen365/issues/116)
+
+---
+
+Formatet er basert på [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) og dette prosjektet følger [Semantic Versioning](http://semver.org/spec/v2.0.0.html).

@@ -1,0 +1,37 @@
+.latestRelease {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .content {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+
+    .version {
+      display: flex;
+      gap: 4px;
+
+      .latestGitHubReleaseLink {
+        color: inherit;
+      }
+
+      .versionComparisonIcon {
+        margin: 0 3px;
+        vertical-align: middle;
+        cursor: default;
+      }
+
+    }
+  }
+
+  .button {
+    justify-content: flex-start;
+    width: fit-content;
+
+    .label {
+      font-weight: var(--fontWeightRegular);
+      margin: 0;
+    }
+  }
+}

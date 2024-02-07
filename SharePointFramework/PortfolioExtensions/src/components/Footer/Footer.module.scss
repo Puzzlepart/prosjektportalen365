@@ -1,0 +1,17 @@
+.footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    min-height: 65px;
+    padding: 25px;
+    background-color: var(--colorNeutralBackground1);
+    border-top: 1px solid var(--colorNeutralBackground3);
+
+  .left, .right {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+  }
+}

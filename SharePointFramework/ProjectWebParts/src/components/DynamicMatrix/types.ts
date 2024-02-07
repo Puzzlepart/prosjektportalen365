@@ -23,6 +23,11 @@ export interface IDynamicMatrixProps {
   size?: DynamicMatrixSize
 
   /**
+   * Whether the matrix should be full width
+   */
+  fullWidth?: boolean
+
+  /**
    * Width can be either `string` or `number`.
    *
    * For example `100` or `50%`.
@@ -40,7 +45,7 @@ export interface IDynamicMatrixProps {
   getElementsForCell?: (cell: IMatrixCell) => IMatrixElementProps[]
 
   /**
-   * Color scale configuration contains color configurations for the matrix.
+   * Manual configuration URL. File must be a JSON file stored in SharePoint.
    */
-  colorScaleConfig?: DynamicMatrixColorScaleConfig
+  manualConfigurationPath?: string
 }

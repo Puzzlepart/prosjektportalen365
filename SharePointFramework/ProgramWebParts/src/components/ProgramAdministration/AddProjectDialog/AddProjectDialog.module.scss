@@ -1,24 +1,22 @@
-@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+@import "~@fluentui/react/dist/sass/References.scss";
 
-.root {
-  width: 950px;
-  max-width: 950px;
-  box-sizing: border-box;
-  position: relative;
+.addProjectDialog {
+  & > div[role="dialog"] {
+    display: flex;
+    flex-direction: column;
+    max-width: 700px;
+    width: calc(100vw - 180px);
+    height: calc(100vh - 180px);
+  }
 
-  .dialogContent {
-    height: 650px;
-    margin: 20px 0 0 0;
-    box-sizing: border-box;
-
-    .searchBox {
-      width: 625px;
-      margin: 10px 0 0 0;
-      box-sizing: border-box;
+    .content {
+      overflow-y: auto;
+      overflow-x: hidden;
     }
-  }
 
-  div[class*="ms-List-cell"] {
-    min-height: 0px;
-  }
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      padding: 20px 0 0 0;
+    }
 }

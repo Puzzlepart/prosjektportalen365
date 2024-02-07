@@ -1,9 +1,0 @@
-@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
-
-.root {
-    @include ms-Grid-col;
-    @include ms-sm4;
-    @include ms-font-m;
-    margin-top: 8px;
-    width: 120px;
-}

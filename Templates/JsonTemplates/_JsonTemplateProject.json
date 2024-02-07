@@ -528,14 +528,34 @@
             "Title": "{{ClientSidePages_Home_Title}}",
             "PageLayoutType": "Home",
             "CommentsDisabled": true,
+            "VerticalSection": [
+                {
+                    "Id": "{{ControlId_ProjectInformationWebPart}}",
+                    "Properties": {
+                        "title": "Prosjektinformasjon",
+                        "statusReportsCount": 0,
+                        "statusReportsHeader": "Prosjektstatus",
+                        "filterField": "GtShowFieldFrontpage",
+                        "adminPageLink": "Admin.aspx"
+                    }
+                },
+                {
+                    "Id": "a5df8fdf-b508-4b66-98a6-d83bc2597f63",
+                    "Properties": {
+                        "title": "Prosjektnyheter",
+                        "showChrome": true,
+                        "compactMode": true
+                    }
+                }
+            ],
             "Sections": [
                 {
                     "Columns": [
                         {
-                            "Factor": 8,
+                            "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "4449d3dc-fa58-4982-b87c-5a893114e7b7",
+                                    "Id": "{{ControlId_ProjectPhasesWebPart}}",
                                     "Properties": {
                                         "phaseField": "Fase",
                                         "syncPropertiesAfterPhaseChange": true,
@@ -558,29 +578,6 @@
                                         "showPerPage": 5,
                                         "title": "Møter og hendelser",
                                         "timeSpanLimitInMonth": 6
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "Factor": 4,
-                            "Controls": [
-                                {
-                                    "Id": "b8bec0be-2354-443d-a3ca-24b36e8ea7dc",
-                                    "Properties": {
-                                        "title": "Prosjektinformasjon",
-                                        "statusReportsCount": 0,
-                                        "statusReportsHeader": "Prosjektstatus",
-                                        "filterField": "GtShowFieldFrontpage",
-                                        "adminPageLink": "Admin.aspx"
-                                    }
-                                },
-                                {
-                                    "Id": "a5df8fdf-b508-4b66-98a6-d83bc2597f63",
-                                    "Properties": {
-                                        "title": "Prosjektnyheter",
-                                        "showChrome": true,
-                                        "compactMode": true
                                     }
                                 }
                             ]
@@ -641,114 +638,15 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "6c0e484d-f6da-40d4-81fc-ec1389ef29a8",
+                                    "Id": "{{ControlId_PortfolioAggregationWebPart}}",
                                     "Properties": {
                                         "title": "Gevinstoversikt",
-                                        "dataSource": "Gevinstoversikt (Prosjektnivå)",
-                                        "searchBoxPlaceholderText": "Søk i gevinster...",
-                                        "lockedColumns": true,
-                                        "columns": [
-                                            {
-                                                "key": "Title",
-                                                "fieldName": "Title",
-                                                "name": "Tittel",
-                                                "minWidth": 120,
-                                                "isResizable": true,
-                                                "data": {
-                                                    "renderAs": "text"
-                                                }
-                                            },
-                                            {
-                                                "key": "GtGainsResponsible",
-                                                "fieldName": "GtGainsResponsible",
-                                                "name": "Gevinstansvarlig",
-                                                "minWidth": 100,
-                                                "isResizable": true,
-                                                "data": {
-                                                    "renderAs": "user"
-                                                }
-                                            },
-                                            {
-                                                "key": "GtGainsOwner",
-                                                "fieldName": "GtGainsOwner",
-                                                "name": "Gevinsteier",
-                                                "minWidth": 100,
-                                                "isResizable": true,
-                                                "data": {
-                                                    "renderAs": "user"
-                                                }
-                                            },
-                                            {
-                                                "key": "GtDesiredValueOWSNMBR",
-                                                "fieldName": "GtDesiredValueOWSNMBR",
-                                                "name": "Ønsket verdi",
-                                                "minWidth": 100,
-                                                "isResizable": true,
-                                                "data": {
-                                                    "renderAs": "number"
-                                                }
-                                            },
-                                            {
-                                                "key": "GtMeasurementUnitOWSCHCS",
-                                                "fieldName": "GtMeasurementUnitOWSCHCS",
-                                                "name": "Måleenhet",
-                                                "minWidth": 100,
-                                                "isResizable": true,
-                                                "data": {
-                                                    "renderAs": "text"
-                                                }
-                                            },
-                                            {
-                                                "key": "GtStartValueOWSNMBR",
-                                                "fieldName": "GtStartValueOWSNMBR",
-                                                "name": "Startverdi",
-                                                "minWidth": 100,
-                                                "isResizable": true,
-                                                "data": {
-                                                    "renderAs": "number"
-                                                }
-                                            },
-                                            {
-                                                "key": "MeasurementIndicator",
-                                                "fieldName": "MeasurementIndicator",
-                                                "name": "Måleindikator",
-                                                "minWidth": 180,
-                                                "isResizable": true,
-                                                "data": {
-                                                    "renderAs": "text"
-                                                }
-                                            },
-                                            {
-                                                "key": "LastMeasurementValue",
-                                                "fieldName": "LastMeasurementValue",
-                                                "name": "Siste måling",
-                                                "minWidth": 100,
-                                                "isResizable": true,
-                                                "data": {
-                                                    "renderAs": "number"
-                                                }
-                                            },
-                                            {
-                                                "key": "MeasurementAchievement",
-                                                "fieldName": "MeasurementAchievement",
-                                                "name": "Måloppnåelse",
-                                                "minWidth": 100,
-                                                "isResizable": true,
-                                                "data": {
-                                                    "renderAs": "trend"
-                                                }
-                                            },
-                                            {
-                                                "key": "Measurements",
-                                                "fieldName": "Measurements",
-                                                "name": "Målinger",
-                                                "minWidth": 100,
-                                                "isResizable": true,
-                                                "data": {
-                                                    "renderAs": "modal"
-                                                }
-                                            }
-                                        ]
+                                        "dataSource": "Alle gevinstelementer for prosjektet",
+                                        "dataSourceCategory": "Gevinstoversikt",
+                                        "dataSourceLevel": "Prosjekt",
+                                        "showCommandBar": true,
+                                        "showViewSelector": true,
+                                        "showSearchBox": true
                                     }
                                 }
                             ]
@@ -769,7 +667,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "681ad0dc-ddb5-4dba-a5d6-a42f6d1c90a6",
+                                    "Id": "{{ControlId_ProjectStatusWebPart}}",
                                     "Properties": {
                                         "title": "Prosjektstatus",
                                         "riskMatrix": {
@@ -800,7 +698,7 @@
                             "Factor": 12,
                             "Controls": [
                                 {
-                                    "Id": "d156652b-9121-47af-89ae-1fe8427c53da",
+                                    "Id": "{{ControlId_ProjectTimelineWebPart}}",
                                     "Properties": {
                                         "listName": "Tidslinjeinnhold",
                                         "showTimeline": true,

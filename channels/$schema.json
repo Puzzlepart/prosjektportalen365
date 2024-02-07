@@ -1,0 +1,305 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "definitions": {
+        "guid": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "sppkg": {
+            "type": "string",
+            "pattern": "solution\\/pp-[A-Za-z-]*\\.sppkg"
+          }
+    },
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "spfx": {
+            "type": "object",
+            "properties": {
+                "solutions": {
+                    "type": "object",
+                    "properties": {
+                        "PortfolioExtensions": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "$ref": "#/definitions/guid"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "zippedPackage": {
+                                    "$ref": "#/definitions/sppkg"
+                                },
+                                "components": {
+                                    "type": "object",
+                                    "properties": {
+                                        "Footer": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "IdeaProcessing": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "IdeaProjectData": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "IdeaRegistration": {
+                                            "$ref": "#/definitions/guid"
+                                        }
+                                    },
+                                    "required": [
+                                        "Footer",
+                                        "IdeaProcessing",
+                                        "IdeaProjectData",
+                                        "IdeaRegistration"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "name",
+                                "zippedPackage",
+                                "components"
+                            ]
+                        },
+                        "PortfolioWebParts": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "$ref": "#/definitions/guid"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "zippedPackage": {
+                                    "$ref": "#/definitions/sppkg"
+                                },
+                                "components": {
+                                    "type": "object",
+                                    "properties": {
+                                        "LatestProjectsWebPart": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "PortfolioAggregationWebPart": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "PortfolioInsightsWebPart": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "PortfolioOverviewWebPart": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "ProjectListWebPart": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "PortfolioTimelineWebPart": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "ResourceAllocationWebPart": {
+                                            "$ref": "#/definitions/guid"
+                                        }
+                                    },
+                                    "required": [
+                                        "LatestProjectsWebPart",
+                                        "PortfolioAggregationWebPart",
+                                        "PortfolioInsightsWebPart",
+                                        "PortfolioOverviewWebPart",
+                                        "ProjectListWebPart",
+                                        "PortfolioTimelineWebPart",
+                                        "ResourceAllocationWebPart"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "name",
+                                "zippedPackage",
+                                "components"
+                            ]
+                        },
+                        "ProgramWebParts": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "$ref": "#/definitions/guid"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "zippedPackage": {
+                                    "$ref": "#/definitions/sppkg"
+                                },
+                                "components": {
+                                    "type": "object",
+                                    "properties": {
+                                        "ProgramAdministrationWebpart": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "ProgramAggregationWebPart": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "ProgramProjectOverviewWebPart": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "ProgramTimelineWebPart": {
+                                            "$ref": "#/definitions/guid"
+                                        }
+                                    },
+                                    "required": [
+                                        "ProgramAdministrationWebpart",
+                                        "ProgramAggregationWebPart",
+                                        "ProgramProjectOverviewWebPart",
+                                        "ProgramTimelineWebPart"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "name",
+                                "zippedPackage",
+                                "components"
+                            ]
+                        },
+                        "ProjectExtensions": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "$ref": "#/definitions/guid"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "zippedPackage": {
+                                    "$ref": "#/definitions/sppkg"
+                                },
+                                "components": {
+                                    "type": "object",
+                                    "properties": {
+                                        "ProjectSetup": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "ProjectUpgrade": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "TemplateSelectorCommand": {
+                                            "$ref": "#/definitions/guid"
+                                        }
+                                    },
+                                    "required": [
+                                        "ProjectSetup",
+                                        "ProjectUpgrade",
+                                        "TemplateSelectorCommand"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "name",
+                                "zippedPackage",
+                                "components"
+                            ]
+                        },
+                        "ProjectWebParts": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "$ref": "#/definitions/guid"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "zippedPackage": {
+                                    "$ref": "#/definitions/sppkg"
+                                },
+                                "components": {
+                                    "type": "object",
+                                    "properties": {
+                                        "OpportunityMatrixWebPart": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "ProjectInformationWebPart": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "ProjectPhasesWebPart": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "ProjectStatusWebPart": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "ProjectTimelineWebPart": {
+                                            "$ref": "#/definitions/guid"
+                                        },
+                                        "RiskMatrixWebPart": {
+                                            "$ref": "#/definitions/guid"
+                                        }
+                                    },
+                                    "required": [
+                                        "OpportunityMatrixWebPart",
+                                        "ProjectInformationWebPart",
+                                        "ProjectPhasesWebPart",
+                                        "ProjectStatusWebPart",
+                                        "ProjectTimelineWebPart",
+                                        "RiskMatrixWebPart"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "name",
+                                "zippedPackage",
+                                "components"
+                            ]
+                        },
+                        "shared-library": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "$ref": "#/definitions/guid"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "zippedPackage": {
+                                    "$ref": "#/definitions/sppkg"
+                                },
+                                "components": {
+                                    "type": "object",
+                                    "properties": {
+                                        "SharedLibrary": {
+                                            "$ref": "#/definitions/guid"
+                                        }
+                                    },
+                                    "required": [
+                                        "SharedLibrary"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "name",
+                                "zippedPackage",
+                                "components"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "PortfolioExtensions",
+                        "PortfolioWebParts",
+                        "ProgramWebParts",
+                        "ProjectExtensions",
+                        "ProjectWebParts"
+                    ]
+                }
+            },
+            "required": [
+                "solutions"
+            ]
+        }
+    },
+    "required": [
+        "name",
+        "spfx"
+    ]
+}

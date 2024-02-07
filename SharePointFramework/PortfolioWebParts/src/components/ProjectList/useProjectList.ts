@@ -1,11 +1,16 @@
 /* eslint-disable prefer-spread */
-import { format, IButtonProps, IColumn } from '@fluentui/react'
-import { ProjectListModel } from 'models'
-import { sortAlphabetically } from 'pp365-shared/lib/helpers'
+import { format, IColumn } from '@fluentui/react'
+import { ButtonProps, useId } from '@fluentui/react-components'
+import { SearchBoxProps } from '@fluentui/react-search-preview'
+import { ProjectListModel } from 'pp365-shared-library/lib/models'
+import { sortAlphabetically } from 'pp365-shared-library/lib/util/sortAlphabetically'
 import _ from 'underscore'
+import { IProjectCardContext } from './ProjectCard/context'
 import { IProjectListProps } from './types'
 import { useProjectListDataFetch } from './useProjectListDataFetch'
 import { useProjectListState } from './useProjectListState'
+import strings from 'PortfolioWebPartsStrings'
+import { useToolbarItems } from './ToolbarItems/useToolbarItems'
 
 /**
  * Component logic hook for `ProjectList`. This hook is responsible for
@@ -23,31 +28,34 @@ export const useProjectList = (props: IProjectListProps) => {
    * @param column - Column
    */
   function onListSort(_evt: React.MouseEvent<any>, column: IColumn): void {
-    let isSortedDescending = column.isSortedDescending
-    if (column.isSorted) {
-      isSortedDescending = !isSortedDescending
+    if (column.key !== 'logo') {
+      let isSortedDescending = column.isSortedDescending
+      if (column.isSorted) {
+        isSortedDescending = !isSortedDescending
+      }
+      const newSort = { fieldName: column.fieldName, isSortedDescending }
+      setState({ sort: newSort })
     }
-    const newSort = { fieldName: column.fieldName, isSortedDescending }
-    setState({ sort: newSort })
+    return
   }
 
   /**
-   * Get card ations. For now only `ON_SELECT_PROJECT` is handled.
+   * Get card actions. For now only `showProjectInfo` is handled.
    *
    * @param project - Project
    */
-  function getCardActions(project: ProjectListModel): IButtonProps[] {
+  function getCardActions(project: ProjectListModel): ButtonProps[] {
     return [
       {
-        id: 'ON_SELECT_PROJECT',
-        iconProps: { iconName: 'OpenInNewWindow' },
-        onClick: (event: React.MouseEvent<any>) => onExecuteCardAction(event, project)
+        id: 'showProjectInfo',
+        onClick: (event: React.MouseEvent<any>) => onExecuteCardAction(event, project),
+        title: strings.ProjectInformationPanelButton
       }
     ]
   }
 
   /**
-   * On execute card action. For now only `ON_SELECT_PROJECT` is handled.
+   * On execute card action. For now only `showProjectInfo` is handled.
    *
    * @param event - Event
    * @param project - Project
@@ -56,24 +64,32 @@ export const useProjectList = (props: IProjectListProps) => {
     event.preventDefault()
     event.stopPropagation()
     switch (event.currentTarget.id) {
-      case 'ON_SELECT_PROJECT':
+      case 'showProjectInfo':
         setState({ showProjectInfo: project })
         break
     }
   }
 
   /**
-   * Filter projects based on the `filter` function from the `selectedView` 
+   * Filter projects based on the `filter` function from the `selectedVertical`
    * and the `searchTerm`. Then sort the projects based on the `sort` state.
    *
    * @param projects - Projects
    */
-  function filterProjets(projects: ProjectListModel[]) {
+  function filterProjects(projects: ProjectListModel[]) {
     return projects
-      .filter((project) => state.selectedView.filter(project, state))
+      .filter((project) => state.selectedVertical.filter(project, state))
       .filter((project) =>
         _.any(Object.keys(project), (key) => {
-          const value = project[key]
+          let value
+          if (Array.isArray(project[key]) && project[key].length > 0) {
+            value = project[key]?.join(', ')
+          } else if (typeof project[key] === 'object' && project[key] !== null) {
+            value = Object.values(project[key])?.join(', ')
+          } else {
+            value = project[key]
+          }
+
           return (
             value &&
             typeof value === 'string' &&
@@ -94,31 +110,53 @@ export const useProjectList = (props: IProjectListProps) => {
   /**
    * On search callback handler
    *
-   * @param _event - React change event
+   * @param _ - React change event
    * @param searchTerm - Search term
    */
-  function onSearch(_event: React.ChangeEvent<HTMLInputElement>, searchTerm: string) {
-    setState({ searchTerm })
+  const onSearch: SearchBoxProps['onChange'] = (_, data) => {
+    setState({ searchTerm: data?.value })
   }
 
-  const projects = state.isDataLoaded ? filterProjets(state.projects) : state.projects
-  const views = props.views.filter(
-    (view) => !props.hideViews.includes(view.itemKey) && (!view.isHidden || !view?.isHidden(state))
+  const projects = state.isDataLoaded ? filterProjects(state.projects) : state.projects
+  const verticals = props.verticals.filter(
+    (vertical) => !props.hideVerticals.includes(vertical.key.toString())
   )
 
-  useProjectListDataFetch(props, views, setState)
+  useProjectListDataFetch(props, verticals, setState)
+
+  /**
+   * Create card context for the provided project.
+   *
+   * @param project Project to create context for
+   */
+  function createCardContext(project: ProjectListModel): IProjectCardContext {
+    const shouldDisplay = (key: string) => _.contains(props.projectMetadata, key)
+    return {
+      ...props,
+      project,
+      actions: getCardActions(project),
+      isDataLoaded: state.isDataLoaded,
+      shouldDisplay
+    }
+  }
+
+  const menuItems = useToolbarItems(state, setState, props)
+
+  const fluentProviderId = useId('fp-project-list')
 
   return {
     state,
     setState,
+    menuItems,
     projects,
-    views,
-    getCardActions,
+    verticals,
     searchBoxPlaceholder:
       !state.isDataLoaded || _.isEmpty(state.projects)
         ? ''
-        : format(state.selectedView.searchBoxPlaceholder, projects.length),
+        : format(state.selectedVertical.searchBoxPlaceholder, projects.length),
     onListSort,
-    onSearch
-  } as const
+    onSearch,
+    createCardContext,
+    fluentProviderId
+  }
 }

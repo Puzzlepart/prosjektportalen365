@@ -15,6 +15,7 @@
                 <FieldRef Name="GtPortfolioColumnValue" />
                 <FieldRef Name="GtPortfolioColumnColor" />
                 <FieldRef Name="GtPortfolioColumnIconName" />
+                <FieldRef Name="GtPortfolioColumnTooltip" />
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
             <Aggregations Value="Off" />
@@ -194,6 +195,20 @@
             <pnp:DataValue FieldName="GtPortfolioColumn">23</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnValue">Bedre enn spesifikasjon</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status tilskudd</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumn">41</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnValue">Ingen hendelser siste måned</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnColor">#2da748</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
+        </pnp:DataRow>
+        <pnp:DataRow>
+            <pnp:DataValue FieldName="Title">Status tilskudd</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumn">41</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnValue">Hendelse registrert siste måned</pnp:DataValue>
+            <pnp:DataValue FieldName="GtPortfolioColumnColor">#e9b359</pnp:DataValue>
             <pnp:DataValue FieldName="GtPortfolioColumnIconName">CircleFill</pnp:DataValue>
         </pnp:DataRow>
         <pnp:DataRow>
