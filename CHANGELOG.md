@@ -115,6 +115,7 @@ I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Pr
 - Endret standardsortering av dokumentbiblioteker til å sortere på filnavn (var "Ingen" før)
 - Standard visningsmodus er nå lagt til som egenskap for prosjektliste-webdelen [#1053](https://github.com/Puzzlepart/prosjektportalen365/issues/1053)
 
+
 ### Feilrettinger
 
 - Fiks for uthenting av prosjektinformasjon for brukere uten tilgang til hubområdet [#1080](https://github.com/Puzzlepart/prosjektportalen365/issues/1080)

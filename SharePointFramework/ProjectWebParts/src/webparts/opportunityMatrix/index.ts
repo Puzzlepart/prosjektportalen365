@@ -110,7 +110,9 @@ export default class OpportunityMatrixWebPart extends BaseProjectWebPart<IOpport
               groupName: strings.LookAndFeelGroupName,
               groupFields: [
                 PropertyPaneToggle('fullWidth', {
-                  label: strings.MatrixFullWidthLabel
+                  label: strings.MatrixFullWidthLabel,
+                  checked:
+                    this.properties.fullWidth === undefined ? true : this.properties.fullWidth
                 }),
                 !this.properties.fullWidth &&
                   PropertyPaneSlider('width', {

@@ -312,7 +312,7 @@
             <pnp:DataValue FieldName="Title">{resource:SiteFields_GtOverallStatus_DisplayName}</pnp:DataValue>
             <pnp:DataValue FieldName="GtInternalName">GtOverallStatus</pnp:DataValue>
             <pnp:DataValue FieldName="GtManagedProperty">GtOverallStatusOWSMTXT</pnp:DataValue>
-            <pnp:DataValue FieldName="GtFieldDataType">Text</pnp:DataValue>
+            <pnp:DataValue FieldName="GtFieldDataType">Note</pnp:DataValue>
             <pnp:DataValue FieldName="GtColMinWidth">250</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldProjectStatus">False</pnp:DataValue>
             <pnp:DataValue FieldName="GtShowFieldFrontpage">False</pnp:DataValue>

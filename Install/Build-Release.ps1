@@ -209,6 +209,23 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
     }
     EndAction
 }
+
+if (-not $SkipBuildSharePointFramework.IsPresent) {
+    $Solutions | ForEach-Object {
+        Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH\$_"
+        $Version = (Get-Content "./config/package-solution.json" -Raw | ConvertFrom-Json).solution.version
+        StartAction("Packaging SPFx solution $_")
+        if ($CI.IsPresent) {  
+            npm ci --silent --no-audit --no-fund >$null 2>&1
+        }
+        else {
+            npm install --no-progress --silent --no-audit --no-fund
+        }
+        npm run package
+        Get-ChildItem "./sharepoint/solution/" *.sppkg -Recurse -ErrorAction SilentlyContinue | Where-Object { -not ($_.PSIsContainer -or (Test-Path "$RELEASE_PATH/Apps/$_")) } | Copy-Item -Destination $RELEASE_PATH_APPS -Force
+        EndAction
+    }
+}
 #endregion
 
 #region Build PnP templates

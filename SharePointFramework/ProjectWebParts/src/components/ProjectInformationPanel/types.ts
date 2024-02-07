@@ -9,7 +9,7 @@ export interface IProjectInformationPanelProps
    * callback function is passed to the element that should be called when the
    * panel should be toggled.
    */
-  onRenderToggleElement?: (onToggle: () => void) => JSX.Element
+  onRenderToggleElement?: (onToggle: React.MouseEventHandler<HTMLElement>) => JSX.Element
 
   /**
    * Props for the `Panel` component. See: `IPanelProps`

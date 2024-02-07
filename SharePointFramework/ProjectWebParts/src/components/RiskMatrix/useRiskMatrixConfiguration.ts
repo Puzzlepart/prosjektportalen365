@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react'
 import SPDataAdapter from '../../data'
 import { DynamicMatrixConfiguration } from '../DynamicMatrix'
 import { IRiskMatrixProps } from './types'
+import SPDataAdapter from '../../data'
+import strings from 'ProjectWebPartsStrings'
 
 /**
  * Configuration hook for `RiskMatrix`. This hook will fetch the manual configuration
@@ -19,7 +21,7 @@ export function useRiskMatrixConfiguration(props: IRiskMatrixProps) {
 
   // Fetch manual configuration if `pageContext` is set.
   useEffect(() => {
-    if (props.pageContext) {
+    if (props.pageContext && !props.useDynamicConfiguration) {
       fetchJsonConfiguration()
     }
   }, [props.pageContext])

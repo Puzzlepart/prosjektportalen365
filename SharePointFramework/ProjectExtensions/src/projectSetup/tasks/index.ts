@@ -9,6 +9,7 @@ import { ProvisionSiteFields } from './ProvisionSiteFields'
 import { SetTaxonomyFields } from './SetTaxonomyFields'
 import { SetupProjectInformation } from './SetupProjectInformation'
 import { SitePermissions } from './SitePermissions'
+import { Hooks } from './Hooks'
 
 const tasks: (new (data: IProjectSetupData) => IBaseTask)[] = [
   PreTask,

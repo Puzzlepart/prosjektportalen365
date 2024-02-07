@@ -42,6 +42,9 @@ declare interface IProjectExtensionsStrings {
   ApplyTemplateSiteFields: string
   ApplyTemplateText: string
   ApplyTemplateWebSettings: string
+  ApplyTemplateHooks: string
+  ApplyExtensionHooks: string
+  RunHooksText: string
   CloseModalText: string
   CmdSelectionCountText: string
   CmdSelectionCountTooltipText: string
