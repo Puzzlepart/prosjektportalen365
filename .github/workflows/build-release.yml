@@ -34,7 +34,8 @@ jobs:
       sha_short: ${{ steps.vars.outputs.sha_short }}
 
   build_release_package_test:
-    name: Build release package for test channel
+    needs: [build-release]
+    name: Build test channel release (CI)
     runs-on: macos-latest
     if: "!contains(github.event.head_commit.message, '[skip-ci]')"
     steps:

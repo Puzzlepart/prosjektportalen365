@@ -48,7 +48,6 @@ import {
   IPortfolioWebPartsDataAdapter,
   IProjectsData
 } from './types'
-import { SearchQueryInit } from '@pnp/sp/src/search'
 
 /**
  * Data adapter for Portfolio Web Parts.

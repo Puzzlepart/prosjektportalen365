@@ -64,8 +64,8 @@ body:
       label: Versjon
       description: Hvilken versjon av Prosjektportalen 365 oppsto feilen på?
       options:
-        - 1.8.x (siste stabile)
-        - 1.9.0 (preview)
+        - 1.8.x (forrige stabile)
+        - 1.9.0 (siste stabile)
         - Eldre (spesifiser over)
     validations:
       required: true
