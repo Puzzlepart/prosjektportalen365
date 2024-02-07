@@ -5,9 +5,9 @@ on:
     branches:
       - releases/1.9
     paths:
-      - "SharePointFramework/**"
-      - "Install/**"
-      - "Templates/**"
+      - 'SharePointFramework/**'
+      - 'Install/**'
+      - 'Templates/**'
       - .github/workflows/ci-channel-test.yml
 
 env:
@@ -17,10 +17,10 @@ jobs:
   build_release_package_test:
     name: Build release package for test channel
     runs-on: macos-latest
-    concurrency: 
+    concurrency:
       group: ${{ github.ref }}_build_release_package_for_test_channel
       cancel-in-progress: true
-    if: "contains(github.event.head_commit.message, '[test]')"
+    if: ${{ contains(github.event.head_commit.message, '[test]') }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -49,7 +49,7 @@ jobs:
     needs: [build_release_package_test]
     name: Upgrade (test)
     runs-on: macos-latest
-    if: "!contains(github.event.head_commit.message, '[skip-upgrade]')"
+    if: ${{ !contains(github.event.head_commit.message, '[skip-upgrade]') }}
     steps:
       - uses: actions/download-artifact@v3
         with:
@@ -64,7 +64,7 @@ jobs:
     needs: [build_release_package_test, upgrade_channel_test]
     name: Upgrade all sites to latest (test)
     runs-on: macos-latest
-    if: "contains(github.event.head_commit.message, '[upgrade-all-sites-to-latest]')"
+    if: ${{ contains(github.event.head_commit.message, '[upgrade-all-sites-to-latest]') }}
     steps:
       - uses: actions/download-artifact@v3
         with:
