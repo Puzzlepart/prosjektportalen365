@@ -97,7 +97,5 @@
             <pnp:DataValue FieldName="GtSettingsCategory">Mulighetsmatrise</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
-    <pnp:Webhooks>
-        <pnp:Webhook ServerNotificationUrl="https://northeurope1-0.pushnp.svc.ms/notifications?token=5507e3fc-9a4e-4217-b7be-b4e034d94ec6" ExpiresInDays="1" />
-    </pnp:Webhooks>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
 </pnp:ListInstance>
