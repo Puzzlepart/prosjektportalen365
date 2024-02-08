@@ -168,4 +168,23 @@ if ($null -ne $LastInstall) {
         }
         Write-Host "[SUCCESS] Project Status items successfully processed"
     }
+    
+    if ($PreviousVersion -lt "1.9.0") {
+        Write-Host "[INFO] In version v1.9.0 we introduced data source levels. Adding default level 'Portfolio' to existing data sources..."
+        
+        Get-PnPListItem -List "Datakilder" | Where-Object { $_["Title"] -eq [System.Uri]::UnescapeDataString("Gevinstoversikt (Prosjektniv%C3%A5)") } | Remove-PnPListItem -Recycle -Force -ErrorAction SilentlyContinue | Out-Null
+        Get-PnPListItem -List "Datakilder" | Where-Object { $_["Title"] -eq "Programrisiko" } | Remove-PnPListItem -Recycle -Force -ErrorAction SilentlyContinue | Out-Null
+        
+        Get-PnPListItem -List "Datakilder" | ForEach-Object {
+            $Item = $_
+            $Levels = $Item["GtDataSourceLevel"]
+            if ($null -eq $Levels) {
+                $Item["GtDataSourceLevel"] = [System.Uri]::UnescapeDataString("Portef%C3%B8lje")
+                $Item.Update()
+                Invoke-PnPQuery
+            }
+        }
+
+        Write-Host "[SUCCESS] Data sources updated"
+    }
 }

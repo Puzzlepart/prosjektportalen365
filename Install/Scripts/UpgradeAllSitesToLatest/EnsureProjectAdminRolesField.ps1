@@ -15,14 +15,14 @@ if ($global:__PreviousVersion -le $TargetVersion) {
     $field = Get-PnPField -List $listName -Identity $fieldId -ErrorAction SilentlyContinue
     if ($null -eq $field) {
       Write-Host "`t`tAdding field GtProjectAdminRoles to list $listName"
-      Add-PnPFieldFromXml -List $listName -FieldXml $fieldXml >$null 2>&1
+      $newfield = Add-PnPFieldFromXml -List $listName -FieldXml $fieldXml
 
       $field = Get-PnPField -List $listName -Identity $fieldId -ErrorAction SilentlyContinue
       if ($null -ne $field) {
         $contentType = Get-PnPContentType -List $listName -Identity "Element" -ErrorAction SilentlyContinue
         if ($null -ne $contentType) {
           Write-Host "`t`t`tAdding GtProjectAdminRoles field to contenttype"
-          Add-PnPFieldToContentType -Field "GtProjectAdminRoles" -ContentType $contentType.Name >$null 2>&1
+          $newfieldct = Add-PnPFieldToContentType -Field "GtProjectAdminRoles" -ContentType $contentType.Name -ErrorAction SilentlyContinue
         }
 
         $items = Get-PnPListItem -List $listName
@@ -30,14 +30,7 @@ if ($global:__PreviousVersion -le $TargetVersion) {
           Write-Host "`t`t`tSetting default value for GtProjectAdminRoles field"
           $item["GtProjectAdminRoles"] = [System.Uri]::UnescapeDataString("SP omr%C3%A5deadministrator")
           $item.Update()
-        }
-
-        # Retry if for some reason setting the values didn't work
-        $items = Get-PnPListItem -List $listName
-        foreach ($item in $items) {
-          Write-Host "`t`t`tSetting default value for GtProjectAdminRoles field"
-          $item["GtProjectAdminRoles"] = [System.Uri]::UnescapeDataString("SP omr%C3%A5deadministrator")
-          $item.Update()
+          Invoke-PnPQuery
         }
       }
     }
