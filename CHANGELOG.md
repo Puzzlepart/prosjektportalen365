@@ -2,7 +2,7 @@
 
 Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
-## 1.9.0 - TBA
+## 1.9.0 - 08.02.2024
 
 I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Prosjektportalen, flere av komponentene er blitt helrenovert og fått nytt utseende og tilpasningsmuligheter. Sjekk ut [release notes](./releasenotes/1.9.0.md) for oversikt. Noen av de mest omfattende er:
 

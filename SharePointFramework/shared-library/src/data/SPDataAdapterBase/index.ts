@@ -272,7 +272,10 @@ export class SPDataAdapterBase<
   ): Promise<ITag[]> {
     const terms = await this.sp.termStore.sets.getById(termSetId).terms()
     const tags = terms.map<ITag>((term) => {
-      const name = term.labels.find((label) => label.languageTag === languageTag).name
+      const label =
+        term.labels.find((label) => label.languageTag === languageTag) ||
+        term.labels.find((label) => label.languageTag === 'en-US')
+      const name = label ? label.name : ''
       return {
         key: term.id,
         name

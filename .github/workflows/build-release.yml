@@ -3,16 +3,25 @@ name: Build release (main)
 on:
   push:
     branches: [main]
+    paths:
+      - 'SharePointFramework/**'
+      - 'Install/**'
+      - 'Templates/**'
+      - .github/workflows/build-release.yml
 
 jobs:
   build-release:
     name: Build release (CI)
     runs-on: macos-latest
-    if: "!contains(github.event.head_commit.message, '[skip-ci]')"
+    if: ${{ !contains(github.event.head_commit.message, '[skip-main-ci]') }}
     steps:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
+
+      - name: Set sha_short
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
       - uses: actions/setup-node@v3
         with:
@@ -26,9 +35,17 @@ jobs:
         with:
           name: release-package
           path: release
+    outputs:
+      sha_short: ${{ steps.vars.outputs.sha_short }}
+
   build_release_package_test:
-    name: Build release package for test channel
+    needs: [build-release]
+    name: Build test channel release (CI)
     runs-on: macos-latest
+    concurrency:
+      group: ${{ github.ref }}_build_test_channel_release_ci
+      cancel-in-progress: true
+    if: ${{ always() || !contains(github.event.head_commit.message, '[skip-test-ci]') }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -43,7 +60,7 @@ jobs:
           node-version: ${{ vars.NODE_VERSION }}
 
       - name: Run Install/Build-Release.ps1 in CI mode for channel test
-        run: Install/Build-Release.ps1 -Channel test
+        run: Install/Build-Release.ps1 -CI -Channel test
         shell: pwsh
 
       - uses: actions/upload-artifact@v3

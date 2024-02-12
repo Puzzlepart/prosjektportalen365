@@ -1,6 +1,6 @@
 $TargetVersion = "1.8.2"
 
-if ($global:__InstalledVersion -lt $TargetVersion) {
+if ($global:__PreviousVersion -lt $TargetVersion) {
     $ExistingNodes = Get-PnPNavigationNode -Location QuickLaunch -ErrorAction SilentlyContinue
 
     if ($null -eq $ExistingNodes) {

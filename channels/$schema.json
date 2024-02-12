@@ -9,7 +9,7 @@
         "sppkg": {
             "type": "string",
             "pattern": "solution\\/pp-[A-Za-z-]*\\.sppkg"
-          }
+        }
     },
     "properties": {
         "name": {

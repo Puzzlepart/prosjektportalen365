@@ -1,6 +1,6 @@
 $TargetVersion = "1.9.0"
 
-if ($global:__InstalledVersion -lt $TargetVersion) {
+if ($global:__PreviousVersion -lt $TargetVersion) {
     $BaseDir = "$ScriptDir/UpgradeAllSitesToLatest/EnsureProgramAggregrationWebPart"
     $Pages = Get-Content "$BaseDir/old.json" -Raw -Encoding UTF8 | ConvertFrom-Json
 

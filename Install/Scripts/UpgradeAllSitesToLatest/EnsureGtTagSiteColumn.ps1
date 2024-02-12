@@ -1,6 +1,6 @@
 $TargetVersion = "1.8.0"
 
-if ($global:__InstalledVersion -lt $TargetVersion) {
+if ($global:__PreviousVersion -lt $TargetVersion) {
     $ProjectDeliveries = Get-PnPList -Identity "Prosjektleveranser" -ErrorAction SilentlyContinue
     if ($null -ne $ProjectDeliveries) {
         $GtTagSiteColumn = Get-PnPField -Identity "GtTag" -ErrorAction SilentlyContinue

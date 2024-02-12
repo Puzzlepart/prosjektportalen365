@@ -14,10 +14,17 @@ import { DataFetchFunction } from '../../types/DataFetchFunction'
 import { INIT_DATA } from './reducer'
 import { FetchDataResult, IProjectStatusProps } from './types'
 
-export type FetchDataResult = {
-  data: IProjectStatusData
-  initialSelectedReport: StatusReport
-  sourceUrl: string
+/**
+ * Get report fields for Project Status. If content type ID is not provided,
+ * the ID "0x010022252E35737A413FB56A1BA53862F6D5" is used, which is the ID
+ * for the default content type for Project Status.
+ *
+ * @param contentTypeId Content type ID for Project Status
+ */
+async function getReportFields(contentTypeId = '0x010022252E35737A413FB56A1BA53862F6D5') {
+  const fields = await SPDataAdapter.portalDataService.getContentTypeFields(contentTypeId)
+  const reportFields = fields.map((field) => new EditableSPField(field))
+  return reportFields
 }
 
 /**
