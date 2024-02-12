@@ -110,6 +110,7 @@
       <pnp:DataValue FieldName="GtDescription">Dette er standardmalen for program som følger med Prosjektportalen 365.</pnp:DataValue>
       <pnp:DataValue FieldName="IconName">ProductList</pnp:DataValue>
       <pnp:DataValue FieldName="GtDocumentTemplateLibrary">Malbibliotek</pnp:DataValue>
+      <pnp:DataValue FieldName="FieldConfigurationName">Program</pnp:DataValue>
     </pnp:DataRow>
     <pnp:DataRow>
       <pnp:DataValue FieldName="Title">Byggprosjekt</pnp:DataValue>
