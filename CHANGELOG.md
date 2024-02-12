@@ -55,6 +55,7 @@ I denne versjonen er det gjort flere endringer på det visuelle uttrykket til Pr
 - Kolonner i aggregerte oversikter kan nå gjøres grupperbare [#1020](https://github.com/Puzzlepart/prosjektportalen365/issues/1020)
 - Malbibliotek-sti kan nå konfigureres i maloppsett-lista [#1179](https://github.com/Puzzlepart/prosjektportalen365/issues/1179)
 - Prosjektinformasjon og prosjektnyheter vises nå i en vertikal seksjon på forsiden for å utnytte plassen bedre [#731](https://github.com/Puzzlepart/prosjektportalen365/issues/731)
+- Støtte for egne visningsnavn og beskrivelser for prosjektinformasjon-felter for f.eks. Program [#1225](https://github.com/Puzzlepart/prosjektportalen365/pull/1314)
 - Støtte for mer enn 500 restultater på oversikter i program [#1343](https://github.com/Puzzlepart/prosjektportalen365/issues/1343)
 - Søket på porteføljeforsiden inkluderer nå prosjekteiere, prosjektledere, prosjekttype og tjenesteområder [#1281](https://github.com/Puzzlepart/prosjektportalen365/issues/1281)
 - Forbedringer rundt rapportering og logging av feil/begrensninger under provisjonering av planneroppgaver [#1158](https://github.com/Puzzlepart/prosjektportalen365/pull/1158)
