@@ -263,17 +263,18 @@ export class PlannerConfiguration extends BaseTask {
       taskDetails.previewType === 'automatic'
     )
       return
+
     this.logInformation(`Sleeping ${delay}s before updating task details for ${taskId}`)
     await sleep(delay)
 
-    if (taskDetails.checklist.length > 20 || taskDetails.attachments.length > 10) {
+    if (taskDetails.checklist?.length > 20 || taskDetails.attachments?.length > 10) {
       ListLogger.init(
         SPDataAdapter.portalDataService.web.lists.getByTitle('Logg'),
         pageContext.web.absoluteUrl,
         'PlannerConfiguration'
       )
 
-      if (taskDetails.checklist.length > 20) {
+      if (taskDetails.checklist?.length > 20) {
         await ListLogger.log({
           message: format(strings.PlannerTaskChecklistLimitLogText, taskDetails.name ?? taskId),
           functionName: '_updateTaskDetails',
@@ -282,7 +283,7 @@ export class PlannerConfiguration extends BaseTask {
         })
       }
 
-      if (taskDetails.attachments.length > 10) {
+      if (taskDetails.attachments?.length > 10) {
         await ListLogger.log({
           message: format(strings.PlannerTaskAttachmentLimitLogText, taskDetails.name ?? taskId),
           functionName: '_updateTaskDetails',
