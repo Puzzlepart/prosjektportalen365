@@ -58,7 +58,7 @@ export interface ICustomEditPanelProps extends IBasePanelProps {
   targetWeb?: IWeb
 
   /**
-   * Target list ID used to transform property valus
+   * Target list ID used to transform property values
    * before submitting the item.
    */
   targetistId?: string

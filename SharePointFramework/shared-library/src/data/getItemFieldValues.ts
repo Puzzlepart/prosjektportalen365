@@ -16,6 +16,7 @@ export async function getItemFieldValues(item: IItem, userFields: string[] = [])
     item
       .select(
         '*',
+        'TemplateParameters',
         ...userFields.map((fieldName) => `${fieldName}/Id`),
         ...userFields.map((fieldName) => `${fieldName}/Title`),
         ...userFields.map((fieldName) => `${fieldName}/EMail`)
