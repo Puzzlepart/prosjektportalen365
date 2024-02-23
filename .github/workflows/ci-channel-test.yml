@@ -20,7 +20,7 @@ jobs:
     concurrency:
       group: ${{ github.ref }}_build_release_package_for_test_channel
       cancel-in-progress: true
-    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') && !contains(github.event.head_commit.message, '[packages-only]')}}
+    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') && !contains(github.event.head_commit.message, '[packages-only]') }}
     steps:
       - uses: actions/checkout@v3
         with:
