@@ -3,7 +3,6 @@ name: Automatic chores
 on:
   push:
     branches:
-      - releases/1.9
       - releases/1.10
     paths:
       - SharePointFramework/**
@@ -15,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: 
       group: ${{ github.ref }}_automatic_chores
-    if: "!contains(github.event.head_commit.message, '[skip-ci]')"
+    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') }}
     steps:
       - uses: actions/checkout@v2
         with:
