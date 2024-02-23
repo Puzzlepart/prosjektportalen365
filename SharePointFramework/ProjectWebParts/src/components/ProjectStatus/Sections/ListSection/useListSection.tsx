@@ -24,10 +24,10 @@ export function useListSection() {
   const shouldRenderList = !_.isEmpty(state.data?.items)
 
   useEffect(() => {
-    const persistedData =
-      selectedReport.persistedSectionData && selectedReport.persistedSectionData[section.id]
+    const persistedData = selectedReport.persistedSectionData
     if (persistedData) {
-      setState({ data: persistedData, isDataLoaded: true })
+      const persistedSectionData = selectedReport.persistedSectionData[section.id]
+      setState({ data: persistedSectionData, isDataLoaded: true })
     } else {
       fetchListData().then((data) => {
         context.dispatch(PERSIST_SECTION_DATA({ section, data }))
