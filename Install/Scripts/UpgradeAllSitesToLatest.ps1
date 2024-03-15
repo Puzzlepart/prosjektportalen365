@@ -105,7 +105,7 @@ if ($YesOrNo -eq "y" -or $CI_MODE) {
     }
 }
 
-Write-Host "Upgrading existing sites"
+Write-Host "Upgrading existing sites from version $global:__PreviousVersion to $global:__InstalledVersion)..."
 $ProjectsInHub | ForEach-Object {
     Write-Host "`tUpgrading site $_"
     UpgradeSite -Url $_
