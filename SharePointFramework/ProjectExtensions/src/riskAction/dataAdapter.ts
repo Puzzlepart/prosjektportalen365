@@ -145,7 +145,8 @@ export class DataAdapter extends SPDataAdapterBase {
       await task.details.update(
         {
           description: model.get('description') ?? '',
-          references: itemContext.references
+          references: itemContext.references,
+          previewType: 'noPreview'
         },
         eTag
       )

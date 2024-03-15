@@ -7,6 +7,11 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 ### Feilrettinger
 
 - Rettet et problem hvor listedata tilhørende tidligere prosjektstatusrapporter ikke ble hentet inn [#1472](https://github.com/Puzzlepart/prosjektportalen365/issues/1472)
+- Rettet et problem hvor 'Hooks' ikke ble kjørt riktig på grunn av manglende 'body' i `POST` forespørsel [#1479](https://github.com/Puzzlepart/prosjektportalen365/issues/1479)
+
+### Forbedringer
+
+- Standard forhåndsvisning for migrerte tiltak (Tiltakshåndtering) er nå satt til 'Ingen forhåndsvisning' [#1480](https://github.com/Puzzlepart/prosjektportalen365/issues/1480)
 
 ---
 
