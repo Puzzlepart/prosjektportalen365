@@ -41,7 +41,7 @@
     "@pnp/queryable": "3.17.0",
     "@fluentui/react-components": "~9.42.0",
     "@fluentui/react-icons": "~2.0.224",
-    "sp-js-provisioning": "~1.2.1",
+    "sp-js-provisioning": "1.2.2",
     "@fluentui/react-search-preview": "~0.1.33",
     "@fluentui/react-datepicker-compat": "~0.4.7",
     "shade-blend-color": "~1.0.0"
