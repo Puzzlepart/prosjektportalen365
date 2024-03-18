@@ -43,7 +43,7 @@
   "devDependencies": {
     "fs-extra": "11.1.0",
     "glob": "7.2.0",
-    "pzl-spfx-tasks": "^0.5.2-27",
+    "pzl-spfx-tasks": "^0.5.2",
     "replace": "1.2.2",
     "uuid": "9.0.0",
     "yargs": "17.7.1"

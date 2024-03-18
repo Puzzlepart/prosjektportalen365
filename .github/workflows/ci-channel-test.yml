@@ -3,8 +3,8 @@ name: CI (channels/test)
 on:
   push:
     branches:
-      - feat/spfx-tasks # to be removed before PR merge
       - releases/1.9
+      - feat/spfx-tasks # to be removed before PR merge
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'
