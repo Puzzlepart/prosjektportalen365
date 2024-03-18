@@ -1,6 +1,6 @@
 {
   "name": "pp365-projectwebparts",
-  "version": "1.9.0",
+  "version": "1.9.1-0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Puzzlepart/prosjektportalen365.git",
@@ -98,6 +98,6 @@
     "webpack": "5.74.0",
     "@types/lodash": "~4.14.195",
     "@types/smoothscroll-polyfill": "~0.3.3",
-    "pzl-spfx-tasks": "~0.5.1-28"
+    "pzl-spfx-tasks": "~0.5.1-33"
   }
 }

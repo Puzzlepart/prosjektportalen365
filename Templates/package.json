@@ -21,6 +21,6 @@
   "devDependencies": {
     "replace": "1.2.2",
     "@types/lodash": "~4.14.195",
-    "pzl-spfx-tasks": "~0.5.1-28"
+    "pzl-spfx-tasks": "~0.5.1-33"
   }
 }
