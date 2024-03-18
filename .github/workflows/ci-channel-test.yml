@@ -10,6 +10,7 @@ on:
       - 'Install/**'
       - 'Templates/**'
       - .github/workflows/ci-channel-test.yml
+      - '.tasks/**'
 
 env:
   CI_CREDENTIALS: ${{ secrets.CI_DEV_CREDENTIALS }}
