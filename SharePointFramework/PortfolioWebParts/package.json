@@ -95,6 +95,6 @@
     "webpack": "5.74.0",
     "@types/react-beautiful-dnd": "~13.1.4",
     "@types/lodash": "~4.14.195",
-    "pzl-spfx-tasks": "~0.5.1-21"
+    "pzl-spfx-tasks": "~0.5.1-28"
   }
 }
