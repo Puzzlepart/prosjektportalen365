@@ -113,13 +113,13 @@ if ($CI.IsPresent) {
     npm ci >$null 2>&1
     npm i @microsoft/rush@5.98.0 -g >$null 2>&1
     rush update >$null 2>&1
-    npm run generate-channel-replace-map >$null 2>&1
+    npm run generate-channel-replace-map
     EndAction
 }
 else {
     StartAction("Updating npm packages using rush")
     rush update >$null 2>&1
-    npm run generate-channel-replace-map >$null 2>&1
+    npm run generate-channel-replace-map
     EndAction
 }
 

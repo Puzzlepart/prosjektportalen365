@@ -6,7 +6,7 @@
     "sync-version": "node ./.tasks/automatic-versioning.js",
     "generate-readme": "npx @appnest/readme generate && npx @appnest/readme generate --config .development-guide/blueprint.json",
     "generate-channel-config": "node node_modules/pzl-spfx-tasks --create-channel-config --silent",
-    "generate-channel-replace-map": "node node_modules/pzl-spfx-tasks --create-channel-config --replaceMap --silent",
+    "generate-channel-replace-map": "node node_modules/pzl-spfx-tasks --create-channel-config --replaceMapOnly --silent",
     "generate-pnp-templates": "node ./.tasks/generate-pnp-templates.js",
     "generate-site-scripts": "node ./.tasks/generate-site-scripts.js --silent",
     "postversion": "npm run generate-readme && npm run sync-version",
@@ -43,7 +43,7 @@
   "devDependencies": {
     "fs-extra": "11.1.0",
     "glob": "7.2.0",
-    "pzl-spfx-tasks": "^0.5.2-24",
+    "pzl-spfx-tasks": "^0.5.2-27",
     "replace": "1.2.2",
     "uuid": "9.0.0",
     "yargs": "17.7.1"
