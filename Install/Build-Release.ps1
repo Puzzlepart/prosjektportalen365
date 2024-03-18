@@ -195,7 +195,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
             $SOLUTION_CONFIG = $CHANNEL_CONFIG.spfx.solutions.($Solution)
             $SOLUTION_CONFIG_JSON = ($SOLUTION_CONFIG | ConvertTo-Json)
             $SOLUTION_CONFIG_JSON | Out-File -FilePath "./config/.generated-solution-config.json" -Encoding UTF8 -Force
-            node ../.tasks/modifySolutionFiles.js --force >$null 2>&1
+            node ../node_modules/pzl-spfx-tasks --modify-solution-files --force >$null 2>&1
         }
     }
     Set-Location $SHAREPOINT_FRAMEWORK_BASEPATH
@@ -204,7 +204,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
     if ($USE_CHANNEL_CONFIG) {
         foreach ($Solution in $Solutions) {
             Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution"
-            node ../.tasks/modifySolutionFiles.js --revert --force >$null 2>&1 
+            node ../node_modules/pzl-spfx-tasks --modify-solution-files --revert --force >$null 2>&1 
         }
     }
     EndAction

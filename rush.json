@@ -39,10 +39,6 @@
         {
             "packageName": "pp365-templates",
             "projectFolder": "Templates"
-        },
-        {
-            "packageName": "pp365-spfx-tasks",
-            "projectFolder": "SharePointFramework/.tasks"
         }
     ]
 }
