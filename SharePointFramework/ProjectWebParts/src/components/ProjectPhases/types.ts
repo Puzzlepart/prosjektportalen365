@@ -43,6 +43,11 @@ export interface IProjectPhasesProps extends IBaseWebPartComponentProps {
   useEndArrow: boolean
 
   /**
+   * Show phase site page message when switching phases if dynamic homepage is used
+   */
+  showPhaseSitePageMessage: boolean
+
+  /**
    * Use dynamic homepage when switching phases
    */
   useDynamicHomepage: boolean

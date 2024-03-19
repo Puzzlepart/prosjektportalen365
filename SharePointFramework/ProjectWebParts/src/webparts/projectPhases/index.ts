@@ -32,9 +32,10 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
     return {
       pages: [
         {
+          displayGroupsAsAccordion: true,
           groups: [
             {
-              groupName: strings.SettingsGroupName,
+              groupName: strings.GeneralGroupName,
               groupFields: [
                 PropertyPaneToggle('syncPropertiesAfterPhaseChange', {
                   label: strings.SyncPropertiesAfterPhaseChangeFieldLabel
@@ -55,6 +56,10 @@ export default class ProjectPhasesWebPart extends BaseProjectWebPart<IProjectPha
                 }),
                 PropertyPaneToggle('useEndArrow', {
                   label: strings.PhaseUseEndArrowLabel
+                }),
+
+                PropertyPaneToggle('showPhaseSitePageMessage', {
+                  label: strings.ShowPhaseSitePageMessageLabel
                 }),
                 PropertyPaneDropdown('phaseField', {
                   label: strings.PhaseFieldFieldLabel,

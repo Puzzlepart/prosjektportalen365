@@ -43,9 +43,9 @@ export const ChangePhaseDialog: FC = () => {
               </Label>
               {state.view === View.Confirm &&
                 format(strings.ConfirmChangePhase, context.state.confirmPhase.name)}
-              {state.view === View.Confirm && context.props.useDynamicHomepage && (
-                <DynamicHomepageContent />
-              )}
+              {state.view === View.Confirm &&
+                context.props.useDynamicHomepage &&
+                context.props.showPhaseSitePageMessage && <DynamicHomepageContent />}
               <Content />
             </DialogContent>
             <Actions />

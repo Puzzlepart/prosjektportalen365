@@ -37,10 +37,8 @@ export function useChangePhase(delayBeforeReload: number = 1000) {
       if (context.props.syncPropertiesAfterPhaseChange) {
         // TODO: Sync phase to hub site item
         setTimeout(() => {
-          if (context.props.useDynamicHomepage)
-            window.location.href = context.props.webAbsoluteUrl
-          else
-            window.location.reload()
+          if (context.props.useDynamicHomepage) window.location.href = context.props.webAbsoluteUrl
+          else window.location.reload()
         }, delayBeforeReload)
       }
     } catch (error) {
