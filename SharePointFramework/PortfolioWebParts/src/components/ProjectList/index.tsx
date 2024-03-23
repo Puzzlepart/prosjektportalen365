@@ -41,7 +41,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
    *
    * @param projects - Projects to render
    */
-  function renderProjects(projects: ProjectListModel[]) {
+  const renderProjects = (projects: ProjectListModel[]) => {
     const projectRow: FC<{ index: number; style: React.CSSProperties; itemsPerRow: number }> = ({
       index,
       style,
@@ -62,7 +62,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
             ))
         )
         return employeeItems
-      }, [index, itemsPerRow, projects])
+      }, [itemsPerRow])
 
       return (
         <div className={styles.projectRow} key={index} style={style}>
@@ -76,7 +76,7 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
         return (
           <AutoSizer disableHeight style={{ width: '100%' }}>
             {({ width }) => {
-              const cardWidth = 240
+              const cardWidth = 242
               const itemsPerRow = Math.floor(width / cardWidth)
               const itemCount = Math.ceil(projects.length / itemsPerRow)
               const listHeight = Math.ceil(itemCount * 300)
@@ -85,9 +85,9 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
                 <FixedSizeList
                   className={styles.projectsSection}
                   style={{ gap: 12 }}
-                  height={listHeight < 1280 ? listHeight : 1280}
+                  height={listHeight < 880 ? listHeight : 880}
                   itemCount={itemCount}
-                  overscanCount={6}
+                  overscanCount={2}
                   itemSize={290}
                   width={width}
                 >
