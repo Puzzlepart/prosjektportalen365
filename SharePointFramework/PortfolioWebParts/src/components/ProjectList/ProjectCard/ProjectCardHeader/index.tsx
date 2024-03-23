@@ -3,8 +3,8 @@ import React, { FC, useCallback, useContext } from 'react'
 import { ProjectCardContext } from '../context'
 import styles from './ProjectCardHeader.module.scss'
 import { useProjectCardHeader } from './useProjectCardHeader'
-import { ProjectLogo } from 'pp365-shared-library/lib/components'
 import { IProjectCardHeaderProps } from './types'
+import { ProjectLogo } from 'pp365-shared-library'
 
 export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
   const context = useContext(ProjectCardContext)
@@ -14,7 +14,7 @@ export const ProjectCardHeader: FC<IProjectCardHeaderProps> = (props) => {
    * Callback function to set the showCustomImage state.
    */
   const customImageCallback = useCallback(
-    (value) => {
+    (value: boolean) => {
       setShowCustomImage(value)
     },
     [context.showProjectLogo, showCustomImage]

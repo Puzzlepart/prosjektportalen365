@@ -9,7 +9,7 @@ import { IProjectLogoProps } from './types'
  * @returns An object containing the conditional styling based on project logo render mode.
  */
 export function useProjectLogo(props: IProjectLogoProps) {
-  const [showCustomImage, setShowCustomImage] = useState(true)
+  const [showCustomImage, setShowCustomImage] = useState(false)
 
   /**
    * Checks if the image is a custom image.
