@@ -9,7 +9,7 @@ import { SearchBox } from '@fluentui/react-search-preview'
 import * as strings from 'PortfolioWebPartsStrings'
 import { ProjectInformationPanel } from 'pp365-projectwebparts/lib/components/ProjectInformationPanel'
 import { ProjectListModel, SiteContext, customLightTheme } from 'pp365-shared-library'
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import { find, isEmpty } from 'underscore'
 import { List } from './List'
 import { ListContext } from './List/context'
@@ -20,6 +20,8 @@ import { ProjectListVerticals } from './ProjectListVerticals'
 import { IProjectListProps } from './types'
 import { useProjectList } from './useProjectList'
 import { Toolbar, UserMessage } from 'pp365-shared-library'
+import { FixedSizeList } from 'react-window'
+import AutoSizer from 'react-virtualized-auto-sizer'
 
 export const ProjectList: FC<IProjectListProps> = (props) => {
   const {
@@ -40,13 +42,61 @@ export const ProjectList: FC<IProjectListProps> = (props) => {
    * @param projects - Projects to render
    */
   function renderProjects(projects: ProjectListModel[]) {
+    const projectRow: FC<{ index: number; style: React.CSSProperties; itemsPerRow: number }> = ({
+      index,
+      style,
+      itemsPerRow
+    }) => {
+      const items = useMemo(() => {
+        const convertedIndex = index * itemsPerRow
+        const employeeItems = []
+
+        employeeItems.push(
+          ...projects
+            .slice(convertedIndex, convertedIndex + itemsPerRow)
+            .filter(Boolean)
+            .map((project, idx) => (
+              <ProjectCardContext.Provider key={idx} value={createCardContext(project)}>
+                <ProjectCard />
+              </ProjectCardContext.Provider>
+            ))
+        )
+        return employeeItems
+      }, [index, itemsPerRow, projects])
+
+      return (
+        <div className={styles.projectRow} key={index} style={style}>
+          {items}
+        </div>
+      )
+    }
+
     switch (state.renderMode) {
       case 'tiles': {
-        return projects.map((project, idx) => (
-          <ProjectCardContext.Provider key={idx} value={createCardContext(project)}>
-            <ProjectCard />
-          </ProjectCardContext.Provider>
-        ))
+        return (
+          <AutoSizer disableHeight style={{ width: '100%' }}>
+            {({ width }) => {
+              const cardWidth = 240
+              const itemsPerRow = Math.floor(width / cardWidth)
+              const itemCount = Math.ceil(projects.length / itemsPerRow)
+              const listHeight = Math.ceil(itemCount * 300)
+
+              return (
+                <FixedSizeList
+                  className={styles.projectsSection}
+                  style={{ gap: 12 }}
+                  height={listHeight < 1280 ? listHeight : 1280}
+                  itemCount={itemCount}
+                  overscanCount={6}
+                  itemSize={290}
+                  width={width}
+                >
+                  {({ index, style }) => projectRow({ index, style, itemsPerRow })}
+                </FixedSizeList>
+              )
+            }}
+          </AutoSizer>
+        )
       }
       case 'list':
       case 'compactList': {
