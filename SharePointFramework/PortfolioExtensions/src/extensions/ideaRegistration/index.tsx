@@ -224,7 +224,7 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    * @param rowTitle Title of the row in the registration list
    */
   private _updateProcessingList(rowId: number, rowTitle: string) {
-    const url = rowTitle.replace(/ /g, '-')
+    const url = rowTitle.replace(/ /g, '-').replace(/é/g, 'e')
     const baseUrl = this.context.pageContext.web.absoluteUrl
     const ideaUrl = baseUrl.concat('/SitePages/', `KUR-${url}`, '.aspx')
 
@@ -246,9 +246,10 @@ export default class IdeaRegistrationCommand extends BaseListViewCommandSet<any>
    */
   private async _createSitePage(row: RowAccessor) {
     const title: string = row.getValueByName('Title')
+    const urlFriendlyTitle = title.replace(/é/g, 'e').replace(/[^a-zA-Z0-9-_ÆØÅæøå ]/g, '')
     const page = await this._sp.web.addClientsidePage(
-      `KUR-${title.replace(/[^a-zA-Z0-9-_]/g, '')}`,
-      `KUR-${title.replace(/[^a-zA-Z0-9-_]/g, '')}`,
+      `KUR-${urlFriendlyTitle}`,
+      `KUR-${urlFriendlyTitle}`,
       'Article'
     )
     const reporter = row.getValueByName('GtIdeaReporter')[0] || ''

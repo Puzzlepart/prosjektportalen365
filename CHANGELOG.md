@@ -10,6 +10,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Rettet et problem hvor 'Hooks' ikke ble kjørt riktig på grunn av manglende 'body' i `POST` forespørsel [#1479](https://github.com/Puzzlepart/prosjektportalen365/issues/1479)
 - Rettet et problem hvor dynamisk endring av prosjektforside via fasevelger ikke fungerte [#1481](https://github.com/Puzzlepart/prosjektportalen365/issues/1481)
 - Rettet et problem hvor noen underområder ikke var klikkbare i administrasjon av underområder webdel [#1468](https://github.com/Puzzlepart/prosjektportalen365/issues/1468)
+- Rettet et problem hvor URL til KUR-side ble feil ved godkjenning av en idè [#1393](https://github.com/Puzzlepart/prosjektportalen365/issues/1393)
 
 ### Forbedringer
 
