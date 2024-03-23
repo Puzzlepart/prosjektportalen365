@@ -5,16 +5,16 @@ import styles from './ProjectCardHeader.module.scss'
 
 export function useProjectCardHeader() {
   const context = useContext(ProjectCardContext)
-  const [showCustomImage, setShowCustomImage] = useState(true)
+  const [showCustomImage, setShowCustomImage] = useState(false)
 
-  const imageColorData = useImageColor(
-    context.project.logo ?? `${context.project.url}/_api/siteiconmanager/getsitelogo?type='1'`,
-    { cors: true, colors: 2, windowSize: 5 }
-  )
+  const imageUrl = `${context.project.url}/_api/siteiconmanager/getsitelogo?type='1'`
+  const imageColorData = context.useDynamicColors
+    ? context.project.logo ?? useImageColor(imageUrl, { cors: true, colors: 2, windowSize: 5 })
+    : null
 
   const colors =
     context.useDynamicColors && context.showProjectLogo
-      ? imageColorData.colors
+      ? imageColorData?.colors ?? ['transparent', 'transparent']
       : ['transparent', 'transparent']
 
   const headerProps: HTMLProps<HTMLDivElement> = {
