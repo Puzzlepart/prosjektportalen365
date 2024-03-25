@@ -1,0 +1,1 @@
+<Field Type="Text" DisplayName="{resource:SiteFields_GtSecSumField_DisplayName}" Description="{resource:SiteFields_GtSecSumField_Description}" Group="{resource:SiteFields_Portfolio_Group}" ID="{101ed5e8-bf6f-498a-8a19-2d9f4f2fd175}" StaticName="GtSecSumField" Name="GtSecSumField" />

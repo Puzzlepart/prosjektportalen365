@@ -11,5 +11,6 @@
         <pnp:FieldRef ID="2d6790ad-9da9-408c-a87f-8d56d7b377f6" Name="GtSecSource" UpdateChildren="true" />
         <pnp:FieldRef ID="2d165a4d-a3e9-4756-acd2-abb537041fd4" Name="GtSecViewFields" UpdateChildren="true" />
         <pnp:FieldRef ID="fe762779-f5d6-475d-ad1d-68e7d9ae0034" Name="GtSecFieldName" UpdateChildren="true" />
+        <pnp:FieldRef ID="101ed5e8-bf6f-498a-8a19-2d9f4f2fd175" Name="GtSecSumField" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

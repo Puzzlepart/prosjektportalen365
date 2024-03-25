@@ -470,7 +470,7 @@
     <value>Allocation of resources</value>
   </data>
   <data name="ContentTypes_UncertaintySection_Name" xml:space="preserve">
-    <value>Risikoseksjon</value>
+    <value>Usikkerhetseksjon</value>
   </data>
   <data name="ContentTypes_UncertaintySection_Description" xml:space="preserve">
     <value>Uncertainties related to the project</value>
@@ -678,6 +678,9 @@
   </data>
   <data name="SiteFields_GtSecViewFields_DisplayName" xml:space="preserve">
     <value>Fields</value>
+  </data>
+  <data name="SiteFields_GtSecSumField_DisplayName" xml:space="preserve">
+    <value>Summary field</value>
   </data>
   <data name="SiteFields_GtSecIcon_DisplayName" xml:space="preserve">
     <value>Icon</value>
@@ -1523,7 +1526,10 @@
     <value>If the benefits are to be realized in different parts of the organization (or in several businesses), it is recommended to appoint a benefit owner in the different parts of the line organization (or the businesses) that own different parts of the planned benefits. Benefit owners then have a distributed responsibility for their part of the benefits, and play an important role as the benefit responsible's extended arm and local supporter.</value>
   </data>
   <data name="SiteFields_GtSecViewFields_Description" xml:space="preserve">
-      <value>Fields that are to be displayed in the security view.</value>
+      <value>Fields that are to be displayed in the sections view.</value>
+  </data>
+  <data name="SiteFields_GtSecSumField_Description" xml:space="preserve">
+      <value>Fields to be summed, example: "GtSum;Avg;Average of summation". Summation types: Add, Sub, Avg (Addition, Subtraction, and Average)</value>
   </data>
   <data name="SiteFields_GtSecIcon_Description" xml:space="preserve">
     <value>Name of icon from UI Fabric. See https://uifabricicons.azurewebsites.net/.</value>

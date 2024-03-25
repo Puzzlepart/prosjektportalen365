@@ -14,5 +14,6 @@
         <pnp:FieldRef ID="2d165a4d-a3e9-4756-acd2-abb537041fd4" Name="GtSecViewFields" UpdateChildren="true" />
         <pnp:FieldRef ID="adf89685-f464-4ef5-8f7b-53b600aac14a" Name="GtSecRowLimit" UpdateChildren="true" />
         <pnp:FieldRef ID="0c5167bb-1c77-49ce-8985-e012e33398c8" Name="GtSecView" UpdateChildren="true" />
+        <pnp:FieldRef ID="101ed5e8-bf6f-498a-8a19-2d9f4f2fd175" Name="GtSecSumField" UpdateChildren="true" />
     </pnp:FieldRefs>
 </pnp:ContentType>

@@ -766,6 +766,9 @@
   <data name="SiteFields_GtSecViewFields_DisplayName" xml:space="preserve">
     <value>Felter</value>
   </data>
+  <data name="SiteFields_GtSecSumField_DisplayName" xml:space="preserve">
+    <value>Summeringsfelt</value>
+  </data>
   <data name="SiteFields_GtSecIcon_DisplayName" xml:space="preserve">
     <value>Ikon</value>
   </data>
@@ -1646,7 +1649,10 @@
     <value>Dersom gevinstene skal realiseres i ulike deler av organisasjonen (eller i flere virksomheter) anbefales det å oppnevne en gevinsteier i de ulike delene av linjeorganisasjonen (eller virksomhetene) som eier ulike deler av de planlagte gevinstene. Gevinsteiere har da et distribuert ansvar for sin del av gevinstene, og har en viktig rolle som den gevinstansvarliges forlengede arm og lokale støttespiller.</value>
   </data>
   <data name="SiteFields_GtSecViewFields_Description" xml:space="preserve">
-      <value>Felt som skal vises i sikkerhetsvisningen.</value>
+      <value>Felt(er) som skal vises i seksjonsvisningen.</value>
+  </data>
+  <data name="SiteFields_GtSecSumField_Description" xml:space="preserve">
+      <value>Felt som skal summeres, eksempel: "GtSum;Avg;Gjennomsnitt av summering". Summeringstyper Add,Sub,Avg (Addering, Subrahering og gjennomsnitt)</value>
   </data>
   <data name="SiteFields_GtSecIcon_Description" xml:space="preserve">
     <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>
