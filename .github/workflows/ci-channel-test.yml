@@ -4,11 +4,13 @@ on:
   push:
     branches:
       - releases/1.9
+      - feat/spfx-tasks # to be removed before PR merge
     paths:
       - 'SharePointFramework/**'
       - 'Install/**'
       - 'Templates/**'
       - .github/workflows/ci-channel-test.yml
+      - '.tasks/**'
 
 env:
   CI_CREDENTIALS: ${{ secrets.CI_DEV_CREDENTIALS }}

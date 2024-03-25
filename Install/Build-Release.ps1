@@ -113,13 +113,13 @@ if ($CI.IsPresent) {
     npm ci >$null 2>&1
     npm i @microsoft/rush@5.98.0 -g >$null 2>&1
     rush update >$null 2>&1
-    npm run generate-channel-replace-map >$null 2>&1
+    npm run generate-channel-replace-map
     EndAction
 }
 else {
     StartAction("Updating npm packages using rush")
     rush update >$null 2>&1
-    npm run generate-channel-replace-map >$null 2>&1
+    npm run generate-channel-replace-map
     EndAction
 }
 
@@ -154,7 +154,7 @@ EndAction
 #region Copying source files
 StartAction("Copying Install.ps1, PostInstall.ps1 and site script source files")
 if ($USE_CHANNEL_CONFIG) {
-    npm run generate-site-scripts >$null 2>&1
+    npm run generate-site-scripts
     $SITE_SCRIPTS_BASEPATH = "$ROOT_PATH/.dist/SiteScripts"
     Copy-Item -Path "$SITE_SCRIPTS_BASEPATH/*.txt" -Filter *.txt -Destination $RELEASE_PATH_SITESCRIPTS -Force 
 }
@@ -195,7 +195,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
             $SOLUTION_CONFIG = $CHANNEL_CONFIG.spfx.solutions.($Solution)
             $SOLUTION_CONFIG_JSON = ($SOLUTION_CONFIG | ConvertTo-Json)
             $SOLUTION_CONFIG_JSON | Out-File -FilePath "./config/.generated-solution-config.json" -Encoding UTF8 -Force
-            node ../.tasks/modifySolutionFiles.js --force >$null 2>&1
+            node ../node_modules/pzl-spfx-tasks --modify-solution-files --force >$null 2>&1
         }
     }
     Set-Location $SHAREPOINT_FRAMEWORK_BASEPATH
@@ -204,7 +204,7 @@ if (-not $SkipBuildSharePointFramework.IsPresent) {
     if ($USE_CHANNEL_CONFIG) {
         foreach ($Solution in $Solutions) {
             Set-Location "$SHAREPOINT_FRAMEWORK_BASEPATH/$Solution"
-            node ../.tasks/modifySolutionFiles.js --revert --force >$null 2>&1 
+            node ../node_modules/pzl-spfx-tasks --modify-solution-files --revert --force >$null 2>&1 
         }
     }
     EndAction
