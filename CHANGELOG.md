@@ -2,6 +2,12 @@
 
 Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detaljert endringslogg for siste hovedversjon.
 
+## 1.10.0 - TBA
+
+### Ny funksjonalitet
+
+- Lagt til muligheten for et summeringsfelt i prosjektstatus seksjoner, denne kan summere, subtrahere eller finne gjennomsnitt [#1485](https://github.com/Puzzlepart/prosjektportalen365/issues/1485)
+
 ## 1.9.1 - TBA
 
 ### Feilrettinger
