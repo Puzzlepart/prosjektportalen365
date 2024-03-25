@@ -91,7 +91,7 @@ jobs:
   build_release_package_packages_only:
     name: Build release package - packages only
     runs-on: macos-latest
-    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') || contains(github.event.head_commit.message, '[packages-only]') }}
+    if: ${{ contains(github.event.head_commit.message, '[packages-only]') }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -120,7 +120,6 @@ jobs:
     needs: [build_release_package_packages_only]
     name: Upgrade packages only
     runs-on: macos-latest
-    if: ${{ !contains(github.event.head_commit.message, '[skip-upgrade]') }}
     steps:
       - uses: actions/download-artifact@v3
         with:
