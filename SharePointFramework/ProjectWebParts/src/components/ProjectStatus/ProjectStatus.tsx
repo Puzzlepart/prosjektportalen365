@@ -15,7 +15,6 @@ import { ScrollablePane } from '@fluentui/react'
 
 export const ProjectStatus: FC<IProjectStatusProps> = (props) => {
   const { context } = useProjectStatus(props)
-  console.log(context)
 
   return (
     <ProjectStatusContext.Provider value={context}>

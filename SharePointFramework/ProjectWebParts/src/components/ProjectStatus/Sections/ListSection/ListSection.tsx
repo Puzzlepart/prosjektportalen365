@@ -12,12 +12,12 @@ import { BaseSection } from '../BaseSection/BaseSection'
 import { useListSection } from './useListSection'
 
 export const ListSection: FC = () => {
-  const { state, items, columns, shouldRenderList } = useListSection()
+  const { state, items, columns, summation, shouldRenderList } = useListSection()
 
   /**
-   * Render list
+   * Render content for the List section. Handles potential errors and renders the list of items.
    */
-  function renderList() {
+  const renderList = () => {
     if (state.error)
       return (
         <UserMessage
@@ -41,7 +41,13 @@ export const ListSection: FC = () => {
 
   return (
     <BaseSection>
-      <StatusElement />
+      <StatusElement summation={summation} />
+      {summation && summation.result !== null && summation.description && (
+        <div>
+          <strong>{summation.description}</strong>
+          <span>{summation.result}</span>
+        </div>
+      )}
       {shouldRenderList && renderList()}
     </BaseSection>
   )

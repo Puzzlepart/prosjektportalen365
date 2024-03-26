@@ -1,6 +1,6 @@
 import { IColumn } from '@fluentui/react'
 import _ from 'lodash'
-import { getObjectValue as get } from 'pp365-shared-library/lib/util/getObjectValue'
+import { getObjectValue as get, calculateValues } from 'pp365-shared-library'
 import { useContext, useEffect, useState } from 'react'
 import { UncertaintyElementModel } from '../../../../models'
 import { useProjectStatusContext } from '../../context'
@@ -8,6 +8,7 @@ import { PERSIST_SECTION_DATA } from '../../reducer'
 import { useFetchListData } from '../ListSection/useFetchListData'
 import { SectionContext } from '../context'
 import { IUncertaintySectionData, IUncertaintySectionState } from './types'
+import { ISummation } from '../ListSection'
 
 /**
  * Component logic hook for `UncertaintySection`. Fetches list data
@@ -33,10 +34,12 @@ export function useUncertaintySection() {
         const contentTypeIndex = parseInt(
           _.first(_data?.items)?.ContentType?.Id?.StringValue?.substring(38, 40) ?? '-1'
         )
+
         const data: IUncertaintySectionData = {
           ..._data,
           matrixElements: _data?.items?.map((i) => new UncertaintyElementModel(i)),
-          contentTypeIndex
+          contentTypeIndex,
+          summation: calculateValues(section?.sumField, _data?.items)
         }
         context.dispatch(
           PERSIST_SECTION_DATA({
@@ -54,6 +57,7 @@ export function useUncertaintySection() {
     matrixElements: get<any[]>(state, 'data.matrixElements', []),
     items: get<any[]>(state, 'data.items', []),
     columns: get<IColumn[]>(state, 'data.columns', []),
+    summation: get<ISummation>(state, 'data.summation', {}),
     shouldRenderContent
   } as const
 }
