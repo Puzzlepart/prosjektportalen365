@@ -1652,7 +1652,7 @@
       <value>Felt(er) som skal vises i seksjonsvisningen.</value>
   </data>
   <data name="SiteFields_GtSecSumField_Description" xml:space="preserve">
-      <value>Felt som skal summeres, eksempel: "GtSum;Avg;Gjennomsnitt av summering". Summeringstyper Add,Sub,Avg (Addering, Subrahering og gjennomsnitt)</value>
+      <value>Felt som skal summeres, eksempel: 'GtSum;Avg;Gjennomsnitt av sum;currency'. Summeringstyper: Add og Avg (Addere og gjennomsnitt). Du kan også spesifisere å vise som valuta, standard er tall.</value>
   </data>
   <data name="SiteFields_GtSecIcon_Description" xml:space="preserve">
     <value>Navn på ikon fra UI Fabric. Se https://uifabricicons.azurewebsites.net/.</value>

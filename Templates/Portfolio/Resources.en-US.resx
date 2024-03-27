@@ -1529,7 +1529,7 @@
       <value>Fields that are to be displayed in the sections view.</value>
   </data>
   <data name="SiteFields_GtSecSumField_Description" xml:space="preserve">
-      <value>Fields to be summed, example: "GtSum;Avg;Average of summation". Summation types: Add, Sub, Avg (Addition, Subtraction, and Average)</value>
+      <value>Fields to be summed, example: 'GtSum;Avg;Average of summation;currency'. Summation types: Add and Avg (Addition and Average). You can also specify to render as currency, defaults to number.</value>
   </data>
   <data name="SiteFields_GtSecIcon_Description" xml:space="preserve">
     <value>Name of icon from UI Fabric. See https://uifabricicons.azurewebsites.net/.</value>

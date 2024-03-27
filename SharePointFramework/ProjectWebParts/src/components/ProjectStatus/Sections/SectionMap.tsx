@@ -6,6 +6,9 @@ import { UncertaintySection } from './UncertaintySection/UncertaintySection'
 import { StatusSection } from './StatusSection/StatusSection'
 import { SummarySection } from './SummarySection/SummarySection'
 
+/**
+ * A mapping of section types to their corresponding React components.
+ */
 export const SectionMap = {
   [SectionType.SummarySection]: <SummarySection showProjectInformation />,
   [SectionType.StatusSection]: <StatusSection />,

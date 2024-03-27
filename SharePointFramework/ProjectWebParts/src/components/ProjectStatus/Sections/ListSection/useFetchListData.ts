@@ -56,7 +56,10 @@ export function useFetchListData() {
           minWidth: 100,
           maxWidth: COLUMN_MAX_WIDTH[field.TypeAsString] ?? 150,
           isResizable: true,
-          isMultiline: field.TypeAsString === 'Note'
+          isMultiline: field.TypeAsString === 'Note',
+          data: {
+            type: field?.TypeAsString
+          }
         }))
       return {
         items: itemValues,

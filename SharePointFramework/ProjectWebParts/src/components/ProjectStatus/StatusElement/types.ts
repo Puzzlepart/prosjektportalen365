@@ -1,3 +1,5 @@
+import { ISummation } from '../Sections/ListSection'
+
 export interface IStatusElement {
   label?: string
   value?: string
@@ -18,4 +20,9 @@ export interface IStatusElementProps extends Pick<IStatusElement, 'iconSize'> {
    * Show only icons
    */
   iconsOnly?: boolean
+
+  /**
+   * Summation with result and description
+   */
+  summation?: ISummation
 }
