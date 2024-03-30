@@ -18,7 +18,7 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
       <FluentProvider theme={customLightTheme} className={styles.programAdministration}>
         <ProgramAdministrationContext.Provider value={context}>
           <WebPartTitle
-            title={props.title}
+            title={strings.ProgramAdministrationHeader}
             description={strings.ProgramAdministrationInfoMessage}
           />
           {context.state.error ? (
@@ -40,8 +40,4 @@ export const ProgramAdministration: FC<IProgramAdministrationProps> = (props) =>
       </FluentProvider>
     </IdPrefixProvider>
   )
-}
-
-ProgramAdministration.defaultProps = {
-  title: strings.ProgramAdministrationHeader
 }

@@ -392,7 +392,7 @@ export class SPDataAdapter
         const config = timelineConfig.find((col) => col.title === type)
 
         if (
-          item?.GtSiteIdLookup?.Title &&
+          item?.GtSiteIdLookup?.GtSiteId &&
           this.childProjects.find(
             (child) =>
               child?.SiteId === item?.GtSiteIdLookup?.GtSiteId ||
@@ -400,7 +400,7 @@ export class SPDataAdapter
                 this?.spfxContext?.pageContext?.site?.id?.toString()
           )
         ) {
-          if (item.GtSiteIdLookup?.Title && config?.showElementProgram) {
+          if (item.GtSiteIdLookup?.GtSiteId && config?.showElementProgram) {
             return new TimelineContentModel(
               item.GtSiteIdLookup?.GtSiteId,
               item.GtSiteIdLookup?.Title,

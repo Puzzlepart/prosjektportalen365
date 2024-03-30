@@ -19,7 +19,7 @@
         "default": "Administrasjon av underområder"
       },
       "description": {
-        "default": "Webpart for å administrere (legge til/fjerne) underområder"
+        "default": "Webdel for å administrere (legge til/fjerne) underområder"
       },
       "officeFabricIconFontName": "Org",
       "properties": {

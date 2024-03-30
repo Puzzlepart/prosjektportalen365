@@ -9,8 +9,6 @@ export interface IProgramAdministrationProject extends Record<string, any> {
 }
 
 export interface IProgramAdministrationProps {
-  title: string
-  description: string
   context: WebPartContext
   dataAdapter: SPDataAdapter
 }
