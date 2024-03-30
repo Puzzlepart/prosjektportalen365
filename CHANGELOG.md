@@ -18,6 +18,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Rettet et problem hvor noen underområder ikke var klikkbare i administrasjon av underområder webdel [#1468](https://github.com/Puzzlepart/prosjektportalen365/issues/1468)
 - Rettet et problem hvor URL til KUR-side ble feil ved godkjenning av en idè [#1393](https://github.com/Puzzlepart/prosjektportalen365/issues/1393)
 - Rettet et problem hvor `Gjør om til overordnet prosjekt` knapp ble igjen etter omgjøringen og at `Administrer underområder` knapp ikke lengre var synlig [#1412](https://github.com/Puzzlepart/prosjektportalen365/issues/1412)
+- Rettet et problem hvor `Vis alle målinger` ikke var synlig i `Gevinster for underområder` (Program/overordnet område) [#1461](https://github.com/Puzzlepart/prosjektportalen365/issues/1461)
 
 ### Forbedringer
 
