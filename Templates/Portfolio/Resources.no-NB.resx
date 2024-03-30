@@ -1754,7 +1754,7 @@
     <value>Skal kolonnen være synlig i Prosjektinformasjon på forsiden av prosjektet.</value>
   </data>
   <data name="SiteFields_GtShowFieldPortfolio_Description" xml:space="preserve">
-    <value>Skal kolonnen være synlig i Porteføljeoversikten.</value>
+    <value>Skal kolonnen være synlig i Porteføljeoversikten. Dette betyr at kolonnen blir synlig i sidepaneler og vis eller skjul kolonner panelet.</value>
   </data>
   <data name="SiteFields_GtFieldDataType_Description" xml:space="preserve">
     <value>Datatype for denne kolonnen. Styrer hvordan kolonnen blir vist i Porteføljeoversikten.</value>
