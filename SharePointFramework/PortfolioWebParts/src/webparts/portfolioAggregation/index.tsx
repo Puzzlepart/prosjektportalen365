@@ -89,7 +89,10 @@ export default class PortfolioAggregationWebPart extends BasePortfolioWebPart<IP
    */
   protected _getViewOptions(): IPropertyPaneDropdownOption[] {
     if (!this._configuration) return []
-    return [...this._configuration.views.map((view) => ({ key: view.id, text: view.title }))]
+    return [
+      { key: null, text: '' },
+      ...this._configuration.views.map((view) => ({ key: view.id, text: view.title }))
+    ]
   }
 
   public getPropertyPaneConfiguration(): IPropertyPaneConfiguration {

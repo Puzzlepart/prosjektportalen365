@@ -12,7 +12,8 @@ import _ from 'lodash'
  * @param props Props for `EditViewColumnsPanel` component
  */
 function sortColumns({ columns, customColumnOrder, sortMode }: IEditViewColumnsPanelProps) {
-  return [...columns].filter((c) => c.data?.visibility.includes('Portfolio'))
+  return [...columns]
+    .filter((c) => c.data?.visibility?.includes('Portfolio'))
     .sort((a, b) => {
       const columnOrderA = customColumnOrder.indexOf(a['id'])
       const customColumnOrderIndexB = customColumnOrder.indexOf(b['id'])

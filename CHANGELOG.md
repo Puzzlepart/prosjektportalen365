@@ -21,6 +21,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 - Rettet et problem hvor `Vis alle målinger` ikke var synlig i `Gevinster for underområder` (Program/overordnet område) [#1461](https://github.com/Puzzlepart/prosjektportalen365/issues/1461)
 - Rettet et problem hvor 'Tittel' fra `Prosjektkolonner` listen ikke ble angitt som visningsnavn for felter i Prosjektinformasjon [#1458](https://github.com/Puzzlepart/prosjektportalen365/issues/1458)
 - Rettet et problem hvor kolonner var synlige i `Vis eller skjul kolonner` panelet på porteløjeoversikten selv om de skulle vært skjult [#1442](https://github.com/Puzzlepart/prosjektportalen365/issues/1442)
+- Rettet et problem hvor sorteringsindikatorene for kolonner i aggregerte oversikter ikke var riktig sjekket av [#1429](https://github.com/Puzzlepart/prosjektportalen365/issues/1429)
 
 ### Forbedringer
 
