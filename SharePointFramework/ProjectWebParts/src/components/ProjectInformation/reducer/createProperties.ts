@@ -12,6 +12,7 @@ import { IProjectInformationState } from '../types'
  */
 export function createProperties(state: IProjectInformationState, spfxContext: SPFxContext) {
   const currentLocale = spfxContext.pageContext.cultureInfo.currentUICultureName.toLowerCase()
+
   return state.data.fields
     .map((field) =>
       new EditableSPField(field)

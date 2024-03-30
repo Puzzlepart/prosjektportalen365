@@ -103,6 +103,7 @@ export class EditableSPField extends SPField {
   public init(columns: ProjectColumn[], currentLocale?: string, configurationName?: string) {
     this.column = columns.find((c) => c.internalName === this.internalName)
     this._isExternal = _.isEmpty(columns)
+    this.displayName = this.column?.name ?? this.displayName
     this._initConfiguration(currentLocale, configurationName)
     return this
   }

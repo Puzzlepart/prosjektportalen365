@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import SPDataAdapter from 'data/SPDataAdapter'
 import _ from 'lodash'
 import {
@@ -35,7 +36,8 @@ export async function fetchTimelineData(
       console.error('Failed to fetch project deliveries:', error)
     }
 
-    projectDeliveries = projectDeliveries.map((item) => {
+    projectDeliveries = projectDeliveries
+      .map((item) => {
         const config = _.find(timelineConfig, (col) => col.title === props.configItemTitle)
         return new TimelineContentModel(
           props.siteId,
