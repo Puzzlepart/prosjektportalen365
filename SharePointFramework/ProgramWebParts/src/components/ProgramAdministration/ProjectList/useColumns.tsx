@@ -21,7 +21,14 @@ export const useColumns = (renderLinks: boolean): IListColumn[] => {
         return null
       },
       renderCell: (item) => {
-        return <ProjectLogo title={item.Title} url={item.SPWebURL || item.Path} renderMode='list' size='32px' />
+        return (
+          <ProjectLogo
+            title={item.Title}
+            url={item.SPWebURL || item.Path}
+            renderMode='list'
+            size='32px'
+          />
+        )
       }
     },
     {

@@ -24,6 +24,7 @@ Sjekk ut [release notes](./releasenotes/1.9.0.md) for høydepunkter og mer detal
 
 - Standard forhåndsvisning for migrerte tiltak (Tiltakshåndtering) er nå satt til 'Ingen forhåndsvisning' [#1480](https://github.com/Puzzlepart/prosjektportalen365/issues/1480)
 - Mulighet for å skru på/av informasjonsmelding for dynamisk hjemmeside, standard av [#1484](https://github.com/Puzzlepart/prosjektportalen365/issues/1484)
+- Tidslinjeliste baserer seg nå på område-id for å hente tidslinjeelementer, dette for å sikre at elementene hentes og vises riktig [#1477](https://github.com/Puzzlepart/prosjektportalen365/issues/1477)
 
 ---
 

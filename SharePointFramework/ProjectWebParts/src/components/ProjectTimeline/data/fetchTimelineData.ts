@@ -25,12 +25,17 @@ export async function fetchTimelineData(
       strings.TimelineContentListName
     )
 
-    const projectDeliveries = (
-      props.showProjectDeliveries
+    let projectDeliveries = []
+
+    try {
+      projectDeliveries = props.showProjectDeliveries
         ? await props.sp.web.lists.getByTitle(props.projectDeliveriesListName).items.getAll()
         : []
-    )
-      .map((item) => {
+    } catch (error) {
+      console.error('Failed to fetch project deliveries:', error)
+    }
+
+    projectDeliveries = projectDeliveries.map((item) => {
         const config = _.find(timelineConfig, (col) => col.title === props.configItemTitle)
         return new TimelineContentModel(
           props.siteId,
@@ -83,7 +88,7 @@ export async function fetchTimelineData(
       .getAll()
 
     const timelineListItems = timelineContentItems.filter(
-      (item) => item.GtSiteIdLookup.Title === props.webTitle
+      (item) => item.GtSiteIdLookup?.GtSiteId === props.siteId
     )
 
     const columns = defaultViewFields
