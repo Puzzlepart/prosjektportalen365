@@ -14,6 +14,7 @@
         <FieldRef Name="ListContentConfigLookup" />
         <FieldRef Name="IsDefaultListContentLocked" />
         <FieldRef Name="IsHiddenTemplate" />
+        <FieldRef Name="FieldConfigurationName" />
       </ViewFields>
       <RowLimit Paged="TRUE">30</RowLimit>
       <JSLink>clienttemplates.js</JSLink>
