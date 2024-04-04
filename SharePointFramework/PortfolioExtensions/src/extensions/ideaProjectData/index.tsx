@@ -61,7 +61,6 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
       case this._openCmd.id:
         const dialog: IdeaDialog = new IdeaDialog()
         const row = event.selectedRows[0]
-
         dialog.ideaTitle = row.getValueByName('Title')
         dialog.dialogMessage =
           this._ideaConfig.description[2] ||

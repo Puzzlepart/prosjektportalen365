@@ -2102,6 +2102,18 @@
   <data name="SiteFields_GtIdeaPriority_Description" xml:space="preserve">
     <value>Priority for the idea</value>
   </data>
+  <data name="SiteFields_GtIdeaProcessingChoices_DisplayName" xml:space="preserve">
+    <value>Recommendations for processing</value>
+  </data>
+  <data name="SiteFields_GtIdeaProcessingChoices_Description" xml:space="preserve">
+    <value>Recommendations are configured as JSON, multiple choices can be added, note that the key must remain the same for the default choices</value>
+  </data>
+  <data name="SiteFields_GtIdeaRegistrationChoices_DisplayName" xml:space="preserve">
+    <value>Recommendations for registration</value>
+  </data>
+  <data name="SiteFields_GtIdeaRegistrationChoices_Description" xml:space="preserve">
+    <value>Recommendations are configured as JSON, multiple choices can be added, note that the key must remain the same for the default choices</value>
+  </data>
   <data name="SiteFields_GtBAEndDateOriginal_DisplayName" xml:space="preserve">
     <value>Original handover date</value>
   </data>

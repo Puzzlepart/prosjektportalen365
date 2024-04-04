@@ -15,6 +15,8 @@
                 <FieldRef Name="GtIdeaProcessingList" />
                 <FieldRef Name="GtIdeaRegistrationList" />
                 <FieldRef Name="GtDescription" />
+                <FieldRef Name="GtIdeaRegistrationChoices" />
+                <FieldRef Name="GtIdeaProcessingChoices" />
             </ViewFields>
             <RowLimit Paged="TRUE">100</RowLimit>
             <Aggregations Value="Off" />
@@ -24,12 +26,23 @@
     <pnp:Fields>
         <Field DisplayName="{resource:Lists_Idea_Configuration_Field_GtDescription_DisplayName}" Description="{resource:Lists_Idea_Configuration_Field_GtDescription_Description}" ID="{c3beecea-c0e5-4d18-9b45-3c7d7949bee4}" Name="GtDescription" StaticName="GtDescription" Type="Note" UnlimitedLengthInDocumentLibrary="TRUE" />
     </pnp:Fields>
-    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip" >
+    <pnp:DataRows KeyColumn="Title" UpdateBehavior="Overwrite">
         <pnp:DataRow>
             <pnp:DataValue FieldName="Title">Standard</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaProcessingList">Idébehandling</pnp:DataValue>
             <pnp:DataValue FieldName="GtIdeaRegistrationList">Idéregistrering</pnp:DataValue>
             <pnp:DataValue FieldName="GtDescription">Dersom idéen blir godkjent vil det bli opprettet en detaljert idé-side for idéen og et element i Idébehandlingslisten.;Dersom idéen blir godkjent vil det være mulig å opprette prosjektdata som kan bli brukt for provisjonering av området.;Tilknytt prosjektdata til ideen for å synkronisere data til et prosjekt senere. Når prosjektdata er opprettet, er det viktig å fylle ut ønsket metadata, deretter legge inn url for prosjektet, dette gjør at metadata synkroniseres til prosjektet ved provisjonering. Url til prosjektet kan enten fylles inn manuelt etter at et prosjekt har fått URL eller via en bestillingsløsning.</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaRegistrationChoices">{
+                "approvedSync": 'Godkjent og synkronisert',
+                "approved": 'Godkjent for konseptutredning',
+                "consideration": 'Under vurdering',
+                "rejected": 'Avvist'
+            }</pnp:DataValue>
+            <pnp:DataValue FieldName="GtIdeaProcessingChoices">{
+                "approved": 'Godkjent for detaljering av idé',
+                "consideration": 'Under vurdering',
+                "rejected": 'Avvist'
+            }</pnp:DataValue>
         </pnp:DataRow>
     </pnp:DataRows>
 </pnp:ListInstance>

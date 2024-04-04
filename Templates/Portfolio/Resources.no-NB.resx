@@ -2245,6 +2245,18 @@
   <data name="SiteFields_GtIdeaPriority_Description" xml:space="preserve">
     <value>Prioritering for idéen</value>
   </data>
+  <data name="SiteFields_GtIdeaProcessingChoices_DisplayName" xml:space="preserve">
+    <value>Anbefalingsvalg for behandling</value>
+  </data>
+  <data name="SiteFields_GtIdeaProcessingChoices_Description" xml:space="preserve">
+    <value>Anbefalingsvalg settes opp med JSON, her kan flere valg legges til, merk at nøkkel (key) må forbli lik for standardvalgene</value>
+  </data>
+  <data name="SiteFields_GtIdeaRegistrationChoices_DisplayName" xml:space="preserve">
+    <value>Anbefalingsvalg for registrering</value>
+  </data>
+  <data name="SiteFields_GtIdeaRegistrationChoices_Description" xml:space="preserve">
+    <value>Anbefalingsvalg settes opp med JSON, her kan flere valg legges til, merk at nøkkel (key) må forbli lik for standardvalgene</value>
+  </data>
   <data name="SiteFields_GtBAEndDateOriginal_DisplayName" xml:space="preserve">
     <value>Opprinnelig overtakelsesdato</value>
   </data>
