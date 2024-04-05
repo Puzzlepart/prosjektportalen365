@@ -27,7 +27,7 @@ define([], function () {
     DueDateLabel: 'Forfallsdato',
     NewRiskActionPanelTitle: 'Legg til nytt tiltak for {0}',
     NewRiskActionPanelAddNewRiskAction: 'Legg til nytt tiltak',
-    ResponsibleFieldNoResults: 'Fant ingen brukere',
+    ResponsibleFieldNoResults: 'Fant ingen brukere som matcher søket \'{0}\'.',
     ResponsibleFieldLabel: 'Ansvarlig',
     ApplyExtensionHooks: 'Kjører hooks definert i prosjekttillegg',
     ApplyExtensionText: 'Legger på prosjekttilegg {0}',
