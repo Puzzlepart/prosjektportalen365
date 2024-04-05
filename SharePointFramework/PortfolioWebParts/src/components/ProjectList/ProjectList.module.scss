@@ -14,7 +14,7 @@
   .commandBar {
     display: flex;
     flex-direction: row;
-    max-width: 996px;
+    max-width: 1024px;
     gap: 15px;
 
     .search {
@@ -44,7 +44,22 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    max-width: 996px;
+    max-width: 1024px;
     gap: 12px;
+
+    .projectsSection {
+      width: 100%;
+      overflow-x: hidden !important;
+
+      .projectRow {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        align-content: flex-start;
+        gap: 12px;
+        left: 4px !important;
+      }
+    }
   }
 }
