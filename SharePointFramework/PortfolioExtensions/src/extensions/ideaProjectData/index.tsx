@@ -15,7 +15,7 @@ import IdeaDialog from 'components/IdeaDialog'
 import { isUserAuthorized } from '../../helpers/isUserAuthorized'
 import strings from 'PortfolioExtensionsStrings'
 import { Choice, IdeaConfigurationModel, SPIdeaConfigurationItem } from 'models'
-import _ from 'underscore'
+import { find } from 'underscore'
 
 export interface IIdeaProjectDataCommandProperties {
   ideaId: number
@@ -59,7 +59,7 @@ export default class IdeaProjectDataCommand extends BaseListViewCommandSet<IIdea
         dialog.dialogMessage = this._config.description.projectData
         dialog.isApproved =
           row.getValueByName('GtIdeaDecision') ===
-            _.find(this._config.processing, { key: Choice.Approve }).recommendation ||
+            find(this._config.processing, { key: Choice.Approve }).recommendation ||
           row.getValueByName('GtIdeaDecision') === strings.ApprovedSyncText
         dialog.isBlocked = !!row.getValueByName('GtIdeaProjectData')
         dialog.show()
